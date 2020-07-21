@@ -1,0 +1,447 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-split {
+  @include basis;
+
+  $pane: #{&}__pane;
+  $trigger: #{&}__trigger;
+  $handle: #{&}__handle;
+  $button: #{&}__button;
+  $icon: #{&}__icon;
+  $guide: #{&}__guide;
+  $pointer: #{&}__pointer;
+
+  $button-color: $vxp-color-border;
+  $button-hover-color: $vxp-color-primary;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  &__pane {
+    position: absolute;
+  }
+
+  &__trigger {
+    position: absolute;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+  }
+
+  &__handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $vxp-color-fill-background;
+    border: 0 solid $vxp-color-border;
+  }
+
+  &__button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: $button-color;
+    border-radius: $vxp-border-radius-small;
+    transition: $vxp-transition-background-base;
+
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-content-reverse;
+    }
+
+    &::before,
+    &::after {
+      position: absolute;
+      content: '';
+      border: 2px $vxp-border-style transparent;
+      transition: $vxp-transition-border-base;
+    }
+
+    &--left-full {
+      margin-bottom: 3px;
+
+      &::before {
+        top: -3px;
+        border-bottom-color: $button-color;
+        border-left-color: $button-color;
+      }
+
+      &::after {
+        bottom: -3px;
+        border-top-color: $button-color;
+        border-left-color: $button-color;
+      }
+
+      &:hover {
+        &::before {
+          border-bottom-color: $button-hover-color;
+          border-left-color: $button-hover-color;
+        }
+
+        &::after {
+          border-top-color: $button-hover-color;
+          border-left-color: $button-hover-color;
+        }
+      }
+    }
+
+    &--right-full {
+      margin-top: 3px;
+
+      &::before {
+        top: -3px;
+        border-right-color: $button-color;
+        border-bottom-color: $button-color;
+      }
+
+      &::after {
+        bottom: -3px;
+        border-top-color: $button-color;
+        border-right-color: $button-color;
+      }
+
+      &:hover {
+        &::before {
+          border-right-color: $button-hover-color;
+          border-bottom-color: $button-hover-color;
+        }
+
+        &::after {
+          border-top-color: $button-hover-color;
+          border-right-color: $button-hover-color;
+        }
+      }
+    }
+
+    &--top-full {
+      margin-right: 3px;
+
+      &::before {
+        left: -3px;
+        border-top-color: $button-color;
+        border-right-color: $button-color;
+      }
+
+      &::after {
+        right: -3px;
+        border-top-color: $button-color;
+        border-left-color: $button-color;
+      }
+
+      &:hover {
+        &::before {
+          border-top-color: $button-hover-color;
+          border-right-color: $button-hover-color;
+        }
+
+        &::after {
+          border-top-color: $button-hover-color;
+          border-left-color: $button-hover-color;
+        }
+      }
+    }
+
+    &--bottom-full {
+      margin-left: 3px;
+
+      &::before {
+        left: -3px;
+        border-right-color: $button-color;
+        border-bottom-color: $button-color;
+      }
+
+      &::after {
+        right: -3px;
+        border-bottom-color: $button-color;
+        border-left-color: $button-color;
+      }
+
+      &:hover {
+        &::before {
+          border-right-color: $button-hover-color;
+          border-bottom-color: $button-hover-color;
+        }
+
+        &::after {
+          border-bottom-color: $button-hover-color;
+          border-left-color: $button-hover-color;
+        }
+      }
+    }
+
+    &:hover {
+      background-color: $button-hover-color;
+    }
+  }
+
+  &__guide {
+    position: absolute;
+    z-index: 11;
+    display: none;
+    pointer-events: none;
+    background-color: $vxp-color-border-light-2;
+  }
+
+  &__pointer {
+    pointer-events: none;
+    background-color: $vxp-color-border;
+  }
+
+  &--moving {
+    cursor: col-resize;
+    user-select: none;
+
+    #{$pane},
+    & > #{$trigger},
+    #{$handle} {
+      pointer-events: none;
+    }
+  }
+
+  &--vertical &--moving {
+    cursor: row-resize;
+  }
+
+  &--transition {
+    #{$pane},
+    & > #{$trigger},
+    #{$handle} {
+      pointer-events: none;
+      transition: {
+        property: top, right, bottom, left;
+        duration: $vxp-transition-duration;
+      }
+    }
+  }
+
+  &--left-full {
+    #{$pane} {
+      &--left {
+        padding-right: 6px !important;
+      }
+
+      &--right {
+        padding-left: 0 !important;
+        overflow: hidden;
+      }
+    }
+
+    & > #{$trigger} {
+      #{$handle} {
+        transform: translateX(-100%);
+      }
+
+      #{$button} {
+        &--left-full {
+          display: none;
+        }
+
+        &--right-full {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
+  &--right-full {
+    #{$pane} {
+      &--left {
+        padding-right: 0 !important;
+        overflow: hidden;
+      }
+
+      &--right {
+        padding-left: 6px !important;
+      }
+    }
+
+    & > #{$trigger} {
+      #{$button} {
+        &--left-full {
+          margin-bottom: 0;
+        }
+
+        &--right-full {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &--top-full {
+    #{$pane} {
+      &--top {
+        padding-bottom: 6px !important;
+      }
+
+      &--bottom {
+        padding-top: 0 !important;
+        overflow: hidden;
+      }
+    }
+
+    & > #{$trigger} {
+      #{$handle} {
+        transform: translateY(-100%);
+      }
+
+      #{$button} {
+        &--top-full {
+          display: none;
+        }
+
+        &--bottom-full {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  &--bottom-full {
+    #{$pane} {
+      &--top {
+        padding-bottom: 0 !important;
+      }
+
+      &--bottom {
+        padding-top: 6px !important;
+        overflow: hidden;
+      }
+    }
+
+    & > #{$trigger} {
+      #{$button} {
+        &--top-full {
+          margin-right: 0;
+        }
+
+        &--bottom-full {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &--top-full,
+  &--right-full,
+  &--bottom-full,
+  &--left-full {
+    & > #{$trigger} {
+      #{$handle} {
+        cursor: default !important;
+      }
+    }
+  }
+
+  &--horizontal {
+    #{$pane} {
+      top: 0;
+      bottom: 0;
+
+      &--left {
+        left: 0;
+        padding-right: 3px;
+      }
+
+      &--right {
+        right: 0;
+        padding-left: 3px;
+      }
+    }
+
+    & > #{$trigger} {
+      top: 50%;
+      width: 0;
+      height: 100%;
+
+      #{$handle} {
+        flex-direction: column;
+        width: 6px;
+        height: 100%;
+        cursor: col-resize;
+        border: {
+          top-width: 0;
+          right-width: 1px;
+          bottom-width: 0;
+          left-width: 1px;
+        }
+      }
+
+      #{$button} {
+        width: 4px;
+        height: 28px;
+      }
+
+      #{$pointer} {
+        width: 100%;
+        height: 1px;
+        margin: 2px 0;
+      }
+    }
+
+    & > #{$guide} {
+      left: 50%;
+      width: 6px;
+      height: 100%;
+      cursor: col-resize;
+      transform: translateX(-50%);
+    }
+  }
+
+  &--vertical {
+    #{$pane} {
+      right: 0;
+      left: 0;
+
+      &--top {
+        top: 0;
+        padding-bottom: 3px;
+      }
+
+      &--bottom {
+        bottom: 0;
+        padding-top: 3px;
+      }
+    }
+
+    & > #{$trigger} {
+      left: 50%;
+      width: 100%;
+      height: 0;
+
+      #{$handle} {
+        flex-direction: row;
+        width: 100%;
+        height: 6px;
+        cursor: row-resize;
+        border: {
+          top-width: 1px;
+          right-width: 0;
+          bottom-width: 1px;
+          left-width: 0;
+        }
+      }
+
+      #{$button} {
+        width: 28px;
+        height: 4px;
+      }
+
+      #{$pointer} {
+        width: 1px;
+        height: 100%;
+        margin: 0 2px;
+      }
+    }
+
+    & > #{$guide} {
+      top: 50%;
+      width: 100%;
+      height: 6px;
+      cursor: row-resize;
+      transform: translateY(-50%);
+    }
+  }
+}

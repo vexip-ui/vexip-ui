@@ -1,0 +1,45 @@
+@mixin start {
+  opacity: 0;
+}
+
+@mixin end {
+  opacity: 1;
+}
+
+.#{$prefix}-fade {
+  @at-root {
+    &-enter-active {
+      animation: {
+        name: #{$prefix}-fade-in;
+        duration: 300ms;
+      }
+    }
+
+    &-leave-active {
+      animation: {
+        name: #{$prefix}-fade-out;
+        duration: 300ms;
+      }
+    }
+  }
+}
+
+@keyframes #{$prefix}-fade-in {
+  0% {
+    @include start;
+  }
+
+  100% {
+    @include end;
+  }
+}
+
+@keyframes #{$prefix}-fade-out {
+  0% {
+    @include end;
+  }
+
+  100% {
+    @include start;
+  }
+}

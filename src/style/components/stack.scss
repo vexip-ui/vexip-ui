@@ -1,0 +1,12 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-stack {
+  @include basis;
+
+  position: relative;
+  display: inline-block;
+
+  &__item {
+    position: absolute;
+  }
+}

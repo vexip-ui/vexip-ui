@@ -1,0 +1,177 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-collapse {
+  @include basis;
+
+  $header: #{&}__header;
+  $arrow: #{&}__arrow;
+  $content: #{&}__content;
+
+  $border-light-base: $vxp-border-appearance $vxp-color-border-light-2;
+
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  border-top: $border-light-base;
+
+  @at-root {
+    &__pane {
+      @include basis;
+
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      border-top: $border-light-base;
+      border-bottom: $border-light-base;
+
+      &--card {
+        #{$header} {
+          border-radius: $vxp-border-radius-base;
+        }
+
+        #{$content} {
+          padding: 0.8em 0 1.2em;
+          border-radius: 0 0 $vxp-border-radius-base $vxp-border-radius-base;
+        }
+      }
+
+      &--expanded#{&}--card {
+        #{$header} {
+          border-bottom-color: $vxp-border-appearance $vxp-color-border-light-2;
+          border-radius: $vxp-border-radius-base $vxp-border-radius-base 0 0;
+        }
+      }
+    }
+  }
+
+  & &__pane {
+    border-top: 0;
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.6em 1em;
+    cursor: pointer;
+    transition: $vxp-transition-color-base;
+  }
+
+  &__pane--disabled &__header {
+    color: $vxp-color-content-disabled;
+    cursor: not-allowed;
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    transition: $vxp-transition-color-base, $vxp-transition-transform-base;
+    transform: translate(-50%, -50%);
+
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-content-secondary;
+    }
+  }
+
+  &--arrow-left,
+  &__pane--arrow-left {
+    #{$header} {
+      padding-left: 2.4em;
+    }
+
+    #{$arrow} {
+      left: 1.2em;
+    }
+  }
+
+  &--arrow-right,
+  &__pane--arrow-right {
+    #{$header} {
+      padding-right: 2.4em;
+    }
+
+    #{$arrow} {
+      left: calc(100% - 1.2em);
+    }
+  }
+
+  &--arrow-none,
+  &__pane--arrow-none {
+    #{$arrow} {
+      display: none;
+    }
+  }
+
+  &__pane--expanded &__arrow {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  &__pane--disabled &__arrow {
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-content-humble;
+    }
+  }
+
+  &__body {
+    padding: 0 1em;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    padding: 0.2em 0 1.6em;
+  }
+
+  &__pane--disabled &__content {
+    color: $vxp-color-content-disabled;
+  }
+
+  &--card,
+  &__pane--card {
+    border: $vxp-border-base;
+    border-radius: $vxp-border-radius-base;
+
+    #{$header} {
+      background-color: $vxp-color-fill-background;
+      border-bottom: 1px solid transparent;
+    }
+  }
+
+  &--card &__pane {
+    border-color: $vxp-border-appearance $vxp-color-border-light-2;
+
+    &:first-child #{$header} {
+      border-radius: $vxp-border-radius-base $vxp-border-radius-base 0 0;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+
+      #{$header} {
+        border-radius: 0 0 $vxp-border-radius-base $vxp-border-radius-base;
+      }
+    }
+  }
+
+  &--card &__pane--expanded {
+    #{$header} {
+      border-bottom-color: $vxp-border-appearance $vxp-color-border-light-2;
+      border-radius: 0 !important;
+    }
+
+    #{$content} {
+      border-radius: 0 0 $vxp-border-radius-base $vxp-border-radius-base;
+    }
+  }
+
+  &--card &__content {
+    padding: 0.8em 0 1.2em;
+  }
+}

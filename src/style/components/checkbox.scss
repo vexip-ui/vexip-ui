@@ -1,0 +1,255 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-checkbox {
+  @include basis;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.8em;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+    $vxp-transition-box-shadow-base;
+
+  &--border {
+    padding: 0.6em 0.8em;
+    border: $vxp-checkbox-border;
+    border-radius: $vxp-checkbox-border-radius;
+
+    &:hover {
+      border-color: $vxp-checkbox-color-border-hover;
+    }
+  }
+
+  &--checked#{&}--border {
+    border-color: $vxp-checkbox-color-border-checked;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+
+    &,
+    &:hover {
+      border-color: $vxp-checkbox-color-border-disabled;
+    }
+  }
+
+  &__signal {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color: $vxp-checkbox-color-bg-signal;
+    border: $vxp-checkbox-border;
+    border-radius: $vxp-checkbox-border-radius-signal;
+    transition: $vxp-transition-background-base, $vxp-transition-border-base;
+
+    &::after {
+      position: absolute;
+      top: calc(50% - 1px);
+      left: 50%;
+      width: 5px;
+      height: 9px;
+      content: '';
+      background-color: transparent;
+      border: solid $vxp-checkbox-color-border-signal-after;
+      border-width: 0 2px 2px 0;
+      opacity: 0;
+      transition: width $vxp-transition-base, height $vxp-transition-base,
+        $vxp-transition-background-base, $vxp-transition-opacity-base,
+        $vxp-transition-transform-base;
+      transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    }
+  }
+
+  @mixin small-signal {
+    width: 14px;
+    height: 14px;
+
+    &::after {
+      width: 3px;
+      height: 7px;
+      border-width: 0 1px 1px 0;
+    }
+  }
+
+  @mixin large-signal {
+    width: 22px;
+    height: 22px;
+
+    &::after {
+      width: 6px;
+      height: 11px;
+    }
+  }
+
+  &--small &__signal {
+    @include small-signal;
+  }
+
+  &--large &__signal {
+    @include large-signal;
+  }
+
+  &__label {
+    margin-left: 0.4em;
+    transition: $vxp-transition-color-base;
+  }
+
+  &:hover &__signal {
+    border-color: $vxp-checkbox-color-border-hover;
+  }
+
+  @mixin partial-signal {
+    background-color: $vxp-checkbox-color-bg-checked-signal;
+    border-color: $vxp-checkbox-color-border-checked;
+
+    &::after {
+      top: 50%;
+      width: 9px;
+      height: 1px;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  &--partial &__signal {
+    @include partial-signal;
+  }
+
+  &--partial#{&}--samll &__signal::after {
+    width: 7px;
+  }
+
+  &--partial#{&}--large &__signal::after {
+    width: 11px;
+  }
+
+  &--checked &__signal {
+    background-color: $vxp-checkbox-color-bg-checked-signal;
+    border-color: $vxp-checkbox-color-border-checked;
+
+    &::after {
+      opacity: 1;
+      transform: translate(-50%, -50%) rotate(45deg) scale(1);
+    }
+  }
+
+  &--checked &__label {
+    color: $vxp-checkbox-color-checked-label;
+  }
+
+  &--disabled &__signal,
+  &--disabled:hover &__signal {
+    background-color: $vxp-checkbox-color-bg-disabled-signal;
+    border-color: $vxp-checkbox-color-border-disabled;
+
+    &::after {
+      background-color: $vxp-checkbox-color-border-disabled;
+    }
+  }
+
+  &--disabled &__label {
+    color: $vxp-checkbox-color-disabled-label;
+  }
+
+  &--disabled#{&}--checked &__signal {
+    background-color: $vxp-checkbox-color-border-disabled;
+  }
+
+  &__input {
+    display: none;
+    opacity: 0;
+  }
+
+  @at-root {
+    &-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      &--vertical {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+      }
+    }
+
+    &-group--vertical & {
+      margin-right: 0;
+      margin-bottom: 0.5em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &-group--border & {
+      padding: 0.6em 0.8em;
+      border: $vxp-checkbox-border;
+      border-radius: $vxp-checkbox-border-radius;
+
+      &:hover {
+        border-color: $vxp-checkbox-color-border-hover;
+      }
+
+      &--checked {
+        border-color: $vxp-checkbox-color-border-checked;
+      }
+    }
+
+    &-group--border &--disabled {
+      &,
+      &:hover {
+        border-color: $vxp-checkbox-color-border-disabled;
+      }
+    }
+
+    &-group--disabled & {
+      cursor: not-allowed;
+
+      &,
+      &:hover {
+        border-color: $vxp-checkbox-color-border-disabled;
+      }
+
+      &__signal {
+        border-color: $vxp-checkbox-color-border-disabled !important;
+
+        &::after {
+          background-color: $vxp-checkbox-color-border-disabled;
+        }
+      }
+
+      &__label {
+        color: $vxp-checkbox-color-disabled-label;
+      }
+    }
+
+    &-group--disabled &--checked &__signal {
+      background-color: $vxp-checkbox-color-border-disabled;
+    }
+
+    &-group--small &__signal {
+      @include small-signal;
+    }
+
+    &-group--large &__signal {
+      @include large-signal;
+    }
+
+    &--partial &__signal {
+      @include partial-signal;
+    }
+
+    &-group--small &--partial &__signal::after {
+      width: 7px;
+    }
+
+    &-group--large &--partial &__signal::after {
+      width: 11px;
+    }
+  }
+}

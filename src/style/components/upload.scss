@@ -1,0 +1,148 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-upload {
+  @include basis;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &--multiple,
+  &--drag {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  &__input {
+    display: none;
+  }
+
+  &__control {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &--drag,
+  &--drag &__control {
+    width: 100%;
+  }
+
+  &__drag-pane {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1.6em;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: $vxp-color-fill;
+    border: $vxp-border-width dashed $vxp-color-border;
+    border-radius: $vxp-border-radius-base;
+    transition: $vxp-transition-border-base;
+
+    &:hover {
+      border-color: $vxp-color-primary;
+    }
+  }
+
+  &__control--drag-over &__drag-pane {
+    border-color: $vxp-color-primary;
+  }
+
+  &__cloud {
+    color: $vxp-color-border;
+  }
+
+  &__control--drag-over &__cloud {
+    color: $vxp-color-primary;
+  }
+
+  &__drag-pane &__tip {
+    user-select: none;
+  }
+
+  &__files {
+    width: 100%;
+    padding: 0;
+    margin-left: 0.5em;
+  }
+
+  &--multiple &__files,
+  &--drag &__files {
+    margin-top: 0.5em;
+    margin-left: 0;
+  }
+
+  &__file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.2em 0.5em;
+    list-style: none;
+    border-radius: $vxp-border-radius-base;
+    transition: $vxp-transition-background-base;
+
+    &:hover {
+      background-color: $vxp-color-fill-hover;
+    }
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    margin-right: 1em;
+    user-select: none;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: $vxp-transition-color-base;
+  }
+
+  &__file-icon {
+    width: 1.2em;
+    margin-right: 0.3em;
+  }
+
+  &__close {
+    cursor: pointer;
+
+    &,
+    .#{$prefix}-icon {
+      color: transparent;
+    }
+  }
+
+  &__file:hover &__close {
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-content-disabled;
+    }
+
+    &:hover {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-content-normal;
+      }
+    }
+  }
+
+  &__success {
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-success;
+    }
+  }
+
+  &__progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+}

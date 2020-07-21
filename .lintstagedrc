@@ -1,0 +1,15 @@
+{
+  "src/**/*.{js,jsx,ts,tsx}": [
+    "npm run lint",
+    "prettier --write"
+  ],
+  "src/**/*.scss": [
+    "npm run lint:style",
+    "prettier --write"
+  ],
+  "src/**/*.vue": [
+    "npm run lint:style",
+    "prettier --write",
+    "npm run lint"
+  ]
+}

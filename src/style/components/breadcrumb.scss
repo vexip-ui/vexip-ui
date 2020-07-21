@@ -1,0 +1,80 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-breadcrumb {
+  @include basis;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &--border {
+    height: 2.1em;
+    padding: 0 0.6em;
+    border: $vxp-border-base;
+    border-radius: $vxp-border-radius-base;
+    transition: {
+      property: border-color;
+      timing-function: ease-in-out;
+      duration: $vxp-transition-duration;
+    }
+
+    &:hover {
+      border-color: $vxp-color-primary-light-1;
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    border: $vxp-border-appearance transparent;
+    border-radius: $vxp-border-radius-small;
+    transition: $vxp-transition-background-base;
+  }
+
+  &--border &__item:hover {
+    background-color: rgba($vxp-color-primary, 0.2);
+    border-color: rgba($vxp-color-primary, 0.2);
+  }
+
+  &__label {
+    padding: 0 0.4em;
+    cursor: pointer;
+    transition: $vxp-transition-color-base;
+
+    &:hover {
+      color: $vxp-color-primary-light-1;
+    }
+  }
+
+  &__separator {
+    padding: 0 0.4em;
+    user-select: none;
+    border-right: $vxp-border-appearance transparent;
+    border-left: $vxp-border-appearance transparent;
+    transition: $vxp-transition-color-base, $vxp-transition-border-base;
+
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-content-placeholder;
+    }
+  }
+
+  &--border &__separator {
+    cursor: pointer;
+
+    &:hover {
+      &,
+      .#{$prefix}-icon {
+        color: rgba($vxp-color-primary-light-1, 0.8);
+      }
+    }
+  }
+
+  &__item:last-child &__separator {
+    display: none;
+  }
+
+  &--border &__item:hover &__separator {
+    border-left-color: rgba($vxp-color-primary, 0.2);
+  }
+}

@@ -1,0 +1,38 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-scroll {
+  @include basis;
+
+  position: relative;
+  overflow: hidden;
+
+  &--vertical &__wrapper {
+    display: block;
+  }
+
+  &--horizontal &__wrapper,
+  &--both &__wrapper {
+    display: inline-block;
+  }
+
+  &__wrapper {
+    vertical-align: top;
+    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition-duration: 200ms;
+
+    &:active,
+    &--using-bar,
+    &--no-ready {
+      transition-duration: 0ms;
+    }
+
+    &--no-ready {
+      display: inline-block;
+    }
+
+    // 与使用 js 找到所有子元素再添加样式相比效率如何 (不太好测试) ?
+    &--scrolling > * {
+      pointer-events: none;
+    }
+  }
+}

@@ -1,0 +1,234 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-tooltip {
+  $popper: #{&}__popper;
+  $arrow: #{&}__arrow;
+
+  @include basis;
+
+  &__trigger {
+    display: inline-block;
+  }
+
+  &__tip {
+    @include basis;
+
+    position: relative;
+    min-width: 2em;
+    min-height: 2em;
+    padding: 0.6em 1em;
+    background-color: $vxp-tooltip-color-bg-base;
+    border-radius: $vxp-tooltip-border-raduis-base;
+    box-shadow: $vxp-tooltip-shadow-base;
+
+    #{$popper}--dark & {
+      box-shadow: $vxp-tooltip-shadow-dark;
+    }
+  }
+
+  &__arrow {
+    &,
+    &::after {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: {
+        width: 0;
+        color: transparent;
+        style: solid;
+      }
+    }
+
+    &::after {
+      content: '';
+    }
+  }
+
+  // arrow size
+  $size: $vxp-tooltip-arrow-size;
+
+  &__popper {
+    z-index: $vxp-z-index-popper;
+
+    &[data-popper-placement^='top'] {
+      padding: 0.5em 0 0.8em;
+
+      #{$arrow} {
+        bottom: 0;
+        border-width: $size $size 0;
+        transform: translate(-50%, 100%);
+
+        &::after {
+          bottom: 1px;
+          border-width: $size $size 0;
+          transform: translateX(-50%);
+        }
+      }
+    }
+
+    &[data-popper-placement^='bottom'] {
+      padding: 0.8em 0 0.5em;
+
+      #{$arrow} {
+        top: 0;
+        border-width: 0 $size $size;
+        transform: translate(-50%, -100%);
+
+        &::after {
+          top: 1px;
+          border-width: 0 $size $size;
+          transform: translateX(-50%);
+        }
+      }
+    }
+
+    &[data-popper-placement^='left'] {
+      padding: 0 0.8em 0 0.5em;
+
+      #{$arrow} {
+        right: 0;
+        border-width: $size 0 $size $size;
+        transform: translate(100%, -50%);
+
+        &::after {
+          right: 1px;
+          border-width: $size 0 $size $size;
+          transform: translateY(-50%);
+        }
+      }
+    }
+
+    &[data-popper-placement^='right'] {
+      padding: 0 0.5em 0 0.8em;
+
+      #{$arrow} {
+        left: 0;
+        border-width: $size $size $size 0;
+        transform: translate(-100%, -50%);
+
+        &::after {
+          left: 1px;
+          border-width: $size $size $size 0;
+          transform: translateY(-50%);
+        }
+      }
+    }
+
+    &[data-popper-placement='top'] #{$arrow} {
+      left: 50%;
+    }
+
+    &[data-popper-placement='top-start'] #{$arrow} {
+      left: 1.8em;
+    }
+
+    &[data-popper-placement='top-end'] #{$arrow} {
+      left: calc(100% - 1.8em);
+    }
+
+    &[data-popper-placement='bottom'] #{$arrow} {
+      left: 50%;
+    }
+
+    &[data-popper-placement='bottom-start'] #{$arrow} {
+      left: 1.8em;
+    }
+
+    &[data-popper-placement='bottom-end'] #{$arrow} {
+      left: calc(100% - 1.8em);
+    }
+
+    &[data-popper-placement='left'] #{$arrow} {
+      top: 50%;
+    }
+
+    &[data-popper-placement='left-start'] #{$arrow} {
+      top: 0.9em;
+    }
+
+    &[data-popper-placement='left-end'] #{$arrow} {
+      top: calc(100% - 0.9em);
+    }
+
+    &[data-popper-placement='right'] #{$arrow} {
+      top: 50%;
+    }
+
+    &[data-popper-placement='right-start'] #{$arrow} {
+      top: 0.9em;
+    }
+
+    &[data-popper-placement='right-end'] #{$arrow} {
+      top: calc(100% - 0.9em);
+    }
+
+    &--no-hover {
+      pointer-events: none;
+    }
+  }
+
+  @mixin theme($name, $content-color, $border-color, $fill-color) {
+    &__popper--#{$name} &__tip {
+      color: $content-color;
+      background-color: $fill-color;
+    }
+
+    &__popper--#{$name} {
+      &[data-popper-placement^='top'] {
+        #{$arrow} {
+          border-top-color: $border-color;
+
+          &::after {
+            border-top-color: $fill-color;
+          }
+        }
+      }
+
+      &[data-popper-placement^='bottom'] {
+        padding: 0.8em 0 0.5em;
+
+        #{$arrow} {
+          border-bottom-color: $border-color;
+
+          &::after {
+            border-bottom-color: $fill-color;
+          }
+        }
+      }
+
+      &[data-popper-placement^='left'] {
+        #{$arrow} {
+          border-left-color: $border-color;
+
+          &::after {
+            border-left-color: $fill-color;
+          }
+        }
+      }
+
+      &[data-popper-placement^='right'] {
+        #{$arrow} {
+          border-right-color: $border-color;
+
+          &::after {
+            border-right-color: $fill-color;
+          }
+        }
+      }
+    }
+  }
+
+  @include theme(
+    'light',
+    $vxp-tooltip-color-content-base,
+    $vxp-tooltip-color-shadow-base,
+    $vxp-tooltip-color-bg-base
+  );
+
+  @include theme(
+    'dark',
+    $vxp-tooltip-color-content-dark,
+    $vxp-tooltip-color-shadow-dark,
+    $vxp-tooltip-color-bg-dark
+  );
+}

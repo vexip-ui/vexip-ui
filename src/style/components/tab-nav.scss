@@ -1,0 +1,89 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-tab-nav {
+  @include basis;
+
+  $color: $vxp-color-content-normal;
+  $open-color: $vxp-color-primary;
+
+  position: relative;
+  background-color: transparent;
+  border-bottom: $vxp-border-base;
+
+  &__list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    margin-bottom: -1px;
+    list-style: none;
+  }
+
+  @at-root %item {
+    position: relative;
+    display: flex;
+    padding: 0.6em 1.2em;
+    color: $color;
+    cursor: pointer;
+    user-select: none;
+    transition: $vxp-transition-color-base;
+  }
+
+  &--card %item {
+    margin-right: 4px;
+    background-color: $vxp-color-fill-background;
+    border: $vxp-border-base;
+    border-radius: $vxp-border-radius-base $vxp-border-radius-base 0 0;
+    transition-property: $vxp-transition-color-base,
+      $vxp-transition-background-base, $vxp-transition-border-base;
+  }
+
+  &__item {
+    @extend %item;
+
+    &--active {
+      @extend %item;
+
+      color: $open-color;
+    }
+
+    &--disabled {
+      @extend %item;
+
+      color: $vxp-color-content-disabled;
+      cursor: not-allowed;
+    }
+  }
+
+  &--card &__item {
+    &--active {
+      background-color: $vxp-color-fill;
+      border-color: $open-color;
+      border-bottom-color: transparent;
+    }
+  }
+
+  &__mark {
+    position: absolute;
+    bottom: -1px;
+    width: 70px;
+    height: 2px;
+    background-color: $open-color;
+    transition: left $vxp-transition-base, width $vxp-transition-base;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.3em;
+  }
+
+  &__item--active &__icon .#{$prefix}-icon {
+    color: $open-color;
+  }
+
+  &__item--disabled &__icon .#{$prefix}-icon {
+    color: $vxp-color-fill-disabled;
+  }
+}

@@ -1,0 +1,176 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-input {
+  @include basis;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: $vxp-input-color-bg;
+  border: $vxp-input-border;
+  border-radius: $vxp-input-border-radius;
+  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+    $vxp-transition-box-shadow-base;
+
+  &:hover {
+    border-color: $vxp-input-color-border-hover;
+  }
+
+  &:focus,
+  &--focused {
+    border-color: $vxp-input-color-border-focus;
+    box-shadow: $vxp-input-shadow-focus;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    background-color: $vxp-input-color-bg-disabled;
+
+    &:hover,
+    &:focus {
+      border: $vxp-input-border;
+      box-shadow: transparent;
+    }
+
+    %disabled-item {
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+  }
+
+  &--disabled &--focused {
+    border-color: $vxp-input-color-border;
+    box-shadow: transparent;
+  }
+
+  &--number {
+    padding-right: 1.4em;
+
+    %number-suffix {
+      right: 1.4em;
+    }
+  }
+
+  &__control {
+    width: 100%;
+    height: 2.1em;
+    padding: 0.3em 0.6em;
+    line-height: $vxp-input-line-height;
+    color: $vxp-input-color-control;
+    background-color: transparent;
+    border: 0;
+    border-radius: $vxp-input-border-radius;
+    outline: 0;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    @extend %disabled-item;
+  }
+
+  &--small &__control {
+    height: 1.9em;
+    padding: 0.1em 0.6em;
+  }
+
+  &--large &__control {
+    height: 2.5em;
+    padding: 0.5em 0.8em;
+  }
+
+  &__number-plus,
+  &__number-minus {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4em;
+    height: 50%;
+    cursor: pointer;
+    user-select: none;
+    border: $vxp-input-border;
+    border-width: 0;
+    border-left-width: $vxp-border-width;
+    transition: $vxp-transition-color-base;
+
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-input-color-icon;
+    }
+
+    .#{$prefix}-icon {
+      pointer-events: none;
+    }
+
+    &:hover {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-input-color-icon-hover;
+      }
+    }
+
+    @extend %disabled-item;
+  }
+
+  &__number-plus {
+    top: 0;
+  }
+
+  &__number-minus {
+    bottom: 0;
+    border-top-width: 1px;
+  }
+
+  @at-root {
+    %icon {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2em;
+      height: 100%;
+      user-select: none;
+
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-input-color-icon;
+      }
+
+      @extend %disabled-item;
+    }
+  }
+
+  &__icon {
+    &--prefix {
+      @extend %icon;
+
+      left: 0;
+    }
+
+    &--suffix,
+    &--password {
+      @extend %icon, %number-suffix;
+
+      right: 0;
+    }
+
+    &--password {
+      cursor: pointer;
+    }
+  }
+
+  &__count {
+    position: absolute;
+    top: 50%;
+    right: 7px;
+    margin-top: -1px;
+    font-size: $vxp-input-font-size-count;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    transform: translateY(-50%);
+  }
+}

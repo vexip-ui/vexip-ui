@@ -1,0 +1,38 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-card {
+  @include basis;
+
+  display: flex;
+  flex-direction: column;
+  background-color: $vxp-color-fill;
+  border: $vxp-border-base;
+  border-radius: $vxp-border-radius-base;
+  transition: box-shadow 200ms;
+
+  &--shadow-always {
+    box-shadow: $vxp-box-shadow-base;
+  }
+
+  &--shadow-hover {
+    &:hover {
+      box-shadow: $vxp-box-shadow-base;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em 1.2em;
+    border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
+  }
+
+  &__title {
+    font-size: $vxp-font-size-primary;
+  }
+
+  &__content {
+    padding: 1em 1.2em;
+  }
+}

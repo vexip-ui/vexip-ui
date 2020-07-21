@@ -1,0 +1,116 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-switch {
+  @include basis;
+
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+  user-select: none;
+  background-color: mix($vxp-color-black, $vxp-color-fill-background, 10%);
+  border-radius: 30px;
+  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+    $vxp-transition-opacity-base;
+
+  &--disabled {
+    cursor: not-allowed;
+    background-color: $vxp-color-fill-disabled;
+  }
+
+  &--loading {
+    cursor: default;
+  }
+
+  &--disabled,
+  &--loading {
+    opacity: 0.6;
+  }
+
+  &--open {
+    background-color: $vxp-color-primary;
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 22px;
+    padding-right: 11px;
+    padding-left: 24px;
+    line-height: 1;
+    color: $vxp-color-content-reverse;
+    border-radius: 30px;
+  }
+
+  &--open &__label {
+    padding-right: 24px;
+    padding-left: 11px;
+  }
+
+  &__signal {
+    position: absolute;
+    top: 50%;
+    left: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    color: $vxp-color-primary;
+    content: '';
+    background-color: $vxp-color-white;
+    border-radius: 30px;
+    transition: left $vxp-transition-base, width $vxp-transition-base,
+      $vxp-transition-transform-base;
+    transform: translateY(-50%);
+  }
+
+  &--disabled &__signal {
+    pointer-events: none;
+  }
+
+  &--open &__signal {
+    left: calc(100% - 2px);
+    transform: translate(-100%, -50%);
+  }
+
+  &--small &__label {
+    min-width: 36px;
+    height: 18px;
+    padding-right: 9px;
+    padding-left: 20px;
+  }
+
+  &--small#{&}--open &__label {
+    padding-right: 20px;
+    padding-left: 9px;
+  }
+
+  &--small &__signal {
+    width: 14px;
+    height: 14px;
+  }
+
+  &--large &__label {
+    min-width: 52px;
+    height: 26px;
+    padding-right: 13px;
+    padding-left: 29px;
+  }
+
+  &--large#{&}--open &__label {
+    padding-right: 29px;
+    padding-left: 13px;
+  }
+
+  &--large &__signal {
+    width: 22px;
+    height: 22px;
+  }
+
+  &__input {
+    display: none;
+    opacity: 0;
+  }
+}

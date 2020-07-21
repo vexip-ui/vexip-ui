@@ -1,0 +1,22 @@
+.#{$prefix}-popup {
+  position: fixed;
+  z-index: $vxp-z-index-popper;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  font-size: $vxp-font-size;
+
+  &__item {
+    position: fixed;
+    z-index: $vxp-z-index-popup;
+    display: flex;
+    // background-color: #fff;
+    // stylelint-disable declaration-property-value-blacklist
+    transition: all 300ms $vxp-transition-timing-function;
+
+    &-inner {
+      position: relative;
+    }
+  }
+}

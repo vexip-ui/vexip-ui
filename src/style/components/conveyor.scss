@@ -1,0 +1,32 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-conveyor {
+  @include basis;
+
+  $transition-duration: 600ms;
+
+  display: inline-block;
+
+  &__list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  &__item {
+    display: inline-block;
+    list-style: none;
+    transition: opacity $transition-duration $vxp-transition-timing-function,
+      transform $transition-duration $vxp-transition-timing-function;
+
+    &.#{$prefix}-fade-enter-active,
+    &.#{$prefix}-fade-leave-active {
+      animation-duration: $transition-duration;
+    }
+
+    &.#{$prefix}-fade-leave-active {
+      position: absolute;
+    }
+  }
+}

@@ -1,0 +1,49 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-picture {
+  @include basis;
+
+  display: flex;
+
+  &__image,
+  &__load,
+  &__error {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__image {
+    pointer-events: none;
+  }
+
+  /* stylelint-disable plugin/no-unsupported-browser-features */
+  &--fill &__image {
+    object-fit: fill;
+  }
+
+  &--contain &__image {
+    object-fit: contain;
+  }
+
+  &--cover &__image {
+    object-fit: cover;
+  }
+
+  &--none &__image {
+    object-fit: none;
+  }
+
+  &--scale-down &__image {
+    object-fit: scale-down;
+  }
+  /* stylelint-enable */
+
+  &__load,
+  &__error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    background-color: $vxp-color-fill-background;
+  }
+}

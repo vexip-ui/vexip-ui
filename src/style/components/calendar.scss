@@ -1,0 +1,79 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-calendar {
+  @include basis;
+
+  &__wrapper {
+    @include basis;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__action {
+    display: flex;
+  }
+
+  &__row {
+    display: flex;
+  }
+
+  &__cell {
+    display: flex;
+  }
+
+  &__index {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
+    margin: 2px;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    border-radius: $vxp-border-radius-base;
+    transition: $vxp-transition-color-base, $vxp-transition-background-base;
+
+    &:hover {
+      background-color: rgba($vxp-color-primary, 0.2);
+    }
+
+    &--today {
+      color: $vxp-color-primary;
+    }
+
+    &--prev,
+    &--next {
+      color: $vxp-color-content-disabled;
+    }
+
+    &--selected {
+      &,
+      &:hover {
+        color: $vxp-color-content-reverse;
+        background-color: $vxp-color-primary;
+      }
+    }
+
+    &--disabled {
+      &,
+      &:hover {
+        color: $vxp-color-content-humble;
+        cursor: not-allowed;
+        background-color: $vxp-color-fill;
+      }
+    }
+  }
+
+  &__row--week &__index {
+    cursor: default;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}

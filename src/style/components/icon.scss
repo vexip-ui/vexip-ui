@@ -1,0 +1,14 @@
+.#{$prefix}-icon {
+  display: inline-block;
+  overflow: visible;
+  // font-size: 0.8em;
+  fill: currentColor;
+  transition: $vxp-transition-color-base;
+  transform-origin: 50% 50%;
+
+  & > g {
+    line-height: 1;
+    transform: scale(0.8);
+    transform-origin: 50% 50%;
+  }
+}

@@ -1,0 +1,128 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-pagination {
+  @include basis;
+
+  display: inline-flex;
+  padding: 0;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2em;
+    height: 2.2em;
+    margin-right: 0.4em;
+    // color: $vxp-color-content-secondary;
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+    border: $vxp-border-base;
+    border-radius: $vxp-border-radius-base;
+    transition: $vxp-transition-color-base, $vxp-transition-background-base,
+      $vxp-transition-border-base;
+
+    &--prev,
+    &--next,
+    &--more {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-content-normal;
+      }
+    }
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+
+    &:hover,
+    &--active {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-primary;
+      }
+
+      border-color: $vxp-color-primary;
+    }
+
+    @mixin disabled {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-content-disabled;
+      }
+
+      cursor: not-allowed;
+      border-color: $vxp-color-fill-disabled;
+    }
+
+    &--disabled,
+    &--disabled#{&}:hover,
+    &--disabled#{&}--active {
+      @include disabled;
+    }
+  }
+
+  &--small &__item {
+    width: 2em;
+    height: 2em;
+  }
+
+  &--large &__item {
+    width: 2.5em;
+    height: 2.5em;
+  }
+
+  &--background &__item {
+    background-color: $vxp-color-fill-background;
+
+    &:hover {
+      background-color: mix($vxp-color-white, $vxp-color-primary, 90%);
+    }
+
+    &--disabled {
+      &,
+      &:hover {
+        background-color: $vxp-color-fill-background;
+      }
+    }
+  }
+
+  &--background &__item#{&}__item--active {
+    color: $vxp-color-content-reverse;
+    background-color: $vxp-color-primary;
+  }
+
+  &--no-border &__item {
+    border: 0;
+  }
+
+  &__jump,
+  &__size,
+  &__total {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    // padding: 0 0.3em;
+  }
+
+  &__jump {
+    width: 7.6em;
+    white-space: nowrap;
+    user-select: none;
+
+    &-input {
+      margin: 0 0.3em;
+      user-select: auto;
+    }
+  }
+
+  &__size {
+    width: 7.6em;
+  }
+
+  & > &__jump,
+  & > &__size,
+  & > &__total {
+    margin-left: 0.8em;
+  }
+}

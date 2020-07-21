@@ -1,0 +1,44 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-select {
+  @include basis;
+
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  &__trigger,
+  &__input {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__popper {
+    z-index: $vxp-z-index-popper;
+    display: flex;
+    min-width: 7em;
+    padding: 0.35em 0;
+  }
+
+  &__list {
+    display: inline-block;
+    width: 100%;
+    padding: 0.35em 0;
+    user-select: none;
+    background-color: $vxp-select-color-bg-list;
+    border-radius: $vxp-select-border-radius-list;
+    box-shadow: $vxp-select-shadow-list;
+  }
+
+  &__trigger--selected .#{$prefix}-option {
+    background-color: $vxp-select-color-bg-option-hover;
+  }
+
+  &__arrow {
+    transition: $vxp-transition-transform-base;
+  }
+
+  &--visible &__arrow {
+    transform: rotate(180deg);
+  }
+}

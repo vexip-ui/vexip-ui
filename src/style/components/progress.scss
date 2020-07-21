@@ -1,0 +1,62 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-progress {
+  @include basis;
+
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+
+  &__track {
+    width: 100%;
+    background-color: mix($vxp-color-black, $vxp-color-fill-background, 5%);
+  }
+
+  &__filler {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    background-color: $vxp-color-primary;
+    transition: width $vxp-transition-base;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    margin-left: 0.6em;
+  }
+
+  &--info-inside &__info {
+    height: 100%;
+    margin-right: 0.6em;
+    color: $vxp-color-content-reverse;
+  }
+
+  &--info-bubble &__info,
+  &--info-bubble-top &__info,
+  &--info-bubble-bottom &__info {
+    min-width: auto;
+    min-height: auto;
+    padding: 0.1em 0.3em;
+    margin: 0;
+  }
+
+  &--info--none &__info {
+    display: none;
+  }
+
+  &__percentage {
+    font-size: $vxp-font-size-secondary;
+  }
+
+  &__reference {
+    position: relative;
+    height: 100%;
+  }
+
+  &__bubble {
+    position: absolute;
+    transform: translateX(-50%);
+  }
+}

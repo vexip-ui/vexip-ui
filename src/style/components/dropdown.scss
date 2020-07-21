@@ -1,0 +1,83 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-dropdown {
+  @include basis;
+
+  display: inline-block;
+
+  & & {
+    width: 100%;
+  }
+
+  &__popper {
+    @include basis;
+
+    z-index: $vxp-z-index-popper;
+    display: flex;
+    padding: 0.35em 0;
+  }
+
+  &--sub &__popper {
+    padding: 0;
+  }
+
+  &__list {
+    display: inline-block;
+    min-width: 5em;
+    padding: 0.35em 0;
+    margin: 0;
+    // color: $vxp-color-content-normal;
+    user-select: none;
+    background-color: $vxp-color-fill;
+    border-radius: $vxp-border-radius-base;
+    box-shadow: $vxp-box-shadow-base;
+  }
+
+  &__item {
+    padding: 0.35em 1.2em;
+    white-space: nowrap;
+    list-style: none;
+    cursor: pointer;
+    background-color: $vxp-color-fill;
+    transition: $vxp-transition-background-base;
+
+    &:hover {
+      background-color: $vxp-color-fill-hover;
+    }
+
+    &--selected {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-primary;
+      }
+    }
+
+    &--disabled {
+      color: $vxp-color-fill-disabled;
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: $vxp-color-fill;
+      }
+    }
+
+    &--divided {
+      margin-bottom: 0.35em;
+      border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
+
+      &::after {
+        position: relative;
+        bottom: -0.35em;
+        display: block;
+        height: 0.35em;
+        margin: 0 -1.2em;
+        content: '';
+        background-color: $vxp-color-fill;
+      }
+    }
+  }
+
+  &__trigger--selected &__item {
+    background-color: $vxp-color-fill-hover;
+  }
+}

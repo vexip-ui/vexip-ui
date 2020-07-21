@@ -1,0 +1,33 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-confirm {
+  @include basis;
+
+  &__body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1em;
+  }
+
+  &__icon {
+    margin-right: 0.3em;
+    color: $vxp-color-warning;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em 0;
+  }
+
+  &__button {
+    width: 5.6em;
+
+    &:last-child {
+      margin-left: 1.6em;
+    }
+  }
+}

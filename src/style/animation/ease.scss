@@ -1,0 +1,47 @@
+@mixin start {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+@mixin end {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.#{$prefix}-ease {
+  @at-root {
+    &-enter-active {
+      animation: {
+        name: #{$prefix}-ease-in;
+        duration: 300ms;
+      }
+    }
+
+    &-leave-active {
+      animation: {
+        name: #{$prefix}-ease-out;
+        duration: 300ms;
+      }
+    }
+  }
+}
+
+@keyframes #{$prefix}-ease-in {
+  0% {
+    @include start;
+  }
+
+  100% {
+    @include end;
+  }
+}
+
+@keyframes #{$prefix}-ease-out {
+  0% {
+    @include end;
+  }
+
+  100% {
+    @include start;
+  }
+}

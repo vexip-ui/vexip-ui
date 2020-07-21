@@ -1,0 +1,69 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-badge {
+  @include basis;
+
+  position: relative;
+  display: inline-block;
+
+  &--not-wrapper {
+    line-height: 1;
+    vertical-align: middle;
+  }
+
+  &--not-wrapper#{&}--is-dot {
+    display: inline-flex;
+  }
+
+  &__content {
+    position: relative;
+    top: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: $vxp-line-height * 1em;
+    padding: 0 $vxp-line-height * 0.35em;
+    font-family: Helvetica, Microsoft YaHei, SimSun, sans-serif;
+    font-size: $vxp-font-size-secondary;
+    // line-height: 1;
+    color: $vxp-color-content-reverse;
+    white-space: nowrap;
+    user-select: none;
+    background-color: $vxp-color-error;
+    border-radius: $vxp-line-height * 0.5em;
+    box-shadow: $vxp-box-shadow-border-appearance $vxp-color-fill;
+    transform-origin: center center;
+
+    &--fixed {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(50%, -50%);
+    }
+
+    &--click {
+      cursor: pointer;
+    }
+
+    $types: (
+      primary: $vxp-color-primary,
+      info: $vxp-color-info,
+      success: $vxp-color-success,
+      warning: $vxp-color-warning,
+      disabled: $vxp-color-content-disabled
+    );
+
+    @each $type in map-keys($map: $types) {
+      &--#{$type} {
+        background-color: map-get($types, $type);
+      }
+    }
+  }
+
+  &--is-dot &__content {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border-radius: 50%;
+  }
+}

@@ -1,0 +1,89 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-tag {
+  @include basis;
+
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.5em;
+  background-color: $vxp-color-fill-background;
+  border: $vxp-border-base;
+  border-radius: $vxp-border-radius-base;
+
+  &__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5em;
+    cursor: pointer;
+
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-border;
+    }
+
+    &:hover,
+    &:hover .#{$prefix}-icon {
+      color: $vxp-color-content-secondary;
+    }
+  }
+
+  $close: #{&}__close;
+
+  &--primary,
+  &--success,
+  &--error,
+  &--warning {
+    color: $vxp-color-content-reverse;
+
+    #{$close},
+    .#{$prefix}-icon {
+      color: rgba($vxp-color-content-reverse, 0.6);
+    }
+
+    #{$close}:hover,
+    #{$close}:hover .#{$prefix}-icon {
+      color: $vxp-color-content-reverse;
+    }
+  }
+
+  $types: (
+    primary: $vxp-color-primary,
+    info: $vxp-color-info,
+    success: $vxp-color-success,
+    error: $vxp-color-error,
+    warning: $vxp-color-warning
+  );
+
+  @each $type in map-keys($map: $types) {
+    $color: map-get(
+      $map: $types,
+      $key: $type
+    );
+
+    @at-root {
+      &--#{$type} {
+        background-color: $color;
+        border-color: $color;
+      }
+
+      &--border#{&}--#{$type} {
+        color: $color;
+
+        #{$close},
+        .#{$prefix}-icon {
+          color: rgba($color, 0.6);
+        }
+
+        #{$close}:hover,
+        #{$close}:hover .#{$prefix}-icon {
+          color: $color;
+        }
+      }
+    }
+  }
+
+  &--border {
+    background-color: transparent;
+  }
+}

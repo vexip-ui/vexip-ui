@@ -1,0 +1,126 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-timeline {
+  @include basis;
+
+  $line: #{&}__line;
+  $signal: #{&}__signal;
+  $pointer: #{&}__pointer;
+
+  $item-types: (
+    success: $vxp-color-success,
+    error: $vxp-color-error,
+    warning: $vxp-color-warning,
+    disabled: $vxp-color-fill-disabled
+  );
+
+  display: inline-flex;
+  flex-direction: column;
+  padding-left: 6px;
+
+  &--both-sides {
+    padding-left: 0;
+  }
+
+  &__item {
+    position: relative;
+    padding-bottom: 0.8em;
+
+    @each $type in map-keys($map: $item-types) {
+      $color: map-get($item-types, $type);
+
+      &--#{$type} {
+        #{$signal},
+        #{$pointer} {
+          color: $color;
+        }
+
+        #{$pointer} {
+          border-color: $color;
+        }
+      }
+    }
+  }
+
+  &--both-sides &__item {
+    align-self: flex-end;
+    width: 50%;
+
+    &:nth-child(even) {
+      align-self: flex-start;
+    }
+  }
+
+  &__signal {
+    position: absolute;
+    top: 0;
+    left: -6px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 13px;
+    height: 13px;
+    // background-color: $vxp-color-fill;
+  }
+
+  &--both-sides &__item:nth-child(even) &__signal {
+    left: calc(100% - 6px);
+  }
+
+  &--signal-click &__signal {
+    cursor: pointer;
+  }
+
+  &__pointer {
+    width: 100%;
+    height: 100%;
+    color: $vxp-color-primary;
+    border: 2px solid $vxp-color-primary;
+    border-radius: 50%;
+  }
+
+  &__line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    border-left: $vxp-border-base;
+  }
+
+  &--both-sides &__item:nth-child(even) &__line {
+    left: 100%;
+  }
+
+  &__content {
+    position: relative;
+    top: -0.4em;
+    display: flex;
+    flex-direction: column;
+    padding: {
+      bottom: 0.6em;
+      left: 16px;
+    }
+  }
+
+  &--both-sides &__item:nth-child(even) &__content {
+    align-items: flex-end;
+    padding: {
+      right: 16px;
+      left: 0;
+    }
+  }
+
+  &__item:last-child &__line {
+    display: none;
+  }
+
+  &--pending &__item:nth-last-child(2) {
+    padding-bottom: 2.2em;
+
+    #{$line} {
+      border-left-style: dashed;
+    }
+  }
+}

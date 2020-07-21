@@ -1,0 +1,34 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-tabs {
+  @include basis;
+
+  position: relative;
+  overflow: hidden;
+
+  &__header {
+    margin-bottom: 0.8em;
+  }
+
+  &__main {
+    position: relative;
+    display: flex;
+    transition: $vxp-transition-transform-base;
+  }
+
+  @at-root %pane {
+    flex-shrink: 0;
+    width: 100%;
+    visibility: hidden;
+  }
+
+  &__pane {
+    @extend %pane;
+
+    &--active {
+      @extend %pane;
+
+      visibility: visible;
+    }
+  }
+}

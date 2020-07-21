@@ -1,0 +1,109 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-notice {
+  @include basis;
+
+  $icon: #{&}__icon;
+  $close: #{&}__close;
+
+  padding: 2em 0;
+
+  &__title {
+    margin-bottom: 0.6em;
+    font-size: $vxp-font-size-primary;
+    color: $vxp-color-content-primary;
+  }
+
+  &__content {
+    line-height: $vxp-line-height;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 1.4em;
+    left: 1.6em;
+    display: flex;
+    align-items: center;
+
+    .#{$prefix}-icon {
+      transform: scale(2);
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 0.4em;
+    right: 0.6em;
+    display: flex;
+    align-items: center;
+    color: $vxp-color-content-placeholder;
+    cursor: pointer;
+
+    &:hover {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-content-normal;
+      }
+    }
+  }
+
+  $types: (
+    info: $vxp-color-primary,
+    success: $vxp-color-success,
+    warning: $vxp-color-warning,
+    error: $vxp-color-error
+  );
+
+  &__item {
+    width: 24em;
+    padding: 1em;
+    background-color: $vxp-color-fill;
+    border-radius: $vxp-border-radius-base;
+    box-shadow: $vxp-box-shadow-base;
+
+    &--icon {
+      padding-left: 4.2em;
+    }
+
+    &--title {
+      padding-left: 3.2em;
+    }
+
+    &--content {
+      min-height: 5em;
+    }
+
+    @each $type in map-keys($map: $types) {
+      $color: map-get($types, $type);
+
+      &--#{$type} {
+        #{$icon} {
+          &,
+          .#{$prefix}-icon {
+            color: $color;
+          }
+        }
+      }
+    }
+  }
+
+  &__item--title &__title {
+    margin: 0;
+  }
+
+  &__item--title &__icon {
+    top: 50%;
+    left: 1.4em;
+    transform: translateY(-50%);
+
+    .#{$prefix}-icon {
+      transform: scale(1.2);
+    }
+  }
+
+  &__item--title &__close {
+    top: 50%;
+    right: 1em;
+    transform: translateY(-50%);
+  }
+}

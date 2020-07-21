@@ -1,0 +1,100 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-message {
+  @include basis;
+
+  $icon: #{&}__icon;
+  $close: #{&}__close;
+
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2em 0;
+  font-size: 0.875rem;
+
+  &__wrapper {
+    display: flex;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5em;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    margin-left: 1em;
+    color: $vxp-color-content-placeholder;
+    cursor: pointer;
+
+    &:hover {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-content-normal;
+      }
+    }
+  }
+
+  $types: (
+    info: $vxp-color-primary,
+    success: $vxp-color-success,
+    warning: $vxp-color-warning,
+    error: $vxp-color-error
+  );
+
+  &__item {
+    display: flex;
+    padding: 0.6em 1em;
+    background-color: $vxp-color-fill;
+    border: $vxp-border-appearance transparent;
+    border-radius: $vxp-border-radius-base;
+    box-shadow: $vxp-box-shadow-base;
+
+    @mixin color-close($color) {
+      color: mix($vxp-color-white, $color, 50%);
+
+      &:hover {
+        &,
+        .#{$prefix}-icon {
+          color: $color;
+        }
+      }
+    }
+
+    @each $type in map-keys($map: $types) {
+      $color: map-get($types, $type);
+
+      &--color-only#{&}--#{$type} {
+        color: $color;
+
+        #{$close} {
+          @include color-close($color);
+        }
+      }
+
+      &--background#{&}--#{$type} {
+        color: mix($vxp-color-black, $color, 10%);
+        background-color: mix($vxp-color-white, $color, 85%);
+        border-color: mix($vxp-color-white, $color, 20%);
+        box-shadow: unset;
+
+        #{$close} {
+          @include color-close($color);
+        }
+      }
+
+      &--#{$type} {
+        #{$icon} {
+          &,
+          .#{$prefix}-icon {
+            color: $color;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,150 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-picture-viewer {
+  @include basis;
+
+  $normal-color: mix($vxp-color-white, $vxp-color-content-normal, 20%);
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  &__wrapper {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__close {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &,
+    .#{$prefix}-icon {
+      color: $normal-color;
+    }
+
+    &:hover {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-content-normal;
+      }
+    }
+  }
+
+  &__actions {
+    position: absolute;
+    bottom: 2em;
+    left: 50%;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5em 1em;
+    background-color: $vxp-color-fill-hover;
+    border-radius: $vxp-border-radius-large;
+    transform: translateX(-50%);
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4em;
+    height: 2.4em;
+    margin: 0 0.3em;
+    cursor: pointer;
+
+    &,
+    .#{$prefix}-icon {
+      color: $normal-color;
+    }
+
+    &:hover {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-content-normal;
+      }
+    }
+
+    &--small {
+      width: 1.8em;
+      height: 1.8em;
+    }
+
+    &--large {
+      width: 3em;
+      height: 3em;
+    }
+  }
+
+  &__refresh {
+    padding: 1px 0.1em 0;
+    font-weight: 700;
+    color: $normal-color;
+    user-select: none;
+    border: 3px $vxp-border-style $normal-color;
+    border-radius: $vxp-border-radius-large;
+    transition: $vxp-transition-color-base, $vxp-transition-border-base,
+      $vxp-transition-transform-base;
+    transform: scaleY(0.9);
+  }
+
+  &__action:hover &__refresh {
+    color: $vxp-color-content-normal;
+    border-color: $vxp-color-content-normal;
+  }
+
+  %item-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__single-wrapper {
+    @extend %item-wrapper;
+  }
+
+  .#{$prefix}-carousel {
+    width: 100%;
+    height: 100%;
+
+    &__item {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      overflow: hidden;
+      user-select: none;
+      opacity: 0.1;
+      transition: $vxp-transition-opacity-base;
+
+      &-inner {
+        @extend %item-wrapper;
+      }
+
+      &--active {
+        opacity: 1;
+      }
+    }
+  }
+
+  .#{$prefix}-picture {
+    &__image {
+      width: auto;
+      height: auto;
+      user-select: none;
+    }
+  }
+}

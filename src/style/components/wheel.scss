@@ -1,0 +1,86 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-wheel {
+  @include basis;
+
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+
+  &__scroll {
+    position: relative;
+    // height: 100%;
+    // overflow: hidden;
+    user-select: none;
+  }
+
+  &__list {
+    padding: 0.4em;
+    margin: 0;
+  }
+
+  &__item {
+    padding: 0.3em 0.6em;
+    text-align: center;
+    list-style: none;
+  }
+
+  &__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $vxp-color-content-disabled;
+    cursor: pointer;
+    user-select: none;
+    transition: $vxp-transition-color-base;
+
+    &:hover {
+      color: $vxp-color-content-normal;
+    }
+
+    &--disabled {
+      &,
+      &:hover {
+        color: $vxp-color-fill-disabled;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__mask {
+    position: absolute;
+    pointer-events: none;
+    background-color: rgba($vxp-color-fill, 0.4);
+    border: 0 $vxp-border-style $vxp-color-border-light-1;
+  }
+
+  &--vertical &__mask {
+    right: 0;
+    left: 0;
+
+    &--top {
+      top: 0;
+      border-bottom-width: $vxp-border-width;
+    }
+
+    &--bottom {
+      bottom: 0;
+      border-top-width: $vxp-border-width;
+    }
+  }
+
+  &--horizontal &__mask {
+    top: 0;
+    bottom: 0;
+
+    &--top {
+      left: 0;
+      border-right-width: $vxp-border-width;
+    }
+
+    &--bottom {
+      right: 0;
+      border-left-width: $vxp-border-width;
+    }
+  }
+}
