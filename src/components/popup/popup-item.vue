@@ -3,8 +3,6 @@
     appear
     type="animation"
     :name="transitionName"
-    @enter="handleEnter"
-    @leave="handleLeave"
   >
     <div
       :class="`${prefix}__item`"

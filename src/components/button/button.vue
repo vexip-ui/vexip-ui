@@ -1,6 +1,7 @@
 <template>
   <button
     :class="className"
+    :style="style"
     :type="buttonType"
     :disabled="disabled"
     @click.left="handleClick"
@@ -78,6 +79,10 @@ export default {
       validator(value) {
         return ['small', 'default', 'large'].includes(value)
       }
+    },
+    textColor: {
+      type: String,
+      default: null
     }
   },
   data() {
@@ -105,12 +110,6 @@ export default {
         pulsing
       } = this
 
-      // let baseClass = prefixCls
-
-      // if (type !== 'default') {
-      //   baseClass += `--${type}`
-      // }
-
       return {
         [prefixCls]: true,
         [`${prefixCls}--${type}`]: type !== 'default',
@@ -122,6 +121,11 @@ export default {
         [`${prefixCls}--icon-only`]: isIconOnly,
         [`${prefixCls}--${size}`]: size !== 'defalut',
         [`${prefixCls}--pulsing`]: pulsing
+      }
+    },
+    style() {
+      return {
+        color: this.textColor
       }
     }
   },

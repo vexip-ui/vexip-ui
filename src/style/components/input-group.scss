@@ -3,34 +3,34 @@
 .#{$prefix}-input-group {
   @include basis;
 
-  $transition-time: 200ms;
-
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
-  background-color: #fff;
-  border: $vxp-border-base;
-  border-radius: $vxp-border-radius-base;
-  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+  background-color: $vxp-input-color-bg;
+  border: $vxp-input-border;
+  border-radius: $vxp-input-border-radius;
+  transition:
+    $vxp-transition-background-base,
+    $vxp-transition-border-base,
     $vxp-transition-box-shadow-base;
 
   &:hover {
-    border-color: $vxp-color-primary-light-1;
+    border-color: $vxp-input-color-border-hover;
   }
 
   &--focused {
-    border-color: $vxp-color-primary-light-1;
-    box-shadow: $vxp-box-shadow-fouced-appearance rgba($vxp-color-primary, 0.2);
+    border-color: $vxp-input-color-border-focus;
+    box-shadow: $vxp-input-shadow-focus;
   }
 
   &--disabled {
     cursor: not-allowed;
-    background-color: mix($vxp-color-white, $vxp-color-fill-disabled, 70%);
+    background-color: $vxp-input-color-bg-disabled;
 
     &,
     &:hover {
-      border-color: $vxp-color-border;
+      border-color: $vxp-input-color-border;
     }
   }
 
@@ -43,7 +43,7 @@
     overflow: hidden;
     background-color: transparent;
     border: 0;
-    border-radius: $vxp-border-radius-base;
+    border-radius: $vxp-input-border-radius;
   }
 
   &--small &__control {
@@ -71,7 +71,7 @@
     width: 1.6em;
     height: 100%;
     padding: 0;
-    color: $vxp-color-content-normal;
+    color: $vxp-input-color-control;
     cursor: pointer;
     user-select: none;
     background-color: transparent;
@@ -96,7 +96,7 @@
       justify-content: center;
       width: 2em;
       height: 100%;
-      color: $vxp-color-content-secondary;
+      color: $vxp-input-color-icon;
       user-select: none;
     }
   }

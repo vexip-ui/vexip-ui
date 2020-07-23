@@ -17,7 +17,8 @@
   &__item {
     display: inline-block;
     list-style: none;
-    transition: opacity $transition-duration $vxp-transition-timing-function,
+    transition:
+      opacity $transition-duration $vxp-transition-timing-function,
       transform $transition-duration $vxp-transition-timing-function;
 
     &.#{$prefix}-fade-enter-active,

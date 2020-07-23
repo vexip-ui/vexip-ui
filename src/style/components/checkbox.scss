@@ -10,7 +10,9 @@
   line-height: 1;
   cursor: pointer;
   user-select: none;
-  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+  transition:
+    $vxp-transition-background-base,
+    $vxp-transition-border-base,
     $vxp-transition-box-shadow-base;
 
   &--border {
@@ -57,8 +59,11 @@
       border: solid $vxp-checkbox-color-border-signal-after;
       border-width: 0 2px 2px 0;
       opacity: 0;
-      transition: width $vxp-transition-base, height $vxp-transition-base,
-        $vxp-transition-background-base, $vxp-transition-opacity-base,
+      transition:
+        width $vxp-transition-base,
+        height $vxp-transition-base,
+        $vxp-transition-background-base,
+        $vxp-transition-opacity-base,
         $vxp-transition-transform-base;
       transform: translate(-50%, -50%) rotate(45deg) scale(0);
     }

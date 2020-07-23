@@ -94,7 +94,9 @@
     user-select: none;
     border: 3px $vxp-border-style $normal-color;
     border-radius: $vxp-border-radius-large;
-    transition: $vxp-transition-color-base, $vxp-transition-border-base,
+    transition:
+      $vxp-transition-color-base,
+      $vxp-transition-border-base,
       $vxp-transition-transform-base;
     transform: scaleY(0.9);
   }

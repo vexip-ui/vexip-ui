@@ -30,7 +30,8 @@
 
         &:focus,
         &--focused {
-          box-shadow: $vxp-box-shadow-fouced-appearance
+          box-shadow:
+            $vxp-box-shadow-fouced-appearance
             rgba($vxp-color-error, 0.2);
         }
       }
@@ -53,7 +54,8 @@
         }
 
         &__trigger--visible .#{$color-picker}__control {
-          box-shadow: $vxp-box-shadow-fouced-appearance
+          box-shadow:
+            $vxp-box-shadow-fouced-appearance
             rgba($vxp-color-error, 0.2);
         }
       }

@@ -15,7 +15,9 @@ $popup-types: (
 
   @if $type == 'top' or $type == 'bottom' {
     transform: translate3d(-50%, 0, 0);
-  } @else {
+  }
+
+  @else {
     transform: translate3d(0, 0, 0);
   }
 }

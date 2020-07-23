@@ -79,7 +79,7 @@ import { Row, Column } from './components/grid'
 import 'vue-awesome/icons'
 
 // utils
-import * as Util from './utils'
+import * as Util from './utils/common'
 import * as ColorUtil from './utils/color'
 import * as DateUtil from './utils/date'
 

@@ -13,7 +13,9 @@
   background-color: $vxp-color-fill;
   border: $vxp-border-base;
   border-radius: $vxp-border-radius-base;
-  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+  transition:
+    $vxp-transition-background-base,
+    $vxp-transition-border-base,
     $vxp-transition-box-shadow-base;
 
   &:hover,

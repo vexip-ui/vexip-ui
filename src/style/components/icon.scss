@@ -1,3 +1,38 @@
+.fa-icon {
+  display: inline-block;
+  overflow: visible;
+  vertical-align: -0.125em;
+  fill: currentColor;
+}
+
+.fa-icon > g {
+  transform-origin: 50% 50%;
+}
+
+.fa-flip-horizontal {
+  transform: scale(-1, 1);
+}
+
+.fa-flip-vertical {
+  transform: scale(1, -1);
+}
+
+.fa-flip-both {
+  transform: scale(-1, -1);
+}
+
+.fa-spin > g {
+  animation: fa-spin 1s 0s infinite linear;
+}
+
+.fa-pulse > g {
+  animation: fa-spin 1s infinite steps(8);
+}
+
+.fa-inverse {
+  color: #fff;
+}
+
 .#{$prefix}-icon {
   display: inline-block;
   overflow: visible;
@@ -10,5 +45,15 @@
     line-height: 1;
     transform: scale(0.8);
     transform-origin: 50% 50%;
+  }
+}
+
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }

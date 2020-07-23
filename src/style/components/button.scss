@@ -40,8 +40,11 @@
       border: $vxp-button-border;
       border-radius: $vxp-button-border-radius;
       outline: 0;
-      transition: $vxp-transition-color-base, $vxp-transition-background-base,
-        $vxp-transition-border-base, $vxp-transition-box-shadow-base;
+      transition:
+        $vxp-transition-color-base,
+        $vxp-transition-background-base,
+        $vxp-transition-border-base,
+        $vxp-transition-box-shadow-base;
 
       &::after {
         position: absolute;

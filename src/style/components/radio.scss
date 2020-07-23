@@ -10,7 +10,9 @@
   line-height: 1;
   cursor: pointer;
   user-select: none;
-  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+  transition:
+    $vxp-transition-background-base,
+    $vxp-transition-border-base,
     $vxp-transition-box-shadow-base;
 
   &--border {
@@ -56,7 +58,8 @@
       background-color: $vxp-radio-color-checked-signal;
       border-radius: 50%;
       opacity: 0;
-      transition: $vxp-transition-background-base,
+      transition:
+        $vxp-transition-background-base,
         $vxp-transition-opacity-base $vxp-transition-transform-base;
       transform: translate(-50%, -50%) scale(0);
     }

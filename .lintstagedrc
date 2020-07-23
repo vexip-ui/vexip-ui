@@ -4,8 +4,7 @@
     "prettier --write"
   ],
   "src/**/*.scss": [
-    "npm run lint:style",
-    "prettier --write"
+    "npm run lint:style"
   ],
   "src/**/*.vue": [
     "npm run lint:style",
