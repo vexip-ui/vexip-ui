@@ -1,7 +1,7 @@
 {
   "src/**/*.{js,jsx,ts,tsx}": [
-    "npm run lint",
-    "prettier --write"
+    "prettier --write",
+    "npm run lint"
   ],
   "src/**/*.scss": [
     "npm run lint:style"

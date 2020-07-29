@@ -1,9 +1,14 @@
 <template>
   <div
     :class="`${prefix}__group`"
+    :draggable="draggable"
     @click="handleClick"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
+    @dragstart.stop="handleDragStart"
+    @dragover.stop="handleDragOver"
+    @dragend.stop="handleDragEnd"
+    @drop.stop="handleDrop"
   >
     <div :class="className">
       <slot></slot>
@@ -70,18 +75,10 @@ export default {
         },
         customClass
       ]
+    },
+    draggable() {
+      return !this.isHead && this.table.rowDraggable
     }
-    // style () {
-    //   const { index, stripe } = this
-
-    //   if (stripe && index % 2 === 1) {
-    //     return {
-    //       backgroundColor: stripe
-    //     }
-    //   }
-
-    //   return {}
-    // }
   },
   mounted() {
     this.computeRowHeight()
@@ -116,6 +113,30 @@ export default {
     },
     handleMouseLeave() {
       this.setRowHover(this.row.key, false)
+    },
+    handleDragStart() {
+      if (!this.draggable) return
+
+      this.table.handleRowDragStart(this)
+    },
+    handleDragOver(event) {
+      if (!this.draggable) return
+
+      event.preventDefault()
+
+      this.table.handleRowDragOver(this, event)
+    },
+    handleDrop(event) {
+      if (!this.draggable) return
+
+      event.preventDefault()
+
+      this.table.handleRowDrop(this)
+    },
+    handleDragEnd() {
+      if (!this.draggable) return
+
+      this.table.handleRowDragEnd(this)
     }
   }
 }

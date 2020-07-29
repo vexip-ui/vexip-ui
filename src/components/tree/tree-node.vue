@@ -348,7 +348,7 @@ export default {
 
       event.preventDefault()
 
-      this.callTreeInstanceMethod('handleNodeDragOver', this)
+      this.callTreeInstanceMethod('handleNodeDragOver', this, event)
     },
     handleDrop(event) {
       if (!this.draggable) return

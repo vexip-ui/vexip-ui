@@ -265,4 +265,13 @@
   &--use-y-bar &__bar--horizontal {
     right: 6px;
   }
+
+  &__indicator {
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    height: 1px;
+    background-color: $vxp-color-primary;
+  }
 }

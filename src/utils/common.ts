@@ -454,10 +454,10 @@ export function sortByProps(
       (value: string | SortPropOptions): SortPropOptions =>
         typeof value === 'string'
           ? {
-              key: value,
-              method: defaultSortMethod,
-              type: 'asc'
-            }
+            key: value,
+            method: defaultSortMethod,
+            type: 'asc'
+          }
           : value
     )
     .map((value: SortPropOptions) => {
@@ -509,7 +509,7 @@ export function throttle(method: AnyFunction, delay = 16): AnyFunction {
   let start = Date.now()
   let timer: number
 
-  return function(...args: any[]): void {
+  return function (...args: any[]): void {
     const current = Date.now()
     const remaining = start + delay - current
 
@@ -538,7 +538,7 @@ export function debounce(method: AnyFunction, delay = 100): AnyFunction {
 
   let timer: number
 
-  return function(...args: any[]): void {
+  return function (...args: any[]): void {
     clearTimeout(timer)
 
     timer = setTimeout(() => {
@@ -552,16 +552,13 @@ export function debounce(method: AnyFunction, delay = 100): AnyFunction {
  * @param {Array} array 需要被移除元素的数组
  * @param {Any} item 需要被移除的元素, 或一个查找方法
  */
-export function removeArrayItem(
-  array: any[],
-  item: any | null | undefined
-): boolean {
+export function removeArrayItem(array: any[], item: unknown): boolean {
   let index = -1
 
   if (typeof item !== 'function') {
     index = array.findIndex((current: any) => current === item)
   } else {
-    index = array.findIndex(item)
+    index = array.findIndex(item as AnyFunction)
   }
 
   if (~index) {

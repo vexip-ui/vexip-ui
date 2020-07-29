@@ -48,6 +48,53 @@ export default class Store {
   }
 }
 
+function createStoreVM(store) {
+  const computed = {}
+  const keys = Object.keys(getters)
+
+  store.getters = {}
+
+  for (let i = 0, len = keys.length; i < len; i++) {
+    const key = keys[i]
+    const getter = getters[key]
+
+    computed[key] = function () {
+      return getter(store.state, store.getters)
+    }
+
+    Object.defineProperty(store.getters, key, {
+      get() {
+        return store._vm[key]
+      },
+      enumerable: true
+    })
+  }
+
+  store._vm = new Vue({
+    data: {
+      state: {
+        columns: [],
+        rightFixedColumns: [],
+        leftFixedColumns: [],
+        data: [],
+        dataMap: {},
+        idMaps: new WeakMap(),
+        dataKey: DEFAULT_KEY_FIELD,
+        width: null,
+        checkedAll: false,
+        partial: false,
+        rowClass: null,
+        widths: {},
+        sorters: {},
+        filters: {},
+        bodyScroll: 0,
+        highlight: false
+      }
+    },
+    computed
+  })
+}
+
 // 理论上 Getter 是函数的调用, 应该可以重复使用
 const getters = {
   processedData(state) {
@@ -133,6 +180,13 @@ const mutations = {
       if (item) {
         item.active = active
       }
+    }
+  },
+  refreshRowIndex(state) {
+    const data = state.data
+
+    for (let i = 0, len = data.length; i < len; i++) {
+      data[i].index = i
     }
   }
 }
@@ -269,10 +323,9 @@ function setData(state, data) {
   const dataMap = {}
   const { dataKey, idMaps } = state
   const length = data.length
+  const oldDataMap = state.dataMap
 
   let i = 0
-
-  const oldDataMap = state.dataMap
 
   while (i < length) {
     const item = data[i]
@@ -542,60 +595,13 @@ function sortData(sorters, data, columns) {
   return sortByProps(data, usedSorter)
 }
 
-function createStoreVM(store) {
-  const computed = {}
-  const keys = Object.keys(getters)
-
-  store.getters = {}
-
-  for (let i = 0, len = keys.length; i < len; i++) {
-    const key = keys[i]
-    const getter = getters[key]
-
-    computed[key] = function() {
-      return getter(store.state, store.getters)
-    }
-
-    Object.defineProperty(store.getters, key, {
-      get() {
-        return store._vm[key]
-      },
-      enumerable: true
-    })
-  }
-
-  store._vm = new Vue({
-    data: {
-      state: {
-        columns: [],
-        rightFixedColumns: [],
-        leftFixedColumns: [],
-        data: [],
-        dataMap: {},
-        idMaps: new WeakMap(),
-        dataKey: DEFAULT_KEY_FIELD,
-        width: null,
-        checkedAll: false,
-        partial: false,
-        rowClass: null,
-        widths: {},
-        sorters: {},
-        filters: {},
-        bodyScroll: 0,
-        highlight: false
-      }
-    },
-    computed
-  })
-}
-
 export function mapState(mapList) {
   const map = {}
 
   for (let i = 0, len = mapList.length; i < len; i++) {
     const key = mapList[i]
 
-    map[key] = function() {
+    map[key] = function () {
       return this.table.store.state[key]
     }
   }
@@ -609,7 +615,7 @@ export function mapGetters(mapList) {
   for (let i = 0, len = mapList.length; i < len; i++) {
     const key = mapList[i]
 
-    map[key] = function() {
+    map[key] = function () {
       return this.table.store.getters[key]
     }
   }
@@ -623,7 +629,7 @@ export function mapMutations(mapList) {
   for (let i = 0, len = mapList.length; i < len; i++) {
     const key = mapList[i]
 
-    map[key] = function(...args) {
+    map[key] = function (...args) {
       const store = this.table.store
 
       return mutations[key](store.state, ...args)
@@ -639,7 +645,7 @@ export function mapActions(mapList) {
   for (let i = 0, len = mapList.length; i < len; i++) {
     const key = mapList[i]
 
-    map[key] = function(...args) {
+    map[key] = function (...args) {
       const store = this.table.store
 
       return actions[key](

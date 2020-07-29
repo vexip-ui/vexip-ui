@@ -82,6 +82,12 @@
       :style="{top: `${headHeight}px`}"
       @on-scroll="handleYBarScroll"
     ></Scrollbar>
+    <div
+      v-if="rowDraggable"
+      v-show="indicatorShow"
+      ref="indicator"
+      :class="`${prefix}__indicator`"
+    ></div>
   </div>
 </template>
 
@@ -96,7 +102,7 @@ import Store, {
   mapMutations,
   mapGetters
 } from './store'
-import { debounce } from '../../utils/common'
+import { debounce, removeArrayItem } from '../../utils/common'
 
 const { prefix } = require('../../style/basis/variable')
 
@@ -159,6 +165,10 @@ export default {
     barFade: {
       type: Number,
       default: 1500
+    },
+    rowDraggable: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -170,7 +180,8 @@ export default {
       yScrollPercent: 0,
       yScrollEnable: false,
       headHeight: 0,
-      templateColumns: []
+      templateColumns: [],
+      indicatorShow: false
     }
   },
   computed: {
@@ -201,11 +212,15 @@ export default {
         }
 
         return {
+          width: `${width}px`,
           minWidth: `${width}px`
         }
       }
 
       return {}
+    },
+    rowData() {
+      return this.store?.state.data ?? []
     },
     useXScroll() {
       return (
@@ -275,7 +290,7 @@ export default {
     const { rowClass } = this
 
     this.table = {}
-    window.store = this.table.store = this.store = new Store({
+    this.table.store = this.store = new Store({
       rowClass,
       columns: this.columns,
       data: this.data,
@@ -304,7 +319,8 @@ export default {
       'setBodyScroll',
       'setTableWidth',
       'setHighlight',
-      'setStripe'
+      'setStripe',
+      'refreshRowIndex'
     ]),
     computeTableWidth() {
       const width = this.width
@@ -380,6 +396,71 @@ export default {
     },
     emitAllRowCheck(checked) {
       this.$emit('on-row-check-all', checked)
+    },
+    handleRowDragStart(rowInstance) {
+      this.dragState = {
+        draggingRow: rowInstance.row,
+        tableRect: this.$el.getBoundingClientRect()
+      }
+
+      this.$emit('on-row-drag-start', rowInstance.row.data)
+    },
+    handleRowDragOver(rowInstance, event) {
+      const dragState = this.dragState
+      const indicator = this.$refs.indicator
+      const dropRowRect = rowInstance.$el.getBoundingClientRect()
+      const tableRect = dragState.tableRect
+      const prevPercent = 0.5
+      const distance = event.clientY - dropRowRect.top
+      const dropRowHeight = dropRowRect.height
+
+      let dropType
+      let indicatorTop = -9999
+
+      if (distance < dropRowHeight * prevPercent) {
+        dropType = 'before'
+        indicatorTop = dropRowRect.top - tableRect.top
+      } else {
+        dropType = 'after'
+        indicatorTop = dropRowRect.bottom - tableRect.top
+      }
+
+      indicator.style.top = `${indicatorTop - 2}px`
+
+      dragState.willDropRow = rowInstance.row
+      dragState.dropType = dropType
+
+      this.indicatorShow = true
+      this.$emit('on-row-drag-over', rowInstance.row.data)
+    },
+    handleRowDrop(rowInstance) {
+      const dragState = this.dragState
+      const { draggingRow, willDropRow, dropType } = dragState
+
+      if (draggingRow.key === willDropRow.key) return
+
+      let index = this.rowData.findIndex(row => row.key === willDropRow.key)
+
+      if (~index) {
+        removeArrayItem(this.rowData, row => row.key === draggingRow.key)
+
+        if (dropType === 'after') {
+          index += 1
+        }
+
+        this.rowData.splice(index, 0, draggingRow)
+        this.refreshRowIndex()
+        this.$emit('on-row-drop', rowInstance.row.data, dropType)
+      }
+    },
+    handleRowDragEnd(rowInstance) {
+      this.dragState = {}
+      this.indicatorShow = false
+      this.$emit(
+        'on-row-drag-end',
+        rowInstance.row.data,
+        this.rowData.map(row => row.data)
+      )
     }
   }
 }

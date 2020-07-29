@@ -32,6 +32,7 @@
       </slot>
     </div>
     <div
+      v-if="draggable"
       v-show="indicatorShow"
       ref="indicator"
       :class="`${prefix}__indicator`"
@@ -49,9 +50,9 @@ import 'vue-awesome/icons/search'
 const { prefix } = require('../../style/basis/variable')
 
 // drop type
-const BEFORE = 1
-const INNER = 2
-const AFTER = 3
+const BEFORE = 'before'
+const INNER = 'inner'
+const AFTER = 'after'
 
 export default {
   name: 'Tree',
@@ -143,7 +144,7 @@ export default {
       nodeMaps: {},
       flatData: [],
       treeData: [],
-      dragState: {},
+      // dragState: {},
       indicatorShow: false,
       searchValue: null
     }
@@ -503,14 +504,18 @@ export default {
       return null
     },
     handleNodeDragStart(nodeInstance) {
-      this.dragState.draggingNode = nodeInstance.node
+      this.dragState = {
+        draggingNode: nodeInstance.node,
+        treeRect: this.$el.getBoundingClientRect()
+      }
+
       this.$emit('on-drag-start', nodeInstance.data, nodeInstance.node)
     },
-    handleNodeDragOver(nodeInstance) {
+    handleNodeDragOver(nodeInstance, event) {
       const dragState = this.dragState
       const indicator = this.$refs.indicator
       const dropNodeRect = nodeInstance.$el.getBoundingClientRect()
-      const treeRect = this.$el.getBoundingClientRect()
+      const treeRect = dragState.treeRect
       const dropArrowRect = nodeInstance.$refs.arrow.getBoundingClientRect()
       const prevPercent = 0.25
       const nextPercent = 0.75
@@ -601,7 +606,7 @@ export default {
         this.$forceUpdate()
       })
 
-      this.$emit('on-drop', nodeInstance.data, nodeInstance.node)
+      this.$emit('on-drop', nodeInstance.data, nodeInstance.node, dropType)
     },
     handleNodeDragEnd(nodeInstance) {
       this.indicatorShow = false
