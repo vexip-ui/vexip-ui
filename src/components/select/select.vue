@@ -45,15 +45,42 @@
         </VxpInput>
       </slot>
     </div>
-    <transition :name="transitionName">
+    <transition :name="transitionName" @after-enter="computeListHeight">
       <div
         v-show="currentVisible"
         ref="popper"
         :class="`${prefixCls}__popper`"
         @click.stop
       >
-        <ul :class="`${prefixCls}__list`">
-          <slot></slot>
+        <ul
+          :class="`${prefixCls}__list`"
+          :style="{
+            height: listHeight,
+            maxHeight: `${maxListHeight}px`
+          }"
+        >
+          <Scroll
+            ref="scroll"
+            use-y-bar
+            height="100%"
+          >
+            <slot>
+              <template v-for="(item, index) in options">
+                <Option
+                  v-if="isObject(item)"
+                  :key="index"
+                  :label="item.label || item.value"
+                  :value="item.value"
+                ></Option>
+                <Option
+                  v-else
+                  :key="index"
+                  :label="item"
+                  :value="item"
+                ></Option>
+              </template>
+            </slot>
+          </Scroll>
         </ul>
       </div>
     </transition>
@@ -63,6 +90,8 @@
 <script>
 import Icon from '../icon'
 import Input from '../input'
+import Option from '../option'
+import Scroll from '../scroll'
 
 import { SELECTOR } from '../option/option'
 import { usePopper } from '../../mixins/popper'
@@ -79,11 +108,13 @@ export default {
   name: 'Select',
   components: {
     Icon,
-    VxpInput: Input
+    VxpInput: Input,
+    Option,
+    Scroll
   },
   mixins: [usePopper({ isDrop: true }), formControl],
   model: {
-    event: 'on-select'
+    event: 'on-change'
   },
   provide() {
     return { [SELECTOR]: this }
@@ -92,6 +123,12 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    options: {
+      type: Array,
+      default() {
+        return []
+      }
     },
     size: {
       default: 'default',
@@ -130,6 +167,10 @@ export default {
     clearable: {
       type: Boolean,
       default: false
+    },
+    maxListHeight: {
+      type: Number,
+      default: 300
     }
   },
   data() {
@@ -139,7 +180,8 @@ export default {
       focused: false,
       currentLabel: null,
       currentValue: this.value,
-      isHover: false
+      isHover: false,
+      listHeight: null
     }
   },
   computed: {
@@ -183,6 +225,21 @@ export default {
     disconnect(this.$el, CLICK_OUTSIDE)
   },
   methods: {
+    isObject(value) {
+      return typeof value === 'object'
+    },
+    computeListHeight() {
+      this.$nextTick(() => {
+        const scrollWrapper = this.$refs.scroll?.$refs.wrapper
+
+        if (scrollWrapper) {
+          const listHeight = scrollWrapper.getBoundingClientRect().height
+
+          this.listHeight = listHeight < 300 ? null : `${listHeight}px`
+          this.$refs.scroll.refresh()
+        }
+      })
+    },
     handleToggelVisible(value = !this.currentVisible) {
       this.currentVisible = value
 
@@ -197,9 +254,15 @@ export default {
         this.currentLabel = label
       }
 
+      const oldValue = this.currentValue
+
       this.currentValue = value
       this.handleToggelVisible(false)
       this.$emit('on-select', value, label)
+
+      if (oldValue !== value) {
+        this.$emit('on-change', value, label)
+      }
     },
     handleClick() {
       if (this.disabled) {

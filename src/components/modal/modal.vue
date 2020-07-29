@@ -5,19 +5,25 @@
     :inner="inner"
     :transition-name="transitionName"
     :closable="maskClose"
+    :disabled="hideMask"
     @before-close="handleMaskClose"
     @on-hide="handleHidden"
   >
     <template #default="{show}">
-      <div
+      <section
         v-show="show"
         :class="wrapperClass"
         :style="wrapperStyle"
       >
-        <div v-if="hasTitle" :class="`${prefix}__header`">
+        <div
+          v-if="hasTitle"
+          :class="`${prefix}__header`"
+          @mousedown="handleDragStart"
+        >
           <div
             v-if="closable"
             :class="`${prefix}__close`"
+            @mousedown.stop
             @click="handleClose()"
           >
             <slot name="close">
@@ -30,7 +36,11 @@
             </div>
           </slot>
         </div>
-        <div :class="`${prefix}__content`">
+        <div
+          ref="content"
+          :class="`${prefix}__content`"
+          :style="contentStyle"
+        >
           <slot></slot>
         </div>
         <div v-if="!noFooter" :class="`${prefix}__footer`">
@@ -51,7 +61,12 @@
             </Button>
           </slot>
         </div>
-      </div>
+        <div
+          v-if="resizable"
+          :class="`${prefix}__resizer`"
+          @mousedown="handleResizeStart"
+        ></div>
+      </section>
     </template>
   </Masker>
 </template>
@@ -86,7 +101,7 @@ export default {
       default: 600
     },
     top: {
-      type: [Number, String],
+      type: Number,
       default: 100
     },
     left: {
@@ -116,28 +131,41 @@ export default {
     noFooter: {
       type: Boolean,
       default: false
+    },
+    hideMask: {
+      type: Boolean,
+      default: false
+    },
+    draggable: {
+      type: Boolean,
+      default: false
+    },
+    resizable: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
-    // 根据 inner 判断 寻找最近的定位元素
-    const left =
-      this.left === 'auto' ? (window.innerWidth - this.width) / 2 : this.left
-
     return {
       prefix: `${prefix}-modal`,
       currentActive: this.active,
       transitionName: `${prefix}-ease`,
-      currentLeft: left
+      currentTop: this.top,
+      currentLeft: this.left,
+      currentWidth: this.width,
+      contentHeight: 'auto'
     }
   },
   computed: {
     className() {
-      const { prefix, inner } = this
+      const { prefix, inner, draggable, resizable } = this
 
       return [
         prefix,
         {
-          [`${prefix}--inner`]: inner
+          [`${prefix}--inner`]: inner,
+          [`${prefix}--draggable`]: draggable,
+          [`${prefix}--resizable`]: resizable
         }
       ]
     },
@@ -154,9 +182,21 @@ export default {
     },
     wrapperStyle() {
       return {
-        width: `${this.width}px`,
-        top: `${this.top}px`,
-        left: `${this.currentLeft}px`
+        top: `${this.currentTop}px`,
+        left: `${this.currentLeft}px`,
+        width: `${this.currentWidth}px`
+      }
+    },
+    contentStyle() {
+      const { contentHeight } = this
+
+      if (contentHeight === 'auto') {
+        return null
+      }
+
+      return {
+        height: `${contentHeight}px`,
+        overflow: 'hidden'
       }
     },
     cancelText() {
@@ -181,10 +221,14 @@ export default {
     currentActive(value) {
       this.$emit('on-toggle', value)
     },
+    top(value) {
+      this.currentTop = value
+    },
     left() {
       this.computeLeft()
     },
-    width() {
+    width(value) {
+      this.currentWidth = value
       this.computeLeft()
     }
   },
@@ -199,7 +243,7 @@ export default {
         while (parentNode && parentNode !== document.body) {
           if (getComputedStyle(parentNode).position === 'absolute') {
             this.currentLeft =
-              (parentNode.getBoundingClientRect().width - this.width) / 2
+              (parentNode.getBoundingClientRect().width - this.currentWidth) / 2
 
             break
           }
@@ -209,7 +253,7 @@ export default {
       } else {
         this.currentLeft =
           this.left === 'auto'
-            ? (window.innerWidth - this.width) / 2
+            ? (window.innerWidth - this.currentWidth) / 2
             : this.left
       }
     },
@@ -251,6 +295,98 @@ export default {
       if (this.maskClose) {
         this.handleClose(maskCloseFn)
       }
+    },
+    handleDragStart(event) {
+      if (!this.draggable || event.button !== 0) {
+        return false
+      }
+
+      event.stopPropagation()
+
+      this.dragState = {
+        topStart: this.currentTop,
+        leftStart: this.currentLeft,
+        xStart: event.clientX,
+        yStart: event.clientY
+      }
+
+      document.addEventListener('mousemove', this.handleDragMove)
+      document.addEventListener('mouseup', this.handleDragEnd)
+
+      this.$emit('on-drag-start')
+    },
+    handleDragMove(event) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      const { clientX, clientY } = event
+      const { topStart, leftStart, xStart, yStart } = this.dragState
+
+      this.currentTop = topStart - yStart + clientY
+      this.currentLeft = leftStart - xStart + clientX
+
+      this.$emit('on-drag-move', {
+        top: this.currentTop,
+        left: this.currentLeft
+      })
+    },
+    handleDragEnd(event) {
+      event.stopPropagation()
+
+      document.removeEventListener('mousemove', this.handleDragMove)
+      document.removeEventListener('mouseup', this.handleDragEnd)
+
+      this.$emit('on-drag-end')
+    },
+    handleResizeStart(event) {
+      if (!this.resizable || event.button !== 0) {
+        return false
+      }
+
+      event.stopPropagation()
+
+      let heightStart
+
+      if (this.contentHeight === 'auto') {
+        heightStart = this.$refs.content.getBoundingClientRect().height
+      } else {
+        heightStart = this.contentHeight
+      }
+
+      this.resizeState = {
+        heightStart,
+        widthStart: this.currentWidth,
+        xStart: event.clientX,
+        yStart: event.clientY
+      }
+
+      document.addEventListener('mousemove', this.handleResizeMove)
+      document.addEventListener('mouseup', this.handleResizeEnd)
+
+      this.$emit('on-resize-start')
+    },
+    handleResizeMove(event) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      const { clientX, clientY } = event
+      const { widthStart, heightStart, xStart, yStart } = this.resizeState
+
+      this.currentWidth = Math.max(150, widthStart - xStart + clientX)
+      this.contentHeight = heightStart - yStart + clientY
+
+      this.$emit('on-drag-move', {
+        width: this.currentWidth,
+        height: this.contentHeight
+      })
+    },
+    handleResizeEnd(event) {
+      event.stopPropagation()
+
+      document.removeEventListener('mousemove', this.handleResizeMove)
+      document.removeEventListener('mouseup', this.handleResizeEnd)
+
+      this.$emit('on-resize-end')
     }
   }
 }

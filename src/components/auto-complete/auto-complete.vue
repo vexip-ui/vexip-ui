@@ -30,7 +30,7 @@
         <Option
           v-if="isObject(item)"
           :key="index"
-          :label="item.label"
+          :label="item.label || item.value"
           :value="item.value"
         ></Option>
         <Option

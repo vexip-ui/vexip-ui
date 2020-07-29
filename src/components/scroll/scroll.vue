@@ -7,7 +7,7 @@
     @wheel="handleWheel"
   >
     <div
-      ref="scroll"
+      ref="wrapper"
       :class="wrapperClass"
       :style="wrapperStyle"
     >
@@ -313,7 +313,7 @@ export default {
         const mode = this.mode
 
         if (mode !== VERTICAL) {
-          this.contentWidth = this.$refs.scroll.offsetWidth
+          this.contentWidth = this.$refs.wrapper.offsetWidth
 
           if (this.wrapperWidth >= this.contentWidth) {
             this.currentXScroll = 0
@@ -321,7 +321,7 @@ export default {
         }
 
         if (mode !== HORIZONTAL) {
-          this.contentHeight = this.$refs.scroll.offsetHeight
+          this.contentHeight = this.$refs.wrapper.offsetHeight
 
           if (this.wrapperHeight >= this.contentHeight) {
             this.currentYScroll = 0
@@ -531,7 +531,7 @@ export default {
       })
     },
     createMutationObserver() {
-      const target = this.$refs.scroll.children[0]
+      const target = this.$refs.wrapper.children[0]
 
       if (!target) return
 
