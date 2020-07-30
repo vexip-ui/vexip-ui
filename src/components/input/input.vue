@@ -88,7 +88,6 @@ export default {
   },
   props: {
     type: {
-      type: String,
       default: 'text',
       validator(value) {
         return [
@@ -99,6 +98,12 @@ export default {
           'datetime',
           'time'
         ].includes(value)
+      }
+    },
+    state: {
+      default: 'default',
+      validator(value) {
+        return ['default', 'success', 'error', 'warning'].includes(value)
       }
     },
     prefix: {
@@ -195,7 +200,7 @@ export default {
   },
   computed: {
     className() {
-      const { prefixCls, type, focused, disabled, size } = this
+      const { prefixCls, type, focused, disabled, size, state } = this
 
       return [
         prefixCls,
@@ -203,7 +208,8 @@ export default {
         {
           [`${prefixCls}--focused`]: focused,
           [`${prefixCls}--disabled`]: disabled,
-          [`${prefixCls}--${size}`]: size !== 'default'
+          [`${prefixCls}--${size}`]: size !== 'default',
+          [`${prefixCls}--${state}`]: state !== 'default'
         }
       ]
     },

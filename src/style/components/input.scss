@@ -25,14 +25,54 @@
     box-shadow: $vxp-input-shadow-focus;
   }
 
+  &--success {
+    &,
+    &:hover {
+      border-color: $vxp-input-color-border-success-hover;
+    }
+  }
+
+  &--success:focus,
+  &--success#{&}--focused {
+    border-color: $vxp-input-color-border-success-focus;
+    box-shadow: $vxp-input-shadow-success-focus;
+  }
+
+  &--error {
+    &,
+    &:hover {
+      border-color: $vxp-input-color-border-error-hover;
+    }
+  }
+
+  &--error:focus,
+  &--error#{&}--focused {
+    border-color: $vxp-input-color-border-error-focus;
+    box-shadow: $vxp-input-shadow-error-focus;
+  }
+
+  &--warning {
+    &,
+    &:hover {
+      border-color: $vxp-input-color-border-warning-hover;
+    }
+  }
+
+  &--warning:focus,
+  &--warning#{&}--focused {
+    border-color: $vxp-input-color-border-warning-focus;
+    box-shadow: $vxp-input-shadow-warning-focus;
+  }
+
   &--disabled {
     cursor: not-allowed;
     background-color: $vxp-input-color-bg-disabled;
 
+    &,
     &:hover,
     &:focus {
       border: $vxp-input-border;
-      box-shadow: transparent;
+      box-shadow: none;
     }
 
     %disabled-item {
@@ -43,7 +83,7 @@
 
   &--disabled &--focused {
     border-color: $vxp-input-color-border;
-    box-shadow: transparent;
+    box-shadow: none;
   }
 
   &--number {

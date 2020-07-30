@@ -21,6 +21,7 @@
       :placeholder="placeholder"
       :disabled="disabled"
       :size="size"
+      :state="state"
       @click.native="handleInputClick"
       @on-input="handleInput"
       @on-blur="handleChange"
@@ -75,6 +76,12 @@ export default {
       type: Array,
       default() {
         return []
+      }
+    },
+    state: {
+      default: 'default',
+      validator(value) {
+        return ['default', 'success', 'error', 'warning'].includes(value)
       }
     },
     filter: {

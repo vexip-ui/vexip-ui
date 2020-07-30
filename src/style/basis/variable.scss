@@ -303,6 +303,15 @@ $vxp-input-color-bg-disabled: mix(
 $vxp-input-color-border: $vxp-color-border !default;
 $vxp-input-color-border-hover: $vxp-color-primary-light-1 !default;
 $vxp-input-color-border-focus: $vxp-input-color-border-hover !default;
+// success
+$vxp-input-color-border-success-hover: $vxp-color-success-light-1 !default;
+$vxp-input-color-border-success-focus: $vxp-input-color-border-success-hover !default;
+// error
+$vxp-input-color-border-error-hover: $vxp-color-error-light-1 !default;
+$vxp-input-color-border-error-focus: $vxp-input-color-border-error-hover !default;
+//warning
+$vxp-input-color-border-warning-hover: $vxp-color-warning-light-1 !default;
+$vxp-input-color-border-warning-focus: $vxp-input-color-border-warning-hover !default;
 
 $vxp-input-color-control: $vxp-color-content-normal !default;
 
@@ -314,6 +323,15 @@ $vxp-input-border: $vxp-border-appearance $vxp-input-color-border !default;
 $vxp-input-border-radius: $vxp-border-radius-base !default;
 $vxp-input-shadow-focus: $vxp-box-shadow-fouced-appearance
   rgba($vxp-color-primary, 0.2) !default;
+// success
+$vxp-input-shadow-success-focus: $vxp-box-shadow-fouced-appearance
+  rgba($vxp-color-success, 0.2) !default;
+// error
+$vxp-input-shadow-error-focus: $vxp-box-shadow-fouced-appearance
+  rgba($vxp-color-error, 0.2) !default;
+//warning
+$vxp-input-shadow-warning-focus: $vxp-box-shadow-fouced-appearance
+  rgba($vxp-color-warning, 0.2) !default;
 
 $vxp-input-font-size-count: $vxp-font-size-secondary !default;
 $vxp-input-line-height-count: $vxp-line-height-secondary !default;

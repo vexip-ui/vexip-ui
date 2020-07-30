@@ -17,6 +17,7 @@
           :value="currentLabel"
           :placeholder="placeholder"
           :size="size"
+          :state="state"
           :disabled="disabled"
           @on-focus="handleFocus"
           @on-blur="handleBlur"
@@ -134,6 +135,12 @@ export default {
       default: 'default',
       validator(value) {
         return ['small', 'default', 'large'].includes(value)
+      }
+    },
+    state: {
+      default: 'default',
+      validator(value) {
+        return ['default', 'success', 'error', 'warning'].includes(value)
       }
     },
     disabled: {

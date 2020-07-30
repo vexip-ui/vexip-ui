@@ -25,7 +25,7 @@
         &:hover,
         &:focus,
         &--focused {
-          border-color: $vxp-color-error;
+          border-color: $vxp-color-error-light-1;
         }
 
         &:focus,
@@ -50,7 +50,7 @@
 
       .#{$color-picker} {
         &__control {
-          border-color: $vxp-color-error;
+          border-color: $vxp-color-error-light-1;
         }
 
         &__trigger--visible .#{$color-picker}__control {

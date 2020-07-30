@@ -24,14 +24,57 @@
     box-shadow: $vxp-input-shadow-focus;
   }
 
+  &--success {
+    &,
+    &:hover {
+      border-color: $vxp-input-color-border-success-hover;
+    }
+  }
+
+  &--success#{&}--focused {
+    border-color: $vxp-input-color-border-success-focus;
+    box-shadow: $vxp-input-shadow-success-focus;
+  }
+
+  &--error {
+    &,
+    &:hover {
+      border-color: $vxp-input-color-border-error-hover;
+    }
+  }
+
+  &--error#{&}--focused {
+    border-color: $vxp-input-color-border-error-focus;
+    box-shadow: $vxp-input-shadow-error-focus;
+  }
+
+  &--warning {
+    &,
+    &:hover {
+      border-color: $vxp-input-color-border-warning-hover;
+    }
+  }
+
+  &--warning#{&}--focused {
+    border-color: $vxp-input-color-border-warning-focus;
+    box-shadow: $vxp-input-shadow-warning-focus;
+  }
+
   &--disabled {
     cursor: not-allowed;
     background-color: $vxp-input-color-bg-disabled;
 
     &,
-    &:hover {
+    &:hover,
+    &:focus {
       border-color: $vxp-input-color-border;
+      box-shadow: none;
     }
+  }
+
+  &--disabled#{&}--focused {
+    border-color: $vxp-input-color-border;
+    box-shadow: none;
   }
 
   &__control {

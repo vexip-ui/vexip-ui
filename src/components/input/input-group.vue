@@ -112,6 +112,12 @@ export default {
         return ['small', 'default', 'large'].includes(value)
       }
     },
+    state: {
+      default: 'default',
+      validator(value) {
+        return ['default', 'success', 'error', 'warning'].includes(value)
+      }
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -192,14 +198,15 @@ export default {
   },
   computed: {
     className() {
-      const { prefixCls, focused, disabled, size } = this
+      const { prefixCls, focused, disabled, size, state } = this
 
       return [
         prefixCls,
         {
           [`${prefixCls}--focused`]: focused,
           [`${prefixCls}--disabled`]: disabled,
-          [`${prefixCls}--${size}`]: size !== 'default'
+          [`${prefixCls}--${size}`]: size !== 'default',
+          [`${prefixCls}--${state}`]: state !== 'default'
         }
       ]
     },

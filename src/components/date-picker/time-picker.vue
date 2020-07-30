@@ -16,6 +16,7 @@
       :disabled-item="disabledInputVaule"
       :disabled="disabled"
       :size="size"
+      :state="state"
       @on-change="handleControlChange"
       @on-focus="handleFocus"
       @on-suffix-click="handleClear"
@@ -205,6 +206,12 @@ export default {
       default: 'default',
       validator(value) {
         return ['small', 'default', 'large'].includes(value)
+      }
+    },
+    state: {
+      default: 'default',
+      validator(value) {
+        return ['default', 'success', 'error', 'warning'].includes(value)
       }
     }
   },
