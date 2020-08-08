@@ -1,0 +1,105 @@
+@import '../mixins/basis.scss';
+
+.#{$prefix}-linker {
+  @include basis;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: $vxp-transition-color-base;
+
+  & + & {
+    margin-left: 10px;
+  }
+
+  &:hover {
+    text-decoration: none;
+
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-primary-light-1;
+    }
+  }
+
+  &--underline {
+    &::after {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 1px;
+      content: '';
+      background-color: $vxp-color-primary-light-1;
+      opacity: 0;
+      transition: $vxp-transition-opacity-base;
+    }
+
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+
+    &,
+    &:hover {
+      &,
+      .#{$prefix}-icon {
+        color: $vxp-color-content-disabled;
+      }
+    }
+
+    &:hover::after {
+      opacity: 0;
+    }
+  }
+
+  &__icon {
+    margin-right: 3px;
+  }
+
+  $types: (
+    primary: $vxp-color-primary $vxp-color-primary-light-2,
+    success: $vxp-color-success $vxp-color-success-light-2,
+    error: $vxp-color-error $vxp-color-error-light-2,
+    warning: $vxp-color-warning $vxp-color-warning-light-2,
+    info: $vxp-color-info $vxp-color-info-light-2
+  );
+
+  @each $type in map-keys($types) {
+    $colors: map-get($types, $type);
+    $color-base: nth($colors, 1);
+    $color-hover: nth($colors, 2);
+
+    &--#{$type} {
+      color: $color-base;
+
+      &:hover {
+        &,
+        .#{$prefix}-icon {
+          color: $color-hover;
+        }
+      }
+    }
+
+    &--#{$type}#{&}--underline {
+      &::after {
+        background-color: $color-hover;
+      }
+    }
+
+    &--#{$type}#{&}--disabled {
+      &,
+      &:hover {
+        &,
+        .#{$prefix}-icon {
+          color: mix($vxp-color-white, $color-base, 50%);
+        }
+      }
+    }
+  }
+}

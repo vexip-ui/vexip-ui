@@ -26,6 +26,7 @@ import FormItem from './components/form/form-item'
 import Icon from './components/icon'
 import Input from './components/input'
 import InputGroup from './components/input/input-group'
+import Linker from './components/linker'
 import Masker from './components/masker'
 import Menu from './components/menu'
 import MenuGroup from './components/menu/menu-group'
@@ -118,6 +119,7 @@ const components = {
   Icon,
   Input,
   InputGroup,
+  Linker,
   Masker,
   Menu,
   MenuGroup,
@@ -223,6 +225,7 @@ export {
   Icon,
   Input,
   InputGroup,
+  Linker,
   Masker,
   Menu,
   MenuGroup,

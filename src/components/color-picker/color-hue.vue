@@ -2,7 +2,7 @@
   <div :class="`${prefix}__hue`" @mousedown="handleMouseDown">
     <div
       :class="`${prefix}__hue-handler`"
-      :style="{left: `${left * 100}%`}"
+      :style="{ left: `${left * 100}%` }"
     ></div>
   </div>
 </template>

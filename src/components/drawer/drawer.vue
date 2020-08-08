@@ -9,8 +9,8 @@
     @before-close="handleMaskClose"
     @on-hide="handleHidden"
   >
-    <template #default="{show}">
-      <div
+    <template #default="{ show }">
+      <section
         v-show="show"
         :class="wrapperClass"
         :style="wrapperStyle"
@@ -32,7 +32,20 @@
         <div :class="`${prefix}__content`">
           <slot></slot>
         </div>
-      </div>
+        <div
+          v-if="resizable"
+          :class="[
+            `${prefix}__handler`,
+            `${prefix}__handler--${placement}`,
+            {
+              [`${prefix}__handler--resizing`]: resizing
+            }
+          ]"
+          @mousedown="handleResizeStart"
+        >
+          <slot name="handler"></slot>
+        </div>
+      </section>
     </template>
   </Masker>
 </template>
@@ -100,6 +113,10 @@ export default {
       default: null
     },
     hideMask: {
+      type: Boolean,
+      default: false
+    },
+    resizable: {
       type: Boolean,
       default: false
     }
@@ -199,6 +216,70 @@ export default {
       this.$nextTick(() => {
         this.$emit('on-hidden')
       })
+    },
+    handleResizeStart(event) {
+      if (!this.resizable || event.button !== 0) {
+        return false
+      }
+
+      event.stopPropagation()
+
+      this.resizeState = {
+        widthStart: this.currentWidth,
+        heightStart: this.currentHeight,
+        xStart: event.clientX,
+        yStart: event.clientY
+      }
+
+      document.addEventListener('mousemove', this.handleResizeMove)
+      document.addEventListener('mouseup', this.handleResizeEnd)
+
+      this.resizing = true
+      this.$emit('on-resize-start')
+    },
+    handleResizeMove(event) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      const { clientX, clientY } = event
+      const { widthStart, heightStart, xStart, yStart } = this.resizeState
+      const deltaX = xStart - clientX
+      const deltaY = yStart - clientY
+
+      switch (this.placement) {
+        case 'top': {
+          this.currentHeight = heightStart - deltaY
+          break
+        }
+        case 'right': {
+          this.currentWidth = widthStart + deltaX
+          break
+        }
+        case 'bottom': {
+          this.currentHeight = heightStart + deltaY
+          break
+        }
+        default: {
+          this.currentWidth = widthStart - deltaX
+        }
+      }
+
+      this.currentWidth = Math.max(this.currentWidth, 101)
+      this.currentHeight = Math.max(this.currentHeight, 101)
+
+      this.$emit('on-resize-move', {
+        width: this.currentWidth,
+        height: this.currentHeight
+      })
+    },
+    handleResizeEnd(event) {
+      event.stopPropagation()
+
+      document.removeEventListener('mousemove', this.handleResizeMove)
+      document.removeEventListener('mouseup', this.handleResizeEnd)
+
+      this.resizing = false
+      this.$emit('on-resize-end')
     }
   }
 }

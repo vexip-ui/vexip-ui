@@ -32,7 +32,7 @@
     <div
       v-if="hasPrefix"
       :class="`${prefixCls}__icon--prefix`"
-      :style="{color: prefixColor}"
+      :style="{ color: prefixColor }"
       @click="handlePrefixClick"
     >
       <slot name="prefix">
@@ -42,7 +42,7 @@
     <div
       v-if="hasSuffix"
       :class="`${prefixCls}__icon--suffix`"
-      :style="{color: suffixColor}"
+      :style="{ color: suffixColor }"
       @click="handleSuffixClick"
     >
       <slot name="suffix">

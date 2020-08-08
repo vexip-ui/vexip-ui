@@ -69,7 +69,7 @@
                 v-for="(item, index) in shortcutList"
                 :key="index"
                 :class="`${prefix}__shortcut-item`"
-                :style="{backgroundColor: item}"
+                :style="{ backgroundColor: item }"
                 @click="handleShortcutClick(item)"
               ></div>
             </div>

@@ -9,7 +9,7 @@
       :inner-class="innerClass"
       :style="getItemStyle(item)"
     >
-      <template #item="{item: itemData}">
+      <template #item="{ item: itemData }">
         <slot name="item" :item="itemData"></slot>
       </template>
     </PopupItem>

@@ -10,7 +10,7 @@
           [`${prefix}__content--click`]: bindClick,
           [`${prefix}__content--${type}`]: type !== 'error'
         }"
-        :style="{backgroundColor: color}"
+        :style="{ backgroundColor: color }"
         :title="content"
         @click="handleClick"
       >

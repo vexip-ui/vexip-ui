@@ -15,7 +15,7 @@ module.exports = {
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'space-before-function-paren': [
       'error',
       {
@@ -47,7 +47,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-unnecessary-condition': 'off',
     'vue/eqeqeq': 'error',
-    'vue/object-curly-spacing': 'error',
+    'vue/object-curly-spacing': ['error', 'always'],
     'vue/require-direct-export': 'error',
     'vue/no-parsing-error': [
       'error',
@@ -105,7 +105,8 @@ module.exports = {
           'inheritAttrs',
           'model',
           ['inject', 'provide'],
-          ['props', 'propsData'],
+          ['props', 'propsData', 'emits'],
+          'setup',
           'fetch',
           'asyncData',
           'data',

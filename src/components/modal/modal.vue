@@ -9,7 +9,7 @@
     @before-close="handleMaskClose"
     @on-hide="handleHidden"
   >
-    <template #default="{show}">
+    <template #default="{ show }">
       <section
         v-show="show"
         :class="wrapperClass"

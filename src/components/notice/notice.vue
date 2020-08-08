@@ -6,7 +6,7 @@
     :transition-name="transitionName"
     :placement="placement"
   >
-    <template #item="{item}">
+    <template #item="{ item }">
       <div
         :class="[
           {
@@ -24,7 +24,7 @@
         <div
           v-if="item.icon"
           :class="`${prefix}__icon`"
-          :style="{color: item.iconColor}"
+          :style="{ color: item.iconColor }"
         >
           <Icon :name="item.icon"></Icon>
         </div>

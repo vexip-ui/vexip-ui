@@ -79,7 +79,7 @@
       :fade="barFade"
       :disabled="totalRowHeight <= bodyHeight"
       :bar-length="barLength"
-      :style="{top: `${headHeight}px`}"
+      :style="{ top: `${headHeight}px` }"
       @on-scroll="handleYBarScroll"
     ></Scrollbar>
     <div

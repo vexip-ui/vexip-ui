@@ -6,7 +6,7 @@
     :closable="false"
     @on-hidden="handleHidden"
   >
-    <template #default="{show}">
+    <template #default="{ show }">
       <div v-show="show" :class="wrapperClass">
         <Carousel
           v-if="list.length > 1"

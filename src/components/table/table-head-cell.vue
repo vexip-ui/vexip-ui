@@ -12,7 +12,7 @@
     <Render
       v-else-if="isFunction(column.headRenderer)"
       :renderer="column.headRenderer"
-      :data="{column, index}"
+      :data="{ column, index }"
     ></Render>
     <template v-else>
       {{ column.name }}

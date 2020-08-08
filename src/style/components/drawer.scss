@@ -87,4 +87,46 @@
       color: $vxp-drawer-color-close-hover;
     }
   }
+
+  &__handler {
+    position: absolute;
+    transition: $vxp-transition-background-base;
+
+    &--top,
+    &--bottom {
+      right: 0;
+      left: 0;
+      height: $vxp-drawer-handler-length;
+      cursor: ns-resize;
+    }
+
+    &--right,
+    &--left {
+      top: 0;
+      bottom: 0;
+      width: $vxp-drawer-handler-length;
+      cursor: ew-resize;
+    }
+
+    &--top {
+      bottom: 0;
+    }
+
+    &--right {
+      left: 0;
+    }
+
+    &--bottom {
+      top: 0;
+    }
+
+    &--left {
+      right: 0;
+    }
+
+    &:hover,
+    &--resizing {
+      background-color: $vxp-drawer-color-bg-handler-hover;
+    }
+  }
 }

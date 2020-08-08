@@ -3,7 +3,7 @@
     <label
       v-if="hasLabel"
       :class="`${prefix}__label`"
-      :style="{width: `${computedlabelWidth}px`}"
+      :style="{ width: `${computedlabelWidth}px` }"
       :for="htmlFor"
     >
       <slot name="label">

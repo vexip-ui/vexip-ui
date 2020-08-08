@@ -6,7 +6,7 @@
   >
     <div
       :class="`${prefix}__item`"
-      :style="{zIndex: item.zIndex}"
+      :style="{ zIndex: item.zIndex }"
       :vxp-index="item.key"
     >
       <div :class="[`${prefix}__item-inner`, innerClass]">

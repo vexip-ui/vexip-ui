@@ -23,7 +23,7 @@
     <Render
       v-else-if="isFunction(column.renderer)"
       :renderer="column.renderer"
-      :data="{row: row.data, rowIndex, column, columnIndex}"
+      :data="{ row: row.data, rowIndex, column, columnIndex }"
     ></Render>
     <template v-else-if="isFunction(column.accessor)">
       <!-- eslint-disable vue/no-v-html vue/valid-v-html -->

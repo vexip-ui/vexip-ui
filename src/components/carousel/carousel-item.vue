@@ -5,7 +5,7 @@
   >
     <div
       :class="[`${prefix}__item-inner`, innerClass]"
-      :style="{cursor: bindSelectEvent ? 'pointer' : 'default'}"
+      :style="{ cursor: bindSelectEvent ? 'pointer' : 'default' }"
       @click="handleClick"
     >
       <slot></slot>

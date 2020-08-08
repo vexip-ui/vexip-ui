@@ -8,7 +8,7 @@
     ></div>
     <div
       :class="`${prefix}__alpha-handler`"
-      :style="{left: `${left * 100}%`}"
+      :style="{ left: `${left * 100}%` }"
     ></div>
   </div>
 </template>
