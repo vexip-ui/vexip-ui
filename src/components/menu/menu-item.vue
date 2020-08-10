@@ -14,8 +14,8 @@
         }"
         :style="labelStyle"
         @click="handleSelect"
-        @mouseenter="handleMouseEnter"
-        @mouseleave="handleMouseLeave"
+        @mouseenter="handleMouseEnter(true)"
+        @mouseleave="handleMouseLeave(true)"
       >
         <div v-if="icon" :class="`${prefix}__icon`">
           <slot name="icon">
@@ -59,9 +59,12 @@
       <div
         v-show="showGroup"
         ref="popper"
-        :class="`${prefix}__popper`"
-        @mouseenter="handleMouseEnter"
-        @mouseleave="handleMouseLeave"
+        :class="{
+          [`${prefix}__popper`]: true,
+          [`${prefix}__popper--drop`]: isHorizontal
+        }"
+        @mouseenter="handleMouseEnter(false)"
+        @mouseleave="handleMouseLeave(false)"
       >
         <ul :class="[`${prefix}__list`, `${prefix}__list--${theme}`]">
           <slot name="group"></slot>
@@ -118,8 +121,7 @@ export default {
       selected: false,
       items: [],
       currentExpanded: [],
-      transitionName: `${prefix}-zoom`,
-      placement: 'right-start',
+      // using by popper mixin
       transfer: true,
       parentInstance: null,
       sonSelected: false
@@ -166,7 +168,7 @@ export default {
       const { menu, isGroup, parentInstance } = this
 
       return (
-        (menu && menu.groupType === 'dropdown') ||
+        (menu && (menu.horizontal || menu.groupType === 'dropdown')) ||
         (isGroup && menu && menu.isReduced && menu === parentInstance) ||
         (parentInstance && parentInstance.usePopper)
       )
@@ -181,10 +183,19 @@ export default {
       )
     },
     theme() {
-      return this.menu ? this.menu.theme : 'light'
+      return this.menu?.theme ?? 'light'
     },
     tooltipTheme() {
-      return this.menu ? this.menu.tooltipTheme : 'dark'
+      return this.menu?.tooltipTheme ?? 'dark'
+    },
+    isHorizontal() {
+      return !!(this.menu === this.parentInstance && this.menu?.horizontal)
+    },
+    transitionName() {
+      return this.isHorizontal ? `${prefix}-drop` : `${prefix}-zoom`
+    },
+    placement() {
+      return this.isHorizontal ? 'bottom' : 'right-start'
     }
   },
   watch: {
@@ -233,10 +244,24 @@ export default {
     }
   },
   created() {
-    const parentInstance = findComponentUpward(this, ['Menu', 'MenuItem'])
+    const parentInstance = findComponentUpward(this, [
+      'Menu',
+      'MenuItem',
+      'MenuGroup'
+    ])
 
-    if (parentInstance && parentInstance.$options.name === 'MenuItem') {
-      this.indent = parentInstance.indent + 1
+    if (parentInstance?.$options.name === 'MenuGroup') {
+      this.parentInstance = findComponentUpward(this, ['Menu', 'MenuItem'])
+
+      this.indent = parentInstance.indent
+    } else {
+      if (parentInstance) {
+        this.parentInstance = parentInstance
+
+        if (parentInstance.$options.name === 'MenuItem') {
+          this.indent = parentInstance.indent + 1
+        }
+      }
     }
   },
   mounted() {
@@ -310,42 +335,6 @@ export default {
         this.menu && this.menu.$emit('on-reduce', label)
       }
     },
-    handleMouseEnter() {
-      if (this.disabled || !this.usePopper) return
-
-      if (
-        this.parentInstance &&
-        typeof this.parentInstance.handleMouseEnter === 'function'
-      ) {
-        this.parentInstance.handleMouseEnter()
-      }
-
-      if (!this.isGroup) return
-
-      clearTimeout(this.hoverTimer)
-
-      this.hoverTimer = setTimeout(() => {
-        this.groupExpanded = true
-      }, 250)
-    },
-    handleMouseLeave() {
-      if (this.disabled || !this.usePopper) return
-
-      if (
-        this.parentInstance &&
-        typeof this.parentInstance.handleMouseLeave === 'function'
-      ) {
-        this.parentInstance.handleMouseLeave()
-      }
-
-      if (!this.isGroup) return
-
-      clearTimeout(this.hoverTimer)
-
-      this.hoverTimer = setTimeout(() => {
-        this.groupExpanded = false
-      }, 250)
-    },
     updateSonSelected() {
       this.sonSelected = !!this.items.find(
         item => item.selected || item.sonSelected
@@ -361,6 +350,56 @@ export default {
       ) {
         parent.groupExpanded = false
         parent = parent.parentInstance
+      }
+    },
+    handleMouseEnter(isLabel) {
+      if (isLabel) {
+        if (this.menu === this.parentInstance) {
+          this.handleParentMouseEnter()
+        }
+      } else {
+        this.handleParentMouseEnter()
+      }
+
+      if (this.disabled || !this.usePopper || !this.isGroup) return
+
+      clearTimeout(this.hoverTimer)
+
+      this.hoverTimer = setTimeout(() => {
+        this.groupExpanded = true
+      }, 250)
+    },
+    handleMouseLeave(isLabel) {
+      if (isLabel) {
+        if (this.menu === this.parentInstance) {
+          this.handleParentMouseLeave()
+        }
+      } else {
+        this.handleParentMouseLeave()
+      }
+
+      if (this.disabled || !this.usePopper || !this.isGroup) return
+
+      clearTimeout(this.hoverTimer)
+
+      this.hoverTimer = setTimeout(() => {
+        this.groupExpanded = false
+      }, 250)
+    },
+    handleParentMouseEnter() {
+      if (
+        this.parentInstance &&
+        typeof this.parentInstance.handleMouseEnter === 'function'
+      ) {
+        this.parentInstance.handleMouseEnter()
+      }
+    },
+    handleParentMouseLeave() {
+      if (
+        this.parentInstance &&
+        typeof this.parentInstance.handleMouseLeave === 'function'
+      ) {
+        this.parentInstance.handleMouseLeave()
       }
     }
   }

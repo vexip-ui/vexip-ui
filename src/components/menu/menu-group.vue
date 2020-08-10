@@ -1,10 +1,16 @@
 <template>
   <li :class="prefix">
-    <div :class="`${prefix}__label`" :style="labelStyle">
-      <slot name="label">
-        {{ label }}
-      </slot>
-    </div>
+    <CollapseTransition>
+      <div
+        v-show="!isHideLabel"
+        :class="`${prefix}__label`"
+        :style="labelStyle"
+      >
+        <slot name="label">
+          {{ label }}
+        </slot>
+      </div>
+    </CollapseTransition>
     <ul :class="`${prefix}__list`">
       <slot></slot>
     </ul>
@@ -12,6 +18,8 @@
 </template>
 
 <script>
+import CollapseTransition from '../collapse/collapse-transition'
+
 import { baseIndentWidth } from './menu'
 import { findComponentUpward } from '../../utils/common'
 
@@ -19,6 +27,12 @@ const { prefix } = require('../../style/basis/variable')
 
 export default {
   name: 'MenuGroup',
+  components: {
+    CollapseTransition
+  },
+  inject: {
+    menu: { default: null }
+  },
   props: {
     label: {
       type: String,
@@ -28,7 +42,8 @@ export default {
   data() {
     return {
       prefix: `${prefix}-menu-group`,
-      indent: 1
+      indent: 1,
+      parentInstance: null
     }
   },
   computed: {
@@ -41,18 +56,52 @@ export default {
             ? null
             : `${indent * baseIndentWidth}px`
       }
+    },
+    isReduced() {
+      return !!this.menu?.isReduced
+    },
+    isHideLabel() {
+      return this.isReduced && !this.parentInstance?.usePopper
     }
   },
   created() {
-    const parentInstance = findComponentUpward(this, ['Menu', 'MenuItem'])
+    const parentInstance = findComponentUpward(this, [
+      'Menu',
+      'MenuItem',
+      'MenuGroup'
+    ])
 
-    if (parentInstance) {
-      this.parentInstance = parentInstance
+    if (parentInstance?.$options.name === 'MenuGroup') {
+      this.parentInstance = findComponentUpward(this, ['Menu', 'MenuItem'])
 
-      if (parentInstance.$options.name === 'MenuItem') {
-        this.indent = parentInstance.indent + 1
+      this.indent = parentInstance.indent + 1
+    } else {
+      if (parentInstance) {
+        this.parentInstance = parentInstance
+
+        if (parentInstance.$options.name === 'MenuItem') {
+          this.indent = parentInstance.indent + 1
+        }
       }
     }
   }
+  // methods: {
+  //   handleMouseEnter() {
+  //     if (
+  //       this.parentInstance &&
+  //       typeof this.parentInstance.handleMouseEnter === 'function'
+  //     ) {
+  //       this.parentInstance.handleMouseEnter()
+  //     }
+  //   },
+  //   handleMouseLeave() {
+  //     if (
+  //       this.parentInstance &&
+  //       typeof this.parentInstance.handleMouseLeave === 'function'
+  //     ) {
+  //       this.parentInstance.handleMouseLeave()
+  //     }
+  //   }
+  // }
 }
 </script>

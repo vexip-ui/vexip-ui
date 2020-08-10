@@ -340,6 +340,30 @@ $vxp-input-shadow-warning-focus: $vxp-box-shadow-fouced-appearance
 $vxp-input-font-size-count: $vxp-font-size-secondary !default;
 $vxp-input-line-height-count: $vxp-line-height-secondary !default;
 
+// menu
+// ------------------------------------------
+$vxp-menu-color-icon: $vxp-color-content-secondary !default;
+$vxp-menu-color-arrow: $vxp-menu-color-icon !default;
+$vxp-menu-color-label-hover: $vxp-color-primary !default;
+$vxp-menu-color-label-dark: rgba($vxp-color-content-reverse, 0.65) !default;
+$vxp-menu-color-label-visible-dark: $vxp-color-content-reverse !default;
+$vxp-menu-color-label-disabled: $vxp-color-content-disabled !default;
+
+$vxp-menu-color-bg-base: $vxp-color-fill !default;
+$vxp-menu-color-bg-selected: mix(
+  $vxp-color-white,
+  $vxp-color-primary,
+  85%
+) !default;
+$vxp-menu-color-bg-marker: $vxp-color-primary !default;
+$vxp-menu-color-bg-selected-dark: $vxp-color-primary !default;
+$vxp-menu-color-bg-dark: $vxp-color-fill-reverse !default;
+$vxp-menu-color-bg-list-dark: $vxp-color-black !default;
+
+$vxp-menu-color-border: $vxp-color-border !default;
+
+$vxp-menu-border-base: $vxp-border-appearance $vxp-menu-color-border !default;
+
 // option
 // ------------------------------------------
 $vxp-option-color: $vxp-color-content-normal !default;
@@ -407,25 +431,3 @@ $vxp-tooltip-shadow-dark: none !default;
 
 $vxp-tooltip-border-raduis-base: $vxp-border-radius-base !default;
 $vxp-tooltip-arrow-size: 0.5em !default;
-
-// menu
-// ------------------------------------------
-$vxp-menu-color-bg-base: $vxp-color-fill !default;
-$vxp-menu-color-bg-selected: mix(
-  $vxp-color-white,
-  $vxp-color-primary,
-  85%
-) !default;
-$vxp-menu-color-bg-marker: $vxp-color-primary !default;
-$vxp-menu-color-icon: $vxp-color-content-secondary !default;
-$vxp-menu-color-arrow: $vxp-menu-color-icon !default;
-
-$vxp-menu-color-bg-selected-dark: $vxp-color-primary !default;
-$vxp-menu-color-bg-dark: $vxp-color-fill-reverse !default;
-$vxp-menu-color-bg-list-dark: $vxp-color-black !default;
-$vxp-menu-color-label-dark: rgba($vxp-color-content-reverse, 0.65) !default;
-$vxp-menu-color-label-visible-dark: $vxp-color-content-reverse !default;
-
-$vxp-menu-color-label-disabled: $vxp-color-content-disabled !default;
-$vxp-menu-color-border: $vxp-color-border !default;
-$vxp-menu-border-base: $vxp-border-appearance $vxp-menu-color-border !default;

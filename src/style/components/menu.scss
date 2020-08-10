@@ -17,6 +17,11 @@
   border-right: $vxp-menu-border-base;
   transition: width $vxp-transition-base;
 
+  &--horizontal {
+    flex-direction: row;
+    width: auto;
+  }
+
   &--dark {
     background-color: $vxp-menu-color-bg-dark;
   }
@@ -38,13 +43,24 @@
   &__popper {
     padding: 0 0.35em;
     transform-origin: 0 0 !important;
+
+    &--drop {
+      padding: 0.35em 0;
+    }
   }
 
   &__item {
     list-style: none;
 
-    .#{$prefix}-tooltip__trigger {
-      display: block;
+    // .#{$prefix}-tooltip__trigger
+
+    & > .#{$prefix}-tooltip {
+      height: 100%;
+
+      & > .#{$prefix}-tooltip__trigger {
+        display: block;
+        height: 100%;
+      }
     }
   }
 
@@ -53,6 +69,7 @@
     display: flex;
     align-items: center;
     width: 100%;
+    height: 100%;
     padding: 0.8em 20px;
     cursor: pointer;
     background-color: $vxp-menu-color-bg-base;
@@ -80,12 +97,30 @@
       display: block;
       width: 3px;
       content: '';
-      background-color: transparent;
-      transition: $vxp-transition-background-base;
+      background-color: $vxp-menu-color-bg-marker;
+      opacity: 0;
+      transition: $vxp-transition-opacity-base;
 
       #{$menu}--marker-left & {
         right: auto;
         left: 0;
+      }
+
+      #{$menu}--horizontal & {
+        top: auto;
+        right: 0;
+        bottom: auto;
+        left: 0;
+        width: auto;
+        height: 2px;
+      }
+
+      #{$menu}--marker-top & {
+        top: 0;
+      }
+
+      #{$menu}--marker-bottom & {
+        bottom: 0;
       }
 
       #{$menu}--marker-none &,
@@ -104,7 +139,7 @@
     > & {
       &,
       .#{$prefix}-icon {
-        color: $vxp-color-primary;
+        color: $vxp-menu-color-label-hover;
       }
 
       #{$menu}--dark &,
@@ -113,6 +148,10 @@
         .#{$prefix}-icon {
           color: $vxp-menu-color-label-visible-dark;
         }
+      }
+
+      #{$menu}--horizontal &::after {
+        opacity: 1;
       }
     }
 
@@ -127,18 +166,33 @@
           color: $vxp-menu-color-label-visible-dark;
         }
       }
+
+      #{$menu}--horizontal & {
+        &,
+        .#{$prefix}-icon {
+          color: $vxp-menu-color-label-hover;
+        }
+
+        &::after {
+          opacity: 1;
+        }
+      }
     }
 
     #{$item}--selected & {
       background-color: $vxp-menu-color-bg-selected;
 
       &::after {
-        background-color: $vxp-menu-color-bg-marker;
+        opacity: 1;
       }
 
       #{$menu}--dark &,
       #{$list}--dark & {
         background-color: $vxp-menu-color-bg-selected-dark;
+      }
+
+      #{$menu}--horizontal & {
+        background-color: $vxp-menu-color-bg-base;
       }
     }
 
@@ -172,6 +226,10 @@
     #{$menu}--reduced & {
       margin: 0;
     }
+
+    #{$menu}--horizontal & {
+      margin-right: 6px;
+    }
   }
 
   &__title {
@@ -189,6 +247,11 @@
 
     #{$item}--no-icon & {
       width: 100%;
+    }
+
+    #{$menu}--horizontal & {
+      width: auto;
+      margin-right: 8px;
     }
   }
 
@@ -210,6 +273,18 @@
     #{$menu}--dropdown &,
     #{$label}--in-popper > & {
       transform: rotate(-90deg);
+    }
+
+    #{$menu}--horizontal & {
+      position: relative;
+      right: auto;
+      margin-right: 4px;
+      margin-left: 6px;
+      transform: rotate(0);
+
+      &--visible {
+        transform: rotate(180deg);
+      }
     }
   }
 
@@ -255,11 +330,23 @@
         padding: 0.35em 1.4em;
         font-size: $vxp-font-size-secondary;
         color: $vxp-menu-color-icon;
+
+        #{$menu}--horizontal & {
+          display: none;
+        }
       }
 
       &__list {
         position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
         padding: 0;
+
+        #{$menu}--horizontal & {
+          flex-direction: row;
+          width: auto;
+        }
       }
     }
   }

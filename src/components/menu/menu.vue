@@ -27,15 +27,20 @@ export default {
       default: false
     },
     markerType: {
-      default: 'right',
+      default: null,
       validator(value) {
-        return ['right', 'left', 'none'].includes(value)
+        return ['top', 'right', 'bottom', 'left', 'none'].includes(value)
       }
     },
     reduced: {
       type: Boolean,
       default: false
     },
+    horizontal: {
+      type: Boolean,
+      default: false
+    },
+    // 强制在纵向展开模式下也使用 dropdown
     groupType: {
       default: 'collapse',
       validator(value) {
@@ -66,15 +71,36 @@ export default {
   },
   computed: {
     className() {
-      const { prefix, markerType, isReduced, groupType, theme } = this
+      const {
+        prefix,
+        markerType,
+        isReduced,
+        horizontal,
+        groupType,
+        theme
+      } = this
+
+      let computedMarkerType
+
+      if (horizontal && (markerType === 'left' || markerType === 'right')) {
+        computedMarkerType = 'bottom'
+      } else if (
+        !horizontal &&
+        (markerType === 'top' || markerType === 'bottom')
+      ) {
+        computedMarkerType = 'right'
+      } else {
+        computedMarkerType = markerType ?? horizontal ? 'bottom' : 'right'
+      }
 
       return [
         prefix,
         `${prefix}--${theme}`,
-        `${prefix}--marker-${markerType}`,
+        `${prefix}--marker-${computedMarkerType}`,
         {
           [`${prefix}--reduced`]: isReduced,
-          [`${prefix}--dropdown`]: groupType === 'dropdown'
+          [`${prefix}--dropdown`]: groupType === 'dropdown',
+          [`${prefix}--horizontal`]: horizontal
         }
       ]
     }
@@ -85,19 +111,19 @@ export default {
         this.handleSelect(value)
       }
     },
-    reduced: {
-      handler(value) {
-        if (value) {
-          this.handleReduce()
-        } else {
-          this.handleExpand()
-        }
+    reduced(value) {
+      if (this.horizontal) return
+
+      if (value) {
+        this.handleReduce()
+      } else {
+        this.handleExpand()
       }
     }
   },
   mounted() {
     this.$nextTick(() => {
-      if (this.reduced) {
+      if (!this.horizontal && this.reduced) {
         this.handleReduce()
       }
     })
@@ -139,6 +165,7 @@ export default {
       }
     },
     handleReduce() {
+      debugger
       this.currentExpanded = []
 
       let firstExpandedItem = null
@@ -176,11 +203,21 @@ export default {
         )
 
         if (selectedItem) {
+          let current = selectedItem
           let parent = selectedItem.parentInstance
 
           while (parent && parent.$options.name === 'MenuItem') {
-            parent.groupExpanded = true
+            // parent.groupExpanded = true
+            if (current.isGroup) {
+              parent.handleToggleExpand(current.label)
+            }
+
+            current = parent
             parent = parent.parentInstance
+          }
+
+          if (current.isGroup && parent.$options.name === 'Menu') {
+            parent.handleToggleExpand(current.label)
           }
         }
 
