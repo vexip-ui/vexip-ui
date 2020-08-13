@@ -149,7 +149,11 @@ export default {
       }
     },
     labelStyle() {
-      const { indent, parentInstance } = this
+      const { indent, parentInstance, menu } = this
+
+      if (menu?.horizontal || parentInstance?.usePopper) {
+        return null
+      }
 
       return {
         paddingLeft:

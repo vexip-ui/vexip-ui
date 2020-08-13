@@ -165,7 +165,6 @@ export default {
       }
     },
     handleReduce() {
-      debugger
       this.currentExpanded = []
 
       let firstExpandedItem = null

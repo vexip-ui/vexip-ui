@@ -508,8 +508,11 @@ export default {
   watch: {
     value(value) {
       if (!+new Date(value)) {
-        this.activated = {}
         this.changed = true
+
+        this.$nextTick(() => {
+          this.activated = {}
+        })
       } else {
         this.activated = {
           year: true,

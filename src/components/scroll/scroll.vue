@@ -119,6 +119,7 @@ export default {
       default: null
     }
   },
+  emits: ['on-x-enable-change', 'on-y-enable-change', 'on-wheel', 'on-scroll'],
   data() {
     return {
       prefix: `${prefix}-scroll`,
@@ -128,8 +129,8 @@ export default {
       isReady: false,
 
       // 当前滚动位置
-      currentXScroll: this.scrollX,
-      currentYScroll: this.scrollY,
+      currentXScroll: -this.scrollX,
+      currentYScroll: -this.scrollY,
 
       // 当前滚动的百分比
       percentX: 0,
@@ -164,12 +165,16 @@ export default {
       return {
         width: width
           ? typeof width === 'string'
-            ? width
+            ? Number.isNaN(Number(width))
+              ? width
+              : `${Number(width)}px`
             : `${width}px`
           : null,
         height: height
           ? typeof height === 'string'
-            ? height
+            ? Number.isNaN(Number(height))
+              ? height
+              : `${Number(height)}px`
             : `${height}px`
           : null
       }
@@ -241,10 +246,10 @@ export default {
   },
   watch: {
     scrollX(value) {
-      this.currentXScroll = value
+      this.currentXScroll = -value
     },
     scrollY(value) {
-      this.currentYScroll = value
+      this.currentYScroll = -value
     },
     width() {
       this.refreshWrapper()
@@ -298,7 +303,7 @@ export default {
 
         // 获取 wrapper 的 px 大小
         if (typeof size === 'string') {
-          if (!size.endsWith('px')) {
+          if (!size.endsWith('px') && Number.isNaN(Number(size))) {
             this[wrapperSize] = this.$el[`offset${titleCaseSizeType}`]
           } else {
             this[wrapperSize] = parseInt(size)
@@ -404,7 +409,7 @@ export default {
       this.emitScrollEvent()
     },
     handleWheel(event) {
-      const { mode, enableXScroll, enableYScroll, deltaY, wheel } = this
+      const { mode, enableXScroll, enableYScroll, deltaX, deltaY, wheel } = this
 
       if (wheel && (enableXScroll || enableYScroll)) {
         event.preventDefault()
@@ -416,7 +421,8 @@ export default {
       this.prepareScroll()
 
       const sign = event.deltaY > 0 ? -1 : 1
-      const delta = sign * deltaY
+      const computedDeltaX = sign * deltaX
+      const computedDeltaY = sign * deltaY
 
       let scrollType
 
@@ -428,22 +434,22 @@ export default {
           scrollType = HORIZONTAL
 
           if (enableXScroll) {
-            this.currentXScroll += delta
+            this.currentXScroll += computedDeltaX
           }
         } else {
           scrollType = VERTICAL
 
           if (enableYScroll) {
-            this.currentYScroll += delta
+            this.currentYScroll += computedDeltaY
           }
         }
       } else {
         scrollType = mode
 
         if (enableYScroll) {
-          this.currentYScroll += delta
+          this.currentYScroll += computedDeltaY
         } else if (enableXScroll) {
-          this.currentXScroll += delta
+          this.currentXScroll += computedDeltaX
         }
       }
 

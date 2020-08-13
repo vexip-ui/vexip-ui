@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { isNull } from '../../utils/common'
+import { isNull, removeArrayItem } from '../../utils/common'
 
 const { prefix } = require('../../style/basis/variable')
 
@@ -72,9 +72,18 @@ export default {
   },
   mounted() {
     this.computeValueAndLabel()
+
+    if (Array.isArray(this[SELECTOR].items)) {
+      this[SELECTOR].items.push(this)
+    }
   },
   updated() {
     this.computeValueAndLabel()
+  },
+  beforeDestroy() {
+    if (Array.isArray(this[SELECTOR].items)) {
+      removeArrayItem(this[SELECTOR].items, this)
+    }
   },
   methods: {
     handleSelect() {

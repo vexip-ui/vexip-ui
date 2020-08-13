@@ -85,23 +85,5 @@ export default {
       }
     }
   }
-  // methods: {
-  //   handleMouseEnter() {
-  //     if (
-  //       this.parentInstance &&
-  //       typeof this.parentInstance.handleMouseEnter === 'function'
-  //     ) {
-  //       this.parentInstance.handleMouseEnter()
-  //     }
-  //   },
-  //   handleMouseLeave() {
-  //     if (
-  //       this.parentInstance &&
-  //       typeof this.parentInstance.handleMouseLeave === 'function'
-  //     ) {
-  //       this.parentInstance.handleMouseLeave()
-  //     }
-  //   }
-  // }
 }
 </script>

@@ -68,19 +68,13 @@ export default {
     }
   },
   mounted() {
-    this.$on('on-active-change', label => {
-      if (this.label === label) {
-        this.active = true
-      } else {
-        this.active = false
-      }
-    })
-
     const parentInstance = findComponentUpward(this, parentName)
 
     if (parentInstance) {
       this.parentInstance = parentInstance
       parentInstance.items.push(this)
+
+      this.active = this.label === parentInstance.currentActive
     }
   },
   beforeDestroy() {
@@ -90,6 +84,11 @@ export default {
       if (~index) {
         this.$parent.items.splice(index, 1)
       }
+    }
+  },
+  methods: {
+    handleActiveChange(label) {
+      this.active = this.label === label
     }
   }
 }

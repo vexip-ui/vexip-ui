@@ -183,6 +183,7 @@ export default {
   data() {
     return {
       prefixCls: `${prefix}-select`,
+      items: [],
       currentVisible: false,
       focused: false,
       currentLabel: null,
@@ -219,6 +220,8 @@ export default {
     },
     value(value) {
       this.currentValue = value
+
+      this.updateSelected()
     }
   },
   mounted() {
@@ -293,14 +296,11 @@ export default {
       }
     },
     updateSelected() {
-      this.items.forEach(item => {
-        // item.$emit('on-option-change', this.currentValue)
-        item.selected = item.truthValue === this.currentValue
+      const item = this.items.find(
+        item => item.truthValue === this.currentValue
+      )
 
-        if (item.selected) {
-          this.currentLabel = item.truthLabel
-        }
-      })
+      this.currentLabel = item?.truthLabel ?? ''
     },
     toggleHoverState(hover = !this.isHover) {
       this.isHover = hover

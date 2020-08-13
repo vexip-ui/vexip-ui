@@ -1,14 +1,14 @@
 {
   "src/**/*.{js,jsx,ts,tsx}": [
     "prettier --write",
-    "npm run lint"
+    "yarn run lint"
   ],
   "src/**/*.scss": [
-    "npm run lint:style"
+    "yarn run lint:style"
   ],
   "src/**/*.vue": [
-    "npm run lint:style",
+    "yarn run lint:style",
     "prettier --write",
-    "npm run lint"
+    "yarn run lint"
   ]
 }

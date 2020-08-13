@@ -51,8 +51,13 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    wrapper: {
+      type: [String, Object],
+      default: null
     }
   },
+  emits: ['on-scroll', 'on-scroll-start', 'on-scroll-end'],
   data() {
     return {
       prefix: `${prefix}-scrollbar`,
@@ -109,6 +114,13 @@ export default {
   watch: {
     scroll(value) {
       this.currentScroll = value
+    },
+    currentScroll() {
+      clearTimeout(this.fadeTimer)
+
+      this.active = true
+
+      this.setScrollbarFade()
     }
   },
   created() {
@@ -123,11 +135,7 @@ export default {
 
       this.active = true
 
-      if (this.fade >= 300) {
-        this.fadeTimer = setTimeout(() => {
-          this.active = false
-        }, this.fade)
-      }
+      this.setScrollbarFade()
     })
 
     this.handleBarMove = throttle(event => {
@@ -147,14 +155,25 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      if (this.$parent) {
-        this.wrapper = this.$parent.$el
+      const wrapper = this.wrapper
+
+      if (typeof wrapper === 'string' && wrapper.startsWith('#')) {
+        this.wrapperElement = document.querySelector(wrapper)
+      } else if (wrapper instanceof Node) {
+        this.wrapperElement = wrapper
       } else {
-        this.wrapper = this.$el.parentNode
+        if (this.$parent) {
+          this.wrapperElement = this.$parent.$el
+        } else {
+          this.wrapperElement = this.$el.parentNode
+        }
       }
 
-      if (this.wrapper) {
-        this.wrapper.addEventListener('mousemove', this.handleWrapperMouseMove)
+      if (this.wrapperElement) {
+        this.wrapperElement.addEventListener(
+          'mousemove',
+          this.handleWrapperMouseMove
+        )
       }
     })
 
@@ -163,8 +182,11 @@ export default {
     }
   },
   beforeDestroy() {
-    if (this.wrapper) {
-      this.wrapper.removeEventListener('mousemove', this.handleWrapperMouseMove)
+    if (this.wrapperElement) {
+      this.wrapperElement.removeEventListener(
+        'mousemove',
+        this.handleWrapperMouseMove
+      )
     }
   },
   methods: {
@@ -211,15 +233,20 @@ export default {
       document.removeEventListener('mousemove', this.handleMouseMove)
       document.removeEventListener('mouseup', this.handleMouseUp)
 
-      this.fadeTimer = setTimeout(() => {
-        this.active = false
-      }, this.fade)
+      this.setScrollbarFade()
 
       this.scrolling = false
       this.$emit('on-scroll-end', this.currentScroll)
     },
     verifyScroll() {
       this.currentScroll = Math.max(0, Math.min(this.currentScroll, 100))
+    },
+    setScrollbarFade() {
+      if (this.fade >= 300) {
+        this.fadeTimer = setTimeout(() => {
+          this.active = false
+        }, this.fade)
+      }
     }
   }
 }

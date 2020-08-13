@@ -60,12 +60,14 @@ export default {
       prefix: `${prefix}-tabs`,
       items: [],
       currentActive: null,
-      currentIndex: 0
+      currentIndex: 0,
+      isMounted: false
     }
   },
   computed: {
     mainStyle() {
       return {
+        transition: this.isMounted ? null : 'none',
         transform: `translateX(-${this.currentIndex}00%) translateZ(0)`
       }
     }
@@ -73,23 +75,30 @@ export default {
   watch: {
     currentActive(value) {
       this.updateActive()
+      this.computeIndex(value)
       this.$emit('on-change', value)
     }
   },
   mounted() {
     this.$nextTick(() => {
       // 触发 nav 的 marker 位置计算
-      if (!this.currentActive && this.items.length) {
+      if (!this.active && this.items.length) {
         this.currentActive = this.items[0].label
       } else {
         this.currentActive = this.active
+        this.computeIndex()
       }
+
+      this.$nextTick(() => {
+        this.isMounted = true
+      })
     })
   },
   methods: {
     handleTabPaneChange(label) {
       this.currentActive = label
-
+    },
+    computeIndex(label) {
       const index = this.items.findIndex(item => item.label === label)
 
       if (~index) {
@@ -98,7 +107,7 @@ export default {
     },
     updateActive() {
       this.items.forEach(item => {
-        item.$emit('on-active-change', this.currentActive)
+        item.handleActiveChange(this.currentActive)
       })
     },
     renderLabelSlot(h, item) {

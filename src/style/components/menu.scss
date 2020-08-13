@@ -20,6 +20,7 @@
   &--horizontal {
     flex-direction: row;
     width: auto;
+    border-right: 0;
   }
 
   &--dark {
@@ -245,13 +246,17 @@
       opacity: 0;
     }
 
-    #{$item}--no-icon & {
-      width: 100%;
-    }
-
     #{$menu}--horizontal & {
       width: auto;
       margin-right: 8px;
+    }
+
+    #{$item}--no-icon & {
+      width: 100%;
+
+      #{$menu}--horizontal & {
+        margin-right: 0;
+      }
     }
   }
 

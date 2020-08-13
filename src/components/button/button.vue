@@ -9,7 +9,7 @@
   >
     <div v-if="loading" :class="`${prefixCls}__icon`">
       <slot name="loading">
-        <Icon spin :name="loadingIcon"></Icon>
+        <Icon pulse :name="loadingIcon"></Icon>
       </slot>
     </div>
     <div v-if="icon && !loading" :class="`${prefixCls}__icon`">

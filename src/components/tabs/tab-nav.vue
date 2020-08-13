@@ -54,6 +54,8 @@ export default {
     }
   },
   mounted() {
+    this.computeMarkPosition()
+
     this.$nextTick(() => {
       const hiddenParentNode = this.queryOutsideHiddenElement()
 
@@ -71,8 +73,6 @@ export default {
           characterData: true,
           attributeFilter: ['style']
         })
-      } else {
-        this.computeMarkPosition()
       }
     })
 
