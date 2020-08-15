@@ -6,8 +6,9 @@
     :transition-name="moveTransition"
     :closable="maskClose"
     :disabled="hideMask"
-    @before-close="handleMaskClose"
-    @on-hide="handleHidden"
+    :before-close="handleMaskClose"
+    @on-show="handleShow"
+    @on-hide="handleHide"
   >
     <template #default="{ show }">
       <section
@@ -53,7 +54,9 @@
 <script>
 import Icon from '../icon'
 import Masker from '../masker'
+
 import 'vue-awesome/icons/times'
+import { isPromise } from '../../utils/common'
 
 const { prefix } = require('../../style/basis/variable')
 
@@ -116,17 +119,33 @@ export default {
       type: Boolean,
       default: false
     },
+    beforeClose: {
+      type: Function,
+      default: null
+    },
     resizable: {
       type: Boolean,
       default: false
     }
   },
+  emits: [
+    'on-toggle',
+    'on-close',
+    'on-hide',
+    'on-resize-start',
+    'on-resize-move',
+    'on-resize-end',
+    'update:active'
+  ],
   data() {
     return {
       prefix: `${prefix}-drawer`,
       currentActive: this.active,
       // wrapShow: this.active,
-      fadeTrantision: `${prefix}-fade`
+      fadeTrantision: `${prefix}-fade`,
+      currentWidth: this.width,
+      currentHeight: this.height,
+      resizing: false
     }
   },
   computed: {
@@ -144,34 +163,31 @@ export default {
       return `${prefix}-move-${this.placement}`
     },
     wrapperClass() {
-      const { prefix, placement, closable, drawerClass } = this
+      const { prefix, placement, closable, drawerClass, resizing } = this
 
       return [
         `${prefix}__wrapper`,
         `${prefix}__wrapper--${placement}`,
         {
-          [`${prefix}__wrapper--closable`]: closable
+          [`${prefix}__wrapper--closable`]: closable,
+          [`${prefix}__wrapper--resizing`]: resizing
         },
         drawerClass
       ]
     },
     wrapperStyle() {
-      const { placement, width, height } = this
+      const { placement, currentWidth, currentHeight } = this
 
       if (placement === 'top' || placement === 'bottom') {
         return {
-          height: height > 100 ? `${height}px` : `${height}%`
+          height:
+            currentHeight > 100 ? `${currentHeight}px` : `${currentHeight}%`
         }
       }
 
       return {
-        width: width > 100 ? `${width}px` : `${width}%`
+        width: currentWidth > 100 ? `${currentWidth}px` : `${currentWidth}%`
       }
-    },
-    bindBeforeClose() {
-      return !!(
-        this._events['before-close'] && this._events['before-close'].length
-      )
     },
     hasTitle() {
       return this.$slots.title || this.title
@@ -183,39 +199,48 @@ export default {
     },
     currentActive(value) {
       this.$emit('on-toggle', value)
+    },
+    width(value) {
+      this.currentWidth = value
+    },
+    height(value) {
+      this.currentHeight = value
     }
   },
   methods: {
     toggleActive(value) {
       this.currentActive = value
     },
-    handleClose(maskCloseFn) {
-      const close = () => {
-        this.executeClose()
-        typeof maskCloseFn === 'function' && maskCloseFn()
+    async handleClose() {
+      let result = true
+
+      if (typeof this.beforeClose === 'function') {
+        result = this.beforeClose()
+
+        if (isPromise(result)) {
+          result = await result
+        }
       }
 
-      if (this.bindBeforeClose) {
-        this.$emit('before-close', close)
-      } else {
-        close()
+      if (result !== false) {
+        this.$nextTick(() => {
+          this.toggleActive(false)
+          this.$emit('on-close')
+        })
       }
+
+      return result
     },
-    executeClose() {
-      this.$nextTick(() => {
-        this.toggleActive(false)
-        this.$emit('on-close')
-      })
-    },
-    handleMaskClose(maskCloseFn) {
+    handleMaskClose() {
       if (this.maskClose) {
-        this.handleClose(maskCloseFn)
+        this.handleClose()
       }
     },
-    handleHidden() {
-      this.$nextTick(() => {
-        this.$emit('on-hide')
-      })
+    handleShow() {
+      this.$emit('on-show')
+    },
+    handleHide() {
+      this.$emit('on-hide')
     },
     handleResizeStart(event) {
       if (!this.resizable || event.button !== 0) {

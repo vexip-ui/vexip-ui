@@ -113,7 +113,7 @@ export default {
 
       return {
         flex: `${width} 0 auto`,
-        width: `${width}px`,
+        width: `${column.width ?? width}px`,
         maxWidth: `${column.width}px`
       }
     },

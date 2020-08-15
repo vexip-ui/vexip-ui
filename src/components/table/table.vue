@@ -181,7 +181,8 @@ export default {
       yScrollEnable: false,
       headHeight: 0,
       templateColumns: [],
-      indicatorShow: false
+      indicatorShow: false,
+      store: null
     }
   },
   computed: {
@@ -199,7 +200,7 @@ export default {
       }
     },
     style() {
-      const width = this.width
+      const width = this.tableWidth ?? this.width
 
       if (width !== null) {
         if (
@@ -273,6 +274,9 @@ export default {
         this.setData(value)
       },
       deep: true
+    },
+    width() {
+      this.computeTableWidth()
     },
     height() {
       this.$nextTick(() => {

@@ -6,8 +6,9 @@
     :transition-name="transitionName"
     :closable="maskClose"
     :disabled="hideMask"
-    @before-close="handleMaskClose"
-    @on-hide="handleHidden"
+    :before-close="handleMaskClose"
+    @on-show="handleShow"
+    @on-hide="handleHide"
   >
     <template #default="{ show }">
       <section
@@ -24,7 +25,7 @@
             v-if="closable"
             :class="`${prefix}__close`"
             @mousedown.stop
-            @click="handleClose()"
+            @click="handleClose(false)"
           >
             <slot name="close">
               <Icon name="times"></Icon>
@@ -55,7 +56,7 @@
             <Button
               type="primary"
               size="small"
-              @on-click="handleOk"
+              @on-click="handleConfirm"
             >
               {{ okText }}
             </Button>
@@ -77,6 +78,7 @@ import Icon from '../icon'
 import Masker from '../masker'
 
 import 'vue-awesome/icons/times'
+import { isPromise } from '../../utils/common'
 
 const { prefix } = require('../../style/basis/variable')
 
@@ -143,8 +145,26 @@ export default {
     resizable: {
       type: Boolean,
       default: false
+    },
+    beforeClose: {
+      type: Function,
+      default: null
     }
   },
+  emits: [
+    'on-toggle',
+    'on-ok',
+    'on-cancel',
+    'on-close',
+    'on-hide',
+    'on-drag-start',
+    'on-drag-move',
+    'on-drag-end',
+    'on-resize-start',
+    'on-resize-move',
+    'on-resize-end',
+    'update:active'
+  ],
   data() {
     return {
       prefix: `${prefix}-modal`,
@@ -205,11 +225,6 @@ export default {
     okText() {
       return '确定'
     },
-    bindBeforeClose() {
-      return !!(
-        this._events['before-close'] && this._events['before-close'].length
-      )
-    },
     hasTitle() {
       return this.$slots.title || this.title
     }
@@ -260,40 +275,43 @@ export default {
     toggleActive(value) {
       this.currentActive = value
     },
-    handleOk() {
-      this.handleClose()
+    handleConfirm() {
+      this.handleClose(true)
       this.$emit('on-ok')
     },
     handleCancle() {
-      this.handleClose()
+      this.handleClose(false)
       this.$emit('on-cancel')
     },
-    handleClose(maskCloseFn) {
-      const close = () => {
-        this.executeClose()
-        typeof maskCloseFn === 'function' && maskCloseFn()
+    async handleClose(isConfirm) {
+      let result = true
+
+      if (typeof this.beforeClose === 'function') {
+        result = this.beforeClose(isConfirm)
+
+        if (isPromise(result)) {
+          result = await result
+        }
       }
 
-      if (this.bindBeforeClose) {
-        this.$emit('before-close', close)
-      } else {
-        close()
+      if (result !== false) {
+        this.$nextTick(() => {
+          this.toggleActive(false)
+          this.$emit('on-close')
+        })
       }
+
+      return result
     },
-    executeClose() {
-      this.$nextTick(() => {
-        this.toggleActive(false)
-        this.$emit('on-close')
-      })
+    handleShow() {
+      this.$emit('on-show')
     },
-    handleHidden() {
-      this.$nextTick(() => {
-        this.$emit('on-hide')
-      })
+    handleHide() {
+      this.$emit('on-hide')
     },
-    handleMaskClose(maskCloseFn) {
+    handleMaskClose() {
       if (this.maskClose) {
-        this.handleClose(maskCloseFn)
+        this.handleClose(false)
       }
     },
     handleDragStart(event) {
@@ -375,7 +393,7 @@ export default {
       this.currentWidth = Math.max(150, widthStart - xStart + clientX)
       this.contentHeight = heightStart - yStart + clientY
 
-      this.$emit('on-drag-move', {
+      this.$emit('on-resize-move', {
         width: this.currentWidth,
         height: this.contentHeight
       })

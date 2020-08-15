@@ -3,12 +3,13 @@
     <transition
       v-if="!disabled"
       :name="maskTransition"
+      @after-enter="afterOpen"
       @after-leave="afterClose"
     >
       <div
         v-show="currentActive"
         :class="`${prefix}__mask`"
-        @click="handleMaskClose"
+        @click="handleClose"
       ></div>
     </transition>
     <transition :name="transitionName">
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+import { isPromise } from '../../utils/common'
 const { prefix } = require('../../style/basis/variable')
 
 export default {
@@ -50,8 +52,13 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    beforeClose: {
+      type: Function,
+      default: null
     }
   },
+  emits: ['on-toggle', 'before-close', 'on-close', 'on-hide', 'update:active'],
   data() {
     return {
       prefix: `${prefix}-masker`,
@@ -70,11 +77,6 @@ export default {
           [`${prefix}--disabled`]: disabled
         }
       ]
-    },
-    bindBeforeClose() {
-      return !!(
-        this._events['before-close'] && this._events['before-close'].length
-      )
     }
   },
   watch: {
@@ -93,28 +95,35 @@ export default {
     toggleActive(value) {
       this.currentActive = value
     },
-    handleClose() {
-      if (this.bindBeforeClose) {
-        this.$emit('before-close', this.executeClose)
-      } else {
-        this.executeClose()
+    async handleClose() {
+      if (!this.closable) return
+
+      let result = false
+
+      if (typeof this.beforeClose === 'function') {
+        result = this.beforeClose()
+
+        if (isPromise(result)) {
+          result = await result
+        }
       }
-    },
-    executeClose() {
-      this.$nextTick(() => {
-        this.toggleActive(false)
-        this.$emit('on-close')
-      })
-    },
-    handleMaskClose() {
-      if (this.closable) {
-        this.handleClose()
+
+      if (result !== false) {
+        this.$nextTick(() => {
+          this.toggleActive(false)
+          this.$emit('on-close')
+        })
       }
     },
     afterClose() {
       this.$nextTick(() => {
         this.wrapShow = false
         this.$emit('on-hide')
+      })
+    },
+    afterOpen() {
+      this.$nextTick(() => {
+        this.$emit('on-show')
       })
     }
   }
