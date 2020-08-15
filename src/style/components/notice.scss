@@ -6,10 +6,8 @@
   $icon: #{&}__icon;
   $close: #{&}__close;
 
-  padding: 2em 0;
-
   &__title {
-    margin-bottom: 0.6em;
+    margin-bottom: 0.2em;
     font-size: $vxp-font-size-primary;
     color: $vxp-color-content-primary;
   }
@@ -21,7 +19,7 @@
   &__icon {
     position: absolute;
     top: 1.4em;
-    left: 1.6em;
+    left: 1.8em;
     display: flex;
     align-items: center;
 
@@ -56,21 +54,33 @@
 
   &__item {
     width: 24em;
-    padding: 1em;
+    padding: 0.8em;
+    padding-left: calc(1em + 5px);
     background-color: $vxp-color-fill;
     border-radius: $vxp-border-radius-base;
     box-shadow: $vxp-box-shadow-base;
 
-    &--icon {
+    &--has-icon {
       padding-left: 4.2em;
     }
 
-    &--title {
+    &--has-icon#{&}--title-only {
       padding-left: 3.2em;
     }
 
-    &--content {
+    &--content-only {
       min-height: 5em;
+    }
+
+    &::after {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 5px;
+      content: '';
+      background-color: $vxp-color-primary;
+      border-radius: $vxp-border-radius-base 0 0 $vxp-border-radius-base;
     }
 
     @each $type in map-keys($map: $types) {
@@ -83,15 +93,19 @@
             color: $color;
           }
         }
+
+        &::after {
+          background-color: $color;
+        }
       }
     }
   }
 
-  &__item--title &__title {
+  &__item--title-only &__title {
     margin: 0;
   }
 
-  &__item--title &__icon {
+  &__item--title-only &__icon {
     top: 50%;
     left: 1.4em;
     transform: translateY(-50%);
@@ -101,7 +115,7 @@
     }
   }
 
-  &__item--title &__close {
+  &__item--title-only &__close {
     top: 50%;
     right: 1em;
     transform: translateY(-50%);

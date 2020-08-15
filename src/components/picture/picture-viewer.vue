@@ -4,7 +4,7 @@
     :class="prefix"
     :transition-name="transitionName"
     :closable="false"
-    @on-hidden="handleHidden"
+    @on-hide="handleHidden"
   >
     <template #default="{ show }">
       <div v-show="show" :class="wrapperClass">
@@ -242,7 +242,7 @@ export default {
           this.resetTransform()
         }
 
-        this.$emit('on-hidden')
+        this.$emit('on-hide')
       })
     },
     zoomIn() {

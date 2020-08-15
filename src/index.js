@@ -1,3 +1,4 @@
+import Alert from './components/alert'
 import AutoComplete from './components/auto-complete'
 import Badge from './components/badge'
 import Breadcrumb from './components/breadcrumb'
@@ -91,6 +92,7 @@ const components = {
   Column,
   Row,
   // common
+  Alert,
   AutoComplete,
   Badge,
   Breadcrumb,
@@ -197,6 +199,7 @@ export {
   Column,
   Row,
   // components
+  Alert,
   AutoComplete,
   Badge,
   Breadcrumb,

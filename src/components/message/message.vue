@@ -16,7 +16,7 @@
               item.type
             ),
             [`${prefix}__item--color-only`]: !item.background && item.color,
-            [`${prefix}__item--icon`]: item.icon,
+            [`${prefix}__item--has-icon`]: item.icon,
             [`${prefix}__item--closable`]: item.closable
           },
           item.className

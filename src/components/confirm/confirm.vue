@@ -8,7 +8,7 @@
     :left="left"
     :width="width"
     :mask-close="maskClose"
-    @on-hidden="handleReset"
+    @on-hide="handleReset"
   >
     <div :class="`${prefix}__body`">
       <Icon

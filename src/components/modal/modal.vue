@@ -288,7 +288,7 @@ export default {
     },
     handleHidden() {
       this.$nextTick(() => {
-        this.$emit('on-hidden')
+        this.$emit('on-hide')
       })
     },
     handleMaskClose(maskCloseFn) {

@@ -16,7 +16,7 @@ export const SELECTOR = 'SELECTOR'
 export default {
   name: 'Option',
   inject: {
-    [SELECTOR]: { default: null }
+    [SELECTOR]: { default: {} }
   },
   props: {
     value: {

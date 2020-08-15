@@ -11,9 +11,9 @@
         :class="[
           {
             [`${prefix}__item`]: true,
-            [`${prefix}__item--title`]: !item.content,
-            [`${prefix}__item--icon`]: item.icon,
-            [`${prefix}__item--content`]: !item.title,
+            [`${prefix}__item--title-only`]: !item.content,
+            [`${prefix}__item--has-icon`]: item.icon,
+            [`${prefix}__item--content-only`]: !item.title,
             [`${prefix}__item--${item.type}`]: effectiveTypes.includes(
               item.type
             )

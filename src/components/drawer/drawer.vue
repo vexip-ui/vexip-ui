@@ -214,7 +214,7 @@ export default {
     },
     handleHidden() {
       this.$nextTick(() => {
-        this.$emit('on-hidden')
+        this.$emit('on-hide')
       })
     },
     handleResizeStart(event) {

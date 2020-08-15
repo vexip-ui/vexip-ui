@@ -114,7 +114,7 @@ export default {
     afterClose() {
       this.$nextTick(() => {
         this.wrapShow = false
-        this.$emit('on-hidden')
+        this.$emit('on-hide')
       })
     }
   }
