@@ -247,15 +247,19 @@ export default {
   watch: {
     scrollX(value) {
       this.currentXScroll = -value
+      this.verifyScroll()
     },
     scrollY(value) {
       this.currentYScroll = -value
+      this.verifyScroll()
     },
     width() {
       this.refreshWrapper()
+      this.verifyScroll()
     },
     height() {
       this.refreshWrapper()
+      this.verifyScroll()
     },
     enableXScroll(value) {
       this.$emit('on-x-enable-change', value)

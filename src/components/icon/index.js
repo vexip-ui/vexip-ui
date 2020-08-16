@@ -5,6 +5,7 @@ Icon.name = 'Icon'
 const { prefix } = require('../../style/basis/variable')
 
 export default {
+  name: 'Icon',
   functional: true,
   render(h, context) {
     const className = [`${prefix}-icon`]

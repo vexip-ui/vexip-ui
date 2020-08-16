@@ -12,6 +12,10 @@ export const baseIndentWidth = 20 // px
 
 export default {
   name: 'Menu',
+  model: {
+    prop: 'active',
+    event: 'on-toggle'
+  },
   provide() {
     return {
       menu: this
@@ -108,7 +112,10 @@ export default {
   watch: {
     active(value) {
       if (this.currentActive !== value) {
-        this.handleSelect(value)
+        this.currentActive = value
+        this.items.forEach(item => {
+          item.selected = item.label === value
+        })
       }
     },
     reduced(value) {
