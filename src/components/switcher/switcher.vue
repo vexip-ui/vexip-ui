@@ -73,7 +73,7 @@ export default {
   },
   data() {
     return {
-      prefix: `${prefix}-switch`,
+      prefix: `${prefix}-switcher`,
       currentValue: this.value
     }
   },

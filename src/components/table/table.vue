@@ -31,6 +31,7 @@
         :class="`${prefix}__scroll`"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
+        :delta-y="scrollDeltaY"
         @on-scroll="handleBodyScroll"
         @on-y-enable-change="handleYScrollEnableChange"
       >
@@ -49,6 +50,7 @@
         :class="`${prefix}__scroll`"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
+        :delta-y="scrollDeltaY"
         @on-scroll="handleBodyScroll"
       >
         <TableBody fixed="left"></TableBody>
@@ -66,6 +68,7 @@
         :class="`${prefix}__scroll`"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
+        :delta-y="scrollDeltaY"
         @on-scroll="handleBodyScroll"
       >
         <TableBody fixed="right"></TableBody>
@@ -100,7 +103,8 @@ import Store, {
   DEFAULT_KEY_FIELD,
   mapState,
   mapMutations,
-  mapGetters
+  mapGetters,
+  mapActions
 } from './store'
 import { debounce, removeArrayItem } from '../../utils/common'
 
@@ -166,9 +170,21 @@ export default {
       type: Number,
       default: 1500
     },
+    scrollDeltaY: {
+      type: Number,
+      default: 20
+    },
     rowDraggable: {
       type: Boolean,
       default: false
+    },
+    rowHeight: {
+      type: Number,
+      default: null
+    },
+    renderCount: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -187,7 +203,7 @@ export default {
   },
   computed: {
     ...mapState(['leftFixedColumns', 'rightFixedColumns', 'bodyScroll']),
-    ...mapGetters(['totalRowHeight']),
+    ...mapGetters(['totalRowHeight', 'processedData']),
     className() {
       const { prefix, stripe, border, highlight, useYBar } = this
 
@@ -299,16 +315,14 @@ export default {
       columns: this.columns,
       data: this.data,
       dataKey: this.dataKey,
-      highlight: this.highlight
+      highlight: this.highlight,
+      renderCount: this.renderCount
     })
 
     this.handleResize = debounce(this.computeTableWidth)
   },
   mounted() {
-    this.$nextTick(() => {
-      this.computeBodyHeight()
-      this.computeTableWidth()
-    })
+    this.refresh()
 
     window.addEventListener('resize', this.handleResize)
   },
@@ -326,6 +340,7 @@ export default {
       'setStripe',
       'refreshRowIndex'
     ]),
+    ...mapActions(['setRenderRows']),
     computeTableWidth() {
       const width = this.width
 
@@ -363,8 +378,9 @@ export default {
       }
     },
     handleBodyScroll({ clientY, percentY }) {
-      this.setBodyScroll(-clientY)
       this.yScrollPercent = percentY
+      this.setBodyScroll(clientY)
+      this.emitYScroll(clientY, percentY)
     },
     handleXScroll({ percentX }) {
       this.xScrollPercent = percentX
@@ -387,10 +403,19 @@ export default {
       this.yScrollEnable = able
     },
     handleYBarScroll(percent) {
+      const client =
+        (percent * (this.totalRowHeight - this.bodyScrollHeight)) / 100
+
       this.yScrollPercent = percent
-      this.setBodyScroll(
-        (-percent * (this.totalRowHeight - this.bodyScrollHeight)) / 100
-      )
+      this.setBodyScroll(client)
+      this.emitYScroll(client, percent)
+    },
+    emitYScroll(client, percent) {
+      this.$emit('on-body-scroll', { client, percent })
+
+      this.$nextTick(() => {
+        this.computeRenderRows()
+      })
     },
     emitRowClick(data, key, index) {
       this.$emit('on-row-click', data, key, index)
@@ -465,6 +490,39 @@ export default {
         rowInstance.row.data,
         this.rowData.map(row => row.data)
       )
+    },
+    computeRenderRows() {
+      const {
+        bodyScroll,
+        totalRowHeight,
+        renderCount,
+        rowHeight,
+        processedData
+      } = this
+      const rowCount = processedData.length
+
+      if (!renderCount || !rowHeight) {
+        this.setRenderRows(0, rowCount)
+
+        return
+      }
+
+      if (bodyScroll >= totalRowHeight) return
+
+      const start = Math.floor((bodyScroll / totalRowHeight) * rowCount)
+
+      if (start + renderCount > rowCount) {
+        this.setRenderRows(rowCount - renderCount, rowCount)
+      } else {
+        this.setRenderRows(start, start + renderCount)
+      }
+    },
+    refresh() {
+      this.$nextTick(() => {
+        this.computeTableWidth()
+        this.computeBodyHeight()
+        this.$nextTick(this.computeRenderRows)
+      })
     }
   }
 }

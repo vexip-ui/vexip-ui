@@ -307,9 +307,15 @@ export default {
     },
     handleClear() {
       if (this.clearable) {
+        const cleared = isNull(this.currentValue) || this.currentValue === ''
+
         this.currentValue = ''
         this.currentLabel = ''
         this.$emit('on-clear')
+
+        if (!cleared) {
+          this.$emit('on-change', '', '')
+        }
       }
     }
   }

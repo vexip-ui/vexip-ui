@@ -1,6 +1,6 @@
 @import '../mixins/basis.scss';
 
-.#{$prefix}-switch {
+.#{$prefix}-switcher {
   @include basis;
 
   position: relative;

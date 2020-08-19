@@ -48,8 +48,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['columns', 'widths', 'leftFixedColumns', 'rightFixedColumns']),
-    ...mapGetters(['processedData']),
+    ...mapState([
+      'columns',
+      'widths',
+      'leftFixedColumns',
+      'rightFixedColumns',
+      'hiddenHeight'
+    ]),
+    ...mapGetters(['processedData', 'totalRowHeight']),
     currentColumns() {
       if (this.fixed === 'left') {
         return this.leftFixedColumns
@@ -62,7 +68,7 @@ export default {
       return this.columns
     },
     style() {
-      const { currentColumns, widths } = this
+      const { currentColumns, widths, totalRowHeight, hiddenHeight } = this
 
       let width = 0
 
@@ -75,7 +81,9 @@ export default {
       }
 
       return {
-        minWidth: `${width}px`
+        minWidth: `${width}px`,
+        minHeight: `${totalRowHeight}px`,
+        paddingTop: `${hiddenHeight}px`
       }
     }
   },

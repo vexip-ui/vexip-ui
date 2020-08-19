@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!row.hidden"
     :class="`${prefix}__group`"
     :draggable="draggable"
     @click="handleClick"
@@ -80,11 +81,20 @@ export default {
       return !this.isHead && this.table.rowDraggable
     }
   },
+  watch: {
+    'row.hidden'(value) {
+      if (!value) {
+        this.computeRowHeight()
+      }
+    }
+  },
   mounted() {
     this.computeRowHeight()
   },
   updated() {
-    this.computeRowHeight()
+    if (!this.table.rowHeight) {
+      this.computeRowHeight()
+    }
   },
   methods: {
     ...mapMutations(['setRowHeight', 'setRowHover']),
@@ -96,17 +106,31 @@ export default {
       }
     },
     computeRowHeight() {
-      this.$nextTick(() => {
-        if (!this.isFixed) {
-          const height = this.$el.getBoundingClientRect().height
+      if (this.table.rowHeight) {
+        this.$nextTick(() => {
+          this.setRowHeight(this.row.key, this.table.rowHeight)
 
-          this.setRowHeight(this.row.key, height)
-        } else {
-          setTimeout(() => {
-            this.$el.style.height = `${this.row.height}px`
-          }, 0)
-        }
-      })
+          if (this.$el?.style) {
+            this.$el.style.maxHeight = `${this.table.rowHeight}px`
+          }
+        })
+      } else {
+        this.$nextTick(() => {
+          if (!this.isFixed) {
+            if (this.$el?.getBoundingClientRect) {
+              const height = this.$el.getBoundingClientRect().height
+
+              this.setRowHeight(this.row.key, height)
+            }
+          } else {
+            setTimeout(() => {
+              if (this.$el?.style) {
+                this.$el.style.height = `${this.row.height}px`
+              }
+            }, 0)
+          }
+        })
+      }
     },
     handleMouseEnter() {
       this.setRowHover(this.row.key, true)

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { sortByProps, isNull } from '../../utils/common'
 
+// 数据 data 的默认 id 字段
 export const DEFAULT_KEY_FIELD = 'id'
 
 export const TYPE_ORDER = 'order'
@@ -22,7 +23,15 @@ function getIndexId() {
 // 支持 state getters mutations
 export default class Store {
   constructor(options = {}) {
-    const { columns, data, rowClass, width, dataKey, highlight } = options
+    const {
+      columns,
+      data,
+      rowClass,
+      width,
+      dataKey,
+      highlight,
+      renderCount
+    } = options
 
     createStoreVM(this)
 
@@ -33,6 +42,7 @@ export default class Store {
 
     setRowClass(this.state, rowClass)
     setHighlight(this.state, highlight)
+    setRenderCount(this.state, renderCount)
 
     if (!isNull(width)) {
       setTableWidth(this.state, width)
@@ -88,7 +98,10 @@ function createStoreVM(store) {
         sorters: {},
         filters: {},
         bodyScroll: 0,
-        highlight: false
+        highlight: false,
+        hiddenHeight: 0,
+        startRow: 0,
+        endRow: 0
       }
     },
     computed
@@ -148,6 +161,7 @@ const mutations = {
   setBodyScroll,
   setDataKey,
   setHighlight,
+  setRenderCount,
   setRowHover(state, key, hover) {
     if (state.dataMap[key]) {
       Vue.set(state.dataMap[key], 'hover', hover)
@@ -238,6 +252,25 @@ const actions = {
     state.partial = false
 
     computePartial(state)
+  },
+  setRenderRows({ state, getters }, start, end) {
+    const { startRow, endRow } = state
+
+    if (start === startRow && end === endRow) return
+
+    const { processedData } = getters
+
+    if (processedData[0]) {
+      let i = processedData.length
+
+      while (i--) {
+        processedData[i].hidden = !(i >= start && i < end)
+      }
+
+      state.hiddenHeight = start * processedData[0].height
+      state.startRow = start
+      state.endRow = end
+    }
   }
 }
 
@@ -324,6 +357,7 @@ function setData(state, data) {
   const { dataKey, idMaps } = state
   const length = data.length
   const oldDataMap = state.dataMap
+  const hidden = !!state.renderCount
 
   let i = 0
 
@@ -351,6 +385,7 @@ function setData(state, data) {
         key,
         checked,
         height,
+        hidden,
         data: item
       }
 
@@ -444,6 +479,10 @@ function setDataKey(state, field) {
 
 function setHighlight(state, able) {
   state.highlight = !!able
+}
+
+function setRenderCount(state, count) {
+  state.renderCount = parseInt(count) || null
 }
 
 function parseSorter(sorter = {}) {

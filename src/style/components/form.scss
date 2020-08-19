@@ -8,6 +8,8 @@
   flex-direction: column;
 
   &__item {
+    @include basis;
+
     display: flex;
     align-items: center;
     width: 100%;
