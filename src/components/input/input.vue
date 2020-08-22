@@ -22,10 +22,18 @@
       @change="handleChange"
     />
     <template v-if="type === 'number'">
-      <div :class="`${prefixCls}__number-plus`" @click="plusNumber">
+      <div
+        :class="`${prefixCls}__number-plus`"
+        @click="plusNumber"
+        @mousedown.prevent
+      >
         <Icon name="caret-up" :scale="0.6"></Icon>
       </div>
-      <div :class="`${prefixCls}__number-minus`" @click="minusNumber">
+      <div
+        :class="`${prefixCls}__number-minus`"
+        @click="minusNumber"
+        @mousedown.prevent
+      >
         <Icon name="caret-down" :scale="0.6"></Icon>
       </div>
     </template>

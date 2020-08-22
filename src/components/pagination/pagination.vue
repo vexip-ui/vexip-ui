@@ -114,18 +114,39 @@
       </slot>
     </li>
     <slot>
-      <PageTotal v-if="pageTotal"></PageTotal>
-      <PageCount v-if="pageCount"></PageCount>
-      <PageJump v-if="pageJump"></PageJump>
+      <div v-if="pageTotal" :class="`${prefix}__total`">
+        {{ `共 ${total} ${itemUnit}` }}
+      </div>
+      <div v-if="pageCount" :class="`${prefix}__size`">
+        <Select v-model="currentPageSize" size="small">
+          <Option
+            v-for="(item, index) in sizeOptions"
+            :key="index"
+            :value="item"
+            :label="`${item} ${itemUnit}/页`"
+          ></Option>
+        </Select>
+      </div>
+      <div v-if="pageJump" :class="`${prefix}__jump`">
+        跳至
+        <Input
+          ref="jumpInput"
+          type="number"
+          size="small"
+          :value="currentActive"
+          :class="`${prefix}__jump-input`"
+          @on-change="handleJumpPage"
+        ></Input>
+        页
+      </div>
     </slot>
   </ul>
 </template>
 
 <script>
 import Icon from '../icon'
-import PageCount from './page-count'
-import PageJump from './page-jump'
-import PageTotal from './page-total'
+import Input from '../input'
+import Select from '../select'
 import { range } from '../../utils/common'
 
 import 'vue-awesome/icons/chevron-right'
@@ -140,9 +161,8 @@ export default {
   name: 'Pagination',
   components: {
     Icon,
-    PageCount,
-    PageJump,
-    PageTotal
+    Input,
+    Select
   },
   model: {
     prop: 'active',
@@ -223,8 +243,13 @@ export default {
     pageTotal: {
       type: Boolean,
       default: false
+    },
+    itemUnit: {
+      type: String,
+      default: '条'
     }
   },
+  emits: ['on-change', 'on-page-size-change'],
   data() {
     return {
       prefix: `${prefix}-pagination`,
@@ -326,12 +351,6 @@ export default {
     },
     pagerCount() {
       this.computePagers()
-    },
-    total(value) {
-      this.$emit('on-total-change', value)
-    },
-    sizeOptions(value) {
-      this.$emit('on-size-opts-change', value)
     },
     pageSize(value) {
       this.currentPageSize = value
@@ -465,6 +484,34 @@ export default {
       }
 
       return active
+    },
+    handleJumpPage(active) {
+      active = parseInt(active)
+
+      if (active < 1) active = 1
+      if (active > this.pagerCount) active = this.pagerCount
+
+      const originActive = active
+
+      if (active !== this.currentActive) {
+        const step = active > this.currentActive ? 1 : -1
+
+        active = this.queryEnableActive(originActive, step)
+
+        if (step > 0 ? active > this.pagerCount : active < 1) {
+          active = this.queryEnableActive(originActive, -step)
+
+          if (step > 0 ? active < 1 : active > this.pagerCount) {
+            this.currentActive = null
+          }
+        }
+
+        this.currentActive = active
+
+        if (this.$refs.jumpInput) {
+          this.$refs.jumpInput.currentValue = this.currentActive.toString()
+        }
+      }
     }
   }
 }

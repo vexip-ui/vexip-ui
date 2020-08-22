@@ -204,6 +204,9 @@ export default {
   computed: {
     ...mapState(['leftFixedColumns', 'rightFixedColumns', 'bodyScroll']),
     ...mapGetters(['totalRowHeight', 'processedData']),
+    table() {
+      return this
+    },
     className() {
       const { prefix, stripe, border, highlight, useYBar } = this
 
@@ -309,8 +312,7 @@ export default {
   created() {
     const { rowClass } = this
 
-    this.table = {}
-    this.table.store = this.store = new Store({
+    this.store = new Store({
       rowClass,
       columns: this.columns,
       data: this.data,
@@ -320,6 +322,15 @@ export default {
     })
 
     this.handleResize = debounce(this.computeTableWidth)
+
+    this.$watch('bodyScrollHeight', value => {
+      this.$nextTick(() => {
+        this.yScrollPercent = (this.bodyScroll / (value || 1)) * 100
+
+        if (this.yScrollPercent > 100) this.yScrollPercent = 100
+        if (this.yScrollPercent < 0) this.yScrollPercent = 0
+      })
+    })
   },
   mounted() {
     this.refresh()

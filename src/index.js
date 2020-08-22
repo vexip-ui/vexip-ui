@@ -35,9 +35,6 @@ import MenuItem from './components/menu/menu-item'
 import Modal from './components/modal'
 import Option from './components/option'
 import OptionGroup from './components/option/option-group'
-import PageCount from './components/pagination/page-count'
-import PageJump from './components/pagination/page-jump'
-import PageTotal from './components/pagination/page-total'
 import Pagination from './components/pagination'
 import Picture from './components/picture'
 import PictureViewer from './components/picture/picture-viewer'
@@ -129,9 +126,6 @@ const components = {
   Modal,
   Option,
   OptionGroup,
-  PageCount,
-  PageJump,
-  PageTotal,
   Pagination,
   Picture,
   PictureViewer,
@@ -236,9 +230,6 @@ export {
   Modal,
   Option,
   OptionGroup,
-  PageCount,
-  PageJump,
-  PageTotal,
   Pagination,
   Picture,
   PictureViewer,

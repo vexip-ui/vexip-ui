@@ -6,7 +6,7 @@
     :transition-name="transitionName"
     :placement="`${placement}-center`"
   >
-    <template #item="{ item }">
+    <template #default="{ item }">
       <div
         :class="[
           {

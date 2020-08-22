@@ -290,6 +290,8 @@ export default {
       this.$emit('on-blur', event)
     },
     handleClickOutside() {
+      this.$emit('on-outside-click')
+
       if (this.outsideClose && this.currentVisible) {
         this.handleToggelVisible(false)
         this.$emit('on-outside-close')

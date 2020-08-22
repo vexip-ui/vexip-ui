@@ -72,15 +72,18 @@
       min-height: 5em;
     }
 
-    &::after {
+    &::before {
       position: absolute;
       top: 0;
       bottom: 0;
       left: 0;
       width: 5px;
-      content: '';
       background-color: $vxp-color-primary;
       border-radius: $vxp-border-radius-base 0 0 $vxp-border-radius-base;
+    }
+
+    &--marker::before {
+      content: '';
     }
 
     @each $type in map-keys($map: $types) {
@@ -94,7 +97,7 @@
           }
         }
 
-        &::after {
+        &::before {
           background-color: $color;
         }
       }

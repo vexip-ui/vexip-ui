@@ -1,23 +1,36 @@
 <template>
-  <div :class="prefix">
-    <PopupItem
+  <transition-group
+    tag="div"
+    :class="prefix"
+    :name="transitionName"
+  >
+    <div
       v-for="item in items"
       :key="item.key"
       ref="instances"
-      :item="item"
-      :transition-name="transitionName"
-      :inner-class="innerClass"
+      :class="`${prefix}__item`"
       :style="getItemStyle(item)"
+      :vxp-index="item.key"
     >
-      <template #item="{ item: itemData }">
-        <slot name="item" :item="itemData"></slot>
-      </template>
-    </PopupItem>
-  </div>
+      <div :class="[`${prefix}__item-inner`, innerClass]">
+        <slot :item="item">
+          <Render
+            v-if="typeof item.renderer === 'function'"
+            :renderer="item.renderer"
+          ></Render>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <template v-else-if="item.parseHtml" v-html="item.content"></template>
+          <template v-else>
+            {{ item.content }}
+          </template>
+        </slot>
+      </div>
+    </div>
+  </transition-group>
 </template>
 
 <script>
-import PopupItem from './popup-item'
+import Render from '../basis/render'
 
 const { prefix } = require('../../style/basis/variable')
 
@@ -26,7 +39,8 @@ let zIndex = 2000
 export default {
   name: 'Popup',
   components: {
-    PopupItem
+    // PopupItem
+    Render
   },
   props: {
     transitionName: {
@@ -153,11 +167,11 @@ export default {
 
         let currentVertical = this.startOffset
 
-        const instances = this.$refs.instances
+        const elements = this.$refs.instances
 
-        if (instances) {
-          this.$refs.instances.forEach(instance => {
-            currentVertical += instance.$el.offsetHeight + 16
+        if (elements?.length) {
+          elements.forEach(instance => {
+            currentVertical += instance.offsetHeight + 16
           })
         }
 
@@ -173,8 +187,8 @@ export default {
       const index = items.findIndex(item => item.key === key)
 
       if (~index) {
-        const instance = this.$refs.instances[index]
-        const removeHeight = instance.$el.offsetHeight
+        const element = this.$refs.instances[index]
+        const removeHeight = element.offsetHeight
         const [item] = items.splice(index, 1)
 
         // 关闭回调
@@ -205,7 +219,10 @@ export default {
     },
     getItemStyle(item) {
       const [verticalStyle, horizontalStyle] = this.placementArray
-      const style = { [verticalStyle]: `${item.verticalStyle}px` }
+      const style = {
+        zIndex: item.zIndex,
+        [verticalStyle]: `${item.verticalStyle}px`
+      }
 
       if (horizontalStyle === 'center') {
         style.left = '50%'

@@ -34,7 +34,10 @@ function getKey() {
 class NoticeManager {
   constructor() {
     this.name = 'Notice'
-    this.defaultDuration = 4000
+    this.defaults = {
+      marker: true,
+      duration: 4000
+    }
   }
 
   _getInstance() {
@@ -66,7 +69,7 @@ class NoticeManager {
       }
     }
 
-    const item = Object.assign({}, convenienceOptions, options, {
+    const item = Object.assign({}, this.defaults, convenienceOptions, options, {
       key,
       type,
       onClose
@@ -74,8 +77,7 @@ class NoticeManager {
 
     notice.add(item)
 
-    const duration =
-      typeof item.duration === 'number' ? item.duration : this.defaultDuration
+    const duration = typeof item.duration === 'number' ? item.duration : 4000
 
     if (duration >= 500) {
       timer = setTimeout(() => {

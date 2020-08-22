@@ -6,7 +6,7 @@
     :transition-name="transitionName"
     :placement="placement"
   >
-    <template #item="{ item }">
+    <template #default="{ item }">
       <div
         :class="[
           {
@@ -16,7 +16,8 @@
             [`${prefix}__item--content-only`]: !item.title,
             [`${prefix}__item--${item.type}`]: effectiveTypes.includes(
               item.type
-            )
+            ),
+            [`${prefix}__item--marker`]: item.marker
           },
           item.className
         ]"
