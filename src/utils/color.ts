@@ -1,48 +1,48 @@
 interface RGB {
-  r: number | string
-  g: number | string
+  r: number | string,
+  g: number | string,
   b: number | string
 }
 
 export interface RGBColor extends RGB {
-  a?: number | string
+  a?: number | string,
   format?: string
 }
 
 export interface RGBAColor extends RGB {
-  a: number | string
+  a: number | string,
   format?: string
 }
 
 interface HSL {
-  h: number | string
-  s: number | string
+  h: number | string,
+  s: number | string,
   l: number | string
 }
 
 export interface HSLColor extends HSL {
-  a?: number | string
+  a?: number | string,
   format?: string
 }
 
 export interface HSLAColor extends HSL {
-  a: number | string
+  a: number | string,
   format?: string
 }
 
 interface HSV {
-  h: number | string
-  s: number | string
+  h: number | string,
+  s: number | string,
   v: number | string
 }
 
 export interface HSVColor extends HSV {
-  a?: number | string
+  a?: number | string,
   format?: string
 }
 
 export interface HSVAColor extends HSV {
-  a: number | string
+  a: number | string,
   format?: string
 }
 
@@ -56,15 +56,15 @@ export type Color =
   | string
 
 export interface ColorObject {
-  rgb: RGBColor
-  hsl: HSLColor
-  hsv: HSVColor
-  hex: string
-  alpha: number | string
-  rgba: RGBAColor
-  hsla: HSLAColor
-  hsva: HSVAColor
-  hex8: string
+  rgb: RGBColor,
+  hsl: HSLColor,
+  hsv: HSVColor,
+  hex: string,
+  alpha: number | string,
+  rgba: RGBAColor,
+  hsla: HSLAColor,
+  hsva: HSVAColor,
+  hex8: string,
   origin: Color
 }
 

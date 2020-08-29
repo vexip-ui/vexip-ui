@@ -178,14 +178,14 @@
       }
     }
 
-    & &-wrapper {
+    &-wrapper {
       padding: {
-        right: 0;
-        left: 0;
+        right: 0 !important;
+        left: 0 !important;
       }
 
       &--multiple {
-        padding-bottom: 0;
+        padding-bottom: 0 !important;
       }
     }
 

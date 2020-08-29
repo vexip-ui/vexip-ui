@@ -30,7 +30,7 @@ module.exports = {
       'error',
       {
         multiline: {
-          delimiter: 'none',
+          delimiter: 'comma',
           requireLast: false
         },
         singleline: {

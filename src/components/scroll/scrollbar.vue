@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { throttle } from '../../utils/common'
+import { throttle, isDefined } from '../../utils/common'
 
 const { prefix } = require('../../style/basis/variable')
 
@@ -55,6 +55,10 @@ export default {
     wrapper: {
       type: [String, Object],
       default: null
+    },
+    duration: {
+      type: Number,
+      default: null
     }
   },
   emits: ['on-scroll', 'on-scroll-start', 'on-scroll-end'],
@@ -92,7 +96,7 @@ export default {
       return HORIZONTAL
     },
     barStyle() {
-      const { type, barColor, barLength, currentScroll } = this
+      const { type, barColor, barLength, currentScroll, duration } = this
 
       const style = {}
       const position = `${((100 - barLength) * currentScroll) / 100}%`
@@ -107,6 +111,10 @@ export default {
       }
 
       style.backgroundColor = barColor
+
+      if (isDefined(duration)) {
+        style.transitionDuration = `${duration}ms`
+      }
 
       return style
     }

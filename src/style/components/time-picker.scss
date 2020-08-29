@@ -3,7 +3,7 @@
 .#{$prefix}-time-picker {
   @include basis;
 
-  $input-group: '#{$prefix}-input-group';
+  $multiple-input: '#{$prefix}-multiple-input';
   $wheel: '#{$prefix}-wheel';
 
   display: inline-flex;
@@ -62,13 +62,13 @@
   &__input {
     text-align: center;
 
-    .#{$input-group}__input {
+    .#{$multiple-input}__input {
       text-align: center;
       letter-spacing: 1px;
     }
   }
 
-  .#{$input-group}__input {
+  .#{$multiple-input}__input {
     &:focus,
     &--focus {
       color: $vxp-color-content-reverse;
@@ -77,7 +77,7 @@
   }
 
   &--no-hour {
-    // .#{$input-group} {
+    // .#{$multiple-input} {
     //   &__input:first-of-type,
     //   &__separator:first-of-type {
     //     display: none;
@@ -90,7 +90,7 @@
   }
 
   &--no-minute {
-    // .#{$input-group} {
+    // .#{$multiple-input} {
     //   &__input:nth-of-type(2),
     //   &__separator:nth-of-type(1) {
     //     display: none;
@@ -103,7 +103,7 @@
   }
 
   &--no-second {
-    // .#{$input-group} {
+    // .#{$multiple-input} {
     //   &__input:last-of-type,
     //   &__separator:last-of-type {
     //     display: none;
@@ -116,7 +116,7 @@
   }
 
   // &--no-hour#{&}--no-minute {
-  //   .#{$input-group} {
+  //   .#{$multiple-input} {
   //     &__separator:nth-of-type(2) {
   //       display: none;
   //     }

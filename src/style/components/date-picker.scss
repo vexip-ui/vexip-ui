@@ -3,7 +3,7 @@
 .#{$prefix}-date-picker {
   @include basis;
 
-  $input-group: '#{$prefix}-input-group';
+  $multiple-input: '#{$prefix}-multiple-input';
   $wheel: '#{$prefix}-wheel';
 
   display: inline-flex;
@@ -52,7 +52,7 @@
   &__input {
     text-align: center;
 
-    .#{$input-group}__input {
+    .#{$multiple-input}__input {
       text-align: center;
       letter-spacing: 1px;
     }
@@ -162,7 +162,7 @@
     border-top: $vxp-border-appearance $vxp-color-border-light-2;
   }
 
-  .#{$input-group}__input {
+  .#{$multiple-input}__input {
     &:focus,
     &--focus {
       color: $vxp-color-content-reverse;
@@ -170,11 +170,11 @@
     }
   }
 
-  &--year &__input--year .#{$input-group}__separator {
+  &--year &__input--year .#{$multiple-input}__separator {
     display: none;
   }
 
-  &--month &__input--month .#{$input-group}__separator {
+  &--month &__input--month .#{$multiple-input}__separator {
     display: none;
   }
 

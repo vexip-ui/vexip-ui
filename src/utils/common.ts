@@ -180,8 +180,8 @@ export function formatNumber(number: number): string {
 }
 
 interface CloneNode {
-  parent: AnyObject
-  key: undefined | string | number
+  parent: AnyObject,
+  key: undefined | string | number,
   data: AnyObject
 }
 
@@ -310,8 +310,8 @@ export function groupByProps(
 }
 
 interface TreeOptions {
-  keyField?: string
-  childField?: string
+  keyField?: string,
+  childField?: string,
   parentField?: string
 }
 
@@ -411,15 +411,15 @@ export function flatTree(tree: any[], options: TreeOptions = {}): any[] {
 }
 
 interface SortPropOptions {
-  key: string
-  method?: AnyFunction
-  accessor?: AnyFunction
-  type?: string
+  key: string,
+  method?: AnyFunction,
+  accessor?: AnyFunction,
+  type?: string,
   params?: any[]
 }
 
 interface FormattedSortPropOptions extends SortPropOptions {
-  method: AnyFunction
+  method: AnyFunction,
   accessor: AnyFunction
 }
 
@@ -687,4 +687,40 @@ export function getRandomString(length = 16): string {
   }
 
   return string
+}
+
+interface ScrollElement {
+  scrollTo(x: number, y: number): void,
+  [prop: string]: any
+}
+
+export function animateScrollTo(
+  el: ScrollElement,
+  from: number,
+  to: number,
+  duration: number,
+  callback: unknown
+): void {
+  const distance = to - from
+  const step = Math.ceil((distance / duration) * 60)
+
+  let current = from
+
+  const scroll = () => {
+    current = current + step
+
+    if ((to - current) / distance <= 0) {
+      current = to
+    }
+
+    el.scrollTo(0, current)
+
+    if (current === to) {
+      typeof callback === 'function' && callback()
+    } else {
+      requestAnimationFrame(scroll)
+    }
+  }
+
+  scroll()
 }

@@ -4,7 +4,7 @@
     @keydown="handleInput"
     @clickoutside="finishInput"
   >
-    <InputGroup
+    <MultipleInput
       ref="control"
       readonly
       :separator="computedSeparator"
@@ -38,7 +38,7 @@
           <Icon v-else name="regular/clock"></Icon>
         </div>
       </template>
-    </InputGroup>
+    </MultipleInput>
     <transition :name="transitionName">
       <div
         v-show="focused"
@@ -99,7 +99,7 @@
 <script>
 import Button from '../button'
 import Icon from '../icon'
-import InputGroup from '../input/input-group'
+import MultipleInput from '../multiple-input'
 import TimeWheel from './time-wheel'
 
 import 'vue-awesome/icons/times-circle'
@@ -117,7 +117,7 @@ export default {
   components: {
     Button,
     Icon,
-    InputGroup,
+    MultipleInput,
     TimeWheel
   },
   mixins: [usePopper({ isDrop: true }), formControl],

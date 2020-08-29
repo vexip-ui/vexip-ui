@@ -5,7 +5,7 @@
     @keydown="handleInput"
     @clickoutside="finishInput"
   >
-    <InputGroup
+    <MultipleInput
       ref="control"
       readonly
       :separator="separator"
@@ -41,7 +41,7 @@
           <Icon v-else name="calendar-alt"></Icon>
         </div>
       </template>
-    </InputGroup>
+    </MultipleInput>
     <transition :name="transitionName" @after-leave="togglePane('calendar')">
       <div
         v-show="focused"
@@ -217,7 +217,7 @@
 import Button from '../button'
 import CalendarBase from '../calendar/calendar-base'
 import Icon from '../icon'
-import InputGroup from '../input/input-group'
+import MultipleInput from '../multiple-input'
 import TimeWheel from './time-wheel'
 
 import 'vue-awesome/icons/times-circle'
@@ -251,7 +251,7 @@ export default {
     Button,
     CalendarBase,
     Icon,
-    InputGroup,
+    MultipleInput,
     TimeWheel
   },
   mixins: [usePopper({ isDrop: true }), formControl],

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { sortByProps, isNull } from '../../utils/common'
+import { sortByProps, isNull, deepClone } from '../../utils/common'
 
 // 数据 data 的默认 id 字段
 export const DEFAULT_KEY_FIELD = 'id'
@@ -325,6 +325,7 @@ function setColumns(state, columns) {
 
     const fixed = column.fixed
 
+    // 独立属性解析时注意隔断同对象引用
     Vue.set(widths, key, column.width || 100)
     Vue.set(sorters, key, parseSorter(column.sorter))
     Vue.set(filters, key, parseFilter(column.filter))
@@ -494,11 +495,12 @@ function parseSorter(sorter = {}) {
 function parseFilter(filter = {}) {
   const {
     able = false,
-    options = [],
     multiple = false,
     active = null,
     method = null
   } = filter
+  // 防止内部变化触发 deep watch
+  const options = deepClone(filter.options || [])
   const formattedOptions = []
 
   for (let i = 0, len = options.length; i < len; i++) {

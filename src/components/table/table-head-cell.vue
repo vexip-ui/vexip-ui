@@ -9,104 +9,107 @@
       :size="column.size || 'default'"
       @click.native.prevent="handleCheckAllRow"
     ></checkbox>
-    <Render
-      v-else-if="isFunction(column.headRenderer)"
-      :renderer="column.headRenderer"
-      :data="{ column, index }"
-    ></Render>
     <template v-else>
-      {{ column.name }}
-      <div v-if="sorter.able" :class="`${prefix}__sorter`">
-        <span
-          :class="{
-            [`${prefix}__sorter--asc`]: true,
-            [`${prefix}__sorter--active`]: sorter.type === 'asc'
-          }"
-          @click="handleSortAsc()"
-        >
-          <Icon name="caret-up"></Icon>
-        </span>
-        <span
-          :class="{
-            [`${prefix}__sorter--desc`]: true,
-            [`${prefix}__sorter--active`]: sorter.type === 'desc'
-          }"
-          @click="handleSortDesc()"
-        >
-          <Icon name="caret-down"></Icon>
-        </span>
-      </div>
-      <Tooltip
-        v-if="filter.able"
-        v-model="filterVisible"
-        placement="bottom"
-        trigger="click"
+      <Render
+        v-if="isFunction(column.headRenderer)"
+        :renderer="column.headRenderer"
+        :data="{ column, index }"
+      ></Render>
+      <template v-else>
+        {{ column.name }}
+      </template>
+    </template>
+    <div v-if="sorter.able" :class="`${prefix}__sorter`">
+      <span
         :class="{
-          [`${prefix}__filter`]: true,
-          [`${prefix}__filter--visible`]: filterVisible,
-          [`${prefix}__filter--active`]: filter.active
+          [`${prefix}__sorter--asc`]: true,
+          [`${prefix}__sorter--active`]: sorter.type === 'asc'
         }"
-        :tip-class="{
-          [`${prefix}__filter-wrapper`]: true,
-          [`${prefix}__filter-wrapper--multiple`]: filter.multiple
-        }"
+        @click="handleSortAsc()"
       >
-        <div :class="`${prefix}__filter-trigger`">
-          <Icon name="filter" :scale="0.8"></Icon>
-        </div>
-        <template v-if="filter.multiple" slot="tip">
-          <CheckboxGroup vertical :class="`${prefix}__filter-group`">
-            <Checkbox
-              v-for="item in filter.options"
-              :key="item.value"
-              :checked="item.active"
-              :label="item.label"
-              :value="item.value"
-              @on-change="handleFilterCheck(item.value, $event)"
-            ></Checkbox>
-          </CheckboxGroup>
-          <div :class="`${prefix}__filter-actions`">
-            <Button
-              type="text"
-              size="small"
-              :disabled="!hasFilterActive"
-              @on-click="handleFilterMutiple()"
-            >
-              筛选
-            </Button>
-            <Button
-              type="text"
-              size="small"
-              @on-click="handleResetFilter()"
-            >
-              重置
-            </Button>
-          </div>
-        </template>
-        <template v-else slot="tip">
-          <div
-            :class="{
-              [`${prefix}__filter-item`]: true,
-              [`${prefix}__filter-item--active`]: !filter.active
-            }"
-            @click="handleResetFilter()"
-          >
-            全部
-          </div>
-          <div
+        <Icon name="caret-up"></Icon>
+      </span>
+      <span
+        :class="{
+          [`${prefix}__sorter--desc`]: true,
+          [`${prefix}__sorter--active`]: sorter.type === 'desc'
+        }"
+        @click="handleSortDesc()"
+      >
+        <Icon name="caret-down"></Icon>
+      </span>
+    </div>
+    <Tooltip
+      v-if="filter.able"
+      v-model="filterVisible"
+      transfer
+      placement="bottom"
+      trigger="click"
+      :class="{
+        [`${prefix}__filter`]: true,
+        [`${prefix}__filter--visible`]: filterVisible,
+        [`${prefix}__filter--active`]: filter.active
+      }"
+      :tip-class="{
+        [`${prefix}__filter-wrapper`]: true,
+        [`${prefix}__filter-wrapper--multiple`]: filter.multiple
+      }"
+    >
+      <div :class="`${prefix}__filter-trigger`">
+        <Icon name="filter" :scale="0.8"></Icon>
+      </div>
+      <template v-if="filter.multiple" slot="tip">
+        <CheckboxGroup vertical :class="`${prefix}__filter-group`">
+          <Checkbox
             v-for="item in filter.options"
             :key="item.value"
-            :class="{
-              [`${prefix}__filter-item`]: true,
-              [`${prefix}__filter-item--active`]: item.active
-            }"
-            @click="handleFilterItemSelect(item)"
+            :checked="item.active"
+            :label="item.label"
+            :value="item.value"
+            @on-change="handleFilterCheck(item.value, $event)"
+          ></Checkbox>
+        </CheckboxGroup>
+        <div :class="`${prefix}__filter-actions`">
+          <Button
+            type="text"
+            size="small"
+            :disabled="!hasFilterActive"
+            @on-click="handleFilterMutiple()"
           >
-            {{ item.label }}
-          </div>
-        </template>
-      </Tooltip>
-    </template>
+            筛选
+          </Button>
+          <Button
+            type="text"
+            size="small"
+            @on-click="handleResetFilter()"
+          >
+            重置
+          </Button>
+        </div>
+      </template>
+      <template v-else slot="tip">
+        <div
+          :class="{
+            [`${prefix}__filter-item`]: true,
+            [`${prefix}__filter-item--active`]: !filter.active
+          }"
+          @click="handleResetFilter()"
+        >
+          全部
+        </div>
+        <div
+          v-for="item in filter.options"
+          :key="item.value"
+          :class="{
+            [`${prefix}__filter-item`]: true,
+            [`${prefix}__filter-item--active`]: item.active
+          }"
+          @click="handleFilterItemSelect(item)"
+        >
+          {{ item.label }}
+        </div>
+      </template>
+    </Tooltip>
   </div>
 </template>
 

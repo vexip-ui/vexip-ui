@@ -10,6 +10,7 @@
       ref="wrapper"
       :class="wrapperClass"
       :style="wrapperStyle"
+      @transitionend="duration = null"
     >
       <slot></slot>
     </div>
@@ -21,6 +22,7 @@
       :fade="barFade"
       :bar-length="xBarLength"
       :disabled="!enableXScroll"
+      :duration="duration"
       @on-scroll-start="handleBarScrollStart"
       @on-scroll="handleXBarScroll"
       @on-scroll-end="handleBarScrollEnd"
@@ -33,6 +35,7 @@
       :fade="barFade"
       :bar-length="yBarLength"
       :disabled="!enableYScroll"
+      :duration="duration"
       @on-scroll-start="handleBarScrollStart"
       @on-scroll="handleYBarScroll"
       @on-scroll-end="handleBarScrollEnd"
@@ -42,7 +45,7 @@
 
 <script>
 import Scrollbar from './scrollbar'
-import { multipleFixed, throttle } from '../../utils/common'
+import { multipleFixed, throttle, isNull } from '../../utils/common'
 import { USE_TOUCH } from '../../utils/event'
 
 const { prefix } = require('../../style/basis/variable')
@@ -127,6 +130,7 @@ export default {
       scrolling: false,
       bufferTimer: null,
       isReady: false,
+      duration: null,
 
       // 当前滚动位置
       currentXScroll: -this.scrollX,
@@ -193,10 +197,11 @@ export default {
       ]
     },
     wrapperStyle() {
-      const { currentXScroll, currentYScroll } = this
+      const { currentXScroll, currentYScroll, duration } = this
 
       return {
-        transform: `translate3d(${currentXScroll}px, ${currentYScroll}px, 0)`
+        transform: `translate3d(${currentXScroll}px, ${currentYScroll}px, 0)`,
+        transitionDuration: isNull(duration) ? null : `${duration}ms`
       }
     },
     xScrollLimit() {
@@ -318,7 +323,9 @@ export default {
       })
     },
     computeContentSize() {
-      this.$nextTick(() => {
+      clearTimeout(this.timer)
+
+      this.timer = setTimeout(() => {
         const mode = this.mode
 
         if (mode !== VERTICAL) {
@@ -326,6 +333,10 @@ export default {
 
           if (this.wrapperWidth >= this.contentWidth) {
             this.currentXScroll = 0
+          } else {
+            if (this.currentXScroll === 0) {
+              this.currentXScroll = -this.scrollX
+            }
           }
         }
 
@@ -334,6 +345,10 @@ export default {
 
           if (this.wrapperHeight >= this.contentHeight) {
             this.currentYScroll = 0
+          } else {
+            if (this.currentYScroll === 0) {
+              this.currentYScroll = -this.scrollY
+            }
           }
         }
 
@@ -341,8 +356,9 @@ export default {
 
         setTimeout(() => {
           this.isReady = true
+          this.verifyScroll()
         }, 0)
-      })
+      }, 0)
     },
     handleMouseDown(event) {
       if (!this.pointer || event.button !== 0 || USE_TOUCH) {
@@ -575,20 +591,26 @@ export default {
         this.verifyScroll()
       }, 10)
     },
-    scrollTo(clientX, clientY) {
-      const { enableXScroll, enableYScroll } = this
+    scrollTo(clientX, clientY, time) {
+      this.setDuration(time)
 
-      if (enableXScroll) {
-        this.currentXScroll = -clientX
-      }
+      this.$nextTick(() => {
+        const { enableXScroll, enableYScroll } = this
 
-      if (enableYScroll) {
-        this.currentYScroll = -clientY
-      }
+        if (enableXScroll) {
+          this.currentXScroll = -clientX
+        }
 
-      this.verifyScroll()
+        if (enableYScroll) {
+          this.currentYScroll = -clientY
+        }
+
+        this.verifyScroll()
+      })
     },
-    scrollBy(deltaX, deltaY) {
+    scrollBy(deltaX, deltaY, time) {
+      this.setDuration(time)
+
       const { enableXScroll, enableYScroll } = this
 
       if (enableXScroll) {
@@ -600,6 +622,23 @@ export default {
       }
 
       this.verifyScroll()
+    },
+    setDuration(time) {
+      if (typeof time === 'number') {
+        this.duration = time
+
+        if (time === 0) {
+          this.$nextTick(() => {
+            this.duration = null
+          })
+        }
+      }
+    },
+    getXScrollLimit() {
+      return [0, -this.xScrollLimit]
+    },
+    getYScrollLimit() {
+      return [0, -this.yScrollLimit]
     }
   }
 }

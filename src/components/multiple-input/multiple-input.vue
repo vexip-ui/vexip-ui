@@ -77,7 +77,7 @@ import { CLICK_OUTSIDE, observe, disconnect } from '../../utils/event'
 const { prefix } = require('../../style/basis/variable')
 
 export default {
-  name: 'InputGroup',
+  name: 'MultipleInput',
   components: {
     Icon
   },
@@ -189,7 +189,7 @@ export default {
   },
   data() {
     return {
-      prefixCls: `${prefix}-input-group`,
+      prefixCls: `${prefix}-multiple-input`,
       currentValue: Array.from(this.value),
       focusStates: [],
       focused: false,

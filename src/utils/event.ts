@@ -1,11 +1,11 @@
 import { isNull, getType } from './common'
 
-interface TransferNode extends Node {
-  __transferNode?: Node
+interface TransferNode extends Element {
+  __transferNode?: Element
 }
 
 interface EventPayload extends EventInit {
-  type: string
+  type: string,
   [prop: string]: any
 }
 

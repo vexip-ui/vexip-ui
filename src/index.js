@@ -1,4 +1,6 @@
 import Alert from './components/alert'
+import Anchor from './components/anchor'
+import AnchorLink from './components/anchor/anchor-link'
 import AutoComplete from './components/auto-complete'
 import Badge from './components/badge'
 import Breadcrumb from './components/breadcrumb'
@@ -26,13 +28,14 @@ import Form from './components/form'
 import FormItem from './components/form/form-item'
 import Icon from './components/icon'
 import Input from './components/input'
-import InputGroup from './components/input/input-group'
 import Linker from './components/linker'
 import Masker from './components/masker'
 import Menu from './components/menu'
 import MenuGroup from './components/menu/menu-group'
 import MenuItem from './components/menu/menu-item'
 import Modal from './components/modal'
+import MultipleInput from './components/multiple-input'
+import NumberInput from './components/number-input'
 import Option from './components/option'
 import OptionGroup from './components/option/option-group'
 import Pagination from './components/pagination'
@@ -90,6 +93,8 @@ const components = {
   Row,
   // common
   Alert,
+  Anchor,
+  AnchorLink,
   AutoComplete,
   Badge,
   Breadcrumb,
@@ -117,13 +122,14 @@ const components = {
   FormItem,
   Icon,
   Input,
-  InputGroup,
   Linker,
   Masker,
   Menu,
   MenuGroup,
   MenuItem,
   Modal,
+  MultipleInput,
+  NumberInput,
   Option,
   OptionGroup,
   Pagination,
@@ -194,6 +200,8 @@ export {
   Row,
   // components
   Alert,
+  Anchor,
+  AnchorLink,
   AutoComplete,
   Badge,
   Breadcrumb,
@@ -221,13 +229,14 @@ export {
   FormItem,
   Icon,
   Input,
-  InputGroup,
   Linker,
   Masker,
   Menu,
   MenuGroup,
   MenuItem,
   Modal,
+  MultipleInput,
+  NumberInput,
   Option,
   OptionGroup,
   Pagination,

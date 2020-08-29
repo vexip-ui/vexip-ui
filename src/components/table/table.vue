@@ -291,6 +291,7 @@ export default {
     data: {
       handler(value) {
         this.setData(value)
+        this.refreshPercentScroll()
       },
       deep: true
     },
@@ -323,14 +324,7 @@ export default {
 
     this.handleResize = debounce(this.computeTableWidth)
 
-    this.$watch('bodyScrollHeight', value => {
-      this.$nextTick(() => {
-        this.yScrollPercent = (this.bodyScroll / (value || 1)) * 100
-
-        if (this.yScrollPercent > 100) this.yScrollPercent = 100
-        if (this.yScrollPercent < 0) this.yScrollPercent = 0
-      })
-    })
+    this.$watch('bodyScrollHeight', this.refreshPercentScroll)
   },
   mounted() {
     this.refresh()
@@ -533,7 +527,19 @@ export default {
         this.computeTableWidth()
         this.computeBodyHeight()
         this.$nextTick(this.computeRenderRows)
+        this.refreshPercentScroll()
       })
+    },
+    refreshPercentScroll() {
+      setTimeout(() => {
+        const { bodyScroll, totalRowHeight, bodyScrollHeight } = this
+
+        this.yScrollPercent =
+          (bodyScroll / (totalRowHeight - bodyScrollHeight || 1)) * 100
+
+        if (this.yScrollPercent > 100) this.yScrollPercent = 100
+        if (this.yScrollPercent < 0) this.yScrollPercent = 0
+      }, 10)
     }
   }
 }

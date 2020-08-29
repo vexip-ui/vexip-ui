@@ -1,6 +1,6 @@
 @import '../mixins/basis.scss';
 
-.#{$prefix}-input-group {
+.#{$prefix}-multiple-input {
   @include basis;
 
   position: relative;
