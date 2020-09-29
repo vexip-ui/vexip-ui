@@ -54,7 +54,7 @@ export default {
     return {
       prefix: `${prefix}-confirm`,
       content: '',
-      visible: true,
+      visible: false,
       top: 150,
       left: 'auto',
       width: 420,

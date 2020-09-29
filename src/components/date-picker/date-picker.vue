@@ -1,5 +1,4 @@
 <template>
-  <!-- eslint-disable vue/space-infix-ops -->
   <div
     :class="className"
     @keydown="handleInput"
@@ -13,7 +12,6 @@
       :labels="labels"
       :item-class="`${prefix}__input`"
       :item-class-list="itemClassList"
-      :item-width-list="[38]"
       :outside-blur="false"
       :default-focus="2"
       :disabled-item="disabledInputVaule"
@@ -64,132 +62,143 @@
             </div>
           </div>
           <div :class="`${prefix}__list`">
-            <div :class="`${prefix}__header`">
-              <template v-if="type === 'datetime' && currentPane === 'time'">
-                <div
-                  key="year"
-                  :class="`${prefix}__year`"
-                  @click.stop="togglePane('calendar')"
-                >
-                  选择日期
-                </div>
-              </template>
-              <template v-else>
-                <div
-                  v-show="currentPane !== 'month'"
-                  :class="[`${prefix}__arrow`, `${prefix}__prev-year`]"
-                  @click="handleDoublePrevClick"
-                >
-                  <Icon name="angle-double-left"></Icon>
-                </div>
-                <div
-                  v-show="currentPane === 'calendar'"
-                  :class="[`${prefix}__arrow`, `${prefix}__prev-month`]"
-                  @click="adjustCalendar('month', -1)"
-                >
-                  <Icon name="angle-left"></Icon>
-                </div>
-                <div
-                  key="year"
-                  :class="`${prefix}__year`"
-                  @click.stop="togglePane('year')"
-                >
-                  <template v-if="currentPane === 'year'">
-                    {{ `${yearRange[0]}年 - ${yearRange[9]}年` }}
+            <div style="display: flex;">
+              <div>
+                <div :class="`${prefix}__header`">
+                  <template
+                    v-if="type.startsWith('datetime') && currentPane === 'time'"
+                  >
+                    <div
+                      key="year"
+                      :class="`${prefix}__year`"
+                      @click.stop="togglePane('calendar')"
+                    >
+                      选择日期
+                    </div>
                   </template>
                   <template v-else>
-                    {{ `${calendarYear}年` }}
+                    <div
+                      v-show="currentPane !== 'month'"
+                      :class="[`${prefix}__arrow`, `${prefix}__prev-year`]"
+                      @click="handleDoublePrevClick"
+                    >
+                      <Icon name="angle-double-left"></Icon>
+                    </div>
+                    <div
+                      v-show="currentPane === 'calendar'"
+                      :class="[`${prefix}__arrow`, `${prefix}__prev-month`]"
+                      @click="adjustCalendar('month', -1)"
+                    >
+                      <Icon name="angle-left"></Icon>
+                    </div>
+                    <div
+                      key="year"
+                      :class="`${prefix}__year`"
+                      @click.stop="togglePane('year')"
+                    >
+                      <template v-if="currentPane === 'year'">
+                        {{ `${yearRange[0]}年 - ${yearRange[9]}年` }}
+                      </template>
+                      <template v-else>
+                        {{ `${calendarYear}年` }}
+                      </template>
+                    </div>
+                    <div
+                      v-show="currentPane === 'calendar'"
+                      :class="`${prefix}__month`"
+                      @click.stop="togglePane('month')"
+                    >
+                      {{ `${formatDigit(calendarMonth + 1)}月` }}
+                    </div>
+                    <div
+                      v-show="currentPane === 'calendar'"
+                      :class="[`${prefix}__arrow`, `${prefix}__next-month`]"
+                      @click="adjustCalendar('month', 1)"
+                    >
+                      <Icon name="angle-right"></Icon>
+                    </div>
+                    <div
+                      v-show="currentPane !== 'month'"
+                      :class="[`${prefix}__arrow`, `${prefix}__next-year`]"
+                      @click="handleDoubleNextClick"
+                    >
+                      <Icon name="angle-double-right"></Icon>
+                    </div>
                   </template>
                 </div>
                 <div
-                  v-show="currentPane === 'calendar'"
-                  :class="`${prefix}__month`"
-                  @click.stop="togglePane('month')"
+                  :class="`${prefix}__calendar`"
+                  @mouseenter="handleEnterCalendar"
                 >
-                  {{ `${formatDigit(calendarMonth + 1)}月` }}
-                </div>
-                <div
-                  v-show="currentPane === 'calendar'"
-                  :class="[`${prefix}__arrow`, `${prefix}__next-month`]"
-                  @click="adjustCalendar('month', 1)"
-                >
-                  <Icon name="angle-right"></Icon>
-                </div>
-                <div
-                  v-show="currentPane !== 'month'"
-                  :class="[`${prefix}__arrow`, `${prefix}__next-year`]"
-                  @click="handleDoubleNextClick"
-                >
-                  <Icon name="angle-double-right"></Icon>
-                </div>
-              </template>
-            </div>
-            <div :class="`${prefix}__calendar`">
-              <div
-                v-if="currentPane === 'year'"
-                :class="`${prefix}__year-pane`"
-              >
-                <div
-                  v-for="(item, index) in yearRange"
-                  :key="index"
-                  :class="{
-                    [`${prefix}__year-item`]: true,
-                    [`${prefix}__year-item--selected`]: item === year,
-                    [`${prefix}__year-item--next`]: index > 9
-                  }"
-                  @click.stop="handleYearItemClick(item)"
-                >
-                  {{ item }}
-                </div>
-              </div>
-              <div
-                v-else-if="currentPane === 'month'"
-                :class="`${prefix}__month-pane`"
-              >
-                <div
-                  v-for="(item, index) in monthRange"
-                  :key="index"
-                  :class="{
-                    [`${prefix}__month-item`]: true,
-                    [`${prefix}__month-item--selected`]: item === month + 1
-                  }"
-                  @click.stop="handleMonthItemClick(item)"
-                >
-                  {{ `${item}月` }}
+                  <div
+                    v-if="currentPane === 'year'"
+                    :class="`${prefix}__year-pane`"
+                  >
+                    <div
+                      v-for="(item, index) in yearRange"
+                      :key="index"
+                      :class="{
+                        [`${prefix}__year-item`]: true,
+                        [`${prefix}__year-item--selected`]: item === start.year,
+                        [`${prefix}__year-item--next`]: index > 9
+                      }"
+                      @click.stop="handleYearItemClick(item)"
+                    >
+                      {{ item }}
+                    </div>
+                  </div>
+                  <div
+                    v-else-if="currentPane === 'month'"
+                    :class="`${prefix}__month-pane`"
+                  >
+                    <div
+                      v-for="(item, index) in monthRange"
+                      :key="index"
+                      :class="{
+                        [`${prefix}__month-item`]: true,
+                        [`${prefix}__month-item--selected`]:
+                          start.month && item === start.month + 1
+                      }"
+                      @click.stop="handleMonthItemClick(item)"
+                    >
+                      {{ `${item}月` }}
+                    </div>
+                  </div>
+                  <CalendarBase
+                    v-else
+                    :value="`${start.year}-${start.month + 1}-${start.date}`"
+                    :year="calendarYear"
+                    :month="calendarMonth + 1"
+                    :disabled-date="disabledDate"
+                    @on-select="handleSelectDate"
+                  ></CalendarBase>
                 </div>
               </div>
               <div
-                v-else-if="type === 'datetime' && currentPane === 'time'"
+                v-if="type.startsWith('datetime') && currentPane === 'calendar'"
                 :class="`${prefix}__time-wheel`"
               >
+                <div :class="`${prefix}__header`"></div>
                 <TimeWheel
-                  :candidate="2"
+                  :candidate="3"
                   :steps="steps"
-                  :values="[hour, minute, second]"
+                  :values="[start.hour, start.minute, start.second]"
                   @on-mount="updatePopper"
                   @on-toggle-col="handleInputFocus($event + 3)"
-                  @on-change="handleWheelChange"
+                  @on-change="start[$event.type] = $event.value"
                 ></TimeWheel>
               </div>
-              <CalendarBase
-                v-else
-                :value="`${year}-${month + 1}-${date}`"
-                :year="calendarYear"
-                :month="calendarMonth + 1"
-                :disabled-date="disabledDate"
-                @on-select="handleSelectDate"
-              ></CalendarBase>
             </div>
             <div v-if="!noAction" :class="`${prefix}__action`">
-              <Button
-                v-if="type === 'datetime' && currentPane !== 'time'"
+              <!-- <Button
+                v-if="type.startsWith('datetime') && currentPane !== 'time'"
                 type="text"
                 size="small"
                 style="margin-right: auto;"
                 @click.native.stop="togglePane('time')"
               >
                 选择时间
-              </Button>
+              </Button> -->
               <Button
                 type="text"
                 size="small"
@@ -244,6 +253,28 @@ import {
 import { range } from '../../utils/common'
 
 const { prefix } = require('../../style/basis/variable')
+
+function getNullValueObject() {
+  return {
+    year: null,
+    month: null,
+    date: null,
+    hour: null,
+    minute: null,
+    second: null
+  }
+}
+
+function getAllActivated() {
+  return {
+    year: true,
+    month: true,
+    date: true,
+    hour: true,
+    minute: true,
+    second: true
+  }
+}
 
 export default {
   name: 'DatePicker',
@@ -347,6 +378,10 @@ export default {
       validator(value) {
         return ['default', 'success', 'error', 'warning'].includes(value)
       }
+    },
+    exactlySelect: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -357,13 +392,13 @@ export default {
       prefix: `${prefix}-date-picker`,
       currentPane: 'calendar',
       inControl: false,
-      activated: {},
-      year: null,
-      month: null,
-      date: null,
-      hour: null,
-      minute: null,
-      second: null,
+      activated: {
+        start: {},
+        end: {}
+      },
+      start: getNullValueObject(),
+      end: getNullValueObject(),
+      valueType: 'start',
       focused: false,
       transitionName: `${prefix}-drop`,
       isMounted: false,
@@ -373,7 +408,8 @@ export default {
       cancelText: '取消',
       yearRange: range(12, parseInt(currentYear / 10) * 10, 1),
       monthRange: range(12, 1, 1),
-      changed: false,
+      startChanged: false,
+      endChanged: false,
       currentColumn: null,
       defaultValue: null,
       hasHour: true,
@@ -410,8 +446,7 @@ export default {
     },
     itemClassList() {
       const prefix = this.prefix
-
-      return [
+      const baseList = [
         `${prefix}__input--year`,
         `${prefix}__input--month`,
         `${prefix}__input--date`,
@@ -419,87 +454,32 @@ export default {
         `${prefix}__input--minute`,
         `${prefix}__input--second`
       ]
+
+      return baseList.concat(baseList)
+    },
+    isRange() {
+      // return this.type.endsWith('range')
+      return false
     },
     referenceObject() {
       return this.$refs.control.$el
     },
     separator() {
-      const {
-        dateSeparator,
-        timeSeparator,
-        hasHour,
-        hasMinute,
-        hasSecond
-      } = this
-      const separator = [
-        dateSeparator,
-        dateSeparator,
-        ' ',
-        timeSeparator,
-        timeSeparator
-      ]
+      const separator = this.getSeparator()
 
-      if (hasHour && !hasMinute && !hasSecond) {
-        separator[3] = ''
-      }
+      if (this.isRange) {
+        separator.push('~')
 
-      if (hasMinute && !hasSecond) {
-        separator[4] = ''
+        return separator.concat(this.getSeparator())
       }
 
       return separator
     },
-    formatedYear() {
-      const { activated, noFiller, year, filler, formatYear } = this
-
-      return noFiller || activated.year
-        ? formatYear(year)
-        : `${filler}${filler}${filler}${filler}`
-    },
-    formatedMonth() {
-      const { activated, noFiller, month, filler, formatDigit } = this
-
-      return noFiller || activated.month
-        ? formatDigit(month + 1)
-        : `${filler}${filler}`
-    },
-    formatedDate() {
-      const { activated, noFiller, date, filler, formatDigit } = this
-
-      return noFiller || activated.date
-        ? formatDigit(date)
-        : `${filler}${filler}`
-    },
-    formatedHour() {
-      const { activated, noFiller, hour, filler, formatDigit } = this
-
-      return noFiller || activated.hour
-        ? formatDigit(hour)
-        : `${filler}${filler}`
-    },
-    formatedMinute() {
-      const { activated, noFiller, minute, filler, formatDigit } = this
-
-      return noFiller || activated.minute
-        ? formatDigit(minute)
-        : `${filler}${filler}`
-    },
-    formatedSecond() {
-      const { activated, noFiller, second, filler, formatDigit } = this
-
-      return noFiller || activated.second
-        ? formatDigit(second)
-        : `${filler}${filler}`
-    },
     controlValue() {
-      const { formatedYear, formatedMonth, formatedDate, type } = this
+      const value = this.getValueList('start')
 
-      let value = [formatedYear, formatedMonth, formatedDate]
-
-      if (type === 'datetime') {
-        const { formatedHour, formatedMinute, formatedSecond } = this
-
-        value = value.concat(formatedHour, formatedMinute, formatedSecond)
+      if (this.isRange) {
+        return value.concat(this.getValueList('end'))
       }
 
       return value
@@ -507,66 +487,20 @@ export default {
   },
   watch: {
     value(value) {
-      if (!+new Date(value)) {
-        this.changed = true
+      if (this.isRange) {
+        if (!Array.isArray(value)) return
 
-        this.$nextTick(() => {
-          this.activated = {}
-        })
+        this.computeValueActivated('start', value[0])
+        this.parseTime(value[0], 'start')
+        this.verifyValue('start')
+
+        this.computeValueActivated('end', value[1])
+        this.parseTime(value[1], 'end')
+        this.verifyValue('end')
       } else {
-        this.activated = {
-          year: true,
-          month: true,
-          date: true,
-          hour: true,
-          minute: true,
-          second: true
-        }
-      }
-
-      this.parseTime(value)
-      this.verifyValue()
-    },
-    year() {
-      this.handleDateChange()
-
-      if (this.isMounted && !this.activated.year) {
-        this.$set(this.activated, 'year', true)
-      }
-    },
-    month() {
-      this.handleDateChange()
-
-      if (this.isMounted && !this.activated.month) {
-        this.$set(this.activated, 'month', true)
-      }
-    },
-    date() {
-      this.handleDateChange()
-
-      if (this.isMounted && !this.activated.date) {
-        this.$set(this.activated, 'date', true)
-      }
-    },
-    hour() {
-      this.handleDateChange()
-
-      if (this.isMounted && !this.activated.hour) {
-        this.$set(this.activated, 'hour', true)
-      }
-    },
-    minute() {
-      this.handleDateChange()
-
-      if (this.isMounted && !this.activated.minute) {
-        this.$set(this.activated, 'minute', true)
-      }
-    },
-    second() {
-      this.handleDateChange()
-
-      if (this.isMounted && !this.activated.second) {
-        this.$set(this.activated, 'second', true)
+        this.computeValueActivated('start', value)
+        this.parseTime(value)
+        this.verifyValue()
       }
     },
     calendarYear(value) {
@@ -579,20 +513,33 @@ export default {
         this.$emit('on-foucs')
       } else {
         this.$emit('on-blur')
-        this.activated = {
-          year: true,
-          month: true,
-          date: true,
-          hour: true,
-          minute: true,
-          second: true
-        }
 
-        if (this.changed) {
-          this.changed = false
-          this.$nextTick(() => {
-            this.emitChangeEvent('change')
-          })
+        if (this.isRange) {
+          if (this.startChanged) {
+            this.activated.start = getAllActivated()
+          }
+
+          if (this.endChanged) {
+            this.activated.end = getAllActivated()
+          }
+
+          if (this.startChanged && this.endChanged) {
+            this.startChanged = false
+            this.endChanged = false
+
+            this.$nextTick(() => {
+              this.emitChangeEvent('change')
+            })
+          }
+        } else {
+          if (this.startChanged) {
+            this.activated.start = getAllActivated()
+            this.startChanged = false
+
+            this.$nextTick(() => {
+              this.emitChangeEvent('change')
+            })
+          }
         }
       }
     },
@@ -602,12 +549,13 @@ export default {
           item => item === value
         )
 
-        if (index === 3 && this.$refs.control.currentItem < 3) {
-          this.$refs.control.currentItem = 3
-        }
+        // if (index === 3 && this.$refs.control.currentItem < 3) {
+        //   this.$refs.control.currentItem = 3
+        // }
 
-        if (index !== -1 && index !== 3) {
-          this.$refs.control.currentItem = index
+        if (index !== -1) {
+          this.$refs.control.currentItem =
+            index + (this.valueType === 'start' ? 0 : 4)
         }
       }
     },
@@ -645,8 +593,48 @@ export default {
   },
   created() {
     this.parseFormat()
-    this.parseTime(this.value)
+    // this.parseTime(this.value)
     this.defaultValue = this.getDateValue()
+
+    if (Number.isNaN(this.defaultValue.getTime())) {
+      this.defaultValue = new Date()
+    }
+
+    // if (this.isRange) {
+    //   this.parseTime(this.value, 'end')
+    // }
+
+    if (!this.exactlySelect && !this.isRange) {
+      this.parseTime(this.value)
+
+      this.startChanged = true
+    }
+
+    const types = ['year', 'month', 'date', 'hour', 'minute', 'second']
+
+    types.forEach(type => {
+      this.$watch(
+        () => this.start[type],
+        () => {
+          this.handleDateChange()
+
+          if (this.isMounted && !this.activated.start[type]) {
+            this.$set(this.activated.start, type, true)
+          }
+        }
+      )
+
+      this.$watch(
+        () => this.end[type],
+        () => {
+          this.handleDateChange()
+
+          if (this.isMounted && !this.activated.end[type]) {
+            this.$set(this.activated.end, type, true)
+          }
+        }
+      )
+    })
   },
   mounted() {
     observe(this.$el, CLICK_OUTSIDE)
@@ -660,6 +648,17 @@ export default {
     disconnect(this.$el, CLICK_OUTSIDE)
   },
   methods: {
+    computeValueActivated(type, value) {
+      if (!+new Date(value)) {
+        this[`${type}Changed`] = true
+
+        this.$nextTick(() => {
+          this.activated[type] = {}
+        })
+      } else {
+        this.activated[type] = getAllActivated()
+      }
+    },
     formatDigit(number) {
       return number < 10 ? `0${number}` : `${number}`
     },
@@ -674,6 +673,63 @@ export default {
         return `${year}`
       }
     },
+    getFormatValue(valueType, type, value) {
+      const { activated, noFiller, filler } = this
+
+      return noFiller || activated[valueType][type]
+        ? (type === 'yaer' ? this.formatYear : this.formatDigit)(
+          type === 'month' ? value + 1 : value
+        )
+        : type === 'year'
+          ? `${filler}${filler}${filler}${filler}`
+          : `${filler}${filler}`
+    },
+    getValueList(type) {
+      const { year, month, date } = this[type]
+      const value = [
+        this.getFormatValue(type, 'year', year),
+        this.getFormatValue(type, 'month', month),
+        this.getFormatValue(type, 'date', date)
+      ]
+
+      if (this.type.startsWith('datetime')) {
+        const { hour, minute, second } = this[type]
+
+        value.push(
+          this.getFormatValue(type, 'hour', hour),
+          this.getFormatValue(type, 'minute', minute),
+          this.getFormatValue(type, 'second', second)
+        )
+      }
+
+      return value
+    },
+    getSeparator() {
+      const {
+        dateSeparator,
+        timeSeparator,
+        hasHour,
+        hasMinute,
+        hasSecond
+      } = this
+      const separator = [
+        dateSeparator,
+        dateSeparator,
+        ' ',
+        timeSeparator,
+        timeSeparator
+      ]
+
+      if (hasHour && !hasMinute && !hasSecond) {
+        separator[3] = ''
+      }
+
+      if (hasMinute && !hasSecond) {
+        separator[4] = ''
+      }
+
+      return separator
+    },
     handleFocus() {
       this.focused = true
     },
@@ -681,30 +737,42 @@ export default {
       if (this.clearable) {
         event.stopPropagation()
 
-        this.parseTime(this.defaultValue)
-        this.$nextTick(() => {
-          // if (Object.keys(this.activated).length) {
-          //   this.$emit('on-change', null, null, {})
-          // }
+        this.start = getNullValueObject()
 
-          this.activated = {}
+        if (this.isRange) {
+          this.end = getNullValueObject()
+        } else {
+          if (!this.exactlySelect) {
+            this.parseTime(this.defaultValue)
+          }
+        }
+
+        this.$nextTick(() => {
+          if (this.isRange || this.exactlySelect) {
+            this.startChanged = false
+            this.endChanged = false
+          }
+
+          this.activated = { start: {}, end: {} }
           this.$emit('on-clear')
         })
       }
     },
-    parseTime(value) {
+    parseTime(value, type = 'start') {
       if (!value) {
         value = this.defaultValue || Date.now()
       }
 
       const date = toDate(value)
 
-      this.year = date.getFullYear()
-      this.month = date.getMonth()
-      this.date = date.getDate()
-      this.hour = date.getHours()
-      this.minute = date.getMinutes()
-      this.second = date.getSeconds()
+      this[type] = {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        date: date.getDate(),
+        hour: date.getHours(),
+        minute: date.getMinutes(),
+        second: date.getSeconds()
+      }
     },
     handleEnterControl() {
       this.inControl = true
@@ -713,43 +781,51 @@ export default {
       this.inControl = false
     },
     handleControlChange(value) {
+      this.parseControlValue('start', value.slice(0, 6))
+
+      if (this.isRange) {
+        this.parseControlValue('end', value.slice(6))
+      }
+    },
+    parseControlValue(valueType, value) {
       const { noFiller, filler, type } = this
       const defaultValue = `${filler}${filler}`
+      const valueObject = this[valueType]
 
       if (noFiller) {
-        this.year = parseInt(value[0]) || 1900
-        this.month = parseInt(value[1]) - 1 || 0
-        this.date = parseInt(value[2]) || 1
+        valueObject.year = parseInt(value[0]) || 1900
+        valueObject.month = parseInt(value[1]) - 1 || 0
+        valueObject.date = parseInt(value[2]) || 1
 
-        if (type === 'datetime') {
-          this.hour = parseInt(value[3]) || 0
-          this.minute = parseInt(value[4]) || 0
-          this.second = parseInt(value[5]) || 0
+        if (type.startsWith('datetime')) {
+          valueObject.hour = parseInt(value[3]) || 0
+          valueObject.minute = parseInt(value[4]) || 0
+          valueObject.second = parseInt(value[5]) || 0
         }
       } else {
         if (value[0] !== `${defaultValue}${defaultValue}`) {
-          this.year = parseInt(value[0]) || 1900
+          valueObject.year = parseInt(value[0]) || 1900
         }
 
         if (value[1] !== defaultValue) {
-          this.month = parseInt(value[1]) - 1 || 0
+          valueObject.month = parseInt(value[1]) - 1 || 0
         }
 
         if (value[2] !== defaultValue) {
-          this.date = parseInt(value[2]) || 1
+          valueObject.date = parseInt(value[2]) || 1
         }
 
         if (type === 'datetime') {
           if (value[3] !== defaultValue) {
-            this.hour = parseInt(value[3]) || 0
+            valueObject.hour = parseInt(value[3]) || 0
           }
 
           if (value[4] !== defaultValue) {
-            this.minute = parseInt(value[4]) || 0
+            valueObject.minute = parseInt(value[4]) || 0
           }
 
           if (value[5] !== defaultValue) {
-            this.second = parseInt(value[5]) || 0
+            valueObject.second = parseInt(value[5]) || 0
           }
         }
       }
@@ -762,14 +838,19 @@ export default {
 
         if (this.disabledDate(this.getDateValue())) {
           this.parseTime(this.defaultValue)
+
+          if (this.isRange) {
+            this.parseTime(this.defaultValue, 'end')
+          }
+
           this.$nextTick(() => {
-            this.activated = {}
+            this.activated = { start: {}, end: {} }
           })
         }
       }
     },
     adjustTime(type, amount) {
-      const { year, month, date: day, hour, minute, second } = this
+      const { year, month, date: day, hour, minute, second } = this.start
 
       let date = new Date(year, month, day, hour, minute, second)
 
@@ -821,22 +902,22 @@ export default {
       this.verifyValue()
       this.finishInput()
     },
-    verifyValue() {
+    verifyValue(type = 'start') {
       const date = this.getDateValue()
 
-      this.year = date.getFullYear()
-      this.month = date.getMonth()
-      this.date = date.getDate()
-      this.hour = date.getHours()
-      this.minute = date.getMinutes()
-      this.second = date.getSeconds()
+      this[type].year = date.getFullYear()
+      this[type].month = date.getMonth()
+      this[type].date = date.getDate()
+      this[type].hour = date.getHours()
+      this[type].minute = date.getMinutes()
+      this[type].second = date.getSeconds()
 
-      if (this.year !== this.calendarYear) {
-        this.adjustCalendar('year', this.year - this.calendarYear)
+      if (this[type].year !== this.calendarYear) {
+        this.adjustCalendar('year', this[type].year - this.calendarYear)
       }
 
-      if (this.month !== this.calendarMonth) {
-        this.adjustCalendar('month', this.month - this.calendarMonth)
+      if (this[type].month !== this.calendarMonth) {
+        this.adjustCalendar('month', this[type].month - this.calendarMonth)
       }
     },
     togglePane(type) {
@@ -873,43 +954,56 @@ export default {
       }
     },
     handleSelectDate(date) {
-      this.parseTime(date)
-      this.$nextTick(() => {
-        this.activated = {
-          ...this.activated,
-          year: true,
-          month: true,
-          date: true
-        }
+      const type = this.valueType
 
-        this.finishInput()
+      if (this.isRange) {
+        this.parseTime(date, type)
+      } else {
+        this.parseTime(date)
+      }
+
+      this.$nextTick(() => {
+        if (this.isRange) {
+          this.activated[type] = {
+            ...this.activated[type],
+            year: true,
+            month: true,
+            date: true
+          }
+
+          if (this.startChanged && this.endChanged) {
+            this.finishInput()
+          }
+        } else {
+          this.activated.start = {
+            ...this.activated.start,
+            year: true,
+            month: true,
+            date: true
+          }
+
+          this.finishInput()
+        }
       })
     },
     handleDateChange() {
-      this.changed = true
+      this.startChanged = true
       this.inputChanged = true
     },
     emitChangeEvent(type = 'input') {
       const eventName = type === 'input' ? 'on-input' : 'on-change'
       const date = this.getDateValue()
 
-      this.$emit(eventName, date, format(date, this.format), {
-        year: this.year,
-        month: this.month,
-        date: this.date,
-        hour: this.hour,
-        minute: this.minute,
-        second: this.second
-      })
+      this.$emit(eventName, date, format(date, this.format))
     },
-    getDateValue() {
+    getDateValue(type = 'start') {
       return new Date(
-        this.year,
-        this.month,
-        this.date,
-        this.hour,
-        this.minute,
-        this.second,
+        this[type].year,
+        this[type].month,
+        this[type].date,
+        this[type].hour,
+        this[type].minute,
+        this[type].second,
         0
       )
     },
@@ -927,6 +1021,13 @@ export default {
           }
         }
       })
+    },
+    handleEnterCalendar() {
+      if (this.currentPane === 'calendar') {
+        this.currentColumn = this.getColumnIndexList()[
+          this.valueType === 'start' ? 2 : 8
+        ]
+      }
     },
     handleInput(event) {
       const keyCode = event.keyCode
@@ -1026,7 +1127,7 @@ export default {
       this.handleInputNumber('year', number)
 
       this.$nextTick(() => {
-        if (this.year >= 1000) {
+        if (this[this.valueType].year >= 1000) {
           this.currentColumn = 1
         }
       })
@@ -1035,7 +1136,7 @@ export default {
       this.handleInputNumber('month', number)
 
       this.$nextTick(() => {
-        if (this.month >= 10) {
+        if (this[this.valueType].month >= 10) {
           this.currentColumn = 2
         }
       })
@@ -1045,7 +1146,7 @@ export default {
 
       if (this.type === 'datetime') {
         this.$nextTick(() => {
-          if (this.date >= 10) {
+          if (this[this.valueType].date >= 10) {
             this.currentColumn = 3
           }
         })
@@ -1055,7 +1156,7 @@ export default {
       this.handleInputNumber('hour', number)
 
       this.$nextTick(() => {
-        if (this.hour >= 10) {
+        if (this[this.valueType].hour >= 10) {
           this.currentColumn = 4
         }
       })
@@ -1064,7 +1165,7 @@ export default {
       this.handleInputNumber('minute', number)
 
       this.$nextTick(() => {
-        if (this.minute >= 10) {
+        if (this[this.valueType].minute >= 10) {
           this.currentColumn = 5
         }
       })
@@ -1104,10 +1205,14 @@ export default {
       }
     },
     handleInputItemChange(index) {
-      if (index < 3) {
-        this.togglePane(['year', 'month', 'calendar'][index])
+      this.valueType = index < 6 ? 'start' : 'end'
+
+      const paneIndex = index % 6
+
+      if (paneIndex < 3) {
+        this.togglePane(['year', 'month', 'calendar'][paneIndex])
       } else {
-        this.togglePane('time')
+        this.togglePane('calendar')
       }
 
       this.handleInputFocus(index)
@@ -1133,22 +1238,25 @@ export default {
 
       this[type] -= +(type === 'month')
 
-      this.verifyInputValue(type, oldDate)
+      const valueType = this.valueType
 
-      if (this.year >= 1000 && this.year !== this.calendarYear) {
-        this.adjustCalendar('year', this.year - this.calendarYear)
+      this.verifyInputValue(type, valueType, oldDate)
+
+      if (this[valueType].year >= 1000 && this.year !== this.calendarYear) {
+        this.adjustCalendar('year', this[valueType].year - this.calendarYear)
       }
 
-      if (this.month !== this.calendarMonth) {
-        this.adjustCalendar('month', this.month - this.calendarMonth)
+      if (this[valueType].month !== this.calendarMonth) {
+        this.adjustCalendar('month', this[valueType].month - this.calendarMonth)
       }
     },
-    verifyInputValue(type, oldDate) {
-      const value = this[type]
+    verifyInputValue(type, valueType, oldDate) {
+      const valueObject = this[valueType]
+      const value = valueObject[type]
 
       switch (type) {
         case 'month': {
-          this.month = Math.max(Math.min(value, 11), 0)
+          valueObject.month = Math.max(Math.min(value, 11), 0)
 
           break
         }
@@ -1171,22 +1279,22 @@ export default {
             lastDay = 31 - (month % 2)
           }
 
-          this.date = Math.max(Math.min(value, lastDay), 1)
+          valueObject.date = Math.max(Math.min(value, lastDay), 1)
 
           break
         }
         case 'hour': {
-          this.hour = Math.max(Math.min(value, 23), 0)
+          valueObject.hour = Math.max(Math.min(value, 23), 0)
 
           break
         }
         case 'minute': {
-          this.minute = Math.max(Math.min(value, 59), 0)
+          valueObject.minute = Math.max(Math.min(value, 59), 0)
 
           break
         }
         case 'second': {
-          this.second = Math.max(Math.min(value, 59), 0)
+          valueObject.second = Math.max(Math.min(value, 59), 0)
 
           break
         }
@@ -1226,12 +1334,12 @@ export default {
     },
     getColumnIndexList() {
       const columns = [0, 1, 2, null, null, null]
+      const { hasHour, hasMinute, hasSecond } = this
+      const isDatetime = this.type.startsWith('datetime')
 
-      if (this.type === 'datetime') {
-        const { hasHour, hasMinute, hasSecond } = this
+      let count = 3
 
-        let count = 3
-
+      if (isDatetime) {
         if (hasHour) {
           columns[3] = count++
         }
@@ -1245,26 +1353,46 @@ export default {
         }
       }
 
+      if (this.isRange) {
+        for (let i = 0; i < 3; i++) {
+          columns[i + 6] = count++
+        }
+
+        if (isDatetime) {
+          if (hasHour) {
+            columns[9] = count++
+          }
+
+          if (hasMinute) {
+            columns[10] = count++
+          }
+
+          if (hasSecond) {
+            columns[11] = count++
+          }
+        }
+      }
+
       return columns
     },
     plusOne() {
       const type = this.getCurrentTimeType()
 
       if (type) {
-        this[type]++
+        this[this.valueType][type]++
 
         this.verifyValue()
-        this.$emit('on-plus', type, this[type])
+        this.$emit('on-plus', type, this[this.valueType][type])
       }
     },
     minusOne() {
       const type = this.getCurrentTimeType()
 
       if (type) {
-        this[type]--
+        this[this.valueType][type]--
 
         this.verifyValue()
-        this.$emit('on-minus', type, this[type])
+        this.$emit('on-minus', type, this[this.valueType][type])
       }
     },
     disabledInputVaule(index) {
@@ -1278,13 +1406,13 @@ export default {
           return type === 'year' || type === 'month'
         }
         case 3: {
-          return type !== 'datetime' || !hasHour
+          return !type.startsWith('datetime') || !hasHour
         }
         case 4: {
-          return type !== 'datetime' || !hasMinute
+          return !type.startsWith('datetime') || !hasMinute
         }
         case 5: {
-          return type !== 'datetime' || !hasSecond
+          return !type.startsWith('datetime') || !hasSecond
         }
       }
 

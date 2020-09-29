@@ -315,7 +315,7 @@ export default {
 
     this.store = new Store({
       rowClass,
-      columns: this.columns,
+      columns: this.allColumns,
       data: this.data,
       dataKey: this.dataKey,
       highlight: this.highlight,
@@ -413,7 +413,7 @@ export default {
 
       this.yScrollPercent = percent
       this.setBodyScroll(client)
-      this.emitYScroll(client, percent)
+      // this.emitYScroll(client, percent)
     },
     emitYScroll(client, percent) {
       this.$emit('on-body-scroll', { client, percent })

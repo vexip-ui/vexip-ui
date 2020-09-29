@@ -1,80 +1,95 @@
 <template>
-  <div :class="className">
-    <input
-      ref="input"
-      :class="[`${prefixCls}__control`, inputClass]"
-      :type="inputType"
-      :value="formattedValue"
-      :style="inputStyle"
-      :autofocus="autofocus"
-      :autocomplete="autocomplete"
-      :spellcheck="spellcheck"
-      :disabled="disabled"
-      :readonly="readonly"
-      :placeholder="placeholder"
-      @blur="handleBlur"
-      @focus="handleFocus"
-      @keyup.enter="handleEnter"
-      @keyup="handleKeyUp"
-      @keypress="handleKeyPress"
-      @keydown="handleKeyDown"
-      @input="handleThrottleeChange"
-      @change="handleChange"
-    />
-    <template v-if="type === 'number'">
-      <div
-        :class="`${prefixCls}__number-plus`"
-        @click="plusNumber"
-        @mousedown.prevent
-      >
-        <Icon name="caret-up" :scale="0.6"></Icon>
+  <Condition :name="hasBefore || hasAfter ? '' : 'input'">
+    <div :class="wrapperClass">
+      <div v-if="hasBefore" :class="`${prefixCls}__before`">
+        <slot name="before">
+          {{ before }}
+        </slot>
       </div>
-      <div
-        :class="`${prefixCls}__number-minus`"
-        @click="minusNumber"
-        @mousedown.prevent
-      >
-        <Icon name="caret-down" :scale="0.6"></Icon>
+      <div slot="input" :class="className">
+        <input
+          ref="input"
+          :class="[`${prefixCls}__control`, inputClass]"
+          :type="inputType"
+          :value="formattedValue"
+          :style="inputStyle"
+          :autofocus="autofocus"
+          :autocomplete="autocomplete"
+          :spellcheck="spellcheck"
+          :disabled="disabled"
+          :readonly="readonly"
+          :placeholder="placeholder"
+          @blur="handleBlur"
+          @focus="handleFocus"
+          @keyup.enter="handleEnter"
+          @keyup="handleKeyUp"
+          @keypress="handleKeyPress"
+          @keydown="handleKeyDown"
+          @input="handleThrottleeChange"
+          @change="handleChange"
+        />
+        <template v-if="type === 'number'">
+          <div
+            :class="`${prefixCls}__number-plus`"
+            @click="plusNumber"
+            @mousedown.prevent
+          >
+            <Icon name="caret-up" :scale="0.6"></Icon>
+          </div>
+          <div
+            :class="`${prefixCls}__number-minus`"
+            @click="minusNumber"
+            @mousedown.prevent
+          >
+            <Icon name="caret-down" :scale="0.6"></Icon>
+          </div>
+        </template>
+        <div
+          v-if="hasPrefix"
+          :class="`${prefixCls}__icon--prefix`"
+          :style="{ color: prefixColor }"
+          @click="handlePrefixClick"
+        >
+          <slot name="prefix">
+            <Icon :name="prefix"></Icon>
+          </slot>
+        </div>
+        <div
+          v-if="hasSuffix"
+          :class="`${prefixCls}__icon--suffix`"
+          :style="{ color: suffixColor }"
+          @click="handleSuffixClick"
+        >
+          <slot name="suffix">
+            <Icon :name="suffix"></Icon>
+          </slot>
+        </div>
+        <div
+          v-else-if="type === 'password' && password"
+          :class="`${prefixCls}__icon--password`"
+          @click="toggleShowPassword"
+        >
+          <Icon :name="passwordIcon"></Icon>
+        </div>
+        <div
+          v-if="maxLength"
+          :class="`${prefixCls}__count`"
+          :style="countStyle"
+        >
+          {{ `${currentLength}/${maxLength}` }}
+        </div>
       </div>
-    </template>
-    <div
-      v-if="hasPrefix"
-      :class="`${prefixCls}__icon--prefix`"
-      :style="{ color: prefixColor }"
-      @click="handlePrefixClick"
-    >
-      <slot name="prefix">
-        <Icon :name="prefix"></Icon>
-      </slot>
+      <div v-if="hasAfter" :class="`${prefixCls}__after`">
+        <slot name="after">
+          {{ after }}
+        </slot>
+      </div>
     </div>
-    <div
-      v-if="hasSuffix"
-      :class="`${prefixCls}__icon--suffix`"
-      :style="{ color: suffixColor }"
-      @click="handleSuffixClick"
-    >
-      <slot name="suffix">
-        <Icon :name="suffix"></Icon>
-      </slot>
-    </div>
-    <div
-      v-else-if="type === 'password'"
-      :class="`${prefixCls}__icon--password`"
-      @click="toggleShowPassword"
-    >
-      <Icon :name="passwordIcon"></Icon>
-    </div>
-    <div
-      v-if="maxLength"
-      :class="`${prefixCls}__count`"
-      :style="countStyle"
-    >
-      {{ `${currentLength}/${maxLength}` }}
-    </div>
-  </div>
+  </Condition>
 </template>
 
 <script>
+import Condition from '../basis/condition'
 import Icon from '../icon'
 import formControl from '../../mixins/form-control'
 import { throttle, isNull } from '../../utils/common'
@@ -88,6 +103,7 @@ const { prefix } = require('../../style/basis/variable')
 export default {
   name: 'Input',
   components: {
+    Condition,
     Icon
   },
   mixins: [formControl],
@@ -197,6 +213,18 @@ export default {
     maxLength: {
       type: Number,
       default: 0
+    },
+    before: {
+      type: String,
+      default: ''
+    },
+    after: {
+      type: String,
+      default: ''
+    },
+    password: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -214,12 +242,22 @@ export default {
   },
   computed: {
     className() {
-      const { prefixCls, type, focused, disabled, size, state } = this
+      const {
+        prefixCls,
+        type,
+        focused,
+        disabled,
+        size,
+        state,
+        hasBefore,
+        hasAfter
+      } = this
 
       return [
         prefixCls,
         `${prefixCls}--${type}`,
         {
+          [`${prefixCls}-wrapper`]: !hasBefore && !hasAfter,
           [`${prefixCls}--focused`]: focused,
           [`${prefixCls}--disabled`]: disabled,
           [`${prefixCls}--${size}`]: size !== 'default',
@@ -227,11 +265,27 @@ export default {
         }
       ]
     },
+    wrapperClass() {
+      const { prefixCls, size, hasBefore, hasAfter } = this
+
+      return {
+        [`${prefixCls}-wrapper`]: true,
+        [`${prefixCls}-wrapper--${size}`]: size !== 'default',
+        [`${prefixCls}-wrapper--before-only`]: hasBefore && !hasAfter,
+        [`${prefixCls}-wrapper--after-only`]: !hasBefore && hasAfter
+      }
+    },
     hasPrefix() {
       return !!(this.$slots.prefix || this.prefix)
     },
     hasSuffix() {
       return !!(this.$slots.suffix || this.suffix)
+    },
+    hasBefore() {
+      return !!(this.$slots.before || this.before)
+    },
+    hasAfter() {
+      return !!(this.$slots.after || this.after)
     },
     inputStyle() {
       return {

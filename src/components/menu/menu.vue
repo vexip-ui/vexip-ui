@@ -94,7 +94,7 @@ export default {
       ) {
         computedMarkerType = 'right'
       } else {
-        computedMarkerType = markerType ?? horizontal ? 'bottom' : 'right'
+        computedMarkerType = markerType ?? (horizontal ? 'bottom' : 'right')
       }
 
       return [

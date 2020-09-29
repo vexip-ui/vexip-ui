@@ -6,7 +6,7 @@
     :transition-name="transitionName"
     :placement="placement"
   >
-    <template #default="{ item }">
+    <template #item="{ item }">
       <div
         :class="[
           {

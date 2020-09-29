@@ -45,7 +45,7 @@
 
 <script>
 import Scrollbar from './scrollbar'
-import { multipleFixed, throttle, isNull } from '../../utils/common'
+import { multipleFixed, throttle, isNull, debounce } from '../../utils/common'
 import { USE_TOUCH } from '../../utils/event'
 
 const { prefix } = require('../../style/basis/variable')
@@ -561,9 +561,11 @@ export default {
 
       if (!target) return
 
-      this.mutationObserver = new MutationObserver(() => {
-        this.computeContentSize()
-      })
+      this.mutationObserver = new MutationObserver(
+        debounce(() => {
+          this.computeContentSize()
+        })
+      )
 
       this.mutationObserver.observe(target, {
         attributes: true,

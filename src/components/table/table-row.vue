@@ -92,7 +92,7 @@ export default {
     this.computeRowHeight()
   },
   updated() {
-    if (!this.table.rowHeight) {
+    if (!this.isFixed && !this.table.rowHeight) {
       this.computeRowHeight()
     }
   },

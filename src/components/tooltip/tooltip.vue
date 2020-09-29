@@ -111,7 +111,6 @@ export default {
       }
     },
     currentVisible(value) {
-      this.updatePopper()
       this.$emit('on-toggle', value)
     }
   },
@@ -121,6 +120,11 @@ export default {
     this.$nextTick(() => {
       this.createPopper()
     })
+  },
+  updated() {
+    if (!this.disabled) {
+      this.updatePopper()
+    }
   },
   beforeDestroy() {
     disconnect(this.$el, CLICK_OUTSIDE)

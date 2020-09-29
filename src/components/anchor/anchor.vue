@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { findComponentsDownward, animateScrollTo } from '@/utils/common'
+import { findComponentsDownward, animateScrollTo } from '../../utils/common'
 
 const { prefix } = require('../../style/basis/variable')
 
@@ -221,7 +221,9 @@ export default {
         link === this.currentActive ||
         !link.startsWith('#') ||
         link.length < 2
-      ) { return }
+      ) {
+        return
+      }
 
       const element = document.querySelector(link)
 

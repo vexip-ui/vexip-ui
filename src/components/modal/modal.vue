@@ -13,6 +13,7 @@
     <template #default="{ show }">
       <section
         v-show="show"
+        ref="wrapper"
         :class="wrapperClass"
         :style="wrapperStyle"
       >
@@ -103,12 +104,18 @@ export default {
       default: 600
     },
     top: {
-      type: Number,
-      default: 100
+      type: [Number, String],
+      default: 100,
+      validator(value) {
+        return value === 'auto' || typeof value === 'number'
+      }
     },
     left: {
       type: [Number, String],
-      default: 'auto'
+      default: 'auto',
+      validator(value) {
+        return value === 'auto' || typeof value === 'number'
+      }
     },
     title: {
       type: String,
@@ -235,9 +242,16 @@ export default {
     },
     currentActive(value) {
       this.$emit('on-toggle', value)
+
+      if (value) {
+        this.$nextTick(() => {
+          this.computeTop()
+          this.computeLeft()
+        })
+      }
     },
-    top(value) {
-      this.currentTop = value
+    top() {
+      this.computeTop()
     },
     left() {
       this.computeLeft()
@@ -248,15 +262,41 @@ export default {
     }
   },
   mounted() {
-    this.computeLeft()
+    this.$nextTick(() => {
+      this.computeTop()
+      this.computeLeft()
+    })
   },
   methods: {
+    computeTop() {
+      const currentHeight = this.$refs.wrapper.getBoundingClientRect().height
+
+      if (this.top === 'auto' && this.inner) {
+        let parentNode = this.$el.parentNode
+
+        while (parentNode && parentNode !== document.body) {
+          if (getComputedStyle(parentNode).position !== 'static') {
+            this.currentTop =
+              (parentNode.getBoundingClientRect().top - currentHeight) / 2
+
+            break
+          }
+
+          parentNode = parentNode.parentNode
+        }
+      } else {
+        this.currentTop =
+          this.top === 'auto'
+            ? (window.innerHeight - currentHeight) / 2 - 20
+            : this.top
+      }
+    },
     computeLeft() {
       if (this.left === 'auto' && this.inner) {
         let parentNode = this.$el.parentNode
 
         while (parentNode && parentNode !== document.body) {
-          if (getComputedStyle(parentNode).position === 'absolute') {
+          if (getComputedStyle(parentNode).position !== 'static') {
             this.currentLeft =
               (parentNode.getBoundingClientRect().width - this.currentWidth) / 2
 

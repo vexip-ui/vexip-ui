@@ -83,12 +83,7 @@ export default {
   props: {
     value: {
       type: [Number, String, Date],
-      default() {
-        return new Date()
-      },
-      validator(value) {
-        return !Number.isNaN(new Date(value).getTime())
-      }
+      default: null
     },
     year: {
       type: Number,
@@ -130,7 +125,7 @@ export default {
 
     return {
       prefix: `${prefix}-calendar`,
-      currentValue: value,
+      currentValue: Number.isNaN(value.getTime()) ? null : value,
       dateRange: rangeDate(startOfWeek(active), 42),
       today: new Date()
     }
@@ -157,13 +152,11 @@ export default {
       return startOfWeek(startOfMonth(date), this.weekStart)
     },
     isSelected(date) {
-      if (!date) {
+      if (!date || !this.currentValue) {
         return false
       }
 
-      const value = this.currentValue
-
-      return !differenceDays(date, value)
+      return !differenceDays(date, this.currentValue)
     },
     isPrevMonth(date) {
       const { year, month } = this

@@ -11,6 +11,13 @@
   width: 100%;
   user-select: none;
 
+  .#{$multiple-input} {
+    &__separator {
+      margin: 0;
+      color: $vxp-color-content-secondary;
+    }
+  }
+
   &__popper {
     z-index: $vxp-z-index-popper;
     display: flex;
@@ -56,14 +63,19 @@
       text-align: center;
       letter-spacing: 1px;
     }
+
+    &--year .#{$multiple-input}__input {
+      width: 2.8em;
+    }
   }
 
   &__header {
     position: relative;
     display: flex;
+    align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 0.4em 0.6em;
+    height: 2.4em;
     border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
   }
 
@@ -145,12 +157,19 @@
 
   &__time-wheel {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 0 0.6em;
+    // justify-content: center;
+    border-left: $vxp-border-appearance $vxp-color-border-light-2;
 
     .#{$prefix}-wheel__list {
       padding: 0 0.8em;
+    }
+
+    .#{$prefix}-time-picker__wheel {
+      align-items: center;
+      height: calc(100% - 2.4em);
+      padding: 0;
     }
   }
 

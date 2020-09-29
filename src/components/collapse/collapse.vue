@@ -11,6 +11,10 @@ const { prefix } = require('../../style/basis/variable')
 
 export default {
   name: 'Collapse',
+  model: {
+    prop: 'expanded',
+    event: 'on-change'
+  },
   props: {
     expanded: {
       type: [String, Number, Array],

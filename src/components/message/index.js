@@ -29,7 +29,9 @@ function getKey() {
 class MessageManager {
   constructor() {
     this.name = 'Message'
-    this.defaultDuration = 3000
+    this.defaults = {
+      duration: 3000
+    }
   }
 
   _getInstance() {
@@ -61,7 +63,7 @@ class MessageManager {
       }
     }
 
-    const item = Object.assign({}, convenienceOptions, options, {
+    const item = Object.assign({}, this.defaults, convenienceOptions, options, {
       key,
       type,
       onClose
@@ -69,8 +71,7 @@ class MessageManager {
 
     message.add(item)
 
-    const duration =
-      typeof item.duration === 'number' ? item.duration : this.defaultDuration
+    const duration = typeof item.duration === 'number' ? item.duration : 3000
 
     if (duration >= 500) {
       timer = setTimeout(() => {

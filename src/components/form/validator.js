@@ -71,16 +71,18 @@ export async function validate(rules, value, model, validateAll = true) {
       if (!validateAll) break
     }
 
-    if (rule.enum && !validateEnumeration(value, rule.enum)) {
-      errors.push(message)
+    if (isDefined(value) && value !== '') {
+      if (rule.enum && !validateEnumeration(value, rule.enum)) {
+        errors.push(message)
 
-      if (!validateAll) break
-    }
+        if (!validateAll) break
+      }
 
-    if (rule.type && !validateType(value, rule.type, rule)) {
-      errors.push(message)
+      if (rule.type && !validateType(value, rule.type, rule)) {
+        errors.push(message)
 
-      if (!validateAll) break
+        if (!validateAll) break
+      }
     }
   }
 

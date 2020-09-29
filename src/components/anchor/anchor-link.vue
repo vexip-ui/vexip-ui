@@ -17,7 +17,7 @@
 
 <script>
 import { baseIndentWidth } from './anchor'
-import { findComponentUpward, removeArrayItem } from '@/utils/common'
+import { findComponentUpward, removeArrayItem } from '../../utils/common'
 
 const { prefix } = require('../../style/basis/variable')
 

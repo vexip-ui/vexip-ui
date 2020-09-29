@@ -16,7 +16,11 @@ export const TYPE_COLUMNS = Object.freeze([
 let indexId = 1
 
 function getIndexId() {
-  return indexId++
+  return `__${indexId++}`
+}
+
+function defaultIndexLabel(index) {
+  return index + 1
 }
 
 // 实现一个简易 Vuex 管理状态
@@ -300,7 +304,7 @@ function setColumns(state, columns) {
           column.truthIndex = !!column.truthIndex
 
           if (typeof column.orderLabel !== 'function') {
-            column.orderLabel = index => index + 1
+            column.orderLabel = defaultIndexLabel
           }
 
           break

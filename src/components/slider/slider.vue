@@ -25,7 +25,9 @@
           @mouseleave="hideTooltip"
         ></div>
         <template #tip>
-          {{ truthValue }}
+          <slot name="tip" :value="truthValue">
+            {{ truthValue }}
+          </slot>
         </template>
       </Tooltip>
     </div>

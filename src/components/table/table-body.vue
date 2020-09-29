@@ -65,7 +65,8 @@ export default {
         return this.rightFixedColumns
       }
 
-      return this.columns
+      // return this.columns
+      return this.table.store.state.columns
     },
     style() {
       const { currentColumns, widths, totalRowHeight, hiddenHeight } = this

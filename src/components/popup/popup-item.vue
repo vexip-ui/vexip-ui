@@ -28,11 +28,8 @@
 
 <script>
 import Render from '../basis/render'
-// import { findComponentUpward } from '../../utils/common'
 
 const { prefix } = require('../../style/basis/variable')
-
-// const parentName = 'Popup'
 
 export default {
   name: 'PopupItem',

@@ -117,6 +117,9 @@ export default {
         this.parentInstance.toggleExpandItem(old, false)
         this.parentInstance.toggleExpandItem(this.currentLabel, true)
       }
+    },
+    currentExpanded(value) {
+      this.$emit('on-toggle', value)
     }
   },
   created() {

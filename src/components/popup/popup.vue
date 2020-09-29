@@ -1,36 +1,23 @@
 <template>
-  <transition-group
-    tag="div"
-    :class="prefix"
-    :name="transitionName"
-  >
-    <div
+  <div :class="prefix">
+    <PopupItem
       v-for="item in items"
       :key="item.key"
       ref="instances"
-      :class="`${prefix}__item`"
+      :item="item"
+      :transition-name="transitionName"
+      :inner-class="innerClass"
       :style="getItemStyle(item)"
-      :vxp-index="item.key"
     >
-      <div :class="[`${prefix}__item-inner`, innerClass]">
-        <slot :item="item">
-          <Render
-            v-if="typeof item.renderer === 'function'"
-            :renderer="item.renderer"
-          ></Render>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <template v-else-if="item.parseHtml" v-html="item.content"></template>
-          <template v-else>
-            {{ item.content }}
-          </template>
-        </slot>
-      </div>
-    </div>
-  </transition-group>
+      <template #item="{ item: itemData }">
+        <slot name="item" :item="itemData"></slot>
+      </template>
+    </PopupItem>
+  </div>
 </template>
 
 <script>
-import Render from '../basis/render'
+import PopupItem from './popup-item'
 
 const { prefix } = require('../../style/basis/variable')
 
@@ -39,8 +26,7 @@ let zIndex = 2000
 export default {
   name: 'Popup',
   components: {
-    // PopupItem
-    Render
+    PopupItem
   },
   props: {
     transitionName: {
@@ -73,7 +59,7 @@ export default {
     return {
       prefix: `${prefix}-popup`,
       items: [],
-      stack: [],
+      queue: [],
       pendding: false
     }
   },
@@ -104,30 +90,30 @@ export default {
   },
   methods: {
     add(options) {
-      this.stack.push({
+      this.queue.push({
         type: 'add',
         param: options
       })
 
       if (!this.pendding) {
-        this.stackOut()
+        this.queueOut()
         this.pendding = true
       }
     },
     clear(key) {
-      this.stack.push({
+      this.queue.push({
         type: 'clear',
         param: key
       })
 
       if (!this.pendding) {
-        this.stackOut()
+        this.queueOut()
         this.pendding = true
       }
     },
-    stackOut() {
-      if (this.stack.length) {
-        const { type, param } = this.stack.shift()
+    queueOut() {
+      if (this.queue.length) {
+        const { type, param } = this.queue.shift()
 
         if (type === 'add') {
           this.renderItem(param)
@@ -136,10 +122,11 @@ export default {
         }
 
         // this.$nextTick(() => {
-        //   this.stackOut()
+        //   this.queueOut()
         // })
+
         requestAnimationFrame(() => {
-          this.stackOut()
+          this.queueOut()
         })
       } else {
         this.pendding = false
@@ -167,11 +154,11 @@ export default {
 
         let currentVertical = this.startOffset
 
-        const elements = this.$refs.instances
+        const instances = this.$refs.instances
 
-        if (elements?.length) {
-          elements.forEach(instance => {
-            currentVertical += instance.offsetHeight + 16
+        if (instances) {
+          this.$refs.instances.forEach(instance => {
+            currentVertical += instance.$el.offsetHeight + 16
           })
         }
 
@@ -187,8 +174,8 @@ export default {
       const index = items.findIndex(item => item.key === key)
 
       if (~index) {
-        const element = this.$refs.instances[index]
-        const removeHeight = element.offsetHeight
+        const instance = this.$refs.instances[index]
+        const removeHeight = instance.$el.offsetHeight
         const [item] = items.splice(index, 1)
 
         // 关闭回调
@@ -219,10 +206,7 @@ export default {
     },
     getItemStyle(item) {
       const [verticalStyle, horizontalStyle] = this.placementArray
-      const style = {
-        zIndex: item.zIndex,
-        [verticalStyle]: `${item.verticalStyle}px`
-      }
+      const style = { [verticalStyle]: `${item.verticalStyle}px` }
 
       if (horizontalStyle === 'center') {
         style.left = '50%'

@@ -6,6 +6,13 @@ const Construct = Vue.extend(Confirm)
 class ConfirmManager {
   constructor() {
     this.name = 'Confirm'
+    this.defaults = {
+      confirmType: 'primary',
+      confirmText: '确认',
+      cancelText: '取消'
+    }
+
+    this._getInstance()
   }
 
   _getInstance() {
@@ -29,7 +36,7 @@ class ConfirmManager {
       cancelText,
       onConfirm,
       onCancel
-    } = options
+    } = { ...this.defaults, ...options }
     const confirm = this._getInstance()
 
     confirm.content = content
