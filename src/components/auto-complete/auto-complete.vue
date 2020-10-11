@@ -11,21 +11,29 @@
     @on-toggle="handleToggle"
     @on-select="handleSelect"
   >
-    <Input
-      slot="control"
-      v-model="currentValue"
-      :prefix="prefix"
-      :prefix-color="prefixColor"
-      :suffix="suffix"
-      :suffix-color="suffixColor"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :size="size"
-      :state="state"
-      @click.native="handleInputClick"
-      @on-input="handleInput"
-      @on-blur="handleChange"
-    ></Input>
+    <slot
+      name="control"
+      :value="currentValue"
+      :on-click="handleInputClick"
+      :on-input="handleInput"
+      :on-change="handleChange"
+    >
+      <Input
+        slot="control"
+        v-model="currentValue"
+        :prefix="prefix"
+        :prefix-color="prefixColor"
+        :suffix="suffix"
+        :suffix-color="suffixColor"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :size="size"
+        :state="state"
+        @click.native="handleInputClick"
+        @on-input="handleInput"
+        @on-blur="handleChange"
+      ></Input>
+    </slot>
     <slot>
       <template v-for="(item, index) in filteredOptions">
         <Option

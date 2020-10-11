@@ -14,7 +14,7 @@
           :class="`${prefix}__handle${disabledPrev ? '--disabled' : ''}`"
           @click="handlePrev"
         >
-          <slot name="prevArrow" :disabled="disabledPrev">
+          <slot name="prev-arrow" :disabled="disabledPrev">
             <span :class="handleInnerClass">
               <Icon :name="`arrow-${arrowIcons[0]}`" :scale="1.5"></Icon>
             </span>
@@ -46,7 +46,7 @@
           :class="`${prefix}__handle${disabledNext ? '--disabled' : ''}`"
           @click="handleNext"
         >
-          <slot name="nextArrow" :disabled="disabledNext">
+          <slot name="next-arrow" :disabled="disabledNext">
             <span :class="handleInnerClass">
               <Icon :name="`arrow-${arrowIcons[1]}`" :scale="1.5"></Icon>
             </span>
