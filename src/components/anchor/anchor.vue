@@ -118,17 +118,38 @@ export default {
           this.isRaw = true
         } else {
           this.isRaw = false
-          container = this.$parent
+          // container = this.$parent
         }
 
         if (!this.isRaw) {
-          if (container.$refs.scroll) {
-            this.scroller = container.$refs.scroll
+          container = this.$parent
+
+          if (typeof viewer !== 'function' || !container) {
+            container = this.$parent
+          }
+
+          while (container) {
+            if (container.$options.name === 'Scroll') {
+              this.scroller = container
+              break
+            }
+
+            if (container.$refs?.scroll) {
+              this.scroller = container.$refs.scroll
+              break
+            }
+
+            container = container.$parent
+          }
+
+          if (this.scroller) {
             this.container = this.scroller.$el
 
             this.scroller.$on('on-scroll', this.handleContainerScroll)
           } else {
+            this.isRaw = true
             this.container = container.$el
+
             this.container.addEventListener(
               'scroll',
               this.handleContainerScroll

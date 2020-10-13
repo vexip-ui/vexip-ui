@@ -3,7 +3,7 @@
     :class="className"
     :href="to"
     :target="target"
-    @click="handleClick"
+    @click.left="handleClick"
   >
     <slot name="icon">
       <Icon

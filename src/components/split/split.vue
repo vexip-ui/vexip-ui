@@ -48,7 +48,7 @@
             ></Icon>
           </div>
         </template>
-        <template>
+        <template v-else>
           <span
             v-for="n in 6"
             :key="n"
@@ -215,7 +215,7 @@ export default {
       const value = Math.min(Math.max(min, (start + offset) / outer), max)
 
       if (lazy) {
-        this.$refs.guide.style[this.position[0]] = `${value * 100}`
+        this.$refs.guide.style[this.position[0]] = `${value * 100}%`
         this.moveState.target = value
       } else {
         this.currentValue = value
@@ -272,12 +272,16 @@ export default {
       document.removeEventListener('mousemove', this.handleTriggerMove)
       document.removeEventListener('mouseup', this.handleTriggerUp)
 
-      if (this.lazy) {
-        this.currentValue = this.moveState.target
-      }
-
       this.moving = false
       this.$refs.guide.style.display = ''
+
+      if (this.lazy) {
+        if (Math.abs(this.moveState.target - this.currentValue > 0.01)) {
+          this.setTransition()
+        }
+
+        this.currentValue = this.moveState.target
+      }
 
       this.$emit('on-move-end', this.currentValue)
     },

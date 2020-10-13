@@ -20,6 +20,8 @@
         v-show="currentVisible"
         ref="popper"
         :class="`${prefix}__popper`"
+        @mouseenter="handleTriggerEnter"
+        @mouseleave="handleTriggerLeave"
       >
         <slot name="drop"></slot>
       </div>

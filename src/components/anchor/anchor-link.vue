@@ -5,6 +5,7 @@
       :class="linkClass"
       :href="to"
       :style="linkStyle"
+      :title="title"
       @click.prevent="handleSelect"
     >
       <slot></slot>
@@ -26,6 +27,10 @@ export default {
   inject: ['anchor'],
   props: {
     to: {
+      type: String,
+      default: ''
+    },
+    title: {
       type: String,
       default: ''
     }

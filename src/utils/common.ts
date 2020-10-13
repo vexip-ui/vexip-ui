@@ -22,11 +22,18 @@ export function isPromise(any: unknown): boolean {
   )
 }
 
+export function isMethod(any: unknown): boolean {
+  return typeof any === 'function'
+}
+
 export function toNumber(value: number | string): number {
   const number = parseFloat(value as string)
 
   return Number.isNaN(number) ? 0 : number
 }
+
+/* eslint-disable @typescript-eslint/no-empty-function */
+export function noop(): void {}
 
 /**
  * 生成一个 range 数组

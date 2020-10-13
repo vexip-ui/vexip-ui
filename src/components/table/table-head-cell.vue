@@ -1,14 +1,14 @@
 <template>
   <div :class="className" :style="style">
-    <checkbox
+    <Checkbox
       v-if="column.type === 'selection'"
       control
       :class="`${prefix}__selection`"
       :checked="checkedAll"
       :partial="partial"
-      :size="column.size || 'default'"
+      :size="column.checkboxSize || 'default'"
       @click.native.prevent="handleCheckAllRow"
-    ></checkbox>
+    ></Checkbox>
     <template v-else>
       <Render
         v-if="isFunction(column.headRenderer)"
