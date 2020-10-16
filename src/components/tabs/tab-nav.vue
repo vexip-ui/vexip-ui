@@ -18,6 +18,10 @@ const { prefix } = require('../../style/basis/variable')
 
 export default {
   name: 'TabNav',
+  model: {
+    prop: 'active',
+    event: 'on-change'
+  },
   props: {
     active: {
       type: [String, Number],

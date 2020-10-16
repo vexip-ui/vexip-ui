@@ -45,6 +45,10 @@ export default {
     TabNav,
     TabNavItem
   },
+  model: {
+    prop: 'active',
+    event: 'on-change'
+  },
   props: {
     card: {
       type: Boolean,

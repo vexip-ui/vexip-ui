@@ -7,7 +7,9 @@
     <div :class="`${prefix}__icon`">
       <Icon v-if="icon" :name="icon"></Icon>
     </div>
-    <slot></slot>
+    <slot>
+      {{ label }}
+    </slot>
   </li>
 </template>
 
@@ -48,16 +50,13 @@ export default {
   computed: {
     className() {
       const { prefix, active, disabled } = this
+      const baseClass = `${prefix}__pane`
 
-      let baseClass = `${prefix}__item`
-
-      if (disabled) {
-        baseClass += '--disabled'
-      } else if (active) {
-        baseClass += '--active'
+      return {
+        [baseClass]: true,
+        [`${baseClass}--disabled`]: disabled,
+        [`${baseClass}--active`]: !disabled && active
       }
-
-      return baseClass
     }
   },
   watch: {

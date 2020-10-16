@@ -37,16 +37,13 @@ export default {
   computed: {
     className() {
       const { prefix, active, disabled } = this
+      const baseClass = `${prefix}__pane`
 
-      let baseClass = `${prefix}__pane`
-
-      if (disabled) {
-        baseClass += '--disabled'
-      } else if (active) {
-        baseClass += '--active'
+      return {
+        [baseClass]: true,
+        [`${baseClass}--disabled`]: disabled,
+        [`${baseClass}--active`]: !disabled && active
       }
-
-      return baseClass
     },
     style() {
       return {

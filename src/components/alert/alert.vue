@@ -2,7 +2,9 @@
   <CollapseTransition fade-effect @after-leave="handleAfterLeave">
     <div v-if="!closed" :class="className">
       <div v-if="hasTitle" :class="`${prefix}__title`">
-        <slot name="title"></slot>
+        <slot name="title">
+          {{ title }}
+        </slot>
       </div>
       <div :class="`${prefix}__description`">
         <slot></slot>
@@ -50,6 +52,10 @@ export default {
       validator(value) {
         return ['info', 'success', 'warning', 'error'].includes(value)
       }
+    },
+    title: {
+      type: String,
+      default: ''
     },
     colorfulText: {
       type: Boolean,
@@ -107,7 +113,7 @@ export default {
       }
     },
     hasTitle() {
-      return !!this.$slots.title
+      return !!this.title || !!this.$slots.title
     },
     hasIcon() {
       return !!(this.icon || this.$slots.icon)
