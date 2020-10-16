@@ -92,6 +92,10 @@ export default {
     validateAll: {
       type: Boolean,
       default: null
+    },
+    asterisk: {
+      type: Boolean,
+      default: null
     }
   },
   data() {
@@ -160,13 +164,17 @@ export default {
       return [].concat(requiredRule, formRules, selfRules)
     },
     useAsterisk() {
-      const allRules = this.allRules
+      if (isNull(this.asterisk)) {
+        const allRules = this.allRules
 
-      for (const rule of allRules) {
-        if (rule.required) return true
+        for (const rule of allRules) {
+          if (rule.required) return true
+        }
+
+        return this.isRequired
       }
 
-      return this.isRequired
+      return this.asterisk
     },
     labelSuffix() {
       return this.form ? this.form.labelSuffix : ''

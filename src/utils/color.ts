@@ -71,7 +71,7 @@ export interface ColorObject {
 const INTEGER_REG = '[-\\+]?\\d+%?'
 const NUMBER_REG = '[-\\+]?\\d*\\.\\d+%?'
 
-const NUMBER_UNIT = `(?:${INTEGER_REG})|(?:${NUMBER_REG})`
+const NUMBER_UNIT = `(?:${NUMBER_REG})|(?:${INTEGER_REG})`
 
 const COLOR_REG_3 = `[\\s|\\(]+(${NUMBER_UNIT})[,|\\s]+(${NUMBER_UNIT})[,|\\s]+(${NUMBER_UNIT})\\s*\\)?`
 const COLOR_REG_4 = `[\\s|\\(]+(${NUMBER_UNIT})[,|\\s]+(${NUMBER_UNIT})[,|\\s]+(${NUMBER_UNIT})[,|\\s]+(${NUMBER_UNIT})\\s*\\)?`

@@ -64,7 +64,7 @@
               @on-edit-end="toggleEditing(false)"
               @on-change="handleAlphaChange"
             ></ColorAlpha>
-            <div :class="`${prefix}__shortcuts`">
+            <div v-if="shortcut" :class="`${prefix}__shortcuts`">
               <div
                 v-for="(item, index) in shortcutList"
                 :key="index"

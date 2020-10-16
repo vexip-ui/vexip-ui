@@ -4,6 +4,10 @@ $prefix: 'vxp' !default;
   font-size: 16px;
 }
 
+::placeholder {
+  color: $vxp-color-content-placeholder;
+}
+
 *,
 *::before,
 *::after {

@@ -321,6 +321,12 @@ export default {
         })
       }
     },
+    clear() {
+      this.files = []
+      this.$refs.input.value = null
+
+      this.$emit('on-change', this.multiple ? [] : null)
+    },
     verifyFiles() {
       const { files, maxSize } = this
       const limitSize = maxSize * 1024

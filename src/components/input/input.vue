@@ -114,6 +114,12 @@ export default {
     type: {
       default: 'text',
       validator(value) {
+        if (value === 'number') {
+          console.warn(
+            '[Vexip warn] Number type for Input will be deprecated soon, please replace it with NumberInput.'
+          )
+        }
+
         return [
           'text',
           'number',
@@ -127,12 +133,6 @@ export default {
     state: {
       default: 'default',
       validator(value) {
-        if (value === 'number') {
-          console.warn(
-            '[Vexip warn] Number type for Input will be deprecated soon, please replace it with NumberInput.'
-          )
-        }
-
         return ['default', 'success', 'error', 'warning'].includes(value)
       }
     },
@@ -289,8 +289,8 @@ export default {
     },
     inputStyle() {
       return {
-        paddingLeft: this.hasPrefix ? '2em' : '',
-        paddingRight: this.hasSuffix || this.type === 'password' ? '2em' : ''
+        paddingLeft: this.hasPrefix ? '1.4em' : '',
+        paddingRight: this.hasSuffix || this.type === 'password' ? '1.4em' : ''
       }
     },
     inputType() {

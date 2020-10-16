@@ -46,7 +46,7 @@
     margin-right: 0.4em;
     border: $vxp-radio-signal-border;
     border-radius: 50%;
-    transition: $vxp-transition-border-base;
+    transition: $vxp-transition-border-base, $vxp-transition-box-shadow-base;
 
     &::after {
       position: absolute;
@@ -60,9 +60,14 @@
       opacity: 0;
       transition:
         $vxp-transition-background-base,
-        $vxp-transition-opacity-base $vxp-transition-transform-base;
+        $vxp-transition-opacity-base,
+        $vxp-transition-transform-base;
       transform: translate(-50%, -50%) scale(0);
     }
+  }
+
+  &:focus-within &__signal {
+    box-shadow: $vxp-radio-shadow-focus;
   }
 
   // 使用 em 容易出现 0.5px 渲染 不容易控制
@@ -130,7 +135,10 @@
   }
 
   &__input {
-    display: none;
+    // display: none;
+    width: 0;
+    height: 0;
+    pointer-events: none;
     opacity: 0;
   }
 
@@ -199,20 +207,23 @@
     }
 
     &-group--button & {
+      position: relative;
+      z-index: 0;
       padding: 0.6em 0.8em;
       margin: 0;
       border: $vxp-radio-border;
       border-left-width: 0;
       border-radius: 0;
 
-      &:first-child {
-        border-left-width: 1px;
-        border-radius: $vxp-border-radius-base 0 0 $vxp-border-radius-base;
-        box-shadow: none !important;
-      }
-
-      &:last-child {
-        border-radius: 0 $vxp-border-radius-base $vxp-border-radius-base 0;
+      &::after {
+        position: absolute;
+        top: 0;
+        left: -1px;
+        display: block;
+        width: 1px;
+        height: 100%;
+        content: '';
+        background-color: transparent;
       }
 
       &:hover {
@@ -220,9 +231,45 @@
         box-shadow: -1px 0 0 0 $vxp-radio-color-hover-border;
       }
 
+      &:first-child {
+        border-left-width: 1px;
+        border-radius: $vxp-border-radius-base 0 0 $vxp-border-radius-base;
+        box-shadow: none;
+
+        &::before,
+        &::after {
+          content: none;
+        }
+      }
+
+      &:last-child {
+        border-radius: 0 $vxp-border-radius-base $vxp-border-radius-base 0;
+      }
+
       &--checked {
+        z-index: 1;
         border-color: $vxp-radio-color-checked-border;
         box-shadow: -1px 0 0 0 $vxp-radio-color-checked-border;
+      }
+
+      &:focus-within {
+        box-shadow: -1px 0 0 0 $vxp-radio-color-checked-border, $vxp-radio-shadow-focus;
+
+        &::after {
+          top: -3px;
+          left: -3px;
+          height: calc(100% + 6px);
+          background-color: $vxp-radio-color-shadow-focus;
+          transition: {
+            property: top, left, height, background-color;
+            duration: $vxp-transition-duration;
+            timing-function: $vxp-transition-timing-function;
+          }
+        }
+      }
+
+      &:focus-within:first-child {
+        box-shadow: $vxp-radio-shadow-focus;
       }
 
       &__signal {
@@ -238,7 +285,7 @@
       @include large-signal;
     }
 
-    &-group--button#{&}-group--samll & {
+    &-group--button#{&}-group--small & {
       padding: 0.4em 0.6em;
     }
 
@@ -246,8 +293,9 @@
       padding: 0.8em 1em;
     }
 
+    &-group--button#{&}-group--disabled &,
     &-group--button &--disabled {
-      // background-color: $vxp-color-fill-background;
+      background-color: $vxp-radio-color-bg-disabled-button;
       border-color: $vxp-radio-color-border !important;
       box-shadow: none !important;
     }
@@ -261,16 +309,12 @@
     }
 
     &-group--button#{&}-group--disabled & {
-      // background-color: $vxp-color-fill-background;
-      border-color: $vxp-radio-color-border !important;
-      box-shadow: none !important;
-
       &--checked {
         background-color: $vxp-radio-color-disabled-button;
 
-        .#{$prefix}-radio__label {
-          color: $vxp-color-content-reverse;
-        }
+        // .#{$prefix}-radio__label {
+        //   color: $vxp-color-content-reverse;
+        // }
       }
     }
   }
