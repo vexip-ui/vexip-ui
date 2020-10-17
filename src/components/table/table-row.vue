@@ -160,7 +160,7 @@ export default {
     handleDragEnd() {
       if (!this.draggable) return
 
-      this.table.handleRowDragEnd(this)
+      this.table.handleRowDragEnd()
     }
   }
 }

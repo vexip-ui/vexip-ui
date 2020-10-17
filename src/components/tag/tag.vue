@@ -1,16 +1,18 @@
 <template>
-  <div :class="className">
-    <span>
-      <slot></slot>
-    </span>
-    <div
-      v-if="closable"
-      :class="`${prefix}__close`"
-      @click="handleClose"
-    >
-      <Icon name="times" :scale="0.8"></Icon>
+  <transition :name="transitionName">
+    <div :class="className">
+      <span>
+        <slot></slot>
+      </span>
+      <div
+        v-if="closable"
+        :class="`${prefix}__close`"
+        @click="handleClose"
+      >
+        <Icon name="times" :scale="0.8"></Icon>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -44,7 +46,8 @@ export default {
   },
   data() {
     return {
-      prefix: `${prefix}-tag`
+      prefix: `${prefix}-tag`,
+      transitionName: `${prefix}-fade`
     }
   },
   computed: {

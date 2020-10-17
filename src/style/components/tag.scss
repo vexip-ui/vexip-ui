@@ -10,6 +10,10 @@
   border: $vxp-border-base;
   border-radius: $vxp-border-radius-base;
 
+  & + & {
+    margin-left: 0.3em;
+  }
+
   &__close {
     display: inline-flex;
     align-items: center;

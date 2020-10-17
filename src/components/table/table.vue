@@ -461,7 +461,7 @@ export default {
 
       indicator.style.top = `${indicatorTop - 2}px`
 
-      dragState.willDropRow = rowInstance.row
+      // dragState.willDropRow = rowInstance.row
       dragState.dropType = dropType
 
       this.indicatorShow = true
@@ -469,17 +469,24 @@ export default {
     },
     handleRowDrop(rowInstance) {
       const dragState = this.dragState
-      const { draggingRow, willDropRow, dropType } = dragState
+      const { draggingRow, dropType } = dragState
+      const willDropRow = rowInstance.row
 
       if (draggingRow.key === willDropRow.key) return
 
       let index = this.rowData.findIndex(row => row.key === willDropRow.key)
 
       if (~index) {
+        const originIndex = this.rowData.findIndex(
+          row => row.key === draggingRow.key
+        )
+
         removeArrayItem(this.rowData, row => row.key === draggingRow.key)
 
-        if (dropType === 'after') {
+        if (originIndex > index && dropType === 'after') {
           index += 1
+        } else if (originIndex < index && dropType === 'before') {
+          index -= 1
         }
 
         this.rowData.splice(index, 0, draggingRow)
@@ -487,12 +494,14 @@ export default {
         this.$emit('on-row-drop', rowInstance.row.data, dropType)
       }
     },
-    handleRowDragEnd(rowInstance) {
+    handleRowDragEnd() {
+      const { draggingRow } = this.dragState
+
       this.dragState = {}
       this.indicatorShow = false
       this.$emit(
         'on-row-drag-end',
-        rowInstance.row.data,
+        draggingRow.data,
         this.rowData.map(row => row.data)
       )
     },
