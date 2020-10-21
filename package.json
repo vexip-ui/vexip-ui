@@ -7,7 +7,7 @@
       "path": "node_modules/cz-customizable"
     },
     "cz-customizable": {
-      "config": "script/cz-config.js"
+      "config": "scripts/cz-config.js"
     }
   },
   "dependencies": {
@@ -53,7 +53,7 @@
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
-    "commit-msg": "node script/verify-commit.js"
+    "commit-msg": "node scripts/verify-commit.js"
   },
   "keywords": [
     "flex",
@@ -81,5 +81,5 @@
     "serve": "vue-cli-service serve",
     "test:unit": "vue-cli-service test:unit"
   },
-  "version": "0.8.67"
+  "version": "0.8.72"
 }

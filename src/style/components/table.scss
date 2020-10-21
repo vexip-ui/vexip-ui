@@ -242,7 +242,7 @@
 
   &__fixed--right {
     right: 0;
-    border-left: $vxp-border-appearance transparent;
+    border-left: 0 transparent;
 
     &#{$fixed-active} {
       box-shadow: -2px 0 $vxp-box-shadow-blur $vxp-color-border;
