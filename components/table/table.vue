@@ -7,7 +7,7 @@
       v-if="useXScroll"
       use-x-bar
       mode="horizontal"
-      :class="`${prefix}__scroll`"
+      :class="[`${prefix}__scroll`, scrollClass.horizontal]"
       :bar-class="`${prefix}__bar--horizontal`"
       :wheel="false"
       :width="width"
@@ -16,7 +16,7 @@
     >
       <TableHead ref="head"></TableHead>
       <Scroll
-        :class="`${prefix}__scroll`"
+        :class="[`${prefix}__scroll`, scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         @on-scroll="handleBodyScroll"
@@ -28,7 +28,7 @@
     <template v-else>
       <TableHead ref="head"></TableHead>
       <Scroll
-        :class="`${prefix}__scroll`"
+        :class="[`${prefix}__scroll`, scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="scrollDeltaY"
@@ -47,7 +47,7 @@
     >
       <TableHead fixed="left"></TableHead>
       <Scroll
-        :class="`${prefix}__scroll`"
+        :class="[`${prefix}__scroll`, scrollClass.left]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="scrollDeltaY"
@@ -65,7 +65,7 @@
     >
       <TableHead fixed="right"></TableHead>
       <Scroll
-        :class="`${prefix}__scroll`"
+        :class="[`${prefix}__scroll`, scrollClass.right]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="scrollDeltaY"
@@ -185,6 +185,12 @@ export default {
     renderCount: {
       type: Number,
       default: null
+    },
+    scrollClass: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   data() {

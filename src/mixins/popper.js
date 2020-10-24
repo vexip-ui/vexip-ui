@@ -30,7 +30,7 @@ export function usePopper(params = {}) {
         }
       },
       transfer: {
-        type: Boolean,
+        type: [Boolean, String],
         default: false
       }
     },
@@ -66,6 +66,13 @@ export function usePopper(params = {}) {
         if (!reference || !popper) return
 
         if (this.transfer) {
+          this.__targetNode = document.body
+
+          if (typeof this.transfer === 'string') {
+            this.__targetNode =
+              document.querySelector(this.transfer) || document.body
+          }
+
           this.popperParent = popper.parentNode
 
           if (!this.popperParent) {
@@ -80,7 +87,7 @@ export function usePopper(params = {}) {
 
           this.popperParent.replaceChild(this.popperHome, popper)
           this.$el.__transferNode = popper
-          document.body.appendChild(popper)
+          this.__targetNode.appendChild(popper)
         }
 
         let options = {
@@ -138,9 +145,9 @@ export function usePopper(params = {}) {
       destroyPopper() {
         if (
           this.popperElement &&
-          this.popperElement.parentNode === document.body
+          this.popperElement.parentNode === this.__targetNode
         ) {
-          document.body.removeChild(this.popperElement)
+          this.__targetNode.removeChild(this.popperElement)
         }
 
         if (this.popperParent && this.$refs.popper && this.popperHome) {

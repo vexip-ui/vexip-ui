@@ -18,6 +18,10 @@
     display: flex;
     min-width: 7em;
     padding: 0.35em 0;
+
+    .#{$prefix}-scroll__wrapper {
+      width: 100%;
+    }
   }
 
   &__list {

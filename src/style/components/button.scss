@@ -41,6 +41,7 @@
       border-radius: $vxp-button-border-radius;
       outline: 0;
       transition:
+        width $vxp-transition-base,
         $vxp-transition-color-base,
         $vxp-transition-background-base,
         $vxp-transition-border-base,
@@ -390,6 +391,10 @@
     }
   }
 
+  &--block {
+    width: 100%;
+  }
+
   &__icon {
     display: flex;
     align-items: center;
@@ -397,6 +402,11 @@
 
     .#{$prefix}-icon {
       transform: scale(0.7);
+    }
+
+    &--loading {
+      // stylelint-disable-next-line declaration-property-value-blacklist
+      transition: all $vxp-transition-base;
     }
   }
 

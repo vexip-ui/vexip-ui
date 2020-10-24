@@ -57,6 +57,7 @@
             <Button
               type="primary"
               size="small"
+              :loading="loading"
               @on-click="handleConfirm"
             >
               {{ okText }}
@@ -156,6 +157,10 @@ export default {
     beforeClose: {
       type: Function,
       default: null
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   emits: [

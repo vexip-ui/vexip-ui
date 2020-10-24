@@ -7,12 +7,12 @@
     @click.left="handleClick"
     @animationend="test"
   >
-    <div v-if="loading" :class="`${prefixCls}__icon`">
+    <div v-if="loading" :class="[`${prefixCls}__icon`, `${prefixCls}__icon--loading`]">
       <slot name="loading">
         <Icon pulse :name="loadingIcon"></Icon>
       </slot>
     </div>
-    <div v-if="icon && !loading" :class="`${prefixCls}__icon`">
+    <div v-else-if="icon" :class="`${prefixCls}__icon`">
       <Icon :name="icon"></Icon>
     </div>
     <slot></slot>
@@ -87,6 +87,10 @@ export default {
     buttonType: {
       type: String,
       default: 'button'
+    },
+    block: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
