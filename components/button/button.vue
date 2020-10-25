@@ -7,11 +7,18 @@
     @click.left="handleClick"
     @animationend="test"
   >
-    <div v-if="loading" :class="[`${prefixCls}__icon`, `${prefixCls}__icon--loading`]">
-      <slot name="loading">
-        <Icon pulse :name="loadingIcon"></Icon>
-      </slot>
-    </div>
+    <CollapseTransition
+      v-if="loading"
+      appear
+      horizontal
+      fade-effect
+    >
+      <div :class="[`${prefixCls}__icon`, `${prefixCls}__icon--loading`]">
+        <slot name="loading">
+          <Icon pulse :name="loadingIcon"></Icon>
+        </slot>
+      </div>
+    </CollapseTransition>
     <div v-else-if="icon" :class="`${prefixCls}__icon`">
       <Icon :name="icon"></Icon>
     </div>
@@ -20,6 +27,7 @@
 </template>
 
 <script>
+import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
 import '../../icons/spinner'
 
@@ -28,6 +36,7 @@ const { prefix } = require('../../src/style/basis/variable')
 export default {
   name: 'Button',
   components: {
+    CollapseTransition,
     Icon
   },
   props: {

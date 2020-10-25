@@ -19,16 +19,24 @@
 </template>
 
 <script>
+import TransferDom from '../../src/mixins/transfer-dom'
 import { isPromise } from '../../src/utils/common'
+
 const { prefix } = require('../../src/style/basis/variable')
 
 export default {
   name: 'Masker',
+  mixins: [TransferDom],
+  // directives: { TransferDom },
   model: {
     prop: 'active',
     event: 'on-toggle'
   },
   props: {
+    // transfer: {
+    //   type: [Boolean, String],
+    //   default: false
+    // },
     active: {
       type: Boolean,
       default: false

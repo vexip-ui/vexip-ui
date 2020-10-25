@@ -7,6 +7,7 @@
     :closable="maskClose"
     :disabled="hideMask"
     :before-close="handleMaskClose"
+    :transfer="transfer"
     @on-show="handleShow"
     @on-hide="handleHide"
   >
@@ -78,11 +79,24 @@
 import Button from '../button'
 import Icon from '../icon'
 import Masker from '../masker'
-
-import '../../icons/times'
+// import { CLICK_TYPE } from '../../src/utils/event'
 import { isPromise } from '../../src/utils/common'
 
+import '../../icons/times'
+
 const { prefix } = require('../../src/style/basis/variable')
+
+// const mousePosition = {
+//   x: window.innerWidth / 2,
+//   y: window.innerHeight / 2
+// }
+
+// document.addEventListener(CLICK_TYPE, ({ clientX, clientY }) => {
+//   console.log({ clientX, clientY })
+
+//   mousePosition.x = clientX
+//   mousePosition.y = clientY
+// })
 
 export default {
   name: 'Modal',
@@ -160,6 +174,10 @@ export default {
     },
     loading: {
       type: Boolean,
+      default: false
+    },
+    transfer: {
+      type: [Boolean, String],
       default: false
     }
   },

@@ -125,7 +125,7 @@ export default {
           implementHandler(listeners.enter, el)
         },
         afterEnter(el) {
-          el.style.transition = styleRecord.transition
+          el.style.transition = styleRecord.transition || ''
           el.style[height] = ''
           el.style.overflow = styleRecord.overflow
           el.style.boxSizing = styleRecord.boxSizing
@@ -172,7 +172,7 @@ export default {
           el.style[marginTop] = styleRecord.marginTop
           el.style[marginBottom] = styleRecord.marginBottom
           el.style.overflow = styleRecord.overflow
-          el.style.transition = styleRecord.transition
+          el.style.transition = styleRecord.transition || ''
           el.style.boxSizing = styleRecord.boxSizing
           el.style.opacity = styleRecord.opacity
 

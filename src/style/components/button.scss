@@ -47,6 +47,12 @@
         $vxp-transition-border-base,
         $vxp-transition-box-shadow-base;
 
+      &::before {
+        pointer-events: none;
+        content: '';
+        opacity: 0;
+      }
+
       &::after {
         position: absolute;
         top: 0;
@@ -382,8 +388,6 @@
       bottom: -1px;
       left: -1px;
       z-index: 1;
-      pointer-events: none;
-      content: '';
       background-color: $vxp-color-white;
       border-radius: inherit;
       opacity: 0.25;

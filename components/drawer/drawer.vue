@@ -7,6 +7,7 @@
     :closable="maskClose"
     :disabled="hideMask"
     :before-close="handleMaskClose"
+    :transfer="transfer"
     @on-show="handleShow"
     @on-hide="handleHide"
   >
@@ -54,9 +55,8 @@
 <script>
 import Icon from '../icon'
 import Masker from '../masker'
-
-import '../../icons/times'
 import { isPromise } from '../../src/utils/common'
+import '../../icons/times'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -125,6 +125,10 @@ export default {
     },
     resizable: {
       type: Boolean,
+      default: false
+    },
+    transfer: {
+      type: [Boolean, String],
       default: false
     }
   },
