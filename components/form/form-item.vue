@@ -45,7 +45,10 @@ const parentName = 'Form'
 export default {
   name: 'FormItem',
   provide() {
-    return { formItem: this }
+    return {
+      formItem: this,
+      validateField: this.validateField
+    }
   },
   inject: ['form'],
   props: {
@@ -106,7 +109,8 @@ export default {
       parentInstance: null,
       validating: false,
       initValue: this.defaultValue,
-      disableValidate: false
+      disableValidate: false,
+      timer: null
     }
   },
   computed: {
@@ -135,7 +139,7 @@ export default {
       return labelWidth
     },
     isRequired() {
-      return this.form.allRequired || this.required
+      return this.form?.allRequired || this.required
     },
     requiredTip() {
       return `${this.label}不可为空`
@@ -222,6 +226,13 @@ export default {
     }
   },
   methods: {
+    validateField() {
+      clearTimeout(this.timer)
+
+      this.timer = setTimeout(() => {
+        this.validate()
+      }, 0)
+    },
     validate(callback) {
       return this.handleValidate('', callback)
     },
@@ -250,7 +261,9 @@ export default {
 
       const result = setValueByPath(form.model, prop, resetValue, true)
 
-      this.form.$emit('on-reset', prop, result)
+      if (this.form) {
+        this.form.$emit('on-reset', prop, result)
+      }
     },
     clearError() {
       this.isError = false

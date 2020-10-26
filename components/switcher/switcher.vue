@@ -24,6 +24,8 @@
 <script>
 import Icon from '../icon'
 import { size } from '../../src/config/properties'
+import { noop } from '../../src/utils/common'
+
 import '../../icons/spinner'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -35,6 +37,9 @@ export default {
   },
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -73,6 +78,10 @@ export default {
     closeText: {
       type: String,
       default: ''
+    },
+    disableValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -124,6 +133,10 @@ export default {
     },
     currentValue(value) {
       this.$emit('on-change', value)
+
+      if (!this.disableValidate) {
+        this.validateField()
+      }
     }
   },
   methods: {

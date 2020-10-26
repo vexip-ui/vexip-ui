@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
-import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
+import { findComponentUpward, removeArrayItem, noop } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -25,9 +25,12 @@ const groupName = 'RadioGroup'
 
 export default {
   name: 'Radio',
-  mixins: [formControl],
+  // mixins: [formControl],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -56,6 +59,10 @@ export default {
       default: false
     },
     border: {
+      type: Boolean,
+      default: false
+    },
+    disableValidate: {
       type: Boolean,
       default: false
     }
@@ -98,6 +105,10 @@ export default {
 
       if (this.groupInstance && value === this.label) {
         this.groupInstance.currentValue = value
+      }
+
+      if (!this.groupInstance?.isFormControl && !this.disableValidate) {
+        this.validateField()
       }
     }
   },

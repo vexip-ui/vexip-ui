@@ -104,9 +104,10 @@ import TimeWheel from './time-wheel'
 
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import { placementWhileList, usePopper } from '../../src/mixins/popper'
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
 import { format, toDate } from '../../src/utils/date'
+import { noop } from '../../src/utils/common'
 
 import '../../icons/times-circle'
 import '../../icons/regular/clock'
@@ -121,9 +122,12 @@ export default {
     MultipleInput,
     TimeWheel
   },
-  mixins: [usePopper({ isDrop: true }), formControl],
+  mixins: [usePopper({ isDrop: true })],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -217,6 +221,10 @@ export default {
       validator(value) {
         return ['default', 'success', 'error', 'warning'].includes(value)
       }
+    },
+    disableValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -373,6 +381,10 @@ export default {
                 second: this.second
               }
             )
+
+            if (!this.disableValidate) {
+              this.validateField()
+            }
           })
         }
 

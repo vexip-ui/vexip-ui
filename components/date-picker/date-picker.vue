@@ -230,7 +230,7 @@ import MultipleInput from '../multiple-input'
 import TimeWheel from './time-wheel'
 
 import { placementWhileList, usePopper } from '../../src/mixins/popper'
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import {
@@ -244,7 +244,7 @@ import {
   addSeconds,
   isLeepYear
 } from '../../src/utils/date'
-import { range } from '../../src/utils/common'
+import { isNull, noop, range } from '../../src/utils/common'
 
 import '../../icons/times-circle'
 import '../../icons/calendar-alt'
@@ -286,9 +286,12 @@ export default {
     MultipleInput,
     TimeWheel
   },
-  mixins: [usePopper({ isDrop: true }), formControl],
+  mixins: [usePopper({ isDrop: true })],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -384,6 +387,10 @@ export default {
       }
     },
     exactlySelect: {
+      type: Boolean,
+      default: false
+    },
+    disableValidate: {
       type: Boolean,
       default: false
     }
@@ -598,9 +605,9 @@ export default {
   created() {
     this.parseFormat()
     // this.parseTime(this.value)
-    this.defaultValue = this.getDateValue()
+    // this.defaultValue = this.getDateValue()
 
-    if (Number.isNaN(this.defaultValue.getTime())) {
+    if (isNull(this.defaultValue) || Number.isNaN(this.defaultValue.getTime())) {
       this.defaultValue = new Date()
     }
 
@@ -999,6 +1006,10 @@ export default {
       const date = this.getDateValue()
 
       this.$emit(eventName, date, format(date, this.format))
+
+      if (eventName === 'on-change' && !this.disableValidate) {
+        this.validateField()
+      }
     },
     getDateValue(type = 'start') {
       return new Date(

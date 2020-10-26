@@ -59,9 +59,9 @@ import Option from '../option'
 import Select from '../select'
 
 import { placementWhileList } from '../../src/mixins/popper'
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size, transfer } from '../../src/config/properties'
-import { isNull } from '../../src/utils/common'
+import { isNull, noop } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -72,9 +72,12 @@ export default {
     Option,
     Select
   },
-  mixins: [formControl],
+  // mixins: [formControl],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -150,6 +153,10 @@ export default {
       validator(value) {
         return placementWhileList.includes(value)
       }
+    },
+    disableValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -210,6 +217,10 @@ export default {
 
       this.changed = false
       this.$emit('on-change', this.currentValue)
+
+      if (!this.disableValidate) {
+        this.validateField()
+      }
     },
     handleToggle() {
       this.testOptionCanDrop()

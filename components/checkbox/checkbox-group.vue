@@ -5,16 +5,20 @@
 </template>
 
 <script>
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
+import { noop } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
 export default {
   name: 'CheckboxGroup',
-  mixins: [formControl],
+  // mixins: [formControl],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -43,6 +47,10 @@ export default {
     border: {
       type: Boolean,
       default: false
+    },
+    disableValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -51,7 +59,9 @@ export default {
       items: [],
       currentValue: this.value,
       labels: {},
-      valueMaps: {}
+      valueMaps: {},
+      isFormControl: true,
+      control: null
     }
   },
   computed: {
@@ -76,6 +86,14 @@ export default {
     },
     currentValue(value) {
       this.$emit('on-change', value)
+
+      if (this.control && typeof this.control.updatePartial === 'function') {
+        this.control.updatePartial(value)
+      }
+
+      if (!this.disableValidate) {
+        this.validateField()
+      }
     }
   },
   mounted() {

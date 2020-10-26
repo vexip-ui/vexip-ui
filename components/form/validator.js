@@ -94,7 +94,7 @@ export function validateRequirement(value) {
     isNull(value) ||
     value.toString().trim() === '' ||
     (Array.isArray(value) && !value.length) ||
-    !Object.keys(value).length
+    (getType(value) === 'object' && !Object.keys(value).length)
   )
 }
 

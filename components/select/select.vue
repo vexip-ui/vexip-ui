@@ -96,9 +96,9 @@ import Scroll from '../scroll'
 
 import { SELECTOR } from '../option/option'
 import { usePopper } from '../../src/mixins/popper'
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
-import { isNull } from '../../src/utils/common'
+import { noop, isNull } from '../../src/utils/common'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 
 import '../../icons/chevron-down'
@@ -114,9 +114,12 @@ export default {
     Option,
     Scroll
   },
-  mixins: [usePopper({ isDrop: true }), formControl],
+  mixins: [usePopper({ isDrop: true })],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   provide() {
     return { [SELECTOR]: this }
@@ -182,6 +185,10 @@ export default {
     maxListHeight: {
       type: Number,
       default: 300
+    },
+    disableValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -276,6 +283,10 @@ export default {
 
       if (oldValue !== value) {
         this.$emit('on-change', value, label)
+
+        if (!this.disableValidate) {
+          this.validateField()
+        }
       }
     },
     handleClick() {

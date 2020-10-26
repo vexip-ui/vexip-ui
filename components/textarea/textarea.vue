@@ -27,16 +27,19 @@
 </template>
 
 <script>
-import formControl from '../../src/mixins/form-control'
-import { throttle } from '../../src/utils/common'
+// import formControl from '../../src/mixins/form-control'
+import { noop, throttle } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
 export default {
   name: 'Textarea',
-  mixins: [formControl],
+  // mixins: [formControl],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     value: {
@@ -82,6 +85,10 @@ export default {
     maxLength: {
       type: Number,
       default: 0
+    },
+    disableValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -112,10 +119,6 @@ export default {
   },
   created() {
     this.handleThrottleeChange = throttle(this.handleChange)
-
-    this.$on('on-change', () => {
-      this.lastValue = this.currentValue
-    })
   },
   methods: {
     focus() {
@@ -150,6 +153,14 @@ export default {
         `on-${type === 'input' ? 'input' : 'change'}`,
         this.currentValue
       )
+
+      if (type === 'change') {
+        this.lastValue = this.currentValue
+
+        if (!this.disableValidate) {
+          this.validateField()
+        }
+      }
     },
     handleEnter(event) {
       this.$emit('on-enter', event)

@@ -23,8 +23,9 @@
 
 <script>
 import Radio from './radio'
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
+import { noop } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -33,9 +34,12 @@ export default {
   components: {
     Radio
   },
-  mixins: [formControl],
+  // mixins: [formControl],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -72,13 +76,18 @@ export default {
       default() {
         return []
       }
+    },
+    disableValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       prefix: `${prefix}-radio-group`,
       items: [],
-      currentValue: this.value
+      currentValue: this.value,
+      isFormControl: true
     }
   },
   computed: {
@@ -104,6 +113,10 @@ export default {
     currentValue(value) {
       this.updateItemValue(value)
       this.$emit('on-change', value)
+
+      if (!this.disableValidate) {
+        this.validateField()
+      }
     }
   },
   mounted() {

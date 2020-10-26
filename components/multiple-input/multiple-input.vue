@@ -71,9 +71,10 @@
 
 <script>
 import Icon from '../icon'
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
+import { noop } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -82,9 +83,12 @@ export default {
   components: {
     Icon
   },
-  mixins: [formControl],
+  // mixins: [formControl],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -189,6 +193,10 @@ export default {
       default() {
         return false
       }
+    },
+    disableValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -233,6 +241,10 @@ export default {
     },
     currentValue(value) {
       this.$emit('on-change', Array.from(value))
+
+      if (!this.disableValidate) {
+        this.validateField()
+      }
     },
     focused(value) {
       if (value) {

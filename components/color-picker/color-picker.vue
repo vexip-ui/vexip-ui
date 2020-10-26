@@ -112,10 +112,10 @@ import Icon from '../icon'
 import Input from '../input'
 
 import { usePopper } from '../../src/mixins/popper'
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
-import { multipleFixed } from '../../src/utils/common'
+import { noop, multipleFixed } from '../../src/utils/common'
 import {
   parseColorToRgb,
   rgbToHsv,
@@ -169,9 +169,12 @@ export default {
     Icon,
     Input
   },
-  mixins: [usePopper({ isDrop: true }), formControl],
+  mixins: [usePopper({ isDrop: true })],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -222,6 +225,10 @@ export default {
       default() {
         return Array.from(defaultShotcuts)
       }
+    },
+    disableValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -390,6 +397,10 @@ export default {
     },
     handleChange() {
       this.$emit('on-change', this.getForamttedColor())
+
+      if (!this.disableValidate) {
+        this.validateField()
+      }
     },
     handlePaletteChange({ s, v }) {
       this.currentValue.s = s

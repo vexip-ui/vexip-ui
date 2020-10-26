@@ -91,9 +91,9 @@
 <script>
 import Condition from '../basis/condition'
 import Icon from '../icon'
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
-import { throttle, isNull } from '../../src/utils/common'
+import { noop, throttle, isNull } from '../../src/utils/common'
 import '../../icons/caret-up'
 import '../../icons/caret-down'
 import '../../icons/regular/eye-slash'
@@ -107,9 +107,12 @@ export default {
     Condition,
     Icon
   },
-  mixins: [formControl],
+  // mixins: [formControl],
   model: {
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -227,6 +230,10 @@ export default {
       default: ''
     },
     password: {
+      type: Boolean,
+      default: false
+    },
+    disableValidate: {
       type: Boolean,
       default: false
     }
@@ -504,9 +511,13 @@ export default {
       this.$emit(`on-${type}`, value, this.currentValue)
 
       if (type === 'change') {
-        this.$nextTick(() => {
-          this.lastValue = this.currentValue
-        })
+        if (this.lastValue === this.currentValue) return
+
+        this.lastValue = this.currentValue
+
+        if (!this.disableValidate) {
+          this.validateField()
+        }
       }
     },
     setNumberValue(value, type) {

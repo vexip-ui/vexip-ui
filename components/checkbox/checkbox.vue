@@ -15,10 +15,11 @@
 </template>
 
 <script>
-import formControl from '../../src/mixins/form-control'
+// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
 import {
   isNull,
+  noop,
   findComponentUpward,
   removeArrayItem
 } from '../../src/utils/common'
@@ -29,10 +30,13 @@ const groupName = 'CheckboxGroup'
 
 export default {
   name: 'Checkbox',
-  mixins: [formControl],
+  // mixins: [formControl],
   model: {
     prop: 'checked',
     event: 'on-change'
+  },
+  inject: {
+    validateField: { default: () => noop }
   },
   props: {
     size,
@@ -73,6 +77,10 @@ export default {
       default: false
     },
     partial: {
+      type: Boolean,
+      default: false
+    },
+    disableValidate: {
       type: Boolean,
       default: false
     }
@@ -193,20 +201,24 @@ export default {
       if (emit) {
         this.$emit('on-change', checked)
       }
+
+      if (!this.groupInstance?.isFormControl && !this.disableValidate) {
+        this.validateField()
+      }
     },
     bindGroup(groupInstance) {
       if (groupInstance) {
         if (this.groupInstance) {
-          this.groupInstance.$off('on-change', this.updatePartial)
+          this.groupInstance.control = null
         }
 
         this.groupInstance = groupInstance
-        this.groupInstance.$on('on-change', this.updatePartial)
+        this.groupInstance.control = this
       }
     },
     unbindGroup() {
       if (this.groupInstance) {
-        this.groupInstance.$off('on-change', this.updatePartial)
+        this.groupInstance.control = null
         this.groupInstance = null
       }
     },
