@@ -24,6 +24,7 @@
 <script>
 import Radio from './radio'
 import formControl from '../../src/mixins/form-control'
+import { size } from '../../src/config/properties'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -37,6 +38,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     value: {
       type: [String, Number],
       default: null
@@ -45,12 +47,14 @@ export default {
       type: Boolean,
       default: false
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.radioGroup.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     disabled: {
       type: Boolean,
       default: false

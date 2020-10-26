@@ -23,6 +23,7 @@
 
 <script>
 import Icon from '../icon'
+import { size } from '../../src/config/properties'
 import '../../icons/spinner'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -36,6 +37,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     value: {
       type: Boolean,
       default: false
@@ -44,12 +46,14 @@ export default {
       type: Boolean,
       default: false
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.switcher.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     openColor: {
       type: String,
       default: ''

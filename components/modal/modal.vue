@@ -79,6 +79,7 @@
 import Button from '../button'
 import Icon from '../icon'
 import Masker from '../masker'
+import { transfer } from '../../src/config/properties'
 // import { CLICK_TYPE } from '../../src/utils/event'
 import { isPromise } from '../../src/utils/common'
 
@@ -110,6 +111,7 @@ export default {
     event: 'on-toggle'
   },
   props: {
+    transfer,
     active: {
       type: Boolean,
       default: false
@@ -160,6 +162,12 @@ export default {
       type: Boolean,
       default: false
     },
+    // transfer: {
+    //   type: [Boolean, String],
+    //   default() {
+    //     return config.modal.transfer ?? false
+    //   }
+    // },
     draggable: {
       type: Boolean,
       default: false
@@ -174,10 +182,6 @@ export default {
     },
     loading: {
       type: Boolean,
-      default: false
-    },
-    transfer: {
-      type: [Boolean, String],
       default: false
     }
   },

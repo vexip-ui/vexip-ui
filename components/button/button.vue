@@ -15,7 +15,16 @@
     >
       <div :class="[`${prefixCls}__icon`, `${prefixCls}__icon--loading`]">
         <slot name="loading">
-          <Icon pulse :name="loadingIcon"></Icon>
+          <Icon
+            v-if="loadingSpin"
+            spin
+            :name="loadingIcon"
+          ></Icon>
+          <Icon
+            v-else
+            pulse
+            :name="loadingIcon"
+          ></Icon>
         </slot>
       </div>
     </CollapseTransition>
@@ -29,6 +38,7 @@
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
+import { size } from '../../src/config/properties'
 import '../../icons/spinner'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -40,6 +50,7 @@ export default {
     Icon
   },
   props: {
+    size,
     type: {
       validator(value) {
         return [
@@ -79,16 +90,22 @@ export default {
       type: String,
       default: 'spinner'
     },
+    loadingSpin: {
+      type: Boolean,
+      default: false
+    },
     icon: {
       type: String,
       default: ''
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.button.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     textColor: {
       type: String,
       default: null

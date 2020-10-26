@@ -55,7 +55,9 @@
 <script>
 import Icon from '../icon'
 import Masker from '../masker'
+import { transfer } from '../../src/config/properties'
 import { isPromise } from '../../src/utils/common'
+
 import '../../icons/times'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -71,6 +73,7 @@ export default {
     event: 'on-toggle'
   },
   props: {
+    transfer,
     active: {
       type: Boolean,
       default: false
@@ -123,12 +126,14 @@ export default {
       type: Function,
       default: null
     },
+    // transfer: {
+    //   type: [Boolean, String],
+    //   default() {
+    //     return config.drawer.transfer ?? false
+    //   }
+    // },
     resizable: {
       type: Boolean,
-      default: false
-    },
-    transfer: {
-      type: [Boolean, String],
       default: false
     }
   },

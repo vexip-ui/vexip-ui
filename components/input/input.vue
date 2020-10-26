@@ -92,6 +92,7 @@
 import Condition from '../basis/condition'
 import Icon from '../icon'
 import formControl from '../../src/mixins/form-control'
+import { size } from '../../src/config/properties'
 import { throttle, isNull } from '../../src/utils/common'
 import '../../icons/caret-up'
 import '../../icons/caret-down'
@@ -111,6 +112,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     type: {
       default: 'text',
       validator(value) {
@@ -200,12 +202,14 @@ export default {
       type: [String, Object, Array],
       default: ''
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.input.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     debounce: {
       type: Boolean,
       default: false

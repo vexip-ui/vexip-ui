@@ -229,15 +229,9 @@ import Icon from '../icon'
 import MultipleInput from '../multiple-input'
 import TimeWheel from './time-wheel'
 
-import '../../icons/times-circle'
-import '../../icons/calendar-alt'
-import '../../icons/angle-right'
-import '../../icons/angle-left'
-import '../../icons/angle-double-right'
-import '../../icons/angle-double-left'
-
 import { placementWhileList, usePopper } from '../../src/mixins/popper'
 import formControl from '../../src/mixins/form-control'
+import { size } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import {
   format,
@@ -251,6 +245,13 @@ import {
   isLeepYear
 } from '../../src/utils/date'
 import { range } from '../../src/utils/common'
+
+import '../../icons/times-circle'
+import '../../icons/calendar-alt'
+import '../../icons/angle-right'
+import '../../icons/angle-left'
+import '../../icons/angle-double-right'
+import '../../icons/angle-double-left'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -290,6 +291,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     type: {
       default: 'date',
       validator(value) {
@@ -367,12 +369,14 @@ export default {
       type: Boolean,
       default: false
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.datePicker.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     state: {
       default: 'default',
       validator(value) {

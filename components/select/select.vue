@@ -97,6 +97,7 @@ import Scroll from '../scroll'
 import { SELECTOR } from '../option/option'
 import { usePopper } from '../../src/mixins/popper'
 import formControl from '../../src/mixins/form-control'
+import { size } from '../../src/config/properties'
 import { isNull } from '../../src/utils/common'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 
@@ -121,6 +122,7 @@ export default {
     return { [SELECTOR]: this }
   },
   props: {
+    size,
     visible: {
       type: Boolean,
       default: false
@@ -131,12 +133,14 @@ export default {
         return []
       }
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.select.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     state: {
       default: 'default',
       validator(value) {

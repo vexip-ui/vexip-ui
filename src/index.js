@@ -85,6 +85,8 @@ import * as Util from './utils/common'
 import * as ColorUtil from './utils/color'
 import * as DateUtil from './utils/date'
 
+import { config, defaults } from './config/defaults'
+
 import './style/index.scss'
 
 const components = {
@@ -180,6 +182,16 @@ const install = (Vue, options = {}) => {
   Vue.prototype.$confirm = Confirm
   Vue.prototype.$message = Message
   Vue.prototype.$notice = Notice
+
+  if (options.config) {
+    Object.keys(options.config).forEach(key => {
+      if (key in defaults) {
+        defaults[key] = options.config[key]
+      } else {
+        config[key] = options.config[key]
+      }
+    })
+  }
 }
 
 if (typeof window !== 'undefined' && window.Vue) {

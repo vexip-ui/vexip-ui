@@ -16,6 +16,7 @@
 
 <script>
 import formControl from '../../src/mixins/form-control'
+import { size } from '../../src/config/properties'
 import {
   isNull,
   findComponentUpward,
@@ -34,6 +35,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     checked: {
       type: Boolean,
       default: false
@@ -50,12 +52,14 @@ export default {
       type: [String, Array, Object],
       default: null
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.checkbox.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     disabled: {
       type: Boolean,
       default: false

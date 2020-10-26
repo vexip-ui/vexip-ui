@@ -72,6 +72,7 @@
 <script>
 import Icon from '../icon'
 import formControl from '../../src/mixins/form-control'
+import { size } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -86,6 +87,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     value: {
       type: Array,
       default() {
@@ -106,12 +108,14 @@ export default {
       type: Boolean,
       default: false
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.multipleInput.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     state: {
       default: 'default',
       validator(value) {

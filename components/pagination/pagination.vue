@@ -147,6 +147,8 @@ import Icon from '../icon'
 import NumberInput from '../number-input'
 import Option from '../option'
 import Select from '../select'
+
+import { size } from '../../src/config/properties'
 import { range } from '../../src/utils/common'
 
 import '../../icons/chevron-right'
@@ -170,6 +172,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     total: {
       type: Number,
       default: 0,
@@ -177,12 +180,14 @@ export default {
         return value >= 0
       }
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.pagination.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     noBorder: {
       type: Boolean,
       default: false

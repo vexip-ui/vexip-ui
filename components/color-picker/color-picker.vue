@@ -110,10 +110,10 @@ import ColorHue from './color-hue'
 import ColorPalette from './color-palette'
 import Icon from '../icon'
 import Input from '../input'
-import '../../icons/chevron-down'
 
 import { usePopper } from '../../src/mixins/popper'
 import formControl from '../../src/mixins/form-control'
+import { size } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import { multipleFixed } from '../../src/utils/common'
 import {
@@ -124,6 +124,8 @@ import {
   hsvToHsl,
   rgbaToHex
 } from '../../src/utils/color'
+
+import '../../icons/chevron-down'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -172,6 +174,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     value: {
       type: [String, Object],
       default: '#339af0'
@@ -186,12 +189,14 @@ export default {
         return ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
       }
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.colorPicker.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     alpha: {
       type: Boolean,
       default: false

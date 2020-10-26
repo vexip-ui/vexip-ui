@@ -1,3 +1,4 @@
+import { transfer } from '../../src/config/properties'
 import { isNull } from './../utils/common'
 
 const homes = new Map()
@@ -17,12 +18,7 @@ function isTransfer(transfer) {
 }
 
 export default {
-  props: {
-    transfer: {
-      type: [Boolean, String],
-      default: false
-    }
-  },
+  props: { transfer },
   mounted() {
     this._initTransferDom()
   },
@@ -41,15 +37,17 @@ export default {
     // transfer 没有变化，无需更新
     if (transfer === prop) return
 
+    Object.assign(homes.get(el), { prop: transfer })
+
     if (!hasMoveOut && isTransfer(transfer)) {
       parentNode.replaceChild(home, el)
       getTarget(transfer).appendChild(el)
 
-      homes.set(el, Object.assign({}, homes.get(el), { hasMoveOut: true }))
+      Object.assign(homes.get(el), { hasMoveOut: true })
     } else if (hasMoveOut && !isTransfer(transfer)) {
       parentNode.replaceChild(el, home)
 
-      homes.set(el, Object.assign({}, homes.get(el), { hasMoveOut: false }))
+      Object.assign(homes.get(el), { hasMoveOut: false })
     } else if (isTransfer(transfer)) {
       getTarget(transfer).appendChild(el)
     }

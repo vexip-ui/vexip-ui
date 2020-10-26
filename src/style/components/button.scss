@@ -407,11 +407,6 @@
     .#{$prefix}-icon {
       transform: scale(0.7);
     }
-
-    &--loading {
-      // stylelint-disable-next-line declaration-property-value-blacklist
-      transition: all $vxp-transition-base;
-    }
   }
 
   &--icon-only {

@@ -16,6 +16,7 @@
 
 <script>
 import formControl from '../../src/mixins/form-control'
+import { size } from '../../src/config/properties'
 import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -29,6 +30,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     value: {
       type: [String, Number],
       default: null
@@ -41,12 +43,14 @@ export default {
       type: [String, Array, Object],
       default: null
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.radio.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     disabled: {
       type: Boolean,
       default: false

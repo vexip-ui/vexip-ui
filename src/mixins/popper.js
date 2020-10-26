@@ -1,4 +1,5 @@
 import { createPopper } from '@popperjs/core'
+import { transfer } from '../../src/config/properties'
 
 export const placementWhileList = [
   'auto',
@@ -23,15 +24,12 @@ export function usePopper(params = {}) {
 
   return {
     props: {
+      transfer,
       placement: {
         default: 'bottom',
         validator(value) {
           return placementWhileList.includes(value)
         }
-      },
-      transfer: {
-        type: [Boolean, String],
-        default: false
       }
     },
     data() {

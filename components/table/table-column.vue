@@ -4,6 +4,7 @@
 
 <script>
 import { TYPE_COLUMNS } from './store'
+import { config } from '../../src/config/defaults'
 import { removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -69,7 +70,9 @@ const columnProps = {
     default: 0
   },
   checkboxSize: {
-    default: 'default',
+    default() {
+      return config.checkbox.size ?? 'default'
+    },
     validator(value) {
       return ['small', 'default', 'large'].includes(value)
     }

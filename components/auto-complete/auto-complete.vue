@@ -60,6 +60,7 @@ import Select from '../select'
 
 import { placementWhileList } from '../../src/mixins/popper'
 import formControl from '../../src/mixins/form-control'
+import { size, transfer } from '../../src/config/properties'
 import { isNull } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -76,6 +77,8 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
+    transfer,
     value: {
       type: [String, Number],
       default: ''
@@ -116,12 +119,14 @@ export default {
       type: String,
       default: null
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.autoComplete.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     disabled: {
       type: Boolean,
       default: false
@@ -134,10 +139,12 @@ export default {
       type: Boolean,
       default: true
     },
-    transfer: {
-      type: Boolean,
-      default: false
-    },
+    // transfer: {
+    //   type: Boolean,
+    //   default() {
+    //     return config.autoComplete.transfer ?? false
+    //   }
+    // },
     placement: {
       default: 'bottom',
       validator(value) {

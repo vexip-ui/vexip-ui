@@ -102,13 +102,14 @@ import Icon from '../icon'
 import MultipleInput from '../multiple-input'
 import TimeWheel from './time-wheel'
 
-import '../../icons/times-circle'
-import '../../icons/regular/clock'
-
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import { placementWhileList, usePopper } from '../../src/mixins/popper'
 import formControl from '../../src/mixins/form-control'
+import { size } from '../../src/config/properties'
 import { format, toDate } from '../../src/utils/date'
+
+import '../../icons/times-circle'
+import '../../icons/regular/clock'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -125,6 +126,7 @@ export default {
     event: 'on-change'
   },
   props: {
+    size,
     // type: {
     //   default: 'dropdown',
     //   validator (value) {
@@ -202,12 +204,14 @@ export default {
       type: Boolean,
       default: false
     },
-    size: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
+    // size: {
+    //   default() {
+    //     return config.timePicker.size ?? 'default'
+    //   },
+    //   validator(value) {
+    //     return ['small', 'default', 'large'].includes(value)
+    //   }
+    // },
     state: {
       default: 'default',
       validator(value) {
