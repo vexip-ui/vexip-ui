@@ -102,12 +102,15 @@ const FAIL = 'fail'
 const SUCCESS = 'success'
 const DELETE = 'delete'
 
+const statusList = [PENDING, UPLOADING, FAIL, SUCCESS, DELETE]
+
 export default {
   name: 'Upload',
   components: {
     Button,
     Icon
   },
+  status: Object.freeze({ PENDING, UPLOADING, FAIL, SUCCESS, DELETE }),
   props: {
     url: {
       type: String,
@@ -357,7 +360,41 @@ export default {
     deleteFile(file) {
       file.status = DELETE
 
+      const files = this.files.filter(item => item.status !== DELETE)
+      const dataTransfer = new DataTransfer()
+
+      files.forEach(item => {
+        dataTransfer.items.add(item.source)
+      })
+
+      this.$refs.input.files = dataTransfer.files
+
       this.$emit('on-delete', file.source)
+    },
+    // 根据源文件删除
+    delete(originFile) {
+      const file = this.files.find(file => file.source === originFile)
+
+      if (file && file.status !== DELETE) {
+        this.deleteFile(file)
+      }
+    },
+    // 根据源文件修改进度
+    progress(originFile, percent) {
+      const file = this.files.find(file => file.source === originFile)
+
+      if (file && file.status === UPLOADING) {
+        file.percentage = percent
+      }
+    },
+    setStatus(originFile, status) {
+      if (!statusList.includes(status)) return
+
+      const file = this.files.find(file => file.source === originFile)
+
+      if (file) {
+        file.status = status
+      }
     },
     handleProgress(percent, file) {
       file.percentage = percent
