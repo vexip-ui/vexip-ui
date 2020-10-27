@@ -126,31 +126,54 @@ const getters = {
     let total = 0
 
     while (i--) {
-      total += data[i].height || 0
+      const { height, expandHeight } = data[i]
+
+      total += (height || 0) + (expandHeight || 0)
     }
 
     return total
   },
-  disabledRows(state) {
+  disableCheckRows(state) {
     const { columns, data } = state
-    const selection = columns.find(item => item.key === 'selection')
-    const disabledRows = {}
+    const selection = columns.find(item => item.type === TYPE_SELECTION)
+    const disableCheckRows = {}
 
     if (selection && typeof selection.disableRow === 'function') {
-      const disabled = selection.disableRow
+      const isDisabled = selection.disableRow
 
       for (let i = 0, len = data.length; i < len; i++) {
         const row = data[i]
 
-        if (disabled(row.data)) {
+        if (isDisabled(row.data)) {
           const key = row.key
 
-          disabledRows[key] = true
+          disableCheckRows[key] = true
         }
       }
     }
 
-    return disabledRows
+    return disableCheckRows
+  },
+  disableExpandRows(state) {
+    const { columns, data } = state
+    const expand = columns.find(item => item.type === TYPE_EXPAND)
+    const disableExpandRows = {}
+
+    if (expand && typeof expand.disableRow === 'function') {
+      const isDisabled = expand.disableRow
+
+      for (let i = 0, len = data.length; i < len; i++) {
+        const row = data[i]
+
+        if (isDisabled(row.data)) {
+          const key = row.key
+
+          disableExpandRows[key] = true
+        }
+      }
+    }
+
+    return disableExpandRows
   }
 }
 
@@ -162,6 +185,7 @@ const mutations = {
   setTableWidth,
   setColumnWidth,
   setRowHeight,
+  setRowExpandHeight,
   setBodyScroll,
   setDataKey,
   setHighlight,
@@ -213,9 +237,9 @@ const mutations = {
 const actions = {
   handleCheck({ state, getters }, key, checked) {
     const { dataMap } = state
-    const { disabledRows } = getters
+    const { disableCheckRows } = getters
 
-    if (dataMap[key] && !disabledRows[key]) {
+    if (dataMap[key] && !disableCheckRows[key]) {
       Vue.set(dataMap[key], 'checked', !!checked)
     }
 
@@ -223,18 +247,18 @@ const actions = {
   },
   handleCheckAll({ state, getters }) {
     const { data, checkedAll } = state
-    const { disabledRows } = getters
+    const { disableCheckRows } = getters
 
     let checked = !checkedAll
 
     // 阻断 disabled 元素对全选的影响
-    if (Object.keys(disabledRows).length) {
+    if (Object.keys(disableCheckRows).length) {
       let partialCheckedAll = true
 
       for (let i = 0, len = data.length; i < len; i++) {
         const row = data[i]
 
-        if (!disabledRows[row.key] && !row.checked) {
+        if (!disableCheckRows[row.key] && !row.checked) {
           partialCheckedAll = false
 
           break
@@ -247,7 +271,7 @@ const actions = {
     for (let i = 0, len = data.length; i < len; i++) {
       const row = data[i]
 
-      if (!disabledRows[row.key]) {
+      if (!disableCheckRows[row.key]) {
         Vue.set(row, 'checked', checked)
       }
     }
@@ -274,6 +298,14 @@ const actions = {
       state.hiddenHeight = start * processedData[0].height
       state.startRow = start
       state.endRow = end
+    }
+  },
+  handleExpand({ state, getters }, key, expanded) {
+    const { dataMap } = state
+    const { disableExpandRows } = getters
+
+    if (dataMap[key] && !disableExpandRows[key]) {
+      Vue.set(dataMap[key], 'expanded', !!expanded)
     }
   }
 }
@@ -307,6 +339,8 @@ function setColumns(state, columns) {
             column.orderLabel = defaultIndexLabel
           }
 
+          if (isNull(column.width)) column.width = 60
+
           break
         }
         case TYPE_SELECTION: {
@@ -315,6 +349,17 @@ function setColumns(state, columns) {
           if (typeof column.disableRow !== 'function') {
             column.disableRow = () => false
           }
+
+          if (isNull(column.width)) column.width = 40
+
+          break
+        }
+        case TYPE_EXPAND: {
+          if (typeof column.disableRow !== 'function') {
+            column.disableRow = () => false
+          }
+
+          if (isNull(column.width)) column.width = 40
 
           break
         }
@@ -384,13 +429,15 @@ function setData(state, data) {
     if (oldDataMap[key]) {
       row = oldDataMap[key]
     } else {
-      const { checked, height } = item
+      const { _checked, _height, _expanded } = item
 
       row = {
         key,
-        checked,
-        height,
         hidden,
+        checked: _checked,
+        height: _height,
+        expanded: _expanded,
+        expandHeight: 0,
         data: item
       }
 
@@ -465,6 +512,12 @@ function setColumnWidth(state, key, width) {
 function setRowHeight(state, key, height) {
   if (state.dataMap[key]) {
     state.dataMap[key].height = height
+  }
+}
+
+function setRowExpandHeight(state, key, height) {
+  if (state.dataMap[key]) {
+    state.dataMap[key].expandHeight = height
   }
 }
 

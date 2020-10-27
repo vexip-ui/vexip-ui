@@ -5,11 +5,23 @@
       :class="`${prefix}__selection`"
       :checked="row.checked"
       :size="column.checkboxSize || 'default'"
-      :disabled="disabledRows[row.key]"
+      :disabled="disableCheckRows[row.key]"
       @click.native.prevent.stop="handleCheckRow(row)"
     ></checkbox>
-    <template v-else-if="column.type === TYPE_ORDER">
+    <span v-else-if="column.type === TYPE_ORDER" :class="`${prefix}__order`">
       {{ column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
+    </span>
+    <template v-else-if="column.type === TYPE_EXPAND">
+      <div
+        v-if="!disableExpandRows[row.key]"
+        :class="{
+          [`${prefix}__expand`]: true,
+          [`${prefix}__expand--active`]: row.expanded
+        }"
+        @click.stop="handleExpandRow(row)"
+      >
+        <Icon name="angle-right"></Icon>
+      </div>
     </template>
     <TableSlot
       v-else-if="column.slot"
@@ -43,15 +55,20 @@
 
 <script>
 import Checkbox from '../checkbox'
+import Icon from '../icon'
 import Render from '../basis/render'
 import TableSlot from './table-slot'
 import {
   TYPE_ORDER,
   TYPE_SELECTION,
+  TYPE_EXPAND,
+  TYPE_COLUMNS,
   mapState,
   mapGetters,
   mapActions
 } from './store'
+
+import '../../icons/angle-right'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -59,6 +76,7 @@ export default {
   name: 'TableCell',
   components: {
     Checkbox,
+    Icon,
     Render,
     TableSlot
   },
@@ -89,12 +107,13 @@ export default {
     return {
       prefix: `${prefix}-table`,
       TYPE_ORDER,
-      TYPE_SELECTION
+      TYPE_SELECTION,
+      TYPE_EXPAND
     }
   },
   computed: {
     ...mapState(['widths']),
-    ...mapGetters(['disabledRows']),
+    ...mapGetters(['disableCheckRows', 'disableExpandRows']),
     className() {
       const { prefix, column } = this
       const customClass = column.className || null
@@ -102,7 +121,7 @@ export default {
       return [
         `${prefix}__cell`,
         {
-          [`${prefix}__cell--center`]: column.type === 'selection'
+          [`${prefix}__cell--center`]: TYPE_COLUMNS.includes(column.type)
         },
         customClass
       ]
@@ -116,25 +135,33 @@ export default {
         width: `${column.width ?? width}px`,
         maxWidth: `${column.width}px`
       }
-    },
-    disabled() {
-      const { row, column } = this
-      const { key, disabled } = column
-
-      return key === 'selection' ? !!disabled(row.data) : false
     }
+    // disabled() {
+    //   const { row, column } = this
+    //   const { key, disabled } = column
+
+    //   return key === 'selection' ? !!disabled(row.data) : false
+    // }
   },
   methods: {
-    ...mapActions(['handleCheck']),
+    ...mapActions(['handleCheck', 'handleExpand']),
     isFunction(value) {
       return typeof value === 'function'
     },
     handleCheckRow(row) {
-      if (!this.disabledRows[row.key]) {
+      if (!this.disableCheckRows[row.key]) {
         const checked = !row.checked
 
         this.handleCheck(row.key, checked)
         this.table.emitRowCheck(row.data, checked, row.key, row.index)
+      }
+    },
+    handleExpandRow(row) {
+      if (!this.disableExpandRows[row.key]) {
+        const expanded = !row.expanded
+
+        this.handleExpand(row.key, expanded)
+        this.table.emitRowExpand(row.data, expanded, row.key, row.index)
       }
     }
   }

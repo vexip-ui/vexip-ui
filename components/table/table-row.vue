@@ -11,23 +11,47 @@
     @dragend.stop="handleDragEnd"
     @drop.stop="handleDrop"
   >
-    <div :class="className">
+    <div ref="row" :class="className">
       <slot></slot>
     </div>
-    <div :class="`${prefix}__collapse`">
-      <slot name="collapse"></slot>
-    </div>
+    <CollapseTransition
+      v-if="!!expandColumn"
+      @after-enter="computeRowHeight"
+      @after-leave="computeRowHeight"
+    >
+      <div
+        v-if="row.expanded"
+        ref="expand"
+        :class="`${prefix}__collapse`"
+      >
+        <Render
+          v-if="isFunction(expandColumn.renderer)"
+          :renderer="expandColumn.renderer"
+          :data="{ row: row.data, rowIndex: index }"
+        ></Render>
+        <Render
+          v-else-if="isFunction(table.expandRenderer)"
+          :renderer="table.expandRenderer"
+          :data="{ row: row.data, rowIndex: index }"
+        ></Render>
+      </div>
+    </CollapseTransition>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from './store'
+import CollapseTransition from '../collapse/collapse-transition'
+import Render from '../basis/render'
+import { TYPE_EXPAND, mapState, mapMutations } from './store'
 
 const { prefix } = require('../../src/style/basis/variable')
 
 export default {
   name: 'TableRow',
-  components: {},
+  components: {
+    CollapseTransition,
+    Render
+  },
   inject: ['table'],
   props: {
     row: {
@@ -55,7 +79,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['rowClass', 'highlight', 'stripe']),
+    ...mapState(['columns', 'rowClass', 'highlight', 'stripe']),
     className() {
       const { prefix, rowClass, row, index, isHead, highlight } = this
 
@@ -79,6 +103,9 @@ export default {
     },
     draggable() {
       return !this.isHead && this.table.rowDraggable
+    },
+    expandColumn() {
+      return this.columns.find(column => column.type === TYPE_EXPAND)
     }
   },
   watch: {
@@ -97,7 +124,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setRowHeight', 'setRowHover']),
+    ...mapMutations(['setRowHeight', 'setRowExpandHeight', 'setRowHover']),
+    isFunction(value) {
+      return typeof value === 'function'
+    },
     handleClick() {
       if (!this.isHead && this.table) {
         const { data, key, index } = this.row
@@ -110,22 +140,24 @@ export default {
         this.$nextTick(() => {
           this.setRowHeight(this.row.key, this.table.rowHeight)
 
-          if (this.$el?.style) {
-            this.$el.style.maxHeight = `${this.table.rowHeight}px`
+          if (this.$refs.row?.style) {
+            this.$refs.row.style.maxHeight = `${this.table.rowHeight}px`
           }
         })
       } else {
         this.$nextTick(() => {
           if (!this.isFixed) {
-            if (this.$el?.getBoundingClientRect) {
-              const height = this.$el.getBoundingClientRect().height
+            if (this.$refs.row?.getBoundingClientRect) {
+              this.setRowHeight(this.row.key, this.$refs.row.getBoundingClientRect().height)
 
-              this.setRowHeight(this.row.key, height)
+              if (this.$refs.expand) {
+                this.setRowExpandHeight(this.row.key, this.$refs.expand.getBoundingClientRect().height)
+              }
             }
           } else {
             setTimeout(() => {
-              if (this.$el?.style) {
-                this.$el.style.height = `${this.row.height}px`
+              if (this.$refs.row?.style) {
+                this.$refs.row.style.height = `${this.row.height}px`
               }
             }, 0)
           }

@@ -120,7 +120,7 @@ import CheckboxGroup from '../checkbox/checkbox-group'
 import Icon from '../icon'
 import Render from '../basis/render'
 import Tooltip from '../tooltip'
-import { mapState, mapMutations, mapActions } from './store'
+import { TYPE_COLUMNS, mapState, mapMutations, mapActions } from './store'
 
 import '../../icons/caret-up'
 import '../../icons/caret-down'
@@ -164,7 +164,7 @@ export default {
       return [
         `${prefix}__head-cell`,
         {
-          [`${prefix}__head-cell--center`]: column.type === 'selection'
+          [`${prefix}__head-cell--center`]: TYPE_COLUMNS.includes(column.type)
         },
         customClass
       ]

@@ -104,6 +104,21 @@
     margin: 0;
   }
 
+  &__expand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4em;
+    height: 1.4em;
+    color: $vxp-color-content-secondary;
+    cursor: pointer;
+    transition: $vxp-transition-transform-base;
+
+    &--active {
+      transform: rotate(90deg);
+    }
+  }
+
   &__sorter {
     display: inline-flex;
     flex-direction: column;

@@ -69,7 +69,7 @@ export default {
       return this.table.store.state.columns
     },
     style() {
-      const { currentColumns, widths, totalRowHeight, hiddenHeight } = this
+      const { currentColumns, widths, hiddenHeight } = this
 
       let width = 0
 
@@ -83,7 +83,7 @@ export default {
 
       return {
         minWidth: `${width}px`,
-        minHeight: `${totalRowHeight}px`,
+        // minHeight: `${totalRowHeight}px`,
         paddingTop: `${hiddenHeight}px`
       }
     }

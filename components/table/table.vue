@@ -75,7 +75,7 @@
       </Scroll>
     </div>
     <Scrollbar
-      v-if="useYBar"
+      v-if="useYBar && bodyScrollHeight"
       placement="right"
       :class="`${prefix}__bar--vertical`"
       :scroll="yScrollPercent"
@@ -191,6 +191,10 @@ export default {
       default() {
         return {}
       }
+    },
+    expandRenderer: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -204,7 +208,8 @@ export default {
       headHeight: 0,
       templateColumns: [],
       indicatorShow: false,
-      store: null
+      store: null,
+      scrollTimer: null
     }
   },
   computed: {
@@ -261,7 +266,7 @@ export default {
         return bodyHeight
       }
 
-      return bodyHeight ? Math.min(bodyHeight, totalRowHeight) : totalRowHeight
+      return bodyHeight ? Math.min(bodyHeight, totalRowHeight) : bodyHeight
     },
     barLength() {
       const { bodyScrollHeight, totalRowHeight } = this
@@ -270,7 +275,7 @@ export default {
         return Math.max(
           Math.min((bodyScrollHeight / totalRowHeight) * 100, 99),
           5
-        )
+        ) || 35
       }
 
       return 35
@@ -437,6 +442,9 @@ export default {
     emitAllRowCheck(checked) {
       this.$emit('on-row-check-all', checked)
     },
+    emitRowExpand(data, expanded, key, index) {
+      this.$emit('on-row-expand', data, expanded, key, index)
+    },
     handleRowDragStart(rowInstance) {
       this.dragState = {
         draggingRow: rowInstance.row,
@@ -546,7 +554,9 @@ export default {
       })
     },
     refreshPercentScroll() {
-      setTimeout(() => {
+      clearTimeout(this.scrollTimer)
+
+      this.scrollTimer = setTimeout(() => {
         const { bodyScroll, totalRowHeight, bodyScrollHeight } = this
 
         this.yScrollPercent =

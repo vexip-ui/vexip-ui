@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { TYPE_COLUMNS } from './store'
+import { TYPE_EXPAND, TYPE_COLUMNS } from './store'
 import { config } from '../../src/config/defaults'
 import { removeArrayItem } from '../../src/utils/common'
 
@@ -116,7 +116,7 @@ export default {
       })
     }
 
-    if (!this.type) {
+    if (!this.type || this.type === TYPE_EXPAND) {
       this.config.renderer = (h, data) => {
         if (this.$scopedSlots.default) {
           return this.$scopedSlots.default(data)
