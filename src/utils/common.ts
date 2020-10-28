@@ -709,7 +709,7 @@ export function animateScrollTo(
   callback: unknown
 ): void {
   const distance = to - from
-  const step = Math.ceil((distance / duration) * 60)
+  const step = Math.ceil((distance / duration) * 16)
 
   let current = from
 

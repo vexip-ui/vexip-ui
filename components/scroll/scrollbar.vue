@@ -169,7 +169,9 @@ export default {
         this.wrapperElement = document.querySelector(wrapper)
       } else if (wrapper instanceof Node) {
         this.wrapperElement = wrapper
-      } else {
+      }
+
+      if (!this.wrapperElement) {
         if (this.$parent) {
           this.wrapperElement = this.$parent.$el
         } else {
@@ -196,6 +198,8 @@ export default {
         this.handleWrapperMouseMove
       )
     }
+
+    this.wrapperElement = null
   },
   methods: {
     handleMouseDown(event) {

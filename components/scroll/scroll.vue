@@ -52,6 +52,7 @@ const { prefix } = require('../../src/style/basis/variable')
 
 const HORIZONTAL = 'horizontal'
 const VERTICAL = 'vertical'
+const BOTH = 'both'
 
 // const downEvent = USE_TOUCH ? 'touchstart' : 'mousedown'
 const moveEvent = USE_TOUCH ? 'touchmove' : 'mousemove'
@@ -70,7 +71,7 @@ export default {
     mode: {
       default: VERTICAL,
       validator(value) {
-        return [HORIZONTAL, VERTICAL, 'both'].includes(value)
+        return [HORIZONTAL, VERTICAL, BOTH].includes(value)
       }
     },
     width: {
@@ -120,6 +121,14 @@ export default {
     barClass: {
       type: [String, Array, Object],
       default: null
+    },
+    autoplay: {
+      type: [Boolean, Number],
+      default: false
+    },
+    playWaiting: {
+      type: Number,
+      default: 500
     }
   },
   emits: ['on-x-enable-change', 'on-y-enable-change', 'on-wheel', 'on-scroll'],
@@ -131,6 +140,7 @@ export default {
       bufferTimer: null,
       isReady: false,
       duration: null,
+      canPlay: false,
 
       // 当前滚动位置
       currentXScroll: -this.scrollX,
@@ -247,6 +257,14 @@ export default {
       }
 
       return 35
+    },
+    canAutoplay() {
+      return this.mode !== BOTH &&
+        (this.autoplay === true || this.autoplay > 1000) &&
+        (
+          (this.mode === HORIZONTAL && this.enableXScroll) ||
+          (this.mode === VERTICAL && this.enableYScroll)
+        )
     }
   },
   watch: {
@@ -271,6 +289,14 @@ export default {
     },
     enableYScroll(value) {
       this.$emit('on-y-enable-change', value)
+    },
+    autoplay() {
+      this.stopAutoplay()
+      this.$nextTick(this.startAutoplay)
+    },
+    playWaiting() {
+      this.stopAutoplay()
+      this.$nextTick(this.startAutoplay)
     }
   },
   created() {
@@ -278,11 +304,6 @@ export default {
   },
   mounted() {
     this.refresh()
-
-    setTimeout(() => {
-      this.isReady = true
-      this.verifyScroll()
-    }, 10)
 
     window.addEventListener('resize', this.handleResize)
   },
@@ -357,7 +378,7 @@ export default {
         setTimeout(() => {
           this.isReady = true
           this.verifyScroll()
-        }, 0)
+        }, 1)
       }, 0)
     },
     handleMouseDown(event) {
@@ -427,6 +448,7 @@ export default {
       this.verifyScroll()
       this.handleBuffer()
       this.emitScrollEvent()
+      this.startAutoplay()
     },
     handleWheel(event) {
       const { mode, enableXScroll, enableYScroll, deltaX, deltaY, wheel } = this
@@ -446,7 +468,7 @@ export default {
 
       let scrollType
 
-      if (mode === 'both') {
+      if (mode === BOTH) {
         const { currentYScroll, yScrollLimit } = this
 
         // 纵向优先
@@ -483,8 +505,11 @@ export default {
         percentX: this.percentX,
         percentY: this.percentY
       })
+
+      this.startAutoplay()
     },
     prepareScroll() {
+      this.stopAutoplay()
       clearTimeout(this.bufferTimer)
     },
     verifyScroll() {
@@ -540,16 +565,17 @@ export default {
       this.percentX = percent
       this.currentXScroll = (percent * this.xScrollLimit) / 100
 
-      this.emitScrollEvent()
+      this.emitScrollEvent(HORIZONTAL)
     },
     handleYBarScroll(percent) {
       this.percentY = percent
       this.currentYScroll = (percent * this.yScrollLimit) / 100
 
-      this.emitScrollEvent()
+      this.emitScrollEvent(VERTICAL)
     },
-    emitScrollEvent() {
+    emitScrollEvent(type) {
       this.$emit('on-scroll', {
+        type,
         clientX: -this.currentXScroll,
         clientY: -this.currentYScroll,
         percentX: this.percentX,
@@ -581,6 +607,7 @@ export default {
       }
     },
     refresh() {
+      this.stopAutoplay()
       this.computeContentSize()
       this.refreshWrapper()
 
@@ -591,6 +618,7 @@ export default {
 
       setTimeout(() => {
         this.verifyScroll()
+        this.startAutoplay()
       }, 10)
     },
     scrollTo(clientX, clientY, time) {
@@ -641,6 +669,61 @@ export default {
     },
     getYScrollLimit() {
       return [0, -this.yScrollLimit]
+    },
+    startAutoplay() {
+      if (!this.canAutoplay) return
+
+      this.stopAutoplay()
+
+      const { mode, autoplay, xScrollLimit, yScrollLimit } = this
+      const distance = mode === HORIZONTAL ? 'wrapperWidth' : 'wrapperHeight'
+      const limit = mode === HORIZONTAL ? xScrollLimit : yScrollLimit
+      const prop = mode === HORIZONTAL ? 'currentXScroll' : 'currentYScroll'
+      const waiting = this.playWaiting < 20 ? 20 : this.playWaiting
+
+      let playSpeed = 0.5
+
+      if (typeof autoplay === 'number') {
+        playSpeed = this[distance] / autoplay * 16
+      }
+
+      const scroll = () => {
+        this[prop] -= playSpeed
+
+        if (this[prop] <= limit) {
+          this[prop] = limit
+          this.canPlay = false
+
+          this.computePercent()
+
+          this.endTimer = setTimeout(() => {
+            this.scrollTo(0, 0, 500)
+
+            this.startTimer = setTimeout(() => {
+              this.canPlay = true
+              scroll()
+            }, 500 + waiting)
+          }, waiting)
+        } else {
+          this.computePercent()
+
+          if (this.canPlay) {
+            requestAnimationFrame(scroll)
+          }
+        }
+      }
+
+      this.playTimer = setTimeout(() => {
+        this.canPlay = true
+        scroll()
+      }, waiting)
+    },
+    stopAutoplay() {
+      this.canPlay = false
+
+      clearTimeout(this.playTimer)
+      clearTimeout(this.startTimer)
+      clearTimeout(this.endTimer)
     }
   }
 }

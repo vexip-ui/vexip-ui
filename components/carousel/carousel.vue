@@ -121,10 +121,10 @@ export default {
       }
     },
     autoplay: {
-      type: Number,
-      default: 0,
+      type: [Boolean, Number],
+      default: false,
       validator(value) {
-        return !value || value > 300
+        return typeof value === 'number' ? value > 500 : true
       }
     },
     pointer: {
@@ -489,15 +489,21 @@ export default {
     setAutoplay() {
       clearInterval(this.timer)
 
-      if (this.autoplay) {
-        this.timer = setInterval(() => {
-          if (!this.loop && this.disabledNext) {
-            this.handleWheel(-this.currentItem)
-          } else {
-            this.handleNext()
-          }
-        }, this.autoplay)
+      if (!this.autoplay) return
+
+      let waiting = 4000
+
+      if (typeof this.autoplay === 'number') {
+        waiting = this.autoplay
       }
+
+      this.timer = setInterval(() => {
+        if (!this.loop && this.disabledNext) {
+          this.handleWheel(-this.currentItem)
+        } else {
+          this.handleNext()
+        }
+      }, waiting)
     },
     handleMouseEnter() {
       if (this.autoplay) {
