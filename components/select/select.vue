@@ -4,12 +4,7 @@
     @click="handleClick"
     @clickoutside="handleClickOutside"
   >
-    <div
-      ref="reference"
-      :class="`${prefixCls}__trigger`"
-      @mouseenter="toggleHoverState(true)"
-      @mouseleave="toggleHoverState(false)"
-    >
+    <div ref="reference" :class="`${prefixCls}__trigger`">
       <slot name="control">
         <VxpInput
           :readonly="true"
@@ -19,8 +14,10 @@
           :size="size"
           :state="state"
           :disabled="disabled"
+          :clearable="clearable"
           @on-focus="handleFocus"
           @on-blur="handleBlur"
+          @on-clear="handleClear"
         >
           <slot
             v-if="hasPrefix"
@@ -31,13 +28,6 @@
           </slot>
           <template slot="suffix">
             <Icon
-              v-if="clearable && hasValue && isHover"
-              name="times-circle"
-              :class="`${prefixCls}__clear`"
-              @click.native.stop="handleClear"
-            ></Icon>
-            <Icon
-              v-else
               name="chevron-down"
               :class="`${prefixCls}__arrow`"
               :scale="0.8"
@@ -53,7 +43,7 @@
         :class="`${prefixCls}__popper`"
         @click.stop
       >
-        <ul
+        <div
           :class="`${prefixCls}__list`"
           :style="{
             height: listHeight,
@@ -65,24 +55,18 @@
             use-y-bar
             height="100%"
           >
-            <slot>
-              <template v-for="(item, index) in options">
+            <ul ref="options" :class="`${prefixCls}__options`">
+              <slot>
                 <Option
-                  v-if="isObject(item)"
+                  v-for="(item, index) in rawOptions"
                   :key="index"
                   :label="item.label || item.value"
                   :value="item.value"
                 ></Option>
-                <Option
-                  v-else
-                  :key="index"
-                  :label="item"
-                  :value="item"
-                ></Option>
-              </template>
-            </slot>
+              </slot>
+            </ul>
           </Scroll>
-        </ul>
+        </div>
       </div>
     </transition>
   </div>
@@ -96,9 +80,8 @@ import Scroll from '../scroll'
 
 import { SELECTOR } from '../option/option'
 import { usePopper } from '../../src/mixins/popper'
-// import formControl from '../../src/mixins/form-control'
 import { size } from '../../src/config/properties'
-import { noop, isNull } from '../../src/utils/common'
+import { noop, isNull, debounce } from '../../src/utils/common'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 
 import '../../icons/chevron-down'
@@ -136,14 +119,6 @@ export default {
         return []
       }
     },
-    // size: {
-    //   default() {
-    //     return config.select.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
     state: {
       default: 'default',
       validator(value) {
@@ -199,7 +174,6 @@ export default {
       focused: false,
       currentLabel: null,
       currentValue: this.value,
-      isHover: false,
       listHeight: null
     }
   },
@@ -217,8 +191,18 @@ export default {
     hasPrefix() {
       return this.$slots.prefix || this.prefix
     },
-    hasValue() {
-      return !(isNull(this.currentValue) || this.currentValue === '')
+    rawOptions() {
+      return this.options.map(item => {
+        if (typeof item === 'string') {
+          item = { value: item }
+        }
+
+        if (!item.label) {
+          item.label = item.value
+        }
+
+        return item
+      })
     }
   },
   watch: {
@@ -239,16 +223,24 @@ export default {
     observe(this.$el, CLICK_OUTSIDE)
 
     this.$nextTick(() => {
+      this.mutationObserver = new MutationObserver(
+        debounce(() => {
+          this.computeListHeight()
+        })
+      )
+
       this.createPopper()
+      this.mutationObserver.observe(this.$refs.options, { childList: true })
     })
   },
   beforeDestroy() {
     disconnect(this.$el, CLICK_OUTSIDE)
+
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect()
+    }
   },
   methods: {
-    isObject(value) {
-      return typeof value === 'object'
-    },
     computeListHeight() {
       this.$nextTick(() => {
         const scrollWrapper = this.$refs.scroll?.$refs.wrapper
@@ -319,9 +311,9 @@ export default {
 
       this.currentLabel = item?.truthLabel ?? ''
     },
-    toggleHoverState(hover = !this.isHover) {
-      this.isHover = hover
-    },
+    // toggleHoverState(hover = !this.isHover) {
+    //   this.isHover = hover
+    // },
     handleClear() {
       if (this.clearable) {
         const cleared = isNull(this.currentValue) || this.currentValue === ''

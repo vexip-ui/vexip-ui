@@ -20,7 +20,7 @@
     >
       <Input
         slot="control"
-        v-model="currentValue"
+        :value="inputValue"
         :prefix="prefix"
         :prefix-color="prefixColor"
         :suffix="suffix"
@@ -29,26 +29,21 @@
         :disabled="disabled"
         :size="size"
         :state="state"
+        :clearable="clearable"
         @click.native="handleInputClick"
         @on-input="handleInput"
         @on-blur="handleChange"
+        @on-enter="handleEnter"
+        @on-clear="handleClear"
       ></Input>
     </slot>
     <slot>
-      <template v-for="(item, index) in filteredOptions">
-        <Option
-          v-if="isObject(item)"
-          :key="index"
-          :label="item.label || item.value"
-          :value="item.value"
-        ></Option>
-        <Option
-          v-else
-          :key="index"
-          :label="item"
-          :value="item"
-        ></Option>
-      </template>
+      <Option
+        v-for="(item, index) in filteredOptions"
+        :key="index"
+        :label="item.label || item.value"
+        :value="item.value"
+      ></Option>
     </slot>
   </Select>
 </template>
@@ -99,8 +94,8 @@ export default {
       }
     },
     filter: {
-      type: Function,
-      default: null
+      type: [Boolean, Function],
+      default: false
     },
     prefix: {
       type: String,
@@ -157,6 +152,10 @@ export default {
     disableValidate: {
       type: Boolean,
       default: false
+    },
+    clearable: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -164,32 +163,61 @@ export default {
       prefixCls: `${prefix}-auto-complete`,
       currentValue: this.value,
       changed: false,
-      hasUsedSelect: false
+      hasUsedSelect: false,
+      lastValue: this.value
     }
   },
   computed: {
-    filteredOptions() {
-      const { options, filter, currentValue } = this
+    rawOptions() {
+      return this.options.map(item => {
+        if (typeof item === 'string') {
+          item = { value: item }
+        }
 
-      if (typeof filter === 'function') {
-        return options.filter(item => filter(item, currentValue))
+        if (!item.label) {
+          item.label = item.value
+        }
+
+        item.value = item.value.toString()
+
+        return item
+      })
+    },
+    filteredOptions() {
+      const { rawOptions, filter, currentValue } = this
+
+      if (filter === true) {
+        return rawOptions.filter(({ value }) => value && value.toString().includes(currentValue))
+      } else if (typeof filter === 'function') {
+        return rawOptions.filter(item => filter(item, currentValue))
       }
 
-      return options || []
+      return rawOptions || []
+    },
+    inputValue() {
+      if (this.$refs.select) {
+        if (this.$refs.select.currentVisible) {
+          return this.currentValue
+        }
+
+        const currentOption = this.rawOptions.find(({ value }) => value === this.currentValue)
+
+        return currentOption ? currentOption.label : this.currentValue
+      }
+
+      return this.currentValue
     }
   },
   watch: {
     value(value) {
       this.currentValue = value
+      this.lastValue = value
     }
   },
   updated() {
     this.testOptionCanDrop()
   },
   methods: {
-    isObject(value) {
-      return typeof value === 'object'
-    },
     handleSelect(value) {
       if (isNull(value)) {
         return
@@ -209,13 +237,15 @@ export default {
     handleInput(value) {
       this.hasUsedSelect = false
       this.$refs.select.handleToggelVisible(this.canDrop)
+      this.currentValue = value
       this.changed = true
       this.$emit('on-input', value)
     },
     handleChange() {
-      if (!this.changed) return
+      if (!this.changed || this.currentValue === this.lastValue) return
 
       this.changed = false
+      this.lastValue = this.currentValue
       this.$emit('on-change', this.currentValue)
 
       if (!this.disableValidate) {
@@ -237,6 +267,21 @@ export default {
     handleInputClick(event) {
       if (!this.canDrop) {
         event.stopPropagation()
+      }
+    },
+    handleEnter() {
+      if (this.filteredOptions.length) {
+        this.handleSelect(this.filteredOptions[0].value)
+      }
+
+      this.$emit('on-enter', this.currentValue)
+    },
+    handleClear() {
+      if (this.clearable) {
+        this.currentValue = ''
+        this.$refs.select.handleToggelVisible(false)
+
+        this.$emit('on-clear')
       }
     }
   }

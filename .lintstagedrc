@@ -7,7 +7,6 @@
     "yarn run lint:style"
   ],
   "src/**/*.vue": [
-    "yarn run lint:style",
     "prettier --write",
     "yarn run lint"
   ]

@@ -6,7 +6,12 @@
           {{ before }}
         </slot>
       </div>
-      <div slot="input" :class="className">
+      <div
+        slot="input"
+        :class="className"
+        @mouseenter="toggleHoverState(true)"
+        @mouseleave="toggleHoverState(false)"
+      >
         <input
           ref="input"
           :class="[`${prefixCls}__control`, inputClass]"
@@ -54,23 +59,35 @@
             <Icon :name="prefix"></Icon>
           </slot>
         </div>
-        <div
-          v-if="hasSuffix"
-          :class="`${prefixCls}__icon--suffix`"
-          :style="{ color: suffixColor }"
-          @click="handleSuffixClick"
-        >
-          <slot name="suffix">
-            <Icon :name="suffix"></Icon>
-          </slot>
-        </div>
-        <div
-          v-else-if="type === 'password' && password"
-          :class="`${prefixCls}__icon--password`"
-          @click="toggleShowPassword"
-        >
-          <Icon :name="passwordIcon"></Icon>
-        </div>
+        <transition :name="transitionName">
+          <div
+            v-if="clearable && hasValue && isHover"
+            key="clear"
+            :class="`${prefixCls}__clear`"
+            @click.stop="handleClear"
+          >
+            <Icon name="times-circle"></Icon>
+          </div>
+          <div
+            v-else-if="hasSuffix"
+            key="suffix"
+            :class="`${prefixCls}__icon--suffix`"
+            :style="{ color: suffixColor }"
+            @click="handleSuffixClick"
+          >
+            <slot name="suffix">
+              <Icon :name="suffix"></Icon>
+            </slot>
+          </div>
+          <div
+            v-else-if="type === 'password' && password"
+            key="password"
+            :class="`${prefixCls}__icon--password`"
+            @click="toggleShowPassword"
+          >
+            <Icon :name="passwordIcon"></Icon>
+          </div>
+        </transition>
         <div
           v-if="maxLength"
           :class="`${prefixCls}__count`"
@@ -236,6 +253,10 @@ export default {
     disableValidate: {
       type: Boolean,
       default: false
+    },
+    clearable: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -248,7 +269,9 @@ export default {
       showPassword: false,
       lastValue: this.value,
       inputting: false,
-      currentLength: this.value ? this.value.length : 0
+      currentLength: this.value ? this.value.length : 0,
+      isHover: false,
+      transitionName: `${prefix}-fade`
     }
   },
   computed: {
@@ -353,6 +376,9 @@ export default {
       }
 
       return {}
+    },
+    hasValue() {
+      return !(isNull(this.currentValue) || this.currentValue === '')
     }
   },
   watch: {
@@ -539,8 +565,8 @@ export default {
       this.showPassword = !this.showPassword
       this.$refs.input.focus()
     },
-    handleEnter(event) {
-      this.$emit('on-enter', event)
+    handleEnter() {
+      this.$emit('on-enter', this.currentValue)
     },
     handlePrefixClick(event) {
       this.$emit('on-prefix-click', event)
@@ -556,6 +582,22 @@ export default {
     },
     handleKeyUp(event) {
       this.$emit('on-key-up', event)
+    },
+    toggleHoverState(hover = !this.isHover) {
+      this.isHover = hover
+    },
+    handleClear() {
+      if (this.clearable) {
+        const cleared = isNull(this.currentValue) || this.currentValue === ''
+
+        this.currentValue = ''
+        this.currentLabel = ''
+        this.$emit('on-clear')
+
+        if (!cleared) {
+          this.$emit('on-change', '', '')
+        }
+      }
     }
   }
 }

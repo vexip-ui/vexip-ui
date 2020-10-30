@@ -242,6 +242,13 @@
     }
   }
 
+  &__clear {
+    @extend %icon, %number-suffix;
+
+    right: 0;
+    cursor: pointer;
+  }
+
   &__count {
     position: absolute;
     top: 50%;

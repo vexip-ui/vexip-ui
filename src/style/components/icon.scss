@@ -34,7 +34,9 @@
 }
 
 .#{$prefix}-icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   overflow: visible;
   // font-size: 0.8em;
   fill: currentColor;

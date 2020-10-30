@@ -72,8 +72,13 @@ export default {
       isRaw: true
     }
   },
-  computed: {},
   watch: {
+    active(value) {
+      this.currentActive = value
+    },
+    currentActive(value) {
+      this.handleChangeLink(value)
+    },
     viewer() {
       this.updateContainer()
     }
