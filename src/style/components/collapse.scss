@@ -42,6 +42,10 @@
           border-radius: $vxp-border-radius-base $vxp-border-radius-base 0 0;
         }
       }
+
+      &--ghost {
+        border: 0;
+      }
     }
   }
 
@@ -129,6 +133,13 @@
     padding: 0.2em 0 1.6em;
   }
 
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.3em;
+  }
+
   &__pane--disabled &__content {
     color: $vxp-color-content-disabled;
   }
@@ -169,6 +180,11 @@
     #{$content} {
       border-radius: 0 0 $vxp-border-radius-base $vxp-border-radius-base;
     }
+  }
+
+  &--ghost,
+  &--ghost &__pane {
+    border: 0;
   }
 
   &--card &__content {

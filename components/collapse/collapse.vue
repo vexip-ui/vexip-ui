@@ -33,8 +33,13 @@ export default {
       validator(value) {
         return ['right', 'left', 'none'].includes(value)
       }
+    },
+    ghost: {
+      type: Boolean,
+      default: false
     }
   },
+  emits: ['on-change'],
   data() {
     const { expanded, accordion } = this
 
@@ -57,12 +62,13 @@ export default {
   },
   computed: {
     className() {
-      const { prefix, card, arrowType } = this
+      const { prefix, card, ghost, arrowType } = this
 
       return [
         prefix,
         {
-          [`${prefix}--card`]: card
+          [`${prefix}--card`]: card,
+          [`${prefix}--ghost`]: !card && ghost
         },
         `${prefix}--arrow-${arrowType}`
       ]

@@ -190,6 +190,7 @@ export default {
     'on-ok',
     'on-cancel',
     'on-close',
+    'on-show',
     'on-hide',
     'on-drag-start',
     'on-drag-move',

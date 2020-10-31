@@ -140,6 +140,7 @@ export default {
   emits: [
     'on-toggle',
     'on-close',
+    'on-show',
     'on-hide',
     'on-resize-start',
     'on-resize-move',

@@ -5,6 +5,9 @@
         <Icon name="chevron-right" :scale="0.8"></Icon>
       </div>
       <slot name="title">
+        <div v-if="icon" :class="`${prefix}__icon`">
+          <Icon :name="icon"></Icon>
+        </div>
         {{ title }}
       </slot>
     </div>
@@ -63,8 +66,17 @@ export default {
       validator(value) {
         return ['right', 'left', 'none'].includes(value)
       }
+    },
+    icon: {
+      type: String,
+      default: ''
+    },
+    ghost: {
+      type: Boolean,
+      default: false
     }
   },
+  emits: ['on-toggle'],
   data() {
     return {
       prefix: `${prefix}-collapse`,
@@ -75,13 +87,14 @@ export default {
   },
   computed: {
     className() {
-      const { prefix, useCard, useArrowType, currentExpanded, disabled } = this
+      const { prefix, useCard, useGhost, useArrowType, currentExpanded, disabled } = this
 
       return [
         `${prefix}__pane`,
         `${prefix}__pane--arrow-${useArrowType}`,
         {
           [`${prefix}__pane--card`]: useCard,
+          [`${prefix}__pane--ghost`]: !useCard && useGhost,
           [`${prefix}__pane--expanded`]: currentExpanded,
           [`${prefix}__pane--disabled`]: disabled
         }
@@ -90,6 +103,13 @@ export default {
     useCard() {
       if (!this.parentInstance) {
         return this.card
+      }
+
+      return false
+    },
+    useGhost() {
+      if (!this.parentInstance) {
+        return this.ghost
       }
 
       return false
