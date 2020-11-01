@@ -43,40 +43,54 @@
         </div>
       </slot>
     </div>
-    <ul v-if="!hiddenFiles && uploadFiles.length" :class="`${prefix}__files`">
+    <ul v-if="!hiddenFiles && renderFiles.length" :class="`${prefix}__files`">
       <li
-        v-for="(item, index) in uploadFiles"
+        v-for="(item, index) in renderFiles"
         :key="index"
         :class="`${prefix}__file`"
       >
-        <div :class="`${prefix}__label`">
-          <div
-            v-if="!hiddenIcon"
-            :class="[`${prefix}__icon`, `${prefix}__file-icon`]"
-          >
-            <Icon :name="getFileIcon(item)"></Icon>
+        <slot
+          name="item"
+          :file="item.source"
+          :status="item.status"
+          :percentage="item.percentage"
+        >
+          <div :class="`${prefix}__label`">
+            <div
+              v-if="!hiddenIcon"
+              :class="[`${prefix}__icon`, `${prefix}__file-icon`]"
+            >
+              <slot name="icon" :file="item.source">
+                <Render
+                  v-if="useIconRenderer"
+                  :renderer="iconRenderer"
+                  :data="item.source"
+                ></Render>
+                <Icon v-else :name="getFileIcon(item)"></Icon>
+              </slot>
+            </div>
+            {{ item.name }}
           </div>
-          {{ item.name }}
-        </div>
-        <div
-          v-if="item.status === status.UPLOADING"
-          :class="`${prefix}__progress`"
-        >
-          {{ `${item.percentage}%` }}
-        </div>
-        <div
-          v-else-if="item.status === status.SUCCESS"
-          :class="[`${prefix}__icon`, `${prefix}__success`]"
-        >
-          <Icon name="check-circle" :scale="0.8"></Icon>
-        </div>
-        <div
-          v-else
-          :class="[`${prefix}__icon`, `${prefix}__close`]"
-          @click="deleteFile(item)"
-        >
-          <Icon name="times" :scale="0.8"></Icon>
-        </div>
+          <div
+            v-if="item.status === status.UPLOADING"
+            :class="`${prefix}__progress`"
+          >
+            {{ `${item.percentage}%` }}
+          </div>
+          <div
+            v-else-if="item.status === status.SUCCESS"
+            :class="[`${prefix}__icon`, `${prefix}__success`]"
+          >
+            <Icon name="check-circle" :scale="0.8"></Icon>
+          </div>
+          <div
+            v-else
+            :class="[`${prefix}__icon`, `${prefix}__close`]"
+            @click="deleteFile(item)"
+          >
+            <Icon name="times" :scale="0.8"></Icon>
+          </div>
+        </slot>
       </li>
     </ul>
   </div>
@@ -85,9 +99,11 @@
 <script>
 import Button from '../button'
 import Icon from '../icon'
+import Render from '../basis/render'
+
 import { iconMaps } from './file-icon'
 import { upload } from './request'
-import { getRandomString } from '../../src/utils/common'
+import { getRandomString, isPromise } from '../../src/utils/common'
 
 import '../../icons/check-circle'
 import '../../icons/cloud-upload-alt'
@@ -108,7 +124,8 @@ export default {
   name: 'Upload',
   components: {
     Button,
-    Icon
+    Icon,
+    Render
   },
   status: Object.freeze({ PENDING, UPLOADING, FAIL, SUCCESS, DELETE }),
   props: {
@@ -159,9 +176,9 @@ export default {
       type: Boolean,
       default: false
     },
-    autoUpload: {
+    manual: {
       type: Boolean,
-      default: true
+      default: false
     },
     hiddenFiles: {
       type: Boolean,
@@ -178,6 +195,14 @@ export default {
     allowDrag: {
       type: Boolean,
       default: false
+    },
+    beforeUpload: {
+      type: Function,
+      default: null
+    },
+    iconRenderer: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -209,13 +234,11 @@ export default {
 
       return accept && (typeof accept === 'string' ? accept : accept.join())
     },
-    bindBeforeUpload() {
-      return !!(
-        this._events['before-upload'] && this._events['before-upload'].length
-      )
-    },
-    uploadFiles() {
+    renderFiles() {
       return this.files.filter(item => item.status !== DELETE)
+    },
+    useIconRenderer() {
+      return typeof this.iconRenderer === 'function'
     }
   },
   methods: {
@@ -260,10 +283,10 @@ export default {
 
       this.$emit(
         'on-change',
-        this.multiple ? sourceFiles : sourceFiles[0] || null
+        sourceFiles
       )
 
-      if (this.autoUpload) {
+      if (!this.manual) {
         this.execute()
       }
     },
@@ -297,52 +320,77 @@ export default {
         return false
       }
 
-      const { url, files, field, data, headers, withCredentials } = this
+      const { files } = this
       const uploadFiles = files.filter(
         item => item.status !== SUCCESS && item.status !== DELETE
       )
+      const requests = []
 
       for (const file of uploadFiles) {
-        file.status = UPLOADING
-
-        upload({
-          url,
-          headers,
-          withCredentials,
-          data,
-          file,
-          field,
-          onProgress: percent => {
-            this.handleProgress(percent, file)
-          },
-          onSuccess: response => {
-            this.handleSuccess(response, file)
-          },
-          onError: error => {
-            this.handleError(error, file)
-          }
-        })
+        requests.push(this.uploadFile(file))
       }
+
+      return Promise.all(requests)
+    },
+    async uploadFile(file) {
+      const { url, files, field, data, headers, withCredentials, beforeUpload } = this
+
+      if (typeof beforeUpload === 'function') {
+        let result = beforeUpload(
+          file,
+          files.filter(
+            item => item.status !== SUCCESS && item.status !== DELETE
+          )
+        )
+
+        if (isPromise(result)) {
+          result = await result
+        }
+
+        if (result === false) return
+      }
+
+      file.status = UPLOADING
+
+      return await upload({
+        url,
+        headers,
+        withCredentials,
+        data,
+        file,
+        field,
+        onProgress: percent => {
+          this.handleProgress(percent, file)
+        },
+        onSuccess: response => {
+          this.handleSuccess(response, file)
+        },
+        onError: error => {
+          this.handleError(error, file)
+        }
+      })
     },
     clear() {
       this.files = []
       this.$refs.input.value = null
 
-      this.$emit('on-change', this.multiple ? [] : null)
+      this.$emit('on-change', [])
     },
     verifyFiles() {
       const { files, maxSize } = this
-      const limitSize = maxSize * 1024
+      const limitSize = maxSize ? maxSize * 1024 : Infinity
 
       let filter = this.filter
 
-      filter = typeof filter === 'string' ? [filter] : filter
+      filter = typeof filter === 'string'
+        ? (filter ? [filter] : [])
+        : filter.filter(item => item)
 
       for (let i = 0, len = files.length; i < len; i++) {
         const file = files[i]
         const extension = this.getFileExtension(file)
 
-        if (!filter.includes(extension)) {
+        if (filter.length && !filter.includes(extension)) {
           this.$emit('on-filter-error', file.source)
 
           return false

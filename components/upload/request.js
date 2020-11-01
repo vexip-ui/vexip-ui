@@ -28,62 +28,73 @@ function getBody(xhr) {
 
 export function upload(options = {}) {
   if (typeof XMLHttpRequest === 'undefined') {
-    return
+    return Promise.resolve(null)
   }
 
-  const xhr = new XMLHttpRequest()
-  const url = options.url
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    const url = options.url
 
-  if (xhr.upload) {
-    xhr.upload.onprogress = event => {
-      let percent = 0
+    if (xhr.upload) {
+      xhr.upload.onprogress = event => {
+        let percent = 0
 
-      if (event.total > 0) {
-        percent = (event.loaded / event.total) * 100
+        if (event.total > 0) {
+          percent = (event.loaded / event.total) * 100
+        }
+
+        options.onProgress(percent)
+      }
+    }
+
+    const formData = new FormData()
+
+    if (options.data) {
+      Object.keys(options.data).forEach(key => {
+        formData.append(key, options.data[key])
+      })
+    }
+
+    formData.append(options.field, options.file)
+
+    xhr.onerror = event => {
+      options.onError(event)
+      reject(event)
+    }
+
+    xhr.onload = () => {
+      if (xhr.status < 200 || xhr.status >= 300) {
+        const error = getError(url, xhr)
+
+        options.onError(error)
+        reject(error)
+
+        return
       }
 
-      options.onProgress(percent)
-    }
-  }
+      const body = getBody(xhr)
 
-  const formData = new FormData()
-
-  if (options.data) {
-    Object.keys(options.data).forEach(key => {
-      formData.append(key, options.data[key])
-    })
-  }
-
-  formData.append(options.field, options.file)
-
-  xhr.onerror = event => {
-    options.onError(event)
-  }
-
-  xhr.onload = () => {
-    if (xhr.status < 200 || xhr.status >= 300) {
-      return options.onError(getError(url, xhr))
+      options.onSuccess(body)
+      resolve(body)
     }
 
-    options.onSuccess(getBody(xhr))
-  }
+    xhr.open('POST', url, true)
 
-  xhr.open('POST', url, true)
-
-  if (options.withCredentials && 'withCredentials' in xhr) {
-    xhr.withCredentials = true
-  }
-
-  const headers = options.headers || {}
-
-  for (const item in headers) {
-    if (
-      Object.prototype.hasOwnProperty.call(headers, item) &&
-      !isNull(headers[item])
-    ) {
-      xhr.setRequestHeader(item, headers[item])
+    if (options.withCredentials && 'withCredentials' in xhr) {
+      xhr.withCredentials = true
     }
-  }
 
-  xhr.send(formData)
+    const headers = options.headers || {}
+
+    for (const item in headers) {
+      if (
+        Object.prototype.hasOwnProperty.call(headers, item) &&
+        !isNull(headers[item])
+      ) {
+        xhr.setRequestHeader(item, headers[item])
+      }
+    }
+
+    xhr.send(formData)
+  })
 }
