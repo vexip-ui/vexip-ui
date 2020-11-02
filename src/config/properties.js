@@ -20,3 +20,13 @@ export const transfer = {
     return getOrElse(config[toCamelCase(this.$options.name)].transfer, false)
   }
 }
+
+export const zIndex = {
+  type: Number,
+  default() {
+    return getOrElse(config[toCamelCase(this.$options.name)].zIndex, 2000)
+  },
+  validator(value) {
+    return value > 0
+  }
+}

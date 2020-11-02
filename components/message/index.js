@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Message from './message'
+import { isNull } from '../../src/utils/common'
 
 const conveniences = {
   info: {
@@ -90,9 +91,11 @@ class MessageManager {
   }
 
   close(key) {
-    const message = this._getInstance()
-
-    return message.clear(key)
+    if (isNull(key)) {
+      this.clearAll()
+    } else {
+      this._getInstance().clear(key)
+    }
   }
 
   info(options) {
@@ -111,24 +114,12 @@ class MessageManager {
     return this._open('error', options)
   }
 
-  config({ placement }) {
-    if (!placementWhiteList.includes(placement)) {
-      return false
-    }
-
+  config({ placement, ...others }) {
     const message = this._getInstance()
 
-    message.placement = placement
-
-    return true
+    message.placement = placementWhiteList.includes(placement) ? placement : placementWhiteList[0]
+    this.defaults = { ...this.defaults, ...others }
   }
-
-  // destroy () {
-  //   const message = this._getInstance()
-
-  //   message.$destroy()
-  //   this._instance = null
-  // }
 
   clone() {
     return new MessageManager()

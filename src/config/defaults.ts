@@ -2,7 +2,8 @@ import { getType } from '../utils/common'
 
 export const defaults = {
   size: 'default',
-  transfer: false
+  transfer: false,
+  zIndex: 2000
 }
 
 export const config = new Proxy(

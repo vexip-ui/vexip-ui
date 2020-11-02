@@ -17,9 +17,19 @@
             [`${prefix}__item--${item.type}`]: effectiveTypes.includes(
               item.type
             ),
+            [`${prefix}__item--background`]: item.background,
+            [`${prefix}__item--color`]: item.background && item.color,
+            [`${prefix}__item--color-only`]: !item.background && item.color,
             [`${prefix}__item--marker`]: item.marker
           },
           item.className
+        ]"
+        :style="[
+          {
+            color: typeof item.color === 'string' ? item.color : null,
+            backgroundColor: typeof item.background === 'string' ? item.background : null
+          },
+          item.style
         ]"
       >
         <div
@@ -27,7 +37,12 @@
           :class="`${prefix}__icon`"
           :style="{ color: item.iconColor }"
         >
-          <Icon :name="item.icon"></Icon>
+          <Render
+            v-if="typeof item.icon === 'function'"
+            :renderer="item.icon"
+          ></Render>
+          <Icon v-else-if="typeof item.icon === 'object'" v-bind="item.icon"></Icon>
+          <Icon v-else :name="item.icon"></Icon>
         </div>
         <Render
           v-if="typeof item.renderer === 'function'"

@@ -77,7 +77,6 @@
       }
 
       &--background#{&}--#{$type} {
-        color: mix($vxp-color-black, $color, 20%);
         background-color: mix($vxp-color-white, $color, 85%);
         border-color: mix($vxp-color-white, $color, 40%);
         box-shadow: unset;
@@ -85,6 +84,10 @@
         #{$close} {
           @include color-close($color);
         }
+      }
+
+      &--background#{&}--color#{&}--#{$type} {
+        color: mix($vxp-color-black, $color, 20%);
       }
 
       &--#{$type} {

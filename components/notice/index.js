@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Notice from './notice'
+import { isNull } from '../../src/utils/common'
 
 const conveniences = {
   info: {
@@ -96,9 +97,11 @@ class NoticeManager {
   }
 
   close(key) {
-    const notice = this._getInstance()
-
-    return notice.clear(key)
+    if (isNull(key)) {
+      this.clearAll()
+    } else {
+      this._getInstance().clear(key)
+    }
   }
 
   info(options) {
@@ -117,24 +120,12 @@ class NoticeManager {
     return this._open('error', options)
   }
 
-  config({ placement }) {
-    if (!placementWhiteList.includes(placement)) {
-      return false
-    }
-
+  config({ placement, ...others }) {
     const notice = this._getInstance()
 
-    notice.placement = placement
-
-    return true
+    notice.placement = placementWhiteList.includes(placement) ? placement : placementWhiteList[0]
+    this.defaults = { ...this.defaults, ...others }
   }
-
-  // destroy () {
-  //   const notice = this._getInstance()
-
-  //   notice.$destroy()
-  //   this._instance = null
-  // }
 
   clone() {
     return new NoticeManager()

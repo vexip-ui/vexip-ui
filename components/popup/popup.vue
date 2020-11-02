@@ -18,10 +18,11 @@
 
 <script>
 import PopupItem from './popup-item'
+import { zIndex } from '../../src/config/properties'
 
 const { prefix } = require('../../src/style/basis/variable')
 
-let zIndex = 2000
+let globalIndex = 0
 
 export default {
   name: 'Popup',
@@ -29,6 +30,7 @@ export default {
     PopupItem
   },
   props: {
+    zIndex,
     transitionName: {
       type: String,
       default: `${prefix}-popup-top`
@@ -196,7 +198,7 @@ export default {
       this.items = []
     },
     getIndex() {
-      return zIndex++
+      return this.zIndex + (globalIndex++)
     },
     has(key) {
       return !~this.items.findIndex(item => item.key === key)
