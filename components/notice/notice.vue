@@ -11,7 +11,7 @@
         :class="[
           {
             [`${prefix}__item`]: true,
-            [`${prefix}__item--title-only`]: !item.content,
+            [`${prefix}__item--title-only`]: !item.content && !item.renderer,
             [`${prefix}__item--has-icon`]: item.icon,
             [`${prefix}__item--content-only`]: !item.title,
             [`${prefix}__item--${item.type}`]: effectiveTypes.includes(
@@ -41,8 +41,16 @@
             v-if="typeof item.icon === 'function'"
             :renderer="item.icon"
           ></Render>
-          <Icon v-else-if="typeof item.icon === 'object'" v-bind="item.icon"></Icon>
-          <Icon v-else :name="item.icon"></Icon>
+          <Icon
+            v-else-if="item.icon && typeof item.icon === 'object'"
+            v-bind="item.icon"
+            :style="[{ color: item.iconColor }, item.icon.style]"
+          ></Icon>
+          <Icon
+            v-else
+            :name="item.icon"
+            :style="{ color: item.iconColor }"
+          ></Icon>
         </div>
         <Render
           v-if="typeof item.renderer === 'function'"
@@ -52,12 +60,21 @@
           <div
             v-if="item.title"
             :class="`${prefix}__title`"
+            :style="{
+              color: typeof item.titleColor === 'string' ? item.titleColor : (typeof item.color === 'string' ? item.color : null),
+            }"
             v-html="item.title"
           ></div>
           <div :class="`${prefix}__content`" v-html="item.content"></div>
         </template>
         <template v-else>
-          <div v-if="item.title" :class="`${prefix}__title`">
+          <div
+            v-if="item.title"
+            :class="`${prefix}__title`"
+            :style="{
+              color: typeof item.titleColor === 'string' ? item.titleColor : (typeof item.color === 'string' ? item.color : null),
+            }"
+          >
             {{ item.title }}
           </div>
           <div :class="`${prefix}__content`">

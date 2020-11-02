@@ -40,8 +40,16 @@
               v-if="typeof item.icon === 'function'"
               :renderer="item.icon"
             ></Render>
-            <Icon v-else-if="typeof item.icon === 'object'" v-bind="item.icon"></Icon>
-            <Icon v-else :name="item.icon"></Icon>
+            <Icon
+              v-else-if="item.icon && typeof item.icon === 'object'"
+              v-bind="item.icon"
+              :style="[{ color: item.iconColor }, item.icon.style]"
+            ></Icon>
+            <Icon
+              v-else
+              :name="item.icon"
+              :style="{ color: item.iconColor }"
+            ></Icon>
           </div>
           <Render
             v-if="typeof item.renderer === 'function'"

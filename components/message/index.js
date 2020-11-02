@@ -44,10 +44,8 @@ class MessageManager {
     return this._instance
   }
 
-  _open(type, options) {
-    if (typeof options === 'string') {
-      options = { content: options }
-    }
+  _open(type, content, _duration) {
+    const options = typeof content === 'string' ? { content, duration: _duration } : content
 
     const key = options.key || getKey()
     const message = this._getInstance()
@@ -86,8 +84,8 @@ class MessageManager {
     }
   }
 
-  open(options) {
-    return this._open('', options)
+  open(content, duration) {
+    return this._open('', content, duration)
   }
 
   close(key) {
@@ -98,20 +96,20 @@ class MessageManager {
     }
   }
 
-  info(options) {
-    return this._open('info', options)
+  info(content, duration) {
+    return this._open('info', content, duration)
   }
 
-  success(options) {
-    return this._open('success', options)
+  success(content, duration) {
+    return this._open('success', content, duration)
   }
 
-  warning(options) {
-    return this._open('warning', options)
+  warning(content, duration) {
+    return this._open('warning', content, duration)
   }
 
-  error(options) {
-    return this._open('error', options)
+  error(content, duration) {
+    return this._open('error', content, duration)
   }
 
   config({ placement, ...others }) {

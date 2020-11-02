@@ -50,9 +50,19 @@ class NoticeManager {
     return this._instance
   }
 
-  _open(type, options) {
-    if (typeof options === 'string') {
-      options = { content: options }
+  _open(type, title, content, _duration) {
+    let options
+
+    if (typeof title === 'object') {
+      options = title
+    } else {
+      if (typeof content === 'number') {
+        options = { title, duration: content }
+      } else if (!content) {
+        options = { title, duration: _duration }
+      } else {
+        options = { title, content, duration: _duration }
+      }
     }
 
     const key = options.key || getKey()
@@ -92,8 +102,8 @@ class NoticeManager {
     }
   }
 
-  open(options) {
-    return this._open('', options)
+  open(title, content, duration) {
+    return this._open('', title, content, duration)
   }
 
   close(key) {
@@ -104,20 +114,20 @@ class NoticeManager {
     }
   }
 
-  info(options) {
-    return this._open('info', options)
+  info(title, content, duration) {
+    return this._open('info', title, content, duration)
   }
 
-  success(options) {
-    return this._open('success', options)
+  success(title, content, duration) {
+    return this._open('success', title, content, duration)
   }
 
-  warning(options) {
-    return this._open('warning', options)
+  warning(title, content, duration) {
+    return this._open('warning', title, content, duration)
   }
 
-  error(options) {
-    return this._open('error', options)
+  error(title, content, duration) {
+    return this._open('error', title, content, duration)
   }
 
   config({ placement, ...others }) {
