@@ -4,7 +4,7 @@
   @include basis;
 
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
 
   &--multiple,
@@ -73,6 +73,10 @@
   &--drag &__files {
     margin-top: 0.5em;
     margin-left: 0;
+  }
+
+  &--thumbnail &__files {
+    display: inline-flex;
   }
 
   &__file {

@@ -439,7 +439,7 @@ export default {
       }
 
       this.computePercent()
-      this.emitScrollEvent()
+      this.emitScrollEvent('mouse')
     },
     handlePointerUp() {
       document.removeEventListener(moveEvent, this.handlePointerMove)
@@ -447,7 +447,7 @@ export default {
 
       this.verifyScroll()
       this.handleBuffer()
-      this.emitScrollEvent()
+      this.emitScrollEvent('mouse')
       this.startAutoplay()
     },
     handleWheel(event) {
@@ -496,7 +496,7 @@ export default {
       }
 
       this.verifyScroll()
-      this.emitScrollEvent()
+      this.emitScrollEvent(scrollType)
 
       this.$emit('on-wheel', {
         type: scrollType,
@@ -621,43 +621,57 @@ export default {
         this.startAutoplay()
       }, 10)
     },
-    scrollTo(clientX, clientY, time) {
-      this.setDuration(time)
+    scrollTo(clientX, clientY, duration) {
+      this.setDuration(duration)
 
       this.$nextTick(() => {
         const { enableXScroll, enableYScroll } = this
 
-        if (enableXScroll) {
+        let changed = false
+
+        if (enableXScroll && Math.abs(this.currentXScroll + clientX) > 0.01) {
           this.currentXScroll = -clientX
+          changed = true
         }
 
-        if (enableYScroll) {
+        if (enableYScroll && Math.abs(this.currentYScroll + clientY) > 0.01) {
           this.currentYScroll = -clientY
+          changed = true
         }
 
         this.verifyScroll()
+
+        if (!changed) this.duration = null
       })
     },
-    scrollBy(deltaX, deltaY, time) {
-      this.setDuration(time)
+    scrollBy(deltaX, deltaY, duration) {
+      this.setDuration(duration)
 
-      const { enableXScroll, enableYScroll } = this
+      this.$nextTick(() => {
+        const { enableXScroll, enableYScroll } = this
 
-      if (enableXScroll) {
-        this.currentXScroll -= deltaX
-      }
+        let changed = false
 
-      if (enableYScroll) {
-        this.currentYScroll -= deltaY
-      }
+        if (deltaX && enableXScroll) {
+          this.currentXScroll -= deltaX
+          changed = true
+        }
 
-      this.verifyScroll()
+        if (deltaY && enableYScroll) {
+          this.currentYScroll -= deltaY
+          changed = true
+        }
+
+        this.verifyScroll()
+
+        if (!changed) this.duration = null
+      })
     },
-    setDuration(time) {
-      if (typeof time === 'number') {
-        this.duration = time
+    setDuration(duration) {
+      if (typeof duration === 'number') {
+        this.duration = duration
 
-        if (time === 0) {
+        if (duration === 0) {
           this.$nextTick(() => {
             this.duration = null
           })
@@ -724,6 +738,33 @@ export default {
       clearTimeout(this.playTimer)
       clearTimeout(this.startTimer)
       clearTimeout(this.endTimer)
+    },
+    scrollToElement(el, duration, offset = 0) {
+      const wrapper = this.$refs.wrapper
+
+      if (!wrapper) return
+
+      if (typeof el === 'string') {
+        el = wrapper.querySelector(el)
+      }
+
+      if (!(el instanceof Node)) return
+
+      const wrapperRect = wrapper.getBoundingClientRect()
+      const elRect = el.getBoundingClientRect()
+
+      let clientX = 0
+      let clientY = 0
+
+      if (this.mode !== VERTICAL) {
+        clientX = elRect.left - wrapperRect.left + offset
+      }
+
+      if (this.mode !== HORIZONTAL) {
+        clientY = elRect.top - wrapperRect.top + offset
+      }
+
+      this.scrollTo(clientX, clientY, duration)
     }
   }
 }

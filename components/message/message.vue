@@ -39,6 +39,7 @@
             <Render
               v-if="typeof item.icon === 'function'"
               :renderer="item.icon"
+              :data="item"
             ></Render>
             <Icon
               v-else-if="item.icon && typeof item.icon === 'object'"
@@ -54,6 +55,7 @@
           <Render
             v-if="typeof item.renderer === 'function'"
             :renderer="item.renderer"
+            :data="item"
           ></Render>
           <template v-else-if="item.parseHtml">
             <div :class="`${prefix}__content`" v-html="item.content"></div>

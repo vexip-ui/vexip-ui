@@ -276,7 +276,7 @@ export default {
       this.$refs.guide.style.display = ''
 
       if (this.lazy) {
-        if (Math.abs(this.moveState.target - this.currentValue > 0.01)) {
+        if (Math.abs(this.moveState.target - this.currentValue) > 0.01) {
           this.setTransition()
         }
 

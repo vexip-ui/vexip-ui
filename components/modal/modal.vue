@@ -422,7 +422,10 @@ export default {
       document.removeEventListener('mousemove', this.handleDragMove)
       document.removeEventListener('mouseup', this.handleDragEnd)
 
-      this.$emit('on-drag-end')
+      this.$emit('on-drag-end', {
+        top: this.currentTop,
+        left: this.currentLeft
+      })
     },
     handleResizeStart(event) {
       if (!this.resizable || event.button !== 0) {
@@ -472,7 +475,10 @@ export default {
       document.removeEventListener('mousemove', this.handleResizeMove)
       document.removeEventListener('mouseup', this.handleResizeEnd)
 
-      this.$emit('on-resize-end')
+      this.$emit('on-resize-end', {
+        width: this.currentWidth,
+        height: this.contentHeight
+      })
     }
   }
 }

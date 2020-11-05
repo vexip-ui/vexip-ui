@@ -16,6 +16,7 @@
   }
 
   &__wrapper {
+    position: relative;
     vertical-align: top;
     transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
     transition-duration: 160ms;
