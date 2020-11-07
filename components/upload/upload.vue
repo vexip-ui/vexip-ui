@@ -48,6 +48,7 @@
         v-for="(item, index) in renderFiles"
         :key="index"
         :class="`${prefix}__file`"
+        :title="item.name"
       >
         <slot
           name="item"
@@ -55,41 +56,69 @@
           :status="item.status"
           :percentage="item.percentage"
         >
-          <div :class="`${prefix}__label`">
-            <div
-              v-if="!hiddenIcon"
-              :class="[`${prefix}__icon`, `${prefix}__file-icon`]"
-            >
-              <slot name="icon" :file="item.source">
-                <Render
-                  v-if="useIconRenderer"
-                  :renderer="iconRenderer"
-                  :data="item.source"
-                ></Render>
-                <Icon v-else :name="getFileIcon(item)"></Icon>
-              </slot>
+          <template v-if="listType === 'name'">
+            <div :class="`${prefix}__label`">
+              <div
+                v-if="!hiddenIcon"
+                :class="[`${prefix}__icon`, `${prefix}__file-icon`]"
+              >
+                <slot name="icon" :file="item.source">
+                  <Render
+                    v-if="useIconRenderer"
+                    :renderer="iconRenderer"
+                    :data="item.source"
+                  ></Render>
+                  <Icon v-else :name="getFileIcon(item)"></Icon>
+                </slot>
+              </div>
+              {{ item.name }}
             </div>
-            {{ item.name }}
-          </div>
-          <div
-            v-if="item.status === status.UPLOADING"
-            :class="`${prefix}__progress`"
-          >
-            {{ `${item.percentage}%` }}
-          </div>
-          <div
-            v-else-if="item.status === status.SUCCESS"
-            :class="[`${prefix}__icon`, `${prefix}__success`]"
-          >
-            <Icon name="check-circle" :scale="0.8"></Icon>
-          </div>
-          <div
-            v-else
-            :class="[`${prefix}__icon`, `${prefix}__close`]"
-            @click="deleteFile(item)"
-          >
-            <Icon name="times" :scale="0.8"></Icon>
-          </div>
+            <div
+              v-if="item.status === status.UPLOADING"
+              :class="`${prefix}__progress`"
+            >
+              {{ `${item.percentage}%` }}
+            </div>
+            <div
+              v-else-if="item.status === status.SUCCESS"
+              :class="[`${prefix}__icon`, `${prefix}__success`]"
+            >
+              <Icon name="check-circle" :scale="0.8"></Icon>
+            </div>
+            <div
+              v-else
+              :class="[`${prefix}__icon`, `${prefix}__close`]"
+              @click="deleteFile(item)"
+            >
+              <Icon name="times" :scale="0.8"></Icon>
+            </div>
+          </template>
+          <template v-else-if="listType === 'thumbnail'">
+            <div :class="`${prefix}__thumbnail`">
+              <img
+                v-if="item.type.startsWith('image/') && item.base64"
+                :class="`${prefix}__image`"
+                :src="item.base64"
+                :alt="item.name"
+              />
+              <template v-else>
+                {{ transformfileToBase64(item) }}
+                <slot name="icon" :file="item.source">
+                  <Render
+                    v-if="useIconRenderer"
+                    :renderer="iconRenderer"
+                    :data="item.source"
+                  ></Render>
+                  <Icon
+                    v-else
+                    :name="getFileIcon(item)"
+                    :scale="3"
+                  ></Icon>
+                </slot>
+              </template>
+            </div>
+            <div :class="`${prefix}__actions`"></div>
+          </template>
         </slot>
       </li>
     </ul>
@@ -203,6 +232,12 @@ export default {
     iconRenderer: {
       type: Function,
       default: null
+    },
+    listType: {
+      default: 'name',
+      validator(value) {
+        return ['name', 'detail', 'thumbnail', 'card'].includes(value)
+      }
     }
   },
   data() {
@@ -210,6 +245,7 @@ export default {
       prefix: `${prefix}-upload`,
       files: [],
       isDragOver: false,
+      objectUrl: {},
       status: {
         PENDING,
         UPLOADING,
@@ -221,13 +257,16 @@ export default {
   },
   computed: {
     className() {
-      const { prefix, multiple, allowDrag } = this
+      const { prefix, multiple, allowDrag, listType } = this
 
-      return {
-        [prefix]: true,
-        [`${prefix}--multiple`]: multiple,
-        [`${prefix}--drag`]: allowDrag
-      }
+      return [
+        prefix,
+        `${prefix}--type-${listType}`,
+        {
+          [`${prefix}--multiple`]: multiple,
+          [`${prefix}--drag`]: allowDrag
+        }
+      ]
     },
     acceptString() {
       const accept = this.accept
@@ -301,6 +340,7 @@ export default {
         name,
         size,
         type,
+        base64: null,
         status: PENDING,
         percentage: 0,
         source: file
@@ -492,6 +532,15 @@ export default {
       this.dragTimer = setTimeout(() => {
         this.isDragOver = false
       }, 100)
+    },
+    transformfileToBase64(file) {
+      const reader = new FileReader()
+
+      reader.readAsDataURL(file.source)
+
+      reader.onload = () => {
+        this.$set(file, 'base64', reader.result)
+      }
     }
   }
 }
