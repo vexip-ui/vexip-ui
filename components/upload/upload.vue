@@ -43,10 +43,18 @@
         </div>
       </slot>
     </div>
-    <ul v-if="!hiddenFiles && renderFiles.length" :class="`${prefix}__files`">
+    <transition-group
+      tag="ul"
+      :appear="selectToAdd"
+      :name="`${prefix}-list-transition`"
+      :class="`${prefix}__files`"
+      :style="{
+        [selectToAdd ? 'marginBottom' : (multiple || allowDrag) ? 'marginTop' : 'marginLeft']: !hiddenFiles && renderFiles.length ? '0.5em' : null
+      }"
+    >
       <li
-        v-for="(item, index) in renderFiles"
-        :key="index"
+        v-for="item in renderFiles"
+        :key="item.id"
         :class="`${prefix}__file`"
         :title="item.name"
       >
@@ -71,7 +79,9 @@
                   <Icon v-else :name="getFileIcon(item)"></Icon>
                 </slot>
               </div>
-              {{ item.name }}
+              <span :class="`${prefix}__filename`">
+                {{ item.name }}
+              </span>
             </div>
             <div
               v-if="item.status === status.UPLOADING"
@@ -93,39 +103,64 @@
               <Icon name="times" :scale="0.8"></Icon>
             </div>
           </template>
-          <template v-else-if="listType === 'thumbnail'">
-            <div :class="`${prefix}__thumbnail`">
-              <img
-                v-if="item.type.startsWith('image/') && item.base64"
-                :class="`${prefix}__image`"
-                :src="item.base64"
-                :alt="item.name"
-              />
-              <template v-else>
-                {{ transformfileToBase64(item) }}
-                <slot name="icon" :file="item.source">
-                  <Render
-                    v-if="useIconRenderer"
-                    :renderer="iconRenderer"
-                    :data="item.source"
-                  ></Render>
-                  <Icon
-                    v-else
-                    :name="getFileIcon(item)"
-                    :scale="3"
-                  ></Icon>
-                </slot>
-              </template>
+          <template v-else-if="listType === 'thumbnail' || listType === 'card'">
+            <div :class="`${prefix}__card`">
+              <div :class="`${prefix}__thumbnail`">
+                <img
+                  v-if="item.type.startsWith('image/') && item.base64"
+                  :class="`${prefix}__image`"
+                  :src="item.base64"
+                  :alt="item.name"
+                />
+                <template v-else>
+                  {{ transformfileToBase64(item) }}
+                  <slot name="icon" :file="item.source">
+                    <Render
+                      v-if="useIconRenderer"
+                      :renderer="iconRenderer"
+                      :data="item.source"
+                    ></Render>
+                    <Icon
+                      v-else
+                      :name="getFileIcon(item)"
+                      :scale="3"
+                    ></Icon>
+                  </slot>
+                </template>
+              </div>
+              <span v-if="listType === 'card'" :class="`${prefix}__filename`">
+                {{ item.name }}
+              </span>
+              <div :class="`${prefix}__actions`">
+                <div
+                  :class="[
+                    `${prefix}__icon`,
+                    `${prefix}__action`,
+                    {
+                      [`${prefix}__action--disabled`]: !item.type.startsWith('image/') || !item.base64
+                    }
+                  ]"
+                  @click="$emit('on-preview', item.source)"
+                >
+                  <Icon name="regular/eye" :scale="1.4"></Icon>
+                </div>
+                <div
+                  :class="[`${prefix}__icon`, `${prefix}__action`]"
+                  @click="deleteFile(item)"
+                >
+                  <Icon name="regular/trash-alt" :scale="1.4"></Icon>
+                </div>
+              </div>
             </div>
-            <div :class="`${prefix}__actions`"></div>
           </template>
         </slot>
       </li>
-    </ul>
+    </transition-group>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 import Button from '../button'
 import Icon from '../icon'
 import Render from '../basis/render'
@@ -138,6 +173,8 @@ import '../../icons/check-circle'
 import '../../icons/cloud-upload-alt'
 import '../../icons/times'
 import '../../icons/upload'
+import '../../icons/regular/eye'
+import '../../icons/regular/trash-alt'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -229,15 +266,27 @@ export default {
       type: Function,
       default: null
     },
+    beforeSelect: {
+      tyoe: Function,
+      default: null
+    },
     iconRenderer: {
       type: Function,
       default: null
+    },
+    selectToAdd: {
+      type: Boolean,
+      default: false
     },
     listType: {
       default: 'name',
       validator(value) {
         return ['name', 'detail', 'thumbnail', 'card'].includes(value)
       }
+    },
+    block: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -257,14 +306,16 @@ export default {
   },
   computed: {
     className() {
-      const { prefix, multiple, allowDrag, listType } = this
+      const { prefix, multiple, allowDrag, selectToAdd, listType, block } = this
 
       return [
         prefix,
         `${prefix}--type-${listType}`,
         {
           [`${prefix}--multiple`]: multiple,
-          [`${prefix}--drag`]: allowDrag
+          [`${prefix}--drag`]: allowDrag,
+          [`${prefix}--to-add`]: selectToAdd,
+          [`${prefix}--block`]: block
         }
       ]
     },
@@ -287,12 +338,22 @@ export default {
     handleInputChange(event) {
       this.handleFilesChange(event.target.files)
     },
-    handleFilesChange(originFiles) {
+    async handleFilesChange(originFiles) {
       originFiles = Array.from(originFiles || [])
 
-      const files = []
+      const files = this.selectToAdd ? this.files : []
 
       for (const file of originFiles) {
+        if (typeof this.beforeSelect === 'function') {
+          let result = this.beforeSelect(file, this.selectToAdd ? this.getSourceFiles() : [])
+
+          if (isPromise(result)) {
+            result = await result
+          }
+
+          if (result === false) continue
+        }
+
         let fileObj = this.getFileObject(file)
 
         if (fileObj) {
@@ -370,17 +431,17 @@ export default {
         requests.push(this.uploadFile(file))
       }
 
-      return Promise.all(requests)
+      return Promise.all(requests).then(responses => responses.filter(response => response))
     },
     async uploadFile(file) {
       const { url, files, field, data, headers, withCredentials, beforeUpload } = this
 
       if (typeof beforeUpload === 'function') {
         let result = beforeUpload(
-          file,
+          file.source,
           files.filter(
             item => item.status !== SUCCESS && item.status !== DELETE
-          )
+          ).map(item => item.source)
         )
 
         if (isPromise(result)) {
@@ -392,22 +453,29 @@ export default {
 
       file.status = UPLOADING
 
-      return await upload({
-        url,
-        headers,
-        withCredentials,
-        data,
-        file,
-        field,
-        onProgress: percent => {
-          this.handleProgress(percent, file)
-        },
-        onSuccess: response => {
-          this.handleSuccess(response, file)
-        },
-        onError: error => {
-          this.handleError(error, file)
-        }
+      return await new Promise((resolve, reject) => {
+        file.xhr = upload({
+          url,
+          headers,
+          withCredentials,
+          data,
+          field,
+          file: file.source,
+          onProgress: percent => {
+            this.handleProgress(percent, file)
+          },
+          onSuccess: response => {
+            this.handleSuccess(response, file)
+            resolve(response)
+          },
+          onError: error => {
+            this.handleError(error, file)
+            reject(error)
+          },
+          onAbort: () => {
+            resolve(null)
+          }
+        })
       })
     },
     clear() {
@@ -448,6 +516,10 @@ export default {
     deleteFile(file) {
       file.status = DELETE
 
+      if (file.xhr) {
+        file.xhr.abort()
+      }
+
       const files = this.files.filter(item => item.status !== DELETE)
       const dataTransfer = new DataTransfer()
 
@@ -485,11 +557,15 @@ export default {
       }
     },
     handleProgress(percent, file) {
+      if (file.status === DELETE) return
+
       file.percentage = percent
 
       this.$emit('on-progress', percent, file.source)
     },
     handleSuccess(response, file) {
+      if (file.status === DELETE) return
+
       file.status = SUCCESS
       file.response = response
       file.error = null
@@ -497,6 +573,8 @@ export default {
       this.$emit('on-success', response, file.source)
     },
     handleError(error, file) {
+      if (file.status === DELETE) return
+
       file.status = FAIL
       file.error = error
 
@@ -539,7 +617,9 @@ export default {
       reader.readAsDataURL(file.source)
 
       reader.onload = () => {
-        this.$set(file, 'base64', reader.result)
+        if (file.status !== DELETE) {
+          this.$set(file, 'base64', reader.result)
+        }
       }
     }
   }
