@@ -5,13 +5,8 @@
 
   position: relative;
   display: inline-flex;
-  align-items: center;
-
-  &--multiple,
-  &--drag {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  flex-direction: column;
+  align-items: flex-start;
 
   &--to-add {
     flex-direction: column-reverse;
@@ -91,10 +86,15 @@
     justify-content: space-between;
     width: 100%;
     padding: 0.2em 0.5em;
+    margin-bottom: 0.2em;
     transition: $vxp-transition-background-base;
 
     &:hover {
       background-color: $vxp-color-fill-hover;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 
@@ -104,6 +104,15 @@
     margin-right: 0.5em;
     margin-bottom: 0.5em;
     border: $vxp-border-base;
+    transition: $vxp-transition-border-base;
+
+    &--success {
+      border-color: $vxp-color-success;
+    }
+
+    &--fail {
+      border-color: $vxp-color-error;
+    }
   }
 
   &--type-card &__file {
@@ -114,6 +123,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transition: $vxp-transition-color-base;
+  }
+
+  &__file--success &__filename {
+    color: $vxp-color-success;
+  }
+
+  &__file--fail &__filename {
+    color: $vxp-color-error;
   }
 
   &__label {
@@ -143,6 +161,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &,
+    #{$prefix}-icon {
+      color: $vxp-color-content-secondary;
+    }
   }
 
   &--type-thumbnail &__thumbnail {
@@ -156,9 +179,16 @@
     margin-right: 1em;
   }
 
-  &--type-card &__filename {
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: calc(100% - 5em);
     padding-right: 5em;
+  }
+
+  &--type-card &__filename {
+    width: 100%;
   }
 
   &__image {
@@ -168,13 +198,14 @@
   }
 
   &__actions {
-    position: absolute;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   &--type-thumbnail &__actions {
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -189,6 +220,7 @@
   }
 
   &--type-card &__actions {
+    position: absolute;
     right: 0;
   }
 
@@ -240,9 +272,27 @@
     margin-right: 0.3em;
   }
 
+  &__success,
+  &__fail,
+  &__loading,
   &__close {
+    width: 1em;
+  }
+
+  &__close {
+    position: absolute;
+    right: 0;
     cursor: pointer;
 
+    &,
+    .#{$prefix}-icon {
+      color: transparent;
+    }
+  }
+
+  &__file:hover &__success,
+  &__file:hover &__fail,
+  &__file:hover &__loading {
     &,
     .#{$prefix}-icon {
       color: transparent;
@@ -270,11 +320,47 @@
     }
   }
 
+  &__fail {
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-error;
+    }
+  }
+
+  &__loading {
+    &,
+    .#{$prefix}-icon {
+      color: $vxp-color-content-disabled;
+    }
+  }
+
   &__progress {
     display: flex;
     align-items: center;
     justify-content: center;
     user-select: none;
+  }
+
+  &--type-name &__progress {
+    position: absolute;
+    right: 0.5em;
+    bottom: 0;
+    left: 0.5em;
+  }
+
+  &--type-thumbnail &__progress {
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+  }
+
+  &--type-card &__progress {
+    padding-top: 0.3em;
+  }
+
+  &__percentage {
+    color: $vxp-color-content-secondary;
   }
 
   &-list-transition {

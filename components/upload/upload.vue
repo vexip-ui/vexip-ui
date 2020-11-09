@@ -44,154 +44,100 @@
       </slot>
     </div>
     <transition-group
+      v-if="listType === 'thumbnail'"
       tag="ul"
       :appear="selectToAdd"
       :name="`${prefix}-list-transition`"
       :class="`${prefix}__files`"
       :style="{
-        [selectToAdd ? 'marginBottom' : (multiple || allowDrag) ? 'marginTop' : 'marginLeft']: !hiddenFiles && renderFiles.length ? '0.5em' : null
+        [selectToAdd ? 'marginBottom' : 'marginTop']: !hiddenFiles && renderFiles.length ? '0.5em' : null
       }"
     >
-      <li
+      <UploadFile
         v-for="item in renderFiles"
         :key="item.id"
-        :class="`${prefix}__file`"
-        :title="item.name"
+        :file="item"
+        :icon-renderer="iconRenderer"
+        :list-type="listType"
+        :loading-text="loadingText"
+        :select-to-add="selectToAdd"
+        @on-delete="deleteFile"
+        @on-preview="$emit('on-preview', $event)"
       >
-        <slot
-          name="item"
-          :file="item.source"
-          :status="item.status"
-          :percentage="item.percentage"
-        >
-          <template v-if="listType === 'name'">
-            <div :class="`${prefix}__label`">
-              <div
-                v-if="!hiddenIcon"
-                :class="[`${prefix}__icon`, `${prefix}__file-icon`]"
-              >
-                <slot name="icon" :file="item.source">
-                  <Render
-                    v-if="useIconRenderer"
-                    :renderer="iconRenderer"
-                    :data="item.source"
-                  ></Render>
-                  <Icon v-else :name="getFileIcon(item)"></Icon>
-                </slot>
-              </div>
-              <span :class="`${prefix}__filename`">
-                {{ item.name }}
-              </span>
-            </div>
-            <div
-              v-if="item.status === status.UPLOADING"
-              :class="`${prefix}__progress`"
-            >
-              {{ `${item.percentage}%` }}
-            </div>
-            <div
-              v-else-if="item.status === status.SUCCESS"
-              :class="[`${prefix}__icon`, `${prefix}__success`]"
-            >
-              <Icon name="check-circle" :scale="0.8"></Icon>
-            </div>
-            <div
-              v-else
-              :class="[`${prefix}__icon`, `${prefix}__close`]"
-              @click="deleteFile(item)"
-            >
-              <Icon name="times" :scale="0.8"></Icon>
-            </div>
-          </template>
-          <template v-else-if="listType === 'thumbnail' || listType === 'card'">
-            <div :class="`${prefix}__card`">
-              <div :class="`${prefix}__thumbnail`">
-                <img
-                  v-if="item.type.startsWith('image/') && item.base64"
-                  :class="`${prefix}__image`"
-                  :src="item.base64"
-                  :alt="item.name"
-                />
-                <template v-else>
-                  {{ transformfileToBase64(item) }}
-                  <slot name="icon" :file="item.source">
-                    <Render
-                      v-if="useIconRenderer"
-                      :renderer="iconRenderer"
-                      :data="item.source"
-                    ></Render>
-                    <Icon
-                      v-else
-                      :name="getFileIcon(item)"
-                      :scale="3"
-                    ></Icon>
-                  </slot>
-                </template>
-              </div>
-              <span v-if="listType === 'card'" :class="`${prefix}__filename`">
-                {{ item.name }}
-              </span>
-              <div :class="`${prefix}__actions`">
-                <div
-                  :class="[
-                    `${prefix}__icon`,
-                    `${prefix}__action`,
-                    {
-                      [`${prefix}__action--disabled`]: !item.type.startsWith('image/') || !item.base64
-                    }
-                  ]"
-                  @click="$emit('on-preview', item.source)"
-                >
-                  <Icon name="regular/eye" :scale="1.4"></Icon>
-                </div>
-                <div
-                  :class="[`${prefix}__icon`, `${prefix}__action`]"
-                  @click="deleteFile(item)"
-                >
-                  <Icon name="regular/trash-alt" :scale="1.4"></Icon>
-                </div>
-              </div>
-            </div>
-          </template>
-        </slot>
-      </li>
+        <template #default="{ file, status: _status, percentage }">
+          <slot
+            name="item"
+            :file="file"
+            :status="_status"
+            :percentage="percentage"
+          ></slot>
+        </template>
+        <template #icon="{ file }">
+          <slot nmae="icon" :file="file"></slot>
+        </template>
+      </UploadFile>
     </transition-group>
+    <ul
+      v-else
+      :class="`${prefix}__files`"
+      :style="{
+        [selectToAdd ? 'marginBottom' : 'marginTop']: !hiddenFiles && renderFiles.length ? '0.5em' : null
+      }"
+    >
+      <UploadFile
+        v-for="item in renderFiles"
+        :key="item.id"
+        :file="item"
+        :icon-renderer="iconRenderer"
+        :list-type="listType"
+        :loading-text="loadingText"
+        :select-to-add="selectToAdd"
+        @on-delete="deleteFile"
+        @on-preview="$emit('on-preview', $event)"
+      >
+        <template #default="{ file, status: _status, percentage }">
+          <slot
+            name="item"
+            :file="file"
+            :status="_status"
+            :percentage="percentage"
+          ></slot>
+        </template>
+        <template #icon="{ file }">
+          <slot nmae="icon" :file="file"></slot>
+        </template>
+      </UploadFile>
+    </ul>
   </div>
 </template>
 
 <script>
-/* eslint-disable */
 import Button from '../button'
 import Icon from '../icon'
-import Render from '../basis/render'
+import UploadFile from './upload-file'
 
-import { iconMaps } from './file-icon'
 import { upload } from './request'
 import { getRandomString, isPromise } from '../../src/utils/common'
 
-import '../../icons/check-circle'
 import '../../icons/cloud-upload-alt'
-import '../../icons/times'
 import '../../icons/upload'
-import '../../icons/regular/eye'
-import '../../icons/regular/trash-alt'
 
 const { prefix } = require('../../src/style/basis/variable')
 
-const PENDING = 'pending'
-const UPLOADING = 'uploading'
-const FAIL = 'fail'
-const SUCCESS = 'success'
-const DELETE = 'delete'
+export const PENDING = 'pending'
+export const UPLOADING = 'uploading'
+export const FAIL = 'fail'
+export const SUCCESS = 'success'
+export const DELETE = 'delete'
 
-const statusList = [PENDING, UPLOADING, FAIL, SUCCESS, DELETE]
+export const statusList = [PENDING, UPLOADING, FAIL, SUCCESS, DELETE]
 
 export default {
   name: 'Upload',
   components: {
     Button,
     Icon,
-    Render
+    UploadFile
   },
   status: Object.freeze({ PENDING, UPLOADING, FAIL, SUCCESS, DELETE }),
   props: {
@@ -250,10 +196,6 @@ export default {
       type: Boolean,
       default: false
     },
-    hiddenIcon: {
-      type: Boolean,
-      default: false
-    },
     countLimit: {
       type: Number,
       default: 0
@@ -267,7 +209,7 @@ export default {
       default: null
     },
     beforeSelect: {
-      tyoe: Function,
+      type: Function,
       default: null
     },
     iconRenderer: {
@@ -287,6 +229,10 @@ export default {
     block: {
       type: Boolean,
       default: false
+    },
+    loadingText: {
+      type: String,
+      default: '上传中'
     }
   },
   data() {
@@ -326,9 +272,6 @@ export default {
     },
     renderFiles() {
       return this.files.filter(item => item.status !== DELETE)
-    },
-    useIconRenderer() {
-      return typeof this.iconRenderer === 'function'
     }
   },
   methods: {
@@ -381,10 +324,8 @@ export default {
 
       const sourceFiles = this.getSourceFiles()
 
-      this.$emit(
-        'on-change',
-        sourceFiles
-      )
+      this.syncInputFiles()
+      this.$emit('on-change', sourceFiles)
 
       if (!this.manual) {
         this.execute()
@@ -520,6 +461,10 @@ export default {
         file.xhr.abort()
       }
 
+      this.syncInputFiles()
+      this.$emit('on-delete', file.source)
+    },
+    syncInputFiles() {
       const files = this.files.filter(item => item.status !== DELETE)
       const dataTransfer = new DataTransfer()
 
@@ -528,8 +473,6 @@ export default {
       })
 
       this.$refs.input.files = dataTransfer.files
-
-      this.$emit('on-delete', file.source)
     },
     // 根据源文件删除
     delete(originFile) {
@@ -580,15 +523,6 @@ export default {
 
       this.$emit('on-error', error, file.source)
     },
-    getFileIcon(file) {
-      const extension = this.getFileExtension(file)
-
-      if (extension) {
-        return iconMaps[extension] || iconMaps.default
-      }
-
-      return iconMaps.default
-    },
     handleDrop(event) {
       if (!this.allowDrag) return
 
@@ -610,17 +544,6 @@ export default {
       this.dragTimer = setTimeout(() => {
         this.isDragOver = false
       }, 100)
-    },
-    transformfileToBase64(file) {
-      const reader = new FileReader()
-
-      reader.readAsDataURL(file.source)
-
-      reader.onload = () => {
-        if (file.status !== DELETE) {
-          this.$set(file, 'base64', reader.result)
-        }
-      }
     }
   }
 }
