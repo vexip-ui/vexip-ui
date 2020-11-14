@@ -25,7 +25,7 @@
           <div :class="`${prefix}__actions`">
             <span
               v-if="file.status === status.UPLOADING"
-              style="margin-right: 0.5em"
+              style="margin-right: 0.5em;"
               :class="`${prefix}__percentage`"
             >
               {{ `${file.percentage}%` }}
@@ -63,7 +63,7 @@
             <div :class="`${prefix}__thumbnail`">
               <template v-if="file.status === status.UPLOADING">
                 <div v-if="listType === 'thumbnail'" :class="`${prefix}__progress`">
-                  <span style="margin-bottom: 0.3em">
+                  <span style="margin-bottom: 0.3em;">
                     {{ loadingText }}
                   </span>
                   <Progress
@@ -71,7 +71,7 @@
                     :stroke-width="2"
                     :percentage="file.percentage"
                   ></Progress>
-                  <span style="margin-top: 0.2em" :class="`${prefix}__percentage`">
+                  <span style="margin-top: 0.2em;" :class="`${prefix}__percentage`">
                     {{ `${file.percentage}%` }}
                   </span>
                 </div>
