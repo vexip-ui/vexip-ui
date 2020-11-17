@@ -60,8 +60,7 @@
 
 <script>
 import Icon from '../icon'
-// import formControl from '../../src/mixins/form-control'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { throttle, isNull, noop } from '../../src/utils/common'
 
 import '../../icons/caret-up'
@@ -69,109 +68,118 @@ import '../../icons/caret-down'
 
 const { prefix } = require('../../src/style/basis/variable')
 
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  state: {
+    default: 'default',
+    validator(value) {
+      return ['default', 'success', 'error', 'warning'].includes(value)
+    }
+  },
+  prefix: {
+    type: String,
+    default: ''
+  },
+  prefixColor: {
+    type: String,
+    default: ''
+  },
+  suffix: {
+    type: String,
+    default: ''
+  },
+  suffixColor: {
+    type: String,
+    default: ''
+  },
+  // 格式化后显示
+  formatter: {
+    type: Function,
+    default: null
+  },
+  // 格式化后读取
+  accessor: {
+    type: Function,
+    default: null
+  },
+  value: {
+    type: [String, Number],
+    default: null
+  },
+  placeholder: {
+    type: String,
+    default: ''
+  },
+  autofocus: {
+    type: Boolean,
+    default: false
+  },
+  spellcheck: {
+    type: Boolean,
+    default: false
+  },
+  autocomplete: {
+    type: String,
+    default: 'off'
+  },
+  precision: {
+    type: Number,
+    default: 0
+  },
+  readonly: {
+    type: Boolean,
+    default: false
+  },
+  step: {
+    type: Number,
+    default: 1
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  inputClass: {
+    type: [String, Object, Array],
+    default: ''
+  },
+  debounce: {
+    type: Boolean,
+    default: false
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'NumberInput',
   components: {
     Icon
   },
-  // mixins: [formControl],
   model: {
     event: 'on-change'
   },
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    state: {
-      default: 'default',
-      validator(value) {
-        return ['default', 'success', 'error', 'warning'].includes(value)
-      }
-    },
-    prefix: {
-      type: String,
-      default: ''
-    },
-    prefixColor: {
-      type: String,
-      default: ''
-    },
-    suffix: {
-      type: String,
-      default: ''
-    },
-    suffixColor: {
-      type: String,
-      default: ''
-    },
-    // 格式化后显示
-    formatter: {
-      type: Function,
-      default: null
-    },
-    // 格式化后读取
-    accessor: {
-      type: Function,
-      default: null
-    },
-    value: {
-      type: [String, Number],
-      default: null
-    },
-    placeholder: {
-      type: String,
-      default: ''
-    },
-    autofocus: {
-      type: Boolean,
-      default: false
-    },
-    spellcheck: {
-      type: Boolean,
-      default: false
-    },
-    autocomplete: {
-      type: String,
-      default: 'off'
-    },
-    precision: {
-      type: Number,
-      default: 0
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    step: {
-      type: Number,
-      default: 1
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    inputClass: {
-      type: [String, Object, Array],
-      default: ''
-    },
-    // size: {
-    //   default() {
-    //     return config.numberInput.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    debounce: {
-      type: Boolean,
-      default: false
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: [
+    'on-focus',
+    'on-blur',
+    'on-input',
+    'on-enter',
+    'on-prefix-click',
+    'on-suffix-click',
+    'on-key-down',
+    'on-key-press',
+    'on-key-up'
+  ],
   data() {
     return {
       prefixCls: `${prefix}-number-input`,

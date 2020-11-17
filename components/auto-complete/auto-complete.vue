@@ -54,11 +54,89 @@ import Option from '../option'
 import Select from '../select'
 
 import { placementWhileList } from '../../src/mixins/popper'
-// import formControl from '../../src/mixins/form-control'
-import { size, transfer } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { isNull, noop } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  transfer: {
+    type: [Boolean, String],
+    default: false
+  },
+  value: {
+    type: [String, Number],
+    default: ''
+  },
+  options: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  state: {
+    default: 'default',
+    validator(value) {
+      return ['default', 'success', 'error', 'warning'].includes(value)
+    }
+  },
+  filter: {
+    type: [Boolean, Function],
+    default: false
+  },
+  prefix: {
+    type: String,
+    default: ''
+  },
+  prefixColor: {
+    type: String,
+    default: ''
+  },
+  suffix: {
+    type: String,
+    default: ''
+  },
+  suffixColor: {
+    type: String,
+    default: ''
+  },
+  placeholder: {
+    type: String,
+    default: null
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  transitionName: {
+    type: String,
+    default: `${prefix}-drop`
+  },
+  canDrop: {
+    type: Boolean,
+    default: true
+  },
+  placement: {
+    default: 'bottom',
+    validator(value) {
+      return placementWhileList.includes(value)
+    }
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  },
+  clearable: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'AutoComplete',
@@ -67,97 +145,14 @@ export default {
     Option,
     Select
   },
-  // mixins: [formControl],
   model: {
     event: 'on-change'
   },
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    transfer,
-    value: {
-      type: [String, Number],
-      default: ''
-    },
-    options: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    state: {
-      default: 'default',
-      validator(value) {
-        return ['default', 'success', 'error', 'warning'].includes(value)
-      }
-    },
-    filter: {
-      type: [Boolean, Function],
-      default: false
-    },
-    prefix: {
-      type: String,
-      default: ''
-    },
-    prefixColor: {
-      type: String,
-      default: ''
-    },
-    suffix: {
-      type: String,
-      default: ''
-    },
-    suffixColor: {
-      type: String,
-      default: ''
-    },
-    placeholder: {
-      type: String,
-      default: null
-    },
-    // size: {
-    //   default() {
-    //     return config.autoComplete.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    transitionName: {
-      type: String,
-      default: `${prefix}-drop`
-    },
-    canDrop: {
-      type: Boolean,
-      default: true
-    },
-    // transfer: {
-    //   type: Boolean,
-    //   default() {
-    //     return config.autoComplete.transfer ?? false
-    //   }
-    // },
-    placement: {
-      default: 'bottom',
-      validator(value) {
-        return placementWhileList.includes(value)
-      }
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    },
-    clearable: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-select', 'on-input', 'on-change', 'on-toggle'],
   data() {
     return {
       prefixCls: `${prefix}-auto-complete`,

@@ -23,45 +23,50 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
+
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  content: {
+    type: [Number, String],
+    default: null
+  },
+  max: {
+    type: Number,
+    default: 0
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  isDot: {
+    type: Boolean,
+    default: false
+  },
+  type: {
+    default: 'error',
+    validator(value) {
+      return [
+        'error',
+        'primary',
+        'success',
+        'warning',
+        'info',
+        'disabled'
+      ].includes(value)
+    }
+  },
+  color: {
+    type: String,
+    default: null
+  }
+})
 
 export default {
   name: 'Badge',
-  props: {
-    content: {
-      type: [Number, String],
-      default: null
-    },
-    max: {
-      type: Number,
-      default: 0
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    isDot: {
-      type: Boolean,
-      default: false
-    },
-    type: {
-      default: 'error',
-      validator(value) {
-        return [
-          'error',
-          'primary',
-          'success',
-          'warning',
-          'info',
-          'disabled'
-        ].includes(value)
-      }
-    },
-    color: {
-      type: String,
-      default: null
-    }
-  },
+  props,
+  emits: ['on-badge-click'],
   data() {
     return {
       prefix: `${prefix}-badge`

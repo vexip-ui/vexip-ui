@@ -222,7 +222,6 @@
 </template>
 
 <script>
-/* eslint-disable vue/no-unused-components */
 import Button from '../button'
 import CalendarBase from '../calendar/calendar-base'
 import Icon from '../icon'
@@ -230,8 +229,7 @@ import MultipleInput from '../multiple-input'
 import TimeWheel from './time-wheel'
 
 import { placementWhileList, usePopper } from '../../src/mixins/popper'
-// import formControl from '../../src/mixins/form-control'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import {
   format,
@@ -254,6 +252,106 @@ import '../../icons/angle-double-right'
 import '../../icons/angle-double-left'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  type: {
+    default: 'date',
+    validator(value) {
+      return ['date', 'datetime', 'year', 'month'].includes(value)
+    }
+  },
+  placement: {
+    default: 'bottom-start',
+    validator(value) {
+      return placementWhileList.includes(value)
+    }
+  },
+  value: {
+    type: [Number, String, Date],
+    default() {
+      return new Date()
+    }
+  },
+  format: {
+    type: String,
+    default: 'yyyy-MM-dd HH:mm:ss'
+  },
+  filler: {
+    type: String,
+    default: '-',
+    validator(value) {
+      return value.length === 1
+    }
+  },
+  noFiller: {
+    type: Boolean,
+    default: false
+  },
+  clearable: {
+    type: Boolean,
+    default: false
+  },
+  noAction: {
+    type: Boolean,
+    default: false
+  },
+  labels: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  dateSeparator: {
+    type: String,
+    default: '/'
+  },
+  timeSeparator: {
+    type: String,
+    default: ':'
+  },
+  shortcuts: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  disabledDate: {
+    type: Function,
+    default() {
+      return false
+    }
+  },
+  steps: {
+    type: Array,
+    default() {
+      return [1, 1, 1]
+    }
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  state: {
+    default: 'default',
+    validator(value) {
+      return ['default', 'success', 'error', 'warning'].includes(value)
+    }
+  },
+  exactlySelect: {
+    type: Boolean,
+    default: false
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
 
 function getNullValueObject() {
   return {
@@ -293,108 +391,20 @@ export default {
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    type: {
-      default: 'date',
-      validator(value) {
-        return ['date', 'datetime', 'year', 'month'].includes(value)
-      }
-    },
-    placement: {
-      default: 'bottom-start',
-      validator(value) {
-        return placementWhileList.includes(value)
-      }
-    },
-    value: {
-      type: [Number, String, Date],
-      default() {
-        return new Date()
-      }
-    },
-    format: {
-      type: String,
-      default: 'yyyy-MM-dd HH:mm:ss'
-    },
-    filler: {
-      type: String,
-      default: '-',
-      validator(value) {
-        return value.length === 1
-      }
-    },
-    noFiller: {
-      type: Boolean,
-      default: false
-    },
-    clearable: {
-      type: Boolean,
-      default: false
-    },
-    noAction: {
-      type: Boolean,
-      default: false
-    },
-    labels: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    dateSeparator: {
-      type: String,
-      default: '/'
-    },
-    timeSeparator: {
-      type: String,
-      default: ':'
-    },
-    shortcuts: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    disabledDate: {
-      type: Function,
-      default() {
-        return false
-      }
-    },
-    steps: {
-      type: Array,
-      default() {
-        return [1, 1, 1]
-      }
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    // size: {
-    //   default() {
-    //     return config.datePicker.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    state: {
-      default: 'default',
-      validator(value) {
-        return ['default', 'success', 'error', 'warning'].includes(value)
-      }
-    },
-    exactlySelect: {
-      type: Boolean,
-      default: false
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: [
+    'on-foucs',
+    'on-blur',
+    'on-change-col',
+    'on-clear',
+    'on-enter',
+    'on-shortcut',
+    'on-plus',
+    'on-minus',
+    'on-input',
+    'on-change',
+    'update:value'
+  ],
   data() {
     const current = new Date()
     const currentYear = current.getFullYear()

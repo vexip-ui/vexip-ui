@@ -23,12 +23,57 @@
 
 <script>
 import Icon from '../icon'
-import { size } from '../../src/config/properties'
-import { noop } from '../../src/utils/common'
+import { useConfigurableProps } from '../../src/config/properties'
+import { isPromise, noop } from '../../src/utils/common'
 
 import '../../icons/spinner'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  value: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  openColor: {
+    type: String,
+    default: ''
+  },
+  closeColor: {
+    type: String,
+    default: ''
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  openText: {
+    type: String,
+    default: ''
+  },
+  closeText: {
+    type: String,
+    default: ''
+  },
+  beforeClose: {
+    type: Function,
+    default: null
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Switcher',
@@ -41,49 +86,8 @@ export default {
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    value: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    // size: {
-    //   default() {
-    //     return config.switcher.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    openColor: {
-      type: String,
-      default: ''
-    },
-    closeColor: {
-      type: String,
-      default: ''
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    openText: {
-      type: String,
-      default: ''
-    },
-    closeText: {
-      type: String,
-      default: ''
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-change'],
   data() {
     return {
       prefix: `${prefix}-switcher`,
@@ -120,11 +124,6 @@ export default {
     },
     isDisabled() {
       return this.disabled || this.loading
-    },
-    bindBeforeClose() {
-      return !!(
-        this._events['before-close'] && this._events['before-close'].length
-      )
     }
   },
   watch: {
@@ -140,13 +139,21 @@ export default {
     }
   },
   methods: {
-    handleChange(checked = !this.currentValue) {
-      if (!checked && this.bindBeforeClose) {
-        this.$emit('before-close', () => {
+    async handleChange(checked = !this.currentValue) {
+      let result = true
+
+      if (typeof this.beforeClose === 'function') {
+        result = this.beforeClose(checked)
+
+        if (isPromise(result)) {
+          result = await result
+        }
+      }
+
+      if (result !== false) {
+        this.$nextTick(() => {
           this.currentValue = checked
         })
-      } else {
-        this.currentValue = checked
       }
     }
   }

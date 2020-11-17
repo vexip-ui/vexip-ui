@@ -112,8 +112,7 @@ import Icon from '../icon'
 import Input from '../input'
 
 import { usePopper } from '../../src/mixins/popper'
-// import formControl from '../../src/mixins/form-control'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import { noop, multipleFixed } from '../../src/utils/common'
 import {
@@ -159,6 +158,59 @@ const defaultShotcuts = [
   '#ffffff'
 ]
 
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  value: {
+    type: [String, Object],
+    default: '#339af0'
+  },
+  visible: {
+    type: Boolean,
+    default: false
+  },
+  format: {
+    default: 'rgb',
+    validator(value) {
+      return ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
+    }
+  },
+  alpha: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  transitionName: {
+    type: String,
+    default: `${prefix}-drop`
+  },
+  noInput: {
+    type: Boolean,
+    default: false
+  },
+  shortcut: {
+    type: Boolean,
+    default: false
+  },
+  shortcutList: {
+    type: Array,
+    default() {
+      return Array.from(defaultShotcuts)
+    }
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'ColorPicker',
   components: {
@@ -176,61 +228,15 @@ export default {
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    value: {
-      type: [String, Object],
-      default: '#339af0'
-    },
-    visible: {
-      type: Boolean,
-      default: false
-    },
-    format: {
-      default: 'rgb',
-      validator(value) {
-        return ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
-      }
-    },
-    // size: {
-    //   default() {
-    //     return config.colorPicker.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    alpha: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    transitionName: {
-      type: String,
-      default: `${prefix}-drop`
-    },
-    noInput: {
-      type: Boolean,
-      default: false
-    },
-    shortcut: {
-      type: Boolean,
-      default: false
-    },
-    shortcutList: {
-      type: Array,
-      default() {
-        return Array.from(defaultShotcuts)
-      }
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: [
+    'on-toggle',
+    'on-outside-close',
+    'on-clear',
+    'on-change',
+    'on-shortcut',
+    'update:value'
+  ],
   data() {
     let isEmpty = true
     let currentValue = getDefaultHsv()

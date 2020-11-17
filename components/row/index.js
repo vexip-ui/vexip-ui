@@ -1,3 +1,3 @@
-import Row from '../grid/row'
+import Row from './row'
 
 export default Row

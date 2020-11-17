@@ -9,31 +9,34 @@
 
 <script>
 import { placementWhileList } from '../../src/mixins/popper'
+import { useConfigurableProps } from '../../src/config/properties'
 
 const { prefix } = require('../../src/style/basis/variable')
 
-export default {
-  name: 'Bubble',
-  props: {
-    placement: {
-      default: 'right',
-      validator(value) {
-        return placementWhileList.includes(value)
-      }
-    },
-    background: {
-      type: String,
-      default: ''
-    },
-    shadow: {
-      type: [Boolean, String],
-      default: false
-    },
-    contentClass: {
-      type: [String, Array, Object],
-      default: null
+const props = useConfigurableProps({
+  placement: {
+    default: 'right',
+    validator(value) {
+      return placementWhileList.includes(value)
     }
   },
+  background: {
+    type: String,
+    default: ''
+  },
+  shadow: {
+    type: [Boolean, String],
+    default: false
+  },
+  contentClass: {
+    type: [String, Array, Object],
+    default: null
+  }
+})
+
+export default {
+  name: 'Bubble',
+  props,
   data() {
     return {
       prefix: `${prefix}-bubble`

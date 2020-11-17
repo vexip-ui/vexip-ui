@@ -28,6 +28,7 @@ export default {
       default: null
     }
   },
+  emits: ['on-select'],
   data() {
     return {
       prefix: `${prefix}-carousel`,

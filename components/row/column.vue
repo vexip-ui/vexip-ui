@@ -9,66 +9,69 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
 import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
+const props = useConfigurableProps({
+  tag: {
+    type: String,
+    default: 'div'
+  },
+  span: {
+    type: Number,
+    default: 24
+  },
+  offset: {
+    type: Number,
+    default: null
+  },
+  push: {
+    type: Number,
+    default: null
+  },
+  pull: {
+    type: Number,
+    default: null
+  },
+  order: {
+    type: Number,
+    default: null
+  },
+  xs: {
+    type: [Number, Object],
+    default: null
+  },
+  sm: {
+    type: [Number, Object],
+    default: null
+  },
+  md: {
+    type: [Number, Object],
+    default: null
+  },
+  lg: {
+    type: [Number, Object],
+    default: null
+  },
+  xl: {
+    type: [Number, Object],
+    default: null
+  },
+  xxl: {
+    type: [Number, Object],
+    default: null
+  },
+  flex: {
+    type: [Number, String],
+    default: null
+  }
+})
+
 export default {
   name: 'Column',
-  props: {
-    tag: {
-      type: String,
-      default: 'div'
-    },
-    span: {
-      type: Number,
-      default: 24
-    },
-    offset: {
-      type: Number,
-      default: null
-    },
-    push: {
-      type: Number,
-      default: null
-    },
-    pull: {
-      type: Number,
-      default: null
-    },
-    order: {
-      type: Number,
-      default: null
-    },
-    xs: {
-      type: [Number, Object],
-      default: null
-    },
-    sm: {
-      type: [Number, Object],
-      default: null
-    },
-    md: {
-      type: [Number, Object],
-      default: null
-    },
-    lg: {
-      type: [Number, Object],
-      default: null
-    },
-    xl: {
-      type: [Number, Object],
-      default: null
-    },
-    xxl: {
-      type: [Number, Object],
-      default: null
-    },
-    flex: {
-      type: [Number, String],
-      default: null
-    }
-  },
+  props,
   data() {
     return {
       prefix: `${prefix}-column`,

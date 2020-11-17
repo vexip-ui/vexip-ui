@@ -18,45 +18,53 @@
 
 <script>
 import PopupItem from './popup-item'
-import { zIndex } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 
 const { prefix } = require('../../src/style/basis/variable')
 
 let globalIndex = 0
+
+const props = useConfigurableProps({
+  zIndex: {
+    type: Number,
+    default: 2000,
+    validator(value) {
+      return value > 0
+    }
+  },
+  transitionName: {
+    type: String,
+    default: `${prefix}-popup-top`
+  },
+  innerClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  startOffset: {
+    type: Number,
+    default: 30
+  },
+  placement: {
+    default: 'top-right',
+    validator(value) {
+      return [
+        'top-right',
+        'top-center',
+        'top-left',
+        'bottom-right',
+        'bottom-center',
+        'bottom-left'
+      ].includes(value)
+    }
+  }
+})
 
 export default {
   name: 'Popup',
   components: {
     PopupItem
   },
-  props: {
-    zIndex,
-    transitionName: {
-      type: String,
-      default: `${prefix}-popup-top`
-    },
-    innerClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    startOffset: {
-      type: Number,
-      default: 30
-    },
-    placement: {
-      default: 'top-right',
-      validator(value) {
-        return [
-          'top-right',
-          'top-center',
-          'top-left',
-          'bottom-right',
-          'bottom-center',
-          'bottom-left'
-        ].includes(value)
-      }
-    }
-  },
+  props,
   data() {
     return {
       prefix: `${prefix}-popup`,

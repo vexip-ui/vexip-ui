@@ -31,6 +31,7 @@
 
 <script>
 import { usePopper } from '../../src/mixins/popper'
+import { useConfigurableProps } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import { findComponentUpward } from '../../src/utils/common'
 
@@ -38,44 +39,47 @@ const { prefix } = require('../../src/style/basis/variable')
 
 const parentName = 'Dropdown'
 
+const props = useConfigurableProps({
+  visible: {
+    type: Boolean,
+    default: false
+  },
+  value: {
+    type: String,
+    default: null
+  },
+  name: {
+    type: [String, Number],
+    default: null
+  },
+  outsideClose: {
+    type: Boolean,
+    default: true
+  },
+  trigger: {
+    default: 'hover',
+    validator(value) {
+      return ['hover', 'click', 'custom'].includes(value)
+    }
+  },
+  transitionName: {
+    type: String,
+    default: `${prefix}-drop`
+  },
+  useValue: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'Dropdown',
   mixins: [usePopper({ isDrop: true })],
   model: {
     event: 'on-select'
   },
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    },
-    value: {
-      type: String,
-      default: null
-    },
-    name: {
-      type: [String, Number],
-      default: null
-    },
-    outsideClose: {
-      type: Boolean,
-      default: true
-    },
-    trigger: {
-      default: 'hover',
-      validator(value) {
-        return ['hover', 'click', 'custom'].includes(value)
-      }
-    },
-    transitionName: {
-      type: String,
-      default: `${prefix}-drop`
-    },
-    useValue: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-toggle', 'on-select', 'on-click-outside', 'on-outside-close'],
   data() {
     return {
       prefix: `${prefix}-dropdown`,

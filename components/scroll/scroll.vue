@@ -45,6 +45,7 @@
 
 <script>
 import Scrollbar from './scrollbar'
+import { useConfigurableProps } from '../../src/config/properties'
 import { multipleFixed, throttle, isNull, debounce } from '../../src/utils/common'
 import { USE_TOUCH } from '../../src/utils/event'
 
@@ -58,79 +59,81 @@ const BOTH = 'both'
 const moveEvent = USE_TOUCH ? 'touchmove' : 'mousemove'
 const upEvent = USE_TOUCH ? 'touchend' : 'mouseup'
 
+const props = useConfigurableProps({
+  scrollClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  mode: {
+    default: VERTICAL,
+    validator(value) {
+      return [HORIZONTAL, VERTICAL, BOTH].includes(value)
+    }
+  },
+  width: {
+    type: [Number, String],
+    default: ''
+  },
+  height: {
+    type: [Number, String],
+    default: ''
+  },
+  deltaX: {
+    type: Number,
+    default: 20
+  },
+  deltaY: {
+    type: Number,
+    default: 20
+  },
+  pointer: {
+    type: Boolean,
+    default: false
+  },
+  wheel: {
+    type: Boolean,
+    default: true
+  },
+  scrollX: {
+    type: Number,
+    default: 0
+  },
+  scrollY: {
+    type: Number,
+    default: 0
+  },
+  useXBar: {
+    type: Boolean,
+    default: false
+  },
+  useYBar: {
+    type: Boolean,
+    default: false
+  },
+  barFade: {
+    type: Number,
+    default: 1500
+  },
+  barClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  autoplay: {
+    type: [Boolean, Number],
+    default: false
+  },
+  playWaiting: {
+    type: Number,
+    default: 500
+  }
+})
+
 export default {
   name: 'Scroll',
   components: {
     Scrollbar
   },
-  props: {
-    scrollClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    mode: {
-      default: VERTICAL,
-      validator(value) {
-        return [HORIZONTAL, VERTICAL, BOTH].includes(value)
-      }
-    },
-    width: {
-      type: [Number, String],
-      default: ''
-    },
-    height: {
-      type: [Number, String],
-      default: ''
-    },
-    deltaX: {
-      type: Number,
-      default: 20
-    },
-    deltaY: {
-      type: Number,
-      default: 20
-    },
-    pointer: {
-      type: Boolean,
-      default: false
-    },
-    wheel: {
-      type: Boolean,
-      default: true
-    },
-    scrollX: {
-      type: Number,
-      default: 0
-    },
-    scrollY: {
-      type: Number,
-      default: 0
-    },
-    useXBar: {
-      type: Boolean,
-      default: false
-    },
-    useYBar: {
-      type: Boolean,
-      default: false
-    },
-    barFade: {
-      type: Number,
-      default: 1500
-    },
-    barClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    autoplay: {
-      type: [Boolean, Number],
-      default: false
-    },
-    playWaiting: {
-      type: Number,
-      default: 500
-    }
-  },
+  props,
   emits: ['on-x-enable-change', 'on-y-enable-change', 'on-wheel', 'on-scroll'],
   data() {
     return {

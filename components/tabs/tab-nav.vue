@@ -12,9 +12,21 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
 import { isNull } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  active: {
+    type: [String, Number],
+    default: null
+  },
+  card: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'TabNav',
@@ -22,16 +34,8 @@ export default {
     prop: 'active',
     event: 'on-change'
   },
-  props: {
-    active: {
-      type: [String, Number],
-      default: null
-    },
-    card: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-change', 'update:active'],
   data() {
     return {
       prefix: `${prefix}-tab-nav`,

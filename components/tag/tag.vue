@@ -17,33 +17,37 @@
 
 <script>
 import Icon from '../icon'
+import { useConfigurableProps } from '../../src/config/properties'
 import '../../icons/times'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  type: {
+    default: 'default',
+    validator(value) {
+      return ['default', 'primary', 'success', 'error', 'warning'].includes(
+        value
+      )
+    }
+  },
+  border: {
+    type: Boolean,
+    default: false
+  },
+  closable: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Tag',
   components: {
     Icon
   },
-  props: {
-    type: {
-      default: 'default',
-      validator(value) {
-        return ['default', 'primary', 'success', 'error', 'warning'].includes(
-          value
-        )
-      }
-    },
-    border: {
-      type: Boolean,
-      default: false
-    },
-    closable: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-close'],
   data() {
     return {
       prefix: `${prefix}-tag`,

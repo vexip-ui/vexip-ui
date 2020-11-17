@@ -5,53 +5,57 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
+
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  model: {
+    type: Object,
+    default() {
+      return {}
+    }
+  },
+  rules: {
+    type: Object,
+    default() {
+      return {}
+    }
+  },
+  labelWidth: {
+    type: Number,
+    default: 80
+  },
+  labelPosition: {
+    default: 'right',
+    validator(value) {
+      return ['right', 'left', 'top'].includes(value)
+    }
+  },
+  allRequired: {
+    type: Boolean,
+    default: false
+  },
+  labelSuffix: {
+    type: String,
+    default: ''
+  },
+  hideAsterisk: {
+    type: Boolean,
+    default: false
+  },
+  validateAll: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Form',
   provide() {
     return { form: this }
   },
-  props: {
-    model: {
-      type: Object,
-      default() {
-        return {}
-      }
-    },
-    rules: {
-      type: Object,
-      default() {
-        return {}
-      }
-    },
-    labelWidth: {
-      type: Number,
-      default: 80
-    },
-    labelPosition: {
-      default: 'right',
-      validator(value) {
-        return ['right', 'left', 'top'].includes(value)
-      }
-    },
-    allRequired: {
-      type: Boolean,
-      default: false
-    },
-    labelSuffix: {
-      type: String,
-      default: ''
-    },
-    hideAsterisk: {
-      type: Boolean,
-      default: false
-    },
-    validateAll: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
   data() {
     return {
       prefix: `${prefix}-form`,

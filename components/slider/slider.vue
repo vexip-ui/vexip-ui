@@ -36,9 +36,40 @@
 
 <script>
 import Tooltip from '../tooltip'
+import { useConfigurableProps } from '../../src/config/properties'
 import { throttle } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  value: {
+    type: Number,
+    default: 0
+  },
+  min: {
+    type: Number,
+    default: 0
+  },
+  max: {
+    type: Number,
+    default: 100
+  },
+  step: {
+    type: Number,
+    default: 1,
+    validator(value) {
+      return Math.ceil(value) === value
+    }
+  },
+  vertical: {
+    type: Boolean,
+    default: false
+  },
+  hideTip: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Slider',
@@ -48,35 +79,8 @@ export default {
   model: {
     event: 'on-change'
   },
-  props: {
-    value: {
-      type: Number,
-      default: 0
-    },
-    min: {
-      type: Number,
-      default: 0
-    },
-    max: {
-      type: Number,
-      default: 100
-    },
-    step: {
-      type: Number,
-      default: 1,
-      validator(value) {
-        return Math.ceil(value) === value
-      }
-    },
-    vertical: {
-      type: Boolean,
-      default: false
-    },
-    hideTip: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-change', 'on-input', 'on-change'],
   data() {
     return {
       prefix: `${prefix}-slider`,

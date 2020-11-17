@@ -17,36 +17,40 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
 import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 const parentName = 'Timeline'
 
-export default {
-  name: 'TimelineItem',
-  props: {
-    type: {
-      default: 'normal',
-      validator(value) {
-        return [
-          'normal',
-          'success',
-          'error',
-          'warning',
-          'disabled',
-          'custom'
-        ].includes(value)
-      }
-    },
-    color: {
-      type: String,
-      default: ''
-    },
-    label: {
-      type: [Number, String],
-      default: null
+const props = useConfigurableProps({
+  type: {
+    default: 'normal',
+    validator(value) {
+      return [
+        'normal',
+        'success',
+        'error',
+        'warning',
+        'disabled',
+        'custom'
+      ].includes(value)
     }
   },
+  color: {
+    type: String,
+    default: ''
+  },
+  label: {
+    type: [Number, String],
+    default: null
+  }
+})
+
+export default {
+  name: 'TimelineItem',
+  props,
+  emits: ['on-signal-click'],
   data() {
     return {
       prefix: `${prefix}-timeline`

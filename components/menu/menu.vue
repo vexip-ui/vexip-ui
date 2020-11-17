@@ -5,10 +5,56 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
 import { removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
+
 export const baseIndentWidth = 20 // px
+
+const props = useConfigurableProps({
+  active: {
+    type: String,
+    default: null
+  },
+  accordion: {
+    type: Boolean,
+    default: false
+  },
+  markerType: {
+    default: null,
+    validator(value) {
+      return ['top', 'right', 'bottom', 'left', 'none'].includes(value)
+    }
+  },
+  reduced: {
+    type: Boolean,
+    default: false
+  },
+  horizontal: {
+    type: Boolean,
+    default: false
+  },
+  // 强制在纵向展开模式下也使用 dropdown
+  groupType: {
+    default: 'collapse',
+    validator(value) {
+      return ['collapse', 'dropdown'].includes(value)
+    }
+  },
+  theme: {
+    default: 'light',
+    validator(value) {
+      return ['light', 'dark'].includes(value)
+    }
+  },
+  tooltipTheme: {
+    default: 'dark',
+    validator(value) {
+      return ['light', 'dark'].includes(value)
+    }
+  }
+})
 
 export default {
   name: 'Menu',
@@ -21,49 +67,8 @@ export default {
       menu: this
     }
   },
-  props: {
-    active: {
-      type: String,
-      default: null
-    },
-    accordion: {
-      type: Boolean,
-      default: false
-    },
-    markerType: {
-      default: null,
-      validator(value) {
-        return ['top', 'right', 'bottom', 'left', 'none'].includes(value)
-      }
-    },
-    reduced: {
-      type: Boolean,
-      default: false
-    },
-    horizontal: {
-      type: Boolean,
-      default: false
-    },
-    // 强制在纵向展开模式下也使用 dropdown
-    groupType: {
-      default: 'collapse',
-      validator(value) {
-        return ['collapse', 'dropdown'].includes(value)
-      }
-    },
-    theme: {
-      default: 'light',
-      validator(value) {
-        return ['light', 'dark'].includes(value)
-      }
-    },
-    tooltipTheme: {
-      default: 'dark',
-      validator(value) {
-        return ['light', 'dark'].includes(value)
-      }
-    }
-  },
+  props,
+  emits: ['on-select', 'on-expand', 'on-reduce'],
   data() {
     return {
       prefix: `${prefix}-menu`,

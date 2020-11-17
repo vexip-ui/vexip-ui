@@ -30,6 +30,7 @@
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
+import { useConfigurableProps } from '../../src/config/properties'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -40,48 +41,51 @@ const predefinedIcons = {
   error: 'times-circle'
 }
 
+const props = useConfigurableProps({
+  type: {
+    default: 'info',
+    validator(value) {
+      return ['info', 'success', 'warning', 'error'].includes(value)
+    }
+  },
+  title: {
+    type: String,
+    default: ''
+  },
+  colorfulText: {
+    type: Boolean,
+    default: false
+  },
+  icon: {
+    type: [Boolean, String],
+    default: false
+  },
+  closable: {
+    type: Boolean,
+    default: false
+  },
+  iconColor: {
+    type: String,
+    default: ''
+  },
+  noBorder: {
+    type: Boolean,
+    default: false
+  },
+  banner: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'Alert',
   components: {
     CollapseTransition,
     Icon
   },
-  props: {
-    type: {
-      default: 'info',
-      validator(value) {
-        return ['info', 'success', 'warning', 'error'].includes(value)
-      }
-    },
-    title: {
-      type: String,
-      default: ''
-    },
-    colorfulText: {
-      type: Boolean,
-      default: false
-    },
-    icon: {
-      type: [Boolean, String],
-      default: false
-    },
-    closable: {
-      type: Boolean,
-      default: false
-    },
-    iconColor: {
-      type: String,
-      default: ''
-    },
-    noBorder: {
-      type: Boolean,
-      default: false
-    },
-    banner: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-close', 'on-hide'],
   data() {
     return {
       prefix: `${prefix}-alert`,

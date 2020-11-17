@@ -15,8 +15,7 @@
 </template>
 
 <script>
-// import formControl from '../../src/mixins/form-control'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import {
   isNull,
   noop,
@@ -28,9 +27,53 @@ const { prefix } = require('../../src/style/basis/variable')
 
 const groupName = 'CheckboxGroup'
 
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  checked: {
+    type: Boolean,
+    default: false
+  },
+  label: {
+    type: [String, Number],
+    default: null
+  },
+  value: {
+    type: [String, Number],
+    default: null
+  },
+  labelClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  border: {
+    type: Boolean,
+    default: false
+  },
+  control: {
+    type: Boolean,
+    default: false
+  },
+  partial: {
+    type: Boolean,
+    default: false
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'Checkbox',
-  // mixins: [formControl],
   model: {
     prop: 'checked',
     event: 'on-change'
@@ -38,53 +81,8 @@ export default {
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    checked: {
-      type: Boolean,
-      default: false
-    },
-    label: {
-      type: [String, Number],
-      default: null
-    },
-    value: {
-      type: [String, Number],
-      default: null
-    },
-    labelClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    // size: {
-    //   default() {
-    //     return config.checkbox.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    border: {
-      type: Boolean,
-      default: false
-    },
-    control: {
-      type: Boolean,
-      default: false
-    },
-    partial: {
-      type: Boolean,
-      default: false
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-change', 'update:check'],
   data() {
     return {
       prefix: `${prefix}-checkbox`,

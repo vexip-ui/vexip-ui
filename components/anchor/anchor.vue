@@ -23,9 +23,33 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
 import { findComponentsDownward, animateScrollTo } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  active: {
+    type: String,
+    default: ''
+  },
+  viewer: {
+    type: [String, Object, Function],
+    default: null
+  },
+  offset: {
+    type: Number,
+    default: 8
+  },
+  marker: {
+    type: Boolean,
+    default: false
+  },
+  scrollDuration: {
+    type: Number,
+    default: 500
+  }
+})
 
 export const baseIndentWidth = 14 // px
 
@@ -38,28 +62,8 @@ export default {
   provide() {
     return { anchor: this }
   },
-  props: {
-    active: {
-      type: String,
-      default: ''
-    },
-    viewer: {
-      type: [String, Object, Function],
-      default: null
-    },
-    offset: {
-      type: Number,
-      default: 8
-    },
-    marker: {
-      type: Boolean,
-      default: false
-    },
-    scrollDuration: {
-      type: Number,
-      default: 500
-    }
-  },
+  props,
+  emits: ['on-change'],
   data() {
     return {
       prefix: `${prefix}-anchor`,

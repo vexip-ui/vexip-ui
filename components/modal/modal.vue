@@ -79,7 +79,7 @@
 import Button from '../button'
 import Icon from '../icon'
 import Masker from '../masker'
-import { transfer } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 // import { CLICK_TYPE } from '../../src/utils/event'
 import { isPromise } from '../../src/utils/common'
 
@@ -99,6 +99,79 @@ const { prefix } = require('../../src/style/basis/variable')
 //   mousePosition.y = clientY
 // })
 
+const props = useConfigurableProps({
+  transfer: {
+    type: [Boolean, String],
+    default: false
+  },
+  active: {
+    type: Boolean,
+    default: false
+  },
+  width: {
+    type: [Number, String],
+    default: 600
+  },
+  top: {
+    type: [Number, String],
+    default: 100,
+    validator(value) {
+      return value === 'auto' || typeof value === 'number'
+    }
+  },
+  left: {
+    type: [Number, String],
+    default: 'auto',
+    validator(value) {
+      return value === 'auto' || typeof value === 'number'
+    }
+  },
+  title: {
+    type: String,
+    default: ''
+  },
+  closable: {
+    type: Boolean,
+    default: true
+  },
+  inner: {
+    type: Boolean,
+    default: false
+  },
+  maskClose: {
+    type: Boolean,
+    default: true
+  },
+  modalClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  noFooter: {
+    type: Boolean,
+    default: false
+  },
+  hideMask: {
+    type: Boolean,
+    default: false
+  },
+  draggable: {
+    type: Boolean,
+    default: false
+  },
+  resizable: {
+    type: Boolean,
+    default: false
+  },
+  beforeClose: {
+    type: Function,
+    default: null
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'Modal',
   components: {
@@ -110,81 +183,7 @@ export default {
     prop: 'active',
     event: 'on-toggle'
   },
-  props: {
-    transfer,
-    active: {
-      type: Boolean,
-      default: false
-    },
-    width: {
-      type: [Number, String],
-      default: 600
-    },
-    top: {
-      type: [Number, String],
-      default: 100,
-      validator(value) {
-        return value === 'auto' || typeof value === 'number'
-      }
-    },
-    left: {
-      type: [Number, String],
-      default: 'auto',
-      validator(value) {
-        return value === 'auto' || typeof value === 'number'
-      }
-    },
-    title: {
-      type: String,
-      default: ''
-    },
-    closable: {
-      type: Boolean,
-      default: true
-    },
-    inner: {
-      type: Boolean,
-      default: false
-    },
-    maskClose: {
-      type: Boolean,
-      default: true
-    },
-    modalClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    noFooter: {
-      type: Boolean,
-      default: false
-    },
-    hideMask: {
-      type: Boolean,
-      default: false
-    },
-    // transfer: {
-    //   type: [Boolean, String],
-    //   default() {
-    //     return config.modal.transfer ?? false
-    //   }
-    // },
-    draggable: {
-      type: Boolean,
-      default: false
-    },
-    resizable: {
-      type: Boolean,
-      default: false
-    },
-    beforeClose: {
-      type: Function,
-      default: null
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
   emits: [
     'on-toggle',
     'on-ok',

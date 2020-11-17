@@ -105,7 +105,7 @@ import TimeWheel from './time-wheel'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import { placementWhileList, usePopper } from '../../src/mixins/popper'
 // import formControl from '../../src/mixins/form-control'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { format, toDate } from '../../src/utils/date'
 import { noop } from '../../src/utils/common'
 
@@ -113,6 +113,96 @@ import '../../icons/times-circle'
 import '../../icons/regular/clock'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  placement: {
+    default: 'bottom-start',
+    validator(value) {
+      return placementWhileList.includes(value)
+    }
+  },
+  format: {
+    type: String,
+    default: 'HH:mm:ss'
+  },
+  separator: {
+    type: String,
+    default: ':'
+  },
+  value: {
+    type: [Number, String, Date],
+    default() {
+      return new Date()
+    }
+  },
+  filler: {
+    type: String,
+    default: '-',
+    validator(value) {
+      return value.length === 1
+    }
+  },
+  noFiller: {
+    type: Boolean,
+    default: false
+  },
+  clearable: {
+    type: Boolean,
+    default: false
+  },
+  noAction: {
+    type: Boolean,
+    default: false
+  },
+  noArrow: {
+    type: Boolean,
+    default: false
+  },
+  candidate: {
+    default: 2,
+    validator(value) {
+      return [0, 1, 2, 3].includes(value)
+    }
+  },
+  steps: {
+    type: Array,
+    default() {
+      return [1, 1, 1]
+    }
+  },
+  labels: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  shortcuts: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  state: {
+    default: 'default',
+    validator(value) {
+      return ['default', 'success', 'error', 'warning'].includes(value)
+    }
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'TimePicker',
@@ -129,104 +219,20 @@ export default {
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    // type: {
-    //   default: 'dropdown',
-    //   validator (value) {
-    //     return ['dropdown', 'drawer'].includes
-    //   }
-    // },
-    placement: {
-      default: 'bottom-start',
-      validator(value) {
-        return placementWhileList.includes(value)
-      }
-    },
-    format: {
-      type: String,
-      default: 'HH:mm:ss'
-    },
-    separator: {
-      type: String,
-      default: ':'
-    },
-    value: {
-      type: [Number, String, Date],
-      default() {
-        return new Date()
-      }
-    },
-    filler: {
-      type: String,
-      default: '-',
-      validator(value) {
-        return value.length === 1
-      }
-    },
-    noFiller: {
-      type: Boolean,
-      default: false
-    },
-    clearable: {
-      type: Boolean,
-      default: false
-    },
-    noAction: {
-      type: Boolean,
-      default: false
-    },
-    noArrow: {
-      type: Boolean,
-      default: false
-    },
-    candidate: {
-      default: 2,
-      validator(value) {
-        return [0, 1, 2, 3].includes(value)
-      }
-    },
-    steps: {
-      type: Array,
-      default() {
-        return [1, 1, 1]
-      }
-    },
-    labels: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    shortcuts: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    // size: {
-    //   default() {
-    //     return config.timePicker.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    state: {
-      default: 'default',
-      validator(value) {
-        return ['default', 'success', 'error', 'warning'].includes(value)
-      }
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: [
+    'on-change-col',
+    'on-change',
+    'on-foucs',
+    'on-blur',
+    'on-plus',
+    'on-minus',
+    'on-enter',
+    'on-input',
+    'on-clear',
+    'on-shortcut',
+    'update:value'
+  ],
   data() {
     return {
       prefix: `${prefix}-time-picker`,

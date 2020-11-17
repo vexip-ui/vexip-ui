@@ -75,7 +75,8 @@ import Message from '../components/message'
 import Notice from '../components/notice'
 
 // layout
-import { Row, Column } from '../components/grid'
+import Row from '../components/row'
+import Column from '../components/row/column'
 
 // icons
 import '../icons'
@@ -85,7 +86,7 @@ import * as Util from './utils/common'
 import * as ColorUtil from './utils/color'
 import * as DateUtil from './utils/date'
 
-import { config, defaults } from './config/defaults'
+import { config } from './config/properties'
 
 import './style/index.scss'
 
@@ -185,13 +186,11 @@ const install = (Vue, options = {}) => {
 
   if (options.config) {
     Object.keys(options.config).forEach(key => {
-      if (key in defaults) {
-        defaults[key] = options.config[key]
-      } else {
-        config[key] = options.config[key]
-      }
+      config[key] = options.config[key]
     })
   }
+
+  Vue.prototype.$vexipConfig = config
 }
 
 if (typeof window !== 'undefined' && window.Vue) {

@@ -5,20 +5,25 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
+
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  pending: {
+    type: Boolean,
+    default: false
+  },
+  bothSides: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Timeline',
-  props: {
-    pending: {
-      type: Boolean,
-      default: false
-    },
-    bothSides: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-signal-click'],
   data() {
     return {
       prefix: `${prefix}-timeline`,

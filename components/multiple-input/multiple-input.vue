@@ -71,134 +71,139 @@
 
 <script>
 import Icon from '../icon'
-// import formControl from '../../src/mixins/form-control'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import { noop } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  value: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  separator: {
+    type: [String, Array],
+    default: ''
+  },
+  labels: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  readonly: {
+    type: Boolean,
+    default: false
+  },
+  state: {
+    default: 'default',
+    validator(value) {
+      return ['default', 'success', 'error', 'warning'].includes(value)
+    }
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  itemClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  itemClassList: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  itemWidth: {
+    type: Number,
+    default: null,
+    validator(value) {
+      return value >= 20
+    }
+  },
+  itemWidthList: {
+    type: Array,
+    default() {
+      return []
+    },
+    validator(value) {
+      for (let i = 0, len = value.length; i < len; i++) {
+        if (value[i] < 20) return false
+      }
+
+      return true
+    }
+  },
+  prefix: {
+    type: String,
+    default: ''
+  },
+  prefixColor: {
+    type: String,
+    default: ''
+  },
+  suffix: {
+    type: String,
+    default: ''
+  },
+  suffixColor: {
+    type: String,
+    default: ''
+  },
+  outsideBlur: {
+    type: Boolean,
+    default: true
+  },
+  autoFocus: {
+    type: Boolean,
+    default: true
+  },
+  defaultFocus: {
+    type: Number,
+    default: 0
+  },
+  disabledItem: {
+    type: Function,
+    default() {
+      return false
+    }
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'MultipleInput',
   components: {
     Icon
   },
-  // mixins: [formControl],
   model: {
     event: 'on-change'
   },
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    value: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    separator: {
-      type: [String, Array],
-      default: ''
-    },
-    labels: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    // size: {
-    //   default() {
-    //     return config.multipleInput.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    state: {
-      default: 'default',
-      validator(value) {
-        return ['default', 'success', 'error', 'warning'].includes(value)
-      }
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    itemClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    itemClassList: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    itemWidth: {
-      type: Number,
-      default: null,
-      validator(value) {
-        return value >= 20
-      }
-    },
-    itemWidthList: {
-      type: Array,
-      default() {
-        return []
-      },
-      validator(value) {
-        for (let i = 0, len = value.length; i < len; i++) {
-          if (value[i] < 20) return false
-        }
-
-        return true
-      }
-    },
-    prefix: {
-      type: String,
-      default: ''
-    },
-    prefixColor: {
-      type: String,
-      default: ''
-    },
-    suffix: {
-      type: String,
-      default: ''
-    },
-    suffixColor: {
-      type: String,
-      default: ''
-    },
-    outsideBlur: {
-      type: Boolean,
-      default: true
-    },
-    autoFocus: {
-      type: Boolean,
-      default: true
-    },
-    defaultFocus: {
-      type: Number,
-      default: 0
-    },
-    disabledItem: {
-      type: Function,
-      default() {
-        return false
-      }
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: [
+    'on-change',
+    'on-focus',
+    'on-blur',
+    'on-item-change',
+    'on-prefix-click',
+    'on-suffix-click'
+  ],
   data() {
     return {
       prefixCls: `${prefix}-multiple-input`,

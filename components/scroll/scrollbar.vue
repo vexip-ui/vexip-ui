@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
 import { throttle, isDefined } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -17,50 +18,52 @@ const { prefix } = require('../../src/style/basis/variable')
 const HORIZONTAL = 1
 const VERTICAL = 2
 
-export default {
-  name: 'Scrollbar',
-  props: {
-    placement: {
-      default: 'right',
-      validator(value) {
-        return ['top', 'right', 'bottom', 'left'].includes(value)
-      }
-    },
-    scroll: {
-      type: Number,
-      default: 0,
-      validator(value) {
-        return value >= 0 && value <= 100
-      }
-    },
-    barLength: {
-      type: Number,
-      default: 35,
-      validator(value) {
-        return value > 0 && value < 100
-      }
-    },
-    fade: {
-      type: Number,
-      default: 1500
-    },
-    barColor: {
-      type: String,
-      default: null
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    wrapper: {
-      type: [String, Object],
-      default: null
-    },
-    duration: {
-      type: Number,
-      default: null
+const props = useConfigurableProps({
+  placement: {
+    default: 'right',
+    validator(value) {
+      return ['top', 'right', 'bottom', 'left'].includes(value)
     }
   },
+  scroll: {
+    type: Number,
+    default: 0,
+    validator(value) {
+      return value >= 0 && value <= 100
+    }
+  },
+  barLength: {
+    type: Number,
+    default: 35,
+    validator(value) {
+      return value > 0 && value < 100
+    }
+  },
+  fade: {
+    type: Number,
+    default: 1500
+  },
+  barColor: {
+    type: String,
+    default: null
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  wrapper: {
+    type: [String, Object],
+    default: null
+  },
+  duration: {
+    type: Number,
+    default: null
+  }
+})
+
+export default {
+  name: 'Scrollbar',
+  props,
   emits: ['on-scroll', 'on-scroll-start', 'on-scroll-end'],
   data() {
     return {

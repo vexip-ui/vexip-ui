@@ -108,8 +108,7 @@
 <script>
 import Condition from '../basis/condition'
 import Icon from '../icon'
-// import formControl from '../../src/mixins/form-control'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { noop, throttle, isNull } from '../../src/utils/common'
 import '../../icons/caret-up'
 import '../../icons/caret-down'
@@ -118,147 +117,145 @@ import '../../icons/regular/eye'
 
 const { prefix } = require('../../src/style/basis/variable')
 
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  type: {
+    default: 'text',
+    validator(value) {
+      if (value === 'number') {
+        console.warn(
+          '[Vexip warn] Number type for Input will be deprecated soon, please replace it with NumberInput.'
+        )
+      }
+
+      return [
+        'text',
+        'number',
+        'password',
+        'date',
+        'datetime',
+        'time'
+      ].includes(value)
+    }
+  },
+  state: {
+    default: 'default',
+    validator(value) {
+      return ['default', 'success', 'error', 'warning'].includes(value)
+    }
+  },
+  prefix: {
+    type: String,
+    default: ''
+  },
+  prefixColor: {
+    type: String,
+    default: ''
+  },
+  suffix: {
+    type: String,
+    default: ''
+  },
+  suffixColor: {
+    type: String,
+    default: ''
+  },
+  formatter: {
+    type: Function,
+    default: null
+  },
+  accessor: {
+    type: Function,
+    default: null
+  },
+  value: {
+    type: [String, Number],
+    default: null
+  },
+  placeholder: {
+    type: String,
+    default: ''
+  },
+  autofocus: {
+    type: Boolean,
+    default: false
+  },
+  spellcheck: {
+    type: Boolean,
+    default: false
+  },
+  autocomplete: {
+    type: String,
+    default: 'off'
+  },
+  precision: {
+    type: Number,
+    default: 0
+  },
+  readonly: {
+    type: Boolean,
+    default: false
+  },
+  step: {
+    type: Number,
+    default: 1
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  inputClass: {
+    type: [String, Object, Array],
+    default: ''
+  },
+  debounce: {
+    type: Boolean,
+    default: false
+  },
+  maxLength: {
+    type: Number,
+    default: 0
+  },
+  before: {
+    type: String,
+    default: ''
+  },
+  after: {
+    type: String,
+    default: ''
+  },
+  password: {
+    type: Boolean,
+    default: false
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  },
+  clearable: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'Input',
   components: {
     Condition,
     Icon
   },
-  // mixins: [formControl],
   model: {
     event: 'on-change'
   },
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    type: {
-      default: 'text',
-      validator(value) {
-        if (value === 'number') {
-          console.warn(
-            '[Vexip warn] Number type for Input will be deprecated soon, please replace it with NumberInput.'
-          )
-        }
-
-        return [
-          'text',
-          'number',
-          'password',
-          'date',
-          'datetime',
-          'time'
-        ].includes(value)
-      }
-    },
-    state: {
-      default: 'default',
-      validator(value) {
-        return ['default', 'success', 'error', 'warning'].includes(value)
-      }
-    },
-    prefix: {
-      type: String,
-      default: ''
-    },
-    prefixColor: {
-      type: String,
-      default: ''
-    },
-    suffix: {
-      type: String,
-      default: ''
-    },
-    suffixColor: {
-      type: String,
-      default: ''
-    },
-    formatter: {
-      type: Function,
-      default: null
-    },
-    accessor: {
-      type: Function,
-      default: null
-    },
-    value: {
-      type: [String, Number],
-      default: null
-    },
-    placeholder: {
-      type: String,
-      default: ''
-    },
-    autofocus: {
-      type: Boolean,
-      default: false
-    },
-    spellcheck: {
-      type: Boolean,
-      default: false
-    },
-    autocomplete: {
-      type: String,
-      default: 'off'
-    },
-    precision: {
-      type: Number,
-      default: 0
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    step: {
-      type: Number,
-      default: 1
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    inputClass: {
-      type: [String, Object, Array],
-      default: ''
-    },
-    // size: {
-    //   default() {
-    //     return config.input.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    debounce: {
-      type: Boolean,
-      default: false
-    },
-    maxLength: {
-      type: Number,
-      default: 0
-    },
-    before: {
-      type: String,
-      default: ''
-    },
-    after: {
-      type: String,
-      default: ''
-    },
-    password: {
-      type: Boolean,
-      default: false
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    },
-    clearable: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
   data() {
     return {
       prefixCls: `${prefix}-input`,

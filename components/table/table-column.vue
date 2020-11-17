@@ -4,12 +4,12 @@
 
 <script>
 import { TYPE_EXPAND, TYPE_COLUMNS } from './store'
-import { config } from '../../src/config/defaults'
+import { useConfigurableProps } from '../../src/config/properties'
 import { removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
-const columnProps = {
+const props = useConfigurableProps({
   idKey: {
     type: [Number, String],
     required: true
@@ -71,7 +71,7 @@ const columnProps = {
   },
   checkboxSize: {
     default() {
-      return config.checkbox.size ?? 'default'
+      return this.$vexipConfig.checkbox.size ?? 'default'
     },
     validator(value) {
       return ['small', 'default', 'large'].includes(value)
@@ -89,9 +89,9 @@ const columnProps = {
     type: Function,
     default: null
   }
-}
+})
 
-const propKeys = Object.keys(columnProps)
+const propKeys = Object.keys(props)
 const aliases = {
   idKey: 'key'
 }
@@ -99,7 +99,7 @@ const aliases = {
 export default {
   name: 'TableColumn',
   inject: ['table'],
-  props: columnProps,
+  props,
   data() {
     return {
       prefix: `${prefix}-table`,
@@ -168,7 +168,6 @@ export default {
     if (this.table) {
       removeArrayItem(this.table.templateColumns, this.config)
     }
-  },
-  methods: {}
+  }
 }
 </script>

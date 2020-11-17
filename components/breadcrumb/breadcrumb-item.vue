@@ -27,6 +27,7 @@ export default {
       default: null
     }
   },
+  emits: ['on-select', 'on-separator-click'],
   data() {
     return {
       prefix: `${prefix}-breadcrumb`,

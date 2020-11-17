@@ -117,6 +117,7 @@ import Icon from '../icon'
 import UploadFile from './upload-file'
 
 import { upload } from './request'
+import { useConfigurableProps } from '../../src/config/properties'
 import { getRandomString, isPromise } from '../../src/utils/common'
 
 import '../../icons/cloud-upload-alt'
@@ -132,6 +133,102 @@ export const DELETE = 'delete'
 
 export const statusList = [PENDING, UPLOADING, FAIL, SUCCESS, DELETE]
 
+const props = useConfigurableProps({
+  url: {
+    type: String,
+    default: ''
+  },
+  multiple: {
+    type: Boolean,
+    default: false
+  },
+  tip: {
+    type: String,
+    default: ''
+  },
+  accept: {
+    type: [String, Array],
+    default: null
+  },
+  filter: {
+    type: [String, Array],
+    default: ''
+  },
+  maxSize: {
+    type: Number,
+    default: null,
+    validator(value) {
+      return value > 0
+    }
+  },
+  field: {
+    type: String,
+    default: 'file'
+  },
+  data: {
+    type: Object,
+    default() {
+      return {}
+    }
+  },
+  headers: {
+    type: Object,
+    default() {
+      return {}
+    }
+  },
+  withCredentials: {
+    type: Boolean,
+    default: false
+  },
+  manual: {
+    type: Boolean,
+    default: false
+  },
+  hiddenFiles: {
+    type: Boolean,
+    default: false
+  },
+  countLimit: {
+    type: Number,
+    default: 0
+  },
+  allowDrag: {
+    type: Boolean,
+    default: false
+  },
+  beforeUpload: {
+    type: Function,
+    default: null
+  },
+  beforeSelect: {
+    type: Function,
+    default: null
+  },
+  iconRenderer: {
+    type: Function,
+    default: null
+  },
+  selectToAdd: {
+    type: Boolean,
+    default: false
+  },
+  listType: {
+    default: 'name',
+    validator(value) {
+      return ['name', 'detail', 'thumbnail', 'card'].includes(value)
+    }
+  },
+  block: {
+    type: Boolean,
+    default: false
+  },
+  loadingText: {
+    type: String,
+    default: '上传中'
+  }
+})
+
 export default {
   name: 'Upload',
   components: {
@@ -140,101 +237,17 @@ export default {
     UploadFile
   },
   status: Object.freeze({ PENDING, UPLOADING, FAIL, SUCCESS, DELETE }),
-  props: {
-    url: {
-      type: String,
-      default: ''
-    },
-    multiple: {
-      type: Boolean,
-      default: false
-    },
-    tip: {
-      type: String,
-      default: ''
-    },
-    accept: {
-      type: [String, Array],
-      default: null
-    },
-    filter: {
-      type: [String, Array],
-      default: ''
-    },
-    maxSize: {
-      type: Number,
-      default: null,
-      validator(value) {
-        return value > 0
-      }
-    },
-    field: {
-      type: String,
-      default: 'file'
-    },
-    data: {
-      type: Object,
-      default() {
-        return {}
-      }
-    },
-    headers: {
-      type: Object,
-      default() {
-        return {}
-      }
-    },
-    withCredentials: {
-      type: Boolean,
-      default: false
-    },
-    manual: {
-      type: Boolean,
-      default: false
-    },
-    hiddenFiles: {
-      type: Boolean,
-      default: false
-    },
-    countLimit: {
-      type: Number,
-      default: 0
-    },
-    allowDrag: {
-      type: Boolean,
-      default: false
-    },
-    beforeUpload: {
-      type: Function,
-      default: null
-    },
-    beforeSelect: {
-      type: Function,
-      default: null
-    },
-    iconRenderer: {
-      type: Function,
-      default: null
-    },
-    selectToAdd: {
-      type: Boolean,
-      default: false
-    },
-    listType: {
-      default: 'name',
-      validator(value) {
-        return ['name', 'detail', 'thumbnail', 'card'].includes(value)
-      }
-    },
-    block: {
-      type: Boolean,
-      default: false
-    },
-    loadingText: {
-      type: String,
-      default: '上传中'
-    }
-  },
+  props,
+  emits: [
+    'on-exceed',
+    'on-change',
+    'on-filter-error',
+    'on-size-error',
+    'on-delete',
+    'on-progress',
+    'on-success',
+    'on-error'
+  ],
   data() {
     return {
       prefix: `${prefix}-upload`,

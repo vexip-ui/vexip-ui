@@ -19,28 +19,32 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
+
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  title: {
+    type: String,
+    default: ''
+  },
+  shadow: {
+    default: 'always',
+    validator(value) {
+      return ['always', 'hover', 'never'].includes(value)
+    }
+  },
+  contentStyle: {
+    type: Object,
+    default() {
+      return {}
+    }
+  }
+})
 
 export default {
   name: 'Card',
-  props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    shadow: {
-      default: 'always',
-      validator(value) {
-        return ['always', 'hover', 'never'].includes(value)
-      }
-    },
-    contentStyle: {
-      type: Object,
-      default() {
-        return {}
-      }
-    }
-  },
+  props,
   data() {
     return {
       prefix: `${prefix}-card`

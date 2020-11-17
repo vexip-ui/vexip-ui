@@ -5,20 +5,25 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
+
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  separator: {
+    type: String,
+    default: '/'
+  },
+  border: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Breadcrumb',
-  props: {
-    separator: {
-      type: String,
-      default: '/'
-    },
-    border: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-select', 'on-separator-click'],
   data() {
     return {
       prefix: `${prefix}-breadcrumb`,

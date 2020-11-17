@@ -148,7 +148,7 @@ import NumberInput from '../number-input'
 import Option from '../option'
 import Select from '../select'
 
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { range } from '../../src/utils/common'
 
 import '../../icons/chevron-right'
@@ -158,6 +158,88 @@ import '../../icons/angle-double-left'
 import '../../icons/ellipsis-h'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  total: {
+    type: Number,
+    default: 0,
+    validator(value) {
+      return value >= 0
+    }
+  },
+  noBorder: {
+    type: Boolean,
+    default: false
+  },
+  background: {
+    type: Boolean,
+    default: false
+  },
+  pageSize: {
+    type: Number,
+    default: 10,
+    validator(value) {
+      return value > 0
+    }
+  },
+  sizeOptions: {
+    type: Array,
+    default() {
+      return [10, 20, 50, 100]
+    }
+  },
+  maxCount: {
+    type: Number,
+    default: 7,
+    validator(value) {
+      // 大于6的整数
+      return value === parseInt(value) && value > 6
+    }
+  },
+  active: {
+    type: [Number, String],
+    default: 1,
+    validator(value) {
+      return value > 0
+    }
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  disabledItems: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  turnPageCount: {
+    type: Number,
+    default: 5
+  },
+  pageJump: {
+    type: Boolean,
+    default: false
+  },
+  pageCount: {
+    type: Boolean,
+    default: false
+  },
+  pageTotal: {
+    type: Boolean,
+    default: false
+  },
+  itemUnit: {
+    type: String,
+    default: '条'
+  }
+})
 
 export default {
   name: 'Pagination',
@@ -171,90 +253,7 @@ export default {
     prop: 'active',
     event: 'on-change'
   },
-  props: {
-    size,
-    total: {
-      type: Number,
-      default: 0,
-      validator(value) {
-        return value >= 0
-      }
-    },
-    // size: {
-    //   default() {
-    //     return config.pagination.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    noBorder: {
-      type: Boolean,
-      default: false
-    },
-    background: {
-      type: Boolean,
-      default: false
-    },
-    pageSize: {
-      type: Number,
-      default: 10,
-      validator(value) {
-        return value > 0
-      }
-    },
-    sizeOptions: {
-      type: Array,
-      default() {
-        return [10, 20, 50, 100]
-      }
-    },
-    maxCount: {
-      type: Number,
-      default: 7,
-      validator(value) {
-        // 大于6的整数
-        return value === parseInt(value) && value > 6
-      }
-    },
-    active: {
-      type: [Number, String],
-      default: 1,
-      validator(value) {
-        return value > 0
-      }
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    disabledItems: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    turnPageCount: {
-      type: Number,
-      default: 5
-    },
-    pageJump: {
-      type: Boolean,
-      default: false
-    },
-    pageCount: {
-      type: Boolean,
-      default: false
-    },
-    pageTotal: {
-      type: Boolean,
-      default: false
-    },
-    itemUnit: {
-      type: String,
-      default: '条'
-    }
-  },
+  props,
   emits: ['on-change', 'on-page-size-change'],
   data() {
     return {

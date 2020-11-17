@@ -1,4 +1,4 @@
-import { transfer } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { isNull } from './../utils/common'
 
 const homes = new Map()
@@ -18,7 +18,12 @@ function isTransfer(transfer) {
 }
 
 export default {
-  props: { transfer },
+  props: useConfigurableProps({
+    transfer: {
+      type: [Boolean, String],
+      default: false
+    }
+  }),
   mounted() {
     this._initTransferDom()
   },

@@ -43,6 +43,7 @@
 <script>
 import Input from '../input'
 import TreeNode from './tree-node'
+import { useConfigurableProps } from '../../src/config/properties'
 import { isNull, getType, transformTree, flatTree } from '../../src/utils/common'
 
 import '../../icons/search'
@@ -54,90 +55,106 @@ const BEFORE = 'before'
 const INNER = 'inner'
 const AFTER = 'after'
 
+const props = useConfigurableProps({
+  arrow: {
+    default: 'auto',
+    validator(value) {
+      return typeof value === 'boolean' || value === 'auto'
+    }
+  },
+  data: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  buildTree: {
+    type: Boolean,
+    default: true
+  },
+  emptyTip: {
+    type: String,
+    default: '暂无数据'
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  checkbox: {
+    type: Boolean,
+    default: false
+  },
+  renderer: {
+    type: Function,
+    default: null
+  },
+  idKey: {
+    type: String,
+    default: 'id'
+  },
+  labelKey: {
+    type: String,
+    default: 'label'
+  },
+  childrenKey: {
+    type: String,
+    default: 'children'
+  },
+  parentKey: {
+    type: String,
+    default: 'parent'
+  },
+  multiple: {
+    type: Boolean,
+    default: false
+  },
+  indent: {
+    type: [String, Number],
+    default: '1.2em'
+  },
+  accordion: {
+    type: Boolean,
+    default: false
+  },
+  draggable: {
+    type: Boolean,
+    default: false
+  },
+  search: {
+    type: Boolean,
+    default: false
+  },
+  appear: {
+    type: Boolean,
+    default: false
+  },
+  floorSelect: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'Tree',
   components: {
     Input,
     TreeNode
   },
-  props: {
-    arrow: {
-      default: 'auto',
-      validator(value) {
-        return typeof value === 'boolean' || value === 'auto'
-      }
-    },
-    data: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    buildTree: {
-      type: Boolean,
-      default: true
-    },
-    emptyTip: {
-      type: String,
-      default: '暂无数据'
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    checkbox: {
-      type: Boolean,
-      default: false
-    },
-    renderer: {
-      type: Function,
-      default: null
-    },
-    idKey: {
-      type: String,
-      default: 'id'
-    },
-    labelKey: {
-      type: String,
-      default: 'label'
-    },
-    childrenKey: {
-      type: String,
-      default: 'children'
-    },
-    parentKey: {
-      type: String,
-      default: 'parent'
-    },
-    multiple: {
-      type: Boolean,
-      default: false
-    },
-    indent: {
-      type: [String, Number],
-      default: '1.2em'
-    },
-    accordion: {
-      type: Boolean,
-      default: false
-    },
-    draggable: {
-      type: Boolean,
-      default: false
-    },
-    search: {
-      type: Boolean,
-      default: false
-    },
-    appear: {
-      type: Boolean,
-      default: false
-    },
-    floorSelect: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: [
+    'on-node-change',
+    'on-node-click',
+    'on-node-select',
+    'on-node-cancel',
+    'on-node-expand',
+    'on-node-reduce',
+    'on-node-shrink',
+    'on-async-load',
+    'on-drag-start',
+    'on-drag-over',
+    'on-drop',
+    'on-drag-end'
+  ],
   data() {
     return {
       prefix: `${prefix}-tree`,

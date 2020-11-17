@@ -37,51 +37,54 @@
 
 <script>
 import Bubble from '../bubble'
+import { useConfigurableProps } from '../../src/config/properties'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  percentage: {
+    type: Number,
+    default: 0,
+    validator(value) {
+      return value >= 0 && value <= 100
+    }
+  },
+  strokeWidth: {
+    type: Number,
+    default: 8
+  },
+  infoType: {
+    default: 'outside',
+    validator(value) {
+      return [
+        'outside',
+        'inside',
+        'bubble',
+        'bubble-top',
+        'bubble-bottom',
+        'none'
+      ].includes(value)
+    }
+  },
+  activated: {
+    type: Boolean,
+    default: false
+  },
+  strokeColor: {
+    type: [String, Array, Function],
+    default: null,
+    validator(value) {
+      return !(Array.isArray(value) && (!value[0] || !value[1]))
+    }
+  }
+})
 
 export default {
   name: 'Progress',
   components: {
     Bubble
   },
-  props: {
-    percentage: {
-      type: Number,
-      default: 0,
-      validator(value) {
-        return value >= 0 && value <= 100
-      }
-    },
-    strokeWidth: {
-      type: Number,
-      default: 8
-    },
-    infoType: {
-      default: 'outside',
-      validator(value) {
-        return [
-          'outside',
-          'inside',
-          'bubble',
-          'bubble-top',
-          'bubble-bottom',
-          'none'
-        ].includes(value)
-      }
-    },
-    activated: {
-      type: Boolean,
-      default: false
-    },
-    strokeColor: {
-      type: [String, Array, Function],
-      default: null,
-      validator(value) {
-        return !(Array.isArray(value) && (!value[0] || !value[1]))
-      }
-    }
-  },
+  props,
   data() {
     return {
       prefix: `${prefix}-progress`

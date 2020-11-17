@@ -80,7 +80,7 @@ import Scroll from '../scroll'
 
 import { SELECTOR } from '../option/option'
 import { usePopper } from '../../src/mixins/popper'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { noop, isNull, debounce } from '../../src/utils/common'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 
@@ -88,6 +88,71 @@ import '../../icons/chevron-down'
 import '../../icons/times-circle'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  visible: {
+    type: Boolean,
+    default: false
+  },
+  options: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  state: {
+    default: 'default',
+    validator(value) {
+      return ['default', 'success', 'error', 'warning'].includes(value)
+    }
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  transitionName: {
+    type: String,
+    default: `${prefix}-drop`
+  },
+  outsideClose: {
+    type: Boolean,
+    default: true
+  },
+  placeholder: {
+    type: String,
+    default: '请选择'
+  },
+  prefix: {
+    type: String,
+    default: ''
+  },
+  value: {
+    type: [String, Number],
+    default: null
+  },
+  multiple: {
+    type: Boolean,
+    default: false
+  },
+  clearable: {
+    type: Boolean,
+    default: false
+  },
+  maxListHeight: {
+    type: Number,
+    default: 300
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Select',
@@ -107,65 +172,18 @@ export default {
   provide() {
     return { [SELECTOR]: this }
   },
-  props: {
-    size,
-    visible: {
-      type: Boolean,
-      default: false
-    },
-    options: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    state: {
-      default: 'default',
-      validator(value) {
-        return ['default', 'success', 'error', 'warning'].includes(value)
-      }
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    transitionName: {
-      type: String,
-      default: `${prefix}-drop`
-    },
-    outsideClose: {
-      type: Boolean,
-      default: true
-    },
-    placeholder: {
-      type: String,
-      default: '请选择'
-    },
-    prefix: {
-      type: String,
-      default: ''
-    },
-    value: {
-      type: [String, Number],
-      default: null
-    },
-    multiple: {
-      type: Boolean,
-      default: false
-    },
-    clearable: {
-      type: Boolean,
-      default: false
-    },
-    maxListHeight: {
-      type: Number,
-      default: 300
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: [
+    'on-toggle',
+    'on-select',
+    'on-change',
+    'on-focus',
+    'on-blur',
+    'on-click-outside',
+    'on-outside-close',
+    'on-clear',
+    'update:value'
+  ],
   data() {
     return {
       prefixCls: `${prefix}-select`,

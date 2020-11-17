@@ -9,38 +9,42 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
+
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  tag: {
+    type: String,
+    default: 'div'
+  },
+  gutter: {
+    type: [Number, Array],
+    default: 0
+  },
+  justify: {
+    default: 'start',
+    validator(value) {
+      return [
+        'start',
+        'end',
+        'center',
+        'space-around',
+        'space-between'
+      ].includes(value)
+    }
+  },
+  align: {
+    default: 'top',
+    validator(value) {
+      return ['top', 'middle', 'bottom'].includes(value)
+    }
+  }
+})
 
 export default {
   name: 'Row',
-  props: {
-    tag: {
-      type: String,
-      default: 'div'
-    },
-    gutter: {
-      type: [Number, Array],
-      default: 0
-    },
-    justify: {
-      default: 'start',
-      validator(value) {
-        return [
-          'start',
-          'end',
-          'center',
-          'space-around',
-          'space-between'
-        ].includes(value)
-      }
-    },
-    align: {
-      default: 'top',
-      validator(value) {
-        return ['top', 'middle', 'bottom'].includes(value)
-      }
-    }
-  },
+  props,
   data() {
     return {
       prefix: `${prefix}-row`,

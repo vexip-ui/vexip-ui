@@ -25,6 +25,7 @@ export default {
       }
     }
   },
+  emits: ['on-edit-start', 'on-edit-end', 'on-change'],
   data() {
     return {
       prefix: `${prefix}-color-picker`,

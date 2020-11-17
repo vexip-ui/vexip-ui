@@ -101,6 +101,8 @@ import Icon from '../icon'
 import Masker from '../masker'
 import Picture from './picture'
 
+import { useConfigurableProps } from '../../src/config/properties'
+
 import '../../icons/times-circle'
 import '../../icons/search-plus'
 import '../../icons/search-minus'
@@ -108,6 +110,37 @@ import '../../icons/undo'
 import '../../icons/redo'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  active: {
+    type: Boolean,
+    default: false
+  },
+  viewerClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  list: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  loop: {
+    type: Boolean,
+    default: true
+  },
+  actionSize: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  openReset: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'PictureViewer',
@@ -122,36 +155,8 @@ export default {
     prop: 'active',
     event: 'on-toggle'
   },
-  props: {
-    active: {
-      type: Boolean,
-      default: false
-    },
-    viewerClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    list: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    loop: {
-      type: Boolean,
-      default: true
-    },
-    actionSize: {
-      default: 'default',
-      validator(value) {
-        return ['small', 'default', 'large'].includes(value)
-      }
-    },
-    openReset: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-toggle', 'on-change', 'on-close', 'on-hide'],
   data() {
     return {
       prefix: `${prefix}-picture-viewer`,

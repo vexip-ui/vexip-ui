@@ -35,8 +35,20 @@
 import Render from '../basis/render'
 import TabNav from './tab-nav'
 import TabNavItem from './tab-nav-item'
+import { useConfigurableProps } from '../../src/config/properties'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  card: {
+    type: Boolean,
+    default: false
+  },
+  active: {
+    type: [String, Number],
+    default: ''
+  }
+})
 
 export default {
   name: 'Tabs',
@@ -49,16 +61,8 @@ export default {
     prop: 'active',
     event: 'on-change'
   },
-  props: {
-    card: {
-      type: Boolean,
-      default: false
-    },
-    active: {
-      type: [String, Number],
-      default: ''
-    }
-  },
+  props,
+  emits: ['on-change', 'update:active'],
   data() {
     return {
       prefix: `${prefix}-tabs`,

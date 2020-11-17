@@ -5,9 +5,35 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
 import { removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  expanded: {
+    type: [String, Number, Array],
+    default: null
+  },
+  card: {
+    type: Boolean,
+    default: false
+  },
+  accordion: {
+    type: Boolean,
+    default: false
+  },
+  arrowType: {
+    default: 'right',
+    validator(value) {
+      return ['right', 'left', 'none'].includes(value)
+    }
+  },
+  ghost: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Collapse',
@@ -15,30 +41,7 @@ export default {
     prop: 'expanded',
     event: 'on-change'
   },
-  props: {
-    expanded: {
-      type: [String, Number, Array],
-      default: null
-    },
-    card: {
-      type: Boolean,
-      default: false
-    },
-    accordion: {
-      type: Boolean,
-      default: false
-    },
-    arrowType: {
-      default: 'right',
-      validator(value) {
-        return ['right', 'left', 'none'].includes(value)
-      }
-    },
-    ghost: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
   emits: ['on-change'],
   data() {
     const { expanded, accordion } = this

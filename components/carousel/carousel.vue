@@ -73,12 +73,76 @@
 
 <script>
 import Icon from '../icon'
+import { useConfigurableProps } from '../../src/config/properties'
+
 import '../../icons/arrow-up'
 import '../../icons/arrow-right'
 import '../../icons/arrow-down'
 import '../../icons/arrow-left'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  viewSize: {
+    type: Number,
+    default: 3
+  },
+  mode: {
+    default: 'horizontal',
+    validator(value) {
+      return value === 'horizontal' || value === 'vertical'
+    }
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  loop: {
+    type: Boolean,
+    default: false
+  },
+  arrow: {
+    default: 'outer',
+    validator(value) {
+      return ['outer', 'insert', 'none'].includes(value)
+    }
+  },
+  arrowShow: {
+    default: 'hover',
+    validator(value) {
+      return ['hover', 'always'].includes(value)
+    }
+  },
+  autoplay: {
+    type: [Boolean, Number],
+    default: false,
+    validator(value) {
+      return typeof value === 'number' ? value > 500 : true
+    }
+  },
+  pointer: {
+    default: 'none',
+    validator(value) {
+      return ['outer', 'insert', 'none'].includes(value)
+    }
+  },
+  speed: {
+    type: Number,
+    default: 300
+  },
+  active: {
+    type: Number,
+    default: 0
+  },
+  activeOffset: {
+    type: Number,
+    default: 0
+  },
+  height: {
+    type: [Number, String],
+    default: null
+  }
+})
 
 export default {
   name: 'Carousel',
@@ -89,67 +153,13 @@ export default {
     prop: 'active',
     event: 'on-change'
   },
-  props: {
-    size: {
-      type: Number,
-      default: 3
-    },
-    mode: {
-      default: 'horizontal',
-      validator(value) {
-        return value === 'horizontal' || value === 'vertical'
-      }
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    loop: {
-      type: Boolean,
-      default: false
-    },
-    arrow: {
-      default: 'outer',
-      validator(value) {
-        return ['outer', 'insert', 'none'].includes(value)
-      }
-    },
-    arrowShow: {
-      default: 'hover',
-      validator(value) {
-        return ['hover', 'always'].includes(value)
-      }
-    },
-    autoplay: {
-      type: [Boolean, Number],
-      default: false,
-      validator(value) {
-        return typeof value === 'number' ? value > 500 : true
-      }
-    },
-    pointer: {
-      default: 'none',
-      validator(value) {
-        return ['outer', 'insert', 'none'].includes(value)
-      }
-    },
-    speed: {
-      type: Number,
-      default: 300
-    },
-    active: {
-      type: Number,
-      default: 0
-    },
-    activeOffset: {
-      type: Number,
-      default: 0
-    },
-    height: {
-      type: [Number, String],
-      default: null
-    }
-  },
+  props,
+  emits: [
+    'on-will-change',
+    'on-change',
+    'on-prev',
+    'on-next'
+  ],
   data() {
     return {
       prefix: `${prefix}-carousel`,
@@ -174,7 +184,7 @@ export default {
   },
   computed: {
     enable() {
-      return this.items.length >= this.size && !this.disabled
+      return this.items.length >= this.viewSize && !this.disabled
     },
     style() {
       const { mode, height } = this
@@ -192,7 +202,7 @@ export default {
         : this.items.length
     },
     usePointer() {
-      return this.size === 1 && this.pointer !== 'none'
+      return this.viewSize === 1 && this.pointer !== 'none'
     },
     bindSelectEvent() {
       return !!(this._events['on-select'] && this._events['on-select'].length)
@@ -203,7 +213,7 @@ export default {
     pointerCount() {
       return this.loop
         ? this.itemCount
-        : Math.max(this.itemCount - this.size + 1, 0)
+        : Math.max(this.itemCount - this.viewSize + 1, 0)
     },
     sizeProp() {
       return this.mode === 'horizontal' ? 'Width' : 'Height'
@@ -238,7 +248,7 @@ export default {
     },
     subTrackStyle() {
       const {
-        size,
+        viewSize,
         sizeProp,
         direction,
         trackWidth,
@@ -250,7 +260,7 @@ export default {
       } = this
 
       return {
-        zIndex: currentItem + size - 1 > itemCount ? 2 : 0,
+        zIndex: currentItem + viewSize - 1 > itemCount ? 2 : 0,
         width: `${trackWidth}px`,
         height: `${trackHeight}px`,
         transform: `translate${direction}(${this['track' + sizeProp] -
@@ -264,7 +274,7 @@ export default {
     disabledNext() {
       return (
         !this.enable ||
-        (!this.loop && this.currentItem >= this.itemCount - this.size)
+        (!this.loop && this.currentItem >= this.itemCount - this.viewSize)
       )
     },
     arrowIcons() {
@@ -341,7 +351,7 @@ export default {
         this.listWidth = 'auto'
 
         if (this.height === null && this.items[0]) {
-          this.listHeight = this.items[0].$el.offsetHeight * this.size
+          this.listHeight = this.items[0].$el.offsetHeight * this.viewSize
         } else {
           this.listHeight = this.$el.offsetHeight - fixHeight
         }
@@ -352,11 +362,11 @@ export default {
       let height
 
       if (this.mode === 'horizontal') {
-        width = this.listWidth / this.size
+        width = this.listWidth / this.viewSize
         height = this.listHeight
       } else {
         width = this.listWidth
-        height = this.listHeight / this.size
+        height = this.listHeight / this.viewSize
       }
 
       this.itemWidth = width
@@ -399,13 +409,13 @@ export default {
       if (!this.loop) {
         this.currentItem = Math.min(
           Math.max(0, targetItem),
-          this.itemCount - this.size
+          this.itemCount - this.viewSize
         )
       } else {
         this.currentItem = targetItem
       }
 
-      const sizeProp = this.sizeProp
+      const sizeProp = this.viewSizeProp
 
       this.trackOffset = this['item' + sizeProp] * this.currentItem
       this.subTrackOffset = this['item' + sizeProp] * this.currentItem

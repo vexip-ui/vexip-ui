@@ -38,10 +38,79 @@
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
+
 import '../../icons/spinner'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  type: {
+    validator(value) {
+      return [
+        'default',
+        'primary',
+        'dashed',
+        'text',
+        'info',
+        'success',
+        'warning',
+        'error'
+      ].includes(value)
+    },
+    default: 'default'
+  },
+  simple: {
+    type: Boolean,
+    default: false
+  },
+  ghost: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  circle: {
+    type: Boolean,
+    default: false
+  },
+  loadingIcon: {
+    type: String,
+    default: 'spinner'
+  },
+  loadingSpin: {
+    type: Boolean,
+    default: false
+  },
+  icon: {
+    type: String,
+    default: ''
+  },
+  textColor: {
+    type: String,
+    default: null
+  },
+  buttonType: {
+    type: String,
+    default: 'button'
+  },
+  block: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Button',
@@ -49,76 +118,8 @@ export default {
     CollapseTransition,
     Icon
   },
-  props: {
-    size,
-    type: {
-      validator(value) {
-        return [
-          'default',
-          'primary',
-          'dashed',
-          'text',
-          'info',
-          'success',
-          'warning',
-          'error'
-        ].includes(value)
-      },
-      default: 'default'
-    },
-    simple: {
-      type: Boolean,
-      default: false
-    },
-    ghost: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    circle: {
-      type: Boolean,
-      default: false
-    },
-    loadingIcon: {
-      type: String,
-      default: 'spinner'
-    },
-    loadingSpin: {
-      type: Boolean,
-      default: false
-    },
-    icon: {
-      type: String,
-      default: ''
-    },
-    // size: {
-    //   default() {
-    //     return config.button.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    textColor: {
-      type: String,
-      default: null
-    },
-    buttonType: {
-      type: String,
-      default: 'button'
-    },
-    block: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-click'],
   data() {
     return {
       prefixCls: `${prefix}-button`,

@@ -15,58 +15,56 @@
 </template>
 
 <script>
-// import formControl from '../../src/mixins/form-control'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { findComponentUpward, removeArrayItem, noop } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
 const groupName = 'RadioGroup'
 
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  value: {
+    type: [String, Number],
+    default: null
+  },
+  label: {
+    type: [String, Number],
+    required: true
+  },
+  labelClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  border: {
+    type: Boolean,
+    default: false
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'Radio',
-  // mixins: [formControl],
   model: {
     event: 'on-change'
   },
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    value: {
-      type: [String, Number],
-      default: null
-    },
-    label: {
-      type: [String, Number],
-      required: true
-    },
-    labelClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    // size: {
-    //   default() {
-    //     return config.radio.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    border: {
-      type: Boolean,
-      default: false
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-change', 'update:value'],
   data() {
     return {
       prefix: `${prefix}-radio`,

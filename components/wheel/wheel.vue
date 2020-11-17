@@ -61,14 +61,43 @@
 import Icon from '../icon'
 import Scroll from '../scroll'
 
+import display from '../../src/mixins/display'
+import { useConfigurableProps } from '../../src/config/properties'
+
 import '../../icons/angle-up'
 import '../../icons/angle-right'
 import '../../icons/angle-down'
 import '../../icons/angle-left'
 
-import display from '../../src/mixins/display'
-
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  horizontal: {
+    type: Boolean,
+    default: false
+  },
+  active: {
+    type: Number,
+    default: 0,
+    validator(value) {
+      return value >= 0
+    }
+  },
+  candidate: {
+    default: 2,
+    validator(value) {
+      return [0, 1, 2, 3].includes(value)
+    }
+  },
+  arrow: {
+    type: Boolean,
+    default: false
+  },
+  pointer: {
+    type: Boolean,
+    default: true
+  }
+})
 
 export default {
   name: 'Wheel',
@@ -81,33 +110,8 @@ export default {
     prop: 'active',
     event: 'on-change'
   },
-  props: {
-    horizontal: {
-      type: Boolean,
-      default: false
-    },
-    active: {
-      type: Number,
-      default: 0,
-      validator(value) {
-        return value >= 0
-      }
-    },
-    candidate: {
-      default: 2,
-      validator(value) {
-        return [0, 1, 2, 3].includes(value)
-      }
-    },
-    arrow: {
-      type: Boolean,
-      default: false
-    },
-    pointer: {
-      type: Boolean,
-      default: true
-    }
-  },
+  props,
+  emits: ['on-change', 'on-prev', 'on-next'],
   data() {
     return {
       prefix: `${prefix}-wheel`,

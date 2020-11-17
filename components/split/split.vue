@@ -63,6 +63,7 @@
 
 <script>
 import Icon from '../icon'
+import { useConfigurableProps } from '../../src/config/properties'
 import { throttle } from '../../src/utils/common'
 import '../../icons/chevron-up'
 import '../../icons/chevron-right'
@@ -70,6 +71,36 @@ import '../../icons/chevron-down'
 import '../../icons/chevron-left'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  value: {
+    type: Number,
+    default: 0.5,
+    validator(value) {
+      return value > 0 && value < 1
+    }
+  },
+  min: {
+    type: Number,
+    default: 100
+  },
+  vertical: {
+    type: Boolean,
+    default: false
+  },
+  noTransition: {
+    type: Boolean,
+    default: false
+  },
+  lazy: {
+    type: Boolean,
+    default: false
+  },
+  canFull: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Split',
@@ -79,35 +110,15 @@ export default {
   model: {
     event: 'on-change'
   },
-  props: {
-    value: {
-      type: Number,
-      default: 0.5,
-      validator(value) {
-        return value > 0 && value < 1
-      }
-    },
-    min: {
-      type: Number,
-      default: 100
-    },
-    vertical: {
-      type: Boolean,
-      default: false
-    },
-    noTransition: {
-      type: Boolean,
-      default: false
-    },
-    lazy: {
-      type: Boolean,
-      default: false
-    },
-    canFull: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: [
+    'on-change',
+    'on-full',
+    'on-reset',
+    'on-move',
+    'on-move-start',
+    'on-move-end'
+  ],
   data() {
     return {
       prefix: `${prefix}-split`,

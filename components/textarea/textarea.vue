@@ -27,70 +27,82 @@
 </template>
 
 <script>
-// import formControl from '../../src/mixins/form-control'
+import { useConfigurableProps } from '../../src/config/properties'
 import { noop, throttle } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
+const props = useConfigurableProps({
+  value: {
+    type: String,
+    default: null
+  },
+  placeholder: {
+    type: String,
+    default: ''
+  },
+  rows: {
+    type: [String, Number],
+    default: 2
+  },
+  noResize: {
+    type: Boolean,
+    default: false
+  },
+  autofocus: {
+    type: Boolean,
+    default: false
+  },
+  spellcheck: {
+    type: Boolean,
+    default: false
+  },
+  autocomplete: {
+    type: String,
+    default: 'off'
+  },
+  readonly: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  debounce: {
+    type: Boolean,
+    default: false
+  },
+  maxLength: {
+    type: Number,
+    default: 0
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'Textarea',
-  // mixins: [formControl],
   model: {
     event: 'on-change'
   },
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    value: {
-      type: String,
-      default: null
-    },
-    placeholder: {
-      type: String,
-      default: ''
-    },
-    rows: {
-      type: [String, Number],
-      default: 2
-    },
-    noResize: {
-      type: Boolean,
-      default: false
-    },
-    autofocus: {
-      type: Boolean,
-      default: false
-    },
-    spellcheck: {
-      type: Boolean,
-      default: false
-    },
-    autocomplete: {
-      type: String,
-      default: 'off'
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    debounce: {
-      type: Boolean,
-      default: false
-    },
-    maxLength: {
-      type: Number,
-      default: 0
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: [
+    'on-focus',
+    'on-blur',
+    'on-input',
+    'on-change',
+    'on-enter',
+    'on-key-down',
+    'on-key-press',
+    'on-key-up',
+    'update:value'
+  ],
   data() {
     return {
       prefix: `${prefix}-textarea`,

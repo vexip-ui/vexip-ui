@@ -5,54 +5,52 @@
 </template>
 
 <script>
-// import formControl from '../../src/mixins/form-control'
-import { size } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { noop } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
+const props = useConfigurableProps({
+  size: {
+    default: 'default',
+    validator(value) {
+      return ['small', 'default', 'large'].includes(value)
+    }
+  },
+  value: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  vertical: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  border: {
+    type: Boolean,
+    default: false
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
+
 export default {
   name: 'CheckboxGroup',
-  // mixins: [formControl],
   model: {
     event: 'on-change'
   },
   inject: {
     validateField: { default: () => noop }
   },
-  props: {
-    size,
-    value: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    vertical: {
-      type: Boolean,
-      default: false
-    },
-    // size: {
-    //   default() {
-    //     return config.checkboxGroup.size ?? 'default'
-    //   },
-    //   validator(value) {
-    //     return ['small', 'default', 'large'].includes(value)
-    //   }
-    // },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    border: {
-      type: Boolean,
-      default: false
-    },
-    disableValidate: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
+  emits: ['on-change', 'update:value'],
   data() {
     return {
       prefix: `${prefix}-checkbox-group`,

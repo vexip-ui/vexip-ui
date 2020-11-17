@@ -20,52 +20,50 @@
 
 <script>
 import TransferDom from '../../src/mixins/transfer-dom'
+import { useConfigurableProps } from '../../src/config/properties'
 import { isPromise } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
+const props = useConfigurableProps({
+  active: {
+    type: Boolean,
+    default: false
+  },
+  closable: {
+    type: Boolean,
+    default: false
+  },
+  inner: {
+    type: Boolean,
+    default: false
+  },
+  maskTransition: {
+    type: String,
+    default: `${prefix}-fade`
+  },
+  transitionName: {
+    type: String,
+    default: `${prefix}-fade`
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  beforeClose: {
+    type: Function,
+    default: null
+  }
+})
+
 export default {
   name: 'Masker',
   mixins: [TransferDom],
-  // directives: { TransferDom },
   model: {
     prop: 'active',
     event: 'on-toggle'
   },
-  props: {
-    // transfer: {
-    //   type: [Boolean, String],
-    //   default: false
-    // },
-    active: {
-      type: Boolean,
-      default: false
-    },
-    closable: {
-      type: Boolean,
-      default: false
-    },
-    inner: {
-      type: Boolean,
-      default: false
-    },
-    maskTransition: {
-      type: String,
-      default: `${prefix}-fade`
-    },
-    transitionName: {
-      type: String,
-      default: `${prefix}-fade`
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    beforeClose: {
-      type: Function,
-      default: null
-    }
-  },
+  props,
   emits: ['on-toggle', 'before-close', 'on-close', 'on-hide', 'update:active'],
   data() {
     return {

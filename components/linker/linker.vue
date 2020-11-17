@@ -18,49 +18,53 @@
 
 <script>
 import Icon from '../icon'
+import { useConfigurableProps } from '../../src/config/properties'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  to: {
+    type: String,
+    default: null
+  },
+  type: {
+    default: 'default',
+    validator(value) {
+      return [
+        'default',
+        'primary',
+        'success',
+        'error',
+        'warning',
+        'info'
+      ].includes(value)
+    }
+  },
+  icon: {
+    type: String,
+    default: ''
+  },
+  underline: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  target: {
+    type: String,
+    default: '_blank'
+  }
+})
 
 export default {
   name: 'Linker',
   components: {
     Icon
   },
-  props: {
-    to: {
-      type: String,
-      default: null
-    },
-    type: {
-      default: 'default',
-      validator(value) {
-        return [
-          'default',
-          'primary',
-          'success',
-          'error',
-          'warning',
-          'info'
-        ].includes(value)
-      }
-    },
-    icon: {
-      type: String,
-      default: ''
-    },
-    underline: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    target: {
-      type: String,
-      default: '_blank'
-    }
-  },
+  props,
+  emits: ['on-click'],
   data() {
     return {
       prefix: `${prefix}-linker`

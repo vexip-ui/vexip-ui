@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
+
 const { prefix } = require('../../src/style/basis/variable')
 
 const isSupportObjectFit =
@@ -35,29 +37,31 @@ const objectFit = {
   scaleDown: 'scale-down'
 }
 
+const props = useConfigurableProps({
+  fit: {
+    default: 'fill',
+    validator(value) {
+      return Object.values(objectFit).includes(value)
+    }
+  },
+  src: {
+    type: String,
+    default: null
+  },
+  width: {
+    type: [Number, String],
+    default: 'auto'
+  },
+  height: {
+    type: [Number, String],
+    default: 'auto'
+  }
+})
+
 export default {
   name: 'Picture',
   inheritAttrs: false,
-  props: {
-    fit: {
-      default: 'fill',
-      validator(value) {
-        return Object.values(objectFit).includes(value)
-      }
-    },
-    src: {
-      type: String,
-      default: null
-    },
-    width: {
-      type: [Number, String],
-      default: 'auto'
-    },
-    height: {
-      type: [Number, String],
-      default: 'auto'
-    }
-  },
+  props,
   data() {
     return {
       prefix: `${prefix}-picture`,

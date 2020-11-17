@@ -24,11 +24,53 @@
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
+import { useConfigurableProps } from '../../src/config/properties'
 import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
 import '../../icons/chevron-right'
 
 const { prefix } = require('../../src/style/basis/variable')
 const parentName = 'Collapse'
+
+const props = useConfigurableProps({
+  label: {
+    type: [String, Number],
+    default: null
+  },
+  title: {
+    type: String,
+    default: ''
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  contentStyle: {
+    type: Object,
+    default: null
+  },
+  expanded: {
+    type: Boolean,
+    default: false
+  },
+  card: {
+    type: Boolean,
+    default: false
+  },
+  arrowType: {
+    default: 'right',
+    validator(value) {
+      return ['right', 'left', 'none'].includes(value)
+    }
+  },
+  icon: {
+    type: String,
+    default: ''
+  },
+  ghost: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'CollapsePane',
@@ -36,46 +78,7 @@ export default {
     CollapseTransition,
     Icon
   },
-  props: {
-    label: {
-      type: [String, Number],
-      default: null
-    },
-    title: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    contentStyle: {
-      type: Object,
-      default: null
-    },
-    expanded: {
-      type: Boolean,
-      default: false
-    },
-    card: {
-      type: Boolean,
-      default: false
-    },
-    arrowType: {
-      default: 'right',
-      validator(value) {
-        return ['right', 'left', 'none'].includes(value)
-      }
-    },
-    icon: {
-      type: String,
-      default: ''
-    },
-    ghost: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
   emits: ['on-toggle'],
   data() {
     return {

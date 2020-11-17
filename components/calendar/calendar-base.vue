@@ -119,6 +119,7 @@ export default {
       }
     }
   },
+  emits: ['on-select'],
   data() {
     const value = new Date(this.value)
     const active = new Date(this.year, this.month - 1, 1)

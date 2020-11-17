@@ -5,39 +5,43 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
+
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  itemWidth: {
+    type: [Number, String],
+    default: 300
+  },
+  itemHeight: {
+    type: [Number, String],
+    default: 200
+  },
+  deltaX: {
+    type: [Number, String],
+    default: 50
+  },
+  deltaY: {
+    type: [Number, String],
+    default: 35
+  },
+  direction: {
+    default: 'top-left',
+    validator(value) {
+      return [
+        'top-left',
+        'top-right',
+        'bottom-left',
+        'bottom-right'
+      ].includes(value)
+    }
+  }
+})
 
 export default {
   name: 'Stack',
-  props: {
-    itemWidth: {
-      type: [Number, String],
-      default: 300
-    },
-    itemHeight: {
-      type: [Number, String],
-      default: 200
-    },
-    deltaX: {
-      type: [Number, String],
-      default: 50
-    },
-    deltaY: {
-      type: [Number, String],
-      default: 35
-    },
-    direction: {
-      default: 'top-left',
-      validator(value) {
-        return [
-          'top-left',
-          'top-right',
-          'bottom-left',
-          'bottom-right'
-        ].includes(value)
-      }
-    }
-  },
+  props,
   data() {
     return {
       prefix: `${prefix}-stack`,

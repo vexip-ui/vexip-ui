@@ -1,3 +1,3 @@
-import Column from '../grid/column'
+import Column from '../row/column'
 
 export default Column

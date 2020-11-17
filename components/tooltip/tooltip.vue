@@ -36,9 +36,56 @@
 
 <script>
 import { placementWhileList, usePopper } from '../../src/mixins/popper'
+import { useConfigurableProps } from '../../src/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  trigger: {
+    default: 'hover',
+    validator(value) {
+      return ['hover', 'click', 'custom'].includes(value)
+    }
+  },
+  transitionName: {
+    type: String,
+    default: `${prefix}-ease`
+  },
+  visible: {
+    type: Boolean,
+    default: false
+  },
+  placement: {
+    default: 'top',
+    validator(value) {
+      return placementWhileList.includes(value)
+    }
+  },
+  outsideClose: {
+    type: Boolean,
+    default: true
+  },
+  // 设置 pointer-event: none
+  noHover: {
+    type: Boolean,
+    default: false
+  },
+  tipClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  theme: {
+    default: 'light',
+    validator(value) {
+      return ['light', 'dark'].includes(value)
+    }
+  }
+})
 
 export default {
   name: 'Tooltip',
@@ -47,51 +94,14 @@ export default {
     prop: 'visible',
     event: 'on-toggle'
   },
-  props: {
-    trigger: {
-      default: 'hover',
-      validator(value) {
-        return ['hover', 'click', 'custom'].includes(value)
-      }
-    },
-    transitionName: {
-      type: String,
-      default: `${prefix}-ease`
-    },
-    visible: {
-      type: Boolean,
-      default: false
-    },
-    placement: {
-      default: 'top',
-      validator(value) {
-        return placementWhileList.includes(value)
-      }
-    },
-    outsideClose: {
-      type: Boolean,
-      default: true
-    },
-    // 设置 pointer-event: none
-    noHover: {
-      type: Boolean,
-      default: false
-    },
-    tipClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    theme: {
-      default: 'light',
-      validator(value) {
-        return ['light', 'dark'].includes(value)
-      }
-    }
-  },
+  props,
+  emits: [
+    'on-toggle',
+    'on-click-outside',
+    'on-outside-close',
+    'on-tip-enter',
+    'on-tip-leave'
+  ],
   data() {
     return {
       prefix: `${prefix}-tooltip`,

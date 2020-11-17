@@ -7,30 +7,34 @@
 </template>
 
 <script>
+import { useConfigurableProps } from '../../src/config/properties'
+
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  vertical: {
+    type: Boolean,
+    default: false
+  },
+  textPosition: {
+    default: 'center',
+    validator(value) {
+      return ['center', 'left', 'right'].includes(value)
+    }
+  },
+  primary: {
+    type: Boolean,
+    default: false
+  },
+  dashed: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Divider',
-  props: {
-    vertical: {
-      type: Boolean,
-      default: false
-    },
-    textPosition: {
-      default: 'center',
-      validator(value) {
-        return ['center', 'left', 'right'].includes(value)
-      }
-    },
-    primary: {
-      type: Boolean,
-      default: false
-    },
-    dashed: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
   data() {
     return {
       prefix: `${prefix}-divider`

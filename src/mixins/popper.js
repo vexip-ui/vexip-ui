@@ -1,5 +1,5 @@
 import { createPopper } from '@popperjs/core'
-import { transfer } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 
 export const placementWhileList = [
   'auto',
@@ -22,16 +22,21 @@ export const placementWhileList = [
 export function usePopper(params = {}) {
   const isDrop = params.isDrop === true
 
-  return {
-    props: {
-      transfer,
-      placement: {
-        default: 'bottom',
-        validator(value) {
-          return placementWhileList.includes(value)
-        }
-      }
+  const props = useConfigurableProps({
+    transfer: {
+      type: [Boolean, String],
+      default: false
     },
+    placement: {
+      default: 'bottom',
+      validator(value) {
+        return placementWhileList.includes(value)
+      }
+    }
+  })
+
+  return {
+    props,
     data() {
       return {
         popperParent: null

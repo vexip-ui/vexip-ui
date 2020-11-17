@@ -106,9 +106,87 @@ import Store, {
   mapGetters,
   mapActions
 } from './store'
+import { useConfigurableProps } from '../../src/config/properties'
 import { debounce, removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  columns: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  data: {
+    type: Array,
+    default() {
+      return []
+    }
+  },
+  dataKey: {
+    type: String,
+    default: DEFAULT_KEY_FIELD
+  },
+  width: {
+    type: [Number, String],
+    default: null
+  },
+  height: {
+    type: Number,
+    default: null
+  },
+  rowClass: {
+    type: [String, Array, Object, Function],
+    default: null
+  },
+  stripe: {
+    type: Boolean,
+    default: false
+  },
+  border: {
+    type: Boolean,
+    default: false
+  },
+  highlight: {
+    type: Boolean,
+    default: false
+  },
+  useYBar: {
+    type: Boolean,
+    default: false
+  },
+  barFade: {
+    type: Number,
+    default: 1500
+  },
+  scrollDeltaY: {
+    type: Number,
+    default: 20
+  },
+  rowDraggable: {
+    type: Boolean,
+    default: false
+  },
+  rowHeight: {
+    type: Number,
+    default: null
+  },
+  renderCount: {
+    type: Number,
+    default: null
+  },
+  scrollClass: {
+    type: Object,
+    default() {
+      return {}
+    }
+  },
+  expandRenderer: {
+    type: Function,
+    default: null
+  }
+})
 
 export default {
   name: 'Table',
@@ -121,82 +199,18 @@ export default {
   provide() {
     return { table: this }
   },
-  props: {
-    columns: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    data: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    dataKey: {
-      type: String,
-      default: DEFAULT_KEY_FIELD
-    },
-    width: {
-      type: [Number, String],
-      default: null
-    },
-    height: {
-      type: Number,
-      default: null
-    },
-    rowClass: {
-      type: [String, Array, Object, Function],
-      default: null
-    },
-    stripe: {
-      type: Boolean,
-      default: false
-    },
-    border: {
-      type: Boolean,
-      default: false
-    },
-    highlight: {
-      type: Boolean,
-      default: false
-    },
-    useYBar: {
-      type: Boolean,
-      default: false
-    },
-    barFade: {
-      type: Number,
-      default: 1500
-    },
-    scrollDeltaY: {
-      type: Number,
-      default: 20
-    },
-    rowDraggable: {
-      type: Boolean,
-      default: false
-    },
-    rowHeight: {
-      type: Number,
-      default: null
-    },
-    renderCount: {
-      type: Number,
-      default: null
-    },
-    scrollClass: {
-      type: Object,
-      default() {
-        return {}
-      }
-    },
-    expandRenderer: {
-      type: Function,
-      default: null
-    }
-  },
+  props,
+  emits: [
+    'on-body-scroll',
+    'on-row-click',
+    'on-row-check',
+    'on-row-check-all',
+    'on-row-expand',
+    'on-row-drag-start',
+    'on-row-drag-over',
+    'on-row-drop',
+    'on-row-drag-end'
+  ],
   data() {
     return {
       prefix: `${prefix}-table`,

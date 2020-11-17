@@ -55,12 +55,75 @@
 <script>
 import Icon from '../icon'
 import Masker from '../masker'
-import { transfer } from '../../src/config/properties'
+import { useConfigurableProps } from '../../src/config/properties'
 import { isPromise } from '../../src/utils/common'
 
 import '../../icons/times'
 
 const { prefix } = require('../../src/style/basis/variable')
+
+const props = useConfigurableProps({
+  transfer: {
+    type: [Boolean, String],
+    default: false
+  },
+  active: {
+    type: Boolean,
+    default: false
+  },
+  width: {
+    type: [Number, String],
+    default: 280,
+    validator(value) {
+      return value > 0
+    }
+  },
+  height: {
+    type: [Number, String],
+    default: 280,
+    validator(value) {
+      return value > 0
+    }
+  },
+  placement: {
+    default: 'right',
+    validator(value) {
+      return ['top', 'right', 'bottom', 'left'].includes(value)
+    }
+  },
+  title: {
+    type: String,
+    default: ''
+  },
+  closable: {
+    type: Boolean,
+    default: false
+  },
+  inner: {
+    type: Boolean,
+    default: false
+  },
+  maskClose: {
+    type: Boolean,
+    default: true
+  },
+  drawerClass: {
+    type: [String, Array, Object],
+    default: null
+  },
+  hideMask: {
+    type: Boolean,
+    default: false
+  },
+  beforeClose: {
+    type: Function,
+    default: null
+  },
+  resizable: {
+    type: Boolean,
+    default: false
+  }
+})
 
 export default {
   name: 'Drawer',
@@ -72,71 +135,7 @@ export default {
     prop: 'active',
     event: 'on-toggle'
   },
-  props: {
-    transfer,
-    active: {
-      type: Boolean,
-      default: false
-    },
-    width: {
-      type: [Number, String],
-      default: 280,
-      validator(value) {
-        return value > 0
-      }
-    },
-    height: {
-      type: [Number, String],
-      default: 280,
-      validator(value) {
-        return value > 0
-      }
-    },
-    placement: {
-      default: 'right',
-      validator(value) {
-        return ['top', 'right', 'bottom', 'left'].includes(value)
-      }
-    },
-    title: {
-      type: String,
-      default: ''
-    },
-    closable: {
-      type: Boolean,
-      default: false
-    },
-    inner: {
-      type: Boolean,
-      default: false
-    },
-    maskClose: {
-      type: Boolean,
-      default: true
-    },
-    drawerClass: {
-      type: [String, Array, Object],
-      default: null
-    },
-    hideMask: {
-      type: Boolean,
-      default: false
-    },
-    beforeClose: {
-      type: Function,
-      default: null
-    },
-    // transfer: {
-    //   type: [Boolean, String],
-    //   default() {
-    //     return config.drawer.transfer ?? false
-    //   }
-    // },
-    resizable: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
   emits: [
     'on-toggle',
     'on-close',
