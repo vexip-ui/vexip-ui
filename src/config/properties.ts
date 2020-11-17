@@ -40,47 +40,25 @@ function getOrElse<T = any>(value: T, defaultValue: T) {
   return isDefined(value) ? value : defaultValue
 }
 
-export const size: PropOptions = {
-  default() {
-    return getOrElse(
-      config[toCamelCase((this as any).$options.name)].size,
-      'default'
-    )
-  },
-  validator(value) {
-    return ['small', 'default', 'large'].includes(value)
-  }
-}
-
-export const transfer: PropOptions = {
-  type: [Boolean, String],
-  default() {
-    return getOrElse(
-      config[toCamelCase((this as any).$options.name)].transfer,
-      false
-    )
-  }
-}
-
-export const zIndex: PropOptions = {
-  type: Number,
-  default() {
-    return getOrElse(
-      config[toCamelCase((this as any).$options.name)].zIndex,
-      2000
-    )
-  },
-  validator(value) {
-    return value > 0
-  }
-}
-
 export function useConfigurableProps(props: {
   [x: string]: PropOptions
 }): { [x: string]: PropOptions } {
   const configurableProps: { [x: string]: PropOptions } = {}
 
   Object.keys(props).forEach(key => {
+    const prop = props[key]
+
+    if (prop.type === Function) {
+      delete prop.type
+
+      const validator = prop.validator
+
+      prop.validator =
+        typeof validator === 'function'
+          ? (value: any) => typeof value === 'function' && validator(value)
+          : (value: any) => typeof value === 'function'
+    }
+
     configurableProps[key] = {
       ...props[key],
       default() {
