@@ -135,6 +135,10 @@ const props = useConfigurableProps({
   clearable: {
     type: Boolean,
     default: false
+  },
+  ignoreCase: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -182,6 +186,10 @@ export default {
       const { rawOptions, filter, currentValue } = this
 
       if (filter === true) {
+        if (this.ignoreCase) {
+          return rawOptions.filter(({ value }) => value && value.toString().toLocaleLowerCase().includes(currentValue && currentValue.toString().toLocaleLowerCase()))
+        }
+
         return rawOptions.filter(({ value }) => value && value.toString().includes(currentValue))
       } else if (typeof filter === 'function') {
         return rawOptions.filter(item => filter(item, currentValue))

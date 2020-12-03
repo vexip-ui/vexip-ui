@@ -18,6 +18,7 @@
     align-items: center;
     padding: 0.4em 0.8em;
     padding-right: 2em;
+    cursor: pointer;
     background-color: $vxp-color-fill;
     border: $vxp-border-base;
     border-radius: $vxp-border-radius-base;
@@ -61,12 +62,12 @@
   }
 
   &--small &__marker {
-    width: 1.4em;
+    // width: 1.4em;
     height: 1.1em;
   }
 
   &--large &__marker {
-    width: 2em;
+    // width: 2em;
     height: 1.7em;
   }
 

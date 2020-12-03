@@ -50,7 +50,7 @@ export default {
   computed: {
     className() {
       const { prefix, active, disabled } = this
-      const baseClass = `${prefix}__pane`
+      const baseClass = `${prefix}__item`
 
       return {
         [baseClass]: true,

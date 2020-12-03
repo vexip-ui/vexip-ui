@@ -4,7 +4,7 @@
 
 <script>
 import { TYPE_EXPAND, TYPE_COLUMNS } from './store'
-import { useConfigurableProps } from '../../src/config/properties'
+import { config, useConfigurableProps } from '../../src/config/properties'
 import { removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
@@ -71,7 +71,7 @@ const props = useConfigurableProps({
   },
   checkboxSize: {
     default() {
-      return this.$vexipConfig.checkbox.size ?? 'default'
+      return config.checkbox.size ?? 'default'
     },
     validator(value) {
       return ['small', 'default', 'large'].includes(value)

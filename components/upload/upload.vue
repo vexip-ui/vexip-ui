@@ -43,71 +43,73 @@
         </div>
       </slot>
     </div>
-    <transition-group
-      v-if="listType === 'thumbnail'"
-      tag="ul"
-      :appear="selectToAdd"
-      :name="`${prefix}-list-transition`"
-      :class="`${prefix}__files`"
-      :style="{
-        [selectToAdd ? 'marginBottom' : 'marginTop']: !hiddenFiles && renderFiles.length ? '0.5em' : null
-      }"
-    >
-      <UploadFile
-        v-for="item in renderFiles"
-        :key="item.id"
-        :file="item"
-        :icon-renderer="iconRenderer"
-        :list-type="listType"
-        :loading-text="loadingText"
-        :select-to-add="selectToAdd"
-        @on-delete="deleteFile"
-        @on-preview="$emit('on-preview', $event)"
+    <template v-if="!hiddenFiles">
+      <transition-group
+        v-if="listType === 'thumbnail'"
+        tag="ul"
+        :appear="selectToAdd"
+        :name="`${prefix}-list-transition`"
+        :class="`${prefix}__files`"
+        :style="{
+          [selectToAdd ? 'marginBottom' : 'marginTop']: !hiddenFiles && renderFiles.length ? '0.5em' : null
+        }"
       >
-        <template #default="{ file, status: _status, percentage }">
-          <slot
-            name="item"
-            :file="file"
-            :status="_status"
-            :percentage="percentage"
-          ></slot>
-        </template>
-        <template #icon="{ file }">
-          <slot nmae="icon" :file="file"></slot>
-        </template>
-      </UploadFile>
-    </transition-group>
-    <ul
-      v-else
-      :class="`${prefix}__files`"
-      :style="{
-        [selectToAdd ? 'marginBottom' : 'marginTop']: !hiddenFiles && renderFiles.length ? '0.5em' : null
-      }"
-    >
-      <UploadFile
-        v-for="item in renderFiles"
-        :key="item.id"
-        :file="item"
-        :icon-renderer="iconRenderer"
-        :list-type="listType"
-        :loading-text="loadingText"
-        :select-to-add="selectToAdd"
-        @on-delete="deleteFile"
-        @on-preview="$emit('on-preview', $event)"
+        <UploadFile
+          v-for="item in renderFiles"
+          :key="item.id"
+          :file="item"
+          :icon-renderer="iconRenderer"
+          :list-type="listType"
+          :loading-text="loadingText"
+          :select-to-add="selectToAdd"
+          @on-delete="deleteFile"
+          @on-preview="$emit('on-preview', $event)"
+        >
+          <template #default="{ file, status: _status, percentage }">
+            <slot
+              name="item"
+              :file="file"
+              :status="_status"
+              :percentage="percentage"
+            ></slot>
+          </template>
+          <template #icon="{ file }">
+            <slot name="icon" :file="file"></slot>
+          </template>
+        </UploadFile>
+      </transition-group>
+      <ul
+        v-else
+        :class="`${prefix}__files`"
+        :style="{
+          [selectToAdd ? 'marginBottom' : 'marginTop']: !hiddenFiles && renderFiles.length ? '0.5em' : null
+        }"
       >
-        <template #default="{ file, status: _status, percentage }">
-          <slot
-            name="item"
-            :file="file"
-            :status="_status"
-            :percentage="percentage"
-          ></slot>
-        </template>
-        <template #icon="{ file }">
-          <slot nmae="icon" :file="file"></slot>
-        </template>
-      </UploadFile>
-    </ul>
+        <UploadFile
+          v-for="item in renderFiles"
+          :key="item.id"
+          :file="item"
+          :icon-renderer="iconRenderer"
+          :list-type="listType"
+          :loading-text="loadingText"
+          :select-to-add="selectToAdd"
+          @on-delete="deleteFile"
+          @on-preview="$emit('on-preview', $event)"
+        >
+          <template #default="{ file, status: _status, percentage }">
+            <slot
+              name="item"
+              :file="file"
+              :status="_status"
+              :percentage="percentage"
+            ></slot>
+          </template>
+          <template #icon="{ file }">
+            <slot name="icon" :file="file"></slot>
+          </template>
+        </UploadFile>
+      </ul>
+    </template>
   </div>
 </template>
 
