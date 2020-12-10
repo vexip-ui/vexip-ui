@@ -9,6 +9,13 @@
   margin: 2px 8px;
   cursor: pointer;
 
+  &--vertical {
+    display: inline-flex;
+    height: 100%;
+    padding: 0 4px;
+    margin: 8px 2px;
+  }
+
   &__track {
     width: 100%;
     height: 4px;
@@ -19,6 +26,11 @@
 
   &:hover &__track {
     background-color: mix($vxp-color-black, $vxp-color-fill-background, 10%);
+  }
+
+  &--vertical &__track {
+    width: 4px;
+    height: 100%;
   }
 
   &__filler {
@@ -35,6 +47,7 @@
     transform: translate(-50%, -50%);
 
     .#{$prefix}-tooltip {
+      line-height: 1;
       cursor: pointer;
       user-select: none;
 
@@ -50,7 +63,7 @@
     width: 14px;
     height: 14px;
     cursor: pointer;
-    background-color: $vxp-color-fill;
+    background-color: $vxp-color-white;
     border: 2px $vxp-border-style $vxp-color-primary;
     border-radius: 14px;
     box-shadow: 0 0 0 4px transparent;

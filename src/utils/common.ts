@@ -16,7 +16,7 @@ export function isDefined(any: unknown): boolean {
 
 export function isPromise(any: unknown): boolean {
   return (
-    any &&
+    !!any &&
     typeof (any as any).then === 'function' &&
     typeof (any as any).catch === 'function'
   )

@@ -125,6 +125,10 @@ const props = useConfigurableProps({
   playWaiting: {
     type: Number,
     default: 500
+  },
+  noBuffer: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -134,7 +138,14 @@ export default {
     Scrollbar
   },
   props,
-  emits: ['on-x-enable-change', 'on-y-enable-change', 'on-wheel', 'on-scroll'],
+  emits: [
+    'on-x-enable-change',
+    'on-y-enable-change',
+    'on-wheel',
+    'on-scroll-start',
+    'on-scroll',
+    'on-scroll-end'
+  ],
   data() {
     return {
       prefix: `${prefix}-scroll`,
@@ -418,6 +429,8 @@ export default {
 
       document.addEventListener(moveEvent, this.handlePointerMove)
       document.addEventListener(upEvent, this.handlePointerUp)
+
+      this.$emit('on-scroll-start')
     },
     handlePointerMove(event) {
       event.stopPropagation()
@@ -441,16 +454,22 @@ export default {
           this.yScrollStartAt + pointer.clientY - this.cursorYPosition
       }
 
-      this.computePercent()
+      if (this.noBuffer) {
+        this.verifyScroll()
+      } else {
+        this.computePercent()
+      }
+
       this.emitScrollEvent('mouse')
     },
     handlePointerUp() {
       document.removeEventListener(moveEvent, this.handlePointerMove)
       document.removeEventListener(upEvent, this.handlePointerUp)
 
-      this.verifyScroll()
       this.handleBuffer()
+      this.verifyScroll()
       this.emitScrollEvent('mouse')
+      this.$emit('on-scroll-end')
       this.startAutoplay()
     },
     handleWheel(event) {
@@ -554,9 +573,13 @@ export default {
       this.percentY = Math.max(0, Math.min(this.percentY, 100))
     },
     handleBuffer() {
-      this.bufferTimer = setTimeout(() => {
+      if (this.noBuffer) {
+        this.bufferTimer = setTimeout(() => {
+          this.scrolling = false
+        }, 300)
+      } else {
         this.scrolling = false
-      }, 300)
+      }
     },
     handleBarScrollStart() {
       this.usingBar = true

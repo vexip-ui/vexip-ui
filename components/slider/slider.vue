@@ -13,9 +13,11 @@
         tabindex="0"
         theme="dark"
         trigger="custom"
+        :transfer="tipTransfer"
         :visible="isTipShow || sliding"
         :tip-class="`${prefix}__tip`"
         :disabled="hideTip"
+        :placement="vertical ? 'right' : 'top'"
         @on-tip-enter="showTooltip"
         @on-tip-leave="hideTooltip"
       >
@@ -66,6 +68,10 @@ const props = useConfigurableProps({
     default: false
   },
   hideTip: {
+    type: Boolean,
+    default: false
+  },
+  tipTransfer: {
     type: Boolean,
     default: false
   }
@@ -129,7 +135,8 @@ export default {
       const { percent, vertical } = this
 
       return {
-        [vertical ? 'top' : 'left']: `${percent}%`
+        top: vertical ? `${percent}%` : '50%',
+        left: vertical ? '50%' : `${percent}%`
       }
     }
   },
@@ -155,12 +162,13 @@ export default {
       )
     },
     handleTrackDown(event) {
-      const { clientX } = event
+      const { vertical, total, truthMin } = this
+      const client = vertical ? event.clientY : event.clientX
       const trackRect = this.$refs.track.getBoundingClientRect()
 
       this.currentValue =
-        ((clientX - trackRect.left) / trackRect.width) * this.total +
-        this.truthMin
+        ((client - trackRect[vertical ? 'top' : 'left']) / trackRect[vertical ? 'height' : 'width']) * total +
+        truthMin
       this.verifyValue()
 
       this.$emit('on-change', this.truthValue)
@@ -180,12 +188,13 @@ export default {
     handleMove(event) {
       event.preventDefault()
 
-      const { clientX } = event
+      const { vertical, total, truthMin } = this
+      const client = vertical ? event.clientY : event.clientX
       const trackRect = this.slidingState.trackRect
 
       this.currentValue =
-        ((clientX - trackRect.left) / trackRect.width) * this.total +
-        this.truthMin
+        ((client - trackRect[vertical ? 'top' : 'left']) / trackRect[vertical ? 'height' : 'width']) * total +
+        truthMin
       this.verifyValue()
 
       if (this.$refs.tooltip) {
