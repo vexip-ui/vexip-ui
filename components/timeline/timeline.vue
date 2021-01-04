@@ -17,6 +17,18 @@ const props = useConfigurableProps({
   bothSides: {
     type: Boolean,
     default: false
+  },
+  dashed: {
+    type: Boolean,
+    default: false
+  },
+  lineColor: {
+    type: String,
+    default: null
+  },
+  spacing: {
+    type: [Number, String],
+    default: null
   }
 })
 

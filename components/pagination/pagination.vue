@@ -279,7 +279,7 @@ export default {
       }
     },
     pagerCount() {
-      return Math.ceil(this.total / (this.currentPageSize || 1))
+      return Math.ceil(this.total / (this.currentPageSize || 1)) || 1
     },
     disabledPrev() {
       const count = this.queryEnableActive(1, 1)

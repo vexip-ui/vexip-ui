@@ -23,7 +23,8 @@
 
     &--scrolling,
     &--using-bar,
-    &--no-ready {
+    &--no-ready,
+    &--no-transition {
       transition-duration: 0ms;
     }
 

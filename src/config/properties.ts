@@ -51,8 +51,11 @@ export function useConfigurableProps(props: {
     if (prop.type === Function) {
       delete prop.type
 
+      const defaultValue = prop.default
       const validator = prop.validator
 
+      prop.default =
+        typeof defaultValue === 'function' ? () => defaultValue : null
       prop.validator =
         typeof validator === 'function'
           ? (value: any) => typeof value === 'function' && validator(value)

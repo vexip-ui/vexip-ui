@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" :style="itemStyle">
     <div
       :class="`${prefix}__signal`"
       :style="signalStyle"
@@ -9,7 +9,7 @@
         <div :class="`${prefix}__pointer`" :style="pointerStyle"></div>
       </slot>
     </div>
-    <div :class="`${prefix}__line`"></div>
+    <div :class="`${prefix}__line`" :style="lineStyle"></div>
     <div ref="content" :class="`${prefix}__content`">
       <slot></slot>
     </div>
@@ -44,6 +44,18 @@ const props = useConfigurableProps({
   label: {
     type: [Number, String],
     default: null
+  },
+  dashed: {
+    type: Boolean,
+    default: null
+  },
+  lineColor: {
+    type: String,
+    default: null
+  },
+  spacing: {
+    type: [Number, String],
+    default: null
   }
 })
 
@@ -53,7 +65,8 @@ export default {
   emits: ['on-signal-click'],
   data() {
     return {
-      prefix: `${prefix}-timeline`
+      prefix: `${prefix}-timeline`,
+      parentInstance: null
     }
   },
   computed: {
@@ -63,6 +76,14 @@ export default {
       return {
         [`${prefix}__item`]: true,
         [`${prefix}__item--${type}`]: type !== 'custom'
+      }
+    },
+    itemStyle() {
+      const { parentInstance } = this
+      const spacing = this.spacing ?? parentInstance?.spacing
+
+      return {
+        paddingBottom: typeof spacing === 'number' ? `${spacing}px` : spacing
       }
     },
     bindSignalClick() {
@@ -94,6 +115,16 @@ export default {
       }
 
       return {}
+    },
+    lineStyle() {
+      const { dashed, lineColor, parentInstance } = this
+      const isDashed = dashed ?? parentInstance?.dashed ?? false
+      const color = lineColor ?? parentInstance?.lineColor
+
+      return {
+        borderLeftStyle: isDashed ? 'dashed' : null,
+        borderLeftColor: color
+      }
     }
   },
   created() {

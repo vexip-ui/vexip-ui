@@ -4,7 +4,8 @@
     :style="style"
     @mousedown="handleMouseDown"
     @touchstart="handleTouchStart"
-    @wheel="handleWheel"
+    @wheel.exact="handleWheel($event, 'vertical')"
+    @wheel.shift="handleWheel($event, 'horizontal')"
   >
     <div
       ref="wrapper"
@@ -23,9 +24,9 @@
       :bar-length="xBarLength"
       :disabled="!enableXScroll"
       :duration="duration"
-      @on-scroll-start="handleBarScrollStart"
+      @on-scroll-start="handleBarScrollStart('horizontal')"
       @on-scroll="handleXBarScroll"
-      @on-scroll-end="handleBarScrollEnd"
+      @on-scroll-end="handleBarScrollEnd('horizontal')"
     ></Scrollbar>
     <Scrollbar
       v-if="useYBar"
@@ -36,9 +37,9 @@
       :bar-length="yBarLength"
       :disabled="!enableYScroll"
       :duration="duration"
-      @on-scroll-start="handleBarScrollStart"
+      @on-scroll-start="handleBarScrollStart('vertical')"
       @on-scroll="handleYBarScroll"
-      @on-scroll-end="handleBarScrollEnd"
+      @on-scroll-end="handleBarScrollEnd('vertical')"
     ></Scrollbar>
   </div>
 </template>
@@ -129,6 +130,10 @@ const props = useConfigurableProps({
   noBuffer: {
     type: Boolean,
     default: false
+  },
+  noTransition: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -144,7 +149,9 @@ export default {
     'on-wheel',
     'on-scroll-start',
     'on-scroll',
-    'on-scroll-end'
+    'on-scroll-end',
+    'on-bar-scroll-start',
+    'on-bar-scroll-end'
   ],
   data() {
     return {
@@ -208,7 +215,7 @@ export default {
       }
     },
     wrapperClass() {
-      const { prefix, scrollClass, usingBar, scrolling, isReady } = this
+      const { prefix, scrollClass, usingBar, scrolling, isReady, noTransition } = this
 
       return [
         `${prefix}__wrapper`,
@@ -216,7 +223,8 @@ export default {
         {
           [`${prefix}__wrapper--scrolling`]: scrolling,
           [`${prefix}__wrapper--no-ready`]: !isReady,
-          [`${prefix}__wrapper--using-bar`]: usingBar
+          [`${prefix}__wrapper--using-bar`]: usingBar,
+          [`${prefix}__wrapper--no-transition`]: noTransition
         }
       ]
     },
@@ -472,7 +480,8 @@ export default {
       this.$emit('on-scroll-end')
       this.startAutoplay()
     },
-    handleWheel(event) {
+    handleWheel(event, type) {
+      // 按下 shift 时为横向滚动，保持和原生操作一致
       const { mode, enableXScroll, enableYScroll, deltaX, deltaY, wheel } = this
 
       if (wheel && (enableXScroll || enableYScroll)) {
@@ -482,39 +491,51 @@ export default {
         return false
       }
 
+      if (mode !== BOTH && mode !== type) return false
+
       this.prepareScroll()
 
       const sign = event.deltaY > 0 ? -1 : 1
-      const computedDeltaX = sign * deltaX
-      const computedDeltaY = sign * deltaY
+      const computedDelta = sign * (type === HORIZONTAL ? deltaX : deltaY)
 
-      let scrollType
+      // const computedDeltaX = sign * deltaX
+      // const computedDeltaY = sign * deltaY
 
-      if (mode === BOTH) {
-        const { currentYScroll, yScrollLimit } = this
+      // let scrollType
 
-        // 纵向优先
-        if (currentYScroll >= 0 || currentYScroll <= yScrollLimit) {
-          scrollType = HORIZONTAL
+      // if (mode === BOTH) {
+      //   const { currentYScroll, yScrollLimit } = this
 
-          if (enableXScroll) {
-            this.currentXScroll += computedDeltaX
-          }
-        } else {
-          scrollType = VERTICAL
+      //   // 纵向优先
+      //   if ((currentYScroll >= 0 && sign > 0) || (currentYScroll <= yScrollLimit && sign < 0)) {
+      //     scrollType = HORIZONTAL
 
-          if (enableYScroll) {
-            this.currentYScroll += computedDeltaY
-          }
-        }
-      } else {
-        scrollType = mode
+      //     if (enableXScroll) {
+      //       this.currentXScroll += computedDeltaX
+      //     }
+      //   } else {
+      //     scrollType = VERTICAL
 
-        if (enableYScroll) {
-          this.currentYScroll += computedDeltaY
-        } else if (enableXScroll) {
-          this.currentXScroll += computedDeltaX
-        }
+      //     if (enableYScroll) {
+      //       this.currentYScroll += computedDeltaY
+      //     }
+      //   }
+      // } else {
+      //   scrollType = mode
+
+      //   if (enableYScroll) {
+      //     this.currentYScroll += computedDeltaY
+      //   } else if (enableXScroll) {
+      //     this.currentXScroll += computedDeltaX
+      //   }
+      // }
+
+      const scrollType = type
+
+      if (enableYScroll && type === VERTICAL) {
+        this.currentYScroll += computedDelta
+      } else if (enableXScroll && type === HORIZONTAL) {
+        this.currentXScroll += computedDelta
       }
 
       this.verifyScroll()
@@ -581,11 +602,13 @@ export default {
         this.scrolling = false
       }
     },
-    handleBarScrollStart() {
+    handleBarScrollStart(type) {
       this.usingBar = true
+      this.$emit('on-bar-scroll-start', type)
     },
-    handleBarScrollEnd() {
+    handleBarScrollEnd(type) {
       this.usingBar = false
+      this.$emit('on-bar-scroll-end', type)
     },
     handleXBarScroll(percent) {
       this.percentX = percent
