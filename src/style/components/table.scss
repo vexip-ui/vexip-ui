@@ -15,10 +15,6 @@
   // border-bottom-color: $vxp-color-border;
   // box-shadow: 0 0 0 1px $vxp-color-border;
 
-  &--border {
-    border-color: $vxp-color-border;
-  }
-
   &__head,
   &__body {
     position: relative;
@@ -91,9 +87,40 @@
     }
   }
 
-  &--border &__cell,
-  &--border &__head-cell {
-    border-right-color: $vxp-color-border-light-2;
+  $head: #{&}__head;
+  $body: #{&}__body;
+  $row: #{&}__row;
+  $group: #{&}__group;
+  $cell: #{&}__cell;
+  $head-cell: #{&}__head-cell;
+
+  &--transparent {
+    #{$head},
+    #{$body},
+    #{$row} {
+      background-color: transparent;
+    }
+  }
+
+  &--transparent:not(#{&}--border) {
+    #{$head},
+    #{$body},
+    #{$group} {
+      border-bottom-width: 0;
+    }
+  }
+
+  &--border {
+    border-color: $vxp-color-border;
+
+    #{$body} {
+      border-bottom-width: 0;
+    }
+
+    #{$cell},
+    #{$head-cell} {
+      border-right-color: $vxp-color-border-light-2;
+    }
   }
 
   &__column {

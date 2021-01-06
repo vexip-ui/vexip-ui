@@ -34,7 +34,9 @@ export default class Store {
       width,
       dataKey,
       highlight,
-      renderCount
+      renderCount,
+      currentPage,
+      pageSize
     } = options
 
     createStoreVM(this)
@@ -43,6 +45,8 @@ export default class Store {
     setDataKey(this.state, dataKey)
 
     setData(this.state, data)
+    setCurrentPage(this.state, currentPage)
+    setPageSize(this.state, pageSize)
 
     setRowClass(this.state, rowClass)
     setHighlight(this.state, highlight)
@@ -105,7 +109,9 @@ function createStoreVM(store) {
         highlight: false,
         hiddenHeight: 0,
         startRow: 0,
-        endRow: 0
+        endRow: 0,
+        currentPage: 1,
+        pageSize: 0
       }
     },
     computed
@@ -114,10 +120,16 @@ function createStoreVM(store) {
 
 // 理论上 Getter 是函数的调用, 应该可以重复使用
 const getters = {
-  processedData(state) {
-    const { sorters, filters, data, columns } = state
+  filteredData(state) {
+    const { filters, data } = state
 
-    return sortData(sorters, filterData(filters, data), columns)
+    return filterData(filters, data)
+  },
+  processedData(state, getters) {
+    const { sorters, columns, currentPage, pageSize } = state
+    const { filteredData } = getters
+
+    return pageData(currentPage, pageSize, sortData(sorters, filteredData, columns))
   },
   totalRowHeight(state, getters) {
     const data = getters.processedData
@@ -181,6 +193,8 @@ const getters = {
 const mutations = {
   setColumns,
   setData,
+  setCurrentPage,
+  setPageSize,
   setRowClass,
   setTableWidth,
   setColumnWidth,
@@ -458,8 +472,16 @@ function setData(state, data) {
   computePartial(state)
 }
 
+function setCurrentPage(state, currentPage) {
+  state.currentPage = currentPage ?? 1
+}
+
+function setPageSize(state, pageSize) {
+  state.pageSize = pageSize ?? state.data?.length ?? 0
+}
+
 function setRowClass(state, rowClass) {
-  state.rowClass = rowClass || null
+  state.rowClass = rowClass ?? null
 }
 
 function setTableWidth(state, width) {
@@ -691,6 +713,10 @@ function sortData(sorters, data, columns) {
   usedSorter.sort((prev, next) => prev.order - next.order)
 
   return sortByProps(data, usedSorter)
+}
+
+function pageData(currentPage, pageSize, data) {
+  return data.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 }
 
 export function mapState(mapList) {

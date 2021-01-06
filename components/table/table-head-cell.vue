@@ -120,7 +120,7 @@ import CheckboxGroup from '../checkbox/checkbox-group'
 import Icon from '../icon'
 import Render from '../basis/render'
 import Tooltip from '../tooltip'
-import { TYPE_COLUMNS, mapState, mapMutations, mapActions } from './store'
+import { TYPE_COLUMNS, mapState, mapMutations, mapActions, mapGetters } from './store'
 
 import '../../icons/caret-up'
 import '../../icons/caret-down'
@@ -157,6 +157,7 @@ export default {
   },
   computed: {
     ...mapState(['checkedAll', 'partial', 'widths', 'sorters', 'filters']),
+    ...mapGetters(['filtered']),
     className() {
       const { prefix, column } = this
       const customClass = column.className || null
@@ -240,6 +241,7 @@ export default {
       })
       this.handleFilter(this.column.key, value)
       this.filterVisible = false
+      this.table.emitRowFilter()
     },
     handleFilterCheck(value, checked) {
       this.toggleFilterItemActive({
@@ -262,6 +264,7 @@ export default {
 
       this.handleFilter(this.column.key, activeValues)
       this.filterVisible = false
+      this.table.emitRowFilter()
     },
     handleResetFilter() {
       this.filterVisible = false
@@ -271,6 +274,7 @@ export default {
         value: null,
         disableOthers: true
       })
+      this.table.emitRowFilter()
     },
     handleCheckAllRow() {
       this.handleCheckAll()

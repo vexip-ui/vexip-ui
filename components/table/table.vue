@@ -107,7 +107,7 @@ import Store, {
   mapActions
 } from './store'
 import { useConfigurableProps } from '../../src/config/properties'
-import { debounce, removeArrayItem } from '../../src/utils/common'
+import { debounce, isNull, removeArrayItem } from '../../src/utils/common'
 
 const { prefix } = require('../../src/style/basis/variable')
 
@@ -185,6 +185,21 @@ const props = useConfigurableProps({
   expandRenderer: {
     type: Function,
     default: null
+  },
+  currentPage: {
+    type: Number,
+    default: 1,
+    validator(value) {
+      return value > 0
+    }
+  },
+  pageSize: {
+    type: Number,
+    default: null
+  },
+  transparent: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -209,7 +224,8 @@ export default {
     'on-row-drag-start',
     'on-row-drag-over',
     'on-row-drop',
-    'on-row-drag-end'
+    'on-row-drag-end',
+    'on-row-filter'
   ],
   data() {
     return {
@@ -228,19 +244,20 @@ export default {
   },
   computed: {
     ...mapState(['leftFixedColumns', 'rightFixedColumns', 'bodyScroll']),
-    ...mapGetters(['totalRowHeight', 'processedData']),
+    ...mapGetters(['totalRowHeight', 'filteredData', 'processedData']),
     table() {
       return this
     },
     className() {
-      const { prefix, stripe, border, highlight, useYBar } = this
+      const { prefix, stripe, border, highlight, useYBar, transparent } = this
 
       return {
         [prefix]: true,
         [`${prefix}--stripe`]: stripe,
         [`${prefix}--border`]: border,
         [`${prefix}--highlight`]: highlight,
-        [`${prefix}--use-y-bar`]: useYBar
+        [`${prefix}--use-y-bar`]: useYBar,
+        [`${prefix}--transparent`]: transparent
       }
     },
     style() {
@@ -333,18 +350,26 @@ export default {
     },
     highlight(value) {
       this.setHighlight(value)
+    },
+    currentPage(value) {
+      this.setCurrentPage(value)
+    },
+    pageSize(value) {
+      this.setPageSize(value)
     }
   },
   created() {
-    const { rowClass } = this
+    const { rowClass, allColumns, data, dataKey, highlight, renderCount, currentPage, pageSize } = this
 
     this.store = new Store({
       rowClass,
-      columns: this.allColumns,
-      data: this.data,
-      dataKey: this.dataKey,
-      highlight: this.highlight,
-      renderCount: this.renderCount
+      data,
+      dataKey,
+      highlight,
+      renderCount,
+      currentPage,
+      columns: allColumns,
+      pageSize: isNull(pageSize) ? data.length : pageSize
     })
 
     this.handleResize = debounce(this.computeTableWidth)
@@ -368,7 +393,9 @@ export default {
       'setTableWidth',
       'setHighlight',
       'setStripe',
-      'refreshRowIndex'
+      'refreshRowIndex',
+      'setCurrentPage',
+      'setPageSize'
     ]),
     ...mapActions(['setRenderRows']),
     computeTableWidth() {
@@ -458,6 +485,9 @@ export default {
     },
     emitRowExpand(data, expanded, key, index) {
       this.$emit('on-row-expand', data, expanded, key, index)
+    },
+    emitRowFilter() {
+      this.$emit('on-row-filter', this.filteredData)
     },
     handleRowDragStart(rowInstance) {
       this.dragState = {
