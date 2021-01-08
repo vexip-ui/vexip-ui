@@ -141,6 +141,7 @@ export default {
           this.setRowHeight(this.row.key, this.table.rowHeight)
 
           if (this.$refs.row?.style) {
+            this.$refs.row.style.height = `${this.table.rowHeight}px`
             this.$refs.row.style.maxHeight = `${this.table.rowHeight}px`
           }
         })

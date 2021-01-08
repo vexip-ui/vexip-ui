@@ -9,7 +9,6 @@
       mode="horizontal"
       :class="[`${prefix}__scroll`, scrollClass.horizontal]"
       :bar-class="`${prefix}__bar--horizontal`"
-      :wheel="false"
       :width="width"
       :bar-fade="barFade"
       @on-scroll="handleXScroll"
@@ -333,6 +332,7 @@ export default {
     data: {
       handler(value) {
         this.setData(value)
+        this.setPageSize(this.pageSize)
         this.refreshPercentScroll()
       },
       deep: true

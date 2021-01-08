@@ -481,14 +481,18 @@ export default {
       this.startAutoplay()
     },
     handleWheel(event, type) {
+      debugger
       // 按下 shift 时为横向滚动，保持和原生操作一致
       const { mode, enableXScroll, enableYScroll, deltaX, deltaY, wheel } = this
 
-      if (wheel && (enableXScroll || enableYScroll)) {
+      const isVerticalScroll = enableYScroll && type === VERTICAL
+      const isHorizontalScroll = enableXScroll && type === HORIZONTAL
+
+      if (wheel && (isVerticalScroll || isHorizontalScroll)) {
         event.preventDefault()
         event.stopPropagation()
       } else {
-        return false
+        return true
       }
 
       if (mode !== BOTH && mode !== type) return false
@@ -532,9 +536,9 @@ export default {
 
       const scrollType = type
 
-      if (enableYScroll && type === VERTICAL) {
+      if (isVerticalScroll) {
         this.currentYScroll += computedDelta
-      } else if (enableXScroll && type === HORIZONTAL) {
+      } else if (isHorizontalScroll) {
         this.currentXScroll += computedDelta
       }
 

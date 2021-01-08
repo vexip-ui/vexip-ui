@@ -23,7 +23,7 @@ const props = useConfigurableProps({
     default: null
   },
   fixed: {
-    type: [String, Boolean],
+    type: [Boolean, String],
     default: false
   },
   className: {
