@@ -481,7 +481,6 @@ export default {
       this.startAutoplay()
     },
     handleWheel(event, type) {
-      debugger
       // 按下 shift 时为横向滚动，保持和原生操作一致
       const { mode, enableXScroll, enableYScroll, deltaX, deltaY, wheel } = this
 

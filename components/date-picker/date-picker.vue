@@ -40,7 +40,7 @@
         </div>
       </template>
     </MultipleInput>
-    <transition :name="transitionName" @after-leave="togglePane('calendar')">
+    <transition :name="transitionName" @after-leave="togglePane(type === 'month' ? 'month' : type === 'year' ? 'year' : 'calendar')">
       <div
         v-show="focused"
         ref="popper"
@@ -408,10 +408,11 @@ export default {
   data() {
     const current = new Date()
     const currentYear = current.getFullYear()
+    const currentPane = this.type === 'year' ? 'year' : this.type === 'month' ? 'month' : 'calendar'
 
     return {
+      currentPane,
       prefix: `${prefix}-date-picker`,
-      currentPane: 'calendar',
       inControl: false,
       activated: {
         start: {},
@@ -947,18 +948,32 @@ export default {
       }
     },
     handleYearItemClick(year) {
-      this.year = year
+      const type = this.valueType
+
+      this[type].year = year
       this.adjustCalendar('year', year - this.calendarYear)
-      this.togglePane('month')
       this.$set(this.activated, 'year', true)
+
+      if (this.type !== 'year') {
+        this.togglePane('month')
+      } else {
+        this.handleSelectDate()
+      }
     },
     handleMonthItemClick(month) {
-      this.year = this.calendarYear
-      this.month = month - 1
+      const type = this.valueType
+
+      this[type].year = this.calendarYear
+      this[type].month = month - 1
       this.adjustCalendar('month', month - this.calendarMonth - 1)
-      this.togglePane('calendar')
       this.$set(this.activated, 'year', true)
       this.$set(this.activated, 'month', true)
+
+      if (this.type !== 'month') {
+        this.togglePane('calendar')
+      } else {
+        this.handleSelectDate()
+      }
     },
     handleDoublePrevClick() {
       if (this.currentPane === 'year') {
@@ -974,7 +989,7 @@ export default {
         this.adjustCalendar('year', -1)
       }
     },
-    handleSelectDate(date) {
+    handleSelectDate(date = this.getDateValue()) {
       const type = this.valueType
 
       if (this.isRange) {
