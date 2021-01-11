@@ -6,8 +6,12 @@
     <div
       v-if="!card"
       ref="mark"
-      :class="`${prefix}__mark`"
-    ></div>
+      :class="`${prefix}__track`"
+    >
+      <slot name="marker">
+        <div :class="`${prefix}__marker`"></div>
+      </slot>
+    </div>
   </div>
 </template>
 

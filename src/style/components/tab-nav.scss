@@ -65,13 +65,18 @@
     }
   }
 
-  &__mark {
+  &__track {
     position: absolute;
     bottom: -1px;
     width: 70px;
+    pointer-events: none;
+    transition: left $vxp-transition-base, width $vxp-transition-base;
+  }
+
+  &__marker {
+    width: 100%;
     height: 2px;
     background-color: $open-color;
-    transition: left $vxp-transition-base, width $vxp-transition-base;
   }
 
   &__icon {
