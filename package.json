@@ -81,5 +81,5 @@
     "serve": "vue-cli-service serve",
     "test:unit": "vue-cli-service test:unit"
   },
-  "version": "0.9.28"
+  "version": "0.9.29"
 }

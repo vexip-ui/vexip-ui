@@ -700,7 +700,7 @@ function sortData(sorters, data, columns) {
         key,
         accessor(row) {
           if (typeof accessor === 'function') {
-            accessor(row.data)
+            return accessor(row.data)
           }
 
           return row.data[key]
