@@ -20,6 +20,7 @@
       >
         <div
           v-if="hasTitle"
+          ref="header"
           :class="`${prefix}__header`"
           @mousedown="handleDragStart"
         >
@@ -40,13 +41,18 @@
           </slot>
         </div>
         <div
-          ref="content"
           :class="`${prefix}__content`"
-          :style="contentStyle"
+          :style="{
+            overflow: resizeState ? 'hidden' : null
+          }"
         >
           <slot></slot>
         </div>
-        <div v-if="!noFooter" :class="`${prefix}__footer`">
+        <div
+          v-if="!noFooter"
+          ref="footer"
+          :class="`${prefix}__footer`"
+        >
           <slot name="footer">
             <Button
               type="text"
@@ -112,6 +118,10 @@ const props = useConfigurableProps({
     type: [Number, String],
     default: 600
   },
+  height: {
+    type: [Number, String],
+    default: 'auto'
+  },
   top: {
     type: [Number, String],
     default: 100,
@@ -120,6 +130,20 @@ const props = useConfigurableProps({
     }
   },
   left: {
+    type: [Number, String],
+    default: 'auto',
+    validator(value) {
+      return value === 'auto' || typeof value === 'number'
+    }
+  },
+  right: {
+    type: [Number, String],
+    default: 'auto',
+    validator(value) {
+      return value === 'auto' || typeof value === 'number'
+    }
+  },
+  bottom: {
     type: [Number, String],
     default: 'auto',
     validator(value) {
@@ -169,6 +193,14 @@ const props = useConfigurableProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  minWidth: {
+    type: Number,
+    default: 150
+  },
+  minHeight: {
+    type: Number,
+    default: 120
   }
 })
 
@@ -207,7 +239,8 @@ export default {
       currentTop: this.top,
       currentLeft: this.left,
       currentWidth: this.width,
-      contentHeight: 'auto'
+      currentHeight: this.height,
+      resizeState: {}
     }
   },
   computed: {
@@ -235,22 +268,16 @@ export default {
       ]
     },
     wrapperStyle() {
-      return {
-        top: `${this.currentTop}px`,
-        left: `${this.currentLeft}px`,
-        width: `${this.currentWidth}px`
-      }
-    },
-    contentStyle() {
-      const { contentHeight } = this
-
-      if (contentHeight === 'auto') {
-        return null
-      }
+      const { currentTop, currentLeft, currentWidth, currentHeight, right, bottom } = this
+      const fixedHeight = currentHeight !== 'auto'
 
       return {
-        height: `${contentHeight}px`,
-        overflow: 'hidden'
+        top: `${currentTop}px`,
+        right: fixedHeight || !right || right === 'auto' ? null : `${right}px`,
+        bottom: fixedHeight || !bottom || bottom === 'auto' ? null : `${bottom}px`,
+        left: `${currentLeft}px`,
+        width: `${currentWidth}px`,
+        height: fixedHeight ? `${this.currentHeight}px` : null
       }
     },
     cancelText() {
@@ -299,17 +326,17 @@ export default {
       const currentHeight = this.$refs.wrapper.getBoundingClientRect().height
 
       if (this.top === 'auto' && this.inner) {
-        let parentNode = this.$el.parentNode
+        let parentNode = this.$el
 
         while (parentNode && parentNode !== document.body) {
+          parentNode = parentNode.parentNode
+
           if (getComputedStyle(parentNode).position !== 'static') {
             this.currentTop =
               (parentNode.getBoundingClientRect().top - currentHeight) / 2
 
             break
           }
-
-          parentNode = parentNode.parentNode
         }
       } else {
         this.currentTop =
@@ -434,15 +461,25 @@ export default {
       event.stopPropagation()
 
       let heightStart
+      let minHeight = 32
 
-      if (this.contentHeight === 'auto') {
-        heightStart = this.$refs.content.getBoundingClientRect().height
+      if (this.currentHeight === 'auto') {
+        heightStart = this.$refs.wrapper.offsetHeight
       } else {
-        heightStart = this.contentHeight
+        heightStart = this.currentHeight
+      }
+
+      if (this.$refs.header) {
+        minHeight += this.$refs.header.offsetHeight
+      }
+
+      if (this.$refs.footer) {
+        minHeight += this.$refs.footer.offsetHeight
       }
 
       this.resizeState = {
         heightStart,
+        minHeight: Math.max(minHeight, this.minHeight),
         widthStart: this.currentWidth,
         xStart: event.clientX,
         yStart: event.clientY
@@ -458,14 +495,14 @@ export default {
       event.stopPropagation()
 
       const { clientX, clientY } = event
-      const { widthStart, heightStart, xStart, yStart } = this.resizeState
+      const { widthStart, heightStart, minHeight, xStart, yStart } = this.resizeState
 
-      this.currentWidth = Math.max(150, widthStart - xStart + clientX)
-      this.contentHeight = heightStart - yStart + clientY
+      this.currentWidth = Math.max(this.minWidth, widthStart - xStart + clientX)
+      this.currentHeight = Math.max(minHeight, heightStart - yStart + clientY)
 
       this.$emit('on-resize-move', {
         width: this.currentWidth,
-        height: this.contentHeight
+        height: this.currentHeight
       })
     },
     handleResizeEnd(event) {
@@ -476,7 +513,7 @@ export default {
 
       this.$emit('on-resize-end', {
         width: this.currentWidth,
-        height: this.contentHeight
+        height: this.currentHeight
       })
     }
   }

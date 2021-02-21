@@ -81,6 +81,9 @@ export default {
     }
   },
   watch: {
+    active(value) {
+      this.currentActive = value
+    },
     currentActive(value) {
       this.updateActive()
       this.computeIndex(value)
