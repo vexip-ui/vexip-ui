@@ -9,6 +9,7 @@
   background-color: $vxp-color-fill-background;
   border: $vxp-border-base;
   border-radius: $vxp-border-radius-base;
+  transition: $vxp-transition-color-base, $vxp-transition-background-base;
 
   & + & {
     margin-left: 0.3em;
@@ -19,16 +20,13 @@
     align-items: center;
     justify-content: center;
     margin-left: 0.5em;
+    color: $vxp-color-content-secondary;
     cursor: pointer;
+    opacity: 0.6;
+    transition: $vxp-transition-opacity-base;
 
-    &,
-    .#{$prefix}-icon {
-      color: $vxp-color-border;
-    }
-
-    &:hover,
-    &:hover .#{$prefix}-icon {
-      color: $vxp-color-content-secondary;
+    &:hover {
+      opacity: 1;
     }
   }
 
@@ -40,13 +38,7 @@
   &--warning {
     color: $vxp-color-content-reverse;
 
-    #{$close},
-    .#{$prefix}-icon {
-      color: rgba($vxp-color-content-reverse, 0.6);
-    }
-
-    #{$close}:hover,
-    #{$close}:hover .#{$prefix}-icon {
+    #{$close} {
       color: $vxp-color-content-reverse;
     }
   }
@@ -74,13 +66,7 @@
       &--border#{&}--#{$type} {
         color: $color;
 
-        #{$close},
-        .#{$prefix}-icon {
-          color: rgba($color, 0.6);
-        }
-
-        #{$close}:hover,
-        #{$close}:hover .#{$prefix}-icon {
+        #{$close} {
           color: $color;
         }
       }

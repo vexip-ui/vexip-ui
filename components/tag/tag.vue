@@ -1,12 +1,15 @@
 <template>
   <transition :name="transitionName">
-    <div :class="className">
+    <div :class="className" :style="style">
       <span>
         <slot></slot>
       </span>
       <div
         v-if="closable"
         :class="`${prefix}__close`"
+        :style="{
+          color: border ? (borderColor || color) : null
+        }"
         @click="handleClose"
       >
         <Icon name="times" :scale="0.8"></Icon>
@@ -38,6 +41,14 @@ const props = useConfigurableProps({
   closable: {
     type: Boolean,
     default: false
+  },
+  color: {
+    type: String,
+    default: null
+  },
+  borderColor: {
+    type: String,
+    default: null
   }
 })
 
@@ -62,6 +73,15 @@ export default {
         [prefix]: true,
         [`${prefix}--${type}`]: type !== 'default',
         [`${prefix}--border`]: border
+      }
+    },
+    style() {
+      const { border, color, borderColor } = this
+
+      return {
+        color: border ? color : null,
+        backgroundColor: border ? null : color,
+        borderColor: borderColor || color
       }
     }
   },
