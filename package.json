@@ -75,11 +75,12 @@
   "scripts": {
     "build": "vue-cli-service build --target lib --name vexip-ui src/index.js",
     "commit": "git-cz",
+    "emit": "npm publish --registry https://registry.npmjs.org/",
     "lint": "vue-cli-service lint",
     "lint:style": "stylelint **/*.{vue,scss} --fix",
     "pretty": "prettier --write \"src/**/*.{js,vue,scss}\"",
     "serve": "vue-cli-service serve",
     "test:unit": "vue-cli-service test:unit"
   },
-  "version": "0.9.31"
+  "version": "0.9.34"
 }

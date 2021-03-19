@@ -211,9 +211,11 @@ export default {
       return this.currentItem % this.itemCount
     },
     pointerCount() {
-      return this.loop
-        ? this.itemCount
-        : Math.max(this.itemCount - this.viewSize + 1, 0)
+      return Math.round(
+        this.loop
+          ? this.itemCount
+          : Math.max(this.itemCount - this.viewSize + 1, 0)
+      )
     },
     sizeProp() {
       return this.mode === 'horizontal' ? 'Width' : 'Height'

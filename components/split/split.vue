@@ -49,11 +49,13 @@
           </div>
         </template>
         <template v-else>
-          <span
-            v-for="n in 6"
-            :key="n"
-            :class="`${prefix}__pointer`"
-          ></span>
+          <slot name="handler">
+            <span
+              v-for="n in 6"
+              :key="n"
+              :class="`${prefix}__pointer`"
+            ></span>
+          </slot>
         </template>
       </div>
     </div>
@@ -65,6 +67,7 @@
 import Icon from '../icon'
 import { useConfigurableProps } from '../../src/config/properties'
 import { throttle } from '../../src/utils/common'
+
 import '../../icons/chevron-up'
 import '../../icons/chevron-right'
 import '../../icons/chevron-down'
@@ -82,7 +85,11 @@ const props = useConfigurableProps({
   },
   min: {
     type: Number,
-    default: 100
+    default: 0.1
+  },
+  max: {
+    type: Number,
+    default: 0.9
   },
   vertical: {
     type: Boolean,
@@ -202,6 +209,7 @@ export default {
     },
     currentValue(value) {
       this.$emit('on-change', value)
+      this.$refs.guide.style[this.position[0]] = `${value * 100}%`
     },
     currentFull(value) {
       this.setTransition()
@@ -244,23 +252,28 @@ export default {
         return false
       }
 
+      window.clearTimeout(this.timer)
+
       this.moving = true
 
+      const { min, max, vertical, currentValue, lazy } = this
+
       const outer = this.$el[this.offset]
-      const min = this.min / outer
-      const direction = this.vertical ? 'pageY' : 'pageX'
-      const style = this.vertical ? 'top' : 'left'
+      const computedMin = min <= 1 ? min : (min / outer)
+      const computedMax = max <= 1 ? max : (max / outer)
+      const direction = vertical ? 'pageY' : 'pageX'
+      const style = vertical ? 'top' : 'left'
 
       this.moveState = {
         outer,
-        min,
-        max: 1 - min,
         direction,
         style,
+        lazy,
+        min: computedMin,
+        max: computedMax,
         origin: event[direction],
-        start: this.currentValue * outer,
-        target: this.currentValue,
-        lazy: this.lazy
+        start: currentValue * outer,
+        target: currentValue
       }
 
       if (this.lazy) {
@@ -295,6 +308,11 @@ export default {
       }
 
       this.$emit('on-move-end', this.currentValue)
+
+      const durationWithUnit = getComputedStyle(this.$el).transitionDuration
+      const duration = parseFloat(durationWithUnit) || 0
+
+      this.timer = window.setTimeout(this.removeEventListener, durationWithUnit.endsWith('ms') ? duration : duration * 1000)
     },
     setTransition() {
       this.transition = !this.noTransition && !this.moving

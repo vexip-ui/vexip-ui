@@ -1,6 +1,10 @@
 <template>
   <transition :name="transitionName">
-    <div :class="className" :style="style">
+    <div
+      :class="className"
+      :style="style"
+      @click="$emit('on-click', $event)"
+    >
       <span>
         <slot></slot>
       </span>
@@ -10,7 +14,7 @@
         :style="{
           color: border ? (borderColor || color) : null
         }"
-        @click="handleClose"
+        @click.left.stop="handleClose"
       >
         <Icon name="times" :scale="0.8"></Icon>
       </div>
@@ -58,7 +62,7 @@ export default {
     Icon
   },
   props,
-  emits: ['on-close'],
+  emits: ['on-clickc', 'on-close'],
   data() {
     return {
       prefix: `${prefix}-tag`,

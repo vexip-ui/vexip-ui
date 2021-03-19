@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" @click="$emit('on-click', $event)">
     <div :class="[`${prefix}__content`, contentClass]" :style="contentStyle">
       <div :class="`${prefix}__arrow`" :style="arrowStyle"></div>
       <slot></slot>
@@ -37,6 +37,7 @@ const props = useConfigurableProps({
 export default {
   name: 'Bubble',
   props,
+  emits: ['on-click'],
   data() {
     return {
       prefix: `${prefix}-bubble`

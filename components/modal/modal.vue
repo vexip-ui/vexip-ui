@@ -86,24 +86,13 @@ import Button from '../button'
 import Icon from '../icon'
 import Masker from '../masker'
 import { useConfigurableProps } from '../../src/config/properties'
-// import { CLICK_TYPE } from '../../src/utils/event'
 import { isPromise } from '../../src/utils/common'
 
 import '../../icons/times'
 
 const { prefix } = require('../../src/style/basis/variable')
 
-// const mousePosition = {
-//   x: window.innerWidth / 2,
-//   y: window.innerHeight / 2
-// }
-
-// document.addEventListener(CLICK_TYPE, ({ clientX, clientY }) => {
-//   console.log({ clientX, clientY })
-
-//   mousePosition.x = clientX
-//   mousePosition.y = clientY
-// })
+// FIXME: 点击遮罩关闭时未触发 before-close 或未正确执行
 
 const props = useConfigurableProps({
   transfer: {

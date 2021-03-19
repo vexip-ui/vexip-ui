@@ -185,6 +185,24 @@ export default {
     },
     handleKeyUp(event) {
       this.$emit('on-key-up', event)
+    },
+    copyValue() {
+      const textarea = document.createElement('textarea')
+
+      textarea.style.height = '0'
+      textarea.setAttribute('readonly', 'readonly')
+
+      textarea.value = this.currentValue
+
+      document.body.appendChild(textarea)
+
+      textarea.select()
+
+      const isSuccess = document.execCommand('copy')
+
+      document.body.removeChild(textarea)
+
+      return isSuccess
     }
   }
 }

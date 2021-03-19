@@ -19,7 +19,7 @@
       >
         <div v-if="icon" :class="`${prefix}__icon`">
           <slot name="icon">
-            <Icon :name="icon"></Icon>
+            <Icon :name="icon" :scale="iconScale"></Icon>
           </slot>
         </div>
         <span :class="`${prefix}__title`">
@@ -111,6 +111,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    iconScale: {
+      type: Number,
+      default: 1
     }
   },
   data() {
