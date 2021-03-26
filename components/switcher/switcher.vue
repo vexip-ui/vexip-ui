@@ -140,6 +140,8 @@ export default {
   },
   methods: {
     async handleChange(checked = !this.currentValue) {
+      if (checked === this.currentValue) return
+
       let result = true
 
       if (typeof this.beforeChange === 'function') {
