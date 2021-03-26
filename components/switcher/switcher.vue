@@ -65,7 +65,7 @@ const props = useConfigurableProps({
     type: String,
     default: ''
   },
-  beforeClose: {
+  beforeChange: {
     type: Function,
     default: null
   },
@@ -142,8 +142,8 @@ export default {
     async handleChange(checked = !this.currentValue) {
       let result = true
 
-      if (typeof this.beforeClose === 'function') {
-        result = this.beforeClose(checked)
+      if (typeof this.beforeChange === 'function') {
+        result = this.beforeChange(checked)
 
         if (isPromise(result)) {
           result = await result
