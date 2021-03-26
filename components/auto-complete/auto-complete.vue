@@ -2,6 +2,7 @@
   <Select
     ref="select"
     :class="prefixCls"
+    :list-class="`${prefixCls}__list`"
     :value="currentValue"
     :size="size"
     :transition-name="transitionName"
@@ -17,9 +18,12 @@
       :on-click="handleInputClick"
       :on-input="handleInput"
       :on-change="handleChange"
+      :on-enter="handleEnter"
+      :on-clear="handleClear"
     >
       <Input
         slot="control"
+        ref="control"
         :value="inputValue"
         :prefix="prefix"
         :prefix-color="prefixColor"
@@ -35,6 +39,7 @@
         @on-blur="handleChange"
         @on-enter="handleEnter"
         @on-clear="handleClear"
+        @on-key-down="handleKeyDown"
       ></Input>
     </slot>
     <slot>
@@ -43,6 +48,9 @@
         :key="index"
         :label="item.label || item.value"
         :value="item.value"
+        :class="{
+          [`${prefixCls}__option--hit`]: currentIndex === index
+        }"
       ></Option>
     </slot>
   </Select>
@@ -163,7 +171,8 @@ export default {
       currentValue: this.value,
       changed: false,
       hasUsedSelect: false,
-      lastValue: this.value
+      lastValue: this.value,
+      currentIndex: -1
     }
   },
   computed: {
@@ -232,6 +241,8 @@ export default {
       this.hasUsedSelect = true
       this.$emit('on-select', value)
 
+      this.$refs.select.currentVisible = false
+
       if (value !== old) {
         this.changed = true
         this.handleChange(value)
@@ -242,6 +253,11 @@ export default {
       this.$refs.select.handleToggelVisible(this.canDrop)
       this.currentValue = value
       this.changed = true
+
+      if (this.currentIndex !== -1) {
+        this.currentIndex = 0
+      }
+
       this.$emit('on-input', value)
     },
     handleChange() {
@@ -254,10 +270,20 @@ export default {
       if (!this.disableValidate) {
         this.validateField()
       }
+
+      this.$refs.select.currentVisible = false
+      this.$refs.control?.blur()
     },
     handleToggle() {
       this.testOptionCanDrop()
-      this.$emit('on-toggle', this.$refs.select.currentVisible)
+
+      const visible = this.$refs.select.currentVisible
+
+      this.$emit('on-toggle', visible)
+
+      if (!visible) {
+        this.currentIndex = -1
+      }
     },
     testOptionCanDrop() {
       if (
@@ -268,13 +294,27 @@ export default {
       }
     },
     handleInputClick(event) {
-      if (!this.canDrop) {
-        event.stopPropagation()
-      }
+      event.stopPropagation()
+
+      if (!this.canDrop) return
+
+      const select = this.$refs.select
+
+      select.$refs.popper.style.minWidth = `${select.$el.offsetWidth}px`
+      this.$refs.select.currentVisible = true
+      this.$refs.control?.focus()
+    },
+    handleKeyDown({ keyCode }) {
+      this.currentIndex += keyCode === 40 ? 1 : keyCode === 38 ? -1 : 0
+      this.currentIndex = Math.min(Math.max(-1, this.currentIndex), this.filteredOptions.length)
     },
     handleEnter() {
-      if (this.filteredOptions.length) {
-        this.handleSelect(this.filteredOptions[0].value)
+      const { filteredOptions, currentIndex } = this
+
+      if (filteredOptions.length && currentIndex) {
+        this.handleSelect(filteredOptions[currentIndex === -1 ? 0 : currentIndex].value)
+      } else {
+        this.handleChange()
       }
 
       this.$emit('on-enter', this.currentValue)

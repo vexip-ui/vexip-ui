@@ -44,7 +44,7 @@
         @click.stop
       >
         <div
-          :class="`${prefixCls}__list`"
+          :class="[`${prefixCls}__list`, listClass]"
           :style="{
             height: listHeight,
             maxHeight: `${maxListHeight}px`
@@ -147,6 +147,10 @@ const props = useConfigurableProps({
   maxListHeight: {
     type: Number,
     default: 300
+  },
+  listClass: {
+    type: [String, Array, Object],
+    default: null
   },
   disableValidate: {
     type: Boolean,

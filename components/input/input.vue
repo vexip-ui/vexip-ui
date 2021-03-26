@@ -320,8 +320,8 @@ export default {
     },
     inputStyle() {
       return {
-        paddingLeft: this.hasPrefix ? '1.4em' : '',
-        paddingRight: this.hasSuffix || this.type === 'password' ? '1.4em' : ''
+        paddingLeft: this.hasPrefix ? '2em' : '',
+        paddingRight: this.hasSuffix || this.type === 'password' ? '2em' : ''
       }
     },
     inputType() {

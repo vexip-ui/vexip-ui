@@ -13,7 +13,7 @@
   align-items: center;
   width: 100%;
   height: 2.2em;
-  padding: 0.3em 0.6em;
+  // padding: 0.3em 0.6em;
   background-color: $vxp-input-color-bg;
   border: $vxp-input-border;
   border-radius: $radius;
@@ -125,7 +125,7 @@
   &__control {
     width: 100%;
     // height: 2.1em;
-    // padding: 0.3em 0.6em;
+    padding: 0.3em 0.6em;
     padding: 0;
     line-height: $vxp-input-line-height;
     color: $vxp-input-color-control;
@@ -141,23 +141,24 @@
     @extend %disabled-item;
   }
 
-  // &--small &__control {
-  //   height: 1.9em;
-  //   padding: 0.1em 0.6em;
-  // }
-
-  // &--large &__control {
-  //   height: 2.5em;
-  //   padding: 0.5em 0.8em;
-  // }
   &--small {
     height: 1.8em;
-    padding: 0.1em 0.6em;
+    // padding: 0.1em 0.6em;
   }
 
   &--large {
     height: 2.6em;
-    padding: 0.5em 0.6em;
+    // padding: 0.5em 0.6em;
+  }
+
+  &--small &__control {
+    // height: 1.9em;
+    padding: 0.1em 0.6em;
+  }
+
+  &--large &__control {
+    // height: 2.5em;
+    padding: 0.5em 0.8em;
   }
 
   &__number-plus,
