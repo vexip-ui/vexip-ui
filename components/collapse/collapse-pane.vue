@@ -78,6 +78,10 @@ export default {
     CollapseTransition,
     Icon
   },
+  model: {
+    prop: 'expanded',
+    event: 'on-toggle'
+  },
   props,
   emits: ['on-toggle'],
   data() {
