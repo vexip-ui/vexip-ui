@@ -106,7 +106,7 @@ import '../../icons/check-circle'
 import '../../icons/exclamation-circle'
 import '../../icons/times-circle'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'Notice',

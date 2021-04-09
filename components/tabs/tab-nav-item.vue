@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import Icon from '../icon'
-import { isNull, findComponentUpward } from '../../src/utils/common'
+import Icon from '../icon/icon'
+import { isNull, findComponentUpward } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 const parentName = 'TabNav'
 
 export default {

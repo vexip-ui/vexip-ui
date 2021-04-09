@@ -1,6 +1,6 @@
-import { isNull, isDefined, isPromise, getType } from '../../src/utils/common'
-import { toDate } from '../../src/utils/date'
-import { isColor } from '../../src/utils/color'
+import { isNull, isDefined, isPromise, getType } from '@/utils/common'
+import { toDate } from '@/utils/date'
+import { isColor } from '@/utils/color'
 
 const DEFAULT_MESSAGE = '验证未通过'
 

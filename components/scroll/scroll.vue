@@ -46,11 +46,11 @@
 
 <script>
 import Scrollbar from './scrollbar'
-import { useConfigurableProps } from '../../src/config/properties'
-import { multipleFixed, throttle, isNull, debounce } from '../../src/utils/common'
-import { USE_TOUCH } from '../../src/utils/event'
+import { useConfigurableProps } from '@/config/properties'
+import { multipleFixed, throttle, isNull, debounce } from '@/utils/common'
+import { USE_TOUCH } from '@/utils/event'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const HORIZONTAL = 'horizontal'
 const VERTICAL = 'vertical'

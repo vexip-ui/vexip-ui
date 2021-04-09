@@ -3,7 +3,7 @@
 </template>
 
 <script>
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'Calendar',

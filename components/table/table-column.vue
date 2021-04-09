@@ -4,10 +4,10 @@
 
 <script>
 import { TYPE_EXPAND, TYPE_COLUMNS } from './store'
-import { config, useConfigurableProps } from '../../src/config/properties'
-import { removeArrayItem } from '../../src/utils/common'
+import { config, useConfigurableProps } from '@/config/properties'
+import { removeArrayItem } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   idKey: {

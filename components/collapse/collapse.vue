@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import { useConfigurableProps } from '../../src/config/properties'
-import { removeArrayItem } from '../../src/utils/common'
+import { useConfigurableProps } from '@/config/properties'
+import { removeArrayItem } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   expanded: {

@@ -23,10 +23,10 @@
 </template>
 
 <script>
-import { useConfigurableProps } from '../../src/config/properties'
-import { findComponentsDownward, animateScrollTo } from '../../src/utils/common'
+import { useConfigurableProps } from '@/config/properties'
+import { findComponentsDownward, animateScrollTo } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   active: {

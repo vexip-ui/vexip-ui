@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import { placementWhileList } from '../../src/mixins/popper'
-import { useConfigurableProps } from '../../src/config/properties'
+import { placementWhileList } from '@/mixins/popper'
+import { useConfigurableProps } from '@/config/properties'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   placement: {

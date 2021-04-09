@@ -16,7 +16,7 @@ import TableHeadCell from './table-head-cell'
 import TableRow from './table-row'
 import { mapState } from './store'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'TableHead',

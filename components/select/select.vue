@@ -79,15 +79,15 @@ import Option from '../option'
 import Scroll from '../scroll'
 
 import { SELECTOR } from '../option/option'
-import { usePopper } from '../../src/mixins/popper'
-import { useConfigurableProps } from '../../src/config/properties'
-import { noop, isNull, debounce } from '../../src/utils/common'
-import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
+import { usePopper } from '@/mixins/popper'
+import { useConfigurableProps } from '@/config/properties'
+import { noop, isNull, debounce } from '@/utils/common'
+import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
 
 import '../../icons/chevron-down'
 import '../../icons/times-circle'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   size: {

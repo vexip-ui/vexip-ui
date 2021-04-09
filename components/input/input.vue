@@ -108,14 +108,14 @@
 <script>
 import Condition from '../basis/condition'
 import Icon from '../icon'
-import { useConfigurableProps } from '../../src/config/properties'
-import { noop, throttle, isNull } from '../../src/utils/common'
+import { useConfigurableProps } from '@/config/properties'
+import { noop, throttle, isNull } from '@/utils/common'
 import '../../icons/caret-up'
 import '../../icons/caret-down'
 import '../../icons/regular/eye-slash'
 import '../../icons/regular/eye'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   size: {

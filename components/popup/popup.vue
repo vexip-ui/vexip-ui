@@ -18,9 +18,9 @@
 
 <script>
 import PopupItem from './popup-item'
-import { useConfigurableProps } from '../../src/config/properties'
+import { useConfigurableProps } from '@/config/properties'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 let globalIndex = 0
 

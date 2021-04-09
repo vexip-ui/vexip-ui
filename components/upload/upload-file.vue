@@ -159,7 +159,7 @@ import '../../icons/spinner'
 import '../../icons/regular/eye'
 import '../../icons/regular/trash-alt'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'UploadFile',

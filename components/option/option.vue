@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { isNull, removeArrayItem } from '../../src/utils/common'
+import { isNull, removeArrayItem } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 // data:     currentLable, currentValue
 // methods:  handleSelect

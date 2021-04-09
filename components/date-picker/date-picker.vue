@@ -228,9 +228,9 @@ import Icon from '../icon'
 import MultipleInput from '../multiple-input'
 import TimeWheel from './time-wheel'
 
-import { placementWhileList, usePopper } from '../../src/mixins/popper'
-import { useConfigurableProps } from '../../src/config/properties'
-import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
+import { placementWhileList, usePopper } from '@/mixins/popper'
+import { useConfigurableProps } from '@/config/properties'
+import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
 import {
   format,
   toDate,
@@ -241,8 +241,8 @@ import {
   addMinutes,
   addSeconds,
   isLeepYear
-} from '../../src/utils/date'
-import { isNull, noop, range } from '../../src/utils/common'
+} from '@/utils/date'
+import { isNull, noop, range } from '@/utils/common'
 
 import '../../icons/times-circle'
 import '../../icons/calendar-alt'
@@ -251,7 +251,7 @@ import '../../icons/angle-left'
 import '../../icons/angle-double-right'
 import '../../icons/angle-double-left'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   size: {

@@ -18,9 +18,9 @@
 
 <script>
 import { baseIndentWidth } from './anchor'
-import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
+import { findComponentUpward, removeArrayItem } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'AnchorLink',

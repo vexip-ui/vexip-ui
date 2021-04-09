@@ -76,14 +76,14 @@
 
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
-import Icon from '../icon'
-import Tooltip from '../tooltip'
+import Icon from '../icon/icon'
+import Tooltip from '../tooltip/tooltip'
 import { baseIndentWidth } from './menu'
-import { usePopper } from '../../src/mixins/popper'
-import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
+import { usePopper } from '@/mixins/popper'
+import { findComponentUpward, removeArrayItem } from '@/utils/common'
 import '../../icons/chevron-down'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 const popperMixin = usePopper()
 
 delete popperMixin.props

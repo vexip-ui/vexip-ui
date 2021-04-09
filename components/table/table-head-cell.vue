@@ -126,7 +126,7 @@ import '../../icons/caret-up'
 import '../../icons/caret-down'
 import '../../icons/filter'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'TableHeadCell',

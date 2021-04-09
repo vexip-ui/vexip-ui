@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import { useConfigurableProps } from '../../src/config/properties'
-import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
+import { useConfigurableProps } from '@/config/properties'
+import { findComponentUpward, removeArrayItem } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 const parentName = 'Timeline'
 
 const props = useConfigurableProps({

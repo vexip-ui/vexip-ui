@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import { useConfigurableProps } from '../../src/config/properties'
-import { throttle, isDefined } from '../../src/utils/common'
+import { useConfigurableProps } from '@/config/properties'
+import { throttle, isDefined } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const HORIZONTAL = 1
 const VERTICAL = 2

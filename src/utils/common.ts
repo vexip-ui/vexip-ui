@@ -6,7 +6,7 @@ interface AnyFunction {
   (...any: any[]): any
 }
 
-export function isNull(any: unknown): boolean {
+export function isNull(any: unknown): any is null | undefined {
   return any === undefined || any === null
 }
 
@@ -14,7 +14,7 @@ export function isDefined(any: unknown): boolean {
   return any !== undefined && any !== null
 }
 
-export function isPromise(any: unknown): boolean {
+export function isPromise(any: unknown): any is Promise<any> {
   return (
     !!any &&
     typeof (any as any).then === 'function' &&
@@ -22,7 +22,7 @@ export function isPromise(any: unknown): boolean {
   )
 }
 
-export function isMethod(any: unknown): boolean {
+export function isMethod(any: unknown): any is (...args: any[]) => any {
   return typeof any === 'function'
 }
 

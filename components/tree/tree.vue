@@ -43,12 +43,12 @@
 <script>
 import Input from '../input'
 import TreeNode from './tree-node'
-import { useConfigurableProps } from '../../src/config/properties'
-import { isNull, getType, transformTree, flatTree } from '../../src/utils/common'
+import { useConfigurableProps } from '@/config/properties'
+import { isNull, getType, transformTree, flatTree } from '@/utils/common'
 
 import '../../icons/search'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 // drop type
 const BEFORE = 'before'

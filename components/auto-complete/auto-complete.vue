@@ -61,11 +61,11 @@ import Input from '../input'
 import Option from '../option'
 import Select from '../select'
 
-import { placementWhileList } from '../../src/mixins/popper'
-import { useConfigurableProps } from '../../src/config/properties'
-import { isNull, noop } from '../../src/utils/common'
+import { placementWhileList } from '@/mixins/popper'
+import { useConfigurableProps } from '@/config/properties'
+import { isNull, noop } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   size: {
@@ -164,7 +164,7 @@ export default {
     validateField: { default: () => noop }
   },
   props,
-  emits: ['on-select', 'on-input', 'on-change', 'on-toggle'],
+  emits: ['on-select', 'on-input', 'on-change', 'on-toggle', 'on-enter', 'on-clear'],
   data() {
     return {
       prefixCls: `${prefix}-auto-complete`,

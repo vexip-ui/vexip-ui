@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import { multipleFixed } from '../../src/utils/common'
+import { multipleFixed } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const fixed = number => multipleFixed(number, 1, 3)
 

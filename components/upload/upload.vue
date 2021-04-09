@@ -119,13 +119,13 @@ import Icon from '../icon'
 import UploadFile from './upload-file'
 
 import { upload } from './request'
-import { useConfigurableProps } from '../../src/config/properties'
-import { getRandomString, isPromise } from '../../src/utils/common'
+import { useConfigurableProps } from '@/config/properties'
+import { getRandomString, isPromise } from '@/utils/common'
 
 import '../../icons/cloud-upload-alt'
 import '../../icons/upload'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export const PENDING = 'pending'
 export const UPLOADING = 'uploading'

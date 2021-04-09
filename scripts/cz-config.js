@@ -3,6 +3,7 @@ module.exports = {
     { value: 'feat', name: 'feat:     一个新的特性' },
     { value: 'fix', name: 'fix:      一个BUG的修复' },
     { value: 'docs', name: 'docs:     仅限文档相关的修改' },
+    { value: 'types', name: 'types:    TypeScript 类型相关的修改' },
     {
       value: 'style',
       name: 'style:    不影响代码运行逻辑的修改 (代码样式)\n            (增减空格, 修改格式, 行末分号修改等)'

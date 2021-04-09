@@ -85,12 +85,12 @@
 import Button from '../button'
 import Icon from '../icon'
 import Masker from '../masker'
-import { useConfigurableProps } from '../../src/config/properties'
-import { isPromise } from '../../src/utils/common'
+import { useConfigurableProps } from '@/config/properties'
+import { isPromise } from '@/utils/common'
 
 import '../../icons/times'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 // FIXME: 点击遮罩关闭时未触发 before-close 或未正确执行
 

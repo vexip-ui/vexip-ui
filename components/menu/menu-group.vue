@@ -21,9 +21,9 @@
 import CollapseTransition from '../collapse/collapse-transition'
 
 import { baseIndentWidth } from './menu'
-import { findComponentUpward } from '../../src/utils/common'
+import { findComponentUpward } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'MenuGroup',

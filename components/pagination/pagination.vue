@@ -148,8 +148,8 @@ import NumberInput from '../number-input'
 import Option from '../option'
 import Select from '../select'
 
-import { useConfigurableProps } from '../../src/config/properties'
-import { range } from '../../src/utils/common'
+import { useConfigurableProps } from '@/config/properties'
+import { range } from '@/utils/common'
 
 import '../../icons/chevron-right'
 import '../../icons/chevron-left'
@@ -157,7 +157,7 @@ import '../../icons/angle-double-right'
 import '../../icons/angle-double-left'
 import '../../icons/ellipsis-h'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   size: {

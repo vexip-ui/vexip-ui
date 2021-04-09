@@ -111,10 +111,10 @@ import ColorPalette from './color-palette'
 import Icon from '../icon'
 import Input from '../input'
 
-import { usePopper } from '../../src/mixins/popper'
-import { useConfigurableProps } from '../../src/config/properties'
-import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
-import { noop, multipleFixed } from '../../src/utils/common'
+import { usePopper } from '@/mixins/popper'
+import { useConfigurableProps } from '@/config/properties'
+import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
+import { noop, multipleFixed } from '@/utils/common'
 import {
   parseColorToRgb,
   rgbToHsv,
@@ -122,11 +122,11 @@ import {
   rgbToHex,
   hsvToHsl,
   rgbaToHex
-} from '../../src/utils/color'
+} from '@/utils/color'
 
 import '../../icons/chevron-down'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
 const fixed = number => multipleFixed(number, 1, 2)

@@ -70,7 +70,7 @@ import {
 
 import '../../icons/angle-right'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'TableCell',

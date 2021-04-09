@@ -15,15 +15,15 @@
 </template>
 
 <script>
-import { useConfigurableProps } from '../../src/config/properties'
+import { useConfigurableProps } from '@/config/properties'
 import {
   isNull,
   noop,
   findComponentUpward,
   removeArrayItem
-} from '../../src/utils/common'
+} from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const groupName = 'CheckboxGroup'
 

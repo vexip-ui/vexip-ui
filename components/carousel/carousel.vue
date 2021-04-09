@@ -73,14 +73,14 @@
 
 <script>
 import Icon from '../icon'
-import { useConfigurableProps } from '../../src/config/properties'
+import { useConfigurableProps } from '@/config/properties'
 
 import '../../icons/arrow-up'
 import '../../icons/arrow-right'
 import '../../icons/arrow-down'
 import '../../icons/arrow-left'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   viewSize: {

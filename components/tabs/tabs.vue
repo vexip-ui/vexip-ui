@@ -35,9 +35,9 @@
 import Render from '../basis/render'
 import TabNav from './tab-nav'
 import TabNavItem from './tab-nav-item'
-import { useConfigurableProps } from '../../src/config/properties'
+import { useConfigurableProps } from '@/config/properties'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   card: {

@@ -61,15 +61,15 @@
 import Icon from '../icon'
 import Scroll from '../scroll'
 
-import display from '../../src/mixins/display'
-import { useConfigurableProps } from '../../src/config/properties'
+import display from '@/mixins/display'
+import { useConfigurableProps } from '@/config/properties'
 
 import '../../icons/angle-up'
 import '../../icons/angle-right'
 import '../../icons/angle-down'
 import '../../icons/angle-left'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   horizontal: {

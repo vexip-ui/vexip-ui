@@ -38,11 +38,11 @@
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
-import { useConfigurableProps } from '../../src/config/properties'
+import { useConfigurableProps } from '@/config/properties'
 
 import '../../icons/spinner'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   size: {

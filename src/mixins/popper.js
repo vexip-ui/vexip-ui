@@ -1,5 +1,5 @@
 import { createPopper } from '@popperjs/core'
-import { useConfigurableProps } from '../../src/config/properties'
+import { useConfigurableProps } from '@/config/properties'
 
 export const placementWhileList = [
   'auto',

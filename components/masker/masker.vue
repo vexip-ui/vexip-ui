@@ -19,11 +19,11 @@
 </template>
 
 <script>
-import TransferDom from '../../src/mixins/transfer-dom'
-import { useConfigurableProps } from '../../src/config/properties'
-import { isPromise } from '../../src/utils/common'
+import TransferDom from '@/mixins/transfer-dom'
+import { useConfigurableProps } from '@/config/properties'
+import { isPromise } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   active: {

@@ -60,11 +60,11 @@ import Button from '../button'
 import Icon from '../icon'
 import Modal from '../modal'
 import Render from '../basis/render'
-import { isPromise } from '../../src/utils/common'
+import { isPromise } from '@/utils/common'
 
 import '../../icons/question-circle'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'Confirm',

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { sortByProps, isNull, deepClone } from '../../src/utils/common'
+import { sortByProps, isNull, deepClone } from '@/utils/common'
 
 // 数据 data 的默认 id 字段
 export const DEFAULT_KEY_FIELD = 'id'

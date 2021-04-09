@@ -35,11 +35,11 @@
 </template>
 
 <script>
-import { placementWhileList, usePopper } from '../../src/mixins/popper'
-import { useConfigurableProps } from '../../src/config/properties'
-import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
+import { placementWhileList, usePopper } from '@/mixins/popper'
+import { useConfigurableProps } from '@/config/properties'
+import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   trigger: {

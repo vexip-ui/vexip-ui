@@ -58,9 +58,9 @@
 <script>
 import Wheel from '../wheel'
 import WheelItem from '../wheel/wheel-item'
-import { range } from '../../src/utils/common'
+import { range } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 export default {
   name: 'TimeWheel',

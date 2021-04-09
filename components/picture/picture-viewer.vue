@@ -95,13 +95,13 @@
 </template>
 
 <script>
-import Carousel from '../carousel'
+import Carousel from '../carousel/carousel'
 import CarouselItem from '../carousel/carousel-item'
-import Icon from '../icon'
-import Masker from '../masker'
+import Icon from '../icon/icon'
+import Masker from '../masker/masker'
 import Picture from './picture'
 
-import { useConfigurableProps } from '../../src/config/properties'
+import { useConfigurableProps } from '@/config/properties'
 
 import '../../icons/times-circle'
 import '../../icons/search-plus'
@@ -109,7 +109,7 @@ import '../../icons/search-minus'
 import '../../icons/undo'
 import '../../icons/redo'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   active: {

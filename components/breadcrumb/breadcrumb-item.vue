@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import { isNull, findComponentUpward } from '../../src/utils/common'
+import { isNull, findComponentUpward } from '@/utils/common'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const parentName = 'Breadcrumb'
 

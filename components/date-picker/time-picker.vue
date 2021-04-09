@@ -97,22 +97,22 @@
 </template>
 
 <script>
-import Button from '../button'
-import Icon from '../icon'
-import MultipleInput from '../multiple-input'
+import Button from '../button/button'
+import Icon from '../icon/icon'
+import MultipleInput from '../multiple-input/multiple-input'
 import TimeWheel from './time-wheel'
 
-import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
-import { placementWhileList, usePopper } from '../../src/mixins/popper'
-// import formControl from '../../src/mixins/form-control'
-import { useConfigurableProps } from '../../src/config/properties'
-import { format, toDate } from '../../src/utils/date'
-import { noop } from '../../src/utils/common'
+import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
+import { placementWhileList, usePopper } from '@/mixins/popper'
+// import formControl from '@/mixins/form-control'
+import { useConfigurableProps } from '@/config/properties'
+import { format, toDate } from '@/utils/date'
+import { noop } from '@/utils/common'
 
 import '../../icons/times-circle'
 import '../../icons/regular/clock'
 
-const { prefix } = require('../../src/style/basis/variable')
+const { prefix } = require('@/style/basis/variable')
 
 const props = useConfigurableProps({
   size: {
