@@ -23,12 +23,12 @@
 
 <script>
 import Icon from '../icon'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { isPromise, noop } from '@/utils/common'
 
 import '../../icons/spinner'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   size: {

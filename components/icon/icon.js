@@ -1,9 +1,9 @@
 import Icon from 'vue-awesome/components/Icon.vue'
+import { config } from '@/config/properties'
 
 Icon.name = 'Icon'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'Icon',

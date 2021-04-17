@@ -1,4 +1,6 @@
-function implementHandler(handler, ...args) {
+import type { Component } from 'vue'
+
+function implementHandler(handler: any, ...args: any[]) {
   if (Array.isArray(handler)) {
     for (const _handler of handler) {
       typeof _handler === 'function' && _handler(...args)
@@ -35,12 +37,12 @@ export default {
   render(h, { props, children, listeners }) {
     const duration = props.duration
 
-    let height = 'height'
-    let paddingTop = 'paddingTop'
-    let paddingBottom = 'paddingBottom'
-    let marginTop = 'marginTop'
-    let marginBottom = 'marginBottom'
-    let scrollHeight = 'scrollHeight'
+    let height: 'width' | 'height' = 'height'
+    let paddingTop: 'paddingTop' | 'paddingLeft' = 'paddingTop'
+    let paddingBottom: 'paddingRight' | 'paddingBottom' = 'paddingBottom'
+    let marginTop: 'marginTop' | 'marginLeft' = 'marginTop'
+    let marginBottom: 'marginRight' | 'marginBottom' = 'marginBottom'
+    let scrollHeight: 'scrollHeight' | 'scrollWidth' = 'scrollHeight'
     let transition = `
       height ${duration}ms ease-in-out,
       padding-top ${duration}ms ease-in-out,
@@ -72,7 +74,7 @@ export default {
       `
     }
 
-    const styleRecord = {}
+    const styleRecord: { [x: string]: string} = {}
 
     const data = {
       props: {
@@ -84,21 +86,21 @@ export default {
           styleRecord.paddingBottom = el.style[paddingBottom]
           styleRecord.marginTop = el.style[marginTop]
           styleRecord.marginBottom = el.style[marginBottom]
-          styleRecord.transition = el.style[transition]
+          styleRecord.transition = el.style.transition
           styleRecord.boxSizing = el.style.boxSizing
           styleRecord.opacity = el.style.opacity
 
           el.style.transition = transition
 
-          el.style[height] = 0
-          el.style[paddingTop] = 0
-          el.style[paddingBottom] = 0
-          el.style[marginTop] = 0
-          el.style[marginBottom] = 0
+          el.style[height] = '0'
+          el.style[paddingTop] = '0'
+          el.style[paddingBottom] = '0'
+          el.style[marginTop] = '0'
+          el.style[marginBottom] = '0'
           el.style.boxSizing = 'content-box'
 
           if (props.fadeEffect) {
-            el.style.opacity = 0
+            el.style.opacity = '0'
           }
 
           implementHandler(listeners['before-enter'], el)
@@ -106,7 +108,7 @@ export default {
         enter(el) {
           styleRecord.overflow = el.style.overflow
 
-          if (el.scrollHeight !== 0) {
+          if (el[scrollHeight] !== 0) {
             el.style[height] = `${el[scrollHeight]}px`
           } else {
             el.style[height] = ''
@@ -152,14 +154,14 @@ export default {
 
             el.style.transition = transition
 
-            el.style[height] = 0
-            el.style[paddingTop] = 0
-            el.style[paddingBottom] = 0
-            el.style[marginTop] = 0
-            el.style[marginBottom] = 0
+            el.style[height] = '0'
+            el.style[paddingTop] = '0'
+            el.style[paddingBottom] = '0'
+            el.style[marginTop] = '0'
+            el.style[marginBottom] = '0'
 
             if (props.fadeEffect) {
-              el.style.opacity = 0
+              el.style.opacity = '0'
             }
           }
 
@@ -178,9 +180,9 @@ export default {
 
           implementHandler(listeners['after-leave'], el)
         }
-      }
+      } as { [x: string]: (el: HTMLElement) => void }
     }
 
     return h('transition', data, children)
   }
-}
+} as Component

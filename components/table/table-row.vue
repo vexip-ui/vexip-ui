@@ -43,8 +43,9 @@
 import CollapseTransition from '../collapse/collapse-transition'
 import Render from '../basis/render'
 import { TYPE_EXPAND, mapState, mapMutations } from './store'
+import { config } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'TableRow',

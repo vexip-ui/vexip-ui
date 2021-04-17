@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const isSupportObjectFit =
   document.documentElement.style.objectFit !== undefined

@@ -21,11 +21,12 @@
 
 <script>
 /* eslint-disable */
-import TableCell from './table-cell'
-import TableRow from './table-row'
+import TableCell from './table-cell.vue'
+import TableRow from './table-row.vue'
 import { mapState, mapGetters } from './store'
+import { config } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'TableBody',

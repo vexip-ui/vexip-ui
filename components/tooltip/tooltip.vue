@@ -36,10 +36,10 @@
 
 <script>
 import { placementWhileList, usePopper } from '@/mixins/popper'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   trigger: {
@@ -166,7 +166,7 @@ export default {
       if (this.trigger === 'hover') {
         clearTimeout(this.hoverTimer)
 
-        this.hoverTimer = setTimeout(() => {
+        this.hoverTimer = window.setTimeout(() => {
           this.toggleVisible(true)
         }, 250)
       }
@@ -179,7 +179,7 @@ export default {
       if (this.trigger === 'hover') {
         clearTimeout(this.hoverTimer)
 
-        this.hoverTimer = setTimeout(() => {
+        this.hoverTimer = window.setTimeout(() => {
           this.toggleVisible(false)
         }, 250)
       }

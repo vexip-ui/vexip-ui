@@ -17,10 +17,11 @@
 </template>
 
 <script>
-import { baseIndentWidth } from './anchor'
+import { baseIndentWidth } from './anchor.vue'
 import { findComponentUpward, removeArrayItem } from '@/utils/common'
+import { config } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'AnchorLink',

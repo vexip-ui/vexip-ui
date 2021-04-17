@@ -116,24 +116,17 @@
 <script>
 import Button from '../button'
 import Icon from '../icon'
-import UploadFile from './upload-file'
+import UploadFile from './upload-file.vue'
 
 import { upload } from './request'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { getRandomString, isPromise } from '@/utils/common'
+import { PENDING, UPLOADING, FAIL, SUCCESS, DELETE, statusList } from './status.ts'
 
 import '../../icons/cloud-upload-alt'
 import '../../icons/upload'
 
-const { prefix } = require('@/style/basis/variable')
-
-export const PENDING = 'pending'
-export const UPLOADING = 'uploading'
-export const FAIL = 'fail'
-export const SUCCESS = 'success'
-export const DELETE = 'delete'
-
-export const statusList = [PENDING, UPLOADING, FAIL, SUCCESS, DELETE]
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   url: {
@@ -556,7 +549,7 @@ export default {
     handleDragLeave() {
       if (!this.allowDrag) return
 
-      this.dragTimer = setTimeout(() => {
+      this.dragTimer = window.setTimeout(() => {
         this.isDragOver = false
       }, 100)
     }

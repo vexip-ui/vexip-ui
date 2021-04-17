@@ -28,8 +28,9 @@
 
 <script>
 import Render from '../basis/render'
+import { config } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'PopupItem',

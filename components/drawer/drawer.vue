@@ -55,12 +55,12 @@
 <script>
 import Icon from '../icon'
 import Masker from '../masker'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { isPromise } from '@/utils/common'
 
 import '../../icons/times'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   transfer: {

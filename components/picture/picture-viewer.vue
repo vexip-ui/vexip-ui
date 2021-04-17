@@ -95,13 +95,13 @@
 </template>
 
 <script>
-import Carousel from '../carousel/carousel'
-import CarouselItem from '../carousel/carousel-item'
-import Icon from '../icon/icon'
-import Masker from '../masker/masker'
-import Picture from './picture'
+import Carousel from '../carousel'
+import CarouselItem from '../carousel/carousel-item.vue'
+import Icon from '../icon'
+import Masker from '../masker'
+import Picture from './picture.vue'
 
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 
 import '../../icons/times-circle'
 import '../../icons/search-plus'
@@ -109,7 +109,7 @@ import '../../icons/search-minus'
 import '../../icons/undo'
 import '../../icons/redo'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   active: {

@@ -33,11 +33,11 @@
 
 <script>
 import Render from '../basis/render'
-import TabNav from './tab-nav'
-import TabNavItem from './tab-nav-item'
-import { useConfigurableProps } from '@/config/properties'
+import TabNav from './tab-nav.vue'
+import TabNavItem from './tab-nav-item.vue'
+import { config, useConfigurableProps } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   card: {

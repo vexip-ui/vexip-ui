@@ -2,7 +2,7 @@
 node_modules
 /dist
 tests/dev
-*.json
+tests/*.json
 
 # local env files
 .env.local

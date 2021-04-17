@@ -12,11 +12,12 @@
 </template>
 
 <script>
-import TableHeadCell from './table-head-cell'
-import TableRow from './table-row'
+import TableHeadCell from './table-head-cell.vue'
+import TableRow from './table-row.vue'
 import { mapState } from './store'
+import { config } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'TableHead',

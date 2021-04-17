@@ -73,14 +73,14 @@
 
 <script>
 import Icon from '../icon'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 
 import '../../icons/arrow-up'
 import '../../icons/arrow-right'
 import '../../icons/arrow-down'
 import '../../icons/arrow-left'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   viewSize: {
@@ -521,7 +521,7 @@ export default {
       if (this.autoplay) {
         clearTimeout(this.hoverTimer)
 
-        this.hoverTimer = setTimeout(() => {
+        this.hoverTimer = window.setTimeout(() => {
           clearInterval(this.timer)
         }, this.sensitivity)
       }
@@ -534,7 +534,7 @@ export default {
       if (this.autoplay) {
         clearTimeout(this.hoverTimer)
 
-        this.hoverTimer = setTimeout(() => {
+        this.hoverTimer = window.setTimeout(() => {
           this.setAutoplay()
         }, this.sensitivity)
       }

@@ -38,10 +38,10 @@
 
 <script>
 import Tooltip from '../tooltip'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { throttle } from '@/utils/common'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   value: {
@@ -214,14 +214,14 @@ export default {
     showTooltip() {
       clearTimeout(this.hoverTimer)
 
-      this.hoverTimer = setTimeout(() => {
+      this.hoverTimer = window.setTimeout(() => {
         this.isTipShow = true
       }, 250)
     },
     hideTooltip() {
       clearTimeout(this.hoverTimer)
 
-      this.hoverTimer = setTimeout(() => {
+      this.hoverTimer = window.setTimeout(() => {
         this.isTipShow = false
       }, 250)
     }

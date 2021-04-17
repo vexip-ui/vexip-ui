@@ -45,12 +45,12 @@
 </template>
 
 <script>
-import Scrollbar from './scrollbar'
-import { useConfigurableProps } from '@/config/properties'
+import Scrollbar from './scrollbar.vue'
+import { config, useConfigurableProps } from '@/config/properties'
 import { multipleFixed, throttle, isNull, debounce } from '@/utils/common'
 import { USE_TOUCH } from '@/utils/event'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const HORIZONTAL = 'horizontal'
 const VERTICAL = 'vertical'
@@ -368,7 +368,7 @@ export default {
     computeContentSize() {
       clearTimeout(this.timer)
 
-      this.timer = setTimeout(() => {
+      this.timer = window.setTimeout(() => {
         const mode = this.mode
 
         if (mode !== VERTICAL) {
@@ -598,7 +598,7 @@ export default {
     },
     handleBuffer() {
       if (this.noBuffer) {
-        this.bufferTimer = setTimeout(() => {
+        this.bufferTimer = window.setTimeout(() => {
           this.scrolling = false
         }, 300)
       } else {
@@ -762,10 +762,10 @@ export default {
 
           this.computePercent()
 
-          this.endTimer = setTimeout(() => {
+          this.endTimer = window.setTimeout(() => {
             this.scrollTo(0, 0, 500)
 
-            this.startTimer = setTimeout(() => {
+            this.startTimer = window.setTimeout(() => {
               this.canPlay = true
               scroll()
             }, 500 + waiting)
@@ -779,7 +779,7 @@ export default {
         }
       }
 
-      this.playTimer = setTimeout(() => {
+      this.playTimer = window.setTimeout(() => {
         this.canPlay = true
         scroll()
       }, waiting)

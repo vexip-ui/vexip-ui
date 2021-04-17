@@ -526,7 +526,7 @@ export function throttle(method: AnyFunction, delay = 16): AnyFunction {
       method(...args)
       start = Date.now()
     } else {
-      timer = setTimeout(() => {
+      timer = window.setTimeout(() => {
         method(...args)
       }, delay)
     }
@@ -548,7 +548,7 @@ export function debounce(method: AnyFunction, delay = 100): AnyFunction {
   return function (...args: any[]): void {
     clearTimeout(timer)
 
-    timer = setTimeout(() => {
+    timer = window.setTimeout(() => {
       method(...args)
     }, delay)
   }

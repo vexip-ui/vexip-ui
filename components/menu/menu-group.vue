@@ -20,10 +20,11 @@
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
 
-import { baseIndentWidth } from './menu'
+import { baseIndentWidth } from './menu.vue'
 import { findComponentUpward } from '@/utils/common'
+import { config } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'MenuGroup',

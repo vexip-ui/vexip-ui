@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { throttle, isDefined } from '@/utils/common'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const HORIZONTAL = 1
 const VERTICAL = 2
@@ -258,7 +258,7 @@ export default {
     },
     setScrollbarFade() {
       if (this.fade >= 300) {
-        this.fadeTimer = setTimeout(() => {
+        this.fadeTimer = window.setTimeout(() => {
           this.active = false
         }, this.fade)
       }

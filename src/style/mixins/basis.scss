@@ -3,4 +3,10 @@
   line-height: $vxp-line-height;
   color: $vxp-color-content-normal;
   vertical-align: middle;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 }

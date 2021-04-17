@@ -76,14 +76,15 @@
 
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
-import Icon from '../icon/icon'
-import Tooltip from '../tooltip/tooltip'
-import { baseIndentWidth } from './menu'
+import Icon from '../icon'
+import Tooltip from '../tooltip'
+import { baseIndentWidth } from './menu.vue'
 import { usePopper } from '@/mixins/popper'
 import { findComponentUpward, removeArrayItem } from '@/utils/common'
+import { config } from '@/config/properties'
 import '../../icons/chevron-down'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 const popperMixin = usePopper()
 
 delete popperMixin.props
@@ -373,7 +374,7 @@ export default {
 
       clearTimeout(this.hoverTimer)
 
-      this.hoverTimer = setTimeout(() => {
+      this.hoverTimer = window.setTimeout(() => {
         this.groupExpanded = true
       }, 250)
     },
@@ -390,7 +391,7 @@ export default {
 
       clearTimeout(this.hoverTimer)
 
-      this.hoverTimer = setTimeout(() => {
+      this.hoverTimer = window.setTimeout(() => {
         this.groupExpanded = false
       }, 250)
     },

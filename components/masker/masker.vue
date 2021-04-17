@@ -20,10 +20,10 @@
 
 <script>
 import TransferDom from '@/mixins/transfer-dom'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { isPromise } from '@/utils/common'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   active: {

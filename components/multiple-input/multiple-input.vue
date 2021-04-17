@@ -71,11 +71,11 @@
 
 <script>
 import Icon from '../icon'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
 import { noop } from '@/utils/common'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   size: {

@@ -65,7 +65,7 @@
 
 <script>
 import Icon from '../icon'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { throttle } from '@/utils/common'
 
 import '../../icons/chevron-up'
@@ -73,7 +73,7 @@ import '../../icons/chevron-right'
 import '../../icons/chevron-down'
 import '../../icons/chevron-left'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   value: {

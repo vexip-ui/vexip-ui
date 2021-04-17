@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import PopupItem from './popup-item'
-import { useConfigurableProps } from '@/config/properties'
+import PopupItem from './popup-item.vue'
+import { config, useConfigurableProps } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 let globalIndex = 0
 

@@ -6,8 +6,9 @@
 
 <script>
 import { isNull, removeArrayItem } from '@/utils/common'
+import { config } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 // data:     currentLable, currentValue
 // methods:  handleSelect

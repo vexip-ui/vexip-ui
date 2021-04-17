@@ -99,6 +99,7 @@
 import Icon from '../icon'
 import Render from '../basis/render'
 import Popup from '../popup'
+import { config } from '@/config/properties'
 
 import '../../icons/times'
 import '../../icons/info-circle'
@@ -106,7 +107,7 @@ import '../../icons/check-circle'
 import '../../icons/exclamation-circle'
 import '../../icons/times-circle'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'Notice',

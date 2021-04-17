@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { findComponentUpward, removeArrayItem, noop } from '@/utils/common'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const groupName = 'RadioGroup'
 

@@ -7,7 +7,7 @@ import { TYPE_EXPAND, TYPE_COLUMNS } from './store'
 import { config, useConfigurableProps } from '@/config/properties'
 import { removeArrayItem } from '@/utils/common'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   idKey: {

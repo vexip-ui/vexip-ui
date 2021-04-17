@@ -150,8 +150,9 @@ import CollapseTransition from '../collapse/collapse-transition'
 import Progress from '../progress'
 import Render from '../basis/render'
 
-import { PENDING, UPLOADING, FAIL, SUCCESS, DELETE } from './upload'
+import { PENDING, UPLOADING, FAIL, SUCCESS, DELETE } from './status.ts'
 import { iconMaps } from './file-icon'
+import { config } from '@/config/properties'
 
 import '../../icons/check-circle'
 import '../../icons/exclamation-circle'
@@ -159,7 +160,7 @@ import '../../icons/spinner'
 import '../../icons/regular/eye'
 import '../../icons/regular/trash-alt'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'UploadFile',

@@ -123,7 +123,7 @@ export class MessageManager {
     const duration = typeof item.duration === 'number' ? item.duration : 3000
 
     if (duration >= 500) {
-      timer = setTimeout(() => {
+      timer = window.setTimeout(() => {
         message.clear(key)
       }, duration)
     }

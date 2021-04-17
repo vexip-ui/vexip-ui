@@ -75,8 +75,9 @@ import {
   rangeDate,
   differenceDays
 } from '@/utils/date'
+import { config } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'CalendarBase',

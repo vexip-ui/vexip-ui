@@ -61,10 +61,11 @@ import Icon from '../icon'
 import Modal from '../modal'
 import Render from '../basis/render'
 import { isPromise } from '@/utils/common'
+import { config } from '@/config/properties'
 
 import '../../icons/question-circle'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'Confirm',

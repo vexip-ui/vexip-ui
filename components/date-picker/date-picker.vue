@@ -223,13 +223,13 @@
 
 <script>
 import Button from '../button'
-import CalendarBase from '../calendar/calendar-base'
+import CalendarBase from '../calendar/calendar-base.vue'
 import Icon from '../icon'
 import MultipleInput from '../multiple-input'
-import TimeWheel from './time-wheel'
+import TimeWheel from './time-wheel.vue'
 
 import { placementWhileList, usePopper } from '@/mixins/popper'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
 import {
   format,
@@ -251,7 +251,7 @@ import '../../icons/angle-left'
 import '../../icons/angle-double-right'
 import '../../icons/angle-double-left'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   size: {

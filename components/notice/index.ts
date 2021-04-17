@@ -141,7 +141,7 @@ export class NoticeManager {
     const duration = typeof item.duration === 'number' ? item.duration : 4000
 
     if (duration >= 500) {
-      timer = setTimeout(() => {
+      timer = window.setTimeout(() => {
         notice.clear(key)
       }, duration)
     }

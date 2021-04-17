@@ -95,9 +95,9 @@
 
 <script>
 import Scroll from '../scroll'
-import Scrollbar from '../scroll/scrollbar'
-import TableHead from './table-head'
-import TableBody from './table-body'
+import Scrollbar from '../scroll/scrollbar.vue'
+import TableHead from './table-head.vue'
+import TableBody from './table-body.vue'
 import Store, {
   DEFAULT_KEY_FIELD,
   mapState,
@@ -105,10 +105,10 @@ import Store, {
   mapGetters,
   mapActions
 } from './store'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { debounce, isNull, removeArrayItem } from '@/utils/common'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   columns: {
@@ -600,7 +600,7 @@ export default {
     refreshPercentScroll() {
       clearTimeout(this.scrollTimer)
 
-      this.scrollTimer = setTimeout(() => {
+      this.scrollTimer = window.setTimeout(() => {
         const { bodyScroll, totalRowHeight, bodyScrollHeight } = this
 
         this.yScrollPercent =

@@ -17,7 +17,9 @@
 </template>
 
 <script>
-const { prefix } = require('@/style/basis/variable')
+import { config } from '@/config/properties'
+
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'OptionGroup',

@@ -78,16 +78,16 @@ import Input from '../input'
 import Option from '../option'
 import Scroll from '../scroll'
 
-import { SELECTOR } from '../option/option'
+import { SELECTOR } from '../option/option.vue'
 import { usePopper } from '@/mixins/popper'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { noop, isNull, debounce } from '@/utils/common'
 import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
 
 import '../../icons/chevron-down'
 import '../../icons/times-circle'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   size: {

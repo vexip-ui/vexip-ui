@@ -23,12 +23,12 @@
 
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
-import Icon from '../icon/icon'
-import { useConfigurableProps } from '@/config/properties'
+import Icon from '../icon'
+import { config, useConfigurableProps } from '@/config/properties'
 import { findComponentUpward, removeArrayItem } from '@/utils/common'
 import '../../icons/chevron-right'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 const parentName = 'Collapse'
 
 const props = useConfigurableProps({

@@ -7,14 +7,14 @@ export interface Config {
 }
 
 export const config: Config = new Proxy(
-  { defaults: {} },
+  { defaults: { prefixCls: 'vxp' } },
   {
     get<T>(target: T, property: keyof T) {
       return target[property] ?? (target as any).defaults ?? {}
     },
     set<T>(target: T, property: keyof T, value: any) {
       if (getType(value) === 'object') {
-        const rootTarget = target as any
+        const rootTarget = target as T & { defaults: any }
         const oldValue = rootTarget[property]
 
         if (property !== 'defaults') {

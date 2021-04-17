@@ -103,8 +103,9 @@ import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
 import Render from '../basis/render'
 import { isNull, findComponentUpward } from '@/utils/common'
+import { config } from '@/config/properties'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const parentName = 'Tree'
 

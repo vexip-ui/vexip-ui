@@ -42,13 +42,13 @@
 
 <script>
 import Input from '../input'
-import TreeNode from './tree-node'
-import { useConfigurableProps } from '@/config/properties'
+import TreeNode from './tree-node.vue'
+import { config, useConfigurableProps } from '@/config/properties'
 import { isNull, getType, transformTree, flatTree } from '@/utils/common'
 
 import '../../icons/search'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 // drop type
 const BEFORE = 'before'

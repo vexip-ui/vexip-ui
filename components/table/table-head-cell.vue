@@ -116,17 +116,18 @@
 <script>
 import Button from '../button'
 import Checkbox from '../checkbox'
-import CheckboxGroup from '../checkbox/checkbox-group'
+import CheckboxGroup from '../checkbox/checkbox-group.vue'
 import Icon from '../icon'
 import Render from '../basis/render'
 import Tooltip from '../tooltip'
 import { TYPE_COLUMNS, mapState, mapMutations, mapActions, mapGetters } from './store'
+import { config } from '@/config/properties'
 
 import '../../icons/caret-up'
 import '../../icons/caret-down'
 import '../../icons/filter'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'TableHeadCell',

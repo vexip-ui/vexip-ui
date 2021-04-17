@@ -117,8 +117,6 @@ const iconMaps = {}
 const icons = Object.keys(iconConfig)
 
 for (const icon of icons) {
-  require(`../../icons/${icon}`)
-
   const extensions = iconConfig[icon]
 
   if (extensions && extensions.length) {

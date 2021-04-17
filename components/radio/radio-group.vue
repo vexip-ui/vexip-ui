@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import Radio from './radio'
-import { useConfigurableProps } from '@/config/properties'
+import Radio from './radio.vue'
+import { config, useConfigurableProps } from '@/config/properties'
 import { noop } from '@/utils/common'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   size: {

@@ -105,14 +105,14 @@
 
 <script>
 import Button from '../button'
-import ColorAlpha from './color-alpha'
-import ColorHue from './color-hue'
-import ColorPalette from './color-palette'
+import ColorAlpha from './color-alpha.vue'
+import ColorHue from './color-hue.vue'
+import ColorPalette from './color-palette.vue'
 import Icon from '../icon'
 import Input from '../input'
 
 import { usePopper } from '@/mixins/popper'
-import { useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '@/config/properties'
 import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
 import { noop, multipleFixed } from '@/utils/common'
 import {
@@ -126,7 +126,7 @@ import {
 
 import '../../icons/chevron-down'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
 const fixed = number => multipleFixed(number, 1, 2)

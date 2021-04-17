@@ -58,6 +58,7 @@ import Checkbox from '../checkbox'
 import Icon from '../icon'
 import Render from '../basis/render'
 import TableSlot from './table-slot'
+import { config } from '@/config/properties'
 import {
   TYPE_ORDER,
   TYPE_SELECTION,
@@ -70,7 +71,7 @@ import {
 
 import '../../icons/angle-right'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 export default {
   name: 'TableCell',

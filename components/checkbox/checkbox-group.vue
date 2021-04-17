@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import { useConfigurableProps } from '@/config/properties.ts'
+import { useConfigurableProps, config } from '@/config/properties'
 import { noop } from '@/utils/common'
 
-const { prefix } = require('@/style/basis/variable')
+const prefix = config.defaults.prefixCls
 
 const props = useConfigurableProps({
   size: {
