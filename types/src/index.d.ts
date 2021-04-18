@@ -104,7 +104,7 @@ declare const _default: {
     CheckboxGroup: import("vue").VueConstructor<_Vue>;
     Collapse: import("vue").VueConstructor<_Vue>;
     CollapsePane: import("vue").VueConstructor<_Vue>;
-    CollapseTransition: import("vue").Component<import("vue/types/options").DefaultData<never>, import("vue/types/options").DefaultMethods<never>, import("vue/types/options").DefaultComputed, Record<string, any>>;
+    CollapseTransition: import("vue").Component<import("vue/types/options").DefaultData<never>, import("vue/types/options").DefaultMethods<never>, import("vue/types/options").DefaultComputed, import("vue/types/options").DefaultProps>;
     ColorPicker: import("vue").VueConstructor<_Vue>;
     DatePicker: import("vue").VueConstructor<_Vue>;
     Divider: import("vue").VueConstructor<_Vue>;

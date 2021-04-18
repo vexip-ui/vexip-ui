@@ -1,4 +1,9 @@
+@import '../basis/variable.scss';
 @import '../mixins/basis.scss';
+@import '../animation/index.scss';
+@import './button.scss';
+@import './icon.scss';
+@import './input.scss';
 
 .#{$prefix}-color-picker {
   @include basis;

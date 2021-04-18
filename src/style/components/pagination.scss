@@ -1,4 +1,9 @@
+@import '../basis/variable.scss';
 @import '../mixins/basis.scss';
+@import '../animation/index.scss';
+@import './icon.scss';
+@import './number-input.scss';
+@import './select.scss';
 
 .#{$prefix}-pagination {
   @include basis;

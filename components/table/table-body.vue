@@ -20,7 +20,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import TableCell from './table-cell.vue'
 import TableRow from './table-row.vue'
 import { mapState, mapGetters } from './store'

@@ -1,4 +1,9 @@
+@import '../basis/variable.scss';
 @import '../mixins/basis.scss';
+@import '../animation/index.scss';
+@import './carousel.scss';
+@import './masker.scss';
+@import './picture.scss';
 
 .#{$prefix}-picture-viewer {
   @include basis;

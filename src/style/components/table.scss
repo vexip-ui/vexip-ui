@@ -1,6 +1,13 @@
 // stylelint-disable declaration-property-value-blacklist
 
+@import '../basis/variable.scss';
 @import '../mixins/basis.scss';
+@import '../animation/index.scss';
+@import './button.scss';
+@import './icon.scss';
+@import './scroll.scss';
+@import './checkbox.scss';
+@import './tooltip.scss';
 
 .#{$prefix}-table {
   @include basis;

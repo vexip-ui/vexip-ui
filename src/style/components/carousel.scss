@@ -1,4 +1,11 @@
+@import '../basis/variable.scss';
+@import '../mixins/basis.scss';
+@import '../animation/index.scss';
+@import './icon.scss';
+
 .#{$prefix}-carousel {
+  @include basis;
+
   $arrow-padding: 10px;
 
   position: relative;

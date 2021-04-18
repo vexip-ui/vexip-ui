@@ -1,4 +1,10 @@
+@import '../basis/variable.scss';
 @import '../mixins/basis.scss';
+@import '../animation/index.scss';
+@import './icon.scss';
+@import './input.scss';
+@import './option.scss';
+@import './scroll.scss';
 
 .#{$prefix}-select {
   @include basis;

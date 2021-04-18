@@ -1,4 +1,6 @@
+@import '../basis/variable.scss';
 @import '../mixins/basis.scss';
+@import '../animation/index.scss';
 
 .#{$prefix}-stack {
   @include basis;

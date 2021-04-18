@@ -1,4 +1,8 @@
+@import '../basis/variable.scss';
 @import '../mixins/basis.scss';
+@import '../animation/index.scss';
+@import './icon.scss';
+@import './tooltip.scss';
 
 .#{$prefix}-menu {
   $menu: #{&};

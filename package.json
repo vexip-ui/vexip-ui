@@ -43,6 +43,7 @@
     "execa": "^5.0.0",
     "fs-extra": "^9.1.0",
     "lint-staged": "^10.5.2",
+    "postcss-discard-duplicates": "^5.0.0",
     "rollup": "^2.44.0",
     "rollup-plugin-scss": "^2.6.1",
     "rollup-plugin-stylelint": "^1.0.0",
@@ -104,5 +105,5 @@
     "pretty": "prettier --write \"src/**/*.{js,vue,scss}\"",
     "serve": "vite serve"
   },
-  "version": "0.11.0"
+  "version": "0.11.1"
 }

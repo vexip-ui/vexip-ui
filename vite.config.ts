@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 import { createVuePlugin } from 'vite-plugin-vue2'
 import eslint from '@rollup/plugin-eslint'
 import stylelint from 'rollup-plugin-stylelint'
+import discardCss from 'postcss-discard-duplicates'
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
 
@@ -45,9 +46,14 @@ export default defineConfig(
         }
       },
       css: {
+        postcss: {
+          plugins: [
+            discardCss
+          ]
+        },
         preprocessorOptions: {
           scss: {
-            additionalData: `@import '@style/basis/variable.scss';\n`
+            // additionalData: `@import '@style/basis/variable.scss';\n`
           }
         }
       },

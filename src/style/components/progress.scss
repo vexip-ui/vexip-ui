@@ -1,4 +1,7 @@
+@import '../basis/variable.scss';
 @import '../mixins/basis.scss';
+@import '../animation/index.scss';
+@import './bubble.scss';
 
 .#{$prefix}-progress {
   @include basis;

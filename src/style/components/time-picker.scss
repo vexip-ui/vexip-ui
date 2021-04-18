@@ -1,4 +1,10 @@
+@import '../basis/variable.scss';
 @import '../mixins/basis.scss';
+@import '../animation/index.scss';
+@import './button.scss';
+@import './icon.scss';
+@import './multiple-input.scss';
+@import './wheel.scss';
 
 .#{$prefix}-time-picker {
   @include basis;
