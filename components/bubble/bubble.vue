@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import { placementWhileList } from '@/mixins/popper'
-import { config, useConfigurableProps } from '@/config/properties'
+import { placementWhileList } from '../../src/mixins/popper'
+import { config, useConfigurableProps } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

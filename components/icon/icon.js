@@ -1,5 +1,5 @@
 import Icon from 'vue-awesome/components/Icon.vue'
-import { config } from '@/config/properties'
+import { config } from '../../src/config/properties'
 
 Icon.name = 'Icon'
 

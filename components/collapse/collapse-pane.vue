@@ -24,8 +24,8 @@
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
-import { config, useConfigurableProps } from '@/config/properties'
-import { findComponentUpward, removeArrayItem } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
 import '../../icons/chevron-right'
 
 const prefix = config.defaults.prefixCls

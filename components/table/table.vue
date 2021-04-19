@@ -105,8 +105,8 @@ import Store, {
   mapGetters,
   mapActions
 } from './store'
-import { config, useConfigurableProps } from '@/config/properties'
-import { debounce, isNull, removeArrayItem } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { debounce, isNull, removeArrayItem } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

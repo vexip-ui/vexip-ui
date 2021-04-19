@@ -15,13 +15,13 @@
 </template>
 
 <script>
-import { config, useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '../../src/config/properties'
 import {
   isNull,
   noop,
   findComponentUpward,
   removeArrayItem
-} from '@/utils/common'
+} from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

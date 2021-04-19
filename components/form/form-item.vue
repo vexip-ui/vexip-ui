@@ -37,8 +37,8 @@ import {
   removeArrayItem,
   getValueByPath,
   setValueByPath
-} from '@/utils/common'
-import { config } from '@/config/properties'
+} from '../../src/utils/common'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 const parentName = 'Form'

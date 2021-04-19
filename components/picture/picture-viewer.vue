@@ -101,7 +101,7 @@ import Icon from '../icon'
 import Masker from '../masker'
 import Picture from './picture.vue'
 
-import { config, useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '../../src/config/properties'
 
 import '../../icons/times-circle'
 import '../../icons/search-plus'

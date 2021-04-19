@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import { multipleFixed } from '@/utils/common'
-import { config } from '@/config/properties'
+import { multipleFixed } from '../../src/utils/common'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

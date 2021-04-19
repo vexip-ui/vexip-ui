@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import { isNull, findComponentUpward } from '@/utils/common'
-import { config } from '@/config/properties'
+import { isNull, findComponentUpward } from '../../src/utils/common'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

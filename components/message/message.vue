@@ -82,7 +82,7 @@
 import Icon from '../icon'
 import Render from '../basis/render'
 import Popup from '../popup'
-import { config } from '@/config/properties'
+import { config } from '../../src/config/properties'
 
 import '../../icons/times'
 import '../../icons/info-circle'

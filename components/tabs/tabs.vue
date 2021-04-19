@@ -35,7 +35,7 @@
 import Render from '../basis/render'
 import TabNav from './tab-nav.vue'
 import TabNavItem from './tab-nav-item.vue'
-import { config, useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { isNull, removeArrayItem } from '@/utils/common'
-import { config } from '@/config/properties'
+import { isNull, removeArrayItem } from '../../src/utils/common'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

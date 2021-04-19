@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { useConfigurableProps, config } from '@/config/properties'
-import { noop } from '@/utils/common'
+import { useConfigurableProps, config } from '../../src/config/properties'
+import { noop } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

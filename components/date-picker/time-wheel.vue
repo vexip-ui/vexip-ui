@@ -58,8 +58,8 @@
 <script>
 import Wheel from '../wheel'
 import WheelItem from '../wheel/wheel-item.vue'
-import { range } from '@/utils/common'
-import { config } from '@/config/properties'
+import { range } from '../../src/utils/common'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

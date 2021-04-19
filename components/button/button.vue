@@ -38,7 +38,7 @@
 <script>
 import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
-import { config, useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '../../src/config/properties'
 
 import '../../icons/spinner'
 

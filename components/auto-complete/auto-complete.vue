@@ -61,9 +61,9 @@ import Input from '../input'
 import Option from '../option'
 import Select from '../select'
 
-import { placementWhileList } from '@/mixins/popper'
-import { config, useConfigurableProps } from '@/config/properties'
-import { isNull, noop } from '@/utils/common'
+import { placementWhileList } from '../../src/mixins/popper'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { isNull, noop } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

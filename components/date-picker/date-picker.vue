@@ -228,9 +228,9 @@ import Icon from '../icon'
 import MultipleInput from '../multiple-input'
 import TimeWheel from './time-wheel.vue'
 
-import { placementWhileList, usePopper } from '@/mixins/popper'
-import { config, useConfigurableProps } from '@/config/properties'
-import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
+import { placementWhileList, usePopper } from '../../src/mixins/popper'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
 import {
   format,
   toDate,
@@ -241,8 +241,8 @@ import {
   addMinutes,
   addSeconds,
   isLeepYear
-} from '@/utils/date'
-import { isNull, noop, range } from '@/utils/common'
+} from '../../src/utils/date'
+import { isNull, noop, range } from '../../src/utils/common'
 
 import '../../icons/times-circle'
 import '../../icons/calendar-alt'

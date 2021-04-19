@@ -152,7 +152,7 @@ import Render from '../basis/render'
 
 import { PENDING, UPLOADING, FAIL, SUCCESS, DELETE } from './status.ts'
 import { iconMaps } from './file-icon'
-import { config } from '@/config/properties'
+import { config } from '../../src/config/properties'
 
 import '../../icons/check-circle'
 import '../../icons/exclamation-circle'

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { config } from '@/config/properties'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

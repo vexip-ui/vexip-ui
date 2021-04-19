@@ -1,4 +1,4 @@
-import { isNull } from '@/utils/common'
+import { isNull } from '../../src/utils/common'
 
 function getError(url, xhr) {
   const message = `fail to post ${url} ${xhr.status}'`

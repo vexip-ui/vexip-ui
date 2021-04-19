@@ -14,14 +14,10 @@ const prePlugins = plugins => {
 
 export default defineConfig(
   ({ command }) => {
+    const isBuild = command === 'build'
+
     return {
       publicDir: '',
-      resolve: {
-        alias: [
-          { find: /^@\/(.+)/, replacement: resolve(__dirname, 'src/$1') },
-          { find: /^@style\/(.+)/, replacement: resolve(__dirname, 'src/style/$1') }
-        ]
-      },
       define: {
         'process.env.VERSION': JSON.stringify(pkg.version)
       },
@@ -47,9 +43,7 @@ export default defineConfig(
       },
       css: {
         postcss: {
-          plugins: [
-            discardCss
-          ]
+          plugins: [].concat(isBuild ? [discardCss] : [])
         },
         preprocessorOptions: {
           scss: {

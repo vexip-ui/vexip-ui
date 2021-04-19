@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { config, useConfigurableProps } from '@/config/properties'
-import { findComponentUpward, removeArrayItem } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 const parentName = 'Timeline'

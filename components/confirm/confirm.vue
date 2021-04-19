@@ -60,8 +60,8 @@ import Button from '../button'
 import Icon from '../icon'
 import Modal from '../modal'
 import Render from '../basis/render'
-import { isPromise } from '@/utils/common'
-import { config } from '@/config/properties'
+import { isPromise } from '../../src/utils/common'
+import { config } from '../../src/config/properties'
 
 import '../../icons/question-circle'
 

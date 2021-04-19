@@ -43,8 +43,8 @@
 <script>
 import Input from '../input'
 import TreeNode from './tree-node.vue'
-import { config, useConfigurableProps } from '@/config/properties'
-import { isNull, getType, transformTree, flatTree } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { isNull, getType, transformTree, flatTree } from '../../src/utils/common'
 
 import '../../icons/search'
 

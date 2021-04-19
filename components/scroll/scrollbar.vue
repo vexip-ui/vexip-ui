@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import { config, useConfigurableProps } from '@/config/properties'
-import { throttle, isDefined } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { throttle, isDefined } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

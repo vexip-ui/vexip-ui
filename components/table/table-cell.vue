@@ -58,7 +58,7 @@ import Checkbox from '../checkbox'
 import Icon from '../icon'
 import Render from '../basis/render'
 import TableSlot from './table-slot'
-import { config } from '@/config/properties'
+import { config } from '../../src/config/properties'
 import {
   TYPE_ORDER,
   TYPE_SELECTION,

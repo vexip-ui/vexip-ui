@@ -38,8 +38,8 @@
 
 <script>
 import Tooltip from '../tooltip'
-import { config, useConfigurableProps } from '@/config/properties'
-import { throttle } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { throttle } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { config, useConfigurableProps } from '@/config/properties'
-import { removeArrayItem } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { removeArrayItem } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

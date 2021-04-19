@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import { usePopper } from '@/mixins/popper'
-import { config, useConfigurableProps } from '@/config/properties'
-import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
-import { findComponentUpward } from '@/utils/common'
+import { usePopper } from '../../src/mixins/popper'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
+import { findComponentUpward } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

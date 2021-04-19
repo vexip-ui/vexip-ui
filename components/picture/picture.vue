@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { config, useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

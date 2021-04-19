@@ -18,8 +18,8 @@
 
 <script>
 import { baseIndentWidth } from './anchor.vue'
-import { findComponentUpward, removeArrayItem } from '@/utils/common'
-import { config } from '@/config/properties'
+import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

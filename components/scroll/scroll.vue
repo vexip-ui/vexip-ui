@@ -46,9 +46,9 @@
 
 <script>
 import Scrollbar from './scrollbar.vue'
-import { config, useConfigurableProps } from '@/config/properties'
-import { multipleFixed, throttle, isNull, debounce } from '@/utils/common'
-import { USE_TOUCH } from '@/utils/event'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { multipleFixed, throttle, isNull, debounce } from '../../src/utils/common'
+import { USE_TOUCH } from '../../src/utils/event'
 
 const prefix = config.defaults.prefixCls
 

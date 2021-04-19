@@ -23,8 +23,8 @@
 
 <script>
 import Icon from '../icon'
-import { config, useConfigurableProps } from '@/config/properties'
-import { isPromise, noop } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { isPromise, noop } from '../../src/utils/common'
 
 import '../../icons/spinner'
 

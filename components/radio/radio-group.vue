@@ -23,8 +23,8 @@
 
 <script>
 import Radio from './radio.vue'
-import { config, useConfigurableProps } from '@/config/properties'
-import { noop } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { noop } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

@@ -21,8 +21,8 @@
 import CollapseTransition from '../collapse/collapse-transition'
 
 import { baseIndentWidth } from './menu.vue'
-import { findComponentUpward } from '@/utils/common'
-import { config } from '@/config/properties'
+import { findComponentUpward } from '../../src/utils/common'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

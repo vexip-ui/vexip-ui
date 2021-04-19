@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import TransferDom from '@/mixins/transfer-dom'
-import { config, useConfigurableProps } from '@/config/properties'
-import { isPromise } from '@/utils/common'
+import TransferDom from '../../src/mixins/transfer-dom'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { isPromise } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

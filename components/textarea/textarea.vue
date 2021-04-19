@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import { config, useConfigurableProps } from '@/config/properties'
-import { noop, throttle } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { noop, throttle } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

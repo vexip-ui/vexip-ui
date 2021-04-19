@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { isPromise } from '@/utils/common'
+import { isPromise } from '../../src/utils/common'
 import ConfirmComponent from './confirm.vue'
 
 const Construct = Vue.extend(ConfirmComponent)

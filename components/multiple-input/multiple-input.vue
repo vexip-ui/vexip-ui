@@ -71,9 +71,9 @@
 
 <script>
 import Icon from '../icon'
-import { config, useConfigurableProps } from '@/config/properties'
-import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
-import { noop } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
+import { noop } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

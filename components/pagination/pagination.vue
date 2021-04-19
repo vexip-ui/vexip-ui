@@ -148,8 +148,8 @@ import NumberInput from '../number-input'
 import Option from '../option'
 import Select from '../select'
 
-import { config, useConfigurableProps } from '@/config/properties'
-import { range } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { range } from '../../src/utils/common'
 
 import '../../icons/chevron-right'
 import '../../icons/chevron-left'

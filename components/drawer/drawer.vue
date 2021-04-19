@@ -55,8 +55,8 @@
 <script>
 import Icon from '../icon'
 import Masker from '../masker'
-import { config, useConfigurableProps } from '@/config/properties'
-import { isPromise } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { isPromise } from '../../src/utils/common'
 
 import '../../icons/times'
 

@@ -121,7 +121,7 @@ import Icon from '../icon'
 import Render from '../basis/render'
 import Tooltip from '../tooltip'
 import { TYPE_COLUMNS, mapState, mapMutations, mapActions, mapGetters } from './store'
-import { config } from '@/config/properties'
+import { config } from '../../src/config/properties'
 
 import '../../icons/caret-up'
 import '../../icons/caret-down'

@@ -74,8 +74,8 @@ import {
   startOfMonth,
   rangeDate,
   differenceDays
-} from '@/utils/date'
-import { config } from '@/config/properties'
+} from '../../src/utils/date'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

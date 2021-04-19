@@ -15,7 +15,7 @@
 import TableHeadCell from './table-head-cell.vue'
 import TableRow from './table-row.vue'
 import { mapState } from './store'
-import { config } from '@/config/properties'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

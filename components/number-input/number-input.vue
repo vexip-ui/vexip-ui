@@ -60,8 +60,8 @@
 
 <script>
 import Icon from '../icon'
-import { config, useConfigurableProps } from '@/config/properties'
-import { throttle, isNull, noop } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { throttle, isNull, noop } from '../../src/utils/common'
 
 import '../../icons/caret-up'
 import '../../icons/caret-down'

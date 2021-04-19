@@ -73,7 +73,7 @@
 
 <script>
 import Icon from '../icon'
-import { config, useConfigurableProps } from '@/config/properties'
+import { config, useConfigurableProps } from '../../src/config/properties'
 
 import '../../icons/arrow-up'
 import '../../icons/arrow-right'

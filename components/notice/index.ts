@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import NoticeComponent from './notice.vue'
-import { isNull } from '@/utils/common'
+import { isNull } from '../../src/utils/common'
 
 type FuzzyOptions = string | { [x: string]: any }
 

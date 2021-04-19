@@ -119,8 +119,8 @@ import Icon from '../icon'
 import UploadFile from './upload-file.vue'
 
 import { upload } from './request'
-import { config, useConfigurableProps } from '@/config/properties'
-import { getRandomString, isPromise } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { getRandomString, isPromise } from '../../src/utils/common'
 import { PENDING, UPLOADING, FAIL, SUCCESS, DELETE, statusList } from './status.ts'
 
 import '../../icons/cloud-upload-alt'

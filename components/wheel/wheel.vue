@@ -61,8 +61,8 @@
 import Icon from '../icon'
 import Scroll from '../scroll'
 
-import display from '@/mixins/display'
-import { config, useConfigurableProps } from '@/config/properties'
+import display from '../../src/mixins/display'
+import { config, useConfigurableProps } from '../../src/config/properties'
 
 import '../../icons/angle-up'
 import '../../icons/angle-right'

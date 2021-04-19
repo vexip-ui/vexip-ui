@@ -111,10 +111,10 @@ import ColorPalette from './color-palette.vue'
 import Icon from '../icon'
 import Input from '../input'
 
-import { usePopper } from '@/mixins/popper'
-import { config, useConfigurableProps } from '@/config/properties'
-import { CLICK_OUTSIDE, observe, disconnect } from '@/utils/event'
-import { noop, multipleFixed } from '@/utils/common'
+import { usePopper } from '../../src/mixins/popper'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { CLICK_OUTSIDE, observe, disconnect } from '../../src/utils/event'
+import { noop, multipleFixed } from '../../src/utils/common'
 import {
   parseColorToRgb,
   rgbToHsv,
@@ -122,7 +122,7 @@ import {
   rgbToHex,
   hsvToHsl,
   rgbaToHex
-} from '@/utils/color'
+} from '../../src/utils/color'
 
 import '../../icons/chevron-down'
 

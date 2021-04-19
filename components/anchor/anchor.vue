@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import { config, useConfigurableProps } from '@/config/properties'
-import { findComponentsDownward, animateScrollTo } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { findComponentsDownward, animateScrollTo } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

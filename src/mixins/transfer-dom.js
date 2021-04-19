@@ -1,4 +1,4 @@
-import { useConfigurableProps } from '@/config/properties'
+import { useConfigurableProps } from '../config/properties'
 import { isNull } from './../utils/common'
 
 const homes = new Map()

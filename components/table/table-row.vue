@@ -43,7 +43,7 @@
 import CollapseTransition from '../collapse/collapse-transition'
 import Render from '../basis/render'
 import { TYPE_EXPAND, mapState, mapMutations } from './store'
-import { config } from '@/config/properties'
+import { config } from '../../src/config/properties'
 
 const prefix = config.defaults.prefixCls
 

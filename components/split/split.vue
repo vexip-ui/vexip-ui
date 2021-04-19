@@ -65,8 +65,8 @@
 
 <script>
 import Icon from '../icon'
-import { config, useConfigurableProps } from '@/config/properties'
-import { throttle } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { throttle } from '../../src/utils/common'
 
 import '../../icons/chevron-up'
 import '../../icons/chevron-right'

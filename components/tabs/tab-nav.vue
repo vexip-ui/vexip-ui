@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { config, useConfigurableProps } from '@/config/properties'
-import { isNull } from '@/utils/common'
+import { config, useConfigurableProps } from '../../src/config/properties'
+import { isNull } from '../../src/utils/common'
 
 const prefix = config.defaults.prefixCls
 

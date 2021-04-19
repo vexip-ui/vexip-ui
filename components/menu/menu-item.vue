@@ -79,9 +79,9 @@ import CollapseTransition from '../collapse/collapse-transition'
 import Icon from '../icon'
 import Tooltip from '../tooltip'
 import { baseIndentWidth } from './menu.vue'
-import { usePopper } from '@/mixins/popper'
-import { findComponentUpward, removeArrayItem } from '@/utils/common'
-import { config } from '@/config/properties'
+import { usePopper } from '../../src/mixins/popper'
+import { findComponentUpward, removeArrayItem } from '../../src/utils/common'
+import { config } from '../../src/config/properties'
 import '../../icons/chevron-down'
 
 const prefix = config.defaults.prefixCls
