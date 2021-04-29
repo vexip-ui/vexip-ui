@@ -391,8 +391,9 @@ export default {
       const checked = originNode.checked
       const partial = originNode.partial
 
-      let node
       const loop = [...originNode[childrenKey]]
+
+      let node
 
       while (loop.length) {
         node = loop.shift()
@@ -409,7 +410,8 @@ export default {
     },
     computeCheckedState(originNode, able) {
       const nodeList = [originNode].concat(
-        this.flatData.filter(item => item.disabled)
+        // 需要包含被禁用且被勾选的节点
+        this.flatData.filter(item => item.disabled && item.checked)
       )
 
       for (let i = 0, len = nodeList.length; i < len; i++) {
@@ -576,7 +578,7 @@ export default {
       const prevPercent = 0.25
       const nextPercent = 0.75
       const distance = event.clientY - dropNodeRect.top
-      const dropNodeHeight = dropNodeRect.height
+      const dropNodeHeight = dropArrowRect.height
 
       let dropType
       let indicatorTop = -9999
@@ -613,15 +615,19 @@ export default {
       if (draggingNode) {
         parent = this.getParentNode(draggingNode)
 
-        if (parent) {
-          currentId = draggingNode[idKey]
-          index = parent[childrenKey].findIndex(
-            item => item[idKey] === currentId
-          )
-
-          if (~index) {
-            parent[childrenKey].splice(index, 1)
+        if (!parent) {
+          parent = {
+            [childrenKey]: this.treeData
           }
+        }
+
+        currentId = draggingNode[idKey]
+        index = parent[childrenKey].findIndex(
+          item => item[idKey] === currentId
+        )
+
+        if (~index) {
+          parent[childrenKey].splice(index, 1)
         }
       }
 
@@ -639,21 +645,26 @@ export default {
       } else {
         parent = this.getParentNode(willDropNode)
 
-        if (parent) {
-          currentId = willDropNode[idKey]
-          index = parent[childrenKey].findIndex(
-            item => item[idKey] === currentId
+        if (!parent) {
+          parent = {
+            [parentKey]: undefined,
+            [childrenKey]: this.treeData
+          }
+        }
+
+        currentId = willDropNode[idKey]
+        index = parent[childrenKey].findIndex(
+          item => item[idKey] === currentId
+        )
+
+        if (~index) {
+          parent[childrenKey].splice(
+            index + (dropType === AFTER),
+            0,
+            draggingNode
           )
 
-          if (~index) {
-            parent[childrenKey].splice(
-              index + (dropType === AFTER),
-              0,
-              draggingNode
-            )
-
-            this.$set(draggingNode, parentKey, parent[idKey])
-          }
+          this.$set(draggingNode, parentKey, parent[idKey])
         }
       }
 

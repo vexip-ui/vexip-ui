@@ -47,6 +47,7 @@
           :checked="checked"
           :disabled="isDisabled"
           :partial="partial"
+          @click.native.stop
           @click.native.prevent="handleToggleCheck()"
         ></Checkbox>
         <span
