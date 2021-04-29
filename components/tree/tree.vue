@@ -1,5 +1,9 @@
 <template>
-  <div :class="prefix">
+  <div
+    :class="prefix"
+    :aria-disabled="disabled"
+    :aria-readonly="readonly"
+  >
     <Input
       v-if="search"
       v-model="searchValue"
@@ -44,7 +48,7 @@
 import Input from '../input'
 import TreeNode from './tree-node.vue'
 import { config, useConfigurableProps } from '../../src/config/properties'
-import { isNull, getType, transformTree, flatTree } from '../../src/utils/common'
+import { isNull, isPromise, getType, transformTree, flatTree } from '../../src/utils/common'
 
 import '../../icons/search'
 
@@ -68,7 +72,7 @@ const props = useConfigurableProps({
       return []
     }
   },
-  buildTree: {
+  noBuildTree: {
     type: Boolean,
     default: true
   },
@@ -77,6 +81,10 @@ const props = useConfigurableProps({
     default: '暂无数据'
   },
   disabled: {
+    type: Boolean,
+    default: false
+  },
+  readonly: {
     type: Boolean,
     default: false
   },
@@ -131,6 +139,10 @@ const props = useConfigurableProps({
   floorSelect: {
     type: Boolean,
     default: false
+  },
+  asyncLoad: {
+    type: Function,
+    default: null
   }
 })
 
@@ -149,7 +161,6 @@ export default {
     'on-node-expand',
     'on-node-reduce',
     'on-node-shrink',
-    'on-async-load',
     'on-drag-start',
     'on-drag-over',
     'on-drop',
@@ -168,9 +179,7 @@ export default {
   },
   computed: {
     bindAsyncLoad() {
-      return !!(
-        this._events['on-async-load'] && this._events['on-async-load'].length
-      )
+      return typeof this.asyncLoad === 'function'
     },
     parseOptions() {
       const { idKey, childrenKey, parentKey } = this
@@ -180,15 +189,17 @@ export default {
         childField: childrenKey,
         parentField: parentKey
       }
+    },
+    isDisabled() {
+      return !!this.disabled
+    },
+    isReadonly() {
+      return !!this.readonly
     }
   },
   watch: {
-    data(value, old) {
-      if (value === old) {
-        this.updateData()
-      } else {
-        this.parseAndTransformData()
-      }
+    data() {
+      this.parseAndTransformData()
     },
     searchValue() {
       this.updateData()
@@ -214,25 +225,15 @@ export default {
       }
     }
   },
-  mounted() {
-    if (
-      this._events['on-node-shrink'] &&
-      this._events['on-node-shrink'].length
-    ) {
-      console.error(
-        "[Vexip warn] Event 'on-node-shrink' will be deprecated in the near future, replace it with 'on-node-reduce'"
-      )
-    }
-  },
   methods: {
     parseAndTransformData() {
-      const { idKey, buildTree, parseOptions, searchValue } = this
+      const { idKey, noBuildTree, parseOptions, searchValue } = this
       const nodeMaps = {}
       const flatData = []
 
       let data = this.data || []
 
-      data = buildTree ? data : flatTree(data, parseOptions)
+      data = noBuildTree ? flatTree(data, parseOptions) : data
 
       if (searchValue) {
         data = this.getFilterData(data)
@@ -250,13 +251,13 @@ export default {
       this.treeData = transformTree(flatData, parseOptions)
     },
     updateData() {
-      const { idKey, buildTree, parseOptions, searchValue } = this
+      const { idKey, noBuildTree, parseOptions, searchValue } = this
       const flatData = []
       const nodeMaps = this.nodeMaps
 
       let data = this.data || []
 
-      data = buildTree ? data : flatTree(data, parseOptions)
+      data = noBuildTree ? flatTree(data, parseOptions) : data
 
       if (searchValue) {
         data = this.getFilterData(data)
@@ -269,11 +270,24 @@ export default {
         let node
 
         if (nodeMaps[id]) {
-          const { visible = true, disabled = false } = item
+          const {
+            visible = true,
+            selected = false,
+            expanded = false,
+            disabled = false,
+            checked = false,
+            loading = false,
+            readonly = false
+          } = item
 
           node = nodeMaps[id]
           node.visible = visible
+          node.selected = selected
+          node.expanded = expanded
           node.disabled = disabled
+          node.checked = checked
+          node.loading = loading
+          node.readonly = readonly
         } else {
           node = this.createNodeItem(item)
           nodeMaps[id] = node
@@ -284,6 +298,21 @@ export default {
 
       this.flatData = flatData
       this.treeData = transformTree(flatData, parseOptions)
+    },
+    syncNodeStateIntoData() {
+      this.flatData.forEach(node => {
+        if (!node.data) return
+
+        const { data, visible, selected, expanded, disabled, checked, loading, readonly } = node
+
+        data.visible = visible
+        data.selected = selected
+        data.expanded = expanded
+        data.disabled = disabled
+        data.checked = checked
+        data.loading = loading
+        data.readonly = readonly
+      })
     },
     getFilterData(data) {
       const { searchValue, labelKey } = this
@@ -299,7 +328,9 @@ export default {
         selected = false,
         expanded = false,
         disabled = false,
-        checked = false
+        checked = false,
+        loading = false,
+        readonly = false
       } = data
       const id = data[idKey]
       const parent = data[parentKey]
@@ -311,6 +342,8 @@ export default {
         expanded,
         disabled,
         checked,
+        loading,
+        readonly,
         [idKey]: id,
         [parentKey]: parent
       }
@@ -429,11 +462,17 @@ export default {
     },
     handleNodeReduce(node) {
       this.$emit('on-node-reduce', node.data, node)
-      // TODO: will be deprecated
-      this.$emit('on-node-shrink', node.data, node)
     },
-    handleAsyncLoad(node, callback) {
-      this.$emit('on-async-load', node.data, node, callback)
+    async handleAsyncLoad(node) {
+      if (!this.bindAsyncLoad) return
+
+      let result = this.asyncLoad(node, node.data)
+
+      if (isPromise(result)) {
+        result = await result
+      }
+
+      return result
     },
     getCheckedNodes() {
       return this.flatData.filter(item => item.checked)
@@ -631,27 +670,36 @@ export default {
       this.$emit('on-drag-end', nodeInstance.data)
     },
     getNodeByData(data) {
-      return this.flatData.find(item => item.data === data)
+      const idKey = this.idKey
+
+      return this.flatData.find(item => item.data[idKey] === data[idKey])
     },
     expandNodeByData(data, expanded) {
       const node = this.getNodeByData(data)
 
       if (node) {
-        node.expanded = isNull(expanded) ? !node.expanded : expanded
+        node.expanded = isNull(expanded) ? !node.expanded : !!expanded
       }
     },
     selectNodeByData(data, selected) {
       const node = this.getNodeByData(data)
 
       if (node) {
-        node.selected = isNull(selected) ? !node.selected : selected
+        node.selected = isNull(selected) ? !node.selected : !!selected
       }
     },
     checkNodeByData(data, checked) {
       const node = this.getNodeByData(data)
 
       if (node) {
-        node.checked = isNull(checked) ? !node.checked : checked
+        node.checked = isNull(checked) ? !node.checked : !!checked
+      }
+    },
+    toggleNodeLoadingByData(data, loading) {
+      const node = this.getNodeByData(data)
+
+      if (node) {
+        node.checked = isNull(loading) ? !node.loading : !!loading
       }
     }
   }

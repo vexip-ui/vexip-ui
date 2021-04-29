@@ -10,7 +10,7 @@ export function isNull(any: unknown): any is null | undefined {
   return any === undefined || any === null
 }
 
-export function isDefined(any: unknown): boolean {
+export function isDefined<T = unknown>(any: T | undefined | null): any is T {
   return any !== undefined && any !== null
 }
 

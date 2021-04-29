@@ -53,7 +53,9 @@
           :class="{
             [`${prefix}__label`]: true,
             [`${prefix}__label--selected`]: selected,
-            [`${prefix}__label--disabled`]: isDisabled
+            [`${prefix}__label--disabled`]: isDisabled,
+            [`${prefix}__label--readonly`]: isReadonly,
+            [`${prefix}__label--is-floor`]: floorSelect && children && children.length
           }"
           @click="handleToggleSelect()"
         >
@@ -163,7 +165,15 @@ export default {
       type: Boolean,
       default: false
     },
+    loading: {
+      type: Boolean,
+      default: false
+    },
     partial: {
+      type: Boolean,
+      default: false
+    },
+    readonly: {
       type: Boolean,
       default: false
     },
@@ -189,20 +199,20 @@ export default {
   data() {
     return {
       prefix: `${prefix}-tree`,
-      loading: false,
       treeInstance: null,
       loaded: false
     }
   },
   computed: {
     className() {
-      const { prefix, selected, expanded, isDisabled } = this
+      const { prefix, selected, expanded, isDisabled, isReadonly } = this
 
       return {
         [`${prefix}__node`]: true,
         [`${prefix}__node--selected`]: selected,
         [`${prefix}__node--expanded`]: expanded,
-        [`${prefix}__node--disabled`]: isDisabled
+        [`${prefix}__node--disabled`]: isDisabled,
+        [`${prefix}__node--readonly`]: isReadonly
       }
     },
     showChildren() {
@@ -211,7 +221,10 @@ export default {
       return expanded && children && children.length
     },
     isDisabled() {
-      return this.$parent.disabled || this.disabled
+      return this.$parent.isDisabled || this.disabled
+    },
+    isReadonly() {
+      return this.$parent.isReadonly || this.readonly
     },
     hasArrow() {
       const arrow = this.data.arrow
@@ -283,7 +296,7 @@ export default {
         this.callTreeInstanceMethod('computeCheckedState', this.node, able)
       })
     },
-    handleToggleExpand(able = !this.expanded) {
+    async handleToggleExpand(able = !this.expanded) {
       if (this.loading || this.isDisabled) return
 
       const {
@@ -295,9 +308,11 @@ export default {
       } = this
 
       if (able && treeInstance && treeInstance.bindAsyncLoad && !loaded) {
-        this.loading = true
+        this.setValue('loading', true)
 
-        callTreeInstanceMethod('handleAsyncLoad', node, asyncLoadCallback)
+        const result = await callTreeInstanceMethod('handleAsyncLoad', node)
+
+        asyncLoadCallback(result)
       } else {
         this.setValue('expanded', able)
 
@@ -315,17 +330,17 @@ export default {
         return this.handleToggleExpand()
       }
 
-      this.setValue('selected', able)
+      this.setValue('selected', !this.isReadonly && able)
 
-      if (able) {
+      if (this.isReadonly || able) {
         this.callTreeInstanceMethod('handleNodeSelect', this.node)
       } else {
         this.callTreeInstanceMethod('handleNodeCancel', this.node)
       }
     },
     asyncLoadCallback(success = true) {
-      this.loading = false
-      this.setValue('expanded', !!success)
+      this.setValue('loading', false)
+      this.setValue('expanded', success !== false)
 
       if (success) {
         this.loaded = true

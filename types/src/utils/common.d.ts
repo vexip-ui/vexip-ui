@@ -5,7 +5,7 @@ interface AnyFunction {
     (...any: any[]): any;
 }
 export declare function isNull(any: unknown): any is null | undefined;
-export declare function isDefined(any: unknown): boolean;
+export declare function isDefined<T = unknown>(any: T | undefined | null): any is T;
 export declare function isPromise(any: unknown): any is Promise<any>;
 export declare function isMethod(any: unknown): any is (...args: any[]) => any;
 export declare function toNumber(value: number | string): number;

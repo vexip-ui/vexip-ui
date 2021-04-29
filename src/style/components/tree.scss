@@ -47,8 +47,20 @@
 
     &--disabled,
     &--disabled:hover {
+      color: $vxp-color-content-disabled;
+    }
+
+    &--disabled,
+    &--disabled:hover,
+    &--readonly,
+    &--readonly:hover {
       cursor: default;
       background-color: transparent;
+    }
+
+    &--is-floor,
+    &--is-floor:hover {
+      cursor: pointer;
     }
   }
 
