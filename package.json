@@ -105,5 +105,5 @@
     "pretty": "prettier --write \"src/**/*.{js,vue,scss}\"",
     "serve": "vite serve"
   },
-  "version": "0.11.4"
+  "version": "0.11.5"
 }

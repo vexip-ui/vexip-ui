@@ -28,6 +28,9 @@
         <template #default="node">
           <slot name="node" v-bind="node"></slot>
         </template>
+        <template #label="data">
+          <slot name="label" v-bind="data"></slot>
+        </template>
       </TreeNode>
     </ul>
     <div v-if="!data || !data.length" :class="`${prefix}__empty-tip`">

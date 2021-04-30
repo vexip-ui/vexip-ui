@@ -67,7 +67,9 @@
             :node="node"
           ></Render>
           <template v-else>
-            {{ data[labelKey] }}
+            <slot name="label" v-bind="data">
+              {{ data[labelKey] }}
+            </slot>
           </template>
         </span>
       </div>
@@ -93,6 +95,9 @@
         >
           <template #default="childNode">
             <slot v-bind="childNode"></slot>
+          </template>
+          <template #label="childData">
+            <slot name="label" v-bind="childData"></slot>
           </template>
         </TreeNode>
       </ul>
