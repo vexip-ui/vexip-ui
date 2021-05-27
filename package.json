@@ -42,6 +42,7 @@
     "fs-extra": "^10.0.0",
     "husky": "^6.0.0",
     "is-ci": "^3.0.0",
+    "jest": "^27.0.1",
     "lint-staged": "^10.5.4",
     "pinst": "^2.1.6",
     "postcss": "^8.2.13",
@@ -58,6 +59,7 @@
     "stylelint-order": "^4.1.0",
     "stylelint-prettier": "^1.2.0",
     "stylelint-scss": "^3.19.0",
+    "ts-jest": "^27.0.1",
     "ts-morph": "^11.0.0",
     "typescript": "^4.2.4",
     "vite": "^2.1.5",
@@ -106,8 +108,7 @@
     "prepublishOnly": "pinst --disable",
     "prettier": "prettier --write \"packages/*/{src,__serve__}/**/*.{ts,js,json,css,pcss,scss,vue,html,md}\"",
     "release": "node scripts/release.js",
-    "serve": "node scripts/serve.js",
-    "test": "node scripts/test.js"
+    "serve": "node scripts/serve.js"
   },
   "sideEffects": [
     "dist/*",

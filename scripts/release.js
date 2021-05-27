@@ -75,18 +75,18 @@ async function main() {
   if (!confirm) return
 
   // 执行单元测试
-  logStep('Running test...')
+  // logStep('Running test...')
 
-  if (!skipTests && !isDryRun) {
-    await run(bin('jest'), ['--clearCache'])
-    await run(bin('jest'), [
-      '--bail',
-      '--runInBand',
-      '--passWithNoTests'
-    ])
-  } else {
-    logSkipped()
-  }
+  // if (!skipTests && !isDryRun) {
+  //   await run(bin('jest'), ['--clearCache'])
+  //   await run(bin('jest'), [
+  //     '--bail',
+  //     '--runInBand',
+  //     '--passWithNoTests'
+  //   ])
+  // } else {
+  //   logSkipped()
+  // }
 
   logStep('Updating version...')
 
