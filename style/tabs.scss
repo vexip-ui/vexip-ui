@@ -1,0 +1,41 @@
+.vxp-tabs {
+  @include basis;
+
+  position: relative;
+  overflow: hidden;
+
+  @at-root %pane {
+    flex-shrink: 0;
+    width: 100%;
+    visibility: hidden;
+  }
+
+  &__header {
+    margin-bottom: 0.8em;
+  }
+
+  &__main {
+    position: relative;
+    display: flex;
+    transition: $vxp-transition-transform-base;
+
+    &--transition {
+      pointer-events: none;
+      user-select: none;
+
+      %pane {
+        visibility: visible;
+      }
+    }
+  }
+
+  &__pane {
+    @extend %pane;
+
+    &--active {
+      @extend %pane;
+
+      visibility: visible;
+    }
+  }
+}

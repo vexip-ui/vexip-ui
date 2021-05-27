@@ -1,0 +1,202 @@
+.vxp-bubble {
+  @include basis;
+
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__content {
+    position: relative;
+    min-width: 6em;
+    min-height: 2em;
+    padding: 0.6em 1em;
+    background-color: $vxp-color-fill;
+    border: $vxp-border-base;
+    border-radius: $vxp-border-radius-base;
+  }
+
+  &--background &__content {
+    border: 0;
+  }
+
+  &--shadow &__content {
+    border: 0;
+    box-shadow: $vxp-box-shadow-base;
+  }
+
+  &__arrow {
+    &,
+    &::after {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: {
+        width: 0;
+        color: transparent;
+        style: solid;
+      }
+    }
+
+    &::after {
+      content: '';
+    }
+  }
+
+  &--background &__arrow::after {
+    display: none;
+  }
+
+  $size: 0.5em;
+
+  &--top,
+  &--top-start,
+  &--top-end {
+    padding: 0.5em 0 0.8em;
+  }
+
+  @mixin top-arrow {
+    bottom: 0;
+    border-width: $size $size 0;
+    border-top-color: $vxp-color-border;
+    transform: translate(-50%, 100%);
+
+    &::after {
+      bottom: 1px;
+      border-width: $size $size 0;
+      border-top-color: $vxp-color-fill;
+      transform: translateX(-50%);
+    }
+  }
+
+  &--top &__arrow {
+    @include top-arrow;
+
+    left: 50%;
+  }
+
+  &--top-start &__arrow {
+    @include top-arrow;
+
+    left: 1.8em;
+  }
+
+  &--top-end &__arrow {
+    @include top-arrow;
+
+    left: calc(100% - 1.8em);
+  }
+
+  &--bottom,
+  &--bottom-start,
+  &--bottom-end {
+    padding: 0.8em 0 0.5em;
+  }
+
+  @mixin bottom-arrow {
+    top: 0;
+    border-width: 0 $size $size;
+    border-bottom-color: $vxp-color-border;
+    transform: translate(-50%, -100%);
+
+    &::after {
+      top: 1px;
+      border-width: 0 $size $size;
+      border-bottom-color: $vxp-color-fill;
+      transform: translateX(-50%);
+    }
+  }
+
+  &--bottom &__arrow {
+    @include bottom-arrow;
+
+    left: 50%;
+  }
+
+  &--bottom-start &__arrow {
+    @include bottom-arrow;
+
+    left: 1.8em;
+  }
+
+  &--bottom-end &__arrow {
+    @include bottom-arrow;
+
+    left: calc(100% - 1.8em);
+  }
+
+  &--left,
+  &--left-start,
+  &--left-end {
+    padding: 0 0.8em 0 0.5em;
+  }
+
+  @mixin left-arrow {
+    right: 0;
+    border-width: $size 0 $size $size;
+    border-left-color: $vxp-color-border;
+    transform: translate(100%, -50%);
+
+    &::after {
+      right: 1px;
+      border-width: $size 0 $size $size;
+      border-left-color: $vxp-color-fill;
+      transform: translateY(-50%);
+    }
+  }
+
+  &--left &__arrow {
+    @include left-arrow;
+
+    top: 50%;
+  }
+
+  &--left-start &__arrow {
+    @include left-arrow;
+
+    top: 0.9em;
+  }
+
+  &--left-end &__arrow {
+    @include left-arrow;
+
+    top: calc(100% - 0.9em);
+  }
+
+  &--right,
+  &--right-start,
+  &--right-end {
+    padding: 0 0.5em 0 0.8em;
+  }
+
+  @mixin right-arrow {
+    left: 0;
+    border-width: $size $size $size 0;
+    border-right-color: $vxp-color-border;
+    transform: translate(-100%, -50%);
+
+    &::after {
+      left: 1px;
+      border-width: $size $size $size 0;
+      border-right-color: $vxp-color-fill;
+      transform: translateY(-50%);
+    }
+  }
+
+  &--right &__arrow {
+    @include right-arrow;
+
+    top: 50%;
+  }
+
+  &--right-start &__arrow {
+    @include right-arrow;
+
+    top: 0.9em;
+  }
+
+  &--right-end &__arrow {
+    @include right-arrow;
+
+    top: calc(100% - 0.9em);
+  }
+}

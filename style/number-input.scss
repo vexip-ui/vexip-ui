@@ -1,0 +1,50 @@
+.vxp-number-input {
+  @include basis;
+  @include input-handler;
+
+  padding-right: 1.4em;
+
+  &__plus,
+  &__minus {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4em;
+    height: 50%;
+    cursor: pointer;
+    user-select: none;
+    border: $vxp-input-border;
+    border-width: 0;
+    border-left-width: $vxp-border-width;
+    transition: $vxp-transition-color-base;
+
+    &,
+    .vxp-icon {
+      color: $vxp-input-color-icon;
+    }
+
+    .vxp-icon {
+      pointer-events: none;
+    }
+
+    &:hover {
+      &,
+      .vxp-icon {
+        color: $vxp-input-color-icon-hover;
+      }
+    }
+
+    @extend %disabled-item;
+  }
+
+  &__plus {
+    top: 0;
+  }
+
+  &__minus {
+    bottom: 0;
+    border-top-width: 1px;
+  }
+}

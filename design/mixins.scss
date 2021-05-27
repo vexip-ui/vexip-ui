@@ -1,0 +1,171 @@
+@mixin basis {
+  font-size: $vxp-font-size;
+  line-height: $vxp-line-height;
+  color: $vxp-color-content-normal;
+  vertical-align: middle;
+
+  &,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+}
+
+@mixin input-handler {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 2.2em;
+  background-color: $vxp-input-color-bg;
+  border: $vxp-input-border;
+  border-radius: $vxp-input-border-radius;
+  outline: 0;
+  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+    $vxp-transition-box-shadow-base;
+
+  &:hover {
+    border-color: $vxp-input-color-border-hover;
+  }
+
+  &:focus,
+  &--focused {
+    border-color: $vxp-input-color-border-focus;
+    box-shadow: $vxp-input-shadow-focus;
+  }
+
+  &--success {
+    &,
+    &:hover {
+      border-color: $vxp-input-color-border-success-hover;
+    }
+  }
+
+  &--success:focus,
+  &--success#{&}--focused {
+    border-color: $vxp-input-color-border-success-focus;
+    box-shadow: $vxp-input-shadow-success-focus;
+  }
+
+  &--error {
+    &,
+    &:hover {
+      border-color: $vxp-input-color-border-error-hover;
+    }
+  }
+
+  &--error:focus,
+  &--error#{&}--focused {
+    border-color: $vxp-input-color-border-error-focus;
+    box-shadow: $vxp-input-shadow-error-focus;
+  }
+
+  &--warning {
+    &,
+    &:hover {
+      border-color: $vxp-input-color-border-warning-hover;
+    }
+  }
+
+  &--warning:focus,
+  &--warning#{&}--focused {
+    border-color: $vxp-input-color-border-warning-focus;
+    box-shadow: $vxp-input-shadow-warning-focus;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    background-color: $vxp-input-color-bg-disabled;
+
+    &,
+    &:hover,
+    &:focus {
+      border: $vxp-input-border;
+      box-shadow: none;
+    }
+
+    %disabled-item {
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+  }
+
+  &--disabled#{&}--focused {
+    border-color: $vxp-input-color-border;
+    box-shadow: none;
+  }
+
+  &__control {
+    width: 100%;
+    padding: 0.3em 0.6em;
+    line-height: $vxp-input-line-height;
+    color: $vxp-input-color-control;
+    background-color: transparent;
+    border: 0;
+    border-radius: $vxp-input-border-radius;
+    outline: 0;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    @extend %disabled-item;
+  }
+
+  &--small {
+    height: 1.8em;
+  }
+
+  &--large {
+    height: 2.6em;
+  }
+
+  &--small &__control {
+    padding: 0.1em 0.6em;
+  }
+
+  &--large &__control {
+    padding: 0.5em 0.8em;
+  }
+
+  @at-root {
+    %icon {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2em;
+      height: 100%;
+      user-select: none;
+
+      &,
+      .vxp-icon {
+        color: $vxp-input-color-icon;
+      }
+
+      @extend %disabled-item;
+    }
+  }
+
+  &__icon {
+    &--prefix {
+      @extend %icon;
+
+      left: 0;
+    }
+
+    &--suffix {
+      @extend %icon;
+
+      right: 0;
+    }
+  }
+
+  &__clear {
+    @extend %icon;
+
+    right: 0;
+    cursor: pointer;
+  }
+}

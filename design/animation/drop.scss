@@ -1,0 +1,47 @@
+@mixin start {
+  opacity: 0;
+  transform: scaleY(0.35);
+}
+
+@mixin end {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.vxp-drop {
+  @at-root {
+    &-enter-active {
+      animation: {
+        name: vxp-drop-in;
+        duration: 300ms;
+      }
+    }
+
+    &-leave-active {
+      animation: {
+        name: vxp-drop-out;
+        duration: 300ms;
+      }
+    }
+  }
+}
+
+@keyframes vxp-drop-in {
+  0% {
+    @include start;
+  }
+
+  100% {
+    @include end;
+  }
+}
+
+@keyframes vxp-drop-out {
+  0% {
+    @include end;
+  }
+
+  100% {
+    @include start;
+  }
+}

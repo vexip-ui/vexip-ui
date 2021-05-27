@@ -1,0 +1,35 @@
+.vxp-masker {
+  @mixin fixed {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  @include basis;
+  @include fixed;
+
+  z-index: $vxp-z-index-popper;
+
+  &--inner {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  &__mask {
+    @include fixed;
+
+    background-color: rgba($vxp-color-black, 0.45);
+  }
+
+  &--inner &__mask {
+    position: absolute;
+  }
+
+  &--disabled {
+    position: static;
+    width: 0;
+    height: 0;
+  }
+}

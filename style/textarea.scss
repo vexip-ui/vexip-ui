@@ -1,0 +1,83 @@
+.vxp-textarea {
+  @include basis;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  background-color: $vxp-color-fill;
+  border: $vxp-border-base;
+  border-radius: $vxp-border-radius-base;
+  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+    $vxp-transition-box-shadow-base;
+
+  &:hover,
+  &:focus,
+  &--focused {
+    border-color: $vxp-color-primary-light-1;
+  }
+
+  &:focus,
+  &--focused {
+    box-shadow: $vxp-box-shadow-fouced-appearance rgba($vxp-color-primary, 0.2);
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    background-color: rgba($vxp-color-fill-disabled, 0.2);
+
+    &:hover,
+    &:focus {
+      border: $vxp-border-base;
+      box-shadow: transparent;
+    }
+
+    %disabled-item {
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+  }
+
+  &--disabled &--focused {
+    border-color: $vxp-color-border;
+    box-shadow: transparent;
+  }
+
+  &--error {
+    background-color: rgba($vxp-color-error, 0.2);
+    border-color: $vxp-color-error;
+  }
+
+  &__control {
+    width: 100%;
+    min-height: 2.1em;
+    padding: 0.3em 0.6em;
+    overflow: hidden;
+    line-height: $vxp-line-height;
+    resize: vertical;
+    background-color: transparent;
+    border: 0;
+    border-radius: $vxp-border-radius-base;
+    outline: 0;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    @extend %disabled-item;
+  }
+
+  &--no-resize &__control {
+    resize: none;
+  }
+
+  &__count {
+    position: absolute;
+    right: 7px;
+    bottom: 2px;
+    font-size: $vxp-font-size-secondary;
+    pointer-events: none;
+    user-select: none;
+  }
+}

@@ -1,0 +1,381 @@
+.vxp-menu {
+  $menu: #{&};
+  $popper: #{&}__popper;
+  $item: #{&}__item;
+  $label: #{&}__label;
+  $list: #{&}__list;
+
+  @include basis;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  background-color: $vxp-menu-color-bg-base;
+  border-right: $vxp-menu-border-base;
+  transition: width $vxp-transition-base;
+
+  &--horizontal {
+    flex-direction: row;
+    width: auto;
+    border-right: 0;
+  }
+
+  &--dark {
+    background-color: $vxp-menu-color-bg-dark;
+  }
+
+  &::before,
+  &::after {
+    display: table;
+    content: '';
+  }
+
+  &::after {
+    clear: both;
+  }
+
+  &--reduced {
+    width: 64px;
+  }
+
+  &__popper {
+    padding: 0 0.35em;
+    transform-origin: 0 0 !important;
+
+    &--drop {
+      padding: 0.35em 0;
+    }
+  }
+
+  &__item {
+    list-style: none;
+
+    // .vxp-tooltip__trigger
+
+    & > .vxp-tooltip {
+      height: 100%;
+
+      & > .vxp-tooltip__trigger {
+        display: block;
+        height: 100%;
+      }
+    }
+  }
+
+  &__label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0.8em 20px;
+    cursor: pointer;
+    background-color: $vxp-menu-color-bg-base;
+    transition: $vxp-transition-color-base, $vxp-transition-background-base;
+
+    #{$menu}--dark &,
+    #{$popper} #{$list}--dark & {
+      color: $vxp-menu-color-label-dark;
+      background-color: $vxp-menu-color-bg-dark;
+    }
+
+    #{$list}--dark &:not(#{&}--in-popper) {
+      background-color: $vxp-menu-color-bg-list-dark;
+    }
+
+    .vxp-icon {
+      color: $vxp-menu-color-icon;
+    }
+
+    &::after {
+      position: absolute;
+      top: 0;
+      right: -1px;
+      bottom: 0;
+      display: block;
+      width: 3px;
+      content: '';
+      background-color: $vxp-menu-color-bg-marker;
+      opacity: 0;
+      transition: $vxp-transition-opacity-base;
+
+      #{$menu}--marker-left & {
+        right: auto;
+        left: 0;
+      }
+
+      #{$menu}--horizontal & {
+        top: auto;
+        right: 0;
+        bottom: auto;
+        left: 0;
+        width: auto;
+        height: 2px;
+      }
+
+      #{$menu}--marker-top & {
+        top: 0;
+      }
+
+      #{$menu}--marker-bottom & {
+        bottom: 0;
+      }
+
+      #{$menu}--marker-none &,
+      #{$menu}--dark &,
+      #{$popper} & {
+        display: none;
+      }
+    }
+
+    &:hover,
+    #{$item}--selected &,
+    #{$menu}--reduced #{$item}--son-selected &,
+    #{$item}--son-selected > .vxp-tooltip > .vxp-tooltip__trigger > & {
+      &,
+      .vxp-icon {
+        color: $vxp-menu-color-label-hover;
+      }
+
+      #{$menu}--dark &,
+      #{$popper} #{$list}--dark & {
+        &,
+        .vxp-icon {
+          color: $vxp-menu-color-label-visible-dark;
+        }
+      }
+
+      #{$menu}--horizontal &::after {
+        opacity: 1;
+      }
+    }
+
+    #{$item}--group-visible > .vxp-tooltip > .vxp-tooltip__trigger > & {
+      #{$menu}--dark &,
+      #{$list}--dark & {
+        &,
+        .vxp-icon {
+          color: $vxp-menu-color-label-visible-dark;
+        }
+      }
+
+      #{$menu}--horizontal & {
+        &,
+        .vxp-icon {
+          color: $vxp-menu-color-label-hover;
+        }
+
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+
+    #{$item}--selected & {
+      background-color: $vxp-menu-color-bg-selected;
+
+      &::after {
+        opacity: 1;
+      }
+
+      #{$menu}--dark &,
+      #{$list}--dark & {
+        background-color: $vxp-menu-color-bg-selected-dark;
+      }
+
+      #{$menu}--horizontal & {
+        background-color: $vxp-menu-color-bg-base;
+      }
+    }
+
+    #{$item}--disabled & {
+      &,
+      .vxp-icon {
+        color: $vxp-menu-color-label-disabled;
+      }
+
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: $vxp-menu-color-bg-base;
+      }
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    margin-right: 10px;
+    transition: margin $vxp-transition-base, $vxp-transition-color-base;
+
+    &,
+    .vxp-icon {
+      color: $vxp-menu-color-icon;
+    }
+
+    #{$menu}--reduced & {
+      margin: 0;
+    }
+
+    #{$menu}--horizontal & {
+      margin-right: 6px;
+    }
+  }
+
+  &__title {
+    display: inline-block;
+    width: calc(100% - 34px);
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 1;
+    transition: width $vxp-transition-base, $vxp-transition-opacity-base;
+
+    #{$menu}--reduced & {
+      width: 0;
+      opacity: 0;
+    }
+
+    #{$menu}--horizontal & {
+      width: auto;
+      margin-right: 8px;
+    }
+
+    #{$item}--no-icon & {
+      width: 100%;
+
+      #{$menu}--horizontal & {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    right: 1.6em;
+    color: $vxp-menu-color-arrow;
+    opacity: 1;
+    transition: $vxp-transition-opacity-base, $vxp-transition-transform-base;
+
+    &--visible {
+      transform: rotate(180deg);
+    }
+
+    #{$menu}--reduced & {
+      opacity: 0;
+    }
+
+    #{$menu}--dropdown &,
+    #{$label}--in-popper > & {
+      transform: rotate(-90deg);
+    }
+
+    #{$menu}--horizontal & {
+      position: relative;
+      right: auto;
+      margin-right: 4px;
+      margin-left: 6px;
+      transform: rotate(0);
+
+      &--visible {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &__list {
+    padding-left: 0;
+
+    &::before,
+    &::after {
+      display: table;
+      content: '';
+    }
+
+    #{$popper} & {
+      @include basis;
+
+      display: inline-block;
+      min-width: 12em;
+      padding: 0.35em 0;
+      user-select: none;
+      background-color: $vxp-menu-color-bg-base;
+      border-radius: $vxp-border-radius-base;
+      box-shadow: $vxp-box-shadow-base;
+
+      &--dark {
+        background-color: $vxp-menu-color-bg-dark;
+      }
+    }
+
+    #{$menu}--dark & {
+      background-color: $vxp-menu-color-bg-list-dark;
+    }
+  }
+
+  @at-root {
+    &-group {
+      @include basis;
+
+      white-space: nowrap;
+      list-style: none;
+      user-select: none;
+
+      &__title {
+        position: relative;
+
+        &::before {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 24px;
+          height: 1px;
+          content: '';
+          background-color: $vxp-menu-color-divider;
+          opacity: 0;
+          transition: $vxp-transition-opacity-base;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      &__label {
+        display: inline-block;
+        padding: 0.35em 1.4em;
+        font-size: $vxp-font-size-secondary;
+        color: $vxp-menu-color-icon;
+        transition: $vxp-transition-opacity-base;
+
+        #{$menu}--horizontal & {
+          display: none;
+        }
+      }
+
+      &__list {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 0;
+
+        #{$menu}--horizontal & {
+          flex-direction: row;
+          width: auto;
+        }
+      }
+
+      #{$menu}--reduced & {
+        &__title {
+          &::before {
+            opacity: 1;
+          }
+        }
+
+        &__label {
+          opacity: 0;
+        }
+      }
+    }
+  }
+}

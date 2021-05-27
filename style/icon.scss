@@ -1,0 +1,42 @@
+.vxp-icon {
+  display: inline-block;
+  overflow: visible;
+  // font-size: 0.8em;
+  fill: currentColor;
+  transition: color 200ms;
+  transform-origin: 50% 50%;
+
+  & > g {
+    line-height: 1;
+    transform: scale(0.8);
+    transform-origin: 50% 50%;
+  }
+
+  &--flip-horizontal > g {
+    transform: scale(-1, 1);
+  }
+
+  &--flip-vertical > g {
+    transform: scale(1, -1);
+  }
+
+  &--flip-both > g {
+    transform: scale(-1, -1);
+  }
+
+  &--spin-in > g {
+    animation: vxp-spin-in 1s 0s infinite linear;
+  }
+
+  &--spin-out > g {
+    animation: vxp-spin-out 1s 0s infinite linear;
+  }
+
+  &--pulse-in > g {
+    animation: vxp-spin-in 1s infinite steps(8);
+  }
+
+  &--pulse-out > g {
+    animation: vxp-spin-out 1s infinite steps(8);
+  }
+}

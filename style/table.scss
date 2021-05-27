@@ -1,0 +1,333 @@
+/* stylelint-disable declaration-property-value-disallowed-list */
+.vxp-table {
+  @include basis;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  border-collapse: collapse;
+  border: $vxp-border-appearance transparent;
+  // border-bottom-color: $vxp-color-border;
+  // box-shadow: 0 0 0 1px $vxp-color-border;
+
+  &__head,
+  &__body {
+    position: relative;
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    width: 100%;
+    background-color: $vxp-color-fill;
+  }
+
+  &__head {
+    z-index: 1;
+    user-select: none;
+    // box-shadow: 0 2px 15px $vxp-color-border;
+    border-bottom: $vxp-border-base;
+  }
+
+  &__body {
+    border-bottom: $vxp-border-appearance $vxp-color-border;
+  }
+
+  &__group {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    align-items: stretch;
+    border-bottom: $vxp-border-appearance $vxp-color-border-light-1;
+
+    &:last-child {
+      border-bottom-color: transparent;
+    }
+  }
+
+  &__row {
+    display: inline-flex;
+    flex: 1 0 auto;
+    transition: all $vxp-transition-base;
+
+    &--hover {
+      background-color: rgba($vxp-color-primary, 0.2) !important;
+    }
+  }
+
+  &__head &__row {
+    background-color: $vxp-color-fill-background;
+  }
+
+  &--stripe &__group:nth-child(even) &__row {
+    background-color: $vxp-color-fill-background;
+  }
+
+  &__cell,
+  &__head-cell {
+    display: flex;
+    flex: 1 0 0;
+    align-items: center;
+    min-height: 36px;
+    padding: 6px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-right: 1px solid transparent;
+    transition: all $vxp-transition-base;
+
+    &:last-child {
+      border-right-width: 0;
+    }
+
+    &--center {
+      justify-content: center;
+    }
+  }
+
+  $head: #{&}__head;
+  $body: #{&}__body;
+  $row: #{&}__row;
+  $group: #{&}__group;
+  $cell: #{&}__cell;
+  $head-cell: #{&}__head-cell;
+
+  &--transparent {
+    #{$head},
+    #{$body},
+    #{$row} {
+      background-color: transparent;
+    }
+  }
+
+  &--transparent:not(#{&}--border) {
+    #{$head},
+    #{$body},
+    #{$group} {
+      border-bottom-width: 0;
+    }
+  }
+
+  &--border {
+    border-color: $vxp-color-border;
+
+    #{$body} {
+      border-bottom-width: 0;
+    }
+
+    #{$cell},
+    #{$head-cell} {
+      border-right-color: $vxp-color-border-light-2;
+    }
+  }
+
+  &__column {
+    display: none;
+  }
+
+  &__selection {
+    margin: 0;
+  }
+
+  &__expand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4em;
+    height: 1.4em;
+    color: $vxp-color-content-secondary;
+    cursor: pointer;
+    transition: $vxp-transition-transform-base;
+
+    &--active {
+      transform: rotate(90deg);
+    }
+  }
+
+  &__sorter {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 3px;
+
+    &--asc,
+    &--desc {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 7px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: $vxp-transition-color-base;
+
+      & .vxp-icon {
+        color: $vxp-color-content-placeholder;
+      }
+
+      &:hover,
+      &:hover .vxp-icon {
+        color: $vxp-color-content-secondary;
+      }
+    }
+
+    &--asc {
+      height: 8px;
+    }
+
+    &--active {
+      &,
+      &:hover {
+        &,
+        .vxp-icon {
+          color: $vxp-color-primary;
+        }
+      }
+    }
+  }
+
+  &__filter {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 3px;
+
+    &-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 15px;
+      cursor: pointer;
+      transition: $vxp-transition-color-base;
+
+      & .vxp-icon {
+        color: $vxp-color-content-placeholder;
+      }
+
+      &:hover,
+      &:hover .vxp-icon {
+        color: $vxp-color-content-secondary;
+      }
+    }
+
+    &--visible &-trigger {
+      &,
+      .vxp-icon {
+        color: $vxp-color-content-secondary;
+      }
+    }
+
+    &--active &-trigger {
+      &,
+      .vxp-icon {
+        color: $vxp-color-primary;
+      }
+    }
+
+    &-wrapper {
+      padding: {
+        right: 0 !important;
+        left: 0 !important;
+      }
+
+      &--multiple {
+        padding-bottom: 0 !important;
+      }
+    }
+
+    &-item {
+      padding: 0.2em 1em;
+      cursor: pointer;
+      background-color: transparent;
+      transition: $vxp-transition-color-base, $vxp-transition-background-base;
+
+      &:hover,
+      &--active {
+        background-color: $vxp-color-fill-hover;
+      }
+
+      &--active {
+        color: $vxp-color-primary;
+      }
+    }
+
+    &-group {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 0 1em;
+
+      .vxp-checkbox {
+        margin-right: 0;
+        margin-bottom: 0.5em;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    &-actions {
+      display: flex;
+      justify-content: space-between;
+      min-width: 6.4em;
+      padding: 0.3em 0.6em;
+      margin-top: 0.6em;
+      border-top: $vxp-border-base;
+
+      .vxp-button--text {
+        padding: 0;
+        box-shadow: none;
+      }
+    }
+  }
+
+  $cell: #{&}__cell;
+  $head-cell: #{&}__head-cell;
+  $fixed-active: #{&}__fixed--active;
+
+  &__fixed--right,
+  &__fixed--left {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    transition: $vxp-transition-box-shadow-base;
+  }
+
+  &__fixed--right {
+    right: 0;
+    border-left: 0 transparent;
+
+    &#{$fixed-active} {
+      box-shadow: -2px 0 $vxp-box-shadow-blur $vxp-color-border;
+    }
+  }
+
+  &--border &__fixed--right {
+    border-left-color: $vxp-border-appearance $vxp-color-border-light-2;
+  }
+
+  &__fixed--left {
+    left: 0;
+
+    &#{$fixed-active} {
+      box-shadow: 2px 0 $vxp-box-shadow-blur $vxp-color-border;
+    }
+
+    #{$cell},
+    #{$head-cell} {
+      border-right-width: $vxp-border-width;
+    }
+  }
+
+  &--use-y-bar &__bar--horizontal {
+    right: 6px;
+  }
+
+  &__indicator {
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    height: 1px;
+    background-color: $vxp-color-primary;
+  }
+}

@@ -1,0 +1,459 @@
+.vxp-button {
+  $button: &;
+
+  @mixin disabled($selector) {
+    @at-root {
+      #{$button}--disabled#{$selector} {
+        &,
+        &:hover,
+        &:active,
+        &.active {
+          @content;
+        }
+      }
+    }
+  }
+
+  @include basis;
+
+  @at-root {
+    & + & {
+      margin-left: 0.6em;
+    }
+
+    %button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 2.2em;
+      padding: 0 1em;
+      font-weight: 400;
+      line-height: 1;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      user-select: none;
+      background-color: $vxp-button-color-bg;
+      border: $vxp-button-border;
+      border-radius: $vxp-button-border-radius;
+      outline: 0;
+      transition: $vxp-transition-color-base, $vxp-transition-background-base,
+        $vxp-transition-border-base, $vxp-transition-box-shadow-base;
+
+      &::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: block;
+        pointer-events: none;
+        content: '';
+        background-color: transparent;
+        border-radius: inherit;
+        opacity: 0.4;
+        animation-timing-function: ease;
+        animation-fill-mode: forwards;
+      }
+
+      &,
+      .vxp-icon {
+        color: $vxp-button-color;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: $vxp-button-color-bg-hover;
+        border-color: $vxp-button-color-border-hover;
+
+        &,
+        .vxp-icon {
+          color: $vxp-button-color-hover;
+        }
+      }
+
+      &:active {
+        background-color: $vxp-button-color-bg-active;
+        border-color: $vxp-button-color-border-active;
+
+        &,
+        .vxp-icon {
+          color: $vxp-button-color-active;
+        }
+      }
+    }
+
+    @include disabled('') {
+      cursor: not-allowed;
+      background-color: $vxp-button-color-bg-disabled;
+      border-color: $vxp-button-color-border-disabled;
+
+      &,
+      .vxp-icon {
+        color: $vxp-button-color-disabled;
+      }
+    }
+  }
+
+  @extend %button;
+
+  &--small {
+    height: 1.9em;
+    padding: 0 0.8em;
+  }
+
+  &--large {
+    height: 2.5em;
+    padding: 0 1.4em;
+  }
+
+  &--pulsing::after {
+    animation: vxp-button-pulse 800ms;
+
+    @keyframes vxp-button-pulse {
+      60% {
+        box-shadow: 0 0 0 6px $vxp-button-color-pulse;
+      }
+
+      100% {
+        box-shadow: 0 0 0 8px $vxp-button-color-pulse;
+        opacity: 0;
+      }
+    }
+  }
+
+  &--dashed {
+    @extend %button;
+
+    border-style: dashed;
+  }
+
+  &--text {
+    @extend %button;
+
+    background-color: transparent;
+    border-color: transparent;
+
+    &::after {
+      display: none;
+    }
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  &--ghost {
+    background-color: $vxp-button-color-bg-ghost;
+    border-color: $vxp-button-color-border-ghost;
+
+    &,
+    .vxp-icon {
+      color: $vxp-button-color-ghost;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: $vxp-button-color-bg-hover-ghost;
+      border-color: $vxp-button-color-border-hover-ghost;
+
+      &,
+      .vxp-icon {
+        color: $vxp-button-color-hover-ghost;
+      }
+    }
+
+    &:active,
+    &.active {
+      background-color: $vxp-button-color-bg-active-ghost;
+      border-color: $vxp-button-color-border-active-ghost;
+
+      &,
+      .vxp-icon {
+        color: $vxp-button-color-active-ghost;
+      }
+    }
+
+    @include disabled(#{&}) {
+      background-color: $vxp-button-color-bg-disabled-ghost;
+      border-color: $vxp-button-color-border-disabled-ghost;
+
+      &,
+      .vxp-icon {
+        color: $vxp-button-color-disabled-ghost;
+      }
+    }
+  }
+
+  &--text#{&}--ghost {
+    border-color: transparent;
+  }
+
+  @each $type in map-keys($vxp-button-type-colors-map) {
+    $colors: map-get($vxp-button-type-colors-map, $type);
+    $color-base: nth($colors, 1);
+    $color-light: nth($colors, 2);
+    $color-dark: nth($colors, 3);
+
+    @at-root {
+      &--#{$type} {
+        @extend %button;
+
+        background-color: $color-base;
+        border-color: $color-base;
+
+        &,
+        .vxp-icon {
+          color: $vxp-button-color-types;
+        }
+
+        &:hover,
+        &:focus {
+          background-color: $color-light;
+          border-color: $color-light;
+
+          &,
+          .vxp-icon {
+            color: $vxp-button-color-hover-types;
+          }
+        }
+
+        // &:focus {
+        //   box-shadow: $vxp-box-shadow-fouced-appearance rgba($color-base, 0.2);
+        // }
+
+        &:active,
+        &.active {
+          background-color: $color-dark;
+          border-color: $color-dark;
+
+          &,
+          .vxp-icon {
+            color: $vxp-button-color-active-types;
+          }
+        }
+
+        @include disabled(#{&}) {
+          cursor: not-allowed;
+          background-color: $vxp-button-color-bg-disabled-types;
+          border-color: $vxp-button-color-border-disabled-types;
+
+          &,
+          .vxp-icon {
+            color: $vxp-button-color-disabled-types;
+          }
+        }
+      }
+
+      &--#{$type}#{&}--pulsing::after {
+        animation: vxp-button-pulse-#{$type} 800ms;
+
+        @keyframes vxp-button-pulse-#{$type} {
+          60% {
+            box-shadow: 0 0 0 6px $color-dark;
+          }
+
+          100% {
+            box-shadow: 0 0 0 8px $color-dark;
+            opacity: 0;
+          }
+        }
+      }
+
+      &--#{$type}#{&}--simple {
+        background-color: mix($vxp-color-white, $color-base, 85%);
+        border-color: mix($vxp-color-white, $color-base, 40%);
+
+        &,
+        .vxp-icon {
+          color: $color-base;
+        }
+
+        &:hover {
+          background-color: mix($vxp-color-white, $color-base, 75%);
+        }
+
+        &:focus,
+        &:active,
+        &.active {
+          background-color: $color-light;
+
+          &,
+          .vxp-icon {
+            color: $vxp-button-color-active-types-simple;
+          }
+        }
+
+        @include disabled(#{&}) {
+          color: $vxp-color-fill-disabled;
+          cursor: not-allowed;
+          background-color: $vxp-button-color-bg-disabled-types-simple;
+          border-color: $vxp-button-color-border-disabled-types-simple;
+
+          &,
+          .vxp-icon {
+            color: $vxp-button-color-disabled-types-simple;
+          }
+        }
+      }
+
+      &--#{$type}#{&}--ghost {
+        background-color: $vxp-button-color-bg-types-ghost;
+
+        &,
+        .vxp-icon {
+          color: $color-base;
+        }
+
+        &:hover,
+        &:focus {
+          background-color: $vxp-button-color-bg-hover-types-ghost;
+          border-color: $color-light;
+        }
+
+        &:active,
+        &.active {
+          background-color: $vxp-button-color-bg-active-types-ghost;
+          border-color: $color-dark;
+        }
+
+        @include disabled(#{&}) {
+          cursor: not-allowed;
+          background-color: $vxp-button-color-bg-disabled-types-ghost;
+          border-color: $vxp-button-color-border-disabled-types-ghost;
+
+          &,
+          .vxp-icon {
+            color: $vxp-button-color-disabled-types-ghost;
+          }
+        }
+      }
+
+      &-group &--#{$type} {
+        &:first-child {
+          border-right-color: rgba($vxp-color-white, 0.5);
+        }
+
+        &:last-child {
+          border-left-color: rgba($vxp-color-white, 0.5);
+        }
+
+        &:not(:first-child):not(:last-child) {
+          border-right-color: rgba($vxp-color-white, 0.5);
+          border-left-color: rgba($vxp-color-white, 0.5);
+        }
+      }
+    }
+  }
+
+  &--text#{&}--disabled {
+    &,
+    &:hover,
+    &:active,
+    &.active {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  &--circle {
+    border-radius: 2.25em;
+  }
+
+  &--loading {
+    position: relative;
+    pointer-events: none;
+
+    &::before {
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      bottom: -1px;
+      left: -1px;
+      z-index: 1;
+      pointer-events: none;
+      content: '';
+      background-color: $vxp-color-white;
+      border-radius: inherit;
+      opacity: 0.25;
+      transition: $vxp-transition-opacity-base;
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    margin-right: 0.3em;
+  }
+
+  &--icon-only {
+    width: 2.25em;
+    padding: 0;
+  }
+
+  &--icon-only &__icon {
+    margin: 0;
+  }
+
+  &--icon-only#{&}--small {
+    width: 2em;
+  }
+
+  &--icon-only#{&}--large {
+    width: 2.5em;
+  }
+
+  @at-root {
+    &-group {
+      display: inline-flex;
+      align-items: center;
+
+      #{$button} + #{$button} {
+        margin-left: 0;
+      }
+
+      #{$button} {
+        border-radius: 0;
+
+        &:hover,
+        &:focus {
+          z-index: 1;
+        }
+
+        &:active,
+        &--active {
+          z-index: 2;
+        }
+
+        &:first-child {
+          border-radius: $vxp-button-border-radius 0 0 $vxp-button-border-radius;
+        }
+
+        &:last-child {
+          border-radius: 0 $vxp-button-border-radius $vxp-button-border-radius 0;
+        }
+
+        &:not(:last-child) {
+          margin-right: -1px;
+        }
+      }
+
+      &--circle {
+        #{$button} {
+          &:first-child {
+            border-radius: 2.25em 0 0 2.25em;
+          }
+
+          &:last-child {
+            border-radius: 0 2.25em 2.25em 0;
+          }
+        }
+      }
+    }
+  }
+}

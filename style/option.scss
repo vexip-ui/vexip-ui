@@ -1,0 +1,81 @@
+.vxp-option {
+  @include basis;
+
+  padding: 0.35em 1.2em;
+  color: $vxp-option-color;
+  white-space: nowrap;
+  list-style: none;
+  cursor: pointer;
+  background-color: $vxp-option-color-bg;
+  transition: $vxp-transition-background-base;
+
+  &:hover {
+    background-color: $vxp-option-color-bg-hover;
+  }
+
+  &--selected {
+    color: $vxp-option-color-selected;
+    background-color: $vxp-option-color-bg-selected;
+  }
+
+  &--disabled {
+    color: $vxp-option-color-disabled;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: $vxp-option-color-bg;
+    }
+  }
+
+  &--divided {
+    margin-bottom: 0.35em;
+    border-bottom: $vxp-option-divider;
+
+    &::after {
+      position: relative;
+      bottom: -0.35em;
+      display: block;
+      height: 0.35em;
+      margin: 0 -1.2em;
+      content: '';
+      background-color: $vxp-option-color-bg;
+    }
+  }
+
+  @at-root {
+    &-group {
+      @include basis;
+
+      white-space: nowrap;
+      list-style: none;
+      user-select: none;
+
+      &__label {
+        padding: 0.35em 1.2em;
+        font-size: $vxp-option-font-size-group;
+        color: $vxp-option-color-group;
+      }
+
+      &__list {
+        position: relative;
+        padding: 0;
+      }
+
+      &--divided &__list {
+        padding-bottom: 0.7em;
+
+        &::after {
+          position: absolute;
+          right: 0;
+          bottom: 0.35em;
+          left: 0;
+          display: block;
+          height: 1px;
+          font-size: $vxp-option-font-size-group;
+          content: '';
+          background-color: $vxp-option-color-divider;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+.vxp-divider {
+  $divider-border: $vxp-border-appearance $vxp-color-border-light-2;
+
+  @include basis;
+
+  display: flex;
+  padding: 0;
+  border-top: $divider-border;
+
+  &--horizontal {
+    width: 100%;
+    margin: 24px 0;
+    clear: both;
+  }
+
+  &--vertical {
+    position: relative;
+    display: inline-block;
+    height: 1em;
+    margin: 0 0.6em;
+    vertical-align: middle;
+    border-top: 0;
+    border-left: $divider-border;
+  }
+
+  &--with-text {
+    margin: 14px 0;
+    text-align: center;
+    white-space: nowrap;
+    border-top: 0;
+
+    &::before,
+    &::after {
+      position: relative;
+      top: 50%;
+      width: 50%;
+      content: '';
+      border-top: $divider-border;
+      transform: translateY(50%);
+    }
+  }
+
+  &--with-text-left {
+    &::before {
+      width: 5%;
+    }
+
+    &::after {
+      width: 95%;
+    }
+  }
+
+  &--with-text-right {
+    &::before {
+      width: 95%;
+    }
+
+    &::after {
+      width: 5%;
+    }
+  }
+
+  &--dashed {
+    &,
+    &::before,
+    &::after {
+      border-top-style: dashed;
+    }
+  }
+
+  &__text {
+    display: inline-block;
+    padding: 0 1em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  &--primary &__text {
+    font-size: $vxp-font-size-primary;
+    font-weight: 500;
+  }
+}

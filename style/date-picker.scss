@@ -1,0 +1,289 @@
+.vxp-date-picker {
+  @include basis;
+  @include input-handler;
+
+  $wheel: 'vxp-wheel';
+
+  user-select: none;
+
+  &__control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__input {
+    display: flex;
+    align-items: center;
+    color: $vxp-color-content-secondary;
+    outline: 0;
+
+    &--activated {
+      color: $vxp-color-content-normal;
+    }
+  }
+
+  &__unit {
+    padding: 0 2px;
+    text-align: center;
+    transition: $vxp-transition-background-base, $vxp-transition-color-base;
+
+    &--focused {
+      color: $vxp-color-content-reverse;
+      background-color: $vxp-color-primary-light-1;
+    }
+  }
+
+  &--disabled &__unit {
+    color: $vxp-color-content-secondary;
+  }
+
+  &__separator {
+    color: $vxp-color-content-disabled;
+  }
+
+  &__exchange {
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    padding-top: 1px;
+
+    .vxp-icon {
+      color: $vxp-color-content-secondary;
+    }
+
+    &--endabled:hover .vxp-icon {
+      color: $vxp-color-primary;
+    }
+  }
+
+  &__popper {
+    z-index: $vxp-z-index-popper;
+    display: flex;
+    padding: 0.6em 0;
+  }
+
+  &__pane {
+    display: flex;
+    background-color: $vxp-color-fill;
+    border-radius: $vxp-border-radius-base;
+    box-shadow: $vxp-box-shadow-base;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+
+    &--sub {
+      padding: 0.3em 0;
+      background-color: $vxp-color-fill-background;
+      border-right: $vxp-border-appearance $vxp-color-border-light-2;
+    }
+  }
+
+  &__shortcut {
+    max-width: 7em;
+    padding: 0.4em 1.1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: $vxp-transition-background-base;
+
+    &:hover {
+      background-color: $vxp-color-fill-hover;
+    }
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 2.4em;
+    border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    justify-content: center;
+    width: 1em;
+    color: $vxp-color-content-secondary;
+    cursor: pointer;
+    transform: translateY(-50%);
+
+    &:hover {
+      color: $vxp-color-primary;
+    }
+  }
+
+  &__prev-year {
+    left: 1em;
+  }
+
+  &__next-year {
+    right: 1em;
+  }
+
+  &__prev-month {
+    left: 2.2em;
+  }
+
+  &__next-month {
+    right: 2.2em;
+  }
+
+  &__calendar {
+    padding: 0.6em;
+  }
+
+  @mixin calendar-pane {
+    margin: 0 0.2em;
+    cursor: pointer;
+    transition: $vxp-transition-color-base;
+
+    &:hover {
+      color: $vxp-color-primary;
+    }
+
+    &-pane {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      width: 16em;
+      height: 16em;
+    }
+
+    &-label {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.6em;
+      height: 2em;
+      margin: 0 0.8em;
+      background-color: transparent;
+      border-radius: $vxp-border-radius-base;
+      transition: $vxp-transition-background-base;
+
+      &::before {
+        position: absolute;
+        top: 2px;
+        right: -0.8em;
+        bottom: 2px;
+        left: -0.8em;
+        display: none;
+        pointer-events: none;
+        content: '';
+        background-color: rgba($vxp-color-primary, 0.1);
+      }
+    }
+
+    $label: '#{&}-label';
+
+    &-item {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 25%;
+      cursor: pointer;
+
+      &:hover #{$label} {
+        background-color: rgba($vxp-color-primary, 0.3);
+      }
+
+      &--selected {
+        &,
+        &:hover {
+          #{$label} {
+            color: $vxp-color-content-reverse;
+            background-color: $vxp-color-primary;
+          }
+        }
+      }
+
+      &--disabled {
+        &,
+        &:hover {
+          #{$label} {
+            color: $vxp-color-content-humble;
+            cursor: not-allowed;
+            background-color: transparent;
+          }
+        }
+      }
+
+      &--in-range #{$label} {
+        &::before {
+          display: block;
+        }
+      }
+    }
+  }
+
+  &__year {
+    &-item--next &-label {
+      color: $vxp-color-content-disabled;
+    }
+
+    @include calendar-pane;
+  }
+
+  &__month {
+    @include calendar-pane;
+  }
+
+  &__time-wheel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: center;
+    border-left: $vxp-border-appearance $vxp-color-border-light-2;
+
+    .vxp-wheel__list {
+      padding: 0 0.8em;
+    }
+
+    .vxp-time-picker__wheel {
+      align-items: center;
+      height: calc(100% - 2.4em);
+      padding: 0;
+    }
+  }
+
+  &__action {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 0.4em 0.6em;
+    border-top: $vxp-border-appearance $vxp-color-border-light-2;
+  }
+
+  &--no-hour {
+    .#{$wheel}:first-of-type {
+      display: none;
+    }
+  }
+
+  &--no-minute {
+    .#{$wheel}:nth-of-type(2) {
+      display: none;
+    }
+  }
+
+  &--no-second {
+    .#{$wheel}:last-of-type {
+      display: none;
+    }
+  }
+
+  .vxp-time-picker__wheel {
+    display: flex;
+  }
+}

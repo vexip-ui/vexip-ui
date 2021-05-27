@@ -1,0 +1,112 @@
+.vxp-alert {
+  $icon: #{&}__icon;
+
+  $types: (
+    info: $vxp-color-primary,
+    success: $vxp-color-success,
+    warning: $vxp-color-warning,
+    error: $vxp-color-error
+  );
+
+  @include basis;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.6em 1em;
+  margin-bottom: 1em;
+  border: $vxp-border-base;
+  border-radius: $vxp-border-radius-base;
+
+  &--has-title {
+    padding: 0.8em 1em;
+  }
+
+  &--has-icon {
+    padding-left: 3.2em;
+  }
+
+  &--has-icon#{&}--has-title {
+    padding-left: 4.2em;
+  }
+
+  &--closable {
+    padding-right: 2.2em;
+  }
+
+  &--no-border {
+    border: 0;
+  }
+
+  &--banner {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  @each $type in map-keys($types) {
+    $color: map-get($types, $type);
+
+    &--#{$type} {
+      background-color: mix($vxp-color-white, $color, 90%);
+      border-color: mix($vxp-color-white, $color, 50%);
+    }
+
+    &--#{$type} #{$icon} {
+      color: mix($vxp-color-black, $color, 20%);
+    }
+
+    &--colorful-text#{&}--#{$type} {
+      &,
+      .vxp-icon {
+        color: mix($vxp-color-black, $color, 20%);
+      }
+    }
+  }
+
+  &__title {
+    margin-bottom: 0.3em;
+    font-size: $vxp-font-size-primary;
+    color: $vxp-color-content-primary;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+    left: 1.2em;
+    display: flex;
+    align-items: center;
+    margin-top: 1px;
+    transform: translateY(-50%);
+  }
+
+  &--has-title &__icon {
+    top: 1.6em;
+    left: 1.6em;
+    transform: scale(2);
+  }
+
+  &__close {
+    position: absolute;
+    top: 50%;
+    right: 0.8em;
+    display: flex;
+    align-items: center;
+    color: $vxp-color-content-placeholder;
+    cursor: pointer;
+    transform: translateY(-50%);
+
+    &:hover {
+      &,
+      .vxp-icon {
+        color: $vxp-color-content-normal;
+      }
+    }
+  }
+
+  &--has-title &__close {
+    top: 0.6em;
+    transform: none;
+  }
+}

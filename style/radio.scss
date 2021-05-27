@@ -1,0 +1,315 @@
+.vxp-radio {
+  @include basis;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.8em;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+    $vxp-transition-box-shadow-base;
+
+  &--border {
+    padding: 0.6em 0.8em;
+    border: $vxp-radio-border;
+    border-radius: $vxp-border-radius-base;
+
+    &:hover {
+      border-color: $vxp-radio-color-hover-border;
+    }
+  }
+
+  &--checked#{&}--border {
+    border-color: $vxp-radio-color-checked-border;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+
+    &,
+    &:hover {
+      border-color: $vxp-radio-color-disabled-border;
+    }
+  }
+
+  &__signal {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 0.4em;
+    border: $vxp-radio-signal-border;
+    border-radius: 50%;
+    transition: $vxp-transition-border-base, $vxp-transition-box-shadow-base;
+
+    &::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      content: '';
+      background-color: $vxp-radio-color-checked-signal;
+      border-radius: 50%;
+      opacity: 0;
+      transition: $vxp-transition-background-base, $vxp-transition-opacity-base,
+        $vxp-transition-transform-base;
+      transform: translate(-50%, -50%) scale(0);
+    }
+  }
+
+  &:focus-within &__signal {
+    box-shadow: $vxp-radio-shadow-focus;
+  }
+
+  // 使用 em 容易出现 0.5px 渲染 不容易控制
+
+  @mixin small-signal {
+    width: 14px;
+    height: 14px;
+
+    &::after {
+      width: 7px;
+      height: 7px;
+    }
+  }
+
+  @mixin large-signal {
+    width: 22px;
+    height: 22px;
+
+    &::after {
+      width: 13px;
+      height: 13px;
+    }
+  }
+
+  &--small &__signal {
+    @include small-signal;
+  }
+
+  &--large &__signal {
+    @include large-signal;
+  }
+
+  &__label {
+    transition: $vxp-transition-color-base;
+  }
+
+  &:hover &__signal {
+    border-color: $vxp-radio-color-hover-signal;
+  }
+
+  &--checked &__signal {
+    border-color: $vxp-radio-color-checked-signal;
+
+    &::after {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  &--checked &__label {
+    color: $vxp-radio-color-checked-label;
+  }
+
+  &--disabled &__signal,
+  &--disabled:hover &__signal {
+    border-color: $vxp-radio-color-disabled-signal;
+
+    &::after {
+      background-color: $vxp-radio-color-disabled-signal;
+    }
+  }
+
+  &--disabled &__label {
+    color: $vxp-radio-color-disabled-label;
+  }
+
+  &__input {
+    // display: none;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  @at-root {
+    &-group {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      &--vertical {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+      }
+    }
+
+    &-group--vertical & {
+      margin-right: 0;
+      margin-bottom: 0.5em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &-group--border & {
+      padding: 0.6em 0.8em;
+      border: $vxp-radio-border;
+      border-radius: $vxp-border-radius-base;
+
+      &:hover {
+        border-color: $vxp-radio-color-hover-border;
+      }
+
+      &--checked {
+        border-color: $vxp-radio-color-checked-border;
+      }
+    }
+
+    &-group--border &--disabled {
+      &,
+      &:hover {
+        border-color: $vxp-radio-color-disabled-border;
+      }
+    }
+
+    &-group--disabled & {
+      cursor: not-allowed;
+
+      &,
+      &:hover {
+        border-color: $vxp-radio-color-disabled-border;
+      }
+
+      &__signal {
+        border-color: $vxp-radio-color-disabled-signal !important;
+
+        &::after {
+          background-color: $vxp-radio-color-disabled-signal;
+        }
+      }
+
+      &__label {
+        color: $vxp-radio-color-disabled-label;
+      }
+    }
+
+    &-group--button & {
+      position: relative;
+      z-index: 0;
+      padding: 0.6em 0.8em;
+      margin: 0;
+      border: $vxp-radio-border;
+      border-left-width: 0;
+      border-radius: 0;
+
+      &::after {
+        position: absolute;
+        top: 0;
+        left: -1px;
+        display: block;
+        width: 1px;
+        height: 100%;
+        content: '';
+        background-color: transparent;
+      }
+
+      &:hover {
+        border-color: $vxp-radio-color-hover-border;
+        box-shadow: -1px 0 0 0 $vxp-radio-color-hover-border;
+      }
+
+      &:first-child {
+        border-left-width: 1px;
+        border-radius: $vxp-border-radius-base 0 0 $vxp-border-radius-base;
+        box-shadow: none;
+
+        &::before,
+        &::after {
+          content: none;
+        }
+      }
+
+      &:last-child {
+        border-radius: 0 $vxp-border-radius-base $vxp-border-radius-base 0;
+      }
+
+      &--checked {
+        z-index: 1;
+        border-color: $vxp-radio-color-checked-border;
+        box-shadow: -1px 0 0 0 $vxp-radio-color-checked-border;
+      }
+
+      &:focus-within {
+        box-shadow: -1px 0 0 0 $vxp-radio-color-checked-border, $vxp-radio-shadow-focus;
+
+        &::after {
+          top: -3px;
+          left: -3px;
+          height: calc(100% + 6px);
+          background-color: $vxp-radio-color-shadow-focus;
+          transition: {
+            property: top, left, height, background-color;
+            duration: $vxp-transition-duration;
+            timing-function: $vxp-transition-timing-function;
+          }
+        }
+      }
+
+      &:focus-within:first-child {
+        box-shadow: $vxp-radio-shadow-focus;
+      }
+
+      &__signal {
+        display: none;
+      }
+    }
+
+    &-group--small &__signal {
+      @include small-signal;
+    }
+
+    &-group--large &__signal {
+      @include large-signal;
+    }
+
+    &-group--button#{&}-group--small & {
+      padding: 0.4em 0.6em;
+    }
+
+    &-group--button#{&}-group--large & {
+      padding: 0.8em 1em;
+    }
+
+    &-group--button#{&}-group--disabled &,
+    &-group--button &--disabled {
+      background-color: $vxp-radio-color-bg-disabled-button;
+      border-color: $vxp-radio-color-border !important;
+      box-shadow: none !important;
+    }
+
+    &-group--button &--disabled#{&}--checked {
+      background-color: $vxp-radio-color-disabled-button;
+
+      .vxp-radio__label {
+        color: $vxp-radio-color-disabled-label;
+      }
+    }
+
+    &-group--button#{&}-group--disabled & {
+      &--checked {
+        background-color: $vxp-radio-color-disabled-button;
+
+        // .vxp-radio__label {
+        //   color: $vxp-color-content-reverse;
+        // }
+      }
+    }
+  }
+}

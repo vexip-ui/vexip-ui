@@ -1,0 +1,87 @@
+.vxp-slider {
+  @include basis;
+
+  position: relative;
+  display: flex;
+  padding: 4px 0;
+  margin: 2px 8px;
+  cursor: pointer;
+
+  &--vertical {
+    display: inline-flex;
+    height: 100%;
+    padding: 0 4px;
+    margin: 8px 2px;
+  }
+
+  &__track {
+    width: 100%;
+    height: 4px;
+    background-color: mix($vxp-color-black, $vxp-color-fill-background, 5%);
+    border-radius: 4px;
+    transition: $vxp-transition-background-base;
+  }
+
+  &:hover &__track {
+    background-color: mix($vxp-color-black, $vxp-color-fill-background, 10%);
+  }
+
+  &--vertical &__track {
+    width: 4px;
+    height: 100%;
+  }
+
+  &__filler {
+    height: 4px;
+    background-color: $vxp-color-primary;
+    border-radius: 4px;
+    transition: $vxp-transition-background-base;
+  }
+
+  &__trigger {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    transform: translate(-50%, -50%);
+
+    .vxp-tooltip {
+      line-height: 1;
+      cursor: pointer;
+      user-select: none;
+
+      &,
+      &__trigger {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  &__handler {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    background-color: $vxp-color-white;
+    border: 2px $vxp-border-style $vxp-color-primary;
+    border-radius: 14px;
+    box-shadow: 0 0 0 4px transparent;
+    transition: box-shadow 500ms ease, $vxp-transition-transform-base;
+
+    &:hover {
+      transform: scale(1.25);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 4px rgba($vxp-color-primary, 0.25);
+    }
+  }
+
+  &--sliding &__handler {
+    box-shadow: 0 0 0 4px rgba($vxp-color-primary, 0.25);
+    transform: scale(1.25);
+  }
+
+  &__tip {
+    user-select: none;
+  }
+}

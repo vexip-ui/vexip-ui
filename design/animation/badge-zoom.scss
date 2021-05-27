@@ -1,0 +1,49 @@
+$name: 'badge-zoom';
+
+@mixin start {
+  opacity: 0;
+  transform: translate(50%, -50%) scale(0.35);
+}
+
+@mixin end {
+  opacity: 1;
+  transform: translate(50%, -50%) scale(1);
+}
+
+.vxp-#{$name} {
+  @at-root {
+    &-enter-active {
+      animation: {
+        name: vxp-#{$name}-in;
+        duration: 300ms;
+      }
+    }
+
+    &-leave-active {
+      animation: {
+        name: vxp-#{$name}-out;
+        duration: 300ms;
+      }
+    }
+  }
+}
+
+@keyframes vxp-#{$name}-in {
+  0% {
+    @include start;
+  }
+
+  100% {
+    @include end;
+  }
+}
+
+@keyframes vxp-#{$name}-out {
+  0% {
+    @include end;
+  }
+
+  100% {
+    @include start;
+  }
+}

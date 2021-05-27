@@ -1,0 +1,100 @@
+.vxp-calendar {
+  &__pane {
+    @include basis;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__action {
+    display: flex;
+  }
+
+  &__row {
+    display: flex;
+    padding: 2px 0;
+  }
+
+  &__cell {
+    display: flex;
+    padding: 0 2px;
+  }
+
+  &__index {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    border-radius: $vxp-border-radius-base;
+    transition: $vxp-transition-color-base, $vxp-transition-background-base;
+
+    &:hover {
+      background-color: rgba($vxp-color-primary, 0.3);
+    }
+
+    &--today {
+      color: $vxp-color-primary;
+    }
+
+    &--prev,
+    &--next {
+      color: $vxp-color-content-disabled;
+    }
+
+    &--selected {
+      &,
+      &:hover {
+        color: $vxp-color-content-reverse;
+        background-color: $vxp-color-primary;
+      }
+    }
+
+    &--disabled {
+      &,
+      &:hover {
+        color: $vxp-color-content-humble;
+        cursor: not-allowed;
+        background-color: transparent;
+      }
+    }
+
+    &::before {
+      position: absolute;
+      top: 2px;
+      right: -2px;
+      bottom: 2px;
+      left: -2px;
+      display: none;
+      pointer-events: none;
+      content: '';
+      background-color: rgba($vxp-color-primary, 0.1);
+    }
+
+    &--in-range {
+      &::before {
+        display: block;
+      }
+    }
+  }
+
+  &__row--week &__index {
+    cursor: default;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    &::before,
+    &:hover::before {
+      display: none;
+      content: none;
+    }
+  }
+}

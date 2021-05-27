@@ -1,0 +1,92 @@
+.vxp-tree {
+  @include basis;
+
+  position: relative;
+
+  &__list,
+  &__node {
+    list-style: none;
+  }
+
+  &__list {
+    padding: 0;
+  }
+
+  &__node {
+    // margin: 0.4em 0;
+    padding-top: 0.4em;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+  }
+
+  &__label {
+    display: inline-block;
+    padding: 0 0.3em;
+    cursor: pointer;
+    border-radius: $vxp-border-radius-small;
+    transition: $vxp-transition-background-base;
+
+    &:hover {
+      background-color: mix($vxp-color-white, $vxp-color-primary, 85%);
+    }
+
+    &--selected,
+    &--selected:hover {
+      background-color: mix($vxp-color-white, $vxp-color-primary, 85%);
+    }
+
+    &--disabled,
+    &--disabled:hover {
+      color: $vxp-color-content-disabled;
+    }
+
+    &--disabled,
+    &--disabled:hover,
+    &--readonly,
+    &--readonly:hover {
+      cursor: default;
+      background-color: transparent;
+    }
+
+    &--is-floor,
+    &--is-floor:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    // padding: 6px;
+    // margin-right: 0.2em;
+    cursor: pointer;
+    transition: $vxp-transition-transform-base;
+
+    &--expanded {
+      transform: rotate(90deg);
+    }
+
+    &--transparent {
+      color: transparent;
+    }
+  }
+
+  &__checkbox {
+    display: inline-flex;
+    margin-right: 0.4em;
+  }
+
+  &__indicator {
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background-color: $vxp-color-primary;
+  }
+}

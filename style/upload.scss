@@ -1,0 +1,384 @@
+.vxp-upload {
+  @include basis;
+
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &--to-add {
+    flex-direction: column-reverse;
+  }
+
+  &--block {
+    width: 100%;
+  }
+
+  &__input {
+    display: none;
+  }
+
+  &__control {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &--drag,
+  &--drag &__control {
+    width: 100%;
+  }
+
+  &__drag-pane {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1.6em;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: $vxp-color-fill;
+    border: $vxp-border-width dashed $vxp-color-border;
+    border-radius: $vxp-border-radius-base;
+    transition: $vxp-transition-border-base;
+
+    &:hover {
+      border-color: $vxp-color-primary;
+    }
+  }
+
+  &__control--drag-over &__drag-pane {
+    border-color: $vxp-color-primary;
+  }
+
+  &__cloud {
+    color: $vxp-color-border;
+  }
+
+  &__control--drag-over &__cloud {
+    color: $vxp-color-primary;
+  }
+
+  &__drag-pane &__tip {
+    user-select: none;
+  }
+
+  &__files {
+    position: relative;
+    width: 100%;
+    padding: 0;
+  }
+
+  &__file {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    list-style: none;
+    border-radius: $vxp-border-radius-base;
+    transition: $vxp-transition-transform-base, $vxp-transition-opacity-base;
+  }
+
+  &--type-name &__file {
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.2em 0.5em;
+    margin-bottom: 0.2em;
+    transition: $vxp-transition-background-base;
+
+    &:hover {
+      background-color: $vxp-color-fill-hover;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &--type-thumbnail &__file,
+  &--type-card &__file {
+    padding: 0.5em;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+    border: $vxp-border-base;
+    transition: $vxp-transition-border-base;
+
+    &--success {
+      border-color: $vxp-color-success;
+    }
+
+    &--fail {
+      border-color: $vxp-color-error;
+    }
+  }
+
+  &--type-card &__file {
+    width: 100%;
+  }
+
+  &__filename {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: $vxp-transition-color-base;
+  }
+
+  &__file--success &__filename {
+    color: $vxp-color-success;
+  }
+
+  &__file--fail &__filename {
+    color: $vxp-color-error;
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    margin-right: 1em;
+    user-select: none;
+  }
+
+  &__card {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &--type-thumbnail &__card {
+    justify-content: center;
+    width: 5em;
+    height: 5em;
+  }
+
+  &--type-card &__card {
+    width: 100%;
+  }
+
+  &__thumbnail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &,
+    vxp-icon {
+      color: $vxp-color-content-secondary;
+    }
+  }
+
+  &--type-thumbnail &__thumbnail {
+    width: 100%;
+    height: 100%;
+  }
+
+  &--type-card &__thumbnail {
+    width: 4em;
+    height: 4em;
+    margin-right: 1em;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: calc(100% - 5em);
+    padding-right: 5em;
+  }
+
+  &--type-card &__filename {
+    width: 100%;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    user-select: none;
+  }
+
+  &__actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &--type-thumbnail &__actions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($vxp-color-black, 0.45);
+    opacity: 0;
+    transition: $vxp-transition-opacity-base;
+  }
+
+  &__card:hover &__actions {
+    opacity: 1;
+  }
+
+  &--type-card &__actions {
+    position: absolute;
+    right: 0;
+  }
+
+  &__action {
+    margin: 0 0.3em;
+    cursor: pointer;
+
+    &--disabled {
+      cursor: not-allowed;
+
+      &,
+      .vxp-icon {
+        color: $vxp-color-content-disabled !important;
+      }
+    }
+  }
+
+  &--type-thumbnail &__action {
+    &,
+    .vxp-icon {
+      color: $vxp-color-content-placeholder;
+
+      &:hover {
+        color: $vxp-color-content-reverse;
+      }
+    }
+  }
+
+  &--type-card &__action {
+    &,
+    .vxp-icon {
+      color: $vxp-color-content-secondary;
+
+      &:hover {
+        color: $vxp-color-content-normal;
+      }
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: $vxp-transition-color-base;
+  }
+
+  &__file-icon {
+    width: 1.2em;
+    margin-right: 0.3em;
+  }
+
+  &__success,
+  &__fail,
+  &__loading,
+  &__close {
+    width: 1em;
+  }
+
+  &__close {
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+
+    &,
+    .vxp-icon {
+      color: transparent;
+    }
+  }
+
+  &__file:hover &__success,
+  &__file:hover &__fail,
+  &__file:hover &__loading {
+    &,
+    .vxp-icon {
+      color: transparent;
+    }
+  }
+
+  &__file:hover &__close {
+    &,
+    .vxp-icon {
+      color: $vxp-color-content-disabled;
+    }
+
+    &:hover {
+      &,
+      .vxp-icon {
+        color: $vxp-color-content-normal;
+      }
+    }
+  }
+
+  &__success {
+    &,
+    .vxp-icon {
+      color: $vxp-color-success;
+    }
+  }
+
+  &__fail {
+    &,
+    .vxp-icon {
+      color: $vxp-color-error;
+    }
+  }
+
+  &__loading {
+    &,
+    .vxp-icon {
+      color: $vxp-color-content-disabled;
+    }
+  }
+
+  &__progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+
+  &--type-name &__progress {
+    position: absolute;
+    right: 0.5em;
+    bottom: 0;
+    left: 0.5em;
+  }
+
+  &--type-thumbnail &__progress {
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+  }
+
+  &--type-card &__progress {
+    padding-top: 0.3em;
+  }
+
+  &__percentage {
+    color: $vxp-color-content-secondary;
+  }
+
+  &-list-transition {
+    &-enter,
+    &-leave-to {
+      opacity: 0;
+      transform: scale(0.35);
+    }
+
+    &-leave-active {
+      position: absolute !important;
+      // transition: $vxp-transition-transform-base, $vxp-transition-opacity-base;
+    }
+
+    // &-move {
+    //   transition: $vxp-transition-transform-base;
+    // }
+  }
+
+  // &--to-add &-list-transition-enter-active {
+  //   transition: $vxp-transition-transform-base, $vxp-transition-opacity-base !important;
+  // }
+}

@@ -1,0 +1,120 @@
+{
+  "author": {
+    "name": "qmhc"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "scripts/cz-config.js"
+    }
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "vue": "^3.0.11"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.1",
+    "@commitlint/config-conventional": "^12.1.1",
+    "@rollup/plugin-eslint": "^8.0.1",
+    "@rollup/plugin-replace": "^2.4.2",
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "@vitejs/plugin-vue": "^1.2.2",
+    "@vitejs/plugin-vue-jsx": "^1.1.4",
+    "@vue/compiler-sfc": "^3.0.11",
+    "@vue/eslint-config-standard": "^6.0.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "@vue/test-utils": "2.0.0-rc.6",
+    "chalk": "^4.1.1",
+    "commitizen": "^4.2.3",
+    "conventional-changelog-cli": "^2.1.1",
+    "cz-customizable": "^6.3.0",
+    "enquirer": "^2.3.6",
+    "eslint": "^7.25.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-vue": "^7.9.0",
+    "execa": "^5.0.0",
+    "fs-extra": "^10.0.0",
+    "husky": "^6.0.0",
+    "is-ci": "^3.0.0",
+    "lint-staged": "^10.5.4",
+    "pinst": "^2.1.6",
+    "postcss": "^8.2.13",
+    "postcss-discard-duplicates": "^5.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.50.0",
+    "sass": "^1.32.12",
+    "semver": "^7.3.5",
+    "stylelint": "^13.13.1",
+    "stylelint-config-recess-order": "^2.4.0",
+    "stylelint-config-standard": "^22.0.0",
+    "stylelint-order": "^4.1.0",
+    "stylelint-prettier": "^1.2.0",
+    "stylelint-scss": "^3.19.0",
+    "ts-morph": "^11.0.0",
+    "typescript": "^4.2.4",
+    "vite": "^2.1.5",
+    "vite-plugin-html": "^2.0.7"
+  },
+  "engines": {
+    "node": "^12 || >=14"
+  },
+  "files": [
+    "design",
+    "dist",
+    "icons",
+    "lib",
+    "style",
+    "themes"
+  ],
+  "keywords": [
+    "flex",
+    "components",
+    "vue",
+    "vexip",
+    "plugin",
+    "toolkit",
+    "vexip-ui",
+    "vite"
+  ],
+  "license": "MIT",
+  "main": "dist/vexip-ui.cjs.js",
+  "module": "dist/vexip-ui.es.js",
+  "name": "vexip-ui",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:clean": "yarn run clean && yarn run build",
+    "build:icons": "node scripts/build-icons.js",
+    "build:lib": "node scripts/build.js --lib",
+    "build:types": "node scripts/build-types.js",
+    "bootstrap": "node scripts/bootstrap.js",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
+    "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
+    "commit": "git-cz",
+    "lint": "eslint --fix --ext .js,.ts,.vue src/** components/**",
+    "lint:style": "stylelint **/*.{vue,scss} --fix",
+    "postinstall": "is-ci || husky install",
+    "postpublish": "pinst --enable",
+    "precommit": "lint-staged -c ./.husky/.lintstagedrc",
+    "prepublishOnly": "pinst --disable",
+    "prettier": "prettier --write \"packages/*/{src,__serve__}/**/*.{ts,js,json,css,pcss,scss,vue,html,md}\"",
+    "release": "node scripts/release.js",
+    "serve": "node scripts/serve.js",
+    "test": "node scripts/test.js"
+  },
+  "sideEffects": [
+    "dist/*",
+    "lib/**",
+    "icons/**",
+    "*.scss"
+  ],
+  "typings": "lib/index.d.ts",
+  "version": "0.1.0"
+}

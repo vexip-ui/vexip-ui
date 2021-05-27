@@ -1,0 +1,130 @@
+.vxp-drawer {
+  @mixin fixed {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  @include basis;
+
+  @include fixed;
+
+  z-index: $vxp-z-index-masker;
+
+  &--inner {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  &__wrapper {
+    position: absolute;
+    background-color: $vxp-drawer-color-bg;
+    border: 0;
+
+    &--top,
+    &--bottom {
+      right: 0;
+      left: 0;
+    }
+
+    &--right,
+    &--left {
+      top: 0;
+      bottom: 0;
+    }
+
+    &--top {
+      top: 0;
+    }
+
+    &--right {
+      right: 0;
+    }
+
+    &--bottom {
+      bottom: 0;
+    }
+
+    &--left {
+      left: 0;
+    }
+  }
+
+  &--inner &__wrapper {
+    position: absolute;
+  }
+
+  &__title {
+    position: relative;
+    padding: 0.8em 1em;
+    font-size: $vxp-drawer-title-font-size;
+    color: $vxp-drawer-color-title;
+    border-bottom: $vxp-drawer-title-divider;
+  }
+
+  &__wrapper--closable &__title {
+    padding-right: 2em;
+  }
+
+  &__content {
+    padding: 1em 1.2em;
+  }
+
+  &__close {
+    position: absolute;
+    top: 50%;
+    right: 0.8em;
+    display: flex;
+    color: $vxp-drawer-color-close;
+    cursor: pointer;
+    transform: translateY(-50%);
+
+    &:hover {
+      color: $vxp-drawer-color-close-hover;
+    }
+  }
+
+  &__handler {
+    position: absolute;
+    transition: $vxp-transition-background-base;
+
+    &--top,
+    &--bottom {
+      right: 0;
+      left: 0;
+      height: $vxp-drawer-handler-length;
+      cursor: ns-resize;
+    }
+
+    &--right,
+    &--left {
+      top: 0;
+      bottom: 0;
+      width: $vxp-drawer-handler-length;
+      cursor: ew-resize;
+    }
+
+    &--top {
+      bottom: 0;
+    }
+
+    &--right {
+      left: 0;
+    }
+
+    &--bottom {
+      top: 0;
+    }
+
+    &--left {
+      right: 0;
+    }
+
+    &:hover,
+    &--resizing {
+      background-color: $vxp-drawer-color-bg-handler-hover;
+    }
+  }
+}

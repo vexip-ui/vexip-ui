@@ -1,0 +1,11 @@
+.vxp-auto-complete {
+  &__list .vxp-option {
+    transition: $vxp-transition-color-base, $vxp-transition-background-base;
+  }
+
+  &__list &__option {
+    &--hit {
+      color: $vxp-color-primary;
+    }
+  }
+}

@@ -1,0 +1,927 @@
+<template>
+  <div
+    ref="wrapper"
+    :class="className"
+    @click="handleTirggerClick"
+    @clickoutside="finishInput"
+  >
+    <div ref="reference" :class="`${prefixCls}__control`">
+      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: prefixColor }">
+        <slot name="prefix">
+          <Icon :name="prefix"></Icon>
+        </slot>
+      </div>
+      <DateControl
+        ref="start"
+        :unit-type="currentState === 'start' ? startState.column : null"
+        :enabled="startState.enabled"
+        :activated="startState.activated"
+        :date-value="startState.dateValue"
+        :steps="steps"
+        :ctrl-steps="ctrlSteps"
+        :focused="focused"
+        :visible="currentVisible"
+        :date-separator="dateSeparator"
+        :time-separator="timeSeparator"
+        :filler="filler"
+        :no-filler="noFiller"
+        @on-input="handleInput"
+        @on-plus="handlePlus"
+        @on-minus="handleMinus"
+        @on-enter="handleEnter"
+        @on-cancel="handleCancel"
+        @on-unit-focus="handleStartInput"
+        @on-prev-unit="enterColumn('prev')"
+        @on-next-unit="enterColumn('next')"
+      ></DateControl>
+      <template v-if="isRange">
+        <div :class="`${prefixCls}__exchange`">
+          <Icon name="exchange-alt"></Icon>
+        </div>
+        <DateControl
+          ref="end"
+          :unit-type="currentState === 'end' ? endState.column : null"
+          :enabled="endState.enabled"
+          :activated="endState.activated"
+          :date-value="endState.dateValue"
+          :steps="steps"
+          :ctrl-steps="ctrlSteps"
+          :focused="focused"
+          :visible="currentVisible"
+          :date-separator="dateSeparator"
+          :time-separator="timeSeparator"
+          :filler="filler"
+          :no-filler="noFiller"
+          @on-input="handleInput"
+          @on-plus="handlePlus"
+          @on-minus="handleMinus"
+          @on-enter="handleEnter"
+          @on-cancel="handleCancel"
+          @on-unit-focus="handleEndInput"
+          @on-prev-unit="enterColumn('prev')"
+          @on-next-unit="enterColumn('next')"
+        ></DateControl>
+      </template>
+      <transition name="vxp-fade">
+        <div
+          v-if="!disabled && clearable && isHover && lastValue"
+          :class="`${prefixCls}__clear`"
+          @click.stop="handleClear"
+        >
+          <Icon name="times-circle"></Icon>
+        </div>
+        <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: suffixColor }">
+          <slot name="suffix">
+            <Icon :name="suffix || 'calendar-alt'"></Icon>
+          </slot>
+        </div>
+      </transition>
+      <Portal :to="transferTo">
+        <transition :name="transitionName">
+          <div
+            v-show="currentVisible"
+            ref="popper"
+            :class="`${prefixCls}__popper`"
+            @click.stop="handleFocused"
+          >
+            <DatePane
+              ref="pane"
+              :type="type"
+              :column="(currentState === 'start' ? startState : endState).column"
+              :start-value="startState.dateValue"
+              :end-value="endState.dateValue"
+              :start-activated="startState.activated"
+              :end-activated="endState.activated"
+              :value-type="currentState"
+              :shortcuts="shortcuts"
+              :ok-text="okText"
+              :cancel-text="cancelText"
+              :today="today"
+              :disable-date="disableDate"
+              :no-action="noAction"
+              :steps="steps"
+              :is-range="isRange"
+              @on-shortcut="handleShortcut"
+              @on-change="handlePaneChange"
+              @on-toggle-col="handleInputFocus"
+              @on-cancel="handleCancel"
+              @on-confirm="handlePaneConfirm"
+            ></DatePane>
+          </div>
+        </transition>
+      </Portal>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, reactive, computed, watch, inject, toRef, nextTick } from 'vue'
+import { Icon } from '@/components/icon'
+import { Portal } from '@/components/portal'
+import DateControl from './date-control.vue'
+import DatePane from './date-pane.vue'
+import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useHover } from '@/common/mixins/hover'
+import { usePopper, placementWhileList } from '@/common/mixins/popper'
+import { useClickOutside } from '@/common/mixins/clickoutside'
+import { useConfiguredProps } from '@/common/config/install'
+import { noop } from '@/common/utils/common'
+import { toDate, isLeepYear } from '@/common/utils/date'
+import { doubleDigits, boundRange } from '@/common/utils/number'
+import { createSizeProp, createStateProp } from '@/common/config/props'
+import { useColumn } from './helper'
+
+import '@/common/icons/calendar-alt'
+import '@/common/icons/times-circle'
+import '@/common/icons/exchange-alt'
+
+import type { PropType } from 'vue'
+import type { Placement } from '@popperjs/core'
+import type { Dateable } from '@/common/utils/date'
+import type { TimeType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
+
+const props = useConfiguredProps('datePicker', {
+  size: createSizeProp(),
+  state: createStateProp(),
+  type: {
+    default: 'date' as DatePickerType,
+    validator(value: DatePickerType) {
+      return ['date', 'datetime', 'year', 'month'].includes(value)
+    }
+  },
+  visible: {
+    type: Boolean,
+    default: false
+  },
+  placement: {
+    type: String as PropType<Placement>,
+    default: 'bottom-start',
+    validator(value: Placement) {
+      return placementWhileList.includes(value)
+    }
+  },
+  transfer: {
+    type: [Boolean, String],
+    default: false
+  },
+  value: {
+    type: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
+    default() {
+      return new Date()
+    }
+  },
+  format: {
+    type: String,
+    default: 'yyyy-MM-dd HH:mm:ss'
+  },
+  filler: {
+    type: String,
+    default: '-',
+    validator(value: string) {
+      return value.length === 1
+    }
+  },
+  noFiller: {
+    type: Boolean,
+    default: false
+  },
+  clearable: {
+    type: Boolean,
+    default: false
+  },
+  noAction: {
+    type: Boolean,
+    default: false
+  },
+  labels: {
+    type: Array as PropType<string[]>,
+    default() {
+      return []
+    }
+  },
+  dateSeparator: {
+    type: String,
+    default: '/'
+  },
+  timeSeparator: {
+    type: String,
+    default: ':'
+  },
+  shortcuts: {
+    type: Array as PropType<DateShortcut[]>,
+    default() {
+      return []
+    }
+  },
+  disableDate: {
+    type: Function as PropType<(date: Date) => boolean>,
+    default() {
+      return false
+    }
+  },
+  steps: {
+    type: Array as PropType<number[]>,
+    default() {
+      return [1, 1, 1]
+    }
+  },
+  ctrlSteps: {
+    type: Array as PropType<number[]>,
+    default() {
+      return [5, 5, 5]
+    }
+  },
+  prefix: {
+    type: String,
+    default: ''
+  },
+  prefixColor: {
+    type: String,
+    default: ''
+  },
+  suffix: {
+    type: String,
+    default: ''
+  },
+  suffixColor: {
+    type: String,
+    default: ''
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  transitionName: {
+    type: String,
+    default: 'vxp-drop'
+  },
+  okText: {
+    type: String,
+    default: '确认'
+  },
+  cancelText: {
+    type: String,
+    default: '取消'
+  },
+  today: {
+    type: [Number, String, Date] as PropType<Dateable>,
+    default() {
+      return new Date()
+    },
+    validator(value: Dateable) {
+      return !Number.isNaN(new Date(value))
+    }
+  },
+  isRange: {
+    type: Boolean,
+    default: false
+  },
+  disableValidate: {
+    type: Boolean,
+    default: false
+  }
+})
+
+export default defineComponent({
+  name: 'DatePicker',
+  components: {
+    DateControl,
+    DatePane,
+    Icon,
+    Portal
+  },
+  props,
+  emits: [
+    'on-input',
+    'on-plus',
+    'on-minus',
+    'on-enter',
+    'on-cancel',
+    'on-change',
+    'on-clear',
+    'on-shortcut',
+    'on-toggle',
+    'on-focus',
+    'on-blur',
+    'on-change-col',
+    'update:value',
+    'update:visible'
+  ],
+  setup(props, { slots, emit }) {
+    const validateField = inject(VALIDATE_FIELD, noop)
+    const clearField = inject(CLEAR_FIELD, noop)
+
+    const prefix = 'vxp-date-picker'
+    const placement = toRef(props, 'placement')
+    const transfer = toRef(props, 'transfer')
+    const currentVisible = ref(props.visible)
+    const focused = ref(false)
+    const startState = createDateState()
+    const endState = createDateState()
+    const currentState = ref<'start' | 'end'>('start')
+    const lastValue = ref('')
+
+    const wrapper = useClickOutside()
+
+    const { reference, popper, transferTo, updatePopper } = usePopper({
+      placement,
+      transfer,
+      wrapper,
+      isDrop: true
+    })
+    const { isHover } = useHover(reference)
+
+    const startInput = ref<InstanceType<typeof DateControl> | null>(null)
+    const endInput = ref<InstanceType<typeof DateControl> | null>(null)
+    const datePane = ref<InstanceType<typeof DatePane> | null>(null)
+
+    const className = computed(() => {
+      return [
+        prefix,
+        `${prefix}--${props.type}`,
+        {
+          [`${prefix}--disabled`]: props.disabled,
+          [`${prefix}--${props.size}`]: props.size !== 'default',
+          [`${prefix}--no-hour`]: !startState.enabled.hour,
+          [`${prefix}--no-minute`]: !startState.enabled.minute,
+          [`${prefix}--no-second`]: !startState.enabled.second,
+          [`${prefix}--focused`]: focused.value,
+          [`${prefix}--${props.state}`]: props.state !== 'default'
+        }
+      ]
+    })
+    const hasPrefix = computed(() => {
+      return !!(slots.prefix || props.prefix)
+    })
+    const currentValue = computed(() => {
+      const values = [startState, endState].map(state => {
+        const values = Object.values(state.dateValue).map(doubleDigits)
+
+        return `${values.slice(0, 3).join('-')} ${values.slice(3).join(':')}`
+      })
+
+      return props.isRange ? values : values[0]
+    })
+    const startActivated = computed(() => {
+      const activated = startState.activated
+
+      return activated.year && activated.month && activated.date
+    })
+    const endActivated = computed(() => {
+      const activated = endState.activated
+
+      return activated.year && activated.month && activated.date
+    })
+
+    startState.enabled.year = true
+    endState.enabled.year = true
+
+    nextTick(() => {
+      startState.resetColumn('date')
+      endState.resetColumn('date')
+    })
+
+    watch(() => props.type, parseFormat)
+    watch(
+      () => props.value,
+      value => {
+        parseValue(value)
+      },
+      { immediate: true }
+    )
+    watch(
+      () => props.type,
+      value => {
+        const hasMonth = value !== 'year'
+        const hasDate = hasMonth && value !== 'month'
+
+        startState.enabled.month = hasMonth
+        endState.enabled.month = hasMonth
+        startState.enabled.date = hasDate
+        endState.enabled.date = hasDate
+      },
+      { immediate: true }
+    )
+    watch(() => props.format, parseFormat, { immediate: true })
+    watch(
+      () => props.visible,
+      value => {
+        currentVisible.value = value
+      }
+    )
+    watch(currentVisible, value => {
+      if (value) {
+        updatePopper()
+      } else {
+        emitChange()
+      }
+
+      emit('on-toggle', value)
+      emit('update:visible', value)
+    })
+    watch(focused, value => {
+      if (value) {
+        emit('on-focus')
+      } else {
+        emit('on-blur')
+      }
+    })
+    watch(
+      () => startState.column,
+      value => {
+        if (currentVisible.value) {
+          emit('on-change-col', value)
+        }
+      }
+    )
+    watch(
+      () => endState.column,
+      value => {
+        if (currentVisible.value) {
+          emit('on-change-col', value)
+        }
+      }
+    )
+
+    function createDateState() {
+      const { currentColumn, enabled, resetColumn, enterColumn } = useColumn([
+        'year',
+        'month',
+        'date',
+        'hour',
+        'minute',
+        'second'
+      ] as DateTimeType[])
+
+      const dateValue = reactive({
+        year: 1970,
+        month: 1, // 1 ~ 12
+        date: 1,
+        hour: 0,
+        minute: 0,
+        second: 0
+      })
+      const activated = reactive({
+        year: false,
+        month: false,
+        date: false,
+        hour: false,
+        minute: false,
+        second: false
+      })
+
+      return reactive({
+        column: currentColumn,
+        enabled,
+        activated,
+        dateValue,
+        resetColumn,
+        enterColumn
+      })
+    }
+
+    function getCurrentState() {
+      return currentState.value === 'start' ? startState : endState
+    }
+
+    function rawValueToDate(value: Dateable) {
+      let date!: Date
+
+      if (typeof value === 'number') {
+        if (props.type === 'year') {
+          if (value < 3000) {
+            date = new Date(value, 1)
+          } else {
+            date = toDate(value)
+          }
+        } else if (props.type === 'month') {
+          if (value < 300000) {
+            const year = Math.floor(value / 100)
+            const month = value - year * 100
+
+            date = new Date(year, month - 1)
+          } else {
+            date = toDate(value)
+          }
+        }
+      } else {
+        date = toDate(value)
+      }
+
+      if (Number.isNaN(date.getTime())) {
+        date = new Date(props.today)
+      }
+
+      return date
+    }
+
+    function parseValue(value: Dateable | Dateable[]) {
+      if (!Array.isArray(value)) {
+        value = [value, value]
+      }
+
+      for (let i = 0; i < 2; i++) {
+        const date = rawValueToDate(value[i] ?? '')
+        const dateValue = (i === 0 ? startState : endState).dateValue
+
+        dateValue.year = date.getFullYear()
+        dateValue.month = date.getMonth() + 1
+        dateValue.date = date.getDate()
+        dateValue.hour = date.getHours()
+        dateValue.minute = date.getMinutes()
+        dateValue.second = date.getSeconds()
+
+        if (!props.isRange) break
+      }
+    }
+
+    function parseFormat() {
+      const isDatetime = props.type === 'datetime'
+
+      ;[startState, endState].forEach(state => {
+        state.enabled.hour = isDatetime && props.format.includes('H')
+        state.enabled.minute = isDatetime && props.format.includes('m')
+        state.enabled.second = isDatetime && props.format.includes('s')
+      })
+    }
+
+    function toggleActivated(value: boolean, type?: string) {
+      const states = type ? (type === 'start' ? [startState] : [endState]) : [startState, endState]
+
+      states.forEach(state => {
+        (Object.keys(state.activated) as DateTimeType[]).forEach(type => {
+          state.activated[type] = value
+        })
+      })
+    }
+
+    function getStringValue() {
+      return Array.isArray(currentValue.value) ? currentValue.value.join('|') : currentValue.value
+    }
+
+    function emitChange() {
+      if (lastValue.value !== getStringValue()) {
+        lastValue.value = getStringValue()
+
+        const values = Array.isArray(currentValue.value) ? currentValue.value : [currentValue.value]
+        const emitValues: string[] | number[] = []
+
+        for (let i = 0; i < 2; i++) {
+          if (props.type === 'year') {
+            emitValues[i] = i === 0 ? startState.dateValue.year : endState.dateValue.year
+          } else if (props.type !== 'datetime') {
+            emitValues[i] = values[i].split(' ')[0]
+          }
+
+          if (!props.isRange) break
+        }
+
+        const emitValue = props.isRange ? emitValues : emitValues[0]
+
+        toggleActivated(true)
+        emit('on-change', emitValue)
+        emit('update:value', emitValue)
+
+        if (!props.disableValidate) {
+          validateField()
+        }
+      }
+    }
+
+    function finishInput() {
+      currentVisible.value = false
+      focused.value = false
+
+      startState.resetColumn('date')
+      endState.resetColumn('date')
+    }
+
+    function verifyValue(type: DateTimeType) {
+      const dateValue = getCurrentState().dateValue
+
+      switch (type) {
+        case 'year': {
+          dateValue.year = boundRange(dateValue.year, 1970, 2300)
+          break
+        }
+        case 'month': {
+          dateValue.month = boundRange(dateValue.month, 1, 12)
+          break
+        }
+        case 'date': {
+          const month = dateValue.month
+
+          let lastDay
+
+          if (month < 7) {
+            if (month !== 2) {
+              lastDay = 30 + (month % 2)
+            } else {
+              if (isLeepYear(dateValue.year)) {
+                lastDay = 29
+              } else {
+                lastDay = 28
+              }
+            }
+          } else {
+            lastDay = 31 - (month % 2)
+          }
+
+          dateValue.date = boundRange(dateValue.date, 1, lastDay)
+          break
+        }
+        case 'hour':
+        case 'minute':
+        case 'second': {
+          dateValue[type] = boundRange(dateValue[type], 0, type === 'hour' ? 23 : 59)
+          dateValue[type] = Math.round(dateValue[type] / getStep(type)) * getStep(type)
+        }
+      }
+    }
+
+    function handleFocused() {
+      if (props.disabled) return
+
+      focused.value = true
+
+      window.setTimeout(() => {
+        if (focused.value) {
+          if (currentState.value === 'start') {
+            startInput.value?.focus()
+          } else {
+            endInput.value?.focus()
+          }
+        }
+      }, 120)
+    }
+
+    function handleTirggerClick() {
+      if (props.disabled) return
+
+      currentVisible.value = true
+
+      handleFocused()
+    }
+
+    function handleInput(value: number) {
+      const state = getCurrentState()
+
+      handleInputNumber(state.column, value)
+
+      if (
+        (state.column === 'year' && state.dateValue.year >= 1000) ||
+        (state.column !== 'second' && state.dateValue[state.column] >= 10)
+      ) {
+        state.enterColumn('next', false)
+      }
+    }
+
+    function handleInputNumber(type: DateTimeType, number: number) {
+      const state = getCurrentState()
+      const prev = state.dateValue[type]
+
+      if (
+        (props.noFiller || state.activated[type]) &&
+        prev > 0 &&
+        prev < (type === 'year' ? 1000 : 10)
+      ) {
+        state.dateValue[type] = prev * 10 + number
+      } else {
+        state.dateValue[type] = number
+      }
+
+      verifyValue(type)
+      emit('on-input', type, state.dateValue[type])
+    }
+
+    function handleInputFocus(type: TimeType) {
+      getCurrentState().column = type
+    }
+
+    function isTimeType(type: DateTimeType): type is TimeType {
+      return ['hour', 'minute', 'second'].includes(type)
+    }
+
+    function handleAdjust(adjustType: 'plus' | 'minus', ctrlKey: boolean) {
+      const isPlus = adjustType === 'plus'
+      const sign = isPlus ? 1 : -1
+      const state = getCurrentState()
+      const type = state.column
+
+      if (state.enabled[type]) {
+        if (isTimeType(type)) {
+          state.dateValue[type] += sign * (ctrlKey ? getCtrlStep(type) : getStep(type))
+        } else {
+          if (ctrlKey) {
+            if (type === 'year') {
+              state.dateValue.year += sign * 10
+            } else {
+              state.dateValue[type === 'date' ? 'month' : 'year'] += sign
+            }
+          } else {
+            state.dateValue[type] += sign
+          }
+
+          computeDate()
+          updateDateActivated(type)
+        }
+
+        verifyValue(type)
+        emit(isPlus ? 'on-plus' : 'on-minus', type, state.dateValue[type])
+        datePane.value?.refreshCalendar()
+      }
+    }
+
+    function handlePlus(ctrlKey: boolean) {
+      handleAdjust('plus', ctrlKey)
+    }
+
+    function handleMinus(ctrlKey: boolean) {
+      handleAdjust('minus', ctrlKey)
+    }
+
+    function computeDate() {
+      const dateValue = getCurrentState().dateValue
+      const date = new Date(dateValue.year, dateValue.month - 1, dateValue.date)
+
+      dateValue.year = date.getFullYear()
+      dateValue.month = date.getMonth() + 1
+      dateValue.date = date.getDate()
+    }
+
+    function handleEnter() {
+      finishInput()
+      emit('on-enter')
+    }
+
+    function handleCancel() {
+      parseValue(props.value)
+      finishInput()
+      emit('on-cancel')
+    }
+
+    function resetValue() {
+      [startState, endState].forEach(state => {
+        state.dateValue.year = 1970
+        state.dateValue.month = 1
+        state.dateValue.date = 1
+        state.dateValue.hour = 0
+        state.dateValue.minute = 0
+        state.dateValue.second = 0
+      })
+
+      lastValue.value = ''
+    }
+
+    function handleClear() {
+      if (props.clearable) {
+        finishInput()
+        nextTick(() => {
+          resetValue()
+          emit('on-clear')
+          clearField()
+
+          nextTick(() => {
+            toggleActivated(false)
+          })
+        })
+      }
+    }
+
+    function handleShortcut(name: string, value: Dateable) {
+      parseValue(value)
+      emit('on-shortcut', name, value)
+      finishInput()
+    }
+
+    // 只有时分秒
+    function getStep(type: TimeType) {
+      return props.steps[type === 'hour' ? 0 : type === 'minute' ? 1 : 2] || 1
+    }
+
+    // 只有时分秒
+    function getCtrlStep(type: TimeType) {
+      return props.ctrlSteps[type === 'hour' ? 0 : type === 'minute' ? 1 : 2] || 1
+    }
+
+    function handlePaneChange(type: DateTimeType, value: number) {
+      getCurrentState().dateValue[type] = value
+      updateDateActivated(type)
+    }
+
+    function updateDateActivated(type: DateTimeType) {
+      const state = getCurrentState()
+
+      if (type === 'month') {
+        state.activated.year = true
+      } else if (type === 'date') {
+        state.activated.year = true
+        state.activated.month = true
+      }
+
+      state.activated[type] = true
+    }
+
+    function toggleCurrentState(type: 'start' | 'end') {
+      currentState.value = type
+    }
+
+    function enterColumn(type: 'prev' | 'next') {
+      if (props.isRange) {
+        const state = getCurrentState()
+        const currentColumn = state.column
+
+        state.enterColumn(type, false)
+
+        if (currentColumn === state.column) {
+          const isStart = currentState.value === 'start'
+          const otherState = isStart ? endState : startState
+
+          otherState.resetColumn(type === 'prev' ? 'second' : 'year', type === 'prev')
+          toggleCurrentState(isStart ? 'end' : 'start')
+        }
+      } else {
+        startState.enterColumn(type)
+      }
+    }
+
+    function handleStartInput(type: TimeType) {
+      toggleCurrentState('start')
+      handleInputFocus(type)
+
+      nextTick(() => {
+        datePane.value?.refreshCalendar()
+      })
+    }
+
+    function handleEndInput(type: TimeType) {
+      toggleCurrentState('end')
+      handleInputFocus(type)
+
+      nextTick(() => {
+        datePane.value?.refreshCalendar()
+      })
+    }
+
+    function handlePaneConfirm() {
+      if (!props.isRange) {
+        finishInput()
+      } else {
+        if (currentState.value === 'start' && !endActivated.value) {
+          toggleActivated(true, 'start')
+          currentState.value = 'end'
+        } else if (currentState.value === 'end' && !startActivated.value) {
+          toggleActivated(true, 'end')
+          currentState.value = 'start'
+        } else {
+          finishInput()
+        }
+      }
+    }
+
+    return {
+      prefixCls: prefix,
+      currentVisible,
+      focused,
+      transferTo,
+      isHover,
+      startState,
+      endState,
+      lastValue,
+      currentState,
+
+      className,
+      hasPrefix,
+      startActivated,
+      endActivated,
+
+      wrapper,
+      reference,
+      popper,
+      start: startInput,
+      end: endInput,
+      pane: datePane,
+
+      handleFocused,
+      handleTirggerClick,
+      handleInput,
+      handleInputFocus,
+      handlePlus,
+      handleMinus,
+      handleEnter,
+      handleCancel,
+      handleClear,
+      handleShortcut,
+      handlePaneChange,
+      finishInput,
+      toggleCurrentState,
+      enterColumn,
+      handleStartInput,
+      handleEndInput,
+      handlePaneConfirm,
+
+      updatePopper
+    }
+  }
+})
+</script>

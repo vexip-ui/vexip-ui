@@ -1,0 +1,93 @@
+.vxp-modal {
+  @include basis;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $vxp-z-index-popper;
+
+  &--inner {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  &__wrapper {
+    position: absolute;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    pointer-events: visible;
+    background-color: $vxp-color-fill;
+    border: 0;
+    border-radius: $vxp-border-radius-base;
+    box-shadow: $vxp-box-shadow-base;
+  }
+
+  &--inner &__wrapper {
+    position: absolute;
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.6em 1em;
+    font-size: $vxp-font-size-primary;
+    font-weight: 500;
+    color: $vxp-color-content-primary;
+    border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
+  }
+
+  &--draggable &__header {
+    cursor: move;
+  }
+
+  &__content {
+    flex: auto;
+    padding: 1em;
+    line-height: $vxp-line-height;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0.7em 1.2em;
+    border-top: $vxp-border-appearance $vxp-color-border-light-2;
+  }
+
+  &__close {
+    position: absolute;
+    top: 50%;
+    right: 1em;
+    display: flex;
+    color: $vxp-color-content-placeholder;
+    cursor: pointer;
+    transform: translateY(-50%);
+
+    &:hover {
+      color: $vxp-color-content-normal;
+    }
+  }
+
+  &__resizer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    cursor: nw-resize;
+    background-image: linear-gradient(
+      -45deg,
+      transparent calc(30% - 1px),
+      $vxp-color-border-light-1 30%,
+      transparent calc(30% + 1px),
+      transparent calc(50% - 1px),
+      $vxp-color-border-light-1 50%,
+      transparent calc(50% + 1px)
+    );
+    border-radius: 0 0 $vxp-border-radius-base 0;
+  }
+}

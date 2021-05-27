@@ -1,0 +1,147 @@
+.vxp-form {
+  @include basis;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    @include basis;
+
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2em;
+
+    &--error {
+      // $checkbox: vxp-checkbox;
+      // $radio: vxp-radio;
+
+      .vxp-input,
+      .vxp-multiple-input,
+      .vxp-textarea {
+        &,
+        &:hover,
+        &:focus,
+        &--focused {
+          border-color: $vxp-color-error-light-1;
+        }
+
+        &:focus,
+        &--focused {
+          box-shadow: $vxp-box-shadow-fouced-appearance rgba($vxp-color-error, 0.2);
+        }
+      }
+
+      // .#{$checkbox} {
+      //   &__signal,
+      //   &:hover .#{$checkbox}__signal {
+      //     border-color: $vxp-color-error;
+      //   }
+
+      //   &--checked .#{$checkbox}__signal {
+      //     background-color: $vxp-color-error;
+      //     border-color: $vxp-color-error;
+      //   }
+      // }
+
+      .vxp-color-picker {
+        &__control {
+          border-color: $vxp-color-error-light-1;
+        }
+
+        &__trigger--visible .vxp-color-picker__control {
+          box-shadow: $vxp-box-shadow-fouced-appearance rgba($vxp-color-error, 0.2);
+        }
+      }
+
+      // .#{$radio} {
+      //   &__signal,
+      //   &:hover .#{$radio}__signal {
+      //     border-color: $vxp-color-error;
+      //   }
+
+      //   &--checked .#{$radio}__signal {
+      //     border-color: $vxp-color-error;
+
+      //     &::after {
+      //       background-color: $vxp-color-error;
+      //     }
+      //   }
+      // }
+    }
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    padding-right: 0.6em;
+    white-space: nowrap;
+  }
+
+  &__control {
+    position: relative;
+  }
+
+  &--label-top &__item {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  &--label-top &__label {
+    justify-content: flex-start;
+    margin-bottom: 0.3em;
+    text-align: left;
+  }
+
+  &--label-top &__control {
+    width: 100%;
+  }
+
+  &--label-right &__label {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  &--label-left &__label {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  @mixin asterisk {
+    display: inline-block;
+    font-family: SimSun, sans-serif;
+    color: $vxp-color-error;
+    content: '*';
+    user-select: none;
+  }
+
+  &__item--required &__label::before {
+    @include asterisk;
+
+    margin-right: 0.3em;
+  }
+
+  &--label-top &__item--required &__label {
+    &::before {
+      display: none;
+    }
+
+    &::after {
+      @include asterisk;
+
+      margin-left: 0.3em;
+    }
+  }
+
+  &__error-tip {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding-top: 3px;
+    color: $vxp-color-error;
+    white-space: nowrap;
+    user-select: none;
+  }
+}

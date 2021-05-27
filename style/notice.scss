@@ -1,0 +1,157 @@
+.vxp-notice {
+  @include basis;
+
+  $title: #{&}__title;
+  $icon: #{&}__icon;
+  $close: #{&}__close;
+
+  &__title {
+    margin-bottom: 0.2em;
+    font-size: $vxp-font-size-primary;
+    color: $vxp-color-content-primary;
+  }
+
+  &__content {
+    line-height: $vxp-line-height;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 1.4em;
+    left: 1.8em;
+    display: flex;
+    align-items: center;
+    transform: scale(2);
+  }
+
+  &__close {
+    position: absolute;
+    top: 0.4em;
+    right: 0.6em;
+    display: flex;
+    align-items: center;
+    color: $vxp-color-content-placeholder;
+    cursor: pointer;
+
+    &:hover {
+      &,
+      .vxp-icon {
+        color: $vxp-color-content-normal;
+      }
+    }
+  }
+
+  $types: (
+    info: $vxp-color-primary,
+    success: $vxp-color-success,
+    warning: $vxp-color-warning,
+    error: $vxp-color-error
+  );
+
+  &__item {
+    width: 24em;
+    padding: 0.8em;
+    padding-left: calc(1em + 5px);
+    background-color: $vxp-color-fill;
+    border-radius: $vxp-border-radius-base;
+    box-shadow: $vxp-box-shadow-base;
+
+    &--has-icon {
+      padding-left: 4.2em;
+    }
+
+    &--has-icon#{&}--title-only {
+      padding-left: 3.2em;
+    }
+
+    &--content-only {
+      min-height: 5em;
+    }
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 5px;
+      background-color: $vxp-color-primary;
+      border-radius: $vxp-border-radius-base 0 0 $vxp-border-radius-base;
+    }
+
+    &--marker::before {
+      content: '';
+    }
+
+    @mixin color-close($color) {
+      color: mix($vxp-color-white, $color, 50%);
+
+      &:hover {
+        &,
+        .vxp-icon {
+          color: $color;
+        }
+      }
+    }
+
+    @each $type in map-keys($map: $types) {
+      $color: map-get($types, $type);
+
+      &--color-only#{&}--#{$type} {
+        &,
+        #{$title} {
+          color: $color;
+        }
+
+        #{$close} {
+          @include color-close($color);
+        }
+      }
+
+      &--background#{&}--#{$type} {
+        background-color: mix($vxp-color-white, $color, 85%);
+        border-color: mix($vxp-color-white, $color, 40%);
+        box-shadow: unset;
+
+        #{$close} {
+          @include color-close($color);
+        }
+      }
+
+      &--background#{&}--color#{&}--#{$type} {
+        &,
+        #{$title} {
+          color: mix($vxp-color-black, $color, 20%);
+        }
+      }
+
+      &--#{$type} {
+        #{$icon} {
+          &,
+          .vxp-icon {
+            color: $color;
+          }
+        }
+
+        &::before {
+          background-color: $color;
+        }
+      }
+    }
+  }
+
+  &__item--title-only &__title {
+    margin: 0;
+  }
+
+  &__item--title-only &__icon {
+    top: 50%;
+    left: 1.4em;
+    transform: translateY(-50%) scale(1.2);
+  }
+
+  &__item--title-only &__close {
+    top: 50%;
+    right: 1em;
+    transform: translateY(-50%);
+  }
+}

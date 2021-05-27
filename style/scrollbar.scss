@@ -1,0 +1,78 @@
+.vxp-scrollbar {
+  @include basis;
+
+  $bar: #{&}__bar;
+  $timing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+  position: absolute;
+  z-index: 10;
+  background-color: $vxp-scrollbar-color-bg-track;
+
+  &--disabled {
+    pointer-events: none;
+  }
+
+  &--top,
+  &--bottom {
+    right: 0;
+    left: 0;
+    height: 6px;
+
+    #{$bar} {
+      height: 100%;
+    }
+  }
+
+  &--right,
+  &--left {
+    top: 0;
+    bottom: 0;
+    width: 6px;
+
+    #{$bar} {
+      width: 100%;
+    }
+  }
+
+  &--top {
+    top: 0;
+  }
+
+  &--right {
+    right: 0;
+  }
+
+  &--bottom {
+    bottom: 0;
+  }
+
+  &--left {
+    left: 0;
+  }
+
+  &--fade &__bar {
+    opacity: 0;
+  }
+
+  &--active &__bar {
+    opacity: 0.6;
+  }
+
+  &__bar {
+    position: absolute;
+    cursor: pointer;
+    background-color: $vxp-scrollbar-color-bg-bar;
+    border-radius: 3px;
+    transition: width $vxp-transition-base, height $vxp-transition-base,
+      $vxp-transition-opacity-base, top 200ms $timing, left 200ms $timing;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &--scrolling &__bar {
+    opacity: 1;
+    transition-property: opacity;
+  }
+}

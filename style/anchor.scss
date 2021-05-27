@@ -1,0 +1,57 @@
+.vxp-anchor {
+  @include basis;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-left: 4px;
+
+  &__list {
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__link {
+    padding: 0.3em 1em;
+    margin-left: -2px;
+    color: $vxp-color-content-normal;
+    text-decoration: none;
+    cursor: pointer;
+    border-left: 2px solid $vxp-color-border-light-2;
+    transition: $vxp-transition-color-base, $vxp-transition-border-base;
+
+    &:hover {
+      color: $vxp-color-primary-light-1;
+    }
+
+    &--active {
+      color: $vxp-color-primary;
+    }
+  }
+
+  &--no-marker &__link--active {
+    border-left-color: $vxp-color-primary;
+  }
+
+  &__marker {
+    position: absolute;
+    left: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: top $vxp-transition-base;
+    transform: translate3d(-50%, -50%, 0);
+  }
+
+  &__pointer {
+    width: 8px;
+    height: 8px;
+    background-color: $vxp-color-fill;
+    border: $vxp-border-appearance $vxp-color-primary;
+    border-radius: 7px;
+  }
+}

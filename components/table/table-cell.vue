@@ -1,0 +1,151 @@
+<template>
+  <div :class="className" :style="style">
+    <Checkbox
+      v-if="column.type === 'selection'"
+      :class="`${prefix}__selection`"
+      :checked="row.checked"
+      :size="column.checkboxSize || 'default'"
+      :disabled="disableCheckRows[row.key]"
+      @click.prevent.stop="handleCheckRow(row)"
+    ></Checkbox>
+    <span v-else-if="column.type === 'order'" :class="`${prefix}__order`">
+      {{ column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
+    </span>
+    <template v-else-if="column.type === 'expand'">
+      <div
+        v-if="!disableExpandRows[row.key]"
+        :class="{
+          [`${prefix}__expand`]: true,
+          [`${prefix}__expand--active`]: row.expanded
+        }"
+        @click.stop="handleExpandRow(row)"
+      >
+        <Icon name="angle-right"></Icon>
+      </div>
+    </template>
+    <Renderer
+      v-else-if="isFunction(column.renderer)"
+      :renderer="column.renderer"
+      :data="{ row: row.data, rowIndex, column, columnIndex }"
+    ></Renderer>
+    <template v-else-if="isFunction(column.accessor)">
+      {{ column.accessor(row.data, rowIndex) }}
+    </template>
+    <template v-else>
+      {{ row.data[column.key] }}
+    </template>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, computed, inject, toRef } from 'vue'
+import { Checkbox } from '@/components/checkbox'
+import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
+import { isFunction } from '@/common/utils/common'
+import { TABLE_STORE, TABLE_ACTION } from './symbol'
+
+import type { PropType } from 'vue'
+import type { TableStore } from './store'
+import type { RowState, TypeColumn, ColumnWithKey, TableAction } from './symbol'
+
+import '@/common/icons/angle-right'
+
+interface TableCellProps {
+  row: RowState,
+  rowIndex: number,
+  column: ColumnWithKey,
+  columnIndex: number
+}
+
+const columnTypes = ['order', 'selection', 'expand']
+
+export default defineComponent({
+  name: 'TableCell',
+  components: {
+    Checkbox,
+    Icon,
+    Renderer
+  },
+  props: {
+    row: {
+      type: Object as PropType<RowState>,
+      default() {
+        return {}
+      }
+    },
+    rowIndex: {
+      type: Number,
+      required: true
+    },
+    column: {
+      type: Object as PropType<ColumnWithKey>,
+      default() {
+        return {}
+      }
+    },
+    columnIndex: {
+      type: Number,
+      required: true
+    }
+  },
+  setup(props: TableCellProps) {
+    const { state, getters, mutations } = inject<TableStore>(TABLE_STORE)!
+    const tableAction = inject<TableAction>(TABLE_ACTION)!
+
+    const prefix = 'vxp-table'
+
+    const className = computed(() => {
+      const customClass = props.column.className || null
+
+      return [
+        `${prefix}__cell`,
+        {
+          [`${prefix}__cell--center`]: columnTypes.includes((props.column as TypeColumn).type)
+        },
+        customClass
+      ]
+    })
+    const style = computed(() => {
+      const width = state.widths[props.column.key]
+
+      return {
+        flex: `${width} 0 auto`,
+        width: `${props.column.width ?? width}px`,
+        maxWidth: `${props.column.width}px`
+      }
+    })
+
+    function handleCheckRow(row: RowState) {
+      if (!getters.disableCheckRows[row.key]) {
+        const checked = !row.checked
+
+        mutations.handleCheck(row.key, checked)
+        tableAction.emitRowCheck(row.data, checked, row.key, row.index)
+      }
+    }
+
+    function handleExpandRow(row: RowState) {
+      if (!getters.disableExpandRows[row.key]) {
+        const expanded = !row.expanded
+
+        mutations.handleExpand(row.key, expanded)
+        tableAction.emitRowExpand(row.data, expanded, row.key, row.index)
+      }
+    }
+
+    return {
+      prefix,
+
+      className,
+      style,
+      disableCheckRows: toRef(getters, 'disableCheckRows'),
+      disableExpandRows: toRef(getters, 'disableExpandRows'),
+
+      isFunction,
+      handleCheckRow,
+      handleExpandRow
+    }
+  }
+})
+</script>

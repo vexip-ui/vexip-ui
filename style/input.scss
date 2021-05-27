@@ -1,0 +1,118 @@
+.vxp-input {
+  @include basis;
+  @include input-handler;
+
+  $input: &;
+  $wrapper: #{&}-wrapper;
+
+  $radius: $vxp-input-border-radius;
+
+  &-wrapper {
+    @include basis;
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &-wrapper & {
+    border-radius: 0;
+  }
+
+  &-wrapper--before-only & {
+    border-radius: 0 $radius $radius 0;
+  }
+
+  &-wrapper--after-only & {
+    border-radius: $radius 0 0 $radius;
+  }
+
+  @at-root {
+    %icon {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2em;
+      height: 100%;
+      user-select: none;
+
+      &,
+      .vxp-icon {
+        color: $vxp-input-color-icon;
+      }
+
+      @extend %disabled-item;
+    }
+  }
+
+  &__icon {
+    &--password {
+      @extend %icon;
+
+      right: 0;
+      cursor: pointer;
+    }
+  }
+
+  &__count {
+    position: absolute;
+    top: 50%;
+    right: 7px;
+    margin-top: -1px;
+    font-size: $vxp-input-font-size-count;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    transform: translateY(-50%);
+  }
+
+  &__before,
+  &__after {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 2.2em;
+    padding: 0 0.6em;
+    border: $vxp-input-border;
+
+    #{$wrapper}--small & {
+      height: 1.8em;
+    }
+
+    #{$wrapper}--large & {
+      height: 2.6em;
+    }
+
+    #{$input} {
+      padding: 0;
+      background-color: transparent;
+      border-color: transparent;
+      box-shadow: none;
+
+      &__control {
+        padding: 0 !important;
+      }
+
+      &__icon {
+        &--prefix,
+        &--suffix {
+          width: auto;
+        }
+      }
+    }
+  }
+
+  &__before {
+    background-color: $vxp-input-color-bg-before;
+    border-right: 0;
+    border-radius: $radius 0 0 $radius;
+  }
+
+  &__after {
+    background-color: $vxp-input-color-bg-after;
+    border-left: 0;
+    border-radius: 0 $radius $radius 0;
+  }
+}

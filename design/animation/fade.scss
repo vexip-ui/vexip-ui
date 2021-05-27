@@ -1,0 +1,45 @@
+@mixin start {
+  opacity: 0;
+}
+
+@mixin end {
+  opacity: 1;
+}
+
+.vxp-fade {
+  @at-root {
+    &-enter-active {
+      animation: {
+        name: vxp-fade-in;
+        duration: 300ms;
+      }
+    }
+
+    &-leave-active {
+      animation: {
+        name: vxp-fade-out;
+        duration: 300ms;
+      }
+    }
+  }
+}
+
+@keyframes vxp-fade-in {
+  0% {
+    @include start;
+  }
+
+  100% {
+    @include end;
+  }
+}
+
+@keyframes vxp-fade-out {
+  0% {
+    @include end;
+  }
+
+  100% {
+    @include start;
+  }
+}

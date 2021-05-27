@@ -1,0 +1,63 @@
+<template>
+  <Tree checkbox draggable :data="data"></Tree>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import Tree from '../tree.vue'
+
+export default defineComponent({
+  name: 'App',
+  components: {
+    Tree
+  },
+  data() {
+    return {
+      data: [
+        {
+          id: 1,
+          label: '动物',
+          parent: 0,
+          expanded: true
+        },
+        {
+          id: 2,
+          label: '鸟类',
+          parent: 5
+        },
+        {
+          id: 3,
+          label: '无脊椎动物',
+          parent: 1
+        },
+        {
+          id: 4,
+          label: '哺乳动物',
+          parent: 5
+        },
+        {
+          id: 5,
+          label: '脊椎动物',
+          parent: 1
+        },
+        {
+          id: 6,
+          label: '喜鹊',
+          parent: 2
+        },
+        {
+          id: 7,
+          label: '蚯蚓',
+          parent: 3
+        }
+      ]
+    }
+  }
+})
+</script>
+
+<style lang="scss">
+.vxp-select {
+  width: 300px;
+}
+</style>

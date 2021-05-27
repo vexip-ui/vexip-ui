@@ -1,0 +1,59 @@
+$popup-types: (
+  top: 'Y(-100%)',
+  right: 'X(100%)',
+  bottom: 'Y(100%)',
+  left: 'X(-100%)'
+);
+
+@mixin start($type) {
+  opacity: 0;
+  transform: translate#{map-get($popup-types, $type)} translateZ(0);
+}
+
+@mixin end {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@each $type in map-keys($map: $popup-types) {
+  $root-name: vxp-move-#{$type};
+
+  .#{$root-name} {
+    @at-root {
+      &-enter-active,
+      &-leave-active {
+        pointer-events: none;
+        user-select: none;
+        animation-duration: 300ms;
+      }
+
+      &-enter-active {
+        animation-name: #{$root-name}-in;
+      }
+
+      &-leave-active {
+        animation-name: #{$root-name}-out;
+      }
+    }
+  }
+
+  @keyframes #{$root-name}-in {
+    0% {
+      @include start($type);
+    }
+
+    100% {
+      @include end;
+    }
+  }
+
+  @keyframes #{$root-name}-out {
+    0% {
+      @include end;
+    }
+
+    100% {
+      @include start($type);
+    }
+  }
+}
