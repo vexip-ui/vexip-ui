@@ -96,6 +96,7 @@ export default defineConfig(({ command }) => {
       preprocessorOptions: {
         scss: {
           additionalData: [
+            '@use "sass:math";',
             '@import "@/design/variables.scss";',
             '@import "@/design/mixins.scss";'
           ].join('\n')

@@ -9,7 +9,7 @@
   }
 
   @for $i from 0 through 24 {
-    $size: (1 / 24 * $i * 100) * 1%;
+    $size: (math.div(1, 24) * $i * 100) * 1%;
 
     &--#{$i} {
       flex: 0 0 $size;
@@ -40,7 +40,7 @@
       }
 
       @for $i from 0 through 24 {
-        $size: (1 / 24 * $i * 100) * 1%;
+        $size: (math.div(1, 24) * $i * 100) * 1%;
 
         &--#{$point}-#{$i} {
           flex: 0 0 $size;
