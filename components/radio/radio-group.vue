@@ -57,9 +57,7 @@ const props = useConfiguredProps('radioGroup', {
   },
   options: {
     type: Array as PropType<RawOption[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   disableValidate: {
     type: Boolean,

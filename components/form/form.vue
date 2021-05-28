@@ -14,15 +14,11 @@ import type { LabelPosition, FieldOptions } from './symbol'
 const props = useConfiguredProps('form', {
   model: {
     type: Object,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   rules: {
     type: Object,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   labelWidth: {
     type: Number,
@@ -30,7 +26,7 @@ const props = useConfiguredProps('form', {
   },
   labelPosition: {
     default: 'right' as LabelPosition,
-    validator(value: LabelPosition) {
+    validator: (value: LabelPosition) => {
       return ['right', 'top', 'left'].includes(value)
     }
   },

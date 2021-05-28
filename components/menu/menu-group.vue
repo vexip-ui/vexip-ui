@@ -19,14 +19,16 @@ import { baseIndentWidth, MENU_ITEM_STATE } from './symbol'
 
 import type { MenuItemState } from './symbol'
 
+const props = {
+  label: {
+    type: String,
+    default: ''
+  }
+}
+
 export default defineComponent({
   name: 'MenuGroup',
-  props: {
-    label: {
-      type: String,
-      default: ''
-    }
-  },
+  props,
   setup() {
     const parentItemState = inject<MenuItemState | null>(MENU_ITEM_STATE, null)
 

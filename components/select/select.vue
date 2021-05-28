@@ -113,9 +113,7 @@ const props = useConfiguredProps('select', {
   },
   options: {
     type: Array as PropType<RawOption[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   disabled: {
     type: Boolean,
@@ -160,7 +158,7 @@ const props = useConfiguredProps('select', {
   placement: {
     type: String as PropType<Placement>,
     default: 'bottom',
-    validator(value: Placement) {
+    validator: (value: Placement) => {
       return placementWhileList.includes(value)
     }
   },

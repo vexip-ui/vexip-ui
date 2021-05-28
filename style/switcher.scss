@@ -7,7 +7,9 @@
   user-select: none;
   background-color: mix($vxp-color-black, $vxp-color-fill-background, 10%);
   border-radius: 30px;
-  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+  transition:
+    $vxp-transition-background-base,
+    $vxp-transition-border-base,
     $vxp-transition-opacity-base;
 
   &--disabled {
@@ -59,7 +61,9 @@
     content: '';
     background-color: $vxp-color-white;
     border-radius: 30px;
-    transition: left $vxp-transition-base, width $vxp-transition-base,
+    transition:
+      left $vxp-transition-base,
+      width $vxp-transition-base,
       $vxp-transition-transform-base;
     transform: translateY(-50%);
   }

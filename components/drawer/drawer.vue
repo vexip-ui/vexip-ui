@@ -71,20 +71,20 @@ const props = useConfiguredProps('drawer', {
   width: {
     type: Number,
     default: 280,
-    validator(value: number) {
+    validator: (value: number) => {
       return value > 0
     }
   },
   height: {
     type: Number,
     default: 280,
-    validator(value: number) {
+    validator: (value: number) => {
       return value > 0
     }
   },
   placement: {
     default: 'right' as DrawerPlacement,
-    validator(value: DrawerPlacement) {
+    validator: (value: DrawerPlacement) => {
       return ['top', 'right', 'bottom', 'left'].includes(value)
     }
   },

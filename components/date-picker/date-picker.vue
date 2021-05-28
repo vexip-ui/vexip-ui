@@ -145,7 +145,7 @@ const props = useConfiguredProps('datePicker', {
   state: createStateProp(),
   type: {
     default: 'date' as DatePickerType,
-    validator(value: DatePickerType) {
+    validator: (value: DatePickerType) => {
       return ['date', 'datetime', 'year', 'month'].includes(value)
     }
   },
@@ -156,7 +156,7 @@ const props = useConfiguredProps('datePicker', {
   placement: {
     type: String as PropType<Placement>,
     default: 'bottom-start',
-    validator(value: Placement) {
+    validator: (value: Placement) => {
       return placementWhileList.includes(value)
     }
   },
@@ -177,7 +177,7 @@ const props = useConfiguredProps('datePicker', {
   filler: {
     type: String,
     default: '-',
-    validator(value: string) {
+    validator: (value: string) => {
       return value.length === 1
     }
   },
@@ -195,9 +195,7 @@ const props = useConfiguredProps('datePicker', {
   },
   labels: {
     type: Array as PropType<string[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   dateSeparator: {
     type: String,
@@ -209,9 +207,7 @@ const props = useConfiguredProps('datePicker', {
   },
   shortcuts: {
     type: Array as PropType<DateShortcut[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   disableDate: {
     type: Function as PropType<(date: Date) => boolean>,
@@ -268,7 +264,7 @@ const props = useConfiguredProps('datePicker', {
     default() {
       return new Date()
     },
-    validator(value: Dateable) {
+    validator: (value: Dateable) => {
       return !Number.isNaN(new Date(value))
     }
   },

@@ -22,7 +22,7 @@ import type { TimelinkItemType, ItemState, TimelineState } from './symbol'
 const props = useConfiguredProps('timelineItem', {
   type: {
     default: 'normal' as TimelinkItemType,
-    validator(value: TimelinkItemType) {
+    validator: (value: TimelinkItemType) => {
       return ['normal', 'success', 'error', 'warning', 'disabled', 'custom'].includes(value)
     }
   },

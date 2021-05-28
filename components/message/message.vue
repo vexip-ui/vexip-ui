@@ -66,20 +66,17 @@ import { defineComponent, ref } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
-import { useConfiguredProps } from '@/common/config/install'
 
 import '@/common/icons/times'
 
 import type { Key, MessagePlacement } from './symbol'
 
-const props = useConfiguredProps(Symbol('message'), {
+const props = {
   placement: {
     default: 'top' as MessagePlacement,
-    validator(value: MessagePlacement) {
-      return ['top', 'bottom'].includes(value)
-    }
+    validator: (value: MessagePlacement) => ['top', 'bottom'].includes(value)
   }
-})
+}
 
 export default defineComponent({
   name: 'Message',

@@ -25,7 +25,7 @@ const props = useConfiguredProps('input', {
   state: createStateProp(),
   type: {
     default: 'text' as InputType,
-    validator(value: InputType) {
+    validator: (value: InputType) => {
       return ['text', 'password', 'date', 'datetime', 'time'].includes(value)
     }
   },

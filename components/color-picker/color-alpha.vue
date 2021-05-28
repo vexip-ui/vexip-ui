@@ -12,31 +12,30 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
 import { toFixed } from '@/common/utils/number'
 import { throttle } from '@/common/utils/performance'
 
 import type { PropType } from 'vue'
 import type { RGBColor } from '@/common/utils/color'
 
-const props = useConfiguredProps(Symbol('colorAlpha'), {
+const props = {
   rgb: {
     type: Object as PropType<RGBColor>,
-    default() {
+    default: () => {
       return { r: 0, g: 0, b: 0 }
     },
-    validator(value: RGBColor) {
+    validator: (value: RGBColor) => {
       return 'r' in value && 'g' in value && 'b' in value
     }
   },
   alpha: {
     type: Number,
     default: 1,
-    validator(value: number) {
+    validator: (value: number) => {
       return value >= 0 && value <= 1
     }
   }
-})
+}
 
 export default defineComponent({
   name: 'ColorAlpha',

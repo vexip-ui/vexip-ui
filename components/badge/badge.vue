@@ -46,7 +46,7 @@ const props = useConfiguredProps('badge', {
   },
   type: {
     default: 'error' as BadgeType,
-    validator(value: BadgeType) {
+    validator: (value: BadgeType) => {
       return ['error', 'primary', 'success', 'warning', 'info', 'disabled'].includes(value)
     }
   },

@@ -33,7 +33,7 @@ const props = useConfiguredProps('menu', {
   },
   markerType: {
     default: 'right' as MenuMarkerType,
-    validator(value: MenuMarkerType) {
+    validator: (value: MenuMarkerType) => {
       return ['right', 'left', 'none'].includes(value)
     }
   },
@@ -43,19 +43,19 @@ const props = useConfiguredProps('menu', {
   },
   groupType: {
     default: 'collapse' as MenuGroupType,
-    validator(value: MenuGroupType) {
+    validator: (value: MenuGroupType) => {
       return ['collapse', 'dropdown'].includes(value)
     }
   },
   theme: {
     default: 'light' as MenuTheme,
-    validator(value: MenuTheme) {
+    validator: (value: MenuTheme) => {
       return ['light', 'dark'].includes(value)
     }
   },
   tooltipTheme: {
     default: 'dark' as TooltipTheme,
-    validator(value: TooltipTheme) {
+    validator: (value: TooltipTheme) => {
       return ['light', 'dark'].includes(value)
     }
   }

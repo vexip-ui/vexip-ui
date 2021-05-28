@@ -168,7 +168,7 @@ const props = useConfiguredProps('colorPicker', {
   },
   format: {
     default: 'rgb' as ColorFormat,
-    validator(value: ColorFormat) {
+    validator: (value: ColorFormat) => {
       return ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
     }
   },
@@ -201,7 +201,7 @@ const props = useConfiguredProps('colorPicker', {
   placement: {
     type: String as PropType<Placement>,
     default: 'bottom',
-    validator(value: Placement) {
+    validator: (value: Placement) => {
       return placementWhileList.includes(value)
     }
   },

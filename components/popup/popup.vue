@@ -42,7 +42,7 @@ const props = useConfiguredProps('popup', {
   zIndex: {
     type: Number,
     default: 2000,
-    validator(value: number) {
+    validator: (value: number) => {
       return value > 0
     }
   },
@@ -60,7 +60,7 @@ const props = useConfiguredProps('popup', {
   },
   placement: {
     default: 'top-right' as PopupPlacement,
-    validator(value: PopupPlacement) {
+    validator: (value: PopupPlacement) => {
       return [
         'top-right',
         'top-center',

@@ -20,7 +20,7 @@ type ClassType = string | Record<string, boolean>
 const props = useConfiguredProps('bubble', {
   placement: {
     default: 'right',
-    validator(value: Placement) {
+    validator: (value: Placement) => {
       return placementWhileList.includes(value)
     }
   },

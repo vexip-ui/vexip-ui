@@ -58,11 +58,23 @@ import type { PropType } from 'vue'
 import type { TableStore } from './store'
 import type { RowState, ExpandColumn, TableAction } from './symbol'
 
-interface TableRowProps {
-  row: RowState,
-  index: number,
-  isHead: boolean,
-  isFixed: boolean
+const props = {
+  row: {
+    type: Object as PropType<RowState>,
+    default: () => ({})
+  },
+  index: {
+    type: Number,
+    default: null
+  },
+  isHead: {
+    type: Boolean,
+    default: false
+  },
+  isFixed: {
+    type: Boolean,
+    default: false
+  }
 }
 
 export default defineComponent({
@@ -71,27 +83,8 @@ export default defineComponent({
     CollapseTransition,
     Renderer
   },
-  props: {
-    row: {
-      type: Object as PropType<RowState>,
-      default() {
-        return {}
-      }
-    },
-    index: {
-      type: Number,
-      default: null
-    },
-    isHead: {
-      type: Boolean,
-      default: false
-    },
-    isFixed: {
-      type: Boolean,
-      default: false
-    }
-  },
-  setup(props: TableRowProps) {
+  props,
+  setup(props) {
     const { state, mutations } = inject<TableStore>(TABLE_STORE)!
     const tableAction = inject<TableAction>(TABLE_ACTION)!
 

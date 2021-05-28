@@ -21,18 +21,17 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, watch, inject, onBeforeUnmount } from 'vue'
 import { Renderer } from '@/components/renderer'
-import { useConfiguredProps } from '@/common/config/install'
 import { isFunction } from '@/common/utils/common'
 import { BREADCRUMB_STATE } from './symbol'
 
 import type { SeparatorRenderFn, ItemState, BreadcrumbState } from './symbol'
 
-const props = useConfiguredProps(Symbol('breadcrumbItem'), {
+const props = {
   label: {
     type: [String, Number],
     default: null
   }
-})
+}
 
 export default defineComponent({
   name: 'BreadcrumbItem',

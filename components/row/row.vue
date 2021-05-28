@@ -19,13 +19,13 @@ const props = useConfiguredProps('row', {
   },
   justify: {
     default: 'start' as RowJustify,
-    validator(value: RowJustify) {
+    validator: (value: RowJustify) => {
       return ['start', 'end', 'center', 'space-around', 'space-between'].includes(value)
     }
   },
   align: {
     default: 'top' as RowAlign,
-    validator(value: RowAlign) {
+    validator: (value: RowAlign) => {
       return ['top', 'middle', 'bottom'].includes(value)
     }
   }

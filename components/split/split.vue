@@ -59,7 +59,7 @@ const props = useConfiguredProps('split', {
   value: {
     type: Number,
     default: 0.5,
-    validator(value: number) {
+    validator: (value: number) => {
       return value > 0 && value < 1
     }
   },

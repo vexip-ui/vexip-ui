@@ -33,7 +33,7 @@ const props = useConfiguredProps('button', {
   size: createSizeProp(),
   type: {
     default: 'default' as ButtonType,
-    validator(value: ButtonType) {
+    validator: (value: ButtonType) => {
       return [
         'default',
         'primary',

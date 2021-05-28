@@ -98,29 +98,24 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { isNull } from '@/common/utils/common'
-import { useConfiguredProps } from '@/common/config/install'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { TreeNodeOptions, TreeState, TreeNodeState } from './symbol'
 
-const props = useConfiguredProps(Symbol('treeNode'), {
+const props = {
   node: {
     type: Object as PropType<TreeNodeOptions>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   data: {
     type: Object,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   arrow: {
     type: [Boolean, String] as PropType<boolean | 'auto'>,
     default: 'auto',
-    validator(value: boolean | 'auto') {
+    validator: (value: boolean | 'auto') => {
       return typeof value === 'boolean' || value === 'auto'
     }
   },
@@ -178,9 +173,7 @@ const props = useConfiguredProps(Symbol('treeNode'), {
   },
   children: {
     type: Array as PropType<TreeNodeOptions[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   draggable: {
     type: Boolean,
@@ -190,11 +183,7 @@ const props = useConfiguredProps(Symbol('treeNode'), {
     type: Boolean,
     default: false
   }
-  // renderer: {
-  //   type: Function as PropType<RenderFn>,
-  //   default: null
-  // }
-})
+}
 
 export default defineComponent({
   name: 'TreeNode',

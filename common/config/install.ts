@@ -18,14 +18,7 @@ function createConfigGetter(name: string) {
  * @param props - 原始 props 选项
  * @returns 使用配置后的 props 选项
  */
-export function useConfiguredProps<T extends Record<string, unknown>>(
-  name: string | symbol,
-  props: T
-) {
-  if (typeof name === 'symbol') {
-    return props
-  }
-
+export function useConfiguredProps<T extends Record<string, unknown>>(name: string, props: T) {
   const getConfig = createConfigGetter(name)
 
   Object.keys(props).forEach(key => {

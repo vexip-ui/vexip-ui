@@ -151,7 +151,7 @@ const props = useConfiguredProps('upload', {
   maxSize: {
     type: Number,
     default: null,
-    validator(value: number) {
+    validator: (value: number) => {
       return value >= 0
     }
   },
@@ -161,15 +161,11 @@ const props = useConfiguredProps('upload', {
   },
   data: {
     type: Object as PropType<Record<string, string | Blob>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   headers: {
     type: Object as PropType<Record<string, string>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   withCredentials: {
     type: Boolean,
@@ -209,7 +205,7 @@ const props = useConfiguredProps('upload', {
   },
   listType: {
     default: 'name' as UploadListType,
-    validator(value: UploadListType) {
+    validator: (value: UploadListType) => {
       return ['name', 'detail', 'thumbnail', 'card'].includes(value)
     }
   },

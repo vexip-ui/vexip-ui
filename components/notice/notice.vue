@@ -80,20 +80,19 @@ import { defineComponent, ref } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
-import { useConfiguredProps } from '@/common/config/install'
 
 import '@/common/icons/times'
 
 import type { Key, NoticePlacement } from './symbol'
 
-const props = useConfiguredProps(Symbol('notice'), {
+const props = {
   placement: {
     default: 'top-right' as NoticePlacement,
-    validator(value: NoticePlacement) {
+    validator: (value: NoticePlacement) => {
       return ['top-right', 'top-left', 'bottom-right', 'bottom-left'].includes(value)
     }
   }
-})
+}
 
 export default defineComponent({
   name: 'Notice',

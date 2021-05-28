@@ -26,7 +26,7 @@ const props = useConfiguredProps('linker', {
   },
   type: {
     default: 'default' as LinkerType,
-    validator(value: LinkerType) {
+    validator: (value: LinkerType) => {
       return ['default', 'primary', 'success', 'error', 'warning', 'info'].includes(value)
     }
   },

@@ -38,9 +38,7 @@ const props = useConfiguredProps('checkboxGroup', {
   state: createStateProp(),
   value: {
     type: Array as PropType<(string | number)[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   vertical: {
     type: Boolean,
@@ -60,9 +58,7 @@ const props = useConfiguredProps('checkboxGroup', {
   },
   options: {
     type: Array as PropType<RawOption[]>,
-    default() {
-      return []
-    }
+    default: () => []
   }
 })
 

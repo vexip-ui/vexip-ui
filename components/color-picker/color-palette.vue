@@ -23,37 +23,34 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
 import { toFixed } from '@/common/utils/number'
 import { throttle } from '@/common/utils/performance'
 
-const props = useConfiguredProps(Symbol('colorPalette'), {
-  hue: {
-    type: Number,
-    default: 0,
-    validator(value: number) {
-      return value >= 0 && value <= 360
-    }
-  },
-  value: {
-    type: Number,
-    default: 1,
-    validator(value: number) {
-      return value >= 0 && value <= 1
-    }
-  },
-  saturation: {
-    type: Number,
-    default: 0,
-    validator(value: number) {
-      return value >= 0 && value <= 1
-    }
-  }
-})
-
 export default defineComponent({
   name: 'ColorPalette',
-  props,
+  props: {
+    hue: {
+      type: Number,
+      default: 0,
+      validator: (value: number) => {
+        return value >= 0 && value <= 360
+      }
+    },
+    value: {
+      type: Number,
+      default: 1,
+      validator: (value: number) => {
+        return value >= 0 && value <= 1
+      }
+    },
+    saturation: {
+      type: Number,
+      default: 0,
+      validator: (value: number) => {
+        return value >= 0 && value <= 1
+      }
+    }
+  },
   emits: ['on-edit-start', 'on-edit-end', 'on-change'],
   setup(props, { emit }) {
     const currentTop = ref((1 - props.value) * 100)

@@ -6,19 +6,18 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
 import { toFixed } from '@/common/utils/number'
 import { throttle } from '@/common/utils/performance'
 
-const props = useConfiguredProps(Symbol('colorHue'), {
+const props = {
   hue: {
     type: Number,
     default: 0,
-    validator(value: number) {
+    validator: (value: number) => {
       return value >= 0 && value <= 360
     }
   }
-})
+}
 
 export default defineComponent({
   name: 'ColorHue',

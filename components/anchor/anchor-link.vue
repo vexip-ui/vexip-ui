@@ -29,12 +29,11 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
 import { baseIndentWidth, LINK_STATE, ANCHOR_STATE } from './symbol'
 
 import type { LinkState, AnchorState } from './symbol'
 
-const props = useConfiguredProps(Symbol('anchorLink'), {
+const props = {
   to: {
     type: String,
     default: ''
@@ -43,7 +42,7 @@ const props = useConfiguredProps(Symbol('anchorLink'), {
     type: String,
     default: ''
   }
-})
+}
 
 export default defineComponent({
   name: 'AnchorLink',

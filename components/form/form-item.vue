@@ -64,9 +64,7 @@ const props = useConfiguredProps('formItem', {
   },
   rules: {
     type: [Object, Array] as PropType<Rule | Rule[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   labelWidth: {
     type: Number,

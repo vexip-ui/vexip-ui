@@ -135,15 +135,11 @@ type DropType = 'before' | 'after'
 const props = useConfiguredProps('table', {
   columns: {
     type: Array as PropType<ColumnOptions[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   data: {
     type: Array as PropType<Data[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   dataKey: {
     type: String,
@@ -204,9 +200,7 @@ const props = useConfiguredProps('table', {
       left: ClassType,
       right: ClassType
     }>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   expandRenderer: {
     type: Function as PropType<RenderFn>,
@@ -215,7 +209,7 @@ const props = useConfiguredProps('table', {
   currentPage: {
     type: Number,
     default: 1,
-    validator(value: number) {
+    validator: (value: number) => {
       return value > 0
     }
   },

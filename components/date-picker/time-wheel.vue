@@ -43,14 +43,13 @@
 import { defineComponent, ref, watch } from 'vue'
 import { Wheel } from '@/components/wheel'
 import { WheelItem } from '@/components/wheel-item'
-import { useConfiguredProps } from '@/common/config/install'
 import { range } from '@/common/utils/common'
 import { doubleDigits } from '@/common/utils/number'
 
 import type { PropType } from 'vue'
 import type { TimeType } from './symbol'
 
-const props = useConfiguredProps(Symbol('timeWheel'), {
+const props = {
   noArrow: {
     type: Boolean,
     default: false
@@ -58,36 +57,28 @@ const props = useConfiguredProps(Symbol('timeWheel'), {
   hour: {
     type: Number,
     default: 0,
-    validator(value: number) {
-      return value >= 0 && value <= 23
-    }
+    validator: (value: number) => value >= 0 && value <= 23
   },
   minute: {
     type: Number,
     default: 0,
-    validator(value: number) {
-      return value >= 0 && value <= 59
-    }
+    validator: (value: number) => value >= 0 && value <= 59
   },
   second: {
     type: Number,
     default: 0,
-    validator(value: number) {
-      return value >= 0 && value <= 59
-    }
+    validator: (value: number) => value >= 0 && value <= 59
   },
   candidate: {
     default: 2,
-    validator(value: number) {
-      return [0, 1, 2, 3].includes(value)
-    }
+    validator: (value: number) => [0, 1, 2, 3].includes(value)
   },
   steps: {
     type: Array as PropType<number[]>,
     default() {
       return [1, 1, 1]
     },
-    validator(value: [number, number, number]) {
+    validator: (value: [number, number, number]) => {
       if (value[0] && 24 % value[0] !== 0) {
         return false
       }
@@ -105,7 +96,7 @@ const props = useConfiguredProps(Symbol('timeWheel'), {
     type: Boolean,
     default: false
   }
-})
+}
 
 export default defineComponent({
   name: 'TimeWheel',

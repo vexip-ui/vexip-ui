@@ -48,35 +48,28 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
 import { doubleDigits } from '@/common/utils/number'
 import { handleKeyEnter } from './helper'
 
 import type { PropType } from 'vue'
 import type { DateTimeType } from './symbol'
 
-const props = useConfiguredProps(Symbol('dateControl'), {
+const props = {
   unitType: {
     type: String as PropType<DateTimeType>,
     default: 'date'
   },
   enabled: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   activated: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   timeValue: {
     type: Object as PropType<Record<DateTimeType, number>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   separator: {
     type: String,
@@ -93,9 +86,7 @@ const props = useConfiguredProps(Symbol('dateControl'), {
   filler: {
     type: String,
     default: '-',
-    validator(value: string) {
-      return value.length === 1
-    }
+    validator: (value: string) => value.length === 1
   },
   noFiller: {
     type: Boolean,
@@ -103,17 +94,13 @@ const props = useConfiguredProps(Symbol('dateControl'), {
   },
   steps: {
     type: Array as PropType<number[]>,
-    default() {
-      return [1, 1, 1]
-    }
+    default: () => [1, 1, 1]
   },
   ctrlSteps: {
     type: Array as PropType<number[]>,
-    default() {
-      return [5, 5, 5]
-    }
+    default: () => [5, 5, 5]
   }
-})
+}
 
 export default defineComponent({
   name: 'TimeControl',

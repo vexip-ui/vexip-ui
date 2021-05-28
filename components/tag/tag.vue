@@ -30,7 +30,7 @@ export type TagType = 'default' | 'primary' | 'success' | 'error' | 'warning'
 const props = useConfiguredProps('tag', {
   type: {
     default: 'default' as TagType,
-    validator(value: TagType) {
+    validator: (value: TagType) => {
       return ['default', 'primary', 'success', 'error', 'warning'].includes(value)
     }
   },

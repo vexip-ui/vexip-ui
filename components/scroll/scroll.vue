@@ -81,7 +81,7 @@ const props = useConfiguredProps('scroll', {
   },
   mode: {
     default: 'vertical' as ScrollMode,
-    validator(value: ScrollMode) {
+    validator: (value: ScrollMode) => {
       return ['horizontal', 'vertical', 'both'].includes(value)
     }
   },
@@ -384,9 +384,8 @@ export default defineComponent({
         // 获取 wrapper 的 px 大小
         if (typeof size === 'string') {
           if (!size.endsWith('px') && Number.isNaN(Number(size))) {
-            wrapper[sizeType] = wrapper.el![
-              `offset${titleCaseSizeType}` as 'offsetWidth' | 'offsetHeight'
-            ]
+            wrapper[sizeType] =
+              wrapper.el![`offset${titleCaseSizeType}` as 'offsetWidth' | 'offsetHeight']
           } else {
             wrapper[sizeType] = parseInt(size)
           }

@@ -79,7 +79,7 @@ const props = useConfiguredProps('wheel', {
   // 上下或左右两侧的候选数
   candidate: {
     default: 2,
-    validator(value: number) {
+    validator: (value: number) => {
       return [0, 1, 2, 3].includes(value)
     }
   },

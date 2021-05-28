@@ -13,7 +13,7 @@ const props = useConfiguredProps('collapseTransition', {
   duration: {
     type: Number,
     default: 250,
-    validator(value: number) {
+    validator: (value: number) => {
       return value >= 200
     }
   },

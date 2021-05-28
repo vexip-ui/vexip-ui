@@ -169,7 +169,7 @@ const props = useConfiguredProps('pagination', {
   total: {
     type: Number,
     default: 0,
-    validator(value: number) {
+    validator: (value: number) => {
       return value >= 0
     }
   },
@@ -184,7 +184,7 @@ const props = useConfiguredProps('pagination', {
   pageSize: {
     type: Number,
     default: 10,
-    validator(value: number) {
+    validator: (value: number) => {
       return value > 0
     }
   },
@@ -193,14 +193,14 @@ const props = useConfiguredProps('pagination', {
     default() {
       return [10, 20, 50, 100]
     },
-    validator(values: number[]) {
+    validator: (values: number[]) => {
       return !values.find(value => typeof value !== 'number')
     }
   },
   maxCount: {
     type: Number,
     default: 7,
-    validator(value: number) {
+    validator: (value: number) => {
       // 大于6的整数
       return value === parseInt(value.toString()) && value > 6
     }
@@ -208,7 +208,7 @@ const props = useConfiguredProps('pagination', {
   active: {
     type: Number,
     default: 1,
-    validator(value: number) {
+    validator: (value: number) => {
       return value > 0
     }
   },

@@ -106,7 +106,7 @@ const props = useConfiguredProps('numberInput', {
     default() {
       return [-Infinity, Infinity]
     },
-    validator(value: [number, number]) {
+    validator: (value: [number, number]) => {
       return Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number'
     }
   },

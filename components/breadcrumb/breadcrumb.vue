@@ -24,9 +24,7 @@ const props = useConfiguredProps('breadcrumb', {
   },
   options: {
     type: Array,
-    default() {
-      return []
-    }
+    default: () => []
   }
 })
 

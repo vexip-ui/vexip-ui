@@ -18,7 +18,9 @@
     user-select: none;
     border: $vxp-border-base;
     border-radius: $vxp-border-radius-base;
-    transition: $vxp-transition-color-base, $vxp-transition-background-base,
+    transition:
+      $vxp-transition-color-base,
+      $vxp-transition-background-base,
       $vxp-transition-border-base;
 
     &--prev,

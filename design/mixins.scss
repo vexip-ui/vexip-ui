@@ -22,7 +22,9 @@
   border: $vxp-input-border;
   border-radius: $vxp-input-border-radius;
   outline: 0;
-  transition: $vxp-transition-background-base, $vxp-transition-border-base,
+  transition:
+    $vxp-transition-background-base,
+    $vxp-transition-border-base,
     $vxp-transition-box-shadow-base;
 
   &:hover {

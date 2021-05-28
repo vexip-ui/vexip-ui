@@ -37,7 +37,7 @@ const props = useConfiguredProps('icon', {
   name: {
     type: String,
     default: null,
-    validator(value: string) {
+    validator: (value: string) => {
       if (value && iconMap.has(value)) {
         return true
       }
@@ -64,21 +64,21 @@ const props = useConfiguredProps('icon', {
   spin: {
     type: [Boolean, String],
     default: false,
-    validator(value: boolean | string) {
+    validator: (value: boolean | string) => {
       return typeof value === 'boolean' || value === 'in' || value === 'out'
     }
   },
   pulse: {
     type: [Boolean, String],
     default: false,
-    validator(value: boolean | string) {
+    validator: (value: boolean | string) => {
       return typeof value === 'boolean' || value === 'in' || value === 'out'
     }
   },
   flip: {
     type: String,
     default: null,
-    validator(value: string) {
+    validator: (value: string) => {
       return ['horizontal', 'vertical', 'both'].includes(value)
     }
   }

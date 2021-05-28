@@ -41,7 +41,7 @@ const predefinedIcons = {
 const props = useConfiguredProps('alert', {
   type: {
     default: 'info' as AlertType,
-    validator(value: AlertType) {
+    validator: (value: AlertType) => {
       return ['info', 'success', 'warning', 'error'].includes(value)
     }
   },

@@ -15,12 +15,11 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
 import { WHEEL_STATE } from './symbol'
 
 import type { WheelState } from './symbol'
 
-const props = useConfiguredProps(Symbol('wheelItem'), {
+const props = {
   value: {
     type: [Number, String],
     default: null
@@ -29,7 +28,7 @@ const props = useConfiguredProps(Symbol('wheelItem'), {
     type: Boolean,
     default: false
   }
-})
+}
 
 export default defineComponent({
   name: 'WheelItem',

@@ -127,12 +127,18 @@ import type { PropType } from 'vue'
 import type { TableStore } from './store'
 import type { TypeColumn, ColumnWithKey, TableAction } from './symbol'
 
-interface TableHeadCellOptions {
-  column: ColumnWithKey,
-  index: number
-}
-
 const columnTypes = ['order', 'selection', 'expand']
+
+const props = {
+  column: {
+    type: Object as PropType<ColumnWithKey>,
+    default: () => ({})
+  },
+  index: {
+    type: Number,
+    required: true
+  }
+}
 
 export default defineComponent({
   name: 'TableHeadCell',
@@ -143,17 +149,8 @@ export default defineComponent({
     Renderer,
     Tooltip
   },
-  props: {
-    column: {
-      type: Object as PropType<ColumnWithKey>,
-      required: true
-    },
-    index: {
-      type: Number,
-      required: true
-    }
-  },
-  setup(props: TableHeadCellOptions) {
+  props,
+  setup(props) {
     const { state, mutations } = inject<TableStore>(TABLE_STORE)!
     const tableAction = inject<TableAction>(TABLE_ACTION)!
 

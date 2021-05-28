@@ -51,14 +51,26 @@ import type { RowState, TypeColumn, ColumnWithKey, TableAction } from './symbol'
 
 import '@/common/icons/angle-right'
 
-interface TableCellProps {
-  row: RowState,
-  rowIndex: number,
-  column: ColumnWithKey,
-  columnIndex: number
-}
-
 const columnTypes = ['order', 'selection', 'expand']
+
+const props = {
+  row: {
+    type: Object as PropType<RowState>,
+    default: () => ({})
+  },
+  rowIndex: {
+    type: Number,
+    required: true
+  },
+  column: {
+    type: Object as PropType<ColumnWithKey>,
+    default: () => ({})
+  },
+  columnIndex: {
+    type: Number,
+    required: true
+  }
+}
 
 export default defineComponent({
   name: 'TableCell',
@@ -67,29 +79,8 @@ export default defineComponent({
     Icon,
     Renderer
   },
-  props: {
-    row: {
-      type: Object as PropType<RowState>,
-      default() {
-        return {}
-      }
-    },
-    rowIndex: {
-      type: Number,
-      required: true
-    },
-    column: {
-      type: Object as PropType<ColumnWithKey>,
-      default() {
-        return {}
-      }
-    },
-    columnIndex: {
-      type: Number,
-      required: true
-    }
-  },
-  setup(props: TableCellProps) {
+  props,
+  setup(props) {
     const { state, getters, mutations } = inject<TableStore>(TABLE_STORE)!
     const tableAction = inject<TableAction>(TABLE_ACTION)!
 

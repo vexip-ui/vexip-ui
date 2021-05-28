@@ -148,7 +148,6 @@ import { CalendarPane } from '@/components/calendar-pane'
 import { Icon } from '@/components/icon'
 import TimeWheel from './time-wheel.vue'
 import { useHover } from '@/common/mixins/hover'
-import { useConfiguredProps } from '@/common/config/install'
 import { range } from '@/common/utils/common'
 import { toDate } from '@/common/utils/date'
 import { doubleDigits } from '@/common/utils/number'
@@ -162,30 +161,24 @@ import type { PropType } from 'vue'
 import type { Dateable } from '@/common/utils/date'
 import type { DateType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
 
-const props = useConfiguredProps(Symbol('datePane'), {
+const props = {
   type: {
     default: 'date' as DatePickerType,
-    validator(value: DatePickerType) {
+    validator: (value: DatePickerType) => {
       return ['date', 'datetime', 'year', 'month'].includes(value)
     }
   },
   enabled: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   startValue: {
     type: Object as PropType<Record<DateTimeType, number>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   endValue: {
     type: Object as PropType<Record<DateTimeType, number>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   valueType: {
     type: String as PropType<'start' | 'end'>,
@@ -193,9 +186,7 @@ const props = useConfiguredProps(Symbol('datePane'), {
   },
   shortcuts: {
     type: Array as PropType<DateShortcut[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   column: {
     type: String as PropType<DateTimeType>,
@@ -211,15 +202,11 @@ const props = useConfiguredProps(Symbol('datePane'), {
   },
   today: {
     type: [Number, String, Date] as PropType<Dateable>,
-    default() {
-      return new Date()
-    }
+    default: () => new Date()
   },
   disableDate: {
     type: Function as PropType<(date: Date) => boolean>,
-    default() {
-      return false
-    }
+    default: () => false
   },
   noAction: {
     type: Boolean,
@@ -227,9 +214,7 @@ const props = useConfiguredProps(Symbol('datePane'), {
   },
   steps: {
     type: Array as PropType<number[]>,
-    default() {
-      return [1, 1, 1]
-    }
+    default: () => [1, 1, 1]
   },
   isRange: {
     type: Boolean,
@@ -237,17 +222,13 @@ const props = useConfiguredProps(Symbol('datePane'), {
   },
   startActivated: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   endActivated: {
     type: Object as PropType<Record<DateTimeType, boolean>>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   }
-})
+}
 
 export default defineComponent({
   name: 'DatePane',

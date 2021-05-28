@@ -20,8 +20,14 @@ import { TABLE_STORE } from './symbol'
 import type { PropType } from 'vue'
 import type { TableStore } from './store'
 
-interface TableHeadProps {
-  fixed: 'left' | 'right'
+const props = {
+  fixed: {
+    type: String as PropType<'left' | 'right'>,
+    default: null,
+    validator: (value: string) => {
+      return value === 'left' || value === 'right'
+    }
+  }
 }
 
 export default defineComponent({
@@ -30,16 +36,8 @@ export default defineComponent({
     TableHeadCell,
     TableRow
   },
-  props: {
-    fixed: {
-      type: String as PropType<'left' | 'right'>,
-      default: null,
-      validator(value) {
-        return value === 'left' || value === 'right'
-      }
-    }
-  },
-  setup(props: TableHeadProps) {
+  props,
+  setup(props) {
     const { state } = inject<TableStore>(TABLE_STORE)!
 
     const wrapper = ref<HTMLElement | null>(null)

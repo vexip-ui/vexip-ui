@@ -10,8 +10,8 @@
     "prettier --write"
   ],
   "*.{css,scss,pcss,html}": [
-    "stylelint --fix",
-    "prettier --write"
+    "prettier --write",
+    "stylelint --fix"
   ],
   "*.md": [
     "prettier --write"

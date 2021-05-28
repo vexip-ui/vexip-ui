@@ -65,7 +65,7 @@ const props = useConfiguredProps('dropdown', {
   placement: {
     type: String as PropType<Placement>,
     default: 'bottom',
-    validator(value: Placement) {
+    validator: (value: Placement) => {
       return placementWhileList.includes(value)
     }
   },
@@ -75,7 +75,7 @@ const props = useConfiguredProps('dropdown', {
   },
   trigger: {
     default: 'hover' as DropdownTrigger,
-    validator(value: DropdownTrigger) {
+    validator: (value: DropdownTrigger) => {
       return ['hover', 'click', 'custom'].includes(value)
     }
   },

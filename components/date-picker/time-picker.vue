@@ -178,7 +178,7 @@ const props = useConfiguredProps('timePicker', {
   placement: {
     type: String as PropType<Placement>,
     default: 'bottom-start',
-    validator(value: Placement) {
+    validator: (value: Placement) => {
       return placementWhileList.includes(value)
     }
   },
@@ -201,7 +201,7 @@ const props = useConfiguredProps('timePicker', {
   filler: {
     type: String,
     default: '-',
-    validator(value: string) {
+    validator: (value: string) => {
       return value.length === 1
     }
   },
@@ -227,7 +227,7 @@ const props = useConfiguredProps('timePicker', {
   },
   candidate: {
     default: 3,
-    validator(value: number) {
+    validator: (value: number) => {
       return [0, 1, 2, 3].includes(value)
     }
   },
@@ -239,15 +239,11 @@ const props = useConfiguredProps('timePicker', {
   },
   labels: {
     type: Array as PropType<string[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   shortcuts: {
     type: Array as PropType<TimeShortcut[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   isRange: {
     type: Boolean,

@@ -15,13 +15,12 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
 import { isDefined } from '@/common/utils/common'
 import { TABS_STATE } from './symbol'
 
 import type { ItemState, TabsState } from './symbol'
 
-const props = useConfiguredProps(Symbol('tabPane'), {
+const props = {
   label: {
     type: [String, Number],
     default: null
@@ -34,7 +33,7 @@ const props = useConfiguredProps(Symbol('tabPane'), {
     type: String,
     default: ''
   }
-})
+}
 
 export default defineComponent({
   name: 'TabPane',

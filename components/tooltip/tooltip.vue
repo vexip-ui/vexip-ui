@@ -49,7 +49,7 @@ import type { Placement } from '@popperjs/core'
 const props = useConfiguredProps('tooltip', {
   trigger: {
     default: 'hover' as ToopTipTrigger,
-    validator(value: ToopTipTrigger) {
+    validator: (value: ToopTipTrigger) => {
       return ['hover', 'click', 'custom'].includes(value)
     }
   },
@@ -64,7 +64,7 @@ const props = useConfiguredProps('tooltip', {
   placement: {
     type: String as PropType<Placement>,
     default: 'top',
-    validator(value: Placement) {
+    validator: (value: Placement) => {
       return placementWhileList.includes(value)
     }
   },
@@ -91,7 +91,7 @@ const props = useConfiguredProps('tooltip', {
   },
   theme: {
     default: 'light' as TooltipTheme,
-    validator(value: TooltipTheme) {
+    validator: (value: TooltipTheme) => {
       return ['light', 'dark'].includes(value)
     }
   }

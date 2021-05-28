@@ -56,7 +56,7 @@ const props = useConfiguredProps('progress', {
   percentage: {
     type: Number,
     default: 0,
-    validator(value: number) {
+    validator: (value: number) => {
       return value >= 0 && value <= 100
     }
   },
@@ -66,7 +66,7 @@ const props = useConfiguredProps('progress', {
   },
   infoType: {
     default: 'outside' as ProgressInfoType,
-    validator(value: ProgressInfoType) {
+    validator: (value: ProgressInfoType) => {
       return ['outside', 'inside', 'bubble', 'bubble-top', 'bubble-bottom', 'none'].includes(value)
     }
   },
@@ -77,7 +77,7 @@ const props = useConfiguredProps('progress', {
   strokeColor: {
     type: [String, Array, Function] as PropType<StrokeColor>,
     default: null,
-    validator(value: StrokeColor) {
+    validator: (value: StrokeColor) => {
       return !(Array.isArray(value) && (!value[0] || !value[1]))
     }
   }

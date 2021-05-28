@@ -90,9 +90,7 @@ const props = useConfiguredProps('autoComplete', {
   },
   options: {
     type: Array as PropType<RawOption[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   filter: {
     type: [Boolean, Function] as PropType<
@@ -136,7 +134,7 @@ const props = useConfiguredProps('autoComplete', {
   placement: {
     type: String as PropType<Placement>,
     default: 'bottom',
-    validator(value: Placement) {
+    validator: (value: Placement) => {
       return placementWhileList.includes(value)
     }
   },

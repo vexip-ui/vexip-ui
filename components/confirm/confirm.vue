@@ -90,7 +90,7 @@ const props = useConfiguredProps('confirm', {
   },
   confirmType: {
     default: 'default' as ConfirmType,
-    validator(value: ConfirmType) {
+    validator: (value: ConfirmType) => {
       return ['default', 'primary', 'info', 'success', 'warning', 'error'].includes(value)
     }
   },
@@ -110,9 +110,7 @@ const props = useConfiguredProps('confirm', {
   },
   style: {
     type: Object as PropType<CSSProperties>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   renderer: {
     type: Function as PropType<() => VNodeChild>,

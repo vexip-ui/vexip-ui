@@ -18,12 +18,11 @@
 import { defineComponent, ref, reactive, computed, inject, watch, onBeforeUnmount } from 'vue'
 import { Icon } from '@/components/icon'
 import { isDefined } from '@/common/utils/common'
-import { useConfiguredProps } from '@/common/config/install'
 import { TAB_NAV_STATE } from './symbol'
 
 import type { ItemState, TabNavState } from './symbol'
 
-const props = useConfiguredProps(Symbol('tabNavItem'), {
+const props = {
   label: {
     type: [String, Number],
     default: null
@@ -36,7 +35,7 @@ const props = useConfiguredProps(Symbol('tabNavItem'), {
     type: String,
     default: ''
   }
-})
+}
 
 export default defineComponent({
   name: 'TabNavItem',

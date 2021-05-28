@@ -141,7 +141,6 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
-import { useConfiguredProps } from '@/common/config/install'
 import { iconMaps } from './file-icon'
 import { UploadStatusType } from './symbol'
 
@@ -154,12 +153,10 @@ import '@/common/icons/regular/trash-alt'
 import type { PropType } from 'vue'
 import type { UploadListType, RenderFn, FileState } from './symbol'
 
-const props = useConfiguredProps(Symbol('uploadFile'), {
+const props = {
   file: {
     type: Object as PropType<FileState>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   iconRenderer: {
     type: Function as PropType<RenderFn>,
@@ -167,7 +164,7 @@ const props = useConfiguredProps(Symbol('uploadFile'), {
   },
   listType: {
     default: 'name' as UploadListType,
-    validator(value: UploadListType) {
+    validator: (value: UploadListType) => {
       return ['name', 'detail', 'thumbnail', 'card'].includes(value)
     }
   },
@@ -179,7 +176,7 @@ const props = useConfiguredProps(Symbol('uploadFile'), {
     type: Boolean,
     default: false
   }
-})
+}
 
 export default defineComponent({
   name: 'UploadFile',

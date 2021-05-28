@@ -27,26 +27,28 @@ import { SELECTOR_STATE } from './symbol'
 
 import type { SelectState } from './symbol'
 
+const props = {
+  value: {
+    type: [String, Number],
+    default: null
+  },
+  label: {
+    type: String,
+    default: ''
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  divided: {
+    type: Boolean,
+    default: false
+  }
+}
+
 export default defineComponent({
   name: 'Option',
-  props: {
-    value: {
-      type: [String, Number],
-      default: null
-    },
-    label: {
-      type: String,
-      default: ''
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    divided: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props,
   emits: ['on-select'],
   setup(props, { emit }) {
     const selectorState = inject<SelectState | null>(SELECTOR_STATE, null)

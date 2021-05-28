@@ -32,8 +32,11 @@
     ]
   },
   "include": [
-    "common/**/*",
-    "components/**/*"
+    "common/**/*.ts",
+    "components/**/*.ts",
+    "components/**/*.d,ts",
+    "components/**/*.tsx",
+    "components/**/*.vue"
   ],
   "exclude": [
     "node_modules"

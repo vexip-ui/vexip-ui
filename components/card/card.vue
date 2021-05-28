@@ -31,15 +31,13 @@ const props = useConfiguredProps('card', {
   },
   shadow: {
     default: 'always' as CardShadowType,
-    validator(value: CardShadowType) {
+    validator: (value: CardShadowType) => {
       return ['always', 'hover', 'never'].includes(value)
     }
   },
   contentStyle: {
     type: Object,
-    default() {
-      return {}
-    }
+    default: () => ({})
   }
 })
 

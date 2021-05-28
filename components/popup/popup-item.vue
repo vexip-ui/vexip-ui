@@ -25,14 +25,13 @@
 <script lang="ts">
 import { defineComponent, ref, inject, onMounted, nextTick } from 'vue'
 import { Renderer } from '@/components/renderer'
-import { useConfiguredProps } from '@/common/config/install'
 import { noop } from '@/common/utils/common'
 import { DELETE_HANDLER } from './symbol'
 
 import type { PropType } from 'vue'
 import type { Key, ClassType, PopupItemState } from './symbol'
 
-const props = useConfiguredProps(Symbol('popupItem'), {
+const props = {
   state: {
     type: Object as PropType<PopupItemState>,
     required: true
@@ -45,7 +44,7 @@ const props = useConfiguredProps(Symbol('popupItem'), {
     type: [String, Object] as PropType<ClassType>,
     default: null
   }
-})
+}
 
 export default defineComponent({
   name: 'PopupItem',

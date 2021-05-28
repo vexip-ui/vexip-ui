@@ -39,7 +39,7 @@ const props = useConfiguredProps('collapse', {
   },
   arrowType: {
     default: 'right' as CollapseArrowType,
-    validator(value: CollapseArrowType) {
+    validator: (value: CollapseArrowType) => {
       return ['right', 'left', 'none'].includes(value)
     }
   },

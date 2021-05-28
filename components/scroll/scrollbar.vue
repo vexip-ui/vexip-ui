@@ -36,21 +36,21 @@ export enum ScrollbarType {
 const props = useConfiguredProps('scrollbar', {
   placement: {
     default: 'right' as ScrollbarPlacement,
-    validator(value: ScrollbarPlacement) {
+    validator: (value: ScrollbarPlacement) => {
       return ['top', 'right', 'bottom', 'left'].includes(value)
     }
   },
   scroll: {
     type: Number,
     default: 0,
-    validator(value: number) {
+    validator: (value: number) => {
       return value >= 0 && value <= 100
     }
   },
   barLength: {
     type: Number,
     default: 35,
-    validator(value: number) {
+    validator: (value: number) => {
       return value > 0 && value < 100
     }
   },

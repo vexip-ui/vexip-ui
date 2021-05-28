@@ -81,7 +81,7 @@ const props = useConfiguredProps('calendarBase', {
   month: {
     type: Number,
     default: new Date().getMonth() + 1,
-    validator(value: number) {
+    validator: (value: number) => {
       return value > 0 && value <= 12
     }
   },
@@ -91,14 +91,14 @@ const props = useConfiguredProps('calendarBase', {
     default() {
       return ['日', '一', '二', '三', '四', '五', '六']
     },
-    validator(value: string[]) {
+    validator: (value: string[]) => {
       return value.length === 7
     }
   },
   weekStart: {
     type: Number,
     default: 0,
-    validator(value: number) {
+    validator: (value: number) => {
       return value >= 0 && value < 7
     }
   },
@@ -107,7 +107,7 @@ const props = useConfiguredProps('calendarBase', {
     default() {
       return new Date()
     },
-    validator(value: Dateable) {
+    validator: (value: Dateable) => {
       return !Number.isNaN(+new Date(value))
     }
   },
@@ -124,7 +124,7 @@ const props = useConfiguredProps('calendarBase', {
   valueType: {
     type: String as PropType<'start' | 'end'>,
     default: 'start',
-    validator(value: 'start' | 'end') {
+    validator: (value: 'start' | 'end') => {
       return value === 'start' || value === 'end'
     }
   }

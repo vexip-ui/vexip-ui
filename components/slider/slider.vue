@@ -56,7 +56,7 @@ const props = useConfiguredProps('slider', {
   step: {
     type: Number,
     default: 1,
-    validator(value: number) {
+    validator: (value: number) => {
       return Math.ceil(value) === value
     }
   },

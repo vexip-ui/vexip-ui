@@ -41,7 +41,7 @@ const props = useConfiguredProps('tableColumn', {
   type: {
     type: String as PropType<ColumnType>,
     default: null,
-    validator(value: ColumnType) {
+    validator: (value: ColumnType) => {
       return ['order', 'selection', 'expand'].includes(value)
     }
   },
@@ -51,15 +51,11 @@ const props = useConfiguredProps('tableColumn', {
   },
   filter: {
     type: Object as PropType<FilterOptions>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   sorter: {
     type: Object as PropType<SorterOptions>,
-    default() {
-      return {}
-    }
+    default: () => ({})
   },
   renderer: {
     type: Function as PropType<RenderFn>,
@@ -100,7 +96,7 @@ export default defineComponent({
   setup(props, { slots }) {
     const tableAction = inject<TableAction | null>(TABLE_ACTION, null)
 
-    const options = (reactive({
+    const options = reactive({
       name: undefined,
       key: undefined,
       fixed: undefined,
@@ -117,7 +113,7 @@ export default defineComponent({
       orderLabel: undefined,
       checkboxSize: undefined,
       disableRow: undefined
-    }) as unknown) as ColumnWithKey
+    }) as unknown as ColumnWithKey
 
     for (const key of propKeys) {
       if (key === 'renderer' || key === 'headRenderer') continue
@@ -168,7 +164,7 @@ export default defineComponent({
           return (result as string).toString()
         }
 
-        return (row as RowState)[(options.key as unknown) as keyof RowState].toString()
+        return (row as RowState)[options.key as unknown as keyof RowState].toString()
       }
     }
 

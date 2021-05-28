@@ -19,7 +19,7 @@ const props = useConfiguredProps('divider', {
   },
   textPosition: {
     default: 'center' as DividerTextPosition,
-    validator(value: DividerTextPosition) {
+    validator: (value: DividerTextPosition) => {
       return ['center', 'left', 'right'].includes(value)
     }
   },

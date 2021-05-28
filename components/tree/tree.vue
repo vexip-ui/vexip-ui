@@ -74,15 +74,13 @@ const props = useConfiguredProps('tree', {
   arrow: {
     type: [Boolean, String] as PropType<boolean | 'auto'>,
     default: 'auto',
-    validator(value: boolean | 'auto') {
+    validator: (value: boolean | 'auto') => {
       return typeof value === 'boolean' || value === 'auto'
     }
   },
   data: {
     type: Array as PropType<InitDataOptions[]>,
-    default() {
-      return []
-    }
+    default: () => []
   },
   noBuildTree: {
     type: Boolean,
