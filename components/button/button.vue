@@ -7,20 +7,37 @@
     @click.left="handleClick"
     @animationend="handleAnimationEnd"
   >
-    <div v-if="loading" :class="`${prefix}__icon`">
-      <slot name="loading">
-        <Icon spin :name="loadingIcon"></Icon>
-      </slot>
-    </div>
-    <div v-if="icon && !loading" :class="`${prefix}__icon`">
-      <Icon :name="icon"></Icon>
-    </div>
+    <template v-if="icon">
+      <div v-if="loading" :class="[`${prefix}__icon`, `${prefix}__icon--loading`]">
+        <slot name="loading">
+          <Icon v-if="loadingSpin" spin :name="loadingIcon"></Icon>
+          <Icon v-else pulse :name="loadingIcon"></Icon>
+        </slot>
+      </div>
+      <div v-else :class="`${prefix}__icon`">
+        <Icon :name="icon"></Icon>
+      </div>
+    </template>
+    <CollapseTransition
+      v-else
+      appear
+      horizontal
+      fade-effect
+    >
+      <div v-if="loading" :class="[`${prefix}__icon`, `${prefix}__icon--loading`]">
+        <slot name="loading">
+          <Icon v-if="loadingSpin" spin :name="loadingIcon"></Icon>
+          <Icon v-else pulse :name="loadingIcon"></Icon>
+        </slot>
+      </div>
+    </CollapseTransition>
     <slot></slot>
   </button>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
+import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { createSizeProp } from '@/common/config/props'
 import { useConfiguredProps } from '@/common/config/install'
@@ -46,6 +63,10 @@ const props = useConfiguredProps('button', {
       ].includes(value)
     }
   },
+  simple: {
+    type: Boolean,
+    default: false
+  },
   ghost: {
     type: Boolean,
     default: false
@@ -66,6 +87,10 @@ const props = useConfiguredProps('button', {
     type: String,
     default: 'spinner'
   },
+  loadingSpin: {
+    type: Boolean,
+    default: false
+  },
   icon: {
     type: String,
     default: ''
@@ -73,12 +98,21 @@ const props = useConfiguredProps('button', {
   textColor: {
     type: String,
     default: null
+  },
+  buttonType: {
+    type: String,
+    default: 'button'
+  },
+  block: {
+    type: Boolean,
+    default: false
   }
 })
 
 export default defineComponent({
   name: 'Button',
   components: {
+    CollapseTransition,
     Icon
   },
   props,
