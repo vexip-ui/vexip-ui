@@ -52,11 +52,11 @@
       </CollapseTransition>
     </span>
     <Portal v-else :to="transferTo">
-      <transition :name="transitionName">
+      <transition :name="transition">
         <div
           v-show="showGroup"
           ref="popper"
-          :class="`${prefix}__popper`"
+          :class="[`${prefix}__popper`, isHorizontal ? `${prefix}__popper--drop` : '']"
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >
@@ -115,7 +115,7 @@ const props = useConfiguredProps('menuItem', {
   },
   transitionName: {
     type: String,
-    default: 'vxp-zoom'
+    default: null
   }
 })
 
@@ -161,6 +161,10 @@ export default defineComponent({
       }
     })
     const labelStyle = computed(() => {
+      if (menuState?.horizontal || parentItemState?.isUsePopper) {
+        return {}
+      }
+
       return {
         paddingLeft:
           parentItemState && parentItemState.isUsePopper
@@ -176,7 +180,7 @@ export default defineComponent({
     })
     const isUsePopper = computed(() => {
       return (
-        (menuState && menuState.groupType === 'dropdown') ||
+        (menuState && (menuState.horizontal || menuState.groupType === 'dropdown')) ||
         (isGroup.value && menuState?.isReduced && !parentItemState) ||
         !!parentItemState?.isUsePopper
       )
@@ -189,6 +193,12 @@ export default defineComponent({
     })
     const tooltipTheme = computed(() => {
       return menuState ? menuState.tooltipTheme : 'dark'
+    })
+    const isHorizontal = computed(() => {
+      return menuState?.horizontal && !parentItemState
+    })
+    const transition = computed(() => {
+      return props.transitionName ?? isHorizontal.value ? 'vxp-drop' : 'vxp-zoom'
     })
 
     const itemState = reactive({
@@ -223,6 +233,13 @@ export default defineComponent({
         menuState.handleExpand(props.label, expanded)
       }
     })
+    watch(
+      isHorizontal,
+      value => {
+        placement.value = value ? 'bottom' : 'right-start'
+      },
+      { immediate: true }
+    )
 
     if (menuState) {
       watch(
@@ -326,6 +343,8 @@ export default defineComponent({
       tooltipDisabled,
       theme,
       tooltipTheme,
+      isHorizontal,
+      transition,
 
       wrapper,
       reference,

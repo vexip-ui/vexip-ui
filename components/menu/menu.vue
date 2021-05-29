@@ -34,10 +34,14 @@ const props = useConfiguredProps('menu', {
   markerType: {
     default: 'right' as MenuMarkerType,
     validator: (value: MenuMarkerType) => {
-      return ['right', 'left', 'none'].includes(value)
+      return ['top', 'right', 'bottom', 'left', 'none'].includes(value)
     }
   },
   reduced: {
+    type: Boolean,
+    default: false
+  },
+  horizontal: {
     type: Boolean,
     default: false
   },
@@ -74,13 +78,27 @@ export default defineComponent({
     const wrapper = ref<HTMLElement | null>(null)
 
     const className = computed(() => {
+      let computedMarkerType
+
+      if (props.horizontal && (props.markerType === 'left' || props.markerType === 'right')) {
+        computedMarkerType = 'bottom'
+      } else if (
+        !props.horizontal &&
+        (props.markerType === 'top' || props.markerType === 'bottom')
+      ) {
+        computedMarkerType = 'right'
+      } else {
+        computedMarkerType = props.markerType ?? (props.horizontal ? 'bottom' : 'right')
+      }
+
       return [
         prefix,
         `${prefix}--${props.theme}`,
-        `${prefix}--marker-${props.markerType}`,
+        `${prefix}--marker-${computedMarkerType}`,
         {
           [`${prefix}--reduced`]: isReduced.value,
-          [`${prefix}--dropdown`]: props.groupType === 'dropdown'
+          [`${prefix}--dropdown`]: props.groupType === 'dropdown',
+          [`${prefix}--horizontal`]: props.horizontal
         }
       ]
     })
@@ -88,6 +106,7 @@ export default defineComponent({
     provide<MenuState>(
       MENU_STATE,
       reactive({
+        horizontal: toRef(props, 'horizontal'),
         accordion: toRef(props, 'accordion'),
         groupType: toRef(props, 'groupType'),
         theme: toRef(props, 'theme'),
@@ -112,6 +131,8 @@ export default defineComponent({
     watch(
       () => props.reduced,
       value => {
+        if (props.horizontal) return
+
         if (value) {
           handleMenuReduce()
         } else {
@@ -122,7 +143,7 @@ export default defineComponent({
 
     onMounted(() => {
       nextTick(() => {
-        if (props.reduced) handleMenuReduce()
+        if (!props.horizontal && props.reduced) handleMenuReduce()
       })
     })
 

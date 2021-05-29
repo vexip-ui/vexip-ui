@@ -1,6 +1,6 @@
 import type { TooltipTheme } from '@/components/tooltip'
 
-export type MenuMarkerType = 'right' | 'left' | 'none'
+export type MenuMarkerType = 'top' | 'right' | 'bottom' | 'left' | 'none'
 export type MenuGroupType = 'collapse' | 'dropdown'
 export type MenuTheme = 'light' | 'dark'
 
@@ -18,6 +18,7 @@ export interface MenuItemState {
 }
 
 export interface MenuState {
+  horizontal: boolean,
   accordion: boolean,
   groupType: MenuGroupType,
   theme: MenuTheme,
