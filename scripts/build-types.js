@@ -36,6 +36,8 @@ let index = 1
 main()
 
 async function main() {
+  logger.infoText('Start building types...')
+
   sourceFiles.push(project.addSourceFileAtPath(
     path.resolve(componentsDir, 'index.ts')
   ))

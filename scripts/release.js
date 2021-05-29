@@ -97,8 +97,7 @@ async function main() {
   logStep(`Building package...`)
 
   if (!skipBuild && !isDryRun) {
-    await run('yarn', ['build', '-a', '-r'])
-    await run('yarn', ['build:types'])
+    await run('yarn', ['build', '-a', '-t', '-r'])
   } else {
     logSkipped()
   }

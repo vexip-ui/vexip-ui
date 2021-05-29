@@ -17,6 +17,7 @@ const sourceMap = args.sourcemap || args.s
 const release = args.release || args.r
 const buildAllMatching = args.all || args.a
 const libOnly = args.lib || args.l
+const buildType = args.type || args.t
 
 const env = devOnly ? 'development' : 'production'
 const libDir = path.resolve(__dirname, '../lib')
@@ -32,21 +33,27 @@ async function main() {
 
   await execa('yarn', ['lint:style'])
 
-  if (libOnly) {
-    await buildLib()
-  } else if (buildAllMatching) {
-    if (!targets.length) {
-      await buildLib()
-      await buildAll(allComponents)
+  if (!libOnly) {
+    if (buildAllMatching) {
+      if (!targets.length) {
+        await buildAll(allComponents)
+      } else {
+        await buildAll(fuzzyMatchComponent(targets, buildAllMatching))
+      }
     } else {
-      await buildAll(fuzzyMatchComponent(targets, buildAllMatching))
+      await build(await specifyComponent(args, allComponents))
     }
-  } else {
-    await build(await specifyComponent(args, allComponents))
+  }
+
+  await buildLib()
+
+  logger.ln()
+
+  if (buildType) {
+    await execa('yarn', ['build:types'], { stdio: 'inherit' })
   }
 
   if (!process.exitCode) {
-    logger.ln()
     logger.success('All builds are complete successfully.')
     logger.ln()
   }
