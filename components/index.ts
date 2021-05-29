@@ -33,6 +33,8 @@ import { Input } from '@/components/input'
 import { Linker } from '@/components/linker'
 import { Masker } from '@/components/masker'
 import { Menu } from '@/components/menu'
+import { MenuGroup } from '@/components/menu-group'
+import { MenuItem } from '@/components/menu-item'
 import { Message } from '@/components/message'
 import { Modal } from '@/components/modal'
 import { Notice } from '@/components/notice'
@@ -58,6 +60,7 @@ import { TabNavItem } from '@/components/tab-nav-item'
 import { Table } from '@/components/table'
 import { TableColumn } from '@/components/table-column'
 import { Tabs } from '@/components/tabs'
+import { TabPane } from '@/components/tab-pane'
 import { Tag } from '@/components/tag'
 import { Textarea } from '@/components/textarea'
 import { TimePicker } from '@/components/time-picker'
@@ -110,6 +113,8 @@ const components = [
   Linker,
   Masker,
   Menu,
+  MenuGroup,
+  MenuItem,
   Modal,
   NumberInput,
   Option,
@@ -133,6 +138,7 @@ const components = [
   Table,
   TableColumn,
   Tabs,
+  TabPane,
   Tag,
   Textarea,
   TimePicker,
@@ -207,6 +213,8 @@ export {
   Linker,
   Masker,
   Menu,
+  MenuGroup,
+  MenuItem,
   Modal,
   NumberInput,
   Option,
@@ -230,6 +238,7 @@ export {
   Table,
   TableColumn,
   Tabs,
+  TabPane,
   Tag,
   Textarea,
   TimePicker,
