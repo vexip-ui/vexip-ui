@@ -1,12 +1,12 @@
 <template>
-  <teleport v-if="to" :to="to">
+  <teleport v-if="isMounted && to" :to="to">
     <slot></slot>
   </teleport>
   <slot v-else></slot>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted, nextTick } from 'vue'
 
 export default defineComponent({
   name: 'Portal',
@@ -15,6 +15,19 @@ export default defineComponent({
     to: {
       type: String,
       default: ''
+    }
+  },
+  setup() {
+    const isMounted = ref(false)
+
+    onMounted(() => {
+      nextTick(() => {
+        isMounted.value = true
+      })
+    })
+
+    return {
+      isMounted
     }
   }
 })
