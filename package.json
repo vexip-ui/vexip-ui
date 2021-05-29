@@ -90,6 +90,7 @@
   "main": "dist/vexip-ui.cjs.js",
   "module": "dist/vexip-ui.es.js",
   "name": "vexip-ui",
+  "private": false,
   "scripts": {
     "build": "node scripts/build.js",
     "build:clean": "yarn run clean && yarn run build",
@@ -117,5 +118,5 @@
     "*.scss"
   ],
   "typings": "lib/index.d.ts",
-  "version": "1.0.0-alpha.2"
+  "version": "1.0.0-alpha.3"
 }
