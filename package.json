@@ -118,5 +118,5 @@
     "*.scss"
   ],
   "typings": "lib/index.d.ts",
-  "version": "1.0.0-alpha.3"
+  "version": "1.0.0-alpha.4"
 }
