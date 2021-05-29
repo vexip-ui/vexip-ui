@@ -1,0 +1,45 @@
+@mixin start {
+  transform: rotate(0deg);
+}
+
+@mixin end {
+  transform: rotate(360deg);
+}
+
+.vxp-spin {
+  @at-root {
+    &-enter-active {
+      animation: {
+        name: vxp-spin-in;
+        duration: 300ms;
+      }
+    }
+
+    &-leave-active {
+      animation: {
+        name: vxp-spin-out;
+        duration: 300ms;
+      }
+    }
+  }
+}
+
+@keyframes vxp-spin-in {
+  0% {
+    @include start;
+  }
+
+  100% {
+    @include end;
+  }
+}
+
+@keyframes vxp-spin-out {
+  0% {
+    @include end;
+  }
+
+  100% {
+    @include start;
+  }
+}
