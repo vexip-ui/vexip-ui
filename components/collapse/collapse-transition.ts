@@ -74,9 +74,7 @@ export default defineComponent({
       return h(
         Transition,
         {
-          props: {
-            appear: props.appear
-          },
+          appear: props.appear,
           onBeforeEnter($el) {
             const el = $el as HTMLElement
 
