@@ -353,6 +353,12 @@ export default defineComponent({
         nextTick(startAutoplay)
       }
     )
+    watch(wrapperElement, () => {
+      refreshWrapper()
+    })
+    watch(contentElement, () => {
+      computeContentSize()
+    })
 
     const handleResize = throttle(refresh)
 
@@ -378,6 +384,8 @@ export default defineComponent({
 
     function computeWrapperSize(sizeType: 'width' | 'height') {
       nextTick(() => {
+        if (!wrapper.el) return
+
         const size = props[sizeType]
         const titleCaseSizeType = sizeType.slice(0, 1).toUpperCase() + sizeType.slice(1)
 
@@ -385,7 +393,7 @@ export default defineComponent({
         if (typeof size === 'string') {
           if (!size.endsWith('px') && Number.isNaN(Number(size))) {
             wrapper[sizeType] =
-              wrapper.el![`offset${titleCaseSizeType}` as 'offsetWidth' | 'offsetHeight']
+              wrapper.el[`offset${titleCaseSizeType}` as 'offsetWidth' | 'offsetHeight']
           } else {
             wrapper[sizeType] = parseInt(size)
           }
@@ -399,10 +407,12 @@ export default defineComponent({
       window.clearTimeout(timer)
 
       timer = window.setTimeout(() => {
+        if (!content.el) return
+
         const mode = props.mode
 
         if (mode !== 'vertical') {
-          content.width = content.el!.offsetWidth
+          content.width = content.el.offsetWidth
 
           if (wrapper.width >= content.width) {
             currentScroll.x = 0
@@ -414,7 +424,7 @@ export default defineComponent({
         }
 
         if (mode !== 'horizontal') {
-          content.height = content.el?.offsetHeight ?? 0
+          content.height = content.el.offsetHeight
 
           if (wrapper.height >= content.height) {
             currentScroll.y = 0
@@ -862,9 +872,6 @@ export default defineComponent({
     }
 
     return {
-      wrapper: wrapperElement,
-      content: contentElement,
-
       percentX,
       percentY,
       transitionDuration,
@@ -877,6 +884,9 @@ export default defineComponent({
       yBarLength,
       enableXScroll,
       enableYScroll,
+
+      wrapper: wrapperElement,
+      content: contentElement,
 
       handleMouseDown,
       handleTouchStart,
