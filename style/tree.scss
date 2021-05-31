@@ -66,13 +66,13 @@
     // padding: 6px;
     // margin-right: 0.2em;
     cursor: pointer;
-    transition: $vxp-transition-transform-base;
+    // transition: $vxp-transition-transform-base;
 
-    &--expanded {
+    &--expanded .vxp-icon {
       transform: rotate(90deg);
     }
 
-    &--transparent {
+    &--transparent .vxp-icon {
       color: transparent;
     }
   }
