@@ -110,7 +110,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject, onMounted, nextTick, toRef } from 'vue'
+import { defineComponent, ref, computed, inject, onMounted, toRef } from 'vue'
 import { Button } from '@/components/button'
 import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
@@ -198,13 +198,11 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      nextTick(() => {
+      window.setTimeout(() => {
         if (wrapper.value) {
-          const width = wrapper.value.getBoundingClientRect().width
-
-          mutations.setColumnWidth(props.column.key, width)
+          mutations.setColumnWidth(props.column.key, wrapper.value.getBoundingClientRect().width)
         }
-      })
+      }, 0)
     })
 
     function handleSortAsc() {

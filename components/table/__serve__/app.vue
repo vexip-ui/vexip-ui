@@ -44,6 +44,17 @@
       :sorter="ageSorter"
     ></TableColumn>
   </Table>
+  <br />
+  <Table :columns="columns2" :data="data.slice(0, 5)">
+    <TableColumn name="First Name" id-key="firstName" :order="0">
+      <template #default="{ row }">
+        <Icon name="user" style="margin-right: 8px;"></Icon>
+        {{ row.firstName }}
+      </template>
+    </TableColumn>
+    <TableColumn name="Job" id-key="job" :order="3"></TableColumn>
+    <TableColumn name="Age" id-key="age" :order="2"></TableColumn>
+  </Table>
 </template>
 
 <script lang="ts">
@@ -92,6 +103,13 @@ export default defineComponent({
               return false
             }
           }
+        }
+      ],
+      columns2: [
+        {
+          name: 'Last Name',
+          key: 'lastName',
+          order: 1
         }
       ],
       firstNameFilter: {
