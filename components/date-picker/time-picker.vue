@@ -24,6 +24,7 @@
         :separator="separator"
         :filler="filler"
         :no-filler="noFiller"
+        :labels="labels"
         @on-input="handleInput"
         @on-plus="handlePlus"
         @on-minus="handleMinus"
@@ -53,6 +54,7 @@
           :separator="separator"
           :filler="filler"
           :no-filler="noFiller"
+          :labels="labels"
           @on-input="handleInput"
           @on-plus="handlePlus"
           @on-minus="handleMinus"
@@ -233,13 +235,11 @@ const props = useConfiguredProps('timePicker', {
   },
   steps: {
     type: Array as PropType<number[]>,
-    default() {
-      return [1, 1, 1]
-    }
+    default: () => [1, 1, 1]
   },
   labels: {
-    type: Array as PropType<string[]>,
-    default: () => []
+    type: Object as PropType<Partial<Record<TimeType, string>>>,
+    default: () => ({})
   },
   shortcuts: {
     type: Array as PropType<TimeShortcut[]>,
@@ -267,9 +267,7 @@ const props = useConfiguredProps('timePicker', {
   },
   ctrlSteps: {
     type: Array as PropType<number[]>,
-    default() {
-      return [5, 5, 5]
-    }
+    default: () => [5, 5, 5]
   },
   prefix: {
     type: String,

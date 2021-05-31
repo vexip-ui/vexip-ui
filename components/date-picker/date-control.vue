@@ -15,6 +15,9 @@
     >
       {{ formattedYear }}
     </div>
+    <div v-if="labels.year" :class="`${prefixCls}__label`">
+      {{ labels.year }}
+    </div>
     <template v-if="enabled.month">
       <div v-if="enabled.year" :class="`${prefixCls}__separator`">
         {{ dateSeparator }}
@@ -27,6 +30,9 @@
         @click="handleInputFocus('month')"
       >
         {{ formattedMonth }}
+      </div>
+      <div v-if="labels.month" :class="`${prefixCls}__label`">
+        {{ labels.month }}
       </div>
     </template>
     <template v-if="enabled.date">
@@ -42,6 +48,9 @@
       >
         {{ formattedDate }}
       </div>
+      <div v-if="labels.date" :class="`${prefixCls}__label`">
+        {{ labels.date }}
+      </div>
     </template>
 
     <template v-if="showTimeUnits">
@@ -54,6 +63,9 @@
         @click="handleInputFocus('hour')"
       >
         {{ formattedHour }}
+      </div>
+      <div v-if="labels.hour" :class="`${prefixCls}__label`">
+        {{ labels.hour }}
       </div>
       <template v-if="enabled.minute">
         <div v-if="enabled.hour" :class="`${prefixCls}__separator`">
@@ -68,6 +80,9 @@
         >
           {{ formattedMinute }}
         </div>
+        <div v-if="labels.minute" :class="`${prefixCls}__label`">
+          {{ labels.minute }}
+        </div>
       </template>
       <template v-if="enabled.second">
         <div v-if="enabled.minute || enabled.hour" :class="`${prefixCls}__separator`">
@@ -81,6 +96,9 @@
           @click="handleInputFocus('second')"
         >
           {{ formattedSecond }}
+        </div>
+        <div v-if="labels.second" :class="`${prefixCls}__label`">
+          {{ labels.second }}
         </div>
       </template>
     </template>
@@ -146,6 +164,10 @@ const props = {
   ctrlSteps: {
     type: Array as PropType<number[]>,
     default: () => [5, 5, 5]
+  },
+  labels: {
+    type: Object as PropType<Partial<Record<DateTimeType, string>>>,
+    default: () => ({})
   }
 }
 
@@ -236,11 +258,11 @@ export default defineComponent({
           break
         }
         case 'ok': {
-          handleEnter()
+          emit('on-enter')
           break
         }
         case 'esc': {
-          handleCancel()
+          emit('on-cancel')
           break
         }
         default: {
@@ -249,14 +271,6 @@ export default defineComponent({
           }
         }
       }
-    }
-
-    function handleEnter() {
-      emit('on-enter')
-    }
-
-    function handleCancel() {
-      emit('on-cancel')
     }
 
     return {

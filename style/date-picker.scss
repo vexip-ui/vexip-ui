@@ -35,7 +35,14 @@
     }
   }
 
-  &--disabled &__unit {
+  &__label {
+    text-align: center;
+    user-select: none;
+    transition: $vxp-transition-background-base, $vxp-transition-color-base;
+  }
+
+  &--disabled &__unit,
+  &--disabled &__label {
     color: $vxp-color-content-secondary;
   }
 

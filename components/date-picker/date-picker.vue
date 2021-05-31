@@ -25,6 +25,7 @@
         :time-separator="timeSeparator"
         :filler="filler"
         :no-filler="noFiller"
+        :labels="labels"
         @on-input="handleInput"
         @on-plus="handlePlus"
         @on-minus="handleMinus"
@@ -52,6 +53,7 @@
           :time-separator="timeSeparator"
           :filler="filler"
           :no-filler="noFiller"
+          :labels="labels"
           @on-input="handleInput"
           @on-plus="handlePlus"
           @on-minus="handleMinus"
@@ -194,8 +196,8 @@ const props = useConfiguredProps('datePicker', {
     default: false
   },
   labels: {
-    type: Array as PropType<string[]>,
-    default: () => []
+    type: Object as PropType<Partial<Record<DateTimeType, string>>>,
+    default: () => ({})
   },
   dateSeparator: {
     type: String,
@@ -211,21 +213,15 @@ const props = useConfiguredProps('datePicker', {
   },
   disableDate: {
     type: Function as PropType<(date: Date) => boolean>,
-    default() {
-      return false
-    }
+    default: () => false
   },
   steps: {
     type: Array as PropType<number[]>,
-    default() {
-      return [1, 1, 1]
-    }
+    default: () => [1, 1, 1]
   },
   ctrlSteps: {
     type: Array as PropType<number[]>,
-    default() {
-      return [5, 5, 5]
-    }
+    default: () => [5, 5, 5]
   },
   prefix: {
     type: String,
@@ -261,9 +257,7 @@ const props = useConfiguredProps('datePicker', {
   },
   today: {
     type: [Number, String, Date] as PropType<Dateable>,
-    default() {
-      return new Date()
-    },
+    default: () => new Date(),
     validator: (value: Dateable) => {
       return !Number.isNaN(new Date(value))
     }
@@ -567,6 +561,8 @@ export default defineComponent({
             emitValues[i] = i === 0 ? startState.dateValue.year : endState.dateValue.year
           } else if (props.type !== 'datetime') {
             emitValues[i] = values[i].split(' ')[0]
+          } else {
+            emitValues[i] = values[i]
           }
 
           if (!props.isRange) break
@@ -860,6 +856,8 @@ export default defineComponent({
     }
 
     function handlePaneConfirm() {
+      emit('on-enter')
+
       if (!props.isRange) {
         finishInput()
       } else {

@@ -15,6 +15,9 @@
     >
       {{ formattedHour }}
     </div>
+    <div v-if="labels.hour" :class="`${prefixCls}__label`">
+      {{ labels.hour }}
+    </div>
     <template v-if="enabled.minute">
       <div v-if="enabled.hour" :class="`${prefixCls}__separator`">
         {{ separator }}
@@ -27,6 +30,9 @@
         @click="handleInputFocus('minute')"
       >
         {{ formattedMinute }}
+      </div>
+      <div v-if="labels.minute" :class="`${prefixCls}__label`">
+        {{ labels.minute }}
       </div>
     </template>
     <template v-if="enabled.second">
@@ -42,6 +48,9 @@
       >
         {{ formattedSecond }}
       </div>
+      <div v-if="labels.second" :class="`${prefixCls}__label`">
+        {{ labels.second }}
+      </div>
     </template>
   </div>
 </template>
@@ -52,23 +61,23 @@ import { doubleDigits } from '@/common/utils/number'
 import { handleKeyEnter } from './helper'
 
 import type { PropType } from 'vue'
-import type { DateTimeType } from './symbol'
+import type { TimeType } from './symbol'
 
 const props = {
   unitType: {
-    type: String as PropType<DateTimeType>,
+    type: String as PropType<TimeType>,
     default: 'date'
   },
   enabled: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<TimeType, boolean>>,
     default: () => ({})
   },
   activated: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<TimeType, boolean>>,
     default: () => ({})
   },
   timeValue: {
-    type: Object as PropType<Record<DateTimeType, number>>,
+    type: Object as PropType<Record<TimeType, number>>,
     default: () => ({})
   },
   separator: {
@@ -99,6 +108,10 @@ const props = {
   ctrlSteps: {
     type: Array as PropType<number[]>,
     default: () => [5, 5, 5]
+  },
+  labels: {
+    type: Object as PropType<Partial<Record<TimeType, string>>>,
+    default: () => ({})
   }
 }
 
@@ -130,13 +143,13 @@ export default defineComponent({
       return formatValue('second')
     })
 
-    function formatValue(type: DateTimeType) {
+    function formatValue(type: TimeType) {
       return props.noFiller || props.activated[type]
         ? doubleDigits(props.timeValue[type])
         : `${props.filler}${props.filler}`
     }
 
-    function handleInputFocus(type: DateTimeType) {
+    function handleInputFocus(type: TimeType) {
       emit('on-unit-focus', type)
     }
 
