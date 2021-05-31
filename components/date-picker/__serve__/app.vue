@@ -3,7 +3,7 @@
     v-model:value="date"
     is-range
     clearable
-    type="date"
+    type="month"
   ></DatePicker>
   <p>
     Current Date:

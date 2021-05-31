@@ -279,6 +279,8 @@ export default defineComponent({
         min = Math.min(startTime, endTime)
         max = Math.max(startTime, endTime)
       } else if (hoveredDate.value) {
+        if (!startValue.value && !endValue.value) return
+
         const hoveredTime = hoveredDate.value.getTime()
 
         if (!startValue.value || !endValue.value) {

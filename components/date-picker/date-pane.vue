@@ -311,7 +311,8 @@ export default defineComponent({
         if (value === 'year' || value === 'month' || value === 'date') {
           currentPane.value = value
         }
-      }
+      },
+      { immediate: true }
     )
     watch(
       calendarYear,
@@ -453,11 +454,11 @@ export default defineComponent({
     function isDisabledYear(year: number) {
       if (!props.isRange) return false
 
-      if (props.valueType === 'end' && startActivated.value && year < props.startValue.year) {
+      if (props.valueType === 'end' && props.startActivated.year && year < props.startValue.year) {
         return true
       }
 
-      if (props.valueType === 'start' && endActivated.value && props.endValue.year < year) {
+      if (props.valueType === 'start' && props.endActivated.year && props.endValue.year < year) {
         return true
       }
 
@@ -471,7 +472,7 @@ export default defineComponent({
 
       if (
         props.valueType === 'end' &&
-        startActivated.value &&
+        props.startActivated.month &&
         monthYear < 100 * props.startValue.year + props.startValue.month
       ) {
         return true
@@ -479,7 +480,7 @@ export default defineComponent({
 
       if (
         props.valueType === 'start' &&
-        endActivated.value &&
+        props.endActivated.month &&
         monthYear > 100 * props.endValue.year + props.endValue.month
       ) {
         return true
@@ -501,6 +502,13 @@ export default defineComponent({
         return false
       }
 
+      if (
+        (props.valueType === 'start' && !props.endActivated.year) ||
+        (props.valueType === 'end' && !props.startActivated.year)
+      ) {
+        return false
+      }
+
       const startYear = props.startValue.year
       const endYear = props.endValue.year
 
@@ -511,6 +519,8 @@ export default defineComponent({
         min = Math.min(startYear, endYear)
         max = Math.max(startYear, endYear)
       } else if (hoveredYear.value) {
+        if (!props.startActivated.year && !props.endActivated.year) return false
+
         if (!props.startActivated.year || !props.endActivated.year) {
           const selectedYear = props.startActivated.year ? startYear : endYear
 
@@ -535,6 +545,13 @@ export default defineComponent({
         return false
       }
 
+      if (
+        (props.valueType === 'start' && !props.endActivated.month) ||
+        (props.valueType === 'end' && !props.startActivated.month)
+      ) {
+        return false
+      }
+
       const startMonthYear = 100 * props.startValue.year + props.startValue.month
       const endMonthYear = 100 * props.endValue.year + props.endValue.month
 
@@ -545,6 +562,8 @@ export default defineComponent({
         min = Math.min(startMonthYear, endMonthYear)
         max = Math.max(startMonthYear, endMonthYear)
       } else if (hoveredMonth.value) {
+        if (!props.startActivated.month && !props.endActivated.month) return false
+
         const hoveredMonthYear = 100 * calendarYear.value + hoveredMonth.value
 
         if (!props.startActivated.month || !props.endActivated.month) {
