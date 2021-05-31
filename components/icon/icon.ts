@@ -94,7 +94,7 @@ export default defineComponent({
     const svgY = ref(null)
     const childrenWidth = ref(0)
     const childrenHeight = ref(0)
-    const outerScale = ref(0.8) // 原图标偏大, 缩小一点
+    const outerScale = ref(0.9) // 原图标偏大, 缩小一点
 
     const computedScale = computed(() => {
       return (Number(props.scale) || 1) * outerScale.value
