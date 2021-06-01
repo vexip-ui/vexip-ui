@@ -1,0 +1,206 @@
+.vxp-carousel {
+  @include basis;
+
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+
+  &--vertical {
+    flex-direction: row;
+  }
+
+  &__list {
+    display: flex;
+    transition: $vxp-transition-transform-base;
+  }
+
+  &--vertical &__list {
+    flex-direction: column;
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+    padding: 0 10px;
+    // transition: $vxp-transition-transform-base;
+
+    &-inner {
+      width: 100%;
+    }
+  }
+
+  $arrow-padding: 10px;
+
+  &__arrow {
+    &--none,
+    &--inside,
+    &--outside {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    &--none {
+      display: none;
+    }
+
+    &--inside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+    }
+
+    &--prev {
+      padding-right: $arrow-padding;
+    }
+
+    &--inside#{&}--prev {
+      left: 15px;
+    }
+
+    &--next {
+      padding-left: $arrow-padding;
+    }
+
+    &--inside#{&}--next {
+      right: 15px;
+    }
+  }
+
+  &--vertical &__arrow {
+    &--prev {
+      padding: 0;
+      padding-bottom: $arrow-padding;
+    }
+
+    &--next {
+      padding: 0;
+      padding-top: $arrow-padding;
+    }
+  }
+
+  &__handle {
+    display: flex;
+    color: $vxp-color-fill-disabled;
+    cursor: pointer;
+    transition: color 200ms;
+
+    &--disabled {
+      cursor: default;
+    }
+
+    &-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      color: $vxp-color-content-reverse;
+      background-color: rgba($vxp-color-content-normal, 0.45);
+      border-radius: 50%;
+      transition: $vxp-transition-background-base, $vxp-transition-opacity-base;
+
+      &:hover {
+        background-color: rgba($vxp-color-content-normal, 0.7);
+      }
+    }
+
+    &--disabled &-inner {
+      background-color: rgba($vxp-color-content-normal, 0.3);
+
+      &:hover {
+        background-color: rgba($vxp-color-content-normal, 0.3);
+      }
+    }
+  }
+
+  /* stylelint-disable */
+  &__arrow--inside &__handle-inner {
+    opacity: 0;
+
+    &--show {
+      opacity: 1;
+    }
+  }
+
+  // &:hover &__handle-inner {
+  //   opacity: 1;
+  // }
+  /* stylelint-enable */
+
+  &__pointers {
+    &--none,
+    &--inside,
+    &--outside {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    &--none {
+      display: none;
+    }
+
+    &--inside {
+      position: absolute;
+      bottom: 15px;
+      left: 0;
+    }
+
+    &--outside {
+      padding: 16px;
+    }
+  }
+
+  &--vertical &__pointers {
+    flex-direction: column;
+
+    &--none,
+    &--inside,
+    &--outside {
+      flex-direction: column;
+    }
+  }
+
+  &__pointer {
+    display: flex;
+    margin: 0 3px;
+
+    &-inner {
+      display: inline-block;
+      width: 16px;
+      height: 3px;
+      margin: 1px 0 2px;
+      background-color: $vxp-color-content-secondary;
+      border-radius: $vxp-border-radius-small;
+      opacity: 0.4;
+      transition: width $vxp-transition-base, $vxp-transition-opacity-base;
+    }
+
+    &--active &-inner {
+      width: 24px;
+      opacity: 0.7;
+    }
+  }
+
+  &--vertical &__pointer {
+    margin: 3px 0;
+
+    &-inner {
+      width: 3px;
+      height: 16px;
+      margin: 0 2px 1px 0;
+    }
+
+    &--active .carousel__pointer-inner {
+      height: 24px;
+    }
+  }
+}
