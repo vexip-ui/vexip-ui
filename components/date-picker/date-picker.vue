@@ -79,7 +79,7 @@
         </div>
       </transition>
       <Portal :to="transferTo">
-        <transition :name="transitionName">
+        <transition :name="transitionName" @after-leave="handlePaneHide">
           <div
             v-show="currentVisible"
             ref="popper"
@@ -873,6 +873,10 @@ export default defineComponent({
       }
     }
 
+    function handlePaneHide() {
+      datePane.value?.refreshCalendar()
+    }
+
     return {
       prefixCls: prefix,
       currentVisible,
@@ -913,6 +917,7 @@ export default defineComponent({
       handleStartInput,
       handleEndInput,
       handlePaneConfirm,
+      handlePaneHide,
 
       updatePopper
     }

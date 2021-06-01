@@ -1,10 +1,5 @@
 <template>
-  <DatePicker
-    v-model:value="date"
-    is-range
-    clearable
-    type="month"
-  ></DatePicker>
+  <DatePicker v-model:value="date" clearable type="date"></DatePicker>
   <p>
     Current Date:
     <br />
@@ -23,7 +18,7 @@ export default defineComponent({
   },
   data() {
     return {
-      date: null
+      date: ''
     }
   }
 })
