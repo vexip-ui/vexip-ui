@@ -166,7 +166,7 @@ export default defineComponent({
         { immediate: true }
       )
       watch(
-        () => groupState.currentValue,
+        () => groupState.currentValues,
         value => {
           if (!props.control) {
             setCurrentChecked(value.includes(currentValue.value))

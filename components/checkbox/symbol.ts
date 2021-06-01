@@ -4,7 +4,7 @@ export interface ControlState {
 }
 
 export interface GroupState {
-  currentValue: (string | number)[],
+  currentValues: (string | number)[],
   disabled: boolean,
   increaseItem(label: string, value: string | number, checked: boolean): void,
   decreaseItem(label: string): void,

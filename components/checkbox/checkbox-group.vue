@@ -36,7 +36,7 @@ type RawOption =
 const props = useConfiguredProps('checkboxGroup', {
   size: createSizeProp(),
   state: createStateProp(),
-  value: {
+  values: {
     type: Array as PropType<(string | number)[]>,
     default: () => []
   },
@@ -68,14 +68,14 @@ export default defineComponent({
     Checkbox
   },
   props,
-  emits: ['on-change', 'update:value'],
+  emits: ['on-change', 'update:values'],
   setup(props, { emit }) {
     const validateField = inject(VALIDATE_FIELD, noop)
 
     const prefix = 'vxp-checkbox-group'
     const valueMap = new Map<string, string | number>()
     const controlSet = new Set<ControlState>()
-    const currentValue = ref<(string | number)[]>(props.value ?? [])
+    const currentValues = ref<(string | number)[]>(props.values ?? [])
     const checkedLabels = ref(new Set<string>())
 
     const className = computed(() => {
@@ -92,19 +92,19 @@ export default defineComponent({
     })
 
     const updateValue = debounceMinor(() => {
-      currentValue.value = []
+      currentValues.value = []
 
       valueMap.forEach((value, label) => {
         if (checkedLabels.value.has(label)) {
-          currentValue.value.push(value)
+          currentValues.value.push(value)
         }
       })
 
-      handleChange(currentValue.value)
+      handleChange(currentValues.value)
     })
 
     const updateControl = debounceMinor(() => {
-      const valueLength = currentValue.value.length
+      const valueLength = currentValues.value.length
       const checked = valueLength === valueMap.size
       const partial = valueLength > 0 && !checked
 
@@ -117,7 +117,7 @@ export default defineComponent({
     provide<GroupState>(
       GROUP_STATE,
       reactive({
-        currentValue,
+        currentValues,
         disabled: toRef(props, 'disabled'),
         increaseItem,
         decreaseItem,
@@ -130,7 +130,14 @@ export default defineComponent({
       })
     )
 
-    watch(currentValue, () => {
+    watch(
+      () => props.values,
+      value => {
+        currentValues.value = Array.from(value)
+      },
+      { deep: true }
+    )
+    watch(currentValues, () => {
       updateControl()
     })
 
@@ -172,7 +179,7 @@ export default defineComponent({
       // 在 group 层进行更新, 未选满则全选, 反之全不选
       const allLabels = Array.from(valueMap.keys())
 
-      if (currentValue.value.length === allLabels.length) {
+      if (currentValues.value.length === allLabels.length) {
         checkedLabels.value.clear()
       } else {
         // 重新实例化以保持 item 顺序
@@ -185,7 +192,7 @@ export default defineComponent({
 
     function handleChange(value: (string | number)[]) {
       emit('on-change', value)
-      emit('update:value', value)
+      emit('update:values', value)
 
       if (!props.disableValidate) {
         validateField()

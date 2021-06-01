@@ -6,7 +6,7 @@
   <p style="margin-top: 10px;">
     checked: {{ checked }}
   </p>
-  <CheckboxGroup v-model:value="values" @on-change="test">
+  <CheckboxGroup v-model:values="values">
     <Checkbox control>
       全选
     </Checkbox>
