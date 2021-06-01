@@ -308,12 +308,9 @@ export default defineComponent({
 
     function handleSelect(value: string | number, label: string) {
       emit('on-select', value, label)
-
-      if (transferTo.value) {
-        currentVisible.value = false
-      }
-
       handleChange(value, label)
+
+      currentVisible.value = false
     }
 
     function handleChange(value: string | number, label: string) {
