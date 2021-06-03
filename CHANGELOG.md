@@ -1,3 +1,21 @@
+# [1.0.0-beta.0](https://github.com/qmhc/vexip-ui/compare/v1.0.0-alpha.4...v1.0.0-beta.0) (2021-06-03)
+
+### Bug Fixes
+
+- **checkbox-group:** sync value when values porp change ([1bdaa9f](https://github.com/qmhc/vexip-ui/commit/1bdaa9ff4d3ffa746f1c22222c851761be51685c))
+- **date-picker:** calendar pane focus on selected date ([6a61c99](https://github.com/qmhc/vexip-ui/commit/6a61c9947df68e2ade844ec8a74a3111160eba73))
+- **date-picker:** incorrect item display when range select year and month ([55ccf76](https://github.com/qmhc/vexip-ui/commit/55ccf7660dad24030ddefff6669c305066e34f51))
+- **date-picker:** supply labels prop, includes time picker ([3cd5735](https://github.com/qmhc/vexip-ui/commit/3cd57352454998d77eb56c0a341dadcbeacdffec))
+- **icon:** adjust default size about 1.05x ([ce90294](https://github.com/qmhc/vexip-ui/commit/ce902949ef1d193d80f2c58d67ee9cc635678875))
+- **menu:** menu list margin set to 0 ([9ddab57](https://github.com/qmhc/vexip-ui/commit/9ddab5789ac42af1491a1797433f62c2bd4b276e))
+- **select:** visible not to false when option v-for ([7208f42](https://github.com/qmhc/vexip-ui/commit/7208f42c69f5102f103f1cbf3387d27d1f029e09))
+- **table:** column width incorrect width multiple talbe ([6fb8f65](https://github.com/qmhc/vexip-ui/commit/6fb8f65c7a122c6574dc85d5222cd9526ec3b4e1))
+- **tree:** arrow transform act at icon svg ([14b53cc](https://github.com/qmhc/vexip-ui/commit/14b53ccfd6ee609aff66ac556f51a1080e374b26))
+
+### Features
+
+- **textarea:** add control state style ([e8d6bfc](https://github.com/qmhc/vexip-ui/commit/e8d6bfc6b6ee3fc141fa42620e6458856b9e0f86))
+
 # [1.0.0-alpha.4](https://github.com/qmhc/vexip-ui/compare/v1.0.0-alpha.2...v1.0.0-alpha.4) (2021-05-29)
 
 ### Bug Fixes

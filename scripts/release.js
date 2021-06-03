@@ -127,7 +127,7 @@ async function main() {
       'npm',
       [
         'publish',
-        '--registry https://registry.npmjs.org/',
+        '--registry=https://registry.npmjs.org/',
         ...(releaseTag ? ['--tag', releaseTag] : [])
       ],
       { stdio: 'pipe' }
