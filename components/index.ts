@@ -12,6 +12,8 @@ import { Button } from '@/components/button'
 import { ButtonGroup } from '@/components/button-group'
 import { CalendarPane } from '@/components/calendar-pane'
 import { Card } from '@/components/card'
+import { Carousel } from '@/components/carousel'
+import { CarouselItem } from '@/components/carousel-item'
 import { Checkbox } from '@/components/checkbox'
 import { CheckboxGroup } from '@/components/checkbox-group'
 import { Collapse } from '@/components/collapse'
@@ -57,10 +59,10 @@ import { Split } from '@/components/split'
 import { Switcher } from '@/components/switcher'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
+import { TabPane } from '@/components/tab-pane'
 import { Table } from '@/components/table'
 import { TableColumn } from '@/components/table-column'
 import { Tabs } from '@/components/tabs'
-import { TabPane } from '@/components/tab-pane'
 import { Tag } from '@/components/tag'
 import { Textarea } from '@/components/textarea'
 import { TimePicker } from '@/components/time-picker'
@@ -93,6 +95,8 @@ const components = [
   ButtonGroup,
   CalendarPane,
   Card,
+  Carousel,
+  CarouselItem,
   Checkbox,
   CheckboxGroup,
   Collapse,
@@ -135,10 +139,10 @@ const components = [
   Switcher,
   TabNav,
   TabNavItem,
+  TabPane,
   Table,
   TableColumn,
   Tabs,
-  TabPane,
   Tag,
   Textarea,
   TimePicker,
@@ -193,6 +197,8 @@ export {
   ButtonGroup,
   CalendarPane,
   Card,
+  Carousel,
+  CarouselItem,
   Checkbox,
   CheckboxGroup,
   Collapse,
@@ -200,6 +206,7 @@ export {
   CollapseTransition,
   ColorPicker,
   Column,
+  Confirm,
   DatePicker,
   Divider,
   Drawer,
@@ -215,7 +222,9 @@ export {
   Menu,
   MenuGroup,
   MenuItem,
+  Message,
   Modal,
+  Notice,
   NumberInput,
   Option,
   OptionGroup,
@@ -235,10 +244,10 @@ export {
   Switcher,
   TabNav,
   TabNavItem,
+  TabPane,
   Table,
   TableColumn,
   Tabs,
-  TabPane,
   Tag,
   Textarea,
   TimePicker,
@@ -248,8 +257,5 @@ export {
   Tree,
   Upload,
   Wheel,
-  WheelItem,
-  Confirm,
-  Message,
-  Notice
+  WheelItem
 }

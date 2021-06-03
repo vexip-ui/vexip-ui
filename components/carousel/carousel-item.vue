@@ -1,6 +1,6 @@
 <template>
-  <div :class="className" :style="style">
-    <slot></slot>
+  <div :class="className" :style="style" @click="handleClick">
+    <slot :active="active"></slot>
   </div>
 </template>
 
@@ -23,10 +23,13 @@ export default defineComponent({
       offset: 0
     })
 
+    const active = computed(() => {
+      return carouselState?.isItemActive(state.label) ?? false
+    })
     const className = computed(() => {
       return {
         [`${prefix}__item`]: true,
-        [`${prefix}__item--active`]: carouselState?.currentActive === state.label
+        [`${prefix}__item--active`]: active.value
       }
     })
     const style = computed(() => {
@@ -47,9 +50,16 @@ export default defineComponent({
       })
     }
 
+    function handleClick() {
+      carouselState?.handleSelect(state.label)
+    }
+
     return {
+      active,
       className,
-      style
+      style,
+
+      handleClick
     }
   }
 })

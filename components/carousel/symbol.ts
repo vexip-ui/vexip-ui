@@ -12,9 +12,10 @@ export interface ItemState {
 
 export interface CarouselState {
   vertical: boolean,
-  currentActive: number,
   increaseItem: (item: ItemState) => void,
-  decreaseItem: (item: ItemState) => void
+  decreaseItem: (item: ItemState) => void,
+  isItemActive: (label: number) => boolean,
+  handleSelect: (label: number) => void
 }
 
 export const CAROUSEL_STATE = Symbol('CAROUSEL_STATE')

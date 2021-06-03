@@ -1,34 +1,25 @@
 <template>
   <div style="width: 500px;">
     <Carousel
+      v-model:active="active"
       loop
       arrow="inside"
       pointer="inside"
-      :view-size="1"
+      :view-size="3"
+      :active-offset="1"
     >
-      <CarouselItem>
+      <CarouselItem v-for="n in 15" :key="n">
         <div class="demo-pane">
-          内容一
+          内容{{ n }}
         </div>
       </CarouselItem>
-      <CarouselItem>
-        <div class="demo-pane">
-          内容二
-        </div>
-      </CarouselItem>
-      <CarouselItem>
-        <div class="demo-pane">
-          内容三
-        </div>
-      </CarouselItem>
-      <CarouselItem>
-        <div class="demo-pane">
-          内容四
-        </div>
-      </CarouselItem>
-      <CarouselItem>
-        <div class="demo-pane">
-          内容五
+    </Carousel>
+  </div>
+  <div style="height: 600px;">
+    <Carousel loop vertical pointer="inside">
+      <CarouselItem v-for="n in 10" :key="n">
+        <div class="demo-pane--vertical">
+          内容{{ n }}
         </div>
       </CarouselItem>
     </Carousel>
@@ -48,7 +39,7 @@ export default defineComponent({
   },
   data() {
     return {
-      active: '标签页1'
+      active: 9
     }
   }
 })
@@ -64,5 +55,17 @@ export default defineComponent({
   font-size: 30px;
   color: #fff;
   background-color: #4dabf7;
+  transition: transform 250ms;
+
+  &--vertical {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 100%;
+    font-size: 30px;
+    color: #fff;
+    background-color: #4dabf7;
+  }
 }
 </style>

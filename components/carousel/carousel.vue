@@ -1,57 +1,77 @@
 <template>
-  <div
-    ref="wrapper"
-    :class="className"
-    :style="style"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-  >
-    <div :class="`${prefix}__list`" :style="listStyle" @transitionend.self="handleAfterMove">
-      <slot></slot>
-    </div>
+  <div ref="wrapper" :class="className" :style="style">
     <div
-      v-if="arrow !== 'none'"
-      ref="prev"
-      :class="[`${prefix}__arrow--${arrow}`, `${prefix}__arrow--prev`]"
+      :style="{
+        position: 'relative',
+        display: 'flex',
+        flexDirection: vertical ? 'column' : 'row',
+        width: '100%'
+      }"
     >
-      <span
-        :class="[`${prefix}__handler`, disabledPrev ? `${prefix}__handler--disabled` : '']"
-        @click="handlePrev"
+      <div
+        v-if="arrow !== 'none'"
+        ref="prev"
+        :class="[
+          `${prefix}__arrow--${arrow}`,
+          `${prefix}__arrow--prev`,
+          arrowActive ? `${prefix}__arrow--show` : ''
+        ]"
       >
-        <slot name="prev-arrow" :disabled="disabledPrev">
-          <span :class="handleInnerClass">
+        <div
+          :class="{
+            [`${prefix}__handler`]: true,
+            [`${prefix}__handler--disabled`]: disabledPrev
+          }"
+          @click="handlePrevClick"
+        >
+          <slot name="prev-arrow" :disabled="disabledPrev">
             <Icon :name="`arrow-${arrowIcons[0]}`" :scale="1.5"></Icon>
-          </span>
-        </slot>
-      </span>
-    </div>
-    <div
-      v-if="arrow !== 'none'"
-      ref="next"
-      :class="[`${prefix}__arrow--${arrow}`, `${prefix}__arrow--next`]"
-    >
-      <span
-        :class="[`${prefix}__handler`, disabledNext ? `${prefix}__handler--disabled` : '']"
-        @click="handleNext"
+          </slot>
+        </div>
+      </div>
+      <div :class="`${prefix}__list`" :style="listStyle">
+        <div :class="`${prefix}__track`" :style="trackStyle" @transitionend.self="handleAfterMove">
+          <slot></slot>
+        </div>
+      </div>
+      <div
+        v-if="arrow !== 'none'"
+        ref="next"
+        :class="[
+          `${prefix}__arrow--${arrow}`,
+          `${prefix}__arrow--next`,
+          arrowActive ? `${prefix}__arrow--show` : ''
+        ]"
       >
-        <slot name="next-arrow" :disabled="disabledNext">
-          <span :class="handleInnerClass">
+        <div
+          :class="{
+            [`${prefix}__handler`]: true,
+            [`${prefix}__handler--disabled`]: disabledNext
+          }"
+          @click="handleNextClick"
+        >
+          <slot name="next-arrow" :disabled="disabledNext">
             <Icon :name="`arrow-${arrowIcons[1]}`" :scale="1.5"></Icon>
-          </span>
-        </slot>
-      </span>
+          </slot>
+        </div>
+      </div>
     </div>
     <div v-if="pointer !== 'none'" :class="`${prefix}__pointers--${pointer}`">
       <div
         v-for="index in itemStates.size"
         :key="index"
-        :class="[
-          `${prefix}__pointer`,
-          index - 1 === currentActive ? `${prefix}__pointer--active` : ''
-        ]"
-        @click="handleWheel(index - 1)"
+        :class="{
+          [`${prefix}__pointer`]: true,
+          [`${prefix}__pointer--active`]:
+            index - 1 === (currentActive + activeOffset) % itemStates.size,
+          [`${prefix}__pointer--disabled`]: isPointerDisabled(index - activeOffset - 1)
+        }"
+        @click="handleWheel(index - activeOffset - 1)"
       >
-        <slot name="pointer" :active="index - 1 === currentActive">
+        <slot
+          name="pointer"
+          :active="index - 1 === (currentActive + activeOffset) % itemStates.size"
+        >
           <span :class="`${prefix}__pointer-inner`"></span>
         </slot>
       </div>
@@ -68,11 +88,13 @@ import {
   watch,
   provide,
   onMounted,
+  onBeforeUnmount,
   nextTick,
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps } from '@/common/config/install'
+import { useHover } from '@/common/mixins/hover'
 import { debounceMinor } from '@/common/utils/performance'
 import { CAROUSEL_STATE } from './symbol'
 
@@ -86,7 +108,10 @@ import type { ArrowType, ArrowTrigger, PointerType, ItemState, CarouselState } f
 const props = useConfiguredProps('carousel', {
   viewSize: {
     type: Number,
-    default: 3
+    default: 3,
+    validator: (value: number) => {
+      return value > 0
+    }
   },
   vertical: {
     type: Boolean,
@@ -149,16 +174,19 @@ export default defineComponent({
     Icon
   },
   props,
-  emits: ['on-will-change', 'on-change', 'on-prev', 'on-next', 'update:active'],
+  emits: ['on-change', 'on-prev', 'on-next', 'on-select', 'update:active'],
   setup(props, { emit }) {
     const prefix = 'vxp-carousel'
     const itemStates = ref(new Set<ItemState>())
-    const currentActive = ref(props.active)
+    const currentActive = ref(0)
     const isLocked = ref(false) // 用于控制阻断快速连点
-    const transition = ref(false) // 用于控制阻断快速连点
     const arrowActive = ref(props.arrowTrigger === 'always')
 
     const listRect = reactive({
+      width: 0,
+      height: 0
+    })
+    const trackRect = reactive({
       width: 0,
       height: 0,
       offset: 0
@@ -168,7 +196,8 @@ export default defineComponent({
       height: 0
     })
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const { wrapper, isHover } = useHover()
+
     const prev = ref<HTMLElement | null>(null)
     const next = ref<HTMLElement | null>(null)
 
@@ -193,45 +222,57 @@ export default defineComponent({
     const listStyle = computed(() => {
       return {
         width: listRect.width ? `${listRect.width}px` : null,
-        height: listRect.height ? `${listRect.height}px` : null,
-        transform: listRect.offset
-          ? `translate${props.vertical ? 'Y' : 'X'}(${listRect.offset}px)`
+        height: listRect.height ? `${listRect.height}px` : null
+      }
+    })
+    const trackStyle = computed(() => {
+      return {
+        width: trackRect.width ? `${trackRect.width}px` : null,
+        height: trackRect.height ? `${trackRect.height}px` : null,
+        transform: trackRect.offset
+          ? `translate${props.vertical ? 'Y' : 'X'}(${trackRect.offset}px) translateZ(0)`
           : null,
-        transitionDuration: isLocked.value ? '0ms' : null
+        transitionDuration: isLocked.value ? '0ms' : `${props.speed}ms`
       }
     })
     const disabledPrev = computed(() => {
       return isDisabled.value || (!props.loop && currentActive.value <= 0)
     })
     const disabledNext = computed(() => {
-      return isDisabled.value || (!props.loop && currentActive.value >= itemStates.value.size - 1)
+      return (
+        isDisabled.value ||
+        (!props.loop && currentActive.value >= itemStates.value.size - props.viewSize)
+      )
     })
     const arrowIcons = computed(() => {
       return props.vertical ? ['up', 'down'] : ['left', 'right']
-    })
-    const handleInnerClass = computed(() => {
-      return [
-        `${prefix}__handle-inner`,
-        {
-          [`${prefix}__handle-inner--show`]: arrowActive.value
-        }
-      ]
     })
 
     watch(
       () => props.active,
       value => {
-        handleWheel(value)
+        handleWheel(value - props.activeOffset)
       }
     )
     watch(currentActive, value => {
-      emit('on-change', value)
-      emit('update:active', value)
+      const active = (value + props.activeOffset) % itemStates.value.size
+
+      emit('on-change', active)
+      emit('update:active', active)
     })
+    watch(isHover, value => {
+      if (value) {
+        handleMouseEnter()
+      } else {
+        handleMouseLeave()
+      }
+    })
+    watch(() => props.viewSize, refresh)
+    watch(() => props.autoplay, setAutoplay)
 
     const refreshLabels = debounceMinor(() => {
       Array.from(itemStates.value).forEach((item, index) => {
-        item.label = index + 1
+        item.label = index
       })
     })
     const updateItemRect = debounceMinor(() => {
@@ -241,22 +282,61 @@ export default defineComponent({
       })
     })
     const updateListRect = debounceMinor(() => {
-      listRect.width = itemRect.width * itemStates.value.size
-      listRect.height = itemRect.height * itemStates.value.size
+      trackRect.width = itemRect.width * itemStates.value.size
+      trackRect.height = itemRect.height * itemStates.value.size
     })
 
     provide<CarouselState>(
       CAROUSEL_STATE,
       reactive({
         vertical: toRef(props, 'vertical'),
-        currentActive,
         increaseItem,
-        decreaseItem
+        decreaseItem,
+        isItemActive,
+        handleSelect
       })
     )
 
+    // 初始化时不使用过渡效果
+    let inTransition = false
+    let shouldReset = false
+
+    isLocked.value = true
+
+    let observer: MutationObserver | null
+
     onMounted(() => {
       computeItemRect()
+      handleWheel(props.active - props.activeOffset)
+      handleAfterMove()
+
+      window.setTimeout(() => {
+        isLocked.value = false
+        inTransition = false
+
+        setAutoplay()
+      }, 0)
+
+      window.addEventListener('resize', refresh)
+
+      if (wrapper.value) {
+        observer = new MutationObserver(() => {
+          refresh()
+        })
+
+        observer.observe(wrapper.value, {
+          attributes: true,
+          childList: true,
+          characterData: true,
+          attributeFilter: ['style']
+        })
+      }
+    })
+
+    onBeforeUnmount(() => {
+      observer && observer.disconnect()
+      observer = null
+      window.removeEventListener('resize', refresh)
     })
 
     function increaseItem(item: ItemState) {
@@ -270,6 +350,10 @@ export default defineComponent({
       itemStates.value.delete(item)
       refreshLabels()
       updateListRect()
+    }
+
+    function isItemActive(label: number) {
+      return (currentActive.value + props.activeOffset) % itemStates.value.size === label
     }
 
     function computeItemRect() {
@@ -289,83 +373,183 @@ export default defineComponent({
       }
 
       if (props.vertical) {
+        listRect.width = 0
+        listRect.height = wrapper.value.offsetHeight - prevFix - nextFix
+
         itemRect.width = 0
-        itemRect.height = wrapper.value.offsetHeight - prevFix - nextFix
+        itemRect.height = listRect.height / props.viewSize
       } else {
-        itemRect.width = wrapper.value.offsetWidth - prevFix - nextFix
+        listRect.width = wrapper.value.offsetWidth - prevFix - nextFix
+        listRect.height = 0
+
+        itemRect.width = listRect.width / props.viewSize
         itemRect.height = 0
       }
+    }
 
+    function refresh() {
+      computeItemRect()
       updateItemRect()
       updateListRect()
+
+      if (trackRect.offset > 0) {
+        handlePrev(0)
+      } else {
+        handleNext(0)
+      }
+
+      window.setTimeout(() => {
+        isLocked.value = false
+        inTransition = false
+      }, 0)
     }
 
-    function handlePrev() {
-      if (isDisabled.value || transition.value) return
+    function handlePrev(amount = 1) {
+      if (isDisabled.value || inTransition) return
 
-      if (currentActive.value === 0) {
+      const itemLength = props.vertical ? itemRect.height : itemRect.width
+      const itemList = Array.from(itemStates.value)
+      const itemCount = itemList.length
+      const targetIndex = (currentActive.value - amount + itemCount) % itemCount
+
+      if (targetIndex >= props.viewSize) {
         if (!props.loop) return
 
-        const itemList = Array.from(itemStates.value)
-        const lastItem = itemList[itemList.length - 1]
+        if (trackRect.offset < 0) {
+          if (amount < currentActive.value) {
+            trackRect.offset = -targetIndex * itemLength
+          } else {
+            trackRect.offset = itemLength * (itemCount - targetIndex)
 
-        lastItem.offset = -itemList.length * itemRect.width
-        listRect.offset = itemRect.width
-        transition.value = true
-        currentActive.value = itemList.length - 1
+            for (let i = targetIndex; i < itemCount; i++) {
+              itemList[i].offset = -itemCount * itemLength
+            }
+          }
+        } else {
+          for (let i = 0; i < itemCount; i++) {
+            itemList[i].offset = i < targetIndex ? 0 : -itemCount * itemLength
+          }
+
+          trackRect.offset = itemLength * (itemCount - targetIndex)
+        }
+
+        currentActive.value = targetIndex
       } else {
-        currentActive.value -= 1
-        transition.value = true
-        listRect.offset = -currentActive.value * itemRect.width
+        currentActive.value = targetIndex
+        trackRect.offset = -currentActive.value * itemLength
       }
+
+      shouldReset = currentActive.value <= itemCount - props.viewSize
+      inTransition = true
     }
 
-    function handleNext() {
-      if (isDisabled.value || transition.value) return
+    function handleNext(amount = 1) {
+      if (isDisabled.value || inTransition) return
 
-      if (currentActive.value === itemStates.value.size - 1) {
+      const itemLength = props.vertical ? itemRect.height : itemRect.width
+      const itemList = Array.from(itemStates.value)
+      const itemCount = itemList.length
+      const targetIndex = currentActive.value + amount
+
+      if (targetIndex > itemStates.value.size - props.viewSize) {
         if (!props.loop) return
 
-        const itemList = Array.from(itemStates.value)
-        const firstItem = itemList[0]
+        if (trackRect.offset > 0) {
+          trackRect.offset = itemLength * (itemCount - targetIndex)
+        } else {
+          const anchorIndex = targetIndex + props.viewSize - itemCount
 
-        firstItem.offset = itemList.length * itemRect.width
-        listRect.offset = -itemList.length * itemRect.width
-        transition.value = true
-        currentActive.value = 0
+          for (let i = 0, len = itemList.length; i < len; i++) {
+            itemList[i].offset = i < anchorIndex ? itemCount * itemLength : 0
+          }
+
+          trackRect.offset = -targetIndex * itemLength
+        }
+
+        currentActive.value = targetIndex % itemCount
       } else {
-        currentActive.value += 1
-        transition.value = true
-        listRect.offset = -currentActive.value * itemRect.width
+        currentActive.value = targetIndex
+        trackRect.offset = -currentActive.value * itemLength
       }
+
+      shouldReset = currentActive.value <= itemCount - props.viewSize
+      inTransition = true
     }
 
     function handleWheel(active: number) {
-      if (isDisabled.value || transition.value || active === currentActive.value) return
+      if (isDisabled.value || inTransition || active === currentActive.value) return
 
       const itemCount = itemStates.value.size
-      const targetActive = (active % itemCount) + (active < 0 ? itemCount : 0)
 
-      currentActive.value = targetActive
-      transition.value = true
-      listRect.offset = -targetActive * itemRect.width
+      active = (active % itemCount) + (active < 0 ? itemCount : 0)
+
+      if (props.loop) {
+        let forward: number
+        let back: number
+
+        if (active > currentActive.value) {
+          forward = active - currentActive.value
+          back = itemCount - active + currentActive.value
+        } else {
+          forward = itemCount - currentActive.value + active
+          back = currentActive.value - active
+        }
+
+        if (forward < back) {
+          handleNext(forward)
+        } else if (forward > back) {
+          handlePrev(back)
+        } else {
+          if (trackRect.offset > 0) {
+            handlePrev(forward)
+          } else {
+            handleNext(forward)
+          }
+        }
+      } else {
+        if (active < currentActive.value) {
+          handlePrev(currentActive.value - active)
+        } else {
+          handleNext(active - currentActive.value)
+        }
+      }
     }
 
     function handleAfterMove() {
-      itemStates.value.forEach(state => {
-        state.offset = 0
-      })
+      if (!shouldReset) {
+        inTransition = false
+      } else {
+        itemStates.value.forEach(state => {
+          state.offset = 0
+        })
 
-      isLocked.value = true
+        shouldReset = false
+        isLocked.value = true
 
-      nextTick(() => {
-        listRect.offset = -currentActive.value * itemRect.width
+        nextTick(() => {
+          trackRect.offset =
+            -currentActive.value * (props.vertical ? itemRect.height : itemRect.width)
 
-        setTimeout(() => {
-          isLocked.value = false
-          transition.value = false
-        }, 0)
-      })
+          window.setTimeout(() => {
+            isLocked.value = false
+            inTransition = false
+          }, 0)
+        })
+      }
+    }
+
+    function handlePrevClick() {
+      handlePrev(1)
+      emit('on-prev', (currentActive.value + props.activeOffset) % itemStates.value.size)
+    }
+
+    function handleNextClick() {
+      handleNext(1)
+      emit('on-next', (currentActive.value + props.activeOffset) % itemStates.value.size)
+    }
+
+    function handleSelect(label: number) {
+      emit('on-select', label)
     }
 
     let playTimer: number
@@ -419,29 +603,39 @@ export default defineComponent({
       }
     }
 
+    function isPointerDisabled(index: number) {
+      if (props.loop) return false
+
+      return !(
+        index >= props.activeOffset - 1 && index < itemStates.value.size - props.activeOffset - 1
+      )
+    }
+
     return {
       prefix,
       itemStates,
       currentActive,
+      arrowActive,
 
       className,
       style,
       listStyle,
+      trackStyle,
       disabledPrev,
       disabledNext,
       arrowIcons,
-      handleInnerClass,
 
       wrapper,
       prev,
       next,
 
-      handlePrev,
-      handleNext,
+      handlePrevClick,
+      handleNextClick,
       handleWheel,
       handleAfterMove,
-      handleMouseEnter,
-      handleMouseLeave
+      isPointerDisabled,
+
+      refresh
     }
   }
 })

@@ -5,54 +5,60 @@
   display: inline-flex;
   flex-direction: column;
   width: 100%;
-  overflow: hidden;
   user-select: none;
 
   &--vertical {
     flex-direction: row;
+    width: auto;
+    height: 100%;
   }
 
   &__list {
+    overflow: hidden;
+  }
+
+  &__track {
     display: flex;
+    width: 100%;
+    height: 100%;
     transition: $vxp-transition-transform-base;
   }
 
-  &--vertical &__list {
+  &--vertical &__track {
     flex-direction: column;
   }
 
   &__item {
     position: relative;
-    display: flex;
+    display: inline-flex;
     padding: 0 10px;
     // transition: $vxp-transition-transform-base;
+  }
 
-    &-inner {
-      width: 100%;
-    }
+  &--vertical &__item {
+    padding: 10px 0;
   }
 
   $arrow-padding: 10px;
 
   &__arrow {
-    &--none,
     &--inside,
     &--outside {
       position: relative;
+      z-index: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      pointer-events: none;
       user-select: none;
-    }
-
-    &--none {
-      display: none;
     }
 
     &--inside {
       position: absolute;
       top: 0;
       bottom: 0;
+      opacity: 0;
+      transition: $vxp-transition-opacity-base;
     }
 
     &--prev {
@@ -60,7 +66,7 @@
     }
 
     &--inside#{&}--prev {
-      left: 15px;
+      left: 20px;
     }
 
     &--next {
@@ -68,7 +74,11 @@
     }
 
     &--inside#{&}--next {
-      right: 15px;
+      right: 20px;
+    }
+
+    &--inside#{&}--show {
+      opacity: 1;
     }
   }
 
@@ -84,37 +94,41 @@
     }
   }
 
-  &__handle {
+  &__handler {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
     color: $vxp-color-fill-disabled;
+    pointer-events: auto;
     cursor: pointer;
-    transition: color 200ms;
+    background-color: rgba($vxp-color-content-normal, 0.45);
+    border-radius: 50%;
+    transition: $vxp-transition-background-base, $vxp-transition-opacity-base;
 
-    &--disabled {
-      cursor: default;
+    .vxp-icon {
+      color: $vxp-color-fill-disabled;
     }
 
-    &-inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      color: $vxp-color-content-reverse;
-      background-color: rgba($vxp-color-content-normal, 0.45);
-      border-radius: 50%;
-      transition: $vxp-transition-background-base, $vxp-transition-opacity-base;
+    &:hover {
+      background-color: rgba($vxp-color-content-normal, 0.7);
 
-      &:hover {
-        background-color: rgba($vxp-color-content-normal, 0.7);
+      .vxp-icon {
+        color: $vxp-color-fill;
       }
     }
 
-    &--disabled &-inner {
-      background-color: rgba($vxp-color-content-normal, 0.3);
+    &--disabled {
+      cursor: not-allowed;
 
+      &,
       &:hover {
         background-color: rgba($vxp-color-content-normal, 0.3);
+
+        .vxp-icon {
+          color: $vxp-color-fill-disabled;
+        }
       }
     }
   }
@@ -134,14 +148,14 @@
   /* stylelint-enable */
 
   &__pointers {
-    &--none,
     &--inside,
     &--outside {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      cursor: pointer;
+      height: 40px;
+      pointer-events: none;
     }
 
     &--none {
@@ -150,7 +164,7 @@
 
     &--inside {
       position: absolute;
-      bottom: 15px;
+      bottom: 0;
       left: 0;
     }
 
@@ -160,18 +174,25 @@
   }
 
   &--vertical &__pointers {
-    flex-direction: column;
-
-    &--none,
     &--inside,
     &--outside {
       flex-direction: column;
+      width: 40px;
+      height: 100%;
+    }
+
+    &--inside {
+      right: 0;
+      bottom: 0;
+      left: auto;
     }
   }
 
   &__pointer {
     display: flex;
-    margin: 0 3px;
+    padding: 3px;
+    pointer-events: auto;
+    cursor: pointer;
 
     &-inner {
       display: inline-block;
@@ -184,22 +205,34 @@
       transition: width $vxp-transition-base, $vxp-transition-opacity-base;
     }
 
+    &:hover &-inner {
+      opacity: 0.7;
+    }
+
     &--active &-inner {
       width: 24px;
       opacity: 0.7;
     }
+
+    &--disabled {
+      cursor: not-allowed;
+
+      &,
+      &:hover {
+        opacity: 0.2;
+      }
+    }
   }
 
   &--vertical &__pointer {
-    margin: 3px 0;
-
     &-inner {
       width: 3px;
       height: 16px;
       margin: 0 2px 1px 0;
+      transition: height $vxp-transition-base, $vxp-transition-opacity-base;
     }
 
-    &--active .carousel__pointer-inner {
+    &--active .vxp-carousel__pointer-inner {
       height: 24px;
     }
   }
