@@ -71,13 +71,13 @@ async function main() {
 
     for (const outputFile of emitOutput.getOutputFiles()) {
       const rawPath = outputFile.getFilePath()
-      const filepath = rawPath.includes('common')
+      const filePath = rawPath.includes('common')
         ? rawPath
         : path.resolve(
             libDir,
             path.relative(path.resolve(libDir, 'components'), rawPath)
           )
-      const relativeToLib = path.relative(path.dirname(filepath), libDir).replace(/[\/]+/g, '/') || '.'
+      const relativeToLib = path.relative(path.dirname(filePath), libDir).replace(/[\/]+/g, '/') || '.'
       
 
       const content = outputFile.getText()
@@ -86,10 +86,10 @@ async function main() {
         .replace(commonReg, `'${relativeToLib}/common$1'`)
         .replace(componentReg, `'${relativeToLib}$1'`)
 
-      await fs.promises.mkdir(path.dirname(filepath), { recursive: true })
-      await fs.promises.writeFile(filepath, content, 'utf8')
+      await fs.promises.mkdir(path.dirname(filePath), { recursive: true })
+      await fs.promises.writeFile(filePath, content, 'utf8')
 
-      logger.infoText(`Emitted ${filepath}`)
+      logger.infoText(`Emitted ${filePath}`)
     }
   }
 
@@ -131,7 +131,7 @@ async function addSource(component) {
 
             content += compiled.content
 
-            if (scriptSetup.lang === 'ts') isTS = true
+            if (scriptSetup.lang === 'ts') isTs = true
           }
 
           sourceFiles.push(

@@ -6,6 +6,7 @@ const { components, toPascalCase } = require('./utils')
 main()
 
 async function main() {
+  const plugins = ['confirm', 'message', 'notice']
   const prettierConfig = await prettier.resolveConfig(path.resolve('.prettierrc.js'))
 
   const index = `
@@ -23,11 +24,13 @@ async function main() {
     import type { App } from 'vue'
     import type { InstallOptions } from '@/common/config/install'
 
-    const components = {
-      ${components.map(toPascalCase).join(',\n')}
-    }
+    const components = [
+      ${components.filter(c => !plugins.includes(c)).map(toPascalCase).join(',\n')}
+    ]
 
-    const install = (
+    const plugins = [${plugins.map(toPascalCase).join(', ')}]
+
+    export const install = (
       app: App<unknown>,
       { prefix = '', ...options }: Partial<InstallOptions> & { prefix?: string } = {}
     ) => {
@@ -48,11 +51,14 @@ async function main() {
     
         app.component(\`\${prefix}\${name}\`, component)
       })
+
+      plugins.forEach(plugin => {
+        app.use(plugin)
+      })
     }
 
-    export default {
-      ...components,
-      install
+    export {
+      ${components.map(toPascalCase).join(',\n')}
     }
   `
 
