@@ -1,30 +1,39 @@
 <template>
-  <div v-show="wrapShow" ref="wrapper" :class="className">
-    <transition
-      v-if="!disabled"
-      :name="maskTransition"
-      @after-enter="afterOpen"
-      @after-leave="afterClose"
-    >
-      <div v-show="currentActive" :class="`${prefix}__mask`" @click="handleClose"></div>
-    </transition>
-    <transition :name="transitionName">
-      <slot :show="currentActive"></slot>
-    </transition>
-  </div>
+  <Portal :to="transferTo">
+    <div v-show="wrapShow" ref="wrapper" :class="className">
+      <transition
+        v-if="!disabled"
+        :name="maskTransition"
+        @after-enter="afterOpen"
+        @after-leave="afterClose"
+      >
+        <div v-show="currentActive" :class="`${prefix}__mask`" @click="handleClose"></div>
+      </transition>
+      <transition :name="transitionName">
+        <slot :show="currentActive"></slot>
+      </transition>
+    </div>
+  </Portal>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
+import { Portal } from '@/components/portal'
 import { useConfiguredProps } from '@/common/config/install'
 import { isPromise } from '@/common/utils/common'
 
 import type { PropType } from 'vue'
 
+type ClassType = string | Record<string, boolean>
+
 const props = useConfiguredProps('masker', {
   active: {
     type: Boolean,
     default: false
+  },
+  class: {
+    type: [String, Object] as PropType<ClassType>,
+    default: null
   },
   closable: {
     type: Boolean,
@@ -58,10 +67,9 @@ const props = useConfiguredProps('masker', {
 
 export default defineComponent({
   name: 'Masker',
-  // model: {
-  //   prop: 'active',
-  //   event: 'on-toggle'
-  // },
+  components: {
+    Portal
+  },
   props,
   emits: ['on-toggle', 'before-close', 'on-close', 'on-hide', 'on-show', 'update:active'],
   setup(props, { emit }) {
@@ -74,11 +82,15 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        props.class,
         {
           [`${prefix}--inner`]: props.inner,
           [`${prefix}--disabled`]: props.disabled
         }
       ]
+    })
+    const transferTo = computed(() => {
+      return typeof props.transfer === 'boolean' ? (props.transfer ? 'body' : '') : props.transfer
     })
 
     watch(
@@ -140,6 +152,7 @@ export default defineComponent({
       wrapShow,
 
       className,
+      transferTo,
 
       wrapper,
 
