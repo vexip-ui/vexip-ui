@@ -334,7 +334,7 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      observer && observer.disconnect()
+      observer?.disconnect()
       observer = null
       window.removeEventListener('resize', refresh)
     })

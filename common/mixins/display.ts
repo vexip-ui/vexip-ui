@@ -20,7 +20,7 @@ export function useDisplay(displayInit = noop, element = ref<HTMLElement | null>
               displayInit()
             }
 
-            observer && observer.disconnect()
+            observer?.disconnect()
             observer = null
           }
         })
@@ -38,7 +38,7 @@ export function useDisplay(displayInit = noop, element = ref<HTMLElement | null>
   })
 
   onBeforeUnmount(() => {
-    observer && observer.disconnect()
+    observer?.disconnect()
     observer = null
   })
 
