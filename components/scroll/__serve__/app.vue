@@ -23,20 +23,39 @@
       <p>内容</p>
       <p>内容</p>
       <p>内容</p>
-      <p>内容</p>
+      <p id="target">
+        内容
+      </p>
       <p>内容</p>
     </div>
   </Scroll>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import Scroll from '../scroll.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
     Scroll
+  },
+  setup() {
+    const scroll = ref<InstanceType<typeof Scroll> | null>(null)
+
+    onMounted(() => {
+      window.setTimeout(() => {
+        if (!scroll.value?.content) return
+
+        const target = scroll.value.content.querySelector('#target')
+
+        target && scroll.value.scrollToElement(target)
+      }, 20)
+    })
+
+    return {
+      scroll
+    }
   }
 })
 </script>

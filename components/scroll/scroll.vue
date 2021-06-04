@@ -173,7 +173,8 @@ export default defineComponent({
     'on-scroll',
     'on-scroll-end',
     'on-bar-scroll-start',
-    'on-bar-scroll-end'
+    'on-bar-scroll-end',
+    'on-ready'
   ],
   setup(props, { emit }) {
     const prefix = 'vxp-scroll'
@@ -358,6 +359,9 @@ export default defineComponent({
     })
     watch(contentElement, () => {
       computeContentSize()
+    })
+    watch(isReady, value => {
+      if (value) emit('on-ready')
     })
 
     const handleResize = throttle(refresh)
@@ -837,7 +841,7 @@ export default defineComponent({
       window.clearTimeout(endTimer)
     }
 
-    function scrollToElement(el: Element, duration?: number, offset = 0) {
+    function scrollToElement(el: string | Element, duration?: number, offset = 0) {
       if (!content.el) return
 
       if (typeof el === 'string') {
