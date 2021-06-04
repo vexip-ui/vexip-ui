@@ -12,7 +12,7 @@
       ref="content"
       :class="wrapperClass"
       :style="wrapperStyle"
-      @transitionend="transitionDuration = null"
+      @transitionend="transitionDuration = -1"
     >
       <slot></slot>
     </div>
@@ -58,7 +58,7 @@ import {
 } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { useConfiguredProps } from '@/common/config/install'
-import { isNull, isTrue } from '@/common/utils/common'
+import { isTrue } from '@/common/utils/common'
 import { throttle, debounce } from '@/common/utils/performance'
 import { toNumber, multipleFixed } from '@/common/utils/number'
 import { USE_TOUCH } from '@/common/utils/dom-event'
@@ -181,7 +181,7 @@ export default defineComponent({
     const usingBar = ref(false)
     const scrolling = ref(false)
     const isReady = ref(false)
-    const transitionDuration = ref<number | null>(null)
+    const transitionDuration = ref<number>(-1)
     const canPlay = ref(false)
 
     const emitter = createEventEmitter()
@@ -231,14 +231,14 @@ export default defineComponent({
               ? width
               : `${Number(width)}px`
             : `${width}px`
-          : null,
+          : undefined,
         height: height
           ? typeof height === 'string'
             ? Number.isNaN(Number(height))
               ? height
               : `${Number(height)}px`
             : `${height}px`
-          : null
+          : undefined
       }
     })
     const wrapperClass = computed(() => {
@@ -256,9 +256,8 @@ export default defineComponent({
     const wrapperStyle = computed(() => {
       return {
         transform: `translate3d(${currentScroll.x}px, ${currentScroll.y}px, 0)`,
-        transitionDuration: isNull(transitionDuration.value)
-          ? null
-          : `${transitionDuration.value}ms`
+        transitionDuration:
+          transitionDuration.value < 0 ? undefined : `${transitionDuration.value}ms`
       }
     })
     const xScrollLimit = computed(() => {
@@ -538,7 +537,7 @@ export default defineComponent({
       document.removeEventListener(moveEvent, handlePointerMove)
       document.removeEventListener(upEvent, handlePointerUp)
 
-      transitionDuration.value = null
+      transitionDuration.value = -1
 
       handleBuffer()
       verifyScroll()
@@ -737,7 +736,7 @@ export default defineComponent({
 
         verifyScroll()
 
-        if (!changed) transitionDuration.value = null
+        if (!changed) transitionDuration.value = -1
       })
     }
 
@@ -759,7 +758,7 @@ export default defineComponent({
 
         verifyScroll()
 
-        if (!changed) transitionDuration.value = null
+        if (!changed) transitionDuration.value = -1
       })
     }
 
@@ -769,7 +768,7 @@ export default defineComponent({
 
         if (transitionDuration.value === 0) {
           nextTick(() => {
-            transitionDuration.value = null
+            transitionDuration.value = -1
           })
         }
       }

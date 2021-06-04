@@ -124,7 +124,7 @@ export default defineComponent({
       },
       ageSorter: {
         able: true,
-        type: 'asc'
+        type: 'asc' as const
       },
       data: [
         {

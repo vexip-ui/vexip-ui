@@ -24,7 +24,7 @@ import { useConfiguredProps } from '@/common/config/install'
 import { isDefined } from '@/common/utils/common'
 import { throttle } from '@/common/utils/performance'
 
-import type { PropType } from 'vue'
+import type { PropType, CSSProperties } from 'vue'
 
 export type ScrollbarPlacement = 'top' | 'right' | 'bottom' | 'left'
 
@@ -109,7 +109,7 @@ export default defineComponent({
         : ScrollbarType.HORIZONTAL
     })
     const barStyle = computed(() => {
-      const style: Partial<CSSStyleDeclaration> = {
+      const style: CSSProperties = {
         backgroundColor: props.barColor
       }
       const position = `${((100 - props.barLength) * currentScroll.value) / 100}%`
@@ -123,7 +123,7 @@ export default defineComponent({
         style.width = length
       }
 
-      if (isDefined(props.duration)) {
+      if (isDefined(props.duration) && props.duration >= 0) {
         style.transitionDuration = `${props.duration}ms`
       }
 

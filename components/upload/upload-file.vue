@@ -1,5 +1,5 @@
 <template>
-  <transition appear :name="selectToAdd ? transitionName : null">
+  <transition appear :name="selectToAdd ? transitionName : undefined">
     <li :class="[`${prefix}__file`, `${prefix}__file--${file.status}`]" :title="file.name">
       <slot :file="file.source" :status="file.status" :percentage="file.percentage">
         <template v-if="listType === 'name'">
@@ -221,7 +221,7 @@ export default defineComponent({
 
       reader.onload = () => {
         if (file.status !== UploadStatusType.DELETE) {
-          file.base64 = reader.result
+          file.base64 = reader.result?.toString() ?? null
         }
       }
     }

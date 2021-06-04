@@ -52,7 +52,7 @@
                   <Option
                     v-for="(item, index) in rawOptions"
                     :key="index"
-                    :label="item.label || item.value"
+                    :label="item.label || item.value.toString()"
                     :value="item.value"
                   ></Option>
                 </slot>
@@ -205,7 +205,7 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
-    const listHeight = ref<string | null>(null)
+    const listHeight = ref<string | undefined>(undefined)
     const optionStates = ref(new Set<OptionState>())
 
     const scroll = ref<InstanceType<typeof Scroll> | null>(null)
@@ -296,7 +296,7 @@ export default defineComponent({
         if (scrollWrapper) {
           const wrapperHeight = scrollWrapper.getBoundingClientRect().height
 
-          listHeight.value = wrapperHeight < props.maxListHeight ? null : `${wrapperHeight}px`
+          listHeight.value = wrapperHeight < props.maxListHeight ? undefined : `${wrapperHeight}px`
           scroll.value?.refresh()
         }
       })

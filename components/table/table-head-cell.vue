@@ -1,7 +1,7 @@
 <template>
   <div ref="wrapper" :class="className" :style="style">
     <Checkbox
-      v-if="column.type === 'selection'"
+      v-if="isSelection(column)"
       control
       :class="`${prefix}__selection`"
       :checked="checkedAll"
@@ -125,7 +125,7 @@ import '@/common/icons/filter'
 
 import type { PropType } from 'vue'
 import type { TableStore } from './store'
-import type { TypeColumn, ColumnWithKey, TableAction } from './symbol'
+import type { SelectionColumn, TypeColumn, ColumnWithKey, TableAction } from './symbol'
 
 const columnTypes = ['order', 'selection', 'expand']
 
@@ -204,6 +204,10 @@ export default defineComponent({
         }
       }, 0)
     })
+
+    function isSelection(column: unknown): column is SelectionColumn {
+      return (column as TypeColumn).type === 'selection'
+    }
 
     function handleSortAsc() {
       const key = props.column.key
@@ -287,6 +291,7 @@ export default defineComponent({
       wrapper,
 
       isFunction,
+      isSelection,
       handleSortAsc,
       handleSortDesc,
       handleFilterItemSelect,

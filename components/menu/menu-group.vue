@@ -42,7 +42,9 @@ export default defineComponent({
 
     const labelStyle = computed(() => {
       return {
-        paddingLeft: parentItemState?.isUsePopper ? null : `${indent.value * baseIndentWidth}px`
+        paddingLeft: parentItemState?.isUsePopper
+          ? undefined
+          : `${indent.value * baseIndentWidth}px`
       }
     })
     const onlyShowSlot = computed(() => {

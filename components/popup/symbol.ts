@@ -16,6 +16,21 @@ export interface PopupItemState extends Record<string, unknown> {
   height: number,
   visible: boolean,
   verticalPosition: number,
+  type?: string,
+  className?: any,
+  style?: any,
+  icon?:
+    | string
+    | ({
+        name: string,
+        scale?: number | string,
+        title?: string,
+        label?: string,
+        spin?: boolean | string,
+        pulse?: boolean | string,
+        flip?: string
+      } & Record<string, unknown>),
+  iconColor?: string,
   onOpen: (key: Key) => void,
   onClose: (result: boolean) => void
 }

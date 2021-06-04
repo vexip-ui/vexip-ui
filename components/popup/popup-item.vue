@@ -34,7 +34,7 @@ import type { Key, ClassType, PopupItemState } from './symbol'
 const props = {
   state: {
     type: Object as PropType<PopupItemState>,
-    required: true
+    default: () => ({})
   },
   transitionName: {
     type: String,

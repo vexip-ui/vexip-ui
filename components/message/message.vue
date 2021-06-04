@@ -4,14 +4,14 @@
     ref="popup"
     :class="prefix"
     :transition-name="`vxp-popup-${placement}`"
-    :placement="`${placement}-center`"
+    :placement="placementCenter"
   >
     <template #item="{ item }">
       <div
         :class="[
           {
             [`${prefix}__item`]: true,
-            [`${prefix}__item--${item.type}`]: effectiveTypes.includes(item.type),
+            [`${prefix}__item--${item.type}`]: item.type && effectiveTypes.includes(item.type),
             [`${prefix}__item--background`]: item.background,
             [`${prefix}__item--color`]: item.background && item.color,
             [`${prefix}__item--color-only`]: !item.background && item.color,
@@ -22,8 +22,8 @@
         ]"
         :style="[
           {
-            color: typeof item.color === 'string' ? item.color : null,
-            backgroundColor: typeof item.background === 'string' ? item.background : null
+            color: typeof item.color === 'string' ? item.color : undefined,
+            backgroundColor: typeof item.background === 'string' ? item.background : undefined
           },
           item.style
         ]"
@@ -36,11 +36,11 @@
               :data="item"
             ></Renderer>
             <Icon
-              v-else-if="item.icon && typeof item.icon === 'object'"
+              v-else-if="item.icon && isObject(item.icon)"
               v-bind="item.icon"
               :style="[{ color: item.iconColor }, item.icon.style]"
             ></Icon>
-            <Icon v-else :name="item.icon" :style="{ color: item.iconColor }"></Icon>
+            <Icon v-else-if="item.icon" :name="item.icon" :style="{ color: item.iconColor }"></Icon>
           </div>
           <Renderer
             v-if="typeof item.renderer === 'function'"
@@ -62,10 +62,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
+import { isObject } from '@/common/utils/common'
 
 import '@/common/icons/times'
 
@@ -86,7 +87,7 @@ export default defineComponent({
     Popup
   },
   props,
-  setup() {
+  setup(props) {
     const popup = ref<InstanceType<typeof Popup> | null>(null)
 
     async function add(options: Record<string, unknown>) {
@@ -105,11 +106,16 @@ export default defineComponent({
       prefix: 'vxp-message',
       effectiveTypes: ['info', 'success', 'warning', 'error'],
 
+      placementCenter: computed(() => {
+        return `${props.placement}-center` as const
+      }),
+
       popup,
 
       add,
       remove,
-      clear
+      clear,
+      isObject
     }
   }
 })

@@ -130,7 +130,6 @@
         <NumberInput
           v-model:value="jumpValue"
           size="small"
-          :value="currentActive"
           :class="`${prefix}__jump-input`"
           @on-change="handleJumpPage"
         ></NumberInput>

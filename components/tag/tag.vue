@@ -8,7 +8,7 @@
         v-if="closable"
         :class="`${prefix}__close`"
         :style="{
-          color: border ? borderColor || color : null
+          color: border ? borderColor || color : undefined
         }"
         @click.left.stop="handleClose"
       >
@@ -75,8 +75,8 @@ export default defineComponent({
     })
     const style = computed(() => {
       return {
-        color: props.border ? props.color : null,
-        backgroundColor: props.border ? null : props.color,
+        color: props.border ? props.color : undefined,
+        backgroundColor: props.border ? undefined : props.color,
         borderColor: props.borderColor || props.color
       }
     })

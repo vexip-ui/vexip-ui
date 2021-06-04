@@ -45,7 +45,7 @@
       <Option
         v-for="(item, index) in rawOptions"
         :key="index"
-        :label="item.label || item.value"
+        :label="item.label || item.value.toString()"
         :value="item.value"
         :class="{
           [`${prefixCls}__option--hit`]: currentIndex === index

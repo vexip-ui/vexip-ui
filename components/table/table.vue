@@ -79,7 +79,7 @@
       :class="`${prefix}__bar--vertical`"
       :scroll="yScrollPercent"
       :fade="barFade"
-      :disabled="totalRowHeight <= bodyHeight"
+      :disabled="!!bodyHeight && totalRowHeight <= bodyHeight"
       :bar-length="barLength"
       :style="{ top: `${headHeight}px` }"
       @on-scroll="handleYBarScroll"
@@ -133,8 +133,9 @@ import type {
 type DropType = 'before' | 'after'
 
 const props = useConfiguredProps('table', {
+  // TODO: colums 正确的类型推导
   columns: {
-    type: Array as PropType<ColumnOptions[]>,
+    type: Array as PropType<any[]>,
     default: () => []
   },
   data: {
@@ -246,7 +247,7 @@ export default defineComponent({
   ],
   setup(props, { emit }) {
     const prefix = 'vxp-table'
-    const bodyHeight = ref<number | null>(props.height)
+    const bodyHeight = ref<number | undefined>(props.height)
     const xScrollPercent = ref(0)
     const yScrollPercent = ref(0)
     const headHeight = ref(0)
@@ -260,7 +261,7 @@ export default defineComponent({
     const indicator = ref<HTMLElement | null>(null)
 
     const store = useStore({
-      columns: props.columns,
+      columns: props.columns as ColumnOptions[],
       data: props.data,
       rowClass: props.rowClass,
       dataKey: props.dataKey,
@@ -339,7 +340,7 @@ export default defineComponent({
       return 35
     })
     const allColumns = computed(() => {
-      return [...templateColumns.value].concat(props.columns)
+      return [...templateColumns.value].concat(props.columns as ColumnOptions[])
     })
 
     const {
@@ -433,7 +434,7 @@ export default defineComponent({
           bodyHeight.value = height
         }
       } else {
-        bodyHeight.value = null
+        bodyHeight.value = undefined
       }
     }
 

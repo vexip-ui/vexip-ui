@@ -13,7 +13,7 @@
       </div>
       <DateControl
         ref="start"
-        :unit-type="currentState === 'start' ? startState.column : null"
+        :unit-type="currentState === 'start' ? startState.column : undefined"
         :enabled="startState.enabled"
         :activated="startState.activated"
         :date-value="startState.dateValue"
@@ -41,7 +41,7 @@
         </div>
         <DateControl
           ref="end"
-          :unit-type="currentState === 'end' ? endState.column : null"
+          :unit-type="currentState === 'end' ? endState.column : undefined"
           :enabled="endState.enabled"
           :activated="endState.activated"
           :date-value="endState.dateValue"

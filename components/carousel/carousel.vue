@@ -216,22 +216,22 @@ export default defineComponent({
         height:
           props.vertical && props.height
             ? `${props.height}${typeof props.height === 'number' ? 'px' : ''}`
-            : null
+            : undefined
       }
     })
     const listStyle = computed(() => {
       return {
-        width: listRect.width ? `${listRect.width}px` : null,
-        height: listRect.height ? `${listRect.height}px` : null
+        width: listRect.width ? `${listRect.width}px` : undefined,
+        height: listRect.height ? `${listRect.height}px` : undefined
       }
     })
     const trackStyle = computed(() => {
       return {
-        width: trackRect.width ? `${trackRect.width}px` : null,
-        height: trackRect.height ? `${trackRect.height}px` : null,
+        width: trackRect.width ? `${trackRect.width}px` : undefined,
+        height: trackRect.height ? `${trackRect.height}px` : undefined,
         transform: trackRect.offset
           ? `translate${props.vertical ? 'Y' : 'X'}(${trackRect.offset}px) translateZ(0)`
-          : null,
+          : undefined,
         transitionDuration: isLocked.value ? '0ms' : `${props.speed}ms`
       }
     })

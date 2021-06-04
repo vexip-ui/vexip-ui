@@ -14,7 +14,7 @@
             [`${prefix}__item--title-only`]: !item.content && !item.renderer,
             [`${prefix}__item--has-icon`]: item.icon,
             [`${prefix}__item--content-only`]: !item.title,
-            [`${prefix}__item--${item.type}`]: effectiveTypes.includes(item.type),
+            [`${prefix}__item--${item.type}`]: item.type && effectiveTypes.includes(item.type),
             [`${prefix}__item--background`]: item.background,
             [`${prefix}__item--color`]: item.background && item.color,
             [`${prefix}__item--color-only`]: !item.background && item.color,
@@ -58,7 +58,7 @@
                   ? item.titleColor
                   : typeof item.color === 'string'
                     ? item.color
-                    : null
+                    : undefined
             }"
           >
             {{ item.title }}
@@ -67,7 +67,7 @@
             {{ item.content }}
           </div>
         </template>
-        <div v-if="item.closable" :class="`${prefix}__close`" @click="clear(item.key)">
+        <div v-if="item.closable" :class="`${prefix}__close`" @click="remove(item.key)">
           <Icon name="times"></Icon>
         </div>
       </div>

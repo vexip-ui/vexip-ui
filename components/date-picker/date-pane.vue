@@ -293,16 +293,16 @@ export default defineComponent({
     const calendarValue = computed(() => {
       return calendarRange.value
         ? [
-            startActivated.value ? getStringValue('start') : null,
-            endActivated.value ? getStringValue('end') : null
+            startActivated.value ? getStringValue('start') : '',
+            endActivated.value ? getStringValue('end') : ''
           ]
         : props.valueType === 'start'
           ? startActivated.value
             ? getStringValue(props.valueType)
-            : null
+            : ''
           : endActivated.value
             ? getStringValue(props.valueType)
-            : null
+            : ''
     })
 
     watch(

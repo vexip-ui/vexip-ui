@@ -111,7 +111,7 @@ export default defineComponent({
     const prefix = 'vxp-form'
 
     const { isRequired, allRules } = useRules(props, formProps)
-    const { isError, validate, clearError, reset } = useField(props, formProps, allRules)
+    const { isError, errorTip, validate, clearError, reset } = useField(props, formProps, allRules)
 
     const fieldObject = {
       prop: toRef(props, 'prop'),
@@ -153,7 +153,7 @@ export default defineComponent({
         width: `calc(100% - ${computedlabelWidth.value}px)`,
         marginLeft:
           hasLabel.value || formProps.labelPosition === 'top'
-            ? null
+            ? undefined
             : `${computedlabelWidth.value}px`
       }
     })
@@ -161,6 +161,7 @@ export default defineComponent({
     return {
       prefix,
       isError,
+      errorTip,
 
       hideAsterisk: formProps.hideAsterisk ?? false,
       labelSuffix: formProps.labelSuffix ?? '',
@@ -305,7 +306,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     return errors
   }
 
-  return { isError, validate, clearError, reset }
+  return { isError, errorTip, validate, clearError, reset }
 }
 
 function useRelation(field: FieldOptions) {

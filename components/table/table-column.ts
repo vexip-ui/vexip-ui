@@ -8,9 +8,9 @@ import type {
   Data,
   ClassType,
   ColumnType,
-  FilterOptions,
-  SorterOptions,
-  Accessor,
+  // FilterOptions,
+  // SorterOptions,
+  // Accessor,
   RenderFn,
   RowState,
   ColumnWithKey,
@@ -27,7 +27,7 @@ const props = useConfiguredProps('tableColumn', {
     default: ''
   },
   accessor: {
-    type: Function as PropType<Accessor>,
+    type: Function as any,
     default: null
   },
   fixed: {
@@ -50,11 +50,11 @@ const props = useConfiguredProps('tableColumn', {
     default: null
   },
   filter: {
-    type: Object as PropType<FilterOptions>,
+    type: Object as any,
     default: () => ({})
   },
   sorter: {
-    type: Object as PropType<SorterOptions>,
+    type: Object as any,
     default: () => ({})
   },
   renderer: {

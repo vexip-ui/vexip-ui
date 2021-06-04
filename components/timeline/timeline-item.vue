@@ -76,7 +76,7 @@ export default defineComponent({
         return { color: props.type }
       }
 
-      return null
+      return {}
     })
     const pointerStyle = computed(() => {
       if (props.type === 'custom') {
@@ -86,14 +86,14 @@ export default defineComponent({
         }
       }
 
-      return null
+      return {}
     })
     const lineStyle = computed(() => {
       const isDashed = props.dashed ?? timelineState?.dashed ?? false
       const color = props.lineColor ?? timelineState?.lineColor
 
       return {
-        borderLeftStyle: isDashed ? 'dashed' : null,
+        borderLeftStyle: isDashed ? ('dashed' as const) : undefined,
         borderLeftColor: color
       }
     })

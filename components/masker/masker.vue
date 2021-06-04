@@ -24,15 +24,14 @@ import { isPromise } from '@/common/utils/common'
 
 import type { PropType } from 'vue'
 
-type ClassType = string | Record<string, boolean>
-
 const props = useConfiguredProps('masker', {
   active: {
     type: Boolean,
     default: false
   },
+  // HTMLAttributes.class => any
   class: {
-    type: [String, Object] as PropType<ClassType>,
+    type: [String, Array, Object] as any,
     default: null
   },
   closable: {

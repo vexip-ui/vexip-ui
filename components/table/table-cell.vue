@@ -1,17 +1,17 @@
 <template>
   <div :class="className" :style="style">
     <Checkbox
-      v-if="column.type === 'selection'"
+      v-if="isSelection(column)"
       :class="`${prefix}__selection`"
       :checked="row.checked"
       :size="column.checkboxSize || 'default'"
       :disabled="disableCheckRows[row.key]"
       @click.prevent.stop="handleCheckRow(row)"
     ></Checkbox>
-    <span v-else-if="column.type === 'order'" :class="`${prefix}__order`">
-      {{ column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
+    <span v-else-if="isOrder(column)" :class="`${prefix}__order`">
+      {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
     </span>
-    <template v-else-if="column.type === 'expand'">
+    <template v-else-if="isExpand(column)">
       <div
         v-if="!disableExpandRows[row.key]"
         :class="{
@@ -47,7 +47,15 @@ import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
 import type { TableStore } from './store'
-import type { RowState, TypeColumn, ColumnWithKey, TableAction } from './symbol'
+import type {
+  RowState,
+  OrderColumn,
+  SelectionColumn,
+  ExpandColumn,
+  TypeColumn,
+  ColumnWithKey,
+  TableAction
+} from './symbol'
 
 import '@/common/icons/angle-right'
 
@@ -60,7 +68,7 @@ const props = {
   },
   rowIndex: {
     type: Number,
-    required: true
+    default: -1
   },
   column: {
     type: Object as PropType<ColumnWithKey>,
@@ -68,7 +76,7 @@ const props = {
   },
   columnIndex: {
     type: Number,
-    required: true
+    default: -1
   }
 }
 
@@ -107,6 +115,18 @@ export default defineComponent({
       }
     })
 
+    function isSelection(column: unknown): column is SelectionColumn {
+      return (column as TypeColumn).type === 'selection'
+    }
+
+    function isOrder(column: unknown): column is OrderColumn {
+      return (column as TypeColumn).type === 'order'
+    }
+
+    function isExpand(column: unknown): column is ExpandColumn {
+      return (column as TypeColumn).type === 'expand'
+    }
+
     function handleCheckRow(row: RowState) {
       if (!getters.disableCheckRows[row.key]) {
         const checked = !row.checked
@@ -134,6 +154,9 @@ export default defineComponent({
       disableExpandRows: toRef(getters, 'disableExpandRows'),
 
       isFunction,
+      isSelection,
+      isOrder,
+      isExpand,
       handleCheckRow,
       handleExpandRow
     }

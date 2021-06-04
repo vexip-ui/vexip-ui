@@ -13,7 +13,7 @@
       </div>
       <TimeControl
         ref="start"
-        :unit-type="currentState === 'start' ? startState.column : null"
+        :unit-type="currentState === 'start' ? startState.column : undefined"
         :enabled="startState.enabled"
         :activated="startState.activated"
         :time-value="startState.timeValue"
@@ -43,7 +43,7 @@
         </div>
         <TimeControl
           ref="end"
-          :unit-type="currentState === 'end' ? endState.column : null"
+          :unit-type="currentState === 'end' ? endState.column : undefined"
           :enabled="endState.enabled"
           :activated="endState.activated"
           :time-value="endState.timeValue"
@@ -88,7 +88,7 @@
           :class="`${prefixCls}__popper`"
           @click.stop="handleFocused"
         >
-          <div :class="`${prefixCls}__pane`" @click="handleInputFocus(currentColumn)">
+          <div :class="`${prefixCls}__pane`">
             <div v-if="shortcuts.length" :class="[`${prefixCls}__list`, `${prefixCls}__list--sub`]">
               <div
                 v-for="(item, index) in shortcuts"

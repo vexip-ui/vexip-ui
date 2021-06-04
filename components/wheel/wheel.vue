@@ -131,12 +131,12 @@ export default defineComponent({
     const scrollStyle = computed(() => {
       if (props.horizontal) {
         return {
-          width: wrapperWidth.value ? `${wrapperWidth.value}px` : null
+          width: wrapperWidth.value ? `${wrapperWidth.value}px` : undefined
         }
       }
 
       return {
-        height: wrapperHeight.value ? `${wrapperHeight.value}px` : null
+        height: wrapperHeight.value ? `${wrapperHeight.value}px` : undefined
       }
     })
     const listStyle = computed(() => {
@@ -155,12 +155,12 @@ export default defineComponent({
     const maskStyle = computed(() => {
       if (props.horizontal) {
         return {
-          width: horizontalPadding.value ? `${horizontalPadding.value}px` : null
+          width: horizontalPadding.value ? `${horizontalPadding.value}px` : undefined
         }
       }
 
       return {
-        height: verticalPadding.value ? `${verticalPadding.value}px` : null
+        height: verticalPadding.value ? `${verticalPadding.value}px` : undefined
       }
     })
     const prevDisabled = computed(() => {

@@ -55,7 +55,7 @@ export default defineComponent({
         }
       ]
     })
-    const ontentStyle = computed(() => {
+    const contentStyle = computed(() => {
       const style: CSSProperties = {
         backgroundColor: props.background
       }
@@ -82,7 +82,7 @@ export default defineComponent({
       prefix,
 
       className,
-      ontentStyle,
+      contentStyle,
       arrowStyle,
 
       handleClick

@@ -168,7 +168,7 @@ export default defineComponent({
       return {
         paddingLeft:
           parentItemState && parentItemState.isUsePopper
-            ? null
+            ? undefined
             : `${indent.value * baseIndentWidth}px`
       }
     })
@@ -186,7 +186,9 @@ export default defineComponent({
       )
     })
     const tooltipDisabled = computed(() => {
-      return isGroup.value || parentItemState?.isUsePopper || (menuState && !menuState.isReduced)
+      return (
+        isGroup.value || !!(parentItemState?.isUsePopper || (menuState && !menuState.isReduced))
+      )
     })
     const theme = computed(() => {
       return menuState ? menuState.theme : 'light'

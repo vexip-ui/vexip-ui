@@ -36,9 +36,11 @@ export default defineComponent({
       const { width, height, offset } = state
 
       return {
-        width: width ? `${width}px` : null,
-        height: height ? `${height}px` : null,
-        transform: offset ? `translate${carouselState?.vertical ? 'Y' : 'X'}(${offset}px)` : null
+        width: width ? `${width}px` : undefined,
+        height: height ? `${height}px` : undefined,
+        transform: offset
+          ? `translate${carouselState?.vertical ? 'Y' : 'X'}(${offset}px)`
+          : undefined
       }
     })
 

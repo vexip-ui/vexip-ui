@@ -43,7 +43,7 @@
         <div
           :class="`${prefix}__content`"
           :style="{
-            overflow: resizing ? 'hidden' : null
+            overflow: resizing ? 'hidden' : undefined
           }"
         >
           <slot></slot>
@@ -249,12 +249,13 @@ export default defineComponent({
 
       return {
         top: `${currentTop.value}px`,
-        right: fixedHeight || !props.right || props.right === 'auto' ? null : `${props.right}px`,
+        right:
+          fixedHeight || !props.right || props.right === 'auto' ? undefined : `${props.right}px`,
         bottom:
-          fixedHeight || !props.bottom || props.bottom === 'auto' ? null : `${props.bottom}px`,
+          fixedHeight || !props.bottom || props.bottom === 'auto' ? undefined : `${props.bottom}px`,
         left: `${currentLeft.value}px`,
         width: `${currentWidth.value}px`,
-        height: fixedHeight ? `${currentHeight.value}px` : null
+        height: fixedHeight ? `${currentHeight.value}px` : undefined
       }
     })
     const cancelText = computed(() => {
