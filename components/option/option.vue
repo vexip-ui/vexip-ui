@@ -25,7 +25,7 @@ import {
 import { isNull } from '@/common/utils/common'
 import { SELECTOR_STATE } from './symbol'
 
-import type { SelectState } from './symbol'
+import type { OptionState, SelectState } from './symbol'
 
 const props = {
   value: {
@@ -57,11 +57,13 @@ export default defineComponent({
     const truthLabel = ref(props.label ?? props.value.toString())
     const truthValue = ref<string | number>(props.value)
     const hidden = ref(false)
+    const hitting = ref(false)
 
     const wrapper = ref<HTMLElement | null>(null)
 
-    const state = reactive({
+    const state: OptionState = reactive({
       hidden,
+      hitting,
       label: truthLabel,
       value: truthValue
     })
@@ -78,7 +80,8 @@ export default defineComponent({
         [prefix]: true,
         [`${prefix}--disabled`]: props.disabled,
         [`${prefix}--selected`]: !props.disabled && selected.value,
-        [`${prefix}--divided`]: props.divided
+        [`${prefix}--divided`]: props.divided,
+        [`${prefix}--hitting`]: hitting.value
       }
     })
 

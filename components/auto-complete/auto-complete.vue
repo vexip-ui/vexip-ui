@@ -205,17 +205,23 @@ export default defineComponent({
       return optionsStates.value.filter(({ hidden }) => !hidden)
     })
     const inputValue = computed(() => {
-      if (select.value) {
+      const hittingOption = filteredOptions.value[currentIndex.value]
+
+      if (hittingOption) {
+        return hittingOption.label || hittingOption.value.toString()
+      } else if (select.value) {
         if (select.value.currentVisible) {
-          return currentValue.value
+          return currentValue.value.toString()
         }
 
-        const currentOption = rawOptions.value.find(({ value }) => value === currentValue.value)
+        const currentOption = filteredOptions.value.find(
+          ({ value }) => value === currentValue.value
+        )
 
-        return currentOption ? currentOption.label : currentValue.value
+        return currentOption ? currentOption.label : currentValue.value.toString()
       }
 
-      return currentValue.value
+      return currentValue.value.toString()
     })
 
     watch(
@@ -225,6 +231,12 @@ export default defineComponent({
         lastValue = value
       }
     )
+    watch(currentIndex, computeHittding)
+    watch(visible, value => {
+      if (!value) {
+        currentIndex.value = -1
+      }
+    })
 
     watchEffect(() => {
       if (props.filter) {
@@ -256,8 +268,23 @@ export default defineComponent({
             }
           }
         }
+
+        computeHittding()
       }
     })
+
+    function computeHittding() {
+      let index = -1
+
+      optionsStates.value.forEach(state => {
+        if (!state.hidden) {
+          index += 1
+          state.hitting = currentIndex.value === index
+        } else {
+          state.hitting = false
+        }
+      })
+    }
 
     function handleSelect(value: string | number) {
       if (isNull(value)) {
@@ -322,9 +349,21 @@ export default defineComponent({
       }
     }
 
-    function handleKeyDown({ key }: KeyboardEvent) {
-      currentIndex.value += key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0
-      currentIndex.value = Math.min(Math.max(-1, currentIndex.value), filteredOptions.value.length)
+    function handleKeyDown(event: KeyboardEvent) {
+      const key = event.key
+
+      if (key === 'ArrowDown' || key === 'ArrowUp') {
+        event.preventDefault()
+
+        currentIndex.value += key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0
+        currentIndex.value = Math.min(
+          Math.max(-1, currentIndex.value),
+          filteredOptions.value.length - 1
+        )
+      } else if (!['Enter', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+        // 进行了其他按键则重置
+        currentIndex.value = -1
+      }
     }
 
     function handleEnter() {
@@ -338,6 +377,7 @@ export default defineComponent({
 
       emit('on-enter', currentValue.value)
       control.value?.blur()
+      visible.value = false
     }
 
     function handleClear() {

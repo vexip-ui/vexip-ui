@@ -1,7 +1,8 @@
 export interface OptionState {
+  hidden: boolean,
+  hitting: boolean,
   label: string,
-  value: string | number,
-  hidden: boolean
+  value: string | number
 }
 
 export interface SelectState {

@@ -7,10 +7,14 @@
   list-style: none;
   cursor: pointer;
   background-color: $vxp-option-color-bg;
-  transition: $vxp-transition-background-base;
+  transition: $vxp-transition-color-base, $vxp-transition-background-base;
 
   &:hover {
     background-color: $vxp-option-color-bg-hover;
+  }
+
+  &--hitting {
+    color: $vxp-option-color-hitting;
   }
 
   &--selected {
