@@ -1,3 +1,9 @@
+# [1.0.0-beta.2](https://github.com/qmhc/vexip-ui/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2021-06-05)
+
+### Bug Fixes
+
+- **style:** relate style for import-on-demand ([194f32b](https://github.com/qmhc/vexip-ui/commit/194f32b6fda7264a52da9835faae8d4dd0875282))
+
 # [1.0.0-beta.1](https://github.com/qmhc/vexip-ui/compare/v1.0.0-beta.0...v1.0.0-beta.1) (2021-06-05)
 
 ### Bug Fixes
