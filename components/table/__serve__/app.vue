@@ -64,6 +64,7 @@ import { Icon } from '@/components/icon'
 import { Row } from '@/components/row'
 import Table from '../table.vue'
 import TableColumn from '../table-column'
+import { defineFilter, defineColumn } from '../helper'
 
 import '@/common/icons/user'
 
@@ -80,7 +81,7 @@ export default defineComponent({
     return {
       test: false,
       columns: [
-        {
+        defineColumn({
           name: 'Last Name',
           key: 'lastName',
           order: 1,
@@ -93,7 +94,7 @@ export default defineComponent({
               { label: 'Starts with T', value: 'T' }
             ],
             multiple: true,
-            method(values: string[], row: { lastName: string }) {
+            method(values, row: { lastName: string }) {
               for (const value of values) {
                 if (row.lastName.startsWith(value)) {
                   return true
@@ -103,25 +104,26 @@ export default defineComponent({
               return false
             }
           }
-        }
+        })
       ],
       columns2: [
-        {
+        defineColumn({
           name: 'Last Name',
           key: 'lastName',
           order: 1
-        }
+        })
       ],
-      firstNameFilter: {
+      firstNameFilter: defineFilter({
         able: true,
         options: [
           { label: 'Starts with A', value: 'A' },
           { label: 'Starts with E', value: 'E' }
         ],
-        method(value: string, row: { firstName: string }) {
+        multiple: false,
+        method(value, row: { firstName: string }) {
           return row.firstName.startsWith(value)
         }
-      },
+      }),
       ageSorter: {
         able: true,
         type: 'asc' as const

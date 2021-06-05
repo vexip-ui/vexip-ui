@@ -13,6 +13,7 @@ import type {
   FilterOptions,
   ParsedFilterOptions,
   SorterOptions,
+  ParsedSorterOptions,
   SelectionColumn,
   ExpandColumn,
   ColumnOptions,
@@ -454,13 +455,13 @@ function setRowHover(state: StoreState, key: Key, hover: boolean) {
   }
 }
 
-function handleSort(state: StoreState, key: Key, type: SorterOptions['type']) {
+function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type']) {
   if (state.sorters[key]) {
     state.sorters[key].type = type
   }
 }
 
-function handleFilter(state: StoreState, key: Key, active: FilterOptions['active']) {
+function handleFilter(state: StoreState, key: Key, active: ParsedFilterOptions['active']) {
   if (state.filters[key]) {
     state.filters[key].active = active
   }
@@ -574,13 +575,14 @@ function refreshRowIndex(state: StoreState) {
   }
 }
 
-function parseSorter(sorter: Partial<SorterOptions> = {}): SorterOptions {
-  const { able = false, type = null, order = 0, method = null } = sorter
+function parseSorter(sorter: boolean | SorterOptions = false): ParsedSorterOptions {
+  const raw = typeof sorter === 'boolean' ? { able: sorter } : sorter
+  const { able = false, type = null, order = 0, method = null } = raw
 
   return { able, type, order, method }
 }
 
-function parseFilter(filter: Partial<FilterOptions> = {}): ParsedFilterOptions {
+function parseFilter(filter: FilterOptions = { able: false, options: [] }): ParsedFilterOptions {
   const { able = false, multiple = false, active = null, method = null } = filter
   // 防止内部变化触发 deep watch
   const options = deepClone(filter.options ?? [])
@@ -640,10 +642,10 @@ function computePartial(state: StoreState) {
   state.partial = partial
 }
 
-function filterData(filters: Record<Key, FilterOptions>, data: RowState[]) {
+function filterData(filters: Record<Key, ParsedFilterOptions>, data: RowState[]) {
   const keys = Object.keys(filters)
-  const usedFilter = []
-  const filterData = []
+  const usedFilter: ParsedFilterOptions[] = []
+  const filterData: RowState[] = []
 
   for (let i = 0, len = keys.length; i < len; i++) {
     const key = keys[i]
@@ -665,7 +667,7 @@ function filterData(filters: Record<Key, FilterOptions>, data: RowState[]) {
     for (let j = 0; j < usedFilterCount; j++) {
       const { active, method } = usedFilter[j]
 
-      isFilter = method!(active!, row.data)
+      isFilter = method!(active! as any, row.data)
 
       if (!isFilter) {
         break
@@ -680,7 +682,11 @@ function filterData(filters: Record<Key, FilterOptions>, data: RowState[]) {
   return filterData
 }
 
-function sortData(sorters: Record<Key, SorterOptions>, data: RowState[], columns: ColumnOptions[]) {
+function sortData(
+  sorters: Record<Key, ParsedSorterOptions>,
+  data: RowState[],
+  columns: ColumnOptions[]
+) {
   const keys = Object.keys(sorters)
   const usedSorter = []
 

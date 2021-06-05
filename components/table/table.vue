@@ -135,7 +135,7 @@ type DropType = 'before' | 'after'
 const props = useConfiguredProps('table', {
   // TODO: colums 正确的类型推导
   columns: {
-    type: Array as PropType<any[]>,
+    type: Array as PropType<ColumnOptions<any, any>[]>,
     default: () => []
   },
   data: {

@@ -8,8 +8,8 @@ import type {
   Data,
   ClassType,
   ColumnType,
-  // FilterOptions,
-  // SorterOptions,
+  FilterOptions,
+  SorterOptions,
   // Accessor,
   RenderFn,
   RowState,
@@ -50,12 +50,12 @@ const props = useConfiguredProps('tableColumn', {
     default: null
   },
   filter: {
-    type: Object as any,
+    type: Object as PropType<FilterOptions<any, any>>,
     default: () => ({})
   },
   sorter: {
-    type: Object as any,
-    default: () => ({})
+    type: [Boolean, Object] as PropType<boolean | SorterOptions<any>>,
+    default: false
   },
   renderer: {
     type: Function as PropType<RenderFn>,

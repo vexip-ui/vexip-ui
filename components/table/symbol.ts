@@ -5,64 +5,96 @@ export type Key = string | number
 export type Data = Record<string, unknown>
 export type ClassType = string | Record<string, boolean>
 export type RowClassFn = (data: Data, index: number) => ClassType
-export type Accessor = (data: Data, index: number) => unknown
+export type Accessor<T extends string | number = string | number, D = Data> = (
+  data: D,
+  index: number
+) => T
 export type RenderFn = (data: Data) => VNodeChild
 
 export type ColumnType = 'order' | 'selection' | 'expand'
 
-export interface FilterOptions {
-  able: boolean,
-  multiple: boolean,
-  active: null | string | number | (string | number)[],
-  options: (string | { value: string | number, label?: string, active?: boolean })[],
-  method: null | ((active: string | number | (string | number)[], data: Data) => boolean)
-}
+// export interface FilterOptions {
+//   able: boolean,
+//   options: (string | { value: string | number, label?: string, active?: boolean })[],
+//   multiple?: boolean,
+//   active?: null | FilterActive,
+//   method?: null | ((active: FilterActive, data: Data) => boolean)
+// }
 
-export interface ParsedFilterOptions extends Omit<FilterOptions, 'options'> {
+export type FilterOptions<T extends string | number = string | number, D = Data> =
+  | {
+      able: boolean,
+      options: (string | { value: T, label?: string, active?: boolean })[],
+      multiple?: false,
+      active?: null | T,
+      method?: null | ((active: T, data: D) => boolean)
+    }
+  | {
+      able: boolean,
+      options: (string | { value: T, label?: string, active?: boolean })[],
+      multiple: true,
+      active?: null | T[],
+      method?: null | ((active: T[], data: D) => boolean)
+    }
+
+export interface ParsedFilterOptions extends Omit<Required<FilterOptions>, 'options'> {
   options: { value: string | number, label: string, active: boolean }[]
 }
 
-export interface SorterOptions {
+export interface SorterOptions<D = Data> {
   able: boolean,
-  type: null | 'asc' | 'desc',
-  order: number, // 优先级
-  method: null | ((prev: Data, next: Data) => number)
+  type?: null | 'asc' | 'desc',
+  order?: number, // 优先级
+  method?: null | ((prev: D, next: D) => number)
 }
 
-export interface BaseColumn {
+export type ParsedSorterOptions = Required<SorterOptions>
+
+export interface BaseColumn<T extends string | number = string | number, D = Data> {
   name: string,
   key?: Key,
   fixed?: boolean | 'left' | 'right',
   className?: ClassType,
   width?: number,
-  filter?: Partial<FilterOptions>,
-  sorter?: Partial<SorterOptions>,
+  filter?: FilterOptions<T, D>,
+  sorter?: boolean | SorterOptions<D>,
   order?: number,
-  accessor?: Accessor,
+  accessor?: Accessor<T, D>,
   renderer?: RenderFn,
   headRenderer?: RenderFn
 }
 
-export interface OrderColumn extends BaseColumn {
+export interface OrderColumn<T extends string | number = string | number, D = Data>
+  extends BaseColumn<T, D> {
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
-export interface SelectionColumn extends BaseColumn {
+export interface SelectionColumn<T extends string | number = string | number, D = Data>
+  extends BaseColumn<T, D> {
   type: 'selection',
   checkboxSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
-export interface ExpandColumn extends BaseColumn {
+export interface ExpandColumn<T extends string | number = string | number, D = Data>
+  extends BaseColumn<T, D> {
   type: 'expand',
   disableRow?: (data: Data) => boolean
 }
 
-export type TypeColumn = OrderColumn | SelectionColumn | ExpandColumn
-export type ColumnOptions = BaseColumn | TypeColumn
-export type ColumnWithKey = ColumnOptions & { key: Key }
+export type TypeColumn<T extends string | number = string | number, D = Data> =
+  | OrderColumn<T, D>
+  | SelectionColumn<T, D>
+  | ExpandColumn<T, D>
+export type ColumnOptions<T extends string | number = string | number, D = Data> =
+  | BaseColumn<T, D>
+  | TypeColumn<T, D>
+export type ColumnWithKey<T extends string | number = string | number, D = Data> = ColumnOptions<
+  T,
+  D
+> & { key: Key }
 
 export interface StoreOptions {
   columns: ColumnOptions[],
@@ -100,7 +132,7 @@ export interface StoreState extends StoreOptions {
   checkedAll: boolean,
   partial: boolean,
   widths: Record<Key, number>,
-  sorters: Record<Key, SorterOptions>,
+  sorters: Record<Key, ParsedSorterOptions>,
   filters: Record<Key, ParsedFilterOptions>,
   bodyScroll: number,
   hiddenHeight: number,
