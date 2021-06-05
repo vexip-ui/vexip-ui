@@ -14,7 +14,7 @@
         :node="item"
         :label-key="labelKey"
         :children-key="childrenKey"
-        :children="item[childrenKey]"
+        :children="getNodeChildren(item)"
         :indent="indent"
         :draggable="draggable"
         :appear="appear"
@@ -355,6 +355,10 @@ export default defineComponent({
         [props.parentKey]: parent,
         [props.childrenKey]: []
       })
+    }
+
+    function getNodeChildren(node: TreeNodeOptions) {
+      return node[props.childrenKey] as TreeNodeOptions[]
     }
 
     function updateCheckedUpward(originNode: TreeNodeOptions) {
@@ -765,6 +769,7 @@ export default defineComponent({
       // api
       forceUpdateData,
       syncNodeStateIntoData,
+      getNodeChildren,
       getCheckedNodes,
       getCheckedNodeData,
       getSelectedNodes,

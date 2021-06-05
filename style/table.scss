@@ -1,4 +1,10 @@
 /* stylelint-disable declaration-property-value-disallowed-list */
+
+@import './button.scss';
+@import './scroll.scss';
+@import './checkbox.scss';
+@import './tooltip.scss';
+
 .vxp-table {
   @include basis;
 
