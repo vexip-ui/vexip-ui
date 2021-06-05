@@ -26,7 +26,7 @@ export interface FileState {
   name: string,
   size: number,
   type: string,
-  base64: string | ArrayBuffer | null,
+  base64: string | null,
   status: UploadStatusType,
   percentage: number,
   source: File,

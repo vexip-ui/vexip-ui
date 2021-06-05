@@ -5,7 +5,7 @@ import { toNumber } from '@/common/utils/number'
 
 export type Trigger = 'blur' | 'change'
 
-type Types =
+export type Types =
   | 'string'
   | 'number'
   | 'boolean'
@@ -20,16 +20,16 @@ type Types =
 type Range = [number, number]
 type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
 
-export interface Rule {
+export interface Rule<T = any> {
   trigger?: Trigger,
   required?: boolean,
   type?: Types,
   length?: number,
   range?: Range,
   strict?: boolean,
-  enums?: [],
+  enums?: T[],
   message?: string,
-  validator?(value: any, model: Record<string, any>): ValidatorReslut
+  validator?(value: T, model: Record<string, any>): ValidatorReslut
 }
 
 type TypeOptions = Pick<Rule, 'length' | 'range' | 'strict'>

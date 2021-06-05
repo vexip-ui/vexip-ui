@@ -49,13 +49,13 @@ async function main() {
 
   logger.ln()
 
-  if (buildType) {
-    await execa('yarn', ['build:types'], { stdio: 'inherit' })
-  }
-
   if (!process.exitCode) {
     logger.success('All builds are complete successfully.')
     logger.ln()
+  }
+
+  if (buildType) {
+    await execa('yarn', ['build:types'], { stdio: 'inherit' })
   }
 }
 
