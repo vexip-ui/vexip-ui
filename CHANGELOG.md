@@ -1,3 +1,15 @@
+# [1.0.0-beta.1](https://github.com/qmhc/vexip-ui/compare/v1.0.0-beta.0...v1.0.0-beta.1) (2021-06-05)
+
+### Bug Fixes
+
+- **auto-complete:** hitting wrong after filter options ([7317ed6](https://github.com/qmhc/vexip-ui/commit/7317ed6848484505a3c61fa2f0cc2d9b60d84e4b))
+- **masker:** transfer prop has no effect ([fd2173e](https://github.com/qmhc/vexip-ui/commit/fd2173e1c45599305d8e8abda0a93d423e222cd6))
+
+### Features
+
+- **scroll:** add on-ready event ([288ec9a](https://github.com/qmhc/vexip-ui/commit/288ec9abcc7a40374b5e788f89b89ec275a1124d))
+- **table:** add filter and column define helpers ([5e85594](https://github.com/qmhc/vexip-ui/commit/5e855944082094e6509e9bed6ad3abf52efd8e03))
+
 # [1.0.0-beta.0](https://github.com/qmhc/vexip-ui/compare/v1.0.0-alpha.4...v1.0.0-beta.0) (2021-06-03)
 
 ### Bug Fixes
