@@ -72,13 +72,6 @@ import '@/common/icons/times'
 
 import type { Key, MessagePlacement } from './symbol'
 
-const props = {
-  placement: {
-    default: 'top' as MessagePlacement,
-    validator: (value: MessagePlacement) => ['top', 'bottom'].includes(value)
-  }
-}
-
 export default defineComponent({
   name: 'Message',
   components: {
@@ -86,8 +79,8 @@ export default defineComponent({
     Renderer,
     Popup
   },
-  props,
-  setup(props) {
+  setup() {
+    const placement = ref<MessagePlacement>('top')
     const popup = ref<InstanceType<typeof Popup> | null>(null)
 
     async function add(options: Record<string, unknown>) {
@@ -105,9 +98,10 @@ export default defineComponent({
     return {
       prefix: 'vxp-message',
       effectiveTypes: ['info', 'success', 'warning', 'error'],
+      placement,
 
       placementCenter: computed(() => {
-        return `${props.placement}-center` as const
+        return `${placement.value}-center` as const
       }),
 
       popup,

@@ -19,9 +19,7 @@ export interface MessageOptions extends Record<string, unknown> {
 }
 
 export interface MessageInstance extends ComponentPublicInstance {
-  $props: {
-    placement: MessagePlacement
-  },
+  placement: MessagePlacement,
   add: (options: MessageOptions) => void,
   remove: (key: string | number) => void,
   clear: () => void
