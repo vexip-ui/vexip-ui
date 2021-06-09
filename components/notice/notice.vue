@@ -85,15 +85,6 @@ import '@/common/icons/times'
 
 import type { Key, NoticePlacement } from './symbol'
 
-const props = {
-  placement: {
-    default: 'top-right' as NoticePlacement,
-    validator: (value: NoticePlacement) => {
-      return ['top-right', 'top-left', 'bottom-right', 'bottom-left'].includes(value)
-    }
-  }
-}
-
 export default defineComponent({
   name: 'Notice',
   components: {
@@ -101,8 +92,8 @@ export default defineComponent({
     Renderer,
     Popup
   },
-  props,
   setup() {
+    const placement = ref<NoticePlacement>('top-right')
     const popup = ref<InstanceType<typeof Popup> | null>(null)
 
     async function add(options: Record<string, unknown>) {
@@ -120,6 +111,7 @@ export default defineComponent({
     return {
       prefix: 'vxp-notice',
       effectiveTypes: ['info', 'success', 'warning', 'error'],
+      placement,
 
       popup,
 

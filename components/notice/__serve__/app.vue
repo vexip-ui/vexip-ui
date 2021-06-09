@@ -11,16 +11,29 @@
   <Button type="error" @on-click="$notice.error('提示的标题', '一条错误提示消息')">
     错误提示
   </Button>
+  <Button type="warning" @on-click="blNotice.warning('左下角提示', '一条左下角提示消息')">
+    左下提示
+  </Button>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Button } from '@/components/button'
+import { Notice } from '..'
 
 export default defineComponent({
   name: 'App',
   components: {
     Button
+  },
+  setup() {
+    const blNotice = Notice.clone()
+
+    blNotice.config({ placement: 'bottom-left' })
+
+    return {
+      blNotice
+    }
   }
 })
 </script>

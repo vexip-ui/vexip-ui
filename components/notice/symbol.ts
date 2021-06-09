@@ -20,9 +20,7 @@ export interface NoticeOptions extends Record<string, unknown> {
 }
 
 export interface NoticeInstance extends ComponentPublicInstance {
-  $props: {
-    placement: NoticePlacement
-  },
+  placement: NoticePlacement,
   add: (options: NoticeOptions) => void,
   remove: (key: string | number) => void,
   clear: () => void

@@ -91,6 +91,10 @@
   "main": "dist/vexip-ui.cjs.js",
   "module": "dist/vexip-ui.es.js",
   "name": "vexip-ui",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qmhc/vexip-ui.git"
+  },
   "scripts": {
     "build": "node scripts/build.js",
     "build:clean": "yarn run clean && yarn run build",

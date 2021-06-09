@@ -111,7 +111,7 @@ export class NoticeManager {
 
   config({ placement, ...others }: { placement?: NoticePlacement, [x: string]: unknown }) {
     if (placement) {
-      this._getInstance().$props.placement = placementWhiteList.includes(placement)
+      this._getInstance().placement = placementWhiteList.includes(placement)
         ? placement
         : placementWhiteList[0]
     }
