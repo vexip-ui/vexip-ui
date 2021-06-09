@@ -1,3 +1,9 @@
+# [1.0.0-beta.3](https://github.com/qmhc/vexip-ui/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2021-06-09)
+
+### Bug Fixes
+
+- **message:** install global property name ([af21d31](https://github.com/qmhc/vexip-ui/commit/af21d31867d3679a2d86b2fdbc519d0f421ecbb1))
+
 # [1.0.0-beta.2](https://github.com/qmhc/vexip-ui/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2021-06-05)
 
 ### Bug Fixes
