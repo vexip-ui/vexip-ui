@@ -128,7 +128,7 @@ export class MessageManager {
 
   install(app: App, options: ManagerOptions = {}) {
     this.config(options)
-    app.config.globalProperties.$notice = this
+    app.config.globalProperties.$message = this
   }
 
   private _getInstance() {
