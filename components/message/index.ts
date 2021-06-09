@@ -126,9 +126,11 @@ export class MessageManager {
     return false
   }
 
-  install(app: App, options: ManagerOptions = {}) {
-    this.config(options)
-    app.config.globalProperties.$message = this
+  install(app: App, options: ManagerOptions & { property?: string } = {}) {
+    const { property, ...others } = options
+
+    this.config(others)
+    app.config.globalProperties[property || '$message'] = this
   }
 
   private _getInstance() {

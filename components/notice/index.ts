@@ -136,9 +136,11 @@ export class NoticeManager {
     return false
   }
 
-  install(app: App, options: ManagerOptions = {}) {
-    this.config(options)
-    app.config.globalProperties.$notice = this
+  install(app: App, options: ManagerOptions & { property?: string } = {}) {
+    const { property, ...others } = options
+
+    this.config(others)
+    app.config.globalProperties[property || '$notice'] = this
   }
 
   private _getInstance() {
