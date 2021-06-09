@@ -63,6 +63,7 @@
     "ts-morph": "^11.0.0",
     "typescript": "4.3.2",
     "vite": "^2.3.4",
+    "vite-plugin-dts": "^0.4.2",
     "vite-plugin-html": "^2.0.7"
   },
   "engines": {
@@ -90,7 +91,6 @@
   "main": "dist/vexip-ui.cjs.js",
   "module": "dist/vexip-ui.es.js",
   "name": "vexip-ui",
-  "private": false,
   "scripts": {
     "build": "node scripts/build.js",
     "build:clean": "yarn run clean && yarn run build",

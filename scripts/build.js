@@ -17,7 +17,7 @@ const sourceMap = args.sourcemap || args.s
 const release = args.release || args.r
 const buildAllMatching = args.all || args.a
 const libOnly = args.lib || args.l
-const buildType = args.type || args.t
+// const buildType = args.type || args.t
 
 const env = devOnly ? 'development' : 'production'
 const libDir = path.resolve(__dirname, '../lib')
@@ -26,8 +26,6 @@ main()
 
 async function main() {
   if (release) {
-    // 删除缓存以防止过去的枚举值
-    await fs.remove(path.resolve(__dirname, '../node_modules/.rts2_cache'))
     await fs.remove(path.resolve(__dirname, '../node_modules/.cache'))
   }
 
@@ -54,9 +52,9 @@ async function main() {
     logger.ln()
   }
 
-  if (buildType) {
-    await execa('yarn', ['build:types'], { stdio: 'inherit' })
-  }
+  // if (buildType) {
+  //   await execa('yarn', ['build:types'], { stdio: 'inherit' })
+  // }
 }
 
 async function buildAll(components) {

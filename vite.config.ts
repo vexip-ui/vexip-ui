@@ -1,7 +1,8 @@
-import { resolve, basename } from 'path'
+import { resolve, basename, relative, dirname } from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import dts from 'vite-plugin-dts'
 import { injectHtml } from 'vite-plugin-html'
 import eslint from '@rollup/plugin-eslint'
 import pcssEnv from 'postcss-preset-env'
@@ -114,6 +115,28 @@ export default defineConfig(({ command }) => {
       ]),
       vue(),
       vueJsx(),
+      !process.env.TARGET &&
+        dts({
+          exclude: ['node_modules', 'common/icons'],
+          outputDir: 'lib',
+          beforeWriteFile(filePath, content) {
+            const libDir = resolve(__dirname, 'lib')
+
+            filePath = filePath.includes('common')
+              ? filePath
+              : resolve(libDir, relative(resolve(libDir, 'components'), filePath))
+
+            const relativeToLib = relative(dirname(filePath), libDir).replace(/[\\/]+/g, '/') || '.'
+
+            content = content
+              .replace(/['"]\.\.\/\.\.\/common(.*)['"]/g, `'${relativeToLib}/common$1'`)
+              .replace(/['"]\.\.\/common(.*)['"]/g, `'${relativeToLib}/common$1'`)
+              .replace(/['"]\.\.\/\.\.\/components(.*)['"]/g, `'${relativeToLib}$1'`)
+              .replace(/['"]\.\.\/components(.*)['"]/g, `'${relativeToLib}$1'`)
+
+            return { filePath, content }
+          }
+        }),
       injectHtml({
         injectData: { name }
       }),

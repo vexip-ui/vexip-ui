@@ -15,7 +15,6 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    // "rootDir": ".",
     "outDir": "dist",
     "types": [
       "vite/client",
