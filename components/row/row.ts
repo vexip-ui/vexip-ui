@@ -1,4 +1,3 @@
-<script lang="ts">
 import { defineComponent, computed, h, provide, toRef } from 'vue'
 import { useConfiguredProps } from '@/common/config/install'
 import { ROW_GUTTER } from './symbol'
@@ -74,8 +73,9 @@ export default defineComponent({
           class: className.value,
           style: style.value
         },
-        slots.default && slots.default()
+        {
+          default: () => slots.default && slots.default()
+        }
       )
   }
 })
-</script>

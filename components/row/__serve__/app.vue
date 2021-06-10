@@ -22,8 +22,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Row from '../row.vue'
-import Column from '../column.vue'
+import Row from '../row'
+import Column from '../column'
 
 export default defineComponent({
   name: 'App',

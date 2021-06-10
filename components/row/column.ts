@@ -1,4 +1,3 @@
-<script lang="ts">
 import { defineComponent, computed, h, inject } from 'vue'
 import { ROW_GUTTER } from '@/components/row'
 import { useConfiguredProps } from '@/common/config/install'
@@ -136,8 +135,9 @@ export default defineComponent({
           class: className.value,
           style: style.value
         },
-        slots.default && slots.default()
+        {
+          default: () => slots.default && slots.default()
+        }
       )
   }
 })
-</script>
