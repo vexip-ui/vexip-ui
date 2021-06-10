@@ -1,10 +1,18 @@
 import { defineComponent, h, Transition } from 'vue'
 import { useConfiguredProps } from '@/common/config/install'
 
+type TransitionMode = 'in-out' | 'out-in' | 'default'
+
 const props = useConfiguredProps('collapseTransition', {
   appear: {
     type: Boolean,
     default: false
+  },
+  mode: {
+    default: 'default' as TransitionMode,
+    validator: (value: TransitionMode) => {
+      return ['in-out', 'out-in', 'default'].includes(value)
+    }
   },
   horizontal: {
     type: Boolean,
@@ -16,6 +24,10 @@ const props = useConfiguredProps('collapseTransition', {
     validator: (value: number) => {
       return value >= 200
     }
+  },
+  timing: {
+    type: String,
+    default: null
   },
   fadeEffect: {
     type: Boolean,
@@ -31,6 +43,7 @@ export default defineComponent({
   setup(props, { slots, emit }) {
     return () => {
       const duration = props.duration
+      const timing = props.timing || 'ease-in-out'
 
       let height: 'width' | 'height' = 'height'
       let paddingTop: 'paddingTop' | 'paddingLeft' = 'paddingTop'
@@ -39,11 +52,11 @@ export default defineComponent({
       let marginBottom: 'marginRight' | 'marginBottom' = 'marginBottom'
       let scrollHeight: 'scrollHeight' | 'scrollWidth' = 'scrollHeight'
       let transition = `
-        height ${duration}ms ease-in-out,
-        padding-top ${duration}ms ease-in-out,
-        padding-bottom ${duration}ms ease-in-out,
-        margin-top ${duration}ms ease-in-out,
-        margin-bottom ${duration}ms ease-in-out
+        height ${duration}ms ${timing},
+        padding-top ${duration}ms ${timing},
+        padding-bottom ${duration}ms ${timing},
+        margin-top ${duration}ms ${timing},
+        margin-bottom ${duration}ms ${timing}
       `
 
       if (props.horizontal) {
@@ -54,11 +67,11 @@ export default defineComponent({
         marginBottom = 'marginRight'
         scrollHeight = 'scrollWidth'
         transition = `
-          width ${duration}ms ease-in-out,
-          padding-left ${duration}ms ease-in-out,
-          padding-right ${duration}ms ease-in-out,
-          margin-left ${duration}ms ease-in-out,
-          margin-right ${duration}ms ease-in-out
+          width ${duration}ms ${timing},
+          padding-left ${duration}ms ${timing},
+          padding-right ${duration}ms ${timing},
+          margin-left ${duration}ms ${timing},
+          margin-right ${duration}ms ${timing}
         `
       }
 
@@ -75,6 +88,7 @@ export default defineComponent({
         Transition,
         {
           appear: props.appear,
+          mode: props.mode,
           onBeforeEnter($el) {
             const el = $el as HTMLElement
 
