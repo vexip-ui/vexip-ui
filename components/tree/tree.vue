@@ -138,10 +138,6 @@ const props = useConfiguredProps('tree', {
     type: Boolean,
     default: false
   },
-  search: {
-    type: Boolean,
-    default: false
-  },
   appear: {
     type: Boolean,
     default: false
