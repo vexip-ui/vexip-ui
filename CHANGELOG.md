@@ -1,3 +1,15 @@
+# [1.0.0](https://github.com/qmhc/vexip-ui/compare/v1.0.0-beta.3...v1.0.0) (2021-06-10)
+
+### Bug Fixes
+
+- **message:** config placement not effective ([85fd771](https://github.com/qmhc/vexip-ui/commit/85fd771d3c1e3f6bc1c57db69c418ab433f9c58f))
+- **notice:** config placement not effective ([833933b](https://github.com/qmhc/vexip-ui/commit/833933b26c26f061fedacee76b576daac067c330))
+
+### Features
+
+- **collapse-transition:** add mode and timing props ([9fe1862](https://github.com/qmhc/vexip-ui/commit/9fe1862045530a20b4c84156e78ca0b890d6b76b))
+- **message:** add property config to install options ([be64ae3](https://github.com/qmhc/vexip-ui/commit/be64ae3699f6915b8124f3e7639c8f7ada2d0174))
+
 # [1.0.0-beta.3](https://github.com/qmhc/vexip-ui/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2021-06-09)
 
 ### Bug Fixes
