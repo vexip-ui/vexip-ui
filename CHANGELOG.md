@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/qmhc/vexip-ui/compare/v1.0.0...v1.0.1) (2021-06-17)
+
+### Bug Fixes
+
+- **button:** style order in using router ([421512e](https://github.com/qmhc/vexip-ui/commit/421512e88972ace7f57b1d03641e9d7b94220780))
+
 # [1.0.0](https://github.com/qmhc/vexip-ui/compare/v1.0.0-beta.3...v1.0.0) (2021-06-10)
 
 ### Bug Fixes
