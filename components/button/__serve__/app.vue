@@ -21,11 +21,35 @@
   <Button type="error">
     Error
   </Button>
+  <br />
+  <br />
+  <Button>Default</Button>
+  <Button disabled>
+    Default
+  </Button>
+  <Button type="primary">
+    Primary
+  </Button>
+  <Button disabled type="primary">
+    Primary
+  </Button>
+  <br />
+  <br />
+  <Button type="primary" icon="search">
+    搜索
+  </Button>
+  <Button type="primary" icon="search"></Button>
+  <Button circle type="primary" icon="search">
+    搜索
+  </Button>
+  <Button circle type="primary" icon="search"></Button>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import Button from '../button.vue'
+
+import '@/common/icons/search'
 
 export default defineComponent({
   name: 'App',
