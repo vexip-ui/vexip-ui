@@ -111,7 +111,7 @@ export default defineComponent({
     const prefix = 'vxp-dropdown'
     const trigger = toRef(props, 'trigger')
     const label = toRef(props, 'label')
-    const placement = ref(props.placement)
+    const placement = toRef(props, 'placement')
     const currentVisible = ref(props.visible)
     const transfer = toRef(props, 'transfer')
 
