@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/qmhc/vexip-ui/compare/v1.0.1...v1.0.2) (2021-06-25)
+
+### Bug Fixes
+
+- **dropdown:** add dropClass prop ([46a9ccf](https://github.com/qmhc/vexip-ui/commit/46a9ccf3bb3bd7b5bf025cda9857563225577c63))
+- **dropdown:** set placement prop not work ([9bd32e8](https://github.com/qmhc/vexip-ui/commit/9bd32e81116a5d27aa85892fab14aaef5f144cd1))
+- **dropdown:** support v-model:vivisble ([cfbf2dc](https://github.com/qmhc/vexip-ui/commit/cfbf2dcac7944df95e745ac097151b6836078478))
+- **tab-nav:** card style order in using router ([825c7db](https://github.com/qmhc/vexip-ui/commit/825c7db18238617fcb55f981a79ae0ac3e705952))
+
 ## [1.0.1](https://github.com/qmhc/vexip-ui/compare/v1.0.0...v1.0.1) (2021-06-17)
 
 ### Bug Fixes
