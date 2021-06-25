@@ -18,7 +18,7 @@
         <div
           v-show="currentVisible"
           ref="popper"
-          :class="`${prefix}__popper`"
+          :class="[`${prefix}__popper`, dropClass]"
           @mouseenter="handleTriggerEnter"
           @mouseleave="handleTriggerLeave"
         >
@@ -56,6 +56,7 @@ import type { PropType } from 'vue'
 import type { Placement } from '@popperjs/core'
 
 export type DropdownTrigger = 'hover' | 'click' | 'custom'
+type ClassType = string | Record<string, boolean>
 
 const props = useConfiguredProps('dropdown', {
   visible: {
@@ -90,6 +91,10 @@ const props = useConfiguredProps('dropdown', {
   transfer: {
     type: [Boolean, String],
     default: true
+  },
+  dropClass: {
+    type: [String, Object] as PropType<ClassType>,
+    default: null
   }
 })
 
