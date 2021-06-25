@@ -19,7 +19,7 @@
     list-style: none;
   }
 
-  @at-root %item {
+  &__item {
     position: relative;
     display: flex;
     padding: 0.6em 1.2em;
@@ -27,9 +27,18 @@
     cursor: pointer;
     user-select: none;
     transition: $vxp-transition-color-base;
+
+    &--active {
+      color: $open-color;
+    }
+
+    &--disabled {
+      color: $vxp-color-content-disabled;
+      cursor: not-allowed;
+    }
   }
 
-  &--card %item {
+  &--card &__item {
     margin-right: 4px;
     background-color: $vxp-color-fill-background;
     border: $vxp-border-base;
@@ -38,26 +47,7 @@
       $vxp-transition-color-base,
       $vxp-transition-background-base,
       $vxp-transition-border-base;
-  }
 
-  &__item {
-    @extend %item;
-
-    &--active {
-      @extend %item;
-
-      color: $open-color;
-    }
-
-    &--disabled {
-      @extend %item;
-
-      color: $vxp-color-content-disabled;
-      cursor: not-allowed;
-    }
-  }
-
-  &--card &__item {
     &--active {
       background-color: $vxp-color-fill;
       border-color: $open-color;
