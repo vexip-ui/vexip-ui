@@ -99,7 +99,7 @@ export default defineComponent({
     Portal
   },
   props,
-  emits: ['on-toggle', 'on-select', 'on-click-outside', 'on-outside-close'],
+  emits: ['on-toggle', 'on-select', 'on-click-outside', 'on-outside-close', 'update:visible'],
   setup(props, { emit }) {
     const parentSelectHandler = inject(SELECT_HANDLER, noop)
 
@@ -152,6 +152,7 @@ export default defineComponent({
       }
 
       emit('on-toggle', value)
+      emit('update:visible', value)
     })
 
     onMounted(() => {

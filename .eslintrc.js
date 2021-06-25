@@ -14,9 +14,6 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020
   },
-  globals: {
-    ClassType: 'readonly'
-  },
   rules: {
     'no-console':
       process.env.NODE_ENV === 'production'
