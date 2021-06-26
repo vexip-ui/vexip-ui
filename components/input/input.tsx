@@ -395,7 +395,7 @@ export default defineComponent({
     }
 
     function createSuffixElement() {
-      if (props.clearable && hasValue.value && isHover.value) {
+      if (!props.disabled && props.clearable && hasValue.value && isHover.value) {
         return (
           <div key={'clear'} class={`${prefix}__clear`} onClick={handleClear}>
             <Icon name={'times-circle'}></Icon>
