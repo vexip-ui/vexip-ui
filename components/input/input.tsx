@@ -128,6 +128,7 @@ export default defineComponent({
     'on-input',
     'on-change',
     'on-enter',
+    'on-clear',
     'on-prefix-click',
     'on-suffix-click',
     'on-key-down',
@@ -345,6 +346,7 @@ export default defineComponent({
     function handleClear(event: MouseEvent) {
       event.stopPropagation()
       setValue('', 'change')
+      emit('on-clear')
       clearField()
     }
 

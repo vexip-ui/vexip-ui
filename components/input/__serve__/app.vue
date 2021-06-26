@@ -1,5 +1,7 @@
 <template>
-  <Input></Input>
+  <Input v-model:value="value" clearable @on-clear="clear"></Input>
+  <p>Input Value: {{ value }}</p>
+  <br />
   <Input>
     <template #before>
       http://
@@ -18,6 +20,16 @@ export default defineComponent({
   name: 'App',
   components: {
     Input
+  },
+  data() {
+    return {
+      value: ''
+    }
+  },
+  methods: {
+    clear() {
+      console.log('clear')
+    }
   }
 })
 </script>

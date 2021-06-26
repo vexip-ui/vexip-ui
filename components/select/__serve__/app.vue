@@ -7,7 +7,7 @@
   ></Select>
   <br />
   <br />
-  <Select v-model="value2">
+  <Select v-model:value="value2" clearable>
     <Option>选项1</Option>
     <Option>选项2</Option>
     <Option>选项3</Option>
