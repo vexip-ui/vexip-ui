@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div ref="wrapper" :class="className">
     <input
       ref="input"
       type="text"
@@ -37,31 +37,42 @@
         <Icon :name="prefix"></Icon>
       </slot>
     </div>
-    <div
-      v-if="hasSuffix"
-      :class="`${prefixCls}__icon--suffix`"
-      :style="{ color: suffixColor }"
-      @click="handleSuffixClick"
-    >
-      <slot name="suffix">
-        <Icon :name="suffix"></Icon>
-      </slot>
-    </div>
+    <transition name="vxp-fade">
+      <div
+        v-if="!disabled && clearable && isHover && hasValue"
+        :class="`${prefixCls}__clear`"
+        @click.stop="handleClear"
+      >
+        <Icon name="times-circle"></Icon>
+      </div>
+      <div
+        v-else-if="hasSuffix"
+        :class="`${prefixCls}__icon--suffix`"
+        :style="{ color: suffixColor }"
+        @click="handleSuffixClick"
+      >
+        <slot name="suffix">
+          <Icon :name="suffix"></Icon>
+        </slot>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
-import { VALIDATE_FIELD } from '@/components/form-item'
+import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useHover } from '@/common/mixins/hover'
 import { useConfiguredProps } from '@/common/config/install'
-import { noop } from '@/common/utils/common'
+import { isNull, noop } from '@/common/utils/common'
 import { toFixed, toNumber } from '@/common/utils/number'
 import { throttle } from '@/common/utils/performance'
 import { createSizeProp, createStateProp } from '@/common/config/props'
 
 import '@/common/icons/caret-up'
 import '@/common/icons/caret-down'
+import '@/common/icons/times-circle'
 
 import type { PropType } from 'vue'
 
@@ -94,11 +105,11 @@ const props = useConfiguredProps('numberInput', {
   },
   // 格式化后读取
   accessor: {
-    type: Function as PropType<(value: number) => any>,
+    type: Function as PropType<(value: number | null) => any>,
     default: null
   },
   value: {
-    type: Number,
+    type: Number as PropType<number | null>,
     default: null
   },
   range: {
@@ -151,6 +162,10 @@ const props = useConfiguredProps('numberInput', {
   disableValidate: {
     type: Boolean,
     default: false
+  },
+  clearable: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -166,6 +181,7 @@ export default defineComponent({
     'on-input',
     'on-change',
     'on-enter',
+    'on-clear',
     'on-prefix-click',
     'on-suffix-click',
     'on-key-down',
@@ -175,16 +191,18 @@ export default defineComponent({
   ],
   setup(props, { slots, emit }) {
     const validateField = inject(VALIDATE_FIELD, noop)
+    const clearField = inject(CLEAR_FIELD, noop)
 
     const prefix = 'vxp-number-input'
     const focused = ref(false)
-    const currentValue = ref(props.value)
+    const currentValue = ref<number | null>(props.value)
     const inputting = ref(false)
 
     const inputControl = ref<HTMLElement | null>(null)
+    const { wrapper, isHover } = useHover()
 
     // eslint-disable-next-line vue/no-setup-props-destructure
-    let lastValue = props.value
+    let lastValue: number | null = props.value
 
     const className = computed(() => {
       return [
@@ -215,17 +233,20 @@ export default defineComponent({
         : currentValue.value
     })
     const formattedValue = computed(() => {
-      if (typeof preciseNumber.value !== 'number') return preciseNumber.value
+      if (typeof preciseNumber.value !== 'number') return preciseNumber.value ?? ''
 
       return typeof props.formatter === 'function'
         ? props.formatter(preciseNumber.value)
         : preciseNumber.value.toString()
     })
     const plusDisabled = computed(() => {
-      return currentValue.value >= props.range[1]
+      return !isNull(currentValue.value) && currentValue.value >= props.range[1]
     })
     const minusDisabled = computed(() => {
-      return currentValue.value <= props.range[0]
+      return !isNull(currentValue.value) && currentValue.value <= props.range[0]
+    })
+    const hasValue = computed(() => {
+      return currentValue.value || currentValue.value === 0
     })
 
     watch(
@@ -321,7 +342,7 @@ export default defineComponent({
       setValue(toNumber(value), type)
     }
 
-    function setValue(value: number, type: InputEventType) {
+    function setValue(value: number | null, type: InputEventType) {
       currentValue.value = value
       emitChangeEvent(type)
     }
@@ -350,6 +371,12 @@ export default defineComponent({
       }
     }
 
+    function handleClear() {
+      setValue(null, 'change')
+      emit('on-clear')
+      clearField()
+    }
+
     function handleEnter(event: KeyboardEvent) {
       emit('on-enter', event)
     }
@@ -376,6 +403,7 @@ export default defineComponent({
 
     return {
       prefixCls: prefix,
+      isHover,
 
       className,
       hasPrefix,
@@ -384,7 +412,9 @@ export default defineComponent({
       formattedValue,
       plusDisabled,
       minusDisabled,
+      hasValue,
 
+      wrapper,
       input: inputControl,
 
       handleFocus,
@@ -393,6 +423,7 @@ export default defineComponent({
       minusNumber,
       handleInput: throttle(handleChange),
       handleChange,
+      handleClear,
       handleEnter,
       handlePrefixClick,
       handleSuffixClick,

@@ -49,4 +49,9 @@
     bottom: 0;
     border-top-width: 1px;
   }
+
+  &__icon--suffix,
+  &__clear {
+    right: 1.4em;
+  }
 }
