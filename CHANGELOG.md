@@ -1,3 +1,15 @@
+## [1.0.3](https://github.com/qmhc/vexip-ui/compare/v1.0.2...v1.0.3) (2021-06-26)
+
+### Bug Fixes
+
+- **input:** no emit on-clear event ([64ca93f](https://github.com/qmhc/vexip-ui/commit/64ca93f507fb5628f91e977d1154687bfe736ceb))
+- **input:** should not clearable when disabled ([6b58a0c](https://github.com/qmhc/vexip-ui/commit/6b58a0cfcb43c22245c7e031ac591e945be6bb10))
+- **number-input:** support clearable and on-clear ([ebb8235](https://github.com/qmhc/vexip-ui/commit/ebb8235f742c3237634fdd6704071992dc664c2a))
+
+### Performance Improvements
+
+- **progress:** using transfrom to improve performance ([7ba3d8d](https://github.com/qmhc/vexip-ui/commit/7ba3d8db07cb32d1e3e65cd9a2e6ca38ac49c05b))
+
 ## [1.0.2](https://github.com/qmhc/vexip-ui/compare/v1.0.1...v1.0.2) (2021-06-25)
 
 ### Bug Fixes
