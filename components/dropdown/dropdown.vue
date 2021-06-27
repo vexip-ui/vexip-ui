@@ -18,7 +18,7 @@
         <div
           v-show="currentVisible"
           ref="popper"
-          :class="`${prefix}__popper`"
+          :class="[`${prefix}__popper`, dropClass]"
           @mouseenter="handleTriggerEnter"
           @mouseleave="handleTriggerLeave"
         >
@@ -56,6 +56,7 @@ import type { PropType } from 'vue'
 import type { Placement } from '@popperjs/core'
 
 export type DropdownTrigger = 'hover' | 'click' | 'custom'
+type ClassType = string | Record<string, boolean>
 
 const props = useConfiguredProps('dropdown', {
   visible: {
@@ -90,6 +91,10 @@ const props = useConfiguredProps('dropdown', {
   transfer: {
     type: [Boolean, String],
     default: true
+  },
+  dropClass: {
+    type: [String, Object] as PropType<ClassType>,
+    default: null
   }
 })
 
@@ -99,14 +104,14 @@ export default defineComponent({
     Portal
   },
   props,
-  emits: ['on-toggle', 'on-select', 'on-click-outside', 'on-outside-close'],
+  emits: ['on-toggle', 'on-select', 'on-click-outside', 'on-outside-close', 'update:visible'],
   setup(props, { emit }) {
     const parentSelectHandler = inject(SELECT_HANDLER, noop)
 
     const prefix = 'vxp-dropdown'
     const trigger = toRef(props, 'trigger')
     const label = toRef(props, 'label')
-    const placement = ref(props.placement)
+    const placement = toRef(props, 'placement')
     const currentVisible = ref(props.visible)
     const transfer = toRef(props, 'transfer')
 
@@ -152,6 +157,7 @@ export default defineComponent({
       }
 
       emit('on-toggle', value)
+      emit('update:visible', value)
     })
 
     onMounted(() => {

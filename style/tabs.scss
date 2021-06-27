@@ -6,12 +6,6 @@
   position: relative;
   overflow: hidden;
 
-  @at-root %pane {
-    flex-shrink: 0;
-    width: 100%;
-    visibility: hidden;
-  }
-
   &__header {
     margin-bottom: 0.8em;
   }
@@ -32,11 +26,11 @@
   }
 
   &__pane {
-    @extend %pane;
+    flex-shrink: 0;
+    width: 100%;
+    visibility: hidden;
 
     &--active {
-      @extend %pane;
-
       visibility: visible;
     }
   }

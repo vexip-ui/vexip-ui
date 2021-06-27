@@ -18,90 +18,85 @@
 
   @include basis;
 
-  @at-root {
-    & + & {
-      margin-left: 0.6em;
-    }
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  padding: 0 1em;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-color: $vxp-button-color-bg;
+  border: $vxp-button-border;
+  border-radius: $vxp-button-border-radius;
+  outline: 0;
+  transition:
+    $vxp-transition-color-base,
+    $vxp-transition-background-base,
+    $vxp-transition-border-base,
+    $vxp-transition-box-shadow-base;
 
-    %button {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 2.2em;
-      padding: 0 1em;
-      font-weight: 400;
-      line-height: 1;
-      white-space: nowrap;
-      vertical-align: middle;
-      cursor: pointer;
-      user-select: none;
-      background-color: $vxp-button-color-bg;
-      border: $vxp-button-border;
-      border-radius: $vxp-button-border-radius;
-      outline: 0;
-      transition:
-        $vxp-transition-color-base,
-        $vxp-transition-background-base,
-        $vxp-transition-border-base,
-        $vxp-transition-box-shadow-base;
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    pointer-events: none;
+    content: '';
+    background-color: transparent;
+    border-radius: inherit;
+    opacity: 0.4;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+  }
 
-      &::after {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        display: block;
-        pointer-events: none;
-        content: '';
-        background-color: transparent;
-        border-radius: inherit;
-        opacity: 0.4;
-        animation-timing-function: ease;
-        animation-fill-mode: forwards;
-      }
+  &,
+  .vxp-icon {
+    color: $vxp-button-color;
+  }
 
-      &,
-      .vxp-icon {
-        color: $vxp-button-color;
-      }
+  &:hover,
+  &:focus {
+    background-color: $vxp-button-color-bg-hover;
+    border-color: $vxp-button-color-border-hover;
+    outline: 0;
 
-      &:hover,
-      &:focus {
-        background-color: $vxp-button-color-bg-hover;
-        border-color: $vxp-button-color-border-hover;
-
-        &,
-        .vxp-icon {
-          color: $vxp-button-color-hover;
-        }
-      }
-
-      &:active {
-        background-color: $vxp-button-color-bg-active;
-        border-color: $vxp-button-color-border-active;
-
-        &,
-        .vxp-icon {
-          color: $vxp-button-color-active;
-        }
-      }
-    }
-
-    @include disabled('') {
-      cursor: not-allowed;
-      background-color: $vxp-button-color-bg-disabled;
-      border-color: $vxp-button-color-border-disabled;
-
-      &,
-      .vxp-icon {
-        color: $vxp-button-color-disabled;
-      }
+    &,
+    .vxp-icon {
+      color: $vxp-button-color-hover;
     }
   }
 
-  @extend %button;
+  &:active {
+    background-color: $vxp-button-color-bg-active;
+    border-color: $vxp-button-color-border-active;
+
+    &,
+    .vxp-icon {
+      color: $vxp-button-color-active;
+    }
+  }
+
+  @include disabled('') {
+    cursor: not-allowed;
+    background-color: $vxp-button-color-bg-disabled;
+    border-color: $vxp-button-color-border-disabled;
+
+    &,
+    .vxp-icon {
+      color: $vxp-button-color-disabled;
+    }
+  }
+
+  & + & {
+    margin-left: 0.6em;
+  }
 
   &--small {
     height: 1.9em;
@@ -129,13 +124,13 @@
   }
 
   &--dashed {
-    @extend %button;
+    // @extend %button;
 
     border-style: dashed;
   }
 
   &--text {
-    @extend %button;
+    // @extend %button;
 
     background-color: transparent;
     border-color: transparent;
@@ -207,7 +202,7 @@
 
     @at-root {
       &--#{$type} {
-        @extend %button;
+        // @extend %button;
 
         background-color: $color-base;
         border-color: $color-base;

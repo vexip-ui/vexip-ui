@@ -103,8 +103,8 @@ export default defineComponent({
     })
     const fillerStyle = computed(() => {
       const style: CSSProperties = {
-        width: `${props.percentage}%`,
-        borderRadius: `${props.strokeWidth}px`
+        borderRadius: `${props.strokeWidth}px`,
+        transform: `translateX(${(props.percentage - 100) / 2}%) scaleX(${props.percentage / 100})`
       }
 
       let strokeColor = props.strokeColor

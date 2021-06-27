@@ -128,6 +128,7 @@ export default defineComponent({
     'on-input',
     'on-change',
     'on-enter',
+    'on-clear',
     'on-prefix-click',
     'on-suffix-click',
     'on-key-down',
@@ -345,6 +346,7 @@ export default defineComponent({
     function handleClear(event: MouseEvent) {
       event.stopPropagation()
       setValue('', 'change')
+      emit('on-clear')
       clearField()
     }
 
@@ -393,7 +395,7 @@ export default defineComponent({
     }
 
     function createSuffixElement() {
-      if (props.clearable && hasValue.value && isHover.value) {
+      if (!props.disabled && props.clearable && hasValue.value && isHover.value) {
         return (
           <div key={'clear'} class={`${prefix}__clear`} onClick={handleClear}>
             <Icon name={'times-circle'}></Icon>
