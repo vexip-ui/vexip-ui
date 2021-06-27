@@ -19,7 +19,7 @@ import { isNull } from '@/common/utils/common'
 import { debounceMinor } from '@/common/utils/performance'
 import { TAB_NAV_STATE } from './symbol'
 
-import type { ItemState, TabNavState } from './symbol'
+import type { ItemState } from './symbol'
 
 const props = useConfiguredProps('tabNav', {
   active: {
@@ -70,7 +70,7 @@ export default defineComponent({
       }
     })
 
-    provide<TabNavState>(
+    provide(
       TAB_NAV_STATE,
       reactive({
         currentActive,

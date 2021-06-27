@@ -1,3 +1,5 @@
+import type { InjectionKey } from 'vue'
+
 export interface LinkState {
   el: HTMLElement | null,
   to: string,
@@ -12,5 +14,5 @@ export interface AnchorState {
 }
 
 export const baseIndentWidth = 14 // px
-export const LINK_STATE = Symbol('ANCHOR_LINK_STATE')
-export const ANCHOR_STATE = Symbol('ANCHOR_STATE')
+export const LINK_STATE: InjectionKey<LinkState> = Symbol('ANCHOR_LINK_STATE')
+export const ANCHOR_STATE: InjectionKey<AnchorState> = Symbol('ANCHOR_STATE')

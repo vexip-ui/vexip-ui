@@ -8,12 +8,12 @@
 import { defineComponent, reactive, computed, inject, onBeforeUnmount } from 'vue'
 import { CAROUSEL_STATE } from './symbol'
 
-import type { ItemState, CarouselState } from './symbol'
+import type { ItemState } from './symbol'
 
 export default defineComponent({
   name: 'CarouselItem',
   setup() {
-    const carouselState = inject<CarouselState | null>(CAROUSEL_STATE, null)
+    const carouselState = inject(CAROUSEL_STATE, null)
 
     const prefix = 'vxp-carousel'
     const state: ItemState = reactive({

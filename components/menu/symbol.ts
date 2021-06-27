@@ -1,3 +1,4 @@
+import type { InjectionKey } from 'vue'
 import type { TooltipTheme } from '@/components/tooltip'
 
 export type MenuMarkerType = 'top' | 'right' | 'bottom' | 'left' | 'none'
@@ -32,5 +33,5 @@ export interface MenuState {
 }
 
 export const baseIndentWidth = 20 // px
-export const MENU_STATE = Symbol('MENU_STATE')
-export const MENU_ITEM_STATE = Symbol('MENU_ITEM_STATE')
+export const MENU_STATE: InjectionKey<MenuState> = Symbol('MENU_STATE')
+export const MENU_ITEM_STATE: InjectionKey<MenuItemState> = Symbol('MENU_ITEM_STATE')

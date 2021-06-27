@@ -1,3 +1,5 @@
+import type { InjectionKey } from 'vue'
+
 export interface ItemState {
   width: number,
   height: number,
@@ -11,4 +13,4 @@ export interface WheelState {
   decreaseItem(item: ItemState): void
 }
 
-export const WHEEL_STATE = Symbol('WHEEL_STATE')
+export const WHEEL_STATE: InjectionKey<WheelState> = Symbol('WHEEL_STATE')

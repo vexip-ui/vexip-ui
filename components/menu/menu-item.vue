@@ -94,7 +94,6 @@ import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE } from './symbol'
 import '@/common/icons/chevron-down'
 
 import type { Placement } from '@popperjs/core'
-import type { MenuState, MenuItemState } from './symbol'
 
 const props = useConfiguredProps('menuItem', {
   label: {
@@ -130,8 +129,8 @@ export default defineComponent({
   props,
   emits: ['on-select'],
   setup(props, { slots, emit }) {
-    const menuState = inject<MenuState | null>(MENU_STATE, null)
-    const parentItemState = inject<MenuItemState | null>(MENU_ITEM_STATE, null)
+    const menuState = inject(MENU_STATE, null)
+    const parentItemState = inject(MENU_ITEM_STATE, null)
 
     const prefix = 'vxp-menu'
     const baseClass = `${prefix}__item`

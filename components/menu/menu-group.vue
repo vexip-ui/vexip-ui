@@ -18,8 +18,6 @@
 import { defineComponent, ref, inject, computed } from 'vue'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE } from './symbol'
 
-import type { MenuItemState, MenuState } from './symbol'
-
 const props = {
   label: {
     type: String,
@@ -31,8 +29,8 @@ export default defineComponent({
   name: 'MenuGroup',
   props,
   setup() {
-    const menuState = inject<MenuState | null>(MENU_STATE, null)
-    const parentItemState = inject<MenuItemState | null>(MENU_ITEM_STATE, null)
+    const menuState = inject(MENU_STATE, null)
+    const parentItemState = inject(MENU_ITEM_STATE, null)
 
     const indent = ref(1)
 

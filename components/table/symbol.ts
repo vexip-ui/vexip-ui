@@ -1,5 +1,6 @@
-import type { VNodeChild } from 'vue'
+import type { InjectionKey, VNodeChild } from 'vue'
 import type { ComponentSize } from '@/common/config/props'
+import type { TableStore } from './store'
 
 export type Key = string | number
 export type Data = Record<string, unknown>
@@ -168,5 +169,5 @@ export interface TableAction {
 }
 
 export const DEFAULT_KEY_FIELD = 'id'
-export const TABLE_STORE = Symbol('TABLE_STORE') // 表格状态管理
-export const TABLE_ACTION = Symbol('TABLE_ACTION') // 表格组件的顶层 Api
+export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE') // 表格状态管理
+export const TABLE_ACTION: InjectionKey<TableAction> = Symbol('TABLE_ACTION') // 表格组件的顶层 Api

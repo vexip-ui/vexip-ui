@@ -101,7 +101,7 @@ import { isNull } from '@/common/utils/common'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TreeNodeOptions, TreeState, TreeNodeState } from './symbol'
+import type { TreeNodeOptions } from './symbol'
 
 const props = {
   node: {
@@ -196,8 +196,8 @@ export default defineComponent({
   inheritAttrs: false,
   props,
   setup(props) {
-    const treeState = inject<TreeState>(TREE_STATE)!
-    const parentState = inject<TreeNodeState>(TREE_NODE_STATE)!
+    const treeState = inject(TREE_STATE)!
+    const parentState = inject(TREE_NODE_STATE)!
 
     const prefix = 'vxp-tree'
 

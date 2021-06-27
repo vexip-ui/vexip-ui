@@ -24,7 +24,7 @@ import { Renderer } from '@/components/renderer'
 import { isFunction } from '@/common/utils/common'
 import { BREADCRUMB_STATE } from './symbol'
 
-import type { SeparatorRenderFn, ItemState, BreadcrumbState } from './symbol'
+import type { SeparatorRenderFn, ItemState } from './symbol'
 
 const props = {
   label: {
@@ -41,7 +41,7 @@ export default defineComponent({
   props,
   emits: ['on-select', 'on-separator-click'],
   setup(props, { emit }) {
-    const breadcrumbState = inject<BreadcrumbState | null>(BREADCRUMB_STATE, null)
+    const breadcrumbState = inject(BREADCRUMB_STATE, null)
 
     const currentLabel = ref(props.label)
     const separator = ref('/')

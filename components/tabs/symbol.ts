@@ -1,4 +1,4 @@
-import type { VNodeChild } from 'vue'
+import type { InjectionKey, VNodeChild } from 'vue'
 
 export interface ItemState {
   label: string | number,
@@ -15,4 +15,4 @@ export interface TabsState {
   refreshLabels: () => void
 }
 
-export const TABS_STATE = Symbol('TABS_STATE')
+export const TABS_STATE: InjectionKey<TabsState> = Symbol('TABS_STATE')

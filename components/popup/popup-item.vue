@@ -29,7 +29,7 @@ import { noop } from '@/common/utils/common'
 import { DELETE_HANDLER } from './symbol'
 
 import type { PropType } from 'vue'
-import type { Key, ClassType, PopupItemState } from './symbol'
+import type { ClassType, PopupItemState } from './symbol'
 
 const props = {
   state: {
@@ -53,7 +53,7 @@ export default defineComponent({
   },
   props,
   setup(props) {
-    const handleDelete = inject<(key: Key) => void>(DELETE_HANDLER, noop)
+    const handleDelete = inject(DELETE_HANDLER, noop)
 
     const wrapper = ref<HTMLElement | null>(null)
 

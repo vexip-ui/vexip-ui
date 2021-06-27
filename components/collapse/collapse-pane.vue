@@ -32,7 +32,7 @@ import { COLLAPSE_STATE } from './symbol'
 import '@/common/icons/chevron-right'
 
 import type { PropType, CSSProperties } from 'vue'
-import type { CollapseArrowType, CollapseState } from './symbol'
+import type { CollapseArrowType } from './symbol'
 
 const props = useConfiguredProps('collapsePane', {
   label: {
@@ -84,7 +84,7 @@ export default defineComponent({
   props,
   emits: ['on-toggle', 'update:expanded'],
   setup(props, { emit }) {
-    const collapseState = inject<CollapseState | null>(COLLAPSE_STATE, null)
+    const collapseState = inject(COLLAPSE_STATE, null)
 
     const prefix = 'vxp-collapse'
     const currentExpanded = ref(props.expanded)

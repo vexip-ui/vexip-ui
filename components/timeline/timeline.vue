@@ -9,7 +9,7 @@ import { defineComponent, reactive, computed, provide, toRef } from 'vue'
 import { useConfiguredProps } from '@/common/config/install'
 import { isNull } from '@/common/utils/common'
 import { debounceMinor } from '@/common/utils/performance'
-import { TTIMELINE_STATE } from './symbol'
+import { TIMELINE_STATE } from './symbol'
 
 import type { ItemState, TimelineState } from './symbol'
 
@@ -69,7 +69,7 @@ export default defineComponent({
       handleSignalClick
     })
 
-    provide(TTIMELINE_STATE, state)
+    provide(TIMELINE_STATE, state)
 
     function increaseItem(item: ItemState) {
       itemStates.add(item)

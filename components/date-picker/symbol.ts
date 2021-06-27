@@ -24,6 +24,3 @@ export interface DatePickerState {
   dateValue: Record<DateTimeType, number>,
   enterColumn(type: 'prev' | 'next'): void
 }
-
-export const START_DATE_STATE = Symbol('START_DATE_STATE')
-export const END_DATE_STATE = Symbol('END_DATE_STATE')

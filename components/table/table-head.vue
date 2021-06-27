@@ -18,7 +18,6 @@ import TableRow from './table-row.vue'
 import { TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TableStore } from './store'
 
 const props = {
   fixed: {
@@ -38,7 +37,7 @@ export default defineComponent({
   },
   props,
   setup(props) {
-    const { state } = inject<TableStore>(TABLE_STORE)!
+    const { state } = inject(TABLE_STORE)!
 
     const wrapper = ref<HTMLElement | null>(null)
 

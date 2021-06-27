@@ -20,7 +20,7 @@ import { Icon } from '@/components/icon'
 import { isDefined } from '@/common/utils/common'
 import { TAB_NAV_STATE } from './symbol'
 
-import type { ItemState, TabNavState } from './symbol'
+import type { ItemState } from './symbol'
 
 const props = {
   label: {
@@ -45,7 +45,7 @@ export default defineComponent({
   props,
   emits: ['on-toggle'],
   setup(props, { emit }) {
-    const tabNavState = inject<TabNavState | null>(TAB_NAV_STATE, null)
+    const tabNavState = inject(TAB_NAV_STATE, null)
 
     const prefix = 'vxp-tab-nav'
     const active = ref(false)

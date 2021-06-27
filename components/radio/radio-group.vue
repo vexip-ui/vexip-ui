@@ -92,14 +92,14 @@ export default defineComponent({
       ]
     })
 
-    provide(
-      GROUP_STATE,
-      reactive({
-        currentValue,
-        disabled: toRef(props, 'disabled'),
-        updateValue: debounceMinor(updateValue)
-      })
-    )
+    const state = reactive({
+      currentValue,
+      disabled: toRef(props, 'disabled'),
+      updateValue: debounceMinor(updateValue)
+    })
+
+    // 此处直接定义 reactive 会出现类型推断错误，存疑？
+    provide(GROUP_STATE, state)
 
     watch(
       () => props.value,

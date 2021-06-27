@@ -24,7 +24,7 @@ import { debounceMinor } from '@/common/utils/performance'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ControlState, GroupState } from './symbol'
+import type { ControlState } from './symbol'
 
 type RawOption =
   | string
@@ -114,7 +114,7 @@ export default defineComponent({
       })
     })
 
-    provide<GroupState>(
+    provide(
       GROUP_STATE,
       reactive({
         currentValues,

@@ -31,7 +31,7 @@ import {
 } from 'vue'
 import { baseIndentWidth, LINK_STATE, ANCHOR_STATE } from './symbol'
 
-import type { LinkState, AnchorState } from './symbol'
+import type { LinkState } from './symbol'
 
 const props = {
   to: {
@@ -48,8 +48,8 @@ export default defineComponent({
   name: 'AnchorLink',
   props,
   setup(props) {
-    const anchorState = inject<AnchorState | null>(ANCHOR_STATE, null)
-    const parentLinkState = inject<LinkState | null>(LINK_STATE, null)
+    const anchorState = inject(ANCHOR_STATE, null)
+    const parentLinkState = inject(LINK_STATE, null)
 
     const prefix = 'vxp-anchor'
     const indent = ref(parentLinkState?.indent ? parentLinkState?.indent + 1 : 1)
@@ -75,7 +75,7 @@ export default defineComponent({
       }
     })
 
-    provide(LINK_STATE, state)
+    provide<LinkState>(LINK_STATE, state)
 
     if (anchorState) {
       watch(

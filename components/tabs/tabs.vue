@@ -44,7 +44,7 @@ import { isNull, isFunction } from '@/common/utils/common'
 import { debounceMinor } from '@/common/utils/performance'
 import { TABS_STATE } from './symbol'
 
-import type { ItemState, TabsState } from './symbol'
+import type { ItemState } from './symbol'
 
 const props = useConfiguredProps('tabs', {
   card: {
@@ -102,7 +102,7 @@ export default defineComponent({
       }
     })
 
-    provide<TabsState>(
+    provide(
       TABS_STATE,
       reactive({
         currentActive,

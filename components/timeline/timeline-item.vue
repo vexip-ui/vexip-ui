@@ -15,9 +15,9 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } from 'vue'
 import { useConfiguredProps } from '@/common/config/install'
-import { TTIMELINE_STATE } from './symbol'
+import { TIMELINE_STATE } from './symbol'
 
-import type { TimelinkItemType, ItemState, TimelineState } from './symbol'
+import type { TimelinkItemType, ItemState } from './symbol'
 
 const props = useConfiguredProps('timelineItem', {
   type: {
@@ -53,7 +53,7 @@ export default defineComponent({
   props,
   emits: ['on-signal-click'],
   setup(props, { emit }) {
-    const timelineState = inject<TimelineState | null>(TTIMELINE_STATE, null)
+    const timelineState = inject(TIMELINE_STATE, null)
 
     const prefix = 'vxp-timeline'
     const currentLabel = ref(props.label)

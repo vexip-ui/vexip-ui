@@ -1,4 +1,4 @@
-import type { VNodeChild } from 'vue'
+import type { InjectionKey, VNodeChild } from 'vue'
 
 export type Key = string | number
 export type Data = Record<string, unknown>
@@ -52,5 +52,5 @@ export interface TreeNodeState {
   readonly: boolean
 }
 
-export const TREE_STATE = Symbol('TREE_STATE')
-export const TREE_NODE_STATE = Symbol('TREE_NODE_STATE')
+export const TREE_STATE: InjectionKey<TreeState> = Symbol('TREE_STATE')
+export const TREE_NODE_STATE: InjectionKey<TreeNodeState> = Symbol('TREE_NODE_STATE')

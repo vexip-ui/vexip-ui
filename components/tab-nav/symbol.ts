@@ -1,3 +1,5 @@
+import type { InjectionKey } from 'vue'
+
 export interface ItemState {
   el: HTMLElement | null,
   label: string | number
@@ -11,4 +13,4 @@ export interface TabNavState {
   refreshLabels: () => void
 }
 
-export const TAB_NAV_STATE = Symbol('TAB_NAV_STATE')
+export const TAB_NAV_STATE: InjectionKey<TabNavState> = Symbol('TAB_NAV_STATE')

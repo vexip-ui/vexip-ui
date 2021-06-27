@@ -17,8 +17,6 @@ import {
 } from 'vue'
 import { WHEEL_STATE } from './symbol'
 
-import type { WheelState } from './symbol'
-
 const props = {
   value: {
     type: [Number, String],
@@ -34,7 +32,7 @@ export default defineComponent({
   name: 'WheelItem',
   props,
   setup(props) {
-    const wheelState = inject<WheelState | null>(WHEEL_STATE, null)
+    const wheelState = inject(WHEEL_STATE, null)
 
     const width = ref(0)
     const height = ref(0)

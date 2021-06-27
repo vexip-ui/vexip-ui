@@ -1,4 +1,4 @@
-import type { Ref } from 'vue'
+import type { Ref, InjectionKey } from 'vue'
 import type { Rule } from './validator'
 
 export type LabelPosition = 'right' | 'top' | 'left'
@@ -36,9 +36,9 @@ export interface FieldOptions {
 }
 
 // form
-export const FORM_PROPS = Symbol('FORM_PROPS')
-export const FORM_FIELDS = Symbol('FORM_FIELDS')
+export const FORM_PROPS: InjectionKey<Partial<FormProps>> = Symbol('FORM_PROPS')
+export const FORM_FIELDS: InjectionKey<Ref<Set<FieldOptions>>> = Symbol('FORM_FIELDS')
 
 // form-item
-export const VALIDATE_FIELD = Symbol('VALIDATE_FIELD')
-export const CLEAR_FIELD = Symbol('CLEAR_FIELD')
+export const VALIDATE_FIELD: InjectionKey<FieldOptions['validate']> = Symbol('VALIDATE_FIELD')
+export const CLEAR_FIELD: InjectionKey<FieldOptions['clearError']> = Symbol('CLEAR_FIELD')

@@ -2,7 +2,7 @@ import { defineComponent, computed, h, inject } from 'vue'
 import { ROW_GUTTER } from '@/components/row'
 import { useConfiguredProps } from '@/common/config/install'
 
-import type { Ref, CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
 
 type LayerProp = 'span' | 'offset' | 'pull' | 'push' | 'order'
 type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
@@ -66,7 +66,7 @@ export default defineComponent({
   name: 'Column',
   props,
   setup(props, { slots }) {
-    const gutter = inject<Ref<number | number[]> | null>(ROW_GUTTER, null)
+    const gutter = inject(ROW_GUTTER, null)
 
     const prefix = 'vxp-column'
 

@@ -1,3 +1,5 @@
+import type { InjectionKey } from 'vue'
+
 export type Key = string | number
 export type ClassType = string | Record<string, boolean>
 export type PopupPlacement =
@@ -35,4 +37,4 @@ export interface PopupItemState extends Record<string, unknown> {
   onClose: (result: boolean) => void
 }
 
-export const DELETE_HANDLER = Symbol('DELETE_HANDLER')
+export const DELETE_HANDLER: InjectionKey<(key: Key) => void> = Symbol('DELETE_HANDLER')

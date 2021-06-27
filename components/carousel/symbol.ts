@@ -1,3 +1,5 @@
+import type { InjectionKey } from 'vue'
+
 export type ClassType = string | Record<string, boolean>
 export type ArrowType = 'outside' | 'inside' | 'none'
 export type ArrowTrigger = 'hover' | 'always'
@@ -18,4 +20,4 @@ export interface CarouselState {
   handleSelect: (label: number) => void
 }
 
-export const CAROUSEL_STATE = Symbol('CAROUSEL_STATE')
+export const CAROUSEL_STATE: InjectionKey<CarouselState> = Symbol('CAROUSEL_STATE')

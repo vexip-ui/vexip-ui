@@ -26,7 +26,6 @@ import TableRow from './table-row.vue'
 import { TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TableStore } from './store'
 
 const props = {
   fixed: {
@@ -46,7 +45,7 @@ export default defineComponent({
   },
   props,
   setup(props) {
-    const { state, getters } = inject<TableStore>(TABLE_STORE)!
+    const { state, getters } = inject(TABLE_STORE)!
 
     const currentColumns = computed(() => {
       if (props.fixed === 'left') {

@@ -46,7 +46,6 @@ import { isFunction } from '@/common/utils/common'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TableStore } from './store'
 import type {
   RowState,
   OrderColumn,
@@ -89,7 +88,7 @@ export default defineComponent({
   },
   props,
   setup(props) {
-    const { state, getters, mutations } = inject<TableStore>(TABLE_STORE)!
+    const { state, getters, mutations } = inject(TABLE_STORE)!
     const tableAction = inject<TableAction>(TABLE_ACTION)!
 
     const prefix = 'vxp-table'

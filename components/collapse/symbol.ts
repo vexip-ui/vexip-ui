@@ -1,4 +1,4 @@
-import type { Ref } from 'vue'
+import type { Ref, InjectionKey } from 'vue'
 
 export type CollapseArrowType = 'right' | 'left' | 'none'
 
@@ -9,4 +9,4 @@ export interface CollapseState {
   expandPane(label: string | number, expanded: boolean): void
 }
 
-export const COLLAPSE_STATE = Symbol('COLLAPSE_STATE')
+export const COLLAPSE_STATE: InjectionKey<CollapseState> = Symbol('COLLAPSE_STATE')

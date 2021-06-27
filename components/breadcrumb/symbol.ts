@@ -1,4 +1,4 @@
-import type { VNodeChild } from 'vue'
+import type { InjectionKey, VNodeChild } from 'vue'
 
 export type SeparatorRenderFn = (data: { label: string | number }) => VNodeChild
 
@@ -16,4 +16,4 @@ export interface BreadcrumbState {
   handleSeparatorClick: (label: string | number) => void
 }
 
-export const BREADCRUMB_STATE = Symbol('BREADCRUMB_STATE')
+export const BREADCRUMB_STATE: InjectionKey<BreadcrumbState> = Symbol('BREADCRUMB_STATE')

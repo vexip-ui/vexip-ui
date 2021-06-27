@@ -124,8 +124,7 @@ import '@/common/icons/caret-down'
 import '@/common/icons/filter'
 
 import type { PropType } from 'vue'
-import type { TableStore } from './store'
-import type { SelectionColumn, TypeColumn, ColumnWithKey, TableAction } from './symbol'
+import type { SelectionColumn, TypeColumn, ColumnWithKey } from './symbol'
 
 const columnTypes = ['order', 'selection', 'expand']
 
@@ -151,8 +150,8 @@ export default defineComponent({
   },
   props,
   setup(props) {
-    const { state, mutations } = inject<TableStore>(TABLE_STORE)!
-    const tableAction = inject<TableAction>(TABLE_ACTION)!
+    const { state, mutations } = inject(TABLE_STORE)!
+    const tableAction = inject(TABLE_ACTION)!
 
     const prefix = 'vxp-table'
     const filterVisible = ref(false)

@@ -13,8 +13,7 @@ import type {
   // Accessor,
   RenderFn,
   RowState,
-  ColumnWithKey,
-  TableAction
+  ColumnWithKey
 } from './symbol'
 
 const props = useConfiguredProps('tableColumn', {
@@ -94,7 +93,7 @@ export default defineComponent({
   functional: true,
   props,
   setup(props, { slots }) {
-    const tableAction = inject<TableAction | null>(TABLE_ACTION, null)
+    const tableAction = inject(TABLE_ACTION, null)
 
     const options = reactive({
       name: undefined,

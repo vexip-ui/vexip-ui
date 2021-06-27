@@ -1,1 +1,4 @@
-export const SELECT_HANDLER = Symbol('SELECT_HANDLER')
+import type { InjectionKey } from 'vue'
+
+export const SELECT_HANDLER: InjectionKey<(label: string | number) => void> =
+  Symbol('SELECT_HANDLER')

@@ -25,7 +25,7 @@ import {
 import { isNull } from '@/common/utils/common'
 import { SELECTOR_STATE } from './symbol'
 
-import type { OptionState, SelectState } from './symbol'
+import type { OptionState } from './symbol'
 
 const props = {
   value: {
@@ -51,7 +51,7 @@ export default defineComponent({
   props,
   emits: ['on-select'],
   setup(props, { emit }) {
-    const selectorState = inject<SelectState | null>(SELECTOR_STATE, null)
+    const selectorState = inject(SELECTOR_STATE, null)
 
     const prefix = 'vxp-option'
     const truthLabel = ref(props.label ?? props.value.toString())

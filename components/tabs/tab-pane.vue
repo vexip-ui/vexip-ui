@@ -18,7 +18,7 @@ import {
 import { isDefined } from '@/common/utils/common'
 import { TABS_STATE } from './symbol'
 
-import type { ItemState, TabsState } from './symbol'
+import type { ItemState } from './symbol'
 
 const props = {
   label: {
@@ -40,7 +40,7 @@ export default defineComponent({
   props,
   emits: ['on-toggle'],
   setup(props, { slots, emit }) {
-    const tabsState = inject<TabsState | null>(TABS_STATE, null)
+    const tabsState = inject(TABS_STATE, null)
 
     const prefix = 'vxp-tabs'
     const active = ref(false)

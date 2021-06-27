@@ -106,7 +106,7 @@ export default defineComponent({
   name: 'FormItem',
   props,
   setup(props, { slots }) {
-    const formProps = inject<Partial<FormProps>>(FORM_PROPS, {})
+    const formProps = inject(FORM_PROPS, {})
 
     const prefix = 'vxp-form'
 
@@ -310,7 +310,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
 }
 
 function useRelation(field: FieldOptions) {
-  const formFields = inject<Ref<Set<FieldOptions>> | null>(FORM_FIELDS, null)
+  const formFields = inject(FORM_FIELDS, null)
 
   provide(VALIDATE_FIELD, field.validate)
   provide(CLEAR_FIELD, field.clearError)

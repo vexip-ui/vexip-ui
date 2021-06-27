@@ -33,7 +33,6 @@ import { noop, isDefined, isFunction } from '@/common/utils/common'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { GroupState } from './symbol'
 
 type ClassType = string | Record<string, boolean>
 
@@ -83,7 +82,7 @@ export default defineComponent({
   props,
   emits: ['on-change', 'update:checked'],
   setup(props, { slots, emit }) {
-    const groupState = inject<GroupState | null>(GROUP_STATE, null)
+    const groupState = inject(GROUP_STATE, null)
     const validateField = inject(VALIDATE_FIELD, noop)
 
     const prefix = 'vxp-checkbox'

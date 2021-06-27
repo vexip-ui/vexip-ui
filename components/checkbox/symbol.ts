@@ -1,3 +1,5 @@
+import type { InjectionKey } from 'vue'
+
 export interface ControlState {
   checked: boolean,
   partial: boolean
@@ -16,4 +18,4 @@ export interface GroupState {
   replaceValue(label: string, value: string | number): void
 }
 
-export const GROUP_STATE = Symbol('CHECKBOX_GROUP_STATE')
+export const GROUP_STATE: InjectionKey<GroupState> = Symbol('CHECKBOX_GROUP_STATE')

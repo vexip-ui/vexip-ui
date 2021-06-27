@@ -65,7 +65,7 @@ import '@/common/icons/angle-right'
 import '@/common/icons/angle-down'
 import '@/common/icons/angle-left'
 
-import type { WheelState, ItemState } from './symbol'
+import type { ItemState } from './symbol'
 
 const props = useConfiguredProps('wheel', {
   horizontal: {
@@ -175,10 +175,7 @@ export default defineComponent({
       )
     })
 
-    provide<WheelState>(WHEEL_STATE, {
-      increaseItem,
-      decreaseItem
-    })
+    provide(WHEEL_STATE, { increaseItem, decreaseItem })
 
     const updateActive = debounceMinor(() => {
       const active = Math.max(
