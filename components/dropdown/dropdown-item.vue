@@ -7,9 +7,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, toRef, inject } from 'vue'
 import { useConfiguredProps } from '@/common/config/install'
-import { noop } from '@/common/utils/common'
 import { useLabel } from './mixins'
-import { SELECT_HANDLER } from './symbol'
+import { DROP_SELECT_HANDLER } from './symbol'
 
 const props = useConfiguredProps('dropdownItem', {
   label: {
@@ -39,7 +38,7 @@ export default defineComponent({
   props,
   emits: ['on-select'],
   setup(props, { emit }) {
-    const parentSelectHandler = inject(SELECT_HANDLER, noop)
+    const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)
 
     const baseClass = 'vxp-dropdown__item'
     const wrapper = ref(null)
@@ -63,7 +62,7 @@ export default defineComponent({
       }
 
       if (typeof parentSelectHandler === 'function') {
-        parentSelectHandler(currentLabel.value)
+        parentSelectHandler(currentLabel.value!)
       }
 
       emit('on-select', currentLabel.value)

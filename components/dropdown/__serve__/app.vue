@@ -1,18 +1,28 @@
 <template>
-  <Dropdown v-model:visible="visible" transfer>
+  <Dropdown v-model:visible="visible" transfer trigger="click">
     <Button type="primary">
       下拉菜单
     </Button>
     <template #drop>
       <DropdownList>
-        <DropdownItem name="选项一">
+        <DropdownItem label="选项一">
           选项一
         </DropdownItem>
-        <DropdownItem name="选项二">
+        <DropdownItem label="选项二">
           选项二
         </DropdownItem>
-        <DropdownItem name="选项三">
-          选项三
+        <Dropdown label="选项三" trigger="click">
+          <DropdownItem> 选项三 </DropdownItem>
+          <template #drop>
+            <DropdownList>
+              <DropdownItem>子选项一</DropdownItem>
+              <DropdownItem>子选项二</DropdownItem>
+              <DropdownItem>子选项三</DropdownItem>
+            </DropdownList>
+          </template>
+        </Dropdown>
+        <DropdownItem label="选项四">
+          选项四
         </DropdownItem>
       </DropdownList>
     </template>

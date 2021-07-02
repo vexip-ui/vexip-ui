@@ -13,10 +13,10 @@
     z-index: $vxp-z-index-popper;
     display: flex;
     padding: 0.35em 0;
-  }
 
-  &--sub &__popper {
-    padding: 0;
+    &--nested {
+      padding: 0;
+    }
   }
 
   &__list {

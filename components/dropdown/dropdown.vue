@@ -13,19 +13,21 @@
     >
       <slot></slot>
     </div>
-    <Portal :to="transferTo">
-      <transition :name="transitionName">
-        <div
-          v-show="currentVisible"
-          ref="popper"
-          :class="[`${prefix}__popper`, dropClass]"
-          @mouseenter="handleTriggerEnter"
-          @mouseleave="handleTriggerLeave"
-        >
-          <slot name="drop"></slot>
-        </div>
-      </transition>
-    </Portal>
+    <DropdownDrop>
+      <Portal :to="transferTo">
+        <transition :name="transitionName">
+          <div
+            v-show="currentVisible"
+            ref="popper"
+            :class="[`${prefix}__popper`, isNested ? `${prefix}__popper--nested` : null, dropClass]"
+            @mouseenter="handleTriggerEnter"
+            @mouseleave="handleTriggerLeave"
+          >
+            <slot name="drop"></slot>
+          </div>
+        </transition>
+      </Portal>
+    </DropdownDrop>
   </div>
 </template>
 
@@ -41,16 +43,14 @@ import {
   inject,
   provide
 } from 'vue'
-
 import { Portal } from '@/components/portal'
-
+import DropdownDrop from './dropdown-drop'
 import { useClickOutside } from '@/common/mixins/clickoutside'
 import { placementWhileList, usePopper } from '@/common/mixins/popper'
 import { useTriggerHandler } from '@/common/mixins/trigger-handler'
 import { useConfiguredProps } from '@/common/config/install'
-import { noop } from '@/common/utils/common'
 import { useLabel } from './mixins'
-import { SELECT_HANDLER } from './symbol'
+import { SELECT_HANDLER, DROP_SELECT_HANDLER } from './symbol'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@popperjs/core'
@@ -101,17 +101,19 @@ const props = useConfiguredProps('dropdown', {
 export default defineComponent({
   name: 'Dropdown',
   components: {
+    DropdownDrop,
     Portal
   },
   props,
   emits: ['on-toggle', 'on-select', 'on-click-outside', 'on-outside-close', 'update:visible'],
   setup(props, { emit }) {
-    const parentSelectHandler = inject(SELECT_HANDLER, noop)
+    const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)
 
     const prefix = 'vxp-dropdown'
+    const isNested = typeof parentSelectHandler === 'function'
     const trigger = toRef(props, 'trigger')
     const label = toRef(props, 'label')
-    const placement = toRef(props, 'placement')
+    const placement = ref(props.placement)
     const currentVisible = ref(props.visible)
     const transfer = toRef(props, 'transfer')
 
@@ -136,6 +138,7 @@ export default defineComponent({
     })
 
     provide(SELECT_HANDLER, handleSelect)
+    provide(DROP_SELECT_HANDLER, null) // 覆盖上一级的 provide
 
     watch(
       () => props.visible,
@@ -203,6 +206,7 @@ export default defineComponent({
 
     return {
       prefix: prefix,
+      isNested,
       currentVisible,
       transferTo,
 
