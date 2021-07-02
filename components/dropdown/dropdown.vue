@@ -122,7 +122,8 @@ export default defineComponent({
       placement,
       transfer,
       wrapper,
-      isDrop: true
+      isDrop: true,
+      offset: isNested ? [-5, 0] : undefined
     })
     const currentLabel = useLabel(label, reference)
     const { handleTriggerEnter, handleTriggerLeave, handleTriggerClick } = useTriggerHandler(

@@ -11,7 +11,7 @@
         <DropdownItem label="选项二">
           选项二
         </DropdownItem>
-        <Dropdown label="选项三" trigger="click">
+        <Dropdown label="选项三">
           <DropdownItem> 选项三 </DropdownItem>
           <template #drop>
             <DropdownList>

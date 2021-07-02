@@ -2,8 +2,14 @@ import { ref, watch, watchEffect, nextTick, onMounted, onBeforeUnmount } from 'v
 import { createPopper } from '@popperjs/core'
 
 import type { Ref, WatchStopHandle } from 'vue'
-import type { Placement, Modifier, Instance } from '@popperjs/core'
+import type { Placement, Modifier, Instance, Rect } from '@popperjs/core'
 import type { TransferNode } from '../utils/dom-event'
+
+type OffsetsFunction = (options: {
+  popper: Rect,
+  reference: Rect,
+  placement: Placement
+}) => [number?, number?]
 
 interface UsePopperOptions {
   placement: Ref<Placement>,
@@ -11,7 +17,8 @@ interface UsePopperOptions {
   wrapper: Ref<HTMLElement | null>,
   isDrop?: boolean,
   reference?: Ref<HTMLElement | null>,
-  popper?: Ref<HTMLElement | null>
+  popper?: Ref<HTMLElement | null>,
+  offset?: OffsetsFunction | [number?, number?]
 }
 
 export const placementWhileList = Object.freeze([
@@ -71,6 +78,15 @@ export function usePopper(initOptions: UsePopperOptions) {
         if (origin) {
           state.elements.popper.style.transformOrigin = origin
         }
+      }
+    })
+  }
+
+  if (initOptions.offset) {
+    options.modifiers.push({
+      name: 'offset',
+      options: {
+        offset: initOptions.offset
       }
     })
   }
