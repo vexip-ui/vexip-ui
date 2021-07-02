@@ -46,30 +46,17 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  computed,
-  watch,
-  onMounted,
-  onBeforeUnmount,
-  nextTick
-} from 'vue'
+import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { useConfiguredProps } from '@/common/config/install'
 import { isTrue } from '@/common/utils/common'
-import { throttle, debounce } from '@/common/utils/performance'
-import { toNumber, multipleFixed } from '@/common/utils/number'
 import { USE_TOUCH } from '@/common/utils/dom-event'
 import { createEventEmitter } from '@/common/utils/event-emitter'
+import { useScrollWrapper } from './mixins'
 
 import type { PropType } from 'vue'
 import type { EventHandler } from '@/common/utils/event-emitter'
-
-export type ScrollMode = 'horizontal' | 'vertical' | 'both'
-
-type ClassType = string | Record<string, boolean>
+import type { ScrollMode, ClassType } from './symbol'
 
 const moveEvent = USE_TOUCH ? 'touchmove' : 'mousemove'
 const upEvent = USE_TOUCH ? 'touchend' : 'mouseup'
@@ -177,46 +164,129 @@ export default defineComponent({
     'on-ready'
   ],
   setup(props, { emit }) {
+    const emitter = createEventEmitter()
+
     const prefix = 'vxp-scroll'
     const usingBar = ref(false)
     const scrolling = ref(false)
-    const isReady = ref(false)
     const transitionDuration = ref<number>(-1)
+
+    const {
+      wrapperElement,
+      contentElement,
+
+      wrapper,
+      isReady,
+      currentScroll,
+      percentX,
+      percentY,
+      xScrollLimit,
+      yScrollLimit,
+      enableXScroll,
+      enableYScroll,
+      xBarLength,
+      yBarLength,
+
+      verifyScroll,
+      computePercent,
+      refresh
+    } = useScrollWrapper({
+      mode: toRef(props, 'mode'),
+      disabled: toRef(props, 'disabled'),
+      width: toRef(props, 'width'),
+      height: toRef(props, 'height'),
+      scrollX: toRef(props, 'scrollX'),
+      scrollY: toRef(props, 'scrollY')
+    })
+
+    /* autoplay */
     const canPlay = ref(false)
 
-    const emitter = createEventEmitter()
-
-    // 当前滚动位置
-    const currentScroll = reactive({
-      x: -props.scrollX,
-      y: -props.scrollY
+    const canAutoplay = computed(() => {
+      return (
+        props.mode !== 'both' &&
+        (isTrue(props.autoplay) || props.autoplay > 1000) &&
+        ((props.mode === 'horizontal' && enableXScroll.value) ||
+          (props.mode === 'vertical' && enableYScroll.value))
+      )
     })
 
-    const percentX = ref(0)
-    const percentY = ref(0)
+    watch(
+      () => props.autoplay,
+      () => {
+        stopAutoplay()
+        nextTick(startAutoplay)
+      }
+    )
+    watch(
+      () => props.playWaiting,
+      () => {
+        stopAutoplay()
+        nextTick(startAutoplay)
+      }
+    )
 
-    const wrapperElement = ref<HTMLElement | null>(null)
-    const contentElement = ref<HTMLElement | null>(null)
-
-    // 容器长宽
-    const wrapper = reactive({
-      el: wrapperElement,
-      width: toNumber(props.width),
-      height: toNumber(props.height)
-    })
-
-    // 内容长宽
-    const content = reactive({
-      el: contentElement,
-      width: 0,
-      height: 0
-    })
-
-    let timer: number
-    let bufferTimer: number
     let playTimer: number
     let startTimer: number
     let endTimer: number
+
+    function startAutoplay() {
+      if (!canAutoplay.value) return
+
+      stopAutoplay()
+
+      const mode = props.mode
+      const distance = mode === 'horizontal' ? 'width' : 'height'
+      const limit = mode === 'horizontal' ? xScrollLimit : yScrollLimit
+      const prop = mode === 'horizontal' ? 'x' : 'y'
+      const waiting = props.playWaiting < 20 ? 20 : props.playWaiting
+
+      let playSpeed = 0.5
+
+      if (typeof props.autoplay === 'number') {
+        playSpeed = (wrapper[distance] / props.autoplay) * 16
+      }
+
+      const scroll = () => {
+        currentScroll[prop] -= playSpeed
+
+        if (currentScroll[prop] <= limit.value) {
+          currentScroll[prop] = limit.value
+          canPlay.value = false
+
+          computePercent()
+
+          endTimer = window.setTimeout(() => {
+            scrollTo(0, 0, 500)
+
+            startTimer = window.setTimeout(() => {
+              canPlay.value = true
+              scroll()
+            }, 500 + waiting)
+          }, waiting)
+        } else {
+          computePercent()
+
+          if (canPlay.value) {
+            requestAnimationFrame(scroll)
+          }
+        }
+      }
+
+      playTimer = window.setTimeout(() => {
+        canPlay.value = true
+        scroll()
+      }, waiting)
+    }
+
+    function stopAutoplay() {
+      canPlay.value = false
+
+      window.clearTimeout(playTimer)
+      window.window.clearTimeout(startTimer)
+      window.clearTimeout(endTimer)
+    }
+    /* autoplay */
 
     const className = computed(() => {
       return [prefix, `${prefix}--${props.mode}`]
@@ -260,192 +330,16 @@ export default defineComponent({
           transitionDuration.value < 0 ? undefined : `${transitionDuration.value}ms`
       }
     })
-    const xScrollLimit = computed(() => {
-      return wrapper.width ? wrapper.width - content.width : 0
-    })
-    const yScrollLimit = computed(() => {
-      return wrapper.height ? wrapper.height - content.height : 0
-    })
-    const enableXScroll = computed(() => {
-      return (
-        !props.disabled &&
-        props.mode !== 'vertical' &&
-        !!wrapper.width &&
-        content.width - wrapper.width > 1
-      )
-    })
-    const enableYScroll = computed(() => {
-      return (
-        !props.disabled &&
-        props.mode !== 'horizontal' &&
-        !!wrapper.height &&
-        content.height - wrapper.height > 1
-      )
-    })
-    const xBarLength = computed(() => {
-      if (wrapper.width) {
-        return Math.max(Math.min((wrapper.width / (content.width || 1)) * 100, 99), 5)
-      }
 
-      return 35
-    })
-    const yBarLength = computed(() => {
-      if (wrapper.height) {
-        return Math.max(Math.min((wrapper.height / (content.height || 1)) * 100, 99), 5)
-      }
-
-      return 35
-    })
-    const canAutoplay = computed(() => {
-      return (
-        props.mode !== 'both' &&
-        (isTrue(props.autoplay) || props.autoplay > 1000) &&
-        ((props.mode === 'horizontal' && enableXScroll.value) ||
-          (props.mode === 'vertical' && enableYScroll.value))
-      )
-    })
-
-    watch(
-      () => props.scrollX,
-      value => {
-        currentScroll.x = -value
-        verifyScroll()
-      }
-    )
-    watch(
-      () => props.scrollY,
-      value => {
-        currentScroll.y = -value
-        verifyScroll()
-      }
-    )
-    watch(
-      () => props.width,
-      () => {
-        refreshWrapper()
-        verifyScroll()
-      }
-    )
-    watch(
-      () => props.height,
-      () => {
-        refreshWrapper()
-        verifyScroll()
-      }
-    )
     watch(enableXScroll, value => {
       emit('on-x-enable-change', value)
     })
     watch(enableYScroll, value => {
       emit('on-y-enable-change', value)
     })
-    watch(
-      () => props.autoplay,
-      () => {
-        stopAutoplay()
-        nextTick(startAutoplay)
-      }
-    )
-    watch(
-      () => props.playWaiting,
-      () => {
-        stopAutoplay()
-        nextTick(startAutoplay)
-      }
-    )
-    watch(wrapperElement, () => {
-      refreshWrapper()
-    })
-    watch(contentElement, () => {
-      computeContentSize()
-    })
     watch(isReady, value => {
       if (value) emit('on-ready')
     })
-
-    const handleResize = throttle(refresh)
-
-    onMounted(() => {
-      refresh()
-      window.addEventListener('resize', handleResize)
-    })
-
-    onBeforeUnmount(() => {
-      destroyMutationObserver()
-      window.removeEventListener('resize', handleResize)
-    })
-
-    function refreshWrapper() {
-      if (props.mode !== 'vertical') {
-        computeWrapperSize('width')
-      }
-
-      if (props.mode !== 'horizontal') {
-        computeWrapperSize('height')
-      }
-    }
-
-    function computeWrapperSize(sizeType: 'width' | 'height') {
-      nextTick(() => {
-        if (!wrapper.el) return
-
-        const size = props[sizeType]
-        const titleCaseSizeType = sizeType.slice(0, 1).toUpperCase() + sizeType.slice(1)
-
-        // 获取 wrapper 的 px 大小
-        if (typeof size === 'string') {
-          if (!size.endsWith('px') && Number.isNaN(Number(size))) {
-            wrapper[sizeType] =
-              wrapper.el[`offset${titleCaseSizeType}` as 'offsetWidth' | 'offsetHeight']
-          } else {
-            wrapper[sizeType] = parseInt(size)
-          }
-        } else {
-          wrapper[sizeType] = size
-        }
-      })
-    }
-
-    function computeContentSize() {
-      window.clearTimeout(timer)
-
-      timer = window.setTimeout(() => {
-        if (!content.el) return
-
-        const mode = props.mode
-
-        if (mode !== 'vertical') {
-          content.width = content.el.offsetWidth
-
-          if (wrapper.width >= content.width) {
-            currentScroll.x = 0
-          } else {
-            if (currentScroll.x === 0) {
-              currentScroll.x = -props.scrollX
-            }
-          }
-        }
-
-        if (mode !== 'horizontal') {
-          content.height = content.el.offsetHeight
-
-          if (wrapper.height >= content.height) {
-            currentScroll.y = 0
-          } else {
-            if (currentScroll.y === 0) {
-              currentScroll.y = -props.scrollY
-            }
-          }
-        }
-
-        isReady.value = false
-
-        setTimeout(() => {
-          isReady.value = true
-          verifyScroll()
-        }, 1)
-      }, 0)
-    }
 
     function handleMouseDown(event: MouseEvent) {
       if (!props.pointer || event.button !== 0 || USE_TOUCH) {
@@ -597,33 +491,11 @@ export default defineComponent({
       startAutoplay()
     }
 
+    let bufferTimer: number
+
     function prepareScroll() {
       stopAutoplay()
       window.clearTimeout(bufferTimer)
-    }
-
-    function verifyScroll() {
-      if (!isReady.value) {
-        return
-      }
-
-      if (props.mode !== 'vertical') {
-        currentScroll.x = Math.min(0, Math.max(currentScroll.x, xScrollLimit.value))
-      }
-
-      if (props.mode !== 'horizontal') {
-        currentScroll.y = Math.min(0, Math.max(currentScroll.y, yScrollLimit.value))
-      }
-
-      computePercent()
-    }
-
-    function computePercent() {
-      percentX.value = multipleFixed(currentScroll.x / (xScrollLimit.value || -1), 100, 2)
-      percentY.value = multipleFixed(currentScroll.y / (yScrollLimit.value || -1), 100, 2)
-
-      percentX.value = Math.max(0, Math.min(percentX.value, 100))
-      percentY.value = Math.max(0, Math.min(percentY.value, 100))
     }
 
     function handleBuffer() {
@@ -675,47 +547,6 @@ export default defineComponent({
         percentX: percentX.value,
         percentY: percentY.value
       })
-    }
-
-    let mutationObserver: MutationObserver | null
-
-    function createMutationObserver() {
-      const target = content.el?.children[0]
-
-      if (!target) return
-
-      mutationObserver = new MutationObserver(debounce(computeContentSize))
-
-      mutationObserver.observe(target, {
-        attributes: true,
-        childList: true,
-        characterData: true,
-        subtree: true,
-        attributeFilter: ['style']
-      })
-    }
-
-    function destroyMutationObserver() {
-      if (mutationObserver) {
-        mutationObserver.disconnect()
-        mutationObserver = null
-      }
-    }
-
-    function refresh() {
-      stopAutoplay()
-      computeContentSize()
-      refreshWrapper()
-
-      nextTick(() => {
-        destroyMutationObserver()
-        createMutationObserver()
-      })
-
-      setTimeout(() => {
-        verifyScroll()
-        startAutoplay()
-      }, 10)
     }
 
     function scrollTo(clientX: number, clientY: number, duration?: number) {
@@ -782,74 +613,16 @@ export default defineComponent({
       return [0, -yScrollLimit.value]
     }
 
-    function startAutoplay() {
-      if (!canAutoplay.value) return
-
-      stopAutoplay()
-
-      // const { mode, autoplay, xScrollLimit, yScrollLimit } = this
-      const mode = props.mode
-      const distance = mode === 'horizontal' ? 'width' : 'height'
-      const limit = mode === 'horizontal' ? xScrollLimit : yScrollLimit
-      const prop = mode === 'horizontal' ? 'x' : 'y'
-      const waiting = props.playWaiting < 20 ? 20 : props.playWaiting
-
-      let playSpeed = 0.5
-
-      if (typeof props.autoplay === 'number') {
-        playSpeed = (wrapper[distance] / props.autoplay) * 16
-      }
-
-      const scroll = () => {
-        currentScroll[prop] -= playSpeed
-
-        if (currentScroll[prop] <= limit.value) {
-          currentScroll[prop] = limit.value
-          canPlay.value = false
-
-          computePercent()
-
-          endTimer = window.setTimeout(() => {
-            scrollTo(0, 0, 500)
-
-            startTimer = window.setTimeout(() => {
-              canPlay.value = true
-              scroll()
-            }, 500 + waiting)
-          }, waiting)
-        } else {
-          computePercent()
-
-          if (canPlay.value) {
-            requestAnimationFrame(scroll)
-          }
-        }
-      }
-
-      playTimer = window.setTimeout(() => {
-        canPlay.value = true
-        scroll()
-      }, waiting)
-    }
-
-    function stopAutoplay() {
-      canPlay.value = false
-
-      window.clearTimeout(playTimer)
-      window.window.clearTimeout(startTimer)
-      window.clearTimeout(endTimer)
-    }
-
     function scrollToElement(el: string | Element, duration?: number, offset = 0) {
-      if (!content.el) return
+      if (!contentElement.value) return
 
       if (typeof el === 'string') {
-        el = content.el.querySelector(el)!
+        el = contentElement.value.querySelector(el)!
       }
 
       if (!(el instanceof Node)) return
 
-      const wrapperRect = content.el.getBoundingClientRect()
+      const wrapperRect = contentElement.value.getBoundingClientRect()
       const elRect = el.getBoundingClientRect()
 
       let clientX = 0
@@ -878,6 +651,7 @@ export default defineComponent({
       percentX,
       percentY,
       transitionDuration,
+      currentScroll,
 
       className,
       style,
