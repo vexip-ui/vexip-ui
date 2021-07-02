@@ -1,4 +1,4 @@
-import { ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, watchEffect, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { createPopper } from '@popperjs/core'
 
 import type { Ref, WatchStopHandle } from 'vue'
@@ -82,6 +82,12 @@ export function usePopper(initOptions: UsePopperOptions) {
     popperInstance && popperInstance.setOptions({ placement: value })
   })
 
+  watchEffect(() => {
+    if (wrapper.value && popper.value) {
+      (wrapper.value as TransferNode).__transferElement = popper.value
+    }
+  })
+
   let stopWatchPopper: WatchStopHandle | null = null
 
   if (transfer) {
@@ -101,10 +107,6 @@ export function usePopper(initOptions: UsePopperOptions) {
         popperInstance && popperInstance.destroy()
         createPopperInstance()
       })
-
-      if (wrapper.value && popper.value) {
-        (wrapper.value as TransferNode).__transferElement = popper.value
-      }
     })
   })
 
