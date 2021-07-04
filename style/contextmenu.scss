@@ -1,0 +1,11 @@
+@import './dropdown.scss';
+
+.vxp-contextmenu {
+  @include basis;
+
+  position: fixed;
+
+  &__anchor {
+    position: fixed;
+  }
+}

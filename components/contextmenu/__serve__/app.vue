@@ -1,29 +1,36 @@
 <template>
-  <Button type="primary" @on-click="confirm">
-    提交
-  </Button>
+  <div
+    style="width: 500px; height: 300px; border: 1px solid #ccc;"
+    @contextmenu.prevent="contextmenu"
+  ></div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Button } from '@/components/button'
 
 export default defineComponent({
   name: 'App',
-  components: {
-    Button
-  },
   methods: {
-    async confirm(this: any) {
-      const isConfirm = await this.$confirm.open({
-        content: '确认提交吗？',
-        confirmType: 'success'
+    async contextmenu(this: any, event: MouseEvent) {
+      const selectedKey = await this.$contextmenu.open({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        appear: true,
+        configs: [
+          {
+            key: '选项一'
+          },
+          {
+            key: '选项二'
+          },
+          {
+            key: '选项三'
+          }
+        ]
       })
 
-      console.log(isConfirm)
+      console.log(selectedKey)
     }
   }
 })
 </script>
-
-<style lang="scss"></style>

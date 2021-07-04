@@ -1,3 +1,5 @@
+import '@/style/contextmenu.scss'
+
 import { createApp } from 'vue'
 import Component from './contextmenu.vue'
 import { destroyObject } from '@/common/utils/destroy-object'
@@ -16,8 +18,8 @@ export class ContextmenuManager {
     this.name = 'Contextmenu'
   }
 
-  open(menus: MenuOptions[]) {
-    return this._getInstance().openContextmenu(menus)
+  open(options: MenuOptions) {
+    return this._getInstance().openContextmenu(options)
   }
 
   destroy() {
