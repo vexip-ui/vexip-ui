@@ -15,7 +15,7 @@
     </div>
     <DropdownDrop>
       <Portal :to="transferTo">
-        <transition :name="transitionName">
+        <transition :name="transitionName" :appear="appear">
           <div
             v-show="currentVisible"
             ref="popper"
@@ -95,6 +95,10 @@ const props = useConfiguredProps('dropdown', {
   dropClass: {
     type: [String, Object] as PropType<ClassType>,
     default: null
+  },
+  appear: {
+    type: Boolean,
+    default: false
   }
 })
 
