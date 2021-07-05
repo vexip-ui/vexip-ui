@@ -7,24 +7,58 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import '@/common/icons/ad'
+import '@/common/icons/user'
+
+import type { ContextmenuManager } from '..'
+
+interface Context {
+  $contextmenu: ContextmenuManager
+}
 
 export default defineComponent({
   name: 'App',
   methods: {
-    async contextmenu(this: any, event: MouseEvent) {
+    async contextmenu(this: Context, event: MouseEvent) {
       const selectedKey = await this.$contextmenu.open({
         clientX: event.clientX,
         clientY: event.clientY,
         appear: true,
         configs: [
           {
-            key: '选项一'
+            key: '选项1'
           },
           {
-            key: '选项二'
+            key: '选项2',
+            icon: 'user',
+            shortcut: 'Ctrl+A'
           },
           {
-            key: '选项三'
+            key: '选项3',
+            icon: 'ad',
+            children: [
+              {
+                key: '选项3-1'
+              },
+              {
+                key: '选项3-2'
+              },
+              {
+                key: '选项3-3',
+                children: [
+                  {
+                    key: '选项3-3-1',
+                    shortcut: 'Ctrl+L'
+                  },
+                  {
+                    key: '选项3-3-2'
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            key: '选项4'
           }
         ]
       })

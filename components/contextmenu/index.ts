@@ -10,20 +10,29 @@ import type { MenuOptions, ContextmenuInstance } from './symbol'
 export class ContextmenuManager {
   name: string
 
-  private _instance!: ContextmenuInstance
-  private _container: App<unknown> | null
+  private _instance: ContextmenuInstance | null
+  private _innerApp: App<unknown> | null
+  private _container: HTMLElement | null
+  private _pending: Promise<any> | null
 
   constructor() {
+    this._instance = null
+    this._innerApp = null
     this._container = null
+    this._pending = null
     this.name = 'Contextmenu'
   }
 
   open(options: MenuOptions) {
-    return this._getInstance().openContextmenu(options)
+    this._pending = this._getInstance().openContextmenu(options)
+
+    return this._pending
   }
 
   destroy() {
-    this._container && this._container.unmount()
+    this._innerApp?.unmount()
+    this._container && document.body.removeChild(this._container.firstElementChild!)
+
     destroyObject(this)
   }
 
@@ -36,18 +45,35 @@ export class ContextmenuManager {
   }
 
   private _getInstance() {
-    if (!this._instance) {
-      const container = document.createElement('div')
-      // 使用 createVNode 和 render 手动控制可以有效降低开销
-      // 然而使用上述方式创建的组件无法被 devTool 正确加载
-      // 因此选择开销更大的 createApp 以保证 devTool 的正常运行
-      const innerApp = createApp(Component)
+    if (this._pending) {
+      let innerApp = this._innerApp
+      let container = this._container
 
-      this._instance = innerApp.mount(container) as ContextmenuInstance
-      this._container = innerApp
+      const unmount = () => {
+        innerApp?.unmount()
+        container && document.body.removeChild(container.firstElementChild!)
+        innerApp = null
+        container = null
+      }
 
-      document.body.appendChild(container.firstElementChild!)
+      this._pending.finally(unmount)
+      this._instance!.handleCancel()
+      this._pending = null
+      this._instance = null
+    } else {
+      this._innerApp?.unmount()
+      this._container && document.body.removeChild(this._container.firstElementChild!)
+
+      this._instance = null
+      this._innerApp = null
+      this._container = null
     }
+
+    this._container = document.createElement('div')
+    this._innerApp = createApp(Component)
+    this._instance = this._innerApp.mount(this._container) as ContextmenuInstance
+
+    document.body.appendChild(this._container.firstElementChild!)
 
     return this._instance
   }

@@ -5,7 +5,54 @@
 
   position: fixed;
 
-  &__anchor {
-    position: fixed;
+  & &__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 180px;
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+
+  &__list--icons &__item {
+    padding-left: 28px;
+  }
+
+  &__list--no-icon &__item {
+    padding-left: 10px;
+  }
+
+  &__list--arrows &__item {
+    padding-right: 28px;
+  }
+
+  &__list--no-arrow &__item {
+    padding-right: 10px;
+  }
+
+  &__icon {
+    position: absolute;
+    left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    margin-top: 1px;
+
+    &,
+    .vxp-icon {
+      color: $vxp-color-content-secondary;
+    }
+  }
+
+  &__shortcut {
+    margin-left: 1em;
+    color: $vxp-color-content-disabled;
+  }
+
+  &__arrow {
+    right: 8px;
+    left: auto;
   }
 }

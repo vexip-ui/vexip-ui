@@ -8,6 +8,7 @@ export interface MenuConfig {
   icon?: string | Record<string, unknown> | (() => VNodeChild),
   color?: string,
   iconColor?: string,
+  shortcut?: string,
   disabled?: boolean,
   children?: MenuConfig[]
 }
@@ -20,5 +21,6 @@ export interface MenuOptions {
 }
 
 export interface ContextmenuInstance extends ComponentPublicInstance {
-  openContextmenu: (options: MenuOptions) => Promise<Key | null>
+  openContextmenu: (options: MenuOptions) => Promise<Key | null>,
+  handleCancel: () => void
 }
