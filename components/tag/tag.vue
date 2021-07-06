@@ -25,7 +25,7 @@ import { useConfiguredProps } from '@/common/config/install'
 
 import '@/common/icons/times'
 
-export type TagType = 'default' | 'primary' | 'success' | 'error' | 'warning'
+import type { TagType } from './symbol'
 
 const props = useConfiguredProps('tag', {
   type: {
@@ -53,6 +53,10 @@ const props = useConfiguredProps('tag', {
   transitionName: {
     type: String,
     default: 'vxp-fade'
+  },
+  simple: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -70,7 +74,8 @@ export default defineComponent({
       return {
         [prefix]: true,
         [`${prefix}--${props.type}`]: props.type !== 'default',
-        [`${prefix}--border`]: props.border
+        [`${prefix}--border`]: props.border,
+        [`${prefix}--simple`]: props.simple
       }
     })
     const style = computed(() => {
