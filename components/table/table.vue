@@ -368,8 +368,9 @@ export default defineComponent({
     watch(
       () => props.data,
       value => {
+        setPageSize(props.pageSize || value.length)
         setData(value)
-        setPageSize(props.pageSize)
+
         refreshPercentScroll()
       },
       { deep: true }
@@ -663,6 +664,8 @@ export default defineComponent({
       barLength,
       bodyScrollHeight,
       totalRowHeight: toRef(getters, 'totalRowHeight'),
+
+      store,
 
       wrapper,
       thead,
