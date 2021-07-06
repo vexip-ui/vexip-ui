@@ -137,7 +137,6 @@ export default defineComponent({
       return (
         <Dropdown
           transfer={false}
-          trigger="click"
           onContextmenu={(event: MouseEvent) => {
             event.preventDefault()
             event.stopPropagation()
@@ -145,7 +144,12 @@ export default defineComponent({
         >
           {{
             default: () => (
-              <DropdownItem class={`${prefix}__item`} label={item.key} disabled={item.disabled}>
+              <DropdownItem
+                class={`${prefix}__item`}
+                label={item.key}
+                divided={item.divided}
+                disabled={item.disabled}
+              >
                 {renderItemIcon(item)}
                 {item.label || item.key}
                 {renderItemShortcut(item)}
@@ -179,7 +183,12 @@ export default defineComponent({
         return renderGroupItem(item)
       } else {
         return (
-          <DropdownItem class={`${prefix}__item`} label={item.key} disabled={item.disabled}>
+          <DropdownItem
+            class={`${prefix}__item`}
+            label={item.key}
+            divided={item.divided}
+            disabled={item.disabled}
+          >
             {renderItemIcon(item)}
             {item.label || item.key}
             {renderItemShortcut(item)}

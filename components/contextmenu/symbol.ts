@@ -9,6 +9,7 @@ export interface MenuConfig {
   color?: string,
   iconColor?: string,
   shortcut?: string,
+  divided?: boolean,
   disabled?: boolean,
   children?: MenuConfig[]
 }

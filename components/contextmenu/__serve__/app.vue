@@ -36,12 +36,15 @@ export default defineComponent({
           {
             key: '选项3',
             icon: 'ad',
+            divided: true,
             children: [
               {
-                key: '选项3-1'
+                key: '选项3-1',
+                disabled: true
               },
               {
-                key: '选项3-2'
+                key: '选项3-2',
+                divided: true
               },
               {
                 key: '选项3-3',
@@ -58,7 +61,12 @@ export default defineComponent({
             ]
           },
           {
-            key: '选项4'
+            key: '选项4',
+            shortcut: 'Alt+I'
+          },
+          {
+            key: '选项5',
+            shortcut: 'Ctrl+Alt+I'
           }
         ]
       })

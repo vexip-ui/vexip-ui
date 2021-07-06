@@ -51,7 +51,6 @@ export class ContextmenuManager {
 
       const unmount = () => {
         innerApp?.unmount()
-        container && document.body.removeChild(container.firstElementChild!)
         innerApp = null
         container = null
       }
