@@ -112,15 +112,16 @@ export default defineComponent({
       const style: CSSProperties = {
         backgroundColor: props.barColor
       }
-      const position = `${((100 - props.barLength) * currentScroll.value) / 100}%`
+      const position = `${((100 - props.barLength) * currentScroll.value) / props.barLength}%`
       const length = `${props.barLength}%`
 
       if (type.value === ScrollbarType.VERTICAL) {
-        style.top = position
         style.height = length
+        style.transform = `translate3d(0, ${position}, 0)`
       } else {
-        style.left = position
+        // style.left = position
         style.width = length
+        style.transform = `translate3d(${position}, 0, 0)`
       }
 
       if (isDefined(props.duration) && props.duration >= 0) {

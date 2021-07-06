@@ -63,12 +63,12 @@
     cursor: pointer;
     background-color: $vxp-scrollbar-color-bg-bar;
     border-radius: 3px;
+    will-change: transform;
     transition:
       width $vxp-transition-base,
       height $vxp-transition-base,
       $vxp-transition-opacity-base,
-      top 200ms $timing,
-      left 200ms $timing;
+      transform 140ms $timing;
 
     &:hover {
       opacity: 0.8;
