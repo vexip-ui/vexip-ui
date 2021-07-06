@@ -12,11 +12,15 @@
           选项二
         </DropdownItem>
         <Dropdown label="选项三">
-          <DropdownItem> 选项三 </DropdownItem>
+          <DropdownItem divided>
+            选项三
+          </DropdownItem>
           <template #drop>
             <DropdownList>
               <DropdownItem>子选项一</DropdownItem>
-              <DropdownItem>子选项二</DropdownItem>
+              <DropdownItem divided>
+                子选项二
+              </DropdownItem>
               <DropdownItem>子选项三</DropdownItem>
             </DropdownList>
           </template>

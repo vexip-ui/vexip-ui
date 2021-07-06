@@ -24,7 +24,6 @@
     min-width: 5em;
     padding: 0.35em 0;
     margin: 0;
-    // color: $vxp-color-content-normal;
     user-select: none;
     background-color: $vxp-color-fill;
     border-radius: $vxp-border-radius-base;
@@ -32,11 +31,12 @@
   }
 
   &__item {
+    position: relative;
     padding: 0.35em 1.2em;
     white-space: nowrap;
     list-style: none;
     cursor: pointer;
-    background-color: $vxp-color-fill;
+    background-color: transparent;
     transition: $vxp-transition-background-base;
 
     &:hover {
@@ -55,22 +55,22 @@
       cursor: not-allowed;
 
       &:hover {
-        background-color: $vxp-color-fill;
+        background-color: transparent;
       }
     }
 
     &--divided {
-      margin-bottom: 0.35em;
-      border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
+      margin-bottom: 0.7em;
 
       &::after {
-        position: relative;
-        bottom: -0.35em;
+        position: absolute;
+        bottom: calc(-0.35em - 0.5px);
+        left: 0;
         display: block;
-        height: 0.35em;
-        margin: 0 -1.2em;
+        width: 100%;
+        height: 0;
         content: '';
-        background-color: $vxp-color-fill;
+        border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
       }
     }
   }
