@@ -1,0 +1,31 @@
+.vxp-loading {
+  @include basis;
+
+  position: fixed;
+  left: 0;
+  z-index: $vxp-z-index-popup;
+  width: 100%;
+
+  &__filler {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-color: $vxp-color-primary;
+    will-change: transform;
+    transition: $vxp-transition-background-base, transform $vxp-transition-base;
+  }
+
+  $types: (
+    success: $vxp-color-success,
+    error: $vxp-color-error,
+    warning: $vxp-color-warning
+  );
+
+  @each $type in map-keys($types) {
+    $color: map-get($types, $type);
+
+    &--#{$type} &__filler {
+      background-color: $color;
+    }
+  }
+}
