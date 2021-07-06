@@ -676,6 +676,7 @@ export default defineComponent({
       handleYScrollEnableChange,
       handleYBarScroll,
 
+      refresh,
       getSelected
     }
   }
