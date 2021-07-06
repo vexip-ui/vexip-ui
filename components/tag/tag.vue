@@ -27,11 +27,29 @@ import '@/common/icons/times'
 
 import type { TagType } from './symbol'
 
+const types = [
+  'default',
+  'primary',
+  'info',
+  'success',
+  'error',
+  'warning',
+  'lime',
+  'pink',
+  'magenta',
+  'tomato',
+  'orange',
+  'cyan',
+  'navy',
+  'gold',
+  'purple'
+]
+
 const props = useConfiguredProps('tag', {
   type: {
     default: 'default' as TagType,
     validator: (value: TagType) => {
-      return ['default', 'primary', 'success', 'error', 'warning'].includes(value)
+      return types.includes(value)
     }
   },
   border: {

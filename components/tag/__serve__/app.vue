@@ -1,7 +1,7 @@
 <template>
   <Tag
     v-for="tag in tags"
-    :key="tag.key"
+    :key="tag.type"
     :type="tag.type"
     closable
   >
@@ -11,7 +11,7 @@
   <br />
   <Tag
     v-for="tag in tags"
-    :key="tag.key"
+    :key="tag.type"
     :type="tag.type"
     border
     closable
@@ -22,7 +22,7 @@
   <br />
   <Tag
     v-for="tag in tags"
-    :key="tag.key"
+    :key="tag.type"
     :type="tag.type"
     simple
     closable
@@ -33,7 +33,7 @@
   <br />
   <Tag
     v-for="tag in tags"
-    :key="tag.key"
+    :key="tag.type"
     closable
     :type="tag.type"
   >
@@ -55,12 +55,22 @@ export default defineComponent({
   setup() {
     return {
       tags: [
-        { key: 0, type: 'default' },
-        { key: 1, type: 'primary' },
-        { key: 2, type: 'success' },
-        { key: 3, type: 'error' },
-        { key: 4, type: 'warning' }
-      ] as { key: number, type: TagType }[]
+        { type: 'default' },
+        { type: 'primary' },
+        { type: 'info' },
+        { type: 'success' },
+        { type: 'error' },
+        { type: 'warning' },
+        { type: 'lime' },
+        { type: 'pink' },
+        { type: 'magenta' },
+        { type: 'tomato' },
+        { type: 'orange' },
+        { type: 'cyan' },
+        { type: 'navy' },
+        { type: 'gold' },
+        { type: 'purple' }
+      ] as { type: TagType }[]
     }
   }
 })
