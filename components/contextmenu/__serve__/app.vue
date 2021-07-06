@@ -9,6 +9,7 @@
 import { defineComponent } from 'vue'
 import '@/common/icons/ad'
 import '@/common/icons/user'
+import '@/common/icons/burn'
 
 import type { ContextmenuManager } from '..'
 
@@ -37,6 +38,7 @@ export default defineComponent({
             key: '选项3',
             icon: 'ad',
             divided: true,
+            iconColor: 'cyan',
             children: [
               {
                 key: '选项3-1',
@@ -62,11 +64,20 @@ export default defineComponent({
           },
           {
             key: '选项4',
-            shortcut: 'Alt+I'
+            shortcut: 'Alt+I',
+            color: 'red'
           },
           {
             key: '选项5',
-            shortcut: 'Ctrl+Alt+I'
+            shortcut: 'Ctrl+Alt+I',
+            icon: {
+              name: 'burn',
+              style: {
+                color: 'orange'
+              }
+            },
+            color: 'blue',
+            iconColor: 'green'
           }
         ]
       })

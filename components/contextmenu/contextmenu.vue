@@ -119,9 +119,14 @@ export default defineComponent({
       if (typeof item.icon === 'function') {
         icon = item.icon()
       } else if (isObject(item.icon)) {
-        icon = <Icon {...item.icon}></Icon>
+        icon = (
+          <Icon
+            {...item.icon}
+            style={[{ color: item.iconColor || item.color }, item.icon.style]}
+          ></Icon>
+        )
       } else {
-        icon = <Icon name={item.icon}></Icon>
+        icon = <Icon name={item.icon} style={{ color: item.iconColor || item.color }}></Icon>
       }
 
       return <div class={`${prefix}__icon`}>{icon}</div>
@@ -151,10 +156,10 @@ export default defineComponent({
                 disabled={item.disabled}
               >
                 {renderItemIcon(item)}
-                {item.label || item.key}
+                <span style={{ color: item.color }}>{item.label || item.key}</span>
                 {renderItemShortcut(item)}
                 <div class={[`${prefix}__icon`, `${prefix}__arrow`]}>
-                  <Icon name="chevron-right"></Icon>
+                  <Icon name="chevron-right" style={{ color: item.iconColor || item.color }}></Icon>
                 </div>
               </DropdownItem>
             ),
@@ -190,7 +195,7 @@ export default defineComponent({
             disabled={item.disabled}
           >
             {renderItemIcon(item)}
-            {item.label || item.key}
+            <span style={{ color: item.color }}>{item.label || item.key}</span>
             {renderItemShortcut(item)}
           </DropdownItem>
         )
