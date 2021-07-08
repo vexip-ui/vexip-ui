@@ -36,14 +36,14 @@
   </Dropdown>
 </template>
 
-<script lang="tsx">
+<script lang="ts">
 import { defineComponent, ref, reactive } from 'vue'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
-import { DropdownItem } from '@/components/dropdown-item'
-import { Icon } from '@/components/icon'
+import { renderItem } from './render'
+
 import { Renderer } from '@/components/renderer'
-import { isFunction, isObject } from '@/common/utils/common'
+import { isFunction } from '@/common/utils/common'
 
 import '@/common/icons/chevron-right'
 
@@ -108,97 +108,6 @@ export default defineComponent({
       if (isFunction(onCancel.value)) {
         onCancel.value()
         afterContextmenu()
-      }
-    }
-
-    function renderItemIcon(item: MenuConfig) {
-      if (!item.icon) return null
-
-      let icon: any
-
-      if (typeof item.icon === 'function') {
-        icon = item.icon()
-      } else if (isObject(item.icon)) {
-        icon = (
-          <Icon
-            {...item.icon}
-            style={[{ color: item.iconColor || item.color }, item.icon.style]}
-          ></Icon>
-        )
-      } else {
-        icon = <Icon name={item.icon} style={{ color: item.iconColor || item.color }}></Icon>
-      }
-
-      return <div class={`${prefix}__icon`}>{icon}</div>
-    }
-
-    function renderItemShortcut(item: MenuConfig) {
-      if (!item.shortcut) return null
-
-      return <div class={`${prefix}__shortcut`}>{item.shortcut}</div>
-    }
-
-    function renderGroupItem(item: MenuConfig) {
-      return (
-        <Dropdown
-          transfer={false}
-          onContextmenu={(event: MouseEvent) => {
-            event.preventDefault()
-            event.stopPropagation()
-          }}
-        >
-          {{
-            default: () => (
-              <DropdownItem
-                class={`${prefix}__item`}
-                label={item.key}
-                divided={item.divided}
-                disabled={item.disabled}
-              >
-                {renderItemIcon(item)}
-                <span style={{ color: item.color }}>{item.label || item.key}</span>
-                {renderItemShortcut(item)}
-                <div class={[`${prefix}__icon`, `${prefix}__arrow`]}>
-                  <Icon name="chevron-right" style={{ color: item.iconColor || item.color }}></Icon>
-                </div>
-              </DropdownItem>
-            ),
-            drop: () => (
-              <DropdownList
-                class={[
-                  `${prefix}__list`,
-                  item.children!.some(c => c.icon)
-                    ? `${prefix}__list--icons`
-                    : `${prefix}__list--no-icon`,
-                  item.children!.some(c => c.children?.length)
-                    ? `${prefix}__list--arrows`
-                    : `${prefix}__list--no-arrow`
-                ]}
-              >
-                {item.children!.map(renderItem)}
-              </DropdownList>
-            )
-          }}
-        </Dropdown>
-      )
-    }
-
-    function renderItem(item: MenuConfig) {
-      if (item.children?.length) {
-        return renderGroupItem(item)
-      } else {
-        return (
-          <DropdownItem
-            class={`${prefix}__item`}
-            label={item.key}
-            divided={item.divided}
-            disabled={item.disabled}
-          >
-            {renderItemIcon(item)}
-            <span style={{ color: item.color }}>{item.label || item.key}</span>
-            {renderItemShortcut(item)}
-          </DropdownItem>
-        )
       }
     }
 
