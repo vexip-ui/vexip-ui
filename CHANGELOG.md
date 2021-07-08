@@ -1,3 +1,27 @@
+# [1.1.0](https://github.com/qmhc/vexip-ui/compare/v1.0.3...v1.1.0) (2021-07-08)
+
+### Bug Fixes
+
+- **dropdown:** flush nested drop first item ([3992b7f](https://github.com/qmhc/vexip-ui/commit/3992b7f20d5a5a93e400dec123b787fb73a36d81))
+- **dropdown:** item position relative incorrect divider ([53f1f91](https://github.com/qmhc/vexip-ui/commit/53f1f91715088e9a3e8b3e912585618f3c4edcda))
+- **dropdown:** nested drop should not toggle select ([ece9d4e](https://github.com/qmhc/vexip-ui/commit/ece9d4eaeca646681781f851c9d77cd14e46cb9d))
+- **popper:** watch wrapper and popper el change ([4fb0ca5](https://github.com/qmhc/vexip-ui/commit/4fb0ca568322df5b2046b5f985337f8dc78ef381))
+- **table:** export refresh api ([f0dab34](https://github.com/qmhc/vexip-ui/commit/f0dab34f02b9d28d968674bb1d58e6a09ac6c08d))
+- **table:** incorrect row count of data change ([7af4d5a](https://github.com/qmhc/vexip-ui/commit/7af4d5a2a90d573ad4ae370e1b3b820b2bc41fd1))
+
+### Features
+
+- **dropdown:** add appear prop ([e230054](https://github.com/qmhc/vexip-ui/commit/e230054a585141d9b88901f65589dbf5578b8890))
+- **loading:** create global loading component ([caedc67](https://github.com/qmhc/vexip-ui/commit/caedc67a883cd0f1683612e25d71d4f0e279480d))
+- **tag:** add build in color type ([02fd360](https://github.com/qmhc/vexip-ui/commit/02fd36026fec4de39349252b0fa03dde4aa820ca))
+- **tag:** add simple style tag ([b316888](https://github.com/qmhc/vexip-ui/commit/b3168886ea40f6cbaa3a83ea8278ed5d89d8c953))
+- **time-ago:** add time-ago component ([b639c2e](https://github.com/qmhc/vexip-ui/commit/b639c2eb13c62b00d72010cc4c30328d09b2835a))
+- add contextmenu component ([#13](https://github.com/qmhc/vexip-ui/issues/13)) ([1571dc3](https://github.com/qmhc/vexip-ui/commit/1571dc34d4830a1a515c15378bf7b7db3e72219b))
+
+### Performance Improvements
+
+- **scrollbar:** use transform replace top and left ([5a0e272](https://github.com/qmhc/vexip-ui/commit/5a0e2721ce54beb4b203013db19301d732c34f39))
+
 ## [1.0.3](https://github.com/qmhc/vexip-ui/compare/v1.0.2...v1.0.3) (2021-06-26)
 
 ### Bug Fixes
