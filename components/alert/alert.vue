@@ -29,6 +29,11 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps } from '@/common/config/install'
 
+import '@/common/icons/info-circle'
+import '@/common/icons/check-circle'
+import '@/common/icons/exclamation-circle'
+import '@/common/icons/times-circle'
+
 export type AlertType = 'info' | 'success' | 'warning' | 'error'
 
 const predefinedIcons = {
@@ -88,7 +93,7 @@ export default defineComponent({
     const closed = ref(false)
 
     const hasTitle = computed(() => {
-      return !!(props.title || !slots.title)
+      return !!(props.title || slots.title)
     })
     const hasIcon = computed(() => {
       return !!(props.icon || slots.icon)

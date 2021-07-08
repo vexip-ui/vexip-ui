@@ -97,6 +97,7 @@
     align-items: center;
     color: $vxp-color-content-placeholder;
     cursor: pointer;
+    transition: $vxp-transition-color-base;
     transform: translateY(-50%);
 
     &:hover {
