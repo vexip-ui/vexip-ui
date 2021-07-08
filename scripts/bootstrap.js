@@ -1,19 +1,20 @@
 const fs = require('fs')
 const path = require('path')
 const prettier = require('prettier')
-const { components, toPascalCase } = require('./utils')
+const { components: allComponents, toPascalCase } = require('./utils')
 
 main()
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice']
+  const components = allComponents.filter(c => !plugins.includes(c))
   const prettierConfig = await prettier.resolveConfig(path.resolve('.prettierrc.js'))
 
   const index = `
     import '@/themes/common.scss'
 
     ${
-      components.map(component => `import { ${toPascalCase(component)} } from '@/components/${component}'`).join('\n')
+      allComponents.map(component => `import { ${toPascalCase(component)} } from '@/components/${component}'`).join('\n')
     }
 
     import { config } from '@/common/config/install'
@@ -25,7 +26,7 @@ async function main() {
     import type { InstallOptions } from '@/common/config/install'
 
     const components = [
-      ${components.filter(c => !plugins.includes(c)).map(toPascalCase).join(',\n')}
+      ${components.map(toPascalCase).join(',\n')}
     ]
 
     const plugins = [${plugins.map(toPascalCase).join(', ')}]
@@ -58,7 +59,17 @@ async function main() {
     }
 
     export {
-      ${components.map(toPascalCase).join(',\n')}
+      ${allComponents.map(toPascalCase).join(',\n')}
+    }
+
+    export interface VexipComponents {
+      ${
+        components.map(component => `${toPascalCase(component)}: typeof ${toPascalCase(component)}`).join(',\n')
+      }
+    }
+
+    export interface VexipProperties {
+      ${plugins.map(plugin => `$${plugin}: typeof ${toPascalCase(plugin)}`)}
     }
   `
 
