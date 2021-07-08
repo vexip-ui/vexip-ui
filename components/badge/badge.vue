@@ -10,7 +10,7 @@
           [`${prefix}__content--${type}`]: type !== 'error'
         }"
         :style="{ backgroundColor: color }"
-        :title="content.toString()"
+        :title="title"
         @click="handleBadgeClick"
       >
         <slot name="content">
@@ -85,6 +85,9 @@ export default defineComponent({
     const transitionName = computed(() => {
       return hasSlot.value ? `${prefix}-badge-zoom` : `${prefix}-zoom`
     })
+    const title = computed(() => {
+      return props.content || props.content === 0 ? props.content.toString() : undefined
+    })
 
     function handleBadgeClick() {
       emit('on-badge-click')
@@ -97,6 +100,7 @@ export default defineComponent({
       className,
       renderContent,
       transitionName,
+      title,
 
       handleBadgeClick
     }
