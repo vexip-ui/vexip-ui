@@ -6,7 +6,7 @@ const { components, toPascalCase } = require('./utils')
 main()
 
 async function main() {
-  const plugins = ['confirm', 'message', 'notice']
+  const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice']
   const prettierConfig = await prettier.resolveConfig(path.resolve('.prettierrc.js'))
 
   const index = `

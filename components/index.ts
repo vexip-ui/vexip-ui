@@ -22,6 +22,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { ColorPicker } from '@/components/color-picker'
 import { Column } from '@/components/column'
 import { Confirm } from '@/components/confirm'
+import { Contextmenu } from '@/components/contextmenu'
 import { DatePicker } from '@/components/date-picker'
 import { Divider } from '@/components/divider'
 import { Drawer } from '@/components/drawer'
@@ -33,6 +34,7 @@ import { FormItem } from '@/components/form-item'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { Linker } from '@/components/linker'
+import { Loading } from '@/components/loading'
 import { Masker } from '@/components/masker'
 import { Menu } from '@/components/menu'
 import { MenuGroup } from '@/components/menu-group'
@@ -65,6 +67,7 @@ import { TableColumn } from '@/components/table-column'
 import { Tabs } from '@/components/tabs'
 import { Tag } from '@/components/tag'
 import { Textarea } from '@/components/textarea'
+import { TimeAgo } from '@/components/time-ago'
 import { TimePicker } from '@/components/time-picker'
 import { Timeline } from '@/components/timeline'
 import { TimelineItem } from '@/components/timeline-item'
@@ -145,6 +148,7 @@ const components = [
   Tabs,
   Tag,
   Textarea,
+  TimeAgo,
   TimePicker,
   Timeline,
   TimelineItem,
@@ -155,7 +159,7 @@ const components = [
   WheelItem
 ]
 
-const plugins = [Confirm, Message, Notice]
+const plugins = [Confirm, Contextmenu, Loading, Message, Notice]
 
 export const install = (
   app: App<unknown>,
@@ -207,6 +211,7 @@ export {
   ColorPicker,
   Column,
   Confirm,
+  Contextmenu,
   DatePicker,
   Divider,
   Drawer,
@@ -218,6 +223,7 @@ export {
   Icon,
   Input,
   Linker,
+  Loading,
   Masker,
   Menu,
   MenuGroup,
@@ -250,6 +256,7 @@ export {
   Tabs,
   Tag,
   Textarea,
+  TimeAgo,
   TimePicker,
   Timeline,
   TimelineItem,
