@@ -31,8 +31,6 @@ export class ContextmenuManager {
 
   destroy() {
     this._innerApp?.unmount()
-    this._container && document.body.removeChild(this._container.firstElementChild!)
-
     destroyObject(this)
   }
 
@@ -47,30 +45,22 @@ export class ContextmenuManager {
   private _getInstance() {
     if (this._pending) {
       let innerApp = this._innerApp
-      let container = this._container
 
       const unmount = () => {
         innerApp?.unmount()
         innerApp = null
-        container = null
       }
 
       this._pending.finally(unmount)
       this._instance!.handleCancel()
-      this._pending = null
-      this._instance = null
     } else {
       this._innerApp?.unmount()
-      this._container && document.body.removeChild(this._container.firstElementChild!)
-
-      this._instance = null
-      this._innerApp = null
-      this._container = null
     }
 
     this._container = document.createElement('div')
     this._innerApp = createApp(Component)
     this._instance = this._innerApp.mount(this._container) as ContextmenuInstance
+    this._pending = null
 
     document.body.appendChild(this._container.firstElementChild!)
 

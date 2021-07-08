@@ -55,8 +55,9 @@ export class MessageManager {
   warning: AipMethod
   error: AipMethod
 
-  private _instance!: MessageInstance
-  private _container: App | null
+  private _instance: MessageInstance | null
+  private _innerApp: App<unknown> | null
+  private _container: HTMLElement | null
 
   constructor(options: ManagerOptions = {}) {
     options = {
@@ -64,6 +65,8 @@ export class MessageManager {
       duration: options.duration ? toNumber(options.duration) : 3000
     }
 
+    this._instance = null
+    this._innerApp = null
     this._container = null
     this.name = 'Message'
     this.defaults = {}
@@ -118,7 +121,7 @@ export class MessageManager {
   }
 
   destroy() {
-    this._container && this._container.unmount()
+    this._innerApp?.unmount()
     destroyObject(this)
   }
 
@@ -135,16 +138,14 @@ export class MessageManager {
 
   private _getInstance() {
     if (!this._instance) {
-      const container = document.createElement('div')
+      this._container = document.createElement('div')
       // 使用 createVNode 和 render 手动控制可以有效降低开销
       // 然而使用上述方式创建的组件无法被 devTool 正确加载
       // 因此选择开销更大的 createApp 以保证 devTool 的正常运行
-      const innerApp = createApp(Component)
+      this._innerApp = createApp(Component)
+      this._instance = this._innerApp.mount(this._container) as MessageInstance
 
-      this._instance = innerApp.mount(container) as MessageInstance
-      this._container = innerApp
-
-      document.body.appendChild(container.firstElementChild!)
+      document.body.appendChild(this._container.firstElementChild!)
     }
 
     return this._instance
