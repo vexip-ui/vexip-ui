@@ -127,6 +127,7 @@ export default defineComponent({
       return {
         [prefix]: true,
         [`${prefix}--${props.type}`]: props.type !== 'default',
+        [`${prefix}--simple`]: !props.ghost && props.simple,
         [`${prefix}--ghost`]: props.ghost,
         [`${prefix}--disabled`]: props.disabled,
         [`${prefix}--loading`]: props.loading,
