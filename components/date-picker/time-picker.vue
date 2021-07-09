@@ -13,7 +13,7 @@
       </div>
       <TimeControl
         ref="start"
-        :unit-type="currentState === 'start' ? startState.column : undefined"
+        :unit-type="currentState === 'start' ? startState.column : ''"
         :enabled="startState.enabled"
         :activated="startState.activated"
         :time-value="startState.timeValue"
@@ -43,7 +43,7 @@
         </div>
         <TimeControl
           ref="end"
-          :unit-type="currentState === 'end' ? endState.column : undefined"
+          :unit-type="currentState === 'end' ? endState.column : ''"
           :enabled="endState.enabled"
           :activated="endState.activated"
           :time-value="endState.timeValue"
@@ -569,7 +569,13 @@ export default defineComponent({
         nextTick(() => {
           parseValue('')
           emit('on-clear')
+          emit('on-change', currentValue.value)
+          emit('update:value', currentValue.value)
           clearField()
+
+          nextTick(() => {
+            toggleActivated(false)
+          })
         })
       }
     }
@@ -728,6 +734,7 @@ export default defineComponent({
       startState,
       endState,
       currentState,
+      currentValue,
 
       className,
       hasPrefix,

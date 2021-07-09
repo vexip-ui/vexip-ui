@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import DatePicker from '../date-picker.vue'
+import { DatePicker } from '..'
 
 export default defineComponent({
   name: 'App',

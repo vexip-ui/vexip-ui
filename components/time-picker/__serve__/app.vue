@@ -1,14 +1,20 @@
 <template>
-  <TimePicker v-model:value="time" is-range clearable></TimePicker>
+  <TimePicker v-model:value="time" clearable></TimePicker>
   <p>
     Current Time:
     <br />
     {{ time }}
   </p>
+  <TimePicker v-model:value="timeRange" is-range clearable></TimePicker>
+  <p>
+    Current Time Range:
+    <br />
+    {{ timeRange }}
+  </p>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { TimePicker } from '..'
 
 export default defineComponent({
@@ -16,9 +22,13 @@ export default defineComponent({
   components: {
     TimePicker
   },
-  data() {
+  setup() {
+    const time = ref('09:48:23')
+    const timeRange = ref<string[]>([])
+
     return {
-      time: '09:48:23'
+      time,
+      timeRange
     }
   }
 })
