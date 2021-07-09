@@ -114,7 +114,7 @@ export default defineComponent({
     async function handleClose() {
       if (!props.closable) return
 
-      let result = false
+      let result = true
 
       if (typeof props.beforeClose === 'function') {
         result = props.beforeClose()
