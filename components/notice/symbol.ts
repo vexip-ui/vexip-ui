@@ -5,12 +5,13 @@ export type NoticeType = 'info' | 'success' | 'warning' | 'error'
 export type NoticePlacement = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
 
 export interface NoticeOptions extends Record<string, unknown> {
-  title: string,
+  title?: string,
   content?: string,
   key?: Key,
-  icon?: string,
+  icon?: string | Record<string, unknown> | (() => any),
   type?: NoticeType,
-  duration?: number
+  duration?: number,
+  renderer?: () => any
   // className: string | any[] | { [x: string]: any }
   // background?: boolean
   // color?: boolean

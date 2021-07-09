@@ -1,10 +1,8 @@
-import type { VNodeChild } from 'vue'
-
 // export type UploadStatusType = 'pending' | 'uploading' | 'fail' | 'success' | 'delete'
 export type UploadListType = 'name' | 'detail' | 'thumbnail' | 'card'
 
 export type BeforeFn = (file: File, files: File[]) => any | Promise<any>
-export type RenderFn = (data: { file: File }) => VNodeChild
+export type RenderFn = (data: { file: File }) => any
 
 export type HttpError = Error & {
   response: any,

@@ -1,17 +1,17 @@
-import type { ComponentPublicInstance, VNodeChild, CSSProperties } from 'vue'
+import type { ComponentPublicInstance, CSSProperties } from 'vue'
 
 export type ConfirmType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
 
 export interface ConfirmOptions extends Record<string, unknown> {
-  content: string,
+  content?: string,
   confirmType?: ConfirmType,
   confirmText?: string,
   cancelText?: string,
-  icon?: string | Record<string, unknown> | (() => VNodeChild),
+  icon?: string | Record<string, unknown> | (() => any),
   iconColor?: string,
   style?: CSSProperties,
   maskClose?: boolean,
-  renderer?: () => VNodeChild,
+  renderer?: () => any,
   beforeConfirm?: () => unknown
 }
 

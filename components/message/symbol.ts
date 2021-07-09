@@ -5,11 +5,12 @@ export type MessageType = 'info' | 'success' | 'warning' | 'error'
 export type MessagePlacement = 'top' | 'bottom'
 
 export interface MessageOptions extends Record<string, unknown> {
-  content: string,
+  content?: string,
   key?: Key,
-  icon?: string,
+  icon?: string | Record<string, unknown> | (() => any),
   type?: MessageType,
-  duration?: number
+  duration?: number,
+  renderer?: () => any
   // className: string | any[] | { [x: string]: any }
   // background?: boolean
   // color?: boolean

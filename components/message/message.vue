@@ -49,7 +49,7 @@
           ></Renderer>
           <template v-else>
             <div :class="`${prefix}__content`">
-              {{ item.content }}
+              {{ item.content || '' }}
             </div>
           </template>
         </div>

@@ -1,10 +1,10 @@
-import type { InjectionKey, VNodeChild } from 'vue'
+import type { InjectionKey } from 'vue'
 
 export interface ItemState {
   label: string | number,
   icon: string,
   disabled: boolean,
-  labelRenderer: null | ((data: { label: string | number }) => VNodeChild)
+  labelRenderer: null | ((data: { label: string | number }) => any)
 }
 
 export interface TabsState {

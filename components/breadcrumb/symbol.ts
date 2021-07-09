@@ -1,6 +1,6 @@
-import type { InjectionKey, VNodeChild } from 'vue'
+import type { InjectionKey } from 'vue'
 
-export type SeparatorRenderFn = (data: { label: string | number }) => VNodeChild
+export type SeparatorRenderFn = (data: { label: string | number }) => any
 
 export interface ItemState {
   label: string | number

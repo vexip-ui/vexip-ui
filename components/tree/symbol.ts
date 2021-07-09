@@ -1,4 +1,4 @@
-import type { InjectionKey, VNodeChild } from 'vue'
+import type { InjectionKey } from 'vue'
 
 export type Key = string | number
 export type Data = Record<string, unknown>
@@ -20,7 +20,7 @@ export type TreeNodeOptions = Required<InitDataOptions> & {
   partial: boolean
 } & Data
 
-export type RenderFn = (data: { data: Data, node: TreeNodeOptions }) => VNodeChild
+export type RenderFn = (data: { data: Data, node: TreeNodeOptions }) => any
 export type AsyncLoadFn = (node: Readonly<TreeNodeOptions>) => boolean
 
 export interface TreeNodeInstance {

@@ -60,7 +60,7 @@ import { isPromise, isFunction } from '@/common/utils/common'
 
 import '@/common/icons/question-circle'
 
-import type { PropType, VNodeChild, CSSProperties } from 'vue'
+import type { PropType, CSSProperties } from 'vue'
 import type { ConfirmType, ConfirmOptions } from './symbol'
 
 const positionType = [Number, String]
@@ -103,9 +103,7 @@ const props = useConfiguredProps('confirm', {
     default: '取消'
   },
   icon: {
-    type: [String, Object, Function] as PropType<
-      string | Record<string, unknown> | (() => VNodeChild)
-    >,
+    type: [String, Object, Function] as PropType<string | Record<string, unknown> | (() => any)>,
     default: 'question-circle'
   },
   style: {
@@ -113,7 +111,7 @@ const props = useConfiguredProps('confirm', {
     default: () => ({})
   },
   renderer: {
-    type: Function as PropType<() => VNodeChild>,
+    type: Function as PropType<() => any>,
     default: null
   },
   iconColor: {
@@ -143,7 +141,7 @@ export default defineComponent({
     const cancelText = ref(props.cancelText)
     const maskClose = ref(props.maskClose)
     const icon = ref(props.icon)
-    const renderer = ref<(() => VNodeChild) | null>(props.renderer)
+    const renderer = ref<(() => any) | null>(props.renderer)
     const beforeConfirm = ref<(() => unknown) | null>(null)
 
     const onConfirm = ref<(() => void) | null>(null)
@@ -151,7 +149,7 @@ export default defineComponent({
 
     function openConfirm(options: ConfirmOptions) {
       return new Promise<boolean>(resolve => {
-        content.value = options.content
+        content.value = options.content ?? ''
         style.value = options.style ?? {}
         iconColor.value = options.iconColor ?? ''
         maskClose.value = !!options.maskClose

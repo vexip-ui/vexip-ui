@@ -1,4 +1,4 @@
-import type { InjectionKey, VNodeChild } from 'vue'
+import type { InjectionKey } from 'vue'
 import type { ComponentSize } from '@/common/config/props'
 import type { TableStore } from './store'
 
@@ -10,7 +10,7 @@ export type Accessor<T extends string | number = string | number, D = Data> = (
   data: D,
   index: number
 ) => T
-export type RenderFn = (data: Data) => VNodeChild
+export type RenderFn = (data: Data) => any
 
 export type ColumnType = 'order' | 'selection' | 'expand'
 

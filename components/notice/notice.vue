@@ -61,10 +61,10 @@
                     : undefined
             }"
           >
-            {{ item.title }}
+            {{ item.title || '' }}
           </div>
           <div :class="`${prefix}__content`">
-            {{ item.content }}
+            {{ item.content || '' }}
           </div>
         </template>
         <div v-if="item.closable" :class="`${prefix}__close`" @click="remove(item.key)">
