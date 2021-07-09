@@ -25,7 +25,6 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { CheckboxGroup } from '@/components/checkbox-group'
 import { useConfiguredProps } from '@/common/config/install'
 import { createSizeProp, createStateProp } from '@/common/config/props'
 import { VALIDATE_FIELD } from '@/components/form-item'
@@ -93,8 +92,6 @@ export default defineComponent({
       checked: currentChecked,
       partial: currentPartial
     })
-
-    const bindGroup = useBindGroupApi(controlState)
 
     const isDisabled = computed(() => {
       return groupState?.disabled || props.disabled
@@ -216,31 +213,8 @@ export default defineComponent({
       hasLabel,
       hasSlot,
 
-      handleChange,
-
-      bindGroup
+      handleChange
     }
   }
 })
-
-function useBindGroupApi(controlState: { checked: boolean, partial: boolean }) {
-  let boundGroupInstance: typeof CheckboxGroup | null
-
-  onBeforeUnmount(() => {
-    if (boundGroupInstance) {
-      boundGroupInstance.decreaseControl(controlState)
-    }
-  })
-
-  function bindGroup(groupInstance: typeof CheckboxGroup) {
-    if (boundGroupInstance) {
-      boundGroupInstance.decreaseControl(controlState)
-    }
-
-    groupInstance.increaseControl(controlState)
-    boundGroupInstance = groupInstance
-  }
-
-  return bindGroup
-}
 </script>

@@ -12,17 +12,17 @@
     </Checkbox>
     <Checkbox v-for="item in items" :key="item" :label="item"></Checkbox>
   </CheckboxGroup>
-  <div>
+  <p>
     Checkbox Value:
     <br />
     {{ values }}
-  </div>
+  </p>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import Checkbox from '../checkbox.vue'
-import CheckboxGroup from '../checkbox-group.vue'
+import { defineComponent, ref } from 'vue'
+import { Checkbox } from '..'
+import { CheckboxGroup } from '@/components/checkbox-group'
 
 export default defineComponent({
   name: 'App',
@@ -30,14 +30,15 @@ export default defineComponent({
     Checkbox,
     CheckboxGroup
   },
-  data() {
+  setup() {
+    const checked = ref(false)
+    const values = ref<string[]>(['广州'])
+
     return {
-      checked: false,
-      values: ['广州'],
+      checked,
+      values,
       items: ['北京', '上海', '广州', '深圳']
     }
   }
 })
 </script>
-
-<style lang="scss"></style>
