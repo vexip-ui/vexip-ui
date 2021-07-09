@@ -115,7 +115,7 @@ import type { DateTimeType } from './symbol'
 
 const props = {
   unitType: {
-    type: String as PropType<DateTimeType>,
+    type: String as PropType<DateTimeType | ''>,
     default: 'date'
   },
   enabled: {

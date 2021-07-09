@@ -13,7 +13,7 @@
       </div>
       <DateControl
         ref="start"
-        :unit-type="currentState === 'start' ? startState.column : undefined"
+        :unit-type="currentState === 'start' ? startState.column : ''"
         :enabled="startState.enabled"
         :activated="startState.activated"
         :date-value="startState.dateValue"
@@ -29,7 +29,7 @@
         @on-input="handleInput"
         @on-plus="handlePlus"
         @on-minus="handleMinus"
-        @on-enter="handleEnter"
+        @on-enter="handlePaneConfirm"
         @on-cancel="handleCancel"
         @on-unit-focus="handleStartInput"
         @on-prev-unit="enterColumn('prev')"
@@ -41,7 +41,7 @@
         </div>
         <DateControl
           ref="end"
-          :unit-type="currentState === 'end' ? endState.column : undefined"
+          :unit-type="currentState === 'end' ? endState.column : ''"
           :enabled="endState.enabled"
           :activated="endState.activated"
           :date-value="endState.dateValue"
@@ -57,7 +57,7 @@
           @on-input="handleInput"
           @on-plus="handlePlus"
           @on-minus="handleMinus"
-          @on-enter="handleEnter"
+          @on-enter="handlePaneConfirm"
           @on-cancel="handleCancel"
           @on-unit-focus="handleEndInput"
           @on-prev-unit="enterColumn('prev')"
@@ -680,10 +680,29 @@ export default defineComponent({
         state.dateValue[type] = prev * 10 + number
       } else {
         state.dateValue[type] = number
+        setActivated(type)
       }
 
       verifyValue(type)
       emit('on-input', type, state.dateValue[type])
+    }
+
+    function setActivated(type: DateTimeType) {
+      const activated = getCurrentState().activated
+
+      if (type === 'date') {
+        activated.year = true
+        activated.month = true
+      } else if (type === 'month') {
+        activated.year = true
+      } else if (type === 'minute') {
+        activated.hour = true
+      } else if (type === 'second') {
+        activated.hour = true
+        activated.minute = true
+      }
+
+      activated[type] = true
     }
 
     function handleInputFocus(type: TimeType) {
@@ -856,10 +875,8 @@ export default defineComponent({
     }
 
     function handlePaneConfirm() {
-      emit('on-enter')
-
       if (!props.isRange) {
-        finishInput()
+        handleEnter()
       } else {
         if (currentState.value === 'start' && !endActivated.value) {
           toggleActivated(true, 'start')
@@ -868,7 +885,7 @@ export default defineComponent({
           toggleActivated(true, 'end')
           currentState.value = 'start'
         } else {
-          finishInput()
+          handleEnter()
         }
       }
     }

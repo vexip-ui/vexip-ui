@@ -1,14 +1,19 @@
 <template>
-  <DatePicker v-model:value="date" clearable type="date"></DatePicker>
+  <DatePicker
+    v-model:value="dateRange"
+    is-range
+    clearable
+    type="date"
+  ></DatePicker>
   <p>
     Current Date:
     <br />
-    {{ date }}
+    {{ dateRange }}
   </p>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DatePicker from '../date-picker.vue'
 
 export default defineComponent({
@@ -16,9 +21,11 @@ export default defineComponent({
   components: {
     DatePicker
   },
-  data() {
+  setup() {
+    const dateRange = ref<string[]>([])
+
     return {
-      date: ''
+      dateRange
     }
   }
 })
