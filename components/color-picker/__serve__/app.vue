@@ -13,20 +13,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import ColorPicker from '../color-picker.vue'
+import { defineComponent, ref } from 'vue'
+import { ColorPicker } from '..'
 
 export default defineComponent({
   name: 'App',
   components: {
     ColorPicker
   },
-  data() {
+  setup() {
+    const color = ref('rgba(51, 154, 240, 0.6)')
+
     return {
-      color: null
+      color
     }
   }
 })
 </script>
-
-<style lang="scss"></style>

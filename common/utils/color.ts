@@ -434,6 +434,7 @@ export function parseColorToRgba(originColor: Color): RGBAColor {
   } else {
     color = originColor
   }
+  debugger
 
   if (color !== null && typeof color === 'object') {
     if ('l' in color) {
@@ -448,9 +449,9 @@ export function parseColorToRgba(originColor: Color): RGBAColor {
       if (Number.isNaN(a)) {
         a = 1
       }
-    } else {
-      rgb = color as RGBColor
     }
+
+    rgb = color as RGBColor
   }
 
   return { ...rgb, a, format: 'rgba' }
