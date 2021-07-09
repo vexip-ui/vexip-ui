@@ -168,9 +168,7 @@ const props = useConfiguredProps('datePicker', {
   },
   value: {
     type: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
-    default() {
-      return new Date()
-    }
+    default: () => new Date()
   },
   format: {
     type: String,
@@ -179,9 +177,7 @@ const props = useConfiguredProps('datePicker', {
   filler: {
     type: String,
     default: '-',
-    validator: (value: string) => {
-      return value.length === 1
-    }
+    validator: (value: string) => value.length === 1
   },
   noFiller: {
     type: Boolean,
@@ -258,9 +254,7 @@ const props = useConfiguredProps('datePicker', {
   today: {
     type: [Number, String, Date] as PropType<Dateable>,
     default: () => new Date(),
-    validator: (value: Dateable) => {
-      return !Number.isNaN(new Date(value))
-    }
+    validator: (value: Dateable) => !Number.isNaN(new Date(value))
   },
   isRange: {
     type: Boolean,
@@ -788,8 +782,12 @@ export default defineComponent({
       if (props.clearable) {
         finishInput()
         nextTick(() => {
+          const emitValue = props.isRange ? ([] as string[] | number[]) : null
+
           resetValue()
           emit('on-clear')
+          emit('on-change', emitValue)
+          emit('update:value', emitValue)
           clearField()
 
           nextTick(() => {

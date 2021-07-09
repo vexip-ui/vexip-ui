@@ -310,6 +310,7 @@ export default defineComponent({
       value => {
         if (value === 'year' || value === 'month' || value === 'date') {
           currentPane.value = value
+          refreshCalendar()
         }
       },
       { immediate: true }
