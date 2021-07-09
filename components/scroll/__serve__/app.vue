@@ -1,11 +1,12 @@
 <template>
   <Scroll
     ref="scroll"
-    mode="both"
+    mode="vertical"
     pointer
     no-buffer
     use-x-bar
     use-y-bar
+    autoplay
     :width="200"
     :height="200"
     style="box-shadow: 0 0 4px #ccc;"
@@ -23,9 +24,9 @@
       <p>内容</p>
       <p>内容</p>
       <p>内容</p>
-      <p id="target">
+      <!-- <p id="target">
         内容
-      </p>
+      </p> -->
       <p>内容</p>
     </div>
   </Scroll>

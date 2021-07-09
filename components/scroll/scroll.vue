@@ -196,7 +196,9 @@ export default defineComponent({
       width: toRef(props, 'width'),
       height: toRef(props, 'height'),
       scrollX: toRef(props, 'scrollX'),
-      scrollY: toRef(props, 'scrollY')
+      scrollY: toRef(props, 'scrollY'),
+      beforeRefresh: stopAutoplay,
+      afterRefresh: startAutoplay
     })
 
     /* autoplay */

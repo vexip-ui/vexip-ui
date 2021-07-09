@@ -38,5 +38,11 @@
     &--scrolling > * {
       pointer-events: none;
     }
+
+    &::before,
+    &::after {
+      display: table;
+      content: '';
+    }
   }
 }
