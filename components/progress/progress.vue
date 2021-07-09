@@ -1,28 +1,27 @@
 <template>
   <div :class="className">
     <div :class="`${prefix}__track`" :style="trackStyle">
-      <div :class="`${prefix}__filler`" :style="fillerStyle">
-        <div v-if="infoType === 'inside'" :class="`${prefix}__info`">
+      <div :class="`${prefix}__filler`" :style="fillerStyle"></div>
+      <div v-if="infoType === 'inside'" :class="`${prefix}__info`" :style="infoStyle">
+        <slot>
+          <span :class="`${prefix}__percentage`">
+            {{ `${percentage}%` }}
+          </span>
+        </slot>
+      </div>
+      <div v-else-if="useBubble" :class="`${prefix}__reference`" :style="infoStyle">
+        <Bubble
+          :class="`${prefix}__bubble`"
+          :style="bubbleStyle"
+          :placement="bubbleType"
+          :content-class="`${prefix}__info`"
+        >
           <slot>
             <span :class="`${prefix}__percentage`">
               {{ `${percentage}%` }}
             </span>
           </slot>
-        </div>
-        <div v-else-if="useBubble" :class="`${prefix}__reference`">
-          <Bubble
-            :class="`${prefix}__bubble`"
-            :style="bubbleStyle"
-            :placement="bubbleType"
-            :content-class="`${prefix}__info`"
-          >
-            <slot>
-              <span :class="`${prefix}__percentage`">
-                {{ `${percentage}%` }}
-              </span>
-            </slot>
-          </Bubble>
-        </div>
+        </Bubble>
       </div>
     </div>
     <div v-if="infoType === 'outside'" :class="`${prefix}__info`">
@@ -70,6 +69,7 @@ const props = useConfiguredProps('progress', {
       return ['outside', 'inside', 'bubble', 'bubble-top', 'bubble-bottom', 'none'].includes(value)
     }
   },
+  // TODO: 添加进度条流动效果
   activated: {
     type: Boolean,
     default: false
@@ -121,10 +121,9 @@ export default defineComponent({
 
       return style
     })
-    const referenceStyle = computed(() => {
+    const infoStyle = computed(() => {
       return {
-        height: `${props.strokeWidth}px`,
-        marginRight: `${props.strokeWidth / 2}px`
+        transform: `translateX(${props.percentage - 100}%)`
       }
     })
     const useBubble = computed(() => {
@@ -153,7 +152,7 @@ export default defineComponent({
       className,
       trackStyle,
       fillerStyle,
-      referenceStyle,
+      infoStyle,
       useBubble,
       bubbleType,
       bubbleStyle

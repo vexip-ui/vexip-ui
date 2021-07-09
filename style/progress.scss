@@ -8,8 +8,13 @@
   width: 100%;
 
   &__track {
+    position: relative;
     width: 100%;
     background-color: mix($vxp-color-black, $vxp-color-fill-background, 5%);
+  }
+
+  &--info-inside &__track {
+    overflow: hidden;
   }
 
   &__filler {
@@ -27,11 +32,19 @@
     display: flex;
     align-items: center;
     margin-left: 0.6em;
+    pointer-events: none;
+    transition: transform $vxp-transition-base;
   }
 
   &--info-inside &__info {
-    height: 100%;
-    margin-right: 0.6em;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    justify-content: flex-end;
+    width: 100%;
+    padding-right: 0.6em;
+    margin: 0;
     color: $vxp-color-content-reverse;
   }
 
@@ -50,15 +63,23 @@
 
   &__percentage {
     font-size: $vxp-font-size-secondary;
+    pointer-events: auto;
   }
 
   &__reference {
-    position: relative;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    transition: transform $vxp-transition-base;
   }
 
   &__bubble {
     position: absolute;
-    transform: translateX(-50%);
+    right: 0;
+    pointer-events: auto;
+    transform: translateX(50%);
   }
 }
