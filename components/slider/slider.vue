@@ -57,7 +57,7 @@ const props = useConfiguredProps('slider', {
     type: Number,
     default: 1,
     validator: (value: number) => {
-      return Math.ceil(value) === value
+      return value > 0 && Math.ceil(value) === value
     }
   },
   vertical: {
@@ -89,7 +89,7 @@ export default defineComponent({
     const validateField = inject(VALIDATE_FIELD, noop)
 
     const prefix = 'vxp-slider'
-    const currentValue = ref(props.value) // 按每 step 为 1 的 value
+    const currentValue = ref(props.value / props.step) // 按每 step 为 1 的 value
     const sliding = ref(false)
     const isTipShow = ref(false)
 
@@ -112,7 +112,7 @@ export default defineComponent({
       return Math.round(Math.max(props.min, props.max) / props.step)
     })
     const truthValue = computed(() => {
-      return currentValue.value * props.step
+      return Math.round(currentValue.value * props.step)
     })
     const total = computed(() => {
       return stepMax.value - stepMin.value || 1

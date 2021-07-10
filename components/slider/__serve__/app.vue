@@ -1,6 +1,11 @@
 <template>
   <div style="width: 400px; padding-top: 60px;">
-    <Slider v-model:value="value"></Slider>
+    <Slider
+      v-model:value="value"
+      :step="5"
+      :max="100"
+      :min="-50"
+    ></Slider>
   </div>
   <p>
     Slider Value:
@@ -10,20 +15,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import Slider from '../slider.vue'
+import { defineComponent, ref } from 'vue'
+import { Slider } from '..'
 
 export default defineComponent({
   name: 'App',
   components: {
     Slider
   },
-  data() {
+  setup() {
+    const value = ref(20)
+
     return {
-      value: 0
+      value
     }
   }
 })
 </script>
-
-<style lang="scss"></style>
