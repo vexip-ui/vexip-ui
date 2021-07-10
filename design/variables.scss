@@ -241,6 +241,7 @@ $vxp-input-color-bg-disabled: mix($vxp-color-white, $vxp-color-fill-disabled, 70
 $vxp-input-color-border: $vxp-color-border !default;
 $vxp-input-color-border-hover: $vxp-color-primary-light-1 !default;
 $vxp-input-color-border-focus: $vxp-input-color-border-hover !default;
+$vxp-input-color-placeholder: $vxp-color-content-placeholder !default;
 // success
 $vxp-input-color-border-success-hover: $vxp-color-success-light-1 !default;
 $vxp-input-color-border-success-focus: $vxp-input-color-border-success-hover !default;

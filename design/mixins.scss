@@ -113,6 +113,10 @@
       cursor: not-allowed;
     }
 
+    &::placeholder {
+      color: $vxp-input-color-placeholder;
+    }
+
     @extend %disabled-item;
   }
 
