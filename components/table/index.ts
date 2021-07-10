@@ -1,6 +1,6 @@
 import '@/style/table.scss'
 
-export { defineFilter, defineColumn } from './helper'
+export { defineFilter, defineColumn, defineColumns } from './helper'
 export { default as Table } from './table.vue'
 
 export type {
