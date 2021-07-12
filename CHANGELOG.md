@@ -1,3 +1,29 @@
+## [1.1.1](https://github.com/qmhc/vexip-ui/compare/v1.1.0...v1.1.1) (2021-07-12)
+
+### Bug Fixes
+
+- **alert:** icon misplaced when no title ([8fd2f7d](https://github.com/qmhc/vexip-ui/commit/8fd2f7db9f6122e69f32dd64f7fdfbee34f6b03a))
+- **badge:** title attr error when no content ([5bb6a86](https://github.com/qmhc/vexip-ui/commit/5bb6a86732c5f3c955c8360902350ba33b461185))
+- **button:** missing simple class name ([4e91993](https://github.com/qmhc/vexip-ui/commit/4e91993ba3aa6fb740cdd55631aa797e44709f46))
+- **color-picker:** cannot parse rgba color value ([8f4c57f](https://github.com/qmhc/vexip-ui/commit/8f4c57f4cf2c4ba4ab1b2f6f07f46209b1ff8b82))
+- **date-picker:** clear should trigger change event ([1b1fec5](https://github.com/qmhc/vexip-ui/commit/1b1fec53d41afa430848dc983001ac7b565e9905))
+- **date-picker:** intuitively update activated ([f4c9efb](https://github.com/qmhc/vexip-ui/commit/f4c9efb1f44cb4a416e2616f0be3ae384f5ae3c9))
+- **input:** add ::placeholder color style ([54ce94b](https://github.com/qmhc/vexip-ui/commit/54ce94be7a595ec3065f78804a6133fa30c3f095))
+- **masker:** closable not work without beforeClose ([77b00c0](https://github.com/qmhc/vexip-ui/commit/77b00c09f7225eb07fc25b028f8ca248bd65a515))
+- **progress:** progress tip display error ([22eb709](https://github.com/qmhc/vexip-ui/commit/22eb709a681cbbdb5fb5861a137cfbb3f979aa85))
+- **scroll:** start autoplay when mounted ([5d6dfa6](https://github.com/qmhc/vexip-ui/commit/5d6dfa6f84e06107344e7d9d9272635f69d45061))
+- **slider:** error value when step is not 1 ([4c2b2b9](https://github.com/qmhc/vexip-ui/commit/4c2b2b996d6b4611ecdc117375d009a34d879b8b))
+- **time-picker:** clear should trigger change event ([92e9ba7](https://github.com/qmhc/vexip-ui/commit/92e9ba7e573ae924e911cd2361613b42e9195981))
+
+### Features
+
+- **checkbox:** remove bindGroup api ([5b3aafa](https://github.com/qmhc/vexip-ui/commit/5b3aafaddda1c0130a5db50cad2ae58d35e9ed7a))
+- **table:** add defineColumns helper ([10d3a8d](https://github.com/qmhc/vexip-ui/commit/10d3a8d45f8a24d7b02f04d64aa015c886a4a1ea))
+
+### BREAKING CHANGES
+
+- **checkbox:** no longer support bindGroup api
+
 # [1.1.0](https://github.com/qmhc/vexip-ui/compare/v1.0.3...v1.1.0) (2021-07-08)
 
 ### Bug Fixes
