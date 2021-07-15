@@ -47,6 +47,7 @@
     border-bottom: $vxp-border-appearance $vxp-color-border-light-1;
 
     &:last-child {
+      margin-bottom: -1px;
       border-bottom-color: transparent;
     }
   }

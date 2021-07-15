@@ -20,7 +20,12 @@
       @after-enter="computeRowHeight"
       @after-leave="computeRowHeight"
     >
-      <div v-if="row.expanded" ref="expand" :class="`${prefix}__collapse`">
+      <div
+        v-if="row.expanded"
+        ref="expand"
+        :class="`${prefix}__collapse`"
+        :style="expandStyle"
+      >
         <Renderer
           v-if="isFunction(expandColumn.renderer)"
           :renderer="expandColumn.renderer"
@@ -124,11 +129,32 @@ export default defineComponent({
         | undefined
     })
     const expandRenderer = computed(() => state.expandRenderer)
+    const expandStyle = computed(() => {
+      return props.isFixed
+        ? {
+            width: '1px',
+            height: `${props.row.expandHeight}px`,
+            visibility: 'hidden' as const
+          }
+        : undefined
+    })
 
     watch(
       () => props.row.hidden,
       value => {
         !value && computeRowHeight()
+      }
+    )
+    watch(
+      () => props.row,
+      () => {
+        if (wrapper.value) {
+          const style = getComputedStyle(wrapper.value)
+          const borderHeight =
+            parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
+
+          mutations.setBorderHeight(props.row.key, borderHeight)
+        }
       }
     )
 
@@ -152,30 +178,25 @@ export default defineComponent({
 
     function computeRowHeight() {
       if (state.rowHeight) {
-        nextTick(() => {
-          mutations.setRowHeight(props.row.key, state.rowHeight)
+        mutations.setRowHeight(props.row.key, state.rowHeight)
 
-          if (rowElement.value?.style) {
-            rowElement.value.style.height = `${state.rowHeight}px`
-            rowElement.value.style.maxHeight = `${state.rowHeight}px`
-          }
-        })
+        if (rowElement.value) {
+          rowElement.value.style.height = `${state.rowHeight}px`
+          rowElement.value.style.maxHeight = `${state.rowHeight}px`
+        }
       } else {
         nextTick(() => {
           if (!props.isFixed) {
-            if (rowElement.value?.getBoundingClientRect) {
+            if (rowElement.value) {
               mutations.setRowHeight(props.row.key, rowElement.value.getBoundingClientRect().height)
-
-              if (expandElement.value) {
-                mutations.setRowExpandHeight(
-                  props.row.key,
-                  expandElement.value.getBoundingClientRect().height
-                )
-              }
+              mutations.setRowExpandHeight(
+                props.row.key,
+                expandElement.value?.getBoundingClientRect().height || 0
+              )
             }
           } else {
             window.setTimeout(() => {
-              if (rowElement.value?.style) {
+              if (rowElement.value) {
                 rowElement.value.style.height = `${props.row.height}px`
               }
             }, 0)
@@ -225,6 +246,7 @@ export default defineComponent({
       draggable,
       expandColumn,
       expandRenderer,
+      expandStyle,
 
       wrapper,
       rowEl: rowElement,

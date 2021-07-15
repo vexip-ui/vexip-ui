@@ -90,9 +90,9 @@ export function useStore(options: StoreOptions) {
     let total = 0
 
     while (i--) {
-      const { height, expandHeight } = data[i]
+      const { height, borderHeight, expandHeight } = data[i]
 
-      total += (height || 0) + (expandHeight || 0)
+      total += (borderHeight || 0) + (height || 0) + (expandHeight || 0)
     }
 
     return total
@@ -165,6 +165,7 @@ export function useStore(options: StoreOptions) {
     setTableWidth: setTableWidth.bind(null, state),
     setColumnWidth: setColumnWidth.bind(null, state),
     setRowHeight: setRowHeight.bind(null, state),
+    setBorderHeight: setBorderHeight.bind(null, state),
     setGlobalRowHeight: setGlobalRowHeight.bind(null, state),
     setRowDraggable: setRowDraggable.bind(null, state),
     setRowExpandHeight: setRowExpandHeight.bind(null, state),
@@ -337,6 +338,7 @@ function setData(state: StoreState, data: Data[]) {
         hidden,
         checked: !!checked,
         height: toNumber(height),
+        borderHeight: 0,
         expanded: !!expanded,
         hover: false,
         expandHeight: 0,
@@ -421,6 +423,12 @@ function setColumnWidth(state: StoreState, key: Key, width: number) {
 function setRowHeight(state: StoreState, key: Key, height: number) {
   if (state.dataMap[key]) {
     state.dataMap[key].height = height
+  }
+}
+
+function setBorderHeight(state: StoreState, key: Key, height: number) {
+  if (state.dataMap[key]) {
+    state.dataMap[key].borderHeight = height
   }
 }
 

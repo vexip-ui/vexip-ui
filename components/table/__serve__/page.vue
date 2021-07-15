@@ -1,10 +1,5 @@
 <template>
-  <Table
-    :columns="columns2"
-    :data="data"
-    :height="310"
-    :width="300"
-  >
+  <Table use-y-bar :columns="columns" :data="pagedData">
     <TableColumn type="expand" id-key="expand">
       <template #default="{ row }">
         <Row style="padding: 20px 40px; background-color: #f8f9fa;">
@@ -23,59 +18,68 @@
         </Row>
       </template>
     </TableColumn>
+    <TableColumn type="selection" id-key="selection"></TableColumn>
+    <TableColumn type="order" id-key="order" name="Order"></TableColumn>
     <TableColumn
       name="First Name"
       id-key="firstName"
       :order="0"
-      fixed
+      :filter="firstNameFilter"
     >
       <template #default="{ row }">
         <Icon name="user" style="margin-right: 8px;"></Icon>
         {{ row.firstName }}
       </template>
     </TableColumn>
-    <TableColumn name="Job" id-key="job" :order="3"></TableColumn>
-    <TableColumn name="Age" id-key="age" :order="2"></TableColumn>
+    <TableColumn
+      name="Job"
+      id-key="job"
+      :accessor="jobAccessor"
+      :order="3"
+    ></TableColumn>
+    <TableColumn
+      name="Age"
+      id-key="age"
+      :order="2"
+      :sorter="ageSorter"
+    ></TableColumn>
   </Table>
+  <Pagination v-model:active="currentPage" :page-size="pageSize" :total="data.length"></Pagination>
   <br />
-  <Button type="primary" @click="toggleData">
-    切换数据
-  </Button>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { Button } from '@/components/button'
+import { defineComponent, ref, computed } from 'vue'
 import { Column } from '@/components/column'
 import { Icon } from '@/components/icon'
 import { Row } from '@/components/row'
+import { Pagination } from '@/components/pagination'
 import Table from '../table.vue'
 import TableColumn from '../table-column'
-import { deepClone } from '@/common/utils/deep-clone'
 import { defineFilter, defineColumn } from '../helper'
 import testData from './data.json'
 
 import '@/common/icons/user'
 
-const clonedData = deepClone(testData.slice(5).reverse())
-
-clonedData.forEach((data, index) => {
-  data.id = `${testData.length + index}`
-})
-
 export default defineComponent({
-  name: 'App',
+  name: 'Page',
   components: {
-    Button,
     Column,
     Icon,
     Row,
+    Pagination,
     Table,
     TableColumn
   },
   setup() {
-    const flag = ref(false)
+    const currentPage = ref(1)
+    const pageSize = 3
+
     const data = ref(testData)
+
+    const pagedData = computed(() => {
+      return data.value.slice((currentPage.value - 1) * pageSize, currentPage.value * pageSize)
+    })
 
     const columns = ref([
       defineColumn({
@@ -135,20 +139,17 @@ export default defineComponent({
       return row.job
     }
 
-    function toggleData() {
-      data.value = flag.value ? testData : clonedData
-      flag.value = !flag.value
-    }
-
     return {
+      currentPage,
+      pageSize,
       data,
+      pagedData,
       columns,
       columns2,
       firstNameFilter,
       ageSorter,
 
-      jobAccessor,
-      toggleData
+      jobAccessor
     }
   }
 })

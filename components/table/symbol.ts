@@ -118,6 +118,7 @@ export interface RowState {
   hover: boolean,
   checked: boolean,
   height: number,
+  borderHeight: number,
   expanded: boolean,
   expandHeight: number,
   data: Data
