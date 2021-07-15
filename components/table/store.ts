@@ -47,6 +47,7 @@ export function useStore(options: StoreOptions) {
     pageSize: 0,
     rowHeight: options.rowHeight ?? 0,
     rowDraggable: !!options.rowDraggable,
+    expandRenderer: options.expandRenderer,
 
     rowData: [],
     rightFixedColumns: [],

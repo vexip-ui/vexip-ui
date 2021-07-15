@@ -27,8 +27,8 @@
           :data="{ row: row.data, rowIndex: index }"
         ></Renderer>
         <Renderer
-          v-else-if="isFunction(table.expandRenderer)"
-          :renderer="table.expandRenderer"
+          v-else-if="isFunction(expandRenderer)"
+          :renderer="expandRenderer"
           :data="{ row: row.data, rowIndex: index }"
         ></Renderer>
       </div>
@@ -117,14 +117,13 @@ export default defineComponent({
         customClass
       ]
     })
-    const draggable = computed(() => {
-      return !props.isHead && state.rowDraggable
-    })
+    const draggable = computed(() => !props.isHead && state.rowDraggable)
     const expandColumn = computed(() => {
       return state.columns.find(column => (column as ExpandColumn).type === 'expand') as
         | ExpandColumn
         | undefined
     })
+    const expandRenderer = computed(() => state.expandRenderer)
 
     watch(
       () => props.row.hidden,
@@ -225,6 +224,7 @@ export default defineComponent({
       className,
       draggable,
       expandColumn,
+      expandRenderer,
 
       wrapper,
       rowEl: rowElement,

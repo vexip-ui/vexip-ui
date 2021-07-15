@@ -107,7 +107,8 @@ export interface StoreOptions {
   currentPage: number,
   pageSize: number,
   rowHeight: number,
-  rowDraggable: boolean
+  rowDraggable: boolean,
+  expandRenderer: RenderFn | null
 }
 
 export interface RowState {

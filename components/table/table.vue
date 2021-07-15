@@ -270,7 +270,8 @@ export default defineComponent({
       currentPage: props.currentPage,
       pageSize: props.pageSize,
       rowHeight: props.rowHeight,
-      rowDraggable: props.rowDraggable
+      rowDraggable: props.rowDraggable,
+      expandRenderer: props.expandRenderer
     })
 
     provide(TABLE_STORE, store)
