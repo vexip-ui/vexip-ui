@@ -77,6 +77,10 @@ const props = useConfiguredProps('tag', {
   simple: {
     type: Boolean,
     default: false
+  },
+  circle: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -96,7 +100,8 @@ export default defineComponent({
         [`${prefix}--${props.size}`]: props.size !== 'default',
         [`${prefix}--${props.type}`]: props.type,
         [`${prefix}--border`]: props.border,
-        [`${prefix}--simple`]: props.simple
+        [`${prefix}--simple`]: props.simple,
+        [`${prefix}--circle`]: props.circle
       }
     })
     const style = computed(() => {

@@ -5,6 +5,7 @@
     :type="tag.type"
     size="small"
     closable
+    circle
   >
     标签
   </Tag>
@@ -16,6 +17,7 @@
     :type="tag.type"
     border
     closable
+    circle
   >
     标签
   </Tag>
@@ -28,6 +30,7 @@
     simple
     closable
     size="large"
+    circle
   >
     标签
   </Tag>

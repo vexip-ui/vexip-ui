@@ -23,6 +23,10 @@
     font-size: $vxp-font-size-primary;
   }
 
+  &--circle {
+    border-radius: 1em;
+  }
+
   &__close {
     display: inline-flex;
     align-items: center;
