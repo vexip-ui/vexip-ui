@@ -22,6 +22,7 @@
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps } from '@/common/config/install'
+import { createSizeProp } from '@/common/config/props'
 
 import '@/common/icons/times'
 
@@ -46,6 +47,7 @@ const types = [
 ]
 
 const props = useConfiguredProps('tag', {
+  size: createSizeProp(),
   type: {
     default: 'default' as TagType,
     validator: (value: TagType) => {
@@ -91,7 +93,8 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
-        [`${prefix}--${props.type}`]: props.type !== 'default',
+        [`${prefix}--${props.size}`]: props.size !== 'default',
+        [`${prefix}--${props.type}`]: props.type,
         [`${prefix}--border`]: props.border,
         [`${prefix}--simple`]: props.simple
       }

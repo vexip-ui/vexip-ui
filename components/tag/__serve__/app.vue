@@ -3,6 +3,7 @@
     v-for="tag in tags"
     :key="tag.type"
     :type="tag.type"
+    size="small"
     closable
   >
     标签
@@ -26,16 +27,7 @@
     :type="tag.type"
     simple
     closable
-  >
-    标签
-  </Tag>
-  <br />
-  <br />
-  <Tag
-    v-for="tag in tags"
-    :key="tag.type"
-    closable
-    :type="tag.type"
+    size="large"
   >
     标签
   </Tag>

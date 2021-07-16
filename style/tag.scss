@@ -15,6 +15,14 @@
     margin-left: 0.3em;
   }
 
+  &--small {
+    font-size: $vxp-font-size-secondary;
+  }
+
+  &--large {
+    font-size: $vxp-font-size-primary;
+  }
+
   &__close {
     display: inline-flex;
     align-items: center;
