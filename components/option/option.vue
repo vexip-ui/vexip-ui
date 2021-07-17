@@ -3,9 +3,12 @@
     v-show="!hidden"
     ref="wrapper"
     :class="className"
+    :title="noTitle ? undefined : String(truthValue)"
     @click="handleSelect"
   >
-    <slot>{{ truthLabel }}</slot>
+    <slot :selected="selected">
+      {{ truthLabel }}
+    </slot>
   </li>
 </template>
 
@@ -41,6 +44,10 @@ const props = {
     default: false
   },
   divided: {
+    type: Boolean,
+    default: false
+  },
+  noTitle: {
     type: Boolean,
     default: false
   }
@@ -153,9 +160,11 @@ export default defineComponent({
 
     return {
       truthLabel,
+      truthValue,
       hidden,
 
       className,
+      selected,
 
       wrapper,
 

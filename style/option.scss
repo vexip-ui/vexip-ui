@@ -1,6 +1,9 @@
 .vxp-option {
   @include basis;
 
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
   padding: 0.35em 1.2em;
   color: $vxp-option-color;
   white-space: nowrap;

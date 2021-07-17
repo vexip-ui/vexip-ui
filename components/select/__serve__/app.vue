@@ -12,6 +12,7 @@
     transfer
     multiple
     clearable
+    option-check
     :options="options"
   ></Select>
   <br />

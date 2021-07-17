@@ -87,12 +87,27 @@
   }
 
   &__options {
+    display: flex;
+    flex-direction: column;
     padding: 0;
     margin: 0;
+
+    &--has-check {
+      .vxp-option {
+        justify-content: space-between;
+      }
+    }
   }
 
-  &__trigger--selected .vxp-option {
-    background-color: $vxp-select-color-bg-option-hover;
+  &__label {
+    flex: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__check {
+    color: $vxp-select-color-check;
   }
 
   &__arrow {

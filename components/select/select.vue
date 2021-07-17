@@ -70,14 +70,28 @@
             }"
           >
             <Scroll ref="scroll" use-y-bar height="100%">
-              <ul :class="`${prefixCls}__options`">
+              <ul
+                :class="[
+                  `${prefixCls}__options`,
+                  optionCheck ? `${prefixCls}__options--has-check` : ''
+                ]"
+              >
                 <slot>
                   <Option
                     v-for="(item, index) in rawOptions"
                     :key="index"
                     :label="item.label || item.value.toString()"
                     :value="item.value"
-                  ></Option>
+                  >
+                    <template #default="{ selected }">
+                      <span :class="`${prefixCls}__label`">
+                        {{ item.label || item.value.toString() }}
+                      </span>
+                      <transition v-if="optionCheck" name="vxp-fade" appear>
+                        <Icon v-if="selected" :class="`${prefixCls}__check`" name="check"></Icon>
+                      </transition>
+                    </template>
+                  </Option>
                 </slot>
               </ul>
             </Scroll>
@@ -114,6 +128,7 @@ import { noop, isNull } from '@/common/utils/common'
 import { createSizeProp, createStateProp } from '@/common/config/props'
 
 import '@/common/icons/chevron-down'
+import '@/common/icons/check'
 import '@/common/icons/times-circle'
 
 import type { PropType } from 'vue'
@@ -207,6 +222,10 @@ const props = useConfiguredProps('select', {
     default: false
   },
   disableValidate: {
+    type: Boolean,
+    default: false
+  },
+  optionCheck: {
     type: Boolean,
     default: false
   }
