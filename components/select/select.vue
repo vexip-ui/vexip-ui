@@ -5,31 +5,54 @@
     @click="handleClick"
     @clickoutside="handleClickOutside"
   >
-    <div ref="reference" :class="`${prefixCls}__trigger`">
+    <div ref="reference" :class="`${prefixCls}__control`" :style="controlStyle">
+      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: prefixColor }">
+        <slot name="prefix">
+          <Icon :name="prefix"></Icon>
+        </slot>
+      </div>
       <slot name="control">
-        <Input
-          :readonly="true"
-          :input-class="`${prefixCls}__input`"
-          :value="currentLabel"
-          :placeholder="placeholder"
-          :size="size"
-          :state="state"
-          :disabled="disabled"
-          :clearable="clearable"
-          @on-focus="handleFocus"
-          @on-blur="handleBlur"
-          @on-clear="handleClear"
+        <template v-if="multiple && Array.isArray(currentValue)">
+          <Tag
+            v-for="(item, index) in currentValue"
+            :key="index"
+            :class="`${prefixCls}__tag`"
+            closable
+            @click.stop="handleClick"
+            @on-close="handleSelect(item, currentLabel[index])"
+          >
+            {{ currentLabel[index] }}
+          </Tag>
+        </template>
+        <template v-else>
+          {{ currentLabel }}
+        </template>
+        <span
+          v-if="placeholder && !hasValue"
+          :class="`${prefixCls}__placeholder`"
+          :style="placeholderStyle"
         >
-          <template v-if="hasPrefix" #prefix>
-            <slot name="prefix">
-              <Icon :name="prefix"></Icon>
-            </slot>
-          </template>
-          <template #suffix>
-            <Icon name="chevron-down" :class="`${prefixCls}__arrow`"></Icon>
-          </template>
-        </Input>
+          {{ placeholder }}
+        </span>
       </slot>
+      <transition name="vxp-fade">
+        <div
+          v-if="!disabled && clearable && isHover && hasValue"
+          :class="`${prefixCls}__clear`"
+          @click.stop="handleClear"
+        >
+          <Icon name="times-circle"></Icon>
+        </div>
+        <div
+          v-else-if="!noSuffix"
+          :class="`${prefixCls}__icon--suffix`"
+          :style="{ color: suffixColor }"
+        >
+          <slot name="suffix">
+            <Icon :name="suffix || 'chevron-down'"></Icon>
+          </slot>
+        </div>
+      </transition>
     </div>
     <Portal :to="transferTo">
       <transition :name="transitionName" @after-enter="computeListHeight">
@@ -78,11 +101,12 @@ import {
   nextTick
 } from 'vue'
 import { Icon } from '@/components/icon'
-import { Input } from '@/components/input'
 import { Option, SELECTOR_STATE } from '@/components/option'
-import { Scroll } from '@/components/scroll'
 import { Portal } from '@/components/portal'
+import { Scroll } from '@/components/scroll'
+import { Tag } from '@/components/tag'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useHover } from '@/common/mixins/hover'
 import { usePopper, placementWhileList } from '@/common/mixins/popper'
 import { useClickOutside } from '@/common/mixins/clickoutside'
 import { useConfiguredProps } from '@/common/config/install'
@@ -135,8 +159,24 @@ const props = useConfiguredProps('select', {
     type: String,
     default: ''
   },
+  prefixColor: {
+    type: String,
+    default: ''
+  },
+  suffix: {
+    type: String,
+    default: ''
+  },
+  suffixColor: {
+    type: String,
+    default: ''
+  },
+  noSuffix: {
+    type: Boolean,
+    default: false
+  },
   value: {
-    type: [String, Number],
+    type: [String, Number, Array] as PropType<string | number | (string | number)[]>,
     default: null
   },
   multiple: {
@@ -176,18 +216,17 @@ export default defineComponent({
   name: 'Select',
   components: {
     Icon,
-    Input,
     Option,
     Portal,
-    Scroll
+    Scroll,
+    Tag
   },
   props,
   emits: [
     'on-toggle',
     'on-select',
+    'on-cancel',
     'on-change',
-    'on-focus',
-    'on-blur',
     'on-click-outside',
     'on-outside-close',
     'on-clear',
@@ -201,8 +240,8 @@ export default defineComponent({
     const prefix = 'vxp-select'
     const currentVisible = ref(props.visible)
     // const focused = ref(false)
-    const currentLabel = ref('')
-    const currentValue = ref(props.value)
+    const currentLabel = ref<string | string[]>(props.multiple ? [] : '')
+    const currentValue = ref<typeof props.value>(props.multiple ? [] : '')
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
@@ -217,18 +256,23 @@ export default defineComponent({
       wrapper,
       isDrop: true
     })
+    const { isHover } = useHover(reference)
 
     const className = computed(() => {
       return {
         [prefix]: true,
-        [`${prefix}--visible`]: !props.disabled && currentVisible.value,
+        [`${prefix}--focused`]: !props.disabled && currentVisible.value,
+        [`${prefix}--focused`]: !props.disabled && currentVisible.value,
+        [`${prefix}--multiple`]: props.multiple,
         [`${prefix}--disabled`]: props.disabled,
         [`${prefix}--${props.size}`]: props.size !== 'default',
         [`${prefix}--${props.state}`]: props.state !== 'default'
       }
     })
     const hasValue = computed(() => {
-      return !(isNull(currentValue.value) || currentValue.value === '')
+      return Array.isArray(currentValue.value)
+        ? currentValue.value.length > 0
+        : currentValue.value || currentValue.value === 0
     })
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
@@ -246,10 +290,22 @@ export default defineComponent({
         return option
       })
     })
+    const controlStyle = computed(() => {
+      return {
+        paddingRight: props.noSuffix ? '' : '2em',
+        paddingLeft: hasPrefix.value ? '2em' : ''
+      }
+    })
+    const placeholderStyle = computed(() => {
+      return {
+        right: props.noSuffix ? '' : '2em',
+        left: hasPrefix.value ? '2em' : ''
+      }
+    })
 
     provide<SelectState>(
       SELECTOR_STATE,
-      reactive({ currentValue, addOption, removeOption, handleSelect, setCurrentLabel })
+      reactive({ isSelected, addOption, removeOption, handleSelect, setCurrentLabel })
     )
 
     watch(
@@ -273,13 +329,44 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValue.value = value
-      }
+        currentValue.value = props.multiple && !Array.isArray(value) ? [value] : value
+      },
+      { immediate: true }
     )
     watch(
       () => Array.from(optionStates.value).filter(state => !state.hidden).length,
       computeListHeight
     )
+    watch(
+      () => props.multiple,
+      value => {
+        if (value) {
+          if (!Array.isArray(currentValue.value)) {
+            currentValue.value = [currentValue.value]
+          }
+
+          if (!Array.isArray(currentLabel.value)) {
+            currentLabel.value = [currentLabel.value]
+          }
+        } else {
+          if (Array.isArray(currentValue.value)) {
+            currentValue.value = currentValue.value[0] ?? ''
+          }
+
+          if (Array.isArray(currentLabel.value)) {
+            currentLabel.value = currentLabel.value[0] ?? ''
+          }
+        }
+      }
+    )
+
+    function isSelected(value: string | number) {
+      if (Array.isArray(currentValue.value)) {
+        return currentValue.value.includes(value)
+      }
+
+      return currentValue.value === value
+    }
 
     function addOption(option: OptionState) {
       optionStates.value.add(option)
@@ -302,34 +389,73 @@ export default defineComponent({
       })
     }
 
-    function setCurrentLabel(label: string) {
-      currentLabel.value = label
-    }
+    function setCurrentLabel(label: string, value: string | number) {
+      if (props.multiple) {
+        if (Array.isArray(currentValue.value) && Array.isArray(currentLabel.value)) {
+          const index = currentValue.value.findIndex(v => v === value)
 
-    function handleSelect(value: string | number, label: string) {
-      emit('on-select', value, label)
-      handleChange(value, label)
-
-      currentVisible.value = false
-    }
-
-    function handleChange(value: string | number, label: string) {
-      if (isNull(value) || value === '') {
-        currentLabel.value = ''
+          if (~index) {
+            currentLabel.value[index] = label
+          }
+        }
       } else {
         currentLabel.value = label
       }
+    }
 
-      const prevValue = currentValue.value
+    function handleSelect(value: string | number, label: string) {
+      emit(props.multiple && isSelected(value) ? 'on-cancel' : 'on-select', value, label)
+      handleChange(value, label)
 
-      currentValue.value = value
+      if (!props.multiple) {
+        currentVisible.value = false
+      } else {
+        updatePopper()
+      }
+    }
 
-      if (prevValue !== value) {
-        emit('on-change', value, label)
-        emit('update:value', value)
+    function handleChange(value: string | number, label: string) {
+      if (
+        props.multiple &&
+        Array.isArray(currentValue.value) &&
+        Array.isArray(currentLabel.value)
+      ) {
+        if (isSelected(value)) {
+          const index = currentValue.value.findIndex(v => v === value)
+
+          if (~index) {
+            currentValue.value.splice(index, 1)
+            currentLabel.value.splice(index, 1)
+          }
+        } else {
+          currentValue.value.push(value)
+          currentLabel.value.push(label)
+        }
+
+        emit('on-change', currentValue.value, currentLabel.value)
+        emit('update:value', currentValue.value)
 
         if (!props.disableValidate) {
           validateField()
+        }
+      } else {
+        if (isNull(value) || value === '') {
+          currentLabel.value = ''
+        } else {
+          currentLabel.value = label
+        }
+
+        const prevValue = currentValue.value
+
+        currentValue.value = value
+
+        if (prevValue !== value) {
+          emit('on-change', value, label)
+          emit('update:value', value)
+
+          if (!props.disableValidate) {
+            validateField()
+          }
         }
       }
     }
@@ -344,16 +470,6 @@ export default defineComponent({
       }
     }
 
-    function handleFocus(event: FocusEvent) {
-      // focused.value = true
-      emit('on-focus', event)
-    }
-
-    function handleBlur(event: FocusEvent) {
-      // focused.value = false
-      emit('on-blur', event)
-    }
-
     function handleClickOutside() {
       emit('on-click-outside')
 
@@ -366,7 +482,18 @@ export default defineComponent({
 
     function handleClear() {
       if (props.clearable) {
-        handleChange('', '')
+        if (props.multiple) {
+          currentValue.value = []
+          currentLabel.value = []
+
+          emit('on-change', currentValue.value, currentLabel.value)
+          emit('update:value', currentValue.value)
+
+          updatePopper()
+        } else {
+          handleChange('', '')
+        }
+
         emit('on-clear')
         clearField()
       }
@@ -375,15 +502,19 @@ export default defineComponent({
     return {
       prefixCls: prefix,
       currentVisible,
+      currentValue,
       currentLabel,
       transferTo,
       listHeight,
       optionStates,
+      isHover,
 
       className,
       hasValue,
       hasPrefix,
       rawOptions,
+      controlStyle,
+      placeholderStyle,
 
       wrapper,
       reference,
@@ -391,9 +522,8 @@ export default defineComponent({
       scroll,
 
       computeListHeight,
+      handleSelect,
       handleClick,
-      handleFocus,
-      handleBlur,
       handleClickOutside,
       handleClear
     }

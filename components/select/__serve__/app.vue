@@ -7,11 +7,20 @@
   ></Select>
   <br />
   <br />
+  <Select
+    v-model:value="values"
+    transfer
+    multiple
+    clearable
+    :options="options"
+  ></Select>
+  <br />
+  <!-- <br />
   <Select v-model:value="value2" clearable>
     <Option>选项1</Option>
     <Option>选项2</Option>
     <Option>选项3</Option>
-  </Select>
+  </Select> -->
   <p>
     Select Value:
     <br />
@@ -20,20 +29,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { Option } from '@/components/option'
-import Select from '../select.vue'
+import { defineComponent, ref } from 'vue'
+// import { Option } from '@/components/option'
+import { Select } from '..'
 
 export default defineComponent({
   name: 'App',
   components: {
-    Option,
+    // Option,
     Select
   },
-  data() {
+  setup() {
+    const value = ref<string | number>('')
+    const value2 = ref<string | number>('')
+    const values = ref<(string | number)[]>([])
+
     return {
-      value: '',
-      value2: '',
+      value,
+      value2,
+      values,
       options: [
         { label: '选项1', value: 'a' },
         { label: '选项2', value: 2 },

@@ -14,10 +14,10 @@
 
 @mixin input-handler {
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   width: 100%;
-  height: 2.2em;
+  // height: 2.2em;
   background-color: $vxp-input-color-bg;
   border: $vxp-input-border;
   border-radius: $vxp-input-border-radius;
@@ -100,8 +100,10 @@
 
   &__control {
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    height: 2.1em;
     padding: 0.3em 0.6em;
+    font-size: inherit;
     line-height: $vxp-input-line-height;
     color: $vxp-input-color-control;
     background-color: transparent;
@@ -120,20 +122,22 @@
     @extend %disabled-item;
   }
 
-  &--small {
-    height: 1.8em;
-  }
+  // &--small {
+  //   height: 1.8em;
+  // }
 
-  &--large {
-    height: 2.6em;
-  }
+  // &--large {
+  //   height: 2.6em;
+  // }
 
   &--small &__control {
+    height: 1.7em;
     padding: 0.1em 0.6em;
   }
 
   &--large &__control {
-    padding: 0.5em 0.8em;
+    height: 2.5em;
+    padding: 0.5em 0.6em;
   }
 
   @at-root {

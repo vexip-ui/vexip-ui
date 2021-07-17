@@ -1,10 +1,15 @@
 <template>
-  <AutoComplete filter ignore-case :options="options"></AutoComplete>
+  <AutoComplete
+    filter
+    ignore-case
+    placeholder="请输入"
+    :options="options"
+  ></AutoComplete>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import AutoComplete from '../auto-complete.vue'
+import { AutoComplete } from '..'
 
 export default defineComponent({
   name: 'App',

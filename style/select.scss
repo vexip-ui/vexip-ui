@@ -5,14 +5,60 @@
 
 .vxp-select {
   @include basis;
+  @include input-handler;
 
-  position: relative;
-  display: inline-block;
-  width: 100%;
+  // position: relative;
+  // display: inline-block;
+  // width: 100%;
 
-  &__trigger,
+  &__control,
   &__input {
     cursor: pointer;
+    user-select: none;
+  }
+
+  &__control {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 2.1em;
+  }
+
+  &--small &__control {
+    min-height: 1.7em;
+  }
+
+  &--large &__control {
+    min-height: 2.5em;
+  }
+
+  &--multiple &__control {
+    height: auto;
+    padding: 0.1em 0.3em;
+  }
+
+  &__tag {
+    height: 1.6em;
+    margin: 0.15em 0.3em;
+    margin-left: 0;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  &__control &__tag + &__tag {
+    margin-left: 0;
+  }
+
+  &__placeholder {
+    position: absolute;
+    right: 2em;
+    left: 0.6em;
+    overflow: hidden;
+    color: $vxp-input-color-placeholder;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
     user-select: none;
   }
 

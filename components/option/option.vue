@@ -69,11 +69,7 @@ export default defineComponent({
     })
 
     const selected = computed(() => {
-      return !!(
-        selectorState &&
-        'currentValue' in selectorState &&
-        selectorState.currentValue === truthValue.value
-      )
+      return !!selectorState?.isSelected?.(truthValue.value)
     })
     const className = computed(() => {
       return {
@@ -148,11 +144,10 @@ export default defineComponent({
 
     function updateSelectLable() {
       if (
-        selectorState &&
-        selectorState.currentValue === truthValue.value &&
+        selectorState?.isSelected?.(truthValue.value) &&
         typeof selectorState.setCurrentLabel === 'function'
       ) {
-        selectorState.setCurrentLabel(truthLabel.value)
+        selectorState.setCurrentLabel(truthLabel.value, truthValue.value)
       }
     }
 

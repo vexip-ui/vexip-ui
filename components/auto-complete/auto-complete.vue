@@ -6,13 +6,25 @@
     :list-class="`${prefixCls}__list`"
     :value="currentValue"
     :size="size"
+    :state="state"
+    :clearable="clearable"
     :transition-name="transitionName"
     :disabled="disabled"
     :transfer="transfer"
     :placement="placement"
+    :prefix-color="prefixColor"
+    :suffix-color="suffixColor"
+    :no-suffix="!hasSuffix"
+    :placeholder="placeholder"
     @on-toggle="handleToggle"
     @on-select="handleSelect"
+    @on-clear="handleClear"
   >
+    <template v-if="hasPrefix" #prefix>
+      <slot name="prefix">
+        <Icon :name="prefix"></Icon>
+      </slot>
+    </template>
     <template #control>
       <slot
         name="control"
@@ -22,23 +34,24 @@
         :on-enter="handleEnter"
         :on-clear="handleClear"
       >
-        <Input
+        <input
           ref="control"
+          :class="`${prefixCls}__input`"
           :value="inputValue"
-          :prefix="prefix"
-          :prefix-color="prefixColor"
-          :suffix="suffix"
-          :suffix-color="suffixColor"
-          :placeholder="placeholder"
+          :autofocus="autofocus"
+          :spellcheck="spellcheck"
           :disabled="disabled"
-          :size="size"
-          :state="state"
-          :clearable="clearable"
-          @on-input="handleInput"
-          @on-enter="handleEnter"
-          @on-clear="handleClear"
-          @on-key-down="handleKeyDown"
-        ></Input>
+          :placeholder="placeholder"
+          autocomplete="off"
+          @input="handleInput"
+          @keyup.enter="handleEnter"
+          @keydown="handleKeyDown"
+        />
+      </slot>
+    </template>
+    <template v-if="hasSuffix" #suffix>
+      <slot name="suffix">
+        <Icon :name="suffix"></Icon>
       </slot>
     </template>
     <slot>
@@ -54,7 +67,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, inject, watch, watchEffect } from 'vue'
-import { Input } from '@/components/input'
+// import { Input } from '@/components/input'
+import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { Select } from '@/components/select'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
@@ -62,6 +76,8 @@ import { placementWhileList } from '@/common/mixins/popper'
 import { useConfiguredProps } from '@/common/config/install'
 import { isNull, noop } from '@/common/utils/common'
 import { createSizeProp, createStateProp } from '@/common/config/props'
+
+import '@/common/icons/times-circle'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@popperjs/core'
@@ -146,13 +162,21 @@ const props = useConfiguredProps('autoComplete', {
   ignoreCase: {
     type: Boolean,
     default: false
+  },
+  autofocus: {
+    type: Boolean,
+    default: false
+  },
+  spellcheck: {
+    type: Boolean,
+    default: false
   }
 })
 
 export default defineComponent({
   name: 'AutoComplete',
   components: {
-    Input,
+    Icon,
     Option,
     Select
   },
@@ -176,7 +200,7 @@ export default defineComponent({
     const visible = ref(false)
 
     const select = ref<InstanceType<typeof Select> | null>(null)
-    const control = ref<InstanceType<typeof Input> | null>(null)
+    const control = ref<HTMLInputElement | null>(null)
 
     let changed = false
     // eslint-disable-next-line vue/no-setup-props-destructure
@@ -220,6 +244,12 @@ export default defineComponent({
 
       return currentValue.value.toString()
     })
+    const hasPrefix = computed(() => {
+      return !!(slots.prefix || props.prefix)
+    })
+    const hasSuffix = computed(() => {
+      return !!(slots.suffix || props.suffix)
+    })
 
     watch(
       () => props.value,
@@ -232,6 +262,9 @@ export default defineComponent({
     watch(visible, value => {
       if (!value) {
         currentIndex.value = -1
+        control.value?.blur()
+      } else {
+        control.value?.focus()
       }
     })
 
@@ -301,7 +334,9 @@ export default defineComponent({
       }
     }
 
-    function handleInput(value: string) {
+    function handleInput(event: string | Event) {
+      const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
+
       visible.value = props.canDrop
       currentValue.value = value
       changed = true
@@ -396,6 +431,8 @@ export default defineComponent({
 
       rawOptions,
       inputValue,
+      hasPrefix,
+      hasSuffix,
 
       select,
       control,
