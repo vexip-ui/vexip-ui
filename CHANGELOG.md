@@ -1,3 +1,24 @@
+## [1.1.2](https://github.com/qmhc/vexip-ui/compare/v1.1.1...v1.1.2) (2021-07-19)
+
+### Bug Fixes
+
+- **table:** effect expandRenderer prop ([857af57](https://github.com/qmhc/vexip-ui/commit/857af572b0ede815727aaf51222ec12dfc48b412))
+- **table:** scroll height incorrect ([66f4804](https://github.com/qmhc/vexip-ui/commit/66f48046b506ba11065ce046bc463c37ec6caef4))
+
+### Code Refactoring
+
+- select and auto-complete no longer depend on input ([4c6af54](https://github.com/qmhc/vexip-ui/commit/4c6af54d09d918fb948cce3e0e459cf1777398e7))
+
+### Features
+
+- **select:** add multiple and option-check props ([da2f78a](https://github.com/qmhc/vexip-ui/commit/da2f78a0b234d8d0a7064e77374e230c3a9bf073))
+- **tag:** add circle prop ([f2e0cf2](https://github.com/qmhc/vexip-ui/commit/f2e0cf2457272b5c3eeef102051e609454d96331))
+- **tag:** add size prop ([79c5290](https://github.com/qmhc/vexip-ui/commit/79c5290d9223d189379019cad637d0efb3d0115c))
+
+### BREAKING CHANGES
+
+- select remove on-focus and on-blur events
+
 ## [1.1.1](https://github.com/qmhc/vexip-ui/compare/v1.1.0...v1.1.1) (2021-07-12)
 
 ### Bug Fixes
