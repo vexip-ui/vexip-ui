@@ -156,5 +156,8 @@ module.exports = {
         jest: true
       }
     }
-  ]
+  ],
+  globals: {
+    __VERSION__: 'readonly'
+  }
 }

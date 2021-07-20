@@ -58,6 +58,8 @@ async function main() {
       })
     }
 
+    export const version = __VERSION__
+
     export {
       ${allComponents.map(toPascalCase).join(',\n')}
     }

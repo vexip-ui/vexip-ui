@@ -188,6 +188,8 @@ export const install = (
   })
 }
 
+export const version = __VERSION__
+
 export {
   Alert,
   Anchor,

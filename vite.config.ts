@@ -1,4 +1,5 @@
 import { resolve, basename, relative, dirname } from 'path'
+import { readFileSync } from 'fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -12,6 +13,7 @@ if (!process.env.TARGET && process.env.ENV === 'development') {
   throw new Error('Target component must be specified.')
 }
 
+const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
 const componentsDir = resolve(__dirname, 'components')
 const componentDir = resolve(componentsDir, process.env.TARGET || '..')
 const name = basename(componentDir)
@@ -33,6 +35,9 @@ export default defineConfig(({ command }) => {
   const useServer = command === 'serve'
 
   return {
+    define: {
+      __VERSION__: JSON.stringify(pkg.version)
+    },
     resolve: {
       alias: [{ find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') }]
     },
