@@ -17,6 +17,12 @@
     <br />
     {{ values }}
   </p>
+  <CheckboxGroup v-model:values="values" vertical>
+    <Checkbox control>
+      全选
+    </Checkbox>
+    <Checkbox v-for="item in items" :key="item" :label="item"></Checkbox>
+  </CheckboxGroup>
 </template>
 
 <script lang="ts">

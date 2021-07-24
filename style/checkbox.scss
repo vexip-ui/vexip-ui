@@ -4,7 +4,7 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  margin-right: 0.8em;
+  // margin-right: 0.8em;
   line-height: 1;
   cursor: pointer;
   user-select: none;
@@ -184,6 +184,10 @@
         align-items: flex-start;
         justify-content: center;
       }
+    }
+
+    &-group & {
+      margin-right: 0.8em;
     }
 
     &-group--vertical & {
