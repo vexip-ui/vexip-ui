@@ -117,4 +117,16 @@
   &--visible &__arrow {
     transform: rotate(180deg);
   }
+
+  &__empty {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.6em 1.2em;
+    color: $vxp-select-color-empty;
+    white-space: nowrap;
+    cursor: default;
+    background-color: $vxp-select-color-bg-list;
+  }
 }

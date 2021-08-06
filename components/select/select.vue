@@ -69,7 +69,12 @@
               maxHeight: `${maxListHeight}px`
             }"
           >
-            <Scroll ref="scroll" use-y-bar height="100%">
+            <Scroll
+              v-show="effectiveCount"
+              ref="scroll"
+              use-y-bar
+              height="100%"
+            >
               <ul
                 :class="[
                   `${prefixCls}__options`,
@@ -95,6 +100,11 @@
                 </slot>
               </ul>
             </Scroll>
+            <slot v-if="hasEmptyTip" name="empty">
+              <div :class="`${prefixCls}__empty`">
+                {{ emptyText }}
+              </div>
+            </slot>
           </div>
         </div>
       </transition>
@@ -228,6 +238,10 @@ const props = useConfiguredProps('select', {
   optionCheck: {
     type: Boolean,
     default: false
+  },
+  emptyText: {
+    type: String,
+    default: '暂无数据'
   }
 })
 
@@ -321,6 +335,12 @@ export default defineComponent({
         left: hasPrefix.value ? '2em' : ''
       }
     })
+    const effectiveCount = computed(() => {
+      return Array.from(optionStates.value).filter(state => !state.hidden).length
+    })
+    const hasEmptyTip = computed(() => {
+      return !!(props.emptyText || slots.empty) && !effectiveCount.value
+    })
 
     provide<SelectState>(
       SELECTOR_STATE,
@@ -352,10 +372,7 @@ export default defineComponent({
       },
       { immediate: true }
     )
-    watch(
-      () => Array.from(optionStates.value).filter(state => !state.hidden).length,
-      computeListHeight
-    )
+    watch(effectiveCount, computeListHeight)
     watch(
       () => props.multiple,
       value => {
@@ -534,6 +551,8 @@ export default defineComponent({
       rawOptions,
       controlStyle,
       placeholderStyle,
+      effectiveCount,
+      hasEmptyTip,
 
       wrapper,
       reference,

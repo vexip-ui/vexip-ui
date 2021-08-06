@@ -6,6 +6,11 @@
     :options="options"
   ></Select>
   <br />
+  <p>
+    Select Value:
+    <br />
+    {{ value }}
+  </p>
   <br />
   <Select
     v-model:value="values"
@@ -16,28 +21,26 @@
     :options="options"
   ></Select>
   <br />
-  <!-- <br />
-  <Select v-model:value="value2" clearable>
+  <br />
+  <Select clearable>
     <Option>选项1</Option>
     <Option>选项2</Option>
     <Option>选项3</Option>
-  </Select> -->
-  <p>
-    Select Value:
-    <br />
-    {{ value }}
-  </p>
+  </Select>
+  <br />
+  <br />
+  <Select></Select>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-// import { Option } from '@/components/option'
+import { Option } from '@/components/option'
 import { Select } from '..'
 
 export default defineComponent({
   name: 'App',
   components: {
-    // Option,
+    Option,
     Select
   },
   setup() {
