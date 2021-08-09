@@ -337,4 +337,17 @@
     height: 1px;
     background-color: $vxp-color-primary;
   }
+
+  &__empty {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 36px;
+    padding: 6px 0;
+    color: $vxp-color-content-placeholder;
+    white-space: nowrap;
+    cursor: default;
+    user-select: none;
+  }
 }

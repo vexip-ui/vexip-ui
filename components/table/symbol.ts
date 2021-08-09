@@ -108,6 +108,7 @@ export interface StoreOptions {
   pageSize: number,
   rowHeight: number,
   rowDraggable: boolean,
+  emptyText: string,
   expandRenderer: RenderFn | null
 }
 

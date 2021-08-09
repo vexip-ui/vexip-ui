@@ -2,7 +2,7 @@ import '@/themes/common.scss'
 import '@/style/table.scss'
 
 import { createApp } from 'vue'
-// import App from './app.vue'
-import Page from './page.vue'
+import App from './app.vue'
+// import App from './page.vue'
 
-createApp(Page).mount('#app')
+createApp(App).mount('#app')

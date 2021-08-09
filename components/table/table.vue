@@ -21,7 +21,11 @@
         @on-scroll="handleBodyScroll"
         @on-y-enable-change="handleYScrollEnableChange"
       >
-        <TableBody></TableBody>
+        <TableBody>
+          <template #empty="{ isFixed }">
+            <slot name="empty" :is-fixed="isFixed"></slot>
+          </template>
+        </TableBody>
       </Scroll>
     </Scroll>
     <template v-else>
@@ -34,7 +38,11 @@
         @on-scroll="handleBodyScroll"
         @on-y-enable-change="handleYScrollEnableChange"
       >
-        <TableBody></TableBody>
+        <TableBody>
+          <template #empty="{ isFixed }">
+            <slot name="empty" :is-fixed="isFixed"></slot>
+          </template>
+        </TableBody>
       </Scroll>
     </template>
     <div
@@ -52,7 +60,11 @@
         :delta-y="scrollDeltaY"
         @on-scroll="handleBodyScroll"
       >
-        <TableBody fixed="left"></TableBody>
+        <TableBody fixed="left">
+          <template #empty="{ isFixed }">
+            <slot name="empty" :is-fixed="isFixed"></slot>
+          </template>
+        </TableBody>
       </Scroll>
     </div>
     <div
@@ -70,7 +82,9 @@
         :delta-y="scrollDeltaY"
         @on-scroll="handleBodyScroll"
       >
-        <TableBody fixed="right"></TableBody>
+        <TableBody fixed="right">
+          <slot></slot>
+        </TableBody>
       </Scroll>
     </div>
     <Scrollbar
@@ -221,6 +235,10 @@ const props = useConfiguredProps('table', {
   transparent: {
     type: Boolean,
     default: false
+  },
+  emptyText: {
+    type: String,
+    default: '暂无数据'
   }
 })
 
@@ -271,6 +289,7 @@ export default defineComponent({
       pageSize: props.pageSize,
       rowHeight: props.rowHeight,
       rowDraggable: props.rowDraggable,
+      emptyText: props.emptyText,
       expandRenderer: props.expandRenderer
     })
 
@@ -356,6 +375,7 @@ export default defineComponent({
       setRenderRows,
       setGlobalRowHeight,
       setRowDraggable,
+      setEmptyText,
       refreshRowIndex
     } = mutations
 
@@ -389,6 +409,7 @@ export default defineComponent({
     watch(() => props.pageSize, setPageSize)
     watch(() => props.rowHeight, setGlobalRowHeight)
     watch(() => props.rowDraggable, setRowDraggable)
+    watch(() => props.emptyText, setEmptyText)
 
     const handlerResize = debounce(refresh)
 

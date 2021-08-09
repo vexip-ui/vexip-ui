@@ -4,6 +4,7 @@
     :data="data"
     :height="310"
     :width="300"
+    empty-text="无数据"
   >
     <TableColumn type="expand" id-key="expand">
       <template #default="{ row }">
@@ -36,6 +37,13 @@
     </TableColumn>
     <TableColumn name="Job" id-key="job" :order="3"></TableColumn>
     <TableColumn name="Age" id-key="age" :order="2"></TableColumn>
+    <!-- <template #empty="{ isFixed }">
+      <div class="vxp-table__empty" :data-fixed="isFixed">
+        <template v-if="!isFixed">
+          无数据
+        </template>
+      </div>
+    </template> -->
   </Table>
   <br />
   <Button type="primary" @click="toggleData">
@@ -136,7 +144,7 @@ export default defineComponent({
     }
 
     function toggleData() {
-      data.value = flag.value ? testData : clonedData
+      data.value = flag.value ? testData : []
       flag.value = !flag.value
     }
 

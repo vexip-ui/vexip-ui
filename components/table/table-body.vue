@@ -1,21 +1,30 @@
 <template>
   <div :class="`${prefix}__body`" :style="style">
-    <TableRow
-      v-for="(row, rowIndex) in processedData"
-      :key="rowIndex"
-      :row="row"
-      :index="rowIndex"
-      :is-fixed="!!fixed"
-    >
-      <TableCell
-        v-for="(column, columnIndex) in currentColumns"
-        :key="columnIndex"
+    <template v-if="processedData.length">
+      <TableRow
+        v-for="(row, rowIndex) in processedData"
+        :key="rowIndex"
         :row="row"
-        :row-index="rowIndex"
-        :column="column"
-        :column-index="columnIndex"
-      ></TableCell>
-    </TableRow>
+        :index="rowIndex"
+        :is-fixed="!!fixed"
+      >
+        <TableCell
+          v-for="(column, columnIndex) in currentColumns"
+          :key="columnIndex"
+          :row="row"
+          :row-index="rowIndex"
+          :column="column"
+          :column-index="columnIndex"
+        ></TableCell>
+      </TableRow>
+    </template>
+    <slot v-else name="empty" :is-fixed="!!fixed">
+      <div :class="`${prefix}__empty`" :style="emptyStyle">
+        <template v-if="!fixed">
+          {{ emptyText }}
+        </template>
+      </div>
+    </slot>
   </div>
 </template>
 
@@ -78,12 +87,21 @@ export default defineComponent({
         paddingTop: `${hiddenHeight}px`
       }
     })
+    const emptyStyle = computed(() => {
+      const { rowHeight } = state
+
+      return {
+        height: rowHeight ? `${rowHeight}px` : undefined
+      }
+    })
 
     return {
       prefix: 'vxp-table',
+      emptyText: toRef(state, 'emptyText'),
 
       currentColumns,
       style,
+      emptyStyle,
       processedData: toRef(getters, 'processedData')
     }
   }

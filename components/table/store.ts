@@ -4,7 +4,7 @@ import { debounceMinor } from '@/common/utils/performance'
 import { toNumber } from '@/common/utils/number'
 import { sortByProps } from '@/common/utils/transform'
 import { deepClone } from '@/common/utils/deep-clone'
-import { ClassType, DEFAULT_KEY_FIELD } from './symbol'
+import { DEFAULT_KEY_FIELD } from './symbol'
 
 import type {
   Key,
@@ -22,6 +22,7 @@ import type {
   StoreOptions,
   StoreState,
   StoreGetters
+  , ClassType
 } from './symbol'
 
 let indexId = 1
@@ -47,6 +48,7 @@ export function useStore(options: StoreOptions) {
     pageSize: 0,
     rowHeight: options.rowHeight ?? 0,
     rowDraggable: !!options.rowDraggable,
+    emptyText: options.emptyText,
     expandRenderer: options.expandRenderer,
 
     rowData: [],
@@ -173,6 +175,7 @@ export function useStore(options: StoreOptions) {
     setHighlight: setHighlight.bind(null, state),
     setRenderCount: setRenderCount.bind(null, state),
     setRowHover: setRowHover.bind(null, state),
+    setEmptyText: setEmptyText.bind(null, state),
     handleSort: handleSort.bind(null, state),
     handleFilter: handleFilter.bind(null, state),
     toggleFilterItemActive: toggleFilterItemActive.bind(null, state),
@@ -462,6 +465,10 @@ function setRowHover(state: StoreState, key: Key, hover: boolean) {
   if (state.dataMap[key]) {
     state.dataMap[key].hover = hover
   }
+}
+
+function setEmptyText(state: StoreState, text: string) {
+  state.emptyText = text
 }
 
 function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type']) {
