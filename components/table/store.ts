@@ -6,6 +6,7 @@ import { sortByProps } from '@/common/utils/transform'
 import { deepClone } from '@/common/utils/deep-clone'
 import { DEFAULT_KEY_FIELD } from './symbol'
 
+import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Key,
   Data,
@@ -21,8 +22,8 @@ import type {
   RowState,
   StoreOptions,
   StoreState,
-  StoreGetters
-  , ClassType
+  StoreGetters,
+  ClassType
 } from './symbol'
 
 let indexId = 1
@@ -49,6 +50,7 @@ export function useStore(options: StoreOptions) {
     rowHeight: options.rowHeight ?? 0,
     rowDraggable: !!options.rowDraggable,
     emptyText: options.emptyText,
+    tooltipTheme: options.tooltipTheme,
     expandRenderer: options.expandRenderer,
 
     rowData: [],
@@ -176,6 +178,7 @@ export function useStore(options: StoreOptions) {
     setRenderCount: setRenderCount.bind(null, state),
     setRowHover: setRowHover.bind(null, state),
     setEmptyText: setEmptyText.bind(null, state),
+    setTooltipTheme: setTooltipTheme.bind(null, state),
     handleSort: handleSort.bind(null, state),
     handleFilter: handleFilter.bind(null, state),
     toggleFilterItemActive: toggleFilterItemActive.bind(null, state),
@@ -469,6 +472,10 @@ function setRowHover(state: StoreState, key: Key, hover: boolean) {
 
 function setEmptyText(state: StoreState, text: string) {
   state.emptyText = text
+}
+
+function setTooltipTheme(state: StoreState, theme: TooltipTheme) {
+  state.tooltipTheme = theme
 }
 
 function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type']) {

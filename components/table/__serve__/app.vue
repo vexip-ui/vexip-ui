@@ -1,11 +1,5 @@
 <template>
-  <Table
-    :columns="columns2"
-    :data="data"
-    :height="310"
-    :width="300"
-    empty-text="无数据"
-  >
+  <Table :columns="columns2" :data="data" empty-text="无数据">
     <TableColumn type="expand" id-key="expand">
       <template #default="{ row }">
         <Row style="padding: 20px 40px; background-color: #f8f9fa;">
@@ -24,12 +18,7 @@
         </Row>
       </template>
     </TableColumn>
-    <TableColumn
-      name="First Name"
-      id-key="firstName"
-      :order="0"
-      fixed
-    >
+    <TableColumn name="First Name" id-key="firstName">
       <template #default="{ row }">
         <Icon name="user" style="margin-right: 8px;"></Icon>
         {{ row.firstName }}
@@ -37,6 +26,9 @@
     </TableColumn>
     <TableColumn name="Job" id-key="job" :order="3"></TableColumn>
     <TableColumn name="Age" id-key="age" :order="2"></TableColumn>
+    <TableColumn name="Long Text" id-key="longText">
+      很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本
+    </TableColumn>
     <!-- <template #empty="{ isFixed }">
       <div class="vxp-table__empty" :data-fixed="isFixed">
         <template v-if="!isFixed">

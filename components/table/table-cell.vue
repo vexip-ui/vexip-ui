@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="style">
+  <Ellipsis :class="className" :tooltip-theme="tooltipTheme" :style="style">
     <Checkbox
       v-if="isSelection(column)"
       :class="`${prefix}__selection`"
@@ -34,12 +34,13 @@
     <template v-else>
       {{ row.data[column.key] }}
     </template>
-  </div>
+  </Ellipsis>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, inject, toRef } from 'vue'
 import { Checkbox } from '@/components/checkbox'
+import { Ellipsis } from '@/components/ellipsis'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { isFunction } from '@/common/utils/common'
@@ -83,6 +84,7 @@ export default defineComponent({
   name: 'TableCell',
   components: {
     Checkbox,
+    Ellipsis,
     Icon,
     Renderer
   },
@@ -149,6 +151,7 @@ export default defineComponent({
 
       className,
       style,
+      tooltipTheme: toRef(state, 'tooltipTheme'),
       disableCheckRows: toRef(getters, 'disableCheckRows'),
       disableExpandRows: toRef(getters, 'disableExpandRows'),
 

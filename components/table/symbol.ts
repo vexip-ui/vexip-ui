@@ -1,5 +1,6 @@
 import type { InjectionKey } from 'vue'
 import type { ComponentSize } from '@/common/config/props'
+import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 
 export type Key = string | number
@@ -109,6 +110,7 @@ export interface StoreOptions {
   rowHeight: number,
   rowDraggable: boolean,
   emptyText: string,
+  tooltipTheme: TooltipTheme,
   expandRenderer: RenderFn | null
 }
 

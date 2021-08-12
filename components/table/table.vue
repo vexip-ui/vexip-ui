@@ -133,6 +133,7 @@ import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
+import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Key,
   Data,
@@ -239,6 +240,12 @@ const props = useConfiguredProps('table', {
   emptyText: {
     type: String,
     default: '暂无数据'
+  },
+  tooltipTheme: {
+    default: 'dark' as TooltipTheme,
+    validator: (value: TooltipTheme) => {
+      return ['light', 'dark'].includes(value)
+    }
   }
 })
 
@@ -290,6 +297,7 @@ export default defineComponent({
       rowHeight: props.rowHeight,
       rowDraggable: props.rowDraggable,
       emptyText: props.emptyText,
+      tooltipTheme: props.tooltipTheme,
       expandRenderer: props.expandRenderer
     })
 
