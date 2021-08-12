@@ -1,6 +1,11 @@
 <template>
   <Portal :to="transferTo">
-    <div v-show="wrapShow" ref="wrapper" :class="className">
+    <div
+      v-show="wrapShow"
+      ref="wrapper"
+      :class="className"
+      v-bind="$attrs"
+    >
       <transition
         v-if="!disabled"
         :name="maskTransition"
@@ -28,11 +33,6 @@ const props = useConfiguredProps('masker', {
   active: {
     type: Boolean,
     default: false
-  },
-  // HTMLAttributes.class => any
-  class: {
-    type: [String, Array, Object] as any,
-    default: null
   },
   closable: {
     type: Boolean,
@@ -81,7 +81,6 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
-        props.class,
         {
           [`${prefix}--inner`]: props.inner,
           [`${prefix}--disabled`]: props.disabled

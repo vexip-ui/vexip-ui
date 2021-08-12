@@ -6,6 +6,8 @@
     v-model:active="active"
     transfer
     closable
+    class="test"
+    title="masker"
     @on-close="active = false"
   ></Masker>
 </template>
