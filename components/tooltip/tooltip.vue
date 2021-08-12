@@ -41,10 +41,10 @@ import { Portal } from '@/components/portal'
 import { useConfiguredProps } from '@/common/config/install'
 import { useClickOutside } from '@/common/mixins/clickoutside'
 import { placementWhileList, usePopper } from '@/common/mixins/popper'
-import { ClassType, TooltipTheme, ToopTipTrigger } from './symbol'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@popperjs/core'
+import type { ClassType, TooltipTheme, ToopTipTrigger } from './symbol'
 
 const props = useConfiguredProps('tooltip', {
   trigger: {
@@ -113,7 +113,6 @@ export default defineComponent({
   ],
   setup(props, { emit }) {
     const placement = toRef(props, 'placement')
-    const trigger = toRef(props, 'trigger')
     const currentVisible = ref(props.visible)
     const transfer = toRef(props, 'transfer')
 
@@ -154,7 +153,7 @@ export default defineComponent({
     function handleTriggerEnter() {
       if (props.disabled) return
 
-      if (trigger.value === 'hover') {
+      if (props.trigger === 'hover') {
         window.clearTimeout(hoverTimer)
 
         hoverTimer = window.setTimeout(() => {
@@ -168,7 +167,7 @@ export default defineComponent({
     function handleTriggerLeave() {
       if (props.disabled) return
 
-      if (trigger.value === 'hover') {
+      if (props.trigger === 'hover') {
         window.clearTimeout(hoverTimer)
 
         hoverTimer = window.setTimeout(() => {
@@ -182,7 +181,7 @@ export default defineComponent({
     function handleTriggerClick() {
       if (props.disabled) return
 
-      if (trigger.value === 'click') {
+      if (props.trigger === 'click') {
         currentVisible.value = !currentVisible.value
       }
     }

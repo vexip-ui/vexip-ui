@@ -149,6 +149,7 @@ export function usePopper(initOptions: UsePopperOptions) {
   function createPopperInstance() {
     if (reference.value && popper.value) {
       popperInstance = createPopper(reference.value, popper.value as HTMLElement, options)
+      updatePopper()
     }
   }
 

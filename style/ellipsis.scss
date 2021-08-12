@@ -1,0 +1,11 @@
+@import './tooltip.scss';
+
+.vxp-ellipsis {
+  @include basis;
+
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
