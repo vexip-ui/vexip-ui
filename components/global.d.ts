@@ -1,7 +1,7 @@
 declare const __VERSION__: string
 
 declare module '*.vue' {
-  import { DefineComponent } from 'vue'
+  import type { DefineComponent } from 'vue'
   const component: DefineComponent<Record<string, unknown>, Record<string, unknown>, any>
   export default component
 }

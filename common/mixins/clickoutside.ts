@@ -1,6 +1,5 @@
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import {
-  TransferNode,
   CLICK_TYPE,
   createEvent,
   getObservers,
@@ -8,6 +7,8 @@ import {
   disconnect,
   dispatchEvent
 } from '../utils/dom-event'
+
+import type { TransferNode } from '../utils/dom-event'
 
 export const CLICK_OUTSIDE = 'clickoutside'
 

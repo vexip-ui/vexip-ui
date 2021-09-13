@@ -36,12 +36,12 @@ import {
   getCurrentInstance,
   isVNode
 } from 'vue'
-import { Scroll } from '@/components/scroll'
 import { useConfiguredProps } from '@/common/config/install'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
 import type { PropType } from 'vue'
+import type { Scroll } from '@/components/scroll'
 import type { LinkState, AnchorState } from './symbol'
 
 const props = useConfiguredProps('anchor', {
