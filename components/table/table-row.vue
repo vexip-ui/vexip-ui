@@ -17,8 +17,8 @@
     </div>
     <CollapseTransition
       v-if="!!expandColumn"
-      @after-enter="computeRowHeight"
-      @after-leave="computeRowHeight"
+      @after-enter="computeRectHeight"
+      @after-leave="computeRectHeight"
     >
       <div
         v-if="row.expanded"
@@ -139,32 +139,31 @@ export default defineComponent({
         : undefined
     })
 
+    function computeRectHeight() {
+      computeRowHeight()
+      computeBorderHeight()
+    }
+
     watch(
       () => props.row.hidden,
       value => {
-        !value && computeRowHeight()
+        !value && computeRectHeight()
       }
     )
-    watch(
-      () => props.row,
-      () => {
-        if (wrapper.value) {
-          const style = getComputedStyle(wrapper.value)
-          const borderHeight =
-            parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
-
-          mutations.setBorderHeight(props.row.key, borderHeight)
-        }
-      }
-    )
+    // watch(
+    //   () => props.row,
+    //   () => {
+    //     computeBorderHeight()
+    //   }
+    // )
 
     onMounted(() => {
-      computeRowHeight()
+      computeRectHeight()
     })
 
     onUpdated(() => {
       if (!state.rowHeight) {
-        computeRowHeight()
+        computeRectHeight()
       }
     })
 
@@ -202,6 +201,15 @@ export default defineComponent({
             }, 0)
           }
         })
+      }
+    }
+
+    function computeBorderHeight() {
+      if (wrapper.value) {
+        const style = getComputedStyle(wrapper.value)
+        const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
+
+        mutations.setBorderHeight(props.row.key, borderHeight)
       }
     }
 
@@ -260,7 +268,7 @@ export default defineComponent({
       handleDragOver,
       handleDrop,
       handleDragEnd,
-      computeRowHeight
+      computeRectHeight
     }
   }
 })

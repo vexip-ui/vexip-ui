@@ -1,5 +1,5 @@
 <template>
-  <Table :columns="columns2" :data="data" empty-text="无数据">
+  <Table :columns="columns2" :data="data" :height="1000">
     <TableColumn type="expand" id-key="expand">
       <template #default="{ row }">
         <Row style="padding: 20px 40px; background-color: #f8f9fa;">
