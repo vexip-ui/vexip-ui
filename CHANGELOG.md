@@ -1,3 +1,17 @@
+## [1.1.3](https://github.com/qmhc/vexip-ui/compare/v1.1.2...v1.1.3) (2021-10-20)
+
+### Bug Fixes
+
+- **checkbox:** only use margins within group ([22d3d9e](https://github.com/qmhc/vexip-ui/commit/22d3d9e80a7a254b72ccc5ef08732c6098cc41d5))
+- **table:** incorrect height when using height prop ([d5143ac](https://github.com/qmhc/vexip-ui/commit/d5143accb4c243a2910c2693485408bd61cabe8e))
+
+### Features
+
+- **ellipsis:** add ellipsis component ([1fefc1b](https://github.com/qmhc/vexip-ui/commit/1fefc1b1546db69299952d957e15de842f89eab8))
+- **select:** show empty text without any option ([5efe942](https://github.com/qmhc/vexip-ui/commit/5efe942b9ee6e075799501bbbc5a46c08a8a3304))
+- **table:** add ellipsis tooltip for long content ([270df96](https://github.com/qmhc/vexip-ui/commit/270df9667e90455f7c6e6915286e78f742cd62b0))
+- **table:** show empty text without any row ([ecb0ee7](https://github.com/qmhc/vexip-ui/commit/ecb0ee773e50efc00bbf6fb56c1420fe913e32d5))
+
 ## [1.1.2](https://github.com/qmhc/vexip-ui/compare/v1.1.1...v1.1.2) (2021-07-19)
 
 ### Bug Fixes
