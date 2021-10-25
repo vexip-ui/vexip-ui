@@ -1,5 +1,6 @@
 <template>
   <Table :columns="columns2" :data="data" :height="1000">
+    <TableColumn type="order"></TableColumn>
     <TableColumn type="expand" id-key="expand">
       <template #default="{ row }">
         <Row style="padding: 20px 40px; background-color: #f8f9fa;">
@@ -40,6 +41,9 @@
   <br />
   <Button type="primary" @click="toggleData">
     切换数据
+  </Button>
+  <Button type="primary" @click="addData">
+    插入数据
   </Button>
 </template>
 
@@ -140,6 +144,10 @@ export default defineComponent({
       flag.value = !flag.value
     }
 
+    function addData() {
+      data.value.unshift({ ...testData[0], id: undefined! })
+    }
+
     return {
       data,
       columns,
@@ -148,7 +156,8 @@ export default defineComponent({
       ageSorter,
 
       jobAccessor,
-      toggleData
+      toggleData,
+      addData
     }
   }
 })

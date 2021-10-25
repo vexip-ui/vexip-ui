@@ -150,12 +150,12 @@ export default defineComponent({
         !value && computeRectHeight()
       }
     )
-    // watch(
-    //   () => props.row,
-    //   () => {
-    //     computeBorderHeight()
-    //   }
-    // )
+    watch(
+      () => props.row,
+      () => {
+        computeRectHeight()
+      }
+    )
 
     onMounted(() => {
       computeRectHeight()
