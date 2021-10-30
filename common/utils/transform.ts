@@ -182,11 +182,11 @@ export function flatTree<T extends Record<string, unknown>>(tree: T[], options: 
   return list
 }
 
-export interface SortOptions {
-  key: string,
+export interface SortOptions<T = string> {
+  key: T,
   method?: (prev: any, next: any) => number,
   accessor?: (...args: any[]) => any,
-  type?: string,
+  type?: 'asc' | 'desc',
   params?: any[] // 传入读取器的额外参数
 }
 
@@ -195,10 +195,10 @@ export interface SortOptions {
  * @param list - 需要排序的数组
  * @param props - 排序依赖的属性 key-属性名 method-排序方法 accessor-数据获取方法 type-升降序
  */
-export function sortByProps(
-  list: any[],
-  props: string | SortOptions | (string | SortOptions)[]
-): any[] {
+export function sortByProps<T extends Record<string, unknown>>(
+  list: T[],
+  props: keyof T | SortOptions<keyof T> | (keyof T | SortOptions<keyof T>)[]
+) {
   if (
     !list.sort ||
     (isObject<SortOptions>(props) && !props.key) ||
@@ -221,18 +221,19 @@ export function sortByProps(
   }
 
   const formattedProps = props
-    .map(value =>
-      typeof value === 'string'
-        ? {
-            key: value,
-            method: defaultSortMethod,
-            type: 'asc'
-          }
-        : value
+    .map(
+      value =>
+        (typeof value === 'string'
+          ? {
+              key: value,
+              method: defaultSortMethod,
+              type: 'asc'
+            }
+          : value) as SortOptions<keyof T>
     )
     .map(value => {
       if (typeof value.accessor !== 'function') {
-        value.accessor = (data: Record<string, any>) => data[value.key]
+        value.accessor = (data: T) => data[value.key]
       }
 
       if (typeof value.method !== 'function') {
