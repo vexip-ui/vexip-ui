@@ -1,13 +1,27 @@
-import { isObject } from './common'
+import { isDefined, isObject, isFunction } from './common'
 
-export function transformListToMap<T = any>(list: T[], prop: string): Record<string, T> {
+/**
+ * 根据数组元素中某个或多个属性的值转换为映射
+ * @param list - 需要被转换的数组
+ * @param prop - 需要被转换的属性或提供一个读取方法
+ * @param accessor - 映射的值的读取方法，默认返回元素本身
+ */
+export function transformListToMap<T = any, K = T>(
+  list: T[],
+  prop: keyof T | ((item: T) => any),
+  accessor: (item: T) => K = v => v as any
+): Record<string, K> {
   const map = {} as Record<string, any>
 
-  if (!prop) return map
+  if (!isDefined(prop)) return map
+
+  const propAccessor = isFunction(prop) ? prop : (item: T) => item[prop]
 
   list.forEach(item => {
-    if (prop in item) {
-      map[`${item[prop as keyof typeof item]}`] = item
+    const key = propAccessor(item)
+
+    if (isDefined(key)) {
+      map[key] = accessor(item)
     }
   })
 
