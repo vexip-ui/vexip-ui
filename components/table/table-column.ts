@@ -1,6 +1,7 @@
 import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
 import { useConfiguredProps } from '@/common/config/install'
 import { createSizeProp } from '@/common/config/props'
+import { isNull } from '@/common/utils/common'
 import { TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
@@ -160,7 +161,7 @@ export default defineComponent({
         if (typeof props.accessor === 'function') {
           const result = props.accessor(row as Data, rowIndex)
 
-          return (result as string).toString()
+          return isNull(result) ? '' : String(result)
         }
 
         return (row as RowState)[options.key as unknown as keyof RowState].toString()

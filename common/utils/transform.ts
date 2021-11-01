@@ -85,10 +85,10 @@ export function groupByProps<T = any>(
   return zipData
 }
 
-export interface TreeOptions {
-  keyField?: string,
-  childField?: string,
-  parentField?: string
+export interface TreeOptions<T = string> {
+  keyField?: T,
+  childField?: T,
+  parentField?: T
 }
 
 /**
@@ -96,18 +96,19 @@ export interface TreeOptions {
  * @param list - 需要转换的扁平数据
  * @param options - 转化配置项
  */
-export function transformTree<T extends Record<string, unknown>>(
-  list: T[],
-  options: TreeOptions = {}
-) {
-  const { keyField = 'id', childField = 'children', parentField = 'parent' } = options
+export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> = {}) {
+  const {
+    keyField = 'id' as keyof T,
+    childField = 'children' as keyof T,
+    parentField = 'parent' as keyof T
+  } = options
 
   const tree: T[] = []
-  const record = new Map<string | number, T[]>()
+  const record = new Map<T[keyof T], T[]>()
 
   for (let i = 0, len = list.length; i < len; i++) {
     const item = list[i]
-    const id = item[keyField] as string | number
+    const id = item[keyField]
 
     if (!id) {
       continue
@@ -121,7 +122,7 @@ export function transformTree<T extends Record<string, unknown>>(
     }
 
     if (item[parentField]) {
-      const parentId = item[parentField] as string | number
+      const parentId = item[parentField]
 
       if (!record.has(parentId)) {
         record.set(parentId, [])
@@ -141,8 +142,12 @@ export function transformTree<T extends Record<string, unknown>>(
  * @param tree - 需要转换的树形数据
  * @param options - 转化配置项
  */
-export function flatTree<T extends Record<string, unknown>>(tree: T[], options: TreeOptions = {}) {
-  const { keyField = 'id', childField = 'children', parentField = 'parent' } = options
+export function flatTree<T = any>(tree: T[], options: TreeOptions<keyof T> = {}) {
+  const {
+    keyField = 'id' as keyof T,
+    childField = 'children' as keyof T,
+    parentField = 'parent' as keyof T
+  } = options
 
   const list: T[] = []
   const loop = [...tree]
@@ -155,8 +160,10 @@ export function flatTree<T extends Record<string, unknown>>(tree: T[], options: 
     let id
     let children: any[] = []
 
-    if ((item[childField] as any[])?.length) {
-      children = item[childField] as any[]
+    const childrenValue = item[childField]
+
+    if (Array.isArray(childrenValue) && childrenValue.length) {
+      children = childrenValue
     }
 
     if (item[keyField]) {
@@ -195,7 +202,7 @@ export interface SortOptions<T = string> {
  * @param list - 需要排序的数组
  * @param props - 排序依赖的属性 key-属性名 method-排序方法 accessor-数据获取方法 type-升降序
  */
-export function sortByProps<T extends Record<string, unknown>>(
+export function sortByProps<T = any>(
   list: T[],
   props: keyof T | SortOptions<keyof T> | (keyof T | SortOptions<keyof T>)[]
 ) {
