@@ -22,9 +22,28 @@ export function useConfiguredProps<T extends Record<string, unknown>>(name: stri
   const getConfig = createConfigGetter(name)
 
   Object.keys(props).forEach(key => {
-    const prop = props[key] as { default?: unknown }
+    const prop = props[key] as { type?: unknown, default?: unknown }
+    const defaultValue = prop.default
 
-    prop.default = getConfig(key, prop.default)
+    if (prop.type === Function) {
+      prop.type = [Function]
+    }
+
+    const propType = prop.type
+
+    if (
+      propType === Array ||
+      propType === Object ||
+      (Array.isArray(propType) && (propType.includes(Object) || propType.includes(Array)))
+    ) {
+      prop.default = () => {
+        const value = getConfig(key, defaultValue)
+
+        return typeof value === 'function' ? value() : value
+      }
+    } else {
+      prop.default = () => getConfig(key, defaultValue)
+    }
   })
 
   return props

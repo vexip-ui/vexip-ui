@@ -105,6 +105,7 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
     "commit": "git-cz",
+    "example": "cd example && vite",
     "lint": "eslint --fix --ext .js,.ts,.tsx,.vue common/** components/**",
     "lint:style": "stylelint **/*.{vue,scss} --fix",
     "postinstall": "is-ci || husky install",
