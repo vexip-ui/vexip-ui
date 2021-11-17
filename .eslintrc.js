@@ -12,7 +12,7 @@ module.exports = {
     '@vue/typescript/recommended'
   ],
   parserOptions: {
-    ecmaVersion: 2020
+    ecmaVersion: 'latest'
   },
   rules: {
     'no-console':
@@ -93,10 +93,7 @@ module.exports = {
       'warn',
       {
         singleline: 3,
-        multiline: {
-          max: 1,
-          allowFirstLine: false
-        }
+        multiline: 1
       }
     ],
     'vue/match-component-file-name': [
@@ -161,6 +158,13 @@ module.exports = {
       files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
       env: {
         jest: true
+      }
+    },
+    {
+      files: ['**/*.vue'],
+      globals: {
+        defineProps: 'readonly',
+        defineEmits: 'readonly'
       }
     }
   ],
