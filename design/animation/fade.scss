@@ -1,9 +1,9 @@
 @mixin start {
-  opacity: 0;
+  opacity: 0%;
 }
 
 @mixin end {
-  opacity: 1;
+  opacity: 100%;
 }
 
 .vxp-fade {

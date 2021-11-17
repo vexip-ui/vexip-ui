@@ -21,8 +21,9 @@
     justify-content: center;
     height: $vxp-line-height * 1em;
     padding: 0 $vxp-line-height * 0.35em;
-    font-family: Helvetica, Microsoft YaHei, SimSun, sans-serif;
+    font-family: Helvetica, 'Microsoft YaHei', SimSun, sans-serif;
     font-size: $vxp-font-size-secondary;
+
     // line-height: 1;
     color: $vxp-color-content-reverse;
     white-space: nowrap;
@@ -50,7 +51,7 @@
 
     @each $type in map-keys($map: $types) {
       &--#{$type} {
-        background-color: map-get($types, $type);
+        background-color: map.get($types, $type);
       }
     }
   }

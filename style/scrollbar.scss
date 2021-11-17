@@ -51,11 +51,11 @@
   }
 
   &--fade &__bar {
-    opacity: 0;
+    opacity: 0%;
   }
 
   &--active &__bar {
-    opacity: 0.6;
+    opacity: 60%;
   }
 
   &__bar {
@@ -71,12 +71,12 @@
       transform 140ms $timing;
 
     &:hover {
-      opacity: 0.8;
+      opacity: 80%;
     }
   }
 
   &--scrolling &__bar {
-    opacity: 1;
+    opacity: 100%;
     transition-property: opacity;
   }
 }

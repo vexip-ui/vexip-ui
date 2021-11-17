@@ -4,7 +4,7 @@
 .vxp-color-picker {
   @include basis;
 
-  $grid-url: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+  $grid-url: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==');
 
   position: relative;
   display: inline-block;
@@ -140,7 +140,7 @@
 
   /* stylelint-disable plugin/no-unsupported-browser-features */
   &__saturation {
-    background: linear-gradient(90deg, #fff, hsla(0, 0%, 100%, 0));
+    background: linear-gradient(90deg, #fff, hsl(0deg 0% 100% / 0%));
   }
 
   &__value {
@@ -190,6 +190,7 @@
 
   &__palette-handler {
     position: absolute;
+
     // pointer-events: none;
     user-select: none;
     border: $vxp-border-appearance $vxp-color-black;
@@ -202,6 +203,7 @@
     height: 6px;
     border: $vxp-border-appearance $vxp-color-white;
     border-radius: 50%;
+
     // box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0, 0, 0, 0.3),
     //   0 0 1px 2px rgba(0, 0, 0, 0.4);
   }

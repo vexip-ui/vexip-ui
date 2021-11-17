@@ -4,7 +4,6 @@
   $line: #{&}__line;
   $signal: #{&}__signal;
   $pointer: #{&}__pointer;
-
   $item-types: (
     success: $vxp-color-success,
     error: $vxp-color-error,
@@ -25,7 +24,7 @@
     padding-bottom: 0.8em;
 
     @each $type in map-keys($map: $item-types) {
-      $color: map-get($item-types, $type);
+      $color: map.get($item-types, $type);
 
       &--#{$type} {
         #{$signal},

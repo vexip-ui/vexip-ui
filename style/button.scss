@@ -51,7 +51,7 @@
     content: '';
     background-color: transparent;
     border-radius: inherit;
-    opacity: 0.4;
+    opacity: 40%;
     animation-timing-function: ease;
     animation-fill-mode: forwards;
   }
@@ -118,7 +118,7 @@
 
       100% {
         box-shadow: 0 0 0 8px $vxp-button-color-pulse;
-        opacity: 0;
+        opacity: 0%;
       }
     }
   }
@@ -195,10 +195,10 @@
   }
 
   @each $type in map-keys($vxp-button-type-colors-map) {
-    $colors: map-get($vxp-button-type-colors-map, $type);
-    $color-base: nth($colors, 1);
-    $color-light: nth($colors, 2);
-    $color-dark: nth($colors, 3);
+    $colors: map.get($vxp-button-type-colors-map, $type);
+    $color-base: list.nth($colors, 1);
+    $color-light: list.nth($colors, 2);
+    $color-dark: list.nth($colors, 3);
 
     @at-root {
       &--#{$type} {
@@ -260,14 +260,14 @@
 
           100% {
             box-shadow: 0 0 0 8px $color-dark;
-            opacity: 0;
+            opacity: 0%;
           }
         }
       }
 
       &--#{$type}#{&}--simple {
-        background-color: mix($vxp-color-white, $color-base, 85%);
-        border-color: mix($vxp-color-white, $color-base, 40%);
+        background-color: color.mix($vxp-color-white, $color-base, 85%);
+        border-color: color.mix($vxp-color-white, $color-base, 40%);
 
         &,
         .vxp-icon {
@@ -275,7 +275,7 @@
         }
 
         &:hover {
-          background-color: mix($vxp-color-white, $color-base, 75%);
+          background-color: color.mix($vxp-color-white, $color-base, 75%);
         }
 
         &:focus,
@@ -380,7 +380,7 @@
       content: '';
       background-color: $vxp-color-white;
       border-radius: inherit;
-      opacity: 0.25;
+      opacity: 25%;
       transition: $vxp-transition-opacity-base;
     }
   }

@@ -6,12 +6,12 @@ $popup-types: (
 );
 
 @mixin start($type) {
-  opacity: 0;
+  opacity: 0%;
   transform: translate#{map-get($popup-types, $type)} translateZ(0);
 }
 
 @mixin end($type) {
-  opacity: 1;
+  opacity: 100%;
 
   @if $type == 'top' or $type == 'bottom' {
     transform: translate3d(-50%, 0, 0);
@@ -60,7 +60,7 @@ $popup-types: (
     }
 
     100% {
-      opacity: 0;
+      opacity: 0%;
     }
   }
 }

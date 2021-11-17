@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const prettier = require('prettier')
+const { ESLint } = require('eslint')
 const { components: allComponents, toPascalCase } = require('./utils')
 
 main()
@@ -75,9 +76,14 @@ async function main() {
     }
   `
 
+  const eslint = new ESLint({ fix: true })
+  const filePath = path.resolve(__dirname, '../components/index.ts')
+
   fs.writeFileSync(
-    path.resolve(__dirname, '../components/index.ts'),
+    filePath,
     prettier.format(index, { ...prettierConfig, parser: 'typescript' })
   )
+
+  await ESLint.outputFixes(await eslint.lintFiles(filePath))
 }
 

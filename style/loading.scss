@@ -22,7 +22,7 @@
   );
 
   @each $type in map-keys($types) {
-    $color: map-get($types, $type);
+    $color: map.get($types, $type);
 
     &--#{$type} &__filler {
       background-color: $color;

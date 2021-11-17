@@ -16,6 +16,7 @@
   overflow: hidden;
   border-collapse: collapse;
   border: $vxp-border-appearance transparent;
+
   // border-bottom-color: $vxp-color-border;
   // box-shadow: 0 0 0 1px $vxp-color-border;
 
@@ -32,6 +33,7 @@
   &__head {
     z-index: 1;
     user-select: none;
+
     // box-shadow: 0 2px 15px $vxp-color-border;
     border-bottom: $vxp-border-base;
   }

@@ -10,7 +10,7 @@
   &__track {
     position: relative;
     width: 100%;
-    background-color: mix($vxp-color-black, $vxp-color-fill-background, 5%);
+    background-color: color.mix($vxp-color-black, $vxp-color-fill-background, 5%);
   }
 
   &--info-inside &__track {

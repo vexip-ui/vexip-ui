@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
   // width: 100%;
   // padding: 2em 0;
   font-size: 0.875rem;
@@ -56,7 +57,7 @@
     box-shadow: $vxp-box-shadow-base;
 
     @mixin color-close($color) {
-      color: mix($vxp-color-white, $color, 50%);
+      color: color.mix($vxp-color-white, $color, 50%);
 
       &:hover {
         &,
@@ -67,7 +68,7 @@
     }
 
     @each $type in map-keys($map: $types) {
-      $color: map-get($types, $type);
+      $color: map.get($types, $type);
 
       &--color-only#{&}--#{$type} {
         color: $color;
@@ -78,8 +79,8 @@
       }
 
       &--background#{&}--#{$type} {
-        background-color: mix($vxp-color-white, $color, 85%);
-        border-color: mix($vxp-color-white, $color, 40%);
+        background-color: color.mix($vxp-color-white, $color, 85%);
+        border-color: color.mix($vxp-color-white, $color, 40%);
         box-shadow: unset;
 
         #{$close} {
@@ -88,7 +89,7 @@
       }
 
       &--background#{&}--color#{&}--#{$type} {
-        color: mix($vxp-color-black, $color, 20%);
+        color: color.mix($vxp-color-black, $color, 20%);
       }
 
       &--#{$type} {

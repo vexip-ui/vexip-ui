@@ -2,7 +2,6 @@
 
 .vxp-alert {
   $icon: #{&}__icon;
-
   $types: (
     info: $vxp-color-primary,
     success: $vxp-color-success,
@@ -48,21 +47,21 @@
   }
 
   @each $type in map-keys($types) {
-    $color: map-get($types, $type);
+    $color: map.get($types, $type);
 
     &--#{$type} {
-      background-color: mix($vxp-color-white, $color, 90%);
-      border-color: mix($vxp-color-white, $color, 50%);
+      background-color: color.mix($vxp-color-white, $color, 90%);
+      border-color: color.mix($vxp-color-white, $color, 50%);
     }
 
     &--#{$type} #{$icon} {
-      color: mix($vxp-color-black, $color, 20%);
+      color: color.mix($vxp-color-black, $color, 20%);
     }
 
     &--colorful-text#{&}--#{$type} {
       &,
       .vxp-icon {
-        color: mix($vxp-color-black, $color, 20%);
+        color: color.mix($vxp-color-black, $color, 20%);
       }
     }
   }

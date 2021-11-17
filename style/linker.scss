@@ -33,12 +33,12 @@
       height: 1px;
       content: '';
       background-color: $vxp-color-primary-light-1;
-      opacity: 0;
+      opacity: 0%;
       transition: $vxp-transition-opacity-base;
     }
 
     &:hover::after {
-      opacity: 1;
+      opacity: 100%;
     }
   }
 
@@ -54,7 +54,7 @@
     }
 
     &:hover::after {
-      opacity: 0;
+      opacity: 0%;
     }
   }
 
@@ -71,9 +71,9 @@
   );
 
   @each $type in map-keys($types) {
-    $colors: map-get($types, $type);
-    $color-base: nth($colors, 1);
-    $color-hover: nth($colors, 2);
+    $colors: map.get($types, $type);
+    $color-base: list.nth($colors, 1);
+    $color-hover: list.nth($colors, 2);
 
     &--#{$type} {
       color: $color-base;
@@ -97,7 +97,7 @@
       &:hover {
         &,
         .vxp-icon {
-          color: mix($vxp-color-white, $color-base, 50%);
+          color: color.mix($vxp-color-white, $color-base, 50%);
         }
       }
     }

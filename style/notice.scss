@@ -86,7 +86,7 @@
     }
 
     @mixin color-close($color) {
-      color: mix($vxp-color-white, $color, 50%);
+      color: color.mix($vxp-color-white, $color, 50%);
 
       &:hover {
         &,
@@ -97,7 +97,7 @@
     }
 
     @each $type in map-keys($map: $types) {
-      $color: map-get($types, $type);
+      $color: map.get($types, $type);
 
       &--color-only#{&}--#{$type} {
         &,
@@ -111,8 +111,8 @@
       }
 
       &--background#{&}--#{$type} {
-        background-color: mix($vxp-color-white, $color, 85%);
-        border-color: mix($vxp-color-white, $color, 40%);
+        background-color: color.mix($vxp-color-white, $color, 85%);
+        border-color: color.mix($vxp-color-white, $color, 40%);
         box-shadow: unset;
 
         #{$close} {
@@ -123,7 +123,7 @@
       &--background#{&}--color#{&}--#{$type} {
         &,
         #{$title} {
-          color: mix($vxp-color-black, $color, 20%);
+          color: color.mix($vxp-color-black, $color, 20%);
         }
       }
 

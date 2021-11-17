@@ -15,6 +15,7 @@
     width: 2.2em;
     height: 2.2em;
     margin-right: 0.4em;
+
     // color: $vxp-color-content-secondary;
     list-style: none;
     cursor: pointer;
@@ -80,7 +81,7 @@
     background-color: $vxp-color-fill-background;
 
     &:hover {
-      background-color: mix($vxp-color-white, $vxp-color-primary, 90%);
+      background-color: color.mix($vxp-color-white, $vxp-color-primary, 90%);
     }
 
     &--disabled {
@@ -106,6 +107,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
     // padding: 0 0.3em;
   }
 

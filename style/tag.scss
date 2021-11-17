@@ -36,16 +36,15 @@
     margin-left: 0.5em;
     color: $vxp-color-content-secondary;
     cursor: pointer;
-    opacity: 0.6;
+    opacity: 60%;
     transition: $vxp-transition-opacity-base;
 
     &:hover {
-      opacity: 1;
+      opacity: 100%;
     }
   }
 
   $close: #{&}__close;
-
   $types: (
     // state
     primary: $vxp-color-primary,
@@ -54,19 +53,19 @@
     error: $vxp-color-error,
     warning: $vxp-color-warning,
     // named color
-    'lime': rgb(18, 228, 83),
-    'pink': rgb(240, 101, 149),
-    'magenta': rgb(235, 47, 150),
-    'tomato': rgb(250, 99, 99),
-    'orange': rgb(255, 146, 43),
-    'cyan': rgb(19, 194, 194),
-    'navy': rgb(47, 65, 224),
-    'gold': rgb(236, 202, 11),
-    'purple': rgb(114, 46, 209)
+    'lime': rgb(18 228 83),
+    'pink': rgb(240 101 149),
+    'magenta': rgb(235 47 150),
+    'tomato': rgb(250 99 99),
+    'orange': rgb(255 146 43),
+    'cyan': rgb(19 194 194),
+    'navy': rgb(47 65 224),
+    'gold': rgb(236 202 11),
+    'purple': rgb(114 46 209)
   );
 
   @each $type in map-keys($map: $types) {
-    $color: map-get(
+    $color: map.get(
       $map: $types,
       $key: $type
     );
@@ -92,7 +91,7 @@
       }
 
       &--simple#{&}--#{$type} {
-        background-color: mix($vxp-color-white, $color, 85%);
+        background-color: color.mix($vxp-color-white, $color, 85%);
       }
     }
   }

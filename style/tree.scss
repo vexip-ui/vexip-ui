@@ -33,12 +33,12 @@
     transition: $vxp-transition-background-base;
 
     &:hover {
-      background-color: mix($vxp-color-white, $vxp-color-primary, 85%);
+      background-color: color.mix($vxp-color-white, $vxp-color-primary, 85%);
     }
 
     &--selected,
     &--selected:hover {
-      background-color: mix($vxp-color-white, $vxp-color-primary, 85%);
+      background-color: color.mix($vxp-color-white, $vxp-color-primary, 85%);
     }
 
     &--disabled,
@@ -66,9 +66,11 @@
     justify-content: center;
     width: 22px;
     height: 22px;
+
     // padding: 6px;
     // margin-right: 0.2em;
     cursor: pointer;
+
     // transition: $vxp-transition-transform-base;
 
     &--expanded .vxp-icon {

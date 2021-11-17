@@ -7,7 +7,7 @@
   display: inline-flex;
   cursor: pointer;
   user-select: none;
-  background-color: mix($vxp-color-black, $vxp-color-fill-background, 10%);
+  background-color: color.mix($vxp-color-black, $vxp-color-fill-background, 10%);
   border-radius: 30px;
   transition:
     $vxp-transition-background-base,
@@ -25,7 +25,7 @@
 
   &--disabled,
   &--loading {
-    opacity: 0.6;
+    opacity: 60%;
   }
 
   &--open {
@@ -115,6 +115,6 @@
 
   &__input {
     display: none;
-    opacity: 0;
+    opacity: 0%;
   }
 }

@@ -4,6 +4,7 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+
   // margin-right: 0.8em;
   line-height: 1;
   cursor: pointer;
@@ -56,7 +57,7 @@
       background-color: transparent;
       border: solid $vxp-checkbox-color-border-signal-after;
       border-width: 0 2px 2px 0;
-      opacity: 0;
+      opacity: 0%;
       transition:
         width $vxp-transition-base,
         height $vxp-transition-base,
@@ -113,7 +114,7 @@
       top: 50%;
       width: 9px;
       height: 1px;
-      opacity: 1;
+      opacity: 100%;
       transform: translate(-50%, -50%) scale(1);
     }
   }
@@ -135,7 +136,7 @@
     border-color: $vxp-checkbox-color-border-checked;
 
     &::after {
-      opacity: 1;
+      opacity: 100%;
       transform: translate(-50%, -50%) rotate(45deg) scale(1);
     }
   }
@@ -170,7 +171,7 @@
 
   &__input {
     display: none;
-    opacity: 0;
+    opacity: 0%;
   }
 
   @at-root {

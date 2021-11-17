@@ -34,7 +34,6 @@
     position: relative;
     display: inline-flex;
     padding: 0 10px;
-    // transition: $vxp-transition-transform-base;
   }
 
   &--vertical &__item {
@@ -59,7 +58,7 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      opacity: 0;
+      opacity: 0%;
       transition: $vxp-transition-opacity-base;
     }
 
@@ -80,7 +79,7 @@
     }
 
     &--inside#{&}--show {
-      opacity: 1;
+      opacity: 100%;
     }
   }
 
@@ -203,17 +202,17 @@
       margin: 1px 0 2px;
       background-color: $vxp-color-content-secondary;
       border-radius: $vxp-border-radius-small;
-      opacity: 0.4;
+      opacity: 40%;
       transition: width $vxp-transition-base, $vxp-transition-opacity-base;
     }
 
     &:hover &-inner {
-      opacity: 0.7;
+      opacity: 70%;
     }
 
     &--active &-inner {
       width: 24px;
-      opacity: 0.7;
+      opacity: 70%;
     }
 
     &--disabled {
@@ -221,7 +220,7 @@
 
       &,
       &:hover {
-        opacity: 0.2;
+        opacity: 20%;
       }
     }
   }

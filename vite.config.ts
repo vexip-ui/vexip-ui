@@ -97,15 +97,23 @@ export default defineConfig(({ command }) => {
     },
     css: {
       postcss: {
-        plugins: [pcssEnv].concat(useServer ? [] : [discardCss])
+        plugins: [pcssEnv as any].concat(useServer ? [] : [discardCss])
       },
       preprocessorOptions: {
         scss: {
-          additionalData: [
-            '@use "sass:math";',
-            '@import "@/design/variables.scss";',
-            '@import "@/design/mixins.scss";'
-          ].join('\n')
+          additionalData: (source: string, fileName: string) => {
+            return (
+              [
+                '@use "sass:color";',
+                '@use "sass:list";',
+                '@use "sass:map";',
+                '@use "sass:math";',
+                '@import "@/design/modules.scss";',
+                '@import "@/design/variables.scss";',
+                '@import "@/design/mixins.scss";'
+              ].join('\r\n') + source
+            )
+          }
         }
       }
     },

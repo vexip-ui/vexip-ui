@@ -101,7 +101,7 @@
       width: 3px;
       content: '';
       background-color: $vxp-menu-color-bg-marker;
-      opacity: 0;
+      opacity: 0%;
       transition: $vxp-transition-opacity-base;
 
       #{$menu}--marker-left & {
@@ -151,7 +151,7 @@
       }
 
       #{$menu}--horizontal &::after {
-        opacity: 1;
+        opacity: 100%;
       }
     }
 
@@ -171,7 +171,7 @@
         }
 
         &::after {
-          opacity: 1;
+          opacity: 100%;
         }
       }
     }
@@ -180,7 +180,7 @@
       background-color: $vxp-menu-color-bg-selected;
 
       &::after {
-        opacity: 1;
+        opacity: 100%;
       }
 
       #{$menu}--dark &,
@@ -234,12 +234,12 @@
     width: calc(100% - 34px);
     overflow: hidden;
     white-space: nowrap;
-    opacity: 1;
+    opacity: 100%;
     transition: width $vxp-transition-base, $vxp-transition-opacity-base;
 
     #{$menu}--reduced & {
       width: 0;
-      opacity: 0;
+      opacity: 0%;
     }
 
     #{$menu}--horizontal & {
@@ -260,7 +260,7 @@
     position: absolute;
     right: 1.6em;
     color: $vxp-menu-color-arrow;
-    opacity: 1;
+    opacity: 100%;
     transition: $vxp-transition-opacity-base, $vxp-transition-transform-base;
 
     &--visible {
@@ -268,7 +268,7 @@
     }
 
     #{$menu}--reduced & {
-      opacity: 0;
+      opacity: 0%;
     }
 
     #{$menu}--dropdown &,
@@ -338,7 +338,7 @@
           height: 1px;
           content: '';
           background-color: $vxp-menu-color-divider;
-          opacity: 0;
+          opacity: 0%;
           transition: $vxp-transition-opacity-base;
           transform: translate(-50%, -50%);
         }
@@ -372,12 +372,12 @@
       #{$menu}--reduced & {
         &__title {
           &::before {
-            opacity: 1;
+            opacity: 100%;
           }
         }
 
         &__label {
-          opacity: 0;
+          opacity: 0%;
         }
       }
     }

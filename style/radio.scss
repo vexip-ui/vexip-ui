@@ -55,7 +55,7 @@
       content: '';
       background-color: $vxp-radio-color-checked-signal;
       border-radius: 50%;
-      opacity: 0;
+      opacity: 0%;
       transition:
         $vxp-transition-background-base,
         $vxp-transition-opacity-base,
@@ -110,7 +110,7 @@
     border-color: $vxp-radio-color-checked-signal;
 
     &::after {
-      opacity: 1;
+      opacity: 100%;
       transform: translate(-50%, -50%) scale(1);
     }
   }
@@ -137,7 +137,7 @@
     width: 0;
     height: 0;
     pointer-events: none;
-    opacity: 0;
+    opacity: 0%;
   }
 
   @at-root {
