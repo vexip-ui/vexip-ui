@@ -1,7 +1,11 @@
 <template>
-  <Form :model="model">
-    <FormItem prop="Input" label="Input">
+  <Form :model="model" action="/test">
+    <FormItem prop="input" label="Input">
       <Input v-model:value="model.input"></Input>
+    </FormItem>
+    <FormItem>
+      <FormSubmit></FormSubmit>
+      <FormReset></FormReset>
     </FormItem>
   </Form>
   <div>
@@ -12,20 +16,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import { Input } from '@/components/input'
-import Form from '../form.vue'
-import FormItem from '../form-item.vue'
+import { Form } from '..'
+import { FormItem } from '@/components/form-item'
+import { FormSubmit } from '@/components/form-submit'
+import { FormReset } from '@/components/form-reset'
 
 export default defineComponent({
   name: 'App',
   components: {
     Input,
     Form,
-    FormItem
+    FormItem,
+    FormSubmit,
+    FormReset
   },
   setup() {
-    const model = ref({
+    const model = reactive({
       input: ''
     })
 

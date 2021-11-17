@@ -1,5 +1,11 @@
 <template>
   <div :class="className">
+    <input
+      type="hidden"
+      :name="prop"
+      :value="inputValue"
+      style="display: none;"
+    />
     <label
       v-if="hasLabel"
       :class="`${prefix}__label`"
@@ -33,7 +39,6 @@
 import {
   defineComponent,
   ref,
-  // reactive,
   computed,
   toRef,
   watch,
@@ -43,7 +48,7 @@ import {
   onBeforeUnmount
 } from 'vue'
 import { useConfiguredProps } from '@/common/config/install'
-import { isNull } from '@/common/utils/common'
+import { isNull, isFunction } from '@/common/utils/common'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
@@ -84,9 +89,7 @@ const props = useConfiguredProps('formItem', {
   },
   defaultValue: {
     default: null,
-    validator() {
-      return true
-    }
+    validator: () => true
   },
   hideErrorTip: {
     type: Boolean,
@@ -111,7 +114,11 @@ export default defineComponent({
     const prefix = 'vxp-form'
 
     const { isRequired, allRules } = useRules(props, formProps)
-    const { isError, errorTip, validate, clearError, reset } = useField(props, formProps, allRules)
+    const { isError, errorTip, currentValue, validate, clearError, reset } = useField(
+      props,
+      formProps,
+      allRules
+    )
 
     const fieldObject = {
       prop: toRef(props, 'prop'),
@@ -157,6 +164,15 @@ export default defineComponent({
             : `${computedlabelWidth.value}px`
       }
     })
+    const inputValue = computed(() => {
+      const value = currentValue.value
+
+      if (Array.isArray(value) || typeof value === 'object') {
+        return JSON.stringify(value)
+      }
+
+      return value
+    })
 
     return {
       prefix,
@@ -167,6 +183,7 @@ export default defineComponent({
       labelSuffix: formProps.labelSuffix ?? '',
 
       className,
+      inputValue,
       useAsterisk,
       hasLabel,
       computedlabelWidth,
@@ -211,6 +228,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
   const validating = ref(false)
   const disabledValidate = ref(false)
 
+  const currentValue = computed(getValue)
   const isValidateAll = computed(() => {
     return isNull(props.validateAll) ? formProps.validateAll ?? false : props.validateAll
   })
@@ -223,7 +241,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
   )
 
   onMounted(() => {
-    const value = getValue()
+    const value = currentValue.value
 
     if (isNull(initValue.value)) {
       initValue.value = Array.isArray(value) ? Array.from(value) : value
@@ -233,7 +251,13 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
   function getValue() {
     if (!formProps.model || !props.prop) return ''
 
-    return getValueByPath(formProps.model, props.prop, true)
+    try {
+      return getValueByPath(formProps.model, props.prop, true)
+    } catch (e) {
+      setValueByPath(formProps.model, props.prop, '', false)
+
+      return ''
+    }
   }
 
   function validate(type?: Trigger) {
@@ -250,14 +274,14 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
 
     if (!formProps.model || !props.prop) return false
 
-    const value = getValue()
+    const value = currentValue.value
 
     let resetValue
 
     if (Array.isArray(value)) {
       resetValue = Array.isArray(initValue.value) ? Array.from(initValue.value) : []
     } else {
-      resetValue = initValue.value
+      resetValue = isFunction(initValue.value) ? initValue.value() : initValue.value
     }
 
     if (resetValue !== value) {
@@ -280,7 +304,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
 
     validating.value = true
 
-    const value = getValue()
+    const value = currentValue.value
     const useRules = type
       ? allRules.value.filter(rule => !rule.trigger || rule.trigger === type)
       : allRules.value
@@ -306,7 +330,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     return errors
   }
 
-  return { isError, errorTip, validate, clearError, reset }
+  return { isError, errorTip, currentValue, validate, clearError, reset, getValue }
 }
 
 function useRelation(field: FieldOptions) {

@@ -142,6 +142,8 @@ export default defineComponent({
     })
 
     function handleClick(event: MouseEvent) {
+      if (props.disabled) return
+
       pulsing.value = false
 
       requestAnimationFrame(() => {

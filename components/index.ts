@@ -29,8 +29,11 @@ import { Drawer } from '@/components/drawer'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownItem } from '@/components/dropdown-item'
 import { DropdownList } from '@/components/dropdown-list'
+import { Ellipsis } from '@/components/ellipsis'
 import { Form } from '@/components/form'
 import { FormItem } from '@/components/form-item'
+import { FormReset } from '@/components/form-reset'
+import { FormSubmit } from '@/components/form-submit'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { Linker } from '@/components/linker'
@@ -113,8 +116,11 @@ const components = [
   Dropdown,
   DropdownItem,
   DropdownList,
+  Ellipsis,
   Form,
   FormItem,
+  FormReset,
+  FormSubmit,
   Icon,
   Input,
   Linker,
@@ -220,8 +226,11 @@ export {
   Dropdown,
   DropdownItem,
   DropdownList,
+  Ellipsis,
   Form,
   FormItem,
+  FormReset,
+  FormSubmit,
   Icon,
   Input,
   Linker,
@@ -297,8 +306,11 @@ export interface VexipComponents {
   Dropdown: typeof Dropdown,
   DropdownItem: typeof DropdownItem,
   DropdownList: typeof DropdownList,
+  Ellipsis: typeof Ellipsis,
   Form: typeof Form,
   FormItem: typeof FormItem,
+  FormReset: typeof FormReset,
+  FormSubmit: typeof FormSubmit,
   Icon: typeof Icon,
   Input: typeof Input,
   Linker: typeof Linker,

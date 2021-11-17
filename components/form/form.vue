@@ -1,5 +1,5 @@
 <template>
-  <form :class="className">
+  <form :class="className" :method="action && method" :action="action">
     <slot></slot>
   </form>
 </template>
@@ -7,11 +7,21 @@
 <script lang="ts">
 import { defineComponent, computed, provide, ref } from 'vue'
 import { useConfiguredProps } from '@/common/config/install'
-import { FORM_PROPS, FORM_FIELDS } from './symbol'
+import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
-import type { LabelPosition, FieldOptions } from './symbol'
+import type { LabelPosition, SubmitMethod, FieldOptions } from './symbol'
 
 const props = useConfiguredProps('form', {
+  method: {
+    default: 'post' as SubmitMethod,
+    validator: (value: SubmitMethod) => {
+      return ['get', 'post', 'put', 'delete'].includes(value)
+    }
+  },
+  action: {
+    type: String,
+    default: null
+  },
   model: {
     type: Object,
     default: () => ({})
@@ -61,6 +71,14 @@ export default defineComponent({
 
     provide(FORM_PROPS, props)
     provide(FORM_FIELDS, fieldSet)
+    provide(FORM_ACTIONS, {
+      validate,
+      validateFields,
+      reset,
+      resetFields,
+      clearError,
+      clearFieldsError
+    })
 
     function getPropMap() {
       const propMap: Record<string, FieldOptions> = {}
