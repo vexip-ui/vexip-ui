@@ -10,7 +10,7 @@
         v-for="(item, index) in treeData"
         v-show="item.visible"
         :key="index"
-        v-bind="item"
+        v-bind="(item as any)"
         :node="item"
         :label-key="labelKey"
         :children-key="childrenKey"

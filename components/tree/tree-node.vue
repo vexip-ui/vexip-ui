@@ -69,7 +69,7 @@
           v-for="(item, index) in children"
           v-show="item.visible"
           :key="index"
-          v-bind="item"
+          v-bind="(item as any)"
           :node="item"
           :label-key="labelKey"
           :children-key="childrenKey"
@@ -80,10 +80,10 @@
           :floor-select="floorSelect"
         >
           <template #default="childNode">
-            <slot v-bind="childNode"></slot>
+            <slot v-bind="(childNode as any)"></slot>
           </template>
           <template #label="childData">
-            <slot name="label" v-bind="childData"></slot>
+            <slot name="label" v-bind="(childData as any)"></slot>
           </template>
         </TreeNode>
       </ul>
