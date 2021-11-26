@@ -128,10 +128,10 @@
               </div>
               <div v-if="!noAction" :class="`${prefixCls}__action`">
                 <Button type="text" size="small" @on-click="handleCancel">
-                  {{ cancelText }}
+                  {{ cancelText || locale.cancel }}
                 </Button>
                 <Button type="primary" size="small" @on-click="finishInput">
-                  {{ okText }}
+                  {{ confirmText || locale.confirm }}
                 </Button>
               </div>
             </div>
@@ -154,6 +154,7 @@ import { useHover } from '@/common/mixins/hover'
 import { usePopper, placementWhileList } from '@/common/mixins/popper'
 import { useClickOutside } from '@/common/mixins/clickoutside'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { noop } from '@/common/utils/common'
 import { doubleDigits, boundRange } from '@/common/utils/number'
 import { createSizeProp, createStateProp } from '@/common/config/props'
@@ -257,13 +258,13 @@ const props = useConfiguredProps('timePicker', {
     type: String,
     default: 'vxp-drop'
   },
-  okText: {
+  confirmText: {
     type: String,
-    default: '确认'
+    default: null
   },
   cancelText: {
     type: String,
-    default: '取消'
+    default: null
   },
   ctrlSteps: {
     type: Array as PropType<number[]>,
@@ -726,6 +727,7 @@ export default defineComponent({
 
     return {
       prefixCls: prefix,
+      locale: useLocaleConfig('timePicker'),
       isHover,
       currentVisible,
       focused,

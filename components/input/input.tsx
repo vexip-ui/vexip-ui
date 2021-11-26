@@ -3,6 +3,7 @@ import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@/common/mixins/hover'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { createSizeProp, createStateProp } from '@/common/config/props'
 import { isNull, noop } from '@/common/utils/common'
 import { throttle } from '@/common/utils/performance'
@@ -59,7 +60,7 @@ const props = useConfiguredProps('input', {
   },
   placeholder: {
     type: String,
-    default: ''
+    default: null
   },
   autofocus: {
     type: Boolean,
@@ -148,6 +149,7 @@ export default defineComponent({
     const inputControl = ref<HTMLElement | null>(null)
 
     const { wrapper, isHover } = useHover()
+    const locale = useLocaleConfig('input')
 
     // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
@@ -432,7 +434,7 @@ export default defineComponent({
             spellcheck={props.spellcheck}
             disabled={props.disabled}
             readonly={props.readonly}
-            placeholder={props.placeholder || undefined}
+            placeholder={props.placeholder ?? locale.placeholder}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}

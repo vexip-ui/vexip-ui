@@ -1,9 +1,21 @@
-export interface InstallOptions extends Record<string, Record<string, unknown>> {
+import { isObject } from '@/common/utils/common'
+
+export interface PropOptions extends Record<string, Record<string, unknown>> {
   defaults: Record<string, unknown>
 }
 
-export const config: InstallOptions = {
+export const config: PropOptions = {
   defaults: {} as Record<string, unknown>
+}
+
+export function configProp(prop: PropOptions) {
+  config.defaults = { ...(prop.defaults ?? {}) }
+
+  Object.keys(prop).forEach(key => {
+    if (key !== 'defaults' && isObject(prop[key])) {
+      config[key] = { ...prop[key] }
+    }
+  })
 }
 
 function createConfigGetter(name: string) {

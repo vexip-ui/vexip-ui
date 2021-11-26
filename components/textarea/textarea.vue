@@ -10,7 +10,7 @@
       :spellcheck="spellcheck"
       :disabled="disabled"
       :readonly="readonly"
-      :placeholder="placeholder"
+      :placeholder="placeholder ?? locale.placeholder"
       @blur="handleBlur"
       @focus="handleFocus"
       @keyup.enter="handleEnter"
@@ -30,6 +30,7 @@
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { noop } from '@/common/utils/common'
 import { throttle } from '@/common/utils/performance'
 import { createStateProp } from '@/common/config/props'
@@ -42,7 +43,7 @@ const props = useConfiguredProps('textarea', {
   },
   placeholder: {
     type: String,
-    default: ''
+    default: null
   },
   rows: {
     type: Number,
@@ -205,6 +206,7 @@ export default defineComponent({
 
     return {
       prefix,
+      locale: useLocaleConfig('input'),
       currentValue,
       currentLength,
 

@@ -41,7 +41,7 @@
           :autofocus="autofocus"
           :spellcheck="spellcheck"
           :disabled="disabled"
-          :placeholder="placeholder"
+          :placeholder="placeholder ?? locale.placeholder"
           autocomplete="off"
           @input="handleInput"
           @keyup.enter="handleEnter"
@@ -67,13 +67,13 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, inject, watch, watchEffect } from 'vue'
-// import { Input } from '@/components/input'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { Select } from '@/components/select'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { placementWhileList } from '@/common/mixins/popper'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { isNull, noop } from '@/common/utils/common'
 import { createSizeProp, createStateProp } from '@/common/config/props'
 
@@ -425,6 +425,7 @@ export default defineComponent({
 
     return {
       prefixCls: prefix,
+      locale: useLocaleConfig('input'),
       currentValue,
       currentIndex,
       visible,

@@ -35,7 +35,7 @@
     </div>
     <div :class="`${prefix}__actions`">
       <Button :class="`${prefix}__button`" @on-click="handleCancel">
-        {{ cancelText }}
+        {{ cancelText || locale.cancel }}
       </Button>
       <Button
         :class="`${prefix}__button`"
@@ -43,7 +43,7 @@
         :loading="loading"
         @on-click="handleConfirm"
       >
-        {{ confirmText }}
+        {{ confirmText || locale.confirm }}
       </Button>
     </div>
   </Modal>
@@ -56,6 +56,7 @@ import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { isPromise, isFunction } from '@/common/utils/common'
 
 import '@/common/icons/question-circle'
@@ -96,11 +97,11 @@ const props = useConfiguredProps('confirm', {
   },
   confirmText: {
     type: String,
-    default: '确认'
+    default: null
   },
   cancelText: {
     type: String,
-    default: '取消'
+    default: null
   },
   icon: {
     type: [String, Object, Function] as PropType<string | Record<string, unknown> | (() => any)>,
@@ -223,6 +224,7 @@ export default defineComponent({
 
     return {
       prefix: 'vxp-confirm',
+      locale: useLocaleConfig('confirm'),
       visible,
       loading,
       content,

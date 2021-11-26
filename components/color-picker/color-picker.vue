@@ -81,10 +81,10 @@
               size="small"
               @on-click="handleClear"
             >
-              重置
+              {{ cancelText || locale.cancel }}
             </Button>
             <Button type="primary" size="small" @on-click="handleOk">
-              确定
+              {{ confirmText || locale.confirm }}
             </Button>
           </div>
         </div>
@@ -105,6 +105,7 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { usePopper, placementWhileList } from '@/common/mixins/popper'
 import { useClickOutside } from '@/common/mixins/clickoutside'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { noop } from '@/common/utils/common'
 import { toFixed } from '@/common/utils/number'
 import {
@@ -220,6 +221,14 @@ const props = useConfiguredProps('colorPicker', {
   disableValidate: {
     type: Boolean,
     default: false
+  },
+  cancelText: {
+    type: String,
+    default: null
+  },
+  confirmText: {
+    type: String,
+    default: null
   }
 })
 
@@ -464,6 +473,7 @@ export default defineComponent({
 
     return {
       prefix,
+      locale: useLocaleConfig('colorPicker'),
       isEmpty,
       currentVisible,
       currentValue,

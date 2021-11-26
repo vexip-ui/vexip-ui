@@ -30,7 +30,7 @@
     </ul>
     <div v-if="!data || !data.length" :class="`${prefix}__empty-tip`">
       <slot name="empty">
-        {{ emptyTip }}
+        {{ emptyTip ?? locale.empty }}
       </slot>
     </div>
     <div
@@ -46,6 +46,7 @@
 import { defineComponent, ref, reactive, computed, watch, provide, nextTick, toRef } from 'vue'
 import TreeNode from './tree-node.vue'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { isNull, isPromise } from '@/common/utils/common'
 import { transformTree, flatTree } from '@/common/utils/transform'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
@@ -88,7 +89,7 @@ const props = useConfiguredProps('tree', {
   },
   emptyTip: {
     type: String,
-    default: '暂无数据'
+    default: null
   },
   disabled: {
     type: Boolean,
@@ -756,6 +757,7 @@ export default defineComponent({
 
     return {
       prefix,
+      locale: useLocaleConfig('tree'),
       treeData,
       indicatorShow,
 

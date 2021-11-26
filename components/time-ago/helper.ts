@@ -1,3 +1,4 @@
+import { useLocaleConfig, getCountWord, makeSentence } from '@/common/config/locale'
 import { SECOND_ON_MILLS, MINUTE_ON_MILLS, HOUR_ON_MILLS, DAY_ON_MILLIS } from '@/common/utils/date'
 
 import type { Ref } from 'vue'
@@ -51,34 +52,58 @@ export function unsubscribe(id: number) {
 }
 
 export function computeTimeAgo(date: Date, current = Date.now()) {
+  const locale = useLocaleConfig('timeAgo')
   const diff = Math.abs(current - date.getTime())
-  const type = current > date.getTime() ? '前' : '后'
+  const type = current > date.getTime() ? locale.ago : locale.late
+
+  let label: string
+  let usedDiff: number
+  let noFormat = false
 
   if (diff < 10 * SECOND_ON_MILLS) {
-    return '刚刚'
+    label = locale.justNow
+    noFormat = true
   } else if (diff < MINUTE_ON_MILLS) {
-    return `${Math.floor(diff / SECOND_ON_MILLS)}秒${type}`
+    label = locale.second
+    usedDiff = Math.floor(diff / SECOND_ON_MILLS)
   } else if (diff < HOUR_ON_MILLS) {
-    return `${Math.floor(diff / MINUTE_ON_MILLS)}分钟${type}`
+    label = locale.minute
+    usedDiff = Math.floor(diff / MINUTE_ON_MILLS)
   } else if (diff < DAY_ON_MILLIS) {
-    return `${Math.floor(diff / HOUR_ON_MILLS)}小时${type}`
+    label = locale.hour
+    usedDiff = Math.floor(diff / HOUR_ON_MILLS)
   } else if (diff < 30 * DAY_ON_MILLIS) {
-    const diffDays = Math.floor(diff / DAY_ON_MILLIS)
+    usedDiff = Math.floor(diff / DAY_ON_MILLIS)
 
-    if (diffDays === 1) return '昨天'
-
-    return `${diffDays}天${type}`
+    if (usedDiff === 1) {
+      label = locale.yesterday
+      noFormat = true
+    } else {
+      label = locale.days
+    }
   } else if (diff < 365 * DAY_ON_MILLIS) {
-    const diffMonths = Math.floor(diff / (30 * DAY_ON_MILLIS))
+    usedDiff = Math.floor(diff / (30 * DAY_ON_MILLIS))
 
-    if (diffMonths === 1) return '上个月'
-
-    return `${diffMonths}月${type}`
+    if (usedDiff === 1) {
+      label = locale.lastMonth
+      noFormat = true
+    } else {
+      label = locale.months
+    }
   } else {
-    const diffYears = Math.floor(diff / 365 / DAY_ON_MILLIS)
+    usedDiff = Math.floor(diff / 365 / DAY_ON_MILLIS)
 
-    if (diffYears === 1) return '去年'
-
-    return `${diffYears}年${type}`
+    if (usedDiff === 1) {
+      label = locale.lastYear
+      noFormat = true
+    } else {
+      label = locale.years
+    }
   }
+
+  if (noFormat) {
+    return label
+  }
+
+  return makeSentence(`${getCountWord(label, usedDiff!)} ${type}`)
 }

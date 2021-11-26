@@ -3,6 +3,7 @@
     v-model:active="active"
     page-jump
     page-total
+    page-count
     :total="100"
     :page-size="10"
     :max-count="8"

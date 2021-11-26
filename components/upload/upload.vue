@@ -21,7 +21,7 @@
       <slot>
         <template v-if="!allowDrag">
           <Button icon="upload">
-            上传文件
+            {{ locale.upload }}
           </Button>
           <slot name="tip">
             <p v-if="tip" :class="`${prefix}__tip`">
@@ -33,7 +33,7 @@
           <Icon name="cloud-upload-alt" :class="`${prefix}__cloud`" :scale="4"></Icon>
           <slot name="tip">
             <p :class="`${prefix}__tip`">
-              {{ tip || '将文件拖到此处, 或点击上传' }}
+              {{ tip || locale.dragOrClick }}
             </p>
           </slot>
         </div>
@@ -118,6 +118,7 @@ import { Icon } from '@/components/icon'
 import UploadFile from './upload-file.vue'
 import { upload } from './request'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { isFalse, isFunction, isPromise, randomString } from '@/common/utils/common'
 import { UploadStatusType } from './symbol'
 
@@ -215,7 +216,7 @@ const props = useConfiguredProps('upload', {
   },
   loadingText: {
     type: String,
-    default: '上传中'
+    default: null
   }
 })
 
@@ -584,6 +585,7 @@ export default defineComponent({
 
     return {
       prefix,
+      locale: useLocaleConfig('upload'),
       fileStates,
       isDragOver,
 

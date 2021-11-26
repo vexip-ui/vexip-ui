@@ -15,7 +15,7 @@
     @on-click="handleReset"
   >
     <slot>
-      {{ text }}
+      {{ text || locale.reset }}
     </slot>
   </Button>
 </template>
@@ -25,6 +25,7 @@ import { defineComponent, inject } from 'vue'
 import { Button } from '@/components/button'
 import { createSizeProp } from '@/common/config/props'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { noop } from '@/common/utils/common'
 import { FORM_ACTIONS } from './symbol'
 
@@ -50,7 +51,7 @@ const props = useConfiguredProps('form-submit', {
   },
   text: {
     type: String,
-    default: '重置'
+    default: null
   },
   simple: {
     type: Boolean,
@@ -116,6 +117,8 @@ export default defineComponent({
 
     return {
       prefix: 'vxp-form',
+      locale: useLocaleConfig('form'),
+
       handleReset
     }
   }

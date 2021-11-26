@@ -51,7 +51,7 @@
         <div v-if="!noFooter" ref="footer" :class="`${prefix}__footer`">
           <slot name="footer">
             <Button type="text" size="small" @on-click="handleCancle">
-              {{ cancelText }}
+              {{ cancelText || locale.cancel }}
             </Button>
             <Button
               type="primary"
@@ -59,7 +59,7 @@
               :loading="loading"
               @on-click="handleConfirm"
             >
-              {{ okText }}
+              {{ confirmText || locale.confirm }}
             </Button>
           </slot>
         </div>
@@ -75,6 +75,7 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { isPromise } from '@/common/utils/common'
 import { toNumber } from '@/common/utils/number'
 
@@ -183,6 +184,14 @@ const props = useConfiguredProps('modal', {
   transitionName: {
     type: String,
     default: 'vxp-ease'
+  },
+  confirmText: {
+    type: String,
+    default: null
+  },
+  cancelText: {
+    type: String,
+    default: null
   }
 })
 
@@ -257,12 +266,6 @@ export default defineComponent({
         width: `${currentWidth.value}px`,
         height: fixedHeight ? `${currentHeight.value}px` : undefined
       }
-    })
-    const cancelText = computed(() => {
-      return '取消'
-    })
-    const okText = computed(() => {
-      return '确定'
     })
     const hasTitle = computed(() => {
       return !!(slots.title || props.title)
@@ -566,14 +569,13 @@ export default defineComponent({
 
     return {
       prefix,
+      locale: useLocaleConfig('modal'),
       currentActive,
       resizing,
 
       className,
       wrapperClass,
       wrapperStyle,
-      cancelText,
-      okText,
       hasTitle,
 
       wrapper,

@@ -6,11 +6,11 @@
         <slot
           name="week"
           :index="week - 1"
-          :label="weekDays[(week - 1 + weekStart) % 7]"
+          :label="getWeekLabel((week - 1 + weekStart) % 7)"
           :week="(week - 1 + weekStart) % 7"
         >
           <div :class="`${prefix}__index`">
-            {{ weekDays[(week - 1 + weekStart) % 7] }}
+            {{ getWeekLabel((week - 1 + weekStart) % 7) }}
           </div>
         </slot>
       </div>
@@ -60,11 +60,13 @@
 import { defineComponent, ref, watch } from 'vue'
 import { useHover } from '@/common/mixins/hover'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { startOfWeek, rangeDate, differenceDays } from '@/common/utils/date'
 import { debounceMinor } from '@/common/utils/performance'
 
 import type { PropType } from 'vue'
 import type { Dateable } from '@/common/utils/date'
+import type { WeekIndex } from './symbol'
 
 const props = useConfiguredProps('calendarBase', {
   // 选中的日期
@@ -88,11 +90,9 @@ const props = useConfiguredProps('calendarBase', {
   // 头部星期显示的内容，数量须为 7 个
   weekDays: {
     type: Array as PropType<string[]>,
-    default() {
-      return ['日', '一', '二', '三', '四', '五', '六']
-    },
+    default: null,
     validator: (value: string[]) => {
-      return value.length === 7
+      return !value || value.length === 0 || value.length === 7
     }
   },
   weekStart: {
@@ -141,6 +141,7 @@ export default defineComponent({
     const hoveredDate = ref<Date | null>(null)
 
     const { wrapper, isHover } = useHover()
+    const locale = useLocaleConfig('calendar')
 
     const updateDateRange = debounceMinor(setDateRange)
 
@@ -158,6 +159,10 @@ export default defineComponent({
     watch(hoveredDate, value => {
       emit('on-hover', value)
     })
+
+    function getWeekLabel(index: number) {
+      return props.weekDays?.[index] || locale[`week${index as WeekIndex}`]
+    }
 
     function setDateRange() {
       dateRange.value = rangeDate(
@@ -306,6 +311,7 @@ export default defineComponent({
 
     return {
       prefix: 'vxp-calendar',
+      locale,
       startValue,
       endValue,
       dateRange,
@@ -313,6 +319,7 @@ export default defineComponent({
 
       body: wrapper,
 
+      getWeekLabel,
       isSelected,
       isHovered,
       isPrevMonth,

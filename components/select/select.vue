@@ -28,11 +28,11 @@
           {{ currentLabel }}
         </template>
         <span
-          v-if="placeholder && !hasValue"
+          v-if="(placeholder ?? locale.placeholder) && !hasValue"
           :class="`${prefixCls}__placeholder`"
           :style="placeholderStyle"
         >
-          {{ placeholder }}
+          {{ placeholder ?? locale.placeholder }}
         </span>
       </slot>
       <transition name="vxp-fade">
@@ -102,7 +102,7 @@
             </Scroll>
             <slot v-if="hasEmptyTip" name="empty">
               <div :class="`${prefixCls}__empty`">
-                {{ emptyText }}
+                {{ emptyText ?? locale.empty }}
               </div>
             </slot>
           </div>
@@ -134,6 +134,7 @@ import { useHover } from '@/common/mixins/hover'
 import { usePopper, placementWhileList } from '@/common/mixins/popper'
 import { useClickOutside } from '@/common/mixins/clickoutside'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { noop, isNull } from '@/common/utils/common'
 import { createSizeProp, createStateProp } from '@/common/config/props'
 
@@ -178,7 +179,7 @@ const props = useConfiguredProps('select', {
   },
   placeholder: {
     type: String,
-    default: '请选择'
+    default: null
   },
   prefix: {
     type: String,
@@ -241,7 +242,7 @@ const props = useConfiguredProps('select', {
   },
   emptyText: {
     type: String,
-    default: '暂无数据'
+    default: null
   }
 })
 
@@ -537,6 +538,7 @@ export default defineComponent({
 
     return {
       prefixCls: prefix,
+      locale: useLocaleConfig('select'),
       currentVisible,
       currentValue,
       currentLabel,

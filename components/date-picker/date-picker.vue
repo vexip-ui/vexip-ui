@@ -96,7 +96,7 @@
               :end-activated="endState.activated"
               :value-type="currentState"
               :shortcuts="shortcuts"
-              :ok-text="okText"
+              :confirm-text="confirmText"
               :cancel-text="cancelText"
               :today="today"
               :disable-date="disableDate"
@@ -243,13 +243,17 @@ const props = useConfiguredProps('datePicker', {
     type: String,
     default: 'vxp-drop'
   },
-  okText: {
+  // okText: {
+  //   type: String,
+  //   default: '确认'
+  // },
+  confirmText: {
     type: String,
-    default: '确认'
+    default: null
   },
   cancelText: {
     type: String,
-    default: '取消'
+    default: null
   },
   today: {
     type: [Number, String, Date] as PropType<Dateable>,

@@ -15,7 +15,7 @@
     @on-click="handleSubmit"
   >
     <slot>
-      {{ text }}
+      {{ text || locale.submit }}
     </slot>
     <button
       ref="submit"
@@ -31,6 +31,7 @@ import { defineComponent, ref, inject } from 'vue'
 import { Button } from '@/components/button'
 import { createSizeProp } from '@/common/config/props'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { noop } from '@/common/utils/common'
 import { FORM_PROPS, FORM_ACTIONS } from './symbol'
 
@@ -56,7 +57,7 @@ const props = useConfiguredProps('form-submit', {
   },
   text: {
     type: String,
-    default: '提交'
+    default: null
   },
   simple: {
     type: Boolean,
@@ -137,6 +138,7 @@ export default defineComponent({
 
     return {
       prefix: 'vxp-form',
+      locale: useLocaleConfig('form'),
       loading,
 
       submit,

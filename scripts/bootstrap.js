@@ -18,13 +18,16 @@ async function main() {
       allComponents.map(component => `import { ${toPascalCase(component)} } from '@/components/${component}'`).join('\n')
     }
 
-    import { config } from '@/common/config/install'
-    import { isObject } from '@/common/utils/common'
+    import { configProp } from '@/common/config/install'
+    import { configLocale } from '@/common/config/locale'
 
     import '@/common/icons'
 
     import type { App } from 'vue'
-    import type { InstallOptions } from '@/common/config/install'
+    import type { PropOptions } from '@/common/config/install'
+    import type { LocaleOptions } from '@/common/config/locale'
+
+    export { configLocale }
 
     const components = [
       ${components.map(toPascalCase).join(',\n')}
@@ -32,18 +35,12 @@ async function main() {
 
     const plugins = [${plugins.map(toPascalCase).join(', ')}]
 
-    export const install = (
-      app: App<unknown>,
-      { prefix = '', ...options }: Partial<InstallOptions> & { prefix?: string } = {}
-    ) => {
-      config.defaults = { ...(options.defaults ?? {}) }
-    
-      Object.keys(options).forEach(key => {
-        if (key !== 'defaults' && isObject(options[key])) {
-          config[key] = { ...options[key] }
-        }
-      })
-    
+    export const install = (app: App<unknown>, options: InstallOptions) => {
+      const { prefix, prop, locale } = options
+
+      configProp(prop)
+      configLocale(locale)
+
       components.forEach(component => {
         let name = component.name
     

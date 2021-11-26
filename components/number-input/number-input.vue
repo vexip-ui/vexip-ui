@@ -11,7 +11,7 @@
       :spellcheck="spellcheck"
       :disabled="disabled"
       :readonly="readonly"
-      :placeholder="placeholder"
+      :placeholder="placeholder ?? locale.placeholder"
       @blur="handleBlur"
       @focus="handleFocus"
       @keyup.enter="handleEnter"
@@ -65,6 +65,7 @@ import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@/common/mixins/hover'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { isNull, noop } from '@/common/utils/common'
 import { toFixed, toNumber } from '@/common/utils/number'
 import { throttle } from '@/common/utils/performance'
@@ -121,7 +122,7 @@ const props = useConfiguredProps('numberInput', {
   },
   placeholder: {
     type: String,
-    default: ''
+    default: null
   },
   autofocus: {
     type: Boolean,
@@ -403,6 +404,7 @@ export default defineComponent({
 
     return {
       prefixCls: prefix,
+      locale: useLocaleConfig('input'),
       isHover,
 
       className,

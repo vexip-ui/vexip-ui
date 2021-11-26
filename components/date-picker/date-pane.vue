@@ -30,10 +30,10 @@
             </div>
             <div key="year" :class="`${prefix}__year`" @click.stop="togglePane('year')">
               <template v-if="currentPane === 'year'">
-                {{ `${yearRange[0]}年 - ${yearRange[9]}年` }}
+                {{ `${yearRange[0]}${locale.year} - ${yearRange[9]}${locale.year}` }}
               </template>
               <template v-else>
-                {{ `${calendarYear}年` }}
+                {{ `${calendarYear}${locale.year}` }}
               </template>
             </div>
             <div
@@ -41,7 +41,7 @@
               :class="`${prefix}__month`"
               @click.stop="togglePane('month')"
             >
-              {{ `${doubleDigits(calendarMonth)}月` }}
+              {{ getMonthLabel(calendarMonth) }}
             </div>
             <div
               v-show="currentPane === 'date'"
@@ -87,19 +87,19 @@
               @mouseleave="hoveredMonth = 0"
             >
               <div
-                v-for="(item, index) in monthRange"
+                v-for="index in monthRange"
                 :key="index"
                 :class="{
                   [`${prefix}__month-item`]: true,
-                  [`${prefix}__month-item--selected`]: isSelectedMonth(item),
-                  [`${prefix}__month-item--disabled`]: isDisabledMonth(item),
-                  [`${prefix}__month-item--in-range`]: isMonthInRange(item)
+                  [`${prefix}__month-item--selected`]: isSelectedMonth(index),
+                  [`${prefix}__month-item--disabled`]: isDisabledMonth(index),
+                  [`${prefix}__month-item--in-range`]: isMonthInRange(index)
                 }"
-                @click.stop="handleSelectMonth(item)"
-                @mouseenter="handleMonthHover(item)"
+                @click.stop="handleSelectMonth(index)"
+                @mouseenter="handleMonthHover(index)"
               >
                 <div :class="`${prefix}__month-label`">
-                  {{ `${item}月` }}
+                  {{ getMonthLabel(index) }}
                 </div>
               </div>
             </div>
@@ -131,10 +131,10 @@
       </div>
       <div v-if="!noAction" :class="`${prefix}__action`">
         <Button type="text" size="small" @on-click="handleCancel">
-          {{ cancelText }}
+          {{ cancelText || locale.cancel }}
         </Button>
         <Button type="primary" size="small" @on-click="handleConfirm">
-          {{ okText }}
+          {{ confirmText || locale.confirm }}
         </Button>
       </div>
     </div>
@@ -148,9 +148,10 @@ import { CalendarPane } from '@/components/calendar-pane'
 import { Icon } from '@/components/icon'
 import TimeWheel from './time-wheel.vue'
 import { useHover } from '@/common/mixins/hover'
+import { useLocaleConfig } from '@/common/config/locale'
 import { range } from '@/common/utils/common'
 import { toDate } from '@/common/utils/date'
-import { doubleDigits } from '@/common/utils/number'
+// import { doubleDigits } from '@/common/utils/number'
 
 import '@/common/icons/angle-right'
 import '@/common/icons/angle-left'
@@ -158,6 +159,7 @@ import '@/common/icons/angle-double-right'
 import '@/common/icons/angle-double-left'
 
 import type { PropType } from 'vue'
+import type { MonthIndex } from '@/components/calendar'
 import type { Dateable } from '@/common/utils/date'
 import type { DateType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
 
@@ -192,13 +194,13 @@ const props = {
     type: String as PropType<DateTimeType>,
     default: 'date'
   },
-  okText: {
+  confirmText: {
     type: String,
-    default: '确认'
+    default: null
   },
   cancelText: {
     type: String,
-    default: '取消'
+    default: null
   },
   today: {
     type: [Number, String, Date] as PropType<Dateable>,
@@ -262,6 +264,10 @@ export default defineComponent({
     const calendar = ref<HTMLElement | null>(null)
 
     const { isHover } = useHover(calendar)
+
+    const locale = computed(() => {
+      return { ...useLocaleConfig('calendar'), ...useLocaleConfig('datePicker') }
+    })
 
     const startActivated = computed(() => {
       const activated = props.startActivated
@@ -332,6 +338,10 @@ export default defineComponent({
       const value = type === 'start' ? props.startValue : props.endValue
 
       return `${value.year}-${value.month}-${value.date}`
+    }
+
+    function getMonthLabel(index: number) {
+      return locale.value[`month${index as MonthIndex}`]
     }
 
     function togglePane(type: DateType) {
@@ -605,6 +615,7 @@ export default defineComponent({
 
     return {
       prefix: 'vxp-date-picker',
+      locale,
       currentPane,
       calendarYear,
       calendarMonth,
@@ -621,7 +632,7 @@ export default defineComponent({
 
       calendar,
 
-      doubleDigits,
+      getMonthLabel,
       togglePane,
       adjustCalendar,
       handleClick,

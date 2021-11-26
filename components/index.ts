@@ -80,13 +80,22 @@ import { Upload } from '@/components/upload'
 import { Wheel } from '@/components/wheel'
 import { WheelItem } from '@/components/wheel-item'
 
-import { config } from '@/common/config/install'
-import { isObject } from '@/common/utils/common'
+import { configProp } from '@/common/config/install'
+import { configLocale } from '@/common/config/locale'
 
 import '@/common/icons'
 
 import type { App } from 'vue'
-import type { InstallOptions } from '@/common/config/install'
+import type { PropOptions } from '@/common/config/install'
+import type { LocaleOptions } from '@/common/config/locale'
+
+export { configLocale }
+
+export interface InstallOptions {
+  prefix: string,
+  prop: PropOptions,
+  locale: LocaleOptions
+}
 
 const components = [
   Alert,
@@ -167,17 +176,11 @@ const components = [
 
 const plugins = [Confirm, Contextmenu, Loading, Message, Notice]
 
-export const install = (
-  app: App<unknown>,
-  { prefix = '', ...options }: Partial<InstallOptions> & { prefix?: string } = {}
-) => {
-  config.defaults = { ...(options.defaults ?? {}) }
+export const install = (app: App<unknown>, options: InstallOptions) => {
+  const { prefix, prop, locale } = options
 
-  Object.keys(options).forEach(key => {
-    if (key !== 'defaults' && isObject(options[key])) {
-      config[key] = { ...options[key] }
-    }
-  })
+  configProp(prop)
+  configLocale(locale)
 
   components.forEach(component => {
     let name = component.name

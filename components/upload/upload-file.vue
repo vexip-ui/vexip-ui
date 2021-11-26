@@ -58,7 +58,7 @@
               <template v-if="file.status === status.UPLOADING">
                 <div v-if="listType === 'thumbnail'" :class="`${prefix}__progress`">
                   <span style="margin-bottom: 0.3em;">
-                    {{ loadingText }}
+                    {{ loadingText ?? locale.uploading }}
                   </span>
                   <Progress
                     info-type="none"
@@ -141,6 +141,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
+import { useLocaleConfig } from '@/common/config/locale'
 import { iconMaps } from './file-icon'
 import { UploadStatusType } from './symbol'
 
@@ -170,7 +171,7 @@ const props = {
   },
   loadingText: {
     type: String,
-    default: '上传中'
+    default: null
   },
   selectToAdd: {
     type: Boolean,
@@ -228,6 +229,7 @@ export default defineComponent({
 
     return {
       prefix,
+      locale: useLocaleConfig('upload'),
       transitionName,
       status: UploadStatusType,
 

@@ -76,10 +76,10 @@
             :disabled="!hasFilterActive"
             @on-click="handleFilterMutiple()"
           >
-            筛选
+            {{ locale.filterConfirm }}
           </Button>
           <Button type="text" size="small" @on-click="handleResetFilter">
-            重置
+            {{ locale.filterReset }}
           </Button>
         </div>
       </template>
@@ -91,7 +91,7 @@
           }"
           @click="handleResetFilter"
         >
-          全部
+          {{ locale.filterAll }}
         </div>
         <div
           v-for="item in filter.options"
@@ -116,6 +116,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
+import { useLocaleConfig } from '@/common/config/locale'
 import { isFunction } from '@/common/utils/common'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
@@ -277,6 +278,7 @@ export default defineComponent({
 
     return {
       prefix,
+      locale: useLocaleConfig('table'),
       filterVisible,
       checkedAll: toRef(state, 'checkedAll'),
       partial: toRef(state, 'partial'),

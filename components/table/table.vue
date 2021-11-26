@@ -123,8 +123,8 @@ import { Scroll } from '@/components/scroll'
 import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
-
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig } from '@/common/config/locale'
 import { isDefined } from '@/common/utils/common'
 import { debounce } from '@/common/utils/performance'
 import { removeArrayItem } from '@/common/utils/transform'
@@ -239,7 +239,7 @@ const props = useConfiguredProps('table', {
   },
   emptyText: {
     type: String,
-    default: '暂无数据'
+    default: null
   },
   tooltipTheme: {
     default: 'dark' as TooltipTheme,
@@ -285,6 +285,8 @@ export default defineComponent({
     const thead = ref<InstanceType<typeof TableHead> | null>(null)
     const indicator = ref<HTMLElement | null>(null)
 
+    const locale = useLocaleConfig('table')
+
     const store = useStore({
       columns: props.columns as ColumnOptions[],
       data: props.data,
@@ -296,7 +298,7 @@ export default defineComponent({
       pageSize: props.pageSize,
       rowHeight: props.rowHeight,
       rowDraggable: props.rowDraggable,
-      emptyText: props.emptyText,
+      emptyText: props.emptyText ?? locale.empty,
       tooltipTheme: props.tooltipTheme,
       expandRenderer: props.expandRenderer
     })
@@ -417,7 +419,12 @@ export default defineComponent({
     watch(() => props.pageSize, setPageSize)
     watch(() => props.rowHeight, setGlobalRowHeight)
     watch(() => props.rowDraggable, setRowDraggable)
-    watch(() => props.emptyText, setEmptyText)
+    watch(
+      () => props.emptyText,
+      value => {
+        setEmptyText(value ?? locale.empty)
+      }
+    )
 
     const handlerResize = debounce(refresh)
 

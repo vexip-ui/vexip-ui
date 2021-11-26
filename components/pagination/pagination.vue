@@ -6,7 +6,7 @@
         `${prefix}__item--prev`,
         disabledPrev ? `${prefix}__item--disabled` : ''
       ]"
-      :title="prevTitle"
+      :title="locale.prevPage"
       @click="handlePrev"
     >
       <slot name="prev">
@@ -92,7 +92,7 @@
         [`${prefix}__item--disabled`]: isFunction(disableItem) && disableItem(pagerCount),
         [`${prefix}__item--active`]: currentActive === pagerCount
       }"
-      :title="nextTitle"
+      :title="locale.nextPage"
       @click="changeActive(pagerCount)"
     >
       <slot name="item" :page="pagerCount">
@@ -113,7 +113,7 @@
     </li>
     <slot>
       <div v-if="pageTotal" :class="`${prefix}__total`">
-        {{ `共 ${total} ${itemUnit}` }}
+        {{ `${locale.total} ${total} ${itemUnit ?? locale.itemUnit}` }}
       </div>
       <div v-if="pageCount" :class="`${prefix}__size`">
         <Select v-model="currentPageSize" size="small">
@@ -121,19 +121,19 @@
             v-for="(item, index) in sizeOptions"
             :key="index"
             :value="item"
-            :label="`${item} ${itemUnit}/页`"
+            :label="`${item} ${itemUnit ?? locale.itemUnit}${locale.prePage}`"
           ></Option>
         </Select>
       </div>
       <div v-if="pageJump" :class="`${prefix}__jump`">
-        跳至
+        {{ locale.jumpTo }}
         <NumberInput
           v-model:value="jumpValue"
           size="small"
           :class="`${prefix}__jump-input`"
           @on-change="handleJumpPage"
         ></NumberInput>
-        页
+        {{ getCountWordOnly(locale.page, 1) }}
       </div>
     </slot>
   </ul>
@@ -146,6 +146,7 @@ import { NumberInput } from '@/components/number-input'
 import { Option } from '@/components/option'
 import { Select } from '@/components/select'
 import { useConfiguredProps } from '@/common/config/install'
+import { useLocaleConfig, getCountWord, getCountWordOnly } from '@/common/config/locale'
 import { isFunction, range } from '@/common/utils/common'
 import { createSizeProp } from '@/common/config/props'
 
@@ -237,7 +238,7 @@ const props = useConfiguredProps('pagination', {
   },
   itemUnit: {
     type: String,
-    default: '条'
+    default: null
   }
 })
 
@@ -261,6 +262,8 @@ export default defineComponent({
     const inNextEllipsis = ref(false)
     const jumpValue = ref(props.active)
 
+    const locale = useLocaleConfig('pagination')
+
     const className = computed(() => {
       return {
         [prefix]: true,
@@ -283,17 +286,11 @@ export default defineComponent({
 
       return count <= 1 || currentActive.value === count
     })
-    const prevTitle = computed(() => {
-      return '上一页'
-    })
-    const nextTitle = computed(() => {
-      return '下一页'
-    })
     const prevTurnPageTitle = computed(() => {
-      return `向前${props.turnPageCount}页`
+      return `${locale.prev} ${getCountWord(locale.page, props.turnPageCount)}`
     })
     const nextTurnPageTitle = computed(() => {
-      return `向后${props.turnPageCount}页`
+      return `${locale.next} ${getCountWord(locale.page, props.turnPageCount)}`
     })
     const useEllipsis = computed(() => {
       return pagerCount.value > props.maxCount
@@ -507,6 +504,7 @@ export default defineComponent({
 
     return {
       prefix,
+      locale,
       currentPagers,
       currentActive,
       currentPageSize,
@@ -520,8 +518,6 @@ export default defineComponent({
       pagerCount,
       disabledPrev,
       disabledNext,
-      prevTitle,
-      nextTitle,
       prevTurnPageTitle,
       nextTurnPageTitle,
       useEllipsis,
@@ -529,6 +525,7 @@ export default defineComponent({
       nextEllipsisTarget,
 
       isFunction,
+      getCountWordOnly,
       changeActive,
       handlePrev,
       handleNext,
