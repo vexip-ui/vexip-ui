@@ -714,7 +714,7 @@ function sortData(
   const usedSorter = []
 
   for (let i = 0, len = keys.length; i < len; i++) {
-    const key = keys[i]
+    const key = keys[i] as keyof RowState
     const { able, type, order, method } = sorters[key]
 
     if (able && type) {
