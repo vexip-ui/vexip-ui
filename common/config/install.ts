@@ -46,7 +46,9 @@ export function useConfiguredProps<T extends Record<string, unknown>>(name: stri
     if (
       propType === Array ||
       propType === Object ||
-      (Array.isArray(propType) && (propType.includes(Object) || propType.includes(Array)))
+      propType === Date ||
+      (Array.isArray(propType) &&
+        (propType.includes(Object) || propType.includes(Array) || propType.includes(Date)))
     ) {
       prop.default = () => {
         const value = getConfig(key, defaultValue)
