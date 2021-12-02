@@ -464,7 +464,25 @@ export default defineComponent({
         activated,
         dateValue,
         resetColumn,
-        enterColumn
+        enterColumn,
+        setDate: (date: Date) => {
+          dateValue.year = date.getFullYear()
+          dateValue.month = date.getMonth() + 1
+          dateValue.date = date.getDate()
+          dateValue.hour = date.getHours()
+          dateValue.minute = date.getMinutes()
+          dateValue.second = date.getSeconds()
+        },
+        getDate: () => {
+          return new Date(
+            dateValue.year,
+            dateValue.month - 1,
+            dateValue.date,
+            dateValue.hour,
+            dateValue.minute,
+            dateValue.second
+          )
+        }
       })
     }
 
@@ -510,14 +528,9 @@ export default defineComponent({
 
       for (let i = 0; i < 2; i++) {
         const date = rawValueToDate(value[i] ?? '')
-        const dateValue = (i === 0 ? startState : endState).dateValue
+        const state = i === 0 ? startState : endState
 
-        dateValue.year = date.getFullYear()
-        dateValue.month = date.getMonth() + 1
-        dateValue.date = date.getDate()
-        dateValue.hour = date.getHours()
-        dateValue.minute = date.getMinutes()
-        dateValue.second = date.getSeconds()
+        state.setDate(date)
 
         if (!props.isRange) break
       }
@@ -820,6 +833,7 @@ export default defineComponent({
     function handlePaneChange(type: DateTimeType, value: number) {
       getCurrentState().dateValue[type] = value
       updateDateActivated(type)
+      verifyRangeValue()
     }
 
     function updateDateActivated(type: DateTimeType) {
@@ -833,6 +847,21 @@ export default defineComponent({
       }
 
       state.activated[type] = true
+    }
+
+    function verifyRangeValue() {
+      if (!props.isRange) return
+
+      const startDate = startState.getDate()
+      const endDate = endState.getDate()
+
+      if (startDate.getTime() > endDate.getTime()) {
+        if (currentState.value === 'start') {
+          startState.setDate(endDate)
+        } else {
+          endState.setDate(startDate)
+        }
+      }
     }
 
     function toggleCurrentState(type: 'start' | 'end') {

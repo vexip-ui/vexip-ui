@@ -399,6 +399,7 @@ export default defineComponent({
       if (isDisabledMonth(month)) return
 
       calendarMonth.value = month
+      emitChange('year', calendarYear.value)
       emitChange('month', month)
 
       if (props.type !== 'month') {
@@ -509,7 +510,10 @@ export default defineComponent({
     }
 
     function isYearInRange(year: number) {
-      if (!hoveredYear.value && !props.startActivated.year && !props.endActivated.year) {
+      if (
+        !calendarRange.value ||
+        (!hoveredYear.value && !props.startActivated.year && !props.endActivated.year)
+      ) {
         return false
       }
 
@@ -552,7 +556,10 @@ export default defineComponent({
     }
 
     function isMonthInRange(month: number) {
-      if (!hoveredMonth.value && !props.startActivated.month && !props.endActivated.month) {
+      if (
+        !calendarRange.value ||
+        (!hoveredMonth.value && !props.startActivated.month && !props.endActivated.month)
+      ) {
         return false
       }
 
