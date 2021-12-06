@@ -8,14 +8,16 @@ main()
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice']
-  const components = allComponents.filter(c => !plugins.includes(c))
+  const ignores = ['calendar']
+  const exportComponents = allComponents.filter(c => !ignores.includes(c))
+  const components = exportComponents.filter(c => !plugins.includes(c))
   const prettierConfig = await prettier.resolveConfig(path.resolve('.prettierrc.js'))
 
   const index = `
     import '@/themes/common.scss'
 
     ${
-      allComponents.map(component => `import { ${toPascalCase(component)} } from '@/components/${component}'`).join('\n')
+      exportComponents.map(component => `import { ${toPascalCase(component)} } from '@/components/${component}'`).join('\n')
     }
 
     import { configProp } from '@/common/config/install'
@@ -29,14 +31,20 @@ async function main() {
 
     export { configLocale }
 
+    export interface InstallOptions {
+      prefix?: string,
+      prop?: Partial<PropOptions>,
+      locale?: LocaleOptions
+    }
+
     const components = [
       ${components.map(toPascalCase).join(',\n')}
     ]
 
     const plugins = [${plugins.map(toPascalCase).join(', ')}]
 
-    export const install = (app: App<unknown>, options: InstallOptions) => {
-      const { prefix, prop, locale } = options
+    export const install = (app: App<unknown>, options: InstallOptions = {}) => {
+      const { prefix = '', prop = {}, locale = {} } = options
 
       configProp(prop)
       configLocale(locale)
@@ -48,7 +56,7 @@ async function main() {
           name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
         }
     
-        app.component(\`\${prefix}\${name}\`, component)
+        app.component(\`\${prefix || ''}\${name}\`, component)
       })
 
       plugins.forEach(plugin => {
@@ -59,7 +67,7 @@ async function main() {
     export const version = __VERSION__
 
     export {
-      ${allComponents.map(toPascalCase).join(',\n')}
+      ${exportComponents.map(toPascalCase).join(',\n')}
     }
 
     export interface VexipComponents {

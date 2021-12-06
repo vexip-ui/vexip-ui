@@ -92,9 +92,9 @@ import type { LocaleOptions } from '@/common/config/locale'
 export { configLocale }
 
 export interface InstallOptions {
-  prefix: string,
-  prop: PropOptions,
-  locale: LocaleOptions
+  prefix?: string,
+  prop?: Partial<PropOptions>,
+  locale?: LocaleOptions
 }
 
 const components = [
@@ -176,8 +176,8 @@ const components = [
 
 const plugins = [Confirm, Contextmenu, Loading, Message, Notice]
 
-export const install = (app: App<unknown>, options: InstallOptions) => {
-  const { prefix, prop, locale } = options
+export const install = (app: App<unknown>, options: InstallOptions = {}) => {
+  const { prefix = '', prop = {}, locale = {} } = options
 
   configProp(prop)
   configLocale(locale)
@@ -189,7 +189,7 @@ export const install = (app: App<unknown>, options: InstallOptions) => {
       name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
     }
 
-    app.component(`${prefix}${name}`, component)
+    app.component(`${prefix || ''}${name}`, component)
   })
 
   plugins.forEach(plugin => {

@@ -8,7 +8,7 @@ export const config: PropOptions = {
   defaults: {} as Record<string, unknown>
 }
 
-export function configProp(prop: PropOptions) {
+export function configProp(prop: Partial<PropOptions>) {
   config.defaults = { ...(prop.defaults ?? {}) }
 
   Object.keys(prop).forEach(key => {
