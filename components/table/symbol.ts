@@ -162,6 +162,8 @@ export interface RowInstance {
 export interface TableAction {
   increaseColumn(column: ColumnOptions): void,
   decreaseColumn(column: ColumnOptions): void,
+  emitRowEnter(data: Data, key: Key, index: number): void,
+  emitRowLeave(data: Data, key: Key, index: number): void,
   emitRowClick(data: Data, key: Key, index: number): void,
   emitRowCheck(data: Data, checked: boolean, key: Key, index: number): void,
   emitAllRowCheck(checked: boolean): void,

@@ -260,6 +260,8 @@ export default defineComponent({
   props,
   emits: [
     'on-body-scroll',
+    'on-row-enter',
+    'on-row-leave',
     'on-row-click',
     'on-row-check',
     'on-row-check-all',
@@ -307,6 +309,8 @@ export default defineComponent({
     provide(TABLE_ACTION, {
       increaseColumn,
       decreaseColumn,
+      emitRowEnter,
+      emitRowLeave,
       emitRowClick,
       emitRowCheck,
       emitAllRowCheck,
@@ -513,6 +517,14 @@ export default defineComponent({
 
     function decreaseColumn(column: ColumnOptions) {
       templateColumns.value.delete(column)
+    }
+
+    function emitRowEnter(data: Data, key: Key, index: number) {
+      emit('on-row-enter', data, key, index)
+    }
+
+    function emitRowLeave(data: Data, key: Key, index: number) {
+      emit('on-row-leave', data, key, index)
     }
 
     function emitRowClick(data: Data, key: Key, index: number) {

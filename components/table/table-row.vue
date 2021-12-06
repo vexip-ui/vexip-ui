@@ -167,14 +167,6 @@ export default defineComponent({
       }
     })
 
-    function handleClick() {
-      if (!props.isHead && tableAction) {
-        const { data, key, index } = props.row
-
-        tableAction.emitRowClick(data, key, index)
-      }
-    }
-
     function computeRowHeight() {
       if (state.rowHeight) {
         mutations.setRowHeight(props.row.key, state.rowHeight)
@@ -215,10 +207,30 @@ export default defineComponent({
 
     function handleMouseEnter() {
       mutations.setRowHover(props.row.key, true)
+
+      if (!props.isHead && tableAction) {
+        const { data, key, index } = props.row
+
+        tableAction.emitRowEnter(data, key, index)
+      }
     }
 
     function handleMouseLeave() {
       mutations.setRowHover(props.row.key, false)
+
+      if (!props.isHead && tableAction) {
+        const { data, key, index } = props.row
+
+        tableAction.emitRowLeave(data, key, index)
+      }
+    }
+
+    function handleClick() {
+      if (!props.isHead && tableAction) {
+        const { data, key, index } = props.row
+
+        tableAction.emitRowClick(data, key, index)
+      }
     }
 
     function handleDragStart() {
