@@ -1,3 +1,26 @@
+# [1.2.0](https://github.com/qmhc/vexip-ui/compare/v1.1.3...v1.2.0) (2022-01-07)
+
+### Bug Fixes
+
+- install options should be optional ([0934c3c](https://github.com/qmhc/vexip-ui/commit/0934c3c36d863c30eb27ec4f38842392b51c7486))
+- **date:** limit range values starkly in modification ([68cc1c8](https://github.com/qmhc/vexip-ui/commit/68cc1c8b64d54ff0bb218104d626e6eed86d14cc))
+- support Date type for ConfiguruseConfiguredProps ([05607e6](https://github.com/qmhc/vexip-ui/commit/05607e66cfff949fe5a21b05d594acaeb5a776b5))
+- **config:** global defaults config no effective ([6eba983](https://github.com/qmhc/vexip-ui/commit/6eba983679b166786528c3a4f3a93b91bcfb6ed9))
+- **table:** no recalculate when add rows ([741400e](https://github.com/qmhc/vexip-ui/commit/741400e112bf4437d47c7ed6898956a08a230021))
+
+### Features
+
+- add judge method for Message and Notice ([cb4062b](https://github.com/qmhc/vexip-ui/commit/cb4062b36096162b519b5a853726a259c4dd46a9))
+- **table:** add row enter and leave events ([b9fb4c2](https://github.com/qmhc/vexip-ui/commit/b9fb4c21e61d739ec4fd2b69a8ac1363d545c244))
+- add locale config ([0a0ec74](https://github.com/qmhc/vexip-ui/commit/0a0ec7487dfc8f89e18a38c50a7e001ea7440209))
+- **form:** support native html form submit ([497c3e3](https://github.com/qmhc/vexip-ui/commit/497c3e3115632c09bcb10ac9c9d98aa334b61547))
+
+### BREAKING CHANGES
+
+- The original install config are
+  no longer supported, use `prop` attribute of the new
+  install config instead.
+
 ## [1.1.3](https://github.com/qmhc/vexip-ui/compare/v1.1.2...v1.1.3) (2021-10-20)
 
 ### Bug Fixes
