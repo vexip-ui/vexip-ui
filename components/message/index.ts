@@ -19,7 +19,9 @@ type ManagerOptions = { duration?: number, placement?: MessagePlacement } & Reco
 
 interface AipMethod {
   (options: MessageOptions): () => void,
-  (content: string, duration?: number): () => void
+  (content: string, duration?: number): () => void,
+  /** @internal */
+  (options: FuzzyOptions, duration?: number): () => void
 }
 
 const conveniences: Record<MessageType, { icon: string }> = {
@@ -91,6 +93,23 @@ export class MessageManager {
 
     this.error = (content: FuzzyOptions, duration?: number) => {
       return this._open('error', content, duration)
+    }
+  }
+
+  judge(state: boolean, success: string, error: string, duration?: number): void
+  judge(state: boolean, success: MessageOptions, error: string, duration?: number): void
+  judge(state: boolean, success: string, error: MessageOptions, duration?: number): void
+  judge(state: boolean, success: MessageOptions, error: MessageOptions): void
+  judge(
+    state: boolean,
+    success: string | MessageOptions,
+    error: string | MessageOptions,
+    duration?: number
+  ) {
+    if (state) {
+      this.success(success, duration)
+    } else {
+      this.error(error, duration)
     }
   }
 

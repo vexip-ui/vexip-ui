@@ -23,7 +23,9 @@ type ManagerOptions = { marker?: boolean, duration?: number, placement?: NoticeP
 interface AipMethod {
   (options: NoticeOptions): () => void,
   (title: string, duration?: number): () => void,
-  (title: string, content: string, duration?: number): () => void
+  (title: string, content: string, duration?: number): () => void,
+  /** @internal */
+  (options: FuzzyOptions, duration?: number): () => void
 }
 
 const conveniences: Record<NoticeType, { icon: string }> = {
@@ -101,6 +103,23 @@ export class NoticeManager {
 
     this.error = (title: FuzzyOptions, content?: string | number, duration?: number) => {
       return this._open('error', title, content, duration)
+    }
+  }
+
+  judge(state: boolean, success: string, error: string, duration?: number): void
+  judge(state: boolean, success: NoticeOptions, error: string, duration?: number): void
+  judge(state: boolean, success: string, error: NoticeOptions, duration?: number): void
+  judge(state: boolean, success: NoticeOptions, error: NoticeOptions): void
+  judge(
+    state: boolean,
+    success: string | NoticeOptions,
+    error: string | NoticeOptions,
+    duration?: number
+  ) {
+    if (state) {
+      this.success(success, duration)
+    } else {
+      this.error(error, duration)
     }
   }
 
