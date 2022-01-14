@@ -244,12 +244,13 @@ export default defineComponent({
     }
 
     function parseAndTransformData() {
+      const idKey = props.idKey
       const oldDataMap = new Map<Data, TreeNodeOptions>()
       const oldIpMap = new Map<any, TreeNodeOptions>()
 
       for (const node of nodeMaps.values()) {
         oldDataMap.set(node.data, node)
-        oldIpMap.set(node.data[props.idKey], node)
+        oldIpMap.set(node.data[idKey], node)
       }
 
       nodeMaps.clear()
@@ -259,7 +260,7 @@ export default defineComponent({
 
       for (let i = 0, len = data.length; i < len; i++) {
         const item = data[i]
-        const node = oldDataMap.get(item) ?? oldIpMap.get(item) ?? createNodeItem(item)
+        const node = oldDataMap.get(item) ?? oldIpMap.get(item[idKey]) ?? createNodeItem(item)
 
         nodeMaps.set(node[props.idKey] as Key, node)
         newFlatData.push(node)
