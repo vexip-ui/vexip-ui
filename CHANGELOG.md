@@ -1,3 +1,9 @@
+## [1.2.1](https://github.com/qmhc/vexip-ui/compare/v1.2.0...v1.2.1) (2022-01-14)
+
+### Bug Fixes
+
+- **tree:** incorrect expanded when using asyncLoad ([31c3ba5](https://github.com/qmhc/vexip-ui/commit/31c3ba509ab5c3c57a9a04e84a8cb806ff6389d7))
+
 # [1.2.0](https://github.com/qmhc/vexip-ui/compare/v1.1.3...v1.2.0) (2022-01-07)
 
 ### Bug Fixes
