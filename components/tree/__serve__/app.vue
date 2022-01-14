@@ -1,5 +1,10 @@
 <template>
-  <Tree checkbox draggable :data="data"></Tree>
+  <Tree
+    checkbox
+    draggable
+    :data="data"
+    :async-load="loadNodes"
+  ></Tree>
 </template>
 
 <script lang="ts">
@@ -20,21 +25,21 @@ export default defineComponent({
           parent: 0,
           expanded: true
         },
-        {
-          id: 2,
-          label: '鸟类',
-          parent: 5
-        },
+        // {
+        //   id: 2,
+        //   label: '鸟类',
+        //   parent: 5
+        // },
         {
           id: 3,
           label: '无脊椎动物',
           parent: 1
         },
-        {
-          id: 4,
-          label: '哺乳动物',
-          parent: 5
-        },
+        // {
+        //   id: 4,
+        //   label: '哺乳动物',
+        //   parent: 5
+        // },
         {
           id: 5,
           label: '脊椎动物',
@@ -51,6 +56,32 @@ export default defineComponent({
           parent: 3
         }
       ]
+    }
+  },
+  methods: {
+    loadNodes(node: any) {
+      return new Promise(resolve => {
+        if (node.id === 5) {
+          window.setTimeout(() => {
+            this.data.push(
+              {
+                id: 2,
+                label: '鸟类',
+                parent: 5
+              },
+              {
+                id: 4,
+                label: '哺乳动物',
+                parent: 5
+              }
+            )
+
+            resolve(true)
+          }, 1000)
+        } else {
+          resolve(true)
+        }
+      })
     }
   }
 })

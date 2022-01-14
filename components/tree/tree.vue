@@ -221,7 +221,7 @@ export default defineComponent({
       })
     )
 
-    watch(() => props.data, parseAndTransformData)
+    watch([() => props.data, () => props.data.length], parseAndTransformData)
 
     // created
     parseAndTransformData()
@@ -244,20 +244,26 @@ export default defineComponent({
     }
 
     function parseAndTransformData() {
+      const oldDataMap = new Map<Data, TreeNodeOptions>()
+
+      for (const node of nodeMaps.values()) {
+        oldDataMap.set(node.data, node)
+      }
+
       nodeMaps.clear()
 
-      const _flatData = []
+      const newFlatData = []
       const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
 
       for (let i = 0, len = data.length; i < len; i++) {
-        const node = createNodeItem(data[i])
+        const node = oldDataMap.get(data[i]) ?? createNodeItem(data[i])
 
         nodeMaps.set(node[props.idKey] as Key, node)
-        _flatData.push(node)
+        newFlatData.push(node)
       }
 
-      treeData.value = transformTree(_flatData, parsedOptions.value)
-      flatData.value = _flatData
+      treeData.value = transformTree(newFlatData, parsedOptions.value)
+      flatData.value = newFlatData
     }
 
     function forceUpdateData() {
@@ -329,6 +335,7 @@ export default defineComponent({
         disabled = false,
         checked = false,
         loading = false,
+        loaded = false,
         readonly = false,
         arrow = 'auto',
         checkbox = null
@@ -344,6 +351,7 @@ export default defineComponent({
         disabled,
         checked,
         loading,
+        loaded,
         readonly,
         arrow,
         checkbox,
@@ -483,7 +491,7 @@ export default defineComponent({
         result = await result
       }
 
-      return result
+      return result !== false
     }
 
     let dragState: {

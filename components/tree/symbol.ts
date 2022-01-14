@@ -10,6 +10,7 @@ export interface InitDataOptions extends Data {
   disabled?: boolean,
   checked?: boolean,
   loading?: boolean,
+  loaded?: boolean,
   readonly?: boolean,
   arrow?: boolean | 'auto' | null,
   checkbox?: boolean | null
@@ -21,7 +22,7 @@ export type TreeNodeOptions = Required<InitDataOptions> & {
 } & Data
 
 export type RenderFn = (data: { data: Data, node: TreeNodeOptions }) => any
-export type AsyncLoadFn = (node: Readonly<TreeNodeOptions>) => boolean
+export type AsyncLoadFn = (node: Readonly<TreeNodeOptions>) => void | boolean | Promise<any>
 
 export interface TreeNodeInstance {
   el: HTMLElement | null,

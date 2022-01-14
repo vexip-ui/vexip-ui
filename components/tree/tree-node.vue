@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, provide, inject, nextTick } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, provide, inject, nextTick } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
@@ -159,6 +159,10 @@ const props = {
     type: Boolean,
     default: false
   },
+  loaded: {
+    type: Boolean,
+    default: false
+  },
   partial: {
     type: Boolean,
     default: false
@@ -204,7 +208,7 @@ export default defineComponent({
     const nodeElement = ref<HTMLElement | null>(null)
     const arrowElement = ref<HTMLElement | null>(null)
 
-    let loaded = false
+    const loaded = ref(props.loaded)
 
     const isDisabled = computed(() => {
       return parentState.disabled || props.disabled
@@ -230,7 +234,7 @@ export default defineComponent({
       let arrowSign: boolean | 'auto' = 'auto'
       let asyncLoad = false
 
-      if (isNull(arrow)) {
+      if (isNull(arrow) || arrow === 'auto') {
         if (treeState) {
           arrowSign = treeState.arrow
           asyncLoad = treeState.boundAsyncLoad
@@ -239,7 +243,9 @@ export default defineComponent({
         arrowSign = arrow
       }
 
-      return arrowSign === 'auto' ? props.children?.length || asyncLoad : !!arrowSign
+      return arrowSign === 'auto'
+        ? props.children?.length || (!loaded.value && asyncLoad)
+        : !!arrowSign
     })
     const hasCheckbox = computed(() => {
       const checkbox = props.checkbox
@@ -269,6 +275,13 @@ export default defineComponent({
       })
     )
 
+    watch(
+      () => props.loaded,
+      value => {
+        loaded.value = value
+      }
+    )
+
     function setValue<T = unknown>(key: keyof TreeNodeOptions, value: T) {
       const node = props.node
 
@@ -293,7 +306,7 @@ export default defineComponent({
     async function handleToggleExpand(able = !props.expanded) {
       if (props.loading || isDisabled.value) return
 
-      if (able && treeState.boundAsyncLoad && !loaded) {
+      if (able && treeState.boundAsyncLoad && !loaded.value) {
         setValue('loading', true)
 
         const result = await treeState.handleAsyncLoad(props.node)
@@ -331,7 +344,7 @@ export default defineComponent({
       setValue('expanded', success !== false)
 
       if (success) {
-        loaded = true
+        loaded.value = true
         treeState.handleNodeExpand(props.node)
       }
     }
