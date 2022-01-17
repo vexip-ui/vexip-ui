@@ -1,5 +1,5 @@
 <template>
-  <Ellipsis :class="className" :tooltip-theme="tooltipTheme" :style="style">
+  <div v-if="isTypeColumn(column)" :class="className" :style="style">
     <Checkbox
       v-if="isSelection(column)"
       :class="`${prefix}__selection`"
@@ -23,8 +23,15 @@
         <Icon name="angle-right"></Icon>
       </div>
     </template>
+  </div>
+  <Ellipsis
+    v-else
+    :class="className"
+    :tooltip-theme="tooltipTheme"
+    :style="style"
+  >
     <Renderer
-      v-else-if="isFunction(column.renderer)"
+      v-if="isFunction(column.renderer)"
       :renderer="column.renderer"
       :data="{ row: row.data, rowIndex, column, columnIndex }"
     ></Renderer>
@@ -128,6 +135,10 @@ export default defineComponent({
       return (column as TypeColumn).type === 'expand'
     }
 
+    function isTypeColumn(column: unknown): column is TypeColumn {
+      return isSelection(column) || isOrder(column) || isExpand(column)
+    }
+
     function handleCheckRow(row: RowState) {
       if (!getters.disableCheckRows[row.key]) {
         const checked = !row.checked
@@ -159,6 +170,7 @@ export default defineComponent({
       isSelection,
       isOrder,
       isExpand,
+      isTypeColumn,
       handleCheckRow,
       handleExpandRow
     }

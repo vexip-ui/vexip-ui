@@ -1,6 +1,7 @@
 <template>
   <Table :columns="columns2" :data="data" :height="1000">
-    <TableColumn type="order"></TableColumn>
+    <TableColumn type="selection" id-key="selection" :disable-row="isDisabled"></TableColumn>
+    <TableColumn type="order" id-key="order"></TableColumn>
     <TableColumn type="expand" id-key="expand">
       <template #default="{ row }">
         <Row style="padding: 20px 40px; background-color: #f8f9fa;">
@@ -148,6 +149,10 @@ export default defineComponent({
       data.value.unshift({ ...testData[0], id: undefined! })
     }
 
+    function isDisabled(row: any) {
+      return row.id !== '1'
+    }
+
     return {
       data,
       columns,
@@ -157,7 +162,8 @@ export default defineComponent({
 
       jobAccessor,
       toggleData,
-      addData
+      addData,
+      isDisabled
     }
   }
 })

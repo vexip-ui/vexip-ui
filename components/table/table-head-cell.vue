@@ -6,6 +6,7 @@
       :class="`${prefix}__selection`"
       :checked="checkedAll"
       :partial="partial"
+      :disabled="checkboxDisabled"
       :size="column.checkboxSize || 'default'"
       @click.prevent="handleCheckAllRow"
     ></Checkbox>
@@ -151,7 +152,7 @@ export default defineComponent({
   },
   props,
   setup(props) {
-    const { state, mutations } = inject(TABLE_STORE)!
+    const { state, getters, mutations } = inject(TABLE_STORE)!
     const tableAction = inject(TABLE_ACTION)!
 
     const prefix = 'vxp-table'
@@ -195,6 +196,18 @@ export default defineComponent({
       }
 
       return false
+    })
+    const checkboxDisabled = computed(() => {
+      if (!isSelection(props.column)) {
+        return false
+      }
+
+      const records = Object.values(getters.disableCheckRows)
+
+      return (
+        getters.processedData.length === records.length &&
+        !Object.values(getters.disableCheckRows).includes(false)
+      )
     })
 
     onMounted(() => {
@@ -288,6 +301,7 @@ export default defineComponent({
       sorter,
       filter,
       hasFilterActive,
+      checkboxDisabled,
 
       wrapper,
 

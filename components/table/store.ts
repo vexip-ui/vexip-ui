@@ -102,8 +102,8 @@ export function useStore(options: StoreOptions) {
     return total
   })
   const disableCheckRows = computed(() => {
-    const { columns, rowData } = state
-    const selection = columns.find(item => (item as SelectionColumn).type === 'selection') as
+    const rowData = processedData.value
+    const selection = state.columns.find(item => (item as SelectionColumn).type === 'selection') as
       | SelectionColumn
       | undefined
     const disableCheckRows: Record<Key, boolean> = {}
@@ -125,8 +125,8 @@ export function useStore(options: StoreOptions) {
     return disableCheckRows
   })
   const disableExpandRows = computed(() => {
-    const { columns, rowData } = state
-    const expand = columns.find(item => (item as ExpandColumn).type === 'expand') as
+    const rowData = processedData.value
+    const expand = state.columns.find(item => (item as ExpandColumn).type === 'expand') as
       | ExpandColumn
       | undefined
     const disableExpandRows: Record<Key, boolean> = {}
