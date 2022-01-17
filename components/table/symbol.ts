@@ -166,7 +166,7 @@ export interface TableAction {
   emitRowLeave(data: Data, key: Key, index: number): void,
   emitRowClick(data: Data, key: Key, index: number): void,
   emitRowCheck(data: Data, checked: boolean, key: Key, index: number): void,
-  emitAllRowCheck(checked: boolean): void,
+  emitAllRowCheck(checked: boolean, partial: boolean): void,
   emitRowExpand(data: Data, expanded: boolean, key: Key, index: number): void,
   emitRowFilter(): void,
   handleRowDragStart(rowInstance: RowInstance): void,

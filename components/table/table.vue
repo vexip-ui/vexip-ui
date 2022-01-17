@@ -535,8 +535,8 @@ export default defineComponent({
       emit('on-row-check', data, checked, key, index)
     }
 
-    function emitAllRowCheck(checked: boolean) {
-      emit('on-row-check-all', checked)
+    function emitAllRowCheck(checked: boolean, partial: boolean) {
+      emit('on-row-check-all', checked, partial)
     }
 
     function emitRowExpand(data: Data, expanded: boolean, key: Key, index: number) {
