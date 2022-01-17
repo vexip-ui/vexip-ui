@@ -286,7 +286,7 @@ export default defineComponent({
 
     function handleCheckAllRow() {
       mutations.handleCheckAll()
-      tableAction.emitAllRowCheck(state.checkedAll)
+      tableAction.emitAllRowCheck(state.checkedAll, state.partial)
     }
 
     return {
