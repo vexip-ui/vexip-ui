@@ -26,9 +26,10 @@ import { Button } from '@/components/button'
 import { createSizeProp } from '@/common/config/props'
 import { useConfiguredProps } from '@/common/config/install'
 import { useLocaleConfig } from '@/common/config/locale'
-import { noop } from '@/common/utils/common'
+import { noop, isPromise } from '@/common/utils/common'
 import { FORM_ACTIONS } from './symbol'
 
+import type { PropType } from 'vue'
 import type { ButtonType } from '@/components/button'
 import type { FormActions } from './symbol'
 
@@ -88,6 +89,10 @@ const props = useConfiguredProps('form-submit', {
   block: {
     type: Boolean,
     default: false
+  },
+  beforeReset: {
+    type: Function as PropType<() => unknown>,
+    default: null
   }
 })
 
@@ -111,8 +116,20 @@ export default defineComponent({
     async function handleReset() {
       if (props.disabled) return
 
-      actions.reset()
-      emit('on-reset')
+      let result: unknown = true
+
+      if (typeof props.beforeReset === 'function') {
+        result = props.beforeReset()
+
+        if (isPromise(result)) {
+          result = await result
+        }
+      }
+
+      if (result !== false) {
+        actions.reset()
+        emit('on-reset')
+      }
     }
 
     return {

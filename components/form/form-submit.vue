@@ -32,9 +32,10 @@ import { Button } from '@/components/button'
 import { createSizeProp } from '@/common/config/props'
 import { useConfiguredProps } from '@/common/config/install'
 import { useLocaleConfig } from '@/common/config/locale'
-import { noop } from '@/common/utils/common'
+import { noop, isPromise } from '@/common/utils/common'
 import { FORM_PROPS, FORM_ACTIONS } from './symbol'
 
+import type { PropType } from 'vue'
 import type { ButtonType } from '@/components/button'
 import type { FormActions } from './symbol'
 
@@ -94,6 +95,10 @@ const props = useConfiguredProps('form-submit', {
   block: {
     type: Boolean,
     default: false
+  },
+  beforeSubmit: {
+    type: Function as PropType<() => unknown>,
+    default: null
   }
 })
 
@@ -128,9 +133,21 @@ export default defineComponent({
 
       if (errors.length) {
         emit('on-error', errors)
-      } else if (submit.value) {
-        emit('on-submit')
-        submit.value.click()
+      } else {
+        let result: unknown = true
+
+        if (typeof props.beforeSubmit === 'function') {
+          result = props.beforeSubmit()
+
+          if (isPromise(result)) {
+            result = await result
+          }
+        }
+
+        if (result !== false) {
+          emit('on-submit')
+          submit.value?.click()
+        }
       }
 
       loading.value = false
