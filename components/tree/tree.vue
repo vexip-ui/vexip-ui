@@ -150,6 +150,14 @@ const props = useConfiguredProps('tree', {
   asyncLoad: {
     type: Function as PropType<AsyncLoadFn>,
     default: null
+  },
+  cacheNode: {
+    type: Boolean,
+    default: false
+  },
+  rootId: {
+    type: [String, Number],
+    default: null
   }
 })
 
@@ -260,7 +268,12 @@ export default defineComponent({
 
       for (let i = 0, len = data.length; i < len; i++) {
         const item = data[i]
-        const node = oldDataMap.get(item) ?? oldIpMap.get(item[idKey]) ?? createNodeItem(item)
+        const node = props.cacheNode
+          ? oldDataMap.get(item) ?? oldIpMap.get(item[idKey]) ?? createNodeItem(item)
+          : createNodeItem(item)
+
+        node[props.parentKey] = item[props.parentKey]
+        node.data = item
 
         nodeMaps.set(node[props.idKey] as Key, node)
         newFlatData.push(node)

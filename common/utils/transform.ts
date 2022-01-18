@@ -103,7 +103,8 @@ export function groupByProps<T = any>(
 export interface TreeOptions<T = string> {
   keyField?: T,
   childField?: T,
-  parentField?: T
+  parentField?: T,
+  rootId?: any
 }
 
 /**
@@ -115,9 +116,11 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
   const {
     keyField = 'id' as keyof T,
     childField = 'children' as keyof T,
-    parentField = 'parent' as keyof T
+    parentField = 'parent' as keyof T,
+    rootId = null
   } = options
 
+  const hasRootId = isDefined(rootId) && rootId !== ''
   const tree: T[] = []
   const record = new Map<T[keyof T], T[]>()
 
@@ -125,7 +128,7 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
     const item = list[i]
     const id = item[keyField]
 
-    if (!id) {
+    if (hasRootId ? id === rootId : !id) {
       continue
     }
 
@@ -161,9 +164,11 @@ export function flatTree<T = any>(tree: T[], options: TreeOptions<keyof T> = {})
   const {
     keyField = 'id' as keyof T,
     childField = 'children' as keyof T,
-    parentField = 'parent' as keyof T
+    parentField = 'parent' as keyof T,
+    rootId = null
   } = options
 
+  const hasRootId = isDefined(rootId) && rootId !== ''
   const list: T[] = []
   const loop = [...tree]
 
@@ -187,7 +192,7 @@ export function flatTree<T = any>(tree: T[], options: TreeOptions<keyof T> = {})
       id = idCount++
     }
 
-    if (!item[parentField]) {
+    if (hasRootId ? item[parentField] === rootId : !item[parentField]) {
       (item as any)[parentField] = null
     }
 
