@@ -55,6 +55,10 @@ const props = useConfiguredProps('form', {
   validateAll: {
     type: Boolean,
     default: false
+  },
+  hideLabel: {
+    type: Boolean,
+    default: false
   }
 })
 

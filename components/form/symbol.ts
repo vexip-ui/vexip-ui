@@ -15,7 +15,8 @@ export interface FormProps {
   allRequired: boolean,
   labelSuffix: string,
   hideAsterisk: boolean,
-  validateAll: boolean
+  validateAll: boolean,
+  hideLabel: boolean
 }
 
 export interface FormItemProps {
@@ -29,7 +30,7 @@ export interface FormItemProps {
   defaultValue: unknown,
   hideErrorTip: boolean,
   validateAll: boolean,
-  asterisk: boolean
+  hideAsterisk: boolean
 }
 
 export interface FieldOptions {

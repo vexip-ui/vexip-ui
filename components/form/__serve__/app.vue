@@ -1,5 +1,5 @@
 <template>
-  <Form :model="model" action="/test">
+  <Form :model="model" hide-label action="/test">
     <FormItem prop="input" label="Input">
       <Input v-model:value="model.input"></Input>
     </FormItem>

@@ -81,6 +81,10 @@
 
   &__control {
     position: relative;
+
+    &__no-label {
+      width: 100%;
+    }
   }
 
   &--label-top &__item {

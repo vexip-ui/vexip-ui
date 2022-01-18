@@ -99,7 +99,11 @@ const props = useConfiguredProps('formItem', {
     type: Boolean,
     default: null
   },
-  asterisk: {
+  hideAsterisk: {
+    type: Boolean,
+    default: null
+  },
+  hideLabel: {
     type: Boolean,
     default: null
   }
@@ -130,23 +134,32 @@ export default defineComponent({
     useRelation(fieldObject)
 
     const useAsterisk = computed(() => {
+      if (props.hideAsterisk === true || formProps.hideAsterisk) {
+        return false
+      }
+
       for (const rule of allRules.value) {
         if (rule.required) return true
       }
 
       return isRequired.value
     })
+    const hideLabel = computed(() => {
+      return props.hideLabel === true || formProps.hideLabel
+    })
     const hasLabel = computed(() => {
-      return !!(props.label || slots.label)
+      return !(hideLabel.value || !(props.label || slots.label))
     })
     const computedlabelWidth = computed(() => {
       if (formProps.labelPosition) {
         return formProps.labelPosition === 'top'
-          ? null
-          : props.labelWidth || formProps.labelWidth || 80
+          ? 0
+          : hideLabel.value
+            ? 0
+            : props.labelWidth || formProps.labelWidth || 80
       }
 
-      return props.labelWidth || 80
+      return hideLabel.value ? 0 : props.labelWidth || 80
     })
     const className = computed(() => {
       return {
