@@ -13,6 +13,12 @@
     width: 100%;
     margin-bottom: 2em;
 
+    &--action {
+      justify-content: center;
+      margin-bottom: 0;
+      text-align: center;
+    }
+
     &--error {
       // $checkbox: vxp-checkbox;
       // $radio: vxp-radio;

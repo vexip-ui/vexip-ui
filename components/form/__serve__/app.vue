@@ -1,9 +1,9 @@
 <template>
-  <Form :model="model" hide-label action="/test">
+  <Form :model="model" action="/test">
     <FormItem prop="input" label="Input">
       <Input v-model:value="model.input"></Input>
     </FormItem>
-    <FormItem>
+    <FormItem action>
       <FormSubmit></FormSubmit>
       <FormReset></FormReset>
     </FormItem>

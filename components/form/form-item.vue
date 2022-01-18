@@ -1,6 +1,7 @@
 <template>
   <div :class="className">
     <input
+      v-if="isNative"
       type="hidden"
       :name="prop"
       :value="inputValue"
@@ -13,7 +14,7 @@
       :for="htmlFor"
     >
       <slot name="label">
-        {{ label + labelSuffix }}
+        {{ label + (labelSuffix || '') }}
       </slot>
     </label>
     <div
@@ -106,6 +107,10 @@ const props = useConfiguredProps('formItem', {
   hideLabel: {
     type: Boolean,
     default: null
+  },
+  action: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -145,7 +150,7 @@ export default defineComponent({
       return isRequired.value
     })
     const hideLabel = computed(() => {
-      return props.hideLabel === true || formProps.hideLabel
+      return props.action || props.hideLabel === true || formProps.hideLabel
     })
     const hasLabel = computed(() => {
       return !(hideLabel.value || !(props.label || slots.label))
@@ -165,7 +170,8 @@ export default defineComponent({
       return {
         [`${prefix}__item`]: true,
         [`${prefix}__item--required`]: !formProps.hideAsterisk && useAsterisk.value,
-        [`${prefix}__item--error`]: isError.value
+        [`${prefix}__item--error`]: isError.value,
+        [`${prefix}__item--action`]: props.action
       }
     })
     const controlStyle = computed(() => {
@@ -192,8 +198,8 @@ export default defineComponent({
       isError,
       errorTip,
 
-      hideAsterisk: formProps.hideAsterisk ?? false,
-      labelSuffix: formProps.labelSuffix ?? '',
+      labelSuffix: toRef(formProps, 'labelSuffix'),
+      isNative: computed(() => !!(formProps.action && formProps.method)),
 
       className,
       inputValue,
