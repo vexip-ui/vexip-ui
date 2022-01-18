@@ -301,6 +301,7 @@ export default defineComponent({
             disabled = false,
             checked = false,
             loading = false,
+            loaded = false,
             readonly = false,
             arrow = 'auto',
             checkbox = null
@@ -313,6 +314,7 @@ export default defineComponent({
           node.disabled = disabled
           node.checked = checked
           node.loading = loading
+          node.loaded = loaded
           node.readonly = readonly
           node.arrow = arrow
           node.checkbox = checkbox
@@ -790,6 +792,7 @@ export default defineComponent({
       indicator,
 
       // api
+      parseAndTransformData,
       forceUpdateData,
       syncNodeStateIntoData,
       getNodeChildren,
