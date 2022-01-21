@@ -194,7 +194,8 @@ export default defineComponent({
       return {
         keyField: props.idKey,
         childField: props.childrenKey,
-        parentField: props.parentKey
+        parentField: props.parentKey,
+        rootId: props.rootId
       }
     })
     const boundAsyncLoad = computed(() => {
