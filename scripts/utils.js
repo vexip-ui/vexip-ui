@@ -44,7 +44,7 @@ exports.toKebabCase = value => {
 }
 
 // 全大写命名
-exports.toPascalCase = value => {
+const toPascalCase = exports.toPascalCase = value => {
   return (
     value.charAt(0).toUpperCase() +
     value.slice(1).replace(/-([a-z])/g, (_, char) => (char ? char.toUpperCase() : ''))
@@ -122,7 +122,7 @@ exports.specifyComponent = async (args, allComponents = components, required = t
 
   if (!component && required) {
     logger.ln()
-    logger.error('Component must be specified')
+    logger.error('Component must be specified.')
 
     process.exitCode = 1
   }
