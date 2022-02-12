@@ -1,0 +1,37 @@
+@import './icon.scss';
+
+.vxp-spin {
+  @include basis;
+
+  position: relative;
+
+  &--inner,
+  &__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__mask {
+    position: absolute;
+    inset: 0;
+    content: '';
+    background-color: var(--color, white);
+    opacity: 50%;
+  }
+
+  &__icon,
+  &__tip {
+    position: relative;
+    color: $vxp-color-primary;
+  }
+
+  &__tip {
+    padding-top: 3px;
+    font-size: $vxp-font-size-secondary;
+    user-select: none;
+  }
+}

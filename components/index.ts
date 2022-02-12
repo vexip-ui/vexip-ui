@@ -60,6 +60,7 @@ import { Scroll } from '@/components/scroll'
 import { Scrollbar } from '@/components/scrollbar'
 import { Select } from '@/components/select'
 import { Slider } from '@/components/slider'
+import { Spin } from '@/components/spin'
 import { Split } from '@/components/split'
 import { Switcher } from '@/components/switcher'
 import { TabNav } from '@/components/tab-nav'
@@ -153,6 +154,7 @@ const components = [
   Scrollbar,
   Select,
   Slider,
+  Spin,
   Split,
   Switcher,
   TabNav,
@@ -182,14 +184,17 @@ export const install = (app: App<unknown>, options: InstallOptions = {}) => {
   configProp(prop)
   configLocale(locale)
 
+  const formatName =
+    typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)
+      ? (name: string) => name.replace(/([A-Z])/g, '-$1').toLowerCase()
+      : (name: string) => name
+
   components.forEach(component => {
-    let name = component.name
+    app.component(`${prefix || ''}${formatName(component.name)}`, component)
 
-    if (typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)) {
-      name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
+    if (typeof component.installDirective === 'function') {
+      component.installDirective(app)
     }
-
-    app.component(`${prefix || ''}${name}`, component)
   })
 
   plugins.forEach(plugin => {
@@ -260,6 +265,7 @@ export {
   Scrollbar,
   Select,
   Slider,
+  Spin,
   Split,
   Switcher,
   TabNav,
@@ -337,6 +343,7 @@ export interface VexipComponents {
   Scrollbar: typeof Scrollbar,
   Select: typeof Select,
   Slider: typeof Slider,
+  Spin: typeof Spin,
   Split: typeof Split,
   Switcher: typeof Switcher,
   TabNav: typeof TabNav,

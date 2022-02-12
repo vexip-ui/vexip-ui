@@ -49,14 +49,16 @@ async function main() {
       configProp(prop)
       configLocale(locale)
 
+      const formatName = typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)
+        ? (name: string) => name.replace(/([A-Z])/g, '-$1').toLowerCase()
+        : (name: string) => name
+
       components.forEach(component => {
-        let name = component.name
-    
-        if (typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)) {
-          name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
+        app.component(\`\${prefix || ''}\$\{formatName(component.name)}\`, component)
+
+        if (typeof component.installDirective === 'function') {
+          component.installDirective(app)
         }
-    
-        app.component(\`\${prefix || ''}\${name}\`, component)
       })
 
       plugins.forEach(plugin => {
