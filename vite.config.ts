@@ -4,10 +4,12 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import dts from 'vite-plugin-dts'
-import { injectHtml } from 'vite-plugin-html'
+import { createHtmlPlugin } from 'vite-plugin-html'
 import eslint from '@rollup/plugin-eslint'
 import pcssEnv from 'postcss-preset-env'
 import discardCss from 'postcss-discard-duplicates'
+
+import type { LogLevel } from 'vite'
 
 if (!process.env.TARGET && process.env.ENV === 'development') {
   throw new Error('Target component must be specified.')
@@ -21,6 +23,7 @@ const name = basename(componentDir)
 const componentResolve = (p: string) => resolve(componentDir, p)
 
 const isProduction = process.env.NODE_ENV === 'production'
+const logLevel = process.env.LOG_LEVEL
 const sourceMap = process.env.SOURCE_MAP === 'true'
 
 const prePlugins = plugins => {
@@ -35,6 +38,7 @@ export default defineConfig(({ command }) => {
   const useServer = command === 'serve'
 
   return {
+    logLevel: (logLevel || 'info') as LogLevel,
     define: {
       __VERSION__: JSON.stringify(pkg.version)
     },
@@ -101,7 +105,7 @@ export default defineConfig(({ command }) => {
       },
       preprocessorOptions: {
         scss: {
-          additionalData: (source: string, fileName: string) => {
+          additionalData: (source: string) => {
             return (
               [
                 '@use "sass:color";',
@@ -150,8 +154,10 @@ export default defineConfig(({ command }) => {
             return { filePath, content }
           }
         }),
-      injectHtml({
-        injectData: { name }
+      createHtmlPlugin({
+        inject: {
+          data: { name }
+        }
       }),
       useServer && {
         name: 'single-hmr',

@@ -32,6 +32,10 @@ async function main() {
   await execa('yarn', ['lint:style'])
 
   if (!libOnly) {
+    logger.ln()
+    logger.successText('start building components...')
+    logger.ln()
+
     if (buildAllMatching) {
       if (!targets.length) {
         await buildAll(allComponents)
@@ -43,12 +47,16 @@ async function main() {
     }
   }
 
+  logger.ln()
+  logger.successText('start building lib...')
+  logger.ln()
+
   await buildLib()
 
   logger.ln()
 
   if (!process.exitCode) {
-    logger.success('All builds are complete successfully.')
+    logger.success('All builds completed successfully.')
     logger.ln()
   }
 
@@ -73,6 +81,7 @@ async function build(component) {
       env: {
         NODE_ENV: env,
         TARGET: component,
+        LOG_LEVEL: 'warn',
         SOURCE_MAP: !!sourceMap
       }
     })
@@ -91,6 +100,8 @@ async function build(component) {
   if (!fs.existsSync(`${targetDir}/style.css`)) {
     await fs.writeFile(`${targetDir}/style.css`, '')
   }
+
+  logger.infoText(`built ${component}`)
 }
 
 async function buildLib() {

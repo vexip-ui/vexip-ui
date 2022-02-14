@@ -46,7 +46,9 @@ module.exports = {
       }
     ],
     'color-function-notation': null,
-    'scss/at-import-partial-extension': 'always'
+    'scss/at-import-partial-extension': 'always',
+    'function-no-unknown': null,
+    'alpha-value-notation': 'percentage'
   },
   ignoreFiles: [
     /* see .stylelintignore */
