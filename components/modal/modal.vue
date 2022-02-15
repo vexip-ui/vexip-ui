@@ -268,7 +268,7 @@ export default defineComponent({
       }
     })
     const hasTitle = computed(() => {
-      return !!(slots.title || props.title)
+      return !!(slots.header || props.title)
     })
 
     watch(
