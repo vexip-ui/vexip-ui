@@ -1,5 +1,6 @@
 <template>
   <Input
+    ref="input"
     v-model:value="value"
     clearable
     suffix="user"
@@ -16,10 +17,14 @@
       .com
     </template>
   </Input> -->
+  <Button type="primary" @on-click="doFocus">
+    Focus
+  </Button>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { Button } from '@/components/button'
 import { Input } from '..'
 
 import '@/common/icons/user'
@@ -27,10 +32,12 @@ import '@/common/icons/user'
 export default defineComponent({
   name: 'App',
   components: {
+    Button,
     Input
   },
   setup() {
     const value = ref('1')
+    const input = ref<InstanceType<typeof Input> | null>(null)
 
     function clear() {
       console.log('clear')
@@ -40,10 +47,16 @@ export default defineComponent({
       console.log('focus')
     }
 
+    function doFocus() {
+      input.value?.focus()
+    }
+
     return {
       value,
+      input,
       clear,
-      focus
+      focus,
+      doFocus
     }
   }
 })

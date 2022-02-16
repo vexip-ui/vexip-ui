@@ -1,4 +1,4 @@
-import { defineComponent, ref, computed, watch, inject, getCurrentInstance, Transition } from 'vue'
+import { defineComponent, ref, computed, watch, inject, Transition } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@/common/mixins/hover'
@@ -137,7 +137,7 @@ export default defineComponent({
     'on-key-up',
     'update:value'
   ],
-  setup(props, { slots, emit }) {
+  setup(props, { slots, emit, expose }) {
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
@@ -239,18 +239,17 @@ export default defineComponent({
       }
     )
 
-    const instance = getCurrentInstance()
-
-    if (instance?.proxy) {
-      const ctx = instance.proxy as any
-
-      ctx._focus = () => {
+    // expose api methods
+    // need to define some same name methods in 'methods' option to support infer types
+    // cannot use expose option in component define
+    expose({
+      focus: () => {
         inputControl.value?.focus()
-      }
-      ctx._blur = () => {
+      },
+      blur: () => {
         inputControl.value?.blur()
       }
-    }
+    })
 
     function handleFocus(event: FocusEvent) {
       if (!focused.value) {
@@ -476,10 +475,10 @@ export default defineComponent({
   },
   methods: {
     focus() {
-      (this as any)._focus()
+      // define type only
     },
     blur() {
-      (this as any)._blur()
+      // define type only
     }
   }
 })
