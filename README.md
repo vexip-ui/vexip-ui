@@ -49,7 +49,7 @@ yarn run serve [component-pattern]
 
 Open a [issue](//github.com/qmhc/vexip-ui/issues) to request help.
 
-If you take some bugs，please use the [Vexip UI Playground](https://playground.vexipui.com/) to provide a minimal reproduction。
+If you take some bugs, please use the [Vexip UI Playground](https://playground.vexipui.com/) to provide a minimal reproduction.
 
 ## License
 
