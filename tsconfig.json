@@ -31,11 +31,10 @@
     ]
   },
   "include": [
-    "common/**/*.ts",
-    "components/**/*.ts",
-    "components/**/*.d,ts",
-    "components/**/*.tsx",
-    "components/**/*.vue"
+    "common",
+    "components",
+    "example",
+    "playground"
   ],
   "exclude": [
     "node_modules"

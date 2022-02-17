@@ -165,7 +165,8 @@ module.exports = {
       files: ['**/*.vue'],
       globals: {
         defineProps: 'readonly',
-        defineEmits: 'readonly'
+        defineEmits: 'readonly',
+        defineExpose: 'readonly'
       }
     }
   ],
