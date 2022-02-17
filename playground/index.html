@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="/favicon.ico" />
-    <title>vexip-ui - playground</title>
+    <title>Vexip UI - Playground</title>
     <script>
       // process shim for old versions of @vue/compiler-sfc dependency
       window.process = { env: {} }
       const saved = localStorage.getItem('vexip-sfc-playground-prefer-dark')
-      if (saved !== 'false' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      if (saved === 'true' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.classList.add('dark')
       }
     </script>

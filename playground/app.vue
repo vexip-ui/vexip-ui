@@ -89,7 +89,7 @@ store.setImportMap({
     'vexip-ui': `${location.origin}/vexip-ui.es.js`
   }
 })
-;(serializedState
+;(!serializedState
   ? store.setFiles(
     {
       'import-map.json': store.getFiles()['import-map.json'],
