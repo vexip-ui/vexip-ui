@@ -65,6 +65,7 @@ export default defineConfig(({ command }) => {
             fileName: 'vexip-ui'
           },
       rollupOptions: {
+        input: useServer ? 'index.html' : undefined,
         external: !process.env.TARGET
           ? ['vue']
           : id => {
