@@ -48,6 +48,9 @@ export default defineConfig(({ command }) => {
     server: {
       port: parseInt(process.env.PORT) || 8000
     },
+    optimizeDeps: {
+      entries: useServer ? 'index.html' : undefined
+    },
     build: {
       sourcemap: sourceMap,
       outDir: process.env.TARGET ? `lib/${name}` : 'dist',
@@ -65,7 +68,6 @@ export default defineConfig(({ command }) => {
             fileName: 'vexip-ui'
           },
       rollupOptions: {
-        input: useServer ? 'index.html' : undefined,
         external: !process.env.TARGET
           ? ['vue']
           : id => {
