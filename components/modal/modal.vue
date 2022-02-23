@@ -333,14 +333,14 @@ export default defineComponent({
     function computeTop() {
       if (!wrapper.value || hasComputedTop) return
 
-      const currentHeight = wrapper.value.getBoundingClientRect().height
+      const currentHeight = wrapper.value.offsetHeight
 
       if (props.top === 'auto' && props.inner) {
         let parentElement = wrapper.value.parentElement
 
         while (parentElement && parentElement !== document.body) {
           if (getComputedStyle(parentElement).position !== 'static') {
-            currentTop.value = (parentElement.getBoundingClientRect().height - currentHeight) / 2
+            currentTop.value = (parentElement.offsetHeight - currentHeight) / 2
 
             break
           }
@@ -358,14 +358,14 @@ export default defineComponent({
     function computeLeft() {
       if (!wrapper.value || hasComputedLeft) return
 
-      const currentWidth = wrapper.value.getBoundingClientRect().width
+      const currentWidth = wrapper.value.offsetWidth
 
       if (props.left === 'auto' && props.inner) {
         let parentElement = wrapper.value.parentElement
 
         while (parentElement && parentElement !== document.body) {
           if (getComputedStyle(parentElement).position !== 'static') {
-            currentLeft.value = (parentElement.getBoundingClientRect().width - currentWidth) / 2
+            currentLeft.value = (parentElement.offsetWidth - currentWidth) / 2
 
             break
           }
