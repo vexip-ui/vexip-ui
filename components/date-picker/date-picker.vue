@@ -509,6 +509,8 @@ export default defineComponent({
           } else {
             date = toDate(value)
           }
+        } else {
+          date = toDate(value)
         }
       } else {
         date = toDate(value)
