@@ -74,7 +74,7 @@ export function groupByProps<T = any>(
   for (const item of list) {
     let data
 
-    for (let i = 0; i < propCount; i++) {
+    for (let i = 0; i < propCount; ++i) {
       const isLast = i === propCount - 1
       const prop = props[i]
       const value = typeof prop === 'function' ? prop(item) : item[prop as keyof T]
@@ -124,7 +124,7 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
   const tree: T[] = []
   const record = new Map<T[keyof T], T[]>()
 
-  for (let i = 0, len = list.length; i < len; i++) {
+  for (let i = 0, len = list.length; i < len; ++i) {
     const item = list[i]
     const id = item[keyField]
 
@@ -139,7 +139,7 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
       record.set(id, (item as any)[childField])
     }
 
-    if (item[parentField]) {
+    if (item[parentField] && (!hasRootId || item[parentField] !== rootId)) {
       const parentId = item[parentField]
 
       if (!record.has(parentId)) {
@@ -193,10 +193,10 @@ export function flatTree<T = any>(tree: T[], options: TreeOptions<keyof T> = {})
     }
 
     if (hasRootId ? item[parentField] === rootId : !item[parentField]) {
-      (item as any)[parentField] = null
+      (item as any)[parentField] = rootId
     }
 
-    for (let i = 0, len = children.length; i < len; i++) {
+    for (let i = 0, len = children.length; i < len; ++i) {
       const child = children[i]
 
       child[parentField] = id

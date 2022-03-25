@@ -114,7 +114,7 @@ export function noop() {}
 export function range(size: number, start = 1, step = 1) {
   const array: number[] = []
 
-  for (let i = 0; i < size; i++) {
+  for (let i = 0; i < size; ++i) {
     array.push(start + i * step)
   }
 

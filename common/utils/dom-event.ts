@@ -10,10 +10,14 @@ export interface EventPayload extends EventInit {
   [prop: string]: any
 }
 
-export const USE_TOUCH =
-  isDefined(window) &&
-  ('ontouchstart' in window || (isDefined(navigator) && navigator.msMaxTouchPoints > 0))
+export const USE_TOUCH = isDefined(window) && ('ontouchstart' in window || getMaxTouchPoints() > 0)
 export const CLICK_TYPE = USE_TOUCH ? 'touchstart' : 'click'
+
+function getMaxTouchPoints() {
+  return isDefined(navigator)
+    ? navigator.maxTouchPoints || ((navigator as any).msMaxTouchPoints as number) || 0
+    : 0
+}
 
 const events: Map<string, Set<TransferNode>> = new Map()
 
@@ -33,7 +37,7 @@ export function observe(el: TransferNode, types: string | string[]) {
   }
 
   if (Array.isArray(types)) {
-    for (let i = 0, len = types.length; i < len; i++) {
+    for (let i = 0, len = types.length; i < len; ++i) {
       const type = types[i]
 
       if (!events.has(type)) {
@@ -51,7 +55,7 @@ export function disconnect(el: TransferNode, types: string | string[]) {
   }
 
   if (Array.isArray(types)) {
-    for (let i = 0, len = types.length; i < len; i++) {
+    for (let i = 0, len = types.length; i < len; ++i) {
       const type = types[i]
 
       if (events.has(type)) {
