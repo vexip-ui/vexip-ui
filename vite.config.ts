@@ -90,12 +90,12 @@ export default defineConfig(({ command }) => {
             }
         }
       },
-      terserOptions: {
-        compress: {
-          ecma: 2015,
-          drop_console: isProduction
-        }
-      },
+      // terserOptions: {
+      //   compress: {
+      //     ecma: 2015,
+      //     drop_console: isProduction
+      //   }
+      // },
       commonjsOptions: {
         sourceMap: false
       },

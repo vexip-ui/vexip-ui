@@ -1,5 +1,5 @@
 <template>
-  <DatePicker v-model:value="date" clearable type="date"></DatePicker>
+  <DatePicker v-model:value="date" clearable type="datetime"></DatePicker>
   <p>
     Current Date:
     <br />

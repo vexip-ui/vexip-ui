@@ -72,6 +72,7 @@ const formatters: Formatters = {
 }
 
 const formatRegExp = /[yMdHmsq](\w)*|./g
+const quotationRegExp = /'(.+?)'/g
 
 // 将任意可转为 Date 的变量转为一个新日期
 export function toDate(any: Dateable, strict = false): Date {
@@ -115,10 +116,10 @@ export function format(date: Dateable, pattern = 'yyyy-MM-dd HH:mm:ss'): string 
       result += substring
     }
 
-    i++
+    ++i
   }
 
-  return result
+  return result.replace(quotationRegExp, '$1')
 }
 
 // 获取日期所在的季度
@@ -223,7 +224,7 @@ export function rangeDate(start: Dateable, size = 42, step = 1): Date[] {
 
   const dateRange: Date[] = []
 
-  for (let i = 0; i < size; i++) {
+  for (let i = 0; i < size; ++i) {
     dateRange.push(addDays(start, i * step))
   }
 
@@ -241,7 +242,7 @@ export function rangeMonth(start: Dateable, size = 12, step = 1): Date[] {
 
   const dateRange: Date[] = []
 
-  for (let i = 0; i < size; i++) {
+  for (let i = 0; i < size; ++i) {
     dateRange.push(addMonths(start, i * step))
   }
 

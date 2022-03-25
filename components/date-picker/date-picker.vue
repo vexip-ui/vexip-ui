@@ -542,9 +542,34 @@ export default defineComponent({
       const isDatetime = props.type === 'datetime'
 
       ;[startState, endState].forEach(state => {
-        state.enabled.hour = isDatetime && props.format.includes('H')
-        state.enabled.minute = isDatetime && props.format.includes('m')
-        state.enabled.second = isDatetime && props.format.includes('s')
+        state.enabled.hour = false
+        state.enabled.minute = false
+        state.enabled.second = false
+
+        if (isDatetime && props.format.length) {
+          const length = props.format.length
+          let inQuotation = false
+
+          for (let i = 0; i < length; ++i) {
+            const char = props.format.charAt(i)
+
+            if (char === "'") {
+              inQuotation = !inQuotation
+            } else if (!inQuotation) {
+              switch (char) {
+                case 'H':
+                  state.enabled.hour = true
+                  break
+                case 'm':
+                  state.enabled.minute = true
+                  break
+                case 's':
+                  state.enabled.second = true
+                  break
+              }
+            }
+          }
+        }
       })
     }
 
