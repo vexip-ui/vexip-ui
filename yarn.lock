@@ -3804,18 +3804,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^4.3.4":
-  version: 4.3.4
-  resolution: "debug@npm:4.3.4"
-  dependencies:
-    ms: 2.1.2
-  peerDependenciesMeta:
-    supports-color:
-      optional: true
-  checksum: 3dbad3f94ea64f34431a9cbf0bafb61853eda57bff2880036153438f50fb5a84f27683ba0d8e5426bf41a8c6ff03879488120cf5b3a761e77953169c0600a708
-  languageName: node
-  linkType: hard
-
 "decamelize-keys@npm:^1.1.0":
   version: 1.1.0
   resolution: "decamelize-keys@npm:1.1.0"
@@ -10907,25 +10895,24 @@ typescript@^4.4.3:
     ts-jest: ^27.1.4
     typescript: 4.5.5
     vite: ^2.8.6
-    vite-plugin-dts: ^1.0.2
+    vite-plugin-dts: ^1.0.3
     vite-plugin-html: ^3.2.0
     vue: ^3.2.31
     vue-eslint-parser: ^8.3.0
   languageName: unknown
   linkType: soft
 
-"vite-plugin-dts@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "vite-plugin-dts@npm:1.0.2"
+"vite-plugin-dts@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "vite-plugin-dts@npm:1.0.3"
   dependencies:
     chalk: ^4.1.2
-    debug: ^4.3.4
     fast-glob: ^3.2.11
     fs-extra: ^10.0.1
     ts-morph: ^14.0.0
   peerDependencies:
     vite: ">=2.4.4"
-  checksum: 9a8f95d627cb4e1b7112bec8bc751d9bfbee0399fea3bef8b2ec4644889109d9e31f10fd50d67cb9237e18b2f81856bf896db6edf22e6007ce3cc3a349c1c618
+  checksum: e65b20453deefdfe5f1db47035175f9db79842df3d9527c84461c77f92e3fdc8e4f0f069e59df9cba8e108c98e4f7b3a5501ef54402b01f14f9dccb59a092ad4
   languageName: node
   linkType: hard
 

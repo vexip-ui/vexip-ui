@@ -10,6 +10,7 @@ import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { Bubble } from '@/components/bubble'
 import { Button } from '@/components/button'
 import { ButtonGroup } from '@/components/button-group'
+import { Calendar } from '@/components/calendar'
 import { CalendarPane } from '@/components/calendar-pane'
 import { Card } from '@/components/card'
 import { Carousel } from '@/components/carousel'
@@ -109,6 +110,7 @@ const components = [
   Bubble,
   Button,
   ButtonGroup,
+  Calendar,
   CalendarPane,
   Card,
   Carousel,
@@ -215,6 +217,7 @@ export {
   Bubble,
   Button,
   ButtonGroup,
+  Calendar,
   CalendarPane,
   Card,
   Carousel,
@@ -298,6 +301,7 @@ export interface VexipComponents {
   Bubble: typeof Bubble,
   Button: typeof Button,
   ButtonGroup: typeof ButtonGroup,
+  Calendar: typeof Calendar,
   CalendarPane: typeof CalendarPane,
   Card: typeof Card,
   Carousel: typeof Carousel,

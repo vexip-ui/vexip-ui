@@ -8,7 +8,7 @@ main()
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice']
-  const ignores = ['calendar']
+  const ignores = []
   const exportComponents = allComponents.filter(c => !ignores.includes(c))
   const components = exportComponents.filter(c => !plugins.includes(c))
   const prettierConfig = await prettier.resolveConfig(path.resolve('.prettierrc.js'))
