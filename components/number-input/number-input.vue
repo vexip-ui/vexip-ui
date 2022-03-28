@@ -4,7 +4,7 @@
       ref="input"
       type="text"
       :class="[`${prefixCls}__control`, inputClass]"
-      :value="formattedValue"
+      :value="focused ? preciseNumber : formattedValue"
       :style="inputStyle"
       :autofocus="autofocus"
       :autocomplete="autocomplete"
@@ -67,7 +67,7 @@ import { useHover } from '@/common/mixins/hover'
 import { useConfiguredProps } from '@/common/config/install'
 import { useLocaleConfig } from '@/common/config/locale'
 import { isNull, noop } from '@/common/utils/common'
-import { toFixed, toNumber } from '@/common/utils/number'
+import { toFixed, toNumber, boundRange } from '@/common/utils/number'
 import { throttle } from '@/common/utils/performance'
 import { createSizeProp, createStateProp } from '@/common/config/props'
 
@@ -344,7 +344,12 @@ export default defineComponent({
     }
 
     function setValue(value: number | null, type: InputEventType) {
-      currentValue.value = value
+      if (type !== 'input') {
+        currentValue.value = boundRange(value || 0, props.range[0], props.range[1])
+      } else {
+        currentValue.value = value
+      }
+
       emitChangeEvent(type)
     }
 
@@ -405,12 +410,14 @@ export default defineComponent({
     return {
       prefixCls: prefix,
       locale: useLocaleConfig('input'),
+      focused,
       isHover,
 
       className,
       hasPrefix,
       hasSuffix,
       inputStyle,
+      preciseNumber,
       formattedValue,
       plusDisabled,
       minusDisabled,
