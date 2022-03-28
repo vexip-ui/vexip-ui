@@ -30,6 +30,7 @@
             :date="dateRange[(row - 1) * 7 + cell - 1]"
             :isPrev="isPrevMonth(dateRange[(row - 1) * 7 + cell - 1])"
             :isNext="isNextMonth(dateRange[(row - 1) * 7 + cell - 1])"
+            :isToday="isToday(dateRange[(row - 1) * 7 + cell - 1])"
             :disabled="isDisabled(dateRange[(row - 1) * 7 + cell - 1])"
             :inRange="isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
           >
@@ -161,7 +162,7 @@ export default defineComponent({
     })
 
     function getWeekLabel(index: number) {
-      return props.weekDays?.[index] || locale[`week${index as WeekIndex}`]
+      return props.weekDays?.[index] || locale[`week${(index || 7) as WeekIndex}`]
     }
 
     function setDateRange() {
@@ -176,7 +177,7 @@ export default defineComponent({
         value = [value, value]
       }
 
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 2; ++i) {
         const date = new Date(value[i] ?? '')
 
         if (i === 0) {
@@ -194,13 +195,17 @@ export default defineComponent({
         return false
       }
 
-      return (
+      return !!(
         (startValue.value && !differenceDays(date, startValue.value)) ||
         (endValue.value && !differenceDays(date, endValue.value))
       )
     }
 
     function isDisabled(date: Date) {
+      if (typeof props.disabledDate !== 'function') {
+        return true
+      }
+
       if (!props.isRange) {
         return props.disabledDate(date)
       }
@@ -284,7 +289,7 @@ export default defineComponent({
         min = Math.min(startTime, endTime)
         max = Math.max(startTime, endTime)
       } else if (hoveredDate.value) {
-        if (!startValue.value && !endValue.value) return
+        if (!startValue.value && !endValue.value) return false
 
         const hoveredTime = hoveredDate.value.getTime()
 

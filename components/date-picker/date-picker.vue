@@ -99,7 +99,7 @@
               :confirm-text="confirmText"
               :cancel-text="cancelText"
               :today="today"
-              :disable-date="disableDate"
+              :disabled-date="disabledDate"
               :no-action="noAction"
               :steps="steps"
               :is-range="isRange"
@@ -207,7 +207,7 @@ const props = useConfiguredProps('datePicker', {
     type: Array as PropType<DateShortcut[]>,
     default: () => []
   },
-  disableDate: {
+  disabledDate: {
     type: Function as PropType<(date: Date) => boolean>,
     default: () => false
   },

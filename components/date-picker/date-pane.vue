@@ -108,7 +108,7 @@
               :value="calendarValue"
               :year="calendarYear"
               :month="calendarMonth"
-              :disable-date="disableDate"
+              :disabled-date="disabledDate"
               :is-range="calendarRange"
               :value-type="valueType"
               @on-select="handleSelectDate"
@@ -206,7 +206,7 @@ const props = {
     type: [Number, String, Date] as PropType<Dateable>,
     default: () => new Date()
   },
-  disableDate: {
+  disabledDate: {
     type: Function as PropType<(date: Date) => boolean>,
     default: () => false
   },
