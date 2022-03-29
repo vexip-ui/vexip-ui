@@ -58,7 +58,7 @@
       <Option
         v-for="(item, index) in rawOptions"
         :key="index"
-        :label="item.label || item.value.toString()"
+        :label="item.label || item.value?.toString()"
         :value="item.value"
       ></Option>
     </slot>
@@ -213,7 +213,7 @@ export default defineComponent({
         }
 
         if (!option.label) {
-          option.label = option.value.toString()
+          option.label = option.value?.toString()
         }
 
         return option
@@ -229,20 +229,20 @@ export default defineComponent({
       const hittingOption = filteredOptions.value[currentIndex.value]
 
       if (hittingOption) {
-        return hittingOption.label || hittingOption.value.toString()
+        return hittingOption.label || hittingOption.value?.toString()
       } else if (select.value) {
         if (select.value.currentVisible) {
-          return currentValue.value.toString()
+          return currentValue.value?.toString()
         }
 
         const currentOption = filteredOptions.value.find(
           ({ value }) => value === currentValue.value
         )
 
-        return currentOption ? currentOption.label : currentValue.value.toString()
+        return currentOption ? currentOption.label : currentValue.value?.toString()
       }
 
-      return currentValue.value.toString()
+      return currentValue.value?.toString()
     })
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
