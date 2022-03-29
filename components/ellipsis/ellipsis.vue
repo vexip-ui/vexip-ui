@@ -22,7 +22,7 @@
         @mouseenter="handleTriggerEnter"
         @mouseleave="handleTriggerLeave"
       >
-        <div :class="[`${tooltipPrefix}__tip`, tipClass]">
+        <div :class="[`${prefix}__tip`, `${tooltipPrefix}__tip`, tipClass]" :style="tipStyle">
           <div :class="`${tooltipPrefix}__arrow`"></div>
           {{ content }}
         </div>
@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, toRef, nextTick } from 'vue'
+import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
 import { useConfiguredProps } from '@/common/config/install'
 import { placementWhileList, usePopper } from '@/common/mixins/popper'
@@ -72,6 +72,10 @@ const props = useConfiguredProps('ellipsis', {
   tipClass: {
     type: [String, Object] as PropType<ClassType>,
     default: null
+  },
+  tipMaxWidth: {
+    type: [Number, String],
+    default: 500
   }
 })
 
@@ -97,6 +101,15 @@ export default defineComponent({
       transfer,
       wrapper,
       reference: wrapper
+    })
+
+    const tipStyle = computed(() => {
+      return {
+        maxWidth:
+          typeof props.tipMaxWidth === 'string'
+            ? parseFloat(props.tipMaxWidth) || props.tipMaxWidth
+            : `${props.tipMaxWidth}px`
+      }
     })
 
     watch(visible, value => {
@@ -151,6 +164,8 @@ export default defineComponent({
       active,
       content,
       transferTo,
+
+      tipStyle,
 
       wrapper,
       popper,
