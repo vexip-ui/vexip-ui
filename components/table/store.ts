@@ -51,6 +51,7 @@ export function useStore(options: StoreOptions) {
     rowDraggable: !!options.rowDraggable,
     emptyText: options.emptyText,
     tooltipTheme: options.tooltipTheme,
+    tooltipWidth: options.tooltipWidth,
     expandRenderer: options.expandRenderer,
 
     rowData: [],

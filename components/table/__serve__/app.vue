@@ -1,5 +1,10 @@
 <template>
-  <Table :columns="columns2" :data="data" :height="1000">
+  <Table
+    :columns="columns2"
+    :data="data"
+    :height="1000"
+    :tooltip-width="300"
+  >
     <TableColumn type="selection" id-key="selection" :disable-row="isDisabled"></TableColumn>
     <TableColumn type="order" id-key="order"></TableColumn>
     <TableColumn type="expand" id-key="expand">
@@ -27,7 +32,12 @@
       </template>
     </TableColumn>
     <TableColumn name="Job" id-key="job" :order="3"></TableColumn>
-    <TableColumn name="Age" id-key="age" :order="2"></TableColumn>
+    <TableColumn
+      name="Age"
+      id-key="age"
+      :order="2"
+      no-ellipsis
+    ></TableColumn>
     <TableColumn name="Long Text" id-key="longText">
       很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本
     </TableColumn>

@@ -69,6 +69,10 @@ const props = useConfiguredProps('tableColumn', {
     type: Number,
     default: 0
   },
+  noEllipsis: {
+    type: Boolean,
+    default: false
+  },
   checkboxSize: createSizeProp(),
   disableRow: {
     type: Function as PropType<(data: Data) => boolean>,

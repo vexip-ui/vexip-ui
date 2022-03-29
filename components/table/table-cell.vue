@@ -24,24 +24,34 @@
       </div>
     </template>
   </div>
-  <Ellipsis
-    v-else
-    :class="className"
-    :tooltip-theme="tooltipTheme"
-    :style="style"
-  >
-    <Renderer
-      v-if="isFunction(column.renderer)"
-      :renderer="column.renderer"
-      :data="{ row: row.data, rowIndex, column, columnIndex }"
-    ></Renderer>
-    <template v-else-if="isFunction(column.accessor)">
-      {{ column.accessor(row.data, rowIndex) }}
-    </template>
+  <div v-else :class="className" :style="style">
+    <Ellipsis v-if="!column.noEllipsis" :tooltip-theme="tooltipTheme" :tip-max-width="tooltipWidth">
+      <Renderer
+        v-if="isFunction(column.renderer)"
+        :renderer="column.renderer"
+        :data="{ row: row.data, rowIndex, column, columnIndex }"
+      ></Renderer>
+      <template v-else-if="isFunction(column.accessor)">
+        {{ column.accessor(row.data, rowIndex) }}
+      </template>
+      <template v-else>
+        {{ row.data[column.key] }}
+      </template>
+    </Ellipsis>
     <template v-else>
-      {{ row.data[column.key] }}
+      <Renderer
+        v-if="isFunction(column.renderer)"
+        :renderer="column.renderer"
+        :data="{ row: row.data, rowIndex, column, columnIndex }"
+      ></Renderer>
+      <template v-else-if="isFunction(column.accessor)">
+        {{ column.accessor(row.data, rowIndex) }}
+      </template>
+      <template v-else>
+        {{ row.data[column.key] }}
+      </template>
     </template>
-  </Ellipsis>
+  </div>
 </template>
 
 <script lang="ts">
@@ -108,7 +118,8 @@ export default defineComponent({
       return [
         `${prefix}__cell`,
         {
-          [`${prefix}__cell--center`]: columnTypes.includes((props.column as TypeColumn).type)
+          [`${prefix}__cell--center`]: columnTypes.includes((props.column as TypeColumn).type),
+          [`${prefix}__cell--wrap`]: props.column.noEllipsis
         },
         customClass
       ]
@@ -163,6 +174,7 @@ export default defineComponent({
       className,
       style,
       tooltipTheme: toRef(state, 'tooltipTheme'),
+      tooltipWidth: toRef(state, 'tooltipWidth'),
       disableCheckRows: toRef(getters, 'disableCheckRows'),
       disableExpandRows: toRef(getters, 'disableExpandRows'),
 

@@ -246,6 +246,10 @@ const props = useConfiguredProps('table', {
     validator: (value: TooltipTheme) => {
       return ['light', 'dark'].includes(value)
     }
+  },
+  tooltipWidth: {
+    type: [Number, String],
+    default: 500
   }
 })
 
@@ -302,6 +306,7 @@ export default defineComponent({
       rowDraggable: props.rowDraggable,
       emptyText: props.emptyText ?? locale.empty,
       tooltipTheme: props.tooltipTheme,
+      tooltipWidth: props.tooltipWidth,
       expandRenderer: props.expandRenderer
     })
 

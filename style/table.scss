@@ -93,6 +93,11 @@
       justify-content: center;
       text-align: center;
     }
+
+    &--wrap {
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
   }
 
   $head: #{&}__head;

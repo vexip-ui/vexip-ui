@@ -61,6 +61,7 @@ export interface BaseColumn<T extends string | number = string | number, D = Dat
   filter?: FilterOptions<T, D>,
   sorter?: boolean | SorterOptions<D>,
   order?: number,
+  noEllipsis?: boolean,
   accessor?: Accessor<T, D>,
   renderer?: RenderFn,
   headRenderer?: RenderFn
@@ -111,6 +112,7 @@ export interface StoreOptions {
   rowDraggable: boolean,
   emptyText: string,
   tooltipTheme: TooltipTheme,
+  tooltipWidth: number | string,
   expandRenderer: RenderFn | null
 }
 
