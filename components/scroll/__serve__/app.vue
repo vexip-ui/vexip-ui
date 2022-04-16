@@ -1,12 +1,11 @@
 <template>
   <Scroll
     ref="scroll"
-    mode="vertical"
+    mode="both"
     pointer
     no-buffer
     use-x-bar
     use-y-bar
-    autoplay
     :width="200"
     :height="200"
     style="box-shadow: 0 0 4px #ccc;"

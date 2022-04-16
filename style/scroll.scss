@@ -45,4 +45,12 @@
       content: '';
     }
   }
+
+  &--both &__bar--horizontal {
+    width: calc(100% - 5px);
+  }
+
+  &--both &__bar--vertical {
+    height: calc(100% - 5px);
+  }
 }

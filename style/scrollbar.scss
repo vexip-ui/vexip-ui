@@ -6,7 +6,7 @@
 
   position: absolute;
   z-index: 10;
-  background-color: $vxp-scrollbar-color-bg-track;
+  background-color: transparent;
 
   &--disabled {
     pointer-events: none;
@@ -50,11 +50,32 @@
     left: 0;
   }
 
-  &--fade &__bar {
+  &__track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background-color: $vxp-scrollbar-color-bg-track;
+    border-radius: 3px;
+    transition: $vxp-transition-opacity-base;
+  }
+
+  &--fade &__track {
     opacity: 0%;
   }
 
-  &--active &__bar {
+  &--active &__track {
+    opacity: 60%;
+
+    &:hover {
+      opacity: 60%;
+    }
+  }
+
+  &--tracking &__track,
+  &--scrolling &__track {
     opacity: 60%;
   }
 
@@ -69,10 +90,23 @@
       height $vxp-transition-base,
       $vxp-transition-opacity-base,
       transform 140ms $timing;
+  }
+
+  &--fade &__bar {
+    opacity: 0%;
+  }
+
+  &--active &__bar {
+    opacity: 60%;
 
     &:hover {
       opacity: 80%;
     }
+  }
+
+  &--tracking &__bar {
+    opacity: 60%;
+    transition-property: opacity;
   }
 
   &--scrolling &__bar {

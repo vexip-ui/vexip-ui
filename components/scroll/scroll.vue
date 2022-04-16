@@ -19,7 +19,7 @@
     <Scrollbar
       v-if="useXBar"
       placement="bottom"
-      :class="barClass"
+      :class="[`${prefix}__bar--horizontal`, barClass]"
       :scroll="percentX"
       :fade="barFade"
       :bar-length="xBarLength"
@@ -32,7 +32,7 @@
     <Scrollbar
       v-if="useYBar"
       placement="right"
-      :class="barClass"
+      :class="[`${prefix}__bar--vertical`, barClass]"
       :scroll="percentY"
       :fade="barFade"
       :bar-length="yBarLength"
@@ -650,6 +650,7 @@ export default defineComponent({
     }
 
     return {
+      prefix,
       percentX,
       percentY,
       transitionDuration,

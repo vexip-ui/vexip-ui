@@ -1,6 +1,7 @@
 <template>
   <NativeScroll
     ref="scroll"
+    mode="both"
     appear
     pointer
     use-x-bar

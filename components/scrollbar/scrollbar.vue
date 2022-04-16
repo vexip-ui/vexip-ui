@@ -1,6 +1,12 @@
 <template>
   <div ref="wrapper" :class="className">
     <div
+      ref="track"
+      :class="`${prefix}__track`"
+      :style="trackStyle"
+      @mousedown="handleTrackMouseDown"
+    ></div>
+    <div
       ref="bar"
       :class="`${prefix}__bar`"
       :style="barStyle"
@@ -15,6 +21,7 @@ import {
   ref,
   computed,
   watch,
+  toRef,
   onMounted,
   onBeforeUnmount,
   nextTick,
@@ -23,15 +30,11 @@ import {
 import { useConfiguredProps } from '@/common/config/install'
 import { isDefined } from '@/common/utils/common'
 import { throttle } from '@/common/utils/performance'
+import { useTrack } from './mixins'
+import { ScrollbarType } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
-
-export type ScrollbarPlacement = 'top' | 'right' | 'bottom' | 'left'
-
-export enum ScrollbarType {
-  HORIZONTAL,
-  VERTICAL
-}
+import type { ScrollbarPlacement } from './symbol'
 
 const props = useConfiguredProps('scrollbar', {
   placement: {
@@ -43,16 +46,12 @@ const props = useConfiguredProps('scrollbar', {
   scroll: {
     type: Number,
     default: 0,
-    validator: (value: number) => {
-      return value >= 0 && value <= 100
-    }
+    validator: (value: number) => value >= 0 && value <= 100
   },
   barLength: {
     type: Number,
     default: 35,
-    validator: (value: number) => {
-      return value > 0 && value < 100
-    }
+    validator: (value: number) => value > 0 && value < 100
   },
   appear: {
     type: Boolean,
@@ -77,6 +76,15 @@ const props = useConfiguredProps('scrollbar', {
   duration: {
     type: Number,
     default: null
+  },
+  useTrack: {
+    type: Boolean,
+    default: true
+  },
+  trackSpeed: {
+    type: Number,
+    default: 2,
+    validator: (value: number) => value > 0 && value < 10
   }
 })
 
@@ -90,8 +98,37 @@ export default defineComponent({
     const currentScroll = ref(props.scroll)
     const scrolling = ref(false)
 
-    const bar = ref<HTMLElement | null>(null)
     const wrapper = ref<HTMLElement | null>(null)
+    const bar = ref<HTMLElement | null>(null)
+    const track = ref<HTMLElement | null>(null)
+
+    let fadeTimer: number
+
+    const type = computed(() => {
+      return props.placement === 'right' || props.placement === 'left'
+        ? ScrollbarType.VERTICAL
+        : ScrollbarType.HORIZONTAL
+    })
+
+    const { tracking, handleMouseDown: handleTrackMouseDown } = useTrack({
+      currentScroll,
+      track,
+      bar,
+      type,
+      trackSpeed: toRef(props, 'trackSpeed'),
+      barLength: toRef(props, 'barLength'),
+      disabled: toRef(props, 'disabled'),
+      handleDown: scroll => {
+        window.clearTimeout(fadeTimer)
+        emit('on-scroll-start', scroll)
+      },
+      handleMove: () => window.clearTimeout(fadeTimer),
+      handleUp: scroll => {
+        setScrollbarFade()
+        emit('on-scroll-end', scroll)
+      },
+      handleScroll: scroll => emit('on-scroll', scroll)
+    })
 
     const className = computed(() => {
       return [
@@ -100,15 +137,11 @@ export default defineComponent({
         {
           [`${prefix}--fade`]: props.fade,
           [`${prefix}--scrolling`]: scrolling.value,
+          [`${prefix}--tracking`]: tracking.value,
           [`${prefix}--active`]: active.value,
           [`${prefix}--disabled`]: props.disabled
         }
       ]
-    })
-    const type = computed(() => {
-      return props.placement === 'right' || props.placement === 'left'
-        ? ScrollbarType.VERTICAL
-        : ScrollbarType.HORIZONTAL
     })
     const barStyle = computed(() => {
       const style: CSSProperties = {
@@ -132,6 +165,11 @@ export default defineComponent({
 
       return style
     })
+    const trackStyle = computed(() => {
+      return {
+        pointerEvents: props.useTrack ? undefined : 'none'
+      } as CSSProperties
+    })
 
     watch(
       () => props.scroll,
@@ -140,13 +178,14 @@ export default defineComponent({
       }
     )
 
-    let fadeTimer: number
-
     if (props.appear) {
       watch(currentScroll, () => {
         window.clearInterval(fadeTimer)
         active.value = true
-        setScrollbarFade()
+
+        if (!scrolling.value && !tracking.value) {
+          setScrollbarFade()
+        }
       })
     }
 
@@ -158,7 +197,9 @@ export default defineComponent({
       } else {
         active.value = true
 
-        setScrollbarFade()
+        if (!scrolling.value && !tracking.value) {
+          setScrollbarFade()
+        }
       }
     })
 
@@ -218,12 +259,12 @@ export default defineComponent({
       event.stopPropagation()
       event.preventDefault()
 
-      if (!wrapper.value || !bar.value) return false
+      if (!track.value || !bar.value) return false
 
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
 
-      const rect = wrapper.value.getBoundingClientRect()
+      const rect = track.value.getBoundingClientRect()
       const barRect = bar.value.getBoundingClientRect()
 
       if (type.value === ScrollbarType.VERTICAL) {
@@ -293,14 +334,18 @@ export default defineComponent({
 
     return {
       prefix,
+      currentScroll,
 
       className,
       barStyle,
+      trackStyle,
 
-      bar,
       wrapper,
+      bar,
+      track,
 
-      handleMouseDown
+      handleMouseDown,
+      handleTrackMouseDown
     }
   }
 })
