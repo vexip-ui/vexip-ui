@@ -39,6 +39,7 @@ export default defineConfig(({ command }) => {
 
   return {
     logLevel: (logLevel || 'info') as LogLevel,
+    publicDir: false,
     define: {
       __VERSION__: JSON.stringify(pkg.version)
     },
@@ -59,7 +60,7 @@ export default defineConfig(({ command }) => {
             entry: componentResolve('index.ts'),
             name: toPascalCase(name),
             formats: ['es'],
-            fileName: 'index'
+            fileName: () => 'index.js'
           }
         : {
             entry: resolve(componentsDir, 'index.ts'),
@@ -99,7 +100,7 @@ export default defineConfig(({ command }) => {
       commonjsOptions: {
         sourceMap: false
       },
-      emptyOutDir: !process.env.TARGET,
+      // emptyOutDir: !process.env.TARGET,
       chunkSizeWarningLimit: 10000
     },
     css: {

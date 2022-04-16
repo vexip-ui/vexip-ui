@@ -28,11 +28,11 @@
             :selected="isSelected(dateRange[(row - 1) * 7 + cell - 1])"
             :hovered="isHovered(dateRange[(row - 1) * 7 + cell - 1])"
             :date="dateRange[(row - 1) * 7 + cell - 1]"
-            :isPrev="isPrevMonth(dateRange[(row - 1) * 7 + cell - 1])"
-            :isNext="isNextMonth(dateRange[(row - 1) * 7 + cell - 1])"
-            :isToday="isToday(dateRange[(row - 1) * 7 + cell - 1])"
+            :is-prev="isPrevMonth(dateRange[(row - 1) * 7 + cell - 1])"
+            :is-next="isNextMonth(dateRange[(row - 1) * 7 + cell - 1])"
+            :is-today="isToday(dateRange[(row - 1) * 7 + cell - 1])"
             :disabled="isDisabled(dateRange[(row - 1) * 7 + cell - 1])"
-            :inRange="isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
+            :in-range="isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
           >
             <div
               :class="{

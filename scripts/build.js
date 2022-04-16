@@ -1,4 +1,4 @@
-const fs = require('fs-extra')
+const fs = require('fs')
 const path = require('path')
 const execa = require('execa')
 const {
@@ -6,7 +6,8 @@ const {
   components: allComponents,
   fuzzyMatchComponent,
   runParallel,
-  specifyComponent
+  specifyComponent,
+  emptyDir
 } = require('./utils')
 
 const args = require('minimist')(process.argv.slice(2))
@@ -26,7 +27,7 @@ main()
 
 async function main() {
   if (release) {
-    await fs.remove(path.resolve(__dirname, '../node_modules/.cache'))
+    emptyDir(path.resolve(__dirname, '../node_modules/.cache'))
   }
 
   await execa('yarn', ['lint:style'])
@@ -36,14 +37,20 @@ async function main() {
     logger.successText('start building components...')
     logger.ln()
 
-    if (buildAllMatching) {
-      if (!targets.length) {
-        await buildAll(allComponents)
+    try {
+      if (buildAllMatching) {
+        if (!targets.length) {
+          await buildAll(allComponents)
+        } else {
+          await buildAll(fuzzyMatchComponent(targets, buildAllMatching))
+        }
       } else {
-        await buildAll(fuzzyMatchComponent(targets, buildAllMatching))
+        await build(await specifyComponent(args, allComponents))
       }
-    } else {
-      await build(await specifyComponent(args, allComponents))
+    } catch(error) {
+      logger.errorText(error)
+      process.exitCode = 1
+      return
     }
   }
 
@@ -71,34 +78,20 @@ async function buildAll(components) {
 
 async function build(component) {
   const targetDir = path.resolve(libDir, component)
-  const indexPath = path.resolve(targetDir, 'index.js')
+  // const indexPath = path.resolve(targetDir, 'index.js')
 
-  await fs.remove(targetDir)
-
-  try {
-    await execa('vite', ['build'], {
-      stdio: 'inherit',
-      env: {
-        NODE_ENV: env,
-        TARGET: component,
-        LOG_LEVEL: 'warn',
-        SOURCE_MAP: !!sourceMap
-      }
-    })
-  } catch (error) {
-    logger.ln()
-    logger.errorText(error)
-    logger.ln()
-
-    process.exitCode = 1
-
-    return
-  }
-
-  await fs.rename(path.resolve(targetDir, 'index.es.js'), indexPath)
+  await execa('vite', ['build'], {
+    stdio: 'inherit',
+    env: {
+      NODE_ENV: env,
+      TARGET: component,
+      LOG_LEVEL: 'warn',
+      SOURCE_MAP: !!sourceMap
+    }
+  })
 
   if (!fs.existsSync(`${targetDir}/style.css`)) {
-    await fs.writeFile(`${targetDir}/style.css`, '')
+    fs.writeFileSync(`${targetDir}/style.css`, '')
   }
 
   logger.infoText(`built ${component}`)

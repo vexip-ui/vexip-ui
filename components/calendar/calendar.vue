@@ -54,9 +54,9 @@
             name="content"
             :selected="selected"
             :date="date"
-            :isPrev="isPrev"
-            :isNext="isNext"
-            :isToday="isToday"
+            :is-prev="isPrev"
+            :is-next="isNext"
+            :is-today="isToday"
             :disabled="disabled"
           ></slot>
         </div>

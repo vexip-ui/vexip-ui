@@ -12,7 +12,7 @@ export default defineConfig({
   resolve: {
     alias: [{ find: /^@\/(.+)/, replacement: resolve(__dirname, '..', '$1') }]
   },
-  publicDir: resolve(__dirname, '../dist'),
+  publicDir: resolve(__dirname, '../dist/playground'),
   server: {
     port: 6012,
     fs: {
