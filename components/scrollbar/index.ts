@@ -1,3 +1,3 @@
 import '@/style/scrollbar.scss'
 
-export { default as Scrollbar } from '../scroll/scrollbar.vue'
+export { default as Scrollbar } from './scrollbar.vue'

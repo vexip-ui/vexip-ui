@@ -54,6 +54,10 @@ const props = useConfiguredProps('scrollbar', {
       return value > 0 && value < 100
     }
   },
+  appear: {
+    type: Boolean,
+    default: false
+  },
   fade: {
     type: Number,
     default: 1500
@@ -88,8 +92,6 @@ export default defineComponent({
 
     const bar = ref<HTMLElement | null>(null)
     const wrapper = ref<HTMLElement | null>(null)
-
-    let fadeTimer: number
 
     const className = computed(() => {
       return [
@@ -138,11 +140,15 @@ export default defineComponent({
       }
     )
 
-    watch(currentScroll, () => {
-      window.clearInterval(fadeTimer)
-      active.value = true
-      setScrollbarFade()
-    })
+    let fadeTimer: number
+
+    if (props.appear) {
+      watch(currentScroll, () => {
+        window.clearInterval(fadeTimer)
+        active.value = true
+        setScrollbarFade()
+      })
+    }
 
     const handleWrapperMouseMove = throttle(() => {
       window.clearTimeout(fadeTimer)
@@ -181,6 +187,14 @@ export default defineComponent({
         }
 
         instance = null
+
+        if (!props.appear) {
+          watch(currentScroll, () => {
+            window.clearInterval(fadeTimer)
+            active.value = true
+            setScrollbarFade()
+          })
+        }
       })
     })
 
