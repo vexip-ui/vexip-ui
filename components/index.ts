@@ -35,6 +35,7 @@ import { Form } from '@/components/form'
 import { FormItem } from '@/components/form-item'
 import { FormReset } from '@/components/form-reset'
 import { FormSubmit } from '@/components/form-submit'
+import { Highlight } from '@/components/highlight'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { Linker } from '@/components/linker'
@@ -45,6 +46,7 @@ import { MenuGroup } from '@/components/menu-group'
 import { MenuItem } from '@/components/menu-item'
 import { Message } from '@/components/message'
 import { Modal } from '@/components/modal'
+import { NativeScroll } from '@/components/native-scroll'
 import { Notice } from '@/components/notice'
 import { NumberInput } from '@/components/number-input'
 import { Option } from '@/components/option'
@@ -133,6 +135,7 @@ const components = [
   FormItem,
   FormReset,
   FormSubmit,
+  Highlight,
   Icon,
   Input,
   Linker,
@@ -141,6 +144,7 @@ const components = [
   MenuGroup,
   MenuItem,
   Modal,
+  NativeScroll,
   NumberInput,
   Option,
   OptionGroup,
@@ -242,6 +246,7 @@ export {
   FormItem,
   FormReset,
   FormSubmit,
+  Highlight,
   Icon,
   Input,
   Linker,
@@ -252,6 +257,7 @@ export {
   MenuItem,
   Message,
   Modal,
+  NativeScroll,
   Notice,
   NumberInput,
   Option,
@@ -324,6 +330,7 @@ export interface VexipComponents {
   FormItem: typeof FormItem,
   FormReset: typeof FormReset,
   FormSubmit: typeof FormSubmit,
+  Highlight: typeof Highlight,
   Icon: typeof Icon,
   Input: typeof Input,
   Linker: typeof Linker,
@@ -332,6 +339,7 @@ export interface VexipComponents {
   MenuGroup: typeof MenuGroup,
   MenuItem: typeof MenuItem,
   Modal: typeof Modal,
+  NativeScroll: typeof NativeScroll,
   NumberInput: typeof NumberInput,
   Option: typeof Option,
   OptionGroup: typeof OptionGroup,
