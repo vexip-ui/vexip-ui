@@ -1,3 +1,41 @@
+# [1.3.0](https://github.com/qmhc/vexip-ui/compare/v1.2.1...v1.3.0) (2022-04-18)
+
+### Bug Fixes
+
+- **auto-complete:** no options rendered when null value ([49af9d4](https://github.com/qmhc/vexip-ui/commit/49af9d4d66d909a4035e27be2ecebb9ea5445f26))
+- **date-picker:** cannot parse number value in date type ([0b0e3a7](https://github.com/qmhc/vexip-ui/commit/0b0e3a7eb7a09ef1cb43ea7fec6b897bd9250dd0))
+- **date-picker:** disabled-date prop not work ([6496175](https://github.com/qmhc/vexip-ui/commit/6496175ba037d741237cea7500772fa9b4d62db3))
+- **date-picker:** format should ignore content in quotations ([31d7f16](https://github.com/qmhc/vexip-ui/commit/31d7f1689a1229582f6f2a71ae80e47d63011ac8))
+- **linker:** vertical align should inherit parent ([9943e5e](https://github.com/qmhc/vexip-ui/commit/9943e5ed39d0a4cf5b225050eae3919a8675159a))
+- **modal:** header slot is not effective ([2af3df6](https://github.com/qmhc/vexip-ui/commit/2af3df6cd6e9eca5919860cebb08c26494ba9dff))
+- **modal:** use offset value to compute position ([07d0dc6](https://github.com/qmhc/vexip-ui/commit/07d0dc64bad7c8f097447d9b5d481f5d9727a4c2))
+- **number-input:** should not format when inputting ([0f58739](https://github.com/qmhc/vexip-ui/commit/0f5873906424b07bfd9b72daf94479316871f4d7))
+- **spin:** mask add default z-index ([943f3c6](https://github.com/qmhc/vexip-ui/commit/943f3c6d35a2585d7df4580360dd6222c5e124ad))
+- **table:** disableRow should base on rendered rows ([c483386](https://github.com/qmhc/vexip-ui/commit/c4833864ec96d9d5fc9deee4f8a1f9eeb80691b3))
+- **table:** row check all event add partial param ([a9cc1c5](https://github.com/qmhc/vexip-ui/commit/a9cc1c5e9acd665cc576da10f5d8d8856fc2b49e))
+- **table:** row check all event add partial param ([7d7bede](https://github.com/qmhc/vexip-ui/commit/7d7bede86701fb534c57b974e3268c981f1b3aaf))
+- **tree:** incorrect variable usage when get id map ([c94714e](https://github.com/qmhc/vexip-ui/commit/c94714ed08294b208af320e61921e1247543d491))
+- **tree:** root-id prop not effective ([7494291](https://github.com/qmhc/vexip-ui/commit/74942916e542163855195e209c2059d11db33dbd))
+- **tree:** use id-node map when update data ([8d5d843](https://github.com/qmhc/vexip-ui/commit/8d5d843572a44fa4c546959bd8fb70496b70a91a))
+- **utils:** incorrect matching rootId in tree transform ([4e9d253](https://github.com/qmhc/vexip-ui/commit/4e9d2537170761d3a29cdcec63f5443fdb002c95))
+
+### Features
+
+- **calendar:** add Calendar component ([495e6b4](https://github.com/qmhc/vexip-ui/commit/495e6b49168cf1ae8647b5231f060eb383ec96d6))
+- **ellipsis:** add tip-max-width prop ([32254d5](https://github.com/qmhc/vexip-ui/commit/32254d549fa3d3e48e610bab8b03da01c6924c05))
+- **form:** add hide-label prop ([08f65ff](https://github.com/qmhc/vexip-ui/commit/08f65ff5407db7932660468ba6a6e92bc2208724))
+- **form:** form actions add before hook prop ([2b31f25](https://github.com/qmhc/vexip-ui/commit/2b31f25520f27ac8e313bee9aa137bf6193ebbca))
+- **form:** form item add action type prop ([e85baf2](https://github.com/qmhc/vexip-ui/commit/e85baf2cc7c49f29d592412ce97e450e5a4cd8a2))
+- **highlight:** add Highlight component ([901a5ad](https://github.com/qmhc/vexip-ui/commit/901a5ad7a10325f630961178df839317984493b8))
+- **native-scroll:** add NativeScroll component ([68bfe20](https://github.com/qmhc/vexip-ui/commit/68bfe20441dede8152ecc3c10d58ce8f8dc09139))
+- **playground:** add vexip-ui playground ([#16](https://github.com/qmhc/vexip-ui/issues/16)) ([989a2c7](https://github.com/qmhc/vexip-ui/commit/989a2c7d99d565d107aba6ecf8d9a78c675095e9))
+- **scrollbar:** add appear prop ([743483c](https://github.com/qmhc/vexip-ui/commit/743483ca3ce131bdc4ca6bdd2e76d70541198e6e))
+- **scrollbar:** add use-track and track-speed props ([2820c77](https://github.com/qmhc/vexip-ui/commit/2820c777b855462b5d1c2da0e3e7f8f77b06f614))
+- **spin:** add Spin component ([784605c](https://github.com/qmhc/vexip-ui/commit/784605ce4d087cb55af2d8ba2263b66b7be03e32))
+- **table:** add tooltip-width and column's no-ellipsis props ([b95e59d](https://github.com/qmhc/vexip-ui/commit/b95e59dc9a0f2e03efbb47dc5bfccbcdcc4723be))
+- **tree:** add cache-node and root-id props ([13e721e](https://github.com/qmhc/vexip-ui/commit/13e721eb3ff2072ec90c1c38ea82a2c751793c76))
+- **tree:** export parseAndTransformData method ([dc5a1e3](https://github.com/qmhc/vexip-ui/commit/dc5a1e3e0ff4d6bd6c5de17e1afb904624bd99b5))
+
 ## [1.2.1](https://github.com/qmhc/vexip-ui/compare/v1.2.0...v1.2.1) (2022-01-14)
 
 ### Bug Fixes
