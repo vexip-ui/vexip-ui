@@ -1,5 +1,11 @@
 <template>
-  <div :class="className" :style="style" @mousedown="handleMouseDown">
+  <div
+    :class="className"
+    :style="style"
+    @mousedown="handleMouseDown"
+    @wheel.exact="handleWheel($event, 'vertical')"
+    @wheel.shift="handleWheel($event, 'horizontal')"
+  >
     <div
       ref="content"
       :class="wrapperClass"
@@ -86,10 +92,10 @@ const props = useConfiguredProps('nativeScroll', {
     type: Boolean,
     default: false
   },
-  wheelDisabled: {
-    type: Boolean,
-    default: false
-  },
+  // wheelDisabled: {
+  //   type: Boolean,
+  //   default: false
+  // },
   scrollX: {
     type: Number,
     default: 0
@@ -156,7 +162,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const emitter = createEventEmitter()
 
-    const prefix = 'vxp-scroll'
+    const prefix = 'vxp-native-scroll'
     const usingBar = ref(false)
     const scrolling = ref(false)
 
@@ -421,6 +427,26 @@ export default defineComponent({
       emitScrollEvent()
     }
 
+    function handleWheel(event: WheelEvent, type: 'vertical' | 'horizontal') {
+      const isVerticalScroll = enableYScroll.value && type === 'vertical'
+      const isHorizontalScroll = enableXScroll.value && type === 'horizontal'
+      const sign = event.deltaY > 0 ? 1 : -1
+
+      if (
+        (isVerticalScroll || isHorizontalScroll) &&
+        props.beforeScroll?.({ signX: sign, signY: sign }) !== false
+      ) {
+        const maxLimit = isVerticalScroll ? yScrollLimit.value : xScrollLimit.value
+        const scroll = isVerticalScroll ? currentScroll.y : currentScroll.x
+
+        if (sign > 0 ? scroll < maxLimit : scroll > 0) {
+          event.stopPropagation()
+
+          return false
+        }
+      }
+    }
+
     function prepareScroll() {
       stopAutoplay()
     }
@@ -498,6 +524,7 @@ export default defineComponent({
 
       handleMouseDown,
       handleScroll,
+      handleWheel,
       handleBarScrollStart,
       handleBarScrollEnd,
       handleXBarScroll,
