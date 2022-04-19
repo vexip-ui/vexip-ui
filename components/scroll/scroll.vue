@@ -25,6 +25,7 @@
       :bar-length="xBarLength"
       :disabled="!enableXScroll"
       :duration="transitionDuration"
+      :use-track="useBarTrack"
       @on-scroll-start="handleBarScrollStart('horizontal')"
       @on-scroll="handleXBarScroll"
       @on-scroll-end="handleBarScrollEnd('horizontal')"
@@ -38,6 +39,7 @@
       :bar-length="yBarLength"
       :disabled="!enableYScroll"
       :duration="transitionDuration"
+      :use-track="useBarTrack"
       @on-scroll-start="handleBarScrollStart('vertical')"
       @on-scroll="handleYBarScroll"
       @on-scroll-end="handleBarScrollEnd('vertical')"
@@ -143,6 +145,10 @@ const props = useConfiguredProps('scroll', {
   beforeScroll: {
     type: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
     default: null
+  },
+  useBarTrack: {
+    type: Boolean,
+    default: false
   }
 })
 

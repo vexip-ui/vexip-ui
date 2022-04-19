@@ -24,6 +24,7 @@
       :disabled="!enableXScroll"
       :appear="appear"
       :duration="barDuration"
+      :use-track="useBarTrack"
       @on-scroll-start="handleBarScrollStart('horizontal')"
       @on-scroll="handleXBarScroll"
       @on-scroll-end="handleBarScrollEnd('horizontal')"
@@ -38,6 +39,7 @@
       :disabled="!enableYScroll"
       :appear="appear"
       :duration="barDuration"
+      :use-track="useBarTrack"
       @on-scroll-start="handleBarScrollStart('vertical')"
       @on-scroll="handleYBarScroll"
       @on-scroll-end="handleBarScrollEnd('vertical')"
@@ -140,6 +142,10 @@ const props = useConfiguredProps('nativeScroll', {
     type: Number,
     default: null,
     validator: (value: number) => value >= 0
+  },
+  useBarTrack: {
+    type: Boolean,
+    default: false
   }
 })
 
