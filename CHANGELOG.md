@@ -1,3 +1,24 @@
+## [1.3.1](https://github.com/qmhc/vexip-ui/compare/v1.3.0...v1.3.1) (2022-04-19)
+
+### Bug Fixes
+
+- **native-scroll:** refresh content size when observer callback ([ff2a732](https://github.com/qmhc/vexip-ui/commit/ff2a7326bf14b8c8159a48a49bf65538760181e7))
+- **native-scroll:** stop wheel event propagation when can scroll ([d13b4d6](https://github.com/qmhc/vexip-ui/commit/d13b4d6912a63ca1f99d1d241164fcbae1f74353))
+- **native-scroll:** unable to scroll after call scroll api mathods ([bca3d51](https://github.com/qmhc/vexip-ui/commit/bca3d5181d74036face7fe4ff990581d36bd86f0))
+- **native-scroll:** unexpected reset scroll when content style change ([dabbd49](https://github.com/qmhc/vexip-ui/commit/dabbd49b4e66400e20340a84234c08527202b40a))
+- **scrollbar:** unexpected show track when use-track not true ([6bf2dda](https://github.com/qmhc/vexip-ui/commit/6bf2dda3f1b6e0a40777e0059b4f20b4c77ad957))
+- **scrollbar:** use-track should default false ([d6f8e6c](https://github.com/qmhc/vexip-ui/commit/d6f8e6ca444fd163b6c460c2772c86c5c61f843a))
+- export Hightlight and NativeScroll components ([55ab1c7](https://github.com/qmhc/vexip-ui/commit/55ab1c71bd1073b79b68706a28d985e43d7c2194))
+
+### Features
+
+- **calendar:** add header, title and week slots ([340194a](https://github.com/qmhc/vexip-ui/commit/340194aca45ba656a211a019350061743150252b))
+- add use-bar-track prop to Scroll and NativeScroll ([59c94f8](https://github.com/qmhc/vexip-ui/commit/59c94f82226e3f4ae722916eacb14b9ae5390a33))
+
+### Performance Improvements
+
+- **tooltip:** no render tip elements when disabled ([6a7a50d](https://github.com/qmhc/vexip-ui/commit/6a7a50de1c78706d8add1d6c3d3cc2e51ae79cda))
+
 # [1.3.0](https://github.com/qmhc/vexip-ui/compare/v1.2.1...v1.3.0) (2022-04-18)
 
 ### Bug Fixes
