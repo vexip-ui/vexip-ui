@@ -109,11 +109,11 @@ export function useScrollWrapper({
     if (!contentElement.value) return
 
     if (mode.value !== 'vertical') {
-      setScrollX(!isMounted && appear.value ? 0 : scrollX.value)
+      setScrollX(!isMounted && appear.value ? scrollX.value : currentScroll.x)
     }
 
     if (mode.value !== 'horizontal') {
-      setScrollY(!isMounted && appear.value ? 0 : scrollY.value)
+      setScrollY(!isMounted && appear.value ? scrollY.value : currentScroll.y)
     }
 
     computePercent()
