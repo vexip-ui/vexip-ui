@@ -84,13 +84,25 @@ async function main() {
   `
 
   const eslint = new ESLint({ fix: true })
-  const filePath = path.resolve(__dirname, '../components/index.ts')
+  const indexPath = path.resolve(__dirname, '../components/index.ts')
 
   fs.writeFileSync(
-    filePath,
+    indexPath,
     prettier.format(index, { ...prettierConfig, parser: 'typescript' })
   )
 
-  await ESLint.outputFixes(await eslint.lintFiles(filePath))
+  await ESLint.outputFixes(await eslint.lintFiles(indexPath))
+
+  exportComponents
+    .filter(component => !fs.existsSync(`style/${component}.scss`))
+    .forEach(component => fs.writeFileSync(`style/${component}.scss`, '', 'utf-8'))
+
+  const styleIndex = exportComponents.map(component => `@import './${component}.scss';`).join('\n') + '\n'
+  const stylePath = path.resolve(__dirname, '../style/index.scss')
+
+  fs.writeFileSync(
+    stylePath,
+    prettier.format(styleIndex, { ...prettierConfig, parser: 'scss' })
+  )
 }
 

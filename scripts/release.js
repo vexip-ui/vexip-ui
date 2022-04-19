@@ -66,13 +66,32 @@ async function main() {
     throw new Error(`Invalid target version: ${version}`)
   }
 
-  const { confirm } = await prompt({
-    type: 'confirm',
-    name: 'confirm',
-    message: `Confirm release ${version}?`
-  })
+  const { bootstrap, confirm } = await prompt([
+    {
+      type: 'confirm',
+      name: 'bootstrap',
+      message: 'Run bootstrap before release?',
+      default: true
+    },
+    {
+      type: 'confirm',
+      name: 'confirm',
+      message: `Confirm release ${version}?`
+    }
+  ])
 
   if (!confirm) return
+
+  // 执行引导程序
+  if (bootstrap) {
+    logStep(`Run bootstrap...`)
+
+    if (!skipBuild && !isDryRun) {
+      await run('yarn', ['bootstrap'])
+    } else {
+      logSkipped()
+    }
+  }
 
   // 执行单元测试
   // logStep('Running test...')
