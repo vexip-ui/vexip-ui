@@ -105,7 +105,7 @@ export function useScrollWrapper({
     if (!content.el) return
 
     content.scrollWidth = content.el.scrollWidth
-    content.offsetWidth = content.el.scrollWidth
+    content.offsetWidth = content.el.offsetWidth
     content.scrollHeight = content.el.scrollHeight
     content.offsetHeight = content.el.offsetHeight
 
