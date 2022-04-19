@@ -60,6 +60,11 @@
     background-color: $vxp-scrollbar-color-bg-track;
     border-radius: 3px;
     transition: $vxp-transition-opacity-base;
+
+    &--disabled {
+      pointer-events: none;
+      background-color: transparent;
+    }
   }
 
   &--fade &__track {

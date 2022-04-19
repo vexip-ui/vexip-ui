@@ -2,8 +2,7 @@
   <div ref="wrapper" :class="className">
     <div
       ref="track"
-      :class="`${prefix}__track`"
-      :style="trackStyle"
+      :class="[`${prefix}__track`, useTrack ? null : `${prefix}__track--disabled`]"
       @mousedown="handleTrackMouseDown"
     ></div>
     <div
@@ -164,11 +163,6 @@ export default defineComponent({
       }
 
       return style
-    })
-    const trackStyle = computed(() => {
-      return {
-        pointerEvents: props.useTrack ? undefined : 'none'
-      } as CSSProperties
     })
 
     watch(
@@ -338,7 +332,6 @@ export default defineComponent({
 
       className,
       barStyle,
-      trackStyle,
 
       wrapper,
       bar,
