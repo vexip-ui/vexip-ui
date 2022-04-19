@@ -109,7 +109,9 @@
     }
 
     &-content {
-      height: 6em;
+      height: 7em;
+      padding: 4px;
+      overflow: auto;
     }
   }
 }

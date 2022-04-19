@@ -7,29 +7,40 @@
     :disabled-date="disabledDate"
   >
     <template #header>
-      <Row :class="`${prefix}__header`" align="middle">
-        <Column flex="auto"></Column>
-        <Column :class="`${prefix}__actions`" flex="0">
-          <NumberInput
-            v-model:value="calendarYear"
-            :class="`${prefix}__year-input`"
-            :range="[1970, 2300]"
-            :formatter="formatYearInput"
-          ></NumberInput>
-          <NumberInput
-            v-model:value="calendarMonth"
-            :class="`${prefix}__month-input`"
-            :range="[1, 12]"
-            :formatter="formatMonthInput"
-          ></NumberInput>
-        </Column>
-      </Row>
+      <slot name="header">
+        <Row :class="`${prefix}__header`" align="middle">
+          <Column flex="auto">
+            <slot name="title"></slot>
+          </Column>
+          <Column :class="`${prefix}__actions`" flex="0">
+            <NumberInput
+              v-model:value="calendarYear"
+              :class="`${prefix}__year-input`"
+              :range="[1970, 2300]"
+              :formatter="formatYearInput"
+            ></NumberInput>
+            <NumberInput
+              v-model:value="calendarMonth"
+              :class="`${prefix}__month-input`"
+              :range="[1, 12]"
+              :formatter="formatMonthInput"
+            ></NumberInput>
+          </Column>
+        </Row>
+      </slot>
     </template>
-    <template #week="{ label }">
+    <template #week="{ label, index, week }">
       <div :class="`${prefix}__week`">
-        <div :class="`${prefix}__week-value`">
-          {{ label }}
-        </div>
+        <slot
+          name="week"
+          :label="label"
+          :index="index"
+          :week="week"
+        >
+          <div :class="`${prefix}__week-value`">
+            {{ label }}
+          </div>
+        </slot>
       </div>
     </template>
     <template #item="{ selected, date, isPrev, isNext, isToday, disabled }">
@@ -78,7 +89,7 @@ import type { Dateable } from '@/common/utils/date'
 
 const props = useConfiguredProps('calendar', {
   value: {
-    type: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
+    type: [Number, String, Date] as PropType<Dateable | Dateable[]>,
     default: null
   },
   year: {
