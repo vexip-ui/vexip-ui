@@ -9,7 +9,7 @@
     <div ref="reference" :class="`${prefix}__trigger`" @click="handleTriggerClick">
       <slot></slot>
     </div>
-    <Portal :to="transferTo">
+    <Portal v-if="!disabled" :to="transferTo">
       <transition :name="transitionName">
         <div
           v-show="currentVisible"
