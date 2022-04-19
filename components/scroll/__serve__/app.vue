@@ -1,7 +1,7 @@
 <template>
   <Scroll
     ref="scroll"
-    mode="both"
+    autoplay
     pointer
     no-buffer
     use-x-bar

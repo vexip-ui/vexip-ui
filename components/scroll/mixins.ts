@@ -177,7 +177,7 @@ export function useScrollWrapper({
 
       isReady.value = false
 
-      setTimeout(() => {
+      window.setTimeout(() => {
         isReady.value = true
         verifyScroll()
       }, 1)
@@ -210,14 +210,20 @@ export function useScrollWrapper({
 
   const handleResize = throttle(refresh)
 
+  let isMounted = false
+
   onMounted(() => {
     refresh()
     window.addEventListener('resize', handleResize)
+
+    isMounted = true
   })
 
   onBeforeUnmount(() => {
     destroyMutationObserver()
     window.removeEventListener('resize', handleResize)
+
+    isMounted = false
   })
 
   let mutationObserver: MutationObserver | null
@@ -258,13 +264,16 @@ export function useScrollWrapper({
       createMutationObserver()
     })
 
-    setTimeout(() => {
-      verifyScroll()
+    window.setTimeout(
+      () => {
+        verifyScroll()
 
-      if (typeof afterRefresh === 'function') {
-        afterRefresh()
-      }
-    }, 10)
+        if (typeof afterRefresh === 'function') {
+          afterRefresh()
+        }
+      },
+      isMounted ? 20 : 100
+    )
   }
 
   return {
