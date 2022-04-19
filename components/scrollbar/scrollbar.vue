@@ -211,7 +211,11 @@ export default defineComponent({
 
         if (!wrapperElement) {
           if (instance?.parent) {
-            wrapperElement = (instance.parent as any).ctx.$el
+            wrapperElement = instance.parent.proxy?.$el
+
+            if (!wrapperElement) {
+              wrapperElement = wrapper.value?.parentElement ?? null
+            }
           } else {
             wrapperElement = wrapper.value?.parentElement ?? null
           }
