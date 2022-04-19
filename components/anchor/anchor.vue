@@ -40,9 +40,12 @@ import { useConfiguredProps } from '@/common/config/install'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
-import type { PropType } from 'vue'
+import type { PropType, ComponentInternalInstance } from 'vue'
+import type { NativeScroll } from '@/components/native-scroll'
 import type { Scroll } from '@/components/scroll'
 import type { LinkState, AnchorState } from './symbol'
+
+type ScrollType = InstanceType<typeof Scroll | typeof NativeScroll>
 
 const props = useConfiguredProps('anchor', {
   active: {
@@ -86,7 +89,7 @@ export default defineComponent({
 
     let isRawViewer = false
     let container: HTMLElement | null = null
-    let scroller: InstanceType<typeof Scroll> | null = null
+    let scroller: ScrollType | null = null
 
     provide<AnchorState>(
       ANCHOR_STATE,
@@ -133,11 +136,15 @@ export default defineComponent({
       nextTick(() => {
         const viewer: unknown = props.viewer
 
-        let _container
+        let _container: Element | ComponentInternalInstance | null = null
+        let refName = 'scroll'
 
         if (typeof viewer === 'string') {
-          if (['window', 'document', 'body'].includes(viewer)) {
-            _container = document
+          if (viewer.startsWith('ref:')) {
+            refName = viewer.substring(4)
+            refName = refName || 'scroll'
+          } else if (['window', 'document', 'body'].includes(viewer)) {
+            _container = document.body
           } else if (viewer === 'root') {
             _container = instance.root
           } else {
@@ -158,20 +165,25 @@ export default defineComponent({
 
         if (!isRawViewer) {
           // ComponentInternalInstance
+          _container = _container as ComponentInternalInstance
           _container = isVNode(_container?.vnode) ? _container : instance.parent
 
           while (_container) {
-            if (_container.type?.name === 'Scroll') {
-              scroller = _container.proxy
+            const name = _container.type?.name
+
+            if (name === 'Scroll' || name === 'NativeScroll') {
+              scroller = _container.proxy as ScrollType
               break
             }
 
-            if (_container.refs?.scroll) {
-              if (_container.refs.scroll instanceof Element) {
+            const refTemp = _container.refs?.[refName]
+
+            if (refTemp) {
+              if (refTemp instanceof Element) {
                 isRawViewer = true
-                container = _container.refs.scroll
+                container = refTemp as HTMLElement
               } else {
-                scroller = _container.refs.scroll
+                scroller = refTemp as ScrollType
               }
 
               break
@@ -192,8 +204,8 @@ export default defineComponent({
             container!.addEventListener('scroll', handleContainerScroll)
           }
         } else {
-          _container.addEventListener('scroll', handleContainerScroll)
-          container = _container
+          container = _container as HTMLElement
+          container.addEventListener('scroll', handleContainerScroll)
         }
       })
     }
