@@ -79,7 +79,7 @@ const props = useConfiguredProps('scrollbar', {
   },
   useTrack: {
     type: Boolean,
-    default: true
+    default: false
   },
   trackSpeed: {
     type: Number,
