@@ -27,40 +27,36 @@ export function useScrollWrapper({
 }) {
   const contentElement = ref<HTMLElement | null>(null)
 
+  const content = reactive({
+    el: contentElement,
+    scrollWidth: 0,
+    offsetWidth: 0,
+    scrollHeight: 0,
+    offsetHeight: 0
+  })
+
   const xScrollLimit = computed(() => {
-    return contentElement.value
-      ? contentElement.value.scrollWidth - contentElement.value.offsetWidth
-      : 0
+    return content.el ? content.scrollWidth - content.offsetWidth : 0
   })
   const yScrollLimit = computed(() => {
-    return contentElement.value
-      ? contentElement.value.scrollHeight - contentElement.value.offsetHeight
-      : 0
+    return content.el ? content.scrollHeight - content.offsetHeight : 0
   })
   const enableXScroll = computed(() => {
-    return !disabled.value && mode.value !== 'vertical' && !!contentElement.value
+    return !disabled.value && mode.value !== 'vertical' && !!content.el
   })
   const enableYScroll = computed(() => {
-    return !disabled.value && mode.value !== 'horizontal' && !!contentElement.value
+    return !disabled.value && mode.value !== 'horizontal' && !!content.el
   })
   const xBarLength = computed(() => {
-    if (contentElement.value) {
-      return boundRange(
-        (contentElement.value.offsetWidth / (contentElement.value.scrollWidth || 1)) * 100,
-        5,
-        99
-      )
+    if (content.el) {
+      return boundRange((content.offsetWidth / (content.scrollWidth || 1)) * 100, 5, 99)
     }
 
     return 35
   })
   const yBarLength = computed(() => {
-    if (contentElement.value) {
-      return boundRange(
-        (contentElement.value.offsetHeight / (contentElement.value.scrollHeight || 1)) * 100,
-        5,
-        99
-      )
+    if (content.el) {
+      return boundRange((content.offsetHeight / (content.scrollHeight || 1)) * 100, 5, 99)
     }
 
     return 35
@@ -87,16 +83,16 @@ export function useScrollWrapper({
   function setScrollX(value: number) {
     currentScroll.x = boundRange(value, 0, xScrollLimit.value)
 
-    if (contentElement.value) {
-      contentElement.value.scrollLeft = currentScroll.x
+    if (content.el) {
+      content.el.scrollLeft = currentScroll.x
     }
   }
 
   function setScrollY(value: number) {
     currentScroll.y = boundRange(value, 0, yScrollLimit.value)
 
-    if (contentElement.value) {
-      contentElement.value.scrollTop = currentScroll.y
+    if (content.el) {
+      content.el.scrollTop = currentScroll.y
     }
   }
 
@@ -106,7 +102,12 @@ export function useScrollWrapper({
   let isMounted = false
 
   function computeContentSize() {
-    if (!contentElement.value) return
+    if (!content.el) return
+
+    content.scrollWidth = content.el.scrollWidth
+    content.offsetWidth = content.el.scrollWidth
+    content.scrollHeight = content.el.scrollHeight
+    content.offsetHeight = content.el.offsetHeight
 
     if (mode.value !== 'vertical') {
       setScrollX(!isMounted && appear.value ? scrollX.value : currentScroll.x)
@@ -120,7 +121,7 @@ export function useScrollWrapper({
   }
 
   function computePercent() {
-    if (contentElement.value) {
+    if (content.el) {
       percentX.value = multipleFixed(currentScroll.x / (xScrollLimit.value || 1), 100, 2)
       percentY.value = multipleFixed(currentScroll.y / (yScrollLimit.value || 1), 100, 2)
     }
@@ -149,7 +150,7 @@ export function useScrollWrapper({
   let mutationObserver: MutationObserver | null
 
   function createMutationObserver() {
-    const target = contentElement.value?.children[0]
+    const target = content.el?.children[0]
 
     if (!target) return
 
@@ -192,7 +193,7 @@ export function useScrollWrapper({
 
   function scrollTo(clientX: number, clientY: number, duration?: number) {
     return new Promise<void>(resolve => {
-      if (!contentElement.value) return
+      if (!content.el) return
 
       if (!enableXScroll.value || Math.abs(currentScroll.x - clientX) < 0.01) {
         clientX = currentScroll.x
@@ -204,7 +205,7 @@ export function useScrollWrapper({
 
       animateScrollTo({
         duration,
-        el: contentElement.value,
+        el: content.el,
         xFrom: currentScroll.x,
         xTo: boundRange(clientX, 0, xScrollLimit.value),
         yFrom: currentScroll.y,
@@ -219,15 +220,15 @@ export function useScrollWrapper({
   }
 
   function scrollToElement(el: string | Element, duration?: number, offset = 0) {
-    if (!contentElement.value) return Promise.resolve()
+    if (!content.el) return Promise.resolve()
 
     if (typeof el === 'string') {
-      el = contentElement.value.querySelector(el)!
+      el = content.el.querySelector(el)!
     }
 
     if (!(el instanceof Node)) return Promise.resolve()
 
-    const wrapperRect = contentElement.value.getBoundingClientRect()
+    const wrapperRect = content.el.getBoundingClientRect()
     const elRect = el.getBoundingClientRect()
 
     let clientX = 0
