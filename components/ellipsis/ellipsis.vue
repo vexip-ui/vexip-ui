@@ -140,7 +140,7 @@ export default defineComponent({
         const horizontalPending =
           parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
 
-        visible.value = rangeWidth + horizontalPending > wrapper.value.offsetWidth
+        visible.value = rangeWidth + horizontalPending > wrapper.value.getBoundingClientRect().width
         content.value = visible.value ? wrapper.value.textContent ?? '' : ''
 
         nextTick(() => {
