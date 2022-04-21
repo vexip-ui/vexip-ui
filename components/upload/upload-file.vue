@@ -1,6 +1,13 @@
 <template>
   <transition appear :name="selectToAdd ? transitionName : undefined">
-    <li :class="[`${prefix}__file`, `${prefix}__file--${file.status}`]" :title="fileName">
+    <li
+      :class="[
+        `${prefix}__file`,
+        `${prefix}__file--${listType}`,
+        `${prefix}__file--${file.status}`
+      ]"
+      :title="fileName"
+    >
       <slot :file="file.source" :status="file.status" :percentage="file.percentage">
         <template v-if="listType === 'name'">
           <div :class="`${prefix}__label`">

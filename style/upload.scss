@@ -51,6 +51,10 @@
     }
   }
 
+  &--drag-only &__drag-pane {
+    cursor: auto;
+  }
+
   &__control--drag-over &__drag-pane {
     border-color: $vxp-color-primary;
   }
@@ -82,44 +86,83 @@
     list-style: none;
     border-radius: $vxp-border-radius-base;
     transition: $vxp-transition-transform-base, $vxp-transition-opacity-base;
-  }
 
-  &--type-name &__file {
-    justify-content: space-between;
-    width: 100%;
-    padding: 0.2em 0.5em;
-    margin-bottom: 0.2em;
-    transition: $vxp-transition-background-base;
+    &--name {
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.2em 0.5em;
+      margin-bottom: 0.2em;
+      transition: $vxp-transition-background-base;
 
-    &:hover {
-      background-color: $vxp-color-fill-hover;
+      &:hover {
+        background-color: $vxp-color-fill-hover;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
-    &:last-child {
-      margin-bottom: 0;
+    &--thumbnail,
+    &--card {
+      padding: 0.5em;
+      margin-right: 0.5em;
+      margin-bottom: 0.5em;
+      border: $vxp-border-base;
+      transition: $vxp-transition-border-base;
     }
-  }
 
-  &--type-thumbnail &__file,
-  &--type-card &__file {
-    padding: 0.5em;
-    margin-right: 0.5em;
-    margin-bottom: 0.5em;
-    border: $vxp-border-base;
-    transition: $vxp-transition-border-base;
-
-    &--success {
+    &--thumbnail &--success,
+    &--card &--success {
       border-color: $vxp-color-success;
     }
 
-    &--fail {
+    &--thumbnail &--fail,
+    &--card &--fail {
       border-color: $vxp-color-error;
+    }
+
+    &--card {
+      width: 100%;
     }
   }
 
-  &--type-card &__file {
-    width: 100%;
-  }
+  // &--type-name &__file {
+  //   justify-content: space-between;
+  //   width: 100%;
+  //   padding: 0.2em 0.5em;
+  //   margin-bottom: 0.2em;
+  //   transition: $vxp-transition-background-base;
+
+  //   &:hover {
+  //     background-color: $vxp-color-fill-hover;
+  //   }
+
+  //   &:last-child {
+  //     margin-bottom: 0;
+  //   }
+  // }
+
+  // &--type-thumbnail &__file,
+  // &--type-card &__file {
+  //   padding: 0.5em;
+  //   margin-right: 0.5em;
+  //   margin-bottom: 0.5em;
+  //   border: $vxp-border-base;
+  //   transition: $vxp-transition-border-base;
+
+  //   &--success {
+  //     border-color: $vxp-color-success;
+  //   }
+
+  //   &--fail {
+  //     border-color: $vxp-color-error;
+  //   }
+  // }
+
+  // &--type-card &__file {
+  //   width: 100%;
+  // }
 
   &__filename {
     overflow: hidden;
@@ -149,13 +192,13 @@
     align-items: center;
   }
 
-  &--type-thumbnail &__card {
+  &__file--thumbnail &__card {
     justify-content: center;
     width: 5em;
     height: 5em;
   }
 
-  &--type-card &__card {
+  &__file--card &__card {
     width: 100%;
   }
 
@@ -170,12 +213,12 @@
     }
   }
 
-  &--type-thumbnail &__thumbnail {
+  &__file--thumbnail &__thumbnail {
     width: 100%;
     height: 100%;
   }
 
-  &--type-card &__thumbnail {
+  &__file--card &__thumbnail {
     width: 4em;
     height: 4em;
     margin-right: 1em;
@@ -189,7 +232,7 @@
     padding-right: 5em;
   }
 
-  &--type-card &__filename {
+  &__file--card &__filename {
     width: 100%;
   }
 
@@ -206,7 +249,7 @@
     justify-content: center;
   }
 
-  &--type-thumbnail &__actions {
+  &__file--thumbnail &__actions {
     position: absolute;
     top: 0;
     left: 0;
@@ -221,7 +264,7 @@
     opacity: 100%;
   }
 
-  &--type-card &__actions {
+  &__file--card &__actions {
     position: absolute;
     right: 0;
   }
@@ -240,7 +283,7 @@
     }
   }
 
-  &--type-thumbnail &__action {
+  &__file--thumbnail &__action {
     &,
     .vxp-icon {
       color: $vxp-color-content-placeholder;
@@ -251,7 +294,7 @@
     }
   }
 
-  &--type-card &__action {
+  &__file--card &__action {
     &,
     .vxp-icon {
       color: $vxp-color-content-secondary;
@@ -343,21 +386,21 @@
     user-select: none;
   }
 
-  &--type-name &__progress {
+  &__file--name &__progress {
     position: absolute;
     right: 0.5em;
     bottom: 0;
     left: 0.5em;
   }
 
-  &--type-thumbnail &__progress {
+  &__file--thumbnail &__progress {
     flex-direction: column;
     width: 100%;
     height: 100%;
     padding: 0.5em;
   }
 
-  &--type-card &__progress {
+  &__file--card &__progress {
     padding-top: 0.3em;
   }
 
