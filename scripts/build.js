@@ -76,6 +76,10 @@ async function buildAll(components) {
   await runParallel(require('os').cpus().length, components, build)
 }
 
+const exceptional = {
+  'tab-pane': 'tabs'
+}
+
 async function build(component) {
   const targetDir = path.resolve(libDir, component)
   // const indexPath = path.resolve(targetDir, 'index.js')
@@ -90,8 +94,20 @@ async function build(component) {
     }
   })
 
+  const parentComponent = exceptional[component] || allComponents.find(c => component.startsWith(c))
+  const writeStyle = () =>
+    fs.writeFileSync(
+      `${targetDir}/style.css`, parentComponent ? `@import '../${parentComponent}/style.css';\n` : ''
+    )
+
   if (!fs.existsSync(`${targetDir}/style.css`)) {
-    fs.writeFileSync(`${targetDir}/style.css`, '')
+    writeStyle()
+  } else {
+    const style = fs.readFileSync(`${targetDir}/style.css`, 'utf-8')
+
+    if (!style.trim()) {
+      writeStyle()
+    }
   }
 
   logger.infoText(`built ${component}`)
