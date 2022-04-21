@@ -59,6 +59,7 @@ export function upload(options: UploadOptions) {
   }
 
   formData.append(options.field || 'file', options.file)
+  options.file.path && formData.append(options.pathField || 'path', options.file.path)
 
   if (options.onError) {
     xhr.onerror = () => {

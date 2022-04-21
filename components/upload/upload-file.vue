@@ -1,6 +1,6 @@
 <template>
   <transition appear :name="selectToAdd ? transitionName : undefined">
-    <li :class="[`${prefix}__file`, `${prefix}__file--${file.status}`]" :title="file.name">
+    <li :class="[`${prefix}__file`, `${prefix}__file--${file.status}`]" :title="fileName">
       <slot :file="file.source" :status="file.status" :percentage="file.percentage">
         <template v-if="listType === 'name'">
           <div :class="`${prefix}__label`">
@@ -15,7 +15,7 @@
               </slot>
             </div>
             <span :class="`${prefix}__filename`">
-              {{ file.name }}
+              {{ fileName }}
             </span>
           </div>
           <div :class="`${prefix}__actions`">
@@ -80,7 +80,7 @@
                 v-else-if="file.type.startsWith('image/') && file.base64"
                 :class="`${prefix}__image`"
                 :src="file.base64"
-                :alt="file.name"
+                :alt="fileName"
               />
               <template v-else>
                 {{ transformfileToBase64(file) }}
@@ -96,7 +96,7 @@
             </div>
             <div v-if="listType === 'card'" :class="`${prefix}__info`">
               <span :class="`${prefix}__filename`">
-                {{ file.name }}
+                {{ fileName }}
               </span>
               <CollapseTransition>
                 <div v-if="file.status === status.UPLOADING" :class="`${prefix}__progress`">
@@ -196,6 +196,9 @@ export default defineComponent({
     const useIconRenderer = computed(() => {
       return typeof props.iconRenderer === 'function'
     })
+    const fileName = computed(() => {
+      return props.file.path || props.file.name
+    })
 
     function getFileExtension(file: FileState) {
       return file.name.split('.').pop()!.toLocaleLowerCase()
@@ -234,6 +237,7 @@ export default defineComponent({
       status: UploadStatusType,
 
       useIconRenderer,
+      fileName,
 
       getFileIcon,
       deleteFile,

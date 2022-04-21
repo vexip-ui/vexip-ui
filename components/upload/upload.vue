@@ -11,11 +11,13 @@
       @dragleave.prevent="handleDragLeave"
     >
       <input
+        v-if="!disabledClick"
         ref="input"
         type="file"
         :class="`${prefix}__input`"
         :multiple="multiple"
         :accept="acceptString"
+        :webkitdirectory="directory"
         @change="handleInputChange"
       />
       <slot>
@@ -126,7 +128,15 @@ import '@/common/icons/cloud-upload-alt'
 import '@/common/icons/upload'
 
 import type { PropType } from 'vue'
-import type { UploadListType, BeforeFn, RenderFn, HttpError, FileState } from './symbol'
+import type {
+  UploadListType,
+  BeforeFn,
+  RenderFn,
+  HttpError,
+  SourceFile,
+  FileState,
+  DirectoryEntity
+} from './symbol'
 
 const props = useConfiguredProps('upload', {
   url: {
@@ -152,9 +162,7 @@ const props = useConfiguredProps('upload', {
   maxSize: {
     type: Number,
     default: null,
-    validator: (value: number) => {
-      return value >= 0
-    }
+    validator: (value: number) => value >= 0
   },
   field: {
     type: String,
@@ -182,7 +190,8 @@ const props = useConfiguredProps('upload', {
   },
   countLimit: {
     type: Number,
-    default: 0
+    default: 0,
+    validator: (value: number) => value >= 0
   },
   allowDrag: {
     type: Boolean,
@@ -217,6 +226,18 @@ const props = useConfiguredProps('upload', {
   loadingText: {
     type: String,
     default: null
+  },
+  directory: {
+    type: Boolean,
+    default: false
+  },
+  pathField: {
+    type: String,
+    default: 'path'
+  },
+  disabledClick: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -268,7 +289,7 @@ export default defineComponent({
     })
 
     function handleClick() {
-      input.value?.click()
+      !props.disabledClick && input.value?.click()
     }
 
     function handleInputChange(event: Event) {
@@ -279,11 +300,15 @@ export default defineComponent({
       }
     }
 
-    async function handleFilesChange(inputFiles: FileList) {
-      const originFiles = Array.from(inputFiles || [])
+    async function handleFilesChange(inputFiles: FileList | SourceFile[]) {
+      const originFiles = Array.from(inputFiles || []) as SourceFile[]
       const files = props.selectToAdd ? fileStates.value : []
 
       for (const file of originFiles) {
+        if (!file.path) {
+          file.path = file.webkitRelativePath
+        }
+
         if (isFunction(props.beforeSelect)) {
           let result = props.beforeSelect(file, props.selectToAdd ? getSourceFiles() : [])
 
@@ -314,7 +339,7 @@ export default defineComponent({
 
       const countLimit = props.countLimit
 
-      if (countLimit && files.length > countLimit) {
+      if (countLimit > 0 && files.length > countLimit) {
         fileStates.value = files.slice(0, countLimit)
 
         const exceedFiles = files.slice(countLimit)
@@ -338,15 +363,21 @@ export default defineComponent({
       }
     }
 
-    function getFileStateBySource(file: File) {
+    function getFileStateBySource(file: SourceFile) {
       const { name, size, type } = file
+      const path = file.path || file.webkitRelativePath
 
       return fileStates.value.find(({ source }) => {
-        return source.name === name && source.size === size && source.type === type
+        return (
+          (source.path || source.webkitRelativePath) === path &&
+          source.name === name &&
+          source.size === size &&
+          source.type === type
+        )
       })
     }
 
-    function createFileState(file: File): FileState {
+    function createFileState(file: SourceFile): FileState {
       const { name, size, type } = file
 
       return {
@@ -358,6 +389,7 @@ export default defineComponent({
         status: UploadStatusType.PENDING,
         percentage: 0,
         source: file,
+        path: file.path || file.webkitRelativePath,
         xhr: null,
         response: null,
         error: null
@@ -410,7 +442,7 @@ export default defineComponent({
 
       file.status = UploadStatusType.UPLOADING
 
-      const { url, headers, withCredentials, data, field } = props
+      const { url, headers, withCredentials, data, field, pathField } = props
 
       return await new Promise((resolve, reject) => {
         file.xhr = upload({
@@ -419,6 +451,7 @@ export default defineComponent({
           withCredentials,
           data,
           field,
+          pathField,
           file: file.source,
           onProgress: percent => {
             handleProgress(percent, file)
@@ -558,13 +591,18 @@ export default defineComponent({
 
     let dragTimer: number
 
-    function handleDrop(event: DragEvent) {
+    async function handleDrop(event: DragEvent) {
       if (!props.allowDrag) return
 
       window.clearTimeout(dragTimer)
 
       isDragOver.value = false
-      event.dataTransfer && handleFilesChange(event.dataTransfer.files)
+
+      if (event.dataTransfer) {
+        const files = await collectDropFiles(event.dataTransfer)
+
+        files.length && handleFilesChange(files)
+      }
     }
 
     function handleDragEnter() {
@@ -581,6 +619,89 @@ export default defineComponent({
       dragTimer = window.setTimeout(() => {
         isDragOver.value = false
       }, 100)
+    }
+
+    async function collectDropFiles(dataTransfer: DataTransfer) {
+      const { items, files } = dataTransfer
+
+      if (!items.length) return []
+
+      const collectedFiles: File[] = []
+      const dirLoop: Array<{ dir: DirectoryEntity, prefix: string }> = []
+      const processes: Promise<void>[] = []
+
+      for (let i = 0, len = items.length; i < len; ++i) {
+        const entity = items[i].webkitGetAsEntry?.()
+
+        // 内核不支持
+        if (!entity) return []
+
+        if (entity.isFile) {
+          collectedFiles.push(files[i])
+        } else {
+          dirLoop.push({ dir: entity as unknown as DirectoryEntity, prefix: '' })
+          // directories.push(entity as unknown as DirectoryEntity)
+        }
+      }
+
+      if (!dirLoop.length) return collectedFiles
+
+      const fileEntries: Array<{ entry: DirectoryEntity, prefix: string }> = []
+
+      let countLimit = props.countLimit - (props.selectToAdd ? fileStates.value.length : 0)
+      countLimit = Math.round(countLimit) > 0 ? countLimit : 100
+
+      const doProcess = () => {
+        while (dirLoop.length) {
+          const loop = dirLoop.shift()!
+          const dir = loop.dir
+          const prefix = loop.prefix ? `${loop.prefix}/${dir.name}` : dir.name
+          const reader = dir.createReader()
+
+          processes.push(
+            new Promise<void>(resolve => {
+              reader.readEntries(entries => {
+                entries.forEach(entry => {
+                  if (entry.isFile) {
+                    fileEntries.push({ entry, prefix })
+                  } else {
+                    dirLoop.push({ dir: entry, prefix })
+                  }
+                })
+
+                resolve()
+              })
+            })
+          )
+        }
+      }
+
+      while (true) {
+        doProcess()
+        await Promise.all(processes)
+
+        if (!dirLoop.length || fileEntries.length >= countLimit) {
+          break
+        }
+      }
+
+      if (fileEntries.length > 0) {
+        return collectedFiles.concat(
+          await Promise.all(
+            fileEntries.map(
+              ({ entry, prefix }) =>
+                new Promise<File>(resolve =>
+                  entry.file(file => {
+                    file.path = `${prefix}/${file.name}`
+                    resolve(file)
+                  })
+                )
+            )
+          )
+        )
+      }
+
+      return collectedFiles
     }
 
     return {

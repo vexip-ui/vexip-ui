@@ -19,6 +19,8 @@ export enum UploadStatusType {
   DELETE
 }
 
+export type SourceFile = File & { path?: string }
+
 export interface FileState {
   id: string,
   name: string,
@@ -27,7 +29,8 @@ export interface FileState {
   base64: string | null,
   status: UploadStatusType,
   percentage: number,
-  source: File,
+  source: SourceFile,
+  path: string,
   xhr: XMLHttpRequest | null,
   response: any,
   error: HttpError | null
@@ -35,13 +38,30 @@ export interface FileState {
 
 export interface UploadOptions {
   url: string,
-  file: File,
+  file: SourceFile,
   headers?: Record<string, string>,
   withCredentials?: boolean,
   data?: Record<string, string | Blob>,
   field?: string,
+  pathField?: string,
   onProgress?: (percent: number) => void,
   onSuccess?: (response: any) => void,
   onError?: (error: HttpError) => void,
   onAbort?: () => void
+}
+export interface DirectoryEntity {
+  name: string,
+  fullPath: string,
+  isFile: boolean,
+  isDirectory: boolean,
+  file: (callback: (file: SourceFile) => void) => void,
+  // eslint-disable-next-line no-use-before-define
+  createReader: () => DirectoryReader
+}
+
+export interface DirectoryReader {
+  readEntries: (
+    onSuccess: (entities: DirectoryEntity[]) => void,
+    onError?: (errors: any) => void
+  ) => void
 }

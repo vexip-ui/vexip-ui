@@ -4,9 +4,16 @@
     manual
     select-to-add
     allow-drag
-    url="//jsonplaceholder.typicode.com/posts/"
+    directory
     list-type="card"
     @on-success="handleSuccess"
+  ></Upload>
+  <Upload
+    multiple
+    manual
+    select-to-add
+    directory
+    list-type="card"
   ></Upload>
 </template>
 
