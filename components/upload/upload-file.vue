@@ -141,6 +141,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
+import { useConfiguredProps } from '@/common/config/install'
 import { useLocaleConfig } from '@/common/config/locale'
 import { iconMaps } from './file-icon'
 import { UploadStatusType } from './symbol'
@@ -154,7 +155,7 @@ import '@/common/icons/regular/trash-alt'
 import type { PropType } from 'vue'
 import type { UploadListType, RenderFn, FileState } from './symbol'
 
-const props = {
+const props = useConfiguredProps('uploadFile', {
   file: {
     type: Object as PropType<FileState>,
     default: () => ({})
@@ -177,7 +178,7 @@ const props = {
     type: Boolean,
     default: false
   }
-}
+})
 
 export default defineComponent({
   name: 'UploadFile',

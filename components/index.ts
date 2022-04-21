@@ -81,6 +81,8 @@ import { TimelineItem } from '@/components/timeline-item'
 import { Tooltip } from '@/components/tooltip'
 import { Tree } from '@/components/tree'
 import { Upload } from '@/components/upload'
+import { UploadFile } from '@/components/upload-file'
+import { UploadList } from '@/components/upload-list'
 import { Wheel } from '@/components/wheel'
 import { WheelItem } from '@/components/wheel-item'
 
@@ -178,6 +180,8 @@ const components = [
   Tooltip,
   Tree,
   Upload,
+  UploadFile,
+  UploadList,
   Wheel,
   WheelItem
 ]
@@ -292,6 +296,8 @@ export {
   Tooltip,
   Tree,
   Upload,
+  UploadFile,
+  UploadList,
   Wheel,
   WheelItem
 }
@@ -373,6 +379,8 @@ export interface VexipComponents {
   Tooltip: typeof Tooltip,
   Tree: typeof Tree,
   Upload: typeof Upload,
+  UploadFile: typeof UploadFile,
+  UploadList: typeof UploadList,
   Wheel: typeof Wheel,
   WheelItem: typeof WheelItem
 }

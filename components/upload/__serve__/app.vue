@@ -8,6 +8,8 @@
     list-type="card"
     @on-success="handleSuccess"
   ></Upload>
+  <br />
+  <br />
   <Upload
     multiple
     manual

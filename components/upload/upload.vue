@@ -41,75 +41,20 @@
         </div>
       </slot>
     </div>
-    <template v-if="!hiddenFiles">
-      <transition-group
-        v-if="listType === 'thumbnail'"
-        tag="ul"
-        :appear="selectToAdd"
-        :name="`${prefix}-list-transition`"
-        :class="`${prefix}__files`"
-        :style="{
-          [selectToAdd ? 'marginBottom' : 'marginTop']:
-            !hiddenFiles && renderFiles.length ? '0.5em' : null
-        }"
-      >
-        <UploadFile
-          v-for="item in renderFiles"
-          :key="item.id"
-          :file="item"
-          :icon-renderer="iconRenderer"
-          :list-type="listType"
-          :loading-text="loadingText"
-          :select-to-add="selectToAdd"
-          @on-delete="deleteFile"
-          @on-preview="$emit('on-preview', $event)"
-        >
-          <template #default="{ file, status: _status, percentage }">
-            <slot
-              name="item"
-              :file="file"
-              :status="_status"
-              :percentage="percentage"
-            ></slot>
-          </template>
-          <template #icon="{ file }">
-            <slot name="icon" :file="file"></slot>
-          </template>
-        </UploadFile>
-      </transition-group>
-      <ul
-        v-else
-        :class="`${prefix}__files`"
-        :style="{
-          [selectToAdd ? 'marginBottom' : 'marginTop']:
-            !hiddenFiles && renderFiles.length ? '0.5em' : null
-        }"
-      >
-        <UploadFile
-          v-for="item in renderFiles"
-          :key="item.id"
-          :file="item"
-          :icon-renderer="iconRenderer"
-          :list-type="listType"
-          :loading-text="loadingText"
-          :select-to-add="selectToAdd"
-          @on-delete="deleteFile"
-          @on-preview="$emit('on-preview', $event)"
-        >
-          <template #default="{ file, status: _status, percentage }">
-            <slot
-              name="item"
-              :file="file"
-              :status="_status"
-              :percentage="percentage"
-            ></slot>
-          </template>
-          <template #icon="{ file }">
-            <slot name="icon" :file="file"></slot>
-          </template>
-        </UploadFile>
-      </ul>
-    </template>
+    <UploadList
+      v-if="!hiddenFiles"
+      :files="renderFiles"
+      :select-to-add="selectToAdd"
+      :type="listType"
+      :icon-renderer="iconRenderer"
+      :loading-text="loadingText"
+      :style="{
+        [selectToAdd ? 'marginBottom' : 'marginTop']:
+          !hiddenFiles && renderFiles.length ? '0.5em' : null
+      }"
+      @on-delete="deleteFile"
+      @on-preview="$emit('on-preview', $event)"
+    ></UploadList>
   </div>
 </template>
 
@@ -117,7 +62,7 @@
 import { defineComponent, ref, computed } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
-import UploadFile from './upload-file.vue'
+import UploadList from './upload-list.vue'
 import { upload } from './request'
 import { useConfiguredProps } from '@/common/config/install'
 import { useLocaleConfig } from '@/common/config/locale'
@@ -246,7 +191,7 @@ export default defineComponent({
   components: {
     Button,
     Icon,
-    UploadFile
+    UploadList
   },
   props,
   emits: [
