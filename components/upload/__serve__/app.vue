@@ -5,7 +5,7 @@
     select-to-add
     allow-drag
     directory
-    list-type="card"
+    list-type="thumbnail"
     @on-success="handleSuccess"
   ></Upload>
   <br />

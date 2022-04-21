@@ -20,8 +20,8 @@
         :webkitdirectory="directory"
         @change="handleInputChange"
       />
-      <slot>
-        <template v-if="!allowDrag">
+      <slot :is-drag-over="(allowDrag || disabledClick) && isDragOver">
+        <template v-if="!allowDrag && !disabledClick">
           <Button icon="upload">
             {{ locale.upload }}
           </Button>
@@ -220,7 +220,8 @@ export default defineComponent({
           [`${prefix}--multiple`]: props.multiple,
           [`${prefix}--drag`]: props.allowDrag,
           [`${prefix}--to-add`]: props.selectToAdd,
-          [`${prefix}--block`]: props.block
+          [`${prefix}--block`]: props.block,
+          [`${prefix}--drag-only`]: props.disabledClick
         }
       ]
     })
@@ -579,7 +580,7 @@ export default defineComponent({
         const entity = items[i].webkitGetAsEntry?.()
 
         // 内核不支持
-        if (!entity) return []
+        if (!entity) return files
 
         if (entity.isFile) {
           collectedFiles.push(files[i])
@@ -589,7 +590,7 @@ export default defineComponent({
         }
       }
 
-      if (!dirLoop.length) return collectedFiles
+      if (!props.directory || !dirLoop.length) return collectedFiles
 
       const fileEntries: Array<{ entry: DirectoryEntity, prefix: string }> = []
 
