@@ -1,10 +1,12 @@
 <template>
   <Row tag="header" class="header">
     <Column flex="0">
-      <h1 class="index">
-        <img class="index__logo" src="/logo.png" alt="logo.png" />
-        <span class="index__title"> Vexip SFC Playground </span>
-      </h1>
+      <Linker to="https://www.vexipui.com">
+        <h1 class="index">
+          <img class="index__logo" src="/logo.png" alt="logo.png" />
+          <span class="index__title"> Vexip SFC Playground </span>
+        </h1>
+      </Linker>
     </Column>
     <Column flex="auto"></Column>
     <Column flex="0">
@@ -27,19 +29,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Row } from '@/components/row'
-import { Column } from '@/components/column'
-import { Confirm } from '@/components/confirm'
-import { Linker } from '@/components/linker'
-import { Icon } from '@/components/icon'
-import { Message } from '@/components/message'
+import { Confirm, Message } from 'vexip-ui'
 import { downloadProject } from '../download/download'
-
-import '@/common/icons/sun'
-import '@/common/icons/moon'
-import '@/common/icons/share-alt'
-import '@/common/icons/download'
-import '@/common/icons/brands/github'
 
 const props = defineProps({
   store: {
@@ -117,7 +108,7 @@ async function download() {
       position: relative;
       top: -2px;
       height: 24px;
-      margin-right: 10px;
+      margin-right: 4px;
       vertical-align: middle;
     }
 

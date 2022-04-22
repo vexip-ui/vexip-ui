@@ -1,0 +1,23 @@
+{
+  "name": "@vexip-ui/playground",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite"
+  },
+  "dependencies": {
+    "@vue/repl": "^1.0.0",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.9.1",
+    "vexip-ui": "^1.3.1",
+    "vue": "^3.2.33"
+  },
+  "devDependencies": {
+    "@types/serve-static": "^1.13.10",
+    "@vitejs/plugin-vue": "^2.3.1",
+    "@vitejs/plugin-vue-jsx": "^1.3.10",
+    "serve-static": "^1.15.0",
+    "vite": "^2.9.5"
+  }
+}

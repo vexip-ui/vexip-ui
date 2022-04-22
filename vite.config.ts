@@ -138,8 +138,11 @@ export default defineConfig(({ command }) => {
       vueJsx(),
       !process.env.TARGET &&
         dts({
-          exclude: ['node_modules', 'common/icons', 'components/*/__serve__'],
+          exclude: ['node_modules', 'playground', 'common/icons', 'components/*/__serve__'],
           outputDir: 'lib',
+          compilerOptions: {
+            sourceMap
+          },
           beforeWriteFile(filePath, content) {
             const libDir = resolve(__dirname, 'lib')
 

@@ -87,7 +87,7 @@ async function main() {
     logStep(`Run bootstrap...`)
 
     if (!skipBuild && !isDryRun) {
-      await run('yarn', ['bootstrap'])
+      await run('pnpm', ['bootstrap'])
     } else {
       logSkipped()
     }
@@ -116,7 +116,7 @@ async function main() {
   logStep(`Building package...`)
 
   if (!skipBuild && !isDryRun) {
-    await run('yarn', ['build', '-a', '-t', '-r'])
+    await run('pnpm', ['build', '-a', '-t', '-r'])
   } else {
     logSkipped()
   }
@@ -124,7 +124,7 @@ async function main() {
   // 更新 Change Log
   logStep('Updating changelog...')
 
-  await run('yarn', ['changelog'])
+  await run('pnpm', ['changelog'])
 
   // 提交改动
   logStep('Comitting changes...')

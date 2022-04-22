@@ -42,7 +42,7 @@ yarn add vexip-ui
 在每个组件文件中，开发相关的文件统一放置在 `__serve__` 下，并且通过预设的命令可以快速为特定组件启动服务：
 
 ```sh
-yarn run serve [component-pattern]
+pnpm run serve [component-pattern]
 ```
 
 ## 帮助

@@ -30,7 +30,7 @@ async function main() {
     emptyDir(path.resolve(__dirname, '../node_modules/.cache'))
   }
 
-  await execa('yarn', ['lint:style'])
+  await execa('pnpm', ['lint:style'])
 
   if (!libOnly) {
     logger.ln()
@@ -68,7 +68,7 @@ async function main() {
   }
 
   // if (buildType) {
-  //   await execa('yarn', ['build:types'], { stdio: 'inherit' })
+  //   await execa('pnpm', ['build:types'], { stdio: 'inherit' })
   // }
 }
 

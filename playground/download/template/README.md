@@ -5,10 +5,10 @@ This is a project template using [Vite](https://vitejs.dev/). It requires [Node.
 To start:
 
 ```sh
-npm install
-npm run dev
+pnpm install
+pnpm run serve
 
 # if using yarn:
 yarn
-yarn dev
+yarn run serve
 ```

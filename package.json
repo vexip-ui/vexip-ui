@@ -68,7 +68,7 @@
     "ts-jest": "^27.1.4",
     "typescript": "4.5.5",
     "vite": "^2.9.5",
-    "vite-plugin-dts": "^1.0.5",
+    "vite-plugin-dts": "^1.1.0",
     "vite-plugin-html": "^3.2.0",
     "vue-eslint-parser": "^8.3.0"
   },
@@ -76,7 +76,7 @@
     "vue": "^3.2.6"
   },
   "engines": {
-    "node": "^12 || >=14"
+    "node": ">=14"
   },
   "files": [
     "design",
@@ -106,10 +106,10 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "build:clean": "yarn run clean && yarn run build",
+    "build:clean": "pnpm run clean && pnpm run build",
     "build:icons": "node scripts/build-icons.js",
     "build:lib": "node scripts/build.js --lib",
-    "build:playground": "cd playground && vite build",
+    "build:playground": "pnpm -C playground build",
     "bootstrap": "node scripts/bootstrap.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
@@ -125,7 +125,7 @@
     "release": "node scripts/release.js",
     "serve": "node scripts/serve.js",
     "serve:example": "cd example && vite",
-    "serve:playground": "cd playground && vite"
+    "serve:playground": "pnpm -C playground serve"
   },
   "sideEffects": [
     "dist/*",

@@ -4,4 +4,4 @@
 
 [ -n "$CI" ] && exit 0
 
-yarn run precommit
+pnpm run precommit
