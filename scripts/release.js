@@ -70,7 +70,7 @@ async function main() {
     {
       type: 'confirm',
       name: 'bootstrap',
-      message: 'Run bootstrap before release?',
+      message: 'Run bootstrap before build?',
       default: true
     },
     {
@@ -116,7 +116,7 @@ async function main() {
   logStep(`Building package...`)
 
   if (!skipBuild && !isDryRun) {
-    await run('pnpm', ['build', '-a', '-t', '-r'])
+    await run('pnpm', ['build', '--', '-a', '-t', '-r'])
   } else {
     logSkipped()
   }

@@ -1,3 +1,24 @@
+## [1.3.2](https://github.com/qmhc/vexip-ui/compare/v1.3.1...v1.3.2) (2022-04-22)
+
+
+### Bug Fixes
+
+* **ellipsis:** exactly compare width using bounding rect ([194fd56](https://github.com/qmhc/vexip-ui/commit/194fd56fe8e2c3e0634f0b9e9f4a690f8498d295))
+* **native-scroll:** incorrectly record content offsetWidth ([6cb2d19](https://github.com/qmhc/vexip-ui/commit/6cb2d19fe7523fbd684404dad9ee64ac997a468f))
+* **scroll:** autoplay cannot start when mounted ([90f1934](https://github.com/qmhc/vexip-ui/commit/90f1934708f8efade6b456fc60349d4bfbc696d0))
+* **scrollbar:** cannot find wrapper in production mode ([d903b15](https://github.com/qmhc/vexip-ui/commit/d903b1573b096866ca9e22809765b9e89ce01e2a))
+* **upload-file:** decoupling the style from Upload class name ([f62a417](https://github.com/qmhc/vexip-ui/commit/f62a4174f1c8a22d012077b504e10b1247830be2))
+
+
+### Features
+
+* **icons:** sync icons to vue-awesome@4.5.0 ([3f0c915](https://github.com/qmhc/vexip-ui/commit/3f0c915a4d5bc97e5fd6a2aa5f028408d0c9b6db))
+* **upload:** add isDragOver prop to default slot ([1a0020a](https://github.com/qmhc/vexip-ui/commit/1a0020afa949abfd32a7cba7955ee6b2a07e2ac8))
+* **upload:** export UploadList and UploadFile components ([8b6ced2](https://github.com/qmhc/vexip-ui/commit/8b6ced29dcf97e15bda356bf4d4203e6ac0db55c))
+* **upload:** support upload directories and only-dary mode ([042d6db](https://github.com/qmhc/vexip-ui/commit/042d6db4e9bbe1b0a075b1a25af25fb33689741b))
+
+
+
 ## [1.3.1](https://github.com/qmhc/vexip-ui/compare/v1.3.0...v1.3.1) (2022-04-19)
 
 ### Bug Fixes
