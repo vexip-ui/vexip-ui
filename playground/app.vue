@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { watchEffect } from 'vue'
 import { Repl, ReplStore as _ReplStore } from '@vue/repl'
-import { Confirm } from '@/components/confirm'
+import { Confirm } from 'vexip-ui'
 import Header from './components/header.vue'
 
 class ReplStore extends _ReplStore {

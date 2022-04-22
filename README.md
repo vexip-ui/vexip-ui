@@ -42,7 +42,7 @@ yarn add vexip-ui
 In each component, development files are placed under a folder named `__serve__`, and start the dev server use following command:
 
 ```sh
-yarn run serve [component-pattern]
+pnpm run serve [component-pattern]
 ```
 
 ## Help
