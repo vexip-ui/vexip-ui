@@ -50,19 +50,17 @@ async function main() {
     }
   }
 
-  logger.ln()
-
-  if (!process.exitCode) {
-    if (targets.length > 1) {
-      logger.success('All components created successfully.')
+  logger.withBothLn(() => {
+    if (!process.exitCode) {
+      if (targets.length > 1) {
+        logger.success('All components created successfully.')
+      } else {
+        logger.success(`Component '${targets[0]}' created successfully.`)
+      }
     } else {
-      logger.success(`Component '${targets[0]}' created successfully.`)
+      logger.error('Component name must be specified and not exists.')
     }
-  } else {
-    logger.error('Component name must be specified and not exists.')
-  }
-
-  logger.ln()
+  })
 }
 
 async function create(name) {

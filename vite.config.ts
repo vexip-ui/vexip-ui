@@ -18,6 +18,7 @@ if (!process.env.TARGET && process.env.ENV === 'development') {
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
 const componentsDir = resolve(__dirname, 'components')
 const componentDir = resolve(componentsDir, process.env.TARGET || '..')
+const libDir = resolve(__dirname, 'lib')
 const name = basename(componentDir)
 
 const componentResolve = (p: string) => resolve(componentDir, p)
@@ -140,12 +141,9 @@ export default defineConfig(({ command }) => {
         dts({
           exclude: ['node_modules', 'playground', 'common/icons', 'components/*/__serve__'],
           outputDir: 'lib',
-          compilerOptions: {
-            sourceMap
-          },
+          compilerOptions: { sourceMap },
+          copyDtsFiles: false,
           beforeWriteFile(filePath, content) {
-            const libDir = resolve(__dirname, 'lib')
-
             filePath = filePath.includes('common')
               ? filePath
               : resolve(libDir, relative(resolve(libDir, 'components'), filePath))

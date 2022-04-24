@@ -19,8 +19,7 @@ const dryRun = (bin, args, opts = {}) => {
 }
 const runIfNotDry = isDryRun ? dryRun : run
 const logStep = msg => {
-  logger.ln()
-  logger.infoText(msg)
+  logger.withStartLn(() => logger.infoText(msg))
 }
 const logSkipped = (msg = 'Skipped') => {
   logger.warningText(`(${msg})`)
@@ -168,13 +167,11 @@ async function main() {
   await runIfNotDry('git', ['push', 'origin', `refs/tags/v${version}`])
   await runIfNotDry('git', ['push'])
 
-  logger.ln()
-
-  if (isDryRun) {
-    logger.success('Dry run finished - run git diff to see package changes')
-  } else {
-    logger.success(`Release successfully`)
-  }
-
-  logger.ln()
+  logger.withBothLn(() => {
+    if (isDryRun) {
+      logger.success('Dry run finished - run git diff to see package changes')
+    } else {
+      logger.success(`Release successfully`)
+    }
+  })
 }

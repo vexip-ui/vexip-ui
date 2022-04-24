@@ -210,7 +210,7 @@ export default defineComponent({
     }
 
     return {
-      prefix: prefix,
+      prefix,
       isNested,
       currentVisible,
       transferTo,

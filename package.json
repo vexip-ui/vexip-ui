@@ -73,9 +73,6 @@
     "vite-plugin-html": "^3.2.0",
     "vue-eslint-parser": "^8.3.0"
   },
-  "peerDependencies": {
-    "vue": "^3.2.6"
-  },
   "engines": {
     "node": ">=14"
   },
@@ -87,6 +84,7 @@
     "style",
     "themes"
   ],
+  "homepage": "https://www.vexipui.com",
   "keywords": [
     "flex",
     "components",
@@ -101,6 +99,9 @@
   "main": "dist/vexip-ui.cjs.js",
   "module": "dist/vexip-ui.es.js",
   "name": "vexip-ui",
+  "peerDependencies": {
+    "vue": "^3.2.6"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/qmhc/vexip-ui.git"

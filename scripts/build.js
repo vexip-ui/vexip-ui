@@ -18,7 +18,6 @@ const sourceMap = args.sourcemap || args.s
 const release = args.release || args.r
 const buildAllMatching = args.all || args.a
 const libOnly = args.lib || args.l
-// const buildType = args.type || args.t
 
 const env = devOnly ? 'development' : 'production'
 const libDir = path.resolve(__dirname, '../lib')
@@ -33,9 +32,7 @@ async function main() {
   await execa('pnpm', ['lint:style'])
 
   if (!libOnly) {
-    logger.ln()
-    logger.successText('start building components...')
-    logger.ln()
+    logger.withBothLn(() => logger.successText('start building components...'))
 
     try {
       if (buildAllMatching) {
@@ -54,22 +51,14 @@ async function main() {
     }
   }
 
-  logger.ln()
-  logger.successText('start building lib...')
-  logger.ln()
-
+  logger.withBothLn(() => logger.successText('start building lib...'))
   await buildLib()
 
   logger.ln()
 
   if (!process.exitCode) {
-    logger.success('All builds completed successfully.')
-    logger.ln()
+    logger.withEndLn(() => logger.success('All builds completed successfully.'))
   }
-
-  // if (buildType) {
-  //   await execa('pnpm', ['build:types'], { stdio: 'inherit' })
-  // }
 }
 
 async function buildAll(components) {
@@ -123,12 +112,7 @@ async function buildLib() {
       }
     })
   } catch (error) {
-    logger.ln()
-    logger.errorText(error)
-    logger.ln()
-
+    logger.withBothLn(() => logger.errorText(error))
     process.exitCode = 1
-
-    return
   }
 }

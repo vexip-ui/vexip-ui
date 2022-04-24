@@ -4,6 +4,9 @@ const chalk = require('chalk')
 
 const logger = (exports.logger = {
   ln: () => console.log(),
+  withStartLn: log => (logger.ln(), log()),
+  withEndLn: log => (log(), logger.ln()),
+  withBothLn: log => (logger.ln(), log(), logger.ln()),
   warning: msg => {
     console.warn(`${chalk.bgYellow.black(' WARNING ')} ${chalk.yellow(msg)}`)
   },

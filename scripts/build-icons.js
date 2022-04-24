@@ -20,9 +20,7 @@ async function main() {
   await runParallel(require('os').cpus().length, iconFiles, build)
 
   if (!process.exitCode) {
-    logger.ln()
-    logger.success('All builds are complete successfully.')
-    logger.ln()
+    logger.withBothLn(() => logger.success('All builds are complete successfully.'))
   }
 }
 
@@ -53,10 +51,7 @@ async function build(iconFile) {
       }
     })
   } catch (error) {
-    logger.ln()
-    logger.errorText(error)
-    logger.ln()
-
+    logger.withBothLn(() => logger.errorText(error))
     process.exitCode = 1
 
     return
