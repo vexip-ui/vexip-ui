@@ -97,7 +97,7 @@ import { Checkbox } from '@/components/checkbox'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { isNull } from '@/common/utils/common'
+import { isNull } from '@vexip-ui/utils'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'

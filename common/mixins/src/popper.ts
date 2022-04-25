@@ -3,7 +3,7 @@ import { createPopper } from '@popperjs/core'
 
 import type { Ref, WatchStopHandle } from 'vue'
 import type { Placement, Modifier, Instance, Rect } from '@popperjs/core'
-import type { TransferNode } from '../utils/dom-event'
+import type { TransferNode } from '@vexip-ui/utils'
 
 type OffsetsFunction = (options: {
   popper: Rect,
@@ -20,6 +20,8 @@ interface UsePopperOptions {
   popper?: Ref<HTMLElement | null>,
   offset?: OffsetsFunction | [number?, number?]
 }
+
+export type { Placement }
 
 export const placementWhileList = Object.freeze([
   'auto',

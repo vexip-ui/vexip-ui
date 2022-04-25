@@ -1,4 +1,4 @@
-import { isNull } from '@/common/utils/common'
+import { isNull } from '@vexip-ui/utils'
 
 /**
  * 根据路径读取对象中的值 (实现 ?. 的逻辑)

@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 

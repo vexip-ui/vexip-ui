@@ -93,9 +93,9 @@ import {
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@/common/config/install'
-import { useHover } from '@/common/mixins/hover'
-import { debounceMinor } from '@/common/utils/performance'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { useHover } from '@vexip-ui/mixins'
+import { debounceMinor } from '@vexip-ui/utils'
 import { CAROUSEL_STATE } from './symbol'
 
 import '@/common/icons/arrow-up'

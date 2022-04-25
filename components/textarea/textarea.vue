@@ -29,11 +29,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useConfiguredProps } from '@/common/config/install'
-import { useLocaleConfig } from '@/common/config/locale'
-import { noop } from '@/common/utils/common'
-import { throttle } from '@/common/utils/performance'
-import { createStateProp } from '@/common/config/props'
+import { useConfiguredProps, useLocaleConfig, createStateProp } from '@vexip-ui/config'
+import { noop, throttle } from '@vexip-ui/utils'
 
 const props = useConfiguredProps('textarea', {
   state: createStateProp(),

@@ -1,2 +1,5 @@
 packages:
   - playground
+  - common/config
+  - common/mixins
+  - common/utils

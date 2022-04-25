@@ -6,12 +6,12 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { toDate, format } from '@/common/utils/date'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { toDate, format } from '@vexip-ui/utils'
 import { getId, subscribe, unsubscribe, computeTimeAgo } from './helper'
 
 import type { PropType } from 'vue'
-import type { Dateable } from '@/common/utils/date'
+import type { Dateable } from '@vexip-ui/utils'
 
 const props = useConfiguredProps('timeAgo', {
   datetime: {

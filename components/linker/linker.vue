@@ -15,7 +15,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 export type LinkerType = 'default' | 'primary' | 'success' | 'error' | 'warning' | 'info'
 

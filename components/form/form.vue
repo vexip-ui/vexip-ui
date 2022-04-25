@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, provide, ref } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
 import type { LabelPosition, SubmitMethod, FieldOptions } from './symbol'

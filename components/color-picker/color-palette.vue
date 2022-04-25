@@ -23,8 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import { toFixed } from '@/common/utils/number'
-import { throttle } from '@/common/utils/performance'
+import { toFixed, throttle } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'ColorPalette',

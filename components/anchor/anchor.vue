@@ -36,7 +36,7 @@ import {
   getCurrentInstance,
   isVNode
 } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 

@@ -6,9 +6,9 @@ import {
   observe,
   disconnect,
   dispatchEvent
-} from '../utils/dom-event'
+} from '@vexip-ui/utils'
 
-import type { TransferNode } from '../utils/dom-event'
+import type { TransferNode } from '@vexip-ui/utils'
 
 export const CLICK_OUTSIDE = 'clickoutside'
 

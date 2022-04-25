@@ -45,10 +45,8 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide, nextTick, toRef } from 'vue'
 import TreeNode from './tree-node.vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { useLocaleConfig } from '@/common/config/locale'
-import { isNull, isPromise } from '@/common/utils/common'
-import { transformTree, flatTree } from '@/common/utils/transform'
+import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import '@/common/icons/chevron-right'

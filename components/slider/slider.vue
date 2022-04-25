@@ -36,9 +36,8 @@
 import { defineComponent, ref, computed, watch, inject, onMounted } from 'vue'
 import { Tooltip } from '@/components/tooltip'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useConfiguredProps } from '@/common/config/install'
-import { noop } from '@/common/utils/common'
-import { throttle } from '@/common/utils/performance'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { noop, throttle } from '@vexip-ui/utils'
 
 const props = useConfiguredProps('slider', {
   value: {

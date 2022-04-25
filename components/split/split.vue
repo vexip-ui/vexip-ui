@@ -47,8 +47,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@/common/config/install'
-import { throttle } from '@/common/utils/performance'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { throttle } from '@vexip-ui/utils'
 
 import '@/common/icons/chevron-up'
 import '@/common/icons/chevron-right'

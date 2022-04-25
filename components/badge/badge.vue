@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 export type BadgeType = 'error' | 'primary' | 'success' | 'warning' | 'info' | 'disabled'
 

@@ -1,5 +1,3 @@
-import { nextTick } from 'vue'
-
 /**
  * 将一个函数或方法进行节流
  * @param method - 需要节流的方法，需自行绑定 this
@@ -75,7 +73,7 @@ export function debounceMinor<T extends(...args: any[]) => any>(method: T) {
     if (!called) {
       called = true
 
-      nextTick(() => {
+      Promise.resolve(() => {
         method(...lastArgs)
         called = false
       })

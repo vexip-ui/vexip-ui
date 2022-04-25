@@ -16,11 +16,9 @@
 <script lang="ts">
 import { defineComponent, ref, inject, provide, reactive, toRef, computed, watch } from 'vue'
 import { Checkbox } from '@/components/checkbox'
-import { useConfiguredProps } from '@/common/config/install'
-import { createSizeProp, createStateProp } from '@/common/config/props'
+import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop, isDefined, isObject } from '@/common/utils/common'
-import { debounceMinor } from '@/common/utils/performance'
+import { noop, isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'

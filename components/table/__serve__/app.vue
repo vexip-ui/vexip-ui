@@ -79,7 +79,7 @@ import { Row } from '@/components/row'
 import { Upload } from '@/components/upload'
 import Table from '../table.vue'
 import TableColumn from '../table-column'
-import { deepClone } from '@/common/utils/deep-clone'
+import { deepClone } from '@vexip-ui/utils'
 import { defineFilter, defineColumn } from '../helper'
 import testData from './data.json'
 

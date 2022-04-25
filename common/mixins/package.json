@@ -1,0 +1,30 @@
+{
+  "name": "@vexip-ui/mixins",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "qmhc",
+  "scripts": {
+    "build": "vite build"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/qmhc/vexip-ui/tree/main/common/mixins#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qmhc/vexip-ui.git",
+    "directory": "common/mixins"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.5",
+    "@vexip-ui/utils": "workspace:^"
+  }
+}

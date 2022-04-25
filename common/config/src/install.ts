@@ -1,4 +1,4 @@
-import { isObject } from '@/common/utils/common'
+import { isObject } from '@vexip-ui/utils'
 
 export interface PropOptions extends Record<string, Record<string, unknown>> {
   defaults: Record<string, unknown>

@@ -48,8 +48,8 @@
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useConfiguredProps } from '@/common/config/install'
-import { isPromise } from '@/common/utils/common'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { isPromise } from '@vexip-ui/utils'
 
 import '@/common/icons/times'
 

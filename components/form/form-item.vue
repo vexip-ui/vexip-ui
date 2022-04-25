@@ -48,8 +48,8 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { isNull, isFunction } from '@/common/utils/common'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { isNull, isFunction } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'

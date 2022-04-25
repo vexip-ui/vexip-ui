@@ -1,4 +1,4 @@
-import { has, isDefined } from '@/common/utils/common'
+import { has, isDefined } from '@vexip-ui/utils'
 
 import type { HttpError, UploadOptions } from './symbol'
 

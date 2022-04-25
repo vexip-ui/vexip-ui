@@ -2,7 +2,7 @@ import '@/style/loading.scss'
 
 import { createApp } from 'vue'
 import Component from './loading.vue'
-import { destroyObject } from '@/common/utils/destroy-object'
+import { destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
 import type { LoadingOptions, LoadingInstance } from './symbol'

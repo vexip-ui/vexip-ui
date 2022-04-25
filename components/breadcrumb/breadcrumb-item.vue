@@ -21,7 +21,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, watch, inject, onBeforeUnmount } from 'vue'
 import { Renderer } from '@/components/renderer'
-import { isFunction } from '@/common/utils/common'
+import { isFunction } from '@vexip-ui/utils'
 import { BREADCRUMB_STATE } from './symbol'
 
 import type { SeparatorRenderFn, ItemState } from './symbol'

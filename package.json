@@ -11,7 +11,9 @@
     }
   },
   "dependencies": {
-    "@popperjs/core": "^2.11.5",
+    "@vexip-ui/config": "workspace:^",
+    "@vexip-ui/mixins": "workspace:^",
+    "@vexip-ui/utils": "workspace:^",
     "vue": "^3.2.33"
   },
   "devDependencies": {
@@ -70,7 +72,7 @@
     "ts-jest": "^27.1.4",
     "typescript": "4.5.5",
     "vite": "^2.9.5",
-    "vite-plugin-dts": "^1.1.0",
+    "vite-plugin-dts": "^1.1.1",
     "vite-plugin-html": "^3.2.0",
     "vue-eslint-parser": "^8.3.0"
   },
@@ -109,10 +111,12 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "build:clean": "pnpm run clean && pnpm run build",
+    "build:config": "pnpm -C common/config build",
     "build:icons": "node scripts/build-icons.js",
     "build:lib": "node scripts/build.js --lib",
+    "build:mixins": "pnpm -C common/mixins build",
     "build:playground": "pnpm -C playground build",
+    "build:utils": "pnpm -C common/utils build",
     "bootstrap": "node scripts/bootstrap.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
@@ -136,6 +140,6 @@
     "icons/**",
     "*.scss"
   ],
-  "typings": "lib/index.d.ts",
+  "types": "lib/index.d.ts",
   "version": "1.3.2"
 }

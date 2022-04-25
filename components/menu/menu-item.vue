@@ -87,13 +87,13 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
-import { useConfiguredProps } from '@/common/config/install'
-import { usePopper } from '@/common/mixins/popper'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { usePopper } from '@vexip-ui/mixins'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE } from './symbol'
 
 import '@/common/icons/chevron-down'
 
-import type { Placement } from '@popperjs/core'
+import type { Placement } from '@vexip-ui/mixins'
 
 const props = useConfiguredProps('menuItem', {
   label: {

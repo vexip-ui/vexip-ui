@@ -23,10 +23,8 @@
 <script lang="ts">
 import { defineComponent, inject } from 'vue'
 import { Button } from '@/components/button'
-import { createSizeProp } from '@/common/config/props'
-import { useConfiguredProps } from '@/common/config/install'
-import { useLocaleConfig } from '@/common/config/locale'
-import { noop, isPromise } from '@/common/utils/common'
+import { createSizeProp, useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { noop, isPromise } from '@vexip-ui/utils'
 import { FORM_ACTIONS } from './symbol'
 
 import type { PropType } from 'vue'

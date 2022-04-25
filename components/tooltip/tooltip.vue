@@ -38,12 +38,11 @@ import { defineComponent, ref, watch, toRef } from 'vue'
 
 import { Portal } from '@/components/portal'
 
-import { useConfiguredProps } from '@/common/config/install'
-import { useClickOutside } from '@/common/mixins/clickoutside'
-import { placementWhileList, usePopper } from '@/common/mixins/popper'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { useClickOutside, placementWhileList, usePopper } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@popperjs/core'
+import type { Placement } from '@vexip-ui/mixins'
 import type { ClassType, TooltipTheme, ToopTipTrigger } from './symbol'
 
 const props = useConfiguredProps('tooltip', {

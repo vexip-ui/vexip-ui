@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, toRef, inject } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 import { useLabel } from './mixins'
 import { DROP_SELECT_HANDLER } from './symbol'
 

@@ -74,10 +74,8 @@ import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useConfiguredProps } from '@/common/config/install'
-import { useLocaleConfig } from '@/common/config/locale'
-import { isPromise } from '@/common/utils/common'
-import { toNumber } from '@/common/utils/number'
+import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { isPromise, toNumber } from '@vexip-ui/utils'
 
 import '@/common/icons/times'
 

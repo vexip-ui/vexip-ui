@@ -12,11 +12,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
-import { toFixed } from '@/common/utils/number'
-import { throttle } from '@/common/utils/performance'
+import { toFixed, throttle } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
-import type { RGBColor } from '@/common/utils/color'
+import type { RGBColor } from '@vexip-ui/utils'
 
 const props = {
   rgb: {

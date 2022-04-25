@@ -107,7 +107,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
-import { doubleDigits } from '@/common/utils/number'
+import { doubleDigits } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'
 
 import type { PropType } from 'vue'

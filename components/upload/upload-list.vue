@@ -61,7 +61,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import UploadFile from './upload-file.vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 import type { PropType, StyleValue } from 'vue'
 import type { UploadListType, RenderFn, FileState } from './symbol'

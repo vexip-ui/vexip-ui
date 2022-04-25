@@ -13,10 +13,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { useDisplay } from '@/common/mixins/display'
-import { isNull } from '@/common/utils/common'
-import { debounceMinor } from '@/common/utils/performance'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { useDisplay } from '@vexip-ui/mixins'
+import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
 import type { ItemState } from './symbol'

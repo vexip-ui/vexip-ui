@@ -45,15 +45,13 @@ import {
 } from 'vue'
 import { Portal } from '@/components/portal'
 import DropdownDrop from './dropdown-drop'
-import { useClickOutside } from '@/common/mixins/clickoutside'
-import { placementWhileList, usePopper } from '@/common/mixins/popper'
-import { useTriggerHandler } from '@/common/mixins/trigger-handler'
-import { useConfiguredProps } from '@/common/config/install'
+import { useClickOutside, placementWhileList, usePopper, useTriggerHandler } from '@vexip-ui/mixins'
+import { useConfiguredProps } from '@vexip-ui/config'
 import { useLabel } from './mixins'
 import { SELECT_HANDLER, DROP_SELECT_HANDLER } from './symbol'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@popperjs/core'
+import type { Placement } from '@vexip-ui/mixins'
 
 export type DropdownTrigger = 'hover' | 'click' | 'custom'
 type ClassType = string | Record<string, boolean>

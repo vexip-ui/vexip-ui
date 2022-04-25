@@ -25,9 +25,8 @@
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useConfiguredProps } from '@/common/config/install'
-import { isPromise, noop } from '@/common/utils/common'
-import { createSizeProp } from '@/common/config/props'
+import { useConfiguredProps, createSizeProp } from '@vexip-ui/config'
+import { isPromise, noop } from '@vexip-ui/utils'
 
 import '@/common/icons/spinner'
 

@@ -34,11 +34,11 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useConfiguredProps } from '@/common/config/install'
-import { placementWhileList, usePopper } from '@/common/mixins/popper'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { placementWhileList, usePopper } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@popperjs/core'
+import type { Placement } from '@vexip-ui/mixins'
 import type { TooltipTheme } from '@/components/tooltip'
 
 export type ClassType = string | Record<string, boolean>

@@ -1,6 +1,5 @@
 import { ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { throttle, debounce } from '@/common/utils/performance'
-import { toNumber, multipleFixed } from '@/common/utils/number'
+import { throttle, debounce, toNumber, multipleFixed } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 import type { ScrollMode } from './symbol'

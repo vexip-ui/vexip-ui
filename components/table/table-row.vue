@@ -56,7 +56,7 @@ import {
 } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
-import { isFunction } from '@/common/utils/common'
+import { isFunction } from '@vexip-ui/utils'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'

@@ -25,7 +25,7 @@ import {
   onBeforeUnmount,
   nextTick
 } from 'vue'
-import { isNull } from '@/common/utils/common'
+import { isNull } from '@vexip-ui/utils'
 import { SELECTOR_STATE } from './symbol'
 
 import type { OptionState } from './symbol'

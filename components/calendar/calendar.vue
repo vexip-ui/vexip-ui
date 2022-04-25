@@ -82,10 +82,10 @@ import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
 import CalendarPane from './calendar-pane.vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
-import type { Dateable } from '@/common/utils/date'
+import type { Dateable } from '@vexip-ui/utils'
 
 const props = useConfiguredProps('calendar', {
   value: {

@@ -43,7 +43,7 @@ import { DropdownList } from '@/components/dropdown-list'
 import { renderItem } from './render'
 
 import { Renderer } from '@/components/renderer'
-import { isFunction } from '@/common/utils/common'
+import { isFunction } from '@vexip-ui/utils'
 
 import '@/common/icons/chevron-right'
 

@@ -60,7 +60,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import { isFunction } from '@/common/utils/common'
+import { isFunction } from '@vexip-ui/utils'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'

@@ -25,8 +25,8 @@
 import { defineComponent, ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@/common/config/install'
-import { randomString } from '@/common/utils/common'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { randomString } from '@vexip-ui/utils'
 import { COLLAPSE_STATE } from './symbol'
 
 import '@/common/icons/chevron-right'

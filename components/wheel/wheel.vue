@@ -54,10 +54,9 @@ import { defineComponent, ref, computed, watch, provide, inject, nextTick } from
 import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useDisplay } from '@/common/mixins/display'
-import { useConfiguredProps } from '@/common/config/install'
-import { noop } from '@/common/utils/common'
-import { debounce, debounceMinor } from '@/common/utils/performance'
+import { useDisplay } from '@vexip-ui/mixins'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { noop, debounce, debounceMinor } from '@vexip-ui/utils'
 import { WHEEL_STATE } from './symbol'
 
 import '@/common/icons/angle-up'
