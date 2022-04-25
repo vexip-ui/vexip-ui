@@ -8,9 +8,9 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @dragstart.stop="handleDragStart"
-    @dragover.stop="handleDragOver"
-    @dragend.stop="handleDragEnd"
-    @drop.stop="handleDrop"
+    @dragover="handleDragOver"
+    @dragend="handleDragEnd"
+    @drop="handleDrop"
   >
     <div ref="rowEl" :class="className">
       <slot></slot>
@@ -123,6 +123,7 @@ export default defineComponent({
       ]
     })
     const draggable = computed(() => !props.isHead && state.rowDraggable)
+    const dragging = computed(() => state.dragging)
     const expandColumn = computed(() => {
       return state.columns.find(column => (column as ExpandColumn).type === 'expand') as
         | ExpandColumn
@@ -240,22 +241,25 @@ export default defineComponent({
     }
 
     function handleDragOver(event: DragEvent) {
-      if (!draggable.value) return
+      if (!draggable.value || !dragging.value) return
 
+      event.stopPropagation()
       event.preventDefault()
       tableAction.handleRowDragOver(instance, event)
     }
 
     function handleDrop(event: DragEvent) {
-      if (!draggable.value) return
+      if (!draggable.value || !dragging.value) return
 
+      event.stopPropagation()
       event.preventDefault()
       tableAction.handleRowDrop(instance)
     }
 
-    function handleDragEnd() {
-      if (!draggable.value) return
+    function handleDragEnd(event: DragEvent) {
+      if (!draggable.value || !dragging.value) return
 
+      event.stopPropagation()
       tableAction.handleRowDragEnd()
     }
 

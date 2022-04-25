@@ -145,7 +145,8 @@ export interface StoreState extends StoreOptions {
   bodyScroll: number,
   hiddenHeight: number,
   startRow: number,
-  endRow: number
+  endRow: number,
+  dragging: boolean
 }
 
 export interface StoreGetters {

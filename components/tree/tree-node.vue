@@ -6,9 +6,9 @@
     :draggable="draggable"
     @click.left="handleClick"
     @dragstart.stop="handleDragStart"
-    @dragover.stop="handleDragOver"
-    @dragend.stop="handleDragEnd"
-    @drop.stop="handleDrop"
+    @dragover="handleDragOver"
+    @dragend="handleDragEnd"
+    @drop="handleDrop"
   >
     <slot
       v-bind="{
@@ -364,22 +364,25 @@ export default defineComponent({
     }
 
     function handleDragOver(event: DragEvent) {
-      if (!props.draggable) return
+      if (!props.draggable || !treeState.dragging) return
 
+      event.stopPropagation()
       event.preventDefault()
       treeState.handleNodeDragOver(getNodeState(), event)
     }
 
     function handleDrop(event: DragEvent) {
-      if (!props.draggable) return
+      if (!props.draggable || !treeState.dragging) return
 
+      event.stopPropagation()
       event.preventDefault()
       treeState.handleNodeDrop(getNodeState())
     }
 
-    function handleDragEnd() {
-      if (!props.draggable) return
+    function handleDragEnd(event: DragEvent) {
+      if (!props.draggable || !treeState.dragging) return
 
+      event.stopPropagation()
       treeState.handleNodeDragEnd(getNodeState())
     }
 

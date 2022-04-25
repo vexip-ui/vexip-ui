@@ -67,7 +67,8 @@ export function useStore(options: StoreOptions) {
     bodyScroll: 0,
     hiddenHeight: 0,
     startRow: 0,
-    endRow: 0
+    endRow: 0,
+    dragging: false
   })
 
   setColumns(state, options.columns)
@@ -180,6 +181,8 @@ export function useStore(options: StoreOptions) {
     setRowHover: setRowHover.bind(null, state),
     setEmptyText: setEmptyText.bind(null, state),
     setTooltipTheme: setTooltipTheme.bind(null, state),
+    setTooltipWidth: setTooltipWidth.bind(null, state),
+    setDragging: setDragging.bind(null, state),
     handleSort: handleSort.bind(null, state),
     handleFilter: handleFilter.bind(null, state),
     toggleFilterItemActive: toggleFilterItemActive.bind(null, state),
@@ -477,6 +480,14 @@ function setEmptyText(state: StoreState, text: string) {
 
 function setTooltipTheme(state: StoreState, theme: TooltipTheme) {
   state.tooltipTheme = theme
+}
+
+function setTooltipWidth(state: StoreState, theme: number | string) {
+  state.tooltipWidth = theme
+}
+
+function setDragging(state: StoreState, dragging: boolean) {
+  state.dragging = !!dragging
 }
 
 function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type']) {

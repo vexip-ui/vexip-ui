@@ -34,6 +34,7 @@ export interface TreeState {
   arrow: boolean | 'auto',
   checkbox: boolean,
   renderer: RenderFn,
+  dragging: boolean,
   boundAsyncLoad: boolean,
   computeCheckedState(originNode: TreeNodeOptions, able: boolean): void,
   handleNodeClick(node: TreeNodeOptions): void,

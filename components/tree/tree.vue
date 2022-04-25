@@ -185,6 +185,7 @@ export default defineComponent({
     const nodeMaps = new Map<Key, TreeNodeOptions>()
     const flatData = ref<TreeNodeOptions[]>([])
     const treeData = ref<TreeNodeOptions[]>([])
+    const dragging = ref(false)
     const indicatorShow = ref(false)
 
     const wrapper = ref<HTMLElement | null>(null)
@@ -208,6 +209,7 @@ export default defineComponent({
         arrow: toRef(props, 'arrow'),
         checkbox: toRef(props, 'checkbox'),
         renderer: toRef(props, 'renderer'),
+        dragging,
         boundAsyncLoad,
         computeCheckedState,
         handleNodeClick,
@@ -531,6 +533,7 @@ export default defineComponent({
         dropType: DropType.BEFORE
       }
 
+      dragging.value = true
       emit('on-drag-start', nodeInstance.node.data, nodeInstance.node)
     }
 
@@ -648,6 +651,7 @@ export default defineComponent({
     }
 
     function handleNodeDragEnd(nodeInstance: TreeNodeInstance) {
+      dragging.value = true
       indicatorShow.value = false
       dragState = null
       emit('on-drag-end', nodeInstance.node.data)

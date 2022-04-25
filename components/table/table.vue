@@ -395,6 +395,9 @@ export default defineComponent({
       setGlobalRowHeight,
       setRowDraggable,
       setEmptyText,
+      setTooltipTheme,
+      setTooltipWidth,
+      setDragging,
       refreshRowIndex
     } = mutations
 
@@ -434,6 +437,8 @@ export default defineComponent({
         setEmptyText(value ?? locale.empty)
       }
     )
+    watch(() => props.tooltipTheme, setTooltipTheme)
+    watch(() => props.tooltipWidth, setTooltipWidth)
 
     const handlerResize = debounce(refresh)
 
@@ -564,6 +569,7 @@ export default defineComponent({
         tableRect: wrapper.value!.getBoundingClientRect()
       }
 
+      setDragging(true)
       emit('on-row-drag-start', rowInstance.row.data)
     }
 
@@ -632,6 +638,8 @@ export default defineComponent({
 
       dragState = null
       indicatorShow.value = false
+
+      setDragging(false)
       emit(
         'on-row-drag-end',
         draggingRow.data,

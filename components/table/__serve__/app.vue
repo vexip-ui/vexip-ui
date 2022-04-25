@@ -1,54 +1,66 @@
 <template>
-  <Table
-    :columns="columns2"
-    :data="data"
-    :height="1000"
-    :tooltip-width="300"
+  <Upload
+    multiple
+    allow-drag
+    disabled-click
+    manual
+    directory
+    :count-limit="10"
   >
-    <TableColumn type="selection" id-key="selection" :disable-row="isDisabled"></TableColumn>
-    <TableColumn type="order" id-key="order"></TableColumn>
-    <TableColumn type="expand" id-key="expand">
-      <template #default="{ row }">
-        <Row style="padding: 20px 40px; background-color: #f8f9fa;">
-          <Column :span="12">
-            Full Name: {{ `${row.firstName} ${row.lastName}` }}
-          </Column>
-          <Column :span="12">
-            Age: {{ row.age }}
-          </Column>
-          <Column :span="12">
-            Job: {{ row.job }}
-          </Column>
-          <Column :span="12">
-            Email: {{ row.email }}
-          </Column>
-        </Row>
-      </template>
-    </TableColumn>
-    <TableColumn name="First Name" id-key="firstName">
-      <template #default="{ row }">
-        <Icon name="user" style="margin-right: 8px;"></Icon>
-        {{ row.firstName }}
-      </template>
-    </TableColumn>
-    <TableColumn name="Job" id-key="job" :order="3"></TableColumn>
-    <TableColumn
-      name="Age"
-      id-key="age"
-      :order="2"
-      no-ellipsis
-    ></TableColumn>
-    <TableColumn name="Long Text" id-key="longText">
-      很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本
-    </TableColumn>
-    <!-- <template #empty="{ isFixed }">
-      <div class="vxp-table__empty" :data-fixed="isFixed">
-        <template v-if="!isFixed">
-          无数据
-        </template>
-      </div>
-    </template> -->
-  </Table>
+    <template #default="{ isDragOver }">
+      <Table
+        :columns="columns2"
+        :data="data"
+        :height="1000"
+        :tooltip-width="300"
+      >
+        <TableColumn type="selection" id-key="selection" :disable-row="isDisabled"></TableColumn>
+        <TableColumn type="order" id-key="order"></TableColumn>
+        <TableColumn type="expand" id-key="expand">
+          <template #default="{ row }">
+            <Row style="padding: 20px 40px; background-color: #f8f9fa;">
+              <Column :span="12">
+                Full Name: {{ `${row.firstName} ${row.lastName}` }}
+              </Column>
+              <Column :span="12">
+                Age: {{ row.age }}
+              </Column>
+              <Column :span="12">
+                Job: {{ row.job }}
+              </Column>
+              <Column :span="12">
+                Email: {{ row.email }}
+              </Column>
+            </Row>
+          </template>
+        </TableColumn>
+        <TableColumn name="First Name" id-key="firstName">
+          <template #default="{ row }">
+            <Icon name="user" style="margin-right: 8px;"></Icon>
+            {{ row.firstName }}
+          </template>
+        </TableColumn>
+        <TableColumn name="Job" id-key="job" :order="3"></TableColumn>
+        <TableColumn
+          name="Age"
+          id-key="age"
+          :order="2"
+          no-ellipsis
+        ></TableColumn>
+        <TableColumn name="Long Text" id-key="longText">
+          很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本
+        </TableColumn>
+        <!-- <template #empty="{ isFixed }">
+          <div class="vxp-table__empty" :data-fixed="isFixed">
+            <template v-if="!isFixed">
+              无数据
+            </template>
+          </div>
+        </template> -->
+      </Table>
+      {{ isDragOver }}
+    </template>
+  </Upload>
   <br />
   <Button type="primary" @click="toggleData">
     切换数据
@@ -64,6 +76,7 @@ import { Button } from '@/components/button'
 import { Column } from '@/components/column'
 import { Icon } from '@/components/icon'
 import { Row } from '@/components/row'
+import { Upload } from '@/components/upload'
 import Table from '../table.vue'
 import TableColumn from '../table-column'
 import { deepClone } from '@/common/utils/deep-clone'
@@ -85,6 +98,7 @@ export default defineComponent({
     Column,
     Icon,
     Row,
+    Upload,
     Table,
     TableColumn
   },
