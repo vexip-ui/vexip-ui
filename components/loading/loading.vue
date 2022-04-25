@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
-import { boundRange } from '@/common/utils/number'
+import { boundRange } from '@vexip-ui/utils'
 
 import type { LoadingState, LoadingPosition, LoadingOptions } from './symbol'
 

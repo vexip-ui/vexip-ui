@@ -71,16 +71,14 @@ import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { Select } from '@/components/select'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
-import { placementWhileList } from '@/common/mixins/popper'
-import { useConfiguredProps } from '@/common/config/install'
-import { useLocaleConfig } from '@/common/config/locale'
-import { isNull, noop } from '@/common/utils/common'
-import { createSizeProp, createStateProp } from '@/common/config/props'
+import { placementWhileList } from '@vexip-ui/mixins'
+import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { isNull, noop } from '@vexip-ui/utils'
 
 import '@/common/icons/times-circle'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@popperjs/core'
+import type { Placement } from '@vexip-ui/mixins'
 import type { OptionState } from '@/components/option'
 
 type RawOption =

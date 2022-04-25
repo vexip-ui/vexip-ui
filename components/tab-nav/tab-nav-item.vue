@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, watch, onBeforeUnmount } from 'vue'
 import { Icon } from '@/components/icon'
-import { isDefined } from '@/common/utils/common'
+import { isDefined } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
 import type { ItemState } from './symbol'

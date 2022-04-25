@@ -66,7 +66,7 @@ import { defineComponent, ref, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
-import { isObject } from '@/common/utils/common'
+import { isObject } from '@vexip-ui/utils'
 
 import '@/common/icons/times'
 

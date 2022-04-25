@@ -1,0 +1,22 @@
+{
+  "name": "@vexip-ui/config",
+  "author": "qmhc",
+  "scripts": {
+    "build": "vite build"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": true,
+  "engines": {
+    "node": ">=14"
+  },
+  "dependencies": {
+    "@vexip-ui/utils": "workspace:^",
+    "vue": "^3.2.33"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.6"
+  }
+}

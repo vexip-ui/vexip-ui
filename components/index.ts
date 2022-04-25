@@ -86,14 +86,12 @@ import { UploadList } from '@/components/upload-list'
 import { Wheel } from '@/components/wheel'
 import { WheelItem } from '@/components/wheel-item'
 
-import { configProp } from '@/common/config/install'
-import { configLocale } from '@/common/config/locale'
+import { configProp, configLocale } from '@vexip-ui/config'
 
 import '@/common/icons'
 
 import type { App } from 'vue'
-import type { PropOptions } from '@/common/config/install'
-import type { LocaleOptions } from '@/common/config/locale'
+import type { PropOptions, LocaleOptions } from '@vexip-ui/config'
 
 export { configLocale }
 

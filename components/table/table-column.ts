@@ -1,7 +1,6 @@
 import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { createSizeProp } from '@/common/config/props'
-import { isNull } from '@/common/utils/common'
+import { useConfiguredProps, createSizeProp } from '@vexip-ui/config'
+import { isNull } from '@vexip-ui/utils'
 import { TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'

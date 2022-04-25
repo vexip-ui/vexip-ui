@@ -1,5 +1,5 @@
 import { defineComponent, computed, h, provide, toRef } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 import { ROW_GUTTER } from './symbol'
 
 import type { PropType } from 'vue'

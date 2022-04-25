@@ -102,28 +102,26 @@ import ColorAlpha from './color-alpha.vue'
 import ColorHue from './color-hue.vue'
 import ColorPalette from './color-palette.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
-import { usePopper, placementWhileList } from '@/common/mixins/popper'
-import { useClickOutside } from '@/common/mixins/clickoutside'
-import { useConfiguredProps } from '@/common/config/install'
-import { useLocaleConfig } from '@/common/config/locale'
-import { noop } from '@/common/utils/common'
-import { toFixed } from '@/common/utils/number'
+import { usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
+
 import {
+  noop,
+  toFixed,
   parseColorToRgba,
   rgbToHsv,
   hsvToRgb,
   rgbToHex,
   hsvToHsl,
   rgbaToHex
-} from '@/common/utils/color'
-import { createSizeProp, createStateProp } from '@/common/config/props'
+} from '@vexip-ui/utils'
 
 import '@/common/icons/times'
 import '@/common/icons/chevron-down'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@popperjs/core'
-import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@/common/utils/color'
+import type { Placement } from '@vexip-ui/mixins'
+import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
 
 export type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
 

@@ -16,10 +16,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, inject } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { createSizeProp, createStateProp } from '@/common/config/props'
+import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop } from '@/common/utils/common'
+import { noop } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'

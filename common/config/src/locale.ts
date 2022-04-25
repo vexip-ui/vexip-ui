@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import { mergeObjects } from '@/common/utils/transform'
+import { mergeObjects } from '@vexip-ui/utils'
 
 export function getDefaultLocaleConfig() {
   return {

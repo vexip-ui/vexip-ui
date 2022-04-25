@@ -21,8 +21,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@/common/config/install'
-import { createSizeProp } from '@/common/config/props'
+import { useConfiguredProps, createSizeProp } from '@vexip-ui/config'
 
 import '@/common/icons/times'
 

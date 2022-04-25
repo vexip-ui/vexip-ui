@@ -39,8 +39,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@/common/config/install'
-import { toNumber } from '@/common/utils/number'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { toNumber } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 

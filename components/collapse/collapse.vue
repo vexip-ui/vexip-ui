@@ -17,8 +17,8 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { removeArrayItem } from '@/common/utils/transform'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { removeArrayItem } from '@vexip-ui/utils'
 import { COLLAPSE_STATE } from './symbol'
 
 import type { PropType, Ref } from 'vue'

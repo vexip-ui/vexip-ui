@@ -33,7 +33,7 @@ const logger = (exports.logger = {
   }
 })
 
-exports.bin = name => path.resolve(__dirname, '../node_modules/.bin/' + name)
+// exports.bin = name => path.resolve(__dirname, '../node_modules/.bin/' + name)
 
 // 短横线命名
 exports.toKebabCase = value => {

@@ -50,14 +50,12 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
-import { useConfiguredProps } from '@/common/config/install'
-import { isTrue } from '@/common/utils/common'
-import { USE_TOUCH } from '@/common/utils/dom-event'
-import { createEventEmitter } from '@/common/utils/event-emitter'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
 import type { PropType, CSSProperties } from 'vue'
-import type { EventHandler } from '@/common/utils/event-emitter'
+import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode, ClassType } from './symbol'
 
 const MOVE_EVENT = 'mousemove'

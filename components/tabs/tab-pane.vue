@@ -15,7 +15,7 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
-import { isDefined } from '@/common/utils/common'
+import { isDefined } from '@vexip-ui/utils'
 import { TABS_STATE } from './symbol'
 
 import type { ItemState } from './symbol'

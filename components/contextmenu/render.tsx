@@ -2,7 +2,7 @@ import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
-import { isObject } from '@/common/utils/common'
+import { isObject } from '@vexip-ui/utils'
 
 import type { MenuConfig } from './symbol'
 

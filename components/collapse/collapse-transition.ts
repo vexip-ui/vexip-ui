@@ -1,5 +1,5 @@
 import { defineComponent, h, Transition } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 type TransitionMode = 'in-out' | 'out-in' | 'default'
 

@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { ComponentSize } from '@/common/config/props'
+import type { ComponentSize } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 

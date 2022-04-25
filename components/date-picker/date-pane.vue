@@ -147,11 +147,9 @@ import { Button } from '@/components/button'
 import { CalendarPane } from '@/components/calendar-pane'
 import { Icon } from '@/components/icon'
 import TimeWheel from './time-wheel.vue'
-import { useHover } from '@/common/mixins/hover'
-import { useLocaleConfig } from '@/common/config/locale'
-import { range } from '@/common/utils/common'
-import { toDate } from '@/common/utils/date'
-// import { doubleDigits } from '@/common/utils/number'
+import { useHover } from '@vexip-ui/mixins'
+import { useLocaleConfig } from '@vexip-ui/config'
+import { range, toDate } from '@vexip-ui/utils'
 
 import '@/common/icons/angle-right'
 import '@/common/icons/angle-left'
@@ -160,7 +158,7 @@ import '@/common/icons/angle-double-left'
 
 import type { PropType } from 'vue'
 import type { MonthIndex } from '@/components/calendar'
-import type { Dateable } from '@/common/utils/date'
+import type { Dateable } from '@vexip-ui/utils'
 import type { DateType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
 
 const props = {

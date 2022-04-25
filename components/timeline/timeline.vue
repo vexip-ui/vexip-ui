@@ -6,9 +6,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, toRef } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { isNull } from '@/common/utils/common'
-import { debounceMinor } from '@/common/utils/performance'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TIMELINE_STATE } from './symbol'
 
 import type { ItemState, TimelineState } from './symbol'

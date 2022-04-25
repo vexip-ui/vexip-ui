@@ -16,7 +16,7 @@ import {
   provide,
   toRef
 } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 import { MENU_STATE } from './symbol'
 
 import type { TooltipTheme } from '@/components/tooltip'

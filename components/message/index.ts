@@ -2,9 +2,7 @@ import '@/style/message.scss'
 
 import { createApp } from 'vue'
 import Component from './message.vue'
-import { isNull } from '@/common/utils/common'
-import { toNumber } from '@/common/utils/number'
-import { destroyObject } from '@/common/utils/destroy-object'
+import { isNull, toNumber, destroyObject } from '@vexip-ui/utils'
 
 import '@/common/icons/info-circle'
 import '@/common/icons/check-circle'

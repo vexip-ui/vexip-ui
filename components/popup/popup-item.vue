@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent, ref, inject, onMounted, nextTick } from 'vue'
 import { Renderer } from '@/components/renderer'
-import { noop } from '@/common/utils/common'
+import { noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 
 import type { PropType } from 'vue'

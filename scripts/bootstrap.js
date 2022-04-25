@@ -20,14 +20,12 @@ async function main() {
       exportComponents.map(component => `import { ${toPascalCase(component)} } from '@/components/${component}'`).join('\n')
     }
 
-    import { configProp } from '@/common/config/install'
-    import { configLocale } from '@/common/config/locale'
+    import { configProp, configLocale } from '@vexip-ui/config'
 
     import '@/common/icons'
 
     import type { App } from 'vue'
-    import type { PropOptions } from '@/common/config/install'
-    import type { LocaleOptions } from '@/common/config/locale'
+    import type { PropOptions, LocaleOptions } from '@vexip-ui/config'
 
     export { configLocale }
 

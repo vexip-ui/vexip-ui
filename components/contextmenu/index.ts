@@ -2,7 +2,7 @@ import '@/style/contextmenu.scss'
 
 import { createApp } from 'vue'
 import Component from './contextmenu.vue'
-import { destroyObject } from '@/common/utils/destroy-object'
+import { destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
 import type { MenuOptions, ContextmenuInstance } from './symbol'

@@ -25,10 +25,9 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { createSizeProp, createStateProp } from '@/common/config/props'
+import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop, isDefined, isFunction } from '@/common/utils/common'
+import { noop, isDefined, isFunction } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'

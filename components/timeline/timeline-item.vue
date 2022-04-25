@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 import { TIMELINE_STATE } from './symbol'
 
 import type { TimelinkItemType, ItemState } from './symbol'

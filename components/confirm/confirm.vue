@@ -55,9 +55,8 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
-import { useConfiguredProps } from '@/common/config/install'
-import { useLocaleConfig } from '@/common/config/locale'
-import { isPromise, isFunction } from '@/common/utils/common'
+import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { isPromise, isFunction } from '@vexip-ui/utils'
 
 import '@/common/icons/question-circle'
 

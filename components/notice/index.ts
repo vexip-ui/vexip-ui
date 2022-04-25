@@ -2,9 +2,7 @@ import '@/style/notice.scss'
 
 import { createApp } from 'vue'
 import Component from './notice.vue'
-import { isNull, isObject } from '@/common/utils/common'
-import { toNumber } from '@/common/utils/number'
-import { destroyObject } from '@/common/utils/destroy-object'
+import { isNull, isObject, toNumber, destroyObject } from '@vexip-ui/utils'
 
 import '@/common/icons/info-circle'
 import '@/common/icons/check-circle'

@@ -1,4 +1,4 @@
-import type { Dateable } from '@/common/utils/date'
+import type { Dateable } from '@vexip-ui/utils'
 
 export type DateType = 'year' | 'month' | 'date'
 export type TimeType = 'hour' | 'minute' | 'second'

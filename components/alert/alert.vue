@@ -27,7 +27,7 @@
 import { defineComponent, ref, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 import '@/common/icons/info-circle'
 import '@/common/icons/check-circle'

@@ -16,11 +16,9 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, inject, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
-import { useConfiguredProps } from '@/common/config/install'
-import { createSizeProp, createStateProp } from '@/common/config/props'
+import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop, isObject } from '@/common/utils/common'
-import { debounceMinor } from '@/common/utils/performance'
+import { noop, isObject, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'

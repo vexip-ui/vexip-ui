@@ -9,11 +9,11 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { placementWhileList } from '@/common/mixins/popper'
-import { useConfiguredProps } from '@/common/config/install'
+import { placementWhileList } from '@vexip-ui/mixins'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 import type { PropType, CSSProperties } from 'vue'
-import type { Placement } from '@popperjs/core'
+import type { Placement } from '@vexip-ui/mixins'
 
 type ClassType = string | Record<string, boolean>
 

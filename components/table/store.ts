@@ -1,9 +1,5 @@
 import { reactive, computed } from 'vue'
-import { isNull } from '@/common/utils/common'
-import { debounceMinor } from '@/common/utils/performance'
-import { toNumber } from '@/common/utils/number'
-import { sortByProps } from '@/common/utils/transform'
-import { deepClone } from '@/common/utils/deep-clone'
+import { isNull, debounceMinor, toNumber, sortByProps, deepClone } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD } from './symbol'
 
 import type { TooltipTheme } from '@/components/tooltip'

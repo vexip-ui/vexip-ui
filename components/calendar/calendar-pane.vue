@@ -59,14 +59,12 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import { useHover } from '@/common/mixins/hover'
-import { useConfiguredProps } from '@/common/config/install'
-import { useLocaleConfig } from '@/common/config/locale'
-import { startOfWeek, rangeDate, differenceDays } from '@/common/utils/date'
-import { debounceMinor } from '@/common/utils/performance'
+import { useHover } from '@vexip-ui/mixins'
+import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { startOfWeek, rangeDate, differenceDays, debounceMinor } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
-import type { Dateable } from '@/common/utils/date'
+import type { Dateable } from '@vexip-ui/utils'
 import type { WeekIndex } from './symbol'
 
 const props = useConfiguredProps('calendarBase', {

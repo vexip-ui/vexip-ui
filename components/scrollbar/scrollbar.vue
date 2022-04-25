@@ -26,9 +26,8 @@ import {
   nextTick,
   getCurrentInstance
 } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { isDefined } from '@/common/utils/common'
-import { throttle } from '@/common/utils/performance'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { isDefined, throttle } from '@vexip-ui/utils'
 import { useTrack } from './mixins'
 import { ScrollbarType } from './symbol'
 

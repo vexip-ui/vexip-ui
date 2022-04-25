@@ -20,7 +20,7 @@
 import { defineComponent } from 'vue'
 import Wheel from '../wheel.vue'
 import WheelItem from '../wheel-item.vue'
-import { range } from '@/common/utils/common'
+import { range } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'App',

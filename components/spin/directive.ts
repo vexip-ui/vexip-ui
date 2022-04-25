@@ -1,6 +1,6 @@
 import { createVNode, render, nextTick } from 'vue'
 import { Spin } from '@/components/spin'
-import { isObject } from '@/common/utils/common'
+import { isObject } from '@vexip-ui/utils'
 
 import type { VNode, ObjectDirective } from 'vue'
 

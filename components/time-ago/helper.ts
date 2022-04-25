@@ -1,5 +1,5 @@
-import { useLocaleConfig, getCountWord, makeSentence } from '@/common/config/locale'
-import { SECOND_ON_MILLS, MINUTE_ON_MILLS, HOUR_ON_MILLS, DAY_ON_MILLIS } from '@/common/utils/date'
+import { useLocaleConfig, getCountWord, makeSentence } from '@vexip-ui/config'
+import { SECOND_ON_MILLS, MINUTE_ON_MILLS, HOUR_ON_MILLS, DAY_ON_MILLIS } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 

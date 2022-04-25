@@ -1,7 +1,4 @@
-import { isDefined, isPromise, isObject } from '@/common/utils/common'
-import { toDate } from '@/common/utils/date'
-import { isColor } from '@/common/utils/color'
-import { toNumber } from '@/common/utils/number'
+import { isDefined, isPromise, isObject, toDate, isColor, toNumber } from '@vexip-ui/utils'
 
 export type Trigger = 'blur' | 'change'
 

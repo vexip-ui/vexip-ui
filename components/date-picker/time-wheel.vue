@@ -43,8 +43,7 @@
 import { defineComponent, ref, watch } from 'vue'
 import { Wheel } from '@/components/wheel'
 import { WheelItem } from '@/components/wheel-item'
-import { range } from '@/common/utils/common'
-import { doubleDigits } from '@/common/utils/number'
+import { range, doubleDigits } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { TimeType } from './symbol'

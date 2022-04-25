@@ -1,5 +1,5 @@
 import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { noop } from '../utils/common'
+import { noop } from '@vexip-ui/utils'
 
 /**
  * 创建一个观察了最近的上级元素 display 变化的元素 Ref

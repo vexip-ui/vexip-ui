@@ -19,8 +19,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, provide } from 'vue'
 import PopupItem from './popup-item.vue'
-import { useConfiguredProps } from '@/common/config/install'
-import { isFunction, noop } from '@/common/utils/common'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { isFunction, noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'

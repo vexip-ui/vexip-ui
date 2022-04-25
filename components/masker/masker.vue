@@ -24,8 +24,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useConfiguredProps } from '@/common/config/install'
-import { isPromise } from '@/common/utils/common'
+import { useConfiguredProps } from '@vexip-ui/config'
+import { isPromise } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 

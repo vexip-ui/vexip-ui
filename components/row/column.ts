@@ -1,6 +1,6 @@
 import { defineComponent, computed, h, inject } from 'vue'
 import { ROW_GUTTER } from '@/components/row'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 import type { CSSProperties } from 'vue'
 

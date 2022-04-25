@@ -1,5 +1,5 @@
 import { defineComponent, h, ref, computed } from 'vue'
-import { useConfiguredProps } from '@/common/config/install'
+import { useConfiguredProps } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 

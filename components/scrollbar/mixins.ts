@@ -1,6 +1,5 @@
 import { ref } from 'vue'
-import { noop } from '@/common/utils/common'
-import { throttle } from '@/common/utils/performance'
+import { noop, throttle } from '@vexip-ui/utils'
 import { ScrollbarType } from './symbol'
 
 import type { Ref } from 'vue'
