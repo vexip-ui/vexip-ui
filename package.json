@@ -48,6 +48,7 @@
     "jest": "^27.5.1",
     "jszip": "^3.9.1",
     "lint-staged": "^12.3.8",
+    "minimist": "^1.2.6",
     "pinst": "^2.1.6",
     "postcss": "^8.4.12",
     "postcss-discard-duplicates": "^5.1.0",

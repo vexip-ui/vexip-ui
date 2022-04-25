@@ -23,7 +23,6 @@ importers:
       conventional-changelog-cli: ^2.2.2
       cz-customizable: ^6.3.0
       enquirer: ^2.3.6
-      esbuild: ^0.14.38
       eslint: ^8.13.0
       eslint-config-standard: ^17.0.0
       eslint-plugin-import: ^2.26.0
@@ -39,6 +38,7 @@ importers:
       jest: ^27.5.1
       jszip: ^3.9.1
       lint-staged: ^12.3.8
+      minimist: ^1.2.6
       pinst: ^2.1.6
       postcss: ^8.4.12
       postcss-discard-duplicates: ^5.1.0
@@ -86,7 +86,6 @@ importers:
       conventional-changelog-cli: 2.2.2
       cz-customizable: 6.3.0
       enquirer: 2.3.6
-      esbuild: 0.14.38
       eslint: 8.14.0
       eslint-config-standard: 17.0.0_288458a4b7d86b306f0e96ba7939a3dc
       eslint-plugin-import: 2.26.0_eslint@8.14.0
@@ -102,6 +101,7 @@ importers:
       jest: 27.5.1
       jszip: 3.9.1
       lint-staged: 12.4.0_enquirer@2.3.6
+      minimist: 1.2.6
       pinst: 2.1.6
       postcss: 8.4.12
       postcss-discard-duplicates: 5.1.0_postcss@8.4.12
@@ -120,7 +120,7 @@ importers:
       stylelint-config-standard-scss: 3.0.0_postcss@8.4.12+stylelint@14.7.1
       stylelint-order: 5.0.0_stylelint@14.7.1
       stylelint-prettier: 2.0.0_prettier@2.6.2+stylelint@14.7.1
-      ts-jest: 27.1.4_8c59a245816aaf39e619b5e51c124558
+      ts-jest: 27.1.4_8fa130d172bf7d71653f05507c50c5a3
       typescript: 4.5.5
       vite: 2.9.5_sass@1.50.1
       vite-plugin-dts: 1.1.0_vite@2.9.5
@@ -7303,7 +7303,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /ts-jest/27.1.4_8c59a245816aaf39e619b5e51c124558:
+  /ts-jest/27.1.4_8fa130d172bf7d71653f05507c50c5a3:
     resolution: {integrity: sha512-qjkZlVPWVctAezwsOD1OPzbZ+k7zA5z3oxII4dGdZo5ggX/PL7kvwTM0pXTr10fAtbiVpJaL3bWd502zAhpgSQ==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -7326,7 +7326,6 @@ packages:
     dependencies:
       '@types/jest': 27.4.1
       bs-logger: 0.2.6
-      esbuild: 0.14.38
       fast-json-stable-stringify: 2.1.0
       jest: 27.5.1
       jest-util: 27.5.1
