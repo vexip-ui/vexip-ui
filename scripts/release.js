@@ -164,7 +164,11 @@ async function main() {
   logStep(`Building package...`)
 
   if (!skipBuild && !isDryRun) {
-    await run('pnpm', ['build', '--', '-a', '-t', '-r'])
+    if (isRoot) {
+      await run('pnpm', ['build', '--', '-a', '-t', '-r'])
+    } else {
+      await run('pnpm', ['build'], { cwd: pkgDir })
+    }
   } else {
     logSkipped()
   }
@@ -205,7 +209,7 @@ async function main() {
   // 发布
   logStep('Publishing package...')
 
-  const publishArgs = ['publish', '--registry=https://registry.npmjs.org/', '--no-git-checks']
+  const publishArgs = ['publish', '--registry=https://registry.npmjs.org/']
 
   if (isDryRun) {
     publishArgs.push('--dry-run')

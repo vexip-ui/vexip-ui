@@ -134,10 +134,10 @@ importers:
   common/config:
     specifiers:
       '@vexip-ui/utils': workspace:^
-      '@vue/reactivity': 3.2.33
+      vue: ^3.2.33
     dependencies:
       '@vexip-ui/utils': link:../utils
-      '@vue/reactivity': 3.2.33
+      vue: 3.2.33
 
   common/mixins:
     specifiers:
