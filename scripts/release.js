@@ -1,18 +1,19 @@
 const fs = require('fs')
-const path = require('path')
+// const path = require('path')
 const execa = require('execa')
 const semver = require('semver')
 const chalk = require('chalk')
 const { prompt } = require('enquirer')
+const { getPackageInfo } = require('./pkg-utils')
 const { logger } = require('./utils')
 
 const args = require('minimist')(process.argv.slice(2))
 
-const inputPkg = args._
+const inputPkg = args._[0]
 const isDryRun = args.dry || args.d
-const skipTests = args.skipTests || args.s
-const skipBuild = args.skipBuild || args.b
-const releaseTag = args.tag || args.t
+const skipTests = args.skipTests || args.st
+const skipBuild = args.skipBuild || args.sb
+const skipPush = args.skipPush || args.sp
 
 const run = (bin, args, opts = {}) => execa(bin, args, { stdio: 'inherit', ...opts })
 const dryRun = (bin, args, opts = {}) => {
@@ -26,60 +27,21 @@ const logSkipped = (msg = 'Skipped') => {
   logger.warningText(`(${msg})`)
 }
 
-const packages = [
-  'vexip-ui',
-  'plaground',
-  'common/mixins',
-  'common/utils'
-]
-
 main()
 
 async function main() {
-  let pkgName
-
-  if (packages.includes(inputPkg)) {
-    pkgName = inputPkg
-  } else {
-    let options = inputPkg ? packages.filter(p => p.includes(inputPkg)) : packages
-
-    if (!options.length) {
-      options = packages
-    } else if (options.length === 1) {
-      pkgName = options[0]
-    } else {
-      pkgName = (await prompt({
-        type: 'select',
-        name: 'pkgName',
-        message: 'Select release package:',
-        choices: options
-      })).pkgName
-    }
-  }
-
-  if (!pkgName) {
-    throw new Error(`Release package must not be null`)
-  }
-
-  const isRoot = pkgName === 'vexip-ui'
-  const pkgDir = path.resolve(__dirname, isRoot ? '..' : `../${pkgName}`)
-  const pkgPath = path.resolve(pkgDir, 'package.json')
-
-  if (!fs.existsSync(pkgPath)) {
-    throw new Error(`Release package ${pkgName} not found`)
-  }
-
-  const package = require(pkgPath)
-
-  if (package.private) {
-    throw new Error(`Release package ${pkgName} is private`)
-  }
-
-  const currentVersion = package.version
-  const preId =
-    args.preid ||
-    args.p ||
-    (semver.prerelease(currentVersion) && semver.prerelease(currentVersion)[0])
+  const {
+    pkgName,
+    pkgDir,
+    pkgPath,
+    pkg: package,
+    isRoot,
+    currentVersion
+  } = await getPackageInfo(inputPkg)
+  
+  const preId = typeof (args.preid || args.p) === 'string'
+    ? args.preid || args.p
+    : semver.prerelease(currentVersion) && semver.prerelease(currentVersion)[0]
 
   const versionIncrements = [
     'patch',
@@ -206,35 +168,15 @@ async function main() {
     logSkipped('No changes to commit')
   }
 
-  // 发布
-  logStep('Publishing package...')
-
-  const publishArgs = ['publish', '--registry=https://registry.npmjs.org/']
-
-  if (isDryRun) {
-    publishArgs.push('--dry-run')
-  }
-
-  if (releaseTag) {
-    publishArgs.push('--tag', releaseTag)
-  }
-
-  try {
-    await run('pnpm', publishArgs, { stdio: 'pipe' })
-    logger.successText(`Successfully published v${version}'`)
-  } catch (err) {
-    if (err.stderr.match(/previously published/)) {
-      logger.errorText(`Skipping already published v'${version}'`)
-    } else {
-      throw err
-    }
-  }
-
   // 推送到远程仓库
   logStep('Pushing to Remote Repository...')
 
-  await runIfNotDry('git', ['push', 'origin', `refs/tags/${tag}`])
-  await runIfNotDry('git', ['push'])
+  if (!skipPush) {
+    await runIfNotDry('git', ['push', 'origin', `refs/tags/${tag}`])
+    await runIfNotDry('git', ['push'])
+  } else {
+    logSkipped()
+  }
 
   logger.withBothLn(() => {
     if (isDryRun) {
