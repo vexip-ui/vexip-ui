@@ -1,12 +1,16 @@
-const execa = require('execa')
-const { specifyComponent, serveComponents } = require('./utils')
+import execa from 'execa'
+import minimist from 'minimist'
+import { logger, specifyComponent, serveComponents } from './utils'
 
-const args = require('minimist')(process.argv.slice(2))
+const args = minimist(process.argv.slice(2))
 
 const sourceMap = args.sourcemap || args.s
 const port = args.port || args.p || 8008
 
-main()
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})
 
 async function main() {
   const target = await specifyComponent(args, serveComponents)
@@ -17,8 +21,7 @@ async function main() {
       NODE_ENV: 'development',
       TARGET: target,
       PORT: port,
-      SOURCE_MAP: !!sourceMap
+      SOURCE_MAP: sourceMap ? 'true' : ''
     }
   })
 }
-

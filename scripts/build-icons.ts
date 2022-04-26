@@ -1,16 +1,20 @@
-const fs = require('fs-extra')
-const path = require('path')
-const { rollup } = require('rollup')
-const { logger, runParallel } = require('./utils')
+import fs from 'fs-extra'
+import path from 'path'
+import { rollup } from 'rollup'
+import minimist from 'minimist'
+import { logger, runParallel } from './utils'
 
-const args = require('minimist')(process.argv.slice(2))
+const args = minimist(process.argv.slice(2))
 
 const iconsDir = path.resolve(__dirname, '../common/icons')
 const iconFiles = findIcons(iconsDir)
 
 const iconReg = /^@\/components\/icon/
 
-main()
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})
 
 async function main() {
   if (args.clean || args.c) {
@@ -24,7 +28,7 @@ async function main() {
   }
 }
 
-async function build(iconFile) {
+async function build(iconFile: string) {
   try {
     const bundle = await rollup({
       input: iconFile,
@@ -58,8 +62,8 @@ async function build(iconFile) {
   }
 }
 
-function findIcons(folder, reslut = []) {
-  const namespaces = []
+function findIcons(folder: string, reslut: string[] = []) {
+  const namespaces: string[] = []
 
   fs.readdirSync(folder).forEach(f => {
     if (fs.statSync(`${folder}/${f}`).isDirectory()) {

@@ -1,16 +1,10 @@
-const fs = require('fs')
-const path = require('path')
-const execa = require('execa')
-const {
-  logger,
-  components: allComponents,
-  fuzzyMatchComponent,
-  runParallel,
-  specifyComponent,
-  emptyDir
-} = require('./utils')
+import fs from 'fs'
+import path from 'path'
+import execa from 'execa'
+import minimist from 'minimist'
+import { logger, components as allComponents, fuzzyMatchComponent, runParallel, specifyComponent, emptyDir } from './utils'
 
-const args = require('minimist')(process.argv.slice(2))
+const args = minimist(process.argv.slice(2))
 
 const targets = args._
 const devOnly = args.dev || args.d
@@ -22,7 +16,10 @@ const libOnly = args.lib || args.l
 const env = devOnly ? 'development' : 'production'
 const libDir = path.resolve(__dirname, '../lib')
 
-main()
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})
 
 async function main() {
   if (release) {
@@ -46,8 +43,7 @@ async function main() {
       }
     } catch(error) {
       logger.errorText(error)
-      process.exitCode = 1
-      return
+      process.exit(1)
     }
   }
 
@@ -61,15 +57,15 @@ async function main() {
   }
 }
 
-async function buildAll(components) {
+async function buildAll(components: string[]) {
   await runParallel(require('os').cpus().length, components, build)
 }
 
-const exceptional = {
+const exceptional: Record<string, string> = {
   'tab-pane': 'tabs'
 }
 
-async function build(component) {
+async function build(component: string) {
   const targetDir = path.resolve(libDir, component)
   // const indexPath = path.resolve(targetDir, 'index.js')
 
@@ -79,7 +75,7 @@ async function build(component) {
       NODE_ENV: env,
       TARGET: component,
       LOG_LEVEL: 'warn',
-      SOURCE_MAP: !!sourceMap
+      SOURCE_MAP: sourceMap ? 'true' : ''
     }
   })
 
@@ -108,11 +104,11 @@ async function buildLib() {
       stdio: 'inherit',
       env: {
         NODE_ENV: env,
-        SOURCE_MAP: !!sourceMap
+        SOURCE_MAP: sourceMap ? 'true' : ''
       }
     })
   } catch (error) {
     logger.withBothLn(() => logger.errorText(error))
-    process.exitCode = 1
+    process.exit(1)
   }
 }

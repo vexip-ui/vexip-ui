@@ -1,14 +1,17 @@
-const fs = require('fs')
-const path = require('path')
-const prettier = require('prettier')
-const { ESLint } = require('eslint')
-const { components: allComponents, toPascalCase } = require('./utils')
+import fs from 'fs'
+import path from 'path'
+import prettier from 'prettier'
+import { ESLint } from 'eslint'
+import { logger, components as allComponents, toPascalCase } from './utils'
 
-main()
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice']
-  const ignores = []
+  const ignores: string[] = []
   const exportComponents = allComponents.filter(c => !ignores.includes(c))
   const components = exportComponents.filter(c => !plugins.includes(c))
   const prettierConfig = await prettier.resolveConfig(path.resolve('.prettierrc.js'))
@@ -103,4 +106,3 @@ async function main() {
     prettier.format(styleIndex, { ...prettierConfig, parser: 'scss' })
   )
 }
-

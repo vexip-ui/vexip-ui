@@ -1,30 +1,32 @@
-const fs = require('fs-extra')
-const path = require('path')
-const prettier = require('prettier')
-const { ESLint } = require('eslint')
-const stylelint = require('stylelint')
-const {
-  logger,
-  components: allComponents,
-  runParallel,
-  toKebabCase,
-  toPascalCase,
-  toCamelCase
-} = require('./utils')
+import fs from 'fs-extra'
+import path from 'path'
+import prettier from 'prettier'
+import { ESLint } from 'eslint'
+import stylelint from 'stylelint'
+import minimist from 'minimist'
+import { logger, components as allComponents, runParallel, toKebabCase, toPascalCase, toCamelCase } from './utils'
 
-const args = require('minimist')(process.argv.slice(2))
+import type { Options } from 'prettier'
+
+const args = minimist(process.argv.slice(2))
 const targets = args._
 
 const dirPath = path.resolve(__dirname, '..')
-
 const eslint = new ESLint({ fix: true })
 
-main()
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})
 
-let prettierConfig
+let prettierConfig: Options
 
 async function main() {
-  prettierConfig = await prettier.resolveConfig(path.resolve(dirPath, '.prettierrc.js'))
+  prettierConfig = (await prettier.resolveConfig(path.resolve(dirPath, '.prettierrc.js')))!
+
+  if (!prettierConfig) {
+    throw new Error(`Config file of prettier not found`)
+  }
 
   if (!targets.length) {
     const { prompt } = require('enquirer')
@@ -35,7 +37,7 @@ async function main() {
     })).component
 
     if (!name || allComponents.includes(name)) {
-      process.exitCode = 1
+      process.exit(1)
     } else {
       logger.ln()
 
@@ -44,7 +46,7 @@ async function main() {
     }
   } else {
     if (targets.some(name => !name || allComponents.includes(name))) {
-      process.exitCode = 1
+      process.exit(1)
     } else {
       await runParallel(require('os').cpus().length, targets, create)
     }
@@ -63,7 +65,7 @@ async function main() {
   })
 }
 
-async function create(name) {
+async function create(name: string) {
   if (allComponents.includes(name)) return
 
   let kebabCaseName

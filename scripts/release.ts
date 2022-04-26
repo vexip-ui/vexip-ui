@@ -1,58 +1,49 @@
-const fs = require('fs')
-// const path = require('path')
-const execa = require('execa')
-const semver = require('semver')
-const chalk = require('chalk')
-const { prompt } = require('enquirer')
-const { getPackageInfo } = require('./pkg-utils')
-const { logger } = require('./utils')
+import fs from 'fs'
+import semver from 'semver'
+import { prompt } from 'enquirer'
+import { logger, run, dryRun, getPackageInfo } from './utils'
+
+import type { ReleaseType } from 'semver'
 
 const args = require('minimist')(process.argv.slice(2))
 
 const inputPkg = args._[0]
 const isDryRun = args.dry || args.d
-const skipTests = args.skipTests || args.st
-const skipBuild = args.skipBuild || args.sb
-const skipPush = args.skipPush || args.sp
+// const skipTests = args.skipTests || args.t
+const skipBuild = args.skipBuild || args.b
+const skipPush = args.skipPush || args.s
 
-const run = (bin, args, opts = {}) => execa(bin, args, { stdio: 'inherit', ...opts })
-const dryRun = (bin, args, opts = {}) => {
-  console.log(chalk.blue(`[dryrun] ${bin} ${args.join(' ')}`), opts)
-}
 const runIfNotDry = isDryRun ? dryRun : run
-const logStep = msg => {
-  logger.withStartLn(() => logger.infoText(msg))
-}
-const logSkipped = (msg = 'Skipped') => {
-  logger.warningText(`(${msg})`)
-}
+const logStep = (msg: string) => logger.withStartLn(() => logger.infoText(msg))
+const logSkipped = (msg = 'Skipped') => logger.warningText(`(${msg})`)
 
-main()
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})
 
 async function main() {
   const {
     pkgName,
     pkgDir,
     pkgPath,
-    pkg: package,
+    pkg,
     isRoot,
     currentVersion
   } = await getPackageInfo(inputPkg)
   
-  const preId = typeof (args.preid || args.p) === 'string'
-    ? args.preid || args.p
-    : semver.prerelease(currentVersion) && semver.prerelease(currentVersion)[0]
+  const preId = args.preid || args.p || (semver.prerelease(currentVersion)?.[0])
 
-  const versionIncrements = [
+  const versionIncrements: ReleaseType[] = [
     'patch',
     'minor',
     'major',
-    ...(preId ? ['prepatch', 'preminor', 'premajor', 'prerelease'] : [])
+    ...(preId ? ['prepatch', 'preminor', 'premajor', 'prerelease'] as const : [])
   ]
 
-  const inc = i => semver.inc(currentVersion, i, preId)
+  const inc = (i: ReleaseType) => semver.inc(currentVersion, i, preId)
 
-  const { release } = await prompt({
+  const { release } = await prompt<{ release: string }>({
     type: 'select',
     name: 'release',
     message: 'Select release type:',
@@ -61,12 +52,12 @@ async function main() {
 
   const version =
     release === 'custom'
-      ? (await prompt({
+      ? (await prompt<{ version: string }>({
         type: 'input',
         name: 'version',
         message: 'Input custom version:'
       })).version
-      : release.match(/\((.*)\)/)[1]
+      : release.match(/\((.*)\)/)![1]
 
   if (!semver.valid(version)) {
     throw new Error(`Invalid target version: ${version}`)
@@ -75,7 +66,7 @@ async function main() {
   const target = pkgName.startsWith('common/') ? pkgName.substring(7) : pkgName
   const tag = `${target}@${version}`
 
-  const { bootstrap = isRoot, confirm } = await prompt([
+  const { bootstrap = isRoot, confirm } = await prompt<{ bootstrap: boolean, confirm: boolean }>([
     {
       type: 'confirm',
       name: 'bootstrap',
@@ -108,8 +99,8 @@ async function main() {
 
   logStep('Updating version...')
 
-  package.version = version
-  fs.writeFileSync(pkgPath, JSON.stringify(package, null, 2) + '\n')
+  pkg.version = version
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
 
   // 执行引导程序
   if (bootstrap) {
