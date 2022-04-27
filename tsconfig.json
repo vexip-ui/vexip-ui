@@ -23,7 +23,8 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
+      ],
+      "@vexip-ui/*": ["common/*/src"],
     },
     "lib": [
       "esnext",

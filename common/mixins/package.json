@@ -26,5 +26,8 @@
   "dependencies": {
     "@popperjs/core": "^2.11.5",
     "@vexip-ui/utils": "workspace:^"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.6"
   }
 }

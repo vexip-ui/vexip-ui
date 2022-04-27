@@ -45,7 +45,14 @@ export default defineConfig(({ command }) => {
       __VERSION__: JSON.stringify(pkg.version)
     },
     resolve: {
-      alias: [{ find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') }]
+      alias: [
+        { find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') },
+        ...(
+          isProduction
+            ? []
+            : [{ find: /^@vexip-ui\/(.+)/, replacement: resolve(__dirname, 'common/$1/src') }]
+        )
+      ]
     },
     server: {
       port: parseInt(process.env.PORT) || 8000
