@@ -217,6 +217,14 @@ export interface SortOptions<T = string> {
   params?: any[] // 传入读取器的额外参数
 }
 
+const defaultSortMethod = (prev: any, next: any) => {
+  if (Number.isNaN(Number(prev) - Number(next))) {
+    return String(prev).localeCompare(next)
+  }
+
+  return prev - next
+}
+
 /**
  * 根据依赖的属性逐层排序
  * @param list - 需要排序的数组
@@ -235,13 +243,6 @@ export function sortByProps<T = any>(
   }
 
   const sortedList = Array.from(list)
-  const defaultSortMethod = (prev: any, next: any) => {
-    if (Number.isNaN(Number(prev) - Number(next))) {
-      return String(prev).localeCompare(next)
-    }
-
-    return prev - next
-  }
 
   if (!Array.isArray(props)) {
     props = [props]
@@ -273,19 +274,19 @@ export function sortByProps<T = any>(
     })
 
   sortedList.sort((prev, next) => {
-    const results: number[] = []
+    let lastResult = 0
 
     for (const prop of formattedProps) {
       const { method, type, accessor, params } = prop
       const desc = type === 'desc'
       const result = method(accessor(prev, ...params), accessor(next, ...params))
 
-      results.push(desc ? -result : result)
+      lastResult = desc ? -result : result
       // 若不为0则无需进行下一层排序
-      if (result) break
+      if (lastResult) break
     }
 
-    return results.pop() ?? 0
+    return lastResult
   })
 
   return sortedList
