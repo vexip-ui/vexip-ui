@@ -406,6 +406,8 @@ export default defineComponent({
       setSingleSorter,
       setSingleFilter,
       setDragging,
+      clearSort,
+      clearFilter,
       refreshRowIndex
     } = mutations
 
@@ -748,6 +750,8 @@ export default defineComponent({
       handleYScrollEnableChange,
       handleYBarScroll,
 
+      clearSort,
+      clearFilter,
       refresh,
       getSelected
     }
