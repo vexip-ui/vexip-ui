@@ -246,6 +246,14 @@ const props = useConfiguredProps('table', {
   tooltipWidth: {
     type: [Number, String],
     default: 500
+  },
+  singleSorter: {
+    type: Boolean,
+    default: false
+  },
+  singleFilter: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -303,6 +311,8 @@ export default defineComponent({
       emptyText: props.emptyText ?? locale.empty,
       tooltipTheme: props.tooltipTheme,
       tooltipWidth: props.tooltipWidth,
+      singleSorter: props.singleSorter,
+      singleFilter: props.singleSorter,
       expandRenderer: props.expandRenderer
     })
 
@@ -393,6 +403,8 @@ export default defineComponent({
       setEmptyText,
       setTooltipTheme,
       setTooltipWidth,
+      setSingleSorter,
+      setSingleFilter,
       setDragging,
       refreshRowIndex
     } = mutations
@@ -402,7 +414,7 @@ export default defineComponent({
       value => {
         setColumns(value)
       },
-      { deep: true }
+      { immediate: true, deep: true }
     )
     watch(
       () => props.data,
@@ -435,6 +447,8 @@ export default defineComponent({
     )
     watch(() => props.tooltipTheme, setTooltipTheme)
     watch(() => props.tooltipWidth, setTooltipWidth)
+    watch(() => props.singleSorter, setSingleSorter)
+    watch(() => props.singleFilter, setSingleFilter)
 
     const handlerResize = debounce(refresh)
 

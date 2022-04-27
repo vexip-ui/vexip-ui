@@ -113,6 +113,8 @@ export interface StoreOptions {
   emptyText: string,
   tooltipTheme: TooltipTheme,
   tooltipWidth: number | string,
+  singleSorter: boolean,
+  singleFilter: boolean,
   expandRenderer: RenderFn | null
 }
 

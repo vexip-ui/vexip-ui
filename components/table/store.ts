@@ -48,6 +48,8 @@ export function useStore(options: StoreOptions) {
     emptyText: options.emptyText,
     tooltipTheme: options.tooltipTheme,
     tooltipWidth: options.tooltipWidth,
+    singleSorter: options.singleSorter,
+    singleFilter: options.singleFilter,
     expandRenderer: options.expandRenderer,
 
     rowData: [],
@@ -78,12 +80,12 @@ export function useStore(options: StoreOptions) {
   setRenderCount(state, options.renderCount)
 
   const filteredData = computed(() => {
-    return filterData(state.filters, state.rowData)
+    return filterData(state.filters, state.rowData, state.singleFilter)
   })
   const processedData = computed(() => {
-    const { sorters, columns, currentPage, pageSize } = state
+    const { sorters, columns, currentPage, pageSize, singleSorter } = state
 
-    return pageData(currentPage, pageSize, sortData(sorters, filteredData.value, columns))
+    return pageData(currentPage, pageSize, sortData(sorters, filteredData.value, columns, singleSorter))
   })
   const totalRowHeight = computed(() => {
     const data = processedData.value
@@ -178,9 +180,13 @@ export function useStore(options: StoreOptions) {
     setEmptyText: setEmptyText.bind(null, state),
     setTooltipTheme: setTooltipTheme.bind(null, state),
     setTooltipWidth: setTooltipWidth.bind(null, state),
+    setSingleSorter: setSingleSorter.bind(null, state),
+    setSingleFilter: setSingleFilter.bind(null, state),
     setDragging: setDragging.bind(null, state),
     handleSort: handleSort.bind(null, state),
+    clearSort: clearSort.bind(null, state),
     handleFilter: handleFilter.bind(null, state),
+    clearFilter: clearFilter.bind(null, state),
     toggleFilterItemActive: toggleFilterItemActive.bind(null, state),
     refreshRowIndex: refreshRowIndex.bind(null, state),
 
@@ -300,7 +306,7 @@ function setDataKey(state: StoreState, field: string) {
     state.dataKey = field
 
     rowData.forEach(row => {
-      let key = row.data[field] as Key | undefined
+      let key = row.data[field] as Key
 
       if (isNull(key)) {
         key = getIndexId()
@@ -322,10 +328,10 @@ function setData(state: StoreState, data: Data[]) {
   for (let i = 0, len = data.length; i < len; i++) {
     const item = data[i]
 
-    let key = item[dataKey] as Key | undefined
+    let key = item[dataKey] as Key
 
     if (isNull(key)) {
-      key = idMaps.get(item)
+      key = idMaps.get(item)!
 
       if (isNull(key)) {
         key = getIndexId()
@@ -482,20 +488,52 @@ function setTooltipWidth(state: StoreState, theme: number | string) {
   state.tooltipWidth = theme
 }
 
+function setSingleSorter(state: StoreState, able: boolean) {
+  state.singleSorter = !!able
+}
+
+function setSingleFilter(state: StoreState, able: boolean) {
+  state.singleFilter = !!able
+}
+
 function setDragging(state: StoreState, dragging: boolean) {
   state.dragging = !!dragging
 }
 
 function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type']) {
   if (state.sorters[key]) {
+    if (state.singleSorter && type) {
+      clearSort(state)
+    }
+
     state.sorters[key].type = type
   }
 }
 
+function clearSort(state: StoreState) {
+  const sorters = state.sorters
+
+  Object.keys(sorters).forEach(key => {
+    sorters[key].type = null
+  })
+}
+
 function handleFilter(state: StoreState, key: Key, active: ParsedFilterOptions['active']) {
   if (state.filters[key]) {
+    if (state.singleFilter && (Array.isArray(active) ? active.length : active)) {
+      clearFilter(state)
+    }
+
     state.filters[key].active = active
   }
+}
+
+function clearFilter(state: StoreState) {
+  const filters = state.filters
+
+  Object.keys(filters).forEach(key => {
+    filters[key].active = null
+  })
 }
 
 function handleCheck(state: StoreState, getters: StoreGetters, key: Key, checked: boolean) {
@@ -673,7 +711,7 @@ function computePartial(state: StoreState) {
   state.partial = partial
 }
 
-function filterData(filters: Record<Key, ParsedFilterOptions>, data: RowState[]) {
+function filterData(filters: Record<Key, ParsedFilterOptions>, data: RowState[], isSingle: boolean) {
   const keys = Object.keys(filters)
   const usedFilter: ParsedFilterOptions[] = []
   const filterData: RowState[] = []
@@ -685,6 +723,8 @@ function filterData(filters: Record<Key, ParsedFilterOptions>, data: RowState[])
 
     if (able && active && typeof method === 'function') {
       usedFilter.push(filter)
+
+      if (isSingle) break
     }
   }
 
@@ -716,7 +756,8 @@ function filterData(filters: Record<Key, ParsedFilterOptions>, data: RowState[])
 function sortData(
   sorters: Record<Key, ParsedSorterOptions>,
   data: RowState[],
-  columns: ColumnOptions[]
+  columns: ColumnOptions[],
+  isSingle: boolean
 ) {
   const keys = Object.keys(sorters)
   const usedSorter = []
@@ -743,6 +784,8 @@ function sortData(
           return row.data[key]
         }
       })
+
+      if (isSingle) break
     }
   }
 

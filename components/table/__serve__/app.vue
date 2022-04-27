@@ -34,7 +34,7 @@
             </Row>
           </template>
         </TableColumn>
-        <TableColumn name="First Name" id-key="firstName">
+        <TableColumn name="First Name" id-key="firstName" sorter>
           <template #default="{ row }">
             <Icon name="user" style="margin-right: 8px;"></Icon>
             {{ row.firstName }}
@@ -46,6 +46,7 @@
           id-key="age"
           :order="2"
           no-ellipsis
+          :sorter="ageSorter"
         ></TableColumn>
         <TableColumn name="Long Text" id-key="longText">
           很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本
