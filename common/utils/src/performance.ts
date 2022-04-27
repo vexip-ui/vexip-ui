@@ -73,7 +73,7 @@ export function debounceMinor<T extends(...args: any[]) => any>(method: T) {
     if (!called) {
       called = true
 
-      Promise.resolve(() => {
+      Promise.resolve().then(() => {
         method(...lastArgs)
         called = false
       })
