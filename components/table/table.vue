@@ -124,7 +124,7 @@ import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
-import { isDefined, debounce, removeArrayItem, toNumber } from '@vexip-ui/utils'
+import { isDefined, debounce, transformListToMap, removeArrayItem, toNumber } from '@vexip-ui/utils'
 import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
@@ -278,7 +278,8 @@ export default defineComponent({
     'on-row-drag-over',
     'on-row-drop',
     'on-row-drag-end',
-    'on-row-filter'
+    'on-row-filter',
+    'on-row-sort'
   ],
   setup(props, { emit }) {
     const prefix = 'vxp-table'
@@ -312,7 +313,7 @@ export default defineComponent({
       tooltipTheme: props.tooltipTheme,
       tooltipWidth: props.tooltipWidth,
       singleSorter: props.singleSorter,
-      singleFilter: props.singleSorter,
+      singleFilter: props.singleFilter,
       expandRenderer: props.expandRenderer
     })
 
@@ -327,6 +328,7 @@ export default defineComponent({
       emitAllRowCheck,
       emitRowExpand,
       emitRowFilter,
+      emitRowSort,
       handleRowDragStart,
       handleRowDragOver,
       handleRowDrop,
@@ -566,7 +568,41 @@ export default defineComponent({
     }
 
     function emitRowFilter() {
-      emit('on-row-filter', getters.filteredData)
+      const { columns, filters } = state
+      const columnMap = transformListToMap(columns, 'key')
+      const profiles = Object.keys(filters)
+        .filter(key => filters[key].active)
+        .map(key => {
+          const column = columnMap[key]
+
+          return {
+            name: column.name,
+            key: column.key,
+            metaData: column.metaData!,
+            active: filters[key].active
+          }
+        })
+
+      emit('on-row-filter', profiles, getters.filteredData)
+    }
+
+    function emitRowSort() {
+      const { columns, sorters } = state
+      const columnMap = transformListToMap(columns, 'key')
+      const profiles = Object.keys(sorters)
+        .filter(key => sorters[key].type)
+        .map(key => {
+          const column = columnMap[key]
+
+          return {
+            name: column.name,
+            key: column.key,
+            metaData: column.metaData!,
+            type: sorters[key].type
+          }
+        })
+
+      emit('on-row-sort', profiles, getters.sortedData)
     }
 
     let dragState: {

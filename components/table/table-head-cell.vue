@@ -227,6 +227,7 @@ export default defineComponent({
       const type = sorter.value.type === 'asc' ? null : 'asc'
 
       mutations.handleSort(key, type)
+      tableAction.emitRowSort()
     }
 
     function handleSortDesc() {
@@ -234,6 +235,7 @@ export default defineComponent({
       const type = sorter.value.type === 'desc' ? null : 'desc'
 
       mutations.handleSort(key, type)
+      tableAction.emitRowSort()
     }
 
     function handleFilterItemSelect(value: string | number, active: boolean) {

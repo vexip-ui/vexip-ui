@@ -84,6 +84,11 @@ const props = useConfiguredProps('tableColumn', {
   orderLabel: {
     type: Function as PropType<(index: number) => string | number>,
     default: null
+  },
+  metaData: {
+    type: Object as PropType<Data>,
+    default: () => ({}),
+    validator: (value: Data) => !isNull(value)
   }
 })
 
@@ -98,25 +103,7 @@ export default defineComponent({
   props,
   setup(props, { slots }) {
     const tableAction = inject(TABLE_ACTION, null)
-
-    const options = reactive({
-      name: undefined,
-      key: undefined,
-      fixed: undefined,
-      className: undefined,
-      width: undefined,
-      filter: undefined,
-      sorter: undefined,
-      order: undefined,
-      accessor: undefined,
-      renderer: undefined,
-      headRenderer: undefined,
-      type: undefined,
-      truthIndex: undefined,
-      orderLabel: undefined,
-      checkboxSize: undefined,
-      disableRow: undefined
-    }) as unknown as ColumnWithKey
+    const options = reactive({}) as ColumnWithKey
 
     for (const key of propKeys) {
       if (key === 'renderer' || key === 'headRenderer') continue

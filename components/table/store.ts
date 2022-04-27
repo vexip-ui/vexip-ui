@@ -82,10 +82,11 @@ export function useStore(options: StoreOptions) {
   const filteredData = computed(() => {
     return filterData(state.filters, state.rowData, state.singleFilter)
   })
+  const sortedData = computed(() => {
+    return sortData(state.sorters, filteredData.value, state.columns, state.singleSorter)
+  })
   const processedData = computed(() => {
-    const { sorters, columns, currentPage, pageSize, singleSorter } = state
-
-    return pageData(currentPage, pageSize, sortData(sorters, filteredData.value, columns, singleSorter))
+    return pageData(state.currentPage, state.pageSize, sortedData.value)
   })
   const totalRowHeight = computed(() => {
     const data = processedData.value
@@ -150,6 +151,7 @@ export function useStore(options: StoreOptions) {
 
   const getters = reactive({
     filteredData,
+    sortedData,
     processedData,
     totalRowHeight,
     disableCheckRows,

@@ -11,5 +11,7 @@ export type {
   SelectionColumn,
   ExpandColumn,
   TypeColumn,
-  ColumnOptions
+  ColumnOptions,
+  FilterProfile,
+  SorterProfile
 } from './symbol'

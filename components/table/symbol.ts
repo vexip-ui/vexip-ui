@@ -55,6 +55,7 @@ export type ParsedSorterOptions = Required<SorterOptions>
 export interface BaseColumn<T extends string | number = string | number, D = Data> {
   name: string,
   key?: Key,
+  metaData?: Data,
   fixed?: boolean | 'left' | 'right',
   className?: ClassType,
   width?: number,
@@ -98,6 +99,15 @@ export type ColumnWithKey<T extends string | number = string | number, D = Data>
   T,
   D
 > & { key: Key }
+
+export type ColumnProfile<T extends string | number = string | number, D = Data> = Pick<ColumnWithKey<T, D>, 'name' | 'key' | 'metaData'>
+
+export type FilterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<T, D> & {
+  active: T | T[]
+}
+export type SorterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<T, D> & {
+  type: 'asc' | 'desc'
+}
 
 export interface StoreOptions {
   columns: ColumnOptions[],
@@ -174,6 +184,7 @@ export interface TableAction {
   emitAllRowCheck(checked: boolean, partial: boolean): void,
   emitRowExpand(data: Data, expanded: boolean, key: Key, index: number): void,
   emitRowFilter(): void,
+  emitRowSort(): void,
   handleRowDragStart(rowInstance: RowInstance): void,
   handleRowDragOver(rowInstance: RowInstance, event: DragEvent): void,
   handleRowDrop(rowInstance: RowInstance): void,

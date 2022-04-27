@@ -13,6 +13,7 @@
         :data="data"
         :height="1000"
         :tooltip-width="300"
+        @on-row-sort="handleRowSort"
       >
         <TableColumn type="selection" id-key="selection" :disable-row="isDisabled"></TableColumn>
         <TableColumn type="order" id-key="order"></TableColumn>
@@ -178,6 +179,10 @@ export default defineComponent({
       return row.id !== '1'
     }
 
+    function handleRowSort(profiles: any, data: any[]) {
+      console.log(profiles, data)
+    }
+
     return {
       data,
       columns,
@@ -188,7 +193,8 @@ export default defineComponent({
       jobAccessor,
       toggleData,
       addData,
-      isDisabled
+      isDisabled,
+      handleRowSort
     }
   }
 })
