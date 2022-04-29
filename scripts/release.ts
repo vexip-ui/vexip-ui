@@ -64,7 +64,7 @@ async function main() {
   }
 
   const target = pkgName.startsWith('common/') ? pkgName.substring(7) : pkgName
-  const tag = `${target}@${version}`
+  const tag = isRoot ? `v${version}` : `${target}@${version}`
 
   const { bootstrap = isRoot, confirm } = await prompt<{ bootstrap: boolean, confirm: boolean }>([
     {
