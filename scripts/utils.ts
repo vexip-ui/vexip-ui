@@ -186,7 +186,7 @@ export function emptyDir(dir: string) {
 
 const packages = [
   'vexip-ui',
-  'plaground',
+  // 'plaground',
   'common/mixins',
   'common/utils'
 ]
