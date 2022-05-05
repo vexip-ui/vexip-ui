@@ -1,11 +1,9 @@
-import { defineComponent, computed, h, provide, toRef } from 'vue'
+import { defineComponent, reactive, computed, h, provide, toRef } from 'vue'
 import { useConfiguredProps } from '@vexip-ui/config'
-import { ROW_GUTTER } from './symbol'
+import { ROW_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-
-export type RowJustify = 'start' | 'end' | 'center' | 'space-around' | 'space-between'
-export type RowAlign = 'top' | 'middle' | 'bottom'
+import type { Justify, Align, ColumnFlex } from './symbol'
 
 const props = useConfiguredProps('row', {
   tag: {
@@ -17,16 +15,20 @@ const props = useConfiguredProps('row', {
     default: 0
   },
   justify: {
-    default: 'start' as RowJustify,
-    validator: (value: RowJustify) => {
+    default: 'start' as Justify,
+    validator: (value: Justify) => {
       return ['start', 'end', 'center', 'space-around', 'space-between'].includes(value)
     }
   },
   align: {
-    default: 'top' as RowAlign,
-    validator: (value: RowAlign) => {
+    default: 'top' as Align,
+    validator: (value: Align) => {
       return ['top', 'middle', 'bottom'].includes(value)
     }
+  },
+  columnFlex: {
+    type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
+    default: false
   }
 })
 
@@ -63,8 +65,27 @@ export default defineComponent({
 
       return null
     })
+    const columnFlex = computed(() => {
+      if (props.columnFlex === true) {
+        return {
+          justify: 'start',
+          align: 'top'
+        }
+      } else if (props.columnFlex) {
+        return {
+          justify: 'start',
+          align: 'top',
+          ...props.columnFlex
+        }
+      }
 
-    provide(ROW_GUTTER, toRef(props, 'gutter'))
+      return false
+    })
+
+    provide(ROW_STATE, reactive({
+      columnFlex,
+      gutter: toRef(props, 'gutter')
+    }))
 
     return () =>
       h(

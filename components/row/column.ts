@@ -1,11 +1,11 @@
 import { defineComponent, computed, h, inject } from 'vue'
-import { ROW_GUTTER } from '@/components/row'
 import { useConfiguredProps } from '@vexip-ui/config'
+import { ROW_STATE, breakPoints } from './symbol'
 
-import type { CSSProperties } from 'vue'
+import type { PropType, CSSProperties } from 'vue'
+import type { ColumnOptions } from './symbol'
 
 type LayerProp = 'span' | 'offset' | 'pull' | 'push' | 'order'
-type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
 
 const props = useConfiguredProps('column', {
   tag: {
@@ -33,27 +33,27 @@ const props = useConfiguredProps('column', {
     default: null
   },
   xs: {
-    type: [Number, Object],
+    type: [Number, Object] as PropType<number | ColumnOptions>,
     default: null
   },
   sm: {
-    type: [Number, Object],
+    type: [Number, Object] as PropType<number | ColumnOptions>,
     default: null
   },
   md: {
-    type: [Number, Object],
+    type: [Number, Object] as PropType<number | ColumnOptions>,
     default: null
   },
   lg: {
-    type: [Number, Object],
+    type: [Number, Object] as PropType<number | ColumnOptions>,
     default: null
   },
   xl: {
-    type: [Number, Object],
+    type: [Number, Object] as PropType<number | ColumnOptions>,
     default: null
   },
   xxl: {
-    type: [Number, Object],
+    type: [Number, Object] as PropType<number | ColumnOptions>,
     default: null
   },
   flex: {
@@ -62,17 +62,26 @@ const props = useConfiguredProps('column', {
   }
 })
 
+const colProps: LayerProp[] = ['span', 'offset', 'pull', 'push', 'order']
+
 export default defineComponent({
   name: 'Column',
   props,
   setup(props, { slots }) {
-    const gutter = inject(ROW_GUTTER, null)
+    const rowState = inject(ROW_STATE, null)
 
     const prefix = 'vxp-column'
 
     const className = computed(() => {
-      const className = [prefix]
-      const colProps: LayerProp[] = ['span', 'offset', 'pull', 'push', 'order']
+      const columnFlex = rowState?.columnFlex
+      const className = [prefix, { [`${prefix}--flex`]: columnFlex }]
+
+      if (columnFlex) {
+        className.push(
+          `${prefix}--${columnFlex.justify}`,
+          `${prefix}--${columnFlex.align}`
+        )
+      }
 
       colProps.forEach(prop => {
         if (typeof props[prop] === 'number') {
@@ -81,14 +90,17 @@ export default defineComponent({
           )
         }
       })
-      ;(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'] as BreakPoint[]).forEach(size => {
-        if (!props[size] && props[size] !== 0) return
 
-        if (typeof props[size] === 'number') {
-          className.push(`${prefix}--${size}-${props[size]}`)
-        } else if (typeof props[size] === 'object') {
+      breakPoints.forEach(size => {
+        const sizeProp = props[size]
+
+        if (!sizeProp && sizeProp !== 0) return
+
+        if (typeof sizeProp === 'number') {
+          className.push(`${prefix}--${size}-${sizeProp}`)
+        } else if (typeof sizeProp === 'object') {
           colProps.forEach(prop => {
-            const value = props[size]?.[prop]
+            const value = sizeProp[prop]
 
             if (!value && value !== 0) return
 
@@ -103,11 +115,11 @@ export default defineComponent({
       const flex = props.flex
       const style: CSSProperties = {}
 
-      if (gutter) {
-        if (typeof gutter.value === 'number') {
-          style.paddingRight = style.paddingLeft = `${gutter.value / 2}px`
-        } else if (Array.isArray(gutter.value)) {
-          const [horizontal, vertical] = gutter.value
+      if (rowState) {
+        if (typeof rowState.gutter === 'number') {
+          style.paddingRight = style.paddingLeft = `${rowState.gutter / 2}px`
+        } else if (Array.isArray(rowState.gutter)) {
+          const [horizontal, vertical] = rowState.gutter
 
           style.padding = `${vertical / 2}px ${horizontal / 2}px`
         }

@@ -4,6 +4,42 @@
   position: relative;
   max-width: 100%;
 
+  &--flex {
+    display: flex;
+  }
+
+  &--start {
+    justify-content: flex-start;
+  }
+
+  &--end {
+    justify-content: flex-end;
+  }
+
+  &--center {
+    justify-content: center;
+  }
+
+  &--space-around {
+    justify-content: space-around;
+  }
+
+  &--space-between {
+    justify-content: space-between;
+  }
+
+  &--top {
+    align-items: flex-start;
+  }
+
+  &--middle {
+    align-items: center;
+  }
+
+  &--bottom {
+    align-items: flex-end;
+  }
+
   &--0 {
     display: none;
   }
@@ -64,5 +100,9 @@
         }
       }
     }
+  }
+
+  & > .vxp-row {
+    width: 100%;
   }
 }

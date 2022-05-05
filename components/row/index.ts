@@ -1,4 +1,5 @@
 import '@/style/row.scss'
 
-export { ROW_GUTTER } from './symbol'
 export { default as Row } from './row'
+
+export type { BreakPoint, Justify, Align, ColumnFlex, ColumnOptions } from './symbol'
