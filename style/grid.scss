@@ -1,0 +1,54 @@
+.vxp-grid {
+  @at-root {
+    :root {
+      @each $point in map-keys($vxp-break-point-map) {
+        --vxp-grid-break-point-#{$point}: #{meta.inspect(map.get($vxp-break-point-map, $point))};
+      }
+    }
+  }
+
+  @include basis;
+
+  position: relative;
+  display: grid;
+
+  &--dense {
+    grid-auto-flow: row dense;
+  }
+
+  &--start {
+    justify-content: start;
+  }
+
+  &--end {
+    justify-content: end;
+  }
+
+  &--center {
+    justify-content: center;
+  }
+
+  &--space-around {
+    justify-content: space-around;
+  }
+
+  &--space-between {
+    justify-content: space-between;
+  }
+
+  &--space-evenly {
+    justify-content: space-evenly;
+  }
+
+  &--top {
+    align-items: start;
+  }
+
+  &--middle {
+    align-items: center;
+  }
+
+  &--bottom {
+    align-items: end;
+  }
+}

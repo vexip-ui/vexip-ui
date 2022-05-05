@@ -1,3 +1,5 @@
+@use './variables.scss' as *;
+
 @mixin basis {
   font-size: $vxp-font-size;
   line-height: $vxp-line-height;
