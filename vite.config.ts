@@ -114,30 +114,30 @@ export default defineConfig(({ command }) => {
     css: {
       postcss: {
         plugins: [pcssEnv as any].concat(useServer ? [] : [discardCss])
-      },
-      preprocessorOptions: {
-        scss: {
-          additionalData: (source: string, loader: string) => {
-            const prependLines = [
-              '@use "sass:color";',
-              '@use "sass:list";',
-              '@use "sass:map";',
-              '@use "sass:math";',
-              '@use "sass:meta";'
-            ]
-
-            if (loader && !loader.endsWith('design/variables.scss')) {
-              prependLines.push('@use "@/design/variables.scss" as *;')
-            }
-
-            if (loader && !loader.endsWith('design/mixins.scss')) {
-              prependLines.push('@use "@/design/mixins.scss" as *;')
-            }
-
-            return prependLines.join('\r\n') + source
-          }
-        }
       }
+      // preprocessorOptions: {
+      //   scss: {
+      //     additionalData: (source: string, loader: string) => {
+      //       const prependLines = [
+      //         '@use "sass:color";',
+      //         '@use "sass:list";',
+      //         '@use "sass:map";',
+      //         '@use "sass:math";',
+      //         '@use "sass:meta";'
+      //       ]
+
+      //       if (loader && !loader.endsWith('design/variables.scss')) {
+      //         prependLines.push('@use "@/design/variables.scss" as *;')
+      //       }
+
+      //       if (loader && !loader.endsWith('design/mixins.scss')) {
+      //         prependLines.push('@use "@/design/mixins.scss" as *;')
+      //       }
+
+      //       return prependLines.join('\r\n') + source
+      //     }
+      //   }
+      // }
     },
     plugins: [
       ...prePlugins([

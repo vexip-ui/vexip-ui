@@ -1,49 +1,49 @@
-$name: 'zoom';
+$-name: 'zoom';
 
-@mixin start {
+@mixin -start {
   opacity: 0%;
   transform: scale(0.35);
 }
 
-@mixin end {
+@mixin -end {
   opacity: 100%;
   transform: scale(1);
 }
 
-.vxp-#{$name} {
+.vxp-#{$-name} {
   @at-root {
     &-enter-active {
       animation: {
-        name: vxp-#{$name}-in;
+        name: vxp-#{$-name}-in;
         duration: 300ms;
       }
     }
 
     &-leave-active {
       animation: {
-        name: vxp-#{$name}-out;
+        name: vxp-#{$-name}-out;
         duration: 300ms;
       }
     }
   }
 }
 
-@keyframes vxp-#{$name}-in {
+@keyframes vxp-#{$-name}-in {
   0% {
-    @include start;
+    @include -start;
   }
 
   100% {
-    @include end;
+    @include -end;
   }
 }
 
-@keyframes vxp-#{$name}-out {
+@keyframes vxp-#{$-name}-out {
   0% {
-    @include end;
+    @include -end;
   }
 
   100% {
-    @include start;
+    @include -start;
   }
 }

@@ -1,45 +1,47 @@
-@mixin start {
+$-name: 'zoom';
+
+@mixin -start {
   transform: rotate(0deg);
 }
 
-@mixin end {
+@mixin -end {
   transform: rotate(360deg);
 }
 
-.vxp-spin {
+.vxp-#{$-name} {
   @at-root {
     &-enter-active {
       animation: {
-        name: vxp-spin-in;
+        name: vxp-#{$-name}-in;
         duration: 300ms;
       }
     }
 
     &-leave-active {
       animation: {
-        name: vxp-spin-out;
+        name: vxp-#{$-name}-out;
         duration: 300ms;
       }
     }
   }
 }
 
-@keyframes vxp-spin-in {
+@keyframes vxp-#{$-name}-in {
   0% {
-    @include start;
+    @include -start;
   }
 
   100% {
-    @include end;
+    @include -end;
   }
 }
 
-@keyframes vxp-spin-out {
+@keyframes vxp-#{$-name}-out {
   0% {
-    @include end;
+    @include -end;
   }
 
   100% {
-    @include start;
+    @include -start;
   }
 }

@@ -1,4 +1,5 @@
-@import './masker.scss';
+@use '../design' as *;
+@use './masker.scss';
 
 .vxp-drawer {
   @mixin fixed {

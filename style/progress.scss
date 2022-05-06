@@ -1,4 +1,7 @@
-@import './bubble.scss';
+@use 'sass:color';
+
+@use '../design' as *;
+@use './bubble.scss';
 
 .vxp-progress {
   @include basis;

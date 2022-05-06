@@ -1,4 +1,7 @@
-@import './calendar-pane.scss';
+@use 'sass:math';
+
+@use '../design' as *;
+@use './calendar-pane.scss';
 
 .vxp-calendar {
   @include basis;

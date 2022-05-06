@@ -98,7 +98,7 @@ async function main() {
     .filter(component => !fs.existsSync(`style/${component}.scss`))
     .forEach(component => fs.writeFileSync(`style/${component}.scss`, '', 'utf-8'))
 
-  const styleIndex = exportComponents.map(component => `@import './${component}.scss';`).join('\n') + '\n'
+  const styleIndex = exportComponents.map(component => `@forward './${component}.scss';`).join('\n') + '\n'
   const stylePath = path.resolve(__dirname, '../style/index.scss')
 
   fs.writeFileSync(

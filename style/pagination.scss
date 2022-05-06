@@ -1,5 +1,8 @@
-@import './number-input.scss';
-@import './select.scss';
+@use 'sass:color';
+
+@use '../design' as *;
+@use './number-input.scss';
+@use './select.scss';
 
 .vxp-pagination {
   @include basis;

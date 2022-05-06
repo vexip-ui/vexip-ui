@@ -1,3 +1,8 @@
+@use 'sass:map';
+@use 'sass:meta';
+
+@use '../design' as *;
+
 .vxp-grid {
   @at-root {
     :root {

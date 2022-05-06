@@ -1,5 +1,6 @@
-@import './button.scss';
-@import './masker.scss';
+@use '../design' as *;
+@use './button.scss';
+@use './masker.scss';
 
 .vxp-modal {
   @include basis;

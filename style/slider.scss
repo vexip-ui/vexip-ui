@@ -1,4 +1,7 @@
-@import './tooltip.scss';
+@use 'sass:color';
+
+@use '../design' as *;
+@use './tooltip.scss';
 
 .vxp-slider {
   @include basis;

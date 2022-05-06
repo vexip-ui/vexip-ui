@@ -1,4 +1,5 @@
-@import './scrollbar.scss';
+@use '../design' as *;
+@use './scrollbar.scss';
 
 .vxp-native-scroll {
   @include basis;

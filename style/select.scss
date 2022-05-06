@@ -1,7 +1,8 @@
-@import './icon.scss';
-@import './input.scss';
-@import './option.scss';
-@import './scroll.scss';
+@use '../design' as *;
+@use './icon.scss';
+@use './input.scss';
+@use './option.scss';
+@use './scroll.scss';
 
 .vxp-select {
   @include basis;

@@ -1,3 +1,7 @@
+@use 'sass:map';
+
+@use '../design' as *;
+
 .vxp-loading {
   @include basis;
 

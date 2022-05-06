@@ -1,4 +1,8 @@
-@import './icon.scss';
+@use 'sass:color';
+@use 'sass:map';
+
+@use '../design' as *;
+@use './icon.scss';
 
 .vxp-tag {
   @include basis;

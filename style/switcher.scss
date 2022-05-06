@@ -1,4 +1,7 @@
-@import './icon.scss';
+@use 'sass:color';
+
+@use '../design' as *;
+@use './icon.scss';
 
 .vxp-switcher {
   @include basis;

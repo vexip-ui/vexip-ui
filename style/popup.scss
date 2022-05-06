@@ -1,3 +1,5 @@
+@use '../design' as *;
+
 .vxp-popup {
   position: fixed;
   z-index: $vxp-z-index-popper;

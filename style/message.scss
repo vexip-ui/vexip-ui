@@ -1,5 +1,9 @@
-@import './icon.scss';
-@import './popup.scss';
+@use 'sass:color';
+@use 'sass:map';
+
+@use '../design' as *;
+@use './icon.scss';
+@use './popup.scss';
 
 .vxp-message {
   @include basis;

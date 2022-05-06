@@ -1,3 +1,5 @@
+@use '../design' as *;
+
 .vxp-divider {
   $divider-border: $vxp-border-appearance $vxp-color-border-light-2;
 

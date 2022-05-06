@@ -1,4 +1,5 @@
-@import './dropdown.scss';
+@use '../design' as *;
+@use './dropdown.scss';
 
 .vxp-contextmenu {
   @include basis;

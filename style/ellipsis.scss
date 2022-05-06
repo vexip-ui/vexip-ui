@@ -1,4 +1,5 @@
-@import './tooltip.scss';
+@use '../design' as *;
+@use './tooltip.scss';
 
 .vxp-ellipsis {
   @include basis;

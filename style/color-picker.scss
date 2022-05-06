@@ -1,5 +1,6 @@
-@import './button.scss';
-@import './input.scss';
+@use '../design' as *;
+@use './button.scss';
+@use './input.scss';
 
 .vxp-color-picker {
   @include basis;

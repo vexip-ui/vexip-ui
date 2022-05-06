@@ -1,4 +1,5 @@
-@import './select.scss';
+@use '../design' as *;
+@use './select.scss';
 
 .vxp-auto-complete {
   &__input {

@@ -1,8 +1,8 @@
-@import './drop.scss';
-@import './ease.scss';
-@import './fade.scss';
-@import './move.scss';
-@import './popup.scss';
-@import './spin.scss';
-@import './zoom.scss';
-@import './badge-zoom.scss';
+@forward './drop.scss';
+@forward './ease.scss';
+@forward './fade.scss';
+@forward './move.scss';
+@forward './popup.scss';
+@forward './spin.scss';
+@forward './zoom.scss';
+@forward './badge-zoom.scss';

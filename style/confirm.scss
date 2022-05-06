@@ -1,4 +1,5 @@
-@import './modal.scss';
+@use '../design' as *;
+@use './modal.scss';
 
 .vxp-confirm {
   @include basis;

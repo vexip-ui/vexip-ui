@@ -1,4 +1,5 @@
-@import './tab-nav.scss';
+@use '../design' as *;
+@use './tab-nav.scss';
 
 .vxp-tabs {
   @include basis;

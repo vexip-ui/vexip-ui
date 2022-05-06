@@ -1,3 +1,5 @@
+@use '../design' as *;
+
 .vxp-scrollbar {
   @include basis;
 

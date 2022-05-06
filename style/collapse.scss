@@ -1,4 +1,5 @@
-@import './icon.scss';
+@use '../design' as *;
+@use './icon.scss';
 
 .vxp-collapse {
   @include basis;

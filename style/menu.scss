@@ -1,5 +1,6 @@
-@import './icon.scss';
-@import './tooltip.scss';
+@use '../design' as *;
+@use './icon.scss';
+@use './tooltip.scss';
 
 .vxp-menu {
   $menu: #{&};

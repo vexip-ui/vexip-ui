@@ -1,28 +1,26 @@
-$popup-types: (
+$-popup-types: (
   top: 'Y(-100%) translateX(-50%)',
   right: 'X(100%)',
   bottom: 'Y(100%) translateX(-50%)',
   left: 'X(-100%)'
 );
 
-@mixin start($type) {
+@mixin -start($type) {
   opacity: 0%;
-  transform: translate#{map-get($popup-types, $type)} translateZ(0);
+  transform: translate#{map-get($-popup-types, $type)} translateZ(0);
 }
 
-@mixin end($type) {
+@mixin -end($type) {
   opacity: 100%;
 
   @if $type == 'top' or $type == 'bottom' {
     transform: translate3d(-50%, 0, 0);
-  }
-
-  @else {
+  } @else {
     transform: translate3d(0, 0, 0);
   }
 }
 
-@each $type in map-keys($map: $popup-types) {
+@each $type in map-keys($map: $-popup-types) {
   $root-name: vxp-popup-#{$type};
 
   .#{$root-name} {
@@ -46,17 +44,17 @@ $popup-types: (
 
   @keyframes #{$root-name}-in {
     0% {
-      @include start($type);
+      @include -start($type);
     }
 
     100% {
-      @include end($type);
+      @include -end($type);
     }
   }
 
   @keyframes #{$root-name}-out {
     0% {
-      @include end($type);
+      @include -end($type);
     }
 
     100% {

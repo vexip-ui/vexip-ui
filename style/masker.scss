@@ -1,3 +1,5 @@
+@use '../design' as *;
+
 .vxp-masker {
   @mixin fixed {
     position: fixed;

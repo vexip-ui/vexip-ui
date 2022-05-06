@@ -15,6 +15,7 @@ import { CalendarPane } from '@/components/calendar-pane'
 import { Card } from '@/components/card'
 import { Carousel } from '@/components/carousel'
 import { CarouselItem } from '@/components/carousel-item'
+import { Cell } from '@/components/cell'
 import { Checkbox } from '@/components/checkbox'
 import { CheckboxGroup } from '@/components/checkbox-group'
 import { Collapse } from '@/components/collapse'
@@ -35,6 +36,7 @@ import { Form } from '@/components/form'
 import { FormItem } from '@/components/form-item'
 import { FormReset } from '@/components/form-reset'
 import { FormSubmit } from '@/components/form-submit'
+import { Grid } from '@/components/grid'
 import { Highlight } from '@/components/highlight'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
@@ -117,6 +119,7 @@ const components = [
   Card,
   Carousel,
   CarouselItem,
+  Cell,
   Checkbox,
   CheckboxGroup,
   Collapse,
@@ -135,6 +138,7 @@ const components = [
   FormItem,
   FormReset,
   FormSubmit,
+  Grid,
   Highlight,
   Icon,
   Input,
@@ -228,6 +232,7 @@ export {
   Card,
   Carousel,
   CarouselItem,
+  Cell,
   Checkbox,
   CheckboxGroup,
   Collapse,
@@ -248,6 +253,7 @@ export {
   FormItem,
   FormReset,
   FormSubmit,
+  Grid,
   Highlight,
   Icon,
   Input,
@@ -316,6 +322,7 @@ export interface VexipComponents {
   Card: typeof Card,
   Carousel: typeof Carousel,
   CarouselItem: typeof CarouselItem,
+  Cell: typeof Cell,
   Checkbox: typeof Checkbox,
   CheckboxGroup: typeof CheckboxGroup,
   Collapse: typeof Collapse,
@@ -334,6 +341,7 @@ export interface VexipComponents {
   FormItem: typeof FormItem,
   FormReset: typeof FormReset,
   FormSubmit: typeof FormSubmit,
+  Grid: typeof Grid,
   Highlight: typeof Highlight,
   Icon: typeof Icon,
   Input: typeof Input,
