@@ -45,6 +45,10 @@ export function isSymbol(value: unknown): value is symbol {
   return typeof value === 'symbol'
 }
 
+export function isBigInt(value: unknown): value is bigint {
+  return typeof value === 'bigint'
+}
+
 export function isArray(value: unknown): value is any[] {
   return Array.isArray(value)
 }
