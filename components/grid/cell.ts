@@ -6,7 +6,7 @@ import { GRID_STATE } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { BreakPoint } from './helpler'
-import type { CellOptions } from './symbol'
+import type { CellFlex, CellOptions } from './symbol'
 
 const props = useConfiguredProps('cell', {
   tag: {
@@ -60,6 +60,10 @@ const props = useConfiguredProps('cell', {
   xxl: {
     type: [Number, Object] as PropType<CellOptions>,
     default: null
+  },
+  useFlex: {
+    type: [Boolean, Object] as PropType<boolean | CellFlex>,
+    default: null
   }
 })
 
@@ -107,7 +111,14 @@ export default defineComponent({
     )
 
     const className = computed(() => {
-      const cellFelx = gridState?.cellFlex
+      const cellFelx = props.useFlex !== false && (props.useFlex || gridState?.cellFlex) && {
+        ...(gridState?.cellFlex || {}),
+        ...(
+          props.useFlex
+            ? props.useFlex === true ? { justify: 'start', align: 'top' } : props.useFlex
+            : {}
+        )
+      }
       const className = {
         [prefix]: true,
         [`${prefix}--flex`]: cellFelx

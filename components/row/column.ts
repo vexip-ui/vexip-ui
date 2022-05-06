@@ -3,7 +3,7 @@ import { useConfiguredProps } from '@vexip-ui/config'
 import { ROW_STATE, breakPoints } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
-import type { ColumnOptions } from './symbol'
+import type { ColumnFlex, ColumnOptions } from './symbol'
 
 type LayerProp = 'span' | 'offset' | 'pull' | 'push' | 'order'
 
@@ -59,6 +59,10 @@ const props = useConfiguredProps('column', {
   flex: {
     type: [Number, String],
     default: null
+  },
+  useFlex: {
+    type: [Boolean, Object] as PropType<boolean | ColumnFlex>,
+    default: null
   }
 })
 
@@ -73,7 +77,14 @@ export default defineComponent({
     const prefix = 'vxp-column'
 
     const className = computed(() => {
-      const columnFlex = rowState?.columnFlex
+      const columnFlex = (props.useFlex || rowState?.columnFlex) && {
+        ...(rowState?.columnFlex || {}),
+        ...(
+          props.useFlex
+            ? props.useFlex === true ? { justify: 'start', align: 'top' } : props.useFlex
+            : {}
+        )
+      }
       const className = [prefix, { [`${prefix}--flex`]: columnFlex }]
 
       if (columnFlex) {

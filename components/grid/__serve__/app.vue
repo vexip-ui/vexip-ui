@@ -36,8 +36,8 @@
     </Cell>
   </Grid>
   <br />
-  <Grid :gap="8">
-    <Cell :width="8" :md="{ width: 12 }">
+  <Grid :gap="8" cell-flex>
+    <Cell :width="8" :md="{ width: 12 }" :use-flex="false">
       <div class="content"></div>
     </Cell>
     <Cell :width="16" :md="{ width: 12 }">
