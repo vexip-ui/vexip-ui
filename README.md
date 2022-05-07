@@ -4,18 +4,20 @@
 
 Vexip UI provides a series of out-of-the-box components.
 
-This library is using the vue 3.0 with composition api, and the development is using vite 2.0 and monorepo that makes it possible to start dev server and manage development files for each component. It is an attempt at the new generation of vue library project.
+This library is using base on vue 3.0 with only using composition api, and design and code components in the traditional way by Vue possible, fully TypeScript.
 
 ## Features
 
-- Rich components and functions for website development, greatly improve efficiency
-- High quality Vue 3.0 components of out-of-the-box
-- Intuitive api design, easy to understand and use
-- entirely using the composition api, with excellent performance and scalability
+- Not less components and functions for website development, hoping may improve efficiency
+- Vue3 components of out-of-the-box (may not help if you still using Vue2)
+- Intuitive design, directly to write code, no equivocate
+- entirely using the composition api, the performance and scalability should be good
 
 ## Environment
 
-Since Vue 3.0 uses the Proxy for implementation, this library cannot be used in IE11 and legacy Edge.
+All components supported in modern browsers, I try to ensure the support of neerly two or three versions.
+
+I have limited energy and it's not start writing unit tests currently, if you encountered any bug, don't scold me and create a issue or PR.
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Opera | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Electron |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -35,15 +37,7 @@ yarn add vexip-ui
 
 ## Document
 
-[Here](//www.vexipui.com) is the online document. Currently only available in Chinese (foreign borthers can use the translation tool of browser).
-
-## Development
-
-In each component, development files are placed under a folder named `__serve__`, and start the dev server use following command:
-
-```sh
-pnpm run serve [component-pattern]
-```
+[Here](//www.vexipui.com) is the online document. Currently only available in Chinese (foreign borthers can use the translation tool of browser currently, English has planned).
 
 ## Help
 
