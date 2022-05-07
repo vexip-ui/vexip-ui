@@ -7,3 +7,5 @@ export type ButtonType =
   | 'success'
   | 'warning'
   | 'error'
+
+export type ButtonAttrType = 'button' | 'submit' | 'reset'

@@ -1,6 +1,7 @@
 <template>
-  <button
-    type="button"
+  <component
+    :is="tag"
+    :type="attrType"
     :class="className"
     :style="style"
     :disabled="disabled"
@@ -32,7 +33,7 @@
       </div>
     </CollapseTransition>
     <slot></slot>
-  </button>
+  </component>
 </template>
 
 <script lang="ts">
@@ -41,7 +42,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { createSizeProp, useConfiguredProps } from '@vexip-ui/config'
 
-import type { ButtonType } from './symbol'
+import type { ButtonType, ButtonAttrType } from './symbol'
 
 import '@/common/icons/spinner'
 
@@ -105,6 +106,16 @@ const props = useConfiguredProps('button', {
   block: {
     type: Boolean,
     default: false
+  },
+  tag: {
+    type: String,
+    default: 'button'
+  },
+  attrType: {
+    default: 'button' as ButtonAttrType,
+    validator: (value: ButtonAttrType) => {
+      return ['button', 'submit', 'reset'].includes(value)
+    }
   }
 })
 
