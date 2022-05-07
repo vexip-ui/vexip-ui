@@ -1,43 +1,4 @@
-<template>
-  <component
-    :is="tag"
-    :type="attrType"
-    :class="className"
-    :style="style"
-    :disabled="disabled"
-    @click.left="handleClick"
-    @animationend="handleAnimationEnd"
-  >
-    <template v-if="icon">
-      <div v-if="loading" :class="[`${prefix}__icon`, `${prefix}__icon--loading`]">
-        <slot name="loading">
-          <Icon v-if="loadingSpin" spin :name="loadingIcon"></Icon>
-          <Icon v-else pulse :name="loadingIcon"></Icon>
-        </slot>
-      </div>
-      <div v-else :class="`${prefix}__icon`">
-        <Icon :name="icon"></Icon>
-      </div>
-    </template>
-    <CollapseTransition
-      v-else
-      appear
-      horizontal
-      fade-effect
-    >
-      <div v-if="loading" :class="[`${prefix}__icon`, `${prefix}__icon--loading`]">
-        <slot name="loading">
-          <Icon v-if="loadingSpin" spin :name="loadingIcon"></Icon>
-          <Icon v-else pulse :name="loadingIcon"></Icon>
-        </slot>
-      </div>
-    </CollapseTransition>
-    <slot></slot>
-  </component>
-</template>
-
-<script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, h, ref, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { createSizeProp, useConfiguredProps } from '@vexip-ui/config'
@@ -152,7 +113,7 @@ export default defineComponent({
     })
 
     function handleClick(event: MouseEvent) {
-      if (props.disabled) return
+      if (props.disabled || event.button) return
 
       pulsing.value = false
 
@@ -167,14 +128,65 @@ export default defineComponent({
       pulsing.value = false
     }
 
-    return {
-      prefix,
-      className,
-      style,
+    // return {
+    //   prefix,
+    //   className,
+    //   style,
 
-      handleClick,
-      handleAnimationEnd
+    //   handleClick,
+    //   handleAnimationEnd
+    // }
+
+    function renderIconWithDefined() {
+      return props.loading ? (
+        <div class={[`${prefix}__icon`, `${prefix}__icon--loading`]}>
+          {slots.loading ? (
+            slots.loading()
+          ) : props.loadingSpin ? (
+            <Icon spin name={props.loadingIcon}></Icon>
+          ) : (
+            <Icon pulse name={props.loadingIcon}></Icon>
+          )}
+        </div>
+      ) : (
+        <div class={`${prefix}__icon`}>
+          <Icon name={props.icon}></Icon>
+        </div>
+      )
     }
+
+    function renderCollapseIcon() {
+      return (
+        <CollapseTransition appear horizontal fade-effect>
+          {props.loading && (
+            <div class={[`${prefix}__icon`, `${prefix}__icon--loading`]}>
+              {slots.loading ? (
+                slots.loading()
+              ) : props.loadingSpin ? (
+                <Icon spin name={props.loadingIcon}></Icon>
+              ) : (
+                <Icon pulse name={props.loadingIcon}></Icon>
+              )}
+            </div>
+          )}
+        </CollapseTransition>
+      )
+    }
+
+    return () => h(
+      props.tag || 'button',
+      {
+        type: props.attrType,
+        class: className.value,
+        style: style.value,
+        disabled: props.disabled,
+        onClick: handleClick,
+        onAnimationend: handleAnimationEnd
+      },
+      [
+        props.icon ? renderIconWithDefined() : renderCollapseIcon(),
+        slots.default ? slots.default() : null
+      ]
+    )
   }
 })
-</script>

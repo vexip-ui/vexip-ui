@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Button from '../button.vue'
+import { Button } from '..'
 
 import '@/common/icons/search'
 
