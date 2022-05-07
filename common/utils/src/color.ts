@@ -434,7 +434,6 @@ export function parseColorToRgba(originColor: Color): RGBAColor {
   } else {
     color = originColor
   }
-  debugger
 
   if (color !== null && typeof color === 'object') {
     if ('l' in color) {
@@ -677,6 +676,33 @@ export function rgbaToHex(
   }
 
   return '#' + hex.join('')
+}
+
+export function mixColor(color1: Color, color2: Color, weight = 0.5): RGBAColor {
+  if (!color1 && !color2) return { r: 0, g: 0, b: 0, a: 1 }
+  if (!color1) return parseColorToRgba(color2)
+  if (!color2) return parseColorToRgba(color1)
+
+  const rgba1 = parseColorToRgba(color1)
+  const rgba2 = parseColorToRgba(color2)
+
+  const originalWeight = boundRange(weight, 0, 1)
+  const normalizedWeight = originalWeight * 2 - 1
+
+  const alphaDistance = rgba1.a - rgba2.a
+  const mixWeight = normalizedWeight * alphaDistance === -1
+    ? normalizedWeight
+    : (normalizedWeight + alphaDistance) / (1 + normalizedWeight * alphaDistance)
+  const weight1 = (mixWeight + 1) / 2
+  const weight2 = 1 - weight1
+
+  return {
+    r: Math.round(rgba1.r * weight1 + rgba2.r * weight2),
+    g: Math.round(rgba1.g * weight1 + rgba2.g * weight2),
+    b: Math.round(rgba1.b * weight1 + rgba2.b * weight2),
+    a: Math.round(rgba1.a * originalWeight + rgba2.a * (1 - originalWeight)),
+    format: 'rgba'
+  }
 }
 
 function repairDigits(str: string) {
