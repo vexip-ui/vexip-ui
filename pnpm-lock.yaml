@@ -12,6 +12,7 @@ importers:
       '@types/file-saver': ^2
       '@types/fs-extra': ^9.0.13
       '@types/jest': ^27.4.1
+      '@types/minimist': ^1.2.2
       '@types/node': ^17.0.27
       '@types/semver': ^7.3.9
       '@typescript-eslint/eslint-plugin': ^5.19.0
@@ -85,6 +86,7 @@ importers:
       '@types/file-saver': 2.0.5
       '@types/fs-extra': 9.0.13
       '@types/jest': 27.4.1
+      '@types/minimist': 1.2.2
       '@types/node': 17.0.27
       '@types/semver': 7.3.9
       '@typescript-eslint/eslint-plugin': 5.20.0_6fgdvqiugnlqfr7q25eyik4pxi
