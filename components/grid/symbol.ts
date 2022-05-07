@@ -11,7 +11,8 @@ export interface CellFlex {
 }
 
 export interface GridState {
-  cellFlex: CellFlex | false
+  cellFlex: CellFlex | false,
+  columns: LayoutProp
 }
 
 export interface CellOptions {

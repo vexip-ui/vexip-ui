@@ -23,7 +23,7 @@ const props = useConfiguredProps('cell', {
   },
   width: {
     type: Number,
-    default: 24
+    default: null
   },
   height: {
     type: Number,
@@ -85,6 +85,14 @@ export default defineComponent({
     })
     const leyoutKeys = Object.keys(layoutState) as ('top' | 'right' | 'bottom' | 'left' | 'width' | 'height')[]
 
+    const defaultWidth = computed(() => {
+      if (isDefined(props.width)) {
+        return props.width
+      }
+
+      return gridState?.columns && typeof gridState.columns === 'number' ? gridState.columns : 1
+    })
+
     watch(
       currentBreakPoint, value => {
         const matchSize = queryBreakPointOptions(value)
@@ -100,11 +108,15 @@ export default defineComponent({
             leyoutKeys.forEach(key => {
               layoutState[key] = has(matchSize, key) ? matchSize[key] : props[key] as any
             })
+
+            layoutState.width = defaultWidth.value
           }
         } else {
           leyoutKeys.forEach(key => {
             layoutState[key] = props[key] as any
           })
+
+          layoutState.width = defaultWidth.value
         }
       },
       { immediate: true }

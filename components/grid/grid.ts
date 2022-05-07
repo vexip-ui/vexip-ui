@@ -1,4 +1,4 @@
-import { defineComponent, reactive, computed, h, provide } from 'vue'
+import { defineComponent, reactive, computed, toRef, h, provide } from 'vue'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { GRID_STATE } from './symbol'
 
@@ -113,7 +113,7 @@ export default defineComponent({
       return false
     })
 
-    provide(GRID_STATE, reactive({ cellFlex }))
+    provide(GRID_STATE, reactive({ cellFlex, columns: toRef(props, 'columns') }))
 
     function parseSizeLayout(value: LayoutProp) {
       if (typeof value === 'number') {

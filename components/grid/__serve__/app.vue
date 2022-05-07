@@ -1,5 +1,5 @@
 <template>
-  <Grid>
+  <Grid :columns="3">
     <Cell>
       <div class="content"></div>
     </Cell>
