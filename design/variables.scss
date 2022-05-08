@@ -1,7 +1,103 @@
-@use 'sass:color';
-
 /* stylelint-disable scss/double-slash-comment-empty-line-before */
 /* stylelint-disable scss/dollar-variable-empty-line-before */
+
+@use 'sass:color';
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+
+$namespace: 'vxp' !default;
+
+@function to-css-var-name($name-units...) {
+  $name: '--' + $namespace;
+
+  @each $unit in $name-units {
+    @if $unit != '' {
+      $name: $name + '-' + $unit;
+    }
+  }
+
+  @return $name;
+}
+
+@function get-css-var($name-units...) {
+  @return var(#{to-css-var-name($name-units...)});
+}
+
+@mixin define-css-var($name-units, $value) {
+  #{to-css-var-name($name-units...)}: #{$value};
+}
+
+@mixin define-preset-style($base-name, $styles, $inspect: false) {
+  @each $name in map.keys($styles) {
+    @include define-css-var(
+      ($base-name, $name),
+      if($inspect, #{meta.inspect(map.get($styles, $name))}, map.get($styles, $name))
+    );
+  }
+}
+
+$color-black: #000 !default;
+$color-white: #fff !default;
+
+$types: primary, info, success, warning, error;
+
+$color-map: () !default;
+$color-map: map.deep-merge(
+  (
+    primary: (
+      base: #339af0
+    ),
+    info: (
+      base: #3bc9db
+    ),
+    success: (
+      base: #20c997
+    ),
+    warning: (
+      base: #fab005
+    ),
+    error: (
+      base: #f03e3e
+    )
+  ),
+  $color-map
+);
+
+@mixin define-level-colors($type, $max-lavel, $mode, $mixed-color) {
+  @for $i from 1 through $max-lavel {
+    $color-map: map.deep-merge(
+      (
+        $type: (
+          '#{$mode}-#{$i}':
+            color.mix(
+              $mixed-color,
+              map.get($color-map, $type, 'base'),
+              math.percentage(math.div($i, 10))
+            )
+        )
+      ),
+      $color-map
+    ) !global;
+  }
+}
+
+@mixin define-type-color($type) {
+  $colors: map.get($color-map, $type);
+
+  @each $name in map.keys($colors) {
+    @include define-css-var(('color', $type, $name), map.get($colors, $name));
+  }
+}
+
+:root {
+  @each $type in $types {
+    @include define-level-colors($type, 9, 'light', $color-white);
+    @include define-level-colors($type, 2, 'dark', $color-black);
+    @include define-type-color($type);
+  }
+}
+
 $vxp-color-black: #000 !default;
 $vxp-color-white: #fff !default;
 
@@ -43,11 +139,45 @@ $vxp-color-content-placeholder: #ced4da !default; // $oc-gray-4
 $vxp-color-content-humble: #dee2e6 !default; // $oc-gray-3
 $vxp-color-content-reverse: $vxp-color-white !default;
 
+$content-color-map: () !default;
+$content-color-map: map.merge(
+  (
+    primary: #212529,
+    normal: #495057,
+    secondary: #868e96,
+    disabled: #adb5bd,
+    placeholder: #ced4da,
+    humble: #dee2e6,
+    reverse: #fff
+  ),
+  $content-color-map
+);
+
+:root {
+  @include define-preset-style('content-color', $content-color-map);
+}
+
 $vxp-color-border: #ced4da !default; // $oc-gray-4
 $vxp-color-border-light-1: #dee2e6 !default; // $oc-gray-3
 $vxp-color-border-light-2: #e9ecef !default; // $oc-gray-2
 $vxp-color-border-dark-1: #adb5bd !default; // $oc-gray-5
 $vxp-color-border-dark-2: #868e96 !default; // $oc-gray-6
+
+$border-color-map: () !default;
+$border-color-map: map.merge(
+  (
+    base: #ced4da,
+    light-1: #dee2e6,
+    light-2: #e9ecef,
+    dark-1: #adb5bd,
+    dark-2: #868e96
+  ),
+  $border-color-map
+);
+
+:root {
+  @include define-preset-style('border-color', $border-color-map);
+}
 
 // 需要填充的元素的底色
 $vxp-color-fill: $vxp-color-white !default;
@@ -60,21 +190,95 @@ $vxp-color-fill-background: #f8f9fa !default; // $oc-gray-0
 // 需要填充的元素的反色
 $vxp-color-fill-reverse: #212529 !default;
 
+$fill-color-map: () !default;
+$fill-color-map: map.merge(
+  (
+    base: #fff,
+    disabled: #dee2e6,
+    hover: #e9ecef,
+    background: #f8f9fa,
+    reverse: #212529
+  ),
+  $fill-color-map
+);
+
+:root {
+  @include define-preset-style('fill-color', $fill-color-map);
+}
+
 $vxp-font-size: 0.875rem !default;
 $vxp-font-size-primary: 1.15em !default;
 $vxp-font-size-secondary: 0.75em !default;
 
+$font-size-map: () !default;
+$font-size-map: map.merge(
+  (
+    base: 0.875rem,
+    primary: 1.15em,
+    secondary: 0.75em
+  ),
+  $font-size-map
+);
+
+:root {
+  @include define-preset-style('font-size', $font-size-map);
+}
+
 $vxp-line-height: 1.5 !default;
 $vxp-line-height-secondary: 1 !default;
+
+$line-height-map: () !default;
+$line-height-map: map.merge(
+  (
+    base: 1.5,
+    secondary: 1
+  ),
+  $line-height-map
+);
+
+:root {
+  @include define-preset-style('line-height', $line-height-map);
+}
 
 $vxp-border-width: 1px !default;
 $vxp-border-style: solid !default;
 $vxp-border-appearance: $vxp-border-width $vxp-border-style !default;
 $vxp-border-base: $vxp-border-appearance $vxp-color-border !default;
 
+$border-width: 1px !default;
+$border-style: solid !default;
+$border-appearance: get-css-var('border-width') get-css-var('border-style') !default;
+
+:root {
+  @include define-css-var('border-width', $border-width);
+  @include define-css-var('border-style', $border-style);
+  @include define-css-var('border-appearance', $border-appearance);
+
+  @each $name in map.keys($border-color-map) {
+    @include define-css-var(
+      ('border', $name),
+      get-css-var('border-appearance') get-css-var('border-color', $name)
+    );
+  }
+}
+
 $vxp-border-radius-base: 4px !default;
 $vxp-border-radius-large: 6px !default;
 $vxp-border-radius-small: 2px !default;
+
+$border-radius-map: () !default;
+$border-radius-map: map.merge(
+  (
+    base: 4px,
+    large: 6px,
+    small: 2px
+  ),
+  $border-radius-map
+);
+
+:root {
+  @include define-preset-style('border-radius', $border-radius-map);
+}
 
 $vxp-box-shadow-x-offset: 0 !default;
 $vxp-box-shadow-y-offset: 0 !default;
@@ -83,6 +287,27 @@ $vxp-box-shadow-appearance: $vxp-box-shadow-x-offset $vxp-box-shadow-y-offset $v
 $vxp-box-shadow-border-appearance: 0 0 0 1px !default;
 $vxp-box-shadow-fouced-appearance: 0 0 0 2px !default;
 $vxp-box-shadow-base: $vxp-box-shadow-appearance $vxp-color-border !default;
+
+$box-shadow-x: 0 !default;
+$box-shadow-y: 0 !default;
+$box-shadow-blur: 4px !default;
+$box-shadow-appearance: get-css-var('box-shadow-x') get-css-var('box-shadow-y')
+  get-css-var('box-shadow-blur') !default;
+$box-shadow-base: get-css-var('box-shadow-appearance') define-css-var('border-color-base') !default;
+
+$box-shadow-border: 0 0 0 1px !default;
+$box-shadow-fouced: 0 0 0 2px !default;
+
+:root {
+  @include define-css-var('box-shadow-x', $box-shadow-x);
+  @include define-css-var('box-shadow-y', $box-shadow-y);
+  @include define-css-var('box-shadow-blur', $box-shadow-blur);
+  @include define-css-var('box-shadow-appearance', $box-shadow-appearance);
+  @include define-css-var('box-shadow-base', $box-shadow-base);
+
+  @include define-css-var('box-shadow-border', $box-shadow-border);
+  @include define-css-var('box-shadow-fouced', $box-shadow-fouced);
+}
 
 $vxp-transition-duration: 250ms !default;
 $vxp-transition-timing-function: ease !default;
@@ -94,9 +319,48 @@ $vxp-transition-box-shadow-base: box-shadow $vxp-transition-base !default;
 $vxp-transition-opacity-base: opacity $vxp-transition-base !default;
 $vxp-transition-transform-base: transform $vxp-transition-base !default;
 
+$transition-duration: 250ms !default;
+$transition-timing: ease !default;
+$transition-base: get-css-var('transition-duration') get-css-var('transition-timing') !default;
+
+$transition-map: () !default;
+$transition-map: map.merge(
+  (
+    color: color get-css-var('transition-base'),
+    background: background-color get-css-var('transition-base'),
+    border: border-color get-css-var('transition-base'),
+    box-shadow: box-shadow get-css-var('transition-base'),
+    opacity: opacity get-css-var('transition-base'),
+    transform: transform get-css-var('transition-base')
+  ),
+  $transition-map
+);
+
+:root {
+  @include define-css-var('transition-duration', $transition-duration);
+  @include define-css-var('transition-timing', $transition-timing);
+  @include define-css-var('transition-base', $transition-base);
+
+  @include define-preset-style('transition', $transition-map);
+}
+
 $vxp-z-index-popper: 1000 !default;
 $vxp-z-index-masker: 1500 !default;
 $vxp-z-index-popup: 2000 !default;
+
+$z-index-map: () !default;
+$z-index-map: map.merge(
+  (
+    popper: 1000,
+    masker: 1500,
+    popup: 2000
+  ),
+  $z-index-map
+);
+
+:root {
+  @include define-preset-style('z-index', $z-index-map);
+}
 
 $vxp-break-point-sm: 576px !default;
 $vxp-break-point-md: 768px !default;
@@ -123,6 +387,35 @@ $vxp-break-point-map: (
     min-width: $vxp-break-point-xxl
   )
 );
+
+$break-point-map: () !default;
+$break-point-map: map.merge(
+  (
+    xs: (
+      max-width: $vxp-break-point-sm - 0.02px
+    ),
+    sm: (
+      min-width: $vxp-break-point-sm
+    ),
+    md: (
+      min-width: $vxp-break-point-md
+    ),
+    lg: (
+      min-width: $vxp-break-point-lg
+    ),
+    xl: (
+      min-width: $vxp-break-point-xl
+    ),
+    xxl: (
+      min-width: $vxp-break-point-xxl
+    )
+  ),
+  $break-point-map
+);
+
+:root {
+  @include define-preset-style('break-point', $break-point-map, true);
+}
 
 // 组件的具体样式变量
 
