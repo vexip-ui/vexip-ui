@@ -12,6 +12,7 @@
     <Drawer
       v-model:active="active"
       transfer
+      resizable
       :title="`${placement} 抽屉`"
       :placement="placement"
     >
@@ -22,34 +23,14 @@
   </Row>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { Button } from '@/components/button'
 import { Radio } from '@/components/radio'
 import { RadioGroup } from '@/components/radio-group'
 import { Row } from '@/components/row'
 import Drawer from '../drawer.vue'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Button,
-    Drawer,
-    Radio,
-    RadioGroup,
-    Row
-  },
-  data() {
-    return {
-      active: false,
-      placement: 'right'
-    }
-  }
-})
+const active = ref(false)
+const placement = ref<'top' | 'right' | 'bottom' | 'left'>('right')
 </script>
-
-<style lang="scss">
-.vxp-select {
-  width: 300px;
-}
-</style>

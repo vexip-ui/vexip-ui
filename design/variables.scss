@@ -433,20 +433,6 @@ $break-point-map: map.merge(
 
 // 组件的具体样式变量
 
-// drawer
-// ------------------------------------------
-$vxp-drawer-color-bg: $vxp-color-fill !default;
-$vxp-drawer-color-title: $vxp-color-content-primary !default;
-$vxp-drawer-color-title-divider: $vxp-color-border-light-2 !default;
-$vxp-drawer-color-close: $vxp-color-content-placeholder !default;
-$vxp-drawer-color-close-hover: $vxp-color-content-normal !default;
-$vxp-drawer-color-bg-handler-hover: rgba($vxp-color-black, 0.15) !default;
-
-$vxp-drawer-handler-length: 5px !default;
-
-$vxp-drawer-title-font-size: $vxp-font-size-primary !default;
-$vxp-drawer-title-divider: $vxp-border-appearance $vxp-drawer-color-title-divider;
-
 // input
 // ------------------------------------------
 $vxp-input-color-bg: $vxp-color-fill !default;
