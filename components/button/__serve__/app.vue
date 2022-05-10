@@ -1,40 +1,19 @@
 <template>
-  <Button>Default</Button>
-  <Button type="primary">
-    Primary
-  </Button>
-  <Button type="dashed">
-    Dashed
-  </Button>
-  <Button type="text">
-    Text
-  </Button>
-  <Button type="info">
-    Info
-  </Button>
-  <Button type="success">
-    Success
-  </Button>
-  <Button type="warning">
-    Warning
-  </Button>
-  <Button type="error">
-    Error
-  </Button>
-  <br />
-  <br />
-  <Button>Default</Button>
-  <Button disabled>
-    Default
-  </Button>
-  <Button type="primary">
-    Primary
-  </Button>
-  <Button disabled type="primary">
-    Primary
-  </Button>
-  <br />
-  <br />
+  <template v-for="(meta, index) in renderMeta" :key="index">
+    <div :style="{ padding: meta.ghost ? '20px' : '0', backgroundColor: meta.ghost ? '#345' : undefined }">
+      <template v-for="(type) in types" :key="type">
+        <Button
+          :type="type"
+          :simple="meta.simple"
+          :ghost="meta.ghost"
+          :disabled="meta.disabled"
+        >
+          {{ type.charAt(0).toLocaleLowerCase() + type.substring(1) }}
+        </Button>
+      </template>
+    </div>
+    <br />
+  </template>
   <Button type="primary" icon="search">
     搜索
   </Button>
@@ -43,20 +22,44 @@
     搜索
   </Button>
   <Button circle type="primary" icon="search"></Button>
+  <br />
+  <br />
+  <ButtonGroup>
+    <Button>
+      按钮一
+    </Button>
+    <Button>
+      按钮一
+    </Button>
+    <Button>
+      按钮三
+    </Button>
+  </ButtonGroup>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { Button } from '..'
+import { ButtonGroup } from '@/components/button-group'
 
 import '@/common/icons/search'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Button
-  }
-})
-</script>
+const renderMeta = [
+  { ghost: false, simple: false, disabled: false },
+  { ghost: false, simple: false, disabled: true },
+  { ghost: false, simple: true, disabled: false },
+  { ghost: false, simple: true, disabled: true },
+  { ghost: true, simple: false, disabled: false },
+  { ghost: true, simple: false, disabled: true }
+]
 
-<style lang="scss"></style>
+const types = [
+  'default',
+  'primary',
+  'dashed',
+  'text',
+  'info',
+  'success',
+  'warning',
+  'error'
+] as const
+</script>

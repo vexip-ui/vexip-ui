@@ -1,3 +1,4 @@
+/* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable scss/double-slash-comment-empty-line-before */
 /* stylelint-disable scss/dollar-variable-empty-line-before */
 
@@ -28,7 +29,7 @@ $namespace: 'vxp' !default;
   #{to-css-var-name($name-units...)}: #{$value};
 }
 
-@mixin define-preset-style($base-name, $styles, $inspect: false) {
+@mixin define-preset-values($base-name, $styles, $inspect: false) {
   @each $name in map.keys($styles) {
     @include define-css-var(
       ($base-name, $name),
@@ -69,12 +70,11 @@ $color-map: map.deep-merge(
     $color-map: map.deep-merge(
       (
         $type: (
-          '#{$mode}-#{$i}':
-            color.mix(
-              $mixed-color,
-              map.get($color-map, $type, 'base'),
-              math.percentage(math.div($i, 10))
-            )
+          '#{$mode}-#{$i}': color.mix(
+            $mixed-color,
+            map.get($color-map, $type, 'base'),
+            math.percentage(math.div($i, 10))
+          )
         )
       ),
       $color-map
@@ -143,7 +143,7 @@ $content-color-map: () !default;
 $content-color-map: map.merge(
   (
     primary: #212529,
-    normal: #495057,
+    base: #495057,
     secondary: #868e96,
     disabled: #adb5bd,
     placeholder: #ced4da,
@@ -154,7 +154,7 @@ $content-color-map: map.merge(
 );
 
 :root {
-  @include define-preset-style('content-color', $content-color-map);
+  @include define-preset-values('content-color', $content-color-map);
 }
 
 $vxp-color-border: #ced4da !default; // $oc-gray-4
@@ -176,7 +176,7 @@ $border-color-map: map.merge(
 );
 
 :root {
-  @include define-preset-style('border-color', $border-color-map);
+  @include define-preset-values('border-color', $border-color-map);
 }
 
 // 需要填充的元素的底色
@@ -203,7 +203,7 @@ $fill-color-map: map.merge(
 );
 
 :root {
-  @include define-preset-style('fill-color', $fill-color-map);
+  @include define-preset-values('fill-color', $fill-color-map);
 }
 
 $vxp-font-size: 0.875rem !default;
@@ -221,7 +221,7 @@ $font-size-map: map.merge(
 );
 
 :root {
-  @include define-preset-style('font-size', $font-size-map);
+  @include define-preset-values('font-size', $font-size-map);
 }
 
 $vxp-line-height: 1.5 !default;
@@ -237,7 +237,7 @@ $line-height-map: map.merge(
 );
 
 :root {
-  @include define-preset-style('line-height', $line-height-map);
+  @include define-preset-values('line-height', $line-height-map);
 }
 
 $vxp-border-width: 1px !default;
@@ -277,7 +277,7 @@ $border-radius-map: map.merge(
 );
 
 :root {
-  @include define-preset-style('border-radius', $border-radius-map);
+  @include define-preset-values('border-radius', $border-radius-map);
 }
 
 $vxp-box-shadow-x-offset: 0 !default;
@@ -341,7 +341,7 @@ $transition-map: map.merge(
   @include define-css-var('transition-timing', $transition-timing);
   @include define-css-var('transition-base', $transition-base);
 
-  @include define-preset-style('transition', $transition-map);
+  @include define-preset-values('transition', $transition-map);
 }
 
 $vxp-z-index-popper: 1000 !default;
@@ -359,7 +359,7 @@ $z-index-map: map.merge(
 );
 
 :root {
-  @include define-preset-style('z-index', $z-index-map);
+  @include define-preset-values('z-index', $z-index-map);
 }
 
 $vxp-break-point-sm: 576px !default;
@@ -414,77 +414,10 @@ $break-point-map: map.merge(
 );
 
 :root {
-  @include define-preset-style('break-point', $break-point-map, true);
+  @include define-preset-values('break-point', $break-point-map, true);
 }
 
 // 组件的具体样式变量
-
-// button
-// ------------------------------------------
-$vxp-button-color: $vxp-color-content-normal !default;
-$vxp-button-color-hover: $vxp-color-primary-light-2 !default;
-$vxp-button-color-active: $vxp-color-primary-dark-1 !default;
-$vxp-button-color-disabled: $vxp-color-content-disabled !default;
-$vxp-button-color-bg: $vxp-color-fill !default;
-$vxp-button-color-bg-hover: $vxp-button-color-bg !default;
-$vxp-button-color-bg-active: $vxp-button-color-bg !default;
-$vxp-button-color-bg-disabled: $vxp-color-fill-background !default;
-$vxp-button-color-border: $vxp-color-border !default;
-$vxp-button-color-border-hover: $vxp-color-primary-light-2 !default;
-$vxp-button-color-border-active: $vxp-color-primary-dark-1 !default;
-$vxp-button-color-border-disabled: $vxp-color-border !default;
-$vxp-button-color-ghost: $vxp-color-content-reverse !default;
-$vxp-button-color-hover-ghost: $vxp-color-primary !default;
-$vxp-button-color-active-ghost: $vxp-color-primary !default;
-$vxp-button-color-disabled-ghost: color.mix(
-  $vxp-color-black,
-  $vxp-color-content-reverse,
-  15%
-) !default;
-$vxp-button-color-bg-ghost: transparent !default;
-$vxp-button-color-bg-hover-ghost: $vxp-button-color-bg-ghost !default;
-$vxp-button-color-bg-active-ghost: $vxp-button-color-bg-ghost !default;
-$vxp-button-color-bg-disabled-ghost: $vxp-button-color-bg-ghost !default;
-$vxp-button-color-border-ghost: $vxp-color-fill !default;
-$vxp-button-color-border-hover-ghost: $vxp-color-primary !default;
-$vxp-button-color-border-active-ghost: $vxp-color-primary !default;
-$vxp-button-color-border-disabled-ghost: $vxp-color-fill-disabled !default;
-$vxp-button-color-types: $vxp-color-content-reverse !default;
-$vxp-button-color-hover-types: $vxp-button-color-types !default;
-$vxp-button-color-active-types: $vxp-button-color-types !default;
-$vxp-button-color-disabled-types: $vxp-color-content-disabled !default;
-$vxp-button-color-bg-disabled-types: $vxp-color-fill-background !default;
-$vxp-button-color-border-disabled-types: $vxp-color-border !default;
-$vxp-button-color-active-types-simple: $vxp-color-content-reverse !default;
-$vxp-button-color-disabled-types-simple: $vxp-color-fill-disabled !default;
-$vxp-button-color-bg-disabled-types-simple: $vxp-color-fill-background !default;
-$vxp-button-color-border-disabled-types-simple: $vxp-color-border !default;
-$vxp-button-color-disabled-types-ghost: $vxp-button-color-disabled-ghost !default;
-$vxp-button-color-bg-types-ghost: transparent !default;
-$vxp-button-color-bg-hover-types-ghost: rgba($vxp-color-fill-background, 0.2) !default;
-$vxp-button-color-bg-active-types-ghost: rgba($vxp-color-fill-background, 0.3) !default;
-$vxp-button-color-bg-disabled-types-ghost: $vxp-button-color-bg-types-ghost !default;
-$vxp-button-color-border-disabled-types-ghost: $vxp-color-fill-disabled !default;
-$vxp-button-color-pulse: $vxp-color-primary-light-2 !default;
-
-$vxp-button-type-colors-primary: $vxp-color-primary $vxp-color-primary-light-2
-  $vxp-color-primary-dark-1 !default;
-$vxp-button-type-colors-info: $vxp-color-info $vxp-color-info-light-2 $vxp-color-info-dark-1 !default;
-$vxp-button-type-colors-success: $vxp-color-success $vxp-color-success-light-2
-  $vxp-color-success-dark-1 !default;
-$vxp-button-type-colors-warning: $vxp-color-warning $vxp-color-warning-light-2
-  $vxp-color-warning-dark-1 !default;
-$vxp-button-type-colors-error: $vxp-color-error $vxp-color-error-light-2 $vxp-color-error-dark-1 !default;
-$vxp-button-type-colors-map: (
-  primary: $vxp-button-type-colors-primary,
-  info: $vxp-button-type-colors-info,
-  success: $vxp-button-type-colors-success,
-  warning: $vxp-button-type-colors-warning,
-  error: $vxp-button-type-colors-error
-);
-
-$vxp-button-border: $vxp-border-appearance $vxp-button-color-border !default;
-$vxp-button-border-radius: $vxp-border-radius-base !default;
 
 // checkbox
 // ------------------------------------------

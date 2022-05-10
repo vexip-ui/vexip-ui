@@ -5,7 +5,77 @@
 @use '../design' as *;
 @use './icon.scss';
 
+$button: () !default;
+$button: map.merge(
+  (
+    color: get-css-var('content-color-base'),
+    color-hover: get-css-var('color-primary-light-2'),
+    color-focus: get-css-var('color-primary-light-2'),
+    color-active: get-css-var('color-primary-dark-1'),
+    color-disabled: get-css-var('content-color-disabled'),
+    color-bg: get-css-var('fill-color-base'),
+    color-bg-hover: get-css-var('button-color-bg'),
+    color-bg-focus: get-css-var('button-color-bg'),
+    color-bg-active: get-css-var('button-color-bg'),
+    color-bg-disabled: get-css-var('fill-color-background'),
+    color-border: get-css-var('border-color-base'),
+    color-border-hover: get-css-var('color-primary-light-2'),
+    color-border-focus: get-css-var('color-primary-light-2'),
+    color-border-active: get-css-var('color-primary-dark-1'),
+    color-border-disabled: get-css-var('border-color-light-1'),
+    color-ghost: get-css-var('content-color-reverse'),
+    color-hover-ghost: get-css-var('color-primary-base'),
+    color-focus-ghost: get-css-var('color-primary-base'),
+    color-active-ghost: get-css-var('color-primary-base'),
+    color-disabled-ghost: get-css-var('content-color-disabled'),
+    color-bg-ghost: transparent,
+    color-bg-hover-ghost: get-css-var('button-color-bg-ghost'),
+    color-bg-focus-ghost: get-css-var('button-color-bg-ghost'),
+    color-bg-active-ghost: get-css-var('button-color-bg-ghost'),
+    color-bg-disabled-ghost: get-css-var('button-color-bg-ghost'),
+    color-border-ghost: get-css-var('fill-color-base'),
+    color-border-hover-ghost: get-css-var('color-primary-base'),
+    color-border-active-ghost: get-css-var('color-primary-base'),
+    color-border-disabled-ghost: get-css-var('content-color-disabled'),
+    color-types: get-css-var('content-color-reverse'),
+    color-hover-types: get-css-var('button-color-types'),
+    color-focus-types: get-css-var('button-color-types'),
+    color-active-types: get-css-var('button-color-types'),
+    color-disabled-types: get-css-var('content-color-disabled'),
+    color-bg-disabled-types: get-css-var('fill-color-background'),
+    color-border-disabled-types: get-css-var('border-color-light-1'),
+    color-active-types-simple: get-css-var('content-color-reverse'),
+    color-disabled-types-simple: get-css-var('content-color-disabled'),
+    color-bg-disabled-types-simple: get-css-var('fill-color-background'),
+    color-border-disabled-types-simple: get-css-var('border-color-light-1'),
+    color-disabled-types-ghost: get-css-var('button-color-disabled-ghost'),
+    color-bg-types-ghost: transparent,
+    color-bg-hover-types-ghost: rgba($color-white, 0.1),
+    color-bg-focus-types-ghost: rgba($color-white, 0.1),
+    color-bg-active-types-ghost: rgba($color-white, 0.2),
+    color-bg-disabled-types-ghost: get-css-var('button-color-bg-types-ghost'),
+    color-border-disabled-types-ghost: get-css-var('content-color-disabled'),
+    color-pulse: get-css-var('color-primary-light-2'),
+    border: get-css-var('border-appearance') get-css-var('button-color-border'),
+    border-radius: get-css-var('border-radius-base'),
+    pulsing-size: 8px,
+    pulsing-showy-size: calc(get-css-var('button-pulsing-size') * 0.75),
+    pulsing-duration: 800ms,
+    pulsing-timing: ease,
+    small-height: 1.9em,
+    small-padding: 0 0.8em,
+    default-height: 2.2em,
+    default-padding: 0 1em,
+    large-height: 2.5em,
+    large-padding: 0 1.4em,
+    series-span: 0.6em
+  ),
+  $button
+);
+
 .vxp-button {
+  @include define-preset-values('button', $button);
+
   $button: &;
 
   @mixin disabled($selector) {
@@ -21,29 +91,39 @@
     }
   }
 
+  @mixin define-button-style($style-map) {
+    @each $name in map.keys($style-map) {
+      $style: map.get($style-map, $name);
+
+      @if list.length($style) != 0 {
+        @include define-css-var(('button', $name), get-css-var($style...));
+      }
+    }
+  }
+
   @include basis;
 
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.2em;
-  padding: 0 1em;
+  height: get-css-var('button-default-height');
+  padding: get-css-var('button-default-padding');
   font-weight: 400;
   line-height: 1;
   white-space: nowrap;
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
-  background-color: $vxp-button-color-bg;
-  border: $vxp-button-border;
-  border-radius: $vxp-button-border-radius;
+  background-color: get-css-var('button-color-bg');
+  border: get-css-var('button-border');
+  border-radius: get-css-var('button-border-radius');
   outline: 0;
   transition:
-    $vxp-transition-color-base,
-    $vxp-transition-background-base,
-    $vxp-transition-border-base,
-    $vxp-transition-box-shadow-base;
+    get-css-var('transition-color'),
+    get-css-var('transition-background'),
+    get-css-var('transition-border'),
+    get-css-var('transition-box-shadow');
 
   &::after {
     position: absolute;
@@ -57,86 +137,92 @@
     background-color: transparent;
     border-radius: inherit;
     opacity: 40%;
-    animation-timing-function: ease;
+    animation-timing-function: get-css-var('button-pulsing-timing');
     animation-fill-mode: forwards;
   }
 
   &,
   .vxp-icon {
-    color: $vxp-button-color;
+    color: get-css-var('button-color');
   }
 
-  &:hover,
-  &:focus {
-    background-color: $vxp-button-color-bg-hover;
-    border-color: $vxp-button-color-border-hover;
+  &:hover {
+    background-color: get-css-var('button-color-bg-hover');
+    border-color: get-css-var('button-color-border-hover');
     outline: 0;
 
     &,
     .vxp-icon {
-      color: $vxp-button-color-hover;
+      color: get-css-var('button-color-hover');
+    }
+  }
+
+  &:focus {
+    background-color: get-css-var('button-color-bg-focus');
+    border-color: get-css-var('button-color-border-focus');
+    outline: 0;
+
+    &,
+    .vxp-icon {
+      color: get-css-var('button-color-focus');
     }
   }
 
   &:active {
-    background-color: $vxp-button-color-bg-active;
-    border-color: $vxp-button-color-border-active;
+    background-color: get-css-var('button-color-bg-active');
+    border-color: get-css-var('button-color-border-active');
 
     &,
     .vxp-icon {
-      color: $vxp-button-color-active;
+      color: get-css-var('button-color-active');
     }
   }
 
   @include disabled('') {
     cursor: not-allowed;
-    background-color: $vxp-button-color-bg-disabled;
-    border-color: $vxp-button-color-border-disabled;
+    background-color: get-css-var('button-color-bg-disabled');
+    border-color: get-css-var('button-color-border-disabled');
 
     &,
     .vxp-icon {
-      color: $vxp-button-color-disabled;
+      color: get-css-var('button-color-disabled');
     }
   }
 
   & + & {
-    margin-left: 0.6em;
+    margin-left: get-css-var('button-series-span');
   }
 
   &--small {
-    height: 1.9em;
-    padding: 0 0.8em;
+    height: get-css-var('button-small-height');
+    padding: get-css-var('button-small-padding');
   }
 
   &--large {
-    height: 2.5em;
-    padding: 0 1.4em;
+    height: get-css-var('button-large-height');
+    padding: get-css-var('button-large-padding');
   }
 
   &--pulsing::after {
-    animation: vxp-button-pulse 800ms;
+    animation: vxp-button-pulse get-css-var('button-pulsing-duration');
 
     @keyframes vxp-button-pulse {
       60% {
-        box-shadow: 0 0 0 6px $vxp-button-color-pulse;
+        box-shadow: 0 0 0 get-css-var('button-pulsing-showy-size') get-css-var('button-color-pulse');
       }
 
       100% {
-        box-shadow: 0 0 0 8px $vxp-button-color-pulse;
+        box-shadow: 0 0 0 get-css-var('button-pulsing-size') get-css-var('button-color-pulse');
         opacity: 0%;
       }
     }
   }
 
   &--dashed {
-    // @extend %button;
-
     border-style: dashed;
   }
 
   &--text {
-    // @extend %button;
-
     background-color: transparent;
     border-color: transparent;
 
@@ -154,189 +240,92 @@
   }
 
   &--ghost {
-    background-color: $vxp-button-color-bg-ghost;
-    border-color: $vxp-button-color-border-ghost;
-
-    &,
-    .vxp-icon {
-      color: $vxp-button-color-ghost;
-    }
-
-    &:hover,
-    &:focus {
-      background-color: $vxp-button-color-bg-hover-ghost;
-      border-color: $vxp-button-color-border-hover-ghost;
-
-      &,
-      .vxp-icon {
-        color: $vxp-button-color-hover-ghost;
-      }
-    }
-
-    &:active,
-    &.active {
-      background-color: $vxp-button-color-bg-active-ghost;
-      border-color: $vxp-button-color-border-active-ghost;
-
-      &,
-      .vxp-icon {
-        color: $vxp-button-color-active-ghost;
-      }
-    }
-
-    @include disabled(#{&}) {
-      background-color: $vxp-button-color-bg-disabled-ghost;
-      border-color: $vxp-button-color-border-disabled-ghost;
-
-      &,
-      .vxp-icon {
-        color: $vxp-button-color-disabled-ghost;
-      }
-    }
+    @include define-button-style((
+      color-bg: 'button-color-bg-ghost',
+      color-border: 'button-color-border-ghost',
+      color: 'button-color-ghost',
+      color-bg-hover: 'button-color-bg-hover-ghost',
+      color-border-hover: 'button-color-border-hover-ghost',
+      color-hover: 'button-color-hover-ghost',
+      color-bg-focus: 'button-color-bg-focus-ghost',
+      color-border-focus: 'button-color-border-focus-ghost',
+      color-focus: 'button-color-focus-ghost',
+      color-bg-active: 'button-color-bg-active-ghost',
+      color-border-active: 'button-color-border-active-ghost',
+      color-active: 'button-color-active-ghost',
+      color-bg-disabled: 'button-color-bg-disabled-ghost',
+      color-border-disabled: 'button-color-border-disabled-ghost',
+      color-disabled: 'button-color-disabled-ghost',
+    ));
   }
 
   &--text#{&}--ghost {
     border-color: transparent;
   }
 
-  @each $type in map-keys($vxp-button-type-colors-map) {
-    $colors: map.get($vxp-button-type-colors-map, $type);
-    $color-base: list.nth($colors, 1);
-    $color-light: list.nth($colors, 2);
-    $color-dark: list.nth($colors, 3);
-
+  @each $type in $types {
     @at-root {
       &--#{$type} {
-        // @extend %button;
-
-        background-color: $color-base;
-        border-color: $color-base;
-
-        &,
-        .vxp-icon {
-          color: $vxp-button-color-types;
-        }
-
-        &:hover,
-        &:focus {
-          background-color: $color-light;
-          border-color: $color-light;
-
-          &,
-          .vxp-icon {
-            color: $vxp-button-color-hover-types;
-          }
-        }
-
-        // &:focus {
-        //   box-shadow: $vxp-box-shadow-fouced-appearance rgba($color-base, 0.2);
-        // }
-
-        &:active,
-        &.active {
-          background-color: $color-dark;
-          border-color: $color-dark;
-
-          &,
-          .vxp-icon {
-            color: $vxp-button-color-active-types;
-          }
-        }
-
-        @include disabled(#{&}) {
-          cursor: not-allowed;
-          background-color: $vxp-button-color-bg-disabled-types;
-          border-color: $vxp-button-color-border-disabled-types;
-
-          &,
-          .vxp-icon {
-            color: $vxp-button-color-disabled-types;
-          }
-        }
+        @include define-button-style((
+          color-bg: 'color' $type 'base',
+          color-border: 'color' $type 'base',
+          color: 'button-color-types',
+          color-bg-hover: 'color' $type 'light-2',
+          color-border-hover: 'color' $type 'light-2',
+          color-hover: 'button-color-hover-types',
+          color-bg-focus: 'color' $type 'light-2',
+          color-border-focus: 'color' $type 'light-2',
+          color-focus: 'button-color-hover-types',
+          color-bg-active: 'color' $type 'dark-1',
+          color-border-active: 'color' $type 'dark-1',
+          color-active: 'button-color-active-types',
+          color-bg-disabled: 'button-color-bg-disabled-types',
+          color-border-disabled: 'button-color-border-disabled-types',
+          color-disabled: 'button-color-disabled-types',
+        ));
       }
 
       &--#{$type}#{&}--pulsing::after {
-        animation: vxp-button-pulse-#{$type} 800ms;
-
-        @keyframes vxp-button-pulse-#{$type} {
-          60% {
-            box-shadow: 0 0 0 6px $color-dark;
-          }
-
-          100% {
-            box-shadow: 0 0 0 8px $color-dark;
-            opacity: 0%;
-          }
-        }
+        @include define-css-var('button-color-pulse', get-css-var('color', $type, 'dark-1'));
       }
 
       &--#{$type}#{&}--simple {
-        background-color: color.mix($vxp-color-white, $color-base, 85%);
-        border-color: color.mix($vxp-color-white, $color-base, 40%);
-
-        &,
-        .vxp-icon {
-          color: $color-base;
-        }
-
-        &:hover {
-          background-color: color.mix($vxp-color-white, $color-base, 75%);
-        }
-
-        &:focus,
-        &:active,
-        &.active {
-          background-color: $color-light;
-
-          &,
-          .vxp-icon {
-            color: $vxp-button-color-active-types-simple;
-          }
-        }
-
-        @include disabled(#{&}) {
-          color: $vxp-color-fill-disabled;
-          cursor: not-allowed;
-          background-color: $vxp-button-color-bg-disabled-types-simple;
-          border-color: $vxp-button-color-border-disabled-types-simple;
-
-          &,
-          .vxp-icon {
-            color: $vxp-button-color-disabled-types-simple;
-          }
-        }
+        @include define-button-style((
+          color-bg: 'color' $type 'light-8',
+          color-border: 'color' $type 'light-4',
+          color: 'color' $type 'base',
+          color-bg-hover: 'color' $type 'light-7',
+          color-border-hover: 'color' $type 'light-4',
+          color-hover: 'color' $type 'base',
+          color-bg-focus: 'color' $type 'light-1',
+          color-border-focus: 'color' $type 'light-3',
+          color-focus: 'button-color-active-types-simple',
+          color-bg-active: 'color' $type 'light-1',
+          color-border-active: 'color' $type 'light-3',
+          color-active: 'button-color-active-types-simple',
+          color-bg-disabled: 'button-color-bg-disabled-types-simple',
+          color-border-disabled: 'button-color-border-disabled-types-simple',
+          color-disabled: 'button-color-disabled-types-simple',
+        ));
       }
 
       &--#{$type}#{&}--ghost {
-        background-color: $vxp-button-color-bg-types-ghost;
-
-        &,
-        .vxp-icon {
-          color: $color-base;
-        }
-
-        &:hover,
-        &:focus {
-          background-color: $vxp-button-color-bg-hover-types-ghost;
-          border-color: $color-light;
-        }
-
-        &:active,
-        &.active {
-          background-color: $vxp-button-color-bg-active-types-ghost;
-          border-color: $color-dark;
-        }
-
-        @include disabled(#{&}) {
-          cursor: not-allowed;
-          background-color: $vxp-button-color-bg-disabled-types-ghost;
-          border-color: $vxp-button-color-border-disabled-types-ghost;
-
-          &,
-          .vxp-icon {
-            color: $vxp-button-color-disabled-types-ghost;
-          }
-        }
+        @include define-button-style((
+          color-bg: 'button-color-bg-types-ghost',
+          color: 'color' $type 'base',
+          color-bg-hover: 'button-color-bg-hover-types-ghost',
+          color-border-hover: 'color' $type 'light-2',
+          color-hover: 'color' $type 'base',
+          color-bg-focus: 'button-color-bg-focus-types-ghost',
+          color-border-focus: 'color' $type 'light-2',
+          color-focus: 'color' $type 'base',
+          color-bg-active: 'button-color-bg-active-types-ghost',
+          color-border-active: 'color' $type 'dark-1',
+          color-active: 'color' $type 'base',
+          color-bg-disabled: 'button-color-bg-disabled-types-ghost',
+          color-border-disabled: 'button-color-border-disabled-types-ghost',
+          color-disabled: 'button-color-disabled-types-ghost',
+        ));
       }
 
       &-group &--#{$type} {
@@ -367,7 +356,7 @@
   }
 
   &--circle {
-    border-radius: 2.25em;
+    border-radius: get-css-var('button-large-height');
   }
 
   &--loading {
@@ -383,21 +372,21 @@
       z-index: 1;
       pointer-events: none;
       content: '';
-      background-color: $vxp-color-white;
+      background-color: get-css-var('color-white');
       border-radius: inherit;
       opacity: 25%;
-      transition: $vxp-transition-opacity-base;
+      transition: get-css-var('transition-opacity');
     }
   }
 
   &__icon {
     display: flex;
     align-items: center;
-    margin-right: 0.3em;
+    margin-right: 3px;
   }
 
   &--icon-only {
-    width: 2.25em;
+    width: get-css-var('button-default-height');
     padding: 0;
   }
 
@@ -406,11 +395,11 @@
   }
 
   &--icon-only#{&}--small {
-    width: 2em;
+    width: get-css-var('button-small-height');
   }
 
   &--icon-only#{&}--large {
-    width: 2.5em;
+    width: get-css-var('button-large-height');
   }
 
   @at-root {
@@ -436,11 +425,11 @@
         }
 
         &:first-child {
-          border-radius: $vxp-button-border-radius 0 0 $vxp-button-border-radius;
+          border-radius: get-css-var('border-radius') 0 0 get-css-var('border-radius');
         }
 
         &:last-child {
-          border-radius: 0 $vxp-button-border-radius $vxp-button-border-radius 0;
+          border-radius: 0 get-css-var('border-radius') get-css-var('border-radius') 0;
         }
 
         &:not(:last-child) {
@@ -451,11 +440,11 @@
       &--circle {
         #{$button} {
           &:first-child {
-            border-radius: 2.25em 0 0 2.25em;
+            border-radius: get-css-var('button-large-height') 0 0 get-css-var('button-large-height');
           }
 
           &:last-child {
-            border-radius: 0 2.25em 2.25em 0;
+            border-radius: 0 get-css-var('button-large-height') get-css-var('button-large-height') 0;
           }
         }
       }
