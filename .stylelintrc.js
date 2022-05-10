@@ -49,7 +49,15 @@ module.exports = {
     'color-function-notation': null,
     'scss/at-import-partial-extension': 'always',
     'function-no-unknown': null,
-    'alpha-value-notation': 'percentage'
+    'alpha-value-notation': 'percentage',
+    'scss/dollar-variable-empty-line-before': [
+      'always',
+      {
+        except: ['first-nested'],
+        ignore: ['after-comment', 'inside-single-line-block'],
+        disableFix: true
+      }
+    ]
   },
   ignoreFiles: [
     /* see .stylelintignore */
