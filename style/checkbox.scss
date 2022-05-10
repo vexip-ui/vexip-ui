@@ -33,7 +33,7 @@ $checkbox: map.merge(
 .vxp-checkbox {
   @include define-preset-values('checkbox', $checkbox);
 
-  @mixin define-button-style($style-map) {
+  @mixin define-checkbox-style($style-map) {
     @include define-preset-style('checkbox', $style-map);
   }
 
@@ -190,7 +190,7 @@ $checkbox: map.merge(
 
   @each $state in $states {
     &--#{$state} {
-      @include define-button-style(
+      @include define-checkbox-style(
         (
           color-checked-label: 'color' $state 'base',
           color-border: 'color' $state 'base',
