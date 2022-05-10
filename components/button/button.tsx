@@ -92,7 +92,7 @@ export default defineComponent({
     const prefix = 'vxp-button'
     const pulsing = ref(false)
     const isIconOnly = computed(() => {
-      return typeof slots.default !== 'function'
+      return !slots.default
     })
     const className = computed(() => {
       return {
