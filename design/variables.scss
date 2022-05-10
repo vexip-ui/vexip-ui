@@ -307,7 +307,7 @@ $box-shadow-y: 0 !default;
 $box-shadow-blur: 4px !default;
 $box-shadow-appearance: get-css-var('box-shadow-x') get-css-var('box-shadow-y')
   get-css-var('box-shadow-blur') !default;
-$box-shadow-base: get-css-var('box-shadow-appearance') define-css-var('border-color-base') !default;
+$box-shadow-base: get-css-var('box-shadow-appearance') get-css-var('border-color-base') !default;
 
 $box-shadow-border: 0 0 0 1px !default;
 $box-shadow-fouced: 0 0 0 2px !default;

@@ -3,7 +3,68 @@
     <Button style="margin-bottom: 20px;" @on-click="reduced = !reduced">
       展开/收起
     </Button>
-    <Menu v-model:active="active" :reduced="reduced">
+    <div style="display: flex;">
+      <div v-for="n in 2" :key="n" style="min-width: 200px; margin-right: 20px;">
+        <Menu
+          v-model:active="active"
+          :reduced="reduced"
+          :theme="n === 1 ? 'light' : 'dark'"
+        >
+          <MenuItem label="1" icon="mail-bulk">
+            菜单一
+            <template #group>
+              <MenuItem label="1-1">
+                子菜单一
+              </MenuItem>
+              <MenuItem label="1-2">
+                子菜单二
+              </MenuItem>
+              <MenuItem label="1-3">
+                子菜单三
+                <template #group>
+                  <MenuItem label="1-3-1">
+                    三级菜单一
+                  </MenuItem>
+                  <MenuItem label="1-3-2">
+                    三级菜单一
+                  </MenuItem>
+                </template>
+              </MenuItem>
+              <MenuItem label="1-4">
+                子菜单四
+              </MenuItem>
+            </template>
+          </MenuItem>
+          <MenuItem label="2" icon="city">
+            菜单二
+          </MenuItem>
+          <MenuGroup label="分组一">
+            <MenuItem label="3" icon="chart-pie">
+              菜单三
+            </MenuItem>
+            <MenuItem label="4" icon="user">
+              菜单四
+            </MenuItem>
+          </MenuGroup>
+          <MenuItem label="5" icon="cart-plus">
+            菜单五
+          </MenuItem>
+        </Menu>
+      </div>
+    </div>
+    <br />
+    <p>
+      Menu Active:
+      {{ active }}
+    </p>
+  </div>
+  <div v-for="n in 2" :key="n" style="padding: 20px;">
+    <Menu
+      v-model:active="active"
+      horizontal
+      :reduced="reduced"
+      :theme="n === 1 ? 'light' : 'dark'"
+    >
       <MenuItem label="1" icon="mail-bulk">
         菜单一
         <template #group>
@@ -29,9 +90,6 @@
           </MenuItem>
         </template>
       </MenuItem>
-      <MenuItem label="2" icon="city">
-        菜单二
-      </MenuItem>
       <MenuGroup label="分组一">
         <MenuItem label="3" icon="chart-pie">
           菜单三
@@ -40,54 +98,11 @@
           菜单四
         </MenuItem>
       </MenuGroup>
-      <MenuItem label="5" icon="cart-plus">
-        菜单五
-      </MenuItem>
-    </Menu>
-    <br />
-    <p>
-      Menu Active:
-      {{ active }}
-    </p>
-  </div>
-  <Menu v-model:active="active" horizontal :reduced="reduced">
-    <MenuItem label="1" icon="mail-bulk">
-      菜单一
-      <template #group>
-        <MenuItem label="1-1">
-          子菜单一
-        </MenuItem>
-        <MenuItem label="1-2">
-          子菜单二
-        </MenuItem>
-        <MenuItem label="1-3">
-          子菜单三
-          <template #group>
-            <MenuItem label="1-3-1">
-              三级菜单一
-            </MenuItem>
-            <MenuItem label="1-3-2">
-              三级菜单一
-            </MenuItem>
-          </template>
-        </MenuItem>
-        <MenuItem label="1-4">
-          子菜单四
-        </MenuItem>
-      </template>
-    </MenuItem>
-    <MenuGroup label="分组一">
-      <MenuItem label="3" icon="chart-pie">
-        菜单三
-      </MenuItem>
       <MenuItem label="4" icon="user">
         菜单四
       </MenuItem>
-    </MenuGroup>
-    <MenuItem label="4" icon="user">
-      菜单四
-    </MenuItem>
-  </Menu>
+    </Menu>
+  </div>
 </template>
 
 <script lang="ts">
