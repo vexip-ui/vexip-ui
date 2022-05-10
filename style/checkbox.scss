@@ -1,6 +1,42 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$states: success, error, warning;
+
+$checkbox: () !default;
+$checkbox: map.merge(
+  (
+    color-checked-label: get-css-var('color-primary-base'),
+    color-disabled-label: get-css-var('content-color-disabled'),
+    color-border: get-css-var('border-color-base'),
+    color-border-hover: get-css-var('color-primary-base'),
+    color-border-checked: get-css-var('color-primary-base'),
+    color-border-disabled: get-css-var('fill-color-disabled'),
+    color-bg-signal: get-css-var('fill-color-base'),
+    color-bg-checked-signal: get-css-var('color-primary-base'),
+    color-bg-disabled-signal: get-css-var('fill-color-background'),
+    color-border-signal-after: get-css-var('fill-color-base'),
+    border: get-css-var('border-appearance') get-css-var('checkbox-color-border'),
+    border-radius: get-css-var('border-radius-base'),
+    border-radius-signal: get-css-var('border-radius-small'),
+    signal-small-size: 14px,
+    signal-small-thick: 1px,
+    signal-default-size: 18px,
+    signal-default-thick: 2px,
+    signal-large-size: 22px,
+    signal-large-thick: 3px
+  ),
+  $checkbox
+);
+
 .vxp-checkbox {
+  @include define-preset-values('checkbox', $checkbox);
+
+  @mixin define-button-style($style-map) {
+    @include define-preset-style('checkbox', $style-map);
+  }
+
   @include basis;
 
   position: relative;
@@ -12,82 +48,84 @@
   cursor: pointer;
   user-select: none;
   transition:
-    $vxp-transition-background-base,
-    $vxp-transition-border-base,
-    $vxp-transition-box-shadow-base;
+    get-css-var('transition-background'),
+    get-css-var('transition-border'),
+    get-css-var('transition-box-shadow');
 
   &--border {
     padding: 0.6em 0.8em;
-    border: $vxp-checkbox-border;
-    border-radius: $vxp-checkbox-border-radius;
+    border: get-css-var('checkbox-border');
+    border-radius: get-css-var('checkbox-border-radius');
 
     &:hover {
-      border-color: $vxp-checkbox-color-border-hover;
+      border-color: get-css-var('checkbox-color-border-hover');
     }
   }
 
   &--checked#{&}--border {
-    border-color: $vxp-checkbox-color-border-checked;
-  }
-
-  &--disabled {
-    cursor: not-allowed;
-
-    &,
-    &:hover {
-      border-color: $vxp-checkbox-color-border-disabled;
-    }
+    border-color: get-css-var('checkbox-color-border-checked');
   }
 
   &__signal {
     position: relative;
     display: inline-block;
-    width: 18px;
-    height: 18px;
-    background-color: $vxp-checkbox-color-bg-signal;
-    border: $vxp-checkbox-border;
-    border-radius: $vxp-checkbox-border-radius-signal;
-    transition: $vxp-transition-background-base, $vxp-transition-border-base;
+    width: get-css-var('checkbox-signal-default-size');
+    height: get-css-var('checkbox-signal-default-size');
+    background-color: get-css-var('checkbox-color-bg-signal');
+    border: get-css-var('checkbox-border');
+    border-radius: get-css-var('checkbox-border-radius-signal');
+    transition: get-css-var('transition-background'), get-css-var('transition-border');
 
     &::after {
       position: absolute;
       top: calc(50% - 1px);
       left: 50%;
-      width: 5px;
-      height: 9px;
+      width:
+        calc(
+          get-css-var('checkbox-signal-default-size') * 0.25 +
+          get-css-var('checkbox-signal-default-thick') * 0.5 - 0.5px
+        );
+      height: calc(get-css-var('checkbox-signal-default-size') * 0.5);
       content: '';
       background-color: transparent;
-      border: solid $vxp-checkbox-color-border-signal-after;
-      border-width: 0 2px 2px 0;
+      border: solid get-css-var('checkbox-color-border-signal-after');
+      border-width: 0 get-css-var('checkbox-signal-default-thick') get-css-var('checkbox-signal-default-thick') 0;
       opacity: 0%;
       transition:
-        width $vxp-transition-base,
-        height $vxp-transition-base,
-        $vxp-transition-background-base,
-        $vxp-transition-opacity-base,
-        $vxp-transition-transform-base;
+        width get-css-var('transition-base'),
+        height get-css-var('transition-base'),
+        get-css-var('transition-background'),
+        get-css-var('transition-opacity'),
+        get-css-var('transition-transform');
       transform: translate(-50%, -50%) rotate(45deg) scale(0);
     }
   }
 
   @mixin small-signal {
-    width: 14px;
-    height: 14px;
+    width: get-css-var('checkbox-signal-small-size');
+    height: get-css-var('checkbox-signal-small-size');
 
     &::after {
-      width: 3px;
-      height: 7px;
-      border-width: 0 1px 1px 0;
+      width:
+        calc(
+          get-css-var('checkbox-signal-small-size') * 0.25 + get-css-var('checkbox-signal-small-thick') * 0.5 - 0.5px
+        );
+      height: calc(get-css-var('checkbox-signal-small-size') * 0.5);
+      border-width: 0 get-css-var('checkbox-signal-small-thick') get-css-var('checkbox-signal-small-thick') 0;
     }
   }
 
   @mixin large-signal {
-    width: 22px;
-    height: 22px;
+    width: get-css-var('checkbox-signal-large-size');
+    height: get-css-var('checkbox-signal-large-size');
 
     &::after {
-      width: 6px;
-      height: 11px;
+      width:
+        calc(
+          get-css-var('checkbox-signal-large-size') * 0.25 + get-css-var('checkbox-signal-large-thick') * 0.5 - 0.5px
+        );
+      height: calc(get-css-var('checkbox-signal-large-size') * 0.5);
+      border-width: 0 get-css-var('checkbox-signal-large-thick') get-css-var('checkbox-signal-large-thick') 0;
     }
   }
 
@@ -101,20 +139,20 @@
 
   &__label {
     margin-left: 0.4em;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
   }
 
   &:hover &__signal {
-    border-color: $vxp-checkbox-color-border-hover;
+    border-color: get-css-var('checkbox-color-border-hover');
   }
 
   @mixin partial-signal {
-    background-color: $vxp-checkbox-color-bg-checked-signal;
-    border-color: $vxp-checkbox-color-border-checked;
+    background-color: get-css-var('checkbox-color-bg-checked-signal');
+    border-color: get-css-var('checkbox-color-border-checked');
 
     &::after {
       top: 50%;
-      width: 9px;
+      width: calc(get-css-var('checkbox-signal-default-size') * 0.5);
       height: 1px;
       opacity: 100%;
       transform: translate(-50%, -50%) scale(1);
@@ -125,17 +163,17 @@
     @include partial-signal;
   }
 
-  &--partial#{&}--samll &__signal::after {
-    width: 7px;
+  &--partial#{&}--small &__signal::after {
+    width: calc(get-css-var('checkbox-signal-small-size') * 0.5);
   }
 
   &--partial#{&}--large &__signal::after {
-    width: 11px;
+    width: calc(get-css-var('checkbox-signal-large-size') * 0.5);
   }
 
   &--checked &__signal {
-    background-color: $vxp-checkbox-color-bg-checked-signal;
-    border-color: $vxp-checkbox-color-border-checked;
+    background-color: get-css-var('checkbox-color-bg-checked-signal');
+    border-color: get-css-var('checkbox-color-border-checked');
 
     &::after {
       opacity: 100%;
@@ -146,29 +184,53 @@
   &--checked &__label {
     &,
     .vxp-icon {
-      color: $vxp-checkbox-color-checked-label;
+      color: get-css-var('checkbox-color-checked-label');
+    }
+  }
+
+  @each $state in $states {
+    &--#{$state} {
+      @include define-button-style(
+        (
+          color-checked-label: 'color' $state 'base',
+          color-border: 'color' $state 'base',
+          color-border-hover: 'color' $state 'base',
+          color-border-checked: 'color' $state 'base',
+          color-bg-checked-signal: 'color' $state 'base'
+        )
+      );
+    }
+  }
+
+  &--disabled,
+  &--disabled#{&}--border {
+    cursor: not-allowed;
+
+    &,
+    &:hover {
+      border-color: get-css-var('checkbox-color-border-disabled');
     }
   }
 
   &--disabled &__signal,
   &--disabled:hover &__signal {
-    background-color: $vxp-checkbox-color-bg-disabled-signal;
-    border-color: $vxp-checkbox-color-border-disabled;
+    background-color: get-css-var('checkbox-color-bg-disabled-signal');
+    border-color: get-css-var('checkbox-color-border-disabled');
 
     &::after {
-      background-color: $vxp-checkbox-color-border-disabled;
+      background-color: get-css-var('checkbox-color-border-disabled');
     }
   }
 
   &--disabled &__label {
     &,
     .vxp-icon {
-      color: $vxp-checkbox-color-disabled-label;
+      color: get-css-var('checkbox-color-disabled-label');
     }
   }
 
   &--disabled#{&}--checked &__signal {
-    background-color: $vxp-checkbox-color-border-disabled;
+    background-color: get-css-var('checkbox-color-border-disabled');
   }
 
   &__input {
@@ -204,22 +266,22 @@
 
     &-group--border & {
       padding: 0.6em 0.8em;
-      border: $vxp-checkbox-border;
-      border-radius: $vxp-checkbox-border-radius;
+      border: get-css-var('checkbox-border');
+      border-radius: get-css-var('checkbox-border-radius');
 
       &:hover {
-        border-color: $vxp-checkbox-color-border-hover;
+        border-color: get-css-var('checkbox-color-border-hover');
       }
 
       &--checked {
-        border-color: $vxp-checkbox-color-border-checked;
+        border-color: get-css-var('checkbox-color-border-checked');
       }
     }
 
     &-group--border &--disabled {
       &,
       &:hover {
-        border-color: $vxp-checkbox-color-border-disabled;
+        border-color: get-css-var('checkbox-color-border-disabled');
       }
     }
 
@@ -228,27 +290,27 @@
 
       &,
       &:hover {
-        border-color: $vxp-checkbox-color-border-disabled;
+        border-color: get-css-var('checkbox-color-border-disabled');
       }
 
       &__signal {
-        border-color: $vxp-checkbox-color-border-disabled !important;
+        border-color: get-css-var('checkbox-color-border-disabled') !important;
 
         &::after {
-          background-color: $vxp-checkbox-color-border-disabled;
+          background-color: get-css-var('checkbox-color-border-disabled');
         }
       }
 
       &__label {
         &,
         .vxp-icon {
-          color: $vxp-checkbox-color-disabled-label;
+          color: get-css-var('checkbox-color-disabled-label');
         }
       }
     }
 
     &-group--disabled &--checked &__signal {
-      background-color: $vxp-checkbox-color-border-disabled;
+      background-color: get-css-var('checkbox-color-border-disabled');
     }
 
     &-group--small &__signal {
@@ -264,11 +326,11 @@
     }
 
     &-group--small &--partial &__signal::after {
-      width: 7px;
+      width: calc(get-css-var('checkbox-signal-small-size') * 0.5);
     }
 
     &-group--large &--partial &__signal::after {
-      width: 11px;
+      width: calc(get-css-var('checkbox-signal-large-size') * 0.5);
     }
   }
 }

@@ -50,14 +50,16 @@ module.exports = {
     'scss/at-import-partial-extension': 'always',
     'function-no-unknown': null,
     'alpha-value-notation': 'percentage',
-    'scss/dollar-variable-empty-line-before': [
-      'always',
-      {
-        except: ['first-nested'],
-        ignore: ['after-comment', 'inside-single-line-block'],
-        disableFix: true
-      }
-    ]
+    // 'scss/dollar-variable-empty-line-before': [
+    //   'always',
+    //   {
+    //     except: ['first-nested'],
+    //     ignore: ['after-comment', 'inside-single-line-block'],
+    //     disableFix: true
+    //   }
+    // ]
+    'scss/dollar-variable-empty-line-before': null,
+    'scss/operator-no-newline-after': null
   },
   ignoreFiles: [
     /* see .stylelintignore */

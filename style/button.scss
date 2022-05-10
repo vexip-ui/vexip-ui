@@ -1,5 +1,4 @@
 @use 'sass:color';
-@use 'sass:list';
 @use 'sass:map';
 
 @use '../design' as *;
@@ -92,13 +91,7 @@ $button: map.merge(
   }
 
   @mixin define-button-style($style-map) {
-    @each $name in map.keys($style-map) {
-      $style: map.get($style-map, $name);
-
-      @if list.length($style) != 0 {
-        @include define-css-var(('button', $name), get-css-var($style...));
-      }
-    }
+    @include define-preset-style('button', $style-map);
   }
 
   @include basis;

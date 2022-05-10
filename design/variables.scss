@@ -4,6 +4,7 @@
 
 @use 'sass:color';
 @use 'sass:map';
+@use 'sass:list';
 @use 'sass:math';
 @use 'sass:meta';
 
@@ -29,12 +30,22 @@ $namespace: 'vxp' !default;
   #{to-css-var-name($name-units...)}: #{$value};
 }
 
-@mixin define-preset-values($base-name, $styles, $inspect: false) {
-  @each $name in map.keys($styles) {
+@mixin define-preset-values($base-name, $style-map, $inspect: false) {
+  @each $name in map.keys($style-map) {
     @include define-css-var(
       ($base-name, $name),
-      if($inspect, #{meta.inspect(map.get($styles, $name))}, map.get($styles, $name))
+      if($inspect, #{meta.inspect(map.get($style-map, $name))}, map.get($style-map, $name))
     );
+  }
+}
+
+@mixin define-preset-style($base-name, $style-map) {
+  @each $name in map.keys($style-map) {
+    $style-units: map.get($style-map, $name);
+
+    @if list.length($style-units) != 0 {
+      @include define-css-var(($base-name, $name), get-css-var($style-units...));
+    }
   }
 }
 
@@ -91,6 +102,9 @@ $color-map: map.deep-merge(
 }
 
 :root {
+  @include define-css-var('color-black', $color-black);
+  @include define-css-var('color-white', $color-white);
+
   @each $type in $types {
     @include define-level-colors($type, 9, 'light', $color-white);
     @include define-level-colors($type, 2, 'dark', $color-black);
@@ -418,23 +432,6 @@ $break-point-map: map.merge(
 }
 
 // 组件的具体样式变量
-
-// checkbox
-// ------------------------------------------
-$vxp-checkbox-color-checked-label: $vxp-color-primary !default;
-$vxp-checkbox-color-disabled-label: $vxp-color-content-disabled !default;
-$vxp-checkbox-color-border: $vxp-color-border !default;
-$vxp-checkbox-color-border-hover: $vxp-color-primary !default;
-$vxp-checkbox-color-border-checked: $vxp-color-primary !default;
-$vxp-checkbox-color-border-disabled: $vxp-color-fill-disabled !default;
-$vxp-checkbox-color-bg-signal: $vxp-color-fill !default;
-$vxp-checkbox-color-bg-checked-signal: $vxp-color-primary !default;
-$vxp-checkbox-color-bg-disabled-signal: $vxp-color-fill-background !default;
-$vxp-checkbox-color-border-signal-after: $vxp-color-white !default;
-
-$vxp-checkbox-border: $vxp-border-appearance $vxp-checkbox-color-border !default;
-$vxp-checkbox-border-radius: $vxp-border-radius-base !default;
-$vxp-checkbox-border-radius-signal: $vxp-border-radius-small !default;
 
 // drawer
 // ------------------------------------------
