@@ -434,20 +434,6 @@ $break-point-map: map.merge(
 
 // 组件的具体样式变量
 
-// option
-// ------------------------------------------
-$vxp-option-color: $vxp-color-content-normal !default;
-$vxp-option-color-hitting: $vxp-color-primary !default;
-$vxp-option-color-selected: $vxp-color-primary !default;
-$vxp-option-color-disabled: $vxp-color-fill-disabled !default;
-$vxp-option-color-bg: $vxp-color-fill !default;
-$vxp-option-color-bg-hover: $vxp-color-fill-hover !default;
-$vxp-option-color-bg-selected: $vxp-option-color-bg-hover !default;
-$vxp-option-color-divider: $vxp-color-border-light-2 !default;
-$vxp-option-divider: $vxp-border-appearance $vxp-option-color-divider !default;
-$vxp-option-color-group: $vxp-color-content-secondary !default;
-$vxp-option-font-size-group: $vxp-font-size-secondary !default;
-
 // radio
 // ------------------------------------------
 $vxp-radio-color-border: $vxp-color-border !default;

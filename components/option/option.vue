@@ -81,6 +81,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--disabled`]: props.disabled,
         [`${prefix}--selected`]: !props.disabled && selected.value,
         [`${prefix}--divided`]: props.divided,

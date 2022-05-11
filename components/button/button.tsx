@@ -129,15 +129,6 @@ export default defineComponent({
       pulsing.value = false
     }
 
-    // return {
-    //   prefix,
-    //   className,
-    //   style,
-
-    //   handleClick,
-    //   handleAnimationEnd
-    // }
-
     function renderIconWithDefined() {
       return props.loading ? (
         <div class={[`${prefix}__icon`, `${prefix}__icon--loading`]}>

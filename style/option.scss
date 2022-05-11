@@ -1,53 +1,83 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$option: () !default;
+$option: map.merge(
+  (
+    color: get-css-var('content-color-normal'),
+    color-hitting: get-css-var('color-primary-base'),
+    color-selected: get-css-var('color-primary-base'),
+    color-disabled: get-css-var('fill-color-disabled'),
+    color-bg: get-css-var('fill-color-base'),
+    color-bg-hover: get-css-var('fill-color-hover'),
+    color-bg-selected: get-css-var('option-color-bg-hover'),
+    color-divider: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-appearance') get-css-var('option-color-divider'),
+    color-group: get-css-var('content-color-secondary'),
+    font-size-group: get-css-var('font-size-secondary'),
+    label-vertical-padding: 0.35em,
+    label-horizontal-padding: 1.2em
+  ),
+  $option
+);
+
 .vxp-option {
+  &-vars {
+    @include define-preset-values('option', $option);
+  }
+
   @include basis;
+
+  $label-v-padding:  get-css-var('option-label-vertical-padding');
+  $label-h-padding:  get-css-var('option-label-horizontal-padding');
+  $label-padding: $label-v-padding $label-h-padding;
 
   display: inline-flex;
   align-items: center;
   width: 100%;
-  padding: 0.35em 1.2em;
-  color: $vxp-option-color;
+  padding: $label-padding;
+  color: get-css-var('option-color');
   white-space: nowrap;
   list-style: none;
   cursor: pointer;
-  background-color: $vxp-option-color-bg;
-  transition: $vxp-transition-color-base, $vxp-transition-background-base;
+  background-color: get-css-var('option-color-bg');
+  transition: get-css-var('transition-color'), get-css-var('transition-background');
 
   &:hover {
-    background-color: $vxp-option-color-bg-hover;
+    background-color: get-css-var('option-color-bg-hover');
   }
 
   &--hitting {
-    color: $vxp-option-color-hitting;
+    color: get-css-var('option-color-hitting');
   }
 
   &--selected {
-    color: $vxp-option-color-selected;
-    background-color: $vxp-option-color-bg-selected;
+    color: get-css-var('option-color-selected');
+    background-color: get-css-var('option-color-bg-selected');
   }
 
   &--disabled {
-    color: $vxp-option-color-disabled;
+    color: get-css-var('option-color-disabled');
     cursor: not-allowed;
 
     &:hover {
-      background-color: $vxp-option-color-bg;
+      background-color: get-css-var('option-color-bg');
     }
   }
 
   &--divided {
-    margin-bottom: 0.35em;
-    border-bottom: $vxp-option-divider;
+    margin-bottom: $label-v-padding;
+    border-bottom: get-css-var('option-divider');
 
     &::after {
       position: relative;
-      bottom: -0.35em;
+      bottom: calc(#{$label-v-padding} * -1);
       display: block;
-      height: 0.35em;
-      margin: 0 -1.2em;
+      height: $label-v-padding;
+      margin: 0 calc(#{$label-h-padding} * -1);
       content: '';
-      background-color: $vxp-option-color-bg;
+      background-color: get-css-var('option-color-bg');
     }
   }
 
@@ -60,12 +90,14 @@
       user-select: none;
 
       &__label {
-        padding: 0.35em 1.2em;
-        font-size: $vxp-option-font-size-group;
-        color: $vxp-option-color-group;
+        padding: $label-padding;
+        font-size: get-css-var('option-font-size-group');
+        color: get-css-var('option-color-group');
       }
 
       &__list {
+        display: flex;
+        flex-direction: column;
         position: relative;
         padding: 0;
       }
@@ -76,13 +108,13 @@
         &::after {
           position: absolute;
           right: 0;
-          bottom: 0.35em;
+          bottom: $label-v-padding;
           left: 0;
           display: block;
           height: 1px;
-          font-size: $vxp-option-font-size-group;
+          font-size: get-css-var('option-font-size-group');
           content: '';
-          background-color: $vxp-option-color-divider;
+          background-color: get-css-var('option-color-divider');
         }
       }
     }

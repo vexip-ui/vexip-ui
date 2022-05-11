@@ -73,13 +73,15 @@ $button: map.merge(
 );
 
 .vxp-button {
-  @include define-preset-values('button', $button);
+  &-vars {
+    @include define-preset-values('button', $button);
+  }
 
-  $button: &;
+  $self: &;
 
   @mixin disabled($selector) {
     @at-root {
-      #{$button}--disabled#{$selector} {
+      #{$self}--disabled#{$selector} {
         &,
         &:hover,
         &:active,
@@ -400,11 +402,11 @@ $button: map.merge(
       display: inline-flex;
       align-items: center;
 
-      #{$button} + #{$button} {
+      #{$self} + #{$self} {
         margin-left: 0;
       }
 
-      #{$button} {
+      #{$self} {
         border-radius: 0;
 
         &:hover,
@@ -431,7 +433,7 @@ $button: map.merge(
       }
 
       &--circle {
-        #{$button} {
+        #{$self} {
           &:first-child {
             border-radius: get-css-var('button-large-height') 0 0 get-css-var('button-large-height');
           }
