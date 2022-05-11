@@ -6,6 +6,7 @@
     pointer
     use-x-bar
     use-y-bar
+    use-bar-track
     :scroll-y="400"
     :width="200"
     :height="200"
@@ -43,14 +44,16 @@ export default defineComponent({
 
 <style lang="scss">
 .content {
+  $color: #fab005;
+
   padding: 10px;
   margin: 4px;
-  color: $vxp-color-warning;
+  color: $color;
   background-image:
     linear-gradient(
       to right,
-      rgba($vxp-color-warning, 0.2),
-      rgba($vxp-color-warning, 0.7)
+      rgba($color, 0.2),
+      rgba($color, 0.7)
     );
 }
 </style>

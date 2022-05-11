@@ -452,11 +452,6 @@ $vxp-radio-signal-border: $vxp-radio-border !default;
 $vxp-radio-color-shadow-focus: rgba($vxp-color-primary, 0.2) !default;
 $vxp-radio-shadow-focus: $vxp-box-shadow-fouced-appearance $vxp-radio-color-shadow-focus !default;
 
-// scrollbar
-// ------------------------------------------
-$vxp-scrollbar-color-bg-bar: color.mix($vxp-color-white, $vxp-color-primary, 60%) !default;
-$vxp-scrollbar-color-bg-track: color.mix($vxp-color-white, $vxp-color-primary, 90%) !default;
-
 // tooltip
 // ------------------------------------------
 $vxp-tooltip-color-bg-base: $vxp-color-fill !default;
