@@ -7,15 +7,15 @@
     height: 100%;
     padding: 0;
     font-size: inherit;
-    line-height: $vxp-input-line-height;
-    color: $vxp-input-color-control;
+    line-height: get-css-var('input-line-height');
+    color: get-css-var('input-color-control');
     background-color: transparent;
     border: 0;
-    border-radius: $vxp-input-border-radius;
+    border-radius: get-css-var('input-border-radius');
     outline: 0;
 
     &::placeholder {
-      color: $vxp-input-color-placeholder;
+      color: get-css-var('input-color-placeholder');
     }
   }
 }

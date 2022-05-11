@@ -434,66 +434,6 @@ $break-point-map: map.merge(
 
 // 组件的具体样式变量
 
-// input
-// ------------------------------------------
-$vxp-input-color-bg: $vxp-color-fill !default;
-$vxp-input-color-bg-disabled: color.mix($vxp-color-white, $vxp-color-fill-disabled, 70%) !default;
-$vxp-input-color-border: $vxp-color-border !default;
-$vxp-input-color-border-hover: $vxp-color-primary-light-1 !default;
-$vxp-input-color-border-focus: $vxp-input-color-border-hover !default;
-$vxp-input-color-placeholder: $vxp-color-content-placeholder !default;
-
-// success
-$vxp-input-color-border-success-hover: $vxp-color-success-light-1 !default;
-$vxp-input-color-border-success-focus: $vxp-input-color-border-success-hover !default;
-
-// error
-$vxp-input-color-border-error-hover: $vxp-color-error-light-1 !default;
-$vxp-input-color-border-error-focus: $vxp-input-color-border-error-hover !default;
-
-// warning
-$vxp-input-color-border-warning-hover: $vxp-color-warning-light-1 !default;
-$vxp-input-color-border-warning-focus: $vxp-input-color-border-warning-hover !default;
-$vxp-input-color-control: $vxp-color-content-normal !default;
-$vxp-input-color-icon: $vxp-color-content-secondary !default;
-$vxp-input-color-icon-hover: $vxp-color-primary !default;
-$vxp-input-color-bg-before: $vxp-color-fill-background !default;
-$vxp-input-color-bg-after: $vxp-color-fill-background !default;
-$vxp-input-line-height: $vxp-line-height !default;
-$vxp-input-border: $vxp-border-appearance $vxp-input-color-border !default;
-$vxp-input-border-radius: $vxp-border-radius-base !default;
-$vxp-input-shadow-focus: $vxp-box-shadow-fouced-appearance rgba($vxp-color-primary, 0.2) !default;
-
-// success
-$vxp-input-shadow-success-focus: $vxp-box-shadow-fouced-appearance rgba($vxp-color-success, 0.2) !default;
-
-// error
-$vxp-input-shadow-error-focus: $vxp-box-shadow-fouced-appearance rgba($vxp-color-error, 0.2) !default;
-
-// warning
-$vxp-input-shadow-warning-focus: $vxp-box-shadow-fouced-appearance rgba($vxp-color-warning, 0.2) !default;
-$vxp-input-font-size-count: $vxp-font-size-secondary !default;
-$vxp-input-line-height-count: $vxp-line-height-secondary !default;
-
-// menu
-// ------------------------------------------
-$vxp-menu-color-icon: $vxp-color-content-secondary !default;
-$vxp-menu-color-arrow: $vxp-menu-color-icon !default;
-$vxp-menu-color-label-hover: $vxp-color-primary !default;
-$vxp-menu-color-label-dark: rgba($vxp-color-content-reverse, 0.65) !default;
-$vxp-menu-color-label-visible-dark: $vxp-color-content-reverse !default;
-$vxp-menu-color-label-disabled: $vxp-color-content-disabled !default;
-$vxp-menu-color-bg-base: $vxp-color-fill !default;
-$vxp-menu-color-bg-selected: color.mix($vxp-color-white, $vxp-color-primary, 85%) !default;
-$vxp-menu-color-bg-marker: $vxp-color-primary !default;
-$vxp-menu-color-bg-selected-dark: $vxp-color-primary !default;
-$vxp-menu-color-bg-dark: $vxp-color-fill-reverse !default;
-$vxp-menu-color-bg-list-dark: $vxp-color-black !default;
-$vxp-menu-color-border: $vxp-color-border !default;
-$vxp-menu-color-divider: $vxp-color-border-light-1 !default;
-
-$vxp-menu-border-base: $vxp-border-appearance $vxp-menu-color-border !default;
-
 // option
 // ------------------------------------------
 $vxp-option-color: $vxp-color-content-normal !default;
@@ -525,14 +465,6 @@ $vxp-radio-border: $vxp-border-appearance $vxp-color-border !default;
 $vxp-radio-signal-border: $vxp-radio-border !default;
 $vxp-radio-color-shadow-focus: rgba($vxp-color-primary, 0.2) !default;
 $vxp-radio-shadow-focus: $vxp-box-shadow-fouced-appearance $vxp-radio-color-shadow-focus !default;
-
-// select
-// ------------------------------------------
-$vxp-select-color-bg-list: $vxp-color-fill !default;
-$vxp-select-border-radius-list: $vxp-border-radius-base !default;
-$vxp-select-shadow-list: $vxp-box-shadow-base !default;
-$vxp-select-color-check: $vxp-color-primary !default;
-$vxp-select-color-empty: $vxp-color-content-placeholder !default;
 
 // scrollbar
 // ------------------------------------------

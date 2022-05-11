@@ -97,6 +97,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--${props.type}`]: props.type !== 'default',
         [`${prefix}--simple`]: !props.ghost && props.simple,
         [`${prefix}--ghost`]: props.ghost,

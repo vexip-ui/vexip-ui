@@ -204,6 +204,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        'vxp-input-vars',
         {
           [`${prefix}--focused`]: focused.value,
           [`${prefix}--disabled`]: props.disabled,

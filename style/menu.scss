@@ -28,7 +28,9 @@ $menu: map.merge(
 );
 
 .vxp-menu {
-  @include define-preset-values('menu', $menu);
+  &-vars {
+    @include define-preset-values('menu', $menu);
+  }
 
   @include basis;
 
@@ -66,8 +68,6 @@ $menu: map.merge(
   }
 
   &__popper {
-    @include define-preset-values('menu', $menu);
-
     padding: 0 0.35em;
     transform-origin: 0 0 !important;
 
@@ -91,7 +91,7 @@ $menu: map.merge(
     }
   }
 
-  $menu: #{&};
+  $self: #{&};
   $popper: #{&}__popper;
   $item: #{&}__item;
   $label: #{&}__label;
@@ -108,7 +108,7 @@ $menu: map.merge(
     background-color: get-css-var('menu-color-bg-base');
     transition: get-css-var('transition-color'), get-css-var('transition-background');
 
-    #{$menu}--dark &,
+    #{$self}--dark &,
     #{$popper} #{$list}--dark & {
       color: get-css-var('menu-color-label-dark');
       background-color: get-css-var('menu-color-bg-dark');
@@ -134,12 +134,12 @@ $menu: map.merge(
       opacity: 0%;
       transition: get-css-var('transition-opacity-base');
 
-      #{$menu}--marker-left & {
+      #{$self}--marker-left & {
         right: auto;
         left: 0;
       }
 
-      #{$menu}--horizontal & {
+      #{$self}--horizontal & {
         top: auto;
         right: 0;
         bottom: auto;
@@ -148,16 +148,16 @@ $menu: map.merge(
         height: 2px;
       }
 
-      #{$menu}--marker-top & {
+      #{$self}--marker-top & {
         top: 0;
       }
 
-      #{$menu}--marker-bottom & {
+      #{$self}--marker-bottom & {
         bottom: 0;
       }
 
-      #{$menu}--marker-none &,
-      #{$menu}--dark &,
+      #{$self}--marker-none &,
+      #{$self}--dark &,
       #{$popper} & {
         display: none;
       }
@@ -165,14 +165,14 @@ $menu: map.merge(
 
     &:hover,
     #{$item}--selected &,
-    #{$menu}--reduced #{$item}--son-selected &,
+    #{$self}--reduced #{$item}--son-selected &,
     #{$item}--son-selected > .vxp-tooltip > .vxp-tooltip__trigger > & {
       &,
       .vxp-icon {
         color: get-css-var('menu-color-label-hover');
       }
 
-      #{$menu}--dark &,
+      #{$self}--dark &,
       #{$popper} #{$list}--dark & {
         &,
         .vxp-icon {
@@ -180,13 +180,13 @@ $menu: map.merge(
         }
       }
 
-      #{$menu}--horizontal &::after {
+      #{$self}--horizontal &::after {
         opacity: 100%;
       }
     }
 
     #{$item}--group-visible > .vxp-tooltip > .vxp-tooltip__trigger > & {
-      #{$menu}--horizontal & {
+      #{$self}--horizontal & {
         &,
         .vxp-icon {
           color: get-css-var('menu-color-label-hover');
@@ -197,7 +197,7 @@ $menu: map.merge(
         }
       }
 
-      #{$menu}--dark &,
+      #{$self}--dark &,
       #{$list}--dark & {
         &,
         .vxp-icon {
@@ -205,7 +205,7 @@ $menu: map.merge(
         }
       }
 
-      // #{$menu}--horizontal#{$menu}--dark & {
+      // #{$self}--horizontal#{$self}--dark & {
       //   &,
       //   .vxp-icon {
       //     color: get-css-var('menu-color-label-hover-dark');
@@ -220,16 +220,16 @@ $menu: map.merge(
         opacity: 100%;
       }
 
-      #{$menu}--horizontal & {
+      #{$self}--horizontal & {
         background-color: get-css-var('menu-color-bg-base');
       }
 
-      #{$menu}--dark &,
+      #{$self}--dark &,
       #{$list}--dark & {
         background-color: get-css-var('menu-color-bg-selected-dark');
       }
 
-      // #{$menu}--horizontal#{$menu}--dark & {
+      // #{$self}--horizontal#{$self}--dark & {
       //   background-color: get-css-var('menu-color-bg-selected-dark');
       // }
     }
@@ -261,11 +261,11 @@ $menu: map.merge(
       color: get-css-var('menu-color-icon');
     }
 
-    #{$menu}--reduced & {
+    #{$self}--reduced & {
       margin: 0;
     }
 
-    #{$menu}--horizontal & {
+    #{$self}--horizontal & {
       margin-right: 6px;
     }
   }
@@ -278,12 +278,12 @@ $menu: map.merge(
     opacity: 100%;
     transition: width get-css-var('transition-base'), get-css-var('transition-opacity');
 
-    #{$menu}--reduced & {
+    #{$self}--reduced & {
       width: 0;
       opacity: 0%;
     }
 
-    #{$menu}--horizontal & {
+    #{$self}--horizontal & {
       width: auto;
       margin-right: 8px;
     }
@@ -291,7 +291,7 @@ $menu: map.merge(
     #{$item}--no-icon & {
       width: 100%;
 
-      #{$menu}--horizontal & {
+      #{$self}--horizontal & {
         margin-right: 0;
       }
     }
@@ -308,16 +308,16 @@ $menu: map.merge(
       transform: rotate(180deg);
     }
 
-    #{$menu}--reduced & {
+    #{$self}--reduced & {
       opacity: 0%;
     }
 
-    #{$menu}--dropdown &,
+    #{$self}--dropdown &,
     #{$label}--in-popper > & {
       transform: rotate(-90deg);
     }
 
-    #{$menu}--horizontal & {
+    #{$self}--horizontal & {
       position: relative;
       right: auto;
       margin-right: 4px;
@@ -355,7 +355,7 @@ $menu: map.merge(
       }
     }
 
-    #{$menu}--dark & {
+    #{$self}--dark & {
       background-color: get-css-var('menu-color-bg-list-dark');
     }
   }
@@ -392,7 +392,7 @@ $menu: map.merge(
         color: get-css-var('menu-color-icon');
         transition: get-css-var('transition-opacity-base');
 
-        #{$menu}--horizontal & {
+        #{$self}--horizontal & {
           display: none;
         }
       }
@@ -404,13 +404,13 @@ $menu: map.merge(
         width: 100%;
         padding: 0;
 
-        #{$menu}--horizontal & {
+        #{$self}--horizontal & {
           flex-direction: row;
           width: auto;
         }
       }
 
-      #{$menu}--reduced & {
+      #{$self}--reduced & {
         &__title {
           &::before {
             opacity: 100%;

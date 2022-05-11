@@ -1,16 +1,31 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './icon.scss';
-@use './input.scss';
+@use './input.scss' as input;
 @use './option.scss';
 @use './scroll.scss';
 
-.vxp-select {
-  @include basis;
-  @include input-handler;
+$select: () !default;
+$select: map.merge(
+  (
+    color-bg-list: get-css-var('fill-color-base'),
+    border-radius-list: get-css-var('border-radius-base'),
+    shadow-list: get-css-var('box-shadow-base'),
+    color-check: get-css-var('color-primary-base'),
+    color-empty: get-css-var('content-color-placeholder'),
+    multiple-padding: 0.1em 0.3em
+  ),
+  $select
+);
 
-  // position: relative;
-  // display: inline-block;
-  // width: 100%;
+.vxp-select {
+  &-vars {
+    @include define-preset-values('select', $select);
+  }
+
+  @include basis;
+  @include input.handler;
 
   &__control,
   &__input {
@@ -23,20 +38,20 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    min-height: 2.1em;
+    min-height: get-css-var('input-default-height');
   }
 
   &--small &__control {
-    min-height: 1.7em;
+    min-height: get-css-var('input-small-height');
   }
 
   &--large &__control {
-    min-height: 2.5em;
+    min-height: get-css-var('input-large-height');
   }
 
   &--multiple &__control {
     height: auto;
-    padding: 0.1em 0.3em;
+    padding: get-css-var('select-multiple-padding');
   }
 
   &__tag {
@@ -56,7 +71,7 @@
     right: 2em;
     left: 0.6em;
     overflow: hidden;
-    color: $vxp-input-color-placeholder;
+    color: get-css-var('input-color-placeholder');
     text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
@@ -64,7 +79,7 @@
   }
 
   &__popper {
-    z-index: $vxp-z-index-popper;
+    z-index: get-css-var('z-index-popper');
     display: flex;
     min-width: 7em;
     padding: 0.35em 0;
@@ -78,9 +93,9 @@
     display: inline-block;
     width: 100%;
     user-select: none;
-    background-color: $vxp-select-color-bg-list;
-    border-radius: $vxp-select-border-radius-list;
-    box-shadow: $vxp-select-shadow-list;
+    background-color: get-css-var('select-color-bg-list');
+    border-radius: get-css-var('select-border-radius-list');
+    box-shadow: get-css-var('select-shadow-list');
 
     .vxp-scroll__wrapper {
       padding: 0.35em 0;
@@ -108,11 +123,11 @@
   }
 
   &__check {
-    color: $vxp-select-color-check;
+    color: get-css-var('select-color-check');
   }
 
   &__arrow {
-    transition: $vxp-transition-transform-base;
+    transition: get-css-var('transition-transform');
   }
 
   &--visible &__arrow {
@@ -125,9 +140,9 @@
     justify-content: center;
     width: 100%;
     padding: 0.6em 1.2em;
-    color: $vxp-select-color-empty;
+    color: get-css-var('select-color-empty');
     white-space: nowrap;
     cursor: default;
-    background-color: $vxp-select-color-bg-list;
+    background-color: get-css-var('select-color-bg-list');
   }
 }

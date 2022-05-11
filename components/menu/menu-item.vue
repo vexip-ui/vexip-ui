@@ -56,7 +56,7 @@
         <div
           v-show="showGroup"
           ref="popper"
-          :class="[`${prefix}__popper`, isHorizontal ? `${prefix}__popper--drop` : '']"
+          :class="[`${prefix}__popper`, `${prefix}-vars`, isHorizontal ? `${prefix}__popper--drop` : '']"
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >

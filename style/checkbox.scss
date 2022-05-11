@@ -31,7 +31,9 @@ $checkbox: map.merge(
 );
 
 .vxp-checkbox {
-  @include define-preset-values('checkbox', $checkbox);
+  &-vars {
+    @include define-preset-values('checkbox', $checkbox);
+  }
 
   @mixin define-checkbox-style($style-map) {
     @include define-preset-style('checkbox', $style-map);

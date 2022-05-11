@@ -16,12 +16,12 @@ $input: map.merge(
     color-shadow-focus: get-css-var('color-primary-light-8'),
     shadow-focus: get-css-var('box-shadow-fouced') get-css-var('input-color-shadow-focus'),
     color-placeholder: get-css-var('content-color-placeholder'),
-    color-control: get-css-var('content-color-normal'),
+    color-control: get-css-var('content-color-base'),
     color-icon: get-css-var('content-color-secondary'),
     color-icon-hover: get-css-var('color-primary-base'),
     color-bg-before: get-css-var('fill-color-background'),
     color-bg-after: get-css-var('fill-color-background'),
-    line-height: get-css-var('line-height'),
+    line-height: get-css-var('line-height-base'),
     border: get-css-var('border-appearance') get-css-var('input-color-border'),
     border-radius: get-css-var('border-radius-base'),
     font-size-count: get-css-var('font-size-secondary'),
@@ -41,12 +41,11 @@ $input: map.merge(
   @include define-preset-style('input', $style-map);
 }
 
-@mixin input-handler {
+@mixin handler {
   position: relative;
   display: inline-flex;
   align-items: center;
   width: 100%;
-
   background-color: get-css-var('input-color-bg');
   border: get-css-var('input-border');
   border-radius: get-css-var('input-border-radius');
@@ -62,9 +61,9 @@ $input: map.merge(
 
   &:focus,
   &--focused {
+    z-index: 2;
     border-color: get-css-var('input-color-border-focus');
     box-shadow: get-css-var('input-shadow-focus');
-    z-index: 2;
   }
 
   @each $state in $states {
@@ -103,7 +102,6 @@ $input: map.merge(
 
   &__control {
     width: 100%;
-
     height: get-css-var('input-default-height');
     padding: get-css-var('input-default-padding');
     font-size: inherit;
@@ -177,17 +175,15 @@ $input: map.merge(
 }
 
 .vxp-input {
-  @include define-preset-values('input', $input);
-
-  @include basis;
+  &-vars {
+    @include define-preset-values('input', $input);
+  }
 
   $self: &;
   $wrapper: #{&}-wrapper;
   $radius: get-css-var('input-border-radius');
 
   &-wrapper {
-    @include define-preset-values('input', $input);
-
     @include basis;
 
     position: relative;
@@ -196,7 +192,8 @@ $input: map.merge(
     width: 100%;
   }
 
-  @include input-handler;
+  @include basis;
+  @include handler;
 
   &-wrapper & {
     border-radius: 0;

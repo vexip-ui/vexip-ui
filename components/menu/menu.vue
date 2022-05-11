@@ -93,6 +93,7 @@ export default defineComponent({
 
       return [
         prefix,
+        `${prefix}-vars`,
         `${prefix}--${props.theme}`,
         `${prefix}--marker-${computedMarkerType}`,
         {

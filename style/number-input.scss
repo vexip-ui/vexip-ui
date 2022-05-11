@@ -1,9 +1,12 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './icon.scss';
+@use './input.scss' as input;
 
 .vxp-number-input {
   @include basis;
-  @include input-handler;
+  @include input.handler;
 
   padding-right: 1.4em;
 
@@ -18,14 +21,14 @@
     height: 50%;
     cursor: pointer;
     user-select: none;
-    border: $vxp-input-border;
+    border: get-css-var('input-border');
     border-width: 0;
-    border-left-width: $vxp-border-width;
-    transition: $vxp-transition-color-base;
+    border-left-width: get-css-var('border-width');
+    transition: get-css-var('transition-color');
 
     &,
     .vxp-icon {
-      color: $vxp-input-color-icon;
+      color: get-css-var('input-color-icon');
     }
 
     .vxp-icon {
@@ -35,7 +38,7 @@
     &:hover {
       &,
       .vxp-icon {
-        color: $vxp-input-color-icon-hover;
+        color: get-css-var('input-color-icon-hover');
       }
     }
 

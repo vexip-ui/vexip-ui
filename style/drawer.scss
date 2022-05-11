@@ -21,14 +21,8 @@ $drawer: map.merge(
 );
 
 .vxp-drawer {
-  @include define-preset-values('drawer', $drawer);
-
-  @mixin fixed {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  &-vars {
+    @include define-preset-values('drawer', $drawer);
   }
 
   @include basis;
