@@ -410,7 +410,8 @@ export default defineComponent({
       setDragging,
       clearSort,
       clearFilter,
-      refreshRowIndex
+      refreshRowIndex,
+      clearCheckAll
     } = mutations
 
     watch(
@@ -789,7 +790,8 @@ export default defineComponent({
       clearSort,
       clearFilter,
       refresh,
-      getSelected
+      getSelected,
+      clearSelected: clearCheckAll
     }
   }
 })

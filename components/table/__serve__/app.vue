@@ -9,6 +9,7 @@
   >
     <template #default="{ isDragOver }">
       <Table
+        ref="table"
         :columns="columns2"
         :data="data"
         :height="1000"
@@ -107,6 +108,9 @@ export default defineComponent({
   setup() {
     const flag = ref(false)
     const data = ref(testData)
+    const table = ref<InstanceType<typeof Table> | null>(null)
+
+    ;(window as any).table = table
 
     const columns = ref([
       defineColumn({
@@ -189,6 +193,7 @@ export default defineComponent({
       columns2,
       firstNameFilter,
       ageSorter,
+      table,
 
       jobAccessor,
       toggleData,
