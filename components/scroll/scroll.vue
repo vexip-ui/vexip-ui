@@ -295,7 +295,7 @@ export default defineComponent({
     /* autoplay */
 
     const className = computed(() => {
-      return [prefix, `${prefix}--${props.mode}`]
+      return [prefix, `${prefix}-vars`, `${prefix}--${props.mode}`]
     })
     const style = computed(() => {
       const { width, height } = props

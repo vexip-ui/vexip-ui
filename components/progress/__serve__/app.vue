@@ -13,23 +13,11 @@
   </Progress>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-import Progress from '../progress.vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Progress } from '..'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Progress
-  },
-  setup() {
-    const percentage = ref(40)
-
-    return {
-      percentage
-    }
-  }
-})
+const percentage = ref(40)
 </script>
 
 <style lang="scss">

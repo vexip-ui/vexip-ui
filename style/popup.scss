@@ -2,19 +2,19 @@
 
 .vxp-popup {
   position: fixed;
-  z-index: $vxp-z-index-popper;
+  z-index: get-css-var('z-index-popper');
   width: 0;
   height: 0;
   padding: 0;
   margin: 0;
-  font-size: $vxp-font-size;
+  font-size: get-css-var('font-size-base');
 
   &__item {
     position: fixed;
-    z-index: $vxp-z-index-popup;
+    z-index: get-css-var('z-index-popup');
     display: flex;
     // stylelint-disable-next-line declaration-property-value-disallowed-list
-    transition: all 300ms $vxp-transition-timing-function;
+    transition: all get-css-var('transition-base');
 
     &-inner {
       position: relative;

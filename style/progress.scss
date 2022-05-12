@@ -1,9 +1,25 @@
 @use 'sass:color';
+@use 'sass:map';
 
 @use '../design' as *;
 @use './bubble.scss';
 
+$progress: () !default;
+$progress: map.merge(
+  (
+    track-bg-color: get-css-var('fill-color-humble'),
+    filler-bg-color: get-css-var('color-primary-base'),
+    inside-info-color: get-css-var('content-color-reverse'),
+    percentage-font-size: get-css-var('font-size-secondary'),
+  ),
+  $progress
+);
+
 .vxp-progress {
+  &-vars {
+    @include define-preset-values('progress', $progress);
+  }
+
   @include basis;
 
   display: inline-flex;
@@ -13,7 +29,7 @@
   &__track {
     position: relative;
     width: 100%;
-    background-color: color.mix($vxp-color-black, $vxp-color-fill-background, 5%);
+    background-color: get-css-var('progress-track-bg-color');
   }
 
   &--info-inside &__track {
@@ -26,7 +42,7 @@
     justify-content: flex-end;
     width: 100%;
     height: 100%;
-    background-color: $vxp-color-primary;
+    background-color: get-css-var('progress-filler-bg-color');
     will-change: transform;
     transition: get-css-var('transition-transform');
   }
@@ -48,7 +64,7 @@
     width: 100%;
     padding-right: 0.6em;
     margin: 0;
-    color: $vxp-color-content-reverse;
+    color: get-css-var('progress-inside-info-color');
   }
 
   &--info-bubble &__info,
@@ -65,7 +81,7 @@
   }
 
   &__percentage {
-    font-size: $vxp-font-size-secondary;
+    font-size: get-css-var('progress-percentage-font-size');
     pointer-events: auto;
   }
 
@@ -76,7 +92,7 @@
     left: 0;
     width: 100%;
     pointer-events: none;
-    transition: transform $vxp-transition-base;
+    transition: get-css-var('transition-transform');
   }
 
   &__bubble {

@@ -2,6 +2,11 @@
 @use './scrollbar.scss';
 
 .vxp-scroll {
+  &-vars {
+    @include define-css-var('scroll-move-duration', 140ms);
+    @include define-css-var('scroll-move-timing', cubic-bezier(0.165, 0.84, 0.44, 1));
+  }
+
   @include basis;
 
   position: relative;
@@ -20,8 +25,8 @@
     position: relative;
     vertical-align: top;
     will-change: transform;
-    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-    transition-duration: 140ms;
+    transition-timing-function: get-css-var('scroll-move-timing');
+    transition-duration: get-css-var('scroll-move-duration');
     transition-property: transform;
 
     &--scrolling,
