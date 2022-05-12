@@ -1,6 +1,46 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$states: success, error, warning;
+
+$radio: () !default;
+$radio: map.merge(
+  (
+    color-border: get-css-var('border-color-base'),
+    color-border-hover: get-css-var('color-primary-base'),
+    color-border-checked: get-css-var('color-primary-base'),
+    color-border-disabled: get-css-var('fill-color-disabled'),
+    color-bg-signal: get-css-var('fill-color-base'),
+    color-bg-checked-signal: get-css-var('color-primary-base'),
+    color-bg-disabled-signal: get-css-var('fill-color-disabled'),
+    color-border-hover-signal: get-css-var('radio-color-border-hover'),
+    color-checked-label: get-css-var('color-primary-base'),
+    color-disabled-label: get-css-var('content-color-disabled'),
+    color-bg-disabled-button: get-css-var('fill-color-background'),
+    border: get-css-var('border-appearance') get-css-var('radio-color-border'),
+    signal-border: get-css-var('radio-border'),
+    color-shadow-focus: get-css-var('color-primary-light-8'),
+    shadow-focus: get-css-var('box-shadow-fouced') get-css-var('radio-color-shadow-focus'),
+    signal-small-size: 14px,
+    signal-small-inner-size: 7px,
+    signal-default-size: 18px,
+    signal-default-inner-size: 10px,
+    signal-large-size: 22px,
+    signal-large-inner-size: 13px
+  ),
+  $radio
+);
+
 .vxp-radio {
+  &-vars {
+    @include define-preset-values('radio', $radio);
+  }
+
+  @mixin define-radio-style($style-map) {
+    @include define-preset-style('radio', $style-map);
+  }
+
   @include basis;
 
   position: relative;
@@ -11,84 +51,74 @@
   cursor: pointer;
   user-select: none;
   transition:
-    $vxp-transition-background-base,
-    $vxp-transition-border-base,
-    $vxp-transition-box-shadow-base;
+    get-css-var('transition-background'),
+    get-css-var('transition-border'),
+    get-css-var('transition-box-shadow');
 
   &--border {
     padding: 0.6em 0.8em;
-    border: $vxp-radio-border;
-    border-radius: $vxp-border-radius-base;
+    border: get-css-var('radio-border');
+    border-radius: get-css-var('border-radius-base');
 
     &:hover {
-      border-color: $vxp-radio-color-hover-border;
+      border-color: get-css-var('radio-color-border-hover');
     }
   }
 
   &--checked#{&}--border {
-    border-color: $vxp-radio-color-checked-border;
-  }
-
-  &--disabled {
-    cursor: not-allowed;
-
-    &,
-    &:hover {
-      border-color: $vxp-radio-color-disabled-border;
-    }
+    border-color: get-css-var('radio-color-border-checked');
   }
 
   &__signal {
     position: relative;
     display: inline-block;
-    width: 18px;
-    height: 18px;
+    width: get-css-var('radio-signal-default-size');
+    height: get-css-var('radio-signal-default-size');
     margin-right: 0.4em;
-    border: $vxp-radio-signal-border;
+    background-color: get-css-var('radio-color-bg-signal');
+    border: get-css-var('radio-signal-border');
     border-radius: 50%;
-    transition: $vxp-transition-border-base, $vxp-transition-box-shadow-base;
+    transition: get-css-var('transition-border'), get-css-var('transition-box-shadow');
 
     &::after {
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 10px;
-      height: 10px;
+      width: get-css-var('radio-signal-default-inner-size');
+      height: get-css-var('radio-signal-default-inner-size');
       content: '';
-      background-color: $vxp-radio-color-checked-signal;
+      background-color: get-css-var('radio-color-bg-checked-signal');
       border-radius: 50%;
       opacity: 0%;
       transition:
-        $vxp-transition-background-base,
-        $vxp-transition-opacity-base,
-        $vxp-transition-transform-base;
+        get-css-var('transition-background'),
+        get-css-var('transition-opacity'),
+        get-css-var('transition-transform');
       transform: translate(-50%, -50%) scale(0);
     }
   }
 
   &:focus-within &__signal {
-    box-shadow: $vxp-radio-shadow-focus;
+    box-shadow: get-css-var('radio-shadow-focus');
   }
 
-  // 使用 em 容易出现 0.5px 渲染 不容易控制
-
   @mixin small-signal {
-    width: 14px;
-    height: 14px;
+    width: get-css-var('radio-signal-small-size');
+    height: get-css-var('radio-signal-small-size');
 
     &::after {
-      width: 7px;
-      height: 7px;
+      width: get-css-var('radio-signal-small-inner-size');
+      height: get-css-var('radio-signal-small-inner-size');
     }
   }
 
   @mixin large-signal {
-    width: 22px;
-    height: 22px;
+    width: get-css-var('radio-signal-large-size');
+    height: get-css-var('radio-signal-large-size');
 
     &::after {
-      width: 13px;
-      height: 13px;
+      width: get-css-var('radio-signal-large-inner-size');
+      height: get-css-var('radio-signal-large-inner-size');
     }
   }
 
@@ -101,15 +131,15 @@
   }
 
   &__label {
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
   }
 
   &:hover &__signal {
-    border-color: $vxp-radio-color-hover-signal;
+    border-color: get-css-var('radio-color-border-hover-signal');
   }
 
   &--checked &__signal {
-    border-color: $vxp-radio-color-checked-signal;
+    border-color: get-css-var('radio-color-border-checked');
 
     &::after {
       opacity: 100%;
@@ -118,26 +148,50 @@
   }
 
   &--checked &__label {
-    color: $vxp-radio-color-checked-label;
+    color: get-css-var('radio-color-checked-label');
+  }
+
+  @each $state in $states {
+    &--#{$state} {
+      @include define-radio-style(
+        (
+          color-checked-label: 'color' $state 'base',
+          color-border: 'color' $state 'base',
+          color-border-hover: 'color' $state 'base',
+          color-border-checked: 'color' $state 'base',
+          color-bg-checked-signal: 'color' $state 'base',
+          color-shadow-focus: 'color' $state 'light-8'
+        )
+      );
+    }
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+
+    &,
+    &:hover {
+      border-color: get-css-var('radio-color-border-disabled');
+    }
   }
 
   &--disabled &__signal,
   &--disabled:hover &__signal {
-    border-color: $vxp-radio-color-disabled-signal;
+    border-color: get-css-var('radio-color-border-disabled');
 
     &::after {
-      background-color: $vxp-radio-color-disabled-signal;
+      background-color: get-css-var('radio-color-bg-disabled-signal');
     }
   }
 
   &--disabled &__label {
-    color: $vxp-radio-color-disabled-label;
+    color: get-css-var('radio-color-disabled-label');
   }
 
   &__input {
-    // display: none;
     width: 0;
     height: 0;
+    margin: 0;
     pointer-events: none;
     opacity: 0%;
   }
@@ -166,22 +220,22 @@
 
     &-group--border & {
       padding: 0.6em 0.8em;
-      border: $vxp-radio-border;
-      border-radius: $vxp-border-radius-base;
+      border: get-css-var('radio-border');
+      border-radius: get-css-var('border-radius-base');
 
       &:hover {
-        border-color: $vxp-radio-color-hover-border;
+        border-color: get-css-var('radio-color-border-hover');
       }
 
       &--checked {
-        border-color: $vxp-radio-color-checked-border;
+        border-color: get-css-var('radio-color-border-checked');
       }
     }
 
     &-group--border &--disabled {
       &,
       &:hover {
-        border-color: $vxp-radio-color-disabled-border;
+        border-color: get-css-var('radio-color-border-disabled');
       }
     }
 
@@ -190,19 +244,19 @@
 
       &,
       &:hover {
-        border-color: $vxp-radio-color-disabled-border;
+        border-color: get-css-var('radio-color-border-disabled');
       }
 
       &__signal {
-        border-color: $vxp-radio-color-disabled-signal !important;
+        border-color: get-css-var('radio-color-border-disabled') !important;
 
         &::after {
-          background-color: $vxp-radio-color-disabled-signal;
+          background-color: get-css-var('radio-color-bg-disabled-signal');
         }
       }
 
       &__label {
-        color: $vxp-radio-color-disabled-label;
+        color: get-css-var('radio-color-disabled-label');
       }
     }
 
@@ -211,7 +265,7 @@
       z-index: 0;
       padding: 0.6em 0.8em;
       margin: 0;
-      border: $vxp-radio-border;
+      border: get-css-var('radio-border');
       border-left-width: 0;
       border-radius: 0;
 
@@ -227,13 +281,13 @@
       }
 
       &:hover {
-        border-color: $vxp-radio-color-hover-border;
-        box-shadow: -1px 0 0 0 $vxp-radio-color-hover-border;
+        border-color: get-css-var('radio-color-border-hover');
+        box-shadow: -1px 0 0 0 get-css-var('radio-color-border-hover');
       }
 
       &:first-child {
         border-left-width: 1px;
-        border-radius: $vxp-border-radius-base 0 0 $vxp-border-radius-base;
+        border-radius: get-css-var('border-radius-base') 0 0 get-css-var('border-radius-base');
         box-shadow: none;
 
         &::before,
@@ -243,33 +297,33 @@
       }
 
       &:last-child {
-        border-radius: 0 $vxp-border-radius-base $vxp-border-radius-base 0;
+        border-radius: 0 get-css-var('border-radius-base') get-css-var('border-radius-base') 0;
       }
 
       &--checked {
         z-index: 1;
-        border-color: $vxp-radio-color-checked-border;
-        box-shadow: -1px 0 0 0 $vxp-radio-color-checked-border;
+        border-color: get-css-var('radio-color-border-checked');
+        box-shadow: -1px 0 0 0 get-css-var('radio-color-border-checked');
       }
 
       &:focus-within {
-        box-shadow: -1px 0 0 0 $vxp-radio-color-checked-border, $vxp-radio-shadow-focus;
+        box-shadow: -1px 0 0 0 get-css-var('radio-color-border-checked'), get-css-var('radio-shadow-focus');
 
         &::after {
           top: -3px;
           left: -3px;
           height: calc(100% + 6px);
-          background-color: $vxp-radio-color-shadow-focus;
-          transition: {
-            property: top, left, height, background-color;
-            duration: $vxp-transition-duration;
-            timing-function: $vxp-transition-timing-function;
-          }
+          background-color: get-css-var('radio-color-shadow-focus');
+          transition:
+            top get-css-var('transition-base'),
+            left get-css-var('transition-base'),
+            height get-css-var('transition-base'),
+            get-css-var('transition-background');
         }
       }
 
       &:focus-within:first-child {
-        box-shadow: $vxp-radio-shadow-focus;
+        box-shadow: get-css-var('radio-shadow-focus');
       }
 
       &__signal {
@@ -295,25 +349,25 @@
 
     &-group--button#{&}-group--disabled &,
     &-group--button &--disabled {
-      background-color: $vxp-radio-color-bg-disabled-button;
-      border-color: $vxp-radio-color-border !important;
+      background-color: get-css-var('radio-color-bg-disabled-button');
+      border-color: get-css-var('radio-color-border') !important;
       box-shadow: none !important;
     }
 
     &-group--button &--disabled#{&}--checked {
-      background-color: $vxp-radio-color-disabled-button;
+      background-color: get-css-var('radio-color-bg-disabled-button');
 
       .vxp-radio__label {
-        color: $vxp-radio-color-disabled-label;
+        color: get-css-var('radio-color-disabled-label');
       }
     }
 
     &-group--button#{&}-group--disabled & {
       &--checked {
-        background-color: $vxp-radio-color-disabled-button;
+        background-color: get-css-var('radio-color-bg-disabled-button');
 
         // .vxp-radio__label {
-        //   color: $vxp-color-content-reverse;
+        //   color: get-css-var('color-content-reverse');
         // }
       }
     }

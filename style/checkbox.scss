@@ -20,6 +20,8 @@ $checkbox: map.merge(
     border: get-css-var('border-appearance') get-css-var('checkbox-color-border'),
     border-radius: get-css-var('border-radius-base'),
     border-radius-signal: get-css-var('border-radius-small'),
+    color-shadow-focus: get-css-var('color-primary-light-8'),
+    shadow-focus: get-css-var('box-shadow-fouced') get-css-var('checkbox-color-shadow-focus'),
     signal-small-size: 14px,
     signal-small-thick: 1px,
     signal-default-size: 18px,
@@ -76,7 +78,10 @@ $checkbox: map.merge(
     background-color: get-css-var('checkbox-color-bg-signal');
     border: get-css-var('checkbox-border');
     border-radius: get-css-var('checkbox-border-radius-signal');
-    transition: get-css-var('transition-background'), get-css-var('transition-border');
+    transition:
+      get-css-var('transition-background'),
+      get-css-var('transition-border'),
+      get-css-var('transition-box-shadow');
 
     &::after {
       position: absolute;
@@ -101,6 +106,10 @@ $checkbox: map.merge(
         get-css-var('transition-transform');
       transform: translate(-50%, -50%) rotate(45deg) scale(0);
     }
+  }
+
+  &:focus-within &__signal {
+    box-shadow: get-css-var('checkbox-shadow-focus');
   }
 
   @mixin small-signal {
@@ -198,7 +207,8 @@ $checkbox: map.merge(
           color-border: 'color' $state 'base',
           color-border-hover: 'color' $state 'base',
           color-border-checked: 'color' $state 'base',
-          color-bg-checked-signal: 'color' $state 'base'
+          color-bg-checked-signal: 'color' $state 'base',
+          color-shadow-focus: 'color' $state 'light-8'
         )
       );
     }
@@ -236,7 +246,10 @@ $checkbox: map.merge(
   }
 
   &__input {
-    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    pointer-events: none;
     opacity: 0%;
   }
 
