@@ -1,6 +1,30 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$bubble: () !default;
+$bubble: map.merge(
+  (
+    bg-color: get-css-var('fill-color-base'),
+    border-color: get-css-var('border-color-base'),
+    border: get-css-var('border-appearance') get-css-var('bubble-border-color'),
+    border-radius: get-css-var('border-radius-base'),
+    min-width: 6em,
+    min-height: 2em,
+    content-padding: 0.6em 1em,
+    content-shadow: get-css-var('box-shadow-appearance') get-css-var('bubble-border-color'),
+    arrow-size: 0.5em,
+    arrow-vertical-offset: 0.9em,
+    arrow-horizontal-offset: 1.8em
+  ),
+  $bubble
+);
+
 .vxp-bubble {
+  &-vars {
+    @include define-preset-values('bubble', $bubble);
+  }
+
   @include basis;
 
   display: inline-flex;
@@ -9,12 +33,12 @@
 
   &__content {
     position: relative;
-    min-width: 6em;
-    min-height: 2em;
-    padding: 0.6em 1em;
-    background-color: $vxp-color-fill;
-    border: $vxp-border-base;
-    border-radius: $vxp-border-radius-base;
+    min-width: get-css-var('bubble-min-width');
+    min-height: get-css-var('bubble-min-height');
+    padding: get-css-var('bubble-content-padding');
+    background-color: get-css-var('bubble-bg-color');
+    border: get-css-var('bubble-border');
+    border-radius: get-css-var('bubble-border-radius');
   }
 
   &--background &__content {
@@ -23,7 +47,7 @@
 
   &--shadow &__content {
     border: 0;
-    box-shadow: $vxp-box-shadow-base;
+    box-shadow: get-css-var('bubble-content-shadow');
   }
 
   &__arrow {
@@ -48,18 +72,22 @@
     display: none;
   }
 
-  $size: 0.5em;
+  $size: get-css-var('bubble-arrow-size');
+  $padding: calc(#{$size} + 0.3em);
+  $border-color: get-css-var('bubble-border-color');
+  $v-offset: get-css-var('bubble-arrow-vertical-offset');
+  $h-offset: get-css-var('bubble-arrow-horizontal-offset');
 
   &--top,
   &--top-start,
   &--top-end {
-    padding: 0.5em 0 0.8em;
+    padding: $size 0 $padding;
   }
 
   @mixin top-arrow {
     bottom: 0;
     border-width: $size $size 0;
-    border-top-color: $vxp-color-border;
+    border-top-color: $border-color;
     transform: translate(-50%, 100%);
 
     &::after {
@@ -79,25 +107,25 @@
   &--top-start &__arrow {
     @include top-arrow;
 
-    left: 1.8em;
+    left: $h-offset;
   }
 
   &--top-end &__arrow {
     @include top-arrow;
 
-    left: calc(100% - 1.8em);
+    left: calc(100% - #{$h-offset});
   }
 
   &--bottom,
   &--bottom-start,
   &--bottom-end {
-    padding: 0.8em 0 0.5em;
+    padding: $padding 0 $size;
   }
 
   @mixin bottom-arrow {
     top: 0;
     border-width: 0 $size $size;
-    border-bottom-color: $vxp-color-border;
+    border-bottom-color: $border-color;
     transform: translate(-50%, -100%);
 
     &::after {
@@ -117,25 +145,25 @@
   &--bottom-start &__arrow {
     @include bottom-arrow;
 
-    left: 1.8em;
+    left: $h-offset;
   }
 
   &--bottom-end &__arrow {
     @include bottom-arrow;
 
-    left: calc(100% - 1.8em);
+    left: calc(100% - #{$h-offset});
   }
 
   &--left,
   &--left-start,
   &--left-end {
-    padding: 0 0.8em 0 0.5em;
+    padding: 0 $padding 0 $size;
   }
 
   @mixin left-arrow {
     right: 0;
     border-width: $size 0 $size $size;
-    border-left-color: $vxp-color-border;
+    border-left-color: $border-color;
     transform: translate(100%, -50%);
 
     &::after {
@@ -155,25 +183,25 @@
   &--left-start &__arrow {
     @include left-arrow;
 
-    top: 0.9em;
+    top: $v-offset;
   }
 
   &--left-end &__arrow {
     @include left-arrow;
 
-    top: calc(100% - 0.9em);
+    top: calc(100% - #{$v-offset});
   }
 
   &--right,
   &--right-start,
   &--right-end {
-    padding: 0 0.5em 0 0.8em;
+    padding: 0 $size 0 $padding;
   }
 
   @mixin right-arrow {
     left: 0;
     border-width: $size $size $size 0;
-    border-right-color: $vxp-color-border;
+    border-right-color: $border-color;
     transform: translate(-100%, -50%);
 
     &::after {
@@ -193,12 +221,12 @@
   &--right-start &__arrow {
     @include right-arrow;
 
-    top: 0.9em;
+    top: $v-offset;
   }
 
   &--right-end &__arrow {
     @include right-arrow;
 
-    top: calc(100% - 0.9em);
+    top: calc(100% - #{$v-offset});
   }
 }

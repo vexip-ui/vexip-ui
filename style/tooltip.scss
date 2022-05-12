@@ -147,11 +147,11 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement='top-start'] #{$arrow} {
-      left: 1.8em;
+      left: $h-offset;
     }
 
     &[data-popper-placement='top-end'] #{$arrow} {
-      left: calc(100% - 1.8em);
+      left: calc(100% - #{$h-offset});
     }
 
     &[data-popper-placement='bottom'] #{$arrow} {
@@ -159,11 +159,11 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement='bottom-start'] #{$arrow} {
-      left: 1.8em;
+      left: $h-offset;
     }
 
     &[data-popper-placement='bottom-end'] #{$arrow} {
-      left: calc(100% - 1.8em);
+      left: calc(100% - #{$h-offset});
     }
 
     &[data-popper-placement='left'] #{$arrow} {
@@ -171,11 +171,11 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement='left-start'] #{$arrow} {
-      top: 0.9em;
+      top: $v-offset;
     }
 
     &[data-popper-placement='left-end'] #{$arrow} {
-      top: calc(100% - 0.9em);
+      top: calc(100% - #{$v-offset});
     }
 
     &[data-popper-placement='right'] #{$arrow} {
@@ -183,11 +183,11 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement='right-start'] #{$arrow} {
-      top: 0.9em;
+      top: $v-offset;
     }
 
     &[data-popper-placement='right-end'] #{$arrow} {
-      top: calc(100% - 0.9em);
+      top: calc(100% - #{$v-offset});
     }
 
     &--no-hover {
