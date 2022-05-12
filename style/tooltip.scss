@@ -1,6 +1,31 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$tooltip: () !default;
+$tooltip: map.merge(
+  (
+    color-bg-base: get-css-var('fill-color-base'),
+    color-content-base: get-css-var('content-color-base'),
+    color-shadow-base: get-css-var('border-color-base'),
+    shadow-base: get-css-var('box-shadow-appearance') get-css-var('tooltip-color-shadow-base'),
+    color-bg-dark: get-css-var('fill-color-reverse'),
+    color-content-dark: get-css-var('content-color-reverse'),
+    color-shadow-dark: get-css-var('fill-color-reverse'),
+    shadow-dark: none,
+    border-raduis-base: get-css-var('border-radius-base'),
+    arrow-size: 0.5em,
+    arrow-vertical-offset: 0.9em,
+    arrow-horizontal-offset: 1.8em
+  ),
+  $tooltip
+);
+
 .vxp-tooltip {
+  &-vars {
+    @include define-preset-values('tooltip', $tooltip);
+  }
+
   $popper: #{&}__popper;
   $arrow: #{&}__arrow;
 
@@ -17,12 +42,12 @@
     min-width: 2em;
     min-height: 2em;
     padding: 0.6em 1em;
-    background-color: $vxp-tooltip-color-bg-base;
-    border-radius: $vxp-tooltip-border-raduis-base;
-    box-shadow: $vxp-tooltip-shadow-base;
+    background-color: get-css-var('tooltip-color-bg-base');
+    border-radius: get-css-var('tooltip-border-raduis-base');
+    box-shadow: get-css-var('tooltip-shadow-base');
 
     #{$popper}--dark & {
-      box-shadow: $vxp-tooltip-shadow-dark;
+      box-shadow: get-css-var('tooltip-shadow-dark');
     }
   }
 
@@ -45,10 +70,10 @@
   }
 
   // arrow size
-  $size: $vxp-tooltip-arrow-size;
+  $size: get-css-var('tooltip-arrow-size');
 
   &__popper {
-    z-index: $vxp-z-index-popper;
+    z-index: get-css-var('z-index-popper');
 
     &[data-popper-placement^='top'] {
       padding: 0.5em 0 0.8em;
@@ -113,6 +138,9 @@
         }
       }
     }
+
+    $v-offset: get-css-var('tooltip-arrow-vertical-offset');
+    $h-offset: get-css-var('tooltip-arrow-horizontal-offset');
 
     &[data-popper-placement='top'] #{$arrow} {
       left: 50%;
@@ -220,15 +248,15 @@
 
   @include theme(
     'light',
-    $vxp-tooltip-color-content-base,
-    $vxp-tooltip-color-shadow-base,
-    $vxp-tooltip-color-bg-base
+    get-css-var('tooltip-color-content-base'),
+    get-css-var('tooltip-color-shadow-base'),
+    get-css-var('tooltip-color-bg-base')
   );
 
   @include theme(
     'dark',
-    $vxp-tooltip-color-content-dark,
-    $vxp-tooltip-color-shadow-dark,
-    $vxp-tooltip-color-bg-dark
+    get-css-var('tooltip-color-content-dark'),
+    get-css-var('tooltip-color-shadow-dark'),
+    get-css-var('tooltip-color-bg-dark')
   );
 }

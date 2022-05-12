@@ -1,7 +1,7 @@
 <template>
   <div
     ref="wrapper"
-    :class="prefix"
+    :class="[prefix, `${prefix}-vars`]"
     @mouseenter="handleTriggerEnter"
     @mouseleave="handleTriggerLeave"
     @clickoutside="handleClickOutside"
@@ -16,6 +16,7 @@
           ref="popper"
           :class="{
             [`${prefix}__popper`]: true,
+            [`${prefix}-vars`]: true,
             [`${prefix}__popper--${theme}`]: true,
             [`${prefix}__popper--no-hover`]: noHover
           }"

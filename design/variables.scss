@@ -431,18 +431,3 @@ $break-point-map: map.merge(
 :root {
   @include define-preset-values('break-point', $break-point-map, true);
 }
-
-// 组件的具体样式变量
-
-// tooltip
-// ------------------------------------------
-$vxp-tooltip-color-bg-base: $vxp-color-fill !default;
-$vxp-tooltip-color-content-base: $vxp-color-content-normal !default;
-$vxp-tooltip-color-shadow-base: $vxp-color-border !default;
-$vxp-tooltip-shadow-base: $vxp-box-shadow-appearance $vxp-tooltip-color-shadow-base !default;
-$vxp-tooltip-color-bg-dark: $vxp-color-fill-reverse !default;
-$vxp-tooltip-color-content-dark: $vxp-color-content-reverse !default;
-$vxp-tooltip-color-shadow-dark: $vxp-color-fill-reverse !default;
-$vxp-tooltip-shadow-dark: none !default;
-$vxp-tooltip-border-raduis-base: $vxp-border-radius-base !default;
-$vxp-tooltip-arrow-size: 0.5em !default;
