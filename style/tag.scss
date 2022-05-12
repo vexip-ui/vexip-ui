@@ -4,27 +4,56 @@
 @use '../design' as *;
 @use './icon.scss';
 
+$types: primary info success error warning;
+
+$tag: () !default;
+$tag: map.merge(
+  (
+    color: get-css-var('content-color-base'),
+    bg-color: get-css-var('fill-color-background'),
+    border-color: get-css-var('border-color-base'),
+    border: get-css-var('border-appearance') get-css-var('tag-border-color'),
+    border-radius: get-css-var('border-radius-base'),
+    series-span: 0.3em,
+    small-font-size: get-css-var('font-size-secondary'),
+    default-font-size: get-css-var('font-size-base'),
+    large-font-size: get-css-var('font-size-primary'),
+    close-color: get-css-var('content-color-secondary')
+  ),
+  $tag
+);
+
 .vxp-tag {
+  &-vars {
+    @include define-preset-values('tag', $tag);
+  }
+
+  @mixin define-tag-style($style-map) {
+    @include define-preset-style('tag', $style-map);
+  }
+
   @include basis;
 
   display: inline-flex;
   align-items: center;
   padding: 0 0.5em;
-  background-color: $vxp-color-fill-background;
-  border: $vxp-border-base;
-  border-radius: $vxp-border-radius-base;
-  transition: $vxp-transition-color-base, $vxp-transition-background-base;
+  font-size: get-css-var('tag-default-font-size');
+  color: get-css-var('tag-color');
+  background-color: get-css-var('tag-bg-color');
+  border: get-css-var('tag-border');
+  border-radius: get-css-var('tag-border-radius');
+  transition: get-css-var('transition-color'), get-css-var('transition-background');
 
   & + & {
-    margin-left: 0.3em;
+    margin-left: get-css-var('tag-series-span');
   }
 
   &--small {
-    font-size: $vxp-font-size-secondary;
+    font-size: get-css-var('tag-small-font-size');
   }
 
   &--large {
-    font-size: $vxp-font-size-primary;
+    font-size: get-css-var('tag-large-font-size');
   }
 
   &--circle {
@@ -38,10 +67,10 @@
     height: 12px;
     margin-top: 1px;
     margin-left: 0.5em;
-    color: $vxp-color-content-secondary;
+    color: get-css-var('tag-close-color');
     cursor: pointer;
     opacity: 60%;
-    transition: $vxp-transition-opacity-base;
+    transition: get-css-var('transition-opacity');
 
     &:hover {
       opacity: 100%;
@@ -49,14 +78,33 @@
   }
 
   $close: #{&}__close;
-  $types: (
-    // state
-    primary: $vxp-color-primary,
-    info: $vxp-color-info,
-    success: $vxp-color-success,
-    error: $vxp-color-error,
-    warning: $vxp-color-warning,
-    // named color
+
+  @each $type in $types {
+    &--#{$type} {
+      @include define-tag-style((
+        color: 'content-color-reverse',
+        bg-color: 'color' $type 'base',
+        border-color: 'color' $type 'base',
+        close-color: 'content-color-reverse'
+      ));
+    }
+
+    &--border#{&}--#{$type},
+    &--simple#{&}--#{$type} {
+      @include define-tag-style((
+        color: 'color' $type 'base',
+        close-color: 'color' $type 'base'
+      ));
+    }
+
+    &--simple#{&}--#{$type} {
+      @include define-tag-style((
+        bg-color: 'color' $type 'light-9'
+      ));
+    }
+  }
+
+  $preset-color-map: (
     'lime': rgb(18 228 83),
     'pink': rgb(240 101 149),
     'magenta': rgb(235 47 150),
@@ -68,34 +116,28 @@
     'purple': rgb(114 46 209)
   );
 
-  @each $type in map-keys($map: $types) {
-    $color: map.get(
-      $map: $types,
-      $key: $type
-    );
+  @each $name in map-keys($preset-color-map) {
+    $color: map.get($preset-color-map, $name);
 
     @at-root {
-      &--#{$type} {
-        color: $vxp-color-content-reverse;
-        background-color: $color;
-        border-color: $color;
+      &--#{$name} {
+        @include define-tag-style((
+          color: 'content-color-reverse',
+          close-color: 'content-color-reverse'
+        ));
 
-        #{$close} {
-          color: $vxp-color-content-reverse;
-        }
+        @include define-css-var('tag-bg-color', $color);
+        @include define-css-var('tag-border-color', $color);
       }
 
-      &--border#{&}--#{$type},
-      &--simple#{&}--#{$type} {
-        color: $color;
-
-        #{$close} {
-          color: $color;
-        }
+      &--border#{&}--#{$name},
+      &--simple#{&}--#{$name} {
+        @include define-css-var('tag-color', $color);
+        @include define-css-var('tag-close-color', $color);
       }
 
-      &--simple#{&}--#{$type} {
-        background-color: color.mix($vxp-color-white, $color, 85%);
+      &--simple#{&}--#{$name} {
+        @include define-css-var('tag-bg-color', color.mix($vxp-color-white, $color, 90%));
       }
     }
   }

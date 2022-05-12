@@ -96,6 +96,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--${props.size}`]: props.size !== 'default',
         [`${prefix}--${props.type}`]: props.type,
         [`${prefix}--border`]: props.border,
