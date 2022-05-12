@@ -2,7 +2,33 @@
 
 @use '../design' as *;
 
+$types: primary info success warning;
+
+$badge: () !default;
+$badge: map.merge(
+  (
+    color: get-css-var('content-color-reverse'),
+    bg-color: get-css-var('color-error-base'),
+    border-color: get-css-var('color-error-light-9'),
+    line-height: get-css-var('line-height-base'),
+    height: calc(get-css-var('badge-line-height') * 1em),
+    padding: 0 calc(get-css-var('badge-line-height') * 0.35em),
+    font-family: #{Helvetica, 'Microsoft YaHei', SimSun, sans-serif},
+    font-size: get-css-var('font-size-secondary'),
+    dot-size: 7px
+  ),
+  $badge
+);
+
 .vxp-badge {
+  &-vars {
+    @include define-preset-values('badge', $badge);
+  }
+
+  @mixin define-badge-style($style-map) {
+    @include define-preset-style('badge', $style-map);
+  }
+
   @include basis;
 
   position: relative;
@@ -23,19 +49,18 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: $vxp-line-height * 1em;
-    padding: 0 $vxp-line-height * 0.35em;
-    font-family: Helvetica, 'Microsoft YaHei', SimSun, sans-serif;
-    font-size: $vxp-font-size-secondary;
-
-    // line-height: 1;
-    color: $vxp-color-content-reverse;
+    height: get-css-var('badge-height');
+    padding: get-css-var('badge-padding');
+    font-family: get-css-var('badge-font-family');
+    font-size: get-css-var('badge-font-size');
+    line-height: get-css-var('badge-line-height');
+    color: get-css-var('badge-color');
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
-    background-color: $vxp-color-error;
-    border-radius: $vxp-line-height * 0.5em;
-    box-shadow: $vxp-box-shadow-border-appearance $vxp-color-fill;
+    background-color: get-css-var('badge-bg-color');
+    border-radius: calc(get-css-var('badge-line-height') * 0.5em);
+    box-shadow: get-css-var('box-shadow-border') get-css-var('badge-border-color');
     transform-origin: center center;
 
     &--fixed {
@@ -45,24 +70,26 @@
       transform: translate(50%, -50%);
     }
 
-    $types: (
-      primary: $vxp-color-primary,
-      info: $vxp-color-info,
-      success: $vxp-color-success,
-      warning: $vxp-color-warning,
-      disabled: $vxp-color-content-disabled
-    );
-
-    @each $type in map-keys($map: $types) {
+    @each $type in $types {
       &--#{$type} {
-        background-color: map.get($types, $type);
+        @include define-badge-style((
+          bg-color: 'color' $type 'base',
+          border-color: 'color' $type 'light-9'
+        ));
       }
+    }
+
+    &--disabled {
+      @include define-badge-style((
+        bg-color: 'content-color-disabled',
+        border-color: 'fill-color-base'
+      ));
     }
   }
 
   &--is-dot &__content {
-    width: 7px;
-    height: 7px;
+    width: get-css-var('badge-dot-size');
+    height: get-css-var('badge-dot-size');
     padding: 0;
     border-radius: 50%;
   }
