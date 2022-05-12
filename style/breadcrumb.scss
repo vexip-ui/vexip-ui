@@ -1,6 +1,34 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$breadcrumb: () !default;
+$breadcrumb: map.merge(
+  (
+    border-color: get-css-var('border-color-base'),
+    border-color-hover: get-css-var('color-primary-light-1'),
+    border-appearance: get-css-var('border-appearance'),
+    border-radius: get-css-var('border-radius-base'),
+    border-padding: 0.3em 0.6em,
+    item-bg-color: transparent,
+    item-bg-color-hover: get-css-var('color-primary-light-9'),
+    item-border-color: transparent,
+    item-border-color-hover: get-css-var('color-primary-light-7'),
+    item-border-radius: get-css-var('border-radius-small'),
+    label-color-hover: get-css-var('color-primary-base'),
+    separator-color: get-css-var('content-color-placeholder'),
+    separator-color-hover: get-css-var('color-primary-base')
+  ),
+  $breadcrumb
+);
+
 .vxp-breadcrumb {
+  &-vars {
+    @include define-preset-values('breadcrumb', $breadcrumb);
+  }
+
+  $border-a: get-css-var('breadcrumb-border-appearance');
+
   @include basis;
 
   position: relative;
@@ -8,64 +36,58 @@
   align-items: center;
 
   &--border {
-    height: 2.1em;
-    padding: 0 0.6em;
-    border: $vxp-border-base;
-    border-radius: $vxp-border-radius-base;
-    transition: {
-      property: border-color;
-      timing-function: ease-in-out;
-      duration: $vxp-transition-duration;
-    }
+    // height: 2.1em;
+    padding: get-css-var('breadcrumb-border-padding');
+    border: $border-a get-css-var('breadcrumb-border-color');
+    border-radius: get-css-var('breadcrumb-border-radius');
+    transition: get-css-var('transition-border');
 
     &:hover {
-      border-color: $vxp-color-primary-light-1;
+      border-color: get-css-var('breadcrumb-border-color-hover');
     }
   }
 
   &__item {
     display: flex;
     align-items: center;
-    border: $vxp-border-appearance transparent;
-    border-radius: $vxp-border-radius-small;
-    transition: $vxp-transition-background-base;
+    background-color: get-css-var('breadcrumb-item-bg-color');
+    border: $border-a get-css-var('breadcrumb-item-border-color');
+    border-radius: get-css-var('breadcrumb-item-border-radius');
+    transition: get-css-var('transition-background');
   }
 
   &--border &__item:hover {
-    background-color: rgba($vxp-color-primary, 0.2);
-    border-color: rgba($vxp-color-primary, 0.2);
+    background-color: get-css-var('breadcrumb-item-bg-color-hover');
+    border-color: get-css-var('breadcrumb-item-border-color-hover');
   }
 
   &__label {
     padding: 0 0.4em;
     cursor: pointer;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
 
     &:hover {
-      color: $vxp-color-primary-light-1;
+      color: get-css-var('breadcrumb-label-color-hover');
     }
   }
 
   &__separator {
     padding: 0 0.4em;
+    cursor: pointer;
     user-select: none;
-    border-right: $vxp-border-appearance transparent;
-    border-left: $vxp-border-appearance transparent;
-    transition: $vxp-transition-color-base, $vxp-transition-border-base;
+    border-right: $border-a transparent;
+    border-left: $border-a transparent;
+    transition: get-css-var('transition-color'), get-css-var('transition-border');
 
     &,
     .vxp-icon {
-      color: $vxp-color-content-placeholder;
+      color: get-css-var('breadcrumb-separator-color');
     }
-  }
-
-  &--border &__separator {
-    cursor: pointer;
 
     &:hover {
       &,
       .vxp-icon {
-        color: rgba($vxp-color-primary-light-1, 0.8);
+        color: get-css-var('breadcrumb-separator-color-hover');
       }
     }
   }
@@ -75,6 +97,6 @@
   }
 
   &--border &__item:hover &__separator {
-    border-left-color: rgba($vxp-color-primary, 0.2);
+    border-left-color: get-css-var('breadcrumb-item-border-color-hover');
   }
 }
