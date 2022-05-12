@@ -61,9 +61,9 @@
     background-color: transparent;
     border-top: 2px solid $vxp-color-border-light-1;
     transition:
-      $vxp-transition-color-base,
-      $vxp-transition-background-base,
-      $vxp-transition-border-base;
+      get-css-var('transition-color'),
+      get-css-var('transition-background'),
+      get-css-var('transition-border');
 
     &:hover {
       background-color: rgba($vxp-color-primary, 0.05);

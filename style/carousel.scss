@@ -24,7 +24,7 @@
     display: flex;
     width: 100%;
     height: 100%;
-    transition: $vxp-transition-transform-base;
+    transition: get-css-var('transition-transform');
   }
 
   &--vertical &__track {
@@ -60,7 +60,7 @@
       top: 0;
       bottom: 0;
       opacity: 0%;
-      transition: $vxp-transition-opacity-base;
+      transition: get-css-var('transition-opacity');
     }
 
     &--prev {
@@ -107,7 +107,7 @@
     cursor: pointer;
     background-color: rgba($vxp-color-content-normal, 0.45);
     border-radius: 50%;
-    transition: $vxp-transition-background-base, $vxp-transition-opacity-base;
+    transition: get-css-var('transition-background'), get-css-var('transition-opacity');
 
     .vxp-icon {
       color: $vxp-color-fill-disabled;
@@ -204,7 +204,7 @@
       background-color: $vxp-color-content-secondary;
       border-radius: $vxp-border-radius-small;
       opacity: 40%;
-      transition: width $vxp-transition-base, $vxp-transition-opacity-base;
+      transition: width get-css-var('transition-base, $vxp-transition-opacity');
     }
 
     &:hover &-inner {
@@ -231,7 +231,7 @@
       width: 3px;
       height: 16px;
       margin: 0 2px 1px 0;
-      transition: height $vxp-transition-base, $vxp-transition-opacity-base;
+      transition: height get-css-var('transition-base, $vxp-transition-opacity');
     }
 
     &--active .vxp-carousel__pointer-inner {

@@ -16,7 +16,7 @@
     pointer-events: none;
     background-color: $vxp-color-primary;
     will-change: transform;
-    transition: $vxp-transition-background-base, transform $vxp-transition-base;
+    transition: get-css-var('transition-background'), get-css-var('transition-transform');
   }
 
   $types: (

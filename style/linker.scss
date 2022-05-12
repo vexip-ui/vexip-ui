@@ -14,7 +14,7 @@
   text-decoration: none;
   vertical-align: inherit;
   cursor: pointer;
-  transition: $vxp-transition-color-base;
+  transition: get-css-var('transition-color');
 
   & + & {
     margin-left: 10px;
@@ -39,7 +39,7 @@
       content: '';
       background-color: $vxp-color-primary-light-1;
       opacity: 0%;
-      transition: $vxp-transition-opacity-base;
+      transition: get-css-var('transition-opacity');
     }
 
     &:hover::after {

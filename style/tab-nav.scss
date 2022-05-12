@@ -27,7 +27,7 @@
     color: $color;
     cursor: pointer;
     user-select: none;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
 
     &--active {
       color: $open-color;
@@ -45,9 +45,9 @@
     border: $vxp-border-base;
     border-radius: $vxp-border-radius-base $vxp-border-radius-base 0 0;
     transition:
-      $vxp-transition-color-base,
-      $vxp-transition-background-base,
-      $vxp-transition-border-base;
+      get-css-var('transition-color'),
+      get-css-var('transition-background'),
+      get-css-var('transition-border');
 
     &--active {
       background-color: $vxp-color-fill;
@@ -61,7 +61,7 @@
     bottom: -1px;
     width: 70px;
     pointer-events: none;
-    transition: left $vxp-transition-base, width $vxp-transition-base;
+    transition: left get-css-var('transition-base, width $vxp-transition');
   }
 
   &__marker {

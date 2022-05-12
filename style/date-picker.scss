@@ -31,7 +31,7 @@
   &__unit {
     padding: 0 2px;
     text-align: center;
-    transition: $vxp-transition-background-base, $vxp-transition-color-base;
+    transition: get-css-var('transition-background'), get-css-var('transition-color');
 
     &--focused {
       color: $vxp-color-content-reverse;
@@ -42,7 +42,7 @@
   &__label {
     text-align: center;
     user-select: none;
-    transition: $vxp-transition-background-base, $vxp-transition-color-base;
+    transition: get-css-var('transition-background'), get-css-var('transition-color');
   }
 
   &--disabled &__unit,
@@ -100,7 +100,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
-    transition: $vxp-transition-background-base;
+    transition: get-css-var('transition-background');
 
     &:hover {
       background-color: $vxp-color-fill-hover;
@@ -155,7 +155,7 @@
   @mixin calendar-pane {
     margin: 0 0.2em;
     cursor: pointer;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
 
     &:hover {
       color: $vxp-color-primary;
@@ -180,7 +180,7 @@
       margin: 0 0.8em;
       background-color: transparent;
       border-radius: $vxp-border-radius-base;
-      transition: $vxp-transition-background-base;
+      transition: get-css-var('transition-background');
 
       &::before {
         position: absolute;

@@ -24,7 +24,7 @@
     background-color: $vxp-color-fill;
     border: $vxp-border-base;
     border-radius: $vxp-border-radius-base;
-    transition: $vxp-transition-border-base, $vxp-transition-box-shadow-base;
+    transition: get-css-var('transition-border'), get-css-var('transition-box-shadow');
 
     &:hover {
       border-color: $vxp-color-primary-light-1;
@@ -94,7 +94,7 @@
     &,
     .vxp-icon {
       color: $vxp-color-content-secondary;
-      transition: $vxp-transition-transform-base;
+      transition: get-css-var('transition-transform');
     }
   }
 

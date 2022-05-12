@@ -24,7 +24,7 @@
     height: 4px;
     background-color: color.mix($vxp-color-black, $vxp-color-fill-background, 5%);
     border-radius: 4px;
-    transition: $vxp-transition-background-base;
+    transition: get-css-var('transition-background');
   }
 
   &:hover &__track {
@@ -40,7 +40,7 @@
     height: 4px;
     background-color: $vxp-color-primary;
     border-radius: 4px;
-    transition: $vxp-transition-background-base;
+    transition: get-css-var('transition-background');
   }
 
   &__trigger {
@@ -70,7 +70,7 @@
     border: 2px $vxp-border-style $vxp-color-primary;
     border-radius: 14px;
     box-shadow: 0 0 0 4px transparent;
-    transition: box-shadow 500ms ease, $vxp-transition-transform-base;
+    transition: box-shadow 500ms ease, get-css-var('transition-transform');
 
     &:hover {
       transform: scale(1.25);

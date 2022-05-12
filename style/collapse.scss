@@ -59,7 +59,7 @@
     align-items: center;
     padding: 0.6em 1em;
     cursor: pointer;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
   }
 
   &__pane--disabled &__header {
@@ -74,7 +74,7 @@
     align-items: center;
     justify-content: center;
     margin: 0;
-    transition: $vxp-transition-color-base, $vxp-transition-transform-base;
+    transition: get-css-var('transition-color'), get-css-var('transition-transform');
     transform: translate(-50%, -50%);
 
     &,

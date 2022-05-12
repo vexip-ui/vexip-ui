@@ -45,7 +45,7 @@
     background-color: $vxp-color-fill;
     border: $vxp-border-width dashed $vxp-color-border;
     border-radius: $vxp-border-radius-base;
-    transition: $vxp-transition-border-base;
+    transition: get-css-var('transition-border');
 
     &:hover {
       border-color: $vxp-color-primary;
@@ -86,14 +86,14 @@
     vertical-align: middle;
     list-style: none;
     border-radius: $vxp-border-radius-base;
-    transition: $vxp-transition-transform-base, $vxp-transition-opacity-base;
+    transition: get-css-var('transition-transform'), get-css-var('transition-opacity');
 
     &--name {
       justify-content: space-between;
       width: 100%;
       padding: 0.2em 0.5em;
       margin-bottom: 0.2em;
-      transition: $vxp-transition-background-base;
+      transition: get-css-var('transition-background');
 
       &:hover {
         background-color: $vxp-color-fill-hover;
@@ -110,7 +110,7 @@
       margin-right: 0.5em;
       margin-bottom: 0.5em;
       border: $vxp-border-base;
-      transition: $vxp-transition-border-base;
+      transition: get-css-var('transition-border');
     }
 
     &--thumbnail &--success,
@@ -133,7 +133,7 @@
   //   width: 100%;
   //   padding: 0.2em 0.5em;
   //   margin-bottom: 0.2em;
-  //   transition: $vxp-transition-background-base;
+  //   transition: get-css-var('transition-background');
 
   //   &:hover {
   //     background-color: $vxp-color-fill-hover;
@@ -150,7 +150,7 @@
   //   margin-right: 0.5em;
   //   margin-bottom: 0.5em;
   //   border: $vxp-border-base;
-  //   transition: $vxp-transition-border-base;
+  //   transition: get-css-var('transition-border');
 
   //   &--success {
   //     border-color: $vxp-color-success;
@@ -169,7 +169,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
   }
 
   &__file--success &__filename {
@@ -258,7 +258,7 @@
     height: 100%;
     background-color: rgba($vxp-color-black, 0.45);
     opacity: 0%;
-    transition: $vxp-transition-opacity-base;
+    transition: get-css-var('transition-opacity');
   }
 
   &__card:hover &__actions {
@@ -310,7 +310,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
   }
 
   &__file-icon {
@@ -419,15 +419,15 @@
     &-leave-active {
       position: absolute !important;
 
-      // transition: $vxp-transition-transform-base, $vxp-transition-opacity-base;
+      // transition: get-css-var('transition-transform'), get-css-var('transition-opacity');
     }
 
     // &-move {
-    //   transition: $vxp-transition-transform-base;
+    //   transition: get-css-var('transition-transform');
     // }
   }
 
   // &--to-add &-list-transition-enter-active {
-  //   transition: $vxp-transition-transform-base, $vxp-transition-opacity-base !important;
+  //   transition: get-css-var('transition-transform'), $vxp-transition-opacity-base !important;
   // }
 }

@@ -35,7 +35,7 @@
     user-select: none;
     background-color: transparent;
     border-radius: $vxp-border-radius-base;
-    transition: $vxp-transition-color-base, $vxp-transition-background-base;
+    transition: get-css-var('transition-color'), get-css-var('transition-background');
 
     &:hover {
       background-color: rgba($vxp-color-primary, 0.3);

@@ -26,7 +26,7 @@
   &__unit {
     padding: 0 2px;
     text-align: center;
-    transition: $vxp-transition-background-base, $vxp-transition-color-base;
+    transition: get-css-var('transition-background'), get-css-var('transition-color');
 
     &--focused {
       color: $vxp-color-content-reverse;
@@ -37,7 +37,7 @@
   &__label {
     text-align: center;
     user-select: none;
-    transition: $vxp-transition-background-base, $vxp-transition-color-base;
+    transition: get-css-var('transition-background'), get-css-var('transition-color');
   }
 
   &--disabled &__unit,
@@ -100,7 +100,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
-    transition: $vxp-transition-background-base;
+    transition: get-css-var('transition-background');
 
     &:hover {
       background-color: $vxp-color-border-light-2;

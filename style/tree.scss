@@ -33,7 +33,7 @@
     padding: 0 0.3em;
     cursor: pointer;
     border-radius: $vxp-border-radius-small;
-    transition: $vxp-transition-background-base;
+    transition: get-css-var('transition-background');
 
     &:hover {
       background-color: color.mix($vxp-color-white, $vxp-color-primary, 85%);
@@ -74,7 +74,7 @@
     // margin-right: 0.2em;
     cursor: pointer;
 
-    // transition: $vxp-transition-transform-base;
+    // transition: get-css-var('transition-transform');
 
     &--expanded .vxp-icon {
       transform: rotate(90deg);

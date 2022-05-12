@@ -59,7 +59,7 @@
   &__row {
     display: inline-flex;
     flex: 1 0 auto;
-    transition: all $vxp-transition-base;
+    transition: all get-css-var('transition-base');
 
     &--hover {
       background-color: rgba($vxp-color-primary, 0.2) !important;
@@ -84,7 +84,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     border-right: 1px solid transparent;
-    transition: all $vxp-transition-base;
+    transition: all get-css-var('transition-base');
 
     &:last-child {
       border-right-width: 0;
@@ -153,7 +153,7 @@
     height: 1.4em;
     color: $vxp-color-content-secondary;
     cursor: pointer;
-    transition: $vxp-transition-transform-base;
+    transition: get-css-var('transition-transform');
 
     &--active {
       transform: rotate(90deg);
@@ -174,7 +174,7 @@
       height: 7px;
       overflow: hidden;
       cursor: pointer;
-      transition: $vxp-transition-color-base;
+      transition: get-css-var('transition-color');
 
       & .vxp-icon {
         color: $vxp-color-content-placeholder;
@@ -212,7 +212,7 @@
       justify-content: center;
       height: 15px;
       cursor: pointer;
-      transition: $vxp-transition-color-base;
+      transition: get-css-var('transition-color');
 
       & .vxp-icon {
         color: $vxp-color-content-placeholder;
@@ -253,7 +253,7 @@
       padding: 0.2em 1em;
       cursor: pointer;
       background-color: transparent;
-      transition: $vxp-transition-color-base, $vxp-transition-background-base;
+      transition: get-css-var('transition-color'), get-css-var('transition-background');
 
       &:hover,
       &--active {
@@ -306,7 +306,7 @@
     position: absolute;
     top: 0;
     z-index: 1;
-    transition: $vxp-transition-box-shadow-base;
+    transition: get-css-var('transition-box-shadow');
   }
 
   &__fixed--right {

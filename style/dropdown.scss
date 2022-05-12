@@ -39,7 +39,7 @@
     list-style: none;
     cursor: pointer;
     background-color: transparent;
-    transition: $vxp-transition-background-base;
+    transition: get-css-var('transition-background');
 
     &:hover {
       background-color: $vxp-color-fill-hover;

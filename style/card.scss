@@ -8,7 +8,7 @@
   background-color: $vxp-color-fill;
   border: $vxp-border-base;
   border-radius: $vxp-border-radius-base;
-  transition: $vxp-transition-box-shadow-base;
+  transition: get-css-var('transition-box-shadow');
 
   &--shadow-always {
     box-shadow: $vxp-box-shadow-base;

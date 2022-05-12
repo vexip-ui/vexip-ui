@@ -6,7 +6,7 @@
 
   // font-size: 0.8em;
   fill: currentcolor;
-  transition: $vxp-transition-transform-base, $vxp-transition-color-base;
+  transition: get-css-var('transition-transform'), get-css-var('transition-color');
   transform-origin: 50% 50%;
 
   & > g {

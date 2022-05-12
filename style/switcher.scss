@@ -13,9 +13,9 @@
   background-color: color.mix($vxp-color-black, $vxp-color-fill-background, 10%);
   border-radius: 30px;
   transition:
-    $vxp-transition-background-base,
-    $vxp-transition-border-base,
-    $vxp-transition-opacity-base;
+    get-css-var('transition-background'),
+    get-css-var('transition-border'),
+    get-css-var('transition-opacity');
 
   &--disabled {
     cursor: not-allowed;
@@ -69,7 +69,7 @@
     transition:
       left $vxp-transition-base,
       width $vxp-transition-base,
-      $vxp-transition-transform-base;
+      get-css-var('transition-transform');
     transform: translateY(-50%);
   }
 

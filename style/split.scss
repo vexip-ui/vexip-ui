@@ -44,7 +44,7 @@
     cursor: pointer;
     background-color: $button-color;
     border-radius: $vxp-border-radius-small;
-    transition: $vxp-transition-background-base;
+    transition: get-css-var('transition-background');
 
     &,
     .vxp-icon {
@@ -56,7 +56,7 @@
       position: absolute;
       content: '';
       border: 2px $vxp-border-style transparent;
-      transition: $vxp-transition-border-base;
+      transition: get-css-var('transition-border');
     }
 
     &--left-full {

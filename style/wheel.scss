@@ -34,7 +34,7 @@
     justify-content: center;
     cursor: pointer;
     user-select: none;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
 
     .vxp-icon {
       color: $vxp-color-content-disabled;

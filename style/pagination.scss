@@ -26,9 +26,9 @@
     border: $vxp-border-base;
     border-radius: $vxp-border-radius-base;
     transition:
-      $vxp-transition-color-base,
-      $vxp-transition-background-base,
-      $vxp-transition-border-base;
+      get-css-var('transition-color'),
+      get-css-var('transition-background'),
+      get-css-var('transition-border');
 
     &--prev,
     &--next,

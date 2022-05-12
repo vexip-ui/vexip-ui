@@ -28,7 +28,7 @@
     height: 100%;
     background-color: $vxp-color-primary;
     will-change: transform;
-    transition: transform $vxp-transition-base;
+    transition: get-css-var('transition-transform');
   }
 
   &__info {
@@ -36,7 +36,7 @@
     align-items: center;
     margin-left: 0.6em;
     pointer-events: none;
-    transition: transform $vxp-transition-base;
+    transition: get-css-var('transition-transform');
   }
 
   &--info-inside &__info {
