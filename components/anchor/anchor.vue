@@ -3,6 +3,7 @@
     ref="wrapper"
     :class="{
       [prefix]: true,
+      [`${prefix}-vars`]: true,
       [`${prefix}--no-marker`]: !marker
     }"
   >
@@ -339,7 +340,7 @@ export default defineComponent({
         const linkRect = currentLink.el.getBoundingClientRect()
         const wrapperTop = wrapper.value?.getBoundingClientRect().top ?? 0
 
-        markerTop.value = linkRect.top - wrapperTop + linkRect.height / 2
+        markerTop.value = linkRect.top - wrapperTop + linkRect.height / 2 + 0.5
       }
     }
 

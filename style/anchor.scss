@@ -1,12 +1,37 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$anchor: () !default;
+$anchor: map.merge(
+  (
+    link-color: get-css-var('content-color-base'),
+    link-color-hover: get-css-var('color-primary-light-1'),
+    link-color-active: get-css-var('color-primary-base'),
+    track-width: 2px,
+    track-style: solid,
+    track-color: get-css-var('border-color-light-2'),
+    track: get-css-var('anchor-track-width') get-css-var('anchor-track-style') get-css-var('anchor-track-color'),
+    track-color-active: get-css-var('anchor-link-color-active'),
+    pointer-size: 8px,
+    pointer-bg-color: get-css-var('fill-color-base'),
+    pointer-border-color: get-css-var('anchor-link-color-active'),
+    pointer-border: get-css-var('border-appearance') get-css-var('anchor-pointer-border-color')
+  ),
+  $anchor
+);
+
 .vxp-anchor {
+  &-vars {
+    @include define-preset-values('anchor', $anchor);
+  }
+
   @include basis;
 
   position: relative;
   display: flex;
   flex-direction: column;
-  padding-left: 4px;
+  padding-left: calc(get-css-var('anchor-pointer-size') * 0.5);
 
   &__list {
     padding: 0;
@@ -19,41 +44,41 @@
 
   &__link {
     padding: 0.3em 1em;
-    margin-left: -2px;
-    color: $vxp-color-content-normal;
+    margin-left: calc(get-css-var('anchor-track-width') * -1);
+    color: get-css-var('anchor-link-color');
     text-decoration: none;
     cursor: pointer;
-    border-left: 2px solid $vxp-color-border-light-2;
-    transition: $vxp-transition-color-base, $vxp-transition-border-base;
+    border-left: get-css-var('anchor-track');
+    transition: get-css-var('transition-color'), get-css-var('transition-border');
 
     &:hover {
-      color: $vxp-color-primary-light-1;
+      color: get-css-var('anchor-link-color-hover');
     }
 
     &--active {
-      color: $vxp-color-primary;
+      color: get-css-var('anchor-link-color-active');
     }
   }
 
   &--no-marker &__link--active {
-    border-left-color: $vxp-color-primary;
+    border-left-color: get-css-var('trak-color-active');
   }
 
   &__marker {
     position: absolute;
-    left: 3px;
+    left: calc(get-css-var('anchor-pointer-size') * 0.5 - 1px);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: top $vxp-transition-base;
+    transition: top get-css-var('transition-base');
     transform: translate3d(-50%, -50%, 0);
   }
 
   &__pointer {
-    width: 8px;
-    height: 8px;
-    background-color: $vxp-color-fill;
-    border: $vxp-border-appearance $vxp-color-primary;
-    border-radius: 7px;
+    width: get-css-var('anchor-pointer-size');
+    height: get-css-var('anchor-pointer-size');
+    background-color: get-css-var('anchor-pointer-bg-color');
+    border: get-css-var('anchor-pointer-border');
+    border-radius: get-css-var('anchor-pointer-size');
   }
 }
