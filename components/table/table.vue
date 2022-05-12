@@ -340,6 +340,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--stripe`]: props.stripe,
         [`${prefix}--border`]: props.border,
         [`${prefix}--highlight`]: props.highlight,

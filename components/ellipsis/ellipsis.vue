@@ -15,6 +15,7 @@
         ref="popper"
         :class="{
           [`${tooltipPrefix}__popper`]: true,
+          [`${tooltipPrefix}-vars`]: true,
           [`${tooltipPrefix}__popper--${tooltipTheme}`]: true,
           [`${tooltipPrefix}__popper--no-hover`]: noHover
         }"

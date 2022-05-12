@@ -9,15 +9,22 @@
   >
     <template #default="{ isDragOver }">
       <Table
-        :columns="columns2"
+        :columns="columns"
         :data="data"
-        :height="1000"
+        :height="200"
         :tooltip-width="300"
+        :width="1000"
+        use-y-bar
         @on-row-sort="handleRowSort"
       >
-        <TableColumn type="selection" id-key="selection" :disable-row="isDisabled"></TableColumn>
-        <TableColumn type="order" id-key="order"></TableColumn>
-        <TableColumn type="expand" id-key="expand">
+        <TableColumn
+          type="selection"
+          id-key="selection"
+          fixed
+          :disable-row="isDisabled"
+        ></TableColumn>
+        <TableColumn type="order" id-key="order" fixed></TableColumn>
+        <TableColumn type="expand" id-key="expand" fixed>
           <template #default="{ row }">
             <Row style="padding: 20px 40px; background-color: #f8f9fa;">
               <Column :span="12">
@@ -35,21 +42,32 @@
             </Row>
           </template>
         </TableColumn>
-        <TableColumn name="First Name" id-key="firstName" sorter>
+        <TableColumn
+          name="First Name"
+          id-key="firstName"
+          sorter
+          :width="300"
+        >
           <template #default="{ row }">
             <Icon name="user" style="margin-right: 8px;"></Icon>
             {{ row.firstName }}
           </template>
         </TableColumn>
-        <TableColumn name="Job" id-key="job" :order="3"></TableColumn>
+        <TableColumn
+          name="Job"
+          id-key="job"
+          :order="3"
+          fixed="right"
+        ></TableColumn>
         <TableColumn
           name="Age"
           id-key="age"
           :order="2"
           no-ellipsis
           :sorter="ageSorter"
+          :width="300"
         ></TableColumn>
-        <TableColumn name="Long Text" id-key="longText">
+        <TableColumn name="Long Text" id-key="longText" :width="300">
           很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本
         </TableColumn>
         <!-- <template #empty="{ isFixed }">

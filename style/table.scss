@@ -1,4 +1,5 @@
 /* stylelint-disable declaration-property-value-disallowed-list */
+@use 'sass:map';
 
 @use '../design' as *;
 @use './button.scss';
@@ -7,7 +8,47 @@
 @use './checkbox.scss';
 @use './tooltip.scss';
 
+$table: () !default;
+$table: map.merge(
+  (
+    bg-color: get-css-var('fill-color-base'),
+    border-color: get-css-var('border-color-base'),
+    border-width: get-css-var('border-width'),
+    border-style: get-css-var('border-style'),
+    border-appearance: get-css-var('table-border-width') get-css-var('table-border-style'),
+    border: get-css-var('table-border-appearance') get-css-var('table-border-color'),
+    header-bg-color: get-css-var('fill-color-background'),
+    row-bottom-border-color: get-css-var('border-color-light-1'),
+    row-bg-color-hover: get-css-var('color-primary-light-8'),
+    cell-min-height: 36px,
+    cell-padding: 6px,
+    cell-right-border-color: get-css-var('border-color-light-2'),
+    expand-arrow-color: get-css-var('content-color-secondary'),
+    expand-arrow-size: 1.4em,
+    sorter-color: get-css-var('content-color-placeholder'),
+    sorter-color-hover: get-css-var('content-color-secondary'),
+    sorter-color-active: get-css-var('color-primary-base'),
+    filter-color: get-css-var('content-color-placeholder'),
+    filter-color-hover: get-css-var('content-color-secondary'),
+    filter-color-visible: get-css-var('table-filter-color-hover'),
+    filter-color-active: get-css-var('color-primary-base'),
+    filter-item-bg-color: transparent,
+    filter-item-bg-color-hover: get-css-var('fill-color-hover'),
+    filter-item-color-active: get-css-var('color-primary-base'),
+    filter-item-bg-color-active: get-css-var('table-filter-item-bg-color-hover'),
+    indicator-color: get-css-var('color-primary-base'),
+    empty-color: get-css-var('content-color-placeholder')
+  ),
+  $table
+);
+
 .vxp-table {
+  &-vars {
+    @include define-preset-values('table', $table);
+  }
+
+  $border-a: get-css-var('table-border-appearance');
+
   @include basis;
 
   position: relative;
@@ -16,7 +57,7 @@
   width: 100%;
   overflow: hidden;
   border-collapse: collapse;
-  border: $vxp-border-appearance transparent;
+  border: $border-a transparent;
 
   // border-bottom-color: $vxp-color-border;
   // box-shadow: 0 0 0 1px $vxp-color-border;
@@ -28,7 +69,7 @@
     flex: 1 0 auto;
     flex-direction: column;
     width: 100%;
-    background-color: $vxp-color-fill;
+    background-color: get-css-var('table-bg-color');
   }
 
   &__head {
@@ -36,11 +77,11 @@
     user-select: none;
 
     // box-shadow: 0 2px 15px $vxp-color-border;
-    border-bottom: $vxp-border-base;
+    border-bottom: get-css-var('table-border');
   }
 
   &__body {
-    border-bottom: $vxp-border-appearance $vxp-color-border;
+    border-bottom: get-css-var('table-border');
   }
 
   &__group {
@@ -48,7 +89,7 @@
     flex: 1 0 auto;
     flex-direction: column;
     align-items: stretch;
-    border-bottom: $vxp-border-appearance $vxp-color-border-light-1;
+    border-bottom: $border-a get-css-var('table-row-bottom-border-color');
 
     &:last-child {
       margin-bottom: -1px;
@@ -62,7 +103,7 @@
     transition: all get-css-var('transition-base');
 
     &--hover {
-      background-color: rgba($vxp-color-primary, 0.2) !important;
+      background-color: get-css-var('table-row-bg-color-hover') !important;
     }
   }
 
@@ -79,11 +120,11 @@
     display: flex;
     flex: 1 0 0;
     align-items: center;
-    min-height: 36px;
-    padding: 6px;
+    min-height: get-css-var('table-cell-min-height');
+    padding: get-css-var('table-cell-padding');
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-right: 1px solid transparent;
+    border-right: $border-a transparent;
     transition: all get-css-var('transition-base');
 
     &:last-child {
@@ -125,7 +166,7 @@
   }
 
   &--border {
-    border-color: $vxp-color-border;
+    border-color: get-css-var('table-border-color');
 
     #{$body} {
       border-bottom-width: 0;
@@ -133,7 +174,7 @@
 
     #{$cell},
     #{$head-cell} {
-      border-right-color: $vxp-color-border-light-2;
+      border-right-color: get-css-var('table-cell-right-border-color');
     }
   }
 
@@ -149,9 +190,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 1.4em;
-    height: 1.4em;
-    color: $vxp-color-content-secondary;
+    width: get-css-var('table-expand-arrow-size');
+    height: get-css-var('table-expand-arrow-size');
+    color: get-css-var('table-expand-arrow-color');
     cursor: pointer;
     transition: get-css-var('transition-transform');
 
@@ -177,12 +218,12 @@
       transition: get-css-var('transition-color');
 
       & .vxp-icon {
-        color: $vxp-color-content-placeholder;
+        color: get-css-var('table-sorter-color');
       }
 
       &:hover,
       &:hover .vxp-icon {
-        color: $vxp-color-content-secondary;
+        color: get-css-var('table-sorter-color-hover');
       }
     }
 
@@ -195,7 +236,7 @@
       &:hover {
         &,
         .vxp-icon {
-          color: $vxp-color-primary;
+          color: get-css-var('table-sorter-color-active');
         }
       }
     }
@@ -215,26 +256,26 @@
       transition: get-css-var('transition-color');
 
       & .vxp-icon {
-        color: $vxp-color-content-placeholder;
+        color: get-css-var('table-filter-color');
       }
 
       &:hover,
       &:hover .vxp-icon {
-        color: $vxp-color-content-secondary;
+        color: get-css-var('table-filter-color-hover');
       }
     }
 
     &--visible &-trigger {
       &,
       .vxp-icon {
-        color: $vxp-color-content-secondary;
+        color: get-css-var('table-filter-color-visible');
       }
     }
 
     &--active &-trigger {
       &,
       .vxp-icon {
-        color: $vxp-color-primary;
+        color: get-css-var('table-filter-color-active');
       }
     }
 
@@ -252,16 +293,16 @@
     &-item {
       padding: 0.2em 1em;
       cursor: pointer;
-      background-color: transparent;
+      background-color: get-css-var('table-filter-item-bg-color');
       transition: get-css-var('transition-color'), get-css-var('transition-background');
 
-      &:hover,
-      &--active {
-        background-color: $vxp-color-fill-hover;
+      &:hover {
+        background-color: get-css-var('table-filter-item-bg-color-hover');
       }
 
       &--active {
-        color: $vxp-color-primary;
+        color: get-css-var('table-filter-item-color-active');
+        background-color: get-css-var('table-filter-item-bg-color-active');
       }
     }
 
@@ -288,7 +329,7 @@
       min-width: 6.4em;
       padding: 0.3em 0.6em;
       margin-top: 0.6em;
-      border-top: $vxp-border-base;
+      border-top: get-css-var('border-light-2');
 
       .vxp-button--text {
         padding: 0;
@@ -314,24 +355,24 @@
     border-left: 0 transparent;
 
     &#{$fixed-active} {
-      box-shadow: -2px 0 $vxp-box-shadow-blur $vxp-color-border;
+      box-shadow: -2px 0 get-css-var('box-shadow-blur') get-css-var('table-border-color');
     }
   }
 
   &--border &__fixed--right {
-    border-left-color: $vxp-border-appearance $vxp-color-border-light-2;
+    border-left-color: $border-a get-css-var('table-cell-right-border-color');
   }
 
   &__fixed--left {
     left: 0;
 
     &#{$fixed-active} {
-      box-shadow: 2px 0 $vxp-box-shadow-blur $vxp-color-border;
+      box-shadow: 2px 0 get-css-var('box-shadow-blur') get-css-var('table-border-color');
     }
 
     #{$cell},
     #{$head-cell} {
-      border-right-width: $vxp-border-width;
+      border-right-width: get-css-var('table-border-width');
     }
   }
 
@@ -345,7 +386,7 @@
     left: 0;
     z-index: 10;
     height: 1px;
-    background-color: $vxp-color-primary;
+    background-color: get-css-var('table-indicator-color');
   }
 
   &__empty {
@@ -355,7 +396,7 @@
     width: 100%;
     min-height: 36px;
     padding: 6px 0;
-    color: $vxp-color-content-placeholder;
+    color: get-css-var('table-empty-color');
     white-space: nowrap;
     cursor: default;
     user-select: none;
