@@ -207,6 +207,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--vertical`]: props.vertical,
         [`${prefix}--disabled`]: isDisabled.value
       }

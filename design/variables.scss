@@ -208,6 +208,7 @@ $fill-color-map: () !default;
 $fill-color-map: map.merge(
   (
     base: #fff,
+    secondary: #dee2e6,
     disabled: #dee2e6,
     hover: #e9ecef,
     humble: #f3f4f6,
