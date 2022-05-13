@@ -32,7 +32,7 @@
       </slot>
     </div>
     <transition :name="transitionName">
-      <div v-show="currentVisible" ref="popper" :class="`${prefix}__popper`">
+      <div v-show="currentVisible" ref="popper" :class="[`${prefix}__popper`, `${prefix}-vars`]">
         <div :class="`${prefix}__pane`">
           <div :class="`${prefix}__section`">
             <ColorPalette
@@ -284,8 +284,10 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        'vxp-input-vars': true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--empty`]: isEmpty.value && !currentVisible.value,
-        [`${prefix}--visible`]: currentVisible.value,
+        [`${prefix}--focused`]: currentVisible.value,
         [`${prefix}--disabled`]: props.disabled,
         [`${prefix}--alpha`]: props.alpha,
         [`${prefix}--${props.size}`]: props.size !== 'default',

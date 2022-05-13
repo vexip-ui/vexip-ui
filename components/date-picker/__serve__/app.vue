@@ -31,6 +31,13 @@
     clearable
     type="datetime"
   ></DatePicker>
+  <br />
+  <br />
+  <template v-for="state in states" :key="state">
+    <DatePicker :state="state"></DatePicker>
+    <br />
+    <br />
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -44,6 +51,8 @@ const shortcuts = ref([
   { name: 'Current', value: () => Date.now() },
   { name: 'Noon', value: '2022-05-13 12:00:00' }
 ])
+
+const states = ['default', 'success', 'error', 'warning'] as const
 </script>
 
 <style lang="scss">

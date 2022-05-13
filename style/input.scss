@@ -69,7 +69,8 @@ $input: map.merge(
   }
 
   @each $state in $states {
-    &--#{$state} {
+    // 提升 state 样式的级别，以防止引入的先后顺序导致样式丢失
+    &#{&}--#{$state} {
       @include define-input-style(
         (
           color-border: 'color' $state 'light-1',
