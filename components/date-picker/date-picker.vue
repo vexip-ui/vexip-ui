@@ -83,7 +83,7 @@
           <div
             v-show="currentVisible"
             ref="popper"
-            :class="`${prefixCls}__popper`"
+            :class="[`${prefixCls}__popper`, 'vxp-calendar-vars', `${prefixCls}-vars`]"
             @click.stop="handleFocused"
           >
             <DatePane
@@ -321,6 +321,8 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        'vxp-input-vars',
+        `${prefix}-vars`,
         `${prefix}--${props.type}`,
         {
           [`${prefix}--disabled`]: props.disabled,

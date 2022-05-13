@@ -1,5 +1,5 @@
 <template>
-  <div :class="`${prefix}__pane`">
+  <div :class="[`${prefix}__pane`, `${prefix}-vars`]">
     <slot name="header"></slot>
     <div :class="[`${prefix}__row`, `${prefix}__row--week`]">
       <div v-for="week in 7" :key="week" :class="[`${prefix}__cell`, `${prefix}__cell-week`]">
@@ -47,7 +47,9 @@
               }"
               @click="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
             >
-              {{ dateRange[(row - 1) * 7 + cell - 1].getDate() }}
+              <div :class="`${prefix}__index-inner`">
+                {{ dateRange[(row - 1) * 7 + cell - 1].getDate() }}
+              </div>
             </div>
           </slot>
         </div>

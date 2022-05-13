@@ -1,7 +1,41 @@
 @use 'sass:math';
+@use 'sass:map';
 
 @use '../design' as *;
-@use './calendar-pane.scss';
+
+$calendar: () !default;
+$calendar: map.merge(
+  (
+    header-height: 50px,
+    date-color-hover: inherit,
+    date-color-selected: inherit,
+    date-color-today: get-css-var('color-primary-base'),
+    date-color-outside: get-css-var('content-color-disabled'),
+    date-color-disabled: get-css-var('content-color-humble'),
+    date-bg-color: transparent,
+    date-bg-color-hover: get-css-var('color-primary-light-9'),
+    date-bg-color-selected: get-css-var('color-primary-light-8'),
+    date-bg-color-disabled: get-css-var('calendar-date-bg-color'),
+    date-bg-color-outside: get-css-var('calendar-date-bg-color'),
+    date-border-width: 2px,
+    date-border-style: get-css-var('border-style'),
+    date-border-color: get-css-var('border-color-base'),
+    date-border-color-selected: get-css-var('color-primary-light-2'),
+    date-border-color-disabled: get-css-var('border-color-light-2'),
+    date-border-color-outside: get-css-var('border-color-light-1'),
+    date-border:
+    get-css-var('calendar-date-border-width')
+    get-css-var('calendar-date-border-style')
+    get-css-var('calendar-date-border-color'),
+    content-height: 7em,
+    content-padding: 4px
+  ),
+  $calendar
+);
+
+@use './calendar-pane.scss' with (
+  $calendar: $calendar
+);
 
 .vxp-calendar {
   @include basis;
@@ -10,7 +44,7 @@
 
   &__header {
     width: 100%;
-    height: 50px;
+    height: get-css-var('calendar-header-height');
     padding-bottom: 10px;
   }
 
@@ -58,41 +92,45 @@
     padding: 4px 4px 0;
     margin: 0 2px;
     cursor: pointer;
-    background-color: transparent;
-    border-top: 2px solid $vxp-color-border-light-1;
+    background-color: get-css-var('calendar-date-bg-color');
+    border-top: get-css-var('calendar-date-border');
     transition:
       get-css-var('transition-color'),
       get-css-var('transition-background'),
       get-css-var('transition-border');
 
     &:hover {
-      background-color: rgba($vxp-color-primary, 0.05);
+      color: get-css-var('calendar-date-color-hover');
+      background-color: get-css-var('calendar-date-bg-color-hover');
     }
 
     &--today {
-      color: $vxp-color-primary;
+      color: get-css-var('calendar-date-color-today');
     }
 
     &--prev,
     &--next {
-      color: $vxp-color-content-disabled;
+      color: get-css-var('calendar-date-color-outside');
+      background-color: get-css-var('calendar-date-bg-color-outside');
+      border-top-color: get-css-var('calendar-date-border-color-outside');
     }
 
     &--selected {
       &,
       &:hover {
-        // color: $vxp-color-content-reverse;
-        background-color: rgba($vxp-color-primary, 0.1);
-        border-top-color: $vxp-color-primary-light-2;
+        color: get-css-var('calendar-date-color-selected');
+        background-color: get-css-var('calendar-date-bg-color-selected');
+        border-top-color: get-css-var('calendar-date-border-color-selected');
       }
     }
 
     &--disabled {
       &,
       &:hover {
-        color: $vxp-color-content-humble;
+        color: get-css-var('calendar-date-color-disabled');
         cursor: not-allowed;
-        background-color: transparent;
+        background-color: get-css-var('calendar-date-bg-color-disabled');
+        border-top-color: get-css-var('calendar-date-border-color-disabled');
       }
     }
 
@@ -112,8 +150,8 @@
     }
 
     &-content {
-      height: 7em;
-      padding: 4px;
+      height: get-css-var('calendar-content-height');
+      padding: get-css-var('calendar-content-padding');
       overflow: auto;
     }
   }

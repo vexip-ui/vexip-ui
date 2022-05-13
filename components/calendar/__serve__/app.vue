@@ -1,22 +1,13 @@
 <template>
   <div style="padding: 60px;">
-    <Calendar></Calendar>
+    <Calendar :disabled-date="disabledDate"></Calendar>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { Calendar } from '..'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Calendar
-  },
-  data() {
-    return {}
-  }
-})
+function disabledDate(date: Date) {
+  return date.getDate() === 18
+}
 </script>
-
-<style lang="scss"></style>

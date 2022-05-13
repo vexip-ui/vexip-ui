@@ -8,7 +8,7 @@
 $time-picker: () !default;
 $time-picker: map.merge(
   (
-    color-disabled: get-css-var('intpu-control-color-disabled'),
+    color-disabled: get-css-var('input-control-color-disabled'),
     unit-color-focused: get-css-var('content-color-reverse'),
     unit-bg-color-focused: get-css-var('color-primary-light-1'),
     separator-color: get-css-var('content-color-secondary'),
@@ -21,7 +21,8 @@ $time-picker: map.merge(
     shortcut-bg-color: get-css-var('fill-color-background'),
     shortcut-bg-color-hover: get-css-var('fill-color-hover'),
     divider-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-appearance') get-css-var('time-picker-divider-color')
+    divider: get-css-var('border-appearance') get-css-var('time-picker-divider-color'),
+    wheel-padding: 0.6em
   ),
   $time-picker
 );
@@ -78,6 +79,10 @@ $time-picker: map.merge(
     transition: get-css-var('transition-color');
   }
 
+  &--disabled &__separator {
+    color: get-css-var('time-picker-color-disabled');
+  }
+
   &__exchange {
     display: flex;
     align-items: center;
@@ -105,6 +110,8 @@ $time-picker: map.merge(
   }
 
   &__popper {
+    @include basis;
+
     z-index: get-css-var('time-picker-popper-z-index');
     display: flex;
     padding: 0.6em 0;
@@ -134,6 +141,7 @@ $time-picker: map.merge(
   }
 
   &__shortcut {
+    width: 100%;
     max-width: 7em;
     padding: 0.4em 1.1em;
     overflow: hidden;
@@ -149,7 +157,7 @@ $time-picker: map.merge(
 
   &__wheel {
     display: flex;
-    padding: 0.4em 0.6em;
+    padding: get-css-var('time-picker-wheel-padding');
   }
 
   &--no-hour {

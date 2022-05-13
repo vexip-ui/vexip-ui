@@ -77,7 +77,9 @@
                 @mouseenter="handleYearHover(item)"
               >
                 <div :class="`${prefix}__year-label`">
-                  {{ item }}
+                  <div :class="`${prefix}__year-label-inner`">
+                    {{ item }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -99,7 +101,9 @@
                 @mouseenter="handleMonthHover(index)"
               >
                 <div :class="`${prefix}__month-label`">
-                  {{ getMonthLabel(index) }}
+                  <div :class="`${prefix}__month-label-inner`">
+                    {{ getMonthLabel(index) }}
+                  </div>
                 </div>
               </div>
             </div>
