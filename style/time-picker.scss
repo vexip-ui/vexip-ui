@@ -1,10 +1,38 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './button.scss';
+@use './input.scss' as input;
 @use './wheel.scss';
 
+$time-picker: () !default;
+$time-picker: map.merge(
+  (
+    color-disabled: get-css-var('intpu-control-color-disabled'),
+    unit-color-focused: get-css-var('content-color-reverse'),
+    unit-bg-color-focused: get-css-var('color-primary-light-1'),
+    separator-color: get-css-var('content-color-secondary'),
+    exchange-color: get-css-var('content-color-secondary'),
+    exchange-color-hover: get-css-var('color-primary-base'),
+    popper-z-index: get-css-var('z-index-popper'),
+    pane-bg-color: get-css-var('fill-color-base'),
+    pane-border-radius: get-css-var('border-radius-base'),
+    pane-shadow: get-css-var('box-shadow-base'),
+    shortcut-bg-color: get-css-var('fill-color-background'),
+    shortcut-bg-color-hover: get-css-var('fill-color-hover'),
+    divider-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-appearance') get-css-var('time-picker-divider-color')
+  ),
+  $time-picker
+);
+
 .vxp-time-picker {
+  &-vars {
+    @include define-preset-values('time-picker', $time-picker);
+  }
+
   @include basis;
-  @include input-handler;
+  @include input.handler;
 
   $wheel: 'vxp-wheel';
 
@@ -29,8 +57,8 @@
     transition: get-css-var('transition-background'), get-css-var('transition-color');
 
     &--focused {
-      color: $vxp-color-content-reverse;
-      background-color: $vxp-color-primary-light-1;
+      color: get-css-var('time-picker-unit-color-focused');
+      background-color: get-css-var('time-picker-unit-bg-color-focused');
     }
   }
 
@@ -40,13 +68,14 @@
     transition: get-css-var('transition-background'), get-css-var('transition-color');
   }
 
-  &--disabled &__unit,
-  &--disabled &__label {
-    color: $vxp-color-content-secondary;
-  }
+  // &--disabled &__unit,
+  // &--disabled &__label {
+  //   color: $vxp-color-content-secondary;
+  // }
 
   &__separator {
-    color: $vxp-color-content-secondary;
+    color: get-css-var('time-picker-separator-color');
+    transition: get-css-var('transition-color');
   }
 
   &__exchange {
@@ -55,17 +84,28 @@
     padding: 0 4px;
     padding-top: 1px;
 
+    &,
     .vxp-icon {
-      color: $vxp-color-content-secondary;
+      color: get-css-var('time-picker-exchange-color');
     }
 
-    &--endabled:hover .vxp-icon {
-      color: $vxp-color-primary;
+    &--endabled:hover {
+      &,
+      .vxp-icon {
+        color: get-css-var('time-picker-exchange-color-hover');
+      }
+    }
+  }
+
+  &--disabled &__exchange {
+    &,
+    .vxp-icon {
+      color: get-css-var('time-picker-color-disabled');
     }
   }
 
   &__popper {
-    z-index: $vxp-z-index-popper;
+    z-index: get-css-var('time-picker-popper-z-index');
     display: flex;
     padding: 0.6em 0;
   }
@@ -74,9 +114,9 @@
     display: flex;
     justify-content: center;
     min-width: 10.8em;
-    background-color: $vxp-color-fill;
-    border-radius: $vxp-border-radius-base;
-    box-shadow: $vxp-box-shadow-base;
+    background-color: get-css-var('time-picker-pane-bg-color');
+    border-radius: get-css-var('time-picker-pane-border-radius');
+    box-shadow: get-css-var('time-picker-pane-shadow');
   }
 
   &__list {
@@ -88,8 +128,8 @@
     &--sub {
       align-items: flex-start;
       padding: 0.3em 0;
-      background-color: $vxp-color-fill-background;
-      border-right: $vxp-border-appearance $vxp-color-border-light-2;
+      background-color: get-css-var('time-picker-shortcut-bg-color');
+      border-right: get-css-var('time-picker-divider');
     }
   }
 
@@ -103,7 +143,7 @@
     transition: get-css-var('transition-background');
 
     &:hover {
-      background-color: $vxp-color-border-light-2;
+      background-color: get-css-var('time-picker-shortcut-bg-color-hover');
     }
   }
 
@@ -135,6 +175,6 @@
     justify-content: flex-end;
     width: 100%;
     padding: 0.4em 0.6em;
-    border-top: $vxp-border-appearance $vxp-color-border-light-2;
+    border-top: get-css-var('time-picker-divider');
   }
 }

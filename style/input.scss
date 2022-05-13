@@ -17,8 +17,10 @@ $input: map.merge(
     shadow-focus: get-css-var('box-shadow-fouced') get-css-var('input-color-shadow-focus'),
     color-placeholder: get-css-var('content-color-placeholder'),
     color-control: get-css-var('content-color-base'),
+    control-color-disabled: get-css-var('content-color-disabled'),
     color-icon: get-css-var('content-color-secondary'),
     color-icon-hover: get-css-var('color-primary-base'),
+    icon-color-disabled: get-css-var('input-control-color-disabled'),
     color-bg-before: get-css-var('fill-color-background'),
     color-bg-after: get-css-var('fill-color-background'),
     line-height: get-css-var('line-height-base'),
@@ -90,6 +92,7 @@ $input: map.merge(
     }
 
     %disabled-item {
+      color: get-css-var('input-control-color-disabled');
       pointer-events: none;
       cursor: not-allowed;
     }

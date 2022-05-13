@@ -14,6 +14,23 @@
     <br />
     {{ value }}
   </p>
+  <div style="width: 200px;">
+    <Wheel
+      v-model:value="value"
+      pointer
+      arrow
+      horizontal
+    >
+      <WheelItem
+        v-for="item in items"
+        :key="item"
+        :value="item"
+        :disabled="item < 3 || item === 9 || item === 10 || item > 18"
+      >
+        {{ item }}
+      </WheelItem>
+    </Wheel>
+  </div>
 </template>
 
 <script lang="ts">

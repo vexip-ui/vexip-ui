@@ -346,6 +346,8 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
+        'vxp-input-vars',
         {
           [`${prefix}--disabled`]: props.disabled,
           [`${prefix}--${props.size}`]: props.size !== 'default',

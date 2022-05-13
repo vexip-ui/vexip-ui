@@ -1,47 +1,84 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './icon.scss';
 @use './scroll.scss';
 
+$wheel: () !default;
+$wheel: map.merge(
+  (
+    item-padding: 0.2em 0.6em,
+    arrow-color: get-css-var('content-color-secondary'),
+    arrow-color-hover: get-css-var('content-color-base'),
+    arrow-color-disabled: get-css-var('content-color-disabled'),
+    arrow-size: 15px,
+    mask-bg-color: get-css-var('fill-color-base'),
+    mask-opacity: 40%,
+    mask-border-color: get-css-var('border-color-dark-1'),
+    mask-border-width: get-css-var('border-width'),
+    mask-border-style: get-css-var('border-style')
+  ),
+  $wheel
+);
+
 .vxp-wheel {
+  &-vars {
+    @include define-preset-values('wheel', $wheel);
+  }
+
   @include basis;
 
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+
+  &--horizontal {
+    flex-direction: row;
+  }
 
   &__scroll {
     position: relative;
-
-    // height: 100%;
-    // overflow: hidden;
     user-select: none;
   }
 
   &__list {
+    display: flex;
+    flex-direction: column;
     padding: 0.4em;
     margin: 0;
   }
 
+  &--horizontal &__list {
+    flex-direction: row;
+  }
+
   &__item {
-    padding: 0.2em 0.6em;
+    display: inline-block;
+    padding: get-css-var('wheel-item-padding');
     text-align: center;
     list-style: none;
   }
 
   &__arrow {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: get-css-var('wheel-arrow-size');
     cursor: pointer;
     user-select: none;
     transition: get-css-var('transition-color');
 
+    &,
     .vxp-icon {
-      color: $vxp-color-content-disabled;
+      color: get-css-var('wheel-arrow-color');
     }
 
     &:hover .vxp-icon {
-      color: $vxp-color-content-normal;
+      color: get-css-var('wheel-arrow-color-hover');
     }
 
     &--disabled {
@@ -49,19 +86,28 @@
       &:hover {
         cursor: not-allowed;
 
+        &,
         .vxp-icon {
-          color: $vxp-color-fill-disabled;
+          color: get-css-var('wheel-arrow-color-disabled');
         }
       }
     }
   }
 
+  &--horizontal &__arrow {
+    width: get-css-var('wheel-arrow-size');
+    height: 100%;
+  }
+
   &__mask {
     position: absolute;
     pointer-events: none;
-    background-color: rgba($vxp-color-fill, 0.4);
-    border: 0 $vxp-border-style $vxp-color-border-light-1;
+    background-color: get-css-var('wheel-mask-bg-color');
+    border: 0 get-css-var('wheel-mask-border-style') get-css-var('wheel-mask-border-color');
+    opacity: get-css-var('wheel-mask-opacity');
   }
+
+  $border-width: get-css-var('wheel-mask-border-width');
 
   &--vertical &__mask {
     right: 0;
@@ -69,12 +115,12 @@
 
     &--top {
       top: 0;
-      border-bottom-width: $vxp-border-width;
+      border-bottom-width: $border-width;
     }
 
     &--bottom {
       bottom: 0;
-      border-top-width: $vxp-border-width;
+      border-top-width: $border-width;
     }
   }
 
@@ -84,12 +130,12 @@
 
     &--top {
       left: 0;
-      border-right-width: $vxp-border-width;
+      border-right-width: $border-width;
     }
 
     &--bottom {
       right: 0;
-      border-left-width: $vxp-border-width;
+      border-left-width: $border-width;
     }
   }
 }
