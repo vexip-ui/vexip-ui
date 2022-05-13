@@ -1,19 +1,45 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './icon.scss';
 
+$collapse: () !default;
+$collapse: map.merge(
+  (
+    header-color-disabled: get-css-var('content-color-disabled'),
+    header-bg-color: transparent,
+    header-bg-color-card: get-css-var('fill-color-background'),
+    arrow-color: get-css-var('content-color-secondary'),
+    arrow-color-disabled: get-css-var('content-color-humble'),
+    content-color-disabled: get-css-var('content-color-disabled'),
+    content-padding: 0.8em 0 1.2em,
+    divider-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-appearance') get-css-var('collapse-divider-color'),
+    border-color: get-css-var('border-color-base'),
+    border: get-css-var('border-appearance') get-css-var('collapse-border-color'),
+    border-radius: get-css-var('border-radius-base')
+  ),
+  $collapse
+);
+
 .vxp-collapse {
+  &-vars {
+    @include define-preset-values('collapse', $collapse);
+  }
+
   @include basis;
 
   $header: #{&}__header;
   $arrow: #{&}__arrow;
   $content: #{&}__content;
-  $border-light-base: $vxp-border-appearance $vxp-color-border-light-2;
+  $divider: get-css-var('collapse-divider');
+  $radius: get-css-var('collapse-border-radius');
 
   display: flex;
   flex-direction: column;
   padding: 0;
   margin: 0;
-  border-top: $border-light-base;
+  border-top: $divider;
 
   @at-root {
     &__pane {
@@ -22,24 +48,24 @@
       padding: 0;
       margin: 0;
       list-style: none;
-      border-top: $border-light-base;
-      border-bottom: $border-light-base;
+      border-top: $divider;
+      border-bottom: $divider;
 
       &--card {
         #{$header} {
-          border-radius: $vxp-border-radius-base;
+          border-radius: $radius;
         }
 
         #{$content} {
-          padding: 0.8em 0 1.2em;
-          border-radius: 0 0 $vxp-border-radius-base $vxp-border-radius-base;
+          padding: get-css-var('collapse-content-padding');
+          border-radius: 0 0 $radius $radius;
         }
       }
 
       &--expanded#{&}--card {
         #{$header} {
-          border-bottom-color: $vxp-border-appearance $vxp-color-border-light-2;
-          border-radius: $vxp-border-radius-base $vxp-border-radius-base 0 0;
+          border-bottom-color: get-css-var('collapse-divider-color');
+          border-radius: $radius $radius 0 0;
         }
       }
 
@@ -63,7 +89,7 @@
   }
 
   &__pane--disabled &__header {
-    color: $vxp-color-content-disabled;
+    color: get-css-var('collapse-header-color-disabled');
     cursor: not-allowed;
   }
 
@@ -79,7 +105,7 @@
 
     &,
     .vxp-icon {
-      color: $vxp-color-content-secondary;
+      color: get-css-var('collapse-arrow-color');
     }
   }
 
@@ -119,7 +145,7 @@
   &__pane--disabled &__arrow {
     &,
     .vxp-icon {
-      color: $vxp-color-content-humble;
+      color: get-css-var('collapse-arrow-color-disabled');
     }
   }
 
@@ -130,7 +156,7 @@
   &__content {
     display: flex;
     flex-direction: column;
-    padding: 0.2em 0 1.6em;
+    padding: get-css-var('collapse-content-padding');
   }
 
   &__icon {
@@ -141,44 +167,43 @@
   }
 
   &__pane--disabled &__content {
-    color: $vxp-color-content-disabled;
+    color: get-css-var('collapse-content-color-disabled');
   }
 
   &--card,
   &__pane--card {
-    border: $vxp-border-base;
-    border-radius: $vxp-border-radius-base;
+    border: get-css-var('collapse-border');
+    border-radius: $radius;
 
     #{$header} {
-      background-color: $vxp-color-fill-background;
-      border-bottom: 1px solid transparent;
+      background-color: get-css-var('collapse-header-bg-color-card');
+      border-bottom: get-css-var('border-appearance') transparent;
     }
   }
 
   &--card &__pane {
-    border-color: $vxp-border-appearance $vxp-color-border-light-2;
+    border-color: get-css-var('collapse-divider-color');
 
     &:first-child #{$header} {
-      border-radius: $vxp-border-radius-base $vxp-border-radius-base 0 0;
+      border-radius: $radius $radius 0 0;
     }
 
     &:last-child {
       border-bottom: 0;
 
       #{$header} {
-        border-radius: 0 0 $vxp-border-radius-base $vxp-border-radius-base;
+        border-radius: 0 0 $radius $radius;
       }
     }
   }
 
   &--card &__pane--expanded {
     #{$header} {
-      border-bottom-color: $vxp-border-appearance $vxp-color-border-light-2;
-      border-radius: 0 !important;
+      border-bottom-color: get-css-var('collapse-divider-color');
     }
 
     #{$content} {
-      border-radius: 0 0 $vxp-border-radius-base $vxp-border-radius-base;
+      border-radius: 0 0 $radius $radius;
     }
   }
 
@@ -187,7 +212,7 @@
     border: 0;
   }
 
-  &--card &__content {
-    padding: 0.8em 0 1.2em;
-  }
+  // &--card &__content {
+  //   padding: get-css-var('collapse-content-padding');
+  // }
 }

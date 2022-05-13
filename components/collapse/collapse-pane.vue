@@ -114,6 +114,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         `${prefix}__pane`,
+        `${prefix}-vars`,
         `${prefix}__pane--arrow-${useArrowType.value}`,
         {
           [`${prefix}__pane--card`]: useCard.value,

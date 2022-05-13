@@ -27,6 +27,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--${state.value}`]: state.value !== 'default'
       }
     })
