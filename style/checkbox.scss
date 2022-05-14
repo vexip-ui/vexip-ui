@@ -21,7 +21,7 @@ $checkbox: map.merge(
     border-radius: get-css-var('border-radius-base'),
     border-radius-signal: get-css-var('border-radius-small'),
     color-shadow-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-fouced') get-css-var('checkbox-color-shadow-focus'),
+    shadow-focus: get-css-var('box-shadow-focus') get-css-var('checkbox-color-shadow-focus'),
     signal-small-size: 14px,
     signal-small-thick: 1px,
     signal-default-size: 18px,

@@ -1,16 +1,37 @@
+@use 'sass:map';
+
 @use '../design' as *;
+@use './input.scss' as input;
+
+$textarea: () !default;
+$textarea: map.merge(
+  (
+    min-height: 2.1em,
+    resize: vertical,
+    count-color: get-css-var('input-count-color'),
+    count-color-disbaled: get-css-var('input-count-color-disbaled'),
+    count-font-size: get-css-var('input-count-font-size'),
+    count-line-height: get-css-var('input-count-line-height')
+  ),
+  $textarea
+);
 
 .vxp-textarea {
+  &-vars {
+    @include define-preset-values('textarea', $textarea);
+  }
+
   @include basis;
-  @include input-handler;
+  @include input.handler;
 
   height: auto;
   overflow: hidden;
 
   &__control {
-    min-height: 2.1em;
+    height: auto;
+    min-height: get-css-var('textarea-min-height');
     overflow: hidden;
-    resize: vertical;
+    resize: get-css-var('textarea-resize');
   }
 
   &--no-resize &__control {
@@ -20,9 +41,16 @@
   &__count {
     position: absolute;
     right: 7px;
-    bottom: 2px;
-    font-size: $vxp-font-size-secondary;
+    bottom: 4px;
+    font-size: get-css-var('textarea-count-font-size');
+    line-height: get-css-var('textarea-count-line-height');
+    color: get-css-var('textarea-count-color');
     pointer-events: none;
     user-select: none;
+    transition: get-css-var('transition-color');
+  }
+
+  &--disabled &__count {
+    color: get-css-var('textarea-count-color-disbaled');
   }
 }

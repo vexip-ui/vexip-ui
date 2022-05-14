@@ -21,7 +21,7 @@ $radio: map.merge(
     border: get-css-var('border-appearance') get-css-var('radio-color-border'),
     signal-border: get-css-var('radio-border'),
     color-shadow-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-fouced') get-css-var('radio-color-shadow-focus'),
+    shadow-focus: get-css-var('box-shadow-focus') get-css-var('radio-color-shadow-focus'),
     signal-small-size: 14px,
     signal-small-inner-size: 7px,
     signal-default-size: 18px,

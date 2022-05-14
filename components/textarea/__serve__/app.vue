@@ -1,17 +1,20 @@
 <template>
-  <Textarea></Textarea>
+  <template v-for="state in states" :key="state">
+    <Textarea :state="state" :max-length="100"></Textarea>
+    <br />
+    <br />
+  </template>
+  <template v-for="state in states" :key="state">
+    <Textarea :state="state" disabled :max-length="100"></Textarea>
+    <br />
+    <br />
+  </template>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import Textarea from '../textarea.vue'
+<script setup lang="ts">
+import { Textarea } from '..'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Textarea
-  }
-})
+const states = ['default', 'success', 'error', 'warning'] as const
 </script>
 
 <style lang="scss">

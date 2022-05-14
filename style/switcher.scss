@@ -14,7 +14,7 @@ $switcher: map.merge(
     opacity-disabled: 60%,
     opacity-loading: get-css-var('switcher-opacity-disabled'),
     shadow-color-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-fouced') get-css-var('switcher-shadow-color-focus'),
+    shadow-focus: get-css-var('box-shadow-focus') get-css-var('switcher-shadow-color-focus'),
     label-color: get-css-var('content-color-reverse'),
     small-height: 18px,
     default-height: 22px,

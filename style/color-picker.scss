@@ -7,6 +7,7 @@
 $color-picker: () !default;
 $color-picker: map.merge(
   (
+    marker-color: get-css-var('content-color-humble'),
     marker-border-color: get-css-var('border-color-base'),
     marker-border: get-css-var('border-appearance') get-css-var('color-picker-marker-border-color'),
     marker-border-radius: get-css-var('border-radius-small'),
@@ -59,6 +60,7 @@ $color-picker: map.merge(
     height: get-css-var('color-picker-marker-default-height');
     margin-top: -0.5px; // 修正视觉差异
     margin-right: 0.6em;
+    color: get-css-var('color-picker-marker-color');
     border: get-css-var('color-picker-marker-border');
     border-radius: get-css-var('color-picker-marker-border-radius');
   }

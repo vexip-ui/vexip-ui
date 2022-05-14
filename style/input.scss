@@ -14,7 +14,7 @@ $input: map.merge(
     color-border-hover: get-css-var('color-primary-light-1'),
     color-border-focus: get-css-var('input-color-border-hover'),
     color-shadow-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-fouced') get-css-var('input-color-shadow-focus'),
+    shadow-focus: get-css-var('box-shadow-focus') get-css-var('input-color-shadow-focus'),
     color-placeholder: get-css-var('content-color-placeholder'),
     color-control: get-css-var('content-color-base'),
     control-color-disabled: get-css-var('content-color-disabled'),
@@ -26,8 +26,10 @@ $input: map.merge(
     line-height: get-css-var('line-height-base'),
     border: get-css-var('border-appearance') get-css-var('input-color-border'),
     border-radius: get-css-var('border-radius-base'),
-    font-size-count: get-css-var('font-size-secondary'),
-    line-height-count: get-css-var('line-height-secondary'),
+    count-color: get-css-var('content-color-secondary'),
+    count-color-disbaled: get-css-var('input-control-color-disabled'),
+    count-font-size: get-css-var('font-size-secondary'),
+    count-line-height: get-css-var('line-height-secondary'),
     horizontal-padding: 0.6em,
     small-height: 1.7em,
     small-padding: 0.1em get-css-var('input-horizontal-padding'),
@@ -248,12 +250,18 @@ $input: map.merge(
     position: absolute;
     top: 50%;
     right: 7px;
-    margin-top: -1px;
-    font-size: get-css-var('input-font-size-count');
-    line-height: 1;
+    margin-top: -0.5px;
+    font-size: get-css-var('input-count-font-size');
+    line-height: get-css-var('input-count-line-height');
+    color: get-css-var('input-count-color');
     pointer-events: none;
     user-select: none;
+    transition: get-css-var('transition-color');
     transform: translateY(-50%);
+  }
+
+  &--disabled &__count {
+    color: get-css-var('input-count-color-disbaled');
   }
 
   &__before,

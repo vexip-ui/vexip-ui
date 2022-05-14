@@ -301,7 +301,7 @@ $vxp-box-shadow-y-offset: 0 !default;
 $vxp-box-shadow-blur: 4px !default;
 $vxp-box-shadow-appearance: $vxp-box-shadow-x-offset $vxp-box-shadow-y-offset $vxp-box-shadow-blur !default;
 $vxp-box-shadow-border-appearance: 0 0 0 1px !default;
-$vxp-box-shadow-fouced-appearance: 0 0 0 2px !default;
+$vxp-box-shadow-focus-appearance: 0 0 0 2px !default;
 $vxp-box-shadow-base: $vxp-box-shadow-appearance $vxp-color-border !default;
 
 $box-shadow-x: 0 !default;
@@ -312,7 +312,7 @@ $box-shadow-appearance: get-css-var('box-shadow-x') get-css-var('box-shadow-y')
 $box-shadow-base: get-css-var('box-shadow-appearance') get-css-var('border-color-base') !default;
 
 $box-shadow-border: 0 0 0 1px !default;
-$box-shadow-fouced: 0 0 2px 2px !default;
+$box-shadow-focus: 0 0 2px 2px !default;
 
 :root {
   @include define-css-var('box-shadow-x', $box-shadow-x);
@@ -322,7 +322,7 @@ $box-shadow-fouced: 0 0 2px 2px !default;
   @include define-css-var('box-shadow-base', $box-shadow-base);
 
   @include define-css-var('box-shadow-border', $box-shadow-border);
-  @include define-css-var('box-shadow-fouced', $box-shadow-fouced);
+  @include define-css-var('box-shadow-focus', $box-shadow-focus);
 }
 
 $vxp-transition-duration: 250ms !default;

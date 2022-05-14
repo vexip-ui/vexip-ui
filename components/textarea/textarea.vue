@@ -112,6 +112,8 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        'vxp-input-vars': true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--focused`]: focused.value,
         [`${prefix}--disabled`]: props.disabled,
         [`${prefix}--no-resize`]: props.noResize,

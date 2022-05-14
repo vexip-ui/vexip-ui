@@ -1,5 +1,5 @@
 <template>
-  <div :class="prefix">
+  <div :class="[prefix, `${prefix}-vars`]">
     <template v-for="(item, index) in renderTexts" :key="index">
       <span v-if="item.isKey" :class="`${prefix}__key-word`">
         <slot name="light" :text="item.text">

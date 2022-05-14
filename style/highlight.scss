@@ -1,12 +1,28 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$highlight: () !default;
+$highlight: map.merge(
+  (
+    color: get-css-var('color-warning-base'),
+    bg-color: transparent
+  ),
+  $highlight
+);
+
 .vxp-highlight {
+  &-vars {
+    @include define-preset-values('highlight', $highlight);
+  }
+
   @include basis;
 
   &__key-word {
     padding: 0 1px;
     margin: 0 1px;
-    color: $vxp-color-warning;
+    color: get-css-var('highlight-color');
     text-indent: 0;
+    background-color: get-css-var('highlight-bg-color');
   }
 }
