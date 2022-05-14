@@ -5,7 +5,35 @@
 @use './icon.scss';
 @use './popup.scss';
 
+$types: info success warning error;
+
+$message: () !default;
+$message: map.merge(
+  (
+    color: inherit,
+    bg-color: get-css-var('fill-color-base'),
+    border-color: transparent,
+    border: get-css-var('border-appearance') get-css-var('message-border-color'),
+    border-radius: get-css-var('border-radius-base'),
+    shadow-color: get-css-var('border-color-base'),
+    shadow: get-css-var('box-shadow-appearance') get-css-var('message-shadow-color'),
+    padding: 0.6em 1em,
+    icon-color: get-css-var('message-color'),
+    close-color: get-css-var('content-color-placeholder'),
+    close-color-hover: get-css-var('content-color-base')
+  ),
+  $message
+);
+
 .vxp-message {
+  &-vars {
+    @include define-preset-values('message', $message);
+  }
+
+  @mixin define-message-style($style-map) {
+    @include define-preset-style('message', $style-map);
+  }
+
   @include basis;
 
   $icon: #{&}__icon;
@@ -15,9 +43,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  // width: 100%;
-  // padding: 2em 0;
   font-size: 0.875rem;
 
   &__wrapper {
@@ -28,37 +53,36 @@
     display: flex;
     align-items: center;
     margin-right: 0.5em;
+
+    &,
+    .vxp-icon {
+      color: get-css-var('message-icon-color');
+    }
   }
 
   &__close {
     display: flex;
     align-items: center;
     margin-left: 1em;
-    color: $vxp-color-content-placeholder;
+    color: get-css-var('message-close-color');
     cursor: pointer;
 
     &:hover {
       &,
       .vxp-icon {
-        color: $vxp-color-content-normal;
+        color: get-css-var('message-close-color-hover');
       }
     }
   }
 
-  $types: (
-    info: $vxp-color-primary,
-    success: $vxp-color-success,
-    warning: $vxp-color-warning,
-    error: $vxp-color-error
-  );
-
   &__item {
     display: flex;
-    padding: 0.6em 1em;
-    background-color: $vxp-color-fill;
-    border: $vxp-border-appearance transparent;
-    border-radius: $vxp-border-radius-base;
-    box-shadow: $vxp-box-shadow-base;
+    padding: get-css-var('message-padding');
+    color: get-css-var('message-color');
+    background-color: get-css-var('message-bg-color');
+    border: get-css-var('message-border');
+    border-radius: get-css-var('message-border-radius');
+    box-shadow: get-css-var('message-shadow');
 
     @mixin color-close($color) {
       color: color.mix($vxp-color-white, $color, 50%);
@@ -71,38 +95,38 @@
       }
     }
 
-    @each $type in map-keys($map: $types) {
-      $color: map.get($types, $type);
+    @each $type in $types {
+      $color: if($type == 'info', 'primary', $type);
 
       &--color-only#{&}--#{$type} {
-        color: $color;
-
-        #{$close} {
-          @include color-close($color);
-        }
+        @include define-message-style((
+          color: 'color' $color 'base',
+          close-color: 'color' $color 'light-5',
+          close-color-hover: 'color' $color 'base'
+        ));
       }
 
       &--background#{&}--#{$type} {
-        background-color: color.mix($vxp-color-white, $color, 85%);
-        border-color: color.mix($vxp-color-white, $color, 40%);
-        box-shadow: unset;
-
-        #{$close} {
-          @include color-close($color);
-        }
+        @include define-message-style((
+          bg-color: 'color' $color 'light-9',
+          border-color: 'color' $color 'light-5',
+          shadow: unset,
+          close-color: 'color' $color 'light-7',
+          close-color-hover: 'color' $color 'light-2'
+        ));
       }
 
       &--background#{&}--color#{&}--#{$type} {
-        color: color.mix($vxp-color-black, $color, 20%);
+        @include define-message-style((
+          color: 'color' $color 'dark-2',
+          icon-color: 'color' $color 'dark-1'
+        ));
       }
 
       &--#{$type} {
-        #{$icon} {
-          &,
-          .vxp-icon {
-            color: $color;
-          }
-        }
+        @include define-message-style((
+          icon-color: 'color' $color 'base'
+        ));
       }
     }
   }

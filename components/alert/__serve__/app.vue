@@ -19,5 +19,5 @@
 <script setup lang="ts">
 import { Alert } from '..'
 
-const types = ['default', 'primary', 'info', 'success', 'warning', 'error'] as const
+const types = ['default', 'info', 'success', 'warning', 'error'] as const
 </script>
