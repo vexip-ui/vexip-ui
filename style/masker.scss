@@ -1,18 +1,26 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$masker: () !default;
+$masker: map.merge(
+  (
+    z-index: get-css-var('z-index-popper'),
+    bg-color: get-css-var('color-black'),
+    opacity: 45%
+  ),
+  $masker
+);
+
 .vxp-masker {
-  @mixin fixed {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  &-vars {
+    @include define-preset-values('masker', $masker);
   }
 
   @include basis;
   @include fixed;
 
-  z-index: $vxp-z-index-popper;
+  z-index: get-css-var('masker-z-index');
 
   &--inner {
     position: absolute;
@@ -22,7 +30,12 @@
   &__mask {
     @include fixed;
 
-    background-color: rgba($vxp-color-black, 0.45);
+    &-inner {
+      width: 100%;
+      height: 100%;
+      background-color: get-css-var('masker-bg-color');
+      opacity: get-css-var('masker-opacity');
+    }
   }
 
   &--inner &__mask {

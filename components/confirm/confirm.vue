@@ -4,7 +4,7 @@
     no-footer
     :closable="false"
     :active="visible"
-    :class="prefix"
+    :class="[prefix, `${prefix}-vars`]"
     :top="top"
     :left="left"
     :width="width"

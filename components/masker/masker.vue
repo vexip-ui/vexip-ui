@@ -12,7 +12,9 @@
         @after-enter="afterOpen"
         @after-leave="afterClose"
       >
-        <div v-show="currentActive" :class="`${prefix}__mask`" @click="handleClose"></div>
+        <div v-show="currentActive" :class="`${prefix}__mask`" @click="handleClose">
+          <div :class="`${prefix}__mask-inner`"></div>
+        </div>
       </transition>
       <transition :name="transitionName">
         <slot :show="currentActive"></slot>
@@ -81,6 +83,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
         {
           [`${prefix}--inner`]: props.inner,
           [`${prefix}--disabled`]: props.disabled
