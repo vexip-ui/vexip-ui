@@ -1,23 +1,45 @@
-@use 'sass:color';
-@use 'sass:list';
 @use 'sass:map';
 
 @use '../design' as *;
 @use './icon.scss';
 
+$types: primary info success warning error;
+
+$linker: () !default;
+$linker: map.merge(
+  (
+    color: inherit,
+    color-hover: get-css-var('color-primary-light-1'),
+    color-active: get-css-var('color-primary-dark-1'),
+    color-disabled: get-css-var('content-color-disabled'),
+    series-span: 0.6em,
+    underline-height: 1px
+  ),
+  $linker
+);
+
 .vxp-linker {
+  &-vars {
+    @include define-preset-values('linker', $linker);
+  }
+
+  @mixin define-linker-style($style-map) {
+    @include define-preset-style('linker', $style-map);
+  }
+
   @include basis;
 
   position: relative;
   display: inline-flex;
   align-items: center;
+  color: get-css-var('linker-color');
   text-decoration: none;
   vertical-align: inherit;
   cursor: pointer;
   transition: get-css-var('transition-color');
 
   & + & {
-    margin-left: 10px;
+    margin-left: get-css-var('linker-series-span');
   }
 
   &:hover {
@@ -25,7 +47,14 @@
 
     &,
     .vxp-icon {
-      color: $vxp-color-primary-light-1;
+      color: get-css-var('linker-color-hover');
+    }
+  }
+
+  &:active {
+    &,
+    .vxp-icon {
+      color: get-css-var('linker-color-active');
     }
   }
 
@@ -35,15 +64,19 @@
       right: 0;
       bottom: 0;
       left: 0;
-      height: 1px;
+      height: get-css-var('linker-underline-height');
       content: '';
-      background-color: $vxp-color-primary-light-1;
+      background-color: get-css-var('linker-color-hover');
       opacity: 0%;
-      transition: get-css-var('transition-opacity');
+      transition: get-css-var('transition-background'), get-css-var('transition-opacity');
     }
 
     &:hover::after {
       opacity: 100%;
+    }
+
+    &:active::after {
+      background-color: get-css-var('linker-color-active');
     }
   }
 
@@ -51,10 +84,11 @@
     cursor: not-allowed;
 
     &,
-    &:hover {
+    &:hover,
+    &:active {
       &,
       .vxp-icon {
-        color: $vxp-color-content-disabled;
+        color: get-css-var('linker-color-disabled');
       }
     }
 
@@ -67,44 +101,14 @@
     margin-right: 3px;
   }
 
-  $types: (
-    primary: $vxp-color-primary $vxp-color-primary-light-2,
-    success: $vxp-color-success $vxp-color-success-light-2,
-    error: $vxp-color-error $vxp-color-error-light-2,
-    warning: $vxp-color-warning $vxp-color-warning-light-2,
-    info: $vxp-color-info $vxp-color-info-light-2
-  );
-
-  @each $type in map-keys($types) {
-    $colors: map.get($types, $type);
-    $color-base: list.nth($colors, 1);
-    $color-hover: list.nth($colors, 2);
-
+  @each $type in $types {
     &--#{$type} {
-      color: $color-base;
-
-      &:hover {
-        &,
-        .vxp-icon {
-          color: $color-hover;
-        }
-      }
-    }
-
-    &--#{$type}#{&}--underline {
-      &::after {
-        background-color: $color-hover;
-      }
-    }
-
-    &--#{$type}#{&}--disabled {
-      &,
-      &:hover {
-        &,
-        .vxp-icon {
-          color: color.mix($vxp-color-white, $color-base, 50%);
-        }
-      }
+      @include define-linker-style((
+        color: 'color' $type 'base',
+        color-hover: 'color' $type 'light-2',
+        color-active: 'color' $type 'dark-1',
+        color-disabled: 'color' $type 'light-5'
+      ));
     }
   }
 }
