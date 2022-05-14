@@ -1,18 +1,38 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$dropdown: () !default;
+$dropdown: map.merge(
+  (
+    z-index: get-css-var('z-index-popper'),
+    color-selected: get-css-var('color-primary-base'),
+    color-disabled: get-css-var('content-color-disabled'),
+    bg-color: get-css-var('fill-color-base'),
+    bg-color-hover: get-css-var('fill-color-hover'),
+    bg-color-active: get-css-var('dropdown-bg-color-hover'),
+    border-radius: get-css-var('border-radius-base'),
+    shadow-color: get-css-var('border-color-base'),
+    shadow: get-css-var('box-shadow-appearance') get-css-var('dropdown-shadow-color'),
+    divider-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-appearance') get-css-var('dropdown-divider-color')
+  ),
+  $dropdown
+);
+
 .vxp-dropdown {
+  &-vars {
+    @include define-preset-values('dropdown', $dropdown);
+  }
+
   @include basis;
 
   display: inline-block;
 
-  & & {
-    width: 100%;
-  }
-
   &__popper {
     @include basis;
 
-    z-index: $vxp-z-index-popper;
+    z-index: get-css-var('dropdown-z-index');
     display: flex;
     padding: 5px 0;
 
@@ -21,15 +41,20 @@
     }
   }
 
+  & &,
+  &__popper & {
+    width: 100%;
+  }
+
   &__list {
     display: inline-block;
     min-width: 5em;
     padding: 0.35em 0;
     margin: 0;
     user-select: none;
-    background-color: $vxp-color-fill;
-    border-radius: $vxp-border-radius-base;
-    box-shadow: $vxp-box-shadow-base;
+    background-color: get-css-var('dropdown-bg-color');
+    border-radius: get-css-var('dropdown-border-radius');
+    box-shadow: get-css-var('dropdown-shadow');
   }
 
   &__item {
@@ -42,19 +67,23 @@
     transition: get-css-var('transition-background');
 
     &:hover {
-      background-color: $vxp-color-fill-hover;
+      background-color: get-css-var('dropdown-bg-color-hover');
     }
 
     &--selected {
       &,
       .vxp-icon {
-        color: $vxp-color-primary;
+        color: get-css-var('dropdown-color-selected');
       }
     }
 
     &--disabled {
-      color: $vxp-color-fill-disabled;
       cursor: not-allowed;
+
+      &,
+      .vxp-icon {
+        color: get-css-var('dropdown-color-disabled');
+      }
 
       &:hover {
         background-color: transparent;
@@ -72,12 +101,12 @@
         width: 100%;
         height: 0;
         content: '';
-        border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
+        border-bottom: get-css-var('dropdown-divider');
       }
     }
   }
 
-  &__trigger--selected &__item {
-    background-color: $vxp-color-fill-hover;
+  &__trigger--active &__item {
+    background-color: get-css-var('dropdown-bg-color-active');
   }
 }

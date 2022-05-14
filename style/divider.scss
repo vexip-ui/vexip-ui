@@ -1,17 +1,35 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$divider: () !default;
+$divider: map.merge(
+  (
+    border-color: get-css-var('border-color-light-2'),
+    border: get-css-var('border-appearance') get-css-var('divider-border-color'),
+    v-margin: 24px 0,
+    v-margin-text: 14px 0,
+    h-margin: 0 0.6em,
+    text-padding: 0 1em,
+    text-size-primary: get-css-var('font-size-primary'),
+  ),
+  $divider
+);
+
 .vxp-divider {
-  $divider-border: $vxp-border-appearance $vxp-color-border-light-2;
+  &-vars {
+    @include define-preset-values('divider', $divider);
+  }
 
   @include basis;
 
   display: flex;
   padding: 0;
-  border-top: $divider-border;
+  border-top: get-css-var('divider-border');
 
   &--horizontal {
     width: 100%;
-    margin: 24px 0;
+    margin: get-css-var('divider-v-margin');
     clear: both;
   }
 
@@ -19,14 +37,14 @@
     position: relative;
     display: inline-block;
     height: 1em;
-    margin: 0 0.6em;
+    margin: get-css-var('divider-h-margin');
     vertical-align: middle;
     border-top: 0;
-    border-left: $divider-border;
+    border-left: get-css-var('divider-border');
   }
 
   &--with-text {
-    margin: 14px 0;
+    margin: get-css-var('divider-v-margin');
     text-align: center;
     white-space: nowrap;
     border-top: 0;
@@ -37,7 +55,7 @@
       top: 50%;
       width: 50%;
       content: '';
-      border-top: $divider-border;
+      border-top: get-css-var('divider-border');
       transform: translateY(50%);
     }
   }
@@ -72,13 +90,14 @@
 
   &__text {
     display: inline-block;
-    padding: 0 1em;
+    padding: get-css-var('divider-text-padding');
+    color: get-css-var('divider-text-color');
     text-align: center;
     white-space: nowrap;
   }
 
   &--primary &__text {
-    font-size: $vxp-font-size-primary;
+    font-size: get-css-var('divider-text-size-primary');
     font-weight: 500;
   }
 }

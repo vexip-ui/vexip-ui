@@ -46,6 +46,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
         `${prefix}--${props.vertical ? 'vertical' : 'horizontal'}`,
         {
           [`${prefix}--primary`]: !props.vertical && props.primary,

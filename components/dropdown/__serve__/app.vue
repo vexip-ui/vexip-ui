@@ -5,13 +5,13 @@
     </Button>
     <template #drop>
       <DropdownList>
-        <DropdownItem label="选项一">
+        <DropdownItem label="选项一" disabled>
           选项一
         </DropdownItem>
-        <DropdownItem label="选项二">
+        <DropdownItem label="选项二" selected>
           选项二
         </DropdownItem>
-        <Dropdown label="选项三">
+        <Dropdown transfer trigger="click" label="选项三">
           <DropdownItem divided>
             选项三
           </DropdownItem>
