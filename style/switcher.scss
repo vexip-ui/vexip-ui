@@ -1,123 +1,214 @@
-@use 'sass:color';
+@use 'sass:map';
 
 @use '../design' as *;
 @use './icon.scss';
 
+$states: success, error, warning;
+
+$switcher: () !default;
+$switcher: map.merge(
+  (
+    bg-color: get-css-var('fill-color-secondary'),
+    bg-color-open: get-css-var('color-primary-base'),
+    bg-color-disabled: get-css-var('fill-color-disabled'),
+    opacity-disabled: 60%,
+    opacity-loading: get-css-var('switcher-opacity-disabled'),
+    shadow-color-focus: get-css-var('color-primary-light-8'),
+    shadow-focus: get-css-var('box-shadow-fouced') get-css-var('switcher-shadow-color-focus'),
+    label-color: get-css-var('content-color-reverse'),
+    small-height: 18px,
+    default-height: 22px,
+    large-height: 26px,
+    signal-bg-color: get-css-var('fill-color-base'),
+    signal-border-color: get-css-var('switcher-signal-bg-color'),
+    signal-border-color-disabled: get-css-var('switcher-signal-bg-color'),
+    signal-border: get-css-var('border-appearance') get-css-var('switcher-signal-border-color'),
+    signal-small-size: calc(get-css-var('switcher-small-height') - 4px),
+    signal-default-size: calc(get-css-var('switcher-default-height') - 4px),
+    signal-large-size: calc(get-css-var('switcher-large-height') - 4px),
+    series-span: 0.6em,
+  ),
+  $switcher
+);
+
 .vxp-switcher {
+  &-vars {
+    @include define-preset-values('switcher', $switcher);
+  }
+
+  @mixin define-switcher-style($style-map) {
+    @include define-preset-style('switcher', $style-map);
+  }
+
   @include basis;
 
   position: relative;
   display: inline-flex;
   cursor: pointer;
   user-select: none;
-  background-color: color.mix($vxp-color-black, $vxp-color-fill-background, 10%);
+  background-color: get-css-var('switcher-bg-color');
   border-radius: 30px;
   transition:
     get-css-var('transition-background'),
     get-css-var('transition-border'),
+    get-css-var('transition-box-shadow'),
     get-css-var('transition-opacity');
 
-  &--disabled {
-    cursor: not-allowed;
-    background-color: $vxp-color-fill-disabled;
+  & + & {
+    margin-left: get-css-var('switcher-series-span');
+  }
+
+  &:focus-within {
+    box-shadow: get-css-var('switcher-shadow-focus');
   }
 
   &--loading {
     cursor: default;
-  }
-
-  &--disabled,
-  &--loading {
-    opacity: 60%;
+    opacity: get-css-var('switcher-opacity-loading');
   }
 
   &--open {
-    background-color: $vxp-color-primary;
+    background-color: get-css-var('switcher-bg-color-open');
   }
+
+  $height-s: get-css-var('switcher-small-height');
+  $height: get-css-var('switcher-default-height');
+  $height-l: get-css-var('switcher-large-height');
+  $signal-s: get-css-var('switcher-signal-small-size');
+  $signal: get-css-var('switcher-signal-default-size');
+  $signal-l: get-css-var('switcher-signal-large-size');
 
   &__label {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 44px;
-    height: 22px;
-    padding-right: 11px;
-    padding-left: 24px;
+    min-width: calc(#{$height} * 2);
+    height: $height;
+    padding-right: calc(#{$height} * 0.5 - 1px);
+    padding-left: calc(#{$height} + 2px);
     line-height: 1;
-    color: $vxp-color-content-reverse;
-    border-radius: 30px;
+    color: get-css-var('switcher-label-color');
+    border-radius: $height;
+    transition: padding get-css-var('transition-base');
   }
 
   &--open &__label {
-    padding-right: 24px;
-    padding-left: 11px;
+    padding-right: calc(#{$height} + 2px);
+    padding-left: calc(#{$height} * 0.5 - 1px);
   }
 
   &__signal {
     position: absolute;
     top: 50%;
-    left: 2px;
+    left: calc((#{$height} - #{$signal}) * 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 18px;
-    height: 18px;
-    color: $vxp-color-primary;
-    content: '';
-    background-color: $vxp-color-white;
-    border-radius: 30px;
+    width: $signal;
+    height: $signal;
+    background-color: get-css-var('switcher-signal-bg-color');
+    border-radius: 50%;
     transition:
-      left $vxp-transition-base,
-      width $vxp-transition-base,
+      left get-css-var('transition-base'),
+      // width get-css-var('transition-base'),
       get-css-var('transition-transform');
     transform: translateY(-50%);
+
+    &::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60%;
+      height: 60%;
+      content: '';
+      border: get-css-var('switcher-signal-border');
+      border-radius: 50%;
+      transition: get-css-var('transition-border');
+      transform: translate(-50%, -50%);
+    }
   }
 
-  &--disabled &__signal {
-    pointer-events: none;
+  @each $state in $states {
+    &--#{$state} {
+      @include define-switcher-style(
+        (
+          bg-color: 'color' $state 'light-1',
+          bg-color-open: 'color' $state 'light-1',
+          shadow-color-focus: 'color' $state 'light-8',
+          signal-border-color: 'color' $state 'base'
+        )
+      );
+    }
   }
 
   &--open &__signal {
-    left: calc(100% - 2px);
+    left: calc(100% - (#{$height} - #{$signal}) * 0.5);
     transform: translate(-100%, -50%);
   }
 
   &--small &__label {
-    min-width: 36px;
-    height: 18px;
-    padding-right: 9px;
-    padding-left: 20px;
+    min-width: calc(#{$height-s} * 2);
+    height: $height-s;
+    padding-right: calc(#{$height-s} * 0.5 - 1px);
+    padding-left: calc(#{$height-s} + 2px);
   }
 
   &--small#{&}--open &__label {
-    padding-right: 20px;
-    padding-left: 9px;
+    padding-right: calc(#{$height-s} + 2px);
+    padding-left: calc(#{$height-s} * 0.5 - 1px);
   }
 
   &--small &__signal {
-    width: 14px;
-    height: 14px;
+    left: calc((#{$height-s} - #{$signal-s}) * 0.5);
+    width: $signal-s;
+    height: $signal-s;
+  }
+
+  &--small#{&}--open &__signal {
+    left: calc(100% - (#{$height-s} - #{$signal-s}) * 0.5);
   }
 
   &--large &__label {
-    min-width: 52px;
-    height: 26px;
-    padding-right: 13px;
-    padding-left: 29px;
+    min-width: calc(#{$height-l} * 2);
+    height: $height-l;
+    padding-right: calc(#{$height-l} * 0.5 - 1px);
+    padding-left: calc(#{$height-l} + 2px);
   }
 
   &--large#{&}--open &__label {
-    padding-right: 29px;
-    padding-left: 13px;
+    padding-right: calc(#{$height-l} + 2px);
+    padding-left: calc(#{$height-l} * 0.5 - 1px);
   }
 
   &--large &__signal {
-    width: 22px;
-    height: 22px;
+    left: calc((#{$height-l} - #{$signal-l}) * 0.5);
+    width: $signal-l;
+    height: $signal-l;
+  }
+
+  &--large#{&}--open &__signal {
+    left: calc(100% - (#{$height-l} - #{$signal-l}) * 0.5);
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    background-color: get-css-var('switcher-bg-color-disabled');
+    opacity: get-css-var('switcher-opacity-disabled');
+  }
+
+  &--disabled &__signal {
+    pointer-events: none;
+
+    &::after {
+      border-color: get-css-var('switcher-signal-border-color-disabled');
+    }
   }
 
   &__input {
-    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    pointer-events: none;
     opacity: 0%;
   }
 }

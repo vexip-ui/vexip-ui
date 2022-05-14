@@ -5,11 +5,13 @@
         <Icon name="spinner" pulse></Icon>
       </slot>
     </span>
-    <span v-if="currentValue" :class="`${prefix}__label`">
-      <slot name="open">{{ openText }}</slot>
-    </span>
-    <span v-else :class="`${prefix}__label`">
-      <slot name="close">{{ closeText }}</slot>
+    <span :class="`${prefix}__label`">
+      <template v-if="currentValue">
+        <slot name="open">{{ openText }}</slot>
+      </template>
+      <template v-else>
+        <slot name="close">{{ closeText }}</slot>
+      </template>
     </span>
     <input
       type="checkbox"
@@ -25,7 +27,7 @@
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useConfiguredProps, createSizeProp } from '@vexip-ui/config'
+import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isPromise, noop } from '@vexip-ui/utils'
 
 import '@/common/icons/spinner'
@@ -34,6 +36,7 @@ import type { PropType } from 'vue'
 
 const props = useConfiguredProps('switcher', {
   size: createSizeProp(),
+  state: createStateProp(),
   value: {
     type: Boolean,
     default: false
@@ -88,9 +91,11 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
         {
           [`${prefix}--open`]: currentValue.value,
           [`${prefix}--${props.size}`]: props.size !== 'default',
+          [`${prefix}--${props.state}`]: props.state !== 'default',
           [`${prefix}--disabled`]: props.disabled,
           [`${prefix}--loading`]: props.loading
         }

@@ -208,7 +208,7 @@ $fill-color-map: () !default;
 $fill-color-map: map.merge(
   (
     base: #fff,
-    secondary: #dee2e6,
+    secondary: #d9dfe2,
     disabled: #dee2e6,
     hover: #e9ecef,
     humble: #f3f4f6,
@@ -312,7 +312,7 @@ $box-shadow-appearance: get-css-var('box-shadow-x') get-css-var('box-shadow-y')
 $box-shadow-base: get-css-var('box-shadow-appearance') get-css-var('border-color-base') !default;
 
 $box-shadow-border: 0 0 0 1px !default;
-$box-shadow-fouced: 0 0 0 2px !default;
+$box-shadow-fouced: 0 0 2px 2px !default;
 
 :root {
   @include define-css-var('box-shadow-x', $box-shadow-x);
