@@ -1,4 +1,3 @@
-@use 'sass:color';
 @use 'sass:map';
 
 @use '../design' as *;
@@ -83,17 +82,6 @@ $message: map.merge(
     border: get-css-var('message-border');
     border-radius: get-css-var('message-border-radius');
     box-shadow: get-css-var('message-shadow');
-
-    @mixin color-close($color) {
-      color: color.mix($vxp-color-white, $color, 50%);
-
-      &:hover {
-        &,
-        .vxp-icon {
-          color: $color;
-        }
-      }
-    }
 
     @each $type in $types {
       $color: if($type == 'info', 'primary', $type);

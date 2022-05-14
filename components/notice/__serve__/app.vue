@@ -1,41 +1,89 @@
 <template>
-  <Button type="primary" @on-click="$notice.info('提示的标题', '一条一般提示消息')">
-    一般提示
+  <Button @on-click="Notice.open({ ...permanent, icon: 'info-circle' })">
+    一般消息
   </Button>
-  <Button type="success" @on-click="$notice.success('提示的标题', '一条成功提示消息')">
-    成功提示
+  <br />
+  <br />
+  <Button
+    v-for="meta in metaData"
+    :key="meta.type"
+    :type="meta.type"
+    @on-click="Notice[meta.type](permanent)"
+  >
+    {{ meta.name }}
   </Button>
-  <Button type="warning" @on-click="$notice.warning('提示的标题', '一条警告提示消息')">
-    警告提示
+  <br />
+  <br />
+  <Button
+    v-for="meta in metaData"
+    :key="meta.type"
+    :type="meta.type"
+    @on-click="Notice[meta.type]({ ...permanent, background: true })"
+  >
+    {{ meta.name }}
   </Button>
-  <Button type="error" @on-click="$notice.error('提示的标题', '一条错误提示消息')">
-    错误提示
+  <br />
+  <br />
+  <Button
+    v-for="meta in metaData"
+    :key="meta.type"
+    :type="meta.type"
+    @on-click="Notice[meta.type]({ ...permanent, color: true })"
+  >
+    {{ meta.name }}
   </Button>
-  <Button type="warning" @on-click="blNotice.warning('左下角提示', '一条左下角提示消息')">
+  <br />
+  <br />
+  <Button
+    v-for="meta in metaData"
+    :key="meta.type"
+    :type="meta.type"
+    @on-click="Notice[meta.type]({ ...permanent, background: true, color: true })"
+  >
+    {{ meta.name }}
+  </Button>
+  <br />
+  <br />
+  <Button
+    v-for="meta in metaData"
+    :key="meta.type"
+    :type="meta.type"
+    @on-click="Notice[meta.type]({ ...titleOnly, background: true, color: true })"
+  >
+    {{ meta.name }}
+  </Button>
+  <br />
+  <br />
+  <Button type="warning" @on-click="blNotice.warning('左下角提示', '一条左下角提示消息', 0)">
     左下提示
   </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { Button } from '@/components/button'
 import { Notice } from '..'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Button
-  },
-  setup() {
-    const blNotice = Notice.clone()
+const blNotice = Notice.clone()
 
-    blNotice.config({ placement: 'bottom-left' })
+blNotice.config({ placement: 'bottom-left' })
 
-    return {
-      blNotice
-    }
-  }
-})
+const metaData = [
+  { name: '一般提醒', type: 'info' as const },
+  { name: '成功提醒', type: 'success' as const },
+  { name: '警告提醒', type: 'warning' as const },
+  { name: '错误提醒', type: 'error' as const }
+]
+
+const permanent = {
+  title: '提醒标题',
+  content: '一条持久的提醒',
+  duration: 0,
+  closable: true
+}
+
+const titleOnly = {
+  title: '提醒标题',
+  duration: 0,
+  closable: true
+}
 </script>
-
-<style lang="scss"></style>

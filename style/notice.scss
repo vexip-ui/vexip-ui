@@ -1,11 +1,42 @@
-@use 'sass:color';
+// @use 'sass:color';
 @use 'sass:map';
 
 @use '../design' as *;
 @use './icon.scss';
 @use './popup.scss';
 
+$types: info success warning error;
+
+$notice: () !default;
+$notice: map.merge(
+  (
+    title-font-size: get-css-var('font-size-primary'),
+    title-color: get-css-var('content-color-primary'),
+    color: inherit,
+    bg-color: get-css-var('fill-color-base'),
+    border-color: transparent,
+    border: get-css-var('border-appearance') get-css-var('notice-border-color'),
+    border-radius: get-css-var('border-radius-base'),
+    shadow-color: get-css-var('border-color-base'),
+    shadow: get-css-var('box-shadow-appearance') get-css-var('notice-shadow-color'),
+    padding: 0.8em 1.2em,
+    icon-color: get-css-var('notice-color'),
+    close-color: get-css-var('content-color-placeholder'),
+    close-color-hover: get-css-var('content-color-base'),
+    marker-bg-color: get-css-var('fill-color-secondary')
+  ),
+  $notice
+);
+
 .vxp-notice {
+  &-vars {
+    @include define-preset-values('notice', $notice);
+  }
+
+  @mixin define-notice-style($style-map) {
+    @include define-preset-style('notice', $style-map);
+  }
+
   @include basis;
 
   $title: #{&}__title;
@@ -14,12 +45,12 @@
 
   &__title {
     margin-bottom: 0.2em;
-    font-size: $vxp-font-size-primary;
-    color: $vxp-color-content-primary;
+    font-size: get-css-var('notice-title-font-size');
+    color: get-css-var('notice-title-color');
   }
 
   &__content {
-    line-height: $vxp-line-height;
+    color: get-css-var('notice-color');
   }
 
   &__icon {
@@ -29,6 +60,11 @@
     display: flex;
     align-items: center;
     transform: scale(2);
+
+    &,
+    .vxp-icon {
+      color: get-css-var('notice-icon-color');
+    }
   }
 
   &__close {
@@ -37,38 +73,60 @@
     right: 0.6em;
     display: flex;
     align-items: center;
-    color: $vxp-color-content-placeholder;
+    color: get-css-var('notice-close-color');
     cursor: pointer;
 
     &:hover {
       &,
       .vxp-icon {
-        color: $vxp-color-content-normal;
+        color: get-css-var('notice-close-color-hover');
       }
     }
   }
 
-  $types: (
-    info: $vxp-color-primary,
-    success: $vxp-color-success,
-    warning: $vxp-color-warning,
-    error: $vxp-color-error
-  );
-
   &__item {
+    display: flex;
+    flex-direction: column;
     width: 24em;
-    padding: 0.8em;
-    padding-left: calc(1em + 5px);
-    background-color: $vxp-color-fill;
-    border-radius: $vxp-border-radius-base;
-    box-shadow: $vxp-box-shadow-base;
+    padding: get-css-var('notice-padding');
+    // padding-left: calc(1em + 5px);
+    color: get-css-var('notice-color');
+    background-color: get-css-var('notice-bg-color');
+    border: get-css-var('notice-border');
+    border-radius: get-css-var('notice-border-radius');
+    box-shadow: get-css-var('notice-shadow');
 
     &--has-icon {
       padding-left: 4.2em;
     }
 
+    &--title-only {
+      flex-direction: row;
+  
+      #{$title} {
+        margin: 0;
+      }
+  
+      #{$icon} {
+        position: relative;
+        top: auto;
+        left: auto;
+        display: flex;
+        align-items: center;
+        margin-right: 0.5em;
+        transform: scale(1.2);
+      }
+  
+      #{$close} {
+        top: 50%;
+        right: 1em;
+        transform: translateY(-50%);
+      }
+    }
+
     &--has-icon#{&}--title-only {
-      padding-left: 3.2em;
+      // padding-left: 3.2em;
+      padding: get-css-var('notice-padding');
     }
 
     &--content-only {
@@ -81,84 +139,78 @@
       bottom: 0;
       left: 0;
       width: 5px;
-      background-color: $vxp-color-primary;
-      border-radius: $vxp-border-radius-base 0 0 $vxp-border-radius-base;
+      background-color: get-css-var('notice-marker-bg-color');
+      border-radius: get-css-var('notice-border-radius') 0 0 get-css-var('notice-border-radius');
     }
 
     &--marker::before {
       content: '';
     }
 
-    @mixin color-close($color) {
-      color: color.mix($vxp-color-white, $color, 50%);
+    // @mixin color-close($color) {
+    //   color: color.mix($vxp-color-white, $color, 50%);
 
-      &:hover {
-        &,
-        .vxp-icon {
-          color: $color;
-        }
-      }
-    }
+    //   &:hover {
+    //     &,
+    //     .vxp-icon {
+    //       color: $color;
+    //     }
+    //   }
+    // }
 
-    @each $type in map-keys($map: $types) {
-      $color: map.get($types, $type);
+    @each $type in $types {
+      $color: if($type == 'info', 'primary', $type);
 
       &--color-only#{&}--#{$type} {
-        &,
-        #{$title} {
-          color: $color;
-        }
-
-        #{$close} {
-          @include color-close($color);
-        }
+        @include define-notice-style((
+          title-color: 'color' $color 'dark-1',
+          color: 'color' $color 'base',
+          close-color: 'color' $color 'light-5',
+          close-color-hover: 'color' $color 'base'
+        ));
       }
 
       &--background#{&}--#{$type} {
-        background-color: color.mix($vxp-color-white, $color, 85%);
-        border-color: color.mix($vxp-color-white, $color, 40%);
-        box-shadow: unset;
-
-        #{$close} {
-          @include color-close($color);
-        }
+        @include define-notice-style((
+          bg-color: 'color' $color 'light-9',
+          border-color: 'color' $color 'light-5',
+          shadow: unset,
+          close-color: 'color' $color 'light-7',
+          close-color-hover: 'color' $color 'light-2'
+        ));
       }
 
       &--background#{&}--color#{&}--#{$type} {
-        &,
-        #{$title} {
-          color: color.mix($vxp-color-black, $color, 20%);
-        }
+        @include define-notice-style((
+          title-color: 'color' $color 'dark-2',
+          color: 'color' $color 'dark-2',
+          icon-color: 'color' $color 'dark-1',
+          marker-bg-color: 'color' $color 'dark-1'
+        ));
       }
 
       &--#{$type} {
-        #{$icon} {
-          &,
-          .vxp-icon {
-            color: $color;
-          }
-        }
-
-        &::before {
-          background-color: $color;
-        }
+        @include define-notice-style((
+          icon-color: 'color' $color 'base',
+          marker-bg-color: 'color' $color 'base'
+        ));
       }
     }
   }
 
-  &__item--title-only &__title {
-    margin: 0;
-  }
+  // &__item--title-only &__title {
+  //   margin: 0;
+  // }
 
-  &__item--title-only &__icon {
-    top: 50%;
-    left: 1.4em;
-    transform: translateY(-50%) scale(1.2);
-  }
+  // &__item--title-only &__icon {
+  //   top: 50%;
+  //   left: 1.4em;
+  //   transform: translateY(-50%) scale(1.2);
+  // }
 
-  &__item--title-only &__close {
-    top: 50%;
-    right: 1em;
-    transform: translateY(-50%);
-  }
+  // &__item--title-only &__close {
+  //   top: 50%;
+  //   right: 1em;
+  //   transform: translateY(-50%);
+  // }
 }
