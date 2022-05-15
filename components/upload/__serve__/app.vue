@@ -17,30 +17,26 @@
     directory
     list-type="card"
   ></Upload>
+  <br />
+  <br />
+  <Upload
+    multiple
+    manual
+    select-to-add
+    directory
+    list-type="name"
+  ></Upload>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import Upload from '../upload.vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Upload } from '..'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Upload
-  },
-  data() {
-    return {
-      fileIds: [] as string[]
-    }
-  },
-  methods: {
-    handleSuccess(res: { id: string }) {
-      if (res.id && !this.fileIds.includes(res.id)) {
-        this.fileIds.push(res.id)
-      }
-    }
+const fileIds = ref<string[]>([])
+
+function handleSuccess(res: { id: string }) {
+  if (res.id && !fileIds.value.includes(res.id)) {
+    fileIds.value.push(res.id)
   }
-})
+}
 </script>
-
-<style lang="scss"></style>

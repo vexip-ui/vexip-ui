@@ -1,8 +1,49 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './button.scss';
 @use './progress.scss';
 
+$upload: () !default;
+$upload: map.merge(
+  (
+    color-success: get-css-var('color-success-base'),
+    color-fail: get-css-var('color-error-base'),
+    color-loading: get-css-var('content-color-disabled'),
+    pane-bg-color: get-css-var('fill=color-base'),
+    pane-border-width: get-css-var('border-width'),
+    pane-border-style: dashed,
+    pane-border-color: get-css-var('border-color-base'),
+    pane-border-color-hover: get-css-var('color-primary-base'),
+    pane-border-color-over: get-css-var('color-primary-base'),
+    pane-border-radius: get-css-var('border-radius-base'),
+    cloud-color: get-css-var('content-color-secondary'),
+    cloud-color-over: get-css-var('color-primary-base'),
+    file-bg-color: transparent,
+    file-bg-color-hover: get-css-var('fill-color-hover'),
+    file-border-color: get-css-var('border-color-base'),
+    file-border-color-success: get-css-var('color-success-base'),
+    file-border-color-fail: get-css-var('color-error-base'),
+    file-border: get-css-var('border-appearance') get-css-var('upload-file-border-color'),
+    file-border-radius: get-css-var('border-radius-base'),
+    thumbnail-color: get-css-var('content-color-secondary'),
+    mask-bg-color: get-css-var('color-black'),
+    mask-opacity: 45%,
+    action-color: get-css-var('content-color-secondary'),
+    action-color-hover: get-css-var('content-color-base'),
+    action-color-disabled: get-css-var('content-color-disabled'),
+    action-color-light: get-css-var('content-color-placeholder'),
+    action-color-reverse: get-css-var('content-color-reverse'),
+    percentage-color: get-css-var('content-color-secondary')
+  ),
+  $upload
+);
+
 .vxp-upload {
+  &-vars {
+    @include define-preset-values('upload', $upload);
+  }
+
   @include basis;
 
   position: relative;
@@ -42,13 +83,13 @@
     padding: 1.6em;
     overflow: hidden;
     cursor: pointer;
-    background-color: $vxp-color-fill;
-    border: $vxp-border-width dashed $vxp-color-border;
-    border-radius: $vxp-border-radius-base;
+    background-color: get-css-var('upload-pane-bg-color');
+    border: get-css-var('upload-pane-border-width') get-css-var('upload-pane-border-style') get-css-var('upload-pane-border-color');
+    border-radius: get-css-var('upload-pane-border-radius');
     transition: get-css-var('transition-border');
 
     &:hover {
-      border-color: $vxp-color-primary;
+      border-color: get-css-var('upload-pane-border-color-hover');
     }
   }
 
@@ -57,15 +98,15 @@
   }
 
   &__control--drag-over &__drag-pane {
-    border-color: $vxp-color-primary;
+    border-color: get-css-var('upload-pane-border-color-over');
   }
 
   &__cloud {
-    color: $vxp-color-border;
+    color: get-css-var('upload-cloud-color');
   }
 
   &__control--drag-over &__cloud {
-    color: $vxp-color-primary;
+    color: get-css-var('upload-cloud-color-over');
   }
 
   &__drag-pane &__tip {
@@ -85,7 +126,7 @@
     align-items: center;
     vertical-align: middle;
     list-style: none;
-    border-radius: $vxp-border-radius-base;
+    border-radius: get-css-var('upload-file-border-radius');
     transition: get-css-var('transition-transform'), get-css-var('transition-opacity');
 
     &--name {
@@ -93,10 +134,11 @@
       width: 100%;
       padding: 0.2em 0.5em;
       margin-bottom: 0.2em;
+      background-color: get-css-var('upload-file-bg-color');
       transition: get-css-var('transition-background');
 
       &:hover {
-        background-color: $vxp-color-fill-hover;
+        background-color: get-css-var('upload-file-bg-color-hover');
       }
 
       &:last-child {
@@ -109,61 +151,24 @@
       padding: 0.5em;
       margin-right: 0.5em;
       margin-bottom: 0.5em;
-      border: $vxp-border-base;
+      border: get-css-var('upload-file-border');
       transition: get-css-var('transition-border');
     }
 
     &--thumbnail &--success,
     &--card &--success {
-      border-color: $vxp-color-success;
+      border-color: get-css-var('upload-file-border-color-success');
     }
 
     &--thumbnail &--fail,
     &--card &--fail {
-      border-color: $vxp-color-error;
+      border-color: get-css-var('upload-file-border-color-fail');
     }
 
     &--card {
       width: 100%;
     }
   }
-
-  // &--type-name &__file {
-  //   justify-content: space-between;
-  //   width: 100%;
-  //   padding: 0.2em 0.5em;
-  //   margin-bottom: 0.2em;
-  //   transition: get-css-var('transition-background');
-
-  //   &:hover {
-  //     background-color: $vxp-color-fill-hover;
-  //   }
-
-  //   &:last-child {
-  //     margin-bottom: 0;
-  //   }
-  // }
-
-  // &--type-thumbnail &__file,
-  // &--type-card &__file {
-  //   padding: 0.5em;
-  //   margin-right: 0.5em;
-  //   margin-bottom: 0.5em;
-  //   border: $vxp-border-base;
-  //   transition: get-css-var('transition-border');
-
-  //   &--success {
-  //     border-color: $vxp-color-success;
-  //   }
-
-  //   &--fail {
-  //     border-color: $vxp-color-error;
-  //   }
-  // }
-
-  // &--type-card &__file {
-  //   width: 100%;
-  // }
 
   &__filename {
     overflow: hidden;
@@ -173,11 +178,11 @@
   }
 
   &__file--success &__filename {
-    color: $vxp-color-success;
+    color: get-css-var('upload-success-color');
   }
 
   &__file--fail &__filename {
-    color: $vxp-color-error;
+    color: get-css-var('upload-fail-color');
   }
 
   &__label {
@@ -209,8 +214,8 @@
     justify-content: center;
 
     &,
-    vxp-icon {
-      color: $vxp-color-content-secondary;
+    .vxp-icon {
+      color: get-css-var('upload-thumbnail-color');
     }
   }
 
@@ -256,9 +261,18 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba($vxp-color-black, 0.45);
     opacity: 0%;
     transition: get-css-var('transition-opacity');
+  }
+
+  &__file--thumbnail &__mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: get-css-var('upload-mask-bg-color');
+    opacity: get-css-var('upload-mask-opacity');
   }
 
   &__card:hover &__actions {
@@ -271,6 +285,7 @@
   }
 
   &__action {
+    position: relative;
     margin: 0 0.3em;
     cursor: pointer;
 
@@ -279,7 +294,7 @@
 
       &,
       .vxp-icon {
-        color: $vxp-color-content-disabled !important;
+        color: get-css-var('upload-action-color-disabled') !important;
       }
     }
   }
@@ -287,10 +302,10 @@
   &__file--thumbnail &__action {
     &,
     .vxp-icon {
-      color: $vxp-color-content-placeholder;
+      color: get-css-var('upload-action-color-light');
 
       &:hover {
-        color: $vxp-color-content-reverse;
+        color: get-css-var('upload-action-color-reverse');
       }
     }
   }
@@ -298,10 +313,10 @@
   &__file--card &__action {
     &,
     .vxp-icon {
-      color: $vxp-color-content-secondary;
+      color: get-css-var('upload-action-color');
 
       &:hover {
-        color: $vxp-color-content-normal;
+        color: get-css-var('upload-action-color-hover');
       }
     }
   }
@@ -348,13 +363,13 @@
   &__file:hover &__close {
     &,
     .vxp-icon {
-      color: $vxp-color-content-disabled;
+      color: get-css-var('upload-action-color');
     }
 
     &:hover {
       &,
       .vxp-icon {
-        color: $vxp-color-content-normal;
+        color: get-css-var('upload-action-color-hover');
       }
     }
   }
@@ -362,21 +377,21 @@
   &__success {
     &,
     .vxp-icon {
-      color: $vxp-color-success;
+      color: get-css-var('upload-success-color');
     }
   }
 
   &__fail {
     &,
     .vxp-icon {
-      color: $vxp-color-error;
+      color: get-css-var('upload-fail-color');
     }
   }
 
   &__loading {
     &,
     .vxp-icon {
-      color: $vxp-color-content-disabled;
+      color: get-css-var('upload-loading-color');
     }
   }
 
@@ -406,9 +421,10 @@
   }
 
   &__percentage {
-    color: $vxp-color-content-secondary;
+    color: get-css-var('upload-percentage-color');
   }
 
+  // list transition group class names
   &-list-transition {
     &-enter,
     &-leave-to {
@@ -418,16 +434,6 @@
 
     &-leave-active {
       position: absolute !important;
-
-      // transition: get-css-var('transition-transform'), get-css-var('transition-opacity');
     }
-
-    // &-move {
-    //   transition: get-css-var('transition-transform');
-    // }
   }
-
-  // &--to-add &-list-transition-enter-active {
-  //   transition: get-css-var('transition-transform'), $vxp-transition-opacity-base !important;
-  // }
 }
