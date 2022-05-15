@@ -1,10 +1,39 @@
-@use 'sass:color';
+@use 'sass:map';
 
 @use '../design' as *;
 @use './number-input.scss';
 @use './select.scss';
 
+$pagination: () !default;
+$pagination: map.merge(
+  (
+    color: inherit,
+    color-hover: get-css-var('color-primary-base'),
+    color-disabled: get-css-var('content-color-disabled'),
+    color-active: get-css-var('pagination-color-hover'),
+    bg-color: get-css-var('fill-color-background'),
+    bg-color-hover: get-css-var('color-primary-light-9'),
+    bg-color-disabled: get-css-var('pagination-bg-color'),
+    bg-color-active: get-css-var('color-primary-base'),
+    border-color: get-css-var('border-color-base'),
+    border-color-hover: get-css-var('color-primary-base'),
+    border-color-disabled: get-css-var('fill-color-disabled'),
+    border-color-active: get-css-var('pagination-border-color-hover'),
+    border: get-css-var('border-appearance') get-css-var('pagination-border-color'),
+    border-radius: get-css-var('border-radius-base'),
+    small-size: 2em,
+    default-size: 2.2em,
+    large-size: 2.5em,
+    item-span: 0.4em
+  ),
+  $pagination
+);
+
 .vxp-pagination {
+  &-vars {
+    @include define-preset-values('pagination', $pagination);
+  }
+
   @include basis;
 
   display: inline-flex;
@@ -15,52 +44,49 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.2em;
-    height: 2.2em;
-    margin-right: 0.4em;
-
-    // color: $vxp-color-content-secondary;
+    width: get-css-var('pagination-default-size');
+    height: get-css-var('pagination-default-size');
+    margin-right: get-css-var('pagination-item-span');
     list-style: none;
     cursor: pointer;
     user-select: none;
-    border: $vxp-border-base;
-    border-radius: $vxp-border-radius-base;
+    border: get-css-var('pagination-border');
+    border-radius: get-css-var('pagination-border-radius');
     transition:
       get-css-var('transition-color'),
       get-css-var('transition-background'),
       get-css-var('transition-border');
 
-    &--prev,
-    &--next,
-    &--more {
-      &,
-      .vxp-icon {
-        color: $vxp-color-content-normal;
-      }
-    }
-
     &:last-of-type {
       margin-right: 0;
     }
 
-    &:hover,
-    &--active {
+    &:hover {
+      border-color: get-css-var('pagination-border-color-hover');
+
       &,
       .vxp-icon {
-        color: $vxp-color-primary;
+        color: get-css-var('pagination-color-hover');
       }
+    }
 
-      border-color: $vxp-color-primary;
+    &--active {
+      border-color: get-css-var('pagination-border-color-active');
+
+      &,
+      .vxp-icon {
+        color: get-css-var('pagination-color-active');
+      }
     }
 
     @mixin disabled {
+      cursor: not-allowed;
+      border-color: get-css-var('pagination-border-color-disabled');
+
       &,
       .vxp-icon {
-        color: $vxp-color-content-disabled;
+        color: get-css-var('pagination-color-disabled');
       }
-
-      cursor: not-allowed;
-      border-color: $vxp-color-fill-disabled;
     }
 
     &--disabled,
@@ -71,33 +97,34 @@
   }
 
   &--small &__item {
-    width: 2em;
-    height: 2em;
+    width: get-css-var('pagination-small-size');
+    height: get-css-var('pagination-small-size');
   }
 
   &--large &__item {
-    width: 2.5em;
-    height: 2.5em;
+    width: get-css-var('pagination-large-size');
+    height: get-css-var('pagination-large-size');
   }
 
   &--background &__item {
-    background-color: $vxp-color-fill-background;
+    background-color: get-css-var('pagination-bg-color');
 
     &:hover {
-      background-color: color.mix($vxp-color-white, $vxp-color-primary, 90%);
+      background-color: get-css-var('pagination-bg-color-hover');
     }
 
     &--disabled {
       &,
       &:hover {
-        background-color: $vxp-color-fill-background;
+        background-color: get-css-var('pagination-bg-color-disabled');
       }
     }
   }
 
   &--background &__item#{&}__item--active {
-    color: $vxp-color-content-reverse;
-    background-color: $vxp-color-primary;
+    @include define-css-var('pagination-color-active', get-css-var('content-color-reverse'));
+
+    background-color: get-css-var('pagination-bg-color-active');
   }
 
   &--no-border &__item {
@@ -110,8 +137,6 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
-    // padding: 0 0.3em;
   }
 
   &__jump {

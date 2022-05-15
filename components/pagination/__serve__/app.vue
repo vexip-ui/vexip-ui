@@ -8,6 +8,28 @@
     :page-size="10"
     :max-count="8"
   ></Pagination>
+  <br />
+  <Pagination
+    v-model:active="active"
+    background
+    page-jump
+    page-total
+    page-count
+    :total="100"
+    :page-size="10"
+    :max-count="8"
+  ></Pagination>
+  <br />
+  <Pagination
+    v-model:active="active"
+    no-border
+    page-jump
+    page-total
+    page-count
+    :total="100"
+    :page-size="10"
+    :max-count="8"
+  ></Pagination>
 </template>
 
 <script lang="ts">
