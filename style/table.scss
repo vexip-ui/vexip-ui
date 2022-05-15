@@ -386,6 +386,7 @@ $table: map.merge(
     left: 0;
     z-index: 10;
     height: 1px;
+    will-change: top;
     background-color: get-css-var('table-indicator-color');
   }
 
