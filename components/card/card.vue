@@ -48,7 +48,7 @@ export default defineComponent({
     const prefix = 'vxp-card'
 
     const className = computed(() => {
-      return [prefix, `${prefix}--shadow-${props.shadow}`]
+      return [prefix, `${prefix}-vars`, `${prefix}--shadow-${props.shadow}`]
     })
     const hasTitle = computed(() => {
       return slots.title || props.title

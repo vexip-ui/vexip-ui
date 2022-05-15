@@ -1,9 +1,9 @@
 @use './variables.scss' as *;
 
 @mixin basis {
-  font-size: $vxp-font-size;
-  line-height: $vxp-line-height;
-  color: $vxp-color-content-normal;
+  font-size: get-css-var('font-size-base');
+  line-height: get-css-var('line-height-base');
+  color: get-css-var('content-color-base');
   vertical-align: middle;
 
   &,
