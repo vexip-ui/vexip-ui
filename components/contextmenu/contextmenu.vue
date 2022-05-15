@@ -1,7 +1,7 @@
 <template>
   <Dropdown
     v-model:visible="visible"
-    :class="prefix"
+    :class="[prefix, `${prefix}-vars`]"
     trigger="click"
     placement="right-start"
     :appear="appear"
