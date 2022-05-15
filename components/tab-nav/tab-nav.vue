@@ -47,6 +47,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--card`]: props.card
       }
     })

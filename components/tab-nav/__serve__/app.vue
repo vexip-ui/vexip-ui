@@ -6,7 +6,7 @@
     <TabNavItem label="标签页2">
       标签页2
     </TabNavItem>
-    <TabNavItem label="标签页3">
+    <TabNavItem label="标签页3" disabled>
       标签页3
     </TabNavItem>
   </TabNav>
@@ -22,7 +22,7 @@
     <TabNavItem label="标签页2">
       标签页2
     </TabNavItem>
-    <TabNavItem label="标签页3">
+    <TabNavItem label="标签页3" disabled>
       标签页3
     </TabNavItem>
   </TabNav>
