@@ -1,10 +1,20 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './scrollbar.scss';
 
+$scroll: () !default;
+$scroll: map.merge(
+  (
+    move-duration: 140ms,
+    move-timing: cubic-bezier(0.165, 0.84, 0.44, 1)
+  ),
+  $scroll
+);
+
 .vxp-scroll {
   &-vars {
-    @include define-css-var('scroll-move-duration', 140ms);
-    @include define-css-var('scroll-move-timing', cubic-bezier(0.165, 0.84, 0.44, 1));
+    @include define-preset-values('scroll', $scroll);
   }
 
   @include basis;

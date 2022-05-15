@@ -13,7 +13,7 @@
       <slot :name="position[1]"></slot>
     </div>
     <div :class="`${prefix}__trigger`" :style="triggerStyle">
-      <div :class="`${prefix}__handle`" @mousedown="handleTriggerDown">
+      <div :class="`${prefix}__handler`" @mousedown="handleTriggerDown">
         <template v-if="canFull">
           <div
             :class="[`${prefix}__button`, `${prefix}__button--${vertical ? 'top' : 'left'}-full`]"
@@ -127,6 +127,7 @@ export default defineComponent({
 
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--${props.vertical ? 'vertical' : 'horizontal'}`]: true,
         [`${prefix}--moving`]: moving.value,
         [`${prefix}--${fullType}-full`]: !!fullType,
@@ -166,7 +167,7 @@ export default defineComponent({
             ? '100%'
             : currentFull.value > 0
               ? '0'
-              : `calc(${currentValue.value * 100}% - 3px)`
+              : `calc(${currentValue.value * 100}% - var(--vxp-split-handler-size) * 0.5)`
       }
     })
 
