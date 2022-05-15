@@ -158,10 +158,10 @@ export default defineComponent({
 
         hoverTimer = window.setTimeout(() => {
           currentVisible.value = true
-
-          emit('on-tip-enter')
         }, 250)
       }
+
+      emit('on-tip-enter')
     }
 
     function handleTriggerLeave() {
@@ -172,10 +172,10 @@ export default defineComponent({
 
         hoverTimer = window.setTimeout(() => {
           currentVisible.value = false
-
-          emit('on-tip-leave')
         }, 250)
       }
+
+      emit('on-tip-leave')
     }
 
     function handleTriggerClick() {

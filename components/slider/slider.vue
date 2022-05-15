@@ -36,10 +36,11 @@
 import { defineComponent, ref, computed, watch, inject, onMounted } from 'vue'
 import { Tooltip } from '@/components/tooltip'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useConfiguredProps, createStateProp } from '@vexip-ui/config'
 import { noop, throttle } from '@vexip-ui/utils'
 
 const props = useConfiguredProps('slider', {
+  state: createStateProp(),
   value: {
     type: Number,
     default: 0
@@ -71,6 +72,10 @@ const props = useConfiguredProps('slider', {
     type: Boolean,
     default: false
   },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
   disableValidate: {
     type: Boolean,
     default: false
@@ -98,8 +103,11 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
+        [`${prefix}--${props.state}`]: props.state !== 'default',
         [`${prefix}--vertical`]: props.vertical,
-        [`${prefix}--sliding`]: sliding.value
+        [`${prefix}--sliding`]: sliding.value,
+        [`${prefix}--disabled`]: props.disabled
       }
     })
     // 按每 step 算的最小值
@@ -161,26 +169,11 @@ export default defineComponent({
       }
     }
 
-    function handleTrackDown(event: MouseEvent) {
-      if (!track.value) return
-
-      const vertical = props.vertical
-      const client = vertical ? event.clientY : event.clientX
-      const trackRect = track.value.getBoundingClientRect()
-
-      currentValue.value =
-        ((client - trackRect[vertical ? 'top' : 'left']) /
-          trackRect[vertical ? 'height' : 'width']) *
-          total.value +
-        stepMin.value
-      verifyValue()
-      emitChange()
-    }
-
     let trackRect: DOMRect | null = null
+    let slidingTimer: number
 
     const handleMove = throttle((event: MouseEvent) => {
-      if (!trackRect) return
+      if (!trackRect || props.disabled) return
 
       event.preventDefault()
 
@@ -201,9 +194,36 @@ export default defineComponent({
       emit('on-input', truthValue.value)
     })
 
-    function handleMoveStart(event: MouseEvent) {
-      if (!track.value) return
+    function handleTrackDown(event: MouseEvent) {
+      if (!track.value || props.disabled) return
 
+      window.clearTimeout(slidingTimer)
+      event.stopPropagation()
+      event.preventDefault()
+
+      const vertical = props.vertical
+      const client = vertical ? event.clientY : event.clientX
+
+      trackRect = track.value.getBoundingClientRect()
+      sliding.value = true
+
+      currentValue.value =
+        ((client - trackRect[vertical ? 'top' : 'left']) /
+          trackRect[vertical ? 'height' : 'width']) *
+          total.value +
+        stepMin.value
+
+      verifyValue()
+      // emitChange()
+
+      document.addEventListener('mousemove', handleMove)
+      document.addEventListener('mouseup', handleMoveEnd)
+    }
+
+    function handleMoveStart(event: MouseEvent) {
+      if (!track.value || props.disabled) return
+
+      window.clearTimeout(slidingTimer)
       event.stopPropagation()
       event.preventDefault()
 
@@ -215,13 +235,16 @@ export default defineComponent({
     }
 
     function handleMoveEnd() {
-      sliding.value = false
       trackRect = null
 
       document.removeEventListener('mousemove', handleMove)
       document.removeEventListener('mouseup', handleMoveEnd)
 
       emitChange()
+
+      slidingTimer = window.setTimeout(() => {
+        sliding.value = false
+      }, 250)
     }
 
     let hoverTimer: number
@@ -229,9 +252,11 @@ export default defineComponent({
     function showTooltip() {
       window.clearTimeout(hoverTimer)
 
-      hoverTimer = window.setTimeout(() => {
-        isTipShow.value = true
-      }, 250)
+      if (!props.disabled) {
+        hoverTimer = window.setTimeout(() => {
+          isTipShow.value = true
+        }, 250)
+      }
     }
 
     function hideTooltip() {

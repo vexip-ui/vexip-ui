@@ -1,52 +1,105 @@
-@use 'sass:color';
+@use 'sass:map';
 
 @use '../design' as *;
 @use './tooltip.scss';
 
+$states: success, error, warning;
+
+$slider: () !default;
+$slider: map.merge(
+  (
+    track-bg-color: get-css-var('fill-color-humble'),
+    track-bg-color-hover: get-css-var('fill-color-hover'),
+    track-bg-color-disabled: get-css-var('slider-track-bg-color'),
+    track-height: 4px,
+    filler-bg-color: get-css-var('color-primary-base'),
+    filler-bg-color-disabled: get-css-var('fill-color-disabled'),
+    handler-size: 14px,
+    handler-bg-color: get-css-var('fill-color-base'),
+    handler-border-width: 2px,
+    handler-border-color: get-css-var('color-primary-base'),
+    handler-border-color-disabled: get-css-var('content-color-disabled'),
+    handler-shadow: unset,
+    handler-shadow-hover: unset,
+    handler-shadow-color: get-css-var('color-primary-light-6'),
+    handler-shadow-focus: 0 0 4px 1px get-css-var('slider-handler-shadow-color'),
+    handler-shadow-disabled: unset,
+    handler-scale-hover: 1.25,
+    handler-scale-focus: 1.25
+  ),
+  $slider
+);
+
 .vxp-slider {
+  &-vars {
+    @include define-preset-values('slider', $slider);
+  }
+
+  @mixin define-slider-style($style-map) {
+    @include define-preset-style('slider', $style-map);
+  }
+
   @include basis;
+
+  $padding: max(0px, calc((get-css-var('slider-handler-size') - get-css-var('slider-track-height')) * 0.5));
+  $margin: calc(get-css-var('slider-handler-size') * 0.5 + 1px);
 
   position: relative;
   display: flex;
-  padding: 4px 0;
-  margin: 2px 8px;
+  padding: $padding 0;
+  margin: 2px $margin;
   cursor: pointer;
 
   &--vertical {
     display: inline-flex;
     height: 100%;
-    padding: 0 4px;
-    margin: 8px 2px;
+    padding: 0 $padding;
+    margin: $margin 2px;
+  }
+
+  &--disabled {
+    cursor: not-allowed;
   }
 
   &__track {
     width: 100%;
-    height: 4px;
-    background-color: color.mix($vxp-color-black, $vxp-color-fill-background, 5%);
-    border-radius: 4px;
+    height: get-css-var('slider-track-height');
+    background-color: get-css-var('slider-track-bg-color');
+    border-radius: get-css-var('slider-track-height');
     transition: get-css-var('transition-background');
   }
 
   &:hover &__track {
-    background-color: color.mix($vxp-color-black, $vxp-color-fill-background, 10%);
+    background-color: get-css-var('slider-track-bg-color-hover');
+  }
+
+  &--disabled &__track,
+  &--disabled:hover &__track {
+    background-color: get-css-var('slider-track-bg-color-disabled');
   }
 
   &--vertical &__track {
-    width: 4px;
+    width: get-css-var('slider-track-height');
     height: 100%;
   }
 
   &__filler {
-    height: 4px;
-    background-color: $vxp-color-primary;
-    border-radius: 4px;
+    height: get-css-var('slider-track-height');
+    background-color: get-css-var('slider-filler-bg-color');
+    border-radius: get-css-var('slider-track-height');
     transition: get-css-var('transition-background');
   }
 
+  &--disabled &__filler {
+    background-color: get-css-var('slider-filler-bg-color-disabled');
+  }
+
+  $handler-size: get-css-var('slider-handler-size');
+
   &__trigger {
     position: absolute;
-    width: 14px;
-    height: 14px;
+    width: $handler-size;
+    height: $handler-size;
     transform: translate(-50%, -50%);
 
     .vxp-tooltip {
@@ -63,30 +116,58 @@
   }
 
   &__handler {
-    width: 14px;
-    height: 14px;
+    width: $handler-size;
+    height: $handler-size;
     cursor: pointer;
-    background-color: $vxp-color-white;
-    border: 2px $vxp-border-style $vxp-color-primary;
-    border-radius: 14px;
-    box-shadow: 0 0 0 4px transparent;
-    transition: box-shadow 500ms ease, get-css-var('transition-transform');
+    background-color: get-css-var('slider-handler-bg-color');
+    border: get-css-var('slider-handler-border-width') solid get-css-var('slider-handler-border-color');
+    border-radius: $handler-size;
+    box-shadow: get-css-var('slider-handler-shadow');
+    transition: get-css-var('transition-box-shadow'), get-css-var('transition-transform');
 
     &:hover {
-      transform: scale(1.25);
+      box-shadow: get-css-var('slider-handler-shadow-hover');
+      transform: scale(get-css-var('slider-handler-scale-hover'));
     }
 
     &:focus {
-      box-shadow: 0 0 0 4px rgba($vxp-color-primary, 0.25);
+      box-shadow: get-css-var('slider-handler-shadow-focus');
+      transform: scale(get-css-var('slider-handler-scale-focus'));
     }
   }
 
   &--sliding &__handler {
-    box-shadow: 0 0 0 4px rgba($vxp-color-primary, 0.25);
-    transform: scale(1.25);
+    box-shadow: get-css-var('slider-handler-shadow-focus');
+    transform: scale(get-css-var('slider-handler-scale-focus'));
+  }
+
+  &--disabled &__handler {
+    cursor: not-allowed;
+    border-color: get-css-var('slider-handler-border-color-disabled');
+
+    &,
+    &:hover {
+      box-shadow: get-css-var('slider-handler-shadow-disabled');
+      transform: scale(1);
+    }
+  }
+
+  &--disabled#{&}--sliding &__handler {
+    box-shadow: get-css-var('slider-handler-shadow-disabled');
+    transform: scale(1);
   }
 
   &__tip {
     user-select: none;
+  }
+
+  @each $state in $states {
+    &--#{$state} {
+      @include define-slider-style((
+        filler-bg-color: 'color' $state 'base',
+        handler-border-color: 'color' $state 'base',
+        handler-shadow-color: 'color' state 'light-6'
+      ));
+    }
   }
 }
