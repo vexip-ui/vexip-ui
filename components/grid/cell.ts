@@ -109,7 +109,7 @@ export default defineComponent({
               layoutState[key] = has(matchSize, key) ? matchSize[key] : props[key] as any
             })
 
-            layoutState.width = defaultWidth.value
+            layoutState.width = layoutState.width ?? defaultWidth.value
           }
         } else {
           leyoutKeys.forEach(key => {

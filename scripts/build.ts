@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import execa from 'execa'
 import minimist from 'minimist'
-import { logger, components as allComponents, fuzzyMatchComponent, runParallel, specifyComponent, emptyDir } from './utils'
+import { logger, run, components as allComponents, fuzzyMatchComponent, runParallel, specifyComponent, emptyDir } from './utils'
 
 const args = minimist(process.argv.slice(2))
 
@@ -26,7 +25,7 @@ async function main() {
     emptyDir(path.resolve(__dirname, '../node_modules/.cache'))
   }
 
-  await execa('pnpm', ['lint:style'])
+  // await run('pnpm', ['lint:style'])
 
   if (!libOnly) {
     logger.withBothLn(() => logger.successText('start building components...'))
@@ -69,7 +68,7 @@ async function build(component: string) {
   const targetDir = path.resolve(libDir, component)
   // const indexPath = path.resolve(targetDir, 'index.js')
 
-  await execa('vite', ['build'], {
+  await run('vite', ['build'], {
     stdio: 'inherit',
     env: {
       NODE_ENV: env,
@@ -100,7 +99,7 @@ async function build(component: string) {
 
 async function buildLib() {
   try {
-    await execa('vite', ['build'], {
+    await run('vite', ['build'], {
       stdio: 'inherit',
       env: {
         NODE_ENV: env,

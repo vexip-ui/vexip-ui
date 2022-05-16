@@ -67,10 +67,6 @@ $date-picker: map.merge(
     display: flex;
     align-items: center;
     outline: 0;
-
-    // &--activated {
-    //   color: $vxp-color-content-normal;
-    // }
   }
 
   &__unit {
@@ -90,11 +86,6 @@ $date-picker: map.merge(
     transition: get-css-var('transition-background'), get-css-var('transition-color');
   }
 
-  // &--disabled &__unit,
-  // &--disabled &__label {
-  //   color: $vxp-color-content-secondary;
-  // }
-
   &__separator {
     color: get-css-var('date-picker-separator-color');
     transition: get-css-var('transition-color');
@@ -112,11 +103,14 @@ $date-picker: map.merge(
 
     &,
     .vxp-icon {
-      color: $vxp-color-content-secondary;
+      color: get-css-var('date-picker-exchange-color');
     }
 
-    &--endabled:hover .vxp-icon {
-      color: $vxp-color-primary;
+    &--endabled:hover {
+      &,
+      .vxp-icon {
+        color: get-css-var('date-picker-exchange-color-hover');
+      }
     }
   }
 

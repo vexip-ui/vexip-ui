@@ -11,7 +11,7 @@ $drawer: map.merge(
     color-title-divider: get-css-var('border-color-light-2'),
     color-close: get-css-var('content-color-placeholder'),
     color-close-hover: get-css-var('content-color-base'),
-    color-bg-handler-hover: rgba($vxp-color-black, 0.15),
+    color-bg-handler-hover: rgba($color-black, 0.15),
     handler-length: 5px,
     title-font-size: get-css-var('font-size-primary'),
     title-divider: get-css-var('border-appearance') get-css-var('drawer-color-title-divider'),

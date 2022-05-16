@@ -59,18 +59,6 @@ $form: map.merge(
         }
       }
 
-      // .#{$checkbox} {
-      //   &__signal,
-      //   &:hover .#{$checkbox}__signal {
-      //     border-color: $vxp-color-error;
-      //   }
-
-      //   &--checked .#{$checkbox}__signal {
-      //     background-color: $vxp-color-error;
-      //     border-color: $vxp-color-error;
-      //   }
-      // }
-
       .vxp-color-picker {
         &__control {
           border-color: get-css-var('form-error-color');
@@ -80,21 +68,6 @@ $form: map.merge(
           box-shadow: get-css-var('form-error-shadow');
         }
       }
-
-      // .#{$radio} {
-      //   &__signal,
-      //   &:hover .#{$radio}__signal {
-      //     border-color: $vxp-color-error;
-      //   }
-
-      //   &--checked .#{$radio}__signal {
-      //     border-color: $vxp-color-error;
-
-      //     &::after {
-      //       background-color: $vxp-color-error;
-      //     }
-      //   }
-      // }
     }
   }
 

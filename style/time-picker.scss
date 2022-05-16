@@ -69,11 +69,6 @@ $time-picker: map.merge(
     transition: get-css-var('transition-background'), get-css-var('transition-color');
   }
 
-  // &--disabled &__unit,
-  // &--disabled &__label {
-  //   color: $vxp-color-content-secondary;
-  // }
-
   &__separator {
     color: get-css-var('time-picker-separator-color');
     transition: get-css-var('transition-color');

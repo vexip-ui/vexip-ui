@@ -336,9 +336,9 @@ $checkbox: map.merge(
       @include large-signal;
     }
 
-    &--partial &__signal {
-      @include partial-signal;
-    }
+    // &-group--partial &__signal {
+    //   @include partial-signal;
+    // }
 
     &-group--small &--partial &__signal::after {
       width: calc(get-css-var('checkbox-signal-small-size') * 0.5);

@@ -67,7 +67,8 @@ $button: map.merge(
     default-padding: 0 1em,
     large-height: 2.5em,
     large-padding: 0 1.4em,
-    series-span: 0.6em
+    series-span: 0.6em,
+    group-divider-color-types: rgba($color-white, 50%)
   ),
   $button
 );
@@ -258,6 +259,8 @@ $button: map.merge(
     border-color: transparent;
   }
 
+  $divider-color: get-css-var('button-group-divider-color-types');
+
   @each $type in $types {
     @at-root {
       &--#{$type} {
@@ -325,16 +328,16 @@ $button: map.merge(
 
       &-group &--#{$type} {
         &:first-child {
-          border-right-color: rgba($vxp-color-white, 0.5);
+          border-right-color: $divider-color;
         }
 
         &:last-child {
-          border-left-color: rgba($vxp-color-white, 0.5);
+          border-left-color: $divider-color;
         }
 
         &:not(:first-child):not(:last-child) {
-          border-right-color: rgba($vxp-color-white, 0.5);
-          border-left-color: rgba($vxp-color-white, 0.5);
+          border-right-color: $divider-color;
+          border-left-color: $divider-color;
         }
       }
     }

@@ -1,7 +1,7 @@
 @use 'sass:map';
 
 @use '../design' as *;
-@use './checkbox.scss';
+// @use './checkbox.scss';
 @use './icon.scss';
 
 $tree: () !default;
@@ -14,7 +14,7 @@ $tree: map.merge(
     label-color-readonly: get-css-var('tree-label-color'),
     label-bg-color: transparent,
     label-bg-color-hover: get-css-var('color-primary-light-8'),
-    label-bg-color-selected: get-css-var('tree-label-color-hover'),
+    label-bg-color-selected: get-css-var('tree-label-bg-color-hover'),
     label-bg-color-disabled: get-css-var('tree-label-bg-color'),
     label-bg-color-readonly: get-css-var('tree-label-bg-color'),
     label-border-radius: get-css-var('border-radius-base'),

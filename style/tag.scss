@@ -137,7 +137,7 @@ $tag: map.merge(
       }
 
       &--simple#{&}--#{$name} {
-        @include define-css-var('tag-bg-color', color.mix($vxp-color-white, $color, 90%));
+        @include define-css-var('tag-bg-color', color.mix($color-white, $color, 90%));
       }
     }
   }

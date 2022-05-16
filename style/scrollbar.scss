@@ -90,17 +90,14 @@ $scrollbar: map.merge(
     opacity: 0%;
   }
 
-  &--active &__track {
-    opacity: 60%;
-
-    &:hover {
-      opacity: 60%;
-    }
-  }
-
+  &--active &__track,
   &--tracking &__track,
   &--scrolling &__track {
     opacity: 60%;
+  }
+
+  &--active:hover {
+    opacity: 60.0001%;
   }
 
   &__bar {

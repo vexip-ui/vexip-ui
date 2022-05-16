@@ -17,9 +17,9 @@ $table: map.merge(
     border-style: get-css-var('border-style'),
     border-appearance: get-css-var('table-border-width') get-css-var('table-border-style'),
     border: get-css-var('table-border-appearance') get-css-var('table-border-color'),
-    header-bg-color: get-css-var('fill-color-background'),
-    row-bottom-border-color: get-css-var('border-color-light-1'),
+    row-bg-color: get-css-var('fill-color-background'),
     row-bg-color-hover: get-css-var('color-primary-light-8'),
+    row-bottom-border-color: get-css-var('border-color-light-1'),
     cell-min-height: 36px,
     cell-padding: 6px,
     cell-right-border-color: get-css-var('border-color-light-2'),
@@ -59,9 +59,6 @@ $table: map.merge(
   border-collapse: collapse;
   border: $border-a transparent;
 
-  // border-bottom-color: $vxp-color-border;
-  // box-shadow: 0 0 0 1px $vxp-color-border;
-
   &__head,
   &__body {
     position: relative;
@@ -75,8 +72,6 @@ $table: map.merge(
   &__head {
     z-index: 1;
     user-select: none;
-
-    // box-shadow: 0 2px 15px $vxp-color-border;
     border-bottom: get-css-var('table-border');
   }
 
@@ -108,11 +103,11 @@ $table: map.merge(
   }
 
   &__head &__row {
-    background-color: $vxp-color-fill-background;
+    background-color: get-css-var('table-row-bg-color');
   }
 
   &--stripe &__group:nth-child(even) &__row {
-    background-color: $vxp-color-fill-background;
+    background-color: get-css-var('table-row-bg-color');
   }
 
   &__cell,

@@ -29,8 +29,8 @@ $option: map.merge(
 
   @include basis;
 
-  $label-v-padding:  get-css-var('option-label-vertical-padding');
-  $label-h-padding:  get-css-var('option-label-horizontal-padding');
+  $label-v-padding: get-css-var('option-label-vertical-padding');
+  $label-h-padding: get-css-var('option-label-horizontal-padding');
   $label-padding: $label-v-padding $label-h-padding;
 
   display: inline-flex;
@@ -96,9 +96,9 @@ $option: map.merge(
       }
 
       &__list {
+        position: relative;
         display: flex;
         flex-direction: column;
-        position: relative;
         padding: 0;
       }
 

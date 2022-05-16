@@ -84,7 +84,10 @@ $upload: map.merge(
     overflow: hidden;
     cursor: pointer;
     background-color: get-css-var('upload-pane-bg-color');
-    border: get-css-var('upload-pane-border-width') get-css-var('upload-pane-border-style') get-css-var('upload-pane-border-color');
+    border:
+      get-css-var('upload-pane-border-width')
+      get-css-var('upload-pane-border-style')
+      get-css-var('upload-pane-border-color');
     border-radius: get-css-var('upload-pane-border-radius');
     transition: get-css-var('transition-border');
 
@@ -344,13 +347,9 @@ $upload: map.merge(
     position: absolute;
     right: 0;
     cursor: pointer;
-
-    &,
-    .vxp-icon {
-      color: transparent;
-    }
   }
 
+  &__close,
   &__file:hover &__success,
   &__file:hover &__fail,
   &__file:hover &__loading {

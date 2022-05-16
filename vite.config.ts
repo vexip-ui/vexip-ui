@@ -6,7 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import dts from 'vite-plugin-dts'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import eslint from '@rollup/plugin-eslint'
-import pcssEnv from 'postcss-preset-env'
+// import pcssEnv from 'postcss-preset-env'
 import discardCss from 'postcss-discard-duplicates'
 
 import type { LogLevel } from 'vite'
@@ -85,9 +85,6 @@ export default defineConfig(({ command }) => {
             )
           },
         output: {
-          globals: {
-            vue: 'Vue'
-          },
           paths: !process.env.TARGET
             ? undefined
             : id => {
@@ -95,16 +92,12 @@ export default defineConfig(({ command }) => {
                 return id.replace(/@\/components/, '..')
               } else if (/^@\/common\/icons\//.test(id)) {
                 return id.replace(/@\/common\/icons/, '../../icons')
+              } else {
+                return id
               }
             }
         }
       },
-      // terserOptions: {
-      //   compress: {
-      //     ecma: 2015,
-      //     drop_console: isProduction
-      //   }
-      // },
       commonjsOptions: {
         sourceMap: false
       },
@@ -113,31 +106,8 @@ export default defineConfig(({ command }) => {
     },
     css: {
       postcss: {
-        plugins: [pcssEnv as any].concat(useServer ? [] : [discardCss])
+        plugins: useServer ? [] : [discardCss as any]
       }
-      // preprocessorOptions: {
-      //   scss: {
-      //     additionalData: (source: string, loader: string) => {
-      //       const prependLines = [
-      //         '@use "sass:color";',
-      //         '@use "sass:list";',
-      //         '@use "sass:map";',
-      //         '@use "sass:math";',
-      //         '@use "sass:meta";'
-      //       ]
-
-      //       if (loader && !loader.endsWith('design/variables.scss')) {
-      //         prependLines.push('@use "@/design/variables.scss" as *;')
-      //       }
-
-      //       if (loader && !loader.endsWith('design/mixins.scss')) {
-      //         prependLines.push('@use "@/design/mixins.scss" as *;')
-      //       }
-
-      //       return prependLines.join('\r\n') + source
-      //     }
-      //   }
-      // }
     },
     plugins: [
       ...prePlugins([
@@ -172,7 +142,7 @@ export default defineConfig(({ command }) => {
             return { filePath, content }
           }
         }),
-      createHtmlPlugin({
+      useServer && createHtmlPlugin({
         inject: {
           data: { name }
         }

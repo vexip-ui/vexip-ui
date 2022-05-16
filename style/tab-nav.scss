@@ -6,6 +6,8 @@
 $tab-nav: () !default;
 $tab-nav: map.merge(
   (
+    divider-color: get-css-var('border-color-base'),
+    divider: get-css-var('border-appearance') get-css-var('tab-nav-divider-color'),
     color: get-css-var('content-color-base'),
     color-hover: get-css-var('color-primary-base'),
     color-active: get-css-var('tab-nav-color-hover'),
@@ -41,7 +43,7 @@ $tab-nav: map.merge(
 
   position: relative;
   background-color: transparent;
-  border-bottom: $vxp-border-base;
+  border-bottom: get-css-var('tab-nav-divider');
 
   &__list {
     display: flex;

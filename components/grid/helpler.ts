@@ -9,7 +9,7 @@ const computedStyle = getComputedStyle(document.documentElement)
 const queryMap = {} as Record<BreakPoint, MediaQueryList>
 
 breakPoints.forEach(point => {
-  const media = computedStyle.getPropertyValue(`--vxp-grid-break-point-${point}`)
+  const media = computedStyle.getPropertyValue(`--vxp-break-point-${point}`).trim()
   const query = matchMedia(`only screen and ${media}`)
 
   query.addEventListener('change', handleBreakPointChange)

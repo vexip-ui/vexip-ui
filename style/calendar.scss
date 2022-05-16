@@ -2,6 +2,9 @@
 @use 'sass:map';
 
 @use '../design' as *;
+@use './column.scss';
+@use './number-input.scss';
+@use './row.scss';
 
 $calendar: () !default;
 $calendar: map.merge(
