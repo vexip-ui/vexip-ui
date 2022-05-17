@@ -12,63 +12,69 @@ $button: map.merge(
     color-focus: get-css-var('color-primary-light-2'),
     color-active: get-css-var('color-primary-dark-1'),
     color-disabled: get-css-var('content-color-disabled'),
-    color-bg: get-css-var('fill-color-base'),
-    color-bg-hover: get-css-var('button-color-bg'),
-    color-bg-focus: get-css-var('button-color-bg'),
-    color-bg-active: get-css-var('button-color-bg'),
-    color-bg-disabled: get-css-var('fill-color-background'),
-    color-border: get-css-var('border-color-base'),
-    color-border-hover: get-css-var('color-primary-light-2'),
-    color-border-focus: get-css-var('color-primary-light-2'),
-    color-border-active: get-css-var('color-primary-dark-1'),
-    color-border-disabled: get-css-var('border-color-light-1'),
+    bg-color: get-css-var('fill-color-base'),
+    bg-color-hover: get-css-var('button-bg-color'),
+    bg-color-focus: get-css-var('button-bg-color'),
+    bg-color-active: get-css-var('button-bg-color'),
+    bg-color-disabled: get-css-var('fill-color-background'),
+    b-color: get-css-var('border-color-base'),
+    b-color-hover: get-css-var('color-primary-light-2'),
+    b-color-focus: get-css-var('color-primary-light-2'),
+    b-color-active: get-css-var('color-primary-dark-1'),
+    b-color-disabled: get-css-var('border-color-light-1'),
     color-ghost: get-css-var('content-color-reverse'),
     color-hover-ghost: get-css-var('color-primary-base'),
     color-focus-ghost: get-css-var('color-primary-base'),
     color-active-ghost: get-css-var('color-primary-base'),
     color-disabled-ghost: get-css-var('content-color-disabled'),
-    color-bg-ghost: transparent,
-    color-bg-hover-ghost: get-css-var('button-color-bg-ghost'),
-    color-bg-focus-ghost: get-css-var('button-color-bg-ghost'),
-    color-bg-active-ghost: get-css-var('button-color-bg-ghost'),
-    color-bg-disabled-ghost: get-css-var('button-color-bg-ghost'),
-    color-border-ghost: get-css-var('fill-color-base'),
-    color-border-hover-ghost: get-css-var('color-primary-base'),
-    color-border-active-ghost: get-css-var('color-primary-base'),
-    color-border-disabled-ghost: get-css-var('content-color-disabled'),
-    color-types: get-css-var('content-color-reverse'),
-    color-hover-types: get-css-var('button-color-types'),
-    color-focus-types: get-css-var('button-color-types'),
-    color-active-types: get-css-var('button-color-types'),
-    color-disabled-types: get-css-var('content-color-disabled'),
-    color-bg-disabled-types: get-css-var('fill-color-background'),
-    color-border-disabled-types: get-css-var('border-color-light-1'),
-    color-active-types-simple: get-css-var('content-color-reverse'),
-    color-disabled-types-simple: get-css-var('content-color-disabled'),
-    color-bg-disabled-types-simple: get-css-var('fill-color-background'),
-    color-border-disabled-types-simple: get-css-var('border-color-light-1'),
-    color-disabled-types-ghost: get-css-var('button-color-disabled-ghost'),
-    color-bg-types-ghost: transparent,
-    color-bg-hover-types-ghost: rgba($color-white, 0.1),
-    color-bg-focus-types-ghost: rgba($color-white, 0.1),
-    color-bg-active-types-ghost: rgba($color-white, 0.2),
-    color-bg-disabled-types-ghost: get-css-var('button-color-bg-types-ghost'),
-    color-border-disabled-types-ghost: get-css-var('content-color-disabled'),
-    color-pulse: get-css-var('color-primary-light-2'),
-    border: get-css-var('border-appearance') get-css-var('button-color-border'),
-    border-radius: get-css-var('border-radius-base'),
-    pulsing-size: 8px,
-    pulsing-showy-size: calc(get-css-var('button-pulsing-size') * 0.75),
-    pulsing-duration: 800ms,
-    pulsing-timing: ease,
+    bg-color-ghost: transparent,
+    bg-color-hover-ghost: get-css-var('button-bg-color-ghost'),
+    bg-color-focus-ghost: get-css-var('button-bg-color-ghost'),
+    bg-color-active-ghost: get-css-var('button-bg-color-ghost'),
+    bg-color-disabled-ghost: get-css-var('button-bg-color-ghost'),
+    b-color-ghost: get-css-var('fill-color-base'),
+    b-color-hover-ghost: get-css-var('color-primary-base'),
+    b-color-active-ghost: get-css-var('color-primary-base'),
+    b-color-disabled-ghost: get-css-var('content-color-disabled'),
+    color-typed: get-css-var('content-color-reverse'),
+    color-hover-typed: get-css-var('button-color-typed'),
+    color-focus-typed: get-css-var('button-color-typed'),
+    color-active-typed: get-css-var('button-color-typed'),
+    color-disabled-typed: get-css-var('content-color-disabled'),
+    bg-color-disabled-typed: get-css-var('fill-color-background'),
+    b-color-disabled-typed: get-css-var('border-color-light-1'),
+    color-active-typed-simple: get-css-var('content-color-reverse'),
+    color-disabled-typed-simple: get-css-var('content-color-disabled'),
+    bg-color-disabled-typed-simple: get-css-var('fill-color-background'),
+    b-color-disabled-typed-simple: get-css-var('border-color-light-1'),
+    color-disabled-typed-ghost: get-css-var('button-color-disabled-ghost'),
+    bg-color-typed-ghost: transparent,
+    bg-color-hover-typed-ghost: rgba($color-white, 0.1),
+    bg-color-focus-typed-ghost: rgba($color-white, 0.1),
+    bg-color-active-typed-ghost: rgba($color-white, 0.2),
+    bg-color-disabled-typed-ghost: get-css-var('button-bg-color-typed-ghost'),
+    b-color-disabled-typed-ghost: get-css-var('content-color-disabled'),
+    border: get-css-var('border-shape') get-css-var('button-b-color'),
+    radius: get-css-var('border-radius-base'),
+    pulse-s-color: get-css-var('color-primary-light-2'),
+    pulse-size: 8px,
+    pulse-size-showy: calc(get-css-var('button-pulse-size') * 0.75),
+    pulse-duration: 800ms,
+    pulse-timing: ease,
     small-height: 1.9em,
-    small-padding: 0 0.8em,
+    small-v-padding: 0,
+    small-h-padding: 0.8em,
+    small-padding: get-css-var('button-small-v-padding') get-css-var('button-small-h-padding'),
     default-height: 2.2em,
-    default-padding: 0 1em,
+    default-v-padding: 0,
+    default-h-padding: 1em,
+    default-padding: get-css-var('button-default-v-padding') get-css-var('button-default-h-padding'),
     large-height: 2.5em,
-    large-padding: 0 1.4em,
+    large-v-padding: 0,
+    large-h-padding: 1.4em,
+    large-padding: get-css-var('button-large-v-padding') get-css-var('button-large-h-padding'),
     series-span: 0.6em,
-    group-divider-color-types: rgba($color-white, 50%)
+    d-color-typed: rgba($color-white, 50%)
   ),
   $button
 );
@@ -111,9 +117,9 @@ $button: map.merge(
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
-  background-color: get-css-var('button-color-bg');
+  background-color: get-css-var('button-bg-color');
   border: get-css-var('button-border');
-  border-radius: get-css-var('button-border-radius');
+  border-radius: get-css-var('button-radius');
   outline: 0;
   transition:
     get-css-var('transition-color'),
@@ -133,7 +139,7 @@ $button: map.merge(
     background-color: transparent;
     border-radius: inherit;
     opacity: 40%;
-    animation-timing-function: get-css-var('button-pulsing-timing');
+    animation-timing-function: get-css-var('button-pulse-timing');
     animation-fill-mode: forwards;
   }
 
@@ -143,8 +149,8 @@ $button: map.merge(
   }
 
   &:hover {
-    background-color: get-css-var('button-color-bg-hover');
-    border-color: get-css-var('button-color-border-hover');
+    background-color: get-css-var('button-bg-color-hover');
+    border-color: get-css-var('button-b-color-hover');
     outline: 0;
 
     &,
@@ -154,8 +160,8 @@ $button: map.merge(
   }
 
   &:focus {
-    background-color: get-css-var('button-color-bg-focus');
-    border-color: get-css-var('button-color-border-focus');
+    background-color: get-css-var('button-bg-color-focus');
+    border-color: get-css-var('button-b-color-focus');
     outline: 0;
 
     &,
@@ -165,8 +171,8 @@ $button: map.merge(
   }
 
   &:active {
-    background-color: get-css-var('button-color-bg-active');
-    border-color: get-css-var('button-color-border-active');
+    background-color: get-css-var('button-bg-color-active');
+    border-color: get-css-var('button-b-color-active');
 
     &,
     .vxp-icon {
@@ -176,8 +182,8 @@ $button: map.merge(
 
   @include disabled('') {
     cursor: not-allowed;
-    background-color: get-css-var('button-color-bg-disabled');
-    border-color: get-css-var('button-color-border-disabled');
+    background-color: get-css-var('button-bg-color-disabled');
+    border-color: get-css-var('button-b-color-disabled');
 
     &,
     .vxp-icon {
@@ -200,15 +206,15 @@ $button: map.merge(
   }
 
   &--pulsing::after {
-    animation: vxp-button-pulse get-css-var('button-pulsing-duration');
+    animation: vxp-button-pulse get-css-var('button-pulse-duration');
 
     @keyframes vxp-button-pulse {
       60% {
-        box-shadow: 0 0 0 get-css-var('button-pulsing-showy-size') get-css-var('button-color-pulse');
+        box-shadow: 0 0 0 get-css-var('button-pulse-size-showy') get-css-var('button-pulse-s-color');
       }
 
       100% {
-        box-shadow: 0 0 0 get-css-var('button-pulsing-size') get-css-var('button-color-pulse');
+        box-shadow: 0 0 0 get-css-var('button-pulse-size') get-css-var('button-pulse-s-color');
         opacity: 0%;
       }
     }
@@ -237,20 +243,20 @@ $button: map.merge(
 
   &--ghost {
     @include define-button-style((
-      color-bg: 'button-color-bg-ghost',
-      color-border: 'button-color-border-ghost',
+      bg-color: 'button-bg-color-ghost',
+      b-color: 'button-b-color-ghost',
       color: 'button-color-ghost',
-      color-bg-hover: 'button-color-bg-hover-ghost',
-      color-border-hover: 'button-color-border-hover-ghost',
+      bg-color-hover: 'button-bg-color-hover-ghost',
+      b-color-hover: 'button-b-color-hover-ghost',
       color-hover: 'button-color-hover-ghost',
-      color-bg-focus: 'button-color-bg-focus-ghost',
-      color-border-focus: 'button-color-border-focus-ghost',
+      bg-color-focus: 'button-bg-color-focus-ghost',
+      b-color-focus: 'button-b-color-focus-ghost',
       color-focus: 'button-color-focus-ghost',
-      color-bg-active: 'button-color-bg-active-ghost',
-      color-border-active: 'button-color-border-active-ghost',
+      bg-color-active: 'button-bg-color-active-ghost',
+      b-color-active: 'button-b-color-active-ghost',
       color-active: 'button-color-active-ghost',
-      color-bg-disabled: 'button-color-bg-disabled-ghost',
-      color-border-disabled: 'button-color-border-disabled-ghost',
+      bg-color-disabled: 'button-bg-color-disabled-ghost',
+      b-color-disabled: 'button-b-color-disabled-ghost',
       color-disabled: 'button-color-disabled-ghost',
     ));
   }
@@ -259,85 +265,85 @@ $button: map.merge(
     border-color: transparent;
   }
 
-  $divider-color: get-css-var('button-group-divider-color-types');
+  $d-color: get-css-var('button-d-color-typed');
 
   @each $type in $types {
     @at-root {
       &--#{$type} {
         @include define-button-style((
-          color-bg: 'color' $type 'base',
-          color-border: 'color' $type 'base',
-          color: 'button-color-types',
-          color-bg-hover: 'color' $type 'light-2',
-          color-border-hover: 'color' $type 'light-2',
-          color-hover: 'button-color-hover-types',
-          color-bg-focus: 'color' $type 'light-2',
-          color-border-focus: 'color' $type 'light-2',
-          color-focus: 'button-color-hover-types',
-          color-bg-active: 'color' $type 'dark-1',
-          color-border-active: 'color' $type 'dark-1',
-          color-active: 'button-color-active-types',
-          color-bg-disabled: 'button-color-bg-disabled-types',
-          color-border-disabled: 'button-color-border-disabled-types',
-          color-disabled: 'button-color-disabled-types',
+          bg-color: 'color' $type 'base',
+          b-color: 'color' $type 'base',
+          color: 'button-color-typed',
+          bg-color-hover: 'color' $type 'light-2',
+          b-color-hover: 'color' $type 'light-2',
+          color-hover: 'button-color-hover-typed',
+          bg-color-focus: 'color' $type 'light-2',
+          b-color-focus: 'color' $type 'light-2',
+          color-focus: 'button-color-hover-typed',
+          bg-color-active: 'color' $type 'dark-1',
+          b-color-active: 'color' $type 'dark-1',
+          color-active: 'button-color-active-typed',
+          bg-color-disabled: 'button-bg-color-disabled-typed',
+          b-color-disabled: 'button-b-color-disabled-typed',
+          color-disabled: 'button-color-disabled-typed',
         ));
       }
 
       &--#{$type}#{&}--pulsing::after {
-        @include define-css-var('button-color-pulse', get-css-var('color', $type, 'dark-1'));
+        @include define-css-var('button-pulse-s-color', get-css-var('color', $type, 'dark-1'));
       }
 
       &--#{$type}#{&}--simple {
         @include define-button-style((
-          color-bg: 'color' $type 'light-8',
-          color-border: 'color' $type 'light-4',
+          bg-color: 'color' $type 'light-8',
+          b-color: 'color' $type 'light-4',
           color: 'color' $type 'base',
-          color-bg-hover: 'color' $type 'light-7',
-          color-border-hover: 'color' $type 'light-4',
+          bg-color-hover: 'color' $type 'light-7',
+          b-color-hover: 'color' $type 'light-4',
           color-hover: 'color' $type 'base',
-          color-bg-focus: 'color' $type 'light-1',
-          color-border-focus: 'color' $type 'light-3',
-          color-focus: 'button-color-active-types-simple',
-          color-bg-active: 'color' $type 'light-1',
-          color-border-active: 'color' $type 'light-3',
-          color-active: 'button-color-active-types-simple',
-          color-bg-disabled: 'button-color-bg-disabled-types-simple',
-          color-border-disabled: 'button-color-border-disabled-types-simple',
-          color-disabled: 'button-color-disabled-types-simple',
+          bg-color-focus: 'color' $type 'light-1',
+          b-color-focus: 'color' $type 'light-3',
+          color-focus: 'button-color-active-typed-simple',
+          bg-color-active: 'color' $type 'light-1',
+          b-color-active: 'color' $type 'light-3',
+          color-active: 'button-color-active-typed-simple',
+          bg-color-disabled: 'button-bg-color-disabled-typed-simple',
+          b-color-disabled: 'button-b-color-disabled-typed-simple',
+          color-disabled: 'button-color-disabled-typed-simple',
         ));
       }
 
       &--#{$type}#{&}--ghost {
         @include define-button-style((
-          color-bg: 'button-color-bg-types-ghost',
+          bg-color: 'button-bg-color-typed-ghost',
           color: 'color' $type 'base',
-          color-bg-hover: 'button-color-bg-hover-types-ghost',
-          color-border-hover: 'color' $type 'light-2',
+          bg-color-hover: 'button-bg-color-hover-typed-ghost',
+          b-color-hover: 'color' $type 'light-2',
           color-hover: 'color' $type 'base',
-          color-bg-focus: 'button-color-bg-focus-types-ghost',
-          color-border-focus: 'color' $type 'light-2',
+          bg-color-focus: 'button-bg-color-focus-typed-ghost',
+          b-color-focus: 'color' $type 'light-2',
           color-focus: 'color' $type 'base',
-          color-bg-active: 'button-color-bg-active-types-ghost',
-          color-border-active: 'color' $type 'dark-1',
+          bg-color-active: 'button-bg-color-active-typed-ghost',
+          b-color-active: 'color' $type 'dark-1',
           color-active: 'color' $type 'base',
-          color-bg-disabled: 'button-color-bg-disabled-types-ghost',
-          color-border-disabled: 'button-color-border-disabled-types-ghost',
-          color-disabled: 'button-color-disabled-types-ghost',
+          bg-color-disabled: 'button-bg-color-disabled-typed-ghost',
+          b-color-disabled: 'button-b-color-disabled-typed-ghost',
+          color-disabled: 'button-color-disabled-typed-ghost',
         ));
       }
 
       &-group &--#{$type} {
         &:first-child {
-          border-right-color: $divider-color;
+          border-right-color: $d-color;
         }
 
         &:last-child {
-          border-left-color: $divider-color;
+          border-left-color: $d-color;
         }
 
         &:not(:first-child):not(:last-child) {
-          border-right-color: $divider-color;
-          border-left-color: $divider-color;
+          border-right-color: $d-color;
+          border-left-color: $d-color;
         }
       }
     }
@@ -423,11 +429,11 @@ $button: map.merge(
         }
 
         &:first-child {
-          border-radius: get-css-var('border-radius') 0 0 get-css-var('border-radius');
+          border-radius: get-css-var('button-radius') 0 0 get-css-var('button-radius');
         }
 
         &:last-child {
-          border-radius: 0 get-css-var('border-radius') get-css-var('border-radius') 0;
+          border-radius: 0 get-css-var('button-radius') get-css-var('button-radius') 0;
         }
 
         &:not(:last-child) {

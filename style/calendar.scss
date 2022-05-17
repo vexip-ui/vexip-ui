@@ -20,18 +20,20 @@ $calendar: map.merge(
     date-bg-color-selected: get-css-var('color-primary-light-8'),
     date-bg-color-disabled: get-css-var('calendar-date-bg-color'),
     date-bg-color-outside: get-css-var('calendar-date-bg-color'),
-    date-border-width: 2px,
-    date-border-style: get-css-var('border-style'),
-    date-border-color: get-css-var('border-color-base'),
-    date-border-color-selected: get-css-var('color-primary-light-2'),
-    date-border-color-disabled: get-css-var('border-color-light-2'),
-    date-border-color-outside: get-css-var('border-color-light-1'),
+    date-b-width: 2px,
+    date-b-style: get-css-var('border-style'),
+    date-b-color: get-css-var('border-color-base'),
+    date-b-color-selected: get-css-var('color-primary-light-2'),
+    date-b-color-disabled: get-css-var('border-color-light-2'),
+    date-b-color-outside: get-css-var('border-color-light-1'),
     date-border:
-    get-css-var('calendar-date-border-width')
-    get-css-var('calendar-date-border-style')
-    get-css-var('calendar-date-border-color'),
+      get-css-var('calendar-date-b-width')
+      get-css-var('calendar-date-b-style')
+      get-css-var('calendar-date-b-color'),
     content-height: 7em,
-    content-padding: 4px
+    content-v-padding: 4px,
+    content-h-padding: 4px,
+    content-padding: get-css-var('calendar-content-v-padding') get-css-var('calendar-content-h-padding')
   ),
   $calendar
 );
@@ -115,7 +117,7 @@ $calendar: map.merge(
     &--next {
       color: get-css-var('calendar-date-color-outside');
       background-color: get-css-var('calendar-date-bg-color-outside');
-      border-top-color: get-css-var('calendar-date-border-color-outside');
+      border-top-color: get-css-var('calendar-date-b-color-outside');
     }
 
     &--selected {
@@ -123,7 +125,7 @@ $calendar: map.merge(
       &:hover {
         color: get-css-var('calendar-date-color-selected');
         background-color: get-css-var('calendar-date-bg-color-selected');
-        border-top-color: get-css-var('calendar-date-border-color-selected');
+        border-top-color: get-css-var('calendar-date-b-color-selected');
       }
     }
 
@@ -133,7 +135,7 @@ $calendar: map.merge(
         color: get-css-var('calendar-date-color-disabled');
         cursor: not-allowed;
         background-color: get-css-var('calendar-date-bg-color-disabled');
-        border-top-color: get-css-var('calendar-date-border-color-disabled');
+        border-top-color: get-css-var('calendar-date-b-color-disabled');
       }
     }
 

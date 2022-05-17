@@ -13,16 +13,16 @@ $switcher: map.merge(
     bg-color-disabled: get-css-var('fill-color-disabled'),
     opacity-disabled: 60%,
     opacity-loading: get-css-var('switcher-opacity-disabled'),
-    shadow-color-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-focus') get-css-var('switcher-shadow-color-focus'),
+    s-color-focus: get-css-var('color-primary-light-8'),
+    shadow-focus: get-css-var('box-shadow-focus') get-css-var('switcher-s-color-focus'),
     label-color: get-css-var('content-color-reverse'),
     small-height: 18px,
     default-height: 22px,
     large-height: 26px,
     signal-bg-color: get-css-var('fill-color-base'),
-    signal-border-color: get-css-var('switcher-signal-bg-color'),
-    signal-border-color-disabled: get-css-var('switcher-signal-bg-color'),
-    signal-border: get-css-var('border-appearance') get-css-var('switcher-signal-border-color'),
+    signal-b-color: get-css-var('switcher-signal-bg-color'),
+    signal-b-color-disabled: get-css-var('switcher-signal-bg-color'),
+    signal-border: get-css-var('border-shape') get-css-var('switcher-signal-b-color'),
     signal-small-size: calc(get-css-var('switcher-small-height') - 4px),
     signal-default-size: calc(get-css-var('switcher-default-height') - 4px),
     signal-large-size: calc(get-css-var('switcher-large-height') - 4px),
@@ -134,8 +134,8 @@ $switcher: map.merge(
         (
           bg-color: 'color' $state 'light-1',
           bg-color-open: 'color' $state 'light-1',
-          shadow-color-focus: 'color' $state 'light-8',
-          signal-border-color: 'color' $state 'base'
+          s-color-focus: 'color' $state 'light-8',
+          signal-b-color: 'color' $state 'base'
         )
       );
     }
@@ -200,7 +200,7 @@ $switcher: map.merge(
     pointer-events: none;
 
     &::after {
-      border-color: get-css-var('switcher-signal-border-color-disabled');
+      border-color: get-css-var('switcher-signal-b-color-disabled');
     }
   }
 

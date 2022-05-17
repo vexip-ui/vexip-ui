@@ -5,12 +5,14 @@
 $divider: () !default;
 $divider: map.merge(
   (
-    border-color: get-css-var('border-color-light-2'),
-    border: get-css-var('border-appearance') get-css-var('divider-border-color'),
-    v-margin: 24px 0,
-    v-margin-text: 14px 0,
-    h-margin: 0 0.6em,
-    text-padding: 0 1em,
+    b-color: get-css-var('border-color-light-2'),
+    border: get-css-var('border-shape') get-css-var('divider-b-color'),
+    v-margin: 24px,
+    v-margin-text: 14px,
+    h-margin: 0.6em,
+    text-v-padding: 0,
+    text-h-padding: 1em,
+    text-padding: get-css-var('divider-text-v-padding') get-css-var('divider-text-h-padding'),
     text-size-primary: get-css-var('font-size-primary'),
   ),
   $divider
@@ -29,7 +31,7 @@ $divider: map.merge(
 
   &--horizontal {
     width: 100%;
-    margin: get-css-var('divider-v-margin');
+    margin: get-css-var('divider-v-margin') 0;
     clear: both;
   }
 
@@ -37,14 +39,14 @@ $divider: map.merge(
     position: relative;
     display: inline-block;
     height: 1em;
-    margin: get-css-var('divider-h-margin');
+    margin: 0 get-css-var('divider-h-margin');
     vertical-align: middle;
     border-top: 0;
     border-left: get-css-var('divider-border');
   }
 
   &--with-text {
-    margin: get-css-var('divider-v-margin');
+    margin: get-css-var('divider-v-margin-text') 0;
     text-align: center;
     white-space: nowrap;
     border-top: 0;

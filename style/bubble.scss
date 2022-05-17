@@ -6,16 +6,18 @@ $bubble: () !default;
 $bubble: map.merge(
   (
     bg-color: get-css-var('fill-color-base'),
-    border-color: get-css-var('border-color-base'),
-    border: get-css-var('border-appearance') get-css-var('bubble-border-color'),
-    border-radius: get-css-var('border-radius-base'),
+    b-color: get-css-var('border-color-base'),
+    border: get-css-var('border-shape') get-css-var('bubble-b-color'),
+    radius: get-css-var('border-radius-base'),
     min-width: 6em,
     min-height: 2em,
-    content-padding: 0.6em 1em,
-    content-shadow: get-css-var('box-shadow-appearance') get-css-var('bubble-border-color'),
+    content-v-padding: 0.6em,
+    content-h-padding: 1em,
+    content-padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding'),
+    content-shadow: get-css-var('box-shadow-shape') get-css-var('bubble-b-color'),
     arrow-size: 0.5em,
-    arrow-vertical-offset: 0.9em,
-    arrow-horizontal-offset: 1.8em
+    arrow-v-offset: 0.9em,
+    arrow-h-offset: 1.8em
   ),
   $bubble
 );
@@ -38,7 +40,7 @@ $bubble: map.merge(
     padding: get-css-var('bubble-content-padding');
     background-color: get-css-var('bubble-bg-color');
     border: get-css-var('bubble-border');
-    border-radius: get-css-var('bubble-border-radius');
+    border-radius: get-css-var('bubble-radius');
   }
 
   &--background &__content {
@@ -75,9 +77,9 @@ $bubble: map.merge(
   $size: get-css-var('bubble-arrow-size');
   $padding: calc(#{$size} + 0.3em);
   $bg-color: get-css-var('bubble-bg-color');
-  $border-color: get-css-var('bubble-border-color');
-  $v-offset: get-css-var('bubble-arrow-vertical-offset');
-  $h-offset: get-css-var('bubble-arrow-horizontal-offset');
+  $border-color: get-css-var('bubble-b-color');
+  $v-offset: get-css-var('bubble-arrow-v-offset');
+  $h-offset: get-css-var('bubble-arrow-h-offset');
 
   &--top,
   &--top-start,

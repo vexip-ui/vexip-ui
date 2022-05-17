@@ -5,18 +5,18 @@
 $tooltip: () !default;
 $tooltip: map.merge(
   (
-    color-bg-base: get-css-var('fill-color-base'),
-    color-content-base: get-css-var('content-color-base'),
-    color-shadow-base: get-css-var('border-color-base'),
-    shadow-base: get-css-var('box-shadow-appearance') get-css-var('tooltip-color-shadow-base'),
-    color-bg-dark: get-css-var('fill-color-reverse'),
-    color-content-dark: get-css-var('content-color-reverse'),
-    color-shadow-dark: get-css-var('fill-color-reverse'),
+    bg-color: get-css-var('fill-color-base'),
+    bg-color-dark: get-css-var('fill-color-reverse'),
+    s-color: get-css-var('border-color-base'),
+    s-color-dark: get-css-var('fill-color-reverse'),
+    shadow: get-css-var('box-shadow-shape') get-css-var('tooltip-s-color'),
     shadow-dark: none,
-    border-raduis-base: get-css-var('border-radius-base'),
+    content-color: get-css-var('content-color-base'),
+    content-color-dark: get-css-var('content-color-reverse'),
+    raduis: get-css-var('border-radius-base'),
     arrow-size: 0.5em,
-    arrow-vertical-offset: 0.9em,
-    arrow-horizontal-offset: 1.8em
+    arrow-v-offset: 0.9em,
+    arrow-h-offset: 1.8em
   ),
   $tooltip
 );
@@ -42,9 +42,9 @@ $tooltip: map.merge(
     min-width: 2em;
     min-height: 2em;
     padding: 0.6em 1em;
-    background-color: get-css-var('tooltip-color-bg-base');
-    border-radius: get-css-var('tooltip-border-raduis-base');
-    box-shadow: get-css-var('tooltip-shadow-base');
+    background-color: get-css-var('tooltip-bg-color');
+    border-radius: get-css-var('tooltip-raduis');
+    box-shadow: get-css-var('tooltip-shadow');
 
     #{$popper}--dark & {
       box-shadow: get-css-var('tooltip-shadow-dark');
@@ -139,8 +139,8 @@ $tooltip: map.merge(
       }
     }
 
-    $v-offset: get-css-var('tooltip-arrow-vertical-offset');
-    $h-offset: get-css-var('tooltip-arrow-horizontal-offset');
+    $v-offset: get-css-var('tooltip-arrow-v-offset');
+    $h-offset: get-css-var('tooltip-arrow-h-offset');
 
     &[data-popper-placement='top'] #{$arrow} {
       left: 50%;
@@ -248,15 +248,15 @@ $tooltip: map.merge(
 
   @include theme(
     'light',
-    get-css-var('tooltip-color-content-base'),
-    get-css-var('tooltip-color-shadow-base'),
-    get-css-var('tooltip-color-bg-base')
+    get-css-var('tooltip-content-color'),
+    get-css-var('tooltip-s-color'),
+    get-css-var('tooltip-bg-color')
   );
 
   @include theme(
     'dark',
-    get-css-var('tooltip-color-content-dark'),
-    get-css-var('tooltip-color-shadow-dark'),
-    get-css-var('tooltip-color-bg-dark')
+    get-css-var('tooltip-content-color-dark'),
+    get-css-var('tooltip-s-color-dark'),
+    get-css-var('tooltip-bg-color-dark')
   );
 }

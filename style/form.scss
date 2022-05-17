@@ -8,7 +8,7 @@ $form: map.merge(
     error-color: get-css-var('color-error-light-1'),
     error-shadow: get-css-var('box-shaodw-focus') get-css-var('color-error-light-8'),
     asterisk-color: get-css-var('color-error-base'),
-    asterisk-font-family: #{SimSun, sans-serif},
+    asterisk-family: #{SimSun, sans-serif},
     tip-color: get-css-var('color-error-base')
   ),
   $form
@@ -114,7 +114,7 @@ $form: map.merge(
 
   @mixin asterisk {
     display: inline-block;
-    font-family: get-css-var('form-asterisk-font-family');
+    font-family: get-css-var('form-asterisk-family');
     color: get-css-var('form-asterisk-color');
     content: '*';
     user-select: none;

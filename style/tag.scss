@@ -11,9 +11,9 @@ $tag: map.merge(
   (
     color: get-css-var('content-color-base'),
     bg-color: get-css-var('fill-color-background'),
-    border-color: get-css-var('border-color-base'),
-    border: get-css-var('border-appearance') get-css-var('tag-border-color'),
-    border-radius: get-css-var('border-radius-base'),
+    b-color: get-css-var('border-color-base'),
+    border: get-css-var('border-shape') get-css-var('tag-b-color'),
+    radius: get-css-var('border-radius-base'),
     series-span: 0.3em,
     small-font-size: get-css-var('font-size-secondary'),
     default-font-size: get-css-var('font-size-base'),
@@ -41,7 +41,7 @@ $tag: map.merge(
   color: get-css-var('tag-color');
   background-color: get-css-var('tag-bg-color');
   border: get-css-var('tag-border');
-  border-radius: get-css-var('tag-border-radius');
+  border-radius: get-css-var('tag-radius');
   transition: get-css-var('transition-color'), get-css-var('transition-background');
 
   & + & {
@@ -127,7 +127,7 @@ $tag: map.merge(
         ));
 
         @include define-css-var('tag-bg-color', $color);
-        @include define-css-var('tag-border-color', $color);
+        @include define-css-var('tag-b-color', $color);
       }
 
       &--border#{&}--#{$name},

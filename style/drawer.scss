@@ -6,16 +6,16 @@
 $drawer: () !default;
 $drawer: map.merge(
   (
-    color-bg: get-css-var('fill-color-base'),
-    color-title: get-css-var('content-color-primary'),
-    color-title-divider: get-css-var('border-color-light-2'),
-    color-close: get-css-var('content-color-placeholder'),
-    color-close-hover: get-css-var('content-color-base'),
-    color-bg-handler-hover: rgba($color-black, 0.15),
-    handler-length: 5px,
+    z-index: get-css-var('z-index-masker'),
+    bg-color: get-css-var('fill-color-base'),
+    title-color: get-css-var('content-color-primary'),
+    title-d-color: get-css-var('border-color-light-2'),
     title-font-size: get-css-var('font-size-primary'),
-    title-divider: get-css-var('border-appearance') get-css-var('drawer-color-title-divider'),
-    z-index: get-css-var('z-index-masker')
+    title-divider: get-css-var('border-shape') get-css-var('drawer-title-d-color'),
+    close-color: get-css-var('content-color-placeholder'),
+    close-color-hover: get-css-var('content-color-base'),
+    handler-bg-color-hover: rgba($color-black, 0.15),
+    handler-width: 5px
   ),
   $drawer
 );
@@ -37,7 +37,7 @@ $drawer: map.merge(
 
   &__wrapper {
     position: absolute;
-    background-color: get-css-var('drawer-color-bg');
+    background-color: get-css-var('drawer-bg-color');
     border: 0;
 
     &--top,
@@ -77,7 +77,7 @@ $drawer: map.merge(
     position: relative;
     padding: 0.8em 1em;
     font-size: get-css-var('drawer-title-font-size');
-    color: get-css-var('drawer-color-title');
+    color: get-css-var('drawer-title-color');
     border-bottom: get-css-var('drawer-title-divider');
   }
 
@@ -94,17 +94,17 @@ $drawer: map.merge(
     top: 50%;
     right: 0.8em;
     display: flex;
-    color: get-css-var('drawer-color-close');
+    color: get-css-var('drawer-close-color');
     cursor: pointer;
     transform: translateY(-50%);
 
     &:hover {
-      color: get-css-var('drawer-color-close-hover');
+      color: get-css-var('drawer-close-color-hover');
     }
   }
 
   &__handler {
-    @include define-css-var('drawer-hanlder-offset', calc(get-css-var('drawer-handler-length') * -0.5 + 0.5px));
+    @include define-css-var('drawer-hanlder-offset', calc(get-css-var('drawer-handler-width') * -0.5 + 0.5px));
 
     position: absolute;
     z-index: 1;
@@ -117,7 +117,7 @@ $drawer: map.merge(
     &--bottom {
       right: 0;
       left: 0;
-      height: get-css-var('drawer-handler-length');
+      height: get-css-var('drawer-handler-width');
       cursor: ns-resize;
     }
 
@@ -125,7 +125,7 @@ $drawer: map.merge(
     &--left {
       top: 0;
       bottom: 0;
-      width: get-css-var('drawer-handler-length');
+      width: get-css-var('drawer-handler-width');
       cursor: ew-resize;
     }
 
@@ -147,7 +147,7 @@ $drawer: map.merge(
 
     &:hover,
     &--resizing {
-      background-color: get-css-var('drawer-color-bg-handler-hover');
+      background-color: get-css-var('drawer-handler-bg-color-hover');
     }
   }
 }

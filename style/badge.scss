@@ -9,11 +9,13 @@ $badge: map.merge(
   (
     color: get-css-var('content-color-reverse'),
     bg-color: get-css-var('color-error-base'),
-    border-color: get-css-var('color-error-light-9'),
+    b-color: get-css-var('color-error-light-9'),
     line-height: get-css-var('line-height-base'),
     height: calc(get-css-var('badge-line-height') * 1em),
-    padding: 0 calc(get-css-var('badge-line-height') * 0.35em),
-    font-family: #{Helvetica, 'Microsoft YaHei', SimSun, sans-serif},
+    v-padding: 0,
+    h-padding: calc(get-css-var('badge-line-height') * 0.35em),
+    padding: get-css-var('badge-v-padding') get-css-var('badge-h-padding'),
+    family: #{Helvetica, 'Microsoft YaHei', SimSun, sans-serif},
     font-size: get-css-var('font-size-secondary'),
     dot-size: 7px
   ),
@@ -51,7 +53,7 @@ $badge: map.merge(
     justify-content: center;
     height: get-css-var('badge-height');
     padding: get-css-var('badge-padding');
-    font-family: get-css-var('badge-font-family');
+    font-family: get-css-var('badge-family');
     font-size: get-css-var('badge-font-size');
     line-height: get-css-var('badge-line-height');
     color: get-css-var('badge-color');
@@ -60,7 +62,7 @@ $badge: map.merge(
     user-select: none;
     background-color: get-css-var('badge-bg-color');
     border-radius: calc(get-css-var('badge-line-height') * 0.5em);
-    box-shadow: get-css-var('box-shadow-border') get-css-var('badge-border-color');
+    box-shadow: get-css-var('box-shadow-border') get-css-var('badge-b-color');
     transform-origin: center center;
 
     &--fixed {
@@ -74,7 +76,7 @@ $badge: map.merge(
       &--#{$type} {
         @include define-badge-style((
           bg-color: 'color' $type 'base',
-          border-color: 'color' $type 'light-9'
+          b-color: 'color' $type 'light-9'
         ));
       }
     }
@@ -82,7 +84,7 @@ $badge: map.merge(
     &--disabled {
       @include define-badge-style((
         bg-color: 'content-color-disabled',
-        border-color: 'fill-color-base'
+        b-color: 'fill-color-base'
       ));
     }
   }

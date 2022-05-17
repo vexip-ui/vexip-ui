@@ -11,8 +11,8 @@ $timeline: map.merge(
     item-span-pending: 2.2em,
     pointer-color: get-css-var('color-primary-base'),
     pointer-bg-color: get-css-var('fill-color-base'),
-    pointer-border-width: 2px,
-    pointer-border-color: get-css-var('color-primary-base'),
+    pointer-b-width: 2px,
+    pointer-b-color: get-css-var('color-primary-base'),
     pointer-size: 13px,
     line-width: get-css-var('border-width'),
     line-style: solid,
@@ -49,7 +49,7 @@ $timeline: map.merge(
       &--#{$type} {
         @include define-timeline-style((
           pointer-color: 'color' $type 'base',
-          pointer-border-color: 'color' $type 'base'
+          pointer-b-color: 'color' $type 'base'
         ));
       }
     }
@@ -89,7 +89,7 @@ $timeline: map.merge(
     height: 100%;
     color: get-css-var('timeline-pointer-color');
     background-color: get-css-var('timeline-pointer-bg-color');
-    border: get-css-var('timeline-pointer-border-width') solid get-css-var('timeline-pointer-border-color');
+    border: get-css-var('timeline-pointer-b-width') solid get-css-var('timeline-pointer-b-color');
     border-radius: 50%;
   }
 

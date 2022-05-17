@@ -10,8 +10,8 @@ $date-picker: () !default;
 $date-picker: map.merge(
   (
     color-disabled: get-css-var('input-control-color-disabled'),
-    unit-color-focused: get-css-var('content-color-reverse'),
-    unit-bg-color-focused: get-css-var('color-primary-light-1'),
+    unit-color-focus: get-css-var('content-color-reverse'),
+    unit-bg-color-focus: get-css-var('color-primary-light-1'),
     separator-color: get-css-var('content-color-secondary'),
     exchange-color: get-css-var('content-color-secondary'),
     exchange-color-hover: get-css-var('color-primary-base'),
@@ -21,11 +21,11 @@ $date-picker: map.merge(
     pane-shadow: get-css-var('box-shadow-base'),
     shortcut-bg-color: get-css-var('fill-color-background'),
     shortcut-bg-color-hover: get-css-var('fill-color-hover'),
-    divider-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-appearance') get-css-var('date-picker-divider-color'),
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-appearance') get-css-var('date-picker-d-color'),
     arrow-color: get-css-var('content-color-secondary'),
     arrow-color-hover: get-css-var('content-color-base'),
-    header-item-color-hover: get-css-var('color-primary-base'),
+    header-color-hover: get-css-var('color-primary-base'),
     item-color-hover: get-css-var('calendar-index-color-hover'),
     item-color-selected: get-css-var('calendar-index-color-selected'),
     item-color-today: get-css-var('calendar-index-color-today'),
@@ -37,9 +37,9 @@ $date-picker: map.merge(
     item-bg-color-disabled: get-css-var('calendar-index-bg-color-disabled'),
     item-bg-color-today: get-css-var('calendar-index-bg-color-today'),
     item-bg-color-outside: get-css-var('calendar-index-bg-color-outside'),
-    item-border-radius: get-css-var('calendar-index-border-radius'),
-    range-mask-bg-color: get-css-var('calendar-range-mask-bg-color'),
-    range-mask-opacity: get-css-var('calendar-range-mask-opacity')
+    item-radius: get-css-var('calendar-index-border-radius'),
+    range-bg-color: get-css-var('calendar-range-bg-color'),
+    range-opacity: get-css-var('calendar-range-opacity')
   ),
   $date-picker
 );
@@ -75,8 +75,8 @@ $date-picker: map.merge(
     transition: get-css-var('transition-background'), get-css-var('transition-color');
 
     &--focused {
-      color: get-css-var('date-picker-unit-color-focused');
-      background-color: get-css-var('date-picker-unit-bg-color-focused');
+      color: get-css-var('date-picker-unit-color-focus');
+      background-color: get-css-var('date-picker-unit-bg-color-focus');
     }
   }
 
@@ -216,7 +216,7 @@ $date-picker: map.merge(
       transition: get-css-var('transition-color');
 
       &:hover {
-        color: get-css-var('date-picker-header-item-color-hover');
+        color: get-css-var('date-picker-header-color-hover');
       }
     }
 
@@ -238,7 +238,7 @@ $date-picker: map.merge(
       height: 2em;
       margin: 0 0.8em;
       background-color: transparent;
-      border-radius: get-css-var('date-picker-item-border-radius');
+      border-radius: get-css-var('date-picker-item-radius');
 
       &::before {
         position: absolute;
@@ -249,8 +249,8 @@ $date-picker: map.merge(
         display: none;
         pointer-events: none;
         content: '';
-        background-color: get-css-var('date-picker-range-mask-bg-color');
-        opacity: get-css-var('date-picker-range-mask-opacity');
+        background-color: get-css-var('date-picker-range-bg-color');
+        opacity: get-css-var('date-picker-range-opacity');
       }
 
       // ensure content above the range mask
@@ -262,7 +262,7 @@ $date-picker: map.merge(
         width: 100%;
         height: 100%;
         background-color: get-css-var('date-picker-item-bg-color');
-        border-radius: get-css-var('date-picker-item-border-radius');
+        border-radius: get-css-var('date-picker-item-radius');
         transition: get-css-var('transition-color'), get-css-var('transition-background');
       }
     }

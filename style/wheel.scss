@@ -7,16 +7,18 @@
 $wheel: () !default;
 $wheel: map.merge(
   (
-    item-padding: 0.2em 0.6em,
+    item-v-padding: 0.2em,
+    item-h-padding: 0.6em,
+    item-padding: get-css-var('wheel-item-v-padding') get-css-var('wheel-item-h-padding'),
     arrow-color: get-css-var('content-color-secondary'),
     arrow-color-hover: get-css-var('content-color-base'),
     arrow-color-disabled: get-css-var('content-color-disabled'),
     arrow-size: 15px,
     mask-bg-color: get-css-var('fill-color-base'),
     mask-opacity: 40%,
-    mask-border-color: get-css-var('border-color-dark-1'),
-    mask-border-width: get-css-var('border-width'),
-    mask-border-style: get-css-var('border-style')
+    mask-b-color: get-css-var('border-color-dark-1'),
+    mask-b-width: get-css-var('border-width'),
+    mask-b-style: get-css-var('border-style')
   ),
   $wheel
 );
@@ -103,11 +105,11 @@ $wheel: map.merge(
     position: absolute;
     pointer-events: none;
     background-color: get-css-var('wheel-mask-bg-color');
-    border: 0 get-css-var('wheel-mask-border-style') get-css-var('wheel-mask-border-color');
+    border: 0 get-css-var('wheel-mask-b-style') get-css-var('wheel-mask-b-color');
     opacity: get-css-var('wheel-mask-opacity');
   }
 
-  $border-width: get-css-var('wheel-mask-border-width');
+  $border-width: get-css-var('wheel-mask-b-width');
 
   &--vertical &__mask {
     right: 0;

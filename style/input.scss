@@ -8,35 +8,40 @@ $states: success, error, warning;
 $input: () !default;
 $input: map.merge(
   (
-    color-bg: get-css-var('fill-color-base'),
-    color-bg-disabled: get-css-var('fill-color-humble'),
-    color-border: get-css-var('border-color-base'),
-    color-border-hover: get-css-var('color-primary-light-1'),
-    color-border-focus: get-css-var('input-color-border-hover'),
-    color-shadow-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-focus') get-css-var('input-color-shadow-focus'),
-    color-placeholder: get-css-var('content-color-placeholder'),
-    color-control: get-css-var('content-color-base'),
+    bg-color: get-css-var('fill-color-base'),
+    bg-color-disabled: get-css-var('fill-color-humble'),
+    b-color: get-css-var('border-color-base'),
+    b-color-hover: get-css-var('color-primary-light-1'),
+    b-color-focus: get-css-var('input-b-color-hover'),
+    s-color-focus: get-css-var('color-primary-light-8'),
+    shadow-focus: get-css-var('box-shadow-focus') get-css-var('input-s-color-focus'),
+    placeholder-color: get-css-var('content-color-placeholder'),
+    control-color: get-css-var('content-color-base'),
     control-color-disabled: get-css-var('content-color-disabled'),
-    color-icon: get-css-var('content-color-secondary'),
-    color-icon-hover: get-css-var('color-primary-base'),
+    icon-color: get-css-var('content-color-secondary'),
+    icon-color-hover: get-css-var('color-primary-base'),
     icon-color-disabled: get-css-var('input-control-color-disabled'),
-    color-bg-before: get-css-var('fill-color-background'),
-    color-bg-after: get-css-var('fill-color-background'),
+    before-bg-color: get-css-var('fill-color-background'),
+    after-bg-color: get-css-var('fill-color-background'),
     line-height: get-css-var('line-height-base'),
-    border: get-css-var('border-appearance') get-css-var('input-color-border'),
-    border-radius: get-css-var('border-radius-base'),
+    border: get-css-var('border-shape') get-css-var('input-b-color'),
+    radius: get-css-var('border-radius-base'),
     count-color: get-css-var('content-color-secondary'),
     count-color-disbaled: get-css-var('input-control-color-disabled'),
     count-font-size: get-css-var('font-size-secondary'),
     count-line-height: get-css-var('line-height-secondary'),
-    horizontal-padding: 0.6em,
     small-height: 1.7em,
-    small-padding: 0.1em get-css-var('input-horizontal-padding'),
+    small-v-padding: 0.1em,
+    small-h-padding: 0.6em,
+    small-padding: get-css-var('input-small-v-padding') get-css-var('input-small-h-padding'),
     default-height: 2.1em,
-    default-padding: 0.3em get-css-var('input-horizontal-padding'),
+    default-v-padding: 0.3em,
+    default-h-padding: 0.6em,
+    default-padding: get-css-var('input-default-v-padding') get-css-var('input-default-h-padding'),
     large-height: 2.5em,
-    large-padding: 0.5em get-css-var('input-horizontal-padding')
+    large-v-padding: 0.5em,
+    large-h-padding: 0.6em,
+    large-padding: get-css-var('input-large-v-padding') get-css-var('input-large-h-padding')
   ),
   $input
 );
@@ -50,9 +55,9 @@ $input: map.merge(
   display: inline-flex;
   align-items: center;
   width: 100%;
-  background-color: get-css-var('input-color-bg');
+  background-color: get-css-var('input-bg-color');
   border: get-css-var('input-border');
-  border-radius: get-css-var('input-border-radius');
+  border-radius: get-css-var('input-radius');
   outline: 0;
   transition:
     get-css-var('transition-background'),
@@ -60,13 +65,13 @@ $input: map.merge(
     get-css-var('transition-box-shadow');
 
   &:hover {
-    border-color: get-css-var('input-color-border-hover');
+    border-color: get-css-var('input-b-color-hover');
   }
 
   &:focus,
   &--focused {
     z-index: 2;
-    border-color: get-css-var('input-color-border-focus');
+    border-color: get-css-var('input-b-color-focus');
     box-shadow: get-css-var('input-shadow-focus');
   }
 
@@ -75,9 +80,9 @@ $input: map.merge(
     &#{&}--#{$state} {
       @include define-input-style(
         (
-          color-border: 'color' $state 'light-1',
-          color-border-hover: 'color' $state 'light-1',
-          color-shadow-focus: 'color' $state 'light-8'
+          b-color: 'color' $state 'light-1',
+          b-color-hover: 'color' $state 'light-1',
+          s-color-focus: 'color' $state 'light-8'
         )
       );
     }
@@ -85,7 +90,7 @@ $input: map.merge(
 
   &--disabled {
     cursor: not-allowed;
-    background-color: get-css-var('input-color-bg-disabled');
+    background-color: get-css-var('input-bg-color-disabled');
 
     &,
     &:hover,
@@ -116,10 +121,10 @@ $input: map.merge(
     padding: get-css-var('input-default-padding');
     font-size: inherit;
     line-height: get-css-var('input-line-height');
-    color: get-css-var('input-color-control');
+    color: get-css-var('input-control-color');
     background-color: transparent;
     border: 0;
-    border-radius: get-css-var('input-border-radius');
+    border-radius: get-css-var('input-radius');
     outline: 0;
 
     &:disabled {
@@ -127,7 +132,7 @@ $input: map.merge(
     }
 
     &::placeholder {
-      color: get-css-var('input-color-placeholder');
+      color: get-css-var('input-placeholder-color');
     }
 
     @extend %disabled-item;
@@ -155,7 +160,7 @@ $input: map.merge(
 
       &,
       .vxp-icon {
-        color: get-css-var('input-color-icon');
+        color: get-css-var('input-icon-color');
       }
 
       @extend %disabled-item;
@@ -191,7 +196,7 @@ $input: map.merge(
 
   $self: &;
   $wrapper: #{&}-wrapper;
-  $radius: get-css-var('input-border-radius');
+  $radius: get-css-var('input-radius');
 
   &-wrapper {
     @include basis;
@@ -239,7 +244,7 @@ $input: map.merge(
 
       &,
       .vxp-icon {
-        color: get-css-var('input-color-icon');
+        color: get-css-var('input-icon-color');
       }
 
       @extend %disabled-item;
@@ -270,14 +275,16 @@ $input: map.merge(
     display: flex;
     align-items: center;
     height: calc(get-css-var('input-default-height') + get-css-var('border-width') * 2);
-    padding: 0 get-css-var('input-horizontal-padding');
+    padding: 0 get-css-var('input-default-h-padding');
     border: get-css-var('input-border');
 
     #{$wrapper}--small & {
+      padding: 0 get-css-var('input-small-h-padding');
       height: calc(get-css-var('input-small-height') + get-css-var('border-width') * 2);
     }
 
     #{$wrapper}--large & {
+      padding: 0 get-css-var('input-large-h-padding');
       height: calc(get-css-var('input-large-height') + get-css-var('border-width') * 2);
     }
 
@@ -301,13 +308,13 @@ $input: map.merge(
   }
 
   &__before {
-    background-color: get-css-var('input-color-bg-before');
+    background-color: get-css-var('input-before-bg-color');
     border-right: 0;
     border-radius: $radius 0 0 $radius;
   }
 
   &__after {
-    background-color: get-css-var('input-color-bg-after');
+    background-color: get-css-var('input-after-bg-color');
     border-left: 0;
     border-radius: 0 $radius $radius 0;
   }

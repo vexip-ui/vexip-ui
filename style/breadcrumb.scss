@@ -5,16 +5,22 @@
 $breadcrumb: () !default;
 $breadcrumb: map.merge(
   (
-    border-color: get-css-var('border-color-base'),
-    border-color-hover: get-css-var('color-primary-light-1'),
-    border-appearance: get-css-var('border-appearance'),
-    border-radius: get-css-var('border-radius-base'),
-    border-padding: 0.3em 0.6em,
+    b-color: get-css-var('border-color-base'),
+    b-color-hover: get-css-var('color-primary-light-1'),
+    border-shape: get-css-var('border-shape'),
+    radius: get-css-var('border-radius-base'),
+    v-padding: 0.3em,
+    h-padding: 0.6em,
+    v-padding-border: 0.3em,
+    h-padding-border: 0.6em,
+    padding: get-css-var('breadcrumb-v-padding') get-css-var('breadcrumb-h-padding'),
+    padding-border: get-css-var('breadcrumb-v-padding-border') get-css-var('breadcrumb-h-padding-border'),
     item-bg-color: transparent,
     item-bg-color-hover: get-css-var('color-primary-light-9'),
-    item-border-color: transparent,
-    item-border-color-hover: get-css-var('color-primary-light-7'),
-    item-border-radius: get-css-var('border-radius-small'),
+    item-b-color: transparent,
+    item-b-color-hover: get-css-var('color-primary-light-7'),
+    item-radius: get-css-var('border-radius-small'),
+    label-color: inherit,
     label-color-hover: get-css-var('color-primary-base'),
     separator-color: get-css-var('content-color-placeholder'),
     separator-color-hover: get-css-var('color-primary-base')
@@ -27,23 +33,24 @@ $breadcrumb: map.merge(
     @include define-preset-values('breadcrumb', $breadcrumb);
   }
 
-  $border-a: get-css-var('breadcrumb-border-appearance');
+  $border-a: get-css-var('breadcrumb-border-shape');
 
   @include basis;
 
   position: relative;
   display: flex;
   align-items: center;
+  padding: get-css-var('breadcrumb-padding');
 
   &--border {
     // height: 2.1em;
-    padding: get-css-var('breadcrumb-border-padding');
-    border: $border-a get-css-var('breadcrumb-border-color');
-    border-radius: get-css-var('breadcrumb-border-radius');
+    padding: get-css-var('breadcrumb-padding-border');
+    border: $border-a get-css-var('breadcrumb-b-color');
+    border-radius: get-css-var('breadcrumb-radius');
     transition: get-css-var('transition-border');
 
     &:hover {
-      border-color: get-css-var('breadcrumb-border-color-hover');
+      border-color: get-css-var('breadcrumb-b-color-hover');
     }
   }
 
@@ -51,18 +58,19 @@ $breadcrumb: map.merge(
     display: flex;
     align-items: center;
     background-color: get-css-var('breadcrumb-item-bg-color');
-    border: $border-a get-css-var('breadcrumb-item-border-color');
-    border-radius: get-css-var('breadcrumb-item-border-radius');
+    border: $border-a get-css-var('breadcrumb-item-b-color');
+    border-radius: get-css-var('breadcrumb-item-radius');
     transition: get-css-var('transition-background');
   }
 
   &--border &__item:hover {
     background-color: get-css-var('breadcrumb-item-bg-color-hover');
-    border-color: get-css-var('breadcrumb-item-border-color-hover');
+    border-color: get-css-var('breadcrumb-item-b-color-hover');
   }
 
   &__label {
     padding: 0 0.4em;
+    color: get-css-var('breadcrumb-label-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
 
@@ -97,6 +105,6 @@ $breadcrumb: map.merge(
   }
 
   &--border &__item:hover &__separator {
-    border-left-color: get-css-var('breadcrumb-item-border-color-hover');
+    border-left-color: get-css-var('breadcrumb-item-b-color-hover');
   }
 }

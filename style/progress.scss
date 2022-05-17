@@ -8,7 +8,9 @@ $progress: map.merge(
   (
     track-bg-color: get-css-var('fill-color-humble'),
     filler-bg-color: get-css-var('color-primary-base'),
-    inside-info-color: get-css-var('content-color-reverse'),
+    info-color: inherit,
+    info-color-inside: get-css-var('content-color-reverse'),
+    info-color-bubble: inherit,
     percentage-font-size: get-css-var('font-size-secondary'),
   ),
   $progress
@@ -50,6 +52,7 @@ $progress: map.merge(
     display: flex;
     align-items: center;
     margin-left: 0.6em;
+    color: get-css-var('progress-info-color');
     pointer-events: none;
     transition: get-css-var('transition-transform');
   }
@@ -63,7 +66,7 @@ $progress: map.merge(
     width: 100%;
     padding-right: 0.6em;
     margin: 0;
-    color: get-css-var('progress-inside-info-color');
+    color: get-css-var('progress-info-color-inside');
   }
 
   &--info-bubble &__info,
@@ -73,6 +76,7 @@ $progress: map.merge(
     min-height: auto;
     padding: 0.1em 0.3em;
     margin: 0;
+    color: get-css-var('progress-info-color-bubble');
   }
 
   &--info--none &__info {

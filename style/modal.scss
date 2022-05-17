@@ -9,18 +9,24 @@ $modal: map.merge(
   (
     z-index: get-css-var('masker-z-index'),
     bg-color: get-css-var('fill-color-base'),
-    border-radius: get-css-var('border-radius-base'),
-    shadow-color: get-css-var('border-color-base'),
-    shadow: get-css-var('box-shadow-appearance') get-css-var('modal-shadow-color'),
-    divider-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-appearance') get-css-var('modal-divider-color'),
+    radius: get-css-var('border-radius-base'),
+    s-color: get-css-var('border-color-base'),
+    shadow: get-css-var('box-shadow-shape') get-css-var('modal-s-color'),
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-shape') get-css-var('modal-d-color'),
     title-font-size: get-css-var('font-size-primary'),
-    title-font-weight: 500,
+    title-weight: 500,
     title-color: get-css-var('content-color-primary'),
-    header-padding: 0.6em 1em,
-    body-padding: 1em,
+    header-v-padding: 0.6em,
+    header-h-padding: 1em,
+    header-padding: get-css-var('modal-header-v-padding') get-css-var('modal-header-h-padding'),
+    body-v-padding: 1em,
+    body-h-padding: 1em,
+    body-padding: get-css-var('modal-body-v-padding') get-css-var('modal-body-h-padding'),
     body-line-height: get-css-var('line-height-base'),
-    footer-padding: 0.7em 1.2em,
+    footer-v-padding: 0.7em,
+    footer-h-padding: 1.2em,
+    footer-padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding'),
     close-color: get-css-var('content-color-placeholder'),
     close-color-hover: get-css-var('content-color-base'),
     resizer-color: get-css-var('border-color-light-1')
@@ -51,7 +57,7 @@ $modal: map.merge(
     pointer-events: visible;
     background-color: get-css-var('modal-bg-color');
     border: 0;
-    border-radius: get-css-var('modal-border-radius');
+    border-radius: get-css-var('modal-radius');
     box-shadow: get-css-var('modal-shadow');
   }
 
@@ -78,7 +84,7 @@ $modal: map.merge(
 
   &__title {
     font-size: get-css-var('modal-title-font-size');
-    font-weight: get-css-var('modal-title-font-weight');
+    font-weight: get-css-var('modal-title-weight');
     color: get-css-var('modal-title-color');
   }
 
@@ -127,6 +133,6 @@ $modal: map.merge(
         get-css-var('modal-resizer-color') 50%,
         transparent calc(50% + 1px)
       );
-    border-radius: 0 0 get-css-var('modal-border-radius') 0;
+    border-radius: 0 0 get-css-var('modal-radius') 0;
   }
 }

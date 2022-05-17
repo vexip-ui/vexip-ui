@@ -45,6 +45,10 @@ const props = useConfiguredProps('menu', {
     type: Boolean,
     default: false
   },
+  transfer: {
+    type: [Boolean, String],
+    default: false
+  },
   groupType: {
     default: 'collapse' as MenuGroupType,
     validator: (value: MenuGroupType) => {
@@ -107,13 +111,14 @@ export default defineComponent({
     provide<MenuState>(
       MENU_STATE,
       reactive({
+        currentActive,
+        isReduced,
         horizontal: toRef(props, 'horizontal'),
         accordion: toRef(props, 'accordion'),
         groupType: toRef(props, 'groupType'),
         theme: toRef(props, 'theme'),
         tooltipTheme: toRef(props, 'tooltipTheme'),
-        currentActive,
-        isReduced,
+        transfer: toRef(props, 'transfer'),
         handleSelect,
         handleExpand,
         increaseItem,

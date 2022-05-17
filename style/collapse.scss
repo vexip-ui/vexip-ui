@@ -12,12 +12,14 @@ $collapse: map.merge(
     arrow-color: get-css-var('content-color-secondary'),
     arrow-color-disabled: get-css-var('content-color-humble'),
     content-color-disabled: get-css-var('content-color-disabled'),
-    content-padding: 0.8em 0 1.2em,
-    divider-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-appearance') get-css-var('collapse-divider-color'),
-    border-color: get-css-var('border-color-base'),
-    border: get-css-var('border-appearance') get-css-var('collapse-border-color'),
-    border-radius: get-css-var('border-radius-base')
+    content-v-padding: 0.8em,
+    content-h-padding: 1.2em,
+    content-padding: get-css-var('collapse-content-v-padding') get-css-var('collapse-content-h-padding'),
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-shape') get-css-var('collapse-d-color'),
+    b-color: get-css-var('border-color-base'),
+    border: get-css-var('border-shape') get-css-var('collapse-b-color'),
+    radius: get-css-var('border-radius-base')
   ),
   $collapse
 );
@@ -33,7 +35,7 @@ $collapse: map.merge(
   $arrow: #{&}__arrow;
   $content: #{&}__content;
   $divider: get-css-var('collapse-divider');
-  $radius: get-css-var('collapse-border-radius');
+  $radius: get-css-var('collapse-radius');
 
   display: flex;
   flex-direction: column;
@@ -64,7 +66,7 @@ $collapse: map.merge(
 
       &--expanded#{&}--card {
         #{$header} {
-          border-bottom-color: get-css-var('collapse-divider-color');
+          border-bottom-color: get-css-var('collapse-d-color');
           border-radius: $radius $radius 0 0;
         }
       }
@@ -177,12 +179,12 @@ $collapse: map.merge(
 
     #{$header} {
       background-color: get-css-var('collapse-header-bg-color-card');
-      border-bottom: get-css-var('border-appearance') transparent;
+      border-bottom: get-css-var('border-shape') transparent;
     }
   }
 
   &--card &__pane {
-    border-color: get-css-var('collapse-divider-color');
+    border-color: get-css-var('collapse-d-color');
 
     &:first-child #{$header} {
       border-radius: $radius $radius 0 0;
@@ -199,7 +201,7 @@ $collapse: map.merge(
 
   &--card &__pane--expanded {
     #{$header} {
-      border-bottom-color: get-css-var('collapse-divider-color');
+      border-bottom-color: get-css-var('collapse-d-color');
     }
 
     #{$content} {

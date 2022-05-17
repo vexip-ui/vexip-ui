@@ -12,17 +12,19 @@ $table: () !default;
 $table: map.merge(
   (
     bg-color: get-css-var('fill-color-base'),
-    border-color: get-css-var('border-color-base'),
-    border-width: get-css-var('border-width'),
-    border-style: get-css-var('border-style'),
-    border-appearance: get-css-var('table-border-width') get-css-var('table-border-style'),
-    border: get-css-var('table-border-appearance') get-css-var('table-border-color'),
+    b-color: get-css-var('border-color-base'),
+    b-width: get-css-var('border-width'),
+    b-style: get-css-var('border-style'),
+    b-shape: get-css-var('table-b-width') get-css-var('table-b-style'),
+    border: get-css-var('table-b-shape') get-css-var('table-b-color'),
     row-bg-color: get-css-var('fill-color-background'),
     row-bg-color-hover: get-css-var('color-primary-light-8'),
-    row-bottom-border-color: get-css-var('border-color-light-1'),
+    row-b-color-bottom: get-css-var('border-color-light-1'),
     cell-min-height: 36px,
-    cell-padding: 6px,
-    cell-right-border-color: get-css-var('border-color-light-2'),
+    cell-v-padding: 6px,
+    cell-h-padding: 6px,
+    cell-padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding'),
+    cell-b-color-right: get-css-var('border-color-light-2'),
     expand-arrow-color: get-css-var('content-color-secondary'),
     expand-arrow-size: 1.4em,
     sorter-color: get-css-var('content-color-placeholder'),
@@ -32,9 +34,9 @@ $table: map.merge(
     filter-color-hover: get-css-var('content-color-secondary'),
     filter-color-visible: get-css-var('table-filter-color-hover'),
     filter-color-active: get-css-var('color-primary-base'),
+    filter-item-color-active: get-css-var('color-primary-base'),
     filter-item-bg-color: transparent,
     filter-item-bg-color-hover: get-css-var('fill-color-hover'),
-    filter-item-color-active: get-css-var('color-primary-base'),
     filter-item-bg-color-active: get-css-var('table-filter-item-bg-color-hover'),
     indicator-color: get-css-var('color-primary-base'),
     empty-color: get-css-var('content-color-placeholder')
@@ -47,7 +49,7 @@ $table: map.merge(
     @include define-preset-values('table', $table);
   }
 
-  $border-a: get-css-var('table-border-appearance');
+  $border-a: get-css-var('table-b-shape');
 
   @include basis;
 
@@ -84,7 +86,7 @@ $table: map.merge(
     flex: 1 0 auto;
     flex-direction: column;
     align-items: stretch;
-    border-bottom: $border-a get-css-var('table-row-bottom-border-color');
+    border-bottom: $border-a get-css-var('table-row-b-color-bottom');
 
     &:last-child {
       margin-bottom: -1px;
@@ -169,7 +171,7 @@ $table: map.merge(
 
     #{$cell},
     #{$head-cell} {
-      border-right-color: get-css-var('table-cell-right-border-color');
+      border-right-color: get-css-var('table-cell-b-color-right');
     }
   }
 
@@ -355,7 +357,7 @@ $table: map.merge(
   }
 
   &--border &__fixed--right {
-    border-left-color: $border-a get-css-var('table-cell-right-border-color');
+    border-left-color: $border-a get-css-var('table-cell-b-color-right');
   }
 
   &__fixed--left {

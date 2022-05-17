@@ -15,12 +15,12 @@ $pagination: map.merge(
     bg-color-hover: get-css-var('color-primary-light-9'),
     bg-color-disabled: get-css-var('pagination-bg-color'),
     bg-color-active: get-css-var('color-primary-base'),
-    border-color: get-css-var('border-color-base'),
-    border-color-hover: get-css-var('color-primary-base'),
-    border-color-disabled: get-css-var('fill-color-disabled'),
-    border-color-active: get-css-var('pagination-border-color-hover'),
-    border: get-css-var('border-appearance') get-css-var('pagination-border-color'),
-    border-radius: get-css-var('border-radius-base'),
+    b-color: get-css-var('b-color-base'),
+    b-color-hover: get-css-var('color-primary-base'),
+    b-color-disabled: get-css-var('fill-color-disabled'),
+    b-color-active: get-css-var('pagination-b-color-hover'),
+    border: get-css-var('border-shape') get-css-var('pagination-b-color'),
+    radius: get-css-var('border-radius-base'),
     small-size: 2em,
     default-size: 2.2em,
     large-size: 2.5em,
@@ -51,7 +51,7 @@ $pagination: map.merge(
     cursor: pointer;
     user-select: none;
     border: get-css-var('pagination-border');
-    border-radius: get-css-var('pagination-border-radius');
+    border-radius: get-css-var('pagination-radius');
     transition:
       get-css-var('transition-color'),
       get-css-var('transition-background'),
@@ -62,7 +62,7 @@ $pagination: map.merge(
     }
 
     &:hover {
-      border-color: get-css-var('pagination-border-color-hover');
+      border-color: get-css-var('pagination-b-color-hover');
 
       &,
       .vxp-icon {
@@ -71,7 +71,7 @@ $pagination: map.merge(
     }
 
     &--active {
-      border-color: get-css-var('pagination-border-color-active');
+      border-color: get-css-var('pagination-b-color-active');
 
       &,
       .vxp-icon {
@@ -81,7 +81,7 @@ $pagination: map.merge(
 
     @mixin disabled {
       cursor: not-allowed;
-      border-color: get-css-var('pagination-border-color-disabled');
+      border-color: get-css-var('pagination-b-color-disabled');
 
       &,
       .vxp-icon {

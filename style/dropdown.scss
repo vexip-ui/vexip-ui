@@ -5,17 +5,17 @@
 $dropdown: () !default;
 $dropdown: map.merge(
   (
-    z-index: get-css-var('z-index-popper'),
+    popper-z-index: get-css-var('z-index-popper'),
     color-selected: get-css-var('color-primary-base'),
     color-disabled: get-css-var('content-color-disabled'),
     bg-color: get-css-var('fill-color-base'),
     bg-color-hover: get-css-var('fill-color-hover'),
     bg-color-active: get-css-var('dropdown-bg-color-hover'),
-    border-radius: get-css-var('border-radius-base'),
-    shadow-color: get-css-var('border-color-base'),
-    shadow: get-css-var('box-shadow-appearance') get-css-var('dropdown-shadow-color'),
-    divider-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-appearance') get-css-var('dropdown-divider-color')
+    radius: get-css-var('border-radius-base'),
+    s-color: get-css-var('border-color-base'),
+    shadow: get-css-var('box-shadow-shape') get-css-var('dropdown-s-color'),
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-shape') get-css-var('dropdown-d-color')
   ),
   $dropdown
 );
@@ -32,7 +32,7 @@ $dropdown: map.merge(
   &__popper {
     @include basis;
 
-    z-index: get-css-var('dropdown-z-index');
+    z-index: get-css-var('dropdown-popper-z-index');
     display: flex;
     padding: 5px 0;
 
@@ -53,7 +53,7 @@ $dropdown: map.merge(
     margin: 0;
     user-select: none;
     background-color: get-css-var('dropdown-bg-color');
-    border-radius: get-css-var('dropdown-border-radius');
+    border-radius: get-css-var('dropdown-radius');
     box-shadow: get-css-var('dropdown-shadow');
   }
 

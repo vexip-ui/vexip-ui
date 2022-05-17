@@ -8,14 +8,14 @@
     padding: 0;
     font-size: inherit;
     line-height: get-css-var('input-line-height');
-    color: get-css-var('input-color-control');
+    color: get-css-var('input-control-color');
     background-color: transparent;
     border: 0;
-    border-radius: get-css-var('input-border-radius');
+    border-radius: get-css-var('input-radius');
     outline: 0;
 
     &::placeholder {
-      color: get-css-var('input-color-placeholder');
+      color: get-css-var('input-placeholder-color');
     }
   }
 }

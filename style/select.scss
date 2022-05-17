@@ -9,12 +9,11 @@
 $select: () !default;
 $select: map.merge(
   (
-    color-bg-list: get-css-var('fill-color-base'),
-    border-radius-list: get-css-var('border-radius-base'),
-    shadow-list: get-css-var('box-shadow-base'),
-    color-check: get-css-var('color-primary-base'),
-    color-empty: get-css-var('content-color-placeholder'),
-    multiple-padding: 0.1em 0.3em
+    list-bg-color: get-css-var('fill-color-base'),
+    list-radius: get-css-var('border-radius-base'),
+    list-shadow: get-css-var('box-shadow-base'),
+    check-color: get-css-var('color-primary-base'),
+    empty-color: get-css-var('content-color-placeholder')
   ),
   $select
 );
@@ -51,7 +50,7 @@ $select: map.merge(
 
   &--multiple &__control {
     height: auto;
-    padding: get-css-var('select-multiple-padding');
+    padding: 0.1em 0.3em;
   }
 
   &__tag {
@@ -71,7 +70,7 @@ $select: map.merge(
     right: 2em;
     left: 0.6em;
     overflow: hidden;
-    color: get-css-var('input-color-placeholder');
+    color: get-css-var('input-placeholder-color');
     text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
@@ -93,9 +92,9 @@ $select: map.merge(
     display: inline-block;
     width: 100%;
     user-select: none;
-    background-color: get-css-var('select-color-bg-list');
-    border-radius: get-css-var('select-border-radius-list');
-    box-shadow: get-css-var('select-shadow-list');
+    background-color: get-css-var('select-list-bg-color');
+    border-radius: get-css-var('select-list-radius');
+    box-shadow: get-css-var('select-list-shadow');
 
     .vxp-scroll__wrapper {
       padding: 0.35em 0;
@@ -123,7 +122,7 @@ $select: map.merge(
   }
 
   &__check {
-    color: get-css-var('select-color-check');
+    color: get-css-var('select-check-color');
   }
 
   &__arrow {
@@ -140,9 +139,9 @@ $select: map.merge(
     justify-content: center;
     width: 100%;
     padding: 0.6em 1.2em;
-    color: get-css-var('select-color-empty');
+    color: get-css-var('select-empty-color');
     white-space: nowrap;
     cursor: default;
-    background-color: get-css-var('select-color-bg-list');
+    background-color: get-css-var('select-list-bg-color');
   }
 }

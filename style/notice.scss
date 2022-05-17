@@ -1,4 +1,3 @@
-// @use 'sass:color';
 @use 'sass:map';
 
 @use '../design' as *;
@@ -10,16 +9,18 @@ $types: info success warning error;
 $notice: () !default;
 $notice: map.merge(
   (
-    title-font-size: get-css-var('font-size-primary'),
-    title-color: get-css-var('content-color-primary'),
     color: inherit,
     bg-color: get-css-var('fill-color-base'),
-    border-color: transparent,
-    border: get-css-var('border-appearance') get-css-var('notice-border-color'),
-    border-radius: get-css-var('border-radius-base'),
-    shadow-color: get-css-var('border-color-base'),
-    shadow: get-css-var('box-shadow-appearance') get-css-var('notice-shadow-color'),
-    padding: 0.8em 1.2em,
+    b-color: transparent,
+    border: get-css-var('border-shape') get-css-var('notice-b-color'),
+    radius: get-css-var('border-radius-base'),
+    s-color: get-css-var('border-color-base'),
+    shadow: get-css-var('box-shadow-shape') get-css-var('notice-s-color'),
+    v-padding: 0.8em,
+    h-padding: 1.2em,
+    padding: get-css-var('notice-v-padding') get-css-var('notice-h-padding'),
+    title-font-size: get-css-var('font-size-primary'),
+    title-color: get-css-var('content-color-primary'),
     icon-color: get-css-var('notice-color'),
     close-color: get-css-var('content-color-placeholder'),
     close-color-hover: get-css-var('content-color-base'),
@@ -92,7 +93,7 @@ $notice: map.merge(
     color: get-css-var('notice-color');
     background-color: get-css-var('notice-bg-color');
     border: get-css-var('notice-border');
-    border-radius: get-css-var('notice-border-radius');
+    border-radius: get-css-var('notice-radius');
     box-shadow: get-css-var('notice-shadow');
 
     &--has-icon {
@@ -138,7 +139,7 @@ $notice: map.merge(
       left: 0;
       width: 5px;
       background-color: get-css-var('notice-marker-bg-color');
-      border-radius: get-css-var('notice-border-radius') 0 0 get-css-var('notice-border-radius');
+      border-radius: get-css-var('notice-radius') 0 0 get-css-var('notice-radius');
     }
 
     &--marker::before {
@@ -160,7 +161,7 @@ $notice: map.merge(
       &--background#{&}--#{$type} {
         @include define-notice-style((
           bg-color: 'color' $color 'light-9',
-          border-color: 'color' $color 'light-5',
+          b-color: 'color' $color 'light-5',
           shadow: unset,
           close-color: 'color' $color 'light-7',
           close-color-hover: 'color' $color 'light-2'

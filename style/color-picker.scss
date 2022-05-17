@@ -8,9 +8,9 @@ $color-picker: () !default;
 $color-picker: map.merge(
   (
     marker-color: get-css-var('content-color-humble'),
-    marker-border-color: get-css-var('border-color-base'),
-    marker-border: get-css-var('border-appearance') get-css-var('color-picker-marker-border-color'),
-    marker-border-radius: get-css-var('border-radius-small'),
+    marker-b-color: get-css-var('border-color-base'),
+    marker-border: get-css-var('border-shape') get-css-var('color-picker-marker-b-color'),
+    marker-radius: get-css-var('border-radius-small'),
     marker-small-height: 1.1em,
     marker-default-height: 1.3em,
     marker-large-height: 1.7em,
@@ -18,19 +18,19 @@ $color-picker: map.merge(
     arrow-color: get-css-var('content-color-secondary'),
     popper-z-index: get-css-var('z-index-popper'),
     pane-bg-color: get-css-var('fill-color-base'),
-    pand-border-radius: get-css-var('border-radius-base'),
+    pane-radius: get-css-var('border-radius-base'),
     pane-shadow: get-css-var('box-shadow-base'),
-    divider-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-appearance') get-css-var('color-picker-divider-color'),
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-shape') get-css-var('color-picker-d-color'),
     pointer-size: 6px,
     handler-size: 6px,
     handler-bg-color: get-css-var('fill-color-base'),
-    handler-border-color: get-css-var('border-color-base'),
-    handler-border: get-css-var('border-appearance') get-css-var('color-picker-handler-border-color'),
-    handler-border-radius: 3px,
-    shortcut-border-color: get-css-var('border-color-base'),
-    shortcut-border-color-hover: get-css-var('color-primary-base'),
-    shortcut-border-radius: get-css-var('border-radius-base')
+    handler-b-color: get-css-var('border-color-base'),
+    handler-border: get-css-var('border-shape') get-css-var('color-picker-handler-b-color'),
+    handler-radius: 3px,
+    shortcut-b-color: get-css-var('border-color-base'),
+    shortcut-b-color-hover: get-css-var('color-primary-base'),
+    shortcut-radius: get-css-var('border-radius-base')
   ),
   $color-picker
 );
@@ -62,7 +62,7 @@ $color-picker: map.merge(
     margin-right: 0.6em;
     color: get-css-var('color-picker-marker-color');
     border: get-css-var('color-picker-marker-border');
-    border-radius: get-css-var('color-picker-marker-border-radius');
+    border-radius: get-css-var('color-picker-marker-radius');
   }
 
   &--small &__marker {
@@ -110,7 +110,7 @@ $color-picker: map.merge(
 
   &__pane {
     background-color: get-css-var('color-picker-pane-bg-color');
-    border-radius: get-css-var('color-picker-pane-border-radius');
+    border-radius: get-css-var('color-picker-pane-radius');
     box-shadow: get-css-var('color-picker-pane-shadow');
   }
 
@@ -192,7 +192,7 @@ $color-picker: map.merge(
   &__palette-handler {
     position: absolute;
     user-select: none;
-    border: get-css-var('border-appearance') get-css-var('color-black');
+    border: get-css-var('border-shape') get-css-var('color-black');
     border-radius: 50%;
     transform: translate(-50%, -50%);
   }
@@ -200,7 +200,7 @@ $color-picker: map.merge(
   &__palette-pointer {
     width: get-css-var('color-picker-pointer-size');
     height: get-css-var('color-picker-pointer-size');
-    border: get-css-var('border-appearance') get-css-var('color-white');
+    border: get-css-var('border-shape') get-css-var('color-white');
     border-radius: 50%;
   }
 
@@ -212,7 +212,7 @@ $color-picker: map.merge(
     width: get-css-var('color-picker-handler-size');
     background-color: get-css-var('color-picker-handler-bg-color');
     border: get-css-var('color-picker-handler-border');
-    border-radius: get-css-var('color-picker-handler-border-radius');
+    border-radius: get-css-var('color-picker-handler-radius');
     transform: translateX(-50%);
   }
 
@@ -229,12 +229,12 @@ $color-picker: map.merge(
     height: 1.2em;
     margin: 2px;
     cursor: pointer;
-    border-radius: get-css-var('color-picker-shortcut-border-radius');
-    box-shadow: get-css-var('box-shadow-border') get-css-var('color-picker-shortcut-border-color');
+    border-radius: get-css-var('color-picker-shortcut-radius');
+    box-shadow: get-css-var('box-shadow-border') get-css-var('color-picker-shortcut-b-color');
     transition: box-shadow 200ms;
 
     &:hover {
-      box-shadow: 0 0 2px 1px get-css-var('color-picker-shortcut-border-color-hover');
+      box-shadow: 0 0 2px 1px get-css-var('color-picker-shortcut-b-color-hover');
     }
   }
 }

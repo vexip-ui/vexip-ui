@@ -11,12 +11,14 @@ $message: map.merge(
   (
     color: inherit,
     bg-color: get-css-var('fill-color-base'),
-    border-color: transparent,
-    border: get-css-var('border-appearance') get-css-var('message-border-color'),
-    border-radius: get-css-var('border-radius-base'),
-    shadow-color: get-css-var('border-color-base'),
-    shadow: get-css-var('box-shadow-appearance') get-css-var('message-shadow-color'),
-    padding: 0.6em 1em,
+    b-color: transparent,
+    border: get-css-var('border-shape') get-css-var('message-b-color'),
+    radius: get-css-var('border-radius-base'),
+    s-color: get-css-var('border-color-base'),
+    shadow: get-css-var('box-shadow-shape') get-css-var('message-s-color'),
+    v-padding: 0.6em,
+    h-padding: 1em,
+    padding: get-css-var('message-v-padding') get-css-var('message-h-padding'),
     icon-color: get-css-var('message-color'),
     close-color: get-css-var('content-color-placeholder'),
     close-color-hover: get-css-var('content-color-base')
@@ -80,7 +82,7 @@ $message: map.merge(
     color: get-css-var('message-color');
     background-color: get-css-var('message-bg-color');
     border: get-css-var('message-border');
-    border-radius: get-css-var('message-border-radius');
+    border-radius: get-css-var('message-radius');
     box-shadow: get-css-var('message-shadow');
 
     @each $type in $types {
@@ -97,7 +99,7 @@ $message: map.merge(
       &--background#{&}--#{$type} {
         @include define-message-style((
           bg-color: 'color' $color 'light-9',
-          border-color: 'color' $color 'light-5',
+          b-color: 'color' $color 'light-5',
           shadow: unset,
           close-color: 'color' $color 'light-7',
           close-color-hover: 'color' $color 'light-2'

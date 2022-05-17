@@ -9,6 +9,7 @@
           v-model:active="active"
           :reduced="reduced"
           :theme="n === 1 ? 'light' : 'dark'"
+          :transfer="n === 1"
         >
           <MenuItem label="1" icon="mail-bulk">
             菜单一
@@ -60,10 +61,10 @@
   </div>
   <div v-for="n in 2" :key="n" style="padding: 20px;">
     <Menu
-      v-model:active="active"
       horizontal
       :reduced="reduced"
       :theme="n === 1 ? 'light' : 'dark'"
+      transfer
     >
       <MenuItem label="1" icon="mail-bulk">
         菜单一
@@ -79,6 +80,17 @@
             <template #group>
               <MenuItem label="1-3-1">
                 三级菜单一
+                <template #group>
+                  <MenuItem label="1-3-1-1">
+                    四级菜单一
+                  </MenuItem>
+                  <MenuItem label="1-3-1-2">
+                    四级菜单二
+                  </MenuItem>
+                  <MenuItem label="1-3-1-3">
+                    四级菜单三
+                  </MenuItem>
+                </template>
               </MenuItem>
               <MenuItem label="1-3-2">
                 三级菜单一
@@ -91,15 +103,18 @@
         </template>
       </MenuItem>
       <MenuGroup label="分组一">
-        <MenuItem label="3" icon="chart-pie">
-          菜单三
+        <MenuItem label="2" icon="chart-pie">
+          菜单二
         </MenuItem>
-        <MenuItem label="4" icon="user">
-          菜单四
+        <MenuItem label="3" icon="user">
+          菜单三
         </MenuItem>
       </MenuGroup>
       <MenuItem label="4" icon="user">
         菜单四
+      </MenuItem>
+      <MenuItem label="5" icon="cart-plus">
+        菜单五
       </MenuItem>
     </Menu>
   </div>

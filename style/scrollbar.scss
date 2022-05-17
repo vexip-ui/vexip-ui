@@ -5,11 +5,11 @@
 $scrollbar: () !default;
 $scrollbar: map.merge(
   (
-    color-bg-bar: get-css-var('color-primary-light-6'),
-    color-bg-track: get-css-var('color-primary-light-9'),
-    width: 6px,
     move-duration: 140ms,
-    move-timing: cubic-bezier(0.165, 0.84, 0.44, 1)
+    move-timing: cubic-bezier(0.165, 0.84, 0.44, 1),
+    width: 6px,
+    bar-bg-color: get-css-var('color-primary-light-6'),
+    track-bg-color: get-css-var('color-primary-light-9')
   ),
   $scrollbar
 );
@@ -76,7 +76,7 @@ $scrollbar: map.merge(
     width: 100%;
     height: 100%;
     cursor: pointer;
-    background-color: get-css-var('scrollbar-color-bg-track');
+    background-color: get-css-var('scrollbar-track-bg-color');
     border-radius: 3px;
     transition: get-css-var('transition-opacity');
 
@@ -103,7 +103,7 @@ $scrollbar: map.merge(
   &__bar {
     position: absolute;
     cursor: pointer;
-    background-color: get-css-var('scrollbar-color-bg-bar');
+    background-color: get-css-var('scrollbar-bar-bg-color');
     border-radius: 3px;
     will-change: transform;
     transition:

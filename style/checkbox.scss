@@ -7,21 +7,22 @@ $states: success, error, warning;
 $checkbox: () !default;
 $checkbox: map.merge(
   (
-    color-checked-label: get-css-var('color-primary-base'),
-    color-disabled-label: get-css-var('content-color-disabled'),
-    color-border: get-css-var('border-color-base'),
-    color-border-hover: get-css-var('color-primary-base'),
-    color-border-checked: get-css-var('color-primary-base'),
-    color-border-disabled: get-css-var('fill-color-disabled'),
-    color-bg-signal: get-css-var('fill-color-base'),
-    color-bg-checked-signal: get-css-var('color-primary-base'),
-    color-bg-disabled-signal: get-css-var('fill-color-background'),
-    color-border-signal-after: get-css-var('fill-color-base'),
-    border: get-css-var('border-appearance') get-css-var('checkbox-color-border'),
-    border-radius: get-css-var('border-radius-base'),
-    border-radius-signal: get-css-var('border-radius-small'),
-    color-shadow-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-focus') get-css-var('checkbox-color-shadow-focus'),
+    label-color: inherit,
+    label-color-checked: get-css-var('color-primary-base'),
+    label-color-disabled: get-css-var('content-color-disabled'),
+    b-color: get-css-var('border-color-base'),
+    b-color-hover: get-css-var('color-primary-base'),
+    b-color-checked: get-css-var('color-primary-base'),
+    b-color-disabled: get-css-var('fill-color-disabled'),
+    signal-bg-color: get-css-var('fill-color-base'),
+    signal-bg-color-checked: get-css-var('color-primary-base'),
+    signal-bg-color-disabled: get-css-var('fill-color-background'),
+    signal-check-color: get-css-var('checkbox-signal-bg-color'),
+    border: get-css-var('border-shape') get-css-var('checkbox-b-color'),
+    radius: get-css-var('border-radius-base'),
+    signal-radius: get-css-var('border-radius-small'),
+    s-color-focus: get-css-var('color-primary-light-8'),
+    shadow-focus: get-css-var('box-shadow-focus') get-css-var('checkbox-s-color-focus'),
     signal-small-size: 14px,
     signal-small-thick: 1px,
     signal-default-size: 18px,
@@ -59,15 +60,15 @@ $checkbox: map.merge(
   &--border {
     padding: 0.6em 0.8em;
     border: get-css-var('checkbox-border');
-    border-radius: get-css-var('checkbox-border-radius');
+    border-radius: get-css-var('checkbox-radius');
 
     &:hover {
-      border-color: get-css-var('checkbox-color-border-hover');
+      border-color: get-css-var('checkbox-b-color-hover');
     }
   }
 
   &--checked#{&}--border {
-    border-color: get-css-var('checkbox-color-border-checked');
+    border-color: get-css-var('checkbox-b-color-checked');
   }
 
   &__signal {
@@ -75,9 +76,9 @@ $checkbox: map.merge(
     display: inline-block;
     width: get-css-var('checkbox-signal-default-size');
     height: get-css-var('checkbox-signal-default-size');
-    background-color: get-css-var('checkbox-color-bg-signal');
+    background-color: get-css-var('checkbox-signal-bg-color');
     border: get-css-var('checkbox-border');
-    border-radius: get-css-var('checkbox-border-radius-signal');
+    border-radius: get-css-var('checkbox-signal-radius');
     transition:
       get-css-var('transition-background'),
       get-css-var('transition-border'),
@@ -95,7 +96,7 @@ $checkbox: map.merge(
       height: calc(get-css-var('checkbox-signal-default-size') * 0.5);
       content: '';
       background-color: transparent;
-      border: solid get-css-var('checkbox-color-border-signal-after');
+      border: solid get-css-var('checkbox-signal-check-color');
       border-width: 0 get-css-var('checkbox-signal-default-thick') get-css-var('checkbox-signal-default-thick') 0;
       opacity: 0%;
       transition:
@@ -150,16 +151,17 @@ $checkbox: map.merge(
 
   &__label {
     margin-left: 0.4em;
+    color: get-css-var('checkbox-label-color');
     transition: get-css-var('transition-color');
   }
 
   &:hover &__signal {
-    border-color: get-css-var('checkbox-color-border-hover');
+    border-color: get-css-var('checkbox-b-color-hover');
   }
 
   @mixin partial-signal {
-    background-color: get-css-var('checkbox-color-bg-checked-signal');
-    border-color: get-css-var('checkbox-color-border-checked');
+    background-color: get-css-var('checkbox-signal-bg-color-checked');
+    border-color: get-css-var('checkbox-b-color-checked');
 
     &::after {
       top: 50%;
@@ -183,8 +185,8 @@ $checkbox: map.merge(
   }
 
   &--checked &__signal {
-    background-color: get-css-var('checkbox-color-bg-checked-signal');
-    border-color: get-css-var('checkbox-color-border-checked');
+    background-color: get-css-var('checkbox-signal-bg-color-checked');
+    border-color: get-css-var('checkbox-b-color-checked');
 
     &::after {
       opacity: 100%;
@@ -195,7 +197,7 @@ $checkbox: map.merge(
   &--checked &__label {
     &,
     .vxp-icon {
-      color: get-css-var('checkbox-color-checked-label');
+      color: get-css-var('checkbox-label-color-checked');
     }
   }
 
@@ -203,12 +205,12 @@ $checkbox: map.merge(
     &--#{$state} {
       @include define-checkbox-style(
         (
-          color-checked-label: 'color' $state 'base',
-          color-border: 'color' $state 'base',
-          color-border-hover: 'color' $state 'base',
-          color-border-checked: 'color' $state 'base',
-          color-bg-checked-signal: 'color' $state 'base',
-          color-shadow-focus: 'color' $state 'light-8'
+          label-color-checked: 'color' $state 'base',
+          b-color: 'color' $state 'base',
+          b-color-hover: 'color' $state 'base',
+          b-color-checked: 'color' $state 'base',
+          signal-bg-color-checked: 'color' $state 'base',
+          s-color-focus: 'color' $state 'light-8'
         )
       );
     }
@@ -220,29 +222,29 @@ $checkbox: map.merge(
 
     &,
     &:hover {
-      border-color: get-css-var('checkbox-color-border-disabled');
+      border-color: get-css-var('checkbox-b-color-disabled');
     }
   }
 
   &--disabled &__signal,
   &--disabled:hover &__signal {
-    background-color: get-css-var('checkbox-color-bg-disabled-signal');
-    border-color: get-css-var('checkbox-color-border-disabled');
+    background-color: get-css-var('checkbox-signal-bg-color-disabled');
+    border-color: get-css-var('checkbox-b-color-disabled');
 
     &::after {
-      background-color: get-css-var('checkbox-color-border-disabled');
+      background-color: get-css-var('checkbox-b-color-disabled');
     }
   }
 
   &--disabled &__label {
     &,
     .vxp-icon {
-      color: get-css-var('checkbox-color-disabled-label');
+      color: get-css-var('checkbox-label-color-disabled');
     }
   }
 
   &--disabled#{&}--checked &__signal {
-    background-color: get-css-var('checkbox-color-border-disabled');
+    background-color: get-css-var('checkbox-b-color-disabled');
   }
 
   &__input {
@@ -282,21 +284,21 @@ $checkbox: map.merge(
     &-group--border & {
       padding: 0.6em 0.8em;
       border: get-css-var('checkbox-border');
-      border-radius: get-css-var('checkbox-border-radius');
+      border-radius: get-css-var('checkbox-radius');
 
       &:hover {
-        border-color: get-css-var('checkbox-color-border-hover');
+        border-color: get-css-var('checkbox-b-color-hover');
       }
 
       &--checked {
-        border-color: get-css-var('checkbox-color-border-checked');
+        border-color: get-css-var('checkbox-b-color-checked');
       }
     }
 
     &-group--border &--disabled {
       &,
       &:hover {
-        border-color: get-css-var('checkbox-color-border-disabled');
+        border-color: get-css-var('checkbox-b-color-disabled');
       }
     }
 
@@ -305,27 +307,27 @@ $checkbox: map.merge(
 
       &,
       &:hover {
-        border-color: get-css-var('checkbox-color-border-disabled');
+        border-color: get-css-var('checkbox-b-color-disabled');
       }
 
       &__signal {
-        border-color: get-css-var('checkbox-color-border-disabled') !important;
+        border-color: get-css-var('checkbox-b-color-disabled') !important;
 
         &::after {
-          background-color: get-css-var('checkbox-color-border-disabled');
+          background-color: get-css-var('checkbox-b-color-disabled');
         }
       }
 
       &__label {
         &,
         .vxp-icon {
-          color: get-css-var('checkbox-color-disabled-label');
+          color: get-css-var('checkbox-label-color-disabled');
         }
       }
     }
 
     &-group--disabled &--checked &__signal {
-      background-color: get-css-var('checkbox-color-border-disabled');
+      background-color: get-css-var('checkbox-b-color-disabled');
     }
 
     &-group--small &__signal {

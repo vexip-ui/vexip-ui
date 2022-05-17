@@ -9,20 +9,22 @@ $time-picker: () !default;
 $time-picker: map.merge(
   (
     color-disabled: get-css-var('input-control-color-disabled'),
-    unit-color-focused: get-css-var('content-color-reverse'),
-    unit-bg-color-focused: get-css-var('color-primary-light-1'),
+    unit-color-focus: get-css-var('content-color-reverse'),
+    unit-bg-color-focus: get-css-var('color-primary-light-1'),
     separator-color: get-css-var('content-color-secondary'),
     exchange-color: get-css-var('content-color-secondary'),
     exchange-color-hover: get-css-var('color-primary-base'),
     popper-z-index: get-css-var('z-index-popper'),
     pane-bg-color: get-css-var('fill-color-base'),
-    pane-border-radius: get-css-var('border-radius-base'),
+    pane-radius: get-css-var('border-radius-base'),
     pane-shadow: get-css-var('box-shadow-base'),
     shortcut-bg-color: get-css-var('fill-color-background'),
     shortcut-bg-color-hover: get-css-var('fill-color-hover'),
-    divider-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-appearance') get-css-var('time-picker-divider-color'),
-    wheel-padding: 0.6em
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-shape') get-css-var('time-picker-d-color'),
+    wheel-v-padding: 0.6em,
+    wheel-h-padding: 0.6em,
+    wheel-padding: get-css-var('time-picker-wheel-v-padding') get-css-var('time-picker-wheel-h-padding')
   ),
   $time-picker
 );
@@ -58,8 +60,8 @@ $time-picker: map.merge(
     transition: get-css-var('transition-background'), get-css-var('transition-color');
 
     &--focused {
-      color: get-css-var('time-picker-unit-color-focused');
-      background-color: get-css-var('time-picker-unit-bg-color-focused');
+      color: get-css-var('time-picker-unit-color-focus');
+      background-color: get-css-var('time-picker-unit-bg-color-focus');
     }
   }
 
@@ -117,7 +119,7 @@ $time-picker: map.merge(
     justify-content: center;
     min-width: 10.8em;
     background-color: get-css-var('time-picker-pane-bg-color');
-    border-radius: get-css-var('time-picker-pane-border-radius');
+    border-radius: get-css-var('time-picker-pane-radius');
     box-shadow: get-css-var('time-picker-pane-shadow');
   }
 

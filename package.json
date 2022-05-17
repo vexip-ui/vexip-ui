@@ -22,7 +22,7 @@
     "@rollup/plugin-eslint": "^8.0.2",
     "@rollup/plugin-replace": "^4.0.0",
     "@types/eslint": "^8.4.2",
-    "@types/file-saver": "^2",
+    "@types/file-saver": "^2.0.5",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.1",
     "@types/minimist": "^1.2.2",

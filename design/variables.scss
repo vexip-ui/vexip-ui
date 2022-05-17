@@ -48,10 +48,10 @@ $namespace: 'vxp' !default;
   }
 }
 
+$types: primary, info, success, warning, error;
+
 $color-black: #000 !default;
 $color-white: #fff !default;
-
-$types: primary, info, success, warning, error;
 
 $color-map: () !default;
 $color-map: map.deep-merge(
@@ -143,19 +143,19 @@ $border-color-map: map.merge(
 
 $border-width: 1px !default;
 $border-style: solid !default;
-$border-appearance: get-css-var('border-width') get-css-var('border-style') !default;
+$border-shape: get-css-var('border-width') get-css-var('border-style') !default;
 
 :root {
   @include define-preset-values('border-color', $border-color-map);
 
   @include define-css-var('border-width', $border-width);
   @include define-css-var('border-style', $border-style);
-  @include define-css-var('border-appearance', $border-appearance);
+  @include define-css-var('border-shape', $border-shape);
 
   @each $name in map.keys($border-color-map) {
     @include define-css-var(
       ('border', $name),
-      get-css-var('border-appearance') get-css-var('border-color', $name)
+      get-css-var('border-shape') get-css-var('border-color', $name)
     );
   }
 }
@@ -222,9 +222,9 @@ $border-radius-map: map.merge(
 $box-shadow-x: 0 !default;
 $box-shadow-y: 0 !default;
 $box-shadow-blur: 4px !default;
-$box-shadow-appearance: get-css-var('box-shadow-x') get-css-var('box-shadow-y')
+$box-shadow-shape: get-css-var('box-shadow-x') get-css-var('box-shadow-y')
   get-css-var('box-shadow-blur') !default;
-$box-shadow-base: get-css-var('box-shadow-appearance') get-css-var('border-color-base') !default;
+$box-shadow-base: get-css-var('box-shadow-shape') get-css-var('border-color-base') !default;
 
 $box-shadow-border: 0 0 0 1px !default;
 $box-shadow-focus: 0 0 2px 2px !default;
@@ -233,7 +233,7 @@ $box-shadow-focus: 0 0 2px 2px !default;
   @include define-css-var('box-shadow-x', $box-shadow-x);
   @include define-css-var('box-shadow-y', $box-shadow-y);
   @include define-css-var('box-shadow-blur', $box-shadow-blur);
-  @include define-css-var('box-shadow-appearance', $box-shadow-appearance);
+  @include define-css-var('box-shadow-shape', $box-shadow-shape);
   @include define-css-var('box-shadow-base', $box-shadow-base);
 
   @include define-css-var('box-shadow-border', $box-shadow-border);

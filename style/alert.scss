@@ -9,11 +9,11 @@ $alert: () !default;
 $alert: map.merge(
   (
     bg-color: get-css-var('fill-color-background'),
-    border-color: get-css-var('border-color-base'),
+    b-color: get-css-var('border-color-base'),
+    border: get-css-var('border-shape') get-css-var('alert-b-color'),
+    radius: get-css-var('border-radius-base'),
     icon-color: get-css-var('content-color-primary'),
     text-color: get-css-var('content-color-base'),
-    border: get-css-var('border-appearance') get-css-var('alert-border-color'),
-    border-radius: get-css-var('border-radius-base'),
     title-font-size: get-css-var('font-size-primary'),
     title-color: get-css-var('content-color-primary'),
     close-color: get-css-var('content-color-placeholder'),
@@ -41,7 +41,7 @@ $alert: map.merge(
   margin-bottom: 1em;
   background-color: get-css-var('alert-bg-color');
   border: get-css-var('alert-border');
-  border-radius: get-css-var('alert-border-radius');
+  border-radius: get-css-var('alert-radius');
 
   &--has-title {
     padding: 0.8em 1em;
@@ -137,7 +137,7 @@ $alert: map.merge(
     &--#{$type} {
       @include define-alert-style((
         bg-color: 'color' $color 'light-9',
-        border-color: 'color' $color 'light-5',
+        b-color: 'color' $color 'light-5',
         icon-color: 'color' $color 'dark-2',
         text-color: 'color' $color 'dark-2'
       ));
