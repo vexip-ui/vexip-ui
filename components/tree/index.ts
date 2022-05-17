@@ -1,5 +1,2 @@
-import '@/style/tree.scss'
-
+export * from './symbol'
 export { default as Tree } from './tree.vue'
-
-export type { InitDataOptions, TreeNodeOptions } from './symbol'

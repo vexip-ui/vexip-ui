@@ -1,5 +1,2 @@
-import '@/style/calendar.scss'
-
+export * from './symbol'
 export { default as Calendar } from './calendar.vue'
-
-export type { WeekIndex, MonthIndex } from './symbol'

@@ -11,7 +11,6 @@
     }
   },
   "dependencies": {
-    "@vexip-ui/config": "workspace:^",
     "@vexip-ui/mixins": "workspace:^",
     "@vexip-ui/utils": "workspace:^",
     "vue": "^3.2.33"
@@ -40,6 +39,7 @@
     "conventional-changelog-cli": "^2.2.2",
     "cz-customizable": "^6.3.0",
     "enquirer": "^2.3.6",
+    "esbuild": "^0.14.39",
     "eslint": "^8.15.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
@@ -48,6 +48,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
     "execa": "^5.1.1",
+    "fast-glob": "^3.2.11",
     "file-saver": "^2.0.5",
     "fs-extra": "^10.1.0",
     "husky": "^8.0.1",
@@ -64,6 +65,7 @@
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.73.0",
+    "rollup-plugin-esbuild": "^4.9.1",
     "sass": "^1.51.0",
     "semver": "^7.3.7",
     "stylelint": "^14.8.2",

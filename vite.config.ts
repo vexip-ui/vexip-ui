@@ -8,6 +8,8 @@ import { createHtmlPlugin } from 'vite-plugin-html'
 import eslint from '@rollup/plugin-eslint'
 // import pcssEnv from 'postcss-preset-env'
 import discardCss from 'postcss-discard-duplicates'
+import glob from 'fast-glob'
+import esbuild from 'rollup-plugin-esbuild'
 
 import type { LogLevel } from 'vite'
 
@@ -35,7 +37,7 @@ const toPascalCase = (str: string) =>
   str.charAt(0).toUpperCase() +
   str.slice(1).replace(/-([a-z])/g, (_, char) => (char ? char.toUpperCase() : ''))
 
-export default defineConfig(({ command }) => {
+export default defineConfig(async ({ command }) => {
   const useServer = command === 'serve'
 
   return {
@@ -46,10 +48,10 @@ export default defineConfig(({ command }) => {
     },
     resolve: {
       alias: [
-        { find: /^@\/(.+)/, replacement: resolve(__dirname, '$1') },
+        { find: /^@\/((?!style))/, replacement: resolve(__dirname, '$1') },
         ...(
           isProduction
-            ? []
+            ? [{ find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }]
             : [{ find: /^@vexip-ui\/(.+)/, replacement: resolve(__dirname, 'common/$1/src') }]
         )
       ]
@@ -72,11 +74,16 @@ export default defineConfig(({ command }) => {
           }
         : {
             entry: resolve(componentsDir, 'index.ts'),
-            name: 'VexipUI',
-            formats: ['es', 'cjs'],
-            fileName: 'vexip-ui'
+            // name: 'VexipUI',
+            formats: ['es'],
+            fileName: '[name]'
           },
       rollupOptions: {
+        input: await glob('components/**/*.{ts,vue}', {
+          absolute: true,
+          onlyFiles: true,
+          ignore: ['**/__serve__/**']
+        }),
         external: !process.env.TARGET
           ? ['vue']
           : id => {
@@ -95,8 +102,12 @@ export default defineConfig(({ command }) => {
               } else {
                 return id
               }
-            }
-        }
+            },
+          preserveModules: true,
+          preserveModulesRoot: componentsDir,
+          entryFileNames: '[name].mjs'
+        },
+        treeshake: false
       },
       commonjsOptions: {
         sourceMap: false
@@ -116,32 +127,50 @@ export default defineConfig(({ command }) => {
           throwOnWarning: true,
           fix: isProduction,
           include: ['components/**/*.ts', 'components/**/*.vue']
-        })
+        }),
+        {
+          name: 'vexip-ui:alias',
+          resolveId(id) {
+            if (!id.startsWith('@/style')) return
+
+            return {
+              id: id.replace('@/style', 'vexip-ui/style'),
+              external: 'absolute'
+            }
+          }
+        }
       ]),
       vue(),
       vueJsx(),
-      !process.env.TARGET &&
-        dts({
-          exclude: ['node_modules', 'playground', 'common/icons', 'components/*/__serve__'],
-          outputDir: 'lib',
-          compilerOptions: { sourceMap },
-          copyDtsFiles: false,
-          beforeWriteFile(filePath, content) {
-            filePath = filePath.includes('common')
-              ? filePath
-              : resolve(libDir, relative(resolve(libDir, 'components'), filePath))
+      esbuild({
+        sourceMap: false,
+        target: 'es2018',
+        loaders: {
+          '.vue': 'ts'
+        }
+      }),
+      // !process.env.TARGET &&
+      //   dts({
+      //     exclude: ['node_modules', 'playground', 'common/icons', 'components/*/__serve__'],
+      //     outputDir: 'lib',
+      //     compilerOptions: { sourceMap },
+      //     copyDtsFiles: false,
+      //     beforeWriteFile(filePath, content) {
+      //       filePath = filePath.includes('common')
+      //         ? filePath
+      //         : resolve(libDir, relative(resolve(libDir, 'components'), filePath))
 
-            const relativeToLib = relative(dirname(filePath), libDir).replace(/[\\/]+/g, '/') || '.'
+      //       const relativeToLib = relative(dirname(filePath), libDir).replace(/[\\/]+/g, '/') || '.'
 
-            content = content
-              .replace(/['"]\.\.\/\.\.\/common(.*)['"]/g, `'${relativeToLib}/common$1'`)
-              .replace(/['"]\.\.\/common(.*)['"]/g, `'${relativeToLib}/common$1'`)
-              .replace(/['"]\.\.\/\.\.\/components(.*)['"]/g, `'${relativeToLib}$1'`)
-              .replace(/['"]\.\.\/components(.*)['"]/g, `'${relativeToLib}$1'`)
+      //       content = content
+      //         .replace(/['"]\.\.\/\.\.\/common(.*)['"]/g, `'${relativeToLib}/common$1'`)
+      //         .replace(/['"]\.\.\/common(.*)['"]/g, `'${relativeToLib}/common$1'`)
+      //         .replace(/['"]\.\.\/\.\.\/components(.*)['"]/g, `'${relativeToLib}$1'`)
+      //         .replace(/['"]\.\.\/components(.*)['"]/g, `'${relativeToLib}$1'`)
 
-            return { filePath, content }
-          }
-        }),
+      //       return { filePath, content }
+      //     }
+      //   }),
       useServer && createHtmlPlugin({
         inject: {
           data: { name }

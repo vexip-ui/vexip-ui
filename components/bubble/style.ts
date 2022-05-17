@@ -1,0 +1,1 @@
+import '@/style/bubble.scss'

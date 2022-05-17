@@ -1,0 +1,1 @@
+import '@/style/ellipsis.scss'

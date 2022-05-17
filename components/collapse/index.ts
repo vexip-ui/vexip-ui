@@ -1,3 +1,2 @@
-import '@/style/collapse.scss'
-
+export * from './symbol'
 export { default as Collapse } from './collapse.vue'

@@ -1,0 +1,1 @@
+import '@/style/split.scss'

@@ -1,11 +1,11 @@
-import '@/style/loading.scss'
-
 import { createApp } from 'vue'
 import Component from './loading.vue'
 import { destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
 import type { LoadingOptions, LoadingInstance } from './symbol'
+
+export * from './symbol'
 
 type InitLoadingOptions = Omit<LoadingOptions, 'percent'>
 

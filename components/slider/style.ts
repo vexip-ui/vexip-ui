@@ -1,0 +1,1 @@
+import '@/style/slider.scss'
