@@ -6,6 +6,15 @@ Vexip UI provides a series of out-of-the-box components.
 
 This library is using base on vue 3.0 with only using composition api, and design and code components in the traditional way by Vue possible, fully TypeScript.
 
+Currently more then 60 components, many you can see everywhere and a few may bright your eyes.
+
+## Work List
+
+- ~~Transfer to use css vars~~ (Completed, waiting to release)
+- Refactor icons
+- Write unit tests
+- Adapt ssr render
+
 ## Features
 
 - Not less components and functions for website development, hoping may improve efficiency

@@ -112,13 +112,11 @@ export function useStore(options: StoreOptions) {
     if (selection && typeof selection.disableRow === 'function') {
       const isDisabled = selection.disableRow
 
-      for (let i = 0, len = rowData.length; i < len; i++) {
+      for (let i = 0, len = rowData.length; i < len; ++i) {
         const row = rowData[i]
 
         if (isDisabled(row.data)) {
-          const key = row.key
-
-          disableCheckRows[key] = true
+          disableCheckRows[row.key] = true
         }
       }
     }
@@ -135,7 +133,7 @@ export function useStore(options: StoreOptions) {
     if (expand && typeof expand.disableRow === 'function') {
       const isDisabled = expand.disableRow
 
-      for (let i = 0, len = rowData.length; i < len; i++) {
+      for (let i = 0, len = rowData.length; i < len; ++i) {
         const row = rowData[i]
 
         if (isDisabled(row.data)) {
@@ -194,6 +192,7 @@ export function useStore(options: StoreOptions) {
 
     handleCheck: handleCheck.bind(null, state, getters),
     handleCheckAll: handleCheckAll.bind(null, state, getters),
+    clearCheckAll: clearCheckAll.bind(null, state, getters),
     setRenderRows: setRenderRows.bind(null, state, getters),
     handleExpand: handleExpand.bind(null, state, getters)
   }
@@ -221,7 +220,7 @@ function setColumns(state: StoreState, columns: ColumnOptions[]) {
   const leftFixedColumns = []
   const columnTypes = ['order', 'selection', 'expand']
 
-  for (let i = 0, len = columns.length; i < len; i++) {
+  for (let i = 0, len = columns.length; i < len; ++i) {
     const column = { ...columns[i] } as ColumnWithKey
 
     if ('type' in column && columnTypes.includes(column.type)) {
@@ -327,7 +326,7 @@ function setData(state: StoreState, data: Data[]) {
   const oldDataMap = state.dataMap
   const hidden = !!state.renderCount
 
-  for (let i = 0, len = data.length; i < len; i++) {
+  for (let i = 0, len = data.length; i < len; ++i) {
     const item = data[i]
 
     let key = item[dataKey] as Key
@@ -397,7 +396,7 @@ function setTableWidth(state: StoreState, width: number) {
 
   let flexWidth = width
 
-  for (let i = 0, len = columns.length; i < len; i++) {
+  for (let i = 0, len = columns.length; i < len; ++i) {
     const column = columns[i]
 
     if (column.width) {
@@ -418,7 +417,7 @@ function setTableWidth(state: StoreState, width: number) {
     flexUnitWidth = flexWidth / flexColumnCount
   }
 
-  for (let i = 0; i < flexColumnCount; i++) {
+  for (let i = 0; i < flexColumnCount; ++i) {
     const column = flexColumns[i]
     const key = column.key
 
@@ -557,11 +556,12 @@ function handleCheckAll(state: StoreState, getters: StoreGetters) {
 
   // 阻断 disabled 元素对全选的影响
   if (Object.keys(disableCheckRows).length) {
+    // 由于被禁用的元素不可被操作，如果存在被禁用的元素且该状态为未被选中，则全选时仍然是 partial 状态
+    // 假设除了禁用的元素，其余元素均为选中状态（此时对于用户来说属于已经全选，点击的期望是取消全选）
     let partialCheckedAll = true
 
-    for (let i = 0, len = rowData.length; i < len; i++) {
-      const row = rowData[i]
-
+    for (const row of rowData) {
+      // 检查是否存在非禁用的且未被选中的元素（如有则证明现在不是全选，用户点击的期望是进行全选）
       if (!disableCheckRows[row.key] && !row.checked) {
         partialCheckedAll = false
 
@@ -572,9 +572,7 @@ function handleCheckAll(state: StoreState, getters: StoreGetters) {
     checked = !partialCheckedAll
   }
 
-  for (let i = 0, len = rowData.length; i < len; i++) {
-    const row = rowData[i]
-
+  for (const row of rowData) {
     if (!disableCheckRows[row.key]) {
       row.checked = checked
     }
@@ -584,6 +582,54 @@ function handleCheckAll(state: StoreState, getters: StoreGetters) {
   state.partial = false
 
   computePartial(state)
+}
+
+function clearCheckAll(state: StoreState, getters: StoreGetters) {
+  const { rowData } = state
+  const { disableCheckRows } = getters
+
+  for (const row of rowData) {
+    if (!disableCheckRows[row.key]) {
+      row.checked = false
+    }
+  }
+
+  state.checkedAll = false
+  state.partial = false
+
+  computePartial(state)
+}
+
+function computePartial(state: StoreState) {
+  const data = state.rowData
+
+  let hasChecked = false
+  let hasNotChecked = false
+  let partial = false
+
+  for (let i = 0, len = data.length; i < len; ++i) {
+    const row = data[i]
+
+    if (row.checked) {
+      hasChecked = true
+    } else {
+      hasNotChecked = true
+    }
+
+    if (hasChecked && hasNotChecked) {
+      partial = true
+
+      break
+    }
+  }
+
+  if (hasChecked && !partial) {
+    state.checkedAll = true
+  } else {
+    state.checkedAll = false
+  }
+
+  state.partial = partial
 }
 
 function setRenderRows(state: StoreState, getters: StoreGetters, start: number, end: number) {
@@ -625,7 +671,7 @@ function toggleFilterItemActive(
     const filterOptions = state.filters[key].options
 
     if (disableOthers) {
-      for (let i = 0, len = filterOptions.length; i < len; i++) {
+      for (let i = 0, len = filterOptions.length; i < len; ++i) {
         filterOptions[i].active = false
       }
     }
@@ -641,7 +687,7 @@ function toggleFilterItemActive(
 function refreshRowIndex(state: StoreState) {
   const data = state.rowData
 
-  for (let i = 0, len = data.length; i < len; i++) {
+  for (let i = 0, len = data.length; i < len; ++i) {
     data[i].index = i
   }
 }
@@ -659,7 +705,7 @@ function parseFilter(filter: FilterOptions = { able: false, options: [] }): Pars
   const options = deepClone(filter.options ?? [])
   const formattedOptions = []
 
-  for (let i = 0, len = options.length; i < len; i++) {
+  for (let i = 0, len = options.length; i < len; ++i) {
     const item = options[i]
     const option = typeof item === 'string' ? { value: item } : { ...item }
 
@@ -681,44 +727,12 @@ function parseFilter(filter: FilterOptions = { able: false, options: [] }): Pars
   return { able, options: formattedOptions, multiple, active, method }
 }
 
-function computePartial(state: StoreState) {
-  const data = state.rowData
-
-  let hasChecked = false
-  let hasNotChecked = false
-  let partial = false
-
-  for (let i = 0, len = data.length; i < len; i++) {
-    const row = data[i]
-
-    if (row.checked) {
-      hasChecked = true
-    } else {
-      hasNotChecked = true
-    }
-
-    if (hasChecked && hasNotChecked) {
-      partial = true
-
-      break
-    }
-  }
-
-  if (hasChecked && !partial) {
-    state.checkedAll = true
-  } else {
-    state.checkedAll = false
-  }
-
-  state.partial = partial
-}
-
 function filterData(filters: Record<Key, ParsedFilterOptions>, data: RowState[], isSingle: boolean) {
   const keys = Object.keys(filters)
   const usedFilter: ParsedFilterOptions[] = []
   const filterData: RowState[] = []
 
-  for (let i = 0, len = keys.length; i < len; i++) {
+  for (let i = 0, len = keys.length; i < len; ++i) {
     const key = keys[i]
     const filter = filters[key]
     const { able, active, method } = filter
@@ -732,7 +746,7 @@ function filterData(filters: Record<Key, ParsedFilterOptions>, data: RowState[],
 
   const usedFilterCount = usedFilter.length
 
-  for (let i = 0, len = data.length; i < len; i++) {
+  for (let i = 0, len = data.length; i < len; ++i) {
     const row = data[i]
 
     let isFilter = true
@@ -764,7 +778,7 @@ function sortData(
   const keys = Object.keys(sorters)
   const usedSorter = []
 
-  for (let i = 0, len = keys.length; i < len; i++) {
+  for (let i = 0, len = keys.length; i < len; ++i) {
     const key = keys[i] as keyof RowState
     const { able, type, order, method } = sorters[key]
 

@@ -13,7 +13,8 @@
     "email": "Aeris_Drake5867@gmail.com",
     "firstName": "Aeris",
     "lastName": "Drake",
-    "age": "40"
+    "age": "40",
+    "checked": true
   },
   {
     "id": "3",
