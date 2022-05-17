@@ -4,7 +4,7 @@
     tag="ul"
     :appear="selectToAdd"
     :name="`${prefix}-list-transition`"
-    :class="`${prefix}__files`"
+    :class="[`${prefix}__files`, `${prefix}-vars`]"
     :style="style"
   >
     <UploadFile

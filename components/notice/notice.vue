@@ -11,6 +11,7 @@
         :class="[
           {
             [`${prefix}__item`]: true,
+            [`${prefix}-vars`]: true,
             [`${prefix}__item--title-only`]: !item.content && !item.renderer,
             [`${prefix}__item--has-icon`]: item.icon,
             [`${prefix}__item--content-only`]: !item.title,

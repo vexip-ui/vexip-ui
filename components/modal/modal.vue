@@ -235,6 +235,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
         {
           [`${prefix}--inner`]: props.inner,
           [`${prefix}--draggable`]: props.draggable,

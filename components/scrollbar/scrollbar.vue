@@ -131,6 +131,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
         `${prefix}--${props.placement}`,
         {
           [`${prefix}--fade`]: props.fade,

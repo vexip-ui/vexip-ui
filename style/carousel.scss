@@ -1,7 +1,35 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './icon.scss';
 
+$carousel: () !default;
+$carousel: map.merge(
+  (
+    handler-color: get-css-var('content-color-reverse'),
+    handler-bg-color: get-css-var('fill-color-reverse'),
+    handler-opacity: 50%,
+    handler-opacity-hover: 80%,
+    handler-opacity-disabled: 30%,
+    handler-size: 40px,
+    pointer-bg-color: get-css-var('content-color-secondary'),
+    pointer-width: 16px,
+    pointer-width-active: 24px,
+    pointer-height: 3px,
+    pointer-radius: get-css-var('border-radius-small'),
+    pointer-opacity: 50%,
+    pointer-opacity-hover: 80%,
+    pointer-opacity-active: get-css-var('carousel-pointer-opacity-hover'),
+    pointer-opacity-disabled: 30%
+  ),
+  $carousel
+);
+
 .vxp-carousel {
+  &-vars {
+    @include define-preset-values('carousel', $carousel);
+  }
+
   @include basis;
 
   position: relative;
@@ -24,7 +52,7 @@
     display: flex;
     width: 100%;
     height: 100%;
-    transition: $vxp-transition-transform-base;
+    transition: get-css-var('transition-transform');
   }
 
   &--vertical &__track {
@@ -60,7 +88,7 @@
       top: 0;
       bottom: 0;
       opacity: 0%;
-      transition: $vxp-transition-opacity-base;
+      transition: get-css-var('transition-opacity');
     }
 
     &--prev {
@@ -100,25 +128,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    color: $vxp-color-fill-disabled;
+    width: get-css-var('carousel-handler-size');
+    height: get-css-var('carousel-handler-size');
     pointer-events: auto;
     cursor: pointer;
-    background-color: rgba($vxp-color-content-normal, 0.45);
+    background-color: get-css-var('carousel-handler-bg-color');
     border-radius: 50%;
-    transition: $vxp-transition-background-base, $vxp-transition-opacity-base;
+    opacity: get-css-var('carousel-handler-opacity');
+    transition: get-css-var('transition-opacity');
 
+    &,
     .vxp-icon {
-      color: $vxp-color-fill-disabled;
+      color: get-css-var('carousel-handler-color');
     }
 
     &:hover {
-      background-color: rgba($vxp-color-content-normal, 0.7);
-
-      .vxp-icon {
-        color: $vxp-color-fill;
-      }
+      opacity: get-css-var('carousel-handler-opacity-hover');
     }
 
     &--disabled {
@@ -126,11 +151,7 @@
 
       &,
       &:hover {
-        background-color: rgba($vxp-color-content-normal, 0.3);
-
-        .vxp-icon {
-          color: $vxp-color-fill-disabled;
-        }
+        opacity: get-css-var('carousel-handler-opacity-disabled');
       }
     }
   }
@@ -198,44 +219,54 @@
 
     &-inner {
       display: inline-block;
-      width: 16px;
-      height: 3px;
+      width: get-css-var('carousel-pointer-width');
+      height: get-css-var('carousel-pointer-height');
       margin: 1px 0 2px;
-      background-color: $vxp-color-content-secondary;
-      border-radius: $vxp-border-radius-small;
-      opacity: 40%;
-      transition: width $vxp-transition-base, $vxp-transition-opacity-base;
+      background-color: get-css-var('carousel-pointer-bg-color');
+      border-radius: get-css-var('carousel-pointer-radius');
+      opacity: get-css-var('carousel-pointer-opacity');
+      transition: width get-css-var('transition-base'), get-css-var('transition-opacity');
     }
 
     &:hover &-inner {
-      opacity: 70%;
+      opacity: get-css-var('carousel-pointer-opacity-hover');
     }
 
     &--active &-inner {
-      width: 24px;
-      opacity: 70%;
+      width: get-css-var('carousel-pointer-width-active');
+      opacity: get-css-var('carousel-pointer-opacity-active');
     }
+
+    $inner: #{&}-inner;
 
     &--disabled {
       cursor: not-allowed;
 
       &,
       &:hover {
-        opacity: 20%;
+        #{$inner} {
+          opacity: get-css-var('carousel-pointer-opacity-disabled');
+        }
+      }
+    }
+
+    &--disabled#{&}--active {
+      #{$inner} {
+        opacity: get-css-var('carousel-pointer-opacity-disabled');
       }
     }
   }
 
   &--vertical &__pointer {
     &-inner {
-      width: 3px;
-      height: 16px;
+      width: get-css-var('carousel-pointer-height');
+      height: get-css-var('carousel-pointer-width');
       margin: 0 2px 1px 0;
-      transition: height $vxp-transition-base, $vxp-transition-opacity-base;
+      transition: height get-css-var('transition-base'), get-css-var('transition-opacity');
     }
 
     &--active .vxp-carousel__pointer-inner {
-      height: 24px;
+      height: get-css-var('carousel-pointer-width-active');
     }
   }
 }

@@ -1,6 +1,31 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$tooltip: () !default;
+$tooltip: map.merge(
+  (
+    bg-color: get-css-var('fill-color-base'),
+    bg-color-dark: get-css-var('fill-color-reverse'),
+    s-color: get-css-var('border-color-base'),
+    s-color-dark: get-css-var('fill-color-reverse'),
+    shadow: get-css-var('box-shadow-shape') get-css-var('tooltip-s-color'),
+    shadow-dark: none,
+    content-color: get-css-var('content-color-base'),
+    content-color-dark: get-css-var('content-color-reverse'),
+    raduis: get-css-var('border-radius-base'),
+    arrow-size: 0.5em,
+    arrow-v-offset: 0.9em,
+    arrow-h-offset: 1.8em
+  ),
+  $tooltip
+);
+
 .vxp-tooltip {
+  &-vars {
+    @include define-preset-values('tooltip', $tooltip);
+  }
+
   $popper: #{&}__popper;
   $arrow: #{&}__arrow;
 
@@ -17,12 +42,12 @@
     min-width: 2em;
     min-height: 2em;
     padding: 0.6em 1em;
-    background-color: $vxp-tooltip-color-bg-base;
-    border-radius: $vxp-tooltip-border-raduis-base;
-    box-shadow: $vxp-tooltip-shadow-base;
+    background-color: get-css-var('tooltip-bg-color');
+    border-radius: get-css-var('tooltip-raduis');
+    box-shadow: get-css-var('tooltip-shadow');
 
     #{$popper}--dark & {
-      box-shadow: $vxp-tooltip-shadow-dark;
+      box-shadow: get-css-var('tooltip-shadow-dark');
     }
   }
 
@@ -45,10 +70,10 @@
   }
 
   // arrow size
-  $size: $vxp-tooltip-arrow-size;
+  $size: get-css-var('tooltip-arrow-size');
 
   &__popper {
-    z-index: $vxp-z-index-popper;
+    z-index: get-css-var('z-index-popper');
 
     &[data-popper-placement^='top'] {
       padding: 0.5em 0 0.8em;
@@ -114,16 +139,19 @@
       }
     }
 
+    $v-offset: get-css-var('tooltip-arrow-v-offset');
+    $h-offset: get-css-var('tooltip-arrow-h-offset');
+
     &[data-popper-placement='top'] #{$arrow} {
       left: 50%;
     }
 
     &[data-popper-placement='top-start'] #{$arrow} {
-      left: 1.8em;
+      left: $h-offset;
     }
 
     &[data-popper-placement='top-end'] #{$arrow} {
-      left: calc(100% - 1.8em);
+      left: calc(100% - #{$h-offset});
     }
 
     &[data-popper-placement='bottom'] #{$arrow} {
@@ -131,11 +159,11 @@
     }
 
     &[data-popper-placement='bottom-start'] #{$arrow} {
-      left: 1.8em;
+      left: $h-offset;
     }
 
     &[data-popper-placement='bottom-end'] #{$arrow} {
-      left: calc(100% - 1.8em);
+      left: calc(100% - #{$h-offset});
     }
 
     &[data-popper-placement='left'] #{$arrow} {
@@ -143,11 +171,11 @@
     }
 
     &[data-popper-placement='left-start'] #{$arrow} {
-      top: 0.9em;
+      top: $v-offset;
     }
 
     &[data-popper-placement='left-end'] #{$arrow} {
-      top: calc(100% - 0.9em);
+      top: calc(100% - #{$v-offset});
     }
 
     &[data-popper-placement='right'] #{$arrow} {
@@ -155,11 +183,11 @@
     }
 
     &[data-popper-placement='right-start'] #{$arrow} {
-      top: 0.9em;
+      top: $v-offset;
     }
 
     &[data-popper-placement='right-end'] #{$arrow} {
-      top: calc(100% - 0.9em);
+      top: calc(100% - #{$v-offset});
     }
 
     &--no-hover {
@@ -220,15 +248,15 @@
 
   @include theme(
     'light',
-    $vxp-tooltip-color-content-base,
-    $vxp-tooltip-color-shadow-base,
-    $vxp-tooltip-color-bg-base
+    get-css-var('tooltip-content-color'),
+    get-css-var('tooltip-s-color'),
+    get-css-var('tooltip-bg-color')
   );
 
   @include theme(
     'dark',
-    $vxp-tooltip-color-content-dark,
-    $vxp-tooltip-color-shadow-dark,
-    $vxp-tooltip-color-bg-dark
+    get-css-var('tooltip-content-color-dark'),
+    get-css-var('tooltip-s-color-dark'),
+    get-css-var('tooltip-bg-color-dark')
   );
 }

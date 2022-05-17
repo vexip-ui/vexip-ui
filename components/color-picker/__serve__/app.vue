@@ -1,32 +1,36 @@
 <template>
-  <ColorPicker
-    v-model:value="color"
-    alpha
-    shortcut
-    clearable
-  ></ColorPicker>
-  <p>
-    Color Value:
+  <div style="padding: 0 150px;">
+    <ColorPicker
+      v-model:value="color"
+      alpha
+      shortcut
+      clearable
+    ></ColorPicker>
+    <p>
+      Color Value:
+      <br />
+      {{ color }}
+    </p>
+    <Select></Select>
+  </div>
+  <template v-for="state in states" :key="state">
+    <ColorPicker :state="state"></ColorPicker>
     <br />
-    {{ color }}
-  </p>
+    <br />
+  </template>
+  <template v-for="size in sizes" :key="size">
+    <ColorPicker :size="size"></ColorPicker>
+    <br />
+    <br />
+  </template>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Select } from '@/components/select'
 import { ColorPicker } from '..'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    ColorPicker
-  },
-  setup() {
-    const color = ref('rgba(51, 154, 240, 0.6)')
-
-    return {
-      color
-    }
-  }
-})
+const color = ref('rgba(51, 154, 240, 0.6)')
+const states = ['default', 'success', 'error', 'warning'] as const
+const sizes = ['small', 'default', 'large'] as const
 </script>

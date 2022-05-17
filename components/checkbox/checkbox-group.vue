@@ -79,6 +79,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        'vxp-checkbox-vars',
         {
           [`${prefix}--vertical`]: props.vertical,
           [`${prefix}--disabled`]: props.disabled,

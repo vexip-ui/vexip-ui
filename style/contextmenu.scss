@@ -1,7 +1,23 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './dropdown.scss';
 
+$contextmenu: () !default;
+$contextmenu: map.merge(
+  (
+    icon-color: get-css-var('content-color-secondary'),
+    shortcut-color: get-css-var('content-color-disabled'),
+    shortcut-span: 2em
+  ),
+  $contextmenu
+);
+
 .vxp-contextmenu {
+  &-vars {
+    @include define-preset-values('contextmenu', $contextmenu);
+  }
+
   @include basis;
 
   position: fixed;
@@ -43,17 +59,17 @@
 
     &,
     .vxp-icon {
-      color: $vxp-color-content-secondary;
+      color: get-css-var('contextmenu-icon-color');
     }
   }
 
   &__shortcut {
-    margin-left: 2em;
-    color: $vxp-color-content-disabled;
+    margin-left: get-css-var('contextmenu-shortcut-span');
+    color: get-css-var('contextmenu-shortcut-color');
   }
 
   &__arrow {
-    right: 8px;
+    right: 6px;
     left: auto;
   }
 }

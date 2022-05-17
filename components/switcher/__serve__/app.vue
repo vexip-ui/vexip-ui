@@ -5,23 +5,47 @@
     <br />
     {{ checked }}
   </p>
+  <template v-for="state in states" :key="state">
+    <Switcher :state="state"></Switcher>
+  </template>
+  <br />
+  <br />
+  <template v-for="state in states" :key="state">
+    <Switcher :state="state" open-text="打开" close-text="关闭"></Switcher>
+  </template>
+  <br />
+  <br />
+  <template v-for="state in states" :key="state">
+    <Switcher :state="state" disabled></Switcher>
+  </template>
+  <br />
+  <br />
+  <template v-for="state in states" :key="state">
+    <Switcher
+      :state="state"
+      disabled
+      open-text="打开"
+      close-text="关闭"
+    ></Switcher>
+  </template>
+  <br />
+  <br />
+  <template v-for="size in sizes" :key="size">
+    <Switcher :size="size"></Switcher>
+  </template>
+  <br />
+  <br />
+  <template v-for="size in sizes" :key="size">
+    <Switcher :size="size" open-text="打开" close-text="关闭"></Switcher>
+  </template>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import Switcher from '../switcher.vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Switcher } from '..'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Switcher
-  },
-  data() {
-    return {
-      checked: false
-    }
-  }
-})
+const checked = ref(false)
+
+const states = ['default', 'success', 'error', 'warning'] as const
+const sizes = ['small', 'default', 'large'] as const
 </script>
-
-<style lang="scss"></style>

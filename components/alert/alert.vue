@@ -29,14 +29,17 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps } from '@vexip-ui/config'
 
+import '@/common/icons/flag'
 import '@/common/icons/info-circle'
 import '@/common/icons/check-circle'
 import '@/common/icons/exclamation-circle'
+import '@/common/icons/times'
 import '@/common/icons/times-circle'
 
-export type AlertType = 'info' | 'success' | 'warning' | 'error'
+export type AlertType = 'default' | 'info' | 'success' | 'warning' | 'error'
 
 const predefinedIcons = {
+  default: 'flag',
   info: 'info-circle',
   success: 'check-circle',
   warning: 'exclamation-circle',
@@ -47,7 +50,7 @@ const props = useConfiguredProps('alert', {
   type: {
     default: 'info' as AlertType,
     validator: (value: AlertType) => {
-      return ['info', 'success', 'warning', 'error'].includes(value)
+      return ['default', 'info', 'success', 'warning', 'error'].includes(value)
     }
   },
   title: {
@@ -101,6 +104,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--${props.type}`]: props.type,
         [`${prefix}--colorful-text`]: props.colorfulText,
         [`${prefix}--has-title`]: hasTitle.value,

@@ -98,6 +98,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
         {
           [`${prefix}--checked`]: currentChecked.value,
           [`${prefix}--disabled`]: isDisabled.value,

@@ -1,28 +1,63 @@
 <template>
-  <Button type="primary" @on-click="$message.info('一条一般消息')">
+  <Button @on-click="Message.open({ ...permanent, icon: 'info-circle' })">
     一般消息
   </Button>
-  <Button type="success" @on-click="$message.success('一条成功消息')">
-    成功消息
+  <br />
+  <br />
+  <Button
+    v-for="meta in metaData"
+    :key="meta.type"
+    :type="meta.type"
+    @on-click="Message[meta.type](permanent)"
+  >
+    {{ meta.name }}
   </Button>
-  <Button type="warning" @on-click="$message.warning('一条警告消息')">
-    警告消息
+  <br />
+  <br />
+  <Button
+    v-for="meta in metaData"
+    :key="meta.type"
+    :type="meta.type"
+    @on-click="Message[meta.type]({ ...permanent, background: true })"
+  >
+    {{ meta.name }}
   </Button>
-  <Button type="error" @on-click="$message.error('一条错误消息')">
-    错误消息
+  <br />
+  <br />
+  <Button
+    v-for="meta in metaData"
+    :key="meta.type"
+    :type="meta.type"
+    @on-click="Message[meta.type]({ ...permanent, color: true })"
+  >
+    {{ meta.name }}
+  </Button>
+  <br />
+  <br />
+  <Button
+    v-for="meta in metaData"
+    :key="meta.type"
+    :type="meta.type"
+    @on-click="Message[meta.type]({ ...permanent, background: true, color: true })"
+  >
+    {{ meta.name }}
   </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { Button } from '@/components/button'
+import { Message } from '..'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Button
-  }
-})
+const metaData = [
+  { name: '一般消息', type: 'info' as const },
+  { name: '成功消息', type: 'success' as const },
+  { name: '警告消息', type: 'warning' as const },
+  { name: '错误消息', type: 'error' as const }
+]
+
+const permanent = {
+  content: '一条持久的消息',
+  duration: 0,
+  closable: true
+}
 </script>
-
-<style lang="scss"></style>

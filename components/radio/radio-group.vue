@@ -79,6 +79,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        'vxp-radio-vars',
         {
           [`${prefix}--vertical`]: props.vertical,
           [`${prefix}--button`]: !props.vertical && props.button,

@@ -1,80 +1,80 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './button.scss';
-@use './input.scss';
+@use './input.scss' as input;
+
+$color-picker: () !default;
+$color-picker: map.merge(
+  (
+    marker-color: get-css-var('content-color-humble'),
+    marker-b-color: get-css-var('border-color-base'),
+    marker-border: get-css-var('border-shape') get-css-var('color-picker-marker-b-color'),
+    marker-radius: get-css-var('border-radius-small'),
+    marker-small-height: 1.1em,
+    marker-default-height: 1.3em,
+    marker-large-height: 1.7em,
+    marker-bg-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg=='),
+    arrow-color: get-css-var('content-color-secondary'),
+    popper-z-index: get-css-var('z-index-popper'),
+    pane-bg-color: get-css-var('fill-color-base'),
+    pane-radius: get-css-var('border-radius-base'),
+    pane-shadow: get-css-var('box-shadow-base'),
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-shape') get-css-var('color-picker-d-color'),
+    pointer-size: 6px,
+    handler-size: 6px,
+    handler-bg-color: get-css-var('fill-color-base'),
+    handler-b-color: get-css-var('border-color-base'),
+    handler-border: get-css-var('border-shape') get-css-var('color-picker-handler-b-color'),
+    handler-radius: 3px,
+    shortcut-b-color: get-css-var('border-color-base'),
+    shortcut-b-color-hover: get-css-var('color-primary-base'),
+    shortcut-radius: get-css-var('border-radius-base')
+  ),
+  $color-picker
+);
 
 .vxp-color-picker {
-  @include basis;
-
-  $grid-url: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==');
-
-  position: relative;
-  display: inline-block;
-
-  &--disabled {
-    cursor: not-allowed;
+  &-vars {
+    @include define-preset-values('color-picker', $color-picker);
   }
+
+  @include basis;
+  @include input.handler;
+
+  width: auto;
 
   &__control {
-    position: relative;
     display: flex;
     align-items: center;
-    padding: 0.4em 0.8em;
-    padding-right: 2em;
     cursor: pointer;
-    background-color: $vxp-color-fill;
-    border: $vxp-border-base;
-    border-radius: $vxp-border-radius-base;
-    transition: $vxp-transition-border-base, $vxp-transition-box-shadow-base;
-
-    &:hover {
-      border-color: $vxp-color-primary-light-1;
-    }
-  }
-
-  &--small &__control {
-    padding: 0.3em 0.8em;
-    padding-right: 2em;
-  }
-
-  &__trigger--visible &__control {
-    border-color: $vxp-color-primary-light-1;
-    box-shadow: $vxp-box-shadow-fouced-appearance rgba($vxp-color-primary, 0.2);
-  }
-
-  &--disabled &__control {
-    pointer-events: none;
-    background-color: rgba($vxp-color-fill-disabled, 0.2);
-
-    &,
-    &:hover {
-      border-color: $vxp-color-border;
-    }
   }
 
   &__marker {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: calc(100% - 0.6em);
     min-width: 1.6em;
-    height: 1.3em;
-    color: $vxp-color-border;
-    border: $vxp-border-base;
-    border-radius: $vxp-border-radius-small;
+    height: get-css-var('color-picker-marker-default-height');
+    margin-top: -0.5px; // 修正视觉差异
+    margin-right: 0.6em;
+    color: get-css-var('color-picker-marker-color');
+    border: get-css-var('color-picker-marker-border');
+    border-radius: get-css-var('color-picker-marker-radius');
   }
 
   &--small &__marker {
-    // width: 1.4em;
-    height: 1.1em;
+    height: get-css-var('color-picker-marker-small-height');
   }
 
   &--large &__marker {
-    // width: 2em;
-    height: 1.7em;
+    height: get-css-var('color-picker-marker-large-height');
   }
 
   &--alpha &__marker {
-    background-image: $grid-url;
+    background-image: get-css-var('color-picker-marker-bg-image');
   }
 
   &--empty &__marker {
@@ -82,9 +82,9 @@
   }
 
   &__arrow {
-    position: absolute;
-    top: 0;
-    right: 0;
+    // position: absolute;
+    // top: 0;
+    // right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -93,8 +93,8 @@
 
     &,
     .vxp-icon {
-      color: $vxp-color-content-secondary;
-      transition: $vxp-transition-transform-base;
+      color: get-css-var('color-picker-arrow-color');
+      transition: get-css-var('transition-transform');
     }
   }
 
@@ -103,15 +103,15 @@
   }
 
   &__popper {
-    z-index: $vxp-z-index-popper;
+    z-index: get-css-var('color-picker-popper-z-index');
     display: flex;
     padding: 0.35em 0;
   }
 
   &__pane {
-    background-color: $vxp-color-fill;
-    border-radius: $vxp-border-radius-base;
-    box-shadow: $vxp-box-shadow-base;
+    background-color: get-css-var('color-picker-pane-bg-color');
+    border-radius: get-css-var('color-picker-pane-radius');
+    box-shadow: get-css-var('color-picker-pane-shadow');
   }
 
   &__section {
@@ -173,7 +173,7 @@
   /* stylelint-enable */
 
   &__alpha {
-    background-image: $grid-url;
+    background-image: get-css-var('color-picker-marker-bg-image');
   }
 
   &__action {
@@ -182,31 +182,26 @@
     justify-content: flex-end;
     padding: 0.6em;
     margin-top: 0.8em;
-    border-top: $vxp-border-appearance $vxp-color-border-light-2;
+    border-top: get-css-var('color-picker-divider');
 
     .vxp-button {
-      margin-left: 0.3em;
+      margin-left: 0.3em !important;
     }
   }
 
   &__palette-handler {
     position: absolute;
-
-    // pointer-events: none;
     user-select: none;
-    border: $vxp-border-appearance $vxp-color-black;
+    border: get-css-var('border-shape') get-css-var('color-black');
     border-radius: 50%;
     transform: translate(-50%, -50%);
   }
 
   &__palette-pointer {
-    width: 6px;
-    height: 6px;
-    border: $vxp-border-appearance $vxp-color-white;
+    width: get-css-var('color-picker-pointer-size');
+    height: get-css-var('color-picker-pointer-size');
+    border: get-css-var('border-shape') get-css-var('color-white');
     border-radius: 50%;
-
-    // box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0, 0, 0, 0.3),
-    //   0 0 1px 2px rgba(0, 0, 0, 0.4);
   }
 
   &__hue-handler,
@@ -214,10 +209,10 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 6px;
-    background-color: $vxp-color-white;
-    border: $vxp-border-base;
-    border-radius: 3px;
+    width: get-css-var('color-picker-handler-size');
+    background-color: get-css-var('color-picker-handler-bg-color');
+    border: get-css-var('color-picker-handler-border');
+    border-radius: get-css-var('color-picker-handler-radius');
     transform: translateX(-50%);
   }
 
@@ -234,12 +229,12 @@
     height: 1.2em;
     margin: 2px;
     cursor: pointer;
-    border-radius: $vxp-border-radius-base;
-    box-shadow: 0 0 0 1px $vxp-color-border;
+    border-radius: get-css-var('color-picker-shortcut-radius');
+    box-shadow: get-css-var('box-shadow-border') get-css-var('color-picker-shortcut-b-color');
     transition: box-shadow 200ms;
 
     &:hover {
-      box-shadow: 0 0 2px 1px $vxp-color-primary;
+      box-shadow: 0 0 2px 1px get-css-var('color-picker-shortcut-b-color-hover');
     }
   }
 }

@@ -9,34 +9,50 @@
     v-model:value="dateRange"
     is-range
     clearable
-    type="date"
+    transfer
+    type="datetime"
+    :shortcuts="shortcuts"
   ></DatePicker>
   <p>
     Current Date Range:
     <br />
     {{ dateRange }}
   </p>
+  <DatePicker
+    disabled
+    clearable
+    type="datetime"
+  ></DatePicker>
+  <br />
+  <br />
+  <DatePicker
+    disabled
+    is-range
+    clearable
+    type="datetime"
+  ></DatePicker>
+  <br />
+  <br />
+  <template v-for="state in states" :key="state">
+    <DatePicker :state="state"></DatePicker>
+    <br />
+    <br />
+  </template>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { DatePicker } from '..'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    DatePicker
-  },
-  setup() {
-    const date = ref<string>('')
-    const dateRange = ref<string[]>([])
+const date = ref<string>('')
+const dateRange = ref<string[]>([])
 
-    return {
-      date,
-      dateRange
-    }
-  }
-})
+const shortcuts = ref([
+  { name: 'Current', value: () => Date.now() },
+  { name: 'Noon', value: '2022-05-13 12:00:00' }
+])
+
+const states = ['default', 'success', 'error', 'warning'] as const
 </script>
 
 <style lang="scss">

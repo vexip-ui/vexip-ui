@@ -1,7 +1,22 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './scrollbar.scss';
 
+$scroll: () !default;
+$scroll: map.merge(
+  (
+    move-duration: 140ms,
+    move-timing: cubic-bezier(0.165, 0.84, 0.44, 1)
+  ),
+  $scroll
+);
+
 .vxp-scroll {
+  &-vars {
+    @include define-preset-values('scroll', $scroll);
+  }
+
   @include basis;
 
   position: relative;
@@ -20,8 +35,8 @@
     position: relative;
     vertical-align: top;
     will-change: transform;
-    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-    transition-duration: 140ms;
+    transition-timing-function: get-css-var('scroll-move-timing');
+    transition-duration: get-css-var('scroll-move-duration');
     transition-property: transform;
 
     &--scrolling,
@@ -48,10 +63,10 @@
   }
 
   &--both &__bar--horizontal {
-    width: calc(100% - 5px);
+    width: calc(100% - get-css-var('scrollbar-width') + 1px);
   }
 
   &--both &__bar--vertical {
-    height: calc(100% - 5px);
+    height: calc(100% - get-css-var('scrollbar-width') + 1px);
   }
 }

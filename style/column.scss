@@ -73,8 +73,8 @@
     }
   }
 
-  @each $point in map-keys($vxp-break-point-map) {
-    @media only screen and #{inspect(map-get($vxp-break-point-map, $point))} {
+  @each $point in map-keys($break-point-map) {
+    @media only screen and #{inspect(map-get($break-point-map, $point))} {
       &--#{$point}-0 {
         display: none;
       }

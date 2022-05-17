@@ -1,6 +1,44 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$calendar: () !default;
+$calendar: map.merge(
+  (
+    index-color-hover: get-css-var('content-color-base'),
+    index-color-selected: get-css-var('content-color-reverse'),
+    index-color-outside: get-css-var('content-color-disabled'),
+    index-color-today: get-css-var('color-primary-base'),
+    index-color-disabled: get-css-var('content-color-humble'),
+    index-bg-color: transparent,
+    index-bg-color-week: transparent,
+    index-bg-color-hover: get-css-var('color-primary-light-7'),
+    index-bg-color-selected: get-css-var('color-primary-base'),
+    index-bg-color-disabled: get-css-var('calendar-index-bg-color'),
+    index-bg-color-today: get-css-var('calendar-index-bg-color'),
+    index-bg-color-outside: get-css-var('calendar-index-bg-color'),
+    index-b-width: 0,
+    index-b-style: get-css-var('border-style'),
+    index-b-color: get-css-var('border-color-base'),
+    index-b-color-selected: get-css-var('color-primary-light-2'),
+    index-b-color-disabled: get-css-var('border-color-light-2'),
+    index-b-color-outside: get-css-var('border-color-light-1'),
+    index-border:
+      get-css-var('calendar-index-b-width')
+      get-css-var('calendar-index-b-style')
+      get-css-var('calendar-index-b-color'),
+    index-radius: get-css-var('border-radius-base'),
+    range-bg-color: get-css-var('color-primary-light-9'),
+    range-opacity: 60%
+  ),
+  $calendar
+);
+
 .vxp-calendar {
+  &-vars {
+    @include define-preset-values('calendar', $calendar);
+  }
+
   &__pane {
     @include basis;
 
@@ -34,37 +72,53 @@
     cursor: pointer;
     user-select: none;
     background-color: transparent;
-    border-radius: $vxp-border-radius-base;
-    transition: $vxp-transition-color-base, $vxp-transition-background-base;
+    border-radius: get-css-var('calendar-index-radius');
 
-    &:hover {
-      background-color: rgba($vxp-color-primary, 0.3);
+    &-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background-color: get-css-var('calendar-index-bg-color');
+      border: get-css-var('calendar-index-border');
+      border-radius: get-css-var('calendar-index-radius');
+      transition: get-css-var('transition-color'), get-css-var('transition-background');
     }
 
-    &--today {
-      color: $vxp-color-primary;
+    &--today &-inner {
+      color: get-css-var('calendar-index-color-today');
+      background-color: get-css-var('calendar-index-bg-color-today');
+      border-color: get-css-var('calendar-index-b-color-today');
     }
 
-    &--prev,
-    &--next {
-      color: $vxp-color-content-disabled;
+    &--prev &-inner,
+    &--next &-inner {
+      color: get-css-var('calendar-index-color-outside');
+      background-color: get-css-var('calendar-index-bg-color-outside');
+      border-color: get-css-var('calendar-index-b-color-outside');
     }
 
-    &--selected {
-      &,
-      &:hover {
-        color: $vxp-color-content-reverse;
-        background-color: $vxp-color-primary;
-      }
+    &:hover &-inner {
+      color: get-css-var('calendar-index-color-hover');
+      background-color: get-css-var('calendar-index-bg-color-hover');
+      border-color: get-css-var('calendar-index-b-color-hover');
     }
 
-    &--disabled {
-      &,
-      &:hover {
-        color: $vxp-color-content-humble;
-        cursor: not-allowed;
-        background-color: transparent;
-      }
+    &--selected &-inner,
+    &--selected:hover &-inner {
+      color: get-css-var('calendar-index-color-selected');
+      background-color: get-css-var('calendar-index-bg-color-selected');
+      border-color: get-css-var('calendar-index-b-color-selected');
+    }
+
+    &--disabled &-inner,
+    &--disabled:hover &-inner {
+      color: get-css-var('calendar-index-color-disabled');
+      cursor: not-allowed;
+      background-color: get-css-var('calendar-index-bg-color-disabled');
+      border-color: get-css-var('calendar-index-b-color-disabled');
     }
 
     &::before {
@@ -76,7 +130,8 @@
       display: none;
       pointer-events: none;
       content: '';
-      background-color: rgba($vxp-color-primary, 0.1);
+      background-color: get-css-var('calendar-range-bg-color');
+      opacity: get-css-var('calendar-range-opacity');
     }
 
     &--in-range {
@@ -90,7 +145,7 @@
     cursor: default;
 
     &:hover {
-      background-color: transparent;
+      background-color: get-css-var('calendar-index-bg-color-week');
     }
 
     &::before,

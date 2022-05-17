@@ -1,20 +1,34 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './masker.scss';
 
+$drawer: () !default;
+$drawer: map.merge(
+  (
+    z-index: get-css-var('z-index-masker'),
+    bg-color: get-css-var('fill-color-base'),
+    title-color: get-css-var('content-color-primary'),
+    title-d-color: get-css-var('border-color-light-2'),
+    title-font-size: get-css-var('font-size-primary'),
+    title-divider: get-css-var('border-shape') get-css-var('drawer-title-d-color'),
+    close-color: get-css-var('content-color-placeholder'),
+    close-color-hover: get-css-var('content-color-base'),
+    handler-bg-color-hover: rgba($color-black, 0.15),
+    handler-width: 5px
+  ),
+  $drawer
+);
+
 .vxp-drawer {
-  @mixin fixed {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  &-vars {
+    @include define-preset-values('drawer', $drawer);
   }
 
   @include basis;
-
   @include fixed;
 
-  z-index: $vxp-z-index-masker;
+  z-index: get-css-var('drawer-z-index');
 
   &--inner {
     position: absolute;
@@ -23,7 +37,7 @@
 
   &__wrapper {
     position: absolute;
-    background-color: $vxp-drawer-color-bg;
+    background-color: get-css-var('drawer-bg-color');
     border: 0;
 
     &--top,
@@ -62,9 +76,9 @@
   &__title {
     position: relative;
     padding: 0.8em 1em;
-    font-size: $vxp-drawer-title-font-size;
-    color: $vxp-drawer-color-title;
-    border-bottom: $vxp-drawer-title-divider;
+    font-size: get-css-var('drawer-title-font-size');
+    color: get-css-var('drawer-title-color');
+    border-bottom: get-css-var('drawer-title-divider');
   }
 
   &__wrapper--closable &__title {
@@ -80,24 +94,30 @@
     top: 50%;
     right: 0.8em;
     display: flex;
-    color: $vxp-drawer-color-close;
+    color: get-css-var('drawer-close-color');
     cursor: pointer;
     transform: translateY(-50%);
 
     &:hover {
-      color: $vxp-drawer-color-close-hover;
+      color: get-css-var('drawer-close-color-hover');
     }
   }
 
   &__handler {
+    @include define-css-var('drawer-hanlder-offset', calc(get-css-var('drawer-handler-width') * -0.5 + 0.5px));
+
     position: absolute;
-    transition: $vxp-transition-background-base;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: get-css-var('transition-background');
 
     &--top,
     &--bottom {
       right: 0;
       left: 0;
-      height: $vxp-drawer-handler-length;
+      height: get-css-var('drawer-handler-width');
       cursor: ns-resize;
     }
 
@@ -105,29 +125,29 @@
     &--left {
       top: 0;
       bottom: 0;
-      width: $vxp-drawer-handler-length;
+      width: get-css-var('drawer-handler-width');
       cursor: ew-resize;
     }
 
     &--top {
-      bottom: 0;
+      bottom: get-css-var('drawer-hanlder-offset');
     }
 
     &--right {
-      left: 0;
+      left: get-css-var('drawer-hanlder-offset');
     }
 
     &--bottom {
-      top: 0;
+      top: get-css-var('drawer-hanlder-offset');
     }
 
     &--left {
-      right: 0;
+      right: get-css-var('drawer-hanlder-offset');
     }
 
     &:hover,
     &--resizing {
-      background-color: $vxp-drawer-color-bg-handler-hover;
+      background-color: get-css-var('drawer-handler-bg-color-hover');
     }
   }
 }

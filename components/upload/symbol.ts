@@ -12,11 +12,11 @@ export type HttpError = Error & {
 }
 
 export enum UploadStatusType {
-  PENDING,
-  UPLOADING,
-  FAIL,
-  SUCCESS,
-  DELETE
+  PENDING = 'pending',
+  UPLOADING = 'uploading',
+  FAIL = 'fail',
+  SUCCESS = 'success',
+  DELETE = 'delete'
 }
 
 export type SourceFile = File & { path?: string }

@@ -1,15 +1,51 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './icon.scss';
 
-.vxp-tab-nav {
-  @include basis;
+$tab-nav: () !default;
+$tab-nav: map.merge(
+  (
+    d-color: get-css-var('border-color-base'),
+    divider: get-css-var('border-shape') get-css-var('tab-nav-d-color'),
+    color: get-css-var('content-color-base'),
+    color-hover: get-css-var('color-primary-base'),
+    color-active: get-css-var('tab-nav-color-hover'),
+    color-disabled: get-css-var('content-color-disabled'),
+    card-color: get-css-var('tab-nav-color'),
+    card-color-hover: get-css-var('tab-nav-color-hover'),
+    card-color-active: get-css-var('tab-nav-color-active'),
+    card-color-disabled: get-css-var('tab-nav-color-disabled'),
+    card-bg-color: get-css-var('fill-color-background'),
+    card-bg-color-active: get-css-var('fill-color-base'),
+    card-bg-color-disabled: get-css-var('tab-nav-card-bg-color'),
+    card-b-color: get-css-var('border-color-base'),
+    card-b-color-active: get-css-var('tab-nav-color-active'),
+    card-b-color-disabled: get-css-var('tab-nav-card-b-color'),
+    card-border: get-css-var('border-shape') get-css-var('tab-nav-card-b-color'),
+    card-radius: get-css-var('border-radius-base'),
+    marker-bg-color: get-css-var('tab-nav-color-active'),
+    marker-height: 2px,
+    icon-color: get-css-var('tab-nav-color'),
+    icon-color-active: get-css-var('tab-nav-color-active'),
+    icon-color-disabled: get-css-var('tab-nav-color-disabled'),
+    v-padding: 0.6em,
+    h-padding: 1.2em,
+    padding: get-css-var('tab-nav-v-padding') get-css-var('tab-nav-h-padding')
+  ),
+  $tab-nav
+);
 
-  $color: $vxp-color-content-normal;
-  $open-color: $vxp-color-primary;
+.vxp-tab-nav {
+  &-vars {
+    @include define-preset-values('tab-nav', $tab-nav);
+  }
+
+  @include basis;
 
   position: relative;
   background-color: transparent;
-  border-bottom: $vxp-border-base;
+  border-bottom: get-css-var('tab-nav-divider');
 
   &__list {
     display: flex;
@@ -23,36 +59,56 @@
   &__item {
     position: relative;
     display: flex;
-    padding: 0.6em 1.2em;
-    color: $color;
+    padding: get-css-var('tab-nav-padding');
+    color: get-css-var('tab-nav-color');
     cursor: pointer;
     user-select: none;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
 
-    &--active {
-      color: $open-color;
+    &:hover {
+      color: get-css-var('tab-nav-color-hover');
     }
 
-    &--disabled {
-      color: $vxp-color-content-disabled;
+    &--active,
+    &--active:hover {
+      color: get-css-var('tab-nav-color-active');
+    }
+
+    &--disabled,
+    &--disabled:hover {
+      color: get-css-var('tab-nav-color-disabled');
       cursor: not-allowed;
     }
   }
 
   &--card &__item {
     margin-right: 4px;
-    background-color: $vxp-color-fill-background;
-    border: $vxp-border-base;
-    border-radius: $vxp-border-radius-base $vxp-border-radius-base 0 0;
+    color: get-css-var('tab-nav-card-color');
+    background-color: get-css-var('tab-nav-card-bg-color');
+    border: get-css-var('tab-nav-card-border');
+    border-radius: get-css-var('tab-nav-card-radius') get-css-var('tab-nav-card-radius') 0 0;
     transition:
-      $vxp-transition-color-base,
-      $vxp-transition-background-base,
-      $vxp-transition-border-base;
+      get-css-var('transition-color'),
+      get-css-var('transition-background'),
+      get-css-var('transition-border');
 
-    &--active {
-      background-color: $vxp-color-fill;
-      border-color: $open-color;
+    &:hover {
+      color: get-css-var('tab-nav-card-color-hover');
+    }
+
+    &--active,
+    &--active:hover {
+      color: get-css-var('tab-nav-card-color-active');
+      background-color: get-css-var('tab-nav-card-bg-color-active');
+      border-color: get-css-var('tab-nav-card-b-color-active');
       border-bottom-color: transparent;
+    }
+
+    &--disabled,
+    &--disabled:hover {
+      color: get-css-var('tab-nav-card-color-disabled');
+      background-color: get-css-var('tab-nav-card-bg-color-disabled');
+      border-color: get-css-var('tab-nav-card-b-color-disabled');
     }
   }
 
@@ -61,13 +117,13 @@
     bottom: -1px;
     width: 70px;
     pointer-events: none;
-    transition: left $vxp-transition-base, width $vxp-transition-base;
+    transition: left get-css-var('transition-base'), width get-css-var('transition-base');
   }
 
   &__marker {
     width: 100%;
-    height: 2px;
-    background-color: $open-color;
+    height: get-css-var('tab-nav-marker-height');
+    background-color: get-css-var('tab-nav-marker-bg-color');
   }
 
   &__icon {
@@ -75,13 +131,24 @@
     align-items: center;
     justify-content: center;
     margin-right: 0.3em;
+
+    &,
+    .vxp-icon {
+      color: get-css-var('tab-nav-icon-color');
+    }
   }
 
-  &__item--active &__icon .vxp-icon {
-    color: $open-color;
+  &__item--active &__icon {
+    &,
+    .vxp-icon {
+      color: get-css-var('tab-nav-icon-color-active');
+    }
   }
 
-  &__item--disabled &__icon .vxp-icon {
-    color: $vxp-color-fill-disabled;
+  &__item--disabled &__icon {
+    &,
+    .vxp-icon {
+      color: get-css-var('tab-nav-icon-color-disabled');
+    }
   }
 }

@@ -1,16 +1,48 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './button.scss';
 @use './masker.scss';
 
-.vxp-modal {
-  @include basis;
+$modal: () !default;
+$modal: map.merge(
+  (
+    z-index: get-css-var('masker-z-index'),
+    bg-color: get-css-var('fill-color-base'),
+    radius: get-css-var('border-radius-base'),
+    s-color: get-css-var('border-color-base'),
+    shadow: get-css-var('box-shadow-shape') get-css-var('modal-s-color'),
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-shape') get-css-var('modal-d-color'),
+    title-font-size: get-css-var('font-size-primary'),
+    title-weight: 500,
+    title-color: get-css-var('content-color-primary'),
+    header-v-padding: 0.6em,
+    header-h-padding: 1em,
+    header-padding: get-css-var('modal-header-v-padding') get-css-var('modal-header-h-padding'),
+    body-v-padding: 1em,
+    body-h-padding: 1em,
+    body-padding: get-css-var('modal-body-v-padding') get-css-var('modal-body-h-padding'),
+    body-line-height: get-css-var('line-height-base'),
+    footer-v-padding: 0.7em,
+    footer-h-padding: 1.2em,
+    footer-padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding'),
+    close-color: get-css-var('content-color-placeholder'),
+    close-color-hover: get-css-var('content-color-base'),
+    resizer-color: get-css-var('border-color-light-1')
+  ),
+  $modal
+);
 
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: $vxp-z-index-popper;
+.vxp-modal {
+  &-vars {
+    @include define-preset-values('modal', $modal);
+  }
+
+  @include basis;
+  @include fixed;
+
+  z-index: get-css-var('modal-z-index');
 
   &--inner {
     position: absolute;
@@ -23,43 +55,51 @@
     display: flex;
     flex-direction: column;
     pointer-events: visible;
-    background-color: $vxp-color-fill;
+    background-color: get-css-var('modal-bg-color');
     border: 0;
-    border-radius: $vxp-border-radius-base;
-    box-shadow: $vxp-box-shadow-base;
+    border-radius: get-css-var('modal-radius');
+    box-shadow: get-css-var('modal-shadow');
   }
 
   &--inner &__wrapper {
     position: absolute;
   }
 
+  &--draggable &__wrapper {
+    will-change: top, left;
+  }
+
   &__header {
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0.6em 1em;
-    font-size: $vxp-font-size-primary;
-    font-weight: 500;
-    color: $vxp-color-content-primary;
-    border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
+    padding: get-css-var('modal-header-padding');
+    border-bottom: get-css-var('modal-divider');
   }
 
   &--draggable &__header {
     cursor: move;
+    user-select: none;
+  }
+
+  &__title {
+    font-size: get-css-var('modal-title-font-size');
+    font-weight: get-css-var('modal-title-weight');
+    color: get-css-var('modal-title-color');
   }
 
   &__content {
     flex: auto;
-    padding: 1em;
-    line-height: $vxp-line-height;
+    padding: get-css-var('modal-body-padding');
+    line-height: get-css-var('modal-body-line-height');
   }
 
   &__footer {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0.7em 1.2em;
-    border-top: $vxp-border-appearance $vxp-color-border-light-2;
+    padding: get-css-var('modal-footer-padding');
+    border-top: get-css-var('modal-divider');
   }
 
   &__close {
@@ -67,12 +107,12 @@
     top: 50%;
     right: 1em;
     display: flex;
-    color: $vxp-color-content-placeholder;
+    color: get-css-var('modal-close-color');
     cursor: pointer;
     transform: translateY(-50%);
 
     &:hover {
-      color: $vxp-color-content-normal;
+      color: get-css-var('modal-close-color-hover');
     }
   }
 
@@ -87,12 +127,12 @@
       linear-gradient(
         -45deg,
         transparent calc(30% - 1px),
-        $vxp-color-border-light-1 30%,
+        get-css-var('modal-resizer-color') 30%,
         transparent calc(30% + 1px),
         transparent calc(50% - 1px),
-        $vxp-color-border-light-1 50%,
+        get-css-var('modal-resizer-color') 50%,
         transparent calc(50% + 1px)
       );
-    border-radius: 0 0 $vxp-border-radius-base 0;
+    border-radius: 0 0 get-css-var('modal-radius') 0;
   }
 }

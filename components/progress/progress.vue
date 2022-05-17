@@ -93,7 +93,7 @@ export default defineComponent({
     const prefix = 'vxp-progress'
 
     const className = computed(() => {
-      return [prefix, `${prefix}--info-${props.infoType}`]
+      return [prefix, `${prefix}-vars`, `${prefix}--info-${props.infoType}`]
     })
     const trackStyle = computed(() => {
       return {

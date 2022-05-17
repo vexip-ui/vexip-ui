@@ -1,18 +1,47 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './icon.scss';
 
+$split: () !default;
+$split: map.merge(
+  (
+    handler-bg-color: get-css-var('fill-color-background'),
+    handler-b-color: get-css-var('border-color-base'),
+    handler-z-index: 10,
+    handler-size: 6px,
+    button-color: get-css-var('content-color-reverse'),
+    button-bg-color: get-css-var('split-handler-b-color'),
+    button-bg-color-hover: get-css-var('color-primary-base'),
+    button-radius: get-css-var('border-radius-base'),
+    button-size: 28px,
+    guide-bg-color: get-css-var('border-color-light-1'),
+    guide-opacity: 50%,
+    pointer-bg-color: get-css-var('border-color-base')
+  ),
+  $split
+);
+
 .vxp-split {
+  &-vars {
+    @include define-preset-values('split', $split);
+  }
+
   @include basis;
 
   $pane: #{&}__pane;
   $trigger: #{&}__trigger;
-  $handle: #{&}__handle;
+  $handler: #{&}__handler;
   $button: #{&}__button;
   $icon: #{&}__icon;
   $guide: #{&}__guide;
   $pointer: #{&}__pointer;
-  $button-color: $vxp-color-border;
-  $button-hover-color: $vxp-color-primary;
+
+  $handler-size: get-css-var('split-handler-size');
+  $handler-size-h: calc(get-css-var('split-handler-size') * 0.5);
+  $handler-size-rh: calc(get-css-var('split-handler-size') * -0.5);
+  $button-color: get-css-var('split-button-bg-color');
+  $button-hover-color: get-css-var('split-button-bg-color-hover');
 
   position: relative;
   width: 100%;
@@ -24,16 +53,16 @@
 
   &__trigger {
     position: absolute;
-    z-index: 10;
+    z-index: get-css-var('split-handler-z-index');
     transform: translate(-50%, -50%);
   }
 
-  &__handle {
+  &__handler {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: $vxp-color-fill-background;
-    border: 0 solid $vxp-color-border;
+    background-color: get-css-var('split-handler-bg-color');
+    border: 0 solid get-css-var('split-handler-b-color');
   }
 
   &__button {
@@ -43,33 +72,33 @@
     justify-content: center;
     cursor: pointer;
     background-color: $button-color;
-    border-radius: $vxp-border-radius-small;
-    transition: $vxp-transition-background-base;
+    border-radius: get-css-var('split-button-radius');
+    transition: get-css-var('transition-background');
 
     &,
     .vxp-icon {
-      color: $vxp-color-content-reverse;
+      color: get-css-var('split-button-color');
     }
 
     &::before,
     &::after {
       position: absolute;
       content: '';
-      border: 2px $vxp-border-style transparent;
-      transition: $vxp-transition-border-base;
+      border: calc(#{$handler-size} * 0.5 - 1px) solid transparent;
+      transition: get-css-var('transition-border');
     }
 
     &--left-full {
-      margin-bottom: 3px;
+      margin-bottom: $handler-size-h;
 
       &::before {
-        top: -3px;
+        top: $handler-size-rh;
         border-bottom-color: $button-color;
         border-left-color: $button-color;
       }
 
       &::after {
-        bottom: -3px;
+        bottom: $handler-size-rh;
         border-top-color: $button-color;
         border-left-color: $button-color;
       }
@@ -88,16 +117,16 @@
     }
 
     &--right-full {
-      margin-top: 3px;
+      margin-top: $handler-size-h;
 
       &::before {
-        top: -3px;
+        top: $handler-size-rh;
         border-right-color: $button-color;
         border-bottom-color: $button-color;
       }
 
       &::after {
-        bottom: -3px;
+        bottom: $handler-size-rh;
         border-top-color: $button-color;
         border-right-color: $button-color;
       }
@@ -116,16 +145,16 @@
     }
 
     &--top-full {
-      margin-right: 3px;
+      margin-right: $handler-size-h;
 
       &::before {
-        left: -3px;
+        left: $handler-size-rh;
         border-top-color: $button-color;
         border-right-color: $button-color;
       }
 
       &::after {
-        right: -3px;
+        right: $handler-size-rh;
         border-top-color: $button-color;
         border-left-color: $button-color;
       }
@@ -144,16 +173,16 @@
     }
 
     &--bottom-full {
-      margin-left: 3px;
+      margin-left: $handler-size-h;
 
       &::before {
-        left: -3px;
+        left: $handler-size-rh;
         border-right-color: $button-color;
         border-bottom-color: $button-color;
       }
 
       &::after {
-        right: -3px;
+        right: $handler-size-rh;
         border-bottom-color: $button-color;
         border-left-color: $button-color;
       }
@@ -178,15 +207,16 @@
 
   &__guide {
     position: absolute;
-    z-index: 11;
+    z-index: calc(get-css-var('split-handler-z-index') + 1);
     display: none;
     pointer-events: none;
-    background-color: $vxp-color-border-light-2;
+    background-color: get-css-var('split-guide-bg-color');
+    opacity: get-css-var('split-guide-opacity');
   }
 
   &__pointer {
     pointer-events: none;
-    background-color: $vxp-color-border;
+    background-color: get-css-var('split-pointer-bg-color');
   }
 
   &--moving {
@@ -195,23 +225,24 @@
 
     #{$pane},
     & > #{$trigger},
-    #{$handle} {
+    #{$handler} {
       pointer-events: none;
     }
   }
 
-  &--vertical &--moving {
+  &--vertical#{&}--moving {
     cursor: row-resize;
   }
 
   &--transition {
     #{$pane},
     & > #{$trigger},
-    #{$handle} {
+    #{$handler} {
       pointer-events: none;
       transition: {
         property: top, right, bottom, left;
-        duration: $vxp-transition-duration;
+        timing-function: get-css-var('transition-timing');
+        duration: get-css-var('transition-duration');
       }
     }
   }
@@ -219,7 +250,7 @@
   &--left-full {
     #{$pane} {
       &--left {
-        padding-right: 6px !important;
+        padding-right: $handler-size !important;
       }
 
       &--right {
@@ -229,7 +260,7 @@
     }
 
     & > #{$trigger} {
-      #{$handle} {
+      #{$handler} {
         transform: translateX(-100%);
       }
 
@@ -253,7 +284,7 @@
       }
 
       &--right {
-        padding-left: 6px !important;
+        padding-left: $handler-size !important;
       }
     }
 
@@ -273,7 +304,7 @@
   &--top-full {
     #{$pane} {
       &--top {
-        padding-bottom: 6px !important;
+        padding-bottom: $handler-size !important;
       }
 
       &--bottom {
@@ -283,7 +314,7 @@
     }
 
     & > #{$trigger} {
-      #{$handle} {
+      #{$handler} {
         transform: translateY(-100%);
       }
 
@@ -306,7 +337,7 @@
       }
 
       &--bottom {
-        padding-top: 6px !important;
+        padding-top: $handler-size !important;
         overflow: hidden;
       }
     }
@@ -329,7 +360,7 @@
   &--bottom-full,
   &--left-full {
     & > #{$trigger} {
-      #{$handle} {
+      #{$handler} {
         cursor: default !important;
       }
     }
@@ -342,12 +373,12 @@
 
       &--left {
         left: 0;
-        padding-right: 3px;
+        padding-right: $handler-size-h;
       }
 
       &--right {
         right: 0;
-        padding-left: 3px;
+        padding-left: $handler-size-h;
       }
     }
 
@@ -356,9 +387,9 @@
       width: 0;
       height: 100%;
 
-      #{$handle} {
+      #{$handler} {
         flex-direction: column;
-        width: 6px;
+        width: $handler-size;
         height: 100%;
         cursor: col-resize;
         border: {
@@ -370,8 +401,8 @@
       }
 
       #{$button} {
-        width: 4px;
-        height: 28px;
+        width: 100%;
+        height: get-css-var('split-button-size');
       }
 
       #{$pointer} {
@@ -384,7 +415,7 @@
     & > #{$guide} {
       top: 0;
       left: 50%;
-      width: 6px;
+      width: $handler-size;
       height: 100%;
       cursor: col-resize;
       transform: translateX(-50%);
@@ -398,12 +429,12 @@
 
       &--top {
         top: 0;
-        padding-bottom: 3px;
+        padding-bottom: $handler-size-h;
       }
 
       &--bottom {
         bottom: 0;
-        padding-top: 3px;
+        padding-top: $handler-size-h;
       }
     }
 
@@ -412,10 +443,10 @@
       width: 100%;
       height: 0;
 
-      #{$handle} {
+      #{$handler} {
         flex-direction: row;
         width: 100%;
-        height: 6px;
+        height: $handler-size;
         cursor: row-resize;
         border: {
           top-width: 1px;
@@ -426,8 +457,8 @@
       }
 
       #{$button} {
-        width: 28px;
-        height: 4px;
+        width: get-css-var('split-button-size');
+        height: 100%;
       }
 
       #{$pointer} {
@@ -441,7 +472,7 @@
       top: 50%;
       left: 0;
       width: 100%;
-      height: 6px;
+      height: $handler-size;
       cursor: row-resize;
       transform: translateY(-50%);
     }

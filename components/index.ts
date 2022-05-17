@@ -1,4 +1,4 @@
-import '@/themes/common.scss'
+// import '@/themes/common.scss'
 
 import { Alert } from '@/components/alert'
 import { Anchor } from '@/components/anchor'
@@ -188,7 +188,13 @@ const components = [
   WheelItem
 ]
 
-const plugins = [Confirm, Contextmenu, Loading, Message, Notice]
+const plugins = [
+  Confirm,
+  Contextmenu,
+  Loading,
+  Message,
+  Notice
+]
 
 export const install = (app: App<unknown>, options: InstallOptions = {}) => {
   const { prefix = '', prop = {}, locale = {} } = options
@@ -266,7 +272,6 @@ export {
   Message,
   Modal,
   NativeScroll,
-  Notice,
   NumberInput,
   Option,
   OptionGroup,

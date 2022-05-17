@@ -1,7 +1,7 @@
 <template>
   <div
     ref="wrapper"
-    :class="prefix"
+    :class="[prefix, `${prefix}-vars`]"
     :aria-disabled="disabled"
     :aria-readonly="readonly"
   >

@@ -15,7 +15,6 @@
         :style="labelStyle"
         @click="handleSelect"
         @mouseenter="handleMouseEnter"
-        @mouseleave="handleMouseLeave"
       >
         <div v-if="icon" :class="`${prefix}__icon`">
           <slot name="icon">
@@ -51,12 +50,12 @@
         </ul>
       </CollapseTransition>
     </span>
-    <Portal v-else :to="transferTo">
+    <Portal v-else-if="isGroup" :to="transferTo">
       <transition :name="transition">
         <div
           v-show="showGroup"
           ref="popper"
-          :class="[`${prefix}__popper`, isHorizontal ? `${prefix}__popper--drop` : '']"
+          :class="[`${prefix}__popper`, `${prefix}-vars`, isHorizontal ? `${prefix}__popper--drop` : '']"
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >
@@ -110,7 +109,7 @@ const props = useConfiguredProps('menuItem', {
   },
   transfer: {
     type: [Boolean, String],
-    default: false
+    default: null
   },
   transitionName: {
     type: String,
@@ -135,13 +134,16 @@ export default defineComponent({
     const prefix = 'vxp-menu'
     const baseClass = `${prefix}__item`
     const placement = ref('right-start' as Placement)
-    const transfer = ref(true)
     const groupExpanded = ref(false)
     const selected = ref(false)
     const sonSelected = ref(false)
     const indent = ref(parentItemState ? parentItemState.indent + 1 : 1)
 
     const wrapper = ref<HTMLElement | null>(null)
+
+    const propTransfer = computed(() => props.transfer ?? menuState?.transfer ?? false)
+    const inTransfer = computed(() => parentItemState ? parentItemState.transfer : false)
+    const transfer = computed(() => !inTransfer.value && propTransfer.value)
 
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
@@ -209,6 +211,7 @@ export default defineComponent({
       groupExpanded,
       isUsePopper,
       parentState: parentItemState,
+      transfer: computed(() => inTransfer.value || propTransfer.value),
       updateSonSelected,
       toggleGroupExpanded,
       handleMouseEnter,

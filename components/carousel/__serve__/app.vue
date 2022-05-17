@@ -26,23 +26,12 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import Carousel from '../carousel.vue'
-import CarouselItem from '../carousel-item.vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Carousel } from '..'
+import { CarouselItem } from '@/components/carousel-item'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Carousel,
-    CarouselItem
-  },
-  data() {
-    return {
-      active: 9
-    }
-  }
-})
+const active = ref(9)
 </script>
 
 <style lang="scss">

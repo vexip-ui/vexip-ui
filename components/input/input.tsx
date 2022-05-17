@@ -160,6 +160,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
         `${prefix}--${props.type}`,
         {
           [`${prefix}-wrapper`]: !hasBefore.value && !hasAfter.value,
@@ -173,6 +174,7 @@ export default defineComponent({
     const wrapperClass = computed(() => {
       return {
         [`${prefix}-wrapper`]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}-wrapper--${props.size}`]: props.size !== 'default',
         [`${prefix}-wrapper--before-only`]: hasBefore.value && !hasAfter.value,
         [`${prefix}-wrapper--after-only`]: !hasBefore.value && hasAfter.value

@@ -169,6 +169,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [`${prefix}__item`]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}__item--required`]: !formProps.hideAsterisk && useAsterisk.value,
         [`${prefix}__item--error`]: isError.value,
         [`${prefix}__item--action`]: props.action

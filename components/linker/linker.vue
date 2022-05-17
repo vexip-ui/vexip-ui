@@ -61,6 +61,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--${props.type}`]: props.type !== 'default',
         [`${prefix}--disabled`]: props.disabled,
         [`${prefix}--underline`]: props.underline

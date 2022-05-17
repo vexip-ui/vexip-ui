@@ -97,6 +97,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--${props.type}`]: props.type !== 'default',
         [`${prefix}--simple`]: !props.ghost && props.simple,
         [`${prefix}--ghost`]: props.ghost,
@@ -127,15 +128,6 @@ export default defineComponent({
     function handleAnimationEnd() {
       pulsing.value = false
     }
-
-    // return {
-    //   prefix,
-    //   className,
-    //   style,
-
-    //   handleClick,
-    //   handleAnimationEnd
-    // }
 
     function renderIconWithDefined() {
       return props.loading ? (

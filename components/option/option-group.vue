@@ -2,6 +2,7 @@
   <li
     :class="{
       [prefix]: true,
+      'vxp-option-vars': true,
       [`${prefix}--divided`]: divided
     }"
   >

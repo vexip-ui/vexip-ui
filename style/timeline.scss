@@ -2,18 +2,36 @@
 
 @use '../design' as *;
 
-.vxp-timeline {
-  @include basis;
+$types: success error warning;
 
-  $line: #{&}__line;
-  $signal: #{&}__signal;
-  $pointer: #{&}__pointer;
-  $item-types: (
-    success: $vxp-color-success,
-    error: $vxp-color-error,
-    warning: $vxp-color-warning,
-    disabled: $vxp-color-fill-disabled
-  );
+$timeline: () !default;
+$timeline: map.merge(
+  (
+    item-span: 0.8em,
+    item-span-pending: 2.2em,
+    pointer-color: get-css-var('color-primary-base'),
+    pointer-bg-color: get-css-var('fill-color-base'),
+    pointer-b-width: 2px,
+    pointer-b-color: get-css-var('color-primary-base'),
+    pointer-size: 13px,
+    line-width: get-css-var('border-width'),
+    line-style: solid,
+    line-style-pending: dashed,
+    line-color: get-css-var('border-color-base')
+  ),
+  $timeline
+);
+
+.vxp-timeline {
+  &-vars {
+    @include define-preset-values('timeline', $timeline);
+  }
+
+  @mixin define-timeline-style($style-map) {
+    @include define-preset-style('timeline', $style-map);
+  }
+
+  @include basis;
 
   display: inline-flex;
   flex-direction: column;
@@ -25,20 +43,14 @@
 
   &__item {
     position: relative;
-    padding-bottom: 0.8em;
+    padding-bottom: get-css-var('timeline-item-span');
 
-    @each $type in map-keys($map: $item-types) {
-      $color: map.get($item-types, $type);
-
+    @each $type in $types {
       &--#{$type} {
-        #{$signal},
-        #{$pointer} {
-          color: $color;
-        }
-
-        #{$pointer} {
-          border-color: $color;
-        }
+        @include define-timeline-style((
+          pointer-color: 'color' $type 'base',
+          pointer-b-color: 'color' $type 'base'
+        ));
       }
     }
   }
@@ -55,13 +67,13 @@
   &__signal {
     position: absolute;
     top: 0;
-    left: -6px;
+    left: calc(get-css-var('timeline-pointer-size') * -0.5 + 0.5px);
     z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 13px;
-    height: 13px;
+    width: get-css-var('timeline-pointer-size');
+    height: get-css-var('timeline-pointer-size');
   }
 
   &--both-sides &__item:nth-child(even) &__signal {
@@ -75,9 +87,9 @@
   &__pointer {
     width: 100%;
     height: 100%;
-    color: $vxp-color-primary;
-    background-color: $vxp-color-white;
-    border: 2px solid $vxp-color-primary;
+    color: get-css-var('timeline-pointer-color');
+    background-color: get-css-var('timeline-pointer-bg-color');
+    border: get-css-var('timeline-pointer-b-width') solid get-css-var('timeline-pointer-b-color');
     border-radius: 50%;
   }
 
@@ -88,9 +100,9 @@
     left: 0;
     width: 0;
     border-left: {
-      width: 1px;
-      style: solid;
-      color: $vxp-color-border;
+      width: get-css-var('timeline-line-width');
+      style: get-css-var('timeline-line-style');
+      color: get-css-var('timeline-line-color');
     }
   }
 
@@ -121,11 +133,13 @@
     display: none;
   }
 
+  $line: #{&}__line;
+
   &--pending &__item:nth-last-child(2) {
-    padding-bottom: 2.2em;
+    padding-bottom: get-css-var('timeline-item-span-pending');
 
     #{$line} {
-      border-left-style: dashed;
+      border-left-style: get-css-var('timeline-line-style-pending');
     }
   }
 }

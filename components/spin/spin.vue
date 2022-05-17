@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!inner" :class="prefix">
+  <div v-if="!inner" :class="[prefix, `${prefix}-vars`]">
     <slot></slot>
     <transition appear name="vxp-fade">
       <div v-if="currentActive" :class="`${prefix}__loading`">
@@ -19,7 +19,7 @@
     </transition>
   </div>
   <transition v-else appear name="vxp-fade">
-    <div v-if="currentActive" :class="[prefix, `${prefix}--inner`]">
+    <div v-if="currentActive" :class="[prefix, `${prefix}-vars`, `${prefix}--inner`]">
       <div :class="`${prefix}__mask`" :style="maskStyle"></div>
       <div :class="`${prefix}__icon`">
         <slot name="icon">
@@ -73,7 +73,7 @@ const props = useConfiguredProps('spin', {
   },
   maskColor: {
     type: String,
-    default: 'white'
+    default: ''
   }
 })
 
@@ -84,12 +84,18 @@ export default defineComponent({
   },
   props,
   setup(props, { slots }) {
-    const prefix = 'vxp-spin'
-
     const currentActive = ref(props.active)
 
     const hasTip = computed(() => !!(props.tip || slots.tip))
-    const maskStyle = computed(() => ({ '--color': props.maskColor } as any))
+    const maskStyle = computed(() => {
+      const style = {} as any
+
+      if (props.maskColor) {
+        style['--vxp-spin-mask-bg-color'] = props.maskColor
+      }
+
+      return style
+    })
     const delayTime = computed(() => {
       if (props.delay) {
         if (props.delay === true) {
@@ -128,7 +134,7 @@ export default defineComponent({
     )
 
     return {
-      prefix,
+      prefix: 'vxp-spin',
 
       currentActive,
 

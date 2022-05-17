@@ -11,6 +11,7 @@
         :class="[
           {
             [`${prefix}__item`]: true,
+            [`${prefix}-vars`]: true,
             [`${prefix}__item--${item.type}`]: item.type && effectiveTypes.includes(item.type),
             [`${prefix}__item--background`]: item.background,
             [`${prefix}__item--color`]: item.background && item.color,

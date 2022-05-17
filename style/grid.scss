@@ -1,17 +1,6 @@
-@use 'sass:map';
-@use 'sass:meta';
-
 @use '../design' as *;
 
 .vxp-grid {
-  @at-root {
-    :root {
-      @each $point in map-keys($vxp-break-point-map) {
-        --vxp-grid-break-point-#{$point}: #{meta.inspect(map.get($vxp-break-point-map, $point))};
-      }
-    }
-  }
-
   @include basis;
 
   position: relative;

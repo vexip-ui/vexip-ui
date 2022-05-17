@@ -1,10 +1,56 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './button.scss';
+@use './calendar-pane.scss';
+@use './input.scss' as input;
 @use './wheel.scss';
 
+$date-picker: () !default;
+$date-picker: map.merge(
+  (
+    color-disabled: get-css-var('input-control-color-disabled'),
+    unit-color-focus: get-css-var('content-color-reverse'),
+    unit-bg-color-focus: get-css-var('color-primary-light-1'),
+    separator-color: get-css-var('content-color-secondary'),
+    exchange-color: get-css-var('content-color-secondary'),
+    exchange-color-hover: get-css-var('color-primary-base'),
+    popper-z-index: get-css-var('z-index-popper'),
+    pane-bg-color: get-css-var('fill-color-base'),
+    pane-border-radius: get-css-var('border-radius-base'),
+    pane-shadow: get-css-var('box-shadow-base'),
+    shortcut-bg-color: get-css-var('fill-color-background'),
+    shortcut-bg-color-hover: get-css-var('fill-color-hover'),
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-appearance') get-css-var('date-picker-d-color'),
+    arrow-color: get-css-var('content-color-secondary'),
+    arrow-color-hover: get-css-var('content-color-base'),
+    header-color-hover: get-css-var('color-primary-base'),
+    item-color-hover: get-css-var('calendar-index-color-hover'),
+    item-color-selected: get-css-var('calendar-index-color-selected'),
+    item-color-today: get-css-var('calendar-index-color-today'),
+    item-color-outside: get-css-var('calendar-index-color-outside'),
+    item-color-disabled: get-css-var('calendar-index-color-disabled'),
+    item-bg-color: get-css-var('calendar-index-bg-color'),
+    item-bg-color-hover: get-css-var('calendar-index-bg-color-hover'),
+    item-bg-color-selected: get-css-var('calendar-index-bg-color-selected'),
+    item-bg-color-disabled: get-css-var('calendar-index-bg-color-disabled'),
+    item-bg-color-today: get-css-var('calendar-index-bg-color-today'),
+    item-bg-color-outside: get-css-var('calendar-index-bg-color-outside'),
+    item-radius: get-css-var('calendar-index-border-radius'),
+    range-bg-color: get-css-var('calendar-range-bg-color'),
+    range-opacity: get-css-var('calendar-range-opacity')
+  ),
+  $date-picker
+);
+
 .vxp-date-picker {
+  &-vars {
+    @include define-preset-values('date-picker', $date-picker);
+  }
+
   @include basis;
-  @include input-handler;
+  @include input.handler;
 
   $wheel: 'vxp-wheel';
 
@@ -20,38 +66,33 @@
   &__input {
     display: flex;
     align-items: center;
-    color: $vxp-color-content-secondary;
     outline: 0;
-
-    &--activated {
-      color: $vxp-color-content-normal;
-    }
   }
 
   &__unit {
     padding: 0 2px;
     text-align: center;
-    transition: $vxp-transition-background-base, $vxp-transition-color-base;
+    transition: get-css-var('transition-background'), get-css-var('transition-color');
 
     &--focused {
-      color: $vxp-color-content-reverse;
-      background-color: $vxp-color-primary-light-1;
+      color: get-css-var('date-picker-unit-color-focus');
+      background-color: get-css-var('date-picker-unit-bg-color-focus');
     }
   }
 
   &__label {
     text-align: center;
     user-select: none;
-    transition: $vxp-transition-background-base, $vxp-transition-color-base;
-  }
-
-  &--disabled &__unit,
-  &--disabled &__label {
-    color: $vxp-color-content-secondary;
+    transition: get-css-var('transition-background'), get-css-var('transition-color');
   }
 
   &__separator {
-    color: $vxp-color-content-disabled;
+    color: get-css-var('date-picker-separator-color');
+    transition: get-css-var('transition-color');
+  }
+
+  &--disabled &__separator {
+    color: get-css-var('date-picker-color-disabled');
   }
 
   &__exchange {
@@ -60,26 +101,39 @@
     padding: 0 4px;
     padding-top: 1px;
 
+    &,
     .vxp-icon {
-      color: $vxp-color-content-secondary;
+      color: get-css-var('date-picker-exchange-color');
     }
 
-    &--endabled:hover .vxp-icon {
-      color: $vxp-color-primary;
+    &--endabled:hover {
+      &,
+      .vxp-icon {
+        color: get-css-var('date-picker-exchange-color-hover');
+      }
+    }
+  }
+
+  &--disabled &__exchange {
+    &,
+    .vxp-icon {
+      color: get-css-var('date-picker-color-disabled');
     }
   }
 
   &__popper {
-    z-index: $vxp-z-index-popper;
+    @include basis;
+
+    z-index: get-css-var('date-picker-popper-z-index');
     display: flex;
     padding: 0.6em 0;
   }
 
   &__pane {
     display: flex;
-    background-color: $vxp-color-fill;
-    border-radius: $vxp-border-radius-base;
-    box-shadow: $vxp-box-shadow-base;
+    background-color: get-css-var('date-picker-pane-bg-color');
+    border-radius: get-css-var('date-picker-pane-border-radius');
+    box-shadow: get-css-var('date-picker-pane-shadow');
   }
 
   &__list {
@@ -87,23 +141,25 @@
     flex-direction: column;
 
     &--sub {
+      align-items: flex-start;
       padding: 0.3em 0;
-      background-color: $vxp-color-fill-background;
-      border-right: $vxp-border-appearance $vxp-color-border-light-2;
+      background-color: get-css-var('date-picker-shortcut-bg-color');
+      border-right: get-css-var('date-picker-divider');
     }
   }
 
   &__shortcut {
+    width: 100%;
     max-width: 7em;
     padding: 0.4em 1.1em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
-    transition: $vxp-transition-background-base;
+    transition: get-css-var('transition-background');
 
     &:hover {
-      background-color: $vxp-color-fill-hover;
+      background-color: get-css-var('date-picker-shortcut-bg-color-hover');
     }
   }
 
@@ -114,7 +170,7 @@
     justify-content: center;
     width: 100%;
     height: 2.4em;
-    border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
+    border-bottom: get-css-var('date-picker-divider');
   }
 
   &__arrow {
@@ -123,12 +179,12 @@
     display: flex;
     justify-content: center;
     width: 1em;
-    color: $vxp-color-content-secondary;
+    color: get-css-var('date-picker-arrow-color');
     cursor: pointer;
     transform: translateY(-50%);
 
     &:hover {
-      color: $vxp-color-primary;
+      color: get-css-var('date-picker-arrow-color-hover');
     }
   }
 
@@ -153,12 +209,15 @@
   }
 
   @mixin calendar-pane {
-    margin: 0 0.2em;
-    cursor: pointer;
-    transition: $vxp-transition-color-base;
+    & {
+      // here is header items style
+      margin: 0 0.2em;
+      cursor: pointer;
+      transition: get-css-var('transition-color');
 
-    &:hover {
-      color: $vxp-color-primary;
+      &:hover {
+        color: get-css-var('date-picker-header-color-hover');
+      }
     }
 
     &-pane {
@@ -179,8 +238,7 @@
       height: 2em;
       margin: 0 0.8em;
       background-color: transparent;
-      border-radius: $vxp-border-radius-base;
-      transition: $vxp-transition-background-base;
+      border-radius: get-css-var('date-picker-item-radius');
 
       &::before {
         position: absolute;
@@ -191,11 +249,26 @@
         display: none;
         pointer-events: none;
         content: '';
-        background-color: rgba($vxp-color-primary, 0.1);
+        background-color: get-css-var('date-picker-range-bg-color');
+        opacity: get-css-var('date-picker-range-opacity');
+      }
+
+      // ensure content above the range mask
+      &-inner {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: get-css-var('date-picker-item-bg-color');
+        border-radius: get-css-var('date-picker-item-radius');
+        transition: get-css-var('transition-color'), get-css-var('transition-background');
       }
     }
 
     $label: '#{&}-label';
+    $label-i: '#{&}-label-inner';
 
     &-item {
       position: relative;
@@ -205,16 +278,38 @@
       height: 25%;
       cursor: pointer;
 
-      &:hover #{$label} {
-        background-color: rgba($vxp-color-primary, 0.3);
+      &--today {
+        &,
+        &:hover {
+          #{$label-i} {
+            color: get-css-var('date-picker-item-color-today');
+            background-color: get-css-var('date-picker-item-bg-color-today');
+          }
+        }
+      }
+
+      &--prev,
+      &--next {
+        &,
+        &:hover {
+          #{$label-i} {
+            color: get-css-var('date-picker-item-color-outside');
+            background-color: get-css-var('date-picker-item-bg-color-outside');
+          }
+        }
+      }
+
+      &:hover #{$label-i} {
+        color: get-css-var('date-picker-item-color-hover');
+        background-color: get-css-var('date-picker-item-bg-color-hover');
       }
 
       &--selected {
         &,
         &:hover {
-          #{$label} {
-            color: $vxp-color-content-reverse;
-            background-color: $vxp-color-primary;
+          #{$label-i} {
+            color: get-css-var('date-picker-item-color-selected');
+            background-color: get-css-var('date-picker-item-bg-color-selected');
           }
         }
       }
@@ -222,10 +317,10 @@
       &--disabled {
         &,
         &:hover {
-          #{$label} {
-            color: $vxp-color-content-humble;
+          #{$label-i} {
+            color: get-css-var('date-picker-item-color-disabled');
             cursor: not-allowed;
-            background-color: transparent;
+            background-color: get-css-var('date-picker-item-bg-color-disabled');
           }
         }
       }
@@ -239,10 +334,6 @@
   }
 
   &__year {
-    &-item--next &-label {
-      color: $vxp-color-content-disabled;
-    }
-
     @include calendar-pane;
   }
 
@@ -254,15 +345,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    // justify-content: center;
-    border-left: $vxp-border-appearance $vxp-color-border-light-2;
+    border-left: get-css-var('date-picker-divider');
 
     .vxp-wheel__list {
       padding: 0 0.8em;
     }
 
     .vxp-time-picker__wheel {
+      display: flex;
       align-items: center;
       height: calc(100% - 2.4em);
       padding: 0;
@@ -274,7 +364,7 @@
     justify-content: flex-end;
     width: 100%;
     padding: 0.4em 0.6em;
-    border-top: $vxp-border-appearance $vxp-color-border-light-2;
+    border-top: get-css-var('date-picker-divider');
   }
 
   &--no-hour {
@@ -293,9 +383,5 @@
     .#{$wheel}:last-of-type {
       display: none;
     }
-  }
-
-  .vxp-time-picker__wheel {
-    display: flex;
   }
 }

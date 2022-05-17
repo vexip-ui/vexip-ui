@@ -1,17 +1,35 @@
-@use 'sass:color';
 @use 'sass:map';
 
 @use '../design' as *;
 @use './icon.scss';
 
+$types: info success warning error;
+
+$alert: () !default;
+$alert: map.merge(
+  (
+    bg-color: get-css-var('fill-color-background'),
+    b-color: get-css-var('border-color-base'),
+    border: get-css-var('border-shape') get-css-var('alert-b-color'),
+    radius: get-css-var('border-radius-base'),
+    icon-color: get-css-var('content-color-primary'),
+    text-color: get-css-var('content-color-base'),
+    title-font-size: get-css-var('font-size-primary'),
+    title-color: get-css-var('content-color-primary'),
+    close-color: get-css-var('content-color-placeholder'),
+    close-color-hover: get-css-var('content-color-normal')
+  ),
+  $alert
+);
+
 .vxp-alert {
-  $icon: #{&}__icon;
-  $types: (
-    info: $vxp-color-primary,
-    success: $vxp-color-success,
-    warning: $vxp-color-warning,
-    error: $vxp-color-error
-  );
+  &-vars {
+    @include define-preset-values('alert', $alert);
+  }
+
+  @mixin define-alert-style($style-map) {
+    @include define-preset-style('alert', $style-map);
+  }
 
   @include basis;
 
@@ -21,8 +39,9 @@
   justify-content: center;
   padding: 0.6em 1em;
   margin-bottom: 1em;
-  border: $vxp-border-base;
-  border-radius: $vxp-border-radius-base;
+  background-color: get-css-var('alert-bg-color');
+  border: get-css-var('alert-border');
+  border-radius: get-css-var('alert-radius');
 
   &--has-title {
     padding: 0.8em 1em;
@@ -50,30 +69,17 @@
     border-radius: 0;
   }
 
-  @each $type in map-keys($types) {
-    $color: map.get($types, $type);
-
-    &--#{$type} {
-      background-color: color.mix($vxp-color-white, $color, 90%);
-      border-color: color.mix($vxp-color-white, $color, 50%);
-    }
-
-    &--#{$type} #{$icon} {
-      color: color.mix($vxp-color-black, $color, 20%);
-    }
-
-    &--colorful-text#{&}--#{$type} {
-      &,
-      .vxp-icon {
-        color: color.mix($vxp-color-black, $color, 20%);
-      }
+  &--colorful-text {
+    &,
+    .vxp-icon {
+      color: get-css-var('alert-text-color');
     }
   }
 
   &__title {
     margin-bottom: 0.3em;
-    font-size: $vxp-font-size-primary;
-    color: $vxp-color-content-primary;
+    font-size: get-css-var('alert-title-font-size');
+    color: get-css-var('alert-title-color');
   }
 
   &__icon {
@@ -84,6 +90,11 @@
     align-items: center;
     margin-top: 1px;
     transform: translateY(-50%);
+
+    &,
+    .vxp-icon {
+      color: get-css-var('alert-icon-color');
+    }
   }
 
   &--has-title &__icon {
@@ -98,15 +109,19 @@
     right: 0.8em;
     display: flex;
     align-items: center;
-    color: $vxp-color-content-placeholder;
     cursor: pointer;
-    transition: $vxp-transition-color-base;
+    transition: get-css-var('transition-color');
     transform: translateY(-50%);
+
+    &,
+    .vxp-icon {
+      color: get-css-var('alert-close-color');
+    }
 
     &:hover {
       &,
       .vxp-icon {
-        color: $vxp-color-content-normal;
+        color: get-css-var('alert-close-color-hover');
       }
     }
   }
@@ -114,5 +129,18 @@
   &--has-title &__close {
     top: 0.6em;
     transform: none;
+  }
+
+  @each $type in $types {
+    $color: if($type == 'info', 'primary', $type);
+
+    &--#{$type} {
+      @include define-alert-style((
+        bg-color: 'color' $color 'light-9',
+        b-color: 'color' $color 'light-5',
+        icon-color: 'color' $color 'dark-2',
+        text-color: 'color' $color 'dark-2'
+      ));
+    }
   }
 }

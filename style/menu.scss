@@ -1,13 +1,40 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './icon.scss';
 @use './tooltip.scss';
 
+$menu: () !default;
+$menu: map.merge(
+  (
+    bg-color: get-css-var('fill-color-base'),
+    bg-color-selected: get-css-var('color-primary-light-8'),
+    bg-color-selected-dark: get-css-var('color-primary-base'),
+    bg-color-dark: get-css-var('fill-color-reverse'),
+    b-color: get-css-var('border-color-base'),
+    d-color: get-css-var('border-color-light-1'),
+    border: get-css-var('border-shape') get-css-var('menu-b-color'),
+    icon-color: get-css-var('content-color-secondary'),
+    arrow-color: get-css-var('menu-icon-color'),
+    label-color-dark: rgba($color-white, 0.65),
+    label-color-hover: get-css-var('color-primary-base'),
+    label-color-hover-dark: get-css-var('content-color-reverse'),
+    label-color-visible: get-css-var('menu-label-color-hover'),
+    label-color-visible-dark: get-css-var('menu-label-color-hover-dark'),
+    label-color-disabled: get-css-var('content-color-disabled'),
+    marker-bg-color: get-css-var('color-primary-base'),
+    group-bg-color-dark: get-css-var('color-black'),
+    popper-radius: get-css-var('border-radius-base'),
+    popper-shadow: get-css-var('box-shadow-base'),
+    popper-shadow-dark: unset
+  ),
+  $menu
+);
+
 .vxp-menu {
-  $menu: #{&};
-  $popper: #{&}__popper;
-  $item: #{&}__item;
-  $label: #{&}__label;
-  $list: #{&}__list;
+  &-vars {
+    @include define-preset-values('menu', $menu);
+  }
 
   @include basis;
 
@@ -16,9 +43,9 @@
   width: 100%;
   padding: 0;
   margin: 0;
-  background-color: $vxp-menu-color-bg-base;
-  border-right: $vxp-menu-border-base;
-  transition: width $vxp-transition-base;
+  background-color: get-css-var('menu-bg-color');
+  border-right: get-css-var('menu-border');
+  transition: width get-css-var('transition-base');
 
   &--horizontal {
     flex-direction: row;
@@ -27,7 +54,7 @@
   }
 
   &--dark {
-    background-color: $vxp-menu-color-bg-dark;
+    background-color: get-css-var('menu-bg-color-dark');
   }
 
   &::before,
@@ -45,7 +72,7 @@
   }
 
   &__popper {
-    padding: 0 0.35em;
+    padding-left: 0.35em;
     transform-origin: 0 0 !important;
 
     &--drop {
@@ -68,6 +95,12 @@
     }
   }
 
+  $self: #{&};
+  $popper: #{&}__popper;
+  $item: #{&}__item;
+  $label: #{&}__label;
+  $list: #{&}__list;
+
   &__label {
     position: relative;
     display: flex;
@@ -76,21 +109,21 @@
     height: 100%;
     padding: 0.8em 20px;
     cursor: pointer;
-    background-color: $vxp-menu-color-bg-base;
-    transition: $vxp-transition-color-base, $vxp-transition-background-base;
+    background-color: get-css-var('menu-bg-color');
+    transition: get-css-var('transition-color'), get-css-var('transition-background');
 
-    #{$menu}--dark &,
+    #{$self}--dark &,
     #{$popper} #{$list}--dark & {
-      color: $vxp-menu-color-label-dark;
-      background-color: $vxp-menu-color-bg-dark;
+      color: get-css-var('menu-label-color-dark');
+      background-color: get-css-var('menu-bg-color-dark');
     }
 
     #{$list}--dark &:not(#{&}--in-popper) {
-      background-color: $vxp-menu-color-bg-list-dark;
+      background-color: get-css-var('menu-group-bg-color-dark');
     }
 
     .vxp-icon {
-      color: $vxp-menu-color-icon;
+      color: get-css-var('menu-icon-color');
     }
 
     &::after {
@@ -101,16 +134,16 @@
       display: block;
       width: 3px;
       content: '';
-      background-color: $vxp-menu-color-bg-marker;
+      background-color: get-css-var('menu-marker-bg-color');
       opacity: 0%;
-      transition: $vxp-transition-opacity-base;
+      transition: get-css-var('transition-opacity');
 
-      #{$menu}--marker-left & {
+      #{$self}--marker-left & {
         right: auto;
         left: 0;
       }
 
-      #{$menu}--horizontal & {
+      #{$self}--horizontal & {
         top: auto;
         right: 0;
         bottom: auto;
@@ -119,16 +152,16 @@
         height: 2px;
       }
 
-      #{$menu}--marker-top & {
+      #{$self}--marker-top & {
         top: 0;
       }
 
-      #{$menu}--marker-bottom & {
+      #{$self}--marker-bottom & {
         bottom: 0;
       }
 
-      #{$menu}--marker-none &,
-      #{$menu}--dark &,
+      #{$self}--marker-none &,
+      #{$self}--dark &,
       #{$popper} & {
         display: none;
       }
@@ -136,74 +169,90 @@
 
     &:hover,
     #{$item}--selected &,
-    #{$menu}--reduced #{$item}--son-selected &,
+    #{$self}--reduced #{$item}--son-selected &,
     #{$item}--son-selected > .vxp-tooltip > .vxp-tooltip__trigger > & {
       &,
       .vxp-icon {
-        color: $vxp-menu-color-label-hover;
+        color: get-css-var('menu-label-color-hover');
       }
 
-      #{$menu}--dark &,
+      #{$self}--dark &,
       #{$popper} #{$list}--dark & {
         &,
         .vxp-icon {
-          color: $vxp-menu-color-label-visible-dark;
+          color: get-css-var('menu-label-color-visible-dark');
         }
       }
 
-      #{$menu}--horizontal &::after {
+      #{$self}--horizontal &::after {
         opacity: 100%;
       }
     }
 
     #{$item}--group-visible > .vxp-tooltip > .vxp-tooltip__trigger > & {
-      #{$menu}--dark &,
-      #{$list}--dark & {
-        &,
-        .vxp-icon {
-          color: $vxp-menu-color-label-visible-dark;
-        }
+      &,
+      .vxp-icon {
+        color: get-css-var('menu-label-color-visible');
       }
 
-      #{$menu}--horizontal & {
+      #{$self}--horizontal & {
         &,
         .vxp-icon {
-          color: $vxp-menu-color-label-hover;
+          color: get-css-var('menu-label-color-visible');
         }
 
         &::after {
           opacity: 100%;
         }
       }
+
+      #{$self}--dark &,
+      #{$list}--dark & {
+        &,
+        .vxp-icon {
+          color: get-css-var('menu-label-color-visible-dark');
+        }
+      }
+
+      // #{$self}--horizontal#{$self}--dark & {
+      //   &,
+      //   .vxp-icon {
+      //     color: get-css-var('menu-label-color-hover-dark');
+      //   }
+      // }
     }
 
     #{$item}--selected & {
-      background-color: $vxp-menu-color-bg-selected;
+      background-color: get-css-var('menu-bg-color-selected');
 
       &::after {
         opacity: 100%;
       }
 
-      #{$menu}--dark &,
-      #{$list}--dark & {
-        background-color: $vxp-menu-color-bg-selected-dark;
+      #{$self}--horizontal & {
+        background-color: get-css-var('menu-bg-color');
       }
 
-      #{$menu}--horizontal & {
-        background-color: $vxp-menu-color-bg-base;
+      #{$self}--dark &,
+      #{$list}--dark & {
+        background-color: get-css-var('menu-bg-color-selected-dark');
       }
+
+      // #{$self}--horizontal#{$self}--dark & {
+      //   background-color: get-css-var('menu-bg-color-selected-dark');
+      // }
     }
 
     #{$item}--disabled & {
       &,
       .vxp-icon {
-        color: $vxp-menu-color-label-disabled;
+        color: get-css-var('menu-label-color-disabled');
       }
 
       cursor: not-allowed;
 
       &:hover {
-        background-color: $vxp-menu-color-bg-base;
+        background-color: get-css-var('menu-bg-color');
       }
     }
   }
@@ -214,18 +263,18 @@
     justify-content: center;
     width: 24px;
     margin-right: 10px;
-    transition: margin $vxp-transition-base, $vxp-transition-color-base;
+    transition: margin get-css-var('transition-base'), get-css-var('transition-color');
 
     &,
     .vxp-icon {
-      color: $vxp-menu-color-icon;
+      color: get-css-var('menu-icon-color');
     }
 
-    #{$menu}--reduced & {
+    #{$self}--reduced & {
       margin: 0;
     }
 
-    #{$menu}--horizontal & {
+    #{$self}--horizontal & {
       margin-right: 6px;
     }
   }
@@ -236,22 +285,27 @@
     overflow: hidden;
     white-space: nowrap;
     opacity: 100%;
-    transition: width $vxp-transition-base, $vxp-transition-opacity-base;
+    transition: width get-css-var('transition-base'), get-css-var('transition-opacity');
 
-    #{$menu}--reduced & {
+    #{$self}--reduced & {
       width: 0;
       opacity: 0%;
     }
 
-    #{$menu}--horizontal & {
+    #{$self}--horizontal & {
       width: auto;
       margin-right: 8px;
+    }
+
+    #{$popper} & {
+      width: auto;
+      opacity: 100%;
     }
 
     #{$item}--no-icon & {
       width: 100%;
 
-      #{$menu}--horizontal & {
+      #{$self}--horizontal & {
         margin-right: 0;
       }
     }
@@ -260,24 +314,24 @@
   &__arrow {
     position: absolute;
     right: 1.6em;
-    color: $vxp-menu-color-arrow;
+    color: get-css-var('menu-arrow-color');
     opacity: 100%;
-    transition: $vxp-transition-opacity-base, $vxp-transition-transform-base;
+    transition: get-css-var('transition-opacity'), get-css-var('transition-transform');
 
     &--visible {
       transform: rotate(180deg);
     }
 
-    #{$menu}--reduced & {
+    #{$self}--reduced & {
       opacity: 0%;
     }
 
-    #{$menu}--dropdown &,
+    #{$self}--dropdown &,
     #{$label}--in-popper > & {
-      transform: rotate(-90deg);
+      right: 12px;
     }
 
-    #{$menu}--horizontal & {
+    #{$self}--horizontal & {
       position: relative;
       right: auto;
       margin-right: 4px;
@@ -288,15 +342,25 @@
         transform: rotate(180deg);
       }
     }
+
+    #{$popper} & {
+      opacity: 100%;
+      transform: rotate(-90deg);
+    }
   }
 
   &__list {
     padding-left: 0;
+    margin: 0;
 
     &::before,
     &::after {
       display: table;
       content: '';
+    }
+
+    #{$self}--dark & {
+      background-color: get-css-var('menu-group-bg-color-dark');
     }
 
     #{$popper} & {
@@ -306,17 +370,14 @@
       min-width: 12em;
       padding: 0.35em 0;
       user-select: none;
-      background-color: $vxp-menu-color-bg-base;
-      border-radius: $vxp-border-radius-base;
-      box-shadow: $vxp-box-shadow-base;
+      background-color: get-css-var('menu-bg-color');
+      border-radius: get-css-var('menu-popper-radius');
+      box-shadow: get-css-var('menu-popper-shadow');
 
       &--dark {
-        background-color: $vxp-menu-color-bg-dark;
+        background-color: get-css-var('menu-bg-color-dark');
+        box-shadow: get-css-var('menu-popper-shadow-dark');
       }
-    }
-
-    #{$menu}--dark & {
-      background-color: $vxp-menu-color-bg-list-dark;
     }
   }
 
@@ -330,6 +391,11 @@
 
       &__title {
         position: relative;
+        background-color: get-css-var('menu-bg-color');
+
+        #{$self}--dark & {
+          background-color: get-css-var('menu-bg-color-dark');
+        }
 
         &::before {
           position: absolute;
@@ -338,9 +404,9 @@
           width: 24px;
           height: 1px;
           content: '';
-          background-color: $vxp-menu-color-divider;
+          background-color: get-css-var('menu-d-color');
           opacity: 0%;
-          transition: $vxp-transition-opacity-base;
+          transition: get-css-var('transition-opacity');
           transform: translate(-50%, -50%);
         }
       }
@@ -348,11 +414,11 @@
       &__label {
         display: inline-block;
         padding: 0.35em 1.4em;
-        font-size: $vxp-font-size-secondary;
-        color: $vxp-menu-color-icon;
-        transition: $vxp-transition-opacity-base;
+        font-size: get-css-var('font-size-secondary');
+        color: get-css-var('menu-icon-color');
+        transition: get-css-var('transition-opacity');
 
-        #{$menu}--horizontal & {
+        #{$self}--horizontal & {
           display: none;
         }
       }
@@ -364,13 +430,13 @@
         width: 100%;
         padding: 0;
 
-        #{$menu}--horizontal & {
+        #{$self}--horizontal & {
           flex-direction: row;
           width: auto;
         }
       }
 
-      #{$menu}--reduced & {
+      #{$self}--reduced & {
         &__title {
           &::before {
             opacity: 100%;

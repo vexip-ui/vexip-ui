@@ -1,10 +1,34 @@
-@use 'sass:color';
+@use 'sass:map';
 
 @use '../design' as *;
 @use './checkbox.scss';
 @use './icon.scss';
 
+$tree: () !default;
+$tree: map.merge(
+  (
+    label-color: inherit,
+    label-color-hover: get-css-var('tree-label-color'),
+    label-color-selected: get-css-var('tree-label-color-hover'),
+    label-color-disabled: get-css-var('content-color-disabled'),
+    label-color-readonly: get-css-var('tree-label-color'),
+    label-bg-color: transparent,
+    label-bg-color-hover: get-css-var('color-primary-light-8'),
+    label-bg-color-selected: get-css-var('tree-label-bg-color-hover'),
+    label-bg-color-disabled: get-css-var('tree-label-bg-color'),
+    label-bg-color-readonly: get-css-var('tree-label-bg-color'),
+    label-radius: get-css-var('border-radius-base'),
+    arrow-size: 22px,
+    indicator-color: get-css-var('color-primary-base')
+  ),
+  $tree
+);
+
 .vxp-tree {
+  &-vars {
+    @include define-preset-values('tree', $tree);
+  }
+
   @include basis;
 
   position: relative;
@@ -31,30 +55,35 @@
   &__label {
     display: inline-block;
     padding: 0 0.3em;
+    color: get-css-var('tree-label-color');
     cursor: pointer;
-    border-radius: $vxp-border-radius-small;
-    transition: $vxp-transition-background-base;
+    background-color: get-css-var('tree-label-bg-color');
+    border-radius: get-css-var('tree-label-radius');
+    transition: get-css-var('transition-color'), get-css-var('transition-background');
 
     &:hover {
-      background-color: color.mix($vxp-color-white, $vxp-color-primary, 85%);
+      color: get-css-var('tree-label-color-hover');
+      background-color: get-css-var('tree-label-bg-color-hover');
     }
 
     &--selected,
     &--selected:hover {
-      background-color: color.mix($vxp-color-white, $vxp-color-primary, 85%);
+      color: get-css-var('tree-label-color-selected');
+      background-color: get-css-var('tree-label-bg-color-selected');
     }
 
     &--disabled,
     &--disabled:hover {
-      color: $vxp-color-content-disabled;
+      color: get-css-var('tree-label-color-disabled');
+      cursor: default;
+      background-color: get-css-var('tree-label-bg-color-disabled');
     }
 
-    &--disabled,
-    &--disabled:hover,
     &--readonly,
     &--readonly:hover {
+      color: get-css-var('tree-label-color-readonly');
       cursor: default;
-      background-color: transparent;
+      background-color: get-css-var('tree-label-bg-color-readonly');
     }
 
     &--is-floor,
@@ -67,14 +96,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 22px;
-    height: 22px;
-
-    // padding: 6px;
-    // margin-right: 0.2em;
+    width: get-css-var('tree-arrow-size');
+    height: get-css-var('tree-arrow-size');
     cursor: pointer;
-
-    // transition: $vxp-transition-transform-base;
 
     &--expanded .vxp-icon {
       transform: rotate(90deg);
@@ -95,6 +119,7 @@
     right: 0;
     left: 0;
     height: 1px;
-    background-color: $vxp-color-primary;
+    will-change: top, left;
+    background-color: get-css-var('tree-indicator-color');
   }
 }

@@ -1,6 +1,5 @@
-import execa from 'execa'
 import minimist from 'minimist'
-import { logger, specifyComponent, serveComponents } from './utils'
+import { logger, run, specifyComponent, serveComponents } from './utils'
 
 const args = minimist(process.argv.slice(2))
 
@@ -16,7 +15,7 @@ main().catch(error => {
 async function main() {
   const target = await specifyComponent(args, serveComponents)
 
-  await execa('vite', ['serve', '--force'], {
+  await run('vite', ['serve', '--force'], {
     stdio: 'inherit',
     env: {
       NODE_ENV: prodMode ? 'production' : 'development',

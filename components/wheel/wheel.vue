@@ -125,7 +125,7 @@ export default defineComponent({
       return Array.from(items.value)
     })
     const className = computed(() => {
-      return [prefix, `${prefix}--${props.horizontal ? 'horizontal' : 'vertical'}`]
+      return [prefix, `${prefix}-vars`, `${prefix}--${props.horizontal ? 'horizontal' : 'vertical'}`]
     })
     const scrollStyle = computed(() => {
       if (props.horizontal) {
@@ -188,12 +188,13 @@ export default defineComponent({
     const computeSize = debounceMinor(() => {
       nextTick(() => {
         const horizontal = props.horizontal
-        const item = itemList.value[0]
 
-        if (item && item.el) {
-          targetWidth.value = item.el.offsetWidth
-          targetHeight.value = item.el.offsetHeight
-        }
+        itemList.value.forEach(item => {
+          if (item && item.el) {
+            targetWidth.value = Math.max(targetWidth.value, item.el.offsetWidth)
+            targetHeight.value = Math.max(targetHeight.value, item.el.offsetHeight)
+          }
+        })
 
         const candidate = props.candidate
         const showCount = 2 * candidate + 1

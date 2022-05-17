@@ -23,28 +23,81 @@
     </Checkbox>
     <Checkbox v-for="item in items" :key="item" :label="item"></Checkbox>
   </CheckboxGroup>
+  <br />
+  <br />
+  <template v-for="state in states" :key="state">
+    <CheckboxGroup :values="[items[0], items[3]]">
+      <Checkbox
+        v-for="(item, index) in items"
+        :key="item"
+        :state="state"
+        :label="item"
+        :disabled="index === 2 || index === 3"
+        :control="index === 1"
+        :partial="index === 1"
+      ></Checkbox>
+    </CheckboxGroup>
+    <br />
+  </template>
+  <br />
+  <template v-for="state in states" :key="state">
+    <CheckboxGroup :values="[items[0], items[3]]">
+      <Checkbox
+        v-for="(item, index) in items"
+        :key="item"
+        border
+        :state="state"
+        :label="item"
+        :disabled="index === 2 || index === 3"
+        :control="index === 1"
+        :partial="index === 1"
+      ></Checkbox>
+    </CheckboxGroup>
+    <br />
+    <br />
+  </template>
+  <br />
+  <template v-for="size in sizes" :key="size">
+    <CheckboxGroup :values="[items[0], items[3]]">
+      <Checkbox
+        v-for="(item, index) in items"
+        :key="item"
+        :label="item"
+        :size="size"
+        :disabled="index === 2 || index === 3"
+        :control="index === 1"
+        :partial="index === 1"
+      ></Checkbox>
+    </CheckboxGroup>
+    <br />
+  </template>
+  <br />
+  <template v-for="size in sizes" :key="size">
+    <CheckboxGroup :values="[items[0], items[3]]">
+      <Checkbox
+        v-for="(item, index) in items"
+        :key="item"
+        border
+        :label="item"
+        :size="size"
+        :disabled="index === 2 || index === 3"
+        :control="index === 1"
+        :partial="index === 1"
+      ></Checkbox>
+    </CheckboxGroup>
+    <br />
+    <br />
+  </template>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { Checkbox } from '..'
 import { CheckboxGroup } from '@/components/checkbox-group'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Checkbox,
-    CheckboxGroup
-  },
-  setup() {
-    const checked = ref(false)
-    const values = ref<string[]>(['广州'])
-
-    return {
-      checked,
-      values,
-      items: ['北京', '上海', '广州', '深圳']
-    }
-  }
-})
+const checked = ref(false)
+const values = ref<string[]>(['广州'])
+const items = ['北京', '上海', '广州', '深圳']
+const states = ['default', 'success', 'error', 'warning'] as const
+const sizes = ['small', 'default', 'large'] as const
 </script>

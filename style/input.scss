@@ -1,13 +1,202 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './icon.scss';
 
-.vxp-input {
-  @include basis;
-  @include input-handler;
+$states: success, error, warning;
 
-  $input: &;
+$input: () !default;
+$input: map.merge(
+  (
+    bg-color: get-css-var('fill-color-base'),
+    bg-color-disabled: get-css-var('fill-color-humble'),
+    b-color: get-css-var('border-color-base'),
+    b-color-hover: get-css-var('color-primary-light-1'),
+    b-color-focus: get-css-var('input-b-color-hover'),
+    s-color-focus: get-css-var('color-primary-light-8'),
+    shadow-focus: get-css-var('box-shadow-focus') get-css-var('input-s-color-focus'),
+    placeholder-color: get-css-var('content-color-placeholder'),
+    control-color: get-css-var('content-color-base'),
+    control-color-disabled: get-css-var('content-color-disabled'),
+    icon-color: get-css-var('content-color-secondary'),
+    icon-color-hover: get-css-var('color-primary-base'),
+    icon-color-disabled: get-css-var('input-control-color-disabled'),
+    before-bg-color: get-css-var('fill-color-background'),
+    after-bg-color: get-css-var('fill-color-background'),
+    line-height: get-css-var('line-height-base'),
+    border: get-css-var('border-shape') get-css-var('input-b-color'),
+    radius: get-css-var('border-radius-base'),
+    count-color: get-css-var('content-color-secondary'),
+    count-color-disbaled: get-css-var('input-control-color-disabled'),
+    count-font-size: get-css-var('font-size-secondary'),
+    count-line-height: get-css-var('line-height-secondary'),
+    small-height: 1.7em,
+    small-v-padding: 0.1em,
+    small-h-padding: 0.6em,
+    small-padding: get-css-var('input-small-v-padding') get-css-var('input-small-h-padding'),
+    default-height: 2.1em,
+    default-v-padding: 0.3em,
+    default-h-padding: 0.6em,
+    default-padding: get-css-var('input-default-v-padding') get-css-var('input-default-h-padding'),
+    large-height: 2.5em,
+    large-v-padding: 0.5em,
+    large-h-padding: 0.6em,
+    large-padding: get-css-var('input-large-v-padding') get-css-var('input-large-h-padding')
+  ),
+  $input
+);
+
+@mixin define-input-style($style-map) {
+  @include define-preset-style('input', $style-map);
+}
+
+@mixin handler {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  background-color: get-css-var('input-bg-color');
+  border: get-css-var('input-border');
+  border-radius: get-css-var('input-radius');
+  outline: 0;
+  transition:
+    get-css-var('transition-background'),
+    get-css-var('transition-border'),
+    get-css-var('transition-box-shadow');
+
+  &:hover {
+    border-color: get-css-var('input-b-color-hover');
+  }
+
+  &:focus,
+  &--focused {
+    z-index: 2;
+    border-color: get-css-var('input-b-color-focus');
+    box-shadow: get-css-var('input-shadow-focus');
+  }
+
+  @each $state in $states {
+    // 提升 state 样式的级别，以防止引入的先后顺序导致样式丢失
+    &#{&}--#{$state} {
+      @include define-input-style(
+        (
+          b-color: 'color' $state 'light-1',
+          b-color-hover: 'color' $state 'light-1',
+          s-color-focus: 'color' $state 'light-8'
+        )
+      );
+    }
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    background-color: get-css-var('input-bg-color-disabled');
+
+    &,
+    &:hover,
+    &:focus {
+      border-color: get-css-var('border-color-base');
+      box-shadow: none;
+    }
+
+    %disabled-item {
+      pointer-events: none;
+      cursor: not-allowed;
+
+      &,
+      .vxp-icon {
+        color: get-css-var('input-control-color-disabled');
+      }
+    }
+  }
+
+  &--disabled#{&}--focused {
+    border-color: get-css-var('border-color-base');
+    box-shadow: none;
+  }
+
+  &__control {
+    width: 100%;
+    height: get-css-var('input-default-height');
+    padding: get-css-var('input-default-padding');
+    font-size: inherit;
+    line-height: get-css-var('input-line-height');
+    color: get-css-var('input-control-color');
+    background-color: transparent;
+    border: 0;
+    border-radius: get-css-var('input-radius');
+    outline: 0;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &::placeholder {
+      color: get-css-var('input-placeholder-color');
+    }
+
+    @extend %disabled-item;
+  }
+
+  &--small &__control {
+    height: get-css-var('input-small-height');
+    padding: get-css-var('input-small-padding');
+  }
+
+  &--large &__control {
+    height: get-css-var('input-large-height');
+    padding: get-css-var('input-large-padding');
+  }
+
+  @at-root {
+    %icon {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2em;
+      height: 100%;
+      user-select: none;
+
+      &,
+      .vxp-icon {
+        color: get-css-var('input-icon-color');
+      }
+
+      @extend %disabled-item;
+    }
+  }
+
+  &__icon {
+    &--prefix {
+      @extend %icon;
+
+      left: 0;
+    }
+
+    &--suffix {
+      @extend %icon;
+
+      right: 0;
+    }
+  }
+
+  &__clear {
+    @extend %icon;
+
+    right: 0;
+    cursor: pointer;
+  }
+}
+
+.vxp-input {
+  &-vars {
+    @include define-preset-values('input', $input);
+  }
+
+  $self: &;
   $wrapper: #{&}-wrapper;
-  $radius: $vxp-input-border-radius;
+  $radius: get-css-var('input-radius');
 
   &-wrapper {
     @include basis;
@@ -17,6 +206,9 @@
     align-items: center;
     width: 100%;
   }
+
+  @include basis;
+  @include handler;
 
   &-wrapper & {
     border-radius: 0;
@@ -30,23 +222,13 @@
     border-radius: $radius 0 0 $radius;
   }
 
-  &--small &__control {
-    height: 1.7em;
-    padding: 0.1em 0.6em;
-  }
-
-  &--large &__control {
-    height: 2.5em;
-    padding: 0.5em 0.6em;
-  }
-
-  &__overlay {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    width: 100%;
-    overflow: hidden;
-  }
+  // &__overlay {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   align-items: center;
+  //   width: 100%;
+  //   overflow: hidden;
+  // }
 
   &__icon {
     &--password {
@@ -62,7 +244,7 @@
 
       &,
       .vxp-icon {
-        color: $vxp-input-color-icon;
+        color: get-css-var('input-icon-color');
       }
 
       @extend %disabled-item;
@@ -73,12 +255,18 @@
     position: absolute;
     top: 50%;
     right: 7px;
-    margin-top: -1px;
-    font-size: $vxp-input-font-size-count;
-    line-height: 1;
+    margin-top: -0.5px;
+    font-size: get-css-var('input-count-font-size');
+    line-height: get-css-var('input-count-line-height');
+    color: get-css-var('input-count-color');
     pointer-events: none;
     user-select: none;
+    transition: get-css-var('transition-color');
     transform: translateY(-50%);
+  }
+
+  &--disabled &__count {
+    color: get-css-var('input-count-color-disbaled');
   }
 
   &__before,
@@ -86,19 +274,21 @@
     position: relative;
     display: flex;
     align-items: center;
-    height: 2.2em;
-    padding: 0 0.6em;
-    border: $vxp-input-border;
+    height: calc(get-css-var('input-default-height') + get-css-var('border-width') * 2);
+    padding: 0 get-css-var('input-default-h-padding');
+    border: get-css-var('input-border');
 
     #{$wrapper}--small & {
-      height: 1.8em;
+      padding: 0 get-css-var('input-small-h-padding');
+      height: calc(get-css-var('input-small-height') + get-css-var('border-width') * 2);
     }
 
     #{$wrapper}--large & {
-      height: 2.6em;
+      padding: 0 get-css-var('input-large-h-padding');
+      height: calc(get-css-var('input-large-height') + get-css-var('border-width') * 2);
     }
 
-    #{$input} {
+    #{$self} {
       padding: 0;
       background-color: transparent;
       border-color: transparent;
@@ -118,13 +308,13 @@
   }
 
   &__before {
-    background-color: $vxp-input-color-bg-before;
+    background-color: get-css-var('input-before-bg-color');
     border-right: 0;
     border-radius: $radius 0 0 $radius;
   }
 
   &__after {
-    background-color: $vxp-input-color-bg-after;
+    background-color: get-css-var('input-after-bg-color');
     border-left: 0;
     border-radius: 0 $radius $radius 0;
   }

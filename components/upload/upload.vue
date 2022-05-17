@@ -214,6 +214,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
         `${prefix}--type-${props.listType}`,
         {
           [`${prefix}--multiple`]: props.multiple,

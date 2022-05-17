@@ -13,10 +13,6 @@
     height: 100%;
     overflow: scroll;
     vertical-align: top;
-    will-change: transform;
-    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-    transition-duration: 140ms;
-    transition-property: transform;
 
     &::before,
     &::after {
@@ -38,10 +34,10 @@
   }
 
   &--both &__bar--horizontal {
-    width: calc(100% - 5px);
+    width: calc(100% - get-css-var('scrollbar-width') + 1px);
   }
 
   &--both &__bar--vertical {
-    height: calc(100% - 5px);
+    height: calc(100% - get-css-var('scrollbar-width') + 1px);
   }
 }

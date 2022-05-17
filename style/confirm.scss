@@ -1,7 +1,21 @@
+@use 'sass:map';
+
 @use '../design' as *;
 @use './modal.scss';
 
+$confirm: () !default;
+$confirm: map.merge(
+  (
+    icon-color: get-css-var('color-warning-base')
+  ),
+  $confirm
+);
+
 .vxp-confirm {
+  &-vars {
+    @include define-preset-values('confirm', $confirm);
+  }
+
   @include basis;
 
   &__body {
@@ -17,7 +31,7 @@
     align-items: center;
     justify-content: center;
     margin-right: 0.3em;
-    color: $vxp-color-warning;
+    color: get-css-var('confirm-icon-color');
   }
 
   &__actions {

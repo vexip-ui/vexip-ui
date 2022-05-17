@@ -59,7 +59,7 @@
         <div
           v-show="currentVisible"
           ref="popper"
-          :class="`${prefixCls}__popper`"
+          :class="[`${prefixCls}__popper`, `${prefixCls}-vars`]"
           @click.stop
         >
           <div
@@ -287,10 +287,13 @@ export default defineComponent({
       isDrop: true
     })
     const { isHover } = useHover(reference)
+    const locale = useLocaleConfig('select')
 
     const className = computed(() => {
       return {
         [prefix]: true,
+        'vxp-input-vars': true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--focused`]: !props.disabled && currentVisible.value,
         [`${prefix}--focused`]: !props.disabled && currentVisible.value,
         [`${prefix}--multiple`]: props.multiple,
@@ -336,7 +339,7 @@ export default defineComponent({
       return Array.from(optionStates.value).filter(state => !state.hidden).length
     })
     const hasEmptyTip = computed(() => {
-      return !!(props.emptyText || slots.empty) && !effectiveCount.value
+      return !!(props.emptyText || slots.empty || locale.empty) && !effectiveCount.value
     })
 
     provide<SelectState>(
@@ -534,7 +537,7 @@ export default defineComponent({
 
     return {
       prefixCls: prefix,
-      locale: useLocaleConfig('select'),
+      locale,
       currentVisible,
       currentValue,
       currentLabel,

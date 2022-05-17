@@ -8,7 +8,7 @@
   >
     <div
       ref="reference"
-      :class="[`${prefix}__trigger`, currentVisible ? `${prefix}__trigger--selected` : '']"
+      :class="[`${prefix}__trigger`, currentVisible ? `${prefix}__trigger--active` : '']"
       @click="handleTriggerClick"
     >
       <slot></slot>
@@ -19,7 +19,7 @@
           <div
             v-show="currentVisible"
             ref="popper"
-            :class="[`${prefix}__popper`, isNested ? `${prefix}__popper--nested` : null, dropClass]"
+            :class="[`${prefix}__popper`, `${prefix}-vars`, isNested ? `${prefix}__popper--nested` : null, dropClass]"
             @mouseenter="handleTriggerEnter"
             @mouseleave="handleTriggerLeave"
           >
@@ -136,6 +136,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--visible`]: currentVisible.value
       }
     })

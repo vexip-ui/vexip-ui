@@ -15,9 +15,18 @@
       </Split>
     </template>
     <template #right>
-      <div style="padding: 10px;">
-        右侧面板
-      </div>
+      <Split vertical can-full style="padding: 10px;">
+        <template #top>
+          <div style="padding: 10px;">
+            右上侧面板
+          </div>
+        </template>
+        <template #bottom>
+          <div style="padding: 10px;">
+            右下侧面板
+          </div>
+        </template>
+      </Split>
     </template>
   </Split>
   <p>

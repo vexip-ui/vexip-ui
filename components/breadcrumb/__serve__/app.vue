@@ -4,31 +4,28 @@
       {{ label }}
       <Icon name="caret-right"></Icon>
     </template>
-    <BreadcrumbItem>此电脑</BreadcrumbItem>
-    <BreadcrumbItem>文档 (D:)</BreadcrumbItem>
-    <BreadcrumbItem>vexip-ui</BreadcrumbItem>
+    <BreadcrumbItem v-for="item in items" :key="item">
+      {{ item }}
+    </BreadcrumbItem>
+  </Breadcrumb>
+  <br />
+  <Breadcrumb border>
+    <template #separator="{ label }">
+      {{ label }}
+      <Icon name="caret-right"></Icon>
+    </template>
+    <BreadcrumbItem v-for="item in items" :key="item">
+      {{ item }}
+    </BreadcrumbItem>
   </Breadcrumb>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { Icon } from '@/components/icon'
-import Breadcrumb from '../breadcrumb.vue'
-import BreadcrumbItem from '../breadcrumb-item.vue'
+import { Breadcrumb } from '..'
+import { BreadcrumbItem } from '@/components/breadcrumb-item'
 
 import '@/common/icons/caret-right'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Breadcrumb,
-    BreadcrumbItem,
-    Icon
-  },
-  data() {
-    return {}
-  }
-})
+const items = ['此电脑', '文档 (D:)', 'ui-library', 'vexip-ui']
 </script>
-
-<style lang="scss"></style>

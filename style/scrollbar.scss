@@ -1,10 +1,27 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$scrollbar: () !default;
+$scrollbar: map.merge(
+  (
+    move-duration: 140ms,
+    move-timing: cubic-bezier(0.165, 0.84, 0.44, 1),
+    width: 6px,
+    bar-bg-color: get-css-var('color-primary-light-6'),
+    track-bg-color: get-css-var('color-primary-light-9')
+  ),
+  $scrollbar
+);
+
 .vxp-scrollbar {
+  &-vars {
+    @include define-preset-values('scrollbar', $scrollbar);
+  }
+
   @include basis;
 
   $bar: #{&}__bar;
-  $timing: cubic-bezier(0.165, 0.84, 0.44, 1);
 
   position: absolute;
   z-index: 10;
@@ -18,7 +35,7 @@
   &--bottom {
     right: 0;
     left: 0;
-    height: 6px;
+    height: get-css-var('scrollbar-width');
 
     #{$bar} {
       height: 100%;
@@ -29,7 +46,7 @@
   &--left {
     top: 0;
     bottom: 0;
-    width: 6px;
+    width: get-css-var('scrollbar-width');
 
     #{$bar} {
       width: 100%;
@@ -59,9 +76,9 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
-    background-color: $vxp-scrollbar-color-bg-track;
+    background-color: get-css-var('scrollbar-track-bg-color');
     border-radius: 3px;
-    transition: $vxp-transition-opacity-base;
+    transition: get-css-var('transition-opacity');
 
     &--disabled {
       pointer-events: none;
@@ -73,30 +90,27 @@
     opacity: 0%;
   }
 
-  &--active &__track {
-    opacity: 60%;
-
-    &:hover {
-      opacity: 60%;
-    }
-  }
-
+  &--active &__track,
   &--tracking &__track,
   &--scrolling &__track {
     opacity: 60%;
   }
 
+  &--active:hover {
+    opacity: 60.0001%;
+  }
+
   &__bar {
     position: absolute;
     cursor: pointer;
-    background-color: $vxp-scrollbar-color-bg-bar;
+    background-color: get-css-var('scrollbar-bar-bg-color');
     border-radius: 3px;
     will-change: transform;
     transition:
-      width $vxp-transition-base,
-      height $vxp-transition-base,
-      $vxp-transition-opacity-base,
-      transform 140ms $timing;
+      width get-css-var('transition-base'),
+      height get-css-var('transition-base'),
+      get-css-var('transition-opacity'),
+      transform get-css-var('scrollbar-move-duration') get-css-var('scrollbar-move-timing');
   }
 
   &--fade &__bar {

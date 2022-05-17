@@ -1,22 +1,48 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$card: () !default;
+$card: map.merge(
+  (
+    bg-color: get-css-var('fill-color-base'),
+    b-color: get-css-var('border-color-base'),
+    border: get-css-var('border-shape') get-css-var('card-b-color'),
+    radius: get-css-var('border-radius-base'),
+    s-color: get-css-var('card-b-color'),
+    shadow: get-css-var('box-shadow-shape') get-css-var('card-s-color'),
+    d-color: get-css-var('border-color-light-2'),
+    divider: get-css-var('border-shape') get-css-var('card-d-color'),
+    title-font-size: get-css-var('font-size-primary'),
+    body-v-padding: 1em,
+    body-h-padding: 1.2em,
+    body-padding: get-css-var('card-body-v-padding') get-css-var('card-body-h-padding')
+  ),
+  $card
+);
+
 .vxp-card {
+  &-vars {
+    @include define-preset-values('card', $card);
+  }
+
   @include basis;
 
   display: flex;
   flex-direction: column;
-  background-color: $vxp-color-fill;
-  border: $vxp-border-base;
-  border-radius: $vxp-border-radius-base;
-  transition: $vxp-transition-box-shadow-base;
+  background-color: get-css-var('card-bg-color');
+  border: get-css-var('card-border');
+  border-radius: get-css-var('card-radius');
+  box-shadow: 0 0 0 transparent;
+  transition: get-css-var('transition-box-shadow');
 
   &--shadow-always {
-    box-shadow: $vxp-box-shadow-base;
+    box-shadow: get-css-var('card-shadow');
   }
 
   &--shadow-hover {
     &:hover {
-      box-shadow: $vxp-box-shadow-base;
+      box-shadow: get-css-var('card-shadow');
     }
   }
 
@@ -25,14 +51,14 @@
     align-items: center;
     justify-content: space-between;
     padding: 1em 1.2em;
-    border-bottom: $vxp-border-appearance $vxp-color-border-light-2;
+    border-bottom: get-css-var('card-divider');
   }
 
   &__title {
-    font-size: $vxp-font-size-primary;
+    font-size: get-css-var('card-title-font-size');
   }
 
   &__content {
-    padding: 1em 1.2em;
+    padding: get-css-var('card-body-padding');
   }
 }

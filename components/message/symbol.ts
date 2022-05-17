@@ -8,15 +8,14 @@ export interface MessageOptions extends Record<string, unknown> {
   content?: string,
   key?: Key,
   icon?: string | Record<string, unknown> | (() => any),
+  iconColor?: string,
   type?: MessageType,
   duration?: number,
+  className?: string | Record<string, unknown>,
+  background?: boolean | string,
+  color?: boolean | string,
+  closable?: boolean,
   renderer?: () => any
-  // className: string | any[] | { [x: string]: any }
-  // background?: boolean
-  // color?: boolean
-  // closable?: boolean
-  // icon?: string
-  // iconColor?: string
 }
 
 export interface MessageInstance extends ComponentPublicInstance {

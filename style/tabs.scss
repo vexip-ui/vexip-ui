@@ -14,7 +14,7 @@
   &__main {
     position: relative;
     display: flex;
-    transition: $vxp-transition-transform-base;
+    transition: get-css-var('transition-transform');
 
     &--transition {
       pointer-events: none;

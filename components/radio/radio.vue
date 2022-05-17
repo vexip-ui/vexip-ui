@@ -56,9 +56,6 @@ const props = useConfiguredProps('radio', {
 
 export default defineComponent({
   name: 'Radio',
-  inject: {
-    validateField: { default: () => noop }
-  },
   props,
   emits: ['on-change', 'update:value'],
   setup(props, { emit }) {
@@ -74,6 +71,7 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        `${prefix}-vars`,
         {
           [`${prefix}--checked`]: currentValue.value === props.label,
           [`${prefix}--disabled`]: isDisabled.value,

@@ -1,6 +1,24 @@
+@use 'sass:map';
+
 @use '../design' as *;
 
+$form: () !default;
+$form: map.merge(
+  (
+    error-color: get-css-var('color-error-light-1'),
+    error-shadow: get-css-var('box-shaodw-focus') get-css-var('color-error-light-8'),
+    asterisk-color: get-css-var('color-error-base'),
+    asterisk-family: #{SimSun, sans-serif},
+    tip-color: get-css-var('color-error-base')
+  ),
+  $form
+);
+
 .vxp-form {
+  &-vars {
+    @include define-preset-values('form', $form);
+  }
+
   @include basis;
 
   position: relative;
@@ -32,51 +50,24 @@
         &:hover,
         &:focus,
         &--focused {
-          border-color: $vxp-color-error-light-1;
+          border-color: get-css-var('form-error-color');
         }
 
         &:focus,
         &--focused {
-          box-shadow: $vxp-box-shadow-fouced-appearance rgba($vxp-color-error, 0.2);
+          box-shadow: get-css-var('form-error-shadow');
         }
       }
-
-      // .#{$checkbox} {
-      //   &__signal,
-      //   &:hover .#{$checkbox}__signal {
-      //     border-color: $vxp-color-error;
-      //   }
-
-      //   &--checked .#{$checkbox}__signal {
-      //     background-color: $vxp-color-error;
-      //     border-color: $vxp-color-error;
-      //   }
-      // }
 
       .vxp-color-picker {
         &__control {
-          border-color: $vxp-color-error-light-1;
+          border-color: get-css-var('form-error-color');
         }
 
         &__trigger--visible .vxp-color-picker__control {
-          box-shadow: $vxp-box-shadow-fouced-appearance rgba($vxp-color-error, 0.2);
+          box-shadow: get-css-var('form-error-shadow');
         }
       }
-
-      // .#{$radio} {
-      //   &__signal,
-      //   &:hover .#{$radio}__signal {
-      //     border-color: $vxp-color-error;
-      //   }
-
-      //   &--checked .#{$radio}__signal {
-      //     border-color: $vxp-color-error;
-
-      //     &::after {
-      //       background-color: $vxp-color-error;
-      //     }
-      //   }
-      // }
     }
   }
 
@@ -123,8 +114,8 @@
 
   @mixin asterisk {
     display: inline-block;
-    font-family: SimSun, sans-serif;
-    color: $vxp-color-error;
+    font-family: get-css-var('form-asterisk-family');
+    color: get-css-var('form-asterisk-color');
     content: '*';
     user-select: none;
   }
@@ -152,7 +143,7 @@
     top: 100%;
     left: 0;
     padding-top: 3px;
-    color: $vxp-color-error;
+    color: get-css-var('form-tip-color');
     white-space: nowrap;
     user-select: none;
   }

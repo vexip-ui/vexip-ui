@@ -119,6 +119,7 @@
               v-if="listType === 'card' || file.status !== status.UPLOADING"
               :class="`${prefix}__actions`"
             >
+              <div v-if="listType === 'thumbnail'" :class="`${prefix}__mask`"></div>
               <div
                 :class="[
                   `${prefix}__icon`,

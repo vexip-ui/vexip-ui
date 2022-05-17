@@ -70,7 +70,7 @@ export default defineComponent({
     const fieldSet = ref(new Set<FieldOptions>())
 
     const className = computed(() => {
-      return [prefix, `${prefix}--label-${props.labelPosition}`]
+      return [prefix, `${prefix}-vars`, `${prefix}--label-${props.labelPosition}`]
     })
 
     provide(FORM_PROPS, props)

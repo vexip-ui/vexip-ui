@@ -46,6 +46,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [prefix]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}--pending`]: props.pending,
         [`${prefix}--both-sides`]: props.bothSides
       }

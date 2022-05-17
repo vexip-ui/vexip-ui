@@ -85,7 +85,7 @@
         <div
           v-show="currentVisible"
           ref="popper"
-          :class="`${prefixCls}__popper`"
+          :class="[`${prefixCls}__popper`, `${prefixCls}-vars`]"
           @click.stop="handleFocused"
         >
           <div :class="`${prefixCls}__pane`">
@@ -346,6 +346,8 @@ export default defineComponent({
     const className = computed(() => {
       return [
         prefix,
+        'vxp-input-vars',
+        `${prefix}-vars`,
         {
           [`${prefix}--disabled`]: props.disabled,
           [`${prefix}--${props.size}`]: props.size !== 'default',
