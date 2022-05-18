@@ -3,8 +3,6 @@
 @use '../design' as *;
 @use './icon.scss';
 
-$states: success, error, warning;
-
 $input: () !default;
 $input: map.merge(
   (
@@ -74,6 +72,8 @@ $input: map.merge(
     border-color: get-css-var('input-b-color-focus');
     box-shadow: get-css-var('input-shadow-focus');
   }
+
+  $states: success, error, warning;
 
   @each $state in $states {
     // 提升 state 样式的级别，以防止引入的先后顺序导致样式丢失
@@ -279,13 +279,13 @@ $input: map.merge(
     border: get-css-var('input-border');
 
     #{$wrapper}--small & {
-      padding: 0 get-css-var('input-small-h-padding');
       height: calc(get-css-var('input-small-height') + get-css-var('border-width') * 2);
+      padding: 0 get-css-var('input-small-h-padding');
     }
 
     #{$wrapper}--large & {
-      padding: 0 get-css-var('input-large-h-padding');
       height: calc(get-css-var('input-large-height') + get-css-var('border-width') * 2);
+      padding: 0 get-css-var('input-large-h-padding');
     }
 
     #{$self} {

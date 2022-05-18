@@ -1,6 +1,6 @@
 import { defineComponent, h, ref, computed } from 'vue'
 import { useConfiguredProps } from '@vexip-ui/config'
-import { iconMap } from './register'
+import { iconMap, register } from './register'
 
 import type { PropType } from 'vue'
 
@@ -57,6 +57,7 @@ const props = useConfiguredProps('icon', {
 
 export default defineComponent({
   name: 'Icon',
+  register,
   props,
   setup(props, { attrs, slots }) {
     const prefix = 'vxp-icon'

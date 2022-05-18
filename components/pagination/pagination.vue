@@ -147,6 +147,7 @@ import { Option } from '@/components/option'
 import { Select } from '@/components/select'
 import { useConfiguredProps, useLocaleConfig, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
 import { isFunction, range } from '@vexip-ui/utils'
+import { PaginationMode } from './symbol'
 
 import '@/common/icons/chevron-right'
 import '@/common/icons/chevron-left'
@@ -155,12 +156,6 @@ import '@/common/icons/angle-double-left'
 import '@/common/icons/ellipsis-h'
 
 import type { PropType } from 'vue'
-
-export enum PaginationMode {
-  LEFT,
-  CENTER,
-  RIGHT
-}
 
 const props = useConfiguredProps('pagination', {
   size: createSizeProp(),

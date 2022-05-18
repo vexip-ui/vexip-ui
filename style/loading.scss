@@ -2,8 +2,6 @@
 
 @use '../design' as *;
 
-$type: success error warning;
-
 $loading: () !default;
 $loading: map.merge(
   (
@@ -33,6 +31,8 @@ $loading: map.merge(
     will-change: transform;
     transition: get-css-var('transition-background'), get-css-var('transition-transform');
   }
+
+  $types: success error warning;
 
   @each $type in $types {
     &--#{$type} &__filler {

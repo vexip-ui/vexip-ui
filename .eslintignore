@@ -1,6 +1,9 @@
 assets/
+icons/
 dist/
+es/
 lib/
+css/
 node_modules/
 public/
 scripts/

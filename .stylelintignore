@@ -1,6 +1,8 @@
 dist/
+es/
 lib/
 icons/
+css/
 public/
 node_modules/
 *.js

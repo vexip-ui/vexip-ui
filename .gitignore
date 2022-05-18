@@ -5,7 +5,9 @@ temp
 .dev
 coverage
 /icons
+/es
 /lib
+/css
 
 .yarn/cache
 .yarn/unplugged

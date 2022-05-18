@@ -168,6 +168,13 @@ module.exports = {
         defineEmits: 'readonly',
         defineExpose: 'readonly'
       }
+    },
+    {
+      files: ['example/**'],
+      globals: {
+        __DEMOS__: 'readonly',
+        __TARGET__: 'readonly'
+      }
     }
   ],
   globals: {

@@ -100,17 +100,6 @@ $color-map: map.deep-merge(
   }
 }
 
-:root {
-  @include define-css-var('color-black', $color-black);
-  @include define-css-var('color-white', $color-white);
-
-  @each $type in $types {
-    @include define-level-colors($type, 9, 'light', $color-white);
-    @include define-level-colors($type, 2, 'dark', $color-black);
-    @include define-type-color($type);
-  }
-}
-
 $content-color-map: () !default;
 $content-color-map: map.merge(
   (
@@ -124,10 +113,6 @@ $content-color-map: map.merge(
   ),
   $content-color-map
 );
-
-:root {
-  @include define-preset-values('content-color', $content-color-map);
-}
 
 $border-color-map: () !default;
 $border-color-map: map.merge(
@@ -145,21 +130,6 @@ $border-width: 1px !default;
 $border-style: solid !default;
 $border-shape: get-css-var('border-width') get-css-var('border-style') !default;
 
-:root {
-  @include define-preset-values('border-color', $border-color-map);
-
-  @include define-css-var('border-width', $border-width);
-  @include define-css-var('border-style', $border-style);
-  @include define-css-var('border-shape', $border-shape);
-
-  @each $name in map.keys($border-color-map) {
-    @include define-css-var(
-      ('border', $name),
-      get-css-var('border-shape') get-css-var('border-color', $name)
-    );
-  }
-}
-
 $fill-color-map: () !default;
 $fill-color-map: map.merge(
   (
@@ -174,10 +144,6 @@ $fill-color-map: map.merge(
   $fill-color-map
 );
 
-:root {
-  @include define-preset-values('fill-color', $fill-color-map);
-}
-
 $font-size-map: () !default;
 $font-size-map: map.merge(
   (
@@ -188,10 +154,6 @@ $font-size-map: map.merge(
   $font-size-map
 );
 
-:root {
-  @include define-preset-values('font-size', $font-size-map);
-}
-
 $line-height-map: () !default;
 $line-height-map: map.merge(
   (
@@ -200,10 +162,6 @@ $line-height-map: map.merge(
   ),
   $line-height-map
 );
-
-:root {
-  @include define-preset-values('line-height', $line-height-map);
-}
 
 $border-radius-map: () !default;
 $border-radius-map: map.merge(
@@ -215,10 +173,6 @@ $border-radius-map: map.merge(
   $border-radius-map
 );
 
-:root {
-  @include define-preset-values('border-radius', $border-radius-map);
-}
-
 $box-shadow-x: 0 !default;
 $box-shadow-y: 0 !default;
 $box-shadow-blur: 4px !default;
@@ -228,17 +182,6 @@ $box-shadow-base: get-css-var('box-shadow-shape') get-css-var('border-color-base
 
 $box-shadow-border: 0 0 0 1px !default;
 $box-shadow-focus: 0 0 2px 2px !default;
-
-:root {
-  @include define-css-var('box-shadow-x', $box-shadow-x);
-  @include define-css-var('box-shadow-y', $box-shadow-y);
-  @include define-css-var('box-shadow-blur', $box-shadow-blur);
-  @include define-css-var('box-shadow-shape', $box-shadow-shape);
-  @include define-css-var('box-shadow-base', $box-shadow-base);
-
-  @include define-css-var('box-shadow-border', $box-shadow-border);
-  @include define-css-var('box-shadow-focus', $box-shadow-focus);
-}
 
 $transition-duration: 250ms !default;
 $transition-timing: ease !default;
@@ -257,14 +200,6 @@ $transition-map: map.merge(
   $transition-map
 );
 
-:root {
-  @include define-css-var('transition-duration', $transition-duration);
-  @include define-css-var('transition-timing', $transition-timing);
-  @include define-css-var('transition-base', $transition-base);
-
-  @include define-preset-values('transition', $transition-map);
-}
-
 $z-index-map: () !default;
 $z-index-map: map.merge(
   (
@@ -274,10 +209,6 @@ $z-index-map: map.merge(
   ),
   $z-index-map
 );
-
-:root {
-  @include define-preset-values('z-index', $z-index-map);
-}
 
 $break-point-sm: 576px !default;
 $break-point-md: 768px !default;
@@ -309,7 +240,3 @@ $break-point-map: map.merge(
   ),
   $break-point-map
 );
-
-:root {
-  @include define-preset-values('break-point', $break-point-map, true);
-}

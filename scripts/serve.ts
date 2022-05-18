@@ -1,3 +1,5 @@
+import { resolve } from 'path'
+import { readdirSync, statSync, existsSync, copyFile } from 'fs-extra'
 import minimist from 'minimist'
 import { logger, run, specifyComponent, serveComponents } from './utils'
 
@@ -14,14 +16,34 @@ main().catch(error => {
 
 async function main() {
   const target = await specifyComponent(args, serveComponents)
+  const demos = queryDemos(target)
 
-  await run('vite', ['serve', '--force'], {
+  if (demos.length) {
+    await Promise.all(demos.map(async demo => {
+      await copyFile(
+        resolve(__dirname, '../docs', target, demo, 'demo.vue'),
+        resolve(__dirname, '../example/demos', `${demo}.vue`)
+      )
+    }))
+  }
+
+  await run('vite', ['serve'], {
+    cwd: resolve(__dirname, '../example'),
     stdio: 'inherit',
     env: {
       NODE_ENV: prodMode ? 'production' : 'development',
       TARGET: target,
+      DEMOS: JSON.stringify(demos),
       PORT: port,
       SOURCE_MAP: sourceMap ? 'true' : ''
     }
   })
+}
+
+function queryDemos(target: string) {
+  const dir = resolve(__dirname, '../docs', target)
+
+  return readdirSync(dir).filter(
+    f => statSync(resolve(dir, f)).isDirectory() && existsSync(resolve(dir, f, 'demo.vue'))
+  )
 }

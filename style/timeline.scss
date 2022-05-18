@@ -2,8 +2,6 @@
 
 @use '../design' as *;
 
-$types: success error warning;
-
 $timeline: () !default;
 $timeline: map.merge(
   (
@@ -44,6 +42,8 @@ $timeline: map.merge(
   &__item {
     position: relative;
     padding-bottom: get-css-var('timeline-item-span');
+
+    $types: success error warning;
 
     @each $type in $types {
       &--#{$type} {

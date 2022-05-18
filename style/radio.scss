@@ -2,8 +2,6 @@
 
 @use '../design' as *;
 
-$states: success, error, warning;
-
 $radio: () !default;
 $radio: map.merge(
   (
@@ -152,6 +150,8 @@ $radio: map.merge(
   &--checked &__label {
     color: get-css-var('radio-label-color-checked');
   }
+
+  $states: success, error, warning;
 
   @each $state in $states {
     &--#{$state} {
