@@ -1,4 +1,6 @@
-$-name: 'badge-zoom';
+@use '../variables.scss' as *;
+
+$-name: '#{$namespace}-badge-zoom';
 
 @mixin -start {
   opacity: 0%;
@@ -10,25 +12,25 @@ $-name: 'badge-zoom';
   transform: translate(50%, -50%) scale(1);
 }
 
-.vxp-#{$-name} {
+.#{$-name} {
   @at-root {
     &-enter-active {
       animation: {
-        name: vxp-#{$-name}-in;
-        duration: 300ms;
+        name: #{$-name}-in;
+        duration: get-css-var('transition-duration');
       }
     }
 
     &-leave-active {
       animation: {
-        name: vxp-#{$-name}-out;
-        duration: 300ms;
+        name: #{$-name}-out;
+        duration: get-css-var('transition-duration');
       }
     }
   }
 }
 
-@keyframes vxp-#{$-name}-in {
+@keyframes #{$-name}-in {
   0% {
     @include -start;
   }
@@ -38,7 +40,7 @@ $-name: 'badge-zoom';
   }
 }
 
-@keyframes vxp-#{$-name}-out {
+@keyframes #{$-name}-out {
   0% {
     @include -end;
   }

@@ -1,4 +1,5 @@
 packages:
+  - example
   - playground
   - common/config
   - common/mixins
