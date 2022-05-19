@@ -1,3 +1,2 @@
-import '@/style/time-ago.scss'
-
+export * from './helper'
 export { default as TimeAgo } from './time-ago.vue'

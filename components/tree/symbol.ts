@@ -3,6 +3,12 @@ import type { InjectionKey } from 'vue'
 export type Key = string | number
 export type Data = Record<string, unknown>
 
+export enum DropType {
+  BEFORE,
+  INNER,
+  AFTER
+}
+
 export interface InitDataOptions extends Data {
   visible?: boolean,
   selected?: boolean,

@@ -1,5 +1,2 @@
-import '@/style/button.scss'
-
+export * from './symbol'
 export { default as Button } from './button'
-
-export type { ButtonType } from './symbol'

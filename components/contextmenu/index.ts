@@ -1,11 +1,11 @@
-import '@/style/contextmenu.scss'
-
 import { createApp } from 'vue'
 import Component from './contextmenu.vue'
 import { destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
 import type { MenuOptions, ContextmenuInstance } from './symbol'
+
+export * from './symbol'
 
 export class ContextmenuManager {
   name: string

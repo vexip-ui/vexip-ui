@@ -15,7 +15,6 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "outDir": "dist",
     "types": [
       "vite/client",
       "jest"
@@ -25,6 +24,7 @@
         "./*"
       ],
       "@vexip-ui/*": ["common/*/src"],
+      "vexip-ui": ["components"]
     },
     "lib": [
       "esnext",
@@ -35,7 +35,8 @@
     "common",
     "components",
     "example",
-    "playground"
+    "playground",
+    "types.d.ts"
   ],
   "exclude": [
     "node_modules"

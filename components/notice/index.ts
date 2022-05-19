@@ -1,5 +1,3 @@
-import '@/style/notice.scss'
-
 import { createApp } from 'vue'
 import Component from './notice.vue'
 import { isNull, isObject, toNumber, destroyObject } from '@vexip-ui/utils'
@@ -11,6 +9,8 @@ import '@/common/icons/times-circle'
 
 import type { App } from 'vue'
 import type { Key, NoticeType, NoticePlacement, NoticeOptions, NoticeInstance } from './symbol'
+
+export * from './symbol'
 
 type FuzzyOptions = string | NoticeOptions
 type ManagerOptions = { marker?: boolean, duration?: number, placement?: NoticePlacement } & Record<

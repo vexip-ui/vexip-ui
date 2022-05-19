@@ -1,0 +1,1 @@
+import '@/style/scroll.scss'

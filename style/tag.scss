@@ -4,7 +4,7 @@
 @use '../design' as *;
 @use './icon.scss';
 
-$types: primary info success error warning;
+// $types: primary info success error warning;
 
 $tag: () !default;
 $tag: map.merge(
@@ -84,7 +84,7 @@ $tag: map.merge(
       @include define-tag-style((
         color: 'content-color-reverse',
         bg-color: 'color' $type 'base',
-        border-color: 'color' $type 'base',
+        b-color: 'color' $type 'base',
         close-color: 'content-color-reverse'
       ));
     }

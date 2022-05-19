@@ -1,11 +1,11 @@
-import '@/style/confirm.scss'
-
 import { createApp } from 'vue'
 import Component from './confirm.vue'
 import { destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
 import type { ConfirmType, ConfirmOptions, ConfirmInstance } from './symbol'
+
+export * from './symbol'
 
 type FuzzyOptions = string | ConfirmOptions
 

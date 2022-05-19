@@ -2,8 +2,8 @@
 
 @use '../design' as *;
 
-$calendar: () !default;
-$calendar: map.merge(
+$calendar-pane: () !default;
+$calendar-pane: map.merge(
   (
     index-color-hover: get-css-var('content-color-base'),
     index-color-selected: get-css-var('content-color-reverse'),
@@ -24,19 +24,19 @@ $calendar: map.merge(
     index-b-color-disabled: get-css-var('border-color-light-2'),
     index-b-color-outside: get-css-var('border-color-light-1'),
     index-border:
-      get-css-var('calendar-index-b-width')
-      get-css-var('calendar-index-b-style')
-      get-css-var('calendar-index-b-color'),
+    get-css-var('calendar-index-b-width')
+    get-css-var('calendar-index-b-style')
+    get-css-var('calendar-index-b-color'),
     index-radius: get-css-var('border-radius-base'),
     range-bg-color: get-css-var('color-primary-light-9'),
     range-opacity: 60%
   ),
-  $calendar
+  $calendar-pane
 );
 
 .vxp-calendar {
   &-vars {
-    @include define-preset-values('calendar', $calendar);
+    @include define-preset-values('calendar', $calendar-pane);
   }
 
   &__pane {

@@ -4,8 +4,6 @@
 @use './icon.scss';
 @use './popup.scss';
 
-$types: info success warning error;
-
 $notice: () !default;
 $notice: map.merge(
   (
@@ -145,6 +143,8 @@ $notice: map.merge(
     &--marker::before {
       content: '';
     }
+
+    $types: info success warning error;
 
     @each $type in $types {
       $color: if($type == 'info', 'primary', $type);

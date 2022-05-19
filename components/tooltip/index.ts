@@ -1,5 +1,2 @@
-import '@/style/tooltip.scss'
-
+export * from './symbol'
 export { default as Tooltip } from './tooltip.vue'
-
-export type { TooltipTheme } from './symbol'

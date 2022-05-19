@@ -1,3 +1,3 @@
-import '@/style/input.scss'
-
 export { default as Input } from './input'
+
+export type { InputType } from './input'

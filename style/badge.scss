@@ -2,8 +2,6 @@
 
 @use '../design' as *;
 
-$types: primary info success warning;
-
 $badge: () !default;
 $badge: map.merge(
   (
@@ -71,6 +69,8 @@ $badge: map.merge(
       right: 0;
       transform: translate(50%, -50%);
     }
+
+    $types: primary info success warning;
 
     @each $type in $types {
       &--#{$type} {

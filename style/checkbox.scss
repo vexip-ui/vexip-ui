@@ -2,8 +2,6 @@
 
 @use '../design' as *;
 
-$states: success, error, warning;
-
 $checkbox: () !default;
 $checkbox: map.merge(
   (
@@ -200,6 +198,8 @@ $checkbox: map.merge(
       color: get-css-var('checkbox-label-color-checked');
     }
   }
+
+  $states: success, error, warning;
 
   @each $state in $states {
     &--#{$state} {

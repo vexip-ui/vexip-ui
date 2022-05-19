@@ -4,8 +4,6 @@
 @use './icon.scss';
 @use './popup.scss';
 
-$types: info success warning error;
-
 $message: () !default;
 $message: map.merge(
   (
@@ -84,6 +82,8 @@ $message: map.merge(
     border: get-css-var('message-border');
     border-radius: get-css-var('message-radius');
     box-shadow: get-css-var('message-shadow');
+
+    $types: info success warning error;
 
     @each $type in $types {
       $color: if($type == 'info', 'primary', $type);

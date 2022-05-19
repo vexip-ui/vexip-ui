@@ -47,7 +47,7 @@ import { defineComponent, ref, reactive, computed, watch, provide, nextTick, toR
 import TreeNode from './tree-node.vue'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
-import { TREE_STATE, TREE_NODE_STATE } from './symbol'
+import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import '@/common/icons/chevron-right'
 import '@/common/icons/spinner'
@@ -62,12 +62,6 @@ import type {
   AsyncLoadFn,
   TreeNodeInstance
 } from './symbol'
-
-export enum DropType {
-  BEFORE,
-  INNER,
-  AFTER
-}
 
 const props = useConfiguredProps('tree', {
   arrow: {

@@ -3,8 +3,6 @@
 @use '../design' as *;
 @use './tooltip.scss';
 
-$states: success, error, warning;
-
 $slider: () !default;
 $slider: map.merge(
   (
@@ -160,6 +158,8 @@ $slider: map.merge(
   &__tip {
     user-select: none;
   }
+
+  $states: success, error, warning;
 
   @each $state in $states {
     &--#{$state} {

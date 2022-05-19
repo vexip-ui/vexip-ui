@@ -1,14 +1,8 @@
-import '../themes/common.scss'
 import '../style/index.scss'
 
 import { createApp } from 'vue'
 import { install } from '../components'
 import App from './app.vue'
+import { router } from './router'
 
-createApp(App)
-  .use(install, {
-    button: {
-      size: 'large'
-    }
-  })
-  .mount('#app')
+createApp(App).use(install).use(router).mount('#app')

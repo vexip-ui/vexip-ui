@@ -3,8 +3,6 @@
 @use '../design' as *;
 @use './icon.scss';
 
-$types: info success warning error;
-
 $alert: () !default;
 $alert: map.merge(
   (
@@ -130,6 +128,8 @@ $alert: map.merge(
     top: 0.6em;
     transform: none;
   }
+
+  $types: info success warning error;
 
   @each $type in $types {
     $color: if($type == 'info', 'primary', $type);

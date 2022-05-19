@@ -1,3 +1,5 @@
+@use '../variables.scss' as *;
+
 $-popup-types: (
   top: 'Y(-100%) translateX(-50%)',
   right: 'X(100%)',
@@ -21,7 +23,7 @@ $-popup-types: (
 }
 
 @each $type in map-keys($map: $-popup-types) {
-  $root-name: vxp-popup-#{$type};
+  $root-name: #{$namespace}-popup-#{$type};
 
   .#{$root-name} {
     @at-root {
@@ -29,7 +31,7 @@ $-popup-types: (
       &-leave-active {
         pointer-events: none;
         user-select: none;
-        animation-duration: 300ms;
+        animation-duration: get-css-var('transition-duration');
       }
 
       &-enter-active {

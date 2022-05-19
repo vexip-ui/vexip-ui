@@ -1,0 +1,1 @@
+import '@/style/message.scss'

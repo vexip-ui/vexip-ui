@@ -25,7 +25,7 @@ async function main() {
   prettierConfig = (await prettier.resolveConfig(path.resolve(dirPath, '.prettierrc.js')))!
 
   if (!prettierConfig) {
-    throw new Error(`Config file of prettier not found`)
+    throw new Error('Config file of prettier not found')
   }
 
   if (!targets.length) {
@@ -85,11 +85,11 @@ async function create(name: string) {
   const generatedFiles = [
     {
       filePath: path.resolve(dirPath, 'components', kebabCaseName, 'index.ts'),
-      source: `
-        import '@/style/${kebabCaseName}.scss'
-
-        export { default as ${pascalCaseName} } from './${kebabCaseName}.vue'
-      `
+      source: `export { default as ${pascalCaseName} } from './${kebabCaseName}.vue'\n`
+    },
+    {
+      filePath: path.resolve(dirPath, 'components', kebabCaseName, 'style.ts'),
+      source: `import '@/style/${kebabCaseName}.scss'\n`
     },
     {
       filePath: path.resolve(dirPath, 'components', kebabCaseName, `${kebabCaseName}.vue`),
@@ -118,41 +118,55 @@ async function create(name: string) {
         </script>
       `
     },
-    {
-      filePath: path.resolve(dirPath, 'components', kebabCaseName, '__serve__', 'index.ts'),
-      source: `
-        import '@/themes/common.scss'
+    // {
+    //   filePath: path.resolve(dirPath, 'components', kebabCaseName, '__serve__', 'index.ts'),
+    //   source: `
+    //     import '@/themes/common.scss'
 
-        import { createApp } from 'vue'
-        import App from './app.vue'
+    //     import { createApp } from 'vue'
+    //     import App from './app.vue'
 
-        createApp(App).mount('#app')
-      `
-    },
-    {
-      filePath: path.resolve(dirPath, 'components', kebabCaseName, '__serve__', 'app.vue'),
-      source: `
-        <template>
-          <${pascalCaseName}></${pascalCaseName}>
-        </template>
+    //     createApp(App).mount('#app')
+    //   `
+    // },
+    // {
+    //   filePath: path.resolve(dirPath, 'components', kebabCaseName, '__serve__', 'app.vue'),
+    //   source: `
+    //     <template>
+    //       <${pascalCaseName}></${pascalCaseName}>
+    //     </template>
 
-        <script lang="ts">
-        import { defineComponent } from 'vue'
-        import { ${pascalCaseName} } from '..'
+    //     <script lang="ts">
+    //     import { defineComponent } from 'vue'
+    //     import { ${pascalCaseName} } from '..'
 
-        export default defineComponent({
-          name: 'App',
-          components: {
-            ${pascalCaseName}
-          }
-        })
-        </script>
-      `
-    },
+    //     export default defineComponent({
+    //       name: 'App',
+    //       components: {
+    //         ${pascalCaseName}
+    //       }
+    //     })
+    //     </script>
+    //   `
+    // },
     {
       filePath: path.resolve(dirPath, 'style', `${kebabCaseName}.scss`),
       source: `
+        @use 'sass:map';
+
+        @use '../design' as *;
+
+        $${kebabCaseName}: () !default;
+        $${kebabCaseName}: map.merge(
+          (),
+          $${kebabCaseName}
+        );
+
         .vxp-${kebabCaseName} {
+          &-vars {
+            @include define-preset-values('${kebabCaseName}', $${kebabCaseName});
+          }
+
           @include basis;
         }
       `

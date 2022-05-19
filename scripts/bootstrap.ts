@@ -17,20 +17,17 @@ async function main() {
   const prettierConfig = await prettier.resolveConfig(path.resolve('.prettierrc.js'))
 
   const index = `
-    import '@/themes/common.scss'
-
     ${
-      exportComponents.map(component => `import { ${toPascalCase(component)} } from '@/components/${component}'`).join('\n')
+      exportComponents.map(component => `import { ${toPascalCase(component)} } from './${component}'`).join('\n')
     }
 
-    import { configProp, configLocale } from '@vexip-ui/config'
+    import { buildInstall } from './create'
 
     import '@/common/icons'
 
-    import type { App } from 'vue'
     import type { PropOptions, LocaleOptions } from '@vexip-ui/config'
 
-    export { configLocale }
+    export { configProp, configLocale } from '@vexip-ui/config'
 
     export interface InstallOptions {
       prefix?: string,
@@ -39,70 +36,65 @@ async function main() {
     }
 
     const components = [
-      ${components.map(toPascalCase).join(',\n')}
+      ${components.map(toPascalCase).join(',\n')},
+      // plugins
+      ${plugins.map(toPascalCase).join(', ')}
     ]
 
-    const plugins = [${plugins.map(toPascalCase).join(', ')}]
-
-    export const install = (app: App<unknown>, options: InstallOptions = {}) => {
-      const { prefix = '', prop = {}, locale = {} } = options
-
-      configProp(prop)
-      configLocale(locale)
-
-      const formatName = typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)
-        ? (name: string) => name.replace(/([A-Z])/g, '-$1').toLowerCase()
-        : (name: string) => name
-
-      components.forEach(component => {
-        app.component(\`\${prefix || ''}\$\{formatName(component.name)}\`, component)
-
-        if (typeof component.installDirective === 'function') {
-          component.installDirective(app)
-        }
-      })
-
-      plugins.forEach(plugin => {
-        app.use(plugin)
-      })
-    }
-
+    export const install = buildInstall(components)
     export const version = __VERSION__
 
     export {
       ${exportComponents.map(toPascalCase).join(',\n')}
     }
+  `
 
-    export interface VexipComponents {
-      ${
-        components.map(component => `${toPascalCase(component)}: typeof ${toPascalCase(component)}`).join(',\n')
+  const types = `
+    declare module 'vue' {
+      export interface GlobalComponents {
+        ${components.map(name => `${toPascalCase(name)}: typeof import('vexip-ui')['${toPascalCase(name)}']`).join(',\n')}
       }
     }
 
-    export interface VexipProperties {
-      ${plugins.map(plugin => `$${plugin}: typeof ${toPascalCase(plugin)}`)}
+    declare module '@vue/runtime-core' {
+      interface ComponentCustomProperties {
+        ${plugins.map(name => `$${name}: typeof import('vexip-ui')['${toPascalCase(name)}']`).join(',\n')}
+      }
     }
+
+    export {}
   `
 
   const eslint = new ESLint({ fix: true })
   const indexPath = path.resolve(__dirname, '../components/index.ts')
+  const typesPath = path.resolve(__dirname, '../types.d.ts')
 
   fs.writeFileSync(
     indexPath,
-    prettier.format(index, { ...prettierConfig, parser: 'typescript' })
+    prettier.format(index, { ...prettierConfig, parser: 'typescript' }),
+    'utf-8'
+  )
+
+  fs.writeFileSync(
+    typesPath,
+    prettier.format(types, { ...prettierConfig, parser: 'typescript' }),
+    'utf-8'
   )
 
   await ESLint.outputFixes(await eslint.lintFiles(indexPath))
+  await ESLint.outputFixes(await eslint.lintFiles(typesPath))
 
   exportComponents
     .filter(component => !fs.existsSync(`style/${component}.scss`))
     .forEach(component => fs.writeFileSync(`style/${component}.scss`, '', 'utf-8'))
 
-  const styleIndex = exportComponents.map(component => `@forward './${component}.scss';`).join('\n') + '\n'
+  const styleIndex = '@use \'./preset.scss\';\n\n' +
+    exportComponents.map(component => `@use './${component}.scss';`).join('\n') + '\n'
   const stylePath = path.resolve(__dirname, '../style/index.scss')
 
   fs.writeFileSync(
     stylePath,
-    prettier.format(styleIndex, { ...prettierConfig, parser: 'scss' })
+    prettier.format(styleIndex, { ...prettierConfig, parser: 'scss' }),
+    'utf-8'
   )
 }

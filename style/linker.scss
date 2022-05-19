@@ -3,7 +3,7 @@
 @use '../design' as *;
 @use './icon.scss';
 
-$types: primary info success warning error;
+// $types: primary info success warning error;
 
 $linker: () !default;
 $linker: map.merge(

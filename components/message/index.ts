@@ -1,5 +1,3 @@
-import '@/style/message.scss'
-
 import { createApp } from 'vue'
 import Component from './message.vue'
 import { isNull, toNumber, destroyObject } from '@vexip-ui/utils'
@@ -11,6 +9,8 @@ import '@/common/icons/times-circle'
 
 import type { App } from 'vue'
 import type { Key, MessageType, MessagePlacement, MessageOptions, MessageInstance } from './symbol'
+
+export * from './symbol'
 
 type FuzzyOptions = string | MessageOptions
 type ManagerOptions = { duration?: number, placement?: MessagePlacement } & Record<string, unknown>

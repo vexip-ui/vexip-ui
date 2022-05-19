@@ -168,6 +168,27 @@ module.exports = {
         defineEmits: 'readonly',
         defineExpose: 'readonly'
       }
+    },
+    {
+      files: ['example/**'],
+      globals: {
+        __DEMOS__: 'readonly',
+        __TARGET__: 'readonly'
+      }
+    },
+    {
+      files: ['scripts/**'],
+      rules: {
+        'no-sequences': 'off',
+        '@typescript-eslint/no-var-requires': 'off'
+      }
+    },
+    {
+      files: ['types.d.ts'],
+      rules: {
+        '@typescript-eslint/no-empty-interface': 'off',
+        '@typescript-eslint/consistent-type-imports': 'off'
+      }
     }
   ],
   globals: {

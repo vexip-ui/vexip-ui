@@ -3,8 +3,6 @@
 @use '../design' as *;
 @use './icon.scss';
 
-$states: success, error, warning;
-
 $switcher: () !default;
 $switcher: map.merge(
   (
@@ -127,6 +125,8 @@ $switcher: map.merge(
       transform: translate(-50%, -50%);
     }
   }
+
+  $states: success, error, warning;
 
   @each $state in $states {
     &--#{$state} {

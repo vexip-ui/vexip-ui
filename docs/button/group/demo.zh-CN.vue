@@ -1,0 +1,13 @@
+<template>
+  <ButtonGroup>
+    <Button>
+      按钮一
+    </Button>
+    <Button>
+      按钮一
+    </Button>
+    <Button>
+      按钮三
+    </Button>
+  </ButtonGroup>
+</template>

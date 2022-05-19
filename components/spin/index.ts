@@ -1,5 +1,3 @@
-import '@/style/spin.scss'
-
 import Spin from './spin.vue'
 import { loading } from './directive'
 
