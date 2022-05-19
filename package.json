@@ -106,11 +106,13 @@
     "./icons/*": {
       "require": "./lib/common/icons/*",
       "import": "./es/common/icons/*"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
+    "css",
     "design",
-    "dist",
+    "es",
     "icons",
     "lib",
     "style",

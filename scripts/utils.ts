@@ -1,6 +1,6 @@
-import execa from 'execa'
-import { readdirSync, statSync, existsSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
 import { resolve } from 'path'
+import { readdirSync, statSync, existsSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
+import execa from 'execa'
 import chalk from 'chalk'
 import { prompt } from 'enquirer'
 
@@ -78,16 +78,17 @@ export function toCamelCase(value: string) {
   return pascalName.charAt(0).toLowerCase() + pascalName.slice(1)
 }
 
-export const components = readdirSync('components').filter(f => {
-  if (!statSync(`components/${f}`).isDirectory()) {
+export const rootDir = resolve(__dirname, '..')
+export const componentsDir = resolve(rootDir, 'components')
+
+export const components = readdirSync(componentsDir).filter(f => {
+  const path = resolve(componentsDir, f)
+
+  if (!statSync(path).isDirectory()) {
     return false
   }
 
-  return existsSync(`components/${f}/index.ts`)
-})
-
-export const serveComponents = components.filter(f => {
-  return existsSync(`components/${f}/__serve__/index.ts`)
+  return existsSync(`${path}/index.ts`)
 })
 
 export function fuzzyMatch(partials: string[], total: string[], includeAll = false) {
@@ -172,9 +173,10 @@ export function emptyDir(dir: string) {
   if (!existsSync(dir)) {
     return
   }
+
   for (const file of readdirSync(dir)) {
     const abs = resolve(dir, file)
-    // baseline is Node 12 so can't use rmSync :(
+
     if (lstatSync(abs).isDirectory()) {
       emptyDir(abs)
       rmdirSync(abs)
@@ -214,7 +216,7 @@ export async function getPackageInfo(inputPkg: string) {
   }
 
   if (!pkgName) {
-    throw new Error(`Release package must not be null`)
+    throw new Error('Release package must not be null')
   }
 
   const isRoot = pkgName === 'vexip-ui'

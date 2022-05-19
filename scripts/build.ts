@@ -5,15 +5,11 @@ import { logger, run, emptyDir } from './utils'
 
 const args = minimist(process.argv.slice(2))
 
-// const targets = args._
 const devOnly = args.dev || args.d
 const sourceMap = args.sourcemap || args.s
 const release = args.release || args.r
-// const buildAllMatching = args.all || args.a
-// const libOnly = args.lib || args.l
 
 const env = devOnly ? 'development' : 'production'
-// const libDir = path.resolve(__dirname, '../lib')
 
 main().catch(error => {
   logger.error(error)

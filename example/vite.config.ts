@@ -27,7 +27,10 @@ export default defineConfig(() => {
     resolve: {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
-        { find: /^@vexip-ui\/(.+)/, replacement: resolve(__dirname, '../common/$1/src') }
+        { find: /^@vexip-ui\/(.+)/, replacement: resolve(__dirname, '../common/$1/src') },
+        { find: /^vexip-ui\/lib\/(.+)/, replacement: resolve(__dirname, '../components/$1') },
+        { find: /^vexip-ui\/es\/(.+)/, replacement: resolve(__dirname, '../components/$1') },
+        { find: /^vexip-ui\/icons\/(.+)/, replacement: resolve(__dirname, '../common/icons/$1') }
       ]
     },
     server: {

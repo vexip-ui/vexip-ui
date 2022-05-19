@@ -17,10 +17,8 @@ async function main() {
   const prettierConfig = await prettier.resolveConfig(path.resolve('.prettierrc.js'))
 
   const index = `
-    import '@/themes/common.scss'
-
     ${
-      exportComponents.map(component => `import { ${toPascalCase(component)} } from '@/components/${component}'`).join('\n')
+      exportComponents.map(component => `import { ${toPascalCase(component)} } from './${component}'`).join('\n')
     }
 
     import { configProp, configLocale } from '@vexip-ui/config'
@@ -55,7 +53,7 @@ async function main() {
         : (name: string) => name
 
       components.forEach(component => {
-        app.component(\`\${prefix || ''}\$\{formatName(component.name)}\`, component)
+        app.component(\`\${prefix || ''}$\{formatName(component.name)}\`, component)
 
         if (typeof component.installDirective === 'function') {
           component.installDirective(app)

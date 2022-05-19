@@ -49,16 +49,14 @@ async function build(iconFile: string) {
       paths(id) {
         return iconReg.test(id)
           ? path.relative(
-              path.dirname(outputFile), path.resolve(__dirname, '../lib/icon')
-            ).replace(/[\\]+/g, '/')
+            path.dirname(outputFile), path.resolve(__dirname, '../lib/icon')
+          ).replace(/[\\]+/g, '/')
           : id
       }
     })
   } catch (error) {
     logger.withBothLn(() => logger.errorText(error))
     process.exitCode = 1
-
-    return
   }
 }
 

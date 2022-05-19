@@ -175,6 +175,13 @@ module.exports = {
         __DEMOS__: 'readonly',
         __TARGET__: 'readonly'
       }
+    },
+    {
+      files: ['scripts/**'],
+      rules: {
+        'no-sequences': 'off',
+        '@typescript-eslint/no-var-requires': 'off'
+      }
     }
   ],
   globals: {

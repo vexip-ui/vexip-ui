@@ -1,5 +1,3 @@
-// import '@/style/preset.scss'
-
 import { Alert } from './alert'
 import { Anchor } from './anchor'
 import { AnchorLink } from './anchor-link'

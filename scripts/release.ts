@@ -31,7 +31,7 @@ async function main() {
     isRoot,
     currentVersion
   } = await getPackageInfo(inputPkg)
-  
+
   const preId = args.preid || args.p || (semver.prerelease(currentVersion)?.[0])
 
   const versionIncrements: ReleaseType[] = [
@@ -53,10 +53,10 @@ async function main() {
   const version =
     release === 'custom'
       ? (await prompt<{ version: string }>({
-        type: 'input',
-        name: 'version',
-        message: 'Input custom version:'
-      })).version
+          type: 'input',
+          name: 'version',
+          message: 'Input custom version:'
+        })).version
       : release.match(/\((.*)\)/)![1]
 
   if (!semver.valid(version)) {
@@ -104,7 +104,7 @@ async function main() {
 
   // 执行引导程序
   if (bootstrap) {
-    logStep(`Run bootstrap...`)
+    logStep('Run bootstrap...')
 
     if (!skipBuild && !isDryRun) {
       await run('pnpm', ['bootstrap'])
@@ -114,7 +114,7 @@ async function main() {
   }
 
   // 构建库
-  logStep(`Building package...`)
+  logStep('Building package...')
 
   if (!skipBuild && !isDryRun) {
     if (isRoot) {
@@ -173,7 +173,7 @@ async function main() {
     if (isDryRun) {
       logger.success('Dry run finished - run git diff to see package changes')
     } else {
-      logger.success(`Release successfully`)
+      logger.success('Release successfully')
     }
   })
 }
