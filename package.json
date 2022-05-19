@@ -167,8 +167,9 @@
     "serve:playground": "pnpm -C playground serve"
   },
   "sideEffects": [
-    "dist/*",
-    "lib/**",
+    "lib/components/*/style.js",
+    "es/components/*/style.js",
+    "css/*.css",
     "icons/**",
     "*.scss"
   ],

@@ -1,5 +1,4 @@
-// import fs from 'fs'
-import path from 'path'
+import { resolve } from 'path'
 import minimist from 'minimist'
 import { logger, run, emptyDir } from './utils'
 
@@ -18,12 +17,14 @@ main().catch(error => {
 
 async function main() {
   if (release) {
-    emptyDir(path.resolve(__dirname, '../node_modules/.cache'))
+    emptyDir(resolve(__dirname, '../node_modules/.cache'))
   }
 
   logger.withBothLn(() => logger.successText('start building lib...'))
 
-  await run('vite', ['build', '--config', 'vite.build.config.ts'], {
+  await run('pnpm', ['bootstrap'])
+
+  await run('vite', ['build', '--config', 'vite.config.ts'], {
     stdio: 'inherit',
     env: {
       NODE_ENV: env,
@@ -33,7 +34,7 @@ async function main() {
     }
   })
 
-  await run('vite', ['build', '--config', 'vite.build.config.ts'], {
+  await run('vite', ['build', '--config', 'vite.config.ts'], {
     stdio: 'inherit',
     env: {
       NODE_ENV: env,

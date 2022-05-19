@@ -86,14 +86,13 @@ import { UploadList } from './upload-list'
 import { Wheel } from './wheel'
 import { WheelItem } from './wheel-item'
 
-import { configProp, configLocale } from '@vexip-ui/config'
+import { buildInstall } from './create'
 
 import '@/common/icons'
 
-import type { App } from 'vue'
 import type { PropOptions, LocaleOptions } from '@vexip-ui/config'
 
-export { configLocale }
+export { configProp, configLocale } from '@vexip-ui/config'
 
 export interface InstallOptions {
   prefix?: string,
@@ -183,10 +182,8 @@ const components = [
   UploadFile,
   UploadList,
   Wheel,
-  WheelItem
-]
-
-const plugins = [
+  WheelItem,
+  // plugins
   Confirm,
   Contextmenu,
   Loading,
@@ -194,30 +191,7 @@ const plugins = [
   Notice
 ]
 
-export const install = (app: App<unknown>, options: InstallOptions = {}) => {
-  const { prefix = '', prop = {}, locale = {} } = options
-
-  configProp(prop)
-  configLocale(locale)
-
-  const formatName =
-    typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)
-      ? (name: string) => name.replace(/([A-Z])/g, '-$1').toLowerCase()
-      : (name: string) => name
-
-  components.forEach(component => {
-    app.component(`${prefix || ''}${formatName(component.name)}`, component)
-
-    if (typeof component.installDirective === 'function') {
-      component.installDirective(app)
-    }
-  })
-
-  plugins.forEach(plugin => {
-    app.use(plugin)
-  })
-}
-
+export const install = buildInstall(components)
 export const version = __VERSION__
 
 export {
@@ -270,6 +244,7 @@ export {
   Message,
   Modal,
   NativeScroll,
+  Notice,
   NumberInput,
   Option,
   OptionGroup,
@@ -307,97 +282,4 @@ export {
   UploadList,
   Wheel,
   WheelItem
-}
-
-export interface VexipComponents {
-  Alert: typeof Alert,
-  Anchor: typeof Anchor,
-  AnchorLink: typeof AnchorLink,
-  AutoComplete: typeof AutoComplete,
-  Badge: typeof Badge,
-  Breadcrumb: typeof Breadcrumb,
-  BreadcrumbItem: typeof BreadcrumbItem,
-  Bubble: typeof Bubble,
-  Button: typeof Button,
-  ButtonGroup: typeof ButtonGroup,
-  Calendar: typeof Calendar,
-  CalendarPane: typeof CalendarPane,
-  Card: typeof Card,
-  Carousel: typeof Carousel,
-  CarouselItem: typeof CarouselItem,
-  Cell: typeof Cell,
-  Checkbox: typeof Checkbox,
-  CheckboxGroup: typeof CheckboxGroup,
-  Collapse: typeof Collapse,
-  CollapsePane: typeof CollapsePane,
-  CollapseTransition: typeof CollapseTransition,
-  ColorPicker: typeof ColorPicker,
-  Column: typeof Column,
-  DatePicker: typeof DatePicker,
-  Divider: typeof Divider,
-  Drawer: typeof Drawer,
-  Dropdown: typeof Dropdown,
-  DropdownItem: typeof DropdownItem,
-  DropdownList: typeof DropdownList,
-  Ellipsis: typeof Ellipsis,
-  Form: typeof Form,
-  FormItem: typeof FormItem,
-  FormReset: typeof FormReset,
-  FormSubmit: typeof FormSubmit,
-  Grid: typeof Grid,
-  Highlight: typeof Highlight,
-  Icon: typeof Icon,
-  Input: typeof Input,
-  Linker: typeof Linker,
-  Masker: typeof Masker,
-  Menu: typeof Menu,
-  MenuGroup: typeof MenuGroup,
-  MenuItem: typeof MenuItem,
-  Modal: typeof Modal,
-  NativeScroll: typeof NativeScroll,
-  NumberInput: typeof NumberInput,
-  Option: typeof Option,
-  OptionGroup: typeof OptionGroup,
-  Pagination: typeof Pagination,
-  Popup: typeof Popup,
-  Portal: typeof Portal,
-  Progress: typeof Progress,
-  Radio: typeof Radio,
-  RadioGroup: typeof RadioGroup,
-  Renderer: typeof Renderer,
-  Row: typeof Row,
-  Scroll: typeof Scroll,
-  Scrollbar: typeof Scrollbar,
-  Select: typeof Select,
-  Slider: typeof Slider,
-  Spin: typeof Spin,
-  Split: typeof Split,
-  Switcher: typeof Switcher,
-  TabNav: typeof TabNav,
-  TabNavItem: typeof TabNavItem,
-  TabPane: typeof TabPane,
-  Table: typeof Table,
-  TableColumn: typeof TableColumn,
-  Tabs: typeof Tabs,
-  Tag: typeof Tag,
-  Textarea: typeof Textarea,
-  TimeAgo: typeof TimeAgo,
-  TimePicker: typeof TimePicker,
-  Timeline: typeof Timeline,
-  TimelineItem: typeof TimelineItem,
-  Tooltip: typeof Tooltip,
-  Tree: typeof Tree,
-  Upload: typeof Upload,
-  UploadFile: typeof UploadFile,
-  UploadList: typeof UploadList,
-  Wheel: typeof Wheel,
-  WheelItem: typeof WheelItem
-}
-
-export interface VexipProperties {
-  $confirm: typeof Confirm,
-  $contextmenu: typeof Contextmenu,
-  $loading: typeof Loading,
-  $message: typeof Message,
-  $notice: typeof Notice
 }
