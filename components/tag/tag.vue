@@ -12,7 +12,9 @@
         }"
         @click.left.stop="handleClose"
       >
-        <Icon name="times" :scale="0.8"></Icon>
+        <Icon :scale="0.8">
+          <Times></Times>
+        </Icon>
       </div>
     </div>
   </transition>
@@ -22,8 +24,7 @@
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps, createSizeProp } from '@vexip-ui/config'
-
-import '@/common/icons/times'
+import { Times } from '@vexip-ui/icons'
 
 import type { TagType } from './symbol'
 
@@ -86,7 +87,8 @@ const props = useConfiguredProps('tag', {
 export default defineComponent({
   name: 'Tag',
   components: {
-    Icon
+    Icon,
+    Times
   },
   props,
   emits: ['on-click', 'on-close'],

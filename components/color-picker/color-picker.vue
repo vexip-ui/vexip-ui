@@ -13,7 +13,9 @@
       >
         <div :class="`${prefix}__control`">
           <div :class="`${prefix}__marker`">
-            <Icon v-if="!currentVisible && isEmpty" name="times"></Icon>
+            <Icon v-if="!currentVisible && isEmpty">
+              <Times></Times>
+            </Icon>
             <div
               v-else
               :style="{
@@ -26,7 +28,7 @@
             ></div>
           </div>
           <div :class="`${prefix}__arrow`">
-            <Icon name="chevron-down"></Icon>
+            <Icon><ChevronDown></ChevronDown></Icon>
           </div>
         </div>
       </slot>
@@ -104,7 +106,6 @@ import ColorPalette from './color-palette.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
-
 import {
   noop,
   toFixed,
@@ -115,9 +116,7 @@ import {
   hsvToHsl,
   rgbaToHex
 } from '@vexip-ui/utils'
-
-import '@/common/icons/times'
-import '@/common/icons/chevron-down'
+import { Times, ChevronDown } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -238,7 +237,9 @@ export default defineComponent({
     ColorHue,
     ColorPalette,
     Icon,
-    Input
+    Input,
+    Times,
+    ChevronDown
   },
   props,
   emits: [

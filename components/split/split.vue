@@ -20,7 +20,7 @@
             @mousedown.stop
             @click.left="handleFull(-1)"
           >
-            <Icon :name="`chevron-${vertical ? 'down' : 'right'}`" :scale="0.6"></Icon>
+            <Icon :icon="vertical ? ChevronDown : ChevronRight" :scale="0.6"></Icon>
           </div>
           <div
             :class="[
@@ -30,7 +30,7 @@
             @mousedown.stop
             @click.left="handleFull(1)"
           >
-            <Icon :name="`chevron-${vertical ? 'up' : 'left'}`" :scale="0.6"></Icon>
+            <Icon :icon="vertical ? ChevronUp : ChevronLeft" :scale="0.6"></Icon>
           </div>
         </template>
         <template v-else>
@@ -49,11 +49,7 @@ import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { throttle } from '@vexip-ui/utils'
-
-import '@/common/icons/chevron-up'
-import '@/common/icons/chevron-right'
-import '@/common/icons/chevron-down'
-import '@/common/icons/chevron-left'
+import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
 
 const props = useConfiguredProps('split', {
   value: {
@@ -326,6 +322,11 @@ export default defineComponent({
     }
 
     return {
+      ChevronUp,
+      ChevronRight,
+      ChevronDown,
+      ChevronLeft,
+
       prefix,
 
       className,

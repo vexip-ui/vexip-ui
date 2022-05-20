@@ -37,11 +37,10 @@
               :data="item"
             ></Renderer>
             <Icon
-              v-else-if="item.icon && isObject(item.icon)"
-              v-bind="item.icon"
+              v-else-if="item.icon"
+              :icon="item.icon"
               :style="[{ color: item.iconColor }, item.icon.style]"
             ></Icon>
-            <Icon v-else-if="item.icon" :name="item.icon" :style="{ color: item.iconColor }"></Icon>
           </div>
           <Renderer
             v-if="typeof item.renderer === 'function'"
@@ -55,7 +54,7 @@
           </template>
         </div>
         <div v-if="item.closable" :class="`${prefix}__close`" @click="remove(item.key)">
-          <Icon name="times"></Icon>
+          <Icon><Times></Times></Icon>
         </div>
       </div>
     </template>
@@ -67,9 +66,7 @@ import { defineComponent, ref, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
-import { isObject } from '@vexip-ui/utils'
-
-import '@/common/icons/times'
+import { Times } from '@vexip-ui/icons'
 
 import type { Key, MessagePlacement } from './symbol'
 
@@ -78,7 +75,8 @@ export default defineComponent({
   components: {
     Icon,
     Renderer,
-    Popup
+    Popup,
+    Times
   },
   setup() {
     const placement = ref<MessagePlacement>('top')
@@ -109,8 +107,7 @@ export default defineComponent({
 
       add,
       remove,
-      clear,
-      isObject
+      clear
     }
   }
 })

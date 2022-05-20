@@ -2,11 +2,11 @@
   <section :class="className">
     <div :class="`${prefix}__header`" @click="handleToggle">
       <div :class="`${prefix}__arrow`">
-        <Icon name="chevron-right"></Icon>
+        <Icon><ChevronRight></ChevronRight></Icon>
       </div>
       <slot name="title">
         <div v-if="icon" :class="`${prefix}__icon`">
-          <Icon :name="icon"></Icon>
+          <Icon :icon="icon"></Icon>
         </div>
         {{ title }}
       </slot>
@@ -27,9 +27,8 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { randomString } from '@vexip-ui/utils'
+import { ChevronRight } from '@vexip-ui/icons'
 import { COLLAPSE_STATE } from './symbol'
-
-import '@/common/icons/chevron-right'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { CollapseArrowType } from './symbol'
@@ -66,8 +65,8 @@ const props = useConfiguredProps('collapsePane', {
     }
   },
   icon: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   ghost: {
     type: Boolean,
@@ -79,7 +78,8 @@ export default defineComponent({
   name: 'CollapsePane',
   components: {
     CollapseTransition,
-    Icon
+    Icon,
+    ChevronRight
   },
   props,
   emits: ['on-toggle', 'update:expanded'],

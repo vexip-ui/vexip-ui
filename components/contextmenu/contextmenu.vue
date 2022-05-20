@@ -45,8 +45,6 @@ import { renderItem } from './render'
 import { Renderer } from '@/components/renderer'
 import { isFunction } from '@vexip-ui/utils'
 
-import '@/common/icons/chevron-right'
-
 import type { Key, MenuOptions, MenuConfig } from './symbol'
 
 export default defineComponent({

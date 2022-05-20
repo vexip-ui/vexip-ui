@@ -1,4 +1,12 @@
 <template>
-  <Icon name="flag" :scale="2"></Icon>
-  <Icon name="cat" :scale="2"></Icon>
+  <Icon :scale="2">
+    <Flag></Flag>
+  </Icon>
+  <Icon :scale="2">
+    <Cat></Cat>
+  </Icon>
 </template>
+
+<script setup lang="ts">
+import { Flag, Cat } from '@vexip-ui/icons'
+</script>

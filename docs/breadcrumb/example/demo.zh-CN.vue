@@ -10,7 +10,7 @@
               'is-active': record.visible
             }"
           >
-            <Icon name="caret-right"></Icon>
+            <Icon><CaretRight></CaretRight></Icon>
           </div>
           <template #drop>
             <DropdownList>
@@ -25,32 +25,27 @@
   </Breadcrumb>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, reactive } from 'vue'
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import { CaretRight } from '@vexip-ui/icons'
 
 interface Record {
   visible: boolean,
   children: string[]
 }
 
-export default defineComponent({
-  setup() {
-    const recordMap = ref(new Map<string, Record>())
+const recordMap = ref(new Map<string, Record>())
 
-    recordMap.value
-      .set(
-        '此电脑',
-        reactive({ visible: false, children: ['系统 (C:)', '文档 (D:)', '软件 (E:)'] })
-      )
-      .set(
-        '文档 (D:)',
-        reactive({ visible: false, children: ['vexip-ui', 'element-plus', 'antd-vue'] })
-      )
-      .set('vexip-ui', reactive({ visible: false, children: [] }))
-
-    return { recordMap }
-  }
-})
+recordMap.value
+  .set(
+    '此电脑',
+    reactive({ visible: false, children: ['系统 (C:)', '文档 (D:)', '软件 (E:)'] })
+  )
+  .set(
+    '文档 (D:)',
+    reactive({ visible: false, children: ['vexip-ui', 'element-plus', 'antd-vue'] })
+  )
+  .set('vexip-ui', reactive({ visible: false, children: [] }))
 </script>
 
 <style>

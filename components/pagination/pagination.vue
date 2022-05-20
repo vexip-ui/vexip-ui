@@ -10,7 +10,9 @@
       @click="handlePrev"
     >
       <slot name="prev">
-        <Icon name="chevron-left" :scale="0.8"></Icon>
+        <Icon :scale="0.8">
+          <ChevronLeft></ChevronLeft>
+        </Icon>
       </slot>
     </li>
     <li
@@ -38,13 +40,12 @@
       @mouseleave="handleLeavePrevEllipsis"
     >
       <transition name="vxp-fade">
-        <Icon v-if="inPrevEllipsis" name="angle-double-left" :scale="0.8"></Icon>
-        <Icon
-          v-else
-          name="ellipsis-h"
-          :scale="0.8"
-          style="position: absolute;"
-        ></Icon>
+        <Icon v-if="inPrevEllipsis" :scale="0.8">
+          <AngleDoubleLeft></AngleDoubleLeft>
+        </Icon>
+        <Icon v-else :scale="0.8" style="position: absolute;">
+          <EllipsisH></EllipsisH>
+        </Icon>
       </transition>
     </li>
     <template v-if="currentPagers.length">
@@ -76,13 +77,12 @@
       @mouseleave="handleLeaveNextEllipsis"
     >
       <transition name="vxp-fade">
-        <Icon v-if="inNextEllipsis" name="angle-double-right" :scale="0.8"></Icon>
-        <Icon
-          v-else
-          name="ellipsis-h"
-          :scale="0.8"
-          style="position: absolute;"
-        ></Icon>
+        <Icon v-if="inNextEllipsis" :scale="0.8">
+          <AngleDoubleRight></AngleDoubleRight>
+        </Icon>
+        <Icon v-else :scale="0.8" style="position: absolute;">
+          <EllipsisH></EllipsisH>
+        </Icon>
       </transition>
     </li>
     <li
@@ -108,7 +108,9 @@
       @click="handleNext"
     >
       <slot name="next">
-        <Icon name="chevron-right" :scale="0.8"></Icon>
+        <Icon :scale="0.8">
+          <ChevronRight></ChevronRight>
+        </Icon>
       </slot>
     </li>
     <slot>
@@ -148,12 +150,7 @@ import { Select } from '@/components/select'
 import { useConfiguredProps, useLocaleConfig, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
 import { isFunction, range } from '@vexip-ui/utils'
 import { PaginationMode } from './symbol'
-
-import '@/common/icons/chevron-right'
-import '@/common/icons/chevron-left'
-import '@/common/icons/angle-double-right'
-import '@/common/icons/angle-double-left'
-import '@/common/icons/ellipsis-h'
+import { ChevronRight, ChevronLeft, AngleDoubleRight, AngleDoubleLeft, EllipsisH } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -241,7 +238,12 @@ export default defineComponent({
     Icon,
     NumberInput,
     Option,
-    Select
+    Select,
+    ChevronRight,
+    ChevronLeft,
+    AngleDoubleRight,
+    AngleDoubleLeft,
+    EllipsisH
   },
   props,
   emits: ['on-change', 'on-page-size-change', 'update:active'],

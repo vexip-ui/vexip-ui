@@ -18,7 +18,7 @@
                   :renderer="iconRenderer"
                   :data="{ file: file.source }"
                 ></Renderer>
-                <Icon v-else :name="getFileIcon(file)"></Icon>
+                <Icon v-else :icon="getFileIcon(file)"></Icon>
               </slot>
             </div>
             <span :class="`${prefix}__filename`">
@@ -37,22 +37,24 @@
               v-if="file.status === status.SUCCESS"
               :class="[`${prefix}__icon`, `${prefix}__success`]"
             >
-              <Icon name="check-circle"></Icon>
+              <Icon><CheckCircle></CheckCircle></Icon>
             </div>
             <div
               v-else-if="file.status === status.FAIL"
               :class="[`${prefix}__icon`, `${prefix}__fail`]"
             >
-              <Icon name="exclamation-circle"></Icon>
+              <Icon><ExclamationCircle></ExclamationCircle></Icon>
             </div>
             <div
               v-else-if="file.status === status.UPLOADING"
               :class="[`${prefix}__icon`, `${prefix}__loading`]"
             >
-              <Icon pulse name="spinner"></Icon>
+              <Icon pulse>
+                <Spinner></Spinner>
+              </Icon>
             </div>
             <div :class="[`${prefix}__icon`, `${prefix}__close`]" @click="deleteFile(file)">
-              <Icon name="regular/trash-alt"></Icon>
+              <Icon><TrashAltR></TrashAltR></Icon>
             </div>
           </div>
           <div v-if="file.status === status.UPLOADING" :class="`${prefix}__progress`">
@@ -76,12 +78,9 @@
                     {{ `${file.percentage}%` }}
                   </span>
                 </div>
-                <Icon
-                  v-else
-                  pulse
-                  name="spinner"
-                  :scale="1.8"
-                ></Icon>
+                <Icon v-else pulse :scale="1.8">
+                  <Spinner></Spinner>
+                </Icon>
               </template>
               <img
                 v-else-if="file.type.startsWith('image/') && file.base64"
@@ -97,7 +96,7 @@
                     :renderer="iconRenderer"
                     :data="{ file: file.source }"
                   ></Renderer>
-                  <Icon v-else :name="getFileIcon(file)" :scale="2.8"></Icon>
+                  <Icon v-else :icon="getFileIcon(file)" :scale="2.8"></Icon>
                 </slot>
               </template>
             </div>
@@ -130,10 +129,14 @@
                 ]"
                 @click="$emit('on-preview', file.source)"
               >
-                <Icon name="regular/eye" :scale="1.4"></Icon>
+                <Icon :scale="1.4">
+                  <EyeR></EyeR>
+                </Icon>
               </div>
               <div :class="[`${prefix}__icon`, `${prefix}__action`]" @click="deleteFile(file)">
-                <Icon name="regular/trash-alt" :scale="1.4"></Icon>
+                <Icon :scale="1.4">
+                  <TrashAltR></TrashAltR>
+                </Icon>
               </div>
             </div>
           </div>
@@ -151,13 +154,8 @@ import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
 import { iconMaps } from './file-icon'
+import { CheckCircle, ExclamationCircle, Spinner, EyeR, TrashAltR } from '@vexip-ui/icons'
 import { UploadStatusType } from './symbol'
-
-import '@/common/icons/check-circle'
-import '@/common/icons/exclamation-circle'
-import '@/common/icons/spinner'
-import '@/common/icons/regular/eye'
-import '@/common/icons/regular/trash-alt'
 
 import type { PropType } from 'vue'
 import type { UploadListType, RenderFn, FileState } from './symbol'
@@ -193,7 +191,12 @@ export default defineComponent({
     CollapseTransition,
     Icon,
     Progress,
-    Renderer
+    Renderer,
+    CheckCircle,
+    ExclamationCircle,
+    Spinner,
+    EyeR,
+    TrashAltR
   },
   props,
   emits: ['on-delete', 'on-preview'],

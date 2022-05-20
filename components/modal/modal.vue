@@ -31,7 +31,7 @@
             @click="handleClose(false)"
           >
             <slot name="close">
-              <Icon name="times"></Icon>
+              <Icon><Times></Times></Icon>
             </slot>
           </div>
           <slot name="header">
@@ -76,8 +76,7 @@ import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
 import { isPromise, toNumber } from '@vexip-ui/utils'
-
-import '@/common/icons/times'
+import { Times } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -198,7 +197,8 @@ export default defineComponent({
   components: {
     Button,
     Icon,
-    Masker
+    Masker,
+    Times
   },
   props,
   emits: [

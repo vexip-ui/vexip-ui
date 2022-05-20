@@ -7,7 +7,7 @@ export interface ConfirmOptions extends Record<string, unknown> {
   confirmType?: ConfirmType,
   confirmText?: string,
   cancelText?: string,
-  icon?: string | Record<string, unknown> | (() => any),
+  icon?: Record<string, unknown> | (() => any) | null,
   iconColor?: string,
   style?: CSSProperties,
   maskClose?: boolean,

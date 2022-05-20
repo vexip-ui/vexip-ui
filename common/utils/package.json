@@ -22,5 +22,10 @@
     "type": "git",
     "url": "git+https://github.com/qmhc/vexip-ui.git",
     "directory": "common/config"
+  },
+  "devDependencies": {
+    "typescript": "4.6.4",
+    "vite": "^2.9.9",
+    "vite-plugin-dts": "^1.1.1"
   }
 }

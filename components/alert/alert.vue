@@ -11,12 +11,12 @@
       </div>
       <div v-if="hasIcon" :class="`${prefix}__icon`">
         <slot name="icon">
-          <Icon :name="iconName" :style="{ color: iconColor }"></Icon>
+          <Icon :icon="iconComp" :style="{ color: iconColor }"></Icon>
         </slot>
       </div>
       <div v-if="closable" :class="`${prefix}__close`" @click="handleClose">
         <slot name="close">
-          <Icon name="times"></Icon>
+          <Icon :icon="Times"></Icon>
         </slot>
       </div>
     </div>
@@ -29,21 +29,23 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps } from '@vexip-ui/config'
 
-import '@/common/icons/flag'
-import '@/common/icons/info-circle'
-import '@/common/icons/check-circle'
-import '@/common/icons/exclamation-circle'
-import '@/common/icons/times'
-import '@/common/icons/times-circle'
+import {
+  Flag,
+  InfoCircle,
+  CheckCircle,
+  ExclamationCircle,
+  Times,
+  TimesCircle
+} from '@vexip-ui/icons'
 
 export type AlertType = 'default' | 'info' | 'success' | 'warning' | 'error'
 
 const predefinedIcons = {
-  default: 'flag',
-  info: 'info-circle',
-  success: 'check-circle',
-  warning: 'exclamation-circle',
-  error: 'times-circle'
+  default: Flag,
+  info: InfoCircle,
+  success: CheckCircle,
+  warning: ExclamationCircle,
+  error: TimesCircle
 }
 
 const props = useConfiguredProps('alert', {
@@ -62,7 +64,7 @@ const props = useConfiguredProps('alert', {
     default: false
   },
   icon: {
-    type: [Boolean, String],
+    type: [Boolean, Object],
     default: false
   },
   closable: {
@@ -114,7 +116,7 @@ export default defineComponent({
         [`${prefix}--banner`]: props.banner
       }
     })
-    const iconName = computed(() => {
+    const iconComp = computed(() => {
       if (typeof props.icon === 'boolean') {
         return predefinedIcons[props.type] ?? ''
       }
@@ -132,13 +134,15 @@ export default defineComponent({
     }
 
     return {
+      Times,
+
       prefix,
       closed,
 
       hasTitle,
       hasIcon,
       className,
-      iconName,
+      iconComp,
 
       handleClose,
       handleAfterLeave

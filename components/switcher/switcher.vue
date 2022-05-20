@@ -2,7 +2,9 @@
   <label :class="className" :style="style">
     <span :class="`${prefix}__signal`" :style="signalStyle">
       <slot v-if="loading" name="loading">
-        <Icon name="spinner" pulse></Icon>
+        <Icon pulse>
+          <Spinner></Spinner>
+        </Icon>
       </slot>
     </span>
     <span :class="`${prefix}__label`">
@@ -29,8 +31,7 @@ import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isPromise, noop } from '@vexip-ui/utils'
-
-import '@/common/icons/spinner'
+import { Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -78,7 +79,8 @@ const props = useConfiguredProps('switcher', {
 export default defineComponent({
   name: 'Switcher',
   components: {
-    Icon
+    Icon,
+    Spinner
   },
   props,
   emits: ['on-change', 'update:value'],

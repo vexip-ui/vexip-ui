@@ -6,7 +6,7 @@
     @click="handleClick"
   >
     <slot name="icon">
-      <Icon v-if="icon" :class="`${prefix}__icon`" :name="icon"></Icon>
+      <Icon v-if="icon" :class="`${prefix}__icon`" :icon="icon"></Icon>
     </slot>
     <slot></slot>
   </a>
@@ -31,8 +31,8 @@ const props = useConfiguredProps('linker', {
     }
   },
   icon: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   underline: {
     type: Boolean,

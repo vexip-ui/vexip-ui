@@ -38,11 +38,10 @@
             :data="item"
           ></Renderer>
           <Icon
-            v-else-if="item.icon && typeof item.icon === 'object'"
-            v-bind="item.icon"
+            v-else-if="item.icon"
+            :icon="item.icon"
             :style="[{ color: item.iconColor }, item.icon.style]"
           ></Icon>
-          <Icon v-else :name="item.icon" :style="{ color: item.iconColor }"></Icon>
         </div>
         <Renderer
           v-if="typeof item.renderer === 'function'"
@@ -69,7 +68,7 @@
           </div>
         </template>
         <div v-if="item.closable" :class="`${prefix}__close`" @click="remove(item.key)">
-          <Icon name="times"></Icon>
+          <Icon><Times></Times></Icon>
         </div>
       </div>
     </template>
@@ -81,8 +80,7 @@ import { defineComponent, ref } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
-
-import '@/common/icons/times'
+import { Times } from '@vexip-ui/icons'
 
 import type { Key, NoticePlacement } from './symbol'
 
@@ -91,7 +89,8 @@ export default defineComponent({
   components: {
     Icon,
     Renderer,
-    Popup
+    Popup,
+    Times
   },
   setup() {
     const placement = ref<NoticePlacement>('top-right')

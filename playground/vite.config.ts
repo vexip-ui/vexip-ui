@@ -25,20 +25,6 @@ export default defineConfig(({ command }) => {
     build: {
       chunkSizeWarningLimit: 10 * 1024
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: [
-            '@use "sass:color";',
-            '@use "sass:list";',
-            '@use "sass:map";',
-            '@use "sass:math";',
-            '@import "@/design/variables.scss";',
-            '@import "@/design/mixins.scss";'
-          ].join('\n')
-        }
-      }
-    },
     optimizeDeps: {
       exclude: ['@vue/repl']
     },
@@ -65,8 +51,8 @@ export default defineConfig(({ command }) => {
             const filePath = resolve(__dirname, depPaths[fileName])
 
             this.emitFile({
+              fileName,
               type: 'asset',
-              fileName: fileName,
               source: fs.readFileSync(filePath, 'utf-8')
             })
           })

@@ -28,8 +28,8 @@
           }"
           @click="handleToggleExpand()"
         >
-          <Icon v-if="loading" spin name="spinner"></Icon>
-          <Icon v-else name="chevron-right"></Icon>
+          <Icon v-if="loading" pulse><Spinner></Spinner></Icon>
+          <Icon v-else><ChevronRight></ChevronRight></Icon>
         </span>
         <Checkbox
           v-if="hasCheckbox"
@@ -98,6 +98,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { isNull } from '@vexip-ui/utils'
+import { ChevronRight, Spinner } from '@vexip-ui/icons'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -195,7 +196,9 @@ export default defineComponent({
     Checkbox,
     CollapseTransition,
     Icon,
-    Renderer
+    Renderer,
+    ChevronRight,
+    Spinner
   },
   inheritAttrs: false,
   props,

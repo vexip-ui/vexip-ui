@@ -8,7 +8,7 @@
     <div ref="reference" :class="`${prefixCls}__control`">
       <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: prefixColor }">
         <slot name="prefix">
-          <Icon :name="prefix"></Icon>
+          <Icon :icon="prefix"></Icon>
         </slot>
       </div>
       <TimeControl
@@ -39,7 +39,7 @@
           :class="[`${prefixCls}__exchange`, exchange ? `${prefixCls}__exchange--enabled` : '']"
           @click="handleExchangeClick"
         >
-          <Icon name="exchange-alt"></Icon>
+          <Icon><ExchangeAlt></ExchangeAlt></Icon>
         </div>
         <TimeControl
           ref="end"
@@ -71,11 +71,11 @@
           :class="`${prefixCls}__clear`"
           @click.stop="handleClear"
         >
-          <Icon name="times-circle"></Icon>
+          <Icon><TimesCircle></TimesCircle></Icon>
         </div>
         <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: suffixColor }">
           <slot name="suffix">
-            <Icon :name="suffix || 'regular/clock'"></Icon>
+            <Icon :icon="suffix || ClockR"></Icon>
           </slot>
         </div>
       </transition>
@@ -153,11 +153,8 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, doubleDigits, boundRange } from '@vexip-ui/utils'
+import { TimesCircle, ClockR, ExchangeAlt } from '@vexip-ui/icons'
 import { useColumn } from './helper'
-
-import '@/common/icons/times-circle'
-import '@/common/icons/regular/clock'
-import '@/common/icons/exchange-alt'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -266,16 +263,16 @@ const props = useConfiguredProps('timePicker', {
     default: () => [5, 5, 5]
   },
   prefix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   prefixColor: {
     type: String,
     default: ''
   },
   suffix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   suffixColor: {
     type: String,
@@ -298,7 +295,9 @@ export default defineComponent({
     Icon,
     Portal,
     TimeControl,
-    TimeWheel
+    TimeWheel,
+    TimesCircle,
+    ExchangeAlt
   },
   props,
   emits: [
@@ -723,6 +722,8 @@ export default defineComponent({
     }
 
     return {
+      ClockR,
+
       prefixCls: prefix,
       locale: useLocaleConfig('timePicker'),
       isHover,

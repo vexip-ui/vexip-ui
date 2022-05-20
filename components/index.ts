@@ -88,8 +88,6 @@ import { WheelItem } from './wheel-item'
 
 import { buildInstall } from './create'
 
-import '@/common/icons'
-
 import type { PropOptions, LocaleOptions } from '@vexip-ui/config'
 
 export { configProp, configLocale } from '@vexip-ui/config'
