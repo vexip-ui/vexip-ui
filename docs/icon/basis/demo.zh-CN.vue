@@ -1,8 +1,12 @@
 <template>
-  <Icon name="dice-one"></Icon>
-  <Icon name="dice-two"></Icon>
-  <Icon name="dice-three"></Icon>
-  <Icon name="dice-four"></Icon>
-  <Icon name="dice-five"></Icon>
-  <Icon name="dice-six"></Icon>
+  <Icon><DiceOne></DiceOne></Icon>
+  <Icon><DiceTwo></DiceTwo></Icon>
+  <Icon><DiceThree></DiceThree></Icon>
+  <Icon><DiceFour></DiceFour></Icon>
+  <Icon><DiceFive></DiceFive></Icon>
+  <Icon><DiceSix></DiceSix></Icon>
 </template>
+
+<script setup lang="ts">
+import { DiceOne, DiceTwo, DiceThree, DiceFour, DiceFive, DiceSix } from '@vexip-ui/icons'
+</script>

@@ -7,7 +7,7 @@ export type MessagePlacement = 'top' | 'bottom'
 export interface MessageOptions extends Record<string, unknown> {
   content?: string,
   key?: Key,
-  icon?: string | Record<string, unknown> | (() => any),
+  icon?: Record<string, unknown> | (() => any),
   iconColor?: string,
   type?: MessageType,
   duration?: number,

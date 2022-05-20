@@ -28,7 +28,7 @@
         }"
         @click="handleSortAsc()"
       >
-        <Icon name="caret-up"></Icon>
+        <Icon><CaretUp></CaretUp></Icon>
       </span>
       <span
         :class="{
@@ -37,7 +37,7 @@
         }"
         @click="handleSortDesc()"
       >
-        <Icon name="caret-down"></Icon>
+        <Icon><CaretDown></CaretDown></Icon>
       </span>
     </div>
     <Tooltip
@@ -57,7 +57,7 @@
       }"
     >
       <div :class="`${prefix}__filter-trigger`">
-        <Icon name="filter"></Icon>
+        <Icon><Filter></Filter></Icon>
       </div>
       <template v-if="filter.multiple" #tip>
         <div vertical :class="`${prefix}__filter-group`">
@@ -119,11 +119,8 @@ import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
 import { useLocaleConfig } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
+import { CaretUp, CaretDown, Filter } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
-
-import '@/common/icons/caret-up'
-import '@/common/icons/caret-down'
-import '@/common/icons/filter'
 
 import type { PropType } from 'vue'
 import type { SelectionColumn, TypeColumn, ColumnWithKey } from './symbol'
@@ -148,7 +145,10 @@ export default defineComponent({
     Checkbox,
     Icon,
     Renderer,
-    Tooltip
+    Tooltip,
+    CaretUp,
+    CaretDown,
+    Filter
   },
   props,
   setup(props) {

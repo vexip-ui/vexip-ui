@@ -17,13 +17,8 @@
         <div :class="`${prefix}__icon`">
           <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
           <Icon
-            v-else-if="icon && typeof icon === 'object'"
-            v-bind="icon"
-            :style="[{ color: iconColor }, icon.style]"
-          ></Icon>
-          <Icon
             v-else
-            :name="icon || 'question-circle'"
+            :icon="icon || QuestionCircle"
             :scale="2.2"
             :style="{ color: iconColor }"
           ></Icon>
@@ -57,8 +52,7 @@ import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
 import { isPromise, isFunction } from '@vexip-ui/utils'
-
-import '@/common/icons/question-circle'
+import { QuestionCircle } from '@vexip-ui/icons'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { ConfirmType, ConfirmOptions } from './symbol'
@@ -103,8 +97,8 @@ const props = useConfiguredProps('confirm', {
     default: null
   },
   icon: {
-    type: [String, Object, Function] as PropType<string | Record<string, unknown> | (() => any)>,
-    default: 'question-circle'
+    type: [Object, Function] as PropType<Record<string, unknown> | (() => any)>,
+    default: null
   },
   style: {
     type: Object as PropType<CSSProperties>,
@@ -217,11 +211,13 @@ export default defineComponent({
       confirmType.value = props.confirmType
       confirmText.value = props.confirmText
       cancelText.value = props.cancelText
-      icon.value = ''
+      icon.value = null!
       ;(renderer.value as any) = null
     }
 
     return {
+      QuestionCircle,
+
       prefix: 'vxp-confirm',
       locale: useLocaleConfig('confirm'),
       visible,

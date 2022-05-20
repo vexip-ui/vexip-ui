@@ -22,10 +22,14 @@
       @change="handleChange"
     />
     <div :class="`${prefixCls}__plus`" @click="plusNumber" @mousedown.prevent>
-      <Icon name="caret-up" :scale="0.8"></Icon>
+      <Icon :scale="0.8">
+        <CaretUp></CaretUp>
+      </Icon>
     </div>
     <div :class="`${prefixCls}__minus`" @click="minusNumber" @mousedown.prevent>
-      <Icon name="caret-down" :scale="0.8"></Icon>
+      <Icon :scale="0.8">
+        <CaretDown></CaretDown>
+      </Icon>
     </div>
     <div
       v-if="hasPrefix"
@@ -34,7 +38,7 @@
       @click="handlePrefixClick"
     >
       <slot name="prefix">
-        <Icon :name="prefix"></Icon>
+        <Icon :icon="prefix"></Icon>
       </slot>
     </div>
     <transition name="vxp-fade">
@@ -43,7 +47,7 @@
         :class="`${prefixCls}__clear`"
         @click.stop="handleClear"
       >
-        <Icon name="times-circle"></Icon>
+        <Icon><TimesCircle></TimesCircle></Icon>
       </div>
       <div
         v-else-if="hasSuffix"
@@ -52,7 +56,7 @@
         @click="handleSuffixClick"
       >
         <slot name="suffix">
-          <Icon :name="suffix"></Icon>
+          <Icon :icon="suffix"></Icon>
         </slot>
       </div>
     </transition>
@@ -66,10 +70,7 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isNull, noop, toFixed, toNumber, boundRange, throttle } from '@vexip-ui/utils'
-
-import '@/common/icons/caret-up'
-import '@/common/icons/caret-down'
-import '@/common/icons/times-circle'
+import { CaretUp, CaretDown, TimesCircle } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -80,16 +81,16 @@ const props = useConfiguredProps('numberInput', {
   size: createSizeProp(),
   state: createStateProp(),
   prefix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   prefixColor: {
     type: String,
     default: ''
   },
   suffix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   suffixColor: {
     type: String,
@@ -169,7 +170,10 @@ const props = useConfiguredProps('numberInput', {
 export default defineComponent({
   name: 'NumberInput',
   components: {
-    Icon
+    Icon,
+    CaretUp,
+    CaretDown,
+    TimesCircle
   },
   props,
   emits: [

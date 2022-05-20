@@ -118,7 +118,7 @@ watchEffect(() => history.replaceState({}, '', store.serialize()))
 
 <style lang="scss">
 body {
-  --base: #{$vxp-color-content-normal};
+  --base: var(--vxp-content-color-base);
   --nav-height: 50px;
 
   margin: 0;

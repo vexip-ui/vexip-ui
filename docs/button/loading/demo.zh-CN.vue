@@ -1,28 +1,26 @@
 <template>
-  <div>
-    <Button loading type="primary">
-      Loading
-    </Button>
-    <Button
-      type="primary"
-      :loading="loading"
-      @on-click="load"
-    >
-      Click me
-    </Button>
-    <Button
-      loading
-      circle
-      type="primary"
-    >
-      Loading
-    </Button>
-    <Button
-      loading
-      circle
-      type="primary"
-    ></Button>
-  </div>
+  <Button loading type="primary">
+    Loading
+  </Button>
+  <Button
+    type="primary"
+    :loading="loading"
+    @on-click="load"
+  >
+    Click me
+  </Button>
+  <Button
+    loading
+    circle
+    type="primary"
+  >
+    Loading
+  </Button>
+  <Button
+    loading
+    circle
+    type="primary"
+  ></Button>
 </template>
 
 <script lang="ts">

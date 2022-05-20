@@ -1,5 +1,4 @@
 import '@vue/repl/style.css'
-import '../themes/common.scss'
 import '../style/index.scss'
 
 import { createApp } from 'vue'

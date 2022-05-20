@@ -36,6 +36,7 @@ const external = (id: string) => externalPkgs.some(p => p === id || id.startsWit
 
 export default defineConfig(async () => {
   const input = await glob('components/**/*.{ts,vue}', {
+    cwd: __dirname,
     absolute: true,
     onlyFiles: true,
     ignore: ['**/__serve__/**']
@@ -50,13 +51,13 @@ export default defineConfig(async () => {
     resolve: {
       alias: [
         { find: /^@\/components/, replacement: resolve(__dirname, 'components') },
-        { find: /^@\/common\/icons/, replacement: resolve(__dirname, 'common/icons') },
+        { find: /^@\/common\/icons/, replacement: resolve(__dirname, 'common/icons/src') },
         { find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }
       ]
     },
     build: {
-      sourcemap: sourceMap,
       outDir,
+      sourcemap: sourceMap,
       lib: {
         entry: resolve(componentsDir, 'index.ts'),
         formats: [format]

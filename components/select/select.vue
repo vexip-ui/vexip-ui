@@ -8,7 +8,7 @@
     <div ref="reference" :class="`${prefixCls}__control`" :style="controlStyle">
       <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: prefixColor }">
         <slot name="prefix">
-          <Icon :name="prefix"></Icon>
+          <Icon :icon="prefix"></Icon>
         </slot>
       </div>
       <slot name="control">
@@ -41,7 +41,7 @@
           :class="`${prefixCls}__clear`"
           @click.stop="handleClear"
         >
-          <Icon name="times-circle"></Icon>
+          <Icon><TimesCircle></TimesCircle></Icon>
         </div>
         <div
           v-else-if="!noSuffix"
@@ -49,7 +49,7 @@
           :style="{ color: suffixColor }"
         >
           <slot name="suffix">
-            <Icon :name="suffix || 'chevron-down'"></Icon>
+            <Icon :icon="suffix || ChevronDown"></Icon>
           </slot>
         </div>
       </transition>
@@ -93,7 +93,9 @@
                         {{ item.label || item.value.toString() }}
                       </span>
                       <transition v-if="optionCheck" name="vxp-fade" appear>
-                        <Icon v-if="selected" :class="`${prefixCls}__check`" name="check"></Icon>
+                        <Icon v-if="selected" :class="`${prefixCls}__check`">
+                          <Check></Check>
+                        </Icon>
                       </transition>
                     </template>
                   </Option>
@@ -133,10 +135,7 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, isNull } from '@vexip-ui/utils'
-
-import '@/common/icons/chevron-down'
-import '@/common/icons/check'
-import '@/common/icons/times-circle'
+import { ChevronDown, Check, TimesCircle } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -178,16 +177,16 @@ const props = useConfiguredProps('select', {
     default: null
   },
   prefix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   prefixColor: {
     type: String,
     default: ''
   },
   suffix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   suffixColor: {
     type: String,
@@ -249,7 +248,9 @@ export default defineComponent({
     Option,
     Portal,
     Scroll,
-    Tag
+    Tag,
+    Check,
+    TimesCircle
   },
   props,
   emits: [
@@ -536,6 +537,8 @@ export default defineComponent({
     }
 
     return {
+      ChevronDown,
+
       prefixCls: prefix,
       locale,
       currentVisible,

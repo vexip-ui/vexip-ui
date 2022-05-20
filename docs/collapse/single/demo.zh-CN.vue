@@ -7,7 +7,7 @@
     <br />
     <CollapsePane card>
       <template #title>
-        <Icon name="chart-line"></Icon>
+        <Icon><ChartLine></ChartLine></Icon>
         独立面板二
       </template>
       <p>一些内容一些内容一些内容</p>
@@ -15,3 +15,7 @@
     </CollapsePane>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ChartLine } from '@vexip-ui/icons'
+</script>

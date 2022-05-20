@@ -19,7 +19,7 @@
           </slot>
           <div v-if="closable" :class="`${prefix}__close`" @click="handleClose()">
             <slot name="close">
-              <Icon name="times"></Icon>
+              <Icon><Times></Times></Icon>
             </slot>
           </div>
         </div>
@@ -50,8 +50,7 @@ import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
-
-import '@/common/icons/times'
+import { Times } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -126,7 +125,8 @@ export default defineComponent({
   name: 'Drawer',
   components: {
     Icon,
-    Masker
+    Masker,
+    Times
   },
   // model: {
   //   prop: 'active',

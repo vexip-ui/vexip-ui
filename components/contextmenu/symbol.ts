@@ -5,7 +5,7 @@ export type Key = string | number
 export interface MenuConfig {
   key: Key,
   label?: string,
-  icon?: string | Record<string, unknown> | (() => any),
+  icon?: Record<string, unknown> | (() => any),
   color?: string,
   iconColor?: string,
   shortcut?: string,

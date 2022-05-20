@@ -10,7 +10,7 @@
   </Linker>
   <Linker type="error">
     <template #icon>
-      <Icon name="upload"></Icon>
+      <Icon><Upload></Upload></Icon>
     </template>
     链接
   </Linker>
@@ -21,3 +21,7 @@
     链接
   </Linker>
 </template>
+
+<script setup lang="ts">
+import { Upload } from '@vexip-ui/icons'
+</script>

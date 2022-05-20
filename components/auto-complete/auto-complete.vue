@@ -22,7 +22,7 @@
   >
     <template v-if="hasPrefix" #prefix>
       <slot name="prefix">
-        <Icon :name="prefix"></Icon>
+        <Icon :icon="prefix"></Icon>
       </slot>
     </template>
     <template #control>
@@ -51,7 +51,7 @@
     </template>
     <template v-if="hasSuffix" #suffix>
       <slot name="suffix">
-        <Icon :name="suffix"></Icon>
+        <Icon :icon="suffix"></Icon>
       </slot>
     </template>
     <slot>
@@ -74,8 +74,6 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { placementWhileList } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isNull, noop } from '@vexip-ui/utils'
-
-import '@/common/icons/times-circle'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -111,7 +109,7 @@ const props = useConfiguredProps('autoComplete', {
     default: false
   },
   prefix: {
-    type: String,
+    type: Object,
     default: ''
   },
   prefixColor: {
@@ -119,7 +117,7 @@ const props = useConfiguredProps('autoComplete', {
     default: ''
   },
   suffix: {
-    type: String,
+    type: Object,
     default: ''
   },
   suffixColor: {

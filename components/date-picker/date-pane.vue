@@ -19,14 +19,14 @@
               :class="[`${prefix}__arrow`, `${prefix}__prev-year`]"
               @click="handleDoublePrevClick"
             >
-              <Icon name="angle-double-left"></Icon>
+              <Icon><AngleDoubleLeft></AngleDoubleLeft></Icon>
             </div>
             <div
               v-show="currentPane === 'date'"
               :class="[`${prefix}__arrow`, `${prefix}__prev-month`]"
               @click="adjustCalendar('month', -1)"
             >
-              <Icon name="angle-left"></Icon>
+              <Icon><AngleLeft></AngleLeft></Icon>
             </div>
             <div key="year" :class="`${prefix}__year`" @click.stop="togglePane('year')">
               <template v-if="currentPane === 'year'">
@@ -48,13 +48,13 @@
               :class="[`${prefix}__arrow`, `${prefix}__next-month`]"
               @click="adjustCalendar('month', 1)"
             >
-              <Icon name="angle-right"></Icon>
+              <Icon><AngleRight></AngleRight></Icon>
             </div>
             <div
               :class="[`${prefix}__arrow`, `${prefix}__next-year`]"
               @click="handleDoubleNextClick"
             >
-              <Icon name="angle-double-right"></Icon>
+              <Icon><AngleDoubleRight></AngleDoubleRight></Icon>
             </div>
           </div>
           <div ref="calendar" :class="`${prefix}__calendar`">
@@ -154,11 +154,7 @@ import TimeWheel from './time-wheel.vue'
 import { useHover } from '@vexip-ui/mixins'
 import { useLocaleConfig } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
-
-import '@/common/icons/angle-right'
-import '@/common/icons/angle-left'
-import '@/common/icons/angle-double-right'
-import '@/common/icons/angle-double-left'
+import { AngleRight, AngleLeft, AngleDoubleRight, AngleDoubleLeft } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { MonthIndex } from '@/components/calendar'
@@ -240,7 +236,11 @@ export default defineComponent({
     Button,
     CalendarPane,
     Icon,
-    TimeWheel
+    TimeWheel,
+    AngleRight,
+    AngleLeft,
+    AngleDoubleRight,
+    AngleDoubleLeft
   },
   props,
   emits: [

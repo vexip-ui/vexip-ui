@@ -10,7 +10,7 @@
       ]"
       @click="handlePrev"
     >
-      <Icon :name="`angle-${horizontal ? 'left' : 'up'}`"></Icon>
+      <Icon :icon="horizontal ? AngleLeft : AngleUp"></Icon>
     </div>
     <div :class="`${prefix}__scroll`" :style="scrollStyle">
       <Scroll
@@ -44,7 +44,7 @@
       ]"
       @click="handleNext"
     >
-      <Icon :name="`angle-${horizontal ? 'right' : 'down'}`"></Icon>
+      <Icon :icon="horizontal ? AngleRight : AngleDown"></Icon>
     </div>
   </div>
 </template>
@@ -57,12 +57,8 @@ import { VALIDATE_FIELD } from '@/components/form-item'
 import { useDisplay } from '@vexip-ui/mixins'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { noop, debounce, debounceMinor } from '@vexip-ui/utils'
+import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
 import { WHEEL_STATE } from './symbol'
-
-import '@/common/icons/angle-up'
-import '@/common/icons/angle-right'
-import '@/common/icons/angle-down'
-import '@/common/icons/angle-left'
 
 import type { ItemState } from './symbol'
 
@@ -355,6 +351,11 @@ export default defineComponent({
     }
 
     return {
+      AngleUp,
+      AngleRight,
+      AngleDown,
+      AngleLeft,
+
       prefix,
       currentActive,
       isInit,

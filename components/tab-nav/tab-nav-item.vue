@@ -6,7 +6,7 @@
     @click="handleSelect"
   >
     <div v-if="icon" :class="`${prefix}__icon`">
-      <Icon :name="icon"></Icon>
+      <Icon :icon="icon"></Icon>
     </div>
     <slot>
       {{ label }}
@@ -32,8 +32,8 @@ const props = {
     default: false
   },
   icon: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   }
 }
 

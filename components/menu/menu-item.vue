@@ -18,7 +18,7 @@
       >
         <div v-if="icon" :class="`${prefix}__icon`">
           <slot name="icon">
-            <Icon :name="icon"></Icon>
+            <Icon :icon="icon"></Icon>
           </slot>
         </div>
         <span :class="`${prefix}__title`">
@@ -28,12 +28,13 @@
         </span>
         <Icon
           v-if="isGroup"
-          name="chevron-down"
           :class="{
             [`${prefix}__arrow`]: true,
             [`${prefix}__arrow--visible`]: groupExpanded
           }"
-        ></Icon>
+        >
+          <ChevronDown></ChevronDown>
+        </Icon>
       </div>
       <template #tip>
         <span :class="`${prefix}__tooltip-title`">
@@ -88,9 +89,8 @@ import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { usePopper } from '@vexip-ui/mixins'
+import { ChevronDown } from '@vexip-ui/icons'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE } from './symbol'
-
-import '@/common/icons/chevron-down'
 
 import type { Placement } from '@vexip-ui/mixins'
 
@@ -100,7 +100,7 @@ const props = useConfiguredProps('menuItem', {
     default: null
   },
   icon: {
-    type: String,
+    type: Object,
     default: null
   },
   disabled: {
@@ -123,7 +123,8 @@ export default defineComponent({
     CollapseTransition,
     Icon,
     Tooltip,
-    Portal
+    Portal,
+    ChevronDown
   },
   props,
   emits: ['on-select'],

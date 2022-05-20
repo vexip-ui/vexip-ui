@@ -307,15 +307,31 @@ $input: map.merge(
     }
   }
 
+  @mixin inner-select($bg-color) {
+    .vxp-select {
+      background-color: $bg-color;
+      border: 0;
+      box-shadow: unset;
+    }
+  }
+
   &__before {
-    background-color: get-css-var('input-before-bg-color');
+    $bg-color: get-css-var('input-before-bg-color');
+
+    background-color: $bg-color;
     border-right: 0;
     border-radius: $radius 0 0 $radius;
+
+    @include inner-select($bg-color);
   }
 
   &__after {
-    background-color: get-css-var('input-after-bg-color');
+    $bg-color: get-css-var('input-after-bg-color');
+
+    background-color: $bg-color;
     border-left: 0;
     border-radius: 0 $radius $radius 0;
+
+    @include inner-select($bg-color);
   }
 }

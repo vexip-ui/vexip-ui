@@ -74,6 +74,7 @@ $button: map.merge(
     large-h-padding: 1.4em,
     large-padding: get-css-var('button-large-v-padding') get-css-var('button-large-h-padding'),
     series-span: 0.6em,
+    icon-span: 4px,
     d-color-typed: rgba($color-white, 50%)
   ),
   $button
@@ -366,6 +367,7 @@ $button: map.merge(
   &--loading {
     position: relative;
     pointer-events: none;
+    cursor: default;
 
     &::before {
       position: absolute;
@@ -386,7 +388,7 @@ $button: map.merge(
   &__icon {
     display: flex;
     align-items: center;
-    margin-right: 3px;
+    margin-right: get-css-var('button-icon-span');
   }
 
   &--icon-only {

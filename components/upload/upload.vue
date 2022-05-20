@@ -22,7 +22,7 @@
       />
       <slot :is-drag-over="(allowDrag || disabledClick) && isDragOver">
         <template v-if="!allowDrag && !disabledClick">
-          <Button icon="upload">
+          <Button :icon="Upload">
             {{ locale.upload }}
           </Button>
           <slot name="tip">
@@ -32,7 +32,9 @@
           </slot>
         </template>
         <div v-else :class="`${prefix}__drag-pane`">
-          <Icon name="cloud-upload-alt" :class="`${prefix}__cloud`" :scale="4"></Icon>
+          <Icon :class="`${prefix}__cloud`" :scale="4">
+            <CloudUploadAlt></CloudUploadAlt>
+          </Icon>
           <slot name="tip">
             <p :class="`${prefix}__tip`">
               {{ tip || locale.dragOrClick }}
@@ -66,10 +68,8 @@ import UploadList from './upload-list.vue'
 import { upload } from './request'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
 import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
+import { CloudUploadAlt, Upload } from '@vexip-ui/icons'
 import { UploadStatusType } from './symbol'
-
-import '@/common/icons/cloud-upload-alt'
-import '@/common/icons/upload'
 
 import type { PropType } from 'vue'
 import type {
@@ -190,7 +190,8 @@ export default defineComponent({
   components: {
     Button,
     Icon,
-    UploadList
+    UploadList,
+    CloudUploadAlt
   },
   props,
   emits: [
@@ -651,6 +652,8 @@ export default defineComponent({
     }
 
     return {
+      Upload,
+
       prefix,
       locale: useLocaleConfig('upload'),
       fileStates,

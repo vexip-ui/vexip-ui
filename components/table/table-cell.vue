@@ -20,7 +20,7 @@
         }"
         @click.stop="handleExpandRow(row)"
       >
-        <Icon name="angle-right"></Icon>
+        <Icon><AngleRight></AngleRight></Icon>
       </div>
     </template>
   </div>
@@ -61,6 +61,7 @@ import { Ellipsis } from '@/components/ellipsis'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { isFunction } from '@vexip-ui/utils'
+import { AngleRight } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
@@ -73,8 +74,6 @@ import type {
   ColumnWithKey,
   TableAction
 } from './symbol'
-
-import '@/common/icons/angle-right'
 
 const columnTypes = ['order', 'selection', 'expand']
 
@@ -103,7 +102,8 @@ export default defineComponent({
     Checkbox,
     Ellipsis,
     Icon,
-    Renderer
+    Renderer,
+    AngleRight
   },
   props,
   setup(props) {

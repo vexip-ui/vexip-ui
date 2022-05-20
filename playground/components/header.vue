@@ -11,17 +11,27 @@
     <Column flex="auto"></Column>
     <Column flex="0">
       <div class="action" @click="toggleDark">
-        <Icon v-if="isDarkTheme" name="moon" :scale="1.3"></Icon>
-        <Icon v-else name="sun" :scale="1.4"></Icon>
+        <Icon v-if="isDarkTheme" :scale="1.3">
+          <Moon></Moon>
+        </Icon>
+        <Icon v-else :scale="1.4">
+          <Sun></Sun>
+        </Icon>
       </div>
       <div class="action" @click="copyLink">
-        <Icon name="share-alt" :scale="1.3"></Icon>
+        <Icon :scale="1.3">
+          <ShareAlt></ShareAlt>
+        </Icon>
       </div>
       <div class="action" @click="download">
-        <Icon name="download" :scale="1.3"></Icon>
+        <Icon :scale="1.3">
+          <Download></Download>
+        </Icon>
       </div>
       <Linker class="github-link" to="//github.com/qmhc/vexip-ui/tree/main/playground">
-        <Icon name="brands/github" :scale="1.5"></Icon>
+        <Icon :scale="1.5">
+          <GithubB></GithubB>
+        </Icon>
       </Linker>
     </Column>
   </Row>
@@ -30,6 +40,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Confirm, Message } from 'vexip-ui'
+import { Moon, Sun, ShareAlt, Download, GithubB } from '@vexip-ui/icons'
 import { downloadProject } from '../download/download'
 
 const props = defineProps({
@@ -72,9 +83,9 @@ async function download() {
 
 <style lang="scss">
 .header {
-  --bg: #{$vxp-color-white};
-  --bg-light: #{$vxp-color-white};
-  --border: #{$vxp-color-border};
+  --bg: var(--vxp-color-white);
+  --bg-light: var(--vxp-color-white);
+  --border: var(--vxp-border-color-base);
 
   z-index: 10;
   height: var(--nav-height);

@@ -27,6 +27,12 @@
     "@popperjs/core": "^2.11.5",
     "@vexip-ui/utils": "workspace:^"
   },
+  "devDependencies": {
+    "typescript": "4.6.4",
+    "vite": "^2.9.9",
+    "vite-plugin-dts": "^1.1.1",
+    "vue": "^3.2.33"
+  },
   "peerDependencies": {
     "vue": "^3.2.6"
   }

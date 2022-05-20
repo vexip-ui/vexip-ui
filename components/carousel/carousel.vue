@@ -25,7 +25,7 @@
           @click="handlePrevClick"
         >
           <slot name="prev-arrow" :disabled="disabledPrev">
-            <Icon :name="`arrow-${arrowIcons[0]}`" :scale="1.5"></Icon>
+            <Icon :icon="arrowIcons[0]" :scale="1.5"></Icon>
           </slot>
         </div>
       </div>
@@ -51,7 +51,7 @@
           @click="handleNextClick"
         >
           <slot name="next-arrow" :disabled="disabledNext">
-            <Icon :name="`arrow-${arrowIcons[1]}`" :scale="1.5"></Icon>
+            <Icon :icon="arrowIcons[1]" :scale="1.5"></Icon>
           </slot>
         </div>
       </div>
@@ -96,12 +96,8 @@ import { Icon } from '@/components/icon'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { useHover } from '@vexip-ui/mixins'
 import { debounceMinor } from '@vexip-ui/utils'
+import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
 import { CAROUSEL_STATE } from './symbol'
-
-import '@/common/icons/arrow-up'
-import '@/common/icons/arrow-right'
-import '@/common/icons/arrow-down'
-import '@/common/icons/arrow-left'
 
 import type { ArrowType, ArrowTrigger, PointerType, ItemState, CarouselState } from './symbol'
 
@@ -246,7 +242,7 @@ export default defineComponent({
       )
     })
     const arrowIcons = computed(() => {
-      return props.vertical ? ['up', 'down'] : ['left', 'right']
+      return props.vertical ? [ArrowUp, ArrowDown] : [ArrowLeft, ArrowRight]
     })
 
     watch(

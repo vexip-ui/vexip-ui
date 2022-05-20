@@ -49,9 +49,6 @@ import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
 import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
 
-import '@/common/icons/chevron-right'
-import '@/common/icons/spinner'
-
 import type { PropType } from 'vue'
 import type {
   Key,

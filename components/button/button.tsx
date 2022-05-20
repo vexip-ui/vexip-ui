@@ -2,10 +2,9 @@ import { defineComponent, h, ref, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { createSizeProp, useConfiguredProps } from '@vexip-ui/config'
+import { Spinner } from '@vexip-ui/icons'
 
 import type { ButtonType, ButtonAttrType } from './symbol'
-
-import '@/common/icons/spinner'
 
 const props = useConfiguredProps('button', {
   size: createSizeProp(),
@@ -45,16 +44,16 @@ const props = useConfiguredProps('button', {
     default: false
   },
   loadingIcon: {
-    type: String,
-    default: 'spinner'
+    type: Object,
+    default: Spinner
   },
   loadingSpin: {
     type: Boolean,
     default: false
   },
   icon: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   textColor: {
     type: String,
@@ -114,7 +113,7 @@ export default defineComponent({
     })
 
     function handleClick(event: MouseEvent) {
-      if (props.disabled || event.button) return
+      if (props.disabled || props.loading || event.button) return
 
       pulsing.value = false
 
@@ -135,14 +134,14 @@ export default defineComponent({
           {slots.loading ? (
             slots.loading()
           ) : props.loadingSpin ? (
-            <Icon spin name={props.loadingIcon}></Icon>
+            <Icon spin icon={props.loadingIcon}></Icon>
           ) : (
-            <Icon pulse name={props.loadingIcon}></Icon>
+            <Icon pulse icon={props.loadingIcon}></Icon>
           )}
         </div>
       ) : (
         <div class={`${prefix}__icon`}>
-          <Icon name={props.icon}></Icon>
+          <Icon icon={props.icon}></Icon>
         </div>
       )
     }
@@ -155,9 +154,9 @@ export default defineComponent({
               {slots.loading ? (
                 slots.loading()
               ) : props.loadingSpin ? (
-                <Icon spin name={props.loadingIcon}></Icon>
+                <Icon spin icon={props.loadingIcon}></Icon>
               ) : (
-                <Icon pulse name={props.loadingIcon}></Icon>
+                <Icon pulse icon={props.loadingIcon}></Icon>
               )}
             </div>
           )}

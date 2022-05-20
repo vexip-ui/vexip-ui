@@ -4,12 +4,7 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isNull, noop, throttle } from '@vexip-ui/utils'
-
-import '@/common/icons/caret-up'
-import '@/common/icons/caret-down'
-import '@/common/icons/regular/eye-slash'
-import '@/common/icons/regular/eye'
-import '@/common/icons/times-circle'
+import { EyeSlashR, EyeR, TimesCircle } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -28,16 +23,16 @@ const props = useConfiguredProps('input', {
     }
   },
   prefix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   prefixColor: {
     type: String,
     default: ''
   },
   suffix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   suffixColor: {
     type: String,
@@ -211,7 +206,7 @@ export default defineComponent({
         : currentValue.value
     })
     const passwordIcon = computed(() => {
-      return showPassword.value ? 'regular/eye-slash' : 'regular/eye'
+      return showPassword.value ? EyeSlashR : EyeR
     })
     const countStyle = computed(() => {
       let fix = 0
@@ -389,7 +384,7 @@ export default defineComponent({
           style={isPrefix ? { color: props.prefixColor } : { color: props.suffixColor }}
           onClick={isPrefix ? handlePrefixClick : handleSuffixClick}
         >
-          {affixSlot ? affixSlot() : <Icon name={isPrefix ? props.prefix : props.suffix}></Icon>}
+          {affixSlot ? affixSlot() : <Icon icon={isPrefix ? props.prefix : props.suffix}></Icon>}
         </div>
       )
     }
@@ -398,7 +393,7 @@ export default defineComponent({
       if (!props.disabled && props.clearable && hasValue.value && isHover.value) {
         return (
           <div key={'clear'} class={`${prefix}__clear`} onClick={handleClear}>
-            <Icon name={'times-circle'}></Icon>
+            <Icon icon={TimesCircle}></Icon>
           </div>
         )
       }
@@ -408,7 +403,7 @@ export default defineComponent({
       if (props.type === 'password' && props.password) {
         return (
           <div key={'password'} class={`${prefix}__icon--password`} onClick={toggleShowPassword}>
-            <Icon name={passwordIcon.value}></Icon>
+            <Icon icon={passwordIcon.value}></Icon>
           </div>
         )
       }

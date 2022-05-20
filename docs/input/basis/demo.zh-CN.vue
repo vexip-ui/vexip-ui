@@ -4,6 +4,9 @@
     placeholder="基础用法"
     style="width: 220px;"
   ></Input>
+  <p>
+    Input Value: {{ value }}
+  </p>
 </template>
 
 <script lang="ts">

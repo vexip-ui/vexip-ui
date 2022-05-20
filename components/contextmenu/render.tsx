@@ -2,7 +2,7 @@ import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
-import { isObject } from '@vexip-ui/utils'
+import { ChevronRight } from '@vexip-ui/icons'
 
 import type { MenuConfig } from './symbol'
 
@@ -15,15 +15,10 @@ function renderItemIcon(item: MenuConfig) {
 
   if (typeof item.icon === 'function') {
     icon = item.icon()
-  } else if (isObject(item.icon)) {
-    icon = (
-      <Icon
-        {...item.icon}
-        style={[{ color: item.iconColor || item.color }, item.icon.style]}
-      ></Icon>
-    )
   } else {
-    icon = <Icon name={item.icon} style={{ color: item.iconColor || item.color }}></Icon>
+    icon = (
+      <Icon icon={item.icon} style={[{ color: item.iconColor || item.color }, item.icon.style]}></Icon>
+    )
   }
 
   return <div class={`${prefix}__icon`}>{icon}</div>
@@ -58,7 +53,7 @@ function renderGroupItem(item: MenuConfig) {
             <span style={{ color: item.color }}>{item.label || item.key}</span>
             {renderItemShortcut(item)}
             <div class={[`${prefix}__icon`, `${prefix}__arrow`]}>
-              <Icon name="chevron-right" style={{ color: item.iconColor || item.color }}></Icon>
+              <Icon icon={ChevronRight} style={{ color: item.iconColor || item.color }}></Icon>
             </div>
           </DropdownItem>
         ),

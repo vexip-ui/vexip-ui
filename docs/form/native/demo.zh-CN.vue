@@ -10,14 +10,14 @@
     <FormItem label="username" prop="username">
       <Input v-model:value="loginForm.username" placeholder="请输入帐号">
         <template #prefix>
-          <Icon name="user"></Icon>
+          <Icon><User></User></Icon>
         </template>
       </Input>
     </FormItem>
     <FormItem label="password" prop="password">
       <Input v-model:value="loginForm.password" type="password" placeholder="请输入密码">
         <template #prefix>
-          <Icon name="lock"></Icon>
+          <Icon><Lock></Lock></Icon>
         </template>
       </Input>
     </FormItem>
@@ -32,19 +32,12 @@
   </Form>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive } from 'vue'
+<script setup lang="ts">
+import { reactive } from 'vue'
+import { Lock, User } from '@vexip-ui/icons'
 
-export default defineComponent({
-  setup() {
-    const loginForm = reactive({
-      username: '',
-      password: ''
-    })
-
-    return {
-      loginForm
-    }
-  }
+const loginForm = reactive({
+  username: '',
+  password: ''
 })
 </script>

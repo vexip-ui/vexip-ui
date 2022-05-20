@@ -10,7 +10,9 @@
         <Dropdown trigger="click">
           <DropdownItem>
             选项三
-            <Icon name="angle-right" :scale="0.8"></Icon>
+            <Icon :scale="0.8">
+              <CaretRight></CaretRight>
+            </Icon>
           </DropdownItem>
           <template #drop>
             <DropdownList>
@@ -25,3 +27,7 @@
     </template>
   </Dropdown>
 </template>
+
+<script setup lang="ts">
+import { CaretRight } from '@vexip-ui/icons'
+</script>

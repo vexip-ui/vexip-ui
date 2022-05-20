@@ -6,8 +6,8 @@
         <div :class="`${prefix}__mask`" :style="maskStyle"></div>
         <div :class="`${prefix}__icon`">
           <slot name="icon">
-            <Icon v-if="spin" spin :name="icon"></Icon>
-            <Icon v-else pulse :name="icon"></Icon>
+            <Icon v-if="spin" spin :icon="icon"></Icon>
+            <Icon v-else pulse :icon="icon"></Icon>
           </slot>
         </div>
         <div v-if="hasTip" :class="`${prefix}__tip`">
@@ -23,8 +23,8 @@
       <div :class="`${prefix}__mask`" :style="maskStyle"></div>
       <div :class="`${prefix}__icon`">
         <slot name="icon">
-          <Icon v-if="spin" spin :name="icon"></Icon>
-          <Icon v-else pulse :name="icon"></Icon>
+          <Icon v-if="spin" spin :icon="icon"></Icon>
+          <Icon v-else pulse :icon="icon"></Icon>
         </slot>
       </div>
       <div v-if="hasTip" :class="`${prefix}__tip`">
@@ -41,10 +41,9 @@ import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { toNumber } from '@vexip-ui/utils'
+import { Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
-
-import '@/common/icons/spinner'
 
 const props = useConfiguredProps('spin', {
   active: {
@@ -52,8 +51,8 @@ const props = useConfiguredProps('spin', {
     default: false
   },
   icon: {
-    type: String,
-    default: 'spinner'
+    type: Object,
+    default: Spinner
   },
   spin: {
     type: Boolean,

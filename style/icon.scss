@@ -1,45 +1,48 @@
 @use '../design' as *;
 
 .vxp-icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   overflow: visible;
 
   // font-size: 0.8em;
-  fill: currentcolor;
+  // fill: currentcolor;
   transition: get-css-var('transition-transform'), get-css-var('transition-color');
   transform-origin: 50% 50%;
 
-  & > g {
+  svg {
+    width: 1em;
+    height: 1em;
     line-height: 1;
-    transform: scale(0.8);
-    transform-origin: 50% 50%;
+    vertical-align: -0.125em;
   }
 
-  &--flip-horizontal > g {
+  &--flip-horizontal svg {
     transform: scale(-1, 1);
   }
 
-  &--flip-vertical > g {
+  &--flip-vertical svg {
     transform: scale(1, -1);
   }
 
-  &--flip-both > g {
+  &--flip-both svg {
     transform: scale(-1, -1);
   }
 
-  &--spin-in > g {
+  &--spin-in svg {
     animation: vxp-spin-in 1s 0s infinite linear;
   }
 
-  &--spin-out > g {
+  &--spin-out svg {
     animation: vxp-spin-out 1s 0s infinite linear;
   }
 
-  &--pulse-in > g {
+  &--pulse-in svg {
     animation: vxp-spin-in 1s infinite steps(8);
   }
 
-  &--pulse-out > g {
+  &--pulse-out svg {
     animation: vxp-spin-out 1s infinite steps(8);
   }
 }

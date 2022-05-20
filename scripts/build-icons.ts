@@ -64,6 +64,8 @@ function findIcons(folder: string, reslut: string[] = []) {
   const namespaces: string[] = []
 
   fs.readdirSync(folder).forEach(f => {
+    if (f === 'internal') return
+
     if (fs.statSync(`${folder}/${f}`).isDirectory()) {
       namespaces.push(f)
     } else if (!/^index/.test(f)) {

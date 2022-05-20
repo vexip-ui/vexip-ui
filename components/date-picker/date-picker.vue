@@ -8,7 +8,7 @@
     <div ref="reference" :class="`${prefixCls}__control`">
       <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: prefixColor }">
         <slot name="prefix">
-          <Icon :name="prefix"></Icon>
+          <Icon :icon="prefix"></Icon>
         </slot>
       </div>
       <DateControl
@@ -37,7 +37,7 @@
       ></DateControl>
       <template v-if="isRange">
         <div :class="`${prefixCls}__exchange`">
-          <Icon name="exchange-alt"></Icon>
+          <Icon><ExchangeAlt></ExchangeAlt></Icon>
         </div>
         <DateControl
           ref="end"
@@ -70,11 +70,11 @@
           :class="`${prefixCls}__clear`"
           @click.stop="handleClear"
         >
-          <Icon name="times-circle"></Icon>
+          <Icon><TimesCircle></TimesCircle></Icon>
         </div>
         <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: suffixColor }">
           <slot name="suffix">
-            <Icon :name="suffix || 'calendar-alt'"></Icon>
+            <Icon :icon="suffix || CalendarAlt"></Icon>
           </slot>
         </div>
       </transition>
@@ -126,11 +126,8 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
+import { CalendarAlt, TimesCircle, ExchangeAlt } from '@vexip-ui/icons'
 import { useColumn } from './helper'
-
-import '@/common/icons/calendar-alt'
-import '@/common/icons/times-circle'
-import '@/common/icons/exchange-alt'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -215,16 +212,16 @@ const props = useConfiguredProps('datePicker', {
     default: () => [5, 5, 5]
   },
   prefix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   prefixColor: {
     type: String,
     default: ''
   },
   suffix: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   suffixColor: {
     type: String,
@@ -271,7 +268,9 @@ export default defineComponent({
     DateControl,
     DatePane,
     Icon,
-    Portal
+    Portal,
+    TimesCircle,
+    ExchangeAlt
   },
   props,
   emits: [
@@ -950,6 +949,8 @@ export default defineComponent({
     }
 
     return {
+      CalendarAlt,
+
       prefixCls: prefix,
       currentVisible,
       focused,
