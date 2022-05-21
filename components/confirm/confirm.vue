@@ -18,7 +18,7 @@
           <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
           <Icon
             v-else
-            :icon="icon || QuestionCircle"
+            :icon="icon || CircleQuestion"
             :scale="2.2"
             :style="{ color: iconColor }"
           ></Icon>
@@ -52,7 +52,7 @@ import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
 import { isPromise, isFunction } from '@vexip-ui/utils'
-import { QuestionCircle } from '@vexip-ui/icons'
+import { CircleQuestion } from '@vexip-ui/icons'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { ConfirmType, ConfirmOptions } from './symbol'
@@ -216,7 +216,7 @@ export default defineComponent({
     }
 
     return {
-      QuestionCircle,
+      CircleQuestion,
 
       prefix: 'vxp-confirm',
       locale: useLocaleConfig('confirm'),

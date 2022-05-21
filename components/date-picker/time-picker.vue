@@ -39,7 +39,7 @@
           :class="[`${prefixCls}__exchange`, exchange ? `${prefixCls}__exchange--enabled` : '']"
           @click="handleExchangeClick"
         >
-          <Icon><ExchangeAlt></ExchangeAlt></Icon>
+          <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
         </div>
         <TimeControl
           ref="end"
@@ -71,7 +71,7 @@
           :class="`${prefixCls}__clear`"
           @click.stop="handleClear"
         >
-          <Icon><TimesCircle></TimesCircle></Icon>
+          <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: suffixColor }">
           <slot name="suffix">
@@ -153,7 +153,7 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, doubleDigits, boundRange } from '@vexip-ui/utils'
-import { TimesCircle, ClockR, ExchangeAlt } from '@vexip-ui/icons'
+import { CircleXmark, ClockR, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
 
 import type { PropType } from 'vue'
@@ -296,8 +296,8 @@ export default defineComponent({
     Portal,
     TimeControl,
     TimeWheel,
-    TimesCircle,
-    ExchangeAlt
+    CircleXmark,
+    ArrowRightArrowLeft
   },
   props,
   emits: [

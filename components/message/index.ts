@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import Component from './message.vue'
 import { isNull, toNumber, destroyObject } from '@vexip-ui/utils'
-import { InfoCircle, CheckCircle, ExclamationCircle, TimesCircle } from '@vexip-ui/icons'
+import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
 import type { Key, MessageType, MessagePlacement, MessageOptions, MessageInstance } from './symbol'
@@ -20,16 +20,16 @@ interface AipMethod {
 
 const conveniences: Record<MessageType, { icon: Record<string, any> }> = {
   info: {
-    icon: InfoCircle
+    icon: CircleInfo
   },
   success: {
-    icon: CheckCircle
+    icon: CircleCheck
   },
   warning: {
-    icon: ExclamationCircle
+    icon: CircleExclamation
   },
   error: {
-    icon: TimesCircle
+    icon: CircleXmark
   }
 }
 

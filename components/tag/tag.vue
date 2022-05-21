@@ -13,7 +13,7 @@
         @click.left.stop="handleClose"
       >
         <Icon :scale="0.8">
-          <Times></Times>
+          <Xmark></Xmark>
         </Icon>
       </div>
     </div>
@@ -24,7 +24,7 @@
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps, createSizeProp } from '@vexip-ui/config'
-import { Times } from '@vexip-ui/icons'
+import { Xmark } from '@vexip-ui/icons'
 
 import type { TagType } from './symbol'
 
@@ -88,7 +88,7 @@ export default defineComponent({
   name: 'Tag',
   components: {
     Icon,
-    Times
+    Xmark
   },
   props,
   emits: ['on-click', 'on-close'],
