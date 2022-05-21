@@ -44,14 +44,6 @@ async function main() {
     }
   })
 
-  await run('vite', ['build', '--config', 'vite.full.config.ts'], {
-    stdio: 'inherit',
-    env: {
-      NODE_ENV: env,
-      SOURCE_MAP: sourceMap ? 'true' : ''
-    }
-  })
-
   logger.ln()
 
   if (!process.exitCode) {
