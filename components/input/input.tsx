@@ -4,7 +4,7 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isNull, noop, throttle } from '@vexip-ui/utils'
-import { EyeSlashR, EyeR, TimesCircle } from '@vexip-ui/icons'
+import { EyeSlashR, EyeR, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -393,7 +393,7 @@ export default defineComponent({
       if (!props.disabled && props.clearable && hasValue.value && isHover.value) {
         return (
           <div key={'clear'} class={`${prefix}__clear`} onClick={handleClear}>
-            <Icon icon={TimesCircle}></Icon>
+            <Icon icon={CircleXmark}></Icon>
           </div>
         )
       }

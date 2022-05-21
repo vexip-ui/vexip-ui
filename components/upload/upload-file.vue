@@ -37,13 +37,13 @@
               v-if="file.status === status.SUCCESS"
               :class="[`${prefix}__icon`, `${prefix}__success`]"
             >
-              <Icon><CheckCircle></CheckCircle></Icon>
+              <Icon><CircleCheck></CircleCheck></Icon>
             </div>
             <div
               v-else-if="file.status === status.FAIL"
               :class="[`${prefix}__icon`, `${prefix}__fail`]"
             >
-              <Icon><ExclamationCircle></ExclamationCircle></Icon>
+              <Icon><CircleExclamation></CircleExclamation></Icon>
             </div>
             <div
               v-else-if="file.status === status.UPLOADING"
@@ -54,7 +54,7 @@
               </Icon>
             </div>
             <div :class="[`${prefix}__icon`, `${prefix}__close`]" @click="deleteFile(file)">
-              <Icon><TrashAltR></TrashAltR></Icon>
+              <Icon><TrashCanR></TrashCanR></Icon>
             </div>
           </div>
           <div v-if="file.status === status.UPLOADING" :class="`${prefix}__progress`">
@@ -135,7 +135,7 @@
               </div>
               <div :class="[`${prefix}__icon`, `${prefix}__action`]" @click="deleteFile(file)">
                 <Icon :scale="1.4">
-                  <TrashAltR></TrashAltR>
+                  <TrashCanR></TrashCanR>
                 </Icon>
               </div>
             </div>
@@ -154,7 +154,7 @@ import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
 import { iconMaps } from './file-icon'
-import { CheckCircle, ExclamationCircle, Spinner, EyeR, TrashAltR } from '@vexip-ui/icons'
+import { CircleCheck, CircleExclamation, Spinner, EyeR, TrashCanR } from '@vexip-ui/icons'
 import { UploadStatusType } from './symbol'
 
 import type { PropType } from 'vue'
@@ -192,11 +192,11 @@ export default defineComponent({
     Icon,
     Progress,
     Renderer,
-    CheckCircle,
-    ExclamationCircle,
+    CircleCheck,
+    CircleExclamation,
     Spinner,
     EyeR,
-    TrashAltR
+    TrashCanR
   },
   props,
   emits: ['on-delete', 'on-preview'],

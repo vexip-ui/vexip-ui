@@ -1,7 +1,10 @@
-import { resolve, relative, sep } from 'path'
-import { readdirSync, statSync, writeFileSync, existsSync, mkdirSync } from 'fs'
+import { resolve, basename } from 'path'
+import { readFile, writeFile } from 'fs/promises'
+import { existsSync, emptyDir, mkdirSync } from 'fs-extra'
 import execa from 'execa'
 import chalk from 'chalk'
+import glob from 'fast-glob'
+import { format } from 'prettier'
 
 main().catch(error => {
   console.error(chalk.red(error))
@@ -9,90 +12,105 @@ main().catch(error => {
 })
 
 async function main() {
+  ensureEmptyDir(resolve(__dirname, '../vue'))
+  ensureEmptyDir(resolve(__dirname, '../types'))
+
+  const solid = await generateVueIcons('solid', '', '')
+  const brands = await generateVueIcons('brands', 'brands', 'B')
+  const regular = await generateVueIcons('regular', 'regular', 'R')
+
+  const exports = solid.exports + brands.exports + regular.exports
+
+  await writeFile(resolve(__dirname, '../vue/index.ts'), exports, 'utf-8')
+
   await execa('vite', ['build', '--config', 'vite.config.ts'], {
     stdio: 'inherit',
     env: {
       OUT_DIR: 'es',
       FORMAT: 'es',
+      LOG_LEVEL: 'warn'
     }
   })
+
+  console.log(chalk.cyan(`built es packages`))
 
   await execa('vite', ['build', '--config', 'vite.config.ts'], {
     stdio: 'inherit',
     env: {
       OUT_DIR: 'lib',
       FORMAT: 'cjs',
+      LOG_LEVEL: 'warn'
     }
   })
 
-  generateDts()
-}
-
-function generateDts() {
-  const src = resolve(__dirname, '../src')
-  const types = resolve(__dirname, '../types')
-  const icons = findIcons(src)
-  const dts = `
-declare module '@vexip-ui/icons' {
-  import type { DefineComponent } from 'vue'
-  type SvgIcon = DefineComponent<Record<string, unknown>, Record<string, unknown>, any>
-  ${
-    icons.map(iconPath => {
-      const fullName = relative(src, iconPath).replace(`.${sep}`, '').replace('.ts', '')
+  console.log(chalk.cyan(`built cjs packages`))
   
-      let prefix = ''
-      let name = ''
-  
-      if (fullName.includes(sep)) {
-        [prefix, name] = fullName.split(sep)
-      } else {
-        name = fullName
-      }
-  
-      name = toPascalCase(name)
-      name = name.replace(/-(\d)/g, '$1')
-  
-      if (name.match(/^\d/)) {
-        name = 'I' + name
-      }
-  
-      if (prefix) {
-        name += prefix.charAt(0).toLocaleUpperCase()
-      }
-  
-      return `export const ${name}: SvgIcon`
-    }).join('\n  ')
-  }
-}
-
-export {}
-`
-
-  if (!existsSync(types)) {
-    mkdirSync(types)
-  }
-
-  writeFileSync(resolve(types, 'index.d.ts'), dts, 'utf-8')
-}
-
-function findIcons(folder: string, reslut: string[] = []) {
-  const namespaces: string[] = []
-
-  readdirSync(folder).forEach(f => {
-    if (f === 'internal') return
-
-    if (statSync(`${folder}/${f}`).isDirectory()) {
-      namespaces.push(f)
-    } else if (!/^index/.test(f)) {
-      reslut.push(resolve(folder, f))
+  const types = `
+    declare module '@vexip-ui/icons' {
+      import type { DefineComponent } from 'vue'
+      type SvgIcon = DefineComponent<Record<string, unknown>, Record<string, unknown>, any>
+      ${solid.types + brands.types + regular.types}
     }
+
+    export {}
+  `
+
+  await writeFile(resolve(__dirname, '../types', 'index.d.ts'), format(types, { parser: 'typescript', semi: false, singleQuote: true }), 'utf-8')
+
+  console.log()
+  console.log(chalk.green('build successful'))
+}
+
+async function generateVueIcons(dir: string, out: string, suffix: string) {
+  const outDir = resolve(__dirname, '../vue', out)
+
+  if (!existsSync(outDir)) {
+    mkdirSync(outDir)
+  }
+
+  const svgFiles = await glob('*.svg', {
+    cwd: resolve(__dirname, '../src', dir),
+    absolute: true
   })
 
-  namespaces.forEach(namespace => {
-    findIcons(resolve(folder, namespace), reslut)
-  })
+  suffix = suffix.toLocaleUpperCase()
 
-  return reslut
+  let exports = ''
+  let types = ''
+
+  await Promise.all(svgFiles.map(async svgFile => {
+    const fileName = basename(svgFile, '.svg')
+    const svg = (await readFile(svgFile, 'utf-8')).replace(/<!--[\s\S]*-->/, '')
+
+    let name = toPascalCase(fileName)
+    name = name.replace(/^(\d)/, 'I$1').replace(/-(\d)/g, '$1')
+    name += suffix
+
+    const vue = `
+      <template>${svg}</template>
+      <script lang="ts">
+        import { defineComponent } from 'vue'
+        export default defineComponent({ name: '${name}' })
+      </script>
+    `
+
+    await writeFile(resolve(outDir, `${fileName}.vue`), format(vue, { parser: 'vue', semi: false, singleQuote: true }), 'utf-8')
+
+    exports += `export { default as ${name} } from '.${out ? `/${out}` : ''}/${fileName}.vue'\n`
+    types += `export const ${name}: SvgIcon\n`
+  }))
+
+  console.log(chalk.cyan(`generated ${dir} vue icons`))
+
+  return { exports, types }
+}
+
+function ensureEmptyDir(dir: string) {
+  if (existsSync(dir)) {
+    emptyDir(dir)
+  } else {
+    mkdirSync(dir)
+  }
 }
 
 function toPascalCase(value: string) {

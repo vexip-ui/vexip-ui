@@ -41,7 +41,7 @@
           :class="`${prefixCls}__clear`"
           @click.stop="handleClear"
         >
-          <Icon><TimesCircle></TimesCircle></Icon>
+          <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div
           v-else-if="!noSuffix"
@@ -135,7 +135,7 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, isNull } from '@vexip-ui/utils'
-import { ChevronDown, Check, TimesCircle } from '@vexip-ui/icons'
+import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -250,7 +250,7 @@ export default defineComponent({
     Scroll,
     Tag,
     Check,
-    TimesCircle
+    CircleXmark
   },
   props,
   emits: [

@@ -1,11 +1,11 @@
 import {
-  FileWord,
-  FileVideo,
-  FilePowerpoint,
-  FilePdf,
-  FileImage,
-  FileExcel,
-  FileCode,
+  FileWordR,
+  FileVideoR,
+  FilePowerpointR,
+  FilePdfR,
+  FileImageR,
+  FileExcelR,
+  FileCodeR,
   JsB,
   Css3AltB,
   SassB,
@@ -15,19 +15,19 @@ import {
   Html5B,
   PythonB,
   FileAudio,
-  FileArchive,
-  FileAlt,
+  FileZipperR,
+  FileLinesR,
   FileCsv,
   FilePrescription,
-  File
+  FileR
 } from '@vexip-ui/icons'
 
 type Icon = Record<string, any>
 
 const iconConfig = new Map<Icon, string[]>()
 
-iconConfig.set(FileWord, ['doc', 'docx'])
-iconConfig.set(FileVideo, [
+iconConfig.set(FileWordR, ['doc', 'docx'])
+iconConfig.set(FileVideoR, [
   'mp4',
   'flv',
   'mkv',
@@ -41,9 +41,9 @@ iconConfig.set(FileVideo, [
   'amv',
   'dmv'
 ])
-iconConfig.set(FilePowerpoint, ['ppt', 'pptx', 'pptm'])
-iconConfig.set(FilePdf, ['pdf'])
-iconConfig.set(FileImage, [
+iconConfig.set(FilePowerpointR, ['ppt', 'pptx', 'pptm'])
+iconConfig.set(FilePdfR, ['pdf'])
+iconConfig.set(FileImageR, [
   'bmp',
   'jpg',
   'jpeg',
@@ -66,8 +66,8 @@ iconConfig.set(FileImage, [
   'wmf',
   'webp'
 ])
-iconConfig.set(FileExcel, ['xls', 'xlsx', 'xlsm', 'xlsb', 'xlam'])
-iconConfig.set(FileCode, [
+iconConfig.set(FileExcelR, ['xls', 'xlsx', 'xlsm', 'xlsb', 'xlam'])
+iconConfig.set(FileCodeR, [
   'json',
   'xml',
   'property',
@@ -111,7 +111,7 @@ iconConfig.set(FileAudio, [
   'flac',
   'aac'
 ])
-iconConfig.set(FileArchive, [
+iconConfig.set(FileZipperR, [
   'rar',
   'zip',
   '7z',
@@ -126,10 +126,10 @@ iconConfig.set(FileArchive, [
   'jar',
   'iso'
 ])
-iconConfig.set(FileAlt, ['txt'])
+iconConfig.set(FileLinesR, ['txt'])
 iconConfig.set(FileCsv, ['csv'])
 iconConfig.set(FilePrescription, ['rvt', 'rfa', 'rte', 'rtf', 'dgn', 'dwf', 'dwg', 'ifc', 'sat', 'skp'])
-iconConfig.set(File, ['default'])
+iconConfig.set(FileR, ['default'])
 
 const iconMaps: Record<string, Icon> = {}
 

@@ -16,6 +16,7 @@ importers:
       '@types/jest': ^27.5.1
       '@types/minimist': ^1.2.2
       '@types/node': ^17.0.33
+      '@types/prettier': ^2.6.1
       '@types/semver': ^7.3.9
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
@@ -97,6 +98,7 @@ importers:
       '@types/jest': 27.5.1
       '@types/minimist': 1.2.2
       '@types/node': 17.0.34
+      '@types/prettier': 2.6.1
       '@types/semver': 7.3.9
       '@typescript-eslint/eslint-plugin': 5.25.0_qo2hgs5jt7x2a3p77h2rutcdae
       '@typescript-eslint/parser': 5.25.0_hcfsmds2fshutdssjqluwm76uu
@@ -177,38 +179,26 @@ importers:
   common/icons:
     specifiers:
       '@types/node': ^17.0.33
+      '@types/prettier': ^2.6.1
+      '@vitejs/plugin-vue': ^2.3.3
       chalk: ^4.1.2
       execa: ^5.1.1
       fast-glob: ^3.2.11
+      fs-extra: ^10.1.0
+      prettier: ^2.6.2
       ts-node: ^10.7.0
       typescript: 4.6.4
       vite: ^2.9.9
       vue: ^3.2.33
     devDependencies:
       '@types/node': 17.0.34
+      '@types/prettier': 2.6.1
+      '@vitejs/plugin-vue': 2.3.3_vite@2.9.9+vue@3.2.33
       chalk: 4.1.2
       execa: 5.1.1
       fast-glob: 3.2.11
-      ts-node: 10.7.0_3smuweqyuzdazdnyhhezld6mfa
-      typescript: 4.6.4
-      vite: 2.9.9
-      vue: 3.2.33
-
-  common/icons:
-    specifiers:
-      '@types/node': ^17.0.33
-      chalk: ^4.1.2
-      execa: ^5.1.1
-      fast-glob: ^3.2.11
-      ts-node: ^10.7.0
-      typescript: 4.6.4
-      vite: ^2.9.9
-      vue: ^3.2.33
-    devDependencies:
-      '@types/node': 17.0.34
-      chalk: 4.1.2
-      execa: 5.1.1
-      fast-glob: 3.2.11
+      fs-extra: 10.1.0
+      prettier: 2.6.2
       ts-node: 10.7.0_3smuweqyuzdazdnyhhezld6mfa
       typescript: 4.6.4
       vite: 2.9.9
@@ -240,14 +230,6 @@ importers:
       typescript: 4.6.4
       vite: 2.9.9
       vite-plugin-dts: 1.1.1_vite@2.9.9
-
-  example:
-    specifiers:
-      vue: ^3.2.33
-      vue-router: ^4.0.15
-    dependencies:
-      vue: 3.2.33
-      vue-router: 4.0.15_vue@3.2.33
 
   example:
     specifiers:
@@ -1904,7 +1886,7 @@ packages:
       vite: ^2.5.10
       vue: ^3.2.25
     dependencies:
-      vite: 2.9.9_sass@1.51.0
+      vite: 2.9.9
       vue: 3.2.33
     dev: true
 

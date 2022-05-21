@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import Component from './notice.vue'
 import { isNull, isObject, toNumber, destroyObject } from '@vexip-ui/utils'
-import { InfoCircle, CheckCircle, ExclamationCircle, TimesCircle } from '@vexip-ui/icons'
+import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
 import type { Key, NoticeType, NoticePlacement, NoticeOptions, NoticeInstance } from './symbol'
@@ -24,16 +24,16 @@ interface AipMethod {
 
 const conveniences: Record<NoticeType, { icon: Record<string, any> }> = {
   info: {
-    icon: InfoCircle
+    icon: CircleInfo
   },
   success: {
-    icon: CheckCircle
+    icon: CircleCheck
   },
   warning: {
-    icon: ExclamationCircle
+    icon: CircleExclamation
   },
   error: {
-    icon: TimesCircle
+    icon: CircleXmark
   }
 }
 
