@@ -1,24 +1,24 @@
 <template>
   <div>
-    <Button type="primary" :icon="Search">
+    <Button type="primary" :icon="MagnifyingGlass">
       搜索
     </Button>
-    <Button type="primary" :icon="Search"></Button>
+    <Button type="primary" :icon="MagnifyingGlass"></Button>
     <Button
       circle
       type="primary"
-      :icon="Search"
+      :icon="MagnifyingGlass"
     >
       搜索
     </Button>
     <Button
       circle
       type="primary"
-      :icon="Search"
+      :icon="MagnifyingGlass"
     ></Button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Search } from '@vexip-ui/icons'
+import { MagnifyingGlass } from '@vexip-ui/icons'
 </script>

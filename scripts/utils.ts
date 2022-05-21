@@ -121,7 +121,7 @@ export function fuzzyMatchComponent(partialComponents: string[], includeAll = fa
 export async function specifyComponent(args: ParsedArgs, allComponents = components, required = true) {
   const matchedComponents = args._.length ? fuzzyMatchComponent(args._, true, allComponents) : ['']
 
-  let component
+  let component: string
 
   if (matchedComponents.length > 1 || !matchedComponents[0]) {
     const { prompt } = require('enquirer')

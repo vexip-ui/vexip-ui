@@ -51,7 +51,6 @@ export default defineConfig(async () => {
     resolve: {
       alias: [
         { find: /^@\/components/, replacement: resolve(__dirname, 'components') },
-        { find: /^@\/common\/icons/, replacement: resolve(__dirname, 'common/icons/src') },
         { find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }
       ]
     },

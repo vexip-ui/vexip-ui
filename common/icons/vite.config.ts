@@ -1,14 +1,16 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 import glob from 'fast-glob'
 
-import type { LibraryFormats } from 'vite'
+import type { LogLevel, LibraryFormats } from 'vite'
 
 const outDir = process.env.OUT_DIR || 'dist'
 const format = (process.env.FORMAT || 'es') as LibraryFormats
+const logLevel = process.env.LOG_LEVEL
 
 export default defineConfig(async () => {
-  const input = await glob('src/**/*.ts', {
+  const input = await glob('vue/**/*.{ts,vue}', {
     cwd: __dirname,
     absolute: true,
     onlyFiles: true,
@@ -16,6 +18,7 @@ export default defineConfig(async () => {
   })
 
   return {
+    logLevel: (logLevel || 'info') as LogLevel,
     build: {
       outDir,
       sourcemap: false,
@@ -36,6 +39,7 @@ export default defineConfig(async () => {
       commonjsOptions: {
         sourceMap: false
       }
-    }
+    },
+    plugins: [vue()]
   }
 })

@@ -16,7 +16,7 @@
       </div>
       <div v-if="closable" :class="`${prefix}__close`" @click="handleClose">
         <slot name="close">
-          <Icon :icon="Times"></Icon>
+          <Icon :icon="Xmark"></Icon>
         </slot>
       </div>
     </div>
@@ -31,21 +31,21 @@ import { useConfiguredProps } from '@vexip-ui/config'
 
 import {
   Flag,
-  InfoCircle,
-  CheckCircle,
-  ExclamationCircle,
-  Times,
-  TimesCircle
+  CircleInfo,
+  CircleCheck,
+  CircleExclamation,
+  Xmark,
+  CircleXmark
 } from '@vexip-ui/icons'
 
 export type AlertType = 'default' | 'info' | 'success' | 'warning' | 'error'
 
 const predefinedIcons = {
   default: Flag,
-  info: InfoCircle,
-  success: CheckCircle,
-  warning: ExclamationCircle,
-  error: TimesCircle
+  info: CircleInfo,
+  success: CircleCheck,
+  warning: CircleExclamation,
+  error: CircleXmark
 }
 
 const props = useConfiguredProps('alert', {
@@ -134,7 +134,7 @@ export default defineComponent({
     }
 
     return {
-      Times,
+      Xmark,
 
       prefix,
       closed,

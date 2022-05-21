@@ -41,10 +41,10 @@
     >
       <transition name="vxp-fade">
         <Icon v-if="inPrevEllipsis" :scale="0.8">
-          <AngleDoubleLeft></AngleDoubleLeft>
+          <AnglesLeft></AnglesLeft>
         </Icon>
         <Icon v-else :scale="0.8" style="position: absolute;">
-          <EllipsisH></EllipsisH>
+          <Ellipsis></Ellipsis>
         </Icon>
       </transition>
     </li>
@@ -78,10 +78,10 @@
     >
       <transition name="vxp-fade">
         <Icon v-if="inNextEllipsis" :scale="0.8">
-          <AngleDoubleRight></AngleDoubleRight>
+          <AnglesRight></AnglesRight>
         </Icon>
         <Icon v-else :scale="0.8" style="position: absolute;">
-          <EllipsisH></EllipsisH>
+          <Ellipsis></Ellipsis>
         </Icon>
       </transition>
     </li>
@@ -150,7 +150,7 @@ import { Select } from '@/components/select'
 import { useConfiguredProps, useLocaleConfig, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
 import { isFunction, range } from '@vexip-ui/utils'
 import { PaginationMode } from './symbol'
-import { ChevronRight, ChevronLeft, AngleDoubleRight, AngleDoubleLeft, EllipsisH } from '@vexip-ui/icons'
+import { ChevronRight, ChevronLeft, AnglesRight, AnglesLeft, Ellipsis } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -241,9 +241,9 @@ export default defineComponent({
     Select,
     ChevronRight,
     ChevronLeft,
-    AngleDoubleRight,
-    AngleDoubleLeft,
-    EllipsisH
+    AnglesRight,
+    AnglesLeft,
+    Ellipsis
   },
   props,
   emits: ['on-change', 'on-page-size-change', 'update:active'],

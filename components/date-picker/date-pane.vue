@@ -19,7 +19,7 @@
               :class="[`${prefix}__arrow`, `${prefix}__prev-year`]"
               @click="handleDoublePrevClick"
             >
-              <Icon><AngleDoubleLeft></AngleDoubleLeft></Icon>
+              <Icon><AnglesLeft></AnglesLeft></Icon>
             </div>
             <div
               v-show="currentPane === 'date'"
@@ -54,7 +54,7 @@
               :class="[`${prefix}__arrow`, `${prefix}__next-year`]"
               @click="handleDoubleNextClick"
             >
-              <Icon><AngleDoubleRight></AngleDoubleRight></Icon>
+              <Icon><AnglesRight></AnglesRight></Icon>
             </div>
           </div>
           <div ref="calendar" :class="`${prefix}__calendar`">
@@ -154,7 +154,7 @@ import TimeWheel from './time-wheel.vue'
 import { useHover } from '@vexip-ui/mixins'
 import { useLocaleConfig } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
-import { AngleRight, AngleLeft, AngleDoubleRight, AngleDoubleLeft } from '@vexip-ui/icons'
+import { AngleRight, AngleLeft, AnglesRight, AnglesLeft } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { MonthIndex } from '@/components/calendar'
@@ -239,8 +239,8 @@ export default defineComponent({
     TimeWheel,
     AngleRight,
     AngleLeft,
-    AngleDoubleRight,
-    AngleDoubleLeft
+    AnglesRight,
+    AnglesLeft
   },
   props,
   emits: [

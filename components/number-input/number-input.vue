@@ -47,7 +47,7 @@
         :class="`${prefixCls}__clear`"
         @click.stop="handleClear"
       >
-        <Icon><TimesCircle></TimesCircle></Icon>
+        <Icon><CircleXmark></CircleXmark></Icon>
       </div>
       <div
         v-else-if="hasSuffix"
@@ -70,7 +70,7 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isNull, noop, toFixed, toNumber, boundRange, throttle } from '@vexip-ui/utils'
-import { CaretUp, CaretDown, TimesCircle } from '@vexip-ui/icons'
+import { CaretUp, CaretDown, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -173,7 +173,7 @@ export default defineComponent({
     Icon,
     CaretUp,
     CaretDown,
-    TimesCircle
+    CircleXmark
   },
   props,
   emits: [

@@ -33,7 +33,7 @@
         </template>
         <div v-else :class="`${prefix}__drag-pane`">
           <Icon :class="`${prefix}__cloud`" :scale="4">
-            <CloudUploadAlt></CloudUploadAlt>
+            <CloudArrowUp></CloudArrowUp>
           </Icon>
           <slot name="tip">
             <p :class="`${prefix}__tip`">
@@ -68,7 +68,7 @@ import UploadList from './upload-list.vue'
 import { upload } from './request'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
 import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
-import { CloudUploadAlt, Upload } from '@vexip-ui/icons'
+import { CloudArrowUp, Upload } from '@vexip-ui/icons'
 import { UploadStatusType } from './symbol'
 
 import type { PropType } from 'vue'
@@ -191,7 +191,7 @@ export default defineComponent({
     Button,
     Icon,
     UploadList,
-    CloudUploadAlt
+    CloudArrowUp
   },
   props,
   emits: [

@@ -54,7 +54,7 @@
           </template>
         </div>
         <div v-if="item.closable" :class="`${prefix}__close`" @click="remove(item.key)">
-          <Icon><Times></Times></Icon>
+          <Icon><Xmark></Xmark></Icon>
         </div>
       </div>
     </template>
@@ -66,7 +66,7 @@ import { defineComponent, ref, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
-import { Times } from '@vexip-ui/icons'
+import { Xmark } from '@vexip-ui/icons'
 
 import type { Key, MessagePlacement } from './symbol'
 
@@ -76,7 +76,7 @@ export default defineComponent({
     Icon,
     Renderer,
     Popup,
-    Times
+    Xmark
   },
   setup() {
     const placement = ref<MessagePlacement>('top')

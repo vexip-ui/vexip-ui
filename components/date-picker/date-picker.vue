@@ -37,7 +37,7 @@
       ></DateControl>
       <template v-if="isRange">
         <div :class="`${prefixCls}__exchange`">
-          <Icon><ExchangeAlt></ExchangeAlt></Icon>
+          <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
         </div>
         <DateControl
           ref="end"
@@ -70,11 +70,11 @@
           :class="`${prefixCls}__clear`"
           @click.stop="handleClear"
         >
-          <Icon><TimesCircle></TimesCircle></Icon>
+          <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: suffixColor }">
           <slot name="suffix">
-            <Icon :icon="suffix || CalendarAlt"></Icon>
+            <Icon :icon="suffix || CalendarR"></Icon>
           </slot>
         </div>
       </transition>
@@ -126,7 +126,7 @@ import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
-import { CalendarAlt, TimesCircle, ExchangeAlt } from '@vexip-ui/icons'
+import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
 
 import type { PropType } from 'vue'
@@ -269,8 +269,8 @@ export default defineComponent({
     DatePane,
     Icon,
     Portal,
-    TimesCircle,
-    ExchangeAlt
+    CircleXmark,
+    ArrowRightArrowLeft
   },
   props,
   emits: [
@@ -949,7 +949,7 @@ export default defineComponent({
     }
 
     return {
-      CalendarAlt,
+      CalendarR,
 
       prefixCls: prefix,
       currentVisible,

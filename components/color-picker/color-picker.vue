@@ -14,7 +14,7 @@
         <div :class="`${prefix}__control`">
           <div :class="`${prefix}__marker`">
             <Icon v-if="!currentVisible && isEmpty">
-              <Times></Times>
+              <Xmark></Xmark>
             </Icon>
             <div
               v-else
@@ -116,7 +116,7 @@ import {
   hsvToHsl,
   rgbaToHex
 } from '@vexip-ui/utils'
-import { Times, ChevronDown } from '@vexip-ui/icons'
+import { Xmark, ChevronDown } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -238,7 +238,7 @@ export default defineComponent({
     ColorPalette,
     Icon,
     Input,
-    Times,
+    Xmark,
     ChevronDown
   },
   props,
