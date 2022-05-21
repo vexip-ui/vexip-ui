@@ -1,28 +1,15 @@
 import { resolve } from 'path'
-import {
-  readdirSync,
-  statSync,
-  existsSync,
-  copyFile,
-  mkdirSync,
-  writeFileSync,
-  lstatSync,
-  rmdirSync,
-  unlinkSync
-} from 'fs-extra'
+import { readdirSync, statSync, existsSync, writeFileSync } from 'fs-extra'
 import minimist from 'minimist'
-import { logger, run, emptyDir, specifyComponent, components } from './utils'
+import { resolveConfig, format } from 'prettier'
+import { logger, run, specifyComponent } from './utils'
 
 const args = minimist(process.argv.slice(2))
 
 const sourceMap = args.sourcemap || args.s
 const port = args.port || args.p || 8008
 const prodMode = args.prod
-const clearDemos = args.clear || args.c
 const lang = args.lang || args.l
-
-const docsDir = resolve(__dirname, '../docs')
-const demosDir = resolve(__dirname, '../example/demos')
 
 const langs = ['zh-CN']
 
@@ -31,50 +18,43 @@ main().catch(error => {
   process.exit(1)
 })
 
-const external: Record<string, string> = {
-  'tab-nav': 'tabs'
-}
-
 async function main() {
-  let target = await specifyComponent(args, components)
+  const docsDir = resolve(__dirname, '../docs')
+  const targets = readdirSync(docsDir).filter(f => statSync(resolve(docsDir, f)).isDirectory())
 
-  target = components.find(name => {
-    return name === target || target.startsWith(name) || external[target] === name
-  }) || target
+  const target = await specifyComponent(args, targets)
 
   logger.withBothLn(() => logger.success(`matched target: ${target}`))
 
   const matchedLang = langs.find(l => l === lang || l.startsWith(lang)) || 'zh-CN'
   const demos = queryDemos(target, matchedLang)
 
-  if (existsSync(demosDir)) {
-    if (clearDemos) {
-      for (const file of readdirSync(demosDir)) {
-        if (file === '.gitignore') continue
+  const router = `
+    import { createRouter, createWebHashHistory } from 'vue-router'
 
-        const abs = resolve(demosDir, file)
+    export const router = createRouter({
+      history: createWebHashHistory('/'),
+      routes: [
+        ${demos.map((demo, index) => {
+          return `{
+            path: '${index ? `/${demo}` : '/'}',
+            name: '${demo}',
+            component: () => import('../docs/${target}/${demo}/demo.${matchedLang}.vue')
+          }`
+        }).join(',\n')}
+      ]
+    })
 
-        if (lstatSync(abs).isDirectory()) {
-          emptyDir(abs)
-          rmdirSync(abs)
-        } else {
-          unlinkSync(abs)
-        }
-      }
-    }
-  } else {
-    mkdirSync(demosDir)
-    writeFileSync(resolve(demosDir, '.gitignore'), '*\n!.gitignore\n', 'utf-8')
-  }
+    router.afterEach(to => {
+      document.title = \`${target} - \${typeof to.name === 'string' ? to.name : 'dev'} | Vexip UI\`
+    })
+  `
 
-  if (demos.length) {
-    await Promise.all(demos.map(async demo => {
-      await copyFile(
-        resolve(docsDir, target, demo, `demo.${matchedLang}.vue`),
-        resolve(demosDir, `${demo}.vue`)
-      )
-    }))
-  }
+  writeFileSync(
+    resolve(__dirname, '../example/router.ts'),
+    format(router, { ...(await resolveConfig(resolve('.prettierrc.js'))), parser: 'typescript' }),
+    'utf-8'
+  )
 
   await run('vite', ['serve'], {
     cwd: resolve(__dirname, '../example'),

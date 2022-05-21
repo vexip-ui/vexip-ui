@@ -24,6 +24,7 @@ export default defineConfig(() => {
       __DEMOS__: demos,
       __VERSION__: JSON.stringify('*')
     },
+    publicDir: false,
     resolve: {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
@@ -31,7 +32,10 @@ export default defineConfig(() => {
       ]
     },
     server: {
-      port: parseInt(process.env.PORT || '') || 8000
+      port: parseInt(process.env.PORT || '') || 8000,
+      fs: {
+        allow: ['.', `../docs/${target}`]
+      }
     },
     plugins: [
       ...prePlugins([
