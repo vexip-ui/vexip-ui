@@ -15,7 +15,8 @@ export default defineConfig(({ command }) => {
     },
     resolve: {
       alias: [
-        { find: /^@\/(.+)/, replacement: resolve(__dirname, '..', '$1') }
+        { find: /^@\/(.+)/, replacement: resolve(__dirname, '..', '$1') },
+        { find: /^vexip-ui\/(.+)/, replacement: resolve(__dirname, '..', '$1') }
       ]
     },
     publicDir: !isServe && 'public',
@@ -36,6 +37,7 @@ export default defineConfig(({ command }) => {
         configureServer({ middlewares }) {
           middlewares.use('/', serveStatic(resolve(__dirname, '../dist')))
           middlewares.use('/', serveStatic(resolve(__dirname, 'public')))
+          middlewares.use('/icons', serveStatic(resolve(__dirname, '../common/icons/es')))
         }
       },
       {
@@ -43,7 +45,7 @@ export default defineConfig(({ command }) => {
         generateBundle() {
           const depPaths: Record<string, string> = {
             'vue.runtime.esm-browser.js': '../node_modules/vue/dist/vue.runtime.esm-browser.js',
-            'vexip-ui.es.js': '../dist/vexip-ui.es.js',
+            'vexip-ui.js': '../dist/vexip-ui.es.js',
             'style.css': '../dist/style.css'
           }
 

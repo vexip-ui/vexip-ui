@@ -84,7 +84,6 @@ importers:
       '@vexip-ui/icons': link:common/icons
       '@vexip-ui/mixins': link:common/mixins
       '@vexip-ui/utils': link:common/utils
-      vue: 3.2.33
     devDependencies:
       '@commitlint/cli': 16.3.0
       '@commitlint/config-conventional': 16.2.4
@@ -157,14 +156,22 @@ importers:
       typescript: 4.6.4
       vite: 2.9.9_sass@1.51.0
       vite-plugin-dts: 1.1.1_vite@2.9.9
+      vue: 3.2.33
       vue-eslint-parser: 9.0.2_eslint@8.15.0
 
   common/config:
     specifiers:
       '@vexip-ui/utils': workspace:^
+      typescript: 4.6.4
+      vite: ^2.9.9
+      vite-plugin-dts: ^1.1.1
       vue: ^3.2.33
     dependencies:
       '@vexip-ui/utils': link:../utils
+    devDependencies:
+      typescript: 4.6.4
+      vite: 2.9.9
+      vite-plugin-dts: 1.1.1_vite@2.9.9
       vue: 3.2.33
 
   common/icons:
@@ -191,12 +198,28 @@ importers:
     specifiers:
       '@popperjs/core': ^2.11.5
       '@vexip-ui/utils': workspace:^
+      typescript: 4.6.4
+      vite: ^2.9.9
+      vite-plugin-dts: ^1.1.1
+      vue: ^3.2.33
     dependencies:
       '@popperjs/core': 2.11.5
       '@vexip-ui/utils': link:../utils
+    devDependencies:
+      typescript: 4.6.4
+      vite: 2.9.9
+      vite-plugin-dts: 1.1.1_vite@2.9.9
+      vue: 3.2.33
 
   common/utils:
-    specifiers: {}
+    specifiers:
+      typescript: 4.6.4
+      vite: ^2.9.9
+      vite-plugin-dts: ^1.1.1
+    devDependencies:
+      typescript: 4.6.4
+      vite: 2.9.9
+      vite-plugin-dts: 1.1.1_vite@2.9.9
 
   example:
     specifiers:
@@ -210,6 +233,7 @@ importers:
     specifiers:
       '@types/file-saver': ^2.0.5
       '@types/serve-static': ^1.13.10
+      '@vexip-ui/icons': workspace:^
       '@vitejs/plugin-vue': ^2.3.1
       '@vitejs/plugin-vue-jsx': ^1.3.10
       '@vue/repl': ^1.0.0
@@ -220,6 +244,7 @@ importers:
       vite: ^2.9.5
       vue: ^3.2.33
     dependencies:
+      '@vexip-ui/icons': link:../common/icons
       '@vue/repl': 1.1.1_vue@3.2.33
       file-saver: 2.0.5
       jszip: 3.9.1
@@ -9316,7 +9341,7 @@ packages:
       fast-glob: 3.2.11
       fs-extra: 10.1.0
       ts-morph: 14.0.0
-      vite: 2.9.9_sass@1.51.0
+      vite: 2.9.9
     transitivePeerDependencies:
       - supports-color
     dev: true
