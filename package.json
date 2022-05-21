@@ -112,6 +112,7 @@
   },
   "files": [
     "css",
+    "dist",
     "docs",
     "design",
     "es",
@@ -145,8 +146,8 @@
   "scripts": {
     "build": "ts-node scripts/build.ts",
     "build:config": "pnpm -C common/config build && pnpm i",
-    "build:icons": "ts-node scripts/build-icons.ts",
-    "build:lib": "ts-node scripts/build.ts --lib",
+    "build:full": "ts-node scripts/build-full.ts",
+    "build:icons": "pnpm -C common/icons build && pnpm i",
     "build:mixins": "pnpm -C common/mixins build && pnpm i",
     "build:playground": "pnpm -C playground build",
     "build:utils": "pnpm -C common/utils build && pnpm i",

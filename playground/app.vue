@@ -57,13 +57,14 @@ new Promise((resolve, reject) => {
 `
 
 const welcomeCode = `<template>
-  <Button type="primary">{{ msg }}</Button>
+  <Button type="primary" :icon="Search">{{ msg }}</Button>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+import { ref } from 'vue'
+import { Search } from '@vexip-ui/icons'
 
-  const msg = ref('Hello World!')
+const msg = ref('Hello World!')
 ${'</'}script>
 `
 
@@ -85,8 +86,9 @@ const store = new ReplStore({
 
 store.setImportMap({
   imports: {
-    vue: vueRuntimeUrl,
-    'vexip-ui': `${location.origin}/vexip-ui.es.js`
+    // vue: vueRuntimeUrl,
+    'vexip-ui': `${location.origin}/vexip-ui.es.js`,
+    '@vexip-ui/icons': `${location.origin}/icons/index.mjs`
   }
 })
 ;(!serializedState
@@ -107,8 +109,8 @@ store.setImportMap({
 // enable experimental features
 const sfcOptions = {
   script: {
-    refTransform: true,
-    propsDestructureTransform: true
+    // refTransform: true,
+    reactivityTransform: true
   }
 }
 
