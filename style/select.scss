@@ -9,9 +9,11 @@
 $select: () !default;
 $select: map.merge(
   (
-    list-bg-color: get-css-var('fill-color-base'),
+    list-bg-color: get-css-var('bg-color-base'),
+    list-b-color: get-css-var('border-color-light-2'),
+    list-border: get-css-var('border-shape') get-css-var('select-list-b-color'),
     list-radius: get-css-var('border-radius-base'),
-    list-shadow: get-css-var('box-shadow-base'),
+    list-shadow: get-css-var('shadow-base'),
     check-color: get-css-var('color-primary-base'),
     empty-color: get-css-var('content-color-placeholder')
   ),
@@ -93,6 +95,7 @@ $select: map.merge(
     width: 100%;
     user-select: none;
     background-color: get-css-var('select-list-bg-color');
+    border: get-css-var('select-list-border');
     border-radius: get-css-var('select-list-radius');
     box-shadow: get-css-var('select-list-shadow');
 

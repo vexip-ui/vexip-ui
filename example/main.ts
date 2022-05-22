@@ -1,4 +1,5 @@
 import '../style/index.scss'
+import '../themes/dark/preset.scss'
 
 import { createApp } from 'vue'
 import { install } from '../components'

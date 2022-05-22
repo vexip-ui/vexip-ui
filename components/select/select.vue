@@ -87,6 +87,9 @@
                     :key="index"
                     :label="item.label || item.value.toString()"
                     :value="item.value"
+                    :disabled="item.disabled"
+                    :divided="item.divided"
+                    :no-title="item.noTitle"
                   >
                     <template #default="{ selected }">
                       <span :class="`${prefixCls}__label`">
@@ -140,14 +143,7 @@ import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { OptionState, SelectState } from '@/components/option'
-
-type ClassType = string | Record<string, boolean>
-type RawOption =
-  | string
-  | {
-      value: string | number,
-      label?: string
-    }
+import type { ClassType, RawOption } from './symbol'
 
 const props = useConfiguredProps('select', {
   size: createSizeProp(),
@@ -276,7 +272,7 @@ export default defineComponent({
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
-    const optionStates = ref(new Set<OptionState>())
+    const optionStates = ref(new Set<OptionState>()) // using for secondary packaging
 
     const scroll = ref<InstanceType<typeof Scroll> | null>(null)
     const wrapper = useClickOutside()

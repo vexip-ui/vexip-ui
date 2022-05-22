@@ -82,10 +82,10 @@ $tag: map.merge(
   @each $type in $types {
     &--#{$type} {
       @include define-tag-style((
-        color: 'content-color-reverse',
+        color: 'color-white',
         bg-color: 'color' $type 'base',
         b-color: 'color' $type 'base',
-        close-color: 'content-color-reverse'
+        close-color: 'color-white'
       ));
     }
 
@@ -122,8 +122,8 @@ $tag: map.merge(
     @at-root {
       &--#{$name} {
         @include define-tag-style((
-          color: 'content-color-reverse',
-          close-color: 'content-color-reverse'
+          color: 'color-white',
+          close-color: 'color-white'
         ));
 
         @include define-css-var('tag-bg-color', $color);

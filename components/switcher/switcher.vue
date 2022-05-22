@@ -6,6 +6,9 @@
           <Spinner></Spinner>
         </Icon>
       </slot>
+      <slot v-else name="icon">
+        <Icon v-if="icon" :icon="icon"></Icon>
+      </slot>
     </span>
     <span :class="`${prefix}__label`">
       <template v-if="currentValue">
@@ -57,6 +60,10 @@ const props = useConfiguredProps('switcher', {
   loading: {
     type: Boolean,
     default: false
+  },
+  icon: {
+    type: Object,
+    default: null
   },
   openText: {
     type: String,

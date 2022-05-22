@@ -122,7 +122,7 @@ $pagination: map.merge(
   }
 
   &--background &__item#{&}__item--active {
-    @include define-css-var('pagination-color-active', get-css-var('content-color-reverse'));
+    @include define-css-var('pagination-color-active', get-css-var('color-white'));
 
     background-color: get-css-var('pagination-bg-color-active');
   }

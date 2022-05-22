@@ -100,14 +100,12 @@
     },
     "./css": "./css/index.css",
     "./css/*": "./css/*",
-    "./icons": {
-      "require": "./lib/common/icons/index.js",
-      "import": "./es/common/icons/index.mjs"
-    },
-    "./icons/*": {
-      "require": "./lib/common/icons/*",
-      "import": "./es/common/icons/*"
-    },
+    "./es": "./es/components/index.mjs",
+    "./es/*.mjs": "./es/components/*.mjs",
+    "./es/*": "./es/components/*.mjs",
+    "./lib": "./lib/components/index.js",
+    "./lib/*.js": "./lib/components/*.js",
+    "./lib/*": "./lib/components/*.js",
     "./package.json": "./package.json"
   },
   "files": [

@@ -5,14 +5,14 @@
 $tooltip: () !default;
 $tooltip: map.merge(
   (
-    bg-color: get-css-var('fill-color-base'),
+    bg-color: get-css-var('bg-color-base'),
     bg-color-dark: get-css-var('fill-color-reverse'),
     s-color: get-css-var('border-color-base'),
-    s-color-dark: get-css-var('fill-color-reverse'),
-    shadow: get-css-var('box-shadow-shape') get-css-var('tooltip-s-color'),
+    s-color-dark: get-css-var('bg-color-reverse'),
+    shadow: get-css-var('shadow-shape') get-css-var('tooltip-s-color'),
     shadow-dark: none,
     content-color: get-css-var('content-color-base'),
-    content-color-dark: get-css-var('content-color-reverse'),
+    content-color-dark: get-css-var('color-white'),
     raduis: get-css-var('border-radius-base'),
     arrow-size: 0.5em,
     arrow-v-offset: 0.9em,

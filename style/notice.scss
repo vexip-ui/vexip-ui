@@ -8,12 +8,12 @@ $notice: () !default;
 $notice: map.merge(
   (
     color: inherit,
-    bg-color: get-css-var('fill-color-base'),
+    bg-color: get-css-var('bg-color-base'),
     b-color: transparent,
     border: get-css-var('border-shape') get-css-var('notice-b-color'),
     radius: get-css-var('border-radius-base'),
     s-color: get-css-var('border-color-base'),
-    shadow: get-css-var('box-shadow-shape') get-css-var('notice-s-color'),
+    shadow: get-css-var('shadow-shape') get-css-var('notice-s-color'),
     v-padding: 0.8em,
     h-padding: 1.2em,
     padding: get-css-var('notice-v-padding') get-css-var('notice-h-padding'),

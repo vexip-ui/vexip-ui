@@ -13,7 +13,7 @@ $slider: map.merge(
     filler-bg-color: get-css-var('color-primary-base'),
     filler-bg-color-disabled: get-css-var('fill-color-disabled'),
     handler-size: 14px,
-    handler-bg-color: get-css-var('fill-color-base'),
+    handler-bg-color: get-css-var('color-white'),
     handler-b-width: 2px,
     handler-b-color: get-css-var('color-primary-base'),
     handler-b-color-disabled: get-css-var('content-color-disabled'),

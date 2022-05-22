@@ -8,7 +8,7 @@
 
   // font-size: 0.8em;
   // fill: currentcolor;
-  transition: get-css-var('transition-transform'), get-css-var('transition-color');
+  transition: get-css-var('transition-transform');
   transform-origin: 50% 50%;
 
   svg {

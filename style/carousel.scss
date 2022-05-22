@@ -6,7 +6,7 @@
 $carousel: () !default;
 $carousel: map.merge(
   (
-    handler-color: get-css-var('content-color-reverse'),
+    handler-color: get-css-var('color-white'),
     handler-bg-color: get-css-var('fill-color-reverse'),
     handler-opacity: 50%,
     handler-opacity-hover: 80%,

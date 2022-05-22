@@ -11,13 +11,13 @@ $switcher: map.merge(
     bg-color-disabled: get-css-var('fill-color-disabled'),
     opacity-disabled: 60%,
     opacity-loading: get-css-var('switcher-opacity-disabled'),
-    s-color-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-focus') get-css-var('switcher-s-color-focus'),
-    label-color: get-css-var('content-color-reverse'),
+    s-color-focus: get-css-var('color-primary-opacity-6'),
+    shadow-focus: get-css-var('shadow-focus') get-css-var('switcher-s-color-focus'),
+    label-color: get-css-var('color-white'),
     small-height: 18px,
     default-height: 22px,
     large-height: 26px,
-    signal-bg-color: get-css-var('fill-color-base'),
+    signal-bg-color: get-css-var('color-white'),
     signal-b-color: get-css-var('switcher-signal-bg-color'),
     signal-b-color-disabled: get-css-var('switcher-signal-bg-color'),
     signal-border: get-css-var('border-shape') get-css-var('switcher-signal-b-color'),
@@ -25,6 +25,8 @@ $switcher: map.merge(
     signal-default-size: calc(get-css-var('switcher-default-height') - 4px),
     signal-large-size: calc(get-css-var('switcher-large-height') - 4px),
     series-span: 0.6em,
+    icon-color: get-css-var('color-black'),
+    circle-opacity: 0
   ),
   $switcher
 );
@@ -121,8 +123,13 @@ $switcher: map.merge(
       content: '';
       border: get-css-var('switcher-signal-border');
       border-radius: 50%;
+      opacity: get-css-var('switcher-circle-opacity');
       transition: get-css-var('transition-border');
       transform: translate(-50%, -50%);
+    }
+
+    .vxp-icon {
+      color: get-css-var('switcher-icon-color');
     }
   }
 
@@ -134,8 +141,9 @@ $switcher: map.merge(
         (
           bg-color: 'color' $state 'light-1',
           bg-color-open: 'color' $state 'light-1',
-          s-color-focus: 'color' $state 'light-8',
-          signal-b-color: 'color' $state 'base'
+          s-color-focus: 'color' $state 'opacity-6',
+          signal-b-color: 'color' $state 'base',
+          circle-opacity: 80%
         )
       );
     }

@@ -26,9 +26,10 @@ $tab-nav: map.merge(
     card-radius: get-css-var('border-radius-base'),
     marker-bg-color: get-css-var('tab-nav-color-active'),
     marker-height: 2px,
-    icon-color: get-css-var('tab-nav-color'),
-    icon-color-active: get-css-var('tab-nav-color-active'),
-    icon-color-disabled: get-css-var('tab-nav-color-disabled'),
+    // icon-color: get-css-var('tab-nav-color'),
+    // icon-color-hover: get-css-var('tab-nav-color-hover'),
+    // icon-color-active: get-css-var('tab-nav-color-active'),
+    // icon-color-disabled: get-css-var('tab-nav-color-disabled'),
     v-padding: 0.6em,
     h-padding: 1.2em,
     padding: get-css-var('tab-nav-v-padding') get-css-var('tab-nav-h-padding')
@@ -127,28 +128,6 @@ $tab-nav: map.merge(
   }
 
   &__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-right: 0.3em;
-
-    &,
-    .vxp-icon {
-      color: get-css-var('tab-nav-icon-color');
-    }
-  }
-
-  &__item--active &__icon {
-    &,
-    .vxp-icon {
-      color: get-css-var('tab-nav-icon-color-active');
-    }
-  }
-
-  &__item--disabled &__icon {
-    &,
-    .vxp-icon {
-      color: get-css-var('tab-nav-icon-color-disabled');
-    }
   }
 }

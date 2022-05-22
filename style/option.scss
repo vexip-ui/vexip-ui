@@ -5,12 +5,12 @@
 $option: () !default;
 $option: map.merge(
   (
-    color: get-css-var('content-color-normal'),
-    color-hover: get-css-var('option-color'),
+    color: get-css-var('content-color-base'),
+    // color-hover: get-css-var('option-color'),
     color-hitting: get-css-var('color-primary-base'),
     color-selected: get-css-var('color-primary-base'),
     color-disabled: get-css-var('fill-color-disabled'),
-    bg-color: get-css-var('fill-color-base'),
+    bg-color: transparent,
     bg-color-hover: get-css-var('fill-color-hover'),
     bg-color-hitting: get-css-var('option-bg-color'),
     bg-color-selected: get-css-var('option-bg-color-hover'),
@@ -48,7 +48,7 @@ $option: map.merge(
   transition: get-css-var('transition-color'), get-css-var('transition-background');
 
   &:hover {
-    color: get-css-var('option-color-hover');
+    // color: get-css-var('option-color-hover');
     background-color: get-css-var('option-bg-color-hover');
   }
 
@@ -73,17 +73,20 @@ $option: map.merge(
   }
 
   &--divided {
-    margin-bottom: $label-v-padding;
-    border-bottom: get-css-var('option-divider');
+    position: relative;
+    margin-bottom: calc($label-v-padding * 2);
+    // border-bottom: get-css-var('option-divider');
 
     &::after {
-      position: relative;
-      bottom: calc(#{$label-v-padding} * -1);
+      position: absolute;
+      bottom: calc(#{$label-v-padding} * -1 - 0.5px);
       display: block;
-      height: $label-v-padding;
+      width: 100%;
+      height: 0;
       margin: 0 calc(#{$label-h-padding} * -1);
       content: '';
-      background-color: get-css-var('option-bg-color');
+      pointer-events: none;
+      border-bottom: get-css-var('option-divider');
     }
   }
 

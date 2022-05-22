@@ -33,7 +33,7 @@ $upload: map.merge(
     action-color-hover: get-css-var('content-color-base'),
     action-color-disabled: get-css-var('content-color-disabled'),
     action-color-light: get-css-var('content-color-placeholder'),
-    action-color-reverse: get-css-var('content-color-reverse'),
+    action-color-reverse: get-css-var('color-white'),
     percentage-color: get-css-var('content-color-secondary')
   ),
   $upload

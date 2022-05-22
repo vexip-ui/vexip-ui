@@ -41,7 +41,12 @@ async function main() {
             name: '${demo}',
             component: () => import('../docs/${target}/${demo}/demo.${matchedLang}.vue')
           }`
-        }).join(',\n')}
+        }).join(',\n')},
+        {
+          path: '/theme',
+          name: 'theme',
+          component: () => import('./theme.vue')
+        }
       ]
     })
 

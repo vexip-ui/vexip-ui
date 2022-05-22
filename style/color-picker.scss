@@ -17,14 +17,14 @@ $color-picker: map.merge(
     marker-bg-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg=='),
     arrow-color: get-css-var('content-color-secondary'),
     popper-z-index: get-css-var('z-index-popper'),
-    pane-bg-color: get-css-var('fill-color-base'),
+    pane-bg-color: get-css-var('bg-color-base'),
     pane-radius: get-css-var('border-radius-base'),
-    pane-shadow: get-css-var('box-shadow-base'),
+    pane-shadow: get-css-var('shadow-base'),
     d-color: get-css-var('border-color-light-2'),
     divider: get-css-var('border-shape') get-css-var('color-picker-d-color'),
     pointer-size: 6px,
     handler-size: 6px,
-    handler-bg-color: get-css-var('fill-color-base'),
+    handler-bg-color: get-css-var('color-white'),
     handler-b-color: get-css-var('border-color-base'),
     handler-border: get-css-var('border-shape') get-css-var('color-picker-handler-b-color'),
     handler-radius: 3px,
@@ -230,7 +230,7 @@ $color-picker: map.merge(
     margin: 2px;
     cursor: pointer;
     border-radius: get-css-var('color-picker-shortcut-radius');
-    box-shadow: get-css-var('box-shadow-border') get-css-var('color-picker-shortcut-b-color');
+    box-shadow: get-css-var('shadow-border') get-css-var('color-picker-shortcut-b-color');
     transition: box-shadow 200ms;
 
     &:hover {

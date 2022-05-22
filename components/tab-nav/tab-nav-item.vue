@@ -5,9 +5,7 @@
     :aria-disabled="disabled"
     @click="handleSelect"
   >
-    <div v-if="icon" :class="`${prefix}__icon`">
-      <Icon :icon="icon"></Icon>
-    </div>
+    <Icon v-if="icon" :class="`${prefix}__icon`" :icon="icon"></Icon>
     <slot>
       {{ label }}
     </slot>

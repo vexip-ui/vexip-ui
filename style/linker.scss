@@ -107,7 +107,7 @@ $linker: map.merge(
         color: 'color' $type 'base',
         color-hover: 'color' $type 'light-2',
         color-active: 'color' $type 'dark-1',
-        color-disabled: 'color' $type 'light-5'
+        color-disabled: 'color' $type 'opacity-5'
       ));
     }
   }

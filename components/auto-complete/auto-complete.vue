@@ -60,6 +60,9 @@
         :key="index"
         :label="item.label || item.value?.toString()"
         :value="item.value"
+        :disabled="item.disabled"
+        :divided="item.divided"
+        :no-title="item.noTitle"
       ></Option>
     </slot>
   </Select>
@@ -78,13 +81,7 @@ import { isNull, noop } from '@vexip-ui/utils'
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { OptionState } from '@/components/option'
-
-type RawOption =
-  | string
-  | {
-      value: string | number,
-      label?: string
-    }
+import type { RawOption } from '@/components/select'
 
 const props = useConfiguredProps('autoComplete', {
   size: createSizeProp(),
@@ -110,7 +107,7 @@ const props = useConfiguredProps('autoComplete', {
   },
   prefix: {
     type: Object,
-    default: ''
+    default: null
   },
   prefixColor: {
     type: String,
@@ -118,7 +115,7 @@ const props = useConfiguredProps('autoComplete', {
   },
   suffix: {
     type: Object,
-    default: ''
+    default: null
   },
   suffixColor: {
     type: String,

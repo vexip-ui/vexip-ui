@@ -14,7 +14,7 @@ $anchor: map.merge(
     track: get-css-var('anchor-track-width') get-css-var('anchor-track-style') get-css-var('anchor-track-color'),
     track-color-active: get-css-var('anchor-link-color-active'),
     pointer-size: 8px,
-    pointer-bg-color: get-css-var('fill-color-base'),
+    pointer-bg-color: get-css-var('color-white'),
     pointer-b-color: get-css-var('anchor-link-color-active'),
     pointer-border: get-css-var('border-shape') get-css-var('anchor-pointer-b-color')
   ),

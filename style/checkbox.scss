@@ -15,12 +15,12 @@ $checkbox: map.merge(
     signal-bg-color: get-css-var('fill-color-base'),
     signal-bg-color-checked: get-css-var('color-primary-base'),
     signal-bg-color-disabled: get-css-var('fill-color-background'),
-    signal-check-color: get-css-var('checkbox-signal-bg-color'),
+    signal-check-color: get-css-var('color-white'),
     border: get-css-var('border-shape') get-css-var('checkbox-b-color'),
     radius: get-css-var('border-radius-base'),
     signal-radius: get-css-var('border-radius-small'),
-    s-color-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-focus') get-css-var('checkbox-s-color-focus'),
+    s-color-focus: get-css-var('color-primary-opacity-6'),
+    shadow-focus: get-css-var('shadow-focus') get-css-var('checkbox-s-color-focus'),
     signal-small-size: 14px,
     signal-small-thick: 1px,
     signal-default-size: 18px,
@@ -210,7 +210,7 @@ $checkbox: map.merge(
           b-color-hover: 'color' $state 'base',
           b-color-checked: 'color' $state 'base',
           signal-bg-color-checked: 'color' $state 'base',
-          s-color-focus: 'color' $state 'light-8'
+          s-color-focus: 'color' $state 'opacity-6'
         )
       );
     }
@@ -232,7 +232,7 @@ $checkbox: map.merge(
     border-color: get-css-var('checkbox-b-color-disabled');
 
     &::after {
-      background-color: get-css-var('checkbox-b-color-disabled');
+      border-color: get-css-var('checkbox-b-color-disabled');
     }
   }
 
