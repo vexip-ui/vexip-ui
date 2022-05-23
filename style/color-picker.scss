@@ -180,6 +180,10 @@ $color-picker: map.merge(
     .vxp-button {
       margin-left: 0.3em !important;
     }
+
+    .vxp-input {
+      width: 100%;
+    }
   }
 
   &__palette-handler {

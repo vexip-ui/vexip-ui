@@ -97,6 +97,9 @@
       </template>
       <br />
       <br />
+      <ColorPicker alpha></ColorPicker>
+      <br />
+      <br />
       <DatePicker
         is-range
         clearable
@@ -221,12 +224,140 @@
         <br />
         <br />
       </template>
+      <template v-for="(meta, index) in paginationMeta" :key="index">
+        <Pagination
+          page-jump
+          page-total
+          page-count
+          :background="meta.background"
+          :no-border="meta.noBorder"
+          :total="100"
+          :page-size="10"
+          :max-count="8"
+        ></Pagination>
+      </template>
+      <br />
+      <br />
+      <Table
+        :data="tableData"
+        use-y-bar
+        :width="1000"
+        :height="200"
+      >
+        <TableColumn type="selection" id-key="selection" fixed></TableColumn>
+        <TableColumn type="order" id-key="order" fixed></TableColumn>
+        <TableColumn type="expand" id-key="expand" fixed>
+          <template #default="{ row }">
+            <Grid style="padding: 20px 40px;">
+              <Cell :width="12">
+                Full Name: {{ `${row.firstName} ${row.lastName}` }}
+              </Cell>
+              <Cell :width="12">
+                Age: {{ row.age }}
+              </Cell>
+              <Cell :width="12">
+                Job: {{ row.job }}
+              </Cell>
+              <Cell :width="12">
+                Email: {{ row.email }}
+              </Cell>
+            </Grid>
+          </template>
+        </TableColumn>
+        <TableColumn
+          name="First Name"
+          id-key="firstName"
+          sorter
+          :width="300"
+        ></TableColumn>
+        <TableColumn
+          name="Last Name"
+          id-key="lastName"
+          :width="300"
+          :filter="tableFilter"
+        ></TableColumn>
+        <TableColumn
+          name="Job"
+          id-key="job"
+          :order="3"
+          fixed="right"
+        ></TableColumn>
+        <TableColumn
+          name="Age"
+          id-key="age"
+          :order="2"
+          no-ellipsis
+          :width="300"
+        ></TableColumn>
+        <TableColumn name="Long Text" id-key="longText" :width="300">
+          很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本
+        </TableColumn>
+      </Table>
+      <br />
+      <div style="display: flex;">
+        <Timeline both-sides style="width: 50%;">
+          <TimelineItem>
+            <p>项目负责人</p>
+            <Card> 今日客户提出了XXX的需求，请及时做技术可行性分析 </Card>
+          </TimelineItem>
+          <TimelineItem>
+            <p>技术负责人</p>
+            <Card> 经过会议讨论，XXX需求可以实现，请实施人员跟进 </Card>
+          </TimelineItem>
+          <TimelineItem>
+            <p>技术骨干</p>
+            <Card> 已收到开发需求，目前开发进度为30% </Card>
+          </TimelineItem>
+          <TimelineItem>
+            <p>项目负责人</p>
+            <Card> 请及时跟进XXX需求开发，目前客户对这块的进度提出了疑问 </Card>
+          </TimelineItem>
+          <TimelineItem>
+            <p>技术负责人</p>
+            <Card> 收到，已及时跟进开发情况，增加开发人员投入 </Card>
+          </TimelineItem>
+        </Timeline>
+        <Timeline pending style="width: calc(45% - 30px); margin-left: 30px;">
+          <TimelineItem>
+            <p>项目负责人</p>
+            <Card> 今日客户提出了XXX的需求，请及时做技术可行性分析 </Card>
+          </TimelineItem>
+          <TimelineItem type="success">
+            <p>技术负责人</p>
+            <Card> 经过会议讨论，XXX需求可以实现，请实施人员跟进 </Card>
+          </TimelineItem>
+          <TimelineItem type="error">
+            <p>技术骨干</p>
+            <Card> 已收到开发需求，目前开发进度为30% </Card>
+          </TimelineItem>
+          <TimelineItem type="warning">
+            <p>项目负责人</p>
+            <Card> 请及时跟进XXX需求开发，目前客户对这块的进度提出了疑问 </Card>
+          </TimelineItem>
+          <TimelineItem>
+            <p>技术负责人</p>
+            <Card> 收到，已及时跟进开发情况，增加开发人员投入 </Card>
+          </TimelineItem>
+        </Timeline>
+      </div>
+      <div style="display: flex;">
+        <Button type="primary" style="margin-right: 20px;" @on-click="spinActive = !spinActive">
+          切换
+        </Button>
+        <Spin :active="spinActive" tip="Loading..." style="width: 600px;">
+          <Alert icon type="success" title="警告标题">
+            警告提示的内容
+          </Alert>
+        </Spin>
+      </div>
     </Cell>
   </Grid>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { Message, Notice } from '../components'
+import { defineFilter } from '../components/table'
 import { Upload } from '@vexip-ui/icons'
 
 const buttonTypes = ['default', 'primary', 'dashed', 'text', 'info', 'success', 'warning', 'error'] as const
@@ -332,6 +463,118 @@ const messageMeta = [
   { color: true, background: false },
   { color: true, background: true }
 ]
+
+const paginationMeta = [
+  { background: false, noBorder: false },
+  { background: true, noBorder: false },
+  { background: false, noBorder: true },
+  { background: true, noBorder: true }
+]
+
+const tableData = [
+  {
+    id: '1',
+    job: 'Cashier',
+    email: 'Angelique_Walsh2268@twace.org',
+    firstName: 'Angelique',
+    lastName: 'Walsh',
+    age: '58'
+  },
+  {
+    id: '2',
+    job: 'Stockbroker',
+    email: 'Aeris_Drake5867@gmail.com',
+    firstName: 'Aeris',
+    lastName: 'Drake',
+    age: '40'
+  },
+  {
+    id: '3',
+    job: 'Machine Operator',
+    email: 'Elisabeth_Rogers7566@sheye.org',
+    firstName: 'Elisabeth',
+    lastName: 'Rogers',
+    age: '56'
+  },
+  {
+    id: '4',
+    job: 'Audiologist',
+    email: 'Sharon_Tanner5855@nickia.com',
+    firstName: 'Sharon',
+    lastName: 'Tanner',
+    age: '58'
+  },
+  {
+    id: '5',
+    job: 'Cashier',
+    email: 'Evie_Farmer6650@typill.biz',
+    firstName: 'Evie',
+    lastName: 'Farmer',
+    age: '26'
+  },
+  {
+    id: '6',
+    job: 'Dentist',
+    email: 'Phillip_Rixon8188@gmail.com',
+    firstName: 'Phillip',
+    lastName: 'Rixon',
+    age: '37'
+  },
+  {
+    id: '7',
+    job: 'Web Developer',
+    email: 'Liam_Pickard9810@ovock.tech',
+    firstName: 'Liam',
+    lastName: 'Pickard',
+    age: '32'
+  },
+  {
+    id: '8',
+    job: 'Staffing Consultant',
+    email: 'Ruth_Mcleod599@naiker.biz',
+    firstName: 'Ruth',
+    lastName: 'Mcleod',
+    age: '21'
+  },
+  {
+    id: '9',
+    job: 'Stockbroker',
+    email: 'Marvin_Lakey4748@fuliss.net',
+    firstName: 'Marvin',
+    lastName: 'Lakey',
+    age: '41'
+  },
+  {
+    id: '10',
+    job: 'Lecturer',
+    email: 'Deborah_Santos5515@ubusive.com',
+    firstName: 'Deborah',
+    lastName: 'Santos',
+    age: '29'
+  }
+]
+
+const tableFilter = defineFilter({
+  able: true,
+  options: [
+    { label: 'Starts with D', value: 'D' },
+    { label: 'Starts with F', value: 'F' },
+    { label: 'Starts with R', value: 'R' },
+    { label: 'Starts with T', value: 'T' }
+  ],
+  multiple: true,
+  method(values, row: { lastName: string }) {
+    for (const value of values) {
+      if (row.lastName.startsWith(value)) {
+        return true
+      }
+    }
+
+    return false
+  }
+})
+
+const spinActive = ref(true)
 </script>
 
 <style lang="scss">

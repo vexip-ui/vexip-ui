@@ -11,11 +11,12 @@
 $table: () !default;
 $table: map.merge(
   (
-    bg-color: transparent,
+    bg-color: get-css-var('bg-color-base'),
     b-color: get-css-var('border-color-base'),
     b-width: get-css-var('border-width'),
     b-style: get-css-var('border-style'),
     b-shape: get-css-var('table-b-width') get-css-var('table-b-style'),
+    s-color: get-css-var('shadow-color-base'),
     border: get-css-var('table-b-shape') get-css-var('table-b-color'),
     row-bg-color: get-css-var('fill-color-background'),
     row-bg-color-hover: get-css-var('color-primary-light-8'),
@@ -335,7 +336,7 @@ $table: map.merge(
     border-left: 0 transparent;
 
     &#{$fixed-active} {
-      box-shadow: -2px 0 get-css-var('shadow-blur') get-css-var('table-border-color');
+      box-shadow: -2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
     }
   }
 
@@ -347,7 +348,7 @@ $table: map.merge(
     left: 0;
 
     &#{$fixed-active} {
-      box-shadow: 2px 0 get-css-var('shadow-blur') get-css-var('table-border-color');
+      box-shadow: 2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
     }
 
     #{$cell},

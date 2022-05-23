@@ -41,7 +41,7 @@
 
   @each $name in map.keys($shadow-color-map) {
     @include define-css-var(
-      ('box-shadow', $name),
+      ('shadow', $name),
       get-css-var('shadow-shape') get-css-var('shadow-color', $name)
     );
   }

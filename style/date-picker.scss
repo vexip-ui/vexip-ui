@@ -22,7 +22,7 @@ $date-picker: map.merge(
     shortcut-bg-color: get-css-var('fill-color-background'),
     shortcut-bg-color-hover: get-css-var('fill-color-hover'),
     d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-appearance') get-css-var('date-picker-d-color'),
+    divider: get-css-var('border-shape') get-css-var('date-picker-d-color'),
     arrow-color: get-css-var('content-color-secondary'),
     arrow-color-hover: get-css-var('content-color-base'),
     header-color-hover: get-css-var('color-primary-base'),
