@@ -130,17 +130,13 @@ $carousel: map.merge(
     justify-content: center;
     width: get-css-var('carousel-handler-size');
     height: get-css-var('carousel-handler-size');
+    color: get-css-var('carousel-handler-color');
     pointer-events: auto;
     cursor: pointer;
     background-color: get-css-var('carousel-handler-bg-color');
     border-radius: 50%;
     opacity: get-css-var('carousel-handler-opacity');
     transition: get-css-var('transition-opacity');
-
-    &,
-    .vxp-icon {
-      color: get-css-var('carousel-handler-color');
-    }
 
     &:hover {
       opacity: get-css-var('carousel-handler-opacity-hover');

@@ -70,15 +70,11 @@ $split: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
+    color: get-css-var('split-button-color');
     cursor: pointer;
     background-color: $button-color;
     border-radius: get-css-var('split-button-radius');
     transition: get-css-var('transition-background');
-
-    &,
-    .vxp-icon {
-      color: get-css-var('split-button-color');
-    }
 
     &::before,
     &::after {

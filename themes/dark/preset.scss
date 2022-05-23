@@ -8,10 +8,20 @@
   @include c.define-preset-values('bg-color', $bg-color-map);
   @include c.define-preset-values('border-color', $border-color-map);
   @include c.define-preset-values('fill-color', $fill-color-map);
+  @include c.define-preset-values('shadow-color', $shadow-color-map);
 
   // .vxp-switcher-vars {
   //   @include c.define-preset-values('switcher', (
 
   //   ));
   // }
+
+  .vxp-menu-vars {
+    @include c.define-preset-values('menu', (
+      label-color-dark: #495057,
+      label-color-hover-dark: c.get-css-var('color-primary-base'),
+      label-color-visible-dark: c.get-css-var('color-white'),
+      label-color-disabled-dark: #adb5bd,
+    ));
+  }
 }

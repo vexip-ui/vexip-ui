@@ -85,25 +85,15 @@ $time-picker: map.merge(
     align-items: center;
     padding: 0 4px;
     padding-top: 1px;
-
-    &,
-    .vxp-icon {
-      color: get-css-var('time-picker-exchange-color');
-    }
+    color: get-css-var('time-picker-exchange-color');
 
     &--endabled:hover {
-      &,
-      .vxp-icon {
-        color: get-css-var('time-picker-exchange-color-hover');
-      }
+      color: get-css-var('time-picker-exchange-color-hover');
     }
   }
 
   &--disabled &__exchange {
-    &,
-    .vxp-icon {
-      color: get-css-var('time-picker-color-disabled');
-    }
+    color: get-css-var('time-picker-color-disabled');
   }
 
   &__popper {

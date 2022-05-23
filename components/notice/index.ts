@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 import Component from './notice.vue'
 import { isNull, isObject, toNumber, destroyObject } from '@vexip-ui/utils'
 import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
@@ -209,11 +209,15 @@ export class NoticeManager {
       }
     }
 
-    const item = Object.assign({}, this.defaults, convenienceOptions, options, {
+    const item: NoticeOptions = Object.assign({}, this.defaults, convenienceOptions, options, {
       key,
       type,
       onClose
     })
+
+    if (item.icon && typeof item.icon !== 'function') {
+      item.icon = markRaw(item.icon)
+    }
 
     notice.add(item)
 

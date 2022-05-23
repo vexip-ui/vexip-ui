@@ -5,8 +5,8 @@
 $content-color-map: () !default;
 $content-color-map: map.merge(
   (
-    primary: #fff,
-    base: rgba(#fff, 0.92),
+    primary: rgba(#fff, 0.94),
+    base: rgba(#fff, 0.88),
     secondary: rgba(#fff, 0.7),
     disabled: rgba(#fff, 0.4),
     placeholder: rgba(#fff, 0.3),
@@ -29,7 +29,7 @@ $border-color-map: () !default;
 $border-color-map: map.merge(
   (
     base: rgba(#fff, 0.25),
-    light-1: rgba(#fff, 0.20),
+    light-1: rgba(#fff, 0.2),
     light-2: rgba(#fff, 0.15),
     dark-1: rgba(#fff, 0.3),
     dark-2: rgba(#fff, 0.35)
@@ -49,4 +49,16 @@ $fill-color-map: map.merge(
     reverse: #fff
   ),
   $fill-color-map
+);
+
+$shadow-color-map: () !default;
+$shadow-color-map: map.merge(
+  (
+    base: rgba(#000, 0.5),
+    light-1: rgba(#000, 0.4),
+    light-2: rgba(#000, 0.3),
+    dark-1: rgba(#000, 0.6),
+    dark-2: rgba(#000, 0.7)
+  ),
+  $shadow-color-map
 );

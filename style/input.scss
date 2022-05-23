@@ -100,13 +100,9 @@ $input: map.merge(
     }
 
     %disabled-item {
+      color: get-css-var('input-control-color-disabled');
       pointer-events: none;
       cursor: not-allowed;
-
-      &,
-      .vxp-icon {
-        color: get-css-var('input-control-color-disabled');
-      }
     }
   }
 
@@ -156,12 +152,8 @@ $input: map.merge(
       justify-content: center;
       width: 2em;
       height: 100%;
+      color: get-css-var('input-icon-color');
       user-select: none;
-
-      &,
-      .vxp-icon {
-        color: get-css-var('input-icon-color');
-      }
 
       @extend %disabled-item;
     }
@@ -239,13 +231,9 @@ $input: map.merge(
       justify-content: center;
       width: 2em;
       height: 100%;
+      color: get-css-var('input-icon-color');
       cursor: pointer;
       user-select: none;
-
-      &,
-      .vxp-icon {
-        color: get-css-var('input-icon-color');
-      }
 
       @extend %disabled-item;
     }

@@ -12,10 +12,11 @@ $message: map.merge(
     b-color: transparent,
     border: get-css-var('border-shape') get-css-var('message-b-color'),
     radius: get-css-var('border-radius-base'),
-    s-color: get-css-var('border-color-base'),
+    s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('message-s-color'),
     v-padding: 0.6em,
     h-padding: 1em,
+    mask-bg-color: transparent,
     padding: get-css-var('message-v-padding') get-css-var('message-h-padding'),
     icon-color: get-css-var('message-color'),
     close-color: get-css-var('content-color-placeholder'),
@@ -52,11 +53,7 @@ $message: map.merge(
     display: flex;
     align-items: center;
     margin-right: 0.5em;
-
-    &,
-    .vxp-icon {
-      color: get-css-var('message-icon-color');
-    }
+    color: get-css-var('message-icon-color');
   }
 
   &__close {
@@ -65,12 +62,10 @@ $message: map.merge(
     margin-left: 1em;
     color: get-css-var('message-close-color');
     cursor: pointer;
+    transition: get-css-var('transition-color');
 
     &:hover {
-      &,
-      .vxp-icon {
-        color: get-css-var('message-close-color-hover');
-      }
+      color: get-css-var('message-close-color-hover');
     }
   }
 
@@ -83,6 +78,19 @@ $message: map.merge(
     border-radius: get-css-var('message-radius');
     box-shadow: get-css-var('message-shadow');
 
+    &::before {
+      @include inner-fixed;
+
+      pointer-events: none;
+      background-color: get-css-var('message-mask-bg-color');
+      border-radius: get-css-var('message-radius');
+      opacity: 80%;
+    }
+
+    &--background::before {
+      content: '';
+    }
+
     $types: info success warning error;
 
     @each $type in $types {
@@ -91,18 +99,18 @@ $message: map.merge(
       &--color-only#{&}--#{$type} {
         @include define-message-style((
           color: 'color' $color 'base',
-          close-color: 'color' $color 'light-5',
+          close-color: 'color' $color 'opacity-5',
           close-color-hover: 'color' $color 'base'
         ));
       }
 
       &--background#{&}--#{$type} {
         @include define-message-style((
-          bg-color: 'color' $color 'light-9',
-          b-color: 'color' $color 'light-5',
+          b-color: 'color' $color 'opacity-5',
+          mask-bg-color: 'color' $color 'opacity-9',
           shadow: unset,
-          close-color: 'color' $color 'light-7',
-          close-color-hover: 'color' $color 'light-2'
+          close-color: 'color' $color 'opacity-7',
+          close-color-hover: 'color' $color 'opacity-2'
         ));
       }
 

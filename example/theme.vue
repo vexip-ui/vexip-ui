@@ -14,6 +14,7 @@
               :simple="meta.simple"
               :ghost="meta.ghost"
               :disabled="meta.disabled"
+              :icon="Upload"
             >
               {{ type.charAt(0).toLocaleLowerCase() + type.substring(1) }}
             </Button>
@@ -162,11 +163,70 @@
           {{ meta.label }}
         </TabNavItem>
       </TabNav>
+      <template v-for="(type) in alertTypes" :key="type">
+        <Alert icon closable :type="type">
+          警告提示的内容
+        </Alert>
+      </template>
+      <template v-for="n in 2" :key="n">
+        <Breadcrumb :border="n === 2" style="max-width: 500px; margin-bottom: 10px;">
+          <BreadcrumbItem>此电脑</BreadcrumbItem>
+          <BreadcrumbItem>文档 (D:)</BreadcrumbItem>
+          <BreadcrumbItem>vexip-ui</BreadcrumbItem>
+        </Breadcrumb>
+      </template>
+      <div style="display: flex;">
+        <template v-for="n in 2" :key="n">
+          <Menu :theme="n === 1 ? 'light' : 'dark'" style="width: 240px; margin-right: 20px;">
+            <MenuItem
+              v-for="meta in menuMeta"
+              :key="meta.label"
+              :label="meta.label"
+              :icon="Upload"
+              :disabled="meta.disabled"
+            >
+              {{ meta.label }}
+            </MenuItem>
+          </Menu>
+        </template>
+      </div>
+      <br />
+      <template v-for="(meta, index) in messageMeta" :key="index">
+        <span style="padding: 0 10px;">
+          Color({{ meta.color ? '√' : '×' }}) Background({{ meta.background ? '√' : '×' }})
+        </span>
+        <Button
+          v-for="(type) in messageTypes"
+          :key="type.type"
+          :type="type.type"
+          @on-click="Message[type.type]({ ...messageOptions, color: meta.color, background: meta.background })"
+        >
+          {{ `${type.prefix}消息` }}
+        </Button>
+        <br />
+        <br />
+      </template>
+      <template v-for="(meta, index) in messageMeta" :key="index">
+        <span style="padding: 0 10px;">
+          Color({{ meta.color ? '√' : '×' }}) Background({{ meta.background ? '√' : '×' }})
+        </span>
+        <Button
+          v-for="(type) in messageTypes"
+          :key="type.type"
+          :type="type.type"
+          @on-click="Notice[type.type]({ ...messageOptions, color: meta.color, background: meta.background })"
+        >
+          {{ `${type.prefix}提醒` }}
+        </Button>
+        <br />
+        <br />
+      </template>
     </Cell>
   </Grid>
 </template>
 
 <script setup lang="ts">
+import { Message, Notice } from '../components'
 import { Upload } from '@vexip-ui/icons'
 
 const buttonTypes = ['default', 'primary', 'dashed', 'text', 'info', 'success', 'warning', 'error'] as const
@@ -243,6 +303,34 @@ const tabMeta = [
   { label: '标签三', icon: null, disabled: true },
   { label: '标签四', icon: Upload, disabled: false },
   { label: '标签五', icon: Upload, disabled: true }
+]
+
+const alertTypes = ['default', 'info', 'success', 'warning', 'error'] as const
+
+const menuMeta = [
+  { label: '菜单一', disabled: false },
+  { label: '菜单二', disabled: false },
+  { label: '菜单三', disabled: true },
+  { label: '菜单四', disabled: false }
+]
+
+const messageTypes = [
+  { prefix: '一般', type: 'info' as const },
+  { prefix: '成功', type: 'success' as const },
+  { prefix: '警告', type: 'warning' as const },
+  { prefix: '错误', type: 'error' as const }
+]
+const messageOptions = {
+  title: '提醒标题',
+  content: '一条持久的提醒',
+  duration: 0,
+  closable: true,
+  marker: true
+}
+const messageMeta = [
+  { color: false, background: false },
+  { color: true, background: false },
+  { color: true, background: true }
 ]
 </script>
 

@@ -7,7 +7,7 @@ $tooltip: map.merge(
   (
     bg-color: get-css-var('bg-color-base'),
     bg-color-dark: get-css-var('fill-color-reverse'),
-    s-color: get-css-var('border-color-base'),
+    s-color: get-css-var('shadow-color-base'),
     s-color-dark: get-css-var('bg-color-reverse'),
     shadow: get-css-var('shadow-shape') get-css-var('tooltip-s-color'),
     shadow-dark: none,

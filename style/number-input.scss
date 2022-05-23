@@ -19,6 +19,7 @@
     justify-content: center;
     width: 1.4em;
     height: 50%;
+    color: get-css-var('input-icon-color');
     cursor: pointer;
     user-select: none;
     border: get-css-var('input-border');
@@ -26,20 +27,12 @@
     border-left-width: get-css-var('border-width');
     transition: get-css-var('transition-color');
 
-    &,
-    .vxp-icon {
-      color: get-css-var('input-icon-color');
-    }
-
     .vxp-icon {
       pointer-events: none;
     }
 
     &:hover {
-      &,
-      .vxp-icon {
-        color: get-css-var('input-icon-color-hover');
-      }
+      color: get-css-var('input-icon-color-hover');
     }
 
     @extend %disabled-item;

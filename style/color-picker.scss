@@ -82,20 +82,13 @@ $color-picker: map.merge(
   }
 
   &__arrow {
-    // position: absolute;
-    // top: 0;
-    // right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 2em;
     height: 100%;
-
-    &,
-    .vxp-icon {
-      color: get-css-var('color-picker-arrow-color');
-      transition: get-css-var('transition-transform');
-    }
+    color: get-css-var('color-picker-arrow-color');
+    transition: get-css-var('transition-transform');
   }
 
   &--visible &__arrow .vxp-icon {

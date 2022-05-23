@@ -218,7 +218,7 @@ $shadow-color-map: map.merge(
 
 $shadow-x: 0 !default;
 $shadow-y: 0 !default;
-$shadow-blur: 4px !default;
+$shadow-blur: 6px !default;
 $shadow-shape: get-css-var('shadow-x') get-css-var('shadow-y')
   get-css-var('shadow-blur') !default;
 $shadow-base: get-css-var('shadow-shape') get-css-var('border-color-base') !default;

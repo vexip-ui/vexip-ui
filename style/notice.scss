@@ -12,10 +12,11 @@ $notice: map.merge(
     b-color: transparent,
     border: get-css-var('border-shape') get-css-var('notice-b-color'),
     radius: get-css-var('border-radius-base'),
-    s-color: get-css-var('border-color-base'),
+    s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('notice-s-color'),
     v-padding: 0.8em,
     h-padding: 1.2em,
+    mask-bg-color: transparent,
     padding: get-css-var('notice-v-padding') get-css-var('notice-h-padding'),
     title-font-size: get-css-var('font-size-primary'),
     title-color: get-css-var('content-color-primary'),
@@ -43,12 +44,14 @@ $notice: map.merge(
   $close: #{&}__close;
 
   &__title {
+    position: relative;
     margin-bottom: 0.2em;
     font-size: get-css-var('notice-title-font-size');
     color: get-css-var('notice-title-color');
   }
 
   &__content {
+    position: relative;
     color: get-css-var('notice-color');
   }
 
@@ -58,12 +61,8 @@ $notice: map.merge(
     left: 1.8em;
     display: flex;
     align-items: center;
+    color: get-css-var('notice-icon-color');
     transform: scale(2);
-
-    &,
-    .vxp-icon {
-      color: get-css-var('notice-icon-color');
-    }
   }
 
   &__close {
@@ -74,12 +73,10 @@ $notice: map.merge(
     align-items: center;
     color: get-css-var('notice-close-color');
     cursor: pointer;
+    transition: get-css-var('transition-color');
 
     &:hover {
-      &,
-      .vxp-icon {
-        color: get-css-var('notice-close-color-hover');
-      }
+      color: get-css-var('notice-close-color-hover');
     }
   }
 
@@ -131,6 +128,15 @@ $notice: map.merge(
     }
 
     &::before {
+      @include inner-fixed;
+
+      pointer-events: none;
+      background-color: get-css-var('notice-mask-bg-color');
+      border-radius: get-css-var('notice-radius');
+      opacity: 80%;
+    }
+
+    &::after {
       position: absolute;
       top: 0;
       bottom: 0;
@@ -140,7 +146,11 @@ $notice: map.merge(
       border-radius: get-css-var('notice-radius') 0 0 get-css-var('notice-radius');
     }
 
-    &--marker::before {
+    &--background::before {
+      content: '';
+    }
+
+    &--marker::after {
       content: '';
     }
 
@@ -153,18 +163,18 @@ $notice: map.merge(
         @include define-notice-style((
           title-color: 'color' $color 'dark-1',
           color: 'color' $color 'base',
-          close-color: 'color' $color 'light-5',
+          close-color: 'color' $color 'opacity-5',
           close-color-hover: 'color' $color 'base'
         ));
       }
 
       &--background#{&}--#{$type} {
         @include define-notice-style((
-          bg-color: 'color' $color 'light-9',
-          b-color: 'color' $color 'light-5',
+          b-color: 'color' $color 'opacity-5',
+          mask-bg-color: 'color' $color 'opacity-9',
           shadow: unset,
-          close-color: 'color' $color 'light-7',
-          close-color-hover: 'color' $color 'light-2'
+          close-color: 'color' $color 'opacity-7',
+          close-color-hover: 'color' $color 'opacity-2'
         ));
       }
 

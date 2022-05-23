@@ -215,11 +215,7 @@ $upload: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-
-    &,
-    .vxp-icon {
-      color: get-css-var('upload-thumbnail-color');
-    }
+    color: get-css-var('upload-thumbnail-color');
   }
 
   &__file--thumbnail &__thumbnail {
@@ -293,34 +289,24 @@ $upload: map.merge(
     cursor: pointer;
 
     &--disabled {
+      color: get-css-var('upload-action-color-disabled') !important;
       cursor: not-allowed;
-
-      &,
-      .vxp-icon {
-        color: get-css-var('upload-action-color-disabled') !important;
-      }
     }
   }
 
   &__file--thumbnail &__action {
-    &,
-    .vxp-icon {
-      color: get-css-var('upload-action-color-light');
+    color: get-css-var('upload-action-color-light');
 
-      &:hover {
-        color: get-css-var('upload-action-color-reverse');
-      }
+    &:hover {
+      color: get-css-var('upload-action-color-reverse');
     }
   }
 
   &__file--card &__action {
-    &,
-    .vxp-icon {
-      color: get-css-var('upload-action-color');
+    color: get-css-var('upload-action-color');
 
-      &:hover {
-        color: get-css-var('upload-action-color-hover');
-      }
+    &:hover {
+      color: get-css-var('upload-action-color-hover');
     }
   }
 
@@ -353,45 +339,27 @@ $upload: map.merge(
   &__file:hover &__success,
   &__file:hover &__fail,
   &__file:hover &__loading {
-    &,
-    .vxp-icon {
-      color: transparent;
-    }
+    color: transparent;
   }
 
   &__file:hover &__close {
-    &,
-    .vxp-icon {
-      color: get-css-var('upload-action-color');
-    }
+    color: get-css-var('upload-action-color');
 
     &:hover {
-      &,
-      .vxp-icon {
-        color: get-css-var('upload-action-color-hover');
-      }
+      color: get-css-var('upload-action-color-hover');
     }
   }
 
   &__success {
-    &,
-    .vxp-icon {
-      color: get-css-var('upload-success-color');
-    }
+    color: get-css-var('upload-success-color');
   }
 
   &__fail {
-    &,
-    .vxp-icon {
-      color: get-css-var('upload-fail-color');
-    }
+    color: get-css-var('upload-fail-color');
   }
 
   &__loading {
-    &,
-    .vxp-icon {
-      color: get-css-var('upload-loading-color');
-    }
+    color: get-css-var('upload-loading-color');
   }
 
   &__progress {

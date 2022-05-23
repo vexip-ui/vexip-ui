@@ -16,9 +16,9 @@ $breadcrumb: map.merge(
     padding: get-css-var('breadcrumb-v-padding') get-css-var('breadcrumb-h-padding'),
     padding-border: get-css-var('breadcrumb-v-padding-border') get-css-var('breadcrumb-h-padding-border'),
     item-bg-color: transparent,
-    item-bg-color-hover: get-css-var('color-primary-light-9'),
+    item-bg-color-hover: get-css-var('color-primary-opacity-9'),
     item-b-color: transparent,
-    item-b-color-hover: get-css-var('color-primary-light-7'),
+    item-b-color-hover: get-css-var('color-primary-opacity-6'),
     item-radius: get-css-var('border-radius-small'),
     label-color: inherit,
     label-color-hover: get-css-var('color-primary-base'),
@@ -60,7 +60,7 @@ $breadcrumb: map.merge(
     background-color: get-css-var('breadcrumb-item-bg-color');
     border: $border-a get-css-var('breadcrumb-item-b-color');
     border-radius: get-css-var('breadcrumb-item-radius');
-    transition: get-css-var('transition-background');
+    transition: get-css-var('transition-background'), get-css-var('transition-border');
   }
 
   &--border &__item:hover {
@@ -81,22 +81,15 @@ $breadcrumb: map.merge(
 
   &__separator {
     padding: 0 0.4em;
+    color: get-css-var('breadcrumb-separator-color');
     cursor: pointer;
     user-select: none;
     border-right: $border-a transparent;
     border-left: $border-a transparent;
     transition: get-css-var('transition-color'), get-css-var('transition-border');
 
-    &,
-    .vxp-icon {
-      color: get-css-var('breadcrumb-separator-color');
-    }
-
     &:hover {
-      &,
-      .vxp-icon {
-        color: get-css-var('breadcrumb-separator-color-hover');
-      }
+      color: get-css-var('breadcrumb-separator-color-hover');
     }
   }
 

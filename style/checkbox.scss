@@ -193,10 +193,7 @@ $checkbox: map.merge(
   }
 
   &--checked &__label {
-    &,
-    .vxp-icon {
-      color: get-css-var('checkbox-label-color-checked');
-    }
+    color: get-css-var('checkbox-label-color-checked');
   }
 
   $states: success, error, warning;
@@ -237,10 +234,7 @@ $checkbox: map.merge(
   }
 
   &--disabled &__label {
-    &,
-    .vxp-icon {
-      color: get-css-var('checkbox-label-color-disabled');
-    }
+    color: get-css-var('checkbox-label-color-disabled');
   }
 
   &--disabled#{&}--checked &__signal {
@@ -319,10 +313,7 @@ $checkbox: map.merge(
       }
 
       &__label {
-        &,
-        .vxp-icon {
-          color: get-css-var('checkbox-label-color-disabled');
-        }
+        color: get-css-var('checkbox-label-color-disabled');
       }
     }
 

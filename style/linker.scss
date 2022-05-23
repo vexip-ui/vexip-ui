@@ -43,19 +43,12 @@ $linker: map.merge(
   }
 
   &:hover {
+    color: get-css-var('linker-color-hover');
     text-decoration: none;
-
-    &,
-    .vxp-icon {
-      color: get-css-var('linker-color-hover');
-    }
   }
 
   &:active {
-    &,
-    .vxp-icon {
-      color: get-css-var('linker-color-active');
-    }
+    color: get-css-var('linker-color-active');
   }
 
   &--underline {
@@ -86,10 +79,7 @@ $linker: map.merge(
     &,
     &:hover,
     &:active {
-      &,
-      .vxp-icon {
-        color: get-css-var('linker-color-disabled');
-      }
+      color: get-css-var('linker-color-disabled');
     }
 
     &:hover::after {

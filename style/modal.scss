@@ -10,7 +10,7 @@ $modal: map.merge(
     z-index: get-css-var('masker-z-index'),
     bg-color: get-css-var('bg-color-base'),
     radius: get-css-var('border-radius-base'),
-    s-color: get-css-var('border-color-base'),
+    s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('modal-s-color'),
     d-color: get-css-var('border-color-light-2'),
     divider: get-css-var('border-shape') get-css-var('modal-d-color'),

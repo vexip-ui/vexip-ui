@@ -211,15 +211,11 @@ $table: map.merge(
       justify-content: center;
       height: 7px;
       overflow: hidden;
+      color: get-css-var('table-sorter-color');
       cursor: pointer;
       transition: get-css-var('transition-color');
 
-      & .vxp-icon {
-        color: get-css-var('table-sorter-color');
-      }
-
-      &:hover,
-      &:hover .vxp-icon {
+      &:hover {
         color: get-css-var('table-sorter-color-hover');
       }
     }
@@ -231,10 +227,7 @@ $table: map.merge(
     &--active {
       &,
       &:hover {
-        &,
-        .vxp-icon {
-          color: get-css-var('table-sorter-color-active');
-        }
+        color: get-css-var('table-sorter-color-active');
       }
     }
   }
@@ -249,31 +242,21 @@ $table: map.merge(
       align-items: center;
       justify-content: center;
       height: 15px;
+      color: get-css-var('table-filter-color');
       cursor: pointer;
       transition: get-css-var('transition-color');
 
-      & .vxp-icon {
-        color: get-css-var('table-filter-color');
-      }
-
-      &:hover,
-      &:hover .vxp-icon {
+      &:hover {
         color: get-css-var('table-filter-color-hover');
       }
     }
 
     &--visible &-trigger {
-      &,
-      .vxp-icon {
-        color: get-css-var('table-filter-color-visible');
-      }
+      color: get-css-var('table-filter-color-visible');
     }
 
     &--active &-trigger {
-      &,
-      .vxp-icon {
-        color: get-css-var('table-filter-color-active');
-      }
+      color: get-css-var('table-filter-color-active');
     }
 
     &-wrapper {

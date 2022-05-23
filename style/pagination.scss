@@ -62,31 +62,19 @@ $pagination: map.merge(
     }
 
     &:hover {
+      color: get-css-var('pagination-color-hover');
       border-color: get-css-var('pagination-b-color-hover');
-
-      &,
-      .vxp-icon {
-        color: get-css-var('pagination-color-hover');
-      }
     }
 
     &--active {
+      color: get-css-var('pagination-color-active');
       border-color: get-css-var('pagination-b-color-active');
-
-      &,
-      .vxp-icon {
-        color: get-css-var('pagination-color-active');
-      }
     }
 
     @mixin disabled {
+      color: get-css-var('pagination-color-disabled');
       cursor: not-allowed;
       border-color: get-css-var('pagination-b-color-disabled');
-
-      &,
-      .vxp-icon {
-        color: get-css-var('pagination-color-disabled');
-      }
     }
 
     &--disabled,

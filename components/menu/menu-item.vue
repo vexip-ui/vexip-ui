@@ -15,6 +15,7 @@
         :style="labelStyle"
         @click="handleSelect"
         @mouseenter="handleMouseEnter"
+        @mouseleave="handleMouseLeave"
       >
         <div v-if="icon" :class="`${prefix}__icon`">
           <slot name="icon">
