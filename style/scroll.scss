@@ -51,7 +51,8 @@ $scroll: map.merge(
     }
 
     // 与使用 js 找到所有子元素再添加样式相比效率如何 (不太好测试) ?
-    &--scrolling > * {
+    &--scrolling > *,
+    &--using-bar > * {
       pointer-events: none;
     }
 

@@ -335,7 +335,7 @@ export default defineComponent({
     const yBar = ref<InstanceType<typeof Scrollbar> | null>(null)
 
     function syncBarScroll() {
-      xBar.value?.handleScroll(percentY.value)
+      xBar.value?.handleScroll(percentX.value)
       yBar.value?.handleScroll(percentY.value)
     }
 
@@ -423,15 +423,15 @@ export default defineComponent({
       event.preventDefault()
 
       if (contentElement.value) {
-        // const signX = contentElement.value.scrollLeft - currentScroll.x > 0 ? 1 : -1
-        // const signY = contentElement.value.scrollTop - currentScroll.y > 0 ? 1 : -1
+        const signX = contentElement.value.scrollLeft - currentScroll.x > 0 ? 1 : -1
+        const signY = contentElement.value.scrollTop - currentScroll.y > 0 ? 1 : -1
 
-        // if (props.beforeScroll?.({ signX, signY }) === false) {
-        //   contentElement.value.scrollTop = currentScroll.y
-        //   contentElement.value.scrollLeft = currentScroll.x
+        if (props.beforeScroll?.({ signX, signY }) === false) {
+          contentElement.value.scrollTop = currentScroll.y
+          contentElement.value.scrollLeft = currentScroll.x
 
-        //   return
-        // }
+          return
+        }
 
         currentScroll.y = contentElement.value.scrollTop
         currentScroll.x = contentElement.value.scrollLeft
@@ -526,9 +526,8 @@ export default defineComponent({
       percentX,
       percentY,
       currentScroll,
-
-      xBar,
-      yBar,
+      xScrollLimit,
+      yScrollLimit,
 
       className,
       style,
@@ -539,6 +538,8 @@ export default defineComponent({
       enableYScroll,
 
       content: contentElement,
+      xBar,
+      yBar,
 
       handleMouseDown,
       handleScroll,

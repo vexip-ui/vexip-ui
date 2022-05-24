@@ -353,7 +353,7 @@ export default defineComponent({
     const yBar = ref<InstanceType<typeof Scrollbar> | null>(null)
 
     function syncBarScroll() {
-      xBar.value?.handleScroll(percentY.value)
+      xBar.value?.handleScroll(percentX.value)
       yBar.value?.handleScroll(percentY.value)
     }
 
@@ -675,9 +675,6 @@ export default defineComponent({
       transitionDuration,
       currentScroll,
 
-      xBar,
-      yBar,
-
       className,
       style,
       wrapperClass,
@@ -689,6 +686,8 @@ export default defineComponent({
 
       wrapper: wrapperElement,
       content: contentElement,
+      xBar,
+      yBar,
 
       handleMouseDown,
       handleTouchStart,

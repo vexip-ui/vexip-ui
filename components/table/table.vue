@@ -11,6 +11,7 @@
       :bar-class="`${prefix}__bar--horizontal`"
       :width="width"
       :bar-fade="barFade"
+      :delta-x="50"
       @on-scroll="handleXScroll"
     >
       <TableHead ref="thead"></TableHead>
@@ -89,9 +90,9 @@
     </div>
     <Scrollbar
       v-if="useYBar && bodyScrollHeight"
+      ref="scrollbar"
       placement="right"
       :class="`${prefix}__bar--vertical`"
-      :scroll="yScrollPercent"
       :fade="barFade"
       :disabled="!!bodyHeight && totalRowHeight <= bodyHeight"
       :bar-length="barLength"
@@ -191,7 +192,7 @@ const props = useConfiguredProps('table', {
   },
   scrollDeltaY: {
     type: Number,
-    default: 20
+    default: 36
   },
   rowDraggable: {
     type: Boolean,
@@ -295,6 +296,7 @@ export default defineComponent({
     const wrapper = ref<HTMLElement | null>(null)
     const thead = ref<InstanceType<typeof TableHead> | null>(null)
     const indicator = ref<HTMLElement | null>(null)
+    const scrollbar = ref<InstanceType<typeof Scrollbar> | null>(null)
 
     const locale = useLocaleConfig('table')
 
@@ -456,6 +458,10 @@ export default defineComponent({
     watch(() => props.singleSorter, setSingleSorter)
     watch(() => props.singleFilter, setSingleFilter)
 
+    function syncBarScroll() {
+      scrollbar.value?.handleScroll(yScrollPercent.value)
+    }
+
     const handlerResize = debounce(refresh)
 
     onMounted(() => {
@@ -509,6 +515,7 @@ export default defineComponent({
     function handleBodyScroll({ clientY, percentY }: { clientY: number, percentY: number }) {
       yScrollPercent.value = percentY
       setBodyScroll(clientY)
+      syncBarScroll()
       emitYScroll(clientY, percentY)
     }
 
@@ -741,6 +748,7 @@ export default defineComponent({
           Math.min((bodyScroll / (totalRowHeight - (bodyScrollHeight.value ?? 0) || 1)) * 100, 100),
           0
         )
+        syncBarScroll()
       }, 10)
     }
 
@@ -782,6 +790,7 @@ export default defineComponent({
       wrapper,
       thead,
       indicator,
+      scrollbar,
 
       handleBodyScroll,
       handleXScroll,
