@@ -95,18 +95,23 @@
   },
   "exports": {
     ".": {
-      "require": "./lib/components/index.js",
-      "import": "./es/components/index.mjs"
+      "import": "./es/components/index.mjs",
+      "require": "./lib/components/index.js"
     },
     "./css": "./css/index.css",
-    "./css/*": "./css/*",
+    "./css/*.css": "./css/*.css",
+    "./css/*": "./css/*.css",
     "./es": "./es/components/index.mjs",
     "./es/*.mjs": "./es/components/*.mjs",
     "./es/*": "./es/components/*.mjs",
     "./lib": "./lib/components/index.js",
     "./lib/*.js": "./lib/components/*.js",
     "./lib/*": "./lib/components/*.js",
-    "./package.json": "./package.json"
+    "./themes/*": "./css/*/index.css",
+    "./themes/*/*.css": "./css/*/*.css",
+    "./themes/*/*": "./css/*/*.css",
+    "./package.json": "./package.json",
+    "./*": "./*"
   },
   "files": [
     "css",
@@ -142,15 +147,15 @@
     "url": "git+https://github.com/qmhc/vexip-ui.git"
   },
   "scripts": {
+    "bootstrap": "ts-node scripts/bootstrap.ts",
     "build": "ts-node scripts/build.ts",
     "build:config": "pnpm -C common/config build && pnpm i",
     "build:full": "ts-node scripts/build-full.ts",
     "build:icons": "pnpm -C common/icons build && pnpm i",
     "build:mixins": "pnpm -C common/mixins build && pnpm i",
     "build:playground": "pnpm -C playground build",
-    "build:utils": "pnpm -C common/utils build && pnpm i",
     "build:style": "gulp --require sucrase/register/ts",
-    "bootstrap": "ts-node scripts/bootstrap.ts",
+    "build:utils": "pnpm -C common/utils build && pnpm i",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
     "commit": "git-cz",
@@ -165,7 +170,8 @@
     "publish:ci": "ts-node scripts/publish.ts",
     "release": "ts-node scripts/release.ts",
     "serve": "ts-node scripts/serve.ts",
-    "serve:playground": "pnpm -C playground serve"
+    "serve:playground": "pnpm -C playground serve",
+    "serve:theme": "ts-node scripts/serve.ts --theme"
   },
   "sideEffects": [
     "lib/components/*/style.js",

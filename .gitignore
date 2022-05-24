@@ -8,6 +8,7 @@ coverage
 /es
 /lib
 /css
+/themes
 
 .yarn/cache
 .yarn/unplugged

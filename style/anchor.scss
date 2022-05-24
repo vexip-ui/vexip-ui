@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 
 $anchor: () !default;
 $anchor: map.merge(

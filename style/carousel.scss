@@ -1,13 +1,13 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 
 $carousel: () !default;
 $carousel: map.merge(
   (
-    handler-color: get-css-var('color-white'),
-    handler-bg-color: get-css-var('fill-color-reverse'),
+    handler-color: get-css-var('bg-color-base'),
+    handler-bg-color: get-css-var('content-color-base'),
     handler-opacity: 50%,
     handler-opacity-hover: 80%,
     handler-opacity-disabled: 30%,

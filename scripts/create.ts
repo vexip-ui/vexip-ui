@@ -154,7 +154,7 @@ async function create(name: string) {
       source: `
         @use 'sass:map';
 
-        @use '../design' as *;
+        @use './design' as *;
 
         $${kebabCaseName}: () !default;
         $${kebabCaseName}: map.merge(

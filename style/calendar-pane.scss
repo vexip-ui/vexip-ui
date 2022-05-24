@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 
 $calendar-pane: () !default;
 $calendar-pane: map.merge(

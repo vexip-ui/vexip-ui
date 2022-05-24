@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 
 $dropdown: () !default;
 $dropdown: map.merge(

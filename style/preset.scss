@@ -1,7 +1,7 @@
 @use 'sass:map';
 
-@use '../design/variables.scss' as *;
-@use '../design/animation';
+@use './design/variables.scss' as *;
+@use './animation';
 
 :root {
   @include define-css-var('color-black', $color-black);
@@ -56,4 +56,10 @@
   @include define-preset-values('transition', $transition-map);
   @include define-preset-values('z-index', $z-index-map);
   @include define-preset-values('break-point', $break-point-map, true);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
 }

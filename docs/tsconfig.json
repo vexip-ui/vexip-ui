@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "allowJs": false,
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "types": [
+      "vite/client",
+      "jest",
+      "vexip-ui/types"
+    ],
+    "paths": {
+      "@/*": ["../*"],
+      "vexip-ui": ["../components"]
+    },
+    "lib": [
+      "esnext",
+      "dom"
+    ]
+  }
+}

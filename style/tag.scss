@@ -1,7 +1,7 @@
 @use 'sass:color';
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 
 // $types: primary info success error warning;
@@ -99,7 +99,7 @@ $tag: map.merge(
 
     &--simple#{&}--#{$type} {
       @include define-tag-style((
-        bg-color: 'color' $type 'light-9'
+        bg-color: 'color' $type 'opacity-8'
       ));
     }
   }
@@ -137,7 +137,8 @@ $tag: map.merge(
       }
 
       &--simple#{&}--#{$name} {
-        @include define-css-var('tag-bg-color', color.mix($color-white, $color, 90%));
+        // @include define-css-var('tag-bg-color', color.mix($color-white, $color, 90%));
+        @include define-css-var('tag-bg-color', rgba($color, 20%));
       }
     }
   }

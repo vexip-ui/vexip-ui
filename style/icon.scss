@@ -1,4 +1,4 @@
-@use '../design' as *;
+@use './design' as *;
 
 .vxp-icon {
   display: inline-flex;
@@ -16,7 +16,7 @@
     height: 1em;
     line-height: 1;
     vertical-align: -0.125em;
-    fill: currentColor;
+    fill: currentcolor;
   }
 
   &--flip-horizontal svg {

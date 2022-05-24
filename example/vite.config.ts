@@ -6,7 +6,7 @@ import eslint from '@rollup/plugin-eslint'
 
 import type { Plugin } from 'vite'
 
-if (!process.env.TARGET) {
+if (!process.env.TARGET && process.env.THEME !== 'true') {
   throw new Error('Target component must be specified.')
 }
 
@@ -22,7 +22,8 @@ export default defineConfig(() => {
     define: {
       __TARGET__: JSON.stringify(target),
       __DEMOS__: demos,
-      __VERSION__: JSON.stringify('*')
+      __VERSION__: JSON.stringify('*'),
+      __THEME__: JSON.stringify(process.env.THEME === 'true')
     },
     publicDir: false,
     resolve: {

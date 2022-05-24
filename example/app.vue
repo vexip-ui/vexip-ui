@@ -11,7 +11,8 @@
       </router-link>
     </Cell>
     <Cell :width="6" :use-flex="{ justify: 'end', align: 'middle' }" style="padding-right: 10px;">
-      <Switcher v-model:value="isDark" class="theme-switch" :icon="isDark ? Moon : Sun"></Switcher>
+      <!-- <Switcher v-model:value="isDark" class="theme-switch" :icon="isDark ? Moon : Sun"></Switcher> -->
+      <ThemeSwitch></ThemeSwitch>
     </Cell>
   </Grid>
   <main class="dev-main">
@@ -22,20 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { Sun, Moon } from '@vexip-ui/icons'
+import ThemeSwitch from './theme-switch.vue'
 
 const router = useRouter()
-const isDark = ref(document.documentElement.classList.contains('dark'))
-
-watch(isDark, value => {
-  if (value) {
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-  }
-})
 </script>
 
 <style lang="scss">
@@ -64,6 +55,7 @@ html {
 body {
   height: 100%;
   margin: 0;
+  overflow: hidden;
   color: var(--vxp-content-color-base);
   background-color: var(--body-bg-color);
   transition: var(--vxp-transition-background);
@@ -77,17 +69,6 @@ body {
 .dev-nav {
   width: 100%;
   height: 50px;
-}
-
-.theme-switch {
-  border: 1px solid var(--vxp-border-color-base);
-
-  html.dark & {
-    --vxp-switcher-bg-color-open: #{rgba(#fff, 0.05)};
-    --vxp-switcher-signal-bg-color: #000;
-    --vxp-switcher-icon-color: var(--vxp-content-color-secondary);
-    --vxp-switcher-shadow-focus: unset;
-  }
 }
 
 .dev-main {

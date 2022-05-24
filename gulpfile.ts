@@ -1,16 +1,17 @@
 import { resolve } from 'path'
 // import chalk from 'chalk'
-import { dest, src } from 'gulp'
+import { dest, src, parallel } from 'gulp'
 import gulpSass from 'gulp-sass'
 import dartSass from 'sass'
 import autoprefixer from 'gulp-autoprefixer'
 import cleanCSS from 'gulp-clean-css'
-import { emptyDir } from './scripts/utils'
+import { emptyDir } from 'fs-extra'
 
-const outDir = resolve(__dirname, 'css')
+const cssDir = resolve(__dirname, 'css')
+const themesDir = resolve(__dirname, 'themes')
 
-export default () => {
-  emptyDir(outDir)
+function buildStyle() {
+  emptyDir(cssDir)
 
   const sass = gulpSass(dartSass)
 
@@ -18,5 +19,19 @@ export default () => {
     .pipe(sass.sync())
     .pipe(autoprefixer({ cascade: false }))
     .pipe(cleanCSS())
-    .pipe(dest(outDir))
+    .pipe(dest(cssDir))
 }
+
+function buildThemes() {
+  emptyDir(themesDir)
+
+  const sass = gulpSass(dartSass)
+
+  return src(resolve(__dirname, 'style/dark/*.scss'))
+    .pipe(sass.sync())
+    .pipe(autoprefixer({ cascade: false }))
+    .pipe(cleanCSS())
+    .pipe(dest(resolve(themesDir, 'dark')))
+}
+
+export default parallel(buildStyle, buildThemes)

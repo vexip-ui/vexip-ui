@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 @use './tooltip.scss';
 
@@ -331,11 +331,7 @@ $menu: map.merge(
     padding-left: 0;
     margin: 0;
 
-    &::before,
-    &::after {
-      display: table;
-      content: '';
-    }
+    @include clear-both;
 
     #{$self}--dark & {
       background-color: get-css-var('menu-group-bg-color-dark');

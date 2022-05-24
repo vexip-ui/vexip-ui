@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './scrollbar.scss';
 
 $scroll: () !default;
@@ -55,11 +55,7 @@ $scroll: map.merge(
       pointer-events: none;
     }
 
-    &::before,
-    &::after {
-      display: table;
-      content: '';
-    }
+    @include clear-both;
   }
 
   &--both &__bar--horizontal {

@@ -16,9 +16,9 @@
     </div>
     <Scrollbar
       v-if="useXBar"
+      ref="xBar"
       placement="bottom"
       :class="[`${prefix}__bar--horizontal`, barClass]"
-      :scroll="percentX"
       :fade="barFade"
       :bar-length="xBarLength"
       :disabled="!enableXScroll"
@@ -31,9 +31,9 @@
     ></Scrollbar>
     <Scrollbar
       v-if="useYBar"
+      ref="yBar"
       placement="right"
       :class="[`${prefix}__bar--vertical`, barClass]"
-      :scroll="percentY"
       :fade="barFade"
       :bar-length="yBarLength"
       :disabled="!enableYScroll"
@@ -92,10 +92,6 @@ const props = useConfiguredProps('nativeScroll', {
     type: Boolean,
     default: false
   },
-  // wheelDisabled: {
-  //   type: Boolean,
-  //   default: false
-  // },
   scrollX: {
     type: Number,
     default: 0
@@ -259,6 +255,7 @@ export default defineComponent({
           canPlay.value = false
 
           computePercent()
+          syncBarScroll()
 
           endTimer = window.setTimeout(() => {
             scrollTo(0, 0, 500)
@@ -270,6 +267,7 @@ export default defineComponent({
           }, waiting)
         } else {
           computePercent()
+          syncBarScroll()
 
           if (canPlay.value) {
             requestAnimationFrame(scroll)
@@ -333,6 +331,14 @@ export default defineComponent({
       emit('on-y-enable-change', value)
     })
 
+    const xBar = ref<InstanceType<typeof Scrollbar> | null>(null)
+    const yBar = ref<InstanceType<typeof Scrollbar> | null>(null)
+
+    function syncBarScroll() {
+      xBar.value?.handleScroll(percentY.value)
+      yBar.value?.handleScroll(percentY.value)
+    }
+
     function handleMouseDown(event: MouseEvent) {
       if (!props.pointer || event.button !== 0 || USE_TOUCH) {
         return false
@@ -395,6 +401,7 @@ export default defineComponent({
       }
 
       computePercent()
+      syncBarScroll()
       emitScrollEvent()
     }
 
@@ -411,23 +418,27 @@ export default defineComponent({
       startAutoplay()
     }
 
-    function handleScroll() {
+    function handleScroll(event: Event) {
+      event.stopPropagation()
+      event.preventDefault()
+
       if (contentElement.value) {
-        const signX = contentElement.value.scrollLeft - currentScroll.x > 0 ? 1 : -1
-        const signY = contentElement.value.scrollTop - currentScroll.y > 0 ? 1 : -1
+        // const signX = contentElement.value.scrollLeft - currentScroll.x > 0 ? 1 : -1
+        // const signY = contentElement.value.scrollTop - currentScroll.y > 0 ? 1 : -1
 
-        if (props.beforeScroll?.({ signX, signY }) === false) {
-          contentElement.value.scrollTop = currentScroll.y
-          contentElement.value.scrollLeft = currentScroll.x
+        // if (props.beforeScroll?.({ signX, signY }) === false) {
+        //   contentElement.value.scrollTop = currentScroll.y
+        //   contentElement.value.scrollLeft = currentScroll.x
 
-          return
-        }
+        //   return
+        // }
 
         currentScroll.y = contentElement.value.scrollTop
         currentScroll.x = contentElement.value.scrollLeft
       }
 
       computePercent()
+      syncBarScroll()
       emitScrollEvent()
     }
 
@@ -515,6 +526,9 @@ export default defineComponent({
       percentX,
       percentY,
       currentScroll,
+
+      xBar,
+      yBar,
 
       className,
       style,

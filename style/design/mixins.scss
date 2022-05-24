@@ -29,3 +29,11 @@
   bottom: 0;
   left: 0;
 }
+
+@mixin clear-both {
+  &::before,
+  &::after {
+    display: table;
+    content: '';
+  }
+}

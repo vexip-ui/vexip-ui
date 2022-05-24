@@ -173,7 +173,8 @@ module.exports = {
       files: ['example/**'],
       globals: {
         __DEMOS__: 'readonly',
-        __TARGET__: 'readonly'
+        __TARGET__: 'readonly',
+        __THEME__: 'readonly'
       }
     },
     {

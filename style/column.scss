@@ -1,6 +1,6 @@
 @use 'sass:math';
 
-@use '../design' as *;
+@use './design' as *;
 
 .vxp-column {
   @include basis;

@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 
 $tooltip: () !default;
 $tooltip: map.merge(
@@ -10,13 +10,18 @@ $tooltip: map.merge(
     s-color: get-css-var('shadow-color-base'),
     s-color-dark: get-css-var('bg-color-reverse'),
     shadow: get-css-var('shadow-shape') get-css-var('tooltip-s-color'),
-    shadow-dark: none,
+    shadow-dark: get-css-var('tooltip-shadow'),
+    min-width: 4em,
+    min-height: 2em,
+    v-padding: 0.6em,
+    h-padding: 1em,
+    padding: get-css-var('tooltip-v-padding') get-css-var('tooltip-h-padding'),
     content-color: get-css-var('content-color-base'),
-    content-color-dark: get-css-var('color-white'),
+    content-color-dark: get-css-var('bg-color-base'),
     raduis: get-css-var('border-radius-base'),
     arrow-size: 0.5em,
     arrow-v-offset: 0.9em,
-    arrow-h-offset: 1.8em
+    arrow-h-offset: 1.8em,
   ),
   $tooltip
 );
@@ -39,14 +44,15 @@ $tooltip: map.merge(
     @include basis;
 
     position: relative;
-    min-width: 2em;
-    min-height: 2em;
-    padding: 0.6em 1em;
+    min-width: get-css-var('tooltip-min-width');
+    min-height: get-css-var('tooltip-min-height');
+    padding: get-css-var('tooltip-padding');
     background-color: get-css-var('tooltip-bg-color');
     border-radius: get-css-var('tooltip-raduis');
     box-shadow: get-css-var('tooltip-shadow');
 
     #{$popper}--dark & {
+      color: get-css-var('tooltip-color-dark');
       box-shadow: get-css-var('tooltip-shadow-dark');
     }
   }

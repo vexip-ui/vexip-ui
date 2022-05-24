@@ -183,6 +183,9 @@ export function useScrollWrapper({
     }, 0)
   }
 
+  /**
+   * Will post process the percent scroll values.
+   */
   function verifyScroll() {
     if (!isReady.value) {
       return
