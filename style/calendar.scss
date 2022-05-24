@@ -1,7 +1,7 @@
 @use 'sass:math';
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './column.scss';
 @use './number-input.scss';
 @use './row.scss';

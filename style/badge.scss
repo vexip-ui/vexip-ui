@@ -1,11 +1,11 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 
 $badge: () !default;
 $badge: map.merge(
   (
-    color: get-css-var('content-color-reverse'),
+    color: get-css-var('color-white'),
     bg-color: get-css-var('color-error-base'),
     b-color: get-css-var('color-error-light-9'),
     line-height: get-css-var('line-height-base'),
@@ -60,7 +60,7 @@ $badge: map.merge(
     user-select: none;
     background-color: get-css-var('badge-bg-color');
     border-radius: calc(get-css-var('badge-line-height') * 0.5em);
-    box-shadow: get-css-var('box-shadow-border') get-css-var('badge-b-color');
+    box-shadow: get-css-var('shadow-border') get-css-var('badge-b-color');
     transform-origin: center center;
 
     &--fixed {
@@ -84,7 +84,7 @@ $badge: map.merge(
     &--disabled {
       @include define-badge-style((
         bg-color: 'content-color-disabled',
-        b-color: 'fill-color-base'
+        b-color: 'border-color-base'
       ));
     }
   }

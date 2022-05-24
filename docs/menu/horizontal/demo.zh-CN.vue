@@ -1,6 +1,6 @@
 <template>
   <Menu v-model:active="active" horizontal transfer>
-    <MenuItem label="1" icon="mail-bulk">
+    <MenuItem label="1" :icon="EnvelopesBulk">
       菜单一
       <template #group>
         <MenuItem label="1-1">
@@ -26,27 +26,22 @@
       </template>
     </MenuItem>
     <MenuGroup label="分组一">
-      <MenuItem label="2" icon="chart-pie">
+      <MenuItem label="2" :icon="City">
         菜单二
       </MenuItem>
-      <MenuItem label="3" icon="user">
+      <MenuItem label="3" :icon="ChartPie">
         菜单三
       </MenuItem>
     </MenuGroup>
-    <MenuItem label="4" icon="user">
+    <MenuItem label="4" :icon="User">
       菜单四
     </MenuItem>
   </Menu>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
-export default defineComponent({
-  setup() {
-    const active = ref('')
-
-    return { active }
-  }
-})
+const active = ref('')
 </script>

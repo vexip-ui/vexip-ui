@@ -61,7 +61,7 @@ const props = useConfiguredProps('column', {
     default: null
   },
   useFlex: {
-    type: [Boolean, Object] as PropType<boolean | ColumnFlex>,
+    type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
     default: null
   }
 })

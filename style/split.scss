@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 
 $split: () !default;
@@ -10,7 +10,7 @@ $split: map.merge(
     handler-b-color: get-css-var('border-color-base'),
     handler-z-index: 10,
     handler-size: 6px,
-    button-color: get-css-var('content-color-reverse'),
+    button-color: get-css-var('color-white'),
     button-bg-color: get-css-var('split-handler-b-color'),
     button-bg-color-hover: get-css-var('color-primary-base'),
     button-radius: get-css-var('border-radius-base'),
@@ -70,15 +70,11 @@ $split: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
+    color: get-css-var('split-button-color');
     cursor: pointer;
     background-color: $button-color;
     border-radius: get-css-var('split-button-radius');
     transition: get-css-var('transition-background');
-
-    &,
-    .vxp-icon {
-      color: get-css-var('split-button-color');
-    }
 
     &::before,
     &::after {

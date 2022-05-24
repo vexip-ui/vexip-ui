@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 import Component from './confirm.vue'
 import { destroyObject } from '@vexip-ui/utils'
 
@@ -34,7 +34,13 @@ export class ConfirmManager {
       options = { content: options, confirmType: type }
     }
 
-    return this._getInstance().openConfirm({ ...this.defaults, ...options })
+    const item: ConfirmOptions = { ...this.defaults, ...options }
+
+    if (item.icon && typeof item.icon !== 'function') {
+      item.icon = markRaw(item.icon)
+    }
+
+    return this._getInstance().openConfirm(item)
   }
 
   config(options: Record<string, unknown>) {

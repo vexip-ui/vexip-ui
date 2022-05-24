@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 
 $input: () !default;
@@ -11,8 +11,8 @@ $input: map.merge(
     b-color: get-css-var('border-color-base'),
     b-color-hover: get-css-var('color-primary-light-1'),
     b-color-focus: get-css-var('input-b-color-hover'),
-    s-color-focus: get-css-var('color-primary-light-8'),
-    shadow-focus: get-css-var('box-shadow-focus') get-css-var('input-s-color-focus'),
+    s-color-focus: get-css-var('color-primary-opacity-6'),
+    shadow-focus: get-css-var('shadow-focus') get-css-var('input-s-color-focus'),
     placeholder-color: get-css-var('content-color-placeholder'),
     control-color: get-css-var('content-color-base'),
     control-color-disabled: get-css-var('content-color-disabled'),
@@ -82,7 +82,7 @@ $input: map.merge(
         (
           b-color: 'color' $state 'light-1',
           b-color-hover: 'color' $state 'light-1',
-          s-color-focus: 'color' $state 'light-8'
+          s-color-focus: 'color' $state 'opacity-6'
         )
       );
     }
@@ -100,13 +100,9 @@ $input: map.merge(
     }
 
     %disabled-item {
+      color: get-css-var('input-control-color-disabled');
       pointer-events: none;
       cursor: not-allowed;
-
-      &,
-      .vxp-icon {
-        color: get-css-var('input-control-color-disabled');
-      }
     }
   }
 
@@ -156,12 +152,8 @@ $input: map.merge(
       justify-content: center;
       width: 2em;
       height: 100%;
+      color: get-css-var('input-icon-color');
       user-select: none;
-
-      &,
-      .vxp-icon {
-        color: get-css-var('input-icon-color');
-      }
 
       @extend %disabled-item;
     }
@@ -239,13 +231,9 @@ $input: map.merge(
       justify-content: center;
       width: 2em;
       height: 100%;
+      color: get-css-var('input-icon-color');
       cursor: pointer;
       user-select: none;
-
-      &,
-      .vxp-icon {
-        color: get-css-var('input-icon-color');
-      }
 
       @extend %disabled-item;
     }

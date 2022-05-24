@@ -55,7 +55,11 @@ async function main() {
     export {}
   `
 
-  await writeFile(resolve(__dirname, '../types', 'index.d.ts'), format(types, { parser: 'typescript', semi: false, singleQuote: true }), 'utf-8')
+  await writeFile(
+    resolve(__dirname, '../types', 'index.d.ts'),
+    format(types, { parser: 'typescript', semi: false, singleQuote: true }),
+    'utf-8'
+  )
 
   console.log()
   console.log(chalk.green('build successful'))
@@ -80,7 +84,9 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
 
   await Promise.all(svgFiles.map(async svgFile => {
     const fileName = basename(svgFile, '.svg')
-    const svg = (await readFile(svgFile, 'utf-8')).replace(/<!--[\s\S]*-->/, '')
+    const svg = (await readFile(svgFile, 'utf-8'))
+      .replace(/<!--[\s\S]*-->/, '')
+      .replace(/xmlns=".*?"/, 'style="transform: scale(0.85)"')
 
     let name = toPascalCase(fileName)
     name = name.replace(/^(\d)/, 'I$1').replace(/-(\d)/g, '$1')
@@ -94,7 +100,11 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
       </script>
     `
 
-    await writeFile(resolve(outDir, `${fileName}.vue`), format(vue, { parser: 'vue', semi: false, singleQuote: true }), 'utf-8')
+    await writeFile(
+      resolve(outDir, `${fileName}.vue`),
+      format(vue, { parser: 'vue', semi: false, singleQuote: true }),
+      'utf-8'
+    )
 
     exports += `export { default as ${name} } from '.${out ? `/${out}` : ''}/${fileName}.vue'\n`
     types += `export const ${name}: SvgIcon\n`

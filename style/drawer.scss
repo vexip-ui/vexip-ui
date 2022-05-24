@@ -1,13 +1,13 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './masker.scss';
 
 $drawer: () !default;
 $drawer: map.merge(
   (
     z-index: get-css-var('z-index-masker'),
-    bg-color: get-css-var('fill-color-base'),
+    bg-color: get-css-var('bg-color-base'),
     title-color: get-css-var('content-color-primary'),
     title-d-color: get-css-var('border-color-light-2'),
     title-font-size: get-css-var('font-size-primary'),

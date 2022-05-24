@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 
 $alert: () !default;
@@ -68,10 +68,7 @@ $alert: map.merge(
   }
 
   &--colorful-text {
-    &,
-    .vxp-icon {
-      color: get-css-var('alert-text-color');
-    }
+    color: get-css-var('alert-text-color');
   }
 
   &__title {
@@ -87,12 +84,8 @@ $alert: map.merge(
     display: flex;
     align-items: center;
     margin-top: 1px;
+    color: get-css-var('alert-icon-color');
     transform: translateY(-50%);
-
-    &,
-    .vxp-icon {
-      color: get-css-var('alert-icon-color');
-    }
   }
 
   &--has-title &__icon {
@@ -107,20 +100,13 @@ $alert: map.merge(
     right: 0.8em;
     display: flex;
     align-items: center;
+    color: get-css-var('alert-close-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
     transform: translateY(-50%);
 
-    &,
-    .vxp-icon {
-      color: get-css-var('alert-close-color');
-    }
-
     &:hover {
-      &,
-      .vxp-icon {
-        color: get-css-var('alert-close-color-hover');
-      }
+      color: get-css-var('alert-close-color-hover');
     }
   }
 
@@ -136,8 +122,8 @@ $alert: map.merge(
 
     &--#{$type} {
       @include define-alert-style((
-        bg-color: 'color' $color 'light-9',
-        b-color: 'color' $color 'light-5',
+        bg-color: 'color' $color 'opacity-8',
+        b-color: 'color' $color 'opacity-5',
         icon-color: 'color' $color 'dark-2',
         text-color: 'color' $color 'dark-2'
       ));

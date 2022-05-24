@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './bubble.scss';
 
 $progress: () !default;
@@ -9,7 +9,7 @@ $progress: map.merge(
     track-bg-color: get-css-var('fill-color-humble'),
     filler-bg-color: get-css-var('color-primary-base'),
     info-color: inherit,
-    info-color-inside: get-css-var('content-color-reverse'),
+    info-color-inside: get-css-var('color-white'),
     info-color-bubble: inherit,
     percentage-font-size: get-css-var('font-size-secondary'),
   ),

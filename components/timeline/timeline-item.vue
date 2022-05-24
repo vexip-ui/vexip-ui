@@ -1,8 +1,8 @@
 <template>
   <div :class="className" :style="itemStyle">
-    <div :class="`${prefix}__signal`" :style="signalStyle" @click="handleSignalClick">
+    <div :class="`${prefix}__signal`" @click="handleSignalClick">
       <slot name="signal">
-        <div :class="`${prefix}__pointer`" :style="pointerStyle"></div>
+        <div :class="`${prefix}__pointer`"></div>
       </slot>
     </div>
     <div :class="`${prefix}__line`" :style="lineStyle"></div>
@@ -17,13 +17,14 @@ import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } fro
 import { useConfiguredProps } from '@vexip-ui/config'
 import { TIMELINE_STATE } from './symbol'
 
+// import type { CSSProperties } from 'vue'
 import type { TimelinkItemType, ItemState } from './symbol'
 
 const props = useConfiguredProps('timelineItem', {
   type: {
-    default: 'normal' as TimelinkItemType,
+    default: 'default' as TimelinkItemType,
     validator: (value: TimelinkItemType) => {
-      return ['normal', 'success', 'error', 'warning', 'disabled', 'custom'].includes(value)
+      return ['default', 'success', 'error', 'warning', 'disabled'].includes(value)
     }
   },
   color: {
@@ -61,32 +62,21 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [`${prefix}__item`]: true,
-        [`${prefix}__item--${props.type}`]: props.type !== 'custom'
+        [`${prefix}__item--${props.type}`]: props.type !== 'default'
       }
     })
     const itemStyle = computed(() => {
       const spacing = props.spacing || props.spacing === 0 ? props.spacing : timelineState?.spacing
-
-      return {
-        paddingBottom: typeof spacing === 'number' ? `${spacing}px` : spacing
-      }
-    })
-    const signalStyle = computed(() => {
-      if (props.type === 'custom') {
-        return { color: props.type }
+      const style: Record<string, any> = {
+        '--vxp-timeline-item-span': typeof spacing === 'number' ? `${spacing}px` : spacing
       }
 
-      return {}
-    })
-    const pointerStyle = computed(() => {
-      if (props.type === 'custom') {
-        return {
-          color: props.type,
-          borderColor: props.type
-        }
+      if (props.color) {
+        style['--vxp-timeline-pointer-color'] = props.color
+        style['--vxp-timeline-pointer-b-color'] = props.color
       }
 
-      return {}
+      return style
     })
     const lineStyle = computed(() => {
       const isDashed = props.dashed ?? timelineState?.dashed ?? false
@@ -120,8 +110,6 @@ export default defineComponent({
 
       className,
       itemStyle,
-      signalStyle,
-      pointerStyle,
       lineStyle,
 
       handleSignalClick

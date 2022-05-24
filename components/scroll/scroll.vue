@@ -18,9 +18,9 @@
     </div>
     <Scrollbar
       v-if="useXBar"
+      ref="xBar"
       placement="bottom"
       :class="[`${prefix}__bar--horizontal`, barClass]"
-      :scroll="percentX"
       :fade="barFade"
       :bar-length="xBarLength"
       :disabled="!enableXScroll"
@@ -32,9 +32,9 @@
     ></Scrollbar>
     <Scrollbar
       v-if="useYBar"
+      ref="yBar"
       placement="right"
       :class="[`${prefix}__bar--vertical`, barClass]"
-      :scroll="percentY"
       :fade="barFade"
       :bar-length="yBarLength"
       :disabled="!enableYScroll"
@@ -261,6 +261,7 @@ export default defineComponent({
           canPlay.value = false
 
           computePercent()
+          syncBarScroll()
 
           endTimer = window.setTimeout(() => {
             scrollTo(0, 0, 500)
@@ -272,6 +273,7 @@ export default defineComponent({
           }, waiting)
         } else {
           computePercent()
+          syncBarScroll()
 
           if (canPlay.value) {
             requestAnimationFrame(scroll)
@@ -346,6 +348,14 @@ export default defineComponent({
     watch(isReady, value => {
       if (value) emit('on-ready')
     })
+
+    const xBar = ref<InstanceType<typeof Scrollbar> | null>(null)
+    const yBar = ref<InstanceType<typeof Scrollbar> | null>(null)
+
+    function syncBarScroll() {
+      xBar.value?.handleScroll(percentY.value)
+      yBar.value?.handleScroll(percentY.value)
+    }
 
     function handleMouseDown(event: MouseEvent) {
       if (!props.pointer || event.button !== 0 || USE_TOUCH) {
@@ -430,6 +440,7 @@ export default defineComponent({
         computePercent()
       }
 
+      syncBarScroll()
       emitScrollEvent('both')
     }
 
@@ -441,6 +452,7 @@ export default defineComponent({
 
       handleBuffer()
       verifyScroll()
+      syncBarScroll()
       emitScrollEvent('both')
       emit('on-scroll-end', {
         clientX: -currentScroll.x,
@@ -483,6 +495,7 @@ export default defineComponent({
       }
 
       verifyScroll()
+      syncBarScroll()
       emitScrollEvent(type)
 
       emit('on-wheel', {
@@ -572,6 +585,7 @@ export default defineComponent({
         }
 
         verifyScroll()
+        syncBarScroll()
 
         if (!changed) transitionDuration.value = -1
       })
@@ -594,6 +608,7 @@ export default defineComponent({
         }
 
         verifyScroll()
+        syncBarScroll()
 
         if (!changed) transitionDuration.value = -1
       })
@@ -659,6 +674,9 @@ export default defineComponent({
       percentY,
       transitionDuration,
       currentScroll,
+
+      xBar,
+      yBar,
 
       className,
       style,

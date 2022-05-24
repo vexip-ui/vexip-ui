@@ -1,10 +1,10 @@
-@use '../variables.scss' as *;
+@use '../design/variables.scss' as *;
 
-$-name: '#{$namespace}-zoom';
+$-name: '#{$namespace}-ease';
 
 @mixin -start {
   opacity: 0%;
-  transform: scale(0.35);
+  transform: scale(0.9);
 }
 
 @mixin -end {

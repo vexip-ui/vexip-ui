@@ -92,6 +92,28 @@ $color-map: map.deep-merge(
   }
 }
 
+@mixin define-opacity-colors($type, $max-lavel) {
+  @for $i from 1 through $max-lavel {
+    $color-map: map.deep-merge(
+      (
+        $type: (
+          'opacity-#{$i}': rgba(
+            map.get($color-map, $type, 'base'),
+            math.percentage(math.div(10 - $i, 10))
+          )
+        )
+      ),
+      $color-map
+    ) !global;
+  }
+}
+
+@each $type in $types {
+  @include define-level-colors($type, 9, 'light', $color-white);
+  @include define-level-colors($type, 2, 'dark', $color-black);
+  @include define-opacity-colors($type, 9);
+}
+
 @mixin define-type-color($type) {
   $colors: map.get($color-map, $type);
 
@@ -112,6 +134,15 @@ $content-color-map: map.merge(
     reverse: #fff
   ),
   $content-color-map
+);
+
+$bg-color-map: () !default;
+$bg-color-map: map.merge(
+  (
+    base: #fff,
+    reverse: #131719
+  ),
+  $bg-color-map
 );
 
 $border-color-map: () !default;
@@ -139,7 +170,7 @@ $fill-color-map: map.merge(
     hover: #e9ecef,
     humble: #f3f4f6,
     background: #f8f9fa,
-    reverse: #212529
+    reverse: #131719
   ),
   $fill-color-map
 );
@@ -173,15 +204,27 @@ $border-radius-map: map.merge(
   $border-radius-map
 );
 
-$box-shadow-x: 0 !default;
-$box-shadow-y: 0 !default;
-$box-shadow-blur: 4px !default;
-$box-shadow-shape: get-css-var('box-shadow-x') get-css-var('box-shadow-y')
-  get-css-var('box-shadow-blur') !default;
-$box-shadow-base: get-css-var('box-shadow-shape') get-css-var('border-color-base') !default;
+$shadow-color-map: () !default;
+$shadow-color-map: map.merge(
+  (
+    base: #dee2e6,
+    light-1: #e9ecef,
+    light-2: #f1f3f5,
+    dark-1: #ced4da,
+    dark-2: #adb5bd
+  ),
+  $shadow-color-map
+);
 
-$box-shadow-border: 0 0 0 1px !default;
-$box-shadow-focus: 0 0 2px 2px !default;
+$shadow-x: 0 !default;
+$shadow-y: 0 !default;
+$shadow-blur: 6px !default;
+$shadow-shape: get-css-var('shadow-x') get-css-var('shadow-y')
+  get-css-var('shadow-blur') !default;
+$shadow-base: get-css-var('shadow-shape') get-css-var('border-color-base') !default;
+
+$shadow-border: 0 0 0 1px !default;
+$shadow-focus: 0 0 2px 2px !default;
 
 $transition-duration: 250ms !default;
 $transition-timing: ease !default;

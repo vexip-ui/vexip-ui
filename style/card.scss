@@ -1,16 +1,16 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 
 $card: () !default;
 $card: map.merge(
   (
-    bg-color: get-css-var('fill-color-base'),
-    b-color: get-css-var('border-color-base'),
+    bg-color: get-css-var('bg-color-base'),
+    b-color: get-css-var('border-color-light-1'),
     border: get-css-var('border-shape') get-css-var('card-b-color'),
     radius: get-css-var('border-radius-base'),
-    s-color: get-css-var('card-b-color'),
-    shadow: get-css-var('box-shadow-shape') get-css-var('card-s-color'),
+    s-color: get-css-var('shadow-color-base'),
+    shadow: get-css-var('shadow-shape') get-css-var('card-s-color'),
     d-color: get-css-var('border-color-light-2'),
     divider: get-css-var('border-shape') get-css-var('card-d-color'),
     title-font-size: get-css-var('font-size-primary'),

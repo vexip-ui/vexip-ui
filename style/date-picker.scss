@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './button.scss';
 @use './calendar-pane.scss';
 @use './input.scss' as input;
@@ -10,19 +10,19 @@ $date-picker: () !default;
 $date-picker: map.merge(
   (
     color-disabled: get-css-var('input-control-color-disabled'),
-    unit-color-focus: get-css-var('content-color-reverse'),
+    unit-color-focus: get-css-var('color-white'),
     unit-bg-color-focus: get-css-var('color-primary-light-1'),
     separator-color: get-css-var('content-color-secondary'),
     exchange-color: get-css-var('content-color-secondary'),
     exchange-color-hover: get-css-var('color-primary-base'),
     popper-z-index: get-css-var('z-index-popper'),
-    pane-bg-color: get-css-var('fill-color-base'),
+    pane-bg-color: get-css-var('bg-color-base'),
     pane-border-radius: get-css-var('border-radius-base'),
-    pane-shadow: get-css-var('box-shadow-base'),
+    pane-shadow: get-css-var('shadow-base'),
     shortcut-bg-color: get-css-var('fill-color-background'),
     shortcut-bg-color-hover: get-css-var('fill-color-hover'),
     d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-appearance') get-css-var('date-picker-d-color'),
+    divider: get-css-var('border-shape') get-css-var('date-picker-d-color'),
     arrow-color: get-css-var('content-color-secondary'),
     arrow-color-hover: get-css-var('content-color-base'),
     header-color-hover: get-css-var('color-primary-base'),
@@ -100,25 +100,15 @@ $date-picker: map.merge(
     align-items: center;
     padding: 0 4px;
     padding-top: 1px;
-
-    &,
-    .vxp-icon {
-      color: get-css-var('date-picker-exchange-color');
-    }
+    color: get-css-var('date-picker-exchange-color');
 
     &--endabled:hover {
-      &,
-      .vxp-icon {
-        color: get-css-var('date-picker-exchange-color-hover');
-      }
+      color: get-css-var('date-picker-exchange-color-hover');
     }
   }
 
   &--disabled &__exchange {
-    &,
-    .vxp-icon {
-      color: get-css-var('date-picker-color-disabled');
-    }
+    color: get-css-var('date-picker-color-disabled');
   }
 
   &__popper {

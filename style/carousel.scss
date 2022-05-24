@@ -1,13 +1,13 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 
 $carousel: () !default;
 $carousel: map.merge(
   (
-    handler-color: get-css-var('content-color-reverse'),
-    handler-bg-color: get-css-var('fill-color-reverse'),
+    handler-color: get-css-var('bg-color-base'),
+    handler-bg-color: get-css-var('content-color-base'),
     handler-opacity: 50%,
     handler-opacity-hover: 80%,
     handler-opacity-disabled: 30%,
@@ -130,17 +130,13 @@ $carousel: map.merge(
     justify-content: center;
     width: get-css-var('carousel-handler-size');
     height: get-css-var('carousel-handler-size');
+    color: get-css-var('carousel-handler-color');
     pointer-events: auto;
     cursor: pointer;
     background-color: get-css-var('carousel-handler-bg-color');
     border-radius: 50%;
     opacity: get-css-var('carousel-handler-opacity');
     transition: get-css-var('transition-opacity');
-
-    &,
-    .vxp-icon {
-      color: get-css-var('carousel-handler-color');
-    }
 
     &:hover {
       opacity: get-css-var('carousel-handler-opacity-hover');

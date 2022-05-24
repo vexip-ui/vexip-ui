@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 @use './scroll.scss';
 
@@ -70,28 +70,20 @@ $wheel: map.merge(
     justify-content: center;
     width: 100%;
     height: get-css-var('wheel-arrow-size');
+    color: get-css-var('wheel-arrow-color');
     cursor: pointer;
     user-select: none;
     transition: get-css-var('transition-color');
 
-    &,
-    .vxp-icon {
-      color: get-css-var('wheel-arrow-color');
-    }
-
-    &:hover .vxp-icon {
+    &:hover {
       color: get-css-var('wheel-arrow-color-hover');
     }
 
     &--disabled {
       &,
       &:hover {
+        color: get-css-var('wheel-arrow-color-disabled');
         cursor: not-allowed;
-
-        &,
-        .vxp-icon {
-          color: get-css-var('wheel-arrow-color-disabled');
-        }
       }
     }
   }

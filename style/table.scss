@@ -1,7 +1,7 @@
 /* stylelint-disable declaration-property-value-disallowed-list */
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './button.scss';
 @use './ellipsis.scss';
 @use './scroll.scss';
@@ -11,11 +11,12 @@
 $table: () !default;
 $table: map.merge(
   (
-    bg-color: get-css-var('fill-color-base'),
+    bg-color: get-css-var('bg-color-base'),
     b-color: get-css-var('border-color-base'),
     b-width: get-css-var('border-width'),
     b-style: get-css-var('border-style'),
     b-shape: get-css-var('table-b-width') get-css-var('table-b-style'),
+    s-color: get-css-var('shadow-color-base'),
     border: get-css-var('table-b-shape') get-css-var('table-b-color'),
     row-bg-color: get-css-var('fill-color-background'),
     row-bg-color-hover: get-css-var('color-primary-light-8'),
@@ -211,15 +212,11 @@ $table: map.merge(
       justify-content: center;
       height: 7px;
       overflow: hidden;
+      color: get-css-var('table-sorter-color');
       cursor: pointer;
       transition: get-css-var('transition-color');
 
-      & .vxp-icon {
-        color: get-css-var('table-sorter-color');
-      }
-
-      &:hover,
-      &:hover .vxp-icon {
+      &:hover {
         color: get-css-var('table-sorter-color-hover');
       }
     }
@@ -231,10 +228,7 @@ $table: map.merge(
     &--active {
       &,
       &:hover {
-        &,
-        .vxp-icon {
-          color: get-css-var('table-sorter-color-active');
-        }
+        color: get-css-var('table-sorter-color-active');
       }
     }
   }
@@ -249,31 +243,21 @@ $table: map.merge(
       align-items: center;
       justify-content: center;
       height: 15px;
+      color: get-css-var('table-filter-color');
       cursor: pointer;
       transition: get-css-var('transition-color');
 
-      & .vxp-icon {
-        color: get-css-var('table-filter-color');
-      }
-
-      &:hover,
-      &:hover .vxp-icon {
+      &:hover {
         color: get-css-var('table-filter-color-hover');
       }
     }
 
     &--visible &-trigger {
-      &,
-      .vxp-icon {
-        color: get-css-var('table-filter-color-visible');
-      }
+      color: get-css-var('table-filter-color-visible');
     }
 
     &--active &-trigger {
-      &,
-      .vxp-icon {
-        color: get-css-var('table-filter-color-active');
-      }
+      color: get-css-var('table-filter-color-active');
     }
 
     &-wrapper {
@@ -352,7 +336,7 @@ $table: map.merge(
     border-left: 0 transparent;
 
     &#{$fixed-active} {
-      box-shadow: -2px 0 get-css-var('box-shadow-blur') get-css-var('table-border-color');
+      box-shadow: -2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
     }
   }
 
@@ -364,7 +348,7 @@ $table: map.merge(
     left: 0;
 
     &#{$fixed-active} {
-      box-shadow: 2px 0 get-css-var('box-shadow-blur') get-css-var('table-border-color');
+      box-shadow: 2px 0 get-css-var('shadow-blur') get-css-var('table-s-color');
     }
 
     #{$cell},

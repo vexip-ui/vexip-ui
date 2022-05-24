@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 
 $collapse: () !default;
@@ -102,13 +102,9 @@ $collapse: map.merge(
     align-items: center;
     justify-content: center;
     margin: 0;
+    color: get-css-var('collapse-arrow-color');
     transition: get-css-var('transition-color'), get-css-var('transition-transform');
     transform: translate(-50%, -50%);
-
-    &,
-    .vxp-icon {
-      color: get-css-var('collapse-arrow-color');
-    }
   }
 
   &--arrow-left,
@@ -145,10 +141,7 @@ $collapse: map.merge(
   }
 
   &__pane--disabled &__arrow {
-    &,
-    .vxp-icon {
-      color: get-css-var('collapse-arrow-color-disabled');
-    }
+    color: get-css-var('collapse-arrow-color-disabled');
   }
 
   &__body {

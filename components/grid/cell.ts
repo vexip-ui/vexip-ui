@@ -62,7 +62,7 @@ const props = useConfiguredProps('cell', {
     default: null
   },
   useFlex: {
-    type: [Boolean, Object] as PropType<boolean | CellFlex>,
+    type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
     default: null
   }
 })

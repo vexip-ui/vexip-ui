@@ -1,16 +1,17 @@
 <template>
   <li
     ref="wrapper"
-    :class="className"
+    :class="`${prefix}__item`"
     :aria-disabled="disabled"
     @click="handleSelect"
   >
-    <div v-if="icon" :class="`${prefix}__icon`">
-      <Icon :icon="icon"></Icon>
+    <div :class="`${prefix}__pad`"></div>
+    <div :class="contentClass">
+      <Icon v-if="icon" :class="`${prefix}__icon`" :icon="icon"></Icon>
+      <slot>
+        {{ label }}
+      </slot>
     </div>
-    <slot>
-      {{ label }}
-    </slot>
   </li>
 </template>
 
@@ -53,8 +54,8 @@ export default defineComponent({
 
     const wrapper = ref<HTMLElement | null>(null)
 
-    const className = computed(() => {
-      const baseClass = `${prefix}__item`
+    const contentClass = computed(() => {
+      const baseClass = `${prefix}__content`
 
       return {
         [baseClass]: true,
@@ -112,11 +113,8 @@ export default defineComponent({
 
     return {
       prefix,
-
-      className,
-
+      contentClass,
       wrapper,
-
       handleSelect
     }
   }

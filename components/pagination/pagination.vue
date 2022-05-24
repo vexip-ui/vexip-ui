@@ -118,7 +118,7 @@
         {{ `${locale.total} ${total} ${itemUnit ?? locale.itemUnit}` }}
       </div>
       <div v-if="pageCount" :class="`${prefix}__size`">
-        <Select v-model="currentPageSize" size="small">
+        <Select v-model:value="currentPageSize" size="small">
           <Option
             v-for="(item, index) in sizeOptions"
             :key="index"

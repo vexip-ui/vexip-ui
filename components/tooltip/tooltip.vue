@@ -12,6 +12,7 @@
     <Portal v-if="!disabled" :to="transferTo">
       <transition :name="transitionName">
         <div
+          v-if="rendering"
           v-show="currentVisible"
           ref="popper"
           :class="{
@@ -23,6 +24,7 @@
           @click.stop
           @mouseenter="handleTriggerEnter"
           @mouseleave="handleTriggerLeave"
+          @animationend="rendering = currentVisible"
         >
           <div :class="[`${prefix}__tip`, tipClass]">
             <div :class="`${prefix}__arrow`"></div>
@@ -114,6 +116,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const placement = toRef(props, 'placement')
     const currentVisible = ref(props.visible)
+    const rendering = ref(props.visible)
     const transfer = toRef(props, 'transfer')
 
     const wrapper = useClickOutside()
@@ -134,6 +137,7 @@ export default defineComponent({
 
     watch(currentVisible, value => {
       if (value) {
+        rendering.value = true
         updatePopper()
       }
 
@@ -201,6 +205,7 @@ export default defineComponent({
     return {
       prefix: 'vxp-tooltip',
       currentVisible,
+      rendering,
       transferTo,
 
       wrapper,

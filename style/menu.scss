@@ -1,31 +1,34 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 @use './tooltip.scss';
 
 $menu: () !default;
 $menu: map.merge(
   (
-    bg-color: get-css-var('fill-color-base'),
-    bg-color-selected: get-css-var('color-primary-light-8'),
+    bg-color: transparent,
+    bg-color-selected: get-css-var('color-primary-opacity-8'),
+    bg-color-dark: get-css-var('bg-color-reverse'),
     bg-color-selected-dark: get-css-var('color-primary-base'),
-    bg-color-dark: get-css-var('fill-color-reverse'),
     b-color: get-css-var('border-color-base'),
+    // b-color-dark: transparent,
     d-color: get-css-var('border-color-light-1'),
+    d-color-dark: get-css-var('border-color-light-1'),
     border: get-css-var('border-shape') get-css-var('menu-b-color'),
     icon-color: get-css-var('content-color-secondary'),
     arrow-color: get-css-var('menu-icon-color'),
-    label-color-dark: rgba($color-white, 0.65),
     label-color-hover: get-css-var('color-primary-base'),
-    label-color-hover-dark: get-css-var('content-color-reverse'),
     label-color-visible: get-css-var('menu-label-color-hover'),
-    label-color-visible-dark: get-css-var('menu-label-color-hover-dark'),
     label-color-disabled: get-css-var('content-color-disabled'),
+    label-color-dark: rgba($color-white, 0.65),
+    label-color-hover-dark: get-css-var('color-white'),
+    label-color-visible-dark: get-css-var('menu-label-color-hover-dark'),
+    label-color-disabled-dark: rgba($color-white, 0.45),
     marker-bg-color: get-css-var('color-primary-base'),
     group-bg-color-dark: get-css-var('color-black'),
     popper-radius: get-css-var('border-radius-base'),
-    popper-shadow: get-css-var('box-shadow-base'),
+    popper-shadow: get-css-var('shadow-base'),
     popper-shadow-dark: unset
   ),
   $menu
@@ -55,6 +58,7 @@ $menu: map.merge(
 
   &--dark {
     background-color: get-css-var('menu-bg-color-dark');
+    border-right: 0;
   }
 
   &::before,
@@ -122,10 +126,6 @@ $menu: map.merge(
       background-color: get-css-var('menu-group-bg-color-dark');
     }
 
-    .vxp-icon {
-      color: get-css-var('menu-icon-color');
-    }
-
     &::after {
       position: absolute;
       top: 0;
@@ -168,20 +168,14 @@ $menu: map.merge(
     }
 
     &:hover,
-    #{$item}--selected &,
+    // #{$item}--selected &,
     #{$self}--reduced #{$item}--son-selected &,
     #{$item}--son-selected > .vxp-tooltip > .vxp-tooltip__trigger > & {
-      &,
-      .vxp-icon {
-        color: get-css-var('menu-label-color-hover');
-      }
+      color: get-css-var('menu-label-color-hover');
 
       #{$self}--dark &,
       #{$popper} #{$list}--dark & {
-        &,
-        .vxp-icon {
-          color: get-css-var('menu-label-color-visible-dark');
-        }
+        color: get-css-var('menu-label-color-hover-dark');
       }
 
       #{$self}--horizontal &::after {
@@ -189,17 +183,12 @@ $menu: map.merge(
       }
     }
 
+    #{$item}--selected &,
     #{$item}--group-visible > .vxp-tooltip > .vxp-tooltip__trigger > & {
-      &,
-      .vxp-icon {
-        color: get-css-var('menu-label-color-visible');
-      }
+      color: get-css-var('menu-label-color-visible');
 
       #{$self}--horizontal & {
-        &,
-        .vxp-icon {
-          color: get-css-var('menu-label-color-visible');
-        }
+        color: get-css-var('menu-label-color-visible');
 
         &::after {
           opacity: 100%;
@@ -208,17 +197,11 @@ $menu: map.merge(
 
       #{$self}--dark &,
       #{$list}--dark & {
-        &,
-        .vxp-icon {
-          color: get-css-var('menu-label-color-visible-dark');
-        }
+        color: get-css-var('menu-label-color-visible-dark');
       }
 
       // #{$self}--horizontal#{$self}--dark & {
-      //   &,
-      //   .vxp-icon {
-      //     color: get-css-var('menu-label-color-hover-dark');
-      //   }
+      //   color: get-css-var('menu-label-color-hover-dark');
       // }
     }
 
@@ -244,16 +227,17 @@ $menu: map.merge(
     }
 
     #{$item}--disabled & {
-      &,
-      .vxp-icon {
-        color: get-css-var('menu-label-color-disabled');
-      }
-
+      color: get-css-var('menu-label-color-disabled');
       cursor: not-allowed;
 
-      &:hover {
-        background-color: get-css-var('menu-bg-color');
+      #{$self}--dark &,
+      #{$popper} #{$list}--dark & {
+        color: get-css-var('menu-label-color-disabled-dark');
       }
+
+      // &:hover {
+      //   background-color: get-css-var('menu-bg-color');
+      // }
     }
   }
 
@@ -263,12 +247,7 @@ $menu: map.merge(
     justify-content: center;
     width: 24px;
     margin-right: 10px;
-    transition: margin get-css-var('transition-base'), get-css-var('transition-color');
-
-    &,
-    .vxp-icon {
-      color: get-css-var('menu-icon-color');
-    }
+    transition: margin get-css-var('transition-base');
 
     #{$self}--reduced & {
       margin: 0;
@@ -314,7 +293,6 @@ $menu: map.merge(
   &__arrow {
     position: absolute;
     right: 1.6em;
-    color: get-css-var('menu-arrow-color');
     opacity: 100%;
     transition: get-css-var('transition-opacity'), get-css-var('transition-transform');
 
@@ -353,11 +331,7 @@ $menu: map.merge(
     padding-left: 0;
     margin: 0;
 
-    &::before,
-    &::after {
-      display: table;
-      content: '';
-    }
+    @include clear-both;
 
     #{$self}--dark & {
       background-color: get-css-var('menu-group-bg-color-dark');
@@ -393,10 +367,6 @@ $menu: map.merge(
         position: relative;
         background-color: get-css-var('menu-bg-color');
 
-        #{$self}--dark & {
-          background-color: get-css-var('menu-bg-color-dark');
-        }
-
         &::before {
           position: absolute;
           top: 50%;
@@ -409,13 +379,20 @@ $menu: map.merge(
           transition: get-css-var('transition-opacity');
           transform: translate(-50%, -50%);
         }
+
+        #{$self}--dark & {
+          background-color: get-css-var('menu-bg-color-dark');
+
+          &::before {
+            background-color: get-css-var('menu-d-color-dark');
+          }
+        }
       }
 
       &__label {
         display: inline-block;
         padding: 0.35em 1.4em;
         font-size: get-css-var('font-size-secondary');
-        color: get-css-var('menu-icon-color');
         transition: get-css-var('transition-opacity');
 
         #{$self}--horizontal & {

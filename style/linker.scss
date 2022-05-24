@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 
 // $types: primary info success warning error;
@@ -43,19 +43,12 @@ $linker: map.merge(
   }
 
   &:hover {
+    color: get-css-var('linker-color-hover');
     text-decoration: none;
-
-    &,
-    .vxp-icon {
-      color: get-css-var('linker-color-hover');
-    }
   }
 
   &:active {
-    &,
-    .vxp-icon {
-      color: get-css-var('linker-color-active');
-    }
+    color: get-css-var('linker-color-active');
   }
 
   &--underline {
@@ -86,10 +79,7 @@ $linker: map.merge(
     &,
     &:hover,
     &:active {
-      &,
-      .vxp-icon {
-        color: get-css-var('linker-color-disabled');
-      }
+      color: get-css-var('linker-color-disabled');
     }
 
     &:hover::after {
@@ -107,7 +97,7 @@ $linker: map.merge(
         color: 'color' $type 'base',
         color-hover: 'color' $type 'light-2',
         color-active: 'color' $type 'dark-1',
-        color-disabled: 'color' $type 'light-5'
+        color-disabled: 'color' $type 'opacity-5'
       ));
     }
   }

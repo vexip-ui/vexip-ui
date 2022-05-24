@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 import Component from './message.vue'
 import { isNull, toNumber, destroyObject } from '@vexip-ui/utils'
 import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
@@ -182,11 +182,15 @@ export class MessageManager {
       }
     }
 
-    const item = Object.assign({}, this.defaults, convenienceOptions, options, {
+    const item: MessageOptions = Object.assign({}, this.defaults, convenienceOptions, options, {
       key,
       type,
       onClose
     })
+
+    if (item.icon && typeof item.icon !== 'function') {
+      item.icon = markRaw(item.icon)
+    }
 
     message.add(item)
 

@@ -27,7 +27,7 @@ import {
   getCurrentInstance
 } from 'vue'
 import { useConfiguredProps } from '@vexip-ui/config'
-import { isDefined, throttle } from '@vexip-ui/utils'
+import { isDefined, throttle, boundRange } from '@vexip-ui/utils'
 import { useTrack } from './mixins'
 import { ScrollbarType } from './symbol'
 
@@ -221,7 +221,7 @@ export default defineComponent({
           }
         }
 
-        if (wrapperElement) {
+        if (wrapperElement && props.fade >= 300) {
           wrapperElement.addEventListener('mousemove', handleWrapperMouseMove)
         }
 
@@ -330,6 +330,10 @@ export default defineComponent({
       }
     }
 
+    function handleScroll(scroll: number) {
+      currentScroll.value = boundRange(scroll, 0, 100)
+    }
+
     return {
       prefix,
       currentScroll,
@@ -342,7 +346,8 @@ export default defineComponent({
       track,
 
       handleMouseDown,
-      handleTrackMouseDown
+      handleTrackMouseDown,
+      handleScroll
     }
   }
 })

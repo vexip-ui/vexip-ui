@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './checkbox.scss';
 @use './icon.scss';
 
@@ -100,12 +100,12 @@ $tree: map.merge(
     height: get-css-var('tree-arrow-size');
     cursor: pointer;
 
-    &--expanded .vxp-icon {
-      transform: rotate(90deg);
+    &--transparent {
+      color: transparent;
     }
 
-    &--transparent .vxp-icon {
-      color: transparent;
+    &--expanded .vxp-icon {
+      transform: rotate(90deg);
     }
   }
 

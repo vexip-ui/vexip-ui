@@ -1,13 +1,14 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './icon.scss';
 
 $spin: () !default;
 $spin: map.merge(
   (
     z-index: get-css-var('z-index-popper'),
-    mask-bg-color: get-css-var('fill-color-base'),
+    mask-bg-color: get-css-var('bg-color-base'),
+    mask-opacity: 40%,
     icon-color: get-css-var('color-primary-base'),
     tip-color: get-css-var('color-primary-base'),
     tip-font-size: get-css-var('font-size-secondary')
@@ -40,7 +41,7 @@ $spin: map.merge(
     inset: 0;
     content: '';
     background-color: get-css-var('spin-mask-bg-color');
-    opacity: 50%;
+    opacity: get-css-var('spin-mask-opacity');
   }
 
   &__icon {

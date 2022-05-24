@@ -1,4 +1,4 @@
-@use '../design' as *;
+@use './design' as *;
 @use './scrollbar.scss';
 
 .vxp-native-scroll {
@@ -14,11 +14,7 @@
     overflow: scroll;
     vertical-align: top;
 
-    &::before,
-    &::after {
-      display: table;
-      content: '';
-    }
+    @include clear-both;
 
     &::-webkit-scrollbar {
       display: none;

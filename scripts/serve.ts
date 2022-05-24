@@ -10,6 +10,7 @@ const sourceMap = args.sourcemap || args.s
 const port = args.port || args.p || 8008
 const prodMode = args.prod
 const lang = args.lang || args.l
+const theme = args.theme || args.t
 
 const langs = ['zh-CN']
 
@@ -19,6 +20,14 @@ main().catch(error => {
 })
 
 async function main() {
+  if (theme) {
+    await serveTheme()
+  } else {
+    await serveComponent()
+  }
+}
+
+async function serveComponent() {
   const docsDir = resolve(__dirname, '../docs')
   const targets = readdirSync(docsDir).filter(f => statSync(resolve(docsDir, f)).isDirectory())
 
@@ -64,7 +73,21 @@ async function main() {
       TARGET: target,
       DEMOS: JSON.stringify(demos),
       PORT: port,
-      SOURCE_MAP: sourceMap ? 'true' : ''
+      SOURCE_MAP: sourceMap ? 'true' : '',
+      THEME: theme ? 'true' : ''
+    }
+  })
+}
+
+async function serveTheme() {
+  await run('vite', ['serve'], {
+    cwd: resolve(__dirname, '../example'),
+    stdio: 'inherit',
+    env: {
+      NODE_ENV: prodMode ? 'production' : 'development',
+      PORT: port,
+      SOURCE_MAP: sourceMap ? 'true' : '',
+      THEME: 'true'
     }
   })
 }

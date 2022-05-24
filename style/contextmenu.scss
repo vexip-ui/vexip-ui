@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './dropdown.scss';
 
 $contextmenu: () !default;
@@ -56,11 +56,7 @@ $contextmenu: map.merge(
     justify-content: center;
     width: 16px;
     margin-top: 1px;
-
-    &,
-    .vxp-icon {
-      color: get-css-var('contextmenu-icon-color');
-    }
+    color: get-css-var('contextmenu-icon-color');
   }
 
   &__shortcut {

@@ -354,7 +354,8 @@ export default defineComponent({
           [`${prefix}--no-minute`]: !startState.enabled.minute,
           [`${prefix}--no-second`]: !startState.enabled.second,
           [`${prefix}--focused`]: focused.value,
-          [`${prefix}--${props.state}`]: props.state !== 'default'
+          [`${prefix}--${props.state}`]: props.state !== 'default',
+          [`${prefix}--is-range`]: props.isRange
         }
       ]
     })

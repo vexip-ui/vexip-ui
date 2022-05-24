@@ -1,12 +1,13 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 
 $bubble: () !default;
 $bubble: map.merge(
   (
-    bg-color: get-css-var('fill-color-base'),
+    bg-color: get-css-var('bg-color-base'),
     b-color: get-css-var('border-color-base'),
+    s-color: get-css-var('shadow-color-base'),
     border: get-css-var('border-shape') get-css-var('bubble-b-color'),
     radius: get-css-var('border-radius-base'),
     min-width: 6em,
@@ -14,7 +15,7 @@ $bubble: map.merge(
     content-v-padding: 0.6em,
     content-h-padding: 1em,
     content-padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding'),
-    content-shadow: get-css-var('box-shadow-shape') get-css-var('bubble-b-color'),
+    content-shadow: get-css-var('shadow-shape') get-css-var('bubble-s-color'),
     arrow-size: 0.5em,
     arrow-v-offset: 0.9em,
     arrow-h-offset: 1.8em

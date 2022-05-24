@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@use '../design' as *;
+@use './design' as *;
 @use './number-input.scss';
 @use './select.scss';
 
@@ -12,10 +12,10 @@ $pagination: map.merge(
     color-disabled: get-css-var('content-color-disabled'),
     color-active: get-css-var('pagination-color-hover'),
     bg-color: get-css-var('fill-color-background'),
-    bg-color-hover: get-css-var('color-primary-light-9'),
+    bg-color-hover: get-css-var('color-primary-opacity-8'),
     bg-color-disabled: get-css-var('pagination-bg-color'),
     bg-color-active: get-css-var('color-primary-base'),
-    b-color: get-css-var('b-color-base'),
+    b-color: get-css-var('border-color-base'),
     b-color-hover: get-css-var('color-primary-base'),
     b-color-disabled: get-css-var('fill-color-disabled'),
     b-color-active: get-css-var('pagination-b-color-hover'),
@@ -62,31 +62,19 @@ $pagination: map.merge(
     }
 
     &:hover {
+      color: get-css-var('pagination-color-hover');
       border-color: get-css-var('pagination-b-color-hover');
-
-      &,
-      .vxp-icon {
-        color: get-css-var('pagination-color-hover');
-      }
     }
 
     &--active {
+      color: get-css-var('pagination-color-active');
       border-color: get-css-var('pagination-b-color-active');
-
-      &,
-      .vxp-icon {
-        color: get-css-var('pagination-color-active');
-      }
     }
 
     @mixin disabled {
+      color: get-css-var('pagination-color-disabled');
       cursor: not-allowed;
       border-color: get-css-var('pagination-b-color-disabled');
-
-      &,
-      .vxp-icon {
-        color: get-css-var('pagination-color-disabled');
-      }
     }
 
     &--disabled,
@@ -122,7 +110,7 @@ $pagination: map.merge(
   }
 
   &--background &__item#{&}__item--active {
-    @include define-css-var('pagination-color-active', get-css-var('content-color-reverse'));
+    @include define-css-var('pagination-color-active', get-css-var('color-white'));
 
     background-color: get-css-var('pagination-bg-color-active');
   }
@@ -144,7 +132,8 @@ $pagination: map.merge(
     white-space: nowrap;
     user-select: none;
 
-    &-input {
+    .vxp-number-input {
+      width: 100%;
       margin: 0 0.3em;
       user-select: auto;
     }
@@ -152,6 +141,10 @@ $pagination: map.merge(
 
   &__size {
     width: 7.6em;
+
+    .vxp-select {
+      width: 100%;
+    }
   }
 
   & > &__jump,
