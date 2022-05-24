@@ -1,11 +1,11 @@
 <template>
-  <Linker icon="upload">
+  <Linker :icon="Upload">
     链接
   </Linker>
-  <Linker icon="upload" type="primary">
+  <Linker :icon="Upload" type="primary">
     链接
   </Linker>
-  <Linker icon="upload" type="success">
+  <Linker :icon="Upload" type="success">
     链接
   </Linker>
   <Linker type="error">
@@ -14,10 +14,10 @@
     </template>
     链接
   </Linker>
-  <Linker icon="upload" type="warning">
+  <Linker :icon="Upload" type="warning">
     链接
   </Linker>
-  <Linker icon="upload" type="info">
+  <Linker :icon="Upload" type="info">
     链接
   </Linker>
 </template>

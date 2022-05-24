@@ -50,7 +50,11 @@ async function serveComponent() {
             name: '${demo}',
             component: () => import('../docs/demos/${target}/${demo}/demo.${matchedLang}.vue')
           }`
-        }).join(',\n')}
+        }).join(',\n')},
+        {
+          path: '/:catchAll(.*)',
+          redirect: '/'
+        }
       ]
     })
 

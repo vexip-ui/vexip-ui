@@ -465,6 +465,8 @@ import { Message, Notice, Confirm } from '../components'
 import { defineFilter } from '../components/table'
 import { ArrowUpFromBracket } from '@vexip-ui/icons'
 
+document.title = 'theme dev | Vexip UI'
+
 const buttonTypes = ['default', 'primary', 'dashed', 'text', 'info', 'success', 'warning', 'error'] as const
 const buttonMeta = [
   { ghost: false, simple: false, disabled: false },

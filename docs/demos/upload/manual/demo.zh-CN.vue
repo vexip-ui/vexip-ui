@@ -7,16 +7,24 @@
     @on-change="handleChange"
   >
     <Button type="primary" :icon="IUpload">
-      手动上传
+      选择文件
     </Button>
   </Upload>
+  <Button
+    type="success"
+    :icon="Check"
+    style="margin-left: 6px;"
+    @on-click="doUpload"
+  >
+    手动上传
+  </Button>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Upload as IUpload } from '@vexip-ui/icons'
+import { Upload as IUpload, Check } from '@vexip-ui/icons'
 
-import type { Upload } from 'vexip-ui'
+import { Upload } from 'vexip-ui'
 
 const fileIds = ref<string[]>([])
 const upload = ref<InstanceType<typeof Upload> | null>(null)

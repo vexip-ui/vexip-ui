@@ -3,7 +3,7 @@
     <TabNavItem label="标签页1">
       标签页1
     </TabNavItem>
-    <TabNavItem label="标签页2" icon="chart-area">
+    <TabNavItem label="标签页2" :icon="ChartArea">
       标签页2
     </TabNavItem>
     <TabNavItem label="标签页3">
@@ -12,14 +12,9 @@
   </TabNav>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { ChartArea } from '@vexip-ui/icons'
 
-export default defineComponent({
-  setup() {
-    const active = ref('标签页1')
-
-    return { active }
-  }
-})
+const active = ref('标签页1')
 </script>
