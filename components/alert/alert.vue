@@ -82,6 +82,10 @@ const props = useConfiguredProps('alert', {
   banner: {
     type: Boolean,
     default: false
+  },
+  manual: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -125,7 +129,10 @@ export default defineComponent({
     })
 
     function handleClose() {
-      closed.value = true
+      if (!props.manual) {
+        closed.value = true
+      }
+
       emit('on-close')
     }
 
