@@ -83,6 +83,10 @@ $table: map.merge(
     border-bottom: get-css-var('table-border');
   }
 
+  &--visual &__body {
+    will-change: padding-top, padding-bottom;
+  }
+
   &__group {
     display: flex;
     flex: 1 0 auto;
@@ -94,6 +98,10 @@ $table: map.merge(
       margin-bottom: -1px;
       border-bottom-color: transparent;
     }
+  }
+
+  &--visual &__group {
+    flex: 0 0 auto;
   }
 
   &__row {

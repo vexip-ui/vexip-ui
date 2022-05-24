@@ -115,7 +115,8 @@ export interface StoreOptions {
   rowClass: ClassType | RowClassFn,
   dataKey: string,
   highlight: boolean,
-  renderCount: number,
+  virtual: boolean,
+  // renderCount: number,
   currentPage: number,
   pageSize: number,
   rowHeight: number,
@@ -156,6 +157,8 @@ export interface StoreState extends StoreOptions {
   filters: Record<Key, ParsedFilterOptions>,
   bodyScroll: number,
   hiddenHeight: number,
+  padTop: number,
+  padBottom: number,
   startRow: number,
   endRow: number,
   dragging: boolean

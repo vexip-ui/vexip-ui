@@ -40,7 +40,8 @@ export function useStore(options: StoreOptions) {
     width: 0,
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
     highlight: false,
-    renderCount: 0,
+    virtual: options.virtual,
+    // renderCount: 0,
     currentPage: 1,
     pageSize: 0,
     rowHeight: options.rowHeight ?? 0,
@@ -64,6 +65,8 @@ export function useStore(options: StoreOptions) {
     filters: {},
     bodyScroll: 0,
     hiddenHeight: 0,
+    padTop: 0,
+    padBottom: 0,
     startRow: 0,
     endRow: 0,
     dragging: false
@@ -77,7 +80,8 @@ export function useStore(options: StoreOptions) {
 
   setRowClass(state, options.rowClass)
   setHighlight(state, options.highlight)
-  setRenderCount(state, options.renderCount)
+  setVirtual(state, options.virtual)
+  // setRenderCount(state, options.renderCount)
 
   const filteredData = computed(() => {
     return filterData(state.filters, state.rowData, state.singleFilter)
@@ -175,7 +179,8 @@ export function useStore(options: StoreOptions) {
     setRowExpandHeight: setRowExpandHeight.bind(null, state),
     setBodyScroll: setBodyScroll.bind(null, state),
     setHighlight: setHighlight.bind(null, state),
-    setRenderCount: setRenderCount.bind(null, state),
+    setVirtual: setVirtual.bind(null, state),
+    // setRenderCount: setRenderCount.bind(null, state),
     setRowHover: setRowHover.bind(null, state),
     setEmptyText: setEmptyText.bind(null, state),
     setTooltipTheme: setTooltipTheme.bind(null, state),
@@ -324,7 +329,7 @@ function setData(state: StoreState, data: Data[]) {
   const dataMap: Record<Key, RowState> = {}
   const { dataKey, idMaps } = state
   const oldDataMap = state.dataMap
-  const hidden = !!state.renderCount
+  const hidden = !!state.virtual
 
   for (let i = 0, len = data.length; i < len; ++i) {
     const item = data[i]
@@ -467,9 +472,13 @@ function setHighlight(state: StoreState, able: boolean) {
   state.highlight = !!able
 }
 
-function setRenderCount(state: StoreState, count: number) {
-  state.renderCount = parseInt(count as any) || 0
+function setVirtual(state: StoreState, virtual: boolean) {
+  state.virtual = !!virtual
 }
+
+// function setRenderCount(state: StoreState, count: number) {
+//   state.renderCount = parseInt(count as any) || 0
+// }
 
 function setRowHover(state: StoreState, key: Key, hover: boolean) {
   if (state.dataMap[key]) {
@@ -642,11 +651,26 @@ function setRenderRows(state: StoreState, getters: StoreGetters, start: number, 
   if (processedData[0]) {
     let i = processedData.length
 
+    let padTop = 0
+    let padBottom = 0
+
     while (i--) {
-      processedData[i].hidden = !(i >= start && i < end)
+      const data = processedData[i]
+
+      data.hidden = !(i >= start && i < end)
+
+      if (i >= end) {
+        padBottom += data.height + (data.borderHeight || 0)
+      }
+
+      if (i < start) {
+        padTop += data.height + (data.borderHeight || 0)
+      }
     }
 
-    state.hiddenHeight = start * processedData[0].height
+    state.hiddenHeight = padTop
+    state.padTop = padTop
+    state.padBottom = padBottom
     state.startRow = start
     state.endRow = end
   }

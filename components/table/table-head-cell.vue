@@ -53,6 +53,7 @@
       }"
       :tip-class="{
         [`${prefix}__filter-wrapper`]: true,
+        [`${prefix}-vars`]: true,
         [`${prefix}__filter-wrapper--multiple`]: filter.multiple
       }"
     >

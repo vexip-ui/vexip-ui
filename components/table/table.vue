@@ -202,9 +202,14 @@ const props = useConfiguredProps('table', {
     type: Number,
     default: null
   },
-  renderCount: {
+  virtual: {
+    type: Boolean,
+    default: false
+  },
+  bufferCount: {
     type: Number,
-    default: null
+    default: 5,
+    validator: (value: number) => value >= 0
   },
   scrollClass: {
     type: Object as PropType<{
@@ -306,7 +311,8 @@ export default defineComponent({
       rowClass: props.rowClass,
       dataKey: props.dataKey,
       highlight: props.highlight,
-      renderCount: props.renderCount,
+      virtual: props.virtual,
+      // renderCount: props.renderCount,
       currentPage: props.currentPage,
       pageSize: props.pageSize,
       rowHeight: props.rowHeight,
@@ -347,7 +353,8 @@ export default defineComponent({
         [`${prefix}--border`]: props.border,
         [`${prefix}--highlight`]: props.highlight,
         [`${prefix}--use-y-bar`]: props.useYBar,
-        [`${prefix}--transparent`]: props.transparent
+        [`${prefix}--transparent`]: props.transparent,
+        [`${prefix}--virtual`]: props.virtual
       }
     })
     const style = computed(() => {
@@ -533,15 +540,12 @@ export default defineComponent({
 
       yScrollPercent.value = percent
       setBodyScroll(client)
-      // this.emitYScroll(client, percent)
+      nextTick(computeRenderRows)
     }
 
     function emitYScroll(client: number, percent: number) {
       emit('on-body-scroll', { client, percent })
-
-      nextTick(() => {
-        computeRenderRows()
-      })
+      nextTick(computeRenderRows)
     }
 
     function increaseColumn(column: ColumnOptions) {
@@ -704,26 +708,52 @@ export default defineComponent({
       )
     }
 
+    function getRowHeight(row: RowState) {
+      if (!row) return 0
+
+      return (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
+    }
+
     function computeRenderRows() {
-      const { bodyScroll, renderCount } = state
       const { totalRowHeight, processedData } = getters
       const rowCount = processedData.length
 
-      if (!renderCount || !props.rowHeight) {
+      if (!props.virtual) {
         setRenderRows(0, rowCount)
 
         return
       }
 
-      if (bodyScroll >= totalRowHeight) return
+      const { bodyScroll } = state
+      const viewHeight = Math.min(bodyHeight.value || 0, bodyScrollHeight.value || 0)
 
-      const start = Math.floor((bodyScroll / totalRowHeight || 1) * rowCount)
+      let viewStart = bodyScroll
+      let viewEnd = bodyScroll + viewHeight
 
-      if (start + renderCount > rowCount) {
-        setRenderRows(rowCount - renderCount, rowCount)
-      } else {
-        setRenderRows(start, start + renderCount)
+      if (viewEnd > totalRowHeight) {
+        viewEnd = totalRowHeight
+        viewStart = viewEnd - viewHeight
       }
+
+      let total = 0
+      let start = 0
+      let end = rowCount
+
+      for (let i = 0; i < rowCount; ++i) {
+        total += getRowHeight(processedData[i])
+
+        if (total < viewStart) {
+          start = i
+        } else if (total > viewEnd) {
+          end = i
+          break
+        }
+      }
+
+      const renderStart = Math.max(start - props.bufferCount, 0)
+      const renderEnd = Math.min(end + props.bufferCount + 1, rowCount)
+
+      setRenderRows(renderStart, renderEnd)
     }
 
     function refresh() {
@@ -749,6 +779,10 @@ export default defineComponent({
           0
         )
         syncBarScroll()
+        nextTick(() => {
+          computeBodyHeight()
+          computeRenderRows()
+        })
       }, 10)
     }
 

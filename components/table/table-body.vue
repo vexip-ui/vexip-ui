@@ -68,7 +68,8 @@ export default defineComponent({
       return state.columns
     })
     const style = computed(() => {
-      const { widths, hiddenHeight } = state
+      const { widths, padTop, padBottom } = state
+      // const { totalRowHeight } = getters
       const columns = currentColumns.value
 
       let width = 0
@@ -84,7 +85,8 @@ export default defineComponent({
       return {
         minWidth: `${width}px`,
         // minHeight: `${totalRowHeight}px`,
-        paddingTop: `${hiddenHeight}px`
+        paddingTop: `${padTop}px`,
+        paddingBottom: `${padBottom}px`
       }
     })
     const emptyStyle = computed(() => {

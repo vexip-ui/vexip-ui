@@ -201,10 +201,12 @@ export default defineComponent({
       if (state.rowHeight) {
         mutations.setRowHeight(props.row.key, state.rowHeight)
 
-        if (rowElement.value) {
-          rowElement.value.style.height = `${state.rowHeight}px`
-          rowElement.value.style.maxHeight = `${state.rowHeight}px`
-        }
+        nextTick(() => {
+          if (rowElement.value) {
+            rowElement.value.style.height = `${state.rowHeight}px`
+            rowElement.value.style.maxHeight = `${state.rowHeight}px`
+          }
+        })
       } else {
         nextTick(() => {
           if (!props.isFixed) {
