@@ -14,7 +14,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
-import type { Color } from 'vexip-ui/lib/color-picker'
+import type { Color } from 'vexip-ui/es/color-picker'
 
 export default defineComponent({
   setup() {

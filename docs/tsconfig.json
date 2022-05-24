@@ -23,6 +23,7 @@
     ],
     "paths": {
       "@/*": ["../*"],
+      "vexip-ui/es/*": ["../components/*"],
       "vexip-ui": ["../components"]
     },
     "lib": [

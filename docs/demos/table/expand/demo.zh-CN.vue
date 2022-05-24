@@ -1,27 +1,32 @@
 <template>
-  <Table :data="data">
-    <TableColumn type="expand" id-key="expand">
-      <template #default="{ row }">
-        <Row style="padding: 20px 40px; background-color: #f8f9fa;">
-          <Column :span="12">
+  <Table :data="data" :width="800">
+    <TableColumn type="expand" id-key="expand" fixed>
+      <template #default="{ row, leftFixed, rightFixed, }">
+        <Grid
+          :style="{
+            padding: `20px ${rightFixed + 10}px 20px ${leftFixed + 10}px`,
+            backgroundColor: 'var(--bg-color)'
+          }"
+        >
+          <Cell :width="12">
             Full Name: {{ `${row.firstName} ${row.lastName}` }}
-          </Column>
-          <Column :span="12">
+          </Cell>
+          <Cell :width="12">
             Age: {{ row.age }}
-          </Column>
-          <Column :span="12">
+          </Cell>
+          <Cell :width="12">
             Job: {{ row.job }}
-          </Column>
-          <Column :span="12">
+          </Cell>
+          <Cell :width="12">
             Email: {{ row.email }}
-          </Column>
-        </Row>
+          </Cell>
+        </Grid>
       </template>
     </TableColumn>
-    <TableColumn name="First Name" id-key="firstName"></TableColumn>
-    <TableColumn name="Last Name" id-key="lastName"></TableColumn>
-    <TableColumn name="Job" id-key="job"></TableColumn>
-    <TableColumn name="Age" id-key="age"></TableColumn>
+    <TableColumn name="First Name" id-key="firstName" fixed></TableColumn>
+    <TableColumn name="Last Name" id-key="lastName" :width="300"></TableColumn>
+    <TableColumn name="Job" id-key="job" :width="300"></TableColumn>
+    <TableColumn name="Age" id-key="age" :width="300"></TableColumn>
   </Table>
 </template>
 

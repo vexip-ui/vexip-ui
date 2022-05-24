@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { defineFilter } from 'vexip-ui/lib/table'
+import { defineFilter } from 'vexip-ui/es/table'
 
 interface RowData {
   id: string,

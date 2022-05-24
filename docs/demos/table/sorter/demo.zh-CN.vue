@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { defineColumns } from 'vexip-ui/lib/table'
+import { defineColumns } from 'vexip-ui/es/table'
 
 export default defineComponent({
   data() {
