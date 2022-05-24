@@ -29,5 +29,9 @@
       "esnext",
       "dom"
     ]
-  }
+  },
+  "include": [
+    "demos",
+    "global.d.ts"
+  ]
 }

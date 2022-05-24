@@ -28,8 +28,8 @@ async function main() {
 }
 
 async function serveComponent() {
-  const docsDir = resolve(__dirname, '../docs')
-  const targets = readdirSync(docsDir).filter(f => statSync(resolve(docsDir, f)).isDirectory())
+  const demosDir = resolve(__dirname, '../docs/demos')
+  const targets = readdirSync(demosDir).filter(f => statSync(resolve(demosDir, f)).isDirectory())
 
   const target = await specifyComponent(args, targets)
 
@@ -48,7 +48,7 @@ async function serveComponent() {
           return `{
             path: '${index ? `/${demo}` : '/'}',
             name: '${demo}',
-            component: () => import('../docs/${target}/${demo}/demo.${matchedLang}.vue')
+            component: () => import('../docs/demos/${target}/${demo}/demo.${matchedLang}.vue')
           }`
         }).join(',\n')}
       ]
@@ -93,7 +93,7 @@ async function serveTheme() {
 }
 
 function queryDemos(target: string, lang: string) {
-  const dir = resolve(__dirname, '../docs', target)
+  const dir = resolve(__dirname, '../docs/demos', target)
 
   return readdirSync(dir).filter(
     f => statSync(resolve(dir, f)).isDirectory() && existsSync(resolve(dir, f, `demo.${lang}.vue`))
