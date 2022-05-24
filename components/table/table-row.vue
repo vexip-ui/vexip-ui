@@ -17,6 +17,7 @@
     </div>
     <CollapseTransition
       v-if="!!expandColumn"
+      appear
       @after-enter="computeRectHeight"
       @after-leave="computeRectHeight"
     >
@@ -29,12 +30,12 @@
         <Renderer
           v-if="isFunction(expandColumn.renderer)"
           :renderer="expandColumn.renderer"
-          :data="{ row: row.data, rowIndex: index }"
+          :data="{ leftFixed, rightFixed, row: row.data, rowIndex: index }"
         ></Renderer>
         <Renderer
           v-else-if="isFunction(expandRenderer)"
           :renderer="expandRenderer"
-          :data="{ row: row.data, rowIndex: index }"
+          :data="{ leftFixed, rightFixed, row: row.data, rowIndex: index }"
         ></Renderer>
       </div>
     </CollapseTransition>
@@ -59,8 +60,8 @@ import { Renderer } from '@/components/renderer'
 import { isFunction } from '@vexip-ui/utils'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
 
-import type { PropType } from 'vue'
-import type { RowState, ExpandColumn } from './symbol'
+import type { PropType, CSSProperties } from 'vue'
+import type { RowState, ExpandColumn, ColumnWithKey } from './symbol'
 
 const props = {
   row: {
@@ -130,15 +131,43 @@ export default defineComponent({
         | undefined
     })
     const expandRenderer = computed(() => state.expandRenderer)
-    const expandStyle = computed(() => {
+    const expandStyle = computed<CSSProperties>(() => {
       return props.isFixed
         ? {
             width: '1px',
-            height: `${props.row.expandHeight}px`,
-            visibility: 'hidden' as const
+            // height: `${props.row.expandHeight}px`,
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            visibility: 'hidden'
           }
-        : undefined
+        : {}
     })
+    const leftFixed = computed(() => {
+      return computeFixedWidth(state.leftFixedColumns)
+    })
+    const rightFixed = computed(() => {
+      return computeFixedWidth(state.rightFixedColumns)
+    })
+
+    function computeFixedWidth(columns: ColumnWithKey[]) {
+      if (!columns?.length) {
+        return 0
+      }
+
+      const widths = state.widths
+
+      let width = 0
+
+      for (let i = 0, len = columns.length; i < len; i++) {
+        const column = columns[i]
+        const key = column.key
+        const columnWidth = widths[key]
+
+        width += columnWidth
+      }
+
+      return width
+    }
 
     function computeRectHeight() {
       computeRowHeight()
@@ -271,6 +300,8 @@ export default defineComponent({
       expandColumn,
       expandRenderer,
       expandStyle,
+      leftFixed,
+      rightFixed,
 
       wrapper,
       rowEl: rowElement,
