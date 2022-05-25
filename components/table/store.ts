@@ -64,7 +64,6 @@ export function useStore(options: StoreOptions) {
     sorters: {},
     filters: {},
     bodyScroll: 0,
-    hiddenHeight: 0,
     padTop: 0,
     padBottom: 0,
     startRow: 0,
@@ -661,14 +660,11 @@ function setRenderRows(state: StoreState, getters: StoreGetters, start: number, 
 
       if (i >= end) {
         padBottom += data.height + (data.borderHeight || 0)
-      }
-
-      if (i < start) {
+      } else if (i < start) {
         padTop += data.height + (data.borderHeight || 0)
       }
     }
 
-    state.hiddenHeight = padTop
     state.padTop = padTop
     state.padBottom = padBottom
     state.startRow = start

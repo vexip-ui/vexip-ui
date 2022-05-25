@@ -37,7 +37,7 @@ export default defineConfig(() => {
     server: {
       port: parseInt(process.env.PORT || '') || 8000,
       fs: {
-        allow: ['.', `../docs/${target}`]
+        allow: ['..']
       }
     },
     plugins: [

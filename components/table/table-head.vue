@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapper" :class="`${prefix}__head`" :style="style">
+  <div :class="`${prefix}__head`" :style="style">
     <TableRow is-head>
       <TableHeadCell
         v-for="(item, index) in currentColumns"
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject } from 'vue'
+import { defineComponent, computed, inject } from 'vue'
 import TableHeadCell from './table-head-cell.vue'
 import TableRow from './table-row.vue'
 import { TABLE_STORE } from './symbol'
@@ -38,8 +38,6 @@ export default defineComponent({
   props,
   setup(props) {
     const { state } = inject(TABLE_STORE)!
-
-    const wrapper = ref<HTMLElement | null>(null)
 
     const currentColumns = computed(() => {
       if (props.fixed === 'left') {
@@ -75,9 +73,7 @@ export default defineComponent({
       prefix: 'vxp-table',
 
       currentColumns,
-      style,
-
-      wrapper
+      style
     }
   }
 })

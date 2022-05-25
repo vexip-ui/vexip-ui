@@ -6,6 +6,7 @@
     :data="data"
     :width="800"
     :height="320"
+    :row-height="40"
   >
     <TableColumn id-key="selection" type="selection"></TableColumn>
     <TableColumn id-key="order" type="order"></TableColumn>

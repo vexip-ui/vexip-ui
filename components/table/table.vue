@@ -506,13 +506,13 @@ export default defineComponent({
       const height = props.height
 
       if (isDefined(height)) {
-        const tableHead = thead.value?.wrapper
+        const tableHead = thead.value?.$el as HTMLElement
 
         if (tableHead) {
-          headHeight.value = tableHead.getBoundingClientRect().height
+          headHeight.value = tableHead.offsetHeight
           bodyHeight.value = height - headHeight.value
         } else {
-          bodyHeight.value = height
+          bodyHeight.value = height - (props.rowHeight || 0)
         }
       } else {
         bodyHeight.value = undefined
@@ -727,6 +727,10 @@ export default defineComponent({
       const { bodyScroll } = state
       const viewHeight = Math.min(bodyHeight.value || 0, bodyScrollHeight.value || 0)
 
+      if (!viewHeight) {
+        setRenderRows(0, 0)
+      }
+
       let viewStart = bodyScroll
       let viewEnd = bodyScroll + viewHeight
 
@@ -757,12 +761,12 @@ export default defineComponent({
     }
 
     function refresh() {
-      nextTick(() => {
+      setTimeout(() => {
         computeTableWidth()
         computeBodyHeight()
         refreshPercentScroll()
         nextTick(computeRenderRows)
-      })
+      }, 0)
     }
 
     let scrollTimer: number

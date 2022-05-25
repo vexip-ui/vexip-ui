@@ -156,7 +156,6 @@ export interface StoreState extends StoreOptions {
   sorters: Record<Key, ParsedSorterOptions>,
   filters: Record<Key, ParsedFilterOptions>,
   bodyScroll: number,
-  hiddenHeight: number,
   padTop: number,
   padBottom: number,
   startRow: number,
