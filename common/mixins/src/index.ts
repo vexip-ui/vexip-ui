@@ -1,5 +1,6 @@
 export * from './clickoutside'
 export * from './display'
 export * from './hover'
+export * from './mounted'
 export * from './popper'
 export * from './trigger-handler'
