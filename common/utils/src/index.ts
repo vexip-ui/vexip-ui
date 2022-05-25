@@ -1,5 +1,6 @@
 export * from './color'
 export * from './common'
+export * from './data'
 export * from './date'
 export * from './deep-clone'
 export * from './destroy-object'
