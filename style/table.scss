@@ -19,8 +19,9 @@ $table: map.merge(
     s-color: get-css-var('shadow-color-base'),
     border: get-css-var('table-b-shape') get-css-var('table-b-color'),
     head-bg-color: get-css-var('fill-color-humble'),
-    row-bg-color: get-css-var('fill-color-background'),
+    row-bg-color: transparent,
     row-bg-color-hover: get-css-var('color-primary-opacity-8'),
+    row-bg-color-stripe: get-css-var('fill-color-background'),
     row-b-color-bottom: get-css-var('border-color-light-1'),
     cell-min-height: 36px,
     cell-v-padding: 6px,
@@ -107,6 +108,7 @@ $table: map.merge(
   &__row {
     display: inline-flex;
     flex: 1 0 auto;
+    background-color: get-css-var('table-row-bg-color');
     transition: all get-css-var('transition-base');
 
     &--hover {
@@ -118,8 +120,8 @@ $table: map.merge(
     background-color: get-css-var('table-head-bg-color');
   }
 
-  &--stripe &__group:nth-child(even) &__row {
-    background-color: get-css-var('table-row-bg-color');
+  &--stripe &__row--stripe {
+    background-color: get-css-var('table-row-bg-color-stripe');
   }
 
   &__cell,

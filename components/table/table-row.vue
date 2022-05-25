@@ -118,7 +118,8 @@ export default defineComponent({
       return [
         `${prefix}__row`,
         {
-          [`${prefix}__row--hover`]: state.highlight && props.row.hover
+          [`${prefix}__row--hover`]: state.highlight && props.row.hover,
+          [`${prefix}__row--stripe`]: props.index % 2 === 1
         },
         customClass
       ]

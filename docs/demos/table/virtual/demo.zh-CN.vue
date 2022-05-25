@@ -2,6 +2,7 @@
   <Table
     use-y-bar
     virtual
+    stripe
     :data="data"
     :width="800"
     :height="320"
