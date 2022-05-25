@@ -1,5 +1,6 @@
 import type { InjectionKey } from 'vue'
 import type { ComponentSize } from '@vexip-ui/config'
+import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 
@@ -115,11 +116,11 @@ export interface StoreOptions {
   rowClass: ClassType | RowClassFn,
   dataKey: string,
   highlight: boolean,
-  virtual: boolean,
-  // renderCount: number,
   currentPage: number,
   pageSize: number,
   rowHeight: number,
+  rowMinHeight: number,
+  virtual: boolean,
   rowDraggable: boolean,
   emptyText: string,
   tooltipTheme: TooltipTheme,
@@ -157,10 +158,11 @@ export interface StoreState extends StoreOptions {
   filters: Record<Key, ParsedFilterOptions>,
   bodyScroll: number,
   padTop: number,
-  padBottom: number,
   startRow: number,
   endRow: number,
-  dragging: boolean
+  dragging: boolean,
+  heightBITree: BITree,
+  virtualData: RowState[]
 }
 
 export interface StoreGetters {

@@ -12,7 +12,7 @@
     @dragend="handleDragEnd"
     @drop="handleDrop"
   >
-    <div ref="rowEl" :class="className">
+    <div ref="rowEl" :class="className" :style="style">
       <slot></slot>
     </div>
     <CollapseTransition
@@ -124,6 +124,11 @@ export default defineComponent({
         customClass
       ]
     })
+    const style = computed(() => {
+      return {
+        minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
+      }
+    })
     const draggable = computed(() => !props.isHead && state.rowDraggable)
     const dragging = computed(() => state.dragging)
     const expandColumn = computed(() => {
@@ -143,12 +148,14 @@ export default defineComponent({
           }
         : {}
     })
-    const leftFixed = computed(() => {
-      return computeFixedWidth(state.leftFixedColumns)
-    })
-    const rightFixed = computed(() => {
-      return computeFixedWidth(state.rightFixedColumns)
-    })
+    const leftFixed = computed(() => computeFixedWidth(state.leftFixedColumns))
+    const rightFixed = computed(() => computeFixedWidth(state.rightFixedColumns))
+
+    function getRowHeight(row: RowState) {
+      if (!row) return 0
+
+      return (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
+    }
 
     function computeFixedWidth(columns: ColumnWithKey[]) {
       if (!columns?.length) {
@@ -171,8 +178,24 @@ export default defineComponent({
     }
 
     function computeRectHeight() {
-      computeRowHeight()
+      if (!Object.keys(props.row).length || props.row.hidden) return
+
       computeBorderHeight()
+      computeRowHeight()
+
+      if (!props.isFixed) {
+        nextTick(() => {
+          const height = getRowHeight(props.row)
+          const tree = state.heightBITree
+          const prev = tree.get(props.index)
+
+          if (height !== prev) {
+            console.log(props.index, height, prev)
+            const delta = height - prev
+            tree.add(props.index, delta)
+          }
+        })
+      }
     }
 
     watch(
@@ -195,6 +218,8 @@ export default defineComponent({
     onUpdated(() => {
       if (!state.rowHeight) {
         computeRectHeight()
+      } else if (!props.row.hidden) {
+        computeBorderHeight()
       }
     })
 
@@ -212,10 +237,10 @@ export default defineComponent({
         nextTick(() => {
           if (!props.isFixed) {
             if (rowElement.value) {
-              mutations.setRowHeight(props.row.key, rowElement.value.getBoundingClientRect().height)
+              mutations.setRowHeight(props.row.key, rowElement.value.offsetHeight)
               mutations.setRowExpandHeight(
                 props.row.key,
-                expandElement.value?.getBoundingClientRect().height || 0
+                expandElement.value?.offsetHeight || 0
               )
             }
           } else {
@@ -299,6 +324,7 @@ export default defineComponent({
       prefix,
 
       className,
+      style,
       draggable,
       expandColumn,
       expandRenderer,

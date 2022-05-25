@@ -84,9 +84,9 @@ $table: map.merge(
     border-bottom: get-css-var('table-border');
   }
 
-  &--visual &__body {
-    will-change: padding-top, padding-bottom;
-  }
+  // &--visual &__body {
+  //   will-change: padding-top, padding-bottom;
+  // }
 
   &__group {
     display: flex;

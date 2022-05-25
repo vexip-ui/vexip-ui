@@ -202,6 +202,11 @@ const props = useConfiguredProps('table', {
     type: Number,
     default: null
   },
+  rowMinHeight: {
+    type: Number,
+    default: 36,
+    validator: (value: number) => value > 0
+  },
   virtual: {
     type: Boolean,
     default: false
@@ -311,11 +316,11 @@ export default defineComponent({
       rowClass: props.rowClass,
       dataKey: props.dataKey,
       highlight: props.highlight,
-      virtual: props.virtual,
-      // renderCount: props.renderCount,
       currentPage: props.currentPage,
       pageSize: props.pageSize,
       rowHeight: props.rowHeight,
+      rowMinHeight: props.rowMinHeight,
+      virtual: props.virtual,
       rowDraggable: props.rowDraggable,
       emptyText: props.emptyText ?? locale.empty,
       tooltipTheme: props.tooltipTheme,
@@ -512,7 +517,7 @@ export default defineComponent({
           headHeight.value = tableHead.offsetHeight
           bodyHeight.value = height - headHeight.value
         } else {
-          bodyHeight.value = height - (props.rowHeight || 0)
+          bodyHeight.value = height - (props.rowHeight || props.rowMinHeight)
         }
       } else {
         bodyHeight.value = undefined
@@ -708,12 +713,6 @@ export default defineComponent({
       )
     }
 
-    function getRowHeight(row: RowState) {
-      if (!row) return 0
-
-      return (row.borderHeight || 0) + (row.height || 0) + (row.expandHeight || 0)
-    }
-
     function computeRenderRows() {
       const { totalRowHeight, processedData } = getters
       const rowCount = processedData.length
@@ -724,7 +723,7 @@ export default defineComponent({
         return
       }
 
-      const { bodyScroll } = state
+      const { bodyScroll, heightBITree } = state
       const viewHeight = Math.min(bodyHeight.value || 0, bodyScrollHeight.value || 0)
 
       if (!viewHeight) {
@@ -739,21 +738,8 @@ export default defineComponent({
         viewStart = viewEnd - viewHeight
       }
 
-      let total = 0
-      let start = 0
-      let end = rowCount
-
-      for (let i = 0; i < rowCount; ++i) {
-        total += getRowHeight(processedData[i])
-
-        if (total < viewStart) {
-          start = i
-        } else if (total > viewEnd) {
-          end = i
-          break
-        }
-      }
-
+      const start = heightBITree.boundIndex(viewStart)
+      const end = heightBITree.boundIndex(viewEnd)
       const renderStart = Math.max(start - props.bufferCount, 0)
       const renderEnd = Math.min(end + props.bufferCount + 1, rowCount)
 

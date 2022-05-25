@@ -1,5 +1,5 @@
-import { reactive, computed } from 'vue'
-import { isNull, debounceMinor, toNumber, sortByProps, deepClone } from '@vexip-ui/utils'
+import { reactive, computed, markRaw } from 'vue'
+import { isNull, debounceMinor, toNumber, sortByProps, deepClone, createBITree } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD } from './symbol'
 
 import type { TooltipTheme } from '@/components/tooltip'
@@ -40,11 +40,11 @@ export function useStore(options: StoreOptions) {
     width: 0,
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
     highlight: false,
-    virtual: options.virtual,
-    // renderCount: 0,
     currentPage: 1,
     pageSize: 0,
     rowHeight: options.rowHeight ?? 0,
+    rowMinHeight: options.rowMinHeight || 36,
+    virtual: options.virtual,
     rowDraggable: !!options.rowDraggable,
     emptyText: options.emptyText,
     tooltipTheme: options.tooltipTheme,
@@ -65,10 +65,11 @@ export function useStore(options: StoreOptions) {
     filters: {},
     bodyScroll: 0,
     padTop: 0,
-    padBottom: 0,
     startRow: 0,
     endRow: 0,
-    dragging: false
+    dragging: false,
+    heightBITree: null!,
+    virtualData: []
   })
 
   setColumns(state, options.columns)
@@ -80,7 +81,6 @@ export function useStore(options: StoreOptions) {
   setRowClass(state, options.rowClass)
   setHighlight(state, options.highlight)
   setVirtual(state, options.virtual)
-  // setRenderCount(state, options.renderCount)
 
   const filteredData = computed(() => {
     return filterData(state.filters, state.rowData, state.singleFilter)
@@ -92,18 +92,7 @@ export function useStore(options: StoreOptions) {
     return pageData(state.currentPage, state.pageSize, sortedData.value)
   })
   const totalRowHeight = computed(() => {
-    const data = processedData.value
-
-    let i = data.length
-    let total = 0
-
-    while (i--) {
-      const { height, borderHeight, expandHeight } = data[i]
-
-      total += (borderHeight || 0) + (height || 0) + (expandHeight || 0)
-    }
-
-    return total
+    return state.heightBITree?.sum() ?? 0
   })
   const disableCheckRows = computed(() => {
     const rowData = processedData.value
@@ -174,12 +163,12 @@ export function useStore(options: StoreOptions) {
     setRowHeight: setRowHeight.bind(null, state),
     setBorderHeight: setBorderHeight.bind(null, state),
     setGlobalRowHeight: setGlobalRowHeight.bind(null, state),
+    setMinRowHeight: setMinRowHeight.bind(null, state),
+    setVirtual: setVirtual.bind(null, state),
     setRowDraggable: setRowDraggable.bind(null, state),
     setRowExpandHeight: setRowExpandHeight.bind(null, state),
     setBodyScroll: setBodyScroll.bind(null, state),
     setHighlight: setHighlight.bind(null, state),
-    setVirtual: setVirtual.bind(null, state),
-    // setRenderCount: setRenderCount.bind(null, state),
     setRowHover: setRowHover.bind(null, state),
     setEmptyText: setEmptyText.bind(null, state),
     setTooltipTheme: setTooltipTheme.bind(null, state),
@@ -372,6 +361,10 @@ function setData(state: StoreState, data: Data[]) {
     dataMap[key] = row
   }
 
+  if (!state.heightBITree || clonedData.length !== state.rowData.length) {
+    state.heightBITree = markRaw(createBITree(clonedData.length, (state.rowHeight || state.rowMinHeight) + 1))
+  }
+
   state.rowData = clonedData
   state.dataMap = dataMap
 
@@ -438,7 +431,7 @@ function setColumnWidth(state: StoreState, key: Key, width: number) {
 }
 
 function setRowHeight(state: StoreState, key: Key, height: number) {
-  if (state.dataMap[key]) {
+  if (state.dataMap[key] && state.dataMap[key].height !== height) {
     state.dataMap[key].height = height
   }
 }
@@ -451,6 +444,10 @@ function setBorderHeight(state: StoreState, key: Key, height: number) {
 
 function setGlobalRowHeight(state: StoreState, height: number) {
   state.rowHeight = height
+}
+
+function setMinRowHeight(state: StoreState, height: number) {
+  state.rowMinHeight = height
 }
 
 function setRowDraggable(state: StoreState, draggable: boolean) {
@@ -474,10 +471,6 @@ function setHighlight(state: StoreState, able: boolean) {
 function setVirtual(state: StoreState, virtual: boolean) {
   state.virtual = !!virtual
 }
-
-// function setRenderCount(state: StoreState, count: number) {
-//   state.renderCount = parseInt(count as any) || 0
-// }
 
 function setRowHover(state: StoreState, key: Key, hover: boolean) {
   if (state.dataMap[key]) {
@@ -641,32 +634,26 @@ function computePartial(state: StoreState) {
 }
 
 function setRenderRows(state: StoreState, getters: StoreGetters, start: number, end: number) {
-  const { startRow, endRow } = state
+  const { startRow, endRow, heightBITree, virtualData } = state
 
   if (start === startRow && end === endRow) return
 
   const { processedData } = getters
+  virtualData.length = 0
 
   if (processedData[0]) {
     let i = processedData.length
-
-    let padTop = 0
-    let padBottom = 0
 
     while (i--) {
       const data = processedData[i]
 
       data.hidden = !(i >= start && i < end)
-
-      if (i >= end) {
-        padBottom += data.height + (data.borderHeight || 0)
-      } else if (i < start) {
-        padTop += data.height + (data.borderHeight || 0)
-      }
+      !data.hidden && virtualData.push(data)
     }
 
-    state.padTop = padTop
-    state.padBottom = padBottom
+    virtualData.reverse()
+
+    state.padTop = heightBITree.sum(start)
     state.startRow = start
     state.endRow = end
   }

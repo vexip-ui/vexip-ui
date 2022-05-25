@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const data = ref(Array.from({ length: 1000 }, (_, index) => {
+const data = ref(Array.from({ length: 50000 }, (_, index) => {
   return {
     index,
     name: `Row ${index}`

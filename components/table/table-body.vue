@@ -1,23 +1,23 @@
 <template>
   <div :class="`${prefix}__body`" :style="style">
-    <template v-if="processedData.length">
+    <div v-if="renderData.length" :style="innerStyle">
       <TableRow
-        v-for="(row, rowIndex) in processedData"
-        :key="rowIndex"
+        v-for="row in renderData"
+        :key="row.index"
         :row="row"
-        :index="rowIndex"
+        :index="row.index"
         :is-fixed="!!fixed"
       >
         <TableCell
           v-for="(column, columnIndex) in currentColumns"
           :key="columnIndex"
           :row="row"
-          :row-index="rowIndex"
+          :row-index="row.index"
           :column="column"
           :column-index="columnIndex"
         ></TableCell>
       </TableRow>
-    </template>
+    </div>
     <slot v-else name="empty" :is-fixed="!!fixed">
       <div :class="`${prefix}__empty`" :style="emptyStyle">
         <template v-if="!fixed">
@@ -67,9 +67,10 @@ export default defineComponent({
 
       return state.columns
     })
+    const renderData = computed(() => state.virtual ? state.virtualData : getters.processedData)
     const style = computed(() => {
-      const { widths, padTop, padBottom } = state
-      // const { totalRowHeight } = getters
+      const { widths } = state
+      const { totalRowHeight } = getters
       const columns = currentColumns.value
 
       let width = 0
@@ -84,9 +85,12 @@ export default defineComponent({
 
       return {
         minWidth: `${width}px`,
-        // minHeight: `${totalRowHeight}px`,
-        paddingTop: `${padTop}px`,
-        paddingBottom: `${padBottom}px`
+        minHeight: `${totalRowHeight}px`
+      }
+    })
+    const innerStyle = computed(() => {
+      return {
+        transform: state.virtual ? `translate3d(0, ${state.padTop}px, 0)` : undefined
       }
     })
     const emptyStyle = computed(() => {
@@ -103,8 +107,10 @@ export default defineComponent({
 
       currentColumns,
       style,
+      innerStyle,
       emptyStyle,
-      processedData: toRef(getters, 'processedData')
+      processedData: toRef(getters, 'processedData'),
+      renderData
     }
   }
 })
