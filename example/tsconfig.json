@@ -18,8 +18,7 @@
     "outDir": "dist",
     "types": [
       "vite/client",
-      "jest",
-      "vexip-ui/types"
+      "jest"
     ],
     "paths": {
       "@/*": ["../*"],

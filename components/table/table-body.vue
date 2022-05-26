@@ -1,6 +1,6 @@
 <template>
   <div :class="`${prefix}__body`" :style="style">
-    <div v-if="renderData.length" :style="innerStyle">
+    <div v-if="renderData.length" :class="`${prefix}__row-list`" :style="listStyle">
       <TableRow
         v-for="row in renderData"
         :key="row.index"
@@ -18,13 +18,13 @@
         ></TableCell>
       </TableRow>
     </div>
-    <slot v-else name="empty" :is-fixed="!!fixed">
-      <div :class="`${prefix}__empty`" :style="emptyStyle">
+    <div v-else :class="`${prefix}__empty`" :style="emptyStyle">
+      <slot name="empty" :is-fixed="!!fixed">
         <template v-if="!fixed">
           {{ emptyText }}
         </template>
-      </div>
-    </slot>
+      </slot>
+    </div>
   </div>
 </template>
 
@@ -69,8 +69,7 @@ export default defineComponent({
     })
     const renderData = computed(() => state.virtual ? state.virtualData : getters.processedData)
     const style = computed(() => {
-      const { widths } = state
-      const { totalRowHeight } = getters
+      const { widths, totalHeight } = state
       const columns = currentColumns.value
 
       let width = 0
@@ -85,19 +84,19 @@ export default defineComponent({
 
       return {
         minWidth: `${width}px`,
-        minHeight: `${totalRowHeight}px`
+        minHeight: `${totalHeight}px`
       }
     })
-    const innerStyle = computed(() => {
+    const listStyle = computed(() => {
       return {
         transform: state.virtual ? `translate3d(0, ${state.padTop}px, 0)` : undefined
       }
     })
     const emptyStyle = computed(() => {
-      const { rowHeight } = state
+      const { rowHeight, rowMinHeight } = state
 
       return {
-        height: rowHeight ? `${rowHeight}px` : undefined
+        minHeight: `${rowHeight || rowMinHeight}px`
       }
     })
 
@@ -107,9 +106,8 @@ export default defineComponent({
 
       currentColumns,
       style,
-      innerStyle,
+      listStyle,
       emptyStyle,
-      processedData: toRef(getters, 'processedData'),
       renderData
     }
   }

@@ -94,7 +94,7 @@
       placement="right"
       :class="`${prefix}__bar--vertical`"
       :fade="barFade"
-      :disabled="!!bodyHeight && totalRowHeight <= bodyHeight"
+      :disabled="!!bodyHeight && totalHeight <= bodyHeight"
       :bar-length="barLength"
       :style="{ top: `${headHeight}px` }"
       @on-scroll="handleYBarScroll"
@@ -384,19 +384,19 @@ export default defineComponent({
       return !!(props.width && (state.leftFixedColumns.length || state.rightFixedColumns.length))
     })
     const bodyScrollHeight = computed(() => {
-      const { totalRowHeight } = getters
+      const { totalHeight } = state
 
-      if (Number.isNaN(totalRowHeight)) {
+      if (Number.isNaN(totalHeight)) {
         return bodyHeight.value
       }
 
-      return bodyHeight.value ? Math.min(bodyHeight.value, totalRowHeight) : bodyHeight.value
+      return bodyHeight.value ? Math.min(bodyHeight.value, totalHeight) : bodyHeight.value
     })
     const barLength = computed(() => {
-      const { totalRowHeight } = getters
+      const { totalHeight } = state
 
-      if (bodyScrollHeight.value && totalRowHeight) {
-        return Math.max(Math.min((bodyScrollHeight.value / totalRowHeight) * 100, 99), 5) || 35
+      if (bodyScrollHeight.value && totalHeight) {
+        return Math.max(Math.min((bodyScrollHeight.value / totalHeight) * 100, 99), 5) || 35
       }
 
       return 35
@@ -540,8 +540,8 @@ export default defineComponent({
     }
 
     function handleYBarScroll(percent: number) {
-      const { totalRowHeight } = getters
-      const client = (percent * (totalRowHeight - (bodyScrollHeight.value ?? 0))) / 100
+      const { totalHeight } = state
+      const client = (percent * (totalHeight - (bodyScrollHeight.value ?? 0))) / 100
 
       yScrollPercent.value = percent
       setBodyScroll(client)
@@ -714,7 +714,8 @@ export default defineComponent({
     }
 
     function computeRenderRows() {
-      const { totalRowHeight, processedData } = getters
+      const { totalHeight, bodyScroll, heightBITree } = state
+      const { processedData } = getters
       const rowCount = processedData.length
 
       if (!props.virtual) {
@@ -723,7 +724,6 @@ export default defineComponent({
         return
       }
 
-      const { bodyScroll, heightBITree } = state
       const viewHeight = Math.min(bodyHeight.value || 0, bodyScrollHeight.value || 0)
 
       if (!viewHeight) {
@@ -733,8 +733,8 @@ export default defineComponent({
       let viewStart = bodyScroll
       let viewEnd = bodyScroll + viewHeight
 
-      if (viewEnd > totalRowHeight) {
-        viewEnd = totalRowHeight
+      if (viewEnd > totalHeight) {
+        viewEnd = totalHeight
         viewStart = viewEnd - viewHeight
       }
 
@@ -761,11 +761,10 @@ export default defineComponent({
       window.clearTimeout(scrollTimer)
 
       scrollTimer = window.setTimeout(() => {
-        const { bodyScroll } = state
-        const { totalRowHeight } = getters
+        const { totalHeight, bodyScroll } = state
 
         yScrollPercent.value = Math.max(
-          Math.min((bodyScroll / (totalRowHeight - (bodyScrollHeight.value ?? 0) || 1)) * 100, 100),
+          Math.min((bodyScroll / (totalHeight - (bodyScrollHeight.value ?? 0) || 1)) * 100, 100),
           0
         )
         syncBarScroll()
@@ -807,7 +806,7 @@ export default defineComponent({
       useXScroll,
       barLength,
       bodyScrollHeight,
-      totalRowHeight: toRef(getters, 'totalRowHeight'),
+      totalHeight: toRef(state, 'totalHeight'),
 
       store,
 

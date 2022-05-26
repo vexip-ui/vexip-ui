@@ -1,6 +1,6 @@
 import { reactive, computed, markRaw } from 'vue'
 import { isNull, debounceMinor, toNumber, sortByProps, deepClone, createBITree } from '@vexip-ui/utils'
-import { DEFAULT_KEY_FIELD } from './symbol'
+import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY } from './symbol'
 
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
@@ -69,7 +69,8 @@ export function useStore(options: StoreOptions) {
     endRow: 0,
     dragging: false,
     heightBITree: null!,
-    virtualData: []
+    virtualData: [],
+    totalHeight: options.rowMinHeight * options.data.length
   })
 
   setColumns(state, options.columns)
@@ -90,9 +91,6 @@ export function useStore(options: StoreOptions) {
   })
   const processedData = computed(() => {
     return pageData(state.currentPage, state.pageSize, sortedData.value)
-  })
-  const totalRowHeight = computed(() => {
-    return state.heightBITree?.sum() ?? 0
   })
   const disableCheckRows = computed(() => {
     const rowData = processedData.value
@@ -143,7 +141,6 @@ export function useStore(options: StoreOptions) {
     filteredData,
     sortedData,
     processedData,
-    totalRowHeight,
     disableCheckRows,
     disableExpandRows
   })
@@ -176,13 +173,14 @@ export function useStore(options: StoreOptions) {
     setSingleSorter: setSingleSorter.bind(null, state),
     setSingleFilter: setSingleFilter.bind(null, state),
     setDragging: setDragging.bind(null, state),
+
     handleSort: handleSort.bind(null, state),
     clearSort: clearSort.bind(null, state),
     handleFilter: handleFilter.bind(null, state),
     clearFilter: clearFilter.bind(null, state),
     toggleFilterItemActive: toggleFilterItemActive.bind(null, state),
     refreshRowIndex: refreshRowIndex.bind(null, state),
-
+    updateTotalHeight: debounceMinor(updateTotalHeight.bind(null, state)),
     handleCheck: handleCheck.bind(null, state, getters),
     handleCheckAll: handleCheckAll.bind(null, state, getters),
     clearCheckAll: clearCheckAll.bind(null, state, getters),
@@ -319,6 +317,10 @@ function setData(state: StoreState, data: Data[]) {
   const oldDataMap = state.dataMap
   const hidden = !!state.virtual
 
+  dataMap[TABLE_HEAD_KEY] = oldDataMap[TABLE_HEAD_KEY] || {
+    key: TABLE_HEAD_KEY
+  }
+
   for (let i = 0, len = data.length; i < len; ++i) {
     const item = data[i]
 
@@ -362,7 +364,10 @@ function setData(state: StoreState, data: Data[]) {
   }
 
   if (!state.heightBITree || clonedData.length !== state.rowData.length) {
-    state.heightBITree = markRaw(createBITree(clonedData.length, (state.rowHeight || state.rowMinHeight) + 1))
+    state.heightBITree = markRaw(
+      createBITree(clonedData.length, (state.rowHeight || state.rowMinHeight))
+    )
+    state.totalHeight = state.heightBITree.sum()
   }
 
   state.rowData = clonedData
@@ -697,6 +702,10 @@ function refreshRowIndex(state: StoreState) {
   for (let i = 0, len = data.length; i < len; ++i) {
     data[i].index = i
   }
+}
+
+function updateTotalHeight(state: StoreState) {
+  state.totalHeight = state.heightBITree?.sum() ?? 0
 }
 
 function parseSorter(sorter: boolean | SorterOptions = false): ParsedSorterOptions {

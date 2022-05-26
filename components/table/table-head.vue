@@ -1,6 +1,6 @@
 <template>
   <div :class="`${prefix}__head`" :style="style">
-    <TableRow is-head>
+    <TableRow is-head :row="headRow">
       <TableHeadCell
         v-for="(item, index) in currentColumns"
         :key="index"
@@ -15,7 +15,7 @@
 import { defineComponent, computed, inject } from 'vue'
 import TableHeadCell from './table-head-cell.vue'
 import TableRow from './table-row.vue'
-import { TABLE_STORE } from './symbol'
+import { TABLE_STORE, TABLE_HEAD_KEY } from './symbol'
 
 import type { PropType } from 'vue'
 
@@ -68,12 +68,14 @@ export default defineComponent({
         minWidth: `${width}px`
       }
     })
+    const headRow = computed(() => state.dataMap[TABLE_HEAD_KEY] || { key: TABLE_HEAD_KEY })
 
     return {
       prefix: 'vxp-table',
 
       currentColumns,
-      style
+      style,
+      headRow
     }
   }
 })

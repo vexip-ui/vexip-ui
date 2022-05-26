@@ -4,7 +4,7 @@ import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 
-export type Key = string | number
+export type Key = string | number | symbol
 export type Data = Record<string, unknown>
 export type ClassType = string | Record<string, boolean>
 export type RowClassFn = (data: Data, index: number) => ClassType
@@ -162,13 +162,13 @@ export interface StoreState extends StoreOptions {
   endRow: number,
   dragging: boolean,
   heightBITree: BITree,
-  virtualData: RowState[]
+  virtualData: RowState[],
+  totalHeight: number
 }
 
 export interface StoreGetters {
   readonly filteredData: RowState[],
   readonly processedData: RowState[],
-  readonly totalRowHeight: number,
   readonly disableCheckRows: Record<Key, boolean>,
   readonly disableExpandRows: Record<Key, boolean>
 }
@@ -198,3 +198,4 @@ export interface TableAction {
 export const DEFAULT_KEY_FIELD = 'id'
 export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE') // 表格状态管理
 export const TABLE_ACTION: InjectionKey<TableAction> = Symbol('TABLE_ACTION') // 表格组件的顶层 Api
+export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')

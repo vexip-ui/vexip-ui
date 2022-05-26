@@ -23,7 +23,6 @@ $table: map.merge(
     row-bg-color-hover: get-css-var('color-primary-opacity-8'),
     row-bg-color-stripe: get-css-var('fill-color-background'),
     row-b-color-bottom: get-css-var('border-color-light-1'),
-    cell-min-height: 36px,
     cell-v-padding: 6px,
     cell-h-padding: 6px,
     cell-padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding'),
@@ -84,30 +83,47 @@ $table: map.merge(
     border-bottom: get-css-var('table-border');
   }
 
-  // &--visual &__body {
-  //   will-change: padding-top, padding-bottom;
-  // }
+  &__row-list {
+    position: relative;
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    width: 100%;
+  }
 
   &__group {
+    position: relative;
     display: flex;
     flex: 1 0 auto;
     flex-direction: column;
     align-items: stretch;
-    border-bottom: $border-a get-css-var('table-row-b-color-bottom');
+
+    &::after {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 0;
+      content: '';
+      border-bottom: $border-a get-css-var('table-row-b-color-bottom');
+    }
 
     &:last-child {
       margin-bottom: -1px;
-      border-bottom-color: transparent;
+
+      &::after {
+        border-bottom-color: transparent;
+      }
     }
   }
 
-  &--visual &__group {
+  &--virtual &__group {
     flex: 0 0 auto;
   }
 
   &__row {
     display: inline-flex;
     flex: 1 0 auto;
+    padding-bottom: 1px;
     background-color: get-css-var('table-row-bg-color');
     transition: all get-css-var('transition-base');
 
@@ -129,7 +145,6 @@ $table: map.merge(
     display: flex;
     flex: 1 0 0;
     align-items: center;
-    min-height: get-css-var('table-cell-min-height');
     padding: get-css-var('table-cell-padding');
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -383,6 +398,7 @@ $table: map.merge(
 
   &__empty {
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;

@@ -58,7 +58,7 @@ import {
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
 import { isFunction } from '@vexip-ui/utils'
-import { TABLE_STORE, TABLE_ACTION } from './symbol'
+import { TABLE_STORE, TABLE_ACTION, TABLE_HEAD_KEY } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { RowState, ExpandColumn, ColumnWithKey } from './symbol'
@@ -104,6 +104,7 @@ export default defineComponent({
       row: toRef(props, 'row')
     })
 
+    const rowKey = computed(() => props.isHead ? TABLE_HEAD_KEY : props.row.key)
     const className = computed(() => {
       let customClass = null
 
@@ -190,9 +191,8 @@ export default defineComponent({
           const prev = tree.get(props.index)
 
           if (height !== prev) {
-            console.log(props.index, height, prev)
-            const delta = height - prev
-            tree.add(props.index, delta)
+            tree.add(props.index, height - prev)
+            mutations.updateTotalHeight()
           }
         })
       }
@@ -225,7 +225,7 @@ export default defineComponent({
 
     function computeRowHeight() {
       if (state.rowHeight) {
-        mutations.setRowHeight(props.row.key, state.rowHeight)
+        mutations.setRowHeight(rowKey.value, state.rowHeight)
 
         nextTick(() => {
           if (rowElement.value) {
@@ -237,11 +237,7 @@ export default defineComponent({
         nextTick(() => {
           if (!props.isFixed) {
             if (rowElement.value) {
-              mutations.setRowHeight(props.row.key, rowElement.value.offsetHeight)
-              mutations.setRowExpandHeight(
-                props.row.key,
-                expandElement.value?.offsetHeight || 0
-              )
+              mutations.setRowHeight(rowKey.value, rowElement.value.offsetHeight)
             }
           } else {
             window.setTimeout(() => {
@@ -259,12 +255,16 @@ export default defineComponent({
         const style = getComputedStyle(wrapper.value)
         const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
 
-        mutations.setBorderHeight(props.row.key, borderHeight)
+        mutations.setBorderHeight(rowKey.value, borderHeight)
+        mutations.setRowExpandHeight(
+          rowKey.value,
+          expandElement.value?.offsetHeight || 0
+        )
       }
     }
 
     function handleMouseEnter() {
-      mutations.setRowHover(props.row.key, true)
+      mutations.setRowHover(rowKey.value, true)
 
       if (!props.isHead && tableAction) {
         const { data, key, index } = props.row
@@ -274,7 +274,7 @@ export default defineComponent({
     }
 
     function handleMouseLeave() {
-      mutations.setRowHover(props.row.key, false)
+      mutations.setRowHover(rowKey.value, false)
 
       if (!props.isHead && tableAction) {
         const { data, key, index } = props.row
