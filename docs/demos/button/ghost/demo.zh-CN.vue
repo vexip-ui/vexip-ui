@@ -6,12 +6,6 @@
     <Button ghost type="primary">
       Primary
     </Button>
-    <Button ghost type="dashed">
-      Dashed
-    </Button>
-    <Button ghost type="text">
-      Text
-    </Button>
     <Button ghost type="info">
       Info
     </Button>

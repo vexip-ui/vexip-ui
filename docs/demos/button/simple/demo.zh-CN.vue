@@ -6,12 +6,6 @@
     <Button simple type="primary">
       Primary
     </Button>
-    <Button simple type="dashed">
-      Dashed
-    </Button>
-    <Button simple type="text">
-      Text
-    </Button>
     <Button simple type="info">
       Info
     </Button>

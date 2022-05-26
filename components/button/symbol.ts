@@ -1,8 +1,8 @@
 export type ButtonType =
   | 'default'
   | 'primary'
-  | 'dashed'
-  | 'text'
+  // | 'dashed'
+  // | 'text'
   | 'info'
   | 'success'
   | 'warning'

@@ -43,6 +43,7 @@ $button: map.merge(
     color-disabled-typed: get-css-var('content-color-disabled'),
     bg-color-disabled-typed: get-css-var('fill-color-background'),
     b-color-disabled-typed: get-css-var('border-color-light-1'),
+    color-focus-typed-simple: get-css-var('color-white'),
     color-active-typed-simple: get-css-var('color-white'),
     color-disabled-typed-simple: get-css-var('content-color-disabled'),
     bg-color-disabled-typed-simple: get-css-var('fill-color-background'),
@@ -56,9 +57,9 @@ $button: map.merge(
     b-color-disabled-typed-ghost: get-css-var('content-color-disabled'),
     border: get-css-var('border-shape') get-css-var('button-b-color'),
     radius: get-css-var('border-radius-base'),
-    pulse-s-color: get-css-var('color-primary-light-2'),
-    pulse-size: 8px,
-    pulse-size-showy: calc(get-css-var('button-pulse-size') * 0.75),
+    pulse-s-color: get-css-var('color-primary-base'),
+    pulse-opacity: 60%,
+    pulse-size: 6px,
     pulse-duration: 800ms,
     pulse-timing: ease,
     small-height: 1.9em,
@@ -128,22 +129,6 @@ $button: map.merge(
     get-css-var('transition-border'),
     get-css-var('transition-box-shadow');
 
-  &::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: block;
-    pointer-events: none;
-    content: '';
-    background-color: transparent;
-    border-radius: inherit;
-    opacity: 40%;
-    animation-timing-function: get-css-var('button-pulse-timing');
-    animation-fill-mode: forwards;
-  }
-
   &:hover {
     color: get-css-var('button-color-hover');
     background-color: get-css-var('button-bg-color-hover');
@@ -185,16 +170,41 @@ $button: map.merge(
     padding: get-css-var('button-large-padding');
   }
 
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    pointer-events: none;
+    content: '';
+    background-color: transparent;
+    border-radius: inherit;
+    animation-duration: get-css-var('button-pulse-duration');
+    animation-timing-function: get-css-var('button-pulse-timing');
+    animation-iteration-count: 1;
+  }
+
   &--pulsing::after {
-    animation: vxp-button-pulse get-css-var('button-pulse-duration');
+    animation-name: vxp-button-pulse, vxp-button-pulse-opacity;
 
     @keyframes vxp-button-pulse {
-      60% {
-        box-shadow: 0 0 0 get-css-var('button-pulse-size-showy') get-css-var('button-pulse-s-color');
+      0% {
+        box-shadow: 0 0 1px 0 get-css-var('button-pulse-s-color');
       }
 
       100% {
-        box-shadow: 0 0 0 get-css-var('button-pulse-size') get-css-var('button-pulse-s-color');
+        box-shadow: 0 0 1px get-css-var('button-pulse-size') get-css-var('button-pulse-s-color');
+      }
+    }
+
+    @keyframes vxp-button-pulse-opacity {
+      0% {
+        opacity: get-css-var('button-pulse-opacity');
+      }
+
+      100% {
         opacity: 0%;
       }
     }
@@ -202,16 +212,24 @@ $button: map.merge(
 
   &--dashed {
     border-style: dashed;
+
+    &,
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      background-color: transparent;
+    }
   }
 
   &--text {
-    background-color: transparent;
     border-color: transparent;
 
     &::after {
       display: none;
     }
 
+    &,
     &:hover,
     &:focus,
     &:active,
@@ -251,33 +269,30 @@ $button: map.merge(
     @at-root {
       &--#{$type} {
         @include define-button-style((
-          bg-color: 'color' $type 'base',
-          b-color: 'color' $type 'base',
           color: 'button-color-typed',
-          bg-color-hover: 'color' $type 'light-2',
-          b-color-hover: 'color' $type 'light-2',
           color-hover: 'button-color-hover-typed',
-          bg-color-focus: 'color' $type 'light-2',
-          b-color-focus: 'color' $type 'light-2',
-          color-focus: 'button-color-hover-typed',
-          bg-color-active: 'color' $type 'dark-1',
-          b-color-active: 'color' $type 'dark-1',
+          color-focus: 'button-color-focus-typed',
           color-active: 'button-color-active-typed',
-          bg-color-disabled: 'button-bg-color-disabled-typed',
-          b-color-disabled: 'button-b-color-disabled-typed',
           color-disabled: 'button-color-disabled-typed',
+          bg-color: 'color' $type 'base',
+          bg-color-hover: 'color' $type 'light-2',
+          bg-color-focus: 'color' $type 'light-2',
+          bg-color-active: 'color' $type 'dark-1',
+          bg-color-disabled: 'button-bg-color-disabled-typed',
+          b-color: 'color' $type 'base',
+          b-color-hover: 'color' $type 'light-2',
+          b-color-focus: 'color' $type 'light-2',
+          b-color-active: 'color' $type 'dark-1',
+          b-color-disabled: 'button-b-color-disabled-typed',
+          pulse-s-color: 'color' $type 'dark-1'
         ));
-      }
-
-      &--#{$type}#{&}--pulsing::after {
-        @include define-css-var('button-pulse-s-color', get-css-var('color', $type, 'dark-1'));
       }
 
       &--#{$type}#{&}--simple {
         @include define-button-style((
           color: 'color' $type 'base',
           color-hover: 'color' $type 'base',
-          color-focus: 'button-color-active-typed-simple',
+          color-focus: 'button-color-focus-typed-simple',
           color-active: 'button-color-active-typed-simple',
           color-disabled: 'button-color-disabled-typed-simple',
           bg-color: 'color' $type 'opacity-8',
@@ -305,10 +320,17 @@ $button: map.merge(
           bg-color-focus: 'button-bg-color-focus-typed-ghost',
           bg-color-active: 'button-bg-color-active-typed-ghost',
           bg-color-disabled: 'button-bg-color-disabled-typed-ghost',
-          b-color-hover: 'color' $type 'light-2',
-          b-color-focus: 'color' $type 'light-2',
-          b-color-active: 'color' $type 'dark-1',
           b-color-disabled: 'button-b-color-disabled-typed-ghost',
+        ));
+      }
+
+      &--#{$type}#{&}--text,
+      &--#{$type}#{&}--dashed {
+        @include define-button-style((
+          color: 'color' $type 'base',
+          color-hover: 'color' $type 'light-2',
+          color-focus: 'color' $type 'light-2',
+          color-active: 'color' $type 'dark-1'
         ));
       }
 

@@ -10,6 +10,13 @@
   @include c.define-preset-values('fill-color', $fill-color-map);
   @include c.define-preset-values('shadow-color', $shadow-color-map);
 
+  .vxp-button-vars {
+    @include c.define-preset-values('button', (
+      pulse-size: 8px,
+      pulse-opacity: 90%
+    ));
+  }
+
   .vxp-menu-vars {
     @include c.define-preset-values('menu', (
       label-color-dark: #495057,
