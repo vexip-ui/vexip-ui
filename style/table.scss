@@ -76,10 +76,9 @@ $table: map.merge(
   &__head {
     z-index: 1;
     user-select: none;
-    border-bottom: get-css-var('table-border');
   }
 
-  &__body {
+  &__body-wrapper {
     border-bottom: get-css-var('table-border');
   }
 
@@ -106,7 +105,15 @@ $table: map.merge(
       content: '';
       border-bottom: $border-a get-css-var('table-row-b-color-bottom');
     }
+  }
 
+  &__head &__group {
+    &::after {
+      border-bottom-color: get-css-var('table-b-color');
+    }
+  }
+
+  &__body &__group {
     &:last-child {
       margin-bottom: -1px;
 
@@ -166,7 +173,7 @@ $table: map.merge(
   }
 
   $head: #{&}__head;
-  $body: #{&}__body;
+  $body: #{&}__body-wrapper;
   $row: #{&}__row;
   $group: #{&}__group;
   $cell: #{&}__cell;
@@ -185,6 +192,10 @@ $table: map.merge(
     #{$body},
     #{$group} {
       border-bottom-width: 0;
+    }
+
+    #{$group}::after {
+      display: none;
     }
   }
 

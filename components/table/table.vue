@@ -7,7 +7,7 @@
       v-if="useXScroll"
       use-x-bar
       mode="horizontal"
-      :class="[`${prefix}__scroll`, scrollClass.horizontal]"
+      :class="[`${prefix}__wrapper`, scrollClass.horizontal]"
       :bar-class="`${prefix}__bar--horizontal`"
       :width="width"
       :bar-fade="barFade"
@@ -16,7 +16,7 @@
     >
       <TableHead ref="thead"></TableHead>
       <Scroll
-        :class="[`${prefix}__scroll`, scrollClass.major]"
+        :class="[`${prefix}__body-wrapper`, scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         @on-scroll="handleBodyScroll"
@@ -32,7 +32,7 @@
     <template v-else>
       <TableHead ref="thead"></TableHead>
       <Scroll
-        :class="[`${prefix}__scroll`, scrollClass.major]"
+        :class="[`${prefix}__body-wrapper`, scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="scrollDeltaY"
@@ -55,7 +55,7 @@
     >
       <TableHead fixed="left"></TableHead>
       <Scroll
-        :class="[`${prefix}__scroll`, scrollClass.left]"
+        :class="[`${prefix}__body-wrapper`, scrollClass.left]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="scrollDeltaY"
@@ -77,7 +77,7 @@
     >
       <TableHead fixed="right"></TableHead>
       <Scroll
-        :class="[`${prefix}__scroll`, scrollClass.right]"
+        :class="[`${prefix}__body-wrapper`, scrollClass.right]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="scrollDeltaY"
@@ -125,7 +125,7 @@ import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
 import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
-import { isDefined, debounce, transformListToMap, removeArrayItem, toNumber } from '@vexip-ui/utils'
+import { isDefined, debounce, transformListToMap, removeArrayItem, toNumber, nextFrameOnce } from '@vexip-ui/utils'
 import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
@@ -545,12 +545,13 @@ export default defineComponent({
 
       yScrollPercent.value = percent
       setBodyScroll(client)
-      nextTick(computeRenderRows)
+      nextFrameOnce(computeRenderRows)
+      emit('on-body-scroll', { client, percent })
     }
 
     function emitYScroll(client: number, percent: number) {
+      nextFrameOnce(computeRenderRows)
       emit('on-body-scroll', { client, percent })
-      nextTick(computeRenderRows)
     }
 
     function increaseColumn(column: ColumnOptions) {
@@ -751,7 +752,7 @@ export default defineComponent({
         computeTableWidth()
         computeBodyHeight()
         refreshPercentScroll()
-        nextTick(computeRenderRows)
+        nextFrameOnce(computeRenderRows)
       }, 0)
     }
 
@@ -768,10 +769,8 @@ export default defineComponent({
           0
         )
         syncBarScroll()
-        nextTick(() => {
-          computeBodyHeight()
-          computeRenderRows()
-        })
+        nextTick(computeBodyHeight)
+        nextFrameOnce(computeRenderRows)
       }, 10)
     }
 

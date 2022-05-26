@@ -6,6 +6,13 @@
     :columns="columns"
     :data="data"
   ></Table>
+  <br />
+  <Table
+    transparent
+    highlight
+    :columns="columns"
+    :data="data"
+  ></Table>
 </template>
 
 <script lang="ts">
