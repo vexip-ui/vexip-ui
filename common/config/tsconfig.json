@@ -15,7 +15,11 @@
     "declaration": true,
     "types": [
       "vite/client"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@vexip-ui/*": ["../common/*/src"]
+    }
   },
   "include": [
     "src"

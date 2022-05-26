@@ -9,7 +9,7 @@ function lowBit(num: number) {
   return num & -num
 }
 
-export function createBITree(length: number, min = 0) {
+export function createBITree(length: number, min = 0): BITree {
   const tree = new Array(length + 1).fill(0)
 
   function add(index: number, delta: number) {
