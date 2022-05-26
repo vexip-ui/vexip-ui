@@ -1,7 +1,5 @@
 packages:
+  - common/*
+  - docs
   - example
   - playground
-  - common/config
-  - common/icons
-  - common/mixins
-  - common/utils

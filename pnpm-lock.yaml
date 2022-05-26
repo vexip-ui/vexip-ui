@@ -229,6 +229,15 @@ importers:
       vite: 2.9.9
       vite-plugin-dts: 1.1.1_vite@2.9.9
 
+  docs:
+    specifiers:
+      typescript: 4.6.4
+      vue: ^3.2.33
+    dependencies:
+      vue: 3.2.33
+    devDependencies:
+      typescript: 4.6.4
+
   example:
     specifiers:
       '@rollup/plugin-eslint': ^8.0.2

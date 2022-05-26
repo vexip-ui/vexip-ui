@@ -10,18 +10,18 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const values = ref<number[]>([])
-    const options = Array.from({ length: 12 }, (_, i) => ({
-      label: `选项${i + 1}`,
-      value: i + 1
-    }))
-
-    return { values, options }
-  }
-})
+const values = ref<number[]>([])
+const options = Array.from({ length: 12 }, (_, i) => ({
+  label: `选项${i + 1}`,
+  value: i + 1
+}))
 </script>
+
+<style>
+.vxp-select {
+  max-width: 400px;
+}
+</style>

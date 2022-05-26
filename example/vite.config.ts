@@ -25,7 +25,6 @@ export default defineConfig(() => {
       __VERSION__: JSON.stringify('*'),
       __THEME__: JSON.stringify(process.env.THEME === 'true')
     },
-    publicDir: false,
     resolve: {
       alias: [
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },

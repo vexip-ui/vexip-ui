@@ -12,3 +12,9 @@ import { User } from '@vexip-ui/icons'
 
 const value = ref('')
 </script>
+
+<style>
+.vxp-select {
+  max-width: 400px;
+}
+</style>

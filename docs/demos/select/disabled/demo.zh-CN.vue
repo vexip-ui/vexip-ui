@@ -12,3 +12,9 @@
     <Option>选项3</Option>
   </Select>
 </template>
+
+<style>
+.vxp-select {
+  max-width: 400px;
+}
+</style>

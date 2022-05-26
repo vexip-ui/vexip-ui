@@ -1,0 +1,10 @@
+{
+  "name": "@vexip-ui/docs",
+  "private": true,
+  "dependencies": {
+    "vue": "^3.2.33"
+  },
+  "devDependencies": {
+    "typescript": "4.6.4"
+  }
+}

@@ -11,30 +11,29 @@
   </Select>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const value = ref('')
+const value = ref('')
 
-    return {
-      value,
-      options: [
-        {
-          label: '选项1',
-          value: 1
-        },
-        {
-          label: '选项2',
-          value: 2
-        },
-        {
-          label: '选项3',
-          value: 3
-        }
-      ]
-    }
+const options = [
+  {
+    label: '选项1',
+    value: 1
+  },
+  {
+    label: '选项2',
+    value: 2
+  },
+  {
+    label: '选项3',
+    value: 3
   }
-})
+]
 </script>
+
+<style>
+.vxp-select {
+  max-width: 400px;
+}
+</style>

@@ -34,8 +34,5 @@
     "*.vue",
     "*.ts",
     "global.d.ts"
-  ],
-  "references": [
-    { "path": "../docs" }
   ]
 }
