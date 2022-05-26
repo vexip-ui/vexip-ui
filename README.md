@@ -10,8 +10,8 @@ Currently more then 60 components, many you can see everywhere and a few may bri
 
 ## Work List
 
-- ~~Transfer to use css vars~~ (Completed, waiting to release)
-- Refactor icons (**In progress**, see `icons` branch)
+- ~~Transfer to use css vars~~ (Completed, will be released in `2.0`)
+- Refactor icons (Completed, will be released in `2.0`)
 - Write unit tests
 - Adapt ssr render
 
