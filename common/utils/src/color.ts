@@ -1,7 +1,8 @@
 interface RGB {
   r: number,
   g: number,
-  b: number
+  b: number,
+  a?: number
 }
 
 export interface RGBColor extends RGB {
@@ -34,7 +35,8 @@ export interface HEX8Color extends RGB {
 interface HSL {
   h: number,
   s: number,
-  l: number
+  l: number,
+  a?: number
 }
 
 export interface HSLColor extends HSL {
@@ -50,7 +52,8 @@ export interface HSLAColor extends HSL {
 interface HSV {
   h: number,
   s: number,
-  v: number
+  v: number,
+  a?: number
 }
 
 export interface HSVColor extends HSV {
@@ -292,7 +295,7 @@ export function parseStringColor(color: string): Color | null {
   color = color.toString().trim().toLowerCase()
 
   if (color === 'transparent') {
-    return { r: 0, g: 0, b: 0, a: 0, format: 'name' }
+    return { r: 0, g: 0, b: 0, a: 0, format: 'name', toString: toRgbString } as Color
   }
 
   let named = false
@@ -307,7 +310,7 @@ export function parseStringColor(color: string): Color | null {
   if ((match = RGB_REG.exec(color))) {
     const { r, g, b } = normalizeRgb(match[1], match[2], match[3])
 
-    return { r: r * 255, g: g * 255, b: b * 255, format: 'rgb' }
+    return { r: r * 255, g: g * 255, b: b * 255, format: 'rgb', toString: toRgbString } as Color
   }
 
   if ((match = RGBA_REG.exec(color))) {
@@ -318,14 +321,15 @@ export function parseStringColor(color: string): Color | null {
       g: g * 255,
       b: b * 255,
       a: normalizeAlpha(match[4]),
-      format: 'rgba'
-    }
+      format: 'rgba',
+      toString: toRgbString
+    } as Color
   }
 
   if ((match = HSL_REG.exec(color))) {
     const { h, s, l } = normalizeHsl(match[0], match[1], match[3])
 
-    return { h: h * 360, s, l, format: 'hsl' }
+    return { h: h * 360, s, l, format: 'hsl', toString: toHslString } as Color
   }
 
   if ((match = HSLA_REG.exec(color))) {
@@ -336,14 +340,15 @@ export function parseStringColor(color: string): Color | null {
       s,
       l,
       a: normalizeAlpha(match[4]),
-      format: 'hsla'
-    }
+      format: 'hsla',
+      toString: toHslString
+    } as Color
   }
 
   if ((match = HSV_REG.exec(color))) {
     const { h, s, v } = normalizeHsv(match[0], match[1], match[3])
 
-    return { h: h * 360, s, v, format: 'hsv' }
+    return { h: h * 360, s, v, format: 'hsv', toString: toHsvString } as Color
   }
 
   if ((match = HSVA_REG.exec(color))) {
@@ -354,8 +359,9 @@ export function parseStringColor(color: string): Color | null {
       s,
       v,
       a: normalizeAlpha(match[4]),
-      format: 'hsva'
-    }
+      format: 'hsva',
+      toString: toHsvString
+    } as Color
   }
 
   if ((match = HEX_REG_3.exec(color))) {
@@ -363,8 +369,9 @@ export function parseStringColor(color: string): Color | null {
       r: parseInt(`${match[1]}${match[1]}`, 16),
       g: parseInt(`${match[2]}${match[2]}`, 16),
       b: parseInt(`${match[3]}${match[3]}`, 16),
-      format: named ? 'name' : 'hex3'
-    }
+      format: named ? 'name' : 'hex3',
+      toString: toRgbString
+    } as Color
   }
 
   if ((match = HEX_REG_4.exec(color))) {
@@ -373,8 +380,9 @@ export function parseStringColor(color: string): Color | null {
       g: parseInt(`${match[2]}${match[2]}`, 16),
       b: parseInt(`${match[3]}${match[3]}`, 16),
       a: convertHexToDecimal(`${match[4]}${match[4]}`),
-      format: named ? 'name' : 'hex4'
-    }
+      format: named ? 'name' : 'hex4',
+      toString: toRgbString
+    } as Color
   }
 
   if ((match = HEX_REG_6.exec(color))) {
@@ -382,8 +390,9 @@ export function parseStringColor(color: string): Color | null {
       r: parseInt(match[1], 16),
       g: parseInt(match[2], 16),
       b: parseInt(match[3], 16),
-      format: named ? 'name' : 'hex6'
-    }
+      format: named ? 'name' : 'hex6',
+      toString: toRgbString
+    } as Color
   }
 
   if ((match = HEX_REG_8.exec(color))) {
@@ -392,8 +401,9 @@ export function parseStringColor(color: string): Color | null {
       g: parseInt(match[2], 16),
       b: parseInt(match[3], 16),
       a: convertHexToDecimal(match[4]),
-      format: named ? 'name' : 'hex8'
-    }
+      format: named ? 'name' : 'hex8',
+      toString: toRgbString
+    } as Color
   }
 
   return null
@@ -416,15 +426,15 @@ export function parseColor(color: Color): ColorObject {
     hsv,
     hex,
     alpha: a,
-    rgba: { ...rgb, a, format: undefined },
-    hsla: { ...hsl, a, format: undefined },
-    hsva: { ...hsv, a, format: undefined },
+    rgba: { ...rgb, a, format: 'rgba' },
+    hsla: { ...hsl, a, format: 'hsla' },
+    hsva: { ...hsv, a, format: 'hsva' },
     hex8,
     origin: color
   }
 }
 
-export function parseColorToRgba(originColor: Color): RGBAColor {
+export function parseColorToRgba(originColor: Color) {
   let rgb: RGBColor = { r: 0, g: 0, b: 0 }
   let a = 1
   let color: Color | null
@@ -453,38 +463,41 @@ export function parseColorToRgba(originColor: Color): RGBAColor {
     rgb = color as RGBColor
   }
 
-  return { ...rgb, a, format: 'rgba' }
+  return { ...rgb, a, format: 'rgba', toString: toRgbString } as RGBAColor
 }
 
 export function normalizeHsl(h: number | string, s: number | string, l: number | string) {
   return {
     h: boundRange(h, 0, 360) / 360,
     s: boundRange(isPercentage(s) ? parsePercentage(s) : s, 0, 1),
-    l: boundRange(isPercentage(l) ? parsePercentage(l) : l, 0, 1)
-  }
+    l: boundRange(isPercentage(l) ? parsePercentage(l) : l, 0, 1),
+    toString: toHslString
+  } as HSLColor
 }
 
 export function normalizeRgb(r: number | string, g: number | string, b: number | string) {
   return {
     r: boundRange(r, 0, 255) / 255,
     g: boundRange(g, 0, 255) / 255,
-    b: boundRange(b, 0, 255) / 255
-  }
+    b: boundRange(b, 0, 255) / 255,
+    toString: toRgbString
+  } as RGBColor
 }
 
 export function normalizeHsv(h: number | string, s: number | string, v: number | string) {
   return {
     h: boundRange(h, 0, 360) / 360,
     s: boundRange(isPercentage(s) ? parsePercentage(s) : s, 0, 1),
-    v: boundRange(isPercentage(v) ? parsePercentage(v) : v, 0, 1)
-  }
+    v: boundRange(isPercentage(v) ? parsePercentage(v) : v, 0, 1),
+    toString: toHsvString
+  } as HSVColor
 }
 
 export function normalizeAlpha(a: number | string) {
   return boundRange(a, 0, 1)
 }
 
-export function hslToRgb(h: number | string, s: number | string, l: number | string): RGBColor {
+export function hslToRgb(h: number | string, s: number | string, l: number | string) {
   let r, g, b
   ;({ h, s, l } = normalizeHsl(h, s, l))
 
@@ -503,10 +516,10 @@ export function hslToRgb(h: number | string, s: number | string, l: number | str
   g *= 255
   b *= 255
 
-  return { r, g, b }
+  return { r, g, b, toString: toRgbString } as RGBColor
 }
 
-export function rgbToHsl(r: number | string, g: number | string, b: number | string): HSLColor {
+export function rgbToHsl(r: number | string, g: number | string, b: number | string) {
   ({ r, g, b } = normalizeRgb(r, g, b))
 
   const max = Math.max(r, g, b)
@@ -543,30 +556,30 @@ export function rgbToHsl(r: number | string, g: number | string, b: number | str
     h *= 60
   }
 
-  return { h, s, l }
+  return { h, s, l, toString: toHslString } as HSLColor
 }
 
-export function hslToHsv(h: number | string, s: number | string, l: number | string): HSVColor {
+export function hslToHsv(h: number | string, s: number | string, l: number | string) {
   ({ h, s, l } = normalizeHsl(h, s, l))
 
   const v = 0.5 * (2 * l + s * (1 - Math.abs(2 * l - 1)))
 
   s = (2 * (v - l)) / v
 
-  return { h: h * 360, s, v }
+  return { h: h * 360, s, v, toString: toHsvString } as HSVColor
 }
 
-export function hsvToHsl(h: number | string, s: number | string, v: number | string): HSLColor {
+export function hsvToHsl(h: number | string, s: number | string, v: number | string) {
   ({ h, s, v } = normalizeHsv(h, s, v))
 
   const l = 0.5 * v * (2 - s)
 
   s = (v * s) / (1 - Math.abs(2 * l - 1))
 
-  return { h: h * 360, s, l }
+  return { h: h * 360, s, l, toString: toHslString } as HSLColor
 }
 
-export function hsvToRgb(h: number | string, s: number | string, v: number | string): RGBColor {
+export function hsvToRgb(h: number | string, s: number | string, v: number | string) {
   ({ h, s, v } = normalizeHsv(h, s, v))
 
   h *= 6
@@ -586,10 +599,10 @@ export function hsvToRgb(h: number | string, s: number | string, v: number | str
   g *= 255
   b *= 255
 
-  return { r, g, b }
+  return { r, g, b, toString: toRgbString } as RGBColor
 }
 
-export function rgbToHsv(r: number | string, g: number | string, b: number | string): HSVColor {
+export function rgbToHsv(r: number | string, g: number | string, b: number | string) {
   ({ r, g, b } = normalizeRgb(r, g, b))
 
   const max = Math.max(r, g, b)
@@ -625,7 +638,7 @@ export function rgbToHsv(r: number | string, g: number | string, b: number | str
     h *= 60
   }
 
-  return { h, s, v }
+  return { h, s, v, toString: toHsvString } as HSVColor
 }
 
 export function rgbToHex(
@@ -678,7 +691,7 @@ export function rgbaToHex(
   return '#' + hex.join('')
 }
 
-export function mixColor(color1: Color, color2: Color, weight = 0.5): RGBAColor {
+export function mixColor(color1: Color, color2: Color, weight = 0.5) {
   if (!color1 && !color2) return { r: 0, g: 0, b: 0, a: 1 }
   if (!color1) return parseColorToRgba(color2)
   if (!color2) return parseColorToRgba(color1)
@@ -701,8 +714,17 @@ export function mixColor(color1: Color, color2: Color, weight = 0.5): RGBAColor 
     g: Math.round(rgba1.g * weight1 + rgba2.g * weight2),
     b: Math.round(rgba1.b * weight1 + rgba2.b * weight2),
     a: Math.round(rgba1.a * originalWeight + rgba2.a * (1 - originalWeight)),
-    format: 'rgba'
-  }
+    format: 'rgba',
+    toString: toRgbString
+  } as RGBAColor
+}
+
+export function adjustAlpha(color: Color, alpha: number | string) {
+  const rgba = parseColorToRgba(color)
+
+  rgba.a = normalizeAlpha(isPercentage(alpha) ? parsePercentage(alpha) : alpha)
+
+  return rgba
 }
 
 function repairDigits(str: string) {
@@ -747,4 +769,28 @@ function parsePercentage(percent: number | string): number {
   const number = parseFloat(percent as string) / 100
 
   return Number.isNaN(number) ? 0 : number
+}
+
+function toRgbString(this: RGB) {
+  if (this.a && this.a >= 0 && this.a < 1) {
+    return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`
+  }
+
+  return `rgb(${this.r}, ${this.g}, ${this.b})`
+}
+
+function toHslString(this: HSL) {
+  if (this.a && this.a >= 0 && this.a < 1) {
+    return `hsla(${this.h}, ${this.s}, ${this.l}, ${this.a})`
+  }
+
+  return `hsl(${this.h}, ${this.s}, ${this.l})`
+}
+
+function toHsvString(this: HSV) {
+  if (this.a && this.a >= 0 && this.a < 1) {
+    return `hsva(${this.h}, ${this.s}, ${this.v}, ${this.a})`
+  }
+
+  return `hsv(${this.h}, ${this.s}, ${this.v})`
 }
