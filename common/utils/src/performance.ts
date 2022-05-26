@@ -80,3 +80,97 @@ export function debounceMinor<T extends(...args: any[]) => any>(method: T) {
     }
   }
 }
+
+/**
+ * 针对每一帧，将一个函数或方法进行防抖
+ * @param method - 需要防抖的方法，需自行绑定 this
+ *
+ * @returns 防抖后的函数
+ */
+export function debounceFrame<T extends(...args: any[]) => any>(method: T) {
+  if (typeof method !== 'function') {
+    return method
+  }
+
+  let called = false
+  let lastArgs: Parameters<T>
+
+  return function (...args: Parameters<T>) {
+    lastArgs = args
+
+    if (!called) {
+      called = true
+
+      requestAnimationFrame(() => {
+        method(...lastArgs)
+        called = false
+      })
+    }
+  }
+}
+
+const tickCallbacks = new Set<(...args: any[]) => any>()
+const tickArgsMap = new WeakMap<any, any[]>()
+
+function flushTickCallbacks() {
+  tickCallbacks.forEach(fn => {
+    fn(...tickArgsMap.get(fn)!)
+  })
+  tickCallbacks.clear()
+}
+
+/**
+ * 在下一微任务，仅执行一次传入的方法
+ * @param method - 需要执行的方法
+ * @param args - 方法的额外参数，在方法调用前多次传入将会覆盖之前的参数
+ */
+export function nextTickOnce<T extends(...args: any[]) => any>(method: T, ...args: any[]) {
+  if (typeof method !== 'function') {
+    return method
+  }
+
+  tickArgsMap.set(method, args)
+
+  if (tickCallbacks.has(method)) {
+    return
+  }
+
+  tickCallbacks.add(method)
+
+  if (tickCallbacks.size === 1) {
+    Promise.resolve().then(flushTickCallbacks)
+  }
+}
+
+const frameCallbacks = new Set<(...args: any[]) => any>()
+const frameArgsMap = new WeakMap<any, any[]>()
+
+function flushFrameCallbacks() {
+  frameCallbacks.forEach(fn => {
+    fn(...frameArgsMap.get(fn)!)
+  })
+  frameCallbacks.clear()
+}
+
+/**
+ * 在下一渲染帧，仅执行一次传入的方法
+ * @param method - 需要执行的方法
+ * @param args - 方法的额外参数，在方法调用前多次传入将会覆盖之前的参数
+ */
+export function nextFrameOnce<T extends(...args: any[]) => any>(method: T, ...args: any[]) {
+  if (typeof method !== 'function') {
+    return method
+  }
+
+  frameArgsMap.set(method, args)
+
+  if (frameCallbacks.has(method)) {
+    return
+  }
+
+  frameCallbacks.add(method)
+
+  if (frameCallbacks.size === 1) {
+    requestAnimationFrame(flushFrameCallbacks)
+  }
+}
