@@ -204,6 +204,7 @@ importers:
 
   common/mixins:
     specifiers:
+      '@juggle/resize-observer': ^3.3.1
       '@popperjs/core': ^2.11.5
       '@vexip-ui/utils': workspace:^
       typescript: 4.6.4
@@ -211,6 +212,7 @@ importers:
       vite-plugin-dts: ^1.1.1
       vue: ^3.2.33
     dependencies:
+      '@juggle/resize-observer': 3.3.1
       '@popperjs/core': 2.11.5
       '@vexip-ui/utils': link:../utils
     devDependencies:
@@ -1368,6 +1370,10 @@ packages:
       '@jridgewell/resolve-uri': 3.0.7
       '@jridgewell/sourcemap-codec': 1.4.13
     dev: true
+
+  /@juggle/resize-observer/3.3.1:
+    resolution: {integrity: sha512-zMM9Ds+SawiUkakS7y94Ymqx+S0ORzpG3frZirN3l+UlXUmSUR7hF4wxCVqW+ei94JzV5kt0uXBcoOEAuiydrw==}
+    dev: false
 
   /@microsoft/api-extractor-model/7.17.3:
     resolution: {integrity: sha512-ETslFxVEZTEK6mrOARxM34Ll2W/5H2aTk9Pe9dxsMCnthE8O/CaStV4WZAGsvvZKyjelSWgPVYGowxGVnwOMlQ==}

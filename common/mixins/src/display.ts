@@ -11,7 +11,7 @@ export function useDisplay(displayInit = noop, element = ref<HTMLElement | null>
 
   onMounted(() => {
     nextTick(() => {
-      const hiddenParentNode = queryOutsideHiddenElement()
+      const hiddenParentNode = queryOutsideHiddenElement(element.value)
 
       if (hiddenParentNode) {
         observer = new MutationObserver(() => {
@@ -42,21 +42,21 @@ export function useDisplay(displayInit = noop, element = ref<HTMLElement | null>
     observer = null
   })
 
-  function queryOutsideHiddenElement() {
-    if (element.value) {
-      let parentElement = element.value.parentElement
+  return element
+}
 
-      while (parentElement && parentElement !== document.body) {
-        if (parentElement.style.display === 'none') {
-          return parentElement
-        }
+export function queryOutsideHiddenElement(el: Element | null) {
+  if (el) {
+    let parentElement = el.parentElement
 
-        parentElement = parentElement.parentElement
+    while (parentElement && parentElement !== document.body) {
+      if (parentElement.style.display === 'none') {
+        return parentElement
       }
-    }
 
-    return null
+      parentElement = parentElement.parentElement
+    }
   }
 
-  return element
+  return null
 }

@@ -24,6 +24,7 @@
     "directory": "common/mixins"
   },
   "dependencies": {
+    "@juggle/resize-observer": "^3.3.1",
     "@popperjs/core": "^2.11.5",
     "@vexip-ui/utils": "workspace:^"
   },
