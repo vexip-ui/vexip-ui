@@ -10,10 +10,19 @@ Currently more then 60 components, many you can see everywhere and a few may bri
 
 ## Work List
 
+For project:
+
 - ~~Transfer to use css vars~~ (Completed, will be released in `2.0`)
 - ~~Refactor icons~~ (Completed, will be released in `2.0`)
 - Write unit tests
 - Adapt ssr render
+
+For components:
+
+- Avatar
+- Cascader
+- Mention
+- Skeleton
 
 ## Features
 
