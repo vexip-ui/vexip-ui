@@ -16,6 +16,7 @@
 import {
   defineComponent,
   ref,
+  toRef,
   reactive,
   computed,
   watch,
@@ -72,7 +73,10 @@ export default defineComponent({
       hidden,
       hitting,
       label: truthLabel,
-      value: truthValue
+      value: truthValue,
+      disabled: toRef(props, 'disabled'),
+      divided: toRef(props, 'divided'),
+      noTitle: toRef(props, 'noTitle')
     })
 
     const selected = computed(() => {
@@ -144,7 +148,7 @@ export default defineComponent({
           : props.value
         truthLabel.value = !String(props.label)
           ? wrapper.value?.textContent?.trim() ?? truthValue.value?.toString() ?? ''
-          : props.label
+          : (props.label || props.value ? String(props.value) : '')
 
         updateSelectLable()
       })

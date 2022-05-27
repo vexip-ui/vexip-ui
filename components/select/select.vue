@@ -69,22 +69,23 @@
               maxHeight: `${maxListHeight}px`
             }"
           >
-            <Scroll
-              v-show="effectiveCount"
-              ref="scroll"
-              use-y-bar
+            <VirtualList
+              ref="virtualList"
+              :items="rawOptions"
+              :item-size="32"
+              :use-y-bar="!!listHeight"
               height="100%"
-            >
-              <ul
-                :class="[
+              id-key="value"
+              :items-attrs="{
+                class: [
                   `${prefixCls}__options`,
                   optionCheck ? `${prefixCls}__options--has-check` : ''
-                ]"
-              >
-                <slot>
+                ]
+              }"
+            >
+              <template #default="{ item, index }">
+                <slot :option="item" :index="index">
                   <Option
-                    v-for="(item, index) in rawOptions"
-                    :key="index"
                     :label="item.label || item.value.toString()"
                     :value="item.value"
                     :disabled="item.disabled"
@@ -103,13 +104,15 @@
                     </template>
                   </Option>
                 </slot>
-              </ul>
-            </Scroll>
-            <slot v-if="hasEmptyTip" name="empty">
-              <div :class="`${prefixCls}__empty`">
-                {{ emptyText ?? locale.empty }}
-              </div>
-            </slot>
+              </template>
+              <template #empty>
+                <slot v-if="hasEmptyTip" name="empty">
+                  <div :class="`${prefixCls}__empty`">
+                    {{ emptyText ?? locale.empty }}
+                  </div>
+                </slot>
+              </template>
+            </VirtualList>
           </div>
         </div>
       </transition>
@@ -132,8 +135,9 @@ import {
 import { Icon } from '@/components/icon'
 import { Option, SELECTOR_STATE } from '@/components/option'
 import { Portal } from '@/components/portal'
-import { Scroll } from '@/components/scroll'
+// import { Scroll } from '@/components/scroll'
 import { Tag } from '@/components/tag'
+import { VirtualList } from '@/components/virtual-list'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
@@ -142,8 +146,9 @@ import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-import type { OptionState, SelectState } from '@/components/option'
-import type { ClassType, RawOption } from './symbol'
+import type { RawOption, OptionState, SelectState } from '@/components/option'
+import type { VirtualListExposed } from '@/components/virtual-list'
+import type { ClassType } from './symbol'
 
 const props = useConfiguredProps('select', {
   size: createSizeProp(),
@@ -243,8 +248,9 @@ export default defineComponent({
     Icon,
     Option,
     Portal,
-    Scroll,
+    // Scroll,
     Tag,
+    VirtualList,
     Check,
     CircleXmark
   },
@@ -272,9 +278,9 @@ export default defineComponent({
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
-    const optionStates = ref(new Set<OptionState>()) // using for secondary packaging
+    const optionMap = ref(new Map<string | number, OptionState>())
 
-    const scroll = ref<InstanceType<typeof Scroll> | null>(null)
+    const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed | null>(null)
     const wrapper = useClickOutside()
 
     const { reference, popper, transferTo, updatePopper } = usePopper({
@@ -307,10 +313,15 @@ export default defineComponent({
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
     })
+    const optionStates = computed(() => {
+      return Array.from(optionMap.value.values())
+    })
     const rawOptions = computed(() => {
       return props.options.map(option => {
         if (typeof option === 'string') {
           option = { value: option }
+        } else {
+          option = { ...option }
         }
 
         if (!option.label) {
@@ -332,11 +343,11 @@ export default defineComponent({
         left: hasPrefix.value ? '2em' : ''
       }
     })
-    const effectiveCount = computed(() => {
-      return Array.from(optionStates.value).filter(state => !state.hidden).length
+    const visibleOptions = computed(() => {
+      return Array.from(optionStates.value).filter(state => !state.hidden)
     })
     const hasEmptyTip = computed(() => {
-      return !!(props.emptyText || slots.empty || locale.empty) && !effectiveCount.value
+      return !!(props.emptyText || slots.empty || locale.empty) && !visibleOptions.value.length
     })
 
     provide<SelectState>(
@@ -369,7 +380,7 @@ export default defineComponent({
       },
       { immediate: true }
     )
-    watch(effectiveCount, computeListHeight)
+    watch(() => visibleOptions.value.length, computeListHeight)
     watch(
       () => props.multiple,
       value => {
@@ -402,22 +413,27 @@ export default defineComponent({
     }
 
     function addOption(option: OptionState) {
-      optionStates.value.add(option)
+      if (!isNull(option.value)) {
+        optionMap.value.set(option.value, option)
+      }
     }
 
     function removeOption(option: OptionState) {
-      optionStates.value.delete(option)
+      if (!isNull(option.value)) {
+        optionMap.value.delete(option.value)
+      }
     }
 
     function computeListHeight() {
+      virtualList.value?.refresh()
       nextTick(() => {
-        const scrollWrapper = scroll.value?.content
+        const scrollWrapper = virtualList.value?.list
 
         if (scrollWrapper) {
           const wrapperHeight = scrollWrapper.getBoundingClientRect().height
 
           listHeight.value = wrapperHeight < props.maxListHeight ? undefined : `${wrapperHeight}px`
-          scroll.value?.refresh()
+          // scroll.value?.refresh()
         }
       })
     }
@@ -551,13 +567,13 @@ export default defineComponent({
       rawOptions,
       controlStyle,
       placeholderStyle,
-      effectiveCount,
+      visibleOptions,
       hasEmptyTip,
 
       wrapper,
       reference,
       popper,
-      scroll,
+      virtualList,
 
       computeListHeight,
       handleSelect,

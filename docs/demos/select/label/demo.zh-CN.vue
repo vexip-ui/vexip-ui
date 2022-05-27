@@ -1,13 +1,13 @@
 <template>
-  <Select v-model:value="value">
-    <Option
-      v-for="(item, index) in options"
-      :key="index"
-      :value="item.value"
-      :label="item.label"
-    >
-      {{ `${index + 1}、${item.label}` }}
-    </Option>
+  <Select v-model:value="value" :options="options">
+    <template #default="{ option, index }">
+      <Option
+        :value="option.value"
+        :label="option.label"
+      >
+        {{ `${index + 1}、${option.label}` }}
+      </Option>
+    </template>
   </Select>
 </template>
 

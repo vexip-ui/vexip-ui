@@ -12,7 +12,7 @@ $option: map.merge(
     color-disabled: get-css-var('fill-color-disabled'),
     bg-color: transparent,
     bg-color-hover: get-css-var('fill-color-hover'),
-    bg-color-hitting: get-css-var('option-bg-color'),
+    bg-color-hitting: get-css-var('fill-color-humble'),
     bg-color-selected: get-css-var('option-bg-color-hover'),
     bg-color-disabled: get-css-var('option-bg-color'),
     d-color: get-css-var('border-color-light-2'),
@@ -20,7 +20,8 @@ $option: map.merge(
     group-color: get-css-var('content-color-secondary'),
     group-font-size: get-css-var('font-size-secondary'),
     label-v-padding: 0.35em,
-    label-h-padding: 1.2em
+    label-h-padding: 1.2em,
+    min-height: 32px
   ),
   $option
 );
@@ -39,6 +40,7 @@ $option: map.merge(
   display: inline-flex;
   align-items: center;
   width: 100%;
+  min-height: get-css-var('option-min-height');
   padding: $label-padding;
   color: get-css-var('option-color');
   white-space: nowrap;

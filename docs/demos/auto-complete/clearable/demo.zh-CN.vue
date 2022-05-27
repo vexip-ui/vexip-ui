@@ -5,6 +5,7 @@
     ignore-case
     style="width: 400px;"
     :options="options"
+    clearable
   ></AutoComplete>
   <p>
     Current Value: {{ value }}

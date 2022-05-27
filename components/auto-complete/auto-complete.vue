@@ -16,6 +16,7 @@
     :suffix-color="suffixColor"
     :no-suffix="!hasSuffix"
     :placeholder="placeholder"
+    :options="options"
     @on-toggle="handleToggle"
     @on-select="handleSelect"
     @on-clear="handleClear"
@@ -44,6 +45,7 @@
           :placeholder="placeholder ?? locale.placeholder"
           autocomplete="off"
           @input="handleInput"
+          @change="handleInputChange"
           @keyup.enter="handleEnter"
           @keydown="handleKeyDown"
         />
@@ -54,24 +56,24 @@
         <Icon :icon="suffix"></Icon>
       </slot>
     </template>
-    <slot>
-      <Option
-        v-for="(item, index) in rawOptions"
-        :key="index"
-        :label="item.label || item.value?.toString()"
-        :value="item.value"
-        :disabled="item.disabled"
-        :divided="item.divided"
-        :no-title="item.noTitle"
-      ></Option>
-    </slot>
+    <template #default="{ option, index }">
+      <slot :option="option" :index="index">
+        <!-- <Option
+          :label="option.label || option.value?.toString()"
+          :value="option.value"
+          :disabled="option.disabled"
+          :divided="option.divided"
+          :no-title="option.noTitle"
+        ></Option> -->
+      </slot>
+    </template>
   </Select>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, inject, watch, watchEffect } from 'vue'
 import { Icon } from '@/components/icon'
-import { Option } from '@/components/option'
+// import { Option } from '@/components/option'
 import { Select } from '@/components/select'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { placementWhileList } from '@vexip-ui/mixins'
@@ -170,7 +172,7 @@ export default defineComponent({
   name: 'AutoComplete',
   components: {
     Icon,
-    Option,
+    // Option,
     Select
   },
   props,
@@ -199,21 +201,21 @@ export default defineComponent({
     // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
 
-    const rawOptions = computed(() => {
-      return props.options.map(option => {
-        if (typeof option === 'string') {
-          option = { value: option }
-        }
+    // const rawOptions = computed(() => {
+    //   return props.options.map(option => {
+    //     if (typeof option === 'string') {
+    //       option = { value: option }
+    //     }
 
-        if (!option.label) {
-          option.label = option.value?.toString()
-        }
+    //     if (!option.label) {
+    //       option.label = option.value?.toString()
+    //     }
 
-        return option
-      })
-    })
+    //     return option
+    //   })
+    // })
     const optionsStates = computed<OptionState[]>(() => {
-      return select.value?.optionStates ? Array.from(select.value.optionStates) : []
+      return select.value?.optionStates ?? []
     })
     const filteredOptions = computed(() => {
       return optionsStates.value.filter(({ hidden }) => !hidden)
@@ -341,6 +343,24 @@ export default defineComponent({
       emit('on-input', value)
     }
 
+    function handleInputChange(event: string | Event) {
+      const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
+      let matchedOption: OptionState | undefined
+
+      if (props.ignoreCase) {
+        const noCaseValue = value.toLocaleLowerCase()
+
+        matchedOption = filteredOptions.value.find(option => !option.disabled && (option.value === value || option.label?.toLocaleLowerCase() === noCaseValue))
+      } else {
+        matchedOption = filteredOptions.value.find(option => !option.disabled && (option.value === value || option.label === value))
+      }
+
+      if (matchedOption) {
+        currentValue.value = matchedOption.value
+        handleChange()
+      }
+    }
+
     function handleChange() {
       if (!changed || currentValue.value === lastValue) return
 
@@ -407,8 +427,14 @@ export default defineComponent({
 
     function handleClear() {
       if (props.clearable) {
+        const prevValue = currentValue.value
+
         currentValue.value = ''
         visible.value = false
+
+        if (!isNull(prevValue) && prevValue !== currentValue.value) {
+          changed = true
+        }
 
         handleChange()
         emit('on-clear')
@@ -423,7 +449,6 @@ export default defineComponent({
       currentIndex,
       visible,
 
-      rawOptions,
       inputValue,
       hasPrefix,
       hasSuffix,
@@ -433,6 +458,7 @@ export default defineComponent({
 
       handleSelect,
       handleInput,
+      handleInputChange,
       handleChange,
       handleToggle,
       handleKeyDown,

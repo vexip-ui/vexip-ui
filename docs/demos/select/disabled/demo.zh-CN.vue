@@ -1,17 +1,13 @@
 <template>
-  <Select>
-    <Option>选项1</Option>
-    <Option>选项2</Option>
-    <Option>选项3</Option>
-  </Select>
+  <Select :options="options"></Select>
   <br />
   <br />
-  <Select disabled>
-    <Option>选项1</Option>
-    <Option>选项2</Option>
-    <Option>选项3</Option>
-  </Select>
+  <Select disabled :options="options"></Select>
 </template>
+
+<script setup lang="ts">
+const options = ['选项1', '选项2', '选项3']
+</script>
 
 <style>
 .vxp-select {

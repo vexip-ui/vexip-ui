@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <Select
-      v-model:value="values"
-      multiple
-      clearable
-      option-check
-      :options="options"
-    ></Select>
-  </div>
+  <Select
+    v-model:value="values"
+    multiple
+    clearable
+    option-check
+    :options="options"
+  ></Select>
 </template>
 
 <script setup lang="ts">

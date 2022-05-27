@@ -39,6 +39,9 @@ export default defineConfig(() => {
         allow: ['..']
       }
     },
+    optimizeDeps: {
+      include: ['../components']
+    },
     plugins: [
       ...prePlugins([
         eslint({
