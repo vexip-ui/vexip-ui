@@ -60,3 +60,11 @@ export function queryOutsideHiddenElement(el: Element | null) {
 
   return null
 }
+
+export function isHiddenElement(el: HTMLElement | null) {
+  if (el?.style.display !== 'none') {
+    return !!queryOutsideHiddenElement(el)
+  }
+
+  return true
+}

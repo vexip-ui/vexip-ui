@@ -1,50 +1,23 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { ResizeObserver } from '@juggle/resize-observer'
 import { createBITree, nextFrameOnce } from '@vexip-ui/utils'
-import { queryOutsideHiddenElement } from './display'
+import { isHiddenElement } from './display'
+import { observeResize, unobserveResize } from './resize'
 
 import type { Ref } from 'vue'
+// import type { ResizeHandler } from './resize'
 
 type Key = number | string | symbol
-type ResizeHandler = (entry: ResizeObserverEntry) => any
 
 export interface VirtualOptions {
-  items: Ref<Record<string, any>>,
+  items: Ref<Array<Record<string, any>>>,
   itemSize: Ref<number>,
   itemFixed: Ref<boolean>,
   idKey: Ref<string>,
-  defaultKeyAt: Ref<Key>,
+  defaultKeyAt?: Ref<Key>,
   bufferSize?: Ref<number>,
-  wrapper?: Ref<HTMLElement | null>,
-  onResize?: ResizeHandler,
-  onScroll?: (event: Event) => void
-}
-
-const handlerMap = new WeakMap<Element, ResizeHandler>()
-
-function handleResize(entries: ResizeObserverEntry[]) {
-  for (let i = 0, len = entries.length; i < len; ++i) {
-    const entry = entries[i]
-    const handler = handlerMap.get(entry.target)
-
-    if (typeof handler === 'function') {
-      handler(entry)
-    }
-  }
-}
-
-const resizeObserver = new (window.ResizeObserver || ResizeObserver)(handleResize)
-
-function observeResize(el: Element, handler: ResizeHandler) {
-  handlerMap.set(el, handler)
-  resizeObserver.observe(el)
-}
-
-function unobserveResize(el: Element) {
-  if (handlerMap.has(el)) {
-    resizeObserver.unobserve(el)
-    handlerMap.delete(el)
-  }
+  wrapper?: Ref<HTMLElement | null>
+  // onResize?: ResizeHandler,
+  // onScroll?: (event: Event) => void
 }
 
 export function useVirtual(options: VirtualOptions) {
@@ -55,9 +28,9 @@ export function useVirtual(options: VirtualOptions) {
     idKey,
     // defaultKeyAt,
     bufferSize = ref(5),
-    wrapper = ref(null),
-    onResize,
-    onScroll
+    wrapper = ref(null)
+    // onResize,
+    // onScroll
   } = options
 
   const indexMap = computed(() => {
@@ -102,9 +75,8 @@ export function useVirtual(options: VirtualOptions) {
   const visibleItems = computed(() => {
     if (!visibleHeight.value || visibleHeight.value < 0) return []
 
-    const buffer = Math.max(bufferSize.value, 0)
     const endIndex = Math.min(
-      startIndex.value + Math.ceil(visibleHeight.value / itemSize.value + 1) + buffer * 2,
+      heightTree.value.boundIndex(scrollOffset.value + visibleHeight.value) + 1 + Math.max(bufferSize.value, 0),
       items.value.length
     )
 
@@ -149,9 +121,9 @@ export function useVirtual(options: VirtualOptions) {
     }
   }
 
-  function handleScroll(event: Event) {
+  function handleScroll() {
     nextFrameOnce(syncScrollOffset)
-    typeof onScroll === 'function' && onScroll(event)
+    // typeof onScroll === 'function' && onScroll(event)
   }
 
   function handleResize(entry: ResizeObserverEntry) {
@@ -160,17 +132,26 @@ export function useVirtual(options: VirtualOptions) {
     }
 
     visibleHeight.value = entry.contentRect.height
-    typeof onResize === 'function' && onResize(entry)
+    // typeof onResize === 'function' && onResize(entry)
   }
 
   function handleItemResize(key: Key, entry: ResizeObserverEntry) {
-    if (itemFixed.value || isHiddenElement(entry.target as HTMLElement)) return
+    if (itemFixed.value) return
 
     const index = indexMap.value.get(key)!
     const prevHeight = heightTree.value.get(index)
     const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height
 
     if (height === prevHeight) return
+
+    if (isHiddenElement(entry.target as HTMLElement)) {
+      if (prevHeight) {
+        heightTree.value.add(index, -1 * prevHeight)
+        treeUpdateDep.value++
+      }
+
+      return
+    }
 
     const diff = height - itemSize.value
     const delta = height - prevHeight
@@ -187,6 +168,8 @@ export function useVirtual(options: VirtualOptions) {
 
   return {
     wrapper,
+    scrollOffset,
+    indexMap,
     visibleItems,
     listStyle,
     itemsStyle,
@@ -194,12 +177,4 @@ export function useVirtual(options: VirtualOptions) {
     handleResize,
     handleItemResize
   }
-}
-
-function isHiddenElement(el: HTMLElement | null) {
-  if (el?.style.display !== 'none') {
-    return !!queryOutsideHiddenElement(el)
-  }
-
-  return true
 }
