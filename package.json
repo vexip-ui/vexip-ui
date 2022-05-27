@@ -149,6 +149,7 @@
   "scripts": {
     "bootstrap": "ts-node scripts/bootstrap.ts",
     "build": "ts-node scripts/build.ts",
+    "build:common": "pnpm run build:utils && pnpm run build:mixins && pnpm run build:icons",
     "build:config": "pnpm -C common/config build && pnpm i",
     "build:full": "ts-node scripts/build-full.ts",
     "build:icons": "pnpm -C common/icons build && pnpm i",
