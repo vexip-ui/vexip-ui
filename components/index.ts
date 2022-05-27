@@ -58,6 +58,7 @@ import { Progress } from './progress'
 import { Radio } from './radio'
 import { RadioGroup } from './radio-group'
 import { Renderer } from './renderer'
+import { ResizeObserver } from './resize-observer'
 import { Row } from './row'
 import { Scroll } from './scroll'
 import { Scrollbar } from './scrollbar'
@@ -83,6 +84,7 @@ import { Tree } from './tree'
 import { Upload } from './upload'
 import { UploadFile } from './upload-file'
 import { UploadList } from './upload-list'
+import { VirtualList } from './virtual-list'
 import { Wheel } from './wheel'
 import { WheelItem } from './wheel-item'
 
@@ -154,6 +156,7 @@ const components = [
   Radio,
   RadioGroup,
   Renderer,
+  ResizeObserver,
   Row,
   Scroll,
   Scrollbar,
@@ -179,6 +182,7 @@ const components = [
   Upload,
   UploadFile,
   UploadList,
+  VirtualList,
   Wheel,
   WheelItem,
   // plugins
@@ -253,6 +257,7 @@ export {
   Radio,
   RadioGroup,
   Renderer,
+  ResizeObserver,
   Row,
   Scroll,
   Scrollbar,
@@ -278,6 +283,7 @@ export {
   Upload,
   UploadFile,
   UploadList,
+  VirtualList,
   Wheel,
   WheelItem
 }

@@ -60,6 +60,7 @@
 @use './radio.scss';
 @use './radio-group.scss';
 @use './renderer.scss';
+@use './resize-observer.scss';
 @use './row.scss';
 @use './scroll.scss';
 @use './scrollbar.scss';
@@ -85,5 +86,6 @@
 @use './upload.scss';
 @use './upload-file.scss';
 @use './upload-list.scss';
+@use './virtual-list.scss';
 @use './wheel.scss';
 @use './wheel-item.scss';

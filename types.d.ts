@@ -55,6 +55,7 @@ declare module 'vue' {
     Radio: typeof import('vexip-ui')['Radio'],
     RadioGroup: typeof import('vexip-ui')['RadioGroup'],
     Renderer: typeof import('vexip-ui')['Renderer'],
+    ResizeObserver: typeof import('vexip-ui')['ResizeObserver'],
     Row: typeof import('vexip-ui')['Row'],
     Scroll: typeof import('vexip-ui')['Scroll'],
     Scrollbar: typeof import('vexip-ui')['Scrollbar'],
@@ -80,6 +81,7 @@ declare module 'vue' {
     Upload: typeof import('vexip-ui')['Upload'],
     UploadFile: typeof import('vexip-ui')['UploadFile'],
     UploadList: typeof import('vexip-ui')['UploadList'],
+    VirtualList: typeof import('vexip-ui')['VirtualList'],
     Wheel: typeof import('vexip-ui')['Wheel'],
     WheelItem: typeof import('vexip-ui')['WheelItem']
   }

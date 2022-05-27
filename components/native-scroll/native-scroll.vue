@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="wrapper"
     :class="className"
     :style="style"
     @mousedown="handleMouseDown"
@@ -418,6 +419,26 @@ export default defineComponent({
       startAutoplay()
     }
 
+    function handleWheel(event: WheelEvent, type: 'vertical' | 'horizontal') {
+      const isVerticalScroll = enableYScroll.value && type === 'vertical'
+      const isHorizontalScroll = enableXScroll.value && type === 'horizontal'
+      const sign = event.deltaY > 0 ? 1 : -1
+
+      if (
+        (isVerticalScroll || isHorizontalScroll) &&
+        props.beforeScroll?.({ signX: sign, signY: sign }) !== false
+      ) {
+        const maxLimit = isVerticalScroll ? yScrollLimit.value : xScrollLimit.value
+        const scroll = isVerticalScroll ? currentScroll.y : currentScroll.x
+
+        if (sign > 0 ? scroll < maxLimit : scroll > 0) {
+          event.stopPropagation()
+
+          return false
+        }
+      }
+    }
+
     function handleScroll(event: Event) {
       event.stopPropagation()
       event.preventDefault()
@@ -440,26 +461,6 @@ export default defineComponent({
       computePercent()
       syncBarScroll()
       emitScrollEvent()
-    }
-
-    function handleWheel(event: WheelEvent, type: 'vertical' | 'horizontal') {
-      const isVerticalScroll = enableYScroll.value && type === 'vertical'
-      const isHorizontalScroll = enableXScroll.value && type === 'horizontal'
-      const sign = event.deltaY > 0 ? 1 : -1
-
-      if (
-        (isVerticalScroll || isHorizontalScroll) &&
-        props.beforeScroll?.({ signX: sign, signY: sign }) !== false
-      ) {
-        const maxLimit = isVerticalScroll ? yScrollLimit.value : xScrollLimit.value
-        const scroll = isVerticalScroll ? currentScroll.y : currentScroll.x
-
-        if (sign > 0 ? scroll < maxLimit : scroll > 0) {
-          event.stopPropagation()
-
-          return false
-        }
-      }
     }
 
     function prepareScroll() {
@@ -537,6 +538,7 @@ export default defineComponent({
       enableXScroll,
       enableYScroll,
 
+      wrapper: ref<HTMLElement | null>(null),
       content: contentElement,
       xBar,
       yBar,

@@ -1,5 +1,6 @@
-import { ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { throttle, debounce, multipleFixed, boundRange } from '@vexip-ui/utils'
+import { ref, reactive, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useResize, useMounted, isHiddenElement } from '@vexip-ui/mixins'
+import { throttle, multipleFixed, boundRange } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
 import type { Ref } from 'vue'
@@ -98,10 +99,10 @@ export function useScrollWrapper({
   const percentX = ref(0)
   const percentY = ref(0)
 
-  let isMounted = false
+  const { isMounted } = useMounted()
 
   function computeContentSize() {
-    if (!content.el) return
+    if (!content.el || isHiddenElement(content.el)) return
 
     content.scrollWidth = content.el.scrollWidth
     content.offsetWidth = content.el.offsetWidth
@@ -109,11 +110,11 @@ export function useScrollWrapper({
     content.offsetHeight = content.el.offsetHeight
 
     if (mode.value !== 'vertical') {
-      setScrollX(!isMounted && appear.value ? scrollX.value : currentScroll.x)
+      setScrollX(!isMounted.value && appear.value ? scrollX.value : currentScroll.x)
     }
 
     if (mode.value !== 'horizontal') {
-      setScrollY(!isMounted && appear.value ? scrollY.value : currentScroll.y)
+      setScrollY(!isMounted.value && appear.value ? scrollY.value : currentScroll.y)
     }
 
     computePercent()
@@ -127,12 +128,11 @@ export function useScrollWrapper({
   }
 
   const handleResize = throttle(refresh)
+  const { observeResize, unobserveResize } = useResize()
 
   onMounted(() => {
+    content.el && observeResize(content.el, handleResize)
     refresh()
-    window.addEventListener('resize', handleResize)
-
-    isMounted = true
 
     if (appear.value) {
       scrollTo(scrollX.value, scrollY.value)
@@ -140,36 +140,35 @@ export function useScrollWrapper({
   })
 
   onBeforeUnmount(() => {
-    destroyMutationObserver()
-    window.removeEventListener('resize', handleResize)
-
-    isMounted = false
+    content.el && unobserveResize(content.el)
+    // destroyMutationObserver()
+    // window.removeEventListener('resize', handleResize)
   })
 
-  let mutationObserver: MutationObserver | null
+  // let mutationObserver: MutationObserver | null
 
-  function createMutationObserver() {
-    const target = content.el?.children[0]
+  // function createMutationObserver() {
+  //   const target = content.el?.children[0]
 
-    if (!target) return
+  //   if (!target) return
 
-    mutationObserver = new MutationObserver(debounce(computeContentSize))
+  //   mutationObserver = new MutationObserver(debounce(computeContentSize))
 
-    mutationObserver.observe(target, {
-      attributes: true,
-      childList: true,
-      characterData: true,
-      subtree: true,
-      attributeFilter: ['style']
-    })
-  }
+  //   mutationObserver.observe(target, {
+  //     attributes: true,
+  //     childList: true,
+  //     characterData: true,
+  //     subtree: true,
+  //     attributeFilter: ['style']
+  //   })
+  // }
 
-  function destroyMutationObserver() {
-    if (mutationObserver) {
-      mutationObserver.disconnect()
-      mutationObserver = null
-    }
-  }
+  // function destroyMutationObserver() {
+  //   if (mutationObserver) {
+  //     mutationObserver.disconnect()
+  //     mutationObserver = null
+  //   }
+  // }
 
   function refresh() {
     if (typeof beforeRefresh === 'function') {
@@ -178,10 +177,10 @@ export function useScrollWrapper({
 
     computeContentSize()
 
-    nextTick(() => {
-      destroyMutationObserver()
-      createMutationObserver()
-    })
+    // nextTick(() => {
+    //   destroyMutationObserver()
+    //   createMutationObserver()
+    // })
 
     window.setTimeout(() => {
       if (typeof afterRefresh === 'function') {
