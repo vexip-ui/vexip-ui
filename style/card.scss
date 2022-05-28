@@ -34,7 +34,7 @@ $card: map.merge(
   border: get-css-var('card-border');
   border-radius: get-css-var('card-radius');
   box-shadow: 0 0 0 transparent;
-  transition: get-css-var('transition-box-shadow');
+  transition: get-css-var('transition-shadow');
 
   &--shadow-always {
     box-shadow: get-css-var('card-shadow');

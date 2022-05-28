@@ -236,7 +236,7 @@ $transition-map: map.merge(
     color: color get-css-var('transition-base'),
     background: background-color get-css-var('transition-base'),
     border: border-color get-css-var('transition-base'),
-    box-shadow: box-shadow get-css-var('transition-base'),
+    shadow: box-shadow get-css-var('transition-base'),
     opacity: opacity get-css-var('transition-base'),
     transform: transform get-css-var('transition-base')
   ),

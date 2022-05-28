@@ -127,7 +127,7 @@ $button: map.merge(
     get-css-var('transition-color'),
     get-css-var('transition-background'),
     get-css-var('transition-border'),
-    get-css-var('transition-box-shadow');
+    get-css-var('transition-shadow');
 
   &:hover {
     color: get-css-var('button-color-hover');

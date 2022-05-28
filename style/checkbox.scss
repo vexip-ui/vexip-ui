@@ -53,7 +53,7 @@ $checkbox: map.merge(
   transition:
     get-css-var('transition-background'),
     get-css-var('transition-border'),
-    get-css-var('transition-box-shadow');
+    get-css-var('transition-shadow');
 
   &--border {
     padding: 0.6em 0.8em;
@@ -80,7 +80,7 @@ $checkbox: map.merge(
     transition:
       get-css-var('transition-background'),
       get-css-var('transition-border'),
-      get-css-var('transition-box-shadow');
+      get-css-var('transition-shadow');
 
     &::after {
       position: absolute;

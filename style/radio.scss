@@ -52,7 +52,7 @@ $radio: map.merge(
   transition:
     get-css-var('transition-background'),
     get-css-var('transition-border'),
-    get-css-var('transition-box-shadow');
+    get-css-var('transition-shadow');
 
   &--border {
     padding: 0.6em 0.8em;
@@ -77,7 +77,7 @@ $radio: map.merge(
     background-color: get-css-var('radio-signal-bg-color');
     border: get-css-var('radio-signal-border');
     border-radius: 50%;
-    transition: get-css-var('transition-border'), get-css-var('transition-box-shadow');
+    transition: get-css-var('transition-border'), get-css-var('transition-shadow');
 
     &::after {
       position: absolute;

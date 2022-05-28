@@ -121,7 +121,7 @@ $slider: map.merge(
     border: get-css-var('slider-handler-b-width') solid get-css-var('slider-handler-b-color');
     border-radius: $handler-size;
     box-shadow: get-css-var('slider-handler-shadow');
-    transition: get-css-var('transition-box-shadow'), get-css-var('transition-transform');
+    transition: get-css-var('transition-shadow'), get-css-var('transition-transform');
 
     &:hover {
       box-shadow: get-css-var('slider-handler-shadow-hover');

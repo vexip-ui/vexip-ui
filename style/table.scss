@@ -364,7 +364,7 @@ $table: map.merge(
     position: absolute;
     top: 0;
     z-index: 1;
-    transition: get-css-var('transition-box-shadow');
+    transition: get-css-var('transition-shadow');
   }
 
   &__fixed--right {

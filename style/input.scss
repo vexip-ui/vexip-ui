@@ -60,7 +60,7 @@ $input: map.merge(
   transition:
     get-css-var('transition-background'),
     get-css-var('transition-border'),
-    get-css-var('transition-box-shadow');
+    get-css-var('transition-shadow');
 
   &:hover {
     border-color: get-css-var('input-b-color-hover');
