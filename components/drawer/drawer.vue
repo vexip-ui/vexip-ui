@@ -6,7 +6,7 @@
     :transition-name="moveTransition"
     :closable="maskClose"
     :disabled="hideMask"
-    :before-close="handleMaskClose"
+    :on-before-close="handleMaskClose"
     :transfer="transfer"
     @show="handleShow"
     @hide="handleHide"
@@ -111,8 +111,8 @@ const props = useConfiguredProps('drawer', {
     type: Boolean,
     default: false
   },
-  beforeClose: {
-    type: Function as PropType<() => unknown>,
+  onBeforeClose: {
+    type: Function as PropType<() => any>,
     default: null
   },
   resizable: {
@@ -220,8 +220,8 @@ export default defineComponent({
     async function handleClose() {
       let result: unknown = true
 
-      if (typeof props.beforeClose === 'function') {
-        result = props.beforeClose()
+      if (typeof props.onBeforeClose === 'function') {
+        result = props.onBeforeClose()
 
         if (isPromise(result)) {
           result = await result

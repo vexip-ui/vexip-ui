@@ -140,7 +140,7 @@ const props = useConfiguredProps('scroll', {
     type: Boolean,
     default: false
   },
-  beforeScroll: {
+  onBeforeScroll: {
     type: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
     default: null
   },
@@ -201,8 +201,8 @@ export default defineComponent({
       height: toRef(props, 'height'),
       scrollX: toRef(props, 'scrollX'),
       scrollY: toRef(props, 'scrollY'),
-      beforeRefresh: stopAutoplay,
-      afterRefresh: startAutoplay
+      onBeforeRefresh: stopAutoplay,
+      onAfterRefresh: startAutoplay
     })
 
     /* autoplay */
@@ -420,7 +420,7 @@ export default defineComponent({
       const signX = pointer.clientX - cursorXPosition > 0 ? 1 : -1
       const signY = pointer.clientY - cursorYPosition > 0 ? 1 : -1
 
-      if (props.beforeScroll?.({ signX, signY }) === false) {
+      if (props.onBeforeScroll?.({ signX, signY }) === false) {
         return false
       }
 
@@ -474,7 +474,7 @@ export default defineComponent({
       if (
         props.wheel &&
         (isVerticalScroll || isHorizontalScroll) &&
-        props.beforeScroll?.({ signX: -sign, signY: -sign }) !== false
+        props.onBeforeScroll?.({ signX: -sign, signY: -sign }) !== false
       ) {
         event.preventDefault()
         event.stopPropagation()

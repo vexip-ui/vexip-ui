@@ -136,7 +136,7 @@ export default defineComponent({
     const maskClose = ref(props.maskClose)
     const icon = ref(props.icon)
     const renderer = ref<(() => any) | null>(props.renderer)
-    const beforeConfirm = ref<(() => unknown) | null>(null)
+    const onBeforeConfirm = ref<(() => unknown) | null>(null)
 
     const onConfirm = ref<(() => void) | null>(null)
     const onCancel = ref<(() => void) | null>(null)
@@ -152,17 +152,17 @@ export default defineComponent({
         cancelText.value = options.cancelText ?? props.cancelText
         icon.value = options.icon ?? props.icon
         renderer.value = isFunction(options.renderer) ? options.renderer : null
-        beforeConfirm.value = isFunction(options.beforeConfirm) ? options.beforeConfirm : null
+        onBeforeConfirm.value = isFunction(options.onBeforeConfirm) ? options.onBeforeConfirm : null
 
         visible.value = true
 
         onConfirm.value = () => {
           resolve(true)
-          beforeConfirm.value = null
+          onBeforeConfirm.value = null
         }
         onCancel.value = () => {
           resolve(false)
-          beforeConfirm.value = null
+          onBeforeConfirm.value = null
         }
       })
     }
@@ -170,8 +170,8 @@ export default defineComponent({
     async function handleConfirm() {
       loading.value = true
 
-      if (isFunction(beforeConfirm.value)) {
-        let result = beforeConfirm.value()
+      if (isFunction(onBeforeConfirm.value)) {
+        let result = onBeforeConfirm.value()
 
         if (isPromise(result)) {
           result = await result

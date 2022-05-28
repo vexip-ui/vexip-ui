@@ -125,7 +125,7 @@ const props = useConfiguredProps('nativeScroll', {
     type: Number,
     default: 500
   },
-  beforeScroll: {
+  onBeforeScroll: {
     type: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
     default: null
   },
@@ -195,8 +195,8 @@ export default defineComponent({
       height: toRef(props, 'height'),
       scrollX: toRef(props, 'scrollX'),
       scrollY: toRef(props, 'scrollY'),
-      beforeRefresh: stopAutoplay,
-      afterRefresh: startAutoplay
+      onBeforeRefresh: stopAutoplay,
+      onAfterRefresh: startAutoplay
     })
 
     /* autoplay */
@@ -387,7 +387,7 @@ export default defineComponent({
       const signX = event.clientX - cursorXPosition > 0 ? 1 : -1
       const signY = event.clientY - cursorYPosition > 0 ? 1 : -1
 
-      if (props.beforeScroll?.({ signX, signY }) === false) {
+      if (props.onBeforeScroll?.({ signX, signY }) === false) {
         return false
       }
 
@@ -426,7 +426,7 @@ export default defineComponent({
 
       if (
         (isVerticalScroll || isHorizontalScroll) &&
-        props.beforeScroll?.({ signX: sign, signY: sign }) !== false
+        props.onBeforeScroll?.({ signX: sign, signY: sign }) !== false
       ) {
         const maxLimit = isVerticalScroll ? yScrollLimit.value : xScrollLimit.value
         const scroll = isVerticalScroll ? currentScroll.y : currentScroll.x
@@ -447,7 +447,7 @@ export default defineComponent({
         const signX = contentElement.value.scrollLeft - currentScroll.x > 0 ? 1 : -1
         const signY = contentElement.value.scrollTop - currentScroll.y > 0 ? 1 : -1
 
-        if (props.beforeScroll?.({ signX, signY }) === false) {
+        if (props.onBeforeScroll?.({ signX, signY }) === false) {
           contentElement.value.scrollTop = currentScroll.y
           contentElement.value.scrollLeft = currentScroll.x
 

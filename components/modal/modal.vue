@@ -6,7 +6,7 @@
     :transition-name="transitionName"
     :closable="maskClose"
     :disabled="hideMask"
-    :before-close="handleMaskClose"
+    :on-before-close="handleMaskClose"
     :transfer="transfer"
     @show="handleShow"
     @hide="handleHide"
@@ -50,7 +50,7 @@
         </div>
         <div v-if="!noFooter" ref="footer" :class="`${prefix}__footer`">
           <slot name="footer">
-            <Button type="text" size="small" @click="handleCancle">
+            <Button text size="small" @click="handleCancle">
               {{ cancelText || locale.cancel }}
             </Button>
             <Button
@@ -162,8 +162,8 @@ const props = useConfiguredProps('modal', {
     type: Boolean,
     default: false
   },
-  beforeClose: {
-    type: Function as PropType<(isConfirm: boolean) => unknown>,
+  onBeforeClose: {
+    type: Function as PropType<(isConfirm: boolean) => any>,
     default: null
   },
   loading: {
@@ -392,8 +392,8 @@ export default defineComponent({
     async function handleClose(isConfirm: boolean) {
       let result: unknown = true
 
-      if (typeof props.beforeClose === 'function') {
-        result = props.beforeClose(isConfirm)
+      if (typeof props.onBeforeClose === 'function') {
+        result = props.onBeforeClose(isConfirm)
 
         if (isPromise(result)) {
           result = await result

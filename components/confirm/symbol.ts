@@ -12,7 +12,7 @@ export interface ConfirmOptions extends Record<string, unknown> {
   style?: CSSProperties,
   maskClose?: boolean,
   renderer?: () => any,
-  beforeConfirm?: () => unknown
+  onBeforeConfirm?: () => unknown
 }
 
 export interface ConfirmInstance extends ComponentPublicInstance {

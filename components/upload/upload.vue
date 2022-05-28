@@ -141,11 +141,11 @@ const props = useConfiguredProps('upload', {
     type: Boolean,
     default: false
   },
-  beforeUpload: {
+  onBeforeUpload: {
     type: Function as PropType<BeforeFn>,
     default: null
   },
-  beforeSelect: {
+  onBeforeSelect: {
     type: Function as PropType<BeforeFn>,
     default: null
   },
@@ -256,8 +256,8 @@ export default defineComponent({
           file.path = file.webkitRelativePath
         }
 
-        if (isFunction(props.beforeSelect)) {
-          let result = props.beforeSelect(file, props.selectToAdd ? getSourceFiles() : [])
+        if (isFunction(props.onBeforeSelect)) {
+          let result = props.onBeforeSelect(file, props.selectToAdd ? getSourceFiles() : [])
 
           if (isPromise(result)) {
             result = await result
@@ -369,8 +369,8 @@ export default defineComponent({
     }
 
     async function uploadFile(file: FileState) {
-      if (isFunction(props.beforeUpload)) {
-        let result = props.beforeUpload(
+      if (isFunction(props.onBeforeUpload)) {
+        let result = props.onBeforeUpload(
           file.source,
           fileStates.value
             .filter(

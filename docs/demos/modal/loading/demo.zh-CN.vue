@@ -8,7 +8,7 @@
       transfer
       :title="title"
       :loading="loading"
-      :before-close="beforeClose"
+      :on-before-close="beforeClose"
     >
       <p style="margin-bottom: 3px;">
         点击

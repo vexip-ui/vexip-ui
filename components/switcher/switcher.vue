@@ -73,7 +73,7 @@ const props = useConfiguredProps('switcher', {
     type: String,
     default: ''
   },
-  beforeChange: {
+  onBeforeChange: {
     type: Function as PropType<(checked: boolean) => unknown>,
     default: null
   },
@@ -144,8 +144,8 @@ export default defineComponent({
 
       let result: unknown = true
 
-      if (typeof props.beforeChange === 'function') {
-        result = props.beforeChange(checked)
+      if (typeof props.onBeforeChange === 'function') {
+        result = props.onBeforeChange(checked)
 
         if (isPromise(result)) {
           result = await result

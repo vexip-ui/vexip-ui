@@ -21,7 +21,7 @@
         :mode="horizontal ? 'horizontal' : 'vertical'"
         :delta-x="targetWidth"
         :delta-y="targetHeight"
-        :before-scroll="beforeScroll"
+        :on-before-scroll="beforeScroll"
         @wheel="handleWheel"
         @scroll-end="handleScrollEnd"
       >

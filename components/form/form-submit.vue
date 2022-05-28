@@ -75,16 +75,16 @@ const props = useConfiguredProps('form-submit', {
     default: false
   },
   loadingIcon: {
-    type: String,
-    default: 'spinner'
+    type: Object,
+    default: null
   },
   loadingSpin: {
     type: Boolean,
     default: false
   },
   icon: {
-    type: String,
-    default: ''
+    type: Object,
+    default: null
   },
   textColor: {
     type: String,
@@ -94,7 +94,7 @@ const props = useConfiguredProps('form-submit', {
     type: Boolean,
     default: false
   },
-  beforeSubmit: {
+  onBeforeSubmit: {
     type: Function as PropType<() => unknown>,
     default: null
   }
@@ -134,8 +134,8 @@ export default defineComponent({
       } else {
         let result: unknown = true
 
-        if (typeof props.beforeSubmit === 'function') {
-          result = props.beforeSubmit()
+        if (typeof props.onBeforeSubmit === 'function') {
+          result = props.onBeforeSubmit()
 
           if (isPromise(result)) {
             result = await result

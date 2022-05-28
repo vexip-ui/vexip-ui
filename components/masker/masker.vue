@@ -56,7 +56,7 @@ const props = useConfiguredProps('masker', {
     type: Boolean,
     default: false
   },
-  beforeClose: {
+  onBeforeClose: {
     type: Function as PropType<() => any | Promise<any>>,
     default: null
   },
@@ -72,7 +72,7 @@ export default defineComponent({
     Portal
   },
   props,
-  emits: ['toggle', 'before-close', 'close', 'hide', 'show', 'update:active'],
+  emits: ['toggle', 'close', 'hide', 'show', 'update:active'],
   setup(props, { emit }) {
     const prefix = 'vxp-masker'
     const currentActive = ref(props.active)
@@ -118,8 +118,8 @@ export default defineComponent({
 
       let result = true
 
-      if (typeof props.beforeClose === 'function') {
-        result = props.beforeClose()
+      if (typeof props.onBeforeClose === 'function') {
+        result = props.onBeforeClose()
 
         if (isPromise(result)) {
           result = await result

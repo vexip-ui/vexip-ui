@@ -11,8 +11,8 @@ export function useScrollWrapper({
   height,
   scrollX,
   scrollY,
-  beforeRefresh,
-  afterRefresh
+  onBeforeRefresh,
+  onAfterRefresh
 }: {
   mode: Ref<ScrollMode>,
   disabled: Ref<boolean>,
@@ -20,8 +20,8 @@ export function useScrollWrapper({
   height: Ref<number | string>,
   scrollX: Ref<number>,
   scrollY: Ref<number>,
-  beforeRefresh?: () => void,
-  afterRefresh?: () => void
+  onBeforeRefresh?: () => void,
+  onAfterRefresh?: () => void
 }) {
   const wrapperElement = ref<HTMLElement | null>(null)
   const contentElement = ref<HTMLElement | null>(null)
@@ -254,8 +254,8 @@ export function useScrollWrapper({
   }
 
   function refresh() {
-    if (typeof beforeRefresh === 'function') {
-      beforeRefresh()
+    if (typeof onBeforeRefresh === 'function') {
+      onBeforeRefresh()
     }
 
     computeContentSize()
@@ -270,8 +270,8 @@ export function useScrollWrapper({
       () => {
         verifyScroll()
 
-        if (typeof afterRefresh === 'function') {
-          afterRefresh()
+        if (typeof onAfterRefresh === 'function') {
+          onAfterRefresh()
         }
       },
       isMounted ? 20 : 100
