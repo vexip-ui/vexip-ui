@@ -1,0 +1,137 @@
+code[class*='language-'],
+pre[class*='language-'] {
+  font-family:
+    Lucida,
+    'lucida console',
+    'Courier New',
+    Consolas,
+    Monaco,
+    'andale mono',
+    'ubuntu mono',
+    monospace;
+  font-size: 1em;
+  hyphens: none;
+  line-height: 2;
+  color: var(--vxp-content-color-base);
+  text-align: left;
+  word-break: normal;
+  word-wrap: normal;
+  tab-size: 4;
+  white-space: pre;
+  background-color: none;
+  word-spacing: normal;
+
+  &::selection,
+  ::selection {
+    text-shadow: none;
+    background-color: var(--vxp-color-info-opacity-2);
+  }
+}
+
+@media print {
+  code[class*='language-'],
+  pre[class*='language-'] {
+    text-shadow: none;
+  }
+}
+
+/* Inline code */
+:not(pre) > code[class*='language-'] {
+  padding: 0.1em;
+  white-space: normal;
+  border-radius: 0.3em;
+}
+
+.token {
+  &.comment,
+  &.prolog,
+  &.doctype,
+  &.cdata {
+    color: var(--vxp-content-color-disabled);
+  }
+
+  &.punctuation {
+    color: #999;
+  }
+
+  // &.namespace {
+  //   opacity: 1;
+  // }
+
+  &.property {
+    color: var(--vxp-color-warning-dark-2);
+  }
+
+  &.tag,
+  &.boolean,
+  &.number,
+  &.constant,
+  &.symbol,
+  &.deleted {
+    color: var(--vxp-color-error-base);
+  }
+
+  &.attr-name {
+    color: #d141f5;
+  }
+
+  &.selector,
+  &.string,
+  &.char,
+  &.builtin,
+  &.inserted,
+  &.attr-value {
+    color: var(--vxp-color-success-dark-2);
+  }
+
+  &.operator,
+  &.entity,
+  &.url {
+    color: #9a6e3a;
+    background-color: hsla(0deg, 0%, 100%, 50%);
+  }
+
+  &.atrule,
+  &.keyword {
+    color: var(--vxp-color-primary-base);
+  }
+
+  &.function,
+  &.class-name {
+    color: var(--vxp-color-error-base);
+  }
+
+  &.regex,
+  &.important,
+  &.variable {
+    color: #e90;
+  }
+
+  &.important,
+  &.bold {
+    font-weight: bold;
+  }
+
+  &.italic {
+    font-style: italic;
+  }
+
+  &.entity {
+    cursor: help;
+  }
+}
+
+.language-css .token.string,
+.style .token.string {
+  color: #9a6e3a;
+  background: hsla(0deg, 0%, 100%, 50%);
+}
+
+.token.keyword {
+  &-const,
+  &-let,
+  &-var,
+  &-async {
+    color: #d141f5;
+  }
+}

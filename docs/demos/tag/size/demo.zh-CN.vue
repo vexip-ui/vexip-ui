@@ -1,6 +1,6 @@
 <template>
   <Tag
-    v-for="type in tags"
+    v-for="(type) in tags"
     :key="type"
     :type="type"
     closable
@@ -11,7 +11,7 @@
   <br />
   <br />
   <Tag
-    v-for="type in tags"
+    v-for="(type) in tags"
     :key="type"
     :type="type"
     closable
@@ -22,7 +22,7 @@
   <br />
   <br />
   <Tag
-    v-for="type in tags"
+    v-for="(type) in tags"
     :key="type"
     :type="type"
     closable

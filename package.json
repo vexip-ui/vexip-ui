@@ -149,6 +149,7 @@
     "build": "ts-node scripts/build.ts",
     "build:common": "pnpm run build:utils && pnpm run build:mixins && pnpm run build:icons",
     "build:config": "pnpm -C common/config build && pnpm i",
+    "build:docs": "pnpm -C docs build",
     "build:full": "ts-node scripts/build-full.ts",
     "build:icons": "pnpm -C common/icons build && pnpm i",
     "build:mixins": "pnpm -C common/mixins build && pnpm i",
@@ -169,6 +170,7 @@
     "publish:ci": "ts-node scripts/publish.ts",
     "release": "ts-node scripts/release.ts",
     "serve": "ts-node scripts/serve.ts",
+    "serve:docs": "pnpm -C docs serve",
     "serve:playground": "pnpm -C playground serve",
     "serve:theme": "ts-node scripts/serve.ts --theme"
   },

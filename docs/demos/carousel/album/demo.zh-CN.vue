@@ -25,11 +25,11 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
-import img1 from '@/assets/carousel/1.jpg'
-import img2 from '@/assets/carousel/2.jpg'
-import img3 from '@/assets/carousel/3.jpg'
-import img4 from '@/assets/carousel/4.jpg'
-import img5 from '@/assets/carousel/5.jpg'
+import img1 from '@docs/assets/carousel/1.jpg'
+import img2 from '@docs/assets/carousel/2.jpg'
+import img3 from '@docs/assets/carousel/3.jpg'
+import img4 from '@docs/assets/carousel/4.jpg'
+import img5 from '@docs/assets/carousel/5.jpg'
 
 export default defineComponent({
   setup() {

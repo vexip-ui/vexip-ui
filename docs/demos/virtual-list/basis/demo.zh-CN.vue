@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const items = ref(Array.from({ length: 100 }, (_, index) => {
+const items = ref(Array.from({ length: 10000 }, (_, index) => {
   return {
     id: index,
     value: `选项${index}`,

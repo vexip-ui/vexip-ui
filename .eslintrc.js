@@ -170,6 +170,12 @@ module.exports = {
       }
     },
     {
+      files: ['docs/**'],
+      globals: {
+        __LANGUAGE__: 'readonly'
+      }
+    },
+    {
       files: ['example/**'],
       globals: {
         __DEMOS__: 'readonly',
