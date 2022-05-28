@@ -1,3 +1,5 @@
+import type { AnyCase } from './word-case'
+
 /**
  * 将任意值转成数字，NaN 的情况将会处理成 0
  * @param value - 需要转化的值
@@ -108,4 +110,42 @@ export function round(number: number, criticalValue: number) {
  */
 export function boundRange(number: number | string, min: number, max: number) {
   return Math.max(min, Math.min(max, parseFloat(number as string)))
+}
+
+export type SizeUnitWithAuto = AnyCase<'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'AUTO'>
+export type SizeUnit = Exclude<SizeUnitWithAuto, AnyCase<'AUTO'>>
+
+const SIZE_UNIT_WITH_AUTO = Object.freeze(['B', 'KB', 'MB', 'GB', 'TB', 'AUTO'] as Uppercase<SizeUnitWithAuto>[])
+
+/**
+ * 根据传入的 Byte 数值，将其格式化成指定单位的大小
+ * @param byte - 需要计算的 Byte 数值
+ * @param unit - 格式化的单位
+ */
+export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO') {
+  let upperUnit = unit.toUpperCase() as Uppercase<SizeUnitWithAuto>
+  upperUnit = SIZE_UNIT_WITH_AUTO.includes(upperUnit) ? upperUnit : 'AUTO'
+
+  let power
+  switch (upperUnit) {
+    case 'AUTO': power = 0; break
+    case 'KB': power = 1; break
+    case 'MB': power = 2; break
+    case 'GB': power = 3; break
+    case 'TB': power = 4; break
+    default: return byte
+  }
+
+  let targetSize
+
+  if (!power) {
+    for (targetSize = byte; targetSize > 1024; ++power) {
+      if (power > 4) break
+      targetSize = targetSize / 1024
+    }
+  } else {
+    targetSize = byte / (1024 ** power)
+  }
+
+  return targetSize
 }

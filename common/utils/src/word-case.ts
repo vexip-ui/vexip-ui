@@ -1,4 +1,15 @@
-// 短横线命名
+export type AnyCase<S> = string extends S
+  ? string
+  : S extends `${infer F1}${infer F2}${infer R}`
+  ? `${Uppercase<F1> | Lowercase<F1>}${Uppercase<F2> | Lowercase<F2>}${AnyCase<R>}`
+  : S extends `${infer F}${infer R}`
+  ? `${Uppercase<F> | Lowercase<F>}${AnyCase<R>}`
+  : ''
+
+/**
+ * 将命名转换为短横线命名
+ * @param value - 需要转换的命名
+ */
 export function toKebabCase(value: string) {
   return (
     value.charAt(0).toLowerCase() +
@@ -9,7 +20,10 @@ export function toKebabCase(value: string) {
   )
 }
 
-// 全大写命名
+/**
+ * 将命名转换为全大写命名
+ * @param value - 需要转换的命名
+ */
 export function toPascalCase(value: string) {
   return (
     value.charAt(0).toUpperCase() +
@@ -17,7 +31,10 @@ export function toPascalCase(value: string) {
   )
 }
 
-// 驼峰命名
+/**
+ *  将命名转换为驼峰命名
+ * @param value - 需要转换的命名
+ */
 export function toCamelCase(value: string) {
   const pascalName = toPascalCase(value)
 
