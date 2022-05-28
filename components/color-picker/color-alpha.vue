@@ -39,7 +39,7 @@ const props = {
 export default defineComponent({
   name: 'ColorAlpha',
   props,
-  emits: ['on-edit-start', 'on-edit-end', 'on-change'],
+  emits: ['edit-start', 'edit-end', 'change'],
   setup(props, { emit }) {
     const currentLeft = ref(props.alpha * 100)
 
@@ -99,7 +99,7 @@ export default defineComponent({
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
 
-      emit('on-edit-start')
+      emit('edit-start')
     }
 
     function handleMouseMove(event: MouseEvent) {
@@ -116,7 +116,7 @@ export default defineComponent({
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
 
-      emit('on-edit-end')
+      emit('edit-end')
     }
 
     function verifyPosition() {
@@ -124,7 +124,7 @@ export default defineComponent({
     }
 
     function handleChange() {
-      emit('on-change', currentLeft.value / 100)
+      emit('change', currentLeft.value / 100)
     }
 
     return {

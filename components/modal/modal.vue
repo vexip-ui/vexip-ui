@@ -8,8 +8,8 @@
     :disabled="hideMask"
     :before-close="handleMaskClose"
     :transfer="transfer"
-    @on-show="handleShow"
-    @on-hide="handleHide"
+    @show="handleShow"
+    @hide="handleHide"
   >
     <template #default="{ show }">
       <section
@@ -50,14 +50,14 @@
         </div>
         <div v-if="!noFooter" ref="footer" :class="`${prefix}__footer`">
           <slot name="footer">
-            <Button type="text" size="small" @on-click="handleCancle">
+            <Button type="text" size="small" @click="handleCancle">
               {{ cancelText || locale.cancel }}
             </Button>
             <Button
               type="primary"
               size="small"
               :loading="loading"
-              @on-click="handleConfirm"
+              @click="handleConfirm"
             >
               {{ confirmText || locale.confirm }}
             </Button>
@@ -202,18 +202,18 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-toggle',
-    'on-ok',
-    'on-cancel',
-    'on-close',
-    'on-show',
-    'on-hide',
-    'on-drag-start',
-    'on-drag-move',
-    'on-drag-end',
-    'on-resize-start',
-    'on-resize-move',
-    'on-resize-end',
+    'toggle',
+    'ok',
+    'cancel',
+    'close',
+    'show',
+    'hide',
+    'drag-start',
+    'drag-move',
+    'drag-end',
+    'resize-start',
+    'resize-move',
+    'resize-end',
     'update:active'
   ],
   setup(props, { slots, emit }) {
@@ -277,7 +277,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:active', value)
 
       if (value) {
@@ -381,12 +381,12 @@ export default defineComponent({
 
     function handleConfirm() {
       handleClose(true)
-      emit('on-ok')
+      emit('ok')
     }
 
     function handleCancle() {
       handleClose(false)
-      emit('on-cancel')
+      emit('cancel')
     }
 
     async function handleClose(isConfirm: boolean) {
@@ -403,7 +403,7 @@ export default defineComponent({
       if (result !== false) {
         nextTick(() => {
           currentActive.value = false
-          emit('on-close')
+          emit('close')
         })
       }
 
@@ -411,11 +411,11 @@ export default defineComponent({
     }
 
     function handleShow() {
-      emit('on-show')
+      emit('show')
     }
 
     function handleHide() {
-      emit('on-hide')
+      emit('hide')
     }
 
     function handleMaskClose() {
@@ -448,7 +448,7 @@ export default defineComponent({
       document.addEventListener('mousemove', handleDragMove)
       document.addEventListener('mouseup', handleDragEnd)
 
-      emit('on-drag-start')
+      emit('drag-start')
     }
 
     function handleDragMove(event: MouseEvent) {
@@ -463,7 +463,7 @@ export default defineComponent({
       currentTop.value = topStart - yStart + clientY
       currentLeft.value = leftStart - xStart + clientX
 
-      emit('on-drag-move', {
+      emit('drag-move', {
         top: currentTop.value,
         left: currentLeft.value
       })
@@ -475,7 +475,7 @@ export default defineComponent({
       document.removeEventListener('mousemove', handleDragMove)
       document.removeEventListener('mouseup', handleDragEnd)
 
-      emit('on-drag-end', {
+      emit('drag-end', {
         top: currentTop.value,
         left: currentLeft.value
       })
@@ -532,7 +532,7 @@ export default defineComponent({
       document.addEventListener('mouseup', handleResizeEnd)
 
       resizing.value = true
-      emit('on-resize-start')
+      emit('resize-start')
     }
 
     function handleResizeMove(event: MouseEvent) {
@@ -547,7 +547,7 @@ export default defineComponent({
       currentWidth.value = Math.max(props.minWidth, widthStart - xStart + clientX)
       currentHeight.value = Math.max(minHeight, heightStart - yStart + clientY)
 
-      emit('on-resize-move', {
+      emit('resize-move', {
         width: currentWidth.value,
         height: currentHeight.value
       })
@@ -560,7 +560,7 @@ export default defineComponent({
       document.removeEventListener('mouseup', handleResizeEnd)
 
       resizing.value = true
-      emit('on-resize-end', {
+      emit('resize-end', {
         width: currentWidth.value,
         height: currentHeight.value
       })

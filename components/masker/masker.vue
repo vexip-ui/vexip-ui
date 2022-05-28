@@ -72,7 +72,7 @@ export default defineComponent({
     Portal
   },
   props,
-  emits: ['on-toggle', 'before-close', 'on-close', 'on-hide', 'on-show', 'update:active'],
+  emits: ['toggle', 'before-close', 'close', 'hide', 'show', 'update:active'],
   setup(props, { emit }) {
     const prefix = 'vxp-masker'
     const currentActive = ref(props.active)
@@ -105,7 +105,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:active', value)
     })
 
@@ -129,7 +129,7 @@ export default defineComponent({
       if (result !== false) {
         nextTick(() => {
           toggleActive(false)
-          emit('on-close')
+          emit('close')
         })
       }
     }
@@ -137,13 +137,13 @@ export default defineComponent({
     function afterClose() {
       nextTick(() => {
         wrapShow.value = false
-        emit('on-hide')
+        emit('hide')
       })
     }
 
     function afterOpen() {
       nextTick(() => {
-        emit('on-show')
+        emit('show')
       })
     }
 

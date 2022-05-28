@@ -3,7 +3,7 @@
     v-model:value="value"
     style="width: 400px;"
     :options="options"
-    @on-input="setOptions"
+    @input="setOptions"
   ></AutoComplete>
 </template>
 

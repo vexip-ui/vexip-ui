@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Button type="primary" @on-click="sendNotice">
+    <Button type="primary" @click="sendNotice">
       可关闭提示
     </Button>
-    <Button type="warning" @on-click="$notice.warning({ title: '提示的标题', closable: true })">
+    <Button type="warning" @click="$notice.warning({ title: '提示的标题', closable: true })">
       可关闭的仅标题提示
     </Button>
   </div>

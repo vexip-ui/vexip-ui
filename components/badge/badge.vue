@@ -59,7 +59,7 @@ const props = useConfiguredProps('badge', {
 export default defineComponent({
   name: 'Badge',
   props,
-  emits: ['on-badge-click'],
+  emits: ['badge-click'],
   setup(props, { slots, emit }) {
     const prefix = 'vxp-badge'
 
@@ -91,7 +91,7 @@ export default defineComponent({
     })
 
     function handleBadgeClick() {
-      emit('on-badge-click')
+      emit('badge-click')
     }
 
     return {

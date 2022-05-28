@@ -54,8 +54,8 @@
         [selectToAdd ? 'marginBottom' : 'marginTop']:
           !hiddenFiles && renderFiles.length ? '0.5em' : null
       }"
-      @on-delete="deleteFile"
-      @on-preview="$emit('on-preview', $event)"
+      @delete="deleteFile"
+      @preview="$emit('preview', $event)"
     ></UploadList>
   </div>
 </template>
@@ -195,15 +195,15 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-exceed',
-    'on-change',
-    'on-filter-error',
-    'on-size-error',
-    'on-delete',
-    'on-progress',
-    'on-success',
-    'on-error',
-    'on-preview'
+    'exceed',
+    'change',
+    'filter-error',
+    'size-error',
+    'delete',
+    'progress',
+    'success',
+    'error',
+    'preview'
   ],
   setup(props, { emit }) {
     const prefix = 'vxp-upload'
@@ -292,7 +292,7 @@ export default defineComponent({
         const exceedFiles = files.slice(countLimit)
 
         emit(
-          'on-exceed',
+          'exceed',
           exceedFiles.map(file => file.source),
           getSourceFiles()
         )
@@ -303,7 +303,7 @@ export default defineComponent({
       const sourceFiles = getSourceFiles()
 
       syncInputFiles()
-      emit('on-change', sourceFiles)
+      emit('change', sourceFiles)
 
       if (!props.manual) {
         execute()
@@ -432,13 +432,13 @@ export default defineComponent({
         const extension = getFileExtension(file)
 
         if (filter.length && !filter.includes(extension)) {
-          emit('on-filter-error', file.source)
+          emit('filter-error', file.source)
 
           return false
         }
 
         if (file.size > limitSize) {
-          emit('on-size-error', file.source)
+          emit('size-error', file.source)
 
           return false
         }
@@ -455,7 +455,7 @@ export default defineComponent({
       }
 
       syncInputFiles()
-      emit('on-delete', file.source)
+      emit('delete', file.source)
     }
 
     function syncInputFiles() {
@@ -487,7 +487,7 @@ export default defineComponent({
     //     input.value.value = ''
     //   }
 
-    //   emit('on-change', [])
+    //   emit('change', [])
     // }
 
     // 根据源文件修改进度
@@ -514,7 +514,7 @@ export default defineComponent({
 
       file.percentage = percent
 
-      emit('on-progress', percent, file.source)
+      emit('progress', percent, file.source)
     }
 
     function handleSuccess(response: any, file: FileState) {
@@ -524,7 +524,7 @@ export default defineComponent({
       file.response = response
       file.error = null
 
-      emit('on-success', response, file.source)
+      emit('success', response, file.source)
     }
 
     function handleError(error: HttpError, file: FileState) {
@@ -533,7 +533,7 @@ export default defineComponent({
       file.status = UploadStatusType.FAIL
       file.error = error
 
-      emit('on-error', error, file.source)
+      emit('error', error, file.source)
     }
 
     let dragTimer: number

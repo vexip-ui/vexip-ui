@@ -115,8 +115,8 @@
               :disabled-date="disabledDate"
               :is-range="calendarRange"
               :value-type="valueType"
-              @on-select="handleSelectDate"
-              @on-hover="handleHoverDate"
+              @select="handleSelectDate"
+              @hover="handleHoverDate"
             ></CalendarPane>
           </div>
         </div>
@@ -128,16 +128,16 @@
             :second="dateValue.second"
             :candidate="3"
             :steps="steps"
-            @on-toggle-col="toggleColumn"
-            @on-change="emitChange"
+            @toggle-col="toggleColumn"
+            @change="emitChange"
           ></TimeWheel>
         </div>
       </div>
       <div v-if="!noAction" :class="`${prefix}__action`">
-        <Button type="text" size="small" @on-click="handleCancel">
+        <Button type="text" size="small" @click="handleCancel">
           {{ cancelText || locale.cancel }}
         </Button>
-        <Button type="primary" size="small" @on-click="handleConfirm">
+        <Button type="primary" size="small" @click="handleConfirm">
           {{ confirmText || locale.confirm }}
         </Button>
       </div>
@@ -244,14 +244,14 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-click',
-    'on-shortcut',
-    'on-toggle-col',
-    'on-change',
-    'on-cancel',
-    'on-confirm',
-    'on-hover',
-    'on-type-change'
+    'click',
+    'shortcut',
+    'toggle-col',
+    'change',
+    'cancel',
+    'confirm',
+    'hover',
+    'type-change'
   ],
   setup(props, { emit }) {
     const today = toDate(props.today)
@@ -367,7 +367,7 @@ export default defineComponent({
     }
 
     function handleClick(event: MouseEvent) {
-      emit('on-click', event)
+      emit('click', event)
     }
 
     function handleShortcut(index: number) {
@@ -377,7 +377,7 @@ export default defineComponent({
         value = value()
       }
 
-      emit('on-shortcut', name, value)
+      emit('shortcut', name, value)
     }
 
     function handleSelectDate(date: Date) {
@@ -410,11 +410,11 @@ export default defineComponent({
     }
 
     function toggleColumn(type: DateTimeType) {
-      emit('on-toggle-col', type)
+      emit('toggle-col', type)
     }
 
     function emitChange(type: DateTimeType, value: number) {
-      emit('on-change', type, value)
+      emit('change', type, value)
     }
 
     function handleDoublePrevClick() {
@@ -433,15 +433,15 @@ export default defineComponent({
     }
 
     function handleCancel() {
-      emit('on-cancel')
+      emit('cancel')
     }
 
     function handleConfirm() {
-      emit('on-confirm')
+      emit('confirm')
     }
 
     function handleHoverDate(date: Date | null) {
-      emit('on-hover', date)
+      emit('hover', date)
     }
 
     function isSelectedYear(year: number) {

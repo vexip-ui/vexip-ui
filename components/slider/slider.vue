@@ -14,8 +14,8 @@
         :tip-class="`${prefix}__tip`"
         :disabled="hideTip"
         :placement="vertical ? 'right' : 'top'"
-        @on-tip-enter="showTooltip"
-        @on-tip-leave="hideTooltip"
+        @tip-enter="showTooltip"
+        @tip-leave="hideTooltip"
       >
         <div
           :class="`${prefix}__handler`"
@@ -88,7 +88,7 @@ export default defineComponent({
     Tooltip
   },
   props,
-  emits: ['on-change', 'on-input', 'on-change', 'update:value'],
+  emits: ['change', 'input', 'change', 'update:value'],
   setup(props, { emit }) {
     const validateField = inject(VALIDATE_FIELD, noop)
 
@@ -161,7 +161,7 @@ export default defineComponent({
     }
 
     function emitChange() {
-      emit('on-change', truthValue.value)
+      emit('change', truthValue.value)
       emit('update:value', truthValue.value)
 
       if (!props.disableValidate) {
@@ -191,7 +191,7 @@ export default defineComponent({
         tooltip.value.updatePopper()
       }
 
-      emit('on-input', truthValue.value)
+      emit('input', truthValue.value)
     })
 
     function handleTrackDown(event: MouseEvent) {

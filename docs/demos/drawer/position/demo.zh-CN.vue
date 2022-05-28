@@ -6,7 +6,7 @@
       <Radio label="bottom"></Radio>
       <Radio label="left"></Radio>
     </RadioGroup>
-    <Button type="primary" @on-click="active = !active">
+    <Button type="primary" @click="active = !active">
       打开
     </Button>
     <Drawer

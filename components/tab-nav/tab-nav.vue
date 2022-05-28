@@ -34,7 +34,7 @@ const props = useConfiguredProps('tabNav', {
 export default defineComponent({
   name: 'TabNav',
   props,
-  emits: ['on-change', 'update:active'],
+  emits: ['change', 'update:active'],
   setup(props, { emit }) {
     const prefix = ' vxp-tab-nav'
     const currentActive = ref(props.active)
@@ -89,7 +89,7 @@ export default defineComponent({
     )
     watch(currentActive, value => {
       updateMarkerPosition()
-      emit('on-change', value)
+      emit('change', value)
       emit('update:active', value)
     })
 

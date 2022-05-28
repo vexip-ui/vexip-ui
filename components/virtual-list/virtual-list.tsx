@@ -91,7 +91,7 @@ export default defineComponent({
 
       return (
         <ResizeObserver throttle onResize={handleResize}>
-          <NativeScroll ref={scroll} class={prefix} use-y-bar scroll-y={scrollOffset.value} {...attrs} onOnScroll={onScroll}>
+          <NativeScroll ref={scroll} class={prefix} use-y-bar scroll-y={scrollOffset.value} {...attrs} onScroll={onScroll}>
             {h(
               props.listTag || 'div',
               {

@@ -11,8 +11,8 @@
       left: `${position.x}px`
     }"
     @contextmenu.prevent.stop
-    @on-select="handleSelect"
-    @on-outside-close="handleCancel"
+    @select="handleSelect"
+    @outside-close="handleCancel"
   >
     <!-- <div :class="`${prefix}__anchor`"></div> -->
     <template #drop>

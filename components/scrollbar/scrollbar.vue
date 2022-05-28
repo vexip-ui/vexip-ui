@@ -89,7 +89,7 @@ const props = useConfiguredProps('scrollbar', {
 export default defineComponent({
   name: 'Scrollbar',
   props,
-  emits: ['on-scroll', 'on-scroll-start', 'on-scroll-end'],
+  emits: ['scroll', 'scroll-start', 'scroll-end'],
   setup(props, { emit }) {
     const prefix = 'vxp-scrollbar'
     const active = ref(false)
@@ -118,14 +118,14 @@ export default defineComponent({
       disabled: toRef(props, 'disabled'),
       handleDown: scroll => {
         window.clearTimeout(fadeTimer)
-        emit('on-scroll-start', scroll)
+        emit('scroll-start', scroll)
       },
       handleMove: () => window.clearTimeout(fadeTimer),
       handleUp: scroll => {
         setScrollbarFade()
-        emit('on-scroll-end', scroll)
+        emit('scroll-end', scroll)
       },
-      handleScroll: scroll => emit('on-scroll', scroll)
+      handleScroll: scroll => emit('scroll', scroll)
     })
 
     const className = computed(() => {
@@ -278,7 +278,7 @@ export default defineComponent({
       window.clearTimeout(fadeTimer)
 
       scrolling.value = true
-      emit('on-scroll-start', currentScroll.value)
+      emit('scroll-start', currentScroll.value)
     }
 
     const handleBarMove = throttle((event: MouseEvent) => {
@@ -294,7 +294,7 @@ export default defineComponent({
       currentScroll.value = (position / length / (100 - props.barLength)) * 1e4
 
       verifyScroll()
-      emit('on-scroll', currentScroll.value)
+      emit('scroll', currentScroll.value)
     })
 
     function handleMouseMove(event: MouseEvent) {
@@ -315,7 +315,7 @@ export default defineComponent({
       setScrollbarFade()
 
       scrolling.value = false
-      emit('on-scroll-end', currentScroll.value)
+      emit('scroll-end', currentScroll.value)
     }
 
     function verifyScroll() {

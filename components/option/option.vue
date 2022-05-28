@@ -57,7 +57,7 @@ const props = {
 export default defineComponent({
   name: 'Option',
   props,
-  emits: ['on-select'],
+  emits: ['select'],
   setup(props, { emit }) {
     const selectorState = inject(SELECTOR_STATE, null)
 
@@ -132,7 +132,7 @@ export default defineComponent({
     function handleSelect() {
       if (props.disabled) return
 
-      emit('on-select', truthValue.value, truthLabel.value)
+      emit('select', truthValue.value, truthLabel.value)
 
       if (typeof selectorState?.handleSelect === 'function') {
         selectorState.handleSelect(truthValue.value, truthLabel.value)

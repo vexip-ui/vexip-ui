@@ -4,8 +4,8 @@
       :data="data"
       :current-page="currentPage"
       :page-size="pageSize"
-      @on-row-check="toggleChecked"
-      @on-row-check-all="toggleAllChecked"
+      @row-check="toggleChecked"
+      @row-check-all="toggleAllChecked"
     >
       <TableColumn id-key="selection" type="selection"></TableColumn>
       <TableColumn id-key="group" name="Group"></TableColumn>

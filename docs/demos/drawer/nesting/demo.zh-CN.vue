@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Button type="primary" @on-click="active = !active">
+    <Button type="primary" @click="active = !active">
       打开
     </Button>
     <Drawer
@@ -9,7 +9,7 @@
       title="一级抽屉"
       :width="480"
     >
-      <Button type="primary" @on-click="nestingActive = !nestingActive">
+      <Button type="primary" @click="nestingActive = !nestingActive">
         打开二级抽屉
       </Button>
       <Drawer v-model:active="nestingActive" title="二级抽屉">

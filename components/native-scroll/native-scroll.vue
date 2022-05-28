@@ -26,9 +26,9 @@
       :appear="appear"
       :duration="barDuration"
       :use-track="useBarTrack"
-      @on-scroll-start="handleBarScrollStart('horizontal')"
-      @on-scroll="handleXBarScroll"
-      @on-scroll-end="handleBarScrollEnd('horizontal')"
+      @scroll-start="handleBarScrollStart('horizontal')"
+      @scroll="handleXBarScroll"
+      @scroll-end="handleBarScrollEnd('horizontal')"
     ></Scrollbar>
     <Scrollbar
       v-if="useYBar"
@@ -41,9 +41,9 @@
       :appear="appear"
       :duration="barDuration"
       :use-track="useBarTrack"
-      @on-scroll-start="handleBarScrollStart('vertical')"
-      @on-scroll="handleYBarScroll"
-      @on-scroll-end="handleBarScrollEnd('vertical')"
+      @scroll-start="handleBarScrollStart('vertical')"
+      @scroll="handleYBarScroll"
+      @scroll-end="handleBarScrollEnd('vertical')"
     ></Scrollbar>
   </div>
 </template>
@@ -151,14 +151,14 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-x-enable-change',
-    'on-y-enable-change',
-    'on-wheel',
-    'on-scroll-start',
-    'on-scroll',
-    'on-scroll-end',
-    'on-bar-scroll-start',
-    'on-bar-scroll-end'
+    'x-enable-change',
+    'y-enable-change',
+    'wheel',
+    'scroll-start',
+    'scroll',
+    'scroll-end',
+    'bar-scroll-start',
+    'bar-scroll-end'
   ],
   setup(props, { emit }) {
     const emitter = createEventEmitter()
@@ -326,10 +326,10 @@ export default defineComponent({
     })
 
     watch(enableXScroll, value => {
-      emit('on-x-enable-change', value)
+      emit('x-enable-change', value)
     })
     watch(enableYScroll, value => {
-      emit('on-y-enable-change', value)
+      emit('y-enable-change', value)
     })
 
     const xBar = ref<InstanceType<typeof Scrollbar> | null>(null)
@@ -372,7 +372,7 @@ export default defineComponent({
       document.addEventListener(MOVE_EVENT, handlePointerMove)
       document.addEventListener(UP_EVENT, handlePointerUp)
 
-      emit('on-scroll-start', {
+      emit('scroll-start', {
         clientX: currentScroll.x,
         clientY: currentScroll.y,
         percentX: percentX.value,
@@ -410,7 +410,7 @@ export default defineComponent({
       document.removeEventListener(MOVE_EVENT, handlePointerMove)
       document.removeEventListener(UP_EVENT, handlePointerUp)
       emitScrollEvent()
-      emit('on-scroll-end', {
+      emit('scroll-end', {
         clientX: currentScroll.x,
         clientY: currentScroll.y,
         percentX: percentX.value,
@@ -469,12 +469,12 @@ export default defineComponent({
 
     function handleBarScrollStart(type: 'vertical' | 'horizontal') {
       usingBar.value = true
-      emit('on-bar-scroll-start', type)
+      emit('bar-scroll-start', type)
     }
 
     function handleBarScrollEnd(type: 'vertical' | 'horizontal') {
       usingBar.value = false
-      emit('on-bar-scroll-end', type)
+      emit('bar-scroll-end', type)
     }
 
     function handleXBarScroll(percent: number) {
@@ -490,14 +490,14 @@ export default defineComponent({
     }
 
     function emitScrollEvent(barType?: 'vertical' | 'horizontal') {
-      emit('on-scroll', {
+      emit('scroll', {
         barType,
         clientX: currentScroll.x,
         clientY: currentScroll.y,
         percentX: percentX.value,
         percentY: percentY.value
       })
-      emitter.emit('on-scroll', {
+      emitter.emit('scroll', {
         barType,
         clientX: currentScroll.x,
         clientY: currentScroll.y,
@@ -515,11 +515,11 @@ export default defineComponent({
     }
 
     function addScrollListener(listener: EventHandler) {
-      emitter.on('on-scroll', listener)
+      emitter.on('scroll', listener)
     }
 
     function removeScrollListener(listener: EventHandler) {
-      emitter.off('on-scroll', listener)
+      emitter.off('scroll', listener)
     }
 
     return {

@@ -1,6 +1,6 @@
 <template>
   <transition :name="transitionName">
-    <div :class="className" :style="style" @click="$emit('on-click', $event)">
+    <div :class="className" :style="style" @click="$emit('click', $event)">
       <span>
         <slot></slot>
       </span>
@@ -91,7 +91,7 @@ export default defineComponent({
     Xmark
   },
   props,
-  emits: ['on-click', 'on-close'],
+  emits: ['click', 'close'],
   setup(props, { emit }) {
     const prefix = 'vxp-tag'
 
@@ -116,7 +116,7 @@ export default defineComponent({
 
     function handleClose() {
       if (props.closable) {
-        emit('on-close')
+        emit('close')
       }
     }
 

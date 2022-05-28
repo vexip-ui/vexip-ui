@@ -107,7 +107,7 @@ export default defineComponent({
     Portal
   },
   props,
-  emits: ['on-toggle', 'on-select', 'on-click-outside', 'on-outside-close', 'update:visible'],
+  emits: ['toggle', 'select', 'click-outside', 'outside-close', 'update:visible'],
   setup(props, { emit }) {
     const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)
 
@@ -163,7 +163,7 @@ export default defineComponent({
         updatePopper()
       }
 
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:visible', value)
     })
 
@@ -174,19 +174,19 @@ export default defineComponent({
     })
 
     function handleClickOutside() {
-      emit('on-click-outside')
+      emit('click-outside')
 
       if (props.outsideClose && props.trigger !== 'custom' && currentVisible.value) {
         currentVisible.value = false
 
-        emit('on-outside-close')
+        emit('outside-close')
       }
     }
 
     function handleSelect(sonLabel: string | number) {
       if (trigger.value !== 'custom') {
         currentVisible.value = false
-        emit('on-select', sonLabel)
+        emit('select', sonLabel)
       }
 
       if (typeof parentSelectHandler === 'function') {

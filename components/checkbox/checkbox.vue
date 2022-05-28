@@ -78,7 +78,7 @@ const props = useConfiguredProps('checkbox', {
 export default defineComponent({
   name: 'Checkbox',
   props,
-  emits: ['on-change', 'update:checked'],
+  emits: ['change', 'update:checked'],
   setup(props, { slots, emit }) {
     const groupState = inject(GROUP_STATE, null)
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -132,7 +132,7 @@ export default defineComponent({
       }
     )
     watch(currentChecked, checked => {
-      emit('on-change', checked)
+      emit('change', checked)
       emit('update:checked', checked)
     })
 

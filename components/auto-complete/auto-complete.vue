@@ -17,9 +17,9 @@
     :no-suffix="!hasSuffix"
     :placeholder="placeholder"
     :options="options"
-    @on-toggle="handleToggle"
-    @on-select="handleSelect"
-    @on-clear="handleClear"
+    @toggle="handleToggle"
+    @select="handleSelect"
+    @clear="handleClear"
   >
     <template v-if="hasPrefix" #prefix>
       <slot name="prefix">
@@ -177,12 +177,12 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-select',
-    'on-input',
-    'on-change',
-    'on-toggle',
-    'on-enter',
-    'on-clear',
+    'select',
+    'input',
+    'change',
+    'toggle',
+    'enter',
+    'clear',
     'update:value'
   ],
   setup(props, { slots, emit }) {
@@ -319,7 +319,7 @@ export default defineComponent({
       const prevValue = currentValue.value
 
       currentValue.value = value
-      emit('on-select', value)
+      emit('select', value)
 
       if (value !== prevValue) {
         changed = true
@@ -340,7 +340,7 @@ export default defineComponent({
         currentIndex.value = 0
       }
 
-      emit('on-input', value)
+      emit('input', value)
     }
 
     function handleInputChange(event: string | Event) {
@@ -367,7 +367,7 @@ export default defineComponent({
       changed = false
       lastValue = currentValue.value
 
-      emit('on-change', currentValue.value)
+      emit('change', currentValue.value)
       emit('update:value', currentValue.value)
 
       if (!props.disableValidate) {
@@ -381,7 +381,7 @@ export default defineComponent({
     function handleToggle() {
       testOptionCanDrop()
 
-      emit('on-toggle', visible.value)
+      emit('toggle', visible.value)
 
       if (!visible.value) {
         currentIndex.value = -1
@@ -420,7 +420,7 @@ export default defineComponent({
         handleChange()
       }
 
-      emit('on-enter', currentValue.value)
+      emit('enter', currentValue.value)
       control.value?.blur()
       visible.value = false
     }
@@ -437,7 +437,7 @@ export default defineComponent({
         }
 
         handleChange()
-        emit('on-clear')
+        emit('clear')
         clearField()
       }
     }

@@ -12,7 +12,7 @@
     :icon="icon"
     :text-color="textColor"
     :block="block"
-    @on-click="handleReset"
+    @click="handleReset"
   >
     <slot>
       {{ text || locale.reset }}
@@ -100,7 +100,7 @@ export default defineComponent({
     Button
   },
   props,
-  emits: ['on-reset'],
+  emits: ['reset'],
   setup(props, { emit }) {
     const actions = inject<FormActions>(FORM_ACTIONS, {
       validate: noop,
@@ -126,7 +126,7 @@ export default defineComponent({
 
       if (result !== false) {
         actions.reset()
-        emit('on-reset')
+        emit('reset')
       }
     }
 

@@ -41,7 +41,7 @@ const props = useConfiguredProps('bubble', {
 export default defineComponent({
   name: 'Bubble',
   props,
-  emits: ['on-click'],
+  emits: ['click'],
   setup(props, { emit }) {
     const prefix = 'vxp-bubble'
 
@@ -76,7 +76,7 @@ export default defineComponent({
     })
 
     function handleClick(event: MouseEvent) {
-      emit('on-click', event)
+      emit('click', event)
     }
 
     return {

@@ -133,7 +133,7 @@
           v-model:value="jumpValue"
           size="small"
           :class="`${prefix}__jump-input`"
-          @on-change="handleJumpPage"
+          @change="handleJumpPage"
         ></NumberInput>
         {{ getCountWordOnly(locale.page, 1) }}
       </div>
@@ -246,7 +246,7 @@ export default defineComponent({
     Ellipsis
   },
   props,
-  emits: ['on-change', 'on-page-size-change', 'update:active'],
+  emits: ['change', 'page-size-change', 'update:active'],
   setup(props, { emit }) {
     const prefix = 'vxp-pagination'
     const currentPagers = ref<number[]>([])
@@ -321,7 +321,7 @@ export default defineComponent({
     watch(() => props.active, changeActive)
     watch(currentActive, value => {
       computePagers()
-      emit('on-change', value)
+      emit('change', value)
       emit('update:active', value)
     })
     watch(() => props.maxCount, computePagers)
@@ -333,7 +333,7 @@ export default defineComponent({
       }
     )
     watch(currentPageSize, (value, prevValue) => {
-      emit('on-page-size-change', value)
+      emit('page-size-change', value)
 
       // 按当前页的第一条数据计算新的页码
       const anchor = Math.ceil((prevValue * (currentActive.value - 1) + 1) / value)

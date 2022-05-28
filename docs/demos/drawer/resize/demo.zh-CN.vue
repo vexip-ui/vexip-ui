@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Button type="primary" @on-click="horizontalActive = !horizontalActive">
+    <Button type="primary" @click="horizontalActive = !horizontalActive">
       左右调整
     </Button>
-    <Button type="primary" @on-click="verticalActive = !verticalActive">
+    <Button type="primary" @click="verticalActive = !verticalActive">
       上下调整
     </Button>
     <Drawer

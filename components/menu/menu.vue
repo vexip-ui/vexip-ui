@@ -72,7 +72,7 @@ const props = useConfiguredProps('menu', {
 export default defineComponent({
   name: 'Menu',
   props,
-  emits: ['on-select', 'on-expand', 'on-reduce', 'update:active'],
+  emits: ['select', 'expand', 'reduce', 'update:active'],
   setup(props, { emit }) {
     const prefix = 'vxp-menu'
     const menuItemSet = new Set<MenuItemState>()
@@ -165,16 +165,16 @@ export default defineComponent({
       if (currentActive.value !== label) {
         currentActive.value = label
 
-        emit('on-select', label)
+        emit('select', label)
         emit('update:active', label)
       }
     }
 
     function handleExpand(label: string, expanded: boolean) {
       if (expanded) {
-        emit('on-expand', label)
+        emit('expand', label)
       } else {
-        emit('on-reduce', label)
+        emit('reduce', label)
       }
     }
 

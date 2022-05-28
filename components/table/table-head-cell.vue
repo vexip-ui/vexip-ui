@@ -68,7 +68,7 @@
             :checked="item.active"
             :label="item.label"
             :value="item.value"
-            @on-change="handleFilterCheck(item.value, $event)"
+            @change="handleFilterCheck(item.value, $event)"
           ></Checkbox>
         </div>
         <div :class="`${prefix}__filter-actions`">
@@ -76,11 +76,11 @@
             type="text"
             size="small"
             :disabled="!hasFilterActive"
-            @on-click="handleFilterMutiple()"
+            @click="handleFilterMutiple()"
           >
             {{ locale.filterConfirm }}
           </Button>
-          <Button type="text" size="small" @on-click="handleResetFilter">
+          <Button type="text" size="small" @click="handleResetFilter">
             {{ locale.filterReset }}
           </Button>
         </div>

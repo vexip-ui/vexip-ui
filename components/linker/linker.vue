@@ -54,7 +54,7 @@ export default defineComponent({
     Icon
   },
   props,
-  emits: ['on-click'],
+  emits: ['click'],
   setup(props, { emit }) {
     const prefix = 'vxp-linker'
 
@@ -69,7 +69,7 @@ export default defineComponent({
     })
 
     function handleClick(event: MouseEvent) {
-      emit('on-click', event)
+      emit('click', event)
     }
 
     return {

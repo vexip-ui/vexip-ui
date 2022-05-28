@@ -106,11 +106,11 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-toggle',
-    'on-click-outside',
-    'on-outside-close',
-    'on-tip-enter',
-    'on-tip-leave',
+    'toggle',
+    'click-outside',
+    'outside-close',
+    'tip-enter',
+    'tip-leave',
     'update:visible'
   ],
   setup(props, { emit }) {
@@ -141,7 +141,7 @@ export default defineComponent({
         updatePopper()
       }
 
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:visible', value)
     })
 
@@ -165,7 +165,7 @@ export default defineComponent({
         }, 250)
       }
 
-      emit('on-tip-enter')
+      emit('tip-enter')
     }
 
     function handleTriggerLeave() {
@@ -179,7 +179,7 @@ export default defineComponent({
         }, 250)
       }
 
-      emit('on-tip-leave')
+      emit('tip-leave')
     }
 
     function handleTriggerClick() {
@@ -193,12 +193,12 @@ export default defineComponent({
     function handleClickOutside() {
       if (props.disabled) return
 
-      emit('on-click-outside')
+      emit('click-outside')
 
       if (props.outsideClose && props.trigger !== 'custom' && currentVisible.value) {
         currentVisible.value = false
 
-        emit('on-outside-close')
+        emit('outside-close')
       }
     }
 

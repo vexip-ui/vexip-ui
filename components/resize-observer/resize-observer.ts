@@ -18,7 +18,7 @@ export default defineComponent({
       validator: (value: boolean | number) => typeof value === 'boolean' || value > 0
     }
   },
-  // emits: ['on-resize'],
+  // emits: ['resize'],
   setup(props, { slots }) {
     const { observeResize, unobserveResize } = useResize()
 

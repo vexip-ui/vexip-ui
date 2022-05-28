@@ -45,10 +45,10 @@
       <Textarea v-model:value="formModel.textarea"></Textarea>
     </FormItem>
     <FormItem action>
-      <Button type="primary" @on-click="handleSubmit()">
+      <Button type="primary" @click="handleSubmit()">
         提交
       </Button>
-      <Button @on-click="handleReset()">
+      <Button @click="handleReset()">
         重置
       </Button>
     </FormItem>

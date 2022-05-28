@@ -52,7 +52,7 @@ const props = useConfiguredProps('collapse', {
 export default defineComponent({
   name: 'Collapse',
   props,
-  emits: ['on-change', 'update:expanded'],
+  emits: ['change', 'update:expanded'],
   setup(props, { emit }) {
     const prefix = 'vxp-collapse'
     const paneExpandedMap = new Map<string | number, Ref<boolean>>()
@@ -94,7 +94,7 @@ export default defineComponent({
 
     watch(currentExpanded, value => {
       updateItemExpanded()
-      emit('on-change', value)
+      emit('change', value)
       emit('update:expanded', value)
     })
 

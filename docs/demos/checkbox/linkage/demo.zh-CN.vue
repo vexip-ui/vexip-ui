@@ -10,14 +10,14 @@
     <Button
       type="primary"
       size="small"
-      @on-click="checked = !checked"
+      @click="checked = !checked"
     >
       {{ checked ? 'Uncheck' : 'Check' }}
     </Button>
     <Button
       type="primary"
       size="small"
-      @on-click="disabled = !disabled"
+      @click="disabled = !disabled"
     >
       {{ disabled ? 'Enable' : 'Disable' }}
     </Button>

@@ -5,7 +5,7 @@
   <Button
     type="primary"
     :loading="loading"
-    @on-click="load"
+    @click="load"
   >
     Click me
   </Button>

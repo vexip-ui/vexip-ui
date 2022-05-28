@@ -170,7 +170,7 @@ export default defineComponent({
     Icon
   },
   props,
-  emits: ['on-change', 'on-prev', 'on-next', 'on-select', 'update:active'],
+  emits: ['change', 'prev', 'next', 'select', 'update:active'],
   setup(props, { emit }) {
     const prefix = 'vxp-carousel'
     const itemStates = ref(new Set<ItemState>())
@@ -254,7 +254,7 @@ export default defineComponent({
     watch(currentActive, value => {
       const active = (value + props.activeOffset) % itemStates.value.size
 
-      emit('on-change', active)
+      emit('change', active)
       emit('update:active', active)
     })
     watch(isHover, value => {
@@ -537,16 +537,16 @@ export default defineComponent({
 
     function handlePrevClick() {
       handlePrev(1)
-      emit('on-prev', (currentActive.value + props.activeOffset) % itemStates.value.size)
+      emit('prev', (currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleNextClick() {
       handleNext(1)
-      emit('on-next', (currentActive.value + props.activeOffset) % itemStates.value.size)
+      emit('next', (currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleSelect(label: number) {
-      emit('on-select', label)
+      emit('select', label)
     }
 
     let playTimer: number

@@ -128,7 +128,7 @@ export default defineComponent({
     ChevronDown
   },
   props,
-  emits: ['on-select'],
+  emits: ['select'],
   setup(props, { slots, emit }) {
     const menuState = inject(MENU_STATE, null)
     const parentItemState = inject(MENU_ITEM_STATE, null)
@@ -229,7 +229,7 @@ export default defineComponent({
     })
     watch(selected, value => {
       if (value) {
-        emit('on-select')
+        emit('select')
       }
 
       parentItemState?.updateSonSelected(value)

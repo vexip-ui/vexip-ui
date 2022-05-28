@@ -8,8 +8,8 @@
     :disabled="hideMask"
     :before-close="handleMaskClose"
     :transfer="transfer"
-    @on-show="handleShow"
-    @on-hide="handleHide"
+    @show="handleShow"
+    @hide="handleHide"
   >
     <template #default="{ show }">
       <section v-show="show" :class="wrapperClass" :style="wrapperStyle">
@@ -130,17 +130,17 @@ export default defineComponent({
   },
   // model: {
   //   prop: 'active',
-  //   event: 'on-toggle'
+  //   event: 'toggle'
   // },
   props,
   emits: [
-    'on-toggle',
-    'on-close',
-    'on-show',
-    'on-hide',
-    'on-resize-start',
-    'on-resize-move',
-    'on-resize-end',
+    'toggle',
+    'close',
+    'show',
+    'hide',
+    'resize-start',
+    'resize-move',
+    'resize-end',
     'update:active'
   ],
   setup(props, { slots, emit }) {
@@ -201,7 +201,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:active', value)
     })
     watch(
@@ -231,7 +231,7 @@ export default defineComponent({
       if (result !== false) {
         nextTick(() => {
           currentActive.value = false
-          emit('on-close')
+          emit('close')
         })
       }
 
@@ -245,11 +245,11 @@ export default defineComponent({
     }
 
     function handleShow() {
-      emit('on-show')
+      emit('show')
     }
 
     function handleHide() {
-      emit('on-hide')
+      emit('hide')
     }
 
     let resizeState: {
@@ -277,7 +277,7 @@ export default defineComponent({
       document.addEventListener('mouseup', handleResizeEnd)
 
       resizing.value = true
-      emit('on-resize-start')
+      emit('resize-start')
     }
 
     function handleResizeMove(event: MouseEvent) {
@@ -312,7 +312,7 @@ export default defineComponent({
       currentWidth.value = Math.max(currentWidth.value, 101)
       currentHeight.value = Math.max(currentHeight.value, 101)
 
-      emit('on-resize-move', {
+      emit('resize-move', {
         width: currentWidth.value,
         height: currentHeight.value
       })
@@ -325,7 +325,7 @@ export default defineComponent({
       document.removeEventListener('mouseup', handleResizeEnd)
 
       resizing.value = false
-      emit('on-resize-end')
+      emit('resize-end')
     }
 
     return {

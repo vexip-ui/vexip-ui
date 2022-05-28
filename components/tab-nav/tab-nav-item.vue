@@ -44,7 +44,7 @@ export default defineComponent({
     Icon
   },
   props,
-  emits: ['on-toggle'],
+  emits: ['toggle'],
   setup(props, { emit }) {
     const tabNavState = inject(TAB_NAV_STATE, null)
 
@@ -72,7 +72,7 @@ export default defineComponent({
       }
     )
     watch(active, value => {
-      emit('on-toggle', value)
+      emit('toggle', value)
     })
 
     if (tabNavState) {

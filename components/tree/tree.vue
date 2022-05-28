@@ -157,17 +157,17 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-node-change',
-    'on-node-click',
-    'on-node-select',
-    'on-node-cancel',
-    'on-node-expand',
-    'on-node-reduce',
-    'on-node-shrink',
-    'on-drag-start',
-    'on-drag-over',
-    'on-drop',
-    'on-drag-end'
+    'node-change',
+    'node-click',
+    'node-select',
+    'node-cancel',
+    'node-expand',
+    'node-reduce',
+    'node-shrink',
+    'drag-start',
+    'drag-over',
+    'drop',
+    'drag-end'
   ],
   setup(props, { emit }) {
     const prefix = 'vxp-tree'
@@ -443,11 +443,11 @@ export default defineComponent({
         updateCheckedDown(item)
       }
 
-      emit('on-node-change', originNode.data, originNode, able)
+      emit('node-change', originNode.data, originNode, able)
     }
 
     function handleNodeClick(node: TreeNodeOptions) {
-      emit('on-node-click', node.data, node)
+      emit('node-click', node.data, node)
     }
 
     function handleNodeSelect(node: TreeNodeOptions) {
@@ -455,7 +455,7 @@ export default defineComponent({
 
       if (props.multiple) {
         emit(
-          'on-node-select',
+          'node-select',
           selectedNodes.map(item => item.data),
           selectedNodes
         )
@@ -469,12 +469,12 @@ export default defineComponent({
           item.selected = item[idKey] === currentId
         }
 
-        emit('on-node-select', node.data, node)
+        emit('node-select', node.data, node)
       }
     }
 
     function handleNodeCancel(node: TreeNodeOptions) {
-      emit('on-node-cancel', node.data, node)
+      emit('node-cancel', node.data, node)
     }
 
     function handleNodeExpand(node: TreeNodeOptions) {
@@ -486,11 +486,11 @@ export default defineComponent({
         }
       }
 
-      emit('on-node-expand', node.data, node)
+      emit('node-expand', node.data, node)
     }
 
     function handleNodeReduce(node: TreeNodeOptions) {
-      emit('on-node-reduce', node.data, node)
+      emit('node-reduce', node.data, node)
     }
 
     async function handleAsyncLoad(node: TreeNodeOptions) {
@@ -523,7 +523,7 @@ export default defineComponent({
       }
 
       dragging.value = true
-      emit('on-drag-start', nodeInstance.node.data, nodeInstance.node)
+      emit('drag-start', nodeInstance.node.data, nodeInstance.node)
     }
 
     function handleNodeDragOver(nodeInstance: TreeNodeInstance, event: DragEvent) {
@@ -561,7 +561,7 @@ export default defineComponent({
       dragState.dropType = dropType
 
       indicatorShow.value = isIndicatorShow
-      emit('on-drag-over', nodeInstance.node.data, nodeInstance.node)
+      emit('drag-over', nodeInstance.node.data, nodeInstance.node)
     }
 
     function handleNodeDrop(nodeInstance: TreeNodeInstance) {
@@ -636,14 +636,14 @@ export default defineComponent({
         flatData.value = flatTree(treeData.value, parsedOptions.value)
       })
 
-      emit('on-drop', nodeInstance.node.data, nodeInstance.node, dropType)
+      emit('drop', nodeInstance.node.data, nodeInstance.node, dropType)
     }
 
     function handleNodeDragEnd(nodeInstance: TreeNodeInstance) {
       dragging.value = true
       indicatorShow.value = false
       dragState = null
-      emit('on-drag-end', nodeInstance.node.data)
+      emit('drag-end', nodeInstance.node.data)
     }
 
     function getCheckedNodes() {

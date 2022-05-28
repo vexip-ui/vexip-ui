@@ -12,15 +12,15 @@
       :width="width"
       :bar-fade="barFade"
       :delta-x="50"
-      @on-scroll="handleXScroll"
+      @scroll="handleXScroll"
     >
       <TableHead ref="thead"></TableHead>
       <Scroll
         :class="[`${prefix}__body-wrapper`, scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        @on-scroll="handleBodyScroll"
-        @on-y-enable-change="handleYScrollEnableChange"
+        @scroll="handleBodyScroll"
+        @y-enable-change="handleYScrollEnableChange"
       >
         <TableBody>
           <template #empty="{ isFixed }">
@@ -36,8 +36,8 @@
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="scrollDeltaY"
-        @on-scroll="handleBodyScroll"
-        @on-y-enable-change="handleYScrollEnableChange"
+        @scroll="handleBodyScroll"
+        @y-enable-change="handleYScrollEnableChange"
       >
         <TableBody>
           <template #empty="{ isFixed }">
@@ -59,7 +59,7 @@
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="scrollDeltaY"
-        @on-scroll="handleBodyScroll"
+        @scroll="handleBodyScroll"
       >
         <TableBody fixed="left">
           <template #empty="{ isFixed }">
@@ -81,7 +81,7 @@
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="scrollDeltaY"
-        @on-scroll="handleBodyScroll"
+        @scroll="handleBodyScroll"
       >
         <TableBody fixed="right">
           <slot></slot>
@@ -97,7 +97,7 @@
       :disabled="!!bodyHeight && totalHeight <= bodyHeight"
       :bar-length="barLength"
       :style="{ top: `${headHeight}px` }"
-      @on-scroll="handleYBarScroll"
+      @scroll="handleYBarScroll"
     ></Scrollbar>
     <div
       v-if="rowDraggable"
@@ -278,19 +278,19 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-body-scroll',
-    'on-row-enter',
-    'on-row-leave',
-    'on-row-click',
-    'on-row-check',
-    'on-row-check-all',
-    'on-row-expand',
-    'on-row-drag-start',
-    'on-row-drag-over',
-    'on-row-drop',
-    'on-row-drag-end',
-    'on-row-filter',
-    'on-row-sort'
+    'body-scroll',
+    'row-enter',
+    'row-leave',
+    'row-click',
+    'row-check',
+    'row-check-all',
+    'row-expand',
+    'row-drag-start',
+    'row-drag-over',
+    'row-drop',
+    'row-drag-end',
+    'row-filter',
+    'row-sort'
   ],
   setup(props, { emit }) {
     const prefix = 'vxp-table'
@@ -546,12 +546,12 @@ export default defineComponent({
       yScrollPercent.value = percent
       setBodyScroll(client)
       nextFrameOnce(computeRenderRows)
-      emit('on-body-scroll', { client, percent })
+      emit('body-scroll', { client, percent })
     }
 
     function emitYScroll(client: number, percent: number) {
       nextFrameOnce(computeRenderRows)
-      emit('on-body-scroll', { client, percent })
+      emit('body-scroll', { client, percent })
     }
 
     function increaseColumn(column: ColumnOptions) {
@@ -563,27 +563,27 @@ export default defineComponent({
     }
 
     function emitRowEnter(data: Data, key: Key, index: number) {
-      emit('on-row-enter', data, key, index)
+      emit('row-enter', data, key, index)
     }
 
     function emitRowLeave(data: Data, key: Key, index: number) {
-      emit('on-row-leave', data, key, index)
+      emit('row-leave', data, key, index)
     }
 
     function emitRowClick(data: Data, key: Key, index: number) {
-      emit('on-row-click', data, key, index)
+      emit('row-click', data, key, index)
     }
 
     function emitRowCheck(data: Data, checked: boolean, key: Key, index: number) {
-      emit('on-row-check', data, checked, key, index)
+      emit('row-check', data, checked, key, index)
     }
 
     function emitAllRowCheck(checked: boolean, partial: boolean) {
-      emit('on-row-check-all', checked, partial)
+      emit('row-check-all', checked, partial)
     }
 
     function emitRowExpand(data: Data, expanded: boolean, key: Key, index: number) {
-      emit('on-row-expand', data, expanded, key, index)
+      emit('row-expand', data, expanded, key, index)
     }
 
     function emitRowFilter() {
@@ -602,7 +602,7 @@ export default defineComponent({
           }
         })
 
-      emit('on-row-filter', profiles, getters.filteredData)
+      emit('row-filter', profiles, getters.filteredData)
     }
 
     function emitRowSort() {
@@ -621,7 +621,7 @@ export default defineComponent({
           }
         })
 
-      emit('on-row-sort', profiles, getters.sortedData)
+      emit('row-sort', profiles, getters.sortedData)
     }
 
     let dragState: {
@@ -637,7 +637,7 @@ export default defineComponent({
       }
 
       setDragging(true)
-      emit('on-row-drag-start', rowInstance.row.data)
+      emit('row-drag-start', rowInstance.row.data)
     }
 
     function handleRowDragOver(rowInstance: RowInstance, event: DragEvent) {
@@ -666,7 +666,7 @@ export default defineComponent({
       dragState.dropType = dropType
 
       indicatorShow.value = true
-      emit('on-row-drag-over', rowInstance.row.data)
+      emit('row-drag-over', rowInstance.row.data)
     }
 
     function handleRowDrop(rowInstance: RowInstance) {
@@ -694,7 +694,7 @@ export default defineComponent({
 
         rowData.splice(index, 0, draggingRow)
         refreshRowIndex()
-        emit('on-row-drop', rowInstance.row.data, dropType)
+        emit('row-drop', rowInstance.row.data, dropType)
       }
     }
 
@@ -708,7 +708,7 @@ export default defineComponent({
 
       setDragging(false)
       emit(
-        'on-row-drag-end',
+        'row-drag-end',
         draggingRow.data,
         state.rowData.map(row => row.data)
       )

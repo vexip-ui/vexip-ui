@@ -93,7 +93,7 @@ export default defineComponent({
     Icon
   },
   props,
-  emits: ['on-click'],
+  emits: ['click'],
   setup(props, { emit, slots }) {
     const prefix = 'vxp-button'
     const pulsing = ref(false)
@@ -244,7 +244,7 @@ export default defineComponent({
         pulsing.value = true
       })
 
-      emit('on-click', event)
+      emit('click', event)
     }
 
     function handleAnimationEnd() {

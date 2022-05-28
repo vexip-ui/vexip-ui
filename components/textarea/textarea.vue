@@ -88,14 +88,14 @@ export default defineComponent({
   name: 'Textarea',
   props,
   emits: [
-    'on-focus',
-    'on-blur',
-    'on-input',
-    'on-change',
-    'on-enter',
-    'on-key-down',
-    'on-key-press',
-    'on-key-up',
+    'focus',
+    'blur',
+    'input',
+    'change',
+    'enter',
+    'key-down',
+    'key-press',
+    'key-up',
     'update:value'
   ],
   setup(props, { emit }) {
@@ -131,12 +131,12 @@ export default defineComponent({
 
     function handleFocus(event: FocusEvent) {
       focused.value = true
-      emit('on-focus', event)
+      emit('focus', event)
     }
 
     function handleBlur(event: FocusEvent) {
       focused.value = false
-      emit('on-blur', event)
+      emit('blur', event)
     }
 
     function handleChange(event: Event) {
@@ -157,31 +157,31 @@ export default defineComponent({
 
         lastValue = currentValue.value
 
-        emit('on-change', currentValue.value)
+        emit('change', currentValue.value)
         emit('update:value', currentValue.value)
 
         if (!props.disableValidate) {
           validateField()
         }
       } else {
-        emit('on-input', currentValue.value)
+        emit('input', currentValue.value)
       }
     }
 
     function handleEnter(event: KeyboardEvent) {
-      emit('on-enter', event)
+      emit('enter', event)
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      emit('on-key-down', event)
+      emit('key-down', event)
     }
 
     function handleKeyPress(event: KeyboardEvent) {
-      emit('on-key-press', event)
+      emit('key-press', event)
     }
 
     function handleKeyUp(event: KeyboardEvent) {
-      emit('on-key-up', event)
+      emit('key-up', event)
     }
 
     function copyValue() {

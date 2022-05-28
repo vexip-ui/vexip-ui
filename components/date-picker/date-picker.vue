@@ -26,14 +26,14 @@
         :filler="filler"
         :no-filler="noFiller"
         :labels="labels"
-        @on-input="handleInput"
-        @on-plus="handlePlus"
-        @on-minus="handleMinus"
-        @on-enter="handlePaneConfirm"
-        @on-cancel="handleCancel"
-        @on-unit-focus="handleStartInput"
-        @on-prev-unit="enterColumn('prev')"
-        @on-next-unit="enterColumn('next')"
+        @input="handleInput"
+        @plus="handlePlus"
+        @minus="handleMinus"
+        @enter="handlePaneConfirm"
+        @cancel="handleCancel"
+        @unit-focus="handleStartInput"
+        @prev-unit="enterColumn('prev')"
+        @next-unit="enterColumn('next')"
       ></DateControl>
       <template v-if="isRange">
         <div :class="`${prefixCls}__exchange`">
@@ -54,14 +54,14 @@
           :filler="filler"
           :no-filler="noFiller"
           :labels="labels"
-          @on-input="handleInput"
-          @on-plus="handlePlus"
-          @on-minus="handleMinus"
-          @on-enter="handlePaneConfirm"
-          @on-cancel="handleCancel"
-          @on-unit-focus="handleEndInput"
-          @on-prev-unit="enterColumn('prev')"
-          @on-next-unit="enterColumn('next')"
+          @input="handleInput"
+          @plus="handlePlus"
+          @minus="handleMinus"
+          @enter="handlePaneConfirm"
+          @cancel="handleCancel"
+          @unit-focus="handleEndInput"
+          @prev-unit="enterColumn('prev')"
+          @next-unit="enterColumn('next')"
         ></DateControl>
       </template>
       <transition name="vxp-fade">
@@ -103,11 +103,11 @@
               :no-action="noAction"
               :steps="steps"
               :is-range="isRange"
-              @on-shortcut="handleShortcut"
-              @on-change="handlePaneChange"
-              @on-toggle-col="handleInputFocus"
-              @on-cancel="handleCancel"
-              @on-confirm="handlePaneConfirm"
+              @shortcut="handleShortcut"
+              @change="handlePaneChange"
+              @toggle-col="handleInputFocus"
+              @cancel="handleCancel"
+              @confirm="handlePaneConfirm"
             ></DatePane>
           </div>
         </transition>
@@ -274,18 +274,18 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-input',
-    'on-plus',
-    'on-minus',
-    'on-enter',
-    'on-cancel',
-    'on-change',
-    'on-clear',
-    'on-shortcut',
-    'on-toggle',
-    'on-focus',
-    'on-blur',
-    'on-change-col',
+    'input',
+    'plus',
+    'minus',
+    'enter',
+    'cancel',
+    'change',
+    'clear',
+    'shortcut',
+    'toggle',
+    'focus',
+    'blur',
+    'change-col',
     'update:value',
     'update:visible'
   ],
@@ -401,21 +401,21 @@ export default defineComponent({
         emitChange()
       }
 
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:visible', value)
     })
     watch(focused, value => {
       if (value) {
-        emit('on-focus')
+        emit('focus')
       } else {
-        emit('on-blur')
+        emit('blur')
       }
     })
     watch(
       () => startState.column,
       value => {
         if (currentVisible.value) {
-          emit('on-change-col', value)
+          emit('change-col', value)
         }
       }
     )
@@ -423,7 +423,7 @@ export default defineComponent({
       () => endState.column,
       value => {
         if (currentVisible.value) {
-          emit('on-change-col', value)
+          emit('change-col', value)
         }
       }
     )
@@ -606,7 +606,7 @@ export default defineComponent({
         const emitValue = props.isRange ? emitValues : emitValues[0]
 
         toggleActivated(true)
-        emit('on-change', emitValue)
+        emit('change', emitValue)
         emit('update:value', emitValue)
 
         if (!props.disableValidate) {
@@ -719,7 +719,7 @@ export default defineComponent({
       }
 
       verifyValue(type)
-      emit('on-input', type, state.dateValue[type])
+      emit('input', type, state.dateValue[type])
     }
 
     function setActivated(type: DateTimeType) {
@@ -773,7 +773,7 @@ export default defineComponent({
         }
 
         verifyValue(type)
-        emit(isPlus ? 'on-plus' : 'on-minus', type, state.dateValue[type])
+        emit(isPlus ? 'plus' : 'minus', type, state.dateValue[type])
         datePane.value?.refreshCalendar()
       }
     }
@@ -797,13 +797,13 @@ export default defineComponent({
 
     function handleEnter() {
       finishInput()
-      emit('on-enter')
+      emit('enter')
     }
 
     function handleCancel() {
       parseValue(props.value)
       finishInput()
-      emit('on-cancel')
+      emit('cancel')
     }
 
     function resetValue() {
@@ -826,8 +826,8 @@ export default defineComponent({
           const emitValue = props.isRange ? ([] as string[] | number[]) : null
 
           resetValue()
-          emit('on-clear')
-          emit('on-change', emitValue)
+          emit('clear')
+          emit('change', emitValue)
           emit('update:value', emitValue)
           clearField()
 
@@ -840,7 +840,7 @@ export default defineComponent({
 
     function handleShortcut(name: string, value: Dateable) {
       parseValue(value)
-      emit('on-shortcut', name, value)
+      emit('shortcut', name, value)
       finishInput()
     }
 

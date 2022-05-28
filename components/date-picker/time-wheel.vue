@@ -104,7 +104,7 @@ export default defineComponent({
     WheelItem
   },
   props,
-  emits: ['on-change', 'on-toggle-col', 'update:hour', 'update:minute', 'update:second'],
+  emits: ['change', 'toggle-col', 'update:hour', 'update:minute', 'update:second'],
   setup(props, { emit }) {
     const currentHour = ref(props.hour)
     const currentMinute = ref(props.minute)
@@ -137,15 +137,15 @@ export default defineComponent({
       }
     )
     watch(currentHour, value => {
-      emit('on-change', 'hour', value)
+      emit('change', 'hour', value)
       emit('update:hour', value)
     })
     watch(currentMinute, value => {
-      emit('on-change', 'minute', value)
+      emit('change', 'minute', value)
       emit('update:minute', value)
     })
     watch(currentSecond, value => {
-      emit('on-change', 'second', value)
+      emit('change', 'second', value)
       emit('update:second', value)
     })
 
@@ -158,7 +158,7 @@ export default defineComponent({
     }
 
     function handleToggleColumn(type: TimeType) {
-      emit('on-toggle-col', type)
+      emit('toggle-col', type)
     }
 
     function refreshWheel() {

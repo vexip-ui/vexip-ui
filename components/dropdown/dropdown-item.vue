@@ -36,7 +36,7 @@ const props = useConfiguredProps('dropdownItem', {
 export default defineComponent({
   name: 'DropdownItem',
   props,
-  emits: ['on-select'],
+  emits: ['select'],
   setup(props, { emit }) {
     const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)
 
@@ -65,7 +65,7 @@ export default defineComponent({
         parentSelectHandler(currentLabel.value!)
       }
 
-      emit('on-select', currentLabel.value)
+      emit('select', currentLabel.value)
     }
 
     return {

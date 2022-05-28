@@ -188,15 +188,15 @@
     </template>
     <template #right>
       <NativeScroll height="100%" use-y-bar>
-        <Button type="info" @on-click="drawerActive = !drawerActive">
+        <Button type="info" @click="drawerActive = !drawerActive">
           Open Drawer
         </Button>
-        <Button type="success" @on-click="modalActive = !modalActive">
+        <Button type="success" @click="modalActive = !modalActive">
           Open Modal
         </Button>
         <Button
           type="warning"
-          @on-click="Confirm.open({
+          @click="Confirm.open({
             content: 'Confirm to submit?',
             confirmType: 'success'
           })"
@@ -228,7 +228,7 @@
         <br />
         <br />
         <div style="display: flex;">
-          <Button type="primary" style="margin-right: 20px;" @on-click="spinActive = !spinActive">
+          <Button type="primary" style="margin-right: 20px;" @click="spinActive = !spinActive">
             Switch
           </Button>
           <Spin :active="spinActive" tip="Loading..." style="width: 600px;">
@@ -311,7 +311,7 @@
             v-for="(type) in messageTypes"
             :key="type.type"
             :type="type.type"
-            @on-click="Message[type.type]({ ...messageOptions, color: meta.color, background: meta.background })"
+            @click="Message[type.type]({ ...messageOptions, color: meta.color, background: meta.background })"
           >
             {{ `${type.prefix}消息` }}
           </Button>
@@ -326,7 +326,7 @@
             v-for="(type) in messageTypes"
             :key="type.type"
             :type="type.type"
-            @on-click="Notice[type.type]({ ...messageOptions, color: meta.color, background: meta.background })"
+            @click="Notice[type.type]({ ...messageOptions, color: meta.color, background: meta.background })"
           >
             {{ `${type.prefix}提醒` }}
           </Button>

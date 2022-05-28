@@ -1,5 +1,5 @@
 <template>
-  <Button type="primary" @on-click="sendMessage">
+  <Button type="primary" @click="sendMessage">
     打开消息
   </Button>
 </template>

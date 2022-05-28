@@ -52,7 +52,7 @@ const props = useConfiguredProps('timelineItem', {
 export default defineComponent({
   name: 'TimelineItem',
   props,
-  emits: ['on-signal-click'],
+  emits: ['signal-click'],
   setup(props, { emit }) {
     const timelineState = inject(TIMELINE_STATE, null)
 
@@ -101,7 +101,7 @@ export default defineComponent({
     }
 
     function handleSignalClick() {
-      emit('on-signal-click', currentLabel.value)
+      emit('signal-click', currentLabel.value)
       timelineState?.handleSignalClick(currentLabel.value)
     }
 

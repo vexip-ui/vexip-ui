@@ -3,7 +3,7 @@
     <p style="margin-bottom: 16px;">
       抽屉渲染在该元素中
     </p>
-    <Button type="primary" @on-click="active = !active">
+    <Button type="primary" @click="active = !active">
       打开
     </Button>
     <Drawer v-model:active="active" inner title="内置抽屉">

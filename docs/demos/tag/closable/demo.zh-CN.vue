@@ -5,7 +5,7 @@
       :key="tag.key"
       closable
       :type="tag.type"
-      @on-close="removeTag(tag.key)"
+      @close="removeTag(tag.key)"
     >
       标签
     </Tag>
@@ -14,7 +14,7 @@
       szie="small"
       style="height: auto; margin-left: 10px; line-height: 1.5;"
       :icon="Plus"
-      @on-click="addTag"
+      @click="addTag"
     >
       添加标签
     </Button>

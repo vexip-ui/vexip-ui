@@ -12,7 +12,7 @@
     :icon="icon"
     :text-color="textColor"
     :block="block"
-    @on-click="handleSubmit"
+    @click="handleSubmit"
   >
     <slot>
       {{ text || locale.submit }}
@@ -106,7 +106,7 @@ export default defineComponent({
     Button
   },
   props,
-  emits: ['on-submit', 'on-error'],
+  emits: ['submit', 'error'],
   setup(props, { emit }) {
     const formProps = inject(FORM_PROPS, {})
     const actions = inject<FormActions>(FORM_ACTIONS, {
@@ -130,7 +130,7 @@ export default defineComponent({
       const errors = await actions.validate()
 
       if (errors.length) {
-        emit('on-error', errors)
+        emit('error', errors)
       } else {
         let result: unknown = true
 
@@ -143,7 +143,7 @@ export default defineComponent({
         }
 
         if (result !== false) {
-          emit('on-submit')
+          emit('submit')
           submit.value?.click()
         }
       }

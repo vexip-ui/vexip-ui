@@ -1,5 +1,5 @@
 <template>
-  <Upload url="//jsonplaceholder.typicode.com/posts/" @on-success="handleSuccess"></Upload>
+  <Upload url="//jsonplaceholder.typicode.com/posts/" @success="handleSuccess"></Upload>
 </template>
 
 <script lang="ts">

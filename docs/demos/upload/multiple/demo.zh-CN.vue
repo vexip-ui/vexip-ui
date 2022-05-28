@@ -2,7 +2,7 @@
   <Upload
     multiple
     url="//jsonplaceholder.typicode.com/posts/"
-    @on-success="handleSuccess"
+    @success="handleSuccess"
   ></Upload>
 </template>
 

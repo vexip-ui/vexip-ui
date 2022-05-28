@@ -127,7 +127,7 @@
                     [`${prefix}__action--disabled`]: !file.type.startsWith('image/') || !file.base64
                   }
                 ]"
-                @click="$emit('on-preview', file.source)"
+                @click="$emit('preview', file.source)"
               >
                 <Icon :scale="1.4">
                   <EyeR></EyeR>
@@ -199,7 +199,7 @@ export default defineComponent({
     TrashCanR
   },
   props,
-  emits: ['on-delete', 'on-preview'],
+  emits: ['delete', 'preview'],
   setup(props, { emit }) {
     const prefix = 'vxp-upload'
     const transitionName = 'vxp-fade'
@@ -226,7 +226,7 @@ export default defineComponent({
     }
 
     function deleteFile(file: FileState) {
-      emit('on-delete', file)
+      emit('delete', file)
     }
 
     function transformfileToBase64(file: FileState) {

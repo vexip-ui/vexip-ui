@@ -92,12 +92,12 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-change',
-    'on-full',
-    'on-reset',
-    'on-move',
-    'on-move-start',
-    'on-move-end',
+    'change',
+    'full',
+    'reset',
+    'move',
+    'move-start',
+    'move-end',
     'update:value'
   ],
   setup(props, { emit }) {
@@ -177,7 +177,7 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
-      emit('on-change', value)
+      emit('change', value)
       emit('update:value', value)
 
       if (guide.value) {
@@ -196,9 +196,9 @@ export default defineComponent({
           type = value < 0 ? 'left' : 'right'
         }
 
-        emit('on-full', type)
+        emit('full', type)
       } else {
-        emit('on-reset')
+        emit('reset')
       }
     })
 
@@ -230,7 +230,7 @@ export default defineComponent({
         currentValue.value = value
       }
 
-      emit('on-move', value)
+      emit('move', value)
     })
 
     function handleTriggerDown(event: MouseEvent) {
@@ -270,7 +270,7 @@ export default defineComponent({
       document.addEventListener('mousemove', handleTriggerMove)
       document.addEventListener('mouseup', handleTriggerUp)
 
-      emit('on-move-start', currentValue.value)
+      emit('move-start', currentValue.value)
     }
 
     function handleTriggerMove(event: MouseEvent) {
@@ -298,7 +298,7 @@ export default defineComponent({
         currentValue.value = moveState.target
       }
 
-      emit('on-move-end', currentValue.value)
+      emit('move-end', currentValue.value)
     }
 
     function setTransition() {

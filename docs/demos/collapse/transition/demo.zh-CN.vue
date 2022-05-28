@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Button type="primary" @on-click="expanded = !expanded">
+    <Button type="primary" @click="expanded = !expanded">
       {{ expanded ? '收起' : '展开' }}
     </Button>
     <br />

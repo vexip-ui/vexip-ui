@@ -19,7 +19,7 @@
             :class="`${prefixCls}__tag`"
             closable
             @click.stop="handleClick"
-            @on-close="handleSelect(item, currentLabel[index])"
+            @close="handleSelect(item, currentLabel[index])"
           >
             {{ currentLabel[index] }}
           </Tag>
@@ -256,13 +256,13 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-toggle',
-    'on-select',
-    'on-cancel',
-    'on-change',
-    'on-click-outside',
-    'on-outside-close',
-    'on-clear',
+    'toggle',
+    'select',
+    'cancel',
+    'change',
+    'click-outside',
+    'outside-close',
+    'clear',
     'update:value',
     'update:visible'
   ],
@@ -370,7 +370,7 @@ export default defineComponent({
         }
       }
 
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:visible', value)
     })
     watch(
@@ -453,7 +453,7 @@ export default defineComponent({
     }
 
     function handleSelect(value: string | number, label: string) {
-      emit(props.multiple && isSelected(value) ? 'on-cancel' : 'on-select', value, label)
+      emit(props.multiple && isSelected(value) ? 'cancel' : 'select', value, label)
       handleChange(value, label)
 
       if (!props.multiple) {
@@ -481,7 +481,7 @@ export default defineComponent({
           currentLabel.value.push(label)
         }
 
-        emit('on-change', currentValue.value, currentLabel.value)
+        emit('change', currentValue.value, currentLabel.value)
         emit('update:value', currentValue.value)
 
         if (!props.disableValidate) {
@@ -499,7 +499,7 @@ export default defineComponent({
         currentValue.value = value
 
         if (prevValue !== value) {
-          emit('on-change', value, label)
+          emit('change', value, label)
           emit('update:value', value)
 
           if (!props.disableValidate) {
@@ -520,12 +520,12 @@ export default defineComponent({
     }
 
     function handleClickOutside() {
-      emit('on-click-outside')
+      emit('click-outside')
 
       if (props.outsideClose && currentVisible.value) {
         currentVisible.value = false
 
-        emit('on-outside-close')
+        emit('outside-close')
       }
     }
 
@@ -535,7 +535,7 @@ export default defineComponent({
           currentValue.value = []
           currentLabel.value = []
 
-          emit('on-change', currentValue.value, currentLabel.value)
+          emit('change', currentValue.value, currentLabel.value)
           emit('update:value', currentValue.value)
 
           updatePopper()
@@ -543,7 +543,7 @@ export default defineComponent({
           handleChange('', '')
         }
 
-        emit('on-clear')
+        emit('clear')
         clearField()
       }
     }

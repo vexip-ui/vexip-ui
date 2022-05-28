@@ -4,7 +4,7 @@
     multiple
     manual
     url="//jsonplaceholder.typicode.com/posts/"
-    @on-change="handleChange"
+    @change="handleChange"
   >
     <Button type="primary" :icon="IUpload">
       选择文件
@@ -14,7 +14,7 @@
     type="success"
     :icon="Check"
     style="margin-left: 6px;"
-    @on-click="doUpload"
+    @click="doUpload"
   >
     手动上传
   </Button>

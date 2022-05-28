@@ -90,7 +90,7 @@ export default defineComponent({
     Spinner
   },
   props,
-  emits: ['on-change', 'update:value'],
+  emits: ['change', 'update:value'],
   setup(props, { emit }) {
     const validateField = inject(VALIDATE_FIELD, noop)
 
@@ -131,7 +131,7 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
-      emit('on-change', value)
+      emit('change', value)
       emit('update:value', value)
 
       if (!props.disableValidate) {

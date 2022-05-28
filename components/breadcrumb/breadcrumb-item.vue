@@ -39,7 +39,7 @@ export default defineComponent({
     Renderer
   },
   props,
-  emits: ['on-select', 'on-separator-click'],
+  emits: ['select', 'separator-click'],
   setup(props, { emit }) {
     const breadcrumbState = inject(BREADCRUMB_STATE, null)
 
@@ -83,12 +83,12 @@ export default defineComponent({
     }
 
     function handleClick() {
-      emit('on-select', currentLabel.value)
+      emit('select', currentLabel.value)
       breadcrumbState?.handleSelect(currentLabel.value)
     }
 
     function handleSeparatorClick() {
-      emit('on-separator-click', currentLabel.value)
+      emit('separator-click', currentLabel.value)
       breadcrumbState?.handleSeparatorClick(currentLabel.value)
     }
 

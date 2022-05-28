@@ -66,7 +66,7 @@ export default defineComponent({
     Checkbox
   },
   props,
-  emits: ['on-change', 'update:values'],
+  emits: ['change', 'update:values'],
   setup(props, { emit }) {
     const validateField = inject(VALIDATE_FIELD, noop)
 
@@ -190,7 +190,7 @@ export default defineComponent({
     }
 
     function handleChange(value: (string | number)[]) {
-      emit('on-change', value)
+      emit('change', value)
       emit('update:values', value)
 
       if (!props.disableValidate) {

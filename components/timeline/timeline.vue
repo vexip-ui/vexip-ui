@@ -38,7 +38,7 @@ const props = useConfiguredProps('timeline', {
 export default defineComponent({
   name: 'Timeline',
   props,
-  emits: ['on-signal-click'],
+  emits: ['signal-click'],
   setup(props, { emit }) {
     const prefix = 'vxp-timeline'
     const itemStates = new Set<ItemState>()
@@ -82,7 +82,7 @@ export default defineComponent({
     }
 
     function handleSignalClick(label: string | number) {
-      emit('on-signal-click', label)
+      emit('signal-click', label)
     }
 
     return {

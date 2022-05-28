@@ -57,7 +57,7 @@ const props = useConfiguredProps('radio', {
 export default defineComponent({
   name: 'Radio',
   props,
-  emits: ['on-change', 'update:value'],
+  emits: ['change', 'update:value'],
   setup(props, { emit }) {
     const groupState = inject(GROUP_STATE, null)
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -89,7 +89,7 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
-      emit('on-change', value)
+      emit('change', value)
       emit('update:value', value)
 
       if (groupState && value === props.label) {

@@ -175,14 +175,14 @@ export default defineComponent({
   name: 'DateControl',
   props,
   emits: [
-    'on-input',
-    'on-plus',
-    'on-minus',
-    'on-enter',
-    'on-cancel',
-    'on-unit-focus',
-    'on-prev-unit',
-    'on-next-unit'
+    'input',
+    'plus',
+    'minus',
+    'enter',
+    'cancel',
+    'unit-focus',
+    'prev-unit',
+    'next-unit'
   ],
   setup(props, { emit }) {
     const prefix = 'vxp-date-picker'
@@ -234,7 +234,7 @@ export default defineComponent({
     }
 
     function handleInputFocus(type: DateTimeType) {
-      emit('on-unit-focus', type)
+      emit('unit-focus', type)
     }
 
     function handleInput(event: KeyboardEvent) {
@@ -242,32 +242,32 @@ export default defineComponent({
 
       switch (type) {
         case 'next': {
-          emit('on-next-unit')
+          emit('next-unit')
           break
         }
         case 'prev': {
-          emit('on-prev-unit')
+          emit('prev-unit')
           break
         }
         case 'up': {
-          emit('on-minus', event.ctrlKey)
+          emit('minus', event.ctrlKey)
           break
         }
         case 'down': {
-          emit('on-plus', event.ctrlKey)
+          emit('plus', event.ctrlKey)
           break
         }
         case 'ok': {
-          emit('on-enter')
+          emit('enter')
           break
         }
         case 'esc': {
-          emit('on-cancel')
+          emit('cancel')
           break
         }
         default: {
           if (typeof type === 'number') {
-            emit('on-input', type)
+            emit('input', type)
           }
         }
       }

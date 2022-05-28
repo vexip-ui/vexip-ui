@@ -116,17 +116,17 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-focus',
-    'on-blur',
-    'on-input',
-    'on-change',
-    'on-enter',
-    'on-clear',
-    'on-prefix-click',
-    'on-suffix-click',
-    'on-key-down',
-    'on-key-press',
-    'on-key-up',
+    'focus',
+    'blur',
+    'input',
+    'change',
+    'enter',
+    'clear',
+    'prefix-click',
+    'suffix-click',
+    'key-down',
+    'key-press',
+    'key-up',
     'update:value'
   ],
   setup(props, { slots, emit, expose }) {
@@ -248,7 +248,7 @@ export default defineComponent({
     function handleFocus(event: FocusEvent) {
       if (!focused.value) {
         focused.value = true
-        emit('on-focus', event)
+        emit('focus', event)
       }
     }
 
@@ -258,7 +258,7 @@ export default defineComponent({
 
         window.setTimeout(() => {
           if (!focused.value) {
-            emit('on-blur', event)
+            emit('blur', event)
             emitChangeEvent('change')
           }
         }, 120)
@@ -295,14 +295,14 @@ export default defineComponent({
 
         lastValue = currentValue.value
 
-        emit('on-change', value, currentValue.value)
+        emit('change', value, currentValue.value)
         emit('update:value', currentValue.value)
 
         if (!props.disableValidate) {
           validateField()
         }
       } else {
-        emit('on-input', value, currentValue.value)
+        emit('input', value, currentValue.value)
       }
     }
 
@@ -341,28 +341,28 @@ export default defineComponent({
     function handleClear(event: MouseEvent) {
       event.stopPropagation()
       setValue('', 'change')
-      emit('on-clear')
+      emit('clear')
       clearField()
     }
 
     function handleEnter(event: KeyboardEvent) {
-      emit('on-enter', event)
+      emit('enter', event)
     }
 
     function handlePrefixClick(event: MouseEvent) {
-      emit('on-prefix-click', event)
+      emit('prefix-click', event)
     }
 
     function handleSuffixClick(event: MouseEvent) {
-      emit('on-suffix-click', event)
+      emit('suffix-click', event)
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      emit('on-key-down', event)
+      emit('key-down', event)
     }
 
     function handleKeyPress(event: KeyboardEvent) {
-      emit('on-key-press', event)
+      emit('key-press', event)
     }
 
     function handleKeyUp(event: KeyboardEvent) {
@@ -370,7 +370,7 @@ export default defineComponent({
         handleEnter(event)
       }
 
-      emit('on-key-up', event)
+      emit('key-up', event)
     }
 
     function createAffixElement(type: 'prefix' | 'suffix') {

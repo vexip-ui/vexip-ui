@@ -22,8 +22,8 @@
         :delta-x="targetWidth"
         :delta-y="targetHeight"
         :before-scroll="beforeScroll"
-        @on-wheel="handleWheel"
-        @on-scroll-end="handleScrollEnd"
+        @wheel="handleWheel"
+        @scroll-end="handleScrollEnd"
       >
         <ul ref="list" :class="`${prefix}__list`" :style="listStyle">
           <slot v-if="isInit"></slot>
@@ -99,7 +99,7 @@ export default defineComponent({
     Scroll
   },
   props,
-  emits: ['on-change', 'on-prev', 'on-next', 'update:value'],
+  emits: ['change', 'prev', 'next', 'update:value'],
   setup(props, { emit }) {
     const validateField = inject(VALIDATE_FIELD, noop)
 
@@ -246,7 +246,7 @@ export default defineComponent({
 
       const value = getItemValue()
 
-      emit('on-change', value)
+      emit('change', value)
       emit('update:value', value)
 
       if (!props.disableValidate) {
@@ -339,14 +339,14 @@ export default defineComponent({
     function handlePrev() {
       if (!prevDisabled.value) {
         currentActive.value = findEnabledActive(currentActive.value - 1, -1)
-        emit('on-prev', getItemValue())
+        emit('prev', getItemValue())
       }
     }
 
     function handleNext() {
       if (!nextDisabled.value) {
         currentActive.value = findEnabledActive(currentActive.value + 1, 1)
-        emit('on-next', getItemValue())
+        emit('next', getItemValue())
       }
     }
 

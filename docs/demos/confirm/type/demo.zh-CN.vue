@@ -1,6 +1,6 @@
 
 <template>
-  <Button type="error" @on-click="confirm">
+  <Button type="error" @click="confirm">
     删除
   </Button>
 </template>

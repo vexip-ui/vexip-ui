@@ -25,14 +25,14 @@
         :filler="filler"
         :no-filler="noFiller"
         :labels="labels"
-        @on-input="handleInput"
-        @on-plus="handlePlus"
-        @on-minus="handleMinus"
-        @on-enter="handleEnter"
-        @on-cancel="handleCancel"
-        @on-unit-focus="handleStartInput"
-        @on-prev-unit="enterColumn('prev')"
-        @on-next-unit="enterColumn('next')"
+        @input="handleInput"
+        @plus="handlePlus"
+        @minus="handleMinus"
+        @enter="handleEnter"
+        @cancel="handleCancel"
+        @unit-focus="handleStartInput"
+        @prev-unit="enterColumn('prev')"
+        @next-unit="enterColumn('next')"
       ></TimeControl>
       <template v-if="isRange">
         <div
@@ -55,14 +55,14 @@
           :filler="filler"
           :no-filler="noFiller"
           :labels="labels"
-          @on-input="handleInput"
-          @on-plus="handlePlus"
-          @on-minus="handleMinus"
-          @on-enter="handleEnter"
-          @on-cancel="handleCancel"
-          @on-unit-focus="handleEndInput"
-          @on-prev-unit="enterColumn('prev')"
-          @on-next-unit="enterColumn('next')"
+          @input="handleInput"
+          @plus="handlePlus"
+          @minus="handleMinus"
+          @enter="handleEnter"
+          @cancel="handleCancel"
+          @unit-focus="handleEndInput"
+          @prev-unit="enterColumn('prev')"
+          @next-unit="enterColumn('next')"
         ></TimeControl>
       </template>
       <transition name="vxp-fade">
@@ -110,8 +110,8 @@
                   :candidate="candidate"
                   :steps="steps"
                   :pointer="pointer"
-                  @on-change="handleWheelChange"
-                  @on-toggle-col="handleStartInput"
+                  @change="handleWheelChange"
+                  @toggle-col="handleStartInput"
                 ></TimeWheel>
                 <TimeWheel
                   v-if="isRange"
@@ -122,15 +122,15 @@
                   :candidate="candidate"
                   :steps="steps"
                   :pointer="pointer"
-                  @on-change="handleWheelChange"
-                  @on-toggle-col="handleEndInput"
+                  @change="handleWheelChange"
+                  @toggle-col="handleEndInput"
                 ></TimeWheel>
               </div>
               <div v-if="!noAction" :class="`${prefixCls}__action`">
-                <Button type="text" size="small" @on-click="handleCancel">
+                <Button type="text" size="small" @click="handleCancel">
                   {{ cancelText || locale.cancel }}
                 </Button>
-                <Button type="primary" size="small" @on-click="finishInput">
+                <Button type="primary" size="small" @click="finishInput">
                   {{ confirmText || locale.confirm }}
                 </Button>
               </div>
@@ -301,18 +301,18 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-change-col',
-    'on-change',
-    'on-focus',
-    'on-blur',
-    'on-plus',
-    'on-minus',
-    'on-enter',
-    'on-cancel',
-    'on-input',
-    'on-clear',
-    'on-shortcut',
-    'on-toggle',
+    'change-col',
+    'change',
+    'focus',
+    'blur',
+    'plus',
+    'minus',
+    'enter',
+    'cancel',
+    'input',
+    'clear',
+    'shortcut',
+    'toggle',
     'update:value',
     'update:visible'
   ],
@@ -392,21 +392,21 @@ export default defineComponent({
         emitChange()
       }
 
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:visible', value)
     })
     watch(focused, value => {
       if (value) {
-        emit('on-focus')
+        emit('focus')
       } else {
-        emit('on-blur')
+        emit('blur')
       }
     })
     watch(
       () => startState.column,
       value => {
         if (currentVisible.value) {
-          emit('on-change-col', value)
+          emit('change-col', value)
         }
       }
     )
@@ -414,7 +414,7 @@ export default defineComponent({
       () => endState.column,
       value => {
         if (currentVisible.value) {
-          emit('on-change-col', value)
+          emit('change-col', value)
         }
       }
     )
@@ -519,7 +519,7 @@ export default defineComponent({
 
         toggleActivated(true)
 
-        emit('on-change', currentValue.value)
+        emit('change', currentValue.value)
         emit('update:value', currentValue.value)
 
         if (!props.disableValidate) {
@@ -566,8 +566,8 @@ export default defineComponent({
         finishInput()
         nextTick(() => {
           parseValue('')
-          emit('on-clear')
-          emit('on-change', currentValue.value)
+          emit('clear')
+          emit('change', currentValue.value)
           emit('update:value', currentValue.value)
           clearField()
 
@@ -609,7 +609,7 @@ export default defineComponent({
       }
 
       verifyValue(type)
-      emit('on-input', type, state.timeValue[type])
+      emit('input', type, state.timeValue[type])
     }
 
     function verifyValue(type: TimeType) {
@@ -627,7 +627,7 @@ export default defineComponent({
         state.timeValue[type] += ctrlKey ? getCtrlStep(type) : getStep(type)
 
         verifyValue(type)
-        emit('on-plus', type, state.timeValue[type])
+        emit('plus', type, state.timeValue[type])
       }
     }
 
@@ -639,7 +639,7 @@ export default defineComponent({
         state.timeValue[type] -= ctrlKey ? getCtrlStep(type) : getStep(type)
 
         verifyValue(type)
-        emit('on-minus', type, state.timeValue[type])
+        emit('minus', type, state.timeValue[type])
       }
     }
 
@@ -653,13 +653,13 @@ export default defineComponent({
 
     function handleEnter() {
       finishInput()
-      emit('on-enter')
+      emit('enter')
     }
 
     function handleCancel() {
       parseValue(props.value)
       finishInput()
-      emit('on-cancel')
+      emit('cancel')
     }
 
     function handleShortcut(index: number) {
@@ -670,7 +670,7 @@ export default defineComponent({
       }
 
       parseValue(value)
-      emit('on-shortcut', name, value)
+      emit('shortcut', name, value)
       finishInput()
     }
 

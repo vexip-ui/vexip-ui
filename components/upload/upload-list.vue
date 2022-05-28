@@ -15,8 +15,8 @@
       :list-type="type"
       :loading-text="loadingText"
       :select-to-add="selectToAdd"
-      @on-delete="$emit('on-delete', $event)"
-      @on-preview="$emit('on-preview', $event)"
+      @delete="$emit('delete', $event)"
+      @preview="$emit('preview', $event)"
     >
       <template #default="{ file, status: _status, percentage }">
         <slot
@@ -40,8 +40,8 @@
       :list-type="type"
       :loading-text="loadingText"
       :select-to-add="selectToAdd"
-      @on-delete="$emit('on-delete', $event)"
-      @on-preview="$emit('on-preview', $event)"
+      @delete="$emit('delete', $event)"
+      @preview="$emit('preview', $event)"
     >
       <template #default="{ file, status: _status, percentage }">
         <slot
@@ -101,7 +101,7 @@ export default defineComponent({
     UploadFile
   },
   props,
-  emits: ['on-preview', 'on-delete'],
+  emits: ['preview', 'delete'],
   setup() {
     return {
       prefix: 'vxp-upload'

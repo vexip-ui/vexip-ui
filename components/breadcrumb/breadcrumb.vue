@@ -30,7 +30,7 @@ const props = useConfiguredProps('breadcrumb', {
 export default defineComponent({
   name: 'Breadcrumb',
   props,
-  emits: ['on-select', 'on-separator-click'],
+  emits: ['select', 'separator-click'],
   setup(props, { slots, emit }) {
     const prefix = 'vxp-breadcrumb'
     const itemStates = new Set<ItemState>()
@@ -82,11 +82,11 @@ export default defineComponent({
     }
 
     function handleSelect(label: string | number) {
-      emit('on-select', label)
+      emit('select', label)
     }
 
     function handleSeparatorClick(label: string | number) {
-      emit('on-separator-click', label)
+      emit('separator-click', label)
     }
 
     return {

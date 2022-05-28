@@ -82,7 +82,7 @@ export default defineComponent({
     ChevronRight
   },
   props,
-  emits: ['on-toggle', 'update:expanded'],
+  emits: ['toggle', 'update:expanded'],
   setup(props, { emit }) {
     const collapseState = inject(COLLAPSE_STATE, null)
 
@@ -138,7 +138,7 @@ export default defineComponent({
       }
     )
     watch(currentExpanded, value => {
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:expanded', value)
     })
 

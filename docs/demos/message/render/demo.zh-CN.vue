@@ -1,5 +1,5 @@
 <template>
-  <Button type="primary" @on-click="sendCustomizedMessage">
+  <Button type="primary" @click="sendCustomizedMessage">
     自定义渲染
   </Button>
 </template>

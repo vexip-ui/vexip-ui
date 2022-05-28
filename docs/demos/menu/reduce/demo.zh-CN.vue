@@ -1,6 +1,6 @@
 <template>
   <div style="width: 240px;">
-    <Button style="margin-bottom: 20px;" @on-click="reduced = !reduced">
+    <Button style="margin-bottom: 20px;" @click="reduced = !reduced">
       展开/收起
     </Button>
     <Menu :reduced="reduced" transfer>

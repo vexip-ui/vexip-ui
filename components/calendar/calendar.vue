@@ -145,7 +145,7 @@ export default defineComponent({
     Row
   },
   props,
-  emits: ['on-select', 'update:value'],
+  emits: ['select', 'update:value'],
   setup(props, { emit }) {
     const prefix = 'vxp-calendar'
 
@@ -174,7 +174,7 @@ export default defineComponent({
         calendarValue.value = date
       }
 
-      emit('on-select', date)
+      emit('select', date)
       emit('update:value', date)
     }
 

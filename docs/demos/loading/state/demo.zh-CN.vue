@@ -1,14 +1,14 @@
 <template>
-  <Button type="primary" :loading="loading" @on-click="doLoading">
+  <Button type="primary" :loading="loading" @click="doLoading">
     加载结束
   </Button>
-  <Button type="success" :loading="loading" @on-click="doLoading('success')">
+  <Button type="success" :loading="loading" @click="doLoading('success')">
     加载成功
   </Button>
-  <Button type="error" :loading="loading" @on-click="doLoading('error')">
+  <Button type="error" :loading="loading" @click="doLoading('error')">
     加载失败
   </Button>
-  <Button type="warning" :loading="loading" @on-click="doLoading('warning')">
+  <Button type="warning" :loading="loading" @click="doLoading('warning')">
     加载异常
   </Button>
 </template>

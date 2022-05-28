@@ -1,5 +1,5 @@
 <template>
-  <Button type="primary" @on-click="confirm">
+  <Button type="primary" @click="confirm">
     提交
   </Button>
 </template>

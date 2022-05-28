@@ -78,7 +78,7 @@ const props = useConfiguredProps('anchor', {
 export default defineComponent({
   name: 'Anchor',
   props,
-  emits: ['on-change', 'update:active'],
+  emits: ['change', 'update:active'],
   setup(props, { emit }) {
     const prefix = 'vxp-anchor'
     const currentActive = ref(props.active)
@@ -109,7 +109,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('on-change', value)
+      emit('change', value)
       emit('update:active', value)
     })
     watch(() => props.viewer, updateContainer)

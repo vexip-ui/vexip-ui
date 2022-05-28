@@ -1,7 +1,7 @@
 <template>
   <div :class="prefix">
     <div :class="`${prefix}__header`">
-      <TabNav :active="currentActive" :card="card" @on-change="handleActive">
+      <TabNav :active="currentActive" :card="card" @change="handleActive">
         <TabNavItem
           v-for="(item, index) in itemList"
           :key="index"
@@ -64,7 +64,7 @@ export default defineComponent({
     TabNavItem
   },
   props,
-  emits: ['on-change', 'update:active'],
+  emits: ['change', 'update:active'],
   setup(props, { emit }) {
     const currentActive = ref(props.active)
     const currentIndex = ref(0)
@@ -120,7 +120,7 @@ export default defineComponent({
     )
     watch(currentActive, value => {
       computeIndex()
-      emit('on-change', value)
+      emit('change', value)
       emit('update:active', value)
     })
     watch(currentIndex, () => {

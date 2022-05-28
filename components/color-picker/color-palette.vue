@@ -50,7 +50,7 @@ export default defineComponent({
       }
     }
   },
-  emits: ['on-edit-start', 'on-edit-end', 'on-change'],
+  emits: ['edit-start', 'edit-end', 'change'],
   setup(props, { emit }) {
     const currentTop = ref((1 - props.value) * 100)
     const currentLeft = ref(props.saturation * 100)
@@ -131,7 +131,7 @@ export default defineComponent({
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
 
-      emit('on-edit-start')
+      emit('edit-start')
     }
 
     function handleMouseMove(event: MouseEvent) {
@@ -148,7 +148,7 @@ export default defineComponent({
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
 
-      emit('on-edit-end')
+      emit('edit-end')
     }
 
     function verifyPosition() {
@@ -157,7 +157,7 @@ export default defineComponent({
     }
 
     function handleChange() {
-      emit('on-change', {
+      emit('change', {
         h: props.hue,
         s: currentLeft.value / 100,
         v: toFixed(1 - currentTop.value / 100, 3)

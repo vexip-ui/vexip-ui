@@ -3,7 +3,7 @@
     :value="isDark"
     class="theme-switch"
     :icon="isDark ? Moon : Sun"
-    @on-change="toggleDark"
+    @change="toggleDark"
   ></Switcher>
 </template>
 

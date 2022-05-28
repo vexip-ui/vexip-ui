@@ -1,12 +1,12 @@
 <template>
-  <Button type="primary" @on-click="active = !active">
+  <Button type="primary" @click="active = !active">
     打开
   </Button>
   <Masker
     v-model:active="active"
     transfer
     closable
-    @on-close="active = false"
+    @close="active = false"
   ></Masker>
 </template>
 

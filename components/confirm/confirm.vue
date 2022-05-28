@@ -9,7 +9,7 @@
     :left="left"
     :width="width"
     :mask-close="maskClose"
-    @on-hide="handleReset"
+    @hide="handleReset"
   >
     <div :class="`${prefix}__body`" :style="style">
       <Renderer v-if="isFunction(renderer)" :renderer="renderer"></Renderer>
@@ -29,14 +29,14 @@
       </template>
     </div>
     <div :class="`${prefix}__actions`">
-      <Button :class="`${prefix}__button`" @on-click="handleCancel">
+      <Button :class="`${prefix}__button`" @click="handleCancel">
         {{ cancelText || locale.cancel }}
       </Button>
       <Button
         :class="`${prefix}__button`"
         :type="confirmType"
         :loading="loading"
-        @on-click="handleConfirm"
+        @click="handleConfirm"
       >
         {{ confirmText || locale.confirm }}
       </Button>
@@ -123,7 +123,7 @@ export default defineComponent({
     Renderer
   },
   props,
-  emits: ['on-confirm', 'on-cancel'],
+  emits: ['confirm', 'cancel'],
   setup(props) {
     const visible = ref(false)
     const loading = ref(false)

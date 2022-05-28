@@ -38,7 +38,7 @@ const props = {
 export default defineComponent({
   name: 'TabPane',
   props,
-  emits: ['on-toggle'],
+  emits: ['toggle'],
   setup(props, { slots, emit }) {
     const tabsState = inject(TABS_STATE, null)
 
@@ -64,7 +64,7 @@ export default defineComponent({
       }
     )
     watch(active, value => {
-      emit('on-toggle', value)
+      emit('toggle', value)
     })
 
     if (tabsState) {

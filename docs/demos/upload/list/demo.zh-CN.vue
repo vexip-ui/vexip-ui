@@ -8,7 +8,7 @@
     hidden-files
     directory
     :count-limit="10"
-    @on-change="listActive = true"
+    @change="listActive = true"
   >
     <template #default="{ isDragOver }">
       <Alert icon type="info" :title="`自定义的内容${isDragOver ? '（松开进行上传）' : ''}`">

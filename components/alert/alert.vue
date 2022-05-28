@@ -96,7 +96,7 @@ export default defineComponent({
     Icon
   },
   props,
-  emits: ['on-close', 'on-hide'],
+  emits: ['close', 'hide'],
   setup(props, { slots, emit }) {
     const prefix = 'vxp-alert'
     const closed = ref(false)
@@ -133,11 +133,11 @@ export default defineComponent({
         closed.value = true
       }
 
-      emit('on-close')
+      emit('close')
     }
 
     function handleAfterLeave() {
-      emit('on-hide')
+      emit('hide')
     }
 
     return {

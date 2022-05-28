@@ -3,7 +3,7 @@
     v-model:value="value"
     :options="options"
     style="width: 400px;"
-    @on-input="setOptions"
+    @input="setOptions"
   >
     <template #default="{ option }">
       <Option :value="option" :label="option"></Option>

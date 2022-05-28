@@ -10,7 +10,7 @@
     <Button
       type="primary"
       size="small"
-      @on-click="value = value ? '' : 'radio'"
+      @click="value = value ? '' : 'radio'"
     >
       {{ value ? 'Cancel' : 'Select' }}
     </Button>

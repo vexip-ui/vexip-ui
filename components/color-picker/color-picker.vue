@@ -41,23 +41,23 @@
               :hue="currentValue.h"
               :saturation="currentValue.s"
               :value="currentValue.v"
-              @on-edit-start="toggleEditing(true)"
-              @on-edit-end="toggleEditing(false)"
-              @on-change="handlePaletteChange"
+              @edit-start="toggleEditing(true)"
+              @edit-end="toggleEditing(false)"
+              @change="handlePaletteChange"
             ></ColorPalette>
             <ColorHue
               :hue="currentValue.h"
-              @on-edit-start="toggleEditing(true)"
-              @on-edit-end="toggleEditing(false)"
-              @on-change="handleHueChange"
+              @edit-start="toggleEditing(true)"
+              @edit-end="toggleEditing(false)"
+              @change="handleHueChange"
             ></ColorHue>
             <ColorAlpha
               v-if="alpha"
               :rgb="rgb"
               :alpha="currentAlpha"
-              @on-edit-start="toggleEditing(true)"
-              @on-edit-end="toggleEditing(false)"
-              @on-change="handleAlphaChange"
+              @edit-start="toggleEditing(true)"
+              @edit-end="toggleEditing(false)"
+              @change="handleAlphaChange"
             ></ColorAlpha>
             <div v-if="shortcut" :class="`${prefix}__shortcuts`">
               <div
@@ -75,17 +75,17 @@
               size="small"
               :value="hex.toUpperCase()"
               :respond="false"
-              @on-change="handleInputColor"
+              @change="handleInputColor"
             ></Input>
             <Button
               v-if="clearable"
               type="text"
               size="small"
-              @on-click="handleClear"
+              @click="handleClear"
             >
               {{ cancelText || locale.cancel }}
             </Button>
-            <Button type="primary" size="small" @on-click="handleOk">
+            <Button type="primary" size="small" @click="handleOk">
               {{ confirmText || locale.confirm }}
             </Button>
           </div>
@@ -243,12 +243,12 @@ export default defineComponent({
   },
   props,
   emits: [
-    'on-toggle',
-    'on-click-outside',
-    'on-outside-close',
-    'on-clear',
-    'on-change',
-    'on-shortcut',
+    'toggle',
+    'click-outside',
+    'outside-close',
+    'clear',
+    'change',
+    'shortcut',
     'update:value',
     'update:visible'
   ],
@@ -321,7 +321,7 @@ export default defineComponent({
     )
     watch(currentVisible, value => {
       value && updatePopper()
-      emit('on-toggle', value)
+      emit('toggle', value)
       emit('update:visible', value)
     })
     watch(() => props.value, parseValue)
@@ -342,12 +342,12 @@ export default defineComponent({
 
     function handleClickOutside() {
       if (!editing.value) {
-        emit('on-click-outside')
+        emit('click-outside')
 
         if (props.outsideClose && currentVisible.value) {
           currentVisible.value = false
 
-          emit('on-outside-close')
+          emit('outside-close')
         }
       }
     }
@@ -365,7 +365,7 @@ export default defineComponent({
         nextTick(() => {
           parseValue(null)
           clearField()
-          emit('on-clear')
+          emit('clear')
         })
       }
     }
@@ -425,7 +425,7 @@ export default defineComponent({
     function handleChange() {
       const formattedColor = getForamttedColor()
 
-      emit('on-change', formattedColor)
+      emit('change', formattedColor)
       emit('update:value', formattedColor)
 
       if (!props.disableValidate) {
@@ -459,7 +459,7 @@ export default defineComponent({
       currentValue.value = rgbToHsv(r, g, b)
       currentAlpha.value = a
 
-      emit('on-shortcut', getForamttedColor())
+      emit('shortcut', getForamttedColor())
     }
 
     function toggleEditing(able: boolean) {

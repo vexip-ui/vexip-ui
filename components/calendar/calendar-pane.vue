@@ -134,7 +134,7 @@ const props = useConfiguredProps('calendarBase', {
 export default defineComponent({
   name: 'CalendarPane',
   props,
-  emits: ['on-select', 'on-hover', 'update:value'],
+  emits: ['select', 'hover', 'update:value'],
   setup(props, { emit }) {
     const startValue = ref<Date | null>(null)
     const endValue = ref<Date | null>(null)
@@ -158,7 +158,7 @@ export default defineComponent({
       }
     })
     watch(hoveredDate, value => {
-      emit('on-hover', value)
+      emit('hover', value)
     })
 
     function getWeekLabel(index: number) {
@@ -265,7 +265,7 @@ export default defineComponent({
           endValue.value = date
         }
 
-        emit('on-select', date)
+        emit('select', date)
         emit('update:value', date)
       }
     }
