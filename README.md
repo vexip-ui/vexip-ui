@@ -12,8 +12,8 @@ Currently more then 60 components, many you can see everywhere and a few may bri
 
 For project:
 
-- ~~Transfer to use css vars~~ (Completed, will be released in `2.0`)
-- ~~Refactor icons~~ (Completed, will be released in `2.0`)
+- ~~Transfer to use css vars~~ (Released in `2.0.0-beta.0`)
+- ~~Refactor icons~~ (Released in `2.0.0-beta.0`)
 - Write unit tests
 - Adapt ssr render
 
