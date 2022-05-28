@@ -1,3 +1,92 @@
+# [2.0.0-beta.0](https://github.com/qmhc/vexip-ui/compare/v1.3.1...v2.0.0-beta.0) (2022-05-28)
+
+
+### Bug Fixes
+
+* **button:** icon only style not effective ([a4d671c](https://github.com/qmhc/vexip-ui/commit/a4d671c0b9fd4c4d5488f1609b7962eba6bee20f))
+* **button:** use render function to effect dynamic tag ([12b8c00](https://github.com/qmhc/vexip-ui/commit/12b8c00dfa07b4d3dbdb505ef21eb00644f02b35))
+* **ellipsis:** exactly compare width using bounding rect ([194fd56](https://github.com/qmhc/vexip-ui/commit/194fd56fe8e2c3e0634f0b9e9f4a690f8498d295))
+* **grid:** correct cell width default behavior ([23a904c](https://github.com/qmhc/vexip-ui/commit/23a904cb5858e34bb403ca993649c944c4836ee4))
+* **native-scroll:** incorrectly record content offsetWidth ([6cb2d19](https://github.com/qmhc/vexip-ui/commit/6cb2d19fe7523fbd684404dad9ee64ac997a468f))
+* **scroll:** autoplay cannot start when mounted ([90f1934](https://github.com/qmhc/vexip-ui/commit/90f1934708f8efade6b456fc60349d4bfbc696d0))
+* **scrollbar:** cannot find wrapper in production mode ([d903b15](https://github.com/qmhc/vexip-ui/commit/d903b1573b096866ca9e22809765b9e89ce01e2a))
+* stop propagation when dragging only for Table and Tree ([7ca6f53](https://github.com/qmhc/vexip-ui/commit/7ca6f53fa6b88c8336850e65998db9963a2219ef))
+* **style:** transition-box-shadow rename to transition-shadow ([191f089](https://github.com/qmhc/vexip-ui/commit/191f089f55a193b2242e6257a9fc6aade0f9b78f))
+* **table:** body height flicker when first render ([aec5cea](https://github.com/qmhc/vexip-ui/commit/aec5cea99ab062f64ecee16e95edb51e37c43c1c))
+* **table:** incorrect head height and total rows height not reactive ([03d20b3](https://github.com/qmhc/vexip-ui/commit/03d20b3c02d3af24dc62118d1b6c9c86a36c6c88))
+* **table:** incorrect height when using expand and fixed ([b689578](https://github.com/qmhc/vexip-ui/commit/b689578c085d01ba92a6aa804c1e06d0bdf09960))
+* **table:** stripe error when using virtual ([d1b3108](https://github.com/qmhc/vexip-ui/commit/d1b310897487b0c8cfcdf8d7b69074c078b5e6af))
+* **table:** thead and tbody border missing ([acf1a3e](https://github.com/qmhc/vexip-ui/commit/acf1a3e46bbf1415fa92c29d4d99b8290e478c04))
+* **upload-file:** decoupling the style from Upload class name ([f62a417](https://github.com/qmhc/vexip-ui/commit/f62a4174f1c8a22d012077b504e10b1247830be2))
+* **utils:** debounceMinor not effective ([0873b28](https://github.com/qmhc/vexip-ui/commit/0873b28f5abcc634226d07c99061f34fa81d03a9))
+* **utils:** using string schema to process toFixed ([7135f82](https://github.com/qmhc/vexip-ui/commit/7135f82bcf7a6314b47285fc240aa70a982ed20b))
+
+
+### Code Refactoring
+
+* all `beforeXxx` props adjust to `onBeforeXxx` ([2bee7cf](https://github.com/qmhc/vexip-ui/commit/2bee7cff0a2935213270657fc929c3e5408285bf))
+* all events adjust `on-xxx` to `xxx` ([a684401](https://github.com/qmhc/vexip-ui/commit/a684401725e3f85ab79256dab385e01103fd1fbd))
+* **button:** support custom color ([06658f7](https://github.com/qmhc/vexip-ui/commit/06658f7e8fa20daa05d6b4afb09de25b16bd5bf5))
+* icon rewrite to use component ([#22](https://github.com/qmhc/vexip-ui/issues/22)) ([d825637](https://github.com/qmhc/vexip-ui/commit/d82563709def1c65ee548d5ecfb09e296ac6c53a))
+
+
+### Features
+
+* add VirtualList and ResizeObserver components ([db0d26c](https://github.com/qmhc/vexip-ui/commit/db0d26cb44c16384792ba0a98f69be68dcfcb380))
+* **alert:** add manual prop ([a459974](https://github.com/qmhc/vexip-ui/commit/a459974640ae9ed99e14a20ebea051b13fb9edbc))
+* **button:** add tag and attr-type props ([5e7317e](https://github.com/qmhc/vexip-ui/commit/5e7317ef4f82127b085f351821301b06b2ac10af))
+* **color:** add mixColor method ([8c7cdda](https://github.com/qmhc/vexip-ui/commit/8c7cddaa3d2d4c76c186d8d61156c67d32a7bfb6))
+* **grid:** add Grid and Cell components ([#19](https://github.com/qmhc/vexip-ui/issues/19)) ([64670fa](https://github.com/qmhc/vexip-ui/commit/64670fa983558f38808bebf044222135ce8b2a4f))
+* **grid:** add use-flex prop ([01a95a0](https://github.com/qmhc/vexip-ui/commit/01a95a0cb72e081a2043522b968f66fa13ee31a6))
+* **icons:** sync icons to vue-awesome@4.5.0 ([3f0c915](https://github.com/qmhc/vexip-ui/commit/3f0c915a4d5bc97e5fd6a2aa5f028408d0c9b6db))
+* **icons:** upgrade to fontawesome v6 ([#23](https://github.com/qmhc/vexip-ui/issues/23)) ([6770468](https://github.com/qmhc/vexip-ui/commit/67704686ff935e531f3b529c202232ef8fc14a09))
+* **mixins:** add useMounted mixin ([a89cdeb](https://github.com/qmhc/vexip-ui/commit/a89cdeb61a6eb9c5e7ff0455f017a72d944e5509))
+* **mixins:** add useResize mixin ([5d139e3](https://github.com/qmhc/vexip-ui/commit/5d139e3cca81bf5803e467fddf56f36befc41765))
+* **mixins:** add useVirtual mixin ([01827aa](https://github.com/qmhc/vexip-ui/commit/01827aa25611c737d50d9e62b6b98d1e951abd6e))
+* **playground:** support runtime toggle dark theme ([51c6b44](https://github.com/qmhc/vexip-ui/commit/51c6b447e9abdace90635e1c0da86df940f2a041))
+* **row:** add column-flex prop ([42312ec](https://github.com/qmhc/vexip-ui/commit/42312ec6ccb7efd1c6069debdbb992424dc6b988))
+* **style:** add built in dark theme ([#24](https://github.com/qmhc/vexip-ui/issues/24)) ([e388387](https://github.com/qmhc/vexip-ui/commit/e38838720a730f64af3a0e22bc7149d829b0d7e7))
+* **style:** transfer to use css vars ([#20](https://github.com/qmhc/vexip-ui/issues/20)) ([76bef3e](https://github.com/qmhc/vexip-ui/commit/76bef3e393e6c366bc0b90b1b980844ddb4d8dae))
+* support virtual scroll for Select and AutoComplete ([30dba08](https://github.com/qmhc/vexip-ui/commit/30dba084ec0b9b866327b69498f3f98f35f3032f))
+* **table:** add clearSelected method ([1b3d75e](https://github.com/qmhc/vexip-ui/commit/1b3d75e545950ae665dc09ee38d44605fd80dd18))
+* **table:** add singleSorter and singleFilter props ([b477a61](https://github.com/qmhc/vexip-ui/commit/b477a61797e80c7b74b246b6d821787e658331d0))
+* **table:** emit on-row-sort event ([e5306cc](https://github.com/qmhc/vexip-ui/commit/e5306ccca2b8821ddb22b3fbce79d5102d8fc7c1))
+* **table:** export clearSort and clearFilter methods ([6202825](https://github.com/qmhc/vexip-ui/commit/620282563ae8e28c3c123488ee7ee684ac47050f))
+* **table:** support virtual rendering rows ([5479c12](https://github.com/qmhc/vexip-ui/commit/5479c12dc490462f2ec0c7ceb221fa0d7ddb858d))
+* **upload:** add isDragOver prop to default slot ([1a0020a](https://github.com/qmhc/vexip-ui/commit/1a0020afa949abfd32a7cba7955ee6b2a07e2ac8))
+* **upload:** export UploadList and UploadFile components ([8b6ced2](https://github.com/qmhc/vexip-ui/commit/8b6ced29dcf97e15bda356bf4d4203e6ac0db55c))
+* **upload:** support upload directories and only-dary mode ([042d6db](https://github.com/qmhc/vexip-ui/commit/042d6db4e9bbe1b0a075b1a25af25fb33689741b))
+* **utils:** add adjustAlpha method ([107023a](https://github.com/qmhc/vexip-ui/commit/107023a83edb7abec8461bcc433cae79f8c83c91))
+* **utils:** add createBITree method ([dbf76b2](https://github.com/qmhc/vexip-ui/commit/dbf76b2116e9ca59ce05afa09b06691b2703a2ff))
+* **utils:** add debounceFrame, nextTickOnce and nextFrameOnce ([7204479](https://github.com/qmhc/vexip-ui/commit/7204479082899bdfe28bd5ac93aba9b430e49a32))
+* **utils:** add isBigInt function ([259a990](https://github.com/qmhc/vexip-ui/commit/259a990e73091bfcc9bfbfe9c8a55fafeece22db))
+
+
+### Performance Improvements
+
+* **table:** optimize scrolling performance ([3f96507](https://github.com/qmhc/vexip-ui/commit/3f96507b1b009e2de876a19e65cb6f53715a8550))
+* **table:** optimize virtual scroll by BITree ([46e7ac5](https://github.com/qmhc/vexip-ui/commit/46e7ac5bb3efc9686b7962c759f045a76d7817fa))
+
+
+### BREAKING CHANGES
+
+* Using `onBeforeXxx` to replace `beforeXxx` props, the
+purpose is to support `@beforeXxx` alias to bind callback.
+* All component events are removed the `on` prefix,
+currently using `@xxx` to replace `@on-xxx`, its purpose is to better
+bind events in t/jsx (no `onOnXxx`).
+* **button:** extract text and dashed types as props from Button component,
+text-color prop has removed, using color prop to customize the button.
+* All icons have rewrite to svg vue components, package has published to 
+`@vexip-ui/icons`, using `<Icon>` default slot to provide the icon svg component instead of before 
+way which import from `vexip-ui/icons/**`.
+* **style:** All scss variables in components have been removed, all preset scss variables in 
+`design/variables.scss` have removed the `vxp-` prefix and change to use scss map to define. All 
+style imports in scss are currently using `@use` and `@forward`, do not use `@import` to import 
+styles anymore.
+
+
+
 ## [1.3.2](https://github.com/qmhc/vexip-ui/compare/v1.3.1...v1.3.2) (2022-04-22)
 
 

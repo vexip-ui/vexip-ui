@@ -5,7 +5,7 @@ import gulpSass from 'gulp-sass'
 import dartSass from 'sass'
 import autoprefixer from 'gulp-autoprefixer'
 import cleanCSS from 'gulp-clean-css'
-import { emptyDir } from 'fs-extra'
+import { emptyDir, mkdirSync } from 'fs-extra'
 
 const cssDir = resolve(__dirname, 'css')
 const themesDir = resolve(__dirname, 'themes')
@@ -24,6 +24,7 @@ function buildStyle() {
 
 function buildThemes() {
   emptyDir(themesDir)
+  mkdirSync(resolve(themesDir, 'dark'))
 
   const sass = gulpSass(dartSass)
 
