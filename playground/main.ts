@@ -1,5 +1,6 @@
 import '@vue/repl/style.css'
 import '../style/index.scss'
+import '../style/dark/preset.scss'
 
 import { createApp } from 'vue'
 import { install } from 'vexip-ui'

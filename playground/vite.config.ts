@@ -1,16 +1,18 @@
-import fs from 'fs'
 import { resolve } from 'path'
+import { readFileSync } from 'fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import serveStatic from 'serve-static'
+
+const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
 
 export default defineConfig(({ command }) => {
   const isServe = command === 'serve'
 
   return {
     define: {
-      __VERSION__: JSON.stringify(''),
+      __VERSION__: JSON.stringify(pkg.version),
       __VUE_PROD_DEVTOOLS__: JSON.stringify(true)
     },
     resolve: {
@@ -55,7 +57,7 @@ export default defineConfig(({ command }) => {
             this.emitFile({
               fileName,
               type: 'asset',
-              source: fs.readFileSync(filePath, 'utf-8')
+              source: readFileSync(filePath, 'utf-8')
             })
           })
         }

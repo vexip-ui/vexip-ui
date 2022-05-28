@@ -6,6 +6,9 @@
           <img class="index__logo" src="/logo.png" alt="logo.png" />
           <span class="index__title"> Vexip SFC Playground </span>
         </h1>
+        <Tag v-if="libVersion" style="margin: 4px 0 0 6px; transform: scale(0.8);">
+          {{ `v${libVersion}` }}
+        </Tag>
       </Linker>
     </Column>
     <Column flex="auto"></Column>
@@ -20,7 +23,7 @@
       </div>
       <div class="action" @click="copyLink">
         <Icon :scale="1.3">
-          <ShareAlt></ShareAlt>
+          <ShareNodes></ShareNodes>
         </Icon>
       </div>
       <div class="action" @click="download">
@@ -40,7 +43,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Confirm, Message } from 'vexip-ui'
-import { Moon, Sun, ShareAlt, Download, GithubB } from '@vexip-ui/icons'
+import { Moon, Sun, ShareNodes, Download, GithubB } from '@vexip-ui/icons'
 import { downloadProject } from '../download/download'
 
 const props = defineProps({
@@ -51,6 +54,7 @@ const props = defineProps({
 })
 
 const isDarkTheme = ref(document.documentElement.classList.contains('dark'))
+const libVersion = ref(__VERSION__)
 
 function toggleDark() {
   const cls = document.documentElement.classList
@@ -93,7 +97,9 @@ async function download() {
   font-size: 13px;
   color: var(--base);
   background-color: var(--bg);
+  border-bottom: 1px solid transparent;
   box-shadow: 0 0 4px rgba(0, 0, 0, 30%);
+  transition: var(--vxp-transition-background), var(--vxp-transition-border), var(--vxp-transition-shadow);
 
   .dark & {
     --base: #ddd;
@@ -101,7 +107,7 @@ async function download() {
     --bg-light: #242424;
     --border: #383838;
 
-    border-bottom: 1px solid var(--border);
+    border-bottom-color: var(--border);
     box-shadow: none;
   }
 
@@ -125,6 +131,7 @@ async function download() {
 
     &__title {
       color: var(--base);
+      transition: var(--vxp-transition-background);
     }
   }
 

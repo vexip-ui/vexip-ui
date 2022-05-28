@@ -57,15 +57,51 @@ new Promise((resolve, reject) => {
 `
 
 const welcomeCode = `<template>
-  <Button type="primary" :icon="Search">{{ msg }}</Button>
+  <Button type="primary" :icon="MagnifyingGlass">{{ msg }}</Button>
+
+  <!-- This is the dark theme trigger -->
+  <div style="padding: 20px 0;">
+    <span style="margin-right: 10px;">Toggle Dark:</span>
+    <Switcher v-model:value="isDark" class="theme-switch" :icon="isDark ? Moon : Sun"></Switcher>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Search } from '@vexip-ui/icons'
+import { ref, watch } from 'vue'
+import { MagnifyingGlass, Sun, Moon } from '@vexip-ui/icons'
 
 const msg = ref('Hello World!')
+
+const rootCls = document.documentElement.classList
+const isDark = ref(${document.documentElement.classList.contains('dark') ? 'true' : 'false'})
+
+if (isDark.value) {
+  rootCls.add('dark')
+}
+
+watch(isDark, value => {
+  value ? rootCls.add('dark') : rootCls.remove('dark')
+})
 ${'</'}script>
+
+<style>
+body {
+  color: var(--vxp-content-color-base);
+  background-color: var(--vxp-bg-color-base);
+  transition: var(--vxp-transition-color), var(--vxp-transition-background);
+}
+
+.theme-switch {
+  border: 1px solid var(--vxp-border-color-base);
+}
+
+html.dark .theme-switch {
+  --vxp-switcher-bg-color-open: #{rgba(#fff, 0.05)};
+  --vxp-switcher-signal-bg-color: #000;
+  --vxp-switcher-icon-color: var(--vxp-content-color-secondary);
+  --vxp-switcher-shadow-focus: unset;
+}
+</style>
 `
 
 const setVH = () => {
@@ -140,5 +176,27 @@ body {
 
 .vue-repl {
   height: calc(var(--vh) - var(--nav-height));
+}
+
+.vue-repl,
+.file-selector,
+.tab-buttons,
+.iframe-container {
+  transition: var(--vxp-transition-background), var(--vxp-transition-border);
+}
+
+.import-map-wrapper {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+.CodeMirror-gutters,
+.split-pane .left {
+  transition: var(--vxp-transition-border);
+}
+
+.iframe-container {
+  background-color: var(--bg) !important;
 }
 </style>
