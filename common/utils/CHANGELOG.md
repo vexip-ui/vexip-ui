@@ -1,3 +1,34 @@
+# [1.1.0](https://github.com/qmhc/vexip-ui/compare/utils@1.0.0...utils@1.1.0) (2022-05-28)
+
+
+### Bug Fixes
+
+* **utils:** debounceMinor not effective ([0873b28](https://github.com/qmhc/vexip-ui/commit/0873b28f5abcc634226d07c99061f34fa81d03a9))
+* **utils:** using string schema to process toFixed ([7135f82](https://github.com/qmhc/vexip-ui/commit/7135f82bcf7a6314b47285fc240aa70a982ed20b))
+
+
+### Code Refactoring
+
+* icon rewrite to use component ([#22](https://github.com/qmhc/vexip-ui/issues/22)) ([d825637](https://github.com/qmhc/vexip-ui/commit/d82563709def1c65ee548d5ecfb09e296ac6c53a))
+
+
+### Features
+
+* **color:** add mixColor method ([8c7cdda](https://github.com/qmhc/vexip-ui/commit/8c7cddaa3d2d4c76c186d8d61156c67d32a7bfb6))
+* **utils:** add adjustAlpha method ([107023a](https://github.com/qmhc/vexip-ui/commit/107023a83edb7abec8461bcc433cae79f8c83c91))
+* **utils:** add createBITree method ([dbf76b2](https://github.com/qmhc/vexip-ui/commit/dbf76b2116e9ca59ce05afa09b06691b2703a2ff))
+* **utils:** add debounceFrame, nextTickOnce and nextFrameOnce ([7204479](https://github.com/qmhc/vexip-ui/commit/7204479082899bdfe28bd5ac93aba9b430e49a32))
+* **utils:** add isBigInt function ([259a990](https://github.com/qmhc/vexip-ui/commit/259a990e73091bfcc9bfbfe9c8a55fafeece22db))
+
+
+### BREAKING CHANGES
+
+* All icons have rewrite to svg vue components, package has published to 
+`@vexip-ui/icons`, using `<Icon>` default slot to provide the icon svg component instead of before 
+way which import from `vexip-ui/icons/**`.
+
+
+
 # 1.0.0 (2022-04-26)
 
 
