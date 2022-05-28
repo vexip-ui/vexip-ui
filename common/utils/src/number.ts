@@ -1,10 +1,18 @@
-export function toNumber(value: unknown): number {
+/**
+ * 将任意值转成数字，NaN 的情况将会处理成 0
+ * @param value - 需要转化的值
+ */
+export function toNumber(value: unknown) {
   const number = parseFloat(value as string)
 
   return Number.isNaN(number) ? 0 : number
 }
 
-export function doubleDigits(number: number): string {
+/**
+ * 讲小于 10 整数 N 变成 `0N` 的字符串，方法不会对入参校验
+ * @param number - 需要处理的整数
+ */
+export function doubleDigits(number: number) {
   return number < 10 ? `0${number}` : number.toString()
 }
 
@@ -35,19 +43,40 @@ export function segmentNumber(number: number | string, segment = 3, separator = 
 }
 
 /**
+ * 讲一个实数保留一定的小数
+ * @param number - 需要处理的实数
+ * @param decimal - 需要保留的小数
+ */
+export function toFixed(number: number, decimal: number) {
+  if (decimal === 0) return Math.round(number)
+
+  let snum = String(number)
+  const pointPos = snum.indexOf('.')
+
+  if (pointPos === -1) return number
+
+  const nums = snum.replace('.', '').split('')
+  const datum = nums[pointPos + decimal]
+
+  if (!datum) return number
+
+  const length = snum.length
+
+  if (snum.charAt(length - 1) === '5') {
+    snum = snum.substring(0, length - 1) + '6'
+  }
+
+  return parseFloat(Number(snum).toFixed(decimal))
+}
+
+/**
  * 将一个实数扩大一定的倍数并保留一定的小数
  * @param number - 要处理的实数
  * @param multiple - 要扩大的倍数
  * @param decimal - 要保留的小数
  */
-export function multipleFixed(number: number, multiple: number, decimal: number): number {
-  const fixed = 10 ** decimal
-
-  return Math.round(number * multiple * fixed) / fixed
-}
-
-export function toFixed(number: number, decimal: number): number {
-  return multipleFixed(number, 1, decimal)
+export function multipleFixed(number: number, multiple: number, decimal: number) {
+  return toFixed(number * multiple, decimal)
 }
 
 /**

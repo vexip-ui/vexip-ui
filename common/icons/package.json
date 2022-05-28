@@ -1,5 +1,7 @@
 {
   "name": "@vexip-ui/icons",
+  "version": "1.0.0",
+  "license": "MIT",
   "anchor": "qmhc",
   "scripts": {
     "build": "ts-node scripts/build.ts"
