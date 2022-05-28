@@ -1,3 +1,26 @@
+# [1.1.0](https://github.com/qmhc/vexip-ui/compare/mixins@1.0.0...mixins@1.1.0) (2022-05-28)
+
+
+### Code Refactoring
+
+* icon rewrite to use component ([#22](https://github.com/qmhc/vexip-ui/issues/22)) ([d825637](https://github.com/qmhc/vexip-ui/commit/d82563709def1c65ee548d5ecfb09e296ac6c53a))
+
+
+### Features
+
+* **mixins:** add useMounted mixin ([a89cdeb](https://github.com/qmhc/vexip-ui/commit/a89cdeb61a6eb9c5e7ff0455f017a72d944e5509))
+* **mixins:** add useResize mixin ([5d139e3](https://github.com/qmhc/vexip-ui/commit/5d139e3cca81bf5803e467fddf56f36befc41765))
+* **mixins:** add useVirtual mixin ([01827aa](https://github.com/qmhc/vexip-ui/commit/01827aa25611c737d50d9e62b6b98d1e951abd6e))
+
+
+### BREAKING CHANGES
+
+* All icons have rewrite to svg vue components, package has published to 
+`@vexip-ui/icons`, using `<Icon>` default slot to provide the icon svg component instead of before 
+way which import from `vexip-ui/icons/**`.
+
+
+
 # 1.0.0 (2022-04-29)
 
 
