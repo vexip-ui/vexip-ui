@@ -14,7 +14,7 @@ main().catch(error => {
 })
 
 async function main() {
-  logger.withBothLn(() => logger.successText('start building lib...'))
+  logger.withBothLn(() => logger.successText('start building full lib...'))
 
   await run('pnpm', ['bootstrap'])
 
