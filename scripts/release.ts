@@ -118,7 +118,7 @@ async function main() {
 
   if (!skipBuild && !isDryRun) {
     if (isRoot) {
-      await run('pnpm', ['build', '--', '-a', '-t', '-r'])
+      await run('pnpm', ['build'])
     } else {
       await run('pnpm', ['build'], { cwd: pkgDir })
     }
