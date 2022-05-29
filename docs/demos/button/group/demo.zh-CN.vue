@@ -17,7 +17,7 @@
       按钮一
     </Button>
     <Button type="primary">
-      按钮一
+      按钮二
     </Button>
     <Button type="primary">
       按钮三

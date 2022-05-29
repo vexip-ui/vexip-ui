@@ -1,20 +1,20 @@
 <template>
   <Button loading type="primary">
-    Loading
+    加载中
   </Button>
   <Button
     type="primary"
     :loading="loading"
     @click="load"
   >
-    Click me
+    点一下我
   </Button>
   <Button
     loading
     circle
     type="primary"
   >
-    Loading
+    加载中
   </Button>
   <Button
     loading

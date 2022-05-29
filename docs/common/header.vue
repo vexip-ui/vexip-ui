@@ -41,6 +41,24 @@
             </MenuItem>
           </template>
         </Menu>
+        <Dropdown style="height: 100%; margin-right: 24px;">
+          <Icon :scale="2" style="height: 100%;">
+            <Language></Language>
+          </Icon>
+          <template #drop>
+            <DropdownList>
+              <DropdownItem
+                v-for="option in langOptions"
+                :key="option.lang"
+                :name="option.name"
+                :selected="option.lang === globalState.language"
+                @select="changeLanguage(option.lang)"
+              >
+                {{ option.name }}
+              </DropdownItem>
+            </DropdownList>
+          </template>
+        </Dropdown>
         <ThemeSwitch></ThemeSwitch>
         <Linker class="github-link" to="//github.com/qmhc/vexip-ui/">
           <Icon :scale="1.6">
@@ -56,7 +74,7 @@
 import { ref, watchEffect, inject, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { version } from 'vexip-ui'
-import { MagnifyingGlass, GithubB } from '@vexip-ui/icons'
+import { MagnifyingGlass, GithubB, Language } from '@vexip-ui/icons'
 import { toKebabCase } from '@vexip-ui/utils'
 import ThemeSwitch from './theme-switch.vue'
 import { getComponentConfig } from '../router/components'
@@ -64,6 +82,10 @@ import { getComponentConfig } from '../router/components'
 const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const searchOptions: string[] = []
+const langOptions = [
+  { lang: 'zh-CN', name: '中文' },
+  { lang: 'en-US', name: 'English' }
+]
 
 getComponentConfig().forEach(group => {
   searchOptions.push(...group.components.map(({ name, cname }) => `${name} ${cname}`))
@@ -113,6 +135,12 @@ function toComponentDoc(fullName: string) {
   nextTick(() => {
     currentSearch.value = ''
   })
+}
+
+function changeLanguage(language: string) {
+  if (language !== globalState.language) {
+    router.push(route.path.replace(globalState.language, language))
+  }
 }
 </script>
 
@@ -201,19 +229,7 @@ function toComponentDoc(fullName: string) {
   }
 
   .github-link {
-    margin-right: 40px !important;
-
-    &,
-    .vxp-icon {
-      color: var(--vxp-content-color-base);
-    }
-
-    &:hover {
-      &,
-      .vxp-icon {
-        color: var(--vxp-content-color-base);
-      }
-    }
+    margin-right: 40px;
   }
 }
 </style>

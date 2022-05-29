@@ -15,10 +15,11 @@ const routes: RouteRecordRaw[] = [
     redirect: `/${defaultLang}`
   },
   useLanguageRouter('zh-CN'),
-  {
-    path: '/:catchAll(.*)',
-    redirect: '/'
-  }
+  useLanguageRouter('en-US')
+  // {
+  //   path: '/:catchAll(.*)',
+  //   redirect: '/'
+  // }
 ]
 
 function useLanguageRouter(language: string): RouteRecordRaw {
@@ -30,7 +31,7 @@ function useLanguageRouter(language: string): RouteRecordRaw {
     children: [
       {
         path: '',
-        name: 'homepage',
+        name: `${language}-homepage`,
         component: () => import('../views/homepage.vue')
       },
       ...useGuidesRouter(language),
@@ -40,10 +41,11 @@ function useLanguageRouter(language: string): RouteRecordRaw {
 }
 
 function useGuidesRouter(language: string): RouteRecordRaw[] {
-  const children: RouteRecordRaw[] = getGuideConfig().map(({ cname, label }) => {
+  const children: RouteRecordRaw[] = getGuideConfig().map(({ name, cname, label }) => {
     return {
       path: label,
-      name: cname,
+      name: `${language}-${name}`,
+      meta: { name, cname },
       props: { language },
       component: () => import(`../guides/${label}/docs.vue`)
     }
@@ -73,7 +75,7 @@ function useComponentsRouter(language: string): RouteRecordRaw[] {
 
         return {
           path: lowerName,
-          name: `${name} ${cname}`,
+          name: `${language}-${name}`,
           meta: {
             ...others,
             component: `${name} ${cname}`
