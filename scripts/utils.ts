@@ -64,7 +64,7 @@ export function toKebabCase(value: string) {
 }
 
 // 全大写命名
-export function toPascalCase(value: string) {
+export function toCapitalCase(value: string) {
   return (
     value.charAt(0).toUpperCase() +
     value.slice(1).replace(/-([a-z])/g, (_, char) => (char ? char.toUpperCase() : ''))
@@ -73,9 +73,9 @@ export function toPascalCase(value: string) {
 
 // 驼峰命名
 export function toCamelCase(value: string) {
-  const pascalName = toPascalCase(value)
+  const capitalName = toCapitalCase(value)
 
-  return pascalName.charAt(0).toLowerCase() + pascalName.slice(1)
+  return capitalName.charAt(0).toLowerCase() + capitalName.slice(1)
 }
 
 export const rootDir = resolve(__dirname, '..')

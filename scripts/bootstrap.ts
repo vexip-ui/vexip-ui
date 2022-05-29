@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
-import { logger, components as allComponents, toPascalCase } from './utils'
+import { logger, components as allComponents, toCapitalCase } from './utils'
 
 main().catch(error => {
   logger.error(error)
@@ -18,7 +18,7 @@ async function main() {
 
   const index = `
     ${
-      exportComponents.map(component => `import { ${toPascalCase(component)} } from './${component}'`).join('\n')
+      exportComponents.map(component => `import { ${toCapitalCase(component)} } from './${component}'`).join('\n')
     }
 
     import { buildInstall } from './create'
@@ -34,29 +34,29 @@ async function main() {
     }
 
     const components = [
-      ${components.map(toPascalCase).join(',\n')},
+      ${components.map(toCapitalCase).join(',\n')},
       // plugins
-      ${plugins.map(toPascalCase).join(', ')}
+      ${plugins.map(toCapitalCase).join(', ')}
     ]
 
     export const install = buildInstall(components)
     export const version = __VERSION__
 
     export {
-      ${exportComponents.map(toPascalCase).join(',\n')}
+      ${exportComponents.map(toCapitalCase).join(',\n')}
     }
   `
 
   const types = `
     declare module 'vue' {
       export interface GlobalComponents {
-        ${components.map(name => `${toPascalCase(name)}: typeof import('vexip-ui')['${toPascalCase(name)}']`).join(',\n')}
+        ${components.map(name => `${toCapitalCase(name)}: typeof import('vexip-ui')['${toCapitalCase(name)}']`).join(',\n')}
       }
     }
 
     declare module '@vue/runtime-core' {
       interface ComponentCustomProperties {
-        ${plugins.map(name => `$${name}: typeof import('vexip-ui')['${toPascalCase(name)}']`).join(',\n')}
+        ${plugins.map(name => `$${name}: typeof import('vexip-ui')['${toCapitalCase(name)}']`).join(',\n')}
       }
     }
 

@@ -4,7 +4,7 @@ import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import stylelint from 'stylelint'
 import minimist from 'minimist'
-import { logger, components as allComponents, runParallel, toKebabCase, toPascalCase, toCamelCase } from './utils'
+import { logger, components as allComponents, runParallel, toKebabCase, toCapitalCase, toCamelCase } from './utils'
 
 import type { Options } from 'prettier'
 
@@ -69,23 +69,23 @@ async function create(name: string) {
   if (allComponents.includes(name)) return
 
   let kebabCaseName
-  let pascalCaseName
+  let capitalCaseName
   let camelCaseName
 
   if (name.match(/[A-Z]/)) {
-    pascalCaseName = name.replace(/-/g, '')
-    kebabCaseName = toKebabCase(pascalCaseName)
-    camelCaseName = pascalCaseName.charAt(0).toLowerCase() + pascalCaseName.slice(1)
+    capitalCaseName = name.replace(/-/g, '')
+    kebabCaseName = toKebabCase(capitalCaseName)
+    camelCaseName = capitalCaseName.charAt(0).toLowerCase() + capitalCaseName.slice(1)
   } else {
     kebabCaseName = name
-    pascalCaseName = toPascalCase(name)
+    capitalCaseName = toCapitalCase(name)
     camelCaseName = toCamelCase(name)
   }
 
   const generatedFiles = [
     {
       filePath: path.resolve(dirPath, 'components', kebabCaseName, 'index.ts'),
-      source: `export { default as ${pascalCaseName} } from './${kebabCaseName}.vue'\n`
+      source: `export { default as ${capitalCaseName} } from './${kebabCaseName}.vue'\n`
     },
     {
       filePath: path.resolve(dirPath, 'components', kebabCaseName, 'style.ts'),
@@ -105,7 +105,7 @@ async function create(name: string) {
         const props = useConfiguredProps('${camelCaseName}', {})
 
         export default defineComponent({
-          name: '${pascalCaseName}',
+          name: '${capitalCaseName}',
           props,
           setup() {
             const prefix = 'vxp-${kebabCaseName}'
@@ -133,17 +133,17 @@ async function create(name: string) {
     //   filePath: path.resolve(dirPath, 'components', kebabCaseName, '__serve__', 'app.vue'),
     //   source: `
     //     <template>
-    //       <${pascalCaseName}></${pascalCaseName}>
+    //       <${capitalCaseName}></${capitalCaseName}>
     //     </template>
 
     //     <script lang="ts">
     //     import { defineComponent } from 'vue'
-    //     import { ${pascalCaseName} } from '..'
+    //     import { ${capitalCaseName} } from '..'
 
     //     export default defineComponent({
     //       name: 'App',
     //       components: {
-    //         ${pascalCaseName}
+    //         ${capitalCaseName}
     //       }
     //     })
     //     </script>

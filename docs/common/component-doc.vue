@@ -121,7 +121,7 @@ function handleApiMounted() {
   apiLoaded.value = true
 }
 
-async function internalInit(name: string, language: name) {
+async function internalInit(name: string, language: string) {
   descLoaded.value = false
   mountedDemoCount.value = 0
   allDemosLoaded.value = false

@@ -93,7 +93,7 @@ createApp(App)
 当与一些其他的组件一同使用时, 可能会发生命名冲突，使用该特性可以轻松地解决这个问题。
 :::
 
-### PascalCase 命名
+### CapitalCase 命名
 
 ```js
 createApp(App).use(install, { prefix: 'Vxp' })

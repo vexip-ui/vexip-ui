@@ -88,7 +88,7 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
       .replace(/<!--[\s\S]*-->/, '')
       .replace(/xmlns=".*?"/, 'style="transform: scale(0.85)"')
 
-    let name = toPascalCase(fileName)
+    let name = toCapitalCase(fileName)
     name = name.replace(/^(\d)/, 'I$1').replace(/-(\d)/g, '$1')
     name += suffix
 
@@ -123,7 +123,7 @@ function ensureEmptyDir(dir: string) {
   }
 }
 
-function toPascalCase(value: string) {
+function toCapitalCase(value: string) {
   return (
     value.charAt(0).toUpperCase() +
     value.slice(1).replace(/-([a-z])/g, (_, char) => (char ? char.toUpperCase() : ''))
