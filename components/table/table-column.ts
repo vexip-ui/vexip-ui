@@ -154,7 +154,9 @@ export default defineComponent({
           return isNull(result) ? '' : String(result)
         }
 
-        return (row as RowState)[options.key as unknown as keyof RowState].toString()
+        const result = (row as RowState)[options.key as unknown as keyof RowState]
+
+        return isNull(result) ? '' : String(result)
       }
     }
 

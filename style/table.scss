@@ -93,7 +93,7 @@ $table: map.merge(
   &__group {
     position: relative;
     display: flex;
-    flex: 1 0 auto;
+    flex: 0 0 auto;
     flex-direction: column;
     align-items: stretch;
 
@@ -129,7 +129,7 @@ $table: map.merge(
 
   &__row {
     display: inline-flex;
-    flex: 1 0 auto;
+    flex: 0 0 auto;
     padding-bottom: 1px;
     background-color: get-css-var('table-row-bg-color');
     transition: all get-css-var('transition-base');

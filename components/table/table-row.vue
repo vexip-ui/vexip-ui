@@ -184,7 +184,7 @@ export default defineComponent({
       computeBorderHeight()
       computeRowHeight()
 
-      if (!props.isFixed) {
+      if (state.heightBITree && !props.isFixed) {
         nextTick(() => {
           const height = getRowHeight(props.row)
           const tree = state.heightBITree
@@ -213,6 +213,7 @@ export default defineComponent({
 
     onMounted(() => {
       computeRectHeight()
+      mutations.updateTotalHeight()
     })
 
     onUpdated(() => {

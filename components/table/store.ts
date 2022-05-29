@@ -42,7 +42,7 @@ export function useStore(options: StoreOptions) {
     highlight: false,
     currentPage: 1,
     pageSize: 0,
-    rowHeight: options.rowHeight ?? 0,
+    rowHeight: options.rowHeight,
     rowMinHeight: options.rowMinHeight || 36,
     virtual: options.virtual,
     rowDraggable: !!options.rowDraggable,
@@ -363,11 +363,11 @@ function setData(state: StoreState, data: Data[]) {
     dataMap[key] = row
   }
 
-  if (!state.heightBITree || clonedData.length !== state.rowData.length) {
+  if (!state.heightBITree || clonedData.length !== data.length) {
     state.heightBITree = markRaw(
       createBITree(clonedData.length, (state.rowHeight || state.rowMinHeight))
     )
-    state.totalHeight = state.heightBITree.sum()
+    updateTotalHeight(state)
   }
 
   state.rowData = clonedData
@@ -658,7 +658,7 @@ function setRenderRows(state: StoreState, getters: StoreGetters, start: number, 
 
     virtualData.reverse()
 
-    state.padTop = heightBITree.sum(start)
+    state.padTop = heightBITree?.sum(start) ?? 0
     state.startRow = start
     state.endRow = end
   }
@@ -705,7 +705,17 @@ function refreshRowIndex(state: StoreState) {
 }
 
 function updateTotalHeight(state: StoreState) {
-  state.totalHeight = state.heightBITree?.sum() ?? 0
+  const { heightBITree, currentPage, pageSize, rowData } = state
+
+  if (heightBITree) {
+    if (currentPage && pageSize > 0 && pageSize < rowData.length) {
+      state.totalHeight = heightBITree.sum(currentPage * pageSize) - heightBITree.sum((currentPage - 1) * pageSize)
+    } else {
+      state.totalHeight = heightBITree.sum() ?? 0
+    }
+  } else {
+    state.totalHeight = 0
+  }
 }
 
 function parseSorter(sorter: boolean | SorterOptions = false): ParsedSorterOptions {
