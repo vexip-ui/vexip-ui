@@ -1,17 +1,17 @@
 import { resolve } from 'path'
+import { existsSync, emptyDir, mkdirSync } from 'fs-extra'
 // import chalk from 'chalk'
 import { dest, src, parallel } from 'gulp'
 import gulpSass from 'gulp-sass'
 import dartSass from 'sass'
 import autoprefixer from 'gulp-autoprefixer'
 import cleanCSS from 'gulp-clean-css'
-import { emptyDir, mkdirSync } from 'fs-extra'
 
 const cssDir = resolve(__dirname, 'css')
 const themesDir = resolve(__dirname, 'themes')
 
 function buildStyle() {
-  emptyDir(cssDir)
+  ensureEmptyDir(cssDir)
 
   const sass = gulpSass(dartSass)
 
@@ -23,8 +23,8 @@ function buildStyle() {
 }
 
 function buildThemes() {
-  emptyDir(themesDir)
-  mkdirSync(resolve(themesDir, 'dark'))
+  ensureEmptyDir(themesDir)
+  ensureEmptyDir(resolve(themesDir, 'dark'))
 
   const sass = gulpSass(dartSass)
 
@@ -36,3 +36,7 @@ function buildThemes() {
 }
 
 export default parallel(buildStyle, buildThemes)
+
+function ensureEmptyDir(dir: string) {
+  existsSync(dir) ? emptyDir(dir) : mkdirSync(dir)
+}

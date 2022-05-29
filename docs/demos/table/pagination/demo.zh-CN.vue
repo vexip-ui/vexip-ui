@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 1000px;">
     <Table
       :data="data"
       :current-page="currentPage"
@@ -25,8 +25,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
 interface RowData {
   id: number,
@@ -36,62 +36,49 @@ interface RowData {
   progress: number
 }
 
-export default defineComponent({
-  setup() {
-    const data = ref(mockData())
-    const pageSize = ref(5)
-    const currentPage = ref(1)
+const data = ref(mockData())
+const pageSize = ref(5)
+const currentPage = ref(1)
 
-    function mockData() {
-      const data = []
+function mockData() {
+  const data = []
 
-      for (let i = 0; i < 50; i++) {
-        data.push({
-          id: i,
-          group: `Group ${i + 1}`,
-          member: 3 + Math.round(Math.random() * 7),
-          found: randomDate(),
-          progress: 10 + Math.round(Math.random() * 90)
-        })
-      }
-
-      return data
-    }
-
-    function randomDate() {
-      const startDate = new Date('2000-01-01')
-      const endDate = new Date()
-      const randomDate = new Date(
-        startDate.getTime() + (endDate.getTime() - startDate.getTime()) * Math.random()
-      )
-
-      return formatDate(randomDate)
-    }
-
-    function formatDate(date: Date) {
-      const year = date.getFullYear()
-      const month = date.getMonth() + 1
-      const day = date.getDate()
-
-      return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
-    }
-
-    function toggleChecked(row: RowData, checked: boolean) {
-      // this.$set(row, '_checked', checked)
-      console.info(row, checked)
-    }
-
-    function toggleAllChecked(checked: boolean) {
-      // this.renderData.forEach(row => {
-      //   this.$set(row, '_checked', checked)
-      // })
-      console.info(checked)
-    }
-    // function getSelectedRows() {
-    //   return this.data.filter(row => row._checked)
-    // }
-
-    return { data, pageSize, currentPage, toggleChecked, toggleAllChecked }
+  for (let i = 0; i < 20; ++i) {
+    data.push({
+      id: i,
+      group: `Group ${i + 1}`,
+      member: 3 + Math.round(Math.random() * 7),
+      found: randomDate(),
+      progress: 10 + Math.round(Math.random() * 90)
+    })
   }
-})
+
+  return data
+}
+
+function randomDate() {
+  const startDate = new Date('2000-01-01')
+  const endDate = new Date()
+  const randomDate = new Date(
+    startDate.getTime() + (endDate.getTime() - startDate.getTime()) * Math.random()
+  )
+
+  return formatDate(randomDate)
+}
+
+function formatDate(date: Date) {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+
+  return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
+}
+
+function toggleChecked(row: RowData, checked: boolean) {
+  console.info(row, checked)
+}
+
+function toggleAllChecked(checked: boolean) {
+  console.info(checked)
+}
 </script>

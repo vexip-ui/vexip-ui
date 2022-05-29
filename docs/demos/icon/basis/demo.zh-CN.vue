@@ -1,5 +1,5 @@
 <template>
-  <Icon><DiceOne></DiceOne></Icon>
+  <Icon :icon="DiceOne"></Icon>
   <Icon><DiceTwo></DiceTwo></Icon>
   <Icon><DiceThree></DiceThree></Icon>
   <Icon><DiceFour></DiceFour></Icon>

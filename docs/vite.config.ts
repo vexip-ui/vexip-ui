@@ -1,22 +1,28 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import discardCss from 'postcss-discard-duplicates'
 import markdown from 'vite-plugin-md'
 import { highlight } from './build/highlight'
 import { markdownItSetup } from './build/markdown'
-
-const language = 'zh-CN'
 
 export default defineConfig(({ command }) => {
   const useServer = command === 'serve'
 
   return {
     define: {
-      __LANGUAGE__: JSON.stringify(language)
+      __ROLLBACK_LANG__: JSON.stringify('zh-CN'),
+      __VERSION__: JSON.stringify('')
     },
     resolve: {
-      alias: [{ find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') }],
+      alias: [
+        { find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') }
+        // { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
+        // { find: /^@vexip-ui\/((?!icons).+)/, replacement: resolve(__dirname, '../common/$1/src') },
+        // { find: /^vexip-ui\/(es|lib)\/(.+)/, replacement: resolve(__dirname, '../components/$2') },
+        // { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
+      ],
       dedupe: ['vue', 'vexip-ui']
     },
     server: {
@@ -36,6 +42,7 @@ export default defineConfig(({ command }) => {
     },
     plugins: [
       vue({ include: [/\.vue$/, /\.md$/] }),
+      vueJsx(),
       markdown({
         markdownItOptions: {
           typographer: false,

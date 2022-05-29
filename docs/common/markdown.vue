@@ -54,7 +54,7 @@ watch(isMounted, value => {
     margin: 1em 0;
     font-size: 90%;
     color: var(--vxp-content-color-secondary);
-    border-left: 4px solid var(--vxp-color-border-base);
+    border-left: 4px solid var(--vxp-border-color-base);
 
     p {
       margin: 0;

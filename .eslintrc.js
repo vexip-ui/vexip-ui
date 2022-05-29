@@ -172,7 +172,7 @@ module.exports = {
     {
       files: ['docs/**'],
       globals: {
-        __LANGUAGE__: 'readonly'
+        __ROLLBACK_LANG__: 'readonly'
       }
     },
     {

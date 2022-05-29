@@ -18,7 +18,7 @@ const width = ref(0)
 const height = ref(0)
 
 function handleResize(entry: ResizeObserverEntry) {
-  console.log('toggle resize')
+  console.info('toggle resize')
 
   const box = entry.borderBoxSize?.[0]
 

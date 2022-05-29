@@ -3,7 +3,8 @@
   "author": "qmhc",
   "scripts": {
     "build": "vite build",
-    "serve": "vite"
+    "serve": "vite",
+    "test": "node index.js"
   },
   "private": true,
   "dependencies": {

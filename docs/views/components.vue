@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, provide } from 'vue'
+import { ref, watch, provide, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { version, Row, Scroll } from 'vexip-ui'
 import { toKebabCase } from '@vexip-ui/utils'
@@ -66,6 +66,8 @@ import Footer from '../common/footer.vue'
 import { getComponentConfig } from '../router/components'
 
 import type { ComponentConfig } from '../router/components'
+
+const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const prefix = 'components'
 
@@ -85,8 +87,8 @@ provide('refreshScroll', refreshScroll)
 watch(
   () => route.path,
   value => {
-    if (value.startsWith('/components')) {
-      currentMenu.value = value.split('/')[2]
+    if (value.startsWith(`/${globalState.language}/components`)) {
+      currentMenu.value = value.split('/')[3]
     }
 
     if (!currentMenu.value) {
@@ -104,7 +106,7 @@ function refreshScroll() {
 }
 
 function selectComponent(label: string) {
-  router.push(`/components/${label}`)
+  router.push(`/${globalState.language}/components/${label}`)
 }
 
 function scrollToMenuItem(label: string) {

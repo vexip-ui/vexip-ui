@@ -53,13 +53,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, nextTick } from 'vue'
+import { ref, watchEffect, inject, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { version } from 'vexip-ui'
 import { MagnifyingGlass, GithubB } from '@vexip-ui/icons'
 import { toKebabCase } from '@vexip-ui/utils'
 import ThemeSwitch from './theme-switch.vue'
 import { getComponentConfig } from '../router/components'
+
+const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const searchOptions: string[] = []
 
@@ -75,13 +77,13 @@ const router = useRouter()
 const route = useRoute()
 
 const menus = [
-  { label: 'guide', name: '指南' },
+  { label: 'guides', name: '指南' },
   { label: 'components', name: '组件' },
   { name: '游乐场', to: 'https://playground.vexipui.com' }
 ]
 
 watchEffect(() => {
-  const matchedMenu = menus.find(menu => menu.label && route.path.startsWith(`/${menu.label}`))
+  const matchedMenu = menus.find(menu => menu.label && route.path.startsWith(`/${globalState.language}/${menu.label}`))
 
   placeholder.value = route.meta?.component
     ? (route.meta.component as string)
@@ -90,13 +92,13 @@ watchEffect(() => {
 })
 
 function selectMenu(label: string) {
-  if (!route.path.startsWith(`/${label}`)) {
-    router.push(`/${label}`)
+  if (!route.path.startsWith(`/${globalState.language}/${label}`)) {
+    router.push(`/${globalState.language}/${label}`)
   }
 }
 
 function toHomepage() {
-  router.push('/')
+  router.push(`/${globalState.language}`)
 }
 
 function openPage(url: string) {
@@ -105,7 +107,7 @@ function openPage(url: string) {
 
 function toComponentDoc(fullName: string) {
   if (route.meta?.component !== fullName) {
-    router.push(`/components/${toKebabCase(fullName.split(' ')[0])}`)
+    router.push(`/${globalState.language}/components/${toKebabCase(fullName.split(' ')[0])}`)
   }
 
   nextTick(() => {

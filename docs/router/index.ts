@@ -1,42 +1,69 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { Loading } from 'vexip-ui'
 import { toKebabCase } from '@vexip-ui/utils'
-import { getGuideConfig } from './guide'
+import { getGuideConfig } from './guides'
 import { getComponentConfig } from './components'
 
 import type { RouteRecordRaw } from 'vue-router'
 
+const langOptions = ['zh-CN', 'es-US']
+const defaultLang = langOptions.find(l => l === navigator.language) || __ROLLBACK_LANG__
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'Homepage',
-    component: () => import('../views/homepage.vue')
+    redirect: `/${defaultLang}`
   },
-  ...useGuideRouter(),
-  ...useComponentsRouter()
+  useLanguageRouter('zh-CN'),
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/'
+  }
 ]
 
-function useGuideRouter(): RouteRecordRaw[] {
+function useLanguageRouter(language: string): RouteRecordRaw {
+  return {
+    path: `/${language}`,
+    name: language,
+    props: { language },
+    component: () => import('../views/provider.vue'),
+    children: [
+      {
+        path: '',
+        name: 'homepage',
+        component: () => import('../views/homepage.vue')
+      },
+      ...useGuidesRouter(language),
+      ...useComponentsRouter(language)
+    ]
+  }
+}
+
+function useGuidesRouter(language: string): RouteRecordRaw[] {
   const children: RouteRecordRaw[] = getGuideConfig().map(({ cname, label }) => {
     return {
       path: label,
       name: cname,
+      props: { language },
       component: () => import(`../guides/${label}/docs.vue`)
     }
   })
 
-  children.unshift({ path: '', redirect: '/guide/' + children[0].path })
+  if (!children.length) return []
+
+  children.unshift({ path: '', redirect: { name: children[0].name } })
 
   return [
     {
-      path: '/guide',
-      component: () => import('../views/guide.vue'),
+      path: 'guides',
+      props: { language },
+      component: () => import('../views/guides.vue'),
       children
     }
   ]
 }
 
-function useComponentsRouter(): RouteRecordRaw[] {
+function useComponentsRouter(language: string): RouteRecordRaw[] {
   const children: RouteRecordRaw[] = []
 
   getComponentConfig().forEach(group => {
@@ -51,17 +78,22 @@ function useComponentsRouter(): RouteRecordRaw[] {
             ...others,
             component: `${name} ${cname}`
           },
-          component: () => import(`../demos/${lowerName}/docs.vue`)
+          props: { language, name: lowerName },
+          // component: () => import(`../demos/${lowerName}/docs.vue`)
+          component: () => import('../common/component-doc.vue')
         }
       })
     )
   })
 
-  children.unshift({ path: '', redirect: '/components/' + children[0].path })
+  if (!children.length) return []
+
+  children.unshift({ path: '', redirect: { name: children[0].name } })
 
   return [
     {
-      path: '/components',
+      path: 'components',
+      props: { language },
       component: () => import('../views/components.vue'),
       children
     }
@@ -73,7 +105,7 @@ export const router = createRouter({
   routes
 })
 
-router.beforeEach(() => {
+router.beforeResolve(() => {
   Loading.open(5)
 })
 
@@ -82,5 +114,5 @@ router.afterEach(to => {
     to.path !== '/' && typeof to.name === 'string'
       ? `${to.name} - Vexip UI`
       : 'Vexip UI - 创造有趣的开发体验'
-  Loading.open(100)
+  requestAnimationFrame(() => Loading.open(100))
 })

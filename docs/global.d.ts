@@ -1,4 +1,4 @@
-declare const __LANGUAGE__: string
+declare const __ROLLBACK_LANG__: string
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'

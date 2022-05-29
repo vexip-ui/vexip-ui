@@ -4,7 +4,7 @@
     virtual
     stripe
     :data="data"
-    :width="800"
+    :width="1000"
     :height="320"
     :row-height="40"
   >

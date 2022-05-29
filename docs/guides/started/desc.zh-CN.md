@@ -2,7 +2,7 @@
 
 通过该章节，您将了解到如何快速开始使用 Vexip UI。
 
-> 在开始之前，~~默认您已经熟悉 HTML、CSS 和 JavaScript 的中级知识~~，并且掌握了 [Vue3](https://v3.cn.vuejs.org/) 的正确打开方式。
+> 在开始之前，你得掌握了 [Vue3](https://v3.cn.vuejs.org/) 的正确打开方式。
 
 ## 使用 vue-cli
 

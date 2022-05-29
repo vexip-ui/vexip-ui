@@ -24,14 +24,17 @@
 </template>
 
 <script setup lang="ts">
+import { inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { GithubB } from '@vexip-ui/icons'
+
+const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const prefix = 'homepage'
 const router = useRouter()
 
 function getStarted() {
-  router.push('/guide/started')
+  router.push(`/${globalState.language}/guides/started`)
 }
 
 function toRepository() {

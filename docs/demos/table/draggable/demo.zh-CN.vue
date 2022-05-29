@@ -3,6 +3,7 @@
     row-draggable
     :columns="columns"
     :data="data"
+    :width="1000"
   ></Table>
 </template>
 

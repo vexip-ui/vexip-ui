@@ -5,6 +5,7 @@
     highlight
     :columns="columns"
     :data="data"
+    :width="1000"
   ></Table>
   <br />
   <Table
@@ -12,6 +13,7 @@
     highlight
     :columns="columns"
     :data="data"
+    :width="1000"
   ></Table>
 </template>
 

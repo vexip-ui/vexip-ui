@@ -1,5 +1,5 @@
 <template>
-  <Table ref="table" :data="data">
+  <Table ref="table" :data="data" :width="1000">
     <TableColumn type="selection" id-key="selection"></TableColumn>
     <TableColumn name="First Name" id-key="firstName"></TableColumn>
     <TableColumn name="Last Name" id-key="lastName"></TableColumn>

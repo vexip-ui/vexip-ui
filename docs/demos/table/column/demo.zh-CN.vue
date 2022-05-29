@@ -1,5 +1,5 @@
 <template>
-  <Table :columns="columns" :data="data">
+  <Table :columns="columns" :data="data" :width="1000">
     <TableColumn
       name="First Name"
       id-key="firstName"

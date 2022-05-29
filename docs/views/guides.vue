@@ -37,13 +37,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Footer from '../common/footer.vue'
-import { getGuideConfig } from '../router/guide'
+import { getGuideConfig } from '../router/guides'
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Scroll } from 'vexip-ui'
+
+const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const prefix = 'guide'
 
@@ -58,8 +60,8 @@ const route = useRoute()
 watch(
   () => route.path,
   value => {
-    if (value.startsWith('/guide')) {
-      currentMenu.value = value.split('/')[2]
+    if (value.startsWith(`/${globalState.language}/guides`)) {
+      currentMenu.value = value.split('/')[3]
     }
 
     if (!currentMenu.value) {
@@ -72,6 +74,6 @@ watch(
 )
 
 function selectGuide(label: string) {
-  router.push(`/guide/${label}`)
+  router.push(`/${globalState.language}/guides/${label}`)
 }
 </script>

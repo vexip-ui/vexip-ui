@@ -33,6 +33,8 @@
     ]
   },
   "include": [
+    "./*.vue",
+    "./*.ts",
     "builds",
     "demos",
     "guides",
