@@ -1,10 +1,9 @@
 import { resolve } from 'path'
+import { readdirSync, statSync, existsSync } from 'fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import eslint from '@rollup/plugin-eslint'
-
-import type { Plugin } from 'vite'
+import comp from 'unplugin-vue-components/vite'
 
 if (!process.env.TARGET && process.env.THEME !== 'true') {
   throw new Error('Target component must be specified.')
@@ -13,9 +12,16 @@ if (!process.env.TARGET && process.env.THEME !== 'true') {
 const target = process.env.TARGET
 const demos = process.env.DEMOS
 
-const prePlugins = (plugins: Plugin[]): Plugin[] => {
-  return plugins.map(plugin => ({ ...plugin, enforce: 'pre', apply: 'build' }))
-}
+const componentsDir = resolve(__dirname, '../components')
+const components = readdirSync(componentsDir).filter(f => {
+  const path = resolve(componentsDir, f)
+
+  if (!statSync(path).isDirectory()) {
+    return false
+  }
+
+  return existsSync(`${path}/index.ts`)
+})
 
 export default defineConfig(() => {
   return {
@@ -43,16 +49,24 @@ export default defineConfig(() => {
       include: ['../components']
     },
     plugins: [
-      ...prePlugins([
-        eslint({
-          throwOnError: true,
-          throwOnWarning: true,
-          fix: false,
-          include: ['components/**/*.ts', 'components/**/*.vue']
-        })
-      ]),
       vue(),
       vueJsx(),
+      comp({
+        resolvers: [
+          {
+            type: 'component',
+            resolve: name => {
+              if (components.includes(toKebabCase(name))) {
+                return {
+                  name,
+                  from: `@/components/${toKebabCase(name)}/index.ts`
+                }
+              }
+            }
+          }
+        ],
+        exclude: ['../components/**']
+      }),
       {
         name: 'single-hmr',
         handleHotUpdate({ modules, file }) {
@@ -71,3 +85,13 @@ export default defineConfig(() => {
     ]
   }
 })
+
+function toKebabCase(value: string) {
+  return (
+    value.charAt(0).toLowerCase() +
+    value
+      .slice(1)
+      .replace(/([A-Z])/g, '-$1')
+      .toLowerCase()
+  )
+}
