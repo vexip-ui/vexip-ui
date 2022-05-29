@@ -56,16 +56,13 @@
         <Icon :icon="suffix"></Icon>
       </slot>
     </template>
-    <template #default="{ option, index }">
-      <slot :option="option" :index="index">
-        <!-- <Option
-          :label="option.label || option.value?.toString()"
-          :value="option.value"
-          :disabled="option.disabled"
-          :divided="option.divided"
-          :no-title="option.noTitle"
-        ></Option> -->
-      </slot>
+    <template #default="{ option, index, selected }">
+      <slot
+        :option="option"
+        :index="index"
+        :selected="selected"
+        :handle-select="handleSelect"
+      ></slot>
     </template>
   </Select>
 </template>
@@ -201,19 +198,6 @@ export default defineComponent({
     // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
 
-    // const rawOptions = computed(() => {
-    //   return props.options.map(option => {
-    //     if (typeof option === 'string') {
-    //       option = { value: option }
-    //     }
-
-    //     if (!option.label) {
-    //       option.label = option.value?.toString()
-    //     }
-
-    //     return option
-    //   })
-    // })
     const optionsStates = computed<OptionState[]>(() => {
       return select.value?.optionStates ?? []
     })

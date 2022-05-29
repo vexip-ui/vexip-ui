@@ -71,7 +71,7 @@
           >
             <VirtualList
               ref="virtualList"
-              :items="rawOptions"
+              :items="visibleOptions"
               :item-size="32"
               :use-y-bar="!!listHeight"
               height="100%"
@@ -84,24 +84,30 @@
               }"
             >
               <template #default="{ item, index }">
-                <slot :option="item" :index="index">
+                <slot
+                  :option="item"
+                  :index="index"
+                  :selected="item.value === currentValue"
+                  :handle-select="handleSelect"
+                >
                   <Option
                     :label="item.label || item.value.toString()"
                     :value="item.value"
                     :disabled="item.disabled"
                     :divided="item.divided"
                     :no-title="item.noTitle"
+                    :hitting="item.hitting"
+                    :select="item.value === currentValue"
+                    @select="handleSelect"
                   >
-                    <template #default="{ selected }">
-                      <span :class="`${prefixCls}__label`">
-                        {{ item.label || item.value.toString() }}
-                      </span>
-                      <transition v-if="optionCheck" name="vxp-fade" appear>
-                        <Icon v-if="selected" :class="`${prefixCls}__check`">
-                          <Check></Check>
-                        </Icon>
-                      </transition>
-                    </template>
+                    <span :class="`${prefixCls}__label`">
+                      {{ item.label || item.value }}
+                    </span>
+                    <transition v-if="optionCheck" name="vxp-fade" appear>
+                      <Icon v-if="item.value === currentValue" :class="`${prefixCls}__check`">
+                        <Check></Check>
+                      </Icon>
+                    </transition>
                   </Option>
                 </slot>
               </template>
@@ -124,18 +130,16 @@
 import {
   defineComponent,
   ref,
-  reactive,
   computed,
   watch,
-  provide,
+  watchEffect,
   inject,
   toRef,
   nextTick
 } from 'vue'
 import { Icon } from '@/components/icon'
-import { Option, SELECTOR_STATE } from '@/components/option'
+import { Option } from '@/components/option'
 import { Portal } from '@/components/portal'
-// import { Scroll } from '@/components/scroll'
 import { Tag } from '@/components/tag'
 import { VirtualList } from '@/components/virtual-list'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
@@ -146,7 +150,7 @@ import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-import type { RawOption, OptionState, SelectState } from '@/components/option'
+import type { RawOption, OptionState } from '@/components/option'
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type { ClassType } from './symbol'
 
@@ -280,6 +284,29 @@ export default defineComponent({
     const listHeight = ref<string | undefined>(undefined)
     const optionMap = ref(new Map<string | number, OptionState>())
 
+    watchEffect(() => {
+      const oldMap = optionMap.value
+      const map = new Map<string | number, OptionState>()
+
+      props.options.forEach(option => {
+        if (typeof option === 'string') {
+          option = { value: option }
+        }
+
+        if (!option.value) return
+
+        const oldState = oldMap.get(option.value)
+
+        if (oldState) {
+          map.set(option.value, { ...option, hidden: oldState.hidden, hitting: oldState.hitting })
+        } else {
+          map.set(option.value, { ...option, hidden: false, hitting: false })
+        }
+      })
+
+      optionMap.value = map
+    })
+
     const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed | null>(null)
     const wrapper = useClickOutside()
 
@@ -316,21 +343,6 @@ export default defineComponent({
     const optionStates = computed(() => {
       return Array.from(optionMap.value.values())
     })
-    const rawOptions = computed(() => {
-      return props.options.map(option => {
-        if (typeof option === 'string') {
-          option = { value: option }
-        } else {
-          option = { ...option }
-        }
-
-        if (!option.label) {
-          option.label = option.value.toString()
-        }
-
-        return option
-      })
-    })
     const controlStyle = computed(() => {
       return {
         paddingRight: props.noSuffix ? '' : '2em',
@@ -344,16 +356,11 @@ export default defineComponent({
       }
     })
     const visibleOptions = computed(() => {
-      return Array.from(optionStates.value).filter(state => !state.hidden)
+      return optionStates.value.filter(state => !state.hidden)
     })
     const hasEmptyTip = computed(() => {
       return !!(props.emptyText || slots.empty || locale.empty) && !visibleOptions.value.length
     })
-
-    provide<SelectState>(
-      SELECTOR_STATE,
-      reactive({ isSelected, addOption, removeOption, handleSelect, setCurrentLabel })
-    )
 
     watch(
       () => props.visible,
@@ -412,17 +419,17 @@ export default defineComponent({
       return currentValue.value === value
     }
 
-    function addOption(option: OptionState) {
-      if (!isNull(option.value)) {
-        optionMap.value.set(option.value, option)
-      }
-    }
+    // function addOption(option: OptionState) {
+    //   if (!isNull(option.value)) {
+    //     optionMap.value.set(option.value, option)
+    //   }
+    // }
 
-    function removeOption(option: OptionState) {
-      if (!isNull(option.value)) {
-        optionMap.value.delete(option.value)
-      }
-    }
+    // function removeOption(option: OptionState) {
+    //   if (!isNull(option.value)) {
+    //     optionMap.value.delete(option.value)
+    //   }
+    // }
 
     function computeListHeight() {
       virtualList.value?.refresh()
@@ -433,23 +440,8 @@ export default defineComponent({
           const wrapperHeight = scrollWrapper.getBoundingClientRect().height
 
           listHeight.value = wrapperHeight < props.maxListHeight ? undefined : `${wrapperHeight}px`
-          // scroll.value?.refresh()
         }
       })
-    }
-
-    function setCurrentLabel(label: string, value: string | number) {
-      if (props.multiple) {
-        if (Array.isArray(currentValue.value) && Array.isArray(currentLabel.value)) {
-          const index = currentValue.value.findIndex(v => v === value)
-
-          if (~index) {
-            currentLabel.value[index] = label
-          }
-        }
-      } else {
-        currentLabel.value = label
-      }
     }
 
     function handleSelect(value: string | number, label: string) {
@@ -564,7 +556,6 @@ export default defineComponent({
       className,
       hasValue,
       hasPrefix,
-      rawOptions,
       controlStyle,
       placeholderStyle,
       visibleOptions,

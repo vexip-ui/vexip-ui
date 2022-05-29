@@ -1,5 +1,3 @@
-import type { InjectionKey } from 'vue'
-
 export interface ObjectOption {
   value: string | number,
   label?: string,
@@ -15,14 +13,3 @@ export interface OptionState extends ObjectOption {
   hidden: boolean,
   hitting: boolean
 }
-
-export interface SelectState {
-  // currentValue: string | number,
-  isSelected?(value: string | number): boolean,
-  addOption?(state: ObjectOption): void,
-  removeOption?(state: ObjectOption): void,
-  handleSelect?(value: string | number, label: string): void,
-  setCurrentLabel?(label: string, value: string | number): void
-}
-
-export const SELECTOR_STATE: InjectionKey<SelectState> = Symbol('SELECTOR_STATE')

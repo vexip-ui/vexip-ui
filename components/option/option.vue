@@ -1,35 +1,16 @@
 <template>
   <li
-    v-show="!hidden"
     ref="wrapper"
     :class="className"
-    :title="noTitle ? undefined : String(truthValue)"
+    :title="noTitle ? undefined : String(value)"
     @click="handleSelect"
   >
-    <slot :selected="selected">
-      {{ truthLabel }}
-    </slot>
+    <slot>{{ label }}</slot>
   </li>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  toRef,
-  reactive,
-  computed,
-  watch,
-  inject,
-  onMounted,
-  onUpdated,
-  onBeforeUnmount,
-  nextTick
-} from 'vue'
-import { isNull } from '@vexip-ui/utils'
-import { SELECTOR_STATE } from './symbol'
-
-import type { OptionState } from './symbol'
+import { defineComponent, computed } from 'vue'
 
 const props = {
   value: {
@@ -51,6 +32,14 @@ const props = {
   noTitle: {
     type: Boolean,
     default: false
+  },
+  hitting: {
+    type: Boolean,
+    default: false
+  },
+  selected: {
+    type: Boolean,
+    default: false
   }
 }
 
@@ -59,120 +48,26 @@ export default defineComponent({
   props,
   emits: ['select'],
   setup(props, { emit }) {
-    const selectorState = inject(SELECTOR_STATE, null)
-
     const prefix = 'vxp-option'
-    const truthLabel = ref(props.label ?? props.value.toString())
-    const truthValue = ref<string | number>(props.value)
-    const hidden = ref(false)
-    const hitting = ref(false)
-
-    const wrapper = ref<HTMLElement | null>(null)
-
-    const state: OptionState = reactive({
-      hidden,
-      hitting,
-      label: truthLabel,
-      value: truthValue,
-      disabled: toRef(props, 'disabled'),
-      divided: toRef(props, 'divided'),
-      noTitle: toRef(props, 'noTitle')
-    })
-
-    const selected = computed(() => {
-      return !!selectorState?.isSelected?.(truthValue.value)
-    })
     const className = computed(() => {
       return {
         [prefix]: true,
         [`${prefix}-vars`]: true,
         [`${prefix}--disabled`]: props.disabled,
-        [`${prefix}--selected`]: !props.disabled && selected.value,
+        [`${prefix}--selected`]: !props.disabled && props.selected,
         [`${prefix}--divided`]: props.divided,
-        [`${prefix}--hitting`]: hitting.value
-      }
-    })
-
-    watch(
-      () => props.label,
-      value => {
-        truthLabel.value = value
-        updateSelectLable()
-      }
-    )
-    watch(
-      () => props.value,
-      value => {
-        truthValue.value = value
-      }
-    )
-
-    // if (selectorState) {
-    //   watch(() => selectorState.currentValue, computeValueAndLabel)
-    // }
-
-    onMounted(() => {
-      computeValueAndLabel()
-
-      if (typeof selectorState?.addOption === 'function') {
-        selectorState.addOption(state)
-      }
-    })
-
-    onUpdated(() => {
-      computeValueAndLabel()
-    })
-
-    onBeforeUnmount(() => {
-      if (typeof selectorState?.removeOption === 'function') {
-        selectorState.removeOption(state)
+        [`${prefix}--hitting`]: props.hitting
       }
     })
 
     function handleSelect() {
       if (props.disabled) return
 
-      emit('select', truthValue.value, truthLabel.value)
-
-      if (typeof selectorState?.handleSelect === 'function') {
-        selectorState.handleSelect(truthValue.value, truthLabel.value)
-      }
-    }
-
-    function computeValueAndLabel() {
-      nextTick(() => {
-        if (!wrapper.value) return
-
-        truthValue.value = isNull(props.value)
-          ? wrapper.value?.textContent?.trim() ?? ''
-          : props.value
-        truthLabel.value = !String(props.label)
-          ? wrapper.value?.textContent?.trim() ?? truthValue.value?.toString() ?? ''
-          : (props.label || props.value ? String(props.value) : '')
-
-        updateSelectLable()
-      })
-    }
-
-    function updateSelectLable() {
-      if (
-        selectorState?.isSelected?.(truthValue.value) &&
-        typeof selectorState.setCurrentLabel === 'function'
-      ) {
-        selectorState.setCurrentLabel(truthLabel.value, truthValue.value)
-      }
+      emit('select', props.value, props.label || props.value)
     }
 
     return {
-      truthLabel,
-      truthValue,
-      hidden,
-
       className,
-      selected,
-
-      wrapper,
-
       handleSelect
     }
   }
