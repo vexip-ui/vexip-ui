@@ -42,6 +42,7 @@ $fill-color-map: map.merge(
   (
     base: rgba(#fff, 0.06),
     secondary: rgba(#fff, 0.46),
+    third: (rgba(#fff, 0.36)),
     disabled: rgba(#fff, 0.28),
     hover: rgba(#fff, 0.16),
     humble: rgba(#fff, 0.12),
