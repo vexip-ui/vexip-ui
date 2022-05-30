@@ -34,6 +34,7 @@ body {
   overflow: hidden;
   color: var(--vxp-content-color-base);
   background-color: var(--bg-color);
+  transition: var(--vxp-transition-background);
 }
 
 ul {

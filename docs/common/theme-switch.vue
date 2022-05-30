@@ -21,6 +21,8 @@ function toggleDark(value: boolean) {
     } else {
       rootCls.remove('dark')
     }
+
+    localStorage.setItem('vexip-docs-theme-prefer-dark', String(value))
   })
 }
 </script>

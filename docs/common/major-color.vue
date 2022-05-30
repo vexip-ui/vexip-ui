@@ -1,8 +1,11 @@
 <template>
   <div :class="prefix">
     <div :class="`${prefix}__picker`">
-      <p style="margin: 0 0 10px;">
+      <p :class="`${prefix}__tip`">
         {{ getMetaName(language, changeColor, false) }}
+        <Icon :scale="1.2" @click="resetMajorColor">
+          <ArrowRotateLeft></ArrowRotateLeft>
+        </Icon>
       </p>
       <ColorPicker v-model:value="majorColor" format="rgb"></ColorPicker>
     </div>
@@ -22,6 +25,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { ArrowRotateLeft } from '@vexip-ui/icons'
 import { parseColorToRgba, mixColor, adjustAlpha, toFixed } from '@vexip-ui/utils'
 import { getMetaName } from '../common/meta-name'
 
@@ -85,7 +89,12 @@ function computeSeriesColors(value: Color) {
   }
 
   style.setProperty('--vxp-color-primary-base', `${value}`)
+  localStorage.setItem('vexip-docs-prefer-major-color', `${value}`)
   seriesColors.value = colors
+}
+
+function resetMajorColor() {
+  majorColor.value = '#339af0'
 }
 </script>
 
@@ -103,9 +112,27 @@ function computeSeriesColors(value: Color) {
     margin-bottom: 20px;
   }
 
+  &__tip {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    margin: 0 0 20px;
+
+    .vxp-icon {
+      margin-left: 3px;
+      color: var(--vxp-content-color-third);
+      cursor: pointer;
+      transition: var(--vxp-transition-color);
+
+      &:hover {
+        color: var(--vxp-content-color-base);
+      }
+    }
+  }
+
   &__series {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 
     &-item {
       display: flex;
