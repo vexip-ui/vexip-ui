@@ -1,6 +1,6 @@
 <template>
   <Row ref="wrapper" tag="section" :class="prefix">
-    <Column tag="aside" :class="`${prefix}__sider`" :span="4">
+    <Column tag="aside" :class="`${prefix}__sider`" flex="300px">
       <Scroll
         ref="menuScroll"
         use-y-bar
@@ -14,14 +14,18 @@
           :class="`${prefix}__menu`"
           @select="selectComponent"
         >
-          <MenuGroup v-for="group in componentGroups" :key="group.name" :label="group.cname">
+          <MenuGroup
+            v-for="group in componentGroups"
+            :key="group.name"
+            :label="getMetaName(globalState.language, group)"
+          >
             <MenuItem
               v-for="component in group.components"
               :key="component.name"
               :label="toKebabCase(component.name)"
               :data-name="toKebabCase(component.name)"
             >
-              {{ `${component.name} ${component.cname}` }}
+              {{ getMetaName(globalState.language, component) }}
               <Tag
                 v-if="isNewComponent(component)"
                 :class="`${prefix}__tag`"
@@ -35,7 +39,7 @@
         </Menu>
       </Scroll>
     </Column>
-    <Column tag="section" :class="`${prefix}__content`" :span="20">
+    <Column tag="section" :class="`${prefix}__content`" flex="auto">
       <NativeScroll
         ref="scroll"
         appear
@@ -64,6 +68,7 @@ import { version, Row, Scroll } from 'vexip-ui'
 import { toKebabCase } from '@vexip-ui/utils'
 import Footer from '../common/footer.vue'
 import { getComponentConfig } from '../router/components'
+import { getMetaName } from '../common/meta-name'
 
 import type { ComponentConfig } from '../router/components'
 

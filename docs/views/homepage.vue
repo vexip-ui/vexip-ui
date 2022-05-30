@@ -6,32 +6,43 @@
         Vexip UI
       </h1>
       <p :class="`${prefix}__description`">
-        纯组合式 Api，全量的 TypeScript，性能应该还不错
+        {{ getMetaName(language, slogan, false) }}
       </p>
       <div :class="`${prefix}__actions`">
         <Button type="primary" size="large" @click="getStarted">
-          开始使用
+          {{ getMetaName(language, start, false) }}
         </Button>
         <Button size="large" :icon="GithubB" @click="toRepository">
           GitHub
         </Button>
       </div>
     </div>
-    <a :class="`${prefix}__record`" href="https://beian.miit.gov.cn/" target="_blank">
+    <!-- <a :class="`${prefix}__record`" href="https://beian.miit.gov.cn/" target="_blank">
       粤ICP备2020125887号
-    </a>
+    </a> -->
   </section>
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
+import { computed, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { GithubB } from '@vexip-ui/icons'
+import { getMetaName } from '../common/meta-name'
 
 const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const prefix = 'homepage'
 const router = useRouter()
+const language = computed(() => globalState.language)
+
+const slogan = {
+  name: 'Prue composition Api, Full TypeScript, Performance should be good',
+  cname: '纯组合式 Api，全量的 TypeScript，性能应该还不错'
+}
+const start = {
+  name: 'Get Started',
+  cname: '开始使用'
+}
 
 function getStarted() {
   router.push(`/${globalState.language}/guides/started`)

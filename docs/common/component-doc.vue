@@ -3,7 +3,7 @@
     <ResizeObserver @resize="refreshScroll?.()">
       <div :style="{ visibility: allLoaded ? undefined : 'hidden' }">
         <h1 :class="`${prefix}__title`">
-          {{ $route.meta.component }}
+          {{ getMetaName(language) }}
           <Tag v-if="$route.meta.since" type="warning" style="margin-left: 8px;">
             {{ `Since v${$route.meta.since}` }}
           </Tag>
@@ -14,7 +14,11 @@
           </template>
         </div>
         <h2 class="anchor">
-          <span class="anchor__title"> 代码示例 </span>
+          <span class="anchor__title">
+            {{
+              getMetaName(language, { name: 'Demos', cname: '代码示例' }, false)
+            }}
+          </span>
           <a class="anchor__link" href="">#</a>
         </h2>
         <Demo v-for="({ code, demo, desc: _desc }, index) in examples" :key="index" :code="code">
@@ -66,6 +70,7 @@ import { Spinner } from '@vexip-ui/icons'
 import { noop } from '@vexip-ui/utils'
 import Demo from '@docs/common/demo.vue'
 import { ussTocAnchor } from './toc-anchor'
+import { getMetaName } from './meta-name'
 
 interface Example {
   demo: Record<string, any>,

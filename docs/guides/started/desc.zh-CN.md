@@ -145,6 +145,18 @@ export default defineConfig({
 })
 ```
 
+## 全局类型支持
+
+如果全局引入了组件库，在项目的 `tsconfig.json` 文件配置 `compilerOptions.type` 选项可以快速获得全局类型支持：
+
+```json
+{
+  "compilerOptions": {
+    "types": ["vexip-ui/types"]
+  }
+}
+```
+
 ## 完整组件列表
 
 比较长，去组件那边看文档和示例更直观。

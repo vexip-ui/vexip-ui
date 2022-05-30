@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <Row style="height: 100%;">
-      <Column :span="4" style="padding-left: 40px;">
+      <Column flex="300px" style="padding-left: 40px;">
         <a class="index" @click="toHomepage">
           <img class="index__logo" src="../assets/logo.png" alt="logo.pne" />
           <span class="index__title"> Vexip UI </span>
@@ -10,7 +10,7 @@
           </Tag>
         </a>
       </Column>
-      <Column class="navigation" :span="20">
+      <Column class="navigation" flex="auto">
         <div class="search">
           <AutoComplete
             v-model:value="currentSearch"
@@ -18,7 +18,6 @@
             ignore-case
             transfer
             class="search-input"
-            style="width: 400px;"
             :prefix="MagnifyingGlass"
             :placeholder="placeholder"
             :options="searchOptions"
@@ -33,11 +32,11 @@
               @click="openPage(menu.to)"
             >
               <div class="vxp-menu__label">
-                <span class="vxp-menu__title">{{ menu.name }}</span>
+                <span class="vxp-menu__title">{{ getMetaName(globalState.language, menu, false) }}</span>
               </div>
             </li>
             <MenuItem v-else :label="menu.label">
-              {{ menu.name }}
+              {{ getMetaName(globalState.language, menu, false) }}
             </MenuItem>
           </template>
         </Menu>
@@ -78,6 +77,7 @@ import { MagnifyingGlass, GithubB, Language } from '@vexip-ui/icons'
 import { toKebabCase } from '@vexip-ui/utils'
 import ThemeSwitch from './theme-switch.vue'
 import { getComponentConfig } from '../router/components'
+import { getMetaName } from './meta-name'
 
 const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
@@ -99,17 +99,22 @@ const router = useRouter()
 const route = useRoute()
 
 const menus = [
-  { label: 'guides', name: '指南' },
-  { label: 'components', name: '组件' },
-  { name: '游乐场', to: 'https://playground.vexipui.com' }
+  { label: 'guides', name: 'Guides', cname: '指南' },
+  { label: 'components', name: 'Components', cname: '组件' },
+  { name: 'Playground', cname: '游乐场', to: 'https://playground.vexipui.com' }
 ]
+
+const searchMeta = {
+  name: 'Search component in Vexip UI',
+  cname: '在 Vexip UI 中搜索组件'
+}
 
 watchEffect(() => {
   const matchedMenu = menus.find(menu => menu.label && route.path.startsWith(`/${globalState.language}/${menu.label}`))
 
-  placeholder.value = route.meta?.component
-    ? (route.meta.component as string)
-    : '在 Vexip UI 中搜索组件'
+  placeholder.value = route.meta?.isComponent
+    ? getMetaName(globalState.language, route.meta)
+    : getMetaName(globalState.language, searchMeta, false)
   currentMenu.value = matchedMenu ? matchedMenu.label! : ''
 })
 
@@ -210,12 +215,14 @@ function changeLanguage(language: string) {
     }
 
     &__version {
-      margin: 4px 0 0 6px;
+      margin: 2px 0 0 6px;
       transform: scale(0.8);
     }
   }
 
   .search-input {
+    width: 300px;
+    background-color: transparent;
     border: 0;
     box-shadow: none;
 

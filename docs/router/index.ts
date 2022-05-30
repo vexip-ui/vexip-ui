@@ -41,11 +41,11 @@ function useLanguageRouter(language: string): RouteRecordRaw {
 }
 
 function useGuidesRouter(language: string): RouteRecordRaw[] {
-  const children: RouteRecordRaw[] = getGuideConfig().map(({ name, cname, label }) => {
+  const children: RouteRecordRaw[] = getGuideConfig().map(({ name, label, ...others }) => {
     return {
       path: label,
       name: `${language}-${name}`,
-      meta: { name, cname, label },
+      meta: { ...others, name, label },
       props: { name: toKebabCase(label), language },
       // component: () => import(`../guides/${label}/docs.vue`)
       component: () => import('../common/guide-doc.vue')
@@ -71,7 +71,7 @@ function useComponentsRouter(language: string): RouteRecordRaw[] {
 
   getComponentConfig().forEach(group => {
     children.push(
-      ...group.components.map(({ name, cname, ...others }) => {
+      ...group.components.map(({ name, ...others }) => {
         const lowerName = toKebabCase(name)
 
         return {
@@ -79,7 +79,8 @@ function useComponentsRouter(language: string): RouteRecordRaw[] {
           name: `${language}-${name}`,
           meta: {
             ...others,
-            component: `${name} ${cname}`
+            name,
+            isComponent: true
           },
           props: { language, name: lowerName },
           // component: () => import(`../demos/${lowerName}/docs.vue`)

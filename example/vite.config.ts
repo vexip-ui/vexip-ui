@@ -52,6 +52,7 @@ export default defineConfig(() => {
       vue(),
       vueJsx(),
       comp({
+        dts: false,
         resolvers: [
           {
             type: 'component',

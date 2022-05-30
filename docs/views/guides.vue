@@ -1,6 +1,6 @@
 <template>
   <Row tag="section" :class="prefix">
-    <Column tag="aside" :class="`${prefix}__sider`" :span="4">
+    <Column tag="aside" :class="`${prefix}__sider`" flex="300px">
       <Scroll use-y-bar height="100%" :delta-y="60">
         <Menu
           v-model:active="currentMenu"
@@ -9,12 +9,12 @@
           @select="selectGuide"
         >
           <MenuItem v-for="menu in menus" :key="menu.label" :label="menu.label">
-            {{ menu.cname }}
+            {{ getMetaName(globalState.language, menu, false) }}
           </MenuItem>
         </Menu>
       </Scroll>
     </Column>
-    <Column tag="section" :class="`${prefix}__content`" :span="20">
+    <Column tag="section" :class="`${prefix}__content`" flex="auto">
       <NativeScroll
         ref="scroll"
         appear
@@ -41,6 +41,7 @@ import { ref, watch, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Footer from '../common/footer.vue'
 import { getGuideConfig } from '../router/guides'
+import { getMetaName } from '../common/meta-name'
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Scroll } from 'vexip-ui'

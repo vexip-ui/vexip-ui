@@ -13,7 +13,7 @@ export interface ComponentGroup {
 export function getComponentConfig(): ComponentGroup[] {
   return [
     {
-      name: 'basis',
+      name: 'Basis',
       cname: '基础',
       components: [
         { name: 'Button', cname: '按钮' },
@@ -22,7 +22,7 @@ export function getComponentConfig(): ComponentGroup[] {
       ]
     },
     {
-      name: 'layout',
+      name: 'Layout',
       cname: '布局',
       components: [
         { name: 'Grid', cname: '栅格布局', since: '1.4.0' },
@@ -32,7 +32,7 @@ export function getComponentConfig(): ComponentGroup[] {
       ]
     },
     {
-      name: 'nav',
+      name: 'Navigation',
       cname: '导航',
       components: [
         { name: 'Anchor', cname: '锚点' },
@@ -43,7 +43,7 @@ export function getComponentConfig(): ComponentGroup[] {
       ]
     },
     {
-      name: 'form',
+      name: 'Form',
       cname: '表单',
       components: [
         { name: 'AutoComplete', cname: '自动完成' },
@@ -63,7 +63,7 @@ export function getComponentConfig(): ComponentGroup[] {
       ]
     },
     {
-      name: 'data',
+      name: 'Data',
       cname: '数据',
       components: [
         { name: 'Badge', cname: '徽标' },
@@ -85,7 +85,7 @@ export function getComponentConfig(): ComponentGroup[] {
       ]
     },
     {
-      name: 'effect',
+      name: 'Effect',
       cname: '反应',
       components: [
         { name: 'Alert', cname: '警告提示' },
@@ -101,7 +101,7 @@ export function getComponentConfig(): ComponentGroup[] {
       ]
     },
     {
-      name: 'else',
+      name: 'Else',
       cname: '其他',
       components: [
         { name: 'Masker', cname: '遮罩' },
