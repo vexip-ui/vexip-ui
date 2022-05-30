@@ -1,6 +1,4 @@
-## API
-
-### 属性
+### Collapse 属性
 
 | 名称       | 类型                      | 说明                                                       | 默认值  |
 | ---------- | ------------------------- | ---------------------------------------------------------- | ------- |
@@ -10,13 +8,13 @@
 | arrow-type | String                    | 设置面板的指示箭头的类型，可选值为 `right`、`left`、`none` | 'right' |
 | ghost      | Boolean                   | 设置是否为无边框模式                                       | false   |
 
-### 事件
+### Collapse 事件
 
 | 名称      | 说明                                                   | 参数            |
 | --------- | ------------------------------------------------------ | --------------- |
 | on-change | 当展开的面板发生变化时触发，返回当前展开的面板的 label | currentExpanded |
 
-### Item 属性
+### CollapseItem 属性
 
 | 名称          | 类型             | 说明                                                       | 默认值  |
 | ------------- | ---------------- | ---------------------------------------------------------- | ------- |
@@ -30,14 +28,14 @@
 | icon          | String           | 设置面板标题的附属图标名称                                 | ''      |
 | ghost         | Boolean          | 设置是否为无边框模式                                       | false   |
 
-### Item 插槽
+### CollapseItem 插槽
 
 | 名称    | 说明           |
 | ------- | -------------- |
 | default | 面板的内容插槽 |
 | title   | 面板的标题插槽 |
 
-### Transition 属性
+### CollapseTransition 属性
 
 | 名称        | 类型    | 说明                                               | 默认值        |
 | ----------- | ------- | -------------------------------------------------- | ------------- |
@@ -48,4 +46,4 @@
 | timing      | String  | 设置过渡效果的动画函数                             | 'ease-in-out' |
 | fade-effect | Boolean | 设置是否在折叠的时候同时具有渐显隐效果             | false         |
 
-> Transition 组件支持 'before-enter'、'enter'、'after-enter'、'before-leave'、'leave'、'after-leave' 事件。
+> CollapseTransition 组件支持 'before-enter'、'enter'、'after-enter'、'before-leave'、'leave'、'after-leave' 事件。

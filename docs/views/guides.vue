@@ -47,7 +47,7 @@ import type { Scroll } from 'vexip-ui'
 
 const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
-const prefix = 'guide'
+const prefix = 'guides'
 
 const currentMenu = ref('')
 const menus = getGuideConfig()
@@ -77,3 +77,51 @@ function selectGuide(label: string) {
   router.push(`/${globalState.language}/guides/${label}`)
 }
 </script>
+
+<style lang="scss">
+.guides {
+  &,
+  &__sider,
+  &__content {
+    position: relative;
+    height: 100%;
+  }
+
+  &__sider {
+    border-right: var(--vxp-border-light-2);
+  }
+
+  &__menu {
+    padding-top: 40px;
+    border-right: 0;
+  }
+
+  &__main {
+    height: 100%;
+  }
+
+  .doc-wrapper {
+    padding: 1.2em 3.2em 2.8em;
+    padding-right: 13em;
+
+    & > p {
+      margin: 3px;
+    }
+  }
+
+  .toc-anchor {
+    position: absolute;
+    top: 50px;
+    right: 11em;
+    transform: translateX(100%);
+
+    .vxp-anchor {
+      font-size: 12px;
+    }
+  }
+
+  .vxp-select {
+    max-width: 260px;
+  }
+}
+</style>

@@ -1,6 +1,4 @@
-## API
-
-### Props
+### Button Props
 
 | Name         | Type    | Description                 | Default    |
 | ------------ | ------- | ------------------------------------------------------------------------------------------------ | --------- |
@@ -20,13 +18,13 @@
 | block        | Boolean | Whether it is a block-level element, the width becomes 100% after setting                      | false     |
 | color   | String  | Set the major color of the button                   | null      |
 
-### Events
+### Button Events
 
 | Name     | Description                                    | Parameters       |
 | -------- | --------------------------------------- | ---------- |
 | click | Triggered when the button is left clicked, returns the clicked event object | clickEvent |
 
-### Slots
+### Button Slots
 
 | Name    | Description                                             |
 | ------- | ------------------------------------------------ |

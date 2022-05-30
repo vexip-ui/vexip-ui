@@ -23,13 +23,17 @@
             <component :is="_desc" @mounted="handleDemoMounted"></component>
           </template>
         </Demo>
-        <template v-if="api">
+        <h2 class="anchor">
+          <span class="anchor__title"> API </span>
+          <a class="anchor__link" href="#api">#</a>
+        </h2>
+        <div v-if="api" :class="`${prefix}__api`">
           <component :is="api" @mounted="handleApiMounted"></component>
-        </template>
+        </div>
         <Portal to="#toc-anchor">
           <Anchor :offset="15">
-            <AnchorLink v-for="item in anchors" :key="item" :to="`#${item}`">
-              {{ item.toUpperCase() }}
+            <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
+              {{ item.name.replace('-', ' ') }}
             </AnchorLink>
           </Anchor>
         </Portal>
@@ -81,7 +85,7 @@ const props = defineProps({
 const prefix = 'component-doc'
 
 const refreshScroll = inject<() => void>('refreshScroll', noop)
-const { anchors, wrapper, refreshAnchor } = ussTocAnchor()
+const { anchors, wrapper, refreshAnchor } = ussTocAnchor(3)
 
 const desc = ref<Record<string, any> | null>(null)
 const examples = ref<Example[]>([])
@@ -156,7 +160,7 @@ watchEffect(async () => {
 .component-doc {
   position: relative;
   padding: 1.2em 3.2em;
-  padding-right: 13em;
+  padding-right: 15em;
 
   &__loading {
     position: absolute;

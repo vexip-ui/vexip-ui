@@ -41,8 +41,8 @@
             </MenuItem>
           </template>
         </Menu>
-        <Dropdown style="height: 100%; margin-right: 24px;">
-          <Icon :scale="2" style="height: 100%;">
+        <Dropdown style="margin-right: 24px; cursor: pointer;">
+          <Icon :scale="2">
             <Language></Language>
           </Icon>
           <template #drop>

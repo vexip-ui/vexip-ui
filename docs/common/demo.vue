@@ -213,12 +213,16 @@ function getCodeLang(extension: string) {
 
       &::before {
         width: 1em;
-        margin-right: 1em;
+        margin-right: 0.6em;
       }
 
       &::after {
         width: calc(100% - 1em);
-        margin-left: 1em;
+        margin-left: 0.6em;
+      }
+
+      &__link {
+        display: none;
       }
     }
   }

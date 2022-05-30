@@ -19,7 +19,7 @@ function renderPermalink(slug: string, opts: anchor.AnchorOptions, state: StateC
     ['class', 'anchor']
   ]
 
-  if (startToken.tag !== 'h2') return
+  if (startToken.tag !== 'h2' && startToken.tag !== 'h3') return
 
   const id = decodeURIComponent(slug)
 
@@ -65,7 +65,7 @@ function useContainer(md: MarkdownIt) {
     .use(...createContainer('warning', '注意'))
     .use(...createContainer('danger', '警告'))
     .use(container, 'v-pre', {
-      render(tokens, index) {
+      render(tokens: Token[], index: number) {
         return tokens[index].nesting === 1
           ? '<div v-pre>\n'
           : '</div>\n'

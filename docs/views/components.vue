@@ -130,3 +130,57 @@ function isNewComponent(config: ComponentConfig) {
   return config.since && config.since.startsWith(minorVersion)
 }
 </script>
+
+<style lang="scss">
+.components {
+  &,
+  &__sider,
+  &__content {
+    position: relative;
+    height: 100%;
+  }
+
+  &__sider {
+    border-right: var(--vxp-border-light-2);
+  }
+
+  &__menu {
+    padding-top: 20px;
+    border-right: 0;
+  }
+
+  &__tag {
+    font-size: 10px;
+    transform: scale(0.8);
+  }
+
+  .toc-anchor {
+    position: absolute;
+    top: 40px;
+    right: 13.5em;
+    width: 12.5em;
+    transform: translateX(100%);
+
+    .vxp-anchor {
+      width: 100%;
+      font-size: 12px;
+
+      &__link {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .vxp-select {
+    max-width: 400px;
+  }
+
+  .vxp-menu__title {
+    display: flex;
+    align-items: center;
+  }
+}
+</style>

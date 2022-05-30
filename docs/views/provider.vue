@@ -23,3 +23,9 @@ const props = defineProps({
 
 provide('globalState', props)
 </script>
+
+<style>
+.page-viewer {
+  height: calc(100% - 65px);
+}
+</style>
