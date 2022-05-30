@@ -25,15 +25,15 @@
 
 | 名称            | 说明                                                                              | 参数                       |
 | --------------- | --------------------------------------------------------------------------------- | -------------------------- |
-| on-focus        | 输入框聚焦时触发，返回事件对象                                                    | FocusEvent                 |
-| on-blur         | 输入框失去焦点时触发，返回事件对象                                                | BlurEvent                  |
-| on-change       | 当输入框值改变时触发，根据 respond 属性会有不同的触发节点，返回读取后的值和原始值 | accessedValue, originValue |
-| on-enter        | 当键入回车时触发，返回按键事件                                                    | KeyUpEvent                 |
-| on-prefix-click | 当点击前缀部分时触发，返回点击事件                                                | ClickEvent                 |
-| on-suffix-click | 当点击后缀部分时触发，返回点击事件                                                | ClickEvent                 |
-| on-key-down     | 当键按下时触发，返回按键事件                                                      | KeyDownEvent               |
-| on-key-press    | 当键按住时触发，返回按键事件                                                      | KeyPressEvent              |
-| on-key-up       | 当键松开时触发，返回按键事件                                                      | KeyUpEvent                 |
+| focus        | 输入框聚焦时触发，返回事件对象                                                    | FocusEvent                 |
+| blur         | 输入框失去焦点时触发，返回事件对象                                                | BlurEvent                  |
+| change       | 当输入框值改变时触发，根据 respond 属性会有不同的触发节点，返回读取后的值和原始值 | accessedValue, originValue |
+| enter        | 当键入回车时触发，返回按键事件                                                    | KeyUpEvent                 |
+| prefix-click | 当点击前缀部分时触发，返回点击事件                                                | ClickEvent                 |
+| suffix-click | 当点击后缀部分时触发，返回点击事件                                                | ClickEvent                 |
+| key-down     | 当键按下时触发，返回按键事件                                                      | KeyDownEvent               |
+| key-press    | 当键按住时触发，返回按键事件                                                      | KeyPressEvent              |
+| key-up       | 当键松开时触发，返回按键事件                                                      | KeyUpEvent                 |
 
 ### NumberInput 插槽
 

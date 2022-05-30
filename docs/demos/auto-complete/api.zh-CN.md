@@ -22,12 +22,12 @@
 
 | 名称      | 说明                                        | 参数    |
 | --------- | ------------------------------------------- | ------- |
-| on-input  | 当在 Input 控件中输入触发，返回当前输入的值 | value   |
-| on-toggle | 当候选列表 visible 状态改变时，返回当前状态 | visible |
-| on-change | 当值改变后并焦点消失时触发，返回当前的值    | value   |
-| on-select | 当使用选项时触发，返回当前的值              | value   |
-| on-enter  | 当按下回车时触发，返回当前的值              | value   |
-| on-clear  | 当使用清空按钮清空时触发，无返回值          | -       |
+| input  | 当在 Input 控件中输入触发，返回当前输入的值 | value   |
+| toggle | 当候选列表 visible 状态改变时，返回当前状态 | visible |
+| change | 当值改变后并焦点消失时触发，返回当前的值    | value   |
+| select | 当使用选项时触发，返回当前的值              | value   |
+| enter  | 当按下回车时触发，返回当前的值              | value   |
+| clear  | 当使用清空按钮清空时触发，无返回值          | -       |
 
 ### AutoComplete 插槽
 

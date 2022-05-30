@@ -32,15 +32,15 @@
 
 | 名称            | 说明                                                           | 参数               |
 | --------------- | -------------------------------------------------------------- | ------------------ |
-| on-change       | 选择的文件发生改变时触发，返回已选的文件列表                   | files              |
-| on-filter-error | 当文件类型校验失败时触发，返回失败的文件                       | errorFile          |
-| on-size-error   | 当文件大小校验失败时触发，返回失败的文件                       | errorFile          |
-| on-progress     | 当上传文件的进度更新时触发，返回最新进度和文件                 | percent, file      |
-| on-success      | 当文件上传成功时触发，返回最新进度和文件                       | response, file     |
-| on-error        | 当文件上传失败时触发，返回最新进度和文件                       | error, file        |
-| on-delete       | 当删除了选择 (上传) 的文件时触发，返回被删除的文件             | file               |
-| on-exceed       | 当选择的文件超过上限时触发，返回超出的文件列表和已选的文件列表 | exceedFiles, files |
-| on-preview      | 当对文件进行预览时触发，返回预览的文件                         | file               |
+| change       | 选择的文件发生改变时触发，返回已选的文件列表                   | files              |
+| filter-error | 当文件类型校验失败时触发，返回失败的文件                       | errorFile          |
+| size-error   | 当文件大小校验失败时触发，返回失败的文件                       | errorFile          |
+| progress     | 当上传文件的进度更新时触发，返回最新进度和文件                 | percent, file      |
+| success      | 当文件上传成功时触发，返回最新进度和文件                       | response, file     |
+| error        | 当文件上传失败时触发，返回最新进度和文件                       | error, file        |
+| delete       | 当删除了选择 (上传) 的文件时触发，返回被删除的文件             | file               |
+| exceed       | 当选择的文件超过上限时触发，返回超出的文件列表和已选的文件列表 | exceedFiles, files |
+| preview      | 当对文件进行预览时触发，返回预览的文件                         | file               |
 
 ### Upload 插槽
 
@@ -64,8 +64,8 @@
 
 | 名称       | 说明                                               | 参数 |
 | ---------- | -------------------------------------------------- | ---- |
-| on-delete  | 当删除了选择 (上传) 的文件时触发，返回被删除的文件 | file |
-| on-preview | 当对文件进行预览时触发，返回预览的文件             | file |
+| delete  | 当删除了选择 (上传) 的文件时触发，返回被删除的文件 | file |
+| preview | 当对文件进行预览时触发，返回预览的文件             | file |
 
 ### UploadList 插槽
 

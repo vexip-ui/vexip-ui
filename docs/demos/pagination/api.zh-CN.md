@@ -21,9 +21,9 @@
 
 | 名称                | 说明                                       | 参数     |
 | ------------------- | ------------------------------------------ | -------- |
-| on-change           | 当页码发生改变时触发，返回当前页码         | active   |
-| on-total-change     | 当总条数发生变化时触发，返回总条数         | total    |
-| on-page-size-change | 当每页条目数改变时触发，返回当前每页条目数 | pageSize |
+| change           | 当页码发生改变时触发，返回当前页码         | active   |
+| total-change     | 当总条数发生变化时触发，返回总条数         | total    |
+| page-size-change | 当每页条目数改变时触发，返回当前每页条目数 | pageSize |
 
 ### Pagination 插槽
 

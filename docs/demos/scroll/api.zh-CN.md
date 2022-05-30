@@ -26,15 +26,15 @@
 
 | 名称                | 说明                                                                                                                       | 参数         |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| on-scroll           | 当以任意交互形式进行了滚动后触发，返回一个 `{ type, clientX, clientY, percentX, percnetY }` 对象                           | ScrollObject |
-| on-wheel            | 当用滚轮进行了滚动后触发，返回一个 `{ type, sign, clientX, clientY, percentX, percnetY }` 对象，其中 `sign` 标记滚动的方向 | ScrollObject |
-| on-x-enable-change  | 当横向滚动的激活状态改变时触发，返回当前滚动状态                                                                           | enableX      |
-| on-y-enable-change  | 当纵向滚动的激活状态改变时触发，返回当前滚动状态                                                                           | enableY      |
-| on-ready            | 当滚动触发刷新，并在刷新成功即将进入正常可用状态时触发，无返回值                                                           | -            |
-| on-scroll-start     | 当使用 pointer 滚动开始时触发，返回一个 `{ clientX, clientY, percentX, percnetY }` 对象                                    | ScrollObject |
-| on-scroll-end       | 当使用 pointer 滚动结束时触发，返回一个 `{ clientX, clientY, percentX, percnetY }` 对象                                    | ScrollObject |
-| on-bar-scroll-start | 当使用滚动条触发滚动开始时触发，返回当前触发的滚动条类型 `vertical` 或 `horizontal`                                        | type         |
-| on-bar-scroll-end   | 当使用滚动条触发滚动结束时触发，返回当前触发的滚动条类型 `vertical` 或 `horizontal`                                        | type         |
+| scroll           | 当以任意交互形式进行了滚动后触发，返回一个 `{ type, clientX, clientY, percentX, percnetY }` 对象                           | ScrollObject |
+| wheel            | 当用滚轮进行了滚动后触发，返回一个 `{ type, sign, clientX, clientY, percentX, percnetY }` 对象，其中 `sign` 标记滚动的方向 | ScrollObject |
+| x-enable-change  | 当横向滚动的激活状态改变时触发，返回当前滚动状态                                                                           | enableX      |
+| y-enable-change  | 当纵向滚动的激活状态改变时触发，返回当前滚动状态                                                                           | enableY      |
+| ready            | 当滚动触发刷新，并在刷新成功即将进入正常可用状态时触发，无返回值                                                           | -            |
+| scroll-start     | 当使用 pointer 滚动开始时触发，返回一个 `{ clientX, clientY, percentX, percnetY }` 对象                                    | ScrollObject |
+| scroll-end       | 当使用 pointer 滚动结束时触发，返回一个 `{ clientX, clientY, percentX, percnetY }` 对象                                    | ScrollObject |
+| bar-scroll-start | 当使用滚动条触发滚动开始时触发，返回当前触发的滚动条类型 `vertical` 或 `horizontal`                                        | type         |
+| bar-scroll-end   | 当使用滚动条触发滚动结束时触发，返回当前触发的滚动条类型 `vertical` 或 `horizontal`                                        | type         |
 
 ### Scroll 插槽
 

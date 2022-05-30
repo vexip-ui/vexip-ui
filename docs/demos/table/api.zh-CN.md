@@ -30,19 +30,19 @@
 
 | 名称              | 说明                                                                         | 参数                       |
 | ----------------- | ---------------------------------------------------------------------------- | -------------------------- |
-| on-body-scroll    | 当表格纵向滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象               | { client, percent }        |
-| on-row-enter      | 当鼠标移入了行时触发，返回行数据、行索引和行的位置索引                       | data, key, index           |
-| on-row-leave      | 当鼠标移出了行时触发，返回行数据、行索引和行的位置索引                       | data, key, index           |
-| on-row-click      | 当点击了行时触发，返回行数据、行索引和行的位置索引                           | data, key, index           |
-| on-row-check      | 当勾选了行复选框时触发，返回行数据、勾选状态、行索引和行的位置索引           | data, checked, key, index  |
-| on-row-check-all  | 当进行了全选时触发，返回当前是否为全选状态                                   | checked                    |
-| on-row-expand     | 当行拓展内容的展开状态改变时触发，返回行数据、展开状态、行索引和行的位置索引 | data, expanded, key, index |
-| on-row-drag-start | 当行将要开始拖拽时触发，返回当前行的数据                                     | data                       |
-| on-row-drag-over  | 当行正在拖拽时触发，返回前行的数据                                           | data                       |
-| on-row-drop       | 当行被其他的拖拽行放入时触发，返回当前行的数据和放入类型（前放和后放）       | data, dropType             |
-| on-row-drag-end   | 当行结束拖拽时触发，返回前行的数据和所有行的数据                             | data, allRowsData          |
-| on-row-filter     | 当发生表格数据过滤时触发，返回参与了过滤的列信息与过滤后的数据               | columns, data              |
-| on-row-sort       | 当发生表格数据排序时触发，返回参与了排序的列信息与排序后的数据               | columns, data              |
+| body-scroll    | 当表格纵向滚动时触发，返回一个包含滚动偏移量和滚动百分比的对象               | { client, percent }        |
+| row-enter      | 当鼠标移入了行时触发，返回行数据、行索引和行的位置索引                       | data, key, index           |
+| row-leave      | 当鼠标移出了行时触发，返回行数据、行索引和行的位置索引                       | data, key, index           |
+| row-click      | 当点击了行时触发，返回行数据、行索引和行的位置索引                           | data, key, index           |
+| row-check      | 当勾选了行复选框时触发，返回行数据、勾选状态、行索引和行的位置索引           | data, checked, key, index  |
+| row-check-all  | 当进行了全选时触发，返回当前是否为全选状态                                   | checked                    |
+| row-expand     | 当行拓展内容的展开状态改变时触发，返回行数据、展开状态、行索引和行的位置索引 | data, expanded, key, index |
+| row-drag-start | 当行将要开始拖拽时触发，返回当前行的数据                                     | data                       |
+| row-drag-over  | 当行正在拖拽时触发，返回前行的数据                                           | data                       |
+| row-drop       | 当行被其他的拖拽行放入时触发，返回当前行的数据和放入类型（前放和后放）       | data, dropType             |
+| row-drag-end   | 当行结束拖拽时触发，返回前行的数据和所有行的数据                             | data, allRowsData          |
+| row-filter     | 当发生表格数据过滤时触发，返回参与了过滤的列信息与过滤后的数据               | columns, data              |
+| row-sort       | 当发生表格数据排序时触发，返回参与了排序的列信息与排序后的数据               | columns, data              |
 
 ### Table 插槽
 
