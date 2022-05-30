@@ -29,6 +29,10 @@ $dropdown: map.merge(
 
   display: inline-block;
 
+  &__trigger {
+    display: flex;
+  }
+
   &__popper {
     @include basis;
 
