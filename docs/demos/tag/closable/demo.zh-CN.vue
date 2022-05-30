@@ -10,7 +10,7 @@
       标签
     </Tag>
     <Button
-      type="dashed"
+      dashed
       szie="small"
       style="height: auto; margin-left: 10px; line-height: 1.5;"
       :icon="Plus"
