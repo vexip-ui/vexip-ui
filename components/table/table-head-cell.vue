@@ -73,14 +73,14 @@
         </div>
         <div :class="`${prefix}__filter-actions`">
           <Button
-            type="text"
+            text
             size="small"
             :disabled="!hasFilterActive"
             @click="handleFilterMutiple()"
           >
             {{ locale.filterConfirm }}
           </Button>
-          <Button type="text" size="small" @click="handleResetFilter">
+          <Button text size="small" @click="handleResetFilter">
             {{ locale.filterReset }}
           </Button>
         </div>

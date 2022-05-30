@@ -134,7 +134,7 @@
         </div>
       </div>
       <div v-if="!noAction" :class="`${prefix}__action`">
-        <Button type="text" size="small" @click="handleCancel">
+        <Button text size="small" @click="handleCancel">
           {{ cancelText || locale.cancel }}
         </Button>
         <Button type="primary" size="small" @click="handleConfirm">

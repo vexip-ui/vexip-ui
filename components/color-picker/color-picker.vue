@@ -79,7 +79,7 @@
             ></Input>
             <Button
               v-if="clearable"
-              type="text"
+              text
               size="small"
               @click="handleClear"
             >
