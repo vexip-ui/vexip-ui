@@ -110,6 +110,8 @@
     "./themes/*": "./css/*/index.css",
     "./themes/*/*.css": "./css/*/*.css",
     "./themes/*/*": "./css/*/*.css",
+    "./type": "./type.d.ts",
+    "./type.d.ts": "./type.d.ts",
     "./package.json": "./package.json",
     "./*": "./*"
   },

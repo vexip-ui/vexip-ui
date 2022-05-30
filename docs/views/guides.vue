@@ -100,28 +100,24 @@ function selectGuide(label: string) {
     height: 100%;
   }
 
-  .doc-wrapper {
-    padding: 1.2em 3.2em 2.8em;
-    padding-right: 13em;
-
-    & > p {
-      margin: 3px;
-    }
-  }
-
   .toc-anchor {
     position: absolute;
-    top: 50px;
-    right: 11em;
+    top: 40px;
+    right: 13.5em;
+    width: 12.5em;
     transform: translateX(100%);
 
     .vxp-anchor {
+      width: 100%;
       font-size: 12px;
-    }
-  }
 
-  .vxp-select {
-    max-width: 260px;
+      &__link {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
 }
 </style>

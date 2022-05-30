@@ -147,6 +147,8 @@ export default defineConfig({
 
 ## 完整组件列表
 
+比较长，去组件那边看文档和示例更直观。
+
 ```js
 export {
   // components
@@ -165,6 +167,7 @@ export {
   Card,
   Carousel,
   CarouselItem,
+  Cell,
   Checkbox,
   CheckboxGroup,
   Collapse,
@@ -183,6 +186,7 @@ export {
   FormItem,
   FormReset,
   FormSubmit,
+  Grid,
   Highlight,
   Icon,
   Input,
@@ -203,6 +207,7 @@ export {
   Radio,
   RadioGroup,
   Renderer,
+  ResizeObserver,
   Row,
   Scroll,
   Scrollbar,
@@ -228,6 +233,7 @@ export {
   Upload,
   UploadFile,
   UploadList,
+  VirtualList,
   Wheel,
   WheelItem,
   // plugins

@@ -45,9 +45,10 @@ function useGuidesRouter(language: string): RouteRecordRaw[] {
     return {
       path: label,
       name: `${language}-${name}`,
-      meta: { name, cname },
-      props: { language },
-      component: () => import(`../guides/${label}/docs.vue`)
+      meta: { name, cname, label },
+      props: { name: toKebabCase(label), language },
+      // component: () => import(`../guides/${label}/docs.vue`)
+      component: () => import('../common/guide-doc.vue')
     }
   })
 

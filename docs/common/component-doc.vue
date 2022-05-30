@@ -27,13 +27,15 @@
           <span class="anchor__title"> API </span>
           <a class="anchor__link" href="#api">#</a>
         </h2>
-        <div v-if="api" :class="`${prefix}__api`">
-          <component :is="api" @mounted="handleApiMounted"></component>
+        <div :class="`${prefix}__api`">
+          <template v-if="api">
+            <component :is="api" @mounted="handleApiMounted"></component>
+          </template>
         </div>
         <Portal to="#toc-anchor">
           <Anchor :offset="15">
             <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
-              {{ item.name.replace('-', ' ') }}
+              {{ item.name }}
             </AnchorLink>
           </Anchor>
         </Portal>
