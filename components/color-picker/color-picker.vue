@@ -324,7 +324,10 @@ export default defineComponent({
       emit('toggle', value)
       emit('update:visible', value)
     })
-    watch(() => props.value, parseValue)
+    watch(() => props.value, value => {
+      parseValue(value)
+      lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
+    })
 
     function parseValue(value: Color | null) {
       if (value) {
