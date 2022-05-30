@@ -97,6 +97,9 @@ function computeSeriesColors(value: Color) {
   user-select: none;
 
   &__picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 20px;
   }
 

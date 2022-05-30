@@ -64,24 +64,25 @@
 <script setup lang="ts">
 import { ref, watch, provide, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { version, Row, Scroll } from 'vexip-ui'
 import { toKebabCase } from '@vexip-ui/utils'
 import Footer from '../common/footer.vue'
 import { getComponentConfig } from '../router/components'
 import { getMetaName } from '../common/meta-name'
 
+import type { Row, NativeScroll, Scroll } from 'vexip-ui'
 import type { ComponentConfig } from '../router/components'
 
 const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const prefix = 'components'
 
+const version = __VERSION__
 const minorVersion = version.split('.').slice(0, 2).join('.')
 
 const componentGroups = getComponentConfig()
 const currentMenu = ref('')
 const wrapper = ref<InstanceType<typeof Row> | null>(null)
-const scroll = ref<InstanceType<typeof Scroll> | null>(null)
+const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
 const menuScroll = ref<InstanceType<typeof Scroll> | null>(null)
 
 const router = useRouter()

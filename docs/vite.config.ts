@@ -1,4 +1,5 @@
 import { resolve } from 'path'
+import { readFileSync } from 'fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -7,23 +8,25 @@ import markdown from 'vite-plugin-md'
 import { highlight } from './build/highlight'
 import { markdownItSetup } from './build/markdown'
 
+const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
+
 export default defineConfig(({ command }) => {
   const useServer = command === 'serve'
 
   return {
     define: {
       __ROLLBACK_LANG__: JSON.stringify('zh-CN'),
-      __VERSION__: JSON.stringify('')
+      __VERSION__: JSON.stringify(pkg.version || '')
     },
     resolve: {
       alias: [
-        { find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') }
-        // { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
-        // { find: /^@vexip-ui\/((?!icons).+)/, replacement: resolve(__dirname, '../common/$1/src') },
-        // { find: /^vexip-ui\/(es|lib)\/(.+)/, replacement: resolve(__dirname, '../components/$2') },
-        // { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
+        { find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') },
+        { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
+        { find: /^@vexip-ui\/((?!icons).+)/, replacement: resolve(__dirname, '../common/$1/src') },
+        { find: /^vexip-ui\/(es|lib)\/(.+)/, replacement: resolve(__dirname, '../components/$2') },
+        { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
       ],
-      dedupe: ['vue', 'vexip-ui']
+      dedupe: ['../components']
     },
     server: {
       port: 9000,

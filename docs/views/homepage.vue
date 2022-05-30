@@ -16,7 +16,7 @@
           GitHub
         </Button>
       </div>
-      <MajorColor></MajorColor>
+      <MajorColor :language="language"></MajorColor>
     </div>
     <!-- <a :class="`${prefix}__record`" href="https://beian.miit.gov.cn/" target="_blank">
       粤ICP备2020125887号

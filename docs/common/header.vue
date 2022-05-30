@@ -72,7 +72,6 @@
 <script setup lang="ts">
 import { ref, watchEffect, inject, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { version } from 'vexip-ui'
 import { MagnifyingGlass, GithubB, Language } from '@vexip-ui/icons'
 import { toKebabCase } from '@vexip-ui/utils'
 import ThemeSwitch from './theme-switch.vue'
@@ -80,6 +79,7 @@ import { getComponentConfig } from '../router/components'
 import { getMetaName } from './meta-name'
 
 const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
+const version = __VERSION__
 
 const searchOptions: string[] = []
 const langOptions = [
