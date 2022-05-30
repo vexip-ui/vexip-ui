@@ -19,6 +19,10 @@ export interface MenuItemState {
   handleMouseLeave(): void
 }
 
+export interface MenuGroupState {
+  indent: number
+}
+
 export interface MenuState {
   horizontal: boolean,
   accordion: boolean,
@@ -35,5 +39,6 @@ export interface MenuState {
 }
 
 export const baseIndentWidth = 20 // px
-export const MENU_STATE: InjectionKey<MenuState> = Symbol('MENU_STATE')
 export const MENU_ITEM_STATE: InjectionKey<MenuItemState> = Symbol('MENU_ITEM_STATE')
+export const MENU_GROUP_STATE: InjectionKey<MenuGroupState> = Symbol('MENU_GROUP_STATE')
+export const MENU_STATE: InjectionKey<MenuState> = Symbol('MENU_STATE')

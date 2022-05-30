@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject, computed } from 'vue'
-import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE } from './symbol'
+import { defineComponent, ref, reactive, computed, inject, provide } from 'vue'
+import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 const props = {
   label: {
@@ -48,6 +48,8 @@ export default defineComponent({
     const onlyShowSlot = computed(() => {
       return menuState?.horizontal && !parentItemState
     })
+
+    provide(MENU_GROUP_STATE, reactive({ indent }))
 
     return {
       prefix: 'vxp-menu-group',

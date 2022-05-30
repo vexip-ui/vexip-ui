@@ -91,7 +91,7 @@ import { Tooltip } from '@/components/tooltip'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { usePopper } from '@vexip-ui/mixins'
 import { ChevronDown } from '@vexip-ui/icons'
-import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE } from './symbol'
+import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 import type { Placement } from '@vexip-ui/mixins'
 
@@ -132,6 +132,7 @@ export default defineComponent({
   setup(props, { slots, emit }) {
     const menuState = inject(MENU_STATE, null)
     const parentItemState = inject(MENU_ITEM_STATE, null)
+    const groupState = inject(MENU_GROUP_STATE, null)
 
     const prefix = 'vxp-menu'
     const baseClass = `${prefix}__item`
@@ -139,10 +140,10 @@ export default defineComponent({
     const groupExpanded = ref(false)
     const selected = ref(false)
     const sonSelected = ref(false)
-    const indent = ref(parentItemState ? parentItemState.indent + 1 : 1)
 
     const wrapper = ref<HTMLElement | null>(null)
 
+    const indent = computed(() => (parentItemState?.indent ?? 0) + 1)
     const propTransfer = computed(() => props.transfer ?? menuState?.transfer ?? false)
     const inTransfer = computed(() => parentItemState ? parentItemState.transfer : false)
     const transfer = computed(() => !inTransfer.value && propTransfer.value)
@@ -172,7 +173,7 @@ export default defineComponent({
         paddingLeft:
           parentItemState && parentItemState.isUsePopper
             ? undefined
-            : `${indent.value * baseIndentWidth}px`
+            : `${indent.value * baseIndentWidth + ((groupState?.indent ?? 0) * 0.25 * baseIndentWidth)}px`
       }
     })
     const isGroup = computed(() => {
