@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapper" :class="className">
+  <div ref="wrapper" :class="className" :style="style">
     <div
       ref="track"
       :class="[`${prefix}__track`, useTrack ? null : `${prefix}__track--disabled`]"
@@ -31,7 +31,7 @@ import { isDefined, throttle, boundRange } from '@vexip-ui/utils'
 import { useTrack } from './mixins'
 import { ScrollbarType } from './symbol'
 
-import type { PropType, CSSProperties } from 'vue'
+import type { PropType } from 'vue'
 import type { ScrollbarPlacement } from './symbol'
 
 const props = useConfiguredProps('scrollbar', {
@@ -51,6 +51,10 @@ const props = useConfiguredProps('scrollbar', {
     default: 35,
     validator: (value: number) => value > 0 && value < 100
   },
+  width: {
+    type: Number,
+    default: null
+  },
   appear: {
     type: Boolean,
     default: false
@@ -60,6 +64,10 @@ const props = useConfiguredProps('scrollbar', {
     default: 1500
   },
   barColor: {
+    type: String,
+    default: null
+  },
+  trackColor: {
     type: String,
     default: null
   },
@@ -142,10 +150,15 @@ export default defineComponent({
         }
       ]
     })
-    const barStyle = computed(() => {
-      const style: CSSProperties = {
-        backgroundColor: props.barColor
+    const style = computed<Record<string, string>>(() => {
+      return {
+        '--vxp-scrollbar-bar-bg-color': props.barColor,
+        '--vxp-scrollbar-track-bg-color': props.trackColor,
+        '--vxp-scrollbar-width': props.width ? `${props.width}px` : null!
       }
+    })
+    const barStyle = computed(() => {
+      const style: Record<string, string> = {}
       const position = `${((100 - props.barLength) * currentScroll.value) / props.barLength}%`
       const length = `${props.barLength}%`
 
@@ -339,6 +352,7 @@ export default defineComponent({
       currentScroll,
 
       className,
+      style,
       barStyle,
 
       wrapper,

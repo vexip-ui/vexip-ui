@@ -163,6 +163,9 @@ module.exports = {
     },
     {
       files: ['**/*.vue'],
+      rules: {
+        '@typescript-eslint/consistent-type-imports': 'off'
+      },
       globals: {
         defineProps: 'readonly',
         defineEmits: 'readonly',

@@ -7,6 +7,7 @@
     </div>
     <Scrollbar
       ref="bar"
+      use-track
       :bar-length="barLength"
       @scroll="handleBarScroll"
     ></Scrollbar>

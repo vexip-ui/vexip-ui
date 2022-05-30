@@ -7,6 +7,10 @@
     </div>
     <Scrollbar
       ref="bar"
+      use-track
+      :width="20"
+      bar-color="orange"
+      track-color="yellow"
       :bar-length="barLength"
       @scroll="handleBarScroll"
     ></Scrollbar>
