@@ -116,7 +116,7 @@ export const HEX_REG_4 = /^#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0
 export const HEX_REG_6 = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
 export const HEX_REG_8 = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
 
-export const NAMES: Readonly<Record<string, string>> = Object.freeze({
+export const NAMED_COLORS = Object.freeze({
   aliceblue: 'f0f8ff',
   antiquewhite: 'faebd7',
   aqua: '0ff',
@@ -268,16 +268,24 @@ export const NAMES: Readonly<Record<string, string>> = Object.freeze({
   yellowgreen: '9acd32'
 })
 
-export function isColor(value: string): boolean {
-  value = value.trim().toLowerCase()
+export type ColorName = keyof typeof NAMED_COLORS
 
-  if (value === 'transparent' || NAMES[value]) {
+export const COLOR_NAMES = Object.freeze(new Set(Object.keys(NAMED_COLORS))) as Readonly<Set<ColorName>>
+
+export function isColor(value: string): boolean {
+  value = String(value).trim().toLowerCase()
+
+  if (!value) {
+    return false
+  }
+
+  if (value === 'transparent' || NAMED_COLORS[value as ColorName]) {
     return true
   }
 
   return (
     value === 'transparent' ||
-    value in NAMES ||
+    COLOR_NAMES.has(value as ColorName) ||
     RGB_REG.test(value) ||
     RGBA_REG.test(value) ||
     HSL_REG.test(value) ||
@@ -300,8 +308,8 @@ export function parseStringColor(color: string): Color | null {
 
   let named = false
 
-  if (NAMES[color]) {
-    color = NAMES[color]
+  if (NAMED_COLORS[color as ColorName]) {
+    color = NAMED_COLORS[color as ColorName]
     named = true
   }
 
