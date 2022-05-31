@@ -3,8 +3,8 @@
 | 名称         | 类型             | 说明                                                                                              | 默认值    |
 | ------------ | ---------------- | ------------------------------------------------------------------------------------------------- | --------- |
 | type         | String           | 输入框的类型，可选值为 `text`、`password`、`date`、`datetime`、`time`，其中时间相关类型为原生类型 | 'text'    |
-| size         | String           | 输入框的大小，可选值为 `small`、`default`、`large`                                                | 'default' |
-| state        | String           | 输入框的状态，可选值为 `default`、`success`、`error`、`warning`                                   | 'default' |
+| size         | `'small' \| 'default' \| 'large'`           | 输入框的大小                                                | `'default'` |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'`           | 输入框的状态                                   | `'default'` |
 | prefix       | String           | 前缀图标的名称，使用前缀插槽时无效                                                                | ''        |
 | prefix-color | String           | 前缀内容的颜色，会影响前缀插槽                                                                    | ''        |
 | suffix       | String           | 后缀图标的名称，使用后缀插槽时无效                                                                | ''        |

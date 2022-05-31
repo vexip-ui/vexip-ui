@@ -13,7 +13,7 @@
 | drawer-class | String \| Object  | 定义抽屉容器的类名                                                                              | null    |
 | hide-mask    | Boolean           | 设置是否隐藏遮罩层                                                                              | false   |
 | transfer     | Boolean \| String | 设置抽屉的渲染位置，开启但未指定有效选择器时默认渲染至 body                                     | false   |
-| before-close | Function          | 设置抽屉的关闭前回调，支持异步函数和 Promise，返回值为 false 会阻止关闭                         | null    |
+| on-before-close | Function          | 设置抽屉的关闭前回调，支持异步函数和 Promise，返回值为 false 会阻止关闭                         | null    |
 | resizable    | Boolean           | 设置抽屉是否可以改变大小，当为左右抽屉时可以改变宽度，为上下抽屉时可以改变高度                  | false   |
 
 ### Drawer 事件

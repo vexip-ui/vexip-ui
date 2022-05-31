@@ -10,7 +10,7 @@
 | loading       | Boolean  | 设置是否为加载状态                                                                                      | false     |
 | open-text     | String   | 打开状态时开关的填充文字                                                                                | ''        |
 | close-text    | String   | 关闭状态时开关的填充文字                                                                                | ''        |
-| before-change | Function | 设置开关的值变化前回调，接收一个参数标将要变化为的值，支持异步函数和 Promise，返回值为 false 会阻止变化 | null      |
+| on-before-change | Function | 设置开关的值变化前回调，接收一个参数标将要变化为的值，支持异步函数和 Promise，返回值为 false 会阻止变化 | null      |
 
 ### Switcher 事件
 

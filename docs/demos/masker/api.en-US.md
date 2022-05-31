@@ -8,7 +8,7 @@
 | mask-transition | String            | 遮罩层的过渡动画                                                        | 'vxp-fade' |
 | transition-name | String            | 显示层的过渡动画                                                        | 'vxp-fade' |
 | disabled        | Boolean           | 设置是否禁用遮罩层，该属性仅影响遮罩层，显示层不受影响                  | false      |
-| before-close    | Function          | 设置遮罩关闭前的回调，支持异步函数和 Promise，返回值为 false 会阻止关闭 | null       |
+| on-before-close    | Function          | 设置遮罩关闭前的回调，支持异步函数和 Promise，返回值为 false 会阻止关闭 | null       |
 | transfer        | Boolean \| String | 设置遮罩的渲染位置，开启但未指定有效选择器时默认渲染至 body             | false      |
 
 ### Masker 事件

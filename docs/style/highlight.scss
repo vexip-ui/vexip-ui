@@ -88,7 +88,6 @@ pre[class*='language-'] {
   &.entity,
   &.url {
     color: #9a6e3a;
-    background-color: hsla(0deg, 0%, 100%, 50%);
   }
 
   &.atrule,
@@ -124,7 +123,6 @@ pre[class*='language-'] {
 .language-css .token.string,
 .style .token.string {
   color: #9a6e3a;
-  background: hsla(0deg, 0%, 100%, 50%);
 }
 
 .token.keyword {

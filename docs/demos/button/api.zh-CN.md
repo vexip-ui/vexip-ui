@@ -5,7 +5,7 @@
 | type         | `'default' \| 'primary' \| 'info' \| 'success' \| 'warning' \| 'error'`  | 设置按钮类型 | `'default'` |
 | simple       | `boolean` | 开启后，按钮将变为浅色系的简约风格                                                               | `false`     |
 | ghost        | `boolean` | 开启后，按钮将变成背景颜色透明的样式                                                             | `false`     |
-| size         | `string`  | 按钮的大小，可选值为 `small`、`default`、`large`                                                 | `'default'` |
+| size         | `'small' \| 'default' \| 'large'`  | 按钮的大小                                                 | `'default'` |
 | disabled     | `boolean` | 设置是否为禁用状态                         设置                                                          | `false`     |
 | loading      | `boolean` | 设置是否为加载状态                         设置                                                          | `false`     |
 | circle       | `boolean` | 设置是否为圆形按钮                                                                                   | `false`     |

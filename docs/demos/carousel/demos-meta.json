@@ -1,9 +1,9 @@
 [
-  "album",
-  "autoplay",
   "basis",
+  "autoplay",
+  "loop",
   "card",
   "lantern",
-  "loop",
-  "vertical"
+  "vertical",
+  "album"
 ]

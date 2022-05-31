@@ -64,7 +64,7 @@
 | ------------- | -------- | --------------------------------------------------------------------- | --------- |
 | type          | String   | 同 Button 组件的 type 属性，但默认值不同                              | 'primary' |
 | text          | String   | 设置提交按钮的内容，使用插槽时将会失效                                | null      |
-| before-submit | Function | 设置表单提交前回调，支持异步函数和 Promise，返回值为 false 会阻止提交 | null      |
+| on-before-submit | Function | 设置表单提交前回调，支持异步函数和 Promise，返回值为 false 会阻止提交 | null      |
 
 ### FormSubmit 事件
 
@@ -80,7 +80,7 @@
 | 名称         | 类型     | 说明                                                                  | 默认值 |
 | ------------ | -------- | --------------------------------------------------------------------- | ------ |
 | text         | String   | 设置重置按钮的内容，使用插槽时将会失效                                | null   |
-| before-reset | Function | 设置表单提交前回调，支持异步函数和 Promise，返回值为 false 会阻止提交 | null   |
+| on-before-reset | Function | 设置表单提交前回调，支持异步函数和 Promise，返回值为 false 会阻止提交 | null   |
 
 ### FormReset 事件
 

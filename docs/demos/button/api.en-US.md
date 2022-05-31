@@ -7,7 +7,7 @@
 | ghost        | `boolean` |  Once set, the button will be styled with a transparent background color    | `false`     |
 | text | `boolean` | Set whether it is a text button | `false` |
 | dsahed | `boolean` | Set whether it is a dashed button | `false` |
-| size         | `string`  | The size of the button, optional values are `small`, `default`, `large` | `'default'` |
+| size         | `'small' \| 'default' \| 'large'`  | The size of the button | `'default'` |
 | disabled     | `boolean` | Set whether it is a disabled button                                | `false`     |
 | loading      | `boolean` | Set whether it is a loading button                         | `false`     |
 | circle       | `boolean` | Set whether it is a circular button              | `false`     |

@@ -10,8 +10,8 @@
 | suffix       | `string`            | 后缀图标的名称，使用后缀插槽时无效                                                         | `''`        |
 | suffix-color | `string`            | 后缀内容的颜色，会影响后缀插槽                                                             | `''`        |
 | placeholder  | `string`            | Input 控件占位符                                                                           | `null`      |
-| size         | `string`            | Input 控件大小，可选值为 `small`、`default`、`large`                                       | `'default'` |
-| state        | `string`            | 输入框的状态，可选值为 `default`、`success`、`error`、`warning`                            | `'default'` |
+| size         | `'small' \| 'default' \| 'large'`            | 设置输入控件大小                                       | `'default'` |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'`            | 输入框的状态                            | `'default'` |
 | disabled     | `boolean`           | 设置是否禁用                                                                                   | `false`     |
 | drop-disabled     | `boolean`           | 是否允许下拉列表显示                                                                           | `false`      |
 | placement    | `string`            | 选项列表出现的位置，可选值同 Popper.js                                                     | `'bottom'`  |
@@ -23,7 +23,7 @@
 | 名称      | 说明                                        | 参数    |
 | --------- | ------------------------------------------- | ------- |
 | input  | 当在 Input 控件中输入触发，返回当前输入的值 | `(value: string)`   |
-| toggle | 当候选列表 visible 状态改变时，返回当前状态 | `(visible: boolean)` |
+| toggle | 当候选列表显示状态改变时触发，返回当前状态  | `(visible: boolean)` |
 | change | 当值改变后并焦点消失时触发，返回当前的值    | `(value: number \| string)`   |
 | select | 当使用选项时触发，返回当前的值              | `(value: number \| string)`   |
 | enter  | 当按下回车时触发，返回当前的值              | `(value: number \| string)`   |

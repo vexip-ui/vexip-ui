@@ -16,7 +16,7 @@
 | no-footer    | 是否禁用底部的操作按钮 | false                                                                                                               |
 | hide-mask    | Boolean                | 设置是否隐藏遮罩层                                                                                                  | false  |
 | transfer     | Boolean \| String      | 设置模态框的渲染位置，开启但未指定有效选择器时默认渲染至 body                                                       | false  |
-| before-close | Function               | 设置模态框的关闭前回调，接收一个标识区分是确认或是取消触发的关闭，支持异步函数和 Promise，返回值为 false 会阻止关闭 | null   |
+| on-before-close | Function               | 设置模态框的关闭前回调，接收一个标识区分是确认或是取消触发的关闭，支持异步函数和 Promise，返回值为 false 会阻止关闭 | null   |
 | draggable    | Boolean                | 设置模态框是否可以拖拽                                                                                              | false  |
 | resizable    | Boolean                | 设置模态框是否可以改变大小                                                                                          | false  |
 | loading      | Boolean                | 设置模态框的确认按钮是否为加载状态                                                                                  | false  |

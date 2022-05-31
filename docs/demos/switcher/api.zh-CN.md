@@ -4,13 +4,14 @@
 | ------------- | -------- | ------------------------------------------------------------------------------------------------------- | --------- |
 | value         | Boolean  | 开关的值，可以使用 v-model 双向绑定                                                                     | false     |
 | disabled      | Boolean  | 设置是否禁用开关                                                                                        | false     |
-| size          | String   | 开关的大小，可选值为 `small`、`default`、`large`                                                        | 'default' |
+| size          | `'small' \| 'default' \| 'large'`   | 开关的大小                                                        | `'default'` |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'`           | 开关的状态                                   | `'default'` |
 | open-color    | String   | 打开状态时开关的填充颜色                                                                                | ''        |
 | close-color   | String   | 关闭状态时开关的填充颜色                                                                                | ''        |
 | loading       | Boolean  | 设置是否为加载状态                                                                                      | false     |
 | open-text     | String   | 打开状态时开关的填充文字                                                                                | ''        |
 | close-text    | String   | 关闭状态时开关的填充文字                                                                                | ''        |
-| before-change | Function | 设置开关的值变化前回调，接收一个参数标将要变化为的值，支持异步函数和 Promise，返回值为 false 会阻止变化 | null      |
+| on-before-change | Function | 设置开关的值变化前回调，接收一个参数标将要变化为的值，支持异步函数和 Promise，返回值为 false 会阻止变化 | null      |
 
 ### Switcher 事件
 

@@ -17,7 +17,7 @@
 | bar-class     | String \| Object  | 设置滚动条的自定义类名                                                     | null       |
 | autoplay      | Boolean \| Number | 设置滚动条自动滚动，当传入数字时，会作为一次完整滚动的所需毫秒数           | false      |
 | play-waiting  | Number            | 当开启了自动滚动时，设置每次开始滚动前和结束滚动后的暂缓毫秒数             | 500        |
-| before-scroll | Function          | 设置滚动前的回调，不支持异步函数和 Promise，返回值为 false 会阻止滚动      | null       |
+| on-before-scroll | Function          | 设置滚动前的回调，不支持异步函数和 Promise，返回值为 false 会阻止滚动      | null       |
 | appear        | Boolean           | 设置滚动初始渲染时是否具有过渡效果，一般用于初始滚动位置为非 0 的场合      | false      |
 | bar-duration  | Number            | 设置滚动条过渡效果的持续时间                                               | null       |
 | use-bar-track | Boolean           | 设置滚动条是否启用轨道交互                                                 | false      |

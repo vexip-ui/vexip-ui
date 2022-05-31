@@ -21,8 +21,8 @@
 | hidden-icon      | Boolean         | 设置是否隐藏文件图标                                                                                                               | false    |
 | count-limit      | Number          | 在多选文件时设置文件的上传最大数量，为 9 时不做限制                                                                                | 0        |
 | allow-drag       | Boolean         | 设置是否允许使用拖拽文件进行上传                                                                                                   | false    |
-| before-upload    | Function        | 设置文件上传前的回调，接收上传 File 对象和待上传的文件列表，支持异步函数和 Promise，返回值为 false 会阻止上传                      | null     |
-| before-select    | Function        | 设置文件选择前的回调，接收选择的 File 对象 (如果为增量模式还会接收已有文件列表)，支持异步函数和 Promise，返回值为 false 会阻止选择 | null     |
+| on-before-upload    | Function        | 设置文件上传前的回调，接收上传 File 对象和待上传的文件列表，支持异步函数和 Promise，返回值为 false 会阻止上传                      | null     |
+| on-before-select    | Function        | 设置文件选择前的回调，接收选择的 File 对象 (如果为增量模式还会接收已有文件列表)，支持异步函数和 Promise，返回值为 false 会阻止选择 | null     |
 | icon-renderer    | Function        | 文件图标的渲染方法，第一个参数为 h，第二个参数为 File 对象                                                                         | null     |
 | directory        | Boolean         | 设置是否开启文件夹上传，注意，当使用点击上传时将会强制只能上传文件夹，同时该特性需要浏览器支持 `webkitdirectory`                   | false    |
 | path-field       | String          | 设置文件路径在请求表单数据中的字段，开启了文件夹上传后用于记录文件的相对位置                                                       | 'path'   |

@@ -1,5 +1,5 @@
 <template>
-  <Carousel loop :active-offset="1">
+  <Carousel loop :active-offset="1" style="max-width: 1000px;">
     <CarouselItem v-for="n in 5" :key="n">
       <template #default="{ active }">
         <div class="demo-pane" :style="{ transform: `scaleY(${active ? 1 : 0.83})` }">
