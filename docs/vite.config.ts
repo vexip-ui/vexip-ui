@@ -3,6 +3,7 @@ import { readFileSync } from 'fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import i18n from '@intlify/vite-plugin-vue-i18n'
 import discardCss from 'postcss-discard-duplicates'
 import markdown from 'vite-plugin-md'
 import { highlight } from './build/highlight'
@@ -46,6 +47,10 @@ export default defineConfig(({ command }) => {
     plugins: [
       vue({ include: [/\.vue$/, /\.md$/] }),
       vueJsx(),
+      i18n({
+        compositionOnly: false,
+        include: resolve(__dirname, 'i18n')
+      }),
       markdown({
         markdownItOptions: {
           typographer: false,

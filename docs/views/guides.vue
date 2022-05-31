@@ -9,7 +9,7 @@
           @select="selectGuide"
         >
           <MenuItem v-for="menu in menus" :key="menu.label" :label="menu.label">
-            {{ getMetaName(globalState.language, menu, false) }}
+            {{ $t(`guides.${menu.i18n}`) }}
           </MenuItem>
         </Menu>
       </Scroll>
@@ -41,7 +41,6 @@ import { ref, watch, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Footer from '../common/footer.vue'
 import { getGuideConfig } from '../router/guides'
-import { getMetaName } from '../common/meta-name'
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Scroll } from 'vexip-ui'

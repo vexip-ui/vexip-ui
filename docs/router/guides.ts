@@ -1,14 +1,13 @@
 export interface GuideConfig {
-  name: string,
-  cname: string,
-  label: string
+  label: string,
+  i18n: string
 }
 
 export function getGuideConfig(): GuideConfig[] {
   return [
-    { name: 'Introduction', cname: '介绍', label: 'setup' },
-    { name: 'Getting Start', cname: '快速上手', label: 'started' },
-    { name: 'Global Config', cname: '配置项', label: 'global' },
-    { name: 'Style', cname: '样式', label: 'style' }
+    { label: 'setup', i18n: 'introduction' },
+    { label: 'started', i18n: 'gettingStart' },
+    { label: 'global', i18n: 'globalConfig' },
+    { label: 'style', i18n: 'customStyle' }
   ]
 }

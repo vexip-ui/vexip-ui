@@ -1,0 +1,13 @@
+<template>
+  <Timeline>
+    <TimelineItem>
+      <p>时间节点一</p>
+    </TimelineItem>
+    <TimelineItem>
+      <p>时间节点二</p>
+    </TimelineItem>
+    <TimelineItem>
+      <p>时间节点三</p>
+    </TimelineItem>
+  </Timeline>
+</template>

@@ -17,7 +17,7 @@
           <MenuGroup
             v-for="group in componentGroups"
             :key="group.name"
-            :label="getMetaName(globalState.language, group)"
+            :label="`${$t(`group.${group.name}`)} (${group.components.length})`"
           >
             <MenuItem
               v-for="component in group.components"
@@ -25,7 +25,7 @@
               :label="toKebabCase(component.name)"
               :data-name="toKebabCase(component.name)"
             >
-              {{ getMetaName(globalState.language, component) }}
+              {{ getComponentName(component) }}
               <Tag
                 v-if="isNewComponent(component)"
                 :class="`${prefix}__tag`"
@@ -62,17 +62,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, provide, inject } from 'vue'
+import { ref, computed, watch, provide } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import { toKebabCase } from '@vexip-ui/utils'
 import Footer from '../common/footer.vue'
 import { getComponentConfig } from '../router/components'
-import { getMetaName } from '../common/meta-name'
 
 import type { Row, NativeScroll, Scroll } from 'vexip-ui'
 import type { ComponentConfig } from '../router/components'
 
-const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
+// const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const prefix = 'components'
 
@@ -85,15 +85,18 @@ const wrapper = ref<InstanceType<typeof Row> | null>(null)
 const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
 const menuScroll = ref<InstanceType<typeof Scroll> | null>(null)
 
+const i18n = useI18n({ useScope: 'global' })
 const router = useRouter()
 const route = useRoute()
+
+const language = computed(() => i18n.locale.value)
 
 provide('refreshScroll', refreshScroll)
 
 watch(
   () => route.path,
   value => {
-    if (value.startsWith(`/${globalState.language}/components`)) {
+    if (value.startsWith(`/${language.value}/components`)) {
       currentMenu.value = value.split('/')[3]
     }
 
@@ -112,7 +115,7 @@ function refreshScroll() {
 }
 
 function selectComponent(label: string) {
-  router.push(`/${globalState.language}/components/${label}`)
+  router.push(`/${language.value}/components/${label}`)
 }
 
 function scrollToMenuItem(label: string) {
@@ -130,6 +133,11 @@ function scrollToMenuItem(label: string) {
   if (menuItemRect.y < scrollRect.y || menuItemRect.y >= scrollRect.y + scrollRect.height) {
     menuScroll.value?.scrollToElement(menuItemEl, 500, -10)
   }
+}
+
+function getComponentName(config: ComponentConfig) {
+  return i18n.t(`components.${config.name}`) +
+    (language.value !== 'en-US' ? ` ${i18n.t(`components.${config.name}`, 'en-US')}` : '')
 }
 
 function isNewComponent(config: ComponentConfig) {

@@ -6,6 +6,7 @@ import { install } from 'vexip-ui'
 import { isColor } from '@vexip-ui/utils'
 import App from './app.vue'
 import { router } from './router'
+import { i18n } from './i18n'
 import Markdown from './common/markdown.vue'
 
 import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
@@ -23,4 +24,9 @@ if (majorColor && isColor(majorColor)) {
   document.documentElement.style.setProperty('--vxp-color-primary-base', majorColor)
 }
 
-createApp(App).component('Markdown', Markdown).use(install).use(router).mount('#app')
+createApp(App)
+  .component('Markdown', Markdown)
+  .use(i18n)
+  .use(install)
+  .use(router)
+  .mount('#app')

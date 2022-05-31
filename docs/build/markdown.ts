@@ -61,9 +61,10 @@ function useLinkTarget(md: MarkdownIt, target = '_blank') {
 
 function useContainer(md: MarkdownIt) {
   md
-    .use(...createContainer('info', '提示'))
-    .use(...createContainer('warning', '注意'))
-    .use(...createContainer('danger', '警告'))
+    .use(...createContainer('info'))
+    .use(...createContainer('warning'))
+    .use(...createContainer('danger'))
+    .use(...createContainer('error'))
     .use(container, 'v-pre', {
       render(tokens: Token[], index: number) {
         return tokens[index].nesting === 1
@@ -73,7 +74,7 @@ function useContainer(md: MarkdownIt) {
     })
 }
 
-function createContainer(type: string, defaultTitle: string) {
+function createContainer(type: string) {
   return [
     container,
     type,
@@ -84,7 +85,7 @@ function createContainer(type: string, defaultTitle: string) {
 
         if (token.nesting === 1) {
           // return `<div class="vxp-alert vxp-alert--${type}"><p class="">${defaultTitle}</p>\n`
-          return `<Alert type="${type}" icon title="${defaultTitle}">\n`
+          return `<Alert type="${type}" icon :title="$t('alert.${type}')">\n`
         }
 
         return '</Alert>\n'

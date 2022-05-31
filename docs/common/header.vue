@@ -32,11 +32,11 @@
               @click="openPage(menu.to)"
             >
               <div class="vxp-menu__label">
-                <span class="vxp-menu__title">{{ getMetaName(globalState.language, menu, false) }}</span>
+                <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
               </div>
             </li>
             <MenuItem v-else :label="menu.label">
-              {{ getMetaName(globalState.language, menu, false) }}
+              {{ $t(`common.${menu.label}`) }}
             </MenuItem>
           </template>
         </Menu>
@@ -71,6 +71,7 @@
 
 <script setup lang="ts">
 import { ref, watchEffect, inject, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import { MagnifyingGlass, GithubB, Language } from '@vexip-ui/icons'
 import { toKebabCase } from '@vexip-ui/utils'
@@ -95,26 +96,24 @@ const currentMenu = ref('')
 const placeholder = ref('')
 const currentSearch = ref('')
 
+const i18n = useI18n({ useScope: 'global' })
 const router = useRouter()
 const route = useRoute()
 
-const menus = [
-  { label: 'guides', name: 'Guides', cname: '指南' },
-  { label: 'components', name: 'Components', cname: '组件' },
-  { name: 'Playground', cname: '游乐场', to: 'https://playground.vexipui.com' }
-]
+i18n.locale.value = globalState.language
 
-const searchMeta = {
-  name: 'Search component in Vexip UI',
-  cname: '在 Vexip UI 中搜索组件'
-}
+const menus = [
+  { label: 'guides' },
+  { label: 'components' },
+  { label: 'playground', to: 'https://playground.vexipui.com' }
+]
 
 watchEffect(() => {
   const matchedMenu = menus.find(menu => menu.label && route.path.startsWith(`/${globalState.language}/${menu.label}`))
 
   placeholder.value = route.meta?.isComponent
     ? getMetaName(globalState.language, route.meta)
-    : getMetaName(globalState.language, searchMeta, false)
+    : i18n.t('common.searchComponent')
   currentMenu.value = matchedMenu ? matchedMenu.label! : ''
 })
 
@@ -145,6 +144,7 @@ function toComponentDoc(fullName: string) {
 function changeLanguage(language: string) {
   if (language !== globalState.language) {
     router.push(route.path.replace(globalState.language, language))
+    i18n.locale.value = language
   }
 }
 </script>

@@ -1,21 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { Loading } from 'vexip-ui'
 import { toKebabCase } from '@vexip-ui/utils'
+import { langOptions, i18n } from '../i18n'
 import { getGuideConfig } from './guides'
 import { getComponentConfig } from './components'
 
 import type { RouteRecordRaw } from 'vue-router'
 
-const langOptions = ['zh-CN', 'es-US']
-const defaultLang = langOptions.find(l => l === navigator.language) || __ROLLBACK_LANG__
-
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: `/${defaultLang}`
+    redirect: `/${i18n.global.locale || i18n.global.fallbackLocale}`
   },
-  useLanguageRouter('zh-CN'),
-  useLanguageRouter('en-US')
+  ...langOptions.map(useLanguageRouter)
   // {
   //   path: '/:catchAll(.*)',
   //   redirect: '/'
@@ -41,13 +38,12 @@ function useLanguageRouter(language: string): RouteRecordRaw {
 }
 
 function useGuidesRouter(language: string): RouteRecordRaw[] {
-  const children: RouteRecordRaw[] = getGuideConfig().map(({ name, label, ...others }) => {
+  const children: RouteRecordRaw[] = getGuideConfig().map(({ label, i18n, ...others }) => {
     return {
       path: label,
-      name: `${language}-${name}`,
-      meta: { ...others, name, label },
-      props: { name: toKebabCase(label), language },
-      // component: () => import(`../guides/${label}/docs.vue`)
+      name: `${language}-${label}`,
+      meta: { ...others, label, i18n },
+      props: { name: label, language },
       component: () => import('../common/guide-doc.vue')
     }
   })
@@ -83,7 +79,6 @@ function useComponentsRouter(language: string): RouteRecordRaw[] {
             isComponent: true
           },
           props: { language, name: lowerName },
-          // component: () => import(`../demos/${lowerName}/docs.vue`)
           component: () => import('../common/component-doc.vue')
         }
       })

@@ -25,6 +25,8 @@ export function ussTocAnchor(level: 2 | 3 = 2, wrapper = ref<HTMLElement | null>
         id = el.querySelector('.demo__description .anchor')?.textContent?.trim() ?? ''
         id = id.replace(/#$/, '')
         name = id
+        id = id.toLocaleLowerCase().replace(/\s+/g, '-')
+
         el.setAttribute('id', id)
       } else {
         id = el.getAttribute('id') ?? ''
