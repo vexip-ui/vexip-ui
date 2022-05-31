@@ -460,7 +460,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import ThemeSwitch from './theme-switch.vue'
+import ThemeSwitch from '../docs/common/theme-switch.vue'
 import { Message, Notice, Confirm } from '../components'
 import { defineFilter } from '../components/table'
 import { ArrowUpFromBracket } from '@vexip-ui/icons'

@@ -2,7 +2,12 @@ import '../style/index.scss'
 import '../style/dark/preset.scss'
 
 import { createApp } from 'vue'
-// import { install } from '../components'
+
+const isDark = localStorage.getItem('vexip-docs-theme-prefer-dark')
+
+if (isDark === 'true' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.classList.add('dark')
+}
 
 if (__THEME__) {
   import('./theme.vue').then(m => {
