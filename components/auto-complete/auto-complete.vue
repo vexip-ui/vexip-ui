@@ -134,7 +134,7 @@ const props = useConfiguredProps('autoComplete', {
   },
   dropDisabled: {
     type: Boolean,
-    default: true
+    default: false
   },
   placement: {
     type: String as PropType<Placement>,
