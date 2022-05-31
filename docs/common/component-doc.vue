@@ -3,7 +3,10 @@
     <ResizeObserver @resize="refreshScroll?.()">
       <div :style="{ visibility: allLoaded ? undefined : 'hidden' }">
         <h1 :class="`${prefix}__title`">
-          {{ getMetaName(language) }}
+          {{ $t(`components.${$route.meta.name}`) }}
+          <span v-if="language !== 'en-US'" :class="`${prefix}__sub-name`">
+            {{ $route.meta.name }}
+          </span>
           <Tag v-if="$route.meta.since" type="warning" style="margin-left: 8px;">
             {{ `Since v${$route.meta.since}` }}
           </Tag>
@@ -64,7 +67,6 @@ import {
   watch,
   watchEffect,
   inject
-  // nextTick
 } from 'vue'
 import { Spinner } from '@vexip-ui/icons'
 import { noop } from '@vexip-ui/utils'
@@ -174,10 +176,6 @@ watchEffect(async () => {
     top: 1em;
     right: 1em;
     color: var(--vxp-content-color-secondary);
-  }
-
-  &__desc p {
-    margin: 4px 0;
   }
 
   .api,

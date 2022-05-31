@@ -1,19 +1,21 @@
 import { defineI18n } from './helper'
 
-export default defineI18n({
+export const enUS = defineI18n({
   common: {
     slogan: 'Prue composition Api, Full TypeScript, Performance should be good',
     getStarted: 'Get Started',
     guides: 'Guides',
     components: 'Components',
     playground: 'Playground',
-    searchComponent: 'Search component in Vexip UI'
+    searchComponent: 'Search component in Vexip UI',
+    copyCodes: 'Copy Codes',
+    showCodes: 'Show Codes',
+    hideCodes: 'Hide Codes'
   },
   alert: {
     info: 'Tip',
     warning: 'Attention',
-    danger: 'Warning',
-    error: 'Warning'
+    danger: 'Warning'
   },
   guides: {
     introduction: 'Introduction',

@@ -10,7 +10,7 @@
           </Tag>
         </a>
       </Column>
-      <Column class="navigation" flex="auto">
+      <Column class="navigation" style="flex: 1 1 calc(100% - 300px);">
         <div class="search">
           <AutoComplete
             v-model:value="currentSearch"
@@ -50,7 +50,7 @@
                 v-for="option in langOptions"
                 :key="option.lang"
                 :name="option.name"
-                :selected="option.lang === globalState.language"
+                :selected="option.lang === language"
                 @select="changeLanguage(option.lang)"
               >
                 {{ option.name }}
@@ -70,28 +70,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, inject, nextTick } from 'vue'
+import { ref, computed, watchEffect, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import { MagnifyingGlass, GithubB, Language } from '@vexip-ui/icons'
 import { toKebabCase } from '@vexip-ui/utils'
 import ThemeSwitch from './theme-switch.vue'
 import { getComponentConfig } from '../router/components'
-import { getMetaName } from './meta-name'
 
-const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 const version = __VERSION__
 
-const searchOptions: string[] = []
+const searchOptions = ref<string[]>([])
 const langOptions = [
   { lang: 'zh-CN', name: '中文' },
   { lang: 'en-US', name: 'English' }
 ]
-
-getComponentConfig().forEach(group => {
-  searchOptions.push(...group.components.map(({ name, cname }) => `${name} ${cname}`))
-})
-
 const currentMenu = ref('')
 const placeholder = ref('')
 const currentSearch = ref('')
@@ -100,31 +93,41 @@ const i18n = useI18n({ useScope: 'global' })
 const router = useRouter()
 const route = useRoute()
 
-i18n.locale.value = globalState.language
-
 const menus = [
   { label: 'guides' },
   { label: 'components' },
   { label: 'playground', to: 'https://playground.vexipui.com' }
 ]
 
+const language = computed(() => i18n.locale.value as string)
+
 watchEffect(() => {
-  const matchedMenu = menus.find(menu => menu.label && route.path.startsWith(`/${globalState.language}/${menu.label}`))
+  const options: string[] = []
+
+  getComponentConfig().forEach(group => {
+    options.push(...group.components.map(({ name }) => formatComponentName(name)))
+  })
+
+  searchOptions.value = options
+})
+
+watchEffect(() => {
+  const matchedMenu = menus.find(menu => menu.label && route.path.startsWith(`/${language.value}/${menu.label}`))
 
   placeholder.value = route.meta?.isComponent
-    ? getMetaName(globalState.language, route.meta)
+    ? formatComponentName(route.meta.name as string)
     : i18n.t('common.searchComponent')
   currentMenu.value = matchedMenu ? matchedMenu.label! : ''
 })
 
 function selectMenu(label: string) {
-  if (!route.path.startsWith(`/${globalState.language}/${label}`)) {
-    router.push(`/${globalState.language}/${label}`)
+  if (!route.path.startsWith(`/${language.value}/${label}`)) {
+    router.push(`/${language.value}/${label}`)
   }
 }
 
 function toHomepage() {
-  router.push(`/${globalState.language}`)
+  router.push(`/${language.value}`)
 }
 
 function openPage(url: string) {
@@ -133,7 +136,7 @@ function openPage(url: string) {
 
 function toComponentDoc(fullName: string) {
   if (route.meta?.component !== fullName) {
-    router.push(`/${globalState.language}/components/${toKebabCase(fullName.split(' ')[0])}`)
+    router.push(`/${language.value}/components/${toKebabCase(fullName.split(' ').at(-1))}`)
   }
 
   nextTick(() => {
@@ -141,11 +144,14 @@ function toComponentDoc(fullName: string) {
   })
 }
 
-function changeLanguage(language: string) {
-  if (language !== globalState.language) {
-    router.push(route.path.replace(globalState.language, language))
-    i18n.locale.value = language
+function changeLanguage(lang: string) {
+  if (lang !== language.value) {
+    router.push(route.path.replace(language.value, lang))
   }
+}
+
+function formatComponentName(name: string) {
+  return i18n.t(`components.${name}`) + (language.value !== 'en-US' ? ` ${name}` : '')
 }
 </script>
 
@@ -153,6 +159,7 @@ function changeLanguage(language: string) {
 .header {
   height: 65px;
   border-bottom: var(--vxp-border-light-2);
+  transition: var(--vxp-transition-border);
 
   .vxp-column {
     display: flex;

@@ -78,7 +78,7 @@ export function getComponentConfig(): ComponentGroup[] {
       ]
     },
     {
-      name: 'fffect',
+      name: 'effect',
       components: [
         { name: 'Alert' },
         { name: 'Confirm' },

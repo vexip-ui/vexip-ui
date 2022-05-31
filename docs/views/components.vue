@@ -25,7 +25,10 @@
               :label="toKebabCase(component.name)"
               :data-name="toKebabCase(component.name)"
             >
-              {{ getComponentName(component) }}
+              {{ $t(`components.${component.name}`) }}
+              <span v-if="language !== 'en-US'" :class="`${prefix}__sub-name`">
+                {{ component.name }}
+              </span>
               <Tag
                 v-if="isNewComponent(component)"
                 :class="`${prefix}__tag`"
@@ -39,7 +42,7 @@
         </Menu>
       </Scroll>
     </Column>
-    <Column tag="section" :class="`${prefix}__content`" flex="auto">
+    <Column tag="section" :class="`${prefix}__content`" style="flex: 1 1 calc(100% - 300px);">
       <NativeScroll
         ref="scroll"
         appear
@@ -71,8 +74,6 @@ import { getComponentConfig } from '../router/components'
 
 import type { Row, NativeScroll, Scroll } from 'vexip-ui'
 import type { ComponentConfig } from '../router/components'
-
-// const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
 const prefix = 'components'
 
@@ -135,11 +136,6 @@ function scrollToMenuItem(label: string) {
   }
 }
 
-function getComponentName(config: ComponentConfig) {
-  return i18n.t(`components.${config.name}`) +
-    (language.value !== 'en-US' ? ` ${i18n.t(`components.${config.name}`, 'en-US')}` : '')
-}
-
 function isNewComponent(config: ComponentConfig) {
   return config.since && config.since.startsWith(minorVersion)
 }
@@ -166,6 +162,17 @@ function isNewComponent(config: ComponentConfig) {
   &__tag {
     font-size: 10px;
     transform: scale(0.8);
+  }
+
+  &__sub-name {
+    margin-left: 8px;
+    color: var(--vxp-content-color-third);
+    transition: var(--vxp-transition-color);
+
+    .vxp-menu__label:hover &,
+    .vxp-menu__item--selected .vxp-menu__label & {
+      color: var(--vxp-menu-label-color-hover);
+    }
   }
 
   .toc-anchor {

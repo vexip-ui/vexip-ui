@@ -152,7 +152,8 @@ module.exports = {
       }
     ],
     'vue/comment-directive': 'off',
-    'vue/multi-word-component-names': 'off'
+    'vue/multi-word-component-names': 'off',
+    'vue/no-setup-props-destructure': 'off'
   },
   overrides: [
     {

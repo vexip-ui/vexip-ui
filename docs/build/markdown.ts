@@ -64,7 +64,6 @@ function useContainer(md: MarkdownIt) {
     .use(...createContainer('info'))
     .use(...createContainer('warning'))
     .use(...createContainer('danger'))
-    .use(...createContainer('error'))
     .use(container, 'v-pre', {
       render(tokens: Token[], index: number) {
         return tokens[index].nesting === 1
@@ -81,11 +80,12 @@ function createContainer(type: string) {
     {
       render(tokens: Token[], index: number) {
         const token = tokens[index]
-        // const info = token.info.trim().slice(className.length).trim()
 
         if (token.nesting === 1) {
-          // return `<div class="vxp-alert vxp-alert--${type}"><p class="">${defaultTitle}</p>\n`
-          return `<Alert type="${type}" icon :title="$t('alert.${type}')">\n`
+          const title = token.info.replace(type, '').trim()
+          const titleProp = title ? `title="${title}"` : `:title="$t('alert.${type}')"`
+
+          return `<Alert type="${type}" icon ${titleProp}>\n`
         }
 
         return '</Alert>\n'

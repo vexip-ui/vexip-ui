@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { Loading } from 'vexip-ui'
 import { toKebabCase } from '@vexip-ui/utils'
-import { langOptions, i18n } from '../i18n'
+import { defaultLanguage, langOptions } from '../i18n'
 import { getGuideConfig } from './guides'
 import { getComponentConfig } from './components'
 
@@ -10,7 +10,7 @@ import type { RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: `/${i18n.global.locale || i18n.global.fallbackLocale}`
+    redirect: `/${defaultLanguage || __ROLLBACK_LANG__}`
   },
   ...langOptions.map(useLanguageRouter)
   // {

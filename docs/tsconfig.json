@@ -38,6 +38,7 @@
     "builds",
     "demos",
     "guides",
+    "i18n",
     "router",
     "views",
     "global.d.ts"

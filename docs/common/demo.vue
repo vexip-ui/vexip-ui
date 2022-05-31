@@ -7,16 +7,6 @@
       <div :class="`${prefix}__description`">
         <slot name="desc"></slot>
       </div>
-      <!-- <Divider :class="`${prefix}__divider`">
-        <span :class="`${prefix}__title`">
-          <slot name="title">
-            {{ title }}
-          </slot>
-        </span>
-      </Divider>
-      <div :class="`${prefix}__description`">
-        <slot name="desc"></slot>
-      </div> -->
     </Column>
     <Column :class="`${prefix}__actions`">
       <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
@@ -24,7 +14,7 @@
           <CopyR></CopyR>
         </Icon>
         <template #tip>
-          复制代码
+          {{ $t('commom.copyCodes') }}
         </template>
       </Tooltip>
       <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
@@ -32,7 +22,7 @@
           <Code></Code>
         </Icon>
         <template #tip>
-          {{ codeExpanded ? '收起代码' : '展开代码' }}
+          {{ codeExpanded ? $t('common.hideCodes') : $t('common.showCodes') }}
         </template>
       </Tooltip>
     </Column>
@@ -43,7 +33,9 @@
         </slot>
         <div :class="`${prefix}__reduce`" @click="expandCode">
           <Icon><ChevronUp></ChevronUp></Icon>
-          <span :class="`${prefix}__tip`"> 收起代码 </span>
+          <span :class="`${prefix}__tip`">
+            {{ $t('common.hideCodes') }}
+          </span>
         </div>
       </Column>
     </CollapseTransition>

@@ -1,19 +1,21 @@
 import { defineI18n } from './helper'
 
-export default defineI18n({
+export const zhCN = defineI18n({
   common: {
     slogan: '纯组合式 Api，全量的 TypeScript，性能应该还不错',
     getStarted: '开始使用',
     guides: '指南',
     components: '组件',
     playground: '游乐场',
-    searchComponent: '在 Vexip UI 中搜索组件'
+    searchComponent: '在 Vexip UI 中搜索组件',
+    copyCodes: '复制代码',
+    showCodes: '展开代码',
+    hideCodes: '收起代码'
   },
   alert: {
     info: '提示',
     warning: '注意',
-    danger: '警告',
-    error: '警告'
+    danger: '警告'
   },
   guides: {
     introduction: '介绍',

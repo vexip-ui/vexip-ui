@@ -67,7 +67,7 @@ watch(isMounted, value => {
   }
 
   .vxp-alert {
-    margin-top: 1em;
+    margin: 2em 0;
 
     p {
       margin: 0;

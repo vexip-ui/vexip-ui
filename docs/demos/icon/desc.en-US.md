@@ -12,4 +12,4 @@ Icon component name is transformed according to certain rules from the original 
 
 - Normally, icon is default from solid type, it is changed to pascal-case from kebab-case (eg. `angle-down` -> `AngleDown`)
 - If you want to use the `regular` or `brands` types, you can add a suffix `R` or `B` in the end of component name (eg. `rugular/bell` -> `BellR`, `brands/github` -> `GithubB`)
-- Some icons is starts with number, you need to add a prefix `I` in the front of component name (eg. `7` -> `I7`, `brands/500px` -> `I500pxB`)
+- Some icons start with number, you need to add a prefix `I` in the front of component name (eg. `7` -> `I7`, `brands/500px` -> `I500pxB`)

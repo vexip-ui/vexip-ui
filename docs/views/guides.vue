@@ -14,7 +14,7 @@
         </Menu>
       </Scroll>
     </Column>
-    <Column tag="section" :class="`${prefix}__content`" flex="auto">
+    <Column tag="section" :class="`${prefix}__content`" style="flex: 1 1 calc(100% - 300px);">
       <NativeScroll
         ref="scroll"
         appear

@@ -1,17 +1,21 @@
-export interface I18nConfig {
+import type { LocaleMessageDictionary, VueMessageType } from 'vue-i18n'
+
+export interface I18nConfig extends LocaleMessageDictionary<VueMessageType> {
   common: {
     slogan: string,
     getStarted: string,
     guides: string,
     components: string,
     playground: string,
-    searchComponent: string
+    searchComponent: string,
+    copyCodes: string,
+    showCodes: string,
+    hideCodes: string
   },
   alert: {
     info: string,
     warning: string,
-    danger: string,
-    error: string
+    danger: string
   },
   guides: {
     introduction: string,
