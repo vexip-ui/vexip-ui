@@ -30,7 +30,6 @@ import { randomString } from '@vexip-ui/utils'
 import { ChevronRight } from '@vexip-ui/icons'
 import { COLLAPSE_STATE } from './symbol'
 
-import type { PropType, CSSProperties } from 'vue'
 import type { CollapseArrowType } from './symbol'
 
 const props = useConfiguredProps('collapsePane', {
@@ -47,7 +46,7 @@ const props = useConfiguredProps('collapsePane', {
     default: false
   },
   contentStyle: {
-    type: Object as PropType<CSSProperties>,
+    type: Object,
     default: null
   },
   expanded: {

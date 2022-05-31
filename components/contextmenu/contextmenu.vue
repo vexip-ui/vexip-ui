@@ -69,8 +69,8 @@ export default defineComponent({
     const onCancel = ref<(() => void) | null>(null)
 
     function openContextmenu(options: MenuOptions) {
-      position.x = options.clientX
-      position.y = options.clientY
+      position.x = options.clientX || 0
+      position.y = options.clientY || 0
       configs.value = options.configs
       appear.value = options.appear ?? false
 

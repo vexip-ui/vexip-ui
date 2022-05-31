@@ -235,10 +235,6 @@ const props = useConfiguredProps('datePicker', {
     type: String,
     default: 'vxp-drop'
   },
-  // okText: {
-  //   type: String,
-  //   default: '确认'
-  // },
   confirmText: {
     type: String,
     default: null
