@@ -1,7 +1,7 @@
 <template>
   <div :class="`${prefix}__item`">
     <div :class="`${prefix}__label`" @click="handleClick">
-      <slot></slot>
+      <slot>{{ label }}</slot>
     </div>
     <div :class="`${prefix}__separator`" @click="handleSeparatorClick">
       <slot name="separator">

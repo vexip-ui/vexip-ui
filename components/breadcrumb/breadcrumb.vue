@@ -1,6 +1,10 @@
 <template>
   <div :class="className">
-    <slot></slot>
+    <slot>
+      <BreadcrumbItem v-for="label in options" :key="label" :label="label">
+        {{ label }}
+      </BreadcrumbItem>
+    </slot>
   </div>
 </template>
 
@@ -8,8 +12,10 @@
 import { defineComponent, reactive, computed, provide, watch, toRef } from 'vue'
 import { useConfiguredProps } from '@vexip-ui/config'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
+import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { BREADCRUMB_STATE } from './symbol'
 
+import type { PropType } from 'vue'
 import type { ItemState, BreadcrumbState } from './symbol'
 
 const props = useConfiguredProps('breadcrumb', {
@@ -22,13 +28,16 @@ const props = useConfiguredProps('breadcrumb', {
     default: false
   },
   options: {
-    type: Array,
+    type: Array as PropType<string[]>,
     default: () => []
   }
 })
 
 export default defineComponent({
   name: 'Breadcrumb',
+  components: {
+    BreadcrumbItem
+  },
   props,
   emits: ['select', 'separator-click'],
   setup(props, { slots, emit }) {
