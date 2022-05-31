@@ -252,7 +252,6 @@ export default defineComponent({
     Icon,
     Option,
     Portal,
-    // Scroll,
     Tag,
     VirtualList,
     Check,
@@ -293,14 +292,19 @@ export default defineComponent({
           option = { value: option }
         }
 
-        if (!option.value) return
+        if (isNull(option.value)) return
+
+        if (!option.label) {
+          option.label = String(option.value)
+        }
 
         const oldState = oldMap.get(option.value)
+        const rawOption = option as OptionState
 
         if (oldState) {
-          map.set(option.value, { ...option, hidden: oldState.hidden, hitting: oldState.hitting })
+          map.set(option.value, { ...rawOption, hidden: oldState.hidden, hitting: oldState.hitting })
         } else {
-          map.set(option.value, { ...option, hidden: false, hitting: false })
+          map.set(option.value, { ...rawOption, hidden: false, hitting: false })
         }
       })
 
