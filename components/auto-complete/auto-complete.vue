@@ -132,7 +132,7 @@ const props = useConfiguredProps('autoComplete', {
     type: String,
     default: 'vxp-drop'
   },
-  canDrop: {
+  dropDisabled: {
     type: Boolean,
     default: true
   },
@@ -316,7 +316,7 @@ export default defineComponent({
     function handleInput(event: string | Event) {
       const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
 
-      visible.value = props.canDrop
+      visible.value = !props.dropDisabled
       currentValue.value = value
       changed = true
 
@@ -373,7 +373,7 @@ export default defineComponent({
     }
 
     function testOptionCanDrop() {
-      if ((!slots.default && !filteredOptions.value.length) || !props.canDrop) {
+      if ((!slots.default && !filteredOptions.value.length) || props.dropDisabled) {
         visible.value = false
       }
     }
