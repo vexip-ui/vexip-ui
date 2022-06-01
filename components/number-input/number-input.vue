@@ -7,7 +7,7 @@
       :value="focused ? preciseNumber : formattedValue"
       :style="inputStyle"
       :autofocus="autofocus"
-      :autocomplete="autocomplete"
+      :autocomplete="autocomplete ? 'on' : 'off'"
       :spellcheck="spellcheck"
       :disabled="disabled"
       :readonly="readonly"
@@ -130,8 +130,8 @@ const props = useConfiguredProps('numberInput', {
     default: false
   },
   autocomplete: {
-    type: String,
-    default: 'off'
+    type: Boolean,
+    default: false
   },
   precision: {
     type: Number,
