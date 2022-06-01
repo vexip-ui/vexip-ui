@@ -11,7 +11,8 @@
       ref="content"
       :class="wrapperClass"
       :style="scrollStyle"
-      @scroll="handleScroll"
+      @scroll.exact="handleScroll($event, 'vertical')"
+      @scroll.shift="handleScroll($event, 'horizontal')"
     >
       <slot></slot>
     </div>
@@ -55,7 +56,7 @@ import { useConfiguredProps } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
-import type { PropType, CSSProperties } from 'vue'
+import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode, ClassType } from './symbol'
 
@@ -68,7 +69,7 @@ const props = useConfiguredProps('nativeScroll', {
     default: null
   },
   scrollStyle: {
-    type: Object as PropType<CSSProperties>,
+    type: Object,
     default: () => ({})
   },
   mode: {
@@ -439,7 +440,7 @@ export default defineComponent({
       }
     }
 
-    function handleScroll(event: Event) {
+    function handleScroll(event: Event, type: 'vertical' | 'horizontal') {
       event.stopPropagation()
       event.preventDefault()
 
@@ -460,7 +461,7 @@ export default defineComponent({
 
       computePercent()
       syncBarScroll()
-      emitScrollEvent()
+      emitScrollEvent(type)
     }
 
     function prepareScroll() {
@@ -489,16 +490,16 @@ export default defineComponent({
       emitScrollEvent('vertical')
     }
 
-    function emitScrollEvent(barType?: 'vertical' | 'horizontal') {
+    function emitScrollEvent(type?: 'vertical' | 'horizontal') {
       emit('scroll', {
-        barType,
+        type,
         clientX: currentScroll.x,
         clientY: currentScroll.y,
         percentX: percentX.value,
         percentY: percentY.value
       })
       emitter.emit('scroll', {
-        barType,
+        type,
         clientX: currentScroll.x,
         clientY: currentScroll.y,
         percentX: percentX.value,
