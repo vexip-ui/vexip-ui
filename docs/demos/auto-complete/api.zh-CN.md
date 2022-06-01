@@ -14,9 +14,10 @@
 | state        | `'default' \| 'success' \| 'error' \| 'warning'`            | 输入框的状态                            | `'default'` |
 | disabled     | `boolean`           | 设置是否禁用                                                                                   | `false`     |
 | drop-disabled     | `boolean`           | 是否允许下拉列表显示                                                                           | `false`      |
-| placement    | `string`            | 选项列表出现的位置，可选值同 Popper.js                                                     | `'bottom'`  |
+| placement    | `Placement`            | 选项列表出现的位置，可选值同 Popper.js                                                     | `'bottom'`  |
 | clearable    | `boolean`           | 设置是否可以清空值                                                                         | `false`     |
 | ignore-case  | `boolean`           | 在使用内置的过滤时，设置是否忽略大小写                                                     | `false`     |
+| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 |
 
 ### AutoComplete 事件
 

@@ -10,11 +10,11 @@
     <Input
       placeholder="后置图标"
       style="width: 220px;"
-      :suffix="Search"
+      :suffix="MagnifyingGlass"
     ></Input>
   </div>
 </template>
 
 <script setup lang="ts">
-import { User, Search } from '@vexip-ui/icons'
+import { User, MagnifyingGlass } from '@vexip-ui/icons'
 </script>

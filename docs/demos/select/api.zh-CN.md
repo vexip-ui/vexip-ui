@@ -9,20 +9,21 @@
 | disabled        | `boolean`                   | 设置是否禁用选择器                                                  | `false`      |
 | outside-close   | `boolean`                   | 设置是否可以通过点击组件外部进行关闭                                | `false`      |
 | placeholder     | `string`                    | 同原生的 palceholder                                                | `''` |
-| prefix          | `object`                    | 前缀图标的名称，使用前缀插槽时无效                                  | `''`         |
+| prefix          | `Record<string, any>`                    | 前缀图标的名称，使用前缀插槽时无效                                  | `''`         |
 | prefix-color    | `string`                    | 前缀内容的颜色，会影响前缀插槽                                      | `''`         |
-| suffix          | `object`                    | 后缀图标的名称，使用后缀插槽时无效                                  | `''`         |
+| suffix          | `Record<string, any>`                    | 后缀图标的名称，使用后缀插槽时无效                                  | `''`         |
 | suffix-color    | `string`                    | 后缀内容的颜色，会影响后缀插槽                                      | `''`         |
 | value           | `string \| number \| (string \| number)[]` | 选择器的值，可以使用 v-model 双向绑定，多选模式时为数组             | `null`       |
 | clearable       | `boolean`                   | 设置是否可以清空值                                                  | `false`      |
 | max-list-height | Number                    | 设置选项列表的最大高度，超过高度后会出现滚动条                      | `300`        |
 | transition-name | `string`                    | 选项列表的过渡动画                                                  | `'vxp-drop'` |
-| placement       | `string`                    | 选项列表的出现位置，可选值同 Popper.js                              | `'bottom'`   |
-| transfer        | `boolean \| string`         | 设置选项列表的渲染位置，开启但未指定有效选择器时默认渲染至 body     | `false`      |
+| placement       | `Placement`                    | 选项列表的出现位置，可选值同 Popper.js                              | `'bottom'`   |
+| transfer        | `boolean \| string`         | 设置选项列表的渲染位置，设置为 `true` 时默认渲染至 `<body>`     | `false`      |
 | list-class      | `string \| Record<string, boolean>`          | 选项列表的自定义类名                                                | `null`       |
 | multiple        | `boolean`                   | 设置是否开启多选模式                                                | `false`      |
 | option-check    | `boolean`                   | 设置开启被选选项打勾功能                                            | `false`      |
 | empty-text      | `string`                    | 设置空选项时的提示语                                                | `locale.empty` |
+| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 |
 
 ### Select 事件
 

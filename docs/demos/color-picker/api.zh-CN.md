@@ -11,6 +11,7 @@
 | no-input      | `boolean` | 是否禁用 Input 输入颜色值                                                | `false`           |
 | shortcut      | `boolean` | 是否使用快捷选取颜色                                                     | `false`           |
 | shortcut-list | `string[]`   | 快捷选取颜色的候选列表                                                   | `defaultShotcuts` |
+| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 |
 
 ```js
 const defaultShotcuts = [

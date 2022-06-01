@@ -7,8 +7,8 @@
 | size             | `'small' \| 'default' \| 'large'`                            | 输入框的大小                                                   | `'default'`             |
 | state            | `'default' \| 'success' \| 'error' \| 'warning'`                            | 输入框的状态                                       | `'default'`             |
 | visible          | `boolean`                           | 设置日期选择窗口的初始打开状态，可以使用 v-model 双向绑定                                            | `false`                 |
-| placement        | `string`                            | 日期选择窗口的出现位置，可选值同 Popper.js                                                           | `'bottom'`              |
-| transfer         | `boolean \| string`                 | 设置日期选择窗口的渲染位置，开启但未指定有效选择器时默认渲染至 `body`                                  | `false`                 |
+| placement        | `Placement`                            | 日期选择窗口的出现位置，可选值同 Popper.js                                                           | `'bottom'`              |
+| transfer         | `boolean \| string`                 | 设置日期选择窗口的渲染位置，开启但未指定有效选择器时默认渲染至 `<body>`                                  | `false`                 |
 | format           | `string`                            | 在 `datetime` 类型时会根据是否具有 `Hms` 来控制时间选择列的显示隐藏                                    | `'yyyy-MM-dd HH:mm:ss'` |
 | filler           | `string`                            | 日期未选择时的填充符，长度固定为 1                                                                   | `'-'`                   |
 | no-filler        | `boolean`                           | 是否禁用初始填充，如果禁用，初始化后控件内会显示当前 `value`                                            | `false`                 |

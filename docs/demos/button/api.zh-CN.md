@@ -9,7 +9,7 @@
 | disabled     | `boolean` | 设置是否为禁用状态                         设置                                                          | `false`     |
 | loading      | `boolean` | 设置是否为加载状态                         设置                                                          | `false`     |
 | circle       | `boolean` | 设置是否为圆形按钮                                                                                   | `false`     |
-| icon         | `object`  | 按钮的辅助图标，加载状态时会切换为加载图标                                                       | `''`        |
+| icon         | `Record<string, any>`  | 按钮的辅助图标，加载状态时会切换为加载图标                                                       | `''`        |
 | loading-icon | `string`  | 加载状态时显示的图标，具有脉冲效果                                                               | `'spinner'` |
 | loading-spin | `boolean` | 开启后，加载中图标原有的脉冲效果将变位旋转效果                                                   | `false`     |
 | button-type  | `string`  | 设置原生 button 的 type 属性                                                                     | `'button'`  |

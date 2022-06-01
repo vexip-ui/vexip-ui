@@ -62,19 +62,19 @@ createApp().use(myNotice, { property: '$myNotice' })
 
 | 名称       | 类型                         | 说明                                                                                     | 默认值 |
 | ---------- | ---------------------------- | ---------------------------------------------------------------------------------------- | ------ |
-| type       | String                       | 内置的类型，可选值为 `info`、`success`、`warning`、`error`                               | -      |
-| title      | String                       | 提示的标题                                                                               | -      |
-| content    | String                       | 提示的内容                                                                               | -      |
-| key        | Number \| String             | 提示的唯一索引，不设置时将使用内置的索引                                                 | -      |
-| parseHtml  | Boolean                      | 是否解析 html，开启则将 title 和 content 内容作为 html 解析                              | false  |
-| className  | String \| Object             | 提示的自定义类名                                                                         | null   |
-| style      | Object                       | 提示的内联样式                                                                           | null   |
-| duration   | Number                       | 提示的持续毫秒，设置为小于 500 时则不会自动关闭                                          | 4000   |
-| background | Boolean \| String            | 是否显示背景颜色，传入有效颜色值时可以自定义颜色                                         | false  |
-| color      | Boolean \| String            | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色                                       | false  |
-| titleColor | String                       | 单独设置提示标题字体的颜色                                                               | -      |
-| closable   | Boolean                      | 是否有关闭按钮进行关闭                                                                   | false  |
-| icon       | String \| Object \| Function | 提示前缀的图标，传入对象时每个属性会对应 Icon 组件的属性，传入函数时使用 render 函数渲染 | -      |
-| iconColor  | String                       | 前缀图标的颜色，设置后会覆盖 type 的默认设置                                             | -      |
-| renderer   | Function                     | 使用 Vue 的 render 函数渲染自定义内容                                                    | null   |
-| marker     | Boolean                      | 是否显示侧边 marker                                                                      | true   |
+| type       | `'info' \| 'success' \| 'warning' \| 'error'`                       | 内置的类型                               | `''`      |
+| title      | `string`                       | 提示的标题                                                                               | `''`      |
+| content    | `string`                       | 提示的内容                                                                               | `''`      |
+| key        | `number \| string`             | 提示的唯一索引，不设置时将使用内置的索引                                                 | `''`      |
+| parseHtml  | `boolean`                      | 是否解析 html，开启则将 `title` 和 `content` 内容作为 html 解析                              | `false`  |
+| className  | `string \| Record<string, boolean>`             | 提示的自定义类名                                                                         | `null`   |
+| style      | `Record<string, any>`                       | 提示的内联样式                                                                           | `null`   |
+| duration   | `number`                       | 提示的持续毫秒，设置为小于 500 时则不会自动关闭                                          | `4000`   |
+| background | `boolean \| string`            | 是否显示背景颜色，传入有效颜色值时可以自定义颜色                                         | `false`  |
+| color      | `boolean \| string`            | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色                                       | `false`  |
+| titleColor | `string`                       | 单独设置提示标题字体的颜色                                                               | `''`      |
+| closable   | `boolean`                      | 是否有关闭按钮进行关闭                                                                   | `false`  |
+| icon       | `Record<string, any> \| (() => any)` | 提示前缀的图标，传入函数时作为 render 函数渲染 | `null`      |
+| iconColor  | `string`                       | 前缀图标的颜色，设置后会覆盖 `type` 的默认设置                                             | `''`      |
+| renderer   | `() => any`                     | 使用 Vue 的 render 函数渲染自定义内容                                                    | `null`   |
+| marker     | `boolean`                      | 是否显示侧边 marker                                                                      | `false`   |

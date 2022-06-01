@@ -6,6 +6,7 @@
 | active    | Number  | 当前激活元素的索引，可以使用 v-model 双向绑定 | 0            |
 | candidate | Number  | 设置滚轮上下的候选个数，可选范围为 0 ~ 3      | 2            |
 | arrow     | Boolean | 设置是否使用滚轮的箭头指示器                  | false        |
+| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 |
 
 ### Wheel 事件
 

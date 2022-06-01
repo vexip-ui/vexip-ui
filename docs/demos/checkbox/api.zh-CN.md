@@ -11,6 +11,7 @@
 | border      | `boolean`          | 是否设置外边框                                         | `false`     |
 | control     | `boolean`          | 设置为控制性质，一般配合 CheckboxGroup 使用                    | `false`     |
 | partial     | `boolean`          | 是否为部分选择状态，control 为 `true` 时有效           | `false`     |
+| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 |
 
 ### Checkbox 事件
 
@@ -29,6 +30,7 @@
 | disabled | `boolean` | 组内复选框是否为禁用状态，会覆盖复选框单独设置的 `disabled`                           | `false`     |
 | border   | `boolean` | 组内复选框是否设置外边框                                                            | `false`     |
 | options  | `(string \| { value: string \| number, label?: string })[]`   | 设置选子复选框的选项，一般用于简单快速生成复选框组，使用插槽后失效                  | `[]`        |
+| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 |
 
 ### CheckboxGroup 事件
 

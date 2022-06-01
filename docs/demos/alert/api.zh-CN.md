@@ -5,7 +5,7 @@
 | type          | `'info' \| 'success' \| 'warning' \| 'error'`          | 警告提示的类型 | `'info'` |
 | title         | `string`            | 设置警告提示标题，使用同名插槽后失效                           | `''`     |
 | colorful-text | `boolean`           | 设置字体是否具有和类型一致的颜色                               | `false`  |
-| icon          | `boolean \| object` | 设置是否显示图标，当传入字符串时将作为图标名进行显示           | `false`  |
+| icon          | `boolean \| Record<string, any>` | 设置是否显示图标，可以直接传入图标进行显示           | `false`  |
 | closable      | `boolean`           | 设置警告提示是否可以被关闭                                     | `false`  |
 | icon-color    | `string`            | 设置警告提示图标的颜色                                         | `''`     |
 | no-border     | `boolean`           | 设置是否禁用警告提示的边框                                     | `false`  |

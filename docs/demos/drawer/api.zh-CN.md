@@ -12,7 +12,7 @@
 | mask-close   | `boolean`           | 设置是否可以通关点击遮罩层关闭抽屉                                                              | `true`    |
 | drawer-class | `string \| Record<string, boolean>`  | 定义抽屉容器的类名                                                                              | `null`    |
 | hide-mask    | `boolean`           | 设置是否隐藏遮罩层                                                                              | `false`   |
-| transfer     | `boolean \| string` | 设置抽屉的渲染位置，开启但未指定有效选择器时默认渲染至 body                                     | `false`   |
+| transfer     | `boolean \| string` | 设置抽屉的渲染位置，设置为 `true` 时默认渲染至 `<body>`                                     | `false`   |
 | on-before-close | `() => any`          | 设置抽屉的关闭前回调，支持异步函数和 Promise，返回值为 `false` 会阻止关闭                         | `null`    |
 | resizable    | `boolean`           | 设置抽屉是否可以改变大小，当为左右抽屉时可以改变宽度，为上下抽屉时可以改变高度                  | `false`   |
 
@@ -25,8 +25,8 @@
 | show         | 当抽屉打开后，过渡效果结束后触发，无返回值             | -                 |
 | hide         | 当抽屉关闭后，过渡效果结束后触发，无返回值             | -                 |
 | resize-start | 当抽屉将要开始调整大小时触发，无返回值                 | -                 |
-| resize-move  | 当抽屉正在调整大小时触发，返回一个包含抽屉宽高的对象   | `(width: number, height: number)` |
-| resize-end   | 当抽屉结束调整大小时触发，无返回值                     | -                 |
+| resize-move  | 当抽屉正在调整大小时触发，返回一个包含抽屉宽高的对象   | `(rect: { width: number, height: number })` |
+| resize-end   | 当抽屉结束调整大小时触发，无返回值                     | `(rect: { width: number, height: number })`                 |
 
 ### Drawer 插槽
 

@@ -1,7 +1,7 @@
 [
   "basis",
-  "full",
+  "vertical",
   "lazy",
-  "nesting",
-  "vertical"
+  "full",
+  "nesting"
 ]

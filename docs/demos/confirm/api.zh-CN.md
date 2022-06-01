@@ -8,7 +8,7 @@
 | confirmType   | `'default' \| 'primary' \| 'info' \| 'success' \| 'warning' \| 'error'`                       | 确认按钮的类型                      | `'primary'` |
 | confirmText   | `string`                       | 确认按钮的内容                                                                         | `locale.confirm`    |
 | cancelText    | `string`                       | 取消按钮的内容                                                                         | `locale.cancel`    |
-| icon          | `object \| (() => any)` | 确认框的图标，传入函数时作为 render 函数渲染 | `null`         |
+| icon          | `Record<string, any> \| (() => any)` | 确认框的图标，传入函数时作为 render 函数渲染 | `null`         |
 | iconColor     | `string`                       | 确认框的图标的颜色                                                                     | `''`         |
 | onBeforeConfirm | `() => unknown`                     | 设置确认框的确认前回调，支持异步函数和 `Promise`，返回值为 `false` 会阻止关闭              | `null`      |
 | renderer      | `() => any`                     | 使用 render 函数渲染自定义渲染                                                  | `null`      |

@@ -2,7 +2,7 @@
 
 | Name  | Type             | Description                                                        | Default |
 | ----- | ---------------- | ----------------------------------------------------------- | ------ |
-| icon  | `object`           | Set svg vue component       | `null`   |
+| icon  | `Record<string, any>`           | Set svg vue component       | `null`   |
 | scale | `number` | Used to adjust icon size                                            | `1`      |
 | spin  | `boolean`          | Set whether the icon is spin                                        | `false`  |
 | pulse | `boolean`          | Set whether the icon has a pulse effect                                    | `false`  |
