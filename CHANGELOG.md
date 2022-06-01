@@ -1,3 +1,12 @@
+# [2.0.0-beta.2](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-06-01)
+
+
+### Bug Fixes
+
+* missing global types.d.ts ([1a00515](https://github.com/qmhc/vexip-ui/commit/1a0051584ad7c1954b69484f513d17f97289ae0a))
+
+
+
 # [2.0.0-beta.1](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2022-06-01)
 
 
