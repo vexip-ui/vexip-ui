@@ -1,11 +1,8 @@
 <template>
   <div :class="className">
     <slot>
-      <template v-for="(item, index) in options" :key="index">
-        <Radio v-if="isObject(item)" :label="item.value">
-          {{ item.label || item.value }}
-        </Radio>
-        <Radio v-else :label="item">
+      <template v-for="item in options" :key="item">
+        <Radio :label="item">
           {{ item }}
         </Radio>
       </template>
@@ -22,13 +19,6 @@ import { noop, isObject, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-
-type RawOption =
-  | string
-  | {
-      value: string | number,
-      label?: string
-    }
 
 const props = useConfiguredProps('radioGroup', {
   size: createSizeProp(),
@@ -54,7 +44,7 @@ const props = useConfiguredProps('radioGroup', {
     default: false
   },
   options: {
-    type: Array as PropType<RawOption[]>,
+    type: Array as PropType<(string | number)[]>,
     default: () => []
   },
   disableValidate: {
