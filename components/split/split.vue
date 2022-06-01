@@ -4,13 +4,13 @@
       :class="[`${prefix}__pane`, `${prefix}__pane--${vertical ? 'top' : 'left'}`]"
       :style="leftPaneStyle"
     >
-      <slot :name="position[0]"></slot>
+      <slot name="left"></slot>
     </div>
     <div
       :class="[`${prefix}__pane`, `${prefix}__pane--${vertical ? 'bottom' : 'right'}`]"
       :style="rightPaneStyle"
     >
-      <slot :name="position[1]"></slot>
+      <slot name="right"></slot>
     </div>
     <div :class="`${prefix}__trigger`" :style="triggerStyle">
       <div :class="`${prefix}__handler`" @mousedown="handleTriggerDown">
@@ -188,7 +188,7 @@ export default defineComponent({
       setTransition()
 
       if (value) {
-        let type
+        let type: 'top' | 'right' | 'bottom' | 'left'
 
         if (props.vertical) {
           type = value < 0 ? 'top' : 'bottom'
