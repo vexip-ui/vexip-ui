@@ -49,8 +49,8 @@ export default defineComponent({
 
     const style = computed(() => {
       return {
-        width: width.value ? `${width.value}px` : null,
-        height: height.value ? `${height.value}px` : null
+        width: width.value ? `${width.value}px` : undefined,
+        height: height.value ? `${height.value}px` : undefined
       }
     })
 

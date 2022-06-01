@@ -343,7 +343,7 @@ export default defineComponent({
       }
     }
 
-    function getSourceFiles() {
+    function getSourceFiles(): SourceFile[] {
       return fileStates.value.map(file => file.source)
     }
 
