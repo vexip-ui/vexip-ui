@@ -20,11 +20,18 @@
         :appear="appear"
         :floor-select="floorSelect"
       >
-        <template #default="node">
-          <slot name="node" v-bind="node"></slot>
+        <template #default="{ data, node, toggleCheck, toggleExpand, toggleSelect }">
+          <slot
+            name="node"
+            :data="data"
+            :node="node"
+            :toggle-check="toggleCheck"
+            :toggle-expand="toggleExpand"
+            :toggle-select="toggleSelect"
+          ></slot>
         </template>
-        <template #label="data">
-          <slot name="label" v-bind="data"></slot>
+        <template #label="{ data, node }">
+          <slot name="label" :data="data" :node="node"></slot>
         </template>
       </TreeNode>
     </ul>
@@ -643,10 +650,10 @@ export default defineComponent({
       dragging.value = true
       indicatorShow.value = false
       dragState = null
-      emit('drag-end', nodeInstance.node.data)
+      emit('drag-end', nodeInstance.node.data, nodeInstance.node)
     }
 
-    function getCheckedNodes() {
+    function getCheckedNodes(): TreeNodeOptions[] {
       return flatData.value.filter(item => item.checked)
     }
 
@@ -654,7 +661,7 @@ export default defineComponent({
       return getCheckedNodes().map(node => node.data)
     }
 
-    function getSelectedNodes() {
+    function getSelectedNodes(): TreeNodeOptions[] {
       return flatData.value.filter(item => item.selected)
     }
 
@@ -662,15 +669,15 @@ export default defineComponent({
       return getSelectedNodes().map(node => node.data)
     }
 
-    function getExpandedNodes() {
+    function getExpandedNodes(): TreeNodeOptions[] {
       return flatData.value.filter(item => item.expanded)
     }
 
-    function getDisabledNodes() {
+    function getDisabledNodes(): TreeNodeOptions[] {
       return flatData.value.filter(item => item.disabled)
     }
 
-    function getParentNode(node: TreeNodeOptions) {
+    function getParentNode(node: TreeNodeOptions): TreeNodeOptions | null {
       if (node[props.parentKey]) {
         return nodeMaps.get(node[props.parentKey] as Key) ?? null
       }
@@ -678,7 +685,7 @@ export default defineComponent({
       return null
     }
 
-    function getSiblingNodes(node: TreeNodeOptions, includeSelf = false) {
+    function getSiblingNodes(node: TreeNodeOptions, includeSelf = false): TreeNodeOptions[] {
       const { idKey, parentKey } = props
       const parent = getParentNode(node)
 
@@ -696,7 +703,7 @@ export default defineComponent({
       })
     }
 
-    function getPrevSiblingNode(node: TreeNodeOptions) {
+    function getPrevSiblingNode(node: TreeNodeOptions): TreeNodeOptions | null {
       const { idKey, parentKey } = props
       const parent = getParentNode(node)
 
@@ -710,14 +717,14 @@ export default defineComponent({
         const index = children.findIndex(item => item[idKey] === currentId)
 
         if (index > 0) {
-          return children[index - 1].data
+          return children[index - 1]
         }
       }
 
       return null
     }
 
-    function getNextSiblingNode(node: TreeNodeOptions) {
+    function getNextSiblingNode(node: TreeNodeOptions): TreeNodeOptions | null {
       const { idKey, parentKey } = props
       const parent = getParentNode(node)
 
@@ -731,17 +738,17 @@ export default defineComponent({
         const index = children.findIndex(item => item[idKey] === currentId)
 
         if (!~index && index < children.length - 1) {
-          return children[index + 1].data
+          return children[index + 1]
         }
       }
 
       return null
     }
 
-    function getNodeByData<T extends Data>(data: T) {
+    function getNodeByData<T extends Data>(data: T): TreeNodeOptions | null {
       const idKey = props.idKey
 
-      return flatData.value.find(item => item.data[idKey] === data[idKey])
+      return flatData.value.find(item => item.data[idKey] === data[idKey]) ?? null
     }
 
     function expandNodeByData<T extends Data>(data: T, expanded: boolean) {
@@ -789,13 +796,13 @@ export default defineComponent({
       parseAndTransformData,
       forceUpdateData,
       syncNodeStateIntoData,
-      getNodeChildren,
       getCheckedNodes,
       getCheckedNodeData,
       getSelectedNodes,
       getSelectedNodeData,
       getExpandedNodes,
       getDisabledNodes,
+      getNodeChildren,
       getParentNode,
       getSiblingNodes,
       getPrevSiblingNode,

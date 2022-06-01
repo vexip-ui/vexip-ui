@@ -11,12 +11,11 @@
     @drop="handleDrop"
   >
     <slot
-      v-bind="{
-        ...node,
-        toggleCheck: handleToggleCheck,
-        toggleExpand: handleToggleExpand,
-        toggleSelect: handleToggleSelect
-      }"
+      :data="node.data"
+      :node="node"
+      :toggle-check="handleToggleCheck"
+      :toggle-expand="handleToggleExpand"
+      :toggle-select="handleToggleSelect"
     >
       <div :class="`${prefix}__content`">
         <span
@@ -56,7 +55,7 @@
             :data="{ data: node.data, node }"
           ></Renderer>
           <template v-else>
-            <slot name="label" v-bind="data">
+            <slot name="label" :data="node.data" :node="node">
               {{ data[labelKey] }}
             </slot>
           </template>
@@ -79,11 +78,17 @@
           :appear="appear"
           :floor-select="floorSelect"
         >
-          <template #default="childNode">
-            <slot v-bind="(childNode as any)"></slot>
+          <template #default="{ data: childData, node: childNode, toggleCheck, toggleExpand, toggleSelect }">
+            <slot
+              :data="childData"
+              :node="childNode"
+              :toggle-check="toggleCheck"
+              :toggle-expand="toggleExpand"
+              :toggle-select="toggleSelect"
+            ></slot>
           </template>
-          <template #label="childData">
-            <slot name="label" v-bind="(childData as any)"></slot>
+          <template #label="{ data: childData, node: childNode }">
+            <slot name="label" :data="childData" :node="childNode"></slot>
           </template>
         </TreeNode>
       </ul>
