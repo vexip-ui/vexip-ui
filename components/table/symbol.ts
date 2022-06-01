@@ -55,7 +55,7 @@ export type ParsedSorterOptions = Required<SorterOptions>
 
 export interface BaseColumn<T extends string | number = string | number, D = Data> {
   name: string,
-  key?: Key,
+  key?: string | number,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
   className?: ClassType,

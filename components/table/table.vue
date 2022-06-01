@@ -218,10 +218,10 @@ const props = useConfiguredProps('table', {
   },
   scrollClass: {
     type: Object as PropType<{
-      horizontal: ClassType,
-      major: ClassType,
-      left: ClassType,
-      right: ClassType
+      horizontal?: ClassType,
+      major?: ClassType,
+      left?: ClassType,
+      right?: ClassType
     }>,
     default: () => ({})
   },
@@ -602,7 +602,7 @@ export default defineComponent({
           }
         })
 
-      emit('row-filter', profiles, getters.filteredData)
+      emit('row-filter', profiles, getters.filteredData.map(row => row.data))
     }
 
     function emitRowSort() {
@@ -621,7 +621,7 @@ export default defineComponent({
           }
         })
 
-      emit('row-sort', profiles, getters.sortedData)
+      emit('row-sort', profiles, getters.sortedData.map(row => row.data))
     }
 
     let dragState: {

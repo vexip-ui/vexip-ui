@@ -30,7 +30,7 @@ const props = useConfiguredProps('tableColumn', {
     default: null
   },
   fixed: {
-    type: [Boolean, String],
+    type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
     default: false
   },
   className: {
