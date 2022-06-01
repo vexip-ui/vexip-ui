@@ -44,6 +44,8 @@ async function main() {
     }
   })
 
+  await run('pnpm', ['build:style'])
+
   logger.ln()
 
   if (!process.exitCode) {
