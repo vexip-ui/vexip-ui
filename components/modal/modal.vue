@@ -203,7 +203,7 @@ export default defineComponent({
   props,
   emits: [
     'toggle',
-    'ok',
+    'confirm',
     'cancel',
     'close',
     'show',
@@ -381,7 +381,7 @@ export default defineComponent({
 
     function handleConfirm() {
       handleClose(true)
-      emit('ok')
+      emit('confirm')
     }
 
     function handleCancle() {

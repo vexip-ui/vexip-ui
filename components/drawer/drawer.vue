@@ -128,10 +128,6 @@ export default defineComponent({
     Masker,
     Xmark
   },
-  // model: {
-  //   prop: 'active',
-  //   event: 'toggle'
-  // },
   props,
   emits: [
     'toggle',
@@ -325,7 +321,10 @@ export default defineComponent({
       document.removeEventListener('mouseup', handleResizeEnd)
 
       resizing.value = false
-      emit('resize-end')
+      emit('resize-end', {
+        width: currentWidth.value,
+        height: currentHeight.value
+      })
     }
 
     return {
