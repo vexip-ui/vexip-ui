@@ -5,17 +5,19 @@
     :type="type"
     :simple="simple"
     :ghost="ghost"
+    :text="text"
+    :dashed="dashed"
     :disabled="disabled"
     :circle="circle"
     :loading-icon="loadingIcon"
     :loading-spin="loadingSpin"
     :icon="icon"
-    :text-color="textColor"
+    :text-color="color"
     :block="block"
     @click="handleReset"
   >
     <slot>
-      {{ text || locale.reset }}
+      {{ label || locale.reset }}
     </slot>
   </Button>
 </template>
@@ -48,9 +50,17 @@ const props = useConfiguredProps('form-submit', {
       ].includes(value)
     }
   },
-  text: {
+  label: {
     type: String,
     default: null
+  },
+  text: {
+    type: Boolean,
+    default: false
+  },
+  dashed: {
+    type: Boolean,
+    default: false
   },
   simple: {
     type: Boolean,
@@ -80,7 +90,7 @@ const props = useConfiguredProps('form-submit', {
     type: Object,
     default: null
   },
-  textColor: {
+  color: {
     type: String,
     default: null
   },
