@@ -9,13 +9,13 @@ const props = useConfiguredProps('icon', {
     type: String,
     default: null,
     validator: (value: string) => {
+      console.warn(`[vexip-ui:Icon] prop 'name' has been deprecated, use 'icon' instead it.`)
+
       if (value && iconMap.has(value)) {
         return true
       }
 
-      console.warn(`
-        [Vexip warn] prop 'name' is referring to an unregistered icon '${value}'
-      `)
+      console.warn(`[vexip-ui:Icon] prop 'name' is referring to an unregistered icon '${value}'.`)
 
       return false
     }
