@@ -56,7 +56,7 @@ $button: map.merge(
     bg-color-disabled-typed-ghost: get-css-var('button-bg-color-typed-ghost'),
     b-color-disabled-typed-ghost: get-css-var('content-color-disabled'),
     border: get-css-var('border-shape') get-css-var('button-b-color'),
-    radius: get-css-var('border-radius-base'),
+    radius: get-css-var('radius-base'),
     pulse-s-color: get-css-var('color-primary-base'),
     pulse-opacity: 60%,
     pulse-size: 6px,

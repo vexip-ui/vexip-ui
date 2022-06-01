@@ -9,7 +9,7 @@ $bubble: map.merge(
     b-color: get-css-var('border-color-base'),
     s-color: get-css-var('shadow-color-base'),
     border: get-css-var('border-shape') get-css-var('bubble-b-color'),
-    radius: get-css-var('border-radius-base'),
+    radius: get-css-var('radius-base'),
     min-width: 6em,
     min-height: 2em,
     content-v-padding: 0.6em,

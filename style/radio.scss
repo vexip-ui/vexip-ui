@@ -57,7 +57,7 @@ $radio: map.merge(
   &--border {
     padding: 0.6em 0.8em;
     border: get-css-var('radio-border');
-    border-radius: get-css-var('border-radius-base');
+    border-radius: get-css-var('radius-base');
 
     &:hover {
       border-color: get-css-var('radio-b-color-hover');
@@ -223,7 +223,7 @@ $radio: map.merge(
     &-group--border & {
       padding: 0.6em 0.8em;
       border: get-css-var('radio-border');
-      border-radius: get-css-var('border-radius-base');
+      border-radius: get-css-var('radius-base');
 
       &:hover {
         border-color: get-css-var('radio-b-color-hover');
@@ -289,7 +289,7 @@ $radio: map.merge(
 
       &:first-child {
         border-left-width: 1px;
-        border-radius: get-css-var('border-radius-base') 0 0 get-css-var('border-radius-base');
+        border-radius: get-css-var('radius-base') 0 0 get-css-var('radius-base');
         box-shadow: none;
 
         &::before,
@@ -299,7 +299,7 @@ $radio: map.merge(
       }
 
       &:last-child {
-        border-radius: 0 get-css-var('border-radius-base') get-css-var('border-radius-base') 0;
+        border-radius: 0 get-css-var('radius-base') get-css-var('radius-base') 0;
       }
 
       &--checked {

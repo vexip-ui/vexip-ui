@@ -10,7 +10,7 @@ $color-picker: map.merge(
     marker-color: get-css-var('content-color-humble'),
     marker-b-color: get-css-var('border-color-base'),
     marker-border: get-css-var('border-shape') get-css-var('color-picker-marker-b-color'),
-    marker-radius: get-css-var('border-radius-small'),
+    marker-radius: get-css-var('radius-small'),
     marker-small-height: 1.1em,
     marker-default-height: 1.3em,
     marker-large-height: 1.7em,
@@ -18,7 +18,7 @@ $color-picker: map.merge(
     arrow-color: get-css-var('content-color-secondary'),
     popper-z-index: get-css-var('z-index-popper'),
     pane-bg-color: get-css-var('bg-color-base'),
-    pane-radius: get-css-var('border-radius-base'),
+    pane-radius: get-css-var('radius-base'),
     pane-shadow: get-css-var('shadow-base'),
     d-color: get-css-var('border-color-light-2'),
     divider: get-css-var('border-shape') get-css-var('color-picker-d-color'),
@@ -30,7 +30,7 @@ $color-picker: map.merge(
     handler-radius: 3px,
     shortcut-b-color: get-css-var('border-color-base'),
     shortcut-b-color-hover: get-css-var('color-primary-base'),
-    shortcut-radius: get-css-var('border-radius-base')
+    shortcut-radius: get-css-var('radius-base')
   ),
   $color-picker
 );

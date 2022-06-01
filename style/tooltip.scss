@@ -18,7 +18,7 @@ $tooltip: map.merge(
     padding: get-css-var('tooltip-v-padding') get-css-var('tooltip-h-padding'),
     content-color: get-css-var('content-color-base'),
     content-color-dark: get-css-var('bg-color-base'),
-    raduis: get-css-var('border-radius-base'),
+    raduis: get-css-var('radius-base'),
     arrow-size: 0.5em,
     arrow-v-offset: 0.9em,
     arrow-h-offset: 1.8em,

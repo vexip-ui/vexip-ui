@@ -17,7 +17,7 @@ $tree: map.merge(
     label-bg-color-selected: get-css-var('tree-label-bg-color-hover'),
     label-bg-color-disabled: get-css-var('tree-label-bg-color'),
     label-bg-color-readonly: get-css-var('tree-label-bg-color'),
-    label-radius: get-css-var('border-radius-base'),
+    label-radius: get-css-var('radius-base'),
     arrow-size: 22px,
     indicator-color: get-css-var('color-primary-base')
   ),

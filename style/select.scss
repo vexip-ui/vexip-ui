@@ -12,7 +12,7 @@ $select: map.merge(
     list-bg-color: get-css-var('bg-color-base'),
     list-b-color: get-css-var('border-color-light-2'),
     list-border: get-css-var('border-shape') get-css-var('select-list-b-color'),
-    list-radius: get-css-var('border-radius-base'),
+    list-radius: get-css-var('radius-base'),
     list-shadow: get-css-var('shadow-base'),
     check-color: get-css-var('color-primary-base'),
     empty-color: get-css-var('content-color-placeholder')

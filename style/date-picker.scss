@@ -17,7 +17,7 @@ $date-picker: map.merge(
     exchange-color-hover: get-css-var('color-primary-base'),
     popper-z-index: get-css-var('z-index-popper'),
     pane-bg-color: get-css-var('bg-color-base'),
-    pane-border-radius: get-css-var('border-radius-base'),
+    pane-border-radius: get-css-var('radius-base'),
     pane-shadow: get-css-var('shadow-base'),
     shortcut-bg-color: get-css-var('fill-color-background'),
     shortcut-bg-color-hover: get-css-var('fill-color-hover'),

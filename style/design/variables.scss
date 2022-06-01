@@ -195,14 +195,14 @@ $line-height-map: map.merge(
   $line-height-map
 );
 
-$border-radius-map: () !default;
-$border-radius-map: map.merge(
+$radius-map: () !default;
+$radius-map: map.merge(
   (
     base: 4px,
     large: 6px,
     small: 2px
   ),
-  $border-radius-map
+  $radius-map
 );
 
 $shadow-color-map: () !default;

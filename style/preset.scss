@@ -29,7 +29,7 @@
   @include define-preset-values('fill-color', $fill-color-map);
   @include define-preset-values('font-size', $font-size-map);
   @include define-preset-values('line-height', $line-height-map);
-  @include define-preset-values('border-radius', $border-radius-map);
+  @include define-preset-values('radius', $radius-map);
 
   @include define-css-var('shadow-x', $shadow-x);
   @include define-css-var('shadow-y', $shadow-y);

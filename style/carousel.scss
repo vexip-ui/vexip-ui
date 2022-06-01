@@ -16,7 +16,7 @@ $carousel: map.merge(
     pointer-width: 16px,
     pointer-width-active: 24px,
     pointer-height: 3px,
-    pointer-radius: get-css-var('border-radius-small'),
+    pointer-radius: get-css-var('radius-small'),
     pointer-opacity: 50%,
     pointer-opacity-hover: 80%,
     pointer-opacity-active: get-css-var('carousel-pointer-opacity-hover'),

@@ -27,7 +27,7 @@ $calendar-pane: map.merge(
     get-css-var('calendar-index-b-width')
     get-css-var('calendar-index-b-style')
     get-css-var('calendar-index-b-color'),
-    index-radius: get-css-var('border-radius-base'),
+    index-radius: get-css-var('radius-base'),
     range-bg-color: get-css-var('color-primary-light-9'),
     range-opacity: 60%
   ),

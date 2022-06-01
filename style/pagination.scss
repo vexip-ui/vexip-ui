@@ -20,7 +20,7 @@ $pagination: map.merge(
     b-color-disabled: get-css-var('fill-color-disabled'),
     b-color-active: get-css-var('pagination-b-color-hover'),
     border: get-css-var('border-shape') get-css-var('pagination-b-color'),
-    radius: get-css-var('border-radius-base'),
+    radius: get-css-var('radius-base'),
     small-size: 2em,
     default-size: 2.2em,
     large-size: 2.5em,

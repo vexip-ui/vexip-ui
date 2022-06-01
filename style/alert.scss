@@ -9,7 +9,7 @@ $alert: map.merge(
     bg-color: get-css-var('fill-color-background'),
     b-color: get-css-var('border-color-base'),
     border: get-css-var('border-shape') get-css-var('alert-b-color'),
-    radius: get-css-var('border-radius-base'),
+    radius: get-css-var('radius-base'),
     icon-color: get-css-var('content-color-primary'),
     text-color: get-css-var('content-color-base'),
     title-font-size: get-css-var('font-size-primary'),

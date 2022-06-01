@@ -8,7 +8,7 @@ $card: map.merge(
     bg-color: get-css-var('bg-color-base'),
     b-color: get-css-var('border-color-light-1'),
     border: get-css-var('border-shape') get-css-var('card-b-color'),
-    radius: get-css-var('border-radius-base'),
+    radius: get-css-var('radius-base'),
     s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('card-s-color'),
     d-color: get-css-var('border-color-light-2'),

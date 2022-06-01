@@ -13,7 +13,7 @@ $dropdown: map.merge(
     bg-color-active: get-css-var('dropdown-bg-color-hover'),
     b-color: get-css-var('border-color-light-2'),
     border: get-css-var('border-shape') get-css-var('dropdown-b-color'),
-    radius: get-css-var('border-radius-base'),
+    radius: get-css-var('radius-base'),
     s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('dropdown-s-color'),
     d-color: get-css-var('border-color-light-2'),

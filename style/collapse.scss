@@ -19,7 +19,7 @@ $collapse: map.merge(
     divider: get-css-var('border-shape') get-css-var('collapse-d-color'),
     b-color: get-css-var('border-color-base'),
     border: get-css-var('border-shape') get-css-var('collapse-b-color'),
-    radius: get-css-var('border-radius-base')
+    radius: get-css-var('radius-base')
   ),
   $collapse
 );

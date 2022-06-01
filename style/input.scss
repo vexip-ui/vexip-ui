@@ -23,7 +23,7 @@ $input: map.merge(
     after-bg-color: get-css-var('fill-color-background'),
     line-height: get-css-var('line-height-base'),
     border: get-css-var('border-shape') get-css-var('input-b-color'),
-    radius: get-css-var('border-radius-base'),
+    radius: get-css-var('radius-base'),
     count-color: get-css-var('content-color-secondary'),
     count-color-disbaled: get-css-var('input-control-color-disabled'),
     count-font-size: get-css-var('font-size-secondary'),

@@ -23,7 +23,7 @@ $tab-nav: map.merge(
     card-b-color-active: get-css-var('tab-nav-color-active'),
     card-b-color-disabled: get-css-var('tab-nav-card-b-color'),
     card-border: get-css-var('border-shape') get-css-var('tab-nav-card-b-color'),
-    card-radius: get-css-var('border-radius-base'),
+    card-radius: get-css-var('radius-base'),
     item-span: 4px,
     marker-bg-color: get-css-var('tab-nav-color-active'),
     marker-height: 2px,

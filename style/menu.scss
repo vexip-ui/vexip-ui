@@ -27,7 +27,7 @@ $menu: map.merge(
     label-color-disabled-dark: rgba($color-white, 0.45),
     marker-bg-color: get-css-var('color-primary-base'),
     group-bg-color-dark: get-css-var('color-black'),
-    popper-radius: get-css-var('border-radius-base'),
+    popper-radius: get-css-var('radius-base'),
     popper-shadow: get-css-var('shadow-base'),
     popper-shadow-dark: unset
   ),
