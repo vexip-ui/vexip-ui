@@ -1,3 +1,32 @@
+# [2.0.0-beta.1](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2022-06-01)
+
+
+### Bug Fixes
+
+* adjust component internal button text type ([e0fac63](https://github.com/qmhc/vexip-ui/commit/e0fac63bf89777b54efb646e3551bff4ab156183))
+* **auto-complete:** can-drop refactor to drop-disabled ([fd2783a](https://github.com/qmhc/vexip-ui/commit/fd2783a019fd36707ee432e777f95ab4a45a2295))
+* **auto-complete:** drop-disabled default to false ([40469de](https://github.com/qmhc/vexip-ui/commit/40469de045fe7ee966d5c58b115a2f408eb20912))
+* **auto-complete:** part of options blank when filter ([01c169e](https://github.com/qmhc/vexip-ui/commit/01c169e414be241dee71351948624e683afe5165))
+* **color-picker:** incorrect marker color when change value ([f63daec](https://github.com/qmhc/vexip-ui/commit/f63daec73375948e6baa0a52cad1354343b409b3))
+* **dropdown:** add border for dropdown list ([c786b34](https://github.com/qmhc/vexip-ui/commit/c786b3457a2f1ddec06d81746ee6ca25e2224dc7))
+* **dropdown:** trigger display default to flex ([3242cb4](https://github.com/qmhc/vexip-ui/commit/3242cb468e8813aeb905317375a3aa93c1370371))
+* **menu:** adjust item padding-left when inside group ([670fd33](https://github.com/qmhc/vexip-ui/commit/670fd334cd99fcf7c507696e634908e4f3f78cba))
+* **select:** accurately parse option props ([7d8d8cf](https://github.com/qmhc/vexip-ui/commit/7d8d8cfcc09ffce7e0b86838050207c0825c20cb))
+* **table:** endless loop when using page-size ([e6c2337](https://github.com/qmhc/vexip-ui/commit/e6c23375bcc6e66a6153ae5584e1586cafeeec3f))
+* **utils:** rename toPascalCase to toCapitalCase ([b0efc84](https://github.com/qmhc/vexip-ui/commit/b0efc84ec4f0791af497600550e2cfc1440f726e))
+* **utils:** use color name set to check named color ([6e3df86](https://github.com/qmhc/vexip-ui/commit/6e3df86433971ff76955c67937131800e90672e0))
+
+
+### Features
+
+* **breadcrumb:** add options prop to quick set items ([083ed56](https://github.com/qmhc/vexip-ui/commit/083ed56ffddb0a8bd37143acc51850c10f0c9b6c))
+* **scrollbar:** support custom width and track-color from props ([f2a01c9](https://github.com/qmhc/vexip-ui/commit/f2a01c9c9f924408446da753f40c8ffeda8315ab))
+* **style:** add --vxp-content-color-third var ([b5b5adc](https://github.com/qmhc/vexip-ui/commit/b5b5adc94b71c17a05945805d72193cfb847c128))
+* **utils:** add escapeHtml method ([75ee4a9](https://github.com/qmhc/vexip-ui/commit/75ee4a956b2d7d69ee500fb508ba37135a1f637f))
+* **utils:** add formatByteSize method ([0f2458a](https://github.com/qmhc/vexip-ui/commit/0f2458aa6fd8494cfea4feab62420cc0092719d1))
+
+
+
 # [2.0.0-beta.0](https://github.com/qmhc/vexip-ui/compare/v1.3.1...v2.0.0-beta.0) (2022-05-28)
 
 
