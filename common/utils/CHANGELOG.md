@@ -1,3 +1,19 @@
+# [1.2.0](https://github.com/qmhc/vexip-ui/compare/utils@1.1.0...utils@1.2.0) (2022-06-01)
+
+
+### Bug Fixes
+
+* **utils:** rename toPascalCase to toCapitalCase ([b0efc84](https://github.com/qmhc/vexip-ui/commit/b0efc84ec4f0791af497600550e2cfc1440f726e))
+* **utils:** use color name set to check named color ([6e3df86](https://github.com/qmhc/vexip-ui/commit/6e3df86433971ff76955c67937131800e90672e0))
+
+
+### Features
+
+* **utils:** add escapeHtml method ([75ee4a9](https://github.com/qmhc/vexip-ui/commit/75ee4a956b2d7d69ee500fb508ba37135a1f637f))
+* **utils:** add formatByteSize method ([0f2458a](https://github.com/qmhc/vexip-ui/commit/0f2458aa6fd8494cfea4feab62420cc0092719d1))
+
+
+
 # [1.1.0](https://github.com/qmhc/vexip-ui/compare/utils@1.0.0...utils@1.1.0) (2022-05-28)
 
 
