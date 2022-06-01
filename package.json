@@ -122,7 +122,9 @@
     "es",
     "lib",
     "style",
-    "themes"
+    "themes",
+    "CHANGELOG.md",
+    "types.d.ts"
   ],
   "homepage": "https://www.vexipui.com",
   "keywords": [
@@ -177,11 +179,13 @@
     "serve:theme": "ts-node scripts/serve.ts --theme"
   },
   "sideEffects": [
-    "lib/components/*/style.js",
-    "es/components/*/style.js",
+    "dist/*",
     "css/*.css",
+    "es/components/*/style.js",
     "icons/**",
-    "*.scss"
+    "lib/components/*/style.js",
+    "style/**/*.scss",
+    "theme/**/*.css"
   ],
   "types": "es/components/index.d.ts",
   "version": "2.0.0-beta.1"
