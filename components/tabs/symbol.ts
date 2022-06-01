@@ -2,7 +2,7 @@ import type { InjectionKey } from 'vue'
 
 export interface ItemState {
   label: string | number,
-  icon: string,
+  icon: Record<string, any>,
   disabled: boolean,
   labelRenderer: null | ((data: { label: string | number }) => any)
 }

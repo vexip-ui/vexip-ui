@@ -30,7 +30,7 @@ const props = {
     default: false
   },
   icon: {
-    type: String,
+    type: Object,
     default: ''
   }
 }
