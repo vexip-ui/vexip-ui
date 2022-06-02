@@ -23,16 +23,15 @@ export default defineConfig(async () => {
       outDir,
       sourcemap: false,
       lib: {
-        entry: resolve(__dirname, 'src/index.ts'),
+        entry: resolve(__dirname, 'vue/index.ts'),
         formats: [format]
       },
-      
       rollupOptions: {
         input,
         external: ['vue', '@vue'],
         output: {
           preserveModules: true,
-          preserveModulesRoot: resolve(__dirname, 'src'),
+          preserveModulesRoot: resolve(__dirname, 'vue'),
           entryFileNames: `[name].${format === 'es' ? 'mjs' : 'js'}`
         }
       },

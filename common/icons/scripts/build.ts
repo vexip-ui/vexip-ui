@@ -27,24 +27,29 @@ async function main() {
     stdio: 'inherit',
     env: {
       OUT_DIR: 'es',
-      FORMAT: 'es',
-      LOG_LEVEL: 'warn'
+      FORMAT: 'es'
     }
   })
 
+  console.log()
   console.log(chalk.cyan(`built es packages`))
 
   await execa('vite', ['build', '--config', 'vite.config.ts'], {
     stdio: 'inherit',
     env: {
       OUT_DIR: 'lib',
-      FORMAT: 'cjs',
-      LOG_LEVEL: 'warn'
+      FORMAT: 'cjs'
     }
   })
 
+  console.log()
   console.log(chalk.cyan(`built cjs packages`))
-  
+
+  await execa('vite', ['build', '--config', 'vite.full.config.ts'], { stdio: 'inherit' })
+
+  console.log()
+  console.log(chalk.cyan('build full packages successful'))
+
   const types = `
     declare module '@vexip-ui/icons' {
       import type { DefineComponent } from 'vue'
