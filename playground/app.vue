@@ -36,6 +36,7 @@ class ReplStore extends _ReplStore {
 const mianCode = `import { createApp } from 'vue'
 import { install } from 'vexip-ui'
 import App from './App.vue'
+import ThemeSwitch from './ThemeSwitch.vue'
 
 App.name = 'Repl'
 
@@ -53,35 +54,25 @@ new Promise((resolve, reject) => {
   link.onload = resolve
   link.onerror = reject
   document.body.appendChild(link)
-}).then(() => app.mount('#app'))
+}).then(() => app.component('ThemeSwitch', ThemeSwitch).mount('#app'))
 `
 
 const welcomeCode = `<template>
   <Button type="primary" :icon="MagnifyingGlass">{{ msg }}</Button>
 
   <!-- This is the dark theme trigger -->
-  <Theme></Theme>
+  <ThemeSwitch></ThemeSwitch>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { MagnifyingGlass } from '@vexip-ui/icons'
-import Theme from './Theme.vue'
 
 const msg = ref('Hello World!')
 ${'</'}script>
-
-<style>
-body {
-  color: var(--vxp-content-color-base);
-  background-color: var(--vxp-bg-color-base);
-  transition: var(--vxp-transition-color), var(--vxp-transition-background);
-}
-</style>
 `
 
-const themeCode = `
-<template>
+const themeCode = `<template>
   <div style="padding: 20px 0;">
     <span style="margin-right: 10px;">Toggle Dark:</span>
     <Switcher v-model:value="isDark" class="theme-switch" :icon="isDark ? Moon : Sun"></Switcher>
@@ -105,6 +96,12 @@ watch(isDark, value => {
 ${'</'}script>
 
 <style>
+body {
+  color: var(--vxp-content-color-base);
+  background-color: var(--vxp-bg-color-base);
+  transition: var(--vxp-transition-color), var(--vxp-transition-background);
+}
+
 .theme-switch {
   border: 1px solid var(--vxp-border-color-base);
 }
@@ -130,7 +127,7 @@ const vueRuntimeUrl = import.meta.env.PROD
   : `${location.origin}/proxy/vue`
 const vueServerRendererUrl = import.meta.env.PROD
   ? `${location.origin}/server-renderer.esm-browser.js`
-  : `${location.origin}/src/vue-server-renderer-dev-proxy`
+  : `${location.origin}/proxy/vue-server`
 
 const store = new ReplStore({
   serializedState,
@@ -155,7 +152,7 @@ store.setImportMap({
       'import-map.json': store.getFiles()['import-map.json'],
       'main.ts': mianCode,
       'App.vue': welcomeCode,
-      'Theme.vue': themeCode
+      'ThemeSwitch.vue': themeCode
     },
     'main.ts'
   )
