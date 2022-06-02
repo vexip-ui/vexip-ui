@@ -2,6 +2,7 @@ import { defineI18n } from './helper'
 
 export const enUS = defineI18n({
   common: {
+    makeInterest: 'Make interesting in development',
     slogan: 'Prue composition Api, Full TypeScript, Performance should be good',
     getStarted: 'Get started',
     guides: 'Guides',

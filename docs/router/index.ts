@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { Loading } from 'vexip-ui'
 import { toKebabCase } from '@vexip-ui/utils'
-import { defaultLanguage, langOptions } from '../i18n'
+import { defaultLanguage, langOptions, i18n } from '../i18n'
 import { getGuideConfig } from './guides'
 import { getComponentConfig } from './components'
 
@@ -42,7 +42,7 @@ function useGuidesRouter(language: string): RouteRecordRaw[] {
     return {
       path: label,
       name: `${language}-${label}`,
-      meta: { ...others, label, i18n },
+      meta: { ...others, label, i18n, title: `guides.${i18n}` },
       props: { name: label, language },
       component: () => import('../common/guide-doc.vue')
     }
@@ -76,6 +76,7 @@ function useComponentsRouter(language: string): RouteRecordRaw[] {
           meta: {
             ...others,
             name,
+            title: `components.${name}`,
             isComponent: true
           },
           props: { language, name: lowerName },
@@ -109,9 +110,10 @@ router.beforeResolve(() => {
 })
 
 router.afterEach(to => {
-  document.title =
-    to.path !== '/' && typeof to.name === 'string'
-      ? `${to.name} - Vexip UI`
-      : 'Vexip UI - 创造有趣的开发体验'
-  requestAnimationFrame(() => Loading.open(100))
+  requestAnimationFrame(() => {
+    document.title = to.meta.title
+      ? `${i18n.global.t(to.meta.title as string)} - Vexip UI`
+      : `Vexip UI - ${i18n.global.t('common.makeInterest')}`
+    Loading.open(100)
+  })
 })

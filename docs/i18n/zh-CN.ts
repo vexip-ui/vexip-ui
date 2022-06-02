@@ -2,6 +2,7 @@ import { defineI18n } from './helper'
 
 export const zhCN = defineI18n({
   common: {
+    makeInterest: '创造有趣的开发体验',
     slogan: '纯组合式 Api，全量的 TypeScript，性能应该还不错',
     getStarted: '开始使用',
     guides: '指南',
