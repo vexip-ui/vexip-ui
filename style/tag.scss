@@ -39,6 +39,7 @@ $tag: map.merge(
   padding: 0 0.5em;
   font-size: get-css-var('tag-default-font-size');
   color: get-css-var('tag-color');
+  white-space: nowrap;
   background-color: get-css-var('tag-bg-color');
   border: get-css-var('tag-border');
   border-radius: get-css-var('tag-radius');
