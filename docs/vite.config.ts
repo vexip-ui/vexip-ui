@@ -22,12 +22,16 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: [
         { find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') },
-        { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
-        { find: /^@vexip-ui\/((?!icons).+)/, replacement: resolve(__dirname, '../common/$1/src') },
-        { find: /^vexip-ui\/(es|lib)\/(.+)/, replacement: resolve(__dirname, '../components/$2') },
-        { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
+        ...(useServer
+          ? [
+              { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
+              { find: /^@vexip-ui\/((?!icons).+)/, replacement: resolve(__dirname, '../common/$1/src') },
+              { find: /^vexip-ui\/(es|lib)\/(.+)/, replacement: resolve(__dirname, '../components/$2') },
+              { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
+            ]
+          : [])
       ],
-      dedupe: ['../components']
+      dedupe: useServer ? ['../components'] : []
     },
     server: {
       port: 9000,

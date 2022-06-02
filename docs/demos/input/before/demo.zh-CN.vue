@@ -41,14 +41,14 @@
     style="width: 420px;"
   >
     <template #after>
-      <Icon><Cog></Cog></Icon>
+      <Icon><Gear></Gear></Icon>
     </template>
   </Input>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Cog } from '@vexip-ui/icons'
+import { Gear } from '@vexip-ui/icons'
 
 const value1 = ref('')
 const value2 = ref('')

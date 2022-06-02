@@ -7,7 +7,12 @@
           <span v-if="language !== 'en-US'" :class="`${prefix}__sub-name`">
             {{ $route.meta.name }}
           </span>
-          <Tag v-if="$route.meta.since" type="warning" style="margin-left: 8px;">
+          <Tag
+            v-if="$route.meta.since"
+            type="warning"
+            simple
+            style="margin-left: 8px;"
+          >
             {{ `Since v${$route.meta.since}` }}
           </Tag>
         </h1>

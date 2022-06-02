@@ -106,6 +106,7 @@ watch(isMounted, value => {
 
     th {
       text-align: left;
+      white-space: nowrap;
       background-color: var(--vxp-color-primary-opacity-9);
     }
 
