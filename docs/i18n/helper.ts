@@ -8,9 +8,11 @@ export interface I18nConfig extends LocaleMessageDictionary<VueMessageType> {
     components: string,
     playground: string,
     searchComponent: string,
-    copyCodes: string,
-    showCodes: string,
-    hideCodes: string
+    copyCode: string,
+    showCode: string,
+    hideCode: string,
+    editInGithub: string,
+    editInPlayground: string
   },
   alert: {
     info: string,

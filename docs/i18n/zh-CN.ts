@@ -8,9 +8,11 @@ export const zhCN = defineI18n({
     components: '组件',
     playground: '游乐场',
     searchComponent: '在 Vexip UI 中搜索组件',
-    copyCodes: '复制代码',
-    showCodes: '展开代码',
-    hideCodes: '收起代码'
+    copyCode: '复制代码',
+    showCode: '展开代码',
+    hideCode: '收起代码',
+    editInGithub: '在 Github 中编辑',
+    editInPlayground: '在 Playground 中编辑'
   },
   alert: {
     info: '提示',

@@ -14,7 +14,23 @@
           <CopyR></CopyR>
         </Icon>
         <template #tip>
-          {{ $t('common.copyCodes') }}
+          {{ $t('common.copyCode') }}
+        </template>
+      </Tooltip>
+      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
+        <Icon :scale="1.1" @click="editInGithub">
+          <PenToSquareR></PenToSquareR>
+        </Icon>
+        <template #tip>
+          {{ $t('common.editInGithub') }}
+        </template>
+      </Tooltip>
+      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
+        <Icon :scale="1.1" @click="editOnPlayground">
+          <PaperPlaneR></PaperPlaneR>
+        </Icon>
+        <template #tip>
+          {{ $t('common.editInPlayground') }}
         </template>
       </Tooltip>
       <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
@@ -22,7 +38,7 @@
           <Code></Code>
         </Icon>
         <template #tip>
-          {{ codeExpanded ? $t('common.hideCodes') : $t('common.showCodes') }}
+          {{ codeExpanded ? $t('common.hideCode') : $t('common.showCode') }}
         </template>
       </Tooltip>
     </Column>
@@ -34,7 +50,7 @@
         <div :class="`${prefix}__reduce`" @click="expandCode">
           <Icon><ChevronUp></ChevronUp></Icon>
           <span :class="`${prefix}__tip`">
-            {{ $t('common.hideCodes') }}
+            {{ $t('common.hideCode') }}
           </span>
         </div>
       </Column>
@@ -46,10 +62,10 @@
 import { useSlots, ref, watch, onMounted } from 'vue'
 import { highlight, languages } from 'prismjs'
 import { Message } from 'vexip-ui'
-import { CopyR, Code, ChevronUp } from '@vexip-ui/icons'
+import { CopyR, PenToSquareR, PaperPlaneR, Code, ChevronUp } from '@vexip-ui/icons'
+import { usePlayground } from './playground'
 
 import type { PropType } from 'vue'
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { Row } from 'vexip-ui'
 
 const extensionMap: Record<string, string> = {
@@ -78,6 +94,10 @@ const props = defineProps({
   lang: {
     type: String,
     default: 'vue'
+  },
+  github: {
+    type: String,
+    default: ''
   },
   onMounted: {
     type: Function as PropType<() => any>,
@@ -152,31 +172,37 @@ function copyCode() {
 function getCodeLang(extension: string) {
   return extensionMap[extension] ?? extension
 }
+
+const githubBaseUrl = 'https://github.com/qmhc/vexip-ui/blob/main/docs/'
+
+function editInGithub() {
+  if (props.github) {
+    window.open(`${githubBaseUrl}${props.github}`)
+  }
+}
+
+function editOnPlayground() {
+  if (props.code) {
+    const { link } = usePlayground(props.code)
+
+    window.open(link)
+  }
+}
 </script>
 
 <style lang="scss">
 .demo {
   margin-bottom: 1.4em;
   border: var(--vxp-border-light-2);
-  border-radius: var(--vxp-border-radius-base);
-  transition: var(--vxp-transition-box-shadow);
+  border-radius: var(--vxp-radius-base);
+  transition: var(--vxp-transition-border), var(--vxp-transition-shadow);
 
   &:hover {
-    box-shadow: var(--vxp-box-shadow-base);
+    box-shadow: var(--vxp-shadow-base);
   }
 
   &__example {
     padding: 3em 1.6em 2em;
-  }
-
-  &__divider {
-    &::before {
-      width: 1em;
-    }
-
-    &::after {
-      width: calc(100% - 1em);
-    }
   }
 
   &__description {
@@ -200,6 +226,7 @@ function getCodeLang(extension: string) {
         top: 50%;
         content: '';
         border-top: var(--vxp-border-light-2);
+        transition: var(--vxp-transition-border);
         transform: translateY(50%);
       }
 
@@ -225,6 +252,7 @@ function getCodeLang(extension: string) {
     justify-content: center;
     padding: 8px 0;
     border-top: var(--vxp-border-light-2);
+    transition: var(--vxp-transition-border);
   }
 
   &__action {

@@ -29,7 +29,12 @@
           </span>
           <a class="anchor__link" href="">#</a>
         </h2>
-        <Demo v-for="({ code, demo, desc: _desc }, index) in examples" :key="index" :code="code">
+        <Demo
+          v-for="({ code, demo, desc: _desc, github }, index) in examples"
+          :key="index"
+          :code="code"
+          :github="github"
+        >
           <component :is="demo"></component>
           <template #desc>
             <component :is="_desc" @mounted="handleDemoMounted"></component>
@@ -82,7 +87,8 @@ import { getMetaName } from './meta-name'
 interface Example {
   demo: Record<string, any>,
   desc: Record<string, any>,
-  code: string
+  code: string,
+  github: string
 }
 
 const props = defineProps({
@@ -156,7 +162,8 @@ async function internalInit(name: string, language: string) {
     return {
       demo: markRaw(defineAsyncComponent(() => import(`../demos/${name}/${demo}/demo.${language}.vue`))),
       desc: markRaw(defineAsyncComponent(() => import(`../demos/${name}/${demo}/desc.${language}.md`))),
-      code: ''
+      code: '',
+      github: `demos/${name}/${demo}/demo.${language}.vue`
     }
   })
 

@@ -187,6 +187,7 @@ function formatComponentName(name: string) {
     padding-left: 1em;
     margin-left: -1px;
     border-left: var(--vxp-border-light-2);
+    transition: var(--vxp-transition-border);
   }
 
   .index {

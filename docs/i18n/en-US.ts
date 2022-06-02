@@ -3,14 +3,16 @@ import { defineI18n } from './helper'
 export const enUS = defineI18n({
   common: {
     slogan: 'Prue composition Api, Full TypeScript, Performance should be good',
-    getStarted: 'Get Started',
+    getStarted: 'Get started',
     guides: 'Guides',
     components: 'Components',
     playground: 'Playground',
     searchComponent: 'Search component in Vexip UI',
-    copyCodes: 'Copy Codes',
-    showCodes: 'Show Codes',
-    hideCodes: 'Hide Codes'
+    copyCode: 'Copy code',
+    showCode: 'Show code',
+    hideCode: 'Hide code',
+    editInGithub: 'Edit in Github',
+    editInPlayground: 'Edit in Playground'
   },
   alert: {
     info: 'Tip',

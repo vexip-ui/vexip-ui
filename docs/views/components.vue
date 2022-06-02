@@ -152,6 +152,7 @@ function isNewComponent(config: ComponentConfig) {
 
   &__sider {
     border-right: var(--vxp-border-light-2);
+    transition: var(--vxp-transition-border);
   }
 
   &__menu {
