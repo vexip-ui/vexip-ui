@@ -13,26 +13,31 @@
     </Column>
     <Column flex="auto"></Column>
     <Column flex="0">
-      <div class="action" @click="toggleDark">
+      <div class="action" title="Toggle Dark" @click="toggleDark">
         <Icon v-if="isDarkTheme" :scale="1.3">
           <Moon></Moon>
         </Icon>
-        <Icon v-else :scale="1.4">
+        <Icon v-else :scale="1.3">
           <Sun></Sun>
         </Icon>
       </div>
-      <div class="action" @click="copyLink">
+      <div class="action" title="Share" @click="copyLink">
         <Icon :scale="1.3">
           <ShareNodes></ShareNodes>
         </Icon>
       </div>
-      <div class="action" @click="download">
+      <div class="action" title="Download" @click="download">
         <Icon :scale="1.3">
           <Download></Download>
         </Icon>
       </div>
-      <Linker class="github-link" to="//github.com/qmhc/vexip-ui/tree/main/playground">
-        <Icon :scale="1.5">
+      <div class="action" title="Reset" @click="reset">
+        <Icon :scale="1.3">
+          <ArrowRotateLeft></ArrowRotateLeft>
+        </Icon>
+      </div>
+      <Linker class="github-link" title="Github" to="//github.com/qmhc/vexip-ui/tree/main/playground">
+        <Icon :scale="1.4">
           <GithubB></GithubB>
         </Icon>
       </Linker>
@@ -43,7 +48,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Confirm, Message } from 'vexip-ui'
-import { Moon, Sun, ShareNodes, Download, GithubB } from '@vexip-ui/icons'
+import { Moon, Sun, ShareNodes, Download, ArrowRotateLeft, GithubB } from '@vexip-ui/icons'
 import { downloadProject } from '../download/download'
 
 const props = defineProps({
@@ -82,6 +87,10 @@ async function download() {
   if (result) {
     downloadProject(props.store)
   }
+}
+
+function reset() {
+  location.href = location.origin
 }
 </script>
 

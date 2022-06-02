@@ -60,6 +60,28 @@ const welcomeCode = `<template>
   <Button type="primary" :icon="MagnifyingGlass">{{ msg }}</Button>
 
   <!-- This is the dark theme trigger -->
+  <Theme></Theme>
+</template>
+
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+import { MagnifyingGlass } from '@vexip-ui/icons'
+import Theme from './Theme.vue'
+
+const msg = ref('Hello World!')
+${'</'}script>
+
+<style>
+body {
+  color: var(--vxp-content-color-base);
+  background-color: var(--vxp-bg-color-base);
+  transition: var(--vxp-transition-color), var(--vxp-transition-background);
+}
+</style>
+`
+
+const themeCode = `
+<template>
   <div style="padding: 20px 0;">
     <span style="margin-right: 10px;">Toggle Dark:</span>
     <Switcher v-model:value="isDark" class="theme-switch" :icon="isDark ? Moon : Sun"></Switcher>
@@ -68,9 +90,7 @@ const welcomeCode = `<template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { MagnifyingGlass, Sun, Moon } from '@vexip-ui/icons'
-
-const msg = ref('Hello World!')
+import { Sun, Moon } from '@vexip-ui/icons'
 
 const rootCls = document.documentElement.classList
 const isDark = ref(${document.documentElement.classList.contains('dark') ? 'true' : 'false'})
@@ -85,12 +105,6 @@ watch(isDark, value => {
 ${'</'}script>
 
 <style>
-body {
-  color: var(--vxp-content-color-base);
-  background-color: var(--vxp-bg-color-base);
-  transition: var(--vxp-transition-color), var(--vxp-transition-background);
-}
-
 .theme-switch {
   border: 1px solid var(--vxp-border-color-base);
 }
@@ -114,17 +128,25 @@ const serializedState = location.hash.slice(1)
 const vueRuntimeUrl = import.meta.env.PROD
   ? `${location.origin}/vue.runtime.esm-browser.js`
   : `${location.origin}/proxy/vue`
+const vueServerRendererUrl = import.meta.env.PROD
+  ? `${location.origin}/server-renderer.esm-browser.js`
+  : `${location.origin}/src/vue-server-renderer-dev-proxy`
 
 const store = new ReplStore({
   serializedState,
-  defaultVueRuntimeURL: vueRuntimeUrl
+  defaultVueRuntimeURL: vueRuntimeUrl,
+  defaultVueServerRendererURL: vueServerRendererUrl
 })
 
 store.setImportMap({
   imports: {
     // vue: vueRuntimeUrl,
-    'vexip-ui': `${location.origin}/vexip-ui.es.js`,
-    '@vexip-ui/icons': `${location.origin}/icons/index.mjs`
+    'vexip-ui': import.meta.env.PROD
+      ? `${location.origin}/vexip-ui.js`
+      : `${location.origin}/vexip-ui.es.js`,
+    '@vexip-ui/icons': import.meta.env.PROD
+      ? `${location.origin}/vexip-ui-icons.js`
+      : `${location.origin}/icons/index.es.js`
   }
 })
 ;(!serializedState
@@ -132,7 +154,8 @@ store.setImportMap({
     {
       'import-map.json': store.getFiles()['import-map.json'],
       'main.ts': mianCode,
-      'App.vue': welcomeCode
+      'App.vue': welcomeCode,
+      'Theme.vue': themeCode
     },
     'main.ts'
   )
