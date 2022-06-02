@@ -228,7 +228,7 @@ export default defineComponent({
     function createVars(originVars: Record<string, string>) {
       const vars: Record<string, string> = {}
 
-      Object.keys(originVars).map(name => {
+      Object.keys(originVars).forEach(name => {
         vars[`--${prefix}-${name}`] = originVars[name]
       })
 

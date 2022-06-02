@@ -4,14 +4,7 @@
       <span>
         <slot></slot>
       </span>
-      <div
-        v-if="closable"
-        :class="`${prefix}__close`"
-        :style="{
-          color: border ? borderColor || color : undefined
-        }"
-        @click.left.stop="handleClose"
-      >
+      <div v-if="closable" :class="`${prefix}__close`" @click.left.stop="handleClose">
         <Icon :scale="0.8">
           <Xmark></Xmark>
         </Icon>
@@ -25,6 +18,7 @@ import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { useConfiguredProps, createSizeProp } from '@vexip-ui/config'
 import { Xmark } from '@vexip-ui/icons'
+import { parseColorToRgba, adjustAlpha } from '@vexip-ui/utils'
 
 import type { TagType } from './symbol'
 
@@ -66,10 +60,6 @@ const props = useConfiguredProps('tag', {
     type: String,
     default: null
   },
-  borderColor: {
-    type: String,
-    default: null
-  },
   transitionName: {
     type: String,
     default: 'vxp-fade'
@@ -107,12 +97,41 @@ export default defineComponent({
       }
     })
     const style = computed(() => {
-      return {
-        color: props.border ? props.color : undefined,
-        backgroundColor: props.border ? undefined : props.color,
-        borderColor: props.borderColor || props.color
+      if (props.color) {
+        const baseColor = parseColorToRgba(props.color)
+        const base = baseColor.toString()
+
+        return createVars({
+          color: 'var(--vxp-color-white)',
+          'bg-color': base,
+          'b-color': base,
+          'close-color': 'var(--vxp-color-white)',
+          ...(props.simple || props.border
+            ? {
+                color: base,
+                'close-color': base
+              }
+            : {}),
+          ...(props.simple
+            ? {
+                'bg-color': adjustAlpha(baseColor, 0.2).toString()
+              }
+            : {})
+        })
       }
+
+      return {}
     })
+
+    function createVars(originVars: Record<string, string>) {
+      const vars: Record<string, string> = {}
+
+      Object.keys(originVars).forEach(name => {
+        vars[`--${prefix}-${name}`] = originVars[name]
+      })
+
+      return vars
+    }
 
     function handleClose() {
       if (props.closable) {
