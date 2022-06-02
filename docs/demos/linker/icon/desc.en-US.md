@@ -1,3 +1,3 @@
-### 添加图标
+### Add Icon
 
-使用 `icon` 属性或者同名插槽为链接添加前置图标。
+Use the `icon` prop or slot with the same name to add a prefix icon to a link.

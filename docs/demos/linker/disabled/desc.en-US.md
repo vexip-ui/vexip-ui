@@ -1,3 +1,3 @@
-### 禁用状态
+### Disabled
 
-添加 `disbaled` 属性可以禁用链接。
+Add the `disbaled` prop to disable the link.

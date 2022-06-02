@@ -1,33 +1,41 @@
-### Breadcrumb 属性
+### Breadcrumb Props
 
-| 名称      | 类型    | 说明                     | 默认值 |
+| Name      | Type    | Description                     | Default |
 | --------- | ------- | ------------------------ | ------ |
-| separator | String  | 设置面包屑的分隔符       | '/'    |
-| border    | Boolean | 设置是否开启 border 模式 | false  |
+| separator | `string`  | 设置面包屑的分隔符       | `'/'`    |
+| border    | `boolean` | 设置是否开启 border 模式 | `false`  |
+| options | `string[]` | 快捷设置子元素，使用插槽后失效 | `[]` |
 
-### Breadcrumb 事件
+### Breadcrumb Events
 
-| 名称               | 说明                                                                                | 参数  |
+| Name               | Description                                                                                | Parameters  |
 | ------------------ | ----------------------------------------------------------------------------------- | ----- |
-| select          | 当某个子元素被点击时触发，返回该元素的标签 (索引)                                   | label |
-| separator-click | 当某个子元素的分隔符被点击时触发，返回该元素的标签 (索引)，一般配合 border 模式使用 | label |
+| select          | 当某个子元素被点击时触发，返回该元素的标签 (索引)                                   | `(label: string \| number)` |
+| separator-click | 当某个子元素的分隔符被点击时触发，返回该元素的标签 (索引)，一般配合 border 模式使用 | `(label: string \| number)` |
 
-### Breadcrumb 插槽
+### Breadcrumb Slots
 
-| 名称      | 说明                   |
-| --------- | ---------------------- |
-| default   | 面包屑的子元素         |
-| separator | 自定义分隔符内容的插槽 |
+| Name      | Description                   | Parameters  |
+| --------- | ---------------------- | --- |
+| default   | 面包屑的子元素         | - |
+| separator | 自定义分隔符内容的插槽 | `(label: string \| number)` |
 
-### BreadcrumbItem 属性
+### BreadcrumbItem Props
 
-| 名称  | 类型             | 说明                                     | 默认值 |
+| Name  | Type             | Description                                     | Default |
 | ----- | ---------------- | ---------------------------------------- | ------ |
-| label | String \| Number | 元素的唯一标签，不设置时会使用内置的索引 | null   |
+| label | `string \| number` | 元素的唯一标签，不设置时会使用内置的索引 | `null`   |
 
-### BreadcrumbItem 事件
+### BreadcrumbItem Events
 
-| 名称               | 说明                                         | 参数  |
+| Name               | Description                                         | Parameters  |
 | ------------------ | -------------------------------------------- | ----- |
-| select          | 当元素被点击时触发，返回该元素的标签         | label |
-| separator-click | 当元素的分隔符被点击时触发，返回该元素的标签 | label |
+| select          | 当元素被点击时触发，返回该元素的标签         | `(label: string \| number)` |
+| separator-click | 当元素的分隔符被点击时触发，返回该元素的标签 | `(label: string \| number)` |
+
+### BreadcrumbItem Slots
+
+| Name      | Description                   | Parameters  |
+| --------- | ---------------------- | --- |
+| default   | 面包屑元素的内容         | - |
+| separator | 自定义分隔符内容的插槽 | - |

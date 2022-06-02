@@ -21,7 +21,7 @@
             :prefix="MagnifyingGlass"
             :placeholder="placeholder"
             :options="searchOptions"
-            @select="toComponentDoc"
+            @change="toComponentDoc"
           ></AutoComplete>
         </div>
         <Menu v-model:active="currentMenu" horizontal @select="selectMenu">

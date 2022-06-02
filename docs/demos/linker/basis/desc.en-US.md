@@ -1,3 +1,3 @@
-### 基本使用
+### Basis Usage
 
-设置 `type` 属性可以生成不同类型的链接。
+Setting the `type` prop can generate different types of links.

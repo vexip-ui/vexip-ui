@@ -160,6 +160,7 @@ function isNewComponent(config: ComponentConfig) {
   }
 
   &__tag {
+    margin-left: 4px;
     font-size: 10px;
     transform: scale(0.8);
   }

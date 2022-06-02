@@ -1,3 +1,3 @@
-### 下划线
+### Underline
 
-添加 `underline` 属性在鼠标移入链接时显示下划线。
+Added the `underline` prop to display the underline when the hover a link.

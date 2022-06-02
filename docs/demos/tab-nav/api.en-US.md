@@ -1,26 +1,26 @@
-### TabNav 属性
+### TabNav Props
 
-| 名称   | 类型             | 说明                                          | 默认值 |
+| Name   | Type             | Description                                          | Default |
 | ------ | ---------------- | --------------------------------------------- | ------ |
-| active | String \| Number | 设置当前激活的导航，可以使用 v-model 双向绑定 | null   |
-| card   | Boolean          | 设置是否开启卡片模式                          | false  |
+| active | `string \| number` | 设置当前激活的导航，可以使用 v-model 双向绑定 | `null`   |
+| card   | `boolean`          | 设置是否开启卡片模式                          | `false`  |
 
-### TabNav 事件
+### TabNav Events
 
-| 名称      | 说明                                               | 参数 |
+| Name      | Description                                               | Parameters |
 | --------- | -------------------------------------------------- | ---- |
-| change | 当激活的导航发生变化时触发，返回当前激活导航的名字 | name |
+| change | 当激活的导航发生变化时触发，返回当前激活导航的名字 | `(label: string \| number)` |
 
-### TabNavItem 属性
+### TabNavItem Props
 
-| 名称     | 类型             | 说明                     | 默认值 |
+| Name     | Type             | Description                     | Default |
 | -------- | ---------------- | ------------------------ | ------ |
-| label    | String \| Number | 导航的唯一索引，必需设置 | -      |
-| disabled | Boolean          | 设置是否禁用该导航       | false  |
-| icon     | String           | 设置导航的前置图标       | ''     |
+| label    | `string \| number` | 导航的唯一索引，未设置时会采用内部的 `index` 值 | `null`      |
+| disabled | `boolean`          | 设置是否禁用该导航       | `false`  |
+| icon     | `string`           | 设置导航的前置图标       | `''`     |
 
-### TabNavItem 事件
+### TabNavItem Events
 
-| 名称      | 说明                                       | 参数  |
+| Name      | Description                                       | Parameters  |
 | --------- | ------------------------------------------ | ----- |
-| select | 当该导航被选择时触发，返回当前导航的 label | label |
+| toggle | 当该导航被选择时触发，返回当前是否处于激活状态 | `(active: boolean)` |

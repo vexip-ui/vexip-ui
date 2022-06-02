@@ -93,8 +93,10 @@ export interface I18nConfig extends LocaleMessageDictionary<VueMessageType> {
 
     Masker: string,
     NativeScroll: string,
+    ResizeObserver: string,
     Scroll: string,
-    Scrollbar: string
+    Scrollbar: string,
+    VirtualList: string
   }
 }
 

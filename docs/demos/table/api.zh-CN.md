@@ -2,7 +2,7 @@
 
 | 名称            | 类型                         | 说明                                                                                                               | 默认值     |
 | --------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------- |
-| columns         | `ColumnOptions<any, any>[]`                        | 表格的列配置                                                                                                       | `[]`         |
+| columns         | `ColumnOptions<any, any>[]`                        | 表格列的配置，参考下方的 TableColumn 属性                                                                                                       | `[]`         |
 | data            | `Record<string, unknown>[]`                        | 表格的数据源                                                                                                       | `[]`         |
 | data-key        | `string`                       | 数据源的索引字段，该字段的值需要在数据源中唯一                                                                     | `'id'`       |
 | width           | `number`                       | 表格的宽度，在有固定列时使用                                                                                       | `null`       |
@@ -68,14 +68,14 @@
 | name      | `string`            | 类的名称                                                                     | `''`     |
 | key \| id-key       | `string \| number`  | 列的唯一索引，使用模版列时请使用 `id-key` 代替                                 | `''`     |
 | accessor  | `(data: any, rowIndex: number) => any`          | 该列的数据读取方法，接收行数据和行位置索引，若不定义这按索引值从行数据上读取 | `null`   |
-| fixed     | `boolean \| 'left' \| 'right'` | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时同 left                | `false`  |
+| fixed     | `boolean \| 'left' \| 'right'` | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧                | `false`  |
 | className | `string \| Record<string, boolean>` | 该列单元格的自定义类名                                                       | `null`   |
 | type      | `'order' \| 'selection' \| 'expand'`            | 设置内置特定类型列                                      | `null`   |
 | width     | `number`            | 设置列宽                                                                     | `null`   |
 | filter    | `FilterOptions<any, any>`            | 配置列的过滤器                                                               | `null`   |
 | sorter    | `boolean \| SorterOptions<any>`            | 配置列的排序器                                                               | `null`   |
 | order     | `number`            | 配置列的渲染顺序                                                             | `0`      |
-| renderer  | `(data: Record<string, unknown>) => any`          | 自定义渲染函数，接收一个 `{ row, rowIndex, column, columnIndex }` 对象       | `null`   |
+| renderer  | `(data: { row: Record<string, unknown>, rowIndex: number, column: ColumnOptions<any, any>, columnIndex: number }) => any`          | 自定义渲染函数       | `null`   |
 
 ### TableColumn 插槽
 

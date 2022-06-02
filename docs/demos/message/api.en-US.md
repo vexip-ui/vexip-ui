@@ -1,4 +1,4 @@
-### Message 方法
+### Message Methods
 
 组件实例内提供了 5 种基础的打开消息的方法：
 
@@ -58,20 +58,20 @@ myMessage.config({ placement: 'bottom' })
 createApp().use(myMessage, { property: '$myMessage' })
 ```
 
-### Message 选项
+### Message Options
 
-| 名称       | 类型                         | 说明                                                                                     | 默认值 |
+| Name       | Type                         | Description                                                                                     | Default |
 | ---------- | ---------------------------- | ---------------------------------------------------------------------------------------- | ------ |
-| type       | String                       | 内置的类型，可选值为 `info`、`success`、`warning`、`error`                               | -      |
-| content    | String                       | 消息的内容                                                                               | -      |
-| key        | Number \| String             | 消息的唯一索引，不设置时将使用内置的索引                                                 | -      |
-| parseHtml  | Boolean                      | 是否解析 html，开启则将 content 内容作为 html 解析                                       | false  |
-| className  | String \| Object             | 消息的自定义类名                                                                         | null   |
-| style      | Object                       | 消息的内联样式                                                                           | null   |
-| duration   | Number                       | 消息的持续毫秒，设置为小于 500 时则不会自动关闭                                          | 3000   |
-| background | Boolean \| String            | 是否显示背景颜色，传入有效颜色值时可以自定义颜色                                         | false  |
-| color      | Boolean \| String            | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色                                       | false  |
-| closable   | Boolean                      | 是否有关闭按钮进行关闭                                                                   | false  |
-| icon       | String \| Object \| Function | 消息前缀的图标，传入对象时每个属性会对应 Icon 组件的属性，传入函数时使用 render 函数渲染 | -      |
-| iconColor  | String                       | 前缀图标的颜色，设置后会覆盖 type 的默认设置                                             | -      |
-| renderer   | Function                     | 使用 Vue 的 render 函数渲染自定义内容                                                    | null   |
+| type       | `'info' \| 'success' \| 'warning' \| 'error'`                       | 消息的类型                               | `''`      |
+| content    | `string`                       | 消息的内容                                                                               | `''`      |
+| key        | `number \| string`             | 消息的唯一索引，不设置时将使用内置的索引                                                 | `''`      |
+| parseHtml  | `boolean`                      | 是否解析 html，开启则将 `content` 内容作为 html 解析                                       | `false`  |
+| className  | `string \| Record<string, unknown>`             | 消息的自定义类名                                                                         | `null`   |
+| style      | `Record<string, any>`                       | 消息的内联样式                                                                           | `null`   |
+| duration   | `number`                       | 消息的持续毫秒，设置为小于 `500` 时则不会自动关闭                                          | `3000`   |
+| background | `boolean \| string`            | 是否显示背景颜色，传入有效颜色值时可以自定义颜色                                         | `false`  |
+| color      | `boolean \| string`            | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色                                       | `false`  |
+| closable   | `boolean`                      | 是否有关闭按钮进行关闭                                                                   | `false`  |
+| icon       | `Record<string, any> \| (() => any)` | 消息前缀的图标，传入函数时作为 render 函数渲染 | `null`      |
+| iconColor  | `string`                       | 前缀图标的颜色，设置后会覆盖 `type` 的默认设置                                             | `''`      |
+| renderer   | `() => any`                     | 使用 Vue 的 render 函数渲染自定义内容                                                    | `null`   |

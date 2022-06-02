@@ -93,7 +93,9 @@ export const zhCN = defineI18n({
 
     Masker: '遮罩',
     NativeScroll: '原生滚动',
+    ResizeObserver: '缩放观察',
     Scroll: '滚动',
-    Scrollbar: '滚动条'
+    Scrollbar: '滚动条',
+    VirtualList: '虚拟列表'
   }
 })
