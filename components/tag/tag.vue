@@ -1,16 +1,14 @@
 <template>
-  <transition :name="transitionName">
-    <div :class="className" :style="style" @click="$emit('click', $event)">
-      <span>
-        <slot></slot>
-      </span>
-      <div v-if="closable" :class="`${prefix}__close`" @click.left.stop="handleClose">
-        <Icon :scale="0.8">
-          <Xmark></Xmark>
-        </Icon>
-      </div>
+  <div :class="className" :style="style" @click="$emit('click', $event)">
+    <span>
+      <slot></slot>
+    </span>
+    <div v-if="closable" :class="`${prefix}__close`" @click.left.stop="handleClose">
+      <Icon :scale="0.8">
+        <Xmark></Xmark>
+      </Icon>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -59,10 +57,6 @@ const props = useConfiguredProps('tag', {
   color: {
     type: String,
     default: null
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-fade'
   },
   simple: {
     type: Boolean,
