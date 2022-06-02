@@ -144,6 +144,13 @@
   "peerDependencies": {
     "vue": "^3.2.6"
   },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "vite": "^3.0.0"
+      }
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/qmhc/vexip-ui.git"

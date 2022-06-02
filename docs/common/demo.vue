@@ -14,7 +14,7 @@
           <CopyR></CopyR>
         </Icon>
         <template #tip>
-          {{ $t('commom.copyCodes') }}
+          {{ $t('common.copyCodes') }}
         </template>
       </Tooltip>
       <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
