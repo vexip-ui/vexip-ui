@@ -3,7 +3,7 @@
     <span>
       <slot></slot>
     </span>
-    <div v-if="closable" :class="`${prefix}__close`" @click.left.stop="handleClose">
+    <div v-if="props.closable" :class="`${prefix}__close`" @click.left.stop="handleClose">
       <Icon :scale="0.8">
         <Xmark></Xmark>
       </Icon>
@@ -14,13 +14,14 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps, createSizeProp } from '@vexip-ui/config'
+import { useProps, createSizeProp, booleanProp, sizeProp } from '@vexip-ui/config'
 import { Xmark } from '@vexip-ui/icons'
 import { parseColorToRgba, adjustAlpha } from '@vexip-ui/utils'
 
+import type { PropType } from 'vue'
 import type { TagType } from './symbol'
 
-const types = [
+const tagTypes = Object.freeze([
   'default',
   'primary',
   'info',
@@ -36,37 +37,7 @@ const types = [
   'navy',
   'gold',
   'purple'
-]
-
-const props = useConfiguredProps('tag', {
-  size: createSizeProp(),
-  type: {
-    default: 'default' as TagType,
-    validator: (value: TagType) => {
-      return types.includes(value)
-    }
-  },
-  border: {
-    type: Boolean,
-    default: false
-  },
-  closable: {
-    type: Boolean,
-    default: false
-  },
-  color: {
-    type: String,
-    default: null
-  },
-  simple: {
-    type: Boolean,
-    default: false
-  },
-  circle: {
-    type: Boolean,
-    default: false
-  }
-})
+] as const)
 
 export default defineComponent({
   name: 'Tag',
@@ -74,9 +45,29 @@ export default defineComponent({
     Icon,
     Xmark
   },
-  props,
+  props: {
+    size: sizeProp,
+    type: String as PropType<TagType>,
+    border: booleanProp,
+    closable: booleanProp,
+    color: String,
+    simple: booleanProp,
+    circle: booleanProp
+  },
   emits: ['click', 'close'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('tag', _props, {
+      size: createSizeProp(),
+      type: {
+        default: 'default',
+        validator: (value: TagType) => tagTypes.includes(value)
+      },
+      border: false,
+      closable: false,
+      simple: false,
+      circle: false
+    })
+
     const prefix = 'vxp-tag'
 
     const className = computed(() => {
@@ -134,6 +125,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
 
       className,

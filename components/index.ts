@@ -21,6 +21,7 @@ import { CollapsePane } from './collapse-pane'
 import { CollapseTransition } from './collapse-transition'
 import { ColorPicker } from './color-picker'
 import { Column } from './column'
+import { ConfigProvider } from './config-provider'
 import { Confirm } from './confirm'
 import { Contextmenu } from './contextmenu'
 import { DatePicker } from './date-picker'
@@ -124,6 +125,7 @@ const components = [
   CollapseTransition,
   ColorPicker,
   Column,
+  ConfigProvider,
   DatePicker,
   Divider,
   Drawer,
@@ -220,6 +222,7 @@ export {
   CollapseTransition,
   ColorPicker,
   Column,
+  ConfigProvider,
   Confirm,
   Contextmenu,
   DatePicker,

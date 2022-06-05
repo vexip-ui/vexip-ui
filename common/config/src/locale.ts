@@ -1,5 +1,9 @@
-import { reactive } from 'vue'
-import { mergeObjects } from '@vexip-ui/utils'
+import { reactive, computed, provide, inject } from 'vue'
+import { mergeObjects, isFunction } from '@vexip-ui/utils'
+
+import type { App, ComputedRef } from 'vue'
+
+export const PROVIDED_LOCALE = '__vxp-provided-locale'
 
 export function getDefaultLocaleConfig() {
   return {
@@ -129,12 +133,23 @@ const config = reactive({
   locale: getDefaultLocaleConfig()
 })
 
-export function configLocale(locale: LocaleOptions) {
-  config.locale = mergeObjects(getDefaultLocaleConfig(), locale, false)
+export function configLocale(sourceLocale: LocaleOptions, app?: App) {
+  const provideFn = isFunction(app?.provide) ? app!.provide : provide
+  const locale = computed(() => mergeObjects(getDefaultLocaleConfig(), sourceLocale, false))
+
+  // config.locale = locale.value
+
+  provideFn(PROVIDED_LOCALE, locale)
 }
 
 export function useLocaleConfig<T extends LocaleNames>(name: T) {
   return config.locale[name]
+}
+
+export function useLocale<T extends LocaleNames>(name: T) {
+  const locale = inject<ComputedRef<LocaleConfig> | null>(PROVIDED_LOCALE, null)
+
+  return computed(() => locale?.value?.[name] ?? {} as LocaleConfig[T])
 }
 
 export function getCountWord(wordTemplate: string, count: number) {

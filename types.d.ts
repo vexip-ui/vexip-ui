@@ -23,6 +23,7 @@ declare module 'vue' {
     CollapseTransition: typeof import('vexip-ui')['CollapseTransition'],
     ColorPicker: typeof import('vexip-ui')['ColorPicker'],
     Column: typeof import('vexip-ui')['Column'],
+    ConfigProvider: typeof import('vexip-ui')['ConfigProvider'],
     DatePicker: typeof import('vexip-ui')['DatePicker'],
     Divider: typeof import('vexip-ui')['Divider'],
     Drawer: typeof import('vexip-ui')['Drawer'],
