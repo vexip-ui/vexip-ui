@@ -1,6 +1,6 @@
 <template>
   <div :class="className" @click="handleClick">
-    <div :class="[`${prefix}__content`, contentClass]" :style="contentStyle">
+    <div :class="[`${prefix}__content`, props.contentClass]" :style="contentStyle">
       <div :class="`${prefix}__arrow`" :style="arrowStyle"></div>
       <slot></slot>
     </div>
@@ -10,39 +10,33 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { placementWhileList } from '@vexip-ui/mixins'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps } from '@vexip-ui/config'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 
 type ClassType = string | Record<string, boolean>
 
-const props = useConfiguredProps('bubble', {
-  placement: {
-    default: 'right',
-    validator: (value: Placement) => {
-      return placementWhileList.includes(value)
-    }
-  },
-  background: {
-    type: String,
-    default: ''
-  },
-  shadow: {
-    type: [Boolean, String],
-    default: false
-  },
-  contentClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  }
-})
-
 export default defineComponent({
   name: 'Bubble',
-  props,
+  props: {
+    placement: String as PropType<Placement>,
+    background: String,
+    shadow: [Boolean, String],
+    contentClass: [String, Object] as PropType<ClassType>
+  },
   emits: ['click'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('bubble', _props, {
+      placement: {
+        default: 'right',
+        validator: (value: Placement) => placementWhileList.includes(value)
+      },
+      background: '',
+      shadow: false,
+      contentClass: null
+    })
+
     const prefix = 'vxp-bubble'
 
     const className = computed(() => {
@@ -80,6 +74,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
 
       className,

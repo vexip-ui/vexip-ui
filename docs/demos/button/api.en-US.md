@@ -14,7 +14,7 @@
 | icon         | `Record<string, any>`                                                   | Auxiliary icon of the button, it will switch to the loading icon when loading          | `''`        | -     |
 | loading-icon | `string`                                                                | Icon displayed when loading state, with pulse effect                                   | `'spinner'` | -     |
 | loading-spin | `boolean`                                                               | After set, the original pulse effect of the loading icon will be displaced and rotated | `false`     | -     |
-| button-type  | `string`                                                                | Set the type property of the native button                                             | `'button'`  | -     |
+| button-type  | `'button' \| 'submit' \| 'reset'`                                                                | Set the type attribute of the native button                                             | `'button'`  | -     |
 | block        | `boolean`                                                               | Whether it is a block-level element, the width becomes 100% after setting              | `false`     | -     |
 | color        | `string`                                                                | Set the major color of the button                                                      | `null`      | `2.0.0`     |
 

@@ -6,19 +6,18 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
-
-const props = useConfiguredProps('buttonGroup', {
-  circle: {
-    type: Boolean,
-    default: false
-  }
-})
+import { useProps, booleanProp } from '@vexip-ui/config'
 
 export default defineComponent({
   name: 'ButtonGroup',
-  props,
-  setup(props) {
+  props: {
+    circle: booleanProp
+  },
+  setup(_props) {
+    const props = useProps('buttonGroup', _props, {
+      circle: false
+    })
+
     const prefix = 'vxp-button-group'
 
     const className = computed(() => {

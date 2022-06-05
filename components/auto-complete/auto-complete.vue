@@ -5,25 +5,25 @@
     :class="prefixCls"
     :list-class="`${prefixCls}__list`"
     :value="currentValue"
-    :size="size"
-    :state="state"
-    :clearable="clearable"
-    :transition-name="transitionName"
-    :disabled="disabled"
-    :transfer="transfer"
-    :placement="placement"
-    :prefix-color="prefixColor"
-    :suffix-color="suffixColor"
+    :size="props.size"
+    :state="props.state"
+    :clearable="props.clearable"
+    :transition-name="props.transitionName"
+    :disabled="props.disabled"
+    :transfer="props.transfer"
+    :placement="props.placement"
+    :prefix-color="props.prefixColor"
+    :suffix-color="props.suffixColor"
     :no-suffix="!hasSuffix"
-    :placeholder="placeholder"
-    :options="options"
+    :placeholder="props.placeholder"
+    :options="props.options"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
   >
     <template v-if="hasPrefix" #prefix>
       <slot name="prefix">
-        <Icon :icon="prefix"></Icon>
+        <Icon :icon="props.prefix"></Icon>
       </slot>
     </template>
     <template #control>
@@ -39,10 +39,10 @@
           ref="control"
           :class="`${prefixCls}__input`"
           :value="inputValue"
-          :autofocus="autofocus"
-          :spellcheck="spellcheck"
-          :disabled="disabled"
-          :placeholder="placeholder ?? locale.placeholder"
+          :autofocus="props.autofocus"
+          :spellcheck="props.spellcheck"
+          :disabled="props.disabled"
+          :placeholder="props.placeholder ?? locale.placeholder"
           autocomplete="off"
           @input="handleInput"
           @change="handleInputChange"
@@ -53,7 +53,7 @@
     </template>
     <template v-if="hasSuffix" #suffix>
       <slot name="suffix">
-        <Icon :icon="suffix"></Icon>
+        <Icon :icon="props.suffix"></Icon>
       </slot>
     </template>
     <template #default="{ option, index, selected }">
@@ -74,7 +74,7 @@ import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { placementWhileList } from '@vexip-ui/mixins'
-import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, useLocale, createSizeProp, createStateProp, booleanProp, sizeProp, stateProp } from '@vexip-ui/config'
 import { isNull, noop } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -82,97 +82,37 @@ import type { Placement } from '@vexip-ui/mixins'
 import type { OptionState } from '@/components/option'
 import type { RawOption } from '@/components/select'
 
-const props = useConfiguredProps('autoComplete', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  },
-  value: {
-    type: [String, Number],
-    default: ''
-  },
-  options: {
-    type: Array as PropType<RawOption[]>,
-    default: () => []
-  },
-  filter: {
-    type: [Boolean, Function] as PropType<
-      | boolean
-      | ((value: string | number, options: { label: string, value: string | number }) => boolean)
-    >,
-    default: false
-  },
-  prefix: {
-    type: Object,
-    default: null
-  },
-  prefixColor: {
-    type: String,
-    default: ''
-  },
-  suffix: {
-    type: Object,
-    default: null
-  },
-  suffixColor: {
-    type: String,
-    default: ''
-  },
-  placeholder: {
-    type: String,
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-drop'
-  },
-  dropDisabled: {
-    type: Boolean,
-    default: false
-  },
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'bottom',
-    validator: (value: Placement) => {
-      return placementWhileList.includes(value)
-    }
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  },
-  clearable: {
-    type: Boolean,
-    default: false
-  },
-  ignoreCase: {
-    type: Boolean,
-    default: false
-  },
-  autofocus: {
-    type: Boolean,
-    default: false
-  },
-  spellcheck: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'AutoComplete',
   components: {
     Icon,
-    // Option,
     Select
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    transfer: [Boolean, String],
+    value: [String, Number],
+    options: Array as PropType<RawOption[]>,
+    filter: [Boolean, Function] as PropType<
+      | boolean
+      | ((value: string | number, options: { label: string, value: string | number }) => boolean)
+    >,
+    prefix: Object,
+    prefixColor: String,
+    suffix: Object,
+    suffixColor: String,
+    placeholder: String,
+    disabled: booleanProp,
+    transitionName: String,
+    dropDisabled: booleanProp,
+    placement: String as PropType<Placement>,
+    disableValidate: booleanProp,
+    clearable: booleanProp,
+    ignoreCase: booleanProp,
+    autofocus: booleanProp,
+    spellcheck: booleanProp
+  },
   emits: [
     'select',
     'input',
@@ -182,7 +122,39 @@ export default defineComponent({
     'clear',
     'update:value'
   ],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('autoComplete', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      transfer: false,
+      value: {
+        default: '',
+        static: true
+      },
+      options: {
+        default: () => [],
+        static: true
+      },
+      filter: false,
+      prefix: null,
+      prefixColor: '',
+      suffix: null,
+      suffixColor: '',
+      placeholder: null,
+      disabled: false,
+      transitionName: 'vxp-drop',
+      dropDisabled: false,
+      placement: {
+        default: 'bottom',
+        validator: (value: Placement) => placementWhileList.includes(value)
+      },
+      disableValidate: false,
+      clearable: false,
+      ignoreCase: false,
+      autofocus: false,
+      spellcheck: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
@@ -427,8 +399,9 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefixCls: prefix,
-      locale: useLocaleConfig('input'),
+      locale: useLocale('input'),
       currentValue,
       currentIndex,
       visible,

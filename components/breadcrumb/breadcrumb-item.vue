@@ -26,19 +26,17 @@ import { BREADCRUMB_STATE } from './symbol'
 
 import type { SeparatorRenderFn, ItemState } from './symbol'
 
-const props = {
-  label: {
-    type: [String, Number],
-    default: null
-  }
-}
-
 export default defineComponent({
   name: 'BreadcrumbItem',
   components: {
     Renderer
   },
-  props,
+  props: {
+    label: {
+      type: [String, Number],
+      default: null
+    }
+  },
   emits: ['select', 'separator-click'],
   setup(props, { emit }) {
     const breadcrumbState = inject(BREADCRUMB_STATE, null)

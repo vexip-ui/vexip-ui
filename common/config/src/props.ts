@@ -3,52 +3,53 @@ import { has, isNull, isObject, isFunction } from '@vexip-ui/utils'
 
 import type { App, ComputedRef, PropType } from 'vue'
 
-interface PropOptions<T> {
+export type PropOptions = Record<string, Record<string, unknown>>
+
+interface PropConfig<T = any> {
   default: T | (() => T),
   isFunc?: boolean,
   static?: boolean,
   validator?: (value: T) => any
 }
-
 export const PROVIDED_PROPS = '__vxp-provided-props'
 
-export function configProps(props: Record<string, Record<string, unknown>>, app?: App) {
+export function configProps(props: PropOptions, app?: App) {
   const provideFn = isFunction(app?.provide) ? app!.provide : provide
 
   provideFn(PROVIDED_PROPS, props)
 }
 
-export function useProps<T, K extends keyof T = keyof T>(
+export function useProps<T>(
   name: string,
   sourceProps: T,
-  defaults: Partial<Record<K, any>> = {}
+  config: Partial<Record<keyof T, any>> = {}
 ) {
-  const providedProps = inject<ComputedRef<Record<string, Record<K, T[K]>>> | null>(
+  const providedProps = inject<ComputedRef<Record<string, Record<keyof T, T[keyof T]>>> | null>(
     PROVIDED_PROPS,
     null
   )
   const configProps = computed(() => {
-    return providedProps?.value?.[name] ?? ({} as Record<K, T[K]>)
+    return providedProps?.value?.[name] ?? ({} as Record<keyof T, T[keyof T]>)
   })
-  const keys = Object.keys(sourceProps) as Array<K>
-  const props = {} as Record<K, ComputedRef<T[K]>>
+  const keys = Object.keys(sourceProps) as Array<keyof T>
+  const props = {} as Record<keyof T, ComputedRef<T[keyof T]>>
 
   keys.forEach(key => {
-    const defs = defaults[key]
+    const defs = config[key]
     const propOptions = (
       isObject(defs) && has(defs, 'default') ? defs : { default: defs }
-    ) as PropOptions<T[K]>
+    ) as PropConfig<T[keyof T]>
     const validator = isFunction(propOptions.validator) ? propOptions.validator : null
     const defaultValue = propOptions.default
     const isFunc = propOptions.isFunc || false
     const getDefault = () =>
-      (!isFunc && isFunction(defaultValue) ? defaultValue() : defaultValue) as T[K]
+      (!isFunc && isFunction(defaultValue) ? defaultValue() : defaultValue) as T[keyof T]
 
     validator && watch(() => sourceProps[key], validator)
 
     if (propOptions.static) {
       props[key] = computed(() => {
-        return isNull(sourceProps[key]) ? getDefault() : sourceProps[key]
+        return sourceProps[key] ?? getDefault()
       })
     } else {
       props[key] = computed(() => {

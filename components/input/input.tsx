@@ -73,8 +73,14 @@ export default defineComponent({
       prefixColor: '',
       suffix: null,
       suffixColor: '',
-      formatter: null,
-      accessor: null,
+      formatter: {
+        default: null,
+        isFunc: true
+      },
+      accessor: {
+        default: null,
+        isFunc: true
+      },
       value: '',
       placeholder: null,
       autofocus: false,

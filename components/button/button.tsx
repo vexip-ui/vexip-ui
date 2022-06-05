@@ -1,90 +1,14 @@
 import { defineComponent, h, ref, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { createSizeProp, useConfiguredProps } from '@vexip-ui/config'
+import { createSizeProp, useProps, booleanProp, sizeProp } from '@vexip-ui/config'
 import { Spinner } from '@vexip-ui/icons'
 import { parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
 
+import type { PropType } from 'vue'
 import type { ButtonType, ButtonAttrType } from './symbol'
 
-const props = useConfiguredProps('button', {
-  size: createSizeProp(),
-  type: {
-    default: 'default' as ButtonType,
-    validator: (value: ButtonType) => {
-      return [
-        'default',
-        'primary',
-        'info',
-        'success',
-        'warning',
-        'error'
-      ].includes(value)
-    }
-  },
-  dashed: {
-    type: Boolean,
-    default: false
-  },
-  text: {
-    type: Boolean,
-    default: false
-  },
-  simple: {
-    type: Boolean,
-    default: false
-  },
-  ghost: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  circle: {
-    type: Boolean,
-    default: false
-  },
-  loadingIcon: {
-    type: Object,
-    default: Spinner
-  },
-  loadingSpin: {
-    type: Boolean,
-    default: false
-  },
-  icon: {
-    type: Object,
-    default: null
-  },
-  color: {
-    type: String,
-    default: null
-  },
-  buttonType: {
-    type: String,
-    default: 'button'
-  },
-  block: {
-    type: Boolean,
-    default: false
-  },
-  tag: {
-    type: String,
-    default: 'button'
-  },
-  attrType: {
-    default: 'button' as ButtonAttrType,
-    validator: (value: ButtonAttrType) => {
-      return ['button', 'submit', 'reset'].includes(value)
-    }
-  }
-})
+const buttonTypes = Object.freeze(['default', 'primary', 'info', 'success', 'warning', 'error'] as ButtonType[])
 
 export default defineComponent({
   name: 'Button',
@@ -92,9 +16,51 @@ export default defineComponent({
     CollapseTransition,
     Icon
   },
-  props,
+  props: {
+    size: sizeProp,
+    type: String as PropType<ButtonType>,
+    dashed: booleanProp,
+    text: booleanProp,
+    simple: booleanProp,
+    ghost: booleanProp,
+    disabled: booleanProp,
+    loading: booleanProp,
+    circle: booleanProp,
+    loadingIcon: Object,
+    loadingSpin: booleanProp,
+    icon: Object,
+    color: String,
+    buttonType: String as PropType<'button' | 'submit' | 'reset'>,
+    block: booleanProp,
+    tag: String
+  },
   emits: ['click'],
-  setup(props, { emit, slots }) {
+  setup(_props, { emit, slots }) {
+    const props = useProps('button', _props, {
+      size: createSizeProp(),
+      type: {
+        default: 'default' as ButtonType,
+        validator: (value: ButtonType) => buttonTypes.includes(value)
+      },
+      dashed: false,
+      text: false,
+      simple: false,
+      ghost: false,
+      disabled: false,
+      loading: false,
+      circle: false,
+      loadingIcon: Spinner,
+      loadingSpin: false,
+      icon: null,
+      color: null,
+      buttonType: {
+        default: 'button' as ButtonAttrType,
+        validator: (value: ButtonAttrType) => ['button', 'submit', 'reset'].includes(value)
+      },
+      block: false,
+      tag: 'button'
+    })
+
     const prefix = 'vxp-button'
     const pulsing = ref(false)
     const isIconOnly = computed(() => {
@@ -290,7 +256,7 @@ export default defineComponent({
     return () => h(
       props.tag || 'button',
       {
-        type: props.attrType,
+        type: props.buttonType,
         class: className.value,
         style: style.value,
         disabled: props.disabled,

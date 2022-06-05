@@ -1,5 +1,5 @@
 <template>
-  <CollapseTransition fade-effect @after-leave="handleAfterLeave">
+  <CollapseTransition v-if="!hidden" fade-effect @after-leave="handleAfterLeave">
     <div v-if="!closed" :class="className">
       <div v-if="hasTitle" :class="`${prefix}__title`">
         <slot name="title">
@@ -11,12 +11,12 @@
       </div>
       <div v-if="hasIcon" :class="`${prefix}__icon`">
         <slot name="icon">
-          <Icon :icon="iconComp" :style="{ color: iconColor }"></Icon>
+          <Icon :icon="iconComp" :style="{ color: props.iconColor }"></Icon>
         </slot>
       </div>
-      <div v-if="closable" :class="`${prefix}__close`" @click="handleClose">
+      <div v-if="props.closable" :class="`${prefix}__close`" @click="handleClose">
         <slot name="close">
-          <Icon :icon="Xmark"></Icon>
+          <Icon><Xmark></Xmark></Icon>
         </slot>
       </div>
     </div>
@@ -27,7 +27,7 @@
 import { defineComponent, ref, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 
 import {
   Flag,
@@ -37,6 +37,8 @@ import {
   Xmark,
   CircleXmark
 } from '@vexip-ui/icons'
+
+import type { PropType } from 'vue'
 
 export type AlertType = 'default' | 'info' | 'success' | 'warning' | 'error'
 
@@ -48,58 +50,45 @@ const predefinedIcons = {
   error: CircleXmark
 }
 
-const props = useConfiguredProps('alert', {
-  type: {
-    default: 'info' as AlertType,
-    validator: (value: AlertType) => {
-      return ['default', 'info', 'success', 'warning', 'error'].includes(value)
-    }
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  colorfulText: {
-    type: Boolean,
-    default: false
-  },
-  icon: {
-    type: [Boolean, Object],
-    default: false
-  },
-  closable: {
-    type: Boolean,
-    default: false
-  },
-  iconColor: {
-    type: String,
-    default: ''
-  },
-  noBorder: {
-    type: Boolean,
-    default: false
-  },
-  banner: {
-    type: Boolean,
-    default: false
-  },
-  manual: {
-    type: Boolean,
-    default: false
-  }
-})
+const alertTypes = Object.freeze(['default', 'info', 'success', 'warning', 'error'] as AlertType[])
 
 export default defineComponent({
   name: 'Alert',
   components: {
     CollapseTransition,
-    Icon
+    Icon,
+    Xmark
   },
-  props,
+  props: {
+    type: String as PropType<AlertType>,
+    title: String,
+    colorfulText: booleanProp,
+    icon: [Boolean, Object],
+    closable: booleanProp,
+    iconColor: String,
+    noBorder: booleanProp,
+    banner: booleanProp,
+    manual: booleanProp
+  },
   emits: ['close', 'hide'],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('alert', _props, {
+      type: {
+        default: 'info' as AlertType,
+        validator: (value: AlertType) => alertTypes.includes(value)
+      },
+      title: '',
+      colorfulText: false,
+      icon: false,
+      closable: false,
+      iconColor: '',
+      noBorder: false,
+      banner: false,
+      manual: false
+    })
     const prefix = 'vxp-alert'
     const closed = ref(false)
+    const hidden = ref(false)
 
     const hasTitle = computed(() => {
       return !!(props.title || slots.title)
@@ -138,13 +127,15 @@ export default defineComponent({
 
     function handleAfterLeave() {
       emit('hide')
+      hidden.value = true
     }
 
     return {
-      Xmark,
+      props,
 
       prefix,
       closed,
+      hidden,
 
       hasTitle,
       hasIcon,
