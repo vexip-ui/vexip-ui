@@ -30,7 +30,7 @@ export default defineComponent({
     loadingSpin: booleanProp,
     icon: Object,
     color: String,
-    buttonType: String as PropType<'button' | 'submit' | 'reset'>,
+    buttonType: String as PropType<ButtonAttrType>,
     block: booleanProp,
     tag: String
   },

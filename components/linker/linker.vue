@@ -1,12 +1,12 @@
 <template>
   <a
     :class="className"
-    :href="to"
-    :target="target"
+    :href="props.to"
+    :target="props.target"
     @click="handleClick"
   >
     <slot name="icon">
-      <Icon v-if="icon" :class="`${prefix}__icon`" :icon="icon"></Icon>
+      <Icon v-if="props.icon" :class="`${prefix}__icon`" :icon="props.icon"></Icon>
     </slot>
     <slot></slot>
   </a>
@@ -15,47 +15,44 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
+
+import type { PropType } from 'vue'
 
 export type LinkerType = 'default' | 'primary' | 'success' | 'error' | 'warning' | 'info'
 
-const props = useConfiguredProps('linker', {
-  to: {
-    type: String,
-    default: null
-  },
-  type: {
-    default: 'default' as LinkerType,
-    validator: (value: LinkerType) => {
-      return ['default', 'primary', 'success', 'error', 'warning', 'info'].includes(value)
-    }
-  },
-  icon: {
-    type: Object,
-    default: null
-  },
-  underline: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  target: {
-    type: String,
-    default: '_blank'
-  }
-})
+const linkerTypes = Object.freeze<LinkerType>(['default', 'primary', 'success', 'error', 'warning', 'info'])
 
 export default defineComponent({
   name: 'Linker',
   components: {
     Icon
   },
-  props,
+  props: {
+    to: String,
+    type: String as PropType<LinkerType>,
+    icon: Object,
+    underline: booleanProp,
+    disabled: booleanProp,
+    target: String
+  },
   emits: ['click'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('linker', _props, {
+      to: {
+        default: null,
+        static: true
+      },
+      type: {
+        default: 'default' as LinkerType,
+        validator: (value: LinkerType) => linkerTypes.includes(value)
+      },
+      icon: null,
+      underline: false,
+      disabled: false,
+      target: '_blank'
+    })
+
     const prefix = 'vxp-linker'
 
     const className = computed(() => {
@@ -73,6 +70,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
 
       className,

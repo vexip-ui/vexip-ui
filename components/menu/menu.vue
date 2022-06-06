@@ -16,64 +16,57 @@ import {
   provide,
   toRef
 } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { MENU_STATE } from './symbol'
 
+import type { PropType } from 'vue'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { MenuMarkerType, MenuGroupType, MenuTheme, MenuItemState, MenuState } from './symbol'
 
-const props = useConfiguredProps('menu', {
-  active: {
-    type: String,
-    default: null
-  },
-  accordion: {
-    type: Boolean,
-    default: false
-  },
-  markerType: {
-    default: 'right' as MenuMarkerType,
-    validator: (value: MenuMarkerType) => {
-      return ['top', 'right', 'bottom', 'left', 'none'].includes(value)
-    }
-  },
-  reduced: {
-    type: Boolean,
-    default: false
-  },
-  horizontal: {
-    type: Boolean,
-    default: false
-  },
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  },
-  groupType: {
-    default: 'collapse' as MenuGroupType,
-    validator: (value: MenuGroupType) => {
-      return ['collapse', 'dropdown'].includes(value)
-    }
-  },
-  theme: {
-    default: 'light' as MenuTheme,
-    validator: (value: MenuTheme) => {
-      return ['light', 'dark'].includes(value)
-    }
-  },
-  tooltipTheme: {
-    default: 'dark' as TooltipTheme,
-    validator: (value: TooltipTheme) => {
-      return ['light', 'dark'].includes(value)
-    }
-  }
-})
+const menuMarkerTypes = Object.freeze<MenuMarkerType>(['top', 'right', 'bottom', 'left', 'none'])
 
 export default defineComponent({
   name: 'Menu',
-  props,
+  props: {
+    active: String,
+    accordion: booleanProp,
+    markerType: String as PropType<MenuMarkerType>,
+    reduced: booleanProp,
+    horizontal: booleanProp,
+    transfer: [Boolean, String],
+    groupType: String as PropType<MenuGroupType>,
+    theme: String as PropType<MenuTheme>,
+    tooltipTheme: String as PropType<TooltipTheme>
+  },
   emits: ['select', 'expand', 'reduce', 'update:active'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('menu', _props, {
+      active: {
+        default: null,
+        static: true
+      },
+      accordion: false,
+      markerType: {
+        default: 'right' as MenuMarkerType,
+        validator: (value: MenuMarkerType) => menuMarkerTypes.includes(value)
+      },
+      reduced: false,
+      horizontal: false,
+      transfer: false,
+      groupType: {
+        default: 'collapse' as MenuGroupType,
+        validator: (value: MenuGroupType) => ['collapse', 'dropdown'].includes(value)
+      },
+      theme: {
+        default: 'light' as MenuTheme,
+        validator: (value: MenuTheme) => ['light', 'dark'].includes(value)
+      },
+      tooltipTheme: {
+        default: 'dark' as TooltipTheme,
+        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+      }
+    })
+
     const prefix = 'vxp-menu'
     const menuItemSet = new Set<MenuItemState>()
     const currentActive = ref(props.active)

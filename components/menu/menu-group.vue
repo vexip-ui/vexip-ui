@@ -18,16 +18,14 @@
 import { defineComponent, ref, reactive, computed, inject, provide } from 'vue'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
-const props = {
-  label: {
-    type: String,
-    default: ''
-  }
-}
-
 export default defineComponent({
   name: 'MenuGroup',
-  props,
+  props: {
+    label: {
+      type: String,
+      default: ''
+    }
+  },
   setup() {
     const menuState = inject(MENU_STATE, null)
     const parentItemState = inject(MENU_ITEM_STATE, null)

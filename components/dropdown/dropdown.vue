@@ -15,11 +15,11 @@
     </div>
     <DropdownDrop>
       <Portal :to="transferTo">
-        <transition :name="transitionName" :appear="appear">
+        <transition :name="props.transitionName" :appear="props.appear">
           <div
             v-show="currentVisible"
             ref="popper"
-            :class="[`${prefix}__popper`, `${prefix}-vars`, isNested ? `${prefix}__popper--nested` : null, dropClass]"
+            :class="[`${prefix}__popper`, `${prefix}-vars`, isNested ? `${prefix}__popper--nested` : null, props.dropClass]"
             @mouseenter="handleTriggerEnter"
             @mouseleave="handleTriggerLeave"
           >
@@ -46,7 +46,7 @@ import {
 import { Portal } from '@/components/portal'
 import DropdownDrop from './dropdown-drop'
 import { useClickOutside, placementWhileList, usePopper, useTriggerHandler } from '@vexip-ui/mixins'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { useLabel } from './mixins'
 import { SELECT_HANDLER, DROP_SELECT_HANDLER } from './symbol'
 
@@ -56,59 +56,49 @@ import type { Placement } from '@vexip-ui/mixins'
 export type DropdownTrigger = 'hover' | 'click' | 'custom'
 type ClassType = string | Record<string, boolean>
 
-const props = useConfiguredProps('dropdown', {
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'bottom',
-    validator: (value: Placement) => {
-      return placementWhileList.includes(value)
-    }
-  },
-  outsideClose: {
-    type: Boolean,
-    default: true
-  },
-  trigger: {
-    default: 'hover' as DropdownTrigger,
-    validator: (value: DropdownTrigger) => {
-      return ['hover', 'click', 'custom'].includes(value)
-    }
-  },
-  label: {
-    type: [String, Number],
-    default: null
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-drop'
-  },
-  transfer: {
-    type: [Boolean, String],
-    default: true
-  },
-  dropClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  appear: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'Dropdown',
   components: {
     DropdownDrop,
     Portal
   },
-  props,
+  props: {
+    visible: booleanProp,
+    placement: String as PropType<Placement>,
+    outsideClose: booleanProp,
+    trigger: String as PropType<DropdownTrigger>,
+    label: [String, Number],
+    transitionName: String,
+    transfer: [Boolean, String],
+    dropClass: [String, Object] as PropType<ClassType>,
+    appear: booleanProp
+  },
   emits: ['toggle', 'select', 'click-outside', 'outside-close', 'update:visible'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('dropdown', _props, {
+      visible: {
+        default: false,
+        static: true
+      },
+      placement: {
+        default: 'bottom',
+        validator: (value: Placement) => placementWhileList.includes(value)
+      },
+      outsideClose: true,
+      trigger: {
+        default: 'hover' as DropdownTrigger,
+        validator: (value: DropdownTrigger) => ['hover', 'click', 'custom'].includes(value)
+      },
+      label: {
+        default: null,
+        static: true
+      },
+      transitionName: 'vxp-drop',
+      transfer: false,
+      dropClass: null,
+      appear: false
+    })
+
     const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)
 
     const prefix = 'vxp-dropdown'
@@ -209,6 +199,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       isNested,
       currentVisible,

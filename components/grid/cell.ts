@@ -1,5 +1,5 @@
 import { defineComponent, reactive, computed, watch, h, inject } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps } from '@vexip-ui/config'
 import { isDefined, has } from '@vexip-ui/utils'
 import { breakPoints, currentBreakPoint } from './helpler'
 import { GRID_STATE } from './symbol'
@@ -8,69 +8,78 @@ import type { PropType, CSSProperties } from 'vue'
 import type { BreakPoint } from './helpler'
 import type { CellFlex, CellOptions } from './symbol'
 
-const props = useConfiguredProps('cell', {
-  tag: {
-    type: String,
-    default: 'div'
-  },
-  top: {
-    type: [Number, String],
-    default: 'auto'
-  },
-  left: {
-    type: [Number, String],
-    default: 'auto'
-  },
-  width: {
-    type: Number,
-    default: null
-  },
-  height: {
-    type: Number,
-    default: 1
-  },
-  right: {
-    type: [Number, String],
-    default: ''
-  },
-  bottom: {
-    type: [Number, String],
-    default: ''
-  },
-  xs: {
-    type: [Number, Object] as PropType<CellOptions>,
-    default: null
-  },
-  sm: {
-    type: [Number, Object] as PropType<CellOptions>,
-    default: null
-  },
-  md: {
-    type: [Number, Object] as PropType<CellOptions>,
-    default: null
-  },
-  lg: {
-    type: [Number, Object] as PropType<CellOptions>,
-    default: null
-  },
-  xl: {
-    type: [Number, Object] as PropType<CellOptions>,
-    default: null
-  },
-  xxl: {
-    type: [Number, Object] as PropType<CellOptions>,
-    default: null
-  },
-  useFlex: {
-    type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
-    default: null
-  }
-})
-
 export default defineComponent({
   name: 'Cell',
-  props,
-  setup(props, { slots }) {
+  props: {
+    tag: String,
+    top: [Number, String],
+    left: [Number, String],
+    width: Number,
+    height: Number,
+    right: [Number, String],
+    bottom: [Number, String],
+    xs: [Number, Object] as PropType<CellOptions>,
+    sm: [Number, Object] as PropType<CellOptions>,
+    md: [Number, Object] as PropType<CellOptions>,
+    lg: [Number, Object] as PropType<CellOptions>,
+    xl: [Number, Object] as PropType<CellOptions>,
+    xxl: [Number, Object] as PropType<CellOptions>,
+    useFlex: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>
+  },
+  setup(_props, { slots }) {
+    const props = useProps('cell', _props, {
+      tag: 'div',
+      top: {
+        default: 'auto',
+        static: true
+      },
+      left: {
+        default: 'auto',
+        static: true
+      },
+      width: {
+        default: null,
+        static: true
+      },
+      height: {
+        default: 1,
+        static: true
+      },
+      right: {
+        default: '',
+        static: true
+      },
+      bottom: {
+        default: '',
+        static: true
+      },
+      xs: {
+        default: null,
+        static: true
+      },
+      sm: {
+        default: null,
+        static: true
+      },
+      md: {
+        default: null,
+        static: true
+      },
+      lg: {
+        default: null,
+        static: true
+      },
+      xl: {
+        default: null,
+        static: true
+      },
+      xxl: {
+        default: null,
+        static: true
+      },
+      useFlex: null
+    })
+
     const gridState = inject(GRID_STATE, null)
 
     const prefix = 'vxp-cell'

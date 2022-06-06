@@ -3,7 +3,7 @@
     <input
       v-if="isNative"
       type="hidden"
-      :name="prop"
+      :name="props.prop"
       :value="inputValue"
       style="display: none;"
     />
@@ -11,10 +11,10 @@
       v-if="hasLabel"
       :class="`${prefix}__label`"
       :style="{ width: `${computedlabelWidth}px` }"
-      :for="htmlFor"
+      :for="props.htmlFor"
     >
       <slot name="label">
-        {{ label + (labelSuffix || '') }}
+        {{ props.label + (labelSuffix || '') }}
       </slot>
     </label>
     <div
@@ -25,8 +25,8 @@
       :style="controlStyle"
     >
       <slot></slot>
-      <transition :name="errorTransition">
-        <div v-if="!hideErrorTip && isError" :class="`${prefix}__error-tip`">
+      <transition :name="props.errorTransition">
+        <div v-if="!props.hideErrorTip && isError" :class="`${prefix}__error-tip`">
           <slot name="error" :tip="errorTip">
             {{ errorTip }}
           </slot>
@@ -48,7 +48,7 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { isNull, isFunction } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
@@ -59,65 +59,46 @@ import type { Ref, PropType } from 'vue'
 import type { FormProps, FormItemProps, FieldOptions } from './symbol'
 import type { Trigger, Rule } from './validator'
 
-const props = useConfiguredProps('formItem', {
-  label: {
-    type: String,
-    default: ''
-  },
-  prop: {
-    type: String,
-    default: ''
-  },
-  rules: {
-    type: [Object, Array] as PropType<Rule | Rule[]>,
-    default: () => []
-  },
-  labelWidth: {
-    type: Number,
-    default: null
-  },
-  required: {
-    type: Boolean,
-    default: false
-  },
-  htmlFor: {
-    type: String,
-    default: null
-  },
-  errorTransition: {
-    type: String,
-    default: 'vxp-fade'
-  },
-  defaultValue: {
-    default: null,
-    validator: () => true
-  },
-  hideErrorTip: {
-    type: Boolean,
-    default: false
-  },
-  validateAll: {
-    type: Boolean,
-    default: null
-  },
-  hideAsterisk: {
-    type: Boolean,
-    default: null
-  },
-  hideLabel: {
-    type: Boolean,
-    default: null
-  },
-  action: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'FormItem',
-  props,
-  setup(props, { slots }) {
+  props: {
+    label: String,
+    prop: String,
+    rules: [Object, Array] as PropType<Rule | Rule[]>,
+    labelWidth: Number,
+    required: Boolean,
+    htmlFor: String,
+    errorTransition: String,
+    defaultValue: Object as PropType<unknown>,
+    hideErrorTip: booleanProp,
+    validateAll: booleanProp,
+    hideAsterisk: booleanProp,
+    hideLabel: booleanProp,
+    action: booleanProp
+  },
+  setup(_props, { slots }) {
+    const props = useProps('formItem', _props, {
+      label: {
+        default: '',
+        static: true
+      },
+      prop: {
+        default: '',
+        static: true
+      },
+      rules: () => [],
+      labelWidth: null,
+      required: false,
+      htmlFor: null,
+      errorTransition: 'vxp-fade',
+      defaultValue: null,
+      hideErrorTip: false,
+      validateAll: null,
+      hideAsterisk: null,
+      hideLabel: null,
+      action: false
+    })
+
     const formProps = inject(FORM_PROPS, {})
 
     const prefix = 'vxp-form'
@@ -195,6 +176,7 @@ export default defineComponent({
     })
 
     return {
+      props,
       prefix,
       isError,
       errorTip,

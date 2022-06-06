@@ -9,21 +9,21 @@
     <slot></slot>
   </div>
   <Portal v-if="visible" :to="transferTo">
-    <transition :name="transitionName" appear @after-leave="visible = false">
+    <transition :name="props.transitionName" appear @after-leave="visible = false">
       <div
         v-show="active"
         ref="popper"
         :class="{
           [`${tooltipPrefix}__popper`]: true,
           [`${tooltipPrefix}-vars`]: true,
-          [`${tooltipPrefix}__popper--${tooltipTheme}`]: true,
-          [`${tooltipPrefix}__popper--no-hover`]: noHover
+          [`${tooltipPrefix}__popper--${props.tooltipTheme}`]: true,
+          [`${tooltipPrefix}__popper--no-hover`]: props.noHover
         }"
         @click.stop
         @mouseenter="handleTriggerEnter"
         @mouseleave="handleTriggerLeave"
       >
-        <div :class="[`${prefix}__tip`, `${tooltipPrefix}__tip`, tipClass]" :style="tipStyle">
+        <div :class="[`${prefix}__tip`, `${tooltipPrefix}__tip`, props.tipClass]" :style="tipStyle">
           <div :class="`${tooltipPrefix}__arrow`"></div>
           {{ content }}
         </div>
@@ -35,7 +35,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { placementWhileList, usePopper } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
@@ -44,49 +44,37 @@ import type { TooltipTheme } from '@/components/tooltip'
 
 export type ClassType = string | Record<string, boolean>
 
-const props = useConfiguredProps('ellipsis', {
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'top',
-    validator: (value: Placement) => {
-      return placementWhileList.includes(value)
-    }
-  },
-  transfer: {
-    type: String,
-    default: 'body'
-  },
-  noHover: {
-    type: Boolean,
-    default: false
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-fade'
-  },
-  tooltipTheme: {
-    default: 'dark' as TooltipTheme,
-    validator: (value: TooltipTheme) => {
-      return ['light', 'dark'].includes(value)
-    }
-  },
-  tipClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  tipMaxWidth: {
-    type: [Number, String],
-    default: 500
-  }
-})
-
 export default defineComponent({
   name: 'Ellipsis',
   components: {
     Portal
   },
-  props,
-  setup(props) {
+  props: {
+    placement: String as PropType<Placement>,
+    transfer: [Boolean, String],
+    noHover: booleanProp,
+    transitionName: String,
+    tooltipTheme: String as PropType<TooltipTheme>,
+    tipClass: [String, Object] as PropType<ClassType>,
+    tipMaxWidth: [Number, String]
+  },
+  setup(_props) {
+    const props = useProps('ellipsis', _props, {
+      placement: {
+        default: 'top',
+        validator: (value: Placement) => placementWhileList.includes(value)
+      },
+      transfer: 'body',
+      noHover: false,
+      transitionName: 'vxp-fade',
+      tooltipTheme: {
+        default: 'dark' as TooltipTheme,
+        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+      },
+      tipClass: null,
+      tipMaxWidth: 500
+    })
+
     const prefix = 'vxp-ellipsis'
     const tooltipPrefix = 'vxp-tooltip'
     const visible = ref(false)
@@ -159,6 +147,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       tooltipPrefix,
       visible,
