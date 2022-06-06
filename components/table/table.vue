@@ -7,16 +7,16 @@
       v-if="useXScroll"
       use-x-bar
       mode="horizontal"
-      :class="[`${prefix}__wrapper`, scrollClass.horizontal]"
+      :class="[`${prefix}__wrapper`, props.scrollClass.horizontal]"
       :bar-class="`${prefix}__bar--horizontal`"
-      :width="width"
-      :bar-fade="barFade"
+      :width="props.width"
+      :bar-fade="props.barFade"
       :delta-x="50"
       @scroll="handleXScroll"
     >
       <TableHead ref="thead"></TableHead>
       <Scroll
-        :class="[`${prefix}__body-wrapper`, scrollClass.major]"
+        :class="[`${prefix}__body-wrapper`, props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         @scroll="handleBodyScroll"
@@ -32,10 +32,10 @@
     <template v-else>
       <TableHead ref="thead"></TableHead>
       <Scroll
-        :class="[`${prefix}__body-wrapper`, scrollClass.major]"
+        :class="[`${prefix}__body-wrapper`, props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        :delta-y="scrollDeltaY"
+        :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
         @y-enable-change="handleYScrollEnableChange"
       >
@@ -55,10 +55,10 @@
     >
       <TableHead fixed="left"></TableHead>
       <Scroll
-        :class="[`${prefix}__body-wrapper`, scrollClass.left]"
+        :class="[`${prefix}__body-wrapper`, props.scrollClass.left]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        :delta-y="scrollDeltaY"
+        :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
       >
         <TableBody fixed="left">
@@ -77,10 +77,10 @@
     >
       <TableHead fixed="right"></TableHead>
       <Scroll
-        :class="[`${prefix}__body-wrapper`, scrollClass.right]"
+        :class="[`${prefix}__body-wrapper`, props.scrollClass.right]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
-        :delta-y="scrollDeltaY"
+        :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
       >
         <TableBody fixed="right">
@@ -89,18 +89,18 @@
       </Scroll>
     </div>
     <Scrollbar
-      v-if="useYBar && bodyScrollHeight"
+      v-if="props.useYBar && bodyScrollHeight"
       ref="scrollbar"
       placement="right"
       :class="`${prefix}__bar--vertical`"
-      :fade="barFade"
+      :fade="props.barFade"
       :disabled="!!bodyHeight && totalHeight <= bodyHeight"
       :bar-length="barLength"
       :style="{ top: `${headHeight}px` }"
       @scroll="handleYBarScroll"
     ></Scrollbar>
     <div
-      v-if="rowDraggable"
+      v-if="props.rowDraggable"
       v-show="indicatorShow"
       ref="indicator"
       :class="`${prefix}__indicator`"
@@ -124,7 +124,7 @@ import { Scroll } from '@/components/scroll'
 import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
-import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isDefined, debounce, transformListToMap, removeArrayItem, toNumber, nextFrameOnce } from '@vexip-ui/utils'
 import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
@@ -144,130 +144,6 @@ import type {
 
 type DropType = 'before' | 'after'
 
-const props = useConfiguredProps('table', {
-  // TODO: colums 正确的类型推导
-  columns: {
-    type: Array as PropType<ColumnOptions<any, any>[]>,
-    default: () => []
-  },
-  data: {
-    type: Array as PropType<Data[]>,
-    default: () => []
-  },
-  dataKey: {
-    type: String,
-    default: DEFAULT_KEY_FIELD
-  },
-  width: {
-    type: [Number, String],
-    default: null
-  },
-  height: {
-    type: Number,
-    default: null
-  },
-  rowClass: {
-    type: [String, Object, Function] as PropType<ClassType | RowClassFn>,
-    default: null
-  },
-  stripe: {
-    type: Boolean,
-    default: false
-  },
-  border: {
-    type: Boolean,
-    default: false
-  },
-  highlight: {
-    type: Boolean,
-    default: false
-  },
-  useYBar: {
-    type: Boolean,
-    default: false
-  },
-  barFade: {
-    type: Number,
-    default: 1500
-  },
-  scrollDeltaY: {
-    type: Number,
-    default: 36
-  },
-  rowDraggable: {
-    type: Boolean,
-    default: false
-  },
-  rowHeight: {
-    type: Number,
-    default: null
-  },
-  rowMinHeight: {
-    type: Number,
-    default: 36,
-    validator: (value: number) => value > 0
-  },
-  virtual: {
-    type: Boolean,
-    default: false
-  },
-  bufferCount: {
-    type: Number,
-    default: 5,
-    validator: (value: number) => value >= 0
-  },
-  scrollClass: {
-    type: Object as PropType<{
-      horizontal?: ClassType,
-      major?: ClassType,
-      left?: ClassType,
-      right?: ClassType
-    }>,
-    default: () => ({})
-  },
-  expandRenderer: {
-    type: Function as PropType<RenderFn>,
-    default: null
-  },
-  currentPage: {
-    type: Number,
-    default: 1,
-    validator: (value: number) => {
-      return value > 0
-    }
-  },
-  pageSize: {
-    type: Number,
-    default: 0
-  },
-  transparent: {
-    type: Boolean,
-    default: false
-  },
-  emptyText: {
-    type: String,
-    default: null
-  },
-  tooltipTheme: {
-    default: 'dark' as TooltipTheme,
-    validator: (value: TooltipTheme) => {
-      return ['light', 'dark'].includes(value)
-    }
-  },
-  tooltipWidth: {
-    type: [Number, String],
-    default: 500
-  },
-  singleSorter: {
-    type: Boolean,
-    default: false
-  },
-  singleFilter: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'Table',
   components: {
@@ -276,7 +152,41 @@ export default defineComponent({
     TableHead,
     TableBody
   },
-  props,
+  props: {
+    // TODO: colums 正确的类型推导
+    columns: Array as PropType<ColumnOptions<any, any>[]>,
+    data: Array as PropType<Data[]>,
+    dataKey: String,
+    width: [Number, String],
+    height: Number,
+    rowClass: [String, Object, Function] as PropType<ClassType | RowClassFn>,
+    stripe: booleanProp,
+    border: booleanProp,
+    highlight: booleanProp,
+    useYBar: booleanProp,
+    barFade: Number,
+    scrollDeltaY: Number,
+    rowDraggable: booleanProp,
+    rowHeight: Number,
+    rowMinHeight: Number,
+    virtual: booleanProp,
+    bufferCount: Number,
+    scrollClass: Object as PropType<{
+      horizontal?: ClassType,
+      major?: ClassType,
+      left?: ClassType,
+      right?: ClassType
+    }>,
+    expandRenderer: Function as PropType<RenderFn>,
+    currentPage: Number,
+    pageSize: Number,
+    transparent: booleanProp,
+    emptyText: String,
+    tooltipTheme: String as PropType<TooltipTheme>,
+    tooltipWidth: [Number, String],
+    singleSorter: booleanProp,
+    singleFilter: booleanProp
+  },
   emits: [
     'body-scroll',
     'row-enter',
@@ -292,7 +202,60 @@ export default defineComponent({
     'row-filter',
     'row-sort'
   ],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('table', _props, {
+      // TODO: colums 正确的类型推导
+      columns: {
+        default: () => [],
+        static: true
+      },
+      data: {
+        default: () => [],
+        static: true
+      },
+      dataKey: DEFAULT_KEY_FIELD,
+      width: null,
+      height: null,
+      rowClass: null,
+      stripe: false,
+      border: false,
+      highlight: false,
+      useYBar: false,
+      barFade: 1500,
+      scrollDeltaY: 36,
+      rowDraggable: false,
+      rowHeight: null,
+      rowMinHeight: {
+        default: 36,
+        validator: (value: number) => value > 0
+      },
+      virtual: false,
+      bufferCount: {
+        default: 5,
+        validator: (value: number) => value >= 0
+      },
+      scrollClass: () => ({}),
+      expandRenderer: {
+        default: null,
+        isFunc: true
+      },
+      currentPage: {
+        default: 1,
+        validator: (value: number) => value > 0,
+        static: true
+      },
+      pageSize: 0,
+      transparent: false,
+      emptyText: null,
+      tooltipTheme: {
+        default: 'dark' as TooltipTheme,
+        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+      },
+      tooltipWidth: 500,
+      singleSorter: false,
+      singleFilter: false
+    })
+
     const prefix = 'vxp-table'
     const bodyHeight = ref<number | undefined>(props.height)
     const xScrollPercent = ref(0)
@@ -308,7 +271,7 @@ export default defineComponent({
     const indicator = ref<HTMLElement | null>(null)
     const scrollbar = ref<InstanceType<typeof Scrollbar> | null>(null)
 
-    const locale = useLocaleConfig('table')
+    const locale = useLocale('table')
 
     const store = useStore({
       columns: props.columns as ColumnOptions[],
@@ -322,7 +285,7 @@ export default defineComponent({
       rowMinHeight: props.rowMinHeight,
       virtual: props.virtual,
       rowDraggable: props.rowDraggable,
-      emptyText: props.emptyText ?? locale.empty,
+      emptyText: props.emptyText ?? locale.value.empty,
       tooltipTheme: props.tooltipTheme,
       tooltipWidth: props.tooltipWidth,
       singleSorter: props.singleSorter,
@@ -404,6 +367,7 @@ export default defineComponent({
     const allColumns = computed(() => {
       return [...templateColumns.value].concat(props.columns as ColumnOptions[])
     })
+    const emptyText = computed(() => props.emptyText ?? locale.value.empty)
 
     const {
       setColumns,
@@ -459,12 +423,7 @@ export default defineComponent({
     watch(() => props.pageSize, setPageSize)
     watch(() => props.rowHeight, setGlobalRowHeight)
     watch(() => props.rowDraggable, setRowDraggable)
-    watch(
-      () => props.emptyText,
-      value => {
-        setEmptyText(value ?? locale.empty)
-      }
-    )
+    watch(emptyText, setEmptyText)
     watch(() => props.tooltipTheme, setTooltipTheme)
     watch(() => props.tooltipWidth, setTooltipWidth)
     watch(() => props.singleSorter, setSingleSorter)
@@ -790,6 +749,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       bodyHeight,
       xScrollPercent,

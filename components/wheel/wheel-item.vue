@@ -17,20 +17,18 @@ import {
 } from 'vue'
 import { WHEEL_STATE } from './symbol'
 
-const props = {
-  value: {
-    type: [Number, String],
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  }
-}
-
 export default defineComponent({
   name: 'WheelItem',
-  props,
+  props: {
+    value: {
+      type: [Number, String],
+      default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
   setup(props) {
     const wheelState = inject(WHEEL_STATE, null)
 

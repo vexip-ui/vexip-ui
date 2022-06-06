@@ -6,40 +6,31 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, toRef } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TIMELINE_STATE } from './symbol'
 
 import type { ItemState, TimelineState } from './symbol'
 
-const props = useConfiguredProps('timeline', {
-  pending: {
-    type: Boolean,
-    default: false
-  },
-  bothSides: {
-    type: Boolean,
-    default: false
-  },
-  dashed: {
-    type: Boolean,
-    default: false
-  },
-  lineColor: {
-    type: String,
-    default: null
-  },
-  spacing: {
-    type: [Number, String],
-    default: null
-  }
-})
-
 export default defineComponent({
   name: 'Timeline',
-  props,
+  props: {
+    pending: booleanProp,
+    bothSides: booleanProp,
+    dashed: booleanProp,
+    lineColor: String,
+    spacing: [Number, String]
+  },
   emits: ['signal-click'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('timeline', _props, {
+      pending: false,
+      bothSides: false,
+      dashed: false,
+      lineColor: null,
+      spacing: null
+    })
+
     const prefix = 'vxp-timeline'
     const itemStates = new Set<ItemState>()
 

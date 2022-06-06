@@ -51,6 +51,7 @@ export default defineComponent({
     Icon
   },
   props: {
+    // TODO: 添加 transitionName
     active: booleanProp,
     icon: Object,
     spin: booleanProp,

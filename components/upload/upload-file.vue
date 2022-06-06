@@ -1,24 +1,24 @@
 <template>
-  <transition appear :name="selectToAdd ? transitionName : undefined">
+  <transition appear :name="props.selectToAdd ? transitionName : undefined">
     <li
       :class="[
         `${prefix}__file`,
-        `${prefix}__file--${listType}`,
-        `${prefix}__file--${file.status}`
+        `${prefix}__file--${props.listType}`,
+        `${prefix}__file--${props.file.status}`
       ]"
       :title="fileName"
     >
-      <slot :file="file.source" :status="file.status" :percentage="file.percentage">
-        <template v-if="listType === 'name'">
+      <slot :file="props.file.source" :status="props.file.status" :percentage="props.file.percentage">
+        <template v-if="props.listType === 'name'">
           <div :class="`${prefix}__label`">
             <div :class="[`${prefix}__icon`, `${prefix}__file-icon`]">
-              <slot name="icon" :file="file.source">
+              <slot name="icon" :file="props.file.source">
                 <Renderer
                   v-if="useIconRenderer"
-                  :renderer="iconRenderer"
-                  :data="{ file: file.source }"
+                  :renderer="props.iconRenderer"
+                  :data="{ file: props.file.source }"
                 ></Renderer>
-                <Icon v-else :icon="getFileIcon(file)"></Icon>
+                <Icon v-else :icon="getFileIcon(props.file)"></Icon>
               </slot>
             </div>
             <span :class="`${prefix}__filename`">
@@ -27,55 +27,55 @@
           </div>
           <div :class="`${prefix}__actions`">
             <span
-              v-if="file.status === status.UPLOADING"
+              v-if="props.file.status === status.UPLOADING"
               style="margin-right: 0.5em;"
               :class="`${prefix}__percentage`"
             >
-              {{ `${file.percentage}%` }}
+              {{ `${props.file.percentage}%` }}
             </span>
             <div
-              v-if="file.status === status.SUCCESS"
+              v-if="props.file.status === status.SUCCESS"
               :class="[`${prefix}__icon`, `${prefix}__success`]"
             >
               <Icon><CircleCheck></CircleCheck></Icon>
             </div>
             <div
-              v-else-if="file.status === status.FAIL"
+              v-else-if="props.file.status === status.FAIL"
               :class="[`${prefix}__icon`, `${prefix}__fail`]"
             >
               <Icon><CircleExclamation></CircleExclamation></Icon>
             </div>
             <div
-              v-else-if="file.status === status.UPLOADING"
+              v-else-if="props.file.status === status.UPLOADING"
               :class="[`${prefix}__icon`, `${prefix}__loading`]"
             >
               <Icon pulse>
                 <Spinner></Spinner>
               </Icon>
             </div>
-            <div :class="[`${prefix}__icon`, `${prefix}__close`]" @click="deleteFile(file)">
+            <div :class="[`${prefix}__icon`, `${prefix}__close`]" @click="deleteFile(props.file)">
               <Icon><TrashCanR></TrashCanR></Icon>
             </div>
           </div>
-          <div v-if="file.status === status.UPLOADING" :class="`${prefix}__progress`">
-            <Progress info-type="none" :stroke-width="2" :percentage="file.percentage"></Progress>
+          <div v-if="props.file.status === status.UPLOADING" :class="`${prefix}__progress`">
+            <Progress info-type="none" :stroke-width="2" :percentage="props.file.percentage"></Progress>
           </div>
         </template>
-        <template v-else-if="listType === 'thumbnail' || listType === 'card'">
+        <template v-else-if="props.listType === 'thumbnail' || props.listType === 'card'">
           <div :class="`${prefix}__card`">
             <div :class="`${prefix}__thumbnail`">
-              <template v-if="file.status === status.UPLOADING">
-                <div v-if="listType === 'thumbnail'" :class="`${prefix}__progress`">
+              <template v-if="props.file.status === status.UPLOADING">
+                <div v-if="props.listType === 'thumbnail'" :class="`${prefix}__progress`">
                   <span style="margin-bottom: 0.3em;">
-                    {{ loadingText ?? locale.uploading }}
+                    {{ props.loadingText ?? locale.uploading }}
                   </span>
                   <Progress
                     info-type="none"
                     :stroke-width="2"
-                    :percentage="file.percentage"
+                    :percentage="props.file.percentage"
                   ></Progress>
                   <span style="margin-top: 0.2em;" :class="`${prefix}__percentage`">
-                    {{ `${file.percentage}%` }}
+                    {{ `${props.file.percentage}%` }}
                   </span>
                 </div>
                 <Icon v-else pulse :scale="1.8">
@@ -83,57 +83,57 @@
                 </Icon>
               </template>
               <img
-                v-else-if="file.type.startsWith('image/') && file.base64"
+                v-else-if="props.file.type.startsWith('image/') && props.file.base64"
                 :class="`${prefix}__image`"
-                :src="file.base64"
+                :src="props.file.base64"
                 :alt="fileName"
               />
               <template v-else>
-                {{ transformfileToBase64(file) }}
-                <slot name="icon" :file="file.source">
+                {{ transformfileToBase64(props.file) }}
+                <slot name="icon" :file="props.file.source">
                   <Renderer
                     v-if="useIconRenderer"
-                    :renderer="iconRenderer"
-                    :data="{ file: file.source }"
+                    :renderer="props.iconRenderer"
+                    :data="{ file: props.file.source }"
                   ></Renderer>
-                  <Icon v-else :icon="getFileIcon(file)" :scale="2.8"></Icon>
+                  <Icon v-else :icon="getFileIcon(props.file)" :scale="2.8"></Icon>
                 </slot>
               </template>
             </div>
-            <div v-if="listType === 'card'" :class="`${prefix}__info`">
+            <div v-if="props.listType === 'card'" :class="`${prefix}__info`">
               <span :class="`${prefix}__filename`">
                 {{ fileName }}
               </span>
               <CollapseTransition>
-                <div v-if="file.status === status.UPLOADING" :class="`${prefix}__progress`">
+                <div v-if="props.file.status === status.UPLOADING" :class="`${prefix}__progress`">
                   <Progress
                     info-type="none"
                     :stroke-width="4"
-                    :percentage="file.percentage"
+                    :percentage="props.file.percentage"
                   ></Progress>
                 </div>
               </CollapseTransition>
             </div>
             <div
-              v-if="listType === 'card' || file.status !== status.UPLOADING"
+              v-if="props.listType === 'card' || props.file.status !== status.UPLOADING"
               :class="`${prefix}__actions`"
             >
-              <div v-if="listType === 'thumbnail'" :class="`${prefix}__mask`"></div>
+              <div v-if="props.listType === 'thumbnail'" :class="`${prefix}__mask`"></div>
               <div
                 :class="[
                   `${prefix}__icon`,
                   `${prefix}__action`,
                   {
-                    [`${prefix}__action--disabled`]: !file.type.startsWith('image/') || !file.base64
+                    [`${prefix}__action--disabled`]: !props.file.type.startsWith('image/') || !props.file.base64
                   }
                 ]"
-                @click="$emit('preview', file.source)"
+                @click="$emit('preview', props.file.source)"
               >
                 <Icon :scale="1.4">
                   <EyeR></EyeR>
                 </Icon>
               </div>
-              <div :class="[`${prefix}__icon`, `${prefix}__action`]" @click="deleteFile(file)">
+              <div :class="[`${prefix}__icon`, `${prefix}__action`]" @click="deleteFile(props.file)">
                 <Icon :scale="1.4">
                   <TrashCanR></TrashCanR>
                 </Icon>
@@ -152,38 +152,13 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
-import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { iconMaps } from './file-icon'
 import { CircleCheck, CircleExclamation, Spinner, EyeR, TrashCanR } from '@vexip-ui/icons'
-import { UploadStatusType } from './symbol'
+import { UploadStatusType, uploadListTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type { UploadListType, RenderFn, FileState } from './symbol'
-
-const props = useConfiguredProps('uploadFile', {
-  file: {
-    type: Object as PropType<FileState>,
-    default: () => ({})
-  },
-  iconRenderer: {
-    type: Function as PropType<RenderFn>,
-    default: null
-  },
-  listType: {
-    default: 'name' as UploadListType,
-    validator: (value: UploadListType) => {
-      return ['name', 'detail', 'thumbnail', 'card'].includes(value)
-    }
-  },
-  loadingText: {
-    type: String,
-    default: null
-  },
-  selectToAdd: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'UploadFile',
@@ -198,9 +173,32 @@ export default defineComponent({
     EyeR,
     TrashCanR
   },
-  props,
+  props: {
+    file: Object as PropType<FileState>,
+    iconRenderer: Function as PropType<RenderFn>,
+    listType: String as PropType<UploadListType>,
+    loadingText: String,
+    selectToAdd: booleanProp
+  },
   emits: ['delete', 'preview'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('uploadFile', _props, {
+      file: {
+        default: () => ({}),
+        static: true
+      },
+      iconRenderer: {
+        default: null,
+        isFunc: true
+      },
+      listType: {
+        default: 'name' as UploadListType,
+        validator: (value: UploadListType) => uploadListTypes.includes(value)
+      },
+      loadingText: null,
+      selectToAdd: false
+    })
+
     const prefix = 'vxp-upload'
     const transitionName = 'vxp-fade'
 
@@ -242,8 +240,9 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
-      locale: useLocaleConfig('upload'),
+      locale: useLocale('upload'),
       transitionName,
       status: UploadStatusType,
 
