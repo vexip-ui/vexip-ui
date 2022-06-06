@@ -1,8 +1,8 @@
 <template>
-  <div ref="wrapper" :class="className" :style="style">
+  <div ref="contaniner" :class="className" :style="style">
     <div
       ref="track"
-      :class="[`${prefix}__track`, useTrack ? null : `${prefix}__track--disabled`]"
+      :class="[`${prefix}__track`, props.useTrack ? null : `${prefix}__track--disabled`]"
       @mousedown="handleTrackMouseDown"
     ></div>
     <div
@@ -26,7 +26,7 @@ import {
   nextTick,
   getCurrentInstance
 } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { isDefined, throttle, boundRange } from '@vexip-ui/utils'
 import { useTrack } from './mixins'
 import { ScrollbarType } from './symbol'
@@ -34,77 +34,62 @@ import { ScrollbarType } from './symbol'
 import type { PropType } from 'vue'
 import type { ScrollbarPlacement } from './symbol'
 
-const props = useConfiguredProps('scrollbar', {
-  placement: {
-    default: 'right' as ScrollbarPlacement,
-    validator: (value: ScrollbarPlacement) => {
-      return ['top', 'right', 'bottom', 'left'].includes(value)
-    }
-  },
-  scroll: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => value >= 0 && value <= 100
-  },
-  barLength: {
-    type: Number,
-    default: 35,
-    validator: (value: number) => value > 0 && value < 100
-  },
-  width: {
-    type: Number,
-    default: null
-  },
-  appear: {
-    type: Boolean,
-    default: false
-  },
-  fade: {
-    type: Number,
-    default: 1500
-  },
-  barColor: {
-    type: String,
-    default: null
-  },
-  trackColor: {
-    type: String,
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  wrapper: {
-    type: [String, Object] as PropType<string | HTMLElement>,
-    default: null
-  },
-  duration: {
-    type: Number,
-    default: null
-  },
-  useTrack: {
-    type: Boolean,
-    default: false
-  },
-  trackSpeed: {
-    type: Number,
-    default: 2,
-    validator: (value: number) => value > 0 && value < 10
-  }
-})
+const scrollbarPlacements = Object.freeze<ScrollbarPlacement>(['top', 'right', 'bottom', 'left'])
 
 export default defineComponent({
   name: 'Scrollbar',
-  props,
+  props: {
+    placement: String as PropType<ScrollbarPlacement>,
+    scroll: Number,
+    barLength: Number,
+    width: Number,
+    appear: booleanProp,
+    fade: Number,
+    barColor: String,
+    trackColor: String,
+    disabled: booleanProp,
+    wrapper: [String, Object] as PropType<string | HTMLElement>,
+    duration: Number,
+    useTrack: booleanProp,
+    trackSpeed: Number
+  },
   emits: ['scroll', 'scroll-start', 'scroll-end'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('scrollbar', _props, {
+      placement: {
+        default: 'right' as ScrollbarPlacement,
+        validator: (value: ScrollbarPlacement) => scrollbarPlacements.includes(value)
+      },
+      scroll: {
+        default: 0,
+        validator: (value: number) => value >= 0 && value <= 100,
+        static: true
+      },
+      barLength: {
+        default: 35,
+        validator: (value: number) => value > 0 && value < 100
+      },
+      width: null,
+      appear: false,
+      fade: 1500,
+      barColor: null,
+      trackColor: null,
+      disabled: false,
+      wrapper: null,
+      duration: null,
+      useTrack: false,
+      trackSpeed: {
+        default: 2,
+        validator: (value: number) => value > 0 && value < 10
+      }
+    })
+
     const prefix = 'vxp-scrollbar'
     const active = ref(false)
     const currentScroll = ref(props.scroll)
     const scrolling = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const contaniner = ref<HTMLElement | null>(null)
     const bar = ref<HTMLElement | null>(null)
     const track = ref<HTMLElement | null>(null)
 
@@ -227,10 +212,10 @@ export default defineComponent({
             wrapperElement = instance.parent.proxy?.$el
 
             if (!wrapperElement) {
-              wrapperElement = wrapper.value?.parentElement ?? null
+              wrapperElement = contaniner.value?.parentElement ?? null
             }
           } else {
-            wrapperElement = wrapper.value?.parentElement ?? null
+            wrapperElement = contaniner.value?.parentElement ?? null
           }
         }
 
@@ -348,6 +333,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       currentScroll,
 
@@ -355,7 +341,7 @@ export default defineComponent({
       style,
       barStyle,
 
-      wrapper,
+      contaniner,
       bar,
       track,
 

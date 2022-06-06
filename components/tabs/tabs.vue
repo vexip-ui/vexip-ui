@@ -1,7 +1,7 @@
 <template>
   <div :class="prefix">
     <div :class="`${prefix}__header`">
-      <TabNav :active="currentActive" :card="card" @change="handleActive">
+      <TabNav :active="currentActive" :card="props.card" @change="handleActive">
         <TabNavItem
           v-for="(item, index) in itemList"
           :key="index"
@@ -39,22 +39,11 @@ import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
 import { Renderer } from '@/components/renderer'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { isNull, isFunction, debounceMinor } from '@vexip-ui/utils'
 import { TABS_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
-
-const props = useConfiguredProps('tabs', {
-  card: {
-    type: Boolean,
-    default: false
-  },
-  active: {
-    type: [String, Number],
-    default: null
-  }
-})
 
 export default defineComponent({
   name: 'Tabs',
@@ -63,9 +52,20 @@ export default defineComponent({
     TabNav,
     TabNavItem
   },
-  props,
+  props: {
+    card: booleanProp,
+    active: [String, Number]
+  },
   emits: ['change', 'update:active'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('tabs', _props, {
+      card: false,
+      active: {
+        default: null,
+        static: true
+      }
+    })
+
     const currentActive = ref(props.active)
     const currentIndex = ref(0)
     const itemStates = ref(new Set<ItemState>())
@@ -146,6 +146,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix: 'vxp-tabs',
       currentActive,
       isTransition,

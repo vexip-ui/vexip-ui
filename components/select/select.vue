@@ -6,13 +6,13 @@
     @clickoutside="handleClickOutside"
   >
     <div ref="reference" :class="`${prefixCls}__control`" :style="controlStyle">
-      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: prefixColor }">
+      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
         <slot name="prefix">
-          <Icon :icon="prefix"></Icon>
+          <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
       <slot name="control">
-        <template v-if="multiple && Array.isArray(currentValue)">
+        <template v-if="props.multiple && Array.isArray(currentValue)">
           <Tag
             v-for="(item, index) in currentValue"
             :key="index"
@@ -28,16 +28,16 @@
           {{ currentLabel }}
         </template>
         <span
-          v-if="(placeholder ?? locale.placeholder) && !hasValue"
+          v-if="(props.placeholder ?? locale.placeholder) && !hasValue"
           :class="`${prefixCls}__placeholder`"
           :style="placeholderStyle"
         >
-          {{ placeholder ?? locale.placeholder }}
+          {{ props.placeholder ?? locale.placeholder }}
         </span>
       </slot>
       <transition name="vxp-fade">
         <div
-          v-if="!disabled && clearable && isHover && hasValue"
+          v-if="!props.disabled && props.clearable && isHover && hasValue"
           :class="`${prefixCls}__clear`"
           @click.stop="handleClear"
         >
@@ -46,16 +46,16 @@
         <div
           v-else-if="!noSuffix"
           :class="`${prefixCls}__icon--suffix`"
-          :style="{ color: suffixColor }"
+          :style="{ color: props.suffixColor }"
         >
           <slot name="suffix">
-            <Icon :icon="suffix || ChevronDown"></Icon>
+            <Icon :icon="props.suffix || ChevronDown"></Icon>
           </slot>
         </div>
       </transition>
     </div>
     <Portal :to="transferTo">
-      <transition :name="transitionName" @after-enter="computeListHeight">
+      <transition :name="props.transitionName" @after-enter="computeListHeight">
         <div
           v-show="currentVisible"
           ref="popper"
@@ -63,7 +63,7 @@
           @click.stop
         >
           <div
-            :class="[`${prefixCls}__list`, listClass]"
+            :class="[`${prefixCls}__list`, props.listClass]"
             :style="{
               height: listHeight,
               maxHeight: `${maxListHeight}px`
@@ -79,7 +79,7 @@
               :items-attrs="{
                 class: [
                   `${prefixCls}__options`,
-                  optionCheck ? `${prefixCls}__options--has-check` : ''
+                  props.optionCheck ? `${prefixCls}__options--has-check` : ''
                 ]
               }"
             >
@@ -103,7 +103,7 @@
                     <span :class="`${prefixCls}__label`">
                       {{ item.label || item.value }}
                     </span>
-                    <transition v-if="optionCheck" name="vxp-fade" appear>
+                    <transition v-if="props.optionCheck" name="vxp-fade" appear>
                       <Icon v-if="item.value === currentValue" :class="`${prefixCls}__check`">
                         <Check></Check>
                       </Icon>
@@ -114,7 +114,7 @@
               <template #empty>
                 <slot v-if="hasEmptyTip" name="empty">
                   <div :class="`${prefixCls}__empty`">
-                    {{ emptyText ?? locale.empty }}
+                    {{ props.emptyText ?? locale.empty }}
                   </div>
                 </slot>
               </template>
@@ -144,7 +144,7 @@ import { Tag } from '@/components/tag'
 import { VirtualList } from '@/components/virtual-list'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, isNull } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
@@ -153,98 +153,6 @@ import type { Placement } from '@vexip-ui/mixins'
 import type { RawOption, OptionState } from '@/components/option'
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type { ClassType } from './symbol'
-
-const props = useConfiguredProps('select', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  options: {
-    type: Array as PropType<RawOption[]>,
-    default: () => []
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-drop'
-  },
-  outsideClose: {
-    type: Boolean,
-    default: true
-  },
-  placeholder: {
-    type: String,
-    default: null
-  },
-  prefix: {
-    type: Object,
-    default: null
-  },
-  prefixColor: {
-    type: String,
-    default: ''
-  },
-  suffix: {
-    type: Object,
-    default: null
-  },
-  suffixColor: {
-    type: String,
-    default: ''
-  },
-  noSuffix: {
-    type: Boolean,
-    default: false
-  },
-  value: {
-    type: [String, Number, Array] as PropType<string | number | (string | number)[]>,
-    default: null
-  },
-  multiple: {
-    type: Boolean,
-    default: false
-  },
-  clearable: {
-    type: Boolean,
-    default: false
-  },
-  maxListHeight: {
-    type: Number,
-    default: 300
-  },
-  listClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'bottom',
-    validator: (value: Placement) => {
-      return placementWhileList.includes(value)
-    }
-  },
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  },
-  optionCheck: {
-    type: Boolean,
-    default: false
-  },
-  emptyText: {
-    type: String,
-    default: null
-  }
-})
 
 export default defineComponent({
   name: 'Select',
@@ -257,7 +165,31 @@ export default defineComponent({
     Check,
     CircleXmark
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    visible: booleanProp,
+    options: Array as PropType<RawOption[]>,
+    disabled: booleanProp,
+    transitionName: String,
+    outsideClose: booleanProp,
+    placeholder: String,
+    prefix: Object,
+    prefixColor: String,
+    suffix: Object,
+    suffixColor: String,
+    noSuffix: booleanProp,
+    value: [String, Number, Array] as PropType<string | number | (string | number)[]>,
+    multiple: booleanProp,
+    clearable: booleanProp,
+    maxListHeight: Number,
+    listClass: [String, Object] as PropType<ClassType>,
+    placement: String as PropType<Placement>,
+    transfer: [Boolean, String],
+    disableValidate: booleanProp,
+    optionCheck: booleanProp,
+    emptyText: String
+  },
   emits: [
     'toggle',
     'select',
@@ -269,7 +201,45 @@ export default defineComponent({
     'update:value',
     'update:visible'
   ],
-  setup(props, { emit, slots }) {
+  setup(_props, { emit, slots }) {
+    const props = useProps('select', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      visible: {
+        default: false,
+        static: true
+      },
+      options: {
+        default: () => [],
+        static: true
+      },
+      disabled: false,
+      transitionName: 'vxp-drop',
+      outsideClose: true,
+      placeholder: null,
+      prefix: null,
+      prefixColor: '',
+      suffix: null,
+      suffixColor: '',
+      noSuffix: false,
+      value: {
+        default: null,
+        static: true
+      },
+      multiple: false,
+      clearable: false,
+      maxListHeight: 300,
+      listClass: null,
+      placement: {
+        default: 'bottom' as Placement,
+        validator: (value: Placement) => placementWhileList.includes(value)
+      },
+      transfer: false,
+      disableValidate: false,
+      optionCheck: false,
+      emptyText: null
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
@@ -321,7 +291,7 @@ export default defineComponent({
       isDrop: true
     })
     const { isHover } = useHover(reference)
-    const locale = useLocaleConfig('select')
+    const locale = useLocale('select')
 
     const className = computed(() => {
       return {
@@ -363,7 +333,7 @@ export default defineComponent({
       return optionStates.value.filter(state => !state.hidden)
     })
     const hasEmptyTip = computed(() => {
-      return !!(props.emptyText || slots.empty || locale.empty) && !visibleOptions.value.length
+      return !!(props.emptyText || slots.empty || locale.value.empty) && !visibleOptions.value.length
     })
 
     watch(
@@ -575,6 +545,7 @@ export default defineComponent({
     return {
       ChevronDown,
 
+      props,
       prefixCls: prefix,
       locale,
       currentVisible,

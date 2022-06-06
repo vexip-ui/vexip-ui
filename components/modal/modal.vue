@@ -2,12 +2,12 @@
   <Masker
     v-model:active="currentActive"
     :class="className"
-    :inner="inner"
-    :transition-name="transitionName"
-    :closable="maskClose"
-    :disabled="hideMask"
+    :inner="props.inner"
+    :transition-name="props.transitionName"
+    :closable="props.maskClose"
+    :disabled="props.hideMask"
     :on-before-close="handleMaskClose"
-    :transfer="transfer"
+    :transfer="props.transfer"
     @show="handleShow"
     @hide="handleHide"
   >
@@ -25,7 +25,7 @@
           @mousedown="handleDragStart"
         >
           <div
-            v-if="closable"
+            v-if="props.closable"
             :class="`${prefix}__close`"
             @mousedown.stop
             @click="handleClose(false)"
@@ -36,7 +36,7 @@
           </div>
           <slot name="header">
             <div :class="`${prefix}__title`">
-              {{ title }}
+              {{ props.title }}
             </div>
           </slot>
         </div>
@@ -48,22 +48,22 @@
         >
           <slot></slot>
         </div>
-        <div v-if="!noFooter" ref="footer" :class="`${prefix}__footer`">
+        <div v-if="!props.noFooter" ref="footer" :class="`${prefix}__footer`">
           <slot name="footer">
             <Button text size="small" @click="handleCancle">
-              {{ cancelText || locale.cancel }}
+              {{ props.cancelText || locale.cancel }}
             </Button>
             <Button
               type="primary"
               size="small"
-              :loading="loading"
+              :loading="props.loading"
               @click="handleConfirm"
             >
-              {{ confirmText || locale.confirm }}
+              {{ props.confirmText || locale.confirm }}
             </Button>
           </slot>
         </div>
-        <div v-if="resizable" :class="`${prefix}__resizer`" @mousedown="handleResizeStart"></div>
+        <div v-if="props.resizable" :class="`${prefix}__resizer`" @mousedown="handleResizeStart"></div>
       </section>
     </template>
   </Masker>
@@ -74,7 +74,7 @@ import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 
@@ -87,111 +87,6 @@ const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
 
-const props = useConfiguredProps('modal', {
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  },
-  active: {
-    type: Boolean,
-    default: false
-  },
-  width: {
-    type: positionType,
-    default: 'auto',
-    validator: positionValidator
-  },
-  height: {
-    type: positionType,
-    default: 'auto',
-    validator: positionValidator
-  },
-  top: {
-    type: positionType,
-    default: 100,
-    validator: positionValidator
-  },
-  left: {
-    type: positionType,
-    default: 'auto',
-    validator: positionValidator
-  },
-  right: {
-    type: positionType,
-    default: 'auto',
-    validator: positionValidator
-  },
-  bottom: {
-    type: positionType,
-    default: 'auto',
-    validator: positionValidator
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  closable: {
-    type: Boolean,
-    default: true
-  },
-  inner: {
-    type: Boolean,
-    default: false
-  },
-  maskClose: {
-    type: Boolean,
-    default: true
-  },
-  modalClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  noFooter: {
-    type: Boolean,
-    default: false
-  },
-  hideMask: {
-    type: Boolean,
-    default: false
-  },
-  draggable: {
-    type: Boolean,
-    default: false
-  },
-  resizable: {
-    type: Boolean,
-    default: false
-  },
-  onBeforeClose: {
-    type: Function as PropType<(isConfirm: boolean) => any>,
-    default: null
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  minWidth: {
-    type: Number,
-    default: 150
-  },
-  minHeight: {
-    type: Number,
-    default: 120
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-ease'
-  },
-  confirmText: {
-    type: String,
-    default: null
-  },
-  cancelText: {
-    type: String,
-    default: null
-  }
-})
-
 export default defineComponent({
   name: 'Modal',
   components: {
@@ -200,7 +95,32 @@ export default defineComponent({
     Masker,
     Xmark
   },
-  props,
+  props: {
+    transfer: [Boolean, String],
+    active: booleanProp,
+    width: positionType,
+    height: positionType,
+    top: positionType,
+    left: positionType,
+    right: positionType,
+    bottom: positionType,
+    title: String,
+    closable: booleanProp,
+    inner: booleanProp,
+    maskClose: booleanProp,
+    modalClass: [String, Object] as PropType<ClassType>,
+    noFooter: booleanProp,
+    hideMask: booleanProp,
+    draggable: booleanProp,
+    resizable: booleanProp,
+    onBeforeClose: Function as PropType<(isConfirm: boolean) => any>,
+    loading: booleanProp,
+    minWidth: Number,
+    minHeight: Number,
+    transitionName: String,
+    confirmText: String,
+    cancelText: String
+  },
   emits: [
     'toggle',
     'confirm',
@@ -216,7 +136,58 @@ export default defineComponent({
     'resize-end',
     'update:active'
   ],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('modal', _props, {
+      transfer: false,
+      active: {
+        default: false,
+        static: true
+      },
+      width: {
+        default: 'auto',
+        validator: positionValidator
+      },
+      height: {
+        default: 'auto',
+        validator: positionValidator
+      },
+      top: {
+        default: 100,
+        validator: positionValidator
+      },
+      left: {
+        default: 'auto',
+        validator: positionValidator
+      },
+      right: {
+        default: 'auto',
+        validator: positionValidator
+      },
+      bottom: {
+        default: 'auto',
+        validator: positionValidator
+      },
+      title: '',
+      closable: true,
+      inner: false,
+      maskClose: true,
+      modalClass: null,
+      noFooter: false,
+      hideMask: false,
+      draggable: false,
+      resizable: false,
+      onBeforeClose: {
+        default: null,
+        isFunc: true
+      },
+      loading: false,
+      minWidth: 150,
+      minHeight: 120,
+      transitionName: 'vxp-ease',
+      confirmText: null,
+      cancelText: null
+    })
+
     const prefix = 'vxp-modal'
     const currentActive = ref(props.active)
     const currentTop = ref(toNumber(props.top))
@@ -418,9 +389,9 @@ export default defineComponent({
       emit('hide')
     }
 
-    function handleMaskClose() {
+    async function handleMaskClose() {
       if (props.maskClose) {
-        handleClose(false)
+        await handleClose(false)
       }
     }
 
@@ -567,8 +538,9 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
-      locale: useLocaleConfig('modal'),
+      locale: useLocale('modal'),
       currentActive,
       resizing,
 

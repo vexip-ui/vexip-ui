@@ -10,38 +10,38 @@
     <div
       ref="content"
       :class="wrapperClass"
-      :style="scrollStyle"
+      :style="props.scrollStyle"
       @scroll.exact="handleScroll($event, 'vertical')"
       @scroll.shift="handleScroll($event, 'horizontal')"
     >
       <slot></slot>
     </div>
     <Scrollbar
-      v-if="useXBar"
+      v-if="props.useXBar"
       ref="xBar"
       placement="bottom"
-      :class="[`${prefix}__bar--horizontal`, barClass]"
-      :fade="barFade"
+      :class="[`${prefix}__bar--horizontal`, props.barClass]"
+      :fade="props.barFade"
       :bar-length="xBarLength"
       :disabled="!enableXScroll"
-      :appear="appear"
-      :duration="barDuration"
-      :use-track="useBarTrack"
+      :appear="props.appear"
+      :duration="props.barDuration"
+      :use-track="props.useBarTrack"
       @scroll-start="handleBarScrollStart('horizontal')"
       @scroll="handleXBarScroll"
       @scroll-end="handleBarScrollEnd('horizontal')"
     ></Scrollbar>
     <Scrollbar
-      v-if="useYBar"
+      v-if="props.useYBar"
       ref="yBar"
       placement="right"
-      :class="[`${prefix}__bar--vertical`, barClass]"
-      :fade="barFade"
+      :class="[`${prefix}__bar--vertical`, props.barClass]"
+      :fade="props.barFade"
       :bar-length="yBarLength"
       :disabled="!enableYScroll"
-      :appear="appear"
-      :duration="barDuration"
-      :use-track="useBarTrack"
+      :appear="props.appear"
+      :duration="props.barDuration"
+      :use-track="props.useBarTrack"
       @scroll-start="handleBarScrollStart('vertical')"
       @scroll="handleYBarScroll"
       @scroll-end="handleBarScrollEnd('vertical')"
@@ -52,7 +52,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
@@ -60,97 +60,37 @@ import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode, ClassType } from './symbol'
 
+const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
+
 const MOVE_EVENT = 'mousemove'
 const UP_EVENT = 'mouseup'
-
-const props = useConfiguredProps('nativeScroll', {
-  scrollClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  scrollStyle: {
-    type: Object,
-    default: () => ({})
-  },
-  mode: {
-    default: 'vertical' as ScrollMode,
-    validator: (value: ScrollMode) => {
-      return ['horizontal', 'vertical', 'both'].includes(value)
-    }
-  },
-  width: {
-    type: [Number, String],
-    default: ''
-  },
-  height: {
-    type: [Number, String],
-    default: ''
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  pointer: {
-    type: Boolean,
-    default: false
-  },
-  scrollX: {
-    type: Number,
-    default: 0
-  },
-  scrollY: {
-    type: Number,
-    default: 0
-  },
-  useXBar: {
-    type: Boolean,
-    default: false
-  },
-  useYBar: {
-    type: Boolean,
-    default: false
-  },
-  barFade: {
-    type: Number,
-    default: 1500
-  },
-  barClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  autoplay: {
-    type: [Boolean, Number],
-    default: false
-  },
-  playWaiting: {
-    type: Number,
-    default: 500
-  },
-  onBeforeScroll: {
-    type: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
-    default: null
-  },
-  appear: {
-    type: Boolean,
-    default: false
-  },
-  barDuration: {
-    type: Number,
-    default: null,
-    validator: (value: number) => value >= 0
-  },
-  useBarTrack: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'NativeScroll',
   components: {
     Scrollbar
   },
-  props,
+  props: {
+    scrollClass: [String, Object] as PropType<ClassType>,
+    scrollStyle: Object,
+    mode: String as PropType<ScrollMode>,
+    width: [Number, String],
+    height: [Number, String],
+    disabled: booleanProp,
+    pointer: booleanProp,
+    scrollX: Number,
+    scrollY: Number,
+    useXBar: booleanProp,
+    useYBar: booleanProp,
+    barFade: Number,
+    barClass: [String, Object] as PropType<ClassType>,
+    autoplay: [Boolean, Number],
+    playWaiting: Number,
+    onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
+    appear: booleanProp,
+    barDuration: Number,
+    useBarTrack: booleanProp
+  },
   emits: [
     'x-enable-change',
     'y-enable-change',
@@ -161,7 +101,41 @@ export default defineComponent({
     'bar-scroll-start',
     'bar-scroll-end'
   ],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('nativeScroll', _props, {
+      scrollClass: null,
+      scrollStyle: () => ({}),
+      mode: {
+        default: 'vertical' as ScrollMode,
+        validator: (value: ScrollMode) => scrollModes.includes(value)
+      },
+      width: '',
+      height: '',
+      disabled: false,
+      pointer: false,
+      scrollX: {
+        default: 0,
+        static: true
+      },
+      scrollY: {
+        default: 0,
+        static: true
+      },
+      useXBar: false,
+      useYBar: false,
+      barFade: 1500,
+      barClass: null,
+      autoplay: false,
+      playWaiting: 500,
+      onBeforeScroll: {
+        default: null,
+        isFunc: true
+      },
+      appear: false,
+      barDuration: null,
+      useBarTrack: false
+    })
+
     const emitter = createEventEmitter()
 
     const prefix = 'vxp-native-scroll'
@@ -524,6 +498,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       percentX,
       percentY,

@@ -1,36 +1,36 @@
 <template>
   <div ref="wrapper" :class="className" @transitionend="removeTransition">
     <div
-      :class="[`${prefix}__pane`, `${prefix}__pane--${vertical ? 'top' : 'left'}`]"
+      :class="[`${prefix}__pane`, `${prefix}__pane--${props.vertical ? 'top' : 'left'}`]"
       :style="leftPaneStyle"
     >
       <slot name="left"></slot>
     </div>
     <div
-      :class="[`${prefix}__pane`, `${prefix}__pane--${vertical ? 'bottom' : 'right'}`]"
+      :class="[`${prefix}__pane`, `${prefix}__pane--${props.vertical ? 'bottom' : 'right'}`]"
       :style="rightPaneStyle"
     >
       <slot name="right"></slot>
     </div>
     <div :class="`${prefix}__trigger`" :style="triggerStyle">
       <div :class="`${prefix}__handler`" @mousedown="handleTriggerDown">
-        <template v-if="canFull">
+        <template v-if="props.canFull">
           <div
-            :class="[`${prefix}__button`, `${prefix}__button--${vertical ? 'top' : 'left'}-full`]"
+            :class="[`${prefix}__button`, `${prefix}__button--${props.vertical ? 'top' : 'left'}-full`]"
             @mousedown.stop
             @click.left="handleFull(-1)"
           >
-            <Icon :icon="vertical ? ChevronDown : ChevronRight" :scale="0.6"></Icon>
+            <Icon :icon="props.vertical ? ChevronDown : ChevronRight" :scale="0.6"></Icon>
           </div>
           <div
             :class="[
               `${prefix}__button`,
-              `${prefix}__button--${vertical ? 'bottom' : 'right'}-full`
+              `${prefix}__button--${props.vertical ? 'bottom' : 'right'}-full`
             ]"
             @mousedown.stop
             @click.left="handleFull(1)"
           >
-            <Icon :icon="vertical ? ChevronUp : ChevronLeft" :scale="0.6"></Icon>
+            <Icon :icon="props.vertical ? ChevronUp : ChevronLeft" :scale="0.6"></Icon>
           </div>
         </template>
         <template v-else>
@@ -47,50 +47,24 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { throttle } from '@vexip-ui/utils'
 import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
-
-const props = useConfiguredProps('split', {
-  value: {
-    type: Number,
-    default: 0.5,
-    validator: (value: number) => {
-      return value > 0 && value < 1
-    }
-  },
-  min: {
-    type: Number,
-    default: 0.1
-  },
-  max: {
-    type: Number,
-    default: 0.9
-  },
-  vertical: {
-    type: Boolean,
-    default: false
-  },
-  noTransition: {
-    type: Boolean,
-    default: false
-  },
-  lazy: {
-    type: Boolean,
-    default: false
-  },
-  canFull: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'Split',
   components: {
     Icon
   },
-  props,
+  props: {
+    value: Number,
+    min: Number,
+    max: Number,
+    vertical: booleanProp,
+    noTransition: booleanProp,
+    lazy: booleanProp,
+    canFull: booleanProp
+  },
   emits: [
     'change',
     'full',
@@ -100,7 +74,21 @@ export default defineComponent({
     'move-end',
     'update:value'
   ],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('split', _props, {
+      value: {
+        default: 0.5,
+        validator: (value: number) => value > 0 && value < 1,
+        static: true
+      },
+      min: 0.1,
+      max: 0.9,
+      vertical: false,
+      noTransition: false,
+      lazy: false,
+      canFull: false
+    })
+
     const prefix = 'vxp-split'
     const currentValue = ref(props.value)
     const moving = ref(false)
@@ -327,6 +315,7 @@ export default defineComponent({
       ChevronDown,
       ChevronLeft,
 
+      props,
       prefix,
 
       className,

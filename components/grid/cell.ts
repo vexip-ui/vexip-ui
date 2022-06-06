@@ -8,6 +8,8 @@ import type { PropType, CSSProperties } from 'vue'
 import type { BreakPoint } from './helpler'
 import type { CellFlex, CellOptions } from './symbol'
 
+const mediaProp = [Number, Object] as PropType<CellOptions>
+
 export default defineComponent({
   name: 'Cell',
   props: {
@@ -18,12 +20,12 @@ export default defineComponent({
     height: Number,
     right: [Number, String],
     bottom: [Number, String],
-    xs: [Number, Object] as PropType<CellOptions>,
-    sm: [Number, Object] as PropType<CellOptions>,
-    md: [Number, Object] as PropType<CellOptions>,
-    lg: [Number, Object] as PropType<CellOptions>,
-    xl: [Number, Object] as PropType<CellOptions>,
-    xxl: [Number, Object] as PropType<CellOptions>,
+    xs: mediaProp,
+    sm: mediaProp,
+    md: mediaProp,
+    lg: mediaProp,
+    xl: mediaProp,
+    xxl: mediaProp,
     useFlex: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>
   },
   setup(_props, { slots }) {
@@ -212,7 +214,7 @@ export default defineComponent({
     }
 
     return () => h(
-      props.tag,
+      props.tag || 'div',
       {
         class: className.value,
         style: style.value

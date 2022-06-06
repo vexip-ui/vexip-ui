@@ -19,12 +19,20 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, provide } from 'vue'
 import PopupItem from './popup-item.vue'
-import { useConfiguredProps } from '@vexip-ui/config'
 import { isFunction, noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { Key, ClassType, PopupPlacement, PopupItemState } from './symbol'
+
+const popupPlacements = Object.freeze<PopupPlacement>([
+  'top-right',
+  'top-center',
+  'top-left',
+  'bottom-right',
+  'bottom-center',
+  'bottom-left'
+])
 
 type QueneState =
   | {
@@ -38,51 +46,38 @@ type QueneState =
 
 let globalIndex = 0
 
-const props = useConfiguredProps('popup', {
-  zIndex: {
-    type: Number,
-    default: 2000,
-    validator: (value: number) => {
-      return value > 0
-    }
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-popup-top'
-  },
-  innerClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  startOffset: {
-    type: Number,
-    default: 30
-  },
-  placement: {
-    default: 'top-right' as PopupPlacement,
-    validator: (value: PopupPlacement) => {
-      return [
-        'top-right',
-        'top-center',
-        'top-left',
-        'bottom-right',
-        'bottom-center',
-        'bottom-left'
-      ].includes(value)
-    }
-  },
-  itemOffset: {
-    type: Number,
-    default: 16
-  }
-})
-
 export default defineComponent({
   name: 'Popup',
   components: {
     PopupItem
   },
-  props,
+  props: {
+    zIndex: {
+      type: Number,
+      default: 2000,
+      validator: (value: number) => value > 0
+    },
+    transitionName: {
+      type: String,
+      default: 'vxp-popup-top'
+    },
+    innerClass: {
+      type: [String, Object] as PropType<ClassType>,
+      default: null
+    },
+    startOffset: {
+      type: Number,
+      default: 30
+    },
+    placement: {
+      default: 'top-right' as PopupPlacement,
+      validator: (value: PopupPlacement) => popupPlacements.includes(value)
+    },
+    itemOffset: {
+      type: Number,
+      default: 16
+    }
+  },
   setup(props) {
     const prefix = 'vxp-popup'
     const items = ref<PopupItemState[]>([])

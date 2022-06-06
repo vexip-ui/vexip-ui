@@ -20,24 +20,22 @@ import { TABS_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
 
-const props = {
-  label: {
-    type: [String, Number],
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  icon: {
-    type: Object,
-    default: null
-  }
-}
-
 export default defineComponent({
   name: 'TabPane',
-  props,
+  props: {
+    label: {
+      type: [String, Number],
+      default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    icon: {
+      type: Object,
+      default: null
+    }
+  },
   emits: ['toggle'],
   setup(props, { slots, emit }) {
     const tabsState = inject(TABS_STATE, null)

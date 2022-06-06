@@ -15,15 +15,17 @@ const numberRE = /^\d+$/
 const justifyList = Object.freeze<GridJustify>(['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'])
 const alignList = Object.freeze<GridAlign>(['top', 'middle', 'bottom', 'stretch'])
 
+const layoutProp = [Number, String, Array] as PropType<LayoutProp>
+
 export default defineComponent({
   name: 'Grid',
   props: {
     tag: String,
     gap: [Number, Array] as PropType<number | number[]>,
-    rows: [Number, String, Array] as PropType<LayoutProp>,
-    columns: [Number, String, Array] as PropType<LayoutProp>,
-    autoRows: [Number, String, Array] as PropType<LayoutProp>,
-    autoColumns: [Number, String, Array] as PropType<LayoutProp>,
+    rows: layoutProp,
+    columns: layoutProp,
+    autoRows: layoutProp,
+    autoColumns: layoutProp,
     dense: booleanProp,
     justify: String as PropType<GridJustify>,
     align: String as PropType<GridAlign>,

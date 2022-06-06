@@ -6,12 +6,12 @@
       :class="[`${prefixCls}__control`, inputClass]"
       :value="focused ? preciseNumber : formattedValue"
       :style="inputStyle"
-      :autofocus="autofocus"
-      :autocomplete="autocomplete ? 'on' : 'off'"
-      :spellcheck="spellcheck"
-      :disabled="disabled"
-      :readonly="readonly"
-      :placeholder="placeholder ?? locale.placeholder"
+      :autofocus="props.autofocus"
+      :autocomplete="props.autocomplete ? 'on' : 'off'"
+      :spellcheck="props.spellcheck"
+      :disabled="props.disabled"
+      :readonly="props.readonly"
+      :placeholder="props.placeholder ?? locale.placeholder"
       @blur="handleBlur"
       @focus="handleFocus"
       @keyup.enter="handleEnter"
@@ -34,16 +34,16 @@
     <div
       v-if="hasPrefix"
       :class="`${prefixCls}__icon--prefix`"
-      :style="{ color: prefixColor }"
+      :style="{ color: props.prefixColor }"
       @click="handlePrefixClick"
     >
       <slot name="prefix">
-        <Icon :icon="prefix"></Icon>
+        <Icon :icon="props.prefix"></Icon>
       </slot>
     </div>
     <transition name="vxp-fade">
       <div
-        v-if="!disabled && clearable && isHover && hasValue"
+        v-if="!props.disabled && props.clearable && isHover && hasValue"
         :class="`${prefixCls}__clear`"
         @click.stop="handleClear"
       >
@@ -52,11 +52,11 @@
       <div
         v-else-if="hasSuffix"
         :class="`${prefixCls}__icon--suffix`"
-        :style="{ color: suffixColor }"
+        :style="{ color: props.suffixColor }"
         @click="handleSuffixClick"
       >
         <slot name="suffix">
-          <Icon :icon="suffix"></Icon>
+          <Icon :icon="props.suffix"></Icon>
         </slot>
       </div>
     </transition>
@@ -68,7 +68,7 @@ import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
-import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isNull, noop, toFixed, toNumber, boundRange, throttle } from '@vexip-ui/utils'
 import { CaretUp, CaretDown, CircleXmark } from '@vexip-ui/icons'
 
@@ -76,96 +76,6 @@ import type { PropType } from 'vue'
 
 type ClassType = string | Record<string, boolean>
 type InputEventType = 'input' | 'change'
-
-const props = useConfiguredProps('numberInput', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  prefix: {
-    type: Object,
-    default: null
-  },
-  prefixColor: {
-    type: String,
-    default: ''
-  },
-  suffix: {
-    type: Object,
-    default: null
-  },
-  suffixColor: {
-    type: String,
-    default: ''
-  },
-  // 格式化后显示
-  formatter: {
-    type: Function as PropType<(value: number) => string>,
-    default: null
-  },
-  // 格式化后读取
-  accessor: {
-    type: Function as PropType<(value: number | null) => any>,
-    default: null
-  },
-  value: {
-    type: Number as PropType<number | null>,
-    default: null
-  },
-  range: {
-    type: Array as PropType<number[]>,
-    default: () => [-Infinity, Infinity],
-    validator: (value: [number, number]) => {
-      return Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number'
-    }
-  },
-  placeholder: {
-    type: String,
-    default: null
-  },
-  autofocus: {
-    type: Boolean,
-    default: false
-  },
-  spellcheck: {
-    type: Boolean,
-    default: false
-  },
-  autocomplete: {
-    type: Boolean,
-    default: false
-  },
-  precision: {
-    type: Number,
-    default: 0
-  },
-  readonly: {
-    type: Boolean,
-    default: false
-  },
-  step: {
-    type: Number,
-    default: 1
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  inputClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: ''
-  },
-  debounce: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  },
-  clearable: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'NumberInput',
@@ -175,7 +85,32 @@ export default defineComponent({
     CaretDown,
     CircleXmark
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    prefix: Object,
+    prefixColor: String,
+    suffix: Object,
+    suffixColor: String,
+    // 格式化后显示
+    formatter: Function as PropType<(value: number) => string>,
+    // 格式化后读取
+    accessor: Function as PropType<(value: number | null) => any>,
+    value: Number as PropType<number | null>,
+    range: Array as PropType<number[]>,
+    placeholder: String,
+    autofocus: booleanProp,
+    spellcheck: booleanProp,
+    autocomplete: booleanProp,
+    precision: Number,
+    readonly: booleanProp,
+    step: Number,
+    disabled: booleanProp,
+    inputClass: [String, Object] as PropType<ClassType>,
+    debounce: booleanProp,
+    disableValidate: booleanProp,
+    clearable: booleanProp
+  },
   emits: [
     'focus',
     'blur',
@@ -190,7 +125,48 @@ export default defineComponent({
     'key-up',
     'update:value'
   ],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('numberInput', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      prefix: null,
+      prefixColor: '',
+      suffix: null,
+      suffixColor: '',
+      // 格式化后显示
+      formatter: {
+        default: null,
+        isFunc: true
+      },
+      // 格式化后读取
+      accessor: {
+        default: null,
+        isFunc: true
+      },
+      value: {
+        default: null,
+        static: true
+      },
+      range: {
+        default: () => [-Infinity, Infinity],
+        validator: (value: [number, number]) => {
+          return Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number'
+        }
+      },
+      placeholder: null,
+      autofocus: false,
+      spellcheck: false,
+      autocomplete: false,
+      precision: 0,
+      readonly: false,
+      step: 1,
+      disabled: false,
+      inputClass: null,
+      debounce: false,
+      disableValidate: false,
+      clearable: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
@@ -409,8 +385,9 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefixCls: prefix,
-      locale: useLocaleConfig('input'),
+      locale: useLocale('input'),
       focused,
       isHover,
 

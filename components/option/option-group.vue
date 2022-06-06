@@ -20,20 +20,18 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-const props = {
-  label: {
-    type: String,
-    default: ''
-  },
-  divided: {
-    type: Boolean,
-    default: false
-  }
-}
-
 export default defineComponent({
   name: 'OptionGroup',
-  props,
+  props: {
+    label: {
+      type: String,
+      default: ''
+    },
+    divided: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       prefix: 'vxp-option-group'

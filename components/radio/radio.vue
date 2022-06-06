@@ -1,13 +1,13 @@
 <template>
   <label :class="className">
     <span :class="`${prefix}__signal`"></span>
-    <span :class="[`${prefix}__label`, labelClass]">
-      <slot>{{ label }}</slot>
+    <span :class="[`${prefix}__label`, props.labelClass]">
+      <slot>{{ props.label }}</slot>
     </span>
     <input
       type="radio"
       :class="`${prefix}__input`"
-      :checked="currentValue === label"
+      :checked="currentValue === props.label"
       :disabled="isDisabled"
       @change="handleChange"
     />
@@ -16,49 +16,47 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, inject } from 'vue'
-import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop } from '@vexip-ui/utils'
+import { isDefined, noop } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 
 type ClassType = string | Record<string, boolean>
 
-const props = useConfiguredProps('radio', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  value: {
-    type: [String, Number],
-    default: null
-  },
-  label: {
-    type: [String, Number],
-    required: true
-  },
-  labelClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  border: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'Radio',
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    value: [String, Number],
+    label: [String, Number],
+    labelClass: [String, Object] as PropType<ClassType>,
+    disabled: booleanProp,
+    border: booleanProp,
+    disableValidate: booleanProp
+  },
   emits: ['change', 'update:value'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('radio', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      value: {
+        default: null,
+        static: true
+      },
+      label: {
+        default: null,
+        validator: (value: string | number) => isDefined(value),
+        static: true
+      },
+      labelClass: null,
+      disabled: false,
+      border: false,
+      disableValidate: false
+    })
+
     const groupState = inject(GROUP_STATE, null)
     const validateField = inject(VALIDATE_FIELD, noop)
 
@@ -116,6 +114,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       currentValue,
 
