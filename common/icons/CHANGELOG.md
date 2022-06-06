@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/qmhc/vexip-ui/compare/icons@1.0.0...icons@1.0.1) (2022-06-06)
+
+
+### Bug Fixes
+
+* **icons:** support export full icons package ([a136d47](https://github.com/qmhc/vexip-ui/commit/a136d471957fc85100fef6391970340904023931))
+
+
+
 # 1.0.0 (2022-05-28)
 
 
