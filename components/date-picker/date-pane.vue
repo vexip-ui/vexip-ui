@@ -161,75 +161,6 @@ import type { MonthIndex } from '@/components/calendar'
 import type { Dateable } from '@vexip-ui/utils'
 import type { DateType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
 
-const props = {
-  type: {
-    default: 'date' as DatePickerType,
-    validator: (value: DatePickerType) => {
-      return ['date', 'datetime', 'year', 'month'].includes(value)
-    }
-  },
-  enabled: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
-  },
-  startValue: {
-    type: Object as PropType<Record<DateTimeType, number>>,
-    default: () => ({})
-  },
-  endValue: {
-    type: Object as PropType<Record<DateTimeType, number>>,
-    default: () => ({})
-  },
-  valueType: {
-    type: String as PropType<'start' | 'end'>,
-    default: 'start'
-  },
-  shortcuts: {
-    type: Array as PropType<DateShortcut[]>,
-    default: () => []
-  },
-  column: {
-    type: String as PropType<DateTimeType>,
-    default: 'date'
-  },
-  confirmText: {
-    type: String,
-    default: null
-  },
-  cancelText: {
-    type: String,
-    default: null
-  },
-  today: {
-    type: [Number, String, Date] as PropType<Dateable>,
-    default: () => new Date()
-  },
-  disabledDate: {
-    type: Function as PropType<(date: Date) => boolean>,
-    default: () => false
-  },
-  noAction: {
-    type: Boolean,
-    default: false
-  },
-  steps: {
-    type: Array as PropType<number[]>,
-    default: () => [1, 1, 1]
-  },
-  isRange: {
-    type: Boolean,
-    default: false
-  },
-  startActivated: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
-  },
-  endActivated: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
-  }
-}
-
 export default defineComponent({
   name: 'DatePane',
   components: {
@@ -242,7 +173,74 @@ export default defineComponent({
     AnglesRight,
     AnglesLeft
   },
-  props,
+  props: {
+    type: {
+      default: 'date' as DatePickerType,
+      validator: (value: DatePickerType) => {
+        return ['date', 'datetime', 'year', 'month'].includes(value)
+      }
+    },
+    enabled: {
+      type: Object as PropType<Record<DateTimeType, boolean>>,
+      default: () => ({})
+    },
+    startValue: {
+      type: Object as PropType<Record<DateTimeType, number>>,
+      default: () => ({})
+    },
+    endValue: {
+      type: Object as PropType<Record<DateTimeType, number>>,
+      default: () => ({})
+    },
+    valueType: {
+      type: String as PropType<'start' | 'end'>,
+      default: 'start'
+    },
+    shortcuts: {
+      type: Array as PropType<DateShortcut[]>,
+      default: () => []
+    },
+    column: {
+      type: String as PropType<DateTimeType>,
+      default: 'date'
+    },
+    confirmText: {
+      type: String,
+      default: null
+    },
+    cancelText: {
+      type: String,
+      default: null
+    },
+    today: {
+      type: [Number, String, Date] as PropType<Dateable>,
+      default: () => new Date()
+    },
+    disabledDate: {
+      type: Function as PropType<(date: Date) => boolean>,
+      default: () => false
+    },
+    noAction: {
+      type: Boolean,
+      default: false
+    },
+    steps: {
+      type: Array as PropType<number[]>,
+      default: () => [1, 1, 1]
+    },
+    isRange: {
+      type: Boolean,
+      default: false
+    },
+    startActivated: {
+      type: Object as PropType<Record<DateTimeType, boolean>>,
+      default: () => ({})
+    },
+    endActivated: {
+      type: Object as PropType<Record<DateTimeType, boolean>>,
+      default: () => ({})
+    }
+  },
   emits: [
     'click',
     'shortcut',

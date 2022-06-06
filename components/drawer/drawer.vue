@@ -2,12 +2,12 @@
   <Masker
     v-model:active="currentActive"
     :class="className"
-    :inner="inner"
+    :inner="props.inner"
     :transition-name="moveTransition"
-    :closable="maskClose"
-    :disabled="hideMask"
+    :closable="props.maskClose"
+    :disabled="props.hideMask"
     :on-before-close="handleMaskClose"
-    :transfer="transfer"
+    :transfer="props.transfer"
     @show="handleShow"
     @hide="handleHide"
   >
@@ -15,9 +15,9 @@
       <section v-show="show" :class="wrapperClass" :style="wrapperStyle">
         <div v-if="hasTitle" :class="`${prefix}__title`">
           <slot name="title">
-            {{ title }}
+            {{ props.title }}
           </slot>
-          <div v-if="closable" :class="`${prefix}__close`" @click="handleClose()">
+          <div v-if="props.closable" :class="`${prefix}__close`" @click="handleClose()">
             <slot name="close">
               <Icon><Xmark></Xmark></Icon>
             </slot>
@@ -27,10 +27,10 @@
           <slot></slot>
         </div>
         <div
-          v-if="resizable"
+          v-if="props.resizable"
           :class="[
             `${prefix}__handler`,
-            `${prefix}__handler--${placement}`,
+            `${prefix}__handler--${props.placement}`,
             {
               [`${prefix}__handler--resizing`]: resizing
             }
@@ -48,78 +48,16 @@
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
 export type DrawerPlacement = 'top' | 'right' | 'bottom' | 'left'
-
 type ClassType = string | Record<string, boolean>
 
-const props = useConfiguredProps('drawer', {
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  },
-  active: {
-    type: Boolean,
-    default: false
-  },
-  width: {
-    type: Number,
-    default: 280,
-    validator: (value: number) => {
-      return value > 0
-    }
-  },
-  height: {
-    type: Number,
-    default: 280,
-    validator: (value: number) => {
-      return value > 0
-    }
-  },
-  placement: {
-    default: 'right' as DrawerPlacement,
-    validator: (value: DrawerPlacement) => {
-      return ['top', 'right', 'bottom', 'left'].includes(value)
-    }
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  closable: {
-    type: Boolean,
-    default: false
-  },
-  inner: {
-    type: Boolean,
-    default: false
-  },
-  maskClose: {
-    type: Boolean,
-    default: true
-  },
-  drawerClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  hideMask: {
-    type: Boolean,
-    default: false
-  },
-  onBeforeClose: {
-    type: Function as PropType<() => any>,
-    default: null
-  },
-  resizable: {
-    type: Boolean,
-    default: false
-  }
-})
+const drawerPlacements = Object.freeze(['top', 'right', 'bottom', 'left'] as DrawerPlacement[])
 
 export default defineComponent({
   name: 'Drawer',
@@ -128,7 +66,21 @@ export default defineComponent({
     Masker,
     Xmark
   },
-  props,
+  props: {
+    transfer: [Boolean, String],
+    active: booleanProp,
+    width: Number,
+    height: Number,
+    placement: String as PropType<DrawerPlacement>,
+    title: String,
+    closable: booleanProp,
+    inner: booleanProp,
+    maskClose: booleanProp,
+    drawerClass: [String, Object] as PropType<ClassType>,
+    hideMask: booleanProp,
+    onBeforeClose: Function as PropType<() => any>,
+    resizable: booleanProp
+  },
   emits: [
     'toggle',
     'close',
@@ -139,7 +91,38 @@ export default defineComponent({
     'resize-end',
     'update:active'
   ],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('drawer', _props, {
+      transfer: false,
+      active: {
+        default: false,
+        static: true
+      },
+      width: {
+        default: 280,
+        validator: (value: number) => value > 0
+      },
+      height: {
+        default: 280,
+        validator: (value: number) => value > 0
+      },
+      placement: {
+        default: 'right' as DrawerPlacement,
+        validator: (value: DrawerPlacement) => drawerPlacements.includes(value)
+      },
+      title: '',
+      closable: false,
+      inner: false,
+      maskClose: true,
+      drawerClass: null,
+      hideMask: false,
+      onBeforeClose: {
+        default: null,
+        isFunc: true
+      },
+      resizable: false
+    })
+
     const prefix = 'vxp-drawer'
     const currentActive = ref(props.active)
     const currentWidth = ref(props.width)
@@ -234,9 +217,9 @@ export default defineComponent({
       return result
     }
 
-    function handleMaskClose() {
+    async function handleMaskClose() {
       if (props.maskClose) {
-        handleClose()
+        await handleClose()
       }
     }
 
@@ -328,6 +311,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       currentActive,
       resizing,

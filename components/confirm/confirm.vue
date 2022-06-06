@@ -5,22 +5,22 @@
     :closable="false"
     :active="visible"
     :class="[prefix, `${prefix}-vars`]"
-    :top="top"
-    :left="left"
-    :width="width"
-    :mask-close="maskClose"
+    :top="props.top"
+    :left="props.left"
+    :width="props.width"
+    :mask-close="maskCloseR"
     @hide="handleReset"
   >
-    <div :class="`${prefix}__body`" :style="style">
-      <Renderer v-if="isFunction(renderer)" :renderer="renderer"></Renderer>
+    <div :class="`${prefix}__body`" :style="styleR">
+      <Renderer v-if="isFunction(rendererR)" :renderer="rendererR"></Renderer>
       <template v-else>
         <div :class="`${prefix}__icon`">
           <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
           <Icon
             v-else
-            :icon="icon || CircleQuestion"
+            :icon="iconR || CircleQuestion"
             :scale="2.2"
-            :style="{ color: iconColor }"
+            :style="{ color: iconColorR }"
           ></Icon>
         </div>
         <div :class="`${prefix}__content`">
@@ -30,15 +30,15 @@
     </div>
     <div :class="`${prefix}__actions`">
       <Button :class="`${prefix}__button`" @click="handleCancel">
-        {{ cancelText || locale.cancel }}
+        {{ cancelTextR || locale.cancel }}
       </Button>
       <Button
         :class="`${prefix}__button`"
-        :type="confirmType"
+        :type="confirmTypeR"
         :loading="loading"
         @click="handleConfirm"
       >
-        {{ confirmText || locale.confirm }}
+        {{ confirmTextR || locale.confirm }}
       </Button>
     </div>
   </Modal>
@@ -50,7 +50,7 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
-import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isPromise, isFunction } from '@vexip-ui/utils'
 import { CircleQuestion } from '@vexip-ui/icons'
 
@@ -62,57 +62,7 @@ const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
 
-const props = useConfiguredProps('confirm', {
-  top: {
-    type: positionType,
-    default: 'auto',
-    validator: positionValidator
-  },
-  left: {
-    type: positionType,
-    default: 'auto',
-    validator: positionValidator
-  },
-  width: {
-    type: positionType,
-    default: 420,
-    validator: positionValidator
-  },
-  maskClose: {
-    type: Boolean,
-    default: false
-  },
-  confirmType: {
-    default: 'default' as ConfirmType,
-    validator: (value: ConfirmType) => {
-      return ['default', 'primary', 'info', 'success', 'warning', 'error'].includes(value)
-    }
-  },
-  confirmText: {
-    type: String,
-    default: null
-  },
-  cancelText: {
-    type: String,
-    default: null
-  },
-  icon: {
-    type: [Object, Function] as PropType<Record<string, unknown> | (() => any)>,
-    default: null
-  },
-  style: {
-    type: Object as PropType<CSSProperties>,
-    default: () => ({})
-  },
-  renderer: {
-    type: Function as PropType<() => any>,
-    default: null
-  },
-  iconColor: {
-    type: String,
-    default: ''
-  }
-})
+const confirmTypes = Object.freeze(['default', 'primary', 'info', 'success', 'warning', 'error'] as ConfirmType[])
 
 export default defineComponent({
   name: 'Confirm',
@@ -122,20 +72,61 @@ export default defineComponent({
     Modal,
     Renderer
   },
-  props,
+  props: {
+    top: positionType,
+    left: positionType,
+    width: positionType,
+    maskClose: booleanProp,
+    confirmType: String as PropType<ConfirmType>,
+    confirmText: String,
+    cancelText: String,
+    icon: [Object, Function] as PropType<Record<string, any> | (() => any)>,
+    style: Object,
+    renderer: Function as PropType<() => any>,
+    iconColor: String
+  },
   emits: ['confirm', 'cancel'],
-  setup(props) {
+  setup(_props) {
+    const props = useProps('confirm', _props, {
+      top: {
+        default: 'auto',
+        validator: positionValidator
+      },
+      left: {
+        default: 'auto',
+        validator: positionValidator
+      },
+      width: {
+        default: 420,
+        validator: positionValidator
+      },
+      maskClose: false,
+      confirmType: {
+        default: 'default' as ConfirmType,
+        validator: (value: ConfirmType) => confirmTypes.includes(value)
+      },
+      confirmText: null,
+      cancelText: null,
+      icon: null,
+      style: null,
+      renderer: {
+        default: null,
+        isFunc: true
+      },
+      iconColor: ''
+    })
+
     const visible = ref(false)
     const loading = ref(false)
     const content = ref('')
-    const iconColor = ref(props.iconColor)
-    const style = ref<CSSProperties>(props.style)
-    const confirmType = ref(props.confirmType)
-    const confirmText = ref(props.confirmText)
-    const cancelText = ref(props.cancelText)
-    const maskClose = ref(props.maskClose)
-    const icon = ref(props.icon)
-    const renderer = ref<(() => any) | null>(props.renderer)
+    const iconColorR = ref(props.iconColor)
+    const styleR = ref<CSSProperties>(props.style || {})
+    const confirmTypeR = ref(props.confirmType)
+    const confirmTextR = ref(props.confirmText)
+    const cancelTextR = ref(props.cancelText)
+    const maskCloseR = ref(props.maskClose)
+    const iconR = ref(props.icon)
+    const rendererR = ref<(() => any) | null>(props.renderer)
     const onBeforeConfirm = ref<(() => unknown) | null>(null)
 
     const onConfirm = ref<(() => void) | null>(null)
@@ -144,14 +135,14 @@ export default defineComponent({
     function openConfirm(options: ConfirmOptions) {
       return new Promise<boolean>(resolve => {
         content.value = options.content ?? ''
-        style.value = options.style ?? {}
-        iconColor.value = options.iconColor ?? ''
-        maskClose.value = !!options.maskClose
-        confirmType.value = options.confirmType ?? props.confirmType
-        confirmText.value = options.confirmText ?? props.confirmText
-        cancelText.value = options.cancelText ?? props.cancelText
-        icon.value = options.icon ?? props.icon
-        renderer.value = isFunction(options.renderer) ? options.renderer : null
+        styleR.value = options.style ?? props.style
+        iconColorR.value = options.iconColor ?? props.iconColor
+        maskCloseR.value = options.maskClose ?? props.maskClose
+        confirmTypeR.value = options.confirmType ?? props.confirmType
+        confirmTextR.value = options.confirmText ?? props.confirmText
+        cancelTextR.value = options.cancelText ?? props.cancelText
+        iconR.value = options.icon ?? props.icon
+        rendererR.value = isFunction(options.renderer) ? options.renderer : props.renderer
         onBeforeConfirm.value = isFunction(options.onBeforeConfirm) ? options.onBeforeConfirm : null
 
         visible.value = true
@@ -205,32 +196,34 @@ export default defineComponent({
     function handleReset() {
       visible.value = false
       content.value = ''
-      iconColor.value = props.iconColor
-      style.value = props.style
-      maskClose.value = props.maskClose
-      confirmType.value = props.confirmType
-      confirmText.value = props.confirmText
-      cancelText.value = props.cancelText
-      icon.value = null!
-      ;(renderer.value as any) = null
+      iconColorR.value = props.iconColor
+      styleR.value = props.style
+      maskCloseR.value = props.maskClose
+      confirmTypeR.value = props.confirmType
+      confirmTextR.value = props.confirmText
+      cancelTextR.value = props.cancelText
+      iconR.value = props.icon
+      rendererR.value = props.renderer
     }
 
     return {
       CircleQuestion,
 
+      props,
       prefix: 'vxp-confirm',
-      locale: useLocaleConfig('confirm'),
+      locale: useLocale('confirm'),
       visible,
       loading,
       content,
-      style,
-      iconColor,
-      maskClose,
-      confirmType,
-      confirmText,
-      cancelText,
-      icon,
-      renderer,
+
+      styleR,
+      iconColorR,
+      maskCloseR,
+      confirmTypeR,
+      confirmTextR,
+      cancelTextR,
+      iconR,
+      rendererR,
 
       isFunction,
       openConfirm,

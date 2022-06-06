@@ -1,6 +1,6 @@
 <template>
   <div :class="className">
-    <span v-if="!vertical && hasText" :class="`${prefix}__text`">
+    <span v-if="!props.vertical && hasText" :class="`${prefix}__text`">
       <slot></slot>
     </span>
   </div>
@@ -8,36 +8,32 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
+
+import type { PropType } from 'vue'
 
 export type DividerTextPosition = 'center' | 'left' | 'right'
 
-const props = useConfiguredProps('divider', {
-  vertical: {
-    type: Boolean,
-    default: false
-  },
-  textPosition: {
-    default: 'center' as DividerTextPosition,
-    validator: (value: DividerTextPosition) => {
-      return ['center', 'left', 'right'].includes(value)
-    }
-  },
-  // 字体增大加粗
-  primary: {
-    type: Boolean,
-    default: false
-  },
-  dashed: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'Divider',
-  props,
-  setup(props, { slots }) {
+  props: {
+    vertical: booleanProp,
+    textPosition: String as PropType<DividerTextPosition>,
+    // 字体增大加粗
+    primary: booleanProp,
+    dashed: booleanProp
+  },
+  setup(_props, { slots }) {
+    const props = useProps('divider', _props, {
+      vertical: false,
+      textPosition: {
+        default: 'center' as DividerTextPosition,
+        validator: (value: DividerTextPosition) => ['center', 'left', 'right'].includes(value)
+      },
+      primary: false,
+      dashed: false
+    })
+
     const prefix = 'vxp-divider'
 
     const hasText = computed(() => {
@@ -59,6 +55,7 @@ export default defineComponent({
     })
 
     return {
+      props,
       prefix,
 
       hasText,

@@ -63,61 +63,59 @@ import { handleKeyEnter } from './helper'
 import type { PropType } from 'vue'
 import type { TimeType } from './symbol'
 
-const props = {
-  unitType: {
-    type: String as PropType<TimeType | ''>,
-    default: 'date'
-  },
-  enabled: {
-    type: Object as PropType<Record<TimeType, boolean>>,
-    default: () => ({})
-  },
-  activated: {
-    type: Object as PropType<Record<TimeType, boolean>>,
-    default: () => ({})
-  },
-  timeValue: {
-    type: Object as PropType<Record<TimeType, number>>,
-    default: () => ({})
-  },
-  separator: {
-    type: String,
-    default: ':'
-  },
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  focused: {
-    type: Boolean,
-    default: false
-  },
-  filler: {
-    type: String,
-    default: '-',
-    validator: (value: string) => value.length === 1
-  },
-  noFiller: {
-    type: Boolean,
-    default: false
-  },
-  steps: {
-    type: Array as PropType<number[]>,
-    default: () => [1, 1, 1]
-  },
-  ctrlSteps: {
-    type: Array as PropType<number[]>,
-    default: () => [5, 5, 5]
-  },
-  labels: {
-    type: Object as PropType<Partial<Record<TimeType, string>>>,
-    default: () => ({})
-  }
-}
-
 export default defineComponent({
   name: 'TimeControl',
-  props,
+  props: {
+    unitType: {
+      type: String as PropType<TimeType | ''>,
+      default: 'date'
+    },
+    enabled: {
+      type: Object as PropType<Record<TimeType, boolean>>,
+      default: () => ({})
+    },
+    activated: {
+      type: Object as PropType<Record<TimeType, boolean>>,
+      default: () => ({})
+    },
+    timeValue: {
+      type: Object as PropType<Record<TimeType, number>>,
+      default: () => ({})
+    },
+    separator: {
+      type: String,
+      default: ':'
+    },
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    focused: {
+      type: Boolean,
+      default: false
+    },
+    filler: {
+      type: String,
+      default: '-',
+      validator: (value: string) => value.length === 1
+    },
+    noFiller: {
+      type: Boolean,
+      default: false
+    },
+    steps: {
+      type: Array as PropType<number[]>,
+      default: () => [1, 1, 1]
+    },
+    ctrlSteps: {
+      type: Array as PropType<number[]>,
+      default: () => [5, 5, 5]
+    },
+    labels: {
+      type: Object as PropType<Partial<Record<TimeType, string>>>,
+      default: () => ({})
+    }
+  },
   emits: [
     'input',
     'plus',

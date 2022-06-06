@@ -6,11 +6,11 @@
         <slot
           name="week"
           :index="week - 1"
-          :label="getWeekLabel((week - 1 + weekStart) % 7)"
-          :week="(week - 1 + weekStart) % 7"
+          :label="getWeekLabel((week - 1 + props.weekStart) % 7)"
+          :week="(week - 1 + props.weekStart) % 7"
         >
           <div :class="`${prefix}__index`">
-            {{ getWeekLabel((week - 1 + weekStart) % 7) }}
+            {{ getWeekLabel((week - 1 + props.weekStart) % 7) }}
           </div>
         </slot>
       </div>
@@ -32,7 +32,7 @@
             :is-next="isNextMonth(dateRange[(row - 1) * 7 + cell - 1])"
             :is-today="isToday(dateRange[(row - 1) * 7 + cell - 1])"
             :disabled="isDisabled(dateRange[(row - 1) * 7 + cell - 1])"
-            :in-range="isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
+            :in-range="props.isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
           >
             <div
               :class="{
@@ -43,7 +43,7 @@
                 [`${prefix}__index--today`]: isToday(dateRange[(row - 1) * 7 + cell - 1]),
                 [`${prefix}__index--disabled`]: isDisabled(dateRange[(row - 1) * 7 + cell - 1]),
                 [`${prefix}__index--in-range`]:
-                  isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])
+                  props.isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])
               }"
               @click="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
             >
@@ -62,87 +62,72 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useHover } from '@vexip-ui/mixins'
-import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { startOfWeek, rangeDate, differenceDays, debounceMinor } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { Dateable } from '@vexip-ui/utils'
 import type { WeekIndex } from './symbol'
 
-const props = useConfiguredProps('calendarBase', {
-  // 选中的日期
-  value: {
-    type: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
-    default: null
-  },
-  // 当前日历显示的年份
-  year: {
-    type: Number,
-    default: new Date().getFullYear()
-  },
-  // 当前日历显示的月份 (1 ~ 12)
-  month: {
-    type: Number,
-    default: new Date().getMonth() + 1,
-    validator: (value: number) => {
-      return value > 0 && value <= 12
-    }
-  },
-  // 头部星期显示的内容，数量须为 7 个
-  weekDays: {
-    type: Array as PropType<string[]>,
-    default: null,
-    validator: (value: string[]) => {
-      return !value || value.length === 0 || value.length === 7
-    }
-  },
-  weekStart: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => {
-      return value >= 0 && value < 7
-    }
-  },
-  today: {
-    type: [Number, String, Date] as PropType<Dateable>,
-    default() {
-      return new Date()
-    },
-    validator: (value: Dateable) => {
-      return !Number.isNaN(+new Date(value))
-    }
-  },
-  disabledDate: {
-    type: Function as PropType<(data: Date) => boolean>,
-    default() {
-      return false
-    }
-  },
-  isRange: {
-    type: Boolean,
-    default: false
-  },
-  valueType: {
-    type: String as PropType<'start' | 'end'>,
-    default: 'start',
-    validator: (value: 'start' | 'end') => {
-      return value === 'start' || value === 'end'
-    }
-  }
-})
-
 export default defineComponent({
   name: 'CalendarPane',
-  props,
+  props: {
+    // 选中的日期
+    value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
+    // 当前日历显示的年份
+    year: Number,
+    // 当前日历显示的月份 (1 ~ 12)
+    month: Number,
+    // 头部星期显示的内容，数量须为 7 个
+    weekDays: Array as PropType<string[]>,
+    weekStart: Number,
+    today: [Number, String, Date] as PropType<Dateable>,
+    disabledDate: Function as PropType<(data: Date) => boolean>,
+    isRange: booleanProp,
+    valueType: String as PropType<'start' | 'end'>
+  },
   emits: ['select', 'hover', 'update:value'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('calendarBase', _props, {
+      value: {
+        default: null,
+        static: true
+      },
+      year: () => new Date().getFullYear(),
+      month: {
+        default: () => new Date().getMonth() + 1,
+        validator: (value: number) => value > 0 && value <= 12
+      },
+      weekDays: {
+        default: null,
+        validator: (value: string[]) => !value || value.length === 0 || value.length === 7
+      },
+      weekStart: {
+        default: 0,
+        validator: (value: number) => value >= 0 && value < 7
+      },
+      today: {
+        default: () => new Date(),
+        validator: (value: Dateable) => !Number.isNaN(+new Date(value))
+      },
+      disabledDate: {
+        default: () => false,
+        isFunc: true
+      },
+      isRange: false,
+      valueType: {
+        default: 'start',
+        validator: (value: 'start' | 'end') => value === 'start' || value === 'end'
+      }
+    })
+
     const startValue = ref<Date | null>(null)
     const endValue = ref<Date | null>(null)
     const dateRange = ref<Date[]>([])
     const hoveredDate = ref<Date | null>(null)
 
     const { wrapper, isHover } = useHover()
-    const locale = useLocaleConfig('calendar')
+    const locale = useLocale('calendar')
 
     const updateDateRange = debounceMinor(setDateRange)
 
@@ -162,7 +147,7 @@ export default defineComponent({
     })
 
     function getWeekLabel(index: number) {
-      return props.weekDays?.[index] || locale[`week${(index || 7) as WeekIndex}`]
+      return props.weekDays?.[index] || locale.value[`week${(index || 7) as WeekIndex}`]
     }
 
     function setDateRange() {
@@ -315,8 +300,8 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix: 'vxp-calendar',
-      locale,
       startValue,
       endValue,
       dateRange,

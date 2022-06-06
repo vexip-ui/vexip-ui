@@ -33,7 +33,7 @@
         </div>
       </slot>
     </div>
-    <transition :name="transitionName">
+    <transition :name="props.transitionName">
       <div v-show="currentVisible" ref="popper" :class="[`${prefix}__popper`, `${prefix}-vars`]">
         <div :class="`${prefix}__pane`">
           <div :class="`${prefix}__section`">
@@ -52,16 +52,16 @@
               @change="handleHueChange"
             ></ColorHue>
             <ColorAlpha
-              v-if="alpha"
+              v-if="props.alpha"
               :rgb="rgb"
               :alpha="currentAlpha"
               @edit-start="toggleEditing(true)"
               @edit-end="toggleEditing(false)"
               @change="handleAlphaChange"
             ></ColorAlpha>
-            <div v-if="shortcut" :class="`${prefix}__shortcuts`">
+            <div v-if="props.shortcut" :class="`${prefix}__shortcuts`">
               <div
-                v-for="(item, index) in shortcutList"
+                v-for="(item, index) in props.shortcutList"
                 :key="index"
                 :class="`${prefix}__shortcut-item`"
                 :style="{ backgroundColor: item }"
@@ -71,22 +71,22 @@
           </div>
           <div :class="`${prefix}__action`">
             <Input
-              v-if="!noInput"
+              v-if="!props.noInput"
               size="small"
               :value="hex.toUpperCase()"
               :respond="false"
               @change="handleInputColor"
             ></Input>
             <Button
-              v-if="clearable"
+              v-if="props.clearable"
               text
               size="small"
               @click="handleClear"
             >
-              {{ cancelText || locale.cancel }}
+              {{ props.cancelText || locale.cancel }}
             </Button>
             <Button type="primary" size="small" @click="handleOk">
-              {{ confirmText || locale.confirm }}
+              {{ props.confirmText || locale.confirm }}
             </Button>
           </div>
         </div>
@@ -105,7 +105,7 @@ import ColorHue from './color-hue.vue'
 import ColorPalette from './color-palette.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import {
   noop,
   toFixed,
@@ -153,82 +153,6 @@ const defaultShotcuts = [
   '#ffffff'
 ]
 
-const props = useConfiguredProps('colorPicker', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  value: {
-    type: [String, Object] as PropType<Color | null>,
-    default: '#339af0'
-  },
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  format: {
-    default: 'rgb' as ColorFormat,
-    validator: (value: ColorFormat) => {
-      return ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
-    }
-  },
-  alpha: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-drop'
-  },
-  noInput: {
-    type: Boolean,
-    default: false
-  },
-  shortcut: {
-    type: Boolean,
-    default: false
-  },
-  shortcutList: {
-    type: Array as PropType<string[]>,
-    default() {
-      return Array.from(defaultShotcuts)
-    }
-  },
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'bottom',
-    validator: (value: Placement) => {
-      return placementWhileList.includes(value)
-    }
-  },
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  },
-  outsideClose: {
-    type: Boolean,
-    default: true
-  },
-  clearable: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  },
-  cancelText: {
-    type: String,
-    default: null
-  },
-  confirmText: {
-    type: String,
-    default: null
-  }
-})
-
 export default defineComponent({
   name: 'ColorPicker',
   components: {
@@ -241,7 +165,26 @@ export default defineComponent({
     Xmark,
     ChevronDown
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    value: [String, Object] as PropType<Color | null>,
+    visible: booleanProp,
+    format: String as PropType<ColorFormat>,
+    alpha: booleanProp,
+    disabled: booleanProp,
+    transitionName: String,
+    noInput: booleanProp,
+    shortcut: booleanProp,
+    shortcutList: Array as PropType<string[]>,
+    placement: String as PropType<Placement>,
+    transfer: [Boolean, String],
+    outsideClose: booleanProp,
+    clearable: booleanProp,
+    disableValidate: booleanProp,
+    cancelText: String,
+    confirmText: String
+  },
   emits: [
     'toggle',
     'click-outside',
@@ -252,7 +195,39 @@ export default defineComponent({
     'update:value',
     'update:visible'
   ],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('colorPicker', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      value: {
+        default: '#339af0',
+        static: true
+      },
+      visible: false,
+      format: {
+        default: 'rgb' as ColorFormat,
+        validator: (value: ColorFormat) => {
+          return ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
+        }
+      },
+      alpha: false,
+      disabled: false,
+      transitionName: 'vxp-drop',
+      noInput: false,
+      shortcut: false,
+      shortcutList: () => Array.from(defaultShotcuts),
+      placement: {
+        default: 'bottom',
+        validator: (value: Placement) => placementWhileList.includes(value)
+      },
+      transfer: false,
+      outsideClose: true,
+      clearable: false,
+      disableValidate: false,
+      cancelText: null,
+      confirmText: null
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
@@ -476,8 +451,9 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
-      locale: useLocaleConfig('colorPicker'),
+      locale: useLocale('colorPicker'),
       isEmpty,
       currentVisible,
       currentValue,

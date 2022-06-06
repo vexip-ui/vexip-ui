@@ -4,7 +4,7 @@
       <slot name="header">
         <div v-if="hasTitle" :class="`${prefix}__title`">
           <slot name="title">
-            {{ title }}
+            {{ props.title }}
           </slot>
         </div>
         <div v-if="hasExtra" :class="`${prefix}__extra`">
@@ -12,7 +12,7 @@
         </div>
       </slot>
     </div>
-    <div :class="`${prefix}__content`" :style="contentStyle">
+    <div :class="`${prefix}__content`" :style="props.contentStyle">
       <slot></slot>
     </div>
   </div>
@@ -20,31 +20,29 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps } from '@vexip-ui/config'
+
+import type { PropType } from 'vue'
 
 export type CardShadowType = 'always' | 'hover' | 'never'
 
-const props = useConfiguredProps('card', {
-  title: {
-    type: String,
-    default: ''
-  },
-  shadow: {
-    default: 'always' as CardShadowType,
-    validator: (value: CardShadowType) => {
-      return ['always', 'hover', 'never'].includes(value)
-    }
-  },
-  contentStyle: {
-    type: Object,
-    default: () => ({})
-  }
-})
-
 export default defineComponent({
   name: 'Card',
-  props,
-  setup(props, { slots }) {
+  props: {
+    title: String,
+    shadow: String as PropType<CardShadowType>,
+    contentStyle: Object
+  },
+  setup(_props, { slots }) {
+    const props = useProps('card', _props, {
+      title: '',
+      shadow: {
+        default: 'always' as CardShadowType,
+        validator: (value: CardShadowType) => ['always', 'hover', 'never'].includes(value)
+      },
+      contentStyle: () => ({})
+    })
+
     const prefix = 'vxp-card'
 
     const className = computed(() => {
@@ -61,6 +59,7 @@ export default defineComponent({
     })
 
     return {
+      props,
       prefix,
 
       className,

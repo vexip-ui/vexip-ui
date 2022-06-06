@@ -17,28 +17,26 @@ import { toFixed, throttle } from '@vexip-ui/utils'
 import type { PropType } from 'vue'
 import type { RGBColor } from '@vexip-ui/utils'
 
-const props = {
-  rgb: {
-    type: Object as PropType<RGBColor>,
-    default: () => {
-      return { r: 0, g: 0, b: 0 }
-    },
-    validator: (value: RGBColor) => {
-      return 'r' in value && 'g' in value && 'b' in value
-    }
-  },
-  alpha: {
-    type: Number,
-    default: 1,
-    validator: (value: number) => {
-      return value >= 0 && value <= 1
-    }
-  }
-}
-
 export default defineComponent({
   name: 'ColorAlpha',
-  props,
+  props: {
+    rgb: {
+      type: Object as PropType<RGBColor>,
+      default: () => {
+        return { r: 0, g: 0, b: 0 }
+      },
+      validator: (value: RGBColor) => {
+        return 'r' in value && 'g' in value && 'b' in value
+      }
+    },
+    alpha: {
+      type: Number,
+      default: 1,
+      validator: (value: number) => {
+        return value >= 0 && value <= 1
+      }
+    }
+  },
   emits: ['edit-start', 'edit-end', 'change'],
   setup(props, { emit }) {
     const currentLeft = ref(props.alpha * 100)

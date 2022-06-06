@@ -6,9 +6,9 @@
     @clickoutside="finishInput"
   >
     <div ref="reference" :class="`${prefixCls}__control`">
-      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: prefixColor }">
+      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
         <slot name="prefix">
-          <Icon :icon="prefix"></Icon>
+          <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
       <TimeControl
@@ -17,14 +17,14 @@
         :enabled="startState.enabled"
         :activated="startState.activated"
         :time-value="startState.timeValue"
-        :steps="steps"
-        :ctrl-steps="ctrlSteps"
+        :steps="props.steps"
+        :ctrl-steps="props.ctrlSteps"
         :focused="focused"
         :visible="currentVisible"
-        :separator="separator"
-        :filler="filler"
-        :no-filler="noFiller"
-        :labels="labels"
+        :separator="props.separator"
+        :filler="props.filler"
+        :no-filler="props.noFiller"
+        :labels="props.labels"
         @input="handleInput"
         @plus="handlePlus"
         @minus="handleMinus"
@@ -34,9 +34,9 @@
         @prev-unit="enterColumn('prev')"
         @next-unit="enterColumn('next')"
       ></TimeControl>
-      <template v-if="isRange">
+      <template v-if="props.isRange">
         <div
-          :class="[`${prefixCls}__exchange`, exchange ? `${prefixCls}__exchange--enabled` : '']"
+          :class="[`${prefixCls}__exchange`, props.exchange ? `${prefixCls}__exchange--enabled` : '']"
           @click="handleExchangeClick"
         >
           <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
@@ -47,14 +47,14 @@
           :enabled="endState.enabled"
           :activated="endState.activated"
           :time-value="endState.timeValue"
-          :steps="steps"
-          :ctrl-steps="ctrlSteps"
+          :steps="props.steps"
+          :ctrl-steps="props.ctrlSteps"
           :focused="focused"
           :visible="currentVisible"
-          :separator="separator"
-          :filler="filler"
-          :no-filler="noFiller"
-          :labels="labels"
+          :separator="props.separator"
+          :filler="props.filler"
+          :no-filler="props.noFiller"
+          :labels="props.labels"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -67,21 +67,21 @@
       </template>
       <transition name="vxp-fade">
         <div
-          v-if="!disabled && clearable && isHover && lastValue"
+          v-if="!props.disabled && props.clearable && isHover && lastValue"
           :class="`${prefixCls}__clear`"
           @click.stop="handleClear"
         >
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: suffixColor }">
+        <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: props.suffixColor }">
           <slot name="suffix">
-            <Icon :icon="suffix || ClockR"></Icon>
+            <Icon :icon="props.suffix || ClockR"></Icon>
           </slot>
         </div>
       </transition>
     </div>
     <Portal :to="transferTo">
-      <transition :name="transitionName">
+      <transition :name="props.transitionName">
         <div
           v-show="currentVisible"
           ref="popper"
@@ -89,9 +89,9 @@
           @click.stop="handleFocused"
         >
           <div :class="`${prefixCls}__pane`">
-            <div v-if="shortcuts.length" :class="[`${prefixCls}__list`, `${prefixCls}__list--sub`]">
+            <div v-if="props.shortcuts.length" :class="[`${prefixCls}__list`, `${prefixCls}__list--sub`]">
               <div
-                v-for="(item, index) in shortcuts"
+                v-for="(item, index) in props.shortcuts"
                 :key="index"
                 :class="`${prefixCls}__shortcut`"
                 :title="item.name"
@@ -106,10 +106,10 @@
                   v-model:hour="startState.timeValue.hour"
                   v-model:minute="startState.timeValue.minute"
                   v-model:second="startState.timeValue.second"
-                  :no-arrow="noArrow"
-                  :candidate="candidate"
-                  :steps="steps"
-                  :pointer="pointer"
+                  :no-arrow="props.noArrow"
+                  :candidate="props.candidate"
+                  :steps="props.steps"
+                  :pointer="props.pointer"
                   @change="handleWheelChange"
                   @toggle-col="handleStartInput"
                 ></TimeWheel>
@@ -118,20 +118,20 @@
                   v-model:hour="endState.timeValue.hour"
                   v-model:minute="endState.timeValue.minute"
                   v-model:second="endState.timeValue.second"
-                  :no-arrow="noArrow"
-                  :candidate="candidate"
-                  :steps="steps"
-                  :pointer="pointer"
+                  :no-arrow="props.noArrow"
+                  :candidate="props.candidate"
+                  :steps="props.steps"
+                  :pointer="props.pointer"
                   @change="handleWheelChange"
                   @toggle-col="handleEndInput"
                 ></TimeWheel>
               </div>
-              <div v-if="!noAction" :class="`${prefixCls}__action`">
+              <div v-if="!props.noAction" :class="`${prefixCls}__action`">
                 <Button text size="small" @click="handleCancel">
-                  {{ cancelText || locale.cancel }}
+                  {{ props.cancelText || locale.cancel }}
                 </Button>
                 <Button type="primary" size="small" @click="finishInput">
-                  {{ confirmText || locale.confirm }}
+                  {{ props.confirmText || locale.confirm }}
                 </Button>
               </div>
             </div>
@@ -151,7 +151,7 @@ import TimeControl from './time-control.vue'
 import TimeWheel from './time-wheel.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
@@ -162,131 +162,6 @@ import type { TimeType, TimeShortcut } from './symbol'
 
 // const TIME_REG = /^((?:[01]?[0-9])|(?:2[0-3]))((?::[0-5]?[0-9]))?((?::[0-5]?[0-9]))?$/
 const TIME_REG = /^((?:\d{1,2}))((?::\d{1,2}))?((?::\d{1,2}))?$/
-
-const props = useConfiguredProps('timePicker', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'bottom-start',
-    validator: (value: Placement) => {
-      return placementWhileList.includes(value)
-    }
-  },
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  },
-  format: {
-    type: String,
-    default: 'HH:mm:ss'
-  },
-  separator: {
-    type: String,
-    default: ':'
-  },
-  value: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: '00:00:00'
-  },
-  filler: {
-    type: String,
-    default: '-',
-    validator: (value: string) => {
-      return value.length === 1
-    }
-  },
-  noFiller: {
-    type: Boolean,
-    default: false
-  },
-  clearable: {
-    type: Boolean,
-    default: false
-  },
-  noAction: {
-    type: Boolean,
-    default: false
-  },
-  noArrow: {
-    type: Boolean,
-    default: false
-  },
-  pointer: {
-    type: Boolean,
-    default: false
-  },
-  candidate: {
-    default: 3,
-    validator: (value: number) => {
-      return [0, 1, 2, 3].includes(value)
-    }
-  },
-  steps: {
-    type: Array as PropType<number[]>,
-    default: () => [1, 1, 1]
-  },
-  labels: {
-    type: Object as PropType<Partial<Record<TimeType, string>>>,
-    default: () => ({})
-  },
-  shortcuts: {
-    type: Array as PropType<TimeShortcut[]>,
-    default: () => []
-  },
-  isRange: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-drop'
-  },
-  confirmText: {
-    type: String,
-    default: null
-  },
-  cancelText: {
-    type: String,
-    default: null
-  },
-  ctrlSteps: {
-    type: Array as PropType<number[]>,
-    default: () => [5, 5, 5]
-  },
-  prefix: {
-    type: Object,
-    default: null
-  },
-  prefixColor: {
-    type: String,
-    default: ''
-  },
-  suffix: {
-    type: Object,
-    default: null
-  },
-  suffixColor: {
-    type: String,
-    default: ''
-  },
-  exchange: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'TimePicker',
@@ -299,7 +174,38 @@ export default defineComponent({
     CircleXmark,
     ArrowRightArrowLeft
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    visible: booleanProp,
+    placement: String as PropType<Placement>,
+    transfer: [Boolean, String],
+    format: String,
+    separator: String,
+    value: [String, Array] as PropType<string | string[]>,
+    filler: String,
+    noFiller: booleanProp,
+    clearable: booleanProp,
+    noAction: booleanProp,
+    noArrow: booleanProp,
+    pointer: booleanProp,
+    candidate: Number as PropType<0 | 1 | 2 | 3>,
+    steps: Array as PropType<number[]>,
+    labels: Object as PropType<Partial<Record<TimeType, string>>>,
+    shortcuts: Array as PropType<TimeShortcut[]>,
+    isRange: booleanProp,
+    disabled: booleanProp,
+    transitionName: String,
+    confirmText: String,
+    cancelText: String,
+    ctrlSteps: Array as PropType<number[]>,
+    prefix: Object,
+    prefixColor: String,
+    suffix: Object,
+    suffixColor: String,
+    exchange: booleanProp,
+    disableValidate: booleanProp
+  },
   emits: [
     'change-col',
     'change',
@@ -316,7 +222,52 @@ export default defineComponent({
     'update:value',
     'update:visible'
   ],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('timePicker', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      visible: false,
+      placement: {
+        default: 'bottom-start',
+        validator: (value: Placement) => placementWhileList.includes(value)
+      },
+      transfer: false,
+      format: 'HH:mm:ss',
+      separator: ':',
+      value: {
+        default: '00:00:00',
+        static: true
+      },
+      filler: {
+        default: '-',
+        validator: (value: string) => value.length === 1
+      },
+      noFiller: false,
+      clearable: false,
+      noAction: false,
+      noArrow: false,
+      pointer: false,
+      candidate: {
+        default: 3,
+        validator: (value: number) => [0, 1, 2, 3].includes(value)
+      },
+      steps: () => [1, 1, 1],
+      labels: () => ({}),
+      shortcuts: () => [],
+      isRange: false,
+      disabled: false,
+      transitionName: 'vxp-drop',
+      confirmText: null,
+      cancelText: null,
+      ctrlSteps: () => [5, 5, 5],
+      prefix: null,
+      prefixColor: '',
+      suffix: null,
+      suffixColor: '',
+      exchange: false,
+      disableValidate: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
@@ -725,8 +676,9 @@ export default defineComponent({
     return {
       ClockR,
 
+      props,
       prefixCls: prefix,
-      locale: useLocaleConfig('timePicker'),
+      locale: useLocale('timePicker'),
       isHover,
       currentVisible,
       focused,

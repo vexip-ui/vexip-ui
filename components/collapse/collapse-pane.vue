@@ -5,15 +5,15 @@
         <Icon><ChevronRight></ChevronRight></Icon>
       </div>
       <slot name="title">
-        <div v-if="icon" :class="`${prefix}__icon`">
-          <Icon :icon="icon"></Icon>
+        <div v-if="props.icon" :class="`${prefix}__icon`">
+          <Icon :icon="props.icon"></Icon>
         </div>
-        {{ title }}
+        {{ props.title }}
       </slot>
     </div>
     <CollapseTransition>
       <div v-if="currentExpanded" :class="`${prefix}__body`">
-        <div :class="`${prefix}__content`" :style="contentStyle">
+        <div :class="`${prefix}__content`" :style="props.contentStyle">
           <slot></slot>
         </div>
       </div>
@@ -25,53 +25,13 @@
 import { defineComponent, ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { randomString } from '@vexip-ui/utils'
 import { ChevronRight } from '@vexip-ui/icons'
 import { COLLAPSE_STATE } from './symbol'
 
+import type { PropType } from 'vue'
 import type { CollapseArrowType } from './symbol'
-
-const props = useConfiguredProps('collapsePane', {
-  label: {
-    type: [String, Number],
-    default: null
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  contentStyle: {
-    type: Object,
-    default: null
-  },
-  expanded: {
-    type: Boolean,
-    default: false
-  },
-  card: {
-    type: Boolean,
-    default: false
-  },
-  arrowType: {
-    default: 'right' as CollapseArrowType,
-    validator: (value: CollapseArrowType) => {
-      return ['right', 'left', 'none'].includes(value)
-    }
-  },
-  icon: {
-    type: Object,
-    default: null
-  },
-  ghost: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'CollapsePane',
@@ -80,9 +40,37 @@ export default defineComponent({
     Icon,
     ChevronRight
   },
-  props,
+  props: {
+    label: [String, Number],
+    title: String,
+    disabled: booleanProp,
+    contentStyle: Object,
+    expanded: booleanProp,
+    card: booleanProp,
+    arrowType: String as PropType<CollapseArrowType>,
+    icon: Object,
+    ghost: booleanProp
+  },
   emits: ['toggle', 'update:expanded'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('collapsePane', _props, {
+      label: {
+        default: null,
+        static: true
+      },
+      title: '',
+      disabled: false,
+      contentStyle: null,
+      expanded: false,
+      card: false,
+      arrowType: {
+        default: 'right' as CollapseArrowType,
+        validator: (value: CollapseArrowType) => ['right', 'left', 'none'].includes(value)
+      },
+      icon: null,
+      ghost: false
+    })
+
     const collapseState = inject(COLLAPSE_STATE, null)
 
     const prefix = 'vxp-collapse'
@@ -178,6 +166,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       currentExpanded,
 
