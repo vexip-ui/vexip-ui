@@ -1,3 +1,30 @@
+# [2.0.0-beta.3](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2022-06-06)
+
+
+### Bug Fixes
+
+* **form:** sync FormSubmit and FormReset props to Button ([a9ab65f](https://github.com/qmhc/vexip-ui/commit/a9ab65f2647c1e3eabb882e58d193f52d2ba5195))
+* **icons:** support export full icons package ([a136d47](https://github.com/qmhc/vexip-ui/commit/a136d471957fc85100fef6391970340904023931))
+* **modal:** event `ok` rename to `confirm` ([a6610a7](https://github.com/qmhc/vexip-ui/commit/a6610a7db19a3a2fa4297dd86e7560ad105a3a31))
+* **native-scroll:** scroll event barType to type ([3dce3c7](https://github.com/qmhc/vexip-ui/commit/3dce3c79f91e340aacaef578af84cfd0b10f53e8))
+* **number-input:** autocomplete prop change type to boolean ([be2f838](https://github.com/qmhc/vexip-ui/commit/be2f83809b2c4bfce29508116b11c008a8714e73))
+* **radio:** group options prop to string or number array ([56b2e78](https://github.com/qmhc/vexip-ui/commit/56b2e78306944fe08423aed8da7a403e85a1c727))
+* **select:** label not update when value prop changed ([4c61493](https://github.com/qmhc/vexip-ui/commit/4c61493a2008b4ef4bfb63f25e72c60fe50d15b6))
+* **split:** remove 	op and ottom slots ([c50515e](https://github.com/qmhc/vexip-ui/commit/c50515e649b4083e00d13ac6b8cf3384f7f964bc))
+* **tabs:** icon prop of TabPane defautl to null ([a46f173](https://github.com/qmhc/vexip-ui/commit/a46f173d7313f4e1fa9b399e5f6991ffdf63844e))
+* **tabs:** pane icon prop type should be object ([a409731](https://github.com/qmhc/vexip-ui/commit/a409731186df065a172677b5b12d3fc832ad09d9))
+* **tag:** content default no wrap ([ef5a1c0](https://github.com/qmhc/vexip-ui/commit/ef5a1c0ded6f4ffaa4308715f31dfab4f01651be))
+* **tag:** remove built-in transition ([74af492](https://github.com/qmhc/vexip-ui/commit/74af4925b4ca388ae3ff5b8d71d83153f99a375b))
+* **tree:** controllable slot params ([eb8421e](https://github.com/qmhc/vexip-ui/commit/eb8421e628fc534cb36f9ea8430c1f1007573071))
+
+
+### Features
+
+* **playground:** add action to reset codes ([a91d77b](https://github.com/qmhc/vexip-ui/commit/a91d77b8e8e1a1285694a3cd4b69cc617ab4a715))
+* **tag:** color prop custom major color, remove border-color prop ([749a7a8](https://github.com/qmhc/vexip-ui/commit/749a7a8c331e7a9d6aacf783e2b238618c2d65f0))
+
+
+
 # [2.0.0-beta.2](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2022-06-01)
 
 

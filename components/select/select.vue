@@ -388,6 +388,7 @@ export default defineComponent({
       () => props.value,
       value => {
         currentValue.value = props.multiple && !Array.isArray(value) ? [value] : value
+        syncCurrentLabel()
       },
       { immediate: true }
     )
@@ -415,6 +416,45 @@ export default defineComponent({
       }
     )
 
+    function syncCurrentLabel() {
+      if (props.multiple && Array.isArray(currentValue.value)) {
+        if (!currentValue.value.length) {
+          currentLabel.value = []
+          return
+        }
+
+        const selectedValues = new Set(currentValue.value)
+        const options = optionStates.value
+        const selectedLabels: string[] = []
+
+        for (let i = 0, len = options.length; i < len; ++i) {
+          const { value, label } = options[i]
+
+          if (selectedValues.has(value)) {
+            selectedValues.delete(value)
+            selectedLabels.push(label ?? value)
+
+            if (!selectedValues.size) break
+          }
+        }
+
+        currentLabel.value = selectedLabels
+      } else {
+        if (isNull(currentValue.value) || currentValue.value === '') {
+          currentLabel.value = ''
+          return
+        }
+
+        const option = optionStates.value.find(option => option.value === currentValue.value)
+
+        if (option) {
+          currentLabel.value = option.label ?? option.value
+        } else {
+          currentLabel.value = ''
+        }
+      }
+    }
+
     function isSelected(value: string | number) {
       if (Array.isArray(currentValue.value)) {
         return currentValue.value.includes(value)
@@ -422,18 +462,6 @@ export default defineComponent({
 
       return currentValue.value === value
     }
-
-    // function addOption(option: OptionState) {
-    //   if (!isNull(option.value)) {
-    //     optionMap.value.set(option.value, option)
-    //   }
-    // }
-
-    // function removeOption(option: OptionState) {
-    //   if (!isNull(option.value)) {
-    //     optionMap.value.delete(option.value)
-    //   }
-    // }
 
     function computeListHeight() {
       virtualList.value?.refresh()
