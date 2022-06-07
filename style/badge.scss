@@ -7,7 +7,7 @@ $badge: map.merge(
   (
     color: get-css-var('color-white'),
     bg-color: get-css-var('color-error-base'),
-    b-color: get-css-var('color-error-light-9'),
+    b-color: get-css-var('color-error-opacity-8'),
     line-height: get-css-var('line-height-base'),
     height: calc(get-css-var('badge-line-height') * 1em),
     v-padding: 0,
@@ -67,6 +67,7 @@ $badge: map.merge(
       position: absolute;
       top: 0;
       right: 0;
+      padding-top: 0.5px;
       transform: translate(50%, -50%);
     }
 
@@ -76,7 +77,7 @@ $badge: map.merge(
       &--#{$type} {
         @include define-badge-style((
           bg-color: 'color' $type 'base',
-          b-color: 'color' $type 'light-9'
+          b-color: 'color' $type 'opacity-8'
         ));
       }
     }
@@ -84,7 +85,7 @@ $badge: map.merge(
     &--disabled {
       @include define-badge-style((
         bg-color: 'content-color-disabled',
-        b-color: 'border-color-base'
+        b-color: 'border-color-light-2'
       ));
     }
   }
