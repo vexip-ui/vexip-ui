@@ -1,7 +1,7 @@
 <template>
   <div v-if="!props.inner" :class="[prefix, `${prefix}-vars`]">
     <slot></slot>
-    <transition appear name="vxp-fade">
+    <transition appear :name="props.transitionName">
       <div v-if="currentActive" :class="`${prefix}__loading`">
         <div :class="`${prefix}__mask`" :style="maskStyle"></div>
         <div :class="`${prefix}__icon`">
@@ -18,7 +18,7 @@
       </div>
     </transition>
   </div>
-  <transition v-else appear name="vxp-fade">
+  <transition v-else appear :name="props.transitionName">
     <div v-if="currentActive" :class="[prefix, `${prefix}-vars`, `${prefix}--inner`]">
       <div :class="`${prefix}__mask`" :style="maskStyle"></div>
       <div :class="`${prefix}__icon`">
@@ -51,7 +51,6 @@ export default defineComponent({
     Icon
   },
   props: {
-    // TODO: 添加 transitionName
     active: booleanProp,
     icon: Object,
     spin: booleanProp,
@@ -61,7 +60,8 @@ export default defineComponent({
       default: null
     },
     tip: String,
-    maskColor: String
+    maskColor: String,
+    transitionName: String
   },
   setup(_props, { slots }) {
     const props = useProps('spin', _props, {
@@ -74,7 +74,8 @@ export default defineComponent({
       inner: false,
       delay: false,
       tip: '',
-      maskColor: ''
+      maskColor: '',
+      transitionName: 'vxp-fade'
     })
 
     const currentActive = ref(props.active)
