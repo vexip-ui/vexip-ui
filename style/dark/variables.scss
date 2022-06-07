@@ -55,11 +55,11 @@ $fill-color-map: map.merge(
 $shadow-color-map: () !default;
 $shadow-color-map: map.merge(
   (
-    base: rgba(#000, 0.5),
-    light-1: rgba(#000, 0.4),
-    light-2: rgba(#000, 0.3),
-    dark-1: rgba(#000, 0.6),
-    dark-2: rgba(#000, 0.7)
+    base: rgba(#000, 0.7),
+    light-1: rgba(#000, 0.6),
+    light-2: rgba(#000, 0.5),
+    dark-1: rgba(#000, 0.8),
+    dark-2: rgba(#000, 0.9)
   ),
   $shadow-color-map
 );
