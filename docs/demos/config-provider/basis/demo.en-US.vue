@@ -1,10 +1,10 @@
 <template>
   <ConfigProvider :props="provideProps" :locale="locale">
     <Tag type="primary">
-      标签
+      Tag
     </Tag>
     <Tag type="warning" size="small">
-      标签
+      Tag
     </Tag>
     <br />
     <br />
@@ -25,7 +25,7 @@ const provideProps = ref({
 
 const locale = ref({
   input: {
-    placeholder: '随便输入点什么'
+    placeholder: 'Input something...'
   }
 })
 </script>

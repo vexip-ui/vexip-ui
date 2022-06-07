@@ -95,6 +95,7 @@ export function getComponentConfig(): ComponentGroup[] {
     {
       name: 'else',
       components: [
+        { name: 'ConfigProvider', since: '2.0.0' },
         { name: 'Masker' },
         { name: 'NativeScroll', since: '1.3.1' },
         { name: 'ResizeObserver', since: '2.0.0' },

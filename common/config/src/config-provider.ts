@@ -9,7 +9,7 @@ import type { LocaleConfig, LocaleOptions } from './locale'
 export default defineComponent({
   name: 'ConfigProvider',
   props: {
-    provideProps: {
+    props: {
       type: Object,
       default: () => ({})
     },
@@ -23,10 +23,10 @@ export default defineComponent({
 
     const providedProps = computed(() => {
       if (!upstreamProps?.value) {
-        return props.provideProps
+        return props.props
       }
 
-      return mergeObjects(upstreamProps.value, props.provideProps)
+      return mergeObjects(upstreamProps.value, props.props)
     })
 
     provide(PROVIDED_PROPS, providedProps)

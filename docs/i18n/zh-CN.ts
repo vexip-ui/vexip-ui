@@ -94,6 +94,7 @@ export const zhCN = defineI18n({
     Progress: '进度条',
     Spin: '加载中',
 
+    ConfigProvider: '配置注入',
     Masker: '遮罩',
     NativeScroll: '原生滚动',
     ResizeObserver: '缩放观察',

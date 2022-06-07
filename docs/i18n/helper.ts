@@ -94,6 +94,7 @@ export interface I18nConfig extends LocaleMessageDictionary<VueMessageType> {
     Progress: string,
     Spin: string,
 
+    ConfigProvider: string,
     Masker: string,
     NativeScroll: string,
     ResizeObserver: string,

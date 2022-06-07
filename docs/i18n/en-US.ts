@@ -94,6 +94,7 @@ export const enUS = defineI18n({
     Progress: 'Progress',
     Spin: 'Spin',
 
+    ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',
     NativeScroll: 'NativeScroll',
     ResizeObserver: 'ResizeObserver',
