@@ -21,7 +21,7 @@ import { parseColorToRgba, adjustAlpha } from '@vexip-ui/utils'
 import type { PropType } from 'vue'
 import type { TagType } from './symbol'
 
-const tagTypes = Object.freeze([
+const tagTypes = Object.freeze<TagType>([
   'default',
   'primary',
   'info',
@@ -37,7 +37,7 @@ const tagTypes = Object.freeze([
   'navy',
   'gold',
   'purple'
-] as const)
+])
 
 export default defineComponent({
   name: 'Tag',

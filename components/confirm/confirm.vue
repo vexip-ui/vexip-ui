@@ -62,7 +62,7 @@ const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
 
-const confirmTypes = Object.freeze(['default', 'primary', 'info', 'success', 'warning', 'error'] as ConfirmType[])
+const confirmTypes = Object.freeze<ConfirmType>(['default', 'primary', 'info', 'success', 'warning', 'error'])
 
 export default defineComponent({
   name: 'Confirm',

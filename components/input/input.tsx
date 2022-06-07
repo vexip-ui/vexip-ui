@@ -13,7 +13,7 @@ export type InputType = 'text' | 'password' | 'date' | 'datetime' | 'time'
 type ClassType = string | Record<string, boolean>
 type InputEventType = 'input' | 'change'
 
-const inputTypes = Object.freeze(['text', 'password', 'date', 'datetime', 'time'] as const)
+const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
 
 export default defineComponent({
   name: 'Input',

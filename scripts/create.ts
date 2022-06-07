@@ -100,17 +100,22 @@ async function create(name: string) {
 
         <script lang="ts">
         import { defineComponent } from 'vue'
-        import { useConfiguredProps } from '@vexip-ui/config'
-
-        const props = useConfiguredProps('${camelCaseName}', {})
+        import { useProps, booleanProp } from '@vexip-ui/config'
 
         export default defineComponent({
           name: '${capitalCaseName}',
-          props,
-          setup() {
+          props: {
+            bool: booleanProp
+          },
+          setup(_props) {
+            const props = useProps('${camelCaseName}', _props, {
+              bool: false
+            })
+
             const prefix = 'vxp-${kebabCaseName}'
         
             return {
+              props,
               prefix
             }
           }
@@ -118,37 +123,6 @@ async function create(name: string) {
         </script>
       `
     },
-    // {
-    //   filePath: path.resolve(dirPath, 'components', kebabCaseName, '__serve__', 'index.ts'),
-    //   source: `
-    //     import '@/themes/common.scss'
-
-    //     import { createApp } from 'vue'
-    //     import App from './app.vue'
-
-    //     createApp(App).mount('#app')
-    //   `
-    // },
-    // {
-    //   filePath: path.resolve(dirPath, 'components', kebabCaseName, '__serve__', 'app.vue'),
-    //   source: `
-    //     <template>
-    //       <${capitalCaseName}></${capitalCaseName}>
-    //     </template>
-
-    //     <script lang="ts">
-    //     import { defineComponent } from 'vue'
-    //     import { ${capitalCaseName} } from '..'
-
-    //     export default defineComponent({
-    //       name: 'App',
-    //       components: {
-    //         ${capitalCaseName}
-    //       }
-    //     })
-    //     </script>
-    //   `
-    // },
     {
       filePath: path.resolve(dirPath, 'style', `${kebabCaseName}.scss`),
       source: `

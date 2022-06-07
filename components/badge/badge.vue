@@ -29,7 +29,7 @@ import type { PropType } from 'vue'
 
 export type BadgeType = 'error' | 'primary' | 'success' | 'warning' | 'info' | 'disabled'
 
-const badgeTypes = Object.freeze(['error', 'primary', 'success', 'warning', 'info', 'disabled'] as BadgeType[])
+const badgeTypes = Object.freeze<BadgeType>(['error', 'primary', 'success', 'warning', 'info', 'disabled'])
 
 export default defineComponent({
   name: 'Badge',

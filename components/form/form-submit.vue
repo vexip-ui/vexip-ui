@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, inject } from 'vue'
-import { Button } from '@/components/button'
+import { Button, buttonTypes } from '@/components/button'
 import { useProps, useLocale, booleanProp, sizeProp } from '@vexip-ui/config'
 import { noop, isPromise } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_ACTIONS } from './symbol'
@@ -41,8 +41,6 @@ import { FORM_PROPS, FORM_ACTIONS } from './symbol'
 import type { PropType } from 'vue'
 import type { ButtonType, ButtonAttrType } from '@/components/button'
 import type { FormActions } from './symbol'
-
-const buttonTypes = Object.freeze(['default', 'primary', 'info', 'success', 'warning', 'error'] as ButtonType[])
 
 export default defineComponent({
   name: 'FormSubmit',

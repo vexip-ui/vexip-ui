@@ -152,9 +152,10 @@ import { CalendarPane } from '@/components/calendar-pane'
 import { Icon } from '@/components/icon'
 import TimeWheel from './time-wheel.vue'
 import { useHover } from '@vexip-ui/mixins'
-import { useLocaleConfig } from '@vexip-ui/config'
+import { useLocale } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
 import { AngleRight, AngleLeft, AnglesRight, AnglesLeft } from '@vexip-ui/icons'
+import { datePickerTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type { MonthIndex } from '@/components/calendar'
@@ -177,7 +178,7 @@ export default defineComponent({
     type: {
       default: 'date' as DatePickerType,
       validator: (value: DatePickerType) => {
-        return ['date', 'datetime', 'year', 'month'].includes(value)
+        return datePickerTypes.includes(value)
       }
     },
     enabled: {
@@ -266,7 +267,7 @@ export default defineComponent({
     const { isHover } = useHover(calendar)
 
     const locale = computed(() => {
-      return { ...useLocaleConfig('calendar'), ...useLocaleConfig('datePicker') }
+      return { ...useLocale('calendar').value, ...useLocale('datePicker').value }
     })
 
     const startActivated = computed(() => {

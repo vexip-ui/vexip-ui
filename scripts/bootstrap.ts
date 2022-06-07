@@ -23,22 +23,13 @@ async function main() {
 
     import { buildInstall } from './create'
 
-    import type { PropOptions, LocaleOptions } from '@vexip-ui/config'
-
-    export { configProp, configLocale } from '@vexip-ui/config'
-
-    export interface InstallOptions {
-      prefix?: string,
-      prop?: Partial<PropOptions>,
-      locale?: LocaleOptions
-    }
-
     const components = [
       ${components.map(toCapitalCase).join(',\n')},
       // plugins
       ${plugins.map(toCapitalCase).join(', ')}
     ]
 
+    export { buildInstall }
     export const install = buildInstall(components)
     export const version = __VERSION__
 

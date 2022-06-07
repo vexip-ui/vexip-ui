@@ -50,7 +50,7 @@ const predefinedIcons = {
   error: CircleXmark
 }
 
-const alertTypes = Object.freeze(['default', 'info', 'success', 'warning', 'error'] as AlertType[])
+const alertTypes = Object.freeze<AlertType>(['default', 'info', 'success', 'warning', 'error'])
 
 export default defineComponent({
   name: 'Alert',

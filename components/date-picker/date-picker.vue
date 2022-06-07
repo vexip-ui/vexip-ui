@@ -128,13 +128,12 @@ import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createState
 import { noop, toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
+import { datePickerTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { Dateable } from '@vexip-ui/utils'
 import type { TimeType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
-
-const datePickerTypes = Object.freeze(['date', 'datetime', 'year', 'month'] as DatePickerType[])
 
 export default defineComponent({
   name: 'DatePicker',

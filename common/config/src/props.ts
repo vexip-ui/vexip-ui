@@ -13,7 +13,7 @@ interface PropConfig<T = any> {
 }
 export const PROVIDED_PROPS = '__vxp-provided-props'
 
-export function configProps(props: PropOptions, app?: App) {
+export function configProps(props: Partial<PropOptions>, app?: App) {
   const provideFn = isFunction(app?.provide) ? app!.provide : provide
 
   provideFn(PROVIDED_PROPS, props)

@@ -57,7 +57,7 @@ import type { PropType } from 'vue'
 export type DrawerPlacement = 'top' | 'right' | 'bottom' | 'left'
 type ClassType = string | Record<string, boolean>
 
-const drawerPlacements = Object.freeze(['top', 'right', 'bottom', 'left'] as DrawerPlacement[])
+const drawerPlacements = Object.freeze<DrawerPlacement>(['top', 'right', 'bottom', 'left'])
 
 export default defineComponent({
   name: 'Drawer',

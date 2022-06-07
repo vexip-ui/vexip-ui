@@ -24,3 +24,5 @@ export interface DatePickerState {
   dateValue: Record<DateTimeType, number>,
   enterColumn(type: 'prev' | 'next'): void
 }
+
+export const datePickerTypes = Object.freeze<DatePickerType>(['date', 'datetime', 'year', 'month'])

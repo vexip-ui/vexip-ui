@@ -4,11 +4,10 @@ import { Icon } from '@/components/icon'
 import { createSizeProp, useProps, booleanProp, sizeProp } from '@vexip-ui/config'
 import { Spinner } from '@vexip-ui/icons'
 import { parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
+import { buttonTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type { ButtonType, ButtonAttrType } from './symbol'
-
-const buttonTypes = Object.freeze(['default', 'primary', 'info', 'success', 'warning', 'error'] as ButtonType[])
 
 export default defineComponent({
   name: 'Button',
