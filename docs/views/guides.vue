@@ -93,7 +93,7 @@ function selectGuide(label: string) {
   }
 
   &__menu {
-    padding-top: 40px;
+    padding: 40px 0 20px;
     border-right: 0;
   }
 

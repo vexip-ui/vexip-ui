@@ -24,7 +24,7 @@ export interface I18nConfig extends LocaleMessageDictionary<VueMessageType> {
     introduction: string,
     gettingStart: string,
     globalConfig: string,
-    customStyle: string
+    styleConfig: string
   },
   group: {
     basis: string,
