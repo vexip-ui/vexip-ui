@@ -23,6 +23,8 @@ async function main() {
 
     import { buildInstall } from './create'
 
+    export { version } from './version'
+
     const components = [
       ${components.map(toCapitalCase).join(',\n')},
       // plugins
@@ -31,7 +33,6 @@ async function main() {
 
     export { buildInstall }
     export const install = buildInstall(components)
-    export const version = __VERSION__
 
     export {
       ${exportComponents.map(toCapitalCase).join(',\n')}

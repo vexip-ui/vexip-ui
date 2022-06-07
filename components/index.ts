@@ -91,6 +91,8 @@ import { WheelItem } from './wheel-item'
 
 import { buildInstall } from './create'
 
+export { version } from './version'
+
 const components = [
   Alert,
   Anchor,
@@ -187,7 +189,6 @@ const components = [
 
 export { buildInstall }
 export const install = buildInstall(components)
-export const version = __VERSION__
 
 export {
   Alert,
