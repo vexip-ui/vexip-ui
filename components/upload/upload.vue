@@ -23,7 +23,7 @@
       <slot :is-drag-over="(props.allowDrag || props.disabledClick) && isDragOver">
         <template v-if="!props.allowDrag && !props.disabledClick">
           <Button :icon="Upload">
-            {{ locale.upload }}
+            {{ props.buttonLable ?? locale.upload }}
           </Button>
           <slot name="tip">
             <p v-if="props.tip" :class="`${prefix}__tip`">
@@ -71,7 +71,7 @@ import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload } from '@vexip-ui/icons'
 import { UploadStatusType, uploadListTypes } from './symbol'
 
-import type { PropType } from 'vue'
+import type { PropType, Ref } from 'vue'
 import type {
   UploadListType,
   BeforeFn,
@@ -91,7 +91,6 @@ export default defineComponent({
     CloudArrowUp
   },
   props: {
-    // TODO: 增加设置按钮内容 prop
     url: String,
     multiple: booleanProp,
     tip: String,
@@ -115,7 +114,8 @@ export default defineComponent({
     loadingText: String,
     directory: booleanProp,
     pathField: String,
-    disabledClick: booleanProp
+    disabledClick: booleanProp,
+    buttonLable: String
   },
   emits: [
     'exceed',
@@ -174,11 +174,12 @@ export default defineComponent({
       loadingText: null,
       directory: false,
       pathField: 'path',
-      disabledClick: false
+      disabledClick: false,
+      buttonLable: null
     })
 
     const prefix = 'vxp-upload'
-    const fileStates = ref<FileState[]>([])
+    const fileStates = ref([]) as Ref<FileState[]>
     const isDragOver = ref(false)
 
     const input = ref<HTMLInputElement | null>(null)
