@@ -49,7 +49,10 @@
           :style="{ color: props.suffixColor }"
         >
           <slot name="suffix">
-            <Icon :icon="props.suffix || ChevronDown"></Icon>
+            <Icon v-if="props.suffix" :icon="props.suffix"></Icon>
+            <Icon v-else :class="`${prefixCls}__arrow`">
+              <ChevronDown></ChevronDown>
+            </Icon>
           </slot>
         </div>
       </transition>
@@ -163,7 +166,8 @@ export default defineComponent({
     Tag,
     VirtualList,
     Check,
-    CircleXmark
+    CircleXmark,
+    ChevronDown
   },
   props: {
     size: sizeProp,
@@ -298,7 +302,6 @@ export default defineComponent({
         [prefix]: true,
         'vxp-input-vars': true,
         [`${prefix}-vars`]: true,
-        [`${prefix}--focused`]: !props.disabled && currentVisible.value,
         [`${prefix}--focused`]: !props.disabled && currentVisible.value,
         [`${prefix}--multiple`]: props.multiple,
         [`${prefix}--disabled`]: props.disabled,
@@ -543,8 +546,6 @@ export default defineComponent({
     }
 
     return {
-      ChevronDown,
-
       props,
       prefixCls: prefix,
       locale,

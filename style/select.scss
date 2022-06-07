@@ -128,11 +128,11 @@ $select: map.merge(
     color: get-css-var('select-check-color');
   }
 
-  &__arrow {
-    transition: get-css-var('transition-transform');
-  }
+  // &__arrow {
+  //   transition: get-css-var('transition-transform');
+  // }
 
-  &--visible &__arrow {
+  &--focused &__arrow {
     transform: rotate(180deg);
   }
 
