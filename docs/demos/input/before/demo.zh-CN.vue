@@ -46,6 +46,6 @@ const value1 = ref('')
 const value2 = ref('')
 const value3 = ref('')
 
-const protocol = 'http://'
-const service = '.com'
+const protocol = ref('http://')
+const service = ref('.com')
 </script>
