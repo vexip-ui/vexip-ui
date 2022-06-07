@@ -12,7 +12,7 @@ $calendar-pane: map.merge(
     index-color-disabled: get-css-var('content-color-humble'),
     index-bg-color: transparent,
     index-bg-color-week: transparent,
-    index-bg-color-hover: get-css-var('color-primary-light-7'),
+    index-bg-color-hover: get-css-var('color-primary-opacity-7'),
     index-bg-color-selected: get-css-var('color-primary-base'),
     index-bg-color-disabled: get-css-var('calendar-index-bg-color'),
     index-bg-color-today: get-css-var('calendar-index-bg-color'),
@@ -20,15 +20,15 @@ $calendar-pane: map.merge(
     index-b-width: 0,
     index-b-style: get-css-var('border-style'),
     index-b-color: get-css-var('border-color-base'),
-    index-b-color-selected: get-css-var('color-primary-light-2'),
-    index-b-color-disabled: get-css-var('border-color-light-2'),
-    index-b-color-outside: get-css-var('border-color-light-1'),
+    index-b-color-selected: get-css-var('color-primary-opacity-2'),
+    index-b-color-disabled: get-css-var('border-color-opacity-2'),
+    index-b-color-outside: get-css-var('border-color-opacity-1'),
     index-border:
     get-css-var('calendar-index-b-width')
     get-css-var('calendar-index-b-style')
     get-css-var('calendar-index-b-color'),
     index-radius: get-css-var('radius-base'),
-    range-bg-color: get-css-var('color-primary-light-9'),
+    range-bg-color: get-css-var('color-primary-opacity-8'),
     range-opacity: 60%
   ),
   $calendar-pane
