@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/qmhc/vexip-ui/compare/icons@1.0.1...icons@1.0.2) (2022-06-07)
+
+
+### Bug Fixes
+
+* **icons:** mark icon components to raw ([2b98f9f](https://github.com/qmhc/vexip-ui/commit/2b98f9ff51aa081796724c816778a8c2550f4cee))
+
+
+
 ## [1.0.1](https://github.com/qmhc/vexip-ui/compare/icons@1.0.0...icons@1.0.1) (2022-06-06)
 
 
