@@ -62,7 +62,6 @@ export default defineComponent({
     percentage: Number,
     strokeWidth: Number,
     infoType: String as PropType<ProgressInfoType>,
-    // TODO: 实现添加进度条流动效果
     activated: booleanProp,
     strokeColor: [String, Array, Function] as PropType<StrokeColor>
   },
