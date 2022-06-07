@@ -1,9 +1,9 @@
 [
   "basis",
-  "border",
-  "button",
   "disabled",
   "group",
-  "size",
-  "vertical"
+  "vertical",
+  "border",
+  "button",
+  "size"
 ]

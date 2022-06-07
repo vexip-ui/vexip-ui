@@ -6,6 +6,7 @@
     <Modal
       v-model:active="active"
       transfer
+      :width="500"
       resizable
       title="标题"
     >
@@ -16,14 +17,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref(false)
-
-    return { active }
-  }
-})
+const active = ref(false)
 </script>
+
+<style>
+.vxp-modal {
+  min-width: 500px;
+}
+</style>

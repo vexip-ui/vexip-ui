@@ -19,18 +19,10 @@
     style="width: 420px;"
   >
     <template #before>
-      <Select v-model:value="protocol">
-        <Option>http://</Option>
-        <Option>https://</Option>
-      </Select>
+      <Select v-model:value="protocol" :options="['http://', 'https://']"></Select>
     </template>
     <template #after>
-      <Select v-model:value="service">
-        <Option>.com</Option>
-        <Option>.cn</Option>
-        <Option>.net</Option>
-        <Option>.org</Option>
-      </Select>
+      <Select v-model:value="service" :options="['.com', '.cn', '.net', '.org']"></Select>
     </template>
   </Input>
   <br />

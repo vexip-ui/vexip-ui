@@ -6,6 +6,7 @@
     <Modal
       v-model:active="active"
       transfer
+      :width="500"
       :title="title"
       :loading="loading"
       :on-before-close="beforeClose"
@@ -23,33 +24,33 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref(false)
-    const title = ref('加载状态')
-    const loading = ref(false)
+const active = ref(false)
+const title = ref('加载状态')
+const loading = ref(false)
 
-    async function beforeClose(isConfirm: boolean) {
-      if (isConfirm) {
-        title.value = '5 秒后自动关闭'
-        loading.value = true
+async function beforeClose(isConfirm: boolean) {
+  if (isConfirm) {
+    title.value = '5 秒后自动关闭'
+    loading.value = true
 
-        return new Promise(resolve => {
-          setTimeout(() => {
-            loading.value = false
-            title.value = '加载状态'
-            resolve(true)
-          }, 5000)
-        })
-      }
-
-      return false
-    }
-
-    return { active, title, loading, beforeClose }
+    return new Promise(resolve => {
+      setTimeout(() => {
+        loading.value = false
+        title.value = '加载状态'
+        resolve(true)
+      }, 5000)
+    })
   }
-})
+
+  return false
+}
 </script>
+
+<style>
+.vxp-modal {
+  min-width: 500px;
+}
+</style>

@@ -2,6 +2,7 @@
   <Pagination
     page-jump
     page-total
+    page-count
     :total="100"
     :page-size="10"
   ></Pagination>

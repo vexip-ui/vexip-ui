@@ -34,8 +34,8 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   height: 200px;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 2px;
+  background-color: var(--vxp-fill-color-background);
+  border: var(--vxp-border-light-2);
+  border-radius: var(--vxp-border-radius-small);
 }
 </style>

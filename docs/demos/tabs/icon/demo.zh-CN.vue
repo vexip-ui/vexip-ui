@@ -28,3 +28,9 @@
 <script setup lang="ts">
 import { ChartArea } from '@vexip-ui/icons'
 </script>
+
+<style>
+.vxp-tabs {
+  max-width: 500px;
+}
+</style>

@@ -1,29 +1,24 @@
 <template>
   <div>
     <Button type="primary" @click="active = !active">
-      打开
+      Open
     </Button>
     <Modal
       v-model:active="active"
       transfer
       top="auto"
-      title="标题"
+      title="Title"
+      :width="500"
     >
-      <p>一些内容</p>
-      <p>一些内容</p>
-      <p>一些内容</p>
+      <p>Some Content</p>
+      <p>Some Content</p>
+      <p>Some Content</p>
     </Modal>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref(false)
-
-    return { active }
-  }
-})
+const active = ref(false)
 </script>

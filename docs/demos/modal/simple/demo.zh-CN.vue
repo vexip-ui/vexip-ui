@@ -7,6 +7,7 @@
       v-model:active="active"
       transfer
       no-footer
+      :width="500"
     >
       <p>一些内容</p>
       <p>一些内容</p>
@@ -15,14 +16,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref(false)
-
-    return { active }
-  }
-})
+const active = ref(false)
 </script>

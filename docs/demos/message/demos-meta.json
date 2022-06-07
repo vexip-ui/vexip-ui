@@ -1,9 +1,9 @@
 [
   "basis",
+  "type",
+  "style",
   "close",
   "duration",
   "icon",
-  "render",
-  "style",
-  "type"
+  "render"
 ]

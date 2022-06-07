@@ -12,14 +12,14 @@
   </Tabs>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref('标签页1')
-
-    return { active }
-  }
-})
+const active = ref('标签页1')
 </script>
+
+<style>
+.vxp-tabs {
+  max-width: 500px;
+}
+</style>

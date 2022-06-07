@@ -24,3 +24,9 @@
     </TabPane>
   </Tabs>
 </template>
+
+<style>
+.vxp-tabs {
+  max-width: 500px;
+}
+</style>

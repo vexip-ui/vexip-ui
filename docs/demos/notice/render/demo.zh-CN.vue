@@ -7,6 +7,7 @@
 <script lang="ts">
 import { defineComponent, h } from 'vue'
 import { Icon } from 'vexip-ui'
+import { BellSlashR } from '@vexip-ui/icons'
 
 export default defineComponent({
   methods: {
@@ -17,7 +18,7 @@ export default defineComponent({
         renderer: () => {
           return h('span', [
             h(Icon, {
-              name: 'bell-slash',
+              icon: BellSlashR,
               scale: 2,
               style: {
                 position: 'absolute',

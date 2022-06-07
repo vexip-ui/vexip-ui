@@ -1,31 +1,31 @@
 <template>
   <Anchor marker>
-    <AnchorLink to="#basis">
-      基础用法
+    <AnchorLink to="#basis-usage">
+      Basis Usage
     </AnchorLink>
     <AnchorLink to="#marker">
-      标记点
+      Marker
     </AnchorLink>
     <AnchorLink to="#example">
-      完整用例
+      Example
     </AnchorLink>
     <AnchorLink to="#api">
       API
       <template #group>
-        <AnchorLink to="#props">
-          Anchor 属性
+        <AnchorLink to="#anchor-props">
+          Anchor Props
         </AnchorLink>
-        <AnchorLink to="#events">
-          Anchor 事件
+        <AnchorLink to="#anchor-events">
+          Anchor Events
         </AnchorLink>
-        <AnchorLink to="#slots">
-          Anchor 插槽
+        <AnchorLink to="#anchor-slots">
+          Anchor Slots
         </AnchorLink>
-        <AnchorLink to="#link-props">
-          AnchorLink 属性
+        <AnchorLink to="#anchorlink-props">
+          AnchorLink Props
         </AnchorLink>
-        <AnchorLink to="#link-slots">
-          AnchorLink 插槽
+        <AnchorLink to="#anchorlink-slots">
+          AnchorLink Slots
         </AnchorLink>
       </template>
     </AnchorLink>

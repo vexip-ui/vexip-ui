@@ -7,6 +7,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { TriangleExclamation } from '@vexip-ui/icons'
 
 export default defineComponent({
   methods: {
@@ -14,7 +15,7 @@ export default defineComponent({
       const isConfirm = await this.$confirm.open({
         content: '确认删除吗？',
         confirmType: 'error',
-        icon: 'exclamation-triangle',
+        icon: TriangleExclamation,
         iconColor: '#f03e3e'
       })
 

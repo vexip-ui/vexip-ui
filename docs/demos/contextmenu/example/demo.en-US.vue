@@ -9,6 +9,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { User, Hammer, Fire } from '@vexip-ui/icons'
 
 export default defineComponent({
   methods: {
@@ -24,12 +25,12 @@ export default defineComponent({
           },
           {
             key: '选项2',
-            icon: 'user',
+            icon: User,
             shortcut: 'Ctrl+A'
           },
           {
             key: '选项3',
-            icon: 'ad',
+            icon: Hammer,
             divided: true,
             iconColor: 'cyan',
             children: [
@@ -63,12 +64,7 @@ export default defineComponent({
           {
             key: '选项5',
             shortcut: 'Ctrl+Alt+I',
-            icon: {
-              name: 'burn',
-              style: {
-                color: 'orange'
-              }
-            },
+            icon: Fire,
             color: 'blue',
             iconColor: 'green'
           }

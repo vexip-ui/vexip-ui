@@ -1,10 +1,10 @@
 [
   "basis",
+  "type",
+  "style",
   "close",
   "duration",
   "icon",
-  "position",
   "render",
-  "style",
-  "type"
+  "position"
 ]
