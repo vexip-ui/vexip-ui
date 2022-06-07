@@ -107,7 +107,7 @@ export default defineComponent({
     async function handleClose() {
       if (!props.closable) return
 
-      let result = true
+      let result: unknown = true
 
       if (typeof props.onBeforeClose === 'function') {
         result = props.onBeforeClose()

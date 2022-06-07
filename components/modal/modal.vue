@@ -306,7 +306,7 @@ export default defineComponent({
       const currentHeight = wrapper.value.offsetHeight
 
       if (props.top === 'auto' && props.inner) {
-        let parentElement = wrapper.value.parentElement
+        let parentElement = wrapper.value.parentElement as HTMLElement
 
         while (parentElement && parentElement !== document.body) {
           if (getComputedStyle(parentElement).position !== 'static') {
@@ -315,7 +315,7 @@ export default defineComponent({
             break
           }
 
-          parentElement = parentElement.parentElement
+          parentElement = parentElement.parentElement as HTMLElement
         }
       } else {
         currentTop.value =
@@ -331,7 +331,7 @@ export default defineComponent({
       const currentWidth = wrapper.value.offsetWidth
 
       if (props.left === 'auto' && props.inner) {
-        let parentElement = wrapper.value.parentElement
+        let parentElement = wrapper.value.parentElement as HTMLElement
 
         while (parentElement && parentElement !== document.body) {
           if (getComputedStyle(parentElement).position !== 'static') {
@@ -340,7 +340,7 @@ export default defineComponent({
             break
           }
 
-          parentElement = parentElement.parentElement
+          parentElement = parentElement.parentElement as HTMLElement
         }
       } else {
         currentLeft.value =
@@ -389,9 +389,9 @@ export default defineComponent({
       emit('hide')
     }
 
-    async function handleMaskClose() {
+    function handleMaskClose() {
       if (props.maskClose) {
-        await handleClose(false)
+        return handleClose(false)
       }
     }
 

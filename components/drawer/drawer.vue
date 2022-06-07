@@ -217,9 +217,9 @@ export default defineComponent({
       return result
     }
 
-    async function handleMaskClose() {
+    function handleMaskClose() {
       if (props.maskClose) {
-        await handleClose()
+        return handleClose()
       }
     }
 
