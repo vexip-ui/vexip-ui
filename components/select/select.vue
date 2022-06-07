@@ -75,7 +75,7 @@
             :class="[`${prefixCls}__list`, props.listClass]"
             :style="{
               height: listHeight,
-              maxHeight: `${maxListHeight}px`
+              maxHeight: `${props.maxListHeight}px`
             }"
           >
             <VirtualList
