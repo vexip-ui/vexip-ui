@@ -8,6 +8,7 @@ import {
   dispatchEvent
 } from '@vexip-ui/utils'
 
+import type { Ref } from 'vue'
 import type { TransferNode } from '@vexip-ui/utils'
 
 export const CLICK_OUTSIDE = 'clickoutside'
@@ -36,7 +37,7 @@ document.addEventListener(CLICK_TYPE, (event: Event & { path?: TransferNode[] })
  *
  * @returns 可以添加事件的元素 Ref
  */
-export function useClickOutside(wrapper = ref<HTMLElement | null>(null)) {
+export function useClickOutside(wrapper: Ref<HTMLElement | null> = ref(null)) {
   onMounted(() => {
     nextTick(() => {
       if (wrapper.value) {

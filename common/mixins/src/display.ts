@@ -1,12 +1,15 @@
 import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { noop } from '@vexip-ui/utils'
 
+import type { Ref } from 'vue'
+
 /**
  * 创建一个观察了最近的上级元素 display 变化的元素 Ref
+ *
  * @param displayInit 元素初次显示后执行的回调
  * @returns 观察了 display 变化的元素 Ref
  */
-export function useDisplay(displayInit = noop, element = ref<HTMLElement | null>(null)) {
+export function useDisplay(displayInit = noop, element: Ref<HTMLElement | null> = ref(null)) {
   let observer: MutationObserver | null
 
   onMounted(() => {

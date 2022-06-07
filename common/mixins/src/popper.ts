@@ -44,8 +44,8 @@ export const placementWhileList = Object.freeze([
 export function usePopper(initOptions: UsePopperOptions) {
   const { placement, transfer, wrapper, isDrop = false } = initOptions
 
-  const reference = initOptions.reference ?? ref<HTMLElement | null>(null)
-  const popper = initOptions.popper ?? ref<HTMLElement | null>(null)
+  const reference: Ref<HTMLElement | null> = initOptions.reference ?? ref(null)
+  const popper: Ref<HTMLElement | null> = initOptions.popper ?? ref(null)
   const transferTo = ref('')
 
   const options: {
