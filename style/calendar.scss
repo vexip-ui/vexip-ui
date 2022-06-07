@@ -10,14 +10,12 @@ $calendar: () !default;
 $calendar: map.merge(
   (
     header-height: 50px,
-    date-color-hover: inherit,
-    date-color-selected: inherit,
     date-color-today: get-css-var('color-primary-base'),
     date-color-outside: get-css-var('content-color-disabled'),
     date-color-disabled: get-css-var('content-color-humble'),
     date-bg-color: transparent,
-    date-bg-color-hover: get-css-var('color-primary-light-9'),
-    date-bg-color-selected: get-css-var('color-primary-light-8'),
+    date-bg-color-hover: get-css-var('color-primary-opacity-9'),
+    date-bg-color-selected: get-css-var('color-primary-opacity-8'),
     date-bg-color-disabled: get-css-var('calendar-date-bg-color'),
     date-bg-color-outside: get-css-var('calendar-date-bg-color'),
     date-b-width: 2px,
@@ -105,7 +103,6 @@ $calendar: map.merge(
       get-css-var('transition-border');
 
     &:hover {
-      color: get-css-var('calendar-date-color-hover');
       background-color: get-css-var('calendar-date-bg-color-hover');
     }
 
@@ -123,7 +120,6 @@ $calendar: map.merge(
     &--selected {
       &,
       &:hover {
-        color: get-css-var('calendar-date-color-selected');
         background-color: get-css-var('calendar-date-bg-color-selected');
         border-top-color: get-css-var('calendar-date-b-color-selected');
       }
