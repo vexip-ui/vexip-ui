@@ -43,10 +43,8 @@ async function main() {
       export interface GlobalComponents {
         ${components.map(name => `${toCapitalCase(name)}: typeof import('vexip-ui')['${toCapitalCase(name)}']`).join(',\n')}
       }
-    }
 
-    declare module '@vue/runtime-core' {
-      interface ComponentCustomProperties {
+      export interface ComponentCustomProperties {
         ${plugins.map(name => `$${name}: typeof import('vexip-ui')['${toCapitalCase(name)}']`).join(',\n')}
       }
     }

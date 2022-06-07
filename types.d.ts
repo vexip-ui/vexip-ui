@@ -86,10 +86,8 @@ declare module 'vue' {
     Wheel: typeof import('vexip-ui')['Wheel'],
     WheelItem: typeof import('vexip-ui')['WheelItem']
   }
-}
 
-declare module '@vue/runtime-core' {
-  interface ComponentCustomProperties {
+  export interface ComponentCustomProperties {
     $confirm: typeof import('vexip-ui')['Confirm'],
     $contextmenu: typeof import('vexip-ui')['Contextmenu'],
     $loading: typeof import('vexip-ui')['Loading'],
