@@ -1,7 +1,7 @@
-import { reactive, computed, watch, provide, inject } from 'vue'
-import { has, isNull, isObject, isFunction } from '@vexip-ui/utils'
+import { reactive, computed, watch, provide, inject, unref } from 'vue'
+import { has, isNull, isObject, isFunction, mergeObjects } from '@vexip-ui/utils'
 
-import type { App, ComputedRef, PropType } from 'vue'
+import type { App, ComputedRef, PropType, Ref } from 'vue'
 
 export type PropOptions = Record<string, Record<string, unknown>>
 
@@ -13,10 +13,21 @@ interface PropConfig<T = any> {
 }
 export const PROVIDED_PROPS = '__vxp-provided-props'
 
-export function configProps(props: Partial<PropOptions>, app?: App) {
-  const provideFn = isFunction(app?.provide) ? app!.provide : provide
+export function configProps(props: Partial<PropOptions> | Ref<Partial<PropOptions>>, app?: App) {
+  if (app) {
+    app.provide(PROVIDED_PROPS, unref(props))
+  } else {
+    const upstreamProps = inject<ComputedRef<Record<string, any>> | null>(PROVIDED_PROPS, null)
+    const providedProps = computed(() => {
+      if (!upstreamProps?.value) {
+        return unref(props)
+      }
 
-  provideFn(PROVIDED_PROPS, props)
+      return mergeObjects(upstreamProps.value, unref(props))
+    })
+
+    provide(PROVIDED_PROPS, providedProps)
+  }
 }
 
 export function useProps<T>(
