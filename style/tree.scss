@@ -13,7 +13,7 @@ $tree: map.merge(
     label-color-disabled: get-css-var('content-color-disabled'),
     label-color-readonly: get-css-var('tree-label-color'),
     label-bg-color: transparent,
-    label-bg-color-hover: get-css-var('color-primary-light-8'),
+    label-bg-color-hover: get-css-var('color-primary-opacity-8'),
     label-bg-color-selected: get-css-var('tree-label-bg-color-hover'),
     label-bg-color-disabled: get-css-var('tree-label-bg-color'),
     label-bg-color-readonly: get-css-var('tree-label-bg-color'),
@@ -98,6 +98,7 @@ $tree: map.merge(
     justify-content: center;
     width: get-css-var('tree-arrow-size');
     height: get-css-var('tree-arrow-size');
+    margin-right: 3px;
     cursor: pointer;
 
     &--transparent {
