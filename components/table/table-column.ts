@@ -19,12 +19,18 @@ const props = {
   idKey: [Number, String],
   name: String,
   accessor: Function as PropType<(row: Data, index: number) => any>,
-  fixed: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
+  fixed: {
+    type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
+    default: null
+  },
   className: [String, Object] as PropType<ClassType>,
   type: String as PropType<ColumnType>,
   width: Number,
   filter: Object as PropType<FilterOptions<any, any>>,
-  sorter: [Boolean, Object] as PropType<boolean | SorterOptions<any>>,
+  sorter: {
+    type: [Boolean, Object] as PropType<boolean | SorterOptions<any>>,
+    default: null
+  },
   renderer: Function as PropType<RenderFn>,
   headRenderer: Function as PropType<RenderFn>,
   order: Number,

@@ -48,7 +48,7 @@
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 
@@ -67,7 +67,7 @@ export default defineComponent({
     Xmark
   },
   props: {
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     active: booleanProp,
     width: Number,
     height: Number,

@@ -105,7 +105,16 @@ import ColorHue from './color-hue.vue'
 import ColorPalette from './color-palette.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import {
+  useProps,
+  useLocale,
+  booleanProp,
+  booleanStringProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp
+} from '@vexip-ui/config'
 import {
   noop,
   toFixed,
@@ -178,7 +187,7 @@ export default defineComponent({
     shortcut: booleanProp,
     shortcutList: Array as PropType<string[]>,
     placement: String as PropType<Placement>,
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     outsideClose: booleanProp,
     clearable: booleanProp,
     disableValidate: booleanProp,

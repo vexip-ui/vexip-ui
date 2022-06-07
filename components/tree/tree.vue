@@ -73,7 +73,10 @@ export default defineComponent({
     TreeNode
   },
   props: {
-    arrow: [Boolean, String] as PropType<boolean | 'auto'>,
+    arrow: {
+      type: [Boolean, String] as PropType<boolean | 'auto'>,
+      default: null
+    },
     data: Array as PropType<InitDataOptions[]>,
     noBuildTree: booleanProp,
     emptyTip: String,

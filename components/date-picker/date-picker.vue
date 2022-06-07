@@ -124,7 +124,7 @@ import DateControl from './date-control.vue'
 import DatePane from './date-pane.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
@@ -151,7 +151,7 @@ export default defineComponent({
     type: String as PropType<DatePickerType>,
     visible: booleanProp,
     placement: String as PropType<Placement>,
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
     format: String,
     filler: String,

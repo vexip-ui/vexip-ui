@@ -74,7 +74,7 @@ import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 
@@ -96,7 +96,7 @@ export default defineComponent({
     Xmark
   },
   props: {
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     active: booleanProp,
     width: positionType,
     height: positionType,

@@ -151,7 +151,7 @@ import TimeControl from './time-control.vue'
 import TimeWheel from './time-wheel.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
@@ -179,7 +179,7 @@ export default defineComponent({
     state: stateProp,
     visible: booleanProp,
     placement: String as PropType<Placement>,
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     format: String,
     separator: String,
     value: [String, Array] as PropType<string | string[]>,

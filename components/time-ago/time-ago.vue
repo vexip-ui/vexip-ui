@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
-import { useProps } from '@vexip-ui/config'
+import { useProps, booleanStringProp } from '@vexip-ui/config'
 import { toDate, format } from '@vexip-ui/utils'
 import { getId, subscribe, unsubscribe, computeTimeAgo } from './helper'
 
@@ -18,7 +18,7 @@ export default defineComponent({
   props: {
     datetime: [String, Number, Date] as PropType<Dateable>,
     interval: Number,
-    title: [Boolean, String],
+    title: booleanStringProp,
     titleFormat: String
   },
   setup(_props) {

@@ -63,7 +63,10 @@ export default defineComponent({
     type: String as PropType<AlertType>,
     title: String,
     colorfulText: booleanProp,
-    icon: [Boolean, Object],
+    icon: {
+      type: [Boolean, Object],
+      default: null
+    },
     closable: booleanProp,
     iconColor: String,
     noBorder: booleanProp,

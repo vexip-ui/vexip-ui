@@ -39,7 +39,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch, toRef } from 'vue'
 import { Portal } from '@/components/portal'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { useClickOutside, placementWhileList, usePopper } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
@@ -60,7 +60,7 @@ export default defineComponent({
     // 设置 pointer-event: none
     noHover: booleanProp,
     tipClass: [String, Object] as PropType<ClassType>,
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     disabled: booleanProp,
     theme: String as PropType<TooltipTheme>
   },

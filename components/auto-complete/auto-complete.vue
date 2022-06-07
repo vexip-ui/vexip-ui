@@ -70,11 +70,19 @@
 <script lang="ts">
 import { defineComponent, ref, computed, inject, watch, watchEffect } from 'vue'
 import { Icon } from '@/components/icon'
-// import { Option } from '@/components/option'
 import { Select } from '@/components/select'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { placementWhileList } from '@vexip-ui/mixins'
-import { useProps, useLocale, createSizeProp, createStateProp, booleanProp, sizeProp, stateProp } from '@vexip-ui/config'
+import {
+  useProps,
+  useLocale,
+  booleanProp,
+  booleanStringProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp
+} from '@vexip-ui/config'
 import { isNull, noop } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -91,13 +99,16 @@ export default defineComponent({
   props: {
     size: sizeProp,
     state: stateProp,
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     value: [String, Number],
     options: Array as PropType<RawOption[]>,
-    filter: [Boolean, Function] as PropType<
-      | boolean
-      | ((value: string | number, options: { label: string, value: string | number }) => boolean)
-    >,
+    filter: {
+      type: [Boolean, Function] as PropType<
+        | boolean
+        | ((value: string | number, options: { label: string, value: string | number }) => boolean)
+      >,
+      default: null
+    },
     prefix: Object,
     prefixColor: String,
     suffix: Object,

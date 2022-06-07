@@ -15,7 +15,10 @@ export default defineComponent({
     gutter: [Number, Array] as PropType<number | number[]>,
     justify: String as PropType<Justify>,
     align: String as PropType<Align>,
-    columnFlex: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>
+    columnFlex: {
+      type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
+      default: null
+    }
   },
   setup(_props, { slots }) {
     const props = useProps('row', _props, {

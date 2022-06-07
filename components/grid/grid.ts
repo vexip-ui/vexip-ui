@@ -29,7 +29,10 @@ export default defineComponent({
     dense: booleanProp,
     justify: String as PropType<GridJustify>,
     align: String as PropType<GridAlign>,
-    cellFlex: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>
+    cellFlex: {
+      type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
+      default: null
+    }
   },
   setup(_props, { slots }) {
     const props = useProps('grid', _props, {

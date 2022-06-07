@@ -26,7 +26,10 @@ export default defineComponent({
     lg: mediaProp,
     xl: mediaProp,
     xxl: mediaProp,
-    useFlex: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>
+    useFlex: {
+      type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
+      default: null
+    }
   },
   setup(_props, { slots }) {
     const props = useProps('cell', _props, {

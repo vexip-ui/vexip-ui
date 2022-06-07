@@ -93,7 +93,7 @@ import {
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { useHover } from '@vexip-ui/mixins'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
@@ -115,7 +115,7 @@ export default defineComponent({
     loop: booleanProp,
     arrow: String as PropType<ArrowType>,
     arrowTrigger: String as PropType<ArrowTrigger>,
-    autoplay: [Boolean, Number],
+    autoplay: booleanNumberProp,
     pointer: String as PropType<PointerType>,
     speed: Number,
     activeOffset: Number,

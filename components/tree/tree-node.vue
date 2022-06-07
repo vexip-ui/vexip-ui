@@ -132,9 +132,7 @@ export default defineComponent({
     arrow: {
       type: [Boolean, String] as PropType<boolean | 'auto'>,
       default: 'auto',
-      validator: (value: boolean | 'auto') => {
-        return typeof value === 'boolean' || value === 'auto'
-      }
+      validator: (value: boolean | 'auto') => typeof value === 'boolean' || value === 'auto'
     },
     checkbox: {
       type: Boolean,

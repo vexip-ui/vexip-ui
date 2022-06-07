@@ -50,7 +50,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
@@ -84,7 +84,7 @@ export default defineComponent({
     useYBar: booleanProp,
     barFade: Number,
     barClass: [String, Object] as PropType<ClassType>,
-    autoplay: [Boolean, Number],
+    autoplay: booleanNumberProp,
     playWaiting: Number,
     noBuffer: booleanProp,
     noTransition: booleanProp,

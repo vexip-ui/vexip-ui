@@ -153,7 +153,7 @@ import { Tag } from '@/components/tag'
 import { VirtualList } from '@/components/virtual-list'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, isNull } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
@@ -195,7 +195,7 @@ export default defineComponent({
     maxListHeight: Number,
     listClass: [String, Object] as PropType<ClassType>,
     placement: String as PropType<Placement>,
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     disableValidate: booleanProp,
     optionCheck: booleanProp,
     emptyText: String,

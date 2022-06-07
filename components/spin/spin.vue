@@ -56,7 +56,10 @@ export default defineComponent({
     icon: Object,
     spin: booleanProp,
     inner: booleanProp,
-    delay: [Boolean, Number, Array] as PropType<boolean | number | number[]>,
+    delay: {
+      type: [Boolean, Number, Array] as PropType<boolean | number | number[]>,
+      default: null
+    },
     tip: String,
     maskColor: String
   },

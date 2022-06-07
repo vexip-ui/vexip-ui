@@ -51,7 +51,10 @@ export default defineComponent({
   },
   props: {
     placement: String as PropType<Placement>,
-    transfer: [Boolean, String],
+    transfer: {
+      type: [String, Boolean],
+      default: null
+    },
     noHover: booleanProp,
     transitionName: String,
     tooltipTheme: String as PropType<TooltipTheme>,

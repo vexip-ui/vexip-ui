@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -44,7 +44,7 @@ export default defineComponent({
     transitionName: String,
     disabled: booleanProp,
     onBeforeClose: Function as PropType<() => any | Promise<any>>,
-    transfer: [Boolean, String]
+    transfer: booleanStringProp
   },
   emits: ['toggle', 'close', 'hide', 'show', 'update:active'],
   setup(_props, { emit }) {

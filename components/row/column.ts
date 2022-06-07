@@ -26,7 +26,10 @@ export default defineComponent({
     xl: mediaProp,
     xxl: mediaProp,
     flex: [Number, String],
-    useFlex: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>
+    useFlex: {
+      type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
+      default: null
+    }
   },
   setup(_props, { slots }) {
     const props = useProps('column', _props, {

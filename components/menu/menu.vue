@@ -16,7 +16,7 @@ import {
   provide,
   toRef
 } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -33,7 +33,7 @@ export default defineComponent({
     markerType: String as PropType<MenuMarkerType>,
     reduced: booleanProp,
     horizontal: booleanProp,
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     groupType: String as PropType<MenuGroupType>,
     theme: String as PropType<MenuTheme>,
     tooltipTheme: String as PropType<TooltipTheme>

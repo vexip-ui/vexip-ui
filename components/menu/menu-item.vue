@@ -88,7 +88,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { usePopper } from '@vexip-ui/mixins'
 import { ChevronDown } from '@vexip-ui/icons'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
@@ -108,7 +108,7 @@ export default defineComponent({
     label: String,
     icon: Object,
     disabled: booleanProp,
-    transfer: [Boolean, String],
+    transfer: booleanStringProp,
     transitionName: String
   },
   emits: ['select'],

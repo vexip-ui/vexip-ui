@@ -10,7 +10,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { placementWhileList } from '@vexip-ui/mixins'
-import { useProps } from '@vexip-ui/config'
+import { useProps, booleanStringProp } from '@vexip-ui/config'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -22,7 +22,7 @@ export default defineComponent({
   props: {
     placement: String as PropType<Placement>,
     background: String,
-    shadow: [Boolean, String],
+    shadow: booleanStringProp,
     contentClass: [String, Object] as PropType<ClassType>
   },
   emits: ['click'],

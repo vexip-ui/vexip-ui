@@ -4,6 +4,11 @@ import { iconMap, register } from './register'
 
 import type { PropType, CSSProperties } from 'vue'
 
+const inOutProp = {
+  type: [Boolean, String] as PropType<boolean | 'in' | 'out'>,
+  default: null
+}
+
 export default defineComponent({
   name: 'Icon',
   register,
@@ -13,8 +18,8 @@ export default defineComponent({
     scale: [Number, String] as PropType<number | string>,
     title: String,
     label: String,
-    spin: [Boolean, String] as PropType<boolean | 'in' | 'out'>,
-    pulse: [Boolean, String] as PropType<boolean | 'in' | 'out'>,
+    spin: inOutProp,
+    pulse: inOutProp,
     flip: String as PropType<'horizontal' | 'vertical' | 'both'>
   },
   setup(_props, { attrs, slots }) {

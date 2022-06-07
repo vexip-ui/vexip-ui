@@ -71,6 +71,21 @@ export function useProps<T>(
   }
 }
 
+export const booleanProp = {
+  type: Boolean,
+  default: null
+}
+
+export const booleanStringProp = {
+  type: [Boolean, String],
+  default: null
+}
+
+export const booleanNumberProp = {
+  type: [Boolean, Number],
+  default: null
+}
+
 export type ComponentSize = 'small' | 'default' | 'large'
 
 export const sizeProp = String as PropType<ComponentSize>
@@ -95,9 +110,4 @@ export function createStateProp() {
       return ['default', 'success', 'error', 'warning'].includes(value)
     }
   }
-}
-
-export const booleanProp = {
-  type: Boolean,
-  default: null
 }

@@ -1,5 +1,5 @@
 import { defineComponent, onMounted, onBeforeUnmount, getCurrentInstance, renderSlot } from 'vue'
-import { useProps } from '@vexip-ui/config'
+import { useProps, booleanNumberProp } from '@vexip-ui/config'
 import { useResize } from '@vexip-ui/mixins'
 import { throttle } from '@vexip-ui/utils'
 
@@ -10,7 +10,7 @@ export default defineComponent({
   functional: true,
   props: {
     onResize: Function as PropType<(entry: ResizeObserverEntry) => any>,
-    throttle: [Boolean, Number]
+    throttle: booleanNumberProp
   },
   setup(_props, { slots }) {
     const props = useProps('resizeObserver', _props, {
