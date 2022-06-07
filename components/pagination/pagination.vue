@@ -115,7 +115,7 @@
     </li>
     <slot>
       <div v-if="props.pageTotal" :class="`${prefix}__total`">
-        {{ `${locale.total} ${props.total} ${props.itemUnit ?? locale.itemUnit}` }}
+        {{ `${locale.total} ${getCountWord(props.itemUnit ?? locale.itemUnit, props.total)}` }}
       </div>
       <div v-if="props.pageCount" :class="`${prefix}__size`">
         <Select v-model:value="currentPageSize" size="small" :options="sizeObjectOptions"></Select>
@@ -285,7 +285,7 @@ export default defineComponent({
       return props.sizeOptions.map(size => {
         return {
           value: size,
-          label: `${size} ${props.itemUnit ?? locale.value.itemUnit}${locale.value.prePage}`
+          label: `${size} ${locale.value.prePage}`
         }
       })
     })
@@ -496,6 +496,7 @@ export default defineComponent({
       sizeObjectOptions,
 
       isFunction,
+      getCountWord,
       getCountWordOnly,
       changeActive,
       handlePrev,

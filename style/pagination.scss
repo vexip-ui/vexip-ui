@@ -128,19 +128,18 @@ $pagination: map.merge(
   }
 
   &__jump {
-    width: 7.6em;
     white-space: nowrap;
     user-select: none;
 
     .vxp-number-input {
-      width: 100%;
+      width: 60px;
       margin: 0 0.3em;
       user-select: auto;
     }
   }
 
   &__size {
-    width: 7.6em;
+    min-width: 7.6em;
 
     .vxp-select {
       width: 100%;
