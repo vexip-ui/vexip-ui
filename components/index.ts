@@ -21,6 +21,7 @@ import { CollapsePane } from './collapse-pane'
 import { CollapseTransition } from './collapse-transition'
 import { ColorPicker } from './color-picker'
 import { Column } from './column'
+import { ConfigProvider } from './config-provider'
 import { Confirm } from './confirm'
 import { Contextmenu } from './contextmenu'
 import { DatePicker } from './date-picker'
@@ -90,16 +91,6 @@ import { WheelItem } from './wheel-item'
 
 import { buildInstall } from './create'
 
-import type { PropOptions, LocaleOptions } from '@vexip-ui/config'
-
-export { configProp, configLocale } from '@vexip-ui/config'
-
-export interface InstallOptions {
-  prefix?: string,
-  prop?: Partial<PropOptions>,
-  locale?: LocaleOptions
-}
-
 const components = [
   Alert,
   Anchor,
@@ -124,6 +115,7 @@ const components = [
   CollapseTransition,
   ColorPicker,
   Column,
+  ConfigProvider,
   DatePicker,
   Divider,
   Drawer,
@@ -193,6 +185,7 @@ const components = [
   Notice
 ]
 
+export { buildInstall }
 export const install = buildInstall(components)
 export const version = __VERSION__
 
@@ -220,6 +213,7 @@ export {
   CollapseTransition,
   ColorPicker,
   Column,
+  ConfigProvider,
   Confirm,
   Contextmenu,
   DatePicker,

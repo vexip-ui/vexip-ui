@@ -1,71 +1,59 @@
 <template>
-  <form :class="className" :method="action && method" :action="action">
+  <form :class="className" :method="props.action && props.method" :action="props.action">
     <slot></slot>
   </form>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, provide, ref } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
+import type { PropType } from 'vue'
 import type { LabelPosition, SubmitMethod, FieldOptions } from './symbol'
 
-const props = useConfiguredProps('form', {
-  method: {
-    default: 'post' as SubmitMethod,
-    validator: (value: SubmitMethod) => {
-      return ['get', 'post', 'put', 'delete'].includes(value)
-    }
-  },
-  action: {
-    type: String,
-    default: null
-  },
-  model: {
-    type: Object,
-    default: () => ({})
-  },
-  rules: {
-    type: Object,
-    default: () => ({})
-  },
-  labelWidth: {
-    type: Number,
-    default: 80
-  },
-  labelPosition: {
-    default: 'right' as LabelPosition,
-    validator: (value: LabelPosition) => {
-      return ['right', 'top', 'left'].includes(value)
-    }
-  },
-  allRequired: {
-    type: Boolean,
-    default: false
-  },
-  labelSuffix: {
-    type: String,
-    default: ''
-  },
-  hideAsterisk: {
-    type: Boolean,
-    default: false
-  },
-  validateAll: {
-    type: Boolean,
-    default: false
-  },
-  hideLabel: {
-    type: Boolean,
-    default: false
-  }
-})
+const submitMethods = Object.freeze<SubmitMethod>(['get', 'post', 'put', 'delete'])
+const labelPropstions = Object.freeze<LabelPosition>(['right', 'top', 'left'])
 
 export default defineComponent({
   name: 'Form',
-  props,
-  setup(props) {
+  props: {
+    method: String as PropType<SubmitMethod>,
+    action: String,
+    model: Object,
+    rules: Object,
+    labelWidth: Number,
+    labelPosition: String as PropType<LabelPosition>,
+    allRequired: booleanProp,
+    labelSuffix: String,
+    hideAsterisk: booleanProp,
+    validateAll: booleanProp,
+    hideLabel: booleanProp
+  },
+  setup(_props) {
+    const props = useProps('form', _props, {
+      method: {
+        default: 'post' as SubmitMethod,
+        validator: (value: SubmitMethod) => submitMethods.includes(value)
+      },
+      action: null,
+      model: {
+        default: () => ({}),
+        static: true
+      },
+      rules: () => ({}),
+      labelWidth: 80,
+      labelPosition: {
+        default: 'right' as LabelPosition,
+        validator: (value: LabelPosition) => labelPropstions.includes(value)
+      },
+      allRequired: false,
+      labelSuffix: '',
+      hideAsterisk: false,
+      validateAll: false,
+      hideLabel: false
+    })
+
     const prefix = 'vxp-form'
     const fieldSet = ref(new Set<FieldOptions>())
 
@@ -172,6 +160,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       className,
 
       validate,

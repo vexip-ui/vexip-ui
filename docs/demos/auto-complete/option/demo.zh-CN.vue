@@ -6,7 +6,7 @@
     @input="setOptions"
   >
     <template #default="{ option }">
-      <Option :value="option" :label="option"></Option>
+      <Option :value="option.value" :label="option.label"></Option>
     </template>
   </AutoComplete>
 </template>

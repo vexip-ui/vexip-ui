@@ -1,21 +1,21 @@
 <template>
   <label :class="className" :style="style">
     <span :class="`${prefix}__signal`" :style="signalStyle">
-      <slot v-if="loading" name="loading">
+      <slot v-if="props.loading" name="loading">
         <Icon pulse>
           <Spinner></Spinner>
         </Icon>
       </slot>
       <slot v-else name="icon">
-        <Icon v-if="icon" :icon="icon"></Icon>
+        <Icon v-if="props.icon" :icon="props.icon"></Icon>
       </slot>
     </span>
     <span :class="`${prefix}__label`">
       <template v-if="currentValue">
-        <slot name="open">{{ openText }}</slot>
+        <slot name="open">{{ props.openText }}</slot>
       </template>
       <template v-else>
-        <slot name="close">{{ closeText }}</slot>
+        <slot name="close">{{ props.closeText }}</slot>
       </template>
     </span>
     <input
@@ -32,56 +32,11 @@
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isPromise, noop } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
-
-const props = useConfiguredProps('switcher', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  value: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  openColor: {
-    type: String,
-    default: ''
-  },
-  closeColor: {
-    type: String,
-    default: ''
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  icon: {
-    type: Object,
-    default: null
-  },
-  openText: {
-    type: String,
-    default: ''
-  },
-  closeText: {
-    type: String,
-    default: ''
-  },
-  onBeforeChange: {
-    type: Function as PropType<(checked: boolean) => unknown>,
-    default: null
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'Switcher',
@@ -89,9 +44,43 @@ export default defineComponent({
     Icon,
     Spinner
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    value: booleanProp,
+    disabled: booleanProp,
+    openColor: String,
+    closeColor: String,
+    loading: booleanProp,
+    icon: Object,
+    openText: String,
+    closeText: String,
+    onBeforeChange: Function as PropType<(checked: boolean) => unknown>,
+    disableValidate: booleanProp
+  },
   emits: ['change', 'update:value'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('switcher', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      value: {
+        default: false,
+        static: true
+      },
+      disabled: false,
+      openColor: '',
+      closeColor: '',
+      loading: false,
+      icon: null,
+      openText: '',
+      closeText: '',
+      onBeforeChange: {
+        default: null,
+        isFunc: true
+      },
+      disableValidate: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
 
     const prefix = 'vxp-switcher'
@@ -158,6 +147,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       currentValue,
 

@@ -4,13 +4,13 @@
       ref="textarea"
       :class="`${prefix}__control`"
       :value="currentValue"
-      :rows="rows"
-      :autofocus="autofocus"
-      :autocomplete="autocomplete"
-      :spellcheck="spellcheck"
-      :disabled="disabled"
-      :readonly="readonly"
-      :placeholder="placeholder ?? locale.placeholder"
+      :rows="props.rows"
+      :autofocus="props.autofocus"
+      :autocomplete="props.autocomplete ? 'on' : 'off'"
+      :spellcheck="props.spellcheck"
+      :disabled="props.disabled"
+      :readonly="props.readonly"
+      :placeholder="props.placeholder ?? locale.placeholder"
       @blur="handleBlur"
       @focus="handleFocus"
       @keyup.enter="handleEnter"
@@ -20,8 +20,8 @@
       @input="handleInput"
       @change="handleChange"
     ></textarea>
-    <div v-if="maxLength" :class="`${prefix}__count`">
-      {{ `${currentLength}/${maxLength}` }}
+    <div v-if="props.maxLength" :class="`${prefix}__count`">
+      {{ `${currentLength}/${props.maxLength}` }}
     </div>
   </div>
 </template>
@@ -29,64 +29,26 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useConfiguredProps, useLocaleConfig, createStateProp } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp, stateProp, createStateProp } from '@vexip-ui/config'
 import { noop, throttle } from '@vexip-ui/utils'
-
-const props = useConfiguredProps('textarea', {
-  state: createStateProp(),
-  value: {
-    type: String,
-    default: ''
-  },
-  placeholder: {
-    type: String,
-    default: null
-  },
-  rows: {
-    type: Number,
-    default: 2
-  },
-  noResize: {
-    type: Boolean,
-    default: false
-  },
-  autofocus: {
-    type: Boolean,
-    default: false
-  },
-  spellcheck: {
-    type: Boolean,
-    default: false
-  },
-  autocomplete: {
-    type: String,
-    default: 'off'
-  },
-  readonly: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  debounce: {
-    type: Boolean,
-    default: false
-  },
-  maxLength: {
-    type: Number,
-    default: 0
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'Textarea',
-  props,
+  props: {
+    state: stateProp,
+    value: String,
+    placeholder: String,
+    rows: Number,
+    noResize: booleanProp,
+    autofocus: booleanProp,
+    spellcheck: booleanProp,
+    autocomplete: booleanProp,
+    readonly: booleanProp,
+    disabled: booleanProp,
+    debounce: booleanProp,
+    maxLength: Number,
+    disableValidate: booleanProp
+  },
   emits: [
     'focus',
     'blur',
@@ -98,7 +60,26 @@ export default defineComponent({
     'key-up',
     'update:value'
   ],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('textarea', _props, {
+      state: createStateProp(),
+      value: {
+        default: '',
+        static: true
+      },
+      placeholder: null,
+      rows: 2,
+      noResize: false,
+      autofocus: false,
+      spellcheck: false,
+      autocomplete: false,
+      readonly: false,
+      disabled: false,
+      debounce: false,
+      maxLength: 0,
+      disableValidate: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
 
     const prefix = 'vxp-textarea'
@@ -204,8 +185,9 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
-      locale: useLocaleConfig('input'),
+      locale: useLocale('input'),
       currentValue,
       currentLength,
 

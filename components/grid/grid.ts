@@ -1,5 +1,5 @@
 import { defineComponent, reactive, computed, toRef, h, provide } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { GRID_STATE } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
@@ -10,59 +10,47 @@ import type {
   CellFlex
 } from './symbol'
 
-const props = useConfiguredProps('grid', {
-  tag: {
-    type: String,
-    default: 'div'
-  },
-  gap: {
-    type: [Number, Array] as PropType<number | number[]>,
-    default: 0
-  },
-  rows: {
-    type: [Number, String, Array] as PropType<LayoutProp>,
-    default: 'none'
-  },
-  columns: {
-    type: [Number, String, Array] as PropType<LayoutProp>,
-    default: 24
-  },
-  autoRows: {
-    type: [Number, String, Array] as PropType<LayoutProp>,
-    default: 'auto'
-  },
-  autoColumns: {
-    type: [Number, String, Array] as PropType<LayoutProp>,
-    default: 'auto'
-  },
-  dense: {
-    type: Boolean,
-    default: false
-  },
-  justify: {
-    default: 'start' as GridJustify,
-    validator: (value: GridJustify) => {
-      return ['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'].includes(value)
-    }
-  },
-  align: {
-    default: 'stretch' as GridAlign,
-    validator: (value: GridAlign) => {
-      return ['top', 'middle', 'bottom', 'stretch'].includes(value)
-    }
-  },
-  cellFlex: {
-    type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
-    default: false
-  }
-})
-
 const numberRE = /^\d+$/
+
+const justifyList = Object.freeze<GridJustify>(['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'])
+const alignList = Object.freeze<GridAlign>(['top', 'middle', 'bottom', 'stretch'])
+
+const layoutProp = [Number, String, Array] as PropType<LayoutProp>
 
 export default defineComponent({
   name: 'Grid',
-  props,
-  setup(props, { slots }) {
+  props: {
+    tag: String,
+    gap: [Number, Array] as PropType<number | number[]>,
+    rows: layoutProp,
+    columns: layoutProp,
+    autoRows: layoutProp,
+    autoColumns: layoutProp,
+    dense: booleanProp,
+    justify: String as PropType<GridJustify>,
+    align: String as PropType<GridAlign>,
+    cellFlex: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>
+  },
+  setup(_props, { slots }) {
+    const props = useProps('grid', _props, {
+      tag: 'div',
+      gap: 0,
+      rows: 'none',
+      columns: 24,
+      autoRows: 'auto',
+      autoColumns: 'auto',
+      dense: false,
+      justify: {
+        default: 'start' as GridJustify,
+        validator: (value: GridJustify) => justifyList.includes(value)
+      },
+      align: {
+        default: 'stretch' as GridAlign,
+        validator: (value: GridAlign) => alignList.includes(value)
+      },
+      cellFlex: false
+    })
+
     const prefix = 'vxp-grid'
 
     const className = computed(() => {
@@ -168,7 +156,7 @@ export default defineComponent({
     }
 
     return () => h(
-      props.tag,
+      props.tag || 'div',
       {
         class: className.value,
         style: style.value

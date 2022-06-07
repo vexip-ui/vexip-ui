@@ -1,69 +1,60 @@
 import { defineComponent, h, ref, computed } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps } from '@vexip-ui/config'
 import { iconMap, register } from './register'
 
 import type { PropType, CSSProperties } from 'vue'
 
-const props = useConfiguredProps('icon', {
-  name: {
-    type: String,
-    default: null,
-    validator: (value: string) => {
-      console.warn(`[vexip-ui:Icon] prop 'name' has been deprecated, use 'icon' instead it.`)
-
-      if (value && iconMap.has(value)) {
-        return true
-      }
-
-      console.warn(`[vexip-ui:Icon] prop 'name' is referring to an unregistered icon '${value}'.`)
-
-      return false
-    }
-  },
-  icon: {
-    type: Object,
-    default: null
-  },
-  scale: {
-    type: [Number, String] as PropType<number | string>,
-    default: 1
-  },
-  title: {
-    type: String,
-    default: null
-  },
-  label: {
-    type: String,
-    default: null
-  },
-  spin: {
-    type: [Boolean, String] as PropType<boolean | 'in' | 'out'>,
-    default: false,
-    validator: (value: boolean | string) => {
-      return typeof value === 'boolean' || value === 'in' || value === 'out'
-    }
-  },
-  pulse: {
-    type: [Boolean, String] as PropType<boolean | 'in' | 'out'>,
-    default: false,
-    validator: (value: boolean | string) => {
-      return typeof value === 'boolean' || value === 'in' || value === 'out'
-    }
-  },
-  flip: {
-    type: String as PropType<'horizontal' | 'vertical' | 'both'>,
-    default: null,
-    validator: (value: string) => {
-      return ['horizontal', 'vertical', 'both'].includes(value)
-    }
-  }
-})
-
 export default defineComponent({
   name: 'Icon',
   register,
-  props,
-  setup(props, { attrs, slots }) {
+  props: {
+    name: String,
+    icon: Object,
+    scale: [Number, String] as PropType<number | string>,
+    title: String,
+    label: String,
+    spin: [Boolean, String] as PropType<boolean | 'in' | 'out'>,
+    pulse: [Boolean, String] as PropType<boolean | 'in' | 'out'>,
+    flip: String as PropType<'horizontal' | 'vertical' | 'both'>
+  },
+  setup(_props, { attrs, slots }) {
+    const props = useProps('icon', _props, {
+      name: {
+        default: null,
+        validator: (value: string) => {
+          console.warn(`[vexip-ui:Icon] prop 'name' has been deprecated, use 'icon' instead it.`)
+    
+          if (value && iconMap.has(value)) {
+            return true
+          }
+    
+          console.warn(`[vexip-ui:Icon] prop 'name' is referring to an unregistered icon '${value}'.`)
+    
+          return false
+        },
+        static: true
+      },
+      icon: {
+        default: null,
+        static: true
+      },
+      scale: 1,
+      title: null,
+      label: null,
+      spin: {
+        default: false,
+        validator: (value: boolean | string) => typeof value === 'boolean' || value === 'in' || value === 'out'
+      },
+      pulse: {
+        default: false,
+        validator: (value: boolean | string) => typeof value === 'boolean' || value === 'in' || value === 'out'
+      },
+      flip: {
+        default: null,
+        validator: (value: string) => ['horizontal', 'vertical', 'both'].includes(value)
+      }
+    })
+
     const prefix = 'vxp-icon'
     const childrenWidth = ref(0)
     const childrenHeight = ref(0)

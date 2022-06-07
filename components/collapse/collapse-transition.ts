@@ -1,46 +1,38 @@
 import { defineComponent, h, Transition } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
+
+import type { PropType } from 'vue'
 
 type TransitionMode = 'in-out' | 'out-in' | 'default'
-
-const props = useConfiguredProps('collapseTransition', {
-  appear: {
-    type: Boolean,
-    default: false
-  },
-  mode: {
-    default: 'default' as TransitionMode,
-    validator: (value: TransitionMode) => {
-      return ['in-out', 'out-in', 'default'].includes(value)
-    }
-  },
-  horizontal: {
-    type: Boolean,
-    default: false
-  },
-  duration: {
-    type: Number,
-    default: 250,
-    validator: (value: number) => {
-      return value >= 200
-    }
-  },
-  timing: {
-    type: String,
-    default: null
-  },
-  fadeEffect: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'CollapseTransition',
   functional: true,
-  props,
+  props: {
+    appear: booleanProp,
+    mode: String as PropType<TransitionMode>,
+    horizontal: booleanProp,
+    duration: Number,
+    timing: String,
+    fadeEffect: booleanProp
+  },
   emits: ['before-enter', 'enter', 'after-enter', 'before-leave', 'leave', 'after-leave'],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('collapseTransition', _props, {
+      appear: false,
+      mode: {
+        default: 'default' as TransitionMode,
+        validator: (value: TransitionMode) => ['in-out', 'out-in', 'default'].includes(value)
+      },
+      horizontal: false,
+      duration: {
+        default: 250,
+        validator: (value: number) => value >= 200
+      },
+      timing: null,
+      fadeEffect: false
+    })
+
     return () => {
       const duration = props.duration
       const timing = props.timing || 'ease-in-out'

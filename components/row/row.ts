@@ -1,41 +1,37 @@
 import { defineComponent, reactive, computed, h, provide, toRef } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps } from '@vexip-ui/config'
 import { ROW_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { Justify, Align, ColumnFlex } from './symbol'
 
-const props = useConfiguredProps('row', {
-  tag: {
-    type: String,
-    default: 'div'
-  },
-  gutter: {
-    type: [Number, Array] as PropType<number | number[]>,
-    default: 0
-  },
-  justify: {
-    default: 'start' as Justify,
-    validator: (value: Justify) => {
-      return ['start', 'end', 'center', 'space-around', 'space-between'].includes(value)
-    }
-  },
-  align: {
-    default: 'top' as Align,
-    validator: (value: Align) => {
-      return ['top', 'middle', 'bottom'].includes(value)
-    }
-  },
-  columnFlex: {
-    type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
-    default: false
-  }
-})
+const justifyList = Object.freeze<Justify>(['start', 'end', 'center', 'space-around', 'space-between'])
+const alignList = Object.freeze<Align>(['top', 'middle', 'bottom'])
 
 export default defineComponent({
   name: 'Row',
-  props,
-  setup(props, { slots }) {
+  props: {
+    tag: String,
+    gutter: [Number, Array] as PropType<number | number[]>,
+    justify: String as PropType<Justify>,
+    align: String as PropType<Align>,
+    columnFlex: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>
+  },
+  setup(_props, { slots }) {
+    const props = useProps('row', _props, {
+      tag: 'div',
+      gutter: 0,
+      justify: {
+        default: 'start' as Justify,
+        validator: (value: Justify) => justifyList.includes(value)
+      },
+      align: {
+        default: 'top' as Align,
+        validator: (value: Align) => alignList.includes(value)
+      },
+      columnFlex: false
+    })
+
     const prefix = 'vxp-row'
 
     const className = computed(() => {
@@ -89,7 +85,7 @@ export default defineComponent({
 
     return () =>
       h(
-        props.tag,
+        props.tag || 'div',
         {
           class: className.value,
           style: style.value

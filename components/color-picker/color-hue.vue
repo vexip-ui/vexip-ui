@@ -8,19 +8,17 @@
 import { defineComponent, ref, watch } from 'vue'
 import { toFixed, throttle } from '@vexip-ui/utils'
 
-const props = {
-  hue: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => {
-      return value >= 0 && value <= 360
-    }
-  }
-}
-
 export default defineComponent({
   name: 'ColorHue',
-  props,
+  props: {
+    hue: {
+      type: Number,
+      default: 0,
+      validator: (value: number) => {
+        return value >= 0 && value <= 360
+      }
+    }
+  },
   emits: ['edit-start', 'edit-end', 'change'],
   setup(props, { emit }) {
     const currentLeft = ref(props.hue * 100)

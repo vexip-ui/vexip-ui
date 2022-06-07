@@ -109,92 +109,6 @@ import { TREE_STATE, TREE_NODE_STATE } from './symbol'
 import type { PropType } from 'vue'
 import type { TreeNodeOptions } from './symbol'
 
-const props = {
-  node: {
-    type: Object as PropType<TreeNodeOptions>,
-    default: () => ({})
-  },
-  data: {
-    type: Object,
-    default: () => ({})
-  },
-  arrow: {
-    type: [Boolean, String] as PropType<boolean | 'auto'>,
-    default: 'auto',
-    validator: (value: boolean | 'auto') => {
-      return typeof value === 'boolean' || value === 'auto'
-    }
-  },
-  checkbox: {
-    type: Boolean,
-    default: null
-  },
-  appear: {
-    type: Boolean,
-    default: false
-  },
-  visible: {
-    type: Boolean,
-    default: true
-  },
-  selected: {
-    type: Boolean,
-    default: false
-  },
-  expanded: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  labelKey: {
-    type: String,
-    default: 'label'
-  },
-  childrenKey: {
-    type: String,
-    default: 'children'
-  },
-  checked: {
-    type: Boolean,
-    default: false
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  loaded: {
-    type: Boolean,
-    default: false
-  },
-  partial: {
-    type: Boolean,
-    default: false
-  },
-  readonly: {
-    type: Boolean,
-    default: false
-  },
-  indent: {
-    type: [String, Number],
-    default: '1.2em'
-  },
-  children: {
-    type: Array as PropType<TreeNodeOptions[]>,
-    default: () => []
-  },
-  draggable: {
-    type: Boolean,
-    default: false
-  },
-  floorSelect: {
-    type: Boolean,
-    default: false
-  }
-}
-
 export default defineComponent({
   name: 'TreeNode',
   components: {
@@ -206,7 +120,91 @@ export default defineComponent({
     Spinner
   },
   inheritAttrs: false,
-  props,
+  props: {
+    node: {
+      type: Object as PropType<TreeNodeOptions>,
+      default: () => ({})
+    },
+    data: {
+      type: Object,
+      default: () => ({})
+    },
+    arrow: {
+      type: [Boolean, String] as PropType<boolean | 'auto'>,
+      default: 'auto',
+      validator: (value: boolean | 'auto') => {
+        return typeof value === 'boolean' || value === 'auto'
+      }
+    },
+    checkbox: {
+      type: Boolean,
+      default: null
+    },
+    appear: {
+      type: Boolean,
+      default: false
+    },
+    visible: {
+      type: Boolean,
+      default: true
+    },
+    selected: {
+      type: Boolean,
+      default: false
+    },
+    expanded: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    labelKey: {
+      type: String,
+      default: 'label'
+    },
+    childrenKey: {
+      type: String,
+      default: 'children'
+    },
+    checked: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    loaded: {
+      type: Boolean,
+      default: false
+    },
+    partial: {
+      type: Boolean,
+      default: false
+    },
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    indent: {
+      type: [String, Number],
+      default: '1.2em'
+    },
+    children: {
+      type: Array as PropType<TreeNodeOptions[]>,
+      default: () => []
+    },
+    draggable: {
+      type: Boolean,
+      default: false
+    },
+    floorSelect: {
+      type: Boolean,
+      default: false
+    }
+  },
   setup(props) {
     const treeState = inject(TREE_STATE)!
     const parentState = inject(TREE_NODE_STATE)!

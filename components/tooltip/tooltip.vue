@@ -9,8 +9,8 @@
     <div ref="reference" :class="`${prefix}__trigger`" @click="handleTriggerClick">
       <slot></slot>
     </div>
-    <Portal v-if="!disabled" :to="transferTo">
-      <transition :name="transitionName">
+    <Portal v-if="!props.disabled" :to="transferTo">
+      <transition :name="props.transitionName">
         <div
           v-if="rendering"
           v-show="currentVisible"
@@ -18,15 +18,15 @@
           :class="{
             [`${prefix}__popper`]: true,
             [`${prefix}-vars`]: true,
-            [`${prefix}__popper--${theme}`]: true,
-            [`${prefix}__popper--no-hover`]: noHover
+            [`${prefix}__popper--${props.theme}`]: true,
+            [`${prefix}__popper--no-hover`]: props.noHover
           }"
           @click.stop
           @mouseenter="handleTriggerEnter"
           @mouseleave="handleTriggerLeave"
           @animationend="rendering = currentVisible"
         >
-          <div :class="[`${prefix}__tip`, tipClass]">
+          <div :class="[`${prefix}__tip`, props.tipClass]">
             <div :class="`${prefix}__arrow`"></div>
             <slot name="tip"></slot>
           </div>
@@ -38,73 +38,32 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch, toRef } from 'vue'
-
 import { Portal } from '@/components/portal'
-
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { useClickOutside, placementWhileList, usePopper } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { ClassType, TooltipTheme, ToopTipTrigger } from './symbol'
 
-const props = useConfiguredProps('tooltip', {
-  trigger: {
-    default: 'hover' as ToopTipTrigger,
-    validator: (value: ToopTipTrigger) => {
-      return ['hover', 'click', 'custom'].includes(value)
-    }
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-fade'
-  },
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'top',
-    validator: (value: Placement) => {
-      return placementWhileList.includes(value)
-    }
-  },
-  outsideClose: {
-    type: Boolean,
-    default: true
-  },
-  // 设置 pointer-event: none
-  noHover: {
-    type: Boolean,
-    default: false
-  },
-  tipClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  theme: {
-    default: 'light' as TooltipTheme,
-    validator: (value: TooltipTheme) => {
-      return ['light', 'dark'].includes(value)
-    }
-  }
-})
-
 export default defineComponent({
   name: 'Tooltip',
   components: {
     Portal
   },
-  props,
+  props: {
+    trigger: String as PropType<ToopTipTrigger>,
+    transitionName: String,
+    visible: booleanProp,
+    placement: String as PropType<Placement>,
+    outsideClose: booleanProp,
+    // 设置 pointer-event: none
+    noHover: booleanProp,
+    tipClass: [String, Object] as PropType<ClassType>,
+    transfer: [Boolean, String],
+    disabled: booleanProp,
+    theme: String as PropType<TooltipTheme>
+  },
   emits: [
     'toggle',
     'click-outside',
@@ -113,7 +72,30 @@ export default defineComponent({
     'tip-leave',
     'update:visible'
   ],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('tooltip', _props, {
+      trigger: {
+        default: 'hover' as ToopTipTrigger,
+        validator: (value: ToopTipTrigger) => ['hover', 'click', 'custom'].includes(value)
+      },
+      transitionName: 'vxp-fade',
+      visible: false,
+      placement: {
+        default: 'top',
+        validator: (value: Placement) => placementWhileList.includes(value)
+      },
+      outsideClose: true,
+      // 设置 pointer-event: none
+      noHover: false,
+      tipClass: null,
+      transfer: false,
+      disabled: false,
+      theme: {
+        default: 'light' as TooltipTheme,
+        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+      }
+    })
+
     const placement = toRef(props, 'placement')
     const currentVisible = ref(props.visible)
     const rendering = ref(props.visible)
@@ -203,6 +185,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix: 'vxp-tooltip',
       currentVisible,
       rendering,

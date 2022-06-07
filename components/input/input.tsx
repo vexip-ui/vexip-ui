@@ -2,7 +2,7 @@ import { defineComponent, ref, computed, watch, inject, Transition } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
-import { useConfiguredProps, useLocaleConfig, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, useLocale, createSizeProp, createStateProp, booleanProp, sizeProp, stateProp } from '@vexip-ui/config'
 import { isNull, noop, throttle } from '@vexip-ui/utils'
 import { EyeSlashR, EyeR, CircleXmark } from '@vexip-ui/icons'
 
@@ -13,108 +13,40 @@ export type InputType = 'text' | 'password' | 'date' | 'datetime' | 'time'
 type ClassType = string | Record<string, boolean>
 type InputEventType = 'input' | 'change'
 
-const props = useConfiguredProps('input', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  type: {
-    default: 'text' as InputType,
-    validator: (value: InputType) => {
-      return ['text', 'password', 'date', 'datetime', 'time'].includes(value)
-    }
-  },
-  prefix: {
-    type: Object,
-    default: null
-  },
-  prefixColor: {
-    type: String,
-    default: ''
-  },
-  suffix: {
-    type: Object,
-    default: null
-  },
-  suffixColor: {
-    type: String,
-    default: ''
-  },
-  formatter: {
-    type: Function as PropType<(value: string) => string>,
-    default: null
-  },
-  accessor: {
-    type: Function as PropType<(value: string) => any>,
-    default: null
-  },
-  value: {
-    type: String,
-    default: ''
-  },
-  placeholder: {
-    type: String,
-    default: null
-  },
-  autofocus: {
-    type: Boolean,
-    default: false
-  },
-  spellcheck: {
-    type: Boolean,
-    default: false
-  },
-  autocomplete: {
-    type: Boolean,
-    default: false
-  },
-  readonly: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  inputClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: ''
-  },
-  debounce: {
-    type: Boolean,
-    default: false
-  },
-  maxLength: {
-    type: Number,
-    default: 0
-  },
-  before: {
-    type: String,
-    default: ''
-  },
-  after: {
-    type: String,
-    default: ''
-  },
-  // 是否显示切换 passwrod 为明文的按钮
-  password: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  },
-  clearable: {
-    type: Boolean,
-    default: false
-  }
-})
+const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
 
 export default defineComponent({
   name: 'Input',
   components: {
     Icon
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    type: String as PropType<InputType>,
+    prefix: Object,
+    prefixColor: String,
+    suffix: Object,
+    suffixColor: String,
+    formatter: Function as PropType<(value: string) => string>,
+    accessor: Function as PropType<(value: string) => any>,
+    value: String,
+    placeholder: String,
+    autofocus: booleanProp,
+    spellcheck: booleanProp,
+    autocomplete: booleanProp,
+    readonly: booleanProp,
+    disabled: booleanProp,
+    inputClass: [String, Object] as PropType<ClassType>,
+    debounce: booleanProp,
+    maxLength: Number,
+    before: String,
+    after: String,
+    // 是否显示切换 passwrod 为明文的按钮
+    password: booleanProp,
+    disableValidate: booleanProp,
+    clearable: booleanProp
+  },
   emits: [
     'focus',
     'blur',
@@ -129,7 +61,43 @@ export default defineComponent({
     'key-up',
     'update:value'
   ],
-  setup(props, { slots, emit, expose }) {
+  setup(_props, { slots, emit, expose }) {
+    const props = useProps('input', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      type: {
+        default: 'text' as InputType,
+        validator: (value: InputType) => inputTypes.includes(value)
+      },
+      prefix: null,
+      prefixColor: '',
+      suffix: null,
+      suffixColor: '',
+      formatter: {
+        default: null,
+        isFunc: true
+      },
+      accessor: {
+        default: null,
+        isFunc: true
+      },
+      value: '',
+      placeholder: null,
+      autofocus: false,
+      spellcheck: false,
+      autocomplete: false,
+      readonly: false,
+      disabled: false,
+      inputClass: '',
+      debounce: false,
+      maxLength: 0,
+      before: '',
+      after: '',
+      password: false,
+      disableValidate: false,
+      clearable: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
@@ -141,7 +109,7 @@ export default defineComponent({
     const inputControl = ref<HTMLElement | null>(null)
 
     const { wrapper, isHover } = useHover()
-    const locale = useLocaleConfig('input')
+    const locale = useLocale('input')
 
     // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
@@ -427,7 +395,7 @@ export default defineComponent({
             spellcheck={props.spellcheck}
             disabled={props.disabled}
             readonly={props.readonly}
-            placeholder={props.placeholder ?? locale.placeholder}
+            placeholder={props.placeholder ?? locale.value.placeholder}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}

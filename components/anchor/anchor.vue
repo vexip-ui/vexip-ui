@@ -4,15 +4,15 @@
     :class="{
       [prefix]: true,
       [`${prefix}-vars`]: true,
-      [`${prefix}--no-marker`]: !marker
+      [`${prefix}--no-marker`]: !props.marker
     }"
   >
     <ul :class="`${prefix}__list`">
       <slot></slot>
     </ul>
-    <transition appear :name="markerTransition">
+    <transition appear :name="props.markerTransition">
       <div
-        v-if="marker && currentActive"
+        v-if="props.marker && currentActive"
         :class="`${prefix}__marker`"
         :style="{ top: `${markerTop}px` }"
       >
@@ -37,7 +37,7 @@ import {
   getCurrentInstance,
   isVNode
 } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
@@ -48,38 +48,33 @@ import type { LinkState, AnchorState } from './symbol'
 
 type ScrollType = InstanceType<typeof Scroll | typeof NativeScroll>
 
-const props = useConfiguredProps('anchor', {
-  active: {
-    type: String,
-    default: ''
-  },
-  viewer: {
-    type: [String, Object, Function] as PropType<unknown>,
-    default: null
-  },
-  offset: {
-    type: Number,
-    default: 8
-  },
-  marker: {
-    type: Boolean,
-    default: false
-  },
-  scrollDuration: {
-    type: Number,
-    default: 500
-  },
-  markerTransition: {
-    type: String,
-    default: 'vxp-fade'
-  }
-})
-
 export default defineComponent({
   name: 'Anchor',
-  props,
+  props: {
+    active: String,
+    viewer: [String, Object, Function] as PropType<unknown>,
+    offset: Number,
+    marker: booleanProp,
+    scrollDuration: Number,
+    markerTransition: String
+  },
   emits: ['change', 'update:active'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('anchor', _props, {
+      active: {
+        default: '',
+        static: true
+      },
+      viewer: {
+        default: null,
+        static: true
+      },
+      offset: 8,
+      marker: false,
+      scrollDuration: 500,
+      markerTransition: 'vxp-fade'
+    })
+
     const prefix = 'vxp-anchor'
     const currentActive = ref(props.active)
     const animating = ref(false)
@@ -345,6 +340,8 @@ export default defineComponent({
     }
 
     return {
+      props,
+
       prefix,
       currentActive,
       markerTop,

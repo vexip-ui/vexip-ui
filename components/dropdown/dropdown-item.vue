@@ -6,36 +6,33 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, toRef, inject } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
 import { useLabel } from './mixins'
 import { DROP_SELECT_HANDLER } from './symbol'
 
-const props = useConfiguredProps('dropdownItem', {
-  label: {
-    type: [String, Number],
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  selected: {
-    type: Boolean,
-    default: false
-  },
-  divided: {
-    type: Boolean,
-    default: false
-  },
-  reference: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'DropdownItem',
-  props,
+  props: {
+    label: {
+      type: [String, Number],
+      default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    selected: {
+      type: Boolean,
+      default: false
+    },
+    divided: {
+      type: Boolean,
+      default: false
+    },
+    reference: {
+      type: Boolean,
+      default: false
+    }
+  },
   emits: ['select'],
   setup(props, { emit }) {
     const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)

@@ -113,67 +113,65 @@ import { handleKeyEnter } from './helper'
 import type { PropType } from 'vue'
 import type { DateTimeType } from './symbol'
 
-const props = {
-  unitType: {
-    type: String as PropType<DateTimeType | ''>,
-    default: 'date'
-  },
-  enabled: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
-  },
-  activated: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
-    default: () => ({})
-  },
-  dateValue: {
-    type: Object as PropType<Record<DateTimeType, number>>,
-    default: () => ({})
-  },
-  dateSeparator: {
-    type: String,
-    default: '/'
-  },
-  timeSeparator: {
-    type: String,
-    default: ':'
-  },
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  focused: {
-    type: Boolean,
-    default: false
-  },
-  filler: {
-    type: String,
-    default: '-',
-    validator: (value: string) => {
-      return value.length === 1
-    }
-  },
-  noFiller: {
-    type: Boolean,
-    default: false
-  },
-  steps: {
-    type: Array as PropType<number[]>,
-    default: () => [1, 1, 1]
-  },
-  ctrlSteps: {
-    type: Array as PropType<number[]>,
-    default: () => [5, 5, 5]
-  },
-  labels: {
-    type: Object as PropType<Partial<Record<DateTimeType, string>>>,
-    default: () => ({})
-  }
-}
-
 export default defineComponent({
   name: 'DateControl',
-  props,
+  props: {
+    unitType: {
+      type: String as PropType<DateTimeType | ''>,
+      default: 'date'
+    },
+    enabled: {
+      type: Object as PropType<Record<DateTimeType, boolean>>,
+      default: () => ({})
+    },
+    activated: {
+      type: Object as PropType<Record<DateTimeType, boolean>>,
+      default: () => ({})
+    },
+    dateValue: {
+      type: Object as PropType<Record<DateTimeType, number>>,
+      default: () => ({})
+    },
+    dateSeparator: {
+      type: String,
+      default: '/'
+    },
+    timeSeparator: {
+      type: String,
+      default: ':'
+    },
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    focused: {
+      type: Boolean,
+      default: false
+    },
+    filler: {
+      type: String,
+      default: '-',
+      validator: (value: string) => {
+        return value.length === 1
+      }
+    },
+    noFiller: {
+      type: Boolean,
+      default: false
+    },
+    steps: {
+      type: Array as PropType<number[]>,
+      default: () => [1, 1, 1]
+    },
+    ctrlSteps: {
+      type: Array as PropType<number[]>,
+      default: () => [5, 5, 5]
+    },
+    labels: {
+      type: Object as PropType<Partial<Record<DateTimeType, string>>>,
+      default: () => ({})
+    }
+  },
   emits: [
     'input',
     'plus',

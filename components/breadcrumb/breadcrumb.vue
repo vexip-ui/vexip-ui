@@ -1,7 +1,7 @@
 <template>
   <div :class="className">
     <slot>
-      <BreadcrumbItem v-for="label in options" :key="label" :label="label">
+      <BreadcrumbItem v-for="label in props.options" :key="label" :label="label">
         {{ label }}
       </BreadcrumbItem>
     </slot>
@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, watch, toRef } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { BREADCRUMB_STATE } from './symbol'
@@ -18,29 +18,27 @@ import { BREADCRUMB_STATE } from './symbol'
 import type { PropType } from 'vue'
 import type { ItemState, BreadcrumbState } from './symbol'
 
-const props = useConfiguredProps('breadcrumb', {
-  separator: {
-    type: String,
-    default: '/'
-  },
-  border: {
-    type: Boolean,
-    default: false
-  },
-  options: {
-    type: Array as PropType<string[]>,
-    default: () => []
-  }
-})
-
 export default defineComponent({
   name: 'Breadcrumb',
   components: {
     BreadcrumbItem
   },
-  props,
+  props: {
+    separator: String,
+    border: booleanProp,
+    options: Array as PropType<string[]>
+  },
   emits: ['select', 'separator-click'],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('breadcrumb', _props, {
+      separator: '/',
+      border: false,
+      options: {
+        default: () => [],
+        static: true
+      }
+    })
+
     const prefix = 'vxp-breadcrumb'
     const itemStates = new Set<ItemState>()
 
@@ -99,6 +97,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       className
     }
   }

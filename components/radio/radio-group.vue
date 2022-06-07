@@ -1,7 +1,7 @@
 <template>
   <div :class="className">
     <slot>
-      <template v-for="item in options" :key="item">
+      <template v-for="item in props.options" :key="item">
         <Radio :label="item">
           {{ item }}
         </Radio>
@@ -13,54 +13,49 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, inject, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
-import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop, isObject, debounceMinor } from '@vexip-ui/utils'
+import { noop, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-
-const props = useConfiguredProps('radioGroup', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  value: {
-    type: [String, Number],
-    default: null
-  },
-  vertical: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  button: {
-    type: Boolean,
-    default: false
-  },
-  border: {
-    type: Boolean,
-    default: false
-  },
-  options: {
-    type: Array as PropType<(string | number)[]>,
-    default: () => []
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'RadioGroup',
   components: {
     Radio
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    value: [String, Number],
+    vertical: booleanProp,
+    disabled: booleanProp,
+    button: booleanProp,
+    border: booleanProp,
+    options: Array as PropType<(string | number)[]>,
+    disableValidate: booleanProp
+  },
   emits: ['change', 'update:value'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('radioGroup', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      value: {
+        default: null,
+        static: true
+      },
+      vertical: false,
+      disabled: false,
+      button: false,
+      border: false,
+      options: {
+        default: () => [],
+        static: true
+      },
+      disableValidate: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
 
     const prefix = 'vxp-radio-group'
@@ -110,9 +105,8 @@ export default defineComponent({
     }
 
     return {
-      className,
-
-      isObject
+      props,
+      className
     }
   }
 })

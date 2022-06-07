@@ -2,8 +2,8 @@
   <div
     ref="wrapper"
     :class="[prefix, `${prefix}-vars`]"
-    :aria-disabled="disabled"
-    :aria-readonly="readonly"
+    :aria-disabled="props.disabled"
+    :aria-readonly="props.readonly"
   >
     <ul :class="`${prefix}__list`">
       <TreeNode
@@ -12,36 +12,36 @@
         :key="index"
         v-bind="(item as any)"
         :node="item"
-        :label-key="labelKey"
-        :children-key="childrenKey"
+        :label-key="props.labelKey"
+        :children-key="props.childrenKey"
         :children="getNodeChildren(item)"
-        :indent="indent"
-        :draggable="draggable"
-        :appear="appear"
-        :floor-select="floorSelect"
+        :indent="props.indent"
+        :draggable="props.draggable"
+        :appear="props.appear"
+        :floor-select="props.floorSelect"
       >
-        <template #default="{ data, node, toggleCheck, toggleExpand, toggleSelect }">
+        <template #default="{ data: nodeDta, node, toggleCheck, toggleExpand, toggleSelect }">
           <slot
             name="node"
-            :data="data"
+            :data="nodeDta"
             :node="node"
             :toggle-check="toggleCheck"
             :toggle-expand="toggleExpand"
             :toggle-select="toggleSelect"
           ></slot>
         </template>
-        <template #label="{ data, node }">
-          <slot name="label" :data="data" :node="node"></slot>
+        <template #label="{ data: nodeData, node }">
+          <slot name="label" :data="nodeData" :node="node"></slot>
         </template>
       </TreeNode>
     </ul>
-    <div v-if="!data || !data.length" :class="`${prefix}__empty-tip`">
+    <div v-if="!props.data || !props.data.length" :class="`${prefix}__empty-tip`">
       <slot name="empty">
-        {{ emptyTip ?? locale.empty }}
+        {{ props.emptyTip ?? locale.empty }}
       </slot>
     </div>
     <div
-      v-if="draggable"
+      v-if="props.draggable"
       v-show="indicatorShow"
       ref="indicator"
       :class="`${prefix}__indicator`"
@@ -52,7 +52,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide, nextTick, toRef } from 'vue'
 import TreeNode from './tree-node.vue'
-import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
 import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
 
@@ -67,102 +67,34 @@ import type {
   TreeNodeInstance
 } from './symbol'
 
-const props = useConfiguredProps('tree', {
-  arrow: {
-    type: [Boolean, String] as PropType<boolean | 'auto'>,
-    default: 'auto',
-    validator: (value: boolean | 'auto') => {
-      return typeof value === 'boolean' || value === 'auto'
-    }
-  },
-  data: {
-    type: Array as PropType<InitDataOptions[]>,
-    default: () => []
-  },
-  noBuildTree: {
-    type: Boolean,
-    default: true
-  },
-  emptyTip: {
-    type: String,
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  readonly: {
-    type: Boolean,
-    default: false
-  },
-  checkbox: {
-    type: Boolean,
-    default: false
-  },
-  renderer: {
-    type: Function as PropType<RenderFn>,
-    default: null
-  },
-  idKey: {
-    type: String,
-    default: 'id'
-  },
-  labelKey: {
-    type: String,
-    default: 'label'
-  },
-  childrenKey: {
-    type: String,
-    default: 'children'
-  },
-  parentKey: {
-    type: String,
-    default: 'parent'
-  },
-  multiple: {
-    type: Boolean,
-    default: false
-  },
-  indent: {
-    type: [String, Number],
-    default: '1.2em'
-  },
-  accordion: {
-    type: Boolean,
-    default: false
-  },
-  draggable: {
-    type: Boolean,
-    default: false
-  },
-  appear: {
-    type: Boolean,
-    default: false
-  },
-  floorSelect: {
-    type: Boolean,
-    default: false
-  },
-  asyncLoad: {
-    type: Function as PropType<AsyncLoadFn>,
-    default: null
-  },
-  cacheNode: {
-    type: Boolean,
-    default: false
-  },
-  rootId: {
-    type: [String, Number],
-    default: null
-  }
-})
-
 export default defineComponent({
   name: 'Tree',
   components: {
     TreeNode
   },
-  props,
+  props: {
+    arrow: [Boolean, String] as PropType<boolean | 'auto'>,
+    data: Array as PropType<InitDataOptions[]>,
+    noBuildTree: booleanProp,
+    emptyTip: String,
+    disabled: booleanProp,
+    readonly: booleanProp,
+    checkbox: booleanProp,
+    renderer: Function as PropType<RenderFn>,
+    idKey: String,
+    labelKey: String,
+    childrenKey: String,
+    parentKey: String,
+    multiple: booleanProp,
+    indent: [String, Number],
+    accordion: booleanProp,
+    draggable: booleanProp,
+    appear: booleanProp,
+    floorSelect: booleanProp,
+    asyncLoad: Function as PropType<AsyncLoadFn>,
+    cacheNode: booleanProp,
+    rootId: [String, Number]
+  },
   emits: [
     'node-change',
     'node-click',
@@ -176,7 +108,43 @@ export default defineComponent({
     'drop',
     'drag-end'
   ],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('tree', _props, {
+      arrow: {
+        default: 'auto',
+        validator: (value: boolean | 'auto') => typeof value === 'boolean' || value === 'auto'
+      },
+      data: {
+        default: () => [],
+        static: true
+      },
+      noBuildTree: false,
+      emptyTip: null,
+      disabled: false,
+      readonly: false,
+      checkbox: false,
+      renderer: {
+        default: null,
+        isFunc: true
+      },
+      idKey: 'id',
+      labelKey: 'label',
+      childrenKey: 'children',
+      parentKey: 'parent',
+      multiple: false,
+      indent: '1.2em',
+      accordion: false,
+      draggable: false,
+      appear: false,
+      floorSelect: false,
+      asyncLoad: {
+        default: null,
+        isFunc: true
+      },
+      cacheNode: false,
+      rootId: null
+    })
+
     const prefix = 'vxp-tree'
     const nodeMaps = new Map<Key, TreeNodeOptions>()
     const flatData = ref<TreeNodeOptions[]>([])
@@ -784,8 +752,9 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
-      locale: useLocaleConfig('tree'),
+      locale: useLocale('tree'),
       treeData,
       indicatorShow,
 

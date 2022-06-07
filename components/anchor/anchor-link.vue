@@ -33,20 +33,18 @@ import { baseIndentWidth, LINK_STATE, ANCHOR_STATE } from './symbol'
 
 import type { LinkState } from './symbol'
 
-const props = {
-  to: {
-    type: String,
-    default: ''
-  },
-  title: {
-    type: String,
-    default: ''
-  }
-}
-
 export default defineComponent({
   name: 'AnchorLink',
-  props,
+  props: {
+    to: {
+      type: String,
+      default: ''
+    },
+    title: {
+      type: String,
+      default: ''
+    }
+  },
   setup(props) {
     const anchorState = inject(ANCHOR_STATE, null)
     const parentLinkState = inject(LINK_STATE, null)

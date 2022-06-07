@@ -1,4 +1,4 @@
-import { useLocaleConfig, getCountWord, makeSentence } from '@vexip-ui/config'
+import { useLocale, getCountWord, makeSentence } from '@vexip-ui/config'
 import { SECOND_ON_MILLS, MINUTE_ON_MILLS, HOUR_ON_MILLS, DAY_ON_MILLIS } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
@@ -52,7 +52,7 @@ export function unsubscribe(id: number) {
 }
 
 export function computeTimeAgo(date: Date, current = Date.now()) {
-  const locale = useLocaleConfig('timeAgo')
+  const locale = useLocale('timeAgo').value
   const diff = Math.abs(current - date.getTime())
   const type = current > date.getTime() ? locale.ago : locale.late
 

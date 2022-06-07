@@ -114,20 +114,20 @@
       </slot>
     </li>
     <slot>
-      <div v-if="pageTotal" :class="`${prefix}__total`">
-        {{ `${locale.total} ${total} ${itemUnit ?? locale.itemUnit}` }}
+      <div v-if="props.pageTotal" :class="`${prefix}__total`">
+        {{ `${locale.total} ${props.total} ${props.itemUnit ?? locale.itemUnit}` }}
       </div>
-      <div v-if="pageCount" :class="`${prefix}__size`">
-        <Select v-model:value="currentPageSize" size="small">
-          <Option
-            v-for="(item, index) in sizeOptions"
-            :key="index"
-            :value="item"
-            :label="`${item} ${itemUnit ?? locale.itemUnit}${locale.prePage}`"
-          ></Option>
+      <div v-if="props.pageCount" :class="`${prefix}__size`">
+        <Select v-model:value="currentPageSize" size="small" :options="sizeObjectOptions">
+          <template #default="{ option }">
+            <Option
+              :value="option.value"
+              :label="`${option.value} ${props.itemUnit ?? locale.itemUnit}${locale.prePage}`"
+            ></Option>
+          </template>
         </Select>
       </div>
-      <div v-if="pageJump" :class="`${prefix}__jump`">
+      <div v-if="props.pageJump" :class="`${prefix}__jump`">
         {{ locale.jumpTo }}
         <NumberInput
           v-model:value="jumpValue"
@@ -147,90 +147,12 @@ import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
 import { Option } from '@/components/option'
 import { Select } from '@/components/select'
-import { useConfiguredProps, useLocaleConfig, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp, sizeProp, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
 import { isFunction, range } from '@vexip-ui/utils'
 import { PaginationMode } from './symbol'
 import { ChevronRight, ChevronLeft, AnglesRight, AnglesLeft, Ellipsis } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
-
-const props = useConfiguredProps('pagination', {
-  size: createSizeProp(),
-  total: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => {
-      return value >= 0
-    }
-  },
-  noBorder: {
-    type: Boolean,
-    default: false
-  },
-  background: {
-    type: Boolean,
-    default: false
-  },
-  pageSize: {
-    type: Number,
-    default: 10,
-    validator: (value: number) => {
-      return value > 0
-    }
-  },
-  sizeOptions: {
-    type: Array as PropType<number[]>,
-    default() {
-      return [10, 20, 50, 100]
-    },
-    validator: (values: number[]) => {
-      return !values.find(value => typeof value !== 'number')
-    }
-  },
-  maxCount: {
-    type: Number,
-    default: 7,
-    validator: (value: number) => {
-      // 大于6的整数
-      return value === parseInt(value.toString()) && value > 6
-    }
-  },
-  active: {
-    type: Number,
-    default: 1,
-    validator: (value: number) => {
-      return value > 0
-    }
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  disableItem: {
-    type: Function as PropType<(page: number) => boolean>,
-    default: null
-  },
-  turnPageCount: {
-    type: Number,
-    default: 5
-  },
-  pageJump: {
-    type: Boolean,
-    default: false
-  },
-  pageCount: {
-    type: Boolean,
-    default: false
-  },
-  pageTotal: {
-    type: Boolean,
-    default: false
-  },
-  itemUnit: {
-    type: String,
-    default: null
-  }
-})
 
 export default defineComponent({
   name: 'Pagination',
@@ -245,9 +167,60 @@ export default defineComponent({
     AnglesLeft,
     Ellipsis
   },
-  props,
+  props: {
+    size: sizeProp,
+    total: Number,
+    noBorder: booleanProp,
+    background: booleanProp,
+    pageSize: Number,
+    sizeOptions: Array as PropType<number[]>,
+    maxCount: Number,
+    active: Number,
+    disabled: booleanProp,
+    disableItem: Function as PropType<(page: number) => boolean>,
+    turnPageCount: Number,
+    pageJump: booleanProp,
+    pageCount: booleanProp,
+    pageTotal: booleanProp,
+    itemUnit: String
+  },
   emits: ['change', 'page-size-change', 'update:active'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('pagination', _props, {
+      size: createSizeProp(),
+      total: {
+        default: 0,
+        validator: (value: number) => value >= 0,
+        static: true
+      },
+      noBorder: false,
+      background: false,
+      pageSize: {
+        default: 10,
+        validator: (value: number) => value > 0
+      },
+      sizeOptions: () => [10, 20, 50, 100],
+      maxCount: {
+        default: 7,
+        validator: (value: number) => value === parseInt(value.toString()) && value > 6
+      },
+      active: {
+        default: 1,
+        validator: (value: number) => value > 0,
+        static: true
+      },
+      disabled: false,
+      disableItem: {
+        default: null,
+        isFunc: false
+      },
+      turnPageCount: 5,
+      pageJump: false,
+      pageCount: false,
+      pageTotal: false,
+      itemUnit: null
+    })
+
     const prefix = 'vxp-pagination'
     const currentPagers = ref<number[]>([])
     const currentActive = ref(props.active)
@@ -257,7 +230,7 @@ export default defineComponent({
     const inNextEllipsis = ref(false)
     const jumpValue = ref(props.active)
 
-    const locale = useLocaleConfig('pagination')
+    const locale = useLocale('pagination')
 
     const className = computed(() => {
       return {
@@ -283,10 +256,10 @@ export default defineComponent({
       return count <= 1 || currentActive.value === count
     })
     const prevTurnPageTitle = computed(() => {
-      return `${locale.prev} ${getCountWord(locale.page, props.turnPageCount)}`
+      return `${locale.value.prev} ${getCountWord(locale.value.page, props.turnPageCount)}`
     })
     const nextTurnPageTitle = computed(() => {
-      return `${locale.next} ${getCountWord(locale.page, props.turnPageCount)}`
+      return `${locale.value.next} ${getCountWord(locale.value.page, props.turnPageCount)}`
     })
     const useEllipsis = computed(() => {
       return pagerCount.value > props.maxCount
@@ -317,6 +290,7 @@ export default defineComponent({
 
       return active
     })
+    const sizeObjectOptions = computed(() => props.sizeOptions.map(size => ({ value: size })))
 
     watch(() => props.active, changeActive)
     watch(currentActive, value => {
@@ -499,6 +473,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       locale,
       currentPagers,
@@ -519,6 +494,7 @@ export default defineComponent({
       useEllipsis,
       prevEllipsisTarget,
       nextEllipsisTarget,
+      sizeObjectOptions,
 
       isFunction,
       getCountWordOnly,

@@ -1,20 +1,20 @@
 <template>
   <transition-group
-    v-if="type === 'thumbnail'"
+    v-if="props.type === 'thumbnail'"
     tag="ul"
-    :appear="selectToAdd"
+    :appear="props.selectToAdd"
     :name="`${prefix}-list-transition`"
     :class="[`${prefix}__files`, `${prefix}-vars`]"
-    :style="style"
+    :style="props.style"
   >
     <UploadFile
-      v-for="item in files"
+      v-for="item in props.files"
       :key="item.id"
       :file="item"
-      :icon-renderer="iconRenderer"
-      :list-type="type"
-      :loading-text="loadingText"
-      :select-to-add="selectToAdd"
+      :icon-renderer="props.iconRenderer"
+      :list-type="props.type"
+      :loading-text="props.loadingText"
+      :select-to-add="props.selectToAdd"
       @delete="$emit('delete', $event)"
       @preview="$emit('preview', $event)"
     >
@@ -31,15 +31,15 @@
       </template>
     </UploadFile>
   </transition-group>
-  <ul v-else :class="`${prefix}__files`" :style="style">
+  <ul v-else :class="`${prefix}__files`" :style="props.style">
     <UploadFile
-      v-for="item in files"
+      v-for="item in props.files"
       :key="item.id"
       :file="item"
-      :icon-renderer="iconRenderer"
-      :list-type="type"
-      :loading-text="loadingText"
-      :select-to-add="selectToAdd"
+      :icon-renderer="props.iconRenderer"
+      :list-type="props.type"
+      :loading-text="props.loadingText"
+      :select-to-add="props.selectToAdd"
       @delete="$emit('delete', $event)"
       @preview="$emit('preview', $event)"
     >
@@ -61,49 +61,47 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import UploadFile from './upload-file.vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
+import { uploadListTypes } from './symbol'
 
 import type { PropType, StyleValue } from 'vue'
 import type { UploadListType, RenderFn, FileState } from './symbol'
-
-const props = useConfiguredProps('uploadList', {
-  files: {
-    type: Array as PropType<FileState[]>,
-    default: () => []
-  },
-  selectToAdd: {
-    type: Boolean,
-    default: false
-  },
-  iconRenderer: {
-    type: Function as PropType<RenderFn>,
-    default: null
-  },
-  type: {
-    default: 'name' as UploadListType,
-    validator: (value: UploadListType) => {
-      return ['name', 'detail', 'thumbnail', 'card'].includes(value)
-    }
-  },
-  loadingText: {
-    type: String,
-    default: null
-  },
-  style: {
-    type: [String, Object] as PropType<string | StyleValue>,
-    default: null
-  }
-})
 
 export default defineComponent({
   name: 'UploadList',
   components: {
     UploadFile
   },
-  props,
+  props: {
+    files: Array as PropType<FileState[]>,
+    selectToAdd: booleanProp,
+    iconRenderer: Function as PropType<RenderFn>,
+    type: String as PropType<UploadListType>,
+    loadingText: String,
+    style: [String, Object] as PropType<StyleValue>
+  },
   emits: ['preview', 'delete'],
-  setup() {
+  setup(_props) {
+    const props = useProps('uploadList', _props, {
+      files: {
+        default: () => [],
+        static: true
+      },
+      selectToAdd: false,
+      iconRenderer: {
+        default: null,
+        isFunc: true
+      },
+      type: {
+        default: 'name' as UploadListType,
+        validator: (value: UploadListType) => uploadListTypes.includes(value)
+      },
+      loadingText: null,
+      style: null
+    })
+
     return {
+      props,
       prefix: 'vxp-upload'
     }
   }

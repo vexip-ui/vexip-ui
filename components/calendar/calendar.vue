@@ -4,7 +4,9 @@
     :class="prefix"
     :year="calendarYear"
     :month="calendarMonth"
-    :disabled-date="disabledDate"
+    :week-start="props.weekStart"
+    :today="props.today"
+    :disabled-date="props.disabledDate"
   >
     <template #header>
       <slot name="header">
@@ -82,59 +84,10 @@ import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
 import CalendarPane from './calendar-pane.vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 import type { Dateable } from '@vexip-ui/utils'
-
-const props = useConfiguredProps('calendar', {
-  value: {
-    type: [Number, String, Date] as PropType<Dateable | Dateable[]>,
-    default: null
-  },
-  year: {
-    type: Number,
-    default: new Date().getFullYear()
-  },
-  // 当前日历显示的月份 (1 ~ 12)
-  month: {
-    type: Number,
-    default: new Date().getMonth() + 1,
-    validator: (value: number) => {
-      return value > 0 && value <= 12
-    }
-  },
-  // 头部星期显示的内容，数量须为 7 个
-  weekDays: {
-    type: Array as PropType<string[]>,
-    default: null,
-    validator: (value: string[]) => {
-      return !value || value.length === 0 || value.length === 7
-    }
-  },
-  weekStart: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => {
-      return value >= 0 && value < 7
-    }
-  },
-  today: {
-    type: [Number, String, Date] as PropType<Dateable>,
-    default() {
-      return new Date()
-    },
-    validator: (value: Dateable) => {
-      return !Number.isNaN(+new Date(value))
-    }
-  },
-  disabledDate: {
-    type: Function as PropType<(data: Date) => boolean>,
-    default() {
-      return false
-    }
-  }
-})
 
 export default defineComponent({
   name: 'Calendar',
@@ -144,9 +97,47 @@ export default defineComponent({
     NumberInput,
     Row
   },
-  props,
+  props: {
+    value: [Number, String, Date] as PropType<Dateable | Dateable[]>,
+    year: Number,
+    // 当前日历显示的月份 (1 ~ 12)
+    month: Number,
+    // 头部星期显示的内容，数量须为 7 个
+    weekDays: Array as PropType<string[]>,
+    weekStart: Number,
+    today: [Number, String, Date] as PropType<Dateable>,
+    disabledDate: Function as PropType<(data: Date) => boolean>
+  },
   emits: ['select', 'update:value'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('calendar', _props, {
+      value: {
+        default: null,
+        static: true
+      },
+      year: () => new Date().getFullYear(),
+      month: {
+        default: () => new Date().getMonth() + 1,
+        validator: (value: number) => value > 0 && value <= 12
+      },
+      weekDays: {
+        default: null,
+        validator: (value: string[]) => !value || value.length === 0 || value.length === 7
+      },
+      weekStart: {
+        default: 0,
+        validator: (value: number) => value >= 0 && value < 7
+      },
+      today: {
+        default: () => new Date(),
+        validator: (value: Dateable) => !Number.isNaN(+new Date(value))
+      },
+      disabledDate: {
+        default: () => false,
+        isFunc: true
+      }
+    })
+
     const prefix = 'vxp-calendar'
 
     const calendarValue = ref(props.value)
@@ -179,6 +170,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
 
       calendarValue,

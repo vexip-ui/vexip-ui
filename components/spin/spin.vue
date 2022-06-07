@@ -1,18 +1,18 @@
 <template>
-  <div v-if="!inner" :class="[prefix, `${prefix}-vars`]">
+  <div v-if="!props.inner" :class="[prefix, `${prefix}-vars`]">
     <slot></slot>
     <transition appear name="vxp-fade">
       <div v-if="currentActive" :class="`${prefix}__loading`">
         <div :class="`${prefix}__mask`" :style="maskStyle"></div>
         <div :class="`${prefix}__icon`">
           <slot name="icon">
-            <Icon v-if="spin" spin :icon="icon"></Icon>
-            <Icon v-else pulse :icon="icon"></Icon>
+            <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
+            <Icon v-else pulse :icon="props.icon"></Icon>
           </slot>
         </div>
         <div v-if="hasTip" :class="`${prefix}__tip`">
           <slot name="tip">
-            {{ tip }}
+            {{ props.tip }}
           </slot>
         </div>
       </div>
@@ -23,13 +23,13 @@
       <div :class="`${prefix}__mask`" :style="maskStyle"></div>
       <div :class="`${prefix}__icon`">
         <slot name="icon">
-          <Icon v-if="spin" spin :icon="icon"></Icon>
-          <Icon v-else pulse :icon="icon"></Icon>
+          <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
+          <Icon v-else pulse :icon="props.icon"></Icon>
         </slot>
       </div>
       <div v-if="hasTip" :class="`${prefix}__tip`">
         <slot name="tip">
-          {{ tip }}
+          {{ props.tip }}
         </slot>
       </div>
     </div>
@@ -39,50 +39,41 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { toNumber } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
-
-const props = useConfiguredProps('spin', {
-  active: {
-    type: Boolean,
-    default: false
-  },
-  icon: {
-    type: Object,
-    default: Spinner
-  },
-  spin: {
-    type: Boolean,
-    default: false
-  },
-  inner: {
-    type: Boolean,
-    default: false
-  },
-  delay: {
-    type: [Boolean, Number, Array] as PropType<boolean | number | number[]>,
-    default: false
-  },
-  tip: {
-    type: String,
-    default: ''
-  },
-  maskColor: {
-    type: String,
-    default: ''
-  }
-})
 
 export default defineComponent({
   name: 'Spin',
   components: {
     Icon
   },
-  props,
-  setup(props, { slots }) {
+  props: {
+    // TODO: 添加 transitionName
+    active: booleanProp,
+    icon: Object,
+    spin: booleanProp,
+    inner: booleanProp,
+    delay: [Boolean, Number, Array] as PropType<boolean | number | number[]>,
+    tip: String,
+    maskColor: String
+  },
+  setup(_props, { slots }) {
+    const props = useProps('spin', _props, {
+      active: {
+        default: false,
+        static: true
+      },
+      icon: Spinner,
+      spin: false,
+      inner: false,
+      delay: false,
+      tip: '',
+      maskColor: ''
+    })
+
     const currentActive = ref(props.active)
 
     const hasTip = computed(() => !!(props.tip || slots.tip))
@@ -133,6 +124,7 @@ export default defineComponent({
     )
 
     return {
+      props,
       prefix: 'vxp-spin',
 
       currentActive,

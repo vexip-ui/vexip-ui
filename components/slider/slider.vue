@@ -9,11 +9,11 @@
         tabindex="0"
         theme="dark"
         trigger="custom"
-        :transfer="tipTransfer"
+        :transfer="props.tipTransfer"
         :visible="isTipShow || sliding"
         :tip-class="`${prefix}__tip`"
-        :disabled="hideTip"
-        :placement="vertical ? 'right' : 'top'"
+        :disabled="props.hideTip"
+        :placement="props.vertical ? 'right' : 'top'"
         @tip-enter="showTooltip"
         @tip-leave="hideTooltip"
       >
@@ -36,60 +36,47 @@
 import { defineComponent, ref, computed, watch, inject, onMounted } from 'vue'
 import { Tooltip } from '@/components/tooltip'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useConfiguredProps, createStateProp } from '@vexip-ui/config'
+import { useProps, booleanProp, stateProp, createStateProp } from '@vexip-ui/config'
 import { noop, throttle } from '@vexip-ui/utils'
-
-const props = useConfiguredProps('slider', {
-  state: createStateProp(),
-  value: {
-    type: Number,
-    default: 0
-  },
-  min: {
-    type: Number,
-    default: 0
-  },
-  max: {
-    type: Number,
-    default: 100
-  },
-  step: {
-    type: Number,
-    default: 1,
-    validator: (value: number) => {
-      return value > 0 && Math.ceil(value) === value
-    }
-  },
-  vertical: {
-    type: Boolean,
-    default: false
-  },
-  hideTip: {
-    type: Boolean,
-    default: false
-  },
-  tipTransfer: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'Slider',
   components: {
     Tooltip
   },
-  props,
+  props: {
+    state: stateProp,
+    value: Number,
+    min: Number,
+    max: Number,
+    step: Number,
+    vertical: booleanProp,
+    hideTip: booleanProp,
+    tipTransfer: booleanProp,
+    disabled: booleanProp,
+    disableValidate: booleanProp
+  },
   emits: ['change', 'input', 'change', 'update:value'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('slider', _props, {
+      state: createStateProp(),
+      value: {
+        default: 0,
+        static: true
+      },
+      min: 0,
+      max: 100,
+      step: {
+        default: 1,
+        validator: (value: number) => value > 0 && Math.ceil(value) === value
+      },
+      vertical: false,
+      hideTip: false,
+      tipTransfer: false,
+      disabled: false,
+      disableValidate: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
 
     const prefix = 'vxp-slider'
@@ -268,6 +255,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       sliding,
       isTipShow,

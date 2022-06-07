@@ -11,23 +11,23 @@
       @dragleave.prevent="handleDragLeave"
     >
       <input
-        v-if="!disabledClick"
+        v-if="!props.disabledClick"
         ref="input"
         type="file"
         :class="`${prefix}__input`"
-        :multiple="multiple"
+        :multiple="props.multiple"
         :accept="acceptString"
-        :webkitdirectory="directory"
+        :webkitdirectory="props.directory"
         @change="handleInputChange"
       />
-      <slot :is-drag-over="(allowDrag || disabledClick) && isDragOver">
-        <template v-if="!allowDrag && !disabledClick">
+      <slot :is-drag-over="(props.allowDrag || props.disabledClick) && isDragOver">
+        <template v-if="!props.allowDrag && !props.disabledClick">
           <Button :icon="Upload">
             {{ locale.upload }}
           </Button>
           <slot name="tip">
-            <p v-if="tip" :class="`${prefix}__tip`">
-              {{ tip }}
+            <p v-if="props.tip" :class="`${prefix}__tip`">
+              {{ props.tip }}
             </p>
           </slot>
         </template>
@@ -37,22 +37,22 @@
           </Icon>
           <slot name="tip">
             <p :class="`${prefix}__tip`">
-              {{ tip || locale.dragOrClick }}
+              {{ props.tip || locale.dragOrClick }}
             </p>
           </slot>
         </div>
       </slot>
     </div>
     <UploadList
-      v-if="!hiddenFiles"
+      v-if="!props.hiddenFiles"
       :files="renderFiles"
-      :select-to-add="selectToAdd"
-      :type="listType"
-      :icon-renderer="iconRenderer"
-      :loading-text="loadingText"
+      :select-to-add="props.selectToAdd"
+      :type="props.listType"
+      :icon-renderer="props.iconRenderer"
+      :loading-text="props.loadingText"
       :style="{
-        [selectToAdd ? 'marginBottom' : 'marginTop']:
-          !hiddenFiles && renderFiles.length ? '0.5em' : null
+        [props.selectToAdd ? 'marginBottom' : 'marginTop']:
+          !props.hiddenFiles && renderFiles.length ? '0.5em' : null
       }"
       @delete="deleteFile"
       @preview="$emit('preview', $event)"
@@ -66,10 +66,10 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import UploadList from './upload-list.vue'
 import { upload } from './request'
-import { useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload } from '@vexip-ui/icons'
-import { UploadStatusType } from './symbol'
+import { UploadStatusType, uploadListTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
@@ -82,109 +82,6 @@ import type {
   DirectoryEntity
 } from './symbol'
 
-const props = useConfiguredProps('upload', {
-  url: {
-    type: String,
-    default: ''
-  },
-  multiple: {
-    type: Boolean,
-    default: false
-  },
-  tip: {
-    type: String,
-    default: ''
-  },
-  accept: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: null
-  },
-  filter: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: ''
-  },
-  maxSize: {
-    type: Number,
-    default: null,
-    validator: (value: number) => value >= 0
-  },
-  field: {
-    type: String,
-    default: 'file'
-  },
-  data: {
-    type: Object as PropType<Record<string, string | Blob>>,
-    default: () => ({})
-  },
-  headers: {
-    type: Object as PropType<Record<string, string>>,
-    default: () => ({})
-  },
-  withCredentials: {
-    type: Boolean,
-    default: false
-  },
-  manual: {
-    type: Boolean,
-    default: false
-  },
-  hiddenFiles: {
-    type: Boolean,
-    default: false
-  },
-  countLimit: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => value >= 0
-  },
-  allowDrag: {
-    type: Boolean,
-    default: false
-  },
-  onBeforeUpload: {
-    type: Function as PropType<BeforeFn>,
-    default: null
-  },
-  onBeforeSelect: {
-    type: Function as PropType<BeforeFn>,
-    default: null
-  },
-  iconRenderer: {
-    type: Function as PropType<RenderFn>,
-    default: null
-  },
-  selectToAdd: {
-    type: Boolean,
-    default: false
-  },
-  listType: {
-    default: 'name' as UploadListType,
-    validator: (value: UploadListType) => {
-      return ['name', 'detail', 'thumbnail', 'card'].includes(value)
-    }
-  },
-  block: {
-    type: Boolean,
-    default: false
-  },
-  loadingText: {
-    type: String,
-    default: null
-  },
-  directory: {
-    type: Boolean,
-    default: false
-  },
-  pathField: {
-    type: String,
-    default: 'path'
-  },
-  disabledClick: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'Upload',
   components: {
@@ -193,7 +90,33 @@ export default defineComponent({
     UploadList,
     CloudArrowUp
   },
-  props,
+  props: {
+    // TODO: 增加设置按钮内容 prop
+    url: String,
+    multiple: booleanProp,
+    tip: String,
+    accept: [String, Array] as PropType<string | string[]>,
+    filter: [String, Array] as PropType<string | string[]>,
+    maxSize: Number,
+    field: String,
+    data: Object as PropType<Record<string, string | Blob>>,
+    headers: Object as PropType<Record<string, string>>,
+    withCredentials: booleanProp,
+    manual: booleanProp,
+    hiddenFiles: booleanProp,
+    countLimit: Number,
+    allowDrag: booleanProp,
+    onBeforeUpload: Function as PropType<BeforeFn>,
+    onBeforeSelect: Function as PropType<BeforeFn>,
+    iconRenderer: Function as PropType<RenderFn>,
+    selectToAdd: booleanProp,
+    listType: String as PropType<UploadListType>,
+    block: booleanProp,
+    loadingText: String,
+    directory: booleanProp,
+    pathField: String,
+    disabledClick: booleanProp
+  },
   emits: [
     'exceed',
     'change',
@@ -205,7 +128,55 @@ export default defineComponent({
     'error',
     'preview'
   ],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('upload', _props, {
+      url: {
+        default: '',
+        static: true
+      },
+      multiple: false,
+      tip: '',
+      accept: null,
+      filter: '',
+      maxSize: {
+        default: null,
+        validator: (value: number) => value >= 0
+      },
+      field: 'file',
+      data: () => ({}),
+      headers: () => ({}),
+      withCredentials: false,
+      manual: false,
+      hiddenFiles: false,
+      countLimit: {
+        default: 0,
+        validator: (value: number) => value >= 0
+      },
+      allowDrag: false,
+      onBeforeUpload: {
+        default: null,
+        isFunc: true
+      },
+      onBeforeSelect: {
+        default: null,
+        isFunc: true
+      },
+      iconRenderer: {
+        default: null,
+        isFunc: true
+      },
+      selectToAdd: false,
+      listType: {
+        default: 'name' as UploadListType,
+        validator: (value: UploadListType) => uploadListTypes.includes(value)
+      },
+      block: false,
+      loadingText: null,
+      directory: false,
+      pathField: 'path',
+      disabledClick: false
+    })
+
     const prefix = 'vxp-upload'
     const fileStates = ref<FileState[]>([])
     const isDragOver = ref(false)
@@ -654,8 +625,9 @@ export default defineComponent({
     return {
       Upload,
 
+      props,
       prefix,
-      locale: useLocaleConfig('upload'),
+      locale: useLocale('upload'),
       fileStates,
       isDragOver,
 

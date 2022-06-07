@@ -3,7 +3,7 @@
     <ul :class="`${prefix}__list`">
       <slot></slot>
     </ul>
-    <div v-if="!card" :class="`${prefix}__track`" :style="markerStyle">
+    <div v-if="!props.card" :class="`${prefix}__track`" :style="markerStyle">
       <slot name="marker">
         <div :class="`${prefix}__marker`"></div>
       </slot>
@@ -13,29 +13,29 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/mixins'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
 
-const props = useConfiguredProps('tabNav', {
-  active: {
-    type: [String, Number],
-    default: null
-  },
-  card: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'TabNav',
-  props,
+  props: {
+    active: [String, Number],
+    card: booleanProp
+  },
   emits: ['change', 'update:active'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('tabNav', _props, {
+      active: {
+        default: null,
+        static: true
+      },
+      card: false
+    })
+
     const prefix = ' vxp-tab-nav'
     const currentActive = ref(props.active)
     const markerLeft = ref(0)
@@ -124,6 +124,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
 
       className,

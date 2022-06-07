@@ -48,62 +48,58 @@ import { range, doubleDigits } from '@vexip-ui/utils'
 import type { PropType } from 'vue'
 import type { TimeType } from './symbol'
 
-const props = {
-  noArrow: {
-    type: Boolean,
-    default: false
-  },
-  hour: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => value >= 0 && value <= 23
-  },
-  minute: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => value >= 0 && value <= 59
-  },
-  second: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => value >= 0 && value <= 59
-  },
-  candidate: {
-    default: 2,
-    validator: (value: number) => [0, 1, 2, 3].includes(value)
-  },
-  steps: {
-    type: Array as PropType<number[]>,
-    default() {
-      return [1, 1, 1]
-    },
-    validator: (value: [number, number, number]) => {
-      if (value[0] && 24 % value[0] !== 0) {
-        return false
-      }
-
-      for (let i = 1; i < 3; i++) {
-        if (value[i] && 60 % value[i] !== 0) {
-          return false
-        }
-      }
-
-      return true
-    }
-  },
-  pointer: {
-    type: Boolean,
-    default: false
-  }
-}
-
 export default defineComponent({
   name: 'TimeWheel',
   components: {
     Wheel,
     WheelItem
   },
-  props,
+  props: {
+    noArrow: {
+      type: Boolean,
+      default: false
+    },
+    hour: {
+      type: Number,
+      default: 0,
+      validator: (value: number) => value >= 0 && value <= 23
+    },
+    minute: {
+      type: Number,
+      default: 0,
+      validator: (value: number) => value >= 0 && value <= 59
+    },
+    second: {
+      type: Number,
+      default: 0,
+      validator: (value: number) => value >= 0 && value <= 59
+    },
+    candidate: {
+      default: 2,
+      validator: (value: number) => [0, 1, 2, 3].includes(value)
+    },
+    steps: {
+      type: Array as PropType<number[]>,
+      default: () => [1, 1, 1],
+      validator: (value: [number, number, number]) => {
+        if (value[0] && 24 % value[0] !== 0) {
+          return false
+        }
+
+        for (let i = 1; i < 3; i++) {
+          if (value[i] && 60 % value[i] !== 0) {
+            return false
+          }
+        }
+
+        return true
+      }
+    },
+    pointer: {
+      type: Boolean,
+      default: false
+    }
+  },
   emits: ['change', 'toggle-col', 'update:hour', 'update:minute', 'update:second'],
   setup(props, { emit }) {
     const currentHour = ref(props.hour)

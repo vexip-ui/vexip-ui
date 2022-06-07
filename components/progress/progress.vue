@@ -2,10 +2,10 @@
   <div :class="className">
     <div :class="`${prefix}__track`" :style="trackStyle">
       <div :class="`${prefix}__filler`" :style="fillerStyle"></div>
-      <div v-if="infoType === 'inside'" :class="`${prefix}__info`" :style="infoStyle">
+      <div v-if="props.infoType === 'inside'" :class="`${prefix}__info`" :style="infoStyle">
         <slot>
           <span :class="`${prefix}__percentage`">
-            {{ `${percentage}%` }}
+            {{ `${props.percentage}%` }}
           </span>
         </slot>
       </div>
@@ -18,16 +18,16 @@
         >
           <slot>
             <span :class="`${prefix}__percentage`">
-              {{ `${percentage}%` }}
+              {{ `${props.percentage}%` }}
             </span>
           </slot>
         </Bubble>
       </div>
     </div>
-    <div v-if="infoType === 'outside'" :class="`${prefix}__info`">
+    <div v-if="props.infoType === 'outside'" :class="`${prefix}__info`">
       <slot>
         <span :class="`${prefix}__percentage`">
-          {{ `${percentage}%` }}
+          {{ `${props.percentage}%` }}
         </span>
       </slot>
     </div>
@@ -37,7 +37,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Bubble } from '@/components/bubble'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 
 import type { PropType, CSSProperties } from 'vue'
 
@@ -51,49 +51,51 @@ export type ProgressInfoType =
 
 type StrokeColor = string | [string, string] | ((percentage: number) => string | [string, string])
 
-const props = useConfiguredProps('progress', {
-  percentage: {
-    type: Number,
-    default: 0,
-    validator: (value: number) => {
-      return value >= 0 && value <= 100
-    }
-  },
-  strokeWidth: {
-    type: Number,
-    default: 8
-  },
-  infoType: {
-    default: 'outside' as ProgressInfoType,
-    validator: (value: ProgressInfoType) => {
-      return ['outside', 'inside', 'bubble', 'bubble-top', 'bubble-bottom', 'none'].includes(value)
-    }
-  },
-  // TODO: 添加进度条流动效果
-  activated: {
-    type: Boolean,
-    default: false
-  },
-  strokeColor: {
-    type: [String, Array, Function] as PropType<StrokeColor>,
-    default: null,
-    validator: (value: StrokeColor) => {
-      return !(Array.isArray(value) && (!value[0] || !value[1]))
-    }
-  }
-})
+const infoTypes = Object.freeze<ProgressInfoType>(['outside', 'inside', 'bubble', 'bubble-top', 'bubble-bottom', 'none'])
 
 export default defineComponent({
   name: 'Progress',
   components: {
     Bubble
   },
-  props,
-  setup(props) {
+  props: {
+    percentage: Number,
+    strokeWidth: Number,
+    infoType: String as PropType<ProgressInfoType>,
+    // TODO: 实现添加进度条流动效果
+    activated: booleanProp,
+    strokeColor: [String, Array, Function] as PropType<StrokeColor>
+  },
+  setup(_props) {
+    const props = useProps('progress', _props, {
+      percentage: {
+        default: 0,
+        validator: (value: number) => value >= 0 && value <= 100,
+        static: true
+      },
+      strokeWidth: 8,
+      infoType: {
+        default: 'outside' as ProgressInfoType,
+        validator: (value: ProgressInfoType) => infoTypes.includes(value)
+      },
+      activated: false,
+      strokeColor: {
+        default: null,
+        validator: (value: StrokeColor) => !(Array.isArray(value) && (!value[0] || !value[1]))
+      }
+    })
+
     const prefix = 'vxp-progress'
 
     const className = computed(() => {
-      return [prefix, `${prefix}-vars`, `${prefix}--info-${props.infoType}`]
+      return [
+        prefix,
+        `${prefix}-vars`,
+        `${prefix}--info-${props.infoType}`,
+        {
+          [`${prefix}--activated`]: props.activated
+        }
+      ]
     })
     const trackStyle = computed(() => {
       return {
@@ -147,6 +149,7 @@ export default defineComponent({
     })
 
     return {
+      props,
       prefix,
 
       className,

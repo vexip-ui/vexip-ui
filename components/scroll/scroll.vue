@@ -17,29 +17,29 @@
       <slot></slot>
     </div>
     <Scrollbar
-      v-if="useXBar"
+      v-if="props.useXBar"
       ref="xBar"
       placement="bottom"
-      :class="[`${prefix}__bar--horizontal`, barClass]"
-      :fade="barFade"
+      :class="[`${prefix}__bar--horizontal`, props.barClass]"
+      :fade="props.barFade"
       :bar-length="xBarLength"
       :disabled="!enableXScroll"
       :duration="transitionDuration"
-      :use-track="useBarTrack"
+      :use-track="props.useBarTrack"
       @scroll-start="handleBarScrollStart('horizontal')"
       @scroll="handleXBarScroll"
       @scroll-end="handleBarScrollEnd('horizontal')"
     ></Scrollbar>
     <Scrollbar
-      v-if="useYBar"
+      v-if="props.useYBar"
       ref="yBar"
       placement="right"
-      :class="[`${prefix}__bar--vertical`, barClass]"
-      :fade="barFade"
+      :class="[`${prefix}__bar--vertical`, props.barClass]"
+      :fade="props.barFade"
       :bar-length="yBarLength"
       :disabled="!enableYScroll"
       :duration="transitionDuration"
-      :use-track="useBarTrack"
+      :use-track="props.useBarTrack"
       @scroll-start="handleBarScrollStart('vertical')"
       @scroll="handleYBarScroll"
       @scroll-end="handleBarScrollEnd('vertical')"
@@ -50,7 +50,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
@@ -58,104 +58,39 @@ import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode, ClassType } from './symbol'
 
-const moveEvent = USE_TOUCH ? 'touchmove' : 'mousemove'
-const upEvent = USE_TOUCH ? 'touchend' : 'mouseup'
+const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
 
-const props = useConfiguredProps('scroll', {
-  scrollClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  mode: {
-    default: 'vertical' as ScrollMode,
-    validator: (value: ScrollMode) => {
-      return ['horizontal', 'vertical', 'both'].includes(value)
-    }
-  },
-  width: {
-    type: [Number, String],
-    default: ''
-  },
-  height: {
-    type: [Number, String],
-    default: ''
-  },
-  deltaX: {
-    type: Number,
-    default: 20
-  },
-  deltaY: {
-    type: Number,
-    default: 20
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  pointer: {
-    type: Boolean,
-    default: false
-  },
-  wheel: {
-    type: Boolean,
-    default: true
-  },
-  scrollX: {
-    type: Number,
-    default: 0
-  },
-  scrollY: {
-    type: Number,
-    default: 0
-  },
-  useXBar: {
-    type: Boolean,
-    default: false
-  },
-  useYBar: {
-    type: Boolean,
-    default: false
-  },
-  barFade: {
-    type: Number,
-    default: 1500
-  },
-  barClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  autoplay: {
-    type: [Boolean, Number],
-    default: false
-  },
-  playWaiting: {
-    type: Number,
-    default: 500
-  },
-  noBuffer: {
-    type: Boolean,
-    default: false
-  },
-  noTransition: {
-    type: Boolean,
-    default: false
-  },
-  onBeforeScroll: {
-    type: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
-    default: null
-  },
-  useBarTrack: {
-    type: Boolean,
-    default: false
-  }
-})
+const MOVE_EVENT = USE_TOUCH ? 'touchmove' : 'mousemove'
+const UP_EVENT = USE_TOUCH ? 'touchend' : 'mouseup'
 
 export default defineComponent({
   name: 'Scroll',
   components: {
     Scrollbar
   },
-  props,
+  props: {
+    scrollClass: [String, Object] as PropType<ClassType>,
+    mode: String as PropType<ScrollMode>,
+    width: [Number, String],
+    height: [Number, String],
+    deltaX: Number,
+    deltaY: Number,
+    disabled: booleanProp,
+    pointer: booleanProp,
+    wheel: booleanProp,
+    scrollX: Number,
+    scrollY: Number,
+    useXBar: booleanProp,
+    useYBar: booleanProp,
+    barFade: Number,
+    barClass: [String, Object] as PropType<ClassType>,
+    autoplay: [Boolean, Number],
+    playWaiting: Number,
+    noBuffer: booleanProp,
+    noTransition: booleanProp,
+    onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
+    useBarTrack: booleanProp
+  },
   emits: [
     'x-enable-change',
     'y-enable-change',
@@ -167,7 +102,43 @@ export default defineComponent({
     'bar-scroll-end',
     'ready'
   ],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('scroll', _props, {
+      scrollClass: null,
+      mode: {
+        default: 'vertical' as ScrollMode,
+        validator: (value: ScrollMode) => scrollModes.includes(value)
+      },
+      width: '',
+      height: '',
+      deltaX: 20,
+      deltaY: 20,
+      disabled: false,
+      pointer: false,
+      wheel: true,
+      scrollX: {
+        default: 0,
+        static: true
+      },
+      scrollY: {
+        default: 0,
+        static: true
+      },
+      useXBar: false,
+      useYBar: false,
+      barFade: 1500,
+      barClass: null,
+      autoplay: false,
+      playWaiting: 500,
+      noBuffer: false,
+      noTransition: false,
+      onBeforeScroll: {
+        default: null,
+        isFunc: true
+      },
+      useBarTrack: false
+    })
+
     const emitter = createEventEmitter()
 
     const prefix = 'vxp-scroll'
@@ -398,8 +369,8 @@ export default defineComponent({
       cursorXPosition = pointer.clientX
       cursorYPosition = pointer.clientY
 
-      document.addEventListener(moveEvent, handlePointerMove)
-      document.addEventListener(upEvent, handlePointerUp)
+      document.addEventListener(MOVE_EVENT, handlePointerMove)
+      document.addEventListener(UP_EVENT, handlePointerUp)
 
       emit('scroll-start', {
         clientX: -currentScroll.x,
@@ -445,8 +416,8 @@ export default defineComponent({
     }
 
     function handlePointerUp() {
-      document.removeEventListener(moveEvent, handlePointerMove)
-      document.removeEventListener(upEvent, handlePointerUp)
+      document.removeEventListener(MOVE_EVENT, handlePointerMove)
+      document.removeEventListener(UP_EVENT, handlePointerUp)
 
       transitionDuration.value = -1
 
@@ -669,6 +640,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       percentX,
       percentY,

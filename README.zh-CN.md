@@ -14,13 +14,13 @@ Vexip UI 提供了一系列开箱即用的组件。
 
 - ~~迁移至 css 变量~~（已在 `2.0.0-beta.0` 发布）
 - ~~重构图标~~（已在 `2.0.0-beta.0` 发布）
-- 重构全局配置（**进行中**，见 `config` 分支）
+- 重构全局配置（已完成，等待发布中）
 - 编写单元测试
 - 适配 ssr 渲染
 
 组件层级：
 
-- ConfigProvider 配置注入（**进行中**，见 `config` 分支）
+- ConfigProvider 配置注入（已完成，等待发布中）
 - Avatar 头像
 - Cascader 联级选择
 - Mention 提及

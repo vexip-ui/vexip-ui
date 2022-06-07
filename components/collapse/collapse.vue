@@ -17,43 +17,38 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { removeArrayItem } from '@vexip-ui/utils'
 import { COLLAPSE_STATE } from './symbol'
 
 import type { PropType, Ref } from 'vue'
 import type { CollapseArrowType } from './symbol'
 
-const props = useConfiguredProps('collapse', {
-  expanded: {
-    type: [String, Number, Array] as PropType<string | number | (string | number)[]>,
-    default: null
-  },
-  card: {
-    type: Boolean,
-    default: false
-  },
-  accordion: {
-    type: Boolean,
-    default: false
-  },
-  arrowType: {
-    default: 'right' as CollapseArrowType,
-    validator: (value: CollapseArrowType) => {
-      return ['right', 'left', 'none'].includes(value)
-    }
-  },
-  ghost: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'Collapse',
-  props,
+  props: {
+    expanded: [String, Number, Array] as PropType<string | number | (string | number)[]>,
+    card: booleanProp,
+    accordion: booleanProp,
+    arrowType: String as PropType<CollapseArrowType>,
+    ghost: booleanProp
+  },
   emits: ['change', 'update:expanded'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('collapse', _props, {
+      expanded: {
+        default: null,
+        static: true
+      },
+      card: false,
+      accordion: false,
+      arrowType: {
+        default: 'right' as CollapseArrowType,
+        validator: (value: CollapseArrowType) => ['right', 'left', 'none'].includes(value)
+      },
+      ghost: false
+    })
+
     const prefix = 'vxp-collapse'
     const paneExpandedMap = new Map<string | number, Ref<boolean>>()
     const currentExpanded = ref<(string | number)[]>([])

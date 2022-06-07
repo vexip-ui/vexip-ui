@@ -3,13 +3,13 @@
     <slot></slot>
     <transition :name="transitionName">
       <sup
-        v-show="!disabled && (content || content === 0 || isDot)"
+        v-show="showSub"
         :class="{
           [`${prefix}__content`]: true,
           [`${prefix}__content--fixed`]: hasSlot,
-          [`${prefix}__content--${type}`]: type !== 'error'
+          [`${prefix}__content--${props.type}`]: props.type !== 'error'
         }"
-        :style="{ backgroundColor: color }"
+        :style="{ backgroundColor: props.color }"
         :title="title"
         @click="handleBadgeClick"
       >
@@ -23,44 +23,41 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
+
+import type { PropType } from 'vue'
 
 export type BadgeType = 'error' | 'primary' | 'success' | 'warning' | 'info' | 'disabled'
 
-const props = useConfiguredProps('badge', {
-  content: {
-    type: [Number, String],
-    default: null
-  },
-  max: {
-    type: Number,
-    default: 0
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  isDot: {
-    type: Boolean,
-    default: false
-  },
-  type: {
-    default: 'error' as BadgeType,
-    validator: (value: BadgeType) => {
-      return ['error', 'primary', 'success', 'warning', 'info', 'disabled'].includes(value)
-    }
-  },
-  color: {
-    type: String,
-    default: null
-  }
-})
+const badgeTypes = Object.freeze<BadgeType>(['error', 'primary', 'success', 'warning', 'info', 'disabled'])
 
 export default defineComponent({
   name: 'Badge',
-  props,
+  props: {
+    content: [Number, String],
+    max: Number,
+    disabled: booleanProp,
+    isDot: booleanProp,
+    type: String as PropType<BadgeType>,
+    color: String
+  },
   emits: ['badge-click'],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('badge', _props, {
+      content: {
+        default: null,
+        static: true
+      },
+      max: 0,
+      disabled: false,
+      isDot: false,
+      type: {
+        default: 'error' as BadgeType,
+        validator: (value: BadgeType) => badgeTypes.includes(value)
+      },
+      color: null
+    })
+
     const prefix = 'vxp-badge'
 
     const hasSlot = computed(() => {
@@ -89,12 +86,16 @@ export default defineComponent({
     const title = computed(() => {
       return props.content || props.content === 0 ? props.content.toString() : undefined
     })
+    const showSub = computed(() => {
+      return !props.disabled && (props.content || props.content === 0 || props.isDot)
+    })
 
     function handleBadgeClick() {
       emit('badge-click')
     }
 
     return {
+      props,
       prefix,
 
       hasSlot,
@@ -102,6 +103,7 @@ export default defineComponent({
       renderContent,
       transitionName,
       title,
+      showSub,
 
       handleBadgeClick
     }

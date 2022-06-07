@@ -14,46 +14,41 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { TIMELINE_STATE } from './symbol'
 
-// import type { CSSProperties } from 'vue'
+import type { PropType } from 'vue'
 import type { TimelinkItemType, ItemState } from './symbol'
 
-const props = useConfiguredProps('timelineItem', {
-  type: {
-    default: 'default' as TimelinkItemType,
-    validator: (value: TimelinkItemType) => {
-      return ['default', 'success', 'error', 'warning', 'disabled'].includes(value)
-    }
-  },
-  color: {
-    type: String,
-    default: ''
-  },
-  label: {
-    type: [Number, String],
-    default: null
-  },
-  dashed: {
-    type: Boolean,
-    default: null
-  },
-  lineColor: {
-    type: String,
-    default: null
-  },
-  spacing: {
-    type: [Number, String],
-    default: null
-  }
-})
+const timelineItemTypes = Object.freeze<TimelinkItemType>(['default', 'success', 'error', 'warning', 'disabled'])
 
 export default defineComponent({
   name: 'TimelineItem',
-  props,
+  props: {
+    type: String as PropType<TimelinkItemType>,
+    color: String,
+    label: [Number, String],
+    dashed: booleanProp,
+    lineColor: String,
+    spacing: [Number, String]
+  },
   emits: ['signal-click'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('timelineItem', _props, {
+      type: {
+        default: 'default' as TimelinkItemType,
+        validator: (value: TimelinkItemType) => timelineItemTypes.includes(value)
+      },
+      color: '',
+      label: {
+        default: null,
+        static: true
+      },
+      dashed: null,
+      lineColor: null,
+      spacing: null
+    })
+
     const timelineState = inject(TIMELINE_STATE, null)
 
     const prefix = 'vxp-timeline'

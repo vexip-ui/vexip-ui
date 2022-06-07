@@ -1,20 +1,20 @@
-import { configProp, configLocale } from '@vexip-ui/config'
+import { configProps, configLocale } from '@vexip-ui/config'
 
 import type { App } from 'vue'
 import type { PropOptions, LocaleOptions } from '@vexip-ui/config'
 
 export interface InstallOptions {
   prefix?: string,
-  prop?: Partial<PropOptions>,
+  props?: Partial<PropOptions>,
   locale?: LocaleOptions
 }
 
 export function buildInstall(components: any[] = []) {
   return function install(app: App, options: InstallOptions = {}) {
-    const { prefix = '', prop = {}, locale = {} } = options
+    const { prefix = '', props = {}, locale = {} } = options
 
-    configProp(prop)
-    configLocale(locale)
+    configProps(props, app)
+    configLocale(locale, app)
 
     const formatName =
       typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)

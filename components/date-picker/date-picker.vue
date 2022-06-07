@@ -6,9 +6,9 @@
     @clickoutside="finishInput"
   >
     <div ref="reference" :class="`${prefixCls}__control`">
-      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: prefixColor }">
+      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
         <slot name="prefix">
-          <Icon :icon="prefix"></Icon>
+          <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
       <DateControl
@@ -17,15 +17,15 @@
         :enabled="startState.enabled"
         :activated="startState.activated"
         :date-value="startState.dateValue"
-        :steps="steps"
-        :ctrl-steps="ctrlSteps"
+        :steps="props.steps"
+        :ctrl-steps="props.ctrlSteps"
         :focused="focused"
         :visible="currentVisible"
-        :date-separator="dateSeparator"
-        :time-separator="timeSeparator"
-        :filler="filler"
-        :no-filler="noFiller"
-        :labels="labels"
+        :date-separator="props.dateSeparator"
+        :time-separator="props.timeSeparator"
+        :filler="props.filler"
+        :no-filler="props.noFiller"
+        :labels="props.labels"
         @input="handleInput"
         @plus="handlePlus"
         @minus="handleMinus"
@@ -35,7 +35,7 @@
         @prev-unit="enterColumn('prev')"
         @next-unit="enterColumn('next')"
       ></DateControl>
-      <template v-if="isRange">
+      <template v-if="props.isRange">
         <div :class="`${prefixCls}__exchange`">
           <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
         </div>
@@ -45,15 +45,15 @@
           :enabled="endState.enabled"
           :activated="endState.activated"
           :date-value="endState.dateValue"
-          :steps="steps"
-          :ctrl-steps="ctrlSteps"
+          :steps="props.steps"
+          :ctrl-steps="props.ctrlSteps"
           :focused="focused"
           :visible="currentVisible"
-          :date-separator="dateSeparator"
-          :time-separator="timeSeparator"
-          :filler="filler"
-          :no-filler="noFiller"
-          :labels="labels"
+          :date-separator="props.dateSeparator"
+          :time-separator="props.timeSeparator"
+          :filler="props.filler"
+          :no-filler="props.noFiller"
+          :labels="props.labels"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -66,20 +66,20 @@
       </template>
       <transition name="vxp-fade">
         <div
-          v-if="!disabled && clearable && isHover && lastValue"
+          v-if="!props.disabled && props.clearable && isHover && lastValue"
           :class="`${prefixCls}__clear`"
           @click.stop="handleClear"
         >
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: suffixColor }">
+        <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: props.suffixColor }">
           <slot name="suffix">
-            <Icon :icon="suffix || CalendarR"></Icon>
+            <Icon :icon="props.suffix || CalendarR"></Icon>
           </slot>
         </div>
       </transition>
       <Portal :to="transferTo">
-        <transition :name="transitionName" @after-leave="handlePaneHide">
+        <transition :name="props.transitionName" @after-leave="handlePaneHide">
           <div
             v-show="currentVisible"
             ref="popper"
@@ -88,21 +88,21 @@
           >
             <DatePane
               ref="pane"
-              :type="type"
+              :type="props.type"
               :column="(currentState === 'start' ? startState : endState).column"
               :start-value="startState.dateValue"
               :end-value="endState.dateValue"
               :start-activated="startState.activated"
               :end-activated="endState.activated"
               :value-type="currentState"
-              :shortcuts="shortcuts"
-              :confirm-text="confirmText"
-              :cancel-text="cancelText"
-              :today="today"
-              :disabled-date="disabledDate"
-              :no-action="noAction"
-              :steps="steps"
-              :is-range="isRange"
+              :shortcuts="props.shortcuts"
+              :confirm-text="props.confirmText"
+              :cancel-text="props.cancelText"
+              :today="props.today"
+              :disabled-date="props.disabledDate"
+              :no-action="props.noAction"
+              :steps="props.steps"
+              :is-range="props.isRange"
               @shortcut="handleShortcut"
               @change="handlePaneChange"
               @toggle-col="handleInputFocus"
@@ -124,139 +124,16 @@ import DateControl from './date-control.vue'
 import DatePane from './date-pane.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
+import { datePickerTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { Dateable } from '@vexip-ui/utils'
 import type { TimeType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
-
-const props = useConfiguredProps('datePicker', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  type: {
-    default: 'date' as DatePickerType,
-    validator: (value: DatePickerType) => {
-      return ['date', 'datetime', 'year', 'month'].includes(value)
-    }
-  },
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  placement: {
-    type: String as PropType<Placement>,
-    default: 'bottom-start',
-    validator: (value: Placement) => {
-      return placementWhileList.includes(value)
-    }
-  },
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  },
-  value: {
-    type: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
-    default: () => new Date()
-  },
-  format: {
-    type: String,
-    default: 'yyyy-MM-dd HH:mm:ss'
-  },
-  filler: {
-    type: String,
-    default: '-',
-    validator: (value: string) => value.length === 1
-  },
-  noFiller: {
-    type: Boolean,
-    default: false
-  },
-  clearable: {
-    type: Boolean,
-    default: false
-  },
-  noAction: {
-    type: Boolean,
-    default: false
-  },
-  labels: {
-    type: Object as PropType<Partial<Record<DateTimeType, string>>>,
-    default: () => ({})
-  },
-  dateSeparator: {
-    type: String,
-    default: '/'
-  },
-  timeSeparator: {
-    type: String,
-    default: ':'
-  },
-  shortcuts: {
-    type: Array as PropType<DateShortcut[]>,
-    default: () => []
-  },
-  disabledDate: {
-    type: Function as PropType<(date: Date) => boolean>,
-    default: () => false
-  },
-  steps: {
-    type: Array as PropType<number[]>,
-    default: () => [1, 1, 1]
-  },
-  ctrlSteps: {
-    type: Array as PropType<number[]>,
-    default: () => [5, 5, 5]
-  },
-  prefix: {
-    type: Object,
-    default: null
-  },
-  prefixColor: {
-    type: String,
-    default: ''
-  },
-  suffix: {
-    type: Object,
-    default: null
-  },
-  suffixColor: {
-    type: String,
-    default: ''
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-drop'
-  },
-  confirmText: {
-    type: String,
-    default: null
-  },
-  cancelText: {
-    type: String,
-    default: null
-  },
-  today: {
-    type: [Number, String, Date] as PropType<Dateable>,
-    default: () => new Date(),
-    validator: (value: Dateable) => !Number.isNaN(new Date(value))
-  },
-  isRange: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'DatePicker',
@@ -268,7 +145,38 @@ export default defineComponent({
     CircleXmark,
     ArrowRightArrowLeft
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    type: String as PropType<DatePickerType>,
+    visible: booleanProp,
+    placement: String as PropType<Placement>,
+    transfer: [Boolean, String],
+    value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
+    format: String,
+    filler: String,
+    noFiller: booleanProp,
+    clearable: booleanProp,
+    noAction: booleanProp,
+    labels: Object as PropType<Partial<Record<DateTimeType, string>>>,
+    dateSeparator: String,
+    timeSeparator: String,
+    shortcuts: Array as PropType<DateShortcut[]>,
+    disabledDate: Function as PropType<(date: Date) => boolean>,
+    steps: Array as PropType<number[]>,
+    ctrlSteps: Array as PropType<number[]>,
+    prefix: Object,
+    prefixColor: String,
+    suffix: Object,
+    suffixColor: String,
+    disabled: booleanProp,
+    transitionName: String,
+    confirmText: String,
+    cancelText: String,
+    today: [Number, String, Date] as PropType<Dateable>,
+    isRange: booleanProp,
+    disableValidate: booleanProp
+  },
   emits: [
     'input',
     'plus',
@@ -285,7 +193,58 @@ export default defineComponent({
     'update:value',
     'update:visible'
   ],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('datePicker', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      type: {
+        default: 'date' as DatePickerType,
+        validator: (value: DatePickerType) => datePickerTypes.includes(value)
+      },
+      visible: false,
+      placement: {
+        default: 'bottom-start',
+        validator: (value: Placement) => placementWhileList.includes(value)
+      },
+      transfer: false,
+      value: {
+        default: () => new Date(),
+        static: true
+      },
+      format: 'yyyy-MM-dd HH:mm:ss',
+      filler: {
+        default: '-',
+        validator: (value: string) => value.length === 1
+      },
+      noFiller: false,
+      clearable: false,
+      noAction: false,
+      labels: () => ({}),
+      dateSeparator: '/',
+      timeSeparator: ':',
+      shortcuts: () => [],
+      disabledDate: {
+        default: () => false,
+        isFunc: true
+      },
+      steps: () => [1, 1, 1],
+      ctrlSteps: () => [5, 5, 5],
+      prefix: null,
+      prefixColor: '',
+      suffix: null,
+      suffixColor: '',
+      disabled: false,
+      transitionName: 'vxp-drop',
+      confirmText: null,
+      cancelText: null,
+      today: {
+        default: () => new Date(),
+        validator: (value: Dateable) => !Number.isNaN(new Date(value))
+      },
+      isRange: false,
+      disableValidate: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
@@ -948,6 +907,7 @@ export default defineComponent({
     return {
       CalendarR,
 
+      props,
       prefixCls: prefix,
       currentVisible,
       focused,

@@ -1,7 +1,7 @@
 <template>
   <div :class="className">
     <slot>
-      <template v-for="(item, index) in options" :key="index">
+      <template v-for="(item, index) in props.options" :key="index">
         <Checkbox v-if="isObject(item)" :value="item.value">
           {{ item.label || item.value }}
         </Checkbox>
@@ -16,7 +16,7 @@
 <script lang="ts">
 import { defineComponent, ref, inject, provide, reactive, toRef, computed, watch } from 'vue'
 import { Checkbox } from '@/components/checkbox'
-import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { noop, isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
@@ -31,43 +31,43 @@ type RawOption =
       label?: string
     }
 
-const props = useConfiguredProps('checkboxGroup', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  values: {
-    type: Array as PropType<(string | number)[]>,
-    default: () => []
-  },
-  vertical: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  border: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  },
-  options: {
-    type: Array as PropType<RawOption[]>,
-    default: () => []
-  }
-})
-
 export default defineComponent({
   name: 'CheckboxGroup',
   components: {
     Checkbox
   },
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    values: {
+      type: Array as PropType<(string | number)[]>,
+      default: () => []
+    },
+    vertical: booleanProp,
+    disabled: booleanProp,
+    border: booleanProp,
+    disableValidate: booleanProp,
+    options: Array as PropType<RawOption[]>
+  },
   emits: ['change', 'update:values'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('checkboxGroup', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      values: {
+        default: () => [],
+        static: true
+      },
+      vertical: false,
+      disabled: false,
+      border: false,
+      disableValidate: false,
+      options: {
+        default: () => [],
+        static: true
+      }
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
 
     const prefix = 'vxp-checkbox-group'
@@ -219,6 +219,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       className,
 
       isObject,

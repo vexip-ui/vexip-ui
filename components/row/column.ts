@@ -1,5 +1,5 @@
 import { defineComponent, computed, h, inject } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps } from '@vexip-ui/config'
 import { ROW_STATE, breakPoints } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
@@ -7,71 +7,81 @@ import type { ColumnFlex, ColumnOptions } from './symbol'
 
 type LayerProp = 'span' | 'offset' | 'pull' | 'push' | 'order'
 
-const props = useConfiguredProps('column', {
-  tag: {
-    type: String,
-    default: 'div'
-  },
-  span: {
-    type: Number,
-    default: 24
-  },
-  offset: {
-    type: Number,
-    default: null
-  },
-  push: {
-    type: Number,
-    default: null
-  },
-  pull: {
-    type: Number,
-    default: null
-  },
-  order: {
-    type: Number,
-    default: null
-  },
-  xs: {
-    type: [Number, Object] as PropType<number | ColumnOptions>,
-    default: null
-  },
-  sm: {
-    type: [Number, Object] as PropType<number | ColumnOptions>,
-    default: null
-  },
-  md: {
-    type: [Number, Object] as PropType<number | ColumnOptions>,
-    default: null
-  },
-  lg: {
-    type: [Number, Object] as PropType<number | ColumnOptions>,
-    default: null
-  },
-  xl: {
-    type: [Number, Object] as PropType<number | ColumnOptions>,
-    default: null
-  },
-  xxl: {
-    type: [Number, Object] as PropType<number | ColumnOptions>,
-    default: null
-  },
-  flex: {
-    type: [Number, String],
-    default: null
-  },
-  useFlex: {
-    type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
-    default: null
-  }
-})
-
+const mediaProp = [Number, Object] as PropType<number | ColumnOptions>
 const colProps: LayerProp[] = ['span', 'offset', 'pull', 'push', 'order']
 
 export default defineComponent({
   name: 'Column',
-  props,
-  setup(props, { slots }) {
+  props: {
+    tag: String,
+    span: Number,
+    offset: Number,
+    push: Number,
+    pull: Number,
+    order: Number,
+    xs: mediaProp,
+    sm: mediaProp,
+    md: mediaProp,
+    lg: mediaProp,
+    xl: mediaProp,
+    xxl: mediaProp,
+    flex: [Number, String],
+    useFlex: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>
+  },
+  setup(_props, { slots }) {
+    const props = useProps('column', _props, {
+      tag: 'div',
+      span: {
+        default: 24,
+        static: true
+      },
+      offset: {
+        default: null,
+        static: true
+      },
+      push: {
+        default: null,
+        static: true
+      },
+      pull: {
+        default: null,
+        static: true
+      },
+      order: {
+        default: null,
+        static: true
+      },
+      xs: {
+        default: null,
+        static: true
+      },
+      sm: {
+        default: null,
+        static: true
+      },
+      md: {
+        default: null,
+        static: true
+      },
+      lg: {
+        default: null,
+        static: true
+      },
+      xl: {
+        default: null,
+        static: true
+      },
+      xxl: {
+        default: null,
+        static: true
+      },
+      flex: {
+        default: null,
+        static: true
+      },
+      useFlex: null
+    })
+
     const rowState = inject(ROW_STATE, null)
 
     const prefix = 'vxp-column'
@@ -153,7 +163,7 @@ export default defineComponent({
 
     return () =>
       h(
-        props.tag,
+        props.tag || 'div',
         {
           class: className.value,
           style: style.value

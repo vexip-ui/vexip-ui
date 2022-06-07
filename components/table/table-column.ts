@@ -1,5 +1,5 @@
 import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
-import { useConfiguredProps, createSizeProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { TABLE_ACTION } from './symbol'
 
@@ -10,98 +10,97 @@ import type {
   ColumnType,
   FilterOptions,
   SorterOptions,
-  // Accessor,
   RenderFn,
   RowState,
   ColumnWithKey
 } from './symbol'
 
-const props = useConfiguredProps('tableColumn', {
-  idKey: {
-    type: [Number, String],
-    required: true
-  },
-  name: {
-    type: String,
-    default: ''
-  },
-  accessor: {
-    type: Function as any,
-    default: null
-  },
-  fixed: {
-    type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
-    default: false
-  },
-  className: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  type: {
-    type: String as PropType<ColumnType>,
-    default: null,
-    validator: (value: ColumnType) => {
-      return ['order', 'selection', 'expand'].includes(value)
-    }
-  },
-  width: {
-    type: Number,
-    default: null
-  },
-  filter: {
-    type: Object as PropType<FilterOptions<any, any>>,
-    default: () => ({})
-  },
-  sorter: {
-    type: [Boolean, Object] as PropType<boolean | SorterOptions<any>>,
-    default: false
-  },
-  renderer: {
-    type: Function as PropType<RenderFn>,
-    default: null
-  },
-  headRenderer: {
-    type: Function as PropType<RenderFn>,
-    default: null
-  },
-  order: {
-    type: Number,
-    default: 0
-  },
-  noEllipsis: {
-    type: Boolean,
-    default: false
-  },
-  checkboxSize: createSizeProp(),
-  disableRow: {
-    type: Function as PropType<(data: Data) => boolean>,
-    default: null
-  },
-  truthIndex: {
-    type: Boolean,
-    default: false
-  },
-  orderLabel: {
-    type: Function as PropType<(index: number) => string | number>,
-    default: null
-  },
-  metaData: {
-    type: Object as PropType<Data>,
-    default: () => ({}),
-    validator: (value: Data) => !isNull(value)
-  }
-})
+const props = {
+  idKey: [Number, String],
+  name: String,
+  accessor: Function as PropType<(row: Data, index: number) => any>,
+  fixed: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
+  className: [String, Object] as PropType<ClassType>,
+  type: String as PropType<ColumnType>,
+  width: Number,
+  filter: Object as PropType<FilterOptions<any, any>>,
+  sorter: [Boolean, Object] as PropType<boolean | SorterOptions<any>>,
+  renderer: Function as PropType<RenderFn>,
+  headRenderer: Function as PropType<RenderFn>,
+  order: Number,
+  noEllipsis: booleanProp,
+  checkboxSize: sizeProp,
+  disableRow: Function as PropType<(data: Data) => boolean>,
+  truthIndex: booleanProp,
+  orderLabel: Function as PropType<(index: number) => string | number>,
+  metaData: Object as PropType<Data>
+}
 
 const propKeys = Object.keys(props) as (keyof typeof props)[]
 const aliases: Partial<Record<keyof typeof props, string>> = {
   idKey: 'key'
 }
 
+const columnTypes = Object.freeze<ColumnType>(['order', 'selection', 'expand'])
+
 export default defineComponent({
   name: 'TableColumn',
   functional: true,
   props,
-  setup(props, { slots }) {
+  setup(_props, { slots }) {
+    const props = useProps('tableColumn', _props, {
+      idKey: {
+        default: null,
+        validator: (value: number | string) => !isNull(value),
+        static: true
+      },
+      name: '',
+      accessor: {
+        default: null,
+        isFunc: true
+      },
+      fixed: {
+        default: false,
+        static: true
+      },
+      className: null,
+      type: {
+        default: null,
+        validator: (value: ColumnType) => columnTypes.includes(value),
+        static: true
+      },
+      width: null,
+      filter: () => ({}),
+      sorter: false,
+      renderer: {
+        default: null,
+        isFunc: true
+      },
+      headRenderer: {
+        default: null,
+        isFunc: true
+      },
+      order: {
+        default: 0,
+        isFunc: true
+      },
+      noEllipsis: false,
+      checkboxSize: createSizeProp(),
+      disableRow: {
+        default: null,
+        isFunc: true
+      },
+      truthIndex: false,
+      orderLabel: {
+        default: null,
+        isFunc: true
+      },
+      metaData: {
+        default: () => ({}),
+        validator: (value: Data) => !isNull(value)
+      }
+    })
+
     const tableAction = inject(TABLE_ACTION, null)
     const options = reactive({}) as ColumnWithKey
 

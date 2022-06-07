@@ -4,15 +4,15 @@
       :style="{
         position: 'relative',
         display: 'flex',
-        flexDirection: vertical ? 'column' : 'row',
+        flexDirection: props.vertical ? 'column' : 'row',
         width: '100%'
       }"
     >
       <div
-        v-if="arrow !== 'none'"
+        v-if="props.arrow !== 'none'"
         ref="prev"
         :class="[
-          `${prefix}__arrow--${arrow}`,
+          `${prefix}__arrow--${props.arrow}`,
           `${prefix}__arrow--prev`,
           arrowActive ? `${prefix}__arrow--show` : ''
         ]"
@@ -35,10 +35,10 @@
         </div>
       </div>
       <div
-        v-if="arrow !== 'none'"
+        v-if="props.arrow !== 'none'"
         ref="next"
         :class="[
-          `${prefix}__arrow--${arrow}`,
+          `${prefix}__arrow--${props.arrow}`,
           `${prefix}__arrow--next`,
           arrowActive ? `${prefix}__arrow--show` : ''
         ]"
@@ -56,21 +56,21 @@
         </div>
       </div>
     </div>
-    <div v-if="pointer !== 'none'" :class="`${prefix}__pointers--${pointer}`">
+    <div v-if="props.pointer !== 'none'" :class="`${prefix}__pointers--${props.pointer}`">
       <div
         v-for="index in itemStates.size"
         :key="index"
         :class="{
           [`${prefix}__pointer`]: true,
           [`${prefix}__pointer--active`]:
-            index - 1 === (currentActive + activeOffset) % itemStates.size,
-          [`${prefix}__pointer--disabled`]: isPointerDisabled(index - activeOffset - 1)
+            index - 1 === (currentActive + props.activeOffset) % itemStates.size,
+          [`${prefix}__pointer--disabled`]: isPointerDisabled(index - props.activeOffset - 1)
         }"
-        @click="handleWheel(index - activeOffset - 1)"
+        @click="handleWheel(index - props.activeOffset - 1)"
       >
         <slot
           name="pointer"
-          :active="index - 1 === (currentActive + activeOffset) % itemStates.size"
+          :active="index - 1 === (currentActive + props.activeOffset) % itemStates.size"
         >
           <span :class="`${prefix}__pointer-inner`"></span>
         </slot>
@@ -93,85 +93,69 @@ import {
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { useHover } from '@vexip-ui/mixins'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
 import { CAROUSEL_STATE } from './symbol'
 
+import type { PropType } from 'vue'
 import type { ArrowType, ArrowTrigger, PointerType, ItemState, CarouselState } from './symbol'
-
-const props = useConfiguredProps('carousel', {
-  viewSize: {
-    type: Number,
-    default: 3,
-    validator: (value: number) => {
-      return value > 0
-    }
-  },
-  vertical: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  loop: {
-    type: Boolean,
-    default: false
-  },
-  arrow: {
-    default: 'outside' as ArrowType,
-    validator: (value: ArrowType) => {
-      return ['outside', 'inside', 'none'].includes(value)
-    }
-  },
-  arrowTrigger: {
-    default: 'hover' as ArrowTrigger,
-    validator: (value: ArrowTrigger) => {
-      return ['hover', 'always'].includes(value)
-    }
-  },
-  autoplay: {
-    type: [Boolean, Number],
-    default: false,
-    validator(value: boolean | number) {
-      return typeof value === 'number' ? value > 500 : true
-    }
-  },
-  pointer: {
-    default: 'none' as PointerType,
-    validator: (value: PointerType) => {
-      return ['outside', 'inside', 'none'].includes(value)
-    }
-  },
-  speed: {
-    type: Number,
-    default: 300
-  },
-  active: {
-    type: Number,
-    default: 0
-  },
-  activeOffset: {
-    type: Number,
-    default: 0
-  },
-  height: {
-    type: [Number, String],
-    default: null
-  }
-})
 
 export default defineComponent({
   name: 'Carousel',
   components: {
     Icon
   },
-  props,
+  props: {
+    active: Number,
+    viewSize: Number,
+    vertical: booleanProp,
+    disabled: booleanProp,
+    loop: booleanProp,
+    arrow: String as PropType<ArrowType>,
+    arrowTrigger: String as PropType<ArrowTrigger>,
+    autoplay: [Boolean, Number],
+    pointer: String as PropType<PointerType>,
+    speed: Number,
+    activeOffset: Number,
+    height: [Number, String]
+  },
   emits: ['change', 'prev', 'next', 'select', 'update:active'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('carousel', _props, {
+      active: {
+        default: 0,
+        static: true
+      },
+      viewSize: {
+        default: 3,
+        validator: (value: number) => value > 0
+      },
+      vertical: false,
+      disabled: false,
+      loop: false,
+      arrow: {
+        default: 'outside' as ArrowType,
+        validator: (value: ArrowType) => ['outside', 'inside', 'none'].includes(value)
+      },
+      arrowTrigger: {
+        default: 'hover' as ArrowTrigger,
+        validator: (value: ArrowTrigger) => ['hover', 'always'].includes(value)
+      },
+      autoplay: {
+        default: false,
+        validator: (value: boolean | number) => typeof value === 'number' ? value > 500 : true
+      },
+      pointer: {
+        default: 'none' as PointerType,
+        validator: (value: PointerType) => ['outside', 'inside', 'none'].includes(value)
+      },
+      speed: 300,
+      activeOffset: 0,
+      height: null
+    })
+
     const prefix = 'vxp-carousel'
     const itemStates = ref(new Set<ItemState>())
     const currentActive = ref(0)
@@ -609,6 +593,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       itemStates,
       currentActive,

@@ -1,8 +1,8 @@
 <template>
   <label :class="className">
     <span :class="`${prefix}__signal`"></span>
-    <span v-if="hasLabel || hasSlot" :class="[`${prefix}__label`, labelClass]">
-      <slot>{{ label }}</slot>
+    <span v-if="hasLabel || hasSlot" :class="[`${prefix}__label`, props.labelClass]">
+      <slot>{{ props.label }}</slot>
     </span>
     <input
       type="checkbox"
@@ -25,7 +25,7 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { useConfiguredProps, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { noop, isDefined, isFunction } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
@@ -34,52 +34,40 @@ import type { PropType } from 'vue'
 
 type ClassType = string | Record<string, boolean>
 
-const props = useConfiguredProps('checkbox', {
-  size: createSizeProp(),
-  state: createStateProp(),
-  checked: {
-    type: Boolean,
-    default: false
-  },
-  label: {
-    type: String,
-    default: null
-  },
-  value: {
-    type: [String, Number],
-    default: null
-  },
-  labelClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  border: {
-    type: Boolean,
-    default: false
-  },
-  control: {
-    type: Boolean,
-    default: false
-  },
-  partial: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'Checkbox',
-  props,
+  props: {
+    size: sizeProp,
+    state: stateProp,
+    checked: booleanProp,
+    label: String,
+    value: [String, Number],
+    labelClass: [String, Object] as PropType<ClassType>,
+    disabled: booleanProp,
+    border: booleanProp,
+    control: booleanProp,
+    partial: booleanProp,
+    disableValidate: booleanProp
+  },
   emits: ['change', 'update:checked'],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('checkbox', _props, {
+      size: createSizeProp(),
+      state: createStateProp(),
+      checked: false,
+      label: null,
+      value: {
+        default: null,
+        static: true
+      },
+      labelClass: null,
+      disabled: false,
+      border: false,
+      control: false,
+      partial: false,
+      disableValidate: false
+    })
+
     const groupState = inject(GROUP_STATE, null)
     const validateField = inject(VALIDATE_FIELD, noop)
 
@@ -205,6 +193,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       currentChecked,
 

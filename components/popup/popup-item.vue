@@ -31,27 +31,25 @@ import { DELETE_HANDLER } from './symbol'
 import type { PropType } from 'vue'
 import type { ClassType, PopupItemState } from './symbol'
 
-const props = {
-  state: {
-    type: Object as PropType<PopupItemState>,
-    default: () => ({})
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-popup-top'
-  },
-  innerClass: {
-    type: [String, Object] as PropType<ClassType>,
-    default: null
-  }
-}
-
 export default defineComponent({
   name: 'PopupItem',
   components: {
     Renderer
   },
-  props,
+  props: {
+    state: {
+      type: Object as PropType<PopupItemState>,
+      default: () => ({})
+    },
+    transitionName: {
+      type: String,
+      default: 'vxp-popup-top'
+    },
+    innerClass: {
+      type: [String, Object] as PropType<ClassType>,
+      default: null
+    }
+  },
   setup(props) {
     const handleDelete = inject(DELETE_HANDLER, noop)
 

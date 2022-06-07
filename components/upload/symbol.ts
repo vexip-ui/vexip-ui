@@ -65,3 +65,5 @@ export interface DirectoryReader {
     onError?: (errors: any) => void
   ) => void
 }
+
+export const uploadListTypes = Object.freeze<UploadListType>(['name', 'detail', 'thumbnail', 'card'])

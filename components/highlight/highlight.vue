@@ -17,29 +17,30 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
-const props = useConfiguredProps('highlight', {
-  content: {
-    type: String,
-    default: ''
-  },
-  keyWords: {
-    type: Array as PropType<string[]>,
-    default: () => []
-  },
-  ignoreCase: {
-    type: Boolean,
-    default: false
-  }
-})
-
 export default defineComponent({
   name: 'Highlight',
-  props,
-  setup(props) {
+  props: {
+    content: String,
+    keyWords: Array as PropType<string[]>,
+    ignoreCase: booleanProp
+  },
+  setup(_props) {
+    const props = useProps('highlight', _props, {
+      content: {
+        default: '',
+        static: true
+      },
+      keyWords: {
+        default: () => [],
+        static: true
+      },
+      ignoreCase: false
+    })
+
     const prefix = 'vxp-highlight'
 
     const splitRE = computed(() => {

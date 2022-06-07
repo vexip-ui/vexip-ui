@@ -7,8 +7,8 @@
       v-bind="$attrs"
     >
       <transition
-        v-if="!disabled"
-        :name="maskTransition"
+        v-if="!props.disabled"
+        :name="props.maskTransition"
         @after-enter="afterOpen"
         @after-leave="afterClose"
       >
@@ -16,7 +16,7 @@
           <div :class="`${prefix}__mask-inner`"></div>
         </div>
       </transition>
-      <transition :name="transitionName">
+      <transition :name="props.transitionName">
         <slot :show="currentActive"></slot>
       </transition>
     </div>
@@ -26,54 +26,45 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
-
-const props = useConfiguredProps('masker', {
-  active: {
-    type: Boolean,
-    default: false
-  },
-  closable: {
-    type: Boolean,
-    default: false
-  },
-  inner: {
-    type: Boolean,
-    default: false
-  },
-  maskTransition: {
-    type: String,
-    default: 'vxp-fade'
-  },
-  transitionName: {
-    type: String,
-    default: 'vxp-fade'
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  onBeforeClose: {
-    type: Function as PropType<() => any | Promise<any>>,
-    default: null
-  },
-  transfer: {
-    type: [Boolean, String],
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'Masker',
   components: {
     Portal
   },
-  props,
+  props: {
+    active: booleanProp,
+    closable: booleanProp,
+    inner: booleanProp,
+    maskTransition: String,
+    transitionName: String,
+    disabled: booleanProp,
+    onBeforeClose: Function as PropType<() => any | Promise<any>>,
+    transfer: [Boolean, String]
+  },
   emits: ['toggle', 'close', 'hide', 'show', 'update:active'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('masker', _props, {
+      active: {
+        default: false,
+        static: true
+      },
+      closable: false,
+      inner: false,
+      maskTransition: 'vxp-fade',
+      transitionName: 'vxp-fade',
+      disabled: false,
+      onBeforeClose: {
+        default: null,
+        isFunc: true
+      },
+      transfer: false
+    })
+
     const prefix = 'vxp-masker'
     const currentActive = ref(props.active)
     const wrapShow = ref(props.active)
@@ -148,6 +139,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       currentActive,
       wrapShow,

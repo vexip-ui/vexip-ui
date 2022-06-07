@@ -1,117 +1,93 @@
 <template>
   <Button
     :class="`${prefix}__reset`"
-    :size="size"
-    :type="type"
-    :simple="simple"
-    :ghost="ghost"
-    :text="text"
-    :dashed="dashed"
-    :disabled="disabled"
-    :circle="circle"
-    :loading-icon="loadingIcon"
-    :loading-spin="loadingSpin"
-    :icon="icon"
-    :text-color="color"
-    :block="block"
+    :size="props.size"
+    :type="props.type"
+    :simple="props.simple"
+    :ghost="props.ghost"
+    :dashed="props.dashed"
+    :text="props.text"
+    :disabled="props.disabled"
+    :loading="props.loading"
+    :circle="props.circle"
+    :loading-icon="props.loadingIcon"
+    :loading-spin="props.loadingSpin"
+    :icon="props.icon"
+    :color="props.color"
+    :button-type="props.buttonType"
+    :block="props.block"
+    :tag="props.tag"
     @click="handleReset"
   >
     <slot>
-      {{ label || locale.reset }}
+      {{ props.label || locale.reset }}
     </slot>
   </Button>
 </template>
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue'
-import { Button } from '@/components/button'
-import { createSizeProp, useConfiguredProps, useLocaleConfig } from '@vexip-ui/config'
+import { Button, buttonTypes } from '@/components/button'
+import { useProps, useLocale, booleanProp, sizeProp } from '@vexip-ui/config'
 import { noop, isPromise } from '@vexip-ui/utils'
 import { FORM_ACTIONS } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ButtonType } from '@/components/button'
+import type { ButtonType, ButtonAttrType } from '@/components/button'
 import type { FormActions } from './symbol'
-
-const props = useConfiguredProps('form-submit', {
-  size: createSizeProp(),
-  type: {
-    default: 'default' as ButtonType,
-    validator: (value: ButtonType) => {
-      return [
-        'default',
-        'primary',
-        'dashed',
-        'text',
-        'info',
-        'success',
-        'warning',
-        'error'
-      ].includes(value)
-    }
-  },
-  label: {
-    type: String,
-    default: null
-  },
-  text: {
-    type: Boolean,
-    default: false
-  },
-  dashed: {
-    type: Boolean,
-    default: false
-  },
-  simple: {
-    type: Boolean,
-    default: false
-  },
-  ghost: {
-    type: Boolean,
-    default: false
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  circle: {
-    type: Boolean,
-    default: false
-  },
-  loadingIcon: {
-    type: Object,
-    default: null
-  },
-  loadingSpin: {
-    type: Boolean,
-    default: false
-  },
-  icon: {
-    type: Object,
-    default: null
-  },
-  color: {
-    type: String,
-    default: null
-  },
-  block: {
-    type: Boolean,
-    default: false
-  },
-  onBeforeReset: {
-    type: Function as PropType<() => unknown>,
-    default: null
-  }
-})
 
 export default defineComponent({
   name: 'FormReset',
   components: {
     Button
   },
-  props,
+  props: {
+    size: sizeProp,
+    type: String as PropType<ButtonType>,
+    label: String,
+    dashed: booleanProp,
+    text: booleanProp,
+    simple: booleanProp,
+    ghost: booleanProp,
+    disabled: booleanProp,
+    loading: booleanProp,
+    circle: booleanProp,
+    loadingIcon: Object,
+    loadingSpin: booleanProp,
+    icon: Object,
+    color: String,
+    buttonType: String as PropType<ButtonAttrType>,
+    block: booleanProp,
+    tag: String,
+    onBeforeReset: Function as PropType<() => unknown>
+  },
   emits: ['reset'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('formReset', _props, {
+      size: null,
+      type: {
+        default: 'default' as ButtonType,
+        validator: (value: ButtonType) => buttonTypes.includes(value)
+      },
+      label: null,
+      dashed: null,
+      text: null,
+      simple: null,
+      ghost: null,
+      disabled: null,
+      loading: null,
+      circle: null,
+      loadingIcon: null,
+      loadingSpin: null,
+      icon: null,
+      color: null,
+      buttonType: null,
+      block: null,
+      onBeforeReset: {
+        default: null,
+        isFunc: true
+      }
+    })
     const actions = inject<FormActions>(FORM_ACTIONS, {
       validate: noop,
       validateFields: noop,
@@ -141,8 +117,9 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix: 'vxp-form',
-      locale: useLocaleConfig('form'),
+      locale: useLocale('form'),
 
       handleReset
     }

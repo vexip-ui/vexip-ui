@@ -1,7 +1,7 @@
 <template>
   <div ref="wrapper" :class="className">
     <div
-      v-if="arrow"
+      v-if="props.arrow"
       ref="prevArrow"
       :class="[
         `${prefix}__arrow`,
@@ -10,15 +10,15 @@
       ]"
       @click="handlePrev"
     >
-      <Icon :icon="horizontal ? AngleLeft : AngleUp"></Icon>
+      <Icon :icon="props.horizontal ? AngleLeft : AngleUp"></Icon>
     </div>
     <div :class="`${prefix}__scroll`" :style="scrollStyle">
       <Scroll
         ref="scroll"
         width="100%"
         height="100%"
-        :pointer="pointer"
-        :mode="horizontal ? 'horizontal' : 'vertical'"
+        :pointer="props.pointer"
+        :mode="props.horizontal ? 'horizontal' : 'vertical'"
         :delta-x="targetWidth"
         :delta-y="targetHeight"
         :on-before-scroll="beforeScroll"
@@ -29,13 +29,13 @@
           <slot v-if="isInit"></slot>
         </ul>
       </Scroll>
-      <template v-if="candidate">
+      <template v-if="props.candidate">
         <div :class="[`${prefix}__mask`, `${prefix}__mask--top`]" :style="maskStyle"></div>
         <div :class="[`${prefix}__mask`, `${prefix}__mask--bottom`]" :style="maskStyle"></div>
       </template>
     </div>
     <div
-      v-if="arrow"
+      v-if="props.arrow"
       ref="nextArrow"
       :class="[
         `${prefix}__arrow`,
@@ -44,7 +44,7 @@
       ]"
       @click="handleNext"
     >
-      <Icon :icon="horizontal ? AngleRight : AngleDown"></Icon>
+      <Icon :icon="props.horizontal ? AngleRight : AngleDown"></Icon>
     </div>
   </div>
 </template>
@@ -55,42 +55,13 @@ import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { useDisplay } from '@vexip-ui/mixins'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { noop, debounce, debounceMinor } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
 import { WHEEL_STATE } from './symbol'
 
+import type { PropType } from 'vue'
 import type { ItemState } from './symbol'
-
-const props = useConfiguredProps('wheel', {
-  horizontal: {
-    type: Boolean,
-    default: false
-  },
-  value: {
-    type: [String, Number],
-    default: null
-  },
-  // 上下或左右两侧的候选数
-  candidate: {
-    default: 2,
-    validator: (value: number) => {
-      return [0, 1, 2, 3].includes(value)
-    }
-  },
-  arrow: {
-    type: Boolean,
-    default: false
-  },
-  pointer: {
-    type: Boolean,
-    default: false
-  },
-  disableValidate: {
-    type: Boolean,
-    default: false
-  }
-})
 
 export default defineComponent({
   name: 'Wheel',
@@ -98,9 +69,32 @@ export default defineComponent({
     Icon,
     Scroll
   },
-  props,
+  props: {
+    horizontal: booleanProp,
+    value: [String, Number],
+    // 上下或左右两侧的候选数
+    candidate: Number as PropType<0 | 1 | 2 | 3>,
+    arrow: booleanProp,
+    pointer: booleanProp,
+    disableValidate: booleanProp
+  },
   emits: ['change', 'prev', 'next', 'update:value'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const props = useProps('wheel', _props, {
+      horizontal: false,
+      value: {
+        default: null,
+        static: true
+      },
+      candidate: {
+        default: 2,
+        validator: (value: number) => [0, 1, 2, 3].includes(value)
+      },
+      arrow: false,
+      pointer: false,
+      disableValidate: false
+    })
+
     const validateField = inject(VALIDATE_FIELD, noop)
 
     const prefix = 'vxp-wheel'
@@ -356,6 +350,7 @@ export default defineComponent({
       AngleDown,
       AngleLeft,
 
+      props,
       prefix,
       currentActive,
       isInit,

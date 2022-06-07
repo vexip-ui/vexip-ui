@@ -17,14 +17,14 @@
         @mouseenter="handleMouseEnter"
         @mouseleave="handleMouseLeave"
       >
-        <div v-if="icon" :class="`${prefix}__icon`">
+        <div v-if="props.icon" :class="`${prefix}__icon`">
           <slot name="icon">
-            <Icon :icon="icon"></Icon>
+            <Icon :icon="props.icon"></Icon>
           </slot>
         </div>
         <span :class="`${prefix}__title`">
           <slot>
-            {{ label }}
+            {{ props.label }}
           </slot>
         </span>
         <Icon
@@ -40,7 +40,7 @@
       <template #tip>
         <span :class="`${prefix}__tooltip-title`">
           <slot>
-            {{ label }}
+            {{ props.label }}
           </slot>
         </span>
       </template>
@@ -88,35 +88,12 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
-import { useConfiguredProps } from '@vexip-ui/config'
+import { useProps, booleanProp } from '@vexip-ui/config'
 import { usePopper } from '@vexip-ui/mixins'
 import { ChevronDown } from '@vexip-ui/icons'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 import type { Placement } from '@vexip-ui/mixins'
-
-const props = useConfiguredProps('menuItem', {
-  label: {
-    type: String,
-    default: null
-  },
-  icon: {
-    type: Object,
-    default: null
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  transfer: {
-    type: [Boolean, String],
-    default: null
-  },
-  transitionName: {
-    type: String,
-    default: null
-  }
-})
 
 export default defineComponent({
   name: 'MenuItem',
@@ -127,9 +104,29 @@ export default defineComponent({
     Portal,
     ChevronDown
   },
-  props,
+  props: {
+    label: String,
+    icon: Object,
+    disabled: booleanProp,
+    transfer: [Boolean, String],
+    transitionName: String
+  },
   emits: ['select'],
-  setup(props, { slots, emit }) {
+  setup(_props, { slots, emit }) {
+    const props = useProps('menuItem', _props, {
+      label: {
+        default: null,
+        static: true
+      },
+      icon: null,
+      disabled: {
+        default: false,
+        static: true
+      },
+      transfer: null,
+      transitionName: null
+    })
+
     const menuState = inject(MENU_STATE, null)
     const parentItemState = inject(MENU_ITEM_STATE, null)
     const groupState = inject(MENU_GROUP_STATE, null)
@@ -338,6 +335,7 @@ export default defineComponent({
     }
 
     return {
+      props,
       prefix,
       groupExpanded,
       transferTo,
