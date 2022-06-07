@@ -1,17 +1,19 @@
 
 <template>
-  <Header></Header>
-  <section class="page-viewer">
-    <router-view v-slot="{ Component }">
-      <transition name="vxp-fade" mode="out-in">
-        <component :is="Component"></component>
-      </transition>
-    </router-view>
-  </section>
+  <ConfigProvider :locale="locale">
+    <Header></Header>
+    <section class="page-viewer">
+      <router-view v-slot="{ Component }">
+        <transition name="vxp-fade" mode="out-in">
+          <component :is="Component"></component>
+        </transition>
+      </router-view>
+    </section>
+  </ConfigProvider>
 </template>
 
 <script setup lang="ts">
-import { provide, watch } from 'vue'
+import { computed, provide, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Header from '../common/header.vue'
 
@@ -20,6 +22,10 @@ const props = defineProps({
     type: String,
     default: __ROLLBACK_LANG__
   }
+})
+
+const locale = computed(() => {
+  return { locale: props.language }
 })
 
 const i18n = useI18n({ useScope: 'global' })

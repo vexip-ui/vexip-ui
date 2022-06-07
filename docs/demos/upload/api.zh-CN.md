@@ -27,6 +27,7 @@
 | directory        | `boolean`         | 设置是否开启文件夹上传，注意，当使用点击上传时将会强制只能上传文件夹，同时该特性需要浏览器支持 `webkitdirectory`                   | `false`    | - |
 | path-field       | `string`          | 设置文件路径在请求表单数据中的字段，开启了文件夹上传后用于记录文件的相对位置                                                       | `'path'`   | - |
 | disabled-click   | `boolean`         | 设置是否禁用点击上传，禁用后将默认打开拖拽上传                                                                                     | `false`    | - |
+| button-label | `string` | 设置内置上传按钮的文本内容 | `locale.upload` | `2.0.0` |
 
 组件内部对 File 的各项状态进行了封装：
 
