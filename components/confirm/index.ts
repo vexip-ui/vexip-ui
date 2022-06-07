@@ -1,4 +1,4 @@
-import { createApp, markRaw } from 'vue'
+import { createVNode, render, markRaw } from 'vue'
 import Component from './confirm.vue'
 import { destroyObject } from '@vexip-ui/utils'
 
@@ -13,13 +13,15 @@ export class ConfirmManager {
   name: string
   defaults: Record<string, unknown>
 
+  private _mountedApp: App<unknown> | null
   private _instance: ConfirmInstance | null
-  private _innerApp: App<unknown> | null
+  // private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
 
   constructor(options: Partial<ConfirmOptions> = {}) {
+    this._mountedApp = null
     this._instance = null
-    this._innerApp = null
+    // this._innerApp = null
     this._container = null
     this.name = 'Confirm'
     this.defaults = {}
@@ -40,7 +42,7 @@ export class ConfirmManager {
       item.icon = markRaw(item.icon)
     }
 
-    return this._getInstance().openConfirm(item)
+    return this._getInstance()?.openConfirm(item)
   }
 
   config(options: Record<string, unknown>) {
@@ -48,7 +50,8 @@ export class ConfirmManager {
   }
 
   destroy() {
-    this._innerApp?.unmount()
+    // this._innerApp?.unmount()
+    this._container && render(null, this._container)
     destroyObject(this)
   }
 
@@ -59,18 +62,25 @@ export class ConfirmManager {
   install(app: App, options: Partial<ConfirmOptions> = {}) {
     this.config(options)
     app.config.globalProperties.$confirm = this
+    this._mountedApp = app
   }
 
   private _getInstance() {
+    if (!this._mountedApp) {
+      console.warn('[vexip-ui:Confirm]: App missing, the plugin maybe not install.')
+      return null
+    }
+
     if (!this._instance) {
+      const vnode = createVNode(Component)
+
       this._container = document.createElement('div')
-      // 使用 createVNode 和 render 手动控制可以有效降低开销
-      // 然而使用上述方式创建的组件无法被 devTool 正确加载
-      // 因此选择开销更大的 createApp 以保证 devTool 的正常运行
-      this._innerApp = createApp(Component)
-      this._instance = this._innerApp.mount(this._container) as ConfirmInstance
+      vnode.appContext = this._mountedApp._context
+      render(vnode, this._container)
 
       document.body.appendChild(this._container.firstElementChild!)
+
+      this._instance = vnode.component?.proxy as ConfirmInstance
     }
 
     return this._instance
