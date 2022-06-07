@@ -189,7 +189,6 @@
     "dist/*",
     "css/*.css",
     "es/components/*/style.js",
-    "icons/**",
     "lib/components/*/style.js",
     "style/**/*.scss",
     "theme/**/*.css"

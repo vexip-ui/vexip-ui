@@ -45,7 +45,7 @@ async function main() {
         ${components.map(name => `${toCapitalCase(name)}: typeof import('vexip-ui')['${toCapitalCase(name)}']`).join(',\n')}
       }
 
-      export interface ComponentCustomProperties {
+      interface ComponentCustomProperties {
         ${plugins.map(name => `$${name}: typeof import('vexip-ui')['${toCapitalCase(name)}']`).join(',\n')}
       }
     }

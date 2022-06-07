@@ -87,7 +87,7 @@ declare module 'vue' {
     WheelItem: typeof import('vexip-ui')['WheelItem']
   }
 
-  export interface ComponentCustomProperties {
+  interface ComponentCustomProperties {
     $confirm: typeof import('vexip-ui')['Confirm'],
     $contextmenu: typeof import('vexip-ui')['Contextmenu'],
     $loading: typeof import('vexip-ui')['Loading'],
