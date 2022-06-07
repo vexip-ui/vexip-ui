@@ -1,3 +1,35 @@
+# [2.0.0-beta.4](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2022-06-07)
+
+
+### Bug Fixes
+
+* **badge:** adjust defective style ([d99be40](https://github.com/qmhc/vexip-ui/commit/d99be402cf5ebdb7ef16c9139290d5535de5928d))
+* boolean with other type props ignore default value ([5cf9b12](https://github.com/qmhc/vexip-ui/commit/5cf9b12c00515428a48672929110a661f52a674b))
+* **calendar:** hover and selected background color ([7789025](https://github.com/qmhc/vexip-ui/commit/7789025c800a18d98b323350e7bd466fd35a84c7))
+* **confrim:** binding instance to installed app ([bb6dc38](https://github.com/qmhc/vexip-ui/commit/bb6dc38818c5d6f45bf80fd5492d846a634cb458))
+* **icons:** mark icon components to raw ([2b98f9f](https://github.com/qmhc/vexip-ui/commit/2b98f9ff51aa081796724c816778a8c2550f4cee))
+* **menu:** incorrect propper style ([dfe9f30](https://github.com/qmhc/vexip-ui/commit/dfe9f303703f828f9e2726e072a67b31015980b9))
+* **mixins:** assert type for HTMLElement refs ([c4bf386](https://github.com/qmhc/vexip-ui/commit/c4bf3866a14d341761ececc97a441c2206ffb398))
+* **pagination:** page size count select label ([3375be5](https://github.com/qmhc/vexip-ui/commit/3375be51a98802858b7dfa65f21deb5aeffb815c))
+* **pagination:** total items display error ([1434bc4](https://github.com/qmhc/vexip-ui/commit/1434bc4505eb97522c6efc47034134eb29dd9888))
+* **select:** max-list-height not effective ([bc559c7](https://github.com/qmhc/vexip-ui/commit/bc559c7662e3c7f3cf3675d714c0ff8b1c2497da))
+* **select:** suffix arrow no transition when drop ([a90701d](https://github.com/qmhc/vexip-ui/commit/a90701d5c2840e7686e4132dbe31e1d90ce657ba))
+* **style:** adjust shadow color in dark theme ([7f34bc0](https://github.com/qmhc/vexip-ui/commit/7f34bc01616d2bbed5fa20a0ecc969c0f7cfd7d5))
+* **tree:** selected node label background color ([3186024](https://github.com/qmhc/vexip-ui/commit/31860241951cb877714e42ba49d69e34170861a4))
+* unable to prevent mask close for Modal and Drawer ([332f286](https://github.com/qmhc/vexip-ui/commit/332f2869eef817b53265512c58efd619970fc488))
+
+
+### Features
+
+* **config-provider:** support partial provide config ([#25](https://github.com/qmhc/vexip-ui/issues/25)) ([75cbc86](https://github.com/qmhc/vexip-ui/commit/75cbc8671df4c8d73c0b659955a98a5a3b5deef9))
+* **config:** support internal en-US locale ([2a5b2d3](https://github.com/qmhc/vexip-ui/commit/2a5b2d3a84f13197dbfdf1ae2d08156a3e1d7999))
+* **progress:** add activated prop ([38b3d7a](https://github.com/qmhc/vexip-ui/commit/38b3d7a1ed2ede6305692f4925d68cd47113e490))
+* **select:** add static-suffix prop ([862ea5a](https://github.com/qmhc/vexip-ui/commit/862ea5a3cb7fcb4a03bab956eefa8e8fc6479eef))
+* **spin:** add transition-name prop ([7014d35](https://github.com/qmhc/vexip-ui/commit/7014d35469d1238e94a46742c42a43413581326b))
+* **upload:** add button-label prop ([5657427](https://github.com/qmhc/vexip-ui/commit/5657427af9e44b633ac7f123d76a357a56994685))
+
+
+
 # [2.0.0-beta.3](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2022-06-06)
 
 
