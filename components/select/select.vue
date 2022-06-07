@@ -49,7 +49,13 @@
           :style="{ color: props.suffixColor }"
         >
           <slot name="suffix">
-            <Icon v-if="props.suffix" :icon="props.suffix"></Icon>
+            <Icon
+              v-if="props.suffix"
+              :icon="props.suffix"
+              :class="{
+                [`${prefixCls}__arrow`]: !props.staticSuffix
+              }"
+            ></Icon>
             <Icon v-else :class="`${prefixCls}__arrow`">
               <ChevronDown></ChevronDown>
             </Icon>
@@ -192,7 +198,8 @@ export default defineComponent({
     transfer: [Boolean, String],
     disableValidate: booleanProp,
     optionCheck: booleanProp,
-    emptyText: String
+    emptyText: String,
+    staticSuffix: booleanProp
   },
   emits: [
     'toggle',
@@ -241,7 +248,8 @@ export default defineComponent({
       transfer: false,
       disableValidate: false,
       optionCheck: false,
-      emptyText: null
+      emptyText: null,
+      staticSuffix: false
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
