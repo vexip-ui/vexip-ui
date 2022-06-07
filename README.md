@@ -14,13 +14,13 @@ For project:
 
 - ~~Transfer to use css vars~~ (Released in `2.0.0-beta.0`)
 - ~~Refactor icons~~ (Released in `2.0.0-beta.0`)
-- Refactor global config (Completed, waiting to release)
+- ~~Refactor global config~~ (Released in `2.0.0-beta.4`)
 - Write unit tests
 - Adapt ssr render
 
 For components:
 
-- ConfigProvider (Completed, waiting to release)
+- ~~ConfigProvider~~ (Released in `2.0.0-beta.4`)
 - Avatar
 - Cascader
 - Mention
