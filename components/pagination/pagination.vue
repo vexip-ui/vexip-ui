@@ -118,14 +118,7 @@
         {{ `${locale.total} ${props.total} ${props.itemUnit ?? locale.itemUnit}` }}
       </div>
       <div v-if="props.pageCount" :class="`${prefix}__size`">
-        <Select v-model:value="currentPageSize" size="small" :options="sizeObjectOptions">
-          <template #default="{ option }">
-            <Option
-              :value="option.value"
-              :label="`${option.value} ${props.itemUnit ?? locale.itemUnit}${locale.prePage}`"
-            ></Option>
-          </template>
-        </Select>
+        <Select v-model:value="currentPageSize" size="small" :options="sizeObjectOptions"></Select>
       </div>
       <div v-if="props.pageJump" :class="`${prefix}__jump`">
         {{ locale.jumpTo }}
@@ -145,7 +138,6 @@
 import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
-import { Option } from '@/components/option'
 import { Select } from '@/components/select'
 import { useProps, useLocale, booleanProp, sizeProp, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
 import { isFunction, range } from '@vexip-ui/utils'
@@ -159,7 +151,6 @@ export default defineComponent({
   components: {
     Icon,
     NumberInput,
-    Option,
     Select,
     ChevronRight,
     ChevronLeft,
@@ -290,11 +281,19 @@ export default defineComponent({
 
       return active
     })
-    const sizeObjectOptions = computed(() => props.sizeOptions.map(size => ({ value: size })))
+    const sizeObjectOptions = computed(() => {
+      return props.sizeOptions.map(size => {
+        return {
+          value: size,
+          label: `${size} ${props.itemUnit ?? locale.value.itemUnit}${locale.value.prePage}`
+        }
+      })
+    })
 
     watch(() => props.active, changeActive)
     watch(currentActive, value => {
       computePagers()
+      jumpValue.value = value
       emit('change', value)
       emit('update:active', value)
     })
