@@ -100,8 +100,8 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
     const vue = `
       <template>${svg}</template>
       <script lang="ts">
-        import { defineComponent } from 'vue'
-        export default defineComponent({ name: '${name}' })
+        import { defineComponent, markRaw } from 'vue'
+        export default defineComponent(markRaw({ name: '${name}' }))
       </script>
     `
 
