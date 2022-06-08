@@ -1,3 +1,20 @@
+# [2.0.0-beta.5](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2022-06-08)
+
+
+### Bug Fixes
+
+* **calendar:** index hover background color ([014c904](https://github.com/qmhc/vexip-ui/commit/014c90499c2c12d75a22568735a06db762f32269))
+* correctly export style files ([c33e29f](https://github.com/qmhc/vexip-ui/commit/c33e29f1889ebcc2264a8bdc13d494e631834ba8))
+* **locale:** correct calendar week locale ([9e1b25b](https://github.com/qmhc/vexip-ui/commit/9e1b25b9bb03e6b18ec970eb8f232b9cafd046a0))
+* **masker:** improve disabled style ([0fc78df](https://github.com/qmhc/vexip-ui/commit/0fc78dfd8a29e4b8ecabf90824b559f788711151))
+
+
+### Features
+
+* add Avatar and AvatarGroup components ([#27](https://github.com/qmhc/vexip-ui/issues/27)) ([426aa67](https://github.com/qmhc/vexip-ui/commit/426aa67958f1b2107e59adf71243c9c6795415e8))
+
+
+
 # [2.0.0-beta.4](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2022-06-07)
 
 
