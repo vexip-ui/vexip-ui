@@ -1,16 +1,16 @@
 <template>
   <Collapse v-model:expanded="expanded" card>
     <CollapsePane title="面板一">
-      <p>一些内容一些内容一些内容</p>
-      <p>一些内容一些内容一些内容</p>
+      <p>Some content to fill</p>
+      <p>Some content to fill</p>
     </CollapsePane>
     <CollapsePane title="面板二">
-      <p>一些内容一些内容一些内容</p>
-      <p>一些内容一些内容一些内容</p>
+      <p>Some content to fill</p>
+      <p>Some content to fill</p>
     </CollapsePane>
     <CollapsePane title="面板三">
-      <p>一些内容一些内容一些内容</p>
-      <p>一些内容一些内容一些内容</p>
+      <p>Some content to fill</p>
+      <p>Some content to fill</p>
     </CollapsePane>
   </Collapse>
 </template>

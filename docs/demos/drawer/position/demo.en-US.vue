@@ -7,32 +7,26 @@
       <Radio label="left"></Radio>
     </RadioGroup>
     <Button type="primary" @click="active = !active">
-      打开
+      Open
     </Button>
     <Drawer
       v-model:active="active"
       transfer
-      :title="`${placement} 抽屉`"
+      :title="`${placement} Drawer`"
       :placement="placement"
     >
-      <p>一些内容</p>
-      <p>一些内容</p>
-      <p>一些内容</p>
+      <p>Some content</p>
+      <p>Some content</p>
+      <p>Some content</p>
     </Drawer>
   </Row>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
 type Placement = 'right' | 'top' | 'bottom' | 'left'
 
-export default defineComponent({
-  setup() {
-    const active = ref(false)
-    const placement = ref<Placement>('right')
-
-    return { active, placement }
-  }
-})
+const active = ref(false)
+const placement = ref<Placement>('right')
 </script>

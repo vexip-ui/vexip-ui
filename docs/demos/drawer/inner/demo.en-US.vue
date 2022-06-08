@@ -1,29 +1,23 @@
 <template>
   <div class="demo-drawer-inner-wrapper">
     <p style="margin-bottom: 16px;">
-      抽屉渲染在该元素中
+      Drawer rendered inside this element
     </p>
     <Button type="primary" @click="active = !active">
-      打开
+      Open
     </Button>
-    <Drawer v-model:active="active" inner title="内置抽屉">
-      <p>一些内容</p>
-      <p>一些内容</p>
-      <p>一些内容</p>
+    <Drawer v-model:active="active" inner title="Inner Drawer">
+      <p>Some content</p>
+      <p>Some content</p>
+      <p>Some content</p>
     </Drawer>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref(false)
-
-    return { active }
-  }
-})
+const active = ref(false)
 </script>
 
 <style>

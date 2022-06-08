@@ -1,44 +1,38 @@
 <template>
   <div>
     <Button type="primary" @click="horizontalActive = !horizontalActive">
-      左右调整
+      Adjust left and right
     </Button>
     <Button type="primary" @click="verticalActive = !verticalActive">
-      上下调整
+      Adjust top and bottom
     </Button>
     <Drawer
       v-model:active="horizontalActive"
       transfer
       resizable
-      title="调整宽度"
+      title="Adjust Width"
     >
-      <p>一些内容</p>
-      <p>一些内容</p>
-      <p>一些内容</p>
+      <p>Some content</p>
+      <p>Some content</p>
+      <p>Some content</p>
     </Drawer>
     <Drawer
       v-model:active="verticalActive"
       transfer
       resizable
       placement="bottom"
-      title="调整高度"
+      title="Adjust Height"
     >
-      <p>一些内容</p>
-      <p>一些内容</p>
-      <p>一些内容</p>
+      <p>Some content</p>
+      <p>Some content</p>
+      <p>Some content</p>
     </Drawer>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const horizontalActive = ref(false)
-    const verticalActive = ref(false)
-
-    return { horizontalActive, verticalActive }
-  }
-})
+const horizontalActive = ref(false)
+const verticalActive = ref(false)
 </script>

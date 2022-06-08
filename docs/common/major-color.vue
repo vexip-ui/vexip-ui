@@ -115,8 +115,8 @@ function resetMajorColor() {
   &__tip {
     display: flex;
     align-items: center;
-    font-size: 15px;
     margin: 0 0 20px;
+    font-size: 15px;
 
     .vxp-icon {
       margin-left: 3px;

@@ -1,35 +1,29 @@
 <template>
   <div>
     <Button type="primary" @click="active = !active">
-      打开
+      Open
     </Button>
     <Drawer
       v-model:active="active"
       transfer
-      title="一级抽屉"
+      title="First Drawer"
       :width="480"
     >
       <Button type="primary" @click="nestingActive = !nestingActive">
-        打开二级抽屉
+        Open Second Drawer
       </Button>
-      <Drawer v-model:active="nestingActive" title="二级抽屉">
-        <p>一些内容</p>
-        <p>一些内容</p>
-        <p>一些内容</p>
+      <Drawer v-model:active="nestingActive" title="Second Drawer">
+        <p>Some content</p>
+        <p>Some content</p>
+        <p>Some content</p>
       </Drawer>
     </Drawer>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref(false)
-    const nestingActive = ref(false)
-
-    return { active, nestingActive }
-  }
-})
+const active = ref(false)
+const nestingActive = ref(false)
 </script>

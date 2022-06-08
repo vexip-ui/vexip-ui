@@ -1,8 +1,8 @@
 <template>
   <div>
     <CollapsePane title="独立面板一" arrow-type="left">
-      <p>一些内容一些内容一些内容</p>
-      <p>一些内容一些内容一些内容</p>
+      <p>Some content to fill</p>
+      <p>Some content to fill</p>
     </CollapsePane>
     <br />
     <CollapsePane card>
@@ -10,8 +10,8 @@
         <Icon><ChartLine></ChartLine></Icon>
         独立面板二
       </template>
-      <p>一些内容一些内容一些内容</p>
-      <p>一些内容一些内容一些内容</p>
+      <p>Some content to fill</p>
+      <p>Some content to fill</p>
     </CollapsePane>
   </div>
 </template>

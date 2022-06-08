@@ -1,16 +1,20 @@
 <template>
   <div>
     <Button type="primary" @click="active = !active">
-      Open
+      打开
     </Button>
     <Drawer
       v-model:active="active"
       transfer
-      title="Title"
+      title="标题"
+      hide-mask
     >
-      <p>Some content</p>
-      <p>Some content</p>
-      <p>Some content</p>
+      <p>一些内容</p>
+      <p>一些内容</p>
+      <p>一些内容</p>
+      <Button @click="active = false">
+        关闭
+      </Button>
     </Drawer>
   </div>
 </template>

@@ -1,6 +1,4 @@
-import type { LocaleMessageDictionary, VueMessageType } from 'vue-i18n'
-
-export interface I18nConfig extends LocaleMessageDictionary<VueMessageType> {
+export interface I18nConfig {
   common: {
     makeInterest: string,
     slogan: string,

@@ -21,15 +21,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref(false)
-    const nestingActive = ref(false)
-
-    return { active, nestingActive }
-  }
-})
+const active = ref(false)
+const nestingActive = ref(false)
 </script>

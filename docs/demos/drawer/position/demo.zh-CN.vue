@@ -22,17 +22,11 @@
   </Row>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
 type Placement = 'right' | 'top' | 'bottom' | 'left'
 
-export default defineComponent({
-  setup() {
-    const active = ref(false)
-    const placement = ref<Placement>('right')
-
-    return { active, placement }
-  }
-})
+const active = ref(false)
+const placement = ref<Placement>('right')
 </script>

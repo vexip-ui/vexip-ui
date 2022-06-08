@@ -5,7 +5,7 @@ import { enUS } from './en-US'
 export const langOptions = ['zh-CN', 'en-US'] as const
 export const defaultLanguage = langOptions.find(l => l === navigator.language) || __ROLLBACK_LANG__
 
-export const i18n = createI18n({
+export const i18n = createI18n<[typeof zhCN], 'zh-CN' | 'en-US'>({
   legacy: false,
   globalInjection: true,
   locale: defaultLanguage,
