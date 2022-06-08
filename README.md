@@ -21,7 +21,7 @@ For project:
 For components:
 
 - ~~ConfigProvider~~ (Released in `2.0.0-beta.4`)
-- Avatar
+- ~~Avatar~~ (Completed, waiting to release)
 - Cascader
 - Mention
 - Skeleton
