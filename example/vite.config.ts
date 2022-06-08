@@ -25,6 +25,7 @@ const components = readdirSync(componentsDir).filter(f => {
 
 export default defineConfig(() => {
   return {
+    publicDir: '../docs/public',
     define: {
       __TARGET__: JSON.stringify(target),
       __DEMOS__: demos,
