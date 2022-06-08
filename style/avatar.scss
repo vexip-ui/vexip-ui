@@ -7,11 +7,15 @@ $avatar: map.merge(
   (
     color: get-css-var('color-white'),
     bg-color: get-css-var('fill-color-secondary'),
+    b-color: get-css-var('border-color-base'),
+    b-width: get-css-var('border-width'),
+    b-style: get-css-var('border-style'),
+    border: get-css-var('avatar-b-width') get-css-var('avatar-b-style') get-css-var('avatar-b-color'),
     size: 32px,
     radius: get-css-var('radius-base'),
     series-span: 8px,
-    image-fit: 'cover'
-    // icon-color: get-css-var('')
+    image-fit: 'cover',
+    group-offset: -8px
   ),
   $avatar
 );
@@ -46,6 +50,10 @@ $avatar: map.merge(
     border-radius: 50%;
   }
 
+  &--border {
+    border: get-css-var('avatar-border');
+  }
+
   &--small {
     @include define-preset-values('avatar', (
       size: 26px
@@ -67,5 +75,39 @@ $avatar: map.merge(
   &__text {
     text-align: center;
     white-space: nowrap;
+  }
+
+  $self: #{&};
+
+  @at-root {
+    &-group {
+      display: inline-flex;
+
+      &__item {
+        position: relative;
+        background-color: get-css-var('bg-color-base');
+
+        &--rest {
+          cursor: pointer;
+        }
+
+        &:not(:first-child) {
+          margin-left: get-css-var('avatar-group-offset');
+        }
+
+        & > #{$self} {
+          border: get-css-var('avatar-border');
+        }
+      }
+
+      &--circle &__item,
+      &--circle #{$self} {
+        border-radius: 50%;
+      }
+
+      &__rest {
+        display: flex;
+      }
+    }
   }
 }

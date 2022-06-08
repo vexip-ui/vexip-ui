@@ -5,6 +5,7 @@ declare module 'vue' {
     AnchorLink: typeof import('vexip-ui')['AnchorLink'],
     AutoComplete: typeof import('vexip-ui')['AutoComplete'],
     Avatar: typeof import('vexip-ui')['Avatar'],
+    AvatarGroup: typeof import('vexip-ui')['AvatarGroup'],
     Badge: typeof import('vexip-ui')['Badge'],
     Breadcrumb: typeof import('vexip-ui')['Breadcrumb'],
     BreadcrumbItem: typeof import('vexip-ui')['BreadcrumbItem'],

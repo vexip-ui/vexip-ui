@@ -4,5 +4,6 @@
   "icon",
   "text",
   "badge",
-  "error"
+  "error",
+  "group"
 ]

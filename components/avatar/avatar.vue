@@ -30,15 +30,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
 import { useProps, booleanProp } from '@vexip-ui/config'
+import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { ComponentSize } from '@vexip-ui/config'
-
-type ObjectFit = 'fill' | 'contain' | 'cover' | 'none' | 'scale-down'
+import type { ObjectFit } from './symbol'
 
 const objectFitValues = Object.freeze<ObjectFit>(['fill', 'contain', 'cover', 'none', 'scale-down'])
 
@@ -58,7 +58,9 @@ export default defineComponent({
     srcSet: String,
     gap: Number,
     iconScale: Number,
-    fallbackSrc: String
+    fallbackSrc: String,
+    color: String,
+    background: String
   },
   emits: ['error'],
   setup(_props, { emit }) {
@@ -78,8 +80,12 @@ export default defineComponent({
       srcSet: '',
       gap: 4,
       iconScale: 1.4,
-      fallbackSrc: ''
+      fallbackSrc: '',
+      color: null,
+      background: null
     })
+
+    const groupState = inject(GROUP_STATE, null)
 
     const prefix = 'vxp-avatar'
     const loadFail = ref(false)
@@ -88,21 +94,26 @@ export default defineComponent({
     const wrapper = ref<HTMLElement | null>(null)
     const text = ref<HTMLElement | null>(null)
 
+    const size = computed(() => {
+      return groupState?.size ?? props.size
+    })
     const className = computed(() => {
       return {
         [prefix]: true,
         [`${prefix}-vars`]: true,
-        [`${prefix}--${props.size}`]: typeof props.size !== 'number' && props.size !== 'default',
+        [`${prefix}--${size.value}`]: typeof size.value !== 'number' && size.value !== 'default',
         [`${prefix}--circle`]: props.circle
       }
     })
     const style = computed(() => {
       const style: Record<string, any> = {
+        '--vxp-avatar-color': props.color,
+        '--vxp-avatar-bg-color': props.background,
         '--vxp-avatar-image-fit': props.fit
       }
 
-      if (typeof props.size === 'number') {
-        style['--vxp-avatar-size'] = `${props.size}px`
+      if (typeof size.value === 'number') {
+        style['--vxp-avatar-size'] = `${size.value}px`
       }
 
       return style
