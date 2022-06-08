@@ -83,6 +83,10 @@ $avatar: map.merge(
     &-group {
       display: inline-flex;
 
+      &--vertical {
+        flex-direction: column;
+      }
+
       &__item {
         position: relative;
         background-color: get-css-var('bg-color-base');
@@ -103,6 +107,13 @@ $avatar: map.merge(
       &--circle &__item,
       &--circle #{$self} {
         border-radius: 50%;
+      }
+
+      &--vertical &__item {
+        &:not(:first-child) {
+          margin-top: get-css-var('avatar-group-offset');
+          margin-left: 0;
+        }
       }
 
       &__rest {

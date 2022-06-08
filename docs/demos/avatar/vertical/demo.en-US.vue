@@ -1,16 +1,16 @@
 <template>
-  <AvatarGroup :options="options" :offset="12"></AvatarGroup>
-  <br />
-  <br />
-  <AvatarGroup :options="options" :max="3" circle></AvatarGroup>
-  <br />
-  <br />
+  <AvatarGroup
+    :options="options"
+    :offset="12"
+    circle
+    vertical
+  ></AvatarGroup>
   <AvatarGroup
     :options="options"
     :max="3"
     circle
-    :size="44"
-    show-tip
+    vertical
+    style="margin-left: 20px;"
   ></AvatarGroup>
 </template>
 
@@ -21,7 +21,7 @@ const options = [
   { src: '/qmhc.jpg' },
   { icon: User },
   { text: 'Qmhc' },
-  { text: '张三' },
-  { text: '李四' }
+  { text: 'Tom' },
+  { text: 'Ken' }
 ]
 </script>

@@ -66,6 +66,7 @@ export const zhCN = defineI18n({
     Upload: '上传',
     Wheel: '滚轮',
 
+    Avatar: '头像',
     Badge: '徽标',
     Bubble: '气泡框',
     Calendar: '日历',

@@ -21,7 +21,7 @@ const options = [
   { src: '/qmhc.jpg' },
   { icon: User },
   { text: 'Qmhc' },
-  { text: '张三' },
-  { text: '李四' }
+  { text: 'Tom' },
+  { text: 'Ken' }
 ]
 </script>

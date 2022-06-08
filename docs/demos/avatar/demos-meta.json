@@ -5,5 +5,7 @@
   "text",
   "badge",
   "error",
-  "group"
+  "group",
+  "tip",
+  "vertical"
 ]

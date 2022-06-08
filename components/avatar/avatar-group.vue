@@ -68,7 +68,7 @@ import type { ComponentSize } from '@vexip-ui/config'
 import type { AvatarOption } from './symbol'
 
 export default defineComponent({
-  nmae: 'AvatarGroup',
+  name: 'AvatarGroup',
   components: {
     Avatar,
     Tooltip

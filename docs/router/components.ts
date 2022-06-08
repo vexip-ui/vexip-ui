@@ -59,6 +59,7 @@ export function getComponentConfig(): ComponentGroup[] {
     {
       name: 'data',
       components: [
+        { name: 'Avatar', since: '2.0.0' },
         { name: 'Badge' },
         { name: 'Bubble' },
         { name: 'Calendar', since: '1.3.0' },

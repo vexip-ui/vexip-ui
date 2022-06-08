@@ -66,6 +66,7 @@ export interface I18nConfig extends LocaleMessageDictionary<VueMessageType> {
     Upload: string,
     Wheel: string,
 
+    Avatar: string,
     Badge: string,
     Bubble: string,
     Calendar: string,
