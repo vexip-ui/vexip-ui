@@ -30,14 +30,14 @@
           <a class="anchor__link" href="">#</a>
         </h2>
         <Demo
-          v-for="({ code, demo, desc: _desc, github }, index) in examples"
+          v-for="(example, index) in examples"
           :key="index"
-          :code="code"
-          :github="github"
+          :code="example.code"
+          :github="example.github"
         >
-          <component :is="demo"></component>
+          <component :is="example.demo"></component>
           <template #desc>
-            <component :is="_desc" @mounted="handleDemoMounted"></component>
+            <component :is="example.desc" @mounted="handleDemoMounted"></component>
           </template>
         </Demo>
         <h2 class="anchor">

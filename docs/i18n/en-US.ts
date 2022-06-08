@@ -66,6 +66,7 @@ export const enUS = defineI18n({
     Upload: 'Upload',
     Wheel: 'Wheel',
 
+    Avatar: 'Avatar',
     Badge: 'Badge',
     Bubble: 'Bubble',
     Calendar: 'Calendar',

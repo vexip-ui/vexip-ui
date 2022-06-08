@@ -2,6 +2,8 @@ import { Alert } from './alert'
 import { Anchor } from './anchor'
 import { AnchorLink } from './anchor-link'
 import { AutoComplete } from './auto-complete'
+import { Avatar } from './avatar'
+import { AvatarGroup } from './avatar-group'
 import { Badge } from './badge'
 import { Breadcrumb } from './breadcrumb'
 import { BreadcrumbItem } from './breadcrumb-item'
@@ -98,6 +100,8 @@ const components = [
   Anchor,
   AnchorLink,
   AutoComplete,
+  Avatar,
+  AvatarGroup,
   Badge,
   Breadcrumb,
   BreadcrumbItem,
@@ -195,6 +199,8 @@ export {
   Anchor,
   AnchorLink,
   AutoComplete,
+  Avatar,
+  AvatarGroup,
   Badge,
   Breadcrumb,
   BreadcrumbItem,
