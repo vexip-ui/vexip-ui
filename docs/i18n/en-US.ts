@@ -24,7 +24,7 @@ export const enUS = defineI18n({
     introduction: 'Introduction',
     gettingStart: 'Getting Start',
     globalConfig: 'Global Config',
-    customStyle: 'Custom Style'
+    styleConfig: 'Style Config'
   },
   group: {
     basis: 'Basis',

@@ -8,6 +8,6 @@ export function getGuideConfig(): GuideConfig[] {
     { label: 'setup', i18n: 'introduction' },
     { label: 'started', i18n: 'gettingStart' },
     { label: 'global', i18n: 'globalConfig' },
-    { label: 'style', i18n: 'customStyle' }
+    { label: 'style', i18n: 'styleConfig' }
   ]
 }

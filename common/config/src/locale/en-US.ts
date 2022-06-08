@@ -6,7 +6,7 @@ export function enUSLocale() {
     wordSpace: true,
 
     calendar: {
-      year: 'Year',
+      year: '',
       month1: 'Jan',
       month2: 'Feb',
       month3: 'Mar',
@@ -19,13 +19,13 @@ export function enUSLocale() {
       month10: 'Oct',
       month11: 'Nov',
       month12: 'Dec',
-      week1: 'Mon',
-      week2: 'Tues',
-      week3: 'Wed',
-      week4: 'Thur',
-      week5: 'Fri',
-      week6: 'Sat',
-      week7: 'Sun'
+      week1: 'Mo',
+      week2: 'Tu',
+      week3: 'We',
+      week4: 'Th',
+      week5: 'Fr',
+      week6: 'Sa',
+      week7: 'Su'
     },
 
     colorPicker: {

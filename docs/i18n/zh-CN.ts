@@ -24,7 +24,7 @@ export const zhCN = defineI18n({
     introduction: '介绍',
     gettingStart: '快速上手',
     globalConfig: '全局配置',
-    customStyle: '定制样式'
+    styleConfig: '样式配置'
   },
   group: {
     basis: '基础',

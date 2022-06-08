@@ -156,7 +156,7 @@ function isNewComponent(config: ComponentConfig) {
   }
 
   &__menu {
-    padding-top: 20px;
+    padding: 20px 0;
     border-right: 0;
   }
 
