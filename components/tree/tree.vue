@@ -206,7 +206,7 @@ export default defineComponent({
 
     const checkedNodes = flatData.value.filter(item => item.checked)
 
-    for (let i = 0, len = checkedNodes.length; i < len; i++) {
+    for (let i = 0, len = checkedNodes.length; i < len; ++i) {
       const item = checkedNodes[i]
       const parentKey = item[props.parentKey] as Key
 
@@ -236,7 +236,7 @@ export default defineComponent({
       const newFlatData = []
       const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
 
-      for (let i = 0, len = data.length; i < len; i++) {
+      for (let i = 0, len = data.length; i < len; ++i) {
         const item = data[i]
         const node = props.cacheNode
           ? oldDataMap.get(item) ?? oldIpMap.get(item[idKey]) ?? createNodeItem(item)
@@ -257,7 +257,7 @@ export default defineComponent({
       const _flatData = []
       const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
 
-      for (let i = 0, len = data.length; i < len; i++) {
+      for (let i = 0, len = data.length; i < len; ++i) {
         const item = data[i]
         const id = item[props.idKey] as Key
 
@@ -414,7 +414,7 @@ export default defineComponent({
         flatData.value.filter(item => item.disabled && item.checked)
       )
 
-      for (let i = 0, len = nodeList.length; i < len; i++) {
+      for (let i = 0, len = nodeList.length; i < len; ++i) {
         const item = nodeList[i]
 
         updateCheckedUpward(item)
@@ -441,7 +441,7 @@ export default defineComponent({
         const idKey = props.idKey
         const currentId = node[idKey] as Key
 
-        for (let i = 0, len = selectedNodes.length; i < len; i++) {
+        for (let i = 0, len = selectedNodes.length; i < len; ++i) {
           const item = selectedNodes[i]
 
           item.selected = item[idKey] === currentId
@@ -459,7 +459,7 @@ export default defineComponent({
       if (props.accordion) {
         const siblingNodes = getSiblingNodes(node)
 
-        for (let i = 0, len = siblingNodes.length; i < len; i++) {
+        for (let i = 0, len = siblingNodes.length; i < len; ++i) {
           siblingNodes[i].expanded = false
         }
       }

@@ -8,7 +8,7 @@ import { ref } from 'vue'
 const value = ref('')
 const options: string[] = []
 
-for (let i = 1; i < 1600; i++) {
+for (let i = 1; i < 1600; ++i) {
   options.push(`选项${i}`)
 }
 </script>

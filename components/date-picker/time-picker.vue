@@ -407,7 +407,7 @@ export default defineComponent({
         value = [value, value]
       }
 
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 2; ++i) {
         const match = TIME_REG.exec(value[i])
         const state = i === 0 ? startState : endState
         const { activated, timeValue } = state

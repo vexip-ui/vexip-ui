@@ -232,7 +232,7 @@ export default defineComponent({
 
         item.visible = false
 
-        for (let i = index + 1, len = items.value.length; i < len; i++) {
+        for (let i = index + 1, len = items.value.length; i < len; ++i) {
           items.value[i].verticalPosition -= removeHeight + props.itemOffset
         }
 

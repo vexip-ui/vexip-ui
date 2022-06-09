@@ -399,7 +399,7 @@ export default defineComponent({
             : []
           : props.filter.filter(item => item)
 
-      for (let i = 0, len = fileStates.value.length; i < len; i++) {
+      for (let i = 0, len = fileStates.value.length; i < len; ++i) {
         const file = fileStates.value[i]
         const extension = getFileExtension(file)
 

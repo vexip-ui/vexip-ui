@@ -241,7 +241,7 @@ export default defineComponent({
 
       let currentLink = ''
 
-      for (let i = 0, len = offsetList.length - 1; i < len; i++) {
+      for (let i = 0, len = offsetList.length - 1; i < len; ++i) {
         const current = offsetList[i]
         const next = offsetList[i + 1]
 

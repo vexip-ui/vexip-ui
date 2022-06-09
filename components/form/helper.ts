@@ -24,7 +24,7 @@ export function getValueByPath<T = unknown>(
 
     if (!lastKey) return null
 
-    for (let i = 0, len = path.length; i < len; i++) {
+    for (let i = 0, len = path.length; i < len; ++i) {
       const key = String(path[i])
 
       if (!key) break
@@ -76,7 +76,7 @@ export function setValueByPath(
 
     if (!lastKey) return false
 
-    for (let i = 0, len = path.length; i < len; i++) {
+    for (let i = 0, len = path.length; i < len; ++i) {
       const key = String(path[i])
 
       if (!key) {

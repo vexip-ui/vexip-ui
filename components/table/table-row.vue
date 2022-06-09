@@ -167,7 +167,7 @@ export default defineComponent({
 
       let width = 0
 
-      for (let i = 0, len = columns.length; i < len; i++) {
+      for (let i = 0, len = columns.length; i < len; ++i) {
         const column = columns[i]
         const key = column.key
         const columnWidth = widths[key]

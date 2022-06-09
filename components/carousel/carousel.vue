@@ -402,12 +402,12 @@ export default defineComponent({
           } else {
             trackRect.offset = itemLength * (itemCount - targetIndex)
 
-            for (let i = targetIndex; i < itemCount; i++) {
+            for (let i = targetIndex; i < itemCount; ++i) {
               itemList[i].offset = -itemCount * itemLength
             }
           }
         } else {
-          for (let i = 0; i < itemCount; i++) {
+          for (let i = 0; i < itemCount; ++i) {
             itemList[i].offset = i < targetIndex ? 0 : -itemCount * itemLength
           }
 
@@ -440,7 +440,7 @@ export default defineComponent({
         } else {
           const anchorIndex = targetIndex + props.viewSize - itemCount
 
-          for (let i = 0, len = itemList.length; i < len; i++) {
+          for (let i = 0, len = itemList.length; i < len; ++i) {
             itemList[i].offset = i < anchorIndex ? itemCount * itemLength : 0
           }
 

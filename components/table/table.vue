@@ -737,7 +737,7 @@ export default defineComponent({
       const data = state.rowData
       const selectedData = []
 
-      for (let i = 0, len = data.length; i < len; i++) {
+      for (let i = 0, len = data.length; i < len; ++i) {
         const row = data[i]
 
         if (row.checked) {

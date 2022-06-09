@@ -190,7 +190,7 @@ export default defineComponent({
     const hasFilterActive = computed(() => {
       const options = filter.value.options ?? []
 
-      for (let i = 0, len = options.length; i < len; i++) {
+      for (let i = 0, len = options.length; i < len; ++i) {
         if (options[i].active) {
           return true
         }
@@ -263,7 +263,7 @@ export default defineComponent({
       const options = filter.value.options ?? []
       const activeValues = []
 
-      for (let i = 0, len = options.length; i < len; i++) {
+      for (let i = 0, len = options.length; i < len; ++i) {
         const option = options[i]
 
         if (option.active) {

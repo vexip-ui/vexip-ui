@@ -480,7 +480,7 @@ export default defineComponent({
         value = [value, value]
       }
 
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 2; ++i) {
         const date = rawValueToDate(value[i] ?? '')
         const state = i === 0 ? startState : endState
 
@@ -546,7 +546,7 @@ export default defineComponent({
         const values = Array.isArray(currentValue.value) ? currentValue.value : [currentValue.value]
         const emitValues: string[] | number[] = []
 
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 2; ++i) {
           if (props.type === 'year') {
             emitValues[i] = i === 0 ? startState.dateValue.year : endState.dateValue.year
           } else if (props.type !== 'datetime') {

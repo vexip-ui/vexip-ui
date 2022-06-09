@@ -96,7 +96,7 @@ export function useColumn<T extends string>(
   }
 
   function enterColumn(type: 'prev' | 'next', canLoop = true) {
-    for (let i = 0; i < columnCount; i++) {
+    for (let i = 0; i < columnCount; ++i) {
       if (currentColumn.value === columnTypes[i]) {
         const rawTypes = type === 'prev' ? Array.from(columnTypes).reverse() : columnTypes
         const nextIndex = (type === 'prev' ? columnCount - i : i + 1) % columnCount

@@ -86,7 +86,7 @@ export default defineComponent({
           return false
         }
 
-        for (let i = 1; i < 3; i++) {
+        for (let i = 1; i < 3; ++i) {
           if (value[i] && 60 % value[i] !== 0) {
             return false
           }
