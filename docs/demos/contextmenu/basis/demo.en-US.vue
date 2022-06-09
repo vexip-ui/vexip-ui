@@ -18,7 +18,7 @@ export default defineComponent({
         clientX: event.clientX,
         clientY: event.clientY,
         appear: true,
-        configs: [{ key: '选项1' }, { key: '选项2' }, { key: '选项3' }, { key: '选项4' }]
+        configs: [{ key: 'Option 1' }, { key: 'Option 2' }, { key: 'Option 3' }, { key: 'Option 4' }]
       })
 
       console.info(selectedKey)

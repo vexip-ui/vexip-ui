@@ -21,48 +21,48 @@ export default defineComponent({
         appear: true,
         configs: [
           {
-            key: '选项1'
+            key: 'Option 1'
           },
           {
-            key: '选项2',
+            key: 'Option 2',
             icon: User,
             shortcut: 'Ctrl+A'
           },
           {
-            key: '选项3',
+            key: 'Option 3',
             icon: Hammer,
             divided: true,
             iconColor: 'cyan',
             children: [
               {
-                key: '选项3-1',
+                key: 'Option 3-1',
                 disabled: true
               },
               {
-                key: '选项3-2',
+                key: 'Option 3-2',
                 divided: true
               },
               {
-                key: '选项3-3',
+                key: 'Option 3-3',
                 children: [
                   {
-                    key: '选项3-3-1',
+                    key: 'Option 3-3-1',
                     shortcut: 'Ctrl+L'
                   },
                   {
-                    key: '选项3-3-2'
+                    key: 'Option 3-3-2'
                   }
                 ]
               }
             ]
           },
           {
-            key: '选项4',
+            key: 'Option 4',
             shortcut: 'Alt+I',
             color: 'red'
           },
           {
-            key: '选项5',
+            key: 'Option 5',
             shortcut: 'Ctrl+Alt+I',
             icon: Fire,
             color: 'blue',

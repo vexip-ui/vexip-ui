@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-const options = ['选项1', '选项2', '选项3']
+const options = ['Option 1', 'Option 2', 'Option 3']
 </script>
 
 <style>

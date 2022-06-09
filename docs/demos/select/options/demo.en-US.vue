@@ -8,12 +8,12 @@ import { ref } from 'vue'
 const value = ref('')
 
 const options = [
-  '选项1',
+  'Option 1',
   {
-    value: '选项2'
+    value: 'Option 2'
   },
   {
-    label: '选项3',
+    label: 'Option 3',
     value: 3
   }
 ]

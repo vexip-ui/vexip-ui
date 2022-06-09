@@ -9,9 +9,17 @@ export interface InstallOptions {
   locale?: LocaleOptions
 }
 
-export function buildInstall(components: any[] = []) {
+export function buildInstall(
+  components: any[] = [],
+  defaultLocale: 'zh-CN' | 'en-US' = 'zh-CN'
+) {
   return function install(app: App, options: InstallOptions = {}) {
-    const { prefix = '', props = {}, locale = {} } = options
+    debugger
+    const { prefix = '', props = {}, locale = { locale: defaultLocale } } = options
+
+    if (!locale.locale) {
+      locale.locale = defaultLocale
+    }
 
     configProps(props, app)
     configLocale(locale, app)

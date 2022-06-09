@@ -20,13 +20,13 @@ export default defineComponent({
         clientY: event.clientY,
         appear: true,
         configs: [
-          { key: '选项1' },
-          { key: '选项2' },
+          { key: 'Option 1' },
+          { key: 'Option 2' },
           {
-            key: '选项3',
-            children: [{ key: '选项3-1' }, { key: '选项3-2' }, { key: '选项3-3' }]
+            key: 'Option 3',
+            children: [{ key: 'Option 3-1' }, { key: 'Option 3-2' }, { key: 'Option 3-3' }]
           },
-          { key: '选项4' }
+          { key: 'Option 4' }
         ]
       })
 

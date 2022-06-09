@@ -199,7 +199,9 @@ export default defineComponent({
     disableValidate: booleanProp,
     optionCheck: booleanProp,
     emptyText: String,
-    staticSuffix: booleanProp
+    staticSuffix: booleanProp,
+    valueKey: String,
+    labelKey: String
   },
   emits: [
     'toggle',
@@ -249,7 +251,9 @@ export default defineComponent({
       disableValidate: false,
       optionCheck: false,
       emptyText: null,
-      staticSuffix: false
+      staticSuffix: false,
+      valueKey: 'value',
+      labelKey: 'label'
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -266,27 +270,27 @@ export default defineComponent({
     const optionMap = ref(new Map<string | number, OptionState>())
 
     watchEffect(() => {
+      const { valueKey, labelKey } = props
       const oldMap = optionMap.value
       const map = new Map<string | number, OptionState>()
 
       props.options.forEach(option => {
         if (typeof option === 'string') {
-          option = { value: option }
+          option = { [valueKey]: option }
         }
 
-        if (isNull(option.value)) return
+        const value = option[valueKey]
 
-        if (!option.label) {
-          option.label = String(option.value)
-        }
+        if (isNull(value)) return
 
+        const label = option[labelKey] || String(value)
         const oldState = oldMap.get(option.value)
         const rawOption = option as OptionState
 
         if (oldState) {
-          map.set(option.value, { ...rawOption, hidden: oldState.hidden, hitting: oldState.hitting })
+          map.set(value, { ...rawOption, value, label, hidden: oldState.hidden, hitting: oldState.hitting })
         } else {
-          map.set(option.value, { ...rawOption, hidden: false, hitting: false })
+          map.set(value, { ...rawOption, value, label, hidden: false, hitting: false })
         }
       })
 

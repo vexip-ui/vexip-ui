@@ -6,7 +6,7 @@ export interface ObjectOption {
   noTitle?: boolean
 }
 
-export type RawOption = string | ObjectOption
+export type RawOption = string | Record<string, any>
 
 export interface OptionState extends ObjectOption {
   label: string,

@@ -7,7 +7,7 @@ import { ref } from 'vue'
 import { User } from '@vexip-ui/icons'
 
 const value = ref('')
-const options = ['选项1', '选项2', '选项3']
+const options = ['Option 1', 'Option 2', 'Option 3']
 </script>
 
 <style>
