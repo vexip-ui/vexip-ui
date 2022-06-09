@@ -1,7 +1,7 @@
-import { defineLocale } from './helper'
+import { defineLocaleConfig } from './helper'
 
 export function enUSLocale() {
-  return defineLocale({
+  return defineLocaleConfig({
     locale: 'en-US',
     wordSpace: true,
 

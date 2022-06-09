@@ -121,3 +121,7 @@ export type LocaleNames = Exclude<keyof LocaleConfig, 'locale' | 'wordSpace'>
 export function defineLocale(locale: LocaleOptions) {
   return locale
 }
+
+export function defineLocaleConfig(locale: LocaleConfig) {
+  return locale
+}

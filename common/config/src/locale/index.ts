@@ -12,6 +12,8 @@ export * from './en-US'
 
 export const PROVIDED_LOCALE = '__vxp-provided-locale'
 
+export const globalLocal = computed(() => getDefaultLocaleConfig())
+
 export function getDefaultLocaleConfig(locale?: string) {
   if (!locale) {
     return zhCNLocale()
@@ -24,11 +26,12 @@ export function getDefaultLocaleConfig(locale?: string) {
 }
 
 export function configLocale(sourceLocale: LocaleOptions | Ref<LocaleOptions>, app?: App) {
+  debugger
   if (app) {
     const locale = unref(sourceLocale)
     app.provide(PROVIDED_LOCALE, mergeObjects(getDefaultLocaleConfig(locale.locale), locale, false))
   } else {
-    const upstreamLocale = inject<ComputedRef<LocaleConfig> | null>(PROVIDED_LOCALE, null)
+    const upstreamLocale = inject<ComputedRef<LocaleConfig> | null>(PROVIDED_LOCALE, globalLocal)
     const locale = computed(() => {
       const locale = unref(sourceLocale)
       if (!upstreamLocale?.value) {
@@ -45,7 +48,7 @@ export function configLocale(sourceLocale: LocaleOptions | Ref<LocaleOptions>, a
 export function useLocale(): ComputedRef<LocaleConfig> | null
 export function useLocale<T extends LocaleNames>(name: T): ComputedRef<LocaleConfig[T]>
 export function useLocale<T extends LocaleNames>(name?: T) {
-  const locale = inject<ComputedRef<LocaleConfig> | null>(PROVIDED_LOCALE, null)
+  const locale = inject<ComputedRef<LocaleConfig>>(PROVIDED_LOCALE, globalLocal)
 
   if (!name) {
     return locale
