@@ -299,7 +299,7 @@ export function sortByProps<T = any>(
  * @param isNewObj 标记合并至一个全新的对象（深度的）
  * @returns 深度合并后的源对象
  */
-export function mergeObjects<T extends Record<string, unknown>, U extends Record<string, unknown>>(
+export function mergeObjects<T extends Record<string, any>, U extends Record<string, any>>(
   sourceObj: T,
   targetObj: U,
   isNewObj = true
