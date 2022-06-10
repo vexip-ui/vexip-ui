@@ -1,10 +1,10 @@
-import { defineComponent, h, ref, computed } from 'vue'
+import { defineComponent, h, ref, computed, inject } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { createSizeProp, useProps, booleanProp, sizeProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
 import { Spinner } from '@vexip-ui/icons'
 import { parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
-import { buttonTypes } from './symbol'
+import { GROUP_STATE, buttonTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type { ButtonType, ButtonAttrType } from './symbol'
@@ -38,7 +38,7 @@ export default defineComponent({
     const props = useProps('button', _props, {
       size: createSizeProp(),
       type: {
-        default: 'default' as ButtonType,
+        default: null,
         validator: (value: ButtonType) => buttonTypes.includes(value)
       },
       dashed: false,
@@ -60,16 +60,24 @@ export default defineComponent({
       tag: 'button'
     })
 
+    const groupState = inject(GROUP_STATE, null)
+
     const prefix = 'vxp-button'
     const pulsing = ref(false)
     const isIconOnly = computed(() => {
       return !slots.default
     })
+    const type = computed(() => {
+      return props.type ?? groupState?.type ?? 'default'
+    })
+    const size = computed(() => {
+      return groupState?.size ?? props.size
+    })
     const className = computed(() => {
       return {
         [prefix]: true,
         [`${prefix}-vars`]: true,
-        [`${prefix}--${props.type}`]: props.type !== 'default',
+        [`${prefix}--${type.value}`]: type.value !== 'default',
         [`${prefix}--simple`]: !props.ghost && props.simple,
         [`${prefix}--ghost`]: props.ghost,
         [`${prefix}--text`]: props.text,
@@ -78,7 +86,7 @@ export default defineComponent({
         [`${prefix}--loading`]: props.loading,
         [`${prefix}--circle`]: props.circle,
         [`${prefix}--icon-only`]: isIconOnly.value,
-        [`${prefix}--${props.size}`]: props.size !== 'default',
+        [`${prefix}--${size.value}`]: size.value !== 'default',
         [`${prefix}--pulsing`]: pulsing.value
       }
     })

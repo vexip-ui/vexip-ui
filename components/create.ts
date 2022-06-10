@@ -14,7 +14,6 @@ export function buildInstall(
   defaultLocale: 'zh-CN' | 'en-US' = 'zh-CN'
 ) {
   return function install(app: App, options: InstallOptions = {}) {
-    debugger
     const { prefix = '', props = {}, locale = { locale: defaultLocale } } = options
 
     if (!locale.locale) {
