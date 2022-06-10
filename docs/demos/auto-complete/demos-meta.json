@@ -2,5 +2,6 @@
   "basis",
   "clearable",
   "filter",
-  "option"
+  "option",
+  "custom-key"
 ]

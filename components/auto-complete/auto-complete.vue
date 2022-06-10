@@ -17,6 +17,8 @@
     :no-suffix="!hasSuffix"
     :placeholder="props.placeholder"
     :options="props.options"
+    :value-key="props.valueKey"
+    :label-key="props.labelKey"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
@@ -122,7 +124,9 @@ export default defineComponent({
     clearable: booleanProp,
     ignoreCase: booleanProp,
     autofocus: booleanProp,
-    spellcheck: booleanProp
+    spellcheck: booleanProp,
+    valueKey: String,
+    labelKey: String
   },
   emits: [
     'select',
@@ -163,7 +167,9 @@ export default defineComponent({
       clearable: false,
       ignoreCase: false,
       autofocus: false,
-      spellcheck: false
+      spellcheck: false,
+      valueKey: 'value',
+      labelKey: 'label'
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)

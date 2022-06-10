@@ -18,6 +18,8 @@
 | clearable    | `boolean`           | 设置是否可以清空值                                                                         | `false`     | - |
 | ignore-case  | `boolean`           | 在使用内置的过滤时，设置是否忽略大小写                                                     | `false`     | - |
 | disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 | - |
+| value-key | `string` | 设置选项解析时 `value` 的键值 | `'value'` | `2.0.0` |
+| label-key | `string` | 设置选项解析时 `label` 的键值 | `'label'` | `2.0.0` |
 
 ### AutoComplete 事件
 
