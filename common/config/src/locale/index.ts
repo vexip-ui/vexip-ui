@@ -26,7 +26,6 @@ export function getDefaultLocaleConfig(locale?: string) {
 }
 
 export function configLocale(sourceLocale: LocaleOptions | Ref<LocaleOptions>, app?: App) {
-  debugger
   if (app) {
     const locale = unref(sourceLocale)
     app.provide(PROVIDED_LOCALE, mergeObjects(getDefaultLocaleConfig(locale.locale), locale, false))
