@@ -20,11 +20,12 @@
         :appear="props.appear"
         :floor-select="props.floorSelect"
       >
-        <template #default="{ data: nodeDta, node, toggleCheck, toggleExpand, toggleSelect }">
+        <template #default="{ data: nodeDta, node, depth, toggleCheck, toggleExpand, toggleSelect }">
           <slot
             name="node"
             :data="nodeDta"
             :node="node"
+            :depth="depth"
             :toggle-check="toggleCheck"
             :toggle-expand="toggleExpand"
             :toggle-select="toggleSelect"
@@ -194,12 +195,14 @@ export default defineComponent({
     provide(
       TREE_NODE_STATE,
       reactive({
+        depth: -1,
         disabled: toRef(props, 'disabled'),
         readonly: toRef(props, 'readonly')
       })
     )
 
     watch([() => props.data, () => props.data.length], parseAndTransformData)
+    watch(parsedOptions, parseAndTransformData)
 
     // created
     parseAndTransformData()

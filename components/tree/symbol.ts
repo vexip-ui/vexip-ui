@@ -56,6 +56,7 @@ export interface TreeState {
 }
 
 export interface TreeNodeState {
+  depth: number,
   disabled: boolean,
   readonly: boolean
 }

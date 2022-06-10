@@ -13,11 +13,12 @@
     <slot
       :data="node.data"
       :node="node"
+      :depth="depth"
       :toggle-check="handleToggleCheck"
       :toggle-expand="handleToggleExpand"
       :toggle-select="handleToggleSelect"
     >
-      <div :class="`${prefix}__content`">
+      <div :class="`${prefix}__content`" :style="contentStyle">
         <span
           ref="arrowEl"
           :class="{
@@ -52,10 +53,15 @@
           <Renderer
             v-if="renderer"
             :renderer="renderer"
-            :data="{ data: node.data, node }"
+            :data="{ node, depth, data: node.data }"
           ></Renderer>
           <template v-else>
-            <slot name="label" :data="node.data" :node="node">
+            <slot
+              name="label"
+              :data="node.data"
+              :node="node"
+              :depth="depth"
+            >
               {{ data[labelKey] }}
             </slot>
           </template>
@@ -63,7 +69,7 @@
       </div>
     </slot>
     <CollapseTransition :appear="appear">
-      <ul v-if="showChildren" :class="`${prefix}__list`" :style="listStyle">
+      <ul v-if="showChildren" :class="`${prefix}__list`">
         <TreeNode
           v-for="(item, index) in children"
           v-show="item.visible"
@@ -78,10 +84,20 @@
           :appear="appear"
           :floor-select="floorSelect"
         >
-          <template #default="{ data: childData, node: childNode, toggleCheck, toggleExpand, toggleSelect }">
+          <template
+            #default="{
+              data: childData,
+              node: childNode,
+              depth: childDepth,
+              toggleCheck,
+              toggleExpand,
+              toggleSelect
+            }"
+          >
             <slot
               :data="childData"
               :node="childNode"
+              :depth="childDepth"
               :toggle-check="toggleCheck"
               :toggle-expand="toggleExpand"
               :toggle-select="toggleSelect"
@@ -220,6 +236,9 @@ export default defineComponent({
     const isReadonly = computed(() => {
       return parentState.readonly || props.readonly
     })
+    const depth = computed(() => {
+      return parentState.depth + 1
+    })
     const className = computed(() => {
       return {
         [`${prefix}__node`]: true,
@@ -227,6 +246,19 @@ export default defineComponent({
         [`${prefix}__node--expanded`]: props.expanded,
         [`${prefix}__node--disabled`]: isDisabled.value,
         [`${prefix}__node--readonly`]: isReadonly.value
+      }
+    })
+    const contentStyle = computed(() => {
+      let indent = props.indent
+
+      if (typeof indent === 'number') {
+        indent = `${indent}px`
+      }
+
+      return {
+        paddingLeft: depth.value
+          ? depth.value === 1 ? indent : `calc(${depth.value} * ${indent})`
+          : 0
       }
     })
     const showChildren = computed(() => {
@@ -259,21 +291,11 @@ export default defineComponent({
     const renderer = computed(() => {
       return treeState.renderer
     })
-    const listStyle = computed(() => {
-      let indent = props.indent
-
-      if (typeof indent === 'number') {
-        indent = `${indent}px`
-      }
-
-      return {
-        paddingLeft: indent
-      }
-    })
 
     provide(
       TREE_NODE_STATE,
       reactive({
+        depth,
         disabled: isDisabled,
         readonly: isReadonly
       })
@@ -399,12 +421,13 @@ export default defineComponent({
 
       isDisabled,
       isReadonly,
+      depth,
       className,
+      contentStyle,
       showChildren,
       hasArrow,
       hasCheckbox,
       renderer,
-      listStyle,
 
       wrapper: nodeElement,
       arrowEl: arrowElement,

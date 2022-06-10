@@ -10,7 +10,7 @@
 | readonly      | `boolean`           | 设置树是否为只读状态，若设置后，所有的树节点将为只读                                                                                                        | `false`      | - |
 | checkbox      | `boolean`           | 设置是否开启节点的复选框                                                                                                                                    | `false`      | - |
 | draggable     | `boolean`           | 设置节点是否可拖拽                                                                                                                                          | `false`      | - |
-| renderer      | `(data: { data: Data, node: TreeNodeOptions }) => any`          | 使用 render 函数进行节点渲染数                                                                                           | `null`       | - |
+| renderer      | `(data: { data: Data, node: TreeNodeOptions, depth: number }) => any`          | 使用 render 函数进行节点渲染数                                                                                           | `null`       | - |
 | id-key        | `string`            | 设置数据源的 `id` 字段                                                                                                                                        | `'id'`       | - |
 | children-key  | `string`            | 设置数据源的 `children` 字段                                                                                                                                  | `'children'` | - |
 | parent-key    | `string`            | 设置数据源的 `parent` 字段                                                                                                                                    | `'parent'`   | - |
@@ -72,15 +72,15 @@ type TreeNodeOptions = Required<InitDataOptions> & {
 
 | Name  | Description                                                                                                                                                                                                     | Parameters | Since |
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | --- |
-| label | 节点标签的插槽                                                                                                                                                         | `(data: InitDataOptions, node: TreeNodeOptions)` | - |
-| node  | 节点内容的插槽，使用该插槽将完全覆盖节点各元素，包括箭头、复选框等，插槽额外的三个方法 `toggleCheck`、`toggleExpand`、`toggleSelect`，分别用于触发节点的勾选、展开、选择 | `(data: InitDataOptions, node: TreeNodeOptions, toggleCheck: (checked?: boolean) => void, toggleExpand: (expanded?: boolean) => Promise<void>, toggleSelect: (able?: boolean) => Promise<void>)` | - |
+| label | 节点标签的插槽                                                                                                                                                         | `(data: InitDataOptions, node: TreeNodeOptions, depth: number)` | - |
+| node  | 节点内容的插槽，使用该插槽将完全覆盖节点各元素，包括箭头、复选框等，插槽额外的三个方法 `toggleCheck`、`toggleExpand`、`toggleSelect`，分别用于触发节点的勾选、展开、选择 | `(data: InitDataOptions, node: TreeNodeOptions, depath: number, toggleCheck: (checked?: boolean) => void, toggleExpand: (expanded?: boolean) => Promise<void>, toggleSelect: (able?: boolean) => Promise<void>)` | - |
 | empty | 当数据为空时的提示文字的插槽                                                                                                                                                                             | - | - |
 
 ### Tree Methods
 
 | Name                    | Description                                                                                                                                        | Signature              | Since |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | --- |
-| parseAndTransformData | 触发组件内部重新进行数据的解析和转换 | - | `() => void`
+| parseAndTransformData | 触发组件内部重新进行数据的解析和转换 | `() => void` | -
 | forceUpdateData              | 强制更新数据，一般在手动更改了数据源后更新树使用                                                                                                | `() => void`                | - |
 | syncNodeStateIntoData   | 讲 node 中的状态属性同步到 data 中，将会覆盖 `visible`、`selected`、`expanded`、`disabled`、`checked`、`loading`、`readonly` 字段，谨慎使用 | `() => void`                 | - |
 | getCheckedNodes         | 获取所有复选框被勾选的节点对象                                                                                                              | `() => TreeNodeOptions[]`                 | - |
