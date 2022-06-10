@@ -5,36 +5,37 @@
     @click="handleClick"
     @clickoutside="handleClickOutside"
   >
-    <div ref="reference" :class="`${prefixCls}__control`" :style="controlStyle">
+    <div ref="reference" :class="selectorClass">
       <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
-      <slot name="control">
-        <template v-if="props.multiple && Array.isArray(currentValue)">
-          <Tag
-            v-for="(item, index) in currentValue"
-            :key="index"
-            :class="`${prefixCls}__tag`"
-            closable
-            @click.stop="handleClick"
-            @close="handleSelect(item, currentLabel[index])"
+      <div :class="`${prefixCls}__control`">
+        <slot name="control">
+          <template v-if="props.multiple && Array.isArray(currentValue)">
+            <Tag
+              v-for="(item, index) in currentValue"
+              :key="index"
+              :class="`${prefixCls}__tag`"
+              closable
+              @click.stop="handleClick"
+              @close="handleSelect(item, currentLabel[index])"
+            >
+              {{ currentLabel[index] }}
+            </Tag>
+          </template>
+          <template v-else>
+            {{ currentLabel }}
+          </template>
+          <span
+            v-if="(props.placeholder ?? locale.placeholder) && !hasValue"
+            :class="`${prefixCls}__placeholder`"
           >
-            {{ currentLabel[index] }}
-          </Tag>
-        </template>
-        <template v-else>
-          {{ currentLabel }}
-        </template>
-        <span
-          v-if="(props.placeholder ?? locale.placeholder) && !hasValue"
-          :class="`${prefixCls}__placeholder`"
-          :style="placeholderStyle"
-        >
-          {{ props.placeholder ?? locale.placeholder }}
-        </span>
-      </slot>
+            {{ props.placeholder ?? locale.placeholder }}
+          </span>
+        </slot>
+      </div>
       <transition name="vxp-fade">
         <div
           v-if="!props.disabled && props.clearable && isHover && hasValue"
@@ -71,64 +72,61 @@
           :class="[`${prefixCls}__popper`, `${prefixCls}-vars`]"
           @click.stop
         >
-          <div
+          <VirtualList
+            ref="virtualList"
             :class="[`${prefixCls}__list`, props.listClass]"
             :style="{
               height: listHeight,
               maxHeight: `${props.maxListHeight}px`
             }"
+            :items="visibleOptions"
+            :item-size="32"
+            :use-y-bar="!!listHeight"
+            height="100%"
+            id-key="value"
+            :items-attrs="{
+              class: [
+                `${prefixCls}__options`,
+                props.optionCheck ? `${prefixCls}__options--has-check` : ''
+              ]
+            }"
           >
-            <VirtualList
-              ref="virtualList"
-              :items="visibleOptions"
-              :item-size="32"
-              :use-y-bar="!!listHeight"
-              height="100%"
-              id-key="value"
-              :items-attrs="{
-                class: [
-                  `${prefixCls}__options`,
-                  props.optionCheck ? `${prefixCls}__options--has-check` : ''
-                ]
-              }"
-            >
-              <template #default="{ item, index }">
-                <slot
-                  :option="item"
-                  :index="index"
-                  :selected="item.value === currentValue"
-                  :handle-select="handleSelect"
+            <template #default="{ item, index }">
+              <slot
+                :option="item"
+                :index="index"
+                :selected="item.value === currentValue"
+                :handle-select="handleSelect"
+              >
+                <Option
+                  :label="item.label || item.value.toString()"
+                  :value="item.value"
+                  :disabled="item.disabled"
+                  :divided="item.divided"
+                  :no-title="item.noTitle"
+                  :hitting="item.hitting"
+                  :select="item.value === currentValue"
+                  @select="handleSelect"
                 >
-                  <Option
-                    :label="item.label || item.value.toString()"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                    :divided="item.divided"
-                    :no-title="item.noTitle"
-                    :hitting="item.hitting"
-                    :select="item.value === currentValue"
-                    @select="handleSelect"
-                  >
-                    <span :class="`${prefixCls}__label`">
-                      {{ item.label || item.value }}
-                    </span>
-                    <transition v-if="props.optionCheck" name="vxp-fade" appear>
-                      <Icon v-if="item.value === currentValue" :class="`${prefixCls}__check`">
-                        <Check></Check>
-                      </Icon>
-                    </transition>
-                  </Option>
-                </slot>
-              </template>
-              <template #empty>
-                <slot v-if="hasEmptyTip" name="empty">
-                  <div :class="`${prefixCls}__empty`">
-                    {{ props.emptyText ?? locale.empty }}
-                  </div>
-                </slot>
-              </template>
-            </VirtualList>
-          </div>
+                  <span :class="`${prefixCls}__label`">
+                    {{ item.label || item.value }}
+                  </span>
+                  <transition v-if="props.optionCheck" name="vxp-fade" appear>
+                    <Icon v-if="item.value === currentValue" :class="`${prefixCls}__check`">
+                      <Check></Check>
+                    </Icon>
+                  </transition>
+                </Option>
+              </slot>
+            </template>
+            <template #empty>
+              <slot v-if="hasEmptyTip" name="empty">
+                <div :class="`${prefixCls}__empty`">
+                  {{ props.emptyText ?? locale.empty }}
+                </div>
+              </slot>
+            </template>
+          </VirtualList>
         </div>
       </transition>
     </Portal>
@@ -314,11 +312,20 @@ export default defineComponent({
         [prefix]: true,
         'vxp-input-vars': true,
         [`${prefix}-vars`]: true,
-        [`${prefix}--focused`]: !props.disabled && currentVisible.value,
-        [`${prefix}--multiple`]: props.multiple,
-        [`${prefix}--disabled`]: props.disabled,
-        [`${prefix}--${props.size}`]: props.size !== 'default',
-        [`${prefix}--${props.state}`]: props.state !== 'default'
+        [`${prefix}--multiple`]: props.multiple
+      }
+    })
+    const selectorClass = computed(() => {
+      const baseCls = `${prefix}__selector`
+
+      return {
+        [baseCls]: true,
+        [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
+        [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--${props.size}`]: props.size !== 'default',
+        [`${baseCls}--${props.state}`]: props.state !== 'default',
+        [`${baseCls}--has-prefix`]: hasPrefix.value,
+        [`${baseCls}--has-suffix`]: !props.noSuffix
       }
     })
     const hasValue = computed(() => {
@@ -332,18 +339,18 @@ export default defineComponent({
     const optionStates = computed(() => {
       return Array.from(optionMap.value.values())
     })
-    const controlStyle = computed(() => {
-      return {
-        paddingRight: props.noSuffix ? '' : '2em',
-        paddingLeft: hasPrefix.value ? '2em' : ''
-      }
-    })
-    const placeholderStyle = computed(() => {
-      return {
-        right: props.noSuffix ? '' : '2em',
-        left: hasPrefix.value ? '2em' : ''
-      }
-    })
+    // const controlStyle = computed(() => {
+    //   return {
+    //     paddingRight: props.noSuffix ? '' : '2em',
+    //     paddingLeft: hasPrefix.value ? '2em' : ''
+    //   }
+    // })
+    // const placeholderStyle = computed(() => {
+    //   return {
+    //     right: props.noSuffix ? '' : '2em',
+    //     left: hasPrefix.value ? '2em' : ''
+    //   }
+    // })
     const visibleOptions = computed(() => {
       return optionStates.value.filter(state => !state.hidden)
     })
@@ -570,10 +577,11 @@ export default defineComponent({
       isHover,
 
       className,
+      selectorClass,
       hasValue,
       hasPrefix,
-      controlStyle,
-      placeholderStyle,
+      // controlStyle,
+      // placeholderStyle,
       visibleOptions,
       hasEmptyTip,
 

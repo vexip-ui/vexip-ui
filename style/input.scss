@@ -28,18 +28,12 @@ $input: map.merge(
     count-color-disbaled: get-css-var('input-control-color-disabled'),
     count-font-size: get-css-var('font-size-secondary'),
     count-line-height: get-css-var('line-height-secondary'),
-    small-height: 1.7em,
-    small-v-padding: 0.1em,
-    small-h-padding: 0.6em,
-    small-padding: get-css-var('input-small-v-padding') get-css-var('input-small-h-padding'),
-    default-height: 2.1em,
-    default-v-padding: 0.3em,
-    default-h-padding: 0.6em,
-    default-padding: get-css-var('input-default-v-padding') get-css-var('input-default-h-padding'),
-    large-height: 2.5em,
-    large-v-padding: 0.5em,
-    large-h-padding: 0.6em,
-    large-padding: get-css-var('input-large-v-padding') get-css-var('input-large-h-padding')
+    height: 32px,
+    v-padding: 4px,
+    h-padding: 8px,
+    padding: get-css-var('input-v-padding') get-css-var('input-h-padding'),
+    prefix-width: 32px,
+    suffix-width: 32px
   ),
   $input
 );
@@ -48,73 +42,99 @@ $input: map.merge(
   @include define-preset-style('input', $style-map);
 }
 
-@mixin handler {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  width: 100%;
-  background-color: get-css-var('input-bg-color');
-  border: get-css-var('input-border');
-  border-radius: get-css-var('input-radius');
-  outline: 0;
-  transition:
-    get-css-var('transition-background'),
-    get-css-var('transition-border'),
-    get-css-var('transition-shadow');
+@mixin handler($handler: &) {
+  @at-root #{$handler} {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    height: get-css-var('input-height');
+    padding: get-css-var('input-padding');
+    background-color: get-css-var('input-bg-color');
+    border: get-css-var('input-border');
+    border-radius: get-css-var('input-radius');
+    outline: 0;
+    transition:
+      get-css-var('transition-background'),
+      get-css-var('transition-border'),
+      get-css-var('transition-shadow');
 
-  &:hover {
-    border-color: get-css-var('input-b-color-hover');
-  }
-
-  &:focus,
-  &--focused {
-    z-index: 2;
-    border-color: get-css-var('input-b-color-focus');
-    box-shadow: get-css-var('input-shadow-focus');
-  }
-
-  $states: success, error, warning;
-
-  @each $state in $states {
-    // 提升 state 样式的级别，以防止引入的先后顺序导致样式丢失
-    &#{&}--#{$state} {
-      @include define-input-style(
-        (
-          b-color: 'color' $state 'light-1',
-          b-color-hover: 'color' $state 'light-1',
-          s-color-focus: 'color' $state 'opacity-6'
-        )
-      );
+    &:hover {
+      border-color: get-css-var('input-b-color-hover');
     }
-  }
 
-  &--disabled {
-    cursor: not-allowed;
-    background-color: get-css-var('input-bg-color-disabled');
+    &:focus,
+    &--focused {
+      z-index: 2;
+      border-color: get-css-var('input-b-color-focus');
+      box-shadow: get-css-var('input-shadow-focus');
+    }
 
-    &,
-    &:hover,
-    &:focus {
+    &--small {
+      @include define-preset-values('input', (
+        height: 24px,
+        v-padding: 1px
+      ));
+    }
+
+    &--large {
+      @include define-preset-values('input', (
+        height: 40px,
+        v-padding: 7px
+      ));
+    }
+
+    &--has-prefix {
+      padding-left: get-css-var('input-prefix-width');
+    }
+
+    &--has-suffix {
+      padding-right: get-css-var('input-suffix-width');
+    }
+
+    $states: success, error, warning;
+
+    @each $state in $states {
+      // 提升 state 样式的级别，以防止引入的先后顺序导致样式丢失
+      &#{&}--#{$state} {
+        @include define-input-style(
+          (
+            b-color: 'color' $state 'light-1',
+            b-color-hover: 'color' $state 'light-1',
+            s-color-focus: 'color' $state 'opacity-6'
+          )
+        );
+      }
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+      background-color: get-css-var('input-bg-color-disabled');
+
+      &,
+      &:hover,
+      &:focus {
+        border-color: get-css-var('border-color-base');
+        box-shadow: none;
+      }
+
+      %disabled-item {
+        color: get-css-var('input-control-color-disabled');
+        pointer-events: none;
+        cursor: not-allowed;
+      }
+    }
+
+    &--disabled#{&}--focused {
       border-color: get-css-var('border-color-base');
       box-shadow: none;
     }
-
-    %disabled-item {
-      color: get-css-var('input-control-color-disabled');
-      pointer-events: none;
-      cursor: not-allowed;
-    }
-  }
-
-  &--disabled#{&}--focused {
-    border-color: get-css-var('border-color-base');
-    box-shadow: none;
   }
 
   &__control {
     width: 100%;
-    height: get-css-var('input-default-height');
-    padding: get-css-var('input-default-padding');
+    height: 100%;
+    padding: 0;
     font-size: inherit;
     line-height: get-css-var('input-line-height');
     color: get-css-var('input-control-color');
@@ -134,23 +154,12 @@ $input: map.merge(
     @extend %disabled-item;
   }
 
-  &--small &__control {
-    height: get-css-var('input-small-height');
-    padding: get-css-var('input-small-padding');
-  }
-
-  &--large &__control {
-    height: get-css-var('input-large-height');
-    padding: get-css-var('input-large-padding');
-  }
-
   @at-root {
     %icon {
       position: absolute;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 2em;
       height: 100%;
       color: get-css-var('input-icon-color');
       user-select: none;
@@ -164,12 +173,14 @@ $input: map.merge(
       @extend %icon;
 
       left: 0;
+      width: get-css-var('input-prefix-width');
     }
 
     &--suffix {
       @extend %icon;
 
       right: 0;
+      width: get-css-var('input-suffix-width');
     }
   }
 
@@ -177,6 +188,7 @@ $input: map.merge(
     @extend %icon;
 
     right: 0;
+    width: get-css-var('input-suffix-width');
     cursor: pointer;
   }
 }
@@ -214,14 +226,6 @@ $input: map.merge(
     border-radius: $radius 0 0 $radius;
   }
 
-  // &__overlay {
-  //   display: flex;
-  //   flex-wrap: wrap;
-  //   align-items: center;
-  //   width: 100%;
-  //   overflow: hidden;
-  // }
-
   &__icon {
     &--password {
       position: absolute;
@@ -229,7 +233,7 @@ $input: map.merge(
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 2em;
+      width: get-css-var('input-suffix-width');
       height: 100%;
       color: get-css-var('input-icon-color');
       cursor: pointer;
@@ -262,8 +266,8 @@ $input: map.merge(
     position: relative;
     display: flex;
     align-items: center;
-    height: calc(get-css-var('input-default-height') + get-css-var('border-width') * 2);
-    padding: 0 get-css-var('input-default-h-padding');
+    height: calc(get-css-var('input-height'));
+    padding: 0 get-css-var('input-h-padding');
     border: get-css-var('input-border');
 
     #{$wrapper}--small & {
@@ -271,10 +275,10 @@ $input: map.merge(
       padding: 0 get-css-var('input-small-h-padding');
     }
 
-    #{$wrapper}--large & {
-      height: calc(get-css-var('input-large-height') + get-css-var('border-width') * 2);
-      padding: 0 get-css-var('input-large-h-padding');
-    }
+    // #{$wrapper}--large & {
+    //   height: calc(get-css-var('input-large-height') + get-css-var('border-width') * 2);
+    //   padding: 0 get-css-var('input-large-h-padding');
+    // }
 
     #{$self} {
       padding: 0;

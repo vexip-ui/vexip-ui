@@ -50,7 +50,11 @@ $date-picker: map.merge(
   }
 
   @include basis;
-  @include input.handler;
+
+  display: inline-flex;
+  width: 100%;
+
+  @include input.handler(#{&}__selector);
 
   $wheel: 'vxp-wheel';
 

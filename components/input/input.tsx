@@ -130,7 +130,9 @@ export default defineComponent({
           [`${prefix}--focused`]: focused.value,
           [`${prefix}--disabled`]: props.disabled,
           [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--${props.state}`]: props.state !== 'default'
+          [`${prefix}--${props.state}`]: props.state !== 'default',
+          [`${prefix}--has-prefix`]: hasPrefix.value,
+          [`${prefix}--has-suffix`]: hasSuffix.value || props.type === 'password'
         }
       ]
     })
@@ -148,12 +150,6 @@ export default defineComponent({
     })
     const hasSuffix = computed(() => {
       return !!(slots.suffix || props.suffix)
-    })
-    const inputStyle = computed(() => {
-      return {
-        paddingLeft: hasPrefix.value ? '2em' : '',
-        paddingRight: hasSuffix.value || props.type === 'password' ? '2em' : ''
-      }
     })
     const inputType = computed(() => {
       const type = props.type
@@ -389,7 +385,6 @@ export default defineComponent({
             class={[`${prefix}__control`, props.inputClass]}
             type={inputType.value}
             value={formattedValue.value}
-            style={inputStyle.value}
             autofocus={props.autofocus}
             autocomplete={props.autocomplete ? 'on' : 'off'}
             spellcheck={props.spellcheck}

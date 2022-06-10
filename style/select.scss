@@ -26,7 +26,16 @@ $select: map.merge(
   }
 
   @include basis;
-  @include input.handler;
+
+  display: inline-flex;
+  width: 100%;
+
+  @include input.handler(#{&}__selector);
+
+  &--multiple &__selector {
+    height: auto;
+    min-height: get-css-var('input-height');
+  }
 
   &__control,
   &__input {
@@ -34,30 +43,18 @@ $select: map.merge(
     user-select: none;
   }
 
-  &__control {
+  &--multiple &__control {
     position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    min-height: get-css-var('input-default-height');
-  }
-
-  &--small &__control {
-    min-height: get-css-var('input-small-height');
-  }
-
-  &--large &__control {
-    min-height: get-css-var('input-large-height');
-  }
-
-  &--multiple &__control {
-    height: auto;
-    padding: 0.1em 0.3em;
+    min-height: 0;
+    margin-top: -2px;
   }
 
   &__tag {
-    height: 1.6em;
-    margin: 0.15em 0.3em;
+    height: 20px;
+    margin: 2px 4px;
     margin-left: 0;
     pointer-events: auto;
     cursor: pointer;
@@ -69,8 +66,8 @@ $select: map.merge(
 
   &__placeholder {
     position: absolute;
-    right: 2em;
-    left: 0.6em;
+    // right: 2em;
+    // left: 0.6em;
     overflow: hidden;
     color: get-css-var('input-placeholder-color');
     text-overflow: ellipsis;
@@ -83,7 +80,7 @@ $select: map.merge(
     z-index: get-css-var('z-index-popper');
     display: flex;
     min-width: 7em;
-    padding: 0.35em 0;
+    padding: 5px 0;
 
     .vxp-scroll__wrapper {
       width: 100%;
@@ -93,6 +90,7 @@ $select: map.merge(
   &__list {
     display: inline-block;
     width: 100%;
+    padding: 5px 0;
     user-select: none;
     background-color: get-css-var('select-list-bg-color');
     border: get-css-var('select-list-border');
@@ -141,7 +139,7 @@ $select: map.merge(
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 0.6em 1.2em;
+    padding: 3px 16px;
     color: get-css-var('select-empty-color');
     white-space: nowrap;
     cursor: default;

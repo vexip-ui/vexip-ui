@@ -41,9 +41,14 @@ $color-picker: map.merge(
   }
 
   @include basis;
-  @include input.handler;
 
-  width: auto;
+  display: inline-flex;
+
+  @include input.handler(#{&}__trigger);
+
+  &__trigger {
+    width: auto;
+  }
 
   &__control {
     display: flex;

@@ -5,46 +5,19 @@
     @click="handleTirggerClick"
     @clickoutside="finishInput"
   >
-    <div ref="reference" :class="`${prefixCls}__control`">
+    <div ref="reference" :class="`${prefixCls}__selector`">
       <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
-      <DateControl
-        ref="start"
-        :unit-type="currentState === 'start' ? startState.column : ''"
-        :enabled="startState.enabled"
-        :activated="startState.activated"
-        :date-value="startState.dateValue"
-        :steps="props.steps"
-        :ctrl-steps="props.ctrlSteps"
-        :focused="focused"
-        :visible="currentVisible"
-        :date-separator="props.dateSeparator"
-        :time-separator="props.timeSeparator"
-        :filler="props.filler"
-        :no-filler="props.noFiller"
-        :labels="props.labels"
-        @input="handleInput"
-        @plus="handlePlus"
-        @minus="handleMinus"
-        @enter="handlePaneConfirm"
-        @cancel="handleCancel"
-        @unit-focus="handleStartInput"
-        @prev-unit="enterColumn('prev')"
-        @next-unit="enterColumn('next')"
-      ></DateControl>
-      <template v-if="props.isRange">
-        <div :class="`${prefixCls}__exchange`">
-          <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
-        </div>
+      <div :class="`${prefixCls}__control`">
         <DateControl
-          ref="end"
-          :unit-type="currentState === 'end' ? endState.column : ''"
-          :enabled="endState.enabled"
-          :activated="endState.activated"
-          :date-value="endState.dateValue"
+          ref="start"
+          :unit-type="currentState === 'start' ? startState.column : ''"
+          :enabled="startState.enabled"
+          :activated="startState.activated"
+          :date-value="startState.dateValue"
           :steps="props.steps"
           :ctrl-steps="props.ctrlSteps"
           :focused="focused"
@@ -59,11 +32,40 @@
           @minus="handleMinus"
           @enter="handlePaneConfirm"
           @cancel="handleCancel"
-          @unit-focus="handleEndInput"
+          @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
           @next-unit="enterColumn('next')"
         ></DateControl>
-      </template>
+        <template v-if="props.isRange">
+          <div :class="`${prefixCls}__exchange`">
+            <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
+          </div>
+          <DateControl
+            ref="end"
+            :unit-type="currentState === 'end' ? endState.column : ''"
+            :enabled="endState.enabled"
+            :activated="endState.activated"
+            :date-value="endState.dateValue"
+            :steps="props.steps"
+            :ctrl-steps="props.ctrlSteps"
+            :focused="focused"
+            :visible="currentVisible"
+            :date-separator="props.dateSeparator"
+            :time-separator="props.timeSeparator"
+            :filler="props.filler"
+            :no-filler="props.noFiller"
+            :labels="props.labels"
+            @input="handleInput"
+            @plus="handlePlus"
+            @minus="handleMinus"
+            @enter="handlePaneConfirm"
+            @cancel="handleCancel"
+            @unit-focus="handleEndInput"
+            @prev-unit="enterColumn('prev')"
+            @next-unit="enterColumn('next')"
+          ></DateControl>
+        </template>
+      </div>
       <transition name="vxp-fade">
         <div
           v-if="!props.disabled && props.clearable && isHover && lastValue"

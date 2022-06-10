@@ -5,48 +5,19 @@
     @click="handleTirggerClick"
     @clickoutside="finishInput"
   >
-    <div ref="reference" :class="`${prefixCls}__control`">
+    <div ref="reference" :class="`${prefixCls}__selector`">
       <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
-      <TimeControl
-        ref="start"
-        :unit-type="currentState === 'start' ? startState.column : ''"
-        :enabled="startState.enabled"
-        :activated="startState.activated"
-        :time-value="startState.timeValue"
-        :steps="props.steps"
-        :ctrl-steps="props.ctrlSteps"
-        :focused="focused"
-        :visible="currentVisible"
-        :separator="props.separator"
-        :filler="props.filler"
-        :no-filler="props.noFiller"
-        :labels="props.labels"
-        @input="handleInput"
-        @plus="handlePlus"
-        @minus="handleMinus"
-        @enter="handleEnter"
-        @cancel="handleCancel"
-        @unit-focus="handleStartInput"
-        @prev-unit="enterColumn('prev')"
-        @next-unit="enterColumn('next')"
-      ></TimeControl>
-      <template v-if="props.isRange">
-        <div
-          :class="[`${prefixCls}__exchange`, props.exchange ? `${prefixCls}__exchange--enabled` : '']"
-          @click="handleExchangeClick"
-        >
-          <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
-        </div>
+      <div :class="`${prefixCls}__control`">
         <TimeControl
-          ref="end"
-          :unit-type="currentState === 'end' ? endState.column : ''"
-          :enabled="endState.enabled"
-          :activated="endState.activated"
-          :time-value="endState.timeValue"
+          ref="start"
+          :unit-type="currentState === 'start' ? startState.column : ''"
+          :enabled="startState.enabled"
+          :activated="startState.activated"
+          :time-value="startState.timeValue"
           :steps="props.steps"
           :ctrl-steps="props.ctrlSteps"
           :focused="focused"
@@ -60,11 +31,42 @@
           @minus="handleMinus"
           @enter="handleEnter"
           @cancel="handleCancel"
-          @unit-focus="handleEndInput"
+          @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
           @next-unit="enterColumn('next')"
         ></TimeControl>
-      </template>
+        <template v-if="props.isRange">
+          <div
+            :class="[`${prefixCls}__exchange`, props.exchange ? `${prefixCls}__exchange--enabled` : '']"
+            @click="handleExchangeClick"
+          >
+            <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
+          </div>
+          <TimeControl
+            ref="end"
+            :unit-type="currentState === 'end' ? endState.column : ''"
+            :enabled="endState.enabled"
+            :activated="endState.activated"
+            :time-value="endState.timeValue"
+            :steps="props.steps"
+            :ctrl-steps="props.ctrlSteps"
+            :focused="focused"
+            :visible="currentVisible"
+            :separator="props.separator"
+            :filler="props.filler"
+            :no-filler="props.noFiller"
+            :labels="props.labels"
+            @input="handleInput"
+            @plus="handlePlus"
+            @minus="handleMinus"
+            @enter="handleEnter"
+            @cancel="handleCancel"
+            @unit-focus="handleEndInput"
+            @prev-unit="enterColumn('prev')"
+            @next-unit="enterColumn('next')"
+          ></TimeControl>
+        </template>
+      </div>
       <transition name="vxp-fade">
         <div
           v-if="!props.disabled && props.clearable && isHover && lastValue"

@@ -230,9 +230,12 @@ function formatComponentName(name: string) {
 
   .search-input {
     width: 300px;
-    background-color: transparent;
-    border: 0;
-    box-shadow: none;
+
+    .vxp-select__selector {
+      background-color: transparent;
+      border: 0;
+      box-shadow: none;
+    }
 
     .vxp-icon {
       color: var(--vxp-content-color-placeholder);
