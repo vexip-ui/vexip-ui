@@ -62,19 +62,12 @@ $button: map.merge(
     pulse-size: 6px,
     pulse-duration: 800ms,
     pulse-timing: ease,
-    small-height: 1.9em,
-    small-v-padding: 0,
-    small-h-padding: 0.8em,
-    small-padding: get-css-var('button-small-v-padding') get-css-var('button-small-h-padding'),
-    default-height: 2.2em,
-    default-v-padding: 0,
-    default-h-padding: 1em,
-    default-padding: get-css-var('button-default-v-padding') get-css-var('button-default-h-padding'),
-    large-height: 2.5em,
-    large-v-padding: 0,
-    large-h-padding: 1.4em,
-    large-padding: get-css-var('button-large-v-padding') get-css-var('button-large-h-padding'),
-    series-span: 0.6em,
+    height: 32px,
+    v-padding: 0,
+    h-padding: 14px,
+    padding: get-css-var('button-v-padding') get-css-var('button-h-padding'),
+    font-size: get-css-var('font-size-base'),
+    series-span: 8px,
     icon-span: 4px,
     d-color-typed: rgba($color-white, 50%)
   ),
@@ -111,8 +104,8 @@ $button: map.merge(
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: get-css-var('button-default-height');
-  padding: get-css-var('button-default-padding');
+  height: get-css-var('button-height');
+  padding: get-css-var('button-padding');
   font-weight: 400;
   line-height: 1;
   color: get-css-var('button-color');
@@ -161,13 +154,17 @@ $button: map.merge(
   }
 
   &--small {
-    height: get-css-var('button-small-height');
-    padding: get-css-var('button-small-padding');
+    @include define-preset-values('button', (
+      height: 24px,
+      h-padding: 10px
+    ));
   }
 
   &--large {
-    height: get-css-var('button-large-height');
-    padding: get-css-var('button-large-padding');
+    @include define-preset-values('button', (
+      height: 40px,
+      h-padding: 20px
+    ));
   }
 
   &::after {
@@ -255,7 +252,7 @@ $button: map.merge(
       color-active: 'button-color-active-ghost',
       bg-color-disabled: 'button-bg-color-disabled-ghost',
       b-color-disabled: 'button-b-color-disabled-ghost',
-      color-disabled: 'button-color-disabled-ghost',
+      color-disabled: 'button-color-disabled-ghost'
     ));
   }
 
@@ -304,7 +301,7 @@ $button: map.merge(
           b-color-hover: 'color' $type 'opacity-4',
           b-color-focus: 'color' $type 'opacity-3',
           b-color-active: 'color' $type 'opacity-3',
-          b-color-disabled: 'button-b-color-disabled-typed-simple',
+          b-color-disabled: 'button-b-color-disabled-typed-simple'
         ));
       }
 
@@ -320,7 +317,7 @@ $button: map.merge(
           bg-color-focus: 'button-bg-color-focus-typed-ghost',
           bg-color-active: 'button-bg-color-active-typed-ghost',
           bg-color-disabled: 'button-bg-color-disabled-typed-ghost',
-          b-color-disabled: 'button-b-color-disabled-typed-ghost',
+          b-color-disabled: 'button-b-color-disabled-typed-ghost'
         ));
       }
 
@@ -362,7 +359,7 @@ $button: map.merge(
   }
 
   &--circle {
-    border-radius: get-css-var('button-large-height');
+    border-radius: get-css-var('button-height');
   }
 
   &--loading {
@@ -393,7 +390,7 @@ $button: map.merge(
   }
 
   &--icon-only {
-    width: get-css-var('button-default-height');
+    width: get-css-var('button-height');
     padding: 0;
   }
 
@@ -402,11 +399,11 @@ $button: map.merge(
   }
 
   &--icon-only#{&}--small {
-    width: get-css-var('button-small-height');
+    width: get-css-var('button-height');
   }
 
   &--icon-only#{&}--large {
-    width: get-css-var('button-large-height');
+    width: get-css-var('button-height');
   }
 
   @at-root {
@@ -447,11 +444,11 @@ $button: map.merge(
       &--circle {
         #{$self} {
           &:first-child {
-            border-radius: get-css-var('button-large-height') 0 0 get-css-var('button-large-height');
+            border-radius: get-css-var('button-height') 0 0 get-css-var('button-height');
           }
 
           &:last-child {
-            border-radius: 0 get-css-var('button-large-height') get-css-var('button-large-height') 0;
+            border-radius: 0 get-css-var('button-height') get-css-var('button-height') 0;
           }
         }
       }
