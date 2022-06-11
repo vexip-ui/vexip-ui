@@ -63,7 +63,7 @@ function useContainer(md: MarkdownIt) {
   md
     .use(...createContainer('info'))
     .use(...createContainer('warning'))
-    .use(...createContainer('danger'))
+    .use(...createContainer('error'))
     .use(container, 'v-pre', {
       render(tokens: Token[], index: number) {
         return tokens[index].nesting === 1

@@ -16,7 +16,7 @@ export interface I18nConfig {
   alert: {
     info: string,
     warning: string,
-    danger: string
+    error: string
   },
   guides: {
     introduction: string,

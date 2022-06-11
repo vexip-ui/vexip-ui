@@ -17,6 +17,7 @@ const isDark = ref(rootCls.contains('dark'))
 function toggleDark(value: boolean) {
   requestAnimationFrame(() => {
     isDark.value = value
+
     if (value) {
       rootCls.add('dark')
     } else {

@@ -43,6 +43,7 @@ watch(isMounted, value => {
     font-family: SFMono-Regular, Consolas, Monaco, 'andale mono', 'ubuntu mono', monospace;
     background-color: var(--vxp-fill-color-background);
     border-radius: var(--vxp-border-radius-small);
+    transition: var(--vxp-transition-background);
   }
 
   p {

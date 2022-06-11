@@ -18,7 +18,7 @@ export const enUS = defineI18n({
   alert: {
     info: 'Tip',
     warning: 'Attention',
-    danger: 'Warning'
+    error: 'Warning'
   },
   guides: {
     introduction: 'Introduction',

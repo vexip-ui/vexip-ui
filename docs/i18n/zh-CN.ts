@@ -18,7 +18,7 @@ export const zhCN = defineI18n({
   alert: {
     info: '提示',
     warning: '注意',
-    danger: '警告'
+    error: '警告'
   },
   guides: {
     introduction: '介绍',
