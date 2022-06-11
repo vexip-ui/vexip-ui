@@ -23,14 +23,14 @@ $confirm: map.merge(
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 1em;
+    padding: 14px;
   }
 
   &__icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 0.3em;
+    margin-right: 4px;
     color: get-css-var('confirm-icon-color');
   }
 
@@ -38,7 +38,7 @@ $confirm: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1em 0;
+    padding: 14px 0;
   }
 
   &__button {

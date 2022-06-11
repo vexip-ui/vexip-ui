@@ -86,7 +86,7 @@ $progress: map.merge(
   &__info {
     display: flex;
     align-items: center;
-    margin-left: 0.6em;
+    margin-left: 8px;
     color: get-css-var('progress-info-color');
     pointer-events: none;
     transition: get-css-var('transition-transform');
@@ -99,7 +99,7 @@ $progress: map.merge(
     left: 0;
     justify-content: flex-end;
     width: 100%;
-    padding-right: 0.6em;
+    padding-right: 8px;
     margin: 0;
     color: get-css-var('progress-info-color-inside');
   }
@@ -109,7 +109,7 @@ $progress: map.merge(
   &--info-bubble-bottom &__info {
     min-width: auto;
     min-height: auto;
-    padding: 0.1em 0.3em;
+    padding: 0.1em 4px;
     margin: 0;
     color: get-css-var('progress-info-color-bubble');
   }

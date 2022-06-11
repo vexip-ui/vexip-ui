@@ -33,7 +33,7 @@ watch(isMounted, value => {
 <style lang="scss">
 .markdown {
   pre {
-    margin: 1em 0;
+    margin: 14px 0;
     background-color: var(--vxp-fill-color-background);
     border-radius: 2px;
   }
@@ -46,12 +46,12 @@ watch(isMounted, value => {
   }
 
   p {
-    margin: 1em 0;
+    margin: 14px 0;
   }
 
   blockquote {
-    padding: 0.2em 0.8em;
-    margin: 1em 0;
+    padding: 3px 10px;
+    margin: 14px 0;
     font-size: 90%;
     color: var(--vxp-content-color-secondary);
     border-left: 4px solid var(--vxp-border-color-base);
@@ -91,7 +91,7 @@ watch(isMounted, value => {
 
   table {
     width: 100%;
-    margin-top: 0.8em;
+    margin-top: 10px;
     margin-bottom: 2em;
     font-family: Consolas, Monaco, 'andale mono', 'ubuntu mono', monospace;
     font-size: var(--vxp-font-size-secondary);
@@ -100,7 +100,7 @@ watch(isMounted, value => {
 
     th,
     td {
-      padding: 0.8em 1.2em;
+      padding: 10px 16px;
       border: var(--vxp-border-light-2);
     }
 

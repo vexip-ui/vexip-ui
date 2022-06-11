@@ -1,3 +1,3 @@
-### 水平分割线
+### Horizontal Divider
 
-默认为水平分割线，可在中间加入文字。
+The default is a horizontal dividing line, and text can be added in the middle.

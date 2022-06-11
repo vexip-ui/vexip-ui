@@ -14,7 +14,7 @@ $tag: map.merge(
     b-color: get-css-var('border-color-base'),
     border: get-css-var('border-shape') get-css-var('tag-b-color'),
     radius: get-css-var('radius-base'),
-    series-span: 0.3em,
+    series-span: 4px,
     small-font-size: get-css-var('font-size-secondary'),
     default-font-size: get-css-var('font-size-base'),
     large-font-size: get-css-var('font-size-primary'),
@@ -58,7 +58,7 @@ $tag: map.merge(
   }
 
   &--circle {
-    border-radius: 1em;
+    border-radius: 14px;
   }
 
   &__close {

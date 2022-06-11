@@ -14,8 +14,8 @@ $message: map.merge(
     radius: get-css-var('radius-base'),
     s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('message-s-color'),
-    v-padding: 0.6em,
-    h-padding: 1em,
+    v-padding: 8px,
+    h-padding: 14px,
     mask-bg-color: transparent,
     padding: get-css-var('message-v-padding') get-css-var('message-h-padding'),
     icon-color: get-css-var('message-color'),
@@ -59,7 +59,7 @@ $message: map.merge(
   &__close {
     display: flex;
     align-items: center;
-    margin-left: 1em;
+    margin-left: 14px;
     color: get-css-var('message-close-color');
     cursor: pointer;
     transition: get-css-var('transition-color');

@@ -1,9 +1,9 @@
 <template>
   <p>
-    一段文字
+    Some content
     <Divider vertical></Divider>
-    一段文字
+    Some content
     <Divider vertical></Divider>
-    一段文字
+    Some content
   </p>
 </template>

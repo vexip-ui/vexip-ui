@@ -74,7 +74,7 @@ $form: map.merge(
   &__label {
     display: inline-flex;
     align-items: center;
-    padding-right: 0.6em;
+    padding-right: 8px;
     white-space: nowrap;
   }
 
@@ -94,7 +94,7 @@ $form: map.merge(
 
   &--label-top &__label {
     justify-content: flex-start;
-    margin-bottom: 0.3em;
+    margin-bottom: 4px;
     text-align: left;
   }
 
@@ -123,7 +123,7 @@ $form: map.merge(
   &__item--required &__label::before {
     @include asterisk;
 
-    margin-right: 0.3em;
+    margin-right: 4px;
   }
 
   &--label-top &__item--required &__label {
@@ -134,7 +134,7 @@ $form: map.merge(
     &::after {
       @include asterisk;
 
-      margin-left: 0.3em;
+      margin-left: 4px;
     }
   }
 

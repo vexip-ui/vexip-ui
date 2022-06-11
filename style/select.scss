@@ -67,7 +67,7 @@ $select: map.merge(
   &__placeholder {
     position: absolute;
     // right: 2em;
-    // left: 0.6em;
+    // left: 8px;
     overflow: hidden;
     color: get-css-var('input-placeholder-color');
     text-overflow: ellipsis;

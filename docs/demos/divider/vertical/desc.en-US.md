@@ -1,3 +1,3 @@
-### 垂直分割线
+### Veritcal Divider
 
-添加 `vertical` 可以变成纵向分割线。
+Add `vertical` prop to make it vertical.

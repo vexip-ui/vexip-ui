@@ -1,22 +1,24 @@
 <template>
   <CollapseTransition v-if="!hidden" fade-effect @after-leave="handleAfterLeave">
     <div v-if="!closed" :class="className">
-      <div v-if="hasTitle" :class="`${prefix}__title`">
-        <slot name="title">
-          {{ title }}
-        </slot>
-      </div>
-      <div :class="`${prefix}__description`">
-        <slot></slot>
-      </div>
-      <div v-if="hasIcon" :class="`${prefix}__icon`">
-        <slot name="icon">
-          <Icon :icon="iconComp" :style="{ color: props.iconColor }"></Icon>
-        </slot>
+      <div :class="`${prefix}__wrapper`">
+        <div v-if="hasTitle" :class="`${prefix}__title`">
+          <slot name="title">
+            {{ title }}
+          </slot>
+        </div>
+        <div :class="`${prefix}__content`">
+          <slot></slot>
+        </div>
       </div>
       <div v-if="props.closable" :class="`${prefix}__close`" @click="handleClose">
         <slot name="close">
           <Icon><Xmark></Xmark></Icon>
+        </slot>
+      </div>
+      <div v-if="hasIcon" :class="`${prefix}__icon`">
+        <slot name="icon">
+          <Icon :icon="iconComp" :scale="hasTitle ? 2 : 1" :style="{ color: props.iconColor }"></Icon>
         </slot>
       </div>
     </div>

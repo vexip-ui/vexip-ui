@@ -1,1 +1,1 @@
-区隔内容的分割线，用于对不同章节的文本段落进行分割或者对行内元素进行分割。
+The dividing line that separates the content is used to divide the text paragraphs of different chapters or divide the inline elements.

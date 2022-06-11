@@ -24,7 +24,7 @@ $pagination: map.merge(
     small-size: 2em,
     default-size: 2.2em,
     large-size: 2.5em,
-    item-span: 0.4em
+    item-span: 6px
   ),
   $pagination
 );
@@ -133,7 +133,7 @@ $pagination: map.merge(
 
     .vxp-number-input {
       width: 60px;
-      margin: 0 0.3em;
+      margin: 0 4px;
       user-select: auto;
     }
   }
@@ -149,6 +149,6 @@ $pagination: map.merge(
   & > &__jump,
   & > &__size,
   & > &__total {
-    margin-left: 0.8em;
+    margin-left: 10px;
   }
 }

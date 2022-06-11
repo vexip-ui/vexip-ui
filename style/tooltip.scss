@@ -13,8 +13,8 @@ $tooltip: map.merge(
     shadow-dark: get-css-var('tooltip-shadow'),
     min-width: 4em,
     min-height: 2em,
-    v-padding: 0.6em,
-    h-padding: 1em,
+    v-padding: 8px,
+    h-padding: 14px,
     padding: get-css-var('tooltip-v-padding') get-css-var('tooltip-h-padding'),
     content-color: get-css-var('content-color-base'),
     content-color-dark: get-css-var('bg-color-base'),
@@ -82,7 +82,7 @@ $tooltip: map.merge(
     z-index: get-css-var('z-index-popper');
 
     &[data-popper-placement^='top'] {
-      padding: 0.5em 0 0.8em;
+      padding: 0.5em 0 10px;
 
       #{$arrow} {
         bottom: 0;
@@ -98,7 +98,7 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement^='bottom'] {
-      padding: 0.8em 0 0.5em;
+      padding: 10px 0 0.5em;
 
       #{$arrow} {
         top: 0;
@@ -114,7 +114,7 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement^='left'] {
-      padding: 0 0.8em 0 0.5em;
+      padding: 0 10px 0 0.5em;
 
       #{$arrow} {
         right: 0;
@@ -130,7 +130,7 @@ $tooltip: map.merge(
     }
 
     &[data-popper-placement^='right'] {
-      padding: 0 0.5em 0 0.8em;
+      padding: 0 0.5em 0 10px;
 
       #{$arrow} {
         left: 0;
@@ -219,7 +219,7 @@ $tooltip: map.merge(
       }
 
       &[data-popper-placement^='bottom'] {
-        padding: 0.8em 0 0.5em;
+        padding: 10px 0 0.5em;
 
         #{$arrow} {
           border-bottom-color: $border-color;

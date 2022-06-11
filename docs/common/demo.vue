@@ -206,16 +206,16 @@ function editOnPlayground() {
   }
 
   &__description {
-    padding: 0 1em 1em;
+    padding: 0 14px 14px;
 
     .markdown p {
-      padding: 0 1em;
-      margin-bottom: 0.4em;
+      padding: 0 14px;
+      margin-bottom: 6px;
     }
 
     .anchor {
       width: 100%;
-      margin: 1em 0;
+      margin: 14px 0;
       font-size: var(--vxp-font-size-primary);
       color: var(--vxp-content-color-base);
       white-space: nowrap;
@@ -231,13 +231,13 @@ function editOnPlayground() {
       }
 
       &::before {
-        width: 1em;
-        margin-right: 0.6em;
+        width: 14px;
+        margin-right: 8px;
       }
 
       &::after {
-        width: calc(100% - 1em);
-        margin-left: 0.6em;
+        width: calc(100% - 14px);
+        margin-left: 8px;
       }
 
       &__link {
@@ -312,7 +312,7 @@ function editOnPlayground() {
     align-items: center;
     justify-content: center;
     height: 32px;
-    padding: 0.4em 0;
+    padding: 6px 0;
     cursor: pointer;
     border-top: var(--vxp-border-light-2);
 

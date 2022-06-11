@@ -14,8 +14,8 @@ $notice: map.merge(
     radius: get-css-var('radius-base'),
     s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('notice-s-color'),
-    v-padding: 0.8em,
-    h-padding: 1.2em,
+    v-padding: 10px,
+    h-padding: 16px,
     mask-bg-color: transparent,
     padding: get-css-var('notice-v-padding') get-css-var('notice-h-padding'),
     title-font-size: get-css-var('font-size-primary'),
@@ -45,7 +45,7 @@ $notice: map.merge(
 
   &__title {
     position: relative;
-    margin-bottom: 0.2em;
+    margin-bottom: 3px;
     font-size: get-css-var('notice-title-font-size');
     color: get-css-var('notice-title-color');
   }
@@ -57,7 +57,7 @@ $notice: map.merge(
 
   &__icon {
     position: absolute;
-    top: 1.4em;
+    top: 20px;
     left: 1.8em;
     display: flex;
     align-items: center;
@@ -67,8 +67,8 @@ $notice: map.merge(
 
   &__close {
     position: absolute;
-    top: 0.4em;
-    right: 0.6em;
+    top: 6px;
+    right: 8px;
     display: flex;
     align-items: center;
     color: get-css-var('notice-close-color');
@@ -114,7 +114,7 @@ $notice: map.merge(
 
       #{$close} {
         top: 50%;
-        right: 1em;
+        right: 14px;
         transform: translateY(-50%);
       }
     }

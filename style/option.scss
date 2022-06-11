@@ -20,7 +20,7 @@ $option: map.merge(
     group-color: get-css-var('content-color-secondary'),
     group-font-size: get-css-var('font-size-secondary'),
     label-v-padding: 0.35em,
-    label-h-padding: 1.2em,
+    label-h-padding: 16px,
     min-height: 32px
   ),
   $option

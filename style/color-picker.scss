@@ -60,11 +60,11 @@ $color-picker: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(100% - 0.6em);
+    width: calc(100% - 8px);
     min-width: 1.6em;
     height: get-css-var('color-picker-marker-default-height');
     margin-top: -0.5px; // 修正视觉差异
-    margin-right: 0.6em;
+    margin-right: 8px;
     color: get-css-var('color-picker-marker-color');
     border: get-css-var('color-picker-marker-border');
     border-radius: get-css-var('color-picker-marker-radius');
@@ -114,7 +114,7 @@ $color-picker: map.merge(
 
   &__section {
     width: 100%;
-    padding: 0.6em 0.6em 0;
+    padding: 8px 8px 0;
   }
 
   &__palette {
@@ -150,8 +150,8 @@ $color-picker: map.merge(
   &__alpha {
     position: relative;
     width: 100%;
-    height: 1em;
-    margin-top: 0.8em;
+    height: 14px;
+    margin-top: 10px;
     cursor: pointer;
   }
 
@@ -178,12 +178,12 @@ $color-picker: map.merge(
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0.6em;
-    margin-top: 0.8em;
+    padding: 8px;
+    margin-top: 10px;
     border-top: get-css-var('color-picker-divider');
 
     .vxp-button {
-      margin-left: 0.3em !important;
+      margin-left: 4px !important;
     }
 
     .vxp-input {
@@ -223,12 +223,12 @@ $color-picker: map.merge(
     flex-wrap: wrap;
     align-items: center;
     width: 100%;
-    margin-top: 0.8em;
+    margin-top: 10px;
   }
 
   &__shortcut-item {
-    width: 1.2em;
-    height: 1.2em;
+    width: 16px;
+    height: 16px;
     margin: 2px;
     cursor: pointer;
     border-radius: get-css-var('color-picker-shortcut-radius');

@@ -45,7 +45,7 @@ $radio: map.merge(
   position: relative;
   display: inline-flex;
   align-items: center;
-  margin-right: 0.8em;
+  margin-right: 10px;
   line-height: 1;
   cursor: pointer;
   user-select: none;
@@ -55,7 +55,7 @@ $radio: map.merge(
     get-css-var('transition-shadow');
 
   &--border {
-    padding: 0.6em 0.8em;
+    padding: 8px 10px;
     border: get-css-var('radio-border');
     border-radius: get-css-var('radius-base');
 
@@ -73,7 +73,7 @@ $radio: map.merge(
     display: inline-block;
     width: get-css-var('radio-signal-default-size');
     height: get-css-var('radio-signal-default-size');
-    margin-right: 0.4em;
+    margin-right: 6px;
     background-color: get-css-var('radio-signal-bg-color');
     border: get-css-var('radio-signal-border');
     border-radius: 50%;
@@ -221,7 +221,7 @@ $radio: map.merge(
     }
 
     &-group--border & {
-      padding: 0.6em 0.8em;
+      padding: 8px 10px;
       border: get-css-var('radio-border');
       border-radius: get-css-var('radius-base');
 
@@ -265,7 +265,7 @@ $radio: map.merge(
     &-group--button & {
       position: relative;
       z-index: 0;
-      padding: 0.6em 0.8em;
+      padding: 8px 10px;
       margin: 0;
       border: get-css-var('radio-border');
       border-left-width: 0;
@@ -342,11 +342,11 @@ $radio: map.merge(
     }
 
     &-group--button#{&}-group--small & {
-      padding: 0.4em 0.6em;
+      padding: 6px 8px;
     }
 
     &-group--button#{&}-group--large & {
-      padding: 0.8em 1em;
+      padding: 10px 14px;
     }
 
     &-group--button#{&}-group--disabled &,

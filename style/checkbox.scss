@@ -46,7 +46,7 @@ $checkbox: map.merge(
   display: inline-flex;
   align-items: center;
 
-  // margin-right: 0.8em;
+  // margin-right: 10px;
   line-height: 1;
   cursor: pointer;
   user-select: none;
@@ -56,7 +56,7 @@ $checkbox: map.merge(
     get-css-var('transition-shadow');
 
   &--border {
-    padding: 0.6em 0.8em;
+    padding: 8px 10px;
     border: get-css-var('checkbox-border');
     border-radius: get-css-var('checkbox-radius');
 
@@ -148,7 +148,7 @@ $checkbox: map.merge(
   }
 
   &__label {
-    margin-left: 0.4em;
+    margin-left: 6px;
     color: get-css-var('checkbox-label-color');
     transition: get-css-var('transition-color');
   }
@@ -263,7 +263,7 @@ $checkbox: map.merge(
     }
 
     &-group & {
-      margin-right: 0.8em;
+      margin-right: 10px;
     }
 
     &-group--vertical & {
@@ -276,7 +276,7 @@ $checkbox: map.merge(
     }
 
     &-group--border & {
-      padding: 0.6em 0.8em;
+      padding: 8px 10px;
       border: get-css-var('checkbox-border');
       border-radius: get-css-var('checkbox-radius');
 

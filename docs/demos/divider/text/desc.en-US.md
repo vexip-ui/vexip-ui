@@ -1,3 +1,3 @@
-### 文字位置
+### Text Position
 
-通过 `text-position` 可以改变文字所在的位置。
+With `text-position` you can change the position of the text.

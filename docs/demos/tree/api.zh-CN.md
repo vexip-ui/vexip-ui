@@ -16,7 +16,7 @@
 | parent-key    | `string`            | 设置数据源的 `parent` 字段                                                                                                                                    | `'parent'`   | - |
 | label-key     | `string`            | 设置数据源的 `label` 字段                                                                                                                                     | `'label'`    | - |
 | multiple      | `boolean`           | 设置是否开启多选模式                                                                                                                                        | `false`      | - |
-| indent        | `string \| number`  | 设置每层树节点的缩进距离                                                                                                                                    | `'1.2em'`    | - |
+| indent        | `string \| number`  | 设置每层树节点的缩进距离                                                                                                                                    | `'16px'`    | - |
 | accordion     | `boolean`           | 设置是否开启手风琴模式                                                                                                                                      | `false`      | - |
 | appear        | `boolean`           | 设置树节点过渡效果的 `appear` 值                                                                                                                              | `false`      | - |
 | floor-select  | `boolean`           | 开启后，当选择存在下级的节点时，会触发节点的展开收起，无下级时才会触发选择取消事件                                                                          | `false`      | - |

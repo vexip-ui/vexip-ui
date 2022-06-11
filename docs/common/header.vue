@@ -184,7 +184,7 @@ function formatComponentName(name: string) {
 
   .search {
     flex: auto;
-    padding-left: 1em;
+    padding-left: 14px;
     margin-left: -1px;
     border-left: var(--vxp-border-light-2);
     transition: var(--vxp-transition-border);

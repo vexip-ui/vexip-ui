@@ -15,7 +15,8 @@ $alert: map.merge(
     title-font-size: get-css-var('font-size-primary'),
     title-color: get-css-var('content-color-primary'),
     close-color: get-css-var('content-color-placeholder'),
-    close-color-hover: get-css-var('content-color-normal')
+    close-color-hover: get-css-var('content-color-normal'),
+    icon-width: 40px
   ),
   $alert
 );
@@ -33,28 +34,23 @@ $alert: map.merge(
 
   position: relative;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0.6em 1em;
-  margin-bottom: 1em;
+  align-items: center;
+  padding: 8px 14px;
+  margin-bottom: 14px;
   background-color: get-css-var('alert-bg-color');
   border: get-css-var('alert-border');
   border-radius: get-css-var('alert-radius');
 
   &--has-title {
-    padding: 0.8em 1em;
+    padding: 10px 14px;
   }
 
   &--has-icon {
-    padding-left: 3.2em;
+    padding-left: get-css-var('alert-icon-width');
   }
 
   &--has-icon#{&}--has-title {
-    padding-left: 4.2em;
-  }
-
-  &--closable {
-    padding-right: 2.2em;
+    @include define-css-var('alert-icon-width', 56px);
   }
 
   &--no-border {
@@ -71,39 +67,44 @@ $alert: map.merge(
     color: get-css-var('alert-text-color');
   }
 
+  &__wrapper {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    justify-content: center;
+  }
+
   &__title {
-    margin-bottom: 0.3em;
+    margin-bottom: 4px;
     font-size: get-css-var('alert-title-font-size');
     color: get-css-var('alert-title-color');
   }
 
   &__icon {
     position: absolute;
-    top: 50%;
-    left: 1.2em;
+    top: 0;
+    bottom: 0;
+    left: 0;
     display: flex;
     align-items: center;
-    margin-top: 1px;
+    justify-content: center;
+    width: get-css-var('alert-icon-width');
     color: get-css-var('alert-icon-color');
-    transform: translateY(-50%);
   }
 
   &--has-title &__icon {
-    top: 1.6em;
-    left: 1.6em;
-    transform: scale(2);
+    align-items: start;
+    padding-top: 16px;
   }
 
   &__close {
-    position: absolute;
-    top: 50%;
-    right: 0.8em;
-    display: flex;
+    position: relative;
+    display: inline-flex;
     align-items: center;
+    margin-left: 6px;
     color: get-css-var('alert-close-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
-    transform: translateY(-50%);
 
     &:hover {
       color: get-css-var('alert-close-color-hover');
@@ -111,8 +112,7 @@ $alert: map.merge(
   }
 
   &--has-title &__close {
-    top: 0.6em;
-    transform: none;
+    align-self: start;
   }
 
   $types: info success warning error;

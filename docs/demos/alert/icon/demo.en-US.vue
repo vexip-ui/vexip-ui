@@ -1,40 +1,40 @@
 <template>
   <div>
     <Alert icon>
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert icon type="success">
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert icon type="warning">
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert icon type="error">
-      警告提示的内容
+      Some content to alert
     </Alert>
-    <Alert icon title="警告标题">
-      警告提示的内容
+    <Alert icon title="Alert Title">
+      Some content to alert
     </Alert>
     <Alert
       icon
       type="success"
-      title="警告标题"
+      title="Alert Title"
     >
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert
       icon
       type="warning"
-      title="警告标题"
+      title="Alert Title"
     >
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert
       icon
       type="error"
-      title="警告标题"
+      title="Alert Title"
     >
-      警告提示的内容
+      Some content to alert
     </Alert>
   </div>
 </template>

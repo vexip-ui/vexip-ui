@@ -117,7 +117,7 @@ $menu: map.merge(
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 0.8em 20px;
+    padding: 10px 20px;
     cursor: pointer;
     background-color: get-css-var('menu-bg-color');
     transition: get-css-var('transition-color'), get-css-var('transition-background');
@@ -398,7 +398,7 @@ $menu: map.merge(
 
       &__label {
         display: inline-block;
-        padding: 0.35em 1.4em;
+        padding: 0.35em 20px;
         font-size: get-css-var('font-size-secondary');
         transition: get-css-var('transition-opacity');
 

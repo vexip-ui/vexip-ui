@@ -1,5 +1,7 @@
 <template>
-  <p>一段文字一段文字一段文字一段文字一段文字</p>
+  <p>Some content to fill</p>
   <Divider></Divider>
-  <p>一段文字一段文字一段文字一段文字一段文字</p>
+  <p>Some content to fill</p>
+  <Divider>Insert text</Divider>
+  <p>Some content to fill</p>
 </template>

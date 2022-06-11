@@ -180,13 +180,13 @@ watchEffect(async () => {
 <style lang="scss">
 .component-doc {
   position: relative;
-  padding: 1.2em 3.2em;
+  padding: 16px 3.2em;
   padding-right: 15em;
 
   &__loading {
     position: absolute;
-    top: 1em;
-    right: 1em;
+    top: 14px;
+    right: 14px;
     color: var(--vxp-content-color-secondary);
   }
 

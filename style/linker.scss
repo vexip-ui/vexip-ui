@@ -12,7 +12,7 @@ $linker: map.merge(
     color-hover: get-css-var('color-primary-light-1'),
     color-active: get-css-var('color-primary-dark-1'),
     color-disabled: get-css-var('content-color-disabled'),
-    series-span: 0.6em,
+    series-span: 8px,
     underline-height: 1px
   ),
   $linker

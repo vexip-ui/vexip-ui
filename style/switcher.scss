@@ -24,7 +24,7 @@ $switcher: map.merge(
     signal-small-size: calc(get-css-var('switcher-small-height') - 4px),
     signal-default-size: calc(get-css-var('switcher-default-height') - 4px),
     signal-large-size: calc(get-css-var('switcher-large-height') - 4px),
-    series-span: 0.6em,
+    series-span: 8px,
     icon-color: get-css-var('color-black'),
     circle-opacity: 0
   ),
