@@ -9,7 +9,6 @@ $wheel: map.merge(
   (
     item-v-padding: 3px,
     item-h-padding: 8px,
-    item-padding: get-css-var('wheel-item-v-padding') get-css-var('wheel-item-h-padding'),
     arrow-color: get-css-var('content-color-secondary'),
     arrow-color-hover: get-css-var('content-color-base'),
     arrow-color-disabled: get-css-var('content-color-disabled'),
@@ -59,7 +58,7 @@ $wheel: map.merge(
 
   &__item {
     display: inline-block;
-    padding: get-css-var('wheel-item-padding');
+    padding: get-css-var('wheel-item-v-padding') get-css-var('wheel-item-h-padding');
     text-align: center;
     list-style: none;
   }

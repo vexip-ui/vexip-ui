@@ -15,8 +15,7 @@ $card: map.merge(
     divider: get-css-var('border-shape') get-css-var('card-d-color'),
     title-font-size: get-css-var('font-size-primary'),
     body-v-padding: 14px,
-    body-h-padding: 16px,
-    body-padding: get-css-var('card-body-v-padding') get-css-var('card-body-h-padding')
+    body-h-padding: 16px
   ),
   $card
 );
@@ -59,6 +58,6 @@ $card: map.merge(
   }
 
   &__content {
-    padding: get-css-var('card-body-padding');
+    padding: get-css-var('card-body-v-padding') get-css-var('card-body-h-padding');
   }
 }

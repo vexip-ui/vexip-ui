@@ -13,7 +13,6 @@ $breadcrumb: map.merge(
     h-padding: 8px,
     v-padding-border: 4px,
     h-padding-border: 8px,
-    padding: get-css-var('breadcrumb-v-padding') get-css-var('breadcrumb-h-padding'),
     padding-border: get-css-var('breadcrumb-v-padding-border') get-css-var('breadcrumb-h-padding-border'),
     item-bg-color: transparent,
     item-bg-color-hover: get-css-var('color-primary-opacity-9'),
@@ -40,7 +39,7 @@ $breadcrumb: map.merge(
   position: relative;
   display: flex;
   align-items: center;
-  padding: get-css-var('breadcrumb-padding');
+  padding: get-css-var('breadcrumb-v-padding') get-css-var('breadcrumb-h-padding');
 
   &--border {
     padding: get-css-var('breadcrumb-padding-border');

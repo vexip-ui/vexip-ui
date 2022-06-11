@@ -65,7 +65,6 @@ $button: map.merge(
     height: 32px,
     v-padding: 0,
     h-padding: 14px,
-    padding: get-css-var('button-v-padding') get-css-var('button-h-padding'),
     font-size: get-css-var('font-size-base'),
     series-span: 8px,
     icon-span: 6px,
@@ -105,7 +104,7 @@ $button: map.merge(
   align-items: center;
   justify-content: center;
   height: get-css-var('button-height');
-  padding: get-css-var('button-padding');
+  padding: get-css-var('button-v-padding') get-css-var('button-h-padding');
   font-weight: 400;
   line-height: 1;
   color: get-css-var('button-color');

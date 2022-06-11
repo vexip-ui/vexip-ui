@@ -17,7 +17,6 @@ $notice: map.merge(
     v-padding: 8px,
     h-padding: 10px,
     mask-bg-color: transparent,
-    padding: get-css-var('notice-v-padding') get-css-var('notice-h-padding'),
     title-font-size: get-css-var('font-size-primary'),
     title-color: get-css-var('content-color-primary'),
     icon-color: get-css-var('notice-color'),
@@ -85,7 +84,7 @@ $notice: map.merge(
   &__item {
     display: flex;
     width: 336px;
-    padding: get-css-var('notice-padding');
+    padding: get-css-var('notice-v-padding') get-css-var('notice-h-padding');
     color: get-css-var('notice-color');
     background-color: get-css-var('notice-bg-color');
     border: get-css-var('notice-border');
@@ -112,7 +111,7 @@ $notice: map.merge(
     }
 
     &--has-icon#{&}--title-only {
-      padding: get-css-var('notice-padding');
+      padding: get-css-var('notice-v-padding') get-css-var('notice-h-padding');
     }
 
     &--content-only {

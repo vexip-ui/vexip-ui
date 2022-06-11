@@ -12,7 +12,6 @@ $divider: map.merge(
     h-margin: 8px,
     text-v-padding: 0,
     text-h-padding: 14px,
-    text-padding: get-css-var('divider-text-v-padding') get-css-var('divider-text-h-padding'),
     text-size-primary: get-css-var('font-size-primary'),
   ),
   $divider
@@ -92,7 +91,7 @@ $divider: map.merge(
 
   &__text {
     display: inline-block;
-    padding: get-css-var('divider-text-padding');
+    padding: get-css-var('divider-text-v-padding') get-css-var('divider-text-h-padding');
     color: get-css-var('divider-text-color');
     text-align: center;
     white-space: nowrap;

@@ -25,7 +25,6 @@ $table: map.merge(
     row-b-color-bottom: get-css-var('border-color-light-1'),
     cell-v-padding: 6px,
     cell-h-padding: 6px,
-    cell-padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding'),
     cell-b-color-right: get-css-var('border-color-light-2'),
     expand-arrow-color: get-css-var('content-color-secondary'),
     expand-arrow-size: 20px,
@@ -152,7 +151,7 @@ $table: map.merge(
     display: flex;
     flex: 1 0 0;
     align-items: center;
-    padding: get-css-var('table-cell-padding');
+    padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding');
     text-overflow: ellipsis;
     white-space: nowrap;
     border-right: $border-a transparent;

@@ -14,7 +14,6 @@ $collapse: map.merge(
     content-color-disabled: get-css-var('content-color-disabled'),
     content-v-padding: 10px,
     content-h-padding: 16px,
-    content-padding: get-css-var('collapse-content-v-padding') get-css-var('collapse-content-h-padding'),
     d-color: get-css-var('border-color-light-2'),
     divider: get-css-var('border-shape') get-css-var('collapse-d-color'),
     b-color: get-css-var('border-color-base'),
@@ -36,6 +35,8 @@ $collapse: map.merge(
   $content: #{&}__content;
   $divider: get-css-var('collapse-divider');
   $radius: get-css-var('collapse-radius');
+
+  $content-padding: get-css-var('collapse-content-v-padding') get-css-var('collapse-content-h-padding');
 
   display: flex;
   flex-direction: column;
@@ -59,7 +60,7 @@ $collapse: map.merge(
         }
 
         #{$content} {
-          padding: get-css-var('collapse-content-padding');
+          padding: $content-padding;
           border-radius: 0 0 $radius $radius;
         }
       }
@@ -151,7 +152,7 @@ $collapse: map.merge(
   &__content {
     display: flex;
     flex-direction: column;
-    padding: get-css-var('collapse-content-padding');
+    padding: $content-padding;
   }
 
   &__icon {
@@ -206,8 +207,4 @@ $collapse: map.merge(
   &--ghost &__pane {
     border: 0;
   }
-
-  // &--card &__content {
-  //   padding: get-css-var('collapse-content-padding');
-  // }
 }

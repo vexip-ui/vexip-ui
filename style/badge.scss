@@ -12,7 +12,6 @@ $badge: map.merge(
     height: 16px,
     v-padding: 0,
     h-padding: 6px,
-    padding: get-css-var('badge-v-padding') get-css-var('badge-h-padding'),
     family: #{Helvetica, 'Microsoft YaHei', SimSun, sans-serif},
     font-size: get-css-var('font-size-secondary'),
     dot-size: 7px
@@ -50,7 +49,7 @@ $badge: map.merge(
     align-items: center;
     justify-content: center;
     height: get-css-var('badge-height');
-    padding: get-css-var('badge-padding');
+    padding: get-css-var('badge-v-padding') get-css-var('badge-h-padding');
     font-family: get-css-var('badge-family');
     font-size: get-css-var('badge-font-size');
     line-height: get-css-var('badge-line-height');

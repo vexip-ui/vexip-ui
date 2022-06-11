@@ -30,8 +30,7 @@ $calendar: map.merge(
     get-css-var('calendar-date-b-color'),
     content-height: 90px,
     content-v-padding: 4px,
-    content-h-padding: 4px,
-    content-padding: get-css-var('calendar-content-v-padding') get-css-var('calendar-content-h-padding')
+    content-h-padding: 4px
   ),
   $calendar
 );
@@ -152,7 +151,7 @@ $calendar: map.merge(
 
     &-content {
       height: get-css-var('calendar-content-height');
-      padding: get-css-var('calendar-content-padding');
+      padding: get-css-var('calendar-content-v-padding') get-css-var('calendar-content-h-padding');
       overflow: auto;
     }
   }

@@ -19,14 +19,11 @@ $modal: map.merge(
     title-color: get-css-var('content-color-primary'),
     header-v-padding: 8px,
     header-h-padding: 14px,
-    header-padding: get-css-var('modal-header-v-padding') get-css-var('modal-header-h-padding'),
     body-v-padding: 14px,
     body-h-padding: 14px,
-    body-padding: get-css-var('modal-body-v-padding') get-css-var('modal-body-h-padding'),
     body-line-height: get-css-var('line-height-base'),
     footer-v-padding: 10px,
     footer-h-padding: 16px,
-    footer-padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding'),
     close-color: get-css-var('content-color-placeholder'),
     close-color-hover: get-css-var('content-color-base'),
     resizer-color: get-css-var('border-color-light-1')
@@ -73,7 +70,7 @@ $modal: map.merge(
     position: relative;
     display: flex;
     align-items: center;
-    padding: get-css-var('modal-header-padding');
+    padding: get-css-var('modal-header-v-padding') get-css-var('modal-header-h-padding');
     border-bottom: get-css-var('modal-divider');
   }
 
@@ -90,7 +87,7 @@ $modal: map.merge(
 
   &__content {
     flex: auto;
-    padding: get-css-var('modal-body-padding');
+    padding: get-css-var('modal-body-v-padding') get-css-var('modal-body-h-padding');
     line-height: get-css-var('modal-body-line-height');
   }
 
@@ -98,7 +95,7 @@ $modal: map.merge(
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: get-css-var('modal-footer-padding');
+    padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding');
     border-top: get-css-var('modal-divider');
   }
 

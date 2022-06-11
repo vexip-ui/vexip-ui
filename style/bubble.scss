@@ -14,7 +14,6 @@ $bubble: map.merge(
     min-height: 30px,
     content-v-padding: 8px,
     content-h-padding: 14px,
-    content-padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding'),
     content-shadow: get-css-var('shadow-shape') get-css-var('bubble-s-color'),
     arrow-size: 7px,
     arrow-v-offset: 16px,
@@ -38,7 +37,7 @@ $bubble: map.merge(
     position: relative;
     min-width: get-css-var('bubble-min-width');
     min-height: get-css-var('bubble-min-height');
-    padding: get-css-var('bubble-content-padding');
+    padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding');
     background-color: get-css-var('bubble-bg-color');
     border: get-css-var('bubble-border');
     border-radius: get-css-var('bubble-radius');
