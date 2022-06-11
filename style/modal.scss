@@ -17,15 +17,15 @@ $modal: map.merge(
     title-font-size: get-css-var('font-size-primary'),
     title-weight: 500,
     title-color: get-css-var('content-color-primary'),
-    header-v-padding: 0.6em,
-    header-h-padding: 1em,
+    header-v-padding: 8px,
+    header-h-padding: 14px,
     header-padding: get-css-var('modal-header-v-padding') get-css-var('modal-header-h-padding'),
-    body-v-padding: 1em,
-    body-h-padding: 1em,
+    body-v-padding: 14px,
+    body-h-padding: 14px,
     body-padding: get-css-var('modal-body-v-padding') get-css-var('modal-body-h-padding'),
     body-line-height: get-css-var('line-height-base'),
-    footer-v-padding: 0.7em,
-    footer-h-padding: 1.2em,
+    footer-v-padding: 10px,
+    footer-h-padding: 16px,
     footer-padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding'),
     close-color: get-css-var('content-color-placeholder'),
     close-color-hover: get-css-var('content-color-base'),
@@ -105,7 +105,7 @@ $modal: map.merge(
   &__close {
     position: absolute;
     top: 50%;
-    right: 1em;
+    right: 14px;
     display: flex;
     color: get-css-var('modal-close-color');
     cursor: pointer;

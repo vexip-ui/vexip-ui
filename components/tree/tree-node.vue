@@ -204,7 +204,7 @@ export default defineComponent({
     },
     indent: {
       type: [String, Number],
-      default: '1.2em'
+      default: '16px'
     },
     children: {
       type: Array as PropType<TreeNodeOptions[]>,

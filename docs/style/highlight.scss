@@ -9,7 +9,7 @@ pre[class*='language-'] {
     'andale mono',
     'ubuntu mono',
     monospace;
-  font-size: 1em;
+  font-size: 14px;
   hyphens: none;
   line-height: 2;
   color: var(--vxp-content-color-base);
@@ -39,7 +39,7 @@ pre[class*='language-'] {
 :not(pre) > code[class*='language-'] {
   padding: 0.1em;
   white-space: normal;
-  border-radius: 0.3em;
+  border-radius: 4px;
 }
 
 .token {

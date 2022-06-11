@@ -43,7 +43,7 @@ $anchor: map.merge(
   }
 
   &__link {
-    padding: 0.3em 1em;
+    padding: 4px 14px;
     margin-left: calc(get-css-var('anchor-track-width') * -1);
     color: get-css-var('anchor-link-color');
     text-decoration: none;

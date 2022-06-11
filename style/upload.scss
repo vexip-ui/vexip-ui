@@ -80,7 +80,7 @@ $upload: map.merge(
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 1.6em;
+    padding: 20px;
     overflow: hidden;
     cursor: pointer;
     background-color: get-css-var('upload-pane-bg-color');
@@ -135,8 +135,8 @@ $upload: map.merge(
     &--name {
       justify-content: space-between;
       width: 100%;
-      padding: 0.2em 0.5em;
-      margin-bottom: 0.2em;
+      padding: 3px 6px;
+      margin-bottom: 3px;
       background-color: get-css-var('upload-file-bg-color');
       transition: get-css-var('transition-background');
 
@@ -151,9 +151,9 @@ $upload: map.merge(
 
     &--thumbnail,
     &--card {
-      padding: 0.5em;
-      margin-right: 0.5em;
-      margin-bottom: 0.5em;
+      padding: 6px;
+      margin-right: 6px;
+      margin-bottom: 6px;
       border: get-css-var('upload-file-border');
       transition: get-css-var('transition-border');
     }
@@ -191,7 +191,7 @@ $upload: map.merge(
   &__label {
     display: flex;
     align-items: center;
-    margin-right: 1em;
+    margin-right: 14px;
     user-select: none;
   }
 
@@ -203,8 +203,8 @@ $upload: map.merge(
 
   &__file--thumbnail &__card {
     justify-content: center;
-    width: 5em;
-    height: 5em;
+    width: 70px;
+    height: 70px;
   }
 
   &__file--card &__card {
@@ -224,17 +224,17 @@ $upload: map.merge(
   }
 
   &__file--card &__thumbnail {
-    width: 4em;
-    height: 4em;
-    margin-right: 1em;
+    width: 56px;
+    height: 56px;
+    margin-right: 14px;
   }
 
   &__info {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: calc(100% - 5em);
-    padding-right: 5em;
+    width: calc(100% - 56px);
+    padding-right: 56px;
   }
 
   &__file--card &__filename {
@@ -285,7 +285,7 @@ $upload: map.merge(
 
   &__action {
     position: relative;
-    margin: 0 0.3em;
+    margin: 0 4px;
     cursor: pointer;
 
     &--disabled {
@@ -318,15 +318,15 @@ $upload: map.merge(
   }
 
   &__file-icon {
-    width: 1.2em;
-    margin-right: 0.3em;
+    width: 16px;
+    margin-right: 4px;
   }
 
   &__success,
   &__fail,
   &__loading,
   &__close {
-    width: 1em;
+    width: 14px;
   }
 
   &__close {
@@ -371,20 +371,20 @@ $upload: map.merge(
 
   &__file--name &__progress {
     position: absolute;
-    right: 0.5em;
+    right: 6px;
     bottom: 0;
-    left: 0.5em;
+    left: 6px;
   }
 
   &__file--thumbnail &__progress {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    padding: 0.5em;
+    padding: 6px;
   }
 
   &__file--card &__progress {
-    padding-top: 0.3em;
+    padding-top: 4px;
   }
 
   &__percentage {

@@ -82,11 +82,11 @@ $menu: map.merge(
     @include basis;
 
     z-index: get-css-var('menu-popper-z-index');
-    padding-left: 0.35em;
+    padding-left: 5px;
     transform-origin: 0 0 !important;
 
     &--drop {
-      padding: 0.35em 0;
+      padding: 5px 0;
     }
   }
 
@@ -117,7 +117,7 @@ $menu: map.merge(
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 0.8em 20px;
+    padding: 10px 20px;
     cursor: pointer;
     background-color: get-css-var('menu-bg-color');
     transition: get-css-var('transition-color'), get-css-var('transition-background');
@@ -298,7 +298,7 @@ $menu: map.merge(
 
   &__arrow {
     position: absolute;
-    right: 1.6em;
+    right: 22px;
     opacity: 100%;
     transition: get-css-var('transition-opacity'), get-css-var('transition-transform');
 
@@ -348,8 +348,8 @@ $menu: map.merge(
 
       // position: relative;
       display: inline-block;
-      min-width: 12em;
-      padding: 0.35em 0;
+      min-width: 168px;
+      padding: 5px 0;
       user-select: none;
       background-color: get-css-var('menu-popper-bg-color');
       border-radius: get-css-var('menu-popper-radius');
@@ -398,7 +398,7 @@ $menu: map.merge(
 
       &__label {
         display: inline-block;
-        padding: 0.35em 1.4em;
+        padding: 5px 20px;
         font-size: get-css-var('font-size-secondary');
         transition: get-css-var('transition-opacity');
 

@@ -14,7 +14,7 @@ $tag: map.merge(
     b-color: get-css-var('border-color-base'),
     border: get-css-var('border-shape') get-css-var('tag-b-color'),
     radius: get-css-var('radius-base'),
-    series-span: 0.3em,
+    series-span: 4px,
     small-font-size: get-css-var('font-size-secondary'),
     default-font-size: get-css-var('font-size-base'),
     large-font-size: get-css-var('font-size-primary'),
@@ -36,7 +36,7 @@ $tag: map.merge(
 
   display: inline-flex;
   align-items: center;
-  padding: 0 0.5em;
+  padding: 0 8px;
   font-size: get-css-var('tag-default-font-size');
   color: get-css-var('tag-color');
   white-space: nowrap;
@@ -58,7 +58,7 @@ $tag: map.merge(
   }
 
   &--circle {
-    border-radius: 1em;
+    border-radius: 14px;
   }
 
   &__close {
@@ -67,7 +67,7 @@ $tag: map.merge(
     justify-content: center;
     height: 12px;
     margin-top: 1px;
-    margin-left: 0.5em;
+    margin-left: 8px;
     color: get-css-var('tag-close-color');
     cursor: pointer;
     opacity: 60%;

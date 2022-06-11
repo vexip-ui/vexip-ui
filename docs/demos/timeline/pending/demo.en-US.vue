@@ -1,13 +1,13 @@
 <template>
   <Timeline pending>
     <TimelineItem>
-      <p>时间节点一</p>
+      <span>Timeline node 1</span>
     </TimelineItem>
     <TimelineItem>
-      <p>时间节点二</p>
+      <span>Timeline node 2</span>
     </TimelineItem>
     <TimelineItem>
-      <p>时间节点三</p>
+      <span>Timeline node 3</span>
     </TimelineItem>
   </Timeline>
 </template>

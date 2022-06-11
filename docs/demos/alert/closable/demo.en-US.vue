@@ -1,13 +1,13 @@
 <template>
   <div>
     <Alert closable>
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert type="success" closable>
       <template #title>
-        警告标题
+        Alert Title
       </template>
-      警告提示的内容
+      Some content to alert
     </Alert>
   </div>
 </template>

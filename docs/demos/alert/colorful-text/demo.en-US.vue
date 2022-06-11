@@ -1,16 +1,16 @@
 <template>
   <div>
     <Alert colorful-text>
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert type="success" colorful-text>
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert type="warning" colorful-text>
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert type="error" colorful-text>
-      警告提示的内容
+      Some content to alert
     </Alert>
   </div>
 </template>

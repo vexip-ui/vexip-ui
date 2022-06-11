@@ -23,10 +23,12 @@ $checkbox: map.merge(
     shadow-focus: get-css-var('shadow-focus') get-css-var('checkbox-s-color-focus'),
     signal-small-size: 14px,
     signal-small-thick: 1px,
-    signal-default-size: 18px,
-    signal-default-thick: 2px,
+    signal-size: 18px,
+    signal-thick: 2px,
     signal-large-size: 22px,
-    signal-large-thick: 3px
+    signal-large-thick: 3px,
+    series-h-span: 10px,
+    series-v-span: 6px
   ),
   $checkbox
 );
@@ -46,7 +48,7 @@ $checkbox: map.merge(
   display: inline-flex;
   align-items: center;
 
-  // margin-right: 0.8em;
+  // margin-right: 10px;
   line-height: 1;
   cursor: pointer;
   user-select: none;
@@ -56,7 +58,7 @@ $checkbox: map.merge(
     get-css-var('transition-shadow');
 
   &--border {
-    padding: 0.6em 0.8em;
+    padding: 8px 10px;
     border: get-css-var('checkbox-border');
     border-radius: get-css-var('checkbox-radius');
 
@@ -72,8 +74,8 @@ $checkbox: map.merge(
   &__signal {
     position: relative;
     display: inline-block;
-    width: get-css-var('checkbox-signal-default-size');
-    height: get-css-var('checkbox-signal-default-size');
+    width: get-css-var('checkbox-signal-size');
+    height: get-css-var('checkbox-signal-size');
     background-color: get-css-var('checkbox-signal-bg-color');
     border: get-css-var('checkbox-border');
     border-radius: get-css-var('checkbox-signal-radius');
@@ -88,14 +90,14 @@ $checkbox: map.merge(
       left: 50%;
       width:
         calc(
-          get-css-var('checkbox-signal-default-size') * 0.25 +
-          get-css-var('checkbox-signal-default-thick') * 0.5 - 0.5px
+          get-css-var('checkbox-signal-size') * 0.25 +
+          get-css-var('checkbox-signal-thick') * 0.5 - 0.5px
         );
-      height: calc(get-css-var('checkbox-signal-default-size') * 0.5);
+      height: calc(get-css-var('checkbox-signal-size') * 0.5);
       content: '';
       background-color: transparent;
       border: solid get-css-var('checkbox-signal-check-color');
-      border-width: 0 get-css-var('checkbox-signal-default-thick') get-css-var('checkbox-signal-default-thick') 0;
+      border-width: 0 get-css-var('checkbox-signal-thick') get-css-var('checkbox-signal-thick') 0;
       opacity: 0%;
       transition:
         width get-css-var('transition-base'),
@@ -112,43 +114,29 @@ $checkbox: map.merge(
   }
 
   @mixin small-signal {
-    width: get-css-var('checkbox-signal-small-size');
-    height: get-css-var('checkbox-signal-small-size');
-
-    &::after {
-      width:
-        calc(
-          get-css-var('checkbox-signal-small-size') * 0.25 + get-css-var('checkbox-signal-small-thick') * 0.5 - 0.5px
-        );
-      height: calc(get-css-var('checkbox-signal-small-size') * 0.5);
-      border-width: 0 get-css-var('checkbox-signal-small-thick') get-css-var('checkbox-signal-small-thick') 0;
-    }
+    @include define-preset-values('checkbox', (
+      signal-size: 14px,
+      signal-thick: 1px
+    ));
   }
 
   @mixin large-signal {
-    width: get-css-var('checkbox-signal-large-size');
-    height: get-css-var('checkbox-signal-large-size');
-
-    &::after {
-      width:
-        calc(
-          get-css-var('checkbox-signal-large-size') * 0.25 + get-css-var('checkbox-signal-large-thick') * 0.5 - 0.5px
-        );
-      height: calc(get-css-var('checkbox-signal-large-size') * 0.5);
-      border-width: 0 get-css-var('checkbox-signal-large-thick') get-css-var('checkbox-signal-large-thick') 0;
-    }
+    @include define-preset-values('checkbox', (
+      signal-size: 22px,
+      signal-thick: 3px
+    ));
   }
 
-  &--small &__signal {
+  &--small {
     @include small-signal;
   }
 
-  &--large &__signal {
+  &--large {
     @include large-signal;
   }
 
   &__label {
-    margin-left: 0.4em;
+    margin-left: 6px;
     color: get-css-var('checkbox-label-color');
     transition: get-css-var('transition-color');
   }
@@ -163,7 +151,7 @@ $checkbox: map.merge(
 
     &::after {
       top: 50%;
-      width: calc(get-css-var('checkbox-signal-default-size') * 0.5);
+      width: calc(get-css-var('checkbox-signal-size') * 0.5);
       height: 1px;
       opacity: 100%;
       transform: translate(-50%, -50%) scale(1);
@@ -172,14 +160,6 @@ $checkbox: map.merge(
 
   &--partial &__signal {
     @include partial-signal;
-  }
-
-  &--partial#{&}--small &__signal::after {
-    width: calc(get-css-var('checkbox-signal-small-size') * 0.5);
-  }
-
-  &--partial#{&}--large &__signal::after {
-    width: calc(get-css-var('checkbox-signal-large-size') * 0.5);
   }
 
   &--checked &__signal {
@@ -263,12 +243,12 @@ $checkbox: map.merge(
     }
 
     &-group & {
-      margin-right: 0.8em;
+      margin-right: get-css-var('checkbox-series-h-span');
     }
 
     &-group--vertical & {
       margin-right: 0;
-      margin-bottom: 0.5em;
+      margin-bottom: get-css-var('checkbox-series-v-span');
 
       &:last-child {
         margin-bottom: 0;
@@ -276,7 +256,7 @@ $checkbox: map.merge(
     }
 
     &-group--border & {
-      padding: 0.6em 0.8em;
+      padding: 8px 10px;
       border: get-css-var('checkbox-border');
       border-radius: get-css-var('checkbox-radius');
 
@@ -321,24 +301,12 @@ $checkbox: map.merge(
       background-color: get-css-var('checkbox-b-color-disabled');
     }
 
-    &-group--small &__signal {
+    &-group--small & {
       @include small-signal;
     }
 
-    &-group--large &__signal {
+    &-group--large & {
       @include large-signal;
-    }
-
-    // &-group--partial &__signal {
-    //   @include partial-signal;
-    // }
-
-    &-group--small &--partial &__signal::after {
-      width: calc(get-css-var('checkbox-signal-small-size') * 0.5);
-    }
-
-    &-group--large &--partial &__signal::after {
-      width: calc(get-css-var('checkbox-signal-large-size') * 0.5);
     }
   }
 }

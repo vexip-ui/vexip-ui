@@ -1,16 +1,16 @@
 <template>
   <div>
     <Alert no-border>
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert type="success" no-border>
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert type="warning" no-border>
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert type="error" no-border>
-      警告提示的内容
+      Some content to alert
     </Alert>
   </div>
 </template>

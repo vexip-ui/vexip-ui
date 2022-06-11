@@ -74,7 +74,7 @@
                     :stroke-width="2"
                     :percentage="props.file.percentage"
                   ></Progress>
-                  <span style="margin-top: 0.2em;" :class="`${prefix}__percentage`">
+                  <span style="margin-top: 3px;" :class="`${prefix}__percentage`">
                     {{ `${props.file.percentage}%` }}
                   </span>
                 </div>

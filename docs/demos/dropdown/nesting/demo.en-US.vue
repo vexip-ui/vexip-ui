@@ -1,28 +1,30 @@
 <template>
   <Dropdown trigger="click">
     <Button type="primary">
-      嵌套使用
+      Nesting
     </Button>
     <template #drop>
       <DropdownList>
-        <DropdownItem>选项一</DropdownItem>
-        <DropdownItem>选项二</DropdownItem>
+        <DropdownItem>Option 1</DropdownItem>
+        <DropdownItem>Option 2</DropdownItem>
         <Dropdown trigger="click">
           <DropdownItem>
-            选项三
+            Option 2
             <Icon :scale="0.8">
               <CaretRight></CaretRight>
             </Icon>
           </DropdownItem>
           <template #drop>
             <DropdownList>
-              <DropdownItem>子选项一</DropdownItem>
-              <DropdownItem>子选项二</DropdownItem>
-              <DropdownItem>子选项三</DropdownItem>
+              <DropdownItem>Son Option 1</DropdownItem>
+              <DropdownItem disabled>
+                Son Option 2
+              </DropdownItem>
+              <DropdownItem>Son Option 3</DropdownItem>
             </DropdownList>
           </template>
         </Dropdown>
-        <DropdownItem>选项四</DropdownItem>
+        <DropdownItem>Option 4</DropdownItem>
       </DropdownList>
     </template>
   </Dropdown>

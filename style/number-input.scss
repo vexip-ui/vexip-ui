@@ -8,7 +8,7 @@
   @include basis;
   @include input.handler;
 
-  padding-right: 1.4em;
+  padding-right: 20px;
 
   &__plus,
   &__minus {
@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 1.4em;
+    width: 20px;
     height: 50%;
     color: get-css-var('input-icon-color');
     cursor: pointer;
@@ -49,6 +49,6 @@
 
   &__icon--suffix,
   &__clear {
-    right: 1.4em;
+    right: 20px;
   }
 }

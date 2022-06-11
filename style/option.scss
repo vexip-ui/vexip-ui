@@ -19,8 +19,8 @@ $option: map.merge(
     divider: get-css-var('border-shape') get-css-var('option-d-color'),
     group-color: get-css-var('content-color-secondary'),
     group-font-size: get-css-var('font-size-secondary'),
-    label-v-padding: 0.35em,
-    label-h-padding: 1.2em,
+    label-v-padding: 5px,
+    label-h-padding: 16px,
     min-height: 32px
   ),
   $option
@@ -113,7 +113,7 @@ $option: map.merge(
       }
 
       &--divided &__list {
-        padding-bottom: 0.7em;
+        padding-bottom: 10px;
 
         &::after {
           position: absolute;

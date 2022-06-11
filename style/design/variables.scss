@@ -179,9 +179,9 @@ $fill-color-map: map.merge(
 $font-size-map: () !default;
 $font-size-map: map.merge(
   (
-    base: 0.875rem,
-    primary: 1.15em,
-    secondary: 0.75em
+    base: 14px,
+    primary: 16px,
+    secondary: 12px
   ),
   $font-size-map
 );

@@ -1,9 +1,9 @@
 [
   "basis",
+  "title",
   "closable",
   "close",
-  "colorful-text",
   "icon",
-  "no-border",
-  "title"
+  "colorful-text",
+  "no-border"
 ]

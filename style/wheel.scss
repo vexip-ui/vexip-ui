@@ -7,8 +7,8 @@
 $wheel: () !default;
 $wheel: map.merge(
   (
-    item-v-padding: 0.2em,
-    item-h-padding: 0.6em,
+    item-v-padding: 3px,
+    item-h-padding: 8px,
     item-padding: get-css-var('wheel-item-v-padding') get-css-var('wheel-item-h-padding'),
     arrow-color: get-css-var('content-color-secondary'),
     arrow-color-hover: get-css-var('content-color-base'),
@@ -49,7 +49,7 @@ $wheel: map.merge(
   &__list {
     display: flex;
     flex-direction: column;
-    padding: 0.4em;
+    padding: 6px;
     margin: 0;
   }
 

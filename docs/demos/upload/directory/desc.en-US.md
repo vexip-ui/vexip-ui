@@ -1,4 +1,4 @@
-### 文件夹上传
+### Directory Upload
 
 添加 `directory` 属性可以开启文件夹上传模式。
 

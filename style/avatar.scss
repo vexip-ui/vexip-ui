@@ -37,6 +37,7 @@ $avatar: map.merge(
   width: get-css-var('avatar-size');
   height: get-css-var('avatar-size');
   overflow: hidden;
+  line-height: 1;
   color: get-css-var('avatar-color');
   user-select: none;
   background-color: get-css-var('avatar-bg-color');

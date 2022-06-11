@@ -6,18 +6,20 @@
     url="//jsonplaceholder.typicode.com/posts/"
     @change="handleChange"
   >
-    <Button type="primary" :icon="IUpload">
-      选择文件
-    </Button>
+    <div>
+      <Button type="primary" :icon="IUpload">
+        选择文件
+      </Button>
+      <Button
+        type="success"
+        :icon="Check"
+        style="margin-left: 6px;"
+        @click.stop="doUpload"
+      >
+        手动上传
+      </Button>
+    </div>
   </Upload>
-  <Button
-    type="success"
-    :icon="Check"
-    style="margin-left: 6px;"
-    @click="doUpload"
-  >
-    手动上传
-  </Button>
 </template>
 
 <script setup lang="ts">

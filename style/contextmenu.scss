@@ -8,7 +8,7 @@ $contextmenu: map.merge(
   (
     icon-color: get-css-var('content-color-secondary'),
     shortcut-color: get-css-var('content-color-disabled'),
-    shortcut-span: 2em
+    shortcut-offset: 30px
   ),
   $contextmenu
 );
@@ -60,7 +60,7 @@ $contextmenu: map.merge(
   }
 
   &__shortcut {
-    margin-left: get-css-var('contextmenu-shortcut-span');
+    margin-left: get-css-var('contextmenu-shortcut-offset');
     color: get-css-var('contextmenu-shortcut-color');
   }
 

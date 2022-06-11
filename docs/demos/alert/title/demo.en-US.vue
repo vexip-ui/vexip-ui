@@ -1,22 +1,22 @@
 <template>
   <div>
-    <Alert title="警告标题">
-      警告提示的内容
+    <Alert title="Alert Title">
+      Some content to alert
     </Alert>
-    <Alert type="success" title="警告标题">
-      警告提示的内容
+    <Alert type="success" title="Alert Title">
+      Some content to alert
     </Alert>
     <Alert type="warning">
       <template #title>
-        警告标题
+        Alert Title
       </template>
-      警告提示的内容
+      Some content to alert
     </Alert>
     <Alert type="error">
       <template #title>
-        警告标题
+        Alert Title
       </template>
-      警告提示的内容
+      Some content to alert
     </Alert>
   </div>
 </template>

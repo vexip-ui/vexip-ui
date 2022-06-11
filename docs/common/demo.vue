@@ -202,20 +202,20 @@ function editOnPlayground() {
   }
 
   &__example {
-    padding: 3em 1.6em 2em;
+    padding: 40px 24px 16px;
   }
 
   &__description {
-    padding: 0 1em 1em;
+    padding: 0 14px 14px;
 
     .markdown p {
-      padding: 0 1em;
-      margin-bottom: 0.4em;
+      padding: 0 14px;
+      margin-bottom: 6px;
     }
 
     .anchor {
       width: 100%;
-      margin: 1em 0;
+      margin: 14px 0;
       font-size: var(--vxp-font-size-primary);
       color: var(--vxp-content-color-base);
       white-space: nowrap;
@@ -231,13 +231,13 @@ function editOnPlayground() {
       }
 
       &::before {
-        width: 1em;
-        margin-right: 0.6em;
+        width: 14px;
+        margin-right: 8px;
       }
 
       &::after {
-        width: calc(100% - 1em);
-        margin-left: 0.6em;
+        width: calc(100% - 14px);
+        margin-left: 8px;
       }
 
       &__link {
@@ -261,18 +261,12 @@ function editOnPlayground() {
     align-items: center;
     justify-content: center;
     margin-left: 3px;
+    color: var(--vxp-content-color-placeholder);
     cursor: pointer;
-
-    &,
-    .vxp-icon {
-      color: var(--vxp-content-color-placeholder);
-    }
+    transition: var(--vxp-transition-color);
 
     &:hover {
-      &,
-      .vxp-icon {
-        color: var(--vxp-color-primary-light-2);
-      }
+      color: var(--vxp-color-primary-opacity-2);
     }
 
     &:first-child {
@@ -312,27 +306,21 @@ function editOnPlayground() {
     align-items: center;
     justify-content: center;
     height: 32px;
-    padding: 0.4em 0;
+    padding: 6px 0;
+    color: var(--vxp-content-color-placeholder);
     cursor: pointer;
     border-top: var(--vxp-border-light-2);
 
-    &,
-    .vxp-icon {
-      color: var(--vxp-content-color-placeholder);
-    }
-
     &:hover {
-      &,
-      .vxp-icon {
-        color: var(--vxp-color-primary-light-2);
-      }
+      color: var(--vxp-color-primary-opacity-2);
     }
   }
 
   &__reduce &__tip {
-    width: 66px;
+    width: 80px;
     padding-left: 10px;
-    margin-right: -66px;
+    margin-right: -80px;
+    white-space: nowrap;
     opacity: 0%;
     transition:
       margin var(--vxp-transition-base),

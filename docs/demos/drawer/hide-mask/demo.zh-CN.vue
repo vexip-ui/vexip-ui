@@ -8,13 +8,11 @@
       transfer
       title="标题"
       hide-mask
+      closable
     >
       <p>一些内容</p>
       <p>一些内容</p>
       <p>一些内容</p>
-      <Button @click="active = false">
-        关闭
-      </Button>
     </Drawer>
   </div>
 </template>

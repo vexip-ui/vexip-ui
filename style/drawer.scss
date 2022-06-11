@@ -75,27 +75,28 @@ $drawer: map.merge(
 
   &__title {
     position: relative;
-    padding: 0.8em 1em;
+    padding: 10px 14px;
     font-size: get-css-var('drawer-title-font-size');
     color: get-css-var('drawer-title-color');
     border-bottom: get-css-var('drawer-title-divider');
   }
 
   &__wrapper--closable &__title {
-    padding-right: 2em;
+    padding-right: 32px;
   }
 
   &__content {
-    padding: 1em 1.2em;
+    padding: 14px 16px;
   }
 
   &__close {
     position: absolute;
     top: 50%;
-    right: 0.8em;
+    right: 10px;
     display: flex;
     color: get-css-var('drawer-close-color');
     cursor: pointer;
+    transition: get-css-var('transition-color');
     transform: translateY(-50%);
 
     &:hover {

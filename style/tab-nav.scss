@@ -27,8 +27,8 @@ $tab-nav: map.merge(
     item-span: 4px,
     marker-bg-color: get-css-var('tab-nav-color-active'),
     marker-height: 2px,
-    v-padding: 0.6em,
-    h-padding: 1.2em,
+    v-padding: 8px,
+    h-padding: 16px,
     padding: get-css-var('tab-nav-v-padding') get-css-var('tab-nav-h-padding')
   ),
   $tab-nav
@@ -138,6 +138,6 @@ $tab-nav: map.merge(
   }
 
   &__icon {
-    margin-right: 0.3em;
+    margin-right: 4px;
   }
 }

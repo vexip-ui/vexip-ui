@@ -1,3 +1,3 @@
 <template>
-  <Bubble>气泡的内容</Bubble>
+  <Bubble>Bubble content</Bubble>
 </template>

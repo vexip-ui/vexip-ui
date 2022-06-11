@@ -1,13 +1,13 @@
 <template>
   <div>
     <Alert closable>
-      警告提示的内容
+      Some content to alert
       <template #close>
         点击关闭
       </template>
     </Alert>
     <Alert type="warning" closable>
-      警告提示的内容
+      Some content to alert
       <template #close>
         我知道了
       </template>

@@ -70,7 +70,7 @@ watchEffect(async () => {
 
 <style lang="scss">
 .guide-doc {
-  padding: 1.2em 3.2em 2.8em;
+  padding: 16px 3.2em 2.8em;
   padding-right: 15em;
 
   & > p {

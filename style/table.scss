@@ -28,7 +28,7 @@ $table: map.merge(
     cell-padding: get-css-var('table-cell-v-padding') get-css-var('table-cell-h-padding'),
     cell-b-color-right: get-css-var('border-color-light-2'),
     expand-arrow-color: get-css-var('content-color-secondary'),
-    expand-arrow-size: 1.4em,
+    expand-arrow-size: 20px,
     sorter-color: get-css-var('content-color-placeholder'),
     sorter-color-hover: get-css-var('content-color-secondary'),
     sorter-color-active: get-css-var('color-primary-base'),
@@ -308,7 +308,7 @@ $table: map.merge(
     }
 
     &-item {
-      padding: 0.2em 1em;
+      padding: 3px 14px;
       cursor: pointer;
       background-color: get-css-var('table-filter-item-bg-color');
       transition: get-css-var('transition-color'), get-css-var('transition-background');
@@ -328,11 +328,11 @@ $table: map.merge(
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      padding: 0 1em;
+      padding: 0 14px;
 
       .vxp-checkbox {
         margin-right: 0;
-        margin-bottom: 0.5em;
+        margin-bottom: 6px;
 
         &:last-child {
           margin-bottom: 0;
@@ -343,9 +343,9 @@ $table: map.merge(
     &-actions {
       display: flex;
       justify-content: space-between;
-      min-width: 6.4em;
-      padding: 0.3em 0.6em;
-      margin-top: 0.6em;
+      min-width: 90px;
+      padding: 4px 8px;
+      margin-top: 8px;
       border-top: get-css-var('border-light-2');
 
       .vxp-button--text {

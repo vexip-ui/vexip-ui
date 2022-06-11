@@ -1,15 +1,15 @@
 <template>
-  <p>一段文字一段文字一段文字一段文字一段文字</p>
+  <p>Some content to fill</p>
   <Divider>
-    我是分割线
+    I'm Divider
   </Divider>
-  <p>一段文字一段文字一段文字一段文字一段文字</p>
+  <p>Some content to fill</p>
   <Divider text-position="left">
-    我在左侧
+    I'm on the left
   </Divider>
-  <p>一段文字一段文字一段文字一段文字一段文字</p>
+  <p>Some content to fill</p>
   <Divider text-position="right">
-    我在右侧
+    I'm on the right
   </Divider>
-  <p>一段文字一段文字一段文字一段文字一段文字</p>
+  <p>Some content to fill</p>
 </template>

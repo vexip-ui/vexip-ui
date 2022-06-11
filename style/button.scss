@@ -68,7 +68,7 @@ $button: map.merge(
     padding: get-css-var('button-v-padding') get-css-var('button-h-padding'),
     font-size: get-css-var('font-size-base'),
     series-span: 8px,
-    icon-span: 4px,
+    icon-span: 6px,
     d-color-typed: rgba($color-white, 50%)
   ),
   $button

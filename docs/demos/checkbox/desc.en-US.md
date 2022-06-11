@@ -1,1 +1,1 @@
-需要在一组选项中进行多项选择时使用，或是用于需要表示两种状态之间的切换的场合。
+Use when you need to make multiple choices in a set of options, or when you need to represent a switch between two states.

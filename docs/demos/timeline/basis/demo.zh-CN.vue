@@ -1,13 +1,13 @@
 <template>
   <Timeline>
     <TimelineItem>
-      <p>时间节点一</p>
+      <span>时间节点一</span>
     </TimelineItem>
     <TimelineItem>
-      <p>时间节点二</p>
+      <span>时间节点二</span>
     </TimelineItem>
     <TimelineItem>
-      <p>时间节点三</p>
+      <span>时间节点三</span>
     </TimelineItem>
   </Timeline>
 </template>

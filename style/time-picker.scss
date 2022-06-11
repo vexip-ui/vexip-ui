@@ -9,9 +9,10 @@ $time-picker: () !default;
 $time-picker: map.merge(
   (
     color-disabled: get-css-var('input-control-color-disabled'),
+    unit-color: get-css-var('content-color-secondary'),
     unit-color-focus: get-css-var('color-white'),
-    unit-bg-color-focus: get-css-var('color-primary-light-1'),
-    separator-color: get-css-var('content-color-secondary'),
+    unit-bg-color-focus: get-css-var('color-primary-opacity-1'),
+    separator-color: get-css-var('content-color-disabled'),
     exchange-color: get-css-var('content-color-secondary'),
     exchange-color-hover: get-css-var('color-primary-base'),
     popper-z-index: get-css-var('z-index-popper'),
@@ -22,8 +23,8 @@ $time-picker: map.merge(
     shortcut-bg-color-hover: get-css-var('fill-color-hover'),
     d-color: get-css-var('border-color-light-2'),
     divider: get-css-var('border-shape') get-css-var('time-picker-d-color'),
-    wheel-v-padding: 0.6em,
-    wheel-h-padding: 0.6em,
+    wheel-v-padding: 8px,
+    wheel-h-padding: 8px,
     wheel-padding: get-css-var('time-picker-wheel-v-padding') get-css-var('time-picker-wheel-h-padding')
   ),
   $time-picker
@@ -60,6 +61,7 @@ $time-picker: map.merge(
 
   &__unit {
     padding: 0 2px;
+    color: get-css-var('time-picker-unit-color');
     text-align: center;
     transition: get-css-var('transition-background'), get-css-var('transition-color');
 
@@ -105,13 +107,13 @@ $time-picker: map.merge(
 
     z-index: get-css-var('time-picker-popper-z-index');
     display: flex;
-    padding: 0.6em 0;
+    padding: 8px 0;
   }
 
   &__pane {
     display: flex;
     justify-content: center;
-    min-width: 10.8em;
+    min-width: 152px;
     background-color: get-css-var('time-picker-pane-bg-color');
     border-radius: get-css-var('time-picker-pane-radius');
     box-shadow: get-css-var('time-picker-pane-shadow');
@@ -125,7 +127,7 @@ $time-picker: map.merge(
 
     &--sub {
       align-items: flex-start;
-      padding: 0.3em 0;
+      padding: 4px 0;
       background-color: get-css-var('time-picker-shortcut-bg-color');
       border-right: get-css-var('time-picker-divider');
     }
@@ -133,8 +135,8 @@ $time-picker: map.merge(
 
   &__shortcut {
     width: 100%;
-    max-width: 7em;
-    padding: 0.4em 1.1em;
+    max-width: 96px;
+    padding: 6px 14px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -173,7 +175,7 @@ $time-picker: map.merge(
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    padding: 0.4em 0.6em;
+    padding: 6px 8px;
     border-top: get-css-var('time-picker-divider');
   }
 }

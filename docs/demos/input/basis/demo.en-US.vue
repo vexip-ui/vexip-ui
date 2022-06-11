@@ -1,7 +1,7 @@
 <template>
   <Input
     v-model:value="value"
-    placeholder="基础用法"
+    placeholder="Basis usage"
     style="width: 220px;"
   ></Input>
   <p>
@@ -9,14 +9,8 @@
   </p>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const value = ref('')
-
-    return { value }
-  }
-})
+const value = ref('')
 </script>

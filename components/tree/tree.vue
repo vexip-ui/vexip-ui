@@ -136,7 +136,7 @@ export default defineComponent({
       childrenKey: 'children',
       parentKey: 'parent',
       multiple: false,
-      indent: '1.2em',
+      indent: '16px',
       accordion: false,
       draggable: false,
       appear: false,

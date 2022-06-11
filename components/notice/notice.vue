@@ -12,7 +12,7 @@
           {
             [`${prefix}__item`]: true,
             [`${prefix}-vars`]: true,
-            [`${prefix}__item--title-only`]: !item.content && !item.renderer,
+            [`${prefix}__item--title-only`]: !item.content && typeof item.renderer !== 'function',
             [`${prefix}__item--has-icon`]: item.icon,
             [`${prefix}__item--content-only`]: !item.title,
             [`${prefix}__item--${item.type}`]: item.type && effectiveTypes.includes(item.type),
@@ -40,33 +40,36 @@
           <Icon
             v-else-if="item.icon"
             :icon="item.icon"
+            :scale="!item.content && typeof item.renderer !== 'function' ? 1 : 2"
             :style="[{ color: item.iconColor }, item.icon.style]"
           ></Icon>
         </div>
-        <Renderer
-          v-if="typeof item.renderer === 'function'"
-          :renderer="item.renderer"
-          :data="item"
-        ></Renderer>
-        <template v-else>
-          <div
-            v-if="item.title"
-            :class="`${prefix}__title`"
-            :style="{
-              color:
-                typeof item.titleColor === 'string'
-                  ? item.titleColor
-                  : typeof item.color === 'string'
-                    ? item.color
-                    : undefined
-            }"
-          >
-            {{ item.title || '' }}
-          </div>
-          <div :class="`${prefix}__content`">
-            {{ item.content || '' }}
-          </div>
-        </template>
+        <div :class="`${prefix}__wrapper`">
+          <Renderer
+            v-if="typeof item.renderer === 'function'"
+            :renderer="item.renderer"
+            :data="item"
+          ></Renderer>
+          <template v-else>
+            <div
+              v-if="item.title"
+              :class="`${prefix}__title`"
+              :style="{
+                color:
+                  typeof item.titleColor === 'string'
+                    ? item.titleColor
+                    : typeof item.color === 'string'
+                      ? item.color
+                      : undefined
+              }"
+            >
+              {{ item.title || '' }}
+            </div>
+            <div :class="`${prefix}__content`">
+              {{ item.content || '' }}
+            </div>
+          </template>
+        </div>
         <div v-if="item.closable" :class="`${prefix}__close`" @click="remove(item.key)">
           <Icon><Xmark></Xmark></Icon>
         </div>

@@ -48,7 +48,7 @@ pre {
 }
 
 code {
-  padding: 0.8rem 1.2rem;
+  padding: 12px 20px;
   font-family:
     Lucida,
     'lucida console',
@@ -86,7 +86,7 @@ p .vxp-linker {
 }
 
 .vxp-menu-group__label {
-  padding: 0.8em 1.4em;
+  padding: 10px 20px;
   color: var(--vxp-content-color-third);
 }
 
@@ -99,7 +99,7 @@ p .vxp-linker {
   align-items: center;
 
   &__link {
-    margin-left: 0.3em;
+    margin-left: 6px;
     font-size: 20px;
     color: var(--vxp-color-primary-light-1);
     text-decoration: none;
