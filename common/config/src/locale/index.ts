@@ -27,8 +27,13 @@ export function getDefaultLocaleConfig(locale?: string) {
 
 export function configLocale(sourceLocale: LocaleOptions | Ref<LocaleOptions>, app?: App) {
   if (app) {
-    const locale = unref(sourceLocale)
-    app.provide(PROVIDED_LOCALE, mergeObjects(getDefaultLocaleConfig(locale.locale), locale, false))
+    const locale = computed(() => {
+      const locale = unref(sourceLocale)
+
+      return mergeObjects(getDefaultLocaleConfig(locale.locale), locale, false)
+    })
+
+    app.provide(PROVIDED_LOCALE, locale)
   } else {
     const upstreamLocale = inject<ComputedRef<LocaleConfig> | null>(PROVIDED_LOCALE, globalLocal)
     const locale = computed(() => {
@@ -53,7 +58,7 @@ export function useLocale<T extends LocaleNames>(name?: T) {
     return locale
   }
 
-  return computed(() => locale?.value?.[name] ?? {} as LocaleConfig[T])
+  return computed(() => locale.value?.[name] ?? {} as LocaleConfig[T])
 }
 
 export function getCountWord(wordTemplate: string, count: number) {
