@@ -16,12 +16,11 @@ const isDark = ref(rootCls.contains('dark'))
 
 function toggleDark(value: boolean) {
   requestAnimationFrame(() => {
+    isDark.value = value
     if (value) {
       rootCls.add('dark')
-      isDark.value = true
     } else {
       rootCls.remove('dark')
-      isDark.value = false
     }
 
     localStorage.setItem('vexip-docs-theme-prefer-dark', String(value))
