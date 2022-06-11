@@ -17,7 +17,9 @@
           <template #drop>
             <DropdownList>
               <DropdownItem>子选项一</DropdownItem>
-              <DropdownItem>子选项二</DropdownItem>
+              <DropdownItem disabled>
+                子选项二
+              </DropdownItem>
               <DropdownItem>子选项三</DropdownItem>
             </DropdownList>
           </template>

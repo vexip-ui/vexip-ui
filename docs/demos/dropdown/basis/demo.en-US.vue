@@ -1,18 +1,18 @@
 <template>
   <Dropdown>
     <Button type="primary">
-      下拉菜单
+      Dropdown
     </Button>
     <template #drop>
       <DropdownList>
-        <DropdownItem name="选项一">
-          选项一
+        <DropdownItem name="Option 1">
+          Option 1
         </DropdownItem>
-        <DropdownItem name="选项二">
-          选项二
+        <DropdownItem name="Option 2" divided>
+          Option 2
         </DropdownItem>
-        <DropdownItem name="选项三">
-          选项三
+        <DropdownItem name="Option 3">
+          Option 3
         </DropdownItem>
       </DropdownList>
     </template>

@@ -54,8 +54,8 @@ $dropdown: map.merge(
 
   &__list {
     display: inline-block;
-    min-width: 5em;
-    padding: 0.35em 0;
+    min-width: 70px;
+    padding: 5px 0;
     margin: 0;
     user-select: none;
     background-color: get-css-var('dropdown-bg-color');
@@ -66,7 +66,7 @@ $dropdown: map.merge(
 
   &__item {
     position: relative;
-    padding: 0.35em 16px;
+    padding: 5px 16px;
     white-space: nowrap;
     list-style: none;
     cursor: pointer;
@@ -91,11 +91,11 @@ $dropdown: map.merge(
     }
 
     &--divided {
-      margin-bottom: 0.7em;
+      margin-bottom: 10px;
 
       &::after {
         position: absolute;
-        bottom: calc(-0.35em - 0.5px);
+        bottom: calc(-5px - 0.5px);
         left: 0;
         display: block;
         width: 100%;

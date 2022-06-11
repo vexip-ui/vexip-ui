@@ -8,10 +8,10 @@ $badge: map.merge(
     color: get-css-var('color-white'),
     bg-color: get-css-var('color-error-base'),
     b-color: get-css-var('color-error-opacity-8'),
-    line-height: get-css-var('line-height-base'),
-    height: calc(get-css-var('badge-line-height') * 1em),
+    line-height: get-css-var('line-height-secondary'),
+    height: 16px,
     v-padding: 0,
-    h-padding: calc(get-css-var('badge-line-height') * 0.35em),
+    h-padding: 6px,
     padding: get-css-var('badge-v-padding') get-css-var('badge-h-padding'),
     family: #{Helvetica, 'Microsoft YaHei', SimSun, sans-serif},
     font-size: get-css-var('font-size-secondary'),
@@ -59,7 +59,7 @@ $badge: map.merge(
     cursor: pointer;
     user-select: none;
     background-color: get-css-var('badge-bg-color');
-    border-radius: calc(get-css-var('badge-line-height') * 0.5em);
+    border-radius: calc(get-css-var('badge-height') * 0.5);
     box-shadow: get-css-var('shadow-border') get-css-var('badge-b-color');
     transform-origin: center center;
 
@@ -67,7 +67,6 @@ $badge: map.merge(
       position: absolute;
       top: 0;
       right: 0;
-      padding-top: 0.5px;
       transform: translate(50%, -50%);
     }
 

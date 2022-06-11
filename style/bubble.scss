@@ -10,15 +10,15 @@ $bubble: map.merge(
     s-color: get-css-var('shadow-color-base'),
     border: get-css-var('border-shape') get-css-var('bubble-b-color'),
     radius: get-css-var('radius-base'),
-    min-width: 6em,
-    min-height: 2em,
+    min-width: 80px,
+    min-height: 30px,
     content-v-padding: 8px,
     content-h-padding: 14px,
     content-padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding'),
     content-shadow: get-css-var('shadow-shape') get-css-var('bubble-s-color'),
-    arrow-size: 0.5em,
-    arrow-v-offset: 0.9em,
-    arrow-h-offset: 1.8em
+    arrow-size: 7px,
+    arrow-v-offset: 16px,
+    arrow-h-offset: 28px
   ),
   $bubble
 );

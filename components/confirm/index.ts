@@ -15,13 +15,11 @@ export class ConfirmManager {
 
   private _mountedApp: App<unknown> | null
   private _instance: ConfirmInstance | null
-  // private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
 
   constructor(options: Partial<ConfirmOptions> = {}) {
     this._mountedApp = null
     this._instance = null
-    // this._innerApp = null
     this._container = null
     this.name = 'Confirm'
     this.defaults = {}
@@ -50,7 +48,6 @@ export class ConfirmManager {
   }
 
   destroy() {
-    // this._innerApp?.unmount()
     this._container && render(null, this._container)
     destroyObject(this)
   }
@@ -76,8 +73,8 @@ export class ConfirmManager {
 
       this._container = document.createElement('div')
       vnode.appContext = this._mountedApp._context
-      render(vnode, this._container)
 
+      render(vnode, this._container)
       document.body.appendChild(this._container.firstElementChild!)
 
       this._instance = vnode.component?.proxy as ConfirmInstance

@@ -82,7 +82,7 @@ $drawer: map.merge(
   }
 
   &__wrapper--closable &__title {
-    padding-right: 2em;
+    padding-right: 32px;
   }
 
   &__content {
@@ -96,6 +96,7 @@ $drawer: map.merge(
     display: flex;
     color: get-css-var('drawer-close-color');
     cursor: pointer;
+    transition: get-css-var('transition-color');
     transform: translateY(-50%);
 
     &:hover {

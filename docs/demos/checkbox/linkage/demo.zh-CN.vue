@@ -1,38 +1,30 @@
 <template>
-  <div>
-    <p style="margin-bottom: 10px;">
-      <Checkbox v-model:checked="checked" :disabled="disabled">
-        {{ checked ? 'checked' : 'unchecked' }}
-        -
-        {{ disabled ? 'disabled' : 'enabled' }}
-      </Checkbox>
-    </p>
-    <Button
-      type="primary"
-      size="small"
-      @click="checked = !checked"
-    >
-      {{ checked ? 'Uncheck' : 'Check' }}
-    </Button>
-    <Button
-      type="primary"
-      size="small"
-      @click="disabled = !disabled"
-    >
-      {{ disabled ? 'Enable' : 'Disable' }}
-    </Button>
-  </div>
+  <p style="margin-bottom: 10px;">
+    <Checkbox v-model:checked="checked" :disabled="disabled">
+      {{ checked ? 'checked' : 'unchecked' }}
+      -
+      {{ disabled ? 'disabled' : 'enabled' }}
+    </Checkbox>
+  </p>
+  <Button
+    type="primary"
+    size="small"
+    @click="checked = !checked"
+  >
+    {{ checked ? 'Uncheck' : 'Check' }}
+  </Button>
+  <Button
+    type="primary"
+    size="small"
+    @click="disabled = !disabled"
+  >
+    {{ disabled ? 'Enable' : 'Disable' }}
+  </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const checked = ref(false)
-    const disabled = ref(false)
-
-    return { checked, disabled }
-  }
-})
+const checked = ref(false)
+const disabled = ref(false)
 </script>

@@ -5,14 +5,8 @@
   </p>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const date = ref('2020-05-30')
-
-    return { date }
-  }
-})
+const date = ref('2020-05-30')
 </script>

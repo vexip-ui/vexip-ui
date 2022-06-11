@@ -8,7 +8,7 @@
         <DropdownItem name="选项一">
           选项一
         </DropdownItem>
-        <DropdownItem name="选项二">
+        <DropdownItem name="选项二" divided>
           选项二
         </DropdownItem>
         <DropdownItem name="选项三">

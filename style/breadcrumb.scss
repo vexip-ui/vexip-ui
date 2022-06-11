@@ -43,7 +43,6 @@ $breadcrumb: map.merge(
   padding: get-css-var('breadcrumb-padding');
 
   &--border {
-    // height: 2.1em;
     padding: get-css-var('breadcrumb-padding-border');
     border: $border-a get-css-var('breadcrumb-b-color');
     border-radius: get-css-var('breadcrumb-radius');

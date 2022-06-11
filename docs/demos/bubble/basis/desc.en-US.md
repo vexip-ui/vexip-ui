@@ -1,3 +1,3 @@
 ### Basis Usage
 
-随便放一个气泡聊天框。
+Just put a bubble.

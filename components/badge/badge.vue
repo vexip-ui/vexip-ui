@@ -74,7 +74,7 @@ export default defineComponent({
     const renderContent = computed(() => {
       if (props.isDot) return ''
 
-      if (typeof props.content === 'number' && props.max) {
+      if (typeof props.content === 'number' && props.max > 0) {
         return props.content > props.max ? `${props.max}+` : props.content
       }
 

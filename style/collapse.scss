@@ -110,7 +110,7 @@ $collapse: map.merge(
   &--arrow-left,
   &__pane--arrow-left {
     #{$header} {
-      padding-left: 2.4em;
+      padding-left: 36px;
     }
 
     #{$arrow} {
@@ -121,7 +121,7 @@ $collapse: map.merge(
   &--arrow-right,
   &__pane--arrow-right {
     #{$header} {
-      padding-right: 2.4em;
+      padding-right: 36px;
     }
 
     #{$arrow} {

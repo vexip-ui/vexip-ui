@@ -66,8 +66,6 @@ $select: map.merge(
 
   &__placeholder {
     position: absolute;
-    // right: 2em;
-    // left: 8px;
     overflow: hidden;
     color: get-css-var('input-placeholder-color');
     text-overflow: ellipsis;
@@ -90,15 +88,14 @@ $select: map.merge(
   &__list {
     display: inline-block;
     width: 100%;
-    padding: 5px 0;
     user-select: none;
     background-color: get-css-var('select-list-bg-color');
     border: get-css-var('select-list-border');
     border-radius: get-css-var('select-list-radius');
     box-shadow: get-css-var('select-list-shadow');
 
-    .vxp-scroll__wrapper {
-      padding: 0.35em 0;
+    .vxp-native-scroll__wrapper {
+      padding: 5px 0;
     }
   }
 
@@ -130,7 +127,7 @@ $select: map.merge(
   //   transition: get-css-var('transition-transform');
   // }
 
-  &--focused &__arrow {
+  &__selector--focused &__arrow {
     transform: rotate(180deg);
   }
 

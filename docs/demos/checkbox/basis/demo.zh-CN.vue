@@ -1,23 +1,15 @@
 <template>
-  <div>
-    <Checkbox v-model:checked="checked">
-      Checkbox
-    </Checkbox>
-    <br />
-    <p style="margin-top: 10px;">
-      checked: {{ checked }}
-    </p>
-  </div>
+  <Checkbox v-model:checked="checked">
+    Checkbox
+  </Checkbox>
+  <br />
+  <p style="margin-top: 10px;">
+    checked: {{ checked }}
+  </p>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const checked = ref(false)
-
-    return { checked }
-  }
-})
+const checked = ref(false)
 </script>

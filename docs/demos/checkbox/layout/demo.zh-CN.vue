@@ -16,15 +16,9 @@
   </CheckboxGroup>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  data() {
-    const values = ref<string[]>([])
-    const rangeItems = Array.from({ length: 12 }, (_, index) => index + 1)
-
-    return { values, rangeItems }
-  }
-})
+const values = ref<string[]>([])
+const rangeItems = Array.from({ length: 12 }, (_, index) => index + 1)
 </script>

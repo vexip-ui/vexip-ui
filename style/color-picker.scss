@@ -11,9 +11,6 @@ $color-picker: map.merge(
     marker-b-color: get-css-var('border-color-base'),
     marker-border: get-css-var('border-shape') get-css-var('color-picker-marker-b-color'),
     marker-radius: get-css-var('radius-small'),
-    marker-small-height: 1.1em,
-    marker-default-height: 1.3em,
-    marker-large-height: 1.7em,
     marker-bg-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg=='),
     arrow-color: get-css-var('content-color-secondary'),
     popper-z-index: get-css-var('z-index-popper'),
@@ -61,21 +58,12 @@ $color-picker: map.merge(
     align-items: center;
     justify-content: center;
     width: calc(100% - 8px);
-    min-width: 1.6em;
-    height: get-css-var('color-picker-marker-default-height');
-    margin-top: -0.5px; // 修正视觉差异
+    min-width: 40px;
+    height: 100%;
     margin-right: 8px;
     color: get-css-var('color-picker-marker-color');
     border: get-css-var('color-picker-marker-border');
     border-radius: get-css-var('color-picker-marker-radius');
-  }
-
-  &--small &__marker {
-    height: get-css-var('color-picker-marker-small-height');
-  }
-
-  &--large &__marker {
-    height: get-css-var('color-picker-marker-large-height');
   }
 
   &--alpha &__marker {
@@ -90,23 +78,23 @@ $color-picker: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2em;
     height: 100%;
     color: get-css-var('color-picker-arrow-color');
     transition: get-css-var('transition-transform');
   }
 
-  &--visible &__arrow .vxp-icon {
+  &--focused &__arrow .vxp-icon {
     transform: rotate(180deg);
   }
 
   &__popper {
     z-index: get-css-var('color-picker-popper-z-index');
     display: flex;
-    padding: 0.35em 0;
+    padding: 5px 0;
   }
 
   &__pane {
+    width: 270px;
     background-color: get-css-var('color-picker-pane-bg-color');
     border-radius: get-css-var('color-picker-pane-radius');
     box-shadow: get-css-var('color-picker-pane-shadow');
@@ -120,8 +108,7 @@ $color-picker: map.merge(
   &__palette {
     position: relative;
     width: 100%;
-    min-width: 18em;
-    height: 13em;
+    height: 188px;
     cursor: crosshair;
   }
 
@@ -137,7 +124,6 @@ $color-picker: map.merge(
     height: 100%;
   }
 
-  /* stylelint-disable plugin/no-unsupported-browser-features */
   &__saturation {
     background: linear-gradient(90deg, #fff, hsl(0deg 0% 100% / 0%));
   }
@@ -168,7 +154,6 @@ $color-picker: map.merge(
         red
       );
   }
-  /* stylelint-enable */
 
   &__alpha {
     background-image: get-css-var('color-picker-marker-bg-image');
