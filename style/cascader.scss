@@ -1,0 +1,42 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$cascader: () !default;
+$cascader: map.merge(
+  (),
+  $cascader
+);
+
+.vxp-cascader {
+  &-vars {
+    @include define-preset-values('cascader', $cascader);
+  }
+
+  @include basis;
+
+  display: inline-flex;
+  width: 100%;
+
+  @include input.handler(#{&}__selector);
+
+  &--multiple &__selector {
+    height: auto;
+    min-height: get-css-var('input-height');
+  }
+
+  &__control,
+  &__input {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &--multiple &__control {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 0;
+    margin-top: -2px;
+  }
+}
