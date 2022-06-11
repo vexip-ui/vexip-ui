@@ -298,7 +298,7 @@ $menu: map.merge(
 
   &__arrow {
     position: absolute;
-    right: 1.6em;
+    right: 22px;
     opacity: 100%;
     transition: get-css-var('transition-opacity'), get-css-var('transition-transform');
 
@@ -348,7 +348,7 @@ $menu: map.merge(
 
       // position: relative;
       display: inline-block;
-      min-width: 12em;
+      min-width: 168px;
       padding: 5px 0;
       user-select: none;
       background-color: get-css-var('menu-popper-bg-color');

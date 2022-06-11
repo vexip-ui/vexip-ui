@@ -1,4 +1,4 @@
-### 列表分离
+### List Separation
 
 添加 `hidden-files` 属性可以禁用内部的文件列表显示。
 

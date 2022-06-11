@@ -49,7 +49,7 @@ $input: map.merge(
     align-items: center;
     width: 100%;
     height: get-css-var('input-height');
-    padding: get-css-var('input-padding');
+    padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
     background-color: get-css-var('input-bg-color');
     border: get-css-var('input-border');
     border-radius: get-css-var('input-radius');
@@ -194,7 +194,7 @@ $input: map.merge(
 }
 
 .vxp-input {
-  &-vars {
+  @at-root &-vars {
     @include define-preset-values('input', $input);
   }
 

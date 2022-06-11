@@ -21,12 +21,8 @@ $radio: map.merge(
     signal-border: get-css-var('radio-border'),
     s-color-focus: get-css-var('color-primary-opacity-6'),
     shadow-focus: get-css-var('shadow-focus') get-css-var('radio-s-color-focus'),
-    signal-small-size: 14px,
-    signal-small-inner-size: 7px,
-    signal-default-size: 18px,
-    signal-default-inner-size: 10px,
-    signal-large-size: 22px,
-    signal-large-inner-size: 13px
+    signal-size: 18px,
+    signal-inner-size: 10px
   ),
   $radio
 );
@@ -71,8 +67,8 @@ $radio: map.merge(
   &__signal {
     position: relative;
     display: inline-block;
-    width: get-css-var('radio-signal-default-size');
-    height: get-css-var('radio-signal-default-size');
+    width: get-css-var('radio-signal-size');
+    height: get-css-var('radio-signal-size');
     margin-right: 6px;
     background-color: get-css-var('radio-signal-bg-color');
     border: get-css-var('radio-signal-border');
@@ -83,8 +79,8 @@ $radio: map.merge(
       position: absolute;
       top: 50%;
       left: 50%;
-      width: get-css-var('radio-signal-default-inner-size');
-      height: get-css-var('radio-signal-default-inner-size');
+      width: get-css-var('radio-signal-inner-size');
+      height: get-css-var('radio-signal-inner-size');
       content: '';
       background-color: get-css-var('radio-signal-bg-color-checked');
       border-radius: 50%;
@@ -102,23 +98,17 @@ $radio: map.merge(
   }
 
   @mixin small-signal {
-    width: get-css-var('radio-signal-small-size');
-    height: get-css-var('radio-signal-small-size');
-
-    &::after {
-      width: get-css-var('radio-signal-small-inner-size');
-      height: get-css-var('radio-signal-small-inner-size');
-    }
+    @include define-preset-values('radio', (
+      signal-size: 14px,
+      signal-inner-size: 7px
+    ));
   }
 
   @mixin large-signal {
-    width: get-css-var('radio-signal-large-size');
-    height: get-css-var('radio-signal-large-size');
-
-    &::after {
-      width: get-css-var('radio-signal-large-inner-size');
-      height: get-css-var('radio-signal-large-inner-size');
-    }
+    @include define-preset-values('radio', (
+      signal-size: 22px,
+      signal-inner-size: 13px
+    ));
   }
 
   &--small &__signal {
@@ -213,7 +203,7 @@ $radio: map.merge(
 
     &-group--vertical & {
       margin-right: 0;
-      margin-bottom: 0.5em;
+      margin-bottom: 6px;
 
       &:last-child {
         margin-bottom: 0;
@@ -333,11 +323,11 @@ $radio: map.merge(
       }
     }
 
-    &-group--small &__signal {
+    &-group--small & {
       @include small-signal;
     }
 
-    &-group--large &__signal {
+    &-group--large & {
       @include large-signal;
     }
 

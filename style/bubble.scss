@@ -10,7 +10,7 @@ $bubble: map.merge(
     s-color: get-css-var('shadow-color-base'),
     border: get-css-var('border-shape') get-css-var('bubble-b-color'),
     radius: get-css-var('radius-base'),
-    min-width: 80px,
+    min-width: 60px,
     min-height: 30px,
     content-v-padding: 8px,
     content-h-padding: 14px,

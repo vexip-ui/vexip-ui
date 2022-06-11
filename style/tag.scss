@@ -36,7 +36,7 @@ $tag: map.merge(
 
   display: inline-flex;
   align-items: center;
-  padding: 0 0.5em;
+  padding: 0 8px;
   font-size: get-css-var('tag-default-font-size');
   color: get-css-var('tag-color');
   white-space: nowrap;
@@ -67,7 +67,7 @@ $tag: map.merge(
     justify-content: center;
     height: 12px;
     margin-top: 1px;
-    margin-left: 0.5em;
+    margin-left: 8px;
     color: get-css-var('tag-close-color');
     cursor: pointer;
     opacity: 60%;

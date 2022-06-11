@@ -23,7 +23,7 @@
       <slot :is-drag-over="(props.allowDrag || props.disabledClick) && isDragOver">
         <template v-if="!props.allowDrag && !props.disabledClick">
           <Button :icon="Upload">
-            {{ props.buttonLable ?? locale.upload }}
+            {{ props.buttonLabel ?? locale.upload }}
           </Button>
           <slot name="tip">
             <p v-if="props.tip" :class="`${prefix}__tip`">
@@ -115,7 +115,7 @@ export default defineComponent({
     directory: booleanProp,
     pathField: String,
     disabledClick: booleanProp,
-    buttonLable: String
+    buttonLabel: String
   },
   emits: [
     'exceed',
@@ -175,7 +175,7 @@ export default defineComponent({
       directory: false,
       pathField: 'path',
       disabledClick: false,
-      buttonLable: null
+      buttonLabel: null
     })
 
     const prefix = 'vxp-upload'

@@ -21,9 +21,7 @@ $pagination: map.merge(
     b-color-active: get-css-var('pagination-b-color-hover'),
     border: get-css-var('border-shape') get-css-var('pagination-b-color'),
     radius: get-css-var('radius-base'),
-    small-size: 2em,
-    default-size: 2.2em,
-    large-size: 2.5em,
+    size: 32px,
     item-span: 6px
   ),
   $pagination
@@ -44,8 +42,8 @@ $pagination: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    width: get-css-var('pagination-default-size');
-    height: get-css-var('pagination-default-size');
+    width: get-css-var('pagination-size');
+    height: get-css-var('pagination-size');
     margin-right: get-css-var('pagination-item-span');
     list-style: none;
     cursor: pointer;
@@ -84,14 +82,12 @@ $pagination: map.merge(
     }
   }
 
-  &--small &__item {
-    width: get-css-var('pagination-small-size');
-    height: get-css-var('pagination-small-size');
+  &--small {
+    @include define-css-var('pagination-size', 28px);
   }
 
-  &--large &__item {
-    width: get-css-var('pagination-large-size');
-    height: get-css-var('pagination-large-size');
+  &--large {
+    @include define-css-var('pagination-size', 36px);
   }
 
   &--background &__item {
@@ -139,7 +135,7 @@ $pagination: map.merge(
   }
 
   &__size {
-    min-width: 7.6em;
+    min-width: 100px;
 
     .vxp-select {
       width: 100%;

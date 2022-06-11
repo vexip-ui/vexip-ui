@@ -77,7 +77,7 @@ $select: map.merge(
   &__popper {
     z-index: get-css-var('z-index-popper');
     display: flex;
-    min-width: 7em;
+    min-width: 98px;
     padding: 5px 0;
 
     .vxp-scroll__wrapper {

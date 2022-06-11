@@ -1,8 +1,9 @@
 [
   "basis",
-  "directory",
   "drag",
-  "list",
+  "list-type",
+  "separation",
   "manual",
-  "multiple"
+  "multiple",
+  "directory"
 ]

@@ -51,6 +51,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Select' },
         { name: 'Slider' },
         { name: 'Switcher' },
+        { name: 'Textarea' },
         { name: 'TimePicker' },
         { name: 'Upload' },
         { name: 'Wheel' }

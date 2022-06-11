@@ -6,7 +6,7 @@
 $textarea: () !default;
 $textarea: map.merge(
   (
-    min-height: 2.1em,
+    min-height: 32px,
     resize: vertical,
     count-color: get-css-var('input-count-color'),
     count-color-disbaled: get-css-var('input-count-color-disbaled'),
@@ -24,12 +24,16 @@ $textarea: map.merge(
   @include basis;
   @include input.handler;
 
-  height: auto;
-  overflow: hidden;
+  @at-root & {
+    height: auto;
+    min-height: get-css-var('textarea-min-height');
+    padding: 0;
+    overflow: hidden;
+  }
 
   &__control {
     height: auto;
-    min-height: get-css-var('textarea-min-height');
+    padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
     overflow: hidden;
     resize: get-css-var('textarea-resize');
   }

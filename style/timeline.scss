@@ -6,7 +6,7 @@ $timeline: () !default;
 $timeline: map.merge(
   (
     item-span: 10px,
-    item-span-pending: 2.2em,
+    item-span-pending: 32px,
     pointer-color: get-css-var('color-primary-base'),
     pointer-bg-color: get-css-var('color-white'),
     pointer-b-width: 2px,

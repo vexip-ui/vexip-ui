@@ -24,7 +24,7 @@ $modal: map.merge(
     body-h-padding: 14px,
     body-padding: get-css-var('modal-body-v-padding') get-css-var('modal-body-h-padding'),
     body-line-height: get-css-var('line-height-base'),
-    footer-v-padding: 0.7em,
+    footer-v-padding: 10px,
     footer-h-padding: 16px,
     footer-padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding'),
     close-color: get-css-var('content-color-placeholder'),

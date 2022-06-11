@@ -14,8 +14,8 @@ $notice: map.merge(
     radius: get-css-var('radius-base'),
     s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('notice-s-color'),
-    v-padding: 10px,
-    h-padding: 16px,
+    v-padding: 8px,
+    h-padding: 10px,
     mask-bg-color: transparent,
     padding: get-css-var('notice-v-padding') get-css-var('notice-h-padding'),
     title-font-size: get-css-var('font-size-primary'),
@@ -43,6 +43,12 @@ $notice: map.merge(
   $icon: #{&}__icon;
   $close: #{&}__close;
 
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
   &__title {
     position: relative;
     margin-bottom: 3px;
@@ -56,21 +62,17 @@ $notice: map.merge(
   }
 
   &__icon {
-    position: absolute;
-    top: 20px;
-    left: 1.8em;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    padding-top: 4px;
+    margin-right: 10px;
     color: get-css-var('notice-icon-color');
-    transform: scale(2);
   }
 
   &__close {
-    position: absolute;
-    top: 6px;
-    right: 8px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    margin-left: 8px;
     color: get-css-var('notice-close-color');
     cursor: pointer;
     transition: get-css-var('transition-color');
@@ -82,8 +84,7 @@ $notice: map.merge(
 
   &__item {
     display: flex;
-    flex-direction: column;
-    width: 24em;
+    width: 336px;
     padding: get-css-var('notice-padding');
     color: get-css-var('notice-color');
     background-color: get-css-var('notice-bg-color');
@@ -91,31 +92,22 @@ $notice: map.merge(
     border-radius: get-css-var('notice-radius');
     box-shadow: get-css-var('notice-shadow');
 
-    &--has-icon {
-      padding-left: 4.2em;
-    }
-
     &--title-only {
       flex-direction: row;
 
       #{$title} {
         margin: 0;
+        font-size: get-css-var('font-size-base');
       }
 
       #{$icon} {
-        position: relative;
-        top: auto;
-        left: auto;
-        display: flex;
         align-items: center;
-        margin-right: 0.5em;
-        transform: scale(1.2);
+        padding-top: 0;
+        margin-right: 8px;
       }
 
       #{$close} {
-        top: 50%;
-        right: 14px;
-        transform: translateY(-50%);
+        align-items: center;
       }
     }
 
@@ -124,7 +116,7 @@ $notice: map.merge(
     }
 
     &--content-only {
-      min-height: 5em;
+      min-height: 60px;
     }
 
     &::before {

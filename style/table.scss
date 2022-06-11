@@ -332,7 +332,7 @@ $table: map.merge(
 
       .vxp-checkbox {
         margin-right: 0;
-        margin-bottom: 0.5em;
+        margin-bottom: 6px;
 
         &:last-child {
           margin-bottom: 0;
@@ -343,7 +343,7 @@ $table: map.merge(
     &-actions {
       display: flex;
       justify-content: space-between;
-      min-width: 6.4em;
+      min-width: 90px;
       padding: 4px 8px;
       margin-top: 8px;
       border-top: get-css-var('border-light-2');

@@ -118,13 +118,12 @@
         {{ `${locale.total} ${getCountWord(props.itemUnit ?? locale.itemUnit, props.total)}` }}
       </div>
       <div v-if="props.pageCount" :class="`${prefix}__size`">
-        <Select v-model:value="currentPageSize" size="small" :options="sizeObjectOptions"></Select>
+        <Select v-model:value="currentPageSize" :options="sizeObjectOptions"></Select>
       </div>
       <div v-if="props.pageJump" :class="`${prefix}__jump`">
         {{ locale.jumpTo }}
         <NumberInput
           v-model:value="jumpValue"
-          size="small"
           :class="`${prefix}__jump-input`"
           @change="handleJumpPage"
         ></NumberInput>

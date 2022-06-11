@@ -109,7 +109,7 @@ $progress: map.merge(
   &--info-bubble-bottom &__info {
     min-width: auto;
     min-height: auto;
-    padding: 0.1em 4px;
+    padding: 1px 4px;
     margin: 0;
     color: get-css-var('progress-info-color-bubble');
   }

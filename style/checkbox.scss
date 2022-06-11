@@ -114,18 +114,6 @@ $checkbox: map.merge(
   }
 
   @mixin small-signal {
-    // width: get-css-var('checkbox-signal-small-size');
-    // height: get-css-var('checkbox-signal-small-size');
-
-    // &::after {
-    //   width:
-    //     calc(
-    //       get-css-var('checkbox-signal-small-size') * 0.25 + get-css-var('checkbox-signal-small-thick') * 0.5 - 0.5px
-    //     );
-    //   height: calc(get-css-var('checkbox-signal-small-size') * 0.5);
-    //   border-width: 0 get-css-var('checkbox-signal-small-thick') get-css-var('checkbox-signal-small-thick') 0;
-    // }
-
     @include define-preset-values('checkbox', (
       signal-size: 14px,
       signal-thick: 1px
@@ -133,29 +121,17 @@ $checkbox: map.merge(
   }
 
   @mixin large-signal {
-    // width: get-css-var('checkbox-signal-large-size');
-    // height: get-css-var('checkbox-signal-large-size');
-
-    // &::after {
-    //   width:
-    //     calc(
-    //       get-css-var('checkbox-signal-large-size') * 0.25 + get-css-var('checkbox-signal-large-thick') * 0.5 - 0.5px
-    //     );
-    //   height: calc(get-css-var('checkbox-signal-large-size') * 0.5);
-    //   border-width: 0 get-css-var('checkbox-signal-large-thick') get-css-var('checkbox-signal-large-thick') 0;
-    // }
-
     @include define-preset-values('checkbox', (
       signal-size: 22px,
       signal-thick: 3px
     ));
   }
 
-  &--small &__signal {
+  &--small {
     @include small-signal;
   }
 
-  &--large &__signal {
+  &--large {
     @include large-signal;
   }
 
@@ -185,14 +161,6 @@ $checkbox: map.merge(
   &--partial &__signal {
     @include partial-signal;
   }
-
-  // &--partial#{&}--small &__signal::after {
-  //   width: calc(get-css-var('checkbox-signal-small-size') * 0.5);
-  // }
-
-  // &--partial#{&}--large &__signal::after {
-  //   width: calc(get-css-var('checkbox-signal-large-size') * 0.5);
-  // }
 
   &--checked &__signal {
     background-color: get-css-var('checkbox-signal-bg-color-checked');
@@ -333,24 +301,12 @@ $checkbox: map.merge(
       background-color: get-css-var('checkbox-b-color-disabled');
     }
 
-    &-group--small &__signal {
+    &-group--small & {
       @include small-signal;
     }
 
-    &-group--large &__signal {
+    &-group--large & {
       @include large-signal;
     }
-
-    // &-group--partial &__signal {
-    //   @include partial-signal;
-    // }
-
-    // &-group--small &--partial &__signal::after {
-    //   width: calc(get-css-var('checkbox-signal-small-size') * 0.5);
-    // }
-
-    // &-group--large &--partial &__signal::after {
-    //   width: calc(get-css-var('checkbox-signal-large-size') * 0.5);
-    // }
   }
 }
