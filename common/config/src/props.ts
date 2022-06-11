@@ -15,7 +15,7 @@ export const PROVIDED_PROPS = '__vxp-provided-props'
 
 export function configProps(props: Partial<PropOptions> | Ref<Partial<PropOptions>>, app?: App) {
   if (app) {
-    app.provide(PROVIDED_PROPS, unref(props))
+    app.provide(PROVIDED_PROPS, computed(() => unref(props)))
   } else {
     const upstreamProps = inject<ComputedRef<Record<string, any>> | null>(PROVIDED_PROPS, null)
     const providedProps = computed(() => {
