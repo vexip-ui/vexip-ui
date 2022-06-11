@@ -116,7 +116,7 @@ export default defineComponent({
     })
     const iconComp = computed(() => {
       if (typeof props.icon === 'boolean') {
-        return predefinedIcons[props.type] ?? ''
+        return predefinedIcons[props.type] ?? null
       }
 
       return props.icon
