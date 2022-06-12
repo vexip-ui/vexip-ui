@@ -15,6 +15,7 @@ import { CalendarPane } from './calendar-pane'
 import { Card } from './card'
 import { Carousel } from './carousel'
 import { CarouselItem } from './carousel-item'
+import { Cascader } from './cascader'
 import { Cell } from './cell'
 import { Checkbox } from './checkbox'
 import { CheckboxGroup } from './checkbox-group'
@@ -113,6 +114,7 @@ const components = [
   Card,
   Carousel,
   CarouselItem,
+  Cascader,
   Cell,
   Checkbox,
   CheckboxGroup,
@@ -212,6 +214,7 @@ export {
   Card,
   Carousel,
   CarouselItem,
+  Cascader,
   Cell,
   Checkbox,
   CheckboxGroup,
