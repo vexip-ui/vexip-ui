@@ -11,7 +11,7 @@ Currently more then 60 components, many you can see everywhere and a few may bri
 - Not less components and functions for website development, hoping may improve efficiency
 - Vue3 components of out-of-the-box (may not help if you still using Vue2)
 - Intuitive design, directly to write code, no equivocate
-- entirely using the composition api, the performance and scalability should be good
+- entirely using the composition api, the performance and extensibility should be good
 
 ## Environment
 
