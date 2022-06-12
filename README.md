@@ -22,7 +22,7 @@ For components:
 
 - ~~ConfigProvider~~ (Released in `2.0.0-beta.4`)
 - ~~Avatar~~ (Released in `2.0.0-beta.5`)
-- Cascader
+- Cascader (In progress, see `cascader` branch)
 - Mention
 - Skeleton
 
@@ -31,7 +31,7 @@ For components:
 - Not less components and functions for website development, hoping may improve efficiency
 - Vue3 components of out-of-the-box (may not help if you still using Vue2)
 - Intuitive design, directly to write code, no equivocate
-- entirely using the composition api, the performance and scalability should be good
+- entirely using the composition api, the performance and extensibility should be good
 
 ## Environment
 
