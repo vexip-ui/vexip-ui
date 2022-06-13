@@ -1,13 +1,16 @@
 <template>
   <NumberInput v-model:value="maxCount" :range="[0, Infinity]"></NumberInput>
-  <br />
-  <br />
+  <p>
+    Hide Rest Tip:
+    <Switcher v-model:value="noRestTip"></Switcher>
+  </p>
   <Cascader
     :value="value"
     :options="options"
     multiple
     clearable
     :max-tag-count="maxCount"
+    :no-rest-tip="noRestTip"
   ></Cascader>
 </template>
 
@@ -15,6 +18,7 @@
 import { ref } from 'vue'
 
 const maxCount = ref(0)
+const noRestTip = ref(false)
 const value = ref([])
 const options = createOptions(3)
 

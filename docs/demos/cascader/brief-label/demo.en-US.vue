@@ -1,16 +1,21 @@
 <template>
+  <p>
+    Brief Label:
+    <Switcher v-model:value="briefLabel"></Switcher>
+  </p>
   <Cascader
     :value="value"
     :options="options"
     multiple
-    brief-label
-    clearabel
+    clearable
+    :brief-label="briefLabel"
   ></Cascader>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
+const briefLabel = ref(true)
 const value = ref([])
 const options = createOptions(3)
 

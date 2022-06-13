@@ -13,35 +13,57 @@
       </div>
       <div :class="`${prefixCls}__control`">
         <slot name="control">
-          <slot name="control">
-            <div v-if="props.multiple" ref="tagWrapper" :class="[`${prefixCls}__tags`]">
-              <Tag
-                v-for="(item, index) in currentValues"
-                :key="index"
-                :class="`${prefixCls}__tag`"
-                closable
-                @click.stop="handleClick"
-                @close="handleSelect(item)"
-              >
-                {{ currentLabels[index] }}
-              </Tag>
-              <Tag
-                ref="tagCounter"
-                :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]"
-              >
+          <div v-if="props.multiple" ref="tagWrapper" :class="[`${prefixCls}__tags`]">
+            <Tag
+              v-for="(item, index) in currentValues"
+              :key="index"
+              :class="`${prefixCls}__tag`"
+              closable
+              @click.stop="handleClick"
+              @close="handleSelect(item)"
+            >
+              {{ currentLabels[index] }}
+            </Tag>
+            <Tag v-if="props.noRestTip" ref="tagCounter" :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]">
+              {{ `+${restTagCount}` }}
+            </Tag>
+            <Tooltip
+              v-else
+              ref="tagCounter"
+              :visible="restTipShow"
+              trigger="custom"
+              placement="top-end"
+              :tip-class="`${prefixCls}__rest-tip`"
+              @click.stop="toggleShowRestTip"
+            >
+              <Tag :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]">
                 {{ `+${restTagCount}` }}
               </Tag>
-            </div>
-            <template v-else>
-              {{ currentLabels[0] }}
-            </template>
-            <span
-              v-if="(props.placeholder ?? locale.placeholder) && !hasValue"
-              :class="`${prefixCls}__placeholder`"
-            >
-              {{ props.placeholder ?? locale.placeholder }}
-            </span>
-          </slot>
+              <template #tip>
+                <NativeScroll use-y-bar>
+                  <template v-for="(item, index) in currentValues" :key="index">
+                    <Tag
+                      v-if="index >= currentValues.length - restTagCount"
+                      :class="`${prefixCls}__tag`"
+                      closable
+                      @close="handleRestTipClose(item)"
+                    >
+                      {{ currentLabels[index] }}
+                    </Tag>
+                  </template>
+                </NativeScroll>
+              </template>
+            </Tooltip>
+          </div>
+          <template v-else>
+            {{ currentLabels[0] }}
+          </template>
+          <span
+            v-if="(props.placeholder ?? locale.placeholder) && !hasValue"
+            :class="`${prefixCls}__placeholder`"
+          >
+            {{ props.placeholder ?? locale.placeholder }}
+          </span>
         </slot>
       </div>
       <transition name="vxp-fade">
@@ -92,7 +114,11 @@
               @select="handleOptionSelect($event, index)"
               @hover="props.hoverTrigger && handleOptionSelect($event, index)"
               @check="handleOptionCheck($event)"
-            ></CascaderPane>
+            >
+              <template #default="{ option, index: optionIndex }">
+                <slot :option="option" :index="optionIndex"></slot>
+              </template>
+            </CascaderPane>
           </div>
         </div>
       </transition>
@@ -115,12 +141,35 @@ import {
 } from 'vue'
 import CascaderPane from './cascader-pane.vue'
 import { Icon } from '@/components/icon'
-import { Tag } from '@/components/tag'
+import { NativeScroll } from '@/components/native-scroll'
 import { Portal } from '@/components/portal'
+import { Tag } from '@/components/tag'
+import { Tooltip } from '@/components/tooltip'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
-import { useProps, useLocale, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
-import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { noop, isNull, transformListToMap, transformTree, flatTree, removeArrayItem } from '@vexip-ui/utils'
+import {
+  useProps,
+  useLocale,
+  booleanProp,
+  booleanStringProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp
+} from '@vexip-ui/config'
+import {
+  useHover,
+  usePopper,
+  placementWhileList,
+  useClickOutside
+} from '@vexip-ui/mixins'
+import {
+  noop,
+  isNull,
+  transformListToMap,
+  transformTree,
+  flatTree,
+  removeArrayItem
+} from '@vexip-ui/utils'
 import { ChevronDown, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -143,8 +192,10 @@ export default defineComponent({
   components: {
     CascaderPane,
     Icon,
+    NativeScroll,
     Portal,
     Tag,
+    Tooltip,
     ChevronDown,
     CircleXmark
   },
@@ -173,9 +224,9 @@ export default defineComponent({
     keyConfig: Object as PropType<OptionKeyConfig>,
     separator: String,
     hoverTrigger: booleanProp,
-    absolute: booleanProp,
     maxTagCount: Number,
-    briefLabel: booleanProp
+    briefLabel: booleanProp,
+    noRestTip: booleanProp
   },
   emits: [
     'toggle',
@@ -229,9 +280,9 @@ export default defineComponent({
         validator: (value: string) => value.length === 1
       },
       hoverTrigger: false,
-      absolute: false,
       maxTagCount: 0,
-      briefLabel: false
+      briefLabel: false,
+      noRestTip: false
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -342,6 +393,7 @@ export default defineComponent({
     const tagWrapper = ref<HTMLElement | null>(null)
     const tagCounter = ref<InstanceType<typeof Tag> | null>(null)
     const restTagCount = ref(0)
+    const restTipShow = ref(false)
 
     onMounted(() => {
       nextTick(hideTagCounter)
@@ -382,6 +434,7 @@ export default defineComponent({
     )
     watch(currentVisible, value => {
       if (value) {
+        restTipShow.value = false
         updatePopper()
       } else {
         isPopperShow.value = false
@@ -408,6 +461,12 @@ export default defineComponent({
     watch(
       () => props.maxTagCount,
       computeTagsOverflow
+    )
+    watch(
+      () => props.noRestTip,
+      () => {
+        nextTick(computeTagsOverflow)
+      }
     )
     watch(
       () => props.briefLabel,
@@ -566,7 +625,7 @@ export default defineComponent({
       option.checked = checked
       option.partial = false
 
-      if (!props.absolute) {
+      if (!props.noCascaded) {
         const originalOptions = [option].concat(
           options.filter(option => option.disabled && option.checked)
         )
@@ -579,7 +638,7 @@ export default defineComponent({
         }
       }
 
-      const selectedOptions = props.absolute
+      const selectedOptions = props.noCascaded
         ? options.filter(option => option.checked)
         : options.filter(
           option => option.checked && !(option.hasChild || option.children?.length)
@@ -806,6 +865,7 @@ export default defineComponent({
         currentLabels.value.length = 0
         openedIds.value.length = 0
         emittedValue.value = []
+        restTipShow.value = false
 
         Object.values(optionIdMap).forEach(option => {
           option.checked = false
@@ -818,6 +878,26 @@ export default defineComponent({
         clearField()
         hideTagCounter()
       }
+    }
+
+    function toggleShowRestTip() {
+      if (!currentVisible.value) {
+        restTipShow.value = !restTipShow.value
+      } else {
+        restTipShow.value = false
+      }
+    }
+
+    function handleRestTipClose(fullValue: string) {
+      if (props.multiple) {
+        const option = optionValueMap.get(fullValue)
+
+        option && handleOptionCheck(option.id)
+      } else {
+        handleSelect(fullValue)
+      }
+
+      nextTick(computeTagsOverflow)
     }
 
     return {
@@ -833,6 +913,7 @@ export default defineComponent({
       isHover,
       openedIds,
       restTagCount,
+      restTipShow,
 
       optionsList,
       className,
@@ -851,7 +932,9 @@ export default defineComponent({
       handleSelect,
       handleClick,
       handleClickOutside,
-      handleClear
+      handleClear,
+      toggleShowRestTip,
+      handleRestTipClose
     }
   }
 })

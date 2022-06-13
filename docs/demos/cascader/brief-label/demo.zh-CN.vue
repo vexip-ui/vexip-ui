@@ -7,7 +7,7 @@
     :value="value"
     :options="options"
     multiple
-    clearabel
+    clearable
     :brief-label="briefLabel"
   ></Cascader>
 </template>

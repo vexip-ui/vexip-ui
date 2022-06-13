@@ -67,6 +67,7 @@ $cascader: map.merge(
   }
 
   &__control &__tag {
+    position: relative;
     height: 24px;
     margin: 2px 4px;
     margin-left: 0;
@@ -77,6 +78,11 @@ $cascader: map.merge(
 
   &__control &__tag + &__tag {
     margin-left: 0;
+  }
+
+  &__rest-tip {
+    display: flex;
+    max-height: 180px;
   }
 
   &__placeholder {
