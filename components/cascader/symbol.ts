@@ -20,5 +20,8 @@ export interface OptionState {
   hasChild: boolean,
   checked: boolean,
   partial: boolean,
+  loading: boolean,
+  loaded: boolean,
+  error: boolean,
   data: Record<string, any>
 }

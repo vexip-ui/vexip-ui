@@ -1,0 +1,3 @@
+### Async Load
+
+通过 `on-async-load` 绑定一个函数可以开启异步加载模式。

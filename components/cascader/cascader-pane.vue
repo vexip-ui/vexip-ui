@@ -13,6 +13,9 @@
       <template #default="{ item, index }">
         <slot :option="item" :index="index">
           <Option
+            :class="{
+              'vxp-option--error': item.error
+            }"
             :value="item.value"
             :label="item.label"
             :disabled="item.disabled"
@@ -35,11 +38,17 @@
                 {{ item.label }}
               </slot>
             </span>
-            <div v-if="hasChildren(item)" :class="`${prefix}__arrow`">
-              <Icon><ChevronRight></ChevronRight></Icon>
-            </div>
-            <div v-else-if="!multiple && checkIcon && values.includes(item.fullValue)" :class="`${prefix}__check`">
-              <Icon :icon="checkIcon"></Icon>
+            <div :class="`${prefix}__icon`">
+              <Icon v-if="item.loading" pulse>
+                <Spinner></Spinner>
+              </Icon>
+              <Icon v-else-if="item.error">
+                <ArrowsRotate></ArrowsRotate>
+              </Icon>
+              <Icon v-else-if="hasChildren(item)">
+                <ChevronRight></ChevronRight>
+              </Icon>
+              <Icon v-else-if="!multiple && checkIcon && values.includes(item.fullValue)" :icon="checkIcon"></Icon>
             </div>
           </Option>
         </slot>
@@ -54,7 +63,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { VirtualList } from '@/components/virtual-list'
-import { ChevronRight, Check } from '@vexip-ui/icons'
+import { ChevronRight, Check, Spinner, ArrowsRotate } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { VirtualListExposed } from '@/components/virtual-list'
@@ -67,7 +76,9 @@ export default defineComponent({
     Icon,
     Option,
     VirtualList,
-    ChevronRight
+    ChevronRight,
+    Spinner,
+    ArrowsRotate
   },
   props: {
     options: {

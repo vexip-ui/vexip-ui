@@ -3,5 +3,7 @@
   "multiple",
   "clearable",
   "max-count",
-  "absolute"
+  "absolute",
+  "brief-label",
+  "async-load"
 ]

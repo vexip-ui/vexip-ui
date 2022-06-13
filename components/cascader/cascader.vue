@@ -165,6 +165,7 @@ import {
 import {
   noop,
   isNull,
+  isPromise,
   transformListToMap,
   transformTree,
   flatTree,
@@ -226,7 +227,8 @@ export default defineComponent({
     hoverTrigger: booleanProp,
     maxTagCount: Number,
     briefLabel: booleanProp,
-    noRestTip: booleanProp
+    noRestTip: booleanProp,
+    onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>
   },
   emits: [
     'toggle',
@@ -282,7 +284,11 @@ export default defineComponent({
       hoverTrigger: false,
       maxTagCount: 0,
       briefLabel: false,
-      noRestTip: false
+      noRestTip: false,
+      onAsyncLoad: {
+        default: null,
+        isFunc: true
+      }
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -303,69 +309,26 @@ export default defineComponent({
     let optionIdMap: Record<number, OptionState> = (null!)
 
     watchEffect(() => {
-      const {
-        value: valueKey,
-        label: labelKey,
-        children: childrenKey,
-        disabled: disabledKey,
-        hasChild: hasChildKey
-      } = { ...defaultKeyConfig, ...props.keyConfig }
+      const childrenKey = props.keyConfig.children ?? defaultKeyConfig.children
       const rawOptions = flatTree(props.options as Array<Record<string | symbol, any>>, {
         keyField: ID_KEY,
         parentField: PARENT_KEY,
         childField: childrenKey
       })
 
-      const options = rawOptions.map(rawOption => {
-        const {
-          [ID_KEY]: id,
-          [PARENT_KEY]: parent,
-          [valueKey]: value,
-          [labelKey]: label,
-          [disabledKey]: disabled,
-          [hasChildKey]: hasChild
-        } = rawOption
-
-        return reactive<OptionState>({
-          id,
-          parent,
-          value,
-          disabled,
-          hasChild,
-          label: label || String(value),
-          fullValue: '',
-          fullLabel: '',
-          children: [],
-          checked: false,
-          partial: false,
-          data: rawOption
-        })
-      })
-
-      const idMap = transformListToMap(options, 'id')
+      const options = createOptionStates(rawOptions)
       const separator = props.separator
-      const valueMap = new Map<string, OptionState>()
+
+      optionIdMap = transformListToMap(options, 'id')
+      optionValueMap = new Map<string, OptionState>()
 
       for (let i = 0, len = options.length; i < len; ++i) {
         const option = options[i]
 
-        let value = option.value as string
-        let label = option.label
-        let parent = option.parent
-
-        while (idMap[parent]) {
-          value = `${idMap[parent].value}${separator}${value}`
-          label = `${idMap[parent].label}${separator}${label}`
-          parent = idMap[parent].parent
-        }
-
-        option.fullValue = value
-        option.fullLabel = label
-        valueMap.set(value, option)
+        initOptionFull(option, separator)
+        optionValueMap.set(option.fullValue, option)
       }
 
-      optionValueMap = valueMap
-      optionIdMap = idMap
       optionTree.value = transformTree(options)
     })
 
@@ -395,10 +358,6 @@ export default defineComponent({
     const restTagCount = ref(0)
     const restTipShow = ref(false)
 
-    onMounted(() => {
-      nextTick(hideTagCounter)
-    })
-
     const className = computed(() => {
       return {
         [prefix]: true,
@@ -425,6 +384,7 @@ export default defineComponent({
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
     })
+    const isAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
 
     watch(
       () => props.visible,
@@ -478,6 +438,63 @@ export default defineComponent({
         nextTick(computeTagsOverflow)
       }
     )
+
+    onMounted(() => {
+      nextTick(hideTagCounter)
+    })
+
+    function createOptionStates(rawOptions: Record<string | symbol, any>[]) {
+      const {
+        value: valueKey,
+        label: labelKey,
+        disabled: disabledKey,
+        hasChild: hasChildKey
+      } = { ...defaultKeyConfig, ...props.keyConfig }
+
+      return rawOptions.map(rawOption => {
+        const {
+          [ID_KEY]: id,
+          [PARENT_KEY]: parent,
+          [valueKey]: value,
+          [labelKey]: label,
+          [disabledKey]: disabled,
+          [hasChildKey]: hasChild
+        } = rawOption
+
+        return reactive<OptionState>({
+          id,
+          parent,
+          value,
+          disabled,
+          hasChild,
+          label: label || String(value),
+          fullValue: '',
+          fullLabel: '',
+          children: [],
+          checked: false,
+          partial: false,
+          loading: false,
+          loaded: false,
+          error: false,
+          data: rawOption
+        })
+      })
+    }
+
+    function initOptionFull(option: OptionState, separator: string) {
+      let value = option.value as string
+      let label = option.label
+      let parent = option.parent
+
+      while (optionIdMap[parent]) {
+        value = `${optionIdMap[parent].value}${separator}${value}`
+        label = `${optionIdMap[parent].label}${separator}${label}`
+        parent = optionIdMap[parent].parent
+      }
+
+      option.fullValue = value
+      option.fullLabel = label
+    }
 
     function isFlatArray<T extends string | number>(value: T[] | T[][]): value is T[] {
       return !!value.length && !Array.isArray(value[0])
@@ -548,12 +565,53 @@ export default defineComponent({
       }
     }
 
-    function handleOptionSelect(id: number, depth: number) {
+    async function handleOptionSelect(id: number, depth: number) {
       const option = optionIdMap[id]
 
       if (!option) return
 
       if (option.hasChild || option.children?.length) {
+        if (isAsyncLoad.value && !option.children?.length && !option.loaded) {
+          option.loading = true
+
+          let result: ReturnType<typeof props.onAsyncLoad>
+
+          try {
+            result = props.onAsyncLoad(option.data)
+            result = isPromise(result) ? await result : result
+          } catch (e) {
+            option.error = true
+            option.loading = false
+            return
+          }
+
+          const rawOptions = result as any[]
+
+          if (!Array.isArray(rawOptions) || !rawOptions.length) {
+            option.hasChild = false
+          } else {
+            const options = createOptionStates(rawOptions)
+            const parentId = option.id
+            const separator = props.separator
+
+            option.children.push(...options)
+
+            let idCount = Math.max(...Object.keys(optionIdMap).map(Number)) + 1
+
+            options.forEach(option => {
+              option.id = idCount++
+              option.parent = parentId
+              optionIdMap[option.id] = option
+
+              initOptionFull(option, separator)
+              optionValueMap.set(option.fullValue, option)
+            })
+          }
+
+          option.loaded = true
+          option.loading = false
+        }
+
         if (depth < openedIds.value.length) {
           openedIds.value = openedIds.value.slice(0, depth)
         }

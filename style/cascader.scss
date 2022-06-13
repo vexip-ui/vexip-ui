@@ -16,7 +16,8 @@ $cascader: map.merge(
     pane-radius: get-css-var('radius-base'),
     pane-shadow: get-css-var('shadow-base'),
     check-color: get-css-var('color-primary-base'),
-    empty-color: get-css-var('content-color-placeholder')
+    empty-color: get-css-var('content-color-placeholder'),
+    option-color-error: get-css-var('color-error-opacity-2')
   ),
   $cascader
 );
@@ -135,6 +136,10 @@ $cascader: map.merge(
         background-color: get-css-var('option-bg-color-hover');
       }
     }
+
+    .vxp-option--error {
+      color: get-css-var('cascader-option-color-error');
+    }
   }
 
   &__checkbox {
@@ -146,8 +151,7 @@ $cascader: map.merge(
     flex: auto;
   }
 
-  &__arrow,
-  &__check {
+  &__icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
