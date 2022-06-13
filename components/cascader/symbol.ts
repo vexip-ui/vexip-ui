@@ -5,7 +5,7 @@ export interface OptionKeyConfig {
   label?: string,
   children?: string,
   disabled?: string,
-  branch?: string
+  hasChild?: string
 }
 
 export interface OptionState {
@@ -17,7 +17,7 @@ export interface OptionState {
   fullLabel: string,
   children: OptionState[],
   disabled: boolean,
-  branch: boolean,
+  hasChild: boolean,
   checked: boolean,
   partial: boolean,
   data: Record<string, any>

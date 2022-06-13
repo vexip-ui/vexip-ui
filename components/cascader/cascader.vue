@@ -14,7 +14,7 @@
       <div :class="`${prefixCls}__control`">
         <slot name="control">
           <slot name="control">
-            <template v-if="props.multiple">
+            <div v-if="props.multiple" ref="tagWrapper" :class="[`${prefixCls}__tags`]">
               <Tag
                 v-for="(item, index) in currentValues"
                 :key="index"
@@ -25,7 +25,13 @@
               >
                 {{ currentLabels[index] }}
               </Tag>
-            </template>
+              <Tag
+                ref="tagCounter"
+                :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]"
+              >
+                {{ `+${restTagCount}` }}
+              </Tag>
+            </div>
             <template v-else>
               {{ currentLabels[0] }}
             </template>
@@ -81,8 +87,8 @@
               :options="items"
               :opened-id="openedIds[index]"
               :values="currentValues"
-              :checkbox="props.multiple"
               :ready="isPopperShow"
+              :multiple="props.multiple"
               @select="handleOptionSelect($event, index)"
               @hover="props.hoverTrigger && handleOptionSelect($event, index)"
               @check="handleOptionCheck($event)"
@@ -95,7 +101,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, toRef, computed, watch, watchEffect, inject } from 'vue'
+import {
+  defineComponent,
+  ref,
+  reactive,
+  toRef,
+  computed,
+  watch,
+  watchEffect,
+  onMounted,
+  inject,
+  nextTick
+} from 'vue'
 import CascaderPane from './cascader-pane.vue'
 import { Icon } from '@/components/icon'
 import { Tag } from '@/components/tag'
@@ -118,7 +135,7 @@ const defaultKeyConfig: Required<OptionKeyConfig> = {
   label: 'label',
   children: 'children',
   disabled: 'disabled',
-  branch: 'branch'
+  hasChild: 'hasChild'
 }
 
 export default defineComponent({
@@ -157,7 +174,8 @@ export default defineComponent({
     separator: String,
     hoverTrigger: booleanProp,
     absolute: booleanProp,
-    maxTagCount: Number
+    maxTagCount: Number,
+    briefLabel: booleanProp
   },
   emits: [
     'toggle',
@@ -212,7 +230,8 @@ export default defineComponent({
       },
       hoverTrigger: false,
       absolute: false,
-      maxTagCount: 0
+      maxTagCount: 0,
+      briefLabel: false
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -238,7 +257,7 @@ export default defineComponent({
         label: labelKey,
         children: childrenKey,
         disabled: disabledKey,
-        branch: branchKey
+        hasChild: hasChildKey
       } = { ...defaultKeyConfig, ...props.keyConfig }
       const rawOptions = flatTree(props.options as Array<Record<string | symbol, any>>, {
         keyField: ID_KEY,
@@ -253,7 +272,7 @@ export default defineComponent({
           [valueKey]: value,
           [labelKey]: label,
           [disabledKey]: disabled,
-          [branchKey]: branch
+          [hasChildKey]: hasChild
         } = rawOption
 
         return reactive<OptionState>({
@@ -261,7 +280,7 @@ export default defineComponent({
           parent,
           value,
           disabled,
-          branch,
+          hasChild,
           label: label || String(value),
           fullValue: '',
           fullLabel: '',
@@ -297,8 +316,6 @@ export default defineComponent({
       optionValueMap = valueMap
       optionIdMap = idMap
       optionTree.value = transformTree(options)
-
-      console.log(optionTree)
     })
 
     const openedIds = ref<number[]>([])
@@ -322,13 +339,21 @@ export default defineComponent({
     })
     const { isHover } = useHover(reference)
     const locale = useLocale('select')
+    const tagWrapper = ref<HTMLElement | null>(null)
+    const tagCounter = ref<InstanceType<typeof Tag> | null>(null)
+    const restTagCount = ref(0)
+
+    onMounted(() => {
+      nextTick(hideTagCounter)
+    })
 
     const className = computed(() => {
       return {
         [prefix]: true,
         'vxp-input-vars': true,
         [`${prefix}-vars`]: true,
-        [`${prefix}--multiple`]: props.multiple
+        [`${prefix}--multiple`]: props.multiple,
+        [`${prefix}--responsive`]: props.multiple && props.maxTagCount <= 0
       }
     })
     const selectorClass = computed(() => {
@@ -380,6 +405,20 @@ export default defineComponent({
       },
       { immediate: true }
     )
+    watch(
+      () => props.maxTagCount,
+      computeTagsOverflow
+    )
+    watch(
+      () => props.briefLabel,
+      brief => {
+        currentLabels.value = currentValues.value
+          .map(value => optionValueMap.get(value)?.[brief ? 'label' : 'fullLabel'] as string)
+          .filter(Boolean)
+
+        nextTick(computeTagsOverflow)
+      }
+    )
 
     function isFlatArray<T extends string | number>(value: T[] | T[][]): value is T[] {
       return !!value.length && !Array.isArray(value[0])
@@ -396,6 +435,8 @@ export default defineComponent({
         return
       }
 
+      const briefLabel = props.briefLabel
+
       if (props.multiple) {
         const normalizedValue = isFlatArray(value) ? [value] : value
         const valueSet = new Set<string>(normalizedValue.map(v => v.join(props.separator)))
@@ -407,7 +448,7 @@ export default defineComponent({
 
           if (option) {
             selectedValues.push(value)
-            selectedLabels.push(option.fullLabel)
+            selectedLabels.push(briefLabel ? option.label : option.fullLabel)
           }
         })
 
@@ -420,7 +461,7 @@ export default defineComponent({
 
         if (option) {
           currentValues.value = [stringValue]
-          currentLabels.value = [option.fullLabel]
+          currentLabels.value = [briefLabel ? option.label : option.fullLabel]
         } else {
           currentValues.value = []
           currentLabels.value = []
@@ -453,7 +494,7 @@ export default defineComponent({
 
       if (!option) return
 
-      if (option.branch || option.children?.length) {
+      if (option.hasChild || option.children?.length) {
         if (depth < openedIds.value.length) {
           openedIds.value = openedIds.value.slice(0, depth)
         }
@@ -464,8 +505,8 @@ export default defineComponent({
       }
     }
 
-    function updateCheckedUpward(originOption: OptionState) {
-      let option = originOption
+    function updateCheckedUpward(originalOption: OptionState) {
+      let option = originalOption
 
       while (!isNull(option.parent)) {
         const parentId = option.parent
@@ -492,11 +533,11 @@ export default defineComponent({
       }
     }
 
-    function updateCheckedDown(originOption: OptionState) {
-      const checked = originOption.checked
-      const partial = originOption.partial
+    function updateCheckedDown(originalOption: OptionState) {
+      const checked = originalOption.checked
+      const partial = originalOption.partial
 
-      const loop = [...originOption.children]
+      const loop = [...originalOption.children]
 
       let option
 
@@ -519,19 +560,132 @@ export default defineComponent({
 
       if (!option) return
 
+      const options = Object.values(optionIdMap)
       const checked = !option.checked
+
       option.checked = checked
       option.partial = false
 
-      const options = [option].concat(
-        Object.values(optionIdMap).filter(option => option.disabled && option.checked)
-      )
+      if (!props.absolute) {
+        const originalOptions = [option].concat(
+          options.filter(option => option.disabled && option.checked)
+        )
 
-      for (let i = 0, len = options.length; i < len; ++i) {
-        const option = options[i]
+        for (let i = 0, len = originalOptions.length; i < len; ++i) {
+          const option = originalOptions[i]
 
-        updateCheckedUpward(option)
-        updateCheckedDown(option)
+          updateCheckedUpward(option)
+          updateCheckedDown(option)
+        }
+      }
+
+      const selectedOptions = props.absolute
+        ? options.filter(option => option.checked)
+        : options.filter(
+          option => option.checked && !(option.hasChild || option.children?.length)
+        )
+
+      const selectedValues: string[] = []
+      const selectedLabels: string[] = []
+
+      const values: (string | number)[][] = []
+      const dataList: Array<Record<string, any>> = []
+      const briefLabel = props.briefLabel
+
+      selectedOptions.forEach(option => {
+        selectedValues.push(option.fullValue)
+        selectedLabels.push(briefLabel ? option.label : option.fullLabel)
+
+        const { value, data } = queryArrayMeta(option.fullValue)
+
+        values.push(value)
+        dataList.push(data)
+      })
+
+      currentValues.value = selectedValues
+      currentLabels.value = selectedLabels
+
+      emit('change', values, dataList)
+      emit('update:value', values)
+
+      !props.disableValidate && validateField()
+      nextTick(computeTagsOverflow)
+    }
+
+    function computeTagsOverflow() {
+      if (!tagWrapper.value || !tagCounter.value?.$el) return
+
+      const conter = tagCounter.value?.$el as HTMLElement
+      const children = tagWrapper.value.children
+      const maxTagCount = props.maxTagCount
+
+      if (maxTagCount > 0) {
+        const childCount = children.length
+
+        for (let i = 0, len = childCount - 1; i < len; ++i) {
+          const child = children[i] as HTMLElement
+
+          child.style.display = i < maxTagCount ? '' : 'none'
+        }
+
+        if (maxTagCount > childCount - 1) {
+          conter.style.display = 'none'
+          restTagCount.value = 0
+        } else {
+          conter.style.display = ''
+          restTagCount.value = childCount - 1 - maxTagCount
+        }
+
+        return
+      }
+
+      conter.style.display = ''
+
+      const wrapperWidth = tagWrapper.value.offsetWidth
+      const childWidths: number[] = []
+
+      let totalWidth = 0
+      let hidden = false
+
+      for (let i = 0, len = children.length - 1; i < len; ++i) {
+        if (i < 0) continue
+
+        const child = children[i] as HTMLElement
+
+        if (hidden) {
+          child.style.display = 'none'
+          continue
+        } else {
+          child.style.display = ''
+        }
+
+        totalWidth += child.offsetWidth
+        childWidths[i] = child.offsetWidth
+
+        if (totalWidth > wrapperWidth) {
+          for (let j = i; j >= 0; --j) {
+            restTagCount.value = len - j
+            totalWidth -= childWidths[j]
+
+            if (totalWidth + conter.offsetWidth <= wrapperWidth || !j) {
+              hidden = true
+              i = j - 1
+              break
+            }
+          }
+        }
+      }
+
+      if (!hidden) {
+        conter.style.display = 'none'
+      }
+
+      nextTick(updatePopper)
+    }
+
+    function hideTagCounter() {
+      if (tagCounter.value?.$el) {
+        tagCounter.value.$el.style.display = 'none'
       }
     }
 
@@ -588,15 +742,15 @@ export default defineComponent({
       if (props.multiple) {
         if (fullValue && currentValues.value.includes(fullValue)) {
           removeArrayItem(currentValues.value, fullValue)
-          removeArrayItem(currentLabels.value, option.fullLabel)
+          removeArrayItem(currentLabels.value, props.briefLabel ? option.label : option.fullLabel)
         } else {
           currentValues.value.push(fullValue)
-          currentLabels.value.push(option.fullLabel)
+          currentLabels.value.push(props.briefLabel ? option.label : option.fullLabel)
         }
       } else {
         if (fullValue) {
           currentValues.value[0] = fullValue
-          currentLabels.value[0] = option.fullLabel
+          currentLabels.value[0] = props.briefLabel ? option.label : option.fullLabel
         } else {
           currentValues.value.length = 0
           currentLabels.value.length = 0
@@ -627,9 +781,7 @@ export default defineComponent({
         emit('update:value', value)
       }
 
-      if (!props.disableValidate) {
-        validateField()
-      }
+      !props.disableValidate && validateField()
     }
 
     function handleClick() {
@@ -655,10 +807,16 @@ export default defineComponent({
         openedIds.value.length = 0
         emittedValue.value = []
 
+        Object.values(optionIdMap).forEach(option => {
+          option.checked = false
+          option.partial = false
+        })
+
         emit('change', emittedValue.value, [])
         emit('update:value', emittedValue.value)
         emit('clear')
         clearField()
+        hideTagCounter()
       }
     }
 
@@ -674,6 +832,7 @@ export default defineComponent({
       transferTo,
       isHover,
       openedIds,
+      restTagCount,
 
       optionsList,
       className,
@@ -684,6 +843,8 @@ export default defineComponent({
       wrapper,
       reference,
       popper,
+      tagWrapper,
+      tagCounter,
 
       handleOptionSelect,
       handleOptionCheck,

@@ -1,0 +1,3 @@
+### Absolute Options
+
+添加 `absolute` 属性可以使得每个选项都是独立可选的。

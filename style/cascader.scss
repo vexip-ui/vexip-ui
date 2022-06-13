@@ -55,6 +55,17 @@ $cascader: map.merge(
     margin-top: -2px;
   }
 
+  &__tags {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+
+  &--responsive &__tags {
+    display: flex;
+    overflow: hidden;
+  }
+
   &__control &__tag {
     height: 24px;
     margin: 2px 4px;
@@ -85,15 +96,17 @@ $cascader: map.merge(
   }
 
   &__panes {
-    display: flex;
+    position: relative;
     height: get-css-var('cascader-pane-height');
     background-color: get-css-var('cascader-pane-bg-color');
     border: get-css-var('cascader-pane-border');
     border-radius: get-css-var('cascader-pane-radius');
     box-shadow: get-css-var('cascader-pane-shadow');
+    transition: width get-css-var('transition-base');
   }
 
   &__pane {
+    display: inline-block;
     min-width: get-css-var('cascader-pane-min-width');
     max-width: get-css-var('cascader-pane-max-width');
     height: 100%;
@@ -108,6 +121,14 @@ $cascader: map.merge(
     flex-direction: column;
     padding: 0;
     margin: 0;
+
+    &--multiple .vxp-option--selected {
+      background-color: transparent;
+
+      &:hover {
+        background-color: get-css-var('option-bg-color-hover');
+      }
+    }
   }
 
   &__checkbox {
@@ -119,15 +140,16 @@ $cascader: map.merge(
     flex: auto;
   }
 
-  &__arrow {
+  &__arrow,
+  &__check {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+  }
 
-    &--expanded .vxp-icon {
-      transform: rotate(90deg);
-    }
+  &__selector--focused &__arrow {
+    transform: rotate(180deg);
   }
 
   &__empty {

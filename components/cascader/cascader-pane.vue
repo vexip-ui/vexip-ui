@@ -7,23 +7,21 @@
       height="100%"
       id-key="id"
       :items-attrs="{
-        class: [`${prefix}__options`]
+        class: [`${prefix}__options`, multiple ? `${prefix}__options--multiple` : null]
       }"
     >
       <template #default="{ item, index }">
         <slot :option="item" :index="index">
           <Option
-            :class="[`${prefix}__option`]"
             :value="item.value"
             :label="item.label"
             :disabled="item.disabled"
-            :hitting="hasChildren(item) && item.id === openedId"
-            :selected="values.includes(item.fullValue)"
+            :selected="(hasChildren(item) && item.id === openedId) || values.includes(item.fullValue)"
             @select="handleSelect(item)"
             @mouseenter="handleMouseEnter(item)"
           >
             <Checkbox
-              v-if="checkbox"
+              v-if="multiple"
               :class="`${prefix}__checkbox`"
               :checked="item.checked"
               :control="hasChildren(item)"
@@ -40,6 +38,9 @@
             <div v-if="hasChildren(item)" :class="`${prefix}__arrow`">
               <Icon><ChevronRight></ChevronRight></Icon>
             </div>
+            <div v-else-if="!multiple && checkIcon && values.includes(item.fullValue)" :class="`${prefix}__check`">
+              <Icon :icon="checkIcon"></Icon>
+            </div>
           </Option>
         </slot>
       </template>
@@ -53,7 +54,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { VirtualList } from '@/components/virtual-list'
-import { ChevronRight } from '@vexip-ui/icons'
+import { ChevronRight, Check } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { VirtualListExposed } from '@/components/virtual-list'
@@ -81,10 +82,6 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       default: () => []
     },
-    checkbox: {
-      type: Boolean,
-      default: false
-    },
     ready: {
       type: Boolean,
       default: false
@@ -92,6 +89,10 @@ export default defineComponent({
     multiple: {
       type: Boolean,
       default: false
+    },
+    checkIcon: {
+      type: Object,
+      default: Check
     }
   },
   emits: ['select', 'check', 'hover'],
@@ -107,10 +108,12 @@ export default defineComponent({
     )
 
     function hasChildren(item: OptionState) {
-      return !!(item.branch || item.children?.length)
+      return !!(item.hasChild || item.children?.length)
     }
 
     function handleSelect(item: OptionState) {
+      if (item.disabled) return
+
       if (props.multiple) {
         hasChildren(item) ? emit('select', item.id) : handleToggleCheck(item)
       } else {
@@ -119,11 +122,11 @@ export default defineComponent({
     }
 
     function handleToggleCheck(item: OptionState) {
-      emit('check', item.id)
+      !item.disabled && emit('check', item.id)
     }
 
     function handleMouseEnter(item: OptionState) {
-      emit('hover', item.id)
+      !item.disabled && emit('hover', item.id)
     }
 
     return {
