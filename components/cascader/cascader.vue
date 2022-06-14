@@ -353,6 +353,7 @@ export default defineComponent({
       props.keyConfig.disabled
       props.keyConfig.hasChild
       props.separator
+      props.options
       isAsyncLoad.value
       /* eslint-disable no-unused-expressions */
 
