@@ -67,9 +67,18 @@ $cascader: map.merge(
     overflow: hidden;
   }
 
-  &__control &__tag {
+  &__selector &__tooltip {
     position: relative;
-    height: 24px;
+    height: calc(get-css-var('input-height') - 8px);
+
+    .vxp-tooltip__trigger {
+      display: flex;
+    }
+  }
+
+  &__selector &__tag {
+    position: relative;
+    height: calc(get-css-var('input-height') - 8px);
     margin: 2px 4px;
     margin-left: 0;
     font-size: 12px;
@@ -77,7 +86,18 @@ $cascader: map.merge(
     cursor: pointer;
   }
 
-  &__control &__tag + &__tag {
+  &__selector--small &__tag {
+    & > span {
+      height: 100%;
+      line-height: 1;
+    }
+  }
+
+  // &__selector--large &__tag {
+  //   height: 32px;
+  // }
+
+  &__selector &__tag + &__tag {
     margin-left: 0;
   }
 

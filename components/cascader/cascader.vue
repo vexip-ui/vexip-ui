@@ -18,25 +18,32 @@
               v-for="(item, index) in templateValues"
               :key="index"
               :class="`${prefixCls}__tag`"
+              :type="props.tagType"
               closable
               @click.stop="handleClick"
               @close="handleTipClose(item)"
             >
               {{ templateLabels[index] }}
             </Tag>
-            <Tag v-if="props.noRestTip" ref="tagCounter" :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]">
+            <Tag
+              v-if="props.noRestTip"
+              ref="tagCounter"
+              :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]"
+              :type="props.tagType"
+            >
               {{ `+${restTagCount}` }}
             </Tag>
             <Tooltip
               v-else
               ref="tagCounter"
+              :class="`${prefixCls}__tooltip`"
               :visible="restTipShow"
               trigger="custom"
               placement="top-end"
               :tip-class="`${prefixCls}__rest-tip`"
               @click.stop="toggleShowRestTip"
             >
-              <Tag :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]">
+              <Tag :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]" :type="props.tagType">
                 {{ `+${restTagCount}` }}
               </Tag>
               <template #tip>
@@ -46,6 +53,7 @@
                       v-if="index >= templateValues.length - restTagCount"
                       :class="`${prefixCls}__tag`"
                       closable
+                      :type="props.tagType"
                       @close="handleTipClose(item)"
                     >
                       {{ templateLabels[index] }}
@@ -114,11 +122,29 @@
               :is-async="isAsyncLoad"
               :merged="usingMerged"
               @select="handleOptionSelect($event, index)"
-              @hover="props.hoverTrigger && handleOptionSelect($event, index)"
+              @hover="usingHover && handlePaneOpen($event, index)"
               @check="handleOptionCheck($event)"
             >
-              <template #default="{ option, index: optionIndex }">
-                <slot :option="option" :index="optionIndex"></slot>
+              <template #default="{ option, index: optionIndex, selected, canCheck, hasChild, handleSelect }">
+                <slot
+                  :option="option"
+                  :index="optionIndex"
+                  :selected="selected"
+                  :can-check="canCheck"
+                  :has-child="hasChild"
+                  :handle-select="handleSelect"
+                ></slot>
+              </template>
+              <template #label="{ option, index: optionIndex, selected, canCheck, hasChild, handleSelect }">
+                <slot
+                  name="label"
+                  :option="option"
+                  :index="optionIndex"
+                  :selected="selected"
+                  :can-check="canCheck"
+                  :has-child="hasChild"
+                  :handle-select="handleSelect"
+                ></slot>
               </template>
             </CascaderPane>
           </div>
@@ -176,6 +202,7 @@ import { ChevronDown, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
+import type { TagType } from '@/components/tag'
 import type { CascaderValue, OptionKeyConfig, OptionState } from './symbol'
 
 const ID_KEY = Symbol('ID_KEY')
@@ -230,7 +257,8 @@ export default defineComponent({
     briefLabel: booleanProp,
     noRestTip: booleanProp,
     onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>,
-    mergeTags: booleanProp
+    mergeTags: booleanProp,
+    tagType: String as PropType<TagType>
   },
   emits: [
     'toggle',
@@ -291,7 +319,8 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      mergeTags: false
+      mergeTags: false,
+      tagType: null
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -333,7 +362,6 @@ export default defineComponent({
     watch(updateTrigger, initOptionStates, { immediate: true })
 
     function initOptionStates() {
-      console.log('init')
       const childrenKey = props.keyConfig.children ?? defaultKeyConfig.children
       const rawOptions = flatTree(props.options as Array<Record<string | symbol, any>>, {
         keyField: ID_KEY,
@@ -417,6 +445,7 @@ export default defineComponent({
     const templateValues = computed(() => usingMerged.value ? mergedValues.value : currentValues.value)
     const templateLabels = computed(() => usingMerged.value ? mergedLabels.value : currentLabels.value)
     const hasValue = computed(() => !!templateValues.value[0])
+    const usingHover = computed(() => props.hoverTrigger && !isAsyncLoad.value)
 
     watch(
       () => props.visible,
@@ -638,8 +667,7 @@ export default defineComponent({
     }
 
     function initValueAndLabel(value: CascaderValue) {
-      console.log('init value')
-      if (!value.length) {
+      if (!value?.length) {
         currentValues.value = []
         currentLabels.value = []
         return
@@ -717,63 +745,67 @@ export default defineComponent({
       }
     }
 
-    async function handleOptionSelect(id: number, depth: number) {
-      const option = optionIdMap[id]
+    async function handlePaneOpen(option: OptionState, depth: number) {
+      if (!option.hasChild && !option.children?.length) return
 
-      if (!option) return
+      if (isAsyncLoad.value && !option.children?.length && !option.loaded) {
+        option.loading = true
 
-      if (option.hasChild || option.children?.length) {
-        if (isAsyncLoad.value && !option.children?.length && !option.loaded) {
-          option.loading = true
+        let result: ReturnType<typeof props.onAsyncLoad>
 
-          let result: ReturnType<typeof props.onAsyncLoad>
-
-          try {
-            result = props.onAsyncLoad(option.data)
-            result = isPromise(result) ? await result : result
-          } catch (e) {
-            option.error = true
-            option.loading = false
-            return
-          }
-
-          const rawOptions = result as any[]
-
-          if (!Array.isArray(rawOptions) || !rawOptions.length) {
-            option.hasChild = false
-          } else {
-            const options = createOptionStates(rawOptions)
-            const parentId = option.id
-            const separator = props.separator
-
-            option.children.push(...options)
-
-            let idCount = Math.max(...Object.keys(optionIdMap).map(Number)) + 1
-
-            options.forEach(option => {
-              option.id = idCount++
-              option.parent = parentId
-              optionIdMap[option.id] = option
-
-              initOptionFull(option, separator)
-              optionValueMap.set(option.fullValue, option)
-            })
-          }
-
-          option.loaded = true
+        try {
+          result = props.onAsyncLoad(option.data)
+          result = isPromise(result) ? await result : result
+        } catch (e) {
+          option.error = true
           option.loading = false
+          return
+        }
 
-          const upstream = queryUpstreamOptions(option)
-          upstream.forEach(option => {
-            option.childrenLoaded = queryChildrenLoaded(option)
+        const rawOptions = result as any[]
+
+        if (!Array.isArray(rawOptions) || !rawOptions.length) {
+          option.hasChild = false
+        } else {
+          const options = createOptionStates(rawOptions)
+          const parentId = option.id
+          const separator = props.separator
+
+          option.children.push(...options)
+
+          let idCount = Math.max(...Object.keys(optionIdMap).map(Number)) + 1
+
+          options.forEach(option => {
+            option.id = idCount++
+            option.parent = parentId
+            optionIdMap[option.id] = option
+
+            initOptionFull(option, separator)
+            optionValueMap.set(option.fullValue, option)
           })
         }
 
-        if (depth < openedIds.value.length) {
-          openedIds.value = openedIds.value.slice(0, depth)
-        }
+        option.loaded = true
+        option.loading = false
 
-        openedIds.value.push(id)
+        const upstream = queryUpstreamOptions(option)
+        upstream.forEach(option => {
+          option.childrenLoaded = queryChildrenLoaded(option)
+        })
+      }
+
+      if (depth < openedIds.value.length) {
+        openedIds.value = openedIds.value.slice(0, depth)
+      }
+
+      openedIds.value.push(option.id)
+    }
+
+    function handleOptionSelect(option: OptionState, depth: number) {
+      if (!option) return
+
+      if (option.hasChild || option.children?.length) {
+        handlePaneOpen(option, depth)
       } else {
         handleSingleSelect(option.fullValue)
       }
@@ -841,9 +873,7 @@ export default defineComponent({
       }
     }
 
-    function handleOptionCheck(id: number) {
-      const option = optionIdMap[id]
-
+    function handleOptionCheck(option: OptionState) {
       if (!option) return
 
       const options = Object.values(optionIdMap)
@@ -865,6 +895,7 @@ export default defineComponent({
         }
       }
 
+      emit(checked ? 'select' : 'cancel', option.fullValue, option.data)
       emitMultipleChange()
     }
 
@@ -1007,7 +1038,7 @@ export default defineComponent({
 
       if (!option) return
 
-      emit('select', fullValue, option.fullLabel)
+      emit('select', fullValue, option.data)
 
       if (fullValue) {
         currentValues.value[0] = fullValue
@@ -1023,7 +1054,7 @@ export default defineComponent({
       currentVisible.value = false
     }
 
-    function emitChangeEvent(value: CascaderValue, data: any | any[]) {
+    function emitChangeEvent(value: CascaderValue, data: Record<string, any> | Array<Record<string, any>>) {
       emittedValue.value = value
 
       nextTick(() => {
@@ -1111,9 +1142,7 @@ export default defineComponent({
 
     function handleTipClose(fullValue: string) {
       if (props.multiple) {
-        const option = optionValueMap.get(fullValue)
-
-        option && handleOptionCheck(option.id)
+        handleOptionCheck(optionValueMap.get(fullValue)!)
       } else {
         handleSingleSelect(fullValue)
       }
@@ -1145,6 +1174,7 @@ export default defineComponent({
       usingMerged,
       templateValues,
       templateLabels,
+      usingHover,
 
       wrapper,
       reference,
@@ -1152,6 +1182,7 @@ export default defineComponent({
       tagWrapper,
       tagCounter,
 
+      handlePaneOpen,
       handleOptionSelect,
       handleOptionCheck,
       handleClick,

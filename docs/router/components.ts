@@ -41,6 +41,7 @@ export function getComponentConfig(): ComponentGroup[] {
       name: 'form',
       components: [
         { name: 'AutoComplete' },
+        { name: 'Cascader', since: '2.0.0' },
         { name: 'Checkbox' },
         { name: 'ColorPicker' },
         { name: 'DatePicker' },

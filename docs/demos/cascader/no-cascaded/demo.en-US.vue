@@ -2,6 +2,9 @@
   <Cascader
     v-model:value="value"
     :options="options"
+    multiple
+    clearable
+    no-cascaded
   ></Cascader>
   <p>
     Current Value:

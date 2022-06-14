@@ -1,7 +1,14 @@
 <template>
+  <p>
+    Merge Tags:
+    <Switcher v-model:value="mergeTags"></Switcher>
+  </p>
   <Cascader
     v-model:value="value"
     :options="options"
+    multiple
+    clearable
+    :merge-tags="mergeTags"
   ></Cascader>
   <p>
     Current Value:
@@ -12,6 +19,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+const mergeTags = ref(true)
 const value = ref([])
 const options = createOptions(3)
 

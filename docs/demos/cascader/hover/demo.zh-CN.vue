@@ -1,11 +1,13 @@
 <template>
   <Cascader
-    :value="value"
+    v-model:value="value"
     :options="options"
-    multiple
-    clearable
-    absolute
+    hover-trigger
   ></Cascader>
+  <p>
+    当前值：
+    {{ value }}
+  </p>
 </template>
 
 <script setup lang="ts">

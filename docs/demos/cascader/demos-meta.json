@@ -1,9 +1,12 @@
 [
   "basis",
-  "multiple",
+  "hover",
   "clearable",
+  "multiple",
+  "size",
   "max-count",
-  "absolute",
+  "no-cascaded",
   "brief-label",
+  "merged",
   "async-load"
 ]

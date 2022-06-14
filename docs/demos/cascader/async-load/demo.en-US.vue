@@ -1,11 +1,20 @@
 <template>
+  <p>
+    Merge Tags:
+    <Switcher v-model:value="mergeTags"></Switcher>
+  </p>
   <Cascader
-    :value="value"
+    v-model:value="value"
     :options="options"
     multiple
     clearable
+    :merge-tags="mergeTags"
     :on-async-load="loadOptions"
   ></Cascader>
+  <p>
+    Current Value:
+    {{ value }}
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -21,6 +30,7 @@ interface Option {
   children: Option[] | null
 }
 
+const mergeTags = ref(false)
 const value = ref([])
 const options = createOptions()
 
@@ -48,7 +58,7 @@ function loadOptions(data: Option) {
       if (data.index % 3 === 0) {
         reject(new Error('load fail'))
       } else {
-        resolve(createOptions(data.depth + 1, data.value, data.depth > 2))
+        resolve(createOptions(data.depth + 1, data.value, data.depth < 2))
       }
     }, 2000)
   })

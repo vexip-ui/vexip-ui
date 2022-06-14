@@ -1,5 +1,5 @@
 <template>
-  <div :class="`${prefix}__pane`">
+  <div :class="`${prefix}__pane`" @mouseleave="handleMouseLeave">
     <VirtualList
       ref="virtualList"
       :items="options"
@@ -11,7 +11,14 @@
       }"
     >
       <template #default="{ item, index }">
-        <slot :option="item" :index="index">
+        <slot
+          :option="item"
+          :index="index"
+          :selected="isSelected(item)"
+          :can-check="isCheckboxDisabled(item)"
+          :has-child="hasChildren(item)"
+          :handle-select="handleSelect"
+        >
           <Option
             :class="{
               'vxp-option--error': item.error
@@ -19,7 +26,7 @@
             :value="item.value"
             :label="item.label"
             :disabled="item.disabled"
-            :selected="(hasChildren(item) && item.id === openedId) || values.includes(item.fullValue)"
+            :selected="isSelected(item)"
             @select="handleSelect(item)"
             @mouseenter="handleMouseEnter(item)"
           >
@@ -34,7 +41,15 @@
               @click.prevent.stop="handleToggleCheck(item)"
             ></Checkbox>
             <span :class="`${prefix}__label`">
-              <slot name="label">
+              <slot
+                name="label"
+                :option="item"
+                :index="index"
+                :selected="isSelected(item)"
+                :can-check="isCheckboxDisabled(item)"
+                :has-child="hasChildren(item)"
+                :handle-select="handleSelect"
+              >
                 {{ item.label }}
               </slot>
             </span>
@@ -58,7 +73,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch, onBeforeUnmount } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
@@ -119,6 +134,8 @@ export default defineComponent({
     const prefix = 'vxp-cascader'
     const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed | null>(null)
 
+    let hoverTimer = 0
+
     watch(
       () => props.ready,
       value => {
@@ -126,8 +143,14 @@ export default defineComponent({
       }
     )
 
+    onBeforeUnmount(handleMouseLeave)
+
     function hasChildren(option: OptionState) {
       return !!(option.hasChild || option.children?.length)
+    }
+
+    function isSelected(option: OptionState) {
+      return (hasChildren(option) && option.id === props.openedId) || props.values.includes(option.fullValue)
     }
 
     function isCheckboxDisabled(option: OptionState) {
@@ -145,18 +168,26 @@ export default defineComponent({
       if (option.disabled) return
 
       if (props.multiple) {
-        hasChildren(option) ? emit('select', option.id) : handleToggleCheck(option)
+        hasChildren(option) ? emit('select', option) : handleToggleCheck(option)
       } else {
-        emit('select', option.id)
+        emit('select', option)
       }
     }
 
     function handleToggleCheck(option: OptionState) {
-      !isCheckboxDisabled(option) && emit('check', option.id)
+      !isCheckboxDisabled(option) && emit('check', option)
     }
 
     function handleMouseEnter(option: OptionState) {
-      !option.disabled && emit('hover', option.id)
+      clearTimeout(hoverTimer)
+
+      hoverTimer = window.setTimeout(() => {
+        !option.disabled && emit('hover', option)
+      }, 250)
+    }
+
+    function handleMouseLeave() {
+      clearTimeout(hoverTimer)
     }
 
     return {
@@ -165,10 +196,12 @@ export default defineComponent({
       virtualList,
 
       hasChildren,
+      isSelected,
       isCheckboxDisabled,
       handleSelect,
       handleToggleCheck,
-      handleMouseEnter
+      handleMouseEnter,
+      handleMouseLeave
     }
   }
 })

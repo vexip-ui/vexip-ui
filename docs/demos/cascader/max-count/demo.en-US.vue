@@ -1,7 +1,11 @@
 <template>
-  <NumberInput v-model:value="maxCount" :range="[0, Infinity]"></NumberInput>
   <p>
-    Hide Rest Tip:
+    Show all tgas:
+    <Switcher v-model:value="showAllTags"></Switcher>
+  </p>
+  <NumberInput v-model:value="maxCount" :range="[0, Infinity]" :disabled="showAllTags"></NumberInput>
+  <p>
+    Hide rest tip:
     <Switcher v-model:value="noRestTip"></Switcher>
   </p>
   <Cascader
@@ -9,7 +13,7 @@
     :options="options"
     multiple
     clearable
-    :max-tag-count="maxCount"
+    :max-tag-count="showAllTags ? Infinity : maxCount"
     :no-rest-tip="noRestTip"
   ></Cascader>
 </template>
@@ -17,6 +21,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+const showAllTags = ref(false)
 const maxCount = ref(0)
 const noRestTip = ref(false)
 const value = ref([])

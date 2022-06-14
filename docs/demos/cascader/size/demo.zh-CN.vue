@@ -1,18 +1,32 @@
 <template>
   <Cascader
-    v-model:value="value"
     :options="options"
+    multiple
+    clearable
+    size="small"
   ></Cascader>
-  <p>
-    Current Value:
-    {{ value }}
-  </p>
+  <br />
+  <br />
+  <Cascader :options="options" multiple clearable></Cascader>
+  <br />
+  <br />
+  <Cascader
+    :options="options"
+    multiple
+    clearable
+    size="large"
+  ></Cascader>
+  <br />
+  <br />
+  <Cascader
+    :options="options"
+    multiple
+    clearable
+    style="--vxp-input-height: 48px;"
+  ></Cascader>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-const value = ref([])
 const options = createOptions(3)
 
 function createOptions(depth: number, prefix = 'Op', iterator = 1) {

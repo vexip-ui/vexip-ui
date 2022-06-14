@@ -1,11 +1,20 @@
 <template>
+  <p>
+    合并标签：
+    <Switcher v-model:value="mergeTags"></Switcher>
+  </p>
   <Cascader
-    :value="value"
+    v-model:value="value"
     :options="options"
     multiple
     clearable
+    :merge-tags="mergeTags"
     :on-async-load="loadOptions"
   ></Cascader>
+  <p>
+    当前值：
+    {{ value }}
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -21,6 +30,7 @@ interface Option {
   children: Option[] | null
 }
 
+const mergeTags = ref(false)
 const value = ref([])
 const options = createOptions()
 

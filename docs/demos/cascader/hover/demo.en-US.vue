@@ -2,6 +2,7 @@
   <Cascader
     v-model:value="value"
     :options="options"
+    hover-trigger
   ></Cascader>
   <p>
     Current Value:

@@ -1,11 +1,15 @@
 <template>
   <Cascader
-    :value="value"
+    v-model:value="value"
     :options="options"
     multiple
     clearable
-    absolute
+    no-cascaded
   ></Cascader>
+  <p>
+    当前值：
+    {{ value }}
+  </p>
 </template>
 
 <script setup lang="ts">
