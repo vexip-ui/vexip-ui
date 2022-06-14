@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/qmhc/vexip-ui/compare/mixins@1.1.0...mixins@1.2.0) (2022-06-14)
+
+
+### Bug Fixes
+
+* **mixins:** assert type for HTMLElement refs ([c4bf386](https://github.com/qmhc/vexip-ui/commit/c4bf3866a14d341761ececc97a441c2206ffb398))
+
+
+### Features
+
+* **mixins:** add useSetTimeout and useSetInterval ([44b63e7](https://github.com/qmhc/vexip-ui/commit/44b63e7bdb5c31f0d7712cf4f8dcf9535ac581d4))
+
+
+
 # [1.1.0](https://github.com/qmhc/vexip-ui/compare/mixins@1.0.0...mixins@1.1.0) (2022-05-28)
 
 
