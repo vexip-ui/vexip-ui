@@ -17,8 +17,7 @@
     :no-suffix="!hasSuffix"
     :placeholder="props.placeholder"
     :options="props.options"
-    :value-key="props.valueKey"
-    :label-key="props.labelKey"
+    :key-config="props.keyConfig"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
@@ -89,8 +88,7 @@ import { isNull, noop } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-import type { OptionState } from '@/components/option'
-import type { RawOption } from '@/components/select'
+import type { OptionKeyConfig, OptionState, RawOption } from '@/components/option'
 
 export default defineComponent({
   name: 'AutoComplete',
@@ -125,8 +123,7 @@ export default defineComponent({
     ignoreCase: booleanProp,
     autofocus: booleanProp,
     spellcheck: booleanProp,
-    valueKey: String,
-    labelKey: String
+    keyConfig: Object as PropType<OptionKeyConfig>
   },
   emits: [
     'select',
@@ -168,8 +165,7 @@ export default defineComponent({
       ignoreCase: false,
       autofocus: false,
       spellcheck: false,
-      valueKey: 'value',
-      labelKey: 'label'
+      keyConfig: () => ({})
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -235,7 +231,6 @@ export default defineComponent({
         control.value?.focus()
       }
     })
-
     watchEffect(() => {
       if (props.filter) {
         const value = currentValue.value
@@ -253,11 +248,13 @@ export default defineComponent({
             })
           } else {
             if (props.ignoreCase) {
+              const ignoreCaseValue = value?.toString().toLocaleLowerCase()
+
               optionsStates.value.forEach(state => {
                 state.hidden = !state.value
                   ?.toString()
                   .toLocaleLowerCase()
-                  .includes(value?.toString().toLocaleLowerCase())
+                  .includes(ignoreCaseValue)
               })
             } else {
               optionsStates.value.forEach(state => {
@@ -284,15 +281,15 @@ export default defineComponent({
       })
     }
 
-    function handleSelect(value: string | number) {
+    function handleSelect(value: string | number, data: RawOption) {
       if (isNull(value)) {
         return
       }
 
       const prevValue = currentValue.value
-
       currentValue.value = value
-      emit('select', value)
+
+      emit('select', value, data)
 
       if (value !== prevValue) {
         changed = true
@@ -340,7 +337,9 @@ export default defineComponent({
       changed = false
       lastValue = currentValue.value
 
-      emit('change', currentValue.value)
+      const option = optionsStates.value.find(option => option.value === lastValue)
+
+      emit('change', currentValue.value, option?.data || null)
       emit('update:value', currentValue.value)
 
       if (!props.disableValidate) {
@@ -362,7 +361,7 @@ export default defineComponent({
     }
 
     function testOptionCanDrop() {
-      if ((!slots.default && !filteredOptions.value.length) || props.dropDisabled) {
+      if (!filteredOptions.value.length || props.dropDisabled) {
         visible.value = false
       }
     }
@@ -386,9 +385,9 @@ export default defineComponent({
 
     function handleEnter() {
       if (filteredOptions.value.length) {
-        handleSelect(
-          filteredOptions.value[currentIndex.value === -1 ? 0 : currentIndex.value].value
-        )
+        const option = filteredOptions.value[currentIndex.value === -1 ? 0 : currentIndex.value]
+
+        handleSelect(option.value, option.data)
       } else {
         handleChange()
       }

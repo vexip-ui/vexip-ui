@@ -295,6 +295,7 @@ export default defineComponent({
     watch(updateTrigger, initOptionState, { immediate: true })
 
     function initOptionState() {
+      console.log('init')
       const {
         value: valueKey,
         label: labelKey,
@@ -409,14 +410,14 @@ export default defineComponent({
 
     function initValueAndLabel(value: string | number | (string | number)[]) {
       if (!value) {
-        currentValues.value.length = 0
-        currentLabels.value.length = 0
+        currentValues.value = []
+        currentLabels.value = []
         return
       }
 
-      currentValues.value = !Array.isArray(value) ? [value] : value
+      const normalizedValue = !Array.isArray(value) ? [value] : value
 
-      const valueSet = new Set(currentValues.value)
+      const valueSet = new Set(normalizedValue)
       const selectedValues: (string | number)[] = []
       const selectedLabels: string[] = []
 
@@ -424,10 +425,13 @@ export default defineComponent({
         const option = optionValueMap.get(value)
 
         if (option) {
-          selectedValues.push(value)
+          selectedValues.push(option.value)
           selectedLabels.push(option.label)
         }
       })
+
+      currentValues.value = selectedValues
+      currentLabels.value = selectedLabels
     }
 
     function isSelected(option: OptionState) {

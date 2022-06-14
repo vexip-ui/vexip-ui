@@ -2,8 +2,7 @@
   <AutoComplete
     v-model:value="value"
     :options="options"
-    value-key="myValue"
-    label-key="myLabel"
+    :key-config="keyConfig"
     style="width: 400px;"
     @input="setOptions"
   ></AutoComplete>
@@ -11,6 +10,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+const keyConfig = {
+  label: 'customLabel',
+  value: 'customValue'
+}
 
 const value = ref('')
 const options = ref<{ myValue: string, myLabel: string }[]>([])
