@@ -1,4 +1,4 @@
-### 多选模式
+### Multiple Select
 
 添加 `multiple` 属性可以开启多选模式。
 

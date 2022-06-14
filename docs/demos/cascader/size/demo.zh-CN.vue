@@ -4,10 +4,16 @@
     multiple
     clearable
     size="small"
+    placeholder="有点太小了"
   ></Cascader>
   <br />
   <br />
-  <Cascader :options="options" multiple clearable></Cascader>
+  <Cascader
+    :options="options"
+    multiple
+    clearable
+    placeholder="比较正常"
+  ></Cascader>
   <br />
   <br />
   <Cascader
@@ -15,6 +21,7 @@
     multiple
     clearable
     size="large"
+    placeholder="大一点的"
   ></Cascader>
   <br />
   <br />
@@ -23,6 +30,7 @@
     multiple
     clearable
     style="--vxp-input-height: 48px;"
+    placeholder="大过头的"
   ></Cascader>
 </template>
 

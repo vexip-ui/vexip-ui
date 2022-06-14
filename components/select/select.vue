@@ -13,20 +13,20 @@
       </div>
       <div :class="`${prefixCls}__control`">
         <slot name="control">
-          <template v-if="props.multiple && Array.isArray(currentValue)">
+          <template v-if="props.multiple">
             <Tag
-              v-for="(item, index) in currentValue"
+              v-for="(item, index) in currentValues"
               :key="index"
               :class="`${prefixCls}__tag`"
               closable
               @click.stop="handleClick"
-              @close="handleSelect(item, currentLabel[index])"
+              @close="handleSelect(item, currentLabels[index])"
             >
-              {{ currentLabel[index] }}
+              {{ currentLabels[index] }}
             </Tag>
           </template>
           <template v-else>
-            {{ currentLabel }}
+            {{ currentLabels[0] }}
           </template>
           <span
             v-if="(props.placeholder ?? locale.placeholder) && !hasValue"
@@ -95,7 +95,7 @@
               <slot
                 :option="item"
                 :index="index"
-                :selected="item.value === currentValue"
+                :selected="isSelected(item.value)"
                 :handle-select="handleSelect"
               >
                 <Option
@@ -105,14 +105,14 @@
                   :divided="item.divided"
                   :no-title="item.noTitle"
                   :hitting="item.hitting"
-                  :select="item.value === currentValue"
+                  :select="isSelected(item.value)"
                   @select="handleSelect"
                 >
                   <span :class="`${prefixCls}__label`">
                     {{ item.label || item.value }}
                   </span>
                   <transition v-if="props.optionCheck" name="vxp-fade" appear>
-                    <Icon v-if="item.value === currentValue" :class="`${prefixCls}__check`">
+                    <Icon v-if="isSelected(item.value)" :class="`${prefixCls}__check`">
                       <Check></Check>
                     </Icon>
                   </transition>
@@ -259,9 +259,8 @@ export default defineComponent({
 
     const prefix = 'vxp-select'
     const currentVisible = ref(props.visible)
-    // const focused = ref(false)
-    const currentLabel = ref<string | string[]>(props.multiple ? [] : '')
-    const currentValue = ref<typeof props.value>(props.multiple ? [] : '')
+    const currentLabels = ref<string[]>([])
+    const currentValues = ref<(string | number)[]>([])
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
@@ -328,29 +327,13 @@ export default defineComponent({
         [`${baseCls}--has-suffix`]: !props.noSuffix
       }
     })
-    const hasValue = computed(() => {
-      return Array.isArray(currentValue.value)
-        ? currentValue.value.length > 0
-        : currentValue.value || currentValue.value === 0
-    })
+    const hasValue = computed(() => !isNull(currentValues.value[0]))
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
     })
     const optionStates = computed(() => {
       return Array.from(optionMap.value.values())
     })
-    // const controlStyle = computed(() => {
-    //   return {
-    //     paddingRight: props.noSuffix ? '' : '2em',
-    //     paddingLeft: hasPrefix.value ? '2em' : ''
-    //   }
-    // })
-    // const placeholderStyle = computed(() => {
-    //   return {
-    //     right: props.noSuffix ? '' : '2em',
-    //     left: hasPrefix.value ? '2em' : ''
-    //   }
-    // })
     const visibleOptions = computed(() => {
       return optionStates.value.filter(state => !state.hidden)
     })
@@ -379,80 +362,42 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValue.value = props.multiple && !Array.isArray(value) ? [value] : value
-        syncCurrentLabel()
+        initValueAndLabel(value)
       },
       { immediate: true }
     )
     watch(() => visibleOptions.value.length, computeListHeight)
-    watch(
-      () => props.multiple,
-      value => {
-        if (value) {
-          if (!Array.isArray(currentValue.value)) {
-            currentValue.value = [currentValue.value]
-          }
 
-          if (!Array.isArray(currentLabel.value)) {
-            currentLabel.value = [currentLabel.value]
-          }
-        } else {
-          if (Array.isArray(currentValue.value)) {
-            currentValue.value = currentValue.value[0] ?? ''
-          }
-
-          if (Array.isArray(currentLabel.value)) {
-            currentLabel.value = currentLabel.value[0] ?? ''
-          }
-        }
+    function initValueAndLabel(value: string | number | (string | number)[]) {
+      if (!value) {
+        currentValues.value.length = 0
+        currentLabels.value.length = 0
+        return
       }
-    )
 
-    function syncCurrentLabel() {
-      if (props.multiple && Array.isArray(currentValue.value)) {
-        if (!currentValue.value.length) {
-          currentLabel.value = []
-          return
-        }
+      currentValues.value = !Array.isArray(value) ? [value] : value
 
-        const selectedValues = new Set(currentValue.value)
-        const options = optionStates.value
-        const selectedLabels: string[] = []
+      const valueSet = new Set(currentValues.value)
+      const optionValueMap = optionMap.value
+      const selectedValues: (string | number)[] = []
+      const selectedLabels: string[] = []
 
-        for (let i = 0, len = options.length; i < len; ++i) {
-          const { value, label } = options[i]
-
-          if (selectedValues.has(value)) {
-            selectedValues.delete(value)
-            selectedLabels.push(label ?? value)
-
-            if (!selectedValues.size) break
-          }
-        }
-
-        currentLabel.value = selectedLabels
-      } else {
-        if (isNull(currentValue.value) || currentValue.value === '') {
-          currentLabel.value = ''
-          return
-        }
-
-        const option = optionStates.value.find(option => option.value === currentValue.value)
+      valueSet.forEach(value => {
+        const option = optionValueMap.get(value)
 
         if (option) {
-          currentLabel.value = option.label ?? option.value
-        } else {
-          currentLabel.value = ''
+          selectedValues.push(value)
+          selectedLabels.push(option.label)
         }
-      }
+      })
     }
 
     function isSelected(value: string | number) {
-      if (Array.isArray(currentValue.value)) {
-        return currentValue.value.includes(value)
+      if (props.multiple) {
+        return currentValues.value.includes(value)
       }
 
-      return currentValue.value === value
+      return currentValues.value[0] === value
     }
 
     function computeListHeight() {
@@ -480,39 +425,38 @@ export default defineComponent({
     }
 
     function handleChange(value: string | number, label: string) {
-      if (
-        props.multiple &&
-        Array.isArray(currentValue.value) &&
-        Array.isArray(currentLabel.value)
-      ) {
+      if (props.multiple) {
         if (isSelected(value)) {
-          const index = currentValue.value.findIndex(v => v === value)
+          const index = currentValues.value.findIndex(v => v === value)
 
           if (~index) {
-            currentValue.value.splice(index, 1)
-            currentLabel.value.splice(index, 1)
+            currentValues.value.splice(index, 1)
+            currentLabels.value.splice(index, 1)
           }
         } else {
-          currentValue.value.push(value)
-          currentLabel.value.push(label)
+          currentValues.value.push(value)
+          currentLabels.value.push(label)
         }
 
-        emit('change', currentValue.value, currentLabel.value)
-        emit('update:value', currentValue.value)
+        const copiedValues = Array.from(currentValues.value)
+
+        emit('change', copiedValues, Array.from(currentLabels.value))
+        emit('update:value', copiedValues)
 
         if (!props.disableValidate) {
           validateField()
         }
       } else {
-        if (isNull(value) || value === '') {
-          currentLabel.value = ''
-        } else {
-          currentLabel.value = label
+        currentLabels.value.length = 0
+
+        if (!isNull(value) && value !== '') {
+          currentLabels.value.push(label)
         }
 
-        const prevValue = currentValue.value
+        const prevValue = currentValues.value[0]
 
-        currentValue.value = value
+        currentValues.value.length = 0
+        currentValues.value.push(value)
 
         if (prevValue !== value) {
           emit('change', value, label)
@@ -548,11 +492,11 @@ export default defineComponent({
     function handleClear() {
       if (props.clearable) {
         if (props.multiple) {
-          currentValue.value = []
-          currentLabel.value = []
+          currentValues.value = []
+          currentLabels.value = []
 
-          emit('change', currentValue.value, currentLabel.value)
-          emit('update:value', currentValue.value)
+          emit('change', currentValues.value, currentLabels.value)
+          emit('update:value', currentValues.value)
 
           updatePopper()
         } else {
@@ -569,8 +513,8 @@ export default defineComponent({
       prefixCls: prefix,
       locale,
       currentVisible,
-      currentValue,
-      currentLabel,
+      currentValues,
+      currentLabels,
       transferTo,
       listHeight,
       optionStates,
@@ -590,6 +534,7 @@ export default defineComponent({
       popper,
       virtualList,
 
+      isSelected,
       computeListHeight,
       handleSelect,
       handleClick,

@@ -33,6 +33,8 @@ $select: map.merge(
   @include input.handler(#{&}__selector);
 
   &--multiple &__selector {
+    @include define-css-var('input-v-padding', 2px);
+
     height: auto;
     min-height: get-css-var('input-height');
   }
@@ -43,21 +45,31 @@ $select: map.merge(
     user-select: none;
   }
 
-  &--multiple &__control {
+  &__control {
     position: relative;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
+  }
+
+  &--multiple &__control {
+    flex-wrap: wrap;
     min-height: 0;
     margin-top: -2px;
   }
 
   &__tag {
-    height: 20px;
+    height: calc(get-css-var('input-height') - 8px);
     margin: 2px 4px;
     margin-left: 0;
     pointer-events: auto;
     cursor: pointer;
+  }
+
+  &__selector--small &__tag {
+    & > span {
+      height: 100%;
+      line-height: 1;
+    }
   }
 
   &__control &__tag + &__tag {
