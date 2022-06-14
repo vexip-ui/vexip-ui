@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import UploadList from './upload-list.vue'
@@ -443,44 +443,6 @@ export default defineComponent({
       }
     }
 
-    // 根据源文件删除
-    // function handleDelete(originFile: File) {
-    //   const file = fileStates.value.find(file => file.source === originFile)
-
-    //   if (file && file.status !== UploadStatusType.DELETE) {
-    //     deleteFile(file)
-    //   }
-    // }
-
-    // function clear() {
-    //   fileStates.value = []
-
-    //   if (input.value) {
-    //     input.value.value = ''
-    //   }
-
-    //   emit('change', [])
-    // }
-
-    // 根据源文件修改进度
-    // function progress(originFile: File, percent: number) {
-    //   const file = fileStates.value.find(file => file.source === originFile)
-
-    //   if (file && file.status === UploadStatusType.UPLOADING) {
-    //     file.percentage = percent
-    //   }
-    // }
-
-    // function setStatus(originFile: File, status: UploadStatusType) {
-    //   if (!Object.keys(UploadStatusType).includes(status)) return
-
-    //   const file = fileStates.value.find(file => file.source === originFile)
-
-    //   if (file) {
-    //     file.status = status
-    //   }
-    // }
-
     function handleProgress(percent: number, file: FileState) {
       if (file.status === UploadStatusType.DELETE) return
 
@@ -509,6 +471,10 @@ export default defineComponent({
     }
 
     let dragTimer: number
+
+    onBeforeUnmount(() => {
+      window.clearTimeout(dragTimer)
+    })
 
     async function handleDrop(event: DragEvent) {
       if (!props.allowDrag) return

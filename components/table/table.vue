@@ -126,6 +126,7 @@ import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
 import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isDefined, debounce, transformListToMap, removeArrayItem, toNumber, nextFrameOnce } from '@vexip-ui/utils'
+import { useSetTimeout } from '@vexip-ui/mixins'
 import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
@@ -715,12 +716,12 @@ export default defineComponent({
       }, 0)
     }
 
-    let scrollTimer: number
+    const { timer } = useSetTimeout()
 
     function refreshPercentScroll() {
-      window.clearTimeout(scrollTimer)
+      window.clearTimeout(timer.scroll)
 
-      scrollTimer = window.setTimeout(() => {
+      timer.scroll = window.setTimeout(() => {
         const { totalHeight, bodyScroll } = state
 
         yScrollPercent.value = Math.max(

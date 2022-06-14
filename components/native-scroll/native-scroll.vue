@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
+import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
@@ -205,6 +205,8 @@ export default defineComponent({
     let startTimer: number
     let endTimer: number
 
+    onBeforeUnmount(stopAutoplay)
+
     function startAutoplay() {
       if (!canAutoplay.value || !contentElement.value) return
 
@@ -261,7 +263,7 @@ export default defineComponent({
       canPlay.value = false
 
       window.clearTimeout(playTimer)
-      window.window.clearTimeout(startTimer)
+      window.clearTimeout(startTimer)
       window.clearTimeout(endTimer)
     }
     /* autoplay */

@@ -37,6 +37,7 @@ import { defineComponent, ref, computed, watch, inject, onMounted } from 'vue'
 import { Tooltip } from '@/components/tooltip'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { useProps, booleanProp, stateProp, createStateProp } from '@vexip-ui/config'
+import { useSetTimeout } from '@vexip-ui/mixins'
 import { noop, throttle } from '@vexip-ui/utils'
 
 export default defineComponent({
@@ -83,6 +84,8 @@ export default defineComponent({
     const currentValue = ref(props.value / props.step) // 按每 step 为 1 的 value
     const sliding = ref(false)
     const isTipShow = ref(false)
+
+    const { timer } = useSetTimeout()
 
     const track = ref<HTMLElement | null>(null)
     const tooltip = ref<InstanceType<typeof Tooltip> | null>(null)
@@ -157,7 +160,6 @@ export default defineComponent({
     }
 
     let trackRect: DOMRect | null = null
-    let slidingTimer: number
 
     const handleMove = throttle((event: MouseEvent) => {
       if (!trackRect || props.disabled) return
@@ -184,7 +186,7 @@ export default defineComponent({
     function handleTrackDown(event: MouseEvent) {
       if (!track.value || props.disabled) return
 
-      window.clearTimeout(slidingTimer)
+      window.clearTimeout(timer.sliding)
       event.stopPropagation()
       event.preventDefault()
 
@@ -210,7 +212,7 @@ export default defineComponent({
     function handleMoveStart(event: MouseEvent) {
       if (!track.value || props.disabled) return
 
-      window.clearTimeout(slidingTimer)
+      window.clearTimeout(timer.sliding)
       event.stopPropagation()
       event.preventDefault()
 
@@ -229,27 +231,25 @@ export default defineComponent({
 
       emitChange()
 
-      slidingTimer = window.setTimeout(() => {
+      timer.sliding = window.setTimeout(() => {
         sliding.value = false
       }, 250)
     }
 
-    let hoverTimer: number
-
     function showTooltip() {
-      window.clearTimeout(hoverTimer)
+      window.clearTimeout(timer.hover)
 
       if (!props.disabled) {
-        hoverTimer = window.setTimeout(() => {
+        timer.hover = window.setTimeout(() => {
           isTipShow.value = true
         }, 250)
       }
     }
 
     function hideTooltip() {
-      window.clearTimeout(hoverTimer)
+      window.clearTimeout(timer.hover)
 
-      hoverTimer = window.setTimeout(() => {
+      timer.hover = window.setTimeout(() => {
         isTipShow.value = false
       }, 250)
     }

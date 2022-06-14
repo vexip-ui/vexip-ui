@@ -295,7 +295,6 @@ export default defineComponent({
     watch(updateTrigger, initOptionState, { immediate: true })
 
     function initOptionState() {
-      console.log('init')
       const {
         value: valueKey,
         label: labelKey,

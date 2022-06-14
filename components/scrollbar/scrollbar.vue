@@ -241,6 +241,7 @@ export default defineComponent({
       }
 
       wrapperElement = null
+      window.clearTimeout(fadeTimer)
     })
 
     let length: number

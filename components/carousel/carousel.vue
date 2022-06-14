@@ -94,7 +94,7 @@ import {
 } from 'vue'
 import { Icon } from '@/components/icon'
 import { useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
-import { useHover } from '@vexip-ui/mixins'
+import { useHover, useSetTimeout } from '@vexip-ui/mixins'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
 import { CAROUSEL_STATE } from './symbol'
@@ -533,11 +533,10 @@ export default defineComponent({
       emit('select', label)
     }
 
-    let playTimer: number
-    let hoverTimer: number
+    const { timer } = useSetTimeout()
 
     function setAutoplay() {
-      window.clearInterval(playTimer)
+      window.clearInterval(timer.play)
 
       if (!props.autoplay) return
 
@@ -547,7 +546,7 @@ export default defineComponent({
         waiting = props.autoplay
       }
 
-      playTimer = window.setInterval(() => {
+      timer.play = window.setInterval(() => {
         if (!props.loop && disabledNext.value) {
           handleWheel(0)
         } else {
@@ -558,10 +557,10 @@ export default defineComponent({
 
     function handleMouseEnter() {
       if (props.autoplay) {
-        window.clearTimeout(hoverTimer)
+        window.clearTimeout(timer.hover)
 
-        hoverTimer = window.setTimeout(() => {
-          window.clearInterval(playTimer)
+        timer.hover = window.setTimeout(() => {
+          window.clearInterval(timer.play)
         }, 250)
       }
 
@@ -572,9 +571,9 @@ export default defineComponent({
 
     function handleMouseLeave() {
       if (props.autoplay) {
-        window.clearTimeout(hoverTimer)
+        window.clearTimeout(timer.hover)
 
-        hoverTimer = window.setTimeout(() => {
+        timer.hover = window.setTimeout(() => {
           setAutoplay()
         }, 250)
       }

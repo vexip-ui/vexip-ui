@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
+import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
@@ -206,6 +206,8 @@ export default defineComponent({
     let playTimer: number
     let startTimer: number
     let endTimer: number
+
+    onBeforeUnmount(stopAutoplay)
 
     function startAutoplay() {
       if (!canAutoplay.value) return

@@ -40,7 +40,7 @@
 import { defineComponent, ref, watch, toRef } from 'vue'
 import { Portal } from '@/components/portal'
 import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
-import { useClickOutside, placementWhileList, usePopper } from '@vexip-ui/mixins'
+import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -108,7 +108,7 @@ export default defineComponent({
       wrapper
     })
 
-    let hoverTimer: number
+    const { timer } = useSetTimeout()
 
     watch(
       () => props.visible,
@@ -140,9 +140,9 @@ export default defineComponent({
       if (props.disabled) return
 
       if (props.trigger === 'hover') {
-        window.clearTimeout(hoverTimer)
+        window.clearTimeout(timer.hover)
 
-        hoverTimer = window.setTimeout(() => {
+        timer.hover = window.setTimeout(() => {
           currentVisible.value = true
         }, 250)
       }
@@ -154,9 +154,9 @@ export default defineComponent({
       if (props.disabled) return
 
       if (props.trigger === 'hover') {
-        window.clearTimeout(hoverTimer)
+        window.clearTimeout(timer.hover)
 
-        hoverTimer = window.setTimeout(() => {
+        timer.hover = window.setTimeout(() => {
           currentVisible.value = false
         }, 250)
       }

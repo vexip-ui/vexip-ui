@@ -36,7 +36,7 @@
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
 import { useProps, booleanProp } from '@vexip-ui/config'
-import { placementWhileList, usePopper } from '@vexip-ui/mixins'
+import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -110,12 +110,12 @@ export default defineComponent({
       }
     })
 
-    let hoverTimer: number
+    const { timer } = useSetTimeout()
 
     function handleTriggerEnter() {
-      window.clearTimeout(hoverTimer)
+      window.clearTimeout(timer.hover)
 
-      hoverTimer = window.setTimeout(() => {
+      timer.hover = window.setTimeout(() => {
         if (!wrapper.value || !wrapper.value.childNodes.length) {
           visible.value = false
 
@@ -142,9 +142,9 @@ export default defineComponent({
     }
 
     function handleTriggerLeave() {
-      window.clearTimeout(hoverTimer)
+      window.clearTimeout(timer.hover)
 
-      hoverTimer = window.setTimeout(() => {
+      timer.hover = window.setTimeout(() => {
         active.value = false
       })
     }
