@@ -34,7 +34,7 @@
         <Checkbox
           v-if="hasCheckbox"
           :class="`${prefix}__checkbox`"
-          :control="!!hasArrow"
+          :control="hasArrow"
           :checked="checked"
           :disabled="isDisabled"
           :partial="partial"
@@ -46,7 +46,7 @@
             [`${prefix}__label--selected`]: selected,
             [`${prefix}__label--disabled`]: isDisabled,
             [`${prefix}__label--readonly`]: isReadonly,
-            [`${prefix}__label--is-floor`]: floorSelect && children && children.length
+            [`${prefix}__label--is-floor`]: floorSelect && node.children?.length
           }"
           @click="handleToggleSelect()"
         >
@@ -71,14 +71,12 @@
     <CollapseTransition :appear="appear">
       <ul v-if="showChildren" :class="`${prefix}__list`">
         <TreeNode
-          v-for="(item, index) in children"
+          v-for="(item, index) in node.children"
           v-show="item.visible"
           :key="index"
           v-bind="(item as any)"
           :node="item"
           :label-key="labelKey"
-          :children-key="childrenKey"
-          :children="getNodeChildren(item)"
           :indent="indent"
           :draggable="draggable"
           :appear="appear"
@@ -123,7 +121,7 @@ import { ChevronRight, Spinner } from '@vexip-ui/icons'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TreeNodeOptions } from './symbol'
+import type { TreeNodeProps } from './symbol'
 
 export default defineComponent({
   name: 'TreeNode',
@@ -138,7 +136,7 @@ export default defineComponent({
   inheritAttrs: false,
   props: {
     node: {
-      type: Object as PropType<TreeNodeOptions>,
+      type: Object as PropType<TreeNodeProps>,
       default: () => ({})
     },
     data: {
@@ -178,10 +176,10 @@ export default defineComponent({
       type: String,
       default: 'label'
     },
-    childrenKey: {
-      type: String,
-      default: 'children'
-    },
+    // childrenKey: {
+    //   type: String,
+    //   default: 'children'
+    // },
     checked: {
       type: Boolean,
       default: false
@@ -206,10 +204,10 @@ export default defineComponent({
       type: [String, Number],
       default: '16px'
     },
-    children: {
-      type: Array as PropType<TreeNodeOptions[]>,
-      default: () => []
-    },
+    // children: {
+    //   type: Array as PropType<TreeNodeProps[]>,
+    //   default: () => []
+    // },
     draggable: {
       type: Boolean,
       default: false
@@ -262,7 +260,7 @@ export default defineComponent({
       }
     })
     const showChildren = computed(() => {
-      return props.expanded && props.children?.length > 0
+      return props.expanded && props.node.children?.length > 0
     })
     const hasArrow = computed(() => {
       const arrow = props.arrow
@@ -280,7 +278,7 @@ export default defineComponent({
       }
 
       return arrowSign === 'auto'
-        ? props.children?.length || (!loaded.value && asyncLoad)
+        ? !!props.node.children?.length || (!loaded.value && asyncLoad)
         : !!arrowSign
     })
     const hasCheckbox = computed(() => {
@@ -308,10 +306,8 @@ export default defineComponent({
       }
     )
 
-    function setValue<T = unknown>(key: keyof TreeNodeOptions, value: T) {
-      const node = props.node
-
-      node[key] = value
+    function setValue<T = unknown>(key: keyof TreeNodeProps, value: T) {
+      (props.node as any)[key] = value
     }
 
     function handleClick() {
@@ -352,7 +348,7 @@ export default defineComponent({
     function handleToggleSelect(able = !props.selected) {
       if (isDisabled.value) return
 
-      if (props.floorSelect && props.children?.length) {
+      if (props.floorSelect && props.node.children?.length) {
         return handleToggleExpand()
       }
 
@@ -412,8 +408,8 @@ export default defineComponent({
       treeState.handleNodeDragEnd(getNodeState())
     }
 
-    function getNodeChildren(node: TreeNodeOptions) {
-      return node[props.childrenKey] as TreeNodeOptions[]
+    function getNodeChildren(node: TreeNodeProps) {
+      return node.children
     }
 
     return {

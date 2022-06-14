@@ -1,12 +1,13 @@
 <template>
   <Tree :data="mockData">
-    <template #node="{ data, expanded, toggleExpand }">
+    <template #node="{ data, node, depth, toggleExpand }">
       <span
         :style="{
-          color: expanded ? '#fa5252' : '#228be6',
+          paddingLeft: `${depth * 20}px`,
+          color: node.expanded ? '#fa5252' : '#228be6',
           cursor: 'pointer'
         }"
-        @click="toggleExpand()"
+        @click="node.children.length && toggleExpand()"
       >
         {{ data.label }}
       </span>

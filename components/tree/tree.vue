@@ -12,27 +12,31 @@
         :key="index"
         v-bind="(item as any)"
         :node="item"
-        :label-key="props.labelKey"
-        :children-key="props.childrenKey"
-        :children="getNodeChildren(item)"
+        :label-key="labelKey"
         :indent="props.indent"
         :draggable="props.draggable"
         :appear="props.appear"
         :floor-select="props.floorSelect"
       >
-        <template #default="{ data: nodeDta, node, depth, toggleCheck, toggleExpand, toggleSelect }">
+        <template #default="{ data: nodeDta, node, depth, children, toggleCheck, toggleExpand, toggleSelect }">
           <slot
             name="node"
             :data="nodeDta"
             :node="node"
             :depth="depth"
+            :children="children"
             :toggle-check="toggleCheck"
             :toggle-expand="toggleExpand"
             :toggle-select="toggleSelect"
           ></slot>
         </template>
-        <template #label="{ data: nodeData, node }">
-          <slot name="label" :data="nodeData" :node="node"></slot>
+        <template #label="{ data: nodeData, node, children }">
+          <slot
+            name="label"
+            :data="nodeData"
+            :node="node"
+            :children="children"
+          ></slot>
         </template>
       </TreeNode>
     </ul>
@@ -54,19 +58,36 @@
 import { defineComponent, ref, reactive, computed, watch, provide, nextTick, toRef } from 'vue'
 import TreeNode from './tree-node.vue'
 import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
-import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
+import { isNull, isPromise, transformTree, flatTree, removeArrayItem } from '@vexip-ui/utils'
 import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
   Key,
   Data,
-  InitDataOptions,
-  TreeNodeOptions,
+  NodeKeyConfig,
+  TreeNodeProps,
   RenderFn,
   AsyncLoadFn,
   TreeNodeInstance
 } from './symbol'
+
+const defaultKeyConfig: Required<NodeKeyConfig> = {
+  id: 'id',
+  parent: 'parent',
+  label: 'label',
+  children: 'children',
+  visible: 'visible',
+  selected: 'selected',
+  expanded: 'expanded',
+  disabled: 'disabled',
+  checked: 'checked',
+  loading: 'loading',
+  loaded: 'loaded',
+  readonly: 'readonly',
+  arrow: 'arrow',
+  checkbox: 'checkbox'
+}
 
 export default defineComponent({
   name: 'Tree',
@@ -78,26 +99,23 @@ export default defineComponent({
       type: [Boolean, String] as PropType<boolean | 'auto'>,
       default: null
     },
-    data: Array as PropType<InitDataOptions[]>,
+    data: Array as PropType<Data[]>,
     noBuildTree: booleanProp,
     emptyTip: String,
     disabled: booleanProp,
     readonly: booleanProp,
     checkbox: booleanProp,
     renderer: Function as PropType<RenderFn>,
-    idKey: String,
-    labelKey: String,
-    childrenKey: String,
-    parentKey: String,
     multiple: booleanProp,
     indent: [String, Number],
     accordion: booleanProp,
     draggable: booleanProp,
     appear: booleanProp,
     floorSelect: booleanProp,
-    asyncLoad: Function as PropType<AsyncLoadFn>,
+    onAsyncLoad: Function as PropType<AsyncLoadFn>,
     cacheNode: booleanProp,
-    rootId: [String, Number]
+    rootId: [String, Number],
+    keyConfig: Object as PropType<NodeKeyConfig>
   },
   emits: [
     'node-change',
@@ -131,44 +149,44 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      idKey: 'id',
-      labelKey: 'label',
-      childrenKey: 'children',
-      parentKey: 'parent',
       multiple: false,
       indent: '16px',
       accordion: false,
       draggable: false,
       appear: false,
       floorSelect: false,
-      asyncLoad: {
+      onAsyncLoad: {
         default: null,
         isFunc: true
       },
       cacheNode: false,
-      rootId: null
+      rootId: null,
+      keyConfig: () => ({})
     })
 
     const prefix = 'vxp-tree'
-    const nodeMaps = new Map<Key, TreeNodeOptions>()
-    const flatData = ref<TreeNodeOptions[]>([])
-    const treeData = ref<TreeNodeOptions[]>([])
+    const nodeMaps = new Map<Key, TreeNodeProps>()
+    const flatData = ref<TreeNodeProps[]>([])
+    const treeData = ref<TreeNodeProps[]>([])
     const dragging = ref(false)
     const indicatorShow = ref(false)
 
     const wrapper = ref<HTMLElement | null>(null)
     const indicator = ref<HTMLElement | null>(null)
 
+    const keyConfig = computed(() => {
+      return { ...defaultKeyConfig, ...props.keyConfig }
+    })
     const parsedOptions = computed(() => {
       return {
-        keyField: props.idKey,
-        childField: props.childrenKey,
-        parentField: props.parentKey,
+        keyField: keyConfig.value.id,
+        childField: keyConfig.value.children,
+        parentField: keyConfig.value.parent,
         rootId: props.rootId
       }
     })
     const boundAsyncLoad = computed(() => {
-      return typeof props.asyncLoad === 'function'
+      return typeof props.onAsyncLoad === 'function'
     })
 
     provide(
@@ -211,7 +229,7 @@ export default defineComponent({
 
     for (let i = 0, len = checkedNodes.length; i < len; ++i) {
       const item = checkedNodes[i]
-      const parentKey = item[props.parentKey] as Key
+      const parentKey = item.parent
 
       updateCheckedDown(item)
 
@@ -225,9 +243,10 @@ export default defineComponent({
     }
 
     function parseAndTransformData() {
-      const idKey = props.idKey
-      const oldDataMap = new Map<Data, TreeNodeOptions>()
-      const oldIpMap = new Map<any, TreeNodeOptions>()
+      const idKey = keyConfig.value.id
+      const parentKey = keyConfig.value.parent
+      const oldDataMap = new Map<Data, TreeNodeProps>()
+      const oldIpMap = new Map<any, TreeNodeProps>()
 
       for (const node of nodeMaps.values()) {
         oldDataMap.set(node.data, node)
@@ -236,7 +255,7 @@ export default defineComponent({
 
       nodeMaps.clear()
 
-      const newFlatData = []
+      const newFlatData: TreeNodeProps[] = []
       const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
 
       for (let i = 0, len = data.length; i < len; ++i) {
@@ -245,14 +264,19 @@ export default defineComponent({
           ? oldDataMap.get(item) ?? oldIpMap.get(item[idKey]) ?? createNodeItem(item)
           : createNodeItem(item)
 
-        node[props.parentKey] = item[props.parentKey]
+        node.parent = item[parentKey]
         node.data = item
 
-        nodeMaps.set(node[props.idKey] as Key, node)
+        nodeMaps.set(node.id, node)
         newFlatData.push(node)
       }
 
-      treeData.value = transformTree(newFlatData, parsedOptions.value)
+      treeData.value = transformTree(newFlatData, {
+        keyField: 'id',
+        parentField: 'parent',
+        childField: 'children',
+        rootId: props.rootId
+      })
       flatData.value = newFlatData
     }
 
@@ -260,24 +284,38 @@ export default defineComponent({
       const _flatData = []
       const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
 
+      const {
+        id: idKey,
+        visible: visibleKey,
+        selected: selectedKey,
+        expanded: expandedKey,
+        disabled: disabledKey,
+        checked: checkedKey,
+        loading: loadingKey,
+        loaded: loadedKey,
+        readonly: readonlyKey,
+        arrow: arrowKey,
+        checkbox: checkboxKey
+      } = keyConfig.value
+
       for (let i = 0, len = data.length; i < len; ++i) {
         const item = data[i]
-        const id = item[props.idKey] as Key
+        const id = item[idKey] as Key
 
-        let node: TreeNodeOptions
+        let node: TreeNodeProps
 
         if (nodeMaps.has(id)) {
           const {
-            visible = true,
-            selected = false,
-            expanded = false,
-            disabled = false,
-            checked = false,
-            loading = false,
-            loaded = false,
-            readonly = false,
-            arrow = 'auto',
-            checkbox = null
+            [visibleKey]: visible = true,
+            [selectedKey]: selected = false,
+            [expandedKey]: expanded = false,
+            [disabledKey]: disabled = false,
+            [checkedKey]: checked = false,
+            [loadingKey]: loading = false,
+            [loadedKey]: loaded = false,
+            [readonlyKey]: readonly = false,
+            [arrowKey]: arrow = 'auto',
+            [checkboxKey]: checkbox = null
           } = item
 
           node = nodeMaps.get(id)!
@@ -299,7 +337,12 @@ export default defineComponent({
         _flatData.push(node)
       }
 
-      treeData.value = transformTree(_flatData, parsedOptions.value)
+      treeData.value = transformTree(_flatData, {
+        keyField: 'id',
+        parentField: 'parent',
+        childField: 'children',
+        rootId: props.rootId
+      })
       flatData.value = _flatData
     }
 
@@ -319,23 +362,41 @@ export default defineComponent({
       })
     }
 
-    function createNodeItem(data: InitDataOptions): TreeNodeOptions {
+    function createNodeItem(data: Data): TreeNodeProps {
       const {
-        visible = true,
-        selected = false,
-        expanded = false,
-        disabled = false,
-        checked = false,
-        loading = false,
-        loaded = false,
-        readonly = false,
-        arrow = 'auto',
-        checkbox = null
+        id: idKey,
+        parent: parentKey,
+        visible: visibleKey,
+        selected: selectedKey,
+        expanded: expandedKey,
+        disabled: disabledKey,
+        checked: checkedKey,
+        loading: loadingKey,
+        loaded: loadedKey,
+        readonly: readonlyKey,
+        arrow: arrowKey,
+        checkbox: checkboxKey
+      } = keyConfig.value
+
+      const {
+        [visibleKey]: visible = true,
+        [selectedKey]: selected = false,
+        [expandedKey]: expanded = false,
+        [disabledKey]: disabled = false,
+        [checkedKey]: checked = false,
+        [loadingKey]: loading = false,
+        [loadedKey]: loaded = false,
+        [readonlyKey]: readonly = false,
+        [arrowKey]: arrow = 'auto',
+        [checkboxKey]: checkbox = null
       } = data
-      const id = data[props.idKey]
-      const parent = data[props.parentKey]
+      const id = data[idKey]
+      const parent = data[parentKey]
 
       return reactive({
+        id,
+        parent,
+        children: [],
         data,
         visible,
         selected,
@@ -347,24 +408,19 @@ export default defineComponent({
         readonly,
         arrow,
         checkbox,
-        partial: false,
-        [props.idKey]: id,
-        [props.parentKey]: parent,
-        [props.childrenKey]: []
+        partial: false
       })
     }
 
-    function getNodeChildren(node: TreeNodeOptions) {
-      return node[props.childrenKey] as TreeNodeOptions[]
+    function getNodeChildren(node: TreeNodeProps) {
+      return node.children
     }
 
-    function updateCheckedUpward(originNode: TreeNodeOptions) {
-      const { parentKey, childrenKey } = props
-
+    function updateCheckedUpward(originNode: TreeNodeProps) {
       let node = originNode
 
-      while (!isNull(node[parentKey])) {
-        const parentId = node[parentKey] as Key
+      while (!isNull(node.parent)) {
+        const parentId = node.parent
 
         if (!nodeMaps.has(parentId)) break
 
@@ -375,11 +431,11 @@ export default defineComponent({
         }
 
         if (node.checked) {
-          parent.checked = (parent[childrenKey] as TreeNodeOptions[]).every(item => item.checked)
+          parent.checked = parent.children.every(item => item.checked)
           parent.partial = !parent.checked
         } else {
           parent.checked = false
-          parent.partial = (parent[childrenKey] as TreeNodeOptions[]).some(
+          parent.partial = parent.children.some(
             item => item.checked || item.partial
           )
         }
@@ -388,12 +444,11 @@ export default defineComponent({
       }
     }
 
-    function updateCheckedDown(originNode: TreeNodeOptions) {
-      const childrenKey = props.childrenKey
+    function updateCheckedDown(originNode: TreeNodeProps) {
       const checked = originNode.checked
       const partial = originNode.partial
 
-      const loop = [...(originNode[childrenKey] as TreeNodeOptions[])]
+      const loop = [...(originNode.children as TreeNodeProps[])]
 
       let node
 
@@ -405,13 +460,13 @@ export default defineComponent({
         node.checked = checked
         node.partial = partial
 
-        if (node[childrenKey] && (node[childrenKey] as TreeNodeOptions[]).length) {
-          loop.push(...(node[childrenKey] as TreeNodeOptions[]))
+        if (node.children.length) {
+          loop.push(...(node.children as TreeNodeProps[]))
         }
       }
     }
 
-    function computeCheckedState(originNode: TreeNodeOptions, able: boolean) {
+    function computeCheckedState(originNode: TreeNodeProps, able: boolean) {
       const nodeList = [originNode].concat(
         // 需要包含被禁用且被勾选的节点
         flatData.value.filter(item => item.disabled && item.checked)
@@ -427,11 +482,11 @@ export default defineComponent({
       emit('node-change', originNode.data, originNode, able)
     }
 
-    function handleNodeClick(node: TreeNodeOptions) {
+    function handleNodeClick(node: TreeNodeProps) {
       emit('node-click', node.data, node)
     }
 
-    function handleNodeSelect(node: TreeNodeOptions) {
+    function handleNodeSelect(node: TreeNodeProps) {
       const selectedNodes = flatData.value.filter(item => item.selected)
 
       if (props.multiple) {
@@ -441,24 +496,23 @@ export default defineComponent({
           selectedNodes
         )
       } else {
-        const idKey = props.idKey
-        const currentId = node[idKey] as Key
+        const currentId = node.id
 
         for (let i = 0, len = selectedNodes.length; i < len; ++i) {
           const item = selectedNodes[i]
 
-          item.selected = item[idKey] === currentId
+          item.selected = item.id === currentId
         }
 
         emit('node-select', node.data, node)
       }
     }
 
-    function handleNodeCancel(node: TreeNodeOptions) {
+    function handleNodeCancel(node: TreeNodeProps) {
       emit('node-cancel', node.data, node)
     }
 
-    function handleNodeExpand(node: TreeNodeOptions) {
+    function handleNodeExpand(node: TreeNodeProps) {
       if (props.accordion) {
         const siblingNodes = getSiblingNodes(node)
 
@@ -470,14 +524,14 @@ export default defineComponent({
       emit('node-expand', node.data, node)
     }
 
-    function handleNodeReduce(node: TreeNodeOptions) {
+    function handleNodeReduce(node: TreeNodeProps) {
       emit('node-reduce', node.data, node)
     }
 
-    async function handleAsyncLoad(node: TreeNodeOptions) {
+    async function handleAsyncLoad(node: TreeNodeProps) {
       if (!boundAsyncLoad.value) return false
 
-      let result = props.asyncLoad(node)
+      let result = props.onAsyncLoad(node)
 
       if (isPromise(result)) {
         result = await result
@@ -487,9 +541,9 @@ export default defineComponent({
     }
 
     let dragState: {
-      draggingNode: TreeNodeOptions,
+      draggingNode: TreeNodeProps,
       treeRect: DOMRect,
-      willDropNode: TreeNodeOptions | null,
+      willDropNode: TreeNodeProps | null,
       dropType: DropType
     } | null = null
 
@@ -548,73 +602,69 @@ export default defineComponent({
     function handleNodeDrop(nodeInstance: TreeNodeInstance) {
       if (!dragState) return
 
-      const { idKey, parentKey, childrenKey } = props
       const { draggingNode, willDropNode, dropType } = dragState
 
-      if (!willDropNode || draggingNode[idKey] === willDropNode[idKey]) return
+      if (!willDropNode || draggingNode.id === willDropNode.id) return
 
       let currentId: Key
-      let parent: TreeNodeOptions | null
-      let index: number
+      let parent: TreeNodeProps | null
+      // let index: number
 
       if (draggingNode) {
         parent = getParentNode(draggingNode)
 
         if (!parent) {
           parent = {
-            [childrenKey]: treeData.value
-          } as TreeNodeOptions
+            children: treeData.value
+          } as TreeNodeProps
         }
 
-        currentId = draggingNode[idKey] as Key
-        index = (parent[childrenKey] as TreeNodeOptions[]).findIndex(
-          item => item[idKey] === currentId
-        )
-
-        if (~index) {
-          (parent[childrenKey] as TreeNodeOptions[]).splice(index, 1)
-        }
+        currentId = draggingNode.id as Key
+        removeArrayItem(parent.children, item => item.id === currentId)
       }
 
       if (dropType === DropType.INNER) {
-        if (!Array.isArray(willDropNode[childrenKey])) {
-          willDropNode[childrenKey] = []
+        if (!Array.isArray(willDropNode.children)) {
+          willDropNode.children = []
         }
 
-        const children = Array.from(willDropNode[childrenKey] as TreeNodeOptions[])
+        const children = Array.from(willDropNode.children as TreeNodeProps[])
 
         children.push(draggingNode)
 
-        willDropNode[childrenKey] = children
-        draggingNode[parentKey] = willDropNode[idKey]
+        willDropNode.children = children
+        draggingNode.parent = willDropNode.id
       } else {
         parent = getParentNode(willDropNode)
 
         if (!parent) {
           parent = {
-            [parentKey]: undefined,
-            [childrenKey]: treeData.value
-          } as TreeNodeOptions
+            parent: undefined! as Key,
+            children: treeData.value
+          } as TreeNodeProps
         }
 
-        currentId = willDropNode[idKey] as Key
-        index = (parent[childrenKey] as TreeNodeOptions[]).findIndex(
-          item => item[idKey] === currentId
-        )
+        currentId = willDropNode.id
+        const index = parent.children.findIndex(item => item.id === currentId)
 
         if (~index) {
-          (parent[childrenKey] as TreeNodeOptions[]).splice(
+          parent.children.splice(
             +(dropType === DropType.AFTER) + index,
             0,
             draggingNode
           )
 
-          draggingNode[parentKey] = parent[idKey]
+          draggingNode.parent = parent.id
         }
       }
 
       nextTick(() => {
-        flatData.value = flatTree(treeData.value, parsedOptions.value)
+        flatData.value = flatTree(treeData.value, {
+          keyField: 'id',
+          parentField: 'parent',
+          childField: 'children',
+          rootId: props.rootId
+        })
       })
 
       emit('drop', nodeInstance.node.data, nodeInstance.node, dropType)
@@ -627,7 +677,7 @@ export default defineComponent({
       emit('drag-end', nodeInstance.node.data, nodeInstance.node)
     }
 
-    function getCheckedNodes(): TreeNodeOptions[] {
+    function getCheckedNodes(): TreeNodeProps[] {
       return flatData.value.filter(item => item.checked)
     }
 
@@ -635,7 +685,7 @@ export default defineComponent({
       return getCheckedNodes().map(node => node.data)
     }
 
-    function getSelectedNodes(): TreeNodeOptions[] {
+    function getSelectedNodes(): TreeNodeProps[] {
       return flatData.value.filter(item => item.selected)
     }
 
@@ -643,52 +693,50 @@ export default defineComponent({
       return getSelectedNodes().map(node => node.data)
     }
 
-    function getExpandedNodes(): TreeNodeOptions[] {
+    function getExpandedNodes(): TreeNodeProps[] {
       return flatData.value.filter(item => item.expanded)
     }
 
-    function getDisabledNodes(): TreeNodeOptions[] {
+    function getDisabledNodes(): TreeNodeProps[] {
       return flatData.value.filter(item => item.disabled)
     }
 
-    function getParentNode(node: TreeNodeOptions): TreeNodeOptions | null {
-      if (node[props.parentKey]) {
-        return nodeMaps.get(node[props.parentKey] as Key) ?? null
+    function getParentNode(node: TreeNodeProps): TreeNodeProps | null {
+      if (node.parent) {
+        return nodeMaps.get(node.parent) ?? null
       }
 
       return null
     }
 
-    function getSiblingNodes(node: TreeNodeOptions, includeSelf = false): TreeNodeOptions[] {
-      const { idKey, parentKey } = props
+    function getSiblingNodes(node: TreeNodeProps, includeSelf = false): TreeNodeProps[] {
       const parent = getParentNode(node)
 
-      const currentId = node[idKey] as Key
-      const parentId = parent ? (parent[idKey] as Key) : null
+      const currentId = node.id as Key
+      const parentId = parent ? parent.id as Key : null
 
       return flatData.value.filter(item => {
-        const isChild = parentId === null ? !item[parentKey] : item[parentKey] === parentId
+        const isChild = parentId === null ? !item.parent : item.parent === parentId
 
         if (isChild && !includeSelf) {
-          return item[idKey] !== currentId
+          return item.id !== currentId
         }
 
         return isChild
       })
     }
 
-    function getPrevSiblingNode(node: TreeNodeOptions): TreeNodeOptions | null {
-      const { idKey, parentKey } = props
+    function getPrevSiblingNode(node: TreeNodeProps): TreeNodeProps | null {
       const parent = getParentNode(node)
 
       if (!parent) return null
 
-      const currentId = node[idKey] as Key
-      const parentId = parent[idKey] as Key
-      const children = flatData.value.filter(item => item[parentKey] === parentId)
+      const currentId = node.id
+      const parentId = parent.id
+      const children = flatData.value.filter(item => item.parent === parentId)
 
       if (children && children.length) {
-        const index = children.findIndex(item => item[idKey] === currentId)
+        const index = children.findIndex(item => item.id === currentId)
 
         if (index > 0) {
           return children[index - 1]
@@ -698,18 +746,17 @@ export default defineComponent({
       return null
     }
 
-    function getNextSiblingNode(node: TreeNodeOptions): TreeNodeOptions | null {
-      const { idKey, parentKey } = props
+    function getNextSiblingNode(node: TreeNodeProps): TreeNodeProps | null {
       const parent = getParentNode(node)
 
       if (!parent) return null
 
-      const currentId = node[idKey] as Key
-      const parentId = parent[idKey] as Key
-      const children = flatData.value.filter(item => item[parentKey] === parentId)
+      const currentId = node.id
+      const parentId = parent.id
+      const children = flatData.value.filter(item => item.parent === parentId)
 
       if (children && children.length) {
-        const index = children.findIndex(item => item[idKey] === currentId)
+        const index = children.findIndex(item => item.id === currentId)
 
         if (!~index && index < children.length - 1) {
           return children[index + 1]
@@ -719,8 +766,8 @@ export default defineComponent({
       return null
     }
 
-    function getNodeByData<T extends Data>(data: T): TreeNodeOptions | null {
-      const idKey = props.idKey
+    function getNodeByData<T extends Data>(data: T): TreeNodeProps | null {
+      const idKey = keyConfig.value.id
 
       return flatData.value.find(item => item.data[idKey] === data[idKey]) ?? null
     }
@@ -763,6 +810,8 @@ export default defineComponent({
       locale: useLocale('tree'),
       treeData,
       indicatorShow,
+      labelKey: computed(() => keyConfig.value.label),
+      childrenKey: computed(() => keyConfig.value.children),
 
       wrapper,
       indicator,

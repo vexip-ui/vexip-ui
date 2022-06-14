@@ -12,9 +12,6 @@
 | draggable     | `boolean`           | 设置节点是否可拖拽                                                                                                                                          | `false`      | - |
 | renderer      | `(data: { data: Data, node: TreeNodeOptions, depth: number }) => any`          | 使用 render 函数进行节点渲染数                                                                                           | `null`       | - |
 | id-key        | `string`            | 设置数据源的 `id` 字段                                                                                                                                        | `'id'`       | - |
-| children-key  | `string`            | 设置数据源的 `children` 字段                                                                                                                                  | `'children'` | - |
-| parent-key    | `string`            | 设置数据源的 `parent` 字段                                                                                                                                    | `'parent'`   | - |
-| label-key     | `string`            | 设置数据源的 `label` 字段                                                                                                                                     | `'label'`    | - |
 | multiple      | `boolean`           | 设置是否开启多选模式                                                                                                                                        | `false`      | - |
 | indent        | `string \| number`  | 设置每层树节点的缩进距离                                                                                                                                    | `'16px'`    | - |
 | accordion     | `boolean`           | 设置是否开启手风琴模式                                                                                                                                      | `false`      | - |
@@ -23,11 +20,30 @@
 | async-load    | `(node: Readonly<TreeNodeOptions>) => void \| boolean \| Promise<any>`          | 节点初次加载触发的回调函数，接受 `node` 对象作为参数，如果返回 `false` 则表示加载失败，支持异步函数和 `Promise`                                                | `null`       | - |
 | cache-node    | `boolean`           | 设置是否开启节点数据缓存机制，开启后当每次 `data` 发生变化时，同个对象引用或者 `id` 值相同的节点，除了 `id`、`parent`、`children` 和 `label` 属性外其余属性将不会被刷新 | `false`      | - |
 | root-id       | `string \| number`  | 设置根节点的 `id` 值，设置后，当 parent 值与该值相等的节点，将作为第一级节点展示                                                                              | `null`       | - |
+| key-config | `NodeKeyConfig` | 配置解析节点初始化时的各项键名 | `{}` | `2.0.0` |
 
 一些预设的类型：
 
 ```ts
 type Data = Record<string, unknown>
+
+interface NodeKeyConfig {
+  id?: string,
+  parent?: string,
+  label?: string,
+  children?: string,
+  visible?: string,
+  selected?: string,
+  expanded?: string,
+  disabled?: string,
+  checked?: string,
+  loading?: string,
+  loaded?: string,
+  readonly?: string,
+  arrow?: string,
+  checkbox?: string
+}
+
 enum DropType {
   BEFORE,
   INNER,
