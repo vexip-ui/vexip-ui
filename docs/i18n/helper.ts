@@ -50,6 +50,7 @@ export interface I18nConfig {
     Pagination: string,
 
     AutoComplete: string,
+    Cascader: string,
     Checkbox: string,
     ColorPicker: string,
     DatePicker: string,

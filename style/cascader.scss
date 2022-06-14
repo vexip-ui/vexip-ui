@@ -1,0 +1,196 @@
+@use 'sass:map';
+
+@use './design' as *;
+@use './icon.scss';
+@use './input.scss' as input;
+
+$cascader: () !default;
+$cascader: map.merge(
+  (
+    pane-height: 200px,
+    pane-min-width: 180px,
+    pane-max-width: 280px,
+    pane-bg-color: get-css-var('bg-color-base'),
+    pane-b-color: get-css-var('border-color-light-2'),
+    pane-border: get-css-var('border-shape') get-css-var('cascader-pane-b-color'),
+    pane-radius: get-css-var('radius-base'),
+    pane-shadow: get-css-var('shadow-base'),
+    check-color: get-css-var('color-primary-base'),
+    empty-color: get-css-var('content-color-placeholder'),
+    option-color-error: get-css-var('color-error-opacity-2')
+  ),
+  $cascader
+);
+
+.vxp-cascader {
+  &-vars {
+    @include define-preset-values('cascader', $cascader);
+  }
+
+  @include basis;
+
+  display: inline-flex;
+  width: 100%;
+
+  @include input.handler(#{&}__selector);
+
+  &--multiple &__selector {
+    @include define-css-var('input-v-padding', 2px);
+
+    height: auto;
+    min-height: get-css-var('input-height');
+  }
+
+  &__control,
+  &__input {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &--multiple &__control {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 0;
+    margin-top: -2px;
+  }
+
+  &__tags {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+
+  &--responsive &__tags {
+    display: flex;
+    overflow: hidden;
+  }
+
+  &__selector &__tooltip {
+    position: relative;
+    height: calc(get-css-var('input-height') - 8px);
+
+    .vxp-tooltip__trigger {
+      display: flex;
+    }
+  }
+
+  &__selector &__tag {
+    position: relative;
+    height: calc(get-css-var('input-height') - 8px);
+    margin: 2px 4px;
+    margin-left: 0;
+    font-size: 12px;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  &__selector--small &__tag {
+    & > span {
+      height: 100%;
+      line-height: 1;
+    }
+  }
+
+  // &__selector--large &__tag {
+  //   height: 32px;
+  // }
+
+  &__selector &__tag + &__tag {
+    margin-left: 0;
+  }
+
+  &__rest-tip {
+    display: flex;
+    max-height: 180px;
+  }
+
+  &__placeholder {
+    position: absolute;
+    overflow: hidden;
+    color: get-css-var('input-placeholder-color');
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &__popper {
+    z-index: get-css-var('z-index-popper');
+    display: flex;
+    padding: 5px 0;
+  }
+
+  &__panes {
+    position: relative;
+    height: get-css-var('cascader-pane-height');
+    background-color: get-css-var('cascader-pane-bg-color');
+    border: get-css-var('cascader-pane-border');
+    border-radius: get-css-var('cascader-pane-radius');
+    box-shadow: get-css-var('cascader-pane-shadow');
+    transition: width get-css-var('transition-base');
+  }
+
+  &__pane {
+    display: inline-block;
+    min-width: get-css-var('cascader-pane-min-width');
+    max-width: get-css-var('cascader-pane-max-width');
+    height: 100%;
+
+    &:not(:first-child) {
+      border-left: get-css-var('cascader-pane-border');
+    }
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+
+    &--multiple .vxp-option--selected {
+      background-color: transparent;
+
+      &:hover {
+        background-color: get-css-var('option-bg-color-hover');
+      }
+    }
+
+    .vxp-option--error {
+      color: get-css-var('cascader-option-color-error');
+    }
+  }
+
+  &__checkbox {
+    display: inline-flex;
+    margin-right: 10px;
+  }
+
+  &__label {
+    flex: auto;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  &__selector--focused &__arrow {
+    transform: rotate(180deg);
+  }
+
+  &__empty {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 3px 16px;
+    color: get-css-var('cascader-empty-color');
+    white-space: nowrap;
+    cursor: default;
+    background-color: get-css-var('cascader-pane-bg-color');
+  }
+}

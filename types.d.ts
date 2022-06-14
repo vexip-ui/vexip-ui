@@ -17,6 +17,7 @@ declare module 'vue' {
     Card: typeof import('vexip-ui')['Card'],
     Carousel: typeof import('vexip-ui')['Carousel'],
     CarouselItem: typeof import('vexip-ui')['CarouselItem'],
+    Cascader: typeof import('vexip-ui')['Cascader'],
     Cell: typeof import('vexip-ui')['Cell'],
     Checkbox: typeof import('vexip-ui')['Checkbox'],
     CheckboxGroup: typeof import('vexip-ui')['CheckboxGroup'],

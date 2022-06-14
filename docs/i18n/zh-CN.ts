@@ -52,6 +52,7 @@ export const zhCN = defineI18n({
     Pagination: '分页器',
 
     AutoComplete: '自动完成',
+    Cascader: '联级选择器',
     Checkbox: '多选框',
     ColorPicker: '颜色选择器',
     DatePicker: '日期选择框',
