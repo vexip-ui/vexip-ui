@@ -24,8 +24,7 @@
 | option-check    | `boolean`                   | 设置开启被选选项打勾功能                                            | `false`      | - |
 | empty-text      | `string`                    | 设置空选项时的提示语                                                | `locale.empty` | - |
 | disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 | - |
-| value-key | `string` | 设置选项解析时 `value` 的键值 | `'value'` | `2.0.0` |
-| label-key | `string` | 设置选项解析时 `label` 的键值 | `'label'` | `2.0.0` |
+| key-config | `{ value?: string, label?: string, disabled?: string, divided?: string, noTitle?: string }` | 设置选项解析 `options` 时的各项键名 | `{}` | `2.0.0` |
 
 ### Select 事件
 

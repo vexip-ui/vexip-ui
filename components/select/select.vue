@@ -20,7 +20,7 @@
               :class="`${prefixCls}__tag`"
               closable
               @click.stop="handleClick"
-              @close="handleSelect(item, currentLabels[index])"
+              @close="handleTagClose(item)"
             >
               {{ currentLabels[index] }}
             </Tag>
@@ -95,24 +95,24 @@
               <slot
                 :option="item"
                 :index="index"
-                :selected="isSelected(item.value)"
+                :selected="isSelected(item)"
                 :handle-select="handleSelect"
               >
                 <Option
-                  :label="item.label || item.value.toString()"
+                  :label="item.label"
                   :value="item.value"
                   :disabled="item.disabled"
                   :divided="item.divided"
                   :no-title="item.noTitle"
                   :hitting="item.hitting"
-                  :select="isSelected(item.value)"
-                  @select="handleSelect"
+                  :selected="isSelected(item)"
+                  @select="handleSelect(item)"
                 >
                   <span :class="`${prefixCls}__label`">
-                    {{ item.label || item.value }}
+                    {{ item.label }}
                   </span>
                   <transition v-if="props.optionCheck" name="vxp-fade" appear>
-                    <Icon v-if="isSelected(item.value)" :class="`${prefixCls}__check`">
+                    <Icon v-if="isSelected(item)" :class="`${prefixCls}__check`">
                       <Check></Check>
                     </Icon>
                   </transition>
@@ -137,6 +137,7 @@
 import {
   defineComponent,
   ref,
+  reactive,
   computed,
   watch,
   watchEffect,
@@ -157,9 +158,17 @@ import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-import type { RawOption, OptionState } from '@/components/option'
+import type { OptionKeyConfig, RawOption, OptionState } from '@/components/option'
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type { ClassType } from './symbol'
+
+const defaultKeyConfig: Required<OptionKeyConfig> = {
+  value: 'value',
+  label: 'label',
+  disabled: 'disabled',
+  divided: 'divided',
+  noTitle: 'noTitle'
+}
 
 export default defineComponent({
   name: 'Select',
@@ -198,8 +207,7 @@ export default defineComponent({
     optionCheck: booleanProp,
     emptyText: String,
     staticSuffix: booleanProp,
-    valueKey: String,
-    labelKey: String
+    keyConfig: Object as PropType<OptionKeyConfig>
   },
   emits: [
     'toggle',
@@ -250,8 +258,7 @@ export default defineComponent({
       optionCheck: false,
       emptyText: null,
       staticSuffix: false,
-      valueKey: 'value',
-      labelKey: 'label'
+      keyConfig: () => ({})
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -264,35 +271,70 @@ export default defineComponent({
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
-    const optionMap = ref(new Map<string | number, OptionState>())
+    const optionStates = ref<OptionState[]>([])
+
+    const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
+
+    let optionValueMap = new Map<string | number, OptionState>()
+
+    const updateTrigger = ref(0)
 
     watchEffect(() => {
-      const { valueKey, labelKey } = props
-      const oldMap = optionMap.value
+      /* eslint-disable no-unused-expressions */
+      props.keyConfig.value
+      props.keyConfig.label
+      props.keyConfig.disabled
+      props.keyConfig.divided
+      props.keyConfig.noTitle
+      props.options
+      /* eslint-disable no-unused-expressions */
+
+      updateTrigger.value++
+    })
+
+    watch(updateTrigger, initOptionState, { immediate: true })
+
+    function initOptionState() {
+      const {
+        value: valueKey,
+        label: labelKey,
+        disabled: disabledKey,
+        divided: dividedKey,
+        noTitle: noTitleKey
+      } = keyConfig.value
+      const oldMap = optionValueMap
       const map = new Map<string | number, OptionState>()
 
       props.options.forEach(option => {
-        if (typeof option === 'string') {
-          option = { [valueKey]: option }
-        }
-
-        const value = option[valueKey]
+        const rawOption = typeof option === 'string' ? { [valueKey]: option } : option
+        const value = rawOption[valueKey]
 
         if (isNull(value)) return
 
-        const label = option[labelKey] || String(value)
-        const oldState = oldMap.get(option.value)
-        const rawOption = option as OptionState
+        const label = rawOption[labelKey] || String(value)
+        const {
+          [disabledKey]: disabled = false,
+          [dividedKey]: divided = false,
+          [noTitleKey]: noTitle = false
+        } = rawOption
+        const oldState = oldMap.get(rawOption.value)
+        const optionState = reactive({
+          disabled,
+          divided,
+          noTitle,
+          value,
+          label,
+          hidden: oldState?.hidden ?? false,
+          hitting: oldState?.hitting ?? false,
+          data: option
+        })
 
-        if (oldState) {
-          map.set(value, { ...rawOption, value, label, hidden: oldState.hidden, hitting: oldState.hitting })
-        } else {
-          map.set(value, { ...rawOption, value, label, hidden: false, hitting: false })
-        }
+        map.set(value, optionState)
       })
 
-      optionMap.value = map
-    })
+      optionValueMap = map
+      optionStates.value = Array.from(map.values())
+    }
 
     const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed | null>(null)
     const wrapper = useClickOutside()
@@ -330,9 +372,6 @@ export default defineComponent({
     const hasValue = computed(() => !isNull(currentValues.value[0]))
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
-    })
-    const optionStates = computed(() => {
-      return Array.from(optionMap.value.values())
     })
     const visibleOptions = computed(() => {
       return optionStates.value.filter(state => !state.hidden)
@@ -378,7 +417,6 @@ export default defineComponent({
       currentValues.value = !Array.isArray(value) ? [value] : value
 
       const valueSet = new Set(currentValues.value)
-      const optionValueMap = optionMap.value
       const selectedValues: (string | number)[] = []
       const selectedLabels: string[] = []
 
@@ -392,12 +430,12 @@ export default defineComponent({
       })
     }
 
-    function isSelected(value: string | number) {
+    function isSelected(option: OptionState) {
       if (props.multiple) {
-        return currentValues.value.includes(value)
+        return currentValues.value.includes(option.value)
       }
 
-      return currentValues.value[0] === value
+      return currentValues.value[0] === option.value
     }
 
     function computeListHeight() {
@@ -413,29 +451,35 @@ export default defineComponent({
       })
     }
 
-    function handleSelect(value: string | number, label: string) {
-      emit(props.multiple && isSelected(value) ? 'cancel' : 'select', value, label)
-      handleChange(value, label)
+    function handleTagClose(value: string | number) {
+      handleSelect(optionValueMap.get(value)!)
+    }
 
-      if (!props.multiple) {
-        currentVisible.value = false
-      } else {
+    function handleSelect(option: OptionState) {
+      if (!option) return
+
+      emit(props.multiple && isSelected(option) ? 'cancel' : 'select', option.value, option.data)
+      handleChange(option)
+
+      if (props.multiple) {
         updatePopper()
+      } else {
+        currentVisible.value = false
       }
     }
 
-    function handleChange(value: string | number, label: string) {
+    function handleChange(option: OptionState) {
       if (props.multiple) {
-        if (isSelected(value)) {
-          const index = currentValues.value.findIndex(v => v === value)
+        if (isSelected(option)) {
+          const index = currentValues.value.findIndex(v => v === option.value)
 
           if (~index) {
             currentValues.value.splice(index, 1)
             currentLabels.value.splice(index, 1)
           }
         } else {
-          currentValues.value.push(value)
-          currentLabels.value.push(label)
+          currentValues.value.push(option.value)
+          currentLabels.value.push(option.label)
         }
 
         const copiedValues = Array.from(currentValues.value)
@@ -449,18 +493,18 @@ export default defineComponent({
       } else {
         currentLabels.value.length = 0
 
-        if (!isNull(value) && value !== '') {
-          currentLabels.value.push(label)
+        if (!isNull(option.value) && option.value !== '') {
+          currentLabels.value.push(option.label)
         }
 
         const prevValue = currentValues.value[0]
 
         currentValues.value.length = 0
-        currentValues.value.push(value)
+        currentValues.value.push(option.value)
 
-        if (prevValue !== value) {
-          emit('change', value, label)
-          emit('update:value', value)
+        if (prevValue !== option.value) {
+          emit('change', option.value, option.data)
+          emit('update:value', option.value)
 
           if (!props.disableValidate) {
             validateField()
@@ -491,20 +535,16 @@ export default defineComponent({
 
     function handleClear() {
       if (props.clearable) {
-        if (props.multiple) {
-          currentValues.value = []
-          currentLabels.value = []
+        currentValues.value.length = 0
+        currentLabels.value.length = 0
 
-          emit('change', currentValues.value, currentLabels.value)
-          emit('update:value', currentValues.value)
+        const emittedValue = props.multiple ? [] : null
 
-          updatePopper()
-        } else {
-          handleChange('', '')
-        }
-
+        emit('change', emittedValue, emittedValue)
+        emit('update:value', emittedValue)
         emit('clear')
         clearField()
+        updatePopper()
       }
     }
 
@@ -524,8 +564,6 @@ export default defineComponent({
       selectorClass,
       hasValue,
       hasPrefix,
-      // controlStyle,
-      // placeholderStyle,
       visibleOptions,
       hasEmptyTip,
 
@@ -536,6 +574,7 @@ export default defineComponent({
 
       isSelected,
       computeListHeight,
+      handleTagClose,
       handleSelect,
       handleClick,
       handleClickOutside,

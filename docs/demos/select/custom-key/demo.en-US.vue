@@ -2,8 +2,7 @@
   <Select
     v-model:value="value"
     :options="options"
-    value-key="customValue"
-    label-key="customLabel"
+    :key-config="keyConfig"
   ></Select>
 </template>
 
@@ -11,6 +10,11 @@
 import { ref } from 'vue'
 
 const value = ref<number>()
+
+const keyConfig = {
+  label: 'customLabel',
+  value: 'customValue'
+}
 
 const options = [
   {

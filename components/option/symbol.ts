@@ -1,15 +1,20 @@
-export interface ObjectOption {
-  value: string | number,
+export interface OptionKeyConfig {
+  value?: string,
   label?: string,
-  disabled?: boolean,
-  divided?: boolean,
-  noTitle?: boolean
+  disabled?: string,
+  divided?: string,
+  noTitle?: string
 }
 
 export type RawOption = string | Record<string, any>
 
-export interface OptionState extends ObjectOption {
+export interface OptionState {
+  value: string | number,
   label: string,
+  disabled: boolean,
+  divided: boolean,
+  noTitle: boolean,
   hidden: boolean,
-  hitting: boolean
+  hitting: boolean,
+  data: RawOption
 }
