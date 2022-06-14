@@ -22,7 +22,7 @@ For components:
 
 - ~~ConfigProvider~~ (Released in `2.0.0-beta.4`)
 - ~~Avatar~~ (Released in `2.0.0-beta.5`)
-- Cascader (In progress, see `cascader` branch)
+- ~~Cascader~~ (Released in `2.0.0-beta.6`)
 - Mention
 - Skeleton
 

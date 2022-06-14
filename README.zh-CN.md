@@ -21,8 +21,8 @@ Vexip UI 提供了一系列开箱即用的组件。
 组件层级：
 
 - ~~ConfigProvider 配置注入~~（已在 `2.0.0-beta.4` 发布）
-- ~~Avatar 头像~~ (已在 `2.0.0-beta.5` 发布)
-- Cascader 联级选择（进行中，见 `cascader` 分支）
+- ~~Avatar 头像~~（已在 `2.0.0-beta.5` 发布）
+- ~~Cascader 联级选择~~（已在 `2.0.0-beta.6` 发布）
 - Mention 提及
 - Skeleton 骨架屏
 

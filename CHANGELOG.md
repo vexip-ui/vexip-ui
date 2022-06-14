@@ -1,3 +1,53 @@
+# [2.0.0-beta.6](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2022-06-14)
+
+
+### Bug Fixes
+
+* **alert:** icon prop error when set unknown type ([a989838](https://github.com/qmhc/vexip-ui/commit/a9898385e90c4f24825af68e72cc427133a9823d))
+* **button:** change size unit to px ([5cf8421](https://github.com/qmhc/vexip-ui/commit/5cf8421c5787c6eb9eb1d3427e8daa06fba7e6f6))
+* **cascader:** option changed not trigger update ([97a1aff](https://github.com/qmhc/vexip-ui/commit/97a1affd6cfed8dddeaaf4e9d8f96c16ed018f65))
+* change input like size unit to px ([8f566e6](https://github.com/qmhc/vexip-ui/commit/8f566e63e94ef3f01a81a175c7fc327ce3783dfc))
+* change size unit from `em` to `px` ([#31](https://github.com/qmhc/vexip-ui/issues/31)) ([1370057](https://github.com/qmhc/vexip-ui/commit/137005766de6f20989eb02105d189cf25923f504))
+* clear internal timer when unmount ([9c2f462](https://github.com/qmhc/vexip-ui/commit/9c2f4628efeef62db4fbe73dca7228aa84e824cc))
+* **config:** init config not reactive ([47298a5](https://github.com/qmhc/vexip-ui/commit/47298a58472d6f8a08d204add8c311a6fcd99fcb))
+* **config:** should exist global locale ([b7a5546](https://github.com/qmhc/vexip-ui/commit/b7a554652b10dbe0529f3901c229511b19c878c8))
+* **select:** ensure sync init values and labels ([ae04af0](https://github.com/qmhc/vexip-ui/commit/ae04af0842babbf067d782c6f26eca33ca173620)), closes [#36](https://github.com/qmhc/vexip-ui/issues/36)
+* **style:** remove unnecessary padding vars ([ae30e20](https://github.com/qmhc/vexip-ui/commit/ae30e20d2d12a90aceb6c88e9f07df0be98a9701))
+* **tree:** improve node padding style ([6db9bed](https://github.com/qmhc/vexip-ui/commit/6db9bedfa66d036beec7f12b0baed0427b7aece0))
+* **utils:** flatTree not init id when nonexists ([e298729](https://github.com/qmhc/vexip-ui/commit/e29872966070450c17c28f6882f9c1e6dd662d29))
+
+
+### Code Refactoring
+
+* **select:** support bind data to options, add key-config prop ([39b261c](https://github.com/qmhc/vexip-ui/commit/39b261ce384043767274093b83125d4d7d4d271e))
+
+
+### Features
+
+* **auto-complete:** add key-config prop ([2ff15cb](https://github.com/qmhc/vexip-ui/commit/2ff15cb1a840f30a8e2cdf590874c73917748c3b))
+* **auto-complete:** support custom value and label keys ([3a7bfc8](https://github.com/qmhc/vexip-ui/commit/3a7bfc80b0fef7ed14fb405855924db1ab2d4a41))
+* **button:** add size and type props to ButtonGroup ([1b8ca9c](https://github.com/qmhc/vexip-ui/commit/1b8ca9c0d1322fce7783489f583ab6a444efc910))
+* **Cascader:** add Cascader component ([#37](https://github.com/qmhc/vexip-ui/issues/37)) ([237f3cf](https://github.com/qmhc/vexip-ui/commit/237f3cf8232172c920fcca01ce84a0f8ef0f8d69))
+* **mixins:** add useSetTimeout and useSetInterval ([44b63e7](https://github.com/qmhc/vexip-ui/commit/44b63e7bdb5c31f0d7712cf4f8dcf9535ac581d4))
+* **select:** support value-key and label-key props ([2039f25](https://github.com/qmhc/vexip-ui/commit/2039f2518d2f7ed177218c99d7a55091fa9135a8))
+* **tree:** add key-config prop to config key alias ([2ce3ec7](https://github.com/qmhc/vexip-ui/commit/2ce3ec7e07f42532d5b20e425881a075e36f3e09))
+
+
+### Performance Improvements
+
+* improve for loop memory ([acb10d7](https://github.com/qmhc/vexip-ui/commit/acb10d7c6fde619846f4b4b487cf89ce20232592))
+
+
+### BREAKING CHANGES
+
+* **select:** `value-key` and `label-key` props of Select component
+is deprecated and removed, using `key-config` to instead.
+* **tree:** `id-key`, `label-key`, `children-key` and `parent-key`
+props of Tree component is deprecated and removed, using `key-config`
+to instead.
+
+
+
 # [2.0.0-beta.5](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2022-06-08)
 
 
