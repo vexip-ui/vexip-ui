@@ -15,14 +15,14 @@
         <slot name="control">
           <div v-if="props.multiple" ref="tagWrapper" :class="[`${prefixCls}__tags`]">
             <Tag
-              v-for="(item, index) in currentValues"
+              v-for="(item, index) in templateValues"
               :key="index"
               :class="`${prefixCls}__tag`"
               closable
               @click.stop="handleClick"
-              @close="handleSelect(item)"
+              @close="handleTipClose(item)"
             >
-              {{ currentLabels[index] }}
+              {{ templateLabels[index] }}
             </Tag>
             <Tag v-if="props.noRestTip" ref="tagCounter" :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]">
               {{ `+${restTagCount}` }}
@@ -41,14 +41,14 @@
               </Tag>
               <template #tip>
                 <NativeScroll use-y-bar>
-                  <template v-for="(item, index) in currentValues" :key="index">
+                  <template v-for="(item, index) in templateValues" :key="index">
                     <Tag
-                      v-if="index >= currentValues.length - restTagCount"
+                      v-if="index >= templateValues.length - restTagCount"
                       :class="`${prefixCls}__tag`"
                       closable
-                      @close="handleRestTipClose(item)"
+                      @close="handleTipClose(item)"
                     >
-                      {{ currentLabels[index] }}
+                      {{ templateLabels[index] }}
                     </Tag>
                   </template>
                 </NativeScroll>
@@ -111,6 +111,8 @@
               :values="currentValues"
               :ready="isPopperShow"
               :multiple="props.multiple"
+              :is-async="isAsyncLoad"
+              :merged="usingMerged"
               @select="handleOptionSelect($event, index)"
               @hover="props.hoverTrigger && handleOptionSelect($event, index)"
               @check="handleOptionCheck($event)"
@@ -168,8 +170,7 @@ import {
   isPromise,
   transformListToMap,
   transformTree,
-  flatTree,
-  removeArrayItem
+  flatTree
 } from '@vexip-ui/utils'
 import { ChevronDown, CircleXmark } from '@vexip-ui/icons'
 
@@ -228,7 +229,8 @@ export default defineComponent({
     maxTagCount: Number,
     briefLabel: booleanProp,
     noRestTip: booleanProp,
-    onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>
+    onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>,
+    mergeTags: booleanProp
   },
   emits: [
     'toggle',
@@ -288,7 +290,8 @@ export default defineComponent({
       onAsyncLoad: {
         default: null,
         isFunc: true
-      }
+      },
+      mergeTags: false
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -296,19 +299,41 @@ export default defineComponent({
 
     const prefix = 'vxp-cascader'
     const currentVisible = ref(props.visible)
-    const currentLabels = ref<string[]>([])
     const currentValues = ref<string[]>([])
+    const currentLabels = ref<string[]>([])
+    const mergedValues = ref<string[]>([])
+    const mergedLabels = ref<string[]>([])
     const isPopperShow = ref(false)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
 
     const emittedValue = ref<CascaderValue | null>(null)
     const optionTree = ref<OptionState[]>(null!)
+    const isAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
 
     let optionValueMap: Map<string, OptionState> = null!
     let optionIdMap: Record<number, OptionState> = (null!)
 
+    const updateTrigger = ref(0)
+
     watchEffect(() => {
+      /* eslint-disable no-unused-expressions */
+      props.keyConfig.value
+      props.keyConfig.label
+      props.keyConfig.children
+      props.keyConfig.disabled
+      props.keyConfig.hasChild
+      props.separator
+      isAsyncLoad.value
+      /* eslint-disable no-unused-expressions */
+
+      updateTrigger.value++
+    })
+
+    watch(updateTrigger, initOptionStates, { immediate: true })
+
+    function initOptionStates() {
+      console.log('init')
       const childrenKey = props.keyConfig.children ?? defaultKeyConfig.children
       const rawOptions = flatTree(props.options as Array<Record<string | symbol, any>>, {
         keyField: ID_KEY,
@@ -318,6 +343,7 @@ export default defineComponent({
 
       const options = createOptionStates(rawOptions)
       const separator = props.separator
+      const isAsync = isAsyncLoad.value
 
       optionIdMap = transformListToMap(options, 'id')
       optionValueMap = new Map<string, OptionState>()
@@ -327,10 +353,14 @@ export default defineComponent({
 
         initOptionFull(option, separator)
         optionValueMap.set(option.fullValue, option)
+
+        if (isAsync) {
+          option.childrenLoaded = queryChildrenLoaded(option)
+        }
       }
 
       optionTree.value = transformTree(options)
-    })
+    }
 
     const openedIds = ref<number[]>([])
     const optionsList = computed(() => {
@@ -339,7 +369,7 @@ export default defineComponent({
         ...openedIds.value.map(id => {
           const option = optionIdMap[id]
 
-          return option.children?.length ? option.children : null!
+          return option.children
         }).filter(Boolean)
       ]
     })
@@ -380,11 +410,13 @@ export default defineComponent({
         [`${baseCls}--has-suffix`]: !props.noSuffix
       }
     })
-    const hasValue = computed(() => !!currentValues.value[0])
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
     })
-    const isAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
+    const usingMerged = computed(() => props.mergeTags && !props.noCascaded)
+    const templateValues = computed(() => usingMerged.value ? mergedValues.value : currentValues.value)
+    const templateLabels = computed(() => usingMerged.value ? mergedLabels.value : currentLabels.value)
+    const hasValue = computed(() => !!templateValues.value[0])
 
     watch(
       () => props.visible,
@@ -438,6 +470,47 @@ export default defineComponent({
         nextTick(computeTagsOverflow)
       }
     )
+    watch(
+      isAsyncLoad,
+      value => {
+        if (value) {
+          Object.values(optionIdMap).forEach(option => {
+            option.childrenLoaded = queryChildrenLoaded(option)
+          })
+        }
+      }
+    )
+    watch(usingMerged, value => {
+      if (value) {
+        mergedValues.value.length = 0
+        mergedLabels.value.length = 0
+
+        updateMergedProps()
+      }
+
+      if (isAsyncLoad.value) {
+        const originalOptions: OptionState[] = []
+
+        Object.values(optionIdMap).forEach(option => {
+          if (option.checked) {
+            originalOptions.push(option)
+          }
+
+          if (option.hasChild && !option.children.length && !option.loaded) {
+            option.checked = false
+          }
+        })
+
+        for (let i = 0, len = originalOptions.length; i < len; ++i) {
+          const option = originalOptions[i]
+
+          updateCheckedUpward(option)
+          updateCheckedDown(option)
+        }
+      }
+
+      emitMultipleChange()
+    })
 
     onMounted(() => {
       nextTick(hideTagCounter)
@@ -476,6 +549,7 @@ export default defineComponent({
           loading: false,
           loaded: false,
           error: false,
+          childrenLoaded: false,
           data: rawOption
         })
       })
@@ -496,6 +570,65 @@ export default defineComponent({
       option.fullLabel = label
     }
 
+    function queryChildrenLoaded(option: OptionState) {
+      if (option.hasChild && !option.children?.length) {
+        return option.loaded
+      }
+
+      const loop: OptionState[] = [...option.children]
+
+      while (loop.length) {
+        const child = loop.shift()!
+
+        if (child.childrenLoaded) continue
+
+        if (child.hasChild && !child.children?.length) {
+          child.childrenLoaded = child.loaded
+
+          if (!child.loaded) return false
+        }
+
+        loop.push(...child.children)
+      }
+
+      return true
+    }
+
+    function updateMergedProps() {
+      const baseValues = isAsyncLoad.value
+        ? currentValues.value.concat(mergedValues.value)
+        : currentValues.value
+      const values = new Set(baseValues)
+      const loop = [...baseValues]
+
+      while (loop.length) {
+        const value = loop.shift()!
+
+        const option = optionValueMap.get(value)
+
+        if (option) {
+          const parent = optionIdMap[option.parent]
+
+          if (parent?.checked) {
+            values.delete(value)
+            values.add(parent.fullValue)
+            loop.push(parent.fullValue)
+          }
+        }
+      }
+
+      const briefLabel = props.briefLabel
+
+      mergedValues.value = Array.from(values).filter(value => optionValueMap.has(value))
+      mergedLabels.value = mergedValues.value
+        .map(value => {
+          const option = optionValueMap.get(value)!
+
+          return briefLabel ? option.label : option.fullLabel
+        })
+        .filter(Boolean)
+    }
+
     function isFlatArray<T extends string | number>(value: T[] | T[][]): value is T[] {
       return !!value.length && !Array.isArray(value[0])
     }
@@ -505,6 +638,7 @@ export default defineComponent({
     }
 
     function initValueAndLabel(value: CascaderValue) {
+      console.log('init value')
       if (!value.length) {
         currentValues.value = []
         currentLabels.value = []
@@ -518,15 +652,33 @@ export default defineComponent({
         const valueSet = new Set<string>(normalizedValue.map(v => v.join(props.separator)))
         const selectedValues: string[] = []
         const selectedLabels: string[] = []
+        const selectedOptions: OptionState[] = []
 
         valueSet.forEach(value => {
           const option = optionValueMap.get(value)
 
           if (option) {
+            option.checked = true
+            option.partial = false
+
             selectedValues.push(value)
             selectedLabels.push(briefLabel ? option.label : option.fullLabel)
+            selectedOptions.push(option)
           }
         })
+
+        if (!props.noCascaded) {
+          const originalOptions = selectedOptions.concat(
+            Object.values(optionIdMap).filter(option => option.disabled && option.checked)
+          )
+
+          for (let i = 0, len = originalOptions.length; i < len; ++i) {
+            const option = originalOptions[i]
+
+            updateCheckedUpward(option)
+            updateCheckedDown(option)
+          }
+        }
 
         currentValues.value = selectedValues
         currentLabels.value = selectedLabels
@@ -561,7 +713,7 @@ export default defineComponent({
           parentId = parent.parent
         }
 
-        openedIds.value = ids.reverse()
+        openedIds.value = ids.reverse().slice(0, -1)
       }
     }
 
@@ -610,6 +762,11 @@ export default defineComponent({
 
           option.loaded = true
           option.loading = false
+
+          const upstream = queryUpstreamOptions(option)
+          upstream.forEach(option => {
+            option.childrenLoaded = queryChildrenLoaded(option)
+          })
         }
 
         if (depth < openedIds.value.length) {
@@ -618,8 +775,20 @@ export default defineComponent({
 
         openedIds.value.push(id)
       } else {
-        handleSelect(option.fullValue)
+        handleSingleSelect(option.fullValue)
       }
+    }
+
+    function queryUpstreamOptions(option: OptionState) {
+      const options = [option]
+      let parentId = option.parent
+
+      while (parentId && optionIdMap[parentId]) {
+        options.push(optionIdMap[parentId])
+        parentId = optionIdMap[parentId].parent
+      }
+
+      return options
     }
 
     function updateCheckedUpward(originalOption: OptionState) {
@@ -696,6 +865,11 @@ export default defineComponent({
         }
       }
 
+      emitMultipleChange()
+    }
+
+    function emitMultipleChange() {
+      const options = Object.values(optionIdMap)
       const selectedOptions = props.noCascaded
         ? options.filter(option => option.checked)
         : options.filter(
@@ -722,9 +896,31 @@ export default defineComponent({
       currentValues.value = selectedValues
       currentLabels.value = selectedLabels
 
-      emit('change', values, dataList)
-      emit('update:value', values)
+      if (usingMerged.value) {
+        if (isAsyncLoad.value) {
+          mergedValues.value = options.filter(option => option.checked).map(option => option.fullValue)
+        }
 
+        updateMergedProps()
+      }
+
+      if (usingMerged.value && isAsyncLoad.value) {
+        values.length = 0
+        dataList.length = 0
+
+        mergedValues.value.forEach(fullValue => {
+          const option = optionValueMap.get(fullValue)
+
+          if (option) {
+            const { value, data } = queryArrayMeta(option.fullValue)
+
+            values.push(value)
+            dataList.push(data)
+          }
+        })
+      }
+
+      emitChangeEvent(values, dataList)
       !props.disableValidate && validateField()
       nextTick(computeTagsOverflow)
     }
@@ -806,23 +1002,38 @@ export default defineComponent({
       }
     }
 
-    function handleSelect(fullValue: string) {
+    function handleSingleSelect(fullValue: string) {
       const option = optionValueMap.get(fullValue)
 
       if (!option) return
 
-      emit(
-        props.multiple && currentValues.value.includes(fullValue) ? 'cancel' : 'select',
-        fullValue,
-        option.fullLabel
-      )
-      handleChange(fullValue)
+      emit('select', fullValue, option.fullLabel)
 
-      if (!props.multiple) {
-        currentVisible.value = false
+      if (fullValue) {
+        currentValues.value[0] = fullValue
+        currentLabels.value[0] = props.briefLabel ? option.label : option.fullLabel
       } else {
-        updatePopper()
+        currentValues.value.length = 0
+        currentLabels.value.length = 0
       }
+
+      const { value, data } = queryArrayMeta(fullValue)
+
+      emitChangeEvent(value, data)
+      currentVisible.value = false
+    }
+
+    function emitChangeEvent(value: CascaderValue, data: any | any[]) {
+      emittedValue.value = value
+
+      nextTick(() => {
+        outsideChanged = false
+
+        emit('change', value, data)
+        emit('update:value', value)
+
+        !props.disableValidate && validateField()
+      })
     }
 
     function queryArrayMeta(fullValue: string) {
@@ -849,58 +1060,6 @@ export default defineComponent({
       }
     }
 
-    function handleChange(fullValue: string) {
-      const option = optionValueMap.get(fullValue)
-
-      if (!option) return
-
-      outsideChanged = false
-
-      if (props.multiple) {
-        if (fullValue && currentValues.value.includes(fullValue)) {
-          removeArrayItem(currentValues.value, fullValue)
-          removeArrayItem(currentLabels.value, props.briefLabel ? option.label : option.fullLabel)
-        } else {
-          currentValues.value.push(fullValue)
-          currentLabels.value.push(props.briefLabel ? option.label : option.fullLabel)
-        }
-      } else {
-        if (fullValue) {
-          currentValues.value[0] = fullValue
-          currentLabels.value[0] = props.briefLabel ? option.label : option.fullLabel
-        } else {
-          currentValues.value.length = 0
-          currentLabels.value.length = 0
-        }
-      }
-
-      if (props.multiple) {
-        const values: (string | number)[][] = []
-        const dataList: Array<Record<string, any>> = []
-
-        currentValues.value.forEach(fullValue => {
-          const { value, data } = queryArrayMeta(fullValue)
-
-          values.push(value)
-          dataList.push(data)
-        })
-
-        emittedValue.value = values
-
-        emit('change', values, dataList)
-        emit('update:value', values)
-      } else {
-        const { value, data } = queryArrayMeta(fullValue)
-
-        emittedValue.value = value
-
-        emit('change', value, data)
-        emit('update:value', value)
-      }
-
-      !props.disableValidate && validateField()
-    }
-
     function handleClick() {
       if (props.disabled) return
 
@@ -908,6 +1067,8 @@ export default defineComponent({
     }
 
     function handleClickOutside() {
+      restTipShow.value = false
+
       emit('click-outside')
 
       if (props.outsideClose && currentVisible.value) {
@@ -921,6 +1082,8 @@ export default defineComponent({
       if (props.clearable) {
         currentValues.value.length = 0
         currentLabels.value.length = 0
+        mergedValues.value.length = 0
+        mergedLabels.value.length = 0
         openedIds.value.length = 0
         emittedValue.value = []
         restTipShow.value = false
@@ -946,13 +1109,13 @@ export default defineComponent({
       }
     }
 
-    function handleRestTipClose(fullValue: string) {
+    function handleTipClose(fullValue: string) {
       if (props.multiple) {
         const option = optionValueMap.get(fullValue)
 
         option && handleOptionCheck(option.id)
       } else {
-        handleSelect(fullValue)
+        handleSingleSelect(fullValue)
       }
 
       nextTick(computeTagsOverflow)
@@ -964,8 +1127,8 @@ export default defineComponent({
       locale,
       currentVisible,
       isPopperShow,
-      currentLabels,
       currentValues,
+      currentLabels,
       optionTree,
       transferTo,
       isHover,
@@ -978,6 +1141,10 @@ export default defineComponent({
       selectorClass,
       hasValue,
       hasPrefix,
+      isAsyncLoad,
+      usingMerged,
+      templateValues,
+      templateLabels,
 
       wrapper,
       reference,
@@ -987,12 +1154,11 @@ export default defineComponent({
 
       handleOptionSelect,
       handleOptionCheck,
-      handleSelect,
       handleClick,
       handleClickOutside,
       handleClear,
       toggleShowRestTip,
-      handleRestTipClose
+      handleTipClose
     }
   }
 })

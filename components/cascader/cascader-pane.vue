@@ -29,7 +29,7 @@
               :checked="item.checked"
               :control="hasChildren(item)"
               :partial="item.partial"
-              :disabled="item.disabled"
+              :disabled="isCheckboxDisabled(item)"
               size="small"
               @click.prevent.stop="handleToggleCheck(item)"
             ></Checkbox>
@@ -104,6 +104,14 @@ export default defineComponent({
     checkIcon: {
       type: Object,
       default: Check
+    },
+    isAsync: {
+      type: Boolean,
+      default: false
+    },
+    merged: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['select', 'check', 'hover'],
@@ -118,26 +126,37 @@ export default defineComponent({
       }
     )
 
-    function hasChildren(item: OptionState) {
-      return !!(item.hasChild || item.children?.length)
+    function hasChildren(option: OptionState) {
+      return !!(option.hasChild || option.children?.length)
     }
 
-    function handleSelect(item: OptionState) {
-      if (item.disabled) return
+    function isCheckboxDisabled(option: OptionState) {
+      return (
+        option.disabled ||
+        (!props.merged &&
+          props.multiple &&
+          props.isAsync &&
+          hasChildren(option) &&
+          !option.childrenLoaded)
+      )
+    }
+
+    function handleSelect(option: OptionState) {
+      if (option.disabled) return
 
       if (props.multiple) {
-        hasChildren(item) ? emit('select', item.id) : handleToggleCheck(item)
+        hasChildren(option) ? emit('select', option.id) : handleToggleCheck(option)
       } else {
-        emit('select', item.id)
+        emit('select', option.id)
       }
     }
 
-    function handleToggleCheck(item: OptionState) {
-      !item.disabled && emit('check', item.id)
+    function handleToggleCheck(option: OptionState) {
+      !isCheckboxDisabled(option) && emit('check', option.id)
     }
 
-    function handleMouseEnter(item: OptionState) {
-      !item.disabled && emit('hover', item.id)
+    function handleMouseEnter(option: OptionState) {
+      !option.disabled && emit('hover', option.id)
     }
 
     return {
@@ -146,6 +165,7 @@ export default defineComponent({
       virtualList,
 
       hasChildren,
+      isCheckboxDisabled,
       handleSelect,
       handleToggleCheck,
       handleMouseEnter
