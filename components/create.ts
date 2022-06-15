@@ -1,11 +1,11 @@
 import { configProps, configLocale } from '@vexip-ui/config'
 
 import type { App } from 'vue'
-import type { PropOptions, LocaleOptions } from '@vexip-ui/config'
+import type { PropsOptions, LocaleOptions } from '@vexip-ui/config'
 
 export interface InstallOptions {
   prefix?: string,
-  props?: Partial<PropOptions>,
+  props?: Partial<PropsOptions>,
   locale?: LocaleOptions
 }
 

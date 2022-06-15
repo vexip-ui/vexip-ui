@@ -94,6 +94,13 @@ import { WheelItem } from './wheel-item'
 
 import { buildInstall } from './create'
 
+export type {
+  PropsOptions,
+  LocaleConfig,
+  LocaleNames,
+  LocaleOptions
+} from '@vexip-ui/config'
+
 export { version } from './version'
 
 const components = [

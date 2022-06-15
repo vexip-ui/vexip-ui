@@ -23,6 +23,13 @@ async function main() {
 
     import { buildInstall } from './create'
 
+    export type {
+      PropsOptions,
+      LocaleConfig,
+      LocaleNames,
+      LocaleOptions
+    } from '@vexip-ui/config'
+
     export { version } from './version'
 
     const components = [
