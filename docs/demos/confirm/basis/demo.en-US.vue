@@ -1,6 +1,6 @@
 <template>
   <Button type="primary" @click="confirm">
-    提交
+    Submit
   </Button>
 </template>
 
@@ -10,12 +10,12 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   methods: {
     async confirm() {
-      const isConfirm = await this.$confirm.open('确认提交吗？')
+      const isConfirm = await this.$confirm.open('Confirm to submit?')
 
       if (isConfirm) {
-        this.$message.success('提交成功')
+        this.$message.success('submit succeed')
       } else {
-        this.$message.warning('取消提交')
+        this.$message.warning('submit canceled')
       }
     }
   }

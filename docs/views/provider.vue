@@ -1,20 +1,19 @@
 
 <template>
-  <ConfigProvider :locale="locale">
-    <Header></Header>
-    <section class="page-viewer">
-      <router-view v-slot="{ Component }">
-        <transition name="vxp-fade" mode="out-in">
-          <component :is="Component"></component>
-        </transition>
-      </router-view>
-    </section>
-  </ConfigProvider>
+  <Header></Header>
+  <section class="page-viewer">
+    <router-view v-slot="{ Component }">
+      <transition name="vxp-fade" mode="out-in">
+        <component :is="Component"></component>
+      </transition>
+    </router-view>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { computed, provide, watch } from 'vue'
+import { watch, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { vexipuiLocale } from '../i18n'
 import Header from '../common/header.vue'
 
 const props = defineProps({
@@ -24,12 +23,9 @@ const props = defineProps({
   }
 })
 
-const locale = computed(() => {
-  return { locale: props.language }
-})
-
 const i18n = useI18n({ useScope: 'global' })
 i18n.locale.value = props.language
+vexipuiLocale.value.locale = props.language
 
 provide('globalState', props)
 
@@ -37,6 +33,7 @@ watch(
   () => props.language,
   value => {
     i18n.locale.value = value
+    vexipuiLocale.value.locale = value
   }
 )
 </script>

@@ -1,6 +1,6 @@
 <template>
   <Button type="success" @click="confirm">
-    卸载
+    Uninstall
   </Button>
 </template>
 
@@ -11,16 +11,16 @@ export default defineComponent({
   methods: {
     async confirm() {
       const isConfirm = await this.$confirm.open({
-        content: '看我这么可怜，真的要卸载我吗？',
+        content: 'Are you sure want to uninstall?',
         confirmType: 'success',
-        confirmText: '残忍卸载',
-        cancelText: '容我三思'
+        confirmText: 'Uninstall',
+        cancelText: 'Reconsider'
       })
 
       if (isConfirm) {
-        this.$message.success('卸载成功')
+        this.$message.success('Uninstall succeed')
       } else {
-        this.$message.warning('为什么不坚持你的想法')
+        this.$message.warning('Why not stick to your thinking?')
       }
     }
   }

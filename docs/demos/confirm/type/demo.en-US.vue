@@ -1,7 +1,7 @@
 
 <template>
   <Button type="error" @click="confirm">
-    删除
+    Delete
   </Button>
 </template>
 
@@ -13,14 +13,14 @@ export default defineComponent({
   setup() {
     async function confirm() {
       const isConfirm = await Confirm.open({
-        content: '确认删除吗？',
+        content: 'Confrim to delete?',
         confirmType: 'error'
       })
 
       if (isConfirm) {
-        Message.success('删除成功')
+        Message.success('Delete succeed')
       } else {
-        Message.warning('取消删除')
+        Message.warning('Delete canceled')
       }
     }
 

@@ -1,4 +1,4 @@
-### 确认类型
+### Confirm Type
 
 设置 `confirmType` 选项可以改变确认按钮的类型。
 

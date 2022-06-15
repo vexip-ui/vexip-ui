@@ -20,7 +20,7 @@ export default defineComponent({
       if (isConfirm) {
         this.$message.success('卸载成功')
       } else {
-        this.$message.warning('为什么不坚持你的想法')
+        this.$message.warning('为什么不坚持你的想法？')
       }
     }
   }
