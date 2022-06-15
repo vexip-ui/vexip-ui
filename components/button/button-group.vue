@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, provide } from 'vue'
-import { useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp } from '@vexip-ui/config'
 import { GROUP_STATE, buttonTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -21,7 +21,7 @@ export default defineComponent({
   },
   setup(_props) {
     const props = useProps('buttonGroup', _props, {
-      size: createSizeProp(),
+      size: null,
       type: {
         default: 'default' as ButtonType,
         validator: (value: ButtonType) => buttonTypes.includes(value)
