@@ -276,6 +276,7 @@ export default defineComponent({
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
     let optionValueMap = new Map<string | number, OptionState>()
+    let emittedValue: typeof props.value | null = props.value
 
     const updateTrigger = ref(0)
 
@@ -334,6 +335,8 @@ export default defineComponent({
 
       optionValueMap = map
       optionStates.value = Array.from(map.values())
+
+      initValueAndLabel(emittedValue)
     }
 
     const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed | null>(null)
@@ -398,16 +401,13 @@ export default defineComponent({
       emit('toggle', value)
       emit('update:visible', value)
     })
-    watch(
-      () => props.value,
-      value => {
-        initValueAndLabel(value)
-      },
-      { immediate: true }
-    )
+    watch(() => props.value, value => {
+      emittedValue = value
+      initValueAndLabel(value)
+    })
     watch(() => visibleOptions.value.length, computeListHeight)
 
-    function initValueAndLabel(value: string | number | (string | number)[]) {
+    function initValueAndLabel(value: string | number | (string | number)[] | null) {
       if (!value) {
         currentValues.value = []
         currentLabels.value = []
@@ -485,10 +485,10 @@ export default defineComponent({
           currentLabels.value.push(option.label)
         }
 
-        const copiedValues = Array.from(currentValues.value)
+        emittedValue = Array.from(currentValues.value)
 
-        emit('change', copiedValues, Array.from(currentLabels.value))
-        emit('update:value', copiedValues)
+        emit('change', emittedValue, Array.from(currentLabels.value))
+        emit('update:value', emittedValue)
 
         if (!props.disableValidate) {
           validateField()
@@ -506,8 +506,10 @@ export default defineComponent({
         currentValues.value.push(option.value)
 
         if (prevValue !== option.value) {
-          emit('change', option.value, option.data)
-          emit('update:value', option.value)
+          emittedValue = option.value
+
+          emit('change', emittedValue, option.data)
+          emit('update:value', emittedValue)
 
           if (!props.disableValidate) {
             validateField()
@@ -541,7 +543,7 @@ export default defineComponent({
         currentValues.value.length = 0
         currentLabels.value.length = 0
 
-        const emittedValue = props.multiple ? [] : null
+        emittedValue = props.multiple ? [] : null
 
         emit('change', emittedValue, emittedValue)
         emit('update:value', emittedValue)

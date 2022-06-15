@@ -151,7 +151,7 @@ importers:
       stylelint-order: 5.0.0_stylelint@14.8.2
       stylelint-prettier: 2.0.0_klul7fkxgs7xgqhknddbdmurpq
       sucrase: 3.21.0
-      ts-jest: 28.0.2_tkt4aozmbkmr63oofxsdgeeaau
+      ts-jest: 28.0.2_44jgbygewvphnhcbkurqcvskii
       ts-node: 10.7.0_3smuweqyuzdazdnyhhezld6mfa
       typescript: 4.6.4
       vite: 2.9.9_sass@1.51.0
@@ -9483,7 +9483,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-jest/28.0.2_tkt4aozmbkmr63oofxsdgeeaau:
+  /ts-jest/28.0.2_44jgbygewvphnhcbkurqcvskii:
     resolution: {integrity: sha512-IOZMb3D0gx6IHO9ywPgiQxJ3Zl4ECylEFwoVpENB55aTn5sdO0Ptyx/7noNBxAaUff708RqQL4XBNxxOVjY0vQ==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     hasBin: true
@@ -9504,7 +9504,6 @@ packages:
       esbuild:
         optional: true
     dependencies:
-      '@babel/core': 7.17.12
       '@types/jest': 27.5.1
       bs-logger: 0.2.6
       esbuild: 0.14.39

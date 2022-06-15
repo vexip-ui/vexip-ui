@@ -8,5 +8,6 @@
   "options",
   "prefix",
   "custom-key",
-  "virtual"
+  "virtual",
+  "async-options"
 ]

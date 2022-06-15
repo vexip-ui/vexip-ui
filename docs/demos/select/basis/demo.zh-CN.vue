@@ -2,7 +2,7 @@
   <Select v-model:value="value" :options="options"></Select>
   <br />
   <br />
-  <Select></Select>
+  <Select placeholder="空选项"></Select>
 </template>
 
 <script setup lang="ts">
