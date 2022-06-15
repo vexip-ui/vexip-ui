@@ -3,6 +3,8 @@
 @use './design' as *;
 @use './icon.scss';
 @use './input.scss' as input;
+@use './option.scss';
+@use './virtual-list.scss';
 
 $cascader: () !default;
 $cascader: map.merge(

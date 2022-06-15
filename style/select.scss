@@ -4,7 +4,7 @@
 @use './icon.scss';
 @use './input.scss' as input;
 @use './option.scss';
-@use './scroll.scss';
+@use './virtual-list.scss';
 
 $select: () !default;
 $select: map.merge(

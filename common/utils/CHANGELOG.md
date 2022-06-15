@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/qmhc/vexip-ui/compare/utils@1.2.0...utils@1.2.1) (2022-06-15)
+
+
+### Bug Fixes
+
+* **utils:** flatTree not init id when nonexists ([e298729](https://github.com/qmhc/vexip-ui/commit/e29872966070450c17c28f6882f9c1e6dd662d29))
+
+
+
 # [1.2.0](https://github.com/qmhc/vexip-ui/compare/utils@1.1.0...utils@1.2.0) (2022-06-01)
 
 
