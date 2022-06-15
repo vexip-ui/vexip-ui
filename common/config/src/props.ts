@@ -3,9 +3,9 @@ import { has, isNull, isObject, isFunction, mergeObjects } from '@vexip-ui/utils
 
 import type { App, ComputedRef, PropType, Ref } from 'vue'
 
-export type PropOptions = Record<string, Record<string, unknown>>
+export type PropsOptions = Record<string, Record<string, unknown>>
 
-interface PropConfig<T = any> {
+interface PropsConfig<T = any> {
   default: T | (() => T),
   isFunc?: boolean,
   static?: boolean,
@@ -13,7 +13,7 @@ interface PropConfig<T = any> {
 }
 export const PROVIDED_PROPS = '__vxp-provided-props'
 
-export function configProps(props: Partial<PropOptions> | Ref<Partial<PropOptions>>, app?: App) {
+export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOptions>>, app?: App) {
   if (app) {
     app.provide(PROVIDED_PROPS, computed(() => unref(props)))
   } else {
@@ -49,7 +49,7 @@ export function useProps<T>(
     const defs = config[key]
     const propOptions = (
       isObject(defs) && has(defs, 'default') ? defs : { default: defs }
-    ) as PropConfig<T[keyof T]>
+    ) as PropsConfig<T[keyof T]>
     const validator = isFunction(propOptions.validator) ? propOptions.validator : null
     const defaultValue = propOptions.default
     const isFunc = propOptions.isFunc || false

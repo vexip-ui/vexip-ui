@@ -35,14 +35,16 @@ export function configLocale(sourceLocale: LocaleOptions | Ref<LocaleOptions>, a
 
     app.provide(PROVIDED_LOCALE, locale)
   } else {
-    const upstreamLocale = inject<ComputedRef<LocaleConfig> | null>(PROVIDED_LOCALE, globalLocal)
+    const upstreamLocale = inject<ComputedRef<LocaleConfig> | null>(PROVIDED_LOCALE, null)
     const locale = computed(() => {
       const locale = unref(sourceLocale)
+      const providedLocale = mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
+
       if (!upstreamLocale?.value) {
-        return mergeObjects(getDefaultLocaleConfig(locale.locale), locale)
+        return providedLocale
       }
 
-      return mergeObjects(upstreamLocale.value as any, locale)
+      return mergeObjects(upstreamLocale.value as any, providedLocale)
     })
 
     provide(PROVIDED_LOCALE, locale)
