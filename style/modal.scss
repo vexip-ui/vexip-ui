@@ -106,6 +106,7 @@ $modal: map.merge(
     display: flex;
     color: get-css-var('modal-close-color');
     cursor: pointer;
+    transition: get-css-var('transition-color');
     transform: translateY(-50%);
 
     &:hover {
