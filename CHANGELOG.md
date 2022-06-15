@@ -1,3 +1,13 @@
+# [2.0.0-beta.7](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.6...v2.0.0-beta.7) (2022-06-15)
+
+
+### Bug Fixes
+
+* **config:** unexpected merge global locale config ([e43d8e8](https://github.com/qmhc/vexip-ui/commit/e43d8e89c7fb131dde6bdf0eb8613736ed13905d))
+* **select:** ensure init value when async load options ([f4e44b3](https://github.com/qmhc/vexip-ui/commit/f4e44b3238fa0043e7b3588417ba980e28d55620)), closes [#38](https://github.com/qmhc/vexip-ui/issues/38)
+
+
+
 # [2.0.0-beta.6](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2022-06-14)
 
 
