@@ -52,7 +52,7 @@ export function useProps<T>(
     ) as PropsConfig<T[keyof T]>
     const validator = isFunction(propOptions.validator) ? propOptions.validator : null
     const defaultValue = propOptions.default
-    const isFunc = propOptions.isFunc || false
+    const isFunc = !!propOptions.isFunc
     const getDefault = () =>
       (!isFunc && isFunction(defaultValue) ? defaultValue() : defaultValue) as T[keyof T]
 
@@ -66,7 +66,9 @@ export function useProps<T>(
       props[key] = computed(() => {
         if (isNull(sourceProps[key])) {
           if (!isNull(configProps.value[key])) {
-            return configProps.value[key]!
+            const providedValue = configProps.value[key]!
+
+            return !isFunc && isFunction(providedValue) ? providedValue() : providedValue
           }
 
           return getDefault()
