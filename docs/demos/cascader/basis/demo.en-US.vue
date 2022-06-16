@@ -7,6 +7,7 @@
     Current Value:
     {{ value }}
   </p>
+  <Cascader></Cascader>
 </template>
 
 <script setup lang="ts">

@@ -110,43 +110,55 @@
           :class="[`${prefixCls}__popper`, `${prefixCls}-vars`]"
           @click.stop
         >
-          <div :class="`${prefixCls}__panes`">
-            <CascaderPane
-              v-for="(items, index) in optionsList"
-              :key="index"
-              :options="items"
-              :opened-id="openedIds[index]"
-              :values="currentValues"
-              :ready="isPopperShow"
-              :multiple="props.multiple"
-              :is-async="isAsyncLoad"
-              :merged="usingMerged"
-              @select="handleOptionSelect($event, index)"
-              @hover="usingHover && handlePaneOpen($event, index)"
-              @check="handleOptionCheck($event)"
-            >
-              <template #default="{ option, index: optionIndex, selected, canCheck, hasChild, handleSelect }">
-                <slot
-                  :option="option"
-                  :index="optionIndex"
-                  :selected="selected"
-                  :can-check="canCheck"
-                  :has-child="hasChild"
-                  :handle-select="handleSelect"
-                ></slot>
-              </template>
-              <template #label="{ option, index: optionIndex, selected, canCheck, hasChild, handleSelect }">
-                <slot
-                  name="label"
-                  :option="option"
-                  :index="optionIndex"
-                  :selected="selected"
-                  :can-check="canCheck"
-                  :has-child="hasChild"
-                  :handle-select="handleSelect"
-                ></slot>
-              </template>
-            </CascaderPane>
+          <div
+            :class="{
+              [`${prefixCls}__panes`]: true,
+              [`${prefixCls}__panes--empty`]: !optionsList[0] || !optionsList[0].length
+            }"
+          >
+            <template v-if="optionsList[0] && optionsList[0].length">
+              <CascaderPane
+                v-for="(items, index) in optionsList"
+                :key="index"
+                :options="items"
+                :opened-id="openedIds[index]"
+                :values="currentValues"
+                :ready="isPopperShow"
+                :multiple="props.multiple"
+                :is-async="isAsyncLoad"
+                :merged="usingMerged"
+                @select="handleOptionSelect($event, index)"
+                @hover="usingHover && handlePaneOpen($event, index)"
+                @check="handleOptionCheck($event)"
+              >
+                <template #default="{ option, index: optionIndex, selected, canCheck, hasChild, handleSelect }">
+                  <slot
+                    :option="option"
+                    :index="optionIndex"
+                    :selected="selected"
+                    :can-check="canCheck"
+                    :has-child="hasChild"
+                    :handle-select="handleSelect"
+                  ></slot>
+                </template>
+                <template #label="{ option, index: optionIndex, selected, canCheck, hasChild, handleSelect }">
+                  <slot
+                    name="label"
+                    :option="option"
+                    :index="optionIndex"
+                    :selected="selected"
+                    :can-check="canCheck"
+                    :has-child="hasChild"
+                    :handle-select="handleSelect"
+                  ></slot>
+                </template>
+              </CascaderPane>
+            </template>
+            <div v-else :class="`${prefixCls}__empty`" :style="{ width: `${selectorWidth}px` }">
+              <slot name="empty">
+                {{ props.emptyText ?? locale.empty }}
+              </slot>
+            </div>
           </div>
         </div>
       </transition>
@@ -258,7 +270,8 @@ export default defineComponent({
     noRestTip: booleanProp,
     onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>,
     mergeTags: booleanProp,
-    tagType: String as PropType<TagType>
+    tagType: String as PropType<TagType>,
+    emptyText: String
   },
   emits: [
     'toggle',
@@ -320,7 +333,8 @@ export default defineComponent({
         isFunc: true
       },
       mergeTags: false,
-      tagType: null
+      tagType: null,
+      emptyText: null
     })
 
     const validateField = inject(VALIDATE_FIELD, noop)
@@ -416,6 +430,7 @@ export default defineComponent({
     const tagCounter = ref<InstanceType<typeof Tag> | null>(null)
     const restTagCount = ref(0)
     const restTipShow = ref(false)
+    const selectorWidth = ref(0)
 
     const className = computed(() => {
       return {
@@ -457,6 +472,7 @@ export default defineComponent({
     watch(currentVisible, value => {
       if (value) {
         restTipShow.value = false
+        selectorWidth.value = wrapper.value?.offsetWidth || 0
         updatePopper()
       } else {
         isPopperShow.value = false
@@ -1159,12 +1175,12 @@ export default defineComponent({
       isPopperShow,
       currentValues,
       currentLabels,
-      optionTree,
       transferTo,
       isHover,
       openedIds,
       restTagCount,
       restTipShow,
+      selectorWidth,
 
       optionsList,
       className,

@@ -120,11 +120,11 @@
               </slot>
             </template>
             <template #empty>
-              <slot v-if="hasEmptyTip" name="empty">
-                <div :class="`${prefixCls}__empty`">
+              <div v-if="hasEmptyTip" :class="`${prefixCls}__empty`">
+                <slot name="empty">
                   {{ props.emptyText ?? locale.empty }}
-                </div>
-              </slot>
+                </slot>
+              </div>
             </template>
           </VirtualList>
         </div>

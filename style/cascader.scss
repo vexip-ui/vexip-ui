@@ -132,6 +132,11 @@ $cascader: map.merge(
     border-radius: get-css-var('cascader-pane-radius');
     box-shadow: get-css-var('cascader-pane-shadow');
     transition: width get-css-var('transition-base');
+
+    &--empty {
+      height: auto;
+      padding: 5px 0;
+    }
   }
 
   &__pane {
