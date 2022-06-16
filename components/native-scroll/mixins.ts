@@ -1,5 +1,5 @@
-import { ref, reactive, computed, watch, onMounted, onBeforeUnmount } from 'vue'
-import { useResize, useMounted, isHiddenElement } from '@vexip-ui/mixins'
+import { ref, reactive, computed, watch, onMounted } from 'vue'
+import { useMounted, isHiddenElement } from '@vexip-ui/mixins'
 import { throttle, multipleFixed, boundRange } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
@@ -12,6 +12,7 @@ export function useScrollWrapper({
   appear,
   scrollX,
   scrollY,
+  onResize,
   onBeforeRefresh,
   onAfterRefresh
 }: {
@@ -22,6 +23,7 @@ export function useScrollWrapper({
   height: Ref<number | string>,
   scrollX: Ref<number>,
   scrollY: Ref<number>,
+  onResize?: (entity: ResizeObserverEntry) => void,
   onBeforeRefresh?: () => void,
   onAfterRefresh?: () => void
 }) {
@@ -42,10 +44,10 @@ export function useScrollWrapper({
     return content.el ? content.scrollHeight - content.offsetHeight : 0
   })
   const enableXScroll = computed(() => {
-    return !disabled.value && mode.value !== 'vertical' && !!content.el
+    return !disabled.value && mode.value !== 'vertical' && !!content.el && content.scrollWidth > content.offsetWidth
   })
   const enableYScroll = computed(() => {
-    return !disabled.value && mode.value !== 'horizontal' && !!content.el
+    return !disabled.value && mode.value !== 'horizontal' && !!content.el && content.scrollHeight > content.offsetHeight
   })
   const xBarLength = computed(() => {
     if (content.el) {
@@ -71,8 +73,6 @@ export function useScrollWrapper({
   watch(scrollY, value => {
     setScrollY(value)
   })
-
-  // const isReady = ref(false)
 
   // 当前滚动位置
   const currentScroll = reactive({
@@ -127,11 +127,12 @@ export function useScrollWrapper({
     }
   }
 
-  const handleResize = throttle(refresh)
-  const { observeResize, unobserveResize } = useResize()
+  const handleResize = throttle((entity: ResizeObserverEntry) => {
+    refresh()
+    onResize?.(entity)
+  })
 
   onMounted(() => {
-    content.el && observeResize(content.el, handleResize)
     refresh()
 
     if (appear.value) {
@@ -139,49 +140,12 @@ export function useScrollWrapper({
     }
   })
 
-  onBeforeUnmount(() => {
-    content.el && unobserveResize(content.el)
-    // destroyMutationObserver()
-    // window.removeEventListener('resize', handleResize)
-  })
-
-  // let mutationObserver: MutationObserver | null
-
-  // function createMutationObserver() {
-  //   const target = content.el?.children[0]
-
-  //   if (!target) return
-
-  //   mutationObserver = new MutationObserver(debounce(computeContentSize))
-
-  //   mutationObserver.observe(target, {
-  //     attributes: true,
-  //     childList: true,
-  //     characterData: true,
-  //     subtree: true,
-  //     attributeFilter: ['style']
-  //   })
-  // }
-
-  // function destroyMutationObserver() {
-  //   if (mutationObserver) {
-  //     mutationObserver.disconnect()
-  //     mutationObserver = null
-  //   }
-  // }
-
   function refresh() {
     if (typeof onBeforeRefresh === 'function') {
       onBeforeRefresh()
     }
 
     computeContentSize()
-
-    // nextTick(() => {
-    //   destroyMutationObserver()
-    //   createMutationObserver()
-    // })
-
     window.setTimeout(() => {
       if (typeof onAfterRefresh === 'function') {
         onAfterRefresh()
@@ -256,6 +220,7 @@ export function useScrollWrapper({
     xBarLength,
     yBarLength,
 
+    handleResize,
     setScrollX,
     setScrollY,
     computePercent,

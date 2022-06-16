@@ -14,7 +14,9 @@
       @scroll.exact="handleScroll($event, 'vertical')"
       @scroll.shift="handleScroll($event, 'horizontal')"
     >
-      <slot></slot>
+      <ResizeObserver throttle :on-resize="handleResize">
+        <div><slot></slot></div>
+      </ResizeObserver>
     </div>
     <Scrollbar
       v-if="props.useXBar"
@@ -52,6 +54,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
+import { ResizeObserver } from '@/components/resize-observer'
 import { useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
@@ -68,7 +71,8 @@ const UP_EVENT = 'mouseup'
 export default defineComponent({
   name: 'NativeScroll',
   components: {
-    Scrollbar
+    Scrollbar,
+    ResizeObserver
   },
   props: {
     scrollClass: [String, Object] as PropType<ClassType>,
@@ -89,7 +93,8 @@ export default defineComponent({
     onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
     appear: booleanProp,
     barDuration: Number,
-    useBarTrack: booleanProp
+    useBarTrack: booleanProp,
+    onResize: Function as PropType<(entry: ResizeObserverEntry) => any>
   },
   emits: [
     'x-enable-change',
@@ -133,7 +138,11 @@ export default defineComponent({
       },
       appear: false,
       barDuration: null,
-      useBarTrack: false
+      useBarTrack: false,
+      onResize: {
+        default: null,
+        isFunc: true
+      }
     })
 
     const emitter = createEventEmitter()
@@ -155,6 +164,7 @@ export default defineComponent({
       xBarLength,
       yBarLength,
 
+      handleResize,
       setScrollX,
       setScrollY,
       computePercent,
@@ -170,6 +180,7 @@ export default defineComponent({
       height: toRef(props, 'height'),
       scrollX: toRef(props, 'scrollX'),
       scrollY: toRef(props, 'scrollY'),
+      onResize: props.onResize,
       onBeforeRefresh: stopAutoplay,
       onAfterRefresh: startAutoplay
     })
@@ -521,6 +532,7 @@ export default defineComponent({
       xBar,
       yBar,
 
+      handleResize,
       handleMouseDown,
       handleScroll,
       handleWheel,

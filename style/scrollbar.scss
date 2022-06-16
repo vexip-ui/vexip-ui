@@ -29,6 +29,7 @@ $scrollbar: map.merge(
 
   &--disabled {
     pointer-events: none;
+    opacity: 0%;
   }
 
   &--top,

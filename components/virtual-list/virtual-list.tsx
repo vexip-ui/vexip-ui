@@ -90,8 +90,15 @@ export default defineComponent({
       const { class: itemsClass, style: itemsOtherStyle, ...itemsAttrs } = props.itemsAttrs || {}
 
       return (
-        <ResizeObserver throttle onResize={handleResize}>
-          <NativeScroll ref={scroll} class={prefix} use-y-bar scroll-y={scrollOffset.value} {...attrs} onScroll={onScroll}>
+          <NativeScroll
+            ref={scroll}
+            class={prefix}
+            use-y-bar
+            scroll-y={scrollOffset.value}
+            {...attrs}
+            onScroll={onScroll}
+            onReady={handleResize}
+          >
             {h(
               props.listTag || 'div',
               {
@@ -134,7 +141,6 @@ export default defineComponent({
               ]
             )}
           </NativeScroll>
-        </ResizeObserver>
       )
     }
   }
