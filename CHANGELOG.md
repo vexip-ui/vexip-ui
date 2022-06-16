@@ -1,3 +1,18 @@
+# [2.0.0-beta.9](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2022-06-16)
+
+
+### Bug Fixes
+
+* **button:** ensure size effective when not set group size ([171e9bf](https://github.com/qmhc/vexip-ui/commit/171e9bf2ff767736deffbfbf62186ff0ec291e97)), closes [#39](https://github.com/qmhc/vexip-ui/issues/39)
+* **cascader:** add empty tip when options is empty ([682cbec](https://github.com/qmhc/vexip-ui/commit/682cbec67ba2f0e54156c383d39b13799aaeeaa8)), closes [#40](https://github.com/qmhc/vexip-ui/issues/40)
+* **cascader:** no-cascaded effective in single select mode ([9d17d96](https://github.com/qmhc/vexip-ui/commit/9d17d966b7cc5f0f9a1fea89dd80ff7f0821f6ee)), closes [#43](https://github.com/qmhc/vexip-ui/issues/43)
+* **config:** support function as default value ([f44047e](https://github.com/qmhc/vexip-ui/commit/f44047e5362ec5d5374dbcd1d4ad87f51b84ca21)), closes [#41](https://github.com/qmhc/vexip-ui/issues/41)
+* **form:** item field config not init ([16651fc](https://github.com/qmhc/vexip-ui/commit/16651fc4e5c58896bdd3de8d7e81856f5e142e5c))
+* **modal:** close icon color transition not effective ([a1e7fff](https://github.com/qmhc/vexip-ui/commit/a1e7fff99886d072a6b89ac10e0fad1995031c90)), closes [#42](https://github.com/qmhc/vexip-ui/issues/42)
+* **native-scroll:** bar not hide when not available ([005ba93](https://github.com/qmhc/vexip-ui/commit/005ba934d7f77b26c6f83cf234402209472b5ec1)), closes [#44](https://github.com/qmhc/vexip-ui/issues/44)
+
+
+
 # [2.0.0-beta.8](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2022-06-15)
 
 
