@@ -127,6 +127,7 @@
                 :multiple="props.multiple"
                 :is-async="isAsyncLoad"
                 :merged="usingMerged"
+                :no-cascaded="props.noCascaded"
                 @select="handleOptionSelect($event, index)"
                 @hover="usingHover && handlePaneOpen($event, index)"
                 @check="handleOptionCheck($event)"
@@ -895,6 +896,17 @@ export default defineComponent({
 
       const options = Object.values(optionIdMap)
       const checked = !option.checked
+
+      if (!props.multiple) {
+        for (let i = 0, len = options.length; i < len; ++i) {
+          options[i].checked = false
+        }
+
+        option.checked = checked
+        option.partial = false
+
+        return handleSingleSelect(option.fullValue)
+      }
 
       option.checked = checked
       option.partial = false

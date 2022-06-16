@@ -156,7 +156,8 @@ $cascader: map.merge(
     padding: 0;
     margin: 0;
 
-    &--multiple .vxp-option--selected {
+    &--multiple .vxp-option--selected,
+    &--no-cascaded .vxp-option--selected {
       background-color: transparent;
 
       &:hover {

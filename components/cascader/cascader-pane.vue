@@ -7,7 +7,11 @@
       height="100%"
       id-key="id"
       :items-attrs="{
-        class: [`${prefix}__options`, multiple ? `${prefix}__options--multiple` : null]
+        class: [
+          `${prefix}__options`,
+          multiple ? `${prefix}__options--multiple` : null,
+          noCascaded ? `${prefix}__options--no-cascaded` : null
+        ]
       }"
     >
       <template #default="{ item, index }">
@@ -31,7 +35,7 @@
             @mouseenter="handleMouseEnter(item)"
           >
             <Checkbox
-              v-if="multiple"
+              v-if="multiple || noCascaded"
               :class="`${prefix}__checkbox`"
               :checked="item.checked"
               :control="hasChildren(item)"
@@ -63,7 +67,10 @@
               <Icon v-else-if="hasChildren(item)">
                 <ChevronRight></ChevronRight>
               </Icon>
-              <Icon v-else-if="!multiple && checkIcon && values.includes(item.fullValue)" :icon="checkIcon"></Icon>
+              <Icon
+                v-else-if="!multiple && !noCascaded && checkIcon && values.includes(item.fullValue)"
+                :icon="checkIcon"
+              ></Icon>
             </div>
           </Option>
         </slot>
@@ -127,6 +134,10 @@ export default defineComponent({
     merged: {
       type: Boolean,
       default: false
+    },
+    noCascaded: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['select', 'check', 'hover'],
@@ -167,7 +178,7 @@ export default defineComponent({
     function handleSelect(option: OptionState) {
       if (option.disabled) return
 
-      if (props.multiple) {
+      if (props.multiple || props.noCascaded) {
         hasChildren(option) ? emit('select', option) : handleToggleCheck(option)
       } else {
         emit('select', option)

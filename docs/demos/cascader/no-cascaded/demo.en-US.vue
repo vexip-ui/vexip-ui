@@ -1,13 +1,23 @@
 <template>
   <Cascader
-    v-model:value="value"
+    v-model:value="values"
     :options="options"
     multiple
     clearable
     no-cascaded
   ></Cascader>
   <p>
-    Current Value:
+    Multiple Values:
+    {{ values }}
+  </p>
+  <Cascader
+    v-model:value="value"
+    :options="options"
+    clearable
+    no-cascaded
+  ></Cascader>
+  <p>
+    Single Value:
     {{ value }}
   </p>
 </template>
@@ -15,6 +25,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+const values = ref([])
 const value = ref([])
 const options = createOptions(3)
 
