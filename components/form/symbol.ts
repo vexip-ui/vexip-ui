@@ -34,7 +34,7 @@ export interface FormItemProps {
 }
 
 export interface FieldOptions {
-  prop: Ref<string>,
+  prop: string,
   validate(): Promise<string[] | null>,
   reset(): boolean,
   clearError(): void

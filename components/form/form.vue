@@ -76,8 +76,8 @@ export default defineComponent({
       const propMap: Record<string, FieldOptions> = {}
 
       for (const field of fieldSet.value) {
-        if (field.prop.value) {
-          propMap[field.prop.value] = field
+        if (field.prop) {
+          propMap[field.prop] = field
         }
       }
 

@@ -40,6 +40,7 @@
 import {
   defineComponent,
   ref,
+  reactive,
   computed,
   toRef,
   watch,
@@ -110,12 +111,12 @@ export default defineComponent({
       allRules
     )
 
-    const fieldObject = {
+    const fieldObject = reactive({
       prop: toRef(props, 'prop'),
       validate,
       clearError,
       reset
-    }
+    })
 
     useRelation(fieldObject)
 
