@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .bubble-example {
   width: 500px;
   padding: 20px;

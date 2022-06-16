@@ -32,7 +32,7 @@ const options = [
 ]
 </script>
 
-<style>
+<style scoped>
 .vxp-select {
   max-width: 400px;
 }

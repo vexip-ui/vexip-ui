@@ -25,7 +25,7 @@
   </Tabs>
 </template>
 
-<style>
+<style scoped>
 .vxp-tabs {
   max-width: 500px;
 }

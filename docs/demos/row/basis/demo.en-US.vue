@@ -20,7 +20,7 @@
   </Row>
 </template>
 
-<style>
+<style scoped>
 .content {
   display: flex;
   align-items: center;
@@ -29,7 +29,7 @@
   height: 100%;
   min-height: 48px;
   color: #fff;
-  background-color: #339af0;
-  border-radius: 4px;
+  background-color: var(--vxp-color-primary-base);
+  border-radius: var(--vxp-radius-base);
 }
 </style>

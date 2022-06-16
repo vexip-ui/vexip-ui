@@ -9,7 +9,7 @@
 const options = ['选项1', '选项2', '选项3']
 </script>
 
-<style>
+<style scoped>
 .vxp-select {
   max-width: 400px;
 }

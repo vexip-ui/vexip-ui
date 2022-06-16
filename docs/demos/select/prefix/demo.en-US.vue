@@ -10,7 +10,7 @@ const value = ref('')
 const options = ['Option 1', 'Option 2', 'Option 3']
 </script>
 
-<style>
+<style scoped>
 .vxp-select {
   max-width: 400px;
 }

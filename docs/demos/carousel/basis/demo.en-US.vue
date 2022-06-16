@@ -20,7 +20,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .demo-pane {
   display: flex;
   align-items: center;

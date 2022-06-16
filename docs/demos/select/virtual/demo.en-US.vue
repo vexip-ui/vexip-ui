@@ -13,7 +13,7 @@ for (let i = 1; i < 1600; ++i) {
 }
 </script>
 
-<style>
+<style scoped>
 .vxp-select {
   max-width: 400px;
 }

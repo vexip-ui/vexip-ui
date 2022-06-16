@@ -27,7 +27,7 @@ import { ref } from 'vue'
 const active = ref('1')
 </script>
 
-<style>
+<style scoped>
 .vxp-tabs {
   max-width: 500px;
 }

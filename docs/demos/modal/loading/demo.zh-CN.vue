@@ -49,7 +49,7 @@ async function beforeClose(isConfirm: boolean) {
 }
 </script>
 
-<style>
+<style scoped>
 .vxp-modal {
   min-width: 500px;
 }

@@ -18,7 +18,7 @@ const options = Array.from({ length: 12 }, (_, i) => ({
 }))
 </script>
 
-<style>
+<style scoped>
 .vxp-select {
   max-width: 400px;
 }

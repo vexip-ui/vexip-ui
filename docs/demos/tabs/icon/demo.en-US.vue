@@ -29,7 +29,7 @@
 import { ChartArea } from '@vexip-ui/icons'
 </script>
 
-<style>
+<style scoped>
 .vxp-tabs {
   max-width: 500px;
 }

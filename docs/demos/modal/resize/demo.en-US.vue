@@ -23,7 +23,7 @@ import { ref } from 'vue'
 const active = ref(false)
 </script>
 
-<style>
+<style scoped>
 .vxp-modal {
   min-width: 500px;
 }

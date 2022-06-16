@@ -48,7 +48,7 @@ recordMap.value
   .set('vexip-ui', reactive({ visible: false, children: [] }))
 </script>
 
-<style>
+<style scoped>
 .separator {
   display: flex;
   align-items: center;

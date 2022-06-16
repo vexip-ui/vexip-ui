@@ -65,7 +65,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .demo-row-class {
   color: #339af0;
 }

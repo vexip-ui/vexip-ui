@@ -32,7 +32,7 @@ function handleResize(entry: ResizeObserverEntry) {
 }
 </script>
 
-<style>
+<style scoped>
 .resizable-pane {
   display: inline-flex;
   flex-direction: column;

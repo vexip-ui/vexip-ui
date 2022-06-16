@@ -20,7 +20,7 @@ const items = ref(Array.from({ length: 10000 }, (_, index) => {
 }))
 </script>
 
-<style>
+<style scoped>
 .virtual-list__item {
   min-height: 36px;
   border-bottom: var(--vxp-border-base);

@@ -58,7 +58,7 @@ function handleBarScroll(percent: number) {
 }
 </script>
 
-<style>
+<style scoped>
 .wrapper {
   position: relative;
   width: 500px;
