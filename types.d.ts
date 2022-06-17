@@ -64,6 +64,8 @@ declare module 'vue' {
     Scroll: typeof import('vexip-ui')['Scroll'],
     Scrollbar: typeof import('vexip-ui')['Scrollbar'],
     Select: typeof import('vexip-ui')['Select'],
+    Skeleton: typeof import('vexip-ui')['Skeleton'],
+    SkeletonGroup: typeof import('vexip-ui')['SkeletonGroup'],
     Slider: typeof import('vexip-ui')['Slider'],
     Spin: typeof import('vexip-ui')['Spin'],
     Split: typeof import('vexip-ui')['Split'],

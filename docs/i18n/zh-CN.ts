@@ -95,6 +95,7 @@ export const zhCN = defineI18n({
     Modal: '模态框',
     Notice: '通知提醒',
     Progress: '进度条',
+    Skeleton: '骨架屏',
     Spin: '加载中',
 
     ConfigProvider: '配置注入',

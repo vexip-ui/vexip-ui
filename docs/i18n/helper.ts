@@ -93,6 +93,7 @@ export interface I18nConfig {
     Modal: string,
     Notice: string,
     Progress: string,
+    Skeleton: string,
     Spin: string,
 
     ConfigProvider: string,

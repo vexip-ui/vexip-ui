@@ -67,6 +67,8 @@ import { Row } from './row'
 import { Scroll } from './scroll'
 import { Scrollbar } from './scrollbar'
 import { Select } from './select'
+import { Skeleton } from './skeleton'
+import { SkeletonGroup } from './skeleton-group'
 import { Slider } from './slider'
 import { Spin } from './spin'
 import { Split } from './split'
@@ -163,6 +165,8 @@ const components = [
   Scroll,
   Scrollbar,
   Select,
+  Skeleton,
+  SkeletonGroup,
   Slider,
   Spin,
   Split,
@@ -268,6 +272,8 @@ export {
   Scroll,
   Scrollbar,
   Select,
+  Skeleton,
+  SkeletonGroup,
   Slider,
   Spin,
   Split,
