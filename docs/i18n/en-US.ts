@@ -95,6 +95,7 @@ export const enUS = defineI18n({
     Modal: 'Modal',
     Notice: 'Notice',
     Progress: 'Progress',
+    Skeleton: 'Skeleton',
     Spin: 'Spin',
 
     ConfigProvider: 'ConfigProvider',
