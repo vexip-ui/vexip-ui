@@ -1,0 +1,54 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$space: () !default;
+$space: map.merge(
+  (
+    v-gap: 8px,
+    h-gap: 12px
+  ),
+  $space
+);
+
+.vxp-space {
+  &-vars {
+    @include define-preset-values('space', $space);
+  }
+
+  @include basis;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: get-css-var('space-v-gap') get-css-var('space-h-gap');
+
+  &--inline {
+    display: inline-flex;
+  }
+
+  &--vertical {
+    flex-direction: column;
+  }
+
+  &--no-wrap {
+    flex-wrap: nowrap;
+  }
+
+  &--small {
+    @include define-preset-values('space', (
+      v-gap: 4px,
+      h-gap: 8px
+    ));
+  }
+
+  &--large {
+    @include define-preset-values('space', (
+      v-gap: 12px,
+      h-gap: 16px
+    ));
+  }
+
+  &__item {
+    max-width: 100%;
+  }
+}

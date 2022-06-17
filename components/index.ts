@@ -70,6 +70,7 @@ import { Select } from './select'
 import { Skeleton } from './skeleton'
 import { SkeletonGroup } from './skeleton-group'
 import { Slider } from './slider'
+import { Space } from './space'
 import { Spin } from './spin'
 import { Split } from './split'
 import { Switcher } from './switcher'
@@ -168,6 +169,7 @@ const components = [
   Skeleton,
   SkeletonGroup,
   Slider,
+  Space,
   Spin,
   Split,
   Switcher,
@@ -275,6 +277,7 @@ export {
   Skeleton,
   SkeletonGroup,
   Slider,
+  Space,
   Spin,
   Split,
   Switcher,

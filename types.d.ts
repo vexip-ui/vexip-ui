@@ -67,6 +67,7 @@ declare module 'vue' {
     Skeleton: typeof import('vexip-ui')['Skeleton'],
     SkeletonGroup: typeof import('vexip-ui')['SkeletonGroup'],
     Slider: typeof import('vexip-ui')['Slider'],
+    Space: typeof import('vexip-ui')['Space'],
     Spin: typeof import('vexip-ui')['Spin'],
     Split: typeof import('vexip-ui')['Split'],
     Switcher: typeof import('vexip-ui')['Switcher'],
