@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/qmhc/vexip-ui/compare/utils@1.2.1...utils@1.3.0) (2022-06-18)
+
+
+### Features
+
+* **utils:** add supportFlexGap method ([ff158dc](https://github.com/qmhc/vexip-ui/commit/ff158dcb2dcbeccb3fc384be5d0085b2f1dda0b4))
+
+
+
 ## [1.2.1](https://github.com/qmhc/vexip-ui/compare/utils@1.2.0...utils@1.2.1) (2022-06-15)
 
 
