@@ -2,6 +2,7 @@
   "basis",
   "checkbox",
   "suffix-checkbox",
+  "no-cascaded",
   "drag",
   "slot"
 ]

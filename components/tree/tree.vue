@@ -116,7 +116,8 @@ export default defineComponent({
     onAsyncLoad: Function as PropType<AsyncLoadFn>,
     cacheNode: booleanProp,
     rootId: [String, Number],
-    keyConfig: Object as PropType<NodeKeyConfig>
+    keyConfig: Object as PropType<NodeKeyConfig>,
+    noCascaded: booleanProp
   },
   emits: [
     'node-change',
@@ -163,7 +164,8 @@ export default defineComponent({
       },
       cacheNode: false,
       rootId: null,
-      keyConfig: () => ({})
+      keyConfig: () => ({}),
+      noCascaded: false
     })
 
     const prefix = 'vxp-tree'
@@ -470,16 +472,18 @@ export default defineComponent({
     }
 
     function computeCheckedState(originNode: TreeNodeProps, able: boolean) {
-      const nodeList = [originNode].concat(
-        // 需要包含被禁用且被勾选的节点
-        flatData.value.filter(item => item.disabled && item.checked)
-      )
+      if (!props.noCascaded) {
+        const nodeList = [originNode].concat(
+          // 需要包含被禁用且被勾选的节点
+          flatData.value.filter(item => item.disabled && item.checked)
+        )
 
-      for (let i = 0, len = nodeList.length; i < len; ++i) {
-        const item = nodeList[i]
+        for (let i = 0, len = nodeList.length; i < len; ++i) {
+          const item = nodeList[i]
 
-        updateCheckedUpward(item)
-        updateCheckedDown(item)
+          updateCheckedUpward(item)
+          updateCheckedDown(item)
+        }
       }
 
       emit('node-change', originNode.data, originNode, able)
