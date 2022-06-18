@@ -285,6 +285,11 @@ function editOnPlayground() {
     .vxp-tooltip__tip {
       white-space: nowrap;
     }
+
+    .vxp-icon {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &__code {

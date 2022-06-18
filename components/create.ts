@@ -1,27 +1,32 @@
-import { configProps, configLocale } from '@vexip-ui/config'
+import { computed, unref } from 'vue'
+import { configNamespace, configProps, configLocale } from '@vexip-ui/config'
 
-import type { App } from 'vue'
+import type { Ref, App } from 'vue'
 import type { PropsOptions, LocaleOptions } from '@vexip-ui/config'
+
+type MaybeRef<T> = T | Ref<T>
 
 export interface InstallOptions {
   prefix?: string,
-  props?: Partial<PropsOptions>,
-  locale?: LocaleOptions
+  namespace?: MaybeRef<string>,
+  props?: MaybeRef<Partial<PropsOptions>>,
+  locale?: MaybeRef<LocaleOptions>
 }
 
 export function buildInstall(
   components: any[] = [],
-  defaultLocale: 'zh-CN' | 'en-US' = 'zh-CN'
+  defaultLocale?: 'zh-CN' | 'en-US'
 ) {
   return function install(app: App, options: InstallOptions = {}) {
-    const { prefix = '', props = {}, locale = { locale: defaultLocale } } = options
+    const { prefix = '', namespace = '', props = {}, locale = { locale: defaultLocale } } = options
 
-    if (!locale.locale) {
-      locale.locale = defaultLocale
-    }
+    const withDefaultLocale = computed(() => {
+      return { locale: defaultLocale, ...unref(locale) }
+    })
 
+    configNamespace(namespace, app)
     configProps(props, app)
-    configLocale(locale, app)
+    configLocale(withDefaultLocale, app)
 
     const formatName =
       typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)

@@ -63,11 +63,35 @@ createApp(App)
 
 设置完毕后，这些组件的 `size` 属性的默认值将修改为 `'large'`。
 
-结合 ConfigProvider 组件的 `props` 属性，你还可以为局部的区域改变对应组件的默认值，详情请查阅 [ConfigProvider 文档](/en-US/components/config-provider)。
+结合 ConfigProvider 组件的 `props` 属性，你还可以为局部的区域改变对应组件的默认值，详情请查阅 [ConfigProvider 文档](/zh-CN/components/config-provider)。
 
 ## 命名空间
 
-在调用 `Vue.use` 时通过在第二个参数传入 `prefix` 属性可以为所有组件设置一个共同的前缀。
+在 Vexip UI 中有两种命名空间的概念。
+
+第一种是针对类名的命名空间配置，需要同时配合 `sass` 中的命名空间变量一起使用；第二种则是针对组件名的命名空间。
+
+### 类名命名空间
+
+在调用 `app.use` 时通过在第二个参数传入 `namespace` 属性可以修改所有组件的类名前缀。
+
+同时在引用样式时，你需要通过 `sass` 源码引入，并将 `$namespace` 变量设置为同样的值以保证样式的正常运作。
+
+
+```ts
+createApp(App).use(install, { namespace: 'vxp' })
+```
+
+```scss
+@use 'vexip-ui/design' with (
+  $namespace: 'vxp'
+);
+@use 'vexip-ui/style'; // 在 scss 里你可以省略 index.scss
+```
+
+### 组件名命名空间
+
+在调用 `app.use` 时通过在第二个参数传入 `prefix` 属性可以为所有组件的组件名设置一个共同的前缀。
 
 当与一些其他的组件一同使用时, 可能会发生命名冲突，使用该特性可以轻松地解决这个问题。
 
@@ -103,13 +127,9 @@ createApp(App).use(install, { prefix: 'vxp' })
 </template>
 ```
 
-:::error
-聪明的你应该发现在 Vue 解析组件的时候 CapitalCase 和 KebabCase 是互通的，所以这个区分应该在后续会被移除。
-:::
-
 ## 国际化
 
-在调用 `Vue.use` 时通过在第二个参数传入 `locale` 选项可以为所有组件配置国际化。
+在调用 `app.use` 时通过在第二个参数传入 `locale` 选项可以为所有组件配置国际化。
 
 ```ts
 app.use(install, {
