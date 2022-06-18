@@ -1,16 +1,16 @@
 <template>
-  <div v-if="!props.inner" :class="[prefix, `${prefix}-vars`]">
+  <div v-if="!props.inner" :class="[nh.b(), nh.bs('vars')]">
     <slot></slot>
     <transition appear :name="props.transitionName">
-      <div v-if="currentActive" :class="`${prefix}__loading`">
-        <div :class="`${prefix}__mask`" :style="maskStyle"></div>
-        <div :class="`${prefix}__icon`">
+      <div v-if="currentActive" :class="nh.be('loading')">
+        <div :class="nh.be('mask')" :style="maskStyle"></div>
+        <div :class="nh.be('icon')">
           <slot name="icon">
             <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
             <Icon v-else pulse :icon="props.icon"></Icon>
           </slot>
         </div>
-        <div v-if="hasTip" :class="`${prefix}__tip`">
+        <div v-if="hasTip" :class="nh.be('tip')">
           <slot name="tip">
             {{ props.tip }}
           </slot>
@@ -19,15 +19,15 @@
     </transition>
   </div>
   <transition v-else appear :name="props.transitionName">
-    <div v-if="currentActive" :class="[prefix, `${prefix}-vars`, `${prefix}--inner`]">
-      <div :class="`${prefix}__mask`" :style="maskStyle"></div>
-      <div :class="`${prefix}__icon`">
+    <div v-if="currentActive" :class="[nh.b(), nh.bs('vars'), nh.bm('inner')]">
+      <div :class="nh.be('mask')" :style="maskStyle"></div>
+      <div :class="nh.be('icon')">
         <slot name="icon">
           <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
           <Icon v-else pulse :icon="props.icon"></Icon>
         </slot>
       </div>
-      <div v-if="hasTip" :class="`${prefix}__tip`">
+      <div v-if="hasTip" :class="nh.be('tip')">
         <slot name="tip">
           {{ props.tip }}
         </slot>
@@ -39,7 +39,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { toNumber } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
 
@@ -129,7 +129,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix: 'vxp-spin',
+      nh: useNameHelper('spin'),
 
       currentActive,
 

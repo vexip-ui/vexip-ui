@@ -16,7 +16,7 @@
 <script lang="ts">
 import { defineComponent, ref, inject, provide, reactive, toRef, computed, watch } from 'vue'
 import { Checkbox } from '@/components/checkbox'
-import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { noop, isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
@@ -70,7 +70,7 @@ export default defineComponent({
 
     const validateField = inject(VALIDATE_FIELD, noop)
 
-    const prefix = 'vxp-checkbox-group'
+    const nh = useNameHelper('checkbox-group')
     const valueMap = new Map<string, string | number>()
     const controlSet = new Set<ControlState>()
     const currentValues = ref<(string | number)[]>(props.values ?? [])
@@ -78,14 +78,14 @@ export default defineComponent({
 
     const className = computed(() => {
       return [
-        prefix,
-        'vxp-checkbox-vars',
+        nh.b(),
+        nh.ns('checkbox-vars'),
         {
-          [`${prefix}--vertical`]: props.vertical,
-          [`${prefix}--disabled`]: props.disabled,
-          [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--border`]: props.border,
-          [`${prefix}--${props.state}`]: props.state !== 'default'
+          [nh.bm('vertical')]: props.vertical,
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm('border')]: props.border,
+          [nh.bm(props.state)]: props.state !== 'default'
         }
       ]
     })

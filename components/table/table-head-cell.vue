@@ -3,7 +3,7 @@
     <Checkbox
       v-if="isSelection(column)"
       control
-      :class="`${prefix}__selection`"
+      :class="nh.be('selection')"
       :checked="checkedAll"
       :partial="partial"
       :disabled="checkboxDisabled"
@@ -20,11 +20,11 @@
         {{ column.name }}
       </template>
     </template>
-    <div v-if="sorter.able" :class="`${prefix}__sorter`">
+    <div v-if="sorter.able" :class="nh.be('sorter')">
       <span
         :class="{
-          [`${prefix}__sorter--asc`]: true,
-          [`${prefix}__sorter--active`]: sorter.type === 'asc'
+          [nh.bem('sorter', 'asc')]: true,
+          [nh.bem('sorter', 'active')]: sorter.type === 'asc'
         }"
         @click="handleSortAsc()"
       >
@@ -32,8 +32,8 @@
       </span>
       <span
         :class="{
-          [`${prefix}__sorter--desc`]: true,
-          [`${prefix}__sorter--active`]: sorter.type === 'desc'
+          [nh.bem('sorter', 'desc')]: true,
+          [nh.bem('sorter', 'active')]: sorter.type === 'desc'
         }"
         @click="handleSortDesc()"
       >
@@ -47,21 +47,21 @@
       placement="bottom"
       trigger="click"
       :class="{
-        [`${prefix}__filter`]: true,
-        [`${prefix}__filter--visible`]: filterVisible,
-        [`${prefix}__filter--active`]: filter.active
+        [nh.be('filter')]: true,
+        [nh.bem('filter', 'visible')]: filterVisible,
+        [nh.bem('filter', 'active')]: filter.active
       }"
       :tip-class="{
-        [`${prefix}__filter-wrapper`]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}__filter-wrapper--multiple`]: filter.multiple
+        [nh.be('filter-wrapper')]: true,
+        [nh.bs('vars')]: true,
+        [nh.bem('filter-wrapper', 'multiple')]: filter.multiple
       }"
     >
-      <div :class="`${prefix}__filter-trigger`">
+      <div :class="nh.be('filter-trigger')">
         <Icon><Filter></Filter></Icon>
       </div>
       <template v-if="filter.multiple" #tip>
-        <div vertical :class="`${prefix}__filter-group`">
+        <div vertical :class="nh.be('filter-group')">
           <Checkbox
             v-for="item in filter.options"
             :key="item.value"
@@ -71,7 +71,7 @@
             @change="handleFilterCheck(item.value, $event)"
           ></Checkbox>
         </div>
-        <div :class="`${prefix}__filter-actions`">
+        <div :class="nh.be('filter-actions')">
           <Button
             text
             size="small"
@@ -88,8 +88,8 @@
       <template v-else #tip>
         <div
           :class="{
-            [`${prefix}__filter-item`]: true,
-            [`${prefix}__filter-item--active`]: !filter.active
+            [nh.be('filter-item')]: true,
+            [nh.bem('filter-item', 'active')]: !filter.active
           }"
           @click="handleResetFilter"
         >
@@ -99,8 +99,8 @@
           v-for="item in filter.options"
           :key="item.value"
           :class="{
-            [`${prefix}__filter-item`]: true,
-            [`${prefix}__filter-item--active`]: item.active
+            [nh.be('filter-item')]: true,
+            [nh.bem('filter-item', 'active')]: item.active
           }"
           @click="handleFilterItemSelect(item.value, !item.active)"
         >
@@ -118,7 +118,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
-import { useLocale } from '@vexip-ui/config'
+import { useNameHelper, useLocale } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { CaretUp, CaretDown, Filter } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
@@ -156,7 +156,7 @@ export default defineComponent({
     const { state, getters, mutations } = inject(TABLE_STORE)!
     const tableAction = inject(TABLE_ACTION)!
 
-    const prefix = 'vxp-table'
+    const nh = useNameHelper('table')
     const filterVisible = ref(false)
 
     const wrapper = ref<HTMLElement | null>(null)
@@ -165,9 +165,9 @@ export default defineComponent({
       const customClass = props.column.className || null
 
       return [
-        `${prefix}__head-cell`,
+        nh.be('head-cell'),
         {
-          [`${prefix}__head-cell--center`]: columnTypes.includes((props.column as TypeColumn).type)
+          [nh.bem('head-cell', 'center')]: columnTypes.includes((props.column as TypeColumn).type)
         },
         customClass
       ]
@@ -293,7 +293,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
       locale: useLocale('table'),
       filterVisible,
       checkedAll: toRef(state, 'checkedAll'),

@@ -12,8 +12,8 @@
         @after-enter="afterOpen"
         @after-leave="afterClose"
       >
-        <div v-show="currentActive" :class="`${prefix}__mask`" @click="handleClose">
-          <div :class="`${prefix}__mask-inner`"></div>
+        <div v-show="currentActive" :class="nh.be('mask')" @click="handleClose">
+          <div :class="nh.be('mask-inner')"></div>
         </div>
       </transition>
       <transition :name="props.transitionName">
@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -65,7 +65,7 @@ export default defineComponent({
       transfer: false
     })
 
-    const prefix = 'vxp-masker'
+    const nh = useNameHelper('masker')
     const currentActive = ref(props.active)
     const wrapShow = ref(props.active)
 
@@ -73,11 +73,11 @@ export default defineComponent({
 
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
+        nh.b(),
+        nh.bs('vars'),
         {
-          [`${prefix}--inner`]: props.inner,
-          [`${prefix}--disabled`]: props.disabled
+          [nh.bm('inner')]: props.inner,
+          [nh.bm('disabled')]: props.disabled
         }
       ]
     })
@@ -140,7 +140,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       currentActive,
       wrapShow,
 

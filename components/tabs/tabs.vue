@@ -1,6 +1,6 @@
 <template>
-  <div :class="prefix">
-    <div :class="`${prefix}__header`">
+  <div :class="nh.b()">
+    <div :class="nh.be('header')">
       <TabNav :active="currentActive" :card="props.card" @change="handleActive">
         <TabNavItem
           v-for="(item, index) in itemList"
@@ -23,8 +23,8 @@
     </div>
     <div
       :class="{
-        [`${prefix}__main`]: true,
-        [`${prefix}__main--transition`]: isTransition
+        [nh.be('main')]: true,
+        [nh.bem('main', 'transition')]: isTransition
       }"
       :style="mainStyle"
       @transitionend="isTransition = false"
@@ -39,7 +39,7 @@ import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
 import { Renderer } from '@/components/renderer'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { isNull, isFunction, debounceMinor } from '@vexip-ui/utils'
 import { TABS_STATE } from './symbol'
 
@@ -147,7 +147,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix: 'vxp-tabs',
+      nh: useNameHelper('tabs'),
       currentActive,
       isTransition,
 

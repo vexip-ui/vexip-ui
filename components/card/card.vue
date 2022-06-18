@@ -1,18 +1,18 @@
 <template>
   <div :class="className">
-    <div v-if="hasHeader" :class="`${prefix}__header`">
+    <div v-if="hasHeader" :class="nh.be('header')">
       <slot name="header">
-        <div v-if="hasTitle" :class="`${prefix}__title`">
+        <div v-if="hasTitle" :class="nh.be('title')">
           <slot name="title">
             {{ props.title }}
           </slot>
         </div>
-        <div v-if="hasExtra" :class="`${prefix}__extra`">
+        <div v-if="hasExtra" :class="nh.be('extra')">
           <slot name="extra"></slot>
         </div>
       </slot>
     </div>
-    <div :class="`${prefix}__content`" :style="props.contentStyle">
+    <div :class="nh.be('content')" :style="props.contentStyle">
       <slot></slot>
     </div>
   </div>
@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -43,10 +43,10 @@ export default defineComponent({
       contentStyle: () => ({})
     })
 
-    const prefix = 'vxp-card'
+    const nh = useNameHelper('card')
 
     const className = computed(() => {
-      return [prefix, `${prefix}-vars`, `${prefix}--shadow-${props.shadow}`]
+      return [nh.b(), nh.bs('vars'), nh.bs('-shadow-${props.shadow}')]
     })
     const hasTitle = computed(() => {
       return slots.title || props.title
@@ -60,7 +60,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
 
       className,
       hasTitle,

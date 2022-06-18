@@ -8,7 +8,7 @@
   >
     <div
       ref="reference"
-      :class="[`${prefix}__trigger`, currentVisible ? `${prefix}__trigger--active` : '']"
+      :class="[nh.be('trigger'), currentVisible ? nh.bem('trigger', 'active') : '']"
       @click="handleTriggerClick"
     >
       <slot></slot>
@@ -19,7 +19,7 @@
           <div
             v-show="currentVisible"
             ref="popper"
-            :class="[`${prefix}__popper`, `${prefix}-vars`, isNested ? `${prefix}__popper--nested` : null, props.dropClass]"
+            :class="[nh.be('popper'), nh.bs('vars'), isNested ? nh.bem('popper', 'nested') : null, props.dropClass]"
             @mouseenter="handleTriggerEnter"
             @mouseleave="handleTriggerLeave"
           >
@@ -46,7 +46,7 @@ import {
 import { Portal } from '@/components/portal'
 import DropdownDrop from './dropdown-drop'
 import { useClickOutside, placementWhileList, usePopper, useTriggerHandler } from '@vexip-ui/mixins'
-import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { useLabel } from './mixins'
 import { SELECT_HANDLER, DROP_SELECT_HANDLER } from './symbol'
 
@@ -101,7 +101,7 @@ export default defineComponent({
 
     const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)
 
-    const prefix = 'vxp-dropdown'
+    const nh = useNameHelper('dropdown')
     const isNested = typeof parentSelectHandler === 'function'
     const trigger = toRef(props, 'trigger')
     const label = toRef(props, 'label')
@@ -125,9 +125,9 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--visible`]: currentVisible.value
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('visible')]: currentVisible.value
       }
     })
 
@@ -200,7 +200,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       isNested,
       currentVisible,
       transferTo,

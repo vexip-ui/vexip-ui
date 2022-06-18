@@ -16,7 +16,7 @@ import {
   provide,
   toRef
 } from 'vue'
-import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -67,7 +67,7 @@ export default defineComponent({
       }
     })
 
-    const prefix = 'vxp-menu'
+    const nh = useNameHelper('menu')
     const menuItemSet = new Set<MenuItemState>()
     const currentActive = ref(props.active)
     const isReduced = ref(false)
@@ -89,14 +89,14 @@ export default defineComponent({
       }
 
       return [
-        prefix,
-        `${prefix}-vars`,
-        `${prefix}--${props.theme}`,
-        `${prefix}--marker-${computedMarkerType}`,
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(props.theme),
+        nh.bm(`marker-${computedMarkerType}`),
         {
-          [`${prefix}--reduced`]: isReduced.value,
-          [`${prefix}--dropdown`]: props.groupType === 'dropdown',
-          [`${prefix}--horizontal`]: props.horizontal
+          [nh.bm('reduced')]: isReduced.value,
+          [nh.bm('dropdown')]: props.groupType === 'dropdown',
+          [nh.bm('horizontal')]: props.horizontal
         }
       ]
     })

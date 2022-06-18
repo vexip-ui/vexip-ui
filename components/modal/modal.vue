@@ -21,12 +21,12 @@
         <div
           v-if="hasTitle"
           ref="header"
-          :class="`${prefix}__header`"
+          :class="nh.be('header')"
           @mousedown="handleDragStart"
         >
           <div
             v-if="props.closable"
-            :class="`${prefix}__close`"
+            :class="nh.be('close')"
             @mousedown.stop
             @click="handleClose(false)"
           >
@@ -35,20 +35,20 @@
             </slot>
           </div>
           <slot name="header">
-            <div :class="`${prefix}__title`">
+            <div :class="nh.be('title')">
               {{ props.title }}
             </div>
           </slot>
         </div>
         <div
-          :class="`${prefix}__content`"
+          :class="nh.be('content')"
           :style="{
             overflow: resizing ? 'hidden' : undefined
           }"
         >
           <slot></slot>
         </div>
-        <div v-if="!props.noFooter" ref="footer" :class="`${prefix}__footer`">
+        <div v-if="!props.noFooter" ref="footer" :class="nh.be('footer')">
           <slot name="footer">
             <Button text size="small" @click="handleCancle">
               {{ props.cancelText || locale.cancel }}
@@ -63,7 +63,7 @@
             </Button>
           </slot>
         </div>
-        <div v-if="props.resizable" :class="`${prefix}__resizer`" @mousedown="handleResizeStart"></div>
+        <div v-if="props.resizable" :class="nh.be('resizer')" @mousedown="handleResizeStart"></div>
       </section>
     </template>
   </Masker>
@@ -74,7 +74,7 @@ import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useProps, useLocale, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 
@@ -188,7 +188,7 @@ export default defineComponent({
       cancelText: null
     })
 
-    const prefix = 'vxp-modal'
+    const nh = useNameHelper('modal')
     const currentActive = ref(props.active)
     const currentTop = ref(toNumber(props.top))
     const currentLeft = ref(toNumber(props.left))
@@ -205,20 +205,20 @@ export default defineComponent({
 
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
+        nh.b(),
+        nh.bs('vars'),
         {
-          [`${prefix}--inner`]: props.inner,
-          [`${prefix}--draggable`]: props.draggable,
-          [`${prefix}--resizable`]: props.resizable
+          [nh.bm('inner')]: props.inner,
+          [nh.bm('draggable')]: props.draggable,
+          [nh.bm('resizable')]: props.resizable
         }
       ]
     })
     const wrapperClass = computed(() => {
       return [
-        `${prefix}__wrapper`,
+        nh.be('wrapper'),
         {
-          [`${prefix}__wrapper--closable`]: props.closable
+          [nh.bem('wrapper', 'closable')]: props.closable
         },
         props.modalClass
       ]
@@ -539,7 +539,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       locale: useLocale('modal'),
       currentActive,
       resizing,

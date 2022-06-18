@@ -13,26 +13,26 @@
   >
     <template #default="{ show }">
       <section v-show="show" :class="wrapperClass" :style="wrapperStyle">
-        <div v-if="hasTitle" :class="`${prefix}__title`">
+        <div v-if="hasTitle" :class="nh.be('title')">
           <slot name="title">
             {{ props.title }}
           </slot>
-          <div v-if="props.closable" :class="`${prefix}__close`" @click="handleClose()">
+          <div v-if="props.closable" :class="nh.be('close')" @click="handleClose()">
             <slot name="close">
               <Icon><Xmark></Xmark></Icon>
             </slot>
           </div>
         </div>
-        <div :class="`${prefix}__content`">
+        <div :class="nh.be('content')">
           <slot></slot>
         </div>
         <div
           v-if="props.resizable"
           :class="[
-            `${prefix}__handler`,
-            `${prefix}__handler--${props.placement}`,
+            nh.be('handler'),
+            nh.bem('handler', props.placement),
             {
-              [`${prefix}__handler--resizing`]: resizing
+              [nh.bem('handler', 'resizing')]: resizing
             }
           ]"
           @mousedown="handleResizeStart"
@@ -48,7 +48,7 @@
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 
@@ -123,7 +123,7 @@ export default defineComponent({
       resizable: false
     })
 
-    const prefix = 'vxp-drawer'
+    const nh = useNameHelper('drawer')
     const currentActive = ref(props.active)
     const currentWidth = ref(props.width)
     const currentHeight = ref(props.height)
@@ -131,10 +131,10 @@ export default defineComponent({
 
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
+        nh.b(),
+        nh.bs('vars'),
         {
-          [`${prefix}--inner`]: props.inner
+          [nh.bm('inner')]: props.inner
         }
       ]
     })
@@ -143,11 +143,11 @@ export default defineComponent({
     })
     const wrapperClass = computed(() => {
       return [
-        `${prefix}__wrapper`,
-        `${prefix}__wrapper--${props.placement}`,
+        nh.be('wrapper'),
+        nh.bem('wrapper', props.placement),
         {
-          [`${prefix}__wrapper--closable`]: props.closable,
-          [`${prefix}__wrapper--resizing`]: resizing.value
+          [nh.bem('wrapper', 'closable')]: props.closable,
+          [nh.bem('wrapper', 'resizing')]: resizing.value
         },
         props.drawerClass
       ]
@@ -312,7 +312,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       currentActive,
       resizing,
 

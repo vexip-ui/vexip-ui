@@ -1,22 +1,22 @@
 <template>
   <CollapseTransition v-if="!hidden" fade-effect @after-leave="handleAfterLeave">
     <div v-if="!closed" :class="className">
-      <div :class="`${prefix}__wrapper`">
-        <div v-if="hasTitle" :class="`${prefix}__title`">
+      <div :class="nh.be('wrapper')">
+        <div v-if="hasTitle" :class="nh.be('title')">
           <slot name="title">
             {{ title }}
           </slot>
         </div>
-        <div :class="`${prefix}__content`">
+        <div :class="nh.be('content')">
           <slot></slot>
         </div>
       </div>
-      <div v-if="props.closable" :class="`${prefix}__close`" @click="handleClose">
+      <div v-if="props.closable" :class="nh.be('close')" @click="handleClose">
         <slot name="close">
           <Icon><Xmark></Xmark></Icon>
         </slot>
       </div>
-      <div v-if="hasIcon" :class="`${prefix}__icon`">
+      <div v-if="hasIcon" :class="nh.be('icon')">
         <slot name="icon">
           <Icon :icon="iconComp" :scale="hasTitle ? 2 : 1" :style="{ color: props.iconColor }"></Icon>
         </slot>
@@ -29,7 +29,7 @@
 import { defineComponent, ref, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 
 import {
   Flag,
@@ -91,7 +91,9 @@ export default defineComponent({
       banner: false,
       manual: false
     })
-    const prefix = 'vxp-alert'
+
+    const nh = useNameHelper('alert')
+
     const closed = ref(false)
     const hidden = ref(false)
 
@@ -103,15 +105,15 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--${props.type}`]: props.type,
-        [`${prefix}--colorful-text`]: props.colorfulText,
-        [`${prefix}--has-title`]: hasTitle.value,
-        [`${prefix}--has-icon`]: hasIcon.value,
-        [`${prefix}--closable`]: props.closable,
-        [`${prefix}--no-border`]: !props.banner && props.noBorder,
-        [`${prefix}--banner`]: props.banner
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm(props.type)]: props.type,
+        [nh.bm('colorful-text')]: props.colorfulText,
+        [nh.bm('has-title')]: hasTitle.value,
+        [nh.bm('has-icon')]: hasIcon.value,
+        [nh.bm('closable')]: props.closable,
+        [nh.bm('no-border')]: !props.banner && props.noBorder,
+        [nh.bm('banner')]: props.banner
       }
     })
     const iconComp = computed(() => {
@@ -137,8 +139,8 @@ export default defineComponent({
 
     return {
       props,
+      nh,
 
-      prefix,
       closed,
       hidden,
 

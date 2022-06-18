@@ -8,47 +8,47 @@
     <div
       v-if="enabled.year"
       :class="[
-        `${prefixCls}__unit`,
-        visible && unitType === 'year' ? `${prefixCls}__unit--focused` : ''
+        nh.be('unit'),
+        visible && unitType === 'year' ? nh.bem('unit', 'focused') : ''
       ]"
       @click="handleInputFocus('year')"
     >
       {{ formattedYear }}
     </div>
-    <div v-if="labels.year" :class="`${prefixCls}__label`">
+    <div v-if="labels.year" :class="nh.be('label')">
       {{ labels.year }}
     </div>
     <template v-if="enabled.month">
-      <div v-if="enabled.year" :class="`${prefixCls}__separator`">
+      <div v-if="enabled.year" :class="nh.be('separator')">
         {{ dateSeparator }}
       </div>
       <div
         :class="[
-          `${prefixCls}__unit`,
-          visible && unitType === 'month' ? `${prefixCls}__unit--focused` : ''
+          nh.be('unit'),
+          visible && unitType === 'month' ? nh.bem('unit', 'focused') : ''
         ]"
         @click="handleInputFocus('month')"
       >
         {{ formattedMonth }}
       </div>
-      <div v-if="labels.month" :class="`${prefixCls}__label`">
+      <div v-if="labels.month" :class="nh.be('label')">
         {{ labels.month }}
       </div>
     </template>
     <template v-if="enabled.date">
-      <div v-if="enabled.month || enabled.year" :class="`${prefixCls}__separator`">
+      <div v-if="enabled.month || enabled.year" :class="nh.be('separator')">
         {{ dateSeparator }}
       </div>
       <div
         :class="[
-          `${prefixCls}__unit`,
-          visible && unitType === 'date' ? `${prefixCls}__unit--focused` : ''
+          nh.be('unit'),
+          visible && unitType === 'date' ? nh.bem('unit', 'focused') : ''
         ]"
         @click="handleInputFocus('date')"
       >
         {{ formattedDate }}
       </div>
-      <div v-if="labels.date" :class="`${prefixCls}__label`">
+      <div v-if="labels.date" :class="nh.be('label')">
         {{ labels.date }}
       </div>
     </template>
@@ -57,47 +57,47 @@
       <div
         v-if="enabled.hour"
         :class="[
-          `${prefixCls}__unit`,
-          visible && unitType === 'hour' ? `${prefixCls}__unit--focused` : ''
+          nh.be('unit'),
+          visible && unitType === 'hour' ? nh.bem('unit', 'focused') : ''
         ]"
         @click="handleInputFocus('hour')"
       >
         {{ formattedHour }}
       </div>
-      <div v-if="labels.hour" :class="`${prefixCls}__label`">
+      <div v-if="labels.hour" :class="nh.be('label')">
         {{ labels.hour }}
       </div>
       <template v-if="enabled.minute">
-        <div v-if="enabled.hour" :class="`${prefixCls}__separator`">
+        <div v-if="enabled.hour" :class="nh.be('separator')">
           {{ timeSeparator }}
         </div>
         <div
           :class="[
-            `${prefixCls}__unit`,
-            visible && unitType === 'minute' ? `${prefixCls}__unit--focused` : ''
+            nh.be('unit'),
+            visible && unitType === 'minute' ? nh.bem('unit', 'focused') : ''
           ]"
           @click="handleInputFocus('minute')"
         >
           {{ formattedMinute }}
         </div>
-        <div v-if="labels.minute" :class="`${prefixCls}__label`">
+        <div v-if="labels.minute" :class="nh.be('label')">
           {{ labels.minute }}
         </div>
       </template>
       <template v-if="enabled.second">
-        <div v-if="enabled.minute || enabled.hour" :class="`${prefixCls}__separator`">
+        <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')">
           {{ timeSeparator }}
         </div>
         <div
           :class="[
-            `${prefixCls}__unit`,
-            visible && unitType === 'second' ? `${prefixCls}__unit--focused` : ''
+            nh.be('unit'),
+            visible && unitType === 'second' ? nh.bem('unit', 'focused') : ''
           ]"
           @click="handleInputFocus('second')"
         >
           {{ formattedSecond }}
         </div>
-        <div v-if="labels.second" :class="`${prefixCls}__label`">
+        <div v-if="labels.second" :class="nh.be('label')">
           {{ labels.second }}
         </div>
       </template>
@@ -107,6 +107,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { doubleDigits } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'
 
@@ -183,7 +184,7 @@ export default defineComponent({
     'next-unit'
   ],
   setup(props, { emit }) {
-    const prefix = 'vxp-date-picker'
+    const nh = useNameHelper('date-picker')
 
     const wrapper = ref<HTMLElement | null>(null)
 
@@ -194,8 +195,8 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        [`${prefix}__input`]: true,
-        [`${prefix}__input--activated`]: isActivated.value
+        [nh.be('input')]: true,
+        [nh.bem('input', 'activated')]: isActivated.value
       }
     })
     const showTimeUnits = computed(() => {
@@ -272,7 +273,7 @@ export default defineComponent({
     }
 
     return {
-      prefixCls: prefix,
+      nh,
 
       className,
       showTimeUnits,

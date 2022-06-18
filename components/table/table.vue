@@ -7,8 +7,8 @@
       v-if="useXScroll"
       use-x-bar
       mode="horizontal"
-      :class="[`${prefix}__wrapper`, props.scrollClass.horizontal]"
-      :bar-class="`${prefix}__bar--horizontal`"
+      :class="[nh.be('wrapper'), props.scrollClass.horizontal]"
+      :bar-class="nh.bem('bar', 'horizontal')"
       :width="props.width"
       :bar-fade="props.barFade"
       :delta-x="50"
@@ -16,7 +16,7 @@
     >
       <TableHead ref="thead"></TableHead>
       <Scroll
-        :class="[`${prefix}__body-wrapper`, props.scrollClass.major]"
+        :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         @scroll="handleBodyScroll"
@@ -32,7 +32,7 @@
     <template v-else>
       <TableHead ref="thead"></TableHead>
       <Scroll
-        :class="[`${prefix}__body-wrapper`, props.scrollClass.major]"
+        :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="props.scrollDeltaY"
@@ -49,13 +49,13 @@
     <div
       v-if="leftFixedColumns.length"
       :class="{
-        [`${prefix}__fixed--left`]: true,
-        [`${prefix}__fixed--active`]: xScrollPercent
+        [nh.bem('fixed', 'left')]: true,
+        [nh.bem('fixed', 'active')]: xScrollPercent
       }"
     >
       <TableHead fixed="left"></TableHead>
       <Scroll
-        :class="[`${prefix}__body-wrapper`, props.scrollClass.left]"
+        :class="[nh.be('body-wrapper'), props.scrollClass.left]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="props.scrollDeltaY"
@@ -71,13 +71,13 @@
     <div
       v-if="rightFixedColumns.length"
       :class="{
-        [`${prefix}__fixed--right`]: true,
-        [`${prefix}__fixed--active`]: xScrollPercent !== 100
+        [nh.bem('fixed', 'right')]: true,
+        [nh.bem('fixed', 'active')]: xScrollPercent !== 100
       }"
     >
       <TableHead fixed="right"></TableHead>
       <Scroll
-        :class="[`${prefix}__body-wrapper`, props.scrollClass.right]"
+        :class="[nh.be('body-wrapper'), props.scrollClass.right]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="props.scrollDeltaY"
@@ -92,7 +92,7 @@
       v-if="props.useYBar && bodyScrollHeight"
       ref="scrollbar"
       placement="right"
-      :class="`${prefix}__bar--vertical`"
+      :class="nh.bem('bar', 'vertical')"
       :fade="props.barFade"
       :disabled="!!bodyHeight && totalHeight <= bodyHeight"
       :bar-length="barLength"
@@ -103,7 +103,7 @@
       v-if="props.rowDraggable"
       v-show="indicatorShow"
       ref="indicator"
-      :class="`${prefix}__indicator`"
+      :class="nh.be('indicator')"
     ></div>
   </div>
 </template>
@@ -124,7 +124,7 @@ import { Scroll } from '@/components/scroll'
 import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
-import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isDefined, debounce, transformListToMap, removeArrayItem, toNumber, nextFrameOnce } from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/mixins'
 import { useStore } from './store'
@@ -257,7 +257,7 @@ export default defineComponent({
       singleFilter: false
     })
 
-    const prefix = 'vxp-table'
+    const nh = useNameHelper('table')
     const bodyHeight = ref<number | undefined>(props.height)
     const xScrollPercent = ref(0)
     const yScrollPercent = ref(0)
@@ -316,14 +316,14 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--stripe`]: props.stripe,
-        [`${prefix}--border`]: props.border,
-        [`${prefix}--highlight`]: props.highlight,
-        [`${prefix}--use-y-bar`]: props.useYBar,
-        [`${prefix}--transparent`]: props.transparent,
-        [`${prefix}--virtual`]: props.virtual
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('stripe')]: props.stripe,
+        [nh.bm('border')]: props.border,
+        [nh.bm('highlight')]: props.highlight,
+        [nh.bm('use-y-bar')]: props.useYBar,
+        [nh.bm('transparent')]: props.transparent,
+        [nh.bm('virtual')]: props.virtual
       }
     })
     const style = computed(() => {
@@ -751,7 +751,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       bodyHeight,
       xScrollPercent,
       yScrollPercent,

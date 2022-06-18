@@ -1,9 +1,9 @@
 <template>
   <div :class="className" @mousedown="handleTrackDown">
-    <div ref="track" :class="`${prefix}__track`">
-      <div :class="`${prefix}__filler`" :style="fillerStyle"></div>
+    <div ref="track" :class="nh.be('track')">
+      <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
-    <div :class="`${prefix}__trigger`" :style="handlerStyle" @mousedown="handleMoveStart">
+    <div :class="nh.be('trigger')" :style="handlerStyle" @mousedown="handleMoveStart">
       <Tooltip
         ref="tooltip"
         tabindex="0"
@@ -11,14 +11,14 @@
         trigger="custom"
         :transfer="props.tipTransfer"
         :visible="isTipShow || sliding"
-        :tip-class="`${prefix}__tip`"
+        :tip-class="nh.be('tip')"
         :disabled="props.hideTip"
         :placement="props.vertical ? 'right' : 'top'"
         @tip-enter="showTooltip"
         @tip-leave="hideTooltip"
       >
         <div
-          :class="`${prefix}__handler`"
+          :class="nh.be('handler')"
           @mouseenter="showTooltip"
           @mouseleave="hideTooltip"
         ></div>
@@ -36,7 +36,7 @@
 import { defineComponent, ref, computed, watch, inject, onMounted } from 'vue'
 import { Tooltip } from '@/components/tooltip'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useProps, booleanProp, stateProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, stateProp, createStateProp } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/mixins'
 import { noop, throttle } from '@vexip-ui/utils'
 
@@ -80,7 +80,7 @@ export default defineComponent({
 
     const validateField = inject(VALIDATE_FIELD, noop)
 
-    const prefix = 'vxp-slider'
+    const nh = useNameHelper('slider')
     const currentValue = ref(props.value / props.step) // 按每 step 为 1 的 value
     const sliding = ref(false)
     const isTipShow = ref(false)
@@ -92,12 +92,12 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--${props.state}`]: props.state !== 'default',
-        [`${prefix}--vertical`]: props.vertical,
-        [`${prefix}--sliding`]: sliding.value,
-        [`${prefix}--disabled`]: props.disabled
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm(props.state)]: props.state !== 'default',
+        [nh.bm('vertical')]: props.vertical,
+        [nh.bm('sliding')]: sliding.value,
+        [nh.bm('disabled')]: props.disabled
       }
     })
     // 按每 step 算的最小值
@@ -256,7 +256,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       sliding,
       isTipShow,
 

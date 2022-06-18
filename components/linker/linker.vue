@@ -6,7 +6,7 @@
     @click="handleClick"
   >
     <slot name="icon">
-      <Icon v-if="props.icon" :class="`${prefix}__icon`" :icon="props.icon"></Icon>
+      <Icon v-if="props.icon" :class="nh.be('icon')" :icon="props.icon"></Icon>
     </slot>
     <slot></slot>
   </a>
@@ -15,7 +15,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -53,15 +53,15 @@ export default defineComponent({
       target: '_blank'
     })
 
-    const prefix = 'vxp-linker'
+    const nh = useNameHelper('linker')
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--${props.type}`]: props.type !== 'default',
-        [`${prefix}--disabled`]: props.disabled,
-        [`${prefix}--underline`]: props.underline
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm(props.type)]: props.type !== 'default',
+        [nh.bm('disabled')]: props.disabled,
+        [nh.bm('underline')]: props.underline
       }
     })
 
@@ -71,7 +71,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
 
       className,
 

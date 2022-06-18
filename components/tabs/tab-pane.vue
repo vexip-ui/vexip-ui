@@ -15,6 +15,7 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { TABS_STATE } from './symbol'
 
@@ -40,12 +41,12 @@ export default defineComponent({
   setup(props, { slots, emit }) {
     const tabsState = inject(TABS_STATE, null)
 
-    const prefix = 'vxp-tabs'
+    const nh = useNameHelper('tabs')
     const active = ref(false)
     const currentLabel = ref(props.label)
 
     const className = computed(() => {
-      const baseClass = `${prefix}__pane`
+      const baseClass = nh.be('pane')
 
       return {
         [baseClass]: true,

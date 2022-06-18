@@ -1,12 +1,12 @@
 <template>
   <label :class="className">
-    <span :class="`${prefix}__signal`"></span>
-    <span :class="[`${prefix}__label`, props.labelClass]">
+    <span :class="nh.be('signal')"></span>
+    <span :class="[nh.be('label'), props.labelClass]">
       <slot>{{ props.label }}</slot>
     </span>
     <input
       type="radio"
-      :class="`${prefix}__input`"
+      :class="nh.be('input')"
       :checked="currentValue === props.label"
       :disabled="isDisabled"
       @change="handleChange"
@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, inject } from 'vue'
-import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { isDefined, noop } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
@@ -60,7 +60,7 @@ export default defineComponent({
     const groupState = inject(GROUP_STATE, null)
     const validateField = inject(VALIDATE_FIELD, noop)
 
-    const prefix = 'vxp-radio'
+    const nh = useNameHelper('radio')
     const currentValue = ref(props.value)
 
     const isDisabled = computed(() => {
@@ -68,14 +68,14 @@ export default defineComponent({
     })
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
+        nh.b(),
+        nh.bs('vars'),
         {
-          [`${prefix}--checked`]: currentValue.value === props.label,
-          [`${prefix}--disabled`]: isDisabled.value,
-          [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--border`]: props.border,
-          [`${prefix}--${props.state}`]: props.state !== 'default'
+          [nh.bm('checked')]: currentValue.value === props.label,
+          [nh.bm('disabled')]: isDisabled.value,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm('border')]: props.border,
+          [nh.bm(props.state)]: props.state !== 'default'
         }
       ]
     })
@@ -115,7 +115,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       currentValue,
 
       className,

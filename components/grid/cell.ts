@@ -1,5 +1,5 @@
 import { defineComponent, reactive, computed, watch, h, inject } from 'vue'
-import { useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 import { isDefined, has } from '@vexip-ui/utils'
 import { breakPoints, currentBreakPoint } from './helpler'
 import { GRID_STATE } from './symbol'
@@ -87,7 +87,7 @@ export default defineComponent({
 
     const gridState = inject(GRID_STATE, null)
 
-    const prefix = 'vxp-cell'
+    const nh = useNameHelper('cell')
 
     const layoutState = reactive({
       top: props.top,
@@ -146,13 +146,13 @@ export default defineComponent({
         )
       }
       const className = {
-        [prefix]: true,
-        [`${prefix}--flex`]: cellFelx
+        [nh.b()]: true,
+        [nh.bm('flex')]: cellFelx
       }
 
       if (cellFelx) {
-        className[`${prefix}--${cellFelx.justify}`] = true
-        className[`${prefix}--${cellFelx.align}`] = true
+        className[nh.bm(cellFelx.justify)] = true
+        className[nh.bm(cellFelx.align)] = true
       }
 
       return className

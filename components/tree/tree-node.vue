@@ -18,13 +18,13 @@
       :toggle-expand="handleToggleExpand"
       :toggle-select="handleToggleSelect"
     >
-      <div :class="`${prefix}__content`" :style="contentStyle">
+      <div :class="nh.be('content')" :style="contentStyle">
         <span
           ref="arrowEl"
           :class="{
-            [`${prefix}__arrow`]: true,
-            [`${prefix}__arrow--transparent`]: !loading && !hasArrow,
-            [`${prefix}__arrow--expanded`]: expanded
+            [nh.be('arrow')]: true,
+            [nh.bem('arrow', 'transparent')]: !loading && !hasArrow,
+            [nh.bem('arrow', 'expanded')]: expanded
           }"
           @click="handleToggleExpand()"
         >
@@ -33,7 +33,7 @@
         </span>
         <Checkbox
           v-if="hasCheckbox && !suffixCheckbox"
-          :class="`${prefix}__checkbox`"
+          :class="nh.be('checkbox')"
           :control="hasArrow"
           :checked="checked"
           :disabled="isDisabled"
@@ -42,11 +42,11 @@
         ></Checkbox>
         <div
           :class="{
-            [`${prefix}__label`]: true,
-            [`${prefix}__label--selected`]: selected,
-            [`${prefix}__label--disabled`]: isDisabled,
-            [`${prefix}__label--readonly`]: isReadonly,
-            [`${prefix}__label--is-floor`]: floorSelect && node.children?.length
+            [nh.be('label')]: true,
+            [nh.bem('label', 'selected')]: selected,
+            [nh.bem('label', 'disabled')]: isDisabled,
+            [nh.bem('label', 'readonly')]: isReadonly,
+            [nh.bem('label', 'is-floor')]: floorSelect && node.children?.length
           }"
           @click="handleToggleSelect()"
         >
@@ -68,7 +68,7 @@
         </div>
         <Checkbox
           v-if="hasCheckbox && suffixCheckbox"
-          :class="[`${prefix}__checkbox`, `${prefix}__checkbox--suffix`]"
+          :class="[nh.be('checkbox'), nh.bem('checkbox', 'suffix')]"
           :control="hasArrow"
           :checked="checked"
           :disabled="isDisabled"
@@ -78,7 +78,7 @@
       </div>
     </slot>
     <CollapseTransition :appear="appear">
-      <ul v-if="showChildren" :class="`${prefix}__list`">
+      <ul v-if="showChildren" :class="nh.be('list')">
         <TreeNode
           v-for="(item, index) in node.children"
           v-show="item.visible"
@@ -125,6 +125,7 @@ import { Checkbox } from '@/components/checkbox'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
+import { useNameHelper } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { ChevronRight, Spinner } from '@vexip-ui/icons'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
@@ -222,7 +223,7 @@ export default defineComponent({
     const treeState = inject(TREE_STATE)!
     const parentState = inject(TREE_NODE_STATE)!
 
-    const prefix = 'vxp-tree'
+    const nh = useNameHelper('tree')
 
     const nodeElement = ref<HTMLElement | null>(null)
     const arrowElement = ref<HTMLElement | null>(null)
@@ -240,11 +241,11 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        [`${prefix}__node`]: true,
-        [`${prefix}__node--selected`]: props.selected,
-        [`${prefix}__node--expanded`]: props.expanded,
-        [`${prefix}__node--disabled`]: isDisabled.value,
-        [`${prefix}__node--readonly`]: isReadonly.value
+        [nh.be('node')]: true,
+        [nh.bem('node', 'selected')]: props.selected,
+        [nh.bem('node', 'expanded')]: props.expanded,
+        [nh.bem('node', 'disabled')]: isDisabled.value,
+        [nh.bem('node', 'readonly')]: isReadonly.value
       }
     })
     const contentStyle = computed(() => {
@@ -413,7 +414,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
 
       isDisabled,
       isReadonly,

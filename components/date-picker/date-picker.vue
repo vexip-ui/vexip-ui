@@ -5,13 +5,13 @@
     @click="handleTirggerClick"
     @clickoutside="finishInput"
   >
-    <div ref="reference" :class="`${prefixCls}__selector`">
-      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
+    <div ref="reference" :class="nh.be('selector')">
+      <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
-      <div :class="`${prefixCls}__control`">
+      <div :class="nh.be('control')">
         <DateControl
           ref="start"
           :unit-type="currentState === 'start' ? startState.column : ''"
@@ -37,7 +37,7 @@
           @next-unit="enterColumn('next')"
         ></DateControl>
         <template v-if="props.isRange">
-          <div :class="`${prefixCls}__exchange`">
+          <div :class="nh.be('exchange')">
             <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
           </div>
           <DateControl
@@ -69,12 +69,12 @@
       <transition name="vxp-fade">
         <div
           v-if="!props.disabled && props.clearable && isHover && lastValue"
-          :class="`${prefixCls}__clear`"
+          :class="nh.be('clear')"
           @click.stop="handleClear"
         >
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: props.suffixColor }">
+        <div v-else :class="nh.bem('icon', 'suffix')" :style="{ color: props.suffixColor }">
           <slot name="suffix">
             <Icon :icon="props.suffix || CalendarR"></Icon>
           </slot>
@@ -85,7 +85,7 @@
           <div
             v-show="currentVisible"
             ref="popper"
-            :class="[`${prefixCls}__popper`, 'vxp-calendar-vars', `${prefixCls}-vars`]"
+            :class="[nh.be('popper'), nh.ns('calendar-vars'), nh.bs('vars')]"
             @click.stop="handleFocused"
           >
             <DatePane
@@ -126,7 +126,7 @@ import DateControl from './date-control.vue'
 import DatePane from './date-pane.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useProps, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
@@ -250,7 +250,7 @@ export default defineComponent({
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
-    const prefix = 'vxp-date-picker'
+    const nh = useNameHelper('date-picker')
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const currentVisible = ref(props.visible)
@@ -276,19 +276,19 @@ export default defineComponent({
 
     const className = computed(() => {
       return [
-        prefix,
-        'vxp-input-vars',
-        `${prefix}-vars`,
-        `${prefix}--${props.type}`,
+        nh.b(),
+        nh.ns('input-vars'),
+        nh.bs('vars'),
+        nh.bm(props.type),
         {
-          [`${prefix}--disabled`]: props.disabled,
-          [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--no-hour`]: !startState.enabled.hour,
-          [`${prefix}--no-minute`]: !startState.enabled.minute,
-          [`${prefix}--no-second`]: !startState.enabled.second,
-          [`${prefix}--focused`]: focused.value,
-          [`${prefix}--${props.state}`]: props.state !== 'default',
-          [`${prefix}--is-range`]: props.isRange
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm('no-hour')]: !startState.enabled.hour,
+          [nh.bm('no-minute')]: !startState.enabled.minute,
+          [nh.bm('no-second')]: !startState.enabled.second,
+          [nh.bm('focused')]: focused.value,
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm('is-range')]: props.isRange
         }
       ]
     })
@@ -910,7 +910,7 @@ export default defineComponent({
       CalendarR,
 
       props,
-      prefixCls: prefix,
+      nh,
       currentVisible,
       focused,
       transferTo,

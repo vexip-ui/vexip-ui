@@ -1,13 +1,13 @@
 <template>
   <li
     ref="wrapper"
-    :class="`${prefix}__item`"
+    :class="nh.be('item')"
     :aria-disabled="disabled"
     @click="handleSelect"
   >
-    <div :class="`${prefix}__pad`"></div>
+    <div :class="nh.be('pad')"></div>
     <div :class="contentClass">
-      <Icon v-if="icon" :class="`${prefix}__icon`" :icon="icon"></Icon>
+      <Icon v-if="icon" :class="nh.be('icon')" :icon="icon"></Icon>
       <slot>
         {{ label }}
       </slot>
@@ -18,6 +18,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, watch, onBeforeUnmount } from 'vue'
 import { Icon } from '@/components/icon'
+import { useNameHelper } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
@@ -46,14 +47,14 @@ export default defineComponent({
   setup(props, { emit }) {
     const tabNavState = inject(TAB_NAV_STATE, null)
 
-    const prefix = 'vxp-tab-nav'
+    const nh = useNameHelper('tab-nav')
     const active = ref(false)
     const currentLabel = ref(props.label)
 
     const wrapper = ref<HTMLElement | null>(null)
 
     const contentClass = computed(() => {
-      const baseClass = `${prefix}__content`
+      const baseClass = nh.be('content')
 
       return {
         [baseClass]: true,
@@ -110,7 +111,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
       contentClass,
       wrapper,
       handleSelect

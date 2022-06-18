@@ -2,7 +2,7 @@
   <div ref="wrapper" :class="className" @clickoutside="handleClickOutside">
     <div
       ref="reference"
-      :class="[`${prefix}__trigger`, currentVisible ? `${prefix}__trigger--visible` : '']"
+      :class="[nh.be('trigger'), currentVisible ? nh.bem('trigger', 'visible') : '']"
       @click="handleTriggerClick"
     >
       <slot
@@ -11,8 +11,8 @@
         :alpha="currentAlpha"
         :empty="isEmpty"
       >
-        <div :class="`${prefix}__control`">
-          <div :class="`${prefix}__marker`">
+        <div :class="nh.be('control')">
+          <div :class="nh.be('marker')">
             <Icon v-if="!currentVisible && isEmpty">
               <Xmark></Xmark>
             </Icon>
@@ -27,16 +27,16 @@
               }"
             ></div>
           </div>
-          <div :class="`${prefix}__arrow`">
+          <div :class="nh.be('arrow')">
             <Icon><ChevronDown></ChevronDown></Icon>
           </div>
         </div>
       </slot>
     </div>
     <transition :name="props.transitionName">
-      <div v-show="currentVisible" ref="popper" :class="[`${prefix}__popper`, `${prefix}-vars`]">
-        <div :class="`${prefix}__pane`">
-          <div :class="`${prefix}__section`">
+      <div v-show="currentVisible" ref="popper" :class="[nh.be('popper'), nh.bs('vars')]">
+        <div :class="nh.be('pane')">
+          <div :class="nh.be('section')">
             <ColorPalette
               :hue="currentValue.h"
               :saturation="currentValue.s"
@@ -59,17 +59,17 @@
               @edit-end="toggleEditing(false)"
               @change="handleAlphaChange"
             ></ColorAlpha>
-            <div v-if="props.shortcut" :class="`${prefix}__shortcuts`">
+            <div v-if="props.shortcut" :class="nh.be('shortcuts')">
               <div
                 v-for="(item, index) in props.shortcutList"
                 :key="index"
-                :class="`${prefix}__shortcut-item`"
+                :class="nh.be('shortcut-item')"
                 :style="{ backgroundColor: item }"
                 @click="handleShortcutClick(item)"
               ></div>
             </div>
           </div>
-          <div :class="`${prefix}__action`">
+          <div :class="nh.be('action')">
             <Input
               v-if="!props.noInput"
               size="small"
@@ -106,6 +106,7 @@ import ColorPalette from './color-palette.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import {
+  useNameHelper,
   useProps,
   useLocale,
   booleanProp,
@@ -240,7 +241,7 @@ export default defineComponent({
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
-    const prefix = 'vxp-color-picker'
+    const nh = useNameHelper('color-picker')
     const isEmpty = ref(true)
     const currentVisible = ref(props.visible)
     const currentValue = ref<HSVColor>(null!)
@@ -268,15 +269,15 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
+        [nh.b()]: true,
         'vxp-input-vars': true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--empty`]: isEmpty.value && !currentVisible.value,
-        [`${prefix}--focused`]: currentVisible.value,
-        [`${prefix}--disabled`]: props.disabled,
-        [`${prefix}--alpha`]: props.alpha,
-        [`${prefix}--${props.size}`]: props.size !== 'default',
-        [`${prefix}--${props.state}`]: props.state !== 'default'
+        [nh.bs('vars')]: true,
+        [nh.bm('empty')]: isEmpty.value && !currentVisible.value,
+        [nh.bm('focused')]: currentVisible.value,
+        [nh.bm('disabled')]: props.disabled,
+        [nh.bm('alpha')]: props.alpha,
+        [nh.bm(props.size)]: props.size !== 'default',
+        [nh.bm(props.state)]: props.state !== 'default'
       }
     })
     const rgb = computed(() => {
@@ -461,7 +462,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       locale: useLocale('colorPicker'),
       isEmpty,
       currentVisible,

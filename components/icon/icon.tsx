@@ -1,5 +1,5 @@
 import { defineComponent, h, ref, computed } from 'vue'
-import { useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 import { iconMap, register } from './register'
 
 import type { PropType, CSSProperties } from 'vue'
@@ -60,7 +60,7 @@ export default defineComponent({
       }
     })
 
-    const prefix = 'vxp-icon'
+    const nh = useNameHelper('icon')
     const childrenWidth = ref(0)
     const childrenHeight = ref(0)
 
@@ -72,10 +72,10 @@ export default defineComponent({
       const pulse = props.pulse === true || props.pulse === 'in' ? 'in' : 'out'
 
       return {
-        [prefix]: true,
-        [`${prefix}--spin-${spin}`]: props.spin,
-        [`${prefix}--flip-${props.flip}`]: props.flip,
-        [`${prefix}--pulse-${pulse}`]: props.pulse
+        [nh.b()]: true,
+        [nh.bm(`spin-${spin}`)]: props.spin,
+        [nh.bm(`flip-${props.flip}`)]: props.flip,
+        [nh.bm(`pulse-${pulse}`)]: props.pulse
       }
     })
     const icon = computed(() => {

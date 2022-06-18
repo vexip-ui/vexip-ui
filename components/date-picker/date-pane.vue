@@ -1,34 +1,34 @@
 <template>
-  <div :class="`${prefix}__pane`" @click="handleClick">
-    <div v-if="shortcuts.length" :class="[`${prefix}__list`, `${prefix}__list--sub`]">
+  <div :class="nh.be('pane')" @click="handleClick">
+    <div v-if="shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
       <div
         v-for="(item, index) in shortcuts"
         :key="index"
-        :class="`${prefix}__shortcut`"
+        :class="nh.be('shortcut')"
         :title="item.name"
         @click="handleShortcut(index)"
       >
         {{ item.name }}
       </div>
     </div>
-    <div :class="`${prefix}__list`">
+    <div :class="nh.be('list')">
       <div style="display: flex;">
         <div>
-          <div :class="`${prefix}__header`">
+          <div :class="nh.be('header')">
             <div
-              :class="[`${prefix}__arrow`, `${prefix}__prev-year`]"
+              :class="[nh.be('arrow'), nh.be('prev-year')]"
               @click="handleDoublePrevClick"
             >
               <Icon><AnglesLeft></AnglesLeft></Icon>
             </div>
             <div
               v-show="currentPane === 'date'"
-              :class="[`${prefix}__arrow`, `${prefix}__prev-month`]"
+              :class="[nh.be('arrow'), nh.be('prev-month')]"
               @click="adjustCalendar('month', -1)"
             >
               <Icon><AngleLeft></AngleLeft></Icon>
             </div>
-            <div key="year" :class="`${prefix}__year`" @click.stop="togglePane('year')">
+            <div key="year" :class="nh.be('year')" @click.stop="togglePane('year')">
               <template v-if="currentPane === 'year'">
                 {{ `${yearRange[0]}${locale.year} - ${yearRange[9]}${locale.year}` }}
               </template>
@@ -38,46 +38,46 @@
             </div>
             <div
               v-show="currentPane === 'date'"
-              :class="`${prefix}__month`"
+              :class="nh.be('month')"
               @click.stop="togglePane('month')"
             >
               {{ getMonthLabel(calendarMonth) }}
             </div>
             <div
               v-show="currentPane === 'date'"
-              :class="[`${prefix}__arrow`, `${prefix}__next-month`]"
+              :class="[nh.be('arrow'), nh.be('next-month')]"
               @click="adjustCalendar('month', 1)"
             >
               <Icon><AngleRight></AngleRight></Icon>
             </div>
             <div
-              :class="[`${prefix}__arrow`, `${prefix}__next-year`]"
+              :class="[nh.be('arrow'), nh.be('next-year')]"
               @click="handleDoubleNextClick"
             >
               <Icon><AnglesRight></AnglesRight></Icon>
             </div>
           </div>
-          <div ref="calendar" :class="`${prefix}__calendar`">
+          <div ref="calendar" :class="nh.be('calendar')">
             <div
               v-if="currentPane === 'year'"
-              :class="`${prefix}__year-pane`"
+              :class="nh.be('year-pane')"
               @mouseleave="hoveredYear = 0"
             >
               <div
                 v-for="(item, index) in yearRange"
                 :key="index"
                 :class="{
-                  [`${prefix}__year-item`]: true,
-                  [`${prefix}__year-item--selected`]: isSelectedYear(item),
-                  [`${prefix}__year-item--next`]: index > 9,
-                  [`${prefix}__year-item--disabled`]: isDisabledYear(item),
-                  [`${prefix}__year-item--in-range`]: isYearInRange(item)
+                  [nh.be('year-item')]: true,
+                  [nh.bem('year-item', 'selected')]: isSelectedYear(item),
+                  [nh.bem('year-item', 'next')]: index > 9,
+                  [nh.bem('year-item', 'disabled')]: isDisabledYear(item),
+                  [nh.bem('year-item', 'in-range')]: isYearInRange(item)
                 }"
                 @click.stop="handleSelectYear(item)"
                 @mouseenter="handleYearHover(item)"
               >
-                <div :class="`${prefix}__year-label`">
-                  <div :class="`${prefix}__year-label-inner`">
+                <div :class="nh.be('year-label')">
+                  <div :class="nh.be('year-label-inner')">
                     {{ item }}
                   </div>
                 </div>
@@ -85,23 +85,23 @@
             </div>
             <div
               v-else-if="currentPane === 'month'"
-              :class="`${prefix}__month-pane`"
+              :class="nh.be('month-pane')"
               @mouseleave="hoveredMonth = 0"
             >
               <div
                 v-for="index in monthRange"
                 :key="index"
                 :class="{
-                  [`${prefix}__month-item`]: true,
-                  [`${prefix}__month-item--selected`]: isSelectedMonth(index),
-                  [`${prefix}__month-item--disabled`]: isDisabledMonth(index),
-                  [`${prefix}__month-item--in-range`]: isMonthInRange(index)
+                  [nh.be('month-item')]: true,
+                  [nh.bem('month-item', 'selected')]: isSelectedMonth(index),
+                  [nh.bem('month-item', 'disabled')]: isDisabledMonth(index),
+                  [nh.bem('month-item', 'in-range')]: isMonthInRange(index)
                 }"
                 @click.stop="handleSelectMonth(index)"
                 @mouseenter="handleMonthHover(index)"
               >
-                <div :class="`${prefix}__month-label`">
-                  <div :class="`${prefix}__month-label-inner`">
+                <div :class="nh.be('month-label')">
+                  <div :class="nh.be('month-label-inner')">
                     {{ getMonthLabel(index) }}
                   </div>
                 </div>
@@ -120,8 +120,8 @@
             ></CalendarPane>
           </div>
         </div>
-        <div v-if="isDatetime" :class="`${prefix}__time-wheel`">
-          <div :class="`${prefix}__header`"></div>
+        <div v-if="isDatetime" :class="nh.be('time-wheel')">
+          <div :class="nh.be('header')"></div>
           <TimeWheel
             :hour="dateValue.hour"
             :minute="dateValue.minute"
@@ -133,7 +133,7 @@
           ></TimeWheel>
         </div>
       </div>
-      <div v-if="!noAction" :class="`${prefix}__action`">
+      <div v-if="!noAction" :class="nh.be('action')">
         <Button text size="small" @click="handleCancel">
           {{ cancelText || locale.cancel }}
         </Button>
@@ -152,7 +152,7 @@ import { CalendarPane } from '@/components/calendar-pane'
 import { Icon } from '@/components/icon'
 import TimeWheel from './time-wheel.vue'
 import { useHover } from '@vexip-ui/mixins'
-import { useLocale } from '@vexip-ui/config'
+import { useNameHelper, useLocale } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
 import { AngleRight, AngleLeft, AnglesRight, AnglesLeft } from '@vexip-ui/icons'
 import { datePickerTypes } from './symbol'
@@ -622,7 +622,7 @@ export default defineComponent({
     }
 
     return {
-      prefix: 'vxp-date-picker',
+      nh: useNameHelper('date-picker'),
       locale,
       currentPane,
       calendarYear,

@@ -1,7 +1,7 @@
 import { defineComponent, computed, inject, h, renderSlot } from 'vue'
 import { ImageR } from '@vexip-ui/icons'
 import { Icon } from '@/components/icon'
-import { useProps, booleanProp, sizeProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, sizeProp } from '@vexip-ui/config'
 import { GROUP_STATE } from './symbol'
 
 export default defineComponent({
@@ -46,7 +46,7 @@ export default defineComponent({
 
     const groupState = inject(GROUP_STATE, {} as any)
 
-    const prefix = 'vxp-skeleton'
+    const nh = useNameHelper('skeleton')
 
     const activated = computed(() => {
       return props.activated ?? groupState.activated ?? false
@@ -68,29 +68,29 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--${props.size}`]: props.size ?? groupState?.size,
-        [`${prefix}--block`]: block.value,
-        [`${prefix}--image`]: props.image,
-        [`${prefix}--round`]: round.value && !circle.value,
-        [`${prefix}--circle`]: circle.value,
-        [`${prefix}--activated`]: activated.value
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm(props.size)]: props.size ?? groupState?.size,
+        [nh.bm('block')]: block.value,
+        [nh.bm('image')]: props.image,
+        [nh.bm('round')]: round.value && !circle.value,
+        [nh.bm('circle')]: circle.value,
+        [nh.bm('activated')]: activated.value
       }
     })
     const style = computed(() => {
       const style: Record<string, string> = {}
 
       if (props.width !== null) {
-        style[`--${prefix}-width`] = parseSize(props.width)
+        style[nh.cv('width')] = parseSize(props.width)
       }
 
       if (props.height !== null) {
-        style[`--${prefix}-height`] = parseSize(props.height)
+        style[nh.cv('height')] = parseSize(props.height)
       }
 
       if (props.spread) {
-        style[`--${prefix}-spread`] = parseSize(props.spread)
+        style[nh.cv('spread')] = parseSize(props.spread)
       }
 
       return style

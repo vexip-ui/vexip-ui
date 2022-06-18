@@ -1,26 +1,26 @@
 <template>
-  <div :class="[`${prefix}__pane`, `${prefix}-vars`]">
+  <div :class="[nh.be('pane'), nh.bs('vars')]">
     <slot name="header"></slot>
-    <div :class="[`${prefix}__row`, `${prefix}__row--week`]">
-      <div v-for="week in 7" :key="week" :class="[`${prefix}__cell`, `${prefix}__cell-week`]">
+    <div :class="[nh.be('row'), nh.bem('row', 'week')]">
+      <div v-for="week in 7" :key="week" :class="[nh.be('cell'), nh.be('cell-week')]">
         <slot
           name="week"
           :index="week - 1"
           :label="getWeekLabel((week - 1 + props.weekStart) % 7)"
           :week="(week - 1 + props.weekStart) % 7"
         >
-          <div :class="`${prefix}__index`">
+          <div :class="nh.be('index')">
             {{ getWeekLabel((week - 1 + props.weekStart) % 7) }}
           </div>
         </slot>
       </div>
     </div>
-    <div ref="body" :class="`${prefix}__body`">
-      <div v-for="row in 6" :key="row" :class="`${prefix}__row`">
+    <div ref="body" :class="nh.be('body')">
+      <div v-for="row in 6" :key="row" :class="nh.be('row')">
         <div
           v-for="cell in 7"
           :key="(row - 1) * 7 + cell"
-          :class="`${prefix}__cell`"
+          :class="nh.be('cell')"
           @mouseenter="handleHover(dateRange[(row - 1) * 7 + cell - 1])"
         >
           <slot
@@ -36,18 +36,18 @@
           >
             <div
               :class="{
-                [`${prefix}__index`]: true,
-                [`${prefix}__index--selected`]: isSelected(dateRange[(row - 1) * 7 + cell - 1]),
-                [`${prefix}__index--prev`]: isPrevMonth(dateRange[(row - 1) * 7 + cell - 1]),
-                [`${prefix}__index--next`]: isNextMonth(dateRange[(row - 1) * 7 + cell - 1]),
-                [`${prefix}__index--today`]: isToday(dateRange[(row - 1) * 7 + cell - 1]),
-                [`${prefix}__index--disabled`]: isDisabled(dateRange[(row - 1) * 7 + cell - 1]),
-                [`${prefix}__index--in-range`]:
+                [nh.be('index')]: true,
+                [nh.bem('index', 'selected')]: isSelected(dateRange[(row - 1) * 7 + cell - 1]),
+                [nh.bem('index', 'prev')]: isPrevMonth(dateRange[(row - 1) * 7 + cell - 1]),
+                [nh.bem('index', 'next')]: isNextMonth(dateRange[(row - 1) * 7 + cell - 1]),
+                [nh.bem('index', 'today')]: isToday(dateRange[(row - 1) * 7 + cell - 1]),
+                [nh.bem('index', 'disabled')]: isDisabled(dateRange[(row - 1) * 7 + cell - 1]),
+                [nh.bem('index', 'in-range')]:
                   props.isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])
               }"
               @click="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
             >
-              <div :class="`${prefix}__index-inner`">
+              <div :class="nh.be('index-inner')">
                 {{ dateRange[(row - 1) * 7 + cell - 1].getDate() }}
               </div>
             </div>
@@ -62,7 +62,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useHover } from '@vexip-ui/mixins'
-import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { startOfWeek, rangeDate, differenceDays, debounceMinor } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -301,7 +301,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix: 'vxp-calendar',
+      nh: useNameHelper('calendar'),
       startValue,
       endValue,
       dateRange,

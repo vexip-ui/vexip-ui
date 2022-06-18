@@ -1,9 +1,9 @@
 <template>
-  <div :class="`${prefix}__item`">
-    <div :class="`${prefix}__label`" @click="handleClick">
+  <div :class="nh.be('item')">
+    <div :class="nh.be('label')" @click="handleClick">
       <slot>{{ label }}</slot>
     </div>
-    <div :class="`${prefix}__separator`" @click="handleSeparatorClick">
+    <div :class="nh.be('separator')" @click="handleSeparatorClick">
       <slot name="separator">
         <Renderer
           v-if="isFunction(separatorRenderer)"
@@ -21,6 +21,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, watch, inject, onBeforeUnmount } from 'vue'
 import { Renderer } from '@/components/renderer'
+import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { BREADCRUMB_STATE } from './symbol'
 
@@ -91,7 +92,7 @@ export default defineComponent({
     }
 
     return {
-      prefix: 'vxp-breadcrumb',
+      nh: useNameHelper('breadcrumb'),
       currentLabel,
       separator,
       separatorRenderer,

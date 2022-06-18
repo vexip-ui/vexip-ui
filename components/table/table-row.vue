@@ -2,7 +2,7 @@
   <div
     v-if="!row.hidden"
     ref="wrapper"
-    :class="`${prefix}__group`"
+    :class="nh.be('group')"
     :draggable="draggable"
     @click="handleClick"
     @mouseenter="handleMouseEnter"
@@ -24,7 +24,7 @@
       <div
         v-if="row.expanded"
         ref="expand"
-        :class="`${prefix}__collapse`"
+        :class="nh.be('collapse')"
         :style="expandStyle"
       >
         <Renderer
@@ -57,6 +57,7 @@ import {
 } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Renderer } from '@/components/renderer'
+import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { TABLE_STORE, TABLE_ACTION, TABLE_HEAD_KEY } from './symbol'
 
@@ -93,7 +94,7 @@ export default defineComponent({
     const { state, mutations } = inject(TABLE_STORE)!
     const tableAction = inject(TABLE_ACTION)!
 
-    const prefix = 'vxp-table'
+    const nh = useNameHelper('table')
 
     const wrapper = ref<HTMLElement | null>(null)
     const rowElement = ref<HTMLElement | null>(null)
@@ -117,10 +118,10 @@ export default defineComponent({
       }
 
       return [
-        `${prefix}__row`,
+        nh.be('row'),
         {
-          [`${prefix}__row--hover`]: state.highlight && props.row.hover,
-          [`${prefix}__row--stripe`]: props.index % 2 === 1
+          [nh.bem('row', 'hover')]: state.highlight && props.row.hover,
+          [nh.bem('row', 'stripe')]: props.index % 2 === 1
         },
         customClass
       ]
@@ -322,7 +323,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
 
       className,
       style,

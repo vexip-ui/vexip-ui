@@ -1,6 +1,6 @@
 <template>
   <label :class="className" :style="style">
-    <span :class="`${prefix}__signal`" :style="signalStyle">
+    <span :class="nh.be('signal')" :style="signalStyle">
       <slot v-if="props.loading" name="loading">
         <Icon pulse>
           <Spinner></Spinner>
@@ -10,7 +10,7 @@
         <Icon v-if="props.icon" :icon="props.icon"></Icon>
       </slot>
     </span>
-    <span :class="`${prefix}__label`">
+    <span :class="nh.be('label')">
       <template v-if="currentValue">
         <slot name="open">{{ props.openText }}</slot>
       </template>
@@ -20,7 +20,7 @@
     </span>
     <input
       type="checkbox"
-      :class="`${prefix}__input`"
+      :class="nh.be('input')"
       :checked="currentValue"
       :disabled="isDisabled"
       @change="handleChange()"
@@ -32,7 +32,7 @@
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isPromise, noop } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
 
@@ -83,19 +83,19 @@ export default defineComponent({
 
     const validateField = inject(VALIDATE_FIELD, noop)
 
-    const prefix = 'vxp-switcher'
+    const nh = useNameHelper('switcher')
     const currentValue = ref(props.value)
 
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
+        nh.b(),
+        nh.bs('vars'),
         {
-          [`${prefix}--open`]: currentValue.value,
-          [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--${props.state}`]: props.state !== 'default',
-          [`${prefix}--disabled`]: props.disabled,
-          [`${prefix}--loading`]: props.loading
+          [nh.bm('open')]: currentValue.value,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading
         }
       ]
     })
@@ -148,7 +148,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       currentValue,
 
       className,

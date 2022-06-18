@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, inject, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
-import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { noop, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
@@ -58,20 +58,20 @@ export default defineComponent({
 
     const validateField = inject(VALIDATE_FIELD, noop)
 
-    const prefix = 'vxp-radio-group'
+    const nh = useNameHelper('radio-group')
     const currentValue = ref(props.value)
 
     const className = computed(() => {
       return [
-        prefix,
-        'vxp-radio-vars',
+        nh.b(),
+        nh.ns('radio-vars'),
         {
-          [`${prefix}--vertical`]: props.vertical,
-          [`${prefix}--button`]: !props.vertical && props.button,
-          [`${prefix}--disabled`]: props.disabled,
-          [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--border`]: props.border,
-          [`${prefix}--${props.state}`]: props.state !== 'default'
+          [nh.bm('vertical')]: props.vertical,
+          [nh.bm('button')]: !props.vertical && props.button,
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm('border')]: props.border,
+          [nh.bm(props.state)]: props.state !== 'default'
         }
       ]
     })

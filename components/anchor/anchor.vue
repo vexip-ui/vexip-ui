@@ -2,22 +2,22 @@
   <div
     ref="wrapper"
     :class="{
-      [prefix]: true,
-      [`${prefix}-vars`]: true,
-      [`${prefix}--no-marker`]: !props.marker
+      [nh.b()]: true,
+      [nh.bs('vars')]: true,
+      [nh.bm('no-marker')]: !props.marker
     }"
   >
-    <ul :class="`${prefix}__list`">
+    <ul :class="nh.be('list')">
       <slot></slot>
     </ul>
     <transition appear :name="props.markerTransition">
       <div
         v-if="props.marker && currentActive"
-        :class="`${prefix}__marker`"
+        :class="nh.be('marker')"
         :style="{ top: `${markerTop}px` }"
       >
         <slot name="marker">
-          <div :class="`${prefix}__pointer`"></div>
+          <div :class="nh.be('pointer')"></div>
         </slot>
       </div>
     </transition>
@@ -37,7 +37,7 @@ import {
   getCurrentInstance,
   isVNode
 } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
@@ -75,7 +75,7 @@ export default defineComponent({
       markerTransition: 'vxp-fade'
     })
 
-    const prefix = 'vxp-anchor'
+    const nh = useNameHelper('anchor')
     const currentActive = ref(props.active)
     const animating = ref(false)
     const markerTop = ref(0)
@@ -341,8 +341,8 @@ export default defineComponent({
 
     return {
       props,
+      nh,
 
-      prefix,
       currentActive,
       markerTop,
 

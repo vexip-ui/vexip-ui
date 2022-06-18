@@ -156,6 +156,8 @@ $slider: map.merge(
   }
 
   &__tip {
+    min-width: auto;
+    min-height: auto;
     user-select: none;
   }
 

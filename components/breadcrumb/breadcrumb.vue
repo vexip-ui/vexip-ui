@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, watch, toRef } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { BREADCRUMB_STATE } from './symbol'
@@ -39,14 +39,14 @@ export default defineComponent({
       }
     })
 
-    const prefix = 'vxp-breadcrumb'
+    const nh = useNameHelper('breadcrumb')
     const itemStates = new Set<ItemState>()
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--border`]: props.border
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('border')]: props.border
       }
     })
 

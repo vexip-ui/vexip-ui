@@ -6,18 +6,18 @@
     @clickoutside="handleClickOutside"
   >
     <div ref="reference" :class="selectorClass">
-      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
+      <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
-      <div :class="`${prefixCls}__control`">
+      <div :class="nh.be('control')">
         <slot name="control">
-          <div v-if="props.multiple" ref="tagWrapper" :class="[`${prefixCls}__tags`]">
+          <div v-if="props.multiple" ref="tagWrapper" :class="[nh.be('tags')]">
             <Tag
               v-for="(item, index) in templateValues"
               :key="index"
-              :class="`${prefixCls}__tag`"
+              :class="nh.be('tag')"
               :type="props.tagType"
               closable
               @click.stop="handleClick"
@@ -28,7 +28,7 @@
             <Tag
               v-if="props.noRestTip"
               ref="tagCounter"
-              :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]"
+              :class="[nh.be('tag'), nh.be('counter')]"
               :type="props.tagType"
             >
               {{ `+${restTagCount}` }}
@@ -36,14 +36,14 @@
             <Tooltip
               v-else
               ref="tagCounter"
-              :class="`${prefixCls}__tooltip`"
+              :class="nh.be('tooltip')"
               :visible="restTipShow"
               trigger="custom"
               placement="top-end"
-              :tip-class="`${prefixCls}__rest-tip`"
+              :tip-class="nh.be('rest-tip')"
               @click.stop="toggleShowRestTip"
             >
-              <Tag :class="[`${prefixCls}__tag`, `${prefixCls}__counter`]" :type="props.tagType">
+              <Tag :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
                 {{ `+${restTagCount}` }}
               </Tag>
               <template #tip>
@@ -51,7 +51,7 @@
                   <template v-for="(item, index) in templateValues" :key="index">
                     <Tag
                       v-if="index >= templateValues.length - restTagCount"
-                      :class="`${prefixCls}__tag`"
+                      :class="nh.be('tag')"
                       closable
                       :type="props.tagType"
                       @close="handleTipClose(item)"
@@ -68,7 +68,7 @@
           </template>
           <span
             v-if="(props.placeholder ?? locale.placeholder) && !hasValue"
-            :class="`${prefixCls}__placeholder`"
+            :class="nh.be('placeholder')"
           >
             {{ props.placeholder ?? locale.placeholder }}
           </span>
@@ -77,14 +77,14 @@
       <transition name="vxp-fade">
         <div
           v-if="!props.disabled && props.clearable && isHover && hasValue"
-          :class="`${prefixCls}__clear`"
+          :class="nh.be('clear')"
           @click.stop="handleClear"
         >
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div
           v-else-if="!noSuffix"
-          :class="`${prefixCls}__icon--suffix`"
+          :class="nh.bem('icon', 'suffix')"
           :style="{ color: props.suffixColor }"
         >
           <slot name="suffix">
@@ -92,10 +92,10 @@
               v-if="props.suffix"
               :icon="props.suffix"
               :class="{
-                [`${prefixCls}__arrow`]: !props.staticSuffix
+                [nh.be('arrow')]: !props.staticSuffix
               }"
             ></Icon>
-            <Icon v-else :class="`${prefixCls}__arrow`">
+            <Icon v-else :class="nh.be('arrow')">
               <ChevronDown></ChevronDown>
             </Icon>
           </slot>
@@ -107,13 +107,13 @@
         <div
           v-show="currentVisible"
           ref="popper"
-          :class="[`${prefixCls}__popper`, `${prefixCls}-vars`]"
+          :class="[nh.be('popper'), nh.bs('vars')]"
           @click.stop
         >
           <div
             :class="{
-              [`${prefixCls}__panes`]: true,
-              [`${prefixCls}__panes--empty`]: !optionsList[0] || !optionsList[0].length
+              [nh.be('panes')]: true,
+              [nh.bem('panes', 'empty')]: !optionsList[0] || !optionsList[0].length
             }"
           >
             <template v-if="optionsList[0] && optionsList[0].length">
@@ -155,7 +155,7 @@
                 </template>
               </CascaderPane>
             </template>
-            <div v-else :class="`${prefixCls}__empty`" :style="{ width: `${selectorWidth}px` }">
+            <div v-else :class="nh.be('empty')" :style="{ width: `${selectorWidth}px` }">
               <slot name="empty">
                 {{ props.emptyText ?? locale.empty }}
               </slot>
@@ -188,6 +188,7 @@ import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import {
+  useNameHelper,
   useProps,
   useLocale,
   booleanProp,
@@ -341,7 +342,7 @@ export default defineComponent({
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
-    const prefix = 'vxp-cascader'
+    const nh = useNameHelper('cascader')
     const currentVisible = ref(props.visible)
     const currentValues = ref<string[]>([])
     const currentLabels = ref<string[]>([])
@@ -435,15 +436,15 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
+        [nh.b()]: true,
         'vxp-input-vars': true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--multiple`]: props.multiple,
-        [`${prefix}--responsive`]: props.multiple && props.maxTagCount <= 0
+        [nh.bs('vars')]: true,
+        [nh.bm('multiple')]: props.multiple,
+        [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0
       }
     })
     const selectorClass = computed(() => {
-      const baseCls = `${prefix}__selector`
+      const baseCls = nh.be('selector')
 
       return {
         [baseCls]: true,
@@ -1181,7 +1182,7 @@ export default defineComponent({
 
     return {
       props,
-      prefixCls: prefix,
+      nh,
       locale,
       currentVisible,
       isPopperShow,

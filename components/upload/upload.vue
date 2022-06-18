@@ -2,8 +2,8 @@
   <div :class="className">
     <div
       :class="{
-        [`${prefix}__control`]: true,
-        [`${prefix}__control--drag-over`]: isDragOver
+        [nh.be('control')]: true,
+        [nh.bem('control', 'drag-over')]: isDragOver
       }"
       @click="handleClick"
       @drop.prevent="handleDrop"
@@ -14,7 +14,7 @@
         v-if="!props.disabledClick"
         ref="input"
         type="file"
-        :class="`${prefix}__input`"
+        :class="nh.be('input')"
         :multiple="props.multiple"
         :accept="acceptString"
         :webkitdirectory="props.directory"
@@ -26,17 +26,17 @@
             {{ props.buttonLabel ?? locale.upload }}
           </Button>
           <slot name="tip">
-            <p v-if="props.tip" :class="`${prefix}__tip`">
+            <p v-if="props.tip" :class="nh.be('tip')">
               {{ props.tip }}
             </p>
           </slot>
         </template>
-        <div v-else :class="`${prefix}__drag-pane`">
-          <Icon :class="`${prefix}__cloud`" :scale="4">
+        <div v-else :class="nh.be('drag-pane')">
+          <Icon :class="nh.be('cloud')" :scale="4">
             <CloudArrowUp></CloudArrowUp>
           </Icon>
           <slot name="tip">
-            <p :class="`${prefix}__tip`">
+            <p :class="nh.be('tip')">
               {{ props.tip || locale.dragOrClick }}
             </p>
           </slot>
@@ -66,7 +66,7 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import UploadList from './upload-list.vue'
 import { upload } from './request'
-import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload } from '@vexip-ui/icons'
 import { UploadStatusType, uploadListTypes } from './symbol'
@@ -178,7 +178,7 @@ export default defineComponent({
       buttonLabel: null
     })
 
-    const prefix = 'vxp-upload'
+    const nh = useNameHelper('upload')
     const fileStates = ref([]) as Ref<FileState[]>
     const isDragOver = ref(false)
 
@@ -186,15 +186,15 @@ export default defineComponent({
 
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
-        `${prefix}--type-${props.listType}`,
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(`type-${props.listType}`),
         {
-          [`${prefix}--multiple`]: props.multiple,
-          [`${prefix}--drag`]: props.allowDrag,
-          [`${prefix}--to-add`]: props.selectToAdd,
-          [`${prefix}--block`]: props.block,
-          [`${prefix}--drag-only`]: props.disabledClick
+          [nh.bm('multiple')]: props.multiple,
+          [nh.bm('drag')]: props.allowDrag,
+          [nh.bm('to-add')]: props.selectToAdd,
+          [nh.bm('block')]: props.block,
+          [nh.bm('drag-only')]: props.disabledClick
         }
       ]
     })
@@ -593,7 +593,7 @@ export default defineComponent({
       Upload,
 
       props,
-      prefix,
+      nh,
       locale: useLocale('upload'),
       fileStates,
       isDragOver,

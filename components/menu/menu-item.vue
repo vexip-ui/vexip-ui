@@ -9,20 +9,20 @@
       <div
         ref="reference"
         :class="{
-          [`${prefix}__label`]: true,
-          [`${prefix}__label--in-popper`]: isUsePopper
+          [nh.be('label')]: true,
+          [nh.bem('label', 'in-popper')]: isUsePopper
         }"
         :style="labelStyle"
         @click="handleSelect"
         @mouseenter="handleMouseEnter"
         @mouseleave="handleMouseLeave"
       >
-        <div v-if="props.icon" :class="`${prefix}__icon`">
+        <div v-if="props.icon" :class="nh.be('icon')">
           <slot name="icon">
             <Icon :icon="props.icon"></Icon>
           </slot>
         </div>
-        <span :class="`${prefix}__title`">
+        <span :class="nh.be('title')">
           <slot>
             {{ props.label }}
           </slot>
@@ -30,15 +30,15 @@
         <Icon
           v-if="isGroup"
           :class="{
-            [`${prefix}__arrow`]: true,
-            [`${prefix}__arrow--visible`]: groupExpanded
+            [nh.be('arrow')]: true,
+            [nh.bem('arrow', 'visible')]: groupExpanded
           }"
         >
           <ChevronDown></ChevronDown>
         </Icon>
       </div>
       <template #tip>
-        <span :class="`${prefix}__tooltip-title`">
+        <span :class="nh.be('tooltip-title')">
           <slot>
             {{ props.label }}
           </slot>
@@ -47,7 +47,7 @@
     </Tooltip>
     <span v-if="!isUsePopper">
       <CollapseTransition>
-        <ul v-show="showGroup" :class="[`${prefix}__list`, `${prefix}__list--${theme}`]">
+        <ul v-show="showGroup" :class="[nh.be('list'), nh.bem('list', 'theme')]">
           <slot name="group"></slot>
         </ul>
       </CollapseTransition>
@@ -57,11 +57,11 @@
         <div
           v-show="showGroup"
           ref="popper"
-          :class="[`${prefix}__popper`, `${prefix}-vars`, isHorizontal ? `${prefix}__popper--drop` : '']"
+          :class="[nh.be('popper'), nh.bs('vars'), isHorizontal ? nh.bem('popper', 'drop') : '']"
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >
-          <ul :class="[`${prefix}__list`, `${prefix}__list--${theme}`]">
+          <ul :class="[nh.be('list'), nh.bem('list', 'theme')]">
             <slot name="group"></slot>
           </ul>
         </div>
@@ -87,7 +87,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
-import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { usePopper, useSetTimeout } from '@vexip-ui/mixins'
 import { ChevronDown } from '@vexip-ui/icons'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
@@ -130,8 +130,8 @@ export default defineComponent({
     const parentItemState = inject(MENU_ITEM_STATE, null)
     const groupState = inject(MENU_GROUP_STATE, null)
 
-    const prefix = 'vxp-menu'
-    const baseClass = `${prefix}__item`
+    const nh = useNameHelper('menu')
+    const baseClass = nh.be('item')
     const placement = ref('right-start' as Placement)
     const groupExpanded = ref(false)
     const selected = ref(false)
@@ -335,7 +335,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       groupExpanded,
       transferTo,
 

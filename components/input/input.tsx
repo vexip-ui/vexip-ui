@@ -2,7 +2,7 @@ import { defineComponent, ref, computed, watch, inject, Transition } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
-import { useProps, useLocale, createSizeProp, createStateProp, booleanProp, sizeProp, stateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, createSizeProp, createStateProp, booleanProp, sizeProp, stateProp } from '@vexip-ui/config'
 import { isNull, noop, throttle } from '@vexip-ui/utils'
 import { EyeSlashR, EyeR, CircleXmark } from '@vexip-ui/icons'
 
@@ -101,7 +101,7 @@ export default defineComponent({
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
-    const prefix = 'vxp-input'
+    const nh = useNameHelper('input')
     const focused = ref(false)
     const currentValue = ref(props.value)
     const showPassword = ref(false)
@@ -122,27 +122,27 @@ export default defineComponent({
     })
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
-        `${prefix}--${props.type}`,
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(props.type),
         {
-          [`${prefix}-wrapper`]: !hasBefore.value && !hasAfter.value,
-          [`${prefix}--focused`]: focused.value,
-          [`${prefix}--disabled`]: props.disabled,
-          [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--${props.state}`]: props.state !== 'default',
-          [`${prefix}--has-prefix`]: hasPrefix.value,
-          [`${prefix}--has-suffix`]: hasSuffix.value || props.type === 'password'
+          [nh.bs('wrapper')]: !hasBefore.value && !hasAfter.value,
+          [nh.bm('focused')]: focused.value,
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm('has-prefix')]: hasPrefix.value,
+          [nh.bm('has-suffix')]: hasSuffix.value || props.type === 'password'
         }
       ]
     })
     const wrapperClass = computed(() => {
       return {
-        [`${prefix}-wrapper`]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}-wrapper--${props.size}`]: props.size !== 'default',
-        [`${prefix}-wrapper--before-only`]: hasBefore.value && !hasAfter.value,
-        [`${prefix}-wrapper--after-only`]: !hasBefore.value && hasAfter.value
+        [nh.bs('wrapper')]: true,
+        [nh.bs('vars')]: true,
+        [nh.bs('wrapper--${props.size}')]: props.size !== 'default',
+        [nh.bs('wrapper--before-only')]: hasBefore.value && !hasAfter.value,
+        [nh.bs('wrapper--after-only')]: !hasBefore.value && hasAfter.value
       }
     })
     const hasPrefix = computed(() => {
@@ -344,7 +344,7 @@ export default defineComponent({
       return (
         <div
           key={type}
-          class={`${prefix}__icon--${type}`}
+          class={nh.bem('icon', type)}
           style={isPrefix ? { color: props.prefixColor } : { color: props.suffixColor }}
           onClick={isPrefix ? handlePrefixClick : handleSuffixClick}
         >
@@ -356,7 +356,7 @@ export default defineComponent({
     function createSuffixElement() {
       if (!props.disabled && props.clearable && hasValue.value && isHover.value) {
         return (
-          <div key={'clear'} class={`${prefix}__clear`} onClick={handleClear}>
+          <div key={'clear'} class={nh.be('clear')} onClick={handleClear}>
             <Icon icon={CircleXmark}></Icon>
           </div>
         )
@@ -366,7 +366,7 @@ export default defineComponent({
 
       if (props.type === 'password' && props.password) {
         return (
-          <div key={'password'} class={`${prefix}__icon--password`} onClick={toggleShowPassword}>
+          <div key={'password'} class={nh.bem('icon', 'password')} onClick={toggleShowPassword}>
             <Icon icon={passwordIcon.value}></Icon>
           </div>
         )
@@ -382,7 +382,7 @@ export default defineComponent({
         <div ref={wrapper} class={className.value}>
           <input
             ref={inputControl}
-            class={[`${prefix}__control`, props.inputClass]}
+            class={[nh.be('control'), props.inputClass]}
             type={inputType.value}
             value={formattedValue.value}
             autofocus={props.autofocus}
@@ -403,7 +403,7 @@ export default defineComponent({
           <Transition name={'vxp-fade'}>{createSuffixElement()}</Transition>
           {props.maxLength
             ? (
-            <div class={`${prefix}__count`} style={countStyle.value}>
+            <div class={nh.be('count')} style={countStyle.value}>
               {`${currentLength.value}/${props.maxLength}`}
             </div>
               )
@@ -417,11 +417,11 @@ export default defineComponent({
         return (
           <div class={wrapperClass.value}>
             {hasBefore.value && (
-              <div class={`${prefix}__before`}>{slots.before ? slots.before() : props.before}</div>
+              <div class={nh.be('before')}>{slots.before ? slots.before() : props.before}</div>
             )}
             {createInputElement()}
             {hasAfter.value && (
-              <div class={`${prefix}__after`}>{slots.after ? slots.after() : props.after}</div>
+              <div class={nh.be('after')}>{slots.after ? slots.after() : props.after}</div>
             )}
           </div>
         )

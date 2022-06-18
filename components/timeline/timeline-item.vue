@@ -1,12 +1,12 @@
 <template>
   <div :class="className" :style="itemStyle">
-    <div :class="`${prefix}__signal`" @click="handleSignalClick">
+    <div :class="nh.be('signal')" @click="handleSignalClick">
       <slot name="signal">
-        <div :class="`${prefix}__pointer`"></div>
+        <div :class="nh.be('pointer')"></div>
       </slot>
     </div>
-    <div :class="`${prefix}__line`" :style="lineStyle"></div>
-    <div ref="content" :class="`${prefix}__content`">
+    <div :class="nh.be('line')" :style="lineStyle"></div>
+    <div ref="content" :class="nh.be('content')">
       <slot></slot>
     </div>
   </div>
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { TIMELINE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -51,13 +51,13 @@ export default defineComponent({
 
     const timelineState = inject(TIMELINE_STATE, null)
 
-    const prefix = 'vxp-timeline'
+    const nh = useNameHelper('timeline')
     const currentLabel = ref(props.label)
 
     const className = computed(() => {
       return {
-        [`${prefix}__item`]: true,
-        [`${prefix}__item--${props.type}`]: props.type !== 'default'
+        [nh.be('item')]: true,
+        [nh.bem('item', props.type)]: props.type !== 'default'
       }
     })
     const itemStyle = computed(() => {
@@ -101,7 +101,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
 
       className,
       itemStyle,

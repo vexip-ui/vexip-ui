@@ -24,7 +24,7 @@
   height: 240px;
   font-size: 30px;
   color: #fff;
-  background-color: #4dabf7;
+  background-color: var(--vxp-color-primary-base);
   transition: transform 250ms;
 }
 
@@ -36,6 +36,6 @@
   height: 100%;
   font-size: 30px;
   color: #fff;
-  background-color: #4dabf7;
+  background-color: var(--vxp-color-primary-base);
 }
 </style>

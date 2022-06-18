@@ -1,11 +1,12 @@
 <template>
-  <div ref="wrapper" :class="`${prefix}__hue`" @mousedown="handleMouseDown">
-    <div :class="`${prefix}__hue-handler`" :style="{ left: `${currentLeft}%` }"></div>
+  <div ref="wrapper" :class="nh.be('hue')" @mousedown="handleMouseDown">
+    <div :class="nh.be('hue-handler')" :style="{ left: `${currentLeft}%` }"></div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { toFixed, throttle } from '@vexip-ui/utils'
 
 export default defineComponent({
@@ -99,7 +100,7 @@ export default defineComponent({
     }
 
     return {
-      prefix: 'vxp-color-picker',
+      nh: useNameHelper('color-picker'),
       currentLeft,
 
       wrapper,

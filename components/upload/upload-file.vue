@@ -2,16 +2,16 @@
   <transition appear :name="props.selectToAdd ? transitionName : undefined">
     <li
       :class="[
-        `${prefix}__file`,
-        `${prefix}__file--${props.listType}`,
-        `${prefix}__file--${props.file.status}`
+        nh.be('file'),
+        nh.bem('file', props.listType),
+        nh.bem('file', props.file.status)
       ]"
       :title="fileName"
     >
       <slot :file="props.file.source" :status="props.file.status" :percentage="props.file.percentage">
         <template v-if="props.listType === 'name'">
-          <div :class="`${prefix}__label`">
-            <div :class="[`${prefix}__icon`, `${prefix}__file-icon`]">
+          <div :class="nh.be('label')">
+            <div :class="[nh.be('icon'), nh.be('file-icon')]">
               <slot name="icon" :file="props.file.source">
                 <Renderer
                   v-if="useIconRenderer"
@@ -21,51 +21,51 @@
                 <Icon v-else :icon="getFileIcon(props.file)"></Icon>
               </slot>
             </div>
-            <span :class="`${prefix}__filename`">
+            <span :class="nh.be('filename')">
               {{ fileName }}
             </span>
           </div>
-          <div :class="`${prefix}__actions`">
+          <div :class="nh.be('actions')">
             <span
               v-if="props.file.status === status.UPLOADING"
               style="margin-right: 0.5em;"
-              :class="`${prefix}__percentage`"
+              :class="nh.be('percentage')"
             >
               {{ `${props.file.percentage}%` }}
             </span>
             <div
               v-if="props.file.status === status.SUCCESS"
-              :class="[`${prefix}__icon`, `${prefix}__success`]"
+              :class="[nh.be('icon'), nh.be('success')]"
             >
               <Icon><CircleCheck></CircleCheck></Icon>
             </div>
             <div
               v-else-if="props.file.status === status.FAIL"
-              :class="[`${prefix}__icon`, `${prefix}__fail`]"
+              :class="[nh.be('icon'), nh.be('fail')]"
             >
               <Icon><CircleExclamation></CircleExclamation></Icon>
             </div>
             <div
               v-else-if="props.file.status === status.UPLOADING"
-              :class="[`${prefix}__icon`, `${prefix}__loading`]"
+              :class="[nh.be('icon'), nh.be('loading')]"
             >
               <Icon pulse>
                 <Spinner></Spinner>
               </Icon>
             </div>
-            <div :class="[`${prefix}__icon`, `${prefix}__close`]" @click="deleteFile(props.file)">
+            <div :class="[nh.be('icon'), nh.be('close')]" @click="deleteFile(props.file)">
               <Icon><TrashCanR></TrashCanR></Icon>
             </div>
           </div>
-          <div v-if="props.file.status === status.UPLOADING" :class="`${prefix}__progress`">
+          <div v-if="props.file.status === status.UPLOADING" :class="nh.be('progress')">
             <Progress info-type="none" :stroke-width="2" :percentage="props.file.percentage"></Progress>
           </div>
         </template>
         <template v-else-if="props.listType === 'thumbnail' || props.listType === 'card'">
-          <div :class="`${prefix}__card`">
-            <div :class="`${prefix}__thumbnail`">
+          <div :class="nh.be('card')">
+            <div :class="nh.be('thumbnail')">
               <template v-if="props.file.status === status.UPLOADING">
-                <div v-if="props.listType === 'thumbnail'" :class="`${prefix}__progress`">
+                <div v-if="props.listType === 'thumbnail'" :class="nh.be('progress')">
                   <span style="margin-bottom: 0.3em;">
                     {{ props.loadingText ?? locale.uploading }}
                   </span>
@@ -74,7 +74,7 @@
                     :stroke-width="2"
                     :percentage="props.file.percentage"
                   ></Progress>
-                  <span style="margin-top: 3px;" :class="`${prefix}__percentage`">
+                  <span style="margin-top: 3px;" :class="nh.be('percentage')">
                     {{ `${props.file.percentage}%` }}
                   </span>
                 </div>
@@ -84,7 +84,7 @@
               </template>
               <img
                 v-else-if="props.file.type.startsWith('image/') && props.file.base64"
-                :class="`${prefix}__image`"
+                :class="nh.be('image')"
                 :src="props.file.base64"
                 :alt="fileName"
               />
@@ -100,12 +100,12 @@
                 </slot>
               </template>
             </div>
-            <div v-if="props.listType === 'card'" :class="`${prefix}__info`">
-              <span :class="`${prefix}__filename`">
+            <div v-if="props.listType === 'card'" :class="nh.be('info')">
+              <span :class="nh.be('filename')">
                 {{ fileName }}
               </span>
               <CollapseTransition>
-                <div v-if="props.file.status === status.UPLOADING" :class="`${prefix}__progress`">
+                <div v-if="props.file.status === status.UPLOADING" :class="nh.be('progress')">
                   <Progress
                     info-type="none"
                     :stroke-width="4"
@@ -116,15 +116,15 @@
             </div>
             <div
               v-if="props.listType === 'card' || props.file.status !== status.UPLOADING"
-              :class="`${prefix}__actions`"
+              :class="nh.be('actions')"
             >
-              <div v-if="props.listType === 'thumbnail'" :class="`${prefix}__mask`"></div>
+              <div v-if="props.listType === 'thumbnail'" :class="nh.be('mask')"></div>
               <div
                 :class="[
-                  `${prefix}__icon`,
-                  `${prefix}__action`,
+                  nh.be('icon'),
+                  nh.be('action'),
                   {
-                    [`${prefix}__action--disabled`]: !props.file.type.startsWith('image/') || !props.file.base64
+                    [nh.bem('action', 'disabled')]: !props.file.type.startsWith('image/') || !props.file.base64
                   }
                 ]"
                 @click="$emit('preview', props.file.source)"
@@ -133,7 +133,7 @@
                   <EyeR></EyeR>
                 </Icon>
               </div>
-              <div :class="[`${prefix}__icon`, `${prefix}__action`]" @click="deleteFile(props.file)">
+              <div :class="[nh.be('icon'), nh.be('action')]" @click="deleteFile(props.file)">
                 <Icon :scale="1.4">
                   <TrashCanR></TrashCanR>
                 </Icon>
@@ -152,7 +152,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
-import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { iconMaps } from './file-icon'
 import { CircleCheck, CircleExclamation, Spinner, EyeR, TrashCanR } from '@vexip-ui/icons'
 import { UploadStatusType, uploadListTypes } from './symbol'
@@ -199,7 +199,7 @@ export default defineComponent({
       selectToAdd: false
     })
 
-    const prefix = 'vxp-upload'
+    const nh = useNameHelper('upload')
     const transitionName = 'vxp-fade'
 
     const useIconRenderer = computed(() => {
@@ -241,7 +241,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       locale: useLocale('upload'),
       transitionName,
       status: UploadStatusType,

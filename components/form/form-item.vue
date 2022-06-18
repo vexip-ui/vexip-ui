@@ -9,7 +9,7 @@
     />
     <label
       v-if="hasLabel"
-      :class="`${prefix}__label`"
+      :class="nh.be('label')"
       :style="{ width: `${computedlabelWidth}px` }"
       :for="props.htmlFor"
     >
@@ -19,14 +19,14 @@
     </label>
     <div
       :class="{
-        [`${prefix}__control`]: true,
-        [`${prefix}__control--no-label`]: !hasLabel
+        [nh.be('control')]: true,
+        [nh.bem('control', 'no-label')]: !hasLabel
       }"
       :style="controlStyle"
     >
       <slot></slot>
       <transition :name="props.errorTransition">
-        <div v-if="!props.hideErrorTip && isError" :class="`${prefix}__error-tip`">
+        <div v-if="!props.hideErrorTip && isError" :class="nh.be('error-tip')">
           <slot name="error" :tip="errorTip">
             {{ errorTip }}
           </slot>
@@ -49,7 +49,7 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { isNull, isFunction } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
@@ -102,7 +102,7 @@ export default defineComponent({
 
     const formProps = inject(FORM_PROPS, {})
 
-    const prefix = 'vxp-form'
+    const nh = useNameHelper('form')
 
     const { isRequired, allRules } = useRules(props, formProps)
     const { isError, errorTip, currentValue, validate, clearError, reset } = useField(
@@ -150,11 +150,11 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        [`${prefix}__item`]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}__item--required`]: !formProps.hideAsterisk && useAsterisk.value,
-        [`${prefix}__item--error`]: isError.value,
-        [`${prefix}__item--action`]: props.action
+        [nh.be('item')]: true,
+        [nh.bs('vars')]: true,
+        [nh.bem('item', 'required')]: !formProps.hideAsterisk && useAsterisk.value,
+        [nh.bem('item', 'error')]: isError.value,
+        [nh.bem('item', 'action')]: props.action
       }
     })
     const controlStyle = computed(() => {
@@ -178,7 +178,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       isError,
       errorTip,
 

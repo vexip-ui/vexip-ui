@@ -300,7 +300,7 @@ $input: map.merge(
   }
 
   @mixin inner-select($bg-color) {
-    .vxp-select {
+    .vxp-select__selector {
       min-width: 60px;
       background-color: transparent;
       border: 0;

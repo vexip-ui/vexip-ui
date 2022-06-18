@@ -3,7 +3,7 @@
     <input
       ref="input"
       type="text"
-      :class="[`${prefixCls}__control`, inputClass]"
+      :class="[nh.be('control'), inputClass]"
       :value="focused ? preciseNumber : formattedValue"
       :style="inputStyle"
       :autofocus="props.autofocus"
@@ -21,19 +21,19 @@
       @input="handleInput"
       @change="handleChange"
     />
-    <div :class="`${prefixCls}__plus`" @click="plusNumber" @mousedown.prevent>
+    <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
       <Icon :scale="0.8">
         <CaretUp></CaretUp>
       </Icon>
     </div>
-    <div :class="`${prefixCls}__minus`" @click="minusNumber" @mousedown.prevent>
+    <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
       <Icon :scale="0.8">
         <CaretDown></CaretDown>
       </Icon>
     </div>
     <div
       v-if="hasPrefix"
-      :class="`${prefixCls}__icon--prefix`"
+      :class="nh.bem('icon', 'prefix')"
       :style="{ color: props.prefixColor }"
       @click="handlePrefixClick"
     >
@@ -44,14 +44,14 @@
     <transition name="vxp-fade">
       <div
         v-if="!props.disabled && props.clearable && isHover && hasValue"
-        :class="`${prefixCls}__clear`"
+        :class="nh.be('clear')"
         @click.stop="handleClear"
       >
         <Icon><CircleXmark></CircleXmark></Icon>
       </div>
       <div
         v-else-if="hasSuffix"
-        :class="`${prefixCls}__icon--suffix`"
+        :class="nh.bem('icon', 'suffix')"
         :style="{ color: props.suffixColor }"
         @click="handleSuffixClick"
       >
@@ -68,7 +68,7 @@ import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
-import { useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { isNull, noop, toFixed, toNumber, boundRange, throttle } from '@vexip-ui/utils'
 import { CaretUp, CaretDown, CircleXmark } from '@vexip-ui/icons'
 
@@ -170,7 +170,7 @@ export default defineComponent({
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
-    const prefix = 'vxp-number-input'
+    const nh = useNameHelper('number-input')
     const focused = ref(false)
     const currentValue = ref<number | null>(props.value)
     const inputting = ref(false)
@@ -183,13 +183,13 @@ export default defineComponent({
 
     const className = computed(() => {
       return [
-        prefix,
-        'vxp-input-vars',
+        nh.b(),
+        nh.ns('input-vars'),
         {
-          [`${prefix}--focused`]: focused.value,
-          [`${prefix}--disabled`]: props.disabled,
-          [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--${props.state}`]: props.state !== 'default'
+          [nh.bm('focused')]: focused.value,
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm(props.state)]: props.state !== 'default'
         }
       ]
     })
@@ -386,7 +386,7 @@ export default defineComponent({
 
     return {
       props,
-      prefixCls: prefix,
+      nh,
       locale: useLocale('input'),
       focused,
       isHover,

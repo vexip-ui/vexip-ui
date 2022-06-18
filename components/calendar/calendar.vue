@@ -1,7 +1,7 @@
 <template>
   <CalendarPane
     v-model:value="calendarValue"
-    :class="prefix"
+    :class="nh.b()"
     :year="calendarYear"
     :month="calendarMonth"
     :week-start="props.weekStart"
@@ -10,20 +10,20 @@
   >
     <template #header>
       <slot name="header">
-        <Row :class="`${prefix}__header`" align="middle">
+        <Row :class="nh.be('header')" align="middle">
           <Column flex="auto">
             <slot name="title"></slot>
           </Column>
-          <Column :class="`${prefix}__actions`" flex="0">
+          <Column :class="nh.be('actions')" flex="0">
             <NumberInput
               v-model:value="calendarYear"
-              :class="`${prefix}__year-input`"
+              :class="nh.be('year-input')"
               :range="[1970, 2300]"
               :formatter="formatYearInput"
             ></NumberInput>
             <NumberInput
               v-model:value="calendarMonth"
-              :class="`${prefix}__month-input`"
+              :class="nh.be('month-input')"
               :range="[1, 12]"
               :formatter="formatMonthInput"
             ></NumberInput>
@@ -32,14 +32,14 @@
       </slot>
     </template>
     <template #week="{ label, index, week }">
-      <div :class="`${prefix}__week`">
+      <div :class="nh.be('week')">
         <slot
           name="week"
           :label="label"
           :index="index"
           :week="week"
         >
-          <div :class="`${prefix}__week-value`">
+          <div :class="nh.be('week-value')">
             {{ label }}
           </div>
         </slot>
@@ -48,21 +48,21 @@
     <template #item="{ selected, date, isPrev, isNext, isToday, disabled }">
       <div
         :class="{
-          [`${prefix}__date`]: true,
-          [`${prefix}__date--selected`]: selected,
-          [`${prefix}__date--prev`]: isPrev,
-          [`${prefix}__date--next`]: isNext,
-          [`${prefix}__date--today`]: isToday,
-          [`${prefix}__date--disabled`]: disabled
+          [nh.be('date')]: true,
+          [nh.bem('date', 'selected')]: selected,
+          [nh.bem('date', 'prev')]: isPrev,
+          [nh.bem('date', 'next')]: isNext,
+          [nh.bem('date', 'today')]: isToday,
+          [nh.bem('date', 'disabled')]: disabled
         }"
         @click="handleClick(date)"
       >
-        <div :class="`${prefix}__date-header`">
-          <div :class="`${prefix}__date-value`">
+        <div :class="nh.be('date-header')">
+          <div :class="nh.be('date-value')">
             {{ date.getDate() }}
           </div>
         </div>
-        <div :class="`${prefix}__date-content`">
+        <div :class="nh.be('date-content')">
           <slot
             name="content"
             :selected="selected"
@@ -84,7 +84,7 @@ import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
 import CalendarPane from './calendar-pane.vue'
-import { useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 import type { Dateable } from '@vexip-ui/utils'
@@ -138,7 +138,7 @@ export default defineComponent({
       }
     })
 
-    const prefix = 'vxp-calendar'
+    const nh = useNameHelper('calendar')
 
     const calendarValue = ref(props.value)
     const calendarYear = ref(props.year)
@@ -171,7 +171,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
 
       calendarValue,
       calendarYear,
