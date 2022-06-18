@@ -34,6 +34,10 @@ $space: map.merge(
     flex-wrap: nowrap;
   }
 
+  &--no-gap {
+    gap: unset;
+  }
+
   &--small {
     @include define-preset-values('space', (
       v-gap: 4px,

@@ -43,6 +43,7 @@ export const zhCN = defineI18n({
     Grid: '栅格布局',
     Divider: '分割线',
     Row: '行布局',
+    Space: '间距',
     Split: '分割面板',
 
     Anchor: '锚点',

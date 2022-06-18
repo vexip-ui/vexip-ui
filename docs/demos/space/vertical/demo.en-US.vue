@@ -1,5 +1,5 @@
 <template>
-  <Space>
+  <Space vertical>
     <Button>Button</Button>
     <Button>Button</Button>
     <Button>Button</Button>

@@ -24,6 +24,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Grid', since: '2.0.0' },
         { name: 'Divider' },
         { name: 'Row' },
+        { name: 'Space', since: '2.0.0' },
         { name: 'Split' }
       ]
     },

@@ -43,6 +43,7 @@ export const enUS = defineI18n({
     Grid: 'Grid',
     Divider: 'Divider',
     Row: 'Row',
+    Space: 'Space',
     Split: 'Split',
 
     Anchor: 'Anchor',
