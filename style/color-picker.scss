@@ -32,7 +32,7 @@ $color-picker: map.merge(
   $color-picker
 );
 
-.vxp-color-picker {
+.#{$namespace}-color-picker {
   &-vars {
     @include define-preset-values('color-picker', $color-picker);
   }
@@ -83,7 +83,7 @@ $color-picker: map.merge(
     transition: get-css-var('transition-transform');
   }
 
-  &--focused &__arrow .vxp-icon {
+  &--focused &__arrow .#{$namespace}-icon {
     transform: rotate(180deg);
   }
 
@@ -167,11 +167,11 @@ $color-picker: map.merge(
     margin-top: 10px;
     border-top: get-css-var('color-picker-divider');
 
-    .vxp-button {
+    .#{$namespace}-button {
       margin-left: 4px !important;
     }
 
-    .vxp-input {
+    .#{$namespace}-input {
       width: 100%;
     }
   }

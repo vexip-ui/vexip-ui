@@ -45,7 +45,7 @@ $table: map.merge(
   $table
 );
 
-.vxp-table {
+.#{$namespace}-table {
   &-vars {
     @include define-preset-values('table', $table);
   }
@@ -329,7 +329,7 @@ $table: map.merge(
       justify-content: center;
       padding: 0 14px;
 
-      .vxp-checkbox {
+      .#{$namespace}-checkbox {
         margin-right: 0;
         margin-bottom: 6px;
 
@@ -347,7 +347,7 @@ $table: map.merge(
       margin-top: 8px;
       border-top: get-css-var('border-light-2');
 
-      .vxp-button--text {
+      .#{$namespace}-button--text {
         padding: 0;
         box-shadow: none;
       }

@@ -31,7 +31,7 @@ $switcher: map.merge(
   $switcher
 );
 
-.vxp-switcher {
+.#{$namespace}-switcher {
   &-vars {
     @include define-preset-values('switcher', $switcher);
   }
@@ -128,7 +128,7 @@ $switcher: map.merge(
       transform: translate(-50%, -50%);
     }
 
-    .vxp-icon {
+    .#{$namespace}-icon {
       color: get-css-var('switcher-icon-color');
     }
   }

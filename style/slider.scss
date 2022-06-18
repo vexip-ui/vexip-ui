@@ -28,7 +28,7 @@ $slider: map.merge(
   $slider
 );
 
-.vxp-slider {
+.#{$namespace}-slider {
   &-vars {
     @include define-preset-values('slider', $slider);
   }
@@ -100,7 +100,7 @@ $slider: map.merge(
     height: $handler-size;
     transform: translate(-50%, -50%);
 
-    .vxp-tooltip {
+    .#{$namespace}-tooltip {
       line-height: 1;
       cursor: pointer;
       user-select: none;

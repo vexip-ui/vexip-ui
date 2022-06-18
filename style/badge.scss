@@ -19,7 +19,7 @@ $badge: map.merge(
   $badge
 );
 
-.vxp-badge {
+.#{$namespace}-badge {
   &-vars {
     @include define-preset-values('badge', $badge);
   }

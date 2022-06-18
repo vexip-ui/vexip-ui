@@ -1,6 +1,6 @@
 @use './design' as *;
 
-.vxp-icon {
+.#{$namespace}-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -29,18 +29,18 @@
   }
 
   &--spin-in svg {
-    animation: vxp-spin-in 1s 0s infinite linear;
+    animation: #{$namespace}-spin-in 1s 0s infinite linear;
   }
 
   &--spin-out svg {
-    animation: vxp-spin-out 1s 0s infinite linear;
+    animation: #{$namespace}-spin-out 1s 0s infinite linear;
   }
 
   &--pulse-in svg {
-    animation: vxp-spin-in 1s infinite steps(8);
+    animation: #{$namespace}-spin-in 1s infinite steps(8);
   }
 
   &--pulse-out svg {
-    animation: vxp-spin-out 1s infinite steps(8);
+    animation: #{$namespace}-spin-out 1s infinite steps(8);
   }
 }

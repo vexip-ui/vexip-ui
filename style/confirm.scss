@@ -11,7 +11,7 @@ $confirm: map.merge(
   $confirm
 );
 
-.vxp-confirm {
+.#{$namespace}-confirm {
   &-vars {
     @include define-preset-values('confirm', $confirm);
   }

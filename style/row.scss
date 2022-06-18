@@ -1,6 +1,6 @@
 @use './design' as *;
 
-.vxp-row {
+.#{$namespace}-row {
   @include basis;
 
   position: relative;

@@ -11,7 +11,7 @@ $space: map.merge(
   $space
 );
 
-.vxp-space {
+.#{$namespace}-space {
   &-vars {
     @include define-preset-values('space', $space);
   }

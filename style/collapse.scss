@@ -23,7 +23,7 @@ $collapse: map.merge(
   $collapse
 );
 
-.vxp-collapse {
+.#{$namespace}-collapse {
   &-vars {
     @include define-preset-values('collapse', $collapse);
   }

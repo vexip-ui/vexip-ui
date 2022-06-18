@@ -20,7 +20,7 @@ $select: map.merge(
   $select
 );
 
-.vxp-select {
+.#{$namespace}-select {
   &-vars {
     @include define-preset-values('select', $select);
   }
@@ -92,7 +92,7 @@ $select: map.merge(
     min-width: 98px;
     padding: 5px 0;
 
-    .vxp-scroll__wrapper {
+    .#{$namespace}-scroll__wrapper {
       width: 100%;
     }
   }
@@ -106,7 +106,7 @@ $select: map.merge(
     border-radius: get-css-var('select-list-radius');
     box-shadow: get-css-var('select-list-shadow');
 
-    .vxp-native-scroll__wrapper {
+    .#{$namespace}-native-scroll__wrapper {
       padding: 5px 0;
     }
   }
@@ -118,7 +118,7 @@ $select: map.merge(
     margin: 0;
 
     &--has-check {
-      .vxp-option {
+      .#{$namespace}-option {
         justify-content: space-between;
       }
     }

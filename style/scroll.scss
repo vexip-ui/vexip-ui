@@ -12,7 +12,7 @@ $scroll: map.merge(
   $scroll
 );
 
-.vxp-scroll {
+.#{$namespace}-scroll {
   &-vars {
     @include define-preset-values('scroll', $scroll);
   }

@@ -34,7 +34,7 @@ $tab-nav: map.merge(
   $tab-nav
 );
 
-.vxp-tab-nav {
+.#{$namespace}-tab-nav {
   &-vars {
     @include define-preset-values('tab-nav', $tab-nav);
   }

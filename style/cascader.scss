@@ -24,7 +24,7 @@ $cascader: map.merge(
   $cascader
 );
 
-.vxp-cascader {
+.#{$namespace}-cascader {
   &-vars {
     @include define-preset-values('cascader', $cascader);
   }
@@ -73,7 +73,7 @@ $cascader: map.merge(
     position: relative;
     height: calc(get-css-var('input-height') - 8px);
 
-    .vxp-tooltip__trigger {
+    .#{$namespace}-tooltip__trigger {
       display: flex;
     }
   }
@@ -156,8 +156,8 @@ $cascader: map.merge(
     padding: 0;
     margin: 0;
 
-    &--multiple .vxp-option--selected,
-    &--no-cascaded .vxp-option--selected {
+    &--multiple .#{$namespace}-option--selected,
+    &--no-cascaded .#{$namespace}-option--selected {
       background-color: transparent;
 
       &:hover {
@@ -165,7 +165,7 @@ $cascader: map.merge(
       }
     }
 
-    .vxp-option--error {
+    .#{$namespace}-option--error {
       color: get-css-var('cascader-option-color-error');
     }
   }

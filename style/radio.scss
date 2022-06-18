@@ -27,7 +27,7 @@ $radio: map.merge(
   $radio
 );
 
-.vxp-radio {
+.#{$namespace}-radio {
   &-vars {
     @include define-preset-values('radio', $radio);
   }
@@ -349,7 +349,7 @@ $radio: map.merge(
     &-group--button &--disabled#{&}--checked {
       background-color: get-css-var('radio-bg-color-disabled-button');
 
-      .vxp-radio__label {
+      .#{$namespace}-radio__label {
         color: get-css-var('radio-label-color-disabled');
       }
     }
@@ -358,7 +358,7 @@ $radio: map.merge(
       &--checked {
         background-color: get-css-var('radio-bg-color-disabled-button');
 
-        // .vxp-radio__label {
+        // .#{$namespace}-radio__label {
         //   color: get-css-var('color-content-reverse');
         // }
       }

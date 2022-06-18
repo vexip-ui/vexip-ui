@@ -16,7 +16,7 @@ $skeleton: map.merge(
   $skeleton
 );
 
-.vxp-skeleton {
+.#{$namespace}-skeleton {
   &-vars {
     @include define-preset-values('skeleton', $skeleton);
   }
@@ -74,7 +74,7 @@ $skeleton: map.merge(
     display: flex;
   }
 
-  @keyframes skeleton-loading {
+  @keyframes #{$namespace}-skeleton-loading {
     0% {
       transform: translate(-37.5%);
     }
@@ -96,6 +96,6 @@ $skeleton: map.merge(
         get-css-var('skeleton-shine-color') 37%,
         transparent 63%
       );
-    animation: skeleton-loading 2000ms ease infinite;
+    animation: #{$namespace}-skeleton-loading 2000ms ease infinite;
   }
 }

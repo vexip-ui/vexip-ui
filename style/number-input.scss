@@ -4,7 +4,7 @@
 @use './icon.scss';
 @use './input.scss' as input;
 
-.vxp-number-input {
+.#{$namespace}-number-input {
   @include basis;
   @include input.handler;
 
@@ -27,7 +27,7 @@
     border-left-width: get-css-var('border-width');
     transition: get-css-var('transition-color');
 
-    .vxp-icon {
+    .#{$namespace}-icon {
       pointer-events: none;
     }
 

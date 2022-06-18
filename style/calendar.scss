@@ -39,7 +39,7 @@ $calendar: map.merge(
   $calendar-pane: $calendar
 );
 
-.vxp-calendar {
+.#{$namespace}-calendar {
   @include basis;
 
   width: 100%;

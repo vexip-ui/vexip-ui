@@ -1,7 +1,7 @@
 @use './design' as *;
 @use './select.scss';
 
-.vxp-auto-complete {
+.#{$namespace}-auto-complete {
   &__input {
     width: 100%;
     height: 100%;

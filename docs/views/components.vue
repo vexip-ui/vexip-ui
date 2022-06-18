@@ -1,6 +1,11 @@
 <template>
   <Row ref="wrapper" tag="section" :class="prefix">
-    <Column tag="aside" :class="`${prefix}__sider`" flex="300px">
+    <Column
+      tag="aside"
+      :class="`${prefix}__sider`"
+      flex="auto"
+      style="width: 300px;"
+    >
       <Scroll
         ref="menuScroll"
         use-y-bar
@@ -42,7 +47,12 @@
         </Menu>
       </Scroll>
     </Column>
-    <Column tag="section" :class="`${prefix}__content`" style="flex: 1 1 calc(100% - 300px);">
+    <Column
+      tag="section"
+      :class="`${prefix}__content`"
+      flex="auto"
+      style="width: calc(100% - 300px);"
+    >
       <NativeScroll
         ref="scroll"
         appear

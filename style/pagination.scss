@@ -27,7 +27,7 @@ $pagination: map.merge(
   $pagination
 );
 
-.vxp-pagination {
+.#{$namespace}-pagination {
   &-vars {
     @include define-preset-values('pagination', $pagination);
   }
@@ -127,7 +127,7 @@ $pagination: map.merge(
     white-space: nowrap;
     user-select: none;
 
-    .vxp-number-input {
+    .#{$namespace}-number-input {
       width: 60px;
       margin: 0 4px;
       user-select: auto;
@@ -137,7 +137,7 @@ $pagination: map.merge(
   &__size {
     min-width: 100px;
 
-    .vxp-select {
+    .#{$namespace}-select {
       width: 100%;
     }
   }

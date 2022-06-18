@@ -14,7 +14,7 @@ $form: map.merge(
   $form
 );
 
-.vxp-form {
+.#{$namespace}-form {
   &-vars {
     @include define-preset-values('form', $form);
   }
@@ -40,12 +40,12 @@ $form: map.merge(
     }
 
     &--error {
-      // $checkbox: vxp-checkbox;
-      // $radio: vxp-radio;
+      // $checkbox: #{$namespace}-checkbox;
+      // $radio: #{$namespace}-radio;
 
-      .vxp-input,
-      .vxp-multiple-input,
-      .vxp-textarea {
+      .#{$namespace}-input,
+      .#{$namespace}-multiple-input,
+      .#{$namespace}-textarea {
         &,
         &:hover,
         &:focus,
@@ -59,12 +59,12 @@ $form: map.merge(
         }
       }
 
-      .vxp-color-picker {
+      .#{$namespace}-color-picker {
         &__control {
           border-color: get-css-var('form-error-color');
         }
 
-        &__trigger--visible .vxp-color-picker__control {
+        &__trigger--visible .#{$namespace}-color-picker__control {
           box-shadow: get-css-var('form-error-shadow');
         }
       }

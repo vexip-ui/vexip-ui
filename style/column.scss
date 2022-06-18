@@ -2,7 +2,7 @@
 
 @use './design' as *;
 
-.vxp-column {
+.#{$namespace}-column {
   @include basis;
 
   position: relative;
@@ -106,7 +106,7 @@
     }
   }
 
-  & > .vxp-row {
+  & > .#{$namespace}-row {
     width: 100%;
   }
 }

@@ -24,7 +24,7 @@ $tree: map.merge(
   $tree
 );
 
-.vxp-tree {
+.#{$namespace}-tree {
   &-vars {
     @include define-preset-values('tree', $tree);
   }
@@ -106,7 +106,7 @@ $tree: map.merge(
       color: transparent;
     }
 
-    &--expanded .vxp-icon {
+    &--expanded .#{$namespace}-icon {
       transform: rotate(90deg);
     }
   }

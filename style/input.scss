@@ -193,7 +193,7 @@ $input: map.merge(
   }
 }
 
-.vxp-input {
+.#{$namespace}-input {
   @at-root &-vars {
     @include define-preset-values('input', $input);
   }
@@ -300,7 +300,7 @@ $input: map.merge(
   }
 
   @mixin inner-select($bg-color) {
-    .vxp-select__selector {
+    .#{$namespace}-select__selector {
       min-width: 60px;
       background-color: transparent;
       border: 0;

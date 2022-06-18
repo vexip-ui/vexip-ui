@@ -1,7 +1,7 @@
 @use './design' as *;
 @use './tooltip.scss';
 
-.vxp-ellipsis {
+.#{$namespace}-ellipsis {
   @include basis;
 
   display: inline-block;

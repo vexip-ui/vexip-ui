@@ -19,7 +19,7 @@ $progress: map.merge(
   $progress
 );
 
-.vxp-progress {
+.#{$namespace}-progress {
   &-vars {
     @include define-preset-values('progress', $progress);
   }
@@ -60,13 +60,13 @@ $progress: map.merge(
     content: '';
     background-color: get-css-var('progress-activated-color');
     animation:
-      vxp-progress-flowing
+      #{$namespace}-progress-flowing
       get-css-var('progress-animation-duration')
       get-css-var('progress-animation-timing')
       infinite;
   }
 
-  @keyframes vxp-progress-flowing {
+  @keyframes #{$namespace}-progress-flowing {
     0% {
       opacity: 100%;
       transform: translateX(-50%) scaleX(0);

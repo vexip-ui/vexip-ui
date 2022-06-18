@@ -31,7 +31,7 @@ $modal: map.merge(
   $modal
 );
 
-.vxp-modal {
+.#{$namespace}-modal {
   &-vars {
     @include define-preset-values('modal', $modal);
   }

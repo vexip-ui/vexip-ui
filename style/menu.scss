@@ -37,7 +37,7 @@ $menu: map.merge(
   $menu
 );
 
-.vxp-menu {
+.#{$namespace}-menu {
   &-vars {
     @include define-preset-values('menu', $menu);
   }
@@ -93,12 +93,12 @@ $menu: map.merge(
   &__item {
     list-style: none;
 
-    // .vxp-tooltip__trigger
+    // .#{$namespace}-tooltip__trigger
 
-    & > .vxp-tooltip {
+    & > .#{$namespace}-tooltip {
       height: 100%;
 
-      & > .vxp-tooltip__trigger {
+      & > .#{$namespace}-tooltip__trigger {
         display: block;
         height: 100%;
       }
@@ -176,7 +176,7 @@ $menu: map.merge(
     &:hover,
     // #{$item}--selected &,
     // #{$self}--reduced #{$item}--son-selected &,
-    #{$item}--son-selected > .vxp-tooltip > .vxp-tooltip__trigger > & {
+    #{$item}--son-selected > .#{$namespace}-tooltip > .#{$namespace}-tooltip__trigger > & {
       color: get-css-var('menu-label-color-hover');
 
       #{$self}--dark &,
@@ -190,7 +190,7 @@ $menu: map.merge(
     }
 
     #{$item}--selected &,
-    #{$item}--group-visible > .vxp-tooltip > .vxp-tooltip__trigger > & {
+    #{$item}--group-visible > .#{$namespace}-tooltip > .#{$namespace}-tooltip__trigger > & {
       color: get-css-var('menu-label-color-visible');
 
       #{$self}--horizontal & {

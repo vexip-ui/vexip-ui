@@ -22,7 +22,7 @@ $dropdown: map.merge(
   $dropdown
 );
 
-.vxp-dropdown {
+.#{$namespace}-dropdown {
   &-vars {
     @include define-preset-values('dropdown', $dropdown);
   }

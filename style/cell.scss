@@ -1,6 +1,6 @@
 @use './design' as *;
 
-.vxp-cell {
+.#{$namespace}-cell {
   @include basis;
 
   &--flex {
@@ -39,7 +39,7 @@
     align-items: flex-end;
   }
 
-  & > .vxp-grid {
+  & > .#{$namespace}-grid {
     width: 100%;
   }
 }

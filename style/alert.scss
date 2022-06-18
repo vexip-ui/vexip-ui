@@ -21,7 +21,7 @@ $alert: map.merge(
   $alert
 );
 
-.vxp-alert {
+.#{$namespace}-alert {
   &-vars {
     @include define-preset-values('alert', $alert);
   }

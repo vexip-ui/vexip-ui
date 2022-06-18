@@ -25,7 +25,7 @@ $carousel: map.merge(
   $carousel
 );
 
-.vxp-carousel {
+.#{$namespace}-carousel {
   &-vars {
     @include define-preset-values('carousel', $carousel);
   }
@@ -261,7 +261,7 @@ $carousel: map.merge(
       transition: height get-css-var('transition-base'), get-css-var('transition-opacity');
     }
 
-    &--active .vxp-carousel__pointer-inner {
+    &--active .#{$namespace}-carousel__pointer-inner {
       height: get-css-var('carousel-pointer-width-active');
     }
   }

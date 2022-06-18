@@ -73,7 +73,7 @@ $button: map.merge(
   $button
 );
 
-.vxp-button {
+.#{$namespace}-button {
   &-vars {
     @include define-preset-values('button', $button);
   }
@@ -183,9 +183,9 @@ $button: map.merge(
   }
 
   &--pulsing::after {
-    animation-name: vxp-button-pulse, vxp-button-pulse-opacity;
+    animation-name: #{$namespace}-button-pulse, #{$namespace}-button-pulse-opacity;
 
-    @keyframes vxp-button-pulse {
+    @keyframes #{$namespace}-button-pulse {
       0% {
         box-shadow: 0 0 1px 0 get-css-var('button-pulse-s-color');
       }
@@ -195,7 +195,7 @@ $button: map.merge(
       }
     }
 
-    @keyframes vxp-button-pulse-opacity {
+    @keyframes #{$namespace}-button-pulse-opacity {
       0% {
         opacity: get-css-var('button-pulse-opacity');
       }

@@ -17,7 +17,7 @@ $divider: map.merge(
   $divider
 );
 
-.vxp-divider {
+.#{$namespace}-divider {
   &-vars {
     @include define-preset-values('divider', $divider);
   }

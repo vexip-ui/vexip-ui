@@ -29,7 +29,7 @@ $time-picker: map.merge(
   $time-picker
 );
 
-.vxp-time-picker {
+.#{$namespace}-time-picker {
   &-vars {
     @include define-preset-values('time-picker', $time-picker);
   }
@@ -41,7 +41,7 @@ $time-picker: map.merge(
 
   @include input.handler(#{&}__selector);
 
-  $wheel: 'vxp-wheel';
+  $wheel: '#{$namespace}-wheel';
 
   user-select: none;
 

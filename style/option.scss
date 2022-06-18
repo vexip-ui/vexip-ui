@@ -26,7 +26,7 @@ $option: map.merge(
   $option
 );
 
-.vxp-option {
+.#{$namespace}-option {
   &-vars {
     @include define-preset-values('option', $option);
   }

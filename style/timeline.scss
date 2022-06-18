@@ -20,7 +20,7 @@ $timeline: map.merge(
   $timeline
 );
 
-.vxp-timeline {
+.#{$namespace}-timeline {
   &-vars {
     @include define-preset-values('timeline', $timeline);
   }
