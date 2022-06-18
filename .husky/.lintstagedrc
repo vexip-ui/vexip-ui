@@ -3,7 +3,7 @@
     "prettier --write",
     "eslint --fix"
   ],
-  "{!(package)*.json,*.code-snippets,.!(browserslist)*rc}": [
+  "{!(package)*.json,*.code-snippets,.!(browserslist|npm)*rc}": [
     "prettier --write--parser json"
   ],
   "package.json": [

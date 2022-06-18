@@ -1,1 +1,1 @@
-export { ConfigProvider } from '@vexip-ui/config'
+export { default as ConfigProvider } from './config-provider'

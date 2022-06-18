@@ -41,6 +41,7 @@ export default defineConfig(({ command }) => {
       }
     },
     build: {
+      reportCompressedSize: false,
       chunkSizeWarningLimit: 10 * 1024
     },
     css: {

@@ -1,9 +1,8 @@
 import { defineComponent, toRef, renderSlot } from 'vue'
-import { configProps } from './props'
-import { configLocale } from './locale'
+import { configProps, configLocale } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
-import type { LocaleOptions } from './locale'
+import type { LocaleOptions } from '@vexip-ui/config'
 
 export default defineComponent({
   name: 'ConfigProvider',

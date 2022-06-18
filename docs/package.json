@@ -30,7 +30,7 @@
     "postcss-discard-duplicates": "^5.1.0",
     "sass": "^1.51.0",
     "typescript": "4.6.4",
-    "vite": "^3.0.0-alpha.9",
+    "vite": "^3.0.0-alpha.12",
     "vite-plugin-md": "^0.13.1"
   }
 }
