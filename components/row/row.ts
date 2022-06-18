@@ -5,8 +5,8 @@ import { ROW_STATE } from './symbol'
 import type { PropType } from 'vue'
 import type { Justify, Align, ColumnFlex } from './symbol'
 
-const justifyList = Object.freeze<Justify>(['start', 'end', 'center', 'space-around', 'space-between'])
-const alignList = Object.freeze<Align>(['top', 'middle', 'bottom'])
+const justifyList = Object.freeze<Justify>(['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'])
+const alignList = Object.freeze<Align>(['top', 'middle', 'bottom', 'stretch'])
 
 export default defineComponent({
   name: 'Row',

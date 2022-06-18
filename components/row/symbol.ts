@@ -2,8 +2,8 @@ import type { InjectionKey } from 'vue'
 
 export type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
 
-export type Justify = 'start' | 'end' | 'center' | 'space-around' | 'space-between'
-export type Align = 'top' | 'middle' | 'bottom'
+export type Justify = 'start' | 'end' | 'center' | 'space-around' | 'space-between' | 'space-evenly'
+export type Align = 'top' | 'middle' | 'bottom' | 'stretch'
 
 export interface ColumnFlex {
   justify: Justify,
