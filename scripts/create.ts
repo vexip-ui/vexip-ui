@@ -147,38 +147,152 @@ async function create(name: string) {
     }
   ]
 
-  for (const { filePath, source } of generatedFiles) {
-    fs.ensureDir(path.dirname(filePath))
-    fs.writeFileSync(filePath, source)
+  const demosDir = path.resolve(dirPath, 'docs/demos', kebabCaseName)
 
-    if (filePath.match(/(s|p)?css$/)) {
-      await stylelint.lint({
-        cwd: dirPath,
-        fix: true,
-        files: filePath
-      })
-    } else {
-      await ESLint.outputFixes(await eslint.lintFiles(filePath))
+  generatedFiles.push(
+    {
+      filePath: path.resolve(demosDir, 'api.zh-CN.md'),
+      source: `
+        ### ${capitalCaseName} 属性
 
-      if (filePath.endsWith('.vue')) {
-        fs.writeFileSync(
+        | 名称 | 类型 | 说明 | 默认值 | 始于 |
+        | ---- | --- | ---- | ------ | --- |
+
+        ### ${capitalCaseName} 事件
+
+        | 名称 | 说明 | 参数 | 始于 |
+        | ---- | --- | ---- | ---- |
+
+        ### ${capitalCaseName} 插槽
+
+        | 名称 | 说明 | 参数 | 始于 |
+        | ---- | --- | ---- | ---- |
+      `
+    },
+    {
+      filePath: path.resolve(demosDir, 'api.en-US.md'),
+      source: `
+        ### ${capitalCaseName} Props
+
+        | Name | Type | Description | Default | Since |
+        | ---- | ---- | ----------- | ------- | ----- |
+
+        ### ${capitalCaseName} Events
+
+        | Name | Description | Parameters | Since |
+        | ---- | ----------- | ---------- | ----- |
+
+        ### ${capitalCaseName} Slots
+
+        | Name | Description | Parameters | Since |
+        | ---- | ----------- | ---------- | ----- |
+      `
+    },
+    {
+      filePath: path.resolve(demosDir, 'desc.zh-CN.md'),
+      source: '\n'
+    },
+    {
+      filePath: path.resolve(demosDir, 'desc.en-US.md'),
+      source: '\n'
+    },
+    {
+      filePath: path.resolve(demosDir, 'demos-meta.json'),
+      source: '["basis"]\n'
+    },
+    {
+      filePath: path.resolve(demosDir, 'basis/desc.zh-CN.md'),
+      source: `
+        ### 基础用法
+
+        最简单的用法。
+      `
+    },
+    {
+      filePath: path.resolve(demosDir, 'basis/desc.en-US.md'),
+      source: `
+        ### Basis Usage
+
+        Simplest usage.
+      `
+    },
+    {
+      filePath: path.resolve(demosDir, 'basis/demo.zh-CN.vue'),
+      source: `
+        <template>
+          <${capitalCaseName}></${capitalCaseName}>
+        </template>
+
+        <script setup lang="ts"></script>
+      `
+    },
+    {
+      filePath: path.resolve(demosDir, 'basis/demo.en-US.vue'),
+      source: `
+        <template>
+          <${capitalCaseName}></${capitalCaseName}>
+        </template>
+
+        <script setup lang="ts"></script>
+      `
+    }
+  )
+
+  await Promise.all(
+    generatedFiles.map(async ({ filePath, source }) => {
+      if (fs.existsSync(filePath)) {
+        logger.warningText(`exists ${filePath}, skip`)
+        return
+      }
+
+      await fs.ensureDir(path.dirname(filePath))
+
+      if (filePath.match(/\.(s|p)?css$/)) {
+        await fs.writeFile(filePath, source)
+        await stylelint.lint({
+          cwd: dirPath,
+          fix: true,
+          files: filePath
+        })
+      } else if (filePath.endsWith('.md')) {
+        await fs.writeFile(
           filePath,
-          prettier.format(fs.readFileSync(filePath, 'utf-8'), {
+          prettier.format(
+            source.split('\n').map(line => line.trim()).join('\n'),
+            { ...prettierConfig, parser: 'markdown' }
+          )
+        )
+      } else if (filePath.endsWith('.json')) {
+        await fs.writeFile(
+          filePath,
+          prettier.format(source, {
             ...prettierConfig,
-            parser: 'vue'
+            parser: 'json'
           })
         )
       } else {
-        fs.writeFileSync(
-          filePath,
-          prettier.format(fs.readFileSync(filePath, 'utf-8'), {
-            ...prettierConfig,
-            parser: 'typescript'
-          })
-        )
-      }
-    }
+        if (filePath.endsWith('.vue')) {
+          await fs.writeFile(
+            filePath,
+            prettier.format(source, {
+              ...prettierConfig,
+              parser: 'vue'
+            })
+          )
+        } else {
+          await fs.writeFile(
+            filePath,
+            prettier.format(source, {
+              ...prettierConfig,
+              parser: 'typescript'
+            })
+          )
+        }
 
-    logger.infoText(`create ${filePath}`)
-  }
+        await ESLint.outputFixes(await eslint.lintFiles(filePath))
+      }
+
+      logger.infoText(`create ${filePath}`)
+    })
+  )
 }

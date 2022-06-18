@@ -41,6 +41,7 @@ export interface I18nConfig {
     Grid: string,
     Divider: string,
     Row: string,
+    Space: string,
     Split: string,
 
     Anchor: string,

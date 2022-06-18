@@ -1,0 +1,9 @@
+<template>
+  <Space>
+    <Button>Button</Button>
+    <Button>Button</Button>
+    <Button>Button</Button>
+    <Button>Button</Button>
+    <Button>Button</Button>
+  </Space>
+</template>
