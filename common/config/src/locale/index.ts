@@ -11,12 +11,11 @@ export * from './zh-CN'
 export * from './en-US'
 
 export const PROVIDED_LOCALE = '__vxp-provided-locale'
-
-export const globalLocal = computed(() => getDefaultLocaleConfig())
+export const globalLocal = computed(() => zhCNLocale())
 
 export function getDefaultLocaleConfig(locale?: string) {
   if (!locale) {
-    return zhCNLocale()
+    return globalLocal.value
   }
 
   switch (locale) {
