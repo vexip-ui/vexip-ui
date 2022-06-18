@@ -1,3 +1,21 @@
+# [2.0.0-beta.10](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2022-06-18)
+
+
+### Bug Fixes
+
+* **row:** add space-evenly for justify, stretch for align ([01024a4](https://github.com/qmhc/vexip-ui/commit/01024a48c7c2af2b0204e9a741a703acee3139e7))
+
+
+### Features
+
+* add Skeleton and SkeletonGroup components ([#46](https://github.com/qmhc/vexip-ui/issues/46)) ([92c011f](https://github.com/qmhc/vexip-ui/commit/92c011f1a3bf9ecade03304409728ee73cc2de7d))
+* **Space:** add Space component ([#47](https://github.com/qmhc/vexip-ui/issues/47)) ([cedc5b3](https://github.com/qmhc/vexip-ui/commit/cedc5b3a4d3133f95138d9715bb2bd95c8be519a))
+* **tree:** add no-cascaded prop ([fa07fdd](https://github.com/qmhc/vexip-ui/commit/fa07fdd59c4b28ae9b07e8160e9dc586fc797af2))
+* **tree:** add suffix-checkbox prop ([d82a531](https://github.com/qmhc/vexip-ui/commit/d82a53199d489a36e4b58d2074dd2bed577be7c4))
+* **utils:** add supportFlexGap method ([ff158dc](https://github.com/qmhc/vexip-ui/commit/ff158dcb2dcbeccb3fc384be5d0085b2f1dda0b4))
+
+
+
 # [2.0.0-beta.9](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2022-06-16)
 
 
