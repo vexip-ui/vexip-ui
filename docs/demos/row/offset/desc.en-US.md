@@ -1,3 +1,3 @@
-### 左右偏移
+### Column Offset
 
-通过设置 `offset` 属性，可以将列进行左右偏移。
+Columns can be offset left and right by setting the `offset` prop.

@@ -4,19 +4,19 @@
       <Split vertical style="padding: 10px;">
         <template #left>
           <div style="padding: 10px;">
-            左上侧面板
+            左Top pane
           </div>
         </template>
         <template #right>
           <div style="padding: 10px;">
-            左下侧面板
+            左Bottom pane
           </div>
         </template>
       </Split>
     </template>
     <template #right>
       <div style="padding: 10px;">
-        右侧面板
+        Right pane
       </div>
     </template>
   </Split>

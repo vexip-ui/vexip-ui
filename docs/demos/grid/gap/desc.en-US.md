@@ -1,5 +1,5 @@
-### 栅格间距
+### Grid Gap
 
-通过设置 Grid 组件的 `gap` 属性，可以为栅格增加间距。
+Gap can be added to the grid by setting the `gap` property of the Grid component.
 
-传入一个数组可以分别控制横向和纵向的间距。
+Pass in an array to control the horizontal and vertical spacing separately.

@@ -1,6 +1,6 @@
 <template>
-  <Divider>横向的间隔</Divider>
-  <Row :gutter="16">
+  <Divider>Horizontal gap</Divider>
+  <Row :gap="16">
     <Column :span="6">
       <div class="content">
         span-6
@@ -22,8 +22,8 @@
       </div>
     </Column>
   </Row>
-  <Divider>双向的间隔</Divider>
-  <Row :gutter="[16, 24]">
+  <Divider>Both horizontal and vertical gap</Divider>
+  <Row :gap="[16, 24]">
     <Column :span="6">
       <div class="content">
         span-6

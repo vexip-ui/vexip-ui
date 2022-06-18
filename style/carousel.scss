@@ -152,19 +152,17 @@ $carousel: map.merge(
     }
   }
 
-  /* stylelint-disable */
   &__arrow--inside &__handle-inner {
-    opacity: 0;
+    opacity: 0%;
 
     &--show {
-      opacity: 1;
+      opacity: 100%;
     }
   }
 
   // &:hover &__handle-inner {
   //   opacity: 1;
   // }
-  /* stylelint-enable */
 
   &__pointers {
     &--inside,

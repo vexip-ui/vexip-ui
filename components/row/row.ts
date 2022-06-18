@@ -12,7 +12,7 @@ export default defineComponent({
   name: 'Row',
   props: {
     tag: String,
-    gutter: [Number, Array] as PropType<number | number[]>,
+    gap: [Number, Array] as PropType<number | number[]>,
     justify: String as PropType<Justify>,
     align: String as PropType<Align>,
     columnFlex: {
@@ -23,7 +23,7 @@ export default defineComponent({
   setup(_props, { slots }) {
     const props = useProps('row', _props, {
       tag: 'div',
-      gutter: 0,
+      gap: 0,
       justify: {
         default: 'start' as Justify,
         validator: (value: Justify) => justifyList.includes(value)
@@ -41,10 +41,10 @@ export default defineComponent({
       return [nh.b(), nh.bm(props.justify), nh.bm(props.align)]
     })
     const style = computed(() => {
-      if (!props.gutter) return null
+      if (!props.gap) return null
 
-      if (typeof props.gutter === 'number') {
-        const horizontalMargin = `-${props.gutter / 2}px`
+      if (typeof props.gap === 'number') {
+        const horizontalMargin = `-${props.gap / 2}px`
 
         return {
           marginRight: horizontalMargin,
@@ -52,8 +52,8 @@ export default defineComponent({
         }
       }
 
-      if (Array.isArray(props.gutter)) {
-        const [horizontal, vertical] = props.gutter
+      if (Array.isArray(props.gap)) {
+        const [horizontal, vertical] = props.gap
         const horizontalMargin = `-${horizontal / 2}px`
         const verticalMargin = `${vertical / 2}px`
 
@@ -83,7 +83,7 @@ export default defineComponent({
 
     provide(ROW_STATE, reactive({
       columnFlex,
-      gutter: toRef(props, 'gutter')
+      gap: toRef(props, 'gap')
     }))
 
     return () =>

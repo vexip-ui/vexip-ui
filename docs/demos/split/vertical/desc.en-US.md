@@ -1,3 +1,3 @@
-### 纵向分割
+### Vertical Split
 
-添加 `vertical` 开启上下分割，此时 `left` 插槽即上侧内容，`right` 插槽即下侧内容。
+Add `vertical` to enable top-bottom splitting. At this time, the `left` slot is the top pane content, and the `right` slot is the bottom pane content.

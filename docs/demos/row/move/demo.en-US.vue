@@ -1,5 +1,5 @@
 <template>
-  <Row :gutter="16">
+  <Row :gap="16">
     <Column :span="16" :push="8">
       <div class="content">
         span-16 push-8

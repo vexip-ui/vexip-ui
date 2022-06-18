@@ -1,3 +1,3 @@
 ### Vertical
 
-添加 `vertical` 属性可以实现纵向排列。
+Add the `vertical` prop to achieve vertical layout.

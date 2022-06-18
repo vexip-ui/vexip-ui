@@ -12,7 +12,7 @@ export interface ColumnFlex {
 
 export interface RowState {
   columnFlex: ColumnFlex | false,
-  gutter: number | number[]
+  gap: number | number[]
 }
 
 export interface ColumnOptions {

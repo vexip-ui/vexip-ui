@@ -1,27 +1,27 @@
 ### Split Props
 
-| Name          | Type    | Description                                                                 | Default | Since |
-| ------------- | ------- | -------------------------------------------------------------------- | ------ | --- |
-| value         | `number`  | 左侧或上侧版面的占比，取值在 0 ~ 1 之间                              | `0.5`    | - |
-| min           | `number`  | 设置左侧或上侧版面的最小值，当取值在 0 ~ 1 时为比例值，否则为像素值  | `0.1`    | - |
-| max           | `number`  | 设置左侧或上侧版面的最大值，当取值在 0 ~ 1 时为比例值，否则为像素值  | `0.9`    | - |
-| vertical      | `boolean` | 设置是否为纵向分割                                                   | `false`  | - |
-| no-transition | `boolean` | 设置是否禁用过渡效果                                                 | `false`  | - |
-| lazy          | `boolean` | 开启后，在调整过程中会出现一个虚拟手柄，在调整完成后再改变面板的大小 | `false`  | - |
-| can-full      | `boolean` | 设置是否具有全屏按钮                                                 | `false`  | - |
+| Name          | Type      | Description                                                                                                                              | Default | Since |
+| ------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
+| value         | `number`  | The proportion of the left or top page, the value is between `0` ~ `1`                                                                       | `0.5`   | -     |
+| min           | `number`  | Set the minimum value of the left or upper layout, when the value is between 0 ~ 1, it is a scale value, otherwise it is a pixel value   | `0.1`   | -     |
+| max           | `number`  | Set the maximum value of the left or upper layout, when the value is between 0 ~ 1, it is a scale value, otherwise it is a pixel value   | `0.9`   | -     |
+| vertical      | `boolean` | Set whether to split vertically                                                                                                          | `false` | -     |
+| no-transition | `boolean` | Set whether to disable transition effects                                                                                                | `false` | -     |
+| lazy          | `boolean` | When enabled, a virtual handle will appear during the adjustment process, and the panel will be resized after the adjustment is complete | `false` | -     |
+| can-full      | `boolean` | set whether to have a full screen button                                                                                                 | `false` | -     |
 
 ### Split Events
 
-| Name      | Description                                                       | Parameters            | Since |
-| --------- | ---------------------------------------------------------- | --------------- | --- |
-| change | 当面板的比例发生变化时触发，返回当前的左侧或上侧面板的比例 | `(value: number)`           | - |
-| full   | 当开启全屏模式时触发，返回当前全屏的面板                   | `(pane: 'top' \| 'right' \| 'bottom' \| 'left')` | - |
-| reset  | 当关闭全屏模式时触发，无返回值                             | -               | - |
+| Name   | Description                                                                                       | Parameters                                       | Since |
+| ------ | ------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----- |
+| change | Triggered when the scale of the panel changes, returns the current scale of the left or top panel | `(value: number)`                                | -     |
+| full   | Triggered when full screen mode is enabled, returns the current full screen panel                 | `(pane: 'top' \| 'right' \| 'bottom' \| 'left')` | -     |
+| reset  | Triggered when fullscreen mode is closed, no return value                                         | -                                                | -     |
 
 ### Split Slots
 
-| Name   | Description                         | Parameters | Since |
-| ------ | ---------------------------- | --- | --- |
-| left   | 在横向分割时左侧内容的插槽，在纵向分割时上侧内容的插槽 | - | - |
-| right  | 在横向分割时右侧内容的插槽，在纵向分割时下侧内容的插槽 | - | - |
-| handler | 未开启全屏功能时，分割面板手柄的插槽 | - | - |
+| Name    | Description                                                                                   | Parameters | Since |
+| ------- | --------------------------------------------------------------------------------------------- | ---------- | ----- |
+| left    | Slot for left content when split horizontally, slot for upper content when split vertically   | -          | -     |
+| right   | Slot for right content when split horizontally, slot for bottom content when split vertically | -          | -     |
+| handler | When the full screen function is not enabled, the slot for the split panel handle             | -          | -     |

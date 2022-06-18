@@ -1,12 +1,12 @@
 <template>
-  <Row :gutter="[8, 16]">
+  <Row :gap="[8, 16]">
     <Column :span="24">
       <div class="content">
         span-24
       </div>
     </Column>
   </Row>
-  <Row :gutter="8">
+  <Row :gap="8">
     <Column :span="12">
       <div class="content">
         span-12

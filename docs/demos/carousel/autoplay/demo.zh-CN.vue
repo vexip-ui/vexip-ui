@@ -18,7 +18,7 @@
   font-size: 30px;
   color: #fff;
   background-color: var(--vxp-color-primary-base);
-  transition: transform 250ms;
+  transition: var(--vxp-transition-transform);
 }
 
 .demo-pane--vertical {

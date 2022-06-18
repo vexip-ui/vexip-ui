@@ -1,3 +1,3 @@
-### 面板全屏
+### Full Screen Pane
 
-添加 `can-full` 属性可以开启面板全屏功能，点击手柄中间的按钮即可切换全屏。
+Add the `can-full` attribute to enable the full screen function of the panel, and click the button in the middle of the handle to switch the full screen.

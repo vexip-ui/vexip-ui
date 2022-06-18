@@ -1,9 +1,9 @@
-### 定制栅格
+### Custom Grid
 
-Grid 组件的 `rows` 和 `columns` 属性，可以传入数字定制栅格的模版行和模版列的大小。
+The `rows` and `columns` properties of the Grid component can be passed to numerically customize the size of the template rows and template columns of the grid.
 
-如果这还不满足你，这两属性还同时支持传入字符串和数组，传入字符串的时候将会直接赋值给对应的 `grid-template` 样式属性，传入数组时则会组装后再赋值。
+If this doesn't satisfy you, these two properties also support passing in strings and arrays at the same time. When passing in a string, it will be directly assigned to the corresponding `grid-template` style attribute, and when passing in an array, it will be assembled and reassembled. Assignment.
 
-注意一：数组内的数字元素默认单位为 `fr`。
+Note 1: The default unit of numeric elements in an array is `fr`.
 
-注意二：Cell 组件默认宽度为 `24`，当显式地设置了 Grid 的 `columns` 属性后，如果这是一个数字，则 Cell 组件的默认宽度会与之对应，其他情况则会变为 `1`。
+Note 2: The default width of the Cell component is `24`. When the `columns` property of the Grid is explicitly set, if this is a number, the default width of the Cell component will correspond to it, otherwise it will become ` 1`.

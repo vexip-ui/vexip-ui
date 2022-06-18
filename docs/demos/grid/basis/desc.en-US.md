@@ -1,5 +1,5 @@
 ### Basis Usage
 
-单行栅格布局。
+Single row grid layout.
 
-使用一个 Grid 组件和一组 Cell 组件，就可以创建一个基本的栅格系统。
+Using a Grid component and a set of Cell components, you can create a basic grid system.

@@ -3,7 +3,7 @@
 | 名称        | 类型              | 说明                                                                             | 默认值  | 始于 |
 | ----------- | ----------------- | -------------------------------------------------------------------------------- | ------- | --- |
 | tag         | `string`            | 渲染的元素名称                                                                   | `'div'`   | - |
-| gutter      | `number \| number[]`   | 栅格间隔，可以传入 `[horizontal，vertical]` 的数组                               | `0`       | - |
+| gap      | `number \| number[]`   | 栅格间隔，可以传入 `[horizontal，vertical]` 的数组                               | `0`       | - |
 | justify     | `'start' \| 'end' \| 'center' \| 'space-around' \| 'space-between'`            | 水平排列方式 | `'start'` | - |
 | align       | `'top' \| 'middle' \| 'bottom'`            | 垂直对齐方式                                | `'top'`   | - |
 | column-flex | `boolean \| { justify?: 'start' \| 'end' \| 'center' \| 'space-around' \| 'space-between', align?: 'top' \| 'middle' \| 'bottom' }` | 设置其下的栅格是否为弹性布局，可以传入一个 `{ justify, align }` 进行定制化       | `false`   | - |

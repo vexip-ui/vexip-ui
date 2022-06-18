@@ -1,1 +1,1 @@
-一维栅格布局组件，基于列来定义区域块，用于快捷地创建稳健的布局。
+A Grid Layout component that defines area blocks based on columns for quick and easy creation of robust layouts.

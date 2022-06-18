@@ -1,5 +1,5 @@
-### 自由布局
+### Free Layout
 
-Cell 组件在纵横方向上分别有三个属性：`top`、`bottom`、`height` 和 `left`、`right`、`width`。
+The Cell component has three properties in the vertical and horizontal directions: `top`, `bottom`, `height` and `left`, `right`, `width`.
 
-两个方向都可以通过设置其中的两个属性来为栅格定位。
+Both directions can be positioned for the grid by setting two of these properties.

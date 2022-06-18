@@ -138,10 +138,10 @@ export default defineComponent({
       const style: CSSProperties = {}
 
       if (rowState) {
-        if (typeof rowState.gutter === 'number') {
-          style.paddingRight = style.paddingLeft = `${rowState.gutter / 2}px`
-        } else if (Array.isArray(rowState.gutter)) {
-          const [horizontal, vertical] = rowState.gutter
+        if (typeof rowState.gap === 'number') {
+          style.paddingRight = style.paddingLeft = `${rowState.gap / 2}px`
+        } else if (Array.isArray(rowState.gap)) {
+          const [horizontal, vertical] = rowState.gap
 
           style.padding = `${vertical / 2}px ${horizontal / 2}px`
         }

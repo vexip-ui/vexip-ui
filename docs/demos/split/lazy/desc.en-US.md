@@ -1,7 +1,7 @@
-### 虚拟手柄
+### virtual Handler
 
-添加 `lazy` 属性可以开启虚拟手柄功能。
+Add the `lazy` prop to enable virtual gamepad functionality.
 
-开启虚拟手柄后，在拖动过程中将以虚拟手柄标识位置，在拖动结束后面板将直接变换到目标位置。
+After the virtual handle is enabled, the virtual handle will be used to mark the position during the dragging process, and the panel will be directly transformed to the target position after the dragging.
 
-适用于面板内容较多，实时调整面板大小性能不佳的场景。
+It is suitable for scenarios where there is a lot of panel content and the performance of real-time adjustment of the panel size is poor.

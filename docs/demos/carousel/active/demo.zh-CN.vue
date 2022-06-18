@@ -2,7 +2,10 @@
   <Carousel loop :active-offset="1" style="max-width: 1000px;">
     <CarouselItem v-for="n in 5" :key="n">
       <template #default="{ active }">
-        <div class="demo-pane" :style="{ transform: `scaleY(${active ? 1 : 0.83})` }">
+        <div
+          class="demo-pane"
+          :style="{ backgroundColor: active ? 'var(--vxp-color-warning-base)' : undefined }"
+        >
           内容{{ n }}
         </div>
       </template>
@@ -20,17 +23,6 @@
   font-size: 30px;
   color: #fff;
   background-color: var(--vxp-color-primary-base);
-  transition: transform 250ms;
-}
-
-.demo-pane--vertical {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 200px;
-  height: 100%;
-  font-size: 30px;
-  color: #fff;
-  background-color: var(--vxp-color-primary-base);
+  transition: var(--vxp-transition-transform);
 }
 </style>

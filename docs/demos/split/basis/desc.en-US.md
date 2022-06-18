@@ -1,3 +1,3 @@
-### 横向分割
+### Horizontal Split
 
-传入 `left` 和 `right` 的插槽即可形成左右分割。
+Left and right splits are formed by passing in the `left` and `right` slots.

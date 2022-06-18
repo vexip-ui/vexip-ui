@@ -1,5 +1,5 @@
 <template>
-  <Row :gutter="[16, 24]">
+  <Row :gap="[16, 24]">
     <Column :span="8">
       <div class="content">
         span-8
@@ -11,7 +11,7 @@
       </div>
     </Column>
   </Row>
-  <Row :gutter="[16, 24]">
+  <Row :gap="[16, 24]">
     <Column :span="6" :offset="6">
       <div class="content">
         span-6 offset-6

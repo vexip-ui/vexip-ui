@@ -54,7 +54,7 @@ recordMap.value
   align-items: center;
   justify-content: center;
   height: 20px;
-  transition: transform 250ms;
+  transition: var(--vxp-transition-transform);
 }
 
 .separator.is-active {

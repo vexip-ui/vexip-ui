@@ -1,1 +1,3 @@
-二维栅格布局组件，基于行和列来定义区域块，用于快捷地创建稳健的纵横交错布局。
+A grid layout component that defines area blocks based on rows and columns for quickly creating robust criss-cross layouts.
+
+Compared with the grid layout of Row and Column, although Grid and Cell can create complex layouts more flexibly, their limitation is that they cannot be mixed with other components under the Grid component.

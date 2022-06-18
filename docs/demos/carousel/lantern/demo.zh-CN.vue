@@ -25,17 +25,6 @@
   font-size: 30px;
   color: #fff;
   background-color: var(--vxp-color-primary-base);
-  transition: transform 250ms;
-}
-
-.demo-pane--vertical {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 200px;
-  height: 100%;
-  font-size: 30px;
-  color: #fff;
-  background-color: var(--vxp-color-primary-base);
+  transition: var(--vxp-transition-transform);
 }
 </style>

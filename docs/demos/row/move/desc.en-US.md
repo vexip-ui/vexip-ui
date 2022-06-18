@@ -1,3 +1,3 @@
-### 栅格移动
+### Grid Moving
 
-通过设置 `push` 和 `pull` 来改变栅格的顺序。
+Change the order of the grid by setting `push` and `pull`.
