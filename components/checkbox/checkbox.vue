@@ -1,12 +1,12 @@
 <template>
   <label :class="className">
-    <span :class="`${prefix}__signal`"></span>
-    <span v-if="hasLabel || hasSlot" :class="[`${prefix}__label`, props.labelClass]">
+    <span :class="nh.be('signal')"></span>
+    <span v-if="hasLabel || hasSlot" :class="[nh.be('label'), props.labelClass]">
       <slot>{{ props.label }}</slot>
     </span>
     <input
       type="checkbox"
-      :class="`${prefix}__input`"
+      :class="nh.be('input')"
       :checked="currentChecked"
       :disabled="isDisabled"
       @change="handleChange(!currentChecked)"
@@ -25,7 +25,7 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { noop, isDefined, isFunction } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
@@ -71,7 +71,7 @@ export default defineComponent({
     const groupState = inject(GROUP_STATE, null)
     const validateField = inject(VALIDATE_FIELD, noop)
 
-    const prefix = 'vxp-checkbox'
+    const nh = useNameHelper('checkbox')
     const currentChecked = ref(props.checked)
     const currentPartial = ref(props.partial)
 
@@ -85,15 +85,15 @@ export default defineComponent({
     })
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
+        nh.b(),
+        nh.bs('vars'),
         {
-          [`${prefix}--checked`]: currentChecked.value,
-          [`${prefix}--disabled`]: isDisabled.value,
-          [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--border`]: props.border,
-          [`${prefix}--partial`]: props.control && currentPartial.value,
-          [`${prefix}--${props.state}`]: props.state !== 'default'
+          [nh.bm('checked')]: currentChecked.value,
+          [nh.bm('disabled')]: isDisabled.value,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm('border')]: props.border,
+          [nh.bm('partial')]: props.control && currentPartial.value,
+          [nh.bm(props.state)]: props.state !== 'default'
         }
       ]
     })
@@ -194,7 +194,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       currentChecked,
 
       isDisabled,

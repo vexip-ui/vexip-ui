@@ -1,7 +1,7 @@
 <template>
   <div
     ref="wrapper"
-    :class="prefix"
+    :class="nh.b()"
     v-bind="$attrs"
     @mouseenter="handleTriggerEnter"
     @mouseleave="handleTriggerLeave"
@@ -14,17 +14,17 @@
         v-show="active"
         ref="popper"
         :class="{
-          [`${tooltipPrefix}__popper`]: true,
-          [`${tooltipPrefix}-vars`]: true,
-          [`${tooltipPrefix}__popper--${props.tooltipTheme}`]: true,
-          [`${tooltipPrefix}__popper--no-hover`]: props.noHover
+          [tooltipNh.be('popper')]: true,
+          [tooltipNh.bs('vars')]: true,
+          [tooltipNh.bem('popper', props.tooltipTheme)]: true,
+          [tooltipNh.bem('popper', 'no-hover')]: props.noHover
         }"
         @click.stop
         @mouseenter="handleTriggerEnter"
         @mouseleave="handleTriggerLeave"
       >
-        <div :class="[`${prefix}__tip`, `${tooltipPrefix}__tip`, props.tipClass]" :style="tipStyle">
-          <div :class="`${tooltipPrefix}__arrow`"></div>
+        <div :class="[nh.be('tip'), tooltipNh.be('tip'), props.tipClass]" :style="tipStyle">
+          <div :class="tooltipNh.be('arrow')"></div>
           {{ content }}
         </div>
       </div>
@@ -35,7 +35,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
@@ -78,8 +78,8 @@ export default defineComponent({
       tipMaxWidth: 500
     })
 
-    const prefix = 'vxp-ellipsis'
-    const tooltipPrefix = 'vxp-tooltip'
+    const nh = useNameHelper('ellipsis')
+    const tooltipNh = useNameHelper('tooltip')
     const visible = ref(false)
     const active = ref(false)
     const placement = toRef(props, 'placement')
@@ -151,8 +151,8 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
-      tooltipPrefix,
+      nh,
+      tooltipNh,
       visible,
       active,
       content,

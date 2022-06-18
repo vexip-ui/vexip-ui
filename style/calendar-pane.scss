@@ -35,7 +35,7 @@ $calendar-pane: map.merge(
   $calendar-pane
 );
 
-.vxp-calendar {
+.#{$namespace}-calendar {
   &-vars {
     @include define-preset-values('calendar', $calendar-pane);
   }

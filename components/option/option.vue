@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 
 export default defineComponent({
   name: 'Option',
@@ -46,15 +47,15 @@ export default defineComponent({
   },
   emits: ['select'],
   setup(props, { emit }) {
-    const prefix = 'vxp-option'
+    const nh = useNameHelper('option')
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--disabled`]: props.disabled,
-        [`${prefix}--selected`]: !props.disabled && props.selected,
-        [`${prefix}--divided`]: props.divided,
-        [`${prefix}--hitting`]: props.hitting
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('disabled')]: props.disabled,
+        [nh.bm('selected')]: !props.disabled && props.selected,
+        [nh.bm('divided')]: props.divided,
+        [nh.bm('hitting')]: props.hitting
       }
     })
 

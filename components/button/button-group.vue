@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, provide } from 'vue'
-import { useProps, booleanProp, sizeProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, sizeProp } from '@vexip-ui/config'
 import { GROUP_STATE, buttonTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -29,12 +29,12 @@ export default defineComponent({
       circle: false
     })
 
-    const prefix = 'vxp-button-group'
+    const nh = useNameHelper('button-group')
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}--circle`]: props.circle
+        [nh.b()]: true,
+        [nh.bm('circle')]: props.circle
       }
     })
 

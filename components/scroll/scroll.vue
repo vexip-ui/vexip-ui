@@ -20,7 +20,7 @@
       v-if="props.useXBar"
       ref="xBar"
       placement="bottom"
-      :class="[`${prefix}__bar--horizontal`, props.barClass]"
+      :class="[nh.bem('bar', 'horizontal'), props.barClass]"
       :fade="props.barFade"
       :bar-length="xBarLength"
       :disabled="!enableXScroll"
@@ -34,7 +34,7 @@
       v-if="props.useYBar"
       ref="yBar"
       placement="right"
-      :class="[`${prefix}__bar--vertical`, props.barClass]"
+      :class="[nh.bem('bar', 'vertical'), props.barClass]"
       :fade="props.barFade"
       :bar-length="yBarLength"
       :disabled="!enableYScroll"
@@ -50,7 +50,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
-import { useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
@@ -141,7 +141,7 @@ export default defineComponent({
 
     const emitter = createEventEmitter()
 
-    const prefix = 'vxp-scroll'
+    const nh = useNameHelper('scroll')
     const usingBar = ref(false)
     const scrolling = ref(false)
     const transitionDuration = ref<number>(-1)
@@ -270,7 +270,7 @@ export default defineComponent({
     /* autoplay */
 
     const className = computed(() => {
-      return [prefix, `${prefix}-vars`, `${prefix}--${props.mode}`]
+      return [nh.b(), nh.bs('vars'), nh.bm(props.mode)]
     })
     const style = computed(() => {
       const { width, height } = props
@@ -294,13 +294,13 @@ export default defineComponent({
     })
     const wrapperClass = computed(() => {
       return [
-        `${prefix}__wrapper`,
+        nh.be('wrapper'),
         props.scrollClass,
         {
-          [`${prefix}__wrapper--scrolling`]: scrolling.value,
-          [`${prefix}__wrapper--no-ready`]: !isReady.value,
-          [`${prefix}__wrapper--using-bar`]: usingBar.value,
-          [`${prefix}__wrapper--no-transition`]: props.noTransition
+          [nh.bem('wrapper', 'scrolling')]: scrolling.value,
+          [nh.bem('wrapper', 'no-ready')]: !isReady.value,
+          [nh.bem('wrapper', 'using-bar')]: usingBar.value,
+          [nh.bem('wrapper', 'no-transition')]: props.noTransition
         }
       ]
     })
@@ -643,7 +643,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       percentX,
       percentY,
       transitionDuration,

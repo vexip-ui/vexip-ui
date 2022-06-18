@@ -18,7 +18,7 @@ $linker: map.merge(
   $linker
 );
 
-.vxp-linker {
+.#{$namespace}-linker {
   &-vars {
     @include define-preset-values('linker', $linker);
   }

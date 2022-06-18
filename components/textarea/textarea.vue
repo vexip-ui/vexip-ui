@@ -2,7 +2,7 @@
   <div :class="className">
     <textarea
       ref="textarea"
-      :class="`${prefix}__control`"
+      :class="nh.be('control')"
       :value="currentValue"
       :rows="props.rows"
       :autofocus="props.autofocus"
@@ -20,7 +20,7 @@
       @input="handleInput"
       @change="handleChange"
     ></textarea>
-    <div v-if="props.maxLength" :class="`${prefix}__count`">
+    <div v-if="props.maxLength" :class="nh.be('count')">
       {{ `${currentLength}/${props.maxLength}` }}
     </div>
   </div>
@@ -29,7 +29,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useProps, useLocale, booleanProp, stateProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, stateProp, createStateProp } from '@vexip-ui/config'
 import { noop, throttle } from '@vexip-ui/utils'
 
 export default defineComponent({
@@ -82,7 +82,7 @@ export default defineComponent({
 
     const validateField = inject(VALIDATE_FIELD, noop)
 
-    const prefix = 'vxp-textarea'
+    const nh = useNameHelper('textarea')
     const focused = ref(false)
     const currentValue = ref(props.value)
     const currentLength = ref(props.value ? props.value.length : 0)
@@ -92,13 +92,13 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
+        [nh.b()]: true,
         'vxp-input-vars': true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--focused`]: focused.value,
-        [`${prefix}--disabled`]: props.disabled,
-        [`${prefix}--no-resize`]: props.noResize,
-        [`${prefix}--${props.state}`]: props.state !== 'default'
+        [nh.bs('vars')]: true,
+        [nh.bm('focused')]: focused.value,
+        [nh.bm('disabled')]: props.disabled,
+        [nh.bm('no-resize')]: props.noResize,
+        [nh.bm(props.state)]: props.state !== 'default'
       }
     })
 
@@ -186,7 +186,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       locale: useLocale('input'),
       currentValue,
       currentLength,

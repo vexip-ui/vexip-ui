@@ -1,22 +1,22 @@
 <template>
   <div ref="wrapper" :class="className" @transitionend="removeTransition">
     <div
-      :class="[`${prefix}__pane`, `${prefix}__pane--${props.vertical ? 'top' : 'left'}`]"
+      :class="[nh.be('pane'), nh.bem('pane', props.vertical ? 'top' : 'left')]"
       :style="leftPaneStyle"
     >
       <slot name="left"></slot>
     </div>
     <div
-      :class="[`${prefix}__pane`, `${prefix}__pane--${props.vertical ? 'bottom' : 'right'}`]"
+      :class="[nh.be('pane'), nh.bem('pane', props.vertical ? 'bottom' : 'right')]"
       :style="rightPaneStyle"
     >
       <slot name="right"></slot>
     </div>
-    <div :class="`${prefix}__trigger`" :style="triggerStyle">
-      <div :class="`${prefix}__handler`" @mousedown="handleTriggerDown">
+    <div :class="nh.be('trigger')" :style="triggerStyle">
+      <div :class="nh.be('handler')" @mousedown="handleTriggerDown">
         <template v-if="props.canFull">
           <div
-            :class="[`${prefix}__button`, `${prefix}__button--${props.vertical ? 'top' : 'left'}-full`]"
+            :class="[nh.be('button'), nh.bem('button', `${props.vertical ? 'top' : 'left'}-full`)]"
             @mousedown.stop
             @click.left="handleFull(-1)"
           >
@@ -24,8 +24,8 @@
           </div>
           <div
             :class="[
-              `${prefix}__button`,
-              `${prefix}__button--${props.vertical ? 'bottom' : 'right'}-full`
+              nh.be('button'),
+              nh.bem('button', `${props.vertical ? 'bottom' : 'right'}-full`)
             ]"
             @mousedown.stop
             @click.left="handleFull(1)"
@@ -35,19 +35,19 @@
         </template>
         <template v-else>
           <slot name="handler">
-            <span v-for="n in 6" :key="n" :class="`${prefix}__pointer`"></span>
+            <span v-for="n in 6" :key="n" :class="nh.be('pointer')"></span>
           </slot>
         </template>
       </div>
     </div>
-    <div ref="guide" :class="`${prefix}__guide`"></div>
+    <div ref="guide" :class="nh.be('guide')"></div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { throttle } from '@vexip-ui/utils'
 import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
 
@@ -89,7 +89,7 @@ export default defineComponent({
       canFull: false
     })
 
-    const prefix = 'vxp-split'
+    const nh = useNameHelper('split')
     const currentValue = ref(props.value)
     const moving = ref(false)
     const currentFull = ref<0 | 1 | -1>(0)
@@ -110,12 +110,12 @@ export default defineComponent({
       }
 
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--${props.vertical ? 'vertical' : 'horizontal'}`]: true,
-        [`${prefix}--moving`]: moving.value,
-        [`${prefix}--${fullType}-full`]: !!fullType,
-        [`${prefix}--transition`]: transition.value
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm(props.vertical ? 'vertical' : 'horizontal')]: true,
+        [nh.bm('moving')]: moving.value,
+        [nh.bm(`${fullType}-full`)]: !!fullType,
+        [nh.bm('transition')]: transition.value
       }
     })
     const offset = computed(() => {
@@ -316,7 +316,7 @@ export default defineComponent({
       ChevronLeft,
 
       props,
-      prefix,
+      nh,
 
       className,
       position,

@@ -1,7 +1,7 @@
 <template>
   <div :class="className" @click="handleClick">
-    <div :class="[`${prefix}__content`, props.contentClass]" :style="contentStyle">
-      <div :class="`${prefix}__arrow`" :style="arrowStyle"></div>
+    <div :class="[nh.be('content'), props.contentClass]" :style="contentStyle">
+      <div :class="nh.be('arrow')" :style="arrowStyle"></div>
       <slot></slot>
     </div>
   </div>
@@ -10,7 +10,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { placementWhileList } from '@vexip-ui/mixins'
-import { useProps, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanStringProp } from '@vexip-ui/config'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -37,16 +37,16 @@ export default defineComponent({
       contentClass: null
     })
 
-    const prefix = 'vxp-bubble'
+    const nh = useNameHelper('bubble')
 
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
-        `${prefix}--${props.placement}`,
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(props.placement),
         {
-          [`${prefix}--background`]: props.background,
-          [`${prefix}--shadow`]: props.shadow
+          [nh.bm('background')]: props.background,
+          [nh.bm('shadow')]: props.shadow
         }
       ]
     })
@@ -75,7 +75,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
 
       className,
       contentStyle,

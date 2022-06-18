@@ -1,12 +1,12 @@
 <template>
   <div
     ref="wrapper"
-    :class="[prefix, `${prefix}-vars`]"
+    :class="[nh.b(), nh.bs('vars')]"
     @mouseenter="handleTriggerEnter"
     @mouseleave="handleTriggerLeave"
     @clickoutside="handleClickOutside"
   >
-    <div ref="reference" :class="`${prefix}__trigger`" @click="handleTriggerClick">
+    <div ref="reference" :class="nh.be('trigger')" @click="handleTriggerClick">
       <slot></slot>
     </div>
     <Portal v-if="!props.disabled" :to="transferTo">
@@ -16,18 +16,18 @@
           v-show="currentVisible"
           ref="popper"
           :class="{
-            [`${prefix}__popper`]: true,
-            [`${prefix}-vars`]: true,
-            [`${prefix}__popper--${props.theme}`]: true,
-            [`${prefix}__popper--no-hover`]: props.noHover
+            [nh.be('popper')]: true,
+            [nh.bs('vars')]: true,
+            [nh.bem('popper', props.theme)]: true,
+            [nh.bem('popper', 'no-hover')]: props.noHover
           }"
           @click.stop
           @mouseenter="handleTriggerEnter"
           @mouseleave="handleTriggerLeave"
           @animationend="rendering = currentVisible"
         >
-          <div :class="[`${prefix}__tip`, props.tipClass]">
-            <div :class="`${prefix}__arrow`"></div>
+          <div :class="[nh.be('tip'), props.tipClass]">
+            <div :class="nh.be('arrow')"></div>
             <slot name="tip"></slot>
           </div>
         </div>
@@ -39,7 +39,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch, toRef } from 'vue'
 import { Portal } from '@/components/portal'
-import { useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
@@ -186,7 +186,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix: 'vxp-tooltip',
+      nh: useNameHelper('tooltip'),
       currentVisible,
       rendering,
       transferTo,

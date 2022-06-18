@@ -1,11 +1,11 @@
 <template>
   <div ref="wrapper" :class="className">
-    <ul :class="`${prefix}__list`">
+    <ul :class="nh.be('list')">
       <slot></slot>
     </ul>
-    <div v-if="!props.card" :class="`${prefix}__track`" :style="markerStyle">
+    <div v-if="!props.card" :class="nh.be('track')" :style="markerStyle">
       <slot name="marker">
-        <div :class="`${prefix}__marker`"></div>
+        <div :class="nh.be('marker')"></div>
       </slot>
     </div>
   </div>
@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/mixins'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
@@ -36,7 +36,7 @@ export default defineComponent({
       card: false
     })
 
-    const prefix = ' vxp-tab-nav'
+    const nh = useNameHelper('tab-nav')
     const currentActive = ref(props.active)
     const markerLeft = ref(0)
     const markerWidth = ref(0)
@@ -46,9 +46,9 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--card`]: props.card
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('card')]: props.card
       }
     })
     const markerStyle = computed(() => {
@@ -125,7 +125,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
 
       className,
       markerStyle,

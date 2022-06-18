@@ -2,21 +2,21 @@
   <div v-if="isTypeColumn(column)" :class="className" :style="style">
     <Checkbox
       v-if="isSelection(column)"
-      :class="`${prefix}__selection`"
+      :class="nh.be('selection')"
       :checked="row.checked"
       :size="column.checkboxSize || 'default'"
       :disabled="disableCheckRows[row.key]"
       @click.prevent.stop="handleCheckRow(row)"
     ></Checkbox>
-    <span v-else-if="isOrder(column)" :class="`${prefix}__order`">
+    <span v-else-if="isOrder(column)" :class="nh.be('order')">
       {{ column.orderLabel && column.orderLabel(column.truthIndex ? row.index : rowIndex) }}
     </span>
     <template v-else-if="isExpand(column)">
       <div
         v-if="!disableExpandRows[row.key]"
         :class="{
-          [`${prefix}__expand`]: true,
-          [`${prefix}__expand--active`]: row.expanded
+          [nh.be('expand')]: true,
+          [nh.bem('expand', 'active')]: row.expanded
         }"
         @click.stop="handleExpandRow(row)"
       >
@@ -60,6 +60,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Ellipsis } from '@/components/ellipsis'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
+import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { AngleRight } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
@@ -110,16 +111,16 @@ export default defineComponent({
     const { state, getters, mutations } = inject(TABLE_STORE)!
     const tableAction = inject<TableAction>(TABLE_ACTION)!
 
-    const prefix = 'vxp-table'
+    const nh = useNameHelper('table')
 
     const className = computed(() => {
       const customClass = props.column.className || null
 
       return [
-        `${prefix}__cell`,
+        nh.be('cell'),
         {
-          [`${prefix}__cell--center`]: columnTypes.includes((props.column as TypeColumn).type),
-          [`${prefix}__cell--wrap`]: props.column.noEllipsis
+          [nh.bem('cell', 'center')]: columnTypes.includes((props.column as TypeColumn).type),
+          [nh.bem('cell', 'wrap')]: props.column.noEllipsis
         },
         customClass
       ]
@@ -169,7 +170,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
 
       className,
       style,

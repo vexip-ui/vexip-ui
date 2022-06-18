@@ -1,6 +1,6 @@
 <template>
   <Button
-    :class="`${prefix}__reset`"
+    :class="nh.be('reset')"
     :size="props.size"
     :type="props.type"
     :simple="props.simple"
@@ -28,7 +28,7 @@
 <script lang="ts">
 import { defineComponent, inject } from 'vue'
 import { Button, buttonTypes } from '@/components/button'
-import { useProps, useLocale, booleanProp, sizeProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, sizeProp } from '@vexip-ui/config'
 import { noop, isPromise } from '@vexip-ui/utils'
 import { FORM_ACTIONS } from './symbol'
 
@@ -118,7 +118,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix: 'vxp-form',
+      nh: useNameHelper('form'),
       locale: useLocale('form'),
 
       handleReset

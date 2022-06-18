@@ -1,6 +1,6 @@
 <template>
-  <div :class="`${prefix}__body`" :style="style">
-    <div v-if="renderData.length" :class="`${prefix}__row-list`" :style="listStyle">
+  <div :class="nh.be('body')" :style="style">
+    <div v-if="renderData.length" :class="nh.be('row-list')" :style="listStyle">
       <TableRow
         v-for="row in renderData"
         :key="row.index"
@@ -18,7 +18,7 @@
         ></TableCell>
       </TableRow>
     </div>
-    <div v-else :class="`${prefix}__empty`" :style="emptyStyle">
+    <div v-else :class="nh.be('empty')" :style="emptyStyle">
       <slot name="empty" :is-fixed="!!fixed">
         <template v-if="!fixed">
           {{ emptyText }}
@@ -32,6 +32,7 @@
 import { defineComponent, computed, inject, toRef } from 'vue'
 import TableCell from './table-cell.vue'
 import TableRow from './table-row.vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -101,7 +102,7 @@ export default defineComponent({
     })
 
     return {
-      prefix: 'vxp-table',
+      nh: useNameHelper('table'),
       emptyText: toRef(state, 'emptyText'),
 
       currentColumns,

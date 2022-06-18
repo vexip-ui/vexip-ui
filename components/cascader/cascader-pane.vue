@@ -1,5 +1,5 @@
 <template>
-  <div :class="`${prefix}__pane`" @mouseleave="handleMouseLeave">
+  <div :class="nh.be('pane')" @mouseleave="handleMouseLeave">
     <VirtualList
       ref="virtualList"
       :items="options"
@@ -8,9 +8,9 @@
       id-key="id"
       :items-attrs="{
         class: [
-          `${prefix}__options`,
-          multiple ? `${prefix}__options--multiple` : null,
-          noCascaded ? `${prefix}__options--no-cascaded` : null
+          nh.be('options'),
+          multiple ? nh.bem('options', 'multiple') : null,
+          noCascaded ? nh.bem('options', 'no-cascaded') : null
         ]
       }"
     >
@@ -36,7 +36,7 @@
           >
             <Checkbox
               v-if="multiple || noCascaded"
-              :class="`${prefix}__checkbox`"
+              :class="nh.be('checkbox')"
               :checked="item.checked"
               :control="hasChildren(item)"
               :partial="item.partial"
@@ -44,7 +44,7 @@
               size="small"
               @click.prevent.stop="handleToggleCheck(item)"
             ></Checkbox>
-            <span :class="`${prefix}__label`">
+            <span :class="nh.be('label')">
               <slot
                 name="label"
                 :option="item"
@@ -57,7 +57,7 @@
                 {{ item.label }}
               </slot>
             </span>
-            <div :class="`${prefix}__icon`">
+            <div :class="nh.be('icon')">
               <Icon v-if="item.loading" pulse>
                 <Spinner></Spinner>
               </Icon>
@@ -86,6 +86,7 @@ import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { VirtualList } from '@/components/virtual-list'
 import { ChevronRight, Check, Spinner, ArrowsRotate } from '@vexip-ui/icons'
+import { useNameHelper } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 import type { VirtualListExposed } from '@/components/virtual-list'
@@ -142,7 +143,7 @@ export default defineComponent({
   },
   emits: ['select', 'check', 'hover'],
   setup(props, { emit }) {
-    const prefix = 'vxp-cascader'
+    const nh = useNameHelper('cascader')
     const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed | null>(null)
 
     let hoverTimer = 0
@@ -202,7 +203,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
 
       virtualList,
 

@@ -22,7 +22,7 @@ $wheel: map.merge(
   $wheel
 );
 
-.vxp-wheel {
+.#{$namespace}-wheel {
   &-vars {
     @include define-preset-values('wheel', $wheel);
   }

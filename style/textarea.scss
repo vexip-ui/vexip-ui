@@ -16,7 +16,7 @@ $textarea: map.merge(
   $textarea
 );
 
-.vxp-textarea {
+.#{$namespace}-textarea {
   &-vars {
     @include define-preset-values('textarea', $textarea);
   }

@@ -4,15 +4,15 @@
       v-if="props.arrow"
       ref="prevArrow"
       :class="[
-        `${prefix}__arrow`,
-        `${prefix}__arrow--prev`,
-        prevDisabled ? `${prefix}__arrow--disabled` : ''
+        nh.be('arrow'),
+        nh.bem('arrow', 'prev'),
+        prevDisabled ? nh.bem('arrow', 'disabled') : ''
       ]"
       @click="handlePrev"
     >
       <Icon :icon="props.horizontal ? AngleLeft : AngleUp"></Icon>
     </div>
-    <div :class="`${prefix}__scroll`" :style="scrollStyle">
+    <div :class="nh.be('scroll')" :style="scrollStyle">
       <Scroll
         ref="scroll"
         width="100%"
@@ -25,22 +25,22 @@
         @wheel="handleWheel"
         @scroll-end="handleScrollEnd"
       >
-        <ul ref="list" :class="`${prefix}__list`" :style="listStyle">
+        <ul ref="list" :class="nh.be('list')" :style="listStyle">
           <slot v-if="isInit"></slot>
         </ul>
       </Scroll>
       <template v-if="props.candidate">
-        <div :class="[`${prefix}__mask`, `${prefix}__mask--top`]" :style="maskStyle"></div>
-        <div :class="[`${prefix}__mask`, `${prefix}__mask--bottom`]" :style="maskStyle"></div>
+        <div :class="[nh.be('mask'), nh.bem('mask', 'top')]" :style="maskStyle"></div>
+        <div :class="[nh.be('mask'), nh.bem('mask', 'bottom')]" :style="maskStyle"></div>
       </template>
     </div>
     <div
       v-if="props.arrow"
       ref="nextArrow"
       :class="[
-        `${prefix}__arrow`,
-        `${prefix}__arrow--next`,
-        nextDisabled ? `${prefix}__arrow--disabled` : ''
+        nh.be('arrow'),
+        nh.bem('arrow', 'next'),
+        nextDisabled ? nh.bem('arrow', 'disabled') : ''
       ]"
       @click="handleNext"
     >
@@ -55,7 +55,7 @@ import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { useDisplay } from '@vexip-ui/mixins'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { noop, debounce, debounceMinor } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
 import { WHEEL_STATE } from './symbol'
@@ -97,7 +97,7 @@ export default defineComponent({
 
     const validateField = inject(VALIDATE_FIELD, noop)
 
-    const prefix = 'vxp-wheel'
+    const nh = useNameHelper('wheel')
     const items = ref(new Set<ItemState>())
     const currentActive = ref(0)
     const wrapperWidth = ref(0)
@@ -115,7 +115,7 @@ export default defineComponent({
       return Array.from(items.value)
     })
     const className = computed(() => {
-      return [prefix, `${prefix}-vars`, `${prefix}--${props.horizontal ? 'horizontal' : 'vertical'}`]
+      return [nh.b(), nh.bs('vars'), nh.bm(props.horizontal ? 'horizontal' : 'vertical')]
     })
     const scrollStyle = computed(() => {
       if (props.horizontal) {
@@ -351,7 +351,7 @@ export default defineComponent({
       AngleLeft,
 
       props,
-      prefix,
+      nh,
       currentActive,
       isInit,
       targetWidth,

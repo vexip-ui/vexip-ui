@@ -1,6 +1,6 @@
 @use './design' as *;
 
-.vxp-time-ago {
+.#{$namespace}-time-ago {
   @include basis;
 
   display: inline-block;

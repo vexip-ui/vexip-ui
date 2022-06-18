@@ -1,54 +1,54 @@
 <template>
   <div
     ref="wrapper"
-    :class="`${prefixCls}__input`"
+    :class="nh.be('input')"
     tabindex="-1"
     @keydown="handleInput"
   >
     <div
       v-if="enabled.hour"
       :class="[
-        `${prefixCls}__unit`,
-        visible && unitType === 'hour' ? `${prefixCls}__unit--focused` : ''
+        nh.be('unit'),
+        visible && unitType === 'hour' ? nh.bem('unit', 'focused') : ''
       ]"
       @click="handleInputFocus('hour')"
     >
       {{ formattedHour }}
     </div>
-    <div v-if="labels.hour" :class="`${prefixCls}__label`">
+    <div v-if="labels.hour" :class="nh.be('label')">
       {{ labels.hour }}
     </div>
     <template v-if="enabled.minute">
-      <div v-if="enabled.hour" :class="`${prefixCls}__separator`">
+      <div v-if="enabled.hour" :class="nh.be('separator')">
         {{ separator }}
       </div>
       <div
         :class="[
-          `${prefixCls}__unit`,
-          visible && unitType === 'minute' ? `${prefixCls}__unit--focused` : ''
+          nh.be('unit'),
+          visible && unitType === 'minute' ? nh.bem('unit', 'focused') : ''
         ]"
         @click="handleInputFocus('minute')"
       >
         {{ formattedMinute }}
       </div>
-      <div v-if="labels.minute" :class="`${prefixCls}__label`">
+      <div v-if="labels.minute" :class="nh.be('label')">
         {{ labels.minute }}
       </div>
     </template>
     <template v-if="enabled.second">
-      <div v-if="enabled.minute || enabled.hour" :class="`${prefixCls}__separator`">
+      <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')">
         {{ separator }}
       </div>
       <div
         :class="[
-          `${prefixCls}__unit`,
-          visible && unitType === 'second' ? `${prefixCls}__unit--focused` : ''
+          nh.be('unit'),
+          visible && unitType === 'second' ? nh.bem('unit', 'focused') : ''
         ]"
         @click="handleInputFocus('second')"
       >
         {{ formattedSecond }}
       </div>
-      <div v-if="labels.second" :class="`${prefixCls}__label`">
+      <div v-if="labels.second" :class="nh.be('label')">
         {{ labels.second }}
       </div>
     </template>
@@ -57,6 +57,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { doubleDigits } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'
 
@@ -127,7 +128,7 @@ export default defineComponent({
     'next-unit'
   ],
   setup(props, { emit }) {
-    const prefix = 'vxp-time-picker'
+    const nh = useNameHelper('time-picker')
 
     const wrapper = ref<HTMLElement | null>(null)
 
@@ -196,7 +197,7 @@ export default defineComponent({
     }
 
     return {
-      prefixCls: prefix,
+      nh,
 
       formattedHour,
       formattedMinute,

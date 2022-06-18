@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, toRef } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TIMELINE_STATE } from './symbol'
 
@@ -31,15 +31,15 @@ export default defineComponent({
       spacing: null
     })
 
-    const prefix = 'vxp-timeline'
+    const nh = useNameHelper('timeline')
     const itemStates = new Set<ItemState>()
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--pending`]: props.pending,
-        [`${prefix}--both-sides`]: props.bothSides
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('pending')]: props.pending,
+        [nh.bm('both-sides')]: props.bothSides
       }
     })
 

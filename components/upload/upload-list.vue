@@ -3,8 +3,8 @@
     v-if="props.type === 'thumbnail'"
     tag="ul"
     :appear="props.selectToAdd"
-    :name="`${prefix}-list-transition`"
-    :class="[`${prefix}__files`, `${prefix}-vars`]"
+    :name="nh.bs('list-transition')"
+    :class="[nh.be('files'), nh.bs('vars')]"
     :style="props.style"
   >
     <UploadFile
@@ -31,7 +31,7 @@
       </template>
     </UploadFile>
   </transition-group>
-  <ul v-else :class="`${prefix}__files`" :style="props.style">
+  <ul v-else :class="nh.be('files')" :style="props.style">
     <UploadFile
       v-for="item in props.files"
       :key="item.id"
@@ -61,7 +61,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import UploadFile from './upload-file.vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { uploadListTypes } from './symbol'
 
 import type { PropType, StyleValue } from 'vue'
@@ -102,7 +102,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix: 'vxp-upload'
+      nh: useNameHelper('upload')
     }
   }
 })

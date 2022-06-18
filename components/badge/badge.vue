@@ -5,9 +5,9 @@
       <sup
         v-show="showSub"
         :class="{
-          [`${prefix}__content`]: true,
-          [`${prefix}__content--fixed`]: hasSlot,
-          [`${prefix}__content--${props.type}`]: props.type !== 'error'
+          [nh.be('content')]: true,
+          [nh.bem('content', 'fixed')]: hasSlot,
+          [nh.bem('content', props.type)]: props.type !== 'error'
         }"
         :style="{ backgroundColor: props.color }"
         :title="title"
@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -58,17 +58,17 @@ export default defineComponent({
       color: null
     })
 
-    const prefix = 'vxp-badge'
+    const nh = useNameHelper('badge')
 
     const hasSlot = computed(() => {
       return !!slots.default
     })
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--not-wrapper`]: !hasSlot.value,
-        [`${prefix}--is-dot`]: props.isDot
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('not-wrapper')]: !hasSlot.value,
+        [nh.bm('is-dot')]: props.isDot
       }
     })
     const renderContent = computed(() => {
@@ -81,7 +81,7 @@ export default defineComponent({
       return props.content
     })
     const transitionName = computed(() => {
-      return hasSlot.value ? `${prefix}-badge-zoom` : `${prefix}-zoom`
+      return hasSlot.value ? nh.bs('badge-zoom') : nh.bs('zoom')
     })
     const title = computed(() => {
       return props.content || props.content === 0 ? props.content.toString() : undefined
@@ -96,7 +96,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
 
       hasSlot,
       className,

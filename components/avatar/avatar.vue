@@ -2,7 +2,7 @@
   <div ref="wrapper" :class="className" :style="style">
     <img
       v-if="(props.src || props.srcSet) && !loadFail"
-      :class="`${prefix}__image`"
+      :class="nh.be('image')"
       :src="props.src"
       :alt="props.alt"
       :srcset="props.srcSet"
@@ -10,19 +10,19 @@
     />
     <img
       v-else-if="loadFail && props.fallbackSrc && !fallbackFail"
-      :class="`${prefix}__image`"
+      :class="nh.be('image')"
       :src="props.fallbackSrc"
       :alt="props.alt"
       @error="fallbackFail = true"
     />
     <Icon
       v-else-if="icon"
-      :class="`${prefix}__icon`"
+      :class="nh.be('icon')"
       :icon="icon"
       :scale="props.iconScale"
     ></Icon>
     <ResizeObserver v-else :on-resize="scaleText">
-      <span ref="text" :class="`${prefix}__text`">
+      <span ref="text" :class="nh.be('text')">
         <slot></slot>
       </span>
     </ResizeObserver>
@@ -33,7 +33,7 @@
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -87,7 +87,8 @@ export default defineComponent({
 
     const groupState = inject(GROUP_STATE, null)
 
-    const prefix = 'vxp-avatar'
+    const nh = useNameHelper('avatar')
+
     const loadFail = ref(false)
     const fallbackFail = ref(false)
 
@@ -99,10 +100,10 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--${size.value}`]: typeof size.value !== 'number' && size.value !== 'default',
-        [`${prefix}--circle`]: props.circle
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm(size.value)]: typeof size.value !== 'number' && size.value !== 'default',
+        [nh.bm('circle')]: props.circle
       }
     })
     const style = computed(() => {
@@ -169,7 +170,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       loadFail,
       fallbackFail,
 

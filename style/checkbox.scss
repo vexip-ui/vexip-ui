@@ -33,7 +33,7 @@ $checkbox: map.merge(
   $checkbox
 );
 
-.vxp-checkbox {
+.#{$namespace}-checkbox {
   &-vars {
     @include define-preset-values('checkbox', $checkbox);
   }

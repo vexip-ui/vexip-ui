@@ -39,7 +39,7 @@ $upload: map.merge(
   $upload
 );
 
-.vxp-upload {
+.#{$namespace}-upload {
   &-vars {
     @include define-preset-values('upload', $upload);
   }

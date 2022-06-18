@@ -1,6 +1,6 @@
 @use './design' as *;
 
-.vxp-grid {
+.#{$namespace}-grid {
   @include basis;
 
   position: relative;

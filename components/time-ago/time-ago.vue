@@ -1,12 +1,12 @@
 <template>
-  <span :class="prefix" :title="currentTitle">
+  <span :class="nh.b()" :title="currentTitle">
     {{ timeAgo }}
   </span>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
-import { useProps, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanStringProp } from '@vexip-ui/config'
 import { toDate, format } from '@vexip-ui/utils'
 import { getId, subscribe, unsubscribe, computeTimeAgo } from './helper'
 
@@ -35,7 +35,7 @@ export default defineComponent({
       titleFormat: 'yyyy-MM-dd HH:mm:ss'
     })
 
-    const prefix = 'vxp-time-ago'
+    const nh = useNameHelper('time-ago')
     const datetime = toDate(props.datetime)
     const timeAgo = ref(computeTimeAgo(datetime))
 
@@ -75,7 +75,7 @@ export default defineComponent({
     })
 
     return {
-      prefix,
+      nh,
       timeAgo,
 
       currentTitle

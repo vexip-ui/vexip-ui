@@ -117,7 +117,7 @@ watch(
     if (value) {
       const lang = getCodeLang(props.lang.toLowerCase())
 
-      if (languages[lang]) {
+      if (languages[lang] && codeRef.value) {
         codeRef.value.innerHTML = highlight(props.code, languages[lang], lang)
       }
     }
@@ -285,6 +285,11 @@ function editOnPlayground() {
     .vxp-tooltip__tip {
       white-space: nowrap;
     }
+
+    .vxp-icon {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &__code {
@@ -298,6 +303,7 @@ function editOnPlayground() {
 
     code {
       display: block;
+      white-space: pre-wrap;
     }
   }
 

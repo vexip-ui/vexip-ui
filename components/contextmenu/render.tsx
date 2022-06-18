@@ -3,12 +3,11 @@ import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
 import { ChevronRight } from '@vexip-ui/icons'
+import type { NameHelper } from '@vexip-ui/config'
 
 import type { MenuConfig } from './symbol'
 
-const prefix = 'vxp-contextmenu'
-
-function renderItemIcon(item: MenuConfig) {
+function renderItemIcon(item: MenuConfig, nh: NameHelper) {
   if (!item.icon) return null
 
   let icon: any
@@ -21,16 +20,16 @@ function renderItemIcon(item: MenuConfig) {
     )
   }
 
-  return <div class={`${prefix}__icon`}>{icon}</div>
+  return <div class={nh.be('icon')}>{icon}</div>
 }
 
-function renderItemShortcut(item: MenuConfig) {
+function renderItemShortcut(item: MenuConfig, nh: NameHelper) {
   if (!item.shortcut) return null
 
-  return <div class={`${prefix}__shortcut`}>{item.shortcut}</div>
+  return <div class={nh.be('shortcut')}>{item.shortcut}</div>
 }
 
-function renderGroupItem(item: MenuConfig) {
+function renderGroupItem(item: MenuConfig, nh: NameHelper) {
   return (
     <Dropdown
       transfer={false}
@@ -44,15 +43,15 @@ function renderGroupItem(item: MenuConfig) {
       {{
         default: () => (
           <DropdownItem
-            class={`${prefix}__item`}
+            class={nh.be('item')}
             label={item.key}
             divided={item.divided}
             disabled={item.disabled}
           >
-            {renderItemIcon(item)}
+            {renderItemIcon(item, nh)}
             <span style={{ color: item.color }}>{item.label || item.key}</span>
-            {renderItemShortcut(item)}
-            <div class={[`${prefix}__icon`, `${prefix}__arrow`]}>
+            {renderItemShortcut(item, nh)}
+            <div class={[nh.be('icon'), nh.be('arrow')]}>
               <Icon icon={ChevronRight} style={{ color: item.iconColor || item.color }}></Icon>
             </div>
           </DropdownItem>
@@ -60,16 +59,16 @@ function renderGroupItem(item: MenuConfig) {
         drop: () => (
           <DropdownList
             class={[
-              `${prefix}__list`,
+              nh.be('list'),
               item.children!.some(c => c.icon)
-                ? `${prefix}__list--icons`
-                : `${prefix}__list--no-icon`,
+                ? nh.bem('list', 'icons')
+                : nh.bem('list', 'no-icon'),
               item.children!.some(c => c.children?.length)
-                ? `${prefix}__list--arrows`
-                : `${prefix}__list--no-arrow`
+                ? nh.bem('list', 'arrows')
+                : nh.bem('list', 'no-arrow')
             ]}
           >
-            {item.children!.map(renderItem)}
+            {item.children!.map(i => renderItem({ nh, config: i }))}
           </DropdownList>
         )
       }}
@@ -77,20 +76,20 @@ function renderGroupItem(item: MenuConfig) {
   )
 }
 
-export function renderItem(item: MenuConfig) {
-  if (item.children?.length) {
-    return renderGroupItem(item)
+export function renderItem({ config, nh }: { config: MenuConfig, nh: NameHelper }) {
+  if (config.children?.length) {
+    return renderGroupItem(config, nh)
   } else {
     return (
       <DropdownItem
-        class={`${prefix}__item`}
-        label={item.key}
-        divided={item.divided}
-        disabled={item.disabled}
+        class={nh.be('item')}
+        label={config.key}
+        divided={config.divided}
+        disabled={config.disabled}
       >
-        {renderItemIcon(item)}
-        <span style={{ color: item.color }}>{item.label || item.key}</span>
-        {renderItemShortcut(item)}
+        {renderItemIcon(config, nh)}
+        <span style={{ color: config.color }}>{config.label || config.key}</span>
+        {renderItemShortcut(config, nh)}
       </DropdownItem>
     )
   }

@@ -1,6 +1,6 @@
 @use './design' as *;
 
-.vxp-popup {
+.#{$namespace}-popup {
   position: fixed;
   z-index: get-css-var('z-index-popper');
   width: 0;

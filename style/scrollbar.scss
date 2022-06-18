@@ -14,7 +14,7 @@ $scrollbar: map.merge(
   $scrollbar
 );
 
-.vxp-scrollbar {
+.#{$namespace}-scrollbar {
   &-vars {
     @include define-preset-values('scrollbar', $scrollbar);
   }

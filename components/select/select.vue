@@ -6,18 +6,18 @@
     @clickoutside="handleClickOutside"
   >
     <div ref="reference" :class="selectorClass">
-      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
+      <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
-      <div :class="`${prefixCls}__control`">
+      <div :class="nh.be('control')">
         <slot name="control">
           <template v-if="props.multiple">
             <Tag
               v-for="(item, index) in currentValues"
               :key="index"
-              :class="`${prefixCls}__tag`"
+              :class="nh.be('tag')"
               closable
               @click.stop="handleClick"
               @close="handleTagClose(item)"
@@ -30,7 +30,7 @@
           </template>
           <span
             v-if="(props.placeholder ?? locale.placeholder) && !hasValue"
-            :class="`${prefixCls}__placeholder`"
+            :class="nh.be('placeholder')"
           >
             {{ props.placeholder ?? locale.placeholder }}
           </span>
@@ -39,14 +39,14 @@
       <transition name="vxp-fade">
         <div
           v-if="!props.disabled && props.clearable && isHover && hasValue"
-          :class="`${prefixCls}__clear`"
+          :class="nh.be('clear')"
           @click.stop="handleClear"
         >
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div
           v-else-if="!noSuffix"
-          :class="`${prefixCls}__icon--suffix`"
+          :class="nh.bem('icon', 'suffix')"
           :style="{ color: props.suffixColor }"
         >
           <slot name="suffix">
@@ -54,10 +54,10 @@
               v-if="props.suffix"
               :icon="props.suffix"
               :class="{
-                [`${prefixCls}__arrow`]: !props.staticSuffix
+                [nh.be('arrow')]: !props.staticSuffix
               }"
             ></Icon>
-            <Icon v-else :class="`${prefixCls}__arrow`">
+            <Icon v-else :class="nh.be('arrow')">
               <ChevronDown></ChevronDown>
             </Icon>
           </slot>
@@ -69,12 +69,12 @@
         <div
           v-show="currentVisible"
           ref="popper"
-          :class="[`${prefixCls}__popper`, `${prefixCls}-vars`]"
+          :class="[nh.be('popper'), nh.bs('vars')]"
           @click.stop
         >
           <VirtualList
             ref="virtualList"
-            :class="[`${prefixCls}__list`, props.listClass]"
+            :class="[nh.be('list'), props.listClass]"
             :style="{
               height: listHeight,
               maxHeight: `${props.maxListHeight}px`
@@ -86,8 +86,8 @@
             id-key="value"
             :items-attrs="{
               class: [
-                `${prefixCls}__options`,
-                props.optionCheck ? `${prefixCls}__options--has-check` : ''
+                nh.be('options'),
+                props.optionCheck ? nh.bem('options', 'has-check') : ''
               ]
             }"
           >
@@ -108,11 +108,11 @@
                   :selected="isSelected(item)"
                   @select="handleSelect(item)"
                 >
-                  <span :class="`${prefixCls}__label`">
+                  <span :class="nh.be('label')">
                     {{ item.label }}
                   </span>
                   <transition v-if="props.optionCheck" name="vxp-fade" appear>
-                    <Icon v-if="isSelected(item)" :class="`${prefixCls}__check`">
+                    <Icon v-if="isSelected(item)" :class="nh.be('check')">
                       <Check></Check>
                     </Icon>
                   </transition>
@@ -120,7 +120,7 @@
               </slot>
             </template>
             <template #empty>
-              <div v-if="hasEmptyTip" :class="`${prefixCls}__empty`">
+              <div v-if="hasEmptyTip" :class="nh.be('empty')">
                 <slot name="empty">
                   {{ props.emptyText ?? locale.empty }}
                 </slot>
@@ -152,7 +152,7 @@ import { Tag } from '@/components/tag'
 import { VirtualList } from '@/components/virtual-list'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useProps, useLocale, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, isNull } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
@@ -264,7 +264,7 @@ export default defineComponent({
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
-    const prefix = 'vxp-select'
+    const nh = useNameHelper('select')
     const currentVisible = ref(props.visible)
     const currentLabels = ref<string[]>([])
     const currentValues = ref<(string | number)[]>([])
@@ -353,14 +353,14 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
+        [nh.b()]: true,
         'vxp-input-vars': true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--multiple`]: props.multiple
+        [nh.bs('vars')]: true,
+        [nh.bm('multiple')]: props.multiple
       }
     })
     const selectorClass = computed(() => {
-      const baseCls = `${prefix}__selector`
+      const baseCls = nh.be('selector')
 
       return {
         [baseCls]: true,
@@ -555,7 +555,7 @@ export default defineComponent({
 
     return {
       props,
-      prefixCls: prefix,
+      nh,
       locale,
       currentVisible,
       currentValues,

@@ -2,8 +2,8 @@
   <Select
     ref="select"
     v-model:visible="visible"
-    :class="prefixCls"
-    :list-class="`${prefixCls}__list`"
+    :class="nh.b()"
+    :list-class="nh.be('list')"
     :value="currentValue"
     :size="props.size"
     :state="props.state"
@@ -38,7 +38,7 @@
       >
         <input
           ref="control"
-          :class="`${prefixCls}__input`"
+          :class="nh.be('input')"
           :value="inputValue"
           :autofocus="props.autofocus"
           :spellcheck="props.spellcheck"
@@ -75,6 +75,7 @@ import { Select } from '@/components/select'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { placementWhileList } from '@vexip-ui/mixins'
 import {
+  useNameHelper,
   useProps,
   useLocale,
   booleanProp,
@@ -171,7 +172,8 @@ export default defineComponent({
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
-    const prefix = 'vxp-auto-complete'
+    const nh = useNameHelper('auto-complete')
+
     const currentValue = ref(props.value)
     const currentIndex = ref(-1)
     const visible = ref(false)
@@ -416,7 +418,7 @@ export default defineComponent({
 
     return {
       props,
-      prefixCls: prefix,
+      nh,
       locale: useLocale('input'),
       currentValue,
       currentIndex,

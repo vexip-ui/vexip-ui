@@ -1,5 +1,5 @@
 <template>
-  <div :class="`${prefix}__wheel`">
+  <div :class="nh.be('wheel')">
     <Wheel
       ref="hourWheel"
       v-model:value="currentHour"
@@ -43,6 +43,7 @@
 import { defineComponent, ref, watch } from 'vue'
 import { Wheel } from '@/components/wheel'
 import { WheelItem } from '@/components/wheel-item'
+import { useNameHelper } from '@vexip-ui/config'
 import { range, doubleDigits } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -75,7 +76,7 @@ export default defineComponent({
       validator: (value: number) => value >= 0 && value <= 59
     },
     candidate: {
-      default: 2,
+      default: 2 as 0 | 1 | 2 | 3,
       validator: (value: number) => [0, 1, 2, 3].includes(value)
     },
     steps: {
@@ -164,7 +165,7 @@ export default defineComponent({
     }
 
     return {
-      prefix: 'vxp-time-picker',
+      nh: useNameHelper('time-picker'),
       currentHour,
       currentMinute,
       currentSecond,

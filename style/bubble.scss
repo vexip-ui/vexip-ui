@@ -22,7 +22,7 @@ $bubble: map.merge(
   $bubble
 );
 
-.vxp-bubble {
+.#{$namespace}-bubble {
   &-vars {
     @include define-preset-values('bubble', $bubble);
   }

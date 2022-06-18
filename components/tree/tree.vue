@@ -1,11 +1,11 @@
 <template>
   <div
     ref="wrapper"
-    :class="[prefix, `${prefix}-vars`]"
+    :class="[nh.b(), nh.bs('vars')]"
     :aria-disabled="props.disabled"
     :aria-readonly="props.readonly"
   >
-    <ul :class="`${prefix}__list`">
+    <ul :class="nh.be('list')">
       <TreeNode
         v-for="(item, index) in treeData"
         v-show="item.visible"
@@ -40,7 +40,7 @@
         </template>
       </TreeNode>
     </ul>
-    <div v-if="!props.data || !props.data.length" :class="`${prefix}__empty-tip`">
+    <div v-if="!props.data || !props.data.length" :class="nh.be('empty-tip')">
       <slot name="empty">
         {{ props.emptyTip ?? locale.empty }}
       </slot>
@@ -49,7 +49,7 @@
       v-if="props.draggable"
       v-show="indicatorShow"
       ref="indicator"
-      :class="`${prefix}__indicator`"
+      :class="nh.be('indicator')"
     ></div>
   </div>
 </template>
@@ -57,7 +57,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide, nextTick, toRef } from 'vue'
 import TreeNode from './tree-node.vue'
-import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isNull, isPromise, transformTree, flatTree, removeArrayItem } from '@vexip-ui/utils'
 import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
 
@@ -168,7 +168,7 @@ export default defineComponent({
       noCascaded: false
     })
 
-    const prefix = 'vxp-tree'
+    const nh = useNameHelper('tree')
     const nodeMaps = new Map<Key, TreeNodeProps>()
     const flatData = ref<TreeNodeProps[]>([])
     const treeData = ref<TreeNodeProps[]>([])
@@ -813,7 +813,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       locale: useLocale('tree'),
       treeData,
       indicatorShow,

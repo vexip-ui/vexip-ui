@@ -1,5 +1,5 @@
 <template>
-  <li :class="`${prefix}__item`">
+  <li :class="nh.be('item')">
     <a
       ref="link"
       :class="linkClass"
@@ -10,7 +10,7 @@
     >
       <slot></slot>
     </a>
-    <ul :class="`${prefix}__list`">
+    <ul :class="nh.be('list')">
       <slot name="group"></slot>
     </ul>
   </li>
@@ -29,6 +29,7 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { baseIndentWidth, LINK_STATE, ANCHOR_STATE } from './symbol'
 
 import type { LinkState } from './symbol'
@@ -49,7 +50,7 @@ export default defineComponent({
     const anchorState = inject(ANCHOR_STATE, null)
     const parentLinkState = inject(LINK_STATE, null)
 
-    const prefix = 'vxp-anchor'
+    const nh = useNameHelper('anchor')
     const indent = ref(parentLinkState?.indent ? parentLinkState?.indent + 1 : 1)
     const active = ref(false)
 
@@ -63,8 +64,8 @@ export default defineComponent({
 
     const linkClass = computed(() => {
       return {
-        [`${prefix}__link`]: true,
-        [`${prefix}__link--active`]: active.value
+        [nh.be('link')]: true,
+        [nh.be('link--active')]: active.value
       }
     })
     const linkStyle = computed(() => {
@@ -99,7 +100,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
 
       linkClass,
       linkStyle,

@@ -20,7 +20,7 @@ $card: map.merge(
   $card
 );
 
-.vxp-card {
+.#{$namespace}-card {
   &-vars {
     @include define-preset-values('card', $card);
   }

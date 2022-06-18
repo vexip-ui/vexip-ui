@@ -1,6 +1,6 @@
 <template>
   <Button
-    :class="`${prefix}__submit`"
+    :class="nh.be('submit')"
     :size="props.size"
     :type="props.type"
     :simple="props.simple"
@@ -34,7 +34,7 @@
 <script lang="ts">
 import { defineComponent, ref, inject } from 'vue'
 import { Button, buttonTypes } from '@/components/button'
-import { useProps, useLocale, booleanProp, sizeProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, sizeProp } from '@vexip-ui/config'
 import { noop, isPromise } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_ACTIONS } from './symbol'
 
@@ -138,7 +138,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix: 'vxp-form',
+      nh: useNameHelper('form'),
       locale: useLocale('form'),
       loading,
 

@@ -5,13 +5,13 @@
     @click="handleTirggerClick"
     @clickoutside="finishInput"
   >
-    <div ref="reference" :class="`${prefixCls}__selector`">
-      <div v-if="hasPrefix" :class="`${prefixCls}__icon--prefix`" :style="{ color: props.prefixColor }">
+    <div ref="reference" :class="nh.be('selector')">
+      <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
-      <div :class="`${prefixCls}__control`">
+      <div :class="nh.be('control')">
         <TimeControl
           ref="start"
           :unit-type="currentState === 'start' ? startState.column : ''"
@@ -37,7 +37,7 @@
         ></TimeControl>
         <template v-if="props.isRange">
           <div
-            :class="[`${prefixCls}__exchange`, props.exchange ? `${prefixCls}__exchange--enabled` : '']"
+            :class="[nh.be('exchange'), props.exchange ? nh.bem('exchange', 'enabled') : '']"
             @click="handleExchangeClick"
           >
             <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
@@ -70,12 +70,12 @@
       <transition name="vxp-fade">
         <div
           v-if="!props.disabled && props.clearable && isHover && lastValue"
-          :class="`${prefixCls}__clear`"
+          :class="nh.be('clear')"
           @click.stop="handleClear"
         >
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div v-else :class="`${prefixCls}__icon--suffix`" :style="{ color: props.suffixColor }">
+        <div v-else :class="nh.bem('icon', 'suffix')" :style="{ color: props.suffixColor }">
           <slot name="suffix">
             <Icon :icon="props.suffix || ClockR"></Icon>
           </slot>
@@ -87,22 +87,22 @@
         <div
           v-show="currentVisible"
           ref="popper"
-          :class="[`${prefixCls}__popper`, `${prefixCls}-vars`]"
+          :class="[nh.be('popper'), nh.bs('vars')]"
           @click.stop="handleFocused"
         >
-          <div :class="`${prefixCls}__pane`">
-            <div v-if="props.shortcuts.length" :class="[`${prefixCls}__list`, `${prefixCls}__list--sub`]">
+          <div :class="nh.be('pane')">
+            <div v-if="props.shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
               <div
                 v-for="(item, index) in props.shortcuts"
                 :key="index"
-                :class="`${prefixCls}__shortcut`"
+                :class="nh.be('shortcut')"
                 :title="item.name"
                 @click="handleShortcut(index)"
               >
                 {{ item.name }}
               </div>
             </div>
-            <div :class="`${prefixCls}__list`">
+            <div :class="nh.be('list')">
               <div style="display: flex;">
                 <TimeWheel
                   v-model:hour="startState.timeValue.hour"
@@ -128,7 +128,7 @@
                   @toggle-col="handleEndInput"
                 ></TimeWheel>
               </div>
-              <div v-if="!props.noAction" :class="`${prefixCls}__action`">
+              <div v-if="!props.noAction" :class="nh.be('action')">
                 <Button text size="small" @click="handleCancel">
                   {{ props.cancelText || locale.cancel }}
                 </Button>
@@ -153,7 +153,7 @@ import TimeControl from './time-control.vue'
 import TimeWheel from './time-wheel.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useProps, useLocale, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
 import { noop, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
@@ -273,7 +273,7 @@ export default defineComponent({
     const validateField = inject(VALIDATE_FIELD, noop)
     const clearField = inject(CLEAR_FIELD, noop)
 
-    const prefix = 'vxp-time-picker'
+    const nh = useNameHelper('time-picker')
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const currentVisible = ref(props.visible)
@@ -297,18 +297,18 @@ export default defineComponent({
 
     const className = computed(() => {
       return [
-        prefix,
-        'vxp-input-vars',
-        `${prefix}-vars`,
+        nh.b(),
+        nh.ns('input-vars'),
+        nh.bs('vars'),
         {
-          [`${prefix}--disabled`]: props.disabled,
-          [`${prefix}--${props.size}`]: props.size !== 'default',
-          [`${prefix}--no-hour`]: !startState.enabled.hour,
-          [`${prefix}--no-minute`]: !startState.enabled.minute,
-          [`${prefix}--no-second`]: !startState.enabled.second,
-          [`${prefix}--focused`]: focused.value,
-          [`${prefix}--${props.state}`]: props.state !== 'default',
-          [`${prefix}--is-range`]: props.isRange
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm('no-hour')]: !startState.enabled.hour,
+          [nh.bm('no-minute')]: !startState.enabled.minute,
+          [nh.bm('no-second')]: !startState.enabled.second,
+          [nh.bm('focused')]: focused.value,
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm('is-range')]: props.isRange
         }
       ]
     })
@@ -679,7 +679,7 @@ export default defineComponent({
       ClockR,
 
       props,
-      prefixCls: prefix,
+      nh,
       locale: useLocale('timePicker'),
       isHover,
       currentVisible,

@@ -11,7 +11,7 @@ $highlight: map.merge(
   $highlight
 );
 
-.vxp-highlight {
+.#{$namespace}-highlight {
   &-vars {
     @include define-preset-values('highlight', $highlight);
   }

@@ -12,7 +12,7 @@ $masker: map.merge(
   $masker
 );
 
-.vxp-masker {
+.#{$namespace}-masker {
   &-vars {
     @include define-preset-values('masker', $masker);
   }

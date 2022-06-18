@@ -1,7 +1,7 @@
 <template>
   <Dropdown
     v-model:visible="visible"
-    :class="[prefix, `${prefix}-vars`]"
+    :class="[nh.b(), nh.bs('vars')]"
     trigger="click"
     placement="right-start"
     :appear="appear"
@@ -14,21 +14,21 @@
     @select="handleSelect"
     @outside-close="handleCancel"
   >
-    <!-- <div :class="`${prefix}__anchor`"></div> -->
+    <!-- <div :class="nh.be('anchor')"></div> -->
     <template #drop>
       <DropdownList
         :class="[
-          `${prefix}__list`,
-          configs.some(c => c.icon) ? `${prefix}__list--icons` : `${prefix}__list--no-icon`,
+          nh.be('list'),
+          configs.some(c => c.icon) ? nh.bem('list', 'icons') : nh.bem('list', 'no-icon'),
           configs.some(c => c.children && c.children.length)
-            ? `${prefix}__list--arrows`
-            : `${prefix}__list--no-arrow`
+            ? nh.bem('list', 'arrows')
+            : nh.bem('list', 'no-arrow')
         ]"
       >
         <Renderer
           v-for="item in configs"
           :key="item.key"
-          :data="item"
+          :data="{ config: item, nh }"
           :renderer="renderItem"
         ></Renderer>
       </DropdownList>
@@ -40,6 +40,7 @@
 import { defineComponent, ref, reactive } from 'vue'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
+import { useNameHelper } from '@vexip-ui/config'
 import { renderItem } from './render'
 
 import { Renderer } from '@/components/renderer'
@@ -55,7 +56,7 @@ export default defineComponent({
     Renderer
   },
   setup() {
-    const prefix = 'vxp-contextmenu'
+    const nh = useNameHelper('contextmenu')
     const visible = ref(false)
     const configs = ref<MenuConfig[]>([])
     const appear = ref(false)
@@ -110,7 +111,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
       visible,
       configs,
       appear,

@@ -2,9 +2,9 @@
   <ul :class="className">
     <li
       :class="[
-        `${prefix}__item`,
-        `${prefix}__item--prev`,
-        disabledPrev ? `${prefix}__item--disabled` : ''
+        nh.be('item'),
+        nh.bem('item', 'prev'),
+        disabledPrev ? nh.bem('item', 'disabled') : ''
       ]"
       :title="locale.prevPage"
       @click="handlePrev"
@@ -17,9 +17,9 @@
     </li>
     <li
       :class="{
-        [`${prefix}__item`]: true,
-        [`${prefix}__item--disabled`]: isFunction(disableItem) && disableItem(1),
-        [`${prefix}__item--active`]: currentActive === 1
+        [nh.be('item')]: true,
+        [nh.bem('item', 'disabled')]: isFunction(disableItem) && disableItem(1),
+        [nh.bem('item', 'active')]: currentActive === 1
       }"
       @click="changeActive(1)"
     >
@@ -30,9 +30,9 @@
     <li
       v-if="useEllipsis && mode !== PaginationMode.LEFT"
       :class="{
-        [`${prefix}__item`]: true,
-        [`${prefix}__item--more`]: true,
-        [`${prefix}__item--disabled`]: !prevEllipsisTarget
+        [nh.be('item')]: true,
+        [nh.bem('item', 'more')]: true,
+        [nh.bem('item', 'disabled')]: !prevEllipsisTarget
       }"
       :title="prevTurnPageTitle"
       @click="handleClickPrevEllipsis"
@@ -53,9 +53,9 @@
         v-for="(page, index) in currentPagers"
         :key="index"
         :class="{
-          [`${prefix}__item`]: true,
-          [`${prefix}__item--disabled`]: isFunction(disableItem) && disableItem(page),
-          [`${prefix}__item--active`]: currentActive === page
+          [nh.be('item')]: true,
+          [nh.bem('item', 'disabled')]: isFunction(disableItem) && disableItem(page),
+          [nh.bem('item', 'active')]: currentActive === page
         }"
         @click="changeActive(page)"
       >
@@ -67,9 +67,9 @@
     <li
       v-if="useEllipsis && mode !== PaginationMode.RIGHT"
       :class="{
-        [`${prefix}__item`]: true,
-        [`${prefix}__item--more`]: true,
-        [`${prefix}__item--disabled`]: !nextEllipsisTarget
+        [nh.be('item')]: true,
+        [nh.bem('item', 'more')]: true,
+        [nh.bem('item', 'disabled')]: !nextEllipsisTarget
       }"
       :title="nextTurnPageTitle"
       @click="handleClickNextEllipsis"
@@ -88,9 +88,9 @@
     <li
       v-if="pagerCount > 1"
       :class="{
-        [`${prefix}__item`]: true,
-        [`${prefix}__item--disabled`]: isFunction(disableItem) && disableItem(pagerCount),
-        [`${prefix}__item--active`]: currentActive === pagerCount
+        [nh.be('item')]: true,
+        [nh.bem('item', 'disabled')]: isFunction(disableItem) && disableItem(pagerCount),
+        [nh.bem('item', 'active')]: currentActive === pagerCount
       }"
       :title="locale.nextPage"
       @click="changeActive(pagerCount)"
@@ -101,9 +101,9 @@
     </li>
     <li
       :class="[
-        `${prefix}__item`,
-        `${prefix}__item--next`,
-        disabledNext ? `${prefix}__item--disabled` : ''
+        nh.be('item'),
+        nh.bem('item', 'next'),
+        disabledNext ? nh.bem('item', 'disabled') : ''
       ]"
       @click="handleNext"
     >
@@ -114,17 +114,17 @@
       </slot>
     </li>
     <slot>
-      <div v-if="props.pageTotal" :class="`${prefix}__total`">
+      <div v-if="props.pageTotal" :class="nh.be('total')">
         {{ `${locale.total} ${getCountWord(props.itemUnit ?? locale.itemUnit, props.total)}` }}
       </div>
-      <div v-if="props.pageCount" :class="`${prefix}__size`">
+      <div v-if="props.pageCount" :class="nh.be('size')">
         <Select v-model:value="currentPageSize" :options="sizeObjectOptions"></Select>
       </div>
-      <div v-if="props.pageJump" :class="`${prefix}__jump`">
+      <div v-if="props.pageJump" :class="nh.be('jump')">
         {{ locale.jumpTo }}
         <NumberInput
           v-model:value="jumpValue"
-          :class="`${prefix}__jump-input`"
+          :class="nh.be('jump-input')"
           @change="handleJumpPage"
         ></NumberInput>
         {{ getCountWordOnly(locale.page, 1) }}
@@ -138,7 +138,7 @@ import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
 import { Select } from '@/components/select'
-import { useProps, useLocale, booleanProp, sizeProp, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, sizeProp, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
 import { isFunction, range } from '@vexip-ui/utils'
 import { PaginationMode } from './symbol'
 import { ChevronRight, ChevronLeft, AnglesRight, AnglesLeft, Ellipsis } from '@vexip-ui/icons'
@@ -211,7 +211,7 @@ export default defineComponent({
       itemUnit: null
     })
 
-    const prefix = 'vxp-pagination'
+    const nh = useNameHelper('pagination')
     const currentPagers = ref<number[]>([])
     const currentActive = ref(props.active)
     const currentPageSize = ref(props.pageSize)
@@ -224,12 +224,12 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--${props.size}`]: props.size !== 'default',
-        [`${prefix}--background`]: props.background,
-        [`${prefix}--no-border`]: props.noBorder,
-        [`${prefix}--disabled`]: props.disabled
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm(props.size)]: props.size !== 'default',
+        [nh.bm('background')]: props.background,
+        [nh.bm('no-border')]: props.noBorder,
+        [nh.bm('disabled')]: props.disabled
       }
     })
     const pagerCount = computed(() => {
@@ -472,7 +472,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       locale,
       currentPagers,
       currentActive,

@@ -24,7 +24,7 @@ $message: map.merge(
   $message
 );
 
-.vxp-message {
+.#{$namespace}-message {
   &-vars {
     @include define-preset-values('message', $message);
   }

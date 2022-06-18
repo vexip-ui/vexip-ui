@@ -1,6 +1,6 @@
 <template>
   <div :class="className" :style="style">
-    <div v-for="(option, index) in renderAvatars" :key="index" :class="`${prefix}__item`">
+    <div v-for="(option, index) in renderAvatars" :key="index" :class="nh.be('item')">
       <slot :option="option" :index="index">
         <Avatar
           :src="option.src"
@@ -16,8 +16,8 @@
         </Avatar>
       </slot>
     </div>
-    <div v-if="restAvatars.length" :class="[`${prefix}__item`, `${prefix}__item--rest`]">
-      <Tooltip v-if="props.showTip" :trigger="props.tipTrigger" :tip-class="`${prefix}__rest`">
+    <div v-if="restAvatars.length" :class="[nh.be('item'), nh.bem('item', 'rest')]">
+      <Tooltip v-if="props.showTip" :trigger="props.tipTrigger" :tip-class="nh.be('rest')">
         <slot name="rest" :options="restAvatars" :count="restAvatars.length">
           <Avatar :color="props.restColor" :background="props.restBackground">
             {{ `+${restAvatars.length}` }}
@@ -60,7 +60,7 @@
 import { defineComponent, ref, computed, watchEffect, provide } from 'vue'
 import { Avatar } from '@/components/avatar'
 import { Tooltip } from '@/components/tooltip'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -102,7 +102,7 @@ export default defineComponent({
       restBackground: null
     })
 
-    const prefix = 'vxp-avatar-group'
+    const nh = useNameHelper('avatar-group')
 
     const renderAvatars = ref<AvatarOption[]>([])
     const restAvatars = ref<AvatarOption[]>([])
@@ -123,11 +123,11 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
+        [nh.b()]: true,
         'vxp-avatar-vars': true,
-        [`${prefix}--${props.size}`]: typeof props.size !== 'number' && props.size !== 'default',
-        [`${prefix}--circle`]: props.circle,
-        [`${prefix}--vertical`]: props.vertical
+        [nh.bm(props.size)]: typeof props.size !== 'number' && props.size !== 'default',
+        [nh.bm('circle')]: props.circle,
+        [nh.bm('vertical')]: props.vertical
       }
     })
     const style = computed(() => {
@@ -142,7 +142,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       renderAvatars,
       restAvatars,
 

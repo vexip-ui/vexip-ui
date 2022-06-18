@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, inject, onBeforeUnmount } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { CAROUSEL_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
@@ -15,7 +16,7 @@ export default defineComponent({
   setup() {
     const carouselState = inject(CAROUSEL_STATE, null)
 
-    const prefix = 'vxp-carousel'
+    const nh = useNameHelper('carousel')
     const state: ItemState = reactive({
       label: -1,
       width: 0,
@@ -28,8 +29,8 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        [`${prefix}__item`]: true,
-        [`${prefix}__item--active`]: active.value
+        [nh.be('item')]: true,
+        [nh.bem('item', 'active')]: active.value
       }
     })
     const style = computed(() => {

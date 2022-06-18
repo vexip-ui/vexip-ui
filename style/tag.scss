@@ -23,7 +23,7 @@ $tag: map.merge(
   $tag
 );
 
-.vxp-tag {
+.#{$namespace}-tag {
   &-vars {
     @include define-preset-values('tag', $tag);
   }

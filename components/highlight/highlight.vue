@@ -1,7 +1,7 @@
 <template>
-  <div :class="[prefix, `${prefix}-vars`]">
+  <div :class="[nh.b(), nh.bs('vars')]">
     <template v-for="(item, index) in renderTexts" :key="index">
-      <span v-if="item.isKey" :class="`${prefix}__key-word`">
+      <span v-if="item.isKey" :class="nh.be('key-word')">
         <slot name="light" :text="item.text">
           {{ item.text }}
         </slot>
@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -41,7 +41,7 @@ export default defineComponent({
       ignoreCase: false
     })
 
-    const prefix = 'vxp-highlight'
+    const nh = useNameHelper('highlight')
 
     const splitRE = computed(() => {
       const keyWords = props.keyWords?.filter(Boolean)
@@ -66,7 +66,7 @@ export default defineComponent({
     })
 
     return {
-      prefix,
+      nh,
 
       renderTexts
     }

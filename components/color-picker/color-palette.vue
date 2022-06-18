@@ -1,28 +1,29 @@
 <template>
   <div
     ref="wrapper"
-    :class="`${prefix}__palette`"
+    :class="nh.be('palette')"
     :style="{
       backgroundColor: `hsl(${hue}, 100%, 50%)`
     }"
     @mousedown="handleMouseDown"
   >
-    <div :class="`${prefix}__saturation`"></div>
-    <div :class="`${prefix}__value`"></div>
+    <div :class="nh.be('saturation')"></div>
+    <div :class="nh.be('value')"></div>
     <div
-      :class="`${prefix}__palette-handler`"
+      :class="nh.be('palette-handler')"
       :style="{
         top: `${currentTop}%`,
         left: `${currentLeft}%`
       }"
     >
-      <div :class="`${prefix}__palette-pointer`"></div>
+      <div :class="nh.be('palette-pointer')"></div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { toFixed, throttle } from '@vexip-ui/utils'
 
 export default defineComponent({
@@ -165,7 +166,7 @@ export default defineComponent({
     }
 
     return {
-      prefix: 'vxp-color-picker',
+      nh: useNameHelper('color-picker'),
       currentTop,
       currentLeft,
 

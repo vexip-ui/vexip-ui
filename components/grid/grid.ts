@@ -1,5 +1,5 @@
 import { defineComponent, reactive, computed, toRef, h, provide } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { GRID_STATE } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
@@ -54,14 +54,14 @@ export default defineComponent({
       cellFlex: false
     })
 
-    const prefix = 'vxp-grid'
+    const nh = useNameHelper('grid')
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}--${props.justify}`]: true,
-        [`${prefix}--${props.align}`]: props.align !== 'stretch',
-        [`${prefix}--densc`]: props.dense
+        [nh.b()]: true,
+        [nh.bm(props.justify)]: true,
+        [nh.bm(props.align)]: props.align !== 'stretch',
+        [nh.bm('densc')]: props.dense
       }
     })
     const style = computed(() => {

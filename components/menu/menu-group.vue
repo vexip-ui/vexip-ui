@@ -1,14 +1,14 @@
 <template>
   <slot v-if="onlyShowSlot"></slot>
-  <li v-else :class="prefix">
-    <div :class="`${prefix}__title`">
-      <span :class="`${prefix}__label`" :style="labelStyle">
+  <li v-else :class="nh.b()">
+    <div :class="nh.be('title')">
+      <span :class="nh.be('label')" :style="labelStyle">
         <slot name="label">
           {{ label }}
         </slot>
       </span>
     </div>
-    <ul :class="`${prefix}__list`">
+    <ul :class="nh.be('list')">
       <slot></slot>
     </ul>
   </li>
@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, provide } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 export default defineComponent({
@@ -50,7 +51,7 @@ export default defineComponent({
     provide(MENU_GROUP_STATE, reactive({ indent }))
 
     return {
-      prefix: 'vxp-menu-group',
+      nh: useNameHelper('menu-group'),
       indent,
 
       labelStyle,

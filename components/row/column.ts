@@ -1,5 +1,5 @@
 import { defineComponent, computed, h, inject } from 'vue'
-import { useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 import { ROW_STATE, breakPoints } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
@@ -87,7 +87,7 @@ export default defineComponent({
 
     const rowState = inject(ROW_STATE, null)
 
-    const prefix = 'vxp-column'
+    const nh = useNameHelper('column')
 
     const className = computed(() => {
       const columnFlex = (props.useFlex || rowState?.columnFlex) && {
@@ -98,19 +98,17 @@ export default defineComponent({
             : {}
         )
       }
-      const className = [prefix, { [`${prefix}--flex`]: columnFlex }]
+      const className = [nh.b(), { [nh.bm('flex')]: columnFlex }]
 
       if (columnFlex) {
-        className.push(
-          `${prefix}--${columnFlex.justify}`,
-          `${prefix}--${columnFlex.align}`
-        )
+        columnFlex.justify && className.push(nh.bm(columnFlex.justify))
+        columnFlex.align && className.push(nh.bm(columnFlex.align))
       }
 
       colProps.forEach(prop => {
         if (typeof props[prop] === 'number') {
           className.push(
-            prop === 'span' ? `${prefix}--${props[prop]}` : `${prefix}--${prop}-${props[prop]}`
+            prop === 'span' ? nh.bm(props[prop]) : nh.bm(`${prop}-${props[prop]}`)
           )
         }
       })
@@ -121,14 +119,14 @@ export default defineComponent({
         if (!sizeProp && sizeProp !== 0) return
 
         if (typeof sizeProp === 'number') {
-          className.push(`${prefix}--${size}-${sizeProp}`)
+          className.push(nh.bm(`${size}-${sizeProp}`))
         } else if (typeof sizeProp === 'object') {
           colProps.forEach(prop => {
             const value = sizeProp[prop]
 
             if (!value && value !== 0) return
 
-            className.push(prop === 'span' ? `${prefix}--${value}` : `${prefix}--${prop}-${value}`)
+            className.push(prop === 'span' ? nh.bm(value) : nh.bm(`${prop}-${value}`))
           })
         }
       })

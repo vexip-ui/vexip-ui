@@ -1,5 +1,5 @@
 import { defineComponent, computed, h, renderSlot,} from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { supportFlexGap } from '@vexip-ui/utils'
 import { flatVNodes } from './helper'
 
@@ -39,26 +39,31 @@ export default defineComponent({
       gapDisabled: !useFlexGap
     })
 
-    const prefix = 'vxp-space'
+    const nh = useNameHelper('space')
     const varMap: Record<string, any> = {
-      h: `var(--${prefix}-h-gap)`,
-      hh: `calc(var(--${prefix}-h-gap) * 0.5)`,
-      mhh: `calc(var(--${prefix}-h-gap) * -0.5)`,
-      v: `var(--${prefix}-v-gap)`,
-      hv: `calc(var(--${prefix}-v-gap) * 0.5)`,
-      mhv: `calc(var(--${prefix}-v-gap) * -0.5)`
+      h: `var(${nh.cv('h-gap')})`,
+      hh: `calc(var(${nh.cv('h-gap')}) * 0.5)`,
+      mhh: `calc(var(${nh.cv('h-gap')}) * -0.5)`,
+      v: `var(${nh.cv('v-gap')})`,
+      hv: `calc(var(${nh.cv('v-gap')}) * 0.5)`,
+      mhv: `calc(var(${nh.cv('v-gap')}) * -0.5)`
     }
 
     const className = computed(() => {
-      return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--inline`]: props.inline,
-        [`${prefix}--${props.size}`]: typeof props.size === 'string' && props.size !== 'default',
-        [`${prefix}--vertical`]: props.vertical,
-        [`${prefix}--no-wrap`]: props.vertical || props.noWrap,
-        [`${prefix}--no-gap`]: props.gapDisabled
+      const className = {
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('inline')]: props.inline,
+        [nh.bm('vertical')]: props.vertical,
+        [nh.bm('no-wrap')]: props.vertical || props.noWrap,
+        [nh.bm('no-gap')]: props.gapDisabled
       }
+
+      if (typeof props.size === 'string' && props.size !== 'default') {
+        className[nh.bm(props.size)] = true
+      }
+
+      return className
     })
     const style = computed(() => {
       const { justify, align, size } = props
@@ -102,7 +107,7 @@ export default defineComponent({
         },
         vnodes.map((vnode, index) => (
           <div
-            class={`${prefix}__item`}
+            class={nh.be('item')}
             role="none"
             style={[
               props.itemStyle,

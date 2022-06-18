@@ -1,5 +1,5 @@
 <template>
-  <li ref="wrapper" :class="`${prefix}__item`" :style="style">
+  <li ref="wrapper" :class="nh.be('item')" :style="style">
     <slot></slot>
   </li>
 </template>
@@ -15,6 +15,7 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { WHEEL_STATE } from './symbol'
 
 export default defineComponent({
@@ -63,7 +64,7 @@ export default defineComponent({
     }
 
     return {
-      prefix: 'vxp-wheel',
+      nh: useNameHelper('wheel'),
       style,
       wrapper
     }

@@ -16,7 +16,7 @@ $spin: map.merge(
   $spin
 );
 
-.vxp-spin {
+.#{$namespace}-spin {
   &-vars {
     @include define-preset-values('spin', $spin);
   }

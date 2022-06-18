@@ -27,7 +27,7 @@ $notice: map.merge(
   $notice
 );
 
-.vxp-notice {
+.#{$namespace}-notice {
   &-vars {
     @include define-preset-values('notice', $notice);
   }

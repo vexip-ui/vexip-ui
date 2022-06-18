@@ -22,7 +22,7 @@ $split: map.merge(
   $split
 );
 
-.vxp-split {
+.#{$namespace}-split {
   &-vars {
     @include define-preset-values('split', $split);
   }

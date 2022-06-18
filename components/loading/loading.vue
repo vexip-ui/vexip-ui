@@ -1,13 +1,14 @@
 <template>
   <transition name="vxp-fade" appear>
     <div v-show="visible" :class="className" :style="style">
-      <div :class="`${prefix}__filler`" :style="fillerStyle"></div>
+      <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
   </transition>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { boundRange } from '@vexip-ui/utils'
 
 import type { LoadingState, LoadingPosition, LoadingOptions } from './symbol'
@@ -15,7 +16,7 @@ import type { LoadingState, LoadingPosition, LoadingOptions } from './symbol'
 export default defineComponent({
   name: 'Loading',
   setup() {
-    const prefix = 'vxp-loading'
+    const nh = useNameHelper('loading')
     const visible = ref(false)
     const strokeWidth = ref(2)
     const state = ref<LoadingState>('default')
@@ -26,9 +27,9 @@ export default defineComponent({
 
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--${state.value}`]: state.value !== 'default'
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm(state.value)]: state.value !== 'default'
       }
     })
 
@@ -97,7 +98,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
       visible,
 
       className,

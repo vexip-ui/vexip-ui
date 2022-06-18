@@ -12,15 +12,15 @@
         v-if="props.arrow !== 'none'"
         ref="prev"
         :class="[
-          `${prefix}__arrow--${props.arrow}`,
-          `${prefix}__arrow--prev`,
-          arrowActive ? `${prefix}__arrow--show` : ''
+          nh.bem('arrow', props.arrow),
+          nh.bem('arrow', 'prev'),
+          arrowActive ? nh.bem('arrow', 'show') : ''
         ]"
       >
         <div
           :class="{
-            [`${prefix}__handler`]: true,
-            [`${prefix}__handler--disabled`]: disabledPrev
+            [nh.be('handler')]: true,
+            [nh.bem('handler', 'disabled')]: disabledPrev
           }"
           @click="handlePrevClick"
         >
@@ -29,8 +29,8 @@
           </slot>
         </div>
       </div>
-      <div :class="`${prefix}__list`" :style="listStyle">
-        <div :class="`${prefix}__track`" :style="trackStyle" @transitionend.self="handleAfterMove">
+      <div :class="nh.be('list')" :style="listStyle">
+        <div :class="nh.be('track')" :style="trackStyle" @transitionend.self="handleAfterMove">
           <slot></slot>
         </div>
       </div>
@@ -38,15 +38,15 @@
         v-if="props.arrow !== 'none'"
         ref="next"
         :class="[
-          `${prefix}__arrow--${props.arrow}`,
-          `${prefix}__arrow--next`,
-          arrowActive ? `${prefix}__arrow--show` : ''
+          nh.bem('arrow', props.arrow),
+          nh.bem('arrow', 'next'),
+          arrowActive ? nh.bem('arrow', 'show') : ''
         ]"
       >
         <div
           :class="{
-            [`${prefix}__handler`]: true,
-            [`${prefix}__handler--disabled`]: disabledNext
+            [nh.be('handler')]: true,
+            [nh.bem('handler', 'disabled')]: disabledNext
           }"
           @click="handleNextClick"
         >
@@ -56,15 +56,15 @@
         </div>
       </div>
     </div>
-    <div v-if="props.pointer !== 'none'" :class="`${prefix}__pointers--${props.pointer}`">
+    <div v-if="props.pointer !== 'none'" :class="nh.bem('pointers', props.pointer)">
       <div
         v-for="index in itemStates.size"
         :key="index"
         :class="{
-          [`${prefix}__pointer`]: true,
-          [`${prefix}__pointer--active`]:
+          [nh.be('pointer')]: true,
+          [nh.bem('pointer', 'active')]:
             index - 1 === (currentActive + props.activeOffset) % itemStates.size,
-          [`${prefix}__pointer--disabled`]: isPointerDisabled(index - props.activeOffset - 1)
+          [nh.bem('pointer', 'disabled')]: isPointerDisabled(index - props.activeOffset - 1)
         }"
         @click="handleWheel(index - props.activeOffset - 1)"
       >
@@ -72,7 +72,7 @@
           name="pointer"
           :active="index - 1 === (currentActive + props.activeOffset) % itemStates.size"
         >
-          <span :class="`${prefix}__pointer-inner`"></span>
+          <span :class="nh.be('pointer-inner')"></span>
         </slot>
       </div>
     </div>
@@ -93,7 +93,7 @@ import {
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
-import { useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { useHover, useSetTimeout } from '@vexip-ui/mixins'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
@@ -156,7 +156,7 @@ export default defineComponent({
       height: null
     })
 
-    const prefix = 'vxp-carousel'
+    const nh = useNameHelper('carousel')
     const itemStates = ref(new Set<ItemState>())
     const currentActive = ref(0)
     const isLocked = ref(false) // 用于控制阻断快速连点
@@ -186,10 +186,10 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--vertical`]: props.vertical,
-        [`${prefix}--disabled`]: isDisabled.value
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('vertical')]: props.vertical,
+        [nh.bm('disabled')]: isDisabled.value
       }
     })
     const style = computed(() => {
@@ -593,7 +593,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       itemStates,
       currentActive,
       arrowActive,

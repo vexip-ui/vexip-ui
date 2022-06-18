@@ -2,7 +2,7 @@
   <!-- eslint-disable vue/no-v-html -->
   <Popup
     ref="popup"
-    :class="prefix"
+    :class="nh.b()"
     :transition-name="`vxp-popup-${placement.split('-')[1]}`"
     :placement="placement"
   >
@@ -10,16 +10,16 @@
       <div
         :class="[
           {
-            [`${prefix}__item`]: true,
-            [`${prefix}-vars`]: true,
-            [`${prefix}__item--title-only`]: !item.content && typeof item.renderer !== 'function',
-            [`${prefix}__item--has-icon`]: item.icon,
-            [`${prefix}__item--content-only`]: !item.title,
-            [`${prefix}__item--${item.type}`]: item.type && effectiveTypes.includes(item.type),
-            [`${prefix}__item--background`]: item.background,
-            [`${prefix}__item--color`]: item.background && item.color,
-            [`${prefix}__item--color-only`]: !item.background && item.color,
-            [`${prefix}__item--marker`]: item.marker
+            [nh.be('item')]: true,
+            [nh.bs('vars')]: true,
+            [nh.bem('item', 'title-only')]: !item.content && typeof item.renderer !== 'function',
+            [nh.bem('item', 'has-icon')]: item.icon,
+            [nh.bem('item', 'content-only')]: !item.title,
+            [nh.bem('item', item.type)]: item.type && effectiveTypes.includes(item.type),
+            [nh.bem('item', 'background')]: item.background,
+            [nh.bem('item', 'color')]: item.background && item.color,
+            [nh.bem('item', 'color-only')]: !item.background && item.color,
+            [nh.bem('item', 'marker')]: item.marker
           },
           item.className
         ]"
@@ -31,7 +31,7 @@
           item.style
         ]"
       >
-        <div v-if="item.icon" :class="`${prefix}__icon`" :style="{ color: item.iconColor }">
+        <div v-if="item.icon" :class="nh.be('icon')" :style="{ color: item.iconColor }">
           <Renderer
             v-if="typeof item.icon === 'function'"
             :renderer="item.icon"
@@ -44,7 +44,7 @@
             :style="[{ color: item.iconColor }, item.icon.style]"
           ></Icon>
         </div>
-        <div :class="`${prefix}__wrapper`">
+        <div :class="nh.be('wrapper')">
           <Renderer
             v-if="typeof item.renderer === 'function'"
             :renderer="item.renderer"
@@ -53,7 +53,7 @@
           <template v-else>
             <div
               v-if="item.title"
-              :class="`${prefix}__title`"
+              :class="nh.be('title')"
               :style="{
                 color:
                   typeof item.titleColor === 'string'
@@ -65,12 +65,12 @@
             >
               {{ item.title || '' }}
             </div>
-            <div :class="`${prefix}__content`">
+            <div :class="nh.be('content')">
               {{ item.content || '' }}
             </div>
           </template>
         </div>
-        <div v-if="item.closable" :class="`${prefix}__close`" @click="remove(item.key)">
+        <div v-if="item.closable" :class="nh.be('close')" @click="remove(item.key)">
           <Icon><Xmark></Xmark></Icon>
         </div>
       </div>
@@ -84,6 +84,7 @@ import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Popup } from '@/components/popup'
 import { Xmark } from '@vexip-ui/icons'
+import { useNameHelper } from '@vexip-ui/config'
 
 import type { Key, NoticePlacement } from './symbol'
 
@@ -112,7 +113,7 @@ export default defineComponent({
     }
 
     return {
-      prefix: 'vxp-notice',
+      nh: useNameHelper('notice'),
       effectiveTypes: ['info', 'success', 'warning', 'error'],
       placement,
 

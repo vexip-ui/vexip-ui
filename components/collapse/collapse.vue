@@ -17,7 +17,7 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { removeArrayItem } from '@vexip-ui/utils'
 import { COLLAPSE_STATE } from './symbol'
 
@@ -49,18 +49,18 @@ export default defineComponent({
       ghost: false
     })
 
-    const prefix = 'vxp-collapse'
+    const nh = useNameHelper('collapse')
     const paneExpandedMap = new Map<string | number, Ref<boolean>>()
     const currentExpanded = ref<(string | number)[]>([])
 
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
-        `${prefix}--arrow-${props.arrowType}`,
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(`arrow-${props.arrowType}`),
         {
-          [`${prefix}--card`]: props.card,
-          [`${prefix}--ghost`]: !props.card && props.ghost
+          [nh.bm('card')]: props.card,
+          [nh.bm('ghost')]: !props.card && props.ghost
         }
       ]
     })

@@ -1,5 +1,5 @@
 import { defineComponent, reactive, computed, h, provide, toRef } from 'vue'
-import { useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 import { ROW_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -35,10 +35,10 @@ export default defineComponent({
       columnFlex: false
     })
 
-    const prefix = 'vxp-row'
+    const nh = useNameHelper('row')
 
     const className = computed(() => {
-      return [prefix, `${prefix}--${props.justify}`, `${prefix}--${props.align}`]
+      return [nh.b(), nh.bm(props.justify), nh.bm(props.align)]
     })
     const style = computed(() => {
       if (!props.gutter) return null

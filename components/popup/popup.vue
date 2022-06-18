@@ -1,5 +1,5 @@
 <template>
-  <div :class="prefix">
+  <div :class="nh.b()">
     <PopupItem
       v-for="item in items"
       :key="item.key"
@@ -19,6 +19,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, provide } from 'vue'
 import PopupItem from './popup-item.vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { isFunction, noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 
@@ -79,7 +80,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const prefix = 'vxp-popup'
+    const nh = useNameHelper('popup')
     const items = ref<PopupItemState[]>([])
     const queue: QueneState[] = []
 
@@ -189,7 +190,7 @@ export default defineComponent({
 
       if (!item?.visible) {
         const index = getIndex()
-        const key = (options.key as Key) ?? `${prefix}-${index}`
+        const key = (options.key as Key) ?? nh.bs(`${index}`)
 
         let currentVertical = props.startOffset
 
@@ -267,7 +268,7 @@ export default defineComponent({
     }
 
     return {
-      prefix,
+      nh,
       items,
 
       wrapper,

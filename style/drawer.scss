@@ -20,7 +20,7 @@ $drawer: map.merge(
   $drawer
 );
 
-.vxp-drawer {
+.#{$namespace}-drawer {
   &-vars {
     @include define-preset-values('drawer', $drawer);
   }

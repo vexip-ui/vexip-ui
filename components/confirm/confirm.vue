@@ -4,17 +4,17 @@
     no-footer
     :closable="false"
     :active="visible"
-    :class="[prefix, `${prefix}-vars`]"
+    :class="[nh.b(), nh.bs('vars')]"
     :top="props.top"
     :left="props.left"
     :width="props.width"
     :mask-close="maskCloseR"
     @hide="handleReset"
   >
-    <div :class="`${prefix}__body`" :style="styleR">
+    <div :class="nh.be('body')" :style="styleR">
       <Renderer v-if="isFunction(rendererR)" :renderer="rendererR"></Renderer>
       <template v-else>
-        <div :class="`${prefix}__icon`">
+        <div :class="nh.be('icon')">
           <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
           <Icon
             v-else
@@ -23,17 +23,17 @@
             :style="{ color: iconColorR }"
           ></Icon>
         </div>
-        <div :class="`${prefix}__content`">
+        <div :class="nh.be('content')">
           {{ content }}
         </div>
       </template>
     </div>
-    <div :class="`${prefix}__actions`">
-      <Button :class="`${prefix}__button`" @click="handleCancel">
+    <div :class="nh.be('actions')">
+      <Button :class="nh.be('button')" @click="handleCancel">
         {{ cancelTextR || locale.cancel }}
       </Button>
       <Button
-        :class="`${prefix}__button`"
+        :class="nh.be('button')"
         :type="confirmTypeR"
         :loading="loading"
         @click="handleConfirm"
@@ -50,7 +50,7 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
-import { useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isPromise, isFunction } from '@vexip-ui/utils'
 import { CircleQuestion } from '@vexip-ui/icons'
 
@@ -210,7 +210,7 @@ export default defineComponent({
       CircleQuestion,
 
       props,
-      prefix: 'vxp-confirm',
+      nh: useNameHelper('confirm'),
       locale: useLocale('confirm'),
       visible,
       loading,

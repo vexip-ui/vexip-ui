@@ -27,7 +27,7 @@ $breadcrumb: map.merge(
   $breadcrumb
 );
 
-.vxp-breadcrumb {
+.#{$namespace}-breadcrumb {
   &-vars {
     @include define-preset-values('breadcrumb', $breadcrumb);
   }

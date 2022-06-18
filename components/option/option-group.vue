@@ -1,17 +1,17 @@
 <template>
   <li
     :class="{
-      [prefix]: true,
+      [nh.b()]: true,
       'vxp-option-vars': true,
-      [`${prefix}--divided`]: divided
+      [nh.bm('divided')]: divided
     }"
   >
-    <div :class="`${prefix}__label`">
+    <div :class="nh.be('label')">
       <slot name="label">
         {{ label }}
       </slot>
     </div>
-    <ul :class="`${prefix}__list`">
+    <ul :class="nh.be('list')">
       <slot></slot>
     </ul>
   </li>
@@ -19,6 +19,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 
 export default defineComponent({
   name: 'OptionGroup',
@@ -34,7 +35,7 @@ export default defineComponent({
   },
   data() {
     return {
-      prefix: 'vxp-option-group'
+      nh: useNameHelper('option-group')
     }
   }
 })

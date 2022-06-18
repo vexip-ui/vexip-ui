@@ -1,7 +1,7 @@
 import { defineComponent, h, ref, computed, inject } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
 import { Spinner } from '@vexip-ui/icons'
 import { parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
 import { GROUP_STATE, buttonTypes } from './symbol'
@@ -62,7 +62,7 @@ export default defineComponent({
 
     const groupState = inject(GROUP_STATE, null)
 
-    const prefix = 'vxp-button'
+    const nh = useNameHelper('button')
     const pulsing = ref(false)
     const isIconOnly = computed(() => {
       return !slots.default
@@ -75,19 +75,19 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        [prefix]: true,
-        [`${prefix}-vars`]: true,
-        [`${prefix}--${type.value}`]: type.value !== 'default',
-        [`${prefix}--simple`]: !props.ghost && props.simple,
-        [`${prefix}--ghost`]: props.ghost,
-        [`${prefix}--text`]: props.text,
-        [`${prefix}--dashed`]: props.dashed,
-        [`${prefix}--disabled`]: props.disabled,
-        [`${prefix}--loading`]: props.loading,
-        [`${prefix}--circle`]: props.circle,
-        [`${prefix}--icon-only`]: isIconOnly.value,
-        [`${prefix}--${size.value}`]: size.value !== 'default',
-        [`${prefix}--pulsing`]: pulsing.value
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm(type.value)]: type.value !== 'default',
+        [nh.bm('simple')]: !props.ghost && props.simple,
+        [nh.bm('ghost')]: props.ghost,
+        [nh.bm('text')]: props.text,
+        [nh.bm('dashed')]: props.dashed,
+        [nh.bm('disabled')]: props.disabled,
+        [nh.bm('loading')]: props.loading,
+        [nh.bm('circle')]: props.circle,
+        [nh.bm('icon-only')]: isIconOnly.value,
+        [nh.bm(size.value)]: size.value !== 'default',
+        [nh.bm('pulsing')]: pulsing.value
       }
     })
     const colorMap = computed(() => {
@@ -118,7 +118,7 @@ export default defineComponent({
         let style: Record<string, string>
 
         if (props.ghost) {
-          style = createVars({
+          style = nh.cvm({
             color: base,
             'color-hover': base,
             'color-focus': base,
@@ -137,7 +137,7 @@ export default defineComponent({
             'pulse-s-color': dark1
           })
         } else if (props.simple) {
-          style = createVars({
+          style = nh.cvm({
             color: base,
             'color-hover': base,
             'color-focus': 'var(--vxp-button-color-focus-typed-simple)',
@@ -156,7 +156,7 @@ export default defineComponent({
             'pulse-s-color': dark1
           })
         } else if (props.text || props.dashed) {
-          style = createVars({
+          style = nh.cvm({
             ...(props.dashed ? {
               'b-color': base,
               'b-color-hover': light2,
@@ -172,7 +172,7 @@ export default defineComponent({
             'color-disabled': opacity4
           })
         } else {
-          style = createVars({
+          style = nh.cvm({
             color: '#fff',
             'color-hover': '#fff',
             'color-focus': '#fff',
@@ -198,15 +198,15 @@ export default defineComponent({
       return {}
     })
 
-    function createVars(originVars: Record<string, string>) {
-      const vars: Record<string, string> = {}
+    // function nh.cvm(originVars: Record<string, string>) {
+    //   const vars: Record<string, string> = {}
 
-      Object.keys(originVars).forEach(name => {
-        vars[`--${prefix}-${name}`] = originVars[name]
-      })
+    //   Object.keys(originVars).forEach(name => {
+    //     vars[`--${prefix}-${name}`] = originVars[name]
+    //   })
 
-      return vars
-    }
+    //   return vars
+    // }
 
     function handleClick(event: MouseEvent) {
       if (props.disabled || props.loading || event.button) return
@@ -226,7 +226,7 @@ export default defineComponent({
 
     function renderIconWithDefined() {
       return props.loading ? (
-        <div class={[`${prefix}__icon`, `${prefix}__icon--loading`]}>
+        <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
           {slots.loading ? (
             slots.loading()
           ) : props.loadingSpin ? (
@@ -236,7 +236,7 @@ export default defineComponent({
           )}
         </div>
       ) : (
-        <div class={`${prefix}__icon`}>
+        <div class={nh.be('icon')}>
           <Icon icon={props.icon}></Icon>
         </div>
       )
@@ -246,7 +246,7 @@ export default defineComponent({
       return (
         <CollapseTransition appear horizontal fade-effect>
           {props.loading && (
-            <div class={[`${prefix}__icon`, `${prefix}__icon--loading`]}>
+            <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
               {slots.loading ? (
                 slots.loading()
               ) : props.loadingSpin ? (

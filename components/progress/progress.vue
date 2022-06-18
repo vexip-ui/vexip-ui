@@ -1,32 +1,32 @@
 <template>
   <div :class="className">
-    <div :class="`${prefix}__track`" :style="trackStyle">
-      <div :class="`${prefix}__filler`" :style="fillerStyle"></div>
-      <div v-if="props.infoType === 'inside'" :class="`${prefix}__info`" :style="infoStyle">
+    <div :class="nh.be('track')" :style="trackStyle">
+      <div :class="nh.be('filler')" :style="fillerStyle"></div>
+      <div v-if="props.infoType === 'inside'" :class="nh.be('info')" :style="infoStyle">
         <slot>
-          <span :class="`${prefix}__percentage`">
+          <span :class="nh.be('percentage')">
             {{ `${props.percentage}%` }}
           </span>
         </slot>
       </div>
-      <div v-else-if="useBubble" :class="`${prefix}__reference`" :style="infoStyle">
+      <div v-else-if="useBubble" :class="nh.be('reference')" :style="infoStyle">
         <Bubble
-          :class="`${prefix}__bubble`"
+          :class="nh.be('bubble')"
           :style="bubbleStyle"
           :placement="bubbleType"
-          :content-class="`${prefix}__info`"
+          :content-class="nh.be('info')"
         >
           <slot>
-            <span :class="`${prefix}__percentage`">
+            <span :class="nh.be('percentage')">
               {{ `${props.percentage}%` }}
             </span>
           </slot>
         </Bubble>
       </div>
     </div>
-    <div v-if="props.infoType === 'outside'" :class="`${prefix}__info`">
+    <div v-if="props.infoType === 'outside'" :class="nh.be('info')">
       <slot>
-        <span :class="`${prefix}__percentage`">
+        <span :class="nh.be('percentage')">
           {{ `${props.percentage}%` }}
         </span>
       </slot>
@@ -37,7 +37,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Bubble } from '@/components/bubble'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 
 import type { PropType, CSSProperties } from 'vue'
 
@@ -84,15 +84,15 @@ export default defineComponent({
       }
     })
 
-    const prefix = 'vxp-progress'
+    const nh = useNameHelper('progress')
 
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
-        `${prefix}--info-${props.infoType}`,
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(`info-${props.infoType}`),
         {
-          [`${prefix}--activated`]: props.activated
+          [nh.bm('activated')]: props.activated
         }
       ]
     })
@@ -149,7 +149,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
 
       className,
       trackStyle,

@@ -20,7 +20,7 @@ $avatar: map.merge(
   $avatar
 );
 
-.vxp-avatar {
+.#{$namespace}-avatar {
   &-vars {
     @include define-preset-values('avatar', $avatar);
   }

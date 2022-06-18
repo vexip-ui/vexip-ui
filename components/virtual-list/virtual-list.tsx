@@ -1,6 +1,7 @@
 import { defineComponent, toRefs, ref, computed, h } from 'vue'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
+import { useNameHelper } from '@vexip-ui/config'
 import { useVirtual } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
@@ -52,7 +53,7 @@ export default defineComponent({
   },
   emits: ['scroll'],
   setup(props, { emit, slots, attrs, expose }) {
-    const prefix = 'vxp-virtual-list'
+    const nh = useNameHelper('virtual-list')
 
     const { items, itemSize, itemFixed, idKey, defaultKeyAt, bufferSize } = toRefs(props)
     const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
@@ -92,7 +93,7 @@ export default defineComponent({
       return (
           <NativeScroll
             ref={scroll}
-            class={prefix}
+            class={nh.b()}
             use-y-bar
             scroll-y={scrollOffset.value}
             {...attrs}
@@ -103,7 +104,7 @@ export default defineComponent({
               props.listTag || 'div',
               {
                 ref: list,
-                class: `${prefix}__list`,
+                class: nh.be('list'),
                 style: listStyle.value
               },
               [
@@ -111,7 +112,7 @@ export default defineComponent({
                   props.itemsTag || 'ul',
                   {
                     ...itemsAttrs,
-                    class: [`${prefix}__items`, itemsClass],
+                    class: [nh.be('items'), itemsClass],
                     style: [itemsStyle.value, itemsOtherStyle]
                   },
                   [

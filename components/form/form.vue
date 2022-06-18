@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, provide, ref } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
 import type { PropType } from 'vue'
@@ -54,11 +54,11 @@ export default defineComponent({
       hideLabel: false
     })
 
-    const prefix = 'vxp-form'
+    const nh = useNameHelper('form')
     const fieldSet = ref(new Set<FieldOptions>())
 
     const className = computed(() => {
-      return [prefix, `${prefix}-vars`, `${prefix}--label-${props.labelPosition}`]
+      return [nh.b(), nh.bs('vars'), nh.bm(`label-${props.labelPosition}`)]
     })
 
     provide(FORM_PROPS, props)

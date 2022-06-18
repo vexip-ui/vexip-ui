@@ -1,19 +1,19 @@
 <template>
   <section :class="className">
-    <div :class="`${prefix}__header`" @click="handleToggle">
-      <div :class="`${prefix}__arrow`">
+    <div :class="nh.be('header')" @click="handleToggle">
+      <div :class="nh.be('arrow')">
         <Icon><ChevronRight></ChevronRight></Icon>
       </div>
       <slot name="title">
-        <div v-if="props.icon" :class="`${prefix}__icon`">
+        <div v-if="props.icon" :class="nh.be('icon')">
           <Icon :icon="props.icon"></Icon>
         </div>
         {{ props.title }}
       </slot>
     </div>
     <CollapseTransition>
-      <div v-if="currentExpanded" :class="`${prefix}__body`">
-        <div :class="`${prefix}__content`" :style="props.contentStyle">
+      <div v-if="currentExpanded" :class="nh.be('body')">
+        <div :class="nh.be('content')" :style="props.contentStyle">
           <slot></slot>
         </div>
       </div>
@@ -25,7 +25,7 @@
 import { defineComponent, ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { randomString } from '@vexip-ui/utils'
 import { ChevronRight } from '@vexip-ui/icons'
 import { COLLAPSE_STATE } from './symbol'
@@ -73,7 +73,7 @@ export default defineComponent({
 
     const collapseState = inject(COLLAPSE_STATE, null)
 
-    const prefix = 'vxp-collapse'
+    const nh = useNameHelper('collapse')
     const currentExpanded = ref(props.expanded)
     const currentLabel = ref<string | number>('')
 
@@ -100,14 +100,14 @@ export default defineComponent({
     })
     const className = computed(() => {
       return [
-        `${prefix}__pane`,
-        `${prefix}-vars`,
-        `${prefix}__pane--arrow-${useArrowType.value}`,
+        nh.be('pane'),
+        nh.bs('vars'),
+        nh.bem('pane', `arrow-${useArrowType.value}`),
         {
-          [`${prefix}__pane--card`]: useCard.value,
-          [`${prefix}__pane--ghost`]: !useCard.value && useGhost.value,
-          [`${prefix}__pane--expanded`]: currentExpanded,
-          [`${prefix}__pane--disabled`]: props.disabled
+          [nh.bem('pane', 'card')]: useCard.value,
+          [nh.bem('pane', 'ghost')]: !useCard.value && useGhost.value,
+          [nh.bem('pane', 'expanded')]: currentExpanded,
+          [nh.bem('pane', 'disabled')]: props.disabled
         }
       ]
     })
@@ -167,7 +167,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       currentExpanded,
 
       className,

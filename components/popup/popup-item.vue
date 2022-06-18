@@ -3,11 +3,11 @@
     <div
       v-show="state.visible"
       ref="wrapper"
-      :class="`${prefix}__item`"
+      :class="nh.be('item')"
       :style="{ zIndex: state.zIndex }"
       :vxp-index="state.key"
     >
-      <div :class="[`${prefix}__item-inner`, innerClass]">
+      <div :class="[nh.be('item-inner'), innerClass]">
         <slot :item="state">
           <Renderer
             v-if="typeof state.renderer === 'function'"
@@ -25,6 +25,7 @@
 <script lang="ts">
 import { defineComponent, ref, inject, onMounted, nextTick } from 'vue'
 import { Renderer } from '@/components/renderer'
+import { useNameHelper } from '@vexip-ui/config'
 import { noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 
@@ -66,7 +67,7 @@ export default defineComponent({
     })
 
     return {
-      prefix: 'vxp-popup',
+      nh: useNameHelper('popup'),
 
       wrapper,
 

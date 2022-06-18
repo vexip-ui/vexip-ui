@@ -22,7 +22,7 @@ $dropdown: map.merge(
   $dropdown
 );
 
-.vxp-dropdown {
+.#{$namespace}-dropdown {
   &-vars {
     @include define-preset-values('dropdown', $dropdown);
   }
@@ -33,6 +33,7 @@ $dropdown: map.merge(
 
   &__trigger {
     display: flex;
+    min-width: 100%;
   }
 
   &__popper {
@@ -66,6 +67,7 @@ $dropdown: map.merge(
 
   &__item {
     position: relative;
+    min-height: 32px;
     padding: 5px 16px;
     white-space: nowrap;
     list-style: none;
@@ -104,6 +106,10 @@ $dropdown: map.merge(
         border-bottom: get-css-var('dropdown-divider');
       }
     }
+  }
+
+  &__trigger &__item {
+    width: 100%;
   }
 
   &__trigger--active &__item {

@@ -1,17 +1,18 @@
 <template>
-  <div ref="wrapper" :class="`${prefix}__alpha`" @mousedown="handleMouseDown">
+  <div ref="wrapper" :class="nh.be('alpha')" @mousedown="handleMouseDown">
     <div
-      :class="`${prefix}__opacity`"
+      :class="nh.be('opacity')"
       :style="{
         backgroundImage: `linear-gradient(to right, rgba(${rgbString}, 0) 0%, rgb(${rgbString}) 100%)`
       }"
     ></div>
-    <div :class="`${prefix}__alpha-handler`" :style="{ left: `${currentLeft}%` }"></div>
+    <div :class="nh.be('alpha-handler')" :style="{ left: `${currentLeft}%` }"></div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
 import { toFixed, throttle } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -126,7 +127,7 @@ export default defineComponent({
     }
 
     return {
-      prefix: 'vxp-color-picker',
+      nh: useNameHelper('color-picker'),
       currentLeft,
 
       rgbString,

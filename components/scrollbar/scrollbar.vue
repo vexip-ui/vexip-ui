@@ -2,12 +2,12 @@
   <div ref="contaniner" :class="className" :style="style">
     <div
       ref="track"
-      :class="[`${prefix}__track`, props.useTrack ? null : `${prefix}__track--disabled`]"
+      :class="[nh.be('track'), props.useTrack ? null : nh.bem('track', 'disabled')]"
       @mousedown="handleTrackMouseDown"
     ></div>
     <div
       ref="bar"
-      :class="`${prefix}__bar`"
+      :class="nh.be('bar')"
       :style="barStyle"
       @mousedown="handleMouseDown"
     ></div>
@@ -26,7 +26,7 @@ import {
   nextTick,
   getCurrentInstance
 } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { isDefined, throttle, boundRange } from '@vexip-ui/utils'
 import { useTrack } from './mixins'
 import { ScrollbarType } from './symbol'
@@ -84,7 +84,7 @@ export default defineComponent({
       }
     })
 
-    const prefix = 'vxp-scrollbar'
+    const nh = useNameHelper('scrollbar')
     const active = ref(false)
     const currentScroll = ref(props.scroll)
     const scrolling = ref(false)
@@ -123,15 +123,15 @@ export default defineComponent({
 
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
-        `${prefix}--${props.placement}`,
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(props.placement),
         {
-          [`${prefix}--fade`]: props.fade,
-          [`${prefix}--scrolling`]: scrolling.value,
-          [`${prefix}--tracking`]: tracking.value,
-          [`${prefix}--active`]: active.value,
-          [`${prefix}--disabled`]: props.disabled
+          [nh.bm('fade')]: props.fade,
+          [nh.bm('scrolling')]: scrolling.value,
+          [nh.bm('tracking')]: tracking.value,
+          [nh.bm('active')]: active.value,
+          [nh.bm('disabled')]: props.disabled
         }
       ]
     })
@@ -335,7 +335,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
       currentScroll,
 
       className,

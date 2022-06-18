@@ -1,6 +1,6 @@
 <template>
   <div :class="className">
-    <span v-if="!props.vertical && hasText" :class="`${prefix}__text`">
+    <span v-if="!props.vertical && hasText" :class="nh.be('text')">
       <slot></slot>
     </span>
   </div>
@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -34,21 +34,21 @@ export default defineComponent({
       dashed: false
     })
 
-    const prefix = 'vxp-divider'
+    const nh = useNameHelper('divider')
 
     const hasText = computed(() => {
       return !!slots.default
     })
     const className = computed(() => {
       return [
-        prefix,
-        `${prefix}-vars`,
-        `${prefix}--${props.vertical ? 'vertical' : 'horizontal'}`,
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(props.vertical ? 'vertical' : 'horizontal'),
         {
-          [`${prefix}--primary`]: !props.vertical && props.primary,
-          [`${prefix}--dashed`]: props.dashed,
-          [`${prefix}--with-text`]: !props.vertical && hasText.value,
-          [`${prefix}--with-text-${props.textPosition}`]:
+          [nh.bm('primary')]: !props.vertical && props.primary,
+          [nh.bm('dashed')]: props.dashed,
+          [nh.bm('with-text')]: !props.vertical && hasText.value,
+          [nh.bs('-with-text-${props.textPosition}')]:
             !props.vertical && hasText.value && props.textPosition !== 'center'
         }
       ]
@@ -56,7 +56,7 @@ export default defineComponent({
 
     return {
       props,
-      prefix,
+      nh,
 
       hasText,
       className

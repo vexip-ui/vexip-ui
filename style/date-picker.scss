@@ -45,7 +45,7 @@ $date-picker: map.merge(
   $date-picker
 );
 
-.vxp-date-picker {
+.#{$namespace}-date-picker {
   &-vars {
     @include define-preset-values('date-picker', $date-picker);
   }
@@ -57,7 +57,7 @@ $date-picker: map.merge(
 
   @include input.handler(#{&}__selector);
 
-  $wheel: 'vxp-wheel';
+  $wheel: '#{$namespace}-wheel';
 
   user-select: none;
 
@@ -341,11 +341,11 @@ $date-picker: map.merge(
     align-items: center;
     border-left: get-css-var('date-picker-divider');
 
-    .vxp-wheel__list {
+    .#{$namespace}-wheel__list {
       padding: 0 10px;
     }
 
-    .vxp-time-picker__wheel {
+    .#{$namespace}-time-picker__wheel {
       display: flex;
       align-items: center;
       height: calc(100% - 32px);
