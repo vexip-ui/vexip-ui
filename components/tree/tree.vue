@@ -105,6 +105,7 @@ export default defineComponent({
     disabled: booleanProp,
     readonly: booleanProp,
     checkbox: booleanProp,
+    suffixCheckbox: booleanProp,
     renderer: Function as PropType<RenderFn>,
     multiple: booleanProp,
     indent: [String, Number],
@@ -145,6 +146,7 @@ export default defineComponent({
       disabled: false,
       readonly: false,
       checkbox: false,
+      suffixCheckbox: false,
       renderer: {
         default: null,
         isFunc: true
@@ -194,6 +196,7 @@ export default defineComponent({
       reactive({
         arrow: toRef(props, 'arrow'),
         checkbox: toRef(props, 'checkbox'),
+        suffixCheckbox: toRef(props, 'suffixCheckbox'),
         renderer: toRef(props, 'renderer'),
         dragging,
         boundAsyncLoad,

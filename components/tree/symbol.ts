@@ -56,6 +56,7 @@ export interface TreeNodeInstance {
 export interface TreeState {
   arrow: boolean | 'auto',
   checkbox: boolean,
+  suffixCheckbox: boolean,
   renderer: RenderFn,
   dragging: boolean,
   boundAsyncLoad: boolean,

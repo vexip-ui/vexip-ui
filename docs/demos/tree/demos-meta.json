@@ -1,6 +1,7 @@
 [
   "basis",
   "checkbox",
+  "suffix-checkbox",
   "drag",
   "slot"
 ]

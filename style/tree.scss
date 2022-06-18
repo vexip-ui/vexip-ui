@@ -54,6 +54,7 @@ $tree: map.merge(
 
   &__label {
     display: inline-block;
+    flex-grow: 1;
     padding: 0 4px;
     color: get-css-var('tree-label-color');
     cursor: pointer;
@@ -113,6 +114,11 @@ $tree: map.merge(
   &__checkbox {
     display: inline-flex;
     margin-right: 6px;
+
+    &--suffix {
+      margin-right: 0;
+      margin-left: 6px;
+    }
   }
 
   &__indicator {

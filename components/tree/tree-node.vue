@@ -32,7 +32,7 @@
           <Icon v-else><ChevronRight></ChevronRight></Icon>
         </span>
         <Checkbox
-          v-if="hasCheckbox"
+          v-if="hasCheckbox && !suffixCheckbox"
           :class="`${prefix}__checkbox`"
           :control="hasArrow"
           :checked="checked"
@@ -40,7 +40,7 @@
           :partial="partial"
           @click.prevent.stop="handleToggleCheck()"
         ></Checkbox>
-        <span
+        <div
           :class="{
             [`${prefix}__label`]: true,
             [`${prefix}__label--selected`]: selected,
@@ -65,7 +65,16 @@
               {{ data[labelKey] }}
             </slot>
           </template>
-        </span>
+        </div>
+        <Checkbox
+          v-if="hasCheckbox && suffixCheckbox"
+          :class="[`${prefix}__checkbox`, `${prefix}__checkbox--suffix`]"
+          :control="hasArrow"
+          :checked="checked"
+          :disabled="isDisabled"
+          :partial="partial"
+          @click.prevent.stop="handleToggleCheck()"
+        ></Checkbox>
       </div>
     </slot>
     <CollapseTransition :appear="appear">
@@ -176,10 +185,6 @@ export default defineComponent({
       type: String,
       default: 'label'
     },
-    // childrenKey: {
-    //   type: String,
-    //   default: 'children'
-    // },
     checked: {
       type: Boolean,
       default: false
@@ -204,10 +209,6 @@ export default defineComponent({
       type: [String, Number],
       default: '16px'
     },
-    // children: {
-    //   type: Array as PropType<TreeNodeProps[]>,
-    //   default: () => []
-    // },
     draggable: {
       type: Boolean,
       default: false
@@ -286,9 +287,8 @@ export default defineComponent({
 
       return isNull(checkbox) ? treeState.checkbox : checkbox
     })
-    const renderer = computed(() => {
-      return treeState.renderer
-    })
+    const renderer = computed(() => treeState.renderer)
+    const suffixCheckbox = computed(() => treeState.suffixCheckbox)
 
     provide(
       TREE_NODE_STATE,
@@ -424,6 +424,7 @@ export default defineComponent({
       hasArrow,
       hasCheckbox,
       renderer,
+      suffixCheckbox,
 
       wrapper: nodeElement,
       arrowEl: arrowElement,
