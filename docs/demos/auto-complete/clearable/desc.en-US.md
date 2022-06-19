@@ -1,3 +1,3 @@
-### 可清空
+### Clearable
 
-添加 `clearable` 属性可以开启可清空功能。
+Add the `clearable` prop to enable clearable functionality.

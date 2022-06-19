@@ -1,3 +1,3 @@
 ### Basis Usage
 
-最简单的用法，在同一个父级下的选项的值须均不相同。
+In the simplest usage, options under the same parent must have different values.

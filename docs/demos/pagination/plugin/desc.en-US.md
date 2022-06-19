@@ -1,3 +1,3 @@
 ### Internal Plugins
 
-使用内置插件，可以调整每页数量、显示条目总数、快速跳转页面。
+Using built-in plugins, you can adjust the number of pages per-page, display the total number of entries, and quickly jump to pages.

@@ -1,3 +1,3 @@
-### 透明度
+### Alpha
 
-添加 `alpha` 属性可以开启透明度选择功能。
+Add the `alpha` prop to enable transparency selection.

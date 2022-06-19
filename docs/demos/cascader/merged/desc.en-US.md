@@ -1,5 +1,5 @@
 ### Merge Tags
 
-在多选模式下添加 `merge-tags` 可以开启合并标签功能。
+Add `merge-tags` prop in multi-select mode to enable merging tags.
 
-开启后，当某个选项的所有子级都被选择时，会合并显示为父选项的标签。
+When on, when all children of an option are selected, the labels displayed as the parent option are merged.

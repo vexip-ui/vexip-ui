@@ -1,3 +1,3 @@
-### 边框模式
+### Border Mode
 
-添加 `border` 属性可以开启边框模式。
+Add the `border` prop to enable border mode.

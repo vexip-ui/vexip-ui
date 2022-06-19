@@ -1,3 +1,3 @@
 ### Marker
 
-加 `marker` 后会使用标记点标记当前激活的锚点。
+Adding `marker` prop will mark the currently active anchor link with a marker point.

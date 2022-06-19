@@ -2,7 +2,7 @@
 
 | Name            | Type                        | Description                                                                        | Default       | Since |
 | --------------- | --------------------------- | --------------------------------------------------------------------------- | ------------ | --- |
-| active          | `boolean`                   | 设置遮罩是否显示，可以使用 v-model 双向绑定                                 | `false`      | - |
+| active          | `boolean`                   | 设置遮罩是否显示，可以使用 `v-model` 双向绑定                                 | `false`      | - |
 | closable        | `boolean`                   | 设置是否可以点击遮罩层关闭                                                  | `false`      | - |
 | inner           | `boolean`                   | 设置是否为一个内联的抽屉，开启后定位从 fixed 变位 absolute                  | `false`      | - |
 | mask-transition | `string`                    | 遮罩层的过渡动画                                                            | `'vxp-fade'` | - |

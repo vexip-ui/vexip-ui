@@ -1,5 +1,5 @@
 ### Hover Trigger
 
-添加 `hover-trigger` 属性可以开启鼠标悬停触发展开下层面板。
+Add the `hover-trigger` prop to enable the mouseover trigger to expand the lower panel.
 
-该特性在开启了异步加载后无效。
+This feature has no effect when asynchronous loading is enabled.

@@ -1,7 +1,7 @@
 <template>
   <CheckboxGroup v-model:values="values">
     <Checkbox control>
-      Total
+      All
     </Checkbox>
     <Checkbox
       v-for="item in items"

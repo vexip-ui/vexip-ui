@@ -1,27 +1,27 @@
 <template>
   <div style="width: 240px;">
     <Menu>
-      <MenuGroup label="分组一">
+      <MenuGroup label="Group 1">
         <MenuItem label="1" :icon="EnvelopesBulk">
-          菜单一
+          Menu 1
         </MenuItem>
         <MenuItem label="2" :icon="City" disabled>
-          菜单二
+          Menu 2
         </MenuItem>
         <MenuItem label="3" :icon="ChartPie">
-          菜单三
+          Menu 3
         </MenuItem>
       </MenuGroup>
-      <MenuGroup label="分组二">
+      <MenuGroup label="Group 2">
         <MenuItem label="4" :icon="User">
-          菜单四
+          Menu 4
         </MenuItem>
         <MenuItem label="5" :icon="BuildingShield">
-          菜单五
+          Menu 5
         </MenuItem>
       </MenuGroup>
       <MenuItem label="6" :icon="CheckDouble">
-        菜单六
+        Menu 6
       </MenuItem>
     </Menu>
   </div>

@@ -1,5 +1,5 @@
 ### Example
 
-这是一个独立的完整用例。
+This is a standalone complete use case.
 
-可以与滚动或原生滚动组件结合使用，当然真·原生滚动也是可以的。
+It can be combined with Scroll or NativeScrolling components, of course native scrolling is also possible.

@@ -13,7 +13,7 @@
 
 | Name  | Description                                          | Parameters            | Since |
 | ----- | ---------------------------------------------------- | --------------------- | --- |
-| click | Triggered when left clicked, returns the click event | `(event: MouseEvent)` | - |
+| click | Emitted when left clicked, returns the click event | `(event: MouseEvent)` | - |
 
 ### Linker Slots
 

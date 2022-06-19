@@ -2,8 +2,8 @@
 
 | Name             | Type              | Description                                                                               | Default         | Since |
 | ---------------- | ----------------- | ---------------------------------------------------------------------------------- | -------------- | --- |
-| value            | `string \| string[]`   | 时间选择框的值，可以使用 v-model 双向绑定                                          | `'00:00:00'`     | - |
-| visible          | `boolean`           | 设置时间选择窗口的初始打开状态，可以使用 v-model 双向绑定                          | `false`          | - |
+| value            | `string \| string[]`   | 时间选择框的值，可以使用 `v-model` 双向绑定                                          | `'00:00:00'`     | - |
+| visible          | `boolean`           | 设置时间选择窗口的初始打开状态，可以使用 `v-model` 双向绑定                          | `false`          | - |
 | placement        | `Placement`            | 时间选择窗口出现的位置，可选值同 Popper.js                                         | `'bottom-start'` | - |
 | transfer         | `boolean \| string` | 设置时间选择窗口的渲染位置，设置为 `true` 时默认渲染至 `<body>`                | `false`          | - |
 | format           | `string`            | 根据是否具有 Hms 来控制时间选择列的显示隐藏                                        | `'HH:mm:ss'`     | - |
@@ -18,9 +18,9 @@
 | shortcuts        | `{ name: string, value: string \| (() => string) }[]`             | 设置日期快捷选择的候选列表，元素为 `{ name, value }` 的对象，其中 value 可以是函数 | `[]`             | - |
 | steps            | `number[]`             | 分别设置时间选择框每个滚轮的滚动跨度                                               | `[1, 1, 1]`      | - |
 | ctrl-steps       | `number[]`             | 分别设置时间选择框每个滚轮按住 Ctrl 时的滚动跨度                                   | `[5, 5, 5]`      | - |
-| prefix           | `Record<string, any>`            | 前缀图标的名称，使用前缀插槽时无效                                                 | `null`             | - |
+| prefix           | `Record<string, any>`            | 前缀图标，使用前缀插槽时无效                                                 | `null`             | - |
 | prefix-color     | `string`            | 前缀内容的颜色，会影响前缀插槽                                                     | `''`             | - |
-| suffix           | `Record<string, any>`            | 后缀图标的名称，使用后缀插槽时无效                                                 | `null`             | - |
+| suffix           | `Record<string, any>`            | 后缀图标，使用后缀插槽时无效                                                 | `null`             | - |
 | suffix-color     | `string`            | 后缀内容的颜色，会影响后缀插槽                                                     | `''`             | - |
 | disabled         | `boolean`           | 设置是否禁用日期选择框                                                             | `false`          | - |
 | transition-name  | `string`            | 设置时间选择窗口的显示隐藏过渡效果                                                 | `'vxp-drop'`     | - |

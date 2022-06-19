@@ -11,7 +11,7 @@
           <DropdownItem>
             选项三
             <Icon :scale="0.8">
-              <CaretRight></CaretRight>
+              <AngleRight></AngleRight>
             </Icon>
           </DropdownItem>
           <template #drop>
@@ -31,5 +31,5 @@
 </template>
 
 <script setup lang="ts">
-import { CaretRight } from '@vexip-ui/icons'
+import { AngleRight } from '@vexip-ui/icons'
 </script>

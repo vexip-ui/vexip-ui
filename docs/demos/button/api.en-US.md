@@ -22,7 +22,7 @@
 
 | Name  | Description                                                                 | Parameters            | Since |
 | ----- | --------------------------------------------------------------------------- | --------------------- | ----- |
-| click | Triggered when the button is left clicked, returns the clicked event object | `(event: MouseEvent)` | -     |
+| click | Emitted when the button is left clicked, returns the clicked event object | `(event: MouseEvent)` | -     |
 
 ### Button Slots
 

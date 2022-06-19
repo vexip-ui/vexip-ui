@@ -2,7 +2,7 @@
 
 | Name            | Type              | Description                                                                                                      | Default     | Since |
 | --------------- | ----------------- | --------------------------------------------------------------------------------------------------------- | ---------- | --- |
-| visible         | `boolean`           | 气泡框的显示状态，可以使用 v-model 双向绑定                                                               | `false`      | - |
+| visible         | `boolean`           | 气泡框的显示状态，可以使用 `v-model` 双向绑定                                                               | `false`      | - |
 | trigger         | `'hover' \| 'click' \| 'custom'`            | 下拉菜单的触发方式，当为 `custom` 时，所有情景都需要手动控制 `visible` | `'hover'`    | - |
 | placement       | `Placement`            | 气泡框出现的位置，可选值同 Popper.js                                                                      | `'top'`      | - |
 | outside-close   | `boolean`           | 设置是否可以通过点击外部关闭                                                                              | `true`       | - |

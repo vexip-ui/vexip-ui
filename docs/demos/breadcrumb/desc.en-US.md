@@ -1,1 +1,1 @@
-显示当前页面在系统层级结构中的位置，并能向上返回。
+Displays the current page's position in the system hierarchy, and can go back up.

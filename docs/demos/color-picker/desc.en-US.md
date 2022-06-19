@@ -1,1 +1,1 @@
-颜色选择器可用于让用户快速灵活地选择一个颜色值。
+Provides a picker that can be used to give the user quick and flexible selection of color values.

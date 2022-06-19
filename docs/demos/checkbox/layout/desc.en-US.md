@@ -1,3 +1,3 @@
-### 灵活布局
+### Flexible Layout
 
-结合布局组件可以灵活地对复选框组进行自定义布局。
+Combined with the layout component, you can flexibly customize the layout of the checkbox group.

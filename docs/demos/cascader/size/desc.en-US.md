@@ -1,3 +1,3 @@
 ### Change Size
 
-设置 `size` 属性的值可以改变尺寸，目前一共提供了三种尺寸供选择。
+You can change the size by setting the value of the `size` prop. Currently.

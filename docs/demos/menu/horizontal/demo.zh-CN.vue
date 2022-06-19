@@ -16,7 +16,7 @@
               三级菜单一
             </MenuItem>
             <MenuItem label="1-3-2">
-              三级菜单一
+              三级菜单二
             </MenuItem>
           </template>
         </MenuItem>

@@ -1,3 +1,3 @@
 ### Basis Usage
 
-通过 `options` 属性来设置自动完成的数据源。
+The autocomplete data source is set via the `options` prop.

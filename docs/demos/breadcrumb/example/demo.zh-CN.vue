@@ -43,7 +43,7 @@ recordMap.value
   )
   .set(
     '文档 (D:)',
-    reactive({ visible: false, children: ['vexip-ui', 'element-plus', 'antd-vue'] })
+    reactive({ visible: false, children: ['vexip-ui', 'font-awesome', 'vue'] })
   )
   .set('vexip-ui', reactive({ visible: false, children: [] }))
 </script>

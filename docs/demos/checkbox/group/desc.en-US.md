@@ -1,3 +1,3 @@
-### 复选框组
+### Checkbox Group
 
-使用复选框组可以轻松的通过数组结构生成系列复选框。
+Use the CheckboxGroup to easily generate a series of checkboxes from an array structure.

@@ -1,3 +1,3 @@
-### 横向菜单
+### Horizontal Menu
 
-添加 `horizontal` 属性可以使菜单变为横向显示。
+Adding the `horizontal` prop makes the menu horizontal.

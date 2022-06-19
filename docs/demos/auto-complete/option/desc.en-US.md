@@ -1,3 +1,3 @@
-### 自定义选项
+### Custom Option
 
-传入 Option 组件作为插槽可以实现自定义选项。
+Custom option rendering can be implemented by using the Option component as a slot.

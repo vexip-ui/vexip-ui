@@ -3,7 +3,7 @@
     <Row>
       <Column>
         <Checkbox control>
-          全选
+          All
         </Checkbox>
       </Column>
       <Divider></Divider>

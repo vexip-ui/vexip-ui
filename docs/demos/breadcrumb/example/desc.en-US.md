@@ -1,3 +1,3 @@
-### 文件导航
+### File Navigation
 
-一个类似于 Windows 10 文件管理器顶部面包屑导航的用例。
+A use case similar to the breadcrumb navigation at the top of the Windows 10 file manager.

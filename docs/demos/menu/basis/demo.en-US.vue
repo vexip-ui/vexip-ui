@@ -2,27 +2,27 @@
   <div style="width: 240px;">
     <Menu>
       <MenuItem label="1" :icon="EnvelopesBulk">
-        菜单一
+        Menu 1
         <template #group>
           <MenuItem label="1-1">
-            子菜单一
+            Child Menu 1
           </MenuItem>
           <MenuItem label="1-2">
-            子菜单二
+            Child Menu 2
           </MenuItem>
           <MenuItem label="1-3">
-            子菜单三
+            Child Menu 3
           </MenuItem>
         </template>
       </MenuItem>
       <MenuItem label="2" :icon="City" disabled>
-        菜单二
+        Menu 2
       </MenuItem>
       <MenuItem label="3" :icon="ChartPie">
-        菜单三
+        Menu 3
       </MenuItem>
       <MenuItem label="4" :icon="User">
-        菜单四
+        Menu 4
       </MenuItem>
     </Menu>
   </div>

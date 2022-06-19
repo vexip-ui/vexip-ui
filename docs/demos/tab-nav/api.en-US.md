@@ -2,7 +2,7 @@
 
 | Name   | Type             | Description                                          | Default | Since |
 | ------ | ---------------- | --------------------------------------------- | ------ | --- |
-| active | `string \| number` | 设置当前激活的导航，可以使用 v-model 双向绑定 | `null`   | - |
+| active | `string \| number` | 设置当前激活的导航，可以使用 `v-model` 双向绑定 | `null`   | - |
 | card   | `boolean`          | 设置是否开启卡片模式                          | `false`  | - |
 
 ### TabNav Events

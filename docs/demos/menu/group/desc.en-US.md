@@ -1,3 +1,3 @@
-### 菜单组
+### Menu Group
 
-使用 MenuGroup 组件可以将一些菜单归类为一组。
+Use the MenuGroup component to group some menus into groups.

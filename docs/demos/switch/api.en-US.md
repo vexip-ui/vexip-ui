@@ -2,7 +2,7 @@
 
 | Name             | Type                                             | Description                                                                                                                                                                                                 | Default     | Since |
 | ---------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ----- |
-| value            | `boolean`                                        | value of the switch, can use v-model two-way binding                                                                                                                                                        | `false`     | -     |
+| value            | `boolean`                                        | value of the switch, can use `v-model` two-way binding                                                                                                                                                        | `false`     | -     |
 | disabled         | `boolean`                                        | set whether to disable the switch                                                                                                                                                                           | `false`     | -     |
 | size             | `'small' \| 'default' \| 'large'`                | size of switch                                                                                                                                                                                              | `'default'` | -     |
 | state            | `'default' \| 'success' \| 'error' \| 'warning'` | State of the switch                                                                                                                                                                                         | `'default'` | -     |
@@ -20,7 +20,7 @@
 
 | Name   | Description                                                                 | Parameters         | Since |
 | ------ | --------------------------------------------------------------------------- | ------------------ | ----- |
-| change | Triggered when the state of the switch changes, returning the current state | `(value: boolean)` | -     |
+| change | Emitted when the state of the switch changes, returning the current state | `(value: boolean)` | -     |
 
 ### Switch Slots
 

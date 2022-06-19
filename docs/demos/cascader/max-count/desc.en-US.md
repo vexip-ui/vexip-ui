@@ -1,7 +1,7 @@
 ### Tag Count
 
-通过 `max-tag-count` 可以设置多选模式下标签显示的最大值。
+Use `max-tag-count` prop to set the maximum value of tags displayed in multi-select mode.
 
-当设置为 `0` 时，组件内部会动态计算最大值以让标签维持在一行内显示。
+When set to `0`, the maximum value is dynamically calculated inside the component to keep the label displayed on one line.
 
-如果你希望任何时候都显示所有标签，只需要将其设置为 `Infinity`。
+If you want all labels to show at all times, just set it to `Infinity`.

@@ -1,36 +1,36 @@
 ### Anchor Props
 
-| Name            | Type                         | Description                                                                                                                                                                                                                                                  | Default | Since |
-| --------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | --- |
-| active          | `string`                       | 当前激活的锚点，可以使用 v-model 双向绑定                                                                                                                                                                                                             | `''`     | - |
-| viewer          | `unknown` | 设置锚点的容器，当传入字符串时会尝试作为选择器选取元素，其中值为 `root` 时会获取根组件，传入函数时则会将返回值作为元素，当无法获取正确的元素时，默认会向上遍历父组件，尝试寻找 (Native)Scroll 组件或 ref 为 scroll 的 (Native)Scroll 组件作为容器，否则使用组件的 $el | `null`   | - |
-| offset          | `number`                       | 设置锚点滚动捕获的偏移量                                                                                                                                                                                                                              | `8`      | - |
-| marker          | `boolean`                      | 设置是否使用 marker 标记当前激活的锚点                                                                                                                                                                                                                | `false`  | - |
-| scroll-duration | `number`                       | 设置点击锚点时，容器的滚动持续时间，单位为毫秒                                                                                                                                                                                                        | `500`    | - |
+| Name            | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Default | Since |
+| --------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
+| active          | `string`  | The currently active anchor, can use `v-model` two-way binding                                                                                                                                                                                                                                                                                                                                                                                                                                                              | `''`    | -     |
+| viewer          | `unknown` | Set the container of the anchor point. When a string is passed in, it will try to select the element as a selector. When the value is `root`, it will get the root component. When the function is passed in, the return value will be used as the element. When the correct element cannot be obtained, the parent component will be traversed upward by default, trying to find the (Native)Scroll component or the (Native)Scroll component whose ref is scroll as the container, otherwise use the component's $el | `null`  | -     |
+| offset          | `number`  | Set the offset of the anchor scroll capture                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `8`     | -     |
+| marker          | `boolean` | Set whether to use marker to mark the currently active anchor                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `false` | -     |
+| scroll-duration | `number`  | Sets the scroll duration of the container when the anchor is clicked, in milliseconds                                                                                                                                                                                                                                                                                                                                                                                                                                       | `500`   | -     |
 
 ### Anchor Events
 
-| Name      | Description                                                               | Parameters          | Since |
-| --------- | ------------------------------------------------------------------ | ------------- | --- |
-| change | 当锚点被改变时触发，返回当前激活的锚点，若无激活锚点则返回空字符串 | `(active: string)` | - |
+| Name   | Description                                                                                                                                  | Parameters         | Since |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| change | Emitted when the anchor point is changed, returns the currently active anchor point, or an empty string if there is no active anchor point | `(active: string)` | -     |
 
 ### Anchor Slots
 
-| Name    | Description                   | Parameters          | Since |
-| ------- | ---------------------- | --- | --- |
-| default | 锚点的内容插槽         | - | - |
-| marker  | 激活锚点标记的内容插槽 | - | - |
+| Name    | Description                                     | Parameters | Since |
+| ------- | ----------------------------------------------- | ---------- | ----- |
+| default | Anchor's content slot                           | -          | -     |
+| marker  | Activates the content slot of the anchor marker | -          | -     |
 
 ### AnchorLink Props
 
-| Name  | Type   | Description                                   | Default | Since |
-| ----- | ------ | -------------------------------------- | ------ | --- |
-| to    | `string` | 锚点链接锁指向的元素 id，需以 `#` 开头 | `''`     | - |
-| title | `string` | 锚点链接的标题，同原生 `title` 属性    | `''`     | - |
+| Name  | Type     | Description                                                                  | Default | Since |
+| ----- | -------- | ---------------------------------------------------------------------------- | ------- | ----- |
+| to    | `string` | The element id pointed to by the anchor link lock, which must start with `#` | `''`    | -     |
+| title | `string` | The title of the anchor link, same as the native `title` attribute           | `''`    | -     |
 
 ### AnchorLink Slots
 
-| Name    | Description                   | Parameters          | Since |
-| ------- | ---------------------- | --- | --- |
-| default | 锚点链接的内容插槽     | - | - |
-| group   | 锚点链接的子链接的插槽 | - | - |
+| Name    | Description                           | Parameters | Since |
+| ------- | ------------------------------------- | ---------- | ----- |
+| default | content slot for anchor links         | -          | -     |
+| group   | Slots for child links of anchor links | -          | -     |

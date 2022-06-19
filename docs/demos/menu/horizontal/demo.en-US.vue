@@ -1,40 +1,40 @@
 <template>
   <Menu v-model:active="active" horizontal transfer>
     <MenuItem label="1" :icon="EnvelopesBulk">
-      菜单一
+      Menu 1
       <template #group>
         <MenuItem label="1-1">
-          子菜单一
+          Child Menu 1
         </MenuItem>
         <MenuItem label="1-2">
-          子菜单二
+          Child Menu 2
         </MenuItem>
         <MenuItem label="1-3">
-          子菜单三
+          Child Menu 3
           <template #group>
             <MenuItem label="1-3-1">
-              三级菜单一
+              Grandchild Menu 1
             </MenuItem>
             <MenuItem label="1-3-2">
-              三级菜单一
+              Grandchild Menu 2
             </MenuItem>
           </template>
         </MenuItem>
         <MenuItem label="1-4">
-          子菜单四
+          Child Menu 4
         </MenuItem>
       </template>
     </MenuItem>
-    <MenuGroup label="分组一">
+    <MenuGroup label="Group 1">
       <MenuItem label="2" :icon="City">
-        菜单二
+        Menu 2
       </MenuItem>
       <MenuItem label="3" :icon="ChartPie">
-        菜单三
+        Menu 3
       </MenuItem>
     </MenuGroup>
     <MenuItem label="4" :icon="User">
-      菜单四
+      Menu 4
     </MenuItem>
   </Menu>
 </template>

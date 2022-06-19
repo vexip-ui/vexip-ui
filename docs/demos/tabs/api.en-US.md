@@ -3,7 +3,7 @@
 | Name   | Type             | Description                                            | Default | Since |
 | ------ | ---------------- | ----------------------------------------------- | ------ | --- |
 | card   | `boolean`          | 设置导航栏是否开启卡片模式                      | `false`  | - |
-| active | `string \| number` | 设置当前激活的标签页，可以使用 v-model 双向绑定 | `''`     | - |
+| active | `string \| number` | 设置当前激活的标签页，可以使用 `v-model` 双向绑定 | `''`     | - |
 
 ### Tabs Events
 

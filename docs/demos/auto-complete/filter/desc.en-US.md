@@ -1,7 +1,7 @@
-### 内置过滤
+### Filter Options
 
-可以设置 `filter` 属性来开启过滤。
+You can set the `filter` property to enable option filtering when used as a search box.
 
-当设置为 `true` 时将启用内置的过滤方法，当设置为函数时可以传入一个自定义的过滤方法。
+The built-in filter method will be enabled when set to `true`, or set to function to use custom filter method.
 
-添加 `ignore-case` 属性可以设置过滤时忽略大小写进行比较。
+Add the `ignore-case` prop to make the filter to ignore case when compare.

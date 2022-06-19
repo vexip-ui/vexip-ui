@@ -5,9 +5,9 @@
 | value        | `string \| number`  | Input 控件的值                                                                             | `''`        | - |
 | options      | `(string \| { value: string \| number, label?: string, disabled?: boolean, divided?: boolean, noTitle?: boolean })[]`             | 可选项列表，可以是字符串或者符合 `ObjectOption` 的对象                      | `[]`        | - |
 | filter       | `boolean \| (value: string \| number, options: { label: string, value: string \| number }) => boolean)` | 过滤 `options` 的方法，参数为每个选项的值和当前输入框中的值，传入 `ture` 时会使用内置比较方法 | `null`      | - |
-| prefix       | `string`            | 前缀图标的名称，使用前缀插槽时无效                                                         | `''`        | - |
+| prefix       | `Record<string, any>`            | 前缀图标，使用前缀插槽时无效                                                         | `null`        | - |
 | prefix-color | `string`            | 前缀内容的颜色，会影响前缀插槽                                                             | `''`        | - |
-| suffix       | `string`            | 后缀图标的名称，使用后缀插槽时无效                                                         | `''`        | - |
+| suffix       | `Record<string, any>`            | 后缀图标，使用后缀插槽时无效                                                         | `null`        | - |
 | suffix-color | `string`            | 后缀内容的颜色，会影响后缀插槽                                                             | `''`        | - |
 | placeholder  | `string`            | Input 控件占位符                                                                           | `null`      | - |
 | size         | `'small' \| 'default' \| 'large'`            | 设置输入控件大小                                       | `'default'` | - |

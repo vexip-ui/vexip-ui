@@ -1,5 +1,5 @@
-### 快捷方式
+### Shortcuts
 
-添加 `shortcut` 属性可以使用快捷方式。
+Add the `shortcut` prop to use shortcuts.
 
-通过 `shortcut-list` 属性并传入一组有效的颜色值，可以自定义快捷方式列表。
+The list of shortcuts can be customized via the `shortcut-list` prop.

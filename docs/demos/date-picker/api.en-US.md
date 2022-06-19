@@ -3,10 +3,10 @@
 | Name             | Type                              | Description                                                                                                 | Default                | Since |
 | ---------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- | --- |
 | type             | `'date' \| 'datetime' \| 'year' \| 'month'`                            | 时间选择器的类型                                      | `'date'`                | - |
-| value            | `number \| string \| Date \| (number \| string \| Date)[]` | 时间选择器的值，可以使用 v-model 双向绑定                                                            | `new Date()`            | - |
+| value            | `number \| string \| Date \| (number \| string \| Date)[]` | 时间选择器的值，可以使用 `v-model` 双向绑定                                                            | `new Date()`            | - |
 | size             | `'small' \| 'default' \| 'large'`                            | 输入框的大小                                                   | `'default'`             | - |
 | state            | `'default' \| 'success' \| 'error' \| 'warning'`                            | 输入框的状态                                       | `'default'`             | - |
-| visible          | `boolean`                           | 设置日期选择窗口的初始打开状态，可以使用 v-model 双向绑定                                            | `false`                 | - |
+| visible          | `boolean`                           | 设置日期选择窗口的初始打开状态，可以使用 `v-model` 双向绑定                                            | `false`                 | - |
 | placement        | `Placement`                            | 日期选择窗口的出现位置，可选值同 Popper.js                                                           | `'bottom'`              | - |
 | transfer         | `boolean \| string`                 | 设置日期选择窗口的渲染位置，开启但未指定有效选择器时默认渲染至 `<body>`                                  | `false`                 | - |
 | format           | `string`                            | 在 `datetime` 类型时会根据是否具有 `Hms` 来控制时间选择列的显示隐藏                                    | `'yyyy-MM-dd HH:mm:ss'` | - |
@@ -21,9 +21,9 @@
 | disable-date     | `(date: Date) => boolean`                          | 判断日期是否禁用，接受一个日期参数，返回 `true` 则禁用，加载日历面板时会对当前面板的所有日期都调用一次 | `() => false`           | - |
 | steps            | `number[]`                             | 分别设置时间选择器每个滚轮的滚动跨度                                                                 | `[1, 1, 1]`             | - |
 | ctrl-steps       | `number[]`                             | 分别设置时间选择器每个滚轮按住 Ctrl 时的滚动跨度                                                     | `[5, 5, 5]`             | - |
-| prefix           | `string`                            | 前缀图标的名称，使用前缀插槽时无效                                                                   | `''`                    | - |
+| prefix           | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                                                   | `''`                    | - |
 | prefix-color     | `string`                            | 前缀内容的颜色，会影响前缀插槽                                                                       | `''`                    | - |
-| suffix           | `string`                            | 后缀图标的名称，使用后缀插槽时无效                                                                   | `''`                    | - |
+| suffix           | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                                                   | `''`                    | - |
 | suffix-color     | `string`                            | 后缀内容的颜色，会影响后缀插槽                                                                       | `''`                    | - |
 | disabled         | `boolean`                           | 设置是否禁用日期选择框                                                                               | `false`                 | - |
 | transition-name  | `string`                            | 设置日期选择窗口的显示隐藏过渡效果                                                                   | `'vxp-drop'`            | - |

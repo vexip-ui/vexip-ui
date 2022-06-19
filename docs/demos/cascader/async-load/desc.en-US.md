@@ -1,7 +1,7 @@
 ### Async Load
 
-通过 `on-async-load` 绑定一个函数可以开启异步加载模式。
+Binding a function with `on-async-load` prop enables asynchronous loading mode.
 
-在多选模式下添加 `merge-tags` 可以使得父选项在子级未完全加载完的情况下可被选择。
+Added `merge-tags` prop in multi-select mode to make parent options selectable if children are not fully loaded.
 
-注意，在异步加载下开启 `merge-tags` 会使得控件值也合并为父选项的值，这与非异步加载时的表现是不一样的。
+Note that enabling `merge-tags` in asynchronous loading will cause the control value to be merged into the value of the parent option, which is different from the behavior of non-asynchronous loading.

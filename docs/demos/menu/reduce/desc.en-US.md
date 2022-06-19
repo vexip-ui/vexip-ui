@@ -1,3 +1,3 @@
-### 收缩菜单
+### Reduced Menu
 
-通过设置 `reduced` 属性可以使菜单收缩或展开。
+The menu can be reduced or expanded by setting the `reduced` property.
