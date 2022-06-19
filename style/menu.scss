@@ -82,7 +82,7 @@ $menu: map.merge(
     @include basis;
 
     z-index: get-css-var('menu-popper-z-index');
-    padding-left: 5px;
+    padding: 0;
     transform-origin: 0 0 !important;
 
     &--drop {
@@ -249,6 +249,7 @@ $menu: map.merge(
 
   &__icon {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     width: 24px;
