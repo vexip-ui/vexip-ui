@@ -151,8 +151,8 @@ export default defineComponent({
       }
 
       if (cellFelx) {
-        className[nh.bm(cellFelx.justify)] = true
-        className[nh.bm(cellFelx.align)] = true
+        if (cellFelx.justify) className[nh.bm(cellFelx.justify)] = true
+        if (cellFelx.align) className[nh.bm(cellFelx.align)] = true
       }
 
       return className

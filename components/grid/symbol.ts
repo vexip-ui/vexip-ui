@@ -6,8 +6,8 @@ export type GridJustify = 'start' | 'end' | 'center' | 'space-around' | 'space-b
 export type GridAlign = 'top' | 'middle' | 'bottom' | 'stretch'
 
 export interface CellFlex {
-  justify: 'start' | 'end' | 'center' | 'space-around' | 'space-between',
-  align: 'top' | 'middle' | 'bottom'
+  justify: 'start' | 'end' | 'center' | 'space-around' | 'space-between' | 'space-evenly',
+  align: 'top' | 'middle' | 'bottom' | 'stretch'
 }
 
 export interface GridState {
