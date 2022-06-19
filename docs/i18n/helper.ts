@@ -61,7 +61,7 @@ export interface I18nConfig {
     Radio: string,
     Select: string,
     Slider: string,
-    Switcher: string,
+    Switch: string,
     Textarea: string,
     TimePicker: string,
     Upload: string,

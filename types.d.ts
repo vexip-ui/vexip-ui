@@ -70,7 +70,7 @@ declare module 'vue' {
     Space: typeof import('vexip-ui')['Space'],
     Spin: typeof import('vexip-ui')['Spin'],
     Split: typeof import('vexip-ui')['Split'],
-    Switcher: typeof import('vexip-ui')['Switcher'],
+    Switch: typeof import('vexip-ui')['Switch'],
     TabNav: typeof import('vexip-ui')['TabNav'],
     TabNavItem: typeof import('vexip-ui')['TabNavItem'],
     TabPane: typeof import('vexip-ui')['TabPane'],

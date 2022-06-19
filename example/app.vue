@@ -11,7 +11,6 @@
       </router-link>
     </Cell>
     <Cell :width="6" :use-flex="{ justify: 'end', align: 'middle' }" style="padding-right: 10px;">
-      <!-- <Switcher v-model:value="isDark" class="theme-switch" :icon="isDark ? Moon : Sun"></Switcher> -->
       <ThemeSwitch></ThemeSwitch>
     </Cell>
   </Grid>

@@ -1,5 +1,5 @@
 <template>
-  激活状态：<Switcher v-model:value="activated"></Switcher>
+  激活状态：<Switch v-model:value="activated"></Switch>
   <br />
   <br />
   <Skeleton :activated="activated" width="33%" :spread="14"></Skeleton>

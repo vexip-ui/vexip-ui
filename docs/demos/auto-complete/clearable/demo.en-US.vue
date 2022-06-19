@@ -26,7 +26,7 @@ const options = [
   'Radio',
   'Select',
   'Slider',
-  'Switcher',
+  'Switch',
   'TimePicker',
   'Upload',
   'Wheel'

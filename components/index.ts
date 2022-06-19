@@ -73,7 +73,7 @@ import { Slider } from './slider'
 import { Space } from './space'
 import { Spin } from './spin'
 import { Split } from './split'
-import { Switcher } from './switcher'
+import { Switch } from './switch'
 import { TabNav } from './tab-nav'
 import { TabNavItem } from './tab-nav-item'
 import { TabPane } from './tab-pane'
@@ -172,7 +172,7 @@ const components = [
   Space,
   Spin,
   Split,
-  Switcher,
+  Switch,
   TabNav,
   TabNavItem,
   TabPane,
@@ -280,7 +280,7 @@ export {
   Space,
   Spin,
   Split,
-  Switcher,
+  Switch,
   TabNav,
   TabNavItem,
   TabPane,

@@ -1,12 +1,12 @@
 <template>
   <p>
     Show all tgas:
-    <Switcher v-model:value="showAllTags"></Switcher>
+    <Switch v-model:value="showAllTags"></Switch>
   </p>
   <NumberInput v-model:value="maxCount" :min="0" :disabled="showAllTags"></NumberInput>
   <p>
     Hide rest tip:
-    <Switcher v-model:value="noRestTip"></Switcher>
+    <Switch v-model:value="noRestTip"></Switch>
   </p>
   <Cascader
     :value="value"

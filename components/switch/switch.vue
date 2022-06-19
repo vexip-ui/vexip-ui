@@ -1,22 +1,36 @@
 <template>
-  <label :class="className" :style="style">
+  <label
+    :class="className"
+    role="switch"
+    :aria-checked="currentValue"
+    :style="style"
+  >
+    <span :class="nh.be('placeholder')">
+      <span :class="nh.be('open-text')">
+        <slot name="open">{{ props.openText }}</slot>
+      </span>
+      <span :class="nh.be('close-text')">
+        <slot name="close">{{ props.closeText }}</slot>
+      </span>
+    </span>
     <span :class="nh.be('signal')" :style="signalStyle">
       <slot v-if="props.loading" name="loading">
         <Icon pulse>
           <Spinner></Spinner>
         </Icon>
       </slot>
-      <slot v-else name="icon">
-        <Icon v-if="props.icon" :icon="props.icon"></Icon>
+      <slot v-else name="icon" :value="currentValue">
+        <Icon v-if="currentValue && props.openIcon" :icon="props.openIcon"></Icon>
+        <Icon v-else-if="!currentValue && props.closeIcon" :icon="props.closeIcon"></Icon>
       </slot>
     </span>
     <span :class="nh.be('label')">
-      <template v-if="currentValue">
+      <span v-if="currentValue" :class="nh.be('open-text')">
         <slot name="open">{{ props.openText }}</slot>
-      </template>
-      <template v-else>
+      </span>
+      <span v-else :class="nh.be('close-text')">
         <slot name="close">{{ props.closeText }}</slot>
-      </template>
+      </span>
     </span>
     <input
       type="checkbox"
@@ -39,7 +53,7 @@ import { Spinner } from '@vexip-ui/icons'
 import type { PropType } from 'vue'
 
 export default defineComponent({
-  name: 'Switcher',
+  name: 'Switch',
   components: {
     Icon,
     Spinner
@@ -53,6 +67,8 @@ export default defineComponent({
     closeColor: String,
     loading: booleanProp,
     icon: Object,
+    openIcon: Object,
+    closeIcon: Object,
     openText: String,
     closeText: String,
     onBeforeChange: Function as PropType<(checked: boolean) => unknown>,
@@ -60,7 +76,7 @@ export default defineComponent({
   },
   emits: ['change', 'update:value'],
   setup(_props, { emit }) {
-    const props = useProps('switcher', _props, {
+    const props = useProps('switch', _props, {
       size: createSizeProp(),
       state: createStateProp(),
       value: {
@@ -72,6 +88,8 @@ export default defineComponent({
       closeColor: '',
       loading: false,
       icon: null,
+      openIcon: null,
+      closeIcon: null,
       openText: '',
       closeText: '',
       onBeforeChange: {
@@ -83,7 +101,7 @@ export default defineComponent({
 
     const validateField = inject(VALIDATE_FIELD, noop)
 
-    const nh = useNameHelper('switcher')
+    const nh = useNameHelper('switch')
     const currentValue = ref(props.value)
 
     const className = computed(() => {

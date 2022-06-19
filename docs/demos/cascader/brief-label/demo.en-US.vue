@@ -1,7 +1,7 @@
 <template>
   <p>
     Brief Label:
-    <Switcher v-model:value="briefLabel"></Switcher>
+    <Switch v-model:value="briefLabel"></Switch>
   </p>
   <Cascader
     :value="value"

@@ -1,10 +1,11 @@
 <template>
-  <Switcher
+  <Switch
     :value="isDark"
     class="theme-switch"
-    :icon="isDark ? Moon : Sun"
+    :open-icon="Moon"
+    :close-icon="Sun"
     @change="toggleDark"
-  ></Switcher>
+  ></Switch>
 </template>
 
 <script setup lang="ts">
@@ -34,10 +35,10 @@ function toggleDark(value: boolean) {
   border: 1px solid var(--vxp-border-color-base);
 
   html.dark & {
-    --vxp-switcher-bg-color-open: #{rgba(#fff, 0.05)};
-    --vxp-switcher-signal-bg-color: #000;
-    --vxp-switcher-icon-color: var(--vxp-content-color-secondary);
-    --vxp-switcher-shadow-focus: unset;
+    --vxp-switch-bg-color-open: #{rgba(#fff, 0.05)};
+    --vxp-switch-signal-bg-color: #000;
+    --vxp-switch-icon-color: var(--vxp-content-color-secondary);
+    --vxp-switch-shadow-focus: unset;
   }
 }
 </style>

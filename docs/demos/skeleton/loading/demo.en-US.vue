@@ -1,5 +1,5 @@
 <template>
-  Loading: <Switcher v-model:value="loading"></Switcher>
+  Loading: <Switch v-model:value="loading"></Switch>
   <br />
   <br />
   <Skeleton

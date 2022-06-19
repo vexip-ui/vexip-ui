@@ -231,7 +231,7 @@ export {
   Slider,
   Spin,
   Split,
-  Switcher,
+  Switch,
   TabNav,
   TabNavItem,
   TabPane,

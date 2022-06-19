@@ -1,7 +1,7 @@
 <template>
   <p>
     Merge Tags:
-    <Switcher v-model:value="mergeTags"></Switcher>
+    <Switch v-model:value="mergeTags"></Switch>
   </p>
   <Cascader
     v-model:value="value"

@@ -4,7 +4,7 @@
       Some content to alert
     </Alert>
   </Spin>
-  <p>切换加载中状态：<Switcher v-model:value="active"></Switcher></p>
+  <p>切换加载中状态：<Switch v-model:value="active"></Switch></p>
 </template>
 
 <script lang="ts">

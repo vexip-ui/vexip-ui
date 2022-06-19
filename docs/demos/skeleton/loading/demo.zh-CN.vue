@@ -1,5 +1,5 @@
 <template>
-  加载状态：<Switcher v-model:value="loading"></Switcher>
+  加载状态：<Switch v-model:value="loading"></Switch>
   <br />
   <br />
   <Skeleton

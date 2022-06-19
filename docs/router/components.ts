@@ -52,7 +52,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Radio' },
         { name: 'Select' },
         { name: 'Slider' },
-        { name: 'Switcher' },
+        { name: 'Switch' },
         { name: 'Textarea' },
         { name: 'TimePicker' },
         { name: 'Upload' },

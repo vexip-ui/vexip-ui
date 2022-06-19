@@ -92,15 +92,15 @@
         </template>
         <br />
         <template v-for="state in states" :key="state">
-          <Switcher :state="state"></Switcher>
-          <Switcher :state="state" open-text="Open" close-text="Close"></Switcher>
-          <Switcher :state="state" disabled></Switcher>
-          <Switcher
+          <Switch :state="state"></Switch>
+          <Switch :state="state" open-text="Open" close-text="Close"></Switch>
+          <Switch :state="state" disabled></Switch>
+          <Switch
             :state="state"
             disabled
             open-text="Open"
             close-text="Close"
-          ></Switcher>
+          ></Switch>
           <br />
           <br />
         </template>

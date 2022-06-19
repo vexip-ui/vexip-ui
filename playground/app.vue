@@ -75,7 +75,7 @@ ${'</'}script>
 const themeCode = `<template>
   <div style="padding: 20px 0;">
     <span style="margin-right: 10px;">Toggle Dark:</span>
-    <Switcher v-model:value="isDark" class="theme-switch" :icon="isDark ? Moon : Sun"></Switcher>
+    <Switch v-model:value="isDark" class="theme-switch" :open-icon="Moon" :close-icon="Sun"></Switch>
   </div>
 </template>
 
@@ -107,10 +107,10 @@ body {
 }
 
 html.dark .theme-switch {
-  --vxp-switcher-bg-color-open: #{rgba(#fff, 0.05)};
-  --vxp-switcher-signal-bg-color: #000;
-  --vxp-switcher-icon-color: var(--vxp-content-color-secondary);
-  --vxp-switcher-shadow-focus: unset;
+  --vxp-switch-bg-color-open: #{rgba(#fff, 0.05)};
+  --vxp-switch-signal-bg-color: #000;
+  --vxp-switch-icon-color: var(--vxp-content-color-secondary);
+  --vxp-switch-shadow-focus: unset;
 }
 </style>
 `

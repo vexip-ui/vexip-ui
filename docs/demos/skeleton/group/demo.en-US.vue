@@ -1,8 +1,8 @@
 <template>
-  Loading: <Switcher v-model:value="loading"></Switcher>
+  Loading: <Switch v-model:value="loading"></Switch>
   <br />
   <br />
-  Activated: <Switcher v-model:value="activated"></Switcher>
+  Activated: <Switch v-model:value="activated"></Switch>
   <br />
   <br />
   <SkeletonGroup v-if="loading" :activated="activated">

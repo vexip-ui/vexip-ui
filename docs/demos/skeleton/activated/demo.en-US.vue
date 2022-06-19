@@ -1,5 +1,5 @@
 <template>
-  Activated: <Switcher v-model:value="activated"></Switcher>
+  Activated: <Switch v-model:value="activated"></Switch>
   <br />
   <br />
   <Skeleton :activated="activated" width="33%" :spread="14"></Skeleton>
