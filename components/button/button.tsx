@@ -198,16 +198,6 @@ export default defineComponent({
       return {}
     })
 
-    // function nh.cvm(originVars: Record<string, string>) {
-    //   const vars: Record<string, string> = {}
-
-    //   Object.keys(originVars).forEach(name => {
-    //     vars[`--${prefix}-${name}`] = originVars[name]
-    //   })
-
-    //   return vars
-    // }
-
     function handleClick(event: MouseEvent) {
       if (props.disabled || props.loading || event.button) return
 

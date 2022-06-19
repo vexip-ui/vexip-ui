@@ -184,7 +184,7 @@ export default defineComponent({
   setup(_props, { emit }) {
     const props = useProps('uploadFile', _props, {
       file: {
-        default: () => ({}),
+        default: () => ({} as FileState),
         static: true
       },
       iconRenderer: {

@@ -5,12 +5,19 @@ import type { App, ComputedRef, PropType, Ref, CSSProperties } from 'vue'
 
 export type PropsOptions = Record<string, Record<string, unknown>>
 
+type EnsureValue<T> = Exclude<T, undefined | null>
+
 interface PropsConfig<T = any> {
-  default: T | (() => T),
+  default: T | (() => T) | null,
   isFunc?: boolean,
   static?: boolean,
   validator?: (value: T) => any
 }
+
+type PropsConfigOptions<T> = {
+  [K in keyof T]?: PropsConfig<EnsureValue<T[K]>> | EnsureValue<T[K]> | (() => EnsureValue<T[K]>) | null
+}
+
 export const PROVIDED_PROPS = '__vxp-provided-props'
 
 export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOptions>>, app?: App) {
@@ -33,17 +40,19 @@ export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOpti
 export function useProps<T>(
   name: string,
   sourceProps: T,
-  config: Partial<Record<keyof T, any>> = {}
+  config: PropsConfigOptions<T> = {}
 ) {
-  const providedProps = inject<ComputedRef<Record<string, Record<keyof T, T[keyof T]>>> | null>(
+  const providedProps = inject<ComputedRef<Record<string, PropsConfigOptions<T>>> | null>(
     PROVIDED_PROPS,
     null
   )
-  const configProps = computed(() => {
-    return providedProps?.value?.[name] ?? ({} as Record<keyof T, T[keyof T]>)
+  const configProps = computed<PropsConfigOptions<T>>(() => {
+    return providedProps?.value?.[name] ?? {}
   })
   const keys = Object.keys(sourceProps) as Array<keyof T>
-  const props = {} as Record<keyof T, ComputedRef<T[keyof T]>>
+  const props: {
+    [P in keyof T]?: ComputedRef<T[P]>
+  } = {}
 
   keys.forEach(key => {
     const defs = config[key]
@@ -56,12 +65,16 @@ export function useProps<T>(
     const getDefault = () =>
       (!isFunc && isFunction(defaultValue) ? defaultValue() : defaultValue) as T[keyof T]
 
-    validator && watch(() => sourceProps[key], validator)
+    validator && watch(() => sourceProps[key], value => {
+      const result = validator(value)
+
+      if (result === false) {
+        console.warn(`${toWarnPrefix(name)}: an invaild value is set to '${key as string}' prop`)
+      }
+    })
 
     if (propOptions.static) {
-      props[key] = computed(() => {
-        return sourceProps[key] ?? getDefault()
-      })
+      props[key] = computed(() => sourceProps[key] ?? getDefault())
     } else {
       props[key] = computed(() => {
         if (isNull(sourceProps[key])) {
@@ -82,6 +95,10 @@ export function useProps<T>(
   return reactive(props) as {
     [P in keyof T]-?: Exclude<T[P], undefined>
   }
+}
+
+function toWarnPrefix(name: string) {
+  return `[vexip-ui:${name.charAt(0).toLocaleUpperCase() + name.substring(1)}]`
 }
 
 export const booleanProp = {

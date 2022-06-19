@@ -51,8 +51,8 @@
       :icon-renderer="props.iconRenderer"
       :loading-text="props.loadingText"
       :style="{
-        [props.selectToAdd ? 'marginBottom' : 'marginTop']:
-          !props.hiddenFiles && renderFiles.length ? '0.5em' : null
+        [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
+          !props.hiddenFiles && renderFiles.length ? '0.5em' : undefined
       }"
       @delete="deleteFile"
       @preview="$emit('preview', $event)"
