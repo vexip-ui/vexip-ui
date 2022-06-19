@@ -64,7 +64,7 @@ import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ComponentSize } from '@vexip-ui/config'
+import type { ComponentSize, StyleType } from '@vexip-ui/config'
 import type { AvatarOption } from './symbol'
 
 export default defineComponent({
@@ -131,7 +131,7 @@ export default defineComponent({
       }
     })
     const style = computed(() => {
-      const style: Record<string, any> = {}
+      const style: StyleType = {}
 
       if (typeof props.offset === 'number') {
         style['--vxp-avatar-group-offset'] = `${props.offset}px`

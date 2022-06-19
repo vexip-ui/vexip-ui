@@ -10,12 +10,10 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { placementWhileList } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanStringProp, classProp } from '@vexip-ui/config'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-
-type ClassType = string | Record<string, boolean>
 
 export default defineComponent({
   name: 'Bubble',
@@ -23,7 +21,7 @@ export default defineComponent({
     placement: String as PropType<Placement>,
     background: String,
     shadow: booleanStringProp,
-    contentClass: [String, Object] as PropType<ClassType>
+    contentClass: classProp
   },
   emits: ['click'],
   setup(_props, { emit }) {

@@ -19,12 +19,12 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, provide } from 'vue'
 import PopupItem from './popup-item.vue'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, classProp } from '@vexip-ui/config'
 import { isFunction, noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 
-import type { PropType, CSSProperties } from 'vue'
-import type { Key, ClassType, PopupPlacement, PopupItemState } from './symbol'
+import type { CSSProperties } from 'vue'
+import type { Key, PopupPlacement, PopupItemState } from './symbol'
 
 const popupPlacements = Object.freeze<PopupPlacement>([
   'top-right',
@@ -63,7 +63,7 @@ export default defineComponent({
       default: 'vxp-popup-top'
     },
     innerClass: {
-      type: [String, Object] as PropType<ClassType>,
+      type: classProp,
       default: null
     },
     startOffset: {

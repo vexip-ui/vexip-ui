@@ -74,13 +74,11 @@ import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useNameHelper, useProps, useLocale, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
 import { isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
-
-type ClassType = string | Record<string, boolean>
 
 const positionType = [Number, String]
 const positionValidator = (value: string | number) => {
@@ -108,7 +106,7 @@ export default defineComponent({
     closable: booleanProp,
     inner: booleanProp,
     maskClose: booleanProp,
-    modalClass: [String, Object] as PropType<ClassType>,
+    modalClass: classProp,
     noFooter: booleanProp,
     hideMask: booleanProp,
     draggable: booleanProp,

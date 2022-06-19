@@ -16,14 +16,19 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, inject } from 'vue'
-import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp,
+  classProp
+} from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { isDefined, noop } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
-
-import type { PropType } from 'vue'
-
-type ClassType = string | Record<string, boolean>
 
 export default defineComponent({
   name: 'Radio',
@@ -32,7 +37,7 @@ export default defineComponent({
     state: stateProp,
     value: [String, Number],
     label: [String, Number],
-    labelClass: [String, Object] as PropType<ClassType>,
+    labelClass: classProp,
     disabled: booleanProp,
     border: booleanProp,
     disableValidate: booleanProp

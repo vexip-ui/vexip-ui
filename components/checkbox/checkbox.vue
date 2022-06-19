@@ -25,14 +25,19 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp,
+  classProp
+} from '@vexip-ui/config'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { noop, isDefined, isFunction } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
-
-import type { PropType } from 'vue'
-
-type ClassType = string | Record<string, boolean>
 
 export default defineComponent({
   name: 'Checkbox',
@@ -42,7 +47,7 @@ export default defineComponent({
     checked: booleanProp,
     label: String,
     value: [String, Number],
-    labelClass: [String, Object] as PropType<ClassType>,
+    labelClass: classProp,
     disabled: booleanProp,
     border: booleanProp,
     control: booleanProp,

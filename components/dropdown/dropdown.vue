@@ -46,7 +46,7 @@ import {
 import { Portal } from '@/components/portal'
 import DropdownDrop from './dropdown-drop'
 import { useClickOutside, placementWhileList, usePopper, useTriggerHandler } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
 import { useLabel } from './mixins'
 import { SELECT_HANDLER, DROP_SELECT_HANDLER } from './symbol'
 
@@ -54,7 +54,6 @@ import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 
 export type DropdownTrigger = 'hover' | 'click' | 'custom'
-type ClassType = string | Record<string, boolean>
 
 export default defineComponent({
   name: 'Dropdown',
@@ -70,7 +69,7 @@ export default defineComponent({
     label: [String, Number],
     transitionName: String,
     transfer: booleanStringProp,
-    dropClass: [String, Object] as PropType<ClassType>,
+    dropClass: classProp,
     appear: booleanProp
   },
   emits: ['toggle', 'select', 'click-outside', 'outside-close', 'update:visible'],

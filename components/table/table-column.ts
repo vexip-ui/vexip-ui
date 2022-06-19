@@ -1,12 +1,11 @@
 import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
-import { useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
+import { useProps, booleanProp, sizeProp, createSizeProp, classProp } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
 import type {
   Data,
-  ClassType,
   ColumnType,
   FilterOptions,
   SorterOptions,
@@ -23,7 +22,7 @@ const props = {
     type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
     default: null
   },
-  className: [String, Object] as PropType<ClassType>,
+  className: classProp,
   type: String as PropType<ColumnType>,
   width: Number,
   filter: Object as PropType<FilterOptions<any, any>>,

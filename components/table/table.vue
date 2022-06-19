@@ -131,11 +131,11 @@ import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
+import type { ClassType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Key,
   Data,
-  ClassType,
   RenderFn,
   ColumnOptions,
   RowClassFn,
@@ -160,7 +160,7 @@ export default defineComponent({
     dataKey: String,
     width: [Number, String],
     height: Number,
-    rowClass: [String, Object, Function] as PropType<ClassType | RowClassFn>,
+    rowClass: [String, Object, Array, Function] as PropType<ClassType | RowClassFn>,
     stripe: booleanProp,
     border: booleanProp,
     highlight: booleanProp,

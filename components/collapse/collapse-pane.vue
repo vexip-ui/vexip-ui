@@ -25,7 +25,7 @@
 import { defineComponent, ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, styleProp } from '@vexip-ui/config'
 import { randomString } from '@vexip-ui/utils'
 import { ChevronRight } from '@vexip-ui/icons'
 import { COLLAPSE_STATE } from './symbol'
@@ -44,7 +44,7 @@ export default defineComponent({
     label: [String, Number],
     title: String,
     disabled: booleanProp,
-    contentStyle: Object,
+    contentStyle: styleProp,
     expanded: booleanProp,
     card: booleanProp,
     arrowType: String as PropType<CollapseArrowType>,

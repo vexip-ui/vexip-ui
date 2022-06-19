@@ -1,5 +1,5 @@
 import { defineComponent, computed, h, renderSlot,} from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, styleProp } from '@vexip-ui/config'
 import { supportFlexGap } from '@vexip-ui/utils'
 import { flatVNodes } from './helper'
 
@@ -23,7 +23,7 @@ export default defineComponent({
     justify: String as PropType<Justify>,
     noWrap: booleanProp,
     size: [String, Number, Array] as PropType<ComponentSize | number | [number, number]>,
-    itemStyle: [String, Object] as PropType<string | Record<string, any>>,
+    itemStyle: styleProp,
     gapDisabled: booleanProp
   },
   setup(_props, { slots }) {

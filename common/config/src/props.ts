@@ -1,7 +1,7 @@
 import { reactive, computed, watch, provide, inject, unref } from 'vue'
 import { has, isNull, isObject, isFunction, mergeObjects } from '@vexip-ui/utils'
 
-import type { App, ComputedRef, PropType, Ref } from 'vue'
+import type { App, ComputedRef, PropType, Ref, CSSProperties } from 'vue'
 
 export type PropsOptions = Record<string, Record<string, unknown>>
 
@@ -88,12 +88,10 @@ export const booleanProp = {
   type: Boolean,
   default: null
 }
-
 export const booleanStringProp = {
   type: [Boolean, String],
   default: null
 }
-
 export const booleanNumberProp = {
   type: [Boolean, Number],
   default: null
@@ -124,3 +122,11 @@ export function createStateProp() {
     }
   }
 }
+
+type MaybeArray<T> = T | T[]
+
+export type ClassType = MaybeArray<string | Record<string, any>>
+export type StyleType = MaybeArray<string | CSSProperties & { [x: `--${string}`]: string | number }>
+
+export const classProp = [String, Object, Array] as PropType<ClassType>
+export const styleProp = [String, Object, Array] as PropType<StyleType>

@@ -61,10 +61,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import UploadFile from './upload-file.vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, styleProp } from '@vexip-ui/config'
 import { uploadListTypes } from './symbol'
 
-import type { PropType, StyleValue } from 'vue'
+import type { PropType } from 'vue'
 import type { UploadListType, RenderFn, FileState } from './symbol'
 
 export default defineComponent({
@@ -78,7 +78,7 @@ export default defineComponent({
     iconRenderer: Function as PropType<RenderFn>,
     type: String as PropType<UploadListType>,
     loadingText: String,
-    style: [String, Object] as PropType<StyleValue>
+    style: styleProp
   },
   emits: ['preview', 'delete'],
   setup(_props) {

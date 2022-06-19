@@ -1,12 +1,11 @@
 import type { InjectionKey } from 'vue'
-import type { ComponentSize } from '@vexip-ui/config'
+import type { ComponentSize, ClassType } from '@vexip-ui/config'
 import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 
 export type Key = string | number | symbol
 export type Data = Record<string, unknown>
-export type ClassType = string | Record<string, boolean>
 export type RowClassFn = (data: Data, index: number) => ClassType
 export type Accessor<T extends string | number = string | number, D = Data> = (
   data: D,

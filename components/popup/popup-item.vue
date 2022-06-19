@@ -25,12 +25,12 @@
 <script lang="ts">
 import { defineComponent, ref, inject, onMounted, nextTick } from 'vue'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, classProp } from '@vexip-ui/config'
 import { noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ClassType, PopupItemState } from './symbol'
+import type { PopupItemState } from './symbol'
 
 export default defineComponent({
   name: 'PopupItem',
@@ -47,7 +47,7 @@ export default defineComponent({
       default: 'vxp-popup-top'
     },
     innerClass: {
-      type: [String, Object] as PropType<ClassType>,
+      type: classProp,
       default: null
     }
   },

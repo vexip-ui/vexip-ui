@@ -48,7 +48,7 @@ export default defineComponent({
           [nh.bm('primary')]: !props.vertical && props.primary,
           [nh.bm('dashed')]: props.dashed,
           [nh.bm('with-text')]: !props.vertical && hasText.value,
-          [nh.bs('-with-text-${props.textPosition}')]:
+          [nh.bm(`-with-text-${props.textPosition}`)]:
             !props.vertical && hasText.value && props.textPosition !== 'center'
         }
       ]

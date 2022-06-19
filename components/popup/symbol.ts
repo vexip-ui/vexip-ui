@@ -1,7 +1,6 @@
 import type { InjectionKey } from 'vue'
 
 export type Key = string | number
-export type ClassType = string | Record<string, boolean>
 export type PopupPlacement =
   | 'top-right'
   | 'top-center'

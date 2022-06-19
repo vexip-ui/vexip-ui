@@ -50,11 +50,11 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, styleProp } from '@vexip-ui/config'
 import { isPromise, isFunction } from '@vexip-ui/utils'
 import { CircleQuestion } from '@vexip-ui/icons'
 
-import type { PropType, CSSProperties } from 'vue'
+import type { PropType } from 'vue'
 import type { ConfirmType, ConfirmOptions } from './symbol'
 
 const positionType = [Number, String]
@@ -81,7 +81,7 @@ export default defineComponent({
     confirmText: String,
     cancelText: String,
     icon: [Object, Function] as PropType<Record<string, any> | (() => any)>,
-    style: Object,
+    style: styleProp,
     renderer: Function as PropType<() => any>,
     iconColor: String
   },
@@ -120,7 +120,7 @@ export default defineComponent({
     const loading = ref(false)
     const content = ref('')
     const iconColorR = ref(props.iconColor)
-    const styleR = ref<CSSProperties>(props.style || {})
+    const styleR = ref(props.style || {})
     const confirmTypeR = ref(props.confirmType)
     const confirmTextR = ref(props.confirmText)
     const cancelTextR = ref(props.cancelText)

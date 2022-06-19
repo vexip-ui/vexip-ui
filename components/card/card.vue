@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useNameHelper, useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps, styleProp } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -31,7 +31,7 @@ export default defineComponent({
   props: {
     title: String,
     shadow: String as PropType<CardShadowType>,
-    contentStyle: Object
+    contentStyle: styleProp
   },
   setup(_props, { slots }) {
     const props = useProps('card', _props, {
@@ -46,7 +46,7 @@ export default defineComponent({
     const nh = useNameHelper('card')
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars'), nh.bs('-shadow-${props.shadow}')]
+      return [nh.b(), nh.bs('vars'), nh.bm(`shadow-${props.shadow}`)]
     })
     const hasTitle = computed(() => {
       return slots.title || props.title

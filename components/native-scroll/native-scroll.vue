@@ -55,13 +55,13 @@
 import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanNumberProp, styleProp, classProp } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
 import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
-import type { ScrollMode, ClassType } from './symbol'
+import type { ScrollMode } from './symbol'
 
 const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
 
@@ -75,8 +75,8 @@ export default defineComponent({
     ResizeObserver
   },
   props: {
-    scrollClass: [String, Object] as PropType<ClassType>,
-    scrollStyle: Object,
+    scrollClass: classProp,
+    scrollStyle: styleProp,
     mode: String as PropType<ScrollMode>,
     width: [Number, String],
     height: [Number, String],
@@ -87,7 +87,7 @@ export default defineComponent({
     useXBar: booleanProp,
     useYBar: booleanProp,
     barFade: Number,
-    barClass: [String, Object] as PropType<ClassType>,
+    barClass: classProp,
     autoplay: booleanNumberProp,
     playWaiting: Number,
     onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,

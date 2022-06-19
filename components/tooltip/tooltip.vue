@@ -39,12 +39,12 @@
 <script lang="ts">
 import { defineComponent, ref, watch, toRef } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
 import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-import type { ClassType, TooltipTheme, ToopTipTrigger } from './symbol'
+import type { TooltipTheme, ToopTipTrigger } from './symbol'
 
 export default defineComponent({
   name: 'Tooltip',
@@ -59,7 +59,7 @@ export default defineComponent({
     outsideClose: booleanProp,
     // 设置 pointer-event: none
     noHover: booleanProp,
-    tipClass: [String, Object] as PropType<ClassType>,
+    tipClass: classProp,
     transfer: booleanStringProp,
     disabled: booleanProp,
     theme: String as PropType<TooltipTheme>

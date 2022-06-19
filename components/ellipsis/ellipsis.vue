@@ -35,14 +35,12 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, classProp } from '@vexip-ui/config'
 import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { TooltipTheme } from '@/components/tooltip'
-
-export type ClassType = string | Record<string, boolean>
 
 export default defineComponent({
   name: 'Ellipsis',
@@ -58,7 +56,7 @@ export default defineComponent({
     noHover: booleanProp,
     transitionName: String,
     tooltipTheme: String as PropType<TooltipTheme>,
-    tipClass: [String, Object] as PropType<ClassType>,
+    tipClass: classProp,
     tipMaxWidth: [Number, String]
   },
   setup(_props) {

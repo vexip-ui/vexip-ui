@@ -37,7 +37,7 @@ import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ComponentSize } from '@vexip-ui/config'
+import type { ComponentSize, StyleType } from '@vexip-ui/config'
 import type { ObjectFit } from './symbol'
 
 const objectFitValues = Object.freeze<ObjectFit>(['fill', 'contain', 'cover', 'none', 'scale-down'])
@@ -107,7 +107,7 @@ export default defineComponent({
       }
     })
     const style = computed(() => {
-      const style: Record<string, any> = {
+      const style: StyleType = {
         '--vxp-avatar-color': props.color,
         '--vxp-avatar-bg-color': props.background,
         '--vxp-avatar-image-fit': props.fit

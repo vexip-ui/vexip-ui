@@ -152,7 +152,18 @@ import { Tag } from '@/components/tag'
 import { VirtualList } from '@/components/virtual-list'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, useLocale, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  booleanStringProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp,
+  classProp
+} from '@vexip-ui/config'
 import { noop, isNull } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
@@ -160,7 +171,6 @@ import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { OptionKeyConfig, RawOption, OptionState } from '@/components/option'
 import type { VirtualListExposed } from '@/components/virtual-list'
-import type { ClassType } from './symbol'
 
 const defaultKeyConfig: Required<OptionKeyConfig> = {
   value: 'value',
@@ -200,7 +210,7 @@ export default defineComponent({
     multiple: booleanProp,
     clearable: booleanProp,
     maxListHeight: Number,
-    listClass: [String, Object] as PropType<ClassType>,
+    listClass: classProp,
     placement: String as PropType<Placement>,
     transfer: booleanStringProp,
     disableValidate: booleanProp,

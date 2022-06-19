@@ -50,13 +50,13 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
-import { useNameHelper, useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanNumberProp, classProp } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
 import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
-import type { ScrollMode, ClassType } from './symbol'
+import type { ScrollMode } from './symbol'
 
 const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
 
@@ -69,7 +69,7 @@ export default defineComponent({
     Scrollbar
   },
   props: {
-    scrollClass: [String, Object] as PropType<ClassType>,
+    scrollClass: classProp,
     mode: String as PropType<ScrollMode>,
     width: [Number, String],
     height: [Number, String],
@@ -83,7 +83,7 @@ export default defineComponent({
     useXBar: booleanProp,
     useYBar: booleanProp,
     barFade: Number,
-    barClass: [String, Object] as PropType<ClassType>,
+    barClass: classProp,
     autoplay: booleanNumberProp,
     playWaiting: Number,
     noBuffer: booleanProp,

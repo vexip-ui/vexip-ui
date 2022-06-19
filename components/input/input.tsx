@@ -2,15 +2,23 @@ import { defineComponent, ref, computed, watch, inject, Transition } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, useLocale, createSizeProp, createStateProp, booleanProp, sizeProp, stateProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  createSizeProp,
+  createStateProp,
+  booleanProp,
+  sizeProp,
+  stateProp,
+  classProp
+} from '@vexip-ui/config'
 import { isNull, noop, throttle } from '@vexip-ui/utils'
 import { EyeSlashR, EyeR, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
 export type InputType = 'text' | 'password' | 'date' | 'datetime' | 'time'
-
-type ClassType = string | Record<string, boolean>
 type InputEventType = 'input' | 'change'
 
 const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
@@ -37,7 +45,7 @@ export default defineComponent({
     autocomplete: booleanProp,
     readonly: booleanProp,
     disabled: booleanProp,
-    inputClass: [String, Object] as PropType<ClassType>,
+    inputClass: classProp,
     debounce: booleanProp,
     maxLength: Number,
     before: String,
@@ -140,7 +148,7 @@ export default defineComponent({
       return {
         [nh.bs('wrapper')]: true,
         [nh.bs('vars')]: true,
-        [nh.bs('wrapper--${props.size}')]: props.size !== 'default',
+        [nh.bm(`wrapper--${props.size}`)]: props.size !== 'default',
         [nh.bs('wrapper--before-only')]: hasBefore.value && !hasAfter.value,
         [nh.bs('wrapper--after-only')]: !hasBefore.value && hasAfter.value
       }

@@ -1,6 +1,5 @@
 import type { InjectionKey } from 'vue'
 
-export type ClassType = string | Record<string, boolean>
 export type ArrowType = 'outside' | 'inside' | 'none'
 export type ArrowTrigger = 'hover' | 'always'
 export type PointerType = 'outside' | 'inside' | 'none'

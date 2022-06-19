@@ -68,13 +68,22 @@ import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, useLocale, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp,
+  classProp
+} from '@vexip-ui/config'
 import { isNull, noop, toFixed, toNumber, boundRange, throttle } from '@vexip-ui/utils'
 import { CaretUp, CaretDown, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
-type ClassType = string | Record<string, boolean>
 type InputEventType = 'input' | 'change'
 
 export default defineComponent({
@@ -107,7 +116,7 @@ export default defineComponent({
     readonly: booleanProp,
     step: Number,
     disabled: booleanProp,
-    inputClass: [String, Object] as PropType<ClassType>,
+    inputClass: classProp,
     debounce: booleanProp,
     disableValidate: booleanProp,
     clearable: booleanProp
