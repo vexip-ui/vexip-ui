@@ -3,7 +3,7 @@
     Show all tgas:
     <Switcher v-model:value="showAllTags"></Switcher>
   </p>
-  <NumberInput v-model:value="maxCount" :range="[0, Infinity]" :disabled="showAllTags"></NumberInput>
+  <NumberInput v-model:value="maxCount" :min="0" :disabled="showAllTags"></NumberInput>
   <p>
     Hide rest tip:
     <Switcher v-model:value="noRestTip"></Switcher>

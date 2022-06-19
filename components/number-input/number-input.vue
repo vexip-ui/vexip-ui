@@ -97,7 +97,8 @@ export default defineComponent({
     // 格式化后读取
     accessor: Function as PropType<(value: number | null) => any>,
     value: Number as PropType<number | null>,
-    range: Array as PropType<number[]>,
+    min: Number,
+    max: Number,
     placeholder: String,
     autofocus: booleanProp,
     spellcheck: booleanProp,
@@ -147,12 +148,8 @@ export default defineComponent({
         default: null,
         static: true
       },
-      range: {
-        default: () => [-Infinity, Infinity],
-        validator: (value: [number, number]) => {
-          return Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number'
-        }
-      },
+      min: -Infinity,
+      max: Infinity,
       placeholder: null,
       autofocus: false,
       spellcheck: false,
@@ -218,10 +215,10 @@ export default defineComponent({
         : preciseNumber.value.toString()
     })
     const plusDisabled = computed(() => {
-      return !isNull(currentValue.value) && currentValue.value >= props.range[1]
+      return !isNull(currentValue.value) && currentValue.value >= props.max
     })
     const minusDisabled = computed(() => {
-      return !isNull(currentValue.value) && currentValue.value <= props.range[0]
+      return !isNull(currentValue.value) && currentValue.value <= props.min
     })
     const hasValue = computed(() => {
       return currentValue.value || currentValue.value === 0
@@ -322,7 +319,7 @@ export default defineComponent({
 
     function setValue(value: number | null, type: InputEventType) {
       if (type !== 'input') {
-        currentValue.value = boundRange(value || 0, props.range[0], props.range[1])
+        currentValue.value = boundRange(value || 0, props.min, props.max)
       } else {
         currentValue.value = value
       }
