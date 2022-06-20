@@ -77,7 +77,6 @@ createApp(App)
 
 同时在引用样式时，你需要通过 `sass` 源码引入，并将 `$namespace` 变量设置为同样的值以保证样式的正常运作。
 
-
 ```ts
 createApp(App).use(install, { namespace: 'vxp' })
 ```

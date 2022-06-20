@@ -1,6 +1,6 @@
 # 样式配置
 
-Vexip UI 的样式由 `sass` 编写，并生成一系列预设 `css` 变量，同时结合一些规则让配置变得容易。
+Vexip UI 的样式由 `scss` 编写，并生成一系列预设 `css` 变量，同时结合一些规则让配置变得容易。
 
 ## 引入样式
 
@@ -11,7 +11,22 @@ import 'vexip-ui/css/index.css'
 import 'vexip-ui/themes/dark/index.css' // 不需要暗黑主题时无需引入
 ```
 
-如果你喜欢，还可以通过 `sass` 文件引入：
+如果你喜欢，还可以通过 `scss` 文件引入：
+
+在 `scss` 中引入：
+
+```scss
+// style/index.scss
+// 在 scss 里你可以省略 index.scss
+@use 'vexip-ui/style';
+@use 'vexip-ui/style/dark'; // 不需要暗黑主题时无需引入
+```
+
+```ts
+import './style/index.scss'
+```
+
+在 `ts` 中引入（不推荐）：
 
 ```ts
 import 'vexip-ui/style/index.scss'
@@ -48,20 +63,19 @@ import 'vexip-ui/style/dark/preset.scss' // 不需要暗黑主题时无需引入
 
 还有部分的变量是作用于布局上的，与该规则有出入。其余的一些变量出于语义化也会与该规则有不同。
 
-## 通过 Sass 修改
+## 通过 Scss 修改
 
-使用 `@use...with` 引入 `vexip-ui/style/design` 可以修改 `sass` 的变量：
+使用 `@use...with` 可以修改 `scss` 的变量：
 
 ```scss
 // style/index.scss
-@use 'vexip-ui/design' with (
+@use 'vexip-ui/style' with (
   $color-map: (
     primary: (
       base: #845ef7
     )
   )
 );
-@use 'vexip-ui/style'; // 在 scss 里你可以省略 index.scss
 ```
 
 然后在入口文件引入该样式：
@@ -75,4 +89,4 @@ import { install } from 'vexip-ui'
 createApp(App).use(install).mount('#app')
 ```
 
-具体的 `sass` 变量可以在 [源码](https://github.com/qmhc/vexip-ui/blob/main/style/design/variables.scss) 查找。
+具体的 `scss` 变量可以在 [源码](https://github.com/qmhc/vexip-ui/blob/main/style/design/variables.scss) 查找。
