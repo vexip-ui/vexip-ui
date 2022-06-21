@@ -359,7 +359,6 @@ export default defineComponent({
         return false
       }
 
-      event.preventDefault()
       prepareScroll()
 
       transitionDuration.value = 0
