@@ -1,5 +1,6 @@
 export interface I18nConfig {
   common: {
+    language: string,
     makeInterest: string,
     slogan: string,
     getStarted: string,

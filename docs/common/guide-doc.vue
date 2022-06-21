@@ -1,28 +1,17 @@
 <template>
-  <article ref="wrapper" :class="prefix">
+  <Article ref="article" :class="prefix">
     <div :class="`${prefix}__desc`">
       <template v-if="desc">
         <component :is="desc" @mounted="handleDescMounted"></component>
       </template>
     </div>
-    <Portal to="#toc-anchor">
-      <Anchor :offset="15">
-        <AnchorLink
-          v-for="item in anchors"
-          :key="item.id"
-          :to="`#${item.id}`"
-        >
-          {{ item.name }}
-        </AnchorLink>
-      </Anchor>
-    </Portal>
-  </article>
+  </Article>
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent, ref, markRaw, watch, watchEffect, inject } from 'vue'
+import Article from './article.vue'
 import { noop } from '@vexip-ui/utils'
-import { ussTocAnchor } from './toc-anchor'
 
 const props = defineProps({
   name: {
@@ -36,9 +25,9 @@ const props = defineProps({
 })
 
 const prefix = 'guide-doc'
+const article = ref<InstanceType<typeof Article> | null>(null)
 
 const refreshScroll = inject<() => void>('refreshScroll', noop)
-const { wrapper, anchors, refreshAnchor } = ussTocAnchor()
 
 const desc = ref<Record<string, any> | null>(null)
 const descLoaded = ref(false)
@@ -48,7 +37,7 @@ watch(descLoaded, value => value && refresh())
 function refresh() {
   requestAnimationFrame(() => {
     refreshScroll?.()
-    refreshAnchor()
+    article.value?.refreshAnchor()
   })
 }
 
@@ -70,9 +59,6 @@ watchEffect(async () => {
 
 <style lang="scss">
 .guide-doc {
-  padding: 16px 3.2em 2.8em;
-  padding-right: 15em;
-
   & > p {
     margin: 3px;
   }

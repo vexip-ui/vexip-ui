@@ -1,90 +1,122 @@
 <template>
-  <header class="header">
-    <Row style="height: 100%;">
-      <Column flex="300px" style="padding-left: 40px;">
-        <a class="index" @click="toHomepage">
-          <img class="index__logo" src="../assets/logo.png" alt="logo.pne" />
-          <span class="index__title"> Vexip UI </span>
-          <Tag class="index__version">
-            {{ `v${version}` }}
-          </Tag>
-        </a>
-      </Column>
-      <Column class="navigation" style="flex: 1 1 calc(100% - 300px);">
-        <div class="search">
-          <AutoComplete
-            v-model:value="currentSearch"
-            filter
-            ignore-case
-            transfer
-            class="search-input"
-            :prefix="MagnifyingGlass"
-            :placeholder="placeholder"
-            :options="searchOptions"
-            @change="toComponentDoc"
-          ></AutoComplete>
-        </div>
-        <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
-          <template v-for="menu in menus" :key="menu.label">
-            <li
-              v-if="menu.to"
-              class="vxp-menu__item vxp-menu__item--no-icon"
-              @click="openPage(menu.to)"
-            >
-              <div class="vxp-menu__label">
-                <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
-              </div>
-            </li>
-            <MenuItem v-else :label="menu.label">
-              {{ $t(`common.${menu.label}`) }}
-            </MenuItem>
-          </template>
-        </Menu>
-        <Dropdown style="margin-right: 24px; cursor: pointer;">
-          <Icon :scale="2">
-            <Language></Language>
-          </Icon>
-          <template #drop>
-            <DropdownList>
-              <DropdownItem
-                v-for="option in langOptions"
-                :key="option.lang"
-                :name="option.name"
-                :selected="option.lang === language"
-                @select="changeLanguage(option.lang)"
-              >
-                {{ option.name }}
-              </DropdownItem>
-            </DropdownList>
-          </template>
-        </Dropdown>
-        <ThemeSwitch></ThemeSwitch>
-        <Linker class="github-link" to="//github.com/qmhc/vexip-ui/">
-          <Icon :scale="1.6">
-            <GithubB></GithubB>
-          </Icon>
-        </Linker>
-      </Column>
-    </Row>
+  <header :class="['header', isAffix && 'header--reduced']">
+    <a class="index" @click="toHomepage">
+      <img class="index__logo" src="../assets/logo.png" alt="logo.pne" />
+      <span class="index__title"> Vexip UI </span>
+      <Tag class="index__version">
+        {{ `v${version}` }}
+      </Tag>
+    </a>
+    <div class="search">
+      <AutoComplete
+        v-model:value="currentSearch"
+        filter
+        ignore-case
+        transfer
+        class="search-input"
+        :prefix="MagnifyingGlass"
+        :placeholder="placeholder"
+        :options="searchOptions"
+        @change="toComponentDoc"
+      ></AutoComplete>
+    </div>
+    <div class="navigation">
+      <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
+        <template v-for="menu in menus" :key="menu.label">
+          <li
+            v-if="menu.to"
+            class="vxp-menu__item vxp-menu__item--no-icon"
+            @click="openPage(menu.to)"
+          >
+            <div class="vxp-menu__label">
+              <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
+            </div>
+          </li>
+          <MenuItem v-else :label="menu.label">
+            {{ $t(`common.${menu.label}`) }}
+          </MenuItem>
+        </template>
+      </Menu>
+    </div>
+    <Dropdown class="language" trigger="click">
+      <Icon :scale="2">
+        <Language></Language>
+      </Icon>
+      <template #drop>
+        <DropdownList>
+          <DropdownItem
+            v-for="option in langOptions"
+            :key="option.lang"
+            :name="option.name"
+            :selected="option.lang === language"
+            @select="changeLanguage(option.lang)"
+          >
+            {{ option.name }}
+          </DropdownItem>
+        </DropdownList>
+      </template>
+    </Dropdown>
+    <div class="theme">
+      <ThemeSwitch></ThemeSwitch>
+    </div>
+    <Linker class="github-link" to="//github.com/qmhc/vexip-ui/">
+      <Icon :scale="1.6">
+        <GithubB></GithubB>
+      </Icon>
+    </Linker>
   </header>
+  <section v-if="currentMenu" :class="['sub-menu', isAffix && 'sub-menu--affix']">
+    <div class="sub-menu__reduce" @click="$emit('toggle-menu', true)">
+      <Icon :scale="1.4">
+        <Bars></Bars>
+      </Icon>
+    </div>
+    <div style="flex: auto;"></div>
+    <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
+      <template v-for="menu in menus" :key="menu.label">
+        <li
+          v-if="menu.to"
+          class="vxp-menu__item vxp-menu__item--no-icon"
+          @click="openPage(menu.to)"
+        >
+          <div class="vxp-menu__label">
+            <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
+          </div>
+        </li>
+        <MenuItem v-else :label="menu.label">
+          {{ $t(`common.${menu.label}`) }}
+        </MenuItem>
+      </template>
+    </Menu>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watchEffect, nextTick } from 'vue'
+import { ref, toRef, computed, watch, watchEffect, inject, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
-import { MagnifyingGlass, GithubB, Language } from '@vexip-ui/icons'
+import { MagnifyingGlass, GithubB, Language, Bars } from '@vexip-ui/icons'
 import { toKebabCase } from '@vexip-ui/utils'
 import ThemeSwitch from './theme-switch.vue'
 import { getComponentConfig } from '../router/components'
 
+import type { EventEmitter } from '@vexip-ui/utils'
+import type { I18nConfig } from '../i18n'
+import type { Store } from '../symbol'
+
+const emit = defineEmits(['toggle-menu'])
+
+const store = inject<Store>('store')!
+const emitter = inject<EventEmitter>('emitter')!
+const isAffix = toRef(store, 'isAffix')
+
+emitter.on('toggle-affix', (affix: boolean) => {
+  isAffix.value = affix
+})
+
 const version = __VERSION__
 
 const searchOptions = ref<string[]>([])
-const langOptions = [
-  { lang: 'zh-CN', name: '中文' },
-  { lang: 'en-US', name: 'English' }
-]
 const currentMenu = ref('')
 const placeholder = ref('')
 const currentSearch = ref('')
@@ -92,6 +124,18 @@ const currentSearch = ref('')
 const i18n = useI18n({ useScope: 'global' })
 const router = useRouter()
 const route = useRoute()
+
+const langOptions = computed(() => {
+  console.log(i18n.availableLocales)
+  return i18n.availableLocales.map(lang => {
+    const config = i18n.getLocaleMessage(lang as string) as I18nConfig
+
+    return {
+      lang: lang as string,
+      name: config.common.language || lang
+    }
+  })
+})
 
 const menus = [
   { label: 'guides' },
@@ -112,13 +156,17 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  const matchedMenu = menus.find(menu => menu.label && route.path.startsWith(`/${language.value}/${menu.label}`))
+  const matchedMenu = menus.find(
+    menu => menu.label && route.path.startsWith(`/${language.value}/${menu.label}`)
+  )
 
   placeholder.value = route.meta?.isComponent
     ? formatComponentName(route.meta.name as string)
     : i18n.t('common.searchComponent')
   currentMenu.value = matchedMenu ? matchedMenu.label! : ''
 })
+
+watch(() => route.path, () => emit('toggle-menu', false))
 
 function selectMenu(label: string) {
   if (!route.path.startsWith(`/${language.value}/${label}`)) {
@@ -156,30 +204,22 @@ function formatComponentName(name: string) {
 </script>
 
 <style lang="scss">
+@use '../style/mixins.scss' as *;
+
 .header {
-  height: 65px;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(--bg-color);
   border-bottom: var(--vxp-border-light-2);
-  transition: var(--vxp-transition-border);
+  transition: var(--vxp-transition-border), var(--vxp-transition-transform);
 
-  .vxp-column {
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
-  .navigation {
-    & > * {
-      display: flex;
-      margin-right: 16px;
-    }
-
-    .vxp-menu {
-      border: 0;
-    }
-
-    .vxp-menu__item {
-      height: 64px;
-    }
+  &--reduced {
+    transform: translateY(-100%);
   }
 
   .search {
@@ -192,8 +232,10 @@ function formatComponentName(name: string) {
 
   .index {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
-    height: 64px;
+    height: 100%;
+    padding: 0 16px 0 20px;
     font-family:
       Avenir,
       -apple-system,
@@ -212,6 +254,16 @@ function formatComponentName(name: string) {
     font-weight: 500;
     cursor: pointer;
 
+    @include query-media('lg') {
+      width: var(--aside-width);
+      padding: 0;
+      padding-left: 16px;
+    }
+
+    @include query-media('xl') {
+      width: var(--aside-width-large);
+    }
+
     &,
     &:hover {
       color: var(--vxp-content-color-primary);
@@ -219,17 +271,34 @@ function formatComponentName(name: string) {
 
     &__logo {
       height: 32px;
-      margin-right: 14px;
+
+      @include query-media('lg') {
+        margin-right: 14px;
+      }
+    }
+
+    &__title {
+      display: none;
+      white-space: nowrap;
+
+      @include query-media('lg') {
+        display: block;
+      }
     }
 
     &__version {
-      margin: 2px 0 0 6px;
-      transform: scale(0.8);
+      display: none;
+
+      @include query-media('lg') {
+        display: block;
+        margin: 2px 0 0 6px;
+        transform: scale(0.8);
+      }
     }
   }
 
   .search-input {
-    width: 300px;
+    max-width: 300px;
 
     .vxp-select__selector {
       background-color: transparent;
@@ -242,12 +311,74 @@ function formatComponentName(name: string) {
     }
   }
 
-  .theme-switch {
+  .navigation {
+    display: none;
+
+    @include query-media('lg') {
+      display: block;
+    }
+
+    .vxp-menu {
+      margin-right: 24px;
+      border: 0;
+    }
+
+    .vxp-menu__item {
+      height: var(--header-height);
+    }
+  }
+
+  .language {
+    display: inline-flex;
+    margin-right: 24px;
+    cursor: pointer;
+  }
+
+  .theme {
+    display: block;
     margin-right: 24px;
   }
 
   .github-link {
-    margin-right: 40px;
+    margin-right: 24px;
+
+    @include query-media('lg') {
+      margin-right: 40px;
+    }
+  }
+}
+
+.sub-menu {
+  position: fixed;
+  top: var(--header-height);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--sub-menu-height);
+  background-color: var(--bg-color);
+  border-bottom: var(--vxp-border-light-2);
+  transition: var(--vxp-transition-transform);
+
+  &--affix {
+    transform: translateY(calc(var(--header-height) * -1));
+  }
+
+  @include query-media('lg') {
+    display: none;
+  }
+
+  &__reduce {
+    display: flex;
+    padding: 0 16px 0 24px;
+  }
+
+  .vxp-menu {
+    border: 0;
+  }
+
+  .vxp-menu__item {
+    height: var(--sub-menu-height);
   }
 }
 </style>

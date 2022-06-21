@@ -1,11 +1,6 @@
 <template>
-  <Row tag="section" :class="prefix">
-    <Column
-      tag="aside"
-      :class="`${prefix}__sider`"
-      flex="auto"
-      style="width: 300px;"
-    >
+  <Container :class="prefix">
+    <template #aside>
       <Scroll use-y-bar height="100%" :delta-y="60">
         <Menu
           v-model:active="currentMenu"
@@ -18,42 +13,24 @@
           </MenuItem>
         </Menu>
       </Scroll>
-    </Column>
-    <Column
-      tag="section"
-      :class="`${prefix}__content`"
-      flex="auto"
-      style="width: calc(100% - 300px);"
-    >
-      <NativeScroll
-        ref="scroll"
-        appear
-        use-y-bar
-        height="100%"
-        :delta-y="50"
-      >
-        <main :class="`${prefix}__main`">
-          <router-view v-slot="{ Component }">
-            <transition name="vxp-fade" mode="out-in">
-              <component :is="Component"></component>
-            </transition>
-          </router-view>
-        </main>
-        <Footer></Footer>
-      </NativeScroll>
-      <section id="toc-anchor" class="toc-anchor"></section>
-    </Column>
-  </Row>
+    </template>
+    <main :class="`${prefix}__main`">
+      <router-view v-slot="{ Component }">
+        <transition name="vxp-fade" mode="out-in">
+          <component :is="Component"></component>
+        </transition>
+      </router-view>
+    </main>
+    <Footer></Footer>
+  </Container>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import Container from '../common/container.vue'
 import Footer from '../common/footer.vue'
 import { getGuideConfig } from '../router/guides'
-
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import type { Scroll } from 'vexip-ui'
 
 const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
@@ -61,8 +38,6 @@ const prefix = 'guides'
 
 const currentMenu = ref('')
 const menus = getGuideConfig()
-
-const scroll = ref<InstanceType<typeof Scroll> | null>(null)
 
 const router = useRouter()
 const route = useRoute()
@@ -77,8 +52,6 @@ watch(
     if (!currentMenu.value) {
       currentMenu.value = menus[0].label
     }
-
-    scroll.value?.scrollTo(0, 0)
   },
   { immediate: true }
 )

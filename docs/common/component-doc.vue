@@ -1,5 +1,5 @@
 <template>
-  <article ref="wrapper" :class="prefix">
+  <Article ref="article" :class="prefix">
     <ResizeObserver @resize="refreshScroll?.()">
       <div :style="{ visibility: allLoaded ? undefined : 'hidden' }">
         <h1 :class="`${prefix}__title`">
@@ -49,13 +49,6 @@
             <component :is="api" @mounted="handleApiMounted"></component>
           </template>
         </div>
-        <Portal to="#toc-anchor">
-          <Anchor :offset="15">
-            <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
-              {{ item.name }}
-            </AnchorLink>
-          </Anchor>
-        </Portal>
       </div>
     </ResizeObserver>
     <transition name="vxp-fade">
@@ -65,7 +58,7 @@
         </Icon>
       </div>
     </transition>
-  </article>
+  </Article>
 </template>
 
 <script setup lang="ts">
@@ -78,10 +71,10 @@ import {
   watchEffect,
   inject
 } from 'vue'
+import Article from './article.vue'
+import Demo from './demo.vue'
 import { Spinner } from '@vexip-ui/icons'
 import { noop } from '@vexip-ui/utils'
-import Demo from '@docs/common/demo.vue'
-import { ussTocAnchor } from './toc-anchor'
 import { getMetaName } from './meta-name'
 
 interface Example {
@@ -103,9 +96,9 @@ const props = defineProps({
 })
 
 const prefix = 'component-doc'
+const article = ref<InstanceType<typeof Article> | null>(null)
 
 const refreshScroll = inject<() => void>('refreshScroll', noop)
-const { anchors, wrapper, refreshAnchor } = ussTocAnchor(3)
 
 const desc = ref<Record<string, any> | null>(null)
 const examples = ref<Example[]>([])
@@ -125,7 +118,7 @@ watch(allLoaded, value => value && refresh())
 function refresh() {
   requestAnimationFrame(() => {
     refreshScroll?.()
-    refreshAnchor()
+    article.value?.refreshAnchor()
   })
 }
 
@@ -179,10 +172,6 @@ watchEffect(async () => {
 
 <style lang="scss">
 .component-doc {
-  position: relative;
-  padding: 16px 3.2em;
-  padding-right: 15em;
-
   &__loading {
     position: absolute;
     top: 14px;

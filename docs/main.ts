@@ -8,6 +8,7 @@ import App from './app.vue'
 import { router } from './router'
 import { i18n, vexipuiLocale } from './i18n'
 import Markdown from './common/markdown.vue'
+import { computeSeriesColors } from './common/series-color'
 
 import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
 
@@ -22,11 +23,19 @@ if (isDark === 'true' || window.matchMedia('(prefers-color-scheme: dark)').match
 
 if (majorColor && isColor(majorColor)) {
   document.documentElement.style.setProperty('--vxp-color-primary-base', majorColor)
+  computeSeriesColors(majorColor)
 }
 
 createApp(App)
   .component('Markdown', Markdown)
   .use(i18n)
-  .use(install, { locale: vexipuiLocale })
+  .use(install, {
+    locale: vexipuiLocale,
+    props: {
+      default: {
+        transfer: true
+      }
+    }
+  })
   .use(router)
   .mount('#app')

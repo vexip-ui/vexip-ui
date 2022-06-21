@@ -31,10 +31,11 @@ watch(isMounted, value => {
 </script>
 
 <style lang="scss">
+@use '../style/mixins.scss' as *;
+
 .markdown {
   pre {
     margin: 14px 0;
-    background-color: var(--vxp-fill-color-background);
     border-radius: 2px;
   }
 
@@ -91,9 +92,7 @@ watch(isMounted, value => {
   }
 
   table {
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 2em;
+    min-width: 100%;
     font-family: Consolas, Monaco, 'andale mono', 'ubuntu mono', monospace;
     font-size: var(--vxp-font-size-secondary);
     border-spacing: 0;
@@ -107,13 +106,20 @@ watch(isMounted, value => {
 
     th {
       text-align: left;
-      white-space: nowrap;
+      white-space: normal;
       background-color: var(--vxp-color-primary-opacity-9);
     }
+  }
 
-    // tr:nth-child(2n) {
-    //   background-color: rgba(var(--vxp-color-primary-light-9) / 50%);
-    // }
+  .md-table {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 28px;
+    overflow-x: auto;
+  }
+
+  &-body > :last-child {
+    margin-bottom: 0;
   }
 }
 </style>

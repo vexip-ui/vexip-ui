@@ -10,6 +10,12 @@
 }
 
 html {
+  --header-height: 65px;
+  --sub-menu-height: 44px;
+  --aside-width: 270px;
+  --aside-width-large: 300px;
+  --anchor-width: 200px;
+
   --bg-color: #fff;
   --body-bg-color: var(--vxp-fill-color-background);
   --ghost-bg-color: #234;
@@ -42,13 +48,14 @@ ul {
 }
 
 pre {
-  padding: 0;
+  padding: 12px 20px;
   margin: 0;
+  overflow-x: auto;
   line-height: 2;
+  background-color: var(--vxp-fill-color-background) !important;
 }
 
 code {
-  padding: 12px 20px;
   font-family:
     Lucida,
     'lucida console',
@@ -59,10 +66,6 @@ code {
     'ubuntu mono',
     monospace;
   line-height: 2;
-}
-
-pre > code {
-  display: block;
 }
 
 article {
@@ -88,10 +91,6 @@ p .vxp-linker {
 .vxp-menu-group__label {
   padding: 10px 20px;
   color: var(--vxp-content-color-third);
-}
-
-.container {
-  height: 100%;
 }
 
 .anchor {

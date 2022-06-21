@@ -1,16 +1,12 @@
 <template>
-  <Row ref="wrapper" tag="section" :class="prefix">
-    <Column
-      tag="aside"
-      :class="`${prefix}__sider`"
-      flex="auto"
-      style="width: 300px;"
-    >
+  <Container ref="wrapper" :class="prefix">
+    <template #aside>
       <Scroll
         ref="menuScroll"
         use-y-bar
         height="100%"
         :delta-y="60"
+        pointer
         @ready="scrollToMenuItem(currentMenu)"
       >
         <Menu
@@ -46,43 +42,28 @@
           </MenuGroup>
         </Menu>
       </Scroll>
-    </Column>
-    <Column
-      tag="section"
-      :class="`${prefix}__content`"
-      flex="auto"
-      style="width: calc(100% - 300px);"
-    >
-      <NativeScroll
-        ref="scroll"
-        appear
-        use-y-bar
-        height="100%"
-        :delta-y="50"
-      >
-        <main :class="`${prefix}__main`">
-          <router-view v-slot="{ Component }">
-            <transition name="vxp-fade" mode="out-in">
-              <component :is="Component"></component>
-            </transition>
-          </router-view>
-        </main>
-        <Footer></Footer>
-      </NativeScroll>
-      <section id="toc-anchor" class="toc-anchor"></section>
-    </Column>
-  </Row>
+    </template>
+    <main :class="`${prefix}__main`">
+      <router-view v-slot="{ Component }">
+        <transition name="vxp-fade" mode="out-in">
+          <component :is="Component"></component>
+        </transition>
+      </router-view>
+    </main>
+    <Footer></Footer>
+  </Container>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, provide } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import { toKebabCase } from '@vexip-ui/utils'
+import Container from '../common/container.vue'
 import Footer from '../common/footer.vue'
 import { getComponentConfig } from '../router/components'
 
-import type { Row, NativeScroll, Scroll } from 'vexip-ui'
+import type { Scroll } from 'vexip-ui'
 import type { ComponentConfig } from '../router/components'
 
 const prefix = 'components'
@@ -92,8 +73,7 @@ const minorVersion = version.split('.').slice(0, 2).join('.')
 
 const componentGroups = getComponentConfig()
 const currentMenu = ref('')
-const wrapper = ref<InstanceType<typeof Row> | null>(null)
-const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
+const wrapper = ref<InstanceType<typeof Container> | null>(null)
 const menuScroll = ref<InstanceType<typeof Scroll> | null>(null)
 
 const i18n = useI18n({ useScope: 'global' })
@@ -101,8 +81,6 @@ const router = useRouter()
 const route = useRoute()
 
 const language = computed(() => i18n.locale.value)
-
-provide('refreshScroll', refreshScroll)
 
 watch(
   () => route.path,
@@ -114,16 +92,10 @@ watch(
     if (!currentMenu.value) {
       currentMenu.value = toKebabCase(componentGroups[0].components[0].name)
     }
-
-    scroll.value?.scrollTo(0, 0, 0)
   },
   { immediate: true }
 )
 watch(currentMenu, scrollToMenuItem)
-
-function refreshScroll() {
-  scroll.value?.refresh()
-}
 
 function selectComponent(label: string) {
   router.push(`/${language.value}/components/${label}`)
@@ -153,13 +125,6 @@ function isNewComponent(config: ComponentConfig) {
 
 <style lang="scss">
 .components {
-  &,
-  &__sider,
-  &__content {
-    position: relative;
-    height: 100%;
-  }
-
   &__sider {
     border-right: var(--vxp-border-light-2);
     transition: var(--vxp-transition-border);
@@ -184,26 +149,6 @@ function isNewComponent(config: ComponentConfig) {
     .vxp-menu__label:hover &,
     .vxp-menu__item--selected .vxp-menu__label & {
       color: var(--vxp-menu-label-color-hover);
-    }
-  }
-
-  .toc-anchor {
-    position: absolute;
-    top: 40px;
-    right: 13.5em;
-    width: 12.5em;
-    transform: translateX(100%);
-
-    .vxp-anchor {
-      width: 100%;
-      font-size: 12px;
-
-      &__link {
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
     }
   }
 

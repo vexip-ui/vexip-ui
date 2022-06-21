@@ -1,0 +1,14 @@
+@use 'sass:map';
+@use 'vexip-ui/style/design/variables.scss' as vars;
+
+@forward 'vexip-ui/style/design/mixins.scss';
+
+@mixin query-media($point) {
+  @if map.has-key(vars.$break-point-map, $point) {
+    @media screen and #{inspect(map.get(vars.$break-point-map, $point))} {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}

@@ -2,7 +2,17 @@
   <Row ref="wrapper" tag="section" :class="prefix">
     <Column>
       <div :class="`${prefix}__example`">
-        <slot></slot>
+        <NativeScroll
+          mode="horizontal"
+          width="100%"
+          use-x-bar
+          :scroll-style="{
+            display: 'inline-block',
+            padding: '20px 12px 8px'
+          }"
+        >
+          <slot></slot>
+        </NativeScroll>
       </div>
       <div :class="`${prefix}__description`">
         <slot name="desc"></slot>
@@ -191,6 +201,8 @@ function editOnPlayground() {
 </script>
 
 <style lang="scss">
+@use '../style/mixins.scss' as *;
+
 .demo {
   margin-bottom: 1.4em;
   border: var(--vxp-border-light-2);
@@ -202,7 +214,7 @@ function editOnPlayground() {
   }
 
   &__example {
-    padding: 40px 24px 16px;
+    padding: 20px 12px 8px;
   }
 
   &__description {
@@ -296,15 +308,6 @@ function editOnPlayground() {
     overflow: hidden;
     border-top: var(--vxp-border-light-2);
     border-radius: 0 0 var(--vxp-border-radius-base) var(--vxp-border-radius-base);
-
-    pre {
-      background-color: var(--vxp-fill-color-background);
-    }
-
-    code {
-      display: block;
-      white-space: pre-wrap;
-    }
   }
 
   &__reduce {

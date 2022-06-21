@@ -1,26 +1,21 @@
 <template>
   <section :class="prefix">
-    <div :class="`${prefix}__sign`">
-      <img :class="`${prefix}__logo`" src="../assets/logo.png" alt="logo.png" />
-      <h1 :class="`${prefix}__title`">
-        Vexip UI
-      </h1>
-      <p :class="`${prefix}__description`">
-        {{ $t('common.slogan') }}
-      </p>
-      <div :class="`${prefix}__actions`">
-        <Button type="primary" size="large" @click="getStarted">
-          {{ $t('common.getStarted') }}
-        </Button>
-        <Button size="large" :icon="GithubB" @click="toRepository">
-          GitHub
-        </Button>
-      </div>
-      <MajorColor :language="language"></MajorColor>
+    <img :class="`${prefix}__logo`" src="../assets/logo.png" alt="logo.png" />
+    <h1 :class="`${prefix}__title`">
+      Vexip UI
+    </h1>
+    <p :class="`${prefix}__description`">
+      {{ $t('common.slogan') }}
+    </p>
+    <div :class="`${prefix}__actions`">
+      <Button type="primary" size="large" @click="getStarted">
+        {{ $t('common.getStarted') }}
+      </Button>
+      <Button size="large" :icon="GithubB" @click="toRepository">
+        GitHub
+      </Button>
     </div>
-    <!-- <a :class="`${prefix}__record`" href="https://beian.miit.gov.cn/" target="_blank">
-      粤ICP备2020125887号
-    </a> -->
+    <MajorColor :class="`${prefix}__colors`" :language="language"></MajorColor>
   </section>
 </template>
 
@@ -37,7 +32,7 @@ const router = useRouter()
 const language = computed(() => globalState.language)
 
 function getStarted() {
-  router.push(`/${globalState.language}/guides/started`)
+  router.push(`/${globalState.language}/components`)
 }
 
 function toRepository() {
@@ -49,21 +44,20 @@ function toRepository() {
 .homepage {
   position: relative;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
   width: 100%;
   height: 100%;
-  padding-top: 5rem;
-
-  &__sign {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    user-select: none;
-  }
+  padding: 40px 20px;
+  padding-top: calc(var(--header-height) + 80px);
+  overflow-y: auto;
+  user-select: none;
 
   &__logo {
-    width: 240px;
-    height: 240px;
+    width: 30%;
+    min-width: 90px;
+    max-width: 240px;
   }
 
   &__title {
@@ -77,6 +71,7 @@ function toRepository() {
     font-size: 1.4rem;
     font-weight: 300;
     color: var(--vxp-content-color-secondary);
+    text-align: center;
   }
 
   &__actions {
@@ -97,6 +92,10 @@ function toRepository() {
     color: var(--vxp-content-color-placeholder);
     text-decoration: none;
     user-select: none;
+  }
+
+  &__colors {
+    width: 100%;
   }
 }
 </style>

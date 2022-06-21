@@ -5,6 +5,8 @@ import { enUS } from './en-US'
 
 import type { LocaleOptions } from 'vexip-ui'
 
+export * from './helper'
+
 export const langOptions = ['zh-CN', 'en-US'] as const
 export const defaultLanguage = langOptions.find(l => l === navigator.language) || __ROLLBACK_LANG__
 

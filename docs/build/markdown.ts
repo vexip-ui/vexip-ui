@@ -10,6 +10,8 @@ export function markdownItSetup(md: MarkdownIt) {
     .use(anchor, { permalink: true, renderPermalink })
     .use(useLinkTarget)
     .use(useContainer)
+    .use(useCodeWrapper)
+    .use(useTableWrapper)
 }
 
 function renderPermalink(slug: string, opts: anchor.AnchorOptions, state: StateCore, index: number) {
@@ -92,4 +94,25 @@ function createContainer(type: string) {
       }
     }
   ] as const
+}
+
+function useCodeWrapper(md: MarkdownIt) {
+  const fence = md.renderer.rules.fence!
+
+  md.renderer.rules.fence = (...args) => {
+    const [tokens, idx] = args
+    const token = tokens[idx]
+    const rawCode = fence(...args)
+
+    return `<div class="language-${token.info.trim()}">${rawCode}</div>`
+  }
+}
+
+function useTableWrapper(md: MarkdownIt) {
+  md.renderer.rules.table_open = () => {
+    return '<div class="md-table"><table>'
+  }
+  md.renderer.rules.table_close = () => {
+    return '</table></div>'
+  }
 }

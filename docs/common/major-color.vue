@@ -14,7 +14,7 @@
         <div
           :class="`${prefix}__series-color`"
           :style="{
-            backgroundColor: color
+            backgroundColor: `var(--vxp-color-primary-${name}-${index + 1})`
           }"
         ></div>
         {{ `${name}-${index + 1}` }}
@@ -26,10 +26,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { ArrowRotateLeft } from '@vexip-ui/icons'
-import { parseColorToRgba, mixColor, adjustAlpha, toFixed } from '@vexip-ui/utils'
-import { getMetaName } from '../common/meta-name'
-
-import type { Color } from '@vexip-ui/utils'
+import { getMetaName } from './meta-name'
+import { computeSeriesColors } from './series-color'
 
 defineProps({
   language: {
@@ -49,49 +47,11 @@ const rootEl = document.documentElement
 const rootStyle = getComputedStyle(rootEl)
 
 const majorColor = ref(rootStyle.getPropertyValue('--vxp-color-primary-base'))
+const seriesColors = ref<Record<string, string[]>>(computeSeriesColors(majorColor.value))
 
-const seriesColors = ref<Record<string, string[]>>({})
-
-computeSeriesColors(majorColor.value)
-watch(majorColor, computeSeriesColors)
-
-function computeSeriesColors(value: Color) {
-  const colors: Record<string, string[]> = {
-    light: [],
-    opacity: [],
-    dark: []
-  }
-  const black = parseColorToRgba(
-    rootStyle.getPropertyValue('--vxp-color-black') || { r: 0, g: 0, b: 0, a: 1 }
-  )
-  const white = parseColorToRgba(
-    rootStyle.getPropertyValue('--vxp-color-white') || { r: 255, g: 255, b: 255, a: 1 }
-  )
-  const style = rootEl.style
-
-  for (let i = 1; i < 10; ++i) {
-    const light = mixColor(white, value, i * 0.1).toString()
-    const opacity = adjustAlpha(value, toFixed(1 - i * 0.1, 1)).toString()
-
-    style.setProperty(`--vxp-color-primary-light-${i}`, light)
-    style.setProperty(`--vxp-color-primary-opacity-${i}`, opacity)
-
-    colors.light.push(light)
-    colors.opacity.push(opacity)
-  }
-
-  for (let i = 1; i < 3; ++i) {
-    const dark = mixColor(black, value, i * 0.1).toString()
-
-    style.setProperty(`--vxp-color-primary-dark-${i}`, dark)
-
-    colors.dark.push(dark)
-  }
-
-  style.setProperty('--vxp-color-primary-base', `${value}`)
-  localStorage.setItem('vexip-docs-prefer-major-color', `${value}`)
-  seriesColors.value = colors
-}
+watch(majorColor, value => {
+  seriesColors.value = computeSeriesColors(value)
+})
 
 function resetMajorColor() {
   majorColor.value = '#339af0'
@@ -132,7 +92,8 @@ function resetMajorColor() {
 
   &__series {
     display: flex;
-    margin-bottom: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
 
     &-item {
       display: flex;
@@ -140,6 +101,7 @@ function resetMajorColor() {
       align-items: center;
       justify-content: center;
       width: 80px;
+      margin-bottom: 15px;
       font-size: 13px;
       color: var(--vxp-content-color-secondary);
     }
