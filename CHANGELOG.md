@@ -1,3 +1,32 @@
+# [2.0.0-beta.11](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2022-06-21)
+
+
+### Bug Fixes
+
+* ensure Modal and Drawer max sizes less then window sizes ([faade51](https://github.com/qmhc/vexip-ui/commit/faade5190cc7dd82417c65f778b2f7cec7a9d61c))
+* ensure scope when Scroll or NativeScroll nesting ([b81585d](https://github.com/qmhc/vexip-ui/commit/b81585d3c2ce3d46421149307a14cdaf4c5e076e))
+* **menu:** nesting popper padding and icon flex-shrink ([4dc29ea](https://github.com/qmhc/vexip-ui/commit/4dc29ea88cba23ed42e1bfcd15482f9b8b2d7bde))
+* missing style to space-evenly justify ([bda3704](https://github.com/qmhc/vexip-ui/commit/bda370476c0b183b85db2322a3e16d46cd263e6a))
+* **number-input:** range prop split to min and max props ([62447a6](https://github.com/qmhc/vexip-ui/commit/62447a69dde716ee20f07d614e3d37bdac4234ac))
+* **scroll:** click event not be emitted ([eaa5cc7](https://github.com/qmhc/vexip-ui/commit/eaa5cc7c6c661dae58c98b6658f4698b0bf6be0e))
+* **style:** forward design to esaier modify variables ([5a67967](https://github.com/qmhc/vexip-ui/commit/5a67967c4ce09b137728f8acdb32308f3800c291))
+* support array type class and style props ([317fbff](https://github.com/qmhc/vexip-ui/commit/317fbff212847cf3d7054af99102656779e37a8e))
+
+
+### Features
+
+* **config:** auto warning when validator returns false ([2b7712d](https://github.com/qmhc/vexip-ui/commit/2b7712d7d25ef1ef7905934d9d5faf44c4c6003a))
+* **config:** support common props config ([86c8fd8](https://github.com/qmhc/vexip-ui/commit/86c8fd801643f9919e074bd4d1d7825ad7eae355))
+* **config:** support custom class namespace ([#48](https://github.com/qmhc/vexip-ui/issues/48)) ([da29ae3](https://github.com/qmhc/vexip-ui/commit/da29ae3e4e0c80d59d379274ccb8dbcb15254715))
+
+
+### BREAKING CHANGES
+
+* **number-input:** NumberInput `range` prop has removed, using min and
+max props to instead it.
+
+
+
 # [2.0.0-beta.10](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2022-06-18)
 
 

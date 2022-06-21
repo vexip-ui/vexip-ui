@@ -83,7 +83,7 @@ async function main() {
     .filter(component => !fs.existsSync(`style/${component}.scss`))
     .forEach(component => fs.writeFileSync(`style/${component}.scss`, '', 'utf-8'))
 
-  const styleIndex = '@use \'./preset.scss\';\n\n' +
+  const styleIndex = '@forward \'./design/variables.scss\';\n\n@use \'./preset.scss\';\n\n' +
     exportComponents.map(component => `@use './${component}.scss';`).join('\n') + '\n'
   const stylePath = path.resolve(__dirname, '../style/index.scss')
 
