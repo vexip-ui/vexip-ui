@@ -22,19 +22,19 @@
     }
   }
 
-  &--vertical &__wrapper {
+  &--vertical > &__wrapper {
     overflow-x: hidden;
   }
 
-  &--horizontal &__wrapper {
+  &--horizontal > &__wrapper {
     overflow-y: hidden;
   }
 
-  &--both &__bar--horizontal {
+  &--both > &__bar--horizontal {
     width: calc(100% - get-css-var('scrollbar-width') + 1px);
   }
 
-  &--both &__bar--vertical {
+  &--both > &__bar--vertical {
     height: calc(100% - get-css-var('scrollbar-width') + 1px);
   }
 }
