@@ -27,8 +27,12 @@ module.exports = {
     'at-rule-empty-line-before': [
       'always',
       {
-        except: ['blockless-after-blockless', 'first-nested'],
-        ignore: ['after-comment', 'blockless-after-same-name-blockless'],
+        except: ['first-nested'],
+        ignore: [
+          'after-comment',
+          'blockless-after-same-name-blockless',
+          'blockless-after-blockless'
+        ],
         ignoreAtRules: ['else']
       }
     ],
