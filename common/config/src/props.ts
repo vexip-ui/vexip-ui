@@ -46,6 +46,9 @@ export function useProps<T>(
     PROVIDED_PROPS,
     null
   )
+  const commonProps = computed<PropsConfigOptions<T>>(() => {
+    return providedProps?.value?.default ?? {}
+  })
   const configProps = computed<PropsConfigOptions<T>>(() => {
     return providedProps?.value?.[name] ?? {}
   })
@@ -62,6 +65,8 @@ export function useProps<T>(
     const validator = isFunction(propOptions.validator) ? propOptions.validator : null
     const defaultValue = propOptions.default
     const isFunc = !!propOptions.isFunc
+    const getValue = (value: PropsConfigOptions<T>[keyof T]) =>
+      !isFunc && isFunction(value) ? value() : value
     const getDefault = () =>
       (!isFunc && isFunction(defaultValue) ? defaultValue() : defaultValue) as T[keyof T]
 
@@ -79,9 +84,9 @@ export function useProps<T>(
       props[key] = computed(() => {
         if (isNull(sourceProps[key])) {
           if (!isNull(configProps.value[key])) {
-            const providedValue = configProps.value[key]!
-
-            return !isFunc && isFunction(providedValue) ? providedValue() : providedValue
+            return getValue(configProps.value[key])
+          } else if (!isNull(commonProps.value[key])) {
+            return getValue(commonProps.value[key])
           }
 
           return getDefault()
