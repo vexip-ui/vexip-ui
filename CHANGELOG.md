@@ -13,6 +13,10 @@
 * support array type class and style props ([317fbff](https://github.com/qmhc/vexip-ui/commit/317fbff212847cf3d7054af99102656779e37a8e))
 
 
+### Code Refactoring
+
+* **switch:** rename to Switch, icon prop split to open-icon and close-icon
+
 ### Features
 
 * **config:** auto warning when validator returns false ([2b7712d](https://github.com/qmhc/vexip-ui/commit/2b7712d7d25ef1ef7905934d9d5faf44c4c6003a))
@@ -24,7 +28,8 @@
 
 * **number-input:** NumberInput `range` prop has removed, using min and
 max props to instead it.
-
+* **switch**: Swticher is renamed to Switch. Its icon prop has been
+removed, and using open-icon and close-icon to instead it.
 
 
 # [2.0.0-beta.10](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2022-06-18)
