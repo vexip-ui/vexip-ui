@@ -6,7 +6,7 @@ First, thanks for being interested in contributing on this project!
 
 ### Pre-request
 
-Before starting, you should be ensure your mechine having:
+Before starting, you should ensure your mechine is having:
 
 Node >= 16
 
