@@ -44,12 +44,14 @@ $drawer: map.merge(
     &--bottom {
       right: 0;
       left: 0;
+      max-height: calc(100vh - 14px);
     }
 
     &--right,
     &--left {
       top: 0;
       bottom: 0;
+      max-width: calc(100vw - 14px);
     }
 
     &--top {

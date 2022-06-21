@@ -51,6 +51,7 @@ $modal: map.merge(
     top: 100px;
     display: flex;
     flex-direction: column;
+    max-width: calc(100vw - 28px);
     pointer-events: visible;
     background-color: get-css-var('modal-bg-color');
     border: 0;
