@@ -3,12 +3,15 @@ import { noop } from '@vexip-ui/utils'
 
 import type { MaybeRef } from './shared/types'
 
-export function useListener(target: MaybeRef<EventTarget | null>, ...args: Parameters<EventTarget['addEventListener']>) {
+export function useListener<E = Event>(
+  target: MaybeRef<EventTarget | null>,
+  event: string,
+  listener: (event: E) => any,
+  options: AddEventListenerOptions | boolean
+) {
   if (!target) {
     return noop
   }
-
-  const [event, listener, options] = args
 
   let remove = noop
 
@@ -21,10 +24,10 @@ export function useListener(target: MaybeRef<EventTarget | null>, ...args: Param
         return
       }
 
-      el.addEventListener(event, listener, options)
+      el.addEventListener(event, listener as any, options)
 
       remove = () => {
-        el.removeEventListener(event, listener, options)
+        el.removeEventListener(event, listener as any, options)
         remove = noop
       }
     },
