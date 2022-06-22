@@ -22,7 +22,7 @@
           v-if="hasTitle"
           ref="header"
           :class="nh.be('header')"
-          @mousedown="handleDragStart"
+          @pointerdown.capture="handleDragStart"
         >
           <div
             v-if="props.closable"
@@ -63,7 +63,7 @@
             </Button>
           </slot>
         </div>
-        <div v-if="props.resizable" :class="nh.be('resizer')" @mousedown="handleResizeStart"></div>
+        <div v-if="props.resizable" :class="nh.be('resizer')" @pointerdown.capture="handleResizeStart"></div>
       </section>
     </template>
   </Masker>
@@ -190,8 +190,8 @@ export default defineComponent({
     const currentActive = ref(props.active)
     const currentTop = ref(toNumber(props.top))
     const currentLeft = ref(toNumber(props.left))
-    const currentWidth = ref<'auto' | number>(normalizeStyleLength(props.width))
-    const currentHeight = ref<'auto' | number>(normalizeStyleLength(props.height))
+    const currentWidth = ref<'auto' | number>(normalizeSizeValue(props.width))
+    const currentHeight = ref<'auto' | number>(normalizeSizeValue(props.height))
     const resizing = ref(false)
 
     let hasComputedTop = false
@@ -273,14 +273,14 @@ export default defineComponent({
     watch(
       () => props.width,
       value => {
-        currentWidth.value = normalizeStyleLength(value)
+        currentWidth.value = normalizeSizeValue(value)
         computeLeft()
       }
     )
     watch(
       () => props.height,
       value => {
-        currentHeight.value = normalizeStyleLength(value)
+        currentHeight.value = normalizeSizeValue(value)
         computeTop()
       }
     )
@@ -294,8 +294,24 @@ export default defineComponent({
       })
     })
 
-    function normalizeStyleLength(value: string | number) {
+    function normalizeSizeValue(value: string | number) {
       return value === 'auto' ? 'auto' : toNumber(value)
+    }
+
+    function findPositionalParent() {
+      if (!wrapper.value) return document.body
+
+      let parentElement = wrapper.value.parentElement as HTMLElement
+
+      while (parentElement && parentElement !== document.body) {
+        if (getComputedStyle(parentElement).position !== 'static') {
+          return parentElement
+        }
+
+        parentElement = parentElement.parentElement as HTMLElement
+      }
+
+      return parentElement
     }
 
     function computeTop() {
@@ -304,17 +320,7 @@ export default defineComponent({
       const currentHeight = wrapper.value.offsetHeight
 
       if (props.top === 'auto' && props.inner) {
-        let parentElement = wrapper.value.parentElement as HTMLElement
-
-        while (parentElement && parentElement !== document.body) {
-          if (getComputedStyle(parentElement).position !== 'static') {
-            currentTop.value = (parentElement.offsetHeight - currentHeight) / 2
-
-            break
-          }
-
-          parentElement = parentElement.parentElement as HTMLElement
-        }
+        currentTop.value = (findPositionalParent().offsetHeight - currentHeight) / 2
       } else {
         currentTop.value =
           props.top === 'auto' ? (window.innerHeight - currentHeight) / 2 - 20 : toNumber(props.top)
@@ -329,17 +335,7 @@ export default defineComponent({
       const currentWidth = wrapper.value.offsetWidth
 
       if (props.left === 'auto' && props.inner) {
-        let parentElement = wrapper.value.parentElement as HTMLElement
-
-        while (parentElement && parentElement !== document.body) {
-          if (getComputedStyle(parentElement).position !== 'static') {
-            currentLeft.value = (parentElement.offsetWidth - currentWidth) / 2
-
-            break
-          }
-
-          parentElement = parentElement.parentElement as HTMLElement
-        }
+        currentLeft.value = (findPositionalParent().offsetWidth - currentWidth) / 2
       } else {
         currentLeft.value =
           props.left === 'auto' ? (window.innerWidth - currentWidth) / 2 : toNumber(props.left)
@@ -400,12 +396,10 @@ export default defineComponent({
       yStart: number
     } | null = null
 
-    function handleDragStart(event: MouseEvent) {
+    function handleDragStart(event: PointerEvent) {
       if (!props.draggable || event.button !== 0) {
         return false
       }
-
-      event.stopPropagation()
 
       dragState = {
         topStart: currentTop.value,
@@ -414,13 +408,13 @@ export default defineComponent({
         yStart: event.clientY
       }
 
-      document.addEventListener('mousemove', handleDragMove)
-      document.addEventListener('mouseup', handleDragEnd)
+      document.addEventListener('pointermove', handleDragMove, true)
+      document.addEventListener('pointerup', handleDragEnd, true)
 
       emit('drag-start')
     }
 
-    function handleDragMove(event: MouseEvent) {
+    function handleDragMove(event: PointerEvent) {
       if (!dragState) return
 
       event.preventDefault()
@@ -438,11 +432,9 @@ export default defineComponent({
       })
     }
 
-    function handleDragEnd(event: MouseEvent) {
-      event.stopPropagation()
-
-      document.removeEventListener('mousemove', handleDragMove)
-      document.removeEventListener('mouseup', handleDragEnd)
+    function handleDragEnd() {
+      document.removeEventListener('pointermove', handleDragMove, true)
+      document.removeEventListener('pointerup', handleDragEnd, true)
 
       emit('drag-end', {
         top: currentTop.value,
@@ -458,12 +450,10 @@ export default defineComponent({
       yStart: number
     } | null = null
 
-    function handleResizeStart(event: MouseEvent) {
+    function handleResizeStart(event: PointerEvent) {
       if (!props.resizable || event.button !== 0) {
         return false
       }
-
-      event.stopPropagation()
 
       let widthStart
       let heightStart
@@ -497,20 +487,21 @@ export default defineComponent({
         yStart: event.clientY
       }
 
-      document.addEventListener('mousemove', handleResizeMove)
-      document.addEventListener('mouseup', handleResizeEnd)
+      document.addEventListener('pointermove', handleResizeMove, true)
+      document.addEventListener('pointerup', handleResizeEnd, true)
 
       resizing.value = true
       emit('resize-start')
     }
 
-    function handleResizeMove(event: MouseEvent) {
+    function handleResizeMove(event: MouseEvent | TouchEvent) {
       if (!resizeState) return
 
       event.preventDefault()
       event.stopPropagation()
 
-      const { clientX, clientY } = event
+      const pointer = 'touches' in event ? event.touches[0] : event
+      const { clientX, clientY } = pointer
       const { widthStart, heightStart, minHeight, xStart, yStart } = resizeState
 
       currentWidth.value = Math.max(props.minWidth, widthStart - xStart + clientX)
@@ -522,11 +513,9 @@ export default defineComponent({
       })
     }
 
-    function handleResizeEnd(event: MouseEvent) {
-      event.stopPropagation()
-
-      document.removeEventListener('mousemove', handleResizeMove)
-      document.removeEventListener('mouseup', handleResizeEnd)
+    function handleResizeEnd() {
+      document.removeEventListener('pointermove', handleResizeMove, true)
+      document.removeEventListener('pointerup', handleResizeEnd, true)
 
       resizing.value = true
       emit('resize-end', {
