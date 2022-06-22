@@ -1,6 +1,7 @@
 export * from './clickoutside'
 export * from './display'
 export * from './hover'
+export * from './listener'
 export * from './mounted'
 export * from './pointer'
 export * from './popper'

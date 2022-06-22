@@ -3,18 +3,18 @@ import { throttle } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 
-export interface UseMouseOption {
+export interface UsePointerOption {
   x?: number,
   y?: number,
   manualStop?: boolean
 }
 
-interface MouseState {
+interface PointerState {
   x: Ref<number>,
   y: Ref<number>
 }
 
-const registered = new Set<MouseState>()
+const registered = new Set<PointerState>()
 const record = new Map<'x' | 'y', number>()
 
 record.set('x', 0)
@@ -34,7 +34,7 @@ function handler(event: PointerEvent) {
 
 const throttleHandler = throttle(handler)
 
-function register(state: MouseState) {
+function register(state: PointerState) {
   if (!registered.size && window) {
     record.set('x', 0)
     record.set('y', 0)
@@ -44,7 +44,7 @@ function register(state: MouseState) {
   registered.add(state)
 }
 
-function unregister(state: MouseState) {
+function unregister(state: PointerState) {
   registered.delete(state)
 
   if (!registered.size && window) {
@@ -52,7 +52,7 @@ function unregister(state: MouseState) {
   }
 }
 
-export function usePointer(options: UseMouseOption = {}) {
+export function usePointer(options: UsePointerOption = {}) {
   const x = ref(options.x ?? record.get('x')!)
   const y = ref(options.y ?? record.get('y')!)
 
