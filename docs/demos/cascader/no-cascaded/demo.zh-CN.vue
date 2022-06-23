@@ -25,8 +25,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const values = ref([])
-const value = ref([])
+const values = ref([['Op-2'], ['Op-2', 'Op-2-5'], ['Op-2', 'Op-2-5', 'Op-2-5-3']])
+const value = ref(['Op-2', 'Op-2-5'])
 const options = createOptions(3)
 
 function createOptions(depth: number, prefix = 'Op', iterator = 1) {

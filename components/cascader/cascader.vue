@@ -208,7 +208,6 @@ import {
   noop,
   isNull,
   isPromise,
-  transformListToMap,
   transformTree,
   flatTree
 } from '@vexip-ui/utils'
@@ -356,8 +355,9 @@ export default defineComponent({
     const optionTree = ref<OptionState[]>(null!)
     const isAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
 
+    let optionList: OptionState[] = null!
+    let optionIdMap: Map<number, OptionState> = null!
     let optionValueMap: Map<string, OptionState> = null!
-    let optionIdMap: Record<number, OptionState> = (null!)
 
     const updateTrigger = ref(0)
 
@@ -386,17 +386,18 @@ export default defineComponent({
         childField: childrenKey
       })
 
-      const options = createOptionStates(rawOptions)
       const separator = props.separator
       const isAsync = isAsyncLoad.value
 
-      optionIdMap = transformListToMap(options, 'id')
-      optionValueMap = new Map<string, OptionState>()
+      optionList = createOptionStates(rawOptions)
+      optionIdMap = new Map()
+      optionValueMap = new Map()
 
-      for (let i = 0, len = options.length; i < len; ++i) {
-        const option = options[i]
+      for (let i = 0, len = optionList.length; i < len; ++i) {
+        const option = optionList[i]
 
         initOptionFull(option, separator)
+        optionIdMap.set(option.id, option)
         optionValueMap.set(option.fullValue, option)
 
         if (isAsync) {
@@ -404,18 +405,15 @@ export default defineComponent({
         }
       }
 
-      optionTree.value = transformTree(options)
+      optionTree.value = transformTree(optionList)
+      initValueAndLabel(emittedValue.value)
     }
 
     const openedIds = ref<number[]>([])
     const optionsList = computed(() => {
       return [
         optionTree.value,
-        ...openedIds.value.map(id => {
-          const option = optionIdMap[id]
-
-          return option.children
-        }).filter(Boolean)
+        ...openedIds.value.map(id => optionIdMap.get(id)?.children).filter(Boolean)
       ]
     })
 
@@ -493,7 +491,11 @@ export default defineComponent({
       () => props.value,
       value => {
         if (value !== emittedValue.value || outsideChanged) {
+          emittedValue.value = value
           initValueAndLabel(value)
+          nextTick(() => {
+            outsideChanged = false
+          })
         }
       },
       { immediate: true }
@@ -522,9 +524,9 @@ export default defineComponent({
       isAsyncLoad,
       value => {
         if (value) {
-          Object.values(optionIdMap).forEach(option => {
+          for (const option of optionIdMap.values()) {
             option.childrenLoaded = queryChildrenLoaded(option)
-          })
+          }
         }
       }
     )
@@ -539,7 +541,7 @@ export default defineComponent({
       if (isAsyncLoad.value) {
         const originalOptions: OptionState[] = []
 
-        Object.values(optionIdMap).forEach(option => {
+        for (const option of optionIdMap.values()) {
           if (option.checked) {
             originalOptions.push(option)
           }
@@ -547,7 +549,7 @@ export default defineComponent({
           if (option.hasChild && !option.children.length && !option.loaded) {
             option.checked = false
           }
-        })
+        }
 
         for (let i = 0, len = originalOptions.length; i < len; ++i) {
           const option = originalOptions[i]
@@ -606,12 +608,12 @@ export default defineComponent({
     function initOptionFull(option: OptionState, separator: string) {
       let value = option.value as string
       let label = option.label
-      let parent = option.parent
+      let parent = optionIdMap.get(option.parent)
 
-      while (optionIdMap[parent]) {
-        value = `${optionIdMap[parent].value}${separator}${value}`
-        label = `${optionIdMap[parent].label}${separator}${label}`
-        parent = optionIdMap[parent].parent
+      while (parent) {
+        value = `${parent.value}${separator}${value}`
+        label = `${parent.label}${separator}${label}`
+        parent = optionIdMap.get(parent.parent)
       }
 
       option.fullValue = value
@@ -655,7 +657,7 @@ export default defineComponent({
         const option = optionValueMap.get(value)
 
         if (option) {
-          const parent = optionIdMap[option.parent]
+          const parent = optionIdMap.get(option.parent)
 
           if (parent?.checked) {
             values.delete(value)
@@ -685,7 +687,7 @@ export default defineComponent({
       return !!value.length && Array.isArray(value[0])
     }
 
-    function initValueAndLabel(value: CascaderValue) {
+    function initValueAndLabel(value: CascaderValue | null) {
       if (!value?.length) {
         currentValues.value = []
         currentLabels.value = []
@@ -716,7 +718,7 @@ export default defineComponent({
 
         if (!props.noCascaded) {
           const originalOptions = selectedOptions.concat(
-            Object.values(optionIdMap).filter(option => option.disabled && option.checked)
+            Array.from(optionIdMap.values()).filter(option => option.disabled && option.checked)
           )
 
           for (let i = 0, len = originalOptions.length; i < len; ++i) {
@@ -737,6 +739,11 @@ export default defineComponent({
         if (option) {
           currentValues.value = [stringValue]
           currentLabels.value = [briefLabel ? option.label : option.fullLabel]
+
+          if (props.noCascaded) {
+            option.checked = true
+            option.partial = false
+          }
         } else {
           currentValues.value = []
           currentLabels.value = []
@@ -751,13 +758,11 @@ export default defineComponent({
         const option = optionValueMap.get(firstValue)!
         const ids = [option.id]
 
-        let parentId = option.parent
+        let parent = optionIdMap.get(option.parent)
 
-        while (parentId && optionIdMap[parentId]) {
-          const parent = optionIdMap[parentId]
-
+        while (parent) {
           ids.push(parent.id)
-          parentId = parent.parent
+          parent = optionIdMap.get(parent.parent)
         }
 
         openedIds.value = ids.reverse().slice(0, -1)
@@ -792,16 +797,19 @@ export default defineComponent({
 
           option.children.push(...options)
 
-          let idCount = Math.max(...Object.keys(optionIdMap).map(Number)) + 1
+          let idCount = Math.max(...Array.from(optionIdMap.keys()).map(Number)) + 1
 
           options.forEach(option => {
             option.id = idCount++
             option.parent = parentId
-            optionIdMap[option.id] = option
 
             initOptionFull(option, separator)
+
+            optionIdMap.set(option.id, option)
             optionValueMap.set(option.fullValue, option)
           })
+
+          optionList.push(...options)
         }
 
         option.loaded = true
@@ -832,11 +840,11 @@ export default defineComponent({
 
     function queryUpstreamOptions(option: OptionState) {
       const options = [option]
-      let parentId = option.parent
+      let parent = optionIdMap.get(option.parent)
 
-      while (parentId && optionIdMap[parentId]) {
-        options.push(optionIdMap[parentId])
-        parentId = optionIdMap[parentId].parent
+      while (parent) {
+        options.push(parent)
+        parent = optionIdMap.get(parent.parent)
       }
 
       return options
@@ -846,11 +854,9 @@ export default defineComponent({
       let option = originalOption
 
       while (!isNull(option.parent)) {
-        const parentId = option.parent
+        const parent = optionIdMap.get(option.parent)
 
-        if (!optionIdMap[parentId]) break
-
-        const parent = optionIdMap[parentId]
+        if (!parent) break
 
         if (option.checked === parent.checked && option.partial === parent.partial) {
           break
@@ -895,7 +901,7 @@ export default defineComponent({
     function handleOptionCheck(option: OptionState) {
       if (!option) return
 
-      const options = Object.values(optionIdMap)
+      const options = Array.from(optionIdMap.values())
       const checked = !option.checked
 
       if (!props.multiple) {
@@ -930,7 +936,7 @@ export default defineComponent({
     }
 
     function emitMultipleChange() {
-      const options = Object.values(optionIdMap)
+      const options = Array.from(optionIdMap.values())
       const selectedOptions = props.noCascaded
         ? options.filter(option => option.checked)
         : options.filter(
@@ -1106,7 +1112,7 @@ export default defineComponent({
       const data = [option.data]
 
       while (option.parent) {
-        const parent = optionIdMap[option.parent]
+        const parent = optionIdMap.get(option.parent)
 
         if (!parent) break
 
@@ -1149,10 +1155,10 @@ export default defineComponent({
         emittedValue.value = []
         restTipShow.value = false
 
-        Object.values(optionIdMap).forEach(option => {
+        for (const option of optionIdMap.values()) {
           option.checked = false
           option.partial = false
-        })
+        }
 
         emit('change', emittedValue.value, [])
         emit('update:value', emittedValue.value)
