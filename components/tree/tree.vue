@@ -779,15 +779,24 @@ export default defineComponent({
       return flatData.value.find(item => item.data[idKey] === data[idKey]) ?? null
     }
 
-    function expandNodeByData<T extends Data>(data: T, expanded: boolean) {
+    function expandNodeByData<T extends Data>(data: T, expanded?: boolean, upstream = false) {
       const node = getNodeByData(data)
 
       if (node) {
         node.expanded = isNull(expanded) ? !node.expanded : !!expanded
+
+        if (upstream) {
+          let parentNode = getParentNode(node)
+
+          while (parentNode) {
+            parentNode.expanded = node.expanded
+            parentNode = getParentNode(parentNode)
+          }
+        }
       }
     }
 
-    function selectNodeByData<T extends Data>(data: T, selected: boolean) {
+    function selectNodeByData<T extends Data>(data: T, selected?: boolean) {
       const node = getNodeByData(data)
 
       if (node) {
@@ -795,15 +804,28 @@ export default defineComponent({
       }
     }
 
-    function checkNodeByData<T extends Data>(data: T, checked: boolean) {
+    function checkNodeByData<T extends Data>(data: T, checked?: boolean) {
       const node = getNodeByData(data)
 
       if (node) {
         node.checked = isNull(checked) ? !node.checked : !!checked
+
+        if (!props.noCascaded) {
+          const nodeList = [node].concat(
+            flatData.value.filter(item => item.disabled && item.checked)
+          )
+
+          for (let i = 0, len = nodeList.length; i < len; ++i) {
+            const item = nodeList[i]
+
+            updateCheckedUpward(item)
+            updateCheckedDown(item)
+          }
+        }
       }
     }
 
-    function toggleNodeLoadingByData<T extends Data>(data: T, loading: boolean) {
+    function toggleNodeLoadingByData<T extends Data>(data: T, loading?: boolean) {
       const node = getNodeByData(data)
 
       if (node) {

@@ -111,10 +111,10 @@ type TreeNodeProps = {
 | getPrevSiblingNode      | 根据节点对象获取上一个兄弟节点对象，不存在则返回 `null`                                                                                       | `(node: TreeNodeProps) => TreeNodeProps \| null`              | - |
 | getNextSiblingNode      | 根据节点对象获取下一个兄弟节点对象，不存在则返回 `null`                                                                                       | `(node: TreeNodeProps) => TreeNodeProps \| null`              | - |
 | getNodeByData           | 根据数据获取节点对象                                                                                                                        | `<T extends Data>(data: T) => TreeNodeProps \| null`              | - |
-| expandNodeByData        | 根据数据更改节点的展开状态                                                                                                                  | `<T extends Data>(data: T, expanded: boolean) => void`    | - |
-| selectNodeByData        | 根据数据更改节点的选择状态                                                                                                                  | `<T extends Data>(data: T, selected: boolean) => void`    | - |
-| checkNodeByData         | 根据数据更改节点的复选框被选状态                                                                                                            | `<T extends Data>(data: T, checked: boolean) => void`     | - |
-| toggleNodeLoadingByData | 根据数据更改节点的加载状态                                                                                                                  | `<T extends Data>(data: T, loading: boolean) => void`     | - |
+| expandNodeByData        | 根据数据更改节点的展开状态                                                                                                                  | `<T extends Data>(data: T, expanded?: boolean, upstream?: boolean) => void`    | - |
+| selectNodeByData        | 根据数据更改节点的选择状态                                                                                                                  | `<T extends Data>(data: T, selected?: boolean) => void`    | - |
+| checkNodeByData         | 根据数据更改节点的复选框被选状态                                                                                                            | `<T extends Data>(data: T, checked?: boolean) => void`     | - |
+| toggleNodeLoadingByData | 根据数据更改节点的加载状态                                                                                                                  | `<T extends Data>(data: T, loading?: boolean) => void`     | - |
 
 ### TreeNode Props
 
