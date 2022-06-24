@@ -12,13 +12,14 @@ export interface MovingState {
   yEnd: number,
   clientX: number,
   clientY: number,
-  lazy: boolean
+  lazy: boolean,
+  [custom: string]: unknown
 }
 
 export interface UseMovingOptions {
   target?: Ref<HTMLElement | null>,
-  x: MaybeRef<number>,
-  y: MaybeRef<number>,
+  x?: MaybeRef<number>,
+  y?: MaybeRef<number>,
   lazy?: MaybeRef<boolean>,
   onStart?: (state: MovingState, event: PointerEvent) => any,
   onMove?: (state: MovingState, event: PointerEvent) => void,
@@ -55,7 +56,7 @@ export function useMoving(options: UseMovingOptions) {
       lazy: lazy.value
     })
 
-    if (options.onStart?.(internalState, event)) {
+    if (options.onStart?.(internalState, event) === false) {
       return
     }
 

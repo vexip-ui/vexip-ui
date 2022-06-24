@@ -18,12 +18,7 @@
         :class="wrapperClass"
         :style="wrapperStyle"
       >
-        <div
-          v-if="hasTitle"
-          ref="header"
-          :class="nh.be('header')"
-          @pointerdown.capture="handleDragStart"
-        >
+        <div v-if="hasTitle" ref="header" :class="nh.be('header')">
           <div
             v-if="props.closable"
             :class="nh.be('close')"
@@ -63,7 +58,7 @@
             </Button>
           </slot>
         </div>
-        <div v-if="props.resizable" :class="nh.be('resizer')" @pointerdown.capture="handleResizeStart"></div>
+        <div v-if="props.resizable" ref="resizer" :class="nh.be('resizer')"></div>
       </section>
     </template>
   </Masker>
@@ -75,6 +70,7 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { useNameHelper, useProps, useLocale, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
+import { useMoving } from '@vexip-ui/mixins'
 import { isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 
@@ -192,14 +188,102 @@ export default defineComponent({
     const currentLeft = ref(toNumber(props.left))
     const currentWidth = ref<'auto' | number>(normalizeSizeValue(props.width))
     const currentHeight = ref<'auto' | number>(normalizeSizeValue(props.height))
-    const resizing = ref(false)
 
     let hasComputedTop = false
     let hasComputedLeft = false
 
     const wrapper = ref<HTMLElement | null>(null)
-    const header = ref<HTMLElement | null>(null)
     const footer = ref<HTMLElement | null>(null)
+
+    const { target: header, moving: dragging } = useMoving({
+      onStart: state => {
+        state.xStart = currentLeft.value
+        state.yStart = currentTop.value
+
+        emit('drag-start', {
+          top: currentTop.value,
+          left: currentLeft.value
+        })
+      },
+      onMove: (state, event) => {
+        if (!props.draggable || event.button > 0) {
+          return false
+        }
+
+        currentLeft.value = state.xEnd
+        currentTop.value = state.yEnd
+
+        emit('drag-move', {
+          top: currentTop.value,
+          left: currentLeft.value
+        })
+      },
+      onEnd: () => {
+        emit('drag-end', {
+          top: currentTop.value,
+          left: currentLeft.value
+        })
+      }
+    })
+
+    const { target: resizer, moving: resizing } = useMoving({
+      onStart: (state, event) => {
+        if (!props.resizable || event.button > 0) {
+          return false
+        }
+
+        let widthStart
+        let heightStart
+        let minHeight = 32
+
+        if (currentWidth.value === 'auto') {
+          widthStart = wrapper.value?.offsetWidth ?? 0
+        } else {
+          widthStart = currentWidth.value
+        }
+
+        if (currentHeight.value === 'auto') {
+          heightStart = wrapper.value?.offsetHeight ?? 0
+        } else {
+          heightStart = currentHeight.value
+        }
+
+        if (header.value) {
+          minHeight += header.value.offsetHeight
+        }
+
+        if (footer.value) {
+          minHeight += footer.value.offsetHeight
+        }
+
+        state.xStart = widthStart
+        state.yStart = heightStart
+        state.minHeight = Math.max(minHeight, props.minHeight)
+
+        emit('resize-start', {
+          width: widthStart,
+          height: widthStart
+        })
+      },
+      onMove: state => {
+        currentWidth.value = state.xEnd
+        currentHeight.value = state.yEnd
+
+        currentWidth.value = Math.max(props.minWidth, state.xEnd)
+        currentHeight.value = Math.max(state.minHeight as number, state.yEnd)
+
+        emit('resize-move', {
+          width: currentWidth.value as number,
+          height: currentHeight.value as number
+        })
+      },
+      onEnd: () => {
+        emit('resize-end', {
+          width: currentWidth.value as number,
+          height: currentHeight.value as number
+        })
+      }
+    })
 
     const className = computed(() => {
       return [
@@ -216,7 +300,9 @@ export default defineComponent({
       return [
         nh.be('wrapper'),
         {
-          [nh.bem('wrapper', 'closable')]: props.closable
+          [nh.bem('wrapper', 'closable')]: props.closable,
+          [nh.bem('wrapper', 'dragging')]: dragging.value,
+          [nh.bem('wrapper', 'resizing')]: resizing.value
         },
         props.modalClass
       ]
@@ -389,146 +475,12 @@ export default defineComponent({
       }
     }
 
-    let dragState: {
-      topStart: number,
-      leftStart: number,
-      xStart: number,
-      yStart: number
-    } | null = null
-
-    function handleDragStart(event: PointerEvent) {
-      if (!props.draggable || event.button !== 0) {
-        return false
-      }
-
-      dragState = {
-        topStart: currentTop.value,
-        leftStart: currentLeft.value,
-        xStart: event.clientX,
-        yStart: event.clientY
-      }
-
-      document.addEventListener('pointermove', handleDragMove, true)
-      document.addEventListener('pointerup', handleDragEnd, true)
-
-      emit('drag-start')
-    }
-
-    function handleDragMove(event: PointerEvent) {
-      if (!dragState) return
-
-      event.preventDefault()
-      event.stopPropagation()
-
-      const { clientX, clientY } = event
-      const { topStart, leftStart, xStart, yStart } = dragState
-
-      currentTop.value = topStart - yStart + clientY
-      currentLeft.value = leftStart - xStart + clientX
-
-      emit('drag-move', {
-        top: currentTop.value,
-        left: currentLeft.value
-      })
-    }
-
-    function handleDragEnd() {
-      document.removeEventListener('pointermove', handleDragMove, true)
-      document.removeEventListener('pointerup', handleDragEnd, true)
-
-      emit('drag-end', {
-        top: currentTop.value,
-        left: currentLeft.value
-      })
-    }
-
-    let resizeState: {
-      widthStart: number,
-      minHeight: number,
-      heightStart: number,
-      xStart: number,
-      yStart: number
-    } | null = null
-
-    function handleResizeStart(event: PointerEvent) {
-      if (!props.resizable || event.button !== 0) {
-        return false
-      }
-
-      let widthStart
-      let heightStart
-      let minHeight = 32
-
-      if (currentWidth.value === 'auto') {
-        widthStart = wrapper.value?.offsetWidth ?? 0
-      } else {
-        widthStart = currentWidth.value
-      }
-
-      if (currentHeight.value === 'auto') {
-        heightStart = wrapper.value?.offsetHeight ?? 0
-      } else {
-        heightStart = currentHeight.value
-      }
-
-      if (header.value) {
-        minHeight += header.value.offsetHeight
-      }
-
-      if (footer.value) {
-        minHeight += footer.value.offsetHeight
-      }
-
-      resizeState = {
-        widthStart,
-        heightStart,
-        minHeight: Math.max(minHeight, props.minHeight),
-        xStart: event.clientX,
-        yStart: event.clientY
-      }
-
-      document.addEventListener('pointermove', handleResizeMove, true)
-      document.addEventListener('pointerup', handleResizeEnd, true)
-
-      resizing.value = true
-      emit('resize-start')
-    }
-
-    function handleResizeMove(event: MouseEvent | TouchEvent) {
-      if (!resizeState) return
-
-      event.preventDefault()
-      event.stopPropagation()
-
-      const pointer = 'touches' in event ? event.touches[0] : event
-      const { clientX, clientY } = pointer
-      const { widthStart, heightStart, minHeight, xStart, yStart } = resizeState
-
-      currentWidth.value = Math.max(props.minWidth, widthStart - xStart + clientX)
-      currentHeight.value = Math.max(minHeight, heightStart - yStart + clientY)
-
-      emit('resize-move', {
-        width: currentWidth.value,
-        height: currentHeight.value
-      })
-    }
-
-    function handleResizeEnd() {
-      document.removeEventListener('pointermove', handleResizeMove, true)
-      document.removeEventListener('pointerup', handleResizeEnd, true)
-
-      resizing.value = true
-      emit('resize-end', {
-        width: currentWidth.value,
-        height: currentHeight.value
-      })
-    }
-
     return {
       props,
       nh,
       locale: useLocale('modal'),
       currentActive,
+      dragging,
       resizing,
 
       className,
@@ -539,15 +491,14 @@ export default defineComponent({
       wrapper,
       header,
       footer,
+      resizer,
 
       handleConfirm,
       handleCancle,
       handleClose,
       handleShow,
       handleHide,
-      handleMaskClose,
-      handleDragStart,
-      handleResizeStart
+      handleMaskClose
     }
   }
 })

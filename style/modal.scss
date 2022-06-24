@@ -57,14 +57,19 @@ $modal: map.merge(
     border: 0;
     border-radius: get-css-var('modal-radius');
     box-shadow: get-css-var('modal-shadow');
+
+    &--dragging,
+    &--resizing {
+      user-select: none;
+    }
+
+    &--dragging {
+      will-change: top, left;
+    }
   }
 
   &--inner &__wrapper {
     position: absolute;
-  }
-
-  &--draggable &__wrapper {
-    will-change: top, left;
   }
 
   &__header {
