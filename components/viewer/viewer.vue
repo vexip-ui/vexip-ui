@@ -1,0 +1,306 @@
+<template>
+  <div :class="className">
+    <div ref="container" :class="nh.be('container')" @wheel="handleWheel">
+      <div :class="nh.be('content')" :style="contentStyle">
+        <div
+          ref="transition"
+          :class="nh.be('transition')"
+          :style="scaleLayerStyle"
+          @transitionend="normalizeProps"
+        >
+          <slot></slot>
+        </div>
+      </div>
+    </div>
+    <div :class="toolbarClass">
+      <template v-for="action in allActions" :key="action.name">
+        <template v-if="!action.hidden?.(state)">
+          <div
+            :class="{
+              [nh.be('action')]: true,
+              [nh.bem('action', 'disabled')]: action.disabled?.(state)
+            }"
+            @click.stop="action.process(state)"
+          >
+            <Renderer
+              v-if="typeof action.icon === 'function'"
+              :renderer="action.icon"
+              :data="{ state }"
+            ></Renderer>
+            <Icon v-else :icon="action.icon" :scale="action.iconScale || 0"></Icon>
+          </div>
+          <Divider v-if="action.divided" :vertical="!toolbarVertical"></Divider>
+        </template>
+      </template>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, reactive, computed } from 'vue'
+import { Divider } from '@/components/divider'
+import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
+import {
+  ArrowRotateLeft,
+  ArrowRotateRight,
+  Plus,
+  Minus,
+  Expand,
+  Compress
+} from '@vexip-ui/icons'
+import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useMoving } from '@vexip-ui/mixins'
+import { InternalActionName } from './symbol'
+
+import type { PropType } from 'vue'
+import type { ToolbarPlacement, ToolbarAction } from './symbol'
+
+export default defineComponent({
+  name: 'Viewer',
+  components: {
+    Divider,
+    Icon,
+    Renderer
+  },
+  props: {
+    moveDisabled: booleanProp,
+    scaleDisabled: booleanProp,
+    scaleDelta: Number,
+    rotateDisabled: booleanProp,
+    rotateDelta: Number,
+    toolbarPlacement: String as PropType<ToolbarPlacement>,
+    actions: Array as PropType<ToolbarAction[]>,
+    toolbarFade: Number
+  },
+  emits: [
+    'move-start',
+    'move',
+    'move-end'
+  ],
+  setup(_props, { emit }) {
+    const props = useProps('viewer', _props, {
+      moveDisabled: false,
+      scaleDisabled: false,
+      scaleDelta: 0.15,
+      rotateDisabled: false,
+      rotateDelta: 90,
+      toolbarPlacement: 'bottom',
+      actions: () => [],
+      toolbarFade: 1500
+    })
+
+    const nh = useNameHelper('viewer')
+    const scale = ref(1)
+    const rotate = ref(0)
+    const full = ref(false)
+    const transiting = ref(false)
+
+    const transition = ref<HTMLElement | null>(null)
+
+    const { target: container, x: currentLeft, y: currentTop, moving } = useMoving({
+      onStart: (state, event) => {
+        if (props.moveDisabled || event.button > 0) {
+          return false
+        }
+
+        emit('move-start', {
+          top: state.yStart,
+          left: state.xStart
+        })
+      },
+      onMove: state => {
+        emit('move-start', {
+          top: state.yEnd,
+          left: state.xEnd
+        })
+      },
+      onEnd: state => {
+        emit('move-start', {
+          top: state.yEnd,
+          left: state.xEnd
+        })
+      }
+    })
+
+    const state = reactive({
+      scale,
+      rotate,
+      full,
+      moving,
+      transiting,
+      x: currentLeft,
+      y: currentTop
+    })
+
+    const internalActions: ToolbarAction[] = [
+      {
+        name: InternalActionName.RotateRight,
+        icon: ArrowRotateRight,
+        process: () => handleRotate(props.rotateDelta),
+        hidden: () => props.rotateDisabled
+      },
+      {
+        name: InternalActionName.RotateLeft,
+        icon: ArrowRotateLeft,
+        process: () => handleRotate(-1 * props.rotateDelta),
+        hidden: () => props.rotateDisabled,
+        divided: true
+      },
+      {
+        name: InternalActionName.ScalePlus,
+        icon: Plus,
+        process: () => handleScale(props.scaleDelta),
+        hidden: () => props.scaleDisabled
+      },
+      {
+        name: InternalActionName.ScaleMinus,
+        icon: Minus,
+        process: () => handleScale(-1 * props.scaleDelta),
+        hidden: () => props.scaleDisabled,
+        divided: true
+      },
+      {
+        name: InternalActionName.ScreenFull,
+        icon: Expand,
+        process: () => toggleFull(true),
+        hidden: () => full.value,
+        divided: true
+      },
+      {
+        name: InternalActionName.ScreenFullExit,
+        icon: Compress,
+        process: () => toggleFull(false),
+        hidden: () => !full.value,
+        divided: true
+      }
+    ]
+
+    const className = computed(() => {
+      return {
+        [nh.b()]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('draggable')]: !props.moveDisabled,
+        [nh.bm('resizable')]: !props.scaleDisabled,
+        [nh.bm('moving')]: moving.value
+      }
+    })
+    const toolbarVertical = computed(() => {
+      const [layout] = props.toolbarPlacement.split('-')
+
+      return layout === 'left' || layout === 'right'
+    })
+    const toolbarClass = computed(() => {
+      return {
+        [nh.be('toolbar')]: true,
+        [nh.bem('toolbar', props.toolbarPlacement)]: true,
+        [nh.bem('toolbar', 'vertical')]: toolbarVertical.value
+      }
+    })
+    const contentStyle = computed(() => {
+      return {
+        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0)`
+      }
+    })
+    const scaleLayerStyle = computed(() => {
+      return {
+        transform: `scale(${scale.value}) rotate(${rotate.value}deg)`
+      }
+    })
+    const allActions = computed(() => {
+      const map = new Map<string, ToolbarAction>()
+
+      internalActions.concat(props.actions).forEach(action => {
+        if (action.name) {
+          map.set(action.name, action)
+        }
+      })
+
+      return Array.from(map.values())
+    })
+
+    function handleWheel(event: WheelEvent) {
+      if (props.scaleDisabled || transiting.value) {
+        return
+      }
+
+      handleScale((event.deltaY > 0 ? -1 : 1) * props.scaleDelta)
+    }
+
+    function handleRotate(deg: number) {
+      if (props.rotateDisabled || transiting.value) {
+        return
+      }
+
+      rotate.value += deg
+    }
+
+    function handleScale(ratio: number) {
+      if (props.scaleDisabled || transiting.value) {
+        return
+      }
+
+      scale.value += ratio
+    }
+
+    function toggleFull(target = !full.value) {
+      full.value = target
+    }
+
+    function normalizeProps() {
+      const queue: Array<() => void> = []
+
+      if (rotate.value % 360 === 0) {
+        queue.push(
+          () => {
+            if (transition.value) {
+              transition.value.style.transitionDuration = '0ms'
+            }
+          },
+          () => {
+            rotate.value = 0
+          },
+          () => {
+            if (transition.value) {
+              transition.value.style.transitionDuration = ''
+            }
+          }
+        )
+      }
+
+      queue.push(() => {
+        transiting.value = false
+      })
+
+      const run = () => {
+        queue.shift()!()
+        queue.length && requestAnimationFrame(run)
+      }
+
+      run()
+    }
+
+    return {
+      props,
+      nh,
+      moving,
+      transiting,
+      state,
+
+      container,
+      transition,
+
+      className,
+      toolbarVertical,
+      toolbarClass,
+      contentStyle,
+      scaleLayerStyle,
+      allActions,
+
+      handleWheel,
+      handleRotate,
+      normalizeProps
+    }
+  }
+})
+</script>

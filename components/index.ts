@@ -91,6 +91,7 @@ import { Tree } from './tree'
 import { Upload } from './upload'
 import { UploadFile } from './upload-file'
 import { UploadList } from './upload-list'
+import { Viewer } from './viewer'
 import { VirtualList } from './virtual-list'
 import { Wheel } from './wheel'
 import { WheelItem } from './wheel-item'
@@ -190,6 +191,7 @@ const components = [
   Upload,
   UploadFile,
   UploadList,
+  Viewer,
   VirtualList,
   Wheel,
   WheelItem,
@@ -298,6 +300,7 @@ export {
   Upload,
   UploadFile,
   UploadList,
+  Viewer,
   VirtualList,
   Wheel,
   WheelItem
