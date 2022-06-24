@@ -1,5 +1,5 @@
 <template>
-  <Portal :to="transferTo">
+  <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
     <div
       v-show="wrapShow"
       ref="wrapper"
@@ -8,6 +8,7 @@
     >
       <transition
         v-if="!props.disabled"
+        :appear="props.autoRemove"
         :name="props.maskTransition"
         @after-enter="afterOpen"
         @after-leave="afterClose"
@@ -16,7 +17,7 @@
           <div :class="nh.be('mask-inner')"></div>
         </div>
       </transition>
-      <transition :name="props.transitionName">
+      <transition :appear="props.autoRemove" :name="props.transitionName">
         <slot :show="currentActive"></slot>
       </transition>
     </div>
@@ -44,7 +45,8 @@ export default defineComponent({
     transitionName: String,
     disabled: booleanProp,
     onBeforeClose: Function as PropType<() => any | Promise<any>>,
-    transfer: booleanStringProp
+    transfer: booleanStringProp,
+    autoRemove: booleanProp
   },
   emits: ['toggle', 'close', 'hide', 'show', 'update:active'],
   setup(_props, { emit }) {
@@ -62,7 +64,8 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      transfer: false
+      transfer: false,
+      autoRemove: false
     })
 
     const nh = useNameHelper('masker')

@@ -8,6 +8,7 @@
     :disabled="props.hideMask"
     :on-before-close="handleMaskClose"
     :transfer="props.transfer"
+    :auto-remove="props.autoRemove"
     @show="handleShow"
     @hide="handleHide"
   >
@@ -79,7 +80,8 @@ export default defineComponent({
     drawerClass: classProp,
     hideMask: booleanProp,
     onBeforeClose: Function as PropType<() => any>,
-    resizable: booleanProp
+    resizable: booleanProp,
+    autoRemove: booleanProp
   },
   emits: [
     'toggle',
@@ -120,7 +122,8 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      resizable: false
+      resizable: false,
+      autoRemove: false
     })
 
     const nh = useNameHelper('drawer')

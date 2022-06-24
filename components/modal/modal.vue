@@ -8,6 +8,7 @@
     :disabled="props.hideMask"
     :on-before-close="handleMaskClose"
     :transfer="props.transfer"
+    :auto-remove="props.autoRemove"
     @show="handleShow"
     @hide="handleHide"
   >
@@ -113,7 +114,8 @@ export default defineComponent({
     minHeight: Number,
     transitionName: String,
     confirmText: String,
-    cancelText: String
+    cancelText: String,
+    autoRemove: booleanProp
   },
   emits: [
     'toggle',
@@ -179,7 +181,8 @@ export default defineComponent({
       minHeight: 120,
       transitionName: 'vxp-ease',
       confirmText: null,
-      cancelText: null
+      cancelText: null,
+      autoRemove: false
     })
 
     const nh = useNameHelper('modal')
