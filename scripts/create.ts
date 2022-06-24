@@ -95,12 +95,12 @@ async function create(name: string) {
       filePath: path.resolve(dirPath, 'components', kebabCaseName, `${kebabCaseName}.vue`),
       source: `
         <template>
-          <div :class="prefix"></div>
+          <div :class="className"></div>
         </template>
 
         <script lang="ts">
-        import { defineComponent } from 'vue'
-        import { useProps, booleanProp } from '@vexip-ui/config'
+        import { defineComponent, computed } from 'vue'
+        import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 
         export default defineComponent({
           name: '${capitalCaseName}',
@@ -112,11 +112,17 @@ async function create(name: string) {
               bool: false
             })
 
-            const prefix = 'vxp-${kebabCaseName}'
+            const nh = useNameHelper('${kebabCaseName}')
+
+            const className = computed(() => {
+              return [nh.b(), nh.bs('vars')]
+            })
         
             return {
               props,
-              prefix
+              nh,
+
+              className
             }
           }
         })
@@ -136,7 +142,7 @@ async function create(name: string) {
           $${kebabCaseName}
         );
 
-        .vxp-${kebabCaseName} {
+        .#{$namespace}-${kebabCaseName} {
           &-vars {
             @include define-preset-values('${kebabCaseName}', $${kebabCaseName});
           }
