@@ -126,7 +126,6 @@ const router = useRouter()
 const route = useRoute()
 
 const langOptions = computed(() => {
-  console.log(i18n.availableLocales)
   return i18n.availableLocales.map(lang => {
     const config = i18n.getLocaleMessage(lang as string) as I18nConfig
 
@@ -184,7 +183,7 @@ function openPage(url: string) {
 
 function toComponentDoc(fullName: string) {
   if (route.meta?.component !== fullName) {
-    router.push(`/${language.value}/components/${toKebabCase(fullName.split(' ').at(-1))}`)
+    router.push(`/${language.value}/components/${toKebabCase(fullName.split(' ').at(-1)!)}`)
   }
 
   nextTick(() => {

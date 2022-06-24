@@ -102,6 +102,7 @@ function setScrollY() {
 
     @include query-media('lg') {
       top: var(--header-height);
+      z-index: 0;
       transform: translateX(0);
     }
 
