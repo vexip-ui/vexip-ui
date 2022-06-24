@@ -28,6 +28,7 @@
         </div>
         <div
           v-if="props.resizable"
+          ref="resizer"
           :class="[
             nh.be('handler'),
             nh.bem('handler', props.placement),
@@ -35,7 +36,6 @@
               [nh.bem('handler', 'resizing')]: resizing
             }
           ]"
-          @mousedown="handleResizeStart"
         >
           <slot name="handler"></slot>
         </div>
@@ -49,6 +49,7 @@ import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { useNameHelper, useProps, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
+import { useMoving } from '@vexip-ui/mixins'
 import { isPromise } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 
@@ -126,7 +127,58 @@ export default defineComponent({
     const currentActive = ref(props.active)
     const currentWidth = ref(props.width)
     const currentHeight = ref(props.height)
-    const resizing = ref(false)
+
+    const { target: resizer, moving: resizing } = useMoving({
+      onStart: (state, event) => {
+        if (!props.resizable || event.button > 0) {
+          return false
+        }
+
+        state.xStart = currentWidth.value
+        state.yStart = currentHeight.value
+
+        emit('resize-start', {
+          width: currentWidth.value,
+          height: currentHeight.value
+        })
+      },
+      onMove: (state, event) => {
+        const deltaX = event.clientX - state.clientX
+        const deltaY = event.clientY - state.clientY
+
+        switch (props.placement) {
+          case 'top': {
+            currentHeight.value = state.yStart + deltaY
+            break
+          }
+          case 'right': {
+            currentWidth.value = state.xStart - deltaX
+            break
+          }
+          case 'bottom': {
+            currentHeight.value = state.yStart - deltaY
+            break
+          }
+          default: {
+            currentWidth.value = state.xStart + deltaX
+          }
+        }
+
+        currentWidth.value = Math.max(currentWidth.value, 101)
+        currentHeight.value = Math.max(currentHeight.value, 101)
+
+        emit('resize-move', {
+          width: currentWidth.value,
+          height: currentHeight.value
+        })
+      },
+      onEnd: () => {
+        emit('resize-end', {
+          width: currentWidth.value,
+          height: currentHeight.value
+        })
+      }
+    })
 
     const className = computed(() => {
       return [
@@ -230,90 +282,13 @@ export default defineComponent({
       emit('hide')
     }
 
-    let resizeState: {
-      widthStart: number,
-      heightStart: number,
-      xStart: number,
-      yStart: number
-    } | null = null
-
-    function handleResizeStart(event: MouseEvent) {
-      if (!props.resizable || event.button !== 0) {
-        return false
-      }
-
-      event.stopPropagation()
-
-      resizeState = {
-        widthStart: currentWidth.value,
-        heightStart: currentHeight.value,
-        xStart: event.clientX,
-        yStart: event.clientY
-      }
-
-      document.addEventListener('mousemove', handleResizeMove)
-      document.addEventListener('mouseup', handleResizeEnd)
-
-      resizing.value = true
-      emit('resize-start')
-    }
-
-    function handleResizeMove(event: MouseEvent) {
-      if (!resizeState) return
-
-      event.preventDefault()
-      event.stopPropagation()
-
-      const { clientX, clientY } = event
-      const { widthStart, heightStart, xStart, yStart } = resizeState
-      const deltaX = xStart - clientX
-      const deltaY = yStart - clientY
-
-      switch (props.placement) {
-        case 'top': {
-          currentHeight.value = heightStart - deltaY
-          break
-        }
-        case 'right': {
-          currentWidth.value = widthStart + deltaX
-          break
-        }
-        case 'bottom': {
-          currentHeight.value = heightStart + deltaY
-          break
-        }
-        default: {
-          currentWidth.value = widthStart - deltaX
-        }
-      }
-
-      currentWidth.value = Math.max(currentWidth.value, 101)
-      currentHeight.value = Math.max(currentHeight.value, 101)
-
-      emit('resize-move', {
-        width: currentWidth.value,
-        height: currentHeight.value
-      })
-    }
-
-    function handleResizeEnd(event: MouseEvent) {
-      event.stopPropagation()
-
-      document.removeEventListener('mousemove', handleResizeMove)
-      document.removeEventListener('mouseup', handleResizeEnd)
-
-      resizing.value = false
-      emit('resize-end', {
-        width: currentWidth.value,
-        height: currentHeight.value
-      })
-    }
-
     return {
       props,
       nh,
       currentActive,
       resizing,
+
+      resizer,
 
       className,
       moveTransition,
@@ -324,8 +299,7 @@ export default defineComponent({
       handleClose,
       handleMaskClose,
       handleShow,
-      handleHide,
-      handleResizeStart
+      handleHide
     }
   }
 })

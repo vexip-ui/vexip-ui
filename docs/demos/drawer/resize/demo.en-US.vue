@@ -1,38 +1,41 @@
 <template>
-  <div>
-    <Button type="primary" @click="horizontalActive = !horizontalActive">
-      Adjust left and right
+  <ButtonGroup type="primary">
+    <Button @click="handleOpen('top')">
+      Adjust Height (Top)
     </Button>
-    <Button type="primary" @click="verticalActive = !verticalActive">
-      Adjust top and bottom
+    <Button @click="handleOpen('bottom')">
+      Adjust Height (Bottom)
     </Button>
-    <Drawer
-      v-model:active="horizontalActive"
-      transfer
-      resizable
-      title="Adjust Width"
-    >
-      <p>Some content</p>
-      <p>Some content</p>
-      <p>Some content</p>
-    </Drawer>
-    <Drawer
-      v-model:active="verticalActive"
-      transfer
-      resizable
-      placement="bottom"
-      title="Adjust Height"
-    >
-      <p>Some content</p>
-      <p>Some content</p>
-      <p>Some content</p>
-    </Drawer>
-  </div>
+    <Button @click="handleOpen('left')">
+      Adjust Width (Left)
+    </Button>
+    <Button @click="handleOpen('right')">
+      Adjust Width (Right)
+    </Button>
+  </ButtonGroup>
+  <Drawer
+    v-model:active="active"
+    transfer
+    resizable
+    title="Adjust Size"
+    :placement="placement"
+  >
+    <p>Some content</p>
+    <p>Some content</p>
+    <p>Some content</p>
+  </Drawer>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const horizontalActive = ref(false)
-const verticalActive = ref(false)
+type Placement = 'right' | 'top' | 'bottom' | 'left'
+
+const active = ref(false)
+const placement = ref<Placement>('right')
+
+function handleOpen(targetPlacement: Placement) {
+  placement.value = targetPlacement
+  active.value = true
+}
 </script>

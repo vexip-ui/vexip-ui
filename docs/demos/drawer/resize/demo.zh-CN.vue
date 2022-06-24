@@ -1,38 +1,41 @@
 <template>
-  <div>
-    <Button type="primary" @click="horizontalActive = !horizontalActive">
-      左右调整
+  <ButtonGroup type="primary">
+    <Button @click="handleOpen('top')">
+      上下调整（上）
     </Button>
-    <Button type="primary" @click="verticalActive = !verticalActive">
-      上下调整
+    <Button @click="handleOpen('bottom')">
+      上下调整（下）
     </Button>
-    <Drawer
-      v-model:active="horizontalActive"
-      transfer
-      resizable
-      title="调整宽度"
-    >
-      <p>一些内容</p>
-      <p>一些内容</p>
-      <p>一些内容</p>
-    </Drawer>
-    <Drawer
-      v-model:active="verticalActive"
-      transfer
-      resizable
-      placement="bottom"
-      title="调整高度"
-    >
-      <p>一些内容</p>
-      <p>一些内容</p>
-      <p>一些内容</p>
-    </Drawer>
-  </div>
+    <Button @click="handleOpen('left')">
+      左右调整（左）
+    </Button>
+    <Button @click="handleOpen('right')">
+      左右调整（右）
+    </Button>
+  </ButtonGroup>
+  <Drawer
+    v-model:active="active"
+    transfer
+    resizable
+    title="调整大小"
+    :placement="placement"
+  >
+    <p>一些内容</p>
+    <p>一些内容</p>
+    <p>一些内容</p>
+  </Drawer>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const horizontalActive = ref(false)
-const verticalActive = ref(false)
+type Placement = 'right' | 'top' | 'bottom' | 'left'
+
+const active = ref(false)
+const placement = ref<Placement>('right')
+
+function handleOpen(targetPlacement: Placement) {
+  placement.value = targetPlacement
+  active.value = true
+}
 </script>

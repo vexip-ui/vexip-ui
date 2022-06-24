@@ -44,6 +44,7 @@ $drawer: map.merge(
     &--bottom {
       right: 0;
       left: 0;
+      min-height: 60px;
       max-height: calc(100vh - 14px);
     }
 
@@ -68,6 +69,10 @@ $drawer: map.merge(
 
     &--left {
       left: 0;
+    }
+
+    &--resizing {
+      user-select: none;
     }
   }
 
