@@ -49,7 +49,7 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp, makeSentence } from '@vexip-ui/config'
 import { isNull, isFunction } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
@@ -196,11 +196,13 @@ export default defineComponent({
 })
 
 function useRules(props: FormItemProps, formProps: Partial<FormProps>) {
+  const locale = useLocale('form')
+
   const isRequired = computed(() => {
     return formProps.allRequired || props.required
   })
   const requiredTip = computed(() => {
-    return `${props.label}不可为空`
+    return makeSentence(`${props.label} ${locale.value.notNullable}`)
   })
   const allRules = computed(() => {
     if (!props.prop) return []

@@ -45,7 +45,8 @@ export function enUSLocale() {
 
     form: {
       submit: 'Submit',
-      reset: 'Reset'
+      reset: 'Reset',
+      notNullable: 'must not be null'
     },
 
     input: {

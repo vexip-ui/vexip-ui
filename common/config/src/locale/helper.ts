@@ -48,7 +48,8 @@ export interface LocaleConfig {
 
   form: {
     submit: string,
-    reset: string
+    reset: string,
+    notNullable: string
   },
 
   input: {

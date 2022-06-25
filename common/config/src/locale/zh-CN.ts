@@ -45,7 +45,8 @@ export function zhCNLocale() {
 
     form: {
       submit: '提交',
-      reset: '重置'
+      reset: '重置',
+      notNullable: '不可为空'
     },
 
     input: {
