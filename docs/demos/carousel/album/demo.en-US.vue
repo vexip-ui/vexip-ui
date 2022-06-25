@@ -22,23 +22,15 @@
   </Row>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-import img1 from '@docs/assets/carousel/1.jpg'
-import img2 from '@docs/assets/carousel/2.jpg'
-import img3 from '@docs/assets/carousel/3.jpg'
-import img4 from '@docs/assets/carousel/4.jpg'
-import img5 from '@docs/assets/carousel/5.jpg'
-
-export default defineComponent({
-  setup() {
-    const active = ref(0)
-
-    return {
-      active,
-      images: [img1, img2, img3, img4, img5]
-    }
-  }
-})
+const active = ref(0)
+const images = [
+  '/picture-1.jpg',
+  '/picture-2.jpg',
+  '/picture-3.jpg',
+  '/picture-4.jpg',
+  '/picture-5.jpg'
+]
 </script>

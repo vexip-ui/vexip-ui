@@ -87,6 +87,7 @@ export const enUS = defineI18n({
     Timeline: 'Timeline',
     Tooltip: 'Tooltip',
     Tree: 'Tree',
+    Viewer: 'Viewer',
 
     Alert: 'Alert',
     Confirm: 'Confirm',

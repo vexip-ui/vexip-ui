@@ -73,6 +73,12 @@ $viewer: map.merge(
     padding: 6px 10px;
     background-color: get-css-var('viewer-toolbar-bg-color');
     border-radius: get-css-var('viewer-toolbar-radius');
+    opacity: 0%;
+    transition: get-css-var('transition-opacity');
+
+    &--active {
+      opacity: 100%;
+    }
 
     &--vertical {
       flex-direction: column;

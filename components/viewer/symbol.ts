@@ -25,7 +25,7 @@ export enum InternalActionName {
 export interface ViewerState {
   x: number,
   y: number,
-  scale: number,
+  zoom: number,
   rotate: number,
   full: boolean,
   moving: boolean,

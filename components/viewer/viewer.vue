@@ -1,11 +1,11 @@
 <template>
-  <div ref="viewer" :class="className">
+  <div ref="viewer" :class="className" :style="style">
     <div ref="container" :class="nh.be('container')" @wheel="handleWheel">
       <div :class="nh.be('content')" :style="contentStyle">
         <div
           ref="transition"
           :class="nh.be('transition')"
-          :style="scaleLayerStyle"
+          :style="transitionStyle"
           @transitionend="normalizeProps"
         >
           <slot>
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div :class="toolbarClass">
+    <div :class="toolbarClass" @mouseenter="handleEnterToolbar" @mouseleave="handleLeaveToolbar">
       <template v-for="action in allActions" :key="action.name">
         <template v-if="!getActionProp(action, 'hidden')">
           <div
@@ -53,8 +53,8 @@ import {
   Compress,
   ArrowsRotate
 } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
-import { useMoving, useFullScreen } from '@vexip-ui/mixins'
+import { useNameHelper, useProps, useLocale, booleanProp, booleanNumberProp } from '@vexip-ui/config'
+import { useMoving, useFullScreen, useSetTimeout } from '@vexip-ui/mixins'
 import { InternalActionName } from './symbol'
 
 import type { PropType } from 'vue'
@@ -68,36 +68,50 @@ export default defineComponent({
     Renderer
   },
   props: {
+    width: [String, Number],
+    height: [String, Number],
     moveDisabled: booleanProp,
-    scaleDisabled: booleanProp,
-    scaleDelta: Number,
+    zoomDisabled: booleanProp,
+    zoomDelta: Number,
     rotateDisabled: booleanProp,
     rotateDelta: Number,
+    fullDisabled: booleanProp,
     toolbarPlacement: String as PropType<ToolbarPlacement>,
     actions: Array as PropType<ToolbarAction[]>,
-    toolbarFade: Number
+    toolbarFade: booleanNumberProp
   },
   emits: [
     'move-start',
     'move',
-    'move-end'
+    'move-end',
+    'wheel',
+    'rotate',
+    'zoom',
+    'full',
+    'reset'
   ],
   setup(_props, { emit }) {
     const props = useProps('viewer', _props, {
+      width: '100%',
+      height: '100%',
       moveDisabled: false,
-      scaleDisabled: false,
-      scaleDelta: 0.15,
+      zoomDisabled: false,
+      zoomDelta: 0.15,
       rotateDisabled: false,
       rotateDelta: 90,
+      fullDisabled: false,
       toolbarPlacement: 'bottom',
       actions: () => [],
-      toolbarFade: 1500
+      toolbarFade: false
     })
 
     const nh = useNameHelper('viewer')
     const locale = useLocale('viewer')
 
-    const scale = ref(1)
+    const { timer } = useSetTimeout()
+    const toolbarActive = ref(false)
+
+    const zoom = ref(1)
     const rotate = ref(0)
 
     const viewer = ref<HTMLElement | null>(null)
@@ -105,38 +119,33 @@ export default defineComponent({
 
     const { supported: fullSupported, full, enter: enterFull, exit: exitFull } = useFullScreen(viewer)
     const { target: container, x: currentLeft, y: currentTop, moving } = useMoving({
-      onStart: (state, event) => {
+      onStart: (_, event) => {
         if (props.moveDisabled || event.button > 0) {
           return false
         }
 
-        emit('move-start', {
-          top: state.yStart,
-          left: state.xStart
-        })
+        emit('move-start', getState())
       },
-      onMove: state => {
-        emit('move-start', {
-          top: state.yEnd,
-          left: state.xEnd
-        })
+      onMove: () => {
+        emit('move-start', getState())
       },
-      onEnd: state => {
-        emit('move-start', {
-          top: state.yEnd,
-          left: state.xEnd
-        })
+      onEnd: () => {
+        emit('move-start', getState())
       }
     })
 
     const state = reactive({
-      scale,
+      zoom,
       rotate,
       full,
       moving,
       x: currentLeft,
       y: currentTop
     })
+
+    function getState() {
+      return state
+    }
 
     function getActionProp<K extends Exclude<keyof ToolbarAction, 'name' | 'icon' | 'process'>>(
       action: ToolbarAction,
@@ -166,16 +175,16 @@ export default defineComponent({
       {
         name: InternalActionName.ZoomIn,
         icon: Plus,
-        process: () => handleScale(props.scaleDelta),
+        process: () => handleZoom(props.zoomDelta),
         title: () => locale.value.zoomIn,
-        hidden: () => props.scaleDisabled
+        hidden: () => props.zoomDisabled
       },
       {
         name: InternalActionName.ZoomOut,
         icon: Minus,
-        process: () => handleScale(-1 * props.scaleDelta),
+        process: () => handleZoom(-1 * props.zoomDelta),
         title: () => locale.value.zoomOut,
-        hidden: () => props.scaleDisabled,
+        hidden: () => props.zoomDisabled,
         divided: true
       },
       {
@@ -183,7 +192,7 @@ export default defineComponent({
         icon: Expand,
         process: () => toggleFull(true),
         title: () => locale.value.fullScreen,
-        hidden: () => full.value,
+        hidden: () => props.fullDisabled || full.value,
         divided: true
       },
       {
@@ -191,7 +200,7 @@ export default defineComponent({
         icon: Compress,
         process: () => toggleFull(false),
         title: () => locale.value.fullScreenExit,
-        hidden: () => !full.value,
+        hidden: () => props.fullDisabled || !full.value,
         divided: true
       },
       {
@@ -208,9 +217,15 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.bs('vars')]: true,
         [nh.bm('draggable')]: !props.moveDisabled,
-        [nh.bm('resizable')]: !props.scaleDisabled,
+        [nh.bm('resizable')]: !props.zoomDisabled,
         [nh.bm('full')]: full.value,
         [nh.bm('moving')]: moving.value
+      }
+    })
+    const style = computed(() => {
+      return {
+        width: /\d$/.test(`${props.width}`) ? `${props.width}px` : props.width,
+        height: /\d$/.test(`${props.height}`) ? `${props.height}px` : props.height
       }
     })
     const toolbarVertical = computed(() => {
@@ -221,6 +236,7 @@ export default defineComponent({
     const toolbarClass = computed(() => {
       return {
         [nh.be('toolbar')]: true,
+        [nh.bem('toolbar', 'active')]: props.toolbarFade < 300 || toolbarActive.value,
         [nh.bem('toolbar', props.toolbarPlacement)]: true,
         [nh.bem('toolbar', 'vertical')]: toolbarVertical.value
       }
@@ -230,9 +246,9 @@ export default defineComponent({
         transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0)`
       }
     })
-    const scaleLayerStyle = computed(() => {
+    const transitionStyle = computed(() => {
       return {
-        transform: `scale(${scale.value}) rotate(${rotate.value}deg)`
+        transform: `scale(${zoom.value}) rotate(${rotate.value}deg)`
       }
     })
     const allActions = computed(() => {
@@ -248,11 +264,17 @@ export default defineComponent({
     })
 
     function handleWheel(event: WheelEvent) {
-      if (props.scaleDisabled) {
+      if (props.zoomDisabled) {
         return
       }
 
-      handleScale((event.deltaY > 0 ? -1 : 1) * props.scaleDelta)
+      event.stopPropagation()
+      event.preventDefault()
+
+      const sign = event.deltaY > 0 ? -1 : 1
+
+      emit('wheel', sign, state)
+      handleZoom(sign * props.zoomDelta)
     }
 
     function handleRotate(deg: number) {
@@ -261,25 +283,29 @@ export default defineComponent({
       }
 
       rotate.value += deg
+      emit('rotate', deg, state)
     }
 
-    function handleScale(ratio: number) {
-      if (props.scaleDisabled) {
+    function handleZoom(ratio: number) {
+      if (props.zoomDisabled) {
         return
       }
 
-      scale.value += ratio
+      zoom.value += ratio
+      emit('zoom', zoom.value, state)
     }
 
     async function toggleFull(target = !full.value) {
       target ? await enterFull() : await exitFull()
+      emit('full', target, state)
     }
 
     function handleReset() {
       currentTop.value = 0
       currentLeft.value = 0
       rotate.value = 0
-      scale.value = 1
+      zoom.value = 1
+      emit('reset', state)
     }
 
     function normalizeProps() {
@@ -311,6 +337,23 @@ export default defineComponent({
       run()
     }
 
+    function handleEnterToolbar() {
+      clearTimeout(timer.toolbarFade)
+      toolbarActive.value = true
+    }
+
+    function handleLeaveToolbar() {
+      clearTimeout(timer.toolbarFade)
+
+      const fade = typeof props.toolbarFade === 'number' ? props.toolbarFade : (props.toolbarFade ? 1500 : 0)
+
+      if (fade > 0) {
+        timer.toolbarFade = window.setTimeout(() => {
+          toolbarActive.value = false
+        }, fade)
+      }
+    }
+
     return {
       props,
       nh,
@@ -323,19 +366,22 @@ export default defineComponent({
       transition,
 
       className,
+      style,
       toolbarVertical,
       toolbarClass,
       contentStyle,
-      scaleLayerStyle,
+      transitionStyle,
       allActions,
 
       getActionProp,
       handleWheel,
       handleRotate,
-      handleScale,
+      handleZoom,
       toggleFull,
       handleReset,
-      normalizeProps
+      normalizeProps,
+      handleEnterToolbar,
+      handleLeaveToolbar
     }
   }
 })
