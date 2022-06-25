@@ -17,8 +17,9 @@ export enum InternalActionName {
   RotateLeft = 'rotateLeft',
   ScalePlus = 'scalePlus',
   ScaleMinus = 'scaleMinus',
-  ScreenFull = 'screenFull',
-  ScreenFullExit = 'screenFullExit'
+  FullScreen = 'fullScreen',
+  FullScreenExit = 'fullScreenExit',
+  Reset = 'reset'
 }
 
 export interface ViewerState {
@@ -28,7 +29,6 @@ export interface ViewerState {
   rotate: number,
   full: boolean,
   moving: boolean,
-  transiting: boolean,
   [custom: string]: unknown
 }
 

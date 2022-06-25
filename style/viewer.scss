@@ -49,6 +49,11 @@ $viewer: map.merge(
   &__content {
     pointer-events: none;
     user-select: none;
+    transition: get-css-var('transition-transform');
+  }
+
+  &--moving &__content {
+    transition-duration: 0ms;
   }
 
   &__transition {

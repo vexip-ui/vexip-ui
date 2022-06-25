@@ -8,7 +8,9 @@
           :style="scaleLayerStyle"
           @transitionend="normalizeProps"
         >
-          <slot></slot>
+          <slot>
+            <img src="https://www.vexipui.com/assets/4.23a4f29b.jpg" />
+          </slot>
         </div>
       </div>
     </div>
@@ -47,7 +49,8 @@ import {
   Plus,
   Minus,
   Expand,
-  Compress
+  Compress,
+  ArrowsRotate
 } from '@vexip-ui/icons'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/mixins'
@@ -94,7 +97,6 @@ export default defineComponent({
     const scale = ref(1)
     const rotate = ref(0)
     const full = ref(false)
-    const transiting = ref(false)
 
     const transition = ref<HTMLElement | null>(null)
 
@@ -128,7 +130,6 @@ export default defineComponent({
       rotate,
       full,
       moving,
-      transiting,
       x: currentLeft,
       y: currentTop
     })
@@ -161,17 +162,23 @@ export default defineComponent({
         divided: true
       },
       {
-        name: InternalActionName.ScreenFull,
+        name: InternalActionName.FullScreen,
         icon: Expand,
         process: () => toggleFull(true),
         hidden: () => full.value,
         divided: true
       },
       {
-        name: InternalActionName.ScreenFullExit,
+        name: InternalActionName.FullScreenExit,
         icon: Compress,
         process: () => toggleFull(false),
         hidden: () => !full.value,
+        divided: true
+      },
+      {
+        name: InternalActionName.Reset,
+        icon: ArrowsRotate,
+        process: handleReset,
         divided: true
       }
     ]
@@ -220,7 +227,7 @@ export default defineComponent({
     })
 
     function handleWheel(event: WheelEvent) {
-      if (props.scaleDisabled || transiting.value) {
+      if (props.scaleDisabled) {
         return
       }
 
@@ -228,7 +235,7 @@ export default defineComponent({
     }
 
     function handleRotate(deg: number) {
-      if (props.rotateDisabled || transiting.value) {
+      if (props.rotateDisabled) {
         return
       }
 
@@ -236,7 +243,7 @@ export default defineComponent({
     }
 
     function handleScale(ratio: number) {
-      if (props.scaleDisabled || transiting.value) {
+      if (props.scaleDisabled) {
         return
       }
 
@@ -245,6 +252,13 @@ export default defineComponent({
 
     function toggleFull(target = !full.value) {
       full.value = target
+    }
+
+    function handleReset() {
+      currentTop.value = 0
+      currentLeft.value = 0
+      rotate.value = 0
+      scale.value = 1
     }
 
     function normalizeProps() {
@@ -268,12 +282,8 @@ export default defineComponent({
         )
       }
 
-      queue.push(() => {
-        transiting.value = false
-      })
-
       const run = () => {
-        queue.shift()!()
+        queue.shift()?.()
         queue.length && requestAnimationFrame(run)
       }
 
@@ -284,7 +294,6 @@ export default defineComponent({
       props,
       nh,
       moving,
-      transiting,
       state,
 
       container,
@@ -299,6 +308,9 @@ export default defineComponent({
 
       handleWheel,
       handleRotate,
+      handleScale,
+      toggleFull,
+      handleReset,
       normalizeProps
     }
   }
