@@ -85,6 +85,7 @@ export interface I18nConfig {
     Timeline: string,
     Tooltip: string,
     Tree: string,
+    Viewer: string,
 
     Alert: string,
     Confirm: string,

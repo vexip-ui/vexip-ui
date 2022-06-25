@@ -1,0 +1,173 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$viewer: () !default;
+$viewer: map.merge(
+  (
+    b-color: transparent,
+    border: get-css-var('border-shape') get-css-var('viewer-b-color'),
+    radius: get-css-var('radius-base'),
+    v-padding: 0,
+    h-padding: 0,
+    toolbar-bg-color: get-css-var('bg-color-reverse'),
+    toolbar-radius: get-css-var('radius-base'),
+    toolbar-v-padding: 8px,
+    toolbar-h-padding: 8px,
+    action-size: 24px,
+    action-color: get-css-var('bg-color-base'),
+    action-color-hover: get-css-var('color-primary-base')
+  ),
+  $viewer
+);
+
+.#{$namespace}-viewer {
+  &-vars {
+    @include define-preset-values('viewer', $viewer);
+  }
+
+  @include basis;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: get-css-var('viewer-v-padding') get-css-var('viewer-h-padding');
+  border: get-css-var('viewer-border');
+  border-radius: get-css-var('viewer-radius');
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__content {
+    pointer-events: none;
+    user-select: none;
+    transition: get-css-var('transition-transform');
+  }
+
+  &--moving &__content {
+    transition-duration: 0ms;
+  }
+
+  &__transition {
+    pointer-events: none;
+    user-select: none;
+    transition: get-css-var('transition-transform');
+  }
+
+  $v-padding: get-css-var('viewer-toolbar-v-padding');
+  $h-padding: get-css-var('viewer-toolbar-h-padding');
+
+  &__toolbar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    background-color: get-css-var('viewer-toolbar-bg-color');
+    border-radius: get-css-var('viewer-toolbar-radius');
+    opacity: 0%;
+    transition: get-css-var('transition-opacity');
+
+    &--active {
+      opacity: 100%;
+    }
+
+    &--vertical {
+      flex-direction: column;
+      padding: 10px;
+    }
+
+    &--top,
+    &--top-start,
+    &--top-end {
+      top: $v-padding;
+    }
+
+    &--bottom,
+    &--bottom-start,
+    &--bottom-end {
+      bottom: $v-padding;
+    }
+
+    &--top,
+    &--bottom {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &--top-start,
+    &--bottom-start {
+      left: $h-padding;
+    }
+
+    &--top-end,
+    &--bottom-end {
+      right: $h-padding;
+    }
+
+    &--right,
+    &--right-start,
+    &--right-end {
+      right: $h-padding;
+    }
+
+    &--left,
+    &--left-start,
+    &--left-end {
+      left: $h-padding;
+    }
+
+    &--right,
+    &--left {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &--right-start,
+    &--left-start {
+      top: $v-padding;
+    }
+
+    &--right-end,
+    &--left-end {
+      bottom: $v-padding;
+    }
+
+    .#{$namespace}-divider {
+      border-color: get-css-var('viewer-action-color');
+      opacity: 70%;
+
+      &--horizontal {
+        width: 1em;
+        margin: 8px 0;
+      }
+
+      &:last-child {
+        display: none;
+      }
+    }
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: get-css-var('viewer-action-size');
+    height: get-css-var('viewer-action-size');
+    color: get-css-var('viewer-action-color');
+    cursor: pointer;
+    transition: get-css-var('transition-color');
+
+    &:hover {
+      color: get-css-var('viewer-action-color-hover');
+    }
+  }
+}

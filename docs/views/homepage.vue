@@ -1,6 +1,6 @@
 <template>
   <section :class="prefix">
-    <img :class="`${prefix}__logo`" src="../assets/logo.png" alt="logo.png" />
+    <img :class="`${prefix}__logo`" src="/logo.png" alt="logo.png" />
     <h1 :class="`${prefix}__title`">
       Vexip UI
     </h1>

@@ -87,6 +87,7 @@ export const zhCN = defineI18n({
     Timeline: '时间线',
     Tooltip: '提示',
     Tree: '树形列表',
+    Viewer: '查看器',
 
     Alert: '警告提示',
     Confirm: '确认框',

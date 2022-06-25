@@ -109,6 +109,16 @@ export function zhCNLocale() {
       upload: '上传文件',
       uploading: '上传中',
       dragOrClick: '将文件拖到此处, 或点击上传'
+    },
+
+    viewer: {
+      rotateRight: '向右旋转',
+      rotateLeft: '向左旋转',
+      zoomIn: '放大',
+      zoomOut: '缩小',
+      fullScreen: '全屏',
+      fullScreenExit: '退出全屏',
+      reset: '重置'
     }
   })
 }
