@@ -1,5 +1,6 @@
 export * from './clickoutside'
 export * from './display'
+export * from './full-screen'
 export * from './hover'
 export * from './listener'
 export * from './mounted'
