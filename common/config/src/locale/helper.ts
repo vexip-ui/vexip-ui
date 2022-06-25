@@ -112,6 +112,16 @@ export interface LocaleConfig {
     upload: string,
     uploading: string,
     dragOrClick: string
+  },
+
+  viewer: {
+    rotateRight: string,
+    rotateLeft: string,
+    zoomIn: string,
+    zoomOut: string,
+    fullScreen: string,
+    fullScreenExit: string,
+    reset: string
   }
 }
 

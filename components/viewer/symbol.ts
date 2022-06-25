@@ -15,8 +15,8 @@ export type ToolbarPlacement =
 export enum InternalActionName {
   RotateRight = 'rotateRight',
   RotateLeft = 'rotateLeft',
-  ScalePlus = 'scalePlus',
-  ScaleMinus = 'scaleMinus',
+  ZoomIn = 'zoomIn',
+  ZoomOut = 'zoomOut',
   FullScreen = 'fullScreen',
   FullScreenExit = 'fullScreenExit',
   Reset = 'reset'
@@ -36,8 +36,9 @@ export interface ToolbarAction {
   name: string,
   icon: Record<string, any> | ((data: { state: ViewerState }) => any),
   process: (state: ViewerState) => void,
-  iconScale?: number,
-  divided?: boolean,
-  hidden?: (state: ViewerState) => boolean,
-  disabled?: (state: ViewerState) => boolean
+  title?: string | ((state: ViewerState) => string),
+  iconScale?: number | ((state: ViewerState) => number),
+  divided?: boolean | ((state: ViewerState) => boolean),
+  hidden?: boolean | ((state: ViewerState) => boolean),
+  disabled?: boolean | ((state: ViewerState) => boolean)
 }

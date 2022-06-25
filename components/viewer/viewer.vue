@@ -9,19 +9,20 @@
           @transitionend="normalizeProps"
         >
           <slot>
-            <img src="https://www.vexipui.com/assets/4.23a4f29b.jpg" />
+            <!-- <img src="https://www.vexipui.com/assets/4.23a4f29b.jpg" /> -->
           </slot>
         </div>
       </div>
     </div>
     <div :class="toolbarClass">
       <template v-for="action in allActions" :key="action.name">
-        <template v-if="!action.hidden?.(state)">
+        <template v-if="!getActionProp(action, 'hidden')">
           <div
             :class="{
               [nh.be('action')]: true,
-              [nh.bem('action', 'disabled')]: action.disabled?.(state)
+              [nh.bem('action', 'disabled')]: getActionProp(action, 'disabled')
             }"
+            :title="getActionProp(action, 'title')"
             @click.stop="action.process(state)"
           >
             <Renderer
@@ -29,9 +30,9 @@
               :renderer="action.icon"
               :data="{ state }"
             ></Renderer>
-            <Icon v-else :icon="action.icon" :scale="action.iconScale || 0"></Icon>
+            <Icon v-else :icon="action.icon" :scale="getActionProp(action, 'iconScale') || 0"></Icon>
           </div>
-          <Divider v-if="action.divided" :vertical="!toolbarVertical"></Divider>
+          <Divider v-if="getActionProp(action, 'divided')" :vertical="!toolbarVertical"></Divider>
         </template>
       </template>
     </div>
@@ -52,7 +53,7 @@ import {
   Compress,
   ArrowsRotate
 } from '@vexip-ui/icons'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/mixins'
 import { InternalActionName } from './symbol'
 
@@ -94,6 +95,8 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('viewer')
+    const locale = useLocale('viewer')
+
     const scale = ref(1)
     const rotate = ref(0)
     const full = ref(false)
@@ -134,30 +137,43 @@ export default defineComponent({
       y: currentTop
     })
 
+    function getActionProp<K extends Exclude<keyof ToolbarAction, 'name' | 'icon' | 'process'>>(
+      action: ToolbarAction,
+      prop: K
+    ) {
+      const value = action[prop]
+
+      return (typeof value === 'function' ? value(state) : value) as Exclude<ToolbarAction[K], (...args: any) => any>
+    }
+
     const internalActions: ToolbarAction[] = [
       {
         name: InternalActionName.RotateRight,
         icon: ArrowRotateRight,
         process: () => handleRotate(props.rotateDelta),
+        title: () => locale.value.rotateRight,
         hidden: () => props.rotateDisabled
       },
       {
         name: InternalActionName.RotateLeft,
         icon: ArrowRotateLeft,
         process: () => handleRotate(-1 * props.rotateDelta),
+        title: () => locale.value.rotateLeft,
         hidden: () => props.rotateDisabled,
         divided: true
       },
       {
-        name: InternalActionName.ScalePlus,
+        name: InternalActionName.ZoomIn,
         icon: Plus,
         process: () => handleScale(props.scaleDelta),
+        title: () => locale.value.zoomIn,
         hidden: () => props.scaleDisabled
       },
       {
-        name: InternalActionName.ScaleMinus,
+        name: InternalActionName.ZoomOut,
         icon: Minus,
         process: () => handleScale(-1 * props.scaleDelta),
+        title: () => locale.value.zoomOut,
         hidden: () => props.scaleDisabled,
         divided: true
       },
@@ -165,6 +181,7 @@ export default defineComponent({
         name: InternalActionName.FullScreen,
         icon: Expand,
         process: () => toggleFull(true),
+        title: () => locale.value.fullScreen,
         hidden: () => full.value,
         divided: true
       },
@@ -172,6 +189,7 @@ export default defineComponent({
         name: InternalActionName.FullScreenExit,
         icon: Compress,
         process: () => toggleFull(false),
+        title: () => locale.value.fullScreenExit,
         hidden: () => !full.value,
         divided: true
       },
@@ -179,6 +197,7 @@ export default defineComponent({
         name: InternalActionName.Reset,
         icon: ArrowsRotate,
         process: handleReset,
+        title: () => locale.value.reset,
         divided: true
       }
     ]
@@ -306,6 +325,7 @@ export default defineComponent({
       scaleLayerStyle,
       allActions,
 
+      getActionProp,
       handleWheel,
       handleRotate,
       handleScale,

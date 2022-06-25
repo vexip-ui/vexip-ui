@@ -109,6 +109,16 @@ export function enUSLocale() {
       upload: 'Upload files',
       uploading: 'Uploading',
       dragOrClick: 'Drag files here, or click to upload'
+    },
+
+    viewer: {
+      rotateRight: 'Rotate right',
+      rotateLeft: 'Rotate left',
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      fullScreen: 'Full screen',
+      fullScreenExit: 'Full screen exit',
+      reset: 'Reset'
     }
   })
 }
