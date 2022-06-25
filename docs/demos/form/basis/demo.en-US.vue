@@ -10,9 +10,9 @@
     </FormItem>
     <FormItem required label="Select" prop="select">
       <Select v-model:value="formModel.select">
-        <Option>选项1</Option>
-        <Option>选项2</Option>
-        <Option>选项3</Option>
+        <Option>Option 1</Option>
+        <Option>Option 2</Option>
+        <Option>Option 3</Option>
       </Select>
     </FormItem>
     <FormItem required label="Date" prop="date">
@@ -29,16 +29,16 @@
     </FormItem>
     <FormItem required label="Checkbox" prop="checkbox">
       <CheckboxGroup v-model:values="formModel.checkbox">
-        <Checkbox label="选项1" value="1"></Checkbox>
-        <Checkbox label="选项2" value="2"></Checkbox>
-        <Checkbox label="选项3" value="3"></Checkbox>
+        <Checkbox label="Option 1" value="1"></Checkbox>
+        <Checkbox label="Option 2" value="2"></Checkbox>
+        <Checkbox label="Option 3" value="3"></Checkbox>
       </CheckboxGroup>
     </FormItem>
     <FormItem required label="Radio" prop="radio">
       <RadioGroup v-model:value="formModel.radio">
-        <Radio label="选项1"></Radio>
-        <Radio label="选项2"></Radio>
-        <Radio label="选项3"></Radio>
+        <Radio label="Option 1"></Radio>
+        <Radio label="Option 2"></Radio>
+        <Radio label="Option 3"></Radio>
       </RadioGroup>
     </FormItem>
     <FormItem required label="Textarea" prop="textarea">
@@ -46,10 +46,10 @@
     </FormItem>
     <FormItem action>
       <Button type="primary" @click="handleSubmit()">
-        提交
+        Submit
       </Button>
       <Button @click="handleReset()">
-        重置
+        Reset
       </Button>
     </FormItem>
   </Form>

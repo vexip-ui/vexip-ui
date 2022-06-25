@@ -1,3 +1,3 @@
-### 触发方式
+### Trigger Method
 
-设置 `trigger` 属性的值可以改变提示的触发方式。
+Change the trigger method via the `trigger` prop.

@@ -1,7 +1,7 @@
-### 范围选择
+### Range Select
 
-添加 `range` 属性可以开启范围选择模式。
+Add the `range` prop to enable range selection mode.
 
-范围选择模式下，日期选择框的返回值将变为一个包含开始和结束日期的数组。
+In range selection mode, the return value of the date selection box will become an array containing the start and end dates.
 
-在选择类型为 `datetime` 时，建议控件的最小宽度保持在 380px 以上。
+When the selection type is `'datetime'`, it is recommended that the minimum width of the control be kept above 380px.

@@ -1,3 +1,3 @@
-### 前后置插槽
+### Before or After Slots
 
-使用 `before` 和 `after` 插槽可以将一些内容与输入框组合。
+Use the `before` and `after` slots to combine some content with the input box.

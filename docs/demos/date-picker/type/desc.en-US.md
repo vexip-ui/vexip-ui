@@ -1,5 +1,5 @@
-### 控件类型
+### Control Type
 
-设置 `type` 属性的值可以切换日期选择框的选择类型。
+Setting the value of the `type` prop toggles the selection type of the date picker.
 
-当选择类型为 `year` 时，日期选择框的返回值将变为数字类型的年份。
+When the selection type is `'year'`, the return value of the date selection box will become the year of type number.

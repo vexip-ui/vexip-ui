@@ -1,5 +1,5 @@
-### 自定义验证
+### Custom Validation
 
-设置 `rules` 属性的值可以自定义每个字段的校验规则。
+Set the value of the `rules` prop to customize the validation rules for each field.
 
-也可以单独为一个 Item 组件单独设置 `rules` 属性来进行校验。
+You can also set the `rules` prop for an Item component individually for validation.

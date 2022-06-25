@@ -1,10 +1,10 @@
 <template>
   <Tooltip style="display: inline-block;">
     <Button>
-      气泡提示
+      Tooltip
     </Button>
     <template #tip>
-      一些提示的内容
+      Some tip content
     </template>
   </Tooltip>
 </template>

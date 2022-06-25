@@ -1,1 +1,1 @@
-通过键入内容输入数据，是最基础的表单域的包装。
+Entering data by typing is the most basic form field wrapper.

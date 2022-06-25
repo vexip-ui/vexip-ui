@@ -8,14 +8,14 @@
     target="_blank"
   >
     <FormItem label="username" prop="username">
-      <Input v-model:value="loginForm.username" placeholder="请输入帐号">
+      <Input v-model:value="loginForm.username" placeholder="Place input account">
         <template #prefix>
           <Icon><User></User></Icon>
         </template>
       </Input>
     </FormItem>
     <FormItem label="password" prop="password">
-      <Input v-model:value="loginForm.password" type="password" placeholder="请输入密码">
+      <Input v-model:value="loginForm.password" type="password" placeholder="Place input password">
         <template #prefix>
           <Icon><Lock></Lock></Icon>
         </template>
@@ -23,10 +23,10 @@
     </FormItem>
     <FormItem style="margin-bottom: 5px; text-align: center;">
       <FormSubmit type="success" :icon="Check">
-        登 陆
+        Login
       </FormSubmit>
       <FormReset type="warning">
-        重 置
+        Reset
       </FormReset>
     </FormItem>
   </Form>

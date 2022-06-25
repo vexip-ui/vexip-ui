@@ -67,6 +67,7 @@ type Types =
   | 'email'
 type Range = [number, number]
 type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
+
 interface Rule<T = any> {
   trigger?: Trigger,
   required?: boolean,

@@ -2,54 +2,54 @@
 
 | Name            | Type    | Description                                                                                                   | Default  | Since |
 | --------------- | ------- | ------------------------------------------------------------------------------------------------------ | ------- | --- |
-| method          | `'get' \| 'post' \| 'put' \| 'delete'`  | 设置原生 form 对象的 method 值，需要在设置了 action 后才生效 | `'post'`  | - |
-| action          | `string`  | 设置原生 form 标签的 action 值                                                                         | `null`    | - |
-| model           | `Record<string, any>`  | 表单的数据源                                                                                           | `{}`      | - |
-| rules           | `Record<string, any>`  | 表单的验证规则                                                                                         | `{}`      | - |
-| label-width     | `number`  | 表单标签的宽度                                                                                         | `80`      | - |
-| lablel-position | `'right' \| 'top' \| 'left'`  | 表单标签的位置                                                      | `'right'` | - |
-| all-required    | `boolean` | 设置表单内容是否全部必填                                                                               | `false`   | - |
-| label-suffix    | `string`  | 表单标签的后置内容，比如 `:`                                                                           | `''`      | - |
-| hide-asterisk   | `boolean` | 设置是否隐藏必填星号                                                                                   | `false`   | - |
-| validate-all    | `boolean` | 设置表单验证时是否进行所有规则验证 (默认每个字段遇到错误就停止后续验证)                                | `false`   | - |
-| hide-label      | `boolean` | 设置是否隐藏表单标签，常用在登陆表单                                                                   | `false`   | - |
+| method | `'get' \| 'post' \| 'put' \| 'delete'` | Set the method value of the native form object, which takes effect after setting the action | `'post'` | - |
+| action | `string` | Set the action value of the native form tag | `null` | - |
+| model | `Record<string, any>` | The form data source | `{}` | - |
+| rules | `Record<string, any>` | The form validation rules | `{}` | - |
+| label-width | `number` | The width of the form label | `80` | - |
+| labell-position | `'right' \| 'top' \| 'left'` | The position of form label | `'right'` | - |
+| all-required | `boolean` | Set whether all form content is required | `false` | - |
+| label-suffix | `string` | The suffix of the form label, such as `:` | `''` | - |
+| hide-asterisk | `boolean` | Set whether to hide required asterisks | `false` | - |
+| validate-all | `boolean` | Set whether to perform all rule validation during form validation (by default each field encounters an error and stops subsequent validation) | `false` | - |
+| hide-label | `boolean` | Set whether to hide the form label, commonly used in login forms | `false` | - |
 
 ### Form Methods
 
 | Name             | Description                                                             | Signature            | Since |
 | ---------------- | ---------------------------------------------------------------- | --------------- | --- |
-| validate         | 对表单的所有字段进行验证         | `() => Promise<string[]>`        | - |
-| validateFields   | 根据属性对表单指定的字段进行验证 | `(props: string \| string[]) => Promise<string[]>` | - |
-| reset            | 对表单的所有字段进行重置                                         | `() => void`               | - |
-| resetFields      | 根据属性对表单指定的字段进行重置                                 | `(props: string \| string[]) => void`           | - |
-| clearError       | 清除表单的所有错误信息                                           | `() => void`               | - |
-| clearFieldsError | 根据属性清除表单指定的字段的错误信息                             | `(props: string \| string[]) => void`           | - |
+| validate | Validate all fields of the form | `() => Promise<string[]>` | - |
+| validateFields | Validate the fields specified by the form according to the properties | `(props: string \| string[]) => Promise<string[]>` | - |
+| reset | resets all fields of the form | `() => void` | - |
+| resetFields | Reset the fields specified by the form according to the properties | `(props: string \| string[]) => void` | - |
+| clearError | Clear all error messages of the form | `() => void` | - |
+| clearFieldsError | Clears the error information of the fields specified by the form according to the property | `(props: string \| string[]) => void` | - |
 
 ### Form Slots
 
 | Name    | Description           | Parameters | Since |
 | ------- | -------------- | --- | --- |
-| default | 表单内容的插槽 | - | - |
+| default | Slot for form content | - | - |
 
 ### FormItem Props
 
 | Name           | Type            | Description                                                                 | Default | Since |
 | -------------- | --------------- | -------------------------------------------------------------------- | ------ | --- |
-| label          | `string`          | 表单字段的标签                                                       | `''`     | - |
-| prop           | `string`          | 表单字段的属性                                                       | `''`     | - |
-| rules          | `Rule \| Rule[]` | 表单字段的验证规格                                                   | `[]`     | - |
-| label-width    | `number`          | 表单字段标签的宽度                                                   | `null`   | - |
-| required       | `boolean`         | 设置字段是否必填                                                     | `false`  | - |
-| html-for       | `string`          | 原生 `<label>` 的 `for` 属性                                               | `null`   | - |
-| default-value  | `unknown`             | 设置字段的默认值                                                     | `null`   | - |
-| hide-error-tip | `boolean`         | 设置是否隐藏错误提示                                                 | `false`  | - |
-| validate-all   | `boolean`         | 设置验证时是否进行所有规则验证，未设置时将继承 Form 组件的同名属性值 | `null`   | - |
-| hide-asterisk  | `boolean`         | 设置是否隐藏必填星号，未设置时将继承 Form 组件的同名属性值           | `null`   | - |
-| hide-label     | `boolean`         | 设置是否隐藏表单标签，未设置时将继承 Form 组件的同名属性值           | `null`   | - |
-| action         | `boolean`         | 设置是否为纯操作 FormItem，若为是则样式变位内容居中并无下边距            | `false`  | - |
-| error-transition | `string` | 错误提示的过渡效果名称 | `'vxp-fade'` | - |
+| label | `string` | label of the form field | `''` | - |
+| prop | `string` | property of the form field | `''` | - |
+| rules | `Rule \| Rule[]` | Validation specification for form fields | `[]` | - |
+| label-width | `number` | width of the form field label | `null` | - |
+| required | `boolean` | Set whether the field is required | `false` | - |
+| html-for | `string` | `for` attribute of native `<label>` | `null` | - |
+| default-value | `unknown` | set the default value of the field | `null` | - |
+| hide-error-tip | `boolean` | Set whether to hide the error tip | `false` | - |
+| validate-all | `boolean` | Set whether to perform all rule validation when validating, if not set, it will inherit the property value of the same name of the Form component | `null` | - |
+| hide-asterisk | `boolean` | Set whether to hide the required asterisk, if not set, it will inherit the property value of the same name of the Form component | `null` | - |
+| hide-label | `boolean` | Set whether to hide the form label, if not set, it will inherit the property value of the same name of the Form component | `null` | - |
+| action | `boolean` | Set whether it is a pure action FormItem, if so, the style is centered and the content is centered and has no bottom margin | `false` | - |
+| error-transition | `string` | transition effect name for error message | `'vxp-fade'` | - |
 
-`Rule` 相关的类型定义：
+The types related to `Rule`:
 
 ```ts
 type Trigger = 'blur' | 'change'
@@ -67,6 +67,7 @@ type Types =
   | 'email'
 type Range = [number, number]
 type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
+
 interface Rule<T = any> {
   trigger?: Trigger,
   required?: boolean,
@@ -84,38 +85,38 @@ interface Rule<T = any> {
 
 | Name    | Description               | Parameters | Since |
 | ------- | ------------------ | --- | --- |
-| default | 字段内容的插槽     | - | - |
-| label   | 字段标签内容的插槽 | - | - |
-| error   | 错误内容提示的插槽 | `(tip: string)` | - |
+| default | Slot for field content | - | - |
+| label | Slot for field label content | - | - |
+| error | Slot for error content tip | `(tip: string)` | - |
 
 ### FormSubmit Props
 
-> FormSubmit 组件为 Button 组件的再封装，支持 Button 组件的绝大部分属性，下方只列出 Submit 组件特有的属性。
+> The FormSubmit component is a repackage of the Button component and supports most of the properties of the Button component. Only the properties specific to the Submit component are listed below.
 
 | Name          | Type     | Description                                                                  | Default    | Since |
 | ------------- | -------- | --------------------------------------------------------------------- | --------- | --- |
-| type          | `string`   | 同 Button 组件的 `type` 属性，但默认值不同                              | `'primary'` | - |
-| label          | `string`   | 设置提交按钮的内容，使用插槽时将会失效                                | `locale.submit`      | - |
-| on-before-submit | `() => unknown` | 设置表单提交前回调，支持异步函数和 Promise，返回值为 `false` 会阻止提交 | `null`      | - |
+| type | `string` | Same as the `type` property of the Button component, but with a different default value | `'primary'` | - |
+| label | `string` | Set the content of the submit button, it will be invalid when using the slot | `locale.submit` | - |
+| on-before-submit | `() => unknown` | Set callback before form submission, support asynchronous function and Promise, return value of `false` will prevent submission | `null` | - |
 
 ### FormSubmit Events
 
 | Name      | Description                                                                 | Parameters   | Since |
 | --------- | -------------------------------------------------------------------- | ------ | --- |
-| submit | 即将发生提交跳转前的事件回调，无返回值，触发该事件则说明提交未被阻止 | -      | - |
-| error  | 提交前，表单验证发生错误时触发，返回验证的错误信息                   | `(errors: string[])` | - |
+| submit | The event callback before the submission jump is about to occur, there is no return value, triggering this event means that the submission is not blocked | - | - |
+| error | Emitted when an error occurs in form validation before submitting, and returns the validation error message | `(errors: string[])` | - |
 
 ### FormReset Props
 
-> FormReset 组件为 Button 组件的再封装，支持 Button 组件的绝大部分属性，下方只列出 Reset 组件特有的属性。
+> The FormReset component is a repackage of the Button component and supports most of the properties of the Button component. Only the properties specific to the Reset component are listed below.
 
 | Name         | Type     | Description                                                                  | Default | Since |
 | ------------ | -------- | --------------------------------------------------------------------- | ------ | --- |
-| text         | `string`   | 设置重置按钮的内容，使用插槽时将会失效                                | `locale.reset`   | - |
-| on-before-reset | `() => unknown` | 设置表单提交前回调，支持异步函数和 Promise，返回值为 `false` 会阻止提交 | `null`   | - |
+| text | `string` | Set the content of the reset button, it will be invalid when using the slot | `locale.reset` | - |
+| on-before-reset | `() => unknown` | Set callback before form submission, support asynchronous function and Promise, return value of `false` will prevent submission | `null` | - |
 
 ### FormReset Events
 
 | Name     | Description                                                                 | Parameters | Since |
 | -------- | -------------------------------------------------------------------- | ---- | --- |
-| reset | 即将发生提交重置前的事件回调，无返回值，触发该事件则说明重置未被阻止 | -    | - |
+| reset | Event callback before commit reset is about to occur, no return value, triggering this event means reset is not blocked | - | - |

@@ -2,30 +2,30 @@
 
 | Name            | Type              | Description                                                                                                      | Default     | Since |
 | --------------- | ----------------- | --------------------------------------------------------------------------------------------------------- | ---------- | --- |
-| visible         | `boolean`           | 气泡框的显示状态，可以使用 `v-model` 双向绑定                                                               | `false`      | - |
-| trigger         | `'hover' \| 'click' \| 'custom'`            | 下拉菜单的触发方式，当为 `custom` 时，所有情景都需要手动控制 `visible` | `'hover'`    | - |
-| placement       | `Placement`            | 气泡框出现的位置，可选值同 Popper.js                                                                      | `'top'`      | - |
-| outside-close   | `boolean`           | 设置是否可以通过点击外部关闭                                                                              | `true`       | - |
-| no-hover        | `boolean`           | 设置是否让气泡框变得无法捕捉                                                                              | `false`      | - |
-| tip-class       | `string` \| Object  | 气泡框内容的自定义类名                                                                                      | `null`       | - |
-| disabled        | `boolean`           | 设置是否禁用气泡框，禁用后将不显示任何内容                                                                | `false`      | - |
-| theme           | `'light' \| 'dark'`            | 设置气泡的主题                                                               | `'light'`    | - |
-| transfer        | `boolean \| string` | 设置气泡的渲染位置，设置为 `true` 时默认渲染至 `<body>`                                               | `false`      | - |
-| transition-name | `string`            | 设置气泡的显示隐藏过渡效果                                                                                | `'vxp-fade'` | - |
+| visible | `boolean` | The display state of the bubble box, you can use `v-model` two-way binding | `false` | - |
+| trigger | `'hover' \| 'click' \| 'custom'` | The trigger method of the drop-down menu, when it is `custom`, all scenarios need to be manually controlled `visible` | `'hover'` | - |
+| placement | `Placement` | The position where the bubble box appears, the optional value is the same as Popper.js | `'top'` | - |
+| outside-close | `boolean` | Set whether to close by clicking outside | `true` | - |
+| no-hover | `boolean` | Set whether to make the balloon unhoverable | `false` | - |
+| tip-class | `string` \| Object | Custom class name for the content of the balloon | `null` | - |
+| disabled | `boolean` | Sets whether to disable the bubble, after which nothing will be displayed | `false` | - |
+| theme | `'light' \| 'dark'` | set the theme of the bubble | `'light'` | - |
+| transfer | `boolean \| string` | Set the rendering position of the bubble. When set to `true`, it will render to `<body>` by default | `false` | - |
+| transition-name | `string` | Sets the transition to show and hide the bubble | `'vxp-fade'` | - |
 
 ### Tooltip Events
 
 | Name             | Description                                                 | Parameters    | Since |
 | ---------------- | ---------------------------------------------------- | ------- | --- |
-| toggle        | 当气泡框的显示状态改变时触发，返回当前的状态         | `(visible: boolean)` | - |
-| tip-enter | 当鼠标移入气泡框时触发，无返回值 | - | - |
-| tip-leave | 当鼠标移出气泡框时触发，无返回值 | - | - |
-| click-outside | 当点击了元素外部时触发，无返回值 | -       | - |
-| outside-close | 当点击了元素外部进行了下拉菜单的关闭时触发，无返回值 | -       | - |
+| toggle | Emitted when the display state of the bubble box changes, returns the current state | `(visible: boolean)` | - |
+| tip-enter | Emitted when the mouse moves into the bubble, no return value | - | - |
+| tip-leave | Emitted when the mouse moves out of the bubble, no return value | - | - |
+| click-outside | Emitted when the outside of the element is clicked, no return value | - | - |
+| outside-close | Emitted when the drop-down menu is closed by clicking outside the element, no return value | - | - |
 
 ### Tooltip Slots
 
 | Name    | Description                 | Parameters | Since |
 | ------- | -------------------- | --- | --- |
-| default | 触发气泡框内容的插槽 | - | - |
-| tip     | 气泡框内容的插槽     | - | - |
+| default | The slot that triggers the content of the balloon | - | - |
+| tip | Slot for the content of the balloon | - | - |

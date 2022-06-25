@@ -1,3 +1,3 @@
-### 初始无填充
+### No Init Filler
 
-如果需要日期选择框显示初始的日期，可以添加 `no-filler` 属性禁用初始填充。
+If you want the date picker to display the initial date, you can add the `no-filler` prop to disable the initial filling.

@@ -1,19 +1,19 @@
 <template>
   <Space>
-    <Tooltip trigger="hover" placement="top">
+    <Tooltip>
       <Button>
-        悬停触发
+        Light Theme
       </Button>
       <template #tip>
-        一些提示的内容
+        Some tip content
       </template>
     </Tooltip>
-    <Tooltip trigger="click" placement="right">
+    <Tooltip theme="dark">
       <Button>
-        点击触发
+        Dark Theme
       </Button>
       <template #tip>
-        一些提示的内容
+        Some tip content
       </template>
     </Tooltip>
   </Space>

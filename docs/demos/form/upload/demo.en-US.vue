@@ -12,17 +12,17 @@
     </FormItem>
     <FormItem action>
       <Button type="primary" @click="handleSubmit()">
-        提交
+        Submit
       </Button>
       <Button @click="handleReset()">
-        重置
+        Reset
       </Button>
     </FormItem>
   </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch, nextTick } from 'vue'
+import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
 
 import type { Form, Upload } from 'vexip-ui'
 
@@ -35,11 +35,13 @@ const upload = ref<InstanceType<typeof Upload> | null>(null)
 
 const selectedFiles = computed(() => upload.value?.renderFiles || [])
 
-watch(selectedFiles, value => {
-  formModel.files = value.map(state => state.source)
+onMounted(() => {
+  watch(selectedFiles, value => {
+    formModel.files = value.map(state => state.source)
 
-  nextTick(() => {
-    form.value?.validateFields('files')
+    nextTick(() => {
+      form.value?.validateFields('files')
+    })
   })
 })
 

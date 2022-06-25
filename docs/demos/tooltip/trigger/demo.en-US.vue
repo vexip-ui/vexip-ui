@@ -1,10 +1,20 @@
 <template>
-  <Tooltip trigger="click" placement="right">
-    <Button>
-      气泡提示
-    </Button>
-    <template #tip>
-      一些提示的内容
-    </template>
-  </Tooltip>
+  <Space>
+    <Tooltip trigger="click" placement="right">
+      <Button>
+        Hover Trigger
+      </Button>
+      <template #tip>
+        Some tip content
+      </template>
+    </Tooltip>
+    <Tooltip trigger="click" placement="right">
+      <Button>
+        Click Trigger
+      </Button>
+      <template #tip>
+        Some tip content
+      </template>
+    </Tooltip>
+  </Space>
 </template>

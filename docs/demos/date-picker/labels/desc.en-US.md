@@ -1,3 +1,3 @@
-### 日期标签
+### Date Label
 
-设置 `labels` 属性的值可以为每个日期单元添加标签，常用于添加单位。
+Set the value of the `labels` prop to add labels to each date unit, often used to add units.

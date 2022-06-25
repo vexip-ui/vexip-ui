@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch, onMounted } from 'vue'
+import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
 
 import type { Form, Upload } from 'vexip-ui'
 
@@ -37,7 +37,10 @@ const selectedFiles = computed(() => upload.value?.renderFiles || [])
 onMounted(() => {
   watch(selectedFiles, value => {
     formModel.files = value.map(state => state.source)
-    form.value?.validateFields('files')
+
+    nextTick(() => {
+      form.value?.validateFields('files')
+    })
   })
 })
 

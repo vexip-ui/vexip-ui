@@ -1,5 +1,5 @@
-### 原生表单
+### Native Form
 
-设置 `action` 属性的值可以使用原生的表单提交。
+Set the value of the `action` prop to use native form submission.
 
-结合 Submit 和 Reset 组件可以快速生成提交和重置按钮。
+Combining the Submit and Reset components can quickly generate submit and reset buttons.

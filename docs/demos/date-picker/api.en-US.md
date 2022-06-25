@@ -2,57 +2,57 @@
 
 | Name             | Type                              | Description                                                                                                 | Default                | Since |
 | ---------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- | --- |
-| type             | `'date' \| 'datetime' \| 'year' \| 'month'`                            | 时间选择器的类型                                      | `'date'`                | - |
-| value            | `number \| string \| Date \| (number \| string \| Date)[]` | 时间选择器的值，可以使用 `v-model` 双向绑定                                                            | `new Date()`            | - |
-| size             | `'small' \| 'default' \| 'large'`                            | 输入框的大小                                                   | `'default'`             | - |
-| state            | `'default' \| 'success' \| 'error' \| 'warning'`                            | 输入框的状态                                       | `'default'`             | - |
-| visible          | `boolean`                           | 设置日期选择窗口的初始打开状态，可以使用 `v-model` 双向绑定                                            | `false`                 | - |
-| placement        | `Placement`                            | 日期选择窗口的出现位置，可选值同 Popper.js                                                           | `'bottom'`              | - |
-| transfer         | `boolean \| string`                 | 设置日期选择窗口的渲染位置，开启但未指定有效选择器时默认渲染至 `<body>`                                  | `false`                 | - |
-| format           | `string`                            | 在 `datetime` 类型时会根据是否具有 `Hms` 来控制时间选择列的显示隐藏                                    | `'yyyy-MM-dd HH:mm:ss'` | - |
-| filler           | `string`                            | 日期未选择时的填充符，长度固定为 1                                                                   | `'-'`                   | - |
-| no-filler        | `boolean`                           | 是否禁用初始填充，如果禁用，初始化后控件内会显示当前 `value`                                            | `false`                 | - |
-| clearable        | `boolean`                           | 是否允许清空值                                                                                       | `false`                 | - |
-| no-action        | `boolean`                           | 是否禁用日历面板的底部操作栏                                                                         | `false`                 | - |
-| labels           | `Partial<Record<'year' \| 'month' \| 'date' \| 'hour' \| 'minute' \| 'second', string>>`                             | 设置在每个日期或时间单元后面的标签                                                                   | `{}`                    | - |
-| date-separator   | `string`                            | 日期部分的连接符                                                                                     | `'/'`                   | - |
-| time-separator   | `string`                            | 时间部分的连接符                                                                                     | `':'`                   | - |
-| shortcuts        | `{ name: string, value: Dateable \| (() => string \| number \| Date) }`                             | 设置日期快捷选择的候选列表                   | `[]`                    | - |
-| disable-date     | `(date: Date) => boolean`                          | 判断日期是否禁用，接受一个日期参数，返回 `true` 则禁用，加载日历面板时会对当前面板的所有日期都调用一次 | `() => false`           | - |
-| steps            | `number[]`                             | 分别设置时间选择器每个滚轮的滚动跨度                                                                 | `[1, 1, 1]`             | - |
-| ctrl-steps       | `number[]`                             | 分别设置时间选择器每个滚轮按住 Ctrl 时的滚动跨度                                                     | `[5, 5, 5]`             | - |
-| prefix           | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                                                   | `''`                    | - |
-| prefix-color     | `string`                            | 前缀内容的颜色，会影响前缀插槽                                                                       | `''`                    | - |
-| suffix           | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                                                   | `''`                    | - |
-| suffix-color     | `string`                            | 后缀内容的颜色，会影响后缀插槽                                                                       | `''`                    | - |
-| disabled         | `boolean`                           | 设置是否禁用日期选择框                                                                               | `false`                 | - |
-| transition-name  | `string`                            | 设置日期选择窗口的显示隐藏过渡效果                                                                   | `'vxp-drop'`            | - |
-| confirm-text          | `string`                            | 日期选择窗口确认按钮的文本内容                                                                       | `locale.confirm`                | - |
-| cancel-text      | `string`                            | 日期选择窗口取消按钮的文本内容                                                                       | `locale.cancel`                | - |
-| today            | `string \| number \| Date`          | 设置作为今天的日期，这主要会影响日期选择窗口中日历的一些表现                                         | `new Date()`            | - |
-| is-range         | `boolean`                           | 设置是否开启范围选择模式                                                                             | `false`                 | - |
-| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 | - |
+| type | `'date' \| 'datetime' \| 'year' \| 'month'` | The type of time picker | `'date'` | - |
+| value | `number \| string \| Date \| (number \| string \| Date)[]` | The value of the time selector, can use `v-model` two-way binding | `new Date()` | - |
+| size | `'small' \| 'default' \| 'large'` | The size of input box | `'default'` | - |
+| state | `'default' \| 'success' \| 'error' \| 'warning'` | The state of the input box | `'default'` | - |
+| visible | `boolean` | Set the initial open state of the date selection window, you can use `v-model` two-way binding | `false` | - |
+| placement | `Placement` | The position where the date selection window appears, the optional value is the same as Popper.js | `'bottom'` | - |
+| transfer | `boolean \| string` | Set the rendering position of the date selection window. When enabled but no valid selector is specified, the default rendering is to `<body>` | `false` | - |
+| format | `string` | In `datetime` type, it will control the display and hide of the time selection column according to whether it has `Hms` | `'yyyy-MM-dd HH:mm:ss'` | - |
+| filler | `string` | Filler when the date is not selected, the length is fixed to 1 | `'-'` | - |
+| no-filler | `boolean` | Whether to disable initial filling, if disabled, the current `value` | `false` | - |
+| clearable | `boolean` | Whether to allow clearing of values ​​| `false` | - |
+| no-action | `boolean` | Whether to disable the bottom action bar of the calendar panel | `false` | - |
+| labels | `Partial<Record<'year' \| 'month' \| 'date' \| 'hour' \| 'minute' \| 'second', string>>` | set at each date or time unit tag following | `{}` | - |
+| date-separator | `string` | The separator for date part | `'/'` | - |
+| time-separator | `string` | The separator for time part | `':'` | - |
+| shortcuts | `{ name: string, value: Dateable \| (() => string \| number \| Date) }` | Set the candidate list of date shortcuts | `[]` | - |
+| disable-date | `(date: Date) => boolean` | Determine whether the date is disabled, accept a date parameter, return `true` to disable, when loading the calendar panel, it will be called once for all dates in the current panel | `( ) => false` | - |
+| steps | `number[]` | Set the scroll span of each wheel of the time picker separately | `[1, 1, 1]` | - |
+| ctrl-steps | `number[]` | Set the scroll span of each wheel of the time picker when Ctrl is held down | `[5, 5, 5]` | - |
+| prefix | `Record<string, any>` | The prefix icon, invalid when using prefix slot | `''` | - |
+| prefix-color | `string` | The color of the prefix content, affects the prefix slot | `''` | - |
+| suffix | `Record<string, any>` | The suffix icon, invalid when using suffix slot | `''` | - |
+| suffix-color | `string` | The color of the suffix content, which affects the suffix slot | `''` | - |
+| disabled | `boolean` | Set whether to disable the date selection box | `false` | - |
+| transition-name | `string` | Set the transition between show and hide of the date selection window | `'vxp-drop'` | - |
+| confirm-text | `string` | The text content of the date selection window confirm button | `locale.confirm` | - |
+| cancel-text | `string` | The text content of the cancel button of the date selection window | `locale.cancel` | - |
+| today | `string \| number \| Date` | Set as today's date, which mainly affects some of the performance of the calendar in the date selection window | `new Date()` | - |
+| is-range | `boolean` | Set whether to enable range selection mode | `false` | - |
+| disable-validate | `boolean` | Whether to disable triggering form field validation | `false` | - |
 
 ### DatePicker Events
 
 | Name          | Description                                                                                                                                 | Parameters                                                          | Since |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | --- |
-| toggle | 当日期面板显示状态改变时触发，返回当前状态 | `(visible: boolean)` | - |
-| foucs      | 控件聚焦时触发，无返回值                                                                                                             | -                                                             | - |
-| blur       | 控件失去焦点时触发，无返回值                                                                                                         | -                                                             | - |
-| change     | 当选择的时间发生改变时触发，根据日期选择框类型是否为 'year' 以及是否开启了范围模式，会返回一个年份、年份范围、标准日期或标准日期范围 | `(value: string \| number \| number[] \| string[] \| null)` | - |
-| change-col | 当选择的日期类型发生改变时触发，返回当前类型的名称                                                                                   | `(type: 'year' \| 'month' \| 'date' \| 'hour' \| 'minute' \| 'second')`                                                          | - |
-| input      | 当通过按键输入任意类型日期的值发生改变时触发，返回当前类型的名称与输入的值                                                           | `(type: 'year' \| 'month' \| 'date' \| 'hour' \| 'minute' \| 'second', value: number)`                                                   | - |
-| enter      | 当使用回车键确定或点击了日期选择窗口的确认按钮时触发，无返回值                                                                       | -                                                             | - |
-| cancel     | 当使用 Esc 按键关闭或点击了日期选择窗口的取消按钮时触发，无返回值                                                                    | -                                                             | - |
-| shortcut   | 当使用快捷功能选择日期时触发，返回快捷选择的名称和值                                                                                 | `(name: string, value: number \| string \| Date)`                                                   | - |
-| plus       | 当使用上箭头按键增加日期值时触发，返回类型名称的名称和对应的值                                                                       | `(type: 'year' \| 'month' \| 'date' \| 'hour' \| 'minute' \| 'second', value: number)`                                                   | - |
-| minus      | 当使用下箭头按键减少日期值时触发，返回类型名称的名称和列应的值                                                                       | `(type: 'year' \| 'month' \| 'date' \| 'hour' \| 'minute' \| 'second', value: number)`                                                   | - |
-| clear      | 当通过清除按钮清空值时触发，无返回值                                                                                                 | -                                                             | - |
+| toggle | Emitted when the date panel display state changes, returns the current state | `(visible: boolean)` | - |
+| foucs | Emitted when the control is focused, no return value | - | - |
+| blur | Emitted when the control loses focus, no return value | - | - |
+| change | Emitted when the selected time changes, depending on whether the date selection box type is 'year' and whether the range mode is enabled, it will return a year, year range, standard date or standard date range | `(value: string \ | number \| number[] \| string[] \| null)` | - |
+| change-col | Emitted when the selected date type changes, returns the name of the current type | `(type: 'year' \| 'month' \| 'date' \| 'hour' \| 'minute' \| 'second')` | - |
+| input | Emitted when the value of any type of date entered by pressing the key changes, returns the name of the current type and the input value | `(type: 'year' \| 'month' \| 'date' \| 'hour' \ | 'minute' \| 'second', value: number)` | - |
+| enter | Emitted when the enter key is used to confirm or the confirm button of the date selection window is clicked, no return value | - | - |
+| cancel | Emitted when the Esc key is closed or the cancel button of the date selection window is clicked, no return value | - | - |
+| shortcut | Emitted when a date is selected using the shortcut function, returns the name and value of the shortcut selection | `(name: string, value: number \| string \| Date)` | - |
+| plus | Emitted when the date value is incremented using the up arrow key, returns the name of the type name and the corresponding value | `(type: 'year' \| 'month' \| 'date' \| 'hour' \| 'minute ' \| 'second', value: number)` | - |
+| minus | Emitted when a date value is decremented using the down arrow key, returns the name of the type name and the value of the column | `(type: 'year' \| 'month' \| 'date' \| 'hour' \| ' minute' \| 'second', value: number)` | - |
+| clear | Emitted when the value is cleared by the clear button, no return value | - | - |
 
 ### DatePicker Slots
 
 | Name   | Description                           | Parameters | Since |
 | ------ | ------------------------------ | --- | --- |
-| prefix | 前缀内容的插槽，一般为单个图标 | - | - |
-| suffix | 后缀内容的插槽，一般为单个图标 | - | - |
+| prefix | Slot for prefix content, usually a single icon | - | - |
+| suffix | Slot for suffix content, usually a single icon | - | - |

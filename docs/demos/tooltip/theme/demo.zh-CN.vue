@@ -1,16 +1,16 @@
 <template>
   <Space>
-    <Tooltip trigger="hover" placement="top">
+    <Tooltip>
       <Button>
-        悬停触发
+        亮色主题
       </Button>
       <template #tip>
         一些提示的内容
       </template>
     </Tooltip>
-    <Tooltip trigger="click" placement="right">
+    <Tooltip theme="dark">
       <Button>
-        点击触发
+        暗色主题
       </Button>
       <template #tip>
         一些提示的内容
