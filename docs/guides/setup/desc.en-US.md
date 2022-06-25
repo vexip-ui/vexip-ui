@@ -2,15 +2,17 @@
 
 Vexip UI provides a series of out-of-the-box components.
 
-This library is using base on vue 3.0 with only using composition api, and design and code components in the traditional way by Vue possible, fully TypeScript.
+This library is using base on vue 3.0 with only using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript** (not AnyScript).
 
-Currently more then 60 components, many you can see everywhere and a few may bright your eyes.
+Almost all the **default value of props** for each component can be quickly modified by configuration (except value and options props), for easy customization.
+
+Currently more then **70** components, many you can see everywhere and a few may bright your eyes.
 
 ## Features
 
 - Not less components and functions for website development, hoping may improve efficiency
 - Vue3 components of out-of-the-box (may not help if you still using Vue2)
-- Intuitive design, directly to write code, no equivocate
+- Configurable **default value of props** for easy customization
 - entirely using the composition api, the performance and extensibility should be good
 
 ## Environment
@@ -43,6 +45,10 @@ yarn add vexip-ui
 
 ## Help
 
-Open a [issue](//github.com/qmhc/vexip-ui/issues) to request help.
+Open a [issue](https://github.com/qmhc/vexip-ui/issues) to request help.
 
 If you take maybe some bugs, please use the [Vexip UI Playground](https://playground.vexipui.com/) to provide a minimal reproduction.
+
+## Contributing
+
+Welcome to join us! You can check out the [Contributing Guide](https://github.com/qmhc/vexip-ui/blob/main/CONTRIBUTING.md) to learn how to get started.

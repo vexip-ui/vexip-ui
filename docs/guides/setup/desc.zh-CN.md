@@ -4,7 +4,9 @@ Vexip UI 提供了一系类开箱即用的组件。
 
 该组件库使用全新的 **组合式 Api** 编写，并尽可能采用 Vue 传统的方式设计和编写组件，全量的 **TypeScript**（不是 AnyScript）。
 
-目前有 **60** 多个组件，一些你几乎看烂了的组件这里大多有，或许也有一些你不太常见的组件。
+每个组件几乎所有的 **属性默认值** 均可以通过注入配置快速修改（除了值和选项属性），轻松实现定制化。
+
+目前有 **70** 多个组件，一些你几乎看烂了的组件这里大多有，或许也有一些你不太常见的组件。
 
 ## 特性
 
@@ -43,6 +45,10 @@ pnpm install vexip-ui
 
 ## 帮助
 
-创建一个 [issue](//github.com/qmhc/vexip-ui/issues) 来寻求帮助。
+创建一个 [issue](https://github.com/qmhc/vexip-ui/issues) 来寻求帮助。
 
 如果你遇到一些可能是 bugs 的问题, 可以用 [Vexip UI Playground](https://playground.vexipui.com/) 来提供一个最小的复现。
+
+## 贡献
+
+欢迎你的加入！你可以查阅 [贡献指南](https://github.com/qmhc/vexip-ui/blob/main/CONTRIBUTING.md) 了解如何开始。

@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ToolbarPlacement } from 'vexip-ui/es/components/viewer'
+import type { ToolbarPlacement } from 'vexip-ui/es/viewer'
 
 const placements: ToolbarPlacement[] = [
   'top',

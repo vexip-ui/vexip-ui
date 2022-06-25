@@ -32,7 +32,7 @@
 import { ref, computed } from 'vue'
 
 import type { Upload } from 'vexip-ui'
-import type { FileState } from 'vexip-ui/es/components/upload'
+import type { FileState } from 'vexip-ui/es/upload'
 
 const listActive = ref(false)
 const upload = ref<InstanceType<typeof Upload> | null>(null)
