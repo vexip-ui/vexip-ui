@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div ref="viewer" :class="className">
     <div ref="container" :class="nh.be('container')" @wheel="handleWheel">
       <div :class="nh.be('content')" :style="contentStyle">
         <div
@@ -9,7 +9,7 @@
           @transitionend="normalizeProps"
         >
           <slot>
-            <!-- <img src="https://www.vexipui.com/assets/4.23a4f29b.jpg" /> -->
+            <img src="https://www.vexipui.com/assets/4.23a4f29b.jpg" />
           </slot>
         </div>
       </div>
@@ -54,7 +54,7 @@ import {
   ArrowsRotate
 } from '@vexip-ui/icons'
 import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
-import { useMoving } from '@vexip-ui/mixins'
+import { useMoving, useFullScreen } from '@vexip-ui/mixins'
 import { InternalActionName } from './symbol'
 
 import type { PropType } from 'vue'
@@ -99,10 +99,11 @@ export default defineComponent({
 
     const scale = ref(1)
     const rotate = ref(0)
-    const full = ref(false)
 
+    const viewer = ref<HTMLElement | null>(null)
     const transition = ref<HTMLElement | null>(null)
 
+    const { supported: fullSupported, full, enter: enterFull, exit: exitFull } = useFullScreen(viewer)
     const { target: container, x: currentLeft, y: currentTop, moving } = useMoving({
       onStart: (state, event) => {
         if (props.moveDisabled || event.button > 0) {
@@ -208,6 +209,7 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bm('draggable')]: !props.moveDisabled,
         [nh.bm('resizable')]: !props.scaleDisabled,
+        [nh.bm('full')]: full.value,
         [nh.bm('moving')]: moving.value
       }
     })
@@ -269,8 +271,8 @@ export default defineComponent({
       scale.value += ratio
     }
 
-    function toggleFull(target = !full.value) {
-      full.value = target
+    async function toggleFull(target = !full.value) {
+      target ? await enterFull() : await exitFull()
     }
 
     function handleReset() {
@@ -313,8 +315,10 @@ export default defineComponent({
       props,
       nh,
       moving,
+      fullSupported,
       state,
 
+      viewer,
       container,
       transition,
 
