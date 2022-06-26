@@ -1,5 +1,5 @@
 ### Custom Node
 
-通常情况下，使用 `label` 插槽可以自定义节点标签的内容。
+Normally, the content of a node label can be customized using the `label` slot.
 
-如果你希望完全自定义节点的内容，可以使用 `node` 插槽，不过我不是很建议你这样做。
+If you want to completely customize the content of the node, you can use the `node` slot, but I don't really recommend it.

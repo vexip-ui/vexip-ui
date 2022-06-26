@@ -1,3 +1,3 @@
 ### No Cascaded Nodes
 
-添加 `no-cascaded` 属性可以使父子节点能被独立勾选。
+Adding the `no-cascaded` prop enables parent and child nodes to be checked independently.

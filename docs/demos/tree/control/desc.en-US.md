@@ -1,3 +1,3 @@
 ### Control Methods
 
-通过 Tree 实例可以使用一些方法控制树的节点状态。
+There are a number of methods that can be used to control the node state of the tree through the Tree instance.

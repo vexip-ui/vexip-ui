@@ -1,3 +1,3 @@
 ### Basis Usage
 
-使用 `data` 属性传入一个列表数据即可生成相应的树。
+Use the `data` prop to pass in a list of data to generate the corresponding tree.

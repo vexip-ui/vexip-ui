@@ -8,9 +8,8 @@
     <ul :class="nh.be('list')">
       <TreeNode
         v-for="(item, index) in treeData"
-        v-show="item.visible"
         :key="index"
-        v-bind="(item as any)"
+        v-bind="item"
         :node="item"
         :label-key="labelKey"
         :indent="props.indent"
@@ -55,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide, nextTick, toRef } from 'vue'
+import { defineComponent, ref, toRef, reactive, computed, watch, watchEffect, provide } from 'vue'
 import TreeNode from './tree-node.vue'
 import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
 import { isNull, isPromise, transformTree, flatTree, removeArrayItem } from '@vexip-ui/utils'
@@ -69,6 +68,7 @@ import type {
   TreeNodeProps,
   RenderFn,
   AsyncLoadFn,
+  FilterFn,
   TreeNodeInstance
 } from './symbol'
 
@@ -117,7 +117,9 @@ export default defineComponent({
     cacheNode: booleanProp,
     rootId: [String, Number],
     keyConfig: Object as PropType<NodeKeyConfig>,
-    noCascaded: booleanProp
+    noCascaded: booleanProp,
+    filter: [String, Function] as PropType<string | FilterFn>,
+    ignoreCase: booleanProp
   },
   emits: [
     'node-change',
@@ -165,12 +167,13 @@ export default defineComponent({
       cacheNode: false,
       rootId: null,
       keyConfig: () => ({}),
-      noCascaded: false
+      noCascaded: false,
+      filter: '',
+      ignoreCase: false
     })
 
     const nh = useNameHelper('tree')
     const nodeMaps = new Map<Key, TreeNodeProps>()
-    const flatData = ref<TreeNodeProps[]>([])
     const treeData = ref<TreeNodeProps[]>([])
     const dragging = ref(false)
     const indicatorShow = ref(false)
@@ -191,6 +194,62 @@ export default defineComponent({
     })
     const boundAsyncLoad = computed(() => {
       return typeof props.onAsyncLoad === 'function'
+    })
+    const flattedData = computed<TreeNodeProps[]>(() => {
+      return flatTree(treeData.value, {
+        keyField: 'id',
+        parentField: 'parent',
+        childField: 'children',
+        rootId: props.rootId
+      })
+    })
+    const labelKey = computed(() => keyConfig.value.label)
+
+    function createDefaultFilter(value: string) {
+      const pattern = props.ignoreCase ? String(value).toLocaleLowerCase() : value
+      const defaultFilter: FilterFn = data => {
+        const label = data[labelKey.value]
+
+        return props.ignoreCase
+          ? String(label).toLocaleLowerCase().includes(pattern)
+          : String(label).includes(pattern)
+      }
+
+      return defaultFilter
+    }
+
+    watchEffect(() => {
+      const nodes = flattedData.value
+
+      if (!props.filter) {
+        for (let i = 0, len = nodes.length; i < len; ++i) {
+          const node = nodes[i]
+
+          node.matched = true
+          node.childMatched = false
+          node.upperMatched = false
+        }
+      } else {
+        const filter = typeof props.filter === 'function' ? props.filter : createDefaultFilter(props.filter)
+
+        for (let i = 0, len = nodes.length; i < len; ++i) {
+          const node = nodes[i]
+          const parent = nodeMaps.get(node.parent)
+
+          node.matched = filter(node.data, node)
+          node.childMatched = false
+          node.upperMatched = !!parent && (parent.matched || parent.upperMatched)
+
+          if (node.matched) {
+            let upper = parent
+
+            while (upper && !upper.childMatched) {
+              upper.childMatched = true
+              upper = nodeMaps.get(upper.parent)
+            }
+          }
+        }
+      }
     })
 
     provide(
@@ -230,7 +289,7 @@ export default defineComponent({
     // created
     parseAndTransformData()
 
-    const checkedNodes = flatData.value.filter(item => item.checked)
+    const checkedNodes = flattedData.value.filter(item => item.checked)
 
     for (let i = 0, len = checkedNodes.length; i < len; ++i) {
       const item = checkedNodes[i]
@@ -260,7 +319,7 @@ export default defineComponent({
 
       nodeMaps.clear()
 
-      const newFlatData: TreeNodeProps[] = []
+      const nodes: TreeNodeProps[] = []
       const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
 
       for (let i = 0, len = data.length; i < len; ++i) {
@@ -273,20 +332,19 @@ export default defineComponent({
         node.data = item
 
         nodeMaps.set(node.id, node)
-        newFlatData.push(node)
+        nodes.push(node)
       }
 
-      treeData.value = transformTree(newFlatData, {
+      treeData.value = transformTree(nodes, {
         keyField: 'id',
         parentField: 'parent',
         childField: 'children',
         rootId: props.rootId
       })
-      flatData.value = newFlatData
     }
 
     function forceUpdateData() {
-      const _flatData = []
+      const nodes = []
       const data = props.noBuildTree ? flatTree(props.data, parsedOptions.value) : props.data
 
       const {
@@ -339,20 +397,20 @@ export default defineComponent({
           nodeMaps.set(id, node)
         }
 
-        _flatData.push(node)
+        nodes.push(node)
       }
 
-      treeData.value = transformTree(_flatData, {
+      treeData.value = transformTree(nodes, {
         keyField: 'id',
         parentField: 'parent',
         childField: 'children',
         rootId: props.rootId
       })
-      flatData.value = _flatData
+      // flatData.value = nodes
     }
 
     function syncNodeStateIntoData() {
-      flatData.value.forEach(node => {
+      flattedData.value.forEach(node => {
         if (!node.data) return
 
         const { data, visible, selected, expanded, disabled, checked, loading, readonly } = node
@@ -413,7 +471,10 @@ export default defineComponent({
         readonly,
         arrow,
         checkbox,
-        partial: false
+        partial: false,
+        matched: false,
+        childMatched: false,
+        upperMatched: false
       })
     }
 
@@ -475,7 +536,7 @@ export default defineComponent({
       if (!props.noCascaded) {
         const nodeList = [originNode].concat(
           // 需要包含被禁用且被勾选的节点
-          flatData.value.filter(item => item.disabled && item.checked)
+          flattedData.value.filter(item => item.disabled && item.checked)
         )
 
         for (let i = 0, len = nodeList.length; i < len; ++i) {
@@ -494,7 +555,7 @@ export default defineComponent({
     }
 
     function handleNodeSelect(node: TreeNodeProps) {
-      const selectedNodes = flatData.value.filter(item => item.selected)
+      const selectedNodes = flattedData.value.filter(item => item.selected)
 
       if (props.multiple) {
         emit(
@@ -665,14 +726,14 @@ export default defineComponent({
         }
       }
 
-      nextTick(() => {
-        flatData.value = flatTree(treeData.value, {
-          keyField: 'id',
-          parentField: 'parent',
-          childField: 'children',
-          rootId: props.rootId
-        })
-      })
+      // nextTick(() => {
+      //   flattedData.value = flatTree(treeData.value, {
+      //     keyField: 'id',
+      //     parentField: 'parent',
+      //     childField: 'children',
+      //     rootId: props.rootId
+      //   })
+      // })
 
       emit('drop', nodeInstance.node.data, nodeInstance.node, dropType)
     }
@@ -685,7 +746,7 @@ export default defineComponent({
     }
 
     function getCheckedNodes(): TreeNodeProps[] {
-      return flatData.value.filter(item => item.checked)
+      return flattedData.value.filter(item => item.checked)
     }
 
     function getCheckedNodeData() {
@@ -693,7 +754,7 @@ export default defineComponent({
     }
 
     function getSelectedNodes(): TreeNodeProps[] {
-      return flatData.value.filter(item => item.selected)
+      return flattedData.value.filter(item => item.selected)
     }
 
     function getSelectedNodeData() {
@@ -701,11 +762,11 @@ export default defineComponent({
     }
 
     function getExpandedNodes(): TreeNodeProps[] {
-      return flatData.value.filter(item => item.expanded)
+      return flattedData.value.filter(item => item.expanded)
     }
 
     function getDisabledNodes(): TreeNodeProps[] {
-      return flatData.value.filter(item => item.disabled)
+      return flattedData.value.filter(item => item.disabled)
     }
 
     function getParentNode(node: TreeNodeProps): TreeNodeProps | null {
@@ -722,7 +783,7 @@ export default defineComponent({
       const currentId = node.id as Key
       const parentId = parent ? parent.id as Key : null
 
-      return flatData.value.filter(item => {
+      return flattedData.value.filter(item => {
         const isChild = parentId === null ? !item.parent : item.parent === parentId
 
         if (isChild && !includeSelf) {
@@ -740,7 +801,7 @@ export default defineComponent({
 
       const currentId = node.id
       const parentId = parent.id
-      const children = flatData.value.filter(item => item.parent === parentId)
+      const children = flattedData.value.filter(item => item.parent === parentId)
 
       if (children && children.length) {
         const index = children.findIndex(item => item.id === currentId)
@@ -760,7 +821,7 @@ export default defineComponent({
 
       const currentId = node.id
       const parentId = parent.id
-      const children = flatData.value.filter(item => item.parent === parentId)
+      const children = flattedData.value.filter(item => item.parent === parentId)
 
       if (children && children.length) {
         const index = children.findIndex(item => item.id === currentId)
@@ -776,7 +837,7 @@ export default defineComponent({
     function getNodeByData<T extends Data>(data: T): TreeNodeProps | null {
       const idKey = keyConfig.value.id
 
-      return flatData.value.find(item => item.data[idKey] === data[idKey]) ?? null
+      return flattedData.value.find(item => item.data[idKey] === data[idKey]) ?? null
     }
 
     function expandNodeByData<T extends Data>(data: T, expanded?: boolean, upstream = false) {
@@ -812,7 +873,7 @@ export default defineComponent({
 
         if (!props.noCascaded) {
           const nodeList = [node].concat(
-            flatData.value.filter(item => item.disabled && item.checked)
+            flattedData.value.filter(item => item.disabled && item.checked)
           )
 
           for (let i = 0, len = nodeList.length; i < len; ++i) {
@@ -839,7 +900,7 @@ export default defineComponent({
       locale: useLocale('tree'),
       treeData,
       indicatorShow,
-      labelKey: computed(() => keyConfig.value.label),
+      labelKey,
       childrenKey: computed(() => keyConfig.value.children),
 
       wrapper,

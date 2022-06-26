@@ -2,27 +2,29 @@
 
 | Name          | Type              | Description                                                                                                                                                        | Default     | Since |
 | ------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --- |
-| data          | `Data[]`             | 树数据源，支持传入待构建的数组结构或者已处理的树结构                                                                                                    | `[]`         | - |
-| arrow         | `'auto' \| boolean` | 设置树节点是否带有箭头指示，设置为 `'auto'` 时会根据节点是否有下级自动显示隐藏                                                                                | `'auto'`     | - |
-| no-build-tree | `boolean`           | 设置是否禁用内置的构建树，当 `data` 的数据源为树形结构时设置                                                                                                  | `false`      | - |
-| empty-tip     | `string`            | 数据为空时显示的提示                                                                                                                                        | `locale.empty` | - |
-| disabled      | `boolean`           | 设置树是否为禁用状态，若设置后，所有的树节点将被禁用                                                                                                        | `false`      | - |
-| readonly      | `boolean`           | 设置树是否为只读状态，若设置后，所有的树节点将为只读                                                                                                        | `false`      | - |
-| checkbox      | `boolean`           | 设置是否开启节点的复选框                                                                                                                                    | `false`      | - |
-| draggable     | `boolean`           | 设置节点是否可拖拽                                                                                                                                          | `false`      | - |
-| renderer      | `(data: { data: Data, node: TreeNodeProps, depth: number }) => any`          | 使用 render 函数进行节点渲染数                                                                                           | `null`       | - |
-| id-key        | `string`            | 设置数据源的 `id` 字段                                                                                                                                        | `'id'`       | - |
-| multiple      | `boolean`           | 设置是否开启多选模式                                                                                                                                        | `false`      | - |
-| indent        | `string \| number`  | 设置每层树节点的缩进距离                                                                                                                                    | `'16px'`    | - |
-| accordion     | `boolean`           | 设置是否开启手风琴模式                                                                                                                                      | `false`      | - |
-| appear        | `boolean`           | 设置树节点过渡效果的 `appear` 值                                                                                                                              | `false`      | - |
-| floor-select  | `boolean`           | 开启后，当选择存在下级的节点时，会触发节点的展开收起，无下级时才会触发选择取消事件                                                                          | `false`      | - |
-| async-load    | `(node: TreeNodeProps) => void \| boolean \| Promise<any>`          | 节点初次加载触发的回调函数，接受 `node` 对象作为参数，如果返回 `false` 则表示加载失败，支持异步函数和 `Promise`                                                | `null`       | - |
-| cache-node    | `boolean`           | 设置是否开启节点数据缓存机制，开启后当每次 `data` 发生变化时，同个对象引用或者 `id` 值相同的节点，除了 `id`、`parent`、`children` 和 `label` 属性外其余属性将不会被刷新 | `false`      | - |
-| root-id       | `string \| number`  | 设置根节点的 `id` 值，设置后，当 parent 值与该值相等的节点，将作为第一级节点展示                                                                              | `null`       | - |
-| key-config | `NodeKeyConfig` | 配置解析节点初始化时的各项键名 | `{}` | `2.0.0` |
+| data | `Data[]` | Tree data source, supports passing in the array structure to be constructed or the processed tree structure | `[]` | - |
+| arrow | `'auto' \| boolean` | Set whether the tree node has arrow indication, when set to `'auto'`, it will be automatically displayed and hidden according to whether the node has subordinates | `'auto'` | - |
+| no-build-tree | `boolean` | Set whether to disable the built-in build tree, set when the data source of `data` is a tree structure | `false` | - |
+| empty-tip | `string` | Tip to show when data is empty | `locale.empty` | - |
+| disabled | `boolean` | Set whether the tree is disabled, if set, all tree nodes will be disabled | `false` | - |
+| readonly | `boolean` | Set whether the tree is read-only, if set, all tree nodes will be read-only | `false` | - |
+| checkbox | `boolean` | Set whether to enable the checkbox of the node | `false` | - |
+| draggable | `boolean` | Set whether the node is draggable | `false` | - |
+| renderer | `(data: { data: Data, node: TreeNodeProps, depth: number }) => any` | The number of nodes to render using the render function | `null` | - |
+| id-key | `string` | Set the `id` field of the data source | `'id'` | - |
+| multiple | `boolean` | Set whether to enable multiple selection mode | `false` | - |
+| indent | `string \| number` | Set the indent distance of each tree node | `'16px'` | - |
+| accordion | `boolean` | Set whether to enable accordion mode | `false` | - |
+| appear | `boolean` | Set the `appear` value of the transition effect of the tree node | `false` | - |
+| floor-select | `boolean` | When enabled, when a node with subordinates is selected, the node will be expanded and collapsed, and the selection cancellation event will be triggered when there are no subordinates | `false` | - |
+| async-load | `(node: TreeNodeProps) => void \| boolean \| Promise<any>` | The callback function triggered by the initial load of the node, accepts the `node` object as a parameter, if it returns `false`, it means that the load fails , supports async functions and `Promise` | `null` | - |
+| cache-node | `boolean` | Set whether to enable the node data cache mechanism. After enabling, every time `data` changes, the same object refers to the node with the same `id` value, except for `id`, `parent` , `children` and `label` properties will not be refreshed | `false` | - |
+| root-id | `string \| number` | Set the `id` value of the root node. After setting, when the parent value is equal to this value, it will be displayed as the first level node | `null` | - |
+| key-config | `NodeKeyConfig` | Configure the key names when the parsing node is initialized | `{}` | `2.0.0` |
+| filter | `string \| ((data: Data, node: TreeNodeProps) => boolean)` | Set to filter nodes. When a string is passed in, it will be filtered according to the `label` value of nodes, or a custom filter will be passed in function | `''` | `2.0.0` |
+| ignore-case | `boolean` | Set whether to ignore case when using built-in filtering | `false` | `2.0.0` |
 
-一些预设的类型：
+Some preset types:
 
 ```ts
 type Data = Record<string, unknown>
@@ -73,62 +75,62 @@ type TreeNodeProps = {
 
 | Name           | Description                                                                                                                                                        | Parameters                             | Since |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | --- |
-| node-change | 当节点的复选框状态发生改变时触发，返回当前节点的数据和节点对象                                                                                              | `(data: Data, node: TreeNodeProps, checked: boolean)`                       | - |
-| node-click | 当节点被点击时触发，返回当前节点数据和节点对象 | `(data: Data, node: TreeNodeProps)` | - |
-| node-select | 当节点被选择时触发，返回当前节点的数据和节点对象，如果开启的多选模式，则返回的参数类型均为数组                                                                                                            | `(data: Data \| Data[], nodes: TreeNodeProps \| TreeNodeProps[])`                       | - |
-| node-cancel | 当节点被取消选择时触发，返回当前节点的数据和节点对象                                                                                                        | `(data: Data, node: TreeNodeProps)`                       | - |
-| node-expand | 当节点被展开时触发，返回当前节点的数据和节点对象                                                                                                            | `(data: Data, node: TreeNodeProps)`                       | - |
-| node-reduce | 当节点被收起时触发，返回当前节点的数据和节点对象                                                                                                            | `(data: Data, node: TreeNodeProps)`                       | - |
-| drag-start  | 当节点将要开始拖拽时触发，返回当前节点的数据和节点对象                                                                                                      | `(data: Data, node: TreeNodeProps)`                       | - |
-| drag-over   | 当节点正在拖拽时触发，返回当前节点的数据和节点对象                                                                                                          | `(data: Data, node: TreeNodeProps)`                       | - |
-| drop        | 当节点被其他的拖拽节点放入时触发，返回当前节点的数据和节点对象                                                                                              | `(data: Data, node: TreeNodeProps， dropType: DropType)`                       | - |
-| drag-end    | 当节点结束拖拽时触发，返回当前节点的数据和节点对象                                                                                                          | `(data: Data, node: TreeNodeProps)`                       | - |
+| node-change | Emitted when the state of the node's checkbox changes, returns the current node's data and node object | `(data: Data, node: TreeNodeProps, checked: boolean)` | - |
+| node-click | Emitted when a node is clicked, returns the current node data and node object | `(data: Data, node: TreeNodeProps)` | - |
+| node-select | Emitted when a node is selected, returns the data and node object of the current node, if the multi-select mode is enabled, the returned parameter types are all arrays | `(data: Data \| Data[], nodes: TreeNodeProps \| TreeNodeProps[])` | - |
+| node-cancel | Emitted when a node is deselected, returns the current node's data and node object | `(data: Data, node: TreeNodeProps)` | - |
+| node-expand | Emitted when a node is expanded, returns the current node's data and node object | `(data: Data, node: TreeNodeProps)` | - |
+| node-reduce | Emitted when a node is collapsed, returns the data and node object of the current node | `(data: Data, node: TreeNodeProps)` | - |
+| drag-start | Emitted when the node is about to start dragging, returns the data and node object of the current node | `(data: Data, node: TreeNodeProps)` | - |
+| drag-over | Emitted when the node is being dragged, returns the current node's data and node object | `(data: Data, node: TreeNodeProps)` | - |
+| drop | Emitted when a node is dropped by another dragged node, returns the current node's data and node object | `(data: Data, node: TreeNodeProps, dropType: DropType)` | - |
+| drag-end | Emitted when the node finishes dragging, returns the data and node object of the current node | `(data: Data, node: TreeNodeProps)` | - |
 
 ### Tree Slots
 
 | Name  | Description                                                                                                                                                                                                     | Parameters | Since |
 | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | --- |
-| label | 节点标签的插槽                                                                                                                                                         | `(data: Data, node: TreeNodeProps, depth: number)` | - |
-| node  | 节点内容的插槽，使用该插槽将完全覆盖节点各元素，包括箭头、复选框等，插槽额外的三个方法 `toggleCheck`、`toggleExpand`、`toggleSelect`，分别用于触发节点的勾选、展开、选择 | `(data: Data, node: TreeNodeProps, depath: number, toggleCheck: (checked?: boolean) => void, toggleExpand: (expanded?: boolean) => Promise<void>, toggleSelect: (able?: boolean) => Promise<void>)` | - |
-| empty | 当数据为空时的提示文字的插槽                                                                                                                                                                             | - | - |
+| label | Slot for node label | `(data: Data, node: TreeNodeProps, depth: number)` | - |
+| node | The slot of the node content, using this slot will completely cover the elements of the node, including arrows, check boxes, etc. The slot has three additional methods `toggleCheck`, `toggleExpand`, `toggleSelect`, which are used for Trigger node check, expand, select | `(data: Data, node: TreeNodeProps, depath: number, toggleCheck: (checked?: boolean) => void, toggleExpand: (expanded?: boolean) => Promise<void> , toggleSelect: (able?: boolean) => Promise<void>)` | - |
+| empty | Slot for prompt text when data is empty | - | - |
 
 ### Tree Methods
 
 | Name                    | Description                                                                                                                                        | Signature              | Since |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | --- |
-| parseAndTransformData | 触发组件内部重新进行数据的解析和转换 | `() => void` | -
-| forceUpdateData              | 强制更新数据，一般在手动更改了数据源后更新树使用                                                                                                | `() => void`                | - |
-| syncNodeStateIntoData   | 讲 node 中的状态属性同步到 data 中，将会覆盖 `visible`、`selected`、`expanded`、`disabled`、`checked`、`loading`、`readonly` 字段，谨慎使用 | `() => void`                 | - |
-| getCheckedNodes         | 获取所有复选框被勾选的节点对象                                                                                                              | `() => TreeNodeProps[]`                 | - |
-| getCheckedNodeData      | 获取所有复选框被勾选的节点数据                                                                                                              | `() => Data[]`                 | - |
-| getSelectedNodes        | 获取所有被选择的节点对象                                                                                                                    | `() => TreeNodeProps[]`                 | - |
-| getSelectedNodeData     | 获取所有被选择的节点数据                                                                                                                    | `() => Data[]`                 | - |
-| getExpandedNodes        | 获取所有展开的节点对象                                                                                                                      | `() => TreeNodeProps[]`                 | - |
-| getDisabledNodes        | 获取所有被禁用的节点对象                                                                                                                    | `() => TreeNodeProps[]`                 | - |
-| getNodeChildren | 获取节点对象的子节点对象 | `(node: TreeNodeProps) => TreeNodeProps[]` | - |
-| getParentNode           | 根据节点对象获取其父节点对象，不存在则返回 `null`                                                                                             | `(node: TreeNodeProps) => TreeNodeProps \| null`              | - |
-| getSiblingNodes         | 根据节点对象获取所有兄弟节点对象，默认不包含自身                                                                                            | `(node: TreeNodeProps, includeSelf: boolean) => TreeNodeProps[]` | - |
-| getPrevSiblingNode      | 根据节点对象获取上一个兄弟节点对象，不存在则返回 `null`                                                                                       | `(node: TreeNodeProps) => TreeNodeProps \| null`              | - |
-| getNextSiblingNode      | 根据节点对象获取下一个兄弟节点对象，不存在则返回 `null`                                                                                       | `(node: TreeNodeProps) => TreeNodeProps \| null`              | - |
-| getNodeByData           | 根据数据获取节点对象                                                                                                                        | `<T extends Data>(data: T) => TreeNodeProps \| null`              | - |
-| expandNodeByData        | 根据数据更改节点的展开状态                                                                                                                  | `<T extends Data>(data: T, expanded?: boolean, upstream?: boolean) => void`    | - |
-| selectNodeByData        | 根据数据更改节点的选择状态                                                                                                                  | `<T extends Data>(data: T, selected?: boolean) => void`    | - |
-| checkNodeByData         | 根据数据更改节点的复选框被选状态                                                                                                            | `<T extends Data>(data: T, checked?: boolean) => void`     | - |
-| toggleNodeLoadingByData | 根据数据更改节点的加载状态                                                                                                                  | `<T extends Data>(data: T, loading?: boolean) => void`     | - |
+| parseAndTransformData | Trigger to re-parse and transform data inside the component | `() => void` | -
+| forceUpdateData | Force update data, generally use to update the tree after manually changing the data source | `() => void` | - |
+| syncNodeStateIntoData | The state attribute in node is synchronized to data, it will cover `visible`, `selected`, `expanded`, `disabled`, `checked`, `loading`, `readonly` fields, use with caution | ` () => void` | - |
+| getCheckedNodes | Get all node objects whose checkboxes are checked | `() => TreeNodeProps[]` | - |
+| getCheckedNodeData | Get all node data whose checkboxes are checked | `() => Data[]` | - |
+| getSelectedNodes | Get all selected node objects | `() => TreeNodeProps[]` | - |
+| getSelectedNodeData | Get all selected node data | `() => Data[]` | - |
+| getExpandedNodes | Get all expanded node objects | `() => TreeNodeProps[]` | - |
+| getDisabledNodes | Get all disabled node objects | `() => TreeNodeProps[]` | - |
+| getNodeChildren | Get the child node object of the node object | `(node: TreeNodeProps) => TreeNodeProps[]` | - |
+| getParentNode | Get the parent node object according to the node object, or return `null` if it does not exist | `(node: TreeNodeProps) => TreeNodeProps \| null` | - |
+| getSiblingNodes | Get all sibling node objects according to the node object, excluding itself by default | `(node: TreeNodeProps, includeSelf: boolean) => TreeNodeProps[]` | - |
+| getPrevSiblingNode | Get the previous sibling node object according to the node object, or return `null` if it does not exist | `(node: TreeNodeProps) => TreeNodeProps \| null` | - |
+| getNextSiblingNode | Get the next sibling node object according to the node object, or return `null` if it does not exist | `(node: TreeNodeProps) => TreeNodeProps \| null` | - |
+| getNodeByData | Get node object according to data | `<T extends Data>(data: T) => TreeNodeProps \| null` | - |
+| expandNodeByData | Change the expanded state of a node based on data | `<T extends Data>(data: T, expanded?: boolean, upstream?: boolean) => void` | - |
+| selectNodeByData | Change node selection state based on data | `<T extends Data>(data: T, selected?: boolean) => void` | - |
+| checkNodeByData | Change the selected state of the node's checkbox according to the data | `<T extends Data>(data: T, checked?: boolean) => void` | - |
+| toggleNodeLoadingByData | Change the loading state of a node based on data | `<T extends Data>(data: T, loading?: boolean) => void` | - |
 
 ### TreeNode Props
 
-> 以下属性在节点初始化时会从 data 的同名属性中获取初始值，若未定义则使用默认值，注意节点的刷新会触发该节点重新初始化。
+> The following props will get the initial value from the property of the same name of data when the node is initialized. If it is not defined, the default value will be used. Note that the refresh of the node will trigger the re-initialization of the node.
 
 | Name     | Type              | Description                                                                                               | Default  | Since |
 | -------- | ----------------- | -------------------------------------------------------------------------------------------------- | ------- | --- |
-| label    | `string`            | 节点显示的标签内容                                                                                 | `''`      | - |
-| selected | `boolean`           | 设置节点的选择状态                                                                                 | `false`   | - |
-| expanded | `boolean`           | 设置节点的展开状态                                                                                 | `false`   | - |
-| disabled | `boolean`           | 设置节点的禁用状态，不设置时会使用 Tree 的同名状态                                                 | `false`   | - |
-| readonly | `boolean`           | 设置节点的只读状态，不设置时会使用 Tree 的同名状态                                                 | `false`   | - |
-| checkbox | `boolean`           | 设置节点是否具有复选框，不设置时会使用 Tree 的状态                                                 | `false`    | - |
-| arrow    | `'auto' \| boolean` | 设置节点是否带有箭头指示，设置为 'auto' 时会根据是否有下级自动显示隐藏，不设置时会使用 Tree 的状态 | `'auto'`  | - |
-| checked  | `boolean`           | 设置节点的复选框被选状态                                                                           | `false`   | - |
-| loading | `boolean` | 设置节点是否处于加载中状态 | `false` | - |
-| loaded | `boolean` | 设置节点是否已加载 | `false` | - |
+| label | `string` | Label content displayed by the node | `''` | - |
+| selected | `boolean` | Set the selected state of the node | `false` | - |
+| expanded | `boolean` | Set the expanded state of the node | `false` | - |
+| disabled | `boolean` | Set the disabled state of the node, if not set, the state of the same name of the Tree will be used | `false` | - |
+| readonly | `boolean` | Set the read-only status of the node, if not set, the same name status of the Tree will be used | `false` | - |
+| checkbox | `boolean` | Set whether the node has a checkbox, if not set, the state of Tree will be used | `false` | - |
+| arrow | `'auto' \| boolean` | Set whether the node has arrow indication, when set to 'auto', it will be automatically displayed and hidden according to whether there are subordinates, if not set, it will use the state of Tree | `'auto'` | - |
+| checked | `boolean` | Set the checked state of the node's checkbox | `false` | - |
+| loading | `boolean` | Set whether the node is in the loading state | `false` | - |
+| loaded | `boolean` | Set whether the node is loaded | `false` | - |

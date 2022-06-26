@@ -10,6 +10,7 @@ $tree: map.merge(
     label-color: inherit,
     label-color-hover: get-css-var('tree-label-color'),
     label-color-selected: get-css-var('tree-label-color-hover'),
+    label-color-secondary: get-css-var('content-color-secondary'),
     label-color-disabled: get-css-var('content-color-disabled'),
     label-color-readonly: get-css-var('tree-label-color'),
     label-bg-color: transparent,
@@ -71,6 +72,11 @@ $tree: map.merge(
     &--selected:hover {
       color: get-css-var('tree-label-color-selected');
       background-color: get-css-var('tree-label-bg-color-selected');
+    }
+
+    &--secondary,
+    &--secondary:hover {
+      color: get-css-var('tree-label-color-secondary');
     }
 
     &--disabled,

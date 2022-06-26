@@ -1,6 +1,6 @@
 <template>
   <li
-    v-if="visible"
+    v-if="visible && (matched || childMatched)"
     ref="wrapper"
     :class="className"
     :draggable="draggable"
@@ -46,7 +46,8 @@
             [nh.bem('label', 'selected')]: selected,
             [nh.bem('label', 'disabled')]: isDisabled,
             [nh.bem('label', 'readonly')]: isReadonly,
-            [nh.bem('label', 'is-floor')]: floorSelect && node.children?.length
+            [nh.bem('label', 'is-floor')]: floorSelect && node.children?.length,
+            [nh.bem('label', 'secondary')]: secondary
           }"
           @click="handleToggleSelect()"
         >
@@ -81,9 +82,8 @@
       <ul v-if="showChildren" :class="nh.be('list')">
         <TreeNode
           v-for="(item, index) in node.children"
-          v-show="item.visible"
           :key="index"
-          v-bind="(item as any)"
+          v-bind="item"
           :node="item"
           :label-key="labelKey"
           :indent="indent"
@@ -217,6 +217,18 @@ export default defineComponent({
     floorSelect: {
       type: Boolean,
       default: false
+    },
+    matched: {
+      type: Boolean,
+      default: true
+    },
+    childMatched: {
+      type: Boolean,
+      default: false
+    },
+    upperMatched: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
@@ -230,22 +242,18 @@ export default defineComponent({
 
     const loaded = ref(props.loaded)
 
-    const isDisabled = computed(() => {
-      return parentState.disabled || props.disabled
-    })
-    const isReadonly = computed(() => {
-      return parentState.readonly || props.readonly
-    })
-    const depth = computed(() => {
-      return parentState.depth + 1
-    })
+    const isDisabled = computed(() => parentState.disabled || props.disabled)
+    const isReadonly = computed(() => parentState.readonly || props.readonly)
+    const depth = computed(() => parentState.depth + 1)
+    const secondary = computed(() => !props.matched && (props.childMatched || props.upperMatched))
     const className = computed(() => {
       return {
         [nh.be('node')]: true,
         [nh.bem('node', 'selected')]: props.selected,
         [nh.bem('node', 'expanded')]: props.expanded,
         [nh.bem('node', 'disabled')]: isDisabled.value,
-        [nh.bem('node', 'readonly')]: isReadonly.value
+        [nh.bem('node', 'readonly')]: isReadonly.value,
+        [nh.bem('node', 'secondary')]: secondary.value
       }
     })
     const contentStyle = computed(() => {
@@ -419,6 +427,7 @@ export default defineComponent({
       isDisabled,
       isReadonly,
       depth,
+      secondary,
       className,
       contentStyle,
       showChildren,

@@ -260,7 +260,9 @@ function formatComponentName(name: string) {
     }
 
     @include query-media('xl') {
+      justify-content: center;
       width: var(--aside-width-large);
+      padding-left: 0;
     }
 
     &,
