@@ -8,6 +8,7 @@
     @click.left="handleClick"
     @dragstart.stop="handleDragStart"
     @dragover="handleDragOver"
+    @dragleave="handleDragLeave"
     @dragend="handleDragEnd"
     @drop="handleDrop"
   >
@@ -262,6 +263,8 @@ export default defineComponent({
     const arrowElement = ref<HTMLElement | null>(null)
 
     const loaded = ref(props.loaded)
+    const dragging = ref(false)
+    const isDragOver = ref(false)
 
     const isDisabled = computed(() => parentState.disabled || props.disabled)
     const isReadonly = computed(() => parentState.readonly || props.readonly)
@@ -274,7 +277,9 @@ export default defineComponent({
         [nh.bem('node', 'expanded')]: props.expanded,
         [nh.bem('node', 'disabled')]: isDisabled.value,
         [nh.bem('node', 'readonly')]: isReadonly.value,
-        [nh.bem('node', 'secondary')]: secondary.value
+        [nh.bem('node', 'secondary')]: secondary.value,
+        [nh.bem('node', 'dragging')]: dragging.value,
+        [nh.bem('node', 'drag-over')]: isDragOver.value
       }
     })
     const contentStyle = computed(() => {
@@ -412,6 +417,7 @@ export default defineComponent({
     function handleDragStart() {
       if (!props.draggable) return
 
+      dragging.value = true
       treeState.handleNodeDragStart(getNodeState())
     }
 
@@ -420,7 +426,15 @@ export default defineComponent({
 
       event.stopPropagation()
       event.preventDefault()
+      isDragOver.value = true
       treeState.handleNodeDragOver(getNodeState(), event)
+    }
+
+    function handleDragLeave(event: DragEvent) {
+      if (!props.draggable) return
+
+      event.preventDefault()
+      isDragOver.value = false
     }
 
     function handleDrop(event: DragEvent) {
@@ -428,6 +442,7 @@ export default defineComponent({
 
       event.stopPropagation()
       event.preventDefault()
+      isDragOver.value = false
       treeState.handleNodeDrop(getNodeState())
     }
 
@@ -435,6 +450,7 @@ export default defineComponent({
       if (!props.draggable || !treeState.dragging) return
 
       event.stopPropagation()
+      dragging.value = false
       treeState.handleNodeDragEnd(getNodeState())
     }
 
@@ -466,6 +482,7 @@ export default defineComponent({
       handleToggleSelect,
       handleDragStart,
       handleDragOver,
+      handleDragLeave,
       handleDrop,
       handleDragEnd,
       getNodeChildren
