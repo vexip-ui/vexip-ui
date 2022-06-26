@@ -2,6 +2,7 @@
   <li
     v-if="visible && (matched || childMatched)"
     ref="wrapper"
+    v-bind="$attrs"
     :class="className"
     :draggable="draggable"
     @click.left="handleClick"
@@ -26,7 +27,7 @@
             [nh.bem('arrow', 'transparent')]: !loading && !hasArrow,
             [nh.bem('arrow', 'expanded')]: expanded
           }"
-          @click="handleToggleExpand()"
+          @click.stop="handleToggleExpand()"
         >
           <Icon v-if="loading" pulse><Spinner></Spinner></Icon>
           <Icon v-else><ChevronRight></ChevronRight></Icon>
@@ -78,45 +79,61 @@
         ></Checkbox>
       </div>
     </slot>
-    <CollapseTransition :appear="appear">
-      <ul v-if="showChildren" :class="nh.be('list')">
-        <TreeNode
-          v-for="(item, index) in node.children"
-          :key="index"
-          v-bind="item"
-          :node="item"
-          :label-key="labelKey"
-          :indent="indent"
-          :draggable="draggable"
-          :appear="appear"
-          :floor-select="floorSelect"
-        >
-          <template
-            #default="{
-              data: childData,
-              node: childNode,
-              depth: childDepth,
-              toggleCheck,
-              toggleExpand,
-              toggleSelect
-            }"
-          >
-            <slot
-              :data="childData"
-              :node="childNode"
-              :depth="childDepth"
-              :toggle-check="toggleCheck"
-              :toggle-expand="toggleExpand"
-              :toggle-select="toggleSelect"
-            ></slot>
-          </template>
-          <template #label="{ data: childData, node: childNode }">
-            <slot name="label" :data="childData" :node="childNode"></slot>
-          </template>
-        </TreeNode>
-      </ul>
-    </CollapseTransition>
   </li>
+  <CollapseTransition :appear="appear">
+    <ul v-if="showChildren" :class="nh.be('list')">
+      <TreeNode
+        v-for="(item, index) in node.children"
+        :key="index"
+        v-bind="nodeProps!(item.data, item)"
+        :node="item"
+        :data="item.data"
+        :arrow="item.arrow"
+        :checkbox="item.checkbox"
+        :appear="appear"
+        :visible="item.visible"
+        :selected="item.selected"
+        :expanded="item.expanded"
+        :disabled="item.disabled"
+        :label-key="labelKey"
+        :checked="item.checked"
+        :loading="item.loading"
+        :loaded="item.loaded"
+        :partial="item.partial"
+        :readonly="item.readonly"
+        :indent="indent"
+        :draggable="draggable"
+        :floor-select="floorSelect"
+        :matched="item.matched"
+        :child-matched="item.childMatched"
+        :upper-matched="item.upperMatched"
+        :node-props="nodeProps"
+      >
+        <template
+          #default="{
+            data: childData,
+            node: childNode,
+            depth: childDepth,
+            toggleCheck,
+            toggleExpand,
+            toggleSelect
+          }"
+        >
+          <slot
+            :data="childData"
+            :node="childNode"
+            :depth="childDepth"
+            :toggle-check="toggleCheck"
+            :toggle-expand="toggleExpand"
+            :toggle-select="toggleSelect"
+          ></slot>
+        </template>
+        <template #label="{ data: childData, node: childNode }">
+          <slot name="label" :data="childData" :node="childNode"></slot>
+        </template>
+      </TreeNode>
+    </ul>
+  </CollapseTransition>
 </template>
 
 <script lang="ts">
@@ -126,12 +143,12 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { isNull, noop } from '@vexip-ui/utils'
 import { ChevronRight, Spinner } from '@vexip-ui/icons'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TreeNodeProps } from './symbol'
+import type { TreeNodeProps, NodePropsFn } from './symbol'
 
 export default defineComponent({
   name: 'TreeNode',
@@ -229,6 +246,10 @@ export default defineComponent({
     upperMatched: {
       type: Boolean,
       default: false
+    },
+    nodeProps: {
+      type: Function as PropType<NodePropsFn>,
+      default: noop
     }
   },
   setup(props) {

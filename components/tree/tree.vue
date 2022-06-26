@@ -9,13 +9,29 @@
       <TreeNode
         v-for="(item, index) in treeData"
         :key="index"
-        v-bind="item"
+        v-bind="getNodeProps(item.data, item)"
         :node="item"
+        :data="item.data"
+        :arrow="item.arrow"
+        :checkbox="item.checkbox"
+        :appear="props.appear"
+        :visible="item.visible"
+        :selected="item.selected"
+        :expanded="item.expanded"
+        :disabled="item.disabled"
         :label-key="labelKey"
+        :checked="item.checked"
+        :loading="item.loading"
+        :loaded="item.loaded"
+        :partial="item.partial"
+        :readonly="item.readonly"
         :indent="props.indent"
         :draggable="props.draggable"
-        :appear="props.appear"
         :floor-select="props.floorSelect"
+        :matched="item.matched"
+        :child-matched="item.childMatched"
+        :upper-matched="item.upperMatched"
+        :node-props="getNodeProps"
       >
         <template #default="{ data: nodeDta, node, depth, children, toggleCheck, toggleExpand, toggleSelect }">
           <slot
@@ -69,6 +85,7 @@ import type {
   RenderFn,
   AsyncLoadFn,
   FilterFn,
+  NodePropsFn,
   TreeNodeInstance
 } from './symbol'
 
@@ -119,7 +136,8 @@ export default defineComponent({
     keyConfig: Object as PropType<NodeKeyConfig>,
     noCascaded: booleanProp,
     filter: [String, Function] as PropType<string | FilterFn>,
-    ignoreCase: booleanProp
+    ignoreCase: booleanProp,
+    nodeProps: [Object, Function] as PropType<Data | NodePropsFn>
   },
   emits: [
     'node-change',
@@ -169,7 +187,8 @@ export default defineComponent({
       keyConfig: () => ({}),
       noCascaded: false,
       filter: '',
-      ignoreCase: false
+      ignoreCase: false,
+      nodeProps: null
     })
 
     const nh = useNameHelper('tree')
@@ -902,6 +921,9 @@ export default defineComponent({
       indicatorShow,
       labelKey,
       childrenKey: computed(() => keyConfig.value.children),
+      getNodeProps: computed(() => {
+        return typeof props.nodeProps === 'function' ? props.nodeProps : () => props.nodeProps
+      }),
 
       wrapper,
       indicator,

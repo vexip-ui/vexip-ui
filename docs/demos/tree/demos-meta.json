@@ -5,6 +5,7 @@
   "no-cascaded",
   "filter",
   "drag",
+  "props",
   "slot",
   "control"
 ]

@@ -54,6 +54,7 @@ export type TreeNodeProps = {
 export type RenderFn = (data: { data: Data, node: TreeNodeProps }) => any
 export type AsyncLoadFn = (node: Readonly<TreeNodeProps>) => void | boolean | Promise<any>
 export type FilterFn = (data: Data, node: TreeNodeProps) => boolean
+export type NodePropsFn = (data: Data, node: TreeNodeProps) => Data
 
 export interface TreeNodeInstance {
   el: HTMLElement | null,

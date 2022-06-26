@@ -26,11 +26,12 @@
 | key-config | `NodeKeyConfig` | 配置解析节点初始化时的各项键名 | `{}` | `2.0.0` |
 | filter | `string \| ((data: Data, node: TreeNodeProps) => boolean)` | 过滤节点，传入一个字符串时会根据节点的 `label` 值过滤，或者传入一个自定义的过滤函数 | `''` | `2.0.0` |
 | ignore-case | `boolean` | 设置在使用内置的过滤时是否忽略大小写 | `false` | `2.0.0` |
+| node-props | `Data \| ((data: Data, node: TreeNodeProps) => Data)` | 设置所有子节点根元素的 html 属性 | `null` | `2.0.0` |
 
 一些预设的类型：
 
 ```ts
-type Data = Record<string, unknown>
+type Data = Record<string, any>
 
 interface NodeKeyConfig {
   id?: string,

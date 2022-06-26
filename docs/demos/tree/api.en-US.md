@@ -23,11 +23,12 @@
 | key-config | `NodeKeyConfig` | Configure the key names when the parsing node is initialized | `{}` | `2.0.0` |
 | filter | `string \| ((data: Data, node: TreeNodeProps) => boolean)` | Set to filter nodes. When a string is passed in, it will be filtered according to the `label` value of nodes, or a custom filter will be passed in function | `''` | `2.0.0` |
 | ignore-case | `boolean` | Set whether to ignore case when using built-in filtering | `false` | `2.0.0` |
+| node-props | `Data \| ((data: Data, node: TreeNodeProps) => Data)` | Set the html attributes of the root element of all child nodes | `null` | `2.0.0` |
 
 Some preset types:
 
 ```ts
-type Data = Record<string, unknown>
+type Data = Record<string, any>
 
 interface NodeKeyConfig {
   id?: string,
