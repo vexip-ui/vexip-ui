@@ -1,5 +1,5 @@
 import { ref, isRef, computed } from 'vue'
-import { throttle } from '@vexip-ui/utils'
+import { isNull, throttle } from '@vexip-ui/utils'
 import { useListener } from './listener'
 
 import type { Ref } from 'vue'
@@ -12,6 +12,8 @@ export interface MovingState {
   yEnd: number,
   clientX: number,
   clientY: number,
+  deltaX: number,
+  deltaY: number,
   lazy: boolean,
   [custom: string]: unknown
 }
@@ -21,6 +23,7 @@ export interface UseMovingOptions {
   x?: MaybeRef<number>,
   y?: MaybeRef<number>,
   lazy?: MaybeRef<boolean>,
+  capture?: boolean,
   onStart?: (state: MovingState, event: PointerEvent) => any,
   onMove?: (state: MovingState, event: PointerEvent) => void,
   onEnd?: (state: MovingState, event: PointerEvent) => void
@@ -31,6 +34,7 @@ export function useMoving(options: UseMovingOptions) {
   const x = isRef(options.x) ? options.x : ref(0)
   const y = isRef(options.y) ? options.y : ref(0)
   const lazy = isRef(options.lazy) ? options.lazy : ref(false)
+  const capture = isNull(options.capture) ? true : !!options.capture
 
   const moving = ref(false)
   const internalState: MovingState = {
@@ -40,6 +44,8 @@ export function useMoving(options: UseMovingOptions) {
     yEnd: 0,
     clientX: 0,
     clientY: 0,
+    deltaX: 0,
+    deltaY: 0,
     lazy: false
   }
 
@@ -60,8 +66,8 @@ export function useMoving(options: UseMovingOptions) {
       return
     }
 
-    document.addEventListener('pointermove', throttleMove, true)
-    document.addEventListener('pointerup', end, true)
+    document.addEventListener('pointermove', throttleMove, { capture })
+    document.addEventListener('pointerup', end, { capture })
 
     moving.value = true
   }
@@ -72,9 +78,13 @@ export function useMoving(options: UseMovingOptions) {
 
     const { clientX, clientY } = event
     const { xStart, yStart, clientX: clientXStart, clientY: clientYStart, lazy } = internalState
+    const deltaX = clientX - clientXStart
+    const deltaY = clientY - clientYStart
 
-    internalState.xEnd = xStart + clientX - clientXStart
-    internalState.yEnd = yStart + clientY - clientYStart
+    internalState.deltaX = deltaX
+    internalState.deltaY = deltaY
+    internalState.xEnd = xStart + deltaX
+    internalState.yEnd = yStart + deltaY
 
     if (!lazy) {
       x.value = internalState.xEnd
@@ -85,8 +95,8 @@ export function useMoving(options: UseMovingOptions) {
   }
 
   function end(event: PointerEvent) {
-    document.removeEventListener('pointermove', throttleMove, true)
-    document.removeEventListener('pointerup', end, true)
+    document.removeEventListener('pointermove', throttleMove, { capture })
+    document.removeEventListener('pointerup', end, { capture })
 
     if (internalState.lazy) {
       x.value = internalState.xEnd
@@ -98,7 +108,7 @@ export function useMoving(options: UseMovingOptions) {
     options.onEnd?.(internalState, event)
   }
 
-  useListener(target, 'pointerdown', start, true)
+  useListener(target, 'pointerdown', start, { capture })
 
   return {
     target,
