@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/qmhc/vexip-ui/compare/mixins@1.2.0...mixins@1.3.0) (2022-06-27)
+
+
+### Features
+
+* **mixin:** add useMoving mixin ([2e48731](https://github.com/qmhc/vexip-ui/commit/2e4873162aea74d54972e2cbc6de751db588ec6c))
+* **mixins:** add useFullScreen mixin ([0c8ac3a](https://github.com/qmhc/vexip-ui/commit/0c8ac3a23335828a3a1d9b8db0562e58115853de))
+* **mixins:** add useListener mixin ([8a483b3](https://github.com/qmhc/vexip-ui/commit/8a483b3d3195f216c8501f5f5297555c1b769494))
+* **mixins:** add usePointer mixin ([c6c3112](https://github.com/qmhc/vexip-ui/commit/c6c3112f65a6e245296ff3ba6eadd98274dfa80d))
+
+
+
 # [1.2.0](https://github.com/qmhc/vexip-ui/compare/mixins@1.1.0...mixins@1.2.0) (2022-06-14)
 
 
