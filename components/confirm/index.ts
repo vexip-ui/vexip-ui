@@ -69,15 +69,14 @@ export class ConfirmManager {
     }
 
     if (!this._instance) {
-      const vnode = createVNode(Component)
+      const vnode = createVNode(Component, null, null)
 
       this._container = document.createElement('div')
       vnode.appContext = this._mountedApp._context
 
-      render(vnode, this._container)
-      document.body.appendChild(this._container.firstElementChild!)
+      render(vnode, this._container, false)
 
-      this._instance = vnode.component?.proxy as ConfirmInstance
+      this._instance = vnode.component!.proxy as ConfirmInstance
     }
 
     return this._instance

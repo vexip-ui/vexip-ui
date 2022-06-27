@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
@@ -132,7 +132,15 @@ export default defineComponent({
     const onConfirm = ref<(() => void) | null>(null)
     const onCancel = ref<(() => void) | null>(null)
 
-    function openConfirm(options: ConfirmOptions) {
+    const mounted = new Promise<void>(resolve => {
+      onMounted(() => {
+        nextTick(resolve)
+      })
+    })
+
+    async function openConfirm(options: ConfirmOptions) {
+      await mounted
+
       return new Promise<boolean>(resolve => {
         content.value = options.content ?? ''
         styleR.value = options.style ?? props.style
