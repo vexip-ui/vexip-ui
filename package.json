@@ -186,5 +186,5 @@
     "theme/**/*.css"
   ],
   "types": "es/components/index.d.ts",
-  "version": "2.0.0-beta.11"
+  "version": "2.0.0-beta.12"
 }

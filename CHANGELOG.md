@@ -1,3 +1,51 @@
+# [2.0.0-beta.12](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2022-06-27)
+
+
+### Bug Fixes
+
+* **avatar:** ensure no shrink ([d336fdc](https://github.com/qmhc/vexip-ui/commit/d336fdcde00b389fcde5977fe2d7b8cf23047b27))
+* **cascader:** init checkbox in no-cascader with single select mode ([1b9ba45](https://github.com/qmhc/vexip-ui/commit/1b9ba45c707651872a4f46dadd3f12897b301115)), closes [#52](https://github.com/qmhc/vexip-ui/issues/52)
+* **cascader:** panes display using flex ([efc1cee](https://github.com/qmhc/vexip-ui/commit/efc1cee40a3d7fa2df95185760fd60df49d67f21))
+* **collapse:** pane expanded class always exists ([4271190](https://github.com/qmhc/vexip-ui/commit/427119015a427b009037d66e271c075e80ee2419))
+* **color-picker:** pane transfer not effective ([3e59f6b](https://github.com/qmhc/vexip-ui/commit/3e59f6bec100a91933c470682454800b67be765c))
+* **confirm:** will render two components when open ([289d79f](https://github.com/qmhc/vexip-ui/commit/289d79ff1eb547734e4e6b2dc74a9c51d2df46c8))
+* **date-picker:** item range style incorrectly ([c6ed7b3](https://github.com/qmhc/vexip-ui/commit/c6ed7b3be735aae12c7135a3580472fbe734b2e3))
+* **divider:** text position not effective ([21da414](https://github.com/qmhc/vexip-ui/commit/21da414f6c7ecc46b4409425c1bce57c675132b4))
+* effect Scroll and Scrollbar with touch actions ([6e80fd6](https://github.com/qmhc/vexip-ui/commit/6e80fd6f95a2630ab3a81150f3e1833f03f1801e))
+* **form:** add not nullable locale config ([6fb27c6](https://github.com/qmhc/vexip-ui/commit/6fb27c63089ca1076e40cb3335dbab3efb7bbb0f))
+* **masker:** disable transfer when using inner mode ([351cc4d](https://github.com/qmhc/vexip-ui/commit/351cc4d244d8b6b11a4f492a40e053c14f533a12))
+* **mixins:** add delta states and supoort capture config ([b1fd988](https://github.com/qmhc/vexip-ui/commit/b1fd988548689f047fe6a48954830ff9639b1c6e))
+* **mixins:** useFullScreen should return the target ([ecdf647](https://github.com/qmhc/vexip-ui/commit/ecdf647174d391c937525bb5cd0bd33ceba66a1a))
+* **mixins:** useMouse ensure cancelable before disable events ([4aa5686](https://github.com/qmhc/vexip-ui/commit/4aa5686a682ea8f5857303dc1e23db3bedac4899))
+* **mixins:** useMoving default prevent mouse and touch events ([3cb1674](https://github.com/qmhc/vexip-ui/commit/3cb167467d95d16c1f5f8cc1ae2ef35f34cdf8af))
+* **modal:** effect drag and resize to mobile ([373082a](https://github.com/qmhc/vexip-ui/commit/373082aab8103a5c7ac66d474c6b943646445c1f))
+* **modal:** emitted drag events when not draggable ([fa6275d](https://github.com/qmhc/vexip-ui/commit/fa6275d62c919717786e3a2232531da1e5468f8f))
+* **pagination:** total and page size plugins style incorrectly ([df6d556](https://github.com/qmhc/vexip-ui/commit/df6d55683463b0539de8d92228a470a4eed968bf))
+* **scroll:** pointer prop default value base on touch supported ([64770b7](https://github.com/qmhc/vexip-ui/commit/64770b78f1f8d8f685672b400f6c8296a9d1b861))
+* **slider:** effect touch actions ([805c0f2](https://github.com/qmhc/vexip-ui/commit/805c0f2a7f03a3ffa1d940029070f49d6bcd4503))
+* **split:** adjust using useMoving mixin to implement ([cfc94d8](https://github.com/qmhc/vexip-ui/commit/cfc94d870af33bdb141b6b65a730852ff587cb1c))
+* **time-ago:** compatibility for ios when parse string date ([098228a](https://github.com/qmhc/vexip-ui/commit/098228a884272833fcca4630fb013897bb3101fc))
+* **time-picker:** effect touch actions ([3060e18](https://github.com/qmhc/vexip-ui/commit/3060e18d4885fca8015707a144910c07d769a284))
+* **upload:** default 2 precision for upload progress ([ccf4f5c](https://github.com/qmhc/vexip-ui/commit/ccf4f5c58adc84b245a5571f18b1be5137de54b6))
+* **wheel:** pointer prop default value base on touch supported ([36ecbbb](https://github.com/qmhc/vexip-ui/commit/36ecbbb7b43a84d2fbec85cc38f8d58973be4455))
+
+
+### Features
+
+* add auto-remove prop for Masker, Drawer and Modal ([b83f150](https://github.com/qmhc/vexip-ui/commit/b83f1505b1c2e74658db07f6797b522710132940))
+* **mixin:** add useMoving mixin ([2e48731](https://github.com/qmhc/vexip-ui/commit/2e4873162aea74d54972e2cbc6de751db588ec6c))
+* **mixins:** add useFullScreen mixin ([0c8ac3a](https://github.com/qmhc/vexip-ui/commit/0c8ac3a23335828a3a1d9b8db0562e58115853de))
+* **mixins:** add useListener mixin ([8a483b3](https://github.com/qmhc/vexip-ui/commit/8a483b3d3195f216c8501f5f5297555c1b769494))
+* **mixins:** add usePointer mixin ([c6c3112](https://github.com/qmhc/vexip-ui/commit/c6c3112f65a6e245296ff3ba6eadd98274dfa80d))
+* **progress:** add precision prop ([f51dff2](https://github.com/qmhc/vexip-ui/commit/f51dff22efaac99d4af8e6a4960843c4c7a944c0))
+* **tree:** add dragging and drop over classes ([a2aca8e](https://github.com/qmhc/vexip-ui/commit/a2aca8ee7e159629113823399675c61d38ec848c)), closes [#55](https://github.com/qmhc/vexip-ui/issues/55)
+* **tree:** add filter and ignore-case props ([df04a2e](https://github.com/qmhc/vexip-ui/commit/df04a2e5ee2b5469802eba6efd7154dbc8968ffb)), closes [#54](https://github.com/qmhc/vexip-ui/issues/54)
+* **tree:** add node-props prop ([9023743](https://github.com/qmhc/vexip-ui/commit/902374376aa49958f1762e585d3961341eeabbe2))
+* **tree:** support using method expand node and its all upstream nodes ([e9e9ede](https://github.com/qmhc/vexip-ui/commit/e9e9ededad3155fcebffe378d8419d5863c92020)), closes [#53](https://github.com/qmhc/vexip-ui/issues/53)
+* **Viewer:** add Viewer component ([#56](https://github.com/qmhc/vexip-ui/issues/56)) ([f1c16af](https://github.com/qmhc/vexip-ui/commit/f1c16af7f2de4f0315d3c5111f2e53bfb276ceb0))
+
+
+
 # [2.0.0-beta.11](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2022-06-21)
 
 
