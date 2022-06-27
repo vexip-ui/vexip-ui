@@ -33,65 +33,67 @@
         </div>
       </slot>
     </div>
-    <transition :name="props.transitionName">
-      <div v-show="currentVisible" ref="popper" :class="[nh.be('popper'), nh.bs('vars')]">
-        <div :class="nh.be('pane')">
-          <div :class="nh.be('section')">
-            <ColorPalette
-              :hue="currentValue.h"
-              :saturation="currentValue.s"
-              :value="currentValue.v"
-              @edit-start="toggleEditing(true)"
-              @edit-end="toggleEditing(false)"
-              @change="handlePaletteChange"
-            ></ColorPalette>
-            <ColorHue
-              :hue="currentValue.h"
-              @edit-start="toggleEditing(true)"
-              @edit-end="toggleEditing(false)"
-              @change="handleHueChange"
-            ></ColorHue>
-            <ColorAlpha
-              v-if="props.alpha"
-              :rgb="rgb"
-              :alpha="currentAlpha"
-              @edit-start="toggleEditing(true)"
-              @edit-end="toggleEditing(false)"
-              @change="handleAlphaChange"
-            ></ColorAlpha>
-            <div v-if="props.shortcut" :class="nh.be('shortcuts')">
-              <div
-                v-for="(item, index) in props.shortcutList"
-                :key="index"
-                :class="nh.be('shortcut-item')"
-                :style="{ backgroundColor: item }"
-                @click="handleShortcutClick(item)"
-              ></div>
+    <Portal :to="transferTo">
+      <transition :name="props.transitionName">
+        <div v-show="currentVisible" ref="popper" :class="[nh.be('popper'), nh.bs('vars')]">
+          <div :class="nh.be('pane')">
+            <div :class="nh.be('section')">
+              <ColorPalette
+                :hue="currentValue.h"
+                :saturation="currentValue.s"
+                :value="currentValue.v"
+                @edit-start="toggleEditing(true)"
+                @edit-end="toggleEditing(false)"
+                @change="handlePaletteChange"
+              ></ColorPalette>
+              <ColorHue
+                :hue="currentValue.h"
+                @edit-start="toggleEditing(true)"
+                @edit-end="toggleEditing(false)"
+                @change="handleHueChange"
+              ></ColorHue>
+              <ColorAlpha
+                v-if="props.alpha"
+                :rgb="rgb"
+                :alpha="currentAlpha"
+                @edit-start="toggleEditing(true)"
+                @edit-end="toggleEditing(false)"
+                @change="handleAlphaChange"
+              ></ColorAlpha>
+              <div v-if="props.shortcut" :class="nh.be('shortcuts')">
+                <div
+                  v-for="(item, index) in props.shortcutList"
+                  :key="index"
+                  :class="nh.be('shortcut-item')"
+                  :style="{ backgroundColor: item }"
+                  @click="handleShortcutClick(item)"
+                ></div>
+              </div>
+            </div>
+            <div :class="nh.be('action')">
+              <Input
+                v-if="!props.noInput"
+                size="small"
+                :value="hex.toUpperCase()"
+                :respond="false"
+                @change="handleInputColor"
+              ></Input>
+              <Button
+                v-if="props.clearable"
+                text
+                size="small"
+                @click="handleClear"
+              >
+                {{ props.cancelText || locale.cancel }}
+              </Button>
+              <Button type="primary" size="small" @click="handleOk">
+                {{ props.confirmText || locale.confirm }}
+              </Button>
             </div>
           </div>
-          <div :class="nh.be('action')">
-            <Input
-              v-if="!props.noInput"
-              size="small"
-              :value="hex.toUpperCase()"
-              :respond="false"
-              @change="handleInputColor"
-            ></Input>
-            <Button
-              v-if="props.clearable"
-              text
-              size="small"
-              @click="handleClear"
-            >
-              {{ props.cancelText || locale.cancel }}
-            </Button>
-            <Button type="primary" size="small" @click="handleOk">
-              {{ props.confirmText || locale.confirm }}
-            </Button>
-          </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </Portal>
   </div>
 </template>
 
@@ -100,6 +102,7 @@ import { defineComponent, ref, toRef, computed, watch, inject, nextTick } from '
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
+import { Portal } from '@/components/portal'
 import ColorAlpha from './color-alpha.vue'
 import ColorHue from './color-hue.vue'
 import ColorPalette from './color-palette.vue'
@@ -172,6 +175,7 @@ export default defineComponent({
     ColorPalette,
     Icon,
     Input,
+    Portal,
     Xmark,
     ChevronDown
   },
