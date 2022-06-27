@@ -199,7 +199,11 @@ export default defineComponent({
     const footer = ref<HTMLElement | null>(null)
 
     const { target: header, moving: dragging } = useMoving({
-      onStart: state => {
+      onStart: (state, event) => {
+        if (!props.draggable || event.button > 0) {
+          return false
+        }
+
         state.xStart = currentLeft.value
         state.yStart = currentTop.value
 
@@ -208,11 +212,7 @@ export default defineComponent({
           left: currentLeft.value
         })
       },
-      onMove: (state, event) => {
-        if (!props.draggable || event.button > 0) {
-          return false
-        }
-
+      onMove: state => {
         currentLeft.value = state.xEnd
         currentTop.value = state.yEnd
 
