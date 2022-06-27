@@ -106,7 +106,7 @@ export default defineComponent({
         {
           [nh.bem('pane', 'card')]: useCard.value,
           [nh.bem('pane', 'ghost')]: !useCard.value && useGhost.value,
-          [nh.bem('pane', 'expanded')]: currentExpanded,
+          [nh.bem('pane', 'expanded')]: currentExpanded.value,
           [nh.bem('pane', 'disabled')]: props.disabled
         }
       ]
