@@ -13,24 +13,24 @@
       <slot name="right"></slot>
     </div>
     <div :class="nh.be('trigger')" :style="triggerStyle">
-      <div :class="nh.be('handler')" @mousedown="handleTriggerDown">
+      <div ref="handler" :class="nh.be('handler')">
         <template v-if="props.canFull">
           <div
             :class="[nh.be('button'), nh.bem('button', `${props.vertical ? 'top' : 'left'}-full`)]"
-            @mousedown.stop
+            @pointerdown.stop
             @click.left="handleFull(-1)"
           >
-            <Icon :icon="props.vertical ? ChevronDown : ChevronRight" :scale="0.6"></Icon>
+            <Icon :icon="fullIcons[0]" :scale="0.6"></Icon>
           </div>
           <div
             :class="[
               nh.be('button'),
               nh.bem('button', `${props.vertical ? 'bottom' : 'right'}-full`)
             ]"
-            @mousedown.stop
+            @pointerdown.stop
             @click.left="handleFull(1)"
           >
-            <Icon :icon="props.vertical ? ChevronUp : ChevronLeft" :scale="0.6"></Icon>
+            <Icon :icon="fullIcons[1]" :scale="0.6"></Icon>
           </div>
         </template>
         <template v-else>
@@ -48,7 +48,7 @@
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
-import { throttle } from '@vexip-ui/utils'
+import { useMoving } from '@vexip-ui/mixins'
 import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
 
 export default defineComponent({
@@ -91,12 +91,79 @@ export default defineComponent({
 
     const nh = useNameHelper('split')
     const currentValue = ref(props.value)
-    const moving = ref(false)
     const currentFull = ref<0 | 1 | -1>(0)
     const transition = ref(false)
 
     const wrapper = ref<HTMLElement | null>(null)
     const guide = ref<HTMLElement | null>(null)
+
+    const { target: handler, moving } = useMoving({
+      lazy: true,
+      capture: false,
+      onStart: (state, event) => {
+        debugger
+        if (currentFull.value || !wrapper.value || event.button > 0) {
+          return false
+        }
+
+        const { min, max, vertical, lazy } = props
+        const outer = wrapper.value[offset.value]
+        const computedMin = min <= 1 ? min : min / outer
+        const computedMax = max <= 1 ? max : max / outer
+
+        state.outer = outer
+        state.min = computedMin
+        state.max = computedMax
+        state.vertical = vertical
+        state.splitLazy = lazy
+        state.start = currentValue.value * outer
+        state.target = currentValue.value
+
+        if (lazy && guide.value) {
+          guide.value.style[position.value[0]] = `${currentValue.value * 100}`
+          guide.value.style.display = 'block'
+        }
+
+        emit('move-start', currentValue.value)
+      },
+      onMove: state => {
+        const outer = state.outer as number
+        const min = state.min as number
+        const max = state.max as number
+        const delta = state.vertical ? state.deltaY : state.deltaX
+        const start = state.start as number
+        const value = Math.min(Math.max(min, (start + delta) / outer), max)
+
+        if (state.splitLazy) {
+          if (guide.value) {
+            guide.value.style[position.value[0]] = `${value * 100}%`
+          }
+
+          state.target = value
+        } else {
+          currentValue.value = value
+        }
+
+        emit('move', value)
+      },
+      onEnd: state => {
+        if (guide.value) {
+          guide.value.style.display = ''
+        }
+
+        const target = state.target as number
+
+        if (state.splitLazy) {
+          if (Math.abs(target - currentValue.value) > 0.01) {
+            setTransition()
+          }
+
+          currentValue.value = target
+        }
+
+        emit('move-end', currentValue.value)
+      }
+    })
 
     const className = computed(() => {
       let fullType = ''
@@ -154,6 +221,9 @@ export default defineComponent({
               : `calc(${currentValue.value * 100}% - var(--vxp-split-handler-size) * 0.5)`
       }
     })
+    const fullIcons = computed(() => {
+      return props.vertical ? [ChevronDown, ChevronUp] : [ChevronRight, ChevronLeft]
+    })
 
     watch(
       () => props.value,
@@ -190,105 +260,6 @@ export default defineComponent({
       }
     })
 
-    let moveState: {
-      outer: number,
-      origin: number,
-      direction: 'pageY' | 'pageX',
-      start: number,
-      min: number,
-      max: number,
-      lazy: boolean,
-      target: number
-    } | null = null
-
-    const computeTriggerMove = throttle(event => {
-      if (!moveState) return
-
-      const { outer, origin, direction, start, min, max, lazy } = moveState
-      const offset = event[direction] - origin
-      const value = Math.min(Math.max(min, (start + offset) / outer), max)
-
-      if (lazy) {
-        if (guide.value) {
-          guide.value.style[position.value[0]] = `${value * 100}%`
-        }
-
-        moveState.target = value
-      } else {
-        currentValue.value = value
-      }
-
-      emit('move', value)
-    })
-
-    function handleTriggerDown(event: MouseEvent) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      if (currentFull.value || !wrapper.value) {
-        return false
-      }
-
-      moving.value = true
-
-      const { min, max, vertical, lazy } = props
-
-      const outer = wrapper.value[offset.value]
-      const computedMin = min <= 1 ? min : min / outer
-      const computedMax = max <= 1 ? max : max / outer
-      const direction = vertical ? 'pageY' : 'pageX'
-      // const style = vertical ? 'top' : 'left'
-
-      moveState = {
-        outer,
-        direction,
-        lazy,
-        min: computedMin,
-        max: computedMax,
-        origin: event[direction],
-        start: currentValue.value * outer,
-        target: currentValue.value
-      }
-
-      if (props.lazy && guide.value) {
-        guide.value.style[position.value[0]] = `${currentValue.value * 100}`
-        guide.value.style.display = 'block'
-      }
-
-      document.addEventListener('mousemove', handleTriggerMove)
-      document.addEventListener('mouseup', handleTriggerUp)
-
-      emit('move-start', currentValue.value)
-    }
-
-    function handleTriggerMove(event: MouseEvent) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      computeTriggerMove(event)
-    }
-
-    function handleTriggerUp() {
-      document.removeEventListener('mousemove', handleTriggerMove)
-      document.removeEventListener('mouseup', handleTriggerUp)
-
-      moving.value = false
-
-      if (guide.value) {
-        guide.value.style.display = ''
-      }
-
-      if (props.lazy && moveState) {
-        if (Math.abs(moveState.target - currentValue.value) > 0.01) {
-          setTransition()
-        }
-
-        currentValue.value = moveState.target
-      }
-
-      emit('move-end', currentValue.value)
-    }
-
     function setTransition() {
       transition.value = !props.noTransition && !moving.value
     }
@@ -310,11 +281,6 @@ export default defineComponent({
     }
 
     return {
-      ChevronUp,
-      ChevronRight,
-      ChevronDown,
-      ChevronLeft,
-
       props,
       nh,
 
@@ -323,11 +289,12 @@ export default defineComponent({
       leftPaneStyle,
       rightPaneStyle,
       triggerStyle,
+      fullIcons,
 
       wrapper,
       guide,
+      handler,
 
-      handleTriggerDown,
       removeTransition,
       handleFull
     }
