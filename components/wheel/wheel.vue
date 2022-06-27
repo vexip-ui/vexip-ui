@@ -56,7 +56,7 @@ import { Scroll } from '@/components/scroll'
 import { VALIDATE_FIELD } from '@/components/form-item'
 import { useDisplay } from '@vexip-ui/mixins'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
-import { noop, debounce, debounceMinor } from '@vexip-ui/utils'
+import { USE_TOUCH, noop, debounce, debounceMinor } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
 import { WHEEL_STATE } from './symbol'
 
@@ -91,7 +91,7 @@ export default defineComponent({
         validator: (value: number) => [0, 1, 2, 3].includes(value)
       },
       arrow: false,
-      pointer: false,
+      pointer: USE_TOUCH,
       disableValidate: false
     })
 
@@ -302,7 +302,7 @@ export default defineComponent({
     function beforeScroll({ signX, signY }: { signX: number, signY: number }) {
       const sign = props.horizontal ? signX : signY
 
-      return !((sign < 0 && prevDisabled.value) || (sign > 0 && nextDisabled.value))
+      return !((sign > 0 && prevDisabled.value) || (sign < 0 && nextDisabled.value))
     }
 
     function handleScrollEnd({ clientX, clientY }: MouseEvent) {
