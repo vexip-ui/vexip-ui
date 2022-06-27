@@ -84,7 +84,7 @@ export default defineComponent({
             ? rawExpanded
             : []
 
-      currentExpanded.value = Array.isArray(expanded) ? Array.from(expanded) : [expanded]
+      currentExpanded.value = Array.isArray(expanded) ? expanded : [expanded]
     })
 
     watch(currentExpanded, value => {
