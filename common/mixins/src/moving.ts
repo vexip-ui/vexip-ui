@@ -24,9 +24,16 @@ export interface UseMovingOptions {
   y?: MaybeRef<number>,
   lazy?: MaybeRef<boolean>,
   capture?: boolean,
+  stopMouse?: boolean,
+  stopTouch?: boolean,
   onStart?: (state: MovingState, event: PointerEvent) => any,
   onMove?: (state: MovingState, event: PointerEvent) => void,
   onEnd?: (state: MovingState, event: PointerEvent) => void
+}
+
+function disableEvent<E extends Event>(event: E) {
+  event.stopPropagation()
+  event.preventDefault()
 }
 
 export function useMoving(options: UseMovingOptions) {
@@ -35,6 +42,8 @@ export function useMoving(options: UseMovingOptions) {
   const y = isRef(options.y) ? options.y : ref(0)
   const lazy = isRef(options.lazy) ? options.lazy : ref(false)
   const capture = isNull(options.capture) ? true : !!options.capture
+  const stopMouse = isNull(options.stopMouse) ? true : !!options.stopMouse
+  const stopTouch = isNull(options.stopTouch) ? true : !!options.stopTouch
 
   const moving = ref(false)
   const internalState: MovingState = {
@@ -49,33 +58,7 @@ export function useMoving(options: UseMovingOptions) {
     lazy: false
   }
 
-  const throttleMove = throttle(move)
-
-  function start(event: PointerEvent) {
-    Object.assign(internalState, {
-      xStart: x.value,
-      yStart: y.value,
-      xEnd: x.value,
-      yEnd: y.value,
-      clientX: event.clientX,
-      clientY: event.clientY,
-      lazy: lazy.value
-    })
-
-    if (options.onStart?.(internalState, event) === false) {
-      return
-    }
-
-    document.addEventListener('pointermove', throttleMove, { capture })
-    document.addEventListener('pointerup', end, { capture })
-
-    moving.value = true
-  }
-
-  function move(event: PointerEvent) {
-    event.preventDefault()
-    event.stopPropagation()
-
+  const throttleMove = throttle((event: PointerEvent) => {
     const { clientX, clientY } = event
     const { xStart, yStart, clientX: clientXStart, clientY: clientYStart, lazy } = internalState
     const deltaX = clientX - clientXStart
@@ -92,10 +75,37 @@ export function useMoving(options: UseMovingOptions) {
     }
 
     options.onMove?.(internalState, event)
+  })
+
+  function start(event: PointerEvent) {
+    Object.assign(internalState, {
+      xStart: x.value,
+      yStart: y.value,
+      xEnd: x.value,
+      yEnd: y.value,
+      clientX: event.clientX,
+      clientY: event.clientY,
+      lazy: lazy.value
+    })
+
+    if (options.onStart?.(internalState, event) === false) {
+      return
+    }
+
+    document.addEventListener('pointermove', move, { capture })
+    document.addEventListener('pointerup', end, { capture })
+
+    moving.value = true
+  }
+
+  function move(event: PointerEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    throttleMove(event)
   }
 
   function end(event: PointerEvent) {
-    document.removeEventListener('pointermove', throttleMove, { capture })
+    document.removeEventListener('pointermove', move, { capture })
     document.removeEventListener('pointerup', end, { capture })
 
     if (internalState.lazy) {
@@ -109,6 +119,9 @@ export function useMoving(options: UseMovingOptions) {
   }
 
   useListener(target, 'pointerdown', start, { capture })
+
+  stopMouse && useListener(target, 'mousedown', disableEvent, { capture })
+  stopTouch && useListener(target, 'touchstart', disableEvent, { capture })
 
   return {
     target,
