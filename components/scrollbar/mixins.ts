@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { noop, throttle } from '@vexip-ui/utils'
+import { USE_TOUCH, noop, throttle } from '@vexip-ui/utils'
 import { ScrollbarType } from './symbol'
 
 import type { Ref } from 'vue'
@@ -72,8 +72,8 @@ export function useTrack({
     }
   }
 
-  function handleMouseDown(event: MouseEvent) {
-    if (event.button !== 0 || disabled.value) {
+  function handleMouseDown(event: PointerEvent) {
+    if (disabled.value || event.button > 0) {
       return false
     }
 
@@ -82,8 +82,8 @@ export function useTrack({
 
     if (!track.value || !bar.value) return false
 
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('pointermove', handleMouseMove)
+    document.addEventListener('pointerup', handleMouseUp)
 
     const rect = track.value.getBoundingClientRect()
     const barRect = bar.value.getBoundingClientRect()
@@ -114,7 +114,7 @@ export function useTrack({
     animateMoveBar()
   }
 
-  const handleTrackMove = throttle((event: MouseEvent) => {
+  const handleTrackMove = throttle((event: PointerEvent) => {
     let position: number
 
     if (type.value === ScrollbarType.VERTICAL) {
@@ -131,19 +131,22 @@ export function useTrack({
     !processing && animateMoveBar()
   })
 
-  function handleMouseMove(event: MouseEvent) {
-    event.preventDefault()
+  function handleMouseMove(event: PointerEvent) {
     event.stopPropagation()
+
+    if (!USE_TOUCH) {
+      event.preventDefault()
+    }
 
     handleMove(currentScroll.value)
     handleTrackMove(event)
   }
 
-  function handleMouseUp(event: MouseEvent) {
+  function handleMouseUp(event: PointerEvent) {
     event.preventDefault()
 
-    document.removeEventListener('mousemove', handleMouseMove)
-    document.removeEventListener('mouseup', handleMouseUp)
+    document.removeEventListener('pointermove', handleMouseMove)
+    document.removeEventListener('pointerup', handleMouseUp)
 
     tracking.value = false
 

@@ -3,13 +3,15 @@
     <div
       ref="track"
       :class="[nh.be('track'), props.useTrack ? null : nh.bem('track', 'disabled')]"
-      @mousedown="handleTrackMouseDown"
+      @touchstart="disableEvent"
+      @pointerdown="handleTrackMouseDown"
     ></div>
     <div
       ref="bar"
       :class="nh.be('bar')"
       :style="barStyle"
-      @mousedown="handleMouseDown"
+      @touchstart="disableEvent"
+      @pointerdown="handleMouseDown"
     ></div>
   </div>
 </template>
@@ -27,7 +29,7 @@ import {
   getCurrentInstance
 } from 'vue'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
-import { isDefined, throttle, boundRange } from '@vexip-ui/utils'
+import { USE_TOUCH, isDefined, throttle, boundRange } from '@vexip-ui/utils'
 import { useTrack } from './mixins'
 import { ScrollbarType } from './symbol'
 
@@ -248,7 +250,7 @@ export default defineComponent({
     let startAt: number
     let cursorAt: number
 
-    function handleMouseDown(event: MouseEvent) {
+    function handleMouseDown(event: PointerEvent) {
       if (event.button !== 0 || props.disabled) {
         return false
       }
@@ -258,8 +260,8 @@ export default defineComponent({
 
       if (!track.value || !bar.value) return false
 
-      document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
+      document.addEventListener('pointermove', handleMouseMove)
+      document.addEventListener('pointerup', handleMouseUp)
 
       const rect = track.value.getBoundingClientRect()
       const barRect = bar.value.getBoundingClientRect()
@@ -296,20 +298,23 @@ export default defineComponent({
       emit('scroll', currentScroll.value)
     })
 
-    function handleMouseMove(event: MouseEvent) {
-      event.preventDefault()
+    function handleMouseMove(event: PointerEvent) {
       event.stopPropagation()
+
+      if (!USE_TOUCH) {
+        event.preventDefault()
+      }
 
       window.clearTimeout(fadeTimer)
 
       handleBarMove(event)
     }
 
-    function handleMouseUp(event: MouseEvent) {
+    function handleMouseUp(event: PointerEvent) {
       event.preventDefault()
 
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('pointermove', handleMouseMove)
+      document.removeEventListener('pointerup', handleMouseUp)
 
       setScrollbarFade()
 
@@ -333,6 +338,13 @@ export default defineComponent({
       currentScroll.value = boundRange(scroll, 0, 100)
     }
 
+    function disableEvent<E extends Event>(event: E) {
+      if (event.cancelable) {
+        event.stopPropagation()
+        event.preventDefault()
+      }
+    }
+
     return {
       props,
       nh,
@@ -348,7 +360,8 @@ export default defineComponent({
 
       handleMouseDown,
       handleTrackMouseDown,
-      handleScroll
+      handleScroll,
+      disableEvent
     }
   }
 })

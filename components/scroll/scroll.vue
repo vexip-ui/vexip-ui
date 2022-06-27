@@ -331,7 +331,7 @@ export default defineComponent({
     }
 
     function handleMouseDown(event: MouseEvent) {
-      if (!props.pointer || event.button !== 0 || USE_TOUCH) {
+      if (!props.pointer || event.button > 0 || USE_TOUCH) {
         return false
       }
 
@@ -363,7 +363,10 @@ export default defineComponent({
         return false
       }
 
-      event.preventDefault()
+      if (event.cancelable) {
+        event.preventDefault()
+      }
+
       prepareScroll()
 
       transitionDuration.value = 0
