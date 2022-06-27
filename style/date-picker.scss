@@ -226,7 +226,6 @@ $date-picker: map.merge(
     }
 
     &-label {
-      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -237,11 +236,10 @@ $date-picker: map.merge(
 
       &::before {
         position: absolute;
-        top: 2px;
-        right: -10px;
-        bottom: 2px;
-        left: -10px;
+        right: 0;
+        left: 0;
         display: none;
+        height: 24px;
         pointer-events: none;
         content: '';
         background-color: get-css-var('date-picker-range-bg-color');
