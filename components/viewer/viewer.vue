@@ -114,10 +114,9 @@ export default defineComponent({
     const zoom = ref(1)
     const rotate = ref(0)
 
-    const viewer = ref<HTMLElement | null>(null)
     const transition = ref<HTMLElement | null>(null)
 
-    const { supported: fullSupported, full, enter: enterFull, exit: exitFull } = useFullScreen(viewer)
+    const { supported: fullSupported, target: viewer, full, enter: enterFull, exit: exitFull } = useFullScreen()
     const { target: container, x: currentLeft, y: currentTop, moving } = useMoving({
       onStart: (_, event) => {
         if (props.moveDisabled || event.button > 0) {
