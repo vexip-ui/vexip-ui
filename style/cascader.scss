@@ -126,6 +126,7 @@ $cascader: map.merge(
 
   &__panes {
     position: relative;
+    display: flex;
     height: get-css-var('cascader-pane-height');
     background-color: get-css-var('cascader-pane-bg-color');
     border: get-css-var('cascader-pane-border');
