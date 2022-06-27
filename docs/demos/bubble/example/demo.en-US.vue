@@ -13,7 +13,7 @@
         Boss
       </Avatar>
       <Bubble placement="right-start">
-        The weather is so nice today, why not come to work overtime?
+        The weather is so nice today, why not come to do some funny works?
       </Bubble>
     </div>
     <div class="right">
@@ -29,7 +29,7 @@
 
 <style scoped>
 .bubble-example {
-  width: 500px;
+  max-width: 500px;
   padding: 20px;
   border: var(--vxp-border-base);
   border-radius: var(--vxp-radius-base);

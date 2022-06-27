@@ -5,15 +5,19 @@
     style="width: 220px;"
     :prefix="User"
   ></Input>
+  <br />
+  <br />
   <Input
     placeholder="Default size"
-    style="width: 220px; margin-left: 10px;"
+    style="width: 220px;"
     :prefix="User"
   ></Input>
+  <br />
+  <br />
   <Input
     size="large"
     placeholder="Large size"
-    style="width: 220px; margin-left: 10px;"
+    style="width: 220px;"
     :prefix="User"
   ></Input>
 </template>

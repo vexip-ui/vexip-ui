@@ -37,11 +37,11 @@
 | change | Emitted when the value of the input box changes, returns the read value and the original value | `(accessedValue: any, originValue: string)` | - |
 | input | Emitted when a value is entered, returns the read value and the original value | `(accessedValue: any, originValue: string)` | - |
 | enter | Emitted when enter, returns the key event | `(event: KeyboardEvent)` | - |
-| prefix-click | Fired when the prefix part is clicked, returns the click event | `(event: MouseEvent)` | - |
+| prefix-click | Emitted when the prefix part is clicked, returns the click event | `(event: MouseEvent)` | - |
 | suffix-click | Emitted when the suffix part is clicked, returns the click event | `(event: MouseEvent)` | - |
 | key-down | Emitted when the key is pressed, returns the key event | `(event: KeyboardEvent)` | - |
-| key-press | Fired when the key is held down, returns the key event | `(event: KeyboardEvent)` | - |
-| key-up | Fired when the key is released, returns the key event | `(event: KeyboardEvent)` | - |
+| key-press | Emitted when the key is held down, returns the key event | `(event: KeyboardEvent)` | - |
+| key-up | Emitted when the key is released, returns the key event | `(event: KeyboardEvent)` | - |
 | clear | Emitted when the value is cleared by the clear button, no return value | - | - |
 
 ### Input Slots

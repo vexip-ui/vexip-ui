@@ -2,7 +2,7 @@
   <Carousel loop style="width: 600px;">
     <CarouselItem v-for="n in 5" :key="n">
       <div class="demo-pane">
-        内容{{ n }}
+        Content {{ n }}
       </div>
     </CarouselItem>
   </Carousel>

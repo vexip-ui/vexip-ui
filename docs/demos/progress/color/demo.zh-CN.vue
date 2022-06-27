@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 500px;">
+  <div style="max-width: 500px;">
     <Progress stroke-color="red" :percentage="45"></Progress>
     <Progress :stroke-color="['red', 'yellow']" :percentage="68"></Progress>
     <Progress :stroke-color="getColor" :percentage="54"></Progress>

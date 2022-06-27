@@ -1,3 +1,3 @@
-### 自适应高度
+### Adaptive Height
 
-设置 `height` 一个有效的 css 高度百分比值，可以使滚动区域根据百分比自适应其父元素的高度。
+Setting `height` prop to a valid CSS height percentage value will make the scroll area adapt to the height of its parent element according to the percentage.

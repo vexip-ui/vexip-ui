@@ -6,7 +6,7 @@
           class="demo-pane"
           :style="{ backgroundColor: active ? 'var(--vxp-color-warning-base)' : undefined }"
         >
-          内容{{ n }}
+          Content {{ n }}
         </div>
       </template>
     </CarouselItem>

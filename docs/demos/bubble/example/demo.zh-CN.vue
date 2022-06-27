@@ -29,7 +29,7 @@
 
 <style scoped>
 .bubble-example {
-  width: 500px;
+  max-width: 500px;
   padding: 20px;
   border: var(--vxp-border-base);
   border-radius: var(--vxp-radius-base);

@@ -1,3 +1,3 @@
 ### Basis Usage
 
-最常用的用法，为滚动设置 `height` 属性的值，当内容的高度超过该值后即可滚动。
+The most common usage is to set the value of the `height` prop for Scroll. Then it can be scrolled when the height of the content exceeds this height.

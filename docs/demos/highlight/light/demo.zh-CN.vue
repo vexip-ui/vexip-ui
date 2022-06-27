@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 500px; text-indent: 2em;">
+  <div style="max-width: 500px; text-indent: 2em;">
     <Highlight :content="content" :key-words="keyWords">
       <template #light="{ text }">
         <Linker type="primary">

@@ -1,3 +1,3 @@
-### 滚动条
+### Scrollbar
 
-添加 `use-y-bar` 属性，可以为滚动区域添加一个滚动条。
+Add the `use-y-bar` prop to add a scroll bar to the scroll area.

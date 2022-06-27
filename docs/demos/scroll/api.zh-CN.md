@@ -19,7 +19,7 @@
 | bar-class     | `string \| Record<string, boolean>`  | 设置滚动条的自定义类名                                                | `null`       | - |
 | autoplay      | `boolean \| number` | 设置滚动条自动滚动，当传入数字时，会作为一次完整滚动的所需毫秒数      | `false`      | - |
 | play-waiting  | `number`            | 当开启了自动滚动时，设置每次开始滚动前和结束滚动后的暂缓毫秒数        | `500`        | - |
-| on-before-scroll | `(payload: { signX: number, signY: number }) => boolean`          | 设置滚动前的回调，**不支持**异步函数和 `Promise`，返回值为 ``false`` 会阻止滚动 | `null`       | - |
+| on-before-scroll | `(payload: { signX: number, signY: number }) => boolean`          | 设置滚动前的回调，**不支持**异步函数和 `Promise`，返回值为 `false` 会阻止滚动 | `null`       | - |
 | use-bar-track | `boolean`           | 设置滚动条是否启用轨道交互                                            | `false`      | - |
 
 ### Scroll 事件

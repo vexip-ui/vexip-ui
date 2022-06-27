@@ -1,7 +1,7 @@
 <template>
   <Input
-    size="large"
-    placeholder="Large size"
+    size="small"
+    placeholder="Small size"
     style="width: 220px;"
     :prefix="User"
   ></Input>
@@ -15,8 +15,8 @@
   <br />
   <br />
   <Input
-    size="small"
-    placeholder="Small size"
+    size="large"
+    placeholder="Large size"
     style="width: 220px;"
     :prefix="User"
   ></Input>

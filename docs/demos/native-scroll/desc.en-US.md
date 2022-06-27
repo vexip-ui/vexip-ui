@@ -1,5 +1,5 @@
-用于需要展示超出一个区域范围的内容，可以使用户滚动浏览，内部实现采用浏览器原生滚动以获得更好的兼容性与性能。
+It is used for content that needs to be displayed beyond one area, allowing users to scroll through, and the internal implementation uses browser native scrolling to achieve better compatibility and performance.
 
 ::: warning
-为了支持平滑滚动，在需要频繁使用 api 方法改变滚动位置的场合，性能表现可能存在欠佳的情况。
+In order to support smooth scrolling, the performance may be poor in situations where the api method needs to be frequently used to change the scroll position.
 :::

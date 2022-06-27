@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 320px;">
+  <div style="max-width: 320px;">
     <Card title="Never" shadow="never">
       <p>卡片的内容</p>
       <p>卡片的内容</p>

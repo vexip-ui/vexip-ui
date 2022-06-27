@@ -6,7 +6,6 @@
         use-y-bar
         height="100%"
         :delta-y="60"
-        pointer
         @ready="scrollToMenuItem(currentMenu)"
       >
         <Menu

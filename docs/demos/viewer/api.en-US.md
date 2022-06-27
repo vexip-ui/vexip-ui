@@ -65,14 +65,14 @@ interface ToolbarAction {
 
 | Name | Description | Parameters | Since |
 | ---- | ----------- | ---------- | ----- |
-| move-start | Triggered when a move starts, returns the state of the viewer | `(state: ViewerState)` | - |
-| move | Triggered when moving, returns the state of the viewer | `(state: ViewerState)` | - |
-| move-end | Triggered when the move ends, returns the state of the viewer | `(state: ViewerState)` | - |
-| wheel | Fired when scrolling, returns the direction sign and viewer state | `(sign: -1 | 1, state: ViewerState)` | - |
-| rotate | Triggered when rotated, returns delta and viewer state | `(delta: number, state: ViewerState)` | - |
-| zoom | Triggered when zooming, returns delta and viewer state | `(delta: number, state: ViewerState)` | - |
-| full | Triggered when switching to full screen, returns the current full screen state and viewer state | `(active: boolean, state: ViewerState)` | - |
-| reset | Triggered when reset, returns to the viewer state | `(state: ViewerState)` | - |
+| move-start | Emitted when a move starts, returns the state of the viewer | `(state: ViewerState)` | - |
+| move | Emitted when moving, returns the state of the viewer | `(state: ViewerState)` | - |
+| move-end | Emitted when the move ends, returns the state of the viewer | `(state: ViewerState)` | - |
+| wheel | Emitted when scrolling, returns the direction sign and viewer state | `(sign: -1 | 1, state: ViewerState)` | - |
+| rotate | Emitted when rotated, returns delta and viewer state | `(delta: number, state: ViewerState)` | - |
+| zoom | Emitted when zooming, returns delta and viewer state | `(delta: number, state: ViewerState)` | - |
+| full | Emitted when switching to full screen, returns the current full screen state and viewer state | `(active: boolean, state: ViewerState)` | - |
+| reset | Emitted when reset, returns to the viewer state | `(state: ViewerState)` | - |
 
 ### Viewer Slots
 

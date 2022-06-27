@@ -2,42 +2,42 @@
 
 | Name          | Type              | Description                                                                  | Default     | Since |
 | ------------- | ----------------- | --------------------------------------------------------------------- | ---------- | --- |
-| mode          | `'horizontal' \| 'vertical' \| 'both'`            | 滚动的模式 | `'vertical'` | - |
-| scroll-class  | `string \| Record<string, boolean>`  | 滚动内容包围元素的自定义类名                                          | `null`       | - |
-| width         | `number \| string`  | 滚动视窗的宽度，内容的宽度大于视窗的宽度时才可滚动                    | `''`         | - |
-| height        | `number \| string`  | 滚动视窗的高度，内容的高度大于视窗的高度时才可滚动                    | `''`         | - |
-| delat-x       | `number`            | 每次横向滚动的距离                                                    | `20`         | - |
-| delta-y       | `number`            | 每次纵向滚动的距离                                                    | `20`         | - |
-| disabled      | `boolean`           | 设置是否禁用滚动                                                      | `false`      | - |
-| pointer       | `boolean`           | 设置是否开启鼠标拖动滚动                                              | `false`      | - |
-| wheel         | `boolean`           | 设置是否开启滚轮滚动                                                  | `true`       | - |
-| scroll-x      | `number`            | 设置横向滚动的位置                                                    | `0`          | - |
-| scroll-y      | `number`            | 设置纵向滚动的位置                                                    | `0`          | - |
-| use-x-bar     | `boolean`           | 设置是否使用横向滚动条                                                | `false`      | - |
-| use-y-bar     | `boolean`           | 设置是否使用纵向滚动条                                                | `false`      | - |
-| bar-fade      | `number`            | 设置触发滚动条渐隐的等待毫秒，若小于 300 则关闭渐隐效果               | `1500`       | - |
-| bar-class     | `string \| Record<string, boolean>`  | 设置滚动条的自定义类名                                                | `null`       | - |
-| autoplay      | `boolean \| number` | 设置滚动条自动滚动，当传入数字时，会作为一次完整滚动的所需毫秒数      | `false`      | - |
-| play-waiting  | `number`            | 当开启了自动滚动时，设置每次开始滚动前和结束滚动后的暂缓毫秒数        | `500`        | - |
-| on-before-scroll | `(payload: { signX: number, signY: number }) => boolean`          | 设置滚动前的回调，**不支持**异步函数和 `Promise`，返回值为 ``false`` 会阻止滚动 | `null`       | - |
-| use-bar-track | `boolean`           | 设置滚动条是否启用轨道交互                                            | `false`      | - |
+| mode | `'horizontal' \| 'vertical' \| 'both'` | scrolling mode | `'vertical'` | - |
+| scroll-class | `string \| Record<string, boolean>` | Custom class name for scroll content wrapping element | `null` | - |
+| width | `number \| string` | The width of the scrolling window, only when the width of the content is greater than the width of the window can be scrolled | `''` | - |
+| height | `number \| string` | The height of the scrolling window, only when the height of the content is greater than the height of the window can be scrolled | `''` | - |
+| delat-x | `number` | The distance of each horizontal scroll | `20` | - |
+| delta-y | `number` | The distance for each vertical scroll | `20` | - |
+| disabled | `boolean` | Set whether to disable scrolling | `false` | - |
+| pointer | `boolean` | Set whether to enable mouse drag scrolling | `false` | - |
+| wheel | `boolean` | Set whether to enable wheel scrolling | `true` | - |
+| scroll-x | `number` | Set the horizontal scroll position | `0` | - |
+| scroll-y | `number` | Set the vertical scroll position | `0` | - |
+| use-x-bar | `boolean` | Set whether to use the horizontal scroll bar | `false` | - |
+| use-y-bar | `boolean` | Set whether to use vertical scroll bar | `false` | - |
+| bar-fade | `number` | Set the wait milliseconds to trigger the scroll bar to fade, if it is less than 300, the fade effect will be turned off | `1500` | - |
+| bar-class | `string \| Record<string, boolean>` | Set custom class name for scroll bar | `null` | - |
+| autoplay | `boolean \| number` | Set the scroll bar to scroll automatically. When a number is passed in, it will be used as the number of milliseconds required for a full scroll | `false` | - |
+| play-waiting | `number` | When automatic scrolling is enabled, set the number of milliseconds to pause before scrolling and after each scrolling | `500` | - |
+| on-before-scroll | `(payload: { signX: number, signY: number }) => boolean` | Set the callback before scrolling, **does not support** asynchronous functions and `Promise`, the return value is `false` will prevent scrolling | `null` | - |
+| use-bar-track | `boolean` | Sets whether the scrollbar enables track interaction | `false` | - |
 
 ### Scroll Events
 
 | Name                | Description                                                                                                                       | Parameters         | Since |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------ | --- |
-| scroll           | 当以任意交互形式进行了滚动后触发                           | `(scroll: { type?: 'vertical' \| 'horizontal', clientX: number, clientY: number, percentX: number, percnetY: number })` | - |
-| wheel            | 当用滚轮进行了滚动后触发，其中 `sign` 标记滚动的方向 | `(scroll: { type?: 'vertical' \| 'horizontal', sign: -1 \| 1, clientX: number, clientY: number, percentX: number, percnetY: number })` | - |
-| x-enable-change  | 当横向滚动的激活状态改变时触发，返回当前滚动状态                                                                           | `(enabled: boolean)`      | - |
-| y-enable-change  | 当纵向滚动的激活状态改变时触发，返回当前滚动状态                                                                           | `(enabled: boolean)`      | - |
-| ready            | 当滚动触发刷新，并在刷新成功即将进入正常可用状态时触发，无返回值                                                           | -            | - |
-| scroll-start     | 当使用 pointer 滚动开始时触发                                    | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })` | - |
-| scroll-end       | 当使用 pointer 滚动结束时触发                                    | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })` | - |
-| bar-scroll-start | 当使用滚动条触发滚动开始时触发，返回当前触发的滚动条类型 `vertical` 或 `horizontal`                                        | `(type: 'vertical' \| 'horizontal')`         | - |
-| bar-scroll-end   | 当使用滚动条触发滚动结束时触发，返回当前触发的滚动条类型 `vertical` 或 `horizontal`                                        | `(type: 'vertical' \| 'horizontal')`         | - |
+| scroll | Emitted when scrolling in any interactive form | `(scroll: { type?: 'vertical' \| 'horizontal', clientX: number, clientY: number, percentX: number, percnetY: number })` | - |
+| wheel | Emitted after scrolling with the wheel, where `sign` marks the direction of scrolling | `(scroll: { type?: 'vertical' \| 'horizontal', sign: -1 \| 1, clientX: number, clientY: number, percentX: number, percnetY: number })` | - |
+| x-enable-change | Emitted when the active state of horizontal scrolling changes, returns the current scroll state | `(enabled: boolean)` | - |
+| y-enable-change | Emitted when the active state of vertical scrolling changes, returns the current scroll state | `(enabled: boolean)` | - |
+| ready | When the scroll triggers the refresh, and when the refresh is successful and about to enter the normal available state, no return value | - | - |
+| scroll-start | Emitted when scrolling with pointer starts | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })` | - |
+| scroll-end | Emitted when scrolling with pointer ends | `(scroll: { clientX: number, clientY: number, percentX: number, percnetY: number })` | - |
+| bar-scroll-start | Emitted when a scrollbar is used to trigger scrolling start, returns the currently triggered scrollbar type `vertical` or `horizontal` | `(type: 'vertical' \| 'horizontal')` | - |
+| bar-scroll-end | Emitted when the scroll bar is used to trigger the end of the scroll, returns the currently triggered scroll bar type `vertical` or `horizontal` | `(type: 'vertical' \| 'horizontal')` | - |
 
 ### Scroll Slots
 
 | Name    | Description           | Parameters | Since |
 | ------- | -------------- | --- | --- |
-| defalut | 滚动内容的插槽 | - | - |
+| defalut | Slot for scrolling content | - | - |

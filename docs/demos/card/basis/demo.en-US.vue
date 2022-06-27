@@ -1,7 +1,7 @@
 <template>
-  <Card title="Title" style="width: 320px;">
-    <p>卡片的内容</p>
-    <p>卡片的内容</p>
-    <p>卡片的内容</p>
+  <Card title="Title" style="max-width: 320px;">
+    <p>Card's content</p>
+    <p>Card's content</p>
+    <p>Card's content</p>
   </Card>
 </template>

@@ -1,5 +1,5 @@
-### 自动滚动
+### Auto Scroll
 
-添加 `autoplay` 属性可以设置滚动区域自动滚动。
+Add the `autoplay` prop to set the scroll area to scroll automatically.
 
-设置 `autoplay` 属性的值为一个数字时，将作为一次完整滚动所需的毫秒数进行自动滚动。
+Setting the value of the `autoplay` prop to a number will automatically scroll as the number of milliseconds required for a full scroll.

@@ -65,7 +65,7 @@ function handleBarScroll(percent: number) {
 <style scoped>
 .wrapper {
   position: relative;
-  width: 500px;
+  max-width: 500px;
   padding: 0 10px;
   border: var(--vxp-border-base);
 }

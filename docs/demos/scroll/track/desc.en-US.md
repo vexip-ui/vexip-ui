@@ -1,3 +1,3 @@
-### 滚动轨道
+### Scrollbar Track
 
-添加 `use-bar-track` 属性可以开启滚动条的轨道交互，让它看起来像原生滚动条那样。
+Adding the `use-bar-track` property enables scrollbar track interaction, making it look like a native scrollbar.

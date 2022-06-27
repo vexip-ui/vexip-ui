@@ -3,7 +3,7 @@
     loop
     arrow="inside"
     pointer="outside"
-    style="width: 600px;"
+    style="max-width: 600px;"
     :view-size="1"
     :autoplay="5000"
   >

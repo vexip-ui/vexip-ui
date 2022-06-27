@@ -1,3 +1,3 @@
-### 滚动轨道
+### Scrollbar Track
 
-添加 `use-bar-track` 属性可以开启滚动条的轨道交互。
+Add the `use-bar-track` prop to enable track interaction for scroll bars.
