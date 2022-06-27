@@ -127,6 +127,7 @@ export function useFullScreen(target: Ref<HTMLElement | null> = ref(null)) {
 
   return {
     supported,
+    target,
     full: computed(() => full.value),
     enter,
     exit,
