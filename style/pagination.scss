@@ -135,11 +135,15 @@ $pagination: map.merge(
   }
 
   &__size {
-    min-width: 100px;
+    min-width: 106px;
 
     .#{$namespace}-select {
       width: 100%;
     }
+  }
+
+  &__total {
+    white-space: nowrap;
   }
 
   & > &__jump,
