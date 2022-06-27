@@ -114,7 +114,7 @@ export default defineComponent({
       deltaX: 20,
       deltaY: 20,
       disabled: false,
-      pointer: false,
+      pointer: USE_TOUCH,
       wheel: true,
       scrollX: {
         default: 0,
