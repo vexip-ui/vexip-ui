@@ -36,7 +36,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('time-ago')
-    const datetime = toDate(props.datetime)
+    const datetime = toDateValue(props.datetime)
     const timeAgo = ref(computeTimeAgo(datetime))
 
     const id = getId()
@@ -60,7 +60,7 @@ export default defineComponent({
     watch(
       () => props.datetime,
       value => {
-        record.datetime = toDate(value)
+        record.datetime = toDateValue(value)
       }
     )
     watch(
@@ -73,6 +73,14 @@ export default defineComponent({
     onBeforeUnmount(() => {
       unsubscribe(id)
     })
+
+    function toDateValue(value: Dateable) {
+      if (typeof value === 'string') {
+        value = value.replace(/-/g, '/')
+      }
+
+      return toDate(value)
+    }
 
     return {
       nh,
