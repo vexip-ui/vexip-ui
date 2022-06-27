@@ -1,5 +1,5 @@
 <template>
-  <Split style="width: 500px; height: 320px; box-shadow: 0 0 1px;">
+  <Split style="max-width: 500px; height: 320px; box-shadow: 0 0 1px;">
     <template #left>
       <Split vertical style="padding: 10px;">
         <template #left>

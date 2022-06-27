@@ -1,15 +1,15 @@
 <template>
-  <Split style="width: 500px; height: 320px; box-shadow: 0 0 1px;">
+  <Split style="max-width: 500px; height: 320px; box-shadow: 0 0 1px;">
     <template #left>
       <Split vertical style="padding: 10px;">
         <template #left>
           <div style="padding: 10px;">
-            左Top pane
+            Left-Top pane
           </div>
         </template>
         <template #right>
           <div style="padding: 10px;">
-            左Bottom pane
+            Left-Bottom pane
           </div>
         </template>
       </Split>

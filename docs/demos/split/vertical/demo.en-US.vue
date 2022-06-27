@@ -1,5 +1,5 @@
 <template>
-  <Split vertical style="width: 300px; height: 320px; box-shadow: 0 0 1px;">
+  <Split vertical style="max-width: 300px; height: 320px; box-shadow: 0 0 1px;">
     <template #left>
       <div style="padding: 10px;">
         Top pane

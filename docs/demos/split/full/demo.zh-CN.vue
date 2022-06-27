@@ -1,5 +1,5 @@
 <template>
-  <Split can-full style="width: 500px; height: 180px; box-shadow: 0 0 1px;">
+  <Split can-full style="max-width: 500px; height: 180px; box-shadow: 0 0 1px;">
     <template #left>
       <div style="padding: 10px;">
         左侧面板

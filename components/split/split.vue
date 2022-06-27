@@ -101,7 +101,6 @@ export default defineComponent({
       lazy: true,
       capture: false,
       onStart: (state, event) => {
-        debugger
         if (currentFull.value || !wrapper.value || event.button > 0) {
           return false
         }
