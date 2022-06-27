@@ -32,6 +32,7 @@ $avatar: map.merge(
   @include basis;
 
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: get-css-var('avatar-size');
