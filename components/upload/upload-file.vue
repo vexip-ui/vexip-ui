@@ -8,7 +8,7 @@
       ]"
       :title="fileName"
     >
-      <slot :file="props.file.source" :status="props.file.status" :percentage="props.file.percentage">
+      <slot :file="props.file.source" :status="props.file.status" :percentage="percentage">
         <template v-if="props.listType === 'name'">
           <div :class="nh.be('label')">
             <div :class="[nh.be('icon'), nh.be('file-icon')]">
@@ -31,7 +31,7 @@
               style="margin-right: 0.5em;"
               :class="nh.be('percentage')"
             >
-              {{ `${props.file.percentage}%` }}
+              {{ `${percentage}%` }}
             </span>
             <div
               v-if="props.file.status === status.SUCCESS"
@@ -58,7 +58,12 @@
             </div>
           </div>
           <div v-if="props.file.status === status.UPLOADING" :class="nh.be('progress')">
-            <Progress info-type="none" :stroke-width="2" :percentage="props.file.percentage"></Progress>
+            <Progress
+              info-type="none"
+              :stroke-width="2"
+              :percentage="props.file.percentage"
+              :precision="props.precision"
+            ></Progress>
           </div>
         </template>
         <template v-else-if="props.listType === 'thumbnail' || props.listType === 'card'">
@@ -73,9 +78,10 @@
                     info-type="none"
                     :stroke-width="2"
                     :percentage="props.file.percentage"
+                    :precision="props.precision"
                   ></Progress>
                   <span style="margin-top: 3px;" :class="nh.be('percentage')">
-                    {{ `${props.file.percentage}%` }}
+                    {{ `${percentage}%` }}
                   </span>
                 </div>
                 <Icon v-else pulse :scale="1.8">
@@ -110,6 +116,7 @@
                     info-type="none"
                     :stroke-width="4"
                     :percentage="props.file.percentage"
+                    :precision="props.precision"
                   ></Progress>
                 </div>
               </CollapseTransition>
@@ -152,9 +159,10 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
-import { iconMaps } from './file-icon'
 import { CircleCheck, CircleExclamation, Spinner, EyeR, TrashCanR } from '@vexip-ui/icons'
+import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { toFixed } from '@vexip-ui/utils'
+import { iconMaps } from './file-icon'
 import { UploadStatusType, uploadListTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -178,7 +186,8 @@ export default defineComponent({
     iconRenderer: Function as PropType<RenderFn>,
     listType: String as PropType<UploadListType>,
     loadingText: String,
-    selectToAdd: booleanProp
+    selectToAdd: booleanProp,
+    precision: Number
   },
   emits: ['delete', 'preview'],
   setup(_props, { emit }) {
@@ -196,18 +205,16 @@ export default defineComponent({
         validator: (value: UploadListType) => uploadListTypes.includes(value)
       },
       loadingText: null,
-      selectToAdd: false
+      selectToAdd: false,
+      precision: 2
     })
 
     const nh = useNameHelper('upload')
     const transitionName = 'vxp-fade'
 
-    const useIconRenderer = computed(() => {
-      return typeof props.iconRenderer === 'function'
-    })
-    const fileName = computed(() => {
-      return props.file.path || props.file.name
-    })
+    const useIconRenderer = computed(() => typeof props.iconRenderer === 'function')
+    const fileName = computed(() => props.file.path || props.file.name)
+    const percentage = computed(() => toFixed(props.file.percentage, props.precision))
 
     function getFileExtension(file: FileState) {
       return file.name.split('.').pop()!.toLocaleLowerCase()
@@ -248,6 +255,7 @@ export default defineComponent({
 
       useIconRenderer,
       fileName,
+      percentage,
 
       getFileIcon,
       deleteFile,

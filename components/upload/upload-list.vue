@@ -15,6 +15,7 @@
       :list-type="props.type"
       :loading-text="props.loadingText"
       :select-to-add="props.selectToAdd"
+      :precision="props.precision"
       @delete="$emit('delete', $event)"
       @preview="$emit('preview', $event)"
     >
@@ -40,6 +41,7 @@
       :list-type="props.type"
       :loading-text="props.loadingText"
       :select-to-add="props.selectToAdd"
+      :precision="props.precision"
       @delete="$emit('delete', $event)"
       @preview="$emit('preview', $event)"
     >
@@ -78,7 +80,8 @@ export default defineComponent({
     iconRenderer: Function as PropType<RenderFn>,
     type: String as PropType<UploadListType>,
     loadingText: String,
-    style: styleProp
+    style: styleProp,
+    precision: Number
   },
   emits: ['preview', 'delete'],
   setup(_props) {
@@ -97,7 +100,8 @@ export default defineComponent({
         validator: (value: UploadListType) => uploadListTypes.includes(value)
       },
       loadingText: null,
-      style: null
+      style: null,
+      precision: 2
     })
 
     return {
