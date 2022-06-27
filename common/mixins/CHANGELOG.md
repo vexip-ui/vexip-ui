@@ -1,3 +1,15 @@
+## [1.3.1](https://github.com/qmhc/vexip-ui/compare/mixins@1.3.0...mixins@1.3.1) (2022-06-27)
+
+
+### Bug Fixes
+
+* **mixins:** add delta states and supoort capture config ([b1fd988](https://github.com/qmhc/vexip-ui/commit/b1fd988548689f047fe6a48954830ff9639b1c6e))
+* **mixins:** useFullScreen should return the target ([ecdf647](https://github.com/qmhc/vexip-ui/commit/ecdf647174d391c937525bb5cd0bd33ceba66a1a))
+* **mixins:** useMouse ensure cancelable before disable events ([4aa5686](https://github.com/qmhc/vexip-ui/commit/4aa5686a682ea8f5857303dc1e23db3bedac4899))
+* **mixins:** useMoving default prevent mouse and touch events ([3cb1674](https://github.com/qmhc/vexip-ui/commit/3cb167467d95d16c1f5f8cc1ae2ef35f34cdf8af))
+
+
+
 # [1.3.0](https://github.com/qmhc/vexip-ui/compare/mixins@1.2.0...mixins@1.3.0) (2022-06-27)
 
 
