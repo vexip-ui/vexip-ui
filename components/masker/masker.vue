@@ -85,7 +85,9 @@ export default defineComponent({
       ]
     })
     const transferTo = computed(() => {
-      return typeof props.transfer === 'boolean' ? (props.transfer ? 'body' : '') : props.transfer
+      return props.inner
+        ? ''
+        : typeof props.transfer === 'boolean' ? (props.transfer ? 'body' : '') : props.transfer
     })
 
     watch(
