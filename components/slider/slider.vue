@@ -1,9 +1,14 @@
 <template>
-  <div :class="className" @mousedown="handleTrackDown">
+  <div :class="className" @pointerdown="handleTrackDown" @touchstart="disableEvent">
     <div ref="track" :class="nh.be('track')">
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
-    <div :class="nh.be('trigger')" :style="handlerStyle" @mousedown="handleMoveStart">
+    <div
+      :class="nh.be('trigger')"
+      :style="handlerStyle"
+      @pointerdown="handleMoveStart"
+      @touchstart="disableEvent"
+    >
       <Tooltip
         ref="tooltip"
         tabindex="0"
@@ -36,7 +41,14 @@
 import { defineComponent, ref, computed, watch, inject, onMounted } from 'vue'
 import { Tooltip } from '@/components/tooltip'
 import { VALIDATE_FIELD } from '@/components/form-item'
-import { useNameHelper, useProps, booleanProp, stateProp, createStateProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  stateProp,
+  createStateProp
+} from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/mixins'
 import { noop, throttle } from '@vexip-ui/utils'
 
@@ -53,7 +65,7 @@ export default defineComponent({
     step: Number,
     vertical: booleanProp,
     hideTip: booleanProp,
-    tipTransfer: booleanProp,
+    tipTransfer: booleanStringProp,
     disabled: booleanProp,
     disableValidate: booleanProp
   },
@@ -73,7 +85,7 @@ export default defineComponent({
       },
       vertical: false,
       hideTip: false,
-      tipTransfer: false,
+      tipTransfer: null,
       disabled: false,
       disableValidate: false
     })
@@ -161,7 +173,7 @@ export default defineComponent({
 
     let trackRect: DOMRect | null = null
 
-    const handleMove = throttle((event: MouseEvent) => {
+    const throttleMove = throttle((event: MouseEvent) => {
       if (!trackRect || props.disabled) return
 
       event.preventDefault()
@@ -183,7 +195,7 @@ export default defineComponent({
       emit('input', truthValue.value)
     })
 
-    function handleTrackDown(event: MouseEvent) {
+    function handleTrackDown(event: PointerEvent) {
       if (!track.value || props.disabled) return
 
       window.clearTimeout(timer.sliding)
@@ -203,13 +215,12 @@ export default defineComponent({
         stepMin.value
 
       verifyValue()
-      // emitChange()
 
-      document.addEventListener('mousemove', handleMove)
-      document.addEventListener('mouseup', handleMoveEnd)
+      document.addEventListener('pointermove', handleMove)
+      document.addEventListener('pointerup', handleMoveEnd)
     }
 
-    function handleMoveStart(event: MouseEvent) {
+    function handleMoveStart(event: PointerEvent) {
       if (!track.value || props.disabled) return
 
       window.clearTimeout(timer.sliding)
@@ -219,15 +230,19 @@ export default defineComponent({
       trackRect = track.value.getBoundingClientRect()
       sliding.value = true
 
-      document.addEventListener('mousemove', handleMove)
-      document.addEventListener('mouseup', handleMoveEnd)
+      document.addEventListener('pointermove', handleMove)
+      document.addEventListener('pointerup', handleMoveEnd)
+    }
+
+    function handleMove(event: PointerEvent) {
+      throttleMove(event)
     }
 
     function handleMoveEnd() {
       trackRect = null
 
-      document.removeEventListener('mousemove', handleMove)
-      document.removeEventListener('mouseup', handleMoveEnd)
+      document.removeEventListener('pointermove', handleMove)
+      document.removeEventListener('pointerup', handleMoveEnd)
 
       emitChange()
 
@@ -254,6 +269,13 @@ export default defineComponent({
       }, 250)
     }
 
+    function disableEvent<E extends Event>(event: E) {
+      if (event.cancelable) {
+        event.stopPropagation()
+        event.preventDefault()
+      }
+    }
+
     return {
       props,
       nh,
@@ -271,7 +293,8 @@ export default defineComponent({
       handleTrackDown,
       handleMoveStart,
       showTooltip,
-      hideTooltip
+      hideTooltip,
+      disableEvent
     }
   }
 })
