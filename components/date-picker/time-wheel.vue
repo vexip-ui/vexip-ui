@@ -7,6 +7,7 @@
       :arrow="!noArrow"
       :candidate="candidate"
       @mouseenter="handleToggleColumn('hour')"
+      @touchstart="handleToggleColumn('hour')"
     >
       <WheelItem v-for="item in hourRange" :key="item" :value="item">
         {{ doubleDigits(item) }}
@@ -19,6 +20,7 @@
       :arrow="!noArrow"
       :candidate="candidate"
       @mouseenter="handleToggleColumn('minute')"
+      @touchstart="handleToggleColumn('minute')"
     >
       <WheelItem v-for="item in minuteRange" :key="item" :value="item">
         {{ doubleDigits(item) }}
@@ -31,6 +33,7 @@
       :arrow="!noArrow"
       :candidate="candidate"
       @mouseenter="handleToggleColumn('second')"
+      @touchstart="handleToggleColumn('second')"
     >
       <WheelItem v-for="item in secondRange" :key="item" :value="item">
         {{ doubleDigits(item) }}
@@ -44,7 +47,7 @@ import { defineComponent, ref, watch } from 'vue'
 import { Wheel } from '@/components/wheel'
 import { WheelItem } from '@/components/wheel-item'
 import { useNameHelper } from '@vexip-ui/config'
-import { range, doubleDigits } from '@vexip-ui/utils'
+import { USE_TOUCH, range, doubleDigits } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { TimeType } from './symbol'
@@ -98,7 +101,7 @@ export default defineComponent({
     },
     pointer: {
       type: Boolean,
-      default: false
+      default: USE_TOUCH
     }
   },
   emits: ['change', 'toggle-col', 'update:hour', 'update:minute', 'update:second'],

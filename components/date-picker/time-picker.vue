@@ -153,8 +153,18 @@ import TimeControl from './time-control.vue'
 import TimeWheel from './time-wheel.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, useLocale, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
-import { noop, doubleDigits, boundRange } from '@vexip-ui/utils'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  booleanStringProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp
+} from '@vexip-ui/config'
+import { USE_TOUCH, noop, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
 
@@ -248,7 +258,7 @@ export default defineComponent({
       clearable: false,
       noAction: false,
       noArrow: false,
-      pointer: false,
+      pointer: USE_TOUCH,
       candidate: {
         default: 3,
         validator: (value: number) => [0, 1, 2, 3].includes(value)
