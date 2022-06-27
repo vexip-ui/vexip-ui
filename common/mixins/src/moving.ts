@@ -32,8 +32,10 @@ export interface UseMovingOptions {
 }
 
 function disableEvent<E extends Event>(event: E) {
-  event.stopPropagation()
-  event.preventDefault()
+  if (event.cancelable) {
+    event.stopPropagation()
+    event.preventDefault()
+  }
 }
 
 export function useMoving(options: UseMovingOptions) {
@@ -99,8 +101,7 @@ export function useMoving(options: UseMovingOptions) {
   }
 
   function move(event: PointerEvent) {
-    event.preventDefault()
-    event.stopPropagation()
+    disableEvent(event)
     throttleMove(event)
   }
 

@@ -354,11 +354,16 @@ export default defineComponent({
     let cursorXPosition = 0
     let cursorYPosition = 0
 
+    let moved = false
+    let target: EventTarget | null = null
+    let lastDate = 0
+
     function handlePointerDown(event: MouseEvent | TouchEvent) {
       if (!enableXScroll.value && !enableYScroll.value) {
         return false
       }
 
+      event.preventDefault()
       prepareScroll()
 
       transitionDuration.value = 0
@@ -369,6 +374,10 @@ export default defineComponent({
       yScrollStartAt = currentScroll.y
       cursorXPosition = pointer.clientX
       cursorYPosition = pointer.clientY
+
+      moved = false
+      target = event.target
+      lastDate = Date.now()
 
       document.addEventListener(MOVE_EVENT, handlePointerMove)
       document.addEventListener(UP_EVENT, handlePointerUp)
@@ -400,10 +409,12 @@ export default defineComponent({
 
       if (enableXScroll.value) {
         currentScroll.x = xScrollStartAt + pointer.clientX - cursorXPosition
+        moved = true
       }
 
       if (enableYScroll.value) {
         currentScroll.y = yScrollStartAt + pointer.clientY - cursorYPosition
+        moved = true
       }
 
       if (props.noBuffer) {
@@ -416,11 +427,16 @@ export default defineComponent({
       emitScrollEvent('both')
     }
 
-    function handlePointerUp() {
+    function handlePointerUp(event: MouseEvent | TouchEvent) {
+      if (!moved && target && event.target === target && Date.now() - lastDate <= 500) {
+        target.dispatchEvent(new MouseEvent('click', event))
+      }
+
       document.removeEventListener(MOVE_EVENT, handlePointerMove)
       document.removeEventListener(UP_EVENT, handlePointerUp)
 
       transitionDuration.value = -1
+      moved = false
 
       handleBuffer()
       verifyScroll()

@@ -4,6 +4,7 @@
       <Scroll
         ref="scroll"
         use-y-bar
+        pointer
         :delta-y="50"
         style="padding: 15px; margin-right: 15px; box-shadow: 0 0 1px;"
         :height="400"
