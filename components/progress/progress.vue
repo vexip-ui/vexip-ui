@@ -5,7 +5,7 @@
       <div v-if="props.infoType === 'inside'" :class="nh.be('info')" :style="infoStyle">
         <slot>
           <span :class="nh.be('percentage')">
-            {{ `${props.percentage}%` }}
+            {{ `${percentValue}%` }}
           </span>
         </slot>
       </div>
@@ -18,7 +18,7 @@
         >
           <slot>
             <span :class="nh.be('percentage')">
-              {{ `${props.percentage}%` }}
+              {{ `${percentValue}%` }}
             </span>
           </slot>
         </Bubble>
@@ -27,7 +27,7 @@
     <div v-if="props.infoType === 'outside'" :class="nh.be('info')">
       <slot>
         <span :class="nh.be('percentage')">
-          {{ `${props.percentage}%` }}
+          {{ `${percentValue}%` }}
         </span>
       </slot>
     </div>
@@ -38,6 +38,7 @@
 import { defineComponent, computed } from 'vue'
 import { Bubble } from '@/components/bubble'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { toFixed } from '@vexip-ui/utils'
 
 import type { PropType, CSSProperties } from 'vue'
 
@@ -62,6 +63,7 @@ export default defineComponent({
     percentage: Number,
     strokeWidth: Number,
     infoType: String as PropType<ProgressInfoType>,
+    precision: Number,
     activated: booleanProp,
     strokeColor: [String, Array, Function] as PropType<StrokeColor>
   },
@@ -77,6 +79,7 @@ export default defineComponent({
         default: 'outside' as ProgressInfoType,
         validator: (value: ProgressInfoType) => infoTypes.includes(value)
       },
+      precision: 2,
       activated: false,
       strokeColor: {
         default: null,
@@ -146,6 +149,7 @@ export default defineComponent({
         [type]: `${props.strokeWidth}px`
       }
     })
+    const percentValue = computed(() => toFixed(props.percentage, props.precision))
 
     return {
       props,
@@ -157,7 +161,8 @@ export default defineComponent({
       infoStyle,
       useBubble,
       bubbleType,
-      bubbleStyle
+      bubbleStyle,
+      percentValue
     }
   }
 })
