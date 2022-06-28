@@ -58,14 +58,15 @@ export function toFixed(number: number, decimal: number) {
   if (pointPos === -1) return number
 
   const nums = snum.replace('.', '').split('')
-  const datum = nums[pointPos + decimal]
+  const targetPos = pointPos + decimal
+  const datum = nums[targetPos]
 
   if (!datum) return number
 
-  const length = snum.length
-
-  if (snum.charAt(length - 1) === '5') {
-    snum = snum.substring(0, length - 1) + '6'
+  if (snum.charAt(targetPos + 1) === '5') {
+    snum = snum.substring(0, targetPos + 1) + '6'
+  } else {
+    snum = snum.substring(0, targetPos + 2)
   }
 
   return parseFloat(Number(snum).toFixed(decimal))
