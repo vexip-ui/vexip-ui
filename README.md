@@ -38,7 +38,7 @@ For project:
 - ~~Transfer to use css vars~~ (Released in `2.0.0-beta.0`)
 - ~~Refactor icons~~ (Released in `2.0.0-beta.0`)
 - ~~Refactor global config~~ (Released in `2.0.0-beta.4`)
-- Write unit tests
+- Write unit tests (In progress, see `tests` branch)
 - Adapt ssr render
 
 For components:
