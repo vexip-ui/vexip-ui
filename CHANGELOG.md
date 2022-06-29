@@ -1,3 +1,13 @@
+# [2.0.0-beta.13](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2022-06-29)
+
+
+### Bug Fixes
+
+* **confirm:** cannot open confrim ([7939674](https://github.com/qmhc/vexip-ui/commit/7939674c29390de072bd3c359128c294b628ae3c))
+* **utils:** improve toFixed method ([4234dbc](https://github.com/qmhc/vexip-ui/commit/4234dbc5f4766ec75d020e34ee1d72c44cb2567f))
+
+
+
 # [2.0.0-beta.12](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2022-06-27)
 
 
