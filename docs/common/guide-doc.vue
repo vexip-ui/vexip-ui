@@ -1,5 +1,5 @@
 <template>
-  <Article ref="article" :class="prefix">
+  <Article ref="article" :class="prefix" :anchor-level="2">
     <div :class="`${prefix}__desc`">
       <template v-if="desc">
         <component :is="desc" @mounted="handleDescMounted"></component>

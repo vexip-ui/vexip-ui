@@ -5,10 +5,10 @@ export interface AnchorMeta {
   name: string
 }
 
-export function ussTocAnchor(level: 2 | 3 = 2, wrapper = ref<HTMLElement | null>(null)) {
+export function ussTocAnchor(initLevel: 2 | 3 = 2, wrapper = ref<HTMLElement | null>(null)) {
   const anchors = ref<AnchorMeta[]>([])
 
-  function refreshAnchor() {
+  function refreshAnchor(level = initLevel) {
     anchors.value = []
 
     if (!wrapper.value) return

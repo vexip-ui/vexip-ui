@@ -12,9 +12,26 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
 import { ussTocAnchor } from './toc-anchor'
 
-const { anchors, wrapper, refreshAnchor } = ussTocAnchor(3)
+import type { PropType } from 'vue'
+
+const props = defineProps({
+  anchorLevel: {
+    type: Number as PropType<2 | 3>,
+    default: 2
+  }
+})
+
+const { anchors, wrapper, refreshAnchor } = ussTocAnchor(props.anchorLevel || 3)
+
+watch(
+  () => props.anchorLevel,
+  value => {
+    refreshAnchor(value)
+  }
+)
 
 defineExpose({ refreshAnchor })
 </script>
