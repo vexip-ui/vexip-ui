@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  Need you very much! You can let me know if you've written anything with Vexip UI! You are very welcome if you would like to contribute codes!
+  You may let me know if you've written any awesome thing with Vexip UI! You are very welcome if you would like to contribute codes!
 </p>
 
 **English** | [中文](./README.zh-CN.md)
