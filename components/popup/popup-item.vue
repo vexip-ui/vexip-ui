@@ -4,7 +4,7 @@
       v-show="state.visible"
       ref="wrapper"
       :class="nh.be('item')"
-      :style="{ zIndex: state.zIndex }"
+      :style="{ zIndex }"
       :vxp-index="state.key"
     >
       <div :class="[nh.be('item-inner'), innerClass]">
@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent, ref, inject, onMounted, nextTick } from 'vue'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, classProp } from '@vexip-ui/config'
+import { useNameHelper, useZIndex, classProp } from '@vexip-ui/config'
 import { noop } from '@vexip-ui/utils'
 import { DELETE_HANDLER } from './symbol'
 
@@ -68,6 +68,7 @@ export default defineComponent({
 
     return {
       nh: useNameHelper('popup'),
+      zIndex: useZIndex(),
 
       wrapper,
 

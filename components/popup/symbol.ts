@@ -13,7 +13,6 @@ export interface PopupItemState extends Record<string, unknown> {
   key: Key,
   content: string,
   closable: boolean,
-  zIndex: number,
   height: number,
   visible: boolean,
   verticalPosition: number,

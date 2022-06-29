@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, provide } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
 import PopupItem from './popup-item.vue'
 import { useNameHelper, classProp } from '@vexip-ui/config'
 import { isFunction, noop } from '@vexip-ui/utils'
@@ -47,17 +47,16 @@ type QueneState =
 
 let globalIndex = 0
 
+function getIndex() {
+  return globalIndex++
+}
+
 export default defineComponent({
   name: 'Popup',
   components: {
     PopupItem
   },
   props: {
-    zIndex: {
-      type: Number,
-      default: 2000,
-      validator: (value: number) => value > 0
-    },
     transitionName: {
       type: String,
       default: 'vxp-popup-top'
@@ -173,10 +172,6 @@ export default defineComponent({
           removeItem(state.param)
         }
 
-        // this.$nextTick(() => {
-        //   this.queueOut()
-        // })
-
         requestAnimationFrame(() => {
           queueOut()
         })
@@ -189,6 +184,7 @@ export default defineComponent({
       let item = options.key ? find(options.key as Key) : null
 
       if (!item?.visible) {
+        // const zIndex = useZIndex('popup')
         const index = getIndex()
         const key = (options.key as Key) ?? nh.bs(`${index}`)
 
@@ -200,7 +196,7 @@ export default defineComponent({
           }
         })
 
-        item = Object.assign(
+        item = reactive(Object.assign(
           {
             key,
             content: '',
@@ -210,12 +206,12 @@ export default defineComponent({
           },
           options,
           {
-            zIndex: index,
+            // zIndex,
             height: 0,
             visible: true,
             verticalPosition: currentVertical
           }
-        )
+        ))
 
         items.value.push(item)
       }
@@ -261,10 +257,6 @@ export default defineComponent({
     function clear() {
       queue.length = 0
       items.value = []
-    }
-
-    function getIndex() {
-      return props.zIndex + globalIndex++
     }
 
     return {

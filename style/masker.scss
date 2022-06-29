@@ -5,7 +5,7 @@
 $masker: () !default;
 $masker: map.merge(
   (
-    z-index: get-css-var('z-index-popper'),
+    z-index: get-css-var('z-index-masker'),
     bg-color: get-css-var('color-black'),
     opacity: 45%
   ),

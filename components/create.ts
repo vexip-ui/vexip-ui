@@ -1,5 +1,5 @@
 import { computed, unref } from 'vue'
-import { configNamespace, configProps, configLocale } from '@vexip-ui/config'
+import { configNamespace, configProps, configLocale, configZIndex } from '@vexip-ui/config'
 
 import type { Ref, App } from 'vue'
 import type { PropsOptions, LocaleOptions } from '@vexip-ui/config'
@@ -10,7 +10,8 @@ export interface InstallOptions {
   prefix?: string,
   namespace?: MaybeRef<string>,
   props?: MaybeRef<Partial<PropsOptions>>,
-  locale?: MaybeRef<LocaleOptions>
+  locale?: MaybeRef<LocaleOptions>,
+  zIndex?: MaybeRef<number>
 }
 
 export function buildInstall(
@@ -18,7 +19,13 @@ export function buildInstall(
   defaultLocale?: 'zh-CN' | 'en-US'
 ) {
   return function install(app: App, options: InstallOptions = {}) {
-    const { prefix = '', namespace = '', props = {}, locale = { locale: defaultLocale } } = options
+    const {
+      prefix = '',
+      namespace = '',
+      props = {},
+      locale = { locale: defaultLocale },
+      zIndex
+    } = options
 
     const withDefaultLocale = computed(() => {
       return { locale: defaultLocale, ...unref(locale) }
@@ -27,6 +34,10 @@ export function buildInstall(
     configNamespace(namespace, app)
     configProps(props, app)
     configLocale(withDefaultLocale, app)
+
+    if (typeof zIndex === 'number') {
+      configZIndex(zIndex, app)
+    }
 
     const formatName =
       typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)

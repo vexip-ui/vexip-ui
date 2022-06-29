@@ -1,59 +1,55 @@
-import { ref, computed, provide, inject, unref } from 'vue'
+import { computed, provide, inject, unref } from 'vue'
 
 import type { App, ComputedRef, Ref } from 'vue'
 
-export interface ZIndexConfig {
-  popper: number,
-  masker: number,
-  popup: number
-}
-
 export const PROVIDED_Z_INDEX = '___vxp-provided-z-index'
 
-const counter = ref(0)
-const globalZIndex = computed(() => ({
-  popper: 1000,
-  masker: 1500,
-  popup: 2000
-}))
+let counter = 0
+let initZIndex = 2000
 
-function getDefaultZIndexConfig() {
-  return {
-    popper: 1000,
-    masker: 1500,
-    popup: 2000
+if (document) {
+  const rootStyle = getComputedStyle(document.documentElement)
+  const cssZIndex = parseFloat(rootStyle.getPropertyValue('--vxp-z-index-popup').trim())
+
+  if (!Number.isNaN(cssZIndex)) {
+    initZIndex = cssZIndex
   }
 }
 
-export function configZIndex(sourceZIndex: Partial<ZIndexConfig> | Ref<Partial<ZIndexConfig>>, app?: App) {
+const globalZIndex = computed(() => initZIndex)
+
+function getOrDefault(num: number, def: number) {
+  return !Number.isNaN(num) ? num : def
+}
+
+export function configZIndex(sourceZIndex: number | Ref<number>, app?: App) {
   if (app) {
     const zIndex = computed(() => {
       const zIndex = unref(sourceZIndex)
 
-      return Object.assign(getDefaultZIndexConfig(), zIndex)
+      return getOrDefault(zIndex, globalZIndex.value)
     })
 
     app.provide(PROVIDED_Z_INDEX, zIndex)
   } else {
-    const upstreamZIndex = inject<ComputedRef<ZIndexConfig> | null>(PROVIDED_Z_INDEX, null)
+    const upstreamZIndex = inject<ComputedRef<number> | null>(PROVIDED_Z_INDEX, null)
     const zIndex = computed(() => {
       const zIndex = unref(sourceZIndex)
-      const providedZIndex = Object.assign(getDefaultZIndexConfig(), zIndex)
 
-      if (!upstreamZIndex?.value) {
-        return providedZIndex
-      }
-
-      return Object.assign(upstreamZIndex.value, providedZIndex)
+      return getOrDefault(
+        zIndex,
+        upstreamZIndex
+          ? getOrDefault(upstreamZIndex.value, globalZIndex.value)
+          : globalZIndex.value
+      )
     })
 
     provide(PROVIDED_Z_INDEX, zIndex)
   }
 }
 
-export function useZIndex(type: keyof ZIndexConfig) {
-  const zIndex = inject<ComputedRef<ZIndexConfig>>(PROVIDED_Z_INDEX, globalZIndex)
+export function useZIndex() {
+  const zIndex = inject<ComputedRef<number>>(PROVIDED_Z_INDEX, globalZIndex)
 
-  counter.value++
-  return computed(() => zIndex.value[type] + counter.value)
+  return computed(() => zIndex.value + counter++)
 }
