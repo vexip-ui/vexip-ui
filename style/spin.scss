@@ -6,7 +6,7 @@
 $spin: () !default;
 $spin: map.merge(
   (
-    z-index: get-css-var('z-index-popper'),
+    z-index: get-css-var('z-index-masker'),
     mask-bg-color: get-css-var('bg-color-base'),
     mask-opacity: 40%,
     icon-color: get-css-var('color-primary-base'),
