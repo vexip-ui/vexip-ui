@@ -75,6 +75,7 @@ export class ConfirmManager {
       vnode.appContext = this._mountedApp._context
 
       render(vnode, this._container, false)
+      document.body.appendChild(this._container.firstElementChild!)
 
       this._instance = vnode.component!.proxy as ConfirmInstance
     }
