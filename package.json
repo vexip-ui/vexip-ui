@@ -175,7 +175,8 @@
     "serve:docs": "pnpm -C docs serve",
     "serve:playground": "pnpm -C playground serve",
     "serve:theme": "ts-node scripts/serve.ts --theme",
-    "test": "vitest"
+    "test": "vitest",
+    "test1": "ts-node scripts/create-tests.ts"
   },
   "sideEffects": [
     "dist/*",

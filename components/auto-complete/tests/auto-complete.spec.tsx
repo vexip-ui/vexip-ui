@@ -1,4 +1,4 @@
-import { describe, beforeEach, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { AutoComplete } from '..'
@@ -18,10 +18,6 @@ function getValue(wrapper: DOMWrapper<Element>) {
 }
 
 describe('AutoComplete', () => {
-  beforeEach(() => {
-    document.body.innerHTML = ''
-  })
-
   it('render', () => {
     const wrapper = mount(AutoComplete, {
       props: { value: '1', options: OPTIONS }
