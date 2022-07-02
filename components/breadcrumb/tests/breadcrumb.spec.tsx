@@ -30,7 +30,7 @@ describe('Breadcrumb', () => {
       </Breadcrumb>
     ))
 
-    expect(wrapper.find('.vxp-breadcrumb__separator').text()).toBe('-')
+    expect(wrapper.find('.vxp-breadcrumb__separator').text()).toEqual('-')
   })
 
   it('separator slot', async () => {
@@ -45,7 +45,7 @@ describe('Breadcrumb', () => {
 
     await nextTick()
     expect(wrapper.find('.sep').exists()).toBe(true)
-    expect(wrapper.find('.vxp-breadcrumb__separator').text()).toBe('666')
+    expect(wrapper.find('.vxp-breadcrumb__separator').text()).toEqual('666')
   })
 
   it('click', async () => {
