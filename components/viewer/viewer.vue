@@ -55,6 +55,7 @@ import {
 } from '@vexip-ui/icons'
 import { useNameHelper, useProps, useLocale, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { useMoving, useFullScreen, useSetTimeout } from '@vexip-ui/mixins'
+import { boundRange } from '@vexip-ui/utils'
 import { InternalActionName } from './symbol'
 
 import type { PropType } from 'vue'
@@ -73,6 +74,8 @@ export default defineComponent({
     moveDisabled: booleanProp,
     zoomDisabled: booleanProp,
     zoomDelta: Number,
+    zoomMin: Number,
+    zoomMax: Number,
     rotateDisabled: booleanProp,
     rotateDelta: Number,
     fullDisabled: booleanProp,
@@ -97,6 +100,8 @@ export default defineComponent({
       moveDisabled: false,
       zoomDisabled: false,
       zoomDelta: 0.15,
+      zoomMin: 0.1,
+      zoomMax: Infinity,
       rotateDisabled: false,
       rotateDelta: 90,
       fullDisabled: false,
@@ -290,7 +295,7 @@ export default defineComponent({
         return
       }
 
-      zoom.value += ratio
+      zoom.value = boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax)
       emit('zoom', zoom.value, state)
     }
 
