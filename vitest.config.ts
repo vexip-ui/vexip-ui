@@ -12,7 +12,7 @@ export default defineConfig({
   },
   test: {
     include: ['components/*/tests/*.spec.{ts,tsx}'],
-    environment: 'jsdom',
+    environment: 'happy-dom',
     clearMocks: true,
     setupFiles: [resolve(__dirname, 'scripts/test-setup.ts')],
     transformMode: {
