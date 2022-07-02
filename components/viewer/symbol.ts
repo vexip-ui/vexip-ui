@@ -15,6 +15,7 @@ export type ToolbarPlacement =
 export enum InternalActionName {
   RotateRight = 'rotateRight',
   RotateLeft = 'rotateLeft',
+  MirrorFlip = 'mirrorFlip',
   ZoomIn = 'zoomIn',
   ZoomOut = 'zoomOut',
   FullScreen = 'fullScreen',

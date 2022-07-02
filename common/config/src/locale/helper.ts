@@ -118,6 +118,7 @@ export interface LocaleConfig {
   viewer: {
     rotateRight: string,
     rotateLeft: string,
+    mirrorFlip: string,
     zoomIn: string,
     zoomOut: string,
     fullScreen: string,
