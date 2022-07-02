@@ -56,6 +56,7 @@ import {
 import { useNameHelper, useProps, useLocale, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { useMoving, useFullScreen, useSetTimeout } from '@vexip-ui/mixins'
 import { InternalActionName } from './symbol'
+import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { ToolbarPlacement, ToolbarAction } from './symbol'
@@ -294,15 +295,7 @@ export default defineComponent({
         return
       }
 
-      zoom.value += ratio
-
-      if (zoom.value < props.zoomMin) {
-        zoom.value = props.zoomMin
-      }
-      if (zoom.value > props.zoomMax) {
-        zoom.value = props.zoomMax
-      }
-
+      zoom.value = boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax)
       emit('zoom', zoom.value, state)
     }
 
