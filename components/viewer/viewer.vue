@@ -73,6 +73,8 @@ export default defineComponent({
     moveDisabled: booleanProp,
     zoomDisabled: booleanProp,
     zoomDelta: Number,
+    zoomMin: Number,
+    zoomMax: Number,
     rotateDisabled: booleanProp,
     rotateDelta: Number,
     fullDisabled: booleanProp,
@@ -97,6 +99,8 @@ export default defineComponent({
       moveDisabled: false,
       zoomDisabled: false,
       zoomDelta: 0.15,
+      zoomMin: 0.1,
+      zoomMax: 2,
       rotateDisabled: false,
       rotateDelta: 90,
       fullDisabled: false,
@@ -291,6 +295,14 @@ export default defineComponent({
       }
 
       zoom.value += ratio
+
+      if (zoom.value < props.zoomMin) {
+        zoom.value = props.zoomMin
+      }
+      if (zoom.value > props.zoomMax) {
+        zoom.value = props.zoomMax
+      }
+
       emit('zoom', zoom.value, state)
     }
 
