@@ -101,7 +101,7 @@ export default defineComponent({
       zoomDisabled: false,
       zoomDelta: 0.15,
       zoomMin: 0.1,
-      zoomMax: 2,
+      zoomMax: Infinity,
       rotateDisabled: false,
       rotateDelta: 90,
       fullDisabled: false,
