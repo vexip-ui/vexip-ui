@@ -55,8 +55,8 @@ import {
 } from '@vexip-ui/icons'
 import { useNameHelper, useProps, useLocale, booleanProp, booleanNumberProp } from '@vexip-ui/config'
 import { useMoving, useFullScreen, useSetTimeout } from '@vexip-ui/mixins'
-import { InternalActionName } from './symbol'
 import { boundRange } from '@vexip-ui/utils'
+import { InternalActionName } from './symbol'
 
 import type { PropType } from 'vue'
 import type { ToolbarPlacement, ToolbarAction } from './symbol'
