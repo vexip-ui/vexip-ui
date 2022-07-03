@@ -34,7 +34,7 @@
               v-else
               :icon="action.icon"
               :style="getActionProp(action, 'iconStyle')"
-              :scale="getActionProp(action, 'iconScale') || 0"
+              :scale="getActionProp(action, 'iconScale') || 1"
             ></Icon>
           </div>
           <Divider v-if="getActionProp(action, 'divided')" :vertical="!toolbarVertical"></Divider>
