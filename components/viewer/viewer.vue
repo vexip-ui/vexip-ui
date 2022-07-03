@@ -320,22 +320,22 @@ export default defineComponent({
       emit('rotate', deg, state)
     }
 
-    function toggleFlipHorizontal() {
+    function toggleFlipHorizontal(target = !flipX.value) {
       if (props.flipDisabled) {
         return
       }
 
-      flipX.value = !flipX.value
-      emit('flip-x', flipX.value, state)
+      flipX.value = target
+      emit('flip-x', target, state)
     }
 
-    function toggleFlipVertical() {
+    function toggleFlipVertical(target = !flipY.value) {
       if (props.flipDisabled) {
         return
       }
 
-      flipY.value = !flipY.value
-      emit('flip-y', flipY.value, state)
+      flipY.value = target
+      emit('flip-y', target, state)
     }
 
     function handleZoom(ratio: number) {
