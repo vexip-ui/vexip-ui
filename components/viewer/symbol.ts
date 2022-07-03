@@ -15,7 +15,8 @@ export type ToolbarPlacement =
 export enum InternalActionName {
   RotateRight = 'rotateRight',
   RotateLeft = 'rotateLeft',
-  MirrorFlip = 'mirrorFlip',
+  FlipHorizontal = 'flipHorizontal',
+  FlipVertical = 'flipVertical',
   ZoomIn = 'zoomIn',
   ZoomOut = 'zoomOut',
   FullScreen = 'fullScreen',
@@ -39,6 +40,7 @@ export interface ToolbarAction {
   process: (state: ViewerState) => void,
   title?: string | ((state: ViewerState) => string),
   iconScale?: number | ((state: ViewerState) => number),
+  iconStyle?: string | ((state: ViewerState) => string),
   divided?: boolean | ((state: ViewerState) => boolean),
   hidden?: boolean | ((state: ViewerState) => boolean),
   disabled?: boolean | ((state: ViewerState) => boolean)

@@ -30,7 +30,12 @@
               :renderer="action.icon"
               :data="{ state }"
             ></Renderer>
-            <Icon v-else :icon="action.icon" :scale="getActionProp(action, 'iconScale') || 0"></Icon>
+            <Icon
+              v-else
+              :icon="action.icon"
+              :style="getActionProp(action,'iconStyle')"
+              :scale="getActionProp(action,'iconScale') || 0"
+            ></Icon>
           </div>
           <Divider v-if="getActionProp(action, 'divided')" :vertical="!toolbarVertical"></Divider>
         </template>
@@ -47,7 +52,7 @@ import { Renderer } from '@/components/renderer'
 import {
   ArrowRotateLeft,
   ArrowRotateRight,
-  ArrowsLeftRight,
+  Repeat,
   Plus,
   Minus,
   Expand,
@@ -77,7 +82,7 @@ export default defineComponent({
     zoomDelta: Number,
     zoomMin: Number,
     zoomMax: Number,
-    mirrorFlipDisabled: booleanProp,
+    flipDisabled: booleanProp,
     rotateDisabled: booleanProp,
     rotateDelta: Number,
     fullDisabled: booleanProp,
@@ -91,7 +96,8 @@ export default defineComponent({
     'move-end',
     'wheel',
     'rotate',
-    'mirror-flip',
+    'flip-x',
+    'flip-y',
     'zoom',
     'full',
     'reset'
@@ -107,7 +113,7 @@ export default defineComponent({
       zoomMax: Infinity,
       rotateDisabled: false,
       rotateDelta: 90,
-      mirrorFlipDisabled: false,
+      flipDisabled: false,
       fullDisabled: false,
       toolbarPlacement: 'bottom',
       actions: () => [],
@@ -122,7 +128,8 @@ export default defineComponent({
 
     const zoom = ref(1)
     const rotate = ref(0)
-    const isMirrored = ref(false)
+    const flipX = ref(false)
+    const flipY = ref(false)
 
     const transition = ref<HTMLElement | null>(null)
 
@@ -146,7 +153,8 @@ export default defineComponent({
     const state = reactive({
       zoom,
       rotate,
-      isMirrored,
+      flipX,
+      flipY,
       full,
       moving,
       x: currentLeft,
@@ -183,11 +191,19 @@ export default defineComponent({
         divided: true
       },
       {
-        name: InternalActionName.MirrorFlip,
-        icon: ArrowsLeftRight,
-        process: () => handleMirrorFlip(),
-        title: () => locale.value.mirrorFlip,
-        hidden: () => props.mirrorFlipDisabled,
+        name: InternalActionName.FlipHorizontal,
+        icon: Repeat,
+        process: () => toggleFlipHorizontal(),
+        title: () => locale.value.flipHorizontal,
+        hidden: () => props.flipDisabled
+      },
+      {
+        name: InternalActionName.FlipVertical,
+        icon: Repeat,
+        process: () => toggleFlipVertical(),
+        title: () => locale.value.flipVertical,
+        hidden: () => props.flipDisabled,
+        iconStyle: () => 'transform: rotate(90deg);',
         divided: true
       },
       {
@@ -261,7 +277,7 @@ export default defineComponent({
     })
     const contentStyle = computed(() => {
       return {
-        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scaleX(${isMirrored.value ? -1 : 1})`
+        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scaleX(${flipX.value ? -1 : 1}) scaleY(${flipY.value ? -1 : 1})`
       }
     })
     const transitionStyle = computed(() => {
@@ -304,13 +320,22 @@ export default defineComponent({
       emit('rotate', deg, state)
     }
 
-    function handleMirrorFlip() {
-      if (props.mirrorFlipDisabled) {
+    function toggleFlipHorizontal() {
+      if (props.flipDisabled) {
         return
       }
 
-      isMirrored.value = !isMirrored.value
-      emit('mirror-flip', isMirrored.value, state)
+      flipX.value = !flipX.value
+      emit('flip-x', flipX.value, state)
+    }
+
+    function toggleFlipVertical() {
+      if (props.flipDisabled) {
+        return
+      }
+
+      flipY.value = !flipY.value
+      emit('flip-y', flipY.value, state)
     }
 
     function handleZoom(ratio: number) {
@@ -324,6 +349,7 @@ export default defineComponent({
 
     async function toggleFull(target = !full.value) {
       target ? await enterFull() : await exitFull()
+
       emit('full', target, state)
     }
 
@@ -331,7 +357,8 @@ export default defineComponent({
       currentTop.value = 0
       currentLeft.value = 0
       rotate.value = 0
-      isMirrored.value = false
+      flipX.value = false
+      flipY.value = false
       zoom.value = 1
       emit('reset', state)
     }
@@ -404,7 +431,8 @@ export default defineComponent({
       getActionProp,
       handleWheel,
       handleRotate,
-      handleMirrorFlip,
+      toggleFlipHorizontal,
+      toggleFlipVertical,
       handleZoom,
       toggleFull,
       handleReset,
