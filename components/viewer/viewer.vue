@@ -33,8 +33,8 @@
             <Icon
               v-else
               :icon="action.icon"
-              :style="getActionProp(action,'iconStyle')"
-              :scale="getActionProp(action,'iconScale') || 0"
+              :style="getActionProp(action, 'iconStyle')"
+              :scale="getActionProp(action, 'iconScale') || 0"
             ></Icon>
           </div>
           <Divider v-if="getActionProp(action, 'divided')" :vertical="!toolbarVertical"></Divider>
@@ -203,7 +203,7 @@ export default defineComponent({
         process: () => toggleFlipVertical(),
         title: () => locale.value.flipVertical,
         hidden: () => props.flipDisabled,
-        iconStyle: () => 'transform: rotate(90deg);',
+        iconStyle: () => 'transform: rotate(90deg)',
         divided: true
       },
       {
