@@ -203,7 +203,7 @@ export default defineComponent({
         process: () => toggleFlipVertical(),
         title: () => locale.value.flipVertical,
         hidden: () => props.flipDisabled,
-        iconStyle: () => 'transform: rotate(90deg)',
+        iconStyle: 'transform: rotate(90deg)',
         divided: true
       },
       {
