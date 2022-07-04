@@ -118,6 +118,8 @@ export interface LocaleConfig {
   viewer: {
     rotateRight: string,
     rotateLeft: string,
+    flipHorizontal: string,
+    flipVertical: string,
     zoomIn: string,
     zoomOut: string,
     fullScreen: string,

@@ -1,3 +1,5 @@
+import type { StyleType } from '@vexip-ui/config'
+
 export type ToolbarPlacement =
   | 'top'
   | 'top-start'
@@ -15,6 +17,8 @@ export type ToolbarPlacement =
 export enum InternalActionName {
   RotateRight = 'rotateRight',
   RotateLeft = 'rotateLeft',
+  FlipHorizontal = 'flipHorizontal',
+  FlipVertical = 'flipVertical',
   ZoomIn = 'zoomIn',
   ZoomOut = 'zoomOut',
   FullScreen = 'fullScreen',
@@ -38,6 +42,7 @@ export interface ToolbarAction {
   process: (state: ViewerState) => void,
   title?: string | ((state: ViewerState) => string),
   iconScale?: number | ((state: ViewerState) => number),
+  iconStyle?: StyleType | ((state: ViewerState) => StyleType),
   divided?: boolean | ((state: ViewerState) => boolean),
   hidden?: boolean | ((state: ViewerState) => boolean),
   disabled?: boolean | ((state: ViewerState) => boolean)

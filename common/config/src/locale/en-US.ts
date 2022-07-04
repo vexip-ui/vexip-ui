@@ -115,6 +115,8 @@ export function enUSLocale() {
     viewer: {
       rotateRight: 'Rotate right',
       rotateLeft: 'Rotate left',
+      flipHorizontal: 'Flip horizontal',
+      flipVertical: 'Flip vertical',
       zoomIn: 'Zoom in',
       zoomOut: 'Zoom out',
       fullScreen: 'Full screen',

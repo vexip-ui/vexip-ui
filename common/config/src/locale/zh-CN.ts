@@ -115,6 +115,8 @@ export function zhCNLocale() {
     viewer: {
       rotateRight: '向右旋转',
       rotateLeft: '向左旋转',
+      flipHorizontal: '横向翻转',
+      flipVertical: '纵向翻转',
       zoomIn: '放大',
       zoomOut: '缩小',
       fullScreen: '全屏',
