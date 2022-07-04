@@ -1,3 +1,10 @@
 [
-  "basis"
+  "basis",
+  "disabled",
+  "size",
+  "icon",
+  "range",
+  "precision",
+  "step",
+  "clearable"
 ]

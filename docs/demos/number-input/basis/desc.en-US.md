@@ -1,3 +1,3 @@
 ### Basis Usage
 
-直接输入数字，或者用左侧的控件加减。
+Enter numbers directly, or use the controls on the left to add or subtract.

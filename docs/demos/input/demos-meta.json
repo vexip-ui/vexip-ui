@@ -3,5 +3,6 @@
   "disabled",
   "icon",
   "size",
-  "before"
+  "before",
+  "clearable"
 ]

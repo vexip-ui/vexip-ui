@@ -1,18 +1,18 @@
 <template>
-  <Input
+  <NumberInput
     placeholder="前置图标"
     style="width: 220px;"
     :prefix="User"
-  ></Input>
+  ></NumberInput>
   <br />
   <br />
-  <Input
+  <NumberInput
     placeholder="后置图标"
     style="width: 220px;"
-    :suffix="MagnifyingGlass"
-  ></Input>
+    :suffix="User"
+  ></NumberInput>
 </template>
 
 <script setup lang="ts">
-import { User, MagnifyingGlass } from '@vexip-ui/icons'
+import { User } from '@vexip-ui/icons'
 </script>

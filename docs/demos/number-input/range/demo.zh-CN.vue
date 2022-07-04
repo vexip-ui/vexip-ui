@@ -1,5 +1,10 @@
 <template>
-  <NumberInput v-model:value="value" style="width: 300px;"></NumberInput>
+  <NumberInput
+    v-model:value="value"
+    :min="0"
+    :max="10"
+    style="width: 300px;"
+  ></NumberInput>
 </template>
 
 <script setup lang="ts">
