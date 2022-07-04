@@ -130,6 +130,8 @@ export default defineComponent({
     const rotate = ref(0)
     const flipX = ref(false)
     const flipY = ref(false)
+    const mouseX = ref('center')
+    const mouseY = ref('center')
 
     const transition = ref<HTMLElement | null>(null)
 
@@ -282,7 +284,8 @@ export default defineComponent({
     })
     const transitionStyle = computed(() => {
       return {
-        transform: `scale(${zoom.value}) rotate(${rotate.value}deg)`
+        transform: `scale(${zoom.value}) rotate(${rotate.value}deg)`,
+        transformOrigin: `${mouseX.value} ${mouseY.value}`
       }
     })
     const allActions = computed(() => {
@@ -304,6 +307,10 @@ export default defineComponent({
 
       event.stopPropagation()
       event.preventDefault()
+
+      const { offsetX, offsetY } = event
+      mouseX.value = offsetX + 'px'
+      mouseY.value = offsetY + 'px'
 
       const sign = event.deltaY > 0 ? -1 : 1
 
@@ -360,6 +367,8 @@ export default defineComponent({
       flipX.value = false
       flipY.value = false
       zoom.value = 1
+      mouseX.value = 'center'
+      mouseY.value = 'center'
       emit('reset', state)
     }
 
