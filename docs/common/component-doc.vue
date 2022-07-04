@@ -1,5 +1,5 @@
 <template>
-  <Article ref="article" :class="prefix">
+  <Article ref="article" :class="prefix" :anchor-level="3">
     <ResizeObserver @resize="refreshScroll?.()">
       <div :style="{ visibility: allLoaded ? undefined : 'hidden' }">
         <h1 :class="`${prefix}__title`">

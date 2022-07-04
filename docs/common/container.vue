@@ -8,6 +8,7 @@
         ref="scroll"
         appear
         use-y-bar
+        :class="`${prefix}__scroll`"
         height="100%"
         scroll-class="page-view"
         @scroll="handleScroll"
@@ -121,6 +122,16 @@ function setScrollY() {
 
     @include query-media('xl') {
       padding-left: var(--aside-width-large);
+    }
+  }
+
+  &__scroll {
+    .vxp-scrollbar--right {
+      top: calc(var(--header-height) + var(--sub-menu-height));
+
+      @include query-media('lg') {
+        top: var(--header-height);
+      }
     }
   }
 
