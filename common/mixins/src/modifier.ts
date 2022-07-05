@@ -53,11 +53,8 @@ export function useModifier(options: UseModifierOptions = {}) {
     const code = event.code?.toLocaleLowerCase()
     const keys = [code, key].filter(Boolean)
 
-    if (code) {
-      activeKeys[value ? 'add' : 'delete'](code)
-    }
-
     for (const key of keys) {
+      activeKeys[value ? 'add' : 'delete'](key)
       setModifier(key, value)
     }
 
