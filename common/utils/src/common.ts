@@ -109,11 +109,10 @@ export function noop() {}
 
 /**
  * 生成一个 range 数组
- * @param size - 大小
- * @param start - 开始的数值，默认为 1
- * @param step - 跨度，默认为 1
  *
- * @returns range 后的数组
+ * @param size 大小
+ * @param start 开始的数值，默认为 1
+ * @param step 跨度，默认为 1
  */
 export function range(size: number, start = 1, step = 1) {
   const array: number[] = []
@@ -127,9 +126,8 @@ export function range(size: number, start = 1, step = 1) {
 
 /**
  * 获取变量类型
- * @param value - 任意变量
  *
- * @returns 小写的类型名字
+ * @param value 任意变量
  */
 export function getType(value: unknown) {
   return Object.prototype.toString.call(value).slice(8, -1)
@@ -137,7 +135,8 @@ export function getType(value: unknown) {
 
 /**
  * 根据长度生成一串随机的字符串
- * @param length - 字符串的长度
+ *
+ * @param length 字符串的长度
  */
 export function randomString(length = 16) {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'

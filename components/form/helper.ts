@@ -2,9 +2,10 @@ import { isNull } from '@vexip-ui/utils'
 
 /**
  * 根据路径读取对象中的值 (实现 ?. 的逻辑)
- * @param obj - 需要被读取的对象
- * @param path - 读取的路径
- * @param strict - 是否开启严格模式 (非法路径报错)
+ *
+ * @param obj 需要被读取的对象
+ * @param path 读取的路径
+ * @param strict 是否开启严格模式 (非法路径报错)
  */
 export function getValueByPath<T = unknown>(
   obj: Record<string, any>,
@@ -48,10 +49,11 @@ export function getValueByPath<T = unknown>(
 
 /**
  * 根据路径设置对象中的值
- * @param obj - 需要被设置的对象
- * @param path - 设置的路径
- * @param value - 需要设置的值
- * @param strict - 是否开启严格模式 (非法路径报错)
+ *
+ * @param obj 需要被设置的对象
+ * @param path 设置的路径
+ * @param value 需要设置的值
+ * @param strict 是否开启严格模式 (非法路径报错)
  */
 export function setValueByPath(
   obj: Record<string, any>,

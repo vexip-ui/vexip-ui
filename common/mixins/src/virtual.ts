@@ -9,12 +9,33 @@ import type { Ref } from 'vue'
 type Key = number | string | symbol
 
 export interface VirtualOptions {
+  /**
+   * 虚拟滚动的元素
+   */
   items: Ref<Array<Record<string, any>>>,
+  /**
+   * 设置元素的最小高度
+   */
   itemSize: Ref<number>,
+  /**
+   * 设置元素是否为固定高度，固定高度时不处理 resize
+   */
   itemFixed: Ref<boolean>,
+  /**
+   * 元素的主键
+   */
   idKey: Ref<string>,
+  /**
+   * 默认停留在的元素的主键，未实现
+   */
   defaultKeyAt?: Ref<Key>,
+  /**
+   * 设置前后的缓冲元素的个数
+   */
   bufferSize?: Ref<number>,
+  /**
+   * 虚拟滚动的包围元素
+   */
   wrapper?: Ref<HTMLElement | null>
   // onResize?: ResizeHandler,
   // onScroll?: (event: Event) => void

@@ -12,12 +12,35 @@ type OffsetsFunction = (options: {
 }) => [number?, number?]
 
 interface UsePopperOptions {
+  /**
+   * popper 元素出现的位置
+   */
   placement: Ref<Placement>,
+  /**
+   * popper 元素需要迁移至的目标选择器，为 true 时会迁移至 body
+   */
   transfer: Ref<boolean | string>,
+  /**
+   * 包围元素，用于判断 clickoutside 事件
+   *
+   * 即使 popper 元素迁移至 wrapper 元素外部，点击 popper 元素时仍认为处于 wrapper 元素内部
+   */
   wrapper: Ref<HTMLElement | null>,
+  /**
+   * 设置 popper 元素为否需要 drop，此时 transform-origin 会自动调整
+   */
   isDrop?: boolean,
+  /**
+   * 参考元素，popper 元素的位置计算依据
+   */
   reference?: Ref<HTMLElement | null>,
+  /**
+   * popper 元素
+   */
   popper?: Ref<HTMLElement | null>,
+  /**
+   * popper 元素的偏移量，可传入一个回调函数
+   */
   offset?: OffsetsFunction | [number?, number?]
 }
 

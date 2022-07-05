@@ -11,11 +11,33 @@ export type ModifierState = Readonly<
 >
 
 export interface UseModifierOptions {
+  /**
+   * 作用的目标元素的 Ref
+   */
   target?: Ref<HTMLElement | null>,
+  /**
+   * 配置键名的别名，会与默认别名动态合并
+   */
   aliasMap?: Record<string, string>,
+  /**
+   * 事件的 capture 选项
+   *
+   * @default false
+   */
   capture?: boolean,
+  /**
+   * 事件的 passive 选项
+   *
+   * @default true
+   */
   passive?: boolean,
+  /**
+   * 键按下的事件回调函数
+   */
   onKeyDown?: (event: KeyboardEvent, modifier: ModifierState) => void,
+  /**
+   * 键抬起的时间回调函数
+   */
   onKeyUp?: (event: KeyboardEvent, modifier: ModifierState) => void
 }
 
