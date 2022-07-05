@@ -14,10 +14,7 @@
       :placeholder="props.placeholder ?? locale.placeholder"
       @blur="handleBlur"
       @focus="handleFocus"
-      @keyup.enter="handleEnter"
-      @keyup="handleKeyUp"
       @keypress="handleKeyPress"
-      @keydown="handleKeyDown"
       @input="handleInput"
       @change="handleChange"
     />
@@ -67,7 +64,7 @@
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
-import { useHover } from '@vexip-ui/mixins'
+import { useHover, useModifier } from '@vexip-ui/mixins'
 import {
   useNameHelper,
   useProps,
@@ -79,7 +76,7 @@ import {
   createStateProp,
   classProp
 } from '@vexip-ui/config'
-import { isNull, noop, toFixed, toNumber, boundRange, throttle } from '@vexip-ui/utils'
+import { isNull, noop, toFixed, toNumber, boundRange, throttle, plus, minus } from '@vexip-ui/utils'
 import { CaretUp, CaretDown, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -115,6 +112,9 @@ export default defineComponent({
     precision: Number,
     readonly: booleanProp,
     step: Number,
+    ctrlStep: Number,
+    shiftStep: Number,
+    altStep: Number,
     disabled: booleanProp,
     inputClass: classProp,
     debounce: booleanProp,
@@ -166,6 +166,9 @@ export default defineComponent({
       precision: 0,
       readonly: false,
       step: 1,
+      ctrlStep: 100,
+      shiftStep: 10,
+      altStep: 0.1,
       disabled: false,
       inputClass: null,
       debounce: false,
@@ -183,6 +186,30 @@ export default defineComponent({
 
     const inputControl = ref<HTMLElement | null>(null)
     const { wrapper, isHover } = useHover()
+
+    useModifier({
+      target: inputControl,
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        emit('key-down', event)
+
+        if (modifier.up || modifier.down) {
+          event.preventDefault()
+
+          changeStep(
+            modifier.up ? 'plus' : 'minus',
+            modifier.ctrl ? 'ctrl' : modifier.shift ? 'shift' : modifier.alt ? 'alt' : undefined
+          )
+        }
+      },
+      onKeyUp: (event, modifier) => {
+        emit('key-up', event)
+
+        if (modifier.enter) {
+          handleEnter()
+        }
+      }
+    })
 
     // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue: number | null = props.value
@@ -263,41 +290,62 @@ export default defineComponent({
       }, 120)
     }
 
-    function plusNumber() {
+    function plusNumber(event: MouseEvent) {
       if (plusDisabled.value) {
         return
       }
 
       !focused.value && focus()
-      changeStep('plus')
+      changeStep(
+        'plus',
+        event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
+      )
     }
 
-    function minusNumber() {
+    function minusNumber(event: MouseEvent) {
       if (minusDisabled.value) {
         return
       }
 
       !focused.value && focus()
-      changeStep('minus')
+      changeStep(
+        'minus',
+        event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
+      )
     }
 
-    function changeStep(type: 'plus' | 'minus') {
+    function changeStep(type: 'plus' | 'minus', modifier?: 'ctrl' | 'shift' | 'alt') {
       if (props.disabled) {
         return
       }
 
       let value = currentValue.value ?? 0
+      let step!: number
 
-      const stringValue = value.toString()
+      switch (modifier) {
+        case 'ctrl':
+          step = props.ctrlStep
+          break
+        case 'shift':
+          step = props.shiftStep
+          break
+        case 'alt':
+          step = props.altStep
+          break
+        default:
+          step = props.step
+      }
 
-      if (/\.$/.test(stringValue)) {
+      const stringValue = value.toString().trim()
+
+      if (stringValue.endsWith('.')) {
         value = toNumber(stringValue.slice(0, -1))
       }
 
       if (type === 'plus') {
-        value += props.step
+        value = plus(value, step)
       } else {
-        value -= props.step
+        value = minus(value, step)
       }
 
       setValue(value, 'input')
@@ -366,8 +414,8 @@ export default defineComponent({
       clearField()
     }
 
-    function handleEnter(event: KeyboardEvent) {
-      emit('enter', event)
+    function handleEnter() {
+      emit('enter')
     }
 
     function handlePrefixClick(event: MouseEvent) {
@@ -378,16 +426,8 @@ export default defineComponent({
       emit('suffix-click', event)
     }
 
-    function handleKeyDown(event: KeyboardEvent) {
-      emit('key-down', event)
-    }
-
     function handleKeyPress(event: KeyboardEvent) {
       emit('key-press', event)
-    }
-
-    function handleKeyUp(event: KeyboardEvent) {
-      emit('key-up', event)
     }
 
     return {
@@ -420,9 +460,7 @@ export default defineComponent({
       handleEnter,
       handlePrefixClick,
       handleSuffixClick,
-      handleKeyDown,
-      handleKeyPress,
-      handleKeyUp
+      handleKeyPress
     }
   }
 })
