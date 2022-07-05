@@ -75,25 +75,6 @@ export function useModifier(options: UseModifierOptions = {}) {
     }
   }
 
-  useListener(
-    target,
-    'keydown',
-    (event: KeyboardEvent) => {
-      updateModifier(event, true)
-      onKeyDown(event, modifier)
-    },
-    { capture, passive }
-  )
-  useListener(
-    target,
-    'keyup',
-    (event: KeyboardEvent) => {
-      updateModifier(event, false)
-      onKeyUp(event, modifier)
-    },
-    { capture, passive }
-  )
-
   const modifierProxy = new Proxy(modifier, {
     get(target, prop, receiver) {
       if (typeof prop !== 'string') {
@@ -112,7 +93,7 @@ export function useModifier(options: UseModifierOptions = {}) {
 
           modifier[prop] = computed(() => keys.every(key => unref(modifierProxy[key])))
         } else {
-          modifier[prop] = ref(false)
+          modifier[prop] = ref(activeKeys.has(prop))
         }
       }
 
@@ -125,6 +106,25 @@ export function useModifier(options: UseModifierOptions = {}) {
       return true
     }
   })
+
+  useListener(
+    target,
+    'keydown',
+    (event: KeyboardEvent) => {
+      updateModifier(event, true)
+      onKeyDown(event, modifierProxy)
+    },
+    { capture, passive }
+  )
+  useListener(
+    target,
+    'keyup',
+    (event: KeyboardEvent) => {
+      updateModifier(event, false)
+      onKeyUp(event, modifierProxy)
+    },
+    { capture, passive }
+  )
 
   return { target, modifier: modifierProxy as ModifierState }
 }
