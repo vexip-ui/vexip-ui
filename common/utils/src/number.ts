@@ -150,3 +150,95 @@ export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO') {
 
   return targetSize
 }
+
+/**
+ * Return digits length of a number
+ * @param number the number
+ */
+export function digitLength(number: number | string) {
+  // Get digit length of e
+  const eSplit = number.toString().split(/[eE]/)
+  const len = (eSplit[0].split('.')[1] || '').length - +(eSplit[1] || 0)
+
+  return len > 0 ? len : 0
+}
+
+function toPrecision(number: number | string, precision = 15) {
+  return +parseFloat(Number(number).toPrecision(precision))
+}
+
+function multipleInt(number: number | string) {
+  const snum = String(number)
+
+  if (!snum.includes('e')) {
+    return Number(snum.replace('.', ''))
+  }
+
+  const dLength = digitLength(number)
+
+  return dLength > 0 ? toPrecision(Number(number) * (10 ** dLength)) : Number(number)
+}
+
+function times(...numbers: (number | string)[]) {
+  let result = numbers[0] as number
+
+  const loop = numbers.slice(1)
+
+  while (loop.length) {
+    const number = loop.shift()!
+    const int1 = multipleInt(result)
+    const int2 = multipleInt(number)
+    const base = digitLength(result) + digitLength(number)
+    const int = int1 * int2
+
+    result = int / (10 ** base)
+  }
+
+  return result
+}
+
+export function plus(...numbers: (number | string)[]) {
+  let result = numbers[0] as number
+
+  const loop = numbers.slice(1)
+
+  while (loop.length) {
+    const number = loop.shift()!
+    const base = 10 ** Math.max(digitLength(result), digitLength(number))
+
+    result = (times(result, base) + times(number, base)) / base
+  }
+
+  return result
+}
+
+export function minus(...numbers: (number | string)[]) {
+  let result = numbers[0] as number
+
+  const loop = numbers.slice(1)
+
+  while (loop.length) {
+    const number = loop.shift()!
+    const base = 10 ** Math.max(digitLength(result), digitLength(number))
+
+    result = (times(result, base) - times(number, base)) / base
+  }
+
+  return result
+}
+
+export function divide(...numbers: (number | string)[]) {
+  let result = numbers[0] as number
+
+  const loop = numbers.slice(1)
+
+  while (loop.length) {
+    const number = loop.shift()!
+    const int1 = multipleInt(result)
+    const int2 = multipleInt(number)
+
+    result = times(int1 / int2, toPrecision(10 ** (digitLength(number) - digitLength(result))))
+  }
+
+  return result
+}
