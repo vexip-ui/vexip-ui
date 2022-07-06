@@ -7,6 +7,7 @@ export function zhCNLocale() {
 
     calendar: {
       year: '年',
+      month: '月',
       month1: '01月',
       month2: '02月',
       month3: '03月',

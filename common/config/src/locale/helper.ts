@@ -10,6 +10,7 @@ export interface LocaleConfig {
 
   calendar: {
     year: string,
+    month: string,
     month1: string,
     month2: string,
     month3: string,

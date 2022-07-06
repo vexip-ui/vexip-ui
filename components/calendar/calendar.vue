@@ -84,7 +84,7 @@ import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
 import CalendarPane from './calendar-pane.vue'
-import { useNameHelper, useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 import type { Dateable } from '@vexip-ui/utils'
@@ -139,17 +139,18 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('calendar')
+    const locale = useLocale('calendar')
 
     const calendarValue = ref(props.value)
     const calendarYear = ref(props.year)
     const calendarMonth = ref(props.month)
 
     function formatYearInput(value: number) {
-      return `${value}年`
+      return `${value}${locale.value.year}`
     }
 
     function formatMonthInput(value: number) {
-      return `${value}月`
+      return `${value}${locale.value.month}`
     }
 
     function isDisabled(date: Date) {

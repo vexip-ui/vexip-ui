@@ -7,6 +7,7 @@ export function enUSLocale() {
 
     calendar: {
       year: '',
+      month: '',
       month1: 'Jan',
       month2: 'Feb',
       month3: 'Mar',
