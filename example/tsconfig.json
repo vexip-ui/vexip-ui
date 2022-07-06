@@ -17,8 +17,7 @@
     "baseUrl": ".",
     "outDir": "dist",
     "types": [
-      "vite/client",
-      "jest"
+      "vite/client"
     ],
     "paths": {
       "@/*": ["../*"],
