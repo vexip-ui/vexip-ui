@@ -1,3 +1,7 @@
 [
-  "basis"
+  "basis",
+  "disabled",
+  "max-length",
+  "no-resize",
+  "state"
 ]

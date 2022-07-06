@@ -1,14 +1,14 @@
 <template>
   <Input
     placeholder="Prefix Icon"
-    style="width: 220px;"
+    style="max-width: 300px;"
     :prefix="User"
   ></Input>
   <br />
   <br />
   <Input
     placeholder="Suffix Icon"
-    style="width: 220px;"
+    style="max-width: 300px;"
     :suffix="MagnifyingGlass"
   ></Input>
 </template>

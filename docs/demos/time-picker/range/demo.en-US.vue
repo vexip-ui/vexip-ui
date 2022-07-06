@@ -1,5 +1,5 @@
 <template>
-  <TimePicker v-model:value="time" is-range style="width: 220px;"></TimePicker>
+  <TimePicker v-model:value="time" is-range style="max-width: 300px;"></TimePicker>
   <p>
     Current Time Range: {{ time }}
   </p>

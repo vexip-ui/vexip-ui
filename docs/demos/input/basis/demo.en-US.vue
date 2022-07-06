@@ -2,7 +2,7 @@
   <Input
     v-model:value="value"
     placeholder="Basis usage"
-    style="width: 220px;"
+    style="max-width: 300px;"
   ></Input>
   <p>
     Input Value: {{ value }}

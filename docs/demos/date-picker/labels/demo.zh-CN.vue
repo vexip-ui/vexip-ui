@@ -7,7 +7,7 @@
       month: '月',
       date: '日'
     }"
-    style="width: 220px;"
+    style="max-width: 300px;"
   ></DatePicker>
 </template>
 

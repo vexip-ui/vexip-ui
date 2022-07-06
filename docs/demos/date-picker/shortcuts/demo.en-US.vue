@@ -1,5 +1,5 @@
 <template>
-  <DatePicker v-model:value="date" :shortcuts="shortcuts" style="width: 220px;"></DatePicker>
+  <DatePicker v-model:value="date" :shortcuts="shortcuts" style="max-width: 300px;"></DatePicker>
   <p>
     Current Date: {{ date }}
   </p>

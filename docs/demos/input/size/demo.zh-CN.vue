@@ -2,14 +2,14 @@
   <Input
     size="small"
     placeholder="Small size"
-    style="width: 220px;"
+    style="max-width: 300px;"
     :prefix="User"
   ></Input>
   <br />
   <br />
   <Input
     placeholder="Default size"
-    style="width: 220px;"
+    style="max-width: 300px;"
     :prefix="User"
   ></Input>
   <br />
@@ -17,7 +17,7 @@
   <Input
     size="large"
     placeholder="Large size"
-    style="width: 220px;"
+    style="max-width: 300px;"
     :prefix="User"
   ></Input>
 </template>

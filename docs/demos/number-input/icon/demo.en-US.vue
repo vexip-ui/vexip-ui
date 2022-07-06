@@ -1,14 +1,14 @@
 <template>
   <NumberInput
     placeholder="Prefix Icon"
-    style="width: 220px;"
+    style="max-width: 300px;"
     :prefix="User"
   ></NumberInput>
   <br />
   <br />
   <NumberInput
     placeholder="Suffix Icon"
-    style="width: 220px;"
+    style="max-width: 300px;"
     :suffix="User"
   ></NumberInput>
 </template>

@@ -1,11 +1,11 @@
 <template>
-  <Input
+  <Textarea
     v-model:value="value"
-    placeholder="基础用法"
+    :max-length="10"
     style="max-width: 300px;"
-  ></Input>
+  ></Textarea>
   <p>
-    Input Value: {{ value }}
+    Textarea Value: {{ value }}
   </p>
 </template>
 

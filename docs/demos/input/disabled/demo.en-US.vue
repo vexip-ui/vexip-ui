@@ -1,6 +1,6 @@
 <template>
-  <Input placeholder="Normal" style="width: 220px;"></Input>
+  <Input placeholder="Normal" style="max-width: 300px;"></Input>
   <br />
   <br />
-  <Input disabled placeholder="Disabled" style="width: 220px;"></Input>
+  <Input disabled placeholder="Disabled" style="max-width: 300px;"></Input>
 </template>

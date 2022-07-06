@@ -1,5 +1,5 @@
 <template>
-  <TimePicker v-model:value="time" no-filler style="width: 220px;"></TimePicker>
+  <TimePicker v-model:value="time" no-filler style="max-width: 300px;"></TimePicker>
   <p>
     Current Time: {{ time }}
   </p>

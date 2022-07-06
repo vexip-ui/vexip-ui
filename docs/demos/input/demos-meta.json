@@ -4,5 +4,6 @@
   "icon",
   "size",
   "before",
-  "clearable"
+  "clearable",
+  "state"
 ]

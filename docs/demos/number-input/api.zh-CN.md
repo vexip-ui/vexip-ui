@@ -17,7 +17,7 @@
 | autocomplete     | `boolean`                                        | 设置输入框的自动完成                             | `false`     | -    |
 | precision        | `number`                                         | 用于设置值的精度 (小数位数)                      | `0`         | -    |
 | readonly         | `boolean`                                        | 设置输入框的只读属性                             | `false`     | -    |
-| step             | `number`                                         | 在数字类型时，用于设置增减按钮单次变化的幅度     | `1`         | -    |
+| step             | `number`                                         | 用于设置增减按钮单次变化的幅度     | `1`         | -    |
 | min              | `number`                                         | 设置最小值限制                                   | `-Infinity` | -    |
 | max              | `number`                                         | 设置最大值限制                                   | `Infinity`  | -    |
 | disabled         | `boolean`                                        | 设置是否禁用输入框                               | `false`     | -    |

@@ -1,14 +1,14 @@
 <template>
   <NumberInput
     placeholder="前置图标"
-    style="width: 220px;"
+    style="max-width: 300px;"
     :prefix="User"
   ></NumberInput>
   <br />
   <br />
   <NumberInput
     placeholder="后置图标"
-    style="width: 220px;"
+    style="max-width: 300px;"
     :suffix="User"
   ></NumberInput>
 </template>

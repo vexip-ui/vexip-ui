@@ -4,7 +4,7 @@
     v-model:value="yearRange"
     is-range
     type="year"
-    style="width: 220px;"
+    style="max-width: 300px;"
   ></DatePicker>
   <p>
     Current Year Range: {{ yearRange }}
