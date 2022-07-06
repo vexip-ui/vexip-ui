@@ -302,7 +302,7 @@ export default defineComponent({
     function beforeScroll({ signX, signY }: { signX: number, signY: number }) {
       const sign = props.horizontal ? signX : signY
 
-      return !((sign > 0 && prevDisabled.value) || (sign < 0 && nextDisabled.value))
+      return !((sign < 0 && prevDisabled.value) || (sign > 0 && nextDisabled.value))
     }
 
     function handleScrollEnd({ clientX, clientY }: MouseEvent) {
