@@ -145,9 +145,9 @@ export function createStateProp() {
   }
 }
 
-type MaybeArray<T> = T | T[]
+type MaybeArray<T> = T | MaybeArray<T>[]
 
-export type ClassType = MaybeArray<string | Record<string, any>>
+export type ClassType = MaybeArray<string | { [x: string]: ClassType }>
 export type StyleType = MaybeArray<string | CSSProperties & { [x: `--${string}`]: string | number }>
 
 export const classProp = [String, Object, Array] as PropType<ClassType>
