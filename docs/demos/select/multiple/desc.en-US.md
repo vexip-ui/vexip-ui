@@ -1,5 +1,5 @@
 ### Multiple Select
 
-添加 `multiple` 属性可以开启多选模式。
+Add the `multiple` prop to enable multiple selection mode.
 
-添加 `option-check` 属性可以开启被选选项打勾功能，通常配合多选模式一同使用。
+Add the `option-check` prop to enable the check icon display of selected options, usually used in conjunction with multi-select mode.

@@ -1,1 +1,1 @@
-将数据按照日历的形式展示的容器，一般用于数据按日期划分的场合，例如日程表、课表等等。
+A container that displays data in the form of a calendar. It is generally used in occasions where data is divided by date, such as schedules, class schedules and so on.

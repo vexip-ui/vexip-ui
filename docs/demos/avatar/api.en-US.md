@@ -2,50 +2,50 @@
 
 | Name         | Type                                                       | Description                                      | Default     | Since |
 | ------------ | ---------------------------------------------------------- | ------------------------------------------------ | ----------- | ----- |
-| size         | `number \| 'small' \| 'default' \| 'large'`                | 头像的大小，当作用在头像组时优先使用组的大小     | `'default'` | -     |
-| src          | `string`                                                   | 头像图片的源地址                                 | `''`        | -     |
-| icon         | `Record<string, any>`                                      | 头像的图标对象                                   | `null`      | -     |
-| circle       | `boolean`                                                  | 设置头像是否为圆形                               | `false`     | -     |
-| alt          | `string`                                                   | 设置头像图片的 `alt` 属性                        | `''`        | -     |
-| fit          | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | 设置头像的图片如何填充，同 `css` 的 `object-fit` | `'cover'`   | -     |
-| src-set      | `string`                                                   | 设置头像图片的 `srcset` 属性                     | `''`        | -     |
-| gap          | `number`                                                   | 设置文字头像左右两侧内边界的 `px` 值             | `4`         | -     |
-| icon-scale   | `number`                                                   | 设置头像图标的缩放值                             | `1.4`       | -     |
-| fallback-src | `string`                                                   | 头像图片加载失败时的后备源地址                   | `''`        | -     |
-| color        | `string`                                                   | 设置头像的图标和文字的颜色                       | `null`      | -     |
-| background   | `string`                                                   | 设置头像的背景颜色                               | `null`      | -     |
+| size | `number \| 'small' \| 'default' \| 'large'` | The size of the avatar, the size of the group is used first when it is applied to the avatar group | `'default'` | - |
+| src | `string` | The source address of the avatar image | `''` | - |
+| icon | `Record<string, any>` | The icon object of the avatar | `null` | - |
+| circle | `boolean` | Set whether the avatar is a circle | `false` | - |
+| alt | `string` | Set the `alt` attribute of the avatar image | `''` | - |
+| fit | `'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | Set how to fill the image of the avatar, same as `object-fit` of `css` | `'cover'` | - |
+| src-set | `string` | Set the `srcset` attribute of the avatar image | `''` | - |
+| gap | `number` | Set the `px` value of the left and right inner borders of the text avatar | `4` | - |
+| icon-scale | `number` | Set the scaling value of the avatar icon | `1.4` | - |
+| fallback-src | `string` | The fallback source address when the avatar image fails to load | `''` | - |
+| color | `string` | Set the color of the icon and text of the avatar | `null` | - |
+| background | `string` | Set the background color of the avatar | `null` | - |
 
 ### Alert Events
 
 | Name  | Description                              | Parameters       | Since |
 | ----- | ---------------------------------------- | ---------------- | ----- |
-| error | 当使用的图片加载失败时触发，返回错误事件 | `(event: Event)` | -     |
+| error | Emitted when the image used fails to load, returns an error event | `(event: Event)` | - |
 
 ### Alert Slots
 
 | Name    | Description                                                      | Parameters | Since |
 | ------- | ---------------------------------------------------------------- | ---------- | ----- |
-| default | 头像的文字内容插槽，当未使用图片或图片无效、且未使用图标时才有效 | -          | -     |
+| default | The text content slot of the avatar, it is valid only when the image is not used or the image is invalid, and the icon is not used | - | - |
 
 ### AvatarGroup Props
 
 | Name            | Type                                                                                                  | Description                              | Default     | Since |
 | --------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------- | ----------- | ----- |
-| size            | `number \| 'small' \| 'default' \| 'large'`                                                           | 设置组内头像的大小                       | `'default'` | -     |
-| options         | `Array<({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>>` | 头像组的选项                             | `[]`        | -     |
-| circle          | `boolean`                                                                                             | 头像组的大小，会覆盖组内的头像的大小属性 | `false`     | -     |
-| max             | `number`                                                                                              | 设置显示头像的最大个数                   | `null`      | -     |
-| show-tip        | `boolean`                                                                                             | 设置是否为超出部分显示提示气泡           | `false`     | -     |
-| tip-trigger     | `'hover' \| 'click'`                                                                                  | 提示气泡的触发方式                       | `'hover'`   | -     |
-| vertical        | `boolean`                                                                                             | 设置头像组是否为纵向排列                 | `false`     | -     |
-| offset          | `number`                                                                                              | 设置组内头像的偏移量                     | `null`      | -     |
-| rest-color      | `string`                                                                                              | 设置超出部分头像的图标和文字颜色         | `null`      | -     |
-| rest-background | `string`                                                                                              | 设置超出部分头像的背景颜色               | `null`      | -     |
+| size | `number \| 'small' \| 'default' \| 'large'` | Set the size of the avatar in the group | `'default'` | - |
+| options | `Array<({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>>` | avatar group options | `[]` | - |
+| circle | `boolean` | The size of the avatar group, which will override the size property of the avatars in the group | `false` | - |
+| max | `number` | Set the maximum number of avatars to display | `null` | - |
+| show-tip | `boolean` | Set whether to show the tip bubble for the excess part | `false` | - |
+| tip-trigger | `'hover' \| 'click'` | How to trigger the tip bubble | `'hover'` | - |
+| vertical | `boolean` | Set whether the avatar group is arranged vertically | `false` | - |
+| offset | `number` | Set the offset of the avatar in the group | `null` | - |
+| rest-color | `string` | Set the icon and text color of the extra avatar | `null` | - |
+| rest-background | `string` | Set the background color of the rest-background avatar | `null` | - |
 
 ### AlertGroup Slots
 
 | Name    | Description                                        | Parameters                                                                                                                      | Since |
 | ------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| default | 常规显示的头像的插槽                               | `(option: ({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>, index: number)`         | -     |
-| rest    | 超出部分头像的插槽，接收超出部分的选项和超出的数目 | `(options: Array<({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>>, count: number)` | -     |
-| tip     | 提示气泡的插槽，接收超出部分的选项和超出的数目     | `(options: Array<({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>>, count: number)` | -     |
+| default | Slot for regular display avatar | `{ option: ({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>, index: number }` | - |
+| rest | Slot for overshoot avatar, receiving overshoot options and the number of overshoots | `{ options: Array<({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>>, count: number }` | - |
+| tip | Slot for the tip bubble, receiving options for the excess and the number of excess | `{ options: Array<({ src: string } \| { icon: Record<string, any> } \| { text: string } ) & Record<string, any>>, count: number }` | - |

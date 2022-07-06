@@ -42,8 +42,25 @@
 
 | 名称    | 说明                   | 参数 | 始于 |
 | ------- | ---------------------- | --- | --- |
-| default | 选项内容的插槽         | `(option: { value: string \| number, label?: string, disabled?: boolean, divided?: boolean, noTitle?: boolean }, index: number, selected: boolean, handleSelect: (value: string \| number, label: string) => void)` | - |
+| default | 选项内容的插槽         | `(option: OptionState, index: number, selected: boolean, handleSelect: (option: OptionState) => void)` | - |
 | prefix  | 前置图标内容的插槽     | - | - |
 | control | 选择器主控件内容的插槽 | - | - |
 | suffix  | 后缀图标内容的插槽     | - | - |
 | empty   | 空选项提示内容的插槽   | - | - |
+
+选项状态的类型定义：
+
+```ts
+type RawOption = string | Record<string, any>
+
+interface OptionState {
+  value: string | number,
+  label: string,
+  disabled: boolean,
+  divided: boolean,
+  noTitle: boolean,
+  hidden: boolean,
+  hitting: boolean,
+  data: RawOption
+}
+```

@@ -1,3 +1,3 @@
-### 调整幅度
+### Adjust Step
 
-设置 `step` 属性的值可以调整每次滑动的最小幅度。
+Set the value of the `step` prop to adjust the step of each slide.

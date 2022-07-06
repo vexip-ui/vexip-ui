@@ -2,14 +2,14 @@
 
 | Name          | Type   | Description                                                    | Default   | Since |
 | ------------- | ------ | ------------------------------------------------------- | -------- | --- |
-| title         | `string` | 卡片的标题，当使用插槽时无效                            | `''`       | - |
-| shadow        | `'always' \| 'hover' \| 'never'` | 设置卡片的阴影模式 | `'always'` | - |
-| content-style | `Record<string, any>` | 卡片内容的自定义样式                                    | `{}`       | - |
+| title | `string` | The title of the card, invalid when using a slot | `''` | - |
+| shadow | `'always' \| 'hover' \| 'never'` | Set the shadow mode of the card | `'always'` | - |
+| content-style | `Record<string, any>` | Custom style for card content | `{}` | - |
 
 ### Card Slots
 
 | Name    | Description               | Parameters | Since |
 | ------- | ------------------ | --- | --- |
-| default | 卡片内容的插槽     | - | - |
-| title   | 卡片标题的插槽     | - | - |
-| extra   | 卡片拓展内容的插槽 | - | - |
+| default | Slot for card content | - | - |
+| title | Slot for card title | - | - |
+| extra | Slots for card expansions | - | - |

@@ -1,30 +1,22 @@
 <template>
-  <div>
-    <Radio v-model:value="value" label="radio">
-      Radio
-    </Radio>
-    <br />
-    <p style="margin: 10px 0;">
-      value: {{ value }}
-    </p>
-    <Button
-      type="primary"
-      size="small"
-      @click="value = value ? '' : 'radio'"
-    >
-      {{ value ? 'Cancel' : 'Select' }}
-    </Button>
-  </div>
+  <Radio v-model:value="value" label="radio">
+    Radio
+  </Radio>
+  <br />
+  <p style="margin: 10px 0;">
+    value: {{ value }}
+  </p>
+  <Button
+    type="primary"
+    size="small"
+    @click="value = value ? '' : 'radio'"
+  >
+    {{ value ? 'Cancel' : 'Select' }}
+  </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const value = ref('')
-
-    return { value }
-  }
-})
+const value = ref('')
 </script>

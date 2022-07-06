@@ -1,3 +1,3 @@
-### 单独使用
+### Use Alone
 
-并不是所有的情况都需要多个面板并列，这时 Pane 组件可以单独使用，形成一个独立可展开面板。
+Not all cases require multiple panels to be juxtaposed, in which case the panel can be used alone to form an independent expandable panel.

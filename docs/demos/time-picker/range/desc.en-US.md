@@ -1,5 +1,5 @@
-### 范围选择
+### Range Select
 
-添加 `range` 属性可以开启范围选择模式。
+Add the `range` prop to enable range selection mode.
 
-范围选择模式下，时间选择框的返回值将变为一个包含开始和结束时间的数组。
+In range selection mode, the return value of the time picker will become an array containing the start and end times.

@@ -46,6 +46,6 @@
 
 | 名称    | 说明                                                             | 参数 | 始于 |
 | ------- | ---------------------------------------------------------------- | ---- | ---- |
-| default | 常规显示的头像的插槽                               | `(option: ({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>, index: number)`         | -     |
-| rest    | 超出部分头像的插槽，接收超出部分的选项和超出的数目 | `(options: Array<({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>>, count: number)` | -     |
-| tip     | 提示气泡的插槽，接收超出部分的选项和超出的数目     | `(options: Array<({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>>, count: number)` | -     |
+| default | 常规显示的头像的插槽                               | `{ option: ({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>, index: number }`         | -     |
+| rest    | 超出部分头像的插槽，接收超出部分的选项和超出的数目 | `{ options: Array<({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>>, count: number }` | -     |
+| tip     | 提示气泡的插槽，接收超出部分的选项和超出的数目     | `{ options: Array<({ src: string } \| { icon: Record<string, any> } \| { text: string }) & Record<string, any>>, count: number }` | -     |

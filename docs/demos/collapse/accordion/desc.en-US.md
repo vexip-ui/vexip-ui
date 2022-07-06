@@ -1,3 +1,3 @@
-### 手风琴
+### Accordion
 
-添加 `accordion` 属性可以开启手风琴模式，该模式下每次只能展开一个面板。
+Adding the `accordion` prop enables accordion mode, in which only one panel can be expanded at a time.

@@ -1,3 +1,3 @@
-### Add Badge
+### With Badge
 
-可以与 Badge 组件结合使用。
+Can be combined with Badge component.

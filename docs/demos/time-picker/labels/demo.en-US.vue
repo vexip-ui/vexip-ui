@@ -3,22 +3,16 @@
     v-model:value="time"
     separator=""
     :labels="{
-      hour: '时',
-      minute: '分',
-      second: '秒'
+      hour: 'H',
+      minute: 'M',
+      second: 'S'
     }"
     style="width: 220px;"
   ></TimePicker>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const time = ref('')
-
-    return { time }
-  }
-})
+const time = ref('')
 </script>

@@ -65,14 +65,6 @@
   </RadioGroup>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  setup() {
-    return {
-      items: ['北京', '上海', '广州', '深圳']
-    }
-  }
-})
+<script setup lang="ts">
+const items = ['Beijing', 'Shanghai', 'Guangzhou', 'Shenzhen']
 </script>

@@ -25,7 +25,7 @@
 | prefix-color | `string` | The color of the prefix content, affects the prefix slot | `''` | - |
 | suffix | `Record<string, any>` | The suffix icon, invalid when using suffix slot | `''` | - |
 | suffix-color | `string` | The color of the suffix content, which affects the suffix slot | `''` | - |
-| disabled | `boolean` | Set whether to disable the date selection box | `false` | - |
+| disabled | `boolean` | Set whether to disable the date picker | `false` | - |
 | transition-name | `string` | Set the transition between show and hide of the date selection window | `'vxp-drop'` | - |
 | confirm-text | `string` | The text content of the date selection window confirm button | `locale.confirm` | - |
 | cancel-text | `string` | The text content of the cancel button of the date selection window | `locale.cancel` | - |
@@ -40,7 +40,7 @@
 | toggle | Emitted when the date panel display state changes, returns the current state | `(visible: boolean)` | - |
 | foucs | Emitted when the control is focused, no return value | - | - |
 | blur | Emitted when the control loses focus, no return value | - | - |
-| change | Emitted when the selected time changes, depending on whether the date selection box type is 'year' and whether the range mode is enabled, it will return a year, year range, standard date or standard date range | `(value: string \ | number \| number[] \| string[] \| null)` | - |
+| change | Emitted when the selected time changes, depending on whether the date picker type is 'year' and whether the range mode is enabled, it will return a year, year range, standard date or standard date range | `(value: string \ | number \| number[] \| string[] \| null)` | - |
 | change-col | Emitted when the selected date type changes, returns the name of the current type | `(type: 'year' \| 'month' \| 'date' \| 'hour' \| 'minute' \| 'second')` | - |
 | input | Emitted when the value of any type of date entered by pressing the key changes, returns the name of the current type and the input value | `(type: 'year' \| 'month' \| 'date' \| 'hour' \ | 'minute' \| 'second', value: number)` | - |
 | enter | Emitted when the enter key is used to confirm or the confirm button of the date selection window is clicked, no return value | - | - |

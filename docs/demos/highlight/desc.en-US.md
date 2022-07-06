@@ -1,1 +1,1 @@
-对一段文本中特定内容进行高亮，常用于对文字内容检索后对关键词的快速高亮。
+To highlight specific content in a piece of text, it is often used to quickly highlight keywords after retrieving the text content.

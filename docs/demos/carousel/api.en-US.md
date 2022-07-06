@@ -2,39 +2,39 @@
 
 | Name          | Type              | Description                                                                           | Default  | Since |
 | ------------- | ----------------- | ------------------------------------------------------------------------------ | ------- | --- |
-| active        | `number`            | 当前激活的元素，可以使用 `v-model` 双向绑定                                      | `0`       | - |
-| view-size     | `number`            | 视窗中可容纳的 item 数                                                         | `3`       | - |
-| vertical      | `boolean`           | 设置是否开启纵向轮播模式                                                       | `false`   | - |
-| disabled      | `boolean`           | 是否为禁用状态                                                                 | `false`   | - |
-| loop          | `boolean`           | 是否开启循环轮播模式                                                           | `false`   | - |
-| arrow         | `'outside' \| 'inside' \| 'none'`            | 箭头显示的方式                           | `'outside'` | - |
-| arrow-trigger | `'hover' \| 'always'`            | 箭头显示的触发方式，可选值为 `hover`、`always`，仅当箭头类型为 `inside` 时有效 | `'hover'` | - |
-| autoplay      | `boolean \| number` | 设置轮播自动播放，传入数值时可以设置间隔毫秒数，最低有效值为 300               | `false`   | - |
-| pointer       | `'outside' \| 'inside' \| 'none'`            | 指示器显示的方式，可选值为 `outside`、`inside`、`none`                         | `'none'`  | - |
-| speed         | `number`            | 元素切换过渡效果的速度                                                         | `300`     | - |
-| active-offset | `number`            | 标记 item 激活的偏移量，为 0 时默认视窗第一个元素为激活状态                    | `0`       | - |
-| height        | `number` \| `string`  | 在 `vertical` 模式下，可以设置高度                                             | `null`    | - |
+| active | `number` | The currently active element, can use `v-model` two-way binding | `0` | - |
+| view-size | `number` | The number of items that can fit in the viewport | `3` | - |
+| vertical | `boolean` | Set whether to enable vertical rotation mode | `false` | - |
+| disabled | `boolean` | Set whether is disabled | `false` | - |
+| loop | `boolean` | Whether to enable loop mode | `false` | - |
+| arrow | `'outside' \| 'inside' \| 'none'` | Set how the arrow is displayed | `'outside'` | - |
+| arrow-trigger | `'hover' \| 'always'` | The trigger mode of arrow display, optional values ​​are `hover`, `always`, only valid when the arrow type is `inside` | `'hover'` | - |
+| autoplay | `boolean \| number` | Set the carousel to play automatically, the interval in milliseconds can be set when the value is passed in, the minimum valid value is 300 | `false` | - |
+| pointer | `'outside' \| 'inside' \| 'none'` | How to display the pointer, optional values ​​are `outside`, `inside`, `none` | `'none'` | - |
+| speed | `number` | The speed at which the element toggles the transition effect | `300` | - |
+| active-offset | `number` | The offset to mark the activation of the item, when it is 0, the first element of the default window is active | `0` | - |
+| height | `number` \| `string` | In `vertical` mode, the height can be set | `null` | - |
 
 ### Carousel Events
 
 | Name      | Description                                                         | Parameters  | Since |
 | --------- | ------------------------------------------------------------ | ----- | --- |
-| change | 激活的 item 改变时触发，返回激活的元素的索引                 | `(active: number)` | - |
-| prev   | 当点击向前箭头切换元素时触发，返回激活的元素的索引           | `(active: number)` | - |
-| next   | 当点击向后箭头或自动播放切换元素时触发，返回激活的元素的索引 | `(active: number)` | - |
-| select | 当点击了元素时触发，返回点击的元素的索引                     | `(active: number)` | - |
+| change | Emitter when the active item changes, returns the index of the active element | `(active: number)` | - |
+| prev | Emitter when the forward arrow is clicked to switch elements, returns the index of the active element | `(active: number)` | - |
+| next | Emitter when the back arrow or autoplay toggle element is clicked, returns the index of the active element | `(active: number)` | - |
+| select | Emitter when an element is clicked, returns the index of the clicked element | `(active: number)` | - |
 
 ### Carousel Slots
 
 | Name       | Description                                                               | Parameters  | Since |
 | ---------- | ------------------------------------------------------------------ | --- | --- |
-| default    | 轮播的内容插槽                                                     | - | - |
-| prev-arrow | 向前滚动按钮的内容插槽，接受一个 `disabled` 参数标识是否为禁用状态 | `(disabled: boolean)` | - |
-| next-arrow | 向后滚动按钮的内容插槽，接受一个 `disabled` 参数标识是否为禁用状态 | `(disabled: boolean)` | - |
-| pointer    | 轮播标记点的内容插槽，接受一个 `active` 参数标识是否为激活状态     | `(active: boolean)` | - |
+| default | Content slot for carousel | - | - |
+| prev-arrow | The content slot of the forward scroll button, accepts a `disabled` parameter to identify whether it is disabled | `{ disabled: boolean }` | - |
+| next-arrow | The content slot of the back scroll button, accepts a `disabled` parameter to identify whether it is disabled | `{ disabled: boolean }` | - |
+| pointer | The content slot of the carousel marker, accepts an `active` parameter indicating whether it is active | `{ active: boolean }` | - |
 
 ### CarouselItem Slots
 
 | Name    | Description                                                         | Parameters  | Since |
 | ------- | ------------------------------------------------------------ | --- | --- |
-| default | 轮播元素的内容插槽，接受一个 `active` 参数标识是否为激活状态 | `(active: boolean)` | - |
+| default | The content slot of the carousel element, accepts an `active` parameter to indicate whether it is active | `{ active: boolean }` | - |

@@ -1,5 +1,5 @@
 ### Text Avatar
 
-使用默认插槽可以将文字作为头像，并且文字会根据头像大小自动计算缩放比例。
+Using the default slot allows using text as an avatar, and the text is automatically scaled based on the avatar size.
 
-可以结合 `gap` 属性设置头像两侧的内边距。
+You can combine the `gap` prop to set the padding on both sides of the avatar.

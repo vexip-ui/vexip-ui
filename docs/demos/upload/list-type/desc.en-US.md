@@ -1,3 +1,3 @@
 ### List Type
 
-通过 `url` 设置上传的目标地址，在选择文件后将自动上传，默认单文件上传。
+The file list type can be set via the `list-type` prop.

@@ -1,3 +1,3 @@
-### 阴影模式
+### Shadow Mode
 
-设置 `shadow` 属性的值可以调整卡片的阴影模式。
+Set the value of the `shadow` prop to adjust the shadow mode of the card.

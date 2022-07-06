@@ -1,3 +1,3 @@
-### 垂直排列
+### Vertical Arrangement
 
-添加 `vertical` 属性可以设置单选框组垂直布局。
+Add the `vertical` prop to set the radio group to vertical layout.

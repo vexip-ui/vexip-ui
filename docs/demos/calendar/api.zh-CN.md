@@ -22,5 +22,5 @@
 | ------- | ----------------------------------------------------------------------------------------------------- | --- | --- |
 | header  | 日历的头部内容插槽，使用后将替换日历的整个头部                                                        | - | - |
 | title   | 日历的标题内容插槽                                                                                    | - | - |
-| week    | 日历星期数内容的插槽，`week` 参数为处理了 `week-start` 后的星期数                              | `(label: string, index: number, week: number)` | - |
-| content | 日历单元格内容插槽 | `(selected: boolean, date: Date, isPrev: boolean, isNext: boolean, isToday: boolean, disabled: boolean)` | - |
+| week    | 日历星期数内容的插槽，`week` 参数为处理了 `week-start` 后的星期数                              | `{ label: string, index: number, week: number }` | - |
+| content | 日历单元格内容插槽 | `{ selected: boolean, date: Date, isPrev: boolean, isNext: boolean, isToday: boolean, disabled: boolean }` | - |

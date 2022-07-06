@@ -1,3 +1,3 @@
 ### Basis Usage
 
-通过 `url` 设置上传的目标地址，在选择文件后将自动上传，默认单文件上传。
+Use `url` prop to set the upload destination address, which will be automatically uploaded after selecting a file. By default is single file upload.

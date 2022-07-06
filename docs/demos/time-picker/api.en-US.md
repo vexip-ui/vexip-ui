@@ -2,53 +2,53 @@
 
 | Name             | Type              | Description                                                                               | Default         | Since |
 | ---------------- | ----------------- | ---------------------------------------------------------------------------------- | -------------- | --- |
-| value            | `string \| string[]`   | 时间选择框的值，可以使用 `v-model` 双向绑定                                          | `'00:00:00'`     | - |
-| visible          | `boolean`           | 设置时间选择窗口的初始打开状态，可以使用 `v-model` 双向绑定                          | `false`          | - |
-| placement        | `Placement`            | 时间选择窗口出现的位置，可选值同 Popper.js                                         | `'bottom-start'` | - |
-| transfer         | `boolean \| string` | 设置时间选择窗口的渲染位置，设置为 `true` 时默认渲染至 `<body>`                | `false`          | - |
-| format           | `string`            | 根据是否具有 Hms 来控制时间选择列的显示隐藏                                        | `'HH:mm:ss'`     | - |
-| separator        | `string`            | 时间的连接符                                                                       | `':'`            | - |
-| filler           | `string`            | 时间未选择时的填充符，长度固定为 1                                                 | `'-'`            | - |
-| no-filler        | `boolean`           | 是否禁用 filler，如果禁用，初始化后控件内会显示当前 value                          | `false`          | - |
-| clearable        | `boolean`           | 是否允许清空值                                                                     | `false`          | - |
-| no-action        | `boolean`           | 是否禁用时间选择窗口的底部操作栏                                                   | `false`          | - |
-| no-arrow         | `boolean`           | 是否禁用滚轮选择器的箭头指示器                                                     | `false`          | - |
-| candidate        | `number`            | 设置滚轮选择器上下的候选个数，可选范围为 0 ~ 3                                     | `3`              | - |
-| labels           | `Partial<Record<'hour' \| 'minute' \| 'second', string>>`             | 设置在每个时间单元后面的标签                                                       | `{}`             | - |
-| shortcuts        | `{ name: string, value: string \| (() => string) }[]`             | 设置日期快捷选择的候选列表，元素为 `{ name, value }` 的对象，其中 value 可以是函数 | `[]`             | - |
-| steps            | `number[]`             | 分别设置时间选择框每个滚轮的滚动跨度                                               | `[1, 1, 1]`      | - |
-| ctrl-steps       | `number[]`             | 分别设置时间选择框每个滚轮按住 Ctrl 时的滚动跨度                                   | `[5, 5, 5]`      | - |
-| prefix           | `Record<string, any>`            | 前缀图标，使用前缀插槽时无效                                                 | `null`             | - |
-| prefix-color     | `string`            | 前缀内容的颜色，会影响前缀插槽                                                     | `''`             | - |
-| suffix           | `Record<string, any>`            | 后缀图标，使用后缀插槽时无效                                                 | `null`             | - |
-| suffix-color     | `string`            | 后缀内容的颜色，会影响后缀插槽                                                     | `''`             | - |
-| disabled         | `boolean`           | 设置是否禁用日期选择框                                                             | `false`          | - |
-| transition-name  | `string`            | 设置时间选择窗口的显示隐藏过渡效果                                                 | `'vxp-drop'`     | - |
-| ok-text          | `string`            | 时间选择窗口确认按钮的文本内容                                                     | `locale.confirm`         | - |
-| cancel-text      | `string`            | 时间选择窗口取消按钮的文本内容                                                     | `locale.cancel`         | - |
-| is-range         | `boolean`           | 设置是否开启范围选择模式                                                           | `false`          | - |
-| disable-validate | `boolean`           | 当作为 form 控件时，是否禁用触发表单字段验证                                       | `false`          | - |
+| value | `string \| string[]` | The value of the time picker, you can use `v-model:value` two-way binding | `'00:00:00'` | - |
+| visible | `boolean` | Set the initial open state of the time pane, you can use `v-model:visible` two-way binding | `false` | - |
+| placement | `Placement` | The position where the time pane appears, the optional values ​​are the same as Popper.js | `'bottom-start'` | - |
+| transfer | `boolean \| string` | Set the rendering position of the time pane. When set to `true`, it will render to `<body>` by default | `false` | - |
+| format | `string` | Controls the display and hiding of time selection columns based on whether they have Hms | `'HH:mm:ss'` | - |
+| separator | `string` | The time unit separator | `':'` | - |
+| filler | `string` | Filler when time is not selected, the length is fixed to 1 | `'-'` | - |
+| no-filler | `boolean` | Whether to disable filler, if disabled, the current value will be displayed in the control after initialization | `false` | - |
+| clearable | `boolean` | whether to allow clear values ​​| `false` | - |
+| no-action | `boolean` | whether to disable the bottom action bar of the time pane | `false` | - |
+| no-arrow | `boolean` | Whether to disable the wheel selector arrow indicator | `false` | - |
+| candidate | `number` | Set the number of candidates up and down the wheel selector, the optional range is 0 ~ 3 | `3` | - |
+| labels | `Partial<Record<'hour' \| 'minute' \| 'second', string>>` | The label to set after each time unit | `{}` | - |
+| shortcuts | `{ name: string, value: string \| (() => string) }[]` | Set the candidate list for date shortcut selection, the element is an object of `{ name, value }`, where value can be function | `[]` | - |
+| steps | `number[]` | Set the scrolling span of each wheel of the time picker respectively | `[1, 1, 1]` | - |
+| ctrl-steps | `number[]` | Set the scroll span of each wheel of the time picker when Ctrl is held down | `[5, 5, 5]` | - |
+| prefix | `Record<string, any>` | The prefix icon, invalid when using prefix slot | `null` | - |
+| prefix-color | `string` | The color of the prefix content, affects the prefix slot | `''` | - |
+| suffix | `Record<string, any>` | The suffix icon, invalid when using suffix slot | `null` | - |
+| suffix-color | `string` | The color of the suffix content, which affects the suffix slot | `''` | - |
+| disabled | `boolean` | Set whether to disable the date picker | `false` | - |
+| transition-name | `string` | Set the transition to show and hide the time panel | `'vxp-drop'` | - |
+| ok-text | `string` | The text content of the time panel confirm button | `locale.confirm` | - |
+| cancel-text | `string` | The text content of the cancel button in the time panel | `locale.cancel` | - |
+| is-range | `boolean` | Set whether to enable range selection mode | `false` | - |
+| disable-validate | `boolean` | Set whether to disable triggering form field validation when used as a form control | `false` | - |
 
 ### TimePicker Events
 
 | Name          | Description                                                                                               | Parameters                          | Since |
 | ------------- | -------------------------------------------------------------------------------------------------- | ----------------------------- | --- |
-| toggle | 当时间面板显示状态改变时触发，返回当前状态 | `(visible: boolean)` | - |
-| foucs      | 控件聚焦时触发，无返回值                                                                           | -                             | - |
-| blur       | 控件失去焦点时触发，无返回值                                                                       | -                             | - |
-| change     | 当选择的时间发生改变时触发，根据时间选择框类型是否开启了范围模式，会返回一个标准时间或标准时间范围 | `(time: string \| string[])` | - |
-| change-col | 当选择的时间类型发生改变时触发，返回当前类型的名称                                                 | `(type: 'hour' \| 'minute' \| 'second')`                          | - |
-| input      | 当通过按键输入任意类型时间的值发生改变时触发，返回当前类型的名称与输入的值                         | `(type: 'hour' \| 'minute' \| 'second', value: number)`                   | - |
-| enter      | 当使用回车键确定或点击了日期选择窗口的确认按钮时触发，无返回值                                     | -                             | - |
-| cancel     | 当使用 Esc 按键关闭或点击了日期选择窗口的取消按钮时触发，无返回值                                  | -                             | - |
-| shortcut   | 当使用快捷功能选择日期时触发，返回快捷选择的名称和列对应的值                                       | `(name: string, value: string)`                   | - |
-| plus       | 当使用上箭头按键增加时间值时触发，返回类型名称的名称和对应的值                                     | `(type: 'hour' \| 'minute' \| 'second', value: number)`                   | - |
-| minus      | 当使用下箭头按键减少时间值时触发，返回类型名称的名称和列应的值                                     | `(type: 'hour' \| 'minute' \| 'second', value: number)`                   | - |
-| clear      | 当通过清除按钮清空值时触发，无返回值                                                               | -                             | - |
+| toggle | Emitter when the time panel display state changes, returns the current state | `(visible: boolean)` | - |
+| foucs | Emitter when the control is focused, no return value | - | - |
+| blur | Emitter when the control loses focus, no return value | - | - |
+| change | Emitter when the selected time changes, depending on whether the range mode is enabled for the time picker type, it will return a standard time or standard time range | `(time: string \| string[])` | - |
+| change-col | Emitter when the selected time type changes, returns the name of the current type | `(type: 'hour' \| 'minute' \| 'second')` | - |
+| input | Emitter when the value of any type of time input by the key changes, returns the name of the current type and the input value | `(type: 'hour' \| 'minute' \| 'second', value: number)` | - |
+| enter | Emitter when the enter key is used to confirm or the confirm button of the date selection window is clicked, no return value | - | - |
+| cancel | Emitter when the Esc key is closed or the cancel button of the date selection window is clicked, no return value | - | - |
+| shortcut | Emitter when a date is selected using the shortcut function, returns the name of the shortcut selection and the value corresponding to the column | `(name: string, value: string)` | - |
+| plus | Emitter when the time value is incremented using the up arrow key, returns the name of the type name and the corresponding value | `(type: 'hour' \| 'minute' \| 'second', value: number)` | - |
+| minus | Emitter when the time value is decremented using the down arrow key, returns the name of the type name and the value of the column | `(type: 'hour' \| 'minute' \| 'second', value: number)` | - |
+| clear | Emitter when the value is cleared by the clear button, no return value | - | - |
 
 ### TimePicker Slots
 
 | Name   | Description                           | Parameters | Since |
 | ------ | ------------------------------ | --- | --- |
-| prefix | 前缀内容的插槽，一般为单个图标 | - | - |
-| suffix | 后缀内容的插槽，一般为单个图标 | - | - |
+| prefix | Slot for prefix content, usually is a icon | - | - |
+| suffix | Slot for suffix content, usually is a icon | - | - |

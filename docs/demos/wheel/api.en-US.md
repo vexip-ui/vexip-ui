@@ -2,21 +2,21 @@
 
 | Name      | Type    | Description                                          | Default       | Since |
 | --------- | ------- | --------------------------------------------- | ------------ | --- |
-| horizontal      | `boolean`  | 设置滚轮的是否为横向模式 | `false` | - |
-| value    | `string \| number`  | 当前激活元素的索引，可以使用 `v-model` 双向绑定 | `0`            | - |
-| candidate | `number`  | 设置滚轮上下的候选个数，可选范围为 0 ~ 3      | `2`            | - |
-| arrow     | `boolean` | 设置是否使用滚轮的箭头指示器                  | `false`        | - |
-| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 | - |
+| horizontal | `boolean` | Set whether the scroll wheel is in landscape mode | `false` | - |
+| value | `string \| number` | The index of the currently active element, can use `v-model` two-way binding | `0` | - |
+| candidate | `number` | Set the number of candidates up and down the scroll wheel, the optional range is 0 ~ 3 | `2` | - |
+| arrow | `boolean` | Set whether to use the scroll wheel arrow indicator | `false` | - |
+| disable-validate | `boolean` | Whether to disable triggering form field validation | `false` | - |
 
 ### Wheel Events
 
 | Name      | Description                                               | Parameters          | Since |
 | --------- | -------------------------------------------------- | ------------- | --- |
-| change | 当前激活的元素发生改变时触发，返回该元素的索引和值 | `(value: string \| number)` | - |
+| change | Triggered when the currently active element changes, returns the element's index and value | `(value: string \| number)` | - |
 
 ### WheelItem Props
 
 | Name  | Type                        | Description         | Default | Since |
 | ----- | --------------------------- | ------------ | ------ | --- |
-| value | `number \| string` | 滚轮元素的值 | `null`   | - |
-| disabled | `boolean` | 设置是否禁用元素 | `false`   | - |
+| value | `number \| string` | The index value of wheel item | `null` | - |
+| disabled | `boolean` | Set whether to disable the element | `false` | - |

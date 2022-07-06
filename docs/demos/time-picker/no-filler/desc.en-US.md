@@ -1,3 +1,3 @@
-### 禁用填充
+### No Init Filler
 
-如果需要时间选择框显示初始的时间，可以添加 `no-filler` 属性禁用初始填充。
+If you want the time picker to display the initial time, you can add the `no-filler` prop to disable the initial filling.

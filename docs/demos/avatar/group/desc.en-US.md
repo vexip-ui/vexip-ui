@@ -1,3 +1,3 @@
 ### Avatar Group
 
-结合 AvatarGroup 组件可以灵活创建头像组。
+Combined with the AvatarGroup component, you can flexibly create avatar groups.

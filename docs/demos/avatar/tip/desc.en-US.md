@@ -1,3 +1,3 @@
 ### Custom Tip
 
-使用头像组时，通过 `tip` 插槽可以自定义提示气泡的内容。
+the content of the tip bubble can be customized via the `tip` slot when using avatar group.

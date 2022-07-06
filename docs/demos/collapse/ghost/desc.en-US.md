@@ -1,3 +1,3 @@
-### 无边框模式
+### Borderless Mode
 
-添加 `ghost` 属性可以开启无边框模式，该属性在卡片模式下无效。
+Add `ghost` prop to enable borderless mode, this attribute has no effect in card mode.

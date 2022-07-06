@@ -1,3 +1,3 @@
-### 循环轮播
+### Loop Carousel
 
-添加 `loop` 属性可以开启循环轮播，到最后一个元素时会衔接第一个元素，反之亦然。
+Adding the `loop` prop turns on a looping carousel, where the last element joins the first element, and vice versa.

@@ -25,7 +25,7 @@
 | expanded      | `boolean`          | 设置面板是否展开                                           | `false`   | - |
 | card          | `boolean`          | 设置是否为卡片模式                                         | `false`   | - |
 | arrow-type    | `'right' \| 'left' \| 'none'`           | 设置面板的指示箭头的类型 | `'right'` | - |
-| icon          | `string`           | 设置面板标题的附属图标名称                                 | `''`      | - |
+| icon          | `Record<string, any>`           | 设置面板标题的附属图标                                 | `''`      | - |
 | ghost         | `boolean`          | 设置是否为无边框模式                                       | `false`   | - |
 
 ### CollapsePane 插槽

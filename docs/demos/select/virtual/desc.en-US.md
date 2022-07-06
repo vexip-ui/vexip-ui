@@ -1,3 +1,3 @@
 ### Virtual Scroll
 
-数据量再多个 `100` 倍，应该也不卡。
+It should not be stuck if the options are `100` times more.

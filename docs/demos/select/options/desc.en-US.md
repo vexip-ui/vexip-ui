@@ -1,3 +1,3 @@
-### Options
+### Options Parsing
 
-`options` 属性可以直接传字符串，组件内部会自动处理。
+The `options` prop can directly pass a string, which will be automatically processed inside the component.

@@ -15,14 +15,14 @@
   </Collapse>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const expanded = ref(0)
-
-    return { expanded }
-  }
-})
+const expanded = ref(0)
 </script>
+
+<style scoped>
+.vxp-collapse {
+  max-width: 500px;
+}
+</style>
