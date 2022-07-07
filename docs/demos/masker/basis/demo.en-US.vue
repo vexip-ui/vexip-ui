@@ -1,6 +1,6 @@
 <template>
   <Button type="primary" @click="active = !active">
-    打开
+    Open
   </Button>
   <Masker
     v-model:active="active"

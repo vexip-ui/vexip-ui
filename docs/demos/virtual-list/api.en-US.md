@@ -1,14 +1,13 @@
 ### VirtualList Props
 
-| Name           | Type                         | Description                                                                         | Default  | Since |
-| -------------- | ---------------------------- | ---------------------------------------------------------------------------- | ------- | --- |
-| items          | `Record<string, any>[]`      | 设置列表的数组                                                               | `[]`    | - |
-| item-size      | `number`                     | 设置元素的大小，当 `item-fixed` 为 `true` 时为元素的固定高度，否则为最小高度 | `36`    | - |
-| item-fixed     | `boolean`                    | 设置元素是否为固定高度                                                       | `false` | - |
-| id-key         | `string`                     | 设置元素的 `id` 键名                                                         | `'id'`  | - |
-| default-key-at | `number \| string \| symbol` | 设置虚拟列表默认停留在的元素的 `id`                                          | `null`  | - |
-| buffer-size    | `number`                     | 设置可视区域前后的缓冲元素个数                                               | `5`     | - |
-| list-tag       | `string`                     | 列表的渲染元素                                                               | `'div'` | - |
-| items-tag      | `string`                     | 可视区域的渲染元素                                                           | `'ul'`  | - |
-| items-attrs    | `Record<string, any>`        | 可视区域的元素的属性                                                         | `null`  | - |
-
+| Name           | Type                         | Description                                                                                                            | Default | Since |
+| -------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
+| items          | `Record<string, any>[]`      | The array of elements                                                                                                  | `[]`    | -     |
+| item-size      | `number`                     | Set the size of the element, the fixed height of the element when `item-fixed` is `true`, otherwise the minimum height | `36`    | -     |
+| item-fixed     | `boolean`                    | Set whether the element is fixed height                                                                                | `false` | -     |
+| id-key         | `string`                     | Set the `id` key name of the element                                                                                   | `'id'`  | -     |
+| default-key-at | `number \| string \| symbol` | Set the `id` of the element where the virtual list stays by default                                                    | `null`  | -     |
+| buffer-size    | `number`                     | Set the number of buffer elements before and after the visible area                                                    | `5`     | -     |
+| list-tag       | `string`                     | The tag name of the list element                                                                                       | `'div'` | -     |
+| items-tag      | `string`                     | The tag name of the elements wrapper element                                                                           | `'ul'`  | -     |
+| items-attrs    | `Record<string, any>`        | The html attributes of elements wrapper element                                                                        | `null`  | -     |

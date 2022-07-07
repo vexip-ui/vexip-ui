@@ -1,3 +1,3 @@
 ### Basis Usage
 
-最基础的用法，通过 `percentage` 传入一个 `0` ~ `100` 的值。
+The basic usage, pass in a value of `0` ~ `100` via `percentage` prop.

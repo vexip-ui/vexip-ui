@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div ref="pane" class="scroll-pane" @scroll="handleScroll">
       <p v-for="n in 20" :key="n">
-        {{ n }}、一段用来滚动的文本
+        {{ n }}. Some content to scroll
       </p>
     </div>
     <Scrollbar
@@ -28,7 +28,7 @@ onMounted(() => {
   if (!pane.value) return
 
   barLength.value = boundRange(
-    pane.value.offsetHeight / (pane.value.scrollHeight || 1) * 100,
+    (pane.value.offsetHeight / (pane.value.scrollHeight || 1)) * 100,
     5,
     99
   )
@@ -55,7 +55,7 @@ function handleBarScroll(percent: number) {
 
   if (scrollHeight <= offsetHeight) return
 
-  pane.value.scrollTop = percent * (scrollHeight - offsetHeight) / 100
+  pane.value.scrollTop = (percent * (scrollHeight - offsetHeight)) / 100
 }
 </script>
 

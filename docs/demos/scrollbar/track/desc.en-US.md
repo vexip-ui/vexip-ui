@@ -1,3 +1,3 @@
-### 滚动条轨道
+### Scrollbar Track
 
-和基础用法一样，加个 `use-track` 属性，然后就会有一个可以交互的轨道。。
+As with the basic usage, add a `use-track` prop and you will have an interactive track.

@@ -1,9 +1,9 @@
-### 预设样式
+### Preset Style
 
-设置 `color` 属性为 `true` 可以使预设类型的提示具有字体颜色。
+Set the `color` option to `true` to make the preset types notice has a colorful text.
 
-设置 `background` 属性为 `true` 可以使预设类型的提示具有背景颜色。
+Set the `background` option to `true` to make the preset type notice havs a background color.
 
-当预设的颜色不满足需求时，可以传入一个有效的颜色值，实现颜色自定义。
+When the preset color does not meet the requirements, you can pass in a valid color value to realize color customization.
 
-需要独立设置标题的颜色时，可以设置 `titleColor` 属性为一个有效颜色值。
+To set the color of the title independently, set the `titleColor` option to a valid color value.

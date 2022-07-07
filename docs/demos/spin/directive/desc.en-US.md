@@ -1,5 +1,5 @@
-### 指令加载中
+### Directive
 
-使用 `v-loading` 指令可以快速为元素添加加载中状态。
+Use the `v-loading` directive to quickly add a loading state to an element.
 
-在不方便修改上级组件根元素且不需要很高程度定制化的场合，使用指令可以有效减少代码的复杂度。
+When it is inconvenient to modify the root element of the parent component and does not require a high degree of customization, the use of directives can effectively reduce the complexity of the code.

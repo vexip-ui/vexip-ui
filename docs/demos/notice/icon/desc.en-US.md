@@ -1,7 +1,7 @@
 ### Custom Icon
 
-设置 `icon` 属性可以设置提示的前置图标。
+Set the `icon` option to set the front icon of the prompt.
 
-设置 `iconColor` 属性可以设置提示前置图标的颜色。
+Set the `iconColor` option to set the color of the icon in front of the prompt.
 
-当需要更细粒度地控制图标时，可以设置 `icon` 属性为一个对象或函数，传对象时每个属性对应 Icon 组件的属性，传函数时为自定义渲染方法。
+When more fine-grained control over the icon is required, the `icon` option can be set to an or function as a custom rendering method.

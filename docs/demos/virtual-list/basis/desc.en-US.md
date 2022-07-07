@@ -1,3 +1,3 @@
-### 简单例子
+### Simple Example
 
-渲染 `10000` 个元素的列表。
+Renders a list of `10000` elements.

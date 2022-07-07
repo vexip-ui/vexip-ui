@@ -54,7 +54,7 @@ onMounted(() => {
   requestAnimationFrame(setScrollY)
 })
 
-function handleScroll({ clientY } : { clientY: number }) {
+function handleScroll({ clientY }: { clientY: number }) {
   store.scrollY = clientY
   isAffix.value = !store.isLg && clientY >= 50
 }
@@ -126,7 +126,7 @@ function setScrollY() {
   }
 
   &__scroll {
-    .vxp-scrollbar--right {
+    & > .vxp-scrollbar--right {
       top: calc(var(--header-height) + var(--sub-menu-height));
 
       @include query-media('lg') {

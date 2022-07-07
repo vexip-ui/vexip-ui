@@ -1,5 +1,5 @@
-### 修改时长
+### Change Duration
 
-设置 `duration` 属性可以调整提示的持续时间。
+The duration of the prompt can be adjusted by setting the `duration` option.
 
-当设置为 `0` 时，提示将不会自动关闭，需要添加可关闭或者手动控制关闭。
+When set to `0`, the prompt will not be closed automatically, you need to add a close or manual control to close.
