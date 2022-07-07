@@ -7,7 +7,7 @@ export interface TimeAgoRecord {
   datetime: Date,
   timeAgo: Ref<string>,
   locale: Ref<Record<string, string>>,
-  interval: number,
+  interval: false | number,
   updated: number
 }
 
@@ -34,6 +34,8 @@ export function subscribe(id: number, record: TimeAgoRecord) {
       const current = Date.now()
 
       recordMap.forEach(record => {
+        if (!record.interval) return
+
         if (current - record.updated > record.interval) {
           record.timeAgo.value = computeTimeAgo(record.datetime, current, record.locale.value)
           record.updated = current
