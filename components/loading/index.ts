@@ -37,6 +37,10 @@ export class LoadingManager {
     this._getInstance().startLoading({ ...this.defaults, ...options })
   }
 
+  close() {
+    this.open(100)
+  }
+
   config(options: InitLoadingOptions) {
     this.defaults = { ...this.defaults, ...options }
   }
