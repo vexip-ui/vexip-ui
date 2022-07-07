@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
-import { useNameHelper, useProps, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, booleanStringProp } from '@vexip-ui/config'
 import { toDate, format } from '@vexip-ui/utils'
 import { getId, subscribe, unsubscribe, computeTimeAgo } from './helper'
 
@@ -37,12 +37,14 @@ export default defineComponent({
 
     const nh = useNameHelper('time-ago')
     const datetime = toDateValue(props.datetime)
-    const timeAgo = ref(computeTimeAgo(datetime))
+    const locale = useLocale('timeAgo')
+    const timeAgo = ref(computeTimeAgo(datetime, Date.now(), locale.value))
 
     const id = getId()
     const record = {
       datetime,
       timeAgo,
+      locale,
       interval: props.interval * 1000,
       updated: Date.now()
     }
