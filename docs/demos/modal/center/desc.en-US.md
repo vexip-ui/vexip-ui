@@ -1,5 +1,5 @@
-### 自动居中
+### Auto Center
 
-默认情况下，模态框会自动计算并左右居中。
+By default, modal boxes are automatically calculated and centered left and right.
 
-同时设置 `top` 属性的值为 `auto` 可以使模态框上下居中。
+Also set the `top` prop to `'auto'` to center the modal up and down.

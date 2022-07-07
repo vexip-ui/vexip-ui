@@ -1,5 +1,5 @@
 ### Basis Usage
 
-通过 `open` 方法打开一条纯文字的消息提醒。
+Open a plain text message reminder with the `open` method.
 
-该方法可以接收一个字符串或对象，传入字符串时将作为消息内容，传入对象可以更细粒度地控制消息属性。
+This method can receive a string or object, which will be used as the message content when passing in the string, and the incoming object can control the message properties in a finer-grained manner.

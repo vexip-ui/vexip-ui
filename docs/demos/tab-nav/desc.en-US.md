@@ -1,1 +1,1 @@
-标签导航组件，标签页组件的基础组件，可以用于生成自定义的标签页结构。
+The tab navigation component, the basic component of the tab page component, can be used to generate a custom tab page structure.

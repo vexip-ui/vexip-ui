@@ -5,7 +5,7 @@
     :type="type"
     closable
   >
-    标签
+    Tag
   </Tag>
   <br />
   <br />
@@ -15,7 +15,7 @@
     :type="type"
     closable
   >
-    标签
+    Tag
   </Tag>
 </template>
 

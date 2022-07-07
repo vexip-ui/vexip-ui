@@ -1,1 +1,1 @@
-对于一些交互逻辑较多的页面，可以将一些操作置于右键菜单中，以方便用户快速选择。
+For some pages with more interactive logic, some operations can be placed in the right-click menu to facilitate quick selection by users.

@@ -1,3 +1,3 @@
-### 行拖拽
+### Row Draggable
 
-添加 `row-draggable` 属性可以开启行拖拽功能，可实现拖拽排序。
+Adding the `row-draggable` prop enables row dragging and dragging and sorting.

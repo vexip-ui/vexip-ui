@@ -65,16 +65,16 @@
 
 | 名称      | 类型              | 说明                                                                         | 默认值 | 始于 |
 | --------- | ----------------- | ---------------------------------------------------------------------------- | ------ | --- |
-| name      | `string`            | 类的名称                                                                     | `''`     | - |
+| name      | `string`            | 列的名称                                                                     | `''`     | - |
 | key \| id-key       | `string \| number`  | 列的唯一索引，使用模版列时请使用 `id-key` 代替                                 | `''`     | - |
 | accessor  | `(data: any, rowIndex: number) => any`          | 该列的数据读取方法，接收行数据和行位置索引，若不定义这按索引值从行数据上读取 | `null`   | - |
 | fixed     | `boolean \| 'left' \| 'right'` | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧                | `false`  | - |
 | className | `string \| Record<string, boolean>` | 该列单元格的自定义类名                                                       | `null`   | - |
 | type      | `'order' \| 'selection' \| 'expand'`            | 设置内置特定类型列                                      | `null`   | - |
 | width     | `number`            | 设置列宽                                                                     | `null`   | - |
-| filter    | `FilterOptions<any, any>`            | 配置列的过滤器                                                               | `null`   | - |
-| sorter    | `boolean \| SorterOptions<any>`            | 配置列的排序器                                                               | `null`   | - |
-| order     | `number`            | 配置列的渲染顺序                                                             | `0`      | - |
+| filter    | `FilterOptions<any, any>`            | 列的过滤配置器                                                               | `null`   | - |
+| sorter    | `boolean \| SorterOptions<any>`            | 列的排序排序器                                                               | `null`   | - |
+| order     | `number`            | 列的渲染顺序                                                             | `0`      | - |
 | renderer  | `(data: { row: Record<string, unknown>, rowIndex: number, column: ColumnOptions<any, any>, columnIndex: number }) => any`          | 自定义渲染函数       | `null`   | - |
 
 ### TableColumn 插槽

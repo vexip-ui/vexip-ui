@@ -1,26 +1,26 @@
 <template>
   <TabNav>
-    <TabNavItem label="标签页1">
-      标签页1
+    <TabNavItem label="Tab 1">
+      Tab 1
     </TabNavItem>
-    <TabNavItem label="标签页2" disabled>
-      标签页2
+    <TabNavItem label="Tab 2" disabled>
+      Tab 2
     </TabNavItem>
-    <TabNavItem label="标签页3">
-      标签页3
+    <TabNavItem label="Tab 3">
+      Tab 3
     </TabNavItem>
   </TabNav>
   <br />
   <br />
   <TabNav card>
-    <TabNavItem label="标签页1">
-      标签页1
+    <TabNavItem label="Tab 1">
+      Tab 1
     </TabNavItem>
-    <TabNavItem label="标签页2" disabled>
-      标签页2
+    <TabNavItem label="Tab 2" disabled>
+      Tab 2
     </TabNavItem>
-    <TabNavItem label="标签页3">
-      标签页3
+    <TabNavItem label="Tab 3">
+      Tab 3
     </TabNavItem>
   </TabNav>
 </template>

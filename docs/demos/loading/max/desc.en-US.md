@@ -1,3 +1,3 @@
-### 中间值
+### Intermittent Value
 
-通过 `maxPercent` 选项可以设置本次调用的最大进度，达到最大后进度条会处于暂停状态等待下一次的调用。
+The `maxPercent` option can be used to set the maximum progress of this call. After reaching the maximum, the progress bar will be in a paused state waiting for the next call.

@@ -11,13 +11,12 @@
 | checkbox | `boolean` | Set whether to enable the checkbox of the node | `false` | - |
 | draggable | `boolean` | Set whether the node is draggable | `false` | - |
 | renderer | `(data: { data: Data, node: TreeNodeProps, depth: number }) => any` | The number of nodes to render using the render function | `null` | - |
-| id-key | `string` | Set the `id` field of the data source | `'id'` | - |
 | multiple | `boolean` | Set whether to enable multiple selection mode | `false` | - |
 | indent | `string \| number` | Set the indent distance of each tree node | `'16px'` | - |
 | accordion | `boolean` | Set whether to enable accordion mode | `false` | - |
 | appear | `boolean` | Set the `appear` value of the transition effect of the tree node | `false` | - |
 | floor-select | `boolean` | When enabled, when a node with subordinates is selected, the node will be expanded and collapsed, and the selection cancellation event will be triggered when there are no subordinates | `false` | - |
-| async-load | `(node: TreeNodeProps) => void \| boolean \| Promise<any>` | The callback function triggered by the initial load of the node, accepts the `node` object as a parameter, if it returns `false`, it means that the load fails , supports async functions and `Promise` | `null` | - |
+| on-async-load | `(node: TreeNodeProps) => void \| boolean \| Promise<any>` | The callback function triggered by the initial load of the node, accepts the `node` object as a parameter, if it returns `false`, it means that the load fails , supports async functions and `Promise` | `null` | - |
 | cache-node | `boolean` | Set whether to enable the node data cache mechanism. After enabling, every time `data` changes, the same object refers to the node with the same `id` value, except for `id`, `parent` , `children` and `label` properties will not be refreshed | `false` | - |
 | root-id | `string \| number` | Set the `id` value of the root node. After setting, when the parent value is equal to this value, it will be displayed as the first level node | `null` | - |
 | key-config | `NodeKeyConfig` | Configure the key names when the parsing node is initialized | `{}` | `2.0.0` |
@@ -101,7 +100,7 @@ type TreeNodeProps = {
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | --- |
 | parseAndTransformData | Trigger to re-parse and transform data inside the component | `() => void` | -
 | forceUpdateData | Force update data, generally use to update the tree after manually changing the data source | `() => void` | - |
-| syncNodeStateIntoData | The state attribute in node is synchronized to data, it will cover `visible`, `selected`, `expanded`, `disabled`, `checked`, `loading`, `readonly` fields, use with caution | ` () => void` | - |
+| syncNodeStateIntoData | The state attribute in node is synchronized to data, it will cover `visible`, `selected`, `expanded`, `disabled`, `checked`, `loading`, `readonly` fields, use with caution | `() => void` | - |
 | getCheckedNodes | Get all node objects whose checkboxes are checked | `() => TreeNodeProps[]` | - |
 | getCheckedNodeData | Get all node data whose checkboxes are checked | `() => Data[]` | - |
 | getSelectedNodes | Get all selected node objects | `() => TreeNodeProps[]` | - |

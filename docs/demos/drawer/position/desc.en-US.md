@@ -1,3 +1,3 @@
 ### Custom Placement
 
-设置 `placement` 属性的值为 `top`、`right`、`bottom`、`left` 可以自定义抽屉出现的位置。
+Set the `placement` prop to `top`, `right`, `bottom`, `left` to customize the position of the drawer.

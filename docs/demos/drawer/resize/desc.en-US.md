@@ -1,5 +1,5 @@
 ### Resizable
 
-添加 `resizable` 属性可以开启抽屉的调整大小功能。
+Add the `resizable` prop to enable resizing of the drawer.
 
-鼠标移至抽屉边缘会出现手柄，左右方向的抽屉可以调整宽度，上下方向的抽屉可以调整高度。
+Move the mouse to the edge of the drawer and a handle will appear. The width of the drawer in the left and right directions can be adjusted, and the height of the drawer in the up and down direction can be adjusted.

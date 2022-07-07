@@ -1,3 +1,3 @@
 ### Basis Usage
 
-通过设置 `type` 属性为 info、success、warning、error 以创建不同类型的警告提示。
+Create different types of alerts by setting the `type` prop to info, success, warning, error.

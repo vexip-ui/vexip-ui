@@ -6,7 +6,7 @@
     closable
     size="small"
   >
-    标签
+    Tag
   </Tag>
   <br />
   <br />
@@ -17,7 +17,7 @@
     closable
     size="default"
   >
-    标签
+    Tag
   </Tag>
   <br />
   <br />
@@ -28,7 +28,7 @@
     closable
     size="large"
   >
-    标签
+    Tag
   </Tag>
 </template>
 

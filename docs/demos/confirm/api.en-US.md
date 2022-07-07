@@ -2,13 +2,13 @@
 
 | Name          | Type                         | Description                                                                                   | Default    | Since |
 | ------------- | ---------------------------- | -------------------------------------------------------------------------------------- | --------- | --- |
-| content       | `string`                       | 确认框的提示内容                                                                       | `''`        | - |
-| style         | `Record<string, any>`                       | 确认框的内联样式                                                                       | `null`      | - |
-| parseHtml     | `boolean`                      | 是否解析 html，开启则将 `content` 内容作为 html 解析                                     | `false`     | - |
-| confirmType   | `'default' \| 'primary' \| 'info' \| 'success' \| 'warning' \| 'error'`                       | 确认按钮的类型                      | `'primary'` | - |
-| confirmText   | `string`                       | 确认按钮的内容                                                                         | `locale.confirm`    | - |
-| cancelText    | `string`                       | 取消按钮的内容                                                                         | `locale.cancel`    | - |
-| icon          | `Record<string, any> \| (() => any)` | 确认框的图标，传入函数时作为 render 函数渲染 | `null`         | - |
-| iconColor     | `string`                       | 确认框的图标的颜色                                                                     | `''`         | - |
-| onBeforeConfirm | `() => unknown`                     | 设置确认框的确认前回调，支持异步函数和 `Promise`，返回值为 `false` 会阻止关闭              | `null`      | - |
-| renderer      | `() => any`                     | 使用 render 函数渲染自定义渲染                                                  | `null`      | - |
+| content | `string` | The prompt content of the confirm | `''` | - |
+| style | `Record<string, any>` | Inline style for the confirm | `null` | - |
+| parseHtml | `boolean` | Whether to parse html, if enabled, the content of `content` will be parsed as html | `false` | - |
+| confirmType | `'default' \| 'primary' \| 'info' \| 'success' \| 'warning' \| 'error'` | Confirm button type | `'primary'` | - |
+| confirmText | `string` | The content of the confirm button | `locale.confirm` | - |
+| cancelText | `string` | The content of the cancel button | `locale.cancel` | - |
+| icon | `Record<string, any> \| (() => any)` | The icon of the confirm, rendered as the render function when passed in the function | `null` | - |
+| iconColor | `string` | The color of the icon of the confirm | `''` | - |
+| onBeforeConfirm | `() => unknown` | Set the callback before confirm, supports async function and `Promise`, returns `false` will prevent closing | `null` | - |
+| renderer | `() => any` | Use render function to render custom renderer | `null` | - |

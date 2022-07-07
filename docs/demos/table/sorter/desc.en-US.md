@@ -1,3 +1,3 @@
-### 表格排序
+### Sort Data
 
-在 Column 选项添加 `sorter` 属性并设置，可以启用排序功能。
+Adding the `sorter` prop to the column options and setting it enables sorting.

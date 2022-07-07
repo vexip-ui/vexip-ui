@@ -1,3 +1,3 @@
-### 调整大小
+### Different Sizes
 
-设置 `size` 属性的值可以调整标签的大小，该属性会同时调整标签的字号大小。
+The size of the label can be adjusted by setting the value of the `size` prop, which also adjusts the font size of the label.

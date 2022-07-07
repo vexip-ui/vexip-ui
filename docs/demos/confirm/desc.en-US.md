@@ -1,1 +1,1 @@
-通常用于一些重要操作的二次确认，以降低用户误操作的概率。
+It is usually used for the secondary confirmation of some important operations to reduce the probability of user misoperation.

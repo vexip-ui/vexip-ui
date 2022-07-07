@@ -1,3 +1,3 @@
-### 进度条纵宽
+### Bar Stroke Width
 
-设置 `strokeWidth` 选项可以改变进度条的纵宽，一轮加载中需要保持该参数一致。
+Setting the `strokeWidth` option can change the vertical width of the progress bar, and this parameter needs to be kept the same during a round of loading.

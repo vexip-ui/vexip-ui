@@ -3,7 +3,7 @@
     style="width: 400px; height: 100px; border: var(--vxp-border-base);"
     @contextmenu.prevent="contextmenu"
   >
-    在此处右键
+    Right click here
   </div>
 </template>
 

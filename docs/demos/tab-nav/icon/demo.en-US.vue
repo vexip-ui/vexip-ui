@@ -1,13 +1,13 @@
 <template>
   <TabNav v-model:active="active">
-    <TabNavItem label="标签页1">
-      标签页1
+    <TabNavItem label="Tab 1">
+      Tab 1
     </TabNavItem>
-    <TabNavItem label="标签页2" :icon="ChartArea">
-      标签页2
+    <TabNavItem label="Tab 2" :icon="ChartArea">
+      Tab 2
     </TabNavItem>
-    <TabNavItem label="标签页3">
-      标签页3
+    <TabNavItem label="Tab 3">
+      Tab 3
     </TabNavItem>
   </TabNav>
 </template>
@@ -16,5 +16,5 @@
 import { ref } from 'vue'
 import { ChartArea } from '@vexip-ui/icons'
 
-const active = ref('标签页1')
+const active = ref('Tab 1')
 </script>

@@ -1,6 +1,6 @@
 <template>
   <Button type="primary" @click="sendCustomizedNotice">
-    自定义渲染
+    Custom Render
   </Button>
 </template>
 
@@ -30,7 +30,7 @@ export default defineComponent({
                 paddingLeft: '3em'
               }
             }, [
-              '一条自定义的',
+              'A custom ',
               h(
                 'span',
                 {
@@ -39,7 +39,7 @@ export default defineComponent({
                     fontStyle: 'italic'
                   }
                 },
-                '消息'
+                'notice'
               )
             ])
           ])

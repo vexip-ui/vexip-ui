@@ -1,3 +1,3 @@
-### 数据过滤
+### Filter Data
 
-在 Column 选项添加 `filter` 属性并设置，可以启用过滤功能。
+Adding the `filter` prop to the column options and setting it enables filtering.

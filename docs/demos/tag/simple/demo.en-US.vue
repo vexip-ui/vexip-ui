@@ -6,7 +6,7 @@
     simple
     closable
   >
-    标签
+    Tag
   </Tag>
 </template>
 

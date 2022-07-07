@@ -1,3 +1,3 @@
-### 空表格
+### Empty Table
 
-没有数据时的样子，可以用 `empty` 插槽定制化。
+The appearance without data, can be customized with the `empty` slot.

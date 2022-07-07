@@ -4,7 +4,7 @@
     :key="type"
     :type="type"
   >
-    标签
+    Tag
   </Tag>
 </template>
 

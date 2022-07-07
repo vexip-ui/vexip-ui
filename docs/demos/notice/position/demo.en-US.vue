@@ -1,16 +1,16 @@
 <template>
   <div>
-    <Button type="primary" @click="$notice.info('右上角提示', '一条右上角提示消息')">
-      右上提示
+    <Button type="primary" @click="$notice.info('Top Right', 'A top right notice')">
+      Top Right
     </Button>
-    <Button type="success" @click="brNotice.success('右下角提示', '一条右下角提示消息')">
-      右下提示
+    <Button type="success" @click="brNotice.success('Bottom Right', 'A bottom right notice')">
+      Bottom Right
     </Button>
-    <Button type="warning" @click="blNotice.warning('左下角提示', '一条左下角提示消息')">
-      左下提示
+    <Button type="warning" @click="blNotice.warning('Bottom Left', 'A bottom left notice')">
+      Bottom Left
     </Button>
-    <Button type="error" @click="tlNotice.error('左上角提示', '一条左上角提示消息')">
-      左上提示
+    <Button type="error" @click="tlNotice.error('Top Left', 'A top left notice')">
+      Top Left
     </Button>
   </div>
 </template>

@@ -1,10 +1,10 @@
 <template>
   <div>
     <Button type="primary" @click="sendNotice">
-      可关闭提示
+      Closable
     </Button>
-    <Button type="warning" @click="$notice.warning({ title: '提示的标题', closable: true })">
-      可关闭的仅标题提示
+    <Button type="warning" @click="$notice.warning({ title: 'Notice Title', closable: true })">
+      Closable Title Only
     </Button>
   </div>
 </template>
@@ -17,8 +17,8 @@ export default defineComponent({
   setup() {
     function sendNotice() {
       Notice.info({
-        title: '提示的标题',
-        content: '一条可关闭的提示消息',
+        title: 'Notice Title',
+        content: 'A closable notice',
         closable: true
       })
     }

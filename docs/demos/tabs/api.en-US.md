@@ -2,25 +2,25 @@
 
 | Name   | Type             | Description                                            | Default | Since |
 | ------ | ---------------- | ----------------------------------------------- | ------ | --- |
-| card   | `boolean`          | 设置导航栏是否开启卡片模式                      | `false`  | - |
-| active | `string \| number` | 设置当前激活的标签页，可以使用 `v-model` 双向绑定 | `''`     | - |
+| card | `boolean` | Set whether to enable card mode in the navigation bar | `false` | - |
+| active | `string \| number` | Set the currently active tab, you can use `v-model` two-way binding | `''` | - |
 
 ### Tabs Events
 
 | Name      | Description                                                   | Parameters  | Since |
 | --------- | ------------------------------------------------------ | ----- | --- |
-| change | 当激活的标签页发生变化时触发，返回当前激活标签页的标签 | `(label: string \| number)` | - |
+| change | Emitted when the active tab changes, returns the label of the currently active tab | `(label: string \| number)` | - |
 
 ### TabPane Props
 
 | Name     | Type             | Description               | Default | Since |
 | -------- | ---------------- | ------------------ | ------ | --- |
-| label    | `string \| number` | 导航页的唯一索引   | `''`     | - |
-| disabled | `boolean`          | 设置是否禁用该导航 | `false`  | - |
-| icon     | `string`           | 设置导航的前置图标 | `''`     | - |
+| label | `string \| number` | Unique index of the navigation page | `''` | - |
+| disabled | `boolean` | Set whether to disable this navigation | `false` | - |
+| icon | `string` | Set the front icon for navigation | `''` | - |
 
 ### TabPane Events
 
 | Name      | Description                                                     | Parameters   | Since |
 | --------- | -------------------------------------------------------- | ------ | --- |
-| change | 当标签页的激活状态发生变化时触发，返回当前标签页是否激活 | `(active: boolean)` | - |
+| change | Emitted when the active state of the tab changes, returns whether the current tab is active | `(active: boolean)` | - |

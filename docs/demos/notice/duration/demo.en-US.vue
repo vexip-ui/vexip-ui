@@ -1,22 +1,22 @@
 <template>
   <div>
-    <Button type="primary" @click="$notice.info('一条提示消息')">
-      正常时长
+    <Button type="primary" @click="$notice.info('A normal notice')">
+      Normal
     </Button>
-    <Button type="primary" @click="$notice.info({ content: '一条持续 10 秒的提示消息', duration: 10000 })">
-      持续10秒
-    </Button>
-    <Button
-      type="primary"
-      @click="$notice.info({ title: '永久消息', duration: 0, closable: true })"
-    >
-      一直持续
+    <Button type="primary" @click="$notice.info({ content: '10 seconds duration notice', duration: 10000 })">
+      10s Duration
     </Button>
     <Button
       type="primary"
-      @click="$notice.info({ title: '永久消息', content: '一条不自动关闭的提示消息', duration: 0, closable: true })"
+      @click="$notice.info({ title: 'A Permanent Notice', duration: 0, closable: true })"
     >
-      一直持续
+      Permanent Title Only
+    </Button>
+    <Button
+      type="primary"
+      @click="$notice.info({ title: 'A Permanent Notice', content: 'A notice not disapper until you close it', duration: 0, closable: true })"
+    >
+      Permanent
     </Button>
   </div>
 </template>

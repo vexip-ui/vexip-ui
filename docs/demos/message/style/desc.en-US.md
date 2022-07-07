@@ -1,3 +1,3 @@
-### 预设样式
+### Preset Style
 
-设置 `color` 属性为 `true` 可以使预设类型的消息具有字体颜色。
+Set the `color` option to `true` to have a font color for messages of the preset type.

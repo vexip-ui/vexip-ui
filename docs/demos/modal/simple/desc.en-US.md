@@ -1,5 +1,5 @@
-### 简单模态框
+### Simple Modal
 
-不设置 `title` 属性和同名插槽可以使模态框头部隐藏。
+The modal header can be hidden by not setting the `title` prop and the slot with the same name.
 
-添加 `no-footer` 属性可以禁用模态框的默认底部操作栏。
+Add the `no-footer` prop to disable the modal's default bottom action bar.

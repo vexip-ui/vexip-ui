@@ -1,5 +1,5 @@
-### 加载状态
+### Loading State
 
-设置 `state` 选项可以改变进度条的状态。
+Setting the `state` option can change the state of the progress bar.
 
-同时，这个例子展示了如何在组合式 Api 中使用 Loading 组件。
+Also, this example shows how to use the Loading component in a composite API.

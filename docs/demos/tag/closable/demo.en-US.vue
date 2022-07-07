@@ -7,7 +7,7 @@
       :type="tag.type"
       @close="removeTag(tag.key)"
     >
-      标签
+      Tag
     </Tag>
     <Button
       dashed
@@ -16,7 +16,7 @@
       :icon="Plus"
       @click="addTag"
     >
-      添加标签
+      Add Tag
     </Button>
   </div>
 </template>

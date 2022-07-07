@@ -1,5 +1,5 @@
-### 模版列
+### Template Column
 
-使用 TableColumn 组件可以以模版的形式配置表格列。
+Use the TableColumn component to configure table columns.
 
-模版列的优势在于，可以灵活地使用插槽以应对各种复杂的渲染情况，是推荐的使用方式。
+The advantage of template columns is that slots can be used flexibly to deal with various complex rendering situations, which is the recommended way to use them.
