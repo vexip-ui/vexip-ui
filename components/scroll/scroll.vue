@@ -8,14 +8,16 @@
     @wheel.exact="handleWheel($event, 'vertical')"
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
-    <div
-      ref="content"
-      :class="wrapperClass"
-      :style="wrapperStyle"
-      @transitionend="transitionDuration = -1"
-    >
-      <slot></slot>
-    </div>
+    <ResizeObserver throttle :on-resize="handleResize">
+      <div
+        ref="content"
+        :class="wrapperClass"
+        :style="wrapperStyle"
+        @transitionend="transitionDuration = -1"
+      >
+        <slot></slot>
+      </div>
+    </ResizeObserver>
     <Scrollbar
       v-if="props.useXBar"
       ref="xBar"
@@ -50,7 +52,14 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
-import { useNameHelper, useProps, booleanProp, booleanNumberProp, classProp } from '@vexip-ui/config'
+import { ResizeObserver } from '@/components/resize-observer'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanNumberProp,
+  classProp
+} from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
@@ -66,7 +75,8 @@ const UP_EVENT = USE_TOUCH ? 'touchend' : 'mouseup'
 export default defineComponent({
   name: 'Scroll',
   components: {
-    Scrollbar
+    Scrollbar,
+    ResizeObserver
   },
   props: {
     scrollClass: classProp,
@@ -162,6 +172,7 @@ export default defineComponent({
       xBarLength,
       yBarLength,
 
+      handleResize,
       verifyScroll,
       computePercent,
       refresh
@@ -681,6 +692,7 @@ export default defineComponent({
       xBar,
       yBar,
 
+      handleResize,
       handleMouseDown,
       handleTouchStart,
       handleWheel,
