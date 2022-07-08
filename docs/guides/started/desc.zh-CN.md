@@ -99,7 +99,7 @@ export default defineConfig({
 安装插件：
 
 ```sh
-yarn add -D babel-plugin-import
+pnpm i -D babel-plugin-import
 ```
 
 修改 `babel.config.js` 为以下内容：
