@@ -121,36 +121,7 @@ module.exports = {
         math: 'always'
       }
     ],
-    'vue/order-in-components': [
-      'error',
-      {
-        order: [
-          'el',
-          'name',
-          'parent',
-          'functional',
-          ['delimiters', 'comments'],
-          ['components', 'directives', 'filters'],
-          'extends',
-          'mixins',
-          'inheritAttrs',
-          'model',
-          ['inject', 'provide'],
-          ['props', 'propsData', 'emits'],
-          'setup',
-          'fetch',
-          'asyncData',
-          'data',
-          'computed',
-          'watch',
-          'LIFECYCLE_HOOKS',
-          'methods',
-          'head',
-          ['template', 'render'],
-          'renderError'
-        ]
-      }
-    ],
+    'vue/no-reserved-component-names': 'off',
     'vue/comment-directive': 'off',
     'vue/multi-word-component-names': 'off',
     'vue/no-setup-props-destructure': 'off',
