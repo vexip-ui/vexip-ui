@@ -64,7 +64,7 @@ createApp(App).use(install)
 安装插件：
 
 ```sh
-yarn add -D vite-plugin-style-import
+pnpm i -D vite-plugin-style-import
 ```
 
 在 `vite.config.ts` 中拓展以下内容：
@@ -83,6 +83,7 @@ export default defineConfig({
         {
           libraryName: 'vexip-ui',
           esModule: true,
+          base: 'vexip-ui/css/preset.css',
           resolveStyle: name => `vexip-ui/css/${name}.css`
         }
       ]
