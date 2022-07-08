@@ -21,6 +21,7 @@
         :scroll-y="bodyScroll"
         @scroll="handleBodyScroll"
         @y-enable-change="handleYScrollEnableChange"
+        @ready="syncVerticalScroll"
       >
         <TableBody>
           <template #empty="{ isFixed }">
@@ -32,12 +33,14 @@
     <template v-else>
       <TableHead ref="thead"></TableHead>
       <Scroll
+        ref="mainScroll"
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
         @y-enable-change="handleYScrollEnableChange"
+        @ready="syncVerticalScroll"
       >
         <TableBody>
           <template #empty="{ isFixed }">
@@ -55,6 +58,7 @@
     >
       <TableHead fixed="left"></TableHead>
       <Scroll
+        ref="mainScroll"
         :class="[nh.be('body-wrapper'), props.scrollClass.left]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -125,7 +129,14 @@ import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
 import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
-import { isDefined, debounce, transformListToMap, removeArrayItem, toNumber, nextFrameOnce } from '@vexip-ui/utils'
+import {
+  isDefined,
+  debounce,
+  transformListToMap,
+  removeArrayItem,
+  toNumber,
+  nextFrameOnce
+} from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/mixins'
 import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
@@ -205,7 +216,6 @@ export default defineComponent({
   ],
   setup(_props, { emit }) {
     const props = useProps('table', _props, {
-      // TODO: colums 正确的类型推导
       columns: {
         default: () => [],
         static: true
@@ -269,6 +279,7 @@ export default defineComponent({
 
     const wrapper = ref<HTMLElement | null>(null)
     const thead = ref<InstanceType<typeof TableHead> | null>(null)
+    const mainScroll = ref<InstanceType<typeof Scroll> | null>(null)
     const indicator = ref<HTMLElement | null>(null)
     const scrollbar = ref<InstanceType<typeof Scrollbar> | null>(null)
 
@@ -562,7 +573,11 @@ export default defineComponent({
           }
         })
 
-      emit('row-filter', profiles, getters.filteredData.map(row => row.data))
+      emit(
+        'row-filter',
+        profiles,
+        getters.filteredData.map(row => row.data)
+      )
     }
 
     function emitRowSort() {
@@ -581,7 +596,11 @@ export default defineComponent({
           }
         })
 
-      emit('row-sort', profiles, getters.sortedData.map(row => row.data))
+      emit(
+        'row-sort',
+        profiles,
+        getters.sortedData.map(row => row.data)
+      )
     }
 
     let dragState: {
@@ -716,6 +735,12 @@ export default defineComponent({
       }, 0)
     }
 
+    function syncVerticalScroll() {
+      if (mainScroll.value) {
+        setBodyScroll(mainScroll.value.currentScroll.y)
+      }
+    }
+
     const { timer } = useSetTimeout()
 
     function refreshPercentScroll() {
@@ -772,6 +797,7 @@ export default defineComponent({
 
       wrapper,
       thead,
+      mainScroll,
       indicator,
       scrollbar,
 
@@ -779,6 +805,7 @@ export default defineComponent({
       handleXScroll,
       handleYScrollEnableChange,
       handleYBarScroll,
+      syncVerticalScroll,
 
       clearSort,
       clearFilter,
