@@ -1,0 +1,75 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$layout: () !default;
+$layout: map.merge(
+  (
+    aside-width: 270px,
+    header-height: 65px
+  ),
+  $layout
+);
+
+.#{$namespace}-layout {
+  &-vars {
+    @include define-preset-values('layout', $layout);
+  }
+
+  @include basis;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  &__aside {
+    @include inner-fixed;
+
+    z-index: calc(get-css-var('z-index-popper') + 100);
+    width: get-css-var('layout-aside-width');
+    transition: get-css-var('transition-border'), get-css-var('transition-transform');
+    transform: translateX(-100%);
+
+    &--expanded {
+      transform: translateX(0);
+    }
+
+    @include query-media('lg') {
+      z-index: 0;
+      transform: translateX(0);
+    }
+  }
+
+  &__section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    @include query-media('lg') {
+      padding-left: get-css-var('layout-aside-width');
+    }
+  }
+
+  &__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: get-css-var('layout-header-height');
+  }
+
+  &__scroll {
+    width: 100%;
+    height: 100%;
+    padding-top: get-css-var('layout-header-height');
+  }
+
+  &__scrollbar {
+    top: get-css-var('layout-header-height');
+  }
+
+  &__main {
+    width: 100%;
+    min-height: 100%;
+  }
+}

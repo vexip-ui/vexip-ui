@@ -42,6 +42,7 @@ declare module 'vue' {
     Highlight: typeof import('vexip-ui')['Highlight'],
     Icon: typeof import('vexip-ui')['Icon'],
     Input: typeof import('vexip-ui')['Input'],
+    Layout: typeof import('vexip-ui')['Layout'],
     Linker: typeof import('vexip-ui')['Linker'],
     Masker: typeof import('vexip-ui')['Masker'],
     Menu: typeof import('vexip-ui')['Menu'],

@@ -42,6 +42,7 @@ import { Grid } from './grid'
 import { Highlight } from './highlight'
 import { Icon } from './icon'
 import { Input } from './input'
+import { Layout } from './layout'
 import { Linker } from './linker'
 import { Loading } from './loading'
 import { Masker } from './masker'
@@ -145,6 +146,7 @@ const components = [
   Highlight,
   Icon,
   Input,
+  Layout,
   Linker,
   Masker,
   Menu,
@@ -251,6 +253,7 @@ export {
   Highlight,
   Icon,
   Input,
+  Layout,
   Linker,
   Loading,
   Masker,
