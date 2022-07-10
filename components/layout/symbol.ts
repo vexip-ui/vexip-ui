@@ -1,19 +1,27 @@
-import type { ClassType, StyleType } from '@vexip-ui/config'
-
-interface IconProps {
-  class?: ClassType,
-  style?: StyleType,
-  scale?: number,
-  spin?: boolean | 'in' | 'out',
-  pulse?: boolean | 'in' | 'out',
-  flip?: 'horizontal' | 'vertical' | 'both'
+import type { IconMinorProps } from '@/components/icon'
+import type { MenuMarkerType, MenuGroupType, MenuTheme } from '@/components/menu'
+import type { TooltipTheme } from '@/components/tooltip'
+export interface AsideMenuProps {
+  accordion: boolean,
+  markerType: MenuMarkerType,
+  groupType: MenuGroupType,
+  theme: MenuTheme,
+  tooltipTheme: TooltipTheme
 }
 
-export interface MenuOptions {
-  label: string | number,
-  name?: string,
-  path?: string,
+export interface HeaderUserActions {
+  label: string,
   icon?: Record<string, any>,
-  iconProps?: IconProps,
-  children?: MenuOptions[]
+  iconProps?: IconMinorProps,
+  name?: string,
+  disabled?: boolean,
+  divided?: boolean,
+  meta?: Record<string, any>
+}
+
+export interface HeaderUser {
+  name: string,
+  email?: string,
+  avatar?: string | Record<string, any>,
+  actions?: HeaderUserActions[]
 }

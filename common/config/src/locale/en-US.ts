@@ -54,6 +54,10 @@ export function enUSLocale() {
       placeholder: 'Please input'
     },
 
+    layout: {
+      signOut: 'Sign Out'
+    },
+
     modal: {
       confirm: 'Confrim',
       cancel: 'Cancel'
