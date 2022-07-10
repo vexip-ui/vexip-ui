@@ -1,12 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { Alert } from '..'
-import {
-  CircleInfo,
-  CircleCheck,
-  CircleExclamation,
-  CircleXmark
-} from '@vexip-ui/icons'
+import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 const typeIconMap = {
   info: CircleInfo,
@@ -28,7 +23,7 @@ describe('Alert', () => {
   })
 
   it('types', () => {
-    ;(['info', 'success', 'warning', 'error'] as const).forEach(type => {
+    (['info', 'success', 'warning', 'error'] as const).forEach(type => {
       const wrapper = mount(() => <Alert icon type={type}></Alert>)
 
       expect(wrapper.find('.vxp-alert').classes()).toContain(`vxp-alert--${type}`)
@@ -56,12 +51,16 @@ describe('Alert', () => {
   })
 
   it('slots', () => {
-    const wrapper = mount(() => <Alert closable>{{
-      default: () => TEXT,
-      title: () => TEXT,
-      icon: () => TEXT,
-      close: () => TEXT
-    }}</Alert>)
+    const wrapper = mount(() => (
+      <Alert closable>
+        {{
+          default: () => TEXT,
+          title: () => TEXT,
+          icon: () => TEXT,
+          close: () => TEXT
+        }}
+      </Alert>
+    ))
 
     expect(wrapper.find('.vxp-alert__title').text()).toEqual(TEXT)
     expect(wrapper.find('.vxp-alert__content').text()).toEqual(TEXT)

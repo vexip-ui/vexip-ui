@@ -113,7 +113,8 @@ export default defineComponent({
     })
     const style = computed(() => {
       if (colorMap.value) {
-        const { base, light2, dark1, opacity1, opacity3, opacity4, opacity7, opacity8 } = colorMap.value
+        const { base, light2, dark1, opacity1, opacity3, opacity4, opacity7, opacity8 } =
+          colorMap.value
 
         let style: Record<string, string>
 
@@ -157,14 +158,16 @@ export default defineComponent({
           })
         } else if (props.text || props.dashed) {
           style = nh.cvm({
-            ...(props.dashed ? {
-              'b-color': base,
-              'b-color-hover': light2,
-              'b-color-focus': light2,
-              'b-color-active': dark1,
-              'b-color-disabled': 'var(--vxp-button-b-color-disabled-typed)',
-              'pulse-s-color': dark1
-            }: {}),
+            ...(props.dashed
+              ? {
+                  'b-color': base,
+                  'b-color-hover': light2,
+                  'b-color-focus': light2,
+                  'b-color-active': dark1,
+                  'b-color-disabled': 'var(--vxp-button-b-color-disabled-typed)',
+                  'pulse-s-color': dark1
+                }
+              : {}),
             color: base,
             'color-hover': light2,
             'color-focus': light2,
@@ -215,21 +218,27 @@ export default defineComponent({
     }
 
     function renderIconWithDefined() {
-      return props.loading ? (
+      return props.loading
+        ? (
         <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
-          {slots.loading ? (
-            slots.loading()
-          ) : props.loadingSpin ? (
+          {slots.loading
+            ? (
+                slots.loading()
+              )
+            : props.loadingSpin
+              ? (
             <Icon spin icon={props.loadingIcon}></Icon>
-          ) : (
+                )
+              : (
             <Icon pulse icon={props.loadingIcon}></Icon>
-          )}
+                )}
         </div>
-      ) : (
+          )
+        : (
         <div class={nh.be('icon')}>
           <Icon icon={props.icon}></Icon>
         </div>
-      )
+          )
     }
 
     function renderCollapseIcon() {
@@ -237,33 +246,38 @@ export default defineComponent({
         <CollapseTransition appear horizontal fade-effect>
           {props.loading && (
             <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
-              {slots.loading ? (
-                slots.loading()
-              ) : props.loadingSpin ? (
+              {slots.loading
+                ? (
+                    slots.loading()
+                  )
+                : props.loadingSpin
+                  ? (
                 <Icon spin icon={props.loadingIcon}></Icon>
-              ) : (
+                    )
+                  : (
                 <Icon pulse icon={props.loadingIcon}></Icon>
-              )}
+                    )}
             </div>
           )}
         </CollapseTransition>
       )
     }
 
-    return () => h(
-      props.tag || 'button',
-      {
-        type: props.buttonType,
-        class: className.value,
-        style: style.value,
-        disabled: props.disabled,
-        onClick: handleClick,
-        onAnimationend: handleAnimationEnd
-      },
-      [
-        props.icon ? renderIconWithDefined() : renderCollapseIcon(),
-        slots.default ? slots.default() : null
-      ]
-    )
+    return () =>
+      h(
+        props.tag || 'button',
+        {
+          type: props.buttonType,
+          class: className.value,
+          style: style.value,
+          disabled: props.disabled,
+          onClick: handleClick,
+          onAnimationend: handleAnimationEnd
+        },
+        [
+          props.icon ? renderIconWithDefined() : renderCollapseIcon(),
+          slots.default ? slots.default() : null
+        ]
+      )
   }
 })

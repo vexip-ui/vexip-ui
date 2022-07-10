@@ -8,11 +8,11 @@ import type { PropType } from 'vue'
 
 export default defineComponent({
   name: 'VirtualList',
-  inheritAttrs: false,
   components: {
     NativeScroll,
     ResizeObserver
   },
+  inheritAttrs: false,
   props: {
     items: {
       type: Array as PropType<Array<Record<string, any>>>,
@@ -91,57 +91,57 @@ export default defineComponent({
       const { class: itemsClass, style: itemsOtherStyle, ...itemsAttrs } = props.itemsAttrs || {}
 
       return (
-          <NativeScroll
-            ref={scroll}
-            class={nh.b()}
-            use-y-bar
-            scroll-y={scrollOffset.value}
-            {...attrs}
-            onScroll={onScroll}
-            onReady={handleResize}
-          >
-            {h(
-              props.listTag || 'div',
-              {
-                ref: list,
-                class: nh.be('list'),
-                style: listStyle.value
-              },
-              [
-                h(
-                  props.itemsTag || 'ul',
-                  {
-                    ...itemsAttrs,
-                    class: [nh.be('items'), itemsClass],
-                    style: [itemsStyle.value, itemsOtherStyle]
-                  },
-                  [
-                    itemSlot && props.items.length
-                      ? visibleItems.value.map(item => {
-                          const key = item[keyField]
-                          const index = keyIndexMap.get(key)
-                          const vnode = itemSlot({ item, index })[0]
+        <NativeScroll
+          ref={scroll}
+          class={nh.b()}
+          use-y-bar
+          scroll-y={scrollOffset.value}
+          {...attrs}
+          onScroll={onScroll}
+          onReady={handleResize}
+        >
+          {h(
+            props.listTag || 'div',
+            {
+              ref: list,
+              class: nh.be('list'),
+              style: listStyle.value
+            },
+            [
+              h(
+                props.itemsTag || 'ul',
+                {
+                  ...itemsAttrs,
+                  class: [nh.be('items'), itemsClass],
+                  style: [itemsStyle.value, itemsOtherStyle]
+                },
+                [
+                  itemSlot && props.items.length
+                    ? visibleItems.value.map(item => {
+                      const key = item[keyField]
+                      const index = keyIndexMap.get(key)
+                      const vnode = itemSlot({ item, index })[0]
 
-                          if (itemFixed) {
-                            vnode.key = key
+                      if (itemFixed) {
+                        vnode.key = key
 
-                            return vnode
-                          }
+                        return vnode
+                      }
 
-                          const onResize = handleItemResize.bind(null, key)
+                      const onResize = handleItemResize.bind(null, key)
 
-                          return (
-                            <ResizeObserver key={key} throttle onResize={onResize}>
-                              {() => vnode}
-                            </ResizeObserver>
-                          )
-                        })
-                      : slots.empty?.()
-                  ]
-                )
-              ]
-            )}
-          </NativeScroll>
+                      return (
+                          <ResizeObserver key={key} throttle onResize={onResize}>
+                            {() => vnode}
+                          </ResizeObserver>
+                      )
+                    })
+                    : slots.empty?.()
+                ]
+              )
+            ]
+          )}
+        </NativeScroll>
       )
     }
   }

@@ -1,4 +1,4 @@
-import { defineComponent, computed, h, renderSlot,} from 'vue'
+import { defineComponent, computed, h, renderSlot } from 'vue'
 import { useNameHelper, useProps, booleanProp, styleProp } from '@vexip-ui/config'
 import { supportFlexGap } from '@vexip-ui/utils'
 import { flatVNodes } from './helper'
@@ -76,7 +76,7 @@ export default defineComponent({
       if (typeof size !== 'string') {
         const normalizedSize = Array.isArray(size) ? size : [size, size]
 
-        style['--vxp-space-h-gap'] = `${normalizedSize[0]}px`,
+        style['--vxp-space-h-gap'] = `${normalizedSize[0]}px`
         style['--vxp-space-v-gap'] = `${normalizedSize[1]}px`
       }
 
@@ -114,25 +114,25 @@ export default defineComponent({
               !props.gapDisabled
                 ? ''
                 : props.vertical
-                ? {
-                    marginBottom: index !== lastIndex ? varMap.v : undefined
-                  }
-                : {
-                    paddingTop: varMap.hv,
-                    paddingBottom: varMap.hv,
-                    marginRight: justifySpace
-                      ? notBetween || index !== lastIndex
-                        ? varMap.hh
+                  ? {
+                      marginBottom: index !== lastIndex ? varMap.v : undefined
+                    }
+                  : {
+                      paddingTop: varMap.hv,
+                      paddingBottom: varMap.hv,
+                      marginRight: justifySpace
+                        ? notBetween || index !== lastIndex
+                          ? varMap.hh
+                          : undefined
+                        : index !== lastIndex
+                          ? varMap.h
+                          : undefined,
+                      marginLeft: justifySpace
+                        ? notBetween || index !== 0
+                          ? varMap.hh
+                          : undefined
                         : undefined
-                      : index !== lastIndex
-                      ? varMap.h
-                      : undefined,
-                    marginLeft: justifySpace
-                      ? notBetween || index !== 0
-                        ? varMap.hh
-                        : undefined
-                      : undefined
-                  }
+                    }
             ]}
           >
             {vnode}
