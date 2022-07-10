@@ -1,5 +1,7 @@
 [
   "basis",
   "horizontal",
-  "reduce"
+  "reduce",
+  "meta",
+  "options"
 ]

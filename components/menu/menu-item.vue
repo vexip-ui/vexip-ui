@@ -19,7 +19,7 @@
       >
         <div v-if="props.icon" :class="nh.be('icon')">
           <slot name="icon">
-            <Icon :icon="props.icon"></Icon>
+            <Icon v-bind="props.iconProps" :icon="props.icon"></Icon>
           </slot>
         </div>
         <span :class="nh.be('title')">
@@ -48,7 +48,9 @@
     <span v-if="!isUsePopper">
       <CollapseTransition>
         <ul v-show="showGroup" :class="[nh.be('list'), nh.bem('list', 'theme')]">
-          <slot name="group"></slot>
+          <slot name="group">
+            <Renderer :renderer="renderChildren"></Renderer>
+          </slot>
         </ul>
       </CollapseTransition>
     </span>
@@ -62,7 +64,9 @@
           @mouseleave="handleMouseLeave"
         >
           <ul :class="[nh.be('list'), nh.bem('list', 'theme')]">
-            <slot name="group"></slot>
+            <slot name="group">
+              <Renderer :renderer="renderChildren"></Renderer>
+            </slot>
           </ul>
         </div>
       </transition>
@@ -70,7 +74,7 @@
   </li>
 </template>
 
-<script lang="ts">
+<script lang="tsx">
 import {
   defineComponent,
   ref,
@@ -85,30 +89,39 @@ import {
 } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
+import { MenuGroup } from '@/components/menu-group'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
+import { Renderer } from '@/components/renderer'
 import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { usePopper, useSetTimeout } from '@vexip-ui/mixins'
 import { ChevronDown } from '@vexip-ui/icons'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
+import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
+import type { IconMinorProps } from '@/components/icon'
+import type { MenuOptions } from './symbol'
 
-export default defineComponent({
+const MenuItem = defineComponent({
   name: 'MenuItem',
   components: {
     CollapseTransition,
     Icon,
     Tooltip,
     Portal,
+    Renderer,
     ChevronDown
   },
   props: {
     label: String,
     icon: Object,
+    iconProps: Object as PropType<IconMinorProps>,
     disabled: booleanProp,
     transfer: booleanStringProp,
-    transitionName: String
+    transitionName: String,
+    meta: Object,
+    children: Array as PropType<MenuOptions[]>
   },
   emits: ['select'],
   setup(_props, { slots, emit }) {
@@ -118,12 +131,18 @@ export default defineComponent({
         static: true
       },
       icon: null,
+      iconProps: null,
       disabled: {
         default: false,
         static: true
       },
       transfer: null,
-      transitionName: null
+      transitionName: null,
+      meta: null,
+      children: {
+        default: () => [],
+        static: true
+      }
     })
 
     const menuState = inject(MENU_STATE, null)
@@ -141,7 +160,7 @@ export default defineComponent({
 
     const indent = computed(() => (parentItemState?.indent ?? 0) + 1)
     const propTransfer = computed(() => props.transfer ?? menuState?.transfer ?? false)
-    const inTransfer = computed(() => parentItemState ? parentItemState.transfer : false)
+    const inTransfer = computed(() => (parentItemState ? parentItemState.transfer : false))
     const transfer = computed(() => !inTransfer.value && propTransfer.value)
 
     const { reference, popper, transferTo, updatePopper } = usePopper({
@@ -169,11 +188,13 @@ export default defineComponent({
         paddingLeft:
           parentItemState && parentItemState.isUsePopper
             ? undefined
-            : `${indent.value * baseIndentWidth + ((groupState?.indent ?? 0) * 0.25 * baseIndentWidth)}px`
+            : `${
+                indent.value * baseIndentWidth + (groupState?.indent ?? 0) * 0.25 * baseIndentWidth
+              }px`
       }
     })
     const isGroup = computed(() => {
-      return !!slots.group
+      return !!(slots.group || props.children?.length)
     })
     const showGroup = computed(() => {
       return isGroup.value && groupExpanded.value
@@ -233,7 +254,7 @@ export default defineComponent({
     })
     watch(groupExpanded, expanded => {
       if (typeof menuState?.handleExpand === 'function') {
-        menuState.handleExpand(props.label, expanded)
+        menuState.handleExpand(props.label, expanded, props.meta || {})
       }
     })
     watch(
@@ -284,7 +305,7 @@ export default defineComponent({
         }
 
         if (menuState) {
-          menuState.handleSelect(props.label)
+          menuState.handleSelect(props.label, props.meta || {})
         }
 
         selected.value = true
@@ -333,6 +354,36 @@ export default defineComponent({
       }, 250)
     }
 
+    function renderChildren() {
+      if (!props.children?.length) {
+        return null
+      }
+
+      const renderItem = (item: MenuOptions) => (
+        <MenuItem
+          label={item.label}
+          icon={item.icon}
+          icon-props={item.iconProps}
+          disabled={item.disabled}
+          children={item.children}
+        >
+          {item.name || item.label}
+        </MenuItem>
+      )
+
+      return props.children.map(child => {
+        if (child.group) {
+          return (
+            <MenuGroup label={child.name || child.label}>
+              {child.children?.map(renderItem)}
+            </MenuGroup>
+          )
+        }
+
+        return renderItem(child)
+      })
+    }
+
     return {
       props,
       nh,
@@ -356,8 +407,12 @@ export default defineComponent({
 
       handleSelect,
       handleMouseEnter,
-      handleMouseLeave
+      handleMouseLeave,
+      renderChildren
     }
   }
 })
+
+// eslint-disable-next-line vue/require-direct-export
+export default MenuItem
 </script>

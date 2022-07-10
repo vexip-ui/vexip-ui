@@ -5,4 +5,5 @@ const Icon = _Icon as typeof _Icon & {
   register: typeof register
 }
 
+export * from './symbol'
 export { Icon, register }
