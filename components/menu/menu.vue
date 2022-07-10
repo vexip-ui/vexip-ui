@@ -1,6 +1,32 @@
 <template>
   <ul ref="wrapper" :class="className">
-    <slot></slot>
+    <slot>
+      <template v-for="menu in props.options" :key="menu.label">
+        <MenuGroup v-if="menu.group" :label="menu.name || menu.label">
+          <MenuItem
+            v-for="item in menu.children"
+            :key="item.label"
+            :label="item.label"
+            :icon="item.icon"
+            :icon-props="item.iconProps"
+            :disabled="item.disabled"
+            :children="item.children"
+          >
+            {{ item.name || item.label }}
+          </MenuItem>
+        </MenuGroup>
+        <MenuItem
+          v-else
+          :label="menu.label"
+          :icon="menu.icon"
+          :icon-props="menu.iconProps"
+          :disabled="menu.disabled"
+          :children="menu.children"
+        >
+          {{ menu.name || menu.label }}
+        </MenuItem>
+      </template>
+    </slot>
   </ul>
 </template>
 
@@ -16,17 +42,30 @@ import {
   provide,
   toRef
 } from 'vue'
+import { MenuItem } from '@/components/menu-item'
+import { MenuGroup } from '@/components/menu-group'
 import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { TooltipTheme } from '@/components/tooltip'
-import type { MenuMarkerType, MenuGroupType, MenuTheme, MenuItemState, MenuState } from './symbol'
+import type {
+  MenuOptions,
+  MenuMarkerType,
+  MenuGroupType,
+  MenuTheme,
+  MenuItemState,
+  MenuState
+} from './symbol'
 
 const menuMarkerTypes = Object.freeze<MenuMarkerType>(['top', 'right', 'bottom', 'left', 'none'])
 
 export default defineComponent({
   name: 'Menu',
+  components: {
+    MenuItem,
+    MenuGroup
+  },
   props: {
     active: String,
     accordion: booleanProp,
@@ -36,7 +75,8 @@ export default defineComponent({
     transfer: booleanStringProp,
     groupType: String as PropType<MenuGroupType>,
     theme: String as PropType<MenuTheme>,
-    tooltipTheme: String as PropType<TooltipTheme>
+    tooltipTheme: String as PropType<TooltipTheme>,
+    options: Array as PropType<MenuOptions[]>
   },
   emits: ['select', 'expand', 'reduce', 'update:active'],
   setup(_props, { emit }) {
@@ -64,6 +104,10 @@ export default defineComponent({
       tooltipTheme: {
         default: 'dark' as TooltipTheme,
         validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+      },
+      options: {
+        default: () => [],
+        static: true
       }
     })
 
@@ -123,7 +167,7 @@ export default defineComponent({
       () => props.active,
       value => {
         if (value !== currentActive.value) {
-          handleSelect(value)
+          currentActive.value = value
         }
       }
     )
@@ -154,20 +198,20 @@ export default defineComponent({
       menuItemSet.delete(state)
     }
 
-    function handleSelect(label: string) {
+    function handleSelect(label: string, meta: Record<string, any>) {
       if (currentActive.value !== label) {
         currentActive.value = label
 
-        emit('select', label)
+        emit('select', label, meta)
         emit('update:active', label)
       }
     }
 
-    function handleExpand(label: string, expanded: boolean) {
+    function handleExpand(label: string, expanded: boolean, meta: Record<string, any>) {
       if (expanded) {
-        emit('expand', label)
+        emit('expand', label, meta)
       } else {
-        emit('reduce', label)
+        emit('reduce', label, meta)
       }
     }
 
@@ -226,6 +270,9 @@ export default defineComponent({
     }
 
     return {
+      nh,
+      props,
+
       className,
 
       wrapper

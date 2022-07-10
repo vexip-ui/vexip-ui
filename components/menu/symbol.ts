@@ -1,9 +1,21 @@
 import type { InjectionKey } from 'vue'
+import type { IconMinorProps } from '@/components/icon'
 import type { TooltipTheme } from '@/components/tooltip'
 
 export type MenuMarkerType = 'top' | 'right' | 'bottom' | 'left' | 'none'
 export type MenuGroupType = 'collapse' | 'dropdown'
 export type MenuTheme = 'light' | 'dark'
+
+export interface MenuOptions {
+  label: string,
+  icon?: Record<string, any>,
+  iconProps?: IconMinorProps,
+  name?: string,
+  disabled?: boolean,
+  group?: boolean,
+  meta?: Record<string, any>,
+  children?: MenuOptions[]
+}
 
 export interface MenuItemState {
   el: HTMLElement | null,
@@ -32,8 +44,8 @@ export interface MenuState {
   currentActive: string,
   isReduced: boolean,
   transfer: boolean | string,
-  handleSelect(label: string): void,
-  handleExpand(label: string, expanded: boolean): void,
+  handleSelect(label: string, meta: Record<string, any>): void,
+  handleExpand(label: string, expanded: boolean, meta: Record<string, any>): void,
   increaseItem(state: MenuItemState): void,
   decreaseItem(state: MenuItemState): void
 }
