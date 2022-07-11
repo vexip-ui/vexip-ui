@@ -1,4 +1,5 @@
 import type { InjectionKey } from 'vue'
+import type { RouteLocationRaw } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 import type { TooltipTheme } from '@/components/tooltip'
 
@@ -14,6 +15,7 @@ export interface MenuOptions {
   disabled?: boolean,
   group?: boolean,
   meta?: Record<string, any>,
+  route?: RouteLocationRaw,
   children?: MenuOptions[]
 }
 
@@ -44,7 +46,7 @@ export interface MenuState {
   currentActive: string,
   isReduced: boolean,
   transfer: boolean | string,
-  handleSelect(label: string, meta: Record<string, any>): void,
+  handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw): void,
   handleExpand(label: string, expanded: boolean, meta: Record<string, any>): void,
   increaseItem(state: MenuItemState): void,
   decreaseItem(state: MenuItemState): void

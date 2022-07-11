@@ -82,7 +82,8 @@
     "vite-plugin-dts": "^1.2.1",
     "vitest": "^0.17.0",
     "vue": "^3.2.33",
-    "vue-eslint-parser": "^9.0.3"
+    "vue-eslint-parser": "^9.0.3",
+    "vue-router": "^4.1.1"
   },
   "engines": {
     "node": ">=14"
