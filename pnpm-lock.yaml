@@ -74,6 +74,7 @@ importers:
       vitest: ^0.17.0
       vue: ^3.2.33
       vue-eslint-parser: ^9.0.3
+      vue-router: ^4.1.1
     dependencies:
       '@vexip-ui/icons': link:common/icons
       '@vexip-ui/mixins': link:common/mixins
@@ -146,6 +147,7 @@ importers:
       vitest: 0.17.0_sass@1.53.0
       vue: 3.2.33
       vue-eslint-parser: 9.0.3_eslint@8.19.0
+      vue-router: 4.1.1_vue@3.2.33
 
   common/config:
     specifiers:
@@ -243,7 +245,7 @@ importers:
       vite-plugin-md: ^0.13.1
       vue: ^3.2.37
       vue-i18n: ^9.2.0-beta.36
-      vue-router: ^4.0.15
+      vue-router: ^4.1.1
     dependencies:
       '@vexip-ui/icons': link:../common/icons
       '@vexip-ui/mixins': link:../common/mixins
@@ -252,7 +254,7 @@ importers:
       vexip-ui: link:..
       vue: 3.2.37
       vue-i18n: 9.2.0-beta.36_vue@3.2.37
-      vue-router: 4.0.15_vue@3.2.37
+      vue-router: 4.1.1_vue@3.2.37
     devDependencies:
       '@intlify/vite-plugin-vue-i18n': 3.4.0_mwo2sdqree4atizqevg3dcelmm
       '@types/markdown-it': 12.2.3
@@ -278,10 +280,10 @@ importers:
       unplugin-vue-components: ^0.19.6
       vite: ^2.9.13
       vue: ^3.2.37
-      vue-router: ^4.0.15
+      vue-router: ^4.1.1
     dependencies:
       vue: 3.2.37
-      vue-router: 4.0.15_vue@3.2.37
+      vue-router: 4.1.1_vue@3.2.37
     devDependencies:
       '@vitejs/plugin-vue': 2.3.3_vite@2.9.13+vue@3.2.37
       '@vitejs/plugin-vue-jsx': 1.3.10
@@ -8460,8 +8462,17 @@ packages:
       '@vue/devtools-api': 6.1.4
       vue: 3.2.37
 
-  /vue-router/4.0.15_vue@3.2.37:
-    resolution: {integrity: sha512-xa+pIN9ZqORdIW1MkN2+d9Ui2pCM1b/UMgwYUCZOiFYHAvz/slKKBDha8DLrh5aCG/RibtrpyhKjKOZ85tYyWg==}
+  /vue-router/4.1.1_vue@3.2.33:
+    resolution: {integrity: sha512-Wp1mEf2xCwT0ez7o9JvgpfBp9JGnVb+dPERzXDbugTatzJAJ60VWOhJKifQty85k+jOreoFHER4r5fu062PhPw==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      '@vue/devtools-api': 6.1.4
+      vue: 3.2.33
+    dev: true
+
+  /vue-router/4.1.1_vue@3.2.37:
+    resolution: {integrity: sha512-Wp1mEf2xCwT0ez7o9JvgpfBp9JGnVb+dPERzXDbugTatzJAJ60VWOhJKifQty85k+jOreoFHER4r5fu062PhPw==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:

@@ -1,7 +1,7 @@
 <template>
   <ul ref="wrapper" :class="className">
     <slot>
-      <template v-for="menu in props.options" :key="menu.label">
+      <template v-for="menu in menus" :key="menu.label">
         <MenuGroup v-if="menu.group" :label="menu.name || menu.label">
           <MenuItem
             v-for="item in menu.children"
@@ -11,6 +11,7 @@
             :icon-props="item.iconProps"
             :disabled="item.disabled"
             :children="item.children"
+            :route="item.route"
           >
             {{ item.name || item.label }}
           </MenuItem>
@@ -22,6 +23,7 @@
           :icon-props="menu.iconProps"
           :disabled="menu.disabled"
           :children="menu.children"
+          :route="menu.route"
         >
           {{ menu.name || menu.label }}
         </MenuItem>
@@ -34,13 +36,13 @@
 import {
   defineComponent,
   ref,
+  toRef,
   reactive,
   computed,
   watch,
   onMounted,
   nextTick,
-  provide,
-  toRef
+  provide
 } from 'vue'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
@@ -48,6 +50,7 @@ import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-
 import { MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
+import type { Router, RouteRecordRaw, RouteLocationRaw } from 'vue-router'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
   MenuOptions,
@@ -76,7 +79,9 @@ export default defineComponent({
     groupType: String as PropType<MenuGroupType>,
     theme: String as PropType<MenuTheme>,
     tooltipTheme: String as PropType<TooltipTheme>,
-    options: Array as PropType<MenuOptions[]>
+    options: Array as PropType<MenuOptions[]>,
+    router: Object as PropType<Router>,
+    manualRoute: booleanProp
   },
   emits: ['select', 'expand', 'reduce', 'update:active'],
   setup(_props, { emit }) {
@@ -108,7 +113,9 @@ export default defineComponent({
       options: {
         default: () => [],
         static: true
-      }
+      },
+      router: null,
+      manualRoute: false
     })
 
     const nh = useNameHelper('menu')
@@ -144,6 +151,20 @@ export default defineComponent({
         }
       ]
     })
+    const menus = computed(() => {
+      if (props.options?.length) {
+        return props.options
+      }
+
+      const routes = props.router?.options.routes
+
+      if (!routes?.length) {
+        return []
+      }
+
+      return parseRoutesToMenus(routes)
+    })
+    const currentRoute = computed(() => props.router?.currentRoute.value)
 
     provide<MenuState>(
       MENU_STATE,
@@ -183,12 +204,50 @@ export default defineComponent({
         }
       }
     )
+    watch(currentRoute, value => {
+      if (!props.manualRoute && value) {
+        currentActive.value = (value.meta?.label as string) || value.path
+      }
+    })
 
     onMounted(() => {
       nextTick(() => {
         if (!props.horizontal && props.reduced) handleMenuReduce()
       })
     })
+
+    function parseRoutesToMenus(routes: Readonly<RouteRecordRaw[]>) {
+      const root: MenuOptions = { label: '', children: [] }
+      const loop = Array.from(routes).map(route => ({ parent: root, route }))
+
+      while (loop.length) {
+        const { parent, route } = loop.shift()!
+        const routeMeta = route.meta || {}
+
+        if (routeMeta.menu === false) {
+          continue
+        }
+
+        const options = {
+          ...routeMeta,
+          route,
+          label: routeMeta.label || route.path,
+          name: routeMeta.name || route.name
+        } as MenuOptions
+
+        if (!parent.children) {
+          parent.children = []
+        }
+
+        parent.children.push(options)
+
+        if (route.children) {
+          loop.push(...route.children.map(route => ({ parent: options, route })))
+        }
+      }
+
+      return root.children
+    }
 
     function increaseItem(state: MenuItemState) {
       menuItemSet.add(state)
@@ -198,12 +257,16 @@ export default defineComponent({
       menuItemSet.delete(state)
     }
 
-    function handleSelect(label: string, meta: Record<string, any>) {
+    function handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw) {
       if (currentActive.value !== label) {
         currentActive.value = label
 
         emit('select', label, meta)
         emit('update:active', label)
+
+        if (!props.manualRoute && props.router && route) {
+          props.router.push(route)
+        }
       }
     }
 
@@ -274,6 +337,7 @@ export default defineComponent({
       props,
 
       className,
+      menus,
 
       wrapper
     }

@@ -12,29 +12,34 @@
 | tooltip-theme | `'light' \| 'dark'`                                | 设置菜单气泡提示的主题                                                         | `'dark'`     | -       |
 | transfer      | `boolean \| string`                                | 设置其下 MenuItem 的 `transfer` 属性，当 MenuItem 单独设置了该属性时优先级更高 | `false`      | -       |
 | options       | `MenuOptions[]`                                    | 设置菜单的配置                                                                 | `[]`         | `2.0.0` |
+| router        | `Router`                                           | 设置 Router 对象，并自动解析生成菜单，会优先使用 `options` 解析菜单            | `null`       | `2.0.0` |
+| manual-route  | `boolean`                                          | 设置是否为手动路由模式，开启后将不会自动处理路由变化                           | `false`      | `2.0.0` |
 
 一些预设类型：
 
 ```ts
+import type { RouteLocationRaw } from 'vue-router'
+
 interface MenuOptions {
-  label: string
-  icon?: Record<string, any>
-  iconProps?: IconMinorProps
-  name?: string
-  disabled?: boolean
-  group?: boolean
-  meta?: Record<string, any>
+  label: string,
+  icon?: Record<string, any>,
+  iconProps?: IconMinorProps,
+  name?: string,
+  disabled?: boolean,
+  group?: boolean,
+  meta?: Record<string, any>,
+  route?: RouteLocationRaw,
   children?: MenuOptions[]
 }
 ```
 
 ### Menu 事件
 
-| 名称   | 说明                                                       | 参数              | 始于 |
-| ------ | ---------------------------------------------------------- | ----------------- | ---- |
-| select | 当菜单被选择时触发，返回被选菜单的 label                   | `(label: string)` | -    |
-| expand | 当菜单被展开组 (子菜单) 时触发，返回被展开组的菜单的 label | `(label: string)` | -    |
-| reduce | 当菜单被收起组 (子菜单) 时触发，返回被收起组的菜单的 label | `(label: string)` | -    |
+| 名称   | 说明                                                       | 参数                                         | 始于 |
+| ------ | ---------------------------------------------------------- | -------------------------------------------- | ---- |
+| select | 当菜单被选择时触发，返回被选菜单的 label                   | `(label: string, meta: Record<string, any>)` | -    |
+| expand | 当菜单被展开组 (子菜单) 时触发，返回被展开组的菜单的 label | `(label: string, meta: Record<string, any>)` | -    |
+| reduce | 当菜单被收起组 (子菜单) 时触发，返回被收起组的菜单的 label | `(label: string, meta: Record<string, any>)` | -    |
 
 ### MenuItem 属性
 
@@ -48,6 +53,7 @@ interface MenuOptions {
 | transition-name | `string`              | 当子元素处于下拉状态时，设置子元素的过渡效果，未设置时会根据是否为横向菜单分别取值 `'vxp-drop'` 或 `'vxp-zoom'` | `null`  | -       |
 | meta            | `Record<string, any>` | 设置菜单的元数据                                                                                                | `null`  | `2.0.0` |
 | children        | `MenuOptions[]`       | 设置菜单的子级配置                                                                                              | `[]`    | `2.0.0` |
+| route           | `RouteLocationRaw`    | 设置菜单关联的路由，如果设置的 Router 对象默认情况下会自动处理路由的变化                                        | `null`  | `2.0.0` |
 
 ### MenuItem 插槽
 

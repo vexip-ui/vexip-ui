@@ -10,5 +10,13 @@ module.exports = {
   tabWidth: 2,
   trailingComma: 'none',
   useTabs: false,
-  vueIndentScriptAndStyle: false
+  vueIndentScriptAndStyle: false,
+  overrides: [
+    {
+      files: '*.md',
+      options: {
+        embeddedLanguageFormatting: 'off'
+      }
+    }
+  ]
 }

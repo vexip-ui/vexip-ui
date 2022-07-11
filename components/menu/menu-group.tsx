@@ -67,6 +67,7 @@ const MenuGroup = defineComponent({
           icon-props={item.iconProps}
           disabled={item.disabled}
           children={item.children}
+          route={item.route}
         >
           {item.name || item.label}
         </MenuItem>
