@@ -1,4 +1,4 @@
-import { defineComponent, h, computed } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 
 export default defineComponent({
@@ -6,7 +6,7 @@ export default defineComponent({
   props: {
     tag: String
   },
-  setup(_props) {
+  setup(_props, { slots }) {
     const props = useProps('layout', _props, {
       tag: 'main'
     })
@@ -18,9 +18,9 @@ export default defineComponent({
     })
 
     return () => {
-      return h(props.tag || 'main', {
-        class: className.value
-      })
+      const CustomTag = (props.tag || 'main') as any
+
+      return <CustomTag class={className.value}>{slots.default?.()}</CustomTag>
     }
   }
 })

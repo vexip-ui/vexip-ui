@@ -4,8 +4,24 @@
     sign-name="Vexip UI"
     :user="user"
     :menus="menus"
+    :config="['color']"
     @user-action="handleUserAction"
   >
+    <template #header-left="{ reduced, toggleReduce }">
+      <div style="display: flex; cursor: pointer;" @click="toggleReduce()">
+        <Icon :icon="reduced ? Indent : Outdent"></Icon>
+      </div>
+    </template>
+    <template #header-right>
+      <Linker to="https://github.com/qmhc/vexip-ui" style="display: flex; margin-right: 16px;">
+        <Icon :scale="1.6">
+          <GithubB></GithubB>
+        </Icon>
+      </Linker>
+    </template>
+    <template #aside-bottom>
+      <span></span>
+    </template>
     <template #main>
       <div style="width: 100%; height: 2000px;"></div>
     </template>
@@ -13,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { EnvelopesBulk, City, ChartPie, User, Indent, Outdent, GithubB } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui/es/menu'
 
@@ -48,11 +64,6 @@ const menus: MenuOptions[] = [
     label: '4',
     name: '菜单 4',
     icon: User
-  },
-  {
-    label: '5',
-    name: '菜单 5',
-    icon: Marker
   }
 ]
 

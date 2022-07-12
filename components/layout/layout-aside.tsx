@@ -1,8 +1,10 @@
-import { defineComponent, h, ref, computed, watch } from 'vue'
+import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
-import { Indent, Outdent } from '@vexip-ui/icons'
+import { NativeScroll } from '@/components/native-scroll'
+import { Indent, Outdent, CaretRight } from '@vexip-ui/icons'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
 import type { PropType } from 'vue'
 import type { MenuOptions } from '@/components/menu'
@@ -19,9 +21,13 @@ export default defineComponent({
     menuProps: Object as PropType<AsideMenuProps>,
     logo: String,
     signName: String,
-    onReducedChange: Function as PropType<(reduced: boolean) => void>
+    expandedMedia: String,
+    onReducedChange: Function as PropType<(reduced: boolean) => void>,
+    onExpandedChange: Function as PropType<(expanded: boolean) => void>,
+    onSignClick: Function as PropType<(event: MouseEvent) => void>,
+    onMenuSelect: Function as PropType<(label: string, meta: Record<string, any>) => void>
   },
-  emits: ['sign-click', 'menu-select', 'update:reduced'],
+  emits: ['update:reduced', 'update:expanded'],
   setup(_props, { emit, slots }) {
     const props = useProps('layout', _props, {
       tag: 'aside',
@@ -35,19 +41,33 @@ export default defineComponent({
         static: true
       },
       menuProps: null,
-      logo: 'https://www.vexipui.com/logo.png',
-      signName: 'Vexip UI',
-      onReducedChange: null
+      logo: '',
+      signName: '',
+      expandedMedia: 'lg',
+      onReducedChange: null,
+      onExpandedChange: null,
+      onSignClick: null,
+      onMenuSelect: null
     })
 
     const nh = useNameHelper('layout')
+    const layoutState = useLayoutState()
     const currentReduced = ref(props.reduced)
+    const currentExpanded = ref(props.expanded)
+    const scrollHeight = ref('100%')
+
+    const matched = useMediaQuery(toRef(props, 'expandedMedia'))
+    const counter = useUpdateCounter()
+
+    const top = ref<HTMLElement | null>(null)
+    const bottom = ref<HTMLElement | null>(null)
 
     const className = computed(() => {
       return [
         nh.be('aside'),
         {
-          [nh.bem('aside', 'expanded')]: props.expanded,
+          [nh.bs('vars')]: !layoutState.isLayout,
+          [nh.bem('aside', 'expanded')]: currentExpanded.value,
           [nh.bem('aside', 'reduced')]: currentReduced.value
         }
       ]
@@ -62,6 +82,39 @@ export default defineComponent({
         currentReduced.value = value
       }
     )
+    watch(
+      () => props.expanded,
+      value => {
+        currentExpanded.value = value
+      }
+    )
+    watch(
+      matched,
+      value => {
+        layoutState.expanded = !value
+      },
+      { immediate: true }
+    )
+    watch(counter, () => computeScrollHeight)
+
+    function computeScrollHeight() {
+      let topHeight = 0
+      let bottomHeight = 0
+
+      if (top.value) {
+        topHeight = top.value.offsetHeight
+      }
+
+      if (bottom.value) {
+        bottomHeight = bottom.value.offsetHeight
+      }
+
+      if (topHeight || bottomHeight) {
+        scrollHeight.value = `calc(100% - ${topHeight + bottomHeight}px)`
+      } else {
+        scrollHeight.value = '100%'
+      }
+    }
 
     function toggleReduce(target = !currentReduced.value) {
       currentReduced.value = target
@@ -70,26 +123,39 @@ export default defineComponent({
       emit('update:reduced', target)
     }
 
+    function toggleExpand(target = !currentExpanded.value) {
+      currentExpanded.value = target
+
+      props.onExpandedChange?.(target)
+      emit('update:expanded', target)
+    }
+
     function handleSignClick(event: MouseEvent) {
-      emit('sign-click', event)
+      props.onSignClick?.(event)
     }
 
     function handleMenuSelect(label: string, meta: Record<string, any>) {
-      emit('menu-select', label, meta)
+      props.onMenuSelect?.(label, meta)
+    }
+
+    function getSlotParams() {
+      return {
+        reduced: currentReduced.value,
+        toggleReduce,
+        toggleExpand
+      }
     }
 
     return () => {
-      return h(
-        props.tag || 'aside',
-        {
-          class: className.value
-        },
-        [
-          hasTop.value && (
-            <div class={nh.be('aside-top')}>
+      const CustomTag = (props.tag || 'aside') as any
+
+      return (
+        <CustomTag class={className.value}>
+          {hasTop.value && (
+            <div ref={top} class={nh.be('aside-top')}>
               {slots.top
                 ? (
-                    slots.top(currentReduced.value)
+                    slots.top(getSlotParams())
                   )
                 : (
                 <div class={nh.be('sign')} onClick={handleSignClick}>
@@ -102,23 +168,27 @@ export default defineComponent({
                 </div>
                   )}
             </div>
-          ),
-          <div class={nh.be('aside-main')}>
+          )}
+          <NativeScroll class={nh.be('aside-main')} height={scrollHeight.value}>
             {slots.default
-              ? slots.default(currentReduced.value)
-              : props.menus?.length && (
-                  <Menu
-                    {...(props.menuProps || {})}
-                    options={props.menus}
-                    reduced={currentReduced.value}
-                    onSelect={handleMenuSelect}
-                  ></Menu>
-              )}
-          </div>,
-          <div class={nh.be('aside-bottom')}>
+              ? (
+                  slots.default(getSlotParams())
+                )
+              : props.menus?.length
+                ? (
+              <Menu
+                {...(props.menuProps || {})}
+                options={props.menus}
+                reduced={currentReduced.value}
+                onSelect={handleMenuSelect}
+              ></Menu>
+                  )
+                : null}
+          </NativeScroll>
+          <div ref={bottom} class={nh.be('aside-bottom')}>
             {slots.bottom
               ? (
-                  slots.bottom(currentReduced.value)
+                  slots.bottom(getSlotParams())
                 )
               : (
               <div class={nh.be('reduce-handler')} onClick={() => toggleReduce()}>
@@ -126,7 +196,18 @@ export default defineComponent({
               </div>
                 )}
           </div>
-        ]
+          <div class={nh.be('expand-handler')} onClick={() => toggleExpand()}>
+            {slots.expand
+              ? (
+                  slots.expand(getSlotParams())
+                )
+              : (
+              <Icon>
+                <CaretRight></CaretRight>
+              </Icon>
+                )}
+          </div>
+        </CustomTag>
       )
     }
   }

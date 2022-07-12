@@ -5,12 +5,16 @@
 $layout: () !default;
 $layout: map.merge(
   (
-    aside-width: 270px,
+    aside-width: 240px,
+    aside-bg-color: get-css-var('bg-color-base'),
     aside-b-color: get-css-var('border-color-light-2'),
     aside-border: get-css-var('border-shape') get-css-var('layout-aside-b-color'),
     header-height: 55px,
+    header-bg-color: transparent,
     header-b-color: get-css-var('border-color-light-2'),
-    header-border: get-css-var('border-shape') get-css-var('layout-header-b-color')
+    header-border: get-css-var('border-shape') get-css-var('layout-header-b-color'),
+    main-bg-color: transparent,
+    footer-bg-color: get-css-var('fill-color-background')
   ),
   $layout
 );
@@ -25,6 +29,7 @@ $layout: map.merge(
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 
   &__aside {
     @include inner-fixed;
@@ -33,6 +38,7 @@ $layout: map.merge(
     display: flex;
     flex-direction: column;
     width: get-css-var('layout-aside-width');
+    background-color: get-css-var('layout-aside-bg-color');
     border-right: get-css-var('layout-aside-border');
     transition:
       width get-css-var('transition-base'),
@@ -72,6 +78,12 @@ $layout: map.merge(
     }
   }
 
+  &--header-main &__aside {
+    @include query-media('lg') {
+      top: get-css-var('layout-header-height');
+    }
+  }
+
   &__section {
     position: relative;
     width: 100%;
@@ -87,6 +99,16 @@ $layout: map.merge(
     }
   }
 
+  &--header-main &__section {
+    @include query-media('lg') {
+      padding-left: 0;
+    }
+  }
+
+  &--no-aside &__section {
+    padding-left: 0;
+  }
+
   &__container {
     position: relative;
     width: 100%;
@@ -97,26 +119,46 @@ $layout: map.merge(
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 1;
     display: flex;
     align-items: center;
     width: 100%;
     height: get-css-var('layout-header-height');
     padding: 0 16px;
+    background-color: get-css-var('layout-header-bg-color');
     border-bottom: get-css-var('layout-header-border');
-    transition: get-css-var('transition-border'), get-css-var('transition-transform');
+    transition:
+      height get-css-var('transition-base'),
+      get-css-var('transition-border'),
+      get-css-var('transition-transform');
 
-    &--reduced {
+    &--affixed {
       transform: translateY(-100%);
     }
 
     &-left {
+      display: flex;
+      align-items: center;
+      height: 100%;
     }
 
     &-main {
+      display: flex;
       flex: 1 0 0%;
+      align-items: center;
+      height: 100%;
     }
 
     &-right {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+
+    .#{$namespace}-menu {
+      & > .#{$namespace}-menu__item {
+        height: get-css-var('layout-header-height');
+      }
     }
   }
 
@@ -126,13 +168,30 @@ $layout: map.merge(
     padding-top: get-css-var('layout-header-height');
   }
 
-  &__scrollbar {
-    top: get-css-var('layout-header-height');
+  &--header-main &__scroll {
+    transition: padding-left get-css-var('transition-base');
+
+    @include query-media('lg') {
+      padding-left: get-css-var('layout-aside-width');
+
+      &--reduced {
+        padding-left: 64px;
+      }
+    }
   }
 
   &__main {
     width: 100%;
     min-height: 100%;
+    background-color: get-css-var('layout-main-bg-color');
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: get-css-var('layout-footer-bg-color');
   }
 
   &__sign {
@@ -151,6 +210,19 @@ $layout: map.merge(
       opacity: 100%;
       transition: width get-css-var('transition-base'), get-css-var('transition-opacity');
     }
+  }
+
+  &__header &__sign {
+    padding-right: 16px;
+    margin-left: -16px;
+  }
+
+  &--header-main &__sign {
+    min-width: get-css-var('layout-aside-width');
+  }
+
+  &--no-aside &__sign {
+    min-width: 0;
   }
 
   &__aside--reduced &__sign-name {
@@ -177,6 +249,32 @@ $layout: map.merge(
     height: 48px;
     cursor: pointer;
     border-top: get-css-var('layout-aside-border');
+  }
+
+  &__expand-handler {
+    position: absolute;
+    bottom: 47px;
+    left: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 30px;
+    color: get-css-var('content-color-third');
+    cursor: pointer;
+    border: get-css-var('layout-aside-border');
+    border-left-color: transparent;
+    border-radius: 0 get-css-var('radius-base') get-css-var('radius-base') 0;
+
+    @include query-media('lg') {
+      display: none;
+    }
+  }
+
+  &__aside--expanded &__expand-handler {
+    .#{$namespace}-icon {
+      transform: rotate(180deg);
+    }
   }
 
   &__user {
@@ -218,6 +316,158 @@ $layout: map.merge(
       display: flex;
       align-items: center;
       line-height: 1;
+    }
+  }
+
+  &__config {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 16px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    list-style: none;
+    background-color: transparent;
+
+    &::after {
+      position: absolute;
+      bottom: calc(-5px - 0.5px);
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 0;
+      content: '';
+      border-bottom: get-css-var('dropdown-divider');
+    }
+
+    &-label {
+      margin-bottom: 8px;
+      user-select: none;
+    }
+
+    &-unit {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 220px;
+      margin-bottom: 10px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__brief-block {
+    position: relative;
+    width: 44px;
+    height: 32px;
+    margin-right: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: get-css-var('fill-color-humble');
+    border-radius: get-css-var('radius-small');
+    box-shadow: get-css-var('shadow-base');
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 30%;
+      content: '';
+      background-color: get-css-var('content-color-reverse');
+    }
+
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 25%;
+      content: '';
+      background-color: get-css-var('content-color-base');
+    }
+
+    &--aside {
+      &::before {
+        z-index: 1;
+        background-color: get-css-var('content-color-base');
+      }
+
+      &::after {
+        background-color: get-css-var('content-color-reverse');
+      }
+    }
+
+    .#{$namespace}-icon {
+      position: absolute;
+      right: 3px;
+      bottom: 3px;
+      color: get-css-var('color-primary-base');
+    }
+  }
+
+  &__major-color {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 20px;
+    margin-right: 8px;
+    margin-bottom: 6px;
+    color: get-css-var('color-white');
+    cursor: pointer;
+    border-radius: get-css-var('radius-small');
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__copyright {
+    width: 100%;
+    padding: 16px;
+    color: get-css-var('content-color-secondary');
+    text-align: center;
+  }
+
+  &__links {
+    width: 100%;
+    padding: 24px 56px 0;
+
+    &-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: get-css-var('border-light-2');
+    }
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+
+    &-group {
+      flex: 1 0 0;
+      padding-right: 24px;
+      padding-bottom: 32px;
+    }
+
+    &-name--group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: get-css-var('font-size-primary');
+    }
+
+    &-subname {
+      margin-left: 6px;
+      color: get-css-var('content-color-disabled');
     }
   }
 }

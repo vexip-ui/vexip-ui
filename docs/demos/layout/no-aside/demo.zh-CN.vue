@@ -1,10 +1,10 @@
 <template>
   <Layout
+    no-aside
     logo="https://www.vexipui.com/logo.png"
     sign-name="Vexip UI"
     :user="user"
     :menus="menus"
-    @user-action="handleUserAction"
   >
     <template #main>
       <div style="width: 100%; height: 2000px;"></div>
@@ -55,8 +55,4 @@ const menus: MenuOptions[] = [
     icon: Marker
   }
 ]
-
-function handleUserAction(label: string) {
-  console.info(label)
-}
 </script>

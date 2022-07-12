@@ -1,11 +1,13 @@
 <template>
-  <Layout
-    logo="https://www.vexipui.com/logo.png"
-    sign-name="Vexip UI"
-    :user="user"
-    :menus="menus"
-    @user-action="handleUserAction"
-  >
+  <Layout logo="https://www.vexipui.com/logo.png" sign-name="Vexip UI" :user="user">
+    <template #aside-main="{ reduced }">
+      <Menu :options="menus" :reduced="reduced"></Menu>
+    </template>
+    <template #aside-bottom="{ reduced, toggleReduce }">
+      <div style="padding: 16px; cursor: pointer;" @click="toggleReduce()">
+        {{ reduced ? '展开菜单' : '收起菜单' }}
+      </div>
+    </template>
     <template #main>
       <div style="width: 100%; height: 2000px;"></div>
     </template>
@@ -13,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui/es/menu'
 
@@ -48,15 +50,6 @@ const menus: MenuOptions[] = [
     label: '4',
     name: '菜单 4',
     icon: User
-  },
-  {
-    label: '5',
-    name: '菜单 5',
-    icon: Marker
   }
 ]
-
-function handleUserAction(label: string) {
-  console.info(label)
-}
 </script>

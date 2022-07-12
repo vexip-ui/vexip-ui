@@ -4,18 +4,31 @@
     sign-name="Vexip UI"
     :user="user"
     :menus="menus"
+    :style="{
+      '--vxp-layout-aside-width': `${width}px`,
+      '--vxp-layout-header-height': `${height}px`
+    }"
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 2000px;"></div>
+      <div style="width: 100%; height: 2000px; padding: 20px;">
+        <p>边栏宽度：</p>
+        <NumberInput v-model:value="width"></NumberInput>
+        <p>头部高度：</p>
+        <NumberInput v-model:value="height"></NumberInput>
+      </div>
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { ref } from 'vue'
+import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui/es/menu'
+
+const width = ref(240)
+const height = ref(55)
 
 const user = {
   name: 'VexipUI',
@@ -48,11 +61,6 @@ const menus: MenuOptions[] = [
     label: '4',
     name: '菜单 4',
     icon: User
-  },
-  {
-    label: '5',
-    name: '菜单 5',
-    icon: Marker
   }
 ]
 
@@ -60,3 +68,9 @@ function handleUserAction(label: string) {
   console.info(label)
 }
 </script>
+
+<style scoped>
+.vxp-number-input {
+  max-width: 240px;
+}
+</style>

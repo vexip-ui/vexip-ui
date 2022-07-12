@@ -55,7 +55,9 @@ export function enUSLocale() {
     },
 
     layout: {
-      signOut: 'Sign Out'
+      signOut: 'Sign Out',
+      signType: 'Navigation Type',
+      majorColor: 'Major Color'
     },
 
     modal: {

@@ -58,7 +58,9 @@ export interface LocaleConfig {
   },
 
   layout: {
-    signOut: string
+    signOut: string,
+    signType: string,
+    majorColor: string
   },
 
   modal: {
