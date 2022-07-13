@@ -54,6 +54,12 @@ export function enUSLocale() {
       placeholder: 'Please input'
     },
 
+    layout: {
+      signOut: 'Sign out',
+      signType: 'Navigation Type',
+      majorColor: 'Major Color'
+    },
+
     modal: {
       confirm: 'Confrim',
       cancel: 'Cancel'

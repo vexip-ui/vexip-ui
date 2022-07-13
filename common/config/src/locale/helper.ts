@@ -57,6 +57,12 @@ export interface LocaleConfig {
     placeholder: string
   },
 
+  layout: {
+    signOut: string,
+    signType: string,
+    majorColor: string
+  },
+
   modal: {
     confirm: string,
     cancel: string

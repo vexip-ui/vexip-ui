@@ -54,6 +54,12 @@ export function zhCNLocale() {
       placeholder: '请输入'
     },
 
+    layout: {
+      signOut: '注销',
+      signType: '导航模式',
+      majorColor: '主题颜色'
+    },
+
     modal: {
       confirm: '确认',
       cancel: '取消'
