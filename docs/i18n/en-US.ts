@@ -105,6 +105,7 @@ export const enUS = defineI18n({
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',
     NativeScroll: 'NativeScroll',
+    Overflow: 'Overflow',
     ResizeObserver: 'ResizeObserver',
     Scroll: 'Scroll',
     Scrollbar: 'Scrollbar',

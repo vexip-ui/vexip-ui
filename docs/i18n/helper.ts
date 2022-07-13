@@ -103,6 +103,7 @@ export interface I18nConfig {
     ConfigProvider: string,
     Masker: string,
     NativeScroll: string,
+    Overflow: string,
     ResizeObserver: string,
     Scroll: string,
     Scrollbar: string,

@@ -53,6 +53,7 @@ declare module 'vue' {
     NumberInput: typeof import('vexip-ui')['NumberInput'],
     Option: typeof import('vexip-ui')['Option'],
     OptionGroup: typeof import('vexip-ui')['OptionGroup'],
+    Overflow: typeof import('vexip-ui')['Overflow'],
     Pagination: typeof import('vexip-ui')['Pagination'],
     Popup: typeof import('vexip-ui')['Popup'],
     Portal: typeof import('vexip-ui')['Portal'],

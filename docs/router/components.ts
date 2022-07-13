@@ -101,6 +101,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'ConfigProvider', since: '2.0.0' },
         { name: 'Masker' },
         { name: 'NativeScroll', since: '1.3.1' },
+        { name: 'Overflow', since: '2.0.0' },
         { name: 'ResizeObserver', since: '2.0.0' },
         { name: 'Scroll' },
         { name: 'Scrollbar' },

@@ -105,6 +105,7 @@ export const zhCN = defineI18n({
     ConfigProvider: '配置注入',
     Masker: '遮罩',
     NativeScroll: '原生滚动',
+    Overflow: '溢出',
     ResizeObserver: '缩放观察',
     Scroll: '滚动',
     Scrollbar: '滚动条',

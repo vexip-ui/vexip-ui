@@ -56,6 +56,7 @@ import { Notice } from './notice'
 import { NumberInput } from './number-input'
 import { Option } from './option'
 import { OptionGroup } from './option-group'
+import { Overflow } from './overflow'
 import { Pagination } from './pagination'
 import { Popup } from './popup'
 import { Portal } from './portal'
@@ -157,6 +158,7 @@ const components = [
   NumberInput,
   Option,
   OptionGroup,
+  Overflow,
   Pagination,
   Popup,
   Portal,
@@ -267,6 +269,7 @@ export {
   NumberInput,
   Option,
   OptionGroup,
+  Overflow,
   Pagination,
   Popup,
   Portal,
