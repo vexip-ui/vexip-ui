@@ -7,7 +7,7 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 2000px;"></div>
+      <div style="width: 100%; height: 1200px;"></div>
     </template>
   </Layout>
 </template>
@@ -60,3 +60,9 @@ function handleUserAction(label: string) {
   console.info(label)
 }
 </script>
+
+<style scoped>
+.vxp-layout {
+  height: 500px;
+}
+</style>

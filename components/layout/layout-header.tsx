@@ -9,7 +9,7 @@ import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/confi
 import { computeSeriesColors, useLayoutState } from './helper'
 
 import type { PropType } from 'vue'
-import type { LayoutConfig, HeaderUser, HeaderUserAction, LayoutSignType } from './symbol'
+import type { LayoutConfig, HeaderUser, HeaderAction, LayoutSignType } from './symbol'
 
 export default defineComponent({
   name: 'LayoutHeader',
@@ -21,10 +21,10 @@ export default defineComponent({
     userDropped: booleanProp,
     avatarCircle: booleanProp,
     config: Array as PropType<LayoutConfig[]>,
+    actions: Array as PropType<HeaderAction[]>,
     signType: String as PropType<LayoutSignType>,
     colors: Array as PropType<string[]>,
     color: String,
-    fixed: booleanProp,
     onNavChange: Function as PropType<(type: LayoutSignType) => void>,
     onColorChange: Function as PropType<(color: string) => void>,
     onUserAction: Function as PropType<(label: string, meta: Record<string, any>) => void>,
@@ -39,19 +39,16 @@ export default defineComponent({
       logo: '',
       signName: '',
       user: {
-        default: () => ({
-          name: 'VexipUI',
-          email: 'email@vexipui.com'
-        }),
+        default: () => ({ name: '' }),
         static: true
       },
       userDropped: false,
       avatarCircle: false,
       config: () => ['nav', 'color'] as LayoutConfig[],
+      actions: () => [],
       signType: 'aside',
       colors: () => ['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707'],
       color: '',
-      fixed: false,
       onNavChange: null,
       onColorChange: null,
       onUserAction: null,
@@ -75,22 +72,22 @@ export default defineComponent({
         nh.be('header'),
         {
           [nh.bs('vars')]: !layoutState.isLayout,
-          [nh.bem('header', 'affixed')]: !props.fixed && layoutState.affixed
+          [nh.bem('header', 'affixed')]: layoutState.affixed
         }
       ]
     })
     const userActions = computed(() => {
-      if (!props.user.actions) {
+      if (!props.actions?.length) {
         return [
           {
             label: 'signOut',
             name: locale.value.signOut,
             icon: ArrowRightFromBracket
           }
-        ] as HeaderUserAction[]
+        ] as HeaderAction[]
       }
 
-      return props.user.actions
+      return props.actions
     })
     const hasLeft = computed(() => {
       return !!(props.logo || props.signName || slots.left)
@@ -173,6 +170,15 @@ export default defineComponent({
       emit('update:user-dropped', target)
     }
 
+    function getSlotParams() {
+      return {
+        reduced: layoutState.reduced,
+        toggleReduce,
+        handleColorChange,
+        toggleUserDrop
+      }
+    }
+
     function renderCheck() {
       return (
         <Icon>
@@ -217,15 +223,6 @@ export default defineComponent({
           ))}
         </div>
       )
-    }
-
-    function getSlotParams() {
-      return {
-        reduced: layoutState.reduced,
-        toggleReduce,
-        handleColorChange,
-        toggleUserDrop
-      }
     }
 
     return () => {

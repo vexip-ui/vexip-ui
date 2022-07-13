@@ -17,7 +17,7 @@ export interface AsideMenuProps {
   manualRoute?: boolean
 }
 
-export interface HeaderUserAction {
+export interface HeaderAction {
   label: string,
   icon?: Record<string, any>,
   iconProps?: IconMinorProps,
@@ -30,8 +30,7 @@ export interface HeaderUserAction {
 export interface HeaderUser {
   name: string,
   email?: string,
-  avatar?: string | Record<string, any>,
-  actions?: HeaderUserAction[]
+  avatar?: string | Record<string, any>
 }
 
 export interface FooterLink {
@@ -51,6 +50,7 @@ export interface LayoutState {
   scrollY: number,
   affixMatched: boolean,
   expanded: boolean,
+  expandMatched: boolean,
   reduced: boolean,
   navConfig: boolean
 }

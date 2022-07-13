@@ -11,7 +11,7 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 2000px; padding: 20px;">
+      <div style="width: 100%; height: 1200px; padding: 20px;">
         <p>边栏宽度：</p>
         <NumberInput v-model:value="width"></NumberInput>
         <p>头部高度：</p>
@@ -70,6 +70,10 @@ function handleUserAction(label: string) {
 </script>
 
 <style scoped>
+.vxp-layout {
+  height: 500px;
+}
+
 .vxp-number-input {
   max-width: 240px;
 }

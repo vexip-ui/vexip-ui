@@ -1,3 +1,3 @@
-### Basis Usage
+### Adjust Size
 
-Simplest usage.
+The header height and aside width can be easily adjusted via CSS variables.

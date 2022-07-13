@@ -1,3 +1,3 @@
 ### Basis Usage
 
-Simplest usage.
+Usually, you only need to provide some basic configuration for quick layout.

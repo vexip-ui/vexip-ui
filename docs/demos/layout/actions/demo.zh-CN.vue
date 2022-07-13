@@ -1,19 +1,31 @@
 <template>
   <Layout
-    no-aside
     logo="https://www.vexipui.com/logo.png"
     sign-name="Vexip UI"
     :user="user"
+    :actions="actions"
     :menus="menus"
+    @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px;"></div>
+      <div style="width: 100%; height: 1200px; padding: 20px;">
+        点击右上角头像
+      </div>
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import {
+  Gear,
+  IdBadgeR,
+  CommentDotsR,
+  ArrowRightFromBracket,
+  EnvelopesBulk,
+  City,
+  ChartPie,
+  User
+} from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui/es/menu'
 
@@ -21,6 +33,30 @@ const user = {
   name: 'VexipUI',
   email: 'email@vexip-ui.com'
 }
+
+const actions = [
+  {
+    label: 'profile',
+    icon: IdBadgeR,
+    name: '个人资料'
+  },
+  {
+    label: 'message',
+    icon: CommentDotsR,
+    name: '你的消息'
+  },
+  {
+    label: 'settings',
+    icon: Gear,
+    name: '帐号设置',
+    divided: true
+  },
+  {
+    label: 'signOut',
+    name: '退出登录',
+    icon: ArrowRightFromBracket
+  }
+]
 
 const menus: MenuOptions[] = [
   {
@@ -48,13 +84,12 @@ const menus: MenuOptions[] = [
     label: '4',
     name: '菜单 4',
     icon: User
-  },
-  {
-    label: '5',
-    name: '菜单 5',
-    icon: Marker
   }
 ]
+
+function handleUserAction(label: string) {
+  console.info(label)
+}
 </script>
 
 <style scoped>

@@ -1,13 +1,17 @@
 <template>
   <Layout
-    no-aside
     logo="https://www.vexipui.com/logo.png"
     sign-name="Vexip UI"
     :user="user"
     :menus="menus"
+    header-fixed="min"
+    aside-fixed="min"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px;"></div>
+      <div style="width: 100%; height: 1200px; padding: 20px;">
+        <p>点击左下方的小箭头</p>
+        <p>以及来回滚动</p>
+      </div>
     </template>
   </Layout>
 </template>

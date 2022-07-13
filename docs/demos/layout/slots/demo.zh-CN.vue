@@ -44,3 +44,9 @@
   padding: 3px;
 }
 </style>
+
+<style scoped>
+.vxp-layout {
+  height: 500px;
+}
+</style>

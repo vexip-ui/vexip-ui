@@ -1,3 +1,3 @@
-### Basis Usage
+### Various Slots
 
-Simplest usage.
+There are various slots within the component that provide to custom content.

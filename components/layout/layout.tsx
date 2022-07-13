@@ -5,14 +5,20 @@ import LayoutHeader from './layout-header'
 import LayoutMain from './layout-main'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { useMediaQuery } from './helper'
 import { LAYOUT_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { MenuOptions } from '@/components/menu'
-import type { LayoutConfig, AsideMenuProps, LayoutSignType, HeaderUser, FooterLink } from './symbol'
+import type {
+  LayoutConfig,
+  AsideMenuProps,
+  LayoutSignType,
+  HeaderAction,
+  HeaderUser,
+  FooterLink
+} from './symbol'
 
 export default defineComponent({
   name: 'Layout',
@@ -21,6 +27,7 @@ export default defineComponent({
     LayoutFooter,
     LayoutHeader,
     LayoutMain,
+    Menu,
     NativeScroll
   },
   props: {
@@ -33,13 +40,14 @@ export default defineComponent({
     signName: String,
     config: Array as PropType<LayoutConfig[]>,
     user: Object as PropType<HeaderUser>,
+    actions: Array as PropType<HeaderAction[]>,
     reduced: booleanProp,
     avatarCircle: booleanProp,
     signType: String as PropType<LayoutSignType>,
-    headerFixed: booleanProp,
+    headerFixed: booleanStringProp,
+    asideFixed: booleanStringProp,
     copyright: String,
     links: Array as PropType<FooterLink[]>,
-    affixMedia: String,
     onReducedChange: Function as PropType<(target: boolean) => void>,
     onSignClick: Function as PropType<(event: MouseEvent) => void>,
     onMenuSelect: Function as PropType<(label: string, meta: Record<string, any>) => void>,
@@ -55,17 +63,19 @@ export default defineComponent({
         default: () => [],
         static: true
       },
+      menuProps: null,
       logo: '',
       signName: '',
       config: () => ['nav', 'color'] as LayoutConfig[],
       user: null,
+      actions: () => [],
       reduced: false,
       avatarCircle: false,
       signType: 'aside',
-      headerFixed: false,
+      headerFixed: 'lg',
+      asideFixed: 'lg',
       copyright: '',
       links: () => [],
-      affixMedia: 'lg',
       onReducedChange: null,
       onSignClick: null,
       onMenuSelect: null,
@@ -79,17 +89,19 @@ export default defineComponent({
     const userDropped = ref(false)
 
     const section = ref<HTMLElement | null>(null)
-    const scroll = ref<HTMLElement | null>(null)
+    const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
 
-    const matched = useMediaQuery(toRef(props, 'affixMedia'))
+    const affixMatched = useMediaQuery(toRef(props, 'headerFixed'))
+    const expandMatched = useMediaQuery(toRef(props, 'asideFixed'))
 
     const state = reactive({
       isLayout: true,
       locked: false,
       affixed: false,
       scrollY: 0,
-      affixMatched: matched.value,
+      affixMatched,
       expanded: false,
+      expandMatched,
       reduced: asideReduced,
       navConfig: computed(() => !props.noAside)
     })
@@ -107,7 +119,7 @@ export default defineComponent({
 
     provide(LAYOUT_STATE, state)
 
-    watch(matched, value => {
+    watch(affixMatched, value => {
       state.affixMatched = value
       state.affixed = !state.affixMatched && state.scrollY >= 50
     })
@@ -120,14 +132,14 @@ export default defineComponent({
     watch(
       () => state!.locked,
       value => {
-        if (!section.value || !scroll.value) return
+        if (!section.value || !scroll.value.content) return
 
         if (value) {
           section.value.style.transitionDuration = '0ms'
-          scroll.value.style.transitionDuration = '0ms'
+          scroll.value.content.style.transitionDuration = '0ms'
         } else {
           section.value.style.transitionDuration = ''
-          scroll.value.style.transitionDuration = ''
+          scroll.value.content.style.transitionDuration = ''
         }
       }
     )
@@ -147,10 +159,6 @@ export default defineComponent({
       props.onMenuSelect?.(label, meta)
     }
 
-    function handleScrollResize(entry: ResizeObserverEntry) {
-      scrollHeight.value = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height
-    }
-
     function handleScroll({ clientY }: { clientY: number }) {
       state.scrollY = clientY
       state.affixed = !state.affixMatched && clientY >= 50
@@ -158,6 +166,10 @@ export default defineComponent({
 
     function handleUserAction(label: string, meta: Record<string, any>) {
       props.onUserAction?.(label, meta)
+    }
+
+    function getSlotParams() {
+      return { reduced: asideReduced.value, toggleReduce }
     }
 
     function renderSign() {
@@ -168,7 +180,7 @@ export default defineComponent({
       return (
         <div class={nh.be('sign')} onClick={handleSignClick}>
           {slots.sign
-            ? slots.sign()
+            ? slots.sign(getSlotParams())
             : [
                 props.logo && (
                   <div class={nh.be('logo')}>
@@ -183,16 +195,17 @@ export default defineComponent({
 
     function renderHeader() {
       if (slots.header) {
-        return slots.header
+        return slots.header(getSlotParams())
       }
 
       return (
         <LayoutHeader
           v-model:sign-type={currentSignType.value}
           v-model:user-dropped={userDropped.value}
+          user={props.user}
+          actions={props.actions}
           config={props.config}
           avatar-circle={props.avatarCircle}
-          fixed={props.headerFixed}
           onUserAction={handleUserAction}
           onReducedChange={toggleReduce}
         >
@@ -227,7 +240,7 @@ export default defineComponent({
 
     function renderAside() {
       if (slots.aside) {
-        return slots.aside()
+        return slots.aside(getSlotParams())
       }
 
       if (props.noAside) {
@@ -257,7 +270,7 @@ export default defineComponent({
 
     function renderMain() {
       if (slots.default) {
-        return slots.default()
+        return slots.default(getSlotParams())
       }
 
       return (
@@ -271,7 +284,7 @@ export default defineComponent({
 
     function renderFooter() {
       if (slots.footer) {
-        return slots.footer()
+        return slots.footer(getSlotParams())
       }
 
       return (
@@ -286,22 +299,21 @@ export default defineComponent({
 
     function renderScroll() {
       return (
-        <div
+        <NativeScroll
           ref={scroll}
-          class={[nh.be('scroll'), asideReduced.value && nh.bem('scroll', 'reduced')]}
+          scroll-class={[
+            nh.be('scroll'),
+            expandMatched.value && nh.bem('scroll', 'away'),
+            asideReduced.value && nh.bem('scroll', 'reduced')
+          ]}
+          height={'100%'}
+          use-y-bar
+          bar-class={nh.be('scrollbar')}
+          onScroll={handleScroll}
         >
-          <ResizeObserver throttle onResize={handleScrollResize}>
-            <NativeScroll
-              height={'100%'}
-              use-y-bar
-              bar-class={nh.be('scrollbar')}
-              onScroll={handleScroll}
-            >
-              {renderMain()}
-              {props.footer && renderFooter()}
-            </NativeScroll>
-          </ResizeObserver>
-        </div>
+          {renderMain()}
+          {props.footer && renderFooter()}
+        </NativeScroll>
       )
     }
 
@@ -318,6 +330,7 @@ export default defineComponent({
                   class={[
                     nh.be('section'),
                     {
+                      [nh.bem('section', 'away')]: expandMatched.value,
                       [nh.bem('section', 'reduced')]: asideReduced.value,
                       [nh.bem('section', 'locked')]: state.locked
                     }

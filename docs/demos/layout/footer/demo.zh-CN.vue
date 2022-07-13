@@ -105,3 +105,9 @@ const links = [
   }
 ]
 </script>
+
+<style scoped>
+.vxp-layout {
+  height: 500px;
+}
+</style>

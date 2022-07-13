@@ -66,6 +66,7 @@ export function useLayoutState() {
       scrollY: 0,
       affixMatched: false,
       expanded: false,
+      expandMatched: false,
       reduced: false,
       navConfig: false
     })
@@ -74,10 +75,10 @@ export function useLayoutState() {
 
 const breakPoints = Object.freeze(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 
-export function useMediaQuery(query: Ref<string>) {
+export function useMediaQuery(query: Ref<string | boolean>) {
   const computedStyle = getComputedStyle(document.documentElement)
   const computedQuery = computed(() => {
-    if (breakPoints.includes(query.value)) {
+    if (breakPoints.includes(query.value as any)) {
       const media = computedStyle.getPropertyValue(`--vxp-break-point-${query.value}`).trim()
       return `only screen and ${media}`
     }
@@ -89,7 +90,18 @@ export function useMediaQuery(query: Ref<string>) {
   const matched = ref(false)
 
   const update = () => {
-    if (!computedQuery.value) {
+    if (typeof computedQuery.value === 'boolean') {
+      matched.value = computedQuery.value
+      return
+    }
+
+    if (!computedQuery.value || computedQuery.value === 'min') {
+      matched.value = false
+      return
+    }
+
+    if (computedQuery.value === 'max') {
+      matched.value = true
       return
     }
 
@@ -107,7 +119,7 @@ export function useMediaQuery(query: Ref<string>) {
 
   onBeforeMount(() => {
     update()
-    mediaQuery!.addEventListener('change', update)
+    mediaQuery?.addEventListener('change', update)
   })
 
   onBeforeUnmount(() => {

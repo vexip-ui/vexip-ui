@@ -10,7 +10,7 @@ $layout: map.merge(
     aside-b-color: get-css-var('border-color-light-2'),
     aside-border: get-css-var('border-shape') get-css-var('layout-aside-b-color'),
     header-height: 55px,
-    header-bg-color: transparent,
+    header-bg-color: get-css-var('bg-color-base'),
     header-b-color: get-css-var('border-color-light-2'),
     header-border: get-css-var('border-shape') get-css-var('layout-header-b-color'),
     main-bg-color: transparent,
@@ -32,8 +32,10 @@ $layout: map.merge(
   overflow: hidden;
 
   &__aside {
-    @include inner-fixed;
-
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
     z-index: calc(get-css-var('z-index-popper') + 100);
     display: flex;
     flex-direction: column;
@@ -46,17 +48,17 @@ $layout: map.merge(
       get-css-var('transition-transform');
     transform: translateX(-100%);
 
+    &--fixed {
+      z-index: 1;
+      transform: translateX(0);
+    }
+
     &--expanded {
       transform: translateX(0);
     }
 
     &--reduced {
       width: 64px;
-    }
-
-    @include query-media('lg') {
-      z-index: 1;
-      transform: translateX(0);
     }
 
     &-top {
@@ -78,10 +80,8 @@ $layout: map.merge(
     }
   }
 
-  &--header-main &__aside {
-    @include query-media('lg') {
-      top: get-css-var('layout-header-height');
-    }
+  &--header-main &__aside--fixed {
+    top: get-css-var('layout-header-height');
   }
 
   &__section {
@@ -90,12 +90,12 @@ $layout: map.merge(
     height: 100%;
     transition: padding-left get-css-var('transition-base');
 
-    @include query-media('lg') {
+    &--away {
       padding-left: get-css-var('layout-aside-width');
+    }
 
-      &--reduced {
-        padding-left: 64px;
-      }
+    &--away#{&}--reduced {
+      padding-left: 64px;
     }
   }
 
@@ -171,16 +171,22 @@ $layout: map.merge(
   &--header-main &__scroll {
     transition: padding-left get-css-var('transition-base');
 
-    @include query-media('lg') {
+    &--away {
       padding-left: get-css-var('layout-aside-width');
+    }
 
-      &--reduced {
-        padding-left: 64px;
-      }
+    &--away#{&}--reduced {
+      padding-left: 64px;
     }
   }
 
+  &__scrollbar {
+    top: get-css-var('layout-header-height');
+  }
+
   &__main {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     min-height: 100%;
     background-color: get-css-var('layout-main-bg-color');
@@ -265,10 +271,10 @@ $layout: map.merge(
     border: get-css-var('layout-aside-border');
     border-left-color: transparent;
     border-radius: 0 get-css-var('radius-base') get-css-var('radius-base') 0;
+  }
 
-    @include query-media('lg') {
-      display: none;
-    }
+  &__aside--fixed &__expand-handler {
+    display: none;
   }
 
   &__aside--expanded &__expand-handler {
@@ -442,15 +448,22 @@ $layout: map.merge(
     &-row {
       display: flex;
       justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 8px;
       border-bottom: get-css-var('border-light-2');
     }
   }
 
   &__link {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     margin-bottom: 4px;
+
+    &-name,
+    &-subname,
+    .#{$namespace}-linker {
+      display: inline-flex;
+    }
 
     &-group {
       flex: 1 0 0;

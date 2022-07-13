@@ -1,7 +1,7 @@
 <template>
   <Layout logo="https://www.vexipui.com/logo.png" sign-name="Vexip UI" :user="user">
     <template #aside-main="{ reduced }">
-      <Menu :options="menus" :reduced="reduced"></Menu>
+      <Menu transfer :options="menus" :reduced="reduced"></Menu>
     </template>
     <template #aside-bottom="{ reduced, toggleReduce }">
       <div style="padding: 16px; cursor: pointer;" @click="toggleReduce()">
@@ -9,7 +9,7 @@
       </div>
     </template>
     <template #main>
-      <div style="width: 100%; height: 2000px;"></div>
+      <div style="width: 100%; height: 1200px;"></div>
     </template>
   </Layout>
 </template>
@@ -53,3 +53,9 @@ const menus: MenuOptions[] = [
   }
 ]
 </script>
+
+<style scoped>
+.vxp-layout {
+  height: 500px;
+}
+</style>

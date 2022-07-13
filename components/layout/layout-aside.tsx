@@ -67,6 +67,7 @@ export default defineComponent({
         nh.be('aside'),
         {
           [nh.bs('vars')]: !layoutState.isLayout,
+          [nh.bem('aside', 'fixed')]: layoutState.expandMatched,
           [nh.bem('aside', 'expanded')]: currentExpanded.value,
           [nh.bem('aside', 'reduced')]: currentReduced.value
         }
@@ -178,6 +179,7 @@ export default defineComponent({
                 ? (
               <Menu
                 {...(props.menuProps || {})}
+                transfer
                 options={props.menus}
                 reduced={currentReduced.value}
                 onSelect={handleMenuSelect}

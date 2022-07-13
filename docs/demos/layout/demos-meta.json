@@ -1,1 +1,11 @@
-["basis"]
+[
+  "basis",
+  "actions",
+  "footer",
+  "no-aside",
+  "adjust",
+  "media",
+  "custom-header",
+  "custom-aside",
+  "slots"
+]
