@@ -187,6 +187,10 @@ $menu: map.merge(
       #{$self}--horizontal &::after {
         opacity: 100%;
       }
+
+      #{$item}--disabled &::after {
+        opacity: 0%;
+      }
     }
 
     #{$item}--selected &,

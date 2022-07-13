@@ -18,7 +18,7 @@
           </MenuItem>
         </template>
       </MenuItem>
-      <MenuItem label="2" :icon="City">
+      <MenuItem label="2" :icon="City" disabled>
         菜单二
       </MenuItem>
       <MenuItem label="3" :icon="ChartPie">

@@ -26,7 +26,7 @@
       </template>
     </MenuItem>
     <MenuGroup label="分组一">
-      <MenuItem label="2" :icon="City">
+      <MenuItem label="2" :icon="City" disabled>
         菜单二
       </MenuItem>
       <MenuItem label="3" :icon="ChartPie">
