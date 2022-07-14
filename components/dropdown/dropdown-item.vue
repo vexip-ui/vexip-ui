@@ -7,7 +7,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, toRef, inject } from 'vue'
 import { useLabel } from './mixins'
-import { DROP_SELECT_HANDLER } from './symbol'
+import { SELECT_HANDLER } from './symbol'
 
 export default defineComponent({
   name: 'DropdownItem',
@@ -31,11 +31,15 @@ export default defineComponent({
     reference: {
       type: Boolean,
       default: false
+    },
+    meta: {
+      type: Object,
+      default: null
     }
   },
   emits: ['select'],
   setup(props, { emit }) {
-    const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)
+    const parentSelectHandler = inject(SELECT_HANDLER, null)
 
     const baseClass = 'vxp-dropdown__item'
     const wrapper = ref(null)
@@ -59,7 +63,7 @@ export default defineComponent({
       }
 
       if (typeof parentSelectHandler === 'function') {
-        parentSelectHandler(currentLabel.value!)
+        parentSelectHandler([currentLabel.value!], [props.meta])
       }
 
       emit('select', currentLabel.value)

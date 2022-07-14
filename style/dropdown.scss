@@ -34,6 +34,7 @@ $dropdown: map.merge(
   &__trigger {
     display: flex;
     min-width: 100%;
+    height: 100%;
   }
 
   &__popper {

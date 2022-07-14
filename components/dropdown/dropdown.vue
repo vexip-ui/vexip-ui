@@ -4,7 +4,6 @@
     :class="className"
     @mouseenter="handleTriggerEnter"
     @mouseleave="handleTriggerLeave"
-    @clickoutside="handleClickOutside"
   >
     <div
       ref="reference"
@@ -19,7 +18,12 @@
           <div
             v-show="currentVisible"
             ref="popper"
-            :class="[nh.be('popper'), nh.bs('vars'), isNested ? nh.bem('popper', 'nested') : null, props.dropClass]"
+            :class="[
+              nh.be('popper'),
+              nh.bs('vars'),
+              isNested ? nh.bem('popper', 'nested') : null,
+              props.dropClass
+            ]"
             @mouseenter="handleTriggerEnter"
             @mouseleave="handleTriggerLeave"
           >
@@ -45,10 +49,16 @@ import {
 } from 'vue'
 import { Portal } from '@/components/portal'
 import DropdownDrop from './dropdown-drop'
-import { useClickOutside, placementWhileList, usePopper, useTriggerHandler } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
+import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  classProp
+} from '@vexip-ui/config'
 import { useLabel } from './mixins'
-import { SELECT_HANDLER, DROP_SELECT_HANDLER } from './symbol'
+import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -70,7 +80,8 @@ export default defineComponent({
     transitionName: String,
     transfer: booleanStringProp,
     dropClass: classProp,
-    appear: booleanProp
+    appear: booleanProp,
+    meta: Object as PropType<Record<string, any>>
   },
   emits: ['toggle', 'select', 'click-outside', 'outside-close', 'update:visible'],
   setup(_props, { emit }) {
@@ -95,20 +106,20 @@ export default defineComponent({
       transitionName: 'vxp-drop',
       transfer: false,
       dropClass: null,
-      appear: false
+      appear: false,
+      meta: null
     })
 
-    const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)
+    const parentState = inject(DROPDOWN_STATE, null)
 
     const nh = useNameHelper('dropdown')
-    const isNested = typeof parentSelectHandler === 'function'
-    const trigger = toRef(props, 'trigger')
+    const isNested = !!parentState
     const label = toRef(props, 'label')
     const placement = ref(props.placement)
     const currentVisible = ref(props.visible)
     const transfer = toRef(props, 'transfer')
 
-    const wrapper = useClickOutside()
+    const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
@@ -117,10 +128,6 @@ export default defineComponent({
       offset: isNested ? [-5, 0] : undefined
     })
     const currentLabel = useLabel(label, reference)
-    const { handleTriggerEnter, handleTriggerLeave, handleTriggerClick } = useTriggerHandler(
-      trigger,
-      currentVisible
-    )
 
     const className = computed(() => {
       return {
@@ -130,8 +137,12 @@ export default defineComponent({
       }
     })
 
-    provide(SELECT_HANDLER, handleSelect)
-    provide(DROP_SELECT_HANDLER, null) // 覆盖上一级的 provide
+    provide(SELECT_HANDLER, null)
+    provide(DROPDOWN_STATE, {
+      handleSelect,
+      handleTriggerEnter,
+      handleTriggerLeave
+    })
 
     watch(
       () => props.visible,
@@ -172,28 +183,60 @@ export default defineComponent({
       }
     }
 
-    function handleSelect(sonLabel: string | number) {
-      if (trigger.value !== 'custom') {
+    function handleSelect(labels: (string | number)[], metas: Array<Record<string, any>>) {
+      if (props.trigger !== 'custom') {
         currentVisible.value = false
-        emit('select', sonLabel)
+        emit('select', labels, metas)
       }
 
-      if (typeof parentSelectHandler === 'function') {
-        parentSelectHandler(`${currentLabel.value}-${sonLabel}`)
+      if (typeof parentState?.handleSelect === 'function') {
+        parentState.handleSelect([currentLabel.value!, ...labels], [props.meta || {}, ...metas])
       }
     }
 
     function setPlacement(value: Placement) {
       const [xPlacement] = value.split('-')
 
-      if (
-        typeof parentSelectHandler === 'function' &&
-        xPlacement !== 'right' &&
-        xPlacement !== 'left'
-      ) {
+      if (isNested && xPlacement !== 'right' && xPlacement !== 'left') {
         placement.value = 'right-start'
       } else {
         placement.value = value
+      }
+    }
+
+    const { timer } = useSetTimeout()
+
+    function handleTriggerEnter() {
+      if (props.trigger === 'hover') {
+        clearTimeout(timer.hover)
+
+        if (typeof parentState?.handleTriggerEnter === 'function') {
+          parentState.handleTriggerEnter()
+        }
+
+        timer.hover = setTimeout(() => {
+          currentVisible.value = true
+        }, 250)
+      }
+    }
+
+    function handleTriggerLeave() {
+      if (props.trigger === 'hover') {
+        clearTimeout(timer.hover)
+
+        if (typeof parentState?.handleTriggerLeave === 'function') {
+          parentState.handleTriggerLeave()
+        }
+
+        timer.hover = setTimeout(() => {
+          currentVisible.value = false
+        }, 250)
+      }
+    }
+
+    function handleTriggerClick() {
+      if (props.trigger === 'click') {
+        currentVisible.value = !currentVisible.value
       }
     }
 
@@ -212,8 +255,7 @@ export default defineComponent({
 
       handleTriggerEnter,
       handleTriggerLeave,
-      handleTriggerClick,
-      handleClickOutside
+      handleTriggerClick
     }
   }
 })
