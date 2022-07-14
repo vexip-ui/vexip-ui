@@ -1,0 +1,39 @@
+<template>
+  <Overflow :get-counter="getCounter">
+    <div v-for="n in 15" :key="n" class="item">
+      Item {{ n }}
+    </div>
+    <template #counter="{ count }">
+      <div ref="counter" class="item">
+        {{ `+${count}` }}
+      </div>
+    </template>
+  </Overflow>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const counter = ref<HTMLElement | null>(null)
+
+function getCounter() {
+  return counter.value
+}
+</script>
+
+<style scoped>
+.vxp-overflow {
+  max-width: 360px;
+  padding: 10px;
+  border: var(--vxp-border-base);
+  border-radius: var(--vxp-radius-base);
+}
+
+.item {
+  padding: 4px 10px;
+  margin-right: 4px;
+  white-space: nowrap;
+  border: var(--vxp-border-base);
+  border-radius: var(--vxp-radius-base);
+}
+</style>

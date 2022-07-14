@@ -195,7 +195,7 @@ export default defineComponent({
                   </ResizeObserver>
               )
             })
-            : null}
+            : itemSlot?.()}
           {slots.counter
             ? (
                 slots.counter({ count: restCount.value })
