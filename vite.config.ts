@@ -1,14 +1,14 @@
 // This config is for building library, do not use to create serve.
 
 import { resolve } from 'path'
-import { readFileSync } from 'fs'
+import { readFileSync, existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import dts from 'vite-plugin-dts'
 import glob from 'fast-glob'
 
-import type { LogLevel, Plugin, LibraryFormats } from 'vite'
+import type { LogLevel, Plugin } from 'vite'
 
 interface Manifest {
   dependencies?: Record<string, string>,
@@ -19,8 +19,8 @@ interface Manifest {
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')) as Manifest
 const componentsDir = resolve(__dirname, 'components')
 
-const outDir = process.env.OUT_DIR || 'dist'
-const format = (process.env.FORMAT || 'es') as LibraryFormats
+// const outDir = process.env.OUT_DIR || 'dist'
+// const format = (process.env.FORMAT || 'es') as LibraryFormats
 const logLevel = process.env.LOG_LEVEL
 const sourceMap = process.env.SOURCE_MAP === 'true'
 
@@ -34,13 +34,32 @@ const externalPkgs = ['@vue'].concat(
 )
 const external = (id: string) => externalPkgs.some(p => p === id || id.startsWith(`${p}/`))
 
+function emptyDir(dir: string): void {
+  if (!existsSync(dir)) {
+    return
+  }
+
+  for (const file of readdirSync(dir)) {
+    const abs = resolve(dir, file)
+
+    // baseline is Node 12 so can't use rmSync
+    if (lstatSync(abs).isDirectory()) {
+      emptyDir(abs)
+      rmdirSync(abs)
+    } else {
+      unlinkSync(abs)
+    }
+  }
+}
+
 export default defineConfig(async () => {
   const input = await glob('components/**/*.{ts,vue}', {
     cwd: __dirname,
     absolute: true,
-    onlyFiles: true,
-    ignore: ['**/__serve__/**']
+    onlyFiles: true
   })
+
+  emptyDir(resolve(__dirname, 'lib'))
 
   return {
     logLevel: (logLevel || 'info') as LogLevel,
@@ -55,20 +74,31 @@ export default defineConfig(async () => {
       ]
     },
     build: {
-      outDir,
+      outDir: 'es',
       sourcemap: sourceMap,
       lib: {
         entry: resolve(componentsDir, 'index.ts'),
-        formats: [format]
+        name: 'VexipUI'
       },
       rollupOptions: {
         input,
         external,
-        output: {
-          preserveModules: true,
-          preserveModulesRoot: componentsDir,
-          entryFileNames: `[name].${format === 'es' ? 'mjs' : 'js'}`
-        },
+        output: [
+          {
+            format: 'cjs',
+            preserveModules: true,
+            preserveModulesRoot: componentsDir,
+            dir: 'lib',
+            entryFileNames: '[name].js'
+          },
+          {
+            format: 'es',
+            preserveModules: true,
+            preserveModulesRoot: componentsDir,
+            dir: 'es',
+            entryFileNames: '[name].mjs'
+          }
+        ],
         treeshake: false
       },
       commonjsOptions: {
@@ -87,26 +117,14 @@ export default defineConfig(async () => {
                 external: 'absolute'
               }
             }
-            // else if (id.startsWith('@/common/icons')) {
-            //   return {
-            //     id: id.replace(/^@\/common\/icons/, 'vexip-ui/icons'),
-            //     external: 'absolute'
-            //   }
-            // }
           }
         }
       ]),
       vue(),
       vueJsx(),
       dts({
-        exclude: [
-          'node_modules',
-          'playground',
-          'common/icons',
-          'common/mixins',
-          'common/utils',
-          'components/*/__serve__'
-        ],
+        exclude: ['node_modules', 'playground', 'common/icons', 'common/mixins', 'common/utils'],
+        outputDir: ['lib', 'es'],
         compilerOptions: { sourceMap },
         copyDtsFiles: false
       })

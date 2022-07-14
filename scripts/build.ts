@@ -23,27 +23,12 @@ async function main() {
   logger.withBothLn(() => logger.successText('start building lib...'))
 
   await run('pnpm', ['bootstrap'])
-
   await run('vite', ['build', '--config', 'vite.config.ts'], {
-    stdio: 'inherit',
     env: {
       NODE_ENV: env,
-      OUT_DIR: 'es',
-      FORMAT: 'es',
       SOURCE_MAP: sourceMap ? 'true' : ''
     }
   })
-
-  await run('vite', ['build', '--config', 'vite.config.ts'], {
-    stdio: 'inherit',
-    env: {
-      NODE_ENV: env,
-      OUT_DIR: 'lib',
-      FORMAT: 'cjs',
-      SOURCE_MAP: sourceMap ? 'true' : ''
-    }
-  })
-
   await run('pnpm', ['build:style'])
 
   logger.ln()
