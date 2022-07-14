@@ -1,47 +1,67 @@
 <template>
-  <Menu v-model:active="active" horizontal transfer>
-    <MenuItem label="1" :icon="EnvelopesBulk">
-      菜单一
-      <template #group>
-        <MenuItem label="1-1">
-          子菜单一
-        </MenuItem>
-        <MenuItem label="1-2">
-          子菜单二
-        </MenuItem>
-        <MenuItem label="1-3">
-          子菜单三
-          <template #group>
-            <MenuItem label="1-3-1">
-              三级菜单一
-            </MenuItem>
-            <MenuItem label="1-3-2">
-              三级菜单二
-            </MenuItem>
-          </template>
-        </MenuItem>
-        <MenuItem label="1-4">
-          子菜单四
-        </MenuItem>
-      </template>
-    </MenuItem>
-    <MenuGroup label="分组一">
-      <MenuItem label="2" :icon="City" disabled>
-        菜单二
-      </MenuItem>
-      <MenuItem label="3" :icon="ChartPie">
-        菜单三
-      </MenuItem>
-    </MenuGroup>
-    <MenuItem label="4" :icon="User">
-      菜单四
-    </MenuItem>
-  </Menu>
+  <Menu
+    horizontal
+    transfer
+    trigger="click"
+    :options="options"
+  ></Menu>
+  <br />
+  <Menu
+    horizontal
+    transfer
+    :options="options"
+    style="max-width: 360px;"
+  ></Menu>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
 
-const active = ref('')
+import type { MenuOptions } from 'vexip-ui/es/menu'
+
+const options: MenuOptions[] = [
+  {
+    label: '1',
+    name: '菜单 1',
+    icon: EnvelopesBulk,
+    children: [
+      { label: '1-1', name: '子菜单 1' },
+      { label: '1-2', name: '子菜单 2' },
+      {
+        label: '1-3',
+        name: '子菜单 3',
+        children: [
+          { label: '1-3-1', name: '三级菜单 1' },
+          { label: '1-3-2', name: '三级菜单 2' }
+        ]
+      }
+    ]
+  },
+  {
+    label: '2',
+    name: '菜单 2',
+    icon: City,
+    disabled: true
+  },
+  {
+    label: '3',
+    name: '菜单 3',
+    icon: ChartPie
+  },
+  {
+    label: '4',
+    name: '菜单 4',
+    icon: User,
+    children: [
+      { label: '4-1', name: '子菜单 1' },
+      { label: '4-2', name: '子菜单 2' },
+      { label: '4-3', name: '子菜单 3' }
+    ]
+  },
+  {
+    label: '5',
+    name: '菜单 5',
+    icon: Marker
+  }
+]
 </script>

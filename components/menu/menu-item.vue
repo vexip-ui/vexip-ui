@@ -22,7 +22,12 @@
             <Icon v-bind="props.iconProps" :icon="props.icon"></Icon>
           </slot>
         </div>
-        <span :class="nh.be('title')">
+        <span
+          :class="{
+            [nh.be('title')]: true,
+            [nh.bem('title', 'in-group')]: !isHorizontal && isGroup
+          }"
+        >
           <slot>
             {{ props.label }}
           </slot>
@@ -85,7 +90,8 @@ import {
   toRef,
   watch,
   onMounted,
-  onBeforeUnmount
+  onBeforeUnmount,
+  nextTick
 } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
@@ -94,7 +100,7 @@ import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
-import { usePopper, useSetTimeout } from '@vexip-ui/mixins'
+import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/mixins'
 import { ChevronDown } from '@vexip-ui/icons'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
@@ -120,6 +126,7 @@ const MenuItem = defineComponent({
     iconProps: Object as PropType<IconMinorProps>,
     disabled: booleanProp,
     transfer: booleanStringProp,
+    trigger: String as PropType<'hover' | 'click'>,
     transitionName: String,
     meta: Object,
     children: Array as PropType<MenuOptions[]>,
@@ -139,6 +146,7 @@ const MenuItem = defineComponent({
         static: true
       },
       transfer: null,
+      trigger: null,
       transitionName: null,
       meta: null,
       children: {
@@ -159,13 +167,12 @@ const MenuItem = defineComponent({
     const selected = ref(false)
     const sonSelected = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
-
     const indent = computed(() => (parentItemState?.indent ?? 0) + 1)
     const propTransfer = computed(() => props.transfer ?? menuState?.transfer ?? false)
     const inTransfer = computed(() => (parentItemState ? parentItemState.transfer : false))
     const transfer = computed(() => !inTransfer.value && propTransfer.value)
 
+    const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
@@ -196,12 +203,8 @@ const MenuItem = defineComponent({
               }px`
       }
     })
-    const isGroup = computed(() => {
-      return !!(slots.group || props.children?.length)
-    })
-    const showGroup = computed(() => {
-      return isGroup.value && groupExpanded.value
-    })
+    const isGroup = computed(() => !!(slots.group || props.children?.length))
+    const showGroup = computed(() => isGroup.value && groupExpanded.value)
     const isUsePopper = computed(() => {
       return (
         (menuState && (menuState.horizontal || menuState.groupType === 'dropdown')) ||
@@ -214,18 +217,13 @@ const MenuItem = defineComponent({
         isGroup.value || !!(parentItemState?.isUsePopper || (menuState && !menuState.isReduced))
       )
     })
-    const theme = computed(() => {
-      return menuState ? menuState.theme : 'light'
-    })
-    const tooltipTheme = computed(() => {
-      return menuState ? menuState.tooltipTheme : 'dark'
-    })
-    const isHorizontal = computed(() => {
-      return menuState?.horizontal && !parentItemState
-    })
+    const theme = computed(() => (menuState ? menuState.theme : 'light'))
+    const tooltipTheme = computed(() => (menuState ? menuState.tooltipTheme : 'dark'))
+    const isHorizontal = computed(() => menuState?.horizontal && !parentItemState)
     const transition = computed(() => {
       return props.transitionName ?? isHorizontal.value ? 'vxp-drop' : 'vxp-zoom'
     })
+    const dropTrigger = computed(() => props.trigger || menuState?.trigger || 'hover')
 
     const itemState = reactive({
       el: wrapper,
@@ -251,9 +249,12 @@ const MenuItem = defineComponent({
     watch(selected, value => {
       if (value) {
         emit('select')
+        nextTick(() => {
+          parentItemState?.updateSonSelected(value)
+        })
+      } else {
+        parentItemState?.updateSonSelected(value)
       }
-
-      parentItemState?.updateSonSelected(value)
     })
     watch(groupExpanded, expanded => {
       if (typeof menuState?.handleExpand === 'function') {
@@ -295,11 +296,15 @@ const MenuItem = defineComponent({
       parentItemState?.updateSonSelected(selected)
     }
 
+    const { timer } = useSetTimeout()
+
     function handleSelect() {
+      window.clearTimeout(timer.hover)
+
       if (props.disabled) return
 
       if (isGroup.value) {
-        if (isUsePopper.value) return
+        if (isUsePopper.value && dropTrigger.value !== 'click') return
 
         groupExpanded.value = !groupExpanded.value
       } else {
@@ -316,6 +321,8 @@ const MenuItem = defineComponent({
     }
 
     function toggleGroupExpanded(expanded: boolean, upwrad = false) {
+      window.clearTimeout(timer.hover)
+
       groupExpanded.value = expanded
 
       if (upwrad && typeof parentItemState?.toggleGroupExpanded === 'function') {
@@ -323,10 +330,10 @@ const MenuItem = defineComponent({
       }
     }
 
-    const { timer } = useSetTimeout()
-
     function handleMouseEnter() {
-      if (props.disabled || !isUsePopper.value) return
+      window.clearTimeout(timer.hover)
+
+      if (props.disabled || !isUsePopper.value || dropTrigger.value !== 'hover') return
 
       if (typeof parentItemState?.handleMouseEnter === 'function') {
         parentItemState.handleMouseEnter()
@@ -334,15 +341,15 @@ const MenuItem = defineComponent({
 
       if (!isGroup.value) return
 
-      window.clearTimeout(timer.hover)
-
       timer.hover = window.setTimeout(() => {
         groupExpanded.value = true
       }, 250)
     }
 
     function handleMouseLeave() {
-      if (props.disabled || !isUsePopper.value) return
+      window.clearTimeout(timer.hover)
+
+      if (props.disabled || !isUsePopper.value || dropTrigger.value !== 'hover') return
 
       if (typeof parentItemState?.handleMouseLeave === 'function') {
         parentItemState.handleMouseLeave()
@@ -350,11 +357,17 @@ const MenuItem = defineComponent({
 
       if (!isGroup.value) return
 
-      window.clearTimeout(timer.hover)
-
       timer.hover = window.setTimeout(() => {
         groupExpanded.value = false
       }, 250)
+    }
+
+    function handleClickOutside() {
+      if (dropTrigger.value === 'click') {
+        nextTick(() => {
+          groupExpanded.value = false
+        })
+      }
     }
 
     function renderChildren() {
@@ -404,6 +417,7 @@ const MenuItem = defineComponent({
       tooltipTheme,
       isHorizontal,
       transition,
+      dropTrigger,
 
       wrapper,
       reference,

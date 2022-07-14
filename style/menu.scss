@@ -29,6 +29,8 @@ $menu: map.merge(
     group-bg-color-dark: get-css-var('color-black'),
     popper-bg-color: get-css-var('bg-color-base'),
     popper-bg-color-dark: get-css-var('bg-color-reverse'),
+    popper-b-color: get-css-var('border-color-light-2'),
+    popper-border: get-css-var('border-shape') get-css-var('menu-popper-b-color'),
     popper-z-index: get-css-var('z-index-popper'),
     popper-radius: get-css-var('radius-base'),
     popper-shadow: get-css-var('shadow-base'),
@@ -91,9 +93,9 @@ $menu: map.merge(
   }
 
   &__item {
+    padding: 0;
     list-style: none;
-
-    // .#{$namespace}-tooltip__trigger
+    background-color: transparent !important;
 
     & > .#{$namespace}-tooltip {
       height: 100%;
@@ -194,7 +196,8 @@ $menu: map.merge(
     }
 
     #{$item}--selected &,
-    #{$item}--group-visible > .#{$namespace}-tooltip > .#{$namespace}-tooltip__trigger > & {
+    #{$item}--group-visible > .#{$namespace}-tooltip > .#{$namespace}-tooltip__trigger > &,
+    .#{$namespace}-dropdown__trigger--active & {
       color: get-css-var('menu-label-color-visible');
 
       #{$self}--horizontal & {
@@ -267,6 +270,11 @@ $menu: map.merge(
     #{$self}--horizontal & {
       margin-right: 6px;
     }
+
+    #{$popper} & {
+      margin-right: 2px;
+      margin-left: -2px;
+    }
   }
 
   &__title {
@@ -277,6 +285,10 @@ $menu: map.merge(
     opacity: 100%;
     transition: width get-css-var('transition-base'), get-css-var('transition-opacity');
 
+    &--in-group {
+      padding-right: 30px;
+    }
+
     #{$self}--reduced & {
       width: 0;
       opacity: 0%;
@@ -284,7 +296,7 @@ $menu: map.merge(
 
     #{$self}--horizontal & {
       width: auto;
-      margin-right: 8px;
+      padding-right: 12px;
     }
 
     #{$popper} & {
@@ -333,6 +345,7 @@ $menu: map.merge(
     }
 
     #{$popper} & {
+      right: 12px;
       opacity: 100%;
       transform: rotate(-90deg);
     }
@@ -353,16 +366,38 @@ $menu: map.merge(
 
       // position: relative;
       display: inline-block;
-      min-width: 168px;
+      min-width: 70px;
       padding: 5px 0;
       user-select: none;
       background-color: get-css-var('menu-popper-bg-color');
+      border: get-css-var('menu-popper-border');
       border-radius: get-css-var('menu-popper-radius');
       box-shadow: get-css-var('menu-popper-shadow');
 
       &--dark {
         background-color: get-css-var('menu-popper-bg-color-dark');
         box-shadow: get-css-var('menu-popper-shadow-dark');
+      }
+    }
+  }
+
+  &__rest-handler {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: get-css-var('menu-bg-color');
+    transition: get-css-var('transition-color'), get-css-var('transition-background');
+
+    &--selected {
+      color: get-css-var('menu-label-color-hover');
+
+      #{$self}--dark &,
+      #{$popper} #{$list}--dark & {
+        color: get-css-var('menu-label-color-hover-dark');
       }
     }
   }

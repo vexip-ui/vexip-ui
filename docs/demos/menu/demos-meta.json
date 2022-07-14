@@ -1,8 +1,9 @@
 [
   "basis",
-  "horizontal",
-  "reduce",
-  "meta",
+  "group",
   "options",
+  "reduce",
+  "horizontal",
+  "meta",
   "router"
 ]

@@ -1,38 +1,3 @@
-<template>
-  <ul ref="wrapper" :class="className">
-    <slot>
-      <template v-for="menu in menus" :key="menu.label">
-        <MenuGroup v-if="menu.group" :label="menu.name || menu.label">
-          <MenuItem
-            v-for="item in menu.children"
-            :key="item.label"
-            :label="item.label"
-            :icon="item.icon"
-            :icon-props="item.iconProps"
-            :disabled="item.disabled"
-            :children="item.children"
-            :route="item.route"
-          >
-            {{ item.name || item.label }}
-          </MenuItem>
-        </MenuGroup>
-        <MenuItem
-          v-else
-          :label="menu.label"
-          :icon="menu.icon"
-          :icon-props="menu.iconProps"
-          :disabled="menu.disabled"
-          :children="menu.children"
-          :route="menu.route"
-        >
-          {{ menu.name || menu.label }}
-        </MenuItem>
-      </template>
-    </slot>
-  </ul>
-</template>
-
-<script lang="ts">
 import {
   defineComponent,
   ref,
@@ -44,8 +9,10 @@ import {
   nextTick,
   provide
 } from 'vue'
+import MenuRest from './menu-rest'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
+import { Overflow } from '@/components/overflow'
 import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { MENU_STATE } from './symbol'
 
@@ -66,8 +33,10 @@ const menuMarkerTypes = Object.freeze<MenuMarkerType>(['top', 'right', 'bottom',
 export default defineComponent({
   name: 'Menu',
   components: {
+    MenuRest,
     MenuItem,
-    MenuGroup
+    MenuGroup,
+    Overflow
   },
   props: {
     active: String,
@@ -76,6 +45,7 @@ export default defineComponent({
     reduced: booleanProp,
     horizontal: booleanProp,
     transfer: booleanStringProp,
+    trigger: String as PropType<'hover' | 'click'>,
     groupType: String as PropType<MenuGroupType>,
     theme: String as PropType<MenuTheme>,
     tooltipTheme: String as PropType<TooltipTheme>,
@@ -84,7 +54,7 @@ export default defineComponent({
     manualRoute: booleanProp
   },
   emits: ['select', 'expand', 'reduce', 'update:active'],
-  setup(_props, { emit }) {
+  setup(_props, { slots, emit }) {
     const props = useProps('menu', _props, {
       active: {
         default: null,
@@ -98,6 +68,7 @@ export default defineComponent({
       reduced: false,
       horizontal: false,
       transfer: false,
+      trigger: 'hover',
       groupType: {
         default: 'collapse' as MenuGroupType,
         validator: (value: MenuGroupType) => ['collapse', 'dropdown'].includes(value)
@@ -124,6 +95,7 @@ export default defineComponent({
     const isReduced = ref(false)
 
     const wrapper = ref<HTMLElement | null>(null)
+    const rest = ref<InstanceType<typeof MenuRest> | null>(null)
 
     const className = computed(() => {
       let computedMarkerType
@@ -177,6 +149,7 @@ export default defineComponent({
         theme: toRef(props, 'theme'),
         tooltipTheme: toRef(props, 'tooltipTheme'),
         transfer: toRef(props, 'transfer'),
+        trigger: toRef(props, 'trigger'),
         handleSelect,
         handleExpand,
         increaseItem,
@@ -246,7 +219,7 @@ export default defineComponent({
         }
       }
 
-      return root.children
+      return root.children!
     }
 
     function increaseItem(state: MenuItemState) {
@@ -279,6 +252,8 @@ export default defineComponent({
     }
 
     function handleMenuReduce() {
+      if (props.horizontal) return
+
       let firstExpandedItem: MenuItemState | null = null
 
       for (const item of menuItemSet) {
@@ -307,6 +282,8 @@ export default defineComponent({
     }
 
     function handleMenuExpand() {
+      if (props.horizontal) return
+
       isReduced.value = false
 
       if (wrapper.value) {
@@ -332,15 +309,62 @@ export default defineComponent({
       }
     }
 
-    return {
-      nh,
-      props,
+    function renderMenuItem(item: MenuOptions) {
+      return (
+        <MenuItem
+          label={item.label}
+          icon={item.icon}
+          icon-props={item.iconProps}
+          disabled={item.disabled}
+          children={item.children}
+          route={item.route}
+        >
+          {item.name || item.label}
+        </MenuItem>
+      )
+    }
 
-      className,
-      menus,
+    function renderMenus() {
+      return menus.value.map(menu =>
+        menu.group
+          ? (
+          <MenuGroup label={menu.name || menu.label}>
+            {menu.children?.length ? menu.children.map(renderMenuItem) : null}
+          </MenuGroup>
+            )
+          : (
+              renderMenuItem(menu)
+            )
+      )
+    }
 
-      wrapper
+    function getCounter() {
+      return rest.value?.$el
+    }
+
+    return () => {
+      return (
+        <ul ref={wrapper} class={className.value}>
+          {slots.default
+            ? (
+                slots.default()
+              )
+            : props.horizontal
+              ? (
+            <Overflow get-counter={getCounter}>
+              {{
+                default: renderMenus,
+                counter: ({ count }: { count: number }) => (
+                  <MenuRest ref={rest} menus={menus.value.slice(-count)}></MenuRest>
+                )
+              }}
+            </Overflow>
+                )
+              : (
+                  renderMenus()
+                )}
+        </ul>
+      )
     }
   }
 })
-</script>

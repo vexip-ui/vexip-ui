@@ -46,6 +46,7 @@ export interface MenuState {
   currentActive: string,
   isReduced: boolean,
   transfer: boolean | string,
+  trigger: 'hover' | 'click',
   handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw): void,
   handleExpand(label: string, expanded: boolean, meta: Record<string, any>): void,
   increaseItem(state: MenuItemState): void,
