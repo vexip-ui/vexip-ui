@@ -1,10 +1,5 @@
 <template>
-  <div
-    ref="wrapper"
-    :class="className"
-    @click="handleClick"
-    @clickoutside="handleClickOutside"
-  >
+  <div ref="wrapper" :class="className" @click="handleClick">
     <div ref="reference" :class="selectorClass">
       <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
@@ -85,10 +80,7 @@
             height="100%"
             id-key="value"
             :items-attrs="{
-              class: [
-                nh.be('options'),
-                props.optionCheck ? nh.bem('options', 'has-check') : ''
-              ]
+              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : '']
             }"
           >
             <template #default="{ item, index }">
@@ -349,8 +341,8 @@ export default defineComponent({
       initValueAndLabel(emittedValue)
     }
 
-    const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed | null>(null)
-    const wrapper = useClickOutside()
+    const wrapper = useClickOutside(handleClickOutside)
+    const virtualList = ref<(InstanceType<typeof VirtualList> & VirtualListExposed) | null>(null)
 
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
@@ -390,7 +382,9 @@ export default defineComponent({
       return optionStates.value.filter(state => !state.hidden)
     })
     const hasEmptyTip = computed(() => {
-      return !!(props.emptyText || slots.empty || locale.value.empty) && !visibleOptions.value.length
+      return (
+        !!(props.emptyText || slots.empty || locale.value.empty) && !visibleOptions.value.length
+      )
     })
 
     watch(
@@ -411,10 +405,13 @@ export default defineComponent({
       emit('toggle', value)
       emit('update:visible', value)
     })
-    watch(() => props.value, value => {
-      emittedValue = value
-      initValueAndLabel(value)
-    })
+    watch(
+      () => props.value,
+      value => {
+        emittedValue = value
+        initValueAndLabel(value)
+      }
+    )
     watch(() => visibleOptions.value.length, computeListHeight)
 
     function initValueAndLabel(value: string | number | (string | number)[] | null) {
@@ -592,7 +589,6 @@ export default defineComponent({
       handleTagClose,
       handleSelect,
       handleClick,
-      handleClickOutside,
       handleClear
     }
   }

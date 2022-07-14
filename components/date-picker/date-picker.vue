@@ -1,10 +1,5 @@
 <template>
-  <div
-    ref="wrapper"
-    :class="className"
-    @click="handleTirggerClick"
-    @clickoutside="finishInput"
-  >
+  <div ref="wrapper" :class="className" @click="handleTirggerClick">
     <div ref="reference" :class="nh.be('selector')">
       <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
@@ -126,7 +121,16 @@ import DateControl from './date-control.vue'
 import DatePane from './date-pane.vue'
 import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, booleanProp, booleanStringProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp
+} from '@vexip-ui/config'
 import { noop, toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
@@ -260,8 +264,7 @@ export default defineComponent({
     const currentState = ref<'start' | 'end'>('start')
     const lastValue = ref('')
 
-    const wrapper = useClickOutside()
-
+    const wrapper = useClickOutside(finishInput)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,

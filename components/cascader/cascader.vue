@@ -1,10 +1,5 @@
 <template>
-  <div
-    ref="wrapper"
-    :class="className"
-    @click="handleClick"
-    @clickoutside="handleClickOutside"
-  >
+  <div ref="wrapper" :class="className" @click="handleClick">
     <div ref="reference" :class="selectorClass">
       <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
@@ -132,7 +127,16 @@
                 @hover="usingHover && handlePaneOpen($event, index)"
                 @check="handleOptionCheck($event)"
               >
-                <template #default="{ option, index: optionIndex, selected, canCheck, hasChild, handleSelect }">
+                <template
+                  #default="{
+                    option,
+                    index: optionIndex,
+                    selected,
+                    canCheck,
+                    hasChild,
+                    handleSelect
+                  }"
+                >
                   <slot
                     :option="option"
                     :index="optionIndex"
@@ -142,7 +146,16 @@
                     :handle-select="handleSelect"
                   ></slot>
                 </template>
-                <template #label="{ option, index: optionIndex, selected, canCheck, hasChild, handleSelect }">
+                <template
+                  #label="{
+                    option,
+                    index: optionIndex,
+                    selected,
+                    canCheck,
+                    hasChild,
+                    handleSelect
+                  }"
+                >
                   <slot
                     name="label"
                     :option="option"
@@ -198,19 +211,8 @@ import {
   createSizeProp,
   createStateProp
 } from '@vexip-ui/config'
-import {
-  useHover,
-  usePopper,
-  placementWhileList,
-  useClickOutside
-} from '@vexip-ui/mixins'
-import {
-  noop,
-  isNull,
-  isPromise,
-  transformTree,
-  flatTree
-} from '@vexip-ui/utils'
+import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import { noop, isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
 import { ChevronDown, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -417,7 +419,7 @@ export default defineComponent({
       ]
     })
 
-    const wrapper = useClickOutside()
+    const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
@@ -458,8 +460,12 @@ export default defineComponent({
       return !!(slots.prefix || props.prefix)
     })
     const usingMerged = computed(() => props.mergeTags && !props.noCascaded)
-    const templateValues = computed(() => usingMerged.value ? mergedValues.value : currentValues.value)
-    const templateLabels = computed(() => usingMerged.value ? mergedLabels.value : currentLabels.value)
+    const templateValues = computed(() =>
+      usingMerged.value ? mergedValues.value : currentValues.value
+    )
+    const templateLabels = computed(() =>
+      usingMerged.value ? mergedLabels.value : currentLabels.value
+    )
     const hasValue = computed(() => !!templateValues.value[0])
     const usingHover = computed(() => props.hoverTrigger && !isAsyncLoad.value)
 
@@ -500,10 +506,7 @@ export default defineComponent({
       },
       { immediate: true }
     )
-    watch(
-      () => props.maxTagCount,
-      computeTagsOverflow
-    )
+    watch(() => props.maxTagCount, computeTagsOverflow)
     watch(
       () => props.noRestTip,
       () => {
@@ -520,16 +523,13 @@ export default defineComponent({
         nextTick(computeTagsOverflow)
       }
     )
-    watch(
-      isAsyncLoad,
-      value => {
-        if (value) {
-          for (const option of optionIdMap.values()) {
-            option.childrenLoaded = queryChildrenLoaded(option)
-          }
+    watch(isAsyncLoad, value => {
+      if (value) {
+        for (const option of optionIdMap.values()) {
+          option.childrenLoaded = queryChildrenLoaded(option)
         }
       }
-    )
+    })
     watch(usingMerged, value => {
       if (value) {
         mergedValues.value.length = 0
@@ -867,9 +867,7 @@ export default defineComponent({
           parent.partial = !parent.checked
         } else {
           parent.checked = false
-          parent.partial = parent.children.some(
-            item => item.checked || item.partial
-          )
+          parent.partial = parent.children.some(item => item.checked || item.partial)
         }
 
         option = parent
@@ -939,9 +937,7 @@ export default defineComponent({
       const options = Array.from(optionIdMap.values())
       const selectedOptions = props.noCascaded
         ? options.filter(option => option.checked)
-        : options.filter(
-          option => option.checked && !(option.hasChild || option.children?.length)
-        )
+        : options.filter(option => option.checked && !(option.hasChild || option.children?.length))
 
       const selectedValues: string[] = []
       const selectedLabels: string[] = []
@@ -965,7 +961,9 @@ export default defineComponent({
 
       if (usingMerged.value) {
         if (isAsyncLoad.value) {
-          mergedValues.value = options.filter(option => option.checked).map(option => option.fullValue)
+          mergedValues.value = options
+            .filter(option => option.checked)
+            .map(option => option.fullValue)
         }
 
         updateMergedProps()
@@ -1090,7 +1088,10 @@ export default defineComponent({
       currentVisible.value = false
     }
 
-    function emitChangeEvent(value: CascaderValue, data: Record<string, any> | Array<Record<string, any>>) {
+    function emitChangeEvent(
+      value: CascaderValue,
+      data: Record<string, any> | Array<Record<string, any>>
+    ) {
       emittedValue.value = value
 
       nextTick(() => {
@@ -1222,7 +1223,6 @@ export default defineComponent({
       handleOptionSelect,
       handleOptionCheck,
       handleClick,
-      handleClickOutside,
       handleClear,
       toggleShowRestTip,
       handleTipClose

@@ -4,7 +4,6 @@
     :class="[nh.b(), nh.bs('vars')]"
     @mouseenter="handleTriggerEnter"
     @mouseleave="handleTriggerLeave"
-    @clickoutside="handleClickOutside"
   >
     <div ref="reference" :class="nh.be('trigger')" @click="handleTriggerClick">
       <slot></slot>
@@ -39,7 +38,13 @@
 <script lang="ts">
 import { defineComponent, ref, watch, toRef } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  classProp
+} from '@vexip-ui/config'
 import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
@@ -64,14 +69,7 @@ export default defineComponent({
     disabled: booleanProp,
     theme: String as PropType<TooltipTheme>
   },
-  emits: [
-    'toggle',
-    'click-outside',
-    'outside-close',
-    'tip-enter',
-    'tip-leave',
-    'update:visible'
-  ],
+  emits: ['toggle', 'click-outside', 'outside-close', 'tip-enter', 'tip-leave', 'update:visible'],
   setup(_props, { emit }) {
     const props = useProps('tooltip', _props, {
       trigger: {
@@ -101,7 +99,7 @@ export default defineComponent({
     const rendering = ref(props.visible)
     const transfer = toRef(props, 'transfer')
 
-    const wrapper = useClickOutside()
+    const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
@@ -198,7 +196,6 @@ export default defineComponent({
       handleTriggerEnter,
       handleTriggerLeave,
       handleTriggerClick,
-      handleClickOutside,
 
       updatePopper
     }

@@ -1,10 +1,5 @@
 <template>
-  <div
-    ref="wrapper"
-    :class="className"
-    @click="handleTirggerClick"
-    @clickoutside="finishInput"
-  >
+  <div ref="wrapper" :class="className" @click="handleTirggerClick">
     <div ref="reference" :class="nh.be('selector')">
       <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
@@ -293,7 +288,7 @@ export default defineComponent({
     const endState = createDateState()
     const currentState = ref<'start' | 'end'>('start')
 
-    const wrapper = useClickOutside()
+    const wrapper = useClickOutside(finishInput)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,

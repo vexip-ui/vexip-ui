@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapper" :class="className" @clickoutside="handleClickOutside">
+  <div ref="wrapper" :class="className">
     <div
       ref="reference"
       :class="[nh.be('trigger'), currentVisible ? nh.bem('trigger', 'visible') : '']"
@@ -256,7 +256,7 @@ export default defineComponent({
 
     parseValue(props.value)
 
-    const wrapper = useClickOutside()
+    const wrapper = useClickOutside(handleClickOutside)
 
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
@@ -313,10 +313,13 @@ export default defineComponent({
       emit('toggle', value)
       emit('update:visible', value)
     })
-    watch(() => props.value, value => {
-      parseValue(value)
-      lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
-    })
+    watch(
+      () => props.value,
+      value => {
+        parseValue(value)
+        lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
+      }
+    )
 
     function parseValue(value: Color | null) {
       if (value) {
@@ -483,7 +486,6 @@ export default defineComponent({
       reference,
       popper,
 
-      handleClickOutside,
       handleTriggerClick,
       handleClear,
       handleOk,
