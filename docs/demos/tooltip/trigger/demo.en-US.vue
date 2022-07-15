@@ -12,7 +12,7 @@
       </template>
       Some tip content
     </Tooltip>
-    <Tooltip trigger="focus" placement="right">
+    <Tooltip trigger="focus" placement="bottom">
       <template #trigger>
         <Button> Focus Trigger </Button>
       </template>

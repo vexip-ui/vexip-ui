@@ -131,12 +131,12 @@ export default defineComponent({
       return reference.value instanceof Element ? reference.value : null
     })
 
-    const wrapper = useClickOutside(handleClickOutside)
+    useClickOutside(handleClickOutside, originalTrigger)
     const { popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
-      wrapper,
-      reference
+      reference,
+      wrapper: originalTrigger
     })
 
     const tipStyle = computed(() => {
@@ -271,10 +271,6 @@ export default defineComponent({
       } else {
         originalTrigger.value = null
       }
-
-      if (!props.wrapper) {
-        wrapper.value = originalTrigger.value
-      }
     }
 
     function syncRendering() {
@@ -285,7 +281,8 @@ export default defineComponent({
       const CustomTag = props.wrapper
         ? ((props.wrapper === true ? 'span' : props.wrapper) as any)
         : null
-      const triggerVNode = slots.trigger?.()[0] || null
+      const triggers = slots.trigger?.()
+      const triggerVNode = triggers ? triggers[0] : null
 
       const stopPropagation = (event: MouseEvent) => {
         event.stopPropagation()
@@ -303,8 +300,18 @@ export default defineComponent({
 
         return triggerVNode
       }
-      const renderPopover = () => [
-        triggerVNode && <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>,
+
+      return [
+        triggerVNode &&
+          (CustomTag
+            ? (
+            <CustomTag {...attrs} ref={originalTrigger} class={[nh.b(), nh.bs('vars')]}>
+              {triggers}
+            </CustomTag>
+              )
+            : (
+            <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>
+              )),
         !props.disabled && (
           <Portal to={transferTo.value}>
             {(props.tipAlive || rendering.value) && (
@@ -337,16 +344,6 @@ export default defineComponent({
           </Portal>
         )
       ]
-
-      return CustomTag
-        ? (
-        <CustomTag ref={wrapper} {...attrs} class={[nh.b(), nh.bs('vars')]}>
-          {renderPopover()}
-        </CustomTag>
-          )
-        : (
-            renderPopover()
-          )
     }
   }
 })

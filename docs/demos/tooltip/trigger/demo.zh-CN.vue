@@ -12,7 +12,7 @@
       </template>
       一些提示的内容
     </Tooltip>
-    <Tooltip trigger="focus" placement="right">
+    <Tooltip trigger="focus" placement="bottom">
       <template #trigger>
         <Button> 聚焦触发 </Button>
       </template>
