@@ -6,49 +6,49 @@
       :transfer="true"
       :disabled="tooltipDisabled"
     >
-      <div
-        ref="reference"
-        :class="{
-          [nh.be('label')]: true,
-          [nh.bem('label', 'in-popper')]: isUsePopper
-        }"
-        :style="labelStyle"
-        @click="handleSelect"
-        @mouseenter="handleMouseEnter"
-        @mouseleave="handleMouseLeave"
-      >
-        <div v-if="props.icon" :class="nh.be('icon')">
-          <slot name="icon">
-            <Icon v-bind="props.iconProps" :icon="props.icon"></Icon>
-          </slot>
+      <template #trigger>
+        <div
+          ref="reference"
+          :class="{
+            [nh.be('label')]: true,
+            [nh.bem('label', 'in-popper')]: isUsePopper
+          }"
+          :style="labelStyle"
+          @click="handleSelect"
+          @mouseenter="handleMouseEnter"
+          @mouseleave="handleMouseLeave"
+        >
+          <div v-if="props.icon" :class="nh.be('icon')">
+            <slot name="icon">
+              <Icon v-bind="props.iconProps" :icon="props.icon"></Icon>
+            </slot>
+          </div>
+          <span
+            :class="{
+              [nh.be('title')]: true,
+              [nh.bem('title', 'in-group')]: !isHorizontal && isGroup
+            }"
+          >
+            <slot>
+              {{ props.label }}
+            </slot>
+          </span>
+          <Icon
+            v-if="isGroup"
+            :class="{
+              [nh.be('arrow')]: true,
+              [nh.bem('arrow', 'visible')]: groupExpanded
+            }"
+          >
+            <ChevronDown></ChevronDown>
+          </Icon>
         </div>
-        <span
-          :class="{
-            [nh.be('title')]: true,
-            [nh.bem('title', 'in-group')]: !isHorizontal && isGroup
-          }"
-        >
-          <slot>
-            {{ props.label }}
-          </slot>
-        </span>
-        <Icon
-          v-if="isGroup"
-          :class="{
-            [nh.be('arrow')]: true,
-            [nh.bem('arrow', 'visible')]: groupExpanded
-          }"
-        >
-          <ChevronDown></ChevronDown>
-        </Icon>
-      </div>
-      <template #tip>
-        <span :class="nh.be('tooltip-title')">
-          <slot>
-            {{ props.label }}
-          </slot>
-        </span>
       </template>
+      <span :class="nh.be('tooltip-title')">
+        <slot>
+          {{ props.label }}
+        </slot>
+      </span>
     </Tooltip>
     <span v-if="!isUsePopper">
       <CollapseTransition>

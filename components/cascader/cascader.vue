@@ -38,24 +38,24 @@
               :tip-class="nh.be('rest-tip')"
               @click.stop="toggleShowRestTip"
             >
-              <Tag :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
-                {{ `+${restTagCount}` }}
-              </Tag>
-              <template #tip>
-                <NativeScroll use-y-bar>
-                  <template v-for="(item, index) in templateValues" :key="index">
-                    <Tag
-                      v-if="index >= templateValues.length - restTagCount"
-                      :class="nh.be('tag')"
-                      closable
-                      :type="props.tagType"
-                      @close="handleTipClose(item)"
-                    >
-                      {{ templateLabels[index] }}
-                    </Tag>
-                  </template>
-                </NativeScroll>
+              <template #trigger>
+                <Tag :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                  {{ `+${restTagCount}` }}
+                </Tag>
               </template>
+              <NativeScroll use-y-bar>
+                <template v-for="(item, index) in templateValues" :key="index">
+                  <Tag
+                    v-if="index >= templateValues.length - restTagCount"
+                    :class="nh.be('tag')"
+                    closable
+                    :type="props.tagType"
+                    @close="handleTipClose(item)"
+                  >
+                    {{ templateLabels[index] }}
+                  </Tag>
+                </template>
+              </NativeScroll>
             </Tooltip>
           </div>
           <template v-else>

@@ -22,16 +22,12 @@
         @tip-enter="showTooltip"
         @tip-leave="hideTooltip"
       >
-        <div
-          :class="nh.be('handler')"
-          @mouseenter="showTooltip"
-          @mouseleave="hideTooltip"
-        ></div>
-        <template #tip>
-          <slot name="tip" :value="truthValue">
-            {{ truthValue }}
-          </slot>
+        <template #trigger>
+          <div :class="nh.be('handler')" @mouseenter="showTooltip" @mouseleave="hideTooltip"></div>
         </template>
+        <slot name="tip" :value="truthValue">
+          {{ truthValue }}
+        </slot>
       </Tooltip>
     </div>
   </div>
@@ -51,6 +47,8 @@ import {
 } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/mixins'
 import { noop, throttle } from '@vexip-ui/utils'
+
+import type { TooltipExposed } from '@/components/tooltip'
 
 export default defineComponent({
   name: 'Slider',
@@ -100,7 +98,7 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     const track = ref<HTMLElement | null>(null)
-    const tooltip = ref<InstanceType<typeof Tooltip> | null>(null)
+    const tooltip = ref<(InstanceType<typeof Tooltip> & TooltipExposed) | null>(null)
 
     const className = computed(() => {
       return {

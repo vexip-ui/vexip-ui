@@ -2,5 +2,11 @@
   "basis",
   "trigger",
   "placement",
-  "theme"
+  "no-arrow",
+  "raw",
+  "trigger-width",
+  "wrapper",
+  "reverse",
+  "virtual-el",
+  "position"
 ]

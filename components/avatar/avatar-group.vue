@@ -18,29 +18,29 @@
     </div>
     <div v-if="restAvatars.length" :class="[nh.be('item'), nh.bem('item', 'rest')]">
       <Tooltip v-if="props.showTip" :trigger="props.tipTrigger" :tip-class="nh.be('rest')">
-        <slot name="rest" :options="restAvatars" :count="restAvatars.length">
-          <Avatar :color="props.restColor" :background="props.restBackground">
-            {{ `+${restAvatars.length}` }}
-          </Avatar>
-        </slot>
-        <template #tip>
-          <slot name="tip" :options="restAvatars" :count="restAvatars.length">
-            <Avatar
-              v-for="(option, index) in restAvatars"
-              :key="index"
-              :src="option.src"
-              :icon="option.icon"
-              :alt="option.alt"
-              :fit="option.fit"
-              :src-set="option.srcSet"
-              :gap="option.gap"
-              :icon-scale="option.iconScale"
-              :fallback-src="option.fallbackSrc"
-            >
-              {{ option.text }}
+        <template #trigger>
+          <slot name="rest" :options="restAvatars" :count="restAvatars.length">
+            <Avatar :color="props.restColor" :background="props.restBackground">
+              {{ `+${restAvatars.length}` }}
             </Avatar>
           </slot>
         </template>
+        <slot name="tip" :options="restAvatars" :count="restAvatars.length">
+          <Avatar
+            v-for="(option, index) in restAvatars"
+            :key="index"
+            :src="option.src"
+            :icon="option.icon"
+            :alt="option.alt"
+            :fit="option.fit"
+            :src-set="option.srcSet"
+            :gap="option.gap"
+            :icon-scale="option.iconScale"
+            :fallback-src="option.fallbackSrc"
+          >
+            {{ option.text }}
+          </Avatar>
+        </slot>
       </Tooltip>
       <slot
         v-else

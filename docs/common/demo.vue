@@ -20,36 +20,36 @@
     </Column>
     <Column :class="`${prefix}__actions`">
       <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
-        <Icon :scale="1.1" @click="copyCode">
-          <CopyR></CopyR>
-        </Icon>
-        <template #tip>
-          {{ $t('common.copyCode') }}
+        <template #trigger>
+          <Icon :scale="1.1" @click="copyCode">
+            <CopyR></CopyR>
+          </Icon>
         </template>
+        {{ $t('common.copyCode') }}
       </Tooltip>
       <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
-        <Icon :scale="1.1" @click="editInGithub">
-          <PenToSquareR></PenToSquareR>
-        </Icon>
-        <template #tip>
-          {{ $t('common.editInGithub') }}
+        <template #trigger>
+          <Icon :scale="1.1" @click="editInGithub">
+            <PenToSquareR></PenToSquareR>
+          </Icon>
         </template>
+        {{ $t('common.editInGithub') }}
       </Tooltip>
       <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
-        <Icon :scale="1.1" @click="editOnPlayground">
-          <PaperPlaneR></PaperPlaneR>
-        </Icon>
-        <template #tip>
-          {{ $t('common.editInPlayground') }}
+        <template #trigger>
+          <Icon :scale="1.1" @click="editOnPlayground">
+            <PaperPlaneR></PaperPlaneR>
+          </Icon>
         </template>
+        {{ $t('common.editInPlayground') }}
       </Tooltip>
       <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
-        <Icon :scale="1.1" @click="expandCode">
-          <Code></Code>
-        </Icon>
-        <template #tip>
-          {{ codeExpanded ? $t('common.hideCode') : $t('common.showCode') }}
+        <template #trigger>
+          <Icon :scale="1.1" @click="expandCode">
+            <Code></Code>
+          </Icon>
         </template>
+        {{ codeExpanded ? $t('common.hideCode') : $t('common.showCode') }}
       </Tooltip>
     </Column>
     <CollapseTransition>

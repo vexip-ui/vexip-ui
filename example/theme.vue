@@ -15,7 +15,7 @@
               backgroundColor: meta.ghost ? 'var(--ghost-bg-color)' : undefined
             }"
           >
-            <template v-for="(type) in buttonTypes" :key="type">
+            <template v-for="type in buttonTypes" :key="type">
               <Button
                 :type="type"
                 :simple="meta.simple"
@@ -31,7 +31,7 @@
         </template>
         <template v-for="(meta, index) in tagMeta" :key="index">
           <Tag
-            v-for="(type) in tagTypes"
+            v-for="type in tagTypes"
             :key="type"
             closable
             circle
@@ -116,15 +116,11 @@
         ></DatePicker>
         <br />
         <br />
-        <TimePicker
-          is-range
-          clearable
-          :shortcuts="timeShortcuts"
-        ></TimePicker>
+        <TimePicker is-range clearable :shortcuts="timeShortcuts"></TimePicker>
         <br />
         <br />
         <template v-for="(meta, index) in linkerMeta" :key="index">
-          <template v-for="(type) in linkerTypes" :key="type">
+          <template v-for="type in linkerTypes" :key="type">
             <Linker
               :type="type"
               :disabled="meta.disabled"
@@ -145,12 +141,12 @@
         >
           <template v-for="placement in meta.placements" :key="placement">
             <Tooltip theme="dark" :placement="placement" transfer>
-              <span style="padding: 0 5px;">
-                <Button>{{ placement }}</Button>
-              </span>
-              <template #tip>
-                {{ `The ${placement.split('-').join(' ')} text` }}
+              <template #trigger>
+                <span style="padding: 0 5px;">
+                  <Button>{{ placement }}</Button>
+                </span>
               </template>
+              {{ `The ${placement.split('-').join(' ')} text` }}
             </Tooltip>
           </template>
         </Row>
@@ -196,10 +192,12 @@
         </Button>
         <Button
           type="warning"
-          @click="Confirm.open({
-            content: 'Confirm to submit?',
-            confirmType: 'success'
-          })"
+          @click="
+            Confirm.open({
+              content: 'Confirm to submit?',
+              confirmType: 'success'
+            })
+          "
         >
           Open Drawer
         </Button>
@@ -268,7 +266,7 @@
             {{ meta.label }}
           </TabNavItem>
         </TabNav>
-        <template v-for="(type) in alertTypes" :key="type">
+        <template v-for="type in alertTypes" :key="type">
           <Alert
             icon
             closable
@@ -308,10 +306,16 @@
             Color({{ meta.color ? '√' : '×' }}) Background({{ meta.background ? '√' : '×' }})
           </span>
           <Button
-            v-for="(type) in messageTypes"
+            v-for="type in messageTypes"
             :key="type.type"
             :type="type.type"
-            @click="Message[type.type]({ ...messageOptions, color: meta.color, background: meta.background })"
+            @click="
+              Message[type.type]({
+                ...messageOptions,
+                color: meta.color,
+                background: meta.background
+              })
+            "
           >
             {{ `${type.prefix}消息` }}
           </Button>
@@ -323,10 +327,16 @@
             Color({{ meta.color ? '√' : '×' }}) Background({{ meta.background ? '√' : '×' }})
           </span>
           <Button
-            v-for="(type) in messageTypes"
+            v-for="type in messageTypes"
             :key="type.type"
             :type="type.type"
-            @click="Notice[type.type]({ ...messageOptions, color: meta.color, background: meta.background })"
+            @click="
+              Notice[type.type]({
+                ...messageOptions,
+                color: meta.color,
+                background: meta.background
+              })
+            "
           >
             {{ `${type.prefix}提醒` }}
           </Button>
@@ -423,9 +433,7 @@
             </TimelineItem>
           </Timeline>
         </div>
-        <Bubble>
-          Some content in bubble
-        </Bubble>
+        <Bubble> Some content in bubble </Bubble>
         <br />
         <br />
         <Carousel
@@ -467,7 +475,16 @@ import { ArrowUpFromBracket } from '@vexip-ui/icons'
 
 document.title = 'theme dev | Vexip UI'
 
-const buttonTypes = ['default', 'primary', 'dashed', 'text', 'info', 'success', 'warning', 'error'] as const
+const buttonTypes = [
+  'default',
+  'primary',
+  'dashed',
+  'text',
+  'info',
+  'success',
+  'warning',
+  'error'
+] as const
 const buttonMeta = [
   { ghost: false, simple: false, disabled: false },
   { ghost: false, simple: false, disabled: true },
@@ -523,9 +540,7 @@ const dateShortcuts = [
   { name: 'Noon', value: '2022-05-13 12:00:00' }
 ]
 
-const timeShortcuts = [
-  { name: 'Noon', value: '12:00:00' }
-]
+const timeShortcuts = [{ name: 'Noon', value: '12:00:00' }]
 
 const linkerTypes = ['default', 'primary', 'success', 'error', 'warning', 'info'] as const
 const linkerMeta = [

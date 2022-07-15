@@ -1,8 +1,8 @@
 <template>
-  <Tooltip>
+  <Tooltip no-arrow>
     <template #trigger>
       <Button> Tooltip </Button>
     </template>
-    Some tip content
+    A tooltip without arrow
   </Tooltip>
 </template>
