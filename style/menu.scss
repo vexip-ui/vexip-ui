@@ -296,7 +296,10 @@ $menu: map.merge(
 
     #{$self}--horizontal & {
       width: auto;
-      padding-right: 12px;
+    }
+
+    #{$self}--horizontal &--in-group {
+      padding-left: 12px;
     }
 
     #{$popper} & {
