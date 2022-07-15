@@ -1,10 +1,20 @@
-import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import {
+  defineComponent,
+  ref,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  createTextVNode,
+  Fragment
+} from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
 import { useResize } from '@vexip-ui/mixins'
 import { nextFrameOnce, noop } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
+
+const TEXT_VNODE = createTextVNode('').type
 
 export default defineComponent({
   name: 'Overflow',
@@ -13,9 +23,6 @@ export default defineComponent({
     tag: String,
     attrFlag: booleanStringProp,
     static: booleanProp,
-    getCounter: Function as PropType<() => HTMLElement | null>,
-    getPrefix: Function as PropType<() => HTMLElement | null>,
-    getSuffix: Function as PropType<() => HTMLElement | null>,
     onRestChange: Function as PropType<(rest: number) => void>,
     onToggle: Function as PropType<(overflow: boolean) => void>
   },
@@ -28,18 +35,6 @@ export default defineComponent({
       tag: 'div',
       attrFlag: false,
       static: false,
-      getCounter: {
-        default: null,
-        isFunc: true
-      },
-      getPrefix: {
-        default: null,
-        isFunc: true
-      },
-      getSuffix: {
-        default: null,
-        isFunc: true
-      },
       onRestChange: {
         default: null,
         isFunc: true
@@ -94,6 +89,14 @@ export default defineComponent({
       return marginLeft + marginRight
     }
 
+    function computeHorizontalPadding(el: HTMLElement) {
+      const style = getComputedStyle(el)
+      const paddingLeft = parseFloat(style.paddingLeft)
+      const paddingRight = parseFloat(style.paddingRight)
+
+      return paddingLeft + paddingRight
+    }
+
     function computeOuterWidth(el: HTMLElement) {
       return el.offsetWidth + computeHorizontalMargin(el)
     }
@@ -101,22 +104,14 @@ export default defineComponent({
     let lastOverflow = false
 
     function refresh() {
-      if (!wrapper.value) return
+      const counterEl = counter.value
 
-      let counterEl: HTMLElement | null
-
-      if (typeof props.getCounter === 'function') {
-        counterEl = props.getCounter()
-      } else {
-        counterEl = counter.value
-      }
-
-      if (!counterEl) return
+      if (!wrapper.value || !counterEl) return
 
       toggleDisplay(counterEl, true)
 
       const children = wrapper.value.children
-      const wrapperWidth = wrapper.value.offsetWidth
+      const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(wrapper.value)
       const childWidths: number[] = []
 
       let totalWidth = 0
@@ -172,10 +167,22 @@ export default defineComponent({
       nextFrameOnce(refresh)
     }
 
+    function syncCounterRef(el: HTMLElement | null) {
+      if (el) {
+        counter.value = el.nextElementSibling as HTMLElement | null
+      } else {
+        counter.value = null
+      }
+    }
+
     return () => {
       const CustomTag = (props.tag || 'div') as any
       const itemSlot = slots.default
       const staticItem = props.static
+      const counterVNode = slots.counter?.({ count: restCount.value })[0] || null
+
+      const renderCounter = () =>
+        counterVNode?.type === TEXT_VNODE ? <span>{counterVNode}</span> : counterVNode
 
       return (
         <CustomTag ref={wrapper} class={className.value}>
@@ -196,9 +203,9 @@ export default defineComponent({
               )
             })
             : itemSlot?.()}
-          {slots.counter
+          {counterVNode
             ? (
-                slots.counter({ count: restCount.value })
+            <Fragment ref={syncCounterRef as any}>{renderCounter()}</Fragment>
               )
             : (
             <span ref={counter} style={{ display: 'inline-block' }}></span>

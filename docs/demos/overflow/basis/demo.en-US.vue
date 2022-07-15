@@ -1,12 +1,12 @@
 <template>
-  <Overflow :items="items" :get-counter="getCounter">
+  <Overflow :items="items">
     <template #default="{ item }">
       <div class="item">
         Item {{ item.index }}
       </div>
     </template>
     <template #counter="{ count }">
-      <div ref="counter" class="item">
+      <div class="item">
         {{ `+${count}` }}
       </div>
     </template>
@@ -14,14 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-const counter = ref<HTMLElement | null>(null)
 const items = Array.from({ length: 15 }, (_, index) => ({ index: index + 1 }))
-
-function getCounter() {
-  return counter.value
-}
 </script>
 
 <style scoped>
