@@ -1,8 +1,8 @@
 import { ref, watch, watchEffect, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { createPopper } from '@popperjs/core'
+import { createPopper as createInternalPopper } from '@popperjs/core'
 
 import type { Ref, WatchStopHandle } from 'vue'
-import type { Placement, Modifier, Instance, Rect } from '@popperjs/core'
+import type { Placement, Modifier, Instance, Rect, VirtualElement } from '@popperjs/core'
 import type { TransferNode } from '@vexip-ui/utils'
 
 type OffsetsFunction = (options: {
@@ -33,7 +33,7 @@ interface UsePopperOptions {
   /**
    * 参考元素，popper 元素的位置计算依据
    */
-  reference?: Ref<HTMLElement | null>,
+  reference?: Ref<HTMLElement | VirtualElement | null>,
   /**
    * popper 元素
    */
@@ -44,7 +44,7 @@ interface UsePopperOptions {
   offset?: OffsetsFunction | [number?, number?]
 }
 
-export type { Placement }
+export type { Placement, VirtualElement }
 
 export const placementWhileList = Object.freeze([
   'auto',
@@ -67,7 +67,7 @@ export const placementWhileList = Object.freeze([
 export function usePopper(initOptions: UsePopperOptions) {
   const { placement, transfer, wrapper, isDrop = false } = initOptions
 
-  const reference: Ref<HTMLElement | null> = initOptions.reference ?? ref(null)
+  const reference: Ref<HTMLElement | null> = (initOptions.reference as any) ?? ref(null)
   const popper: Ref<HTMLElement | null> = initOptions.popper ?? ref(null)
   const transferTo = ref('')
 
@@ -141,30 +141,29 @@ export function usePopper(initOptions: UsePopperOptions) {
   }
 
   onMounted(() => {
-    nextTick(() => {
-      createPopperInstance()
-
-      stopWatchPopper = watch(popper, () => {
-        popperInstance && popperInstance.destroy()
-        createPopperInstance()
-      })
-    })
+    nextTick(createPopper)
   })
 
-  onBeforeUnmount(() => {
-    popperInstance && popperInstance.destroy()
-    popperInstance = null
-
-    if (typeof stopWatchPopper === 'function') {
-      stopWatchPopper()
-      stopWatchPopper = null
-    }
-  })
+  onBeforeUnmount(destroyPopper)
 
   function updatePopper() {
     nextTick(() => {
       popperInstance && popperInstance.forceUpdate()
     })
+  }
+
+  function createPopper() {
+    destroyPopper()
+    popperInstance && popperInstance.destroy()
+    createPopperInstance()
+
+    const cancelWatchReference = watch(reference, createPopperInstance)
+    const cancelWatchPopper = watch(popper, createPopperInstance)
+
+    stopWatchPopper = () => {
+      cancelWatchReference()
+      cancelWatchPopper()
+    }
   }
 
   function setTransferTo(value: boolean | string) {
@@ -173,8 +172,19 @@ export function usePopper(initOptions: UsePopperOptions) {
 
   function createPopperInstance() {
     if (reference.value && popper.value) {
-      popperInstance = createPopper(reference.value, popper.value as HTMLElement, options)
+      popperInstance && popperInstance.destroy()
+      popperInstance = createInternalPopper(reference.value, popper.value as HTMLElement, options)
       updatePopper()
+    }
+  }
+
+  function destroyPopper() {
+    popperInstance && popperInstance.destroy()
+    popperInstance = null
+
+    if (typeof stopWatchPopper === 'function') {
+      stopWatchPopper()
+      stopWatchPopper = null
     }
   }
 
@@ -182,7 +192,9 @@ export function usePopper(initOptions: UsePopperOptions) {
     reference,
     popper,
     transferTo,
-    updatePopper
+    updatePopper,
+    createPopper,
+    destroyPopper
   }
 }
 
