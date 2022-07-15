@@ -15,14 +15,22 @@ interface PropsConfig<T = any> {
 }
 
 type PropsConfigOptions<T> = {
-  [K in keyof T]?: PropsConfig<EnsureValue<T[K]>> | EnsureValue<T[K]> | (() => EnsureValue<T[K]>) | null
+  [K in keyof T]?:
+    | PropsConfig<EnsureValue<T[K]>>
+    | EnsureValue<T[K]>
+    | (() => EnsureValue<T[K]>)
+    | null
 }
 
 export const PROVIDED_PROPS = '__vxp-provided-props'
+const eventPropRE = /$on[A-Z]/
 
 export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOptions>>, app?: App) {
   if (app) {
-    app.provide(PROVIDED_PROPS, computed(() => unref(props)))
+    app.provide(
+      PROVIDED_PROPS,
+      computed(() => unref(props))
+    )
   } else {
     const upstreamProps = inject<ComputedRef<Record<string, any>> | null>(PROVIDED_PROPS, null)
     const providedProps = computed(() => {
@@ -37,11 +45,7 @@ export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOpti
   }
 }
 
-export function useProps<T>(
-  name: string,
-  sourceProps: T,
-  config: PropsConfigOptions<T> = {}
-) {
+export function useProps<T>(name: string, sourceProps: T, config: PropsConfigOptions<T> = {}) {
   const providedProps = inject<ComputedRef<Record<string, PropsConfigOptions<T>>> | null>(
     PROVIDED_PROPS,
     null
@@ -64,19 +68,25 @@ export function useProps<T>(
     ) as PropsConfig<T[keyof T]>
     const validator = isFunction(propOptions.validator) ? propOptions.validator : null
     const defaultValue = propOptions.default
-    const isFunc = !!propOptions.isFunc
+    const isFunc = isNull(propOptions.isFunc) ? eventPropRE.test(String(key)) : propOptions.isFunc
     const getValue = (value: PropsConfigOptions<T>[keyof T]) =>
       !isFunc && isFunction(value) ? value() : value
     const getDefault = () =>
       (!isFunc && isFunction(defaultValue) ? defaultValue() : defaultValue) as T[keyof T]
 
-    validator && watch(() => sourceProps[key], value => {
-      const result = validator(value)
+    validator &&
+      watch(
+        () => sourceProps[key],
+        value => {
+          const result = validator(value)
 
-      if (result === false) {
-        console.warn(`${toWarnPrefix(name)}: an invaild value is set to '${key as string}' prop`)
-      }
-    })
+          if (result === false) {
+            console.warn(
+              `${toWarnPrefix(name)}: an invaild value is set to '${key as string}' prop`
+            )
+          }
+        }
+      )
 
     if (propOptions.static) {
       props[key] = computed(() => sourceProps[key] ?? getDefault())
@@ -148,7 +158,9 @@ export function createStateProp() {
 type MaybeArray<T> = T | MaybeArray<T>[]
 
 export type ClassType = MaybeArray<string | { [x: string]: ClassType }>
-export type StyleType = MaybeArray<string | CSSProperties & { [x: `--${string}`]: string | number }>
+export type StyleType = MaybeArray<
+  string | (CSSProperties & { [x: `--${string}`]: string | number })
+>
 
 export const classProp = [String, Object, Array] as PropType<ClassType>
 export const styleProp = [String, Object, Array] as PropType<StyleType>
