@@ -104,6 +104,7 @@ export interface I18nConfig {
     Masker: string,
     NativeScroll: string,
     Overflow: string,
+    Renderer: string,
     ResizeObserver: string,
     Scroll: string,
     Scrollbar: string,

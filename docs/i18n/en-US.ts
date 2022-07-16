@@ -106,6 +106,7 @@ export const enUS = defineI18n({
     Masker: 'Masker',
     NativeScroll: 'NativeScroll',
     Overflow: 'Overflow',
+    Renderer: 'Renderer',
     ResizeObserver: 'ResizeObserver',
     Scroll: 'Scroll',
     Scrollbar: 'Scrollbar',
