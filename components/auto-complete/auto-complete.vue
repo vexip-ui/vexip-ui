@@ -69,10 +69,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject, watch, watchEffect } from 'vue'
+import { defineComponent, ref, computed, watch, watchEffect, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { placementWhileList } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -85,7 +85,7 @@ import {
   createSizeProp,
   createStateProp
 } from '@vexip-ui/config'
-import { isNull, noop } from '@vexip-ui/utils'
+import { isNull } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -126,22 +126,18 @@ export default defineComponent({
     spellcheck: booleanProp,
     keyConfig: Object as PropType<OptionKeyConfig>
   },
-  emits: [
-    'select',
-    'input',
-    'change',
-    'toggle',
-    'enter',
-    'clear',
-    'update:value'
-  ],
+  emits: ['select', 'input', 'change', 'toggle', 'enter', 'clear', 'update:value'],
   setup(_props, { slots, emit }) {
+    const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
+      string | number
+    >()
+
     const props = useProps('autoComplete', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       transfer: false,
       value: {
-        default: '',
+        default: () => getFieldValue(''),
         static: true
       },
       options: {
@@ -168,9 +164,6 @@ export default defineComponent({
       spellcheck: false,
       keyConfig: () => ({})
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
 
     const nh = useNameHelper('auto-complete')
 
@@ -322,9 +315,15 @@ export default defineComponent({
       if (props.ignoreCase) {
         const noCaseValue = value.toLocaleLowerCase()
 
-        matchedOption = filteredOptions.value.find(option => !option.disabled && (option.value === value || option.label?.toLocaleLowerCase() === noCaseValue))
+        matchedOption = filteredOptions.value.find(
+          option =>
+            !option.disabled &&
+            (option.value === value || option.label?.toLocaleLowerCase() === noCaseValue)
+        )
       } else {
-        matchedOption = filteredOptions.value.find(option => !option.disabled && (option.value === value || option.label === value))
+        matchedOption = filteredOptions.value.find(
+          option => !option.disabled && (option.value === value || option.label === value)
+        )
       }
 
       if (matchedOption) {
@@ -341,6 +340,7 @@ export default defineComponent({
 
       const option = optionsStates.value.find(option => option.value === lastValue)
 
+      setFieldValue(currentValue.value)
       emit('change', currentValue.value, option?.data || null)
       emit('update:value', currentValue.value)
 
@@ -412,7 +412,7 @@ export default defineComponent({
 
         handleChange()
         emit('clear')
-        clearField()
+        nextTick(clearField)
       }
     }
 

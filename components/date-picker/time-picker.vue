@@ -140,13 +140,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, inject, toRef, nextTick } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, toRef, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Portal } from '@/components/portal'
 import TimeControl from './time-control.vue'
 import TimeWheel from './time-wheel.vue'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -159,7 +159,7 @@ import {
   createSizeProp,
   createStateProp
 } from '@vexip-ui/config'
-import { USE_TOUCH, noop, doubleDigits, boundRange } from '@vexip-ui/utils'
+import { USE_TOUCH, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
 
@@ -230,9 +230,13 @@ export default defineComponent({
     'update:visible'
   ],
   setup(_props, { slots, emit }) {
+    const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
+      string | string[]
+    >()
+
     const props = useProps('timePicker', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       visible: false,
       placement: {
         default: 'bottom-start',
@@ -242,7 +246,7 @@ export default defineComponent({
       format: 'HH:mm:ss',
       separator: ':',
       value: {
-        default: '00:00:00',
+        default: () => getFieldValue('00:00:00'),
         static: true
       },
       filler: {
@@ -274,9 +278,6 @@ export default defineComponent({
       exchange: false,
       disableValidate: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
 
     const nh = useNameHelper('time-picker')
     const placement = toRef(props, 'placement')
@@ -476,13 +477,10 @@ export default defineComponent({
         lastValue.value = getStringValue()
 
         toggleActivated(true)
-
+        setFieldValue(currentValue.value)
         emit('change', currentValue.value)
         emit('update:value', currentValue.value)
-
-        if (!props.disableValidate) {
-          validateField()
-        }
+        !props.disableValidate && validateField()
       }
     }
 
@@ -527,7 +525,7 @@ export default defineComponent({
           emit('clear')
           emit('change', currentValue.value)
           emit('update:value', currentValue.value)
-          clearField()
+          clearField(currentValue.value)
 
           nextTick(() => {
             toggleActivated(false)

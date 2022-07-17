@@ -11,11 +11,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, inject, provide, toRef } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
-import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
-import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop, debounceMinor } from '@vexip-ui/utils'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp
+} from '@vexip-ui/config'
+import { useFieldStore } from '@/components/form'
+import { debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -38,11 +46,13 @@ export default defineComponent({
   },
   emits: ['change', 'update:value'],
   setup(_props, { emit }) {
+    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string | number>()
+
     const props = useProps('radioGroup', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       value: {
-        default: null,
+        default: () => getFieldValue(null!),
         static: true
       },
       vertical: false,
@@ -55,8 +65,6 @@ export default defineComponent({
       },
       disableValidate: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('radio-group')
     const currentValue = ref(props.value)
@@ -76,14 +84,16 @@ export default defineComponent({
       ]
     })
 
-    const state = reactive({
+    const groupState = reactive({
       currentValue,
+      size: toRef(props, 'size'),
+      state: toRef(props, 'state'),
       disabled: toRef(props, 'disabled'),
       updateValue: debounceMinor(updateValue)
     })
 
     // 此处直接定义 reactive 会出现类型推断错误，存疑？
-    provide(GROUP_STATE, state)
+    provide(GROUP_STATE, groupState)
 
     watch(
       () => props.value,
@@ -92,12 +102,10 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
+      setFieldValue(value)
       emit('change', value)
       emit('update:value', value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      !props.disableValidate && validateField()
     })
 
     function updateValue(value: string | number) {

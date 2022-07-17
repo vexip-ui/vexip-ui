@@ -61,9 +61,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { useHover, useModifier } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -76,7 +76,7 @@ import {
   createStateProp,
   classProp
 } from '@vexip-ui/config'
-import { isNull, noop, toFixed, toNumber, boundRange, throttle, plus, minus } from '@vexip-ui/utils'
+import { isNull, toFixed, toNumber, boundRange, throttle, plus, minus } from '@vexip-ui/utils'
 import { CaretUp, CaretDown, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -100,8 +100,6 @@ export default defineComponent({
     suffixColor: String,
     // 格式化后显示
     formatter: Function as PropType<(value: number) => string>,
-    // 格式化后读取
-    accessor: Function as PropType<(value: number | null) => any>,
     value: Number as PropType<number | null>,
     min: Number,
     max: Number,
@@ -136,9 +134,12 @@ export default defineComponent({
     'update:value'
   ],
   setup(_props, { slots, emit }) {
+    const { state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<number>()
+
     const props = useProps('numberInput', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       prefix: null,
       prefixColor: '',
       suffix: null,
@@ -148,13 +149,8 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      // 格式化后读取
-      accessor: {
-        default: null,
-        isFunc: true
-      },
       value: {
-        default: null,
+        default: () => getFieldValue(null!),
         static: true
       },
       min: -Infinity,
@@ -175,9 +171,6 @@ export default defineComponent({
       disableValidate: false,
       clearable: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
 
     const nh = useNameHelper('number-input')
     const focused = ref(false)
@@ -387,24 +380,17 @@ export default defineComponent({
     function emitChangeEvent(type: InputEventType) {
       type = type === 'input' ? 'input' : 'change'
 
-      const value =
-        typeof props.accessor === 'function'
-          ? props.accessor(currentValue.value)
-          : currentValue.value
-
       if (type === 'change') {
         if (lastValue === currentValue.value) return
 
         lastValue = currentValue.value
 
-        emit('change', value, currentValue.value)
+        setFieldValue(currentValue.value!)
+        emit('change', currentValue.value)
         emit('update:value', currentValue.value)
-
-        if (!props.disableValidate) {
-          validateField()
-        }
+        !props.disableValidate && validateField()
       } else {
-        emit('input', value, currentValue.value)
+        emit('input', currentValue.value)
       }
     }
 

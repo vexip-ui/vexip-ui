@@ -114,12 +114,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, inject, toRef, nextTick } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, toRef, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Portal } from '@/components/portal'
 import DateControl from './date-control.vue'
 import DatePane from './date-pane.vue'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -131,7 +131,7 @@ import {
   createSizeProp,
   createStateProp
 } from '@vexip-ui/config'
-import { noop, toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
+import { toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
 import { useColumn } from './helper'
 import { datePickerTypes } from './symbol'
@@ -200,9 +200,13 @@ export default defineComponent({
     'update:visible'
   ],
   setup(_props, { slots, emit }) {
+    const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
+      Dateable | Dateable[]
+    >()
+
     const props = useProps('datePicker', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       type: {
         default: 'date' as DatePickerType,
         validator: (value: DatePickerType) => datePickerTypes.includes(value)
@@ -214,7 +218,7 @@ export default defineComponent({
       },
       transfer: false,
       value: {
-        default: () => new Date(),
+        default: () => getFieldValue(new Date()),
         static: true
       },
       format: 'yyyy-MM-dd HH:mm:ss',
@@ -250,9 +254,6 @@ export default defineComponent({
       isRange: false,
       disableValidate: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
 
     const nh = useNameHelper('date-picker')
     const placement = toRef(props, 'placement')
@@ -566,12 +567,10 @@ export default defineComponent({
         const emitValue = props.isRange ? emitValues : emitValues[0]
 
         toggleActivated(true)
+        setFieldValue(emitValue)
         emit('change', emitValue)
         emit('update:value', emitValue)
-
-        if (!props.disableValidate) {
-          validateField()
-        }
+        !props.disableValidate && validateField()
       }
     }
 
@@ -789,7 +788,7 @@ export default defineComponent({
           emit('clear')
           emit('change', emitValue)
           emit('update:value', emitValue)
-          clearField()
+          clearField(emitValue!)
 
           nextTick(() => {
             toggleActivated(false)

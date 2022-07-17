@@ -35,8 +35,8 @@ import {
   createStateProp,
   classProp
 } from '@vexip-ui/config'
-import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop, isDefined, isFunction } from '@vexip-ui/utils'
+import { useFieldStore } from '@/components/form'
+import { isDefined, isFunction } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 export default defineComponent({
@@ -56,10 +56,15 @@ export default defineComponent({
   },
   emits: ['change', 'update:checked'],
   setup(_props, { slots, emit }) {
+    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>()
+
     const props = useProps('checkbox', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
-      checked: false,
+      state: createStateProp(state),
+      checked: {
+        default: () => getFieldValue(false),
+        static: true
+      },
       label: null,
       value: {
         default: null,
@@ -74,7 +79,6 @@ export default defineComponent({
     })
 
     const groupState = inject(GROUP_STATE, null)
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('checkbox')
     const currentChecked = ref(props.checked)
@@ -85,9 +89,9 @@ export default defineComponent({
       partial: currentPartial
     })
 
-    const isDisabled = computed(() => {
-      return groupState?.disabled || props.disabled
-    })
+    const size = computed(() => groupState?.size || props.size)
+    const computedState = computed(() => groupState?.state || props.state)
+    const isDisabled = computed(() => groupState?.disabled || props.disabled)
     const className = computed(() => {
       return [
         nh.b(),
@@ -95,10 +99,10 @@ export default defineComponent({
         {
           [nh.bm('checked')]: currentChecked.value,
           [nh.bm('disabled')]: isDisabled.value,
-          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm(size.value)]: size.value !== 'default',
           [nh.bm('border')]: props.border,
           [nh.bm('partial')]: props.control && currentPartial.value,
-          [nh.bm(props.state)]: props.state !== 'default'
+          [nh.bm(computedState.value)]: computedState.value !== 'default'
         }
       ]
     })
@@ -125,22 +129,15 @@ export default defineComponent({
       }
     )
     watch(currentChecked, checked => {
+      setFieldValue(checked)
       emit('change', checked)
       emit('update:checked', checked)
     })
 
     if (groupState) {
-      watch(
-        () => props.label,
-        (value, prevValue) => {
-          if (!props.control && isFunction(groupState.replaceLabel)) {
-            groupState.replaceLabel(prevValue, value)
-          }
-        }
-      )
-      watch(currentValue, value => {
+      watch(currentValue, (value, prevValue) => {
         if (isFunction(groupState.replaceValue)) {
-          groupState.replaceValue(props.label, value)
+          groupState.replaceValue(prevValue, value)
         }
       })
       watch(
@@ -166,13 +163,13 @@ export default defineComponent({
 
       onMounted(() => {
         if (!props.control && isFunction(groupState.increaseItem)) {
-          groupState.increaseItem(props.label, currentValue.value, currentChecked.value)
+          groupState.increaseItem(currentValue.value, currentChecked.value)
         }
       })
 
       onBeforeUnmount(() => {
         if (!props.control && isFunction(groupState.decreaseItem)) {
-          groupState.decreaseItem(props.label)
+          groupState.decreaseItem(currentValue.value)
         }
       })
     }
@@ -189,7 +186,8 @@ export default defineComponent({
       setCurrentChecked(checked)
 
       if (!props.control && groupState) {
-        isFunction(groupState.setLabelChecked) && groupState.setLabelChecked(props.label, checked)
+        isFunction(groupState.setItemChecked) &&
+          groupState.setItemChecked(currentValue.value, checked)
       }
 
       if (!groupState && !props.disableValidate) {

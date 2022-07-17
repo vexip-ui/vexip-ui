@@ -40,7 +40,6 @@
 import {
   defineComponent,
   ref,
-  reactive,
   computed,
   toRef,
   watch,
@@ -54,9 +53,10 @@ import { isNull, isFunction } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
-import { VALIDATE_FIELD, CLEAR_FIELD } from './symbol'
+import { VALIDATE_FIELD, CLEAR_FIELD, FIELD_OPTIONS } from './symbol'
 
 import type { Ref, PropType } from 'vue'
+import type { ComponentState } from '@vexip-ui/config'
 import type { FormProps, FormItemProps, FieldOptions } from './symbol'
 import type { Trigger, Rule } from './validator'
 
@@ -105,17 +105,29 @@ export default defineComponent({
     const nh = useNameHelper('form')
 
     const { isRequired, allRules } = useRules(props, formProps)
-    const { isError, errorTip, currentValue, validate, clearError, reset } = useField(
-      props,
-      formProps,
-      allRules
-    )
+    const { isError, errorTip, currentValue, validate, clearError, reset, getValue, setValue } =
+      useField(props, formProps, allRules)
 
-    const fieldObject = reactive({
-      prop: toRef(props, 'prop'),
+    const instances = new Set<any>()
+
+    const fieldObject = Object.freeze({
+      prop: computed(() => props.prop),
+      state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
       validate,
       clearError,
-      reset
+      reset,
+      getValue,
+      setValue,
+      sync: (instance: any) => {
+        if (instances.size) {
+          console.warn('[vexip-ui]: must only be one control component under FormItem.')
+        }
+
+        instances.add(instance)
+      },
+      unsync: (instance: any) => {
+        instances.delete(instance)
+      }
     })
 
     useRelation(fieldObject)
@@ -253,16 +265,24 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     }
   })
 
-  function getValue() {
-    if (!formProps.model || !props.prop) return ''
+  function getValue(defaultValue?: unknown) {
+    if (!formProps.model || !props.prop) return defaultValue
 
     try {
       return getValueByPath(formProps.model, props.prop, true)
     } catch (e) {
-      setValueByPath(formProps.model, props.prop, '', false)
+      setValueByPath(formProps.model, props.prop, defaultValue, false)
 
-      return ''
+      return defaultValue
     }
+  }
+
+  function setValue(value: unknown, strict = false) {
+    if (!formProps.model || !props.prop) return
+
+    try {
+      return setValueByPath(formProps.model, props.prop, value, strict)
+    } catch (e) {}
   }
 
   function validate(type?: Trigger) {
@@ -335,24 +355,35 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     return errors
   }
 
-  return { isError, errorTip, currentValue, validate, clearError, reset, getValue }
+  return {
+    isError,
+    errorTip,
+    currentValue,
+    validate,
+    clearError,
+    reset,
+    getValue,
+    setValue
+  }
 }
 
 function useRelation(field: FieldOptions) {
   const formFields = inject(FORM_FIELDS, null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   provide(VALIDATE_FIELD, field.validate)
   provide(CLEAR_FIELD, field.clearError)
+  provide(FIELD_OPTIONS, field)
 
   onMounted(() => {
     if (formFields) {
-      formFields.value.add(field)
+      formFields.add(field)
     }
   })
 
   onBeforeUnmount(() => {
     if (formFields) {
-      formFields.value.delete(field)
+      formFields.delete(field)
     }
   })
 }

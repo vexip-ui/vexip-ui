@@ -98,7 +98,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, inject, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
@@ -106,7 +106,7 @@ import { Portal } from '@/components/portal'
 import ColorAlpha from './color-alpha.vue'
 import ColorHue from './color-hue.vue'
 import ColorPalette from './color-palette.vue'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -120,7 +120,6 @@ import {
   createStateProp
 } from '@vexip-ui/config'
 import {
-  noop,
   toFixed,
   parseColorToRgba,
   rgbToHsv,
@@ -210,11 +209,14 @@ export default defineComponent({
     'update:visible'
   ],
   setup(_props, { emit }) {
+    const { state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<Color | null>()
+
     const props = useProps('colorPicker', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       value: {
-        default: '#339af0',
+        default: () => getFieldValue('#339af0')!,
         static: true
       },
       visible: false,
@@ -241,9 +243,6 @@ export default defineComponent({
       cancelText: null,
       confirmText: null
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
 
     const nh = useNameHelper('color-picker')
     const isEmpty = ref(true)
@@ -420,6 +419,7 @@ export default defineComponent({
     function handleChange() {
       const formattedColor = getForamttedColor()
 
+      setFieldValue(formattedColor)
       emit('change', formattedColor)
       emit('update:value', formattedColor)
 

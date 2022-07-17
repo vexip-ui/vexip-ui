@@ -34,9 +34,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject, onMounted } from 'vue'
+import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { Tooltip } from '@/components/tooltip'
-import { VALIDATE_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
@@ -46,7 +46,7 @@ import {
   createStateProp
 } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/mixins'
-import { noop, throttle } from '@vexip-ui/utils'
+import { throttle } from '@vexip-ui/utils'
 
 import type { TooltipExposed } from '@/components/tooltip'
 
@@ -69,10 +69,12 @@ export default defineComponent({
   },
   emits: ['change', 'input', 'change', 'update:value'],
   setup(_props, { emit }) {
+    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<number>()
+
     const props = useProps('slider', _props, {
-      state: createStateProp(),
+      state: createStateProp(state),
       value: {
-        default: 0,
+        default: () => getFieldValue(0),
         static: true
       },
       min: 0,
@@ -87,8 +89,6 @@ export default defineComponent({
       disabled: false,
       disableValidate: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('slider')
     const currentValue = ref(props.value / props.step) // 按每 step 为 1 的 value
@@ -161,12 +161,10 @@ export default defineComponent({
     }
 
     function emitChange() {
+      setFieldValue(truthValue.value)
       emit('change', truthValue.value)
       emit('update:value', truthValue.value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      !props.disableValidate && validateField()
     }
 
     let trackRect: DOMRect | null = null

@@ -126,23 +126,13 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  computed,
-  watch,
-  watchEffect,
-  inject,
-  toRef,
-  nextTick
-} from 'vue'
+import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
 import { VirtualList } from '@/components/virtual-list'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -156,13 +146,15 @@ import {
   createStateProp,
   classProp
 } from '@vexip-ui/config'
-import { noop, isNull } from '@vexip-ui/utils'
+import { isNull } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { OptionKeyConfig, RawOption, OptionState } from '@/components/option'
 import type { VirtualListExposed } from '@/components/virtual-list'
+
+type SelectValue = string | number | (string | number)[]
 
 const defaultKeyConfig: Required<OptionKeyConfig> = {
   value: 'value',
@@ -198,7 +190,7 @@ export default defineComponent({
     suffix: Object,
     suffixColor: String,
     noSuffix: booleanProp,
-    value: [String, Number, Array] as PropType<string | number | (string | number)[]>,
+    value: [String, Number, Array] as PropType<SelectValue>,
     multiple: booleanProp,
     clearable: booleanProp,
     maxListHeight: Number,
@@ -223,9 +215,12 @@ export default defineComponent({
     'update:visible'
   ],
   setup(_props, { emit, slots }) {
+    const { state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<SelectValue>()
+
     const props = useProps('select', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       visible: {
         default: false,
         static: true
@@ -244,7 +239,7 @@ export default defineComponent({
       suffixColor: '',
       noSuffix: false,
       value: {
-        default: null,
+        default: () => getFieldValue(null!),
         static: true
       },
       multiple: false,
@@ -262,9 +257,6 @@ export default defineComponent({
       staticSuffix: false,
       keyConfig: () => ({})
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
 
     const nh = useNameHelper('select')
     const currentVisible = ref(props.visible)
@@ -414,7 +406,7 @@ export default defineComponent({
     )
     watch(() => visibleOptions.value.length, computeListHeight)
 
-    function initValueAndLabel(value: string | number | (string | number)[] | null) {
+    function initValueAndLabel(value: SelectValue | null) {
       if (!value) {
         currentValues.value = []
         currentLabels.value = []
@@ -494,12 +486,10 @@ export default defineComponent({
 
         emittedValue = Array.from(currentValues.value)
 
+        setFieldValue(emittedValue)
         emit('change', emittedValue, Array.from(currentLabels.value))
         emit('update:value', emittedValue)
-
-        if (!props.disableValidate) {
-          validateField()
-        }
+        !props.disableValidate && validateField()
       } else {
         currentLabels.value.length = 0
 
@@ -515,12 +505,10 @@ export default defineComponent({
         if (prevValue !== option.value) {
           emittedValue = option.value
 
+          setFieldValue(emittedValue)
           emit('change', emittedValue, option.data)
           emit('update:value', emittedValue)
-
-          if (!props.disableValidate) {
-            validateField()
-          }
+          !props.disableValidate && validateField()
         }
       }
     }
@@ -550,12 +538,12 @@ export default defineComponent({
         currentValues.value.length = 0
         currentLabels.value.length = 0
 
-        emittedValue = props.multiple ? [] : null
+        emittedValue = props.multiple ? [] : ''
 
         emit('change', emittedValue, emittedValue)
         emit('update:value', emittedValue)
         emit('clear')
-        clearField()
+        clearField(emittedValue!)
         updatePopper()
       }
     }

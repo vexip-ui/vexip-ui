@@ -14,11 +14,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject, provide, reactive, toRef, computed, watch } from 'vue'
+import { defineComponent, ref, provide, reactive, toRef, computed, watch } from 'vue'
 import { Checkbox } from '@/components/checkbox'
-import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
-import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop, isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp
+} from '@vexip-ui/config'
+import { useFieldStore } from '@/components/form'
+import { isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -39,10 +47,7 @@ export default defineComponent({
   props: {
     size: sizeProp,
     state: stateProp,
-    values: {
-      type: Array as PropType<(string | number)[]>,
-      default: () => []
-    },
+    value: Array as PropType<(string | number)[]>,
     vertical: booleanProp,
     disabled: booleanProp,
     border: booleanProp,
@@ -51,11 +56,14 @@ export default defineComponent({
   },
   emits: ['change', 'update:values'],
   setup(_props, { emit }) {
+    const { state, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<(string | number)[]>()
+
     const props = useProps('checkboxGroup', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
-      values: {
-        default: () => [],
+      state: createStateProp(state),
+      value: {
+        default: () => getFieldValue([]),
         static: true
       },
       vertical: false,
@@ -68,13 +76,10 @@ export default defineComponent({
       }
     })
 
-    const validateField = inject(VALIDATE_FIELD, noop)
-
     const nh = useNameHelper('checkbox-group')
-    const valueMap = new Map<string, string | number>()
+    const valueMap = new Map<string | number, boolean>()
     const controlSet = new Set<ControlState>()
-    const currentValues = ref<(string | number)[]>(props.values ?? [])
-    const checkedLabels = ref(new Set<string>())
+    const currentValues = ref<(string | number)[]>(props.value || [])
 
     const className = computed(() => {
       return [
@@ -93,8 +98,8 @@ export default defineComponent({
     const updateValue = debounceMinor(() => {
       currentValues.value = []
 
-      valueMap.forEach((value, label) => {
-        if (checkedLabels.value.has(label)) {
+      valueMap.forEach((checked, value) => {
+        if (checked) {
           currentValues.value.push(value)
         }
       })
@@ -117,20 +122,21 @@ export default defineComponent({
       GROUP_STATE,
       reactive({
         currentValues,
+        size: toRef(props, 'size'),
+        state: toRef(props, 'state'),
         disabled: toRef(props, 'disabled'),
         increaseItem,
         decreaseItem,
         increaseControl,
         decreaseControl,
         handleControlChange,
-        setLabelChecked,
-        replaceLabel,
+        setItemChecked,
         replaceValue
       })
     )
 
     watch(
-      () => props.values,
+      () => props.value,
       value => {
         currentValues.value = Array.from(value)
       },
@@ -140,16 +146,12 @@ export default defineComponent({
       updateControl()
     })
 
-    function increaseItem(label: string, value: string | number, checked = false) {
-      valueMap.set(label, value)
-
-      if (checked) {
-        checkedLabels.value.add(label)
-      }
+    function increaseItem(value: string | number, checked = false) {
+      valueMap.set(value, checked)
     }
 
-    function decreaseItem(label: string) {
-      valueMap.delete(label)
+    function decreaseItem(value: string | number) {
+      valueMap.delete(value)
     }
 
     function increaseControl(state: ControlState) {
@@ -161,60 +163,43 @@ export default defineComponent({
       controlSet.delete(state)
     }
 
-    function setLabelChecked(label: string, checked: boolean) {
-      if (!isDefined(label) || !valueMap.has(label)) return
+    function setItemChecked(value: string | number, checked: boolean) {
+      if (!isDefined(value) || !valueMap.has(value)) return
 
-      if (checked) {
-        checkedLabels.value.add(label)
-      } else {
-        checkedLabels.value.delete(label)
-      }
-
+      valueMap.set(value, checked)
       updateValue()
       updateControl()
     }
 
     function handleControlChange() {
       // 在 group 层进行更新, 未选满则全选, 反之全不选
-      const allLabels = Array.from(valueMap.keys())
+      const allValues = Array.from(valueMap.keys())
+      const checked = currentValues.value.length === allValues.length
 
-      if (currentValues.value.length === allLabels.length) {
-        checkedLabels.value.clear()
-      } else {
-        // 重新实例化以保持 item 顺序
-        checkedLabels.value = new Set(allLabels)
-      }
+      allValues.forEach(value => {
+        valueMap.set(value, checked)
+      })
 
       updateValue()
       updateControl()
     }
 
     function handleChange(value: (string | number)[]) {
+      setFieldValue(value)
       emit('change', value)
       emit('update:values', value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      !props.disableValidate && validateField()
     }
 
-    function replaceLabel(oldLabel: string, newLabel: string) {
-      if (valueMap.has(oldLabel)) {
-        const value = valueMap.get(oldLabel)!
-
-        valueMap.delete(oldLabel)
-        isDefined(newLabel) && valueMap.set(newLabel, value)
-      }
-
-      if (checkedLabels.value.has(oldLabel)) {
-        checkedLabels.value.delete(oldLabel)
-        isDefined(newLabel) && checkedLabels.value.add(newLabel)
-      }
-    }
-
-    function replaceValue(label: string, value: string | number) {
-      if (isDefined(label) && valueMap.has(label)) {
-        valueMap.set(label, value)
+    function replaceValue(prevValue: string | number, newValue: string | number) {
+      if (
+        isDefined(prevValue) &&
+        isDefined(newValue) &&
+        prevValue !== newValue &&
+        valueMap.has(prevValue)
+      ) {
+        valueMap.set(newValue, valueMap.get(prevValue)!)
+        valueMap.delete(prevValue)
       }
     }
 

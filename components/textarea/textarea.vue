@@ -27,10 +27,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from 'vue'
-import { VALIDATE_FIELD } from '@/components/form-item'
-import { useNameHelper, useProps, useLocale, booleanProp, stateProp, createStateProp } from '@vexip-ui/config'
-import { noop, throttle } from '@vexip-ui/utils'
+import { defineComponent, ref, computed, watch } from 'vue'
+import { useFieldStore } from '@/components/form'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  stateProp,
+  createStateProp
+} from '@vexip-ui/config'
+import { throttle } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'Textarea',
@@ -61,10 +68,12 @@ export default defineComponent({
     'update:value'
   ],
   setup(_props, { emit }) {
+    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string>()
+
     const props = useProps('textarea', _props, {
-      state: createStateProp(),
+      state: createStateProp(state),
       value: {
-        default: '',
+        default: () => getFieldValue(''),
         static: true
       },
       placeholder: null,
@@ -79,8 +88,6 @@ export default defineComponent({
       maxLength: 0,
       disableValidate: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('textarea')
     const focused = ref(false)
@@ -138,12 +145,10 @@ export default defineComponent({
 
         lastValue = currentValue.value
 
+        setFieldValue(currentValue.value)
         emit('change', currentValue.value)
         emit('update:value', currentValue.value)
-
-        if (!props.disableValidate) {
-          validateField()
-        }
+        !props.disableValidate && validateField()
       } else {
         emit('input', currentValue.value)
       }
@@ -201,6 +206,8 @@ export default defineComponent({
       handleKeyDown,
       handleKeyPress,
       handleKeyUp,
+
+      // api
       copyValue
     }
   }

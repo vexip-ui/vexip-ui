@@ -6,6 +6,7 @@ import type { App, ComputedRef, PropType, Ref, CSSProperties } from 'vue'
 export type PropsOptions = Record<string, Record<string, unknown>>
 
 type EnsureValue<T> = Exclude<T, undefined | null>
+type MaybeRef<T> = T | Ref<T>
 
 interface PropsConfig<T = any> {
   default: T | (() => T) | null,
@@ -133,9 +134,9 @@ export type ComponentSize = 'small' | 'default' | 'large'
 
 export const sizeProp = String as PropType<ComponentSize>
 
-export function createSizeProp() {
+export function createSizeProp(defaultValue: MaybeRef<ComponentSize> = 'default') {
   return {
-    default: 'default' as ComponentSize,
+    default: () => unref(defaultValue),
     validator(value: ComponentSize) {
       return ['small', 'default', 'large'].includes(value)
     }
@@ -146,9 +147,9 @@ export type ComponentState = 'default' | 'success' | 'error' | 'warning'
 
 export const stateProp = String as PropType<ComponentState>
 
-export function createStateProp() {
+export function createStateProp(defaultValue: MaybeRef<ComponentState> = 'default') {
   return {
-    default: 'default' as ComponentState,
+    default: () => unref(defaultValue),
     validator(value: ComponentState) {
       return ['default', 'success', 'error', 'warning'].includes(value)
     }

@@ -26,8 +26,7 @@ import {
   createStateProp,
   classProp
 } from '@vexip-ui/config'
-import { VALIDATE_FIELD } from '@/components/form-item'
-import { isDefined, noop } from '@vexip-ui/utils'
+import { isDefined } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 export default defineComponent({
@@ -63,14 +62,13 @@ export default defineComponent({
     })
 
     const groupState = inject(GROUP_STATE, null)
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('radio')
     const currentValue = ref(props.value)
 
-    const isDisabled = computed(() => {
-      return groupState?.disabled || props.disabled
-    })
+    const size = computed(() => groupState?.size || props.size)
+    const state = computed(() => groupState?.state || props.state)
+    const isDisabled = computed(() => groupState?.disabled || props.disabled)
     const className = computed(() => {
       return [
         nh.b(),
@@ -78,9 +76,9 @@ export default defineComponent({
         {
           [nh.bm('checked')]: currentValue.value === props.label,
           [nh.bm('disabled')]: isDisabled.value,
-          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm(size.value)]: size.value !== 'default',
           [nh.bm('border')]: props.border,
-          [nh.bm(props.state)]: props.state !== 'default'
+          [nh.bm(state.value)]: state.value !== 'default'
         }
       ]
     })
@@ -97,10 +95,6 @@ export default defineComponent({
 
       if (groupState && value === props.label) {
         groupState.updateValue(value)
-      }
-
-      if (!groupState && !props.disableValidate) {
-        validateField()
       }
     })
 

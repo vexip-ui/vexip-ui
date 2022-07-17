@@ -43,11 +43,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { VALIDATE_FIELD } from '@/components/form-item'
-import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
-import { isPromise, noop } from '@vexip-ui/utils'
+import { useFieldStore } from '@/components/form'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp
+} from '@vexip-ui/config'
+import { isPromise } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -76,11 +84,13 @@ export default defineComponent({
   },
   emits: ['change', 'update:value'],
   setup(_props, { emit }) {
+    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>()
+
     const props = useProps('switch', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       value: {
-        default: false,
+        default: () => getFieldValue(false),
         static: true
       },
       disabled: false,
@@ -98,8 +108,6 @@ export default defineComponent({
       },
       disableValidate: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('switch')
     const currentValue = ref(props.value)
@@ -138,12 +146,10 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
+      setFieldValue(value)
       emit('change', value)
       emit('update:value', value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      !props.disableValidate && validateField()
     })
 
     async function handleChange(checked = !currentValue.value) {

@@ -1,6 +1,8 @@
 <template>
   <li ref="wrapper" :class="nh.be('item')" :style="style">
-    <slot></slot>
+    <slot>
+      {{ value }}
+    </slot>
   </li>
 </template>
 

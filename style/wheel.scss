@@ -27,6 +27,10 @@ $wheel: map.merge(
     @include define-preset-values('wheel', $wheel);
   }
 
+  @mixin define-wheel-style($style-map) {
+    @include define-preset-style('wheel', $style-map);
+  }
+
   @include basis;
 
   position: relative;
@@ -98,6 +102,7 @@ $wheel: map.merge(
     background-color: get-css-var('wheel-mask-bg-color');
     border: 0 get-css-var('wheel-mask-b-style') get-css-var('wheel-mask-b-color');
     opacity: get-css-var('wheel-mask-opacity');
+    transition: get-css-var('transition-background'), get-css-var('transition-border');
   }
 
   $border-width: get-css-var('wheel-mask-b-width');
@@ -129,6 +134,19 @@ $wheel: map.merge(
     &--bottom {
       right: 0;
       border-left-width: $border-width;
+    }
+  }
+
+  $states: success, error, warning;
+
+  @each $state in $states {
+    &--#{$state} {
+      @include define-wheel-style(
+        (
+          mask-b-color: 'color' $state 'base',
+          mask-bg-color: 'color' $state 'opacity-8'
+        )
+      );
     }
   }
 }
