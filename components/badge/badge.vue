@@ -29,7 +29,14 @@ import type { PropType } from 'vue'
 
 export type BadgeType = 'error' | 'primary' | 'success' | 'warning' | 'info' | 'disabled'
 
-const badgeTypes = Object.freeze<BadgeType>(['error', 'primary', 'success', 'warning', 'info', 'disabled'])
+const badgeTypes = Object.freeze<BadgeType>([
+  'error',
+  'primary',
+  'success',
+  'warning',
+  'info',
+  'disabled'
+])
 
 export default defineComponent({
   name: 'Badge',
@@ -39,10 +46,10 @@ export default defineComponent({
     disabled: booleanProp,
     isDot: booleanProp,
     type: String as PropType<BadgeType>,
-    color: String
+    color: String,
+    onBadgeClick: Function as PropType<(event: MouseEvent) => void>
   },
-  emits: ['badge-click'],
-  setup(_props, { slots, emit }) {
+  setup(_props, { slots }) {
     const props = useProps('badge', _props, {
       content: {
         default: null,
@@ -90,8 +97,8 @@ export default defineComponent({
       return !props.disabled && (props.content || props.content === 0 || props.isDot)
     })
 
-    function handleBadgeClick() {
-      emit('badge-click')
+    function handleBadgeClick(event: MouseEvent) {
+      props.onBadgeClick?.(event)
     }
 
     return {

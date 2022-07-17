@@ -123,9 +123,15 @@ export default defineComponent({
     ignoreCase: booleanProp,
     autofocus: booleanProp,
     spellcheck: booleanProp,
-    keyConfig: Object as PropType<OptionKeyConfig>
+    keyConfig: Object as PropType<OptionKeyConfig>,
+    onSelect: Function as PropType<(value: string | number, data: RawOption) => void>,
+    onInput: Function as PropType<(value: string) => void>,
+    onChange: Function as PropType<(value: string | number, data: RawOption) => void>,
+    onToggle: Function as PropType<(visible: boolean) => void>,
+    onEnter: Function as PropType<(value: string | number) => void>,
+    onClear: Function as PropType<() => void>
   },
-  emits: ['select', 'input', 'change', 'toggle', 'enter', 'clear', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { slots, emit }) {
     const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
       string | number
@@ -282,7 +288,7 @@ export default defineComponent({
       const prevValue = currentValue.value
       currentValue.value = value
 
-      emit('select', value, data)
+      props.onSelect?.(value, data)
 
       if (value !== prevValue) {
         changed = true
@@ -303,7 +309,7 @@ export default defineComponent({
         currentIndex.value = 0
       }
 
-      emit('input', value)
+      props.onInput?.(value)
     }
 
     function handleInputChange(event: string | Event) {
@@ -339,7 +345,7 @@ export default defineComponent({
       const option = optionsStates.value.find(option => option.value === lastValue)
 
       setFieldValue(currentValue.value)
-      emit('change', currentValue.value, option?.data || null)
+      props.onChange?.(currentValue.value, option?.data || null!)
       emit('update:value', currentValue.value)
       validateField()
 
@@ -349,8 +355,7 @@ export default defineComponent({
 
     function handleToggle() {
       testOptionCanDrop()
-
-      emit('toggle', visible.value)
+      props.onToggle?.(visible.value)
 
       if (!visible.value) {
         currentIndex.value = -1
@@ -389,7 +394,7 @@ export default defineComponent({
         handleChange()
       }
 
-      emit('enter', currentValue.value)
+      props.onEnter?.(currentValue.value)
       control.value?.blur()
       visible.value = false
     }
@@ -406,7 +411,7 @@ export default defineComponent({
         }
 
         handleChange()
-        emit('clear')
+        props.onClear?.()
         nextTick(clearField)
       }
     }

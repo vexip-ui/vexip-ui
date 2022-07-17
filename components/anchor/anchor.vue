@@ -56,9 +56,10 @@ export default defineComponent({
     offset: Number,
     marker: booleanProp,
     scrollDuration: Number,
-    markerTransition: String
+    markerTransition: String,
+    onChange: Function as PropType<(value: string) => void>
   },
-  emits: ['change', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('anchor', _props, {
       active: {
@@ -104,7 +105,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('change', value)
+      props.onChange?.(value)
       emit('update:active', value)
     })
     watch(() => props.viewer, updateContainer)

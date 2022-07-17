@@ -60,10 +60,10 @@ export default defineComponent({
     iconScale: Number,
     fallbackSrc: String,
     color: String,
-    background: String
+    background: String,
+    onError: Function as PropType<(event: Event) => void>
   },
-  emits: ['error'],
-  setup(_props, { emit }) {
+  setup(_props) {
     const props = useProps('avatar', _props, {
       size: 'default' as ComponentSize,
       src: {
@@ -135,14 +135,11 @@ export default defineComponent({
         scaleText()
       }
     )
-    watch(
-      () => props.gap,
-      scaleText
-    )
+    watch(() => props.gap, scaleText)
 
     function handleError(event: Event) {
       loadFail.value = true
-      emit('error', event)
+      props.onError?.(event)
     }
 
     let lastText: string | null = null

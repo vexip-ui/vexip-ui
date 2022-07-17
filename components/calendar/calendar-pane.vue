@@ -84,9 +84,11 @@ export default defineComponent({
     today: [Number, String, Date] as PropType<Dateable>,
     disabledDate: Function as PropType<(data: Date) => boolean>,
     isRange: booleanProp,
-    valueType: String as PropType<'start' | 'end'>
+    valueType: String as PropType<'start' | 'end'>,
+    onSelect: Function as PropType<(date: Date) => void>,
+    onHover: Function as PropType<(date: Date | null) => void>
   },
-  emits: ['select', 'hover', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('calendarBase', _props, {
       value: {
@@ -143,7 +145,7 @@ export default defineComponent({
       }
     })
     watch(hoveredDate, value => {
-      emit('hover', value)
+      props.onHover?.(value)
     })
 
     function getWeekLabel(index: number) {
@@ -250,7 +252,7 @@ export default defineComponent({
           endValue.value = date
         }
 
-        emit('select', date)
+        props.onSelect?.(date)
         emit('update:value', date)
       }
     }

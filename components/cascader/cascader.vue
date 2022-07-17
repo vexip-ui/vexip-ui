@@ -275,19 +275,18 @@ export default defineComponent({
     onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>,
     mergeTags: booleanProp,
     tagType: String as PropType<TagType>,
-    emptyText: String
+    emptyText: String,
+    onToggle: Function as PropType<(visible: boolean) => void>,
+    onSelect: Function as PropType<(fullValue: string, data: Record<string, any>) => void>,
+    onCancel: Function as PropType<(fullValue: string, data: Record<string, any>) => void>,
+    onChange: Function as PropType<
+      (value: CascaderValue, data: Record<string, any> | Array<Record<string, any>>) => void
+    >,
+    onClickOutside: Function as PropType<() => void>,
+    onOutsideClose: Function as PropType<() => void>,
+    onClear: Function as PropType<() => void>
   },
-  emits: [
-    'toggle',
-    'select',
-    'cancel',
-    'change',
-    'click-outside',
-    'outside-close',
-    'clear',
-    'update:value',
-    'update:visible'
-  ],
+  emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
     const { state, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<CascaderValue>()
@@ -484,7 +483,7 @@ export default defineComponent({
         isPopperShow.value = false
       }
 
-      emit('toggle', value)
+      props.onToggle?.(value)
       emit('update:visible', value)
     })
 
@@ -929,7 +928,7 @@ export default defineComponent({
         }
       }
 
-      emit(checked ? 'select' : 'cancel', option.fullValue, option.data)
+      props[checked ? 'onSelect' : 'onCancel']?.(option.fullValue, option.data)
       emitMultipleChange()
     }
 
@@ -1071,7 +1070,7 @@ export default defineComponent({
 
       if (!option) return
 
-      emit('select', fullValue, option.data)
+      props.onSelect?.(fullValue, option.data)
 
       if (fullValue) {
         currentValues.value[0] = fullValue
@@ -1097,7 +1096,7 @@ export default defineComponent({
         outsideChanged = false
 
         setFieldValue(value)
-        emit('change', value, data)
+        props.onChange?.(value, data)
         emit('update:value', value)
         validateField()
       })
@@ -1135,13 +1134,11 @@ export default defineComponent({
 
     function handleClickOutside() {
       restTipShow.value = false
-
-      emit('click-outside')
+      props.onClickOutside?.()
 
       if (props.outsideClose && currentVisible.value) {
         currentVisible.value = false
-
-        emit('outside-close')
+        props.onOutsideClose?.()
       }
     }
 
@@ -1160,9 +1157,9 @@ export default defineComponent({
           option.partial = false
         }
 
-        emit('change', emittedValue.value, [])
+        props.onChange?.(emittedValue.value, [])
         emit('update:value', emittedValue.value)
-        emit('clear')
+        props.onClear?.()
         clearField(emittedValue.value)
         hideTagCounter()
       }

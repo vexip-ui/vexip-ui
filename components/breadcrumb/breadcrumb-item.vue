@@ -25,6 +25,7 @@ import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { BREADCRUMB_STATE } from './symbol'
 
+import type { PropType } from 'vue'
 import type { SeparatorRenderFn, ItemState } from './symbol'
 
 export default defineComponent({
@@ -36,10 +37,11 @@ export default defineComponent({
     label: {
       type: [String, Number],
       default: null
-    }
+    },
+    onSelect: Function as PropType<(label: string | number) => void>,
+    onSeparatorClick: Function as PropType<(label: string | number) => void>
   },
-  emits: ['select', 'separator-click'],
-  setup(props, { emit }) {
+  setup(props) {
     const breadcrumbState = inject(BREADCRUMB_STATE, null)
 
     const currentLabel = ref(props.label)
@@ -82,12 +84,12 @@ export default defineComponent({
     }
 
     function handleClick() {
-      emit('select', currentLabel.value)
+      props.onSelect?.(currentLabel.value)
       breadcrumbState?.handleSelect(currentLabel.value)
     }
 
     function handleSeparatorClick() {
-      emit('separator-click', currentLabel.value)
+      props.onSeparatorClick?.(currentLabel.value)
       breadcrumbState?.handleSeparatorClick(currentLabel.value)
     }
 

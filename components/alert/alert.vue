@@ -18,7 +18,11 @@
       </div>
       <div v-if="hasIcon" :class="nh.be('icon')">
         <slot name="icon">
-          <Icon :icon="iconComp" :scale="hasTitle ? 2 : 1" :style="{ color: props.iconColor }"></Icon>
+          <Icon
+            :icon="iconComp"
+            :scale="hasTitle ? 2 : 1"
+            :style="{ color: props.iconColor }"
+          ></Icon>
         </slot>
       </div>
     </div>
@@ -73,10 +77,11 @@ export default defineComponent({
     iconColor: String,
     noBorder: booleanProp,
     banner: booleanProp,
-    manual: booleanProp
+    manual: booleanProp,
+    onClose: Function as PropType<() => void>,
+    onHide: Function as PropType<() => void>
   },
-  emits: ['close', 'hide'],
-  setup(_props, { slots, emit }) {
+  setup(_props, { slots }) {
     const props = useProps('alert', _props, {
       type: {
         default: 'info' as AlertType,
@@ -129,11 +134,11 @@ export default defineComponent({
         closed.value = true
       }
 
-      emit('close')
+      props.onClose?.()
     }
 
     function handleAfterLeave() {
-      emit('hide')
+      props.onHide?.()
       hidden.value = true
     }
 

@@ -31,10 +31,10 @@ export default defineComponent({
     color: String,
     buttonType: String as PropType<ButtonAttrType>,
     block: booleanProp,
-    tag: String
+    tag: String,
+    onClick: Function as PropType<(event: MouseEvent) => void>
   },
-  emits: ['click'],
-  setup(_props, { emit, slots }) {
+  setup(_props, { slots }) {
     const props = useProps('button', _props, {
       size: createSizeProp(),
       type: {
@@ -210,7 +210,7 @@ export default defineComponent({
         pulsing.value = true
       })
 
-      emit('click', event)
+      props.onClick?.(event)
     }
 
     function handleAnimationEnd() {

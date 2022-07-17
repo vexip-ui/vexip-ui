@@ -106,9 +106,10 @@ export default defineComponent({
     weekDays: Array as PropType<string[]>,
     weekStart: Number,
     today: [Number, String, Date] as PropType<Dateable>,
-    disabledDate: Function as PropType<(data: Date) => boolean>
+    disabledDate: Function as PropType<(data: Date) => boolean>,
+    onSelect: Function as PropType<(date: Date) => void>
   },
-  emits: ['select', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('calendar', _props, {
       value: {
@@ -166,7 +167,7 @@ export default defineComponent({
         calendarValue.value = date
       }
 
-      emit('select', date)
+      props.onSelect?.(date)
       emit('update:value', date)
     }
 

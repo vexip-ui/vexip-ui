@@ -119,9 +119,13 @@ export default defineComponent({
     pointer: String as PropType<PointerType>,
     speed: Number,
     activeOffset: Number,
-    height: [Number, String]
+    height: [Number, String],
+    onChange: Function as PropType<(active: number) => void>,
+    onPrev: Function as PropType<(active: number) => void>,
+    onNext: Function as PropType<(active: number) => void>,
+    onSelect: Function as PropType<(active: number) => void>
   },
-  emits: ['change', 'prev', 'next', 'select', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('carousel', _props, {
       active: {
@@ -145,7 +149,7 @@ export default defineComponent({
       },
       autoplay: {
         default: false,
-        validator: (value: boolean | number) => typeof value === 'number' ? value > 500 : true
+        validator: (value: boolean | number) => (typeof value === 'number' ? value > 500 : true)
       },
       pointer: {
         default: 'none' as PointerType,
@@ -238,7 +242,7 @@ export default defineComponent({
     watch(currentActive, value => {
       const active = (value + props.activeOffset) % itemStates.value.size
 
-      emit('change', active)
+      props.onChange?.(active)
       emit('update:active', active)
     })
     watch(isHover, value => {
@@ -521,16 +525,16 @@ export default defineComponent({
 
     function handlePrevClick() {
       handlePrev(1)
-      emit('prev', (currentActive.value + props.activeOffset) % itemStates.value.size)
+      props.onPrev?.((currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleNextClick() {
       handleNext(1)
-      emit('next', (currentActive.value + props.activeOffset) % itemStates.value.size)
+      props.onNext?.((currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleSelect(label: number) {
-      emit('select', label)
+      props.onSelect?.(label)
     }
 
     const { timer } = useSetTimeout()

@@ -26,10 +26,11 @@ export default defineComponent({
   props: {
     separator: String,
     border: booleanProp,
-    options: Array as PropType<string[]>
+    options: Array as PropType<string[]>,
+    onSelect: Function as PropType<(label: string | number) => void>,
+    onSeparatorClick: Function as PropType<(label: string | number) => void>
   },
-  emits: ['select', 'separator-click'],
-  setup(_props, { slots, emit }) {
+  setup(_props, { slots }) {
     const props = useProps('breadcrumb', _props, {
       separator: '/',
       border: false,
@@ -89,11 +90,11 @@ export default defineComponent({
     }
 
     function handleSelect(label: string | number) {
-      emit('select', label)
+      props.onSelect?.(label)
     }
 
     function handleSeparatorClick(label: string | number) {
-      emit('separator-click', label)
+      props.onSeparatorClick?.(label)
     }
 
     return {
