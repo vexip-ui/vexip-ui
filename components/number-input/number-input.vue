@@ -116,7 +116,6 @@ export default defineComponent({
     disabled: booleanProp,
     inputClass: classProp,
     debounce: booleanProp,
-    disableValidate: booleanProp,
     clearable: booleanProp
   },
   emits: [
@@ -168,7 +167,6 @@ export default defineComponent({
       disabled: false,
       inputClass: null,
       debounce: false,
-      disableValidate: false,
       clearable: false
     })
 
@@ -388,7 +386,7 @@ export default defineComponent({
         setFieldValue(currentValue.value!)
         emit('change', currentValue.value)
         emit('update:value', currentValue.value)
-        !props.disableValidate && validateField()
+        validateField()
       } else {
         emit('input', currentValue.value)
       }

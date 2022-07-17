@@ -9,9 +9,6 @@
       <FormItem required label="Input" prop="input">
         <Input></Input>
       </FormItem>
-      <FormItem required label="Select" prop="select">
-        <AutoComplete :options="options"></AutoComplete>
-      </FormItem>
       <FormItem required label="Cascader" prop="cascader">
         <Cascader :options="treeOptions"></Cascader>
       </FormItem>

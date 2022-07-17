@@ -1,20 +1,19 @@
 ### Textarea 属性
 
-| 名称             | 类型                                             | 说明                                        | 默认值               | 始于 |
-| ---------------- | ------------------------------------------------ | ------------------------------------------- | -------------------- | ---- |
-| state            | `'default' \| 'success' \| 'error' \| 'warning'` | 输入框的状态                                | `'default'`          | -    |
-| value            | `string`                                         | 设置输入框的值                              | `''`                 | -    |
-| placeholder      | `string`                                         | 设置输入框的占位                            | `locale.placeholder` | -    |
-| rows             | `number`                                         | 设置输入框的默认行数                        | `2`                  | -    |
-| no-resize        | `boolean`                                         | 是否禁用缩放功能                            | `false`              | -    |
-| autofocus        | `boolean`                                        | 设置输入框的自动聚焦                        | `false`              | -    |
-| spellcheck       | `boolean`                                        | 设置输入框的拼写检查                        | `false`              | -    |
-| autocomplete     | `boolean`                                        | 设置输入框的自动完成                        | `false`              | -    |
-| readonly         | `boolean`                                        | 设置输入框的只读属性                        | `false`              | -    |
-| disabled         | `boolean`                                        | 设置是否禁用输入框                          | `false`              | -    |
-| debounce         | `boolean`                                        | 开启防抖，当快速输入时只触发一次 `input` 事 | `false`              | -    |
-| max-length       | `number`                                         | 设置输入内容的最大长度，值为 `0` 时不限     | `0`                  | -    |
-| disable-validate | `boolean`                                        | 是否禁用触发表单字段验                      | `false`              | -    |
+| 名称         | 类型                                             | 说明                                        | 默认值               | 始于 |
+| ------------ | ------------------------------------------------ | ------------------------------------------- | -------------------- | ---- |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'` | 输入框的状态                                | `'default'`          | -    |
+| value        | `string`                                         | 设置输入框的值                              | `''`                 | -    |
+| placeholder  | `string`                                         | 设置输入框的占位                            | `locale.placeholder` | -    |
+| rows         | `number`                                         | 设置输入框的默认行数                        | `2`                  | -    |
+| no-resize    | `boolean`                                        | 是否禁用缩放功能                            | `false`              | -    |
+| autofocus    | `boolean`                                        | 设置输入框的自动聚焦                        | `false`              | -    |
+| spellcheck   | `boolean`                                        | 设置输入框的拼写检查                        | `false`              | -    |
+| autocomplete | `boolean`                                        | 设置输入框的自动完成                        | `false`              | -    |
+| readonly     | `boolean`                                        | 设置输入框的只读属性                        | `false`              | -    |
+| disabled     | `boolean`                                        | 设置是否禁用输入框                          | `false`              | -    |
+| debounce     | `boolean`                                        | 开启防抖，当快速输入时只触发一次 `input` 事 | `false`              | -    |
+| max-length   | `number`                                         | 设置输入内容的最大长度，值为 `0` 时不限     | `0`                  | -    |
 
 ### Textarea 事件
 

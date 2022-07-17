@@ -51,7 +51,6 @@ export default defineComponent({
     after: String,
     // 是否显示切换 passwrod 为明文的按钮
     password: booleanProp,
-    disableValidate: booleanProp,
     clearable: booleanProp
   },
   emits: [
@@ -103,7 +102,6 @@ export default defineComponent({
       before: '',
       after: '',
       password: false,
-      disableValidate: false,
       clearable: false
     })
 
@@ -261,10 +259,7 @@ export default defineComponent({
         setFieldValue(currentValue.value)
         emit('change', currentValue.value)
         emit('update:value', currentValue.value)
-
-        if (!props.disableValidate) {
-          validateField()
-        }
+        validateField()
       } else {
         emit('input', currentValue.value)
       }

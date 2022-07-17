@@ -180,8 +180,7 @@ export default defineComponent({
     confirmText: String,
     cancelText: String,
     today: [Number, String, Date] as PropType<Dateable>,
-    isRange: booleanProp,
-    disableValidate: booleanProp
+    isRange: booleanProp
   },
   emits: [
     'input',
@@ -251,8 +250,7 @@ export default defineComponent({
         default: () => new Date(),
         validator: (value: Dateable) => !Number.isNaN(new Date(value))
       },
-      isRange: false,
-      disableValidate: false
+      isRange: false
     })
 
     const nh = useNameHelper('date-picker')
@@ -570,7 +568,7 @@ export default defineComponent({
         setFieldValue(emitValue)
         emit('change', emitValue)
         emit('update:value', emitValue)
-        !props.disableValidate && validateField()
+        validateField()
       }
     }
 

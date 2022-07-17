@@ -41,8 +41,7 @@ export default defineComponent({
     disabled: booleanProp,
     button: booleanProp,
     border: booleanProp,
-    options: Array as PropType<(string | number)[]>,
-    disableValidate: booleanProp
+    options: Array as PropType<(string | number)[]>
   },
   emits: ['change', 'update:value'],
   setup(_props, { emit }) {
@@ -62,8 +61,7 @@ export default defineComponent({
       options: {
         default: () => [],
         static: true
-      },
-      disableValidate: false
+      }
     })
 
     const nh = useNameHelper('radio-group')
@@ -105,7 +103,7 @@ export default defineComponent({
       setFieldValue(value)
       emit('change', value)
       emit('update:value', value)
-      !props.disableValidate && validateField()
+      validateField()
     })
 
     function updateValue(value: string | number) {

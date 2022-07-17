@@ -107,8 +107,7 @@ export default defineComponent({
     arrow: booleanProp,
     pointer: booleanProp,
     options: Array as PropType<RawOption[]>,
-    insertEmpty: booleanStringProp,
-    disableValidate: booleanProp
+    insertEmpty: booleanStringProp
   },
   emits: ['change', 'prev', 'next', 'update:value'],
   setup(_props, { emit }) {
@@ -131,8 +130,7 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      insertEmpty: false,
-      disableValidate: false
+      insertEmpty: false
     })
 
     const nh = useNameHelper('wheel')
@@ -304,7 +302,7 @@ export default defineComponent({
       setFieldValue(value)
       emit('change', value)
       emit('update:value', value)
-      !props.disableValidate && validateField()
+      validateField()
     })
 
     function queryEnabledActive(active: number, step: number) {

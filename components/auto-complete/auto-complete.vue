@@ -119,7 +119,6 @@ export default defineComponent({
     transitionName: String,
     dropDisabled: booleanProp,
     placement: String as PropType<Placement>,
-    disableValidate: booleanProp,
     clearable: booleanProp,
     ignoreCase: booleanProp,
     autofocus: booleanProp,
@@ -157,7 +156,6 @@ export default defineComponent({
         default: 'bottom',
         validator: (value: Placement) => placementWhileList.includes(value)
       },
-      disableValidate: false,
       clearable: false,
       ignoreCase: false,
       autofocus: false,
@@ -343,10 +341,7 @@ export default defineComponent({
       setFieldValue(currentValue.value)
       emit('change', currentValue.value, option?.data || null)
       emit('update:value', currentValue.value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      validateField()
 
       visible.value = false
       control.value?.blur()

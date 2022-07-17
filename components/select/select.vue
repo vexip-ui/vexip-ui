@@ -197,7 +197,6 @@ export default defineComponent({
     listClass: classProp,
     placement: String as PropType<Placement>,
     transfer: booleanStringProp,
-    disableValidate: booleanProp,
     optionCheck: booleanProp,
     emptyText: String,
     staticSuffix: booleanProp,
@@ -251,7 +250,6 @@ export default defineComponent({
         validator: (value: Placement) => placementWhileList.includes(value)
       },
       transfer: false,
-      disableValidate: false,
       optionCheck: false,
       emptyText: null,
       staticSuffix: false,
@@ -489,7 +487,7 @@ export default defineComponent({
         setFieldValue(emittedValue)
         emit('change', emittedValue, Array.from(currentLabels.value))
         emit('update:value', emittedValue)
-        !props.disableValidate && validateField()
+        validateField()
       } else {
         currentLabels.value.length = 0
 
@@ -508,7 +506,7 @@ export default defineComponent({
           setFieldValue(emittedValue)
           emit('change', emittedValue, option.data)
           emit('update:value', emittedValue)
-          !props.disableValidate && validateField()
+          validateField()
         }
       }
     }

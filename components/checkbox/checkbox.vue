@@ -51,8 +51,7 @@ export default defineComponent({
     disabled: booleanProp,
     border: booleanProp,
     control: booleanProp,
-    partial: booleanProp,
-    disableValidate: booleanProp
+    partial: booleanProp
   },
   emits: ['change', 'update:checked'],
   setup(_props, { slots, emit }) {
@@ -74,8 +73,7 @@ export default defineComponent({
       disabled: false,
       border: false,
       control: false,
-      partial: false,
-      disableValidate: false
+      partial: false
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -190,7 +188,7 @@ export default defineComponent({
           groupState.setItemChecked(currentValue.value, checked)
       }
 
-      if (!groupState && !props.disableValidate) {
+      if (!groupState) {
         validateField()
       }
     }

@@ -64,8 +64,7 @@ export default defineComponent({
     vertical: booleanProp,
     hideTip: booleanProp,
     tipTransfer: booleanStringProp,
-    disabled: booleanProp,
-    disableValidate: booleanProp
+    disabled: booleanProp
   },
   emits: ['change', 'input', 'change', 'update:value'],
   setup(_props, { emit }) {
@@ -86,8 +85,7 @@ export default defineComponent({
       vertical: false,
       hideTip: false,
       tipTransfer: null,
-      disabled: false,
-      disableValidate: false
+      disabled: false
     })
 
     const nh = useNameHelper('slider')
@@ -164,7 +162,7 @@ export default defineComponent({
       setFieldValue(truthValue.value)
       emit('change', truthValue.value)
       emit('update:value', truthValue.value)
-      !props.disableValidate && validateField()
+      validateField()
     }
 
     let trackRect: DOMRect | null = null

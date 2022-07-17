@@ -210,8 +210,7 @@ export default defineComponent({
     prefixColor: String,
     suffix: Object,
     suffixColor: String,
-    exchange: booleanProp,
-    disableValidate: booleanProp
+    exchange: booleanProp
   },
   emits: [
     'change-col',
@@ -275,8 +274,7 @@ export default defineComponent({
       prefixColor: '',
       suffix: null,
       suffixColor: '',
-      exchange: false,
-      disableValidate: false
+      exchange: false
     })
 
     const nh = useNameHelper('time-picker')
@@ -480,7 +478,7 @@ export default defineComponent({
         setFieldValue(currentValue.value)
         emit('change', currentValue.value)
         emit('update:value', currentValue.value)
-        !props.disableValidate && validateField()
+        validateField()
       }
     }
 

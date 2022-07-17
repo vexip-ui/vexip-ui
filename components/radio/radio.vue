@@ -38,8 +38,7 @@ export default defineComponent({
     label: [String, Number],
     labelClass: classProp,
     disabled: booleanProp,
-    border: booleanProp,
-    disableValidate: booleanProp
+    border: booleanProp
   },
   emits: ['change', 'update:value'],
   setup(_props, { emit }) {
@@ -57,8 +56,7 @@ export default defineComponent({
       },
       labelClass: null,
       disabled: false,
-      border: false,
-      disableValidate: false
+      border: false
     })
 
     const groupState = inject(GROUP_STATE, null)

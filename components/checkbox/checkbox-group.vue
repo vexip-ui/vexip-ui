@@ -51,7 +51,6 @@ export default defineComponent({
     vertical: booleanProp,
     disabled: booleanProp,
     border: booleanProp,
-    disableValidate: booleanProp,
     options: Array as PropType<RawOption[]>
   },
   emits: ['change', 'update:values'],
@@ -69,7 +68,6 @@ export default defineComponent({
       vertical: false,
       disabled: false,
       border: false,
-      disableValidate: false,
       options: {
         default: () => [],
         static: true
@@ -188,7 +186,7 @@ export default defineComponent({
       setFieldValue(value)
       emit('change', value)
       emit('update:values', value)
-      !props.disableValidate && validateField()
+      validateField()
     }
 
     function replaceValue(prevValue: string | number, newValue: string | number) {

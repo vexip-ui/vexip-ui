@@ -53,8 +53,7 @@ export default defineComponent({
     readonly: booleanProp,
     disabled: booleanProp,
     debounce: booleanProp,
-    maxLength: Number,
-    disableValidate: booleanProp
+    maxLength: Number
   },
   emits: [
     'focus',
@@ -85,8 +84,7 @@ export default defineComponent({
       readonly: false,
       disabled: false,
       debounce: false,
-      maxLength: 0,
-      disableValidate: false
+      maxLength: 0
     })
 
     const nh = useNameHelper('textarea')
@@ -148,7 +146,7 @@ export default defineComponent({
         setFieldValue(currentValue.value)
         emit('change', currentValue.value)
         emit('update:value', currentValue.value)
-        !props.disableValidate && validateField()
+        validateField()
       } else {
         emit('input', currentValue.value)
       }

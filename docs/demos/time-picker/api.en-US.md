@@ -1,54 +1,53 @@
 ### TimePicker Props
 
-| Name             | Type              | Description                                                                               | Default         | Since |
-| ---------------- | ----------------- | ---------------------------------------------------------------------------------- | -------------- | --- |
-| value | `string \| string[]` | The value of the time picker, you can use `v-model:value` two-way binding | `'00:00:00'` | - |
-| visible | `boolean` | Set the initial open state of the time pane, you can use `v-model:visible` two-way binding | `false` | - |
-| placement | `Placement` | The position where the time pane appears, the optional values ​​are the same as Popper.js | `'bottom-start'` | - |
-| transfer | `boolean \| string` | Set the rendering position of the time pane. When set to `true`, it will render to `<body>` by default | `false` | - |
-| format | `string` | Controls the display and hiding of time selection columns based on whether they have Hms | `'HH:mm:ss'` | - |
-| separator | `string` | The time unit separator | `':'` | - |
-| filler | `string` | Filler when time is not selected, the length is fixed to 1 | `'-'` | - |
-| no-filler | `boolean` | Whether to disable filler, if disabled, the current value will be displayed in the control after initialization | `false` | - |
-| clearable | `boolean` | whether to allow clear values ​​| `false` | - |
-| no-action | `boolean` | whether to disable the bottom action bar of the time pane | `false` | - |
-| no-arrow | `boolean` | Whether to disable the wheel selector arrow indicator | `false` | - |
-| candidate | `number` | Set the number of candidates up and down the wheel selector, the optional range is 0 ~ 3 | `3` | - |
-| labels | `Partial<Record<'hour' \| 'minute' \| 'second', string>>` | The label to set after each time unit | `{}` | - |
-| shortcuts | `{ name: string, value: string \| (() => string) }[]` | Set the candidate list for date shortcut selection, the element is an object of `{ name, value }`, where value can be function | `[]` | - |
-| steps | `number[]` | Set the scrolling span of each wheel of the time picker respectively | `[1, 1, 1]` | - |
-| ctrl-steps | `number[]` | Set the scroll span of each wheel of the time picker when Ctrl is held down | `[5, 5, 5]` | - |
-| prefix | `Record<string, any>` | The prefix icon, invalid when using prefix slot | `null` | - |
-| prefix-color | `string` | The color of the prefix content, affects the prefix slot | `''` | - |
-| suffix | `Record<string, any>` | The suffix icon, invalid when using suffix slot | `null` | - |
-| suffix-color | `string` | The color of the suffix content, which affects the suffix slot | `''` | - |
-| disabled | `boolean` | Set whether to disable the date picker | `false` | - |
-| transition-name | `string` | Set the transition to show and hide the time panel | `'vxp-drop'` | - |
-| ok-text | `string` | The text content of the time panel confirm button | `locale.confirm` | - |
-| cancel-text | `string` | The text content of the cancel button in the time panel | `locale.cancel` | - |
-| is-range | `boolean` | Set whether to enable range selection mode | `false` | - |
-| disable-validate | `boolean` | Set whether to disable triggering form field validation when used as a form control | `false` | - |
+| Name            | Type                                                      | Description                                                                                                                    | Default          | Since |
+| --------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------- | ----- |
+| value           | `string \| string[]`                                      | The value of the time picker, you can use `v-model:value` two-way binding                                                      | `'00:00:00'`     | -     |
+| visible         | `boolean`                                                 | Set the initial open state of the time pane, you can use `v-model:visible` two-way binding                                     | `false`          | -     |
+| placement       | `Placement`                                               | The position where the time pane appears, the optional values ​​are the same as Popper.js                                      | `'bottom-start'` | -     |
+| transfer        | `boolean \| string`                                       | Set the rendering position of the time pane. When set to `true`, it will render to `<body>` by default                         | `false`          | -     |
+| format          | `string`                                                  | Controls the display and hiding of time selection columns based on whether they have Hms                                       | `'HH:mm:ss'`     | -     |
+| separator       | `string`                                                  | The time unit separator                                                                                                        | `':'`            | -     |
+| filler          | `string`                                                  | Filler when time is not selected, the length is fixed to 1                                                                     | `'-'`            | -     |
+| no-filler       | `boolean`                                                 | Whether to disable filler, if disabled, the current value will be displayed in the control after initialization                | `false`          | -     |
+| clearable       | `boolean`                                                 | whether to allow clear values ​​                                                                                               | `false`          | -     |
+| no-action       | `boolean`                                                 | whether to disable the bottom action bar of the time pane                                                                      | `false`          | -     |
+| no-arrow        | `boolean`                                                 | Whether to disable the wheel selector arrow indicator                                                                          | `false`          | -     |
+| candidate       | `number`                                                  | Set the number of candidates up and down the wheel selector, the optional range is 0 ~ 3                                       | `3`              | -     |
+| labels          | `Partial<Record<'hour' \| 'minute' \| 'second', string>>` | The label to set after each time unit                                                                                          | `{}`             | -     |
+| shortcuts       | `{ name: string, value: string \| (() => string) }[]`     | Set the candidate list for date shortcut selection, the element is an object of `{ name, value }`, where value can be function | `[]`             | -     |
+| steps           | `number[]`                                                | Set the scrolling span of each wheel of the time picker respectively                                                           | `[1, 1, 1]`      | -     |
+| ctrl-steps      | `number[]`                                                | Set the scroll span of each wheel of the time picker when Ctrl is held down                                                    | `[5, 5, 5]`      | -     |
+| prefix          | `Record<string, any>`                                     | The prefix icon, invalid when using prefix slot                                                                                | `null`           | -     |
+| prefix-color    | `string`                                                  | The color of the prefix content, affects the prefix slot                                                                       | `''`             | -     |
+| suffix          | `Record<string, any>`                                     | The suffix icon, invalid when using suffix slot                                                                                | `null`           | -     |
+| suffix-color    | `string`                                                  | The color of the suffix content, which affects the suffix slot                                                                 | `''`             | -     |
+| disabled        | `boolean`                                                 | Set whether to disable the date picker                                                                                         | `false`          | -     |
+| transition-name | `string`                                                  | Set the transition to show and hide the time panel                                                                             | `'vxp-drop'`     | -     |
+| ok-text         | `string`                                                  | The text content of the time panel confirm button                                                                              | `locale.confirm` | -     |
+| cancel-text     | `string`                                                  | The text content of the cancel button in the time panel                                                                        | `locale.cancel`  | -     |
+| is-range        | `boolean`                                                 | Set whether to enable range selection mode                                                                                     | `false`          | -     |
 
 ### TimePicker Events
 
-| Name          | Description                                                                                               | Parameters                          | Since |
-| ------------- | -------------------------------------------------------------------------------------------------- | ----------------------------- | --- |
-| toggle | Emitter when the time panel display state changes, returns the current state | `(visible: boolean)` | - |
-| foucs | Emitter when the control is focused, no return value | - | - |
-| blur | Emitter when the control loses focus, no return value | - | - |
-| change | Emitter when the selected time changes, depending on whether the range mode is enabled for the time picker type, it will return a standard time or standard time range | `(time: string \| string[])` | - |
-| change-col | Emitter when the selected time type changes, returns the name of the current type | `(type: 'hour' \| 'minute' \| 'second')` | - |
-| input | Emitter when the value of any type of time input by the key changes, returns the name of the current type and the input value | `(type: 'hour' \| 'minute' \| 'second', value: number)` | - |
-| enter | Emitter when the enter key is used to confirm or the confirm button of the date selection window is clicked, no return value | - | - |
-| cancel | Emitter when the Esc key is closed or the cancel button of the date selection window is clicked, no return value | - | - |
-| shortcut | Emitter when a date is selected using the shortcut function, returns the name of the shortcut selection and the value corresponding to the column | `(name: string, value: string)` | - |
-| plus | Emitter when the time value is incremented using the up arrow key, returns the name of the type name and the corresponding value | `(type: 'hour' \| 'minute' \| 'second', value: number)` | - |
-| minus | Emitter when the time value is decremented using the down arrow key, returns the name of the type name and the value of the column | `(type: 'hour' \| 'minute' \| 'second', value: number)` | - |
-| clear | Emitter when the value is cleared by the clear button, no return value | - | - |
+| Name       | Description                                                                                                                                                            | Parameters                                              | Since |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ----- |
+| toggle     | Emitter when the time panel display state changes, returns the current state                                                                                           | `(visible: boolean)`                                    | -     |
+| foucs      | Emitter when the control is focused, no return value                                                                                                                   | -                                                       | -     |
+| blur       | Emitter when the control loses focus, no return value                                                                                                                  | -                                                       | -     |
+| change     | Emitter when the selected time changes, depending on whether the range mode is enabled for the time picker type, it will return a standard time or standard time range | `(time: string \| string[])`                            | -     |
+| change-col | Emitter when the selected time type changes, returns the name of the current type                                                                                      | `(type: 'hour' \| 'minute' \| 'second')`                | -     |
+| input      | Emitter when the value of any type of time input by the key changes, returns the name of the current type and the input value                                          | `(type: 'hour' \| 'minute' \| 'second', value: number)` | -     |
+| enter      | Emitter when the enter key is used to confirm or the confirm button of the date selection window is clicked, no return value                                           | -                                                       | -     |
+| cancel     | Emitter when the Esc key is closed or the cancel button of the date selection window is clicked, no return value                                                       | -                                                       | -     |
+| shortcut   | Emitter when a date is selected using the shortcut function, returns the name of the shortcut selection and the value corresponding to the column                      | `(name: string, value: string)`                         | -     |
+| plus       | Emitter when the time value is incremented using the up arrow key, returns the name of the type name and the corresponding value                                       | `(type: 'hour' \| 'minute' \| 'second', value: number)` | -     |
+| minus      | Emitter when the time value is decremented using the down arrow key, returns the name of the type name and the value of the column                                     | `(type: 'hour' \| 'minute' \| 'second', value: number)` | -     |
+| clear      | Emitter when the value is cleared by the clear button, no return value                                                                                                 | -                                                       | -     |
 
 ### TimePicker Slots
 
-| Name   | Description                           | Parameters | Since |
-| ------ | ------------------------------ | --- | --- |
-| prefix | Slot for prefix content, usually is a icon | - | - |
-| suffix | Slot for suffix content, usually is a icon | - | - |
+| Name   | Description                                | Parameters | Since |
+| ------ | ------------------------------------------ | ---------- | ----- |
+| prefix | Slot for prefix content, usually is a icon | -          | -     |
+| suffix | Slot for suffix content, usually is a icon | -          | -     |

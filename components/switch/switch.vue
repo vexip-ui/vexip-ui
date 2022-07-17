@@ -79,8 +79,7 @@ export default defineComponent({
     closeIcon: Object,
     openText: String,
     closeText: String,
-    onBeforeChange: Function as PropType<(checked: boolean) => unknown>,
-    disableValidate: booleanProp
+    onBeforeChange: Function as PropType<(checked: boolean) => unknown>
   },
   emits: ['change', 'update:value'],
   setup(_props, { emit }) {
@@ -105,8 +104,7 @@ export default defineComponent({
       onBeforeChange: {
         default: null,
         isFunc: true
-      },
-      disableValidate: false
+      }
     })
 
     const nh = useNameHelper('switch')
@@ -149,7 +147,7 @@ export default defineComponent({
       setFieldValue(value)
       emit('change', value)
       emit('update:value', value)
-      !props.disableValidate && validateField()
+      validateField()
     })
 
     async function handleChange(checked = !currentValue.value) {

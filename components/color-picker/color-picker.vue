@@ -194,7 +194,6 @@ export default defineComponent({
     transfer: booleanStringProp,
     outsideClose: booleanProp,
     clearable: booleanProp,
-    disableValidate: booleanProp,
     cancelText: String,
     confirmText: String
   },
@@ -239,7 +238,6 @@ export default defineComponent({
       transfer: false,
       outsideClose: true,
       clearable: false,
-      disableValidate: false,
       cancelText: null,
       confirmText: null
     })
@@ -422,10 +420,7 @@ export default defineComponent({
       setFieldValue(formattedColor)
       emit('change', formattedColor)
       emit('update:value', formattedColor)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      validateField()
     }
 
     function handlePaletteChange({ s, v }: HSVColor) {

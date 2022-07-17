@@ -30,7 +30,6 @@
             </Tag>
             <Tooltip
               v-else
-              ref="tagCounter"
               :class="nh.be('tooltip')"
               :visible="restTipShow"
               trigger="custom"
@@ -39,7 +38,11 @@
               @click.stop="toggleShowRestTip"
             >
               <template #trigger>
-                <Tag :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                <Tag
+                  ref="tagCounter"
+                  :class="[nh.be('tag'), nh.be('counter')]"
+                  :type="props.tagType"
+                >
                   {{ `+${restTagCount}` }}
                 </Tag>
               </template>
@@ -256,7 +259,6 @@ export default defineComponent({
     noCascaded: booleanProp,
     multiple: booleanProp,
     disabled: booleanProp,
-    disableValidate: booleanProp,
     clearable: booleanProp,
     placement: String as PropType<Placement>,
     transfer: booleanStringProp,
@@ -313,7 +315,6 @@ export default defineComponent({
       noCascaded: false,
       multiple: false,
       disabled: false,
-      disableValidate: false,
       clearable: false,
       placement: {
         default: 'bottom-start' as Placement,
@@ -1098,8 +1099,7 @@ export default defineComponent({
         setFieldValue(value)
         emit('change', value, data)
         emit('update:value', value)
-
-        !props.disableValidate && validateField()
+        validateField()
       })
     }
 
