@@ -22,7 +22,7 @@
       />
       <slot :is-drag-over="(props.allowDrag || props.disabledClick) && isDragOver">
         <template v-if="!props.allowDrag && !props.disabledClick">
-          <Button :icon="Upload">
+          <Button :icon="Upload" :type="props.state">
             {{ props.buttonLabel ?? locale.upload }}
           </Button>
           <slot name="tip">
@@ -65,10 +65,18 @@ import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import UploadList from './upload-list.vue'
-import { upload } from './request'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useFieldStore } from '@/components/form'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  stateProp,
+  booleanProp,
+  createStateProp
+} from '@vexip-ui/config'
 import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload } from '@vexip-ui/icons'
+import { upload } from './request'
 import { UploadStatusType, uploadListTypes } from './symbol'
 
 import type { PropType, Ref } from 'vue'
@@ -91,7 +99,9 @@ export default defineComponent({
     CloudArrowUp
   },
   props: {
+    state: stateProp,
     url: String,
+    fileList: Array as PropType<FileState[]>,
     multiple: booleanProp,
     tip: String,
     accept: [String, Array] as PropType<string | string[]>,
@@ -126,12 +136,20 @@ export default defineComponent({
     'progress',
     'success',
     'error',
-    'preview'
+    'preview',
+    'update:file-list'
   ],
   setup(_props, { emit }) {
+    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<FileState[]>()
+
     const props = useProps('upload', _props, {
+      state: createStateProp(state),
       url: {
         default: '',
+        static: true
+      },
+      fileList: {
+        default: () => getFieldValue([]),
         static: true
       },
       multiple: false,
@@ -190,6 +208,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(`type-${props.listType}`),
         {
+          [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('multiple')]: props.multiple,
           [nh.bm('drag')]: props.allowDrag,
           [nh.bm('to-add')]: props.selectToAdd,
@@ -272,14 +291,19 @@ export default defineComponent({
         fileStates.value = files
       }
 
-      const sourceFiles = getSourceFiles()
-
       syncInputFiles()
-      emit('change', sourceFiles)
+      emitChangeEvent()
 
       if (!props.manual) {
         execute()
       }
+    }
+
+    function emitChangeEvent() {
+      setFieldValue(fileStates.value)
+      emit('change', fileStates.value, getSourceFiles())
+      emit('update:file-list', fileStates.value)
+      validateField()
     }
 
     function getFileStateBySource(file: SourceFile) {
@@ -428,13 +452,14 @@ export default defineComponent({
 
       syncInputFiles()
       emit('delete', file.source)
+      emitChangeEvent()
     }
 
     function syncInputFiles() {
-      const files = fileStates.value.filter(item => item.status !== UploadStatusType.DELETE)
       const dataTransfer = new DataTransfer()
+      fileStates.value = fileStates.value.filter(item => item.status !== UploadStatusType.DELETE)
 
-      files.forEach(item => {
+      fileStates.value.forEach(item => {
         dataTransfer.items.add(item.source)
       })
 

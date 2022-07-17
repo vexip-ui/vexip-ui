@@ -45,6 +45,9 @@
       <FormItem required label="Wheel" prop="wheel">
         <Wheel insert-empty :options="options"></Wheel>
       </FormItem>
+      <FormItem required label="Upload" prop="upload">
+        <Upload allow-drag></Upload>
+      </FormItem>
       <FormItem action>
         <Button type="primary" @click="handleSubmit()">
           提交
@@ -75,7 +78,8 @@ const formModel = reactive({
   slider: 0,
   switch: false,
   textarea: '',
-  wheel: ''
+  wheel: '',
+  upload: []
 })
 
 const form = ref<InstanceType<typeof Form> | null>(null)

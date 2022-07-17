@@ -3,8 +3,8 @@
 | Name         | Type                                                     | Description                                                                           | Default     | Since |
 | ------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------- | ----- |
 | type         | `'text' \| 'password' \| 'date' \| 'datetime' \| 'time'` | The type of the input box, where the time-related type is the native type             | `'text'`    | -     |
-| size         | `'small' \| 'default' \| 'large'`                        | size of input box                                                                     | `'default'` | -     |
-| state        | `'default' \| 'success' \| 'error' \| 'warning'`         | state of the input box                                                                | `'default'` | -     |
+| size         | `'small' \| 'default' \| 'large'`                        | the size of input box                                                                 | `'default'` | -     |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'`         | the state of input                                                                    | `'default'` | -     |
 | prefix       | `Record<string, any>`                                    | prefix icon, invalid when using prefix slot                                           | `null`      | -     |
 | prefix-color | `string`                                                 | The color of the prefix content, affects the prefix slot                              | `''`        | -     |
 | suffix       | `Record<string, any>`                                    | suffix icon, invalid when using suffix slot                                           | `null`      | -     |
