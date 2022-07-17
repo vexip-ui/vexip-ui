@@ -46,12 +46,7 @@
         <Textarea></Textarea>
       </FormItem>
       <FormItem required label="Wheel" prop="wheel">
-        <Wheel>
-          <WheelItem value="">
-            -
-          </WheelItem>
-          <WheelItem v-for="option in options" :key="option" :value="option"></WheelItem>
-        </Wheel>
+        <Wheel insert-empty :options="options"></Wheel>
       </FormItem>
       <FormItem action>
         <Button type="primary" @click="handleSubmit()">
@@ -63,6 +58,7 @@
       </FormItem>
     </Form>
   </ConfigProvider>
+  {{ formModel }}
 </template>
 
 <script setup lang="ts">

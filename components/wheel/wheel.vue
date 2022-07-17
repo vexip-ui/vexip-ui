@@ -26,7 +26,18 @@
         @scroll-end="handleScrollEnd"
       >
         <ul ref="list" :class="nh.be('list')" :style="listStyle">
-          <slot v-if="isInit"></slot>
+          <template v-if="isInit">
+            <WheelItem
+              v-for="(option, index) in normalizedOptions"
+              :key="index"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              <slot :option="option" :index="index">
+                {{ option.label || String(option.value) }}
+              </slot>
+            </WheelItem>
+          </template>
         </ul>
       </Scroll>
       <template v-if="props.candidate">
@@ -51,11 +62,19 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, provide, nextTick } from 'vue'
+import WheelItem from './wheel-item.vue'
 import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
 import { useDisplay } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, stateProp, booleanProp, createStateProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  stateProp,
+  booleanProp,
+  booleanStringProp,
+  createStateProp
+} from '@vexip-ui/config'
 import { USE_TOUCH, debounce, debounceMinor } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
 import { WHEEL_STATE } from './symbol'
@@ -63,9 +82,19 @@ import { WHEEL_STATE } from './symbol'
 import type { PropType } from 'vue'
 import type { ItemState } from './symbol'
 
+type RawOption =
+  | string
+  | number
+  | {
+      value: string | number,
+      label?: string,
+      disabled?: boolean
+    }
+
 export default defineComponent({
   name: 'Wheel',
   components: {
+    WheelItem,
     Icon,
     Scroll
   },
@@ -77,6 +106,8 @@ export default defineComponent({
     candidate: Number as PropType<0 | 1 | 2 | 3>,
     arrow: booleanProp,
     pointer: booleanProp,
+    options: Array as PropType<RawOption[]>,
+    insertEmpty: booleanStringProp,
     disableValidate: booleanProp
   },
   emits: ['change', 'prev', 'next', 'update:value'],
@@ -96,6 +127,11 @@ export default defineComponent({
       },
       arrow: false,
       pointer: USE_TOUCH,
+      options: {
+        default: () => [],
+        static: true
+      },
+      insertEmpty: false,
       disableValidate: false
     })
 
@@ -113,6 +149,22 @@ export default defineComponent({
     const wrapper = useDisplay(displayInit)
     const scroll = ref<InstanceType<typeof Scroll> | null>(null)
 
+    const normalizedOptions = computed(() => {
+      const options = props.options.map(option => {
+        if (typeof option === 'object') return option
+
+        return { value: option }
+      })
+
+      if (props.insertEmpty) {
+        options.unshift({
+          value: '',
+          label: typeof props.insertEmpty === 'string' ? props.insertEmpty : '-'
+        })
+      }
+
+      return options
+    })
     const itemList = computed(() => {
       return Array.from(items.value)
     })
@@ -364,6 +416,7 @@ export default defineComponent({
       targetWidth,
       targetHeight,
 
+      normalizedOptions,
       itemList,
       className,
       scrollStyle,

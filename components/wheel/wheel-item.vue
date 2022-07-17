@@ -1,5 +1,5 @@
 <template>
-  <li ref="wrapper" :class="nh.be('item')" :style="style">
+  <li ref="wrapper" :class="[nh.be('item'), disabled && nh.bem('item', 'disabled')]" :style="style">
     <slot>
       {{ value }}
     </slot>

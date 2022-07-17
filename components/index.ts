@@ -96,7 +96,6 @@ import { UploadList } from './upload-list'
 import { Viewer } from './viewer'
 import { VirtualList } from './virtual-list'
 import { Wheel } from './wheel'
-import { WheelItem } from './wheel-item'
 
 import { buildInstall } from './create'
 
@@ -198,7 +197,6 @@ const components = [
   Viewer,
   VirtualList,
   Wheel,
-  WheelItem,
   // plugins
   Confirm,
   Contextmenu,
@@ -308,6 +306,5 @@ export {
   UploadList,
   Viewer,
   VirtualList,
-  Wheel,
-  WheelItem
+  Wheel
 }

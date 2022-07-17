@@ -1,9 +1,5 @@
 <template>
-  <Wheel v-model:value="value" arrow>
-    <WheelItem v-for="item in items" :key="item" :value="item">
-      {{ item }}
-    </WheelItem>
-  </Wheel>
+  <Wheel v-model:value="value" :options="options"></Wheel>
   <p>
     Wheel Value:
     <br />
@@ -11,15 +7,9 @@
   </p>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const value = ref(1)
-    const items = Array.from({ length: 20 }, (_, index) => index + 1)
-
-    return { value, items }
-  }
-})
+const value = ref('选项1')
+const options = Array.from({ length: 20 }, (_, index) => `选项${index + 1}`)
 </script>
