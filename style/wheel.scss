@@ -9,6 +9,7 @@ $wheel: map.merge(
   (
     item-v-padding: 3px,
     item-h-padding: 8px,
+    item-color-disabled: get-css-var('content-color-disabled'),
     arrow-color: get-css-var('content-color-secondary'),
     arrow-color-hover: get-css-var('content-color-base'),
     arrow-color-disabled: get-css-var('content-color-disabled'),
@@ -25,6 +26,10 @@ $wheel: map.merge(
 .#{$namespace}-wheel {
   &-vars {
     @include define-preset-values('wheel', $wheel);
+  }
+
+  @mixin define-wheel-style($style-map) {
+    @include define-preset-style('wheel', $style-map);
   }
 
   @include basis;
@@ -57,10 +62,15 @@ $wheel: map.merge(
   }
 
   &__item {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: get-css-var('wheel-item-v-padding') get-css-var('wheel-item-h-padding');
-    text-align: center;
     list-style: none;
+
+    &--disabled {
+      color: get-css-var('wheel-item-color-disabled');
+    }
   }
 
   &__arrow {
@@ -98,6 +108,7 @@ $wheel: map.merge(
     background-color: get-css-var('wheel-mask-bg-color');
     border: 0 get-css-var('wheel-mask-b-style') get-css-var('wheel-mask-b-color');
     opacity: get-css-var('wheel-mask-opacity');
+    transition: get-css-var('transition-background'), get-css-var('transition-border');
   }
 
   $border-width: get-css-var('wheel-mask-b-width');
@@ -129,6 +140,22 @@ $wheel: map.merge(
     &--bottom {
       right: 0;
       border-left-width: $border-width;
+    }
+  }
+
+  $states: success, error, warning;
+
+  @each $state in $states {
+    &--#{$state} {
+      @include define-wheel-style(
+        (
+          mask-b-color: 'color' $state 'base',
+          mask-bg-color: 'color' $state 'opacity-8',
+          arrow-color: 'color' $state 'opacity-3',
+          arrow-color-hover: 'color' $state 'base',
+          arrow-color-disabled: 'color' $state 'opacity-6'
+        )
+      );
     }
   }
 }

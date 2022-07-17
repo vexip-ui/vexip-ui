@@ -6,12 +6,13 @@
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
+      :options="hourRange"
       @mouseenter="handleToggleColumn('hour')"
       @touchstart="handleToggleColumn('hour')"
     >
-      <WheelItem v-for="item in hourRange" :key="item" :value="item">
-        {{ doubleDigits(item) }}
-      </WheelItem>
+      <template #default="{ option }">
+        {{ doubleDigits(option.value) }}
+      </template>
     </Wheel>
     <Wheel
       ref="minuteWheel"
@@ -19,12 +20,13 @@
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
+      :options="secondRange"
       @mouseenter="handleToggleColumn('minute')"
       @touchstart="handleToggleColumn('minute')"
     >
-      <WheelItem v-for="item in minuteRange" :key="item" :value="item">
-        {{ doubleDigits(item) }}
-      </WheelItem>
+      <template #default="{ option }">
+        {{ doubleDigits(option.value) }}
+      </template>
     </Wheel>
     <Wheel
       ref="secondWheel"
@@ -32,12 +34,13 @@
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
+      :options="secondRange"
       @mouseenter="handleToggleColumn('second')"
       @touchstart="handleToggleColumn('second')"
     >
-      <WheelItem v-for="item in secondRange" :key="item" :value="item">
-        {{ doubleDigits(item) }}
-      </WheelItem>
+      <template #default="{ option }">
+        {{ doubleDigits(option.value) }}
+      </template>
     </Wheel>
   </div>
 </template>
@@ -45,7 +48,6 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { Wheel } from '@/components/wheel'
-import { WheelItem } from '@/components/wheel-item'
 import { useNameHelper } from '@vexip-ui/config'
 import { USE_TOUCH, range, doubleDigits } from '@vexip-ui/utils'
 
@@ -55,8 +57,7 @@ import type { TimeType } from './symbol'
 export default defineComponent({
   name: 'TimeWheel',
   components: {
-    Wheel,
-    WheelItem
+    Wheel
   },
   props: {
     noArrow: {

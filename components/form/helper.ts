@@ -1,4 +1,9 @@
-import { isNull } from '@vexip-ui/utils'
+import { computed, inject, provide, getCurrentInstance, onBeforeUnmount } from 'vue'
+import { isNull, noop } from '@vexip-ui/utils'
+import { FIELD_OPTIONS } from './symbol'
+
+import type { ComponentState } from '@vexip-ui/config'
+import type { FieldOptions } from './symbol'
 
 /**
  * 根据路径读取对象中的值 (实现 ?. 的逻辑)
@@ -102,4 +107,59 @@ export function setValueByPath(
   }
 
   return false
+}
+
+const defaultProp = computed(() => '')
+const defaultState = computed(() => 'default' as ComponentState)
+
+function getEmptyActions<V = unknown>() {
+  return {
+    isField: false,
+    prop: defaultProp,
+    state: defaultState,
+    validateField: noop as FieldOptions['validate'],
+    clearField: noop as FieldOptions['clearError'],
+    resetField: noop as FieldOptions['reset'],
+    getFieldValue: (v => v) as (defaultValue?: V) => V,
+    setFieldValue: noop as (value: V, strict?: boolean) => void
+  }
+}
+
+export function useFieldStore<V = unknown>() {
+  const instance = getCurrentInstance()
+
+  if (!instance) return getEmptyActions<V>()
+
+  const fieldActions = inject(FIELD_OPTIONS, null)
+
+  if (!fieldActions) {
+    return getEmptyActions<V>()
+  }
+
+  // Block the provided if there are dependencies between control components.
+  // e.g. AutoComplete -> Select, ColorPicker -> Input
+  provide(FIELD_OPTIONS, null)
+  fieldActions.sync(instance)
+
+  onBeforeUnmount(() => {
+    fieldActions.unsync(instance)
+  })
+
+  function clearField(defaultValue?: V) {
+    if (!fieldActions) return
+
+    fieldActions.setValue(defaultValue)
+    fieldActions.clearError()
+  }
+
+  return {
+    isField: true,
+    prop: fieldActions.prop,
+    state: fieldActions.state,
+    validateField: fieldActions.validate,
+    clearField,
+    resetField: fieldActions.reset,
+    getFieldValue: fieldActions.getValue as (defaultValue?: V) => V,
+    setFieldValue: fieldActions.setValue as (value: V, strict?: boolean) => void
+  }
 }

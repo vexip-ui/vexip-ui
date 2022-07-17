@@ -1,17 +1,16 @@
 ### ColorPicker Props
 
-| Name          | Type    | Description                                                                     | Default          | Since |
-| ------------- | ------- | ------------------------------------------------------------------------ | --------------- | --- |
-| value | `string` | The value of the color picker, can use `v-model` two-way binding | `'#339af0'` | - |
-| visible | `boolean` | Sets the display state of the color control panel | `false` | - |
-| format | `'rgb' \| 'hsl' \| 'hsv' \| 'hex'` | Type to format the color before updating value | `'rgb'` | - |
-| size | `small \| default \| large` | The size of color picker | `'default'` | - |
-| alpha | `boolean` | whether to use transparency selection | `false` | - |
-| disabled | `boolean` | Set whether is disabled | `false` | - |
-| no-input | `boolean` | Set whether to disable Input input color value | `false` | - |
-| shortcut | `boolean` | wSet hether to use shortcut to select color | `false` | - |
-| shortcut-list | `string[]` | Shortcut colors selection list | `defaultShotcuts` | - |
-| disable-validate | `boolean` | Whether to disable triggering form field validation | `false` | - |
+| Name          | Type                               | Description                                                      | Default           | Since |
+| ------------- | ---------------------------------- | ---------------------------------------------------------------- | ----------------- | ----- |
+| value         | `string`                           | The value of the color picker, can use `v-model` two-way binding | `'#339af0'`       | -     |
+| visible       | `boolean`                          | Sets the display state of the color control panel                | `false`           | -     |
+| format        | `'rgb' \| 'hsl' \| 'hsv' \| 'hex'` | Type to format the color before updating value                   | `'rgb'`           | -     |
+| size          | `small \| default \| large`        | The size of color picker                                         | `'default'`       | -     |
+| alpha         | `boolean`                          | whether to use transparency selection                            | `false`           | -     |
+| disabled      | `boolean`                          | Set whether is disabled                                          | `false`           | -     |
+| no-input      | `boolean`                          | Set whether to disable Input input color value                   | `false`           | -     |
+| shortcut      | `boolean`                          | wSet hether to use shortcut to select color                      | `false`           | -     |
+| shortcut-list | `string[]`                         | Shortcut colors selection list                                   | `defaultShotcuts` | -     |
 
 ```js
 const defaultShotcuts = [
@@ -44,10 +43,10 @@ const defaultShotcuts = [
 
 ### ColorPicker Events
 
-| Name             | Description                                                             | Parameters           | Since |
-| ---------------- | ---------------------------------------------------------------- | -------------- | --- |
-| toggle | Emitted when the color control panel display state changes, returns the current state | `(visible: boolean)` | - |
-| click-outside | Emitted when the outside of the control is clicked, no return value | - | - |
-| outside-close | Emitted when the panel is closed by clicking outside the control, no return value | - | - |
-| change | Emitted when the selected color changes, returns the formatted color value | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | - |
-| shortcut | Emitted when a color is selected using the shortcut function, returns the formatted color value | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | - |
+| Name          | Description                                                                                     | Parameters                                               | Since |
+| ------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ----- |
+| toggle        | Emitted when the color control panel display state changes, returns the current state           | `(visible: boolean)`                                     | -     |
+| click-outside | Emitted when the outside of the control is clicked, no return value                             | -                                                        | -     |
+| outside-close | Emitted when the panel is closed by clicking outside the control, no return value               | -                                                        | -     |
+| change        | Emitted when the selected color changes, returns the formatted color value                      | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | -     |
+| shortcut      | Emitted when a color is selected using the shortcut function, returns the formatted color value | `(color: string \| RGBAColor \| HSLAColor \| HSVAColor)` | -     |

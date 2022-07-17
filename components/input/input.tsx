@@ -1,6 +1,6 @@
-import { defineComponent, ref, computed, watch, inject, Transition } from 'vue'
+import { defineComponent, ref, computed, watch, Transition, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { useHover } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -13,7 +13,7 @@ import {
   stateProp,
   classProp
 } from '@vexip-ui/config'
-import { isNull, noop, throttle } from '@vexip-ui/utils'
+import { isNull, throttle } from '@vexip-ui/utils'
 import { EyeSlashR, EyeR, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -37,7 +37,6 @@ export default defineComponent({
     suffix: Object,
     suffixColor: String,
     formatter: Function as PropType<(value: string) => string>,
-    accessor: Function as PropType<(value: string) => any>,
     value: String,
     placeholder: String,
     autofocus: booleanProp,
@@ -52,7 +51,6 @@ export default defineComponent({
     after: String,
     // 是否显示切换 passwrod 为明文的按钮
     password: booleanProp,
-    disableValidate: booleanProp,
     clearable: booleanProp
   },
   emits: [
@@ -70,9 +68,12 @@ export default defineComponent({
     'update:value'
   ],
   setup(_props, { slots, emit, expose }) {
+    const { state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<string>()
+
     const props = useProps('input', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       type: {
         default: 'text' as InputType,
         validator: (value: InputType) => inputTypes.includes(value)
@@ -85,11 +86,10 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      accessor: {
-        default: null,
-        isFunc: true
+      value: {
+        default: () => getFieldValue(''),
+        static: true
       },
-      value: '',
       placeholder: null,
       autofocus: false,
       spellcheck: false,
@@ -102,12 +102,8 @@ export default defineComponent({
       before: '',
       after: '',
       password: false,
-      disableValidate: false,
       clearable: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
 
     const nh = useNameHelper('input')
     const focused = ref(false)
@@ -205,9 +201,8 @@ export default defineComponent({
       }
     )
 
-    // expose api methods
-    // need to define some same name methods in 'methods' option to support infer types
-    // cannot use expose option in component define
+    // Expose api methods.
+    // Need to define some same name methods in 'methods' option to support infer types.
     expose({
       focus: () => {
         inputControl.value?.focus()
@@ -256,25 +251,17 @@ export default defineComponent({
     function emitChangeEvent(type: InputEventType) {
       type = type === 'input' ? 'input' : 'change'
 
-      let value = currentValue.value
-
-      if (typeof props.accessor === 'function') {
-        value = props.accessor(value)
-      }
-
       if (type === 'change') {
         if (lastValue === currentValue.value) return
 
         lastValue = currentValue.value
 
-        emit('change', value, currentValue.value)
+        setFieldValue(currentValue.value)
+        emit('change', currentValue.value)
         emit('update:value', currentValue.value)
-
-        if (!props.disableValidate) {
-          validateField()
-        }
+        validateField()
       } else {
-        emit('input', value, currentValue.value)
+        emit('input', currentValue.value)
       }
     }
 
@@ -314,7 +301,7 @@ export default defineComponent({
       event.stopPropagation()
       setValue('', 'change')
       emit('clear')
-      clearField()
+      nextTick(clearField)
     }
 
     function handleEnter(event: KeyboardEvent) {

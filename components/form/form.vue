@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, provide, ref } from 'vue'
+import { defineComponent, reactive, computed, provide } from 'vue'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
@@ -55,7 +55,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('form')
-    const fieldSet = ref(new Set<FieldOptions>())
+    const fieldSet = reactive(new Set<FieldOptions>())
 
     const className = computed(() => {
       return [nh.b(), nh.bs('vars'), nh.bm(`label-${props.labelPosition}`)]
@@ -75,9 +75,9 @@ export default defineComponent({
     function getPropMap() {
       const propMap: Record<string, FieldOptions> = {}
 
-      for (const field of fieldSet.value) {
-        if (field.prop) {
-          propMap[field.prop] = field
+      for (const field of fieldSet) {
+        if (field.prop.value) {
+          propMap[field.prop.value] = field
         }
       }
 
@@ -85,7 +85,7 @@ export default defineComponent({
     }
 
     function validate() {
-      return validateItems(fieldSet.value)
+      return validateItems(fieldSet)
     }
 
     function validateFields(props: string | string[]) {
@@ -120,7 +120,7 @@ export default defineComponent({
     }
 
     function reset() {
-      fieldSet.value.forEach(field => {
+      fieldSet.forEach(field => {
         field.reset()
       })
     }
@@ -140,7 +140,7 @@ export default defineComponent({
     }
 
     function clearError() {
-      fieldSet.value.forEach(field => {
+      fieldSet.forEach(field => {
         field.clearError()
       })
     }

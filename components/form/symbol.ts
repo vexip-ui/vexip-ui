@@ -1,4 +1,5 @@
-import type { Ref, InjectionKey } from 'vue'
+import type { ComputedRef, InjectionKey } from 'vue'
+import type { ComponentState } from '@vexip-ui/config'
 import type { Rule } from './validator'
 
 export type LabelPosition = 'right' | 'top' | 'left'
@@ -34,10 +35,15 @@ export interface FormItemProps {
 }
 
 export interface FieldOptions {
-  prop: string,
-  validate(): Promise<string[] | null>,
-  reset(): boolean,
-  clearError(): void
+  prop: ComputedRef<string>,
+  state: ComputedRef<ComponentState>,
+  validate: () => Promise<string[] | null>,
+  reset: () => boolean,
+  clearError: () => void,
+  getValue: (defaultValue?: unknown) => unknown,
+  setValue: (value: unknown, strict?: boolean) => void,
+  sync: (instance: any) => void,
+  unsync: (instance: any) => void
 }
 
 export interface FormActions {
@@ -49,11 +55,14 @@ export interface FormActions {
   clearFieldsError: (props: string | string[]) => void
 }
 
+// export type FieldActions = Omit<FieldOptions, 'prop'>
+
 // form
 export const FORM_PROPS: InjectionKey<Partial<FormProps>> = Symbol('FORM_PROPS')
-export const FORM_FIELDS: InjectionKey<Ref<Set<FieldOptions>>> = Symbol('FORM_FIELDS')
+export const FORM_FIELDS: InjectionKey<Set<FieldOptions>> = Symbol('FORM_FIELDS')
 export const FORM_ACTIONS: InjectionKey<FormActions> = Symbol('FORM_ACTIONS')
 
 // form-item
 export const VALIDATE_FIELD: InjectionKey<FieldOptions['validate']> = Symbol('VALIDATE_FIELD')
 export const CLEAR_FIELD: InjectionKey<FieldOptions['clearError']> = Symbol('CLEAR_FIELD')
+export const FIELD_OPTIONS: InjectionKey<FieldOptions> = Symbol('FIELD_OPTIONS')

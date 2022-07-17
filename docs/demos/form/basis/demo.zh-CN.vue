@@ -1,95 +1,113 @@
 <template>
-  <Form
-    ref="form"
-    style="width: 500px;"
-    :model="formModel"
-    :label-width="100"
-  >
-    <FormItem required label="Input" prop="input">
-      <Input v-model:value="formModel.input"></Input>
-    </FormItem>
-    <FormItem required label="Select" prop="select">
-      <Select v-model:value="formModel.select">
-        <Option>选项1</Option>
-        <Option>选项2</Option>
-        <Option>选项3</Option>
-      </Select>
-    </FormItem>
-    <FormItem required label="Date" prop="date">
-      <DatePicker v-model:value="formModel.date" clearable></DatePicker>
-    </FormItem>
-    <FormItem required label="Time" prop="time">
-      <TimePicker v-model:value="formModel.time"></TimePicker>
-    </FormItem>
-    <FormItem required label="Number" prop="number">
-      <NumberInput v-model:value="formModel.number"></NumberInput>
-    </FormItem>
-    <FormItem required label="Color" prop="color">
-      <ColorPicker v-model:value="formModel.color"></ColorPicker>
-    </FormItem>
-    <FormItem required label="Checkbox" prop="checkbox">
-      <CheckboxGroup v-model:values="formModel.checkbox">
-        <Checkbox label="选项1" value="1"></Checkbox>
-        <Checkbox label="选项2" value="2"></Checkbox>
-        <Checkbox label="选项3" value="3"></Checkbox>
-      </CheckboxGroup>
-    </FormItem>
-    <FormItem required label="Radio" prop="radio">
-      <RadioGroup v-model:value="formModel.radio">
-        <Radio label="选项1"></Radio>
-        <Radio label="选项2"></Radio>
-        <Radio label="选项3"></Radio>
-      </RadioGroup>
-    </FormItem>
-    <FormItem required label="Textarea" prop="textarea">
-      <Textarea v-model:value="formModel.textarea"></Textarea>
-    </FormItem>
-    <FormItem action>
-      <Button type="primary" @click="handleSubmit()">
-        提交
-      </Button>
-      <Button @click="handleReset()">
-        重置
-      </Button>
-    </FormItem>
-  </Form>
+  <ConfigProvider :props="{ default: { clearable: true } }">
+    <Form
+      ref="form"
+      style="width: 500px;"
+      :model="formModel"
+      :label-width="100"
+    >
+      <FormItem required label="Input" prop="input">
+        <Input></Input>
+      </FormItem>
+      <FormItem required label="Cascader" prop="cascader">
+        <Cascader :options="treeOptions"></Cascader>
+      </FormItem>
+      <FormItem required label="Select" prop="select">
+        <Select :options="options"></Select>
+      </FormItem>
+      <FormItem required label="Date" prop="date">
+        <DatePicker></DatePicker>
+      </FormItem>
+      <FormItem required label="Time" prop="time">
+        <TimePicker></TimePicker>
+      </FormItem>
+      <FormItem required label="Number" prop="number">
+        <NumberInput></NumberInput>
+      </FormItem>
+      <FormItem required label="Color" prop="color">
+        <ColorPicker format="hex"></ColorPicker>
+      </FormItem>
+      <FormItem required label="Checkbox" prop="checkbox">
+        <CheckboxGroup :options="options"></CheckboxGroup>
+      </FormItem>
+      <FormItem required label="Radio" prop="radio">
+        <RadioGroup :options="options"></RadioGroup>
+      </FormItem>
+      <FormItem required label="Slider" prop="slider">
+        <Slider></Slider>
+      </FormItem>
+      <FormItem required label="Switch" prop="switch">
+        <Switch></Switch>
+      </FormItem>
+      <FormItem required label="Textarea" prop="textarea">
+        <Textarea></Textarea>
+      </FormItem>
+      <FormItem required label="Wheel" prop="wheel">
+        <Wheel insert-empty :options="options"></Wheel>
+      </FormItem>
+      <FormItem required label="Upload" prop="upload">
+        <Upload allow-drag></Upload>
+      </FormItem>
+      <FormItem action>
+        <Button type="primary" @click="handleSubmit()">
+          提交
+        </Button>
+        <Button @click="handleReset()">
+          重置
+        </Button>
+      </FormItem>
+    </Form>
+  </ConfigProvider>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, reactive } from 'vue'
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
 
 import type { Form } from 'vexip-ui'
 
-export default defineComponent({
-  setup() {
-    const formModel = reactive({
-      input: '',
-      date: '',
-      time: '',
-      number: null,
-      select: '',
-      color: '',
-      checkbox: [],
-      radio: '',
-      textarea: ''
-    })
-
-    const form = ref<InstanceType<typeof Form> | null>(null)
-
-    function handleSubmit() {
-      form.value?.validate()
-    }
-
-    function handleReset() {
-      form.value?.reset()
-    }
-
-    return {
-      formModel,
-      form,
-      handleSubmit,
-      handleReset
-    }
-  }
+const formModel = reactive({
+  input: '',
+  cascader: [],
+  date: '',
+  time: '',
+  number: null,
+  select: '',
+  color: '',
+  checkbox: [],
+  radio: '',
+  slider: 0,
+  switch: false,
+  textarea: '',
+  wheel: '',
+  upload: []
 })
+
+const form = ref<InstanceType<typeof Form> | null>(null)
+
+const options = ['选项1', '选项2', '选项3']
+const treeOptions = createOptions(3)
+
+function createOptions(depth: number, prefix = 'Op', iterator = 1) {
+  const options: Array<Record<string, any>> = []
+  const isLeaf = iterator === depth
+
+  for (let i = 1; i <= 10; ++i) {
+    options.push({
+      value: `${prefix}-${i}`,
+      label: `${prefix}-${i}`,
+      disabled: i % 4 === 0,
+      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1)
+    })
+  }
+
+  return options
+}
+
+function handleSubmit() {
+  form.value?.validate()
+}
+
+function handleReset() {
+  form.value?.reset()
+}
 </script>

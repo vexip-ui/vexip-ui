@@ -2,19 +2,18 @@
 
 | 名称             | 类型                                             | 说明                                                                                                      | 默认值      | 始于 |
 | ---------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------- | ----------- | ---- |
-| value            | `boolean`                                        | 开关的值，可以使用 `v-model` 双向绑定                                                                       | `false`     | -    |
+| value            | `boolean`                                        | 开关的值，可以使用 `v-model` 双向绑定                                                                     | `false`     | -    |
 | disabled         | `boolean`                                        | 设置是否禁用开关                                                                                          | `false`     | -    |
 | size             | `'small' \| 'default' \| 'large'`                | 开关的大小                                                                                                | `'default'` | -    |
 | state            | `'default' \| 'success' \| 'error' \| 'warning'` | 开关的状态                                                                                                | `'default'` | -    |
 | open-color       | `string`                                         | 打开状态时开关的填充颜色                                                                                  | `''`        | -    |
 | close-color      | `string`                                         | 关闭状态时开关的填充颜色                                                                                  | `''`        | -    |
 | loading          | `boolean`                                        | 设置是否为加载状态                                                                                        | `false`     | -    |
-| open-icon        | `Record<string, any>`                            | 开关打开且非加载中时的手柄内图标，使用了 `icon` 插槽后失效                                                  | `null`      | -    |
-| close-icon       | `Record<string, any>`                            | 开关关闭且非加载中时的手柄内图标，使用了 `icon` 插槽后失效                                                  | `null`      | -    |
+| open-icon        | `Record<string, any>`                            | 开关打开且非加载中时的手柄内图标，使用了 `icon` 插槽后失效                                                | `null`      | -    |
+| close-icon       | `Record<string, any>`                            | 开关关闭且非加载中时的手柄内图标，使用了 `icon` 插槽后失效                                                | `null`      | -    |
 | open-text        | `string`                                         | 打开状态时开关的填充文字                                                                                  | `''`        | -    |
 | close-text       | `string`                                         | 关闭状态时开关的填充文字                                                                                  | `''`        | -    |
 | on-before-change | `(checked: boolean) => unknown`                  | 设置开关的值变化前回调，接收一个参数标将要变化为的值，支持异步函数和 Promise，返回值为 `false` 会阻止变化 | `null`      | -    |
-| disable-validate | `boolean`                                        | 是否禁用触发表单字段验证                                                                                  | ``false``   | -    |
 
 ### Switch 事件
 

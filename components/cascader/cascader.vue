@@ -30,7 +30,6 @@
             </Tag>
             <Tooltip
               v-else
-              ref="tagCounter"
               :class="nh.be('tooltip')"
               :visible="restTipShow"
               trigger="custom"
@@ -39,7 +38,11 @@
               @click.stop="toggleShowRestTip"
             >
               <template #trigger>
-                <Tag :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                <Tag
+                  ref="tagCounter"
+                  :class="[nh.be('tag'), nh.be('counter')]"
+                  :type="props.tagType"
+                >
                   {{ `+${restTagCount}` }}
                 </Tag>
               </template>
@@ -190,7 +193,6 @@ import {
   watch,
   watchEffect,
   onMounted,
-  inject,
   nextTick
 } from 'vue'
 import CascaderPane from './cascader-pane.vue'
@@ -199,7 +201,7 @@ import { NativeScroll } from '@/components/native-scroll'
 import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
@@ -212,7 +214,7 @@ import {
   createStateProp
 } from '@vexip-ui/config'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
-import { noop, isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
+import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
 import { ChevronDown, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -257,7 +259,6 @@ export default defineComponent({
     noCascaded: booleanProp,
     multiple: booleanProp,
     disabled: booleanProp,
-    disableValidate: booleanProp,
     clearable: booleanProp,
     placement: String as PropType<Placement>,
     transfer: booleanStringProp,
@@ -288,11 +289,14 @@ export default defineComponent({
     'update:visible'
   ],
   setup(_props, { emit, slots }) {
+    const { state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<CascaderValue>()
+
     const props = useProps('cascader', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       value: {
-        default: null,
+        default: () => getFieldValue([]),
         static: true
       },
       visible: {
@@ -311,7 +315,6 @@ export default defineComponent({
       noCascaded: false,
       multiple: false,
       disabled: false,
-      disableValidate: false,
       clearable: false,
       placement: {
         default: 'bottom-start' as Placement,
@@ -339,9 +342,6 @@ export default defineComponent({
       tagType: null,
       emptyText: null
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
 
     const nh = useNameHelper('cascader')
     const currentVisible = ref(props.visible)
@@ -986,7 +986,6 @@ export default defineComponent({
       }
 
       emitChangeEvent(values, dataList)
-      !props.disableValidate && validateField()
       nextTick(computeTagsOverflow)
     }
 
@@ -1097,10 +1096,10 @@ export default defineComponent({
       nextTick(() => {
         outsideChanged = false
 
+        setFieldValue(value)
         emit('change', value, data)
         emit('update:value', value)
-
-        !props.disableValidate && validateField()
+        validateField()
       })
     }
 
@@ -1164,7 +1163,7 @@ export default defineComponent({
         emit('change', emittedValue.value, [])
         emit('update:value', emittedValue.value)
         emit('clear')
-        clearField()
+        clearField(emittedValue.value)
         hideTagCounter()
       }
     }

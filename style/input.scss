@@ -51,7 +51,7 @@ $input: map.merge(
     height: get-css-var('input-height');
     padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
     background-color: get-css-var('input-bg-color');
-    border: get-css-var('input-border');
+    border: get-css-var('border-shape') get-css-var('input-b-color');
     border-radius: get-css-var('input-radius');
     outline: 0;
     transition:
@@ -71,17 +71,23 @@ $input: map.merge(
     }
 
     &--small {
-      @include define-preset-values('input', (
-        height: 24px,
-        v-padding: 1px
-      ));
+      @include define-preset-values(
+        'input',
+        (
+          height: 24px,
+          v-padding: 1px
+        )
+      );
     }
 
     &--large {
-      @include define-preset-values('input', (
-        height: 40px,
-        v-padding: 7px
-      ));
+      @include define-preset-values(
+        'input',
+        (
+          height: 40px,
+          v-padding: 7px
+        )
+      );
     }
 
     &--has-prefix {

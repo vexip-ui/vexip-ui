@@ -44,6 +44,10 @@ $upload: map.merge(
     @include define-preset-values('upload', $upload);
   }
 
+  @mixin define-upload-style($style-map) {
+    @include define-preset-style('upload', $style-map);
+  }
+
   @include basis;
 
   position: relative;
@@ -57,6 +61,22 @@ $upload: map.merge(
 
   &--block {
     width: 100%;
+  }
+
+  $states: success, error, warning;
+
+  @each $state in $states {
+    &--#{$state} {
+      @include define-upload-style(
+        (
+          pane-b-color: 'color' $state 'opacity-3',
+          pane-b-color-hover: 'color' $state 'base',
+          pane-b-color-over: 'color' $state 'base',
+          cloud-color: 'color' $state 'opacity-2',
+          cloud-color-over: 'color' $state 'base'
+        )
+      );
+    }
   }
 
   &__input {
@@ -85,8 +105,7 @@ $upload: map.merge(
     cursor: pointer;
     background-color: get-css-var('upload-pane-bg-color');
     border:
-      get-css-var('upload-pane-b-width')
-      get-css-var('upload-pane-b-style')
+      get-css-var('upload-pane-b-width') get-css-var('upload-pane-b-style')
       get-css-var('upload-pane-b-color');
     border-radius: get-css-var('upload-pane-radius');
     transition: get-css-var('transition-border');

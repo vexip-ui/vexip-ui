@@ -1,19 +1,19 @@
 <template>
   <Form :model="form" :rules="rules" style="width: 500px;">
     <FormItem label="Input" prop="input">
-      <Input v-model:value="form.input"></Input>
+      <Input></Input>
     </FormItem>
     <FormItem label="Input1" prop="input1">
-      <Input v-model:value="form.input1"></Input>
+      <Input></Input>
     </FormItem>
     <FormItem label="Input2" prop="input2">
-      <Input v-model:value="form.input2"></Input>
+      <Input></Input>
     </FormItem>
     <FormItem label="Input3" prop="input3">
-      <Input v-model:value="form.input3"></Input>
+      <Input></Input>
     </FormItem>
     <FormItem label="Input4" prop="input4">
-      <Input v-model:value="form.input4"></Input>
+      <Input></Input>
     </FormItem>
   </Form>
 </template>
@@ -57,7 +57,8 @@ export default defineComponent({
           // 验证方法 + 错误信息
           // 验证通过需返回 true
           {
-            validator: (value: string) => ['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'].includes(value),
+            validator: (value: string) =>
+              ['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'].includes(value),
             message: '没有这个菜'
           }
         ],
@@ -76,20 +77,21 @@ export default defineComponent({
 
         // 异步验证 (返回 Promise)
         input4: {
-          validator: (value: string) => new Promise((resolve, reject) => {
-            window.setTimeout(() => {
-              // 直接 resolve 验证结果
-              resolve(['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'].includes(value))
+          validator: (value: string) =>
+            new Promise((resolve, reject) => {
+              window.setTimeout(() => {
+                // 直接 resolve 验证结果
+                resolve(['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'].includes(value))
 
-              // 验证不通过时抛出错误
-              if (['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'].includes(value)) {
-                resolve(true)
-              }
+                // 验证不通过时抛出错误
+                if (['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'].includes(value)) {
+                  resolve(true)
+                }
 
-              reject(new Error())
-              // reject(new Error('没有这个菜'))
-            }, 1000)
-          }),
+                reject(new Error())
+                // reject(new Error('没有这个菜'))
+              }, 1000)
+            }),
           message: '没有这个菜'
         }
       }

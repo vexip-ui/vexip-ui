@@ -8,7 +8,8 @@ $form: map.merge(
     error-color: get-css-var('color-error-light-1'),
     error-shadow: get-css-var('box-shaodw-focus') get-css-var('color-error-opacity-6'),
     asterisk-color: get-css-var('color-error-base'),
-    asterisk-family: #{SimSun, sans-serif},
+    asterisk-family: #{SimSun,
+    sans-serif},
     tip-color: get-css-var('color-error-base')
   ),
   $form
@@ -37,37 +38,6 @@ $form: map.merge(
       justify-content: center;
       margin-bottom: 0;
       text-align: center;
-    }
-
-    &--error {
-      // $checkbox: #{$namespace}-checkbox;
-      // $radio: #{$namespace}-radio;
-
-      .#{$namespace}-input,
-      .#{$namespace}-multiple-input,
-      .#{$namespace}-textarea {
-        &,
-        &:hover,
-        &:focus,
-        &--focused {
-          border-color: get-css-var('form-error-color');
-        }
-
-        &:focus,
-        &--focused {
-          box-shadow: get-css-var('form-error-shadow');
-        }
-      }
-
-      .#{$namespace}-color-picker {
-        &__control {
-          border-color: get-css-var('form-error-color');
-        }
-
-        &__trigger--visible .#{$namespace}-color-picker__control {
-          box-shadow: get-css-var('form-error-shadow');
-        }
-      }
     }
   }
 

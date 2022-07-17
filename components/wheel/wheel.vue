@@ -26,7 +26,18 @@
         @scroll-end="handleScrollEnd"
       >
         <ul ref="list" :class="nh.be('list')" :style="listStyle">
-          <slot v-if="isInit"></slot>
+          <template v-if="isInit">
+            <WheelItem
+              v-for="(option, index) in normalizedOptions"
+              :key="index"
+              :value="option.value"
+              :disabled="option.disabled"
+            >
+              <slot :option="option" :index="index">
+                {{ option.label || String(option.value) }}
+              </slot>
+            </WheelItem>
+          </template>
         </ul>
       </Scroll>
       <template v-if="props.candidate">
@@ -50,40 +61,63 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, provide, inject, nextTick } from 'vue'
+import { defineComponent, ref, computed, watch, provide, nextTick } from 'vue'
+import WheelItem from './wheel-item.vue'
 import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
-import { VALIDATE_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { useDisplay } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
-import { USE_TOUCH, noop, debounce, debounceMinor } from '@vexip-ui/utils'
+import {
+  useNameHelper,
+  useProps,
+  stateProp,
+  booleanProp,
+  booleanStringProp,
+  createStateProp
+} from '@vexip-ui/config'
+import { USE_TOUCH, debounce, debounceMinor } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
 import { WHEEL_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { ItemState } from './symbol'
 
+type RawOption =
+  | string
+  | number
+  | {
+      value: string | number,
+      label?: string,
+      disabled?: boolean
+    }
+
 export default defineComponent({
   name: 'Wheel',
   components: {
+    WheelItem,
     Icon,
     Scroll
   },
   props: {
+    state: stateProp,
     horizontal: booleanProp,
     value: [String, Number],
     // 上下或左右两侧的候选数
     candidate: Number as PropType<0 | 1 | 2 | 3>,
     arrow: booleanProp,
     pointer: booleanProp,
-    disableValidate: booleanProp
+    options: Array as PropType<RawOption[]>,
+    insertEmpty: booleanStringProp
   },
   emits: ['change', 'prev', 'next', 'update:value'],
   setup(_props, { emit }) {
+    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string | number>()
+
     const props = useProps('wheel', _props, {
+      state: createStateProp(state),
       horizontal: false,
       value: {
-        default: null,
+        default: () => getFieldValue(null!),
         static: true
       },
       candidate: {
@@ -92,10 +126,12 @@ export default defineComponent({
       },
       arrow: false,
       pointer: USE_TOUCH,
-      disableValidate: false
+      options: {
+        default: () => [],
+        static: true
+      },
+      insertEmpty: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('wheel')
     const items = ref(new Set<ItemState>())
@@ -111,11 +147,34 @@ export default defineComponent({
     const wrapper = useDisplay(displayInit)
     const scroll = ref<InstanceType<typeof Scroll> | null>(null)
 
+    const normalizedOptions = computed(() => {
+      const options = props.options.map(option => {
+        if (typeof option === 'object') return option
+
+        return { value: option }
+      })
+
+      if (props.insertEmpty) {
+        options.unshift({
+          value: '',
+          label: typeof props.insertEmpty === 'string' ? props.insertEmpty : '-'
+        })
+      }
+
+      return options
+    })
     const itemList = computed(() => {
       return Array.from(items.value)
     })
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars'), nh.bm(props.horizontal ? 'horizontal' : 'vertical')]
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(props.horizontal ? 'horizontal' : 'vertical'),
+        {
+          [nh.bm(props.state)]: props.state !== 'default'
+        }
+      ]
     })
     const scrollStyle = computed(() => {
       if (props.horizontal) {
@@ -240,12 +299,10 @@ export default defineComponent({
 
       const value = getItemValue()
 
+      setFieldValue(value)
       emit('change', value)
       emit('update:value', value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      validateField()
     })
 
     function queryEnabledActive(active: number, step: number) {
@@ -357,6 +414,7 @@ export default defineComponent({
       targetWidth,
       targetHeight,
 
+      normalizedOptions,
       itemList,
       className,
       scrollStyle,

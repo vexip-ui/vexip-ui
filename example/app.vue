@@ -73,6 +73,7 @@ body {
 .dev-main {
   height: calc(100% - 50px);
   padding: 20px;
+  overflow: auto;
   background-color: var(--bg-color);
   border: var(--vxp-border-base);
   border-radius: var(--vxp-border-radius-large);
