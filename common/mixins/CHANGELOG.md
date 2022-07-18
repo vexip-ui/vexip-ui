@@ -1,3 +1,9 @@
+## 1.5.0 (2022-07-18)
+
+- types(mixins): fix useClickOutside target param type ([76e64cd](https://github.com/qmhc/vexip-ui/commit/76e64cd))
+- feat(mixins): usePopper support virtual reference ([da51364](https://github.com/qmhc/vexip-ui/commit/da51364))
+- fix: useClickoutside directly passing a callback ([ebf4842](https://github.com/qmhc/vexip-ui/commit/ebf4842))
+
 # [1.4.0](https://github.com/qmhc/vexip-ui/compare/mixins@1.3.1...mixins@1.4.0) (2022-07-10)
 
 ### Bug Fixes
