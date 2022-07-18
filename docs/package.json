@@ -21,8 +21,8 @@
     "@types/markdown-it": "^12.2.3",
     "@types/markdown-it-container": "^2.0.5",
     "@types/prismjs": "^1.26.0",
-    "@vitejs/plugin-vue": "^3.0.0-alpha.1",
-    "@vitejs/plugin-vue-jsx": "^2.0.0-alpha.1",
+    "@vitejs/plugin-vue": "^3.0.0",
+    "@vitejs/plugin-vue-jsx": "^2.0.0",
     "markdown-it": "^13.0.1",
     "markdown-it-anchor": "^8.6.4",
     "markdown-it-container": "^3.0.0",
@@ -30,7 +30,7 @@
     "postcss-discard-duplicates": "^5.1.0",
     "sass": "^1.53.0",
     "typescript": "4.6.4",
-    "vite": "^3.0.0-beta.6",
+    "vite": "^3.0.0",
     "vite-plugin-md": "^0.13.1"
   }
 }
