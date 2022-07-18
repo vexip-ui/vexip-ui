@@ -43,7 +43,9 @@ import {
   booleanProp,
   booleanStringProp,
   stateProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/mixins'
 import { throttle } from '@vexip-ui/utils'
@@ -64,9 +66,11 @@ export default defineComponent({
     vertical: booleanProp,
     hideTip: booleanProp,
     tipTransfer: booleanStringProp,
-    disabled: booleanProp
+    disabled: booleanProp,
+    onChange: eventProp<(value: number) => void>(),
+    onInput: eventProp<(value: number) => void>()
   },
-  emits: ['change', 'input', 'change', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<number>()
 
@@ -160,7 +164,7 @@ export default defineComponent({
 
     function emitChange() {
       setFieldValue(truthValue.value)
-      emit('change', truthValue.value)
+      emitEvent(props.onChange, truthValue.value)
       emit('update:value', truthValue.value)
       validateField()
     }
@@ -186,7 +190,7 @@ export default defineComponent({
         tooltip.value.updatePopper()
       }
 
-      emit('input', truthValue.value)
+      emitEvent(props.onInput, truthValue.value)
     })
 
     function handleTrackDown(event: PointerEvent) {

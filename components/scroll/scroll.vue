@@ -102,7 +102,7 @@ export default defineComponent({
     noTransition: booleanProp,
     onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
     useBarTrack: booleanProp,
-    onResize: Function as PropType<(entry: ResizeObserverEntry) => any>,
+    onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
     onXEnabledChange: eventProp<(enabled: boolean) => void>(),
     onYEnabledChange: eventProp<(enabled: boolean) => void>(),
     onWheel: eventProp<(payload: BarScrollPayload & { sign: 1 | -1 }) => void>(),
@@ -190,7 +190,9 @@ export default defineComponent({
       height: toRef(props, 'height'),
       scrollX: toRef(props, 'scrollX'),
       scrollY: toRef(props, 'scrollY'),
-      onResize: props.onResize,
+      onResize: entry => {
+        emitEvent(props.onResize, entry)
+      },
       onBeforeRefresh: stopAutoplay,
       onAfterRefresh: startAutoplay
     })

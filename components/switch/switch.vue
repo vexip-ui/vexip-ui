@@ -53,7 +53,9 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
@@ -79,9 +81,10 @@ export default defineComponent({
     closeIcon: Object,
     openText: String,
     closeText: String,
-    onBeforeChange: Function as PropType<(checked: boolean) => unknown>
+    onBeforeChange: Function as PropType<(checked: boolean) => unknown>,
+    onChange: eventProp<(value: boolean) => void>()
   },
-  emits: ['change', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>()
 
@@ -145,7 +148,7 @@ export default defineComponent({
     )
     watch(currentValue, value => {
       setFieldValue(value)
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:value', value)
       validateField()
     })

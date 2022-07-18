@@ -144,7 +144,9 @@ import {
   stateProp,
   createSizeProp,
   createStateProp,
-  classProp
+  classProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
@@ -200,19 +202,16 @@ export default defineComponent({
     optionCheck: booleanProp,
     emptyText: String,
     staticSuffix: booleanProp,
-    keyConfig: Object as PropType<OptionKeyConfig>
+    keyConfig: Object as PropType<OptionKeyConfig>,
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onSelect: eventProp<(value: string | number, data: RawOption) => void>(),
+    onCancel: eventProp<(value: string | number, data: RawOption) => void>(),
+    onChange: eventProp<(value: SelectValue, data: RawOption | RawOption[]) => void>(),
+    onClickOutside: eventProp(),
+    onOutsideClose: eventProp(),
+    onClear: eventProp()
   },
-  emits: [
-    'toggle',
-    'select',
-    'cancel',
-    'change',
-    'click-outside',
-    'outside-close',
-    'clear',
-    'update:value',
-    'update:visible'
-  ],
+  emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
     const { state, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<SelectValue>()
@@ -392,7 +391,7 @@ export default defineComponent({
         }
       }
 
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
     watch(
@@ -458,7 +457,11 @@ export default defineComponent({
     function handleSelect(option: OptionState) {
       if (!option) return
 
-      emit(props.multiple && isSelected(option) ? 'cancel' : 'select', option.value, option.data)
+      emitEvent(
+        props[props.multiple && isSelected(option) ? 'onCancel' : 'onSelect'],
+        option.value,
+        option.data
+      )
       handleChange(option)
 
       if (props.multiple) {
@@ -485,7 +488,11 @@ export default defineComponent({
         emittedValue = Array.from(currentValues.value)
 
         setFieldValue(emittedValue)
-        emit('change', emittedValue, Array.from(currentLabels.value))
+        emitEvent(
+          props.onChange,
+          emittedValue,
+          emittedValue.map(value => optionValueMap.get(value)?.data ?? '')
+        )
         emit('update:value', emittedValue)
         validateField()
       } else {
@@ -504,7 +511,7 @@ export default defineComponent({
           emittedValue = option.value
 
           setFieldValue(emittedValue)
-          emit('change', emittedValue, option.data)
+          emitEvent(props.onChange, emittedValue, option.data)
           emit('update:value', emittedValue)
           validateField()
         }
@@ -522,12 +529,11 @@ export default defineComponent({
     }
 
     function handleClickOutside() {
-      emit('click-outside')
+      emitEvent(props.onClickOutside)
 
       if (props.outsideClose && currentVisible.value) {
         currentVisible.value = false
-
-        emit('outside-close')
+        emitEvent(props.onOutsideClose)
       }
     }
 
@@ -538,9 +544,9 @@ export default defineComponent({
 
         emittedValue = props.multiple ? [] : ''
 
-        emit('change', emittedValue, emittedValue)
+        emitEvent(props.onChange, emittedValue, props.multiple ? [] : '')
         emit('update:value', emittedValue)
-        emit('clear')
+        emitEvent(props.onClear)
         clearField(emittedValue!)
         updatePopper()
       }

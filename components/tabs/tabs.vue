@@ -39,7 +39,7 @@ import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
 import { Renderer } from '@/components/renderer'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { isNull, isFunction, debounceMinor } from '@vexip-ui/utils'
 import { TABS_STATE } from './symbol'
 
@@ -54,9 +54,10 @@ export default defineComponent({
   },
   props: {
     card: booleanProp,
-    active: [String, Number]
+    active: [String, Number],
+    onChange: eventProp<(active: string | number) => void>()
   },
-  emits: ['change', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('tabs', _props, {
       card: false,
@@ -120,7 +121,7 @@ export default defineComponent({
     )
     watch(currentActive, value => {
       computeIndex()
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:active', value)
     })
     watch(currentIndex, () => {
