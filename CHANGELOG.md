@@ -1,3 +1,34 @@
+## 2.0.0-beta.15 (2022-07-18)
+
+- release(mixins): v1.5.0 ([80f716c](https://github.com/qmhc/vexip-ui/commit/80f716c))
+- types(mixins): fix useClickOutside target param type ([76e64cd](https://github.com/qmhc/vexip-ui/commit/76e64cd))
+- refactor: auto bind when control component under FormItem (#93) ([e04fc2f](https://github.com/qmhc/vexip-ui/commit/e04fc2f)), closes [#93](https://github.com/qmhc/vexip-ui/issues/93)
+- refactor(tooltip): improve component structure, add multiple features ([e44f327](https://github.com/qmhc/vexip-ui/commit/e44f327))
+- docs: add Renderer docs ([d554d51](https://github.com/qmhc/vexip-ui/commit/d554d51))
+- fix: useClickoutside directly passing a callback ([ebf4842](https://github.com/qmhc/vexip-ui/commit/ebf4842))
+- fix(dropdown): sync drop stata when using hover trigger ([0d8ed5e](https://github.com/qmhc/vexip-ui/commit/0d8ed5e))
+- fix(menu): marker show when disabled in horizontal mode ([e1b1153](https://github.com/qmhc/vexip-ui/commit/e1b1153))
+- fix(menu): title padding error when horizontal ([b834295](https://github.com/qmhc/vexip-ui/commit/b834295))
+- fix(overflow): consider the padding of wrapper ([ee9327d](https://github.com/qmhc/vexip-ui/commit/ee9327d))
+- fix(overflow): support directly render children ([c17c20b](https://github.com/qmhc/vexip-ui/commit/c17c20b))
+- fix(renderer): misisng component name ([b2607aa](https://github.com/qmhc/vexip-ui/commit/b2607aa))
+- fix(tooltip): support fragment when using wrapper ([68be420](https://github.com/qmhc/vexip-ui/commit/68be420))
+- feat(Layout): create Layout component (#88) ([22c2b6d](https://github.com/qmhc/vexip-ui/commit/22c2b6d)), closes [#88](https://github.com/qmhc/vexip-ui/issues/88) [#85](https://github.com/qmhc/vexip-ui/issues/85)
+- feat(menu): support auto ellipsis when horizontal mode ([ad429c8](https://github.com/qmhc/vexip-ui/commit/ad429c8))
+- feat(menu): support parse options from router ([28d13f1](https://github.com/qmhc/vexip-ui/commit/28d13f1)), closes [#85](https://github.com/qmhc/vexip-ui/issues/85)
+- feat(mixins): usePopper support virtual reference ([da51364](https://github.com/qmhc/vexip-ui/commit/da51364))
+- feat(overflow): add Overflow component ([665f250](https://github.com/qmhc/vexip-ui/commit/665f250))
+- chore: adjust useClickoutside ([2355027](https://github.com/qmhc/vexip-ui/commit/2355027))
+- chore(config): props starts with `on` are conventionally function type ([a6da22e](https://github.com/qmhc/vexip-ui/commit/a6da22e))
+- ci: improve build scripts ([b8beecc](https://github.com/qmhc/vexip-ui/commit/b8beecc))
+
+### BREAKING CHANGE
+
+- `theme` prop deprecated, use `reverse` prop instead
+  `theme="dark"` case. `tip` slot deprecated, currently the trigger part
+  use `trigger` slot and the tip part use default slot. Now Tooltip will
+  not render wrapper element by default.
+
 # [2.0.0-beta.14](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2022-07-10)
 
 ### Bug Fixes
