@@ -33,7 +33,7 @@
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -61,8 +61,9 @@ export default defineComponent({
     fallbackSrc: String,
     color: String,
     background: String,
-    onError: Function as PropType<(event: Event) => void>
+    onError: eventProp<(event: Event) => void>()
   },
+  emits: [],
   setup(_props) {
     const props = useProps('avatar', _props, {
       size: 'default' as ComponentSize,
@@ -139,7 +140,7 @@ export default defineComponent({
 
     function handleError(event: Event) {
       loadFail.value = true
-      props.onError?.(event)
+      emitEvent(props.onError, event)
     }
 
     let lastText: string | null = null

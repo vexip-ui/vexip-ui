@@ -20,7 +20,7 @@
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         @scroll="handleBodyScroll"
-        @y-enable-change="handleYScrollEnableChange"
+        @y-enabled-change="handleYScrollEnableChange"
         @ready="syncVerticalScroll"
       >
         <TableBody>
@@ -39,7 +39,7 @@
         :scroll-y="bodyScroll"
         :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
-        @y-enable-change="handleYScrollEnableChange"
+        @y-enabled-change="handleYScrollEnableChange"
         @ready="syncVerticalScroll"
       >
         <TableBody>

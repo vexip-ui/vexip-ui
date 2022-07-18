@@ -33,7 +33,7 @@
 import { defineComponent, ref, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 
 import {
   Flag,
@@ -78,9 +78,10 @@ export default defineComponent({
     noBorder: booleanProp,
     banner: booleanProp,
     manual: booleanProp,
-    onClose: Function as PropType<() => void>,
-    onHide: Function as PropType<() => void>
+    onClose: eventProp(),
+    onHide: eventProp()
   },
+  emits: [],
   setup(_props, { slots }) {
     const props = useProps('alert', _props, {
       type: {
@@ -134,11 +135,11 @@ export default defineComponent({
         closed.value = true
       }
 
-      props.onClose?.()
+      emitEvent(props.onClose)
     }
 
     function handleAfterLeave() {
-      props.onHide?.()
+      emitEvent(props.onHide)
       hidden.value = true
     }
 

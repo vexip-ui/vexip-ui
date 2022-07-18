@@ -5,7 +5,14 @@ import LayoutHeader from './layout-header'
 import LayoutMain from './layout-main'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useMediaQuery } from './helper'
 import { LAYOUT_STATE } from './symbol'
 
@@ -48,10 +55,10 @@ export default defineComponent({
     asideFixed: booleanStringProp,
     copyright: String,
     links: Array as PropType<FooterLink[]>,
-    onReducedChange: Function as PropType<(target: boolean) => void>,
-    onSignClick: Function as PropType<(event: MouseEvent) => void>,
-    onMenuSelect: Function as PropType<(label: string, meta: Record<string, any>) => void>,
-    onUserAction: Function as PropType<(label: string, meta: Record<string, any>) => void>
+    onReducedChange: eventProp<(target: boolean) => void>(),
+    onSignClick: eventProp<(event: MouseEvent) => void>(),
+    onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
+    onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>()
   },
   emits: ['update:reduced'],
   setup(_props, { emit, slots }) {
@@ -147,16 +154,16 @@ export default defineComponent({
     function toggleReduce(target = !asideReduced.value) {
       asideReduced.value = target
 
-      props.onReducedChange?.(target)
+      emitEvent(props.onReducedChange, target)
       emit('update:reduced', target)
     }
 
     function handleSignClick(event: MouseEvent) {
-      props.onSignClick?.(event)
+      emitEvent(props.onSignClick, event)
     }
 
     function handleMenuSelect(label: string, meta: Record<string, any>) {
-      props.onMenuSelect?.(label, meta)
+      emitEvent(props.onMenuSelect, label, meta)
     }
 
     function handleScroll({ clientY }: { clientY: number }) {
@@ -165,7 +172,7 @@ export default defineComponent({
     }
 
     function handleUserAction(label: string, meta: Record<string, any>) {
-      props.onUserAction?.(label, meta)
+      emitEvent(props.onUserAction, label, meta)
     }
 
     function getSlotParams() {

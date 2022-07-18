@@ -62,7 +62,14 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useHover } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { startOfWeek, rangeDate, differenceDays, debounceMinor } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -85,8 +92,8 @@ export default defineComponent({
     disabledDate: Function as PropType<(data: Date) => boolean>,
     isRange: booleanProp,
     valueType: String as PropType<'start' | 'end'>,
-    onSelect: Function as PropType<(date: Date) => void>,
-    onHover: Function as PropType<(date: Date | null) => void>
+    onSelect: eventProp<(date: Date) => void>(),
+    onHover: eventProp<(date: Date | null) => void>()
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
@@ -145,7 +152,7 @@ export default defineComponent({
       }
     })
     watch(hoveredDate, value => {
-      props.onHover?.(value)
+      emitEvent(props.onHover, value)
     })
 
     function getWeekLabel(index: number) {
@@ -252,7 +259,7 @@ export default defineComponent({
           endValue.value = date
         }
 
-        props.onSelect?.(date)
+        emitEvent(props.onSelect, date)
         emit('update:value', date)
       }
     }

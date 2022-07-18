@@ -25,7 +25,14 @@
 import { defineComponent, ref, computed, inject, watch, onMounted, onBeforeUnmount } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, styleProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  styleProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { randomString } from '@vexip-ui/utils'
 import { ChevronRight } from '@vexip-ui/icons'
 import { COLLAPSE_STATE } from './symbol'
@@ -49,9 +56,10 @@ export default defineComponent({
     card: booleanProp,
     arrowType: String as PropType<CollapseArrowType>,
     icon: Object,
-    ghost: booleanProp
+    ghost: booleanProp,
+    onToggle: eventProp<(expanded: boolean) => void>()
   },
-  emits: ['toggle', 'update:expanded'],
+  emits: ['update:expanded'],
   setup(_props, { emit }) {
     const props = useProps('collapsePane', _props, {
       label: {
@@ -125,7 +133,7 @@ export default defineComponent({
       }
     )
     watch(currentExpanded, value => {
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:expanded', value)
     })
 

@@ -62,7 +62,14 @@ const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
 
-const confirmTypes = Object.freeze<ConfirmType>(['default', 'primary', 'info', 'success', 'warning', 'error'])
+const confirmTypes = Object.freeze<ConfirmType>([
+  'default',
+  'primary',
+  'info',
+  'success',
+  'warning',
+  'error'
+])
 
 export default defineComponent({
   name: 'Confirm',
@@ -85,7 +92,6 @@ export default defineComponent({
     renderer: Function as PropType<() => any>,
     iconColor: String
   },
-  emits: ['confirm', 'cancel'],
   setup(_props) {
     const props = useProps('confirm', _props, {
       top: {

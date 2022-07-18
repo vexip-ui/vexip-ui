@@ -84,7 +84,7 @@ import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
 import CalendarPane from './calendar-pane.vue'
-import { useNameHelper, useProps, useLocale } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, eventProp, emitEvent } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 import type { Dateable } from '@vexip-ui/utils'
@@ -107,7 +107,7 @@ export default defineComponent({
     weekStart: Number,
     today: [Number, String, Date] as PropType<Dateable>,
     disabledDate: Function as PropType<(data: Date) => boolean>,
-    onSelect: Function as PropType<(date: Date) => void>
+    onSelect: eventProp<(date: Date) => void>()
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
@@ -167,7 +167,7 @@ export default defineComponent({
         calendarValue.value = date
       }
 
-      props.onSelect?.(date)
+      emitEvent(props.onSelect, date)
       emit('update:value', date)
     }
 

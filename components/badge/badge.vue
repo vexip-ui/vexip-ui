@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -47,8 +47,9 @@ export default defineComponent({
     isDot: booleanProp,
     type: String as PropType<BadgeType>,
     color: String,
-    onBadgeClick: Function as PropType<(event: MouseEvent) => void>
+    onBadgeClick: eventProp<(event: MouseEvent) => void>()
   },
+  emits: [],
   setup(_props, { slots }) {
     const props = useProps('badge', _props, {
       content: {
@@ -98,7 +99,7 @@ export default defineComponent({
     })
 
     function handleBadgeClick(event: MouseEvent) {
-      props.onBadgeClick?.(event)
+      emitEvent(props.onBadgeClick, event)
     }
 
     return {

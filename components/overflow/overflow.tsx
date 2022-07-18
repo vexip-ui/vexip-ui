@@ -8,9 +8,16 @@ import {
   Fragment
 } from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useResize } from '@vexip-ui/mixins'
-import { nextFrameOnce, noop } from '@vexip-ui/utils'
+import { nextFrameOnce } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 
@@ -23,9 +30,10 @@ export default defineComponent({
     tag: String,
     attrFlag: booleanStringProp,
     static: booleanProp,
-    onRestChange: Function as PropType<(rest: number) => void>,
-    onToggle: Function as PropType<(overflow: boolean) => void>
+    onRestChange: eventProp<(rest: number) => void>(),
+    onToggle: eventProp<(overflow: boolean) => void>()
   },
+  emits: [],
   setup(_props, { slots, expose }) {
     const props = useProps('overflow', _props, {
       items: {
@@ -118,7 +126,7 @@ export default defineComponent({
       let overflow = false
 
       const counterMargin = computeHorizontalMargin(counterEl)
-      const updateRest = typeof props.onRestChange === 'function' ? props.onRestChange : noop
+      const updateRest = (count: number) => emitEvent(props.onRestChange, count)
 
       for (let i = 0, len = children.length - 1; i < len; ++i) {
         if (i < 0) continue
@@ -159,7 +167,7 @@ export default defineComponent({
 
       if (overflow !== lastOverflow) {
         lastOverflow = overflow
-        typeof props.onToggle === 'function' && props.onToggle(overflow)
+        emitEvent(props.onToggle, overflow)
       }
     }
 

@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, watch, toRef } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { BREADCRUMB_STATE } from './symbol'
@@ -27,9 +27,10 @@ export default defineComponent({
     separator: String,
     border: booleanProp,
     options: Array as PropType<string[]>,
-    onSelect: Function as PropType<(label: string | number) => void>,
-    onSeparatorClick: Function as PropType<(label: string | number) => void>
+    onSelect: eventProp<(label: string | number) => void>(),
+    onSeparatorClick: eventProp<(label: string | number) => void>()
   },
+  emits: [],
   setup(_props, { slots }) {
     const props = useProps('breadcrumb', _props, {
       separator: '/',
@@ -90,11 +91,11 @@ export default defineComponent({
     }
 
     function handleSelect(label: string | number) {
-      props.onSelect?.(label)
+      emitEvent(props.onSelect, label)
     }
 
     function handleSeparatorClick(label: string | number) {
-      props.onSeparatorClick?.(label)
+      emitEvent(props.onSeparatorClick, label)
     }
 
     return {

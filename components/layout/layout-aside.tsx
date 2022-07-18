@@ -3,7 +3,7 @@ import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
 import { Indent, Outdent, CaretRight } from '@vexip-ui/icons'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
 import type { PropType } from 'vue'
@@ -22,10 +22,10 @@ export default defineComponent({
     logo: String,
     signName: String,
     expandedMedia: String,
-    onReducedChange: Function as PropType<(reduced: boolean) => void>,
-    onExpandedChange: Function as PropType<(expanded: boolean) => void>,
-    onSignClick: Function as PropType<(event: MouseEvent) => void>,
-    onMenuSelect: Function as PropType<(label: string, meta: Record<string, any>) => void>
+    onReducedChange: eventProp<(reduced: boolean) => void>(),
+    onExpandedChange: eventProp<(expanded: boolean) => void>(),
+    onSignClick: eventProp<(event: MouseEvent) => void>(),
+    onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>()
   },
   emits: ['update:reduced', 'update:expanded'],
   setup(_props, { emit, slots }) {
@@ -120,23 +120,23 @@ export default defineComponent({
     function toggleReduce(target = !currentReduced.value) {
       currentReduced.value = target
 
-      props.onReducedChange?.(target)
+      emitEvent(props.onReducedChange, target)
       emit('update:reduced', target)
     }
 
     function toggleExpand(target = !currentExpanded.value) {
       currentExpanded.value = target
 
-      props.onExpandedChange?.(target)
+      emitEvent(props.onExpandedChange, target)
       emit('update:expanded', target)
     }
 
     function handleSignClick(event: MouseEvent) {
-      props.onSignClick?.(event)
+      emitEvent(props.onSignClick, event)
     }
 
     function handleMenuSelect(label: string, meta: Record<string, any>) {
-      props.onMenuSelect?.(label, meta)
+      emitEvent(props.onMenuSelect, label, meta)
     }
 
     function getSlotParams() {

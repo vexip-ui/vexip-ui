@@ -211,7 +211,9 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
@@ -221,6 +223,8 @@ import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { TagType } from '@/components/tag'
 import type { CascaderValue, OptionKeyConfig, OptionState } from './symbol'
+
+type MaybeArrayData = Record<string, any> | Array<Record<string, any>>
 
 const ID_KEY = Symbol('ID_KEY')
 const PARENT_KEY = Symbol('PARENT_KEY')
@@ -276,15 +280,13 @@ export default defineComponent({
     mergeTags: booleanProp,
     tagType: String as PropType<TagType>,
     emptyText: String,
-    onToggle: Function as PropType<(visible: boolean) => void>,
-    onSelect: Function as PropType<(fullValue: string, data: Record<string, any>) => void>,
-    onCancel: Function as PropType<(fullValue: string, data: Record<string, any>) => void>,
-    onChange: Function as PropType<
-      (value: CascaderValue, data: Record<string, any> | Array<Record<string, any>>) => void
-    >,
-    onClickOutside: Function as PropType<() => void>,
-    onOutsideClose: Function as PropType<() => void>,
-    onClear: Function as PropType<() => void>
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onSelect: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
+    onCancel: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
+    onChange: eventProp<(value: CascaderValue, data: MaybeArrayData) => void>(),
+    onClickOutside: eventProp(),
+    onOutsideClose: eventProp(),
+    onClear: eventProp()
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
@@ -483,7 +485,7 @@ export default defineComponent({
         isPopperShow.value = false
       }
 
-      props.onToggle?.(value)
+      emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
 
@@ -928,7 +930,7 @@ export default defineComponent({
         }
       }
 
-      props[checked ? 'onSelect' : 'onCancel']?.(option.fullValue, option.data)
+      emitEvent(props[checked ? 'onSelect' : 'onCancel'], option.fullValue, option.data)
       emitMultipleChange()
     }
 
@@ -1070,7 +1072,7 @@ export default defineComponent({
 
       if (!option) return
 
-      props.onSelect?.(fullValue, option.data)
+      emitEvent(props.onSelect, fullValue, option.data)
 
       if (fullValue) {
         currentValues.value[0] = fullValue
@@ -1096,7 +1098,7 @@ export default defineComponent({
         outsideChanged = false
 
         setFieldValue(value)
-        props.onChange?.(value, data)
+        emitEvent(props.onChange, value, data)
         emit('update:value', value)
         validateField()
       })
@@ -1134,11 +1136,11 @@ export default defineComponent({
 
     function handleClickOutside() {
       restTipShow.value = false
-      props.onClickOutside?.()
+      emitEvent(props.onClickOutside)
 
       if (props.outsideClose && currentVisible.value) {
         currentVisible.value = false
-        props.onOutsideClose?.()
+        emitEvent(props.onOutsideClose)
       }
     }
 
@@ -1157,9 +1159,9 @@ export default defineComponent({
           option.partial = false
         }
 
-        props.onChange?.(emittedValue.value, [])
+        emitEvent(props.onChange, emittedValue.value, [])
         emit('update:value', emittedValue.value)
-        props.onClear?.()
+        emitEvent(props.onClear)
         clearField(emittedValue.value)
         hideTagCounter()
       }

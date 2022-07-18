@@ -74,7 +74,9 @@ import {
   stateProp,
   createSizeProp,
   createStateProp,
-  classProp
+  classProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { isNull, toFixed, toNumber, boundRange, throttle, plus, minus } from '@vexip-ui/utils'
 import { CaretUp, CaretDown, CircleXmark } from '@vexip-ui/icons'
@@ -116,22 +118,20 @@ export default defineComponent({
     disabled: booleanProp,
     inputClass: classProp,
     debounce: booleanProp,
-    clearable: booleanProp
+    clearable: booleanProp,
+    onFocus: eventProp<(event: FocusEvent) => void>(),
+    onBlur: eventProp<(event: FocusEvent) => void>(),
+    onInput: eventProp<(value: number | null) => void>(),
+    onChange: eventProp<(value: number | null) => void>(),
+    onEnter: eventProp(),
+    onClear: eventProp(),
+    onPrefixClick: eventProp<(event: MouseEvent) => void>(),
+    onSuffixClick: eventProp<(event: MouseEvent) => void>(),
+    onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
+    onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
+    onKeyUp: eventProp<(event: KeyboardEvent) => void>()
   },
-  emits: [
-    'focus',
-    'blur',
-    'input',
-    'change',
-    'enter',
-    'clear',
-    'prefix-click',
-    'suffix-click',
-    'key-down',
-    'key-press',
-    'key-up',
-    'update:value'
-  ],
+  emits: ['update:value'],
   setup(_props, { slots, emit }) {
     const { state, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<number>()
@@ -182,7 +182,7 @@ export default defineComponent({
       target: inputControl,
       passive: false,
       onKeyDown: (event, modifier) => {
-        emit('key-down', event)
+        emitEvent(props.onKeyDown, event)
 
         if (modifier.up || modifier.down) {
           event.preventDefault()
@@ -194,7 +194,7 @@ export default defineComponent({
         }
       },
       onKeyUp: (event, modifier) => {
-        emit('key-up', event)
+        emitEvent(props.onKeyUp, event)
 
         if (modifier.enter) {
           handleEnter()
@@ -266,7 +266,7 @@ export default defineComponent({
     function handleFocus(event: FocusEvent) {
       focused.value = true
       inputting.value = true
-      emit('focus', event)
+      emitEvent(props.onFocus, event)
     }
 
     function handleBlur(event: FocusEvent) {
@@ -275,7 +275,7 @@ export default defineComponent({
       window.setTimeout(() => {
         if (!focused.value) {
           inputting.value = false
-          emit('blur', event)
+          emitEvent(props.onBlur, event)
           emitChangeEvent('change')
         }
       }, 120)
@@ -384,34 +384,34 @@ export default defineComponent({
         lastValue = currentValue.value
 
         setFieldValue(currentValue.value!)
-        emit('change', currentValue.value)
+        emitEvent(props.onChange, currentValue.value)
         emit('update:value', currentValue.value)
         validateField()
       } else {
-        emit('input', currentValue.value)
+        emitEvent(props.onInput, currentValue.value)
       }
     }
 
     function handleClear() {
       setValue(null, 'change')
-      emit('clear')
+      emitEvent(props.onClear)
       clearField()
     }
 
     function handleEnter() {
-      emit('enter')
+      emitEvent(props.onEnter)
     }
 
     function handlePrefixClick(event: MouseEvent) {
-      emit('prefix-click', event)
+      emitEvent(props.onPrefixClick, event)
     }
 
     function handleSuffixClick(event: MouseEvent) {
-      emit('suffix-click', event)
+      emitEvent(props.onSuffixClick, event)
     }
 
     function handleKeyPress(event: KeyboardEvent) {
-      emit('key-press', event)
+      emitEvent(props.onKeyPress, event)
     }
 
     return {

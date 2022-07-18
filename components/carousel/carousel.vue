@@ -93,7 +93,14 @@ import {
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanNumberProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useHover, useSetTimeout } from '@vexip-ui/mixins'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
@@ -120,10 +127,10 @@ export default defineComponent({
     speed: Number,
     activeOffset: Number,
     height: [Number, String],
-    onChange: Function as PropType<(active: number) => void>,
-    onPrev: Function as PropType<(active: number) => void>,
-    onNext: Function as PropType<(active: number) => void>,
-    onSelect: Function as PropType<(active: number) => void>
+    onChange: eventProp<(active: number) => void>(),
+    onPrev: eventProp<(active: number) => void>(),
+    onNext: eventProp<(active: number) => void>(),
+    onSelect: eventProp<(active: number) => void>()
   },
   emits: ['update:active'],
   setup(_props, { emit }) {
@@ -242,7 +249,7 @@ export default defineComponent({
     watch(currentActive, value => {
       const active = (value + props.activeOffset) % itemStates.value.size
 
-      props.onChange?.(active)
+      emitEvent(props.onChange, active)
       emit('update:active', active)
     })
     watch(isHover, value => {
@@ -525,16 +532,16 @@ export default defineComponent({
 
     function handlePrevClick() {
       handlePrev(1)
-      props.onPrev?.((currentActive.value + props.activeOffset) % itemStates.value.size)
+      emitEvent(props.onPrev, (currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleNextClick() {
       handleNext(1)
-      props.onNext?.((currentActive.value + props.activeOffset) % itemStates.value.size)
+      emitEvent(props.onNext, (currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleSelect(label: number) {
-      props.onSelect?.(label)
+      emitEvent(props.onSelect, label)
     }
 
     const { timer } = useSetTimeout()

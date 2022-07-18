@@ -83,7 +83,9 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 
@@ -124,12 +126,12 @@ export default defineComponent({
     autofocus: booleanProp,
     spellcheck: booleanProp,
     keyConfig: Object as PropType<OptionKeyConfig>,
-    onSelect: Function as PropType<(value: string | number, data: RawOption) => void>,
-    onInput: Function as PropType<(value: string) => void>,
-    onChange: Function as PropType<(value: string | number, data: RawOption) => void>,
-    onToggle: Function as PropType<(visible: boolean) => void>,
-    onEnter: Function as PropType<(value: string | number) => void>,
-    onClear: Function as PropType<() => void>
+    onSelect: eventProp<(value: string | number, data: RawOption) => void>(),
+    onInput: eventProp<(value: string) => void>(),
+    onChange: eventProp<(value: string | number, data: RawOption) => void>(),
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onEnter: eventProp<(value: string | number) => void>(),
+    onClear: eventProp()
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
@@ -288,7 +290,7 @@ export default defineComponent({
       const prevValue = currentValue.value
       currentValue.value = value
 
-      props.onSelect?.(value, data)
+      emitEvent(props.onSelect, value, data)
 
       if (value !== prevValue) {
         changed = true
@@ -309,7 +311,7 @@ export default defineComponent({
         currentIndex.value = 0
       }
 
-      props.onInput?.(value)
+      emitEvent(props.onInput, value)
     }
 
     function handleInputChange(event: string | Event) {
@@ -345,7 +347,7 @@ export default defineComponent({
       const option = optionsStates.value.find(option => option.value === lastValue)
 
       setFieldValue(currentValue.value)
-      props.onChange?.(currentValue.value, option?.data || null!)
+      emitEvent(props.onChange, currentValue.value, option?.data || null!)
       emit('update:value', currentValue.value)
       validateField()
 
@@ -355,7 +357,7 @@ export default defineComponent({
 
     function handleToggle() {
       testOptionCanDrop()
-      props.onToggle?.(visible.value)
+      emitEvent(props.onToggle, visible.value)
 
       if (!visible.value) {
         currentIndex.value = -1
@@ -394,7 +396,7 @@ export default defineComponent({
         handleChange()
       }
 
-      props.onEnter?.(currentValue.value)
+      emitEvent(props.onEnter, currentValue.value)
       control.value?.blur()
       visible.value = false
     }
@@ -411,7 +413,7 @@ export default defineComponent({
         }
 
         handleChange()
-        props.onClear?.()
+        emitEvent(props.onClear)
         nextTick(clearField)
       }
     }

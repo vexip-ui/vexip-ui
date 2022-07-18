@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
 
 export default defineComponent({
   name: 'Option',
@@ -43,10 +43,11 @@ export default defineComponent({
     selected: {
       type: Boolean,
       default: false
-    }
+    },
+    onSelect: eventProp()
   },
-  emits: ['select'],
-  setup(props, { emit }) {
+  emits: [],
+  setup(props) {
     const nh = useNameHelper('option')
     const className = computed(() => {
       return {
@@ -62,7 +63,7 @@ export default defineComponent({
     function handleSelect() {
       if (props.disabled) return
 
-      emit('select', props.value, props.label || props.value)
+      emitEvent(props.onSelect!)
     }
 
     return {
