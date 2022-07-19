@@ -100,13 +100,15 @@ async function create(name: string) {
 
         <script lang="ts">
         import { defineComponent, computed } from 'vue'
-        import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+        import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 
         export default defineComponent({
           name: '${capitalCaseName}',
           props: {
-            bool: booleanProp
+            bool: booleanProp,
+            onEvent: eventProp<(bool: boolean) => void>()
           },
+          emits: [],
           setup(_props) {
             const props = useProps('${camelCaseName}', _props, {
               bool: false
@@ -117,12 +119,18 @@ async function create(name: string) {
             const className = computed(() => {
               return [nh.b(), nh.bs('vars')]
             })
+
+            function handleEvent() {
+              emitEvent(props.onEvent, props.bool)
+            }
         
             return {
               props,
               nh,
 
-              className
+              className,
+
+              handleEvent
             }
           }
         })
