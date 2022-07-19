@@ -1,3 +1,35 @@
+# [2.0.0-beta.15](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2022-07-18)
+
+### Bug Fixes
+
+- **dropdown:** sync drop stata when using hover trigger ([0d8ed5e](https://github.com/qmhc/vexip-ui/commit/0d8ed5ebf61516f2f79800c2a2e0e61107076133))
+- **menu:** marker show when disabled in horizontal mode ([e1b1153](https://github.com/qmhc/vexip-ui/commit/e1b115350e155f91e27a04ea57ad1acd10fddde0))
+- **menu:** title padding error when horizontal ([b834295](https://github.com/qmhc/vexip-ui/commit/b834295b6ee0e069be5919f3505c4a52f9bb0e3e))
+- **overflow:** consider the padding of wrapper ([ee9327d](https://github.com/qmhc/vexip-ui/commit/ee9327ddbf829391465dca8192543fd9b4a2757d))
+- **overflow:** support directly render children ([c17c20b](https://github.com/qmhc/vexip-ui/commit/c17c20b5e94467bd1e6675e974f9bf8df9b4aba5))
+- **renderer:** misisng component name ([b2607aa](https://github.com/qmhc/vexip-ui/commit/b2607aaff93f8e87f13602472d85cae2f8228a43))
+- **tooltip:** support fragment when using wrapper ([68be420](https://github.com/qmhc/vexip-ui/commit/68be420456f5f0a7b4ef0862b4fac5fea6ab05ab))
+- useClickoutside directly passing a callback ([ebf4842](https://github.com/qmhc/vexip-ui/commit/ebf4842eafab6175a929e0e2cb26cca88a6b2347))
+
+### Code Refactoring
+
+- **tooltip:** improve component structure, add multiple features ([e44f327](https://github.com/qmhc/vexip-ui/commit/e44f32765647db52d05d3acbd07454b92164f34e))
+
+### Features
+
+- **Layout:** create Layout component ([#88](https://github.com/qmhc/vexip-ui/issues/88)) ([22c2b6d](https://github.com/qmhc/vexip-ui/commit/22c2b6d53f0ae27e64b320e49e6b088edd92b057)), closes [#85](https://github.com/qmhc/vexip-ui/issues/85)
+- **menu:** support auto ellipsis when horizontal mode ([ad429c8](https://github.com/qmhc/vexip-ui/commit/ad429c8896158447a1e80cbb51ae4ae1f0346b60))
+- **menu:** support parse options from router ([28d13f1](https://github.com/qmhc/vexip-ui/commit/28d13f1b9dddffd238128145a6fe2ea74967a9c2)), closes [#85](https://github.com/qmhc/vexip-ui/issues/85)
+- **mixins:** usePopper support virtual reference ([da51364](https://github.com/qmhc/vexip-ui/commit/da513643010732d0f36cafb5b01efc9bbe04628e))
+- **overflow:** add Overflow component ([665f250](https://github.com/qmhc/vexip-ui/commit/665f2501c2d4204973c155f7b6bbb95280f72162))
+
+### BREAKING CHANGES
+
+- **tooltip:** `theme` prop deprecated, use `reverse` prop instead
+  `theme="dark"` case. `tip` slot deprecated, currently the trigger part
+  use `trigger` slot and the tip part use default slot. Now Tooltip will
+  not render wrapper element by default.
+
 # [2.0.0-beta.14](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2022-07-10)
 
 ### Bug Fixes
@@ -87,10 +119,6 @@
 - **style:** forward design to esaier modify variables ([5a67967](https://github.com/qmhc/vexip-ui/commit/5a67967c4ce09b137728f8acdb32308f3800c291))
 - support array type class and style props ([317fbff](https://github.com/qmhc/vexip-ui/commit/317fbff212847cf3d7054af99102656779e37a8e))
 
-### Code Refactoring
-
-- **switch:** rename to Switch, icon prop split to open-icon and close-icon
-
 ### Features
 
 - **config:** auto warning when validator returns false ([2b7712d](https://github.com/qmhc/vexip-ui/commit/2b7712d7d25ef1ef7905934d9d5faf44c4c6003a))
@@ -101,8 +129,6 @@
 
 - **number-input:** NumberInput `range` prop has removed, using min and
   max props to instead it.
-- **switch**: Swticher is renamed to Switch. Its icon prop has been
-  removed, and using open-icon and close-icon to instead it.
 
 # [2.0.0-beta.10](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2022-06-18)
 
@@ -359,39 +385,22 @@
   style imports in scss are currently using `@use` and `@forward`, do not use `@import` to import
   styles anymore.
 
-## [1.3.2](https://github.com/qmhc/vexip-ui/compare/v1.3.1...v1.3.2) (2022-04-22)
-
-### Bug Fixes
-
-- **ellipsis:** exactly compare width using bounding rect ([194fd56](https://github.com/qmhc/vexip-ui/commit/194fd56fe8e2c3e0634f0b9e9f4a690f8498d295))
-- **native-scroll:** incorrectly record content offsetWidth ([6cb2d19](https://github.com/qmhc/vexip-ui/commit/6cb2d19fe7523fbd684404dad9ee64ac997a468f))
-- **scroll:** autoplay cannot start when mounted ([90f1934](https://github.com/qmhc/vexip-ui/commit/90f1934708f8efade6b456fc60349d4bfbc696d0))
-- **scrollbar:** cannot find wrapper in production mode ([d903b15](https://github.com/qmhc/vexip-ui/commit/d903b1573b096866ca9e22809765b9e89ce01e2a))
-- **upload-file:** decoupling the style from Upload class name ([f62a417](https://github.com/qmhc/vexip-ui/commit/f62a4174f1c8a22d012077b504e10b1247830be2))
-
-### Features
-
-- **icons:** sync icons to vue-awesome@4.5.0 ([3f0c915](https://github.com/qmhc/vexip-ui/commit/3f0c915a4d5bc97e5fd6a2aa5f028408d0c9b6db))
-- **upload:** add isDragOver prop to default slot ([1a0020a](https://github.com/qmhc/vexip-ui/commit/1a0020afa949abfd32a7cba7955ee6b2a07e2ac8))
-- **upload:** export UploadList and UploadFile components ([8b6ced2](https://github.com/qmhc/vexip-ui/commit/8b6ced29dcf97e15bda356bf4d4203e6ac0db55c))
-- **upload:** support upload directories and only-dary mode ([042d6db](https://github.com/qmhc/vexip-ui/commit/042d6db4e9bbe1b0a075b1a25af25fb33689741b))
-
 ## [1.3.1](https://github.com/qmhc/vexip-ui/compare/v1.3.0...v1.3.1) (2022-04-19)
 
 ### Bug Fixes
 
+- export Hightlight and NativeScroll components ([55ab1c7](https://github.com/qmhc/vexip-ui/commit/55ab1c71bd1073b79b68706a28d985e43d7c2194))
 - **native-scroll:** refresh content size when observer callback ([ff2a732](https://github.com/qmhc/vexip-ui/commit/ff2a7326bf14b8c8159a48a49bf65538760181e7))
 - **native-scroll:** stop wheel event propagation when can scroll ([d13b4d6](https://github.com/qmhc/vexip-ui/commit/d13b4d6912a63ca1f99d1d241164fcbae1f74353))
 - **native-scroll:** unable to scroll after call scroll api mathods ([bca3d51](https://github.com/qmhc/vexip-ui/commit/bca3d5181d74036face7fe4ff990581d36bd86f0))
 - **native-scroll:** unexpected reset scroll when content style change ([dabbd49](https://github.com/qmhc/vexip-ui/commit/dabbd49b4e66400e20340a84234c08527202b40a))
 - **scrollbar:** unexpected show track when use-track not true ([6bf2dda](https://github.com/qmhc/vexip-ui/commit/6bf2dda3f1b6e0a40777e0059b4f20b4c77ad957))
 - **scrollbar:** use-track should default false ([d6f8e6c](https://github.com/qmhc/vexip-ui/commit/d6f8e6ca444fd163b6c460c2772c86c5c61f843a))
-- export Hightlight and NativeScroll components ([55ab1c7](https://github.com/qmhc/vexip-ui/commit/55ab1c71bd1073b79b68706a28d985e43d7c2194))
 
 ### Features
 
-- **calendar:** add header, title and week slots ([340194a](https://github.com/qmhc/vexip-ui/commit/340194aca45ba656a211a019350061743150252b))
 - add use-bar-track prop to Scroll and NativeScroll ([59c94f8](https://github.com/qmhc/vexip-ui/commit/59c94f82226e3f4ae722916eacb14b9ae5390a33))
+- **calendar:** add header, title and week slots ([340194a](https://github.com/qmhc/vexip-ui/commit/340194aca45ba656a211a019350061743150252b))
 
 ### Performance Improvements
 
@@ -445,18 +454,18 @@
 
 ### Bug Fixes
 
-- install options should be optional ([0934c3c](https://github.com/qmhc/vexip-ui/commit/0934c3c36d863c30eb27ec4f38842392b51c7486))
-- **date:** limit range values starkly in modification ([68cc1c8](https://github.com/qmhc/vexip-ui/commit/68cc1c8b64d54ff0bb218104d626e6eed86d14cc))
-- support Date type for ConfiguruseConfiguredProps ([05607e6](https://github.com/qmhc/vexip-ui/commit/05607e66cfff949fe5a21b05d594acaeb5a776b5))
 - **config:** global defaults config no effective ([6eba983](https://github.com/qmhc/vexip-ui/commit/6eba983679b166786528c3a4f3a93b91bcfb6ed9))
+- **date:** limit range values starkly in modification ([68cc1c8](https://github.com/qmhc/vexip-ui/commit/68cc1c8b64d54ff0bb218104d626e6eed86d14cc))
+- install options should be optional ([0934c3c](https://github.com/qmhc/vexip-ui/commit/0934c3c36d863c30eb27ec4f38842392b51c7486))
+- support Date type for ConfiguruseConfiguredProps ([05607e6](https://github.com/qmhc/vexip-ui/commit/05607e66cfff949fe5a21b05d594acaeb5a776b5))
 - **table:** no recalculate when add rows ([741400e](https://github.com/qmhc/vexip-ui/commit/741400e112bf4437d47c7ed6898956a08a230021))
 
 ### Features
 
 - add judge method for Message and Notice ([cb4062b](https://github.com/qmhc/vexip-ui/commit/cb4062b36096162b519b5a853726a259c4dd46a9))
-- **table:** add row enter and leave events ([b9fb4c2](https://github.com/qmhc/vexip-ui/commit/b9fb4c21e61d739ec4fd2b69a8ac1363d545c244))
 - add locale config ([0a0ec74](https://github.com/qmhc/vexip-ui/commit/0a0ec7487dfc8f89e18a38c50a7e001ea7440209))
 - **form:** support native html form submit ([497c3e3](https://github.com/qmhc/vexip-ui/commit/497c3e3115632c09bcb10ac9c9d98aa334b61547))
+- **table:** add row enter and leave events ([b9fb4c2](https://github.com/qmhc/vexip-ui/commit/b9fb4c21e61d739ec4fd2b69a8ac1363d545c244))
 
 ### BREAKING CHANGES
 
@@ -538,12 +547,12 @@
 
 ### Features
 
+- add contextmenu component ([#13](https://github.com/qmhc/vexip-ui/issues/13)) ([1571dc3](https://github.com/qmhc/vexip-ui/commit/1571dc34d4830a1a515c15378bf7b7db3e72219b))
 - **dropdown:** add appear prop ([e230054](https://github.com/qmhc/vexip-ui/commit/e230054a585141d9b88901f65589dbf5578b8890))
 - **loading:** create global loading component ([caedc67](https://github.com/qmhc/vexip-ui/commit/caedc67a883cd0f1683612e25d71d4f0e279480d))
 - **tag:** add build in color type ([02fd360](https://github.com/qmhc/vexip-ui/commit/02fd36026fec4de39349252b0fa03dde4aa820ca))
 - **tag:** add simple style tag ([b316888](https://github.com/qmhc/vexip-ui/commit/b3168886ea40f6cbaa3a83ea8278ed5d89d8c953))
 - **time-ago:** add time-ago component ([b639c2e](https://github.com/qmhc/vexip-ui/commit/b639c2eb13c62b00d72010cc4c30328d09b2835a))
-- add contextmenu component ([#13](https://github.com/qmhc/vexip-ui/issues/13)) ([1571dc3](https://github.com/qmhc/vexip-ui/commit/1571dc34d4830a1a515c15378bf7b7db3e72219b))
 
 ### Performance Improvements
 
@@ -641,8 +650,6 @@
 - **portal:** render teleport after mounted next tick ([8971a9b](https://github.com/qmhc/vexip-ui/commit/8971a9b493056e212c3da1043008ec339be69114))
 - **scroll:** ensure wrapper and content element ([6e0f0de](https://github.com/qmhc/vexip-ui/commit/6e0f0deeec7c27d0224869b4a324779858ea4d78))
 - **scss:** themes at import use relative path ([f283e68](https://github.com/qmhc/vexip-ui/commit/f283e68986a35a93b6ee7ec75cc12a3e2e2a19c4))
-
-# [1.0.0-alpha.3](https://github.com/qmhc/vexip-ui/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2021-05-29)
 
 # [1.0.0-alpha.2](https://github.com/qmhc/vexip-ui/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2021-05-29)
 

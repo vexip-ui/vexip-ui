@@ -67,7 +67,23 @@ import { useScrollWrapper } from './mixins'
 
 import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
-import type { ScrollMode, ScrollPayload, BarScrollPayload } from './symbol'
+import type { ScrollMode } from './symbol'
+
+interface ScrollPayload {
+  type: ScrollMode,
+  clientX: number,
+  clientY: number,
+  percentX: number,
+  percentY: number
+}
+
+interface BarScrollPayload {
+  type: 'vertical' | 'horizontal',
+  clientX: number,
+  clientY: number,
+  percentX: number,
+  percentY: number
+}
 
 const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
 

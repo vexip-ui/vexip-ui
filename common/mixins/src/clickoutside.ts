@@ -10,6 +10,7 @@ import {
 } from '@vexip-ui/utils'
 import { useListener } from './listener'
 
+import type { Ref } from 'vue'
 import type { TransferNode } from '@vexip-ui/utils'
 
 export const CLICK_OUTSIDE = 'clickoutside'
@@ -38,7 +39,7 @@ document.addEventListener(CLICK_TYPE, (event: Event & { path?: TransferNode[] })
  * @param
  * @param target 需要处理的元素 ref，可不传
  */
-export function useClickOutside(handler: () => void, target = ref<HTMLElement | null>(null)) {
+export function useClickOutside(handler: () => void, target: Ref<HTMLElement | null> = ref(null)) {
   let remove = noop
 
   const stopWatch = watch(

@@ -59,13 +59,21 @@ import {
   Compress,
   ArrowsRotate
 } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, booleanProp, booleanNumberProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  booleanNumberProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useMoving, useFullScreen, useSetTimeout } from '@vexip-ui/mixins'
 import { boundRange } from '@vexip-ui/utils'
 import { InternalActionName } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ToolbarPlacement, ToolbarAction } from './symbol'
+import type { ViewerState, ToolbarPlacement, ToolbarAction } from './symbol'
 
 export default defineComponent({
   name: 'Viewer',
@@ -88,21 +96,20 @@ export default defineComponent({
     fullDisabled: booleanProp,
     toolbarPlacement: String as PropType<ToolbarPlacement>,
     actions: Array as PropType<ToolbarAction[]>,
-    toolbarFade: booleanNumberProp
+    toolbarFade: booleanNumberProp,
+    onMoveStart: eventProp<(state: ViewerState) => void>(),
+    onMove: eventProp<(state: ViewerState) => void>(),
+    onMoveEnd: eventProp<(state: ViewerState) => void>(),
+    onWheel: eventProp<(sign: 1 | -1, state: ViewerState) => void>(),
+    onRotate: eventProp<(deg: number, state: ViewerState) => void>(),
+    onFlipX: eventProp<(flip: boolean, state: ViewerState) => void>(),
+    onFlipY: eventProp<(flip: boolean, state: ViewerState) => void>(),
+    onZoom: eventProp<(zoom: number, state: ViewerState) => void>(),
+    onFull: eventProp<(full: boolean, state: ViewerState) => void>(),
+    onReset: eventProp<(state: ViewerState) => void>()
   },
-  emits: [
-    'move-start',
-    'move',
-    'move-end',
-    'wheel',
-    'rotate',
-    'flip-x',
-    'flip-y',
-    'zoom',
-    'full',
-    'reset'
-  ],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('viewer', _props, {
       width: '100%',
       height: '100%',
@@ -133,20 +140,31 @@ export default defineComponent({
 
     const transition = ref<HTMLElement | null>(null)
 
-    const { supported: fullSupported, target: viewer, full, enter: enterFull, exit: exitFull } = useFullScreen()
-    const { target: container, x: currentLeft, y: currentTop, moving } = useMoving({
+    const {
+      supported: fullSupported,
+      target: viewer,
+      full,
+      enter: enterFull,
+      exit: exitFull
+    } = useFullScreen()
+    const {
+      target: container,
+      x: currentLeft,
+      y: currentTop,
+      moving
+    } = useMoving({
       onStart: (_, event) => {
         if (props.moveDisabled || event.button > 0) {
           return false
         }
 
-        emit('move-start', getState())
+        emitEvent(props.onMoveStart, getState())
       },
       onMove: () => {
-        emit('move-start', getState())
+        emitEvent(props.onMoveStart, getState())
       },
       onEnd: () => {
-        emit('move-start', getState())
+        emitEvent(props.onMoveStart, getState())
       }
     })
 
@@ -171,7 +189,10 @@ export default defineComponent({
     ) {
       const value = action[prop]
 
-      return (typeof value === 'function' ? value(state) : value) as Exclude<ToolbarAction[K], (...args: any) => any>
+      return (typeof value === 'function' ? value(state) : value) as Exclude<
+        ToolbarAction[K],
+        (...args: any) => any
+      >
     }
 
     const internalActions: ToolbarAction[] = [
@@ -277,7 +298,9 @@ export default defineComponent({
     })
     const contentStyle = computed(() => {
       return {
-        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scaleX(${flipX.value ? -1 : 1}) scaleY(${flipY.value ? -1 : 1})`
+        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scaleX(${
+          flipX.value ? -1 : 1
+        }) scaleY(${flipY.value ? -1 : 1})`
       }
     })
     const transitionStyle = computed(() => {
@@ -307,7 +330,7 @@ export default defineComponent({
 
       const sign = event.deltaY > 0 ? -1 : 1
 
-      emit('wheel', sign, state)
+      emitEvent(props.onWheel, sign, state)
       handleZoom(sign * props.zoomDelta)
     }
 
@@ -317,7 +340,7 @@ export default defineComponent({
       }
 
       rotate.value += deg
-      emit('rotate', deg, state)
+      emitEvent(props.onRotate, deg, state)
     }
 
     function toggleFlipHorizontal(target = !flipX.value) {
@@ -326,7 +349,7 @@ export default defineComponent({
       }
 
       flipX.value = target
-      emit('flip-x', target, state)
+      emitEvent(props.onFlipX, target, state)
     }
 
     function toggleFlipVertical(target = !flipY.value) {
@@ -335,7 +358,7 @@ export default defineComponent({
       }
 
       flipY.value = target
-      emit('flip-y', target, state)
+      emitEvent(props.onFlipY, target, state)
     }
 
     function handleZoom(ratio: number) {
@@ -344,13 +367,13 @@ export default defineComponent({
       }
 
       zoom.value = boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax)
-      emit('zoom', zoom.value, state)
+      emitEvent(props.onZoom, zoom.value, state)
     }
 
     async function toggleFull(target = !full.value) {
       target ? await enterFull() : await exitFull()
 
-      emit('full', target, state)
+      emitEvent(props.onFull, target, state)
     }
 
     function handleReset() {
@@ -360,7 +383,7 @@ export default defineComponent({
       flipX.value = false
       flipY.value = false
       zoom.value = 1
-      emit('reset', state)
+      emitEvent(props.onReset, state)
     }
 
     function normalizeProps() {
@@ -400,7 +423,8 @@ export default defineComponent({
     function handleLeaveToolbar() {
       clearTimeout(timer.toolbarFade)
 
-      const fade = typeof props.toolbarFade === 'number' ? props.toolbarFade : (props.toolbarFade ? 1500 : 0)
+      const fade =
+        typeof props.toolbarFade === 'number' ? props.toolbarFade : props.toolbarFade ? 1500 : 0
 
       if (fade > 0) {
         timer.toolbarFade = window.setTimeout(() => {
