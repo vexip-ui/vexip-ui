@@ -1,0 +1,76 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$transfer: () !default;
+$transfer: map.merge(
+  (
+    d-color: get-css-var('border-color-light-2'),
+    panel-b-color: get-css-var('border-color-base'),
+    panel-radius: get-css-var('radius-base'),
+    panel-width: 200px,
+    panel-height: 280px
+  ),
+  $transfer
+);
+
+.#{$namespace}-transfer {
+  &-vars {
+    @include define-preset-values('transfer', $transfer);
+  }
+
+  $radius: get-css-var('transfer-panel-radius');
+
+  @include basis;
+
+  display: flex;
+  align-items: center;
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    width: get-css-var('transfer-panel-width');
+    height: get-css-var('transfer-panel-height');
+    border: get-css-var('border-shape') get-css-var('transfer-panel-b-color');
+    border-radius: $radius;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px 9px;
+    background-color: get-css-var('fill-color-background');
+    border-bottom: get-css-var('border-shape') get-css-var('transfer-d-color');
+    border-radius: $radius $radius 0 0;
+  }
+
+  &__checkbox {
+    margin-right: 6px;
+  }
+
+  &__reverse {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    margin-right: 6px;
+    cursor: pointer;
+    transition: get-css-var('transition-color');
+
+    &:hover {
+      color: get-css-var('color-primary-base');
+    }
+  }
+
+  &__title {
+    display: flex;
+    flex: 1 0 auto;
+    justify-content: flex-end;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    margin: 0 8px;
+  }
+}

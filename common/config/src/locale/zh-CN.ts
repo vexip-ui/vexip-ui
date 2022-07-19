@@ -109,6 +109,13 @@ export function zhCNLocale() {
       cancel: '取消'
     },
 
+    transfer: {
+      source: '源',
+      target: '目标',
+      empty: '暂无数据',
+      reverse: '反选'
+    },
+
     tree: {
       empty: '暂无数据'
     },

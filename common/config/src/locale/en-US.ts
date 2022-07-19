@@ -109,6 +109,13 @@ export function enUSLocale() {
       cancel: 'Cancel'
     },
 
+    transfer: {
+      source: 'Source',
+      target: 'Target',
+      empty: 'No data',
+      reverse: 'Reverse selection'
+    },
+
     tree: {
       empty: 'No data'
     },

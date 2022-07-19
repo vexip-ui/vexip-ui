@@ -89,6 +89,7 @@ import { TimePicker } from './time-picker'
 import { Timeline } from './timeline'
 import { TimelineItem } from './timeline-item'
 import { Tooltip } from './tooltip'
+import { Transfer } from './transfer'
 import { Tree } from './tree'
 import { Upload } from './upload'
 import { UploadFile } from './upload-file'
@@ -190,6 +191,7 @@ const components = [
   Timeline,
   TimelineItem,
   Tooltip,
+  Transfer,
   Tree,
   Upload,
   UploadFile,
@@ -300,6 +302,7 @@ export {
   Timeline,
   TimelineItem,
   Tooltip,
+  Transfer,
   Tree,
   Upload,
   UploadFile,
