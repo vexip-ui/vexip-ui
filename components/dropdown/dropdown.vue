@@ -55,7 +55,9 @@ import {
   useProps,
   booleanProp,
   booleanStringProp,
-  classProp
+  classProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { useLabel } from './mixins'
 import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
@@ -81,9 +83,13 @@ export default defineComponent({
     transfer: booleanStringProp,
     dropClass: classProp,
     appear: booleanProp,
-    meta: Object as PropType<Record<string, any>>
+    meta: Object as PropType<Record<string, any>>,
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onSelect: eventProp<(labels: (string | number)[], metas: Array<Record<string, any>>) => void>(),
+    onClickOutside: eventProp(),
+    onOutsideClose: eventProp()
   },
-  emits: ['toggle', 'select', 'click-outside', 'outside-close', 'update:visible'],
+  emits: ['update:visible'],
   setup(_props, { emit }) {
     const props = useProps('dropdown', _props, {
       visible: {
@@ -163,7 +169,7 @@ export default defineComponent({
         updatePopper()
       }
 
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
 
@@ -174,19 +180,18 @@ export default defineComponent({
     })
 
     function handleClickOutside() {
-      emit('click-outside')
+      emitEvent(props.onClickOutside)
 
       if (props.outsideClose && props.trigger !== 'custom' && currentVisible.value) {
         currentVisible.value = false
-
-        emit('outside-close')
+        emitEvent(props.onOutsideClose)
       }
     }
 
     function handleSelect(labels: (string | number)[], metas: Array<Record<string, any>>) {
       if (props.trigger !== 'custom') {
         currentVisible.value = false
-        emit('select', labels, metas)
+        emitEvent(props.onSelect, labels, metas)
       }
 
       if (typeof parentState?.handleSelect === 'function') {

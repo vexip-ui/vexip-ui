@@ -18,7 +18,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, watch, onBeforeUnmount } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
@@ -41,10 +41,11 @@ export default defineComponent({
     icon: {
       type: Object,
       default: null
-    }
+    },
+    onToggle: eventProp<(active: boolean) => void>()
   },
-  emits: ['toggle'],
-  setup(props, { emit }) {
+  emits: [],
+  setup(props) {
     const tabNavState = inject(TAB_NAV_STATE, null)
 
     const nh = useNameHelper('tab-nav')
@@ -71,7 +72,7 @@ export default defineComponent({
       }
     )
     watch(active, value => {
-      emit('toggle', value)
+      emitEvent(props.onToggle!, value)
     })
 
     if (tabNavState) {

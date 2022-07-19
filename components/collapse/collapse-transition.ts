@@ -1,5 +1,5 @@
 import { defineComponent, h, Transition } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -14,10 +14,18 @@ export default defineComponent({
     horizontal: booleanProp,
     duration: Number,
     timing: String,
-    fadeEffect: booleanProp
+    fadeEffect: booleanProp,
+    onBeforeEnter: eventProp<(el: Element) => void>(),
+    onEnter: eventProp<(el: Element, done: () => void) => void>(),
+    onAfterEnter: eventProp<(el: Element) => void>(),
+    onEnterCancelled: eventProp<(el: Element) => void>(),
+    onBeforeLeave: eventProp<(el: Element) => void>(),
+    onLeave: eventProp<(el: Element, done: () => void) => void>(),
+    onAfterLeave: eventProp<(el: Element) => void>(),
+    onLeaveCancelled: eventProp<(el: Element) => void>()
   },
-  emits: ['before-enter', 'enter', 'after-enter', 'before-leave', 'leave', 'after-leave'],
-  setup(_props, { slots, emit }) {
+  emits: [],
+  setup(_props, { slots }) {
     const props = useProps('collapseTransition', _props, {
       appear: false,
       mode: {
@@ -105,9 +113,9 @@ export default defineComponent({
               el.style.opacity = '0'
             }
 
-            emit('before-enter', $el)
+            emitEvent(props.onBeforeEnter, $el)
           },
-          onEnter($el) {
+          onEnter($el, done) {
             const el = $el as HTMLElement
 
             styleRecord.overflow = el.style.overflow
@@ -128,7 +136,7 @@ export default defineComponent({
               el.style.opacity = styleRecord.opacity!
             }
 
-            emit('enter', $el)
+            emitEvent(props.onEnter, $el, done)
           },
           onAfterEnter($el) {
             const el = $el as HTMLElement
@@ -138,7 +146,7 @@ export default defineComponent({
             el.style.overflow = styleRecord.overflow!
             el.style.boxSizing = styleRecord.boxSizing!
 
-            emit('after-enter', $el)
+            emitEvent(props.onAfterEnter, $el)
           },
           onBeforeLeave($el) {
             const el = $el as HTMLElement
@@ -154,9 +162,9 @@ export default defineComponent({
             el.style[height] = `${el[scrollHeight]}px`
             el.style.overflow = 'hidden'
 
-            emit('before-leave', $el)
+            emitEvent(props.onBeforeLeave, $el)
           },
-          onLeave($el) {
+          onLeave($el, done) {
             const el = $el as HTMLElement
 
             if (el[scrollHeight] !== 0) {
@@ -175,7 +183,7 @@ export default defineComponent({
               }
             }
 
-            emit('leave', $el)
+            emitEvent(props.onLeave, $el, done)
           },
           onAfterLeave($el) {
             const el = $el as HTMLElement
@@ -190,7 +198,7 @@ export default defineComponent({
             el.style.boxSizing = styleRecord.boxSizing!
             el.style.opacity = styleRecord.opacity!
 
-            emit('after-leave', $el)
+            emitEvent(props.onAfterLeave, $el)
           }
         },
         {

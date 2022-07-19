@@ -33,7 +33,17 @@
         :upper-matched="item.upperMatched"
         :node-props="getNodeProps"
       >
-        <template #default="{ data: nodeDta, node, depth, children, toggleCheck, toggleExpand, toggleSelect }">
+        <template
+          #default="{
+            data: nodeDta,
+            node,
+            depth,
+            children,
+            toggleCheck,
+            toggleExpand,
+            toggleSelect
+          }"
+        >
           <slot
             name="node"
             :data="nodeDta"
@@ -72,7 +82,14 @@
 <script lang="ts">
 import { defineComponent, ref, toRef, reactive, computed, watch, watchEffect, provide } from 'vue'
 import TreeNode from './tree-node.vue'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { isNull, isPromise, transformTree, flatTree, removeArrayItem } from '@vexip-ui/utils'
 import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
 
@@ -137,22 +154,20 @@ export default defineComponent({
     noCascaded: booleanProp,
     filter: [String, Function] as PropType<string | FilterFn>,
     ignoreCase: booleanProp,
-    nodeProps: [Object, Function] as PropType<Data | NodePropsFn>
+    nodeProps: [Object, Function] as PropType<Data | NodePropsFn>,
+    onNodeChange: eventProp<(data: Data, node: TreeNodeProps, checked: boolean) => void>(),
+    onNodeClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onNodeSelect: eventProp<(data: Data | Data[], node: TreeNodeProps | TreeNodeProps[]) => void>(),
+    onNodeCancel: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onNodeExpand: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onNodeReduce: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onDragStart: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onDragOver: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onDrop: eventProp<(data: Data, node: TreeNodeProps, type: DropType) => void>(),
+    onDragEnd: eventProp<(data: Data, node: TreeNodeProps) => void>()
   },
-  emits: [
-    'node-change',
-    'node-click',
-    'node-select',
-    'node-cancel',
-    'node-expand',
-    'node-reduce',
-    'node-shrink',
-    'drag-start',
-    'drag-over',
-    'drop',
-    'drag-end'
-  ],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('tree', _props, {
       arrow: {
         default: 'auto',
@@ -249,7 +264,8 @@ export default defineComponent({
           node.upperMatched = false
         }
       } else {
-        const filter = typeof props.filter === 'function' ? props.filter : createDefaultFilter(props.filter)
+        const filter =
+          typeof props.filter === 'function' ? props.filter : createDefaultFilter(props.filter)
 
         for (let i = 0, len = nodes.length; i < len; ++i) {
           const node = nodes[i]
@@ -520,9 +536,7 @@ export default defineComponent({
           parent.partial = !parent.checked
         } else {
           parent.checked = false
-          parent.partial = parent.children.some(
-            item => item.checked || item.partial
-          )
+          parent.partial = parent.children.some(item => item.checked || item.partial)
         }
 
         node = parent
@@ -566,19 +580,19 @@ export default defineComponent({
         }
       }
 
-      emit('node-change', originNode.data, originNode, able)
+      emitEvent(props.onNodeChange, originNode.data, originNode, able)
     }
 
     function handleNodeClick(node: TreeNodeProps) {
-      emit('node-click', node.data, node)
+      emitEvent(props.onNodeClick, node.data, node)
     }
 
     function handleNodeSelect(node: TreeNodeProps) {
       const selectedNodes = flattedData.value.filter(item => item.selected)
 
       if (props.multiple) {
-        emit(
-          'node-select',
+        emitEvent(
+          props.onNodeSelect,
           selectedNodes.map(item => item.data),
           selectedNodes
         )
@@ -591,12 +605,12 @@ export default defineComponent({
           item.selected = item.id === currentId
         }
 
-        emit('node-select', node.data, node)
+        emitEvent(props.onNodeSelect, node.data, node)
       }
     }
 
     function handleNodeCancel(node: TreeNodeProps) {
-      emit('node-cancel', node.data, node)
+      emitEvent(props.onNodeCancel, node.data, node)
     }
 
     function handleNodeExpand(node: TreeNodeProps) {
@@ -608,11 +622,11 @@ export default defineComponent({
         }
       }
 
-      emit('node-expand', node.data, node)
+      emitEvent(props.onNodeExpand, node.data, node)
     }
 
     function handleNodeReduce(node: TreeNodeProps) {
-      emit('node-reduce', node.data, node)
+      emitEvent(props.onNodeReduce, node.data, node)
     }
 
     async function handleAsyncLoad(node: TreeNodeProps) {
@@ -645,7 +659,7 @@ export default defineComponent({
       }
 
       dragging.value = true
-      emit('drag-start', nodeInstance.node.data, nodeInstance.node)
+      emitEvent(props.onDragStart, nodeInstance.node.data, nodeInstance.node)
     }
 
     function handleNodeDragOver(nodeInstance: TreeNodeInstance, event: DragEvent) {
@@ -683,7 +697,7 @@ export default defineComponent({
       dragState.dropType = dropType
 
       indicatorShow.value = isIndicatorShow
-      emit('drag-over', nodeInstance.node.data, nodeInstance.node)
+      emitEvent(props.onDragOver, nodeInstance.node.data, nodeInstance.node)
     }
 
     function handleNodeDrop(nodeInstance: TreeNodeInstance) {
@@ -735,11 +749,7 @@ export default defineComponent({
         const index = parent.children.findIndex(item => item.id === currentId)
 
         if (~index) {
-          parent.children.splice(
-            +(dropType === DropType.AFTER) + index,
-            0,
-            draggingNode
-          )
+          parent.children.splice(+(dropType === DropType.AFTER) + index, 0, draggingNode)
 
           draggingNode.parent = parent.id
         }
@@ -754,14 +764,14 @@ export default defineComponent({
       //   })
       // })
 
-      emit('drop', nodeInstance.node.data, nodeInstance.node, dropType)
+      emitEvent(props.onDrop, nodeInstance.node.data, nodeInstance.node, dropType)
     }
 
     function handleNodeDragEnd(nodeInstance: TreeNodeInstance) {
       dragging.value = true
       indicatorShow.value = false
       dragState = null
-      emit('drag-end', nodeInstance.node.data, nodeInstance.node)
+      emitEvent(props.onDragEnd, nodeInstance.node.data, nodeInstance.node)
     }
 
     function getCheckedNodes(): TreeNodeProps[] {
@@ -800,7 +810,7 @@ export default defineComponent({
       const parent = getParentNode(node)
 
       const currentId = node.id as Key
-      const parentId = parent ? parent.id as Key : null
+      const parentId = parent ? (parent.id as Key) : null
 
       return flattedData.value.filter(item => {
         const isChild = parentId === null ? !item.parent : item.parent === parentId

@@ -28,7 +28,7 @@ import {
   nextTick,
   getCurrentInstance
 } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { USE_TOUCH, isDefined, throttle, boundRange } from '@vexip-ui/utils'
 import { useTrack } from './mixins'
 import { ScrollbarType } from './symbol'
@@ -53,10 +53,13 @@ export default defineComponent({
     wrapper: [String, Object] as PropType<string | HTMLElement>,
     duration: Number,
     useTrack: booleanProp,
-    trackSpeed: Number
+    trackSpeed: Number,
+    onScrollStart: eventProp<(percent: number) => void>(),
+    onScroll: eventProp<(percent: number) => void>(),
+    onScrollEnd: eventProp<(percent: number) => void>()
   },
-  emits: ['scroll', 'scroll-start', 'scroll-end'],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('scrollbar', _props, {
       placement: {
         default: 'right' as ScrollbarPlacement,
@@ -113,14 +116,16 @@ export default defineComponent({
       disabled: toRef(props, 'disabled'),
       handleDown: scroll => {
         window.clearTimeout(fadeTimer)
-        emit('scroll-start', scroll)
+        emitEvent(props.onScrollStart, scroll)
       },
       handleMove: () => window.clearTimeout(fadeTimer),
       handleUp: scroll => {
         setScrollbarFade()
-        emit('scroll-end', scroll)
+        emitEvent(props.onScrollEnd, scroll)
       },
-      handleScroll: scroll => emit('scroll', scroll)
+      handleScroll: scroll => {
+        emitEvent(props.onScroll, scroll)
+      }
     })
 
     const className = computed(() => {
@@ -279,7 +284,7 @@ export default defineComponent({
       window.clearTimeout(fadeTimer)
 
       scrolling.value = true
-      emit('scroll-start', currentScroll.value)
+      emitEvent(props.onScrollStart, currentScroll.value)
     }
 
     const handleBarMove = throttle((event: MouseEvent) => {
@@ -295,7 +300,7 @@ export default defineComponent({
       currentScroll.value = (position / length / (100 - props.barLength)) * 1e4
 
       verifyScroll()
-      emit('scroll', currentScroll.value)
+      emitEvent(props.onScroll, currentScroll.value)
     })
 
     function handleMouseMove(event: PointerEvent) {
@@ -319,7 +324,7 @@ export default defineComponent({
       setScrollbarFade()
 
       scrolling.value = false
-      emit('scroll-end', currentScroll.value)
+      emitEvent(props.onScrollEnd, currentScroll.value)
     }
 
     function verifyScroll() {

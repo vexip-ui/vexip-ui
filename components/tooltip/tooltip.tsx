@@ -16,7 +16,9 @@ import {
   booleanProp,
   booleanStringProp,
   classProp,
-  styleProp
+  styleProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import {
   useClickOutside,
@@ -57,11 +59,11 @@ export default defineComponent({
     reverse: booleanProp,
     width: [String, Number] as PropType<number | 'trigger' | 'auto'>,
     virtual: Object as PropType<TooltipVirtual>,
-    onToggle: Function as PropType<(visible: boolean) => void>,
-    onTipEnter: Function as PropType<() => void>,
-    onTipLeave: Function as PropType<() => void>,
-    onClickoutside: Function as PropType<() => void>,
-    onOutsideClose: Function as PropType<() => void>
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onTipEnter: eventProp(),
+    onTipLeave: eventProp(),
+    onClickoutside: eventProp(),
+    onOutsideClose: eventProp()
   },
   emits: ['update:visible'],
   setup(_props, { attrs, slots, emit, expose }) {
@@ -190,7 +192,7 @@ export default defineComponent({
         updatePopper()
       }
 
-      props.onToggle?.(visible)
+      emitEvent(props.onToggle, visible)
       emit('update:visible', visible)
     }
 
@@ -213,7 +215,7 @@ export default defineComponent({
         }, 250)
       }
 
-      props.onTipEnter?.()
+      emitEvent(props.onTipEnter)
     }
 
     function handleTriggerLeave() {
@@ -227,7 +229,7 @@ export default defineComponent({
         }, 250)
       }
 
-      props.onTipLeave?.()
+      emitEvent(props.onTipLeave)
     }
 
     function handleTriggerClick() {
@@ -257,11 +259,11 @@ export default defineComponent({
     function handleClickOutside() {
       if (props.disabled) return
 
-      props.onClickoutside?.()
+      emitEvent(props.onClickoutside)
 
       if (props.outsideClose && props.trigger !== 'custom' && currentVisible.value) {
         toggleVisible(false)
-        props.onOutsideClose?.()
+        emitEvent(props.onOutsideClose)
       }
     }
 

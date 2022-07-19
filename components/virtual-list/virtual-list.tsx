@@ -1,10 +1,17 @@
 import { defineComponent, toRefs, ref, computed, h } from 'vue'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, useProps, eventProp, emitEvent } from '@vexip-ui/config'
 import { useVirtual } from '@vexip-ui/mixins'
 
 import type { PropType } from 'vue'
+
+interface ScrollPayload {
+  clientX: number,
+  clientY: number,
+  percentX: number,
+  percentY: number
+}
 
 export default defineComponent({
   name: 'VirtualList',
@@ -14,45 +21,34 @@ export default defineComponent({
   },
   inheritAttrs: false,
   props: {
-    items: {
-      type: Array as PropType<Array<Record<string, any>>>,
-      default: () => []
-    },
-    itemSize: {
-      type: Number,
-      default: 36
-    },
-    itemFixed: {
-      type: Boolean,
-      default: false
-    },
-    idKey: {
-      type: String,
-      default: 'id'
-    },
-    defaultKeyAt: {
-      type: [Number, String, Symbol],
-      default: null
-    },
-    bufferSize: {
-      type: Number,
-      default: 5
-    },
-    listTag: {
-      type: String,
-      default: 'div'
-    },
-    itemsTag: {
-      type: String,
-      default: 'ul'
-    },
-    itemsAttrs: {
-      type: Object as PropType<Record<string, any>>,
-      default: null
-    }
+    items: Array as PropType<Array<Record<string, any>>>,
+    itemSize: Number,
+    itemFixed: Boolean,
+    idKey: String,
+    defaultKeyAt: [Number, String, Symbol],
+    bufferSize: Number,
+    listTag: String,
+    itemsTag: String,
+    itemsAttrs: Object as PropType<Record<string, any>>,
+    onScroll: eventProp<(payload: ScrollPayload) => void>()
   },
-  emits: ['scroll'],
-  setup(props, { emit, slots, attrs, expose }) {
+  emits: [],
+  setup(_props, { slots, attrs, expose }) {
+    const props = useProps('virtualList', _props, {
+      items: {
+        default: () => [],
+        static: true
+      },
+      itemSize: 36,
+      itemFixed: false,
+      idKey: 'id',
+      defaultKeyAt: null,
+      bufferSize: 5,
+      listTag: 'div',
+      itemsTag: 'ul',
+      itemsAttrs: null
+    })
+
     const nh = useNameHelper('virtual-list')
 
     const { items, itemSize, itemFixed, idKey, defaultKeyAt, bufferSize } = toRefs(props)
@@ -74,9 +70,9 @@ export default defineComponent({
 
     expose({ scroll, list, refresh })
 
-    function onScroll(...payload: any[]) {
+    function onScroll(payload: ScrollPayload) {
       handleScroll()
-      emit('scroll', ...payload)
+      emitEvent(props.onScroll, payload)
     }
 
     function refresh() {

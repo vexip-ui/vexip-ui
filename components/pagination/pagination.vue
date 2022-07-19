@@ -138,7 +138,18 @@ import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
 import { Select } from '@/components/select'
-import { useNameHelper, useProps, useLocale, booleanProp, sizeProp, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  sizeProp,
+  getCountWord,
+  getCountWordOnly,
+  createSizeProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { isFunction, range } from '@vexip-ui/utils'
 import { PaginationMode } from './symbol'
 import { ChevronRight, ChevronLeft, AnglesRight, AnglesLeft, Ellipsis } from '@vexip-ui/icons'
@@ -172,9 +183,11 @@ export default defineComponent({
     pageJump: booleanProp,
     pageCount: booleanProp,
     pageTotal: booleanProp,
-    itemUnit: String
+    itemUnit: String,
+    onChange: eventProp<(page: number) => void>(),
+    onPageSizeChange: eventProp<(size: number) => void>()
   },
-  emits: ['change', 'page-size-change', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('pagination', _props, {
       size: createSizeProp(),
@@ -293,7 +306,7 @@ export default defineComponent({
     watch(currentActive, value => {
       computePagers()
       jumpValue.value = value
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:active', value)
     })
     watch(() => props.maxCount, computePagers)
@@ -305,7 +318,7 @@ export default defineComponent({
       }
     )
     watch(currentPageSize, (value, prevValue) => {
-      emit('page-size-change', value)
+      emitEvent(props.onPageSizeChange, value)
 
       // 按当前页的第一条数据计算新的页码
       const anchor = Math.ceil((prevValue * (currentActive.value - 1) + 1) / value)

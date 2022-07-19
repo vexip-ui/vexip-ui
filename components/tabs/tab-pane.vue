@@ -15,7 +15,7 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { TABS_STATE } from './symbol'
 
@@ -35,10 +35,11 @@ export default defineComponent({
     icon: {
       type: Object,
       default: null
-    }
+    },
+    onToggle: eventProp<(active: boolean) => void>()
   },
-  emits: ['toggle'],
-  setup(props, { slots, emit }) {
+  emits: [],
+  setup(props, { slots }) {
     const tabsState = inject(TABS_STATE, null)
 
     const nh = useNameHelper('tabs')
@@ -63,7 +64,7 @@ export default defineComponent({
       }
     )
     watch(active, value => {
-      emit('toggle', value)
+      emitEvent(props.onToggle!, value)
     })
 
     if (tabsState) {

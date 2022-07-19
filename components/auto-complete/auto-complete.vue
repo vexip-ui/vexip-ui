@@ -83,7 +83,9 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 
@@ -123,9 +125,15 @@ export default defineComponent({
     ignoreCase: booleanProp,
     autofocus: booleanProp,
     spellcheck: booleanProp,
-    keyConfig: Object as PropType<OptionKeyConfig>
+    keyConfig: Object as PropType<OptionKeyConfig>,
+    onSelect: eventProp<(value: string | number, data: RawOption) => void>(),
+    onInput: eventProp<(value: string) => void>(),
+    onChange: eventProp<(value: string | number, data: RawOption) => void>(),
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onEnter: eventProp<(value: string | number) => void>(),
+    onClear: eventProp()
   },
-  emits: ['select', 'input', 'change', 'toggle', 'enter', 'clear', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { slots, emit }) {
     const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
       string | number
@@ -282,7 +290,7 @@ export default defineComponent({
       const prevValue = currentValue.value
       currentValue.value = value
 
-      emit('select', value, data)
+      emitEvent(props.onSelect, value, data)
 
       if (value !== prevValue) {
         changed = true
@@ -303,7 +311,7 @@ export default defineComponent({
         currentIndex.value = 0
       }
 
-      emit('input', value)
+      emitEvent(props.onInput, value)
     }
 
     function handleInputChange(event: string | Event) {
@@ -339,7 +347,7 @@ export default defineComponent({
       const option = optionsStates.value.find(option => option.value === lastValue)
 
       setFieldValue(currentValue.value)
-      emit('change', currentValue.value, option?.data || null)
+      emitEvent(props.onChange, currentValue.value, option?.data || null!)
       emit('update:value', currentValue.value)
       validateField()
 
@@ -349,8 +357,7 @@ export default defineComponent({
 
     function handleToggle() {
       testOptionCanDrop()
-
-      emit('toggle', visible.value)
+      emitEvent(props.onToggle, visible.value)
 
       if (!visible.value) {
         currentIndex.value = -1
@@ -389,7 +396,7 @@ export default defineComponent({
         handleChange()
       }
 
-      emit('enter', currentValue.value)
+      emitEvent(props.onEnter, currentValue.value)
       control.value?.blur()
       visible.value = false
     }
@@ -406,7 +413,7 @@ export default defineComponent({
         }
 
         handleChange()
-        emit('clear')
+        emitEvent(props.onClear)
         nextTick(clearField)
       }
     }

@@ -33,7 +33,9 @@ import {
   stateProp,
   createSizeProp,
   createStateProp,
-  classProp
+  classProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { useFieldStore } from '@/components/form'
 import { isDefined, isFunction } from '@vexip-ui/utils'
@@ -51,9 +53,10 @@ export default defineComponent({
     disabled: booleanProp,
     border: booleanProp,
     control: booleanProp,
-    partial: booleanProp
+    partial: booleanProp,
+    onChange: eventProp<(checked: boolean) => void>()
   },
-  emits: ['change', 'update:checked'],
+  emits: ['update:checked'],
   setup(_props, { slots, emit }) {
     const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>()
 
@@ -128,7 +131,7 @@ export default defineComponent({
     )
     watch(currentChecked, checked => {
       setFieldValue(checked)
-      emit('change', checked)
+      emitEvent(props.onChange, checked)
       emit('update:checked', checked)
     })
 

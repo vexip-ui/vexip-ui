@@ -129,7 +129,9 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
@@ -180,24 +182,22 @@ export default defineComponent({
     confirmText: String,
     cancelText: String,
     today: [Number, String, Date] as PropType<Dateable>,
-    isRange: booleanProp
+    isRange: booleanProp,
+    onInput: eventProp<(type: DateTimeType, value: number) => void>(),
+    onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
+    onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
+    onEnter: eventProp(),
+    onCancel: eventProp(),
+    onChange: eventProp<(value: string | number | string[] | number[] | null) => void>(),
+    onClear: eventProp(),
+    onShortcut: eventProp<(name: string, value: Dateable) => void>(),
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onFocus: eventProp(),
+    onBlur: eventProp(),
+    onChangeCol: eventProp<(type: DateTimeType) => void>(),
+    onClickOutside: eventProp()
   },
-  emits: [
-    'input',
-    'plus',
-    'minus',
-    'enter',
-    'cancel',
-    'change',
-    'clear',
-    'shortcut',
-    'toggle',
-    'focus',
-    'blur',
-    'change-col',
-    'update:value',
-    'update:visible'
-  ],
+  emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
     const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
       Dateable | Dateable[]
@@ -263,7 +263,7 @@ export default defineComponent({
     const currentState = ref<'start' | 'end'>('start')
     const lastValue = ref('')
 
-    const wrapper = useClickOutside(finishInput)
+    const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
@@ -360,21 +360,21 @@ export default defineComponent({
         emitChange()
       }
 
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
     watch(focused, value => {
       if (value) {
-        emit('focus')
+        emitEvent(props.onFocus)
       } else {
-        emit('blur')
+        emitEvent(props.onBlur)
       }
     })
     watch(
       () => startState.column,
       value => {
         if (currentVisible.value) {
-          emit('change-col', value)
+          emitEvent(props.onChangeCol, value)
         }
       }
     )
@@ -382,7 +382,7 @@ export default defineComponent({
       () => endState.column,
       value => {
         if (currentVisible.value) {
-          emit('change-col', value)
+          emitEvent(props.onChangeCol, value)
         }
       }
     )
@@ -566,7 +566,7 @@ export default defineComponent({
 
         toggleActivated(true)
         setFieldValue(emitValue)
-        emit('change', emitValue)
+        emitEvent(props.onChange, emitValue)
         emit('update:value', emitValue)
         validateField()
       }
@@ -676,7 +676,7 @@ export default defineComponent({
       }
 
       verifyValue(type)
-      emit('input', type, state.dateValue[type])
+      emitEvent(props.onInput, type, state.dateValue[type])
     }
 
     function setActivated(type: DateTimeType) {
@@ -730,7 +730,7 @@ export default defineComponent({
         }
 
         verifyValue(type)
-        emit(isPlus ? 'plus' : 'minus', type, state.dateValue[type])
+        emitEvent(props[isPlus ? 'onPlus' : 'onMinus'], type, state.dateValue[type])
         datePane.value?.refreshCalendar()
       }
     }
@@ -754,13 +754,13 @@ export default defineComponent({
 
     function handleEnter() {
       finishInput()
-      emit('enter')
+      emitEvent(props.onEnter)
     }
 
     function handleCancel() {
       parseValue(props.value)
       finishInput()
-      emit('cancel')
+      emitEvent(props.onCancel)
     }
 
     function resetValue() {
@@ -783,9 +783,9 @@ export default defineComponent({
           const emitValue = props.isRange ? ([] as string[] | number[]) : null
 
           resetValue()
-          emit('clear')
-          emit('change', emitValue)
+          emitEvent(props.onChange, emitValue)
           emit('update:value', emitValue)
+          emitEvent(props.onClear)
           clearField(emitValue!)
 
           nextTick(() => {
@@ -797,7 +797,7 @@ export default defineComponent({
 
     function handleShortcut(name: string, value: Dateable) {
       parseValue(value)
-      emit('shortcut', name, value)
+      emitEvent(props.onShortcut, name, value)
       finishInput()
     }
 
@@ -904,6 +904,11 @@ export default defineComponent({
 
     function handlePaneHide() {
       datePane.value?.refreshCalendar()
+    }
+
+    function handleClickOutside() {
+      emitEvent(props.onClickOutside)
+      finishInput()
     }
 
     return {

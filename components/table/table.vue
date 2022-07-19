@@ -20,7 +20,7 @@
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
         @scroll="handleBodyScroll"
-        @y-enable-change="handleYScrollEnableChange"
+        @y-enabled-change="handleYScrollEnableChange"
         @ready="syncVerticalScroll"
       >
         <TableBody>
@@ -39,7 +39,7 @@
         :scroll-y="bodyScroll"
         :delta-y="props.scrollDeltaY"
         @scroll="handleBodyScroll"
-        @y-enable-change="handleYScrollEnableChange"
+        @y-enabled-change="handleYScrollEnableChange"
         @ready="syncVerticalScroll"
       >
         <TableBody>
@@ -128,7 +128,14 @@ import { Scroll } from '@/components/scroll'
 import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import {
   isDefined,
   debounce,
@@ -154,7 +161,21 @@ import type {
   RowInstance
 } from './symbol'
 
-type DropType = 'before' | 'after'
+type DropType = 'before' | 'after' | 'none'
+
+interface FilterProfile {
+  name: string,
+  key: string | number,
+  metaData: Data,
+  active: string | number | (string | number)[] | null
+}
+
+interface SortProfile {
+  name: string,
+  key: string | number,
+  metaData: Data,
+  type: 'asc' | 'desc' | null
+}
 
 export default defineComponent({
   name: 'Table',
@@ -197,24 +218,23 @@ export default defineComponent({
     tooltipTheme: String as PropType<TooltipTheme>,
     tooltipWidth: [Number, String],
     singleSorter: booleanProp,
-    singleFilter: booleanProp
+    singleFilter: booleanProp,
+    onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
+    onRowEnter: eventProp<(row: Data, key: Key, index: number) => void>(),
+    onRowLeave: eventProp<(row: Data, key: Key, index: number) => void>(),
+    onRowClick: eventProp<(row: Data, key: Key, index: number) => void>(),
+    onRowCheck: eventProp<(row: Data, checked: boolean, key: Key, index: number) => void>(),
+    onRowCheckAll: eventProp<(checked: boolean, partial: boolean) => void>(),
+    onRowExpand: eventProp<(row: Data, expanded: boolean, key: Key, index: number) => void>(),
+    onRowDragStart: eventProp<(row: Data) => void>(),
+    onRowDragOver: eventProp<(row: Data) => void>(),
+    onRowDrop: eventProp<(row: Data, type: DropType) => void>(),
+    onRowDragEnd: eventProp<(row: Data, allRows: Data[]) => void>(),
+    onRowFilter: eventProp<(profiles: FilterProfile[], filteredRow: Data[]) => void>(),
+    onRowSort: eventProp<(profiles: SortProfile[], sortedRow: Data[]) => void>()
   },
-  emits: [
-    'body-scroll',
-    'row-enter',
-    'row-leave',
-    'row-click',
-    'row-check',
-    'row-check-all',
-    'row-expand',
-    'row-drag-start',
-    'row-drag-over',
-    'row-drop',
-    'row-drag-end',
-    'row-filter',
-    'row-sort'
-  ],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('table', _props, {
       columns: {
         default: () => [],
@@ -517,12 +537,12 @@ export default defineComponent({
       yScrollPercent.value = percent
       setBodyScroll(client)
       nextFrameOnce(computeRenderRows)
-      emit('body-scroll', { client, percent })
+      emitEvent(props.onBodyScroll, { client, percent })
     }
 
     function emitYScroll(client: number, percent: number) {
       nextFrameOnce(computeRenderRows)
-      emit('body-scroll', { client, percent })
+      emitEvent(props.onBodyScroll, { client, percent })
     }
 
     function increaseColumn(column: ColumnOptions) {
@@ -534,27 +554,27 @@ export default defineComponent({
     }
 
     function emitRowEnter(data: Data, key: Key, index: number) {
-      emit('row-enter', data, key, index)
+      emitEvent(props.onRowEnter, data, key, index)
     }
 
     function emitRowLeave(data: Data, key: Key, index: number) {
-      emit('row-leave', data, key, index)
+      emitEvent(props.onRowLeave, data, key, index)
     }
 
     function emitRowClick(data: Data, key: Key, index: number) {
-      emit('row-click', data, key, index)
+      emitEvent(props.onRowClick, data, key, index)
     }
 
     function emitRowCheck(data: Data, checked: boolean, key: Key, index: number) {
-      emit('row-check', data, checked, key, index)
+      emitEvent(props.onRowCheck, data, checked, key, index)
     }
 
     function emitAllRowCheck(checked: boolean, partial: boolean) {
-      emit('row-check-all', checked, partial)
+      emitEvent(props.onRowCheckAll, checked, partial)
     }
 
     function emitRowExpand(data: Data, expanded: boolean, key: Key, index: number) {
-      emit('row-expand', data, expanded, key, index)
+      emitEvent(props.onRowExpand, data, expanded, key, index)
     }
 
     function emitRowFilter() {
@@ -573,8 +593,8 @@ export default defineComponent({
           }
         })
 
-      emit(
-        'row-filter',
+      emitEvent(
+        props.onRowFilter,
         profiles,
         getters.filteredData.map(row => row.data)
       )
@@ -596,8 +616,8 @@ export default defineComponent({
           }
         })
 
-      emit(
-        'row-sort',
+      emitEvent(
+        props.onRowSort,
         profiles,
         getters.sortedData.map(row => row.data)
       )
@@ -616,7 +636,7 @@ export default defineComponent({
       }
 
       setDragging(true)
-      emit('row-drag-start', rowInstance.row.data)
+      emitEvent(props.onRowDragStart, rowInstance.row.data)
     }
 
     function handleRowDragOver(rowInstance: RowInstance, event: DragEvent) {
@@ -628,7 +648,7 @@ export default defineComponent({
       const distance = event.clientY - dropRowRect.top
       const dropRowHeight = dropRowRect.height
 
-      let dropType: DropType
+      let dropType: DropType = 'none'
       let indicatorTop = -9999
 
       if (distance < dropRowHeight * prevPercent) {
@@ -645,7 +665,7 @@ export default defineComponent({
       dragState.dropType = dropType
 
       indicatorShow.value = true
-      emit('row-drag-over', rowInstance.row.data)
+      emitEvent(props.onRowDragOver, rowInstance.row.data)
     }
 
     function handleRowDrop(rowInstance: RowInstance) {
@@ -673,7 +693,7 @@ export default defineComponent({
 
         rowData.splice(index, 0, draggingRow)
         refreshRowIndex()
-        emit('row-drop', rowInstance.row.data, dropType)
+        emitEvent(props.onRowDrop, rowInstance.row.data, dropType!)
       }
     }
 
@@ -686,8 +706,8 @@ export default defineComponent({
       indicatorShow.value = false
 
       setDragging(false)
-      emit(
-        'row-drag-end',
+      emitEvent(
+        props.onRowDragEnd,
         draggingRow.data,
         state.rowData.map(row => row.data)
       )

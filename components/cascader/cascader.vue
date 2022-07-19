@@ -211,7 +211,9 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
@@ -221,6 +223,8 @@ import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { TagType } from '@/components/tag'
 import type { CascaderValue, OptionKeyConfig, OptionState } from './symbol'
+
+type MaybeArrayData = Record<string, any> | Array<Record<string, any>>
 
 const ID_KEY = Symbol('ID_KEY')
 const PARENT_KEY = Symbol('PARENT_KEY')
@@ -275,19 +279,16 @@ export default defineComponent({
     onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>,
     mergeTags: booleanProp,
     tagType: String as PropType<TagType>,
-    emptyText: String
+    emptyText: String,
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onSelect: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
+    onCancel: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
+    onChange: eventProp<(value: CascaderValue, data: MaybeArrayData) => void>(),
+    onClickOutside: eventProp(),
+    onOutsideClose: eventProp(),
+    onClear: eventProp()
   },
-  emits: [
-    'toggle',
-    'select',
-    'cancel',
-    'change',
-    'click-outside',
-    'outside-close',
-    'clear',
-    'update:value',
-    'update:visible'
-  ],
+  emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
     const { state, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<CascaderValue>()
@@ -484,7 +485,7 @@ export default defineComponent({
         isPopperShow.value = false
       }
 
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
 
@@ -929,7 +930,7 @@ export default defineComponent({
         }
       }
 
-      emit(checked ? 'select' : 'cancel', option.fullValue, option.data)
+      emitEvent(props[checked ? 'onSelect' : 'onCancel'], option.fullValue, option.data)
       emitMultipleChange()
     }
 
@@ -1071,7 +1072,7 @@ export default defineComponent({
 
       if (!option) return
 
-      emit('select', fullValue, option.data)
+      emitEvent(props.onSelect, fullValue, option.data)
 
       if (fullValue) {
         currentValues.value[0] = fullValue
@@ -1097,7 +1098,7 @@ export default defineComponent({
         outsideChanged = false
 
         setFieldValue(value)
-        emit('change', value, data)
+        emitEvent(props.onChange, value, data)
         emit('update:value', value)
         validateField()
       })
@@ -1135,13 +1136,11 @@ export default defineComponent({
 
     function handleClickOutside() {
       restTipShow.value = false
-
-      emit('click-outside')
+      emitEvent(props.onClickOutside)
 
       if (props.outsideClose && currentVisible.value) {
         currentVisible.value = false
-
-        emit('outside-close')
+        emitEvent(props.onOutsideClose)
       }
     }
 
@@ -1160,9 +1159,9 @@ export default defineComponent({
           option.partial = false
         }
 
-        emit('change', emittedValue.value, [])
+        emitEvent(props.onChange, emittedValue.value, [])
         emit('update:value', emittedValue.value)
-        emit('clear')
+        emitEvent(props.onClear)
         clearField(emittedValue.value)
         hideTagCounter()
       }

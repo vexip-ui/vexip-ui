@@ -54,8 +54,8 @@
         [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
           !props.hiddenFiles && renderFiles.length ? '0.5em' : undefined
       }"
-      @delete="deleteFile"
-      @preview="$emit('preview', $event)"
+      @delete="handleDelete"
+      @preview="handlePreview"
     ></UploadList>
   </div>
 </template>
@@ -72,7 +72,9 @@ import {
   useLocale,
   stateProp,
   booleanProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload } from '@vexip-ui/icons'
@@ -125,20 +127,18 @@ export default defineComponent({
     directory: booleanProp,
     pathField: String,
     disabledClick: booleanProp,
-    buttonLabel: String
+    buttonLabel: String,
+    onExceed: eventProp<(files: FileState[], sources: File[]) => void>(),
+    onChange: eventProp<(files: FileState[], sources: File[]) => void>(),
+    onFilterError: eventProp<(files: FileState, sources: File) => void>(),
+    onSizeError: eventProp<(files: FileState, sources: File) => void>(),
+    onDelete: eventProp<(file: FileState, source: File) => void>(),
+    onPreview: eventProp<(file: FileState, source: File) => void>(),
+    onProgress: eventProp<(file: FileState, percent: number, source: File) => void>(),
+    onSuccess: eventProp<(file: FileState, response: any, source: File) => void>(),
+    onError: eventProp<(file: FileState, error: HttpError, source: File) => void>()
   },
-  emits: [
-    'exceed',
-    'change',
-    'filter-error',
-    'size-error',
-    'delete',
-    'progress',
-    'success',
-    'error',
-    'preview',
-    'update:file-list'
-  ],
+  emits: ['update:file-list'],
   setup(_props, { emit }) {
     const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<FileState[]>()
 
@@ -282,11 +282,7 @@ export default defineComponent({
 
         const exceedFiles = files.slice(countLimit)
 
-        emit(
-          'exceed',
-          exceedFiles.map(file => file.source),
-          getSourceFiles()
-        )
+        emitEvent(props.onExceed, exceedFiles, getSourceFiles())
       } else {
         fileStates.value = files
       }
@@ -301,7 +297,7 @@ export default defineComponent({
 
     function emitChangeEvent() {
       setFieldValue(fileStates.value)
-      emit('change', fileStates.value, getSourceFiles())
+      emitEvent(props.onChange, fileStates.value, getSourceFiles())
       emit('update:file-list', fileStates.value)
       validateField()
     }
@@ -428,13 +424,13 @@ export default defineComponent({
         const extension = getFileExtension(file)
 
         if (filter.length && !filter.includes(extension)) {
-          emit('filter-error', file.source)
+          emitEvent(props.onFilterError, file, file.source)
 
           return false
         }
 
         if (file.size > limitSize) {
-          emit('size-error', file.source)
+          emitEvent(props.onSizeError, file, file.source)
 
           return false
         }
@@ -443,7 +439,7 @@ export default defineComponent({
       return true
     }
 
-    function deleteFile(file: FileState) {
+    function handleDelete(file: FileState) {
       file.status = UploadStatusType.DELETE
 
       if (file.xhr) {
@@ -451,8 +447,12 @@ export default defineComponent({
       }
 
       syncInputFiles()
-      emit('delete', file.source)
+      emitEvent(props.onDelete, file, file.source)
       emitChangeEvent()
+    }
+
+    function handlePreview(file: FileState) {
+      emitEvent(props.onPreview, file, file.source)
     }
 
     function syncInputFiles() {
@@ -473,7 +473,7 @@ export default defineComponent({
 
       file.percentage = percent
 
-      emit('progress', percent, file.source)
+      emitEvent(props.onProgress, file, percent, file.source)
     }
 
     function handleSuccess(response: any, file: FileState) {
@@ -483,7 +483,7 @@ export default defineComponent({
       file.response = response
       file.error = null
 
-      emit('success', response, file.source)
+      emitEvent(props.onSuccess, file, response, file.source)
     }
 
     function handleError(error: HttpError, file: FileState) {
@@ -492,7 +492,7 @@ export default defineComponent({
       file.status = UploadStatusType.FAIL
       file.error = error
 
-      emit('error', error, file.source)
+      emitEvent(props.onError, file, error, file.source)
     }
 
     let dragTimer: number
@@ -631,7 +631,8 @@ export default defineComponent({
 
       handleClick,
       handleInputChange,
-      deleteFile,
+      handleDelete,
+      handlePreview,
       handleDrop,
       handleDragEnter,
       handleDragLeave,

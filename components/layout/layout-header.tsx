@@ -5,7 +5,14 @@ import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
 import { User, ArrowRightFromBracket, Check } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { computeSeriesColors, useLayoutState } from './helper'
 
 import type { PropType } from 'vue'
@@ -25,12 +32,12 @@ export default defineComponent({
     signType: String as PropType<LayoutSignType>,
     colors: Array as PropType<string[]>,
     color: String,
-    onNavChange: Function as PropType<(type: LayoutSignType) => void>,
-    onColorChange: Function as PropType<(color: string) => void>,
-    onUserAction: Function as PropType<(label: string, meta: Record<string, any>) => void>,
-    onSignClick: Function as PropType<(event: MouseEvent) => void>,
-    onDropChange: Function as PropType<(target: boolean) => void>,
-    onReducedChange: Function as PropType<(reduced: boolean) => void>
+    onNavChange: eventProp<(type: LayoutSignType) => void>(),
+    onColorChange: eventProp<(color: string) => void>(),
+    onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>(),
+    onSignClick: eventProp<(event: MouseEvent) => void>(),
+    onDropChange: eventProp<(target: boolean) => void>(),
+    onReducedChange: eventProp<(reduced: boolean) => void>()
   },
   emits: ['update:sign-type', 'update:color', 'update:user-dropped'],
   setup(_props, { emit, slots }) {
@@ -119,7 +126,7 @@ export default defineComponent({
     })
 
     function handleUserActionSelect(label: string, meta: Record<string, any>) {
-      props.onUserAction?.(label, meta)
+      emitEvent(props.onUserAction, label, meta)
     }
 
     function handleSignTypeChange(type: LayoutSignType) {
@@ -130,7 +137,7 @@ export default defineComponent({
         () => {
           currentSignType.value = type
 
-          props.onNavChange?.(type)
+          emitEvent(props.onNavChange, type)
           emit('update:sign-type', type)
         },
         () => {
@@ -149,24 +156,24 @@ export default defineComponent({
     function toggleReduce(target = !layoutState.reduced) {
       layoutState.reduced = target
 
-      props.onReducedChange?.(target)
+      emitEvent(props.onReducedChange, target)
     }
 
     function handleColorChange(color: string) {
       currentColor.value = color
 
-      props.onColorChange?.(color)
+      emitEvent(props.onColorChange, color)
       emit('update:color', color)
     }
 
     function handleSignClick(event: MouseEvent) {
-      props.onSignClick?.(event)
+      emitEvent(props.onSignClick, event)
     }
 
     function toggleUserDrop(target = !currentUserDropped.value) {
       currentUserDropped.value = target
 
-      props.onDropChange?.(target)
+      emitEvent(props.onDropChange, target)
       emit('update:user-dropped', target)
     }
 

@@ -1,7 +1,15 @@
 import { defineComponent, h, ref, computed, inject } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  sizeProp,
+  createSizeProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { Spinner } from '@vexip-ui/icons'
 import { parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
 import { GROUP_STATE, buttonTypes } from './symbol'
@@ -31,10 +39,11 @@ export default defineComponent({
     color: String,
     buttonType: String as PropType<ButtonAttrType>,
     block: booleanProp,
-    tag: String
+    tag: String,
+    onClick: eventProp<(event: MouseEvent) => void>()
   },
-  emits: ['click'],
-  setup(_props, { emit, slots }) {
+  emits: [],
+  setup(_props, { slots }) {
     const props = useProps('button', _props, {
       size: createSizeProp(),
       type: {
@@ -210,7 +219,7 @@ export default defineComponent({
         pulsing.value = true
       })
 
-      emit('click', event)
+      emitEvent(props.onClick, event)
     }
 
     function handleAnimationEnd() {

@@ -99,7 +99,14 @@ import { MenuGroup } from '@/components/menu-group'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/mixins'
 import { ChevronDown } from '@vexip-ui/icons'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
@@ -130,10 +137,11 @@ const MenuItem = defineComponent({
     transitionName: String,
     meta: Object,
     children: Array as PropType<MenuOptions[]>,
-    route: [String, Object] as PropType<RouteLocationRaw>
+    route: [String, Object] as PropType<RouteLocationRaw>,
+    onSelect: eventProp()
   },
-  emits: ['select'],
-  setup(_props, { slots, emit }) {
+  emits: [],
+  setup(_props, { slots }) {
     const props = useProps('menuItem', _props, {
       label: {
         default: null,
@@ -248,7 +256,7 @@ const MenuItem = defineComponent({
     })
     watch(selected, value => {
       if (value) {
-        emit('select')
+        emitEvent(props.onSelect)
         nextTick(() => {
           parentItemState?.updateSonSelected(value)
         })

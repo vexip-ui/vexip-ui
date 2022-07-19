@@ -32,9 +32,10 @@
               :key="index"
               :value="option.value"
               :disabled="option.disabled"
+              :meta="option.meta"
             >
               <slot :option="option" :index="index">
-                {{ option.label || String(option.value) }}
+                {{ option.label }}
               </slot>
             </WheelItem>
           </template>
@@ -73,7 +74,9 @@ import {
   stateProp,
   booleanProp,
   booleanStringProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { USE_TOUCH, debounce, debounceMinor } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
@@ -107,9 +110,12 @@ export default defineComponent({
     arrow: booleanProp,
     pointer: booleanProp,
     options: Array as PropType<RawOption[]>,
-    insertEmpty: booleanStringProp
+    insertEmpty: booleanStringProp,
+    onChange: eventProp<(value: string | number, data: RawOption) => void>(),
+    onPrev: eventProp<(value: string | number, data: RawOption) => void>(),
+    onNext: eventProp<(value: string | number, data: RawOption) => void>()
   },
-  emits: ['change', 'prev', 'next', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string | number>()
 
@@ -149,15 +155,26 @@ export default defineComponent({
 
     const normalizedOptions = computed(() => {
       const options = props.options.map(option => {
-        if (typeof option === 'object') return option
+        if (typeof option === 'object') {
+          const { value, label, disabled = false } = option
 
-        return { value: option }
+          return {
+            value,
+            label: label || String(value),
+            disabled,
+            meta: option
+          }
+        }
+
+        return { value: option, label: String(option), disabled: false, meta: option }
       })
 
       if (props.insertEmpty) {
         options.unshift({
           value: '',
-          label: typeof props.insertEmpty === 'string' ? props.insertEmpty : '-'
+          label: typeof props.insertEmpty === 'string' ? props.insertEmpty : '-',
+          disabled: false,
+          meta: ''
         })
       }
 
@@ -297,10 +314,11 @@ export default defineComponent({
     watch(currentActive, () => {
       refreshScroll()
 
-      const value = getItemValue()
+      const item = itemList.value[currentActive.value]
+      const value = item?.value
 
       setFieldValue(value)
-      emit('change', value)
+      emitEvent(props.onChange, value, item?.meta)
       emit('update:value', value)
       validateField()
     })
@@ -383,21 +401,19 @@ export default defineComponent({
       currentActive.value = findEnabledActive(active, sign)
     }
 
-    function getItemValue() {
-      return itemList.value[currentActive.value]?.value
-    }
-
     function handlePrev() {
       if (!prevDisabled.value) {
         currentActive.value = findEnabledActive(currentActive.value - 1, -1)
-        emit('prev', getItemValue())
+        const item = itemList.value[currentActive.value]
+        emitEvent(props.onPrev, item?.value, item?.meta)
       }
     }
 
     function handleNext() {
       if (!nextDisabled.value) {
         currentActive.value = findEnabledActive(currentActive.value + 1, 1)
-        emit('next', getItemValue())
+        const item = itemList.value[currentActive.value]
+        emitEvent(props.onNext, item?.value, item?.meta)
       }
     }
 

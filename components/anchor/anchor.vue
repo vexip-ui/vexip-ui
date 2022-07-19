@@ -37,7 +37,7 @@ import {
   getCurrentInstance,
   isVNode
 } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
@@ -56,9 +56,10 @@ export default defineComponent({
     offset: Number,
     marker: booleanProp,
     scrollDuration: Number,
-    markerTransition: String
+    markerTransition: String,
+    onChange: eventProp<(value: string) => void>()
   },
-  emits: ['change', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('anchor', _props, {
       active: {
@@ -104,7 +105,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:active', value)
     })
     watch(() => props.viewer, updateContainer)

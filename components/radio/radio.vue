@@ -24,7 +24,9 @@ import {
   stateProp,
   createSizeProp,
   createStateProp,
-  classProp
+  classProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
@@ -38,9 +40,10 @@ export default defineComponent({
     label: [String, Number],
     labelClass: classProp,
     disabled: booleanProp,
-    border: booleanProp
+    border: booleanProp,
+    onChange: eventProp<(value: string | number) => void>()
   },
-  emits: ['change', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('radio', _props, {
       size: createSizeProp(),
@@ -88,7 +91,7 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:value', value)
 
       if (groupState && value === props.label) {

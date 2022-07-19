@@ -13,7 +13,14 @@ import MenuRest from './menu-rest'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
 import { Overflow } from '@/components/overflow'
-import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -51,9 +58,12 @@ export default defineComponent({
     tooltipTheme: String as PropType<TooltipTheme>,
     options: Array as PropType<MenuOptions[]>,
     router: Object as PropType<Router>,
-    manualRoute: booleanProp
+    manualRoute: booleanProp,
+    onSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
+    onExpand: eventProp<(label: string, meta: Record<string, any>) => void>(),
+    onReduce: eventProp<(label: string, meta: Record<string, any>) => void>()
   },
-  emits: ['select', 'expand', 'reduce', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { slots, emit }) {
     const props = useProps('menu', _props, {
       active: {
@@ -234,7 +244,7 @@ export default defineComponent({
       if (currentActive.value !== label) {
         currentActive.value = label
 
-        emit('select', label, meta)
+        emitEvent(props.onSelect, label, meta)
         emit('update:active', label)
 
         if (!props.manualRoute && props.router && route) {
@@ -245,9 +255,9 @@ export default defineComponent({
 
     function handleExpand(label: string, expanded: boolean, meta: Record<string, any>) {
       if (expanded) {
-        emit('expand', label, meta)
+        emitEvent(props.onExpand, label, meta)
       } else {
-        emit('reduce', label, meta)
+        emitEvent(props.onReduce, label, meta)
       }
     }
 

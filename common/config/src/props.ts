@@ -156,12 +156,33 @@ export function createStateProp(defaultValue: MaybeRef<ComponentState> = 'defaul
   }
 }
 
-type MaybeArray<T> = T | MaybeArray<T>[]
+type MaybeArray<T> = T | T[]
+type MaybeArrayDeep<T> = T | MaybeArrayDeep<T>[]
 
-export type ClassType = MaybeArray<string | { [x: string]: ClassType }>
-export type StyleType = MaybeArray<
+export type ClassType = MaybeArrayDeep<string | { [x: string]: ClassType }>
+export type StyleType = MaybeArrayDeep<
   string | (CSSProperties & { [x: `--${string}`]: string | number })
 >
 
 export const classProp = [String, Object, Array] as PropType<ClassType>
 export const styleProp = [String, Object, Array] as PropType<StyleType>
+
+type AnyFunction = (...args: any[]) => any
+type VoidFunction = () => void
+
+const eventTypes = [Function, Array]
+
+export function eventProp<F extends AnyFunction = VoidFunction>() {
+  return eventTypes as PropType<MaybeArray<F>>
+}
+
+export function emitEvent<A extends any[]>(handlers: MaybeArray<(...args: A) => void>, ...args: A) {
+  if (Array.isArray(handlers)) {
+    for (let i = 0, len = handlers.length; i < len; ++i) {
+      const handler = handlers[i]
+      typeof handler === 'function' && handlers[i](...args)
+    }
+  } else {
+    typeof handlers === 'function' && handlers(...args)
+  }
+}

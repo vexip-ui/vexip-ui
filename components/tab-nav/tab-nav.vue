@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/mixins'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
@@ -24,9 +24,10 @@ export default defineComponent({
   name: 'TabNav',
   props: {
     active: [String, Number],
-    card: booleanProp
+    card: booleanProp,
+    onChange: eventProp<(active: string | number) => void>()
   },
-  emits: ['change', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('tabNav', _props, {
       active: {
@@ -89,7 +90,7 @@ export default defineComponent({
     )
     watch(currentActive, value => {
       updateMarkerPosition()
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:active', value)
     })
 

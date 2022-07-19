@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, toRef, inject } from 'vue'
+import { eventProp, emitEvent } from '@vexip-ui/config'
 import { useLabel } from './mixins'
 import { SELECT_HANDLER } from './symbol'
 
@@ -35,10 +36,11 @@ export default defineComponent({
     meta: {
       type: Object,
       default: null
-    }
+    },
+    onSelect: eventProp<(label: string | number) => void>()
   },
-  emits: ['select'],
-  setup(props, { emit }) {
+  emits: [],
+  setup(props) {
     const parentSelectHandler = inject(SELECT_HANDLER, null)
 
     const baseClass = 'vxp-dropdown__item'
@@ -66,7 +68,7 @@ export default defineComponent({
         parentSelectHandler([currentLabel.value!], [props.meta])
       }
 
-      emit('select', currentLabel.value)
+      emitEvent(props.onSelect!, currentLabel.value!)
     }
 
     return {

@@ -157,7 +157,9 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { USE_TOUCH, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft } from '@vexip-ui/icons'
@@ -210,24 +212,22 @@ export default defineComponent({
     prefixColor: String,
     suffix: Object,
     suffixColor: String,
-    exchange: booleanProp
+    exchange: booleanProp,
+    onInput: eventProp<(type: TimeType, value: number) => void>(),
+    onPlus: eventProp<(type: TimeType, value: number) => void>(),
+    onMinus: eventProp<(type: TimeType, value: number) => void>(),
+    onEnter: eventProp(),
+    onCancel: eventProp(),
+    onChange: eventProp<(value: string | string[]) => void>(),
+    onClear: eventProp(),
+    onShortcut: eventProp<(name: string, value: string) => void>(),
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onFocus: eventProp(),
+    onBlur: eventProp(),
+    onChangeCol: eventProp<(type: TimeType) => void>(),
+    onClickOutside: eventProp()
   },
-  emits: [
-    'change-col',
-    'change',
-    'focus',
-    'blur',
-    'plus',
-    'minus',
-    'enter',
-    'cancel',
-    'input',
-    'clear',
-    'shortcut',
-    'toggle',
-    'update:value',
-    'update:visible'
-  ],
+  emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
     const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
       string | string[]
@@ -287,7 +287,7 @@ export default defineComponent({
     const endState = createDateState()
     const currentState = ref<'start' | 'end'>('start')
 
-    const wrapper = useClickOutside(finishInput)
+    const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
@@ -349,21 +349,21 @@ export default defineComponent({
         emitChange()
       }
 
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
     watch(focused, value => {
       if (value) {
-        emit('focus')
+        emitEvent(props.onFocus)
       } else {
-        emit('blur')
+        emitEvent(props.onBlur)
       }
     })
     watch(
       () => startState.column,
       value => {
         if (currentVisible.value) {
-          emit('change-col', value)
+          emitEvent(props.onChangeCol, value)
         }
       }
     )
@@ -371,7 +371,7 @@ export default defineComponent({
       () => endState.column,
       value => {
         if (currentVisible.value) {
-          emit('change-col', value)
+          emitEvent(props.onChangeCol, value)
         }
       }
     )
@@ -476,7 +476,7 @@ export default defineComponent({
 
         toggleActivated(true)
         setFieldValue(currentValue.value)
-        emit('change', currentValue.value)
+        emitEvent(props.onChange, currentValue.value)
         emit('update:value', currentValue.value)
         validateField()
       }
@@ -520,9 +520,9 @@ export default defineComponent({
         finishInput()
         nextTick(() => {
           parseValue('')
-          emit('clear')
-          emit('change', currentValue.value)
+          emitEvent(props.onChange, currentValue.value)
           emit('update:value', currentValue.value)
+          emitEvent(props.onClear)
           clearField(currentValue.value)
 
           nextTick(() => {
@@ -563,7 +563,7 @@ export default defineComponent({
       }
 
       verifyValue(type)
-      emit('input', type, state.timeValue[type])
+      emitEvent(props.onInput, type, state.timeValue[type])
     }
 
     function verifyValue(type: TimeType) {
@@ -581,7 +581,7 @@ export default defineComponent({
         state.timeValue[type] += ctrlKey ? getCtrlStep(type) : getStep(type)
 
         verifyValue(type)
-        emit('plus', type, state.timeValue[type])
+        emitEvent(props.onPlus, type, state.timeValue[type])
       }
     }
 
@@ -593,7 +593,7 @@ export default defineComponent({
         state.timeValue[type] -= ctrlKey ? getCtrlStep(type) : getStep(type)
 
         verifyValue(type)
-        emit('minus', type, state.timeValue[type])
+        emitEvent(props.onMinus, type, state.timeValue[type])
       }
     }
 
@@ -607,13 +607,13 @@ export default defineComponent({
 
     function handleEnter() {
       finishInput()
-      emit('enter')
+      emitEvent(props.onEnter)
     }
 
     function handleCancel() {
       parseValue(props.value)
       finishInput()
-      emit('cancel')
+      emitEvent(props.onCancel)
     }
 
     function handleShortcut(index: number) {
@@ -624,7 +624,7 @@ export default defineComponent({
       }
 
       parseValue(value)
-      emit('shortcut', name, value)
+      emitEvent(props.onShortcut, name, value)
       finishInput()
     }
 
@@ -674,6 +674,11 @@ export default defineComponent({
         !currentVisible.value && event.stopPropagation()
         exchangeValue()
       }
+    }
+
+    function handleClickOutside() {
+      emitEvent(props.onClickOutside)
+      finishInput()
     }
 
     return {

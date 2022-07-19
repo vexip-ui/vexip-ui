@@ -1,11 +1,7 @@
 <template>
   <transition appear :name="props.selectToAdd ? transitionName : undefined">
     <li
-      :class="[
-        nh.be('file'),
-        nh.bem('file', props.listType),
-        nh.bem('file', props.file.status)
-      ]"
+      :class="[nh.be('file'), nh.bem('file', props.listType), nh.bem('file', props.file.status)]"
       :title="fileName"
     >
       <slot :file="props.file.source" :status="props.file.status" :percentage="percentage">
@@ -53,7 +49,7 @@
                 <Spinner></Spinner>
               </Icon>
             </div>
-            <div :class="[nh.be('icon'), nh.be('close')]" @click="deleteFile(props.file)">
+            <div :class="[nh.be('icon'), nh.be('close')]" @click="handleDelete(props.file)">
               <Icon><TrashCanR></TrashCanR></Icon>
             </div>
           </div>
@@ -131,16 +127,17 @@
                   nh.be('icon'),
                   nh.be('action'),
                   {
-                    [nh.bem('action', 'disabled')]: !props.file.type.startsWith('image/') || !props.file.base64
+                    [nh.bem('action', 'disabled')]:
+                      !props.file.type.startsWith('image/') || !props.file.base64
                   }
                 ]"
-                @click="$emit('preview', props.file.source)"
+                @click="handlePreview(props.file)"
               >
                 <Icon :scale="1.4">
                   <EyeR></EyeR>
                 </Icon>
               </div>
-              <div :class="[nh.be('icon'), nh.be('action')]" @click="deleteFile(props.file)">
+              <div :class="[nh.be('icon'), nh.be('action')]" @click="handleDelete(props.file)">
                 <Icon :scale="1.4">
                   <TrashCanR></TrashCanR>
                 </Icon>
@@ -160,7 +157,14 @@ import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
 import { CircleCheck, CircleExclamation, Spinner, EyeR, TrashCanR } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { toFixed } from '@vexip-ui/utils'
 import { iconMaps } from './file-icon'
 import { UploadStatusType, uploadListTypes } from './symbol'
@@ -187,10 +191,12 @@ export default defineComponent({
     listType: String as PropType<UploadListType>,
     loadingText: String,
     selectToAdd: booleanProp,
-    precision: Number
+    precision: Number,
+    onDelete: eventProp<(file: FileState, source: File) => void>(),
+    onPreview: eventProp<(file: FileState, source: File) => void>()
   },
-  emits: ['delete', 'preview'],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('uploadFile', _props, {
       file: {
         default: () => ({} as FileState),
@@ -230,8 +236,12 @@ export default defineComponent({
       return iconMaps.default
     }
 
-    function deleteFile(file: FileState) {
-      emit('delete', file)
+    function handleDelete(file: FileState) {
+      emitEvent(props.onDelete, file, file.source)
+    }
+
+    function handlePreview(file: FileState) {
+      emitEvent(props.onPreview, file, file.source)
     }
 
     function transformfileToBase64(file: FileState) {
@@ -258,7 +268,8 @@ export default defineComponent({
       percentage,
 
       getFileIcon,
-      deleteFile,
+      handleDelete,
+      handlePreview,
       transformfileToBase64
     }
   }

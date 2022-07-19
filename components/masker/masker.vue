@@ -27,7 +27,14 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -46,9 +53,13 @@ export default defineComponent({
     disabled: booleanProp,
     onBeforeClose: Function as PropType<() => any | Promise<any>>,
     transfer: booleanStringProp,
-    autoRemove: booleanProp
+    autoRemove: booleanProp,
+    onToggle: eventProp<(active: boolean) => void>(),
+    onClose: eventProp(),
+    onHide: eventProp(),
+    onShow: eventProp()
   },
-  emits: ['toggle', 'close', 'hide', 'show', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('masker', _props, {
       active: {
@@ -87,7 +98,11 @@ export default defineComponent({
     const transferTo = computed(() => {
       return props.inner
         ? ''
-        : typeof props.transfer === 'boolean' ? (props.transfer ? 'body' : '') : props.transfer
+        : typeof props.transfer === 'boolean'
+          ? props.transfer
+            ? 'body'
+            : ''
+          : props.transfer
     })
 
     watch(
@@ -101,7 +116,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:active', value)
     })
 
@@ -125,7 +140,7 @@ export default defineComponent({
       if (result !== false) {
         nextTick(() => {
           toggleActive(false)
-          emit('close')
+          emitEvent(props.onClose)
         })
       }
     }
@@ -133,13 +148,13 @@ export default defineComponent({
     function afterClose() {
       nextTick(() => {
         wrapShow.value = false
-        emit('hide')
+        emitEvent(props.onHide)
       })
     }
 
     function afterOpen() {
       nextTick(() => {
-        emit('show')
+        emitEvent(props.onShow)
       })
     }
 

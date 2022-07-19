@@ -21,7 +21,7 @@ export function useScrollWrapper({
   height: Ref<number | string>,
   scrollX: Ref<number>,
   scrollY: Ref<number>,
-  onResize?: (entity: ResizeObserverEntry) => void,
+  onResize?: (entry: ResizeObserverEntry) => void,
   onBeforeRefresh?: () => void,
   onAfterRefresh?: () => void
 }) {

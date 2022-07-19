@@ -117,7 +117,9 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import {
   toFixed,
@@ -134,6 +136,7 @@ import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
 
+type FormattedColor = string | RGBAColor | HSLAColor | HSVAColor
 export type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
@@ -195,18 +198,15 @@ export default defineComponent({
     outsideClose: booleanProp,
     clearable: booleanProp,
     cancelText: String,
-    confirmText: String
+    confirmText: String,
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onClickOutside: eventProp(),
+    onOutsideClose: eventProp(),
+    onClear: eventProp(),
+    onChange: eventProp<(color: FormattedColor) => void>(),
+    onShortcut: eventProp<(color: FormattedColor) => void>()
   },
-  emits: [
-    'toggle',
-    'click-outside',
-    'outside-close',
-    'clear',
-    'change',
-    'shortcut',
-    'update:value',
-    'update:visible'
-  ],
+  emits: ['update:value', 'update:visible'],
   setup(_props, { emit }) {
     const { state, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<Color | null>()
@@ -307,7 +307,7 @@ export default defineComponent({
     )
     watch(currentVisible, value => {
       value && updatePopper()
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
     watch(
@@ -334,12 +334,11 @@ export default defineComponent({
 
     function handleClickOutside() {
       if (!editing.value) {
-        emit('click-outside')
+        emitEvent(props.onClickOutside)
 
         if (props.outsideClose && currentVisible.value) {
           currentVisible.value = false
-
-          emit('outside-close')
+          emitEvent(props.onOutsideClose)
         }
       }
     }
@@ -357,7 +356,7 @@ export default defineComponent({
         nextTick(() => {
           parseValue(null)
           clearField()
-          emit('clear')
+          emitEvent(props.onClear)
         })
       }
     }
@@ -418,7 +417,7 @@ export default defineComponent({
       const formattedColor = getForamttedColor()
 
       setFieldValue(formattedColor)
-      emit('change', formattedColor)
+      emitEvent(props.onChange, formattedColor)
       emit('update:value', formattedColor)
       validateField()
     }
@@ -449,7 +448,7 @@ export default defineComponent({
       currentValue.value = rgbToHsv(r, g, b)
       currentAlpha.value = a
 
-      emit('shortcut', getForamttedColor())
+      emitEvent(props.onShortcut, getForamttedColor())
     }
 
     function toggleEditing(able: boolean) {

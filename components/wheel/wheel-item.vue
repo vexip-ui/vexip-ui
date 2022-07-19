@@ -30,6 +30,10 @@ export default defineComponent({
     disabled: {
       type: Boolean,
       default: false
+    },
+    meta: {
+      type: [String, Number, Object],
+      default: null
     }
   },
   setup(props) {
@@ -45,7 +49,8 @@ export default defineComponent({
       height,
       el: wrapper,
       value: toRef(props, 'value'),
-      disabled: toRef(props, 'disabled')
+      disabled: toRef(props, 'disabled'),
+      meta: toRef(props, 'meta')
     })
 
     const style = computed(() => {

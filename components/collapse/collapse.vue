@@ -17,7 +17,7 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { removeArrayItem } from '@vexip-ui/utils'
 import { COLLAPSE_STATE } from './symbol'
 
@@ -31,9 +31,10 @@ export default defineComponent({
     card: booleanProp,
     accordion: booleanProp,
     arrowType: String as PropType<CollapseArrowType>,
-    ghost: booleanProp
+    ghost: booleanProp,
+    onChange: eventProp<(expanded: (string | number)[]) => void>()
   },
-  emits: ['change', 'update:expanded'],
+  emits: ['update:expanded'],
   setup(_props, { emit }) {
     const props = useProps('collapse', _props, {
       expanded: {
@@ -89,7 +90,7 @@ export default defineComponent({
 
     watch(currentExpanded, value => {
       updateItemExpanded()
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:expanded', value)
     })
 

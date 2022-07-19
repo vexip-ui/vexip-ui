@@ -55,13 +55,38 @@
 import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, booleanProp, booleanNumberProp, styleProp, classProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanNumberProp,
+  styleProp,
+  classProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
 import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
-import type { ScrollMode } from './symbol'
+import type { ScrollMode } from '@/components/scroll'
+
+interface ScrollPayload {
+  type: ScrollMode,
+  clientX: number,
+  clientY: number,
+  percentX: number,
+  percentY: number
+}
+
+interface BarScrollPayload {
+  type: 'vertical' | 'horizontal',
+  clientX: number,
+  clientY: number,
+  percentX: number,
+  percentY: number
+}
 
 const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
 
@@ -94,19 +119,19 @@ export default defineComponent({
     appear: booleanProp,
     barDuration: Number,
     useBarTrack: booleanProp,
-    onResize: Function as PropType<(entry: ResizeObserverEntry) => any>
+    onResize: Function as PropType<(entry: ResizeObserverEntry) => any>,
+    onXEnabledChange: eventProp<(enabled: boolean) => void>(),
+    onYEnabledChange: eventProp<(enabled: boolean) => void>(),
+    onWheel: eventProp<(event: WheelEvent, type: 'vertical' | 'horizontal') => void>(),
+    onScrollStart: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
+    onScroll: eventProp<(payload: ScrollPayload) => void>(),
+    onScrollEnd: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
+    onBarScrollStart: eventProp<(payload: BarScrollPayload) => void>(),
+    onBarScroll: eventProp<(payload: BarScrollPayload) => void>(),
+    onBarScrollEnd: eventProp<(payload: BarScrollPayload) => void>()
   },
-  emits: [
-    'x-enable-change',
-    'y-enable-change',
-    'wheel',
-    'scroll-start',
-    'scroll',
-    'scroll-end',
-    'bar-scroll-start',
-    'bar-scroll-end'
-  ],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('nativeScroll', _props, {
       scrollClass: null,
       scrollStyle: () => ({}),
@@ -314,10 +339,10 @@ export default defineComponent({
     })
 
     watch(enableXScroll, value => {
-      emit('x-enable-change', value)
+      emitEvent(props.onXEnabledChange, value)
     })
     watch(enableYScroll, value => {
-      emit('y-enable-change', value)
+      emitEvent(props.onYEnabledChange, value)
     })
 
     const xBar = ref<InstanceType<typeof Scrollbar> | null>(null)
@@ -360,7 +385,7 @@ export default defineComponent({
       document.addEventListener(MOVE_EVENT, handlePointerMove)
       document.addEventListener(UP_EVENT, handlePointerUp)
 
-      emit('scroll-start', {
+      emitEvent(props.onScrollStart, {
         clientX: currentScroll.x,
         clientY: currentScroll.y,
         percentX: percentX.value,
@@ -391,14 +416,13 @@ export default defineComponent({
 
       computePercent()
       syncBarScroll()
-      emitScrollEvent()
+      emitScrollEvent(props.mode)
     }
 
     function handlePointerUp() {
       document.removeEventListener(MOVE_EVENT, handlePointerMove)
       document.removeEventListener(UP_EVENT, handlePointerUp)
-      emitScrollEvent()
-      emit('scroll-end', {
+      emitEvent(props.onScrollEnd, {
         clientX: currentScroll.x,
         clientY: currentScroll.y,
         percentX: percentX.value,
@@ -411,6 +435,8 @@ export default defineComponent({
       const isVerticalScroll = enableYScroll.value && type === 'vertical'
       const isHorizontalScroll = enableXScroll.value && type === 'horizontal'
       const sign = event.deltaY > 0 ? 1 : -1
+
+      emitEvent(props.onWheel, event, type)
 
       if (
         (isVerticalScroll || isHorizontalScroll) &&
@@ -457,28 +483,54 @@ export default defineComponent({
 
     function handleBarScrollStart(type: 'vertical' | 'horizontal') {
       usingBar.value = true
-      emit('bar-scroll-start', type)
+      emitEvent(props.onBarScrollStart, {
+        type,
+        clientX: currentScroll.x,
+        clientY: currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value
+      })
     }
 
     function handleBarScrollEnd(type: 'vertical' | 'horizontal') {
       usingBar.value = false
-      emit('bar-scroll-end', type)
+      emitEvent(props.onBarScrollEnd, {
+        type,
+        clientX: currentScroll.x,
+        clientY: currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value
+      })
     }
 
     function handleXBarScroll(percent: number) {
       percentX.value = percent
       setScrollX((percent * xScrollLimit.value) / 100)
+      emitEvent(props.onBarScroll, {
+        type: 'horizontal',
+        clientX: currentScroll.x,
+        clientY: currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value
+      })
       emitScrollEvent('horizontal')
     }
 
     function handleYBarScroll(percent: number) {
       percentY.value = percent
       setScrollY((percent * yScrollLimit.value) / 100)
+      emitEvent(props.onBarScroll, {
+        type: 'vertical',
+        clientX: currentScroll.x,
+        clientY: currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value
+      })
       emitScrollEvent('vertical')
     }
 
-    function emitScrollEvent(type?: 'vertical' | 'horizontal') {
-      emit('scroll', {
+    function emitScrollEvent(type: ScrollMode) {
+      emitEvent(props.onScroll, {
         type,
         clientX: currentScroll.x,
         clientY: currentScroll.y,

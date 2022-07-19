@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="style" @click="$emit('click', $event)">
+  <div :class="className" :style="style">
     <span>
       <slot></slot>
     </span>
@@ -14,7 +14,15 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, createSizeProp, booleanProp, sizeProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  createSizeProp,
+  booleanProp,
+  sizeProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { Xmark } from '@vexip-ui/icons'
 import { parseColorToRgba, adjustAlpha } from '@vexip-ui/utils'
 
@@ -52,10 +60,11 @@ export default defineComponent({
     closable: booleanProp,
     color: String,
     simple: booleanProp,
-    circle: booleanProp
+    circle: booleanProp,
+    onClose: eventProp()
   },
-  emits: ['click', 'close'],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('tag', _props, {
       size: createSizeProp(),
       type: {
@@ -110,7 +119,7 @@ export default defineComponent({
 
     function handleClose() {
       if (props.closable) {
-        emit('close')
+        emitEvent(props.onClose)
       }
     }
 

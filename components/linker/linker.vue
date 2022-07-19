@@ -1,10 +1,5 @@
 <template>
-  <a
-    :class="className"
-    :href="props.to"
-    :target="props.target"
-    @click="handleClick"
-  >
+  <a :class="className" :href="props.to" :target="props.target">
     <slot name="icon">
       <Icon v-if="props.icon" :class="nh.be('icon')" :icon="props.icon"></Icon>
     </slot>
@@ -21,7 +16,14 @@ import type { PropType } from 'vue'
 
 export type LinkerType = 'default' | 'primary' | 'success' | 'error' | 'warning' | 'info'
 
-const linkerTypes = Object.freeze<LinkerType>(['default', 'primary', 'success', 'error', 'warning', 'info'])
+const linkerTypes = Object.freeze<LinkerType>([
+  'default',
+  'primary',
+  'success',
+  'error',
+  'warning',
+  'info'
+])
 
 export default defineComponent({
   name: 'Linker',
@@ -36,8 +38,7 @@ export default defineComponent({
     disabled: booleanProp,
     target: String
   },
-  emits: ['click'],
-  setup(_props, { emit }) {
+  setup(_props) {
     const props = useProps('linker', _props, {
       to: {
         default: null,
@@ -65,17 +66,11 @@ export default defineComponent({
       }
     })
 
-    function handleClick(event: MouseEvent) {
-      emit('click', event)
-    }
-
     return {
       props,
       nh,
 
-      className,
-
-      handleClick
+      className
     }
   }
 })

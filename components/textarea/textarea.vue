@@ -35,7 +35,9 @@ import {
   useLocale,
   booleanProp,
   stateProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { throttle } from '@vexip-ui/utils'
 
@@ -53,19 +55,17 @@ export default defineComponent({
     readonly: booleanProp,
     disabled: booleanProp,
     debounce: booleanProp,
-    maxLength: Number
+    maxLength: Number,
+    onFocus: eventProp<(event: FocusEvent) => void>(),
+    onBlur: eventProp<(event: FocusEvent) => void>(),
+    onInput: eventProp<(value: string) => void>(),
+    onChange: eventProp<(value: string) => void>(),
+    onEnter: eventProp(),
+    onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
+    onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
+    onKeyUp: eventProp<(event: KeyboardEvent) => void>()
   },
-  emits: [
-    'focus',
-    'blur',
-    'input',
-    'change',
-    'enter',
-    'key-down',
-    'key-press',
-    'key-up',
-    'update:value'
-  ],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string>()
 
@@ -117,12 +117,12 @@ export default defineComponent({
 
     function handleFocus(event: FocusEvent) {
       focused.value = true
-      emit('focus', event)
+      emitEvent(props.onFocus, event)
     }
 
     function handleBlur(event: FocusEvent) {
       focused.value = false
-      emit('blur', event)
+      emitEvent(props.onBlur, event)
     }
 
     function handleChange(event: Event) {
@@ -144,28 +144,28 @@ export default defineComponent({
         lastValue = currentValue.value
 
         setFieldValue(currentValue.value)
-        emit('change', currentValue.value)
+        emitEvent(props.onChange, currentValue.value)
         emit('update:value', currentValue.value)
         validateField()
       } else {
-        emit('input', currentValue.value)
+        emitEvent(props.onInput, currentValue.value)
       }
     }
 
-    function handleEnter(event: KeyboardEvent) {
-      emit('enter', event)
+    function handleEnter() {
+      emitEvent(props.onEnter)
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      emit('key-down', event)
+      emitEvent(props.onKeyDown, event)
     }
 
     function handleKeyPress(event: KeyboardEvent) {
-      emit('key-press', event)
+      emitEvent(props.onKeyPress, event)
     }
 
     function handleKeyUp(event: KeyboardEvent) {
-      emit('key-up', event)
+      emitEvent(props.onKeyUp, event)
     }
 
     function copyValue() {

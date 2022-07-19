@@ -49,7 +49,15 @@
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useNameHelper, useProps, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  classProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/mixins'
 import { isPromise } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
@@ -81,18 +89,16 @@ export default defineComponent({
     hideMask: booleanProp,
     onBeforeClose: Function as PropType<() => any>,
     resizable: booleanProp,
-    autoRemove: booleanProp
+    autoRemove: booleanProp,
+    onToggle: eventProp<(active: boolean) => void>(),
+    onClose: eventProp(),
+    onShow: eventProp(),
+    onHide: eventProp(),
+    onResizeStart: eventProp<(rect: { width: number, height: number }) => void>(),
+    onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
+    onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>()
   },
-  emits: [
-    'toggle',
-    'close',
-    'show',
-    'hide',
-    'resize-start',
-    'resize-move',
-    'resize-end',
-    'update:active'
-  ],
+  emits: ['update:active'],
   setup(_props, { slots, emit }) {
     const props = useProps('drawer', _props, {
       transfer: false,
@@ -140,7 +146,7 @@ export default defineComponent({
         state.xStart = currentWidth.value
         state.yStart = currentHeight.value
 
-        emit('resize-start', {
+        emitEvent(props.onResizeStart, {
           width: currentWidth.value,
           height: currentHeight.value
         })
@@ -170,13 +176,13 @@ export default defineComponent({
         currentWidth.value = Math.max(currentWidth.value, 101)
         currentHeight.value = Math.max(currentHeight.value, 101)
 
-        emit('resize-move', {
+        emitEvent(props.onResizeMove, {
           width: currentWidth.value,
           height: currentHeight.value
         })
       },
       onEnd: () => {
-        emit('resize-end', {
+        emitEvent(props.onResizeEnd, {
           width: currentWidth.value,
           height: currentHeight.value
         })
@@ -234,7 +240,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:active', value)
     })
     watch(
@@ -264,7 +270,7 @@ export default defineComponent({
       if (result !== false) {
         nextTick(() => {
           currentActive.value = false
-          emit('close')
+          emitEvent(props.onClose)
         })
       }
 
@@ -278,11 +284,11 @@ export default defineComponent({
     }
 
     function handleShow() {
-      emit('show')
+      emitEvent(props.onShow)
     }
 
     function handleHide() {
-      emit('hide')
+      emitEvent(props.onHide)
     }
 
     return {

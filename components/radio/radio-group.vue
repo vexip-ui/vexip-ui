@@ -20,7 +20,9 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import { useFieldStore } from '@/components/form'
 import { debounceMinor } from '@vexip-ui/utils'
@@ -41,9 +43,10 @@ export default defineComponent({
     disabled: booleanProp,
     button: booleanProp,
     border: booleanProp,
-    options: Array as PropType<(string | number)[]>
+    options: Array as PropType<(string | number)[]>,
+    onChange: eventProp<(value: string | number) => void>()
   },
-  emits: ['change', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string | number>()
 
@@ -101,7 +104,7 @@ export default defineComponent({
     )
     watch(currentValue, value => {
       setFieldValue(value)
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:value', value)
       validateField()
     })
