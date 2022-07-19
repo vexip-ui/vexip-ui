@@ -32,7 +32,7 @@ export default defineComponent({
       default: false
     },
     meta: {
-      type: Object,
+      type: [String, Number, Object],
       default: null
     }
   },
