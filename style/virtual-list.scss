@@ -1,1 +1,11 @@
+@use './design' as *;
+
 @use './native-scroll.scss';
+
+.#{$namespace}-virtual-list {
+  &__items {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+}
