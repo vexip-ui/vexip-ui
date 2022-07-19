@@ -7,17 +7,18 @@
     @wheel.exact="handleWheel($event, 'vertical')"
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
-    <div
-      ref="content"
-      :class="wrapperClass"
-      :style="props.scrollStyle"
-      @scroll.exact="handleScroll($event, 'vertical')"
-      @scroll.shift="handleScroll($event, 'horizontal')"
-    >
-      <ResizeObserver throttle :on-resize="handleResize">
-        <div><slot></slot></div>
-      </ResizeObserver>
-    </div>
+    <ResizeObserver throttle :on-resize="handleResize">
+      <component
+        :is="props.wrapperTag || 'div'"
+        ref="content"
+        :class="wrapperClass"
+        :style="props.scrollStyle"
+        @scroll.exact="handleScroll($event, 'vertical')"
+        @scroll.shift="handleScroll($event, 'horizontal')"
+      >
+        <slot></slot>
+      </component>
+    </ResizeObserver>
     <Scrollbar
       v-if="props.useXBar"
       ref="xBar"
@@ -119,7 +120,8 @@ export default defineComponent({
     appear: booleanProp,
     barDuration: Number,
     useBarTrack: booleanProp,
-    onResize: Function as PropType<(entry: ResizeObserverEntry) => any>,
+    wrapperTag: String,
+    onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
     onXEnabledChange: eventProp<(enabled: boolean) => void>(),
     onYEnabledChange: eventProp<(enabled: boolean) => void>(),
     onWheel: eventProp<(event: WheelEvent, type: 'vertical' | 'horizontal') => void>(),
@@ -164,10 +166,7 @@ export default defineComponent({
       appear: false,
       barDuration: null,
       useBarTrack: false,
-      onResize: {
-        default: null,
-        isFunc: true
-      }
+      wrapperTag: 'div'
     })
 
     const emitter = createEventEmitter()
@@ -205,7 +204,9 @@ export default defineComponent({
       height: toRef(props, 'height'),
       scrollX: toRef(props, 'scrollX'),
       scrollY: toRef(props, 'scrollY'),
-      onResize: props.onResize,
+      onResize: entry => {
+        emitEvent(props.onResize, entry)
+      },
       onBeforeRefresh: stopAutoplay,
       onAfterRefresh: startAutoplay
     })
