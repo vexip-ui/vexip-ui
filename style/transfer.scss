@@ -73,4 +73,21 @@ $transfer: map.merge(
     flex-direction: column;
     margin: 0 8px;
   }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    padding: 0 12px;
+    cursor: pointer;
+    transition: get-css-var('transition-background');
+
+    &:hover {
+      background-color: get-css-var('fill-color-hover');
+    }
+  }
+
+  &__label {
+    padding: 0 4px;
+  }
 }

@@ -7,6 +7,7 @@
       :paged="props.paged"
       :filter="props.filter"
       :title="locale.source"
+      :options="unselected"
       :empty-text="props.emptyText || locale.empty"
     >
     </TransferPanel>
@@ -15,14 +16,14 @@
         :class="nh.be('action')"
         type="primary"
         size="small"
-        :icon="AngleLeft"
-        style="margin-bottom: 4px;"
+        :icon="AngleRight"
+        style="margin-bottom: 6px;"
       ></Button>
       <Button
         :class="nh.be('action')"
         type="primary"
         size="small"
-        :icon="AngleRight"
+        :icon="AngleLeft"
         style="margin: 0;"
       ></Button>
     </div>
@@ -33,6 +34,7 @@
       :paged="props.paged"
       :filter="props.filter"
       :title="locale.target"
+      :options="selected"
       :empty-text="props.emptyText || locale.empty"
     >
     </TransferPanel>
@@ -119,9 +121,14 @@ export default defineComponent({
 
     const nh = useNameHelper('transfer')
     const locale = useLocale('transfer')
+
+    const currentValue = ref(props.value)
+    const selected = ref<TransferOptionState[]>([])
+    const unselected = ref<TransferOptionState[]>([])
     const optionStates = ref<TransferOptionState[]>([])
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
+    const emittedValue = ref(props.value)
 
     let optionValueMap = new Map<string | number, TransferOptionState>()
 
@@ -139,6 +146,29 @@ export default defineComponent({
     })
 
     watch(updateTrigger, initOptions, { immediate: true })
+
+    watchEffect(() => {
+      if (!currentValue.value.length) {
+        selected.value = []
+        unselected.value = Array.from(optionStates.value)
+        return
+      }
+
+      const selectedValues = new Set(currentValue.value)
+      const selectedOptions: TransferOptionState[] = []
+      const unselectedOptions: TransferOptionState[] = []
+
+      for (const option of optionStates.value) {
+        if (selectedValues.has(option.value)) {
+          selectedOptions.push(option)
+        } else {
+          unselectedOptions.push(option)
+        }
+      }
+
+      selected.value = selectedOptions
+      unselected.value = unselectedOptions
+    })
 
     function initOptions() {
       const { value: valueKey, label: labelKey, disabled: disabledKey } = keyConfig.value
@@ -168,6 +198,7 @@ export default defineComponent({
 
       optionValueMap = map
       optionStates.value = Array.from(map.values())
+      currentValue.value = emittedValue.value
     }
 
     const className = computed(() => {
@@ -194,6 +225,8 @@ export default defineComponent({
       props,
       nh,
       locale,
+      selected,
+      unselected,
 
       className,
 

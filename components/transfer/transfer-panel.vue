@@ -23,18 +23,29 @@
         <Input :suffix="MagnifyingGlass"></Input>
       </div>
     </ResizeObserver>
-    <NativeScroll v-if="paged || $slots.body" :class="nh.be('body')" use-y-bar>
+    <NativeScroll
+      v-if="paged || $slots.body"
+      :class="nh.be('body')"
+      use-y-bar
+      wrapper-tag="ul"
+      :height="bodyHeight"
+    >
       <slot name="body">
-        <div v-for="(option, index) in options" :key="index" :class="nh.be('option')">
+        <li
+          v-for="(option, index) in options"
+          :key="index"
+          :class="nh.be('option')"
+          @click="toggleSelect(option)"
+        >
           <slot name="option" :option="option" :index="index">
-            <Checkbox :class="nh.be('checkbox')"></Checkbox>
+            <Checkbox :class="nh.be('checkbox')" :checked="selected.has(option.value)"></Checkbox>
             <span :class="nh.be('label')">
               <slot name="label" :option="option" :index="index">
                 {{ option.label }}
               </slot>
             </span>
           </slot>
-        </div>
+        </li>
       </slot>
     </NativeScroll>
     <VirtualList
@@ -44,18 +55,19 @@
       :item-size="32"
       use-y-bar
       id-key="value"
+      :height="bodyHeight"
     >
       <template #default="{ item: option, index }">
-        <div :class="nh.be('option')">
+        <li :class="nh.be('option')" @click="toggleSelect(option)">
           <slot name="option" :option="option" :index="index">
-            <Checkbox :class="nh.be('checkbox')"></Checkbox>
+            <Checkbox :class="nh.be('checkbox')" :checked="selected.has(option.value)"></Checkbox>
             <span :class="nh.be('label')">
               <slot name="label" :option="option" :index="index">
                 {{ option.label }}
               </slot>
             </span>
           </slot>
-        </div>
+        </li>
       </template>
     </VirtualList>
     <ResizeObserver v-if="paged || $slots.footer" throttle :on-resize="computeBodyHeight">
@@ -131,6 +143,7 @@ export default defineComponent({
     const locale = useLocale('transfer')
 
     const bodyHeight = ref('100%')
+    const selected = ref(new Set<string | number>())
 
     const header = ref<HTMLElement | null>(null)
     const footer = ref<HTMLElement | null>(null)
@@ -147,9 +160,17 @@ export default defineComponent({
     function computeBodyHeight() {
       const headerHeight = header.value ? header.value.offsetHeight : 0
       const searchHeight = search.value ? search.value.offsetHeight : 0
-      const footerHeight = header.value ? header.value.offsetHeight : 0
+      const footerHeight = footer.value ? footer.value.offsetHeight : 0
 
       bodyHeight.value = `calc(100% - ${headerHeight + searchHeight + footerHeight}px)`
+    }
+
+    function toggleSelect(option: TransferOptionState) {
+      if (selected.value.has(option.value)) {
+        selected.value.delete(option.value)
+      } else {
+        selected.value.add(option.value)
+      }
     }
 
     return {
@@ -157,13 +178,16 @@ export default defineComponent({
 
       nh,
       locale,
+      bodyHeight,
+      selected,
 
       className,
 
       header,
       footer,
 
-      computeBodyHeight
+      computeBodyHeight,
+      toggleSelect
     }
   }
 })
