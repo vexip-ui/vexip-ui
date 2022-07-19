@@ -9,14 +9,15 @@
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
     <ResizeObserver throttle :on-resize="handleResize">
-      <div
+      <component
+        :is="props.wrapperTag || 'div'"
         ref="content"
         :class="wrapperClass"
         :style="wrapperStyle"
         @transitionend="transitionDuration = -1"
       >
         <slot></slot>
-      </div>
+      </component>
     </ResizeObserver>
     <Scrollbar
       v-if="props.useXBar"
@@ -118,6 +119,7 @@ export default defineComponent({
     noTransition: booleanProp,
     onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
     useBarTrack: booleanProp,
+    wrapperTag: String,
     onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
     onXEnabledChange: eventProp<(enabled: boolean) => void>(),
     onYEnabledChange: eventProp<(enabled: boolean) => void>(),
@@ -166,10 +168,7 @@ export default defineComponent({
         isFunc: true
       },
       useBarTrack: false,
-      onResize: {
-        default: null,
-        isFunc: true
-      }
+      wrapperTag: 'div'
     })
 
     const emitter = createEventEmitter()
