@@ -113,7 +113,8 @@ export function zhCNLocale() {
       source: '源',
       target: '目标',
       empty: '暂无数据',
-      reverse: '反选'
+      reverse: '反选',
+      search: '搜索 (Ctrl + F)'
     },
 
     tree: {

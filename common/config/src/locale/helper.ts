@@ -116,7 +116,8 @@ export interface LocaleConfig {
     source: string,
     target: string,
     empty: string,
-    reverse: string
+    reverse: string,
+    search: string
   },
 
   tree: {

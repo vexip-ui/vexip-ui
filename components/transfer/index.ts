@@ -1,1 +1,1 @@
-export { default as Transfer } from './transfer.vue'
+export { default as Transfer } from './transfer'

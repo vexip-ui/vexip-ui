@@ -1,97 +1,154 @@
 <template>
-  <div :class="className">
+  <div
+    ref="wrapper"
+    :class="className"
+    tabindex="-1"
+    @blur="currentMark = null"
+  >
     <ResizeObserver throttle :on-resize="computeBodyHeight">
       <div ref="header" :class="nh.be('header')">
-        <Checkbox :class="nh.be('checkbox')"></Checkbox>
-        <div :class="nh.be('reverse')" :title="locale.reverse">
-          <Icon :scale="1.2">
-            <Retweet></Retweet>
-          </Icon>
-        </div>
-        <div :class="nh.be('counter')">
-          {{ `0/${options.length}` }}
-        </div>
-        <span v-if="title || $slots.title" :class="nh.be('title')">
-          <slot name="title">
-            {{ title }}
-          </slot>
-        </span>
+        <slot name="header" v-bind="getSlotPayload()">
+          <Checkbox
+            control
+            :class="nh.be('checkbox')"
+            :checked="allSelected"
+            :partial="partial"
+            :disabled="disabled"
+            @click.prevent="toggleSelectAll"
+          ></Checkbox>
+          <div
+            :class="[nh.be('reverse'), disabled && nh.bem('reverse', 'disabled')]"
+            :title="locale.reverse"
+            @click="handleReverse"
+          >
+            <Icon :scale="1.2">
+              <Retweet></Retweet>
+            </Icon>
+          </div>
+          <div :class="nh.be('counter')">
+            {{ `${currentSelected.size}/${visibleOptions.length}` }}
+          </div>
+          <span v-if="title || $slots.title" :class="nh.be('title')">
+            <slot name="title" v-bind="getSlotPayload()">
+              {{ title }}
+            </slot>
+          </span>
+        </slot>
       </div>
     </ResizeObserver>
-    <ResizeObserver v-if="filter" throttle :on-resize="computeBodyHeight">
+    <ResizeObserver v-if="typeof filter === 'function'" throttle :on-resize="computeBodyHeight">
       <div ref="search" :class="nh.be('filter')">
-        <Input :suffix="MagnifyingGlass"></Input>
+        <slot name="filter" v-bind="getSlotPayload()">
+          <Input
+            ref="input"
+            v-model:value="currentFilter"
+            clearable
+            :disabled="disabled"
+            :suffix="MagnifyingGlass"
+            :placeholder="searching ? null : locale.search"
+            @keydown.stop
+            @input="currentFilter = $event"
+            @focus="searching = true"
+            @blur="searching = false"
+          ></Input>
+        </slot>
       </div>
     </ResizeObserver>
-    <NativeScroll
+    <ul
       v-if="paged || $slots.body"
+      ref="body"
       :class="nh.be('body')"
-      use-y-bar
-      wrapper-tag="ul"
-      :height="bodyHeight"
+      :style="{ height: bodyHeight }"
     >
-      <slot name="body">
-        <li
-          v-for="(option, index) in options"
-          :key="index"
-          :class="nh.be('option')"
-          @click="toggleSelect(option)"
-        >
-          <slot name="option" :option="option" :index="index">
-            <Checkbox :class="nh.be('checkbox')" :checked="selected.has(option.value)"></Checkbox>
-            <span :class="nh.be('label')">
-              <slot name="label" :option="option" :index="index">
-                {{ option.label }}
-              </slot>
-            </span>
-          </slot>
-        </li>
+      <slot name="body" v-bind="getSlotPayload()">
+        <template v-if="pagedOptions.length">
+          <Renderer
+            v-for="(option, index) in pagedOptions"
+            :key="index"
+            :renderer="renderOption"
+            :data="{ option, index }"
+          >
+          </Renderer>
+        </template>
+        <div v-else :class="nh.be('empty')">
+          {{ emptyText || locale.empty }}
+        </div>
       </slot>
-    </NativeScroll>
+    </ul>
     <VirtualList
       v-else
+      ref="list"
       :class="nh.be('body')"
-      :items="options"
-      :item-size="32"
+      :items="visibleOptions"
+      :item-size="optionHeight"
+      item-fixed
       use-y-bar
       id-key="value"
       :height="bodyHeight"
     >
       <template #default="{ item: option, index }">
-        <li :class="nh.be('option')" @click="toggleSelect(option)">
-          <slot name="option" :option="option" :index="index">
-            <Checkbox :class="nh.be('checkbox')" :checked="selected.has(option.value)"></Checkbox>
-            <span :class="nh.be('label')">
-              <slot name="label" :option="option" :index="index">
-                {{ option.label }}
-              </slot>
-            </span>
-          </slot>
-        </li>
+        <Renderer :renderer="renderOption" :data="{ option, index }"></Renderer>
+      </template>
+      <template #empty>
+        <div :class="nh.be('empty')">
+          {{ emptyText || locale.empty }}
+        </div>
       </template>
     </VirtualList>
     <ResizeObserver v-if="paged || $slots.footer" throttle :on-resize="computeBodyHeight">
       <div ref="footer" :class="nh.be('footer')">
-        <slot name="footer">
-          <div :class="nh.be('pagination')"></div>
+        <slot name="footer" v-bind="getSlotPayload()">
+          <div :class="nh.be('pagination')">
+            <Icon
+              :class="[nh.be('page-plus'), currentPage <= 1 && nh.bem('page-plus', 'disabled')]"
+              @click="handlePageChange(currentPage - 1)"
+            >
+              <ChevronLeft></ChevronLeft>
+            </Icon>
+            <NumberInput
+              :value="currentPage"
+              :class="nh.be('page-input')"
+              size="small"
+              :min="1"
+              :max="totalPages"
+              @change="handlePageChange"
+            ></NumberInput>
+            <span style="margin: 0 4px;">/</span>
+            <span>
+              {{ totalPages }}
+            </span>
+            <Icon
+              :class="[
+                nh.be('page-minus'),
+                currentPage >= totalPages && nh.bem('page-minus', 'disabled')
+              ]"
+              @click="handlePageChange(currentPage + 1)"
+            >
+              <ChevronRight></ChevronRight>
+            </Icon>
+          </div>
         </slot>
       </div>
     </ResizeObserver>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+<script lang="tsx">
+import { defineComponent, ref, computed, watch, watchEffect, onMounted } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
-import { NativeScroll } from '@/components/native-scroll'
+import { NumberInput } from '@/components/number-input'
+import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
-import { MagnifyingGlass, Retweet } from '@vexip-ui/icons'
+import { MagnifyingGlass, Retweet, ChevronRight, ChevronLeft } from '@vexip-ui/icons'
 import { useNameHelper, useLocale, sizeProp, stateProp } from '@vexip-ui/config'
+import { useModifier } from '@vexip-ui/mixins'
+import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
+import type { VirtualListExposed } from '@/components/virtual-list'
 import type { TransferOptionState } from './symbol'
 
 export default defineComponent({
@@ -100,12 +157,19 @@ export default defineComponent({
     Checkbox,
     Icon,
     Input,
-    NativeScroll,
+    NumberInput,
+    Renderer,
     ResizeObserver,
     VirtualList,
-    Retweet
+    Retweet,
+    ChevronRight,
+    ChevronLeft
   },
   props: {
+    type: {
+      type: String as PropType<'source' | 'target'>,
+      default: null
+    },
     size: {
       type: sizeProp,
       default: 'default'
@@ -114,15 +178,20 @@ export default defineComponent({
       type: stateProp,
       default: 'default'
     },
+    selected: {
+      type: Set as PropType<Set<string | number>>,
+      default: () => new Set()
+    },
     paged: {
       type: Boolean,
       default: false
     },
     filter: {
-      type: [Boolean, Function] as PropType<
-        | boolean
-        | ((value: string | number, options: { label: string, value: string | number }) => boolean)
-      >,
+      type: Function as PropType<(value: string, options: TransferOptionState) => boolean>,
+      default: null
+    },
+    disabled: {
+      type: Boolean,
       default: false
     },
     title: {
@@ -136,26 +205,184 @@ export default defineComponent({
     emptyText: {
       type: String,
       default: '暂无数据'
+    },
+    optionHeight: {
+      type: Number,
+      default: 32
     }
   },
-  setup(props) {
+  emits: ['update:selected', 'select', 'enter', 'switch'],
+  setup(props, { slots, emit }) {
     const nh = useNameHelper('transfer')
     const locale = useLocale('transfer')
 
     const bodyHeight = ref('100%')
-    const selected = ref(new Set<string | number>())
+    const currentSelected = ref(new Set(props.selected))
+    const pageSize = ref(10)
+    const currentPage = ref(1)
+    const currentMark = ref<string | number | null>(null)
+    const currentHitting = ref(-1)
+    const currentFilter = ref('')
+    const searching = ref(false)
 
     const header = ref<HTMLElement | null>(null)
+    const body = ref<HTMLElement | null>()
     const footer = ref<HTMLElement | null>(null)
     const search = ref<HTMLElement | null>(null)
+    const input = ref<InstanceType<typeof Input> | null>(null)
+    const list = ref<VirtualListExposed | null>(null)
+
+    let lastSelected: string | number | null = props.options[0]?.value
+    let keyUsed = false
+
+    const { target: wrapper, modifier } = useModifier({
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down) {
+          event.preventDefault()
+
+          if (!keyUsed && currentHitting.value < 0 && lastSelected) {
+            keyUsed = true
+            currentHitting.value = props.options.findIndex(option => option.value === lastSelected)
+            currentHitting.value = currentHitting.value === -1 ? 0 : currentHitting.value
+          } else {
+            currentHitting.value = boundRange(
+              findEnabledIndex(currentHitting.value + (modifier.up ? -1 : 1), modifier.up ? -1 : 1),
+              0,
+              optionSize.value
+            )
+          }
+
+          if (!props.paged) {
+            ensureOptionInView(currentHitting.value, modifier.up ? 'top' : 'bottom')
+          }
+        } else if (
+          (props.type === 'source' && modifier.right) ||
+          (props.type === 'target' && modifier.left)
+        ) {
+          event.preventDefault()
+
+          keyUsed = false
+          currentHitting.value = -1
+          lastSelected = props.options[0]?.value
+          emit('switch')
+        } else if (modifier.space) {
+          event.preventDefault()
+
+          const option = props.options[currentHitting.value]
+
+          if (option) {
+            currentSelected.value[currentSelected.value.has(option.value) ? 'delete' : 'add'](
+              option.value
+            )
+            emitSelectedChange()
+          }
+        } else if (modifier.enter) {
+          event.preventDefault()
+          emit('enter')
+        } else if (typeof props.filter === 'function' && input.value && modifier['ctrl+f']) {
+          event.preventDefault()
+          event.stopPropagation()
+          input.value.focus()
+        }
+      }
+    })
 
     const className = computed(() => {
       return {
         [nh.be('panel')]: true,
         [nh.bem('panel', props.size)]: props.size !== 'default',
-        [nh.bem('panel', props.state)]: props.state !== 'default'
+        [nh.bem('panel', props.state)]: props.state !== 'default',
+        [nh.bem('panel', 'disabled')]: props.disabled
       }
     })
+    const visibleOptions = computed(() => {
+      const filter = props.filter
+      const filterValue = currentFilter.value
+
+      if (filter && filterValue) {
+        return props.options.filter(option => filter(filterValue, option))
+      }
+
+      return props.options
+    })
+    const optionSize = computed(() => visibleOptions.value.length)
+    const pagedOptions = computed(() => {
+      return visibleOptions.value.slice(
+        (currentPage.value - 1) * pageSize.value,
+        currentPage.value * pageSize.value
+      )
+    })
+    const totalPages = computed(() => Math.ceil(optionSize.value / (pageSize.value || 1)))
+
+    watch(
+      () => props.selected,
+      value => {
+        currentSelected.value = value
+      }
+    )
+    watch(bodyHeight, computePageSize)
+    watch(
+      () => props.paged,
+      () => {
+        requestAnimationFrame(() => {
+          computeBodyHeight()
+          requestAnimationFrame(() => {
+            list.value?.refresh()
+          })
+        })
+      }
+    )
+    watch(optionSize, () => {
+      keyUsed = false
+      currentHitting.value = -1
+      lastSelected = props.options[0]?.value
+    })
+
+    const partial = ref(false)
+    const allSelected = ref(false)
+
+    watchEffect(() => {
+      const options = visibleOptions.value
+      const selected = currentSelected.value
+
+      let hasSelected = false
+      let hasUnselected = false
+
+      for (let i = 0, len = optionSize.value; i < len; ++i) {
+        const option = options[i]
+
+        if (!option.disabled) {
+          if (selected.has(option.value)) {
+            hasSelected = true
+          } else {
+            hasUnselected = true
+          }
+        }
+
+        if (hasSelected && hasUnselected) {
+          break
+        }
+      }
+
+      allSelected.value = hasSelected && !hasUnselected
+      partial.value = !allSelected.value && selected.size > 0
+    })
+
+    onMounted(computePageSize)
+
+    function computePageSize() {
+      requestAnimationFrame(() => {
+        if (body.value) {
+          const style = getComputedStyle(body.value)
+          const paddingTop = parseInt(style.paddingTop)
+          const paddingBottom = parseInt(style.paddingBottom)
+          const innerHeight = body.value.offsetHeight - paddingTop - paddingBottom
+
+          pageSize.value = Math.floor(innerHeight / (props.optionHeight || 1))
+        }
+      })
+    }
 
     function computeBodyHeight() {
       const headerHeight = header.value ? header.value.offsetHeight : 0
@@ -166,11 +393,193 @@ export default defineComponent({
     }
 
     function toggleSelect(option: TransferOptionState) {
-      if (selected.value.has(option.value)) {
-        selected.value.delete(option.value)
-      } else {
-        selected.value.add(option.value)
+      if (props.disabled || option.disabled) return
+
+      if (currentMark.value && modifier.shift) {
+        handleRangeSelect(currentMark.value, option.value)
+        return
       }
+
+      if (currentSelected.value.has(option.value)) {
+        currentSelected.value.delete(option.value)
+      } else {
+        currentSelected.value.add(option.value)
+      }
+
+      keyUsed = false
+      currentHitting.value = -1
+      lastSelected = option.value
+      currentMark.value = option.value
+      emitSelectedChange()
+    }
+
+    function handleRangeSelect(start: string | number, end: string | number) {
+      const options = visibleOptions.value
+
+      let startIndex = -1
+      let endIndex = -1
+
+      for (let i = 0, len = options.length; i < len; ++i) {
+        const option = options[i]
+
+        if (option.value === start) {
+          startIndex = i
+        } else if (option.value === end) {
+          endIndex = i
+        }
+
+        if (startIndex > 0 && endIndex > 0) break
+      }
+
+      const method = currentSelected.value.has(options[startIndex]?.value) ? 'add' : 'delete'
+
+      if (startIndex > endIndex) {
+        [startIndex, endIndex] = [endIndex, startIndex]
+      }
+
+      for (let i = startIndex; i <= endIndex; ++i) {
+        const option = options[i]
+
+        if (!option.disabled) {
+          currentSelected.value[method](option.value)
+        }
+      }
+
+      emitSelectedChange()
+    }
+
+    function toggleSelectAll() {
+      if (props.disabled) return
+
+      if (allSelected.value) {
+        for (const option of visibleOptions.value) {
+          !option.disabled && currentSelected.value.delete(option.value)
+        }
+      } else {
+        for (const option of visibleOptions.value) {
+          !option.disabled && currentSelected.value.add(option.value)
+        }
+      }
+
+      currentMark.value = null
+      emitSelectedChange()
+    }
+
+    function handleReverse() {
+      if (props.disabled) return
+
+      if (partial.value) {
+        const prevSelected = new Set(currentSelected.value)
+
+        for (const option of visibleOptions.value) {
+          if (!option.disabled) {
+            if (prevSelected.has(option.value)) {
+              currentSelected.value.delete(option.value)
+            } else {
+              currentSelected.value.add(option.value)
+            }
+          }
+        }
+
+        currentMark.value = null
+        emitSelectedChange()
+      } else {
+        toggleSelectAll()
+      }
+    }
+
+    function emitSelectedChange() {
+      emit('select')
+      emit('update:selected', currentSelected.value)
+    }
+
+    function handlePageChange(page: number) {
+      currentPage.value = boundRange(page, 1, totalPages.value)
+    }
+
+    function queryEnabledIndex(index: number, step: number) {
+      step = step / Math.abs(step)
+
+      while (props.options[index]?.disabled) {
+        index += step
+
+        if (index < 0 || index >= optionSize.value) break
+      }
+
+      return index
+    }
+
+    function findEnabledIndex(index: number, sign: 1 | -1 = 1) {
+      if (props.options[index]?.disabled) {
+        index = queryEnabledIndex(index, sign)
+
+        if (sign > 0 ? index >= optionSize.value : index < 0) {
+          index = queryEnabledIndex(index, -sign)
+
+          // 全禁用
+          if (sign > 0 ? index < 0 : index >= optionSize.value) index = -1
+        }
+      }
+
+      return index
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function ensureOptionInView(index: number, direction: 'top' | 'bottom') {
+      const option = props.options[index]
+
+      // eslint-disable-next-line no-useless-return
+      if (!option) return
+
+      // TODO: 等待 VirtualList 实现滚动到元素方法
+    }
+
+    function getSlotPayload() {
+      return {
+        type: props.type,
+        currentPage: currentPage.value,
+        pageSize: pageSize.value,
+        totalPages: totalPages.value,
+        allSelected: allSelected.value,
+        partial: partial.value,
+        selected: currentSelected.value,
+        options: visibleOptions.value,
+        toggleSelectAll,
+        handleReverse
+      }
+    }
+
+    function renderOption({ option, index }: { option: TransferOptionState, index: number }) {
+      const handleCheck = (event: MouseEvent) => {
+        event.preventDefault()
+        event.stopPropagation()
+        toggleSelect(option)
+      }
+
+      return (
+        <li
+          class={{
+            [nh.be('option')]: true,
+            [nh.bem('option', 'disabled')]: props.disabled || option.disabled,
+            [nh.bem('option', 'hitting')]: currentHitting.value === index
+          }}
+          onClick={() => toggleSelect(option)}
+        >
+          {slots.option
+            ? slots.option({ type: props.type, option, index })
+            : [
+                <Checkbox
+                  class={nh.be('checkbox')}
+                  checked={currentSelected.value.has(option.value)}
+                  disabled={props.disabled || option.disabled}
+                  onClick={handleCheck}
+                ></Checkbox>,
+                <span class={nh.be('label')}>
+                  {slots.label ? slots.label({ option, index }) : option.label}
+                </span>
+              ]}
+        </li>
+      )
     }
 
     return {
@@ -179,15 +588,35 @@ export default defineComponent({
       nh,
       locale,
       bodyHeight,
-      selected,
+      currentSelected,
+      pageSize,
+      currentPage,
+      currentMark,
+      currentFilter,
+      searching,
 
       className,
+      visibleOptions,
+      partial,
+      allSelected,
+      pagedOptions,
+      totalPages,
 
+      wrapper,
       header,
+      body,
       footer,
+      search,
+      input,
+      list,
 
       computeBodyHeight,
-      toggleSelect
+      toggleSelect,
+      toggleSelectAll,
+      handleReverse,
+      handlePageChange,
+      getSlotPayload,
+      renderOption
     }
   }
 })

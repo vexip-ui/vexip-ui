@@ -1,8 +1,8 @@
 <template>
-  <Transfer v-model:value="value" :options="options"></Transfer>
+  <Transfer v-model:value="value" :options="options" :paged="paged"></Transfer>
   <p>
-    Current Value:
-    {{ value }}
+    是否分页：
+    <Switch v-model:value="paged"></Switch>
   </p>
 </template>
 
@@ -10,6 +10,7 @@
 import { ref } from 'vue'
 
 const value = ref(Array.from({ length: 20 }, (_, index) => index))
+const paged = ref(true)
 const options = Array.from({ length: 40 }, (_, index) => ({
   value: index,
   label: `选项${index + 1}`,

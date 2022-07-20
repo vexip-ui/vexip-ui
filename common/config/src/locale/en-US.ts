@@ -113,7 +113,8 @@ export function enUSLocale() {
       source: 'Source',
       target: 'Target',
       empty: 'No data',
-      reverse: 'Reverse selection'
+      reverse: 'Reverse selection',
+      search: 'Search (Ctrl + F)'
     },
 
     tree: {
