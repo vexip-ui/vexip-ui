@@ -1,3 +1,3 @@
 ### Disabled
 
-Simplest usage.
+Add the `disabled` prop to set the disabled state.

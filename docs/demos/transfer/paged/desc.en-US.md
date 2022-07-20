@@ -1,3 +1,3 @@
-### Disabled
+### Page Options
 
-Simplest usage.
+Add the `paged` prop to make options paged.

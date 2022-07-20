@@ -3,7 +3,7 @@
     ref="wrapper"
     :class="className"
     tabindex="-1"
-    @blur="currentMark = null"
+    @blur="handleBlur"
   >
     <ResizeObserver throttle :on-resize="computeBodyHeight">
       <div ref="header" :class="nh.be('header')">
@@ -38,20 +38,18 @@
     </ResizeObserver>
     <ResizeObserver v-if="typeof filter === 'function'" throttle :on-resize="computeBodyHeight">
       <div ref="search" :class="nh.be('filter')">
-        <slot name="filter" v-bind="getSlotPayload()">
-          <Input
-            ref="input"
-            v-model:value="currentFilter"
-            clearable
-            :disabled="disabled"
-            :suffix="MagnifyingGlass"
-            :placeholder="searching ? null : locale.search"
-            @keydown.stop
-            @input="currentFilter = $event"
-            @focus="searching = true"
-            @blur="searching = false"
-          ></Input>
-        </slot>
+        <Input
+          ref="input"
+          v-model:value="currentFilter"
+          clearable
+          :disabled="disabled"
+          :suffix="MagnifyingGlass"
+          :placeholder="searching ? null : locale.search"
+          @keydown.stop
+          @input="currentFilter = $event"
+          @focus="searching = true"
+          @blur="searching = false"
+        ></Input>
       </div>
     </ResizeObserver>
     <ul
@@ -143,7 +141,7 @@ import { Renderer } from '@/components/renderer'
 import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
 import { MagnifyingGlass, Retweet, ChevronRight, ChevronLeft } from '@vexip-ui/icons'
-import { useNameHelper, useLocale, sizeProp, stateProp } from '@vexip-ui/config'
+import { useNameHelper, useLocale, stateProp } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/mixins'
 import { boundRange } from '@vexip-ui/utils'
 
@@ -169,10 +167,6 @@ export default defineComponent({
     type: {
       type: String as PropType<'source' | 'target'>,
       default: null
-    },
-    size: {
-      type: sizeProp,
-      default: 'default'
     },
     state: {
       type: stateProp,
@@ -239,8 +233,6 @@ export default defineComponent({
       passive: false,
       onKeyDown: (event, modifier) => {
         if (modifier.up || modifier.down) {
-          event.preventDefault()
-
           if (!keyUsed && currentHitting.value < 0 && lastSelected) {
             keyUsed = true
             currentHitting.value = props.options.findIndex(option => option.value === lastSelected)
@@ -249,27 +241,30 @@ export default defineComponent({
             currentHitting.value = boundRange(
               findEnabledIndex(currentHitting.value + (modifier.up ? -1 : 1), modifier.up ? -1 : 1),
               0,
-              optionSize.value
+              currentOptions.value.length
             )
           }
 
           if (!props.paged) {
             ensureOptionInView(currentHitting.value, modifier.up ? 'top' : 'bottom')
           }
+
+          event.preventDefault()
+        } else if (props.paged && modifier.ctrl && (modifier.left || modifier.right)) {
+          handlePageChange(currentPage.value + (modifier.left ? -1 : 1))
+          currentHitting.value = 0
+          event.preventDefault()
         } else if (
           (props.type === 'source' && modifier.right) ||
           (props.type === 'target' && modifier.left)
         ) {
-          event.preventDefault()
-
           keyUsed = false
           currentHitting.value = -1
           lastSelected = props.options[0]?.value
           emit('switch')
-        } else if (modifier.space) {
           event.preventDefault()
-
-          const option = props.options[currentHitting.value]
+        } else if (modifier.space) {
+          const option = currentOptions.value[currentHitting.value]
 
           if (option) {
             currentSelected.value[currentSelected.value.has(option.value) ? 'delete' : 'add'](
@@ -277,13 +272,17 @@ export default defineComponent({
             )
             emitSelectedChange()
           }
+
+          event.preventDefault()
         } else if (modifier.enter) {
           event.preventDefault()
           emit('enter')
+          event.preventDefault()
         } else if (typeof props.filter === 'function' && input.value && modifier['ctrl+f']) {
           event.preventDefault()
           event.stopPropagation()
           input.value.focus()
+          event.preventDefault()
         }
       }
     })
@@ -291,7 +290,6 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [nh.be('panel')]: true,
-        [nh.bem('panel', props.size)]: props.size !== 'default',
         [nh.bem('panel', props.state)]: props.state !== 'default',
         [nh.bem('panel', 'disabled')]: props.disabled
       }
@@ -313,6 +311,7 @@ export default defineComponent({
         currentPage.value * pageSize.value
       )
     })
+    const currentOptions = computed(() => (props.paged ? pagedOptions.value : visibleOptions.value))
     const totalPages = computed(() => Math.ceil(optionSize.value / (pageSize.value || 1)))
 
     watch(
@@ -488,6 +487,11 @@ export default defineComponent({
       }
     }
 
+    function handleBlur() {
+      currentMark.value = null
+      modifier.resetAll()
+    }
+
     function emitSelectedChange() {
       emit('select')
       emit('update:selected', currentSelected.value)
@@ -498,26 +502,27 @@ export default defineComponent({
     }
 
     function queryEnabledIndex(index: number, step: number) {
+      const options = currentOptions.value
       step = step / Math.abs(step)
 
-      while (props.options[index]?.disabled) {
+      while (options[index]?.disabled) {
         index += step
 
-        if (index < 0 || index >= optionSize.value) break
+        if (index < 0 || index >= options.length) break
       }
 
       return index
     }
 
     function findEnabledIndex(index: number, sign: 1 | -1 = 1) {
-      if (props.options[index]?.disabled) {
+      if (currentOptions.value[index]?.disabled) {
         index = queryEnabledIndex(index, sign)
 
-        if (sign > 0 ? index >= optionSize.value : index < 0) {
+        if (sign > 0 ? index >= currentOptions.value.length : index < 0) {
           index = queryEnabledIndex(index, -sign)
 
           // 全禁用
-          if (sign > 0 ? index < 0 : index >= optionSize.value) index = -1
+          if (sign > 0 ? index < 0 : index >= currentOptions.value.length) index = -1
         }
       }
 
@@ -542,7 +547,7 @@ export default defineComponent({
         totalPages: totalPages.value,
         allSelected: allSelected.value,
         partial: partial.value,
-        selected: currentSelected.value,
+        selected: Array.from(currentSelected.value),
         options: visibleOptions.value,
         toggleSelectAll,
         handleReverse
@@ -615,6 +620,7 @@ export default defineComponent({
       toggleSelectAll,
       handleReverse,
       handlePageChange,
+      handleBlur,
       getSlotPayload,
       renderOption
     }

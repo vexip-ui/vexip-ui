@@ -7,10 +7,8 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  createSizeProp,
   createStateProp,
   booleanProp,
-  sizeProp,
   stateProp,
   eventProp,
   emitEvent
@@ -21,6 +19,11 @@ import type { PropType } from 'vue'
 import type { TransferKeyConfig, TransferOptionState } from './symbol'
 
 type RawOption = string | Record<string, any>
+type FilterHandler = (
+  value: string,
+  options: TransferOptionState,
+  type: 'source' | 'target'
+) => boolean
 type SelectHandler = (
   type: 'source' | 'target',
   selected: { source: (string | number)[], target: (string | number)[] },
@@ -40,17 +43,13 @@ export default defineComponent({
     TransferPanel
   },
   props: {
-    size: sizeProp,
     state: stateProp,
     options: Array as PropType<RawOption[]>,
     value: Array as PropType<(string | number)[]>,
     disabled: booleanProp,
     paged: booleanProp,
     filter: {
-      type: [Boolean, Function] as PropType<
-        | boolean
-        | ((value: string, options: TransferOptionState, type: 'source' | 'target') => boolean)
-      >,
+      type: [Boolean, Function] as PropType<boolean | FilterHandler>,
       default: null
     },
     emptyText: String,
@@ -68,7 +67,6 @@ export default defineComponent({
       useFieldStore<(string | number)[]>()
 
     const props = useProps('transfer', _props, {
-      size: createSizeProp(),
       state: createStateProp(state),
       options: {
         default: () => [],
@@ -276,7 +274,6 @@ export default defineComponent({
             v-model:selected={sourceSelected.value}
             type={'source'}
             class={nh.bem('panel', 'source')}
-            size={props.size}
             state={props.state}
             paged={props.paged}
             filter={sourceFilter.value}
@@ -293,10 +290,9 @@ export default defineComponent({
             {{
               header: slots['source-header'] || slots.sourceHeader || slots.header,
               title: slots['source-title'] || slots.sourceTitle || slots.title,
-              filter: slots['source-filter'] || slots.sourceFilter || slots.filter,
               body: slots['source-body'] || slots.sourceBody || slots.body,
-              option: slots['source-option'] || slots.sourceOption || slots.option,
-              footer: slots['source-footer'] || slots.sourceFooter || slots.footer
+              footer: slots['source-footer'] || slots.sourceFooter || slots.footer,
+              option: slots['source-option'] || slots.sourceOption || slots.option
             }}
           </TransferPanel>
           <div class={nh.be('actions')}>
@@ -328,7 +324,6 @@ export default defineComponent({
             v-model:selected={targetSelected.value}
             type={'target'}
             class={nh.bem('panel', 'target')}
-            size={props.size}
             state={props.state}
             paged={props.paged}
             filter={targetFilter.value}
@@ -345,10 +340,9 @@ export default defineComponent({
             {{
               header: slots['target-header'] || slots.targetHeader || slots.header,
               title: slots['target-title'] || slots.targetTitle || slots.title,
-              filter: slots['target-filter'] || slots.targetFilter || slots.filter,
               body: slots['target-body'] || slots.targetBody || slots.body,
-              option: slots['target-option'] || slots.targetOption || slots.option,
-              footer: slots['target-footer'] || slots.targetFooter || slots.footer
+              footer: slots['target-footer'] || slots.targetFooter || slots.footer,
+              option: slots['target-option'] || slots.targetOption || slots.option
             }}
           </TransferPanel>
         </div>
