@@ -6,7 +6,8 @@ import type { Ref } from 'vue'
 
 export type ModifierState = Readonly<
   Omit<Record<string, boolean>, 'activeKeys'> & {
-    activeKeys: Set<string>
+    activeKeys: Set<string>,
+    resetAll: () => void
   }
 >
 
@@ -55,6 +56,8 @@ const defaultAliasMap: Record<string, string> = {
 const separatorRE = /[+_-]/
 const splitRE = /[+_-]/g
 
+const internalProps = ['activeKeys', 'resetAll']
+
 export function useModifier(options: UseModifierOptions = {}) {
   const { capture = false, passive = true, onKeyDown = noop, onKeyUp = noop } = options
 
@@ -62,7 +65,7 @@ export function useModifier(options: UseModifierOptions = {}) {
   const aliasMap = { ...defaultAliasMap, ...(options.aliasMap || {}) }
   const activeKeys = reactive(new Set<string>())
   const metaDeps = new Set<string>()
-  const modifier: Record<string, any> = reactive({ activeKeys })
+  const modifier: Record<string, any> = reactive({ activeKeys, resetAll })
 
   function setModifier(key: string, value: boolean) {
     if (key in modifier) {
@@ -87,16 +90,29 @@ export function useModifier(options: UseModifierOptions = {}) {
       }
 
       metaDeps.clear()
-    } else if (value && typeof event.getModifierState === 'function' && event.getModifierState('Meta')) {
+    } else if (
+      value &&
+      typeof event.getModifierState === 'function' &&
+      event.getModifierState('Meta')
+    ) {
       for (const key of [...activeKeys, ...keys]) {
         metaDeps.add(key)
       }
     }
   }
 
+  function resetAll() {
+    Object.keys(modifier).forEach(key => {
+      modifier[key] = false
+    })
+
+    modifier.activeKeys = activeKeys
+    modifier.resetAll = resetAll
+  }
+
   const modifierProxy = new Proxy(modifier, {
     get(target, prop, receiver) {
-      if (typeof prop !== 'string') {
+      if (typeof prop !== 'string' || internalProps.includes(prop)) {
         return Reflect.get(target, prop, receiver)
       }
 
@@ -117,12 +133,6 @@ export function useModifier(options: UseModifierOptions = {}) {
       }
 
       return unref(Reflect.get(target, prop, receiver))
-    },
-    set() {
-      return true
-    },
-    deleteProperty() {
-      return true
     }
   })
 
