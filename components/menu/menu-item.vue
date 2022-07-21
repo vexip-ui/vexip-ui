@@ -1,5 +1,12 @@
 <template>
-  <li ref="wrapper" :class="className">
+  <li
+    ref="wrapper"
+    :class="className"
+    role="menuitem"
+    tabindex="0"
+    :aria-disabled="props.disabled ? 'true' : undefined"
+    @keydown.enter.stop="handleSelect"
+  >
     <Tooltip
       placement="right"
       :theme="tooltipTheme"
