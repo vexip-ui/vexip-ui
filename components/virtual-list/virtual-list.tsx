@@ -65,10 +65,24 @@ export default defineComponent({
       itemsStyle,
       handleScroll,
       handleResize,
-      handleItemResize
+      handleItemResize,
+      scrollTo,
+      scrollBy,
+      scrollToKey,
+      scrollToIndex
     } = useVirtual({ items, itemSize, itemFixed, idKey, defaultKeyAt, bufferSize, wrapper })
 
-    expose({ scroll, list, refresh })
+    expose({
+      scroll,
+      wrapper,
+      list,
+      scrollOffset,
+      scrollTo,
+      scrollBy,
+      scrollToKey,
+      scrollToIndex,
+      refresh
+    })
 
     watch(
       () => props.items.length,
