@@ -112,6 +112,14 @@ export interface LocaleConfig {
     cancel: string
   },
 
+  transfer: {
+    source: string,
+    target: string,
+    empty: string,
+    reverse: string,
+    search: string
+  },
+
   tree: {
     empty: string
   },

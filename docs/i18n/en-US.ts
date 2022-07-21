@@ -68,6 +68,7 @@ export const enUS = defineI18n({
     Switch: 'Switch',
     Textarea: 'Textarea',
     TimePicker: 'TimePicker',
+    Transfer: 'Transfer',
     Upload: 'Upload',
     Wheel: 'Wheel',
 

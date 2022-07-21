@@ -86,6 +86,7 @@ declare module 'vue' {
     Timeline: typeof import('vexip-ui')['Timeline'],
     TimelineItem: typeof import('vexip-ui')['TimelineItem'],
     Tooltip: typeof import('vexip-ui')['Tooltip'],
+    Transfer: typeof import('vexip-ui')['Transfer'],
     Tree: typeof import('vexip-ui')['Tree'],
     Upload: typeof import('vexip-ui')['Upload'],
     UploadFile: typeof import('vexip-ui')['UploadFile'],

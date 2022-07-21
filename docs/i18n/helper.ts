@@ -66,6 +66,7 @@ export interface I18nConfig {
     Switch: string,
     Textarea: string,
     TimePicker: string,
+    Transfer: string,
     Upload: string,
     Wheel: string,
 

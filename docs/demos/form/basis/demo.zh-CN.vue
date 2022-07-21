@@ -42,6 +42,9 @@
       <FormItem required label="Textarea" prop="textarea">
         <Textarea></Textarea>
       </FormItem>
+      <FormItem required label="Transfer" prop="transfer">
+        <Transfer :options="options"></Transfer>
+      </FormItem>
       <FormItem required label="Wheel" prop="wheel">
         <Wheel insert-empty :options="options"></Wheel>
       </FormItem>
@@ -78,6 +81,7 @@ const formModel = reactive({
   slider: 0,
   switch: false,
   textarea: '',
+  transfer: [],
   wheel: '',
   upload: []
 })

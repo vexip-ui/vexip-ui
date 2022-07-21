@@ -52,6 +52,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Switch' },
         { name: 'Textarea' },
         { name: 'TimePicker' },
+        { name: 'Transfer', since: '2.0.0' },
         { name: 'Upload' },
         { name: 'Wheel' }
       ]
