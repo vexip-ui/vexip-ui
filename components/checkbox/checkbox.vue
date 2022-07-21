@@ -79,7 +79,7 @@ export default defineComponent({
       border: false,
       control: false,
       partial: false,
-      tabIndex: null
+      tabIndex: 0
     })
 
     const groupState = inject(GROUP_STATE, null)

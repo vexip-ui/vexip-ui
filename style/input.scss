@@ -64,6 +64,7 @@ $input: map.merge(
     }
 
     &:focus,
+    &:focus-within,
     &--focused {
       z-index: 2;
       border-color: get-css-var('input-b-color-focus');
@@ -119,7 +120,8 @@ $input: map.merge(
 
       &,
       &:hover,
-      &:focus {
+      &:focus,
+      &:focus-within {
         border-color: get-css-var('border-color-base');
         box-shadow: none;
       }

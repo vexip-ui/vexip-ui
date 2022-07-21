@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, computed, inject } from 'vue'
+import { defineComponent, ref, computed, inject } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import {
@@ -272,21 +272,23 @@ export default defineComponent({
       )
     }
 
-    return () =>
-      h(
-        props.tag || 'button',
-        {
-          type: props.buttonType,
-          class: className.value,
-          style: style.value,
-          disabled: props.disabled,
-          onClick: handleClick,
-          onAnimationend: handleAnimationEnd
-        },
-        [
-          props.icon ? renderIconWithDefined() : renderCollapseIcon(),
-          slots.default ? slots.default() : null
-        ]
+    return () => {
+      const Button = (props.tag || 'button') as any
+
+      return (
+        <Button
+          type={props.buttonType}
+          class={className.value}
+          role={'button'}
+          style={style.value}
+          disabled={props.disabled}
+          onClick={handleClick}
+          onAnimationend={handleAnimationEnd}
+        >
+          {props.icon ? renderIconWithDefined() : renderCollapseIcon()}
+          {slots.default ? slots.default() : null}
+        </Button>
       )
+    }
   }
 })

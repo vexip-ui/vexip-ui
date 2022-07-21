@@ -9,6 +9,7 @@
       :class="nh.be('input')"
       :checked="currentValue === props.label"
       :disabled="isDisabled"
+      :tabindex="props.tabIndex"
       @change="handleChange"
     />
   </label>
@@ -41,6 +42,7 @@ export default defineComponent({
     labelClass: classProp,
     disabled: booleanProp,
     border: booleanProp,
+    tabIndex: [String, Number],
     onChange: eventProp<(value: string | number) => void>()
   },
   emits: ['update:value'],
@@ -59,7 +61,8 @@ export default defineComponent({
       },
       labelClass: null,
       disabled: false,
-      border: false
+      border: false,
+      tabIndex: 0
     })
 
     const groupState = inject(GROUP_STATE, null)

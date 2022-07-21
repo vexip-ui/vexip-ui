@@ -1,6 +1,11 @@
 <template>
   <div ref="wrapper" :class="className" @click="handleClick">
-    <div ref="reference" :class="selectorClass">
+    <div
+      ref="reference"
+      :class="selectorClass"
+      tabindex="0"
+      @keydown.space.prevent="handleClick"
+    >
       <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>

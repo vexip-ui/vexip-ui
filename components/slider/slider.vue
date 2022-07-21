@@ -1,5 +1,11 @@
 <template>
-  <div :class="className" @pointerdown="handleTrackDown" @touchstart="disableEvent">
+  <div
+    ref="wrapper"
+    :class="className"
+    tabindex="-1"
+    @pointerdown="handleTrackDown"
+    @touchstart="disableEvent"
+  >
     <div ref="track" :class="nh.be('track')">
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
@@ -23,7 +29,13 @@
         @tip-leave="hideTooltip"
       >
         <template #trigger>
-          <div :class="nh.be('handler')" @mouseenter="showTooltip" @mouseleave="hideTooltip"></div>
+          <div
+            :class="nh.be('handler')"
+            role="slider"
+            tabindex="0"
+            @mouseenter="showTooltip"
+            @mouseleave="hideTooltip"
+          ></div>
         </template>
         <slot name="tip" :value="truthValue">
           {{ truthValue }}
@@ -47,7 +59,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useSetTimeout } from '@vexip-ui/mixins'
+import { useSetTimeout, useModifier } from '@vexip-ui/mixins'
 import { throttle } from '@vexip-ui/utils'
 
 import type { TooltipExposed } from '@/components/tooltip'
@@ -98,6 +110,23 @@ export default defineComponent({
     const isTipShow = ref(false)
 
     const { timer } = useSetTimeout()
+    const { target: wrapper } = useModifier({
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down || modifier.left || modifier.right) {
+          event.preventDefault()
+          event.stopPropagation()
+
+          if (modifier.up || modifier.left) {
+            currentValue.value -= 1
+          } else {
+            currentValue.value += 1
+          }
+
+          verifyValue()
+        }
+      }
+    })
 
     const track = ref<HTMLElement | null>(null)
     const tooltip = ref<(InstanceType<typeof Tooltip> & TooltipExposed) | null>(null)
@@ -285,6 +314,7 @@ export default defineComponent({
       fillerStyle,
       handlerStyle,
 
+      wrapper,
       track,
       tooltip,
 

@@ -3,6 +3,7 @@
     <div
       ref="reference"
       :class="[nh.be('trigger'), currentVisible ? nh.bem('trigger', 'visible') : '']"
+      tabindex="0"
       @click="handleTriggerClick"
     >
       <slot

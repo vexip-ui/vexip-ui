@@ -3,6 +3,7 @@
     ref="wrapper"
     :class="className"
     tabindex="0"
+    role="listbox"
     @blur="handleBlur"
   >
     <ResizeObserver throttle :on-resize="computeBodyHeight">
@@ -584,6 +585,7 @@ export default defineComponent({
     }
 
     function renderOption({ option, index }: { option: TransferOptionState, index: number }) {
+      const disabled = props.disabled || option.disabled
       const handleCheck = (event: MouseEvent) => {
         event.preventDefault()
         event.stopPropagation()
@@ -594,9 +596,11 @@ export default defineComponent({
         <li
           class={{
             [nh.be('option')]: true,
-            [nh.bem('option', 'disabled')]: props.disabled || option.disabled,
+            [nh.bem('option', 'disabled')]: disabled,
             [nh.bem('option', 'hitting')]: currentHitting.value === index
           }}
+          role={'option'}
+          aria-disabled={disabled ? 'true' : undefined}
           onClick={() => toggleSelect(option)}
         >
           {slots.option
@@ -606,7 +610,7 @@ export default defineComponent({
                   class={nh.be('checkbox')}
                   state={props.deepState ? props.state : undefined}
                   checked={currentSelected.value.has(option.value)}
-                  disabled={props.disabled || option.disabled}
+                  disabled={disabled}
                   tab-index={-1}
                   onClick={handleCheck}
                 ></Checkbox>,

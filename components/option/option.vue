@@ -3,6 +3,9 @@
     ref="wrapper"
     :class="className"
     :title="noTitle ? undefined : String(value)"
+    role="option"
+    :aria-disabled="disabled ? 'true' : undefined"
+    :aria-selected="selected"
     @click="handleSelect"
   >
     <slot>{{ label }}</slot>
