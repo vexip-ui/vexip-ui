@@ -7,6 +7,7 @@ import type { Ref } from 'vue'
 // import type { ResizeHandler } from './resize'
 
 type Key = number | string | symbol
+type Behavior = ScrollToOptions['behavior']
 
 export interface VirtualOptions {
   /**
@@ -97,7 +98,9 @@ export function useVirtual(options: VirtualOptions) {
     if (!visibleHeight.value || visibleHeight.value < 0) return []
 
     const endIndex = Math.min(
-      heightTree.value.boundIndex(scrollOffset.value + visibleHeight.value) + 1 + Math.max(bufferSize.value, 0),
+      heightTree.value.boundIndex(scrollOffset.value + visibleHeight.value) +
+        1 +
+        Math.max(bufferSize.value, 0),
       items.value.length
     )
 
@@ -148,7 +151,10 @@ export function useVirtual(options: VirtualOptions) {
   }
 
   function handleResize(entry: ResizeObserverEntry) {
-    if (isHiddenElement(entry.target as HTMLElement) || entry.contentRect.height === visibleHeight.value) {
+    if (
+      isHiddenElement(entry.target as HTMLElement) ||
+      entry.contentRect.height === visibleHeight.value
+    ) {
       return
     }
 
@@ -157,17 +163,19 @@ export function useVirtual(options: VirtualOptions) {
   }
 
   function handleItemResize(key: Key, entry: ResizeObserverEntry) {
+    console.log('a')
     if (itemFixed.value) return
 
     const index = indexMap.value.get(key)!
-    const prevHeight = heightTree.value.get(index)
+    const tree = heightTree.value
+    const prevHeight = tree.get(index)
     const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height
 
     if (height === prevHeight) return
 
     if (isHiddenElement(entry.target as HTMLElement)) {
       if (prevHeight) {
-        heightTree.value.add(index, -1 * prevHeight)
+        tree.add(index, -prevHeight)
         treeUpdateDep.value++
       }
 
@@ -183,8 +191,56 @@ export function useVirtual(options: VirtualOptions) {
       heightDiffMap.delete(key)
     }
 
-    heightTree.value.add(index, delta)
+    if (!delta) return
+
+    tree.add(index, delta)
     treeUpdateDep.value++
+
+    if (wrapper.value) {
+      const prevTop = tree.sum(index)
+
+      if (wrapper.value.scrollTop > prevTop) {
+        wrapper.value.scrollBy(0, delta)
+      }
+    }
+  }
+
+  function scrollTo(top: number, behavior?: Behavior) {
+    if (wrapper.value) {
+      wrapper.value.scrollTo({
+        behavior,
+        top,
+        left: 0
+      })
+    }
+  }
+
+  function scrollBy(delta: number, behavior?: Behavior) {
+    if (wrapper.value) {
+      wrapper.value.scrollBy({
+        behavior,
+        top: delta,
+        left: 0
+      })
+    }
+  }
+
+  function scrollToKey(key: Key, behavior?: Behavior) {
+    const index = indexMap.value.get(key)
+
+    if (index !== undefined) {
+      scrollToIndex(index, behavior)
+    }
+  }
+
+  function scrollToIndex(index: number, behavior?: Behavior) {
+    if (wrapper.value) {
+      wrapper.value.scrollTo({
+        behavior,
+        top: heightTree.value.sum(index),
+        left: 0
+      })
+    }
   }
 
   return {
@@ -196,6 +252,10 @@ export function useVirtual(options: VirtualOptions) {
     itemsStyle,
     handleScroll,
     handleResize,
-    handleItemResize
+    handleItemResize,
+    scrollTo,
+    scrollBy,
+    scrollToKey,
+    scrollToIndex
   }
 }
