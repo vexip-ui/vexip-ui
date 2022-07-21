@@ -2,7 +2,7 @@
   <div
     ref="wrapper"
     :class="className"
-    tabindex="-1"
+    tabindex="0"
     @blur="handleBlur"
   >
     <ResizeObserver throttle :on-resize="computeBodyHeight">
@@ -15,6 +15,7 @@
             :checked="allSelected"
             :partial="partial"
             :disabled="disabled"
+            :tab-index="-1"
             @click.prevent="toggleSelectAll"
           ></Checkbox>
           <div
@@ -606,6 +607,7 @@ export default defineComponent({
                   state={props.deepState ? props.state : undefined}
                   checked={currentSelected.value.has(option.value)}
                   disabled={props.disabled || option.disabled}
+                  tab-index={-1}
                   onClick={handleCheck}
                 ></Checkbox>,
                 <span class={nh.be('label')}>
