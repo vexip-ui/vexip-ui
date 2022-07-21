@@ -216,6 +216,7 @@ export default defineComponent({
     const locale = useLocale('transfer')
 
     const bodyHeight = ref('100%')
+    const bodyRealHeight = ref(0)
     const currentSelected = ref(new Set(props.selected))
     const pageSize = ref(10)
     const currentPage = ref(1)
@@ -231,22 +232,30 @@ export default defineComponent({
     const input = ref<InstanceType<typeof Input> | null>(null)
     const list = ref<VirtualListExposed | null>(null)
 
-    let lastSelected: string | number | null = props.options[0]?.value
+    let lastSelected: string | number | null = null
     let keyUsed = false
 
     const { target: wrapper, modifier } = useModifier({
       passive: false,
       onKeyDown: (event, modifier) => {
         if (modifier.up || modifier.down) {
-          if (!keyUsed && currentHitting.value < 0 && lastSelected) {
+          if (!keyUsed && currentHitting.value < 0) {
             keyUsed = true
-            currentHitting.value = props.options.findIndex(option => option.value === lastSelected)
+
+            if (lastSelected) {
+              currentHitting.value = props.options.findIndex(
+                option => option.value === lastSelected
+              )
+            } else if (list.value) {
+              currentHitting.value = Math.round(list.value.scrollOffset / props.optionHeight)
+            }
+
             currentHitting.value = currentHitting.value === -1 ? 0 : currentHitting.value
           } else {
             currentHitting.value = boundRange(
               findEnabledIndex(currentHitting.value + (modifier.up ? -1 : 1), modifier.up ? -1 : 1),
               0,
-              currentOptions.value.length
+              currentOptions.value.length - 1
             )
           }
 
@@ -265,7 +274,7 @@ export default defineComponent({
         ) {
           keyUsed = false
           currentHitting.value = -1
-          lastSelected = props.options[0]?.value
+          lastSelected = null
           emit('switch')
           event.preventDefault()
         } else if (modifier.space) {
@@ -328,19 +337,20 @@ export default defineComponent({
     watch(bodyHeight, computePageSize)
     watch(
       () => props.paged,
-      () => {
+      value => {
         requestAnimationFrame(() => {
           computeBodyHeight()
-          requestAnimationFrame(() => {
-            list.value?.refresh()
-          })
+          !value &&
+            requestAnimationFrame(() => {
+              list.value?.refresh()
+            })
         })
       }
     )
     watch(optionSize, () => {
       keyUsed = false
       currentHitting.value = -1
-      lastSelected = props.options[0]?.value
+      lastSelected = null
     })
 
     const partial = ref(false)
@@ -377,12 +387,15 @@ export default defineComponent({
 
     function computePageSize() {
       requestAnimationFrame(() => {
-        if (body.value) {
-          const style = getComputedStyle(body.value)
+        const bodyEl = body.value || list.value?.wrapper
+
+        if (bodyEl) {
+          const style = getComputedStyle(bodyEl)
           const paddingTop = parseInt(style.paddingTop)
           const paddingBottom = parseInt(style.paddingBottom)
-          const innerHeight = body.value.offsetHeight - paddingTop - paddingBottom
+          const innerHeight = bodyEl.offsetHeight - paddingTop - paddingBottom
 
+          bodyRealHeight.value = innerHeight
           pageSize.value = Math.floor(innerHeight / (props.optionHeight || 1))
         }
       })
@@ -534,14 +547,24 @@ export default defineComponent({
       return index
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function ensureOptionInView(index: number, direction: 'top' | 'bottom') {
       const option = props.options[index]
 
-      // eslint-disable-next-line no-useless-return
-      if (!option) return
+      if (props.paged || !option || !list.value) return
 
-      // TODO: 等待 VirtualList 实现滚动到元素方法
+      if (direction === 'bottom') {
+        const target = (index + 1) * props.optionHeight
+
+        if (list.value.scrollOffset + bodyRealHeight.value < target) {
+          list.value.scrollTo((index - pageSize.value + 1) * props.optionHeight)
+        }
+      } else {
+        const target = index * props.optionHeight
+
+        if (list.value.scrollOffset > target) {
+          list.value.scrollTo(target)
+        }
+      }
     }
 
     function getSlotPayload() {
