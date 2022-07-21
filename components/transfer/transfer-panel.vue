@@ -11,6 +11,7 @@
           <Checkbox
             control
             :class="nh.be('checkbox')"
+            :state="deepState ? state : undefined"
             :checked="allSelected"
             :partial="partial"
             :disabled="disabled"
@@ -203,6 +204,10 @@ export default defineComponent({
     optionHeight: {
       type: Number,
       default: 32
+    },
+    deepState: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:selected', 'select', 'enter', 'switch'],
@@ -575,6 +580,7 @@ export default defineComponent({
             : [
                 <Checkbox
                   class={nh.be('checkbox')}
+                  state={props.deepState ? props.state : undefined}
                   checked={currentSelected.value.has(option.value)}
                   disabled={props.disabled || option.disabled}
                   onClick={handleCheck}

@@ -5,7 +5,7 @@
 | state         | `'default' \| 'success' \| 'error' \| 'warning'` | The state of Transfer                                                                     | `'default'`     | -     |
 | options       | `(string \| Record<string, any>)[]`              | Set options for the Transfer                                                              | `[]`            | -     |
 | value         | `(string \| number)[]`                           | Set the value of the Transfer                                                             | `[]`            | -     |
-| disabled      | `boolean`                                        | set whether disabled                                                                      | `false`         | -     |
+| disabled      | `boolean`                                        | Set whether disabled                                                                      | `false`         | -     |
 | paged         | `boolean`                                        | Set whether paged                                                                         | `false`         | -     |
 | filter        | `boolean \| FilterHandler`                       | Set whether to enable filter, the filter method can be customized when passing a function | `false`         | -     |
 | empty-text    | `string`                                         | The prompt when option empty                                                              | `locale.empty`  | -     |
@@ -51,10 +51,10 @@ type FilterHandler = (value: string, options: TransferOptionState, type: 'source
 
 ### Transfer Events
 
-| Name   | Description                                                    | Parameters                                                                                                                                                    | Since       |
-| ------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | --- |
-| change | Emitted when the selected value changes                        | `(values: (string                                                                                                                                             | number)[])` | -   |
-| select | Emitted when the selected state of option changed in the panel | `(type: 'source' \| 'target', selected: { source: (string \| number)[], target: (string \| number) [] }, data: { source: RawOption[], target: RawOption[] })` | -           |
+| Name   | Description                                                    | Parameters                                                                                                                                                    | Since |
+| ------ | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| change | Emitted when the selected value changes                        | `(values: (string \| number)[])`                                                                                                                              | -     |
+| select | Emitted when the selected state of option changed in the panel | `(type: 'source' \| 'target', selected: { source: (string \| number)[], target: (string \| number) [] }, data: { source: RawOption[], target: RawOption[] })` | -     |
 
 ### Transfer Slots
 

@@ -51,10 +51,10 @@ type FilterHandler = (value: string, options: TransferOptionState, type: 'source
 
 ### Transfer 事件
 
-| 名称   | 说明                               | 参数                                                                                                                                                         | 始于        |
-| ------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- | --- |
-| change | 当所选值发生变化时触发             | `(values: (string                                                                                                                                            | number)[])` | -   |
-| select | 当面板中的选项的选中状态改变时触发 | `(type: 'source' \| 'target', selected: { source: (string \| number)[], target: (string \| number)[] }, data: { source: RawOption[], target: RawOption[] })` | -           |
+| 名称   | 说明                               | 参数                                                                                                                                                         | 始于 |
+| ------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---- |
+| change | 当所选值发生变化时触发             | `(values: (string \| number)[])`                                                                                                                             | -    |
+| select | 当面板中的选项的选中状态改变时触发 | `(type: 'source' \| 'target', selected: { source: (string \| number)[], target: (string \| number)[] }, data: { source: RawOption[], target: RawOption[] })` | -    |
 
 ### Transfer 插槽
 

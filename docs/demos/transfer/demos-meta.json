@@ -2,5 +2,6 @@
   "basis",
   "disabled",
   "paged",
-  "filter"
+  "filter",
+  "state"
 ]

@@ -68,7 +68,7 @@ export const zhCN = defineI18n({
     Switch: '开关',
     Textarea: '多行输入框',
     TimePicker: '时间选择框',
-    Transfer: '穿梭框s',
+    Transfer: '穿梭框',
     Upload: '上传',
     Wheel: '滚轮',
 

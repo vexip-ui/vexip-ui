@@ -1,3 +1,3 @@
 ### Different States
 
-Simple usage, select value with scrolling.
+Different states can be set via `state`.

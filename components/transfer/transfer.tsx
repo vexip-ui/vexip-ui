@@ -58,6 +58,7 @@ export default defineComponent({
     ignoreCase: booleanProp,
     sourceTitle: String,
     targetTitle: String,
+    deepState: booleanProp,
     onChange: eventProp<(values: (string | number)[]) => void>(),
     onSelect: eventProp<SelectHandler>()
   },
@@ -87,7 +88,8 @@ export default defineComponent({
       },
       ignoreCase: false,
       sourceTitle: null,
-      targetTitle: null
+      targetTitle: null,
+      deepState: false
     })
 
     const nh = useNameHelper('transfer')
@@ -186,7 +188,9 @@ export default defineComponent({
         }
       ]
     })
-    // const hasSourceBody = computed(() => {})
+    const actionType = computed(() => {
+      return props.deepState && props.state !== 'default' ? props.state : 'primary'
+    })
     const toTargetEnabled = computed(() => !!sourceSelected.value.size)
     const toSourceEnabled = computed(() => !!targetSelected.value.size)
     const defaultFilter = computed(() => {
@@ -283,6 +287,7 @@ export default defineComponent({
             empty-text={props.emptyText || locale.value.empty}
             option-height={props.optionHeight}
             ignore-case={props.ignoreCase}
+            deep-state={props.deepState}
             onSelect={() => handleSelect('source')}
             onEnter={handleToTarget}
             onSwitch={() => handleSwitchPanel('target')}
@@ -301,7 +306,7 @@ export default defineComponent({
               : [
                   <Button
                     class={nh.be('action')}
-                    type={'primary'}
+                    type={actionType.value}
                     size={'small'}
                     icon={ChevronRight}
                     disabled={props.disabled || !toTargetEnabled.value}
@@ -310,7 +315,7 @@ export default defineComponent({
                   ></Button>,
                   <Button
                     class={nh.be('action')}
-                    type={'primary'}
+                    type={actionType.value}
                     size={'small'}
                     icon={ChevronLeft}
                     disabled={props.disabled || !toSourceEnabled.value}
@@ -333,6 +338,7 @@ export default defineComponent({
             empty-text={props.emptyText || locale.value.empty}
             option-height={props.optionHeight}
             ignore-case={props.ignoreCase}
+            deep-state={props.deepState}
             onSelect={() => handleSelect('target')}
             onEnter={handleToSource}
             onSwitch={() => handleSwitchPanel('source')}
