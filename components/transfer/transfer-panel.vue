@@ -3,7 +3,6 @@
     ref="wrapper"
     :class="className"
     tabindex="0"
-    role="listbox"
     @blur="handleBlur"
   >
     <ResizeObserver throttle :on-resize="computeBodyHeight">
@@ -47,7 +46,7 @@
           clearable
           :disabled="disabled"
           :suffix="MagnifyingGlass"
-          :placeholder="searching ? null : locale.search"
+          :placeholder="searching ? undefined : locale.search"
           @keydown.stop
           @input="currentFilter = $event"
           @focus="searching = true"
@@ -59,6 +58,7 @@
       v-if="paged || $slots.body"
       ref="body"
       :class="nh.be('body')"
+      role="listbox"
       :style="{ height: bodyHeight }"
     >
       <slot name="body" v-bind="getSlotPayload()">
@@ -86,6 +86,7 @@
       use-y-bar
       id-key="value"
       :height="bodyHeight"
+      :items-attrs="{ role: 'listbox' }"
     >
       <template #default="{ item: option, index }">
         <Renderer :renderer="renderOption" :data="{ option, index }"></Renderer>
@@ -218,7 +219,6 @@ export default defineComponent({
     const locale = useLocale('transfer')
 
     const bodyHeight = ref('100%')
-    const bodyRealHeight = ref(0)
     const currentSelected = ref(new Set(props.selected))
     const pageSize = ref(10)
     const currentPage = ref(1)
@@ -234,6 +234,7 @@ export default defineComponent({
     const input = ref<InstanceType<typeof Input> | null>(null)
     const list = ref<VirtualListExposed | null>(null)
 
+    let bodyRealHeight = 0
     let lastSelected: string | number | null = null
     let keyUsed = false
 
@@ -397,7 +398,7 @@ export default defineComponent({
           const paddingBottom = parseInt(style.paddingBottom)
           const innerHeight = bodyEl.offsetHeight - paddingTop - paddingBottom
 
-          bodyRealHeight.value = innerHeight
+          bodyRealHeight = innerHeight
           pageSize.value = Math.floor(innerHeight / (props.optionHeight || 1))
         }
       })
@@ -535,14 +536,16 @@ export default defineComponent({
     }
 
     function findEnabledIndex(index: number, sign: 1 | -1 = 1) {
-      if (currentOptions.value[index]?.disabled) {
+      const options = currentOptions.value
+
+      if (options[index]?.disabled) {
         index = queryEnabledIndex(index, sign)
 
-        if (sign > 0 ? index >= currentOptions.value.length : index < 0) {
+        if (sign > 0 ? index >= options.length : index < 0) {
           index = queryEnabledIndex(index, -sign)
 
           // 全禁用
-          if (sign > 0 ? index < 0 : index >= currentOptions.value.length) index = -1
+          if (sign > 0 ? index < 0 : index >= options.length) index = -1
         }
       }
 
@@ -557,7 +560,7 @@ export default defineComponent({
       if (direction === 'bottom') {
         const target = (index + 1) * props.optionHeight
 
-        if (list.value.scrollOffset + bodyRealHeight.value < target) {
+        if (list.value.scrollOffset + bodyRealHeight < target) {
           list.value.scrollTo((index - pageSize.value + 1) * props.optionHeight)
         }
       } else {

@@ -85,6 +85,8 @@ import type { PropType } from 'vue'
 
 type InputEventType = 'input' | 'change'
 
+const isNullOrNaN = (value: unknown) => isNull(value) || Number.isNaN(value)
+
 export default defineComponent({
   name: 'NumberInput',
   components: {
@@ -102,7 +104,7 @@ export default defineComponent({
     suffixColor: String,
     // 格式化后显示
     formatter: Function as PropType<(value: number) => string>,
-    value: Number as PropType<number | null>,
+    value: Number,
     min: Number,
     max: Number,
     placeholder: String,
@@ -121,8 +123,8 @@ export default defineComponent({
     clearable: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
-    onInput: eventProp<(value: number | null) => void>(),
-    onChange: eventProp<(value: number | null) => void>(),
+    onInput: eventProp<(value: number) => void>(),
+    onChange: eventProp<(value: number) => void>(),
     onEnter: eventProp(),
     onClear: eventProp(),
     onPrefixClick: eventProp<(event: MouseEvent) => void>(),
@@ -172,7 +174,7 @@ export default defineComponent({
 
     const nh = useNameHelper('number-input')
     const focused = ref(false)
-    const currentValue = ref<number | null>(props.value)
+    const currentValue = ref(props.value)
     const inputting = ref(false)
 
     const inputControl = ref<HTMLElement | null>(null)
@@ -242,10 +244,10 @@ export default defineComponent({
         : preciseNumber.value.toString()
     })
     const plusDisabled = computed(() => {
-      return !isNull(currentValue.value) && currentValue.value >= props.max
+      return !isNullOrNaN(currentValue.value) && currentValue.value >= props.max
     })
     const minusDisabled = computed(() => {
-      return !isNull(currentValue.value) && currentValue.value <= props.min
+      return !isNullOrNaN(currentValue.value) && currentValue.value <= props.min
     })
     const hasValue = computed(() => {
       return currentValue.value || currentValue.value === 0
@@ -254,8 +256,8 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValue.value = value
-        lastValue = value
+        currentValue.value = isNull(value) ? NaN : value
+        lastValue = currentValue.value
       }
     )
 
@@ -365,7 +367,7 @@ export default defineComponent({
       setValue(toNumber(value), type)
     }
 
-    function setValue(value: number | null, type: InputEventType) {
+    function setValue(value: number, type: InputEventType) {
       if (type !== 'input') {
         currentValue.value = boundRange(value || 0, props.min, props.max)
       } else {
@@ -388,12 +390,12 @@ export default defineComponent({
         emit('update:value', currentValue.value)
         validateField()
       } else {
-        emitEvent(props.onInput, currentValue.value)
+        emitEvent(props.onInput, currentValue.value!)
       }
     }
 
     function handleClear() {
-      setValue(null, 'change')
+      setValue(NaN, 'change')
       emitEvent(props.onClear)
       clearField()
     }

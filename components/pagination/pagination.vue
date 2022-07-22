@@ -3,7 +3,6 @@
     ref="wrapper"
     :class="className"
     role="menubar"
-    tabindex="-1"
     aria-label="Pagination"
     :aria-disabled="props.disabled ? 'true' : undefined"
   >

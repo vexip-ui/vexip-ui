@@ -123,6 +123,7 @@
               <CascaderPane
                 v-for="(items, index) in optionsList"
                 :key="index"
+                :ref="(panel: any) => panel && panelElList.push(panel)"
                 :options="items"
                 :opened-id="openedIds[index]"
                 :values="currentValues"
@@ -134,45 +135,14 @@
                 @select="handleOptionSelect($event, index)"
                 @hover="usingHover && handlePaneOpen($event, index)"
                 @check="handleOptionCheck($event)"
+                @back="handlePanelBack"
+                @close="currentVisible = false"
               >
-                <template
-                  #default="{
-                    option,
-                    index: optionIndex,
-                    selected,
-                    canCheck,
-                    hasChild,
-                    handleSelect
-                  }"
-                >
-                  <slot
-                    :option="option"
-                    :index="optionIndex"
-                    :selected="selected"
-                    :can-check="canCheck"
-                    :has-child="hasChild"
-                    :handle-select="handleSelect"
-                  ></slot>
+                <template #default="payload">
+                  <slot v-bind="payload"></slot>
                 </template>
-                <template
-                  #label="{
-                    option,
-                    index: optionIndex,
-                    selected,
-                    canCheck,
-                    hasChild,
-                    handleSelect
-                  }"
-                >
-                  <slot
-                    name="label"
-                    :option="option"
-                    :index="optionIndex"
-                    :selected="selected"
-                    :can-check="canCheck"
-                    :has-child="hasChild"
-                    :handle-select="handleSelect"
-                  ></slot>
+                <template #label="payload">
+                  <slot name="label" v-bind="payload"></slot>
                 </template>
               </CascaderPane>
             </template>
@@ -198,6 +168,7 @@ import {
   watch,
   watchEffect,
   onMounted,
+  onBeforeUpdate,
   nextTick
 } from 'vue'
 import CascaderPane from './cascader-pane.vue'
@@ -366,6 +337,8 @@ export default defineComponent({
     let optionList: OptionState[] = null!
     let optionIdMap: Map<number, OptionState> = null!
     let optionValueMap: Map<string, OptionState> = null!
+    let outsideClosed = false
+    let prevClosedId = -1
 
     const updateTrigger = ref(0)
 
@@ -436,6 +409,7 @@ export default defineComponent({
     const locale = useLocale('select')
     const tagWrapper = ref<HTMLElement | null>(null)
     const tagCounter = ref<InstanceType<typeof Tag> | null>(null)
+    const panelElList = ref<InstanceType<typeof CascaderPane>[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)
     const selectorWidth = ref(0)
@@ -486,10 +460,18 @@ export default defineComponent({
         restTipShow.value = false
         selectorWidth.value = wrapper.value?.offsetWidth || 0
         updatePopper()
+        nextTick(() => {
+          panelElList.value.at(-1)?.$el?.focus()
+        })
       } else {
         isPopperShow.value = false
+
+        if (reference.value && !outsideClosed) {
+          reference.value.focus()
+        }
       }
 
+      outsideClosed = false
       emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
@@ -567,9 +549,34 @@ export default defineComponent({
 
       emitMultipleChange()
     })
+    watch(
+      () => optionsList.value.length,
+      () => {
+        nextTick(() => {
+          const panel = panelElList.value.at(-1)
+
+          if (panel?.$el) {
+            panel.$el.focus()
+
+            if (panel.currentHitting < 0) {
+              panel.currentHitting = panel.options.findIndex(option => option.id === prevClosedId)
+
+              if (panel.currentHitting < 0) {
+                panel.currentHitting = 0
+              }
+            }
+          }
+
+          prevClosedId = -1
+        })
+      }
+    )
 
     onMounted(() => {
       nextTick(hideTagCounter)
+    })
+    onBeforeUpdate(() => {
+      panelElList.value.length = 0
     })
 
     function createOptionStates(rawOptions: Record<string | symbol, any>[]) {
@@ -1145,6 +1152,7 @@ export default defineComponent({
 
       if (props.outsideClose && currentVisible.value) {
         currentVisible.value = false
+        outsideClosed = true
         emitEvent(props.onOutsideClose)
       }
     }
@@ -1190,6 +1198,10 @@ export default defineComponent({
       nextTick(computeTagsOverflow)
     }
 
+    function handlePanelBack() {
+      prevClosedId = openedIds.value.pop()!
+    }
+
     return {
       props,
       nh,
@@ -1221,6 +1233,7 @@ export default defineComponent({
       popper,
       tagWrapper,
       tagCounter,
+      panelElList,
 
       handlePaneOpen,
       handleOptionSelect,
@@ -1228,7 +1241,8 @@ export default defineComponent({
       handleClick,
       handleClear,
       toggleShowRestTip,
-      handleTipClose
+      handleTipClose,
+      handlePanelBack
     }
   }
 })
