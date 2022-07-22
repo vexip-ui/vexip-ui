@@ -13,7 +13,12 @@
     @hide="handleHide"
   >
     <template #default="{ show }">
-      <section v-show="show" :class="wrapperClass" :style="wrapperStyle">
+      <section
+        v-show="show"
+        :class="wrapperClass"
+        :style="wrapperStyle"
+        tabindex="0"
+      >
         <div v-if="hasTitle" :class="nh.be('title')">
           <slot name="title">
             {{ props.title }}

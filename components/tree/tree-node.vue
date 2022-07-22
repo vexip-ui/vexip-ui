@@ -5,6 +5,7 @@
     v-bind="$attrs"
     :class="className"
     :draggable="draggable"
+    :aria-disabled="isDisabled"
     @click.left="handleClick"
     @dragstart.stop="handleDragStart"
     @dragover="handleDragOver"
@@ -28,6 +29,7 @@
             [nh.bem('arrow', 'transparent')]: !loading && !hasArrow,
             [nh.bem('arrow', 'expanded')]: expanded
           }"
+          :aria-hidden="!loading && !hasArrow"
           @click.stop="handleToggleExpand()"
         >
           <Icon v-if="loading" pulse><Spinner></Spinner></Icon>
@@ -291,7 +293,9 @@ export default defineComponent({
 
       return {
         paddingLeft: depth.value
-          ? depth.value === 1 ? indent : `calc(${depth.value} * ${indent})`
+          ? depth.value === 1
+            ? indent
+            : `calc(${depth.value} * ${indent})`
           : 0
       }
     })

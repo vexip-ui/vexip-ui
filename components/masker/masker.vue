@@ -4,6 +4,7 @@
       v-show="wrapShow"
       ref="wrapper"
       :class="className"
+      tabindex="-1"
       v-bind="$attrs"
     >
       <transition

@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapper" :class="className">
+  <div ref="wrapper" :class="className" tabindex="0">
     <div
       v-if="props.arrow"
       ref="prevArrow"
@@ -10,13 +10,13 @@
       ]"
       @click="handlePrev"
     >
-      <Icon :icon="props.horizontal ? AngleLeft : AngleUp"></Icon>
+      <Icon :icon="prevIcon"></Icon>
     </div>
-    <div :class="nh.be('scroll')" :style="scrollStyle">
+    <div :class="nh.be('scroll')">
       <Scroll
         ref="scroll"
-        width="100%"
-        height="100%"
+        :width="props.horizontal ? wrapperWidth : '100%'"
+        :height="props.horizontal ? '100%' : wrapperHeight"
         :pointer="props.pointer"
         :mode="props.horizontal ? 'horizontal' : 'vertical'"
         :delta-x="targetWidth"
@@ -32,6 +32,7 @@
               :key="index"
               :value="option.value"
               :disabled="option.disabled"
+              :active="currentActive === index"
               :meta="option.meta"
             >
               <slot :option="option" :index="index">
@@ -45,6 +46,7 @@
         <div :class="[nh.be('mask'), nh.bem('mask', 'top')]" :style="maskStyle"></div>
         <div :class="[nh.be('mask'), nh.bem('mask', 'bottom')]" :style="maskStyle"></div>
       </template>
+      <div :class="nh.be('border')" :style="borderStyle"></div>
     </div>
     <div
       v-if="props.arrow"
@@ -56,7 +58,7 @@
       ]"
       @click="handleNext"
     >
-      <Icon :icon="props.horizontal ? AngleRight : AngleDown"></Icon>
+      <Icon :icon="nextIcon"></Icon>
     </div>
   </div>
 </template>
@@ -67,7 +69,7 @@ import WheelItem from './wheel-item.vue'
 import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
-import { useDisplay } from '@vexip-ui/mixins'
+import { useDisplay, useModifier } from '@vexip-ui/mixins'
 import {
   useNameHelper,
   useProps,
@@ -153,6 +155,17 @@ export default defineComponent({
     const wrapper = useDisplay(displayInit)
     const scroll = ref<InstanceType<typeof Scroll> | null>(null)
 
+    useModifier({
+      target: wrapper,
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down) {
+          event.preventDefault()
+          modifier.up ? handlePrev() : handleNext()
+        }
+      }
+    })
+
     const normalizedOptions = computed(() => {
       const options = props.options.map(option => {
         if (typeof option === 'object') {
@@ -193,17 +206,6 @@ export default defineComponent({
         }
       ]
     })
-    const scrollStyle = computed(() => {
-      if (props.horizontal) {
-        return {
-          width: wrapperWidth.value ? `${wrapperWidth.value}px` : undefined
-        }
-      }
-
-      return {
-        height: wrapperHeight.value ? `${wrapperHeight.value}px` : undefined
-      }
-    })
     const listStyle = computed(() => {
       if (props.horizontal) {
         return {
@@ -228,6 +230,23 @@ export default defineComponent({
         height: verticalPadding.value ? `${verticalPadding.value}px` : undefined
       }
     })
+    const borderStyle = computed(() => {
+      const style: Record<string, string> = {
+        inset: props.horizontal
+          ? `0 ${horizontalPadding.value - 1}px`
+          : `${verticalPadding.value - 1}px 0`
+      }
+
+      if (props.horizontal) {
+        style.borderTop = '0'
+        style.borderBottom = '0'
+      } else {
+        style.borderRight = '0'
+        style.borderLeft = '0'
+      }
+
+      return style
+    })
     const prevDisabled = computed(() => {
       return !itemList.value.slice(0, currentActive.value).some(item => !item.disabled)
     })
@@ -239,6 +258,8 @@ export default defineComponent({
           .some(item => !item.disabled)
       )
     })
+    const prevIcon = computed(() => (props.horizontal ? AngleLeft : AngleUp))
+    const nextIcon = computed(() => (props.horizontal ? AngleRight : AngleDown))
 
     provide(WHEEL_STATE, { increaseItem, decreaseItem })
 
@@ -322,6 +343,7 @@ export default defineComponent({
       emit('update:value', value)
       validateField()
     })
+    watch(() => props.candidate, computeSize)
 
     function queryEnabledActive(active: number, step: number) {
       step = step / Math.abs(step)
@@ -418,26 +440,25 @@ export default defineComponent({
     }
 
     return {
-      AngleUp,
-      AngleRight,
-      AngleDown,
-      AngleLeft,
-
       props,
       nh,
       currentActive,
       isInit,
       targetWidth,
       targetHeight,
+      wrapperWidth,
+      wrapperHeight,
 
       normalizedOptions,
       itemList,
       className,
-      scrollStyle,
       listStyle,
       maskStyle,
+      borderStyle,
       prevDisabled,
       nextDisabled,
+      prevIcon,
+      nextIcon,
 
       wrapper,
       scroll,

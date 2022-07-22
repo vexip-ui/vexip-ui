@@ -1,14 +1,18 @@
 <template>
   <div :class="className">
     <div
+      ref="control"
       :class="{
         [nh.be('control')]: true,
         [nh.bem('control', 'drag-over')]: isDragOver
       }"
+      tabindex="-1"
       @click="handleClick"
       @drop.prevent="handleDrop"
       @dragover.prevent="handleDragEnter"
       @dragleave.prevent="handleDragLeave"
+      @keydown.enter.prevent="handleClick"
+      @keydown.space.prevent="handleClick"
     >
       <input
         v-if="!props.disabledClick"
@@ -31,7 +35,7 @@
             </p>
           </slot>
         </template>
-        <div v-else :class="nh.be('drag-pane')">
+        <div v-else :class="nh.be('drag-pane')" tabindex="0">
           <Icon :class="nh.be('cloud')" :scale="4">
             <CloudArrowUp></CloudArrowUp>
           </Icon>

@@ -17,6 +17,8 @@
         v-show="show"
         ref="wrapper"
         :class="wrapperClass"
+        role="dialog"
+        tabindex="0"
         :style="wrapperStyle"
       >
         <div v-if="hasTitle" ref="header" :class="nh.be('header')">

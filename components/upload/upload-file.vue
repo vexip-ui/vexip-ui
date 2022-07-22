@@ -3,6 +3,7 @@
     <li
       :class="[nh.be('file'), nh.bem('file', props.listType), nh.bem('file', props.file.status)]"
       :title="fileName"
+      tabindex="-1"
     >
       <slot :file="props.file.source" :status="props.file.status" :percentage="percentage">
         <template v-if="props.listType === 'name'">
@@ -49,9 +50,9 @@
                 <Spinner></Spinner>
               </Icon>
             </div>
-            <div :class="[nh.be('icon'), nh.be('close')]" @click="handleDelete(props.file)">
+            <button :class="[nh.be('icon'), nh.be('close')]" @click="handleDelete(props.file)">
               <Icon><TrashCanR></TrashCanR></Icon>
-            </div>
+            </button>
           </div>
           <div v-if="props.file.status === status.UPLOADING" :class="nh.be('progress')">
             <Progress
@@ -122,7 +123,7 @@
               :class="nh.be('actions')"
             >
               <div v-if="props.listType === 'thumbnail'" :class="nh.be('mask')"></div>
-              <div
+              <button
                 :class="[
                   nh.be('icon'),
                   nh.be('action'),
@@ -131,17 +132,18 @@
                       !props.file.type.startsWith('image/') || !props.file.base64
                   }
                 ]"
+                :disabled="!props.file.type.startsWith('image/') || !props.file.base64"
                 @click="handlePreview(props.file)"
               >
                 <Icon :scale="1.4">
                   <EyeR></EyeR>
                 </Icon>
-              </div>
-              <div :class="[nh.be('icon'), nh.be('action')]" @click="handleDelete(props.file)">
+              </button>
+              <button :class="[nh.be('icon'), nh.be('action')]" @click="handleDelete(props.file)">
                 <Icon :scale="1.4">
                   <TrashCanR></TrashCanR>
                 </Icon>
-              </div>
+              </button>
             </div>
           </div>
         </template>

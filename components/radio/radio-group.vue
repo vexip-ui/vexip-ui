@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" role="radiogroup">
     <slot>
       <template v-for="item in props.options" :key="item">
         <Radio :label="item">

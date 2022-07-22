@@ -1,10 +1,17 @@
 <template>
-  <div ref="wrapper" :class="className" @click="handleClick">
+  <div
+    :id="prop"
+    ref="wrapper"
+    :class="className"
+    :aria-disabled="props.disabled ? 'true' : undefined"
+    @click="handleClick"
+  >
     <div
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @keydown.space.prevent="handleClick"
+      @focus="handleFocus"
+      @blur="handleBlur"
     >
       <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
@@ -85,7 +92,8 @@
             height="100%"
             id-key="value"
             :items-attrs="{
-              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : '']
+              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
+              role: 'listbox'
             }"
           >
             <template #default="{ item, index }">
@@ -143,7 +151,8 @@ import {
   usePopper,
   placementWhileList,
   useClickOutside,
-  useModifier
+  useModifier,
+  useMounted
 } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -214,6 +223,8 @@ export default defineComponent({
     emptyText: String,
     staticSuffix: booleanProp,
     keyConfig: Object as PropType<OptionKeyConfig>,
+    onFocus: eventProp<(event: FocusEvent) => void>(),
+    onBlur: eventProp<(event: FocusEvent) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
     onSelect: eventProp<(value: string | number, data: RawOption) => void>(),
     onCancel: eventProp<(value: string | number, data: RawOption) => void>(),
@@ -224,7 +235,7 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } =
+    const { prop, state, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<SelectValue>()
 
     const props = useProps('select', _props, {
@@ -267,6 +278,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('select')
+    const locale = useLocale('select')
     const currentVisible = ref(props.visible)
     const currentLabels = ref<string[]>([])
     const currentValues = ref<(string | number)[]>([])
@@ -275,6 +287,8 @@ export default defineComponent({
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
     const optionStates = ref<OptionState[]>([])
+
+    const { isMounted } = useMounted()
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
@@ -352,13 +366,20 @@ export default defineComponent({
       isDrop: true
     })
     const { isHover } = useHover(reference)
-    const locale = useLocale('select')
 
     useModifier({
       target: wrapper,
       passive: false,
       onKeyDown: (event, modifier) => {
-        if (!currentVisible.value) return
+        if (!currentVisible.value) {
+          if (modifier.space) {
+            event.preventDefault()
+            event.stopPropagation()
+            handleClick()
+          }
+
+          return
+        }
 
         if (modifier.up || modifier.down) {
           event.preventDefault()
@@ -368,13 +389,19 @@ export default defineComponent({
 
           currentIndex.value += modifier.down ? 1 : -1
           currentIndex.value = (currentIndex.value + length) % length
-        } else if (modifier.enter) {
+        } else if (modifier.enter || modifier.space) {
           event.preventDefault()
           event.stopPropagation()
 
           if (currentIndex.value >= 0) {
             handleSelect(visibleOptions.value[currentIndex.value])
+          } else {
+            currentVisible.value = false
+            modifier.resetAll()
           }
+        } else if (modifier.tab || modifier.escape) {
+          currentVisible.value = false
+          modifier.resetAll()
         }
       }
     })
@@ -480,6 +507,8 @@ export default defineComponent({
       if (isNull(value)) {
         currentIndex.value = -1
       } else {
+        if (!isMounted.value) return
+
         currentIndex.value = visibleOptions.value.findIndex(option => option.value === value)
       }
     }
@@ -607,10 +636,20 @@ export default defineComponent({
       }
     }
 
+    function handleFocus(event: FocusEvent) {
+      console.log('a')
+      emitEvent(props.onFocus, event)
+    }
+
+    function handleBlur(event: FocusEvent) {
+      emitEvent(props.onFocus, event)
+    }
+
     return {
       props,
       nh,
       locale,
+      prop,
       currentVisible,
       currentValues,
       currentLabels,
@@ -636,7 +675,9 @@ export default defineComponent({
       handleTagClose,
       handleSelect,
       handleClick,
-      handleClear
+      handleClear,
+      handleFocus,
+      handleBlur
     }
   }
 })

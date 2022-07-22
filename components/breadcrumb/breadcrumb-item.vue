@@ -1,5 +1,5 @@
 <template>
-  <div :class="nh.be('item')">
+  <li :class="nh.be('item')">
     <div :class="nh.be('label')" @click="handleClick">
       <slot>{{ label }}</slot>
     </div>
@@ -15,7 +15,7 @@
         </template>
       </slot>
     </div>
-  </div>
+  </li>
 </template>
 
 <script lang="ts">

@@ -2,6 +2,7 @@
   <div
     ref="wrapper"
     :class="[nh.b(), nh.bs('vars')]"
+    role="tree"
     :aria-disabled="props.disabled"
     :aria-readonly="props.readonly"
   >

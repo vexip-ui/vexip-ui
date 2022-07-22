@@ -21,6 +21,7 @@
           },
           item.className
         ]"
+        role="alert"
         :style="[
           {
             color: typeof item.color === 'string' ? item.color : undefined,
@@ -28,6 +29,8 @@
           },
           item.style
         ]"
+        aria-atomic="true"
+        :aria-live="item.type && assertiveTypes.includes(item.type) ? 'assertive' : 'polite'"
       >
         <div :class="nh.be('wrapper')">
           <div v-if="item.icon" :class="nh.be('icon')" :style="{ color: item.iconColor }">
@@ -98,6 +101,7 @@ export default defineComponent({
     return {
       nh: useNameHelper('message'),
       effectiveTypes: ['info', 'success', 'warning', 'error'],
+      assertiveTypes: ['success', 'warning', 'error'],
       placement,
 
       placementCenter: computed(() => {

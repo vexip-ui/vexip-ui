@@ -1,5 +1,10 @@
 <template>
-  <div ref="contaniner" :class="className" :style="style">
+  <div
+    ref="contaniner"
+    :class="className"
+    role="scrollbar"
+    :style="style"
+  >
     <div
       ref="track"
       :class="[nh.be('track'), props.useTrack ? null : nh.bem('track', 'disabled')]"

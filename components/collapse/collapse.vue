@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" role="tablist">
     <slot></slot>
   </div>
 </template>

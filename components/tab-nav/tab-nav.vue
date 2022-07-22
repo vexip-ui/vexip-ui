@@ -1,6 +1,6 @@
 <template>
-  <div ref="wrapper" :class="className">
-    <ul :class="nh.be('list')">
+  <div ref="wrapper" :class="className" tabindex="-1">
+    <ul :class="nh.be('list')" role="tablist">
       <slot></slot>
     </ul>
     <div v-if="!props.card" :class="nh.be('track')" :style="markerStyle">
@@ -60,7 +60,12 @@ export default defineComponent({
     })
 
     const refreshLabels = debounceMinor(() => {
+      const total = itemStates.size
+
       Array.from(itemStates).forEach((item, index) => {
+        item.index = index + 1
+        item.total = total
+
         if (isNull(item.label)) {
           item.label = index + 1
         }

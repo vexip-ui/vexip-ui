@@ -33,6 +33,10 @@
             :class="nh.be('handler')"
             role="slider"
             tabindex="0"
+            :aria-valuenow="truthValue"
+            :aria-valuemin="props.min"
+            :aria-valuemax="props.max"
+            :aria-disabled="props.disabled"
             @mouseenter="showTooltip"
             @mouseleave="hideTooltip"
           ></div>

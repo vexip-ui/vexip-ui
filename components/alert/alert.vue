@@ -1,6 +1,6 @@
 <template>
   <CollapseTransition v-if="!hidden" fade-effect @after-leave="handleAfterLeave">
-    <div v-if="!closed" :class="className">
+    <div v-if="!closed" :class="className" role="alert">
       <div :class="nh.be('wrapper')">
         <div v-if="hasTitle" :class="nh.be('title')">
           <slot name="title">

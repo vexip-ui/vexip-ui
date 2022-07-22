@@ -68,7 +68,7 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } =
+    const { prop, state, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<string>()
 
     const props = useProps('input', _props, {
@@ -377,6 +377,7 @@ export default defineComponent({
         <div ref={wrapper} class={className.value}>
           <input
             ref={inputControl}
+            id={prop.value}
             class={[nh.be('control'), props.inputClass]}
             type={inputType.value}
             value={formattedValue.value}

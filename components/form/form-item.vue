@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" role="group">
     <input
       v-if="isNative"
       type="hidden"
@@ -11,7 +11,7 @@
       v-if="hasLabel"
       :class="nh.be('label')"
       :style="{ width: `${computedlabelWidth}px` }"
-      :for="props.htmlFor"
+      :for="props.htmlFor || props.prop"
     >
       <slot name="label">
         {{ props.label + (labelSuffix || '') }}
@@ -22,6 +22,8 @@
         [nh.be('control')]: true,
         [nh.bem('control', 'no-label')]: !hasLabel
       }"
+      role="alert"
+      aria-relevant="all"
       :style="controlStyle"
     >
       <slot></slot>

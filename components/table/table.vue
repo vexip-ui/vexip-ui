@@ -1,6 +1,12 @@
 <template>
-  <div ref="wrapper" :class="className" :style="style">
-    <div v-show="false">
+  <div
+    ref="wrapper"
+    :class="className"
+    role="table"
+    :style="style"
+    :aria-rowcount="props.data.length"
+  >
+    <div v-show="false" role="none">
       <slot></slot>
     </div>
     <Scroll
