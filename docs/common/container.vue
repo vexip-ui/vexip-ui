@@ -90,7 +90,7 @@ function setScrollY() {
   &__aside {
     @include fixed;
 
-    z-index: calc(var(--vxp-z-index-popper) + 100);
+    z-index: calc(var(--vxp-z-index-masker) + 100);
     width: var(--aside-width);
     background-color: var(--bg-color);
     border-right: var(--vxp-border-light-2);
