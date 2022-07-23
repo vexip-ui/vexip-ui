@@ -14,7 +14,32 @@ if (__THEME__) {
     createApp(m.default).mount('#app')
   })
 } else {
-  Promise.all([import('./router'), import('./app.vue')]).then(([r, m]) => {
-    createApp(m.default).use(r.router).mount('#app')
-  })
+  Promise.all([
+    import('./router'),
+    import('./app.vue'),
+    import('../components/confirm'),
+    import('../components/contextmenu'),
+    import('../components/loading'),
+    import('../components/message'),
+    import('../components/notice')
+  ]).then(
+    ([
+      { router },
+      { default: App },
+      { Confirm },
+      { Contextmenu },
+      { Loading },
+      { Message },
+      { Notice }
+    ]) => {
+      createApp(App)
+        .use(router)
+        .use(Confirm)
+        .use(Contextmenu)
+        .use(Loading)
+        .use(Message)
+        .use(Notice)
+        .mount('#app')
+    }
+  )
 }

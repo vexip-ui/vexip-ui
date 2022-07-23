@@ -62,7 +62,9 @@ export function isVisible(el?: Element | null) {
 
 export function isDisabled(el?: Element | null) {
   return (
-    !isElement(el) || el.getAttribute('disabled') !== 'false' || (el as HTMLInputElement).disabled
+    !isElement(el) ||
+    (el.hasAttribute('disabled') && el.getAttribute('disabled') !== 'false') ||
+    (el as HTMLInputElement).disabled
   )
 }
 

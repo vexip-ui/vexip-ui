@@ -18,27 +18,34 @@
         ref="wrapper"
         :class="wrapperClass"
         role="dialog"
-        tabindex="0"
         :style="wrapperStyle"
+        :aria-modal="show ? 'true' : undefined"
+        :aria-labelledby="titleId"
+        :aria-describedby="bodyId"
       >
         <div v-if="hasTitle" ref="header" :class="nh.be('header')">
-          <div
-            v-if="props.closable"
-            :class="nh.be('close')"
-            @mousedown.stop
-            @click="handleClose(false)"
-          >
-            <slot name="close">
-              <Icon><Xmark></Xmark></Icon>
-            </slot>
-          </div>
           <slot name="header">
-            <div :class="nh.be('title')">
-              {{ props.title }}
+            <div :id="titleId" :class="nh.be('title')">
+              <slot name="title">
+                {{ props.title }}
+              </slot>
             </div>
+            <button
+              v-if="props.closable"
+              :class="nh.be('close')"
+              @mousedown.stop
+              @click="handleClose(false)"
+            >
+              <slot name="close">
+                <Icon :scale="1.2" label="close">
+                  <Xmark></Xmark>
+                </Icon>
+              </slot>
+            </button>
           </slot>
         </div>
         <div
+          :id="bodyId"
           :class="nh.be('content')"
           :style="{
             overflow: resizing ? 'hidden' : undefined
@@ -92,6 +99,8 @@ const positionType = [Number, String]
 const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
+
+let idCount = 0
 
 export default defineComponent({
   name: 'Modal',
@@ -200,6 +209,8 @@ export default defineComponent({
     const currentLeft = ref(toNumber(props.left))
     const currentWidth = ref<'auto' | number>(normalizeSizeValue(props.width))
     const currentHeight = ref<'auto' | number>(normalizeSizeValue(props.height))
+
+    const idIndex = `${idCount++}`
 
     let hasComputedTop = false
     let hasComputedLeft = false
@@ -336,6 +347,8 @@ export default defineComponent({
     const hasTitle = computed(() => {
       return !!(slots.header || props.title)
     })
+    const titleId = computed(() => `${nh.bs(idIndex)}__title`)
+    const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
 
     watch(
       () => props.active,
@@ -494,6 +507,8 @@ export default defineComponent({
       currentActive,
       dragging,
       resizing,
+      titleId,
+      bodyId,
 
       className,
       wrapperClass,
