@@ -66,14 +66,19 @@ $tag: map.merge(
     align-items: center;
     justify-content: center;
     height: 12px;
+    padding: 0;
     margin-top: 1px;
     margin-left: 8px;
     color: get-css-var('tag-close-color');
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     opacity: 60%;
     transition: get-css-var('transition-opacity');
 
-    &:hover {
+    &:hover,
+    &:focus {
       opacity: 100%;
     }
   }
@@ -82,26 +87,32 @@ $tag: map.merge(
 
   @each $type in $types {
     &--#{$type} {
-      @include define-tag-style((
-        color: 'color-white',
-        bg-color: 'color' $type 'base',
-        b-color: 'color' $type 'base',
-        close-color: 'color-white'
-      ));
+      @include define-tag-style(
+        (
+          color: 'color-white',
+          bg-color: 'color' $type 'base',
+          b-color: 'color' $type 'base',
+          close-color: 'color-white'
+        )
+      );
     }
 
     &--border#{&}--#{$type},
     &--simple#{&}--#{$type} {
-      @include define-tag-style((
-        color: 'color' $type 'base',
-        close-color: 'color' $type 'base'
-      ));
+      @include define-tag-style(
+        (
+          color: 'color' $type 'base',
+          close-color: 'color' $type 'base'
+        )
+      );
     }
 
     &--simple#{&}--#{$type} {
-      @include define-tag-style((
-        bg-color: 'color' $type 'opacity-8'
-      ));
+      @include define-tag-style(
+        (
+          bg-color: 'color' $type 'opacity-8'
+        )
+      );
     }
   }
 
@@ -122,10 +133,12 @@ $tag: map.merge(
 
     @at-root {
       &--#{$name} {
-        @include define-tag-style((
-          color: 'color-white',
-          close-color: 'color-white'
-        ));
+        @include define-tag-style(
+          (
+            color: 'color-white',
+            close-color: 'color-white'
+          )
+        );
 
         @include define-css-var('tag-bg-color', $color);
         @include define-css-var('tag-b-color', $color);

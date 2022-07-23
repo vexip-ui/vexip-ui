@@ -45,7 +45,10 @@
                 [nh.bem('index', 'in-range')]:
                   props.isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])
               }"
+              tabindex="0"
               @click="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
+              @keydown.enter.prevent="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
+              @keydown.space.prevent="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
             >
               <div :class="nh.be('index-inner')">
                 {{ dateRange[(row - 1) * 7 + cell - 1].getDate() }}

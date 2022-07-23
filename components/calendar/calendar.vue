@@ -55,7 +55,10 @@
           [nh.bem('date', 'today')]: isToday,
           [nh.bem('date', 'disabled')]: disabled
         }"
+        tabindex="0"
         @click="handleClick(date)"
+        @keydown.enter.prevent="handleClick(date)"
+        @keydown.space.prevent="handleClick(date)"
       >
         <div :class="nh.be('date-header')">
           <div :class="nh.be('date-value')">

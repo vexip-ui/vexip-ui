@@ -3,6 +3,7 @@
     ref="wrapper"
     :class="className"
     role="menuitem"
+    tabindex="0"
     @click="handleSelect"
   >
     <slot></slot>

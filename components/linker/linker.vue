@@ -1,5 +1,10 @@
 <template>
-  <a :class="className" :href="props.to" :target="props.target">
+  <a
+    :class="className"
+    :href="props.to"
+    tabindex="0"
+    :target="props.target"
+  >
     <slot name="icon">
       <Icon v-if="props.icon" :class="nh.be('icon')" :icon="props.icon"></Icon>
     </slot>

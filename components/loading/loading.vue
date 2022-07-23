@@ -1,6 +1,14 @@
 <template>
   <transition name="vxp-fade" appear>
-    <div v-show="visible" :class="className" :style="style">
+    <div
+      v-show="visible"
+      :class="className"
+      role="progressbar"
+      :style="style"
+      :aria-valuenow="percent"
+      aria-valuemin="0"
+      aria-valuemax="100"
+    >
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
   </transition>
@@ -100,6 +108,7 @@ export default defineComponent({
     return {
       nh,
       visible,
+      percent,
 
       className,
       style,

@@ -73,9 +73,11 @@
             </div>
           </template>
         </div>
-        <div v-if="item.closable" :class="nh.be('close')" @click="remove(item.key)">
-          <Icon><Xmark></Xmark></Icon>
-        </div>
+        <button v-if="item.closable" :class="nh.be('close')" @click="remove(item.key)">
+          <Icon label="close">
+            <Xmark></Xmark>
+          </Icon>
+        </button>
       </div>
     </template>
   </Popup>
