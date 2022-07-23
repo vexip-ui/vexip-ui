@@ -21,6 +21,12 @@ export interface UseModifierOptions {
    */
   aliasMap?: Record<string, string>,
   /**
+   * 是否在目标元素失去焦点时重置修饰符
+   *
+   * @default true
+   */
+  autoReset?: boolean,
+  /**
    * 事件的 capture 选项
    *
    * @default false
@@ -59,7 +65,13 @@ const splitRE = /[+_-]/g
 const internalProps = ['activeKeys', 'resetAll']
 
 export function useModifier(options: UseModifierOptions = {}) {
-  const { capture = false, passive = true, onKeyDown = noop, onKeyUp = noop } = options
+  const {
+    autoReset = true,
+    capture = false,
+    passive = true,
+    onKeyDown = noop,
+    onKeyUp = noop
+  } = options
 
   const target = options.target || ref(null)
   const aliasMap = { ...defaultAliasMap, ...(options.aliasMap || {}) }
@@ -154,6 +166,10 @@ export function useModifier(options: UseModifierOptions = {}) {
     },
     { capture, passive }
   )
+
+  if (autoReset) {
+    useListener(target, 'blur', resetAll, { capture, passive })
+  }
 
   return { target, modifier: modifierProxy as ModifierState }
 }
