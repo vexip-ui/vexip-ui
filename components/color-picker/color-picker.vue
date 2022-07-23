@@ -1,10 +1,16 @@
 <template>
-  <div ref="wrapper" :class="className">
+  <div
+    ref="wrapper"
+    :class="className"
+    @keydown.tab.stop="handleTabDown"
+    @keydown.space="handleSpaceDown"
+    @keydown.escape="handleEscDown"
+  >
     <div
       ref="reference"
       :class="[nh.be('trigger'), currentVisible ? nh.bem('trigger', 'visible') : '']"
       tabindex="0"
-      @click="handleTriggerClick"
+      @click="handleToggleTrigger"
     >
       <slot
         name="control"
@@ -40,6 +46,7 @@
           <div :class="nh.be('pane')">
             <div :class="nh.be('section')">
               <ColorPalette
+                ref="palette"
                 :hue="currentValue.h"
                 :saturation="currentValue.s"
                 :value="currentValue.v"
@@ -48,6 +55,7 @@
                 @change="handlePaletteChange"
               ></ColorPalette>
               <ColorHue
+                ref="hue"
                 :hue="currentValue.h"
                 @edit-start="toggleEditing(true)"
                 @edit-end="toggleEditing(false)"
@@ -55,17 +63,30 @@
               ></ColorHue>
               <ColorAlpha
                 v-if="props.alpha"
+                ref="alphaUnit"
                 :rgb="rgb"
                 :alpha="currentAlpha"
                 @edit-start="toggleEditing(true)"
                 @edit-end="toggleEditing(false)"
                 @change="handleAlphaChange"
               ></ColorAlpha>
-              <div v-if="props.shortcut" :class="nh.be('shortcuts')">
+              <div
+                v-if="props.shortcut"
+                ref="shortcutUnit"
+                :class="nh.be('shortcuts')"
+                tabindex="-1"
+                @focus="handleShrtcutsFocus"
+                @blur="shortcutsFocused = false"
+                @keydown="handleShortcutsKeydown"
+              >
                 <div
-                  v-for="(item, index) in props.shortcutList"
+                  v-for="(item, index) in shortcutList"
                   :key="index"
-                  :class="nh.be('shortcut-item')"
+                  :class="{
+                    [nh.be('shortcut-item')]: true,
+                    [nh.bem('shortcut-item', 'hitting')]:
+                      shortcutsFocused && shortcutHitting === index
+                  }"
                   :style="{ backgroundColor: item }"
                   @click="handleShortcutClick(item)"
                 ></div>
@@ -74,6 +95,7 @@
             <div :class="nh.be('action')">
               <Input
                 v-if="!props.noInput"
+                ref="input"
                 size="small"
                 :value="hex.toUpperCase()"
                 :respond="false"
@@ -81,13 +103,19 @@
               ></Input>
               <Button
                 v-if="props.clearable"
+                ref="cancel"
                 text
                 size="small"
                 @click="handleClear"
               >
                 {{ props.cancelText || locale.cancel }}
               </Button>
-              <Button type="primary" size="small" @click="handleOk">
+              <Button
+                ref="confirm"
+                type="primary"
+                size="small"
+                @click="handleOk"
+              >
                 {{ props.confirmText || locale.confirm }}
               </Button>
             </div>
@@ -142,7 +170,7 @@ export type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
 
-const defaultShotcuts = [
+const defaultShotcuts = Object.freeze([
   '#2d8cf0',
   '#19be6b',
   '#ff9900',
@@ -167,7 +195,7 @@ const defaultShotcuts = [
   '#607d8b',
   '#000000',
   '#ffffff'
-]
+])
 
 export default defineComponent({
   name: 'ColorPicker',
@@ -192,8 +220,10 @@ export default defineComponent({
     disabled: booleanProp,
     transitionName: String,
     noInput: booleanProp,
-    shortcut: booleanProp,
-    shortcutList: Array as PropType<string[]>,
+    shortcut: {
+      type: [Boolean, Array] as PropType<boolean | string[]>,
+      default: null
+    },
     placement: String as PropType<Placement>,
     transfer: booleanStringProp,
     outsideClose: booleanProp,
@@ -231,7 +261,6 @@ export default defineComponent({
       transitionName: 'vxp-drop',
       noInput: false,
       shortcut: false,
-      shortcutList: () => Array.from(defaultShotcuts),
       placement: {
         default: 'bottom',
         validator: (value: Placement) => placementWhileList.includes(value)
@@ -251,16 +280,37 @@ export default defineComponent({
     const editing = ref(false)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
+    const shortcutHitting = ref(0)
+    const shortcutsFocused = ref(false)
 
     parseValue(props.value)
 
-    const wrapper = useClickOutside(handleClickOutside)
+    const palette = ref(null)
+    const hue = ref(null)
+    const alpha = ref(null)
+    const shortcut = ref(null)
+    const input = ref(null)
+    const cancel = ref(null)
+    const confirm = ref(null)
 
+    const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
       isDrop: true
+    })
+
+    const unitList = computed(() => {
+      return [
+        palette.value,
+        hue.value,
+        alpha.value,
+        shortcut.value,
+        input.value,
+        cancel.value,
+        confirm.value
+      ].filter(Boolean) as any[]
     })
 
     const lastValue = ref<HSVAColor>({
@@ -298,6 +348,15 @@ export default defineComponent({
       }
 
       return rgbToHex(r, g, b)
+    })
+    const shortcutList = computed(() => {
+      if (!props.shortcut) return []
+
+      if (Array.isArray(props.shortcut)) {
+        return props.shortcut
+      }
+
+      return defaultShotcuts
     })
 
     watch(
@@ -344,7 +403,7 @@ export default defineComponent({
       }
     }
 
-    function handleTriggerClick() {
+    function handleToggleTrigger() {
       if (props.disabled) return
 
       currentVisible.value = !currentVisible.value
@@ -461,6 +520,94 @@ export default defineComponent({
         editing.value = true
       }
     }
+    function handleTabDown(event: KeyboardEvent) {
+      if (currentVisible.value) {
+        const activeEl = document && document.activeElement
+
+        if (!activeEl) return
+
+        event.preventDefault()
+
+        const shift = event.shiftKey
+        const elList = Array.from(unitList.value)
+        const index = elList.findIndex(unit => {
+          const el = unit instanceof Element ? unit : unit.$el
+
+          return el === activeEl || el.contains(activeEl)
+        })
+
+        let maybeEl: any
+
+        if (!~index) {
+          maybeEl = elList.at(shift ? -1 : 0)
+        } else if (shift ? !index : index === elList.length - 1) {
+          maybeEl = reference.value
+        } else {
+          maybeEl = elList.at(index + (shift ? -1 : 1))
+        }
+
+        if (maybeEl) {
+          if (typeof maybeEl.focus === 'function') {
+            maybeEl.focus()
+          } else {
+            maybeEl.$el?.focus()
+          }
+        }
+      }
+    }
+
+    function handleShrtcutsFocus() {
+      shortcutHitting.value = 0
+      shortcutsFocused.value = true
+    }
+
+    function handleShortcutsKeydown(event: KeyboardEvent) {
+      const key = event.code || event.key
+      const shortcutCount = shortcutList.value.length
+
+      switch (key) {
+        case 'ArrowUp':
+        case 'ArrowLeft': {
+          shortcutHitting.value--
+          break
+        }
+        case 'ArrowDown':
+        case 'ArrowRight': {
+          shortcutHitting.value++
+          break
+        }
+        case 'Enter':
+        case 'Space':
+        case ' ': {
+          const color = shortcutList.value.at(shortcutHitting.value)
+
+          color && handleShortcutClick(color)
+          break
+        }
+      }
+
+      shortcutHitting.value = (shortcutHitting.value + shortcutCount) % shortcutCount
+    }
+
+    function handleSpaceDown(event: KeyboardEvent) {
+      if (props.disabled) {
+        currentVisible.value = false
+      } else {
+        event.preventDefault()
+
+        if (currentVisible.value) {
+          handleOk()
+          reference.value?.focus()
+        } else {
+          currentVisible.value = true
+        }
+      }
+    }
+
+    function handleEscDown() {
+      currentVisible.value = false
+      reference.value?.focus()
+    }
 
     return {
       props,
@@ -472,16 +619,26 @@ export default defineComponent({
       currentAlpha,
       transferTo,
       lastValue,
+      shortcutHitting,
+      shortcutsFocused,
 
       className,
       rgb,
       hex,
+      shortcutList,
 
       wrapper,
       reference,
       popper,
+      palette,
+      hue,
+      alphaUnit: alpha,
+      shortcutUnit: shortcut,
+      input,
+      cancel,
+      confirm,
 
-      handleTriggerClick,
+      handleToggleTrigger,
       handleClear,
       handleOk,
       handlePaletteChange,
@@ -489,7 +646,12 @@ export default defineComponent({
       handleAlphaChange,
       handleInputColor,
       handleShortcutClick,
-      toggleEditing
+      toggleEditing,
+      handleTabDown,
+      handleShrtcutsFocus,
+      handleShortcutsKeydown,
+      handleSpaceDown,
+      handleEscDown
     }
   }
 })

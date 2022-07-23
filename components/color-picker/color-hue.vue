@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapper" :class="nh.be('hue')" @mousedown="handleMouseDown">
+  <div ref="wrapper" :class="nh.be('hue')" tabindex="-1">
     <div :class="nh.be('hue-handler')" :style="{ left: `${currentLeft}%` }"></div>
   </div>
 </template>
@@ -7,7 +7,8 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { toFixed, throttle } from '@vexip-ui/utils'
+import { useModifier, useMoving } from '@vexip-ui/mixins'
+import { toFixed, boundRange } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'ColorHue',
@@ -24,9 +25,59 @@ export default defineComponent({
   setup(props, { emit }) {
     const currentLeft = ref(props.hue * 100)
 
-    const wrapper = ref<HTMLElement | null>(null)
-
     let prevLeft = currentLeft.value
+    let widthLimit: number
+    let leftStartAt: number
+
+    const { target: wrapper } = useModifier({
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.left || modifier.right) {
+          event.preventDefault()
+
+          const step = modifier.ctrl ? 10 : modifier.alt ? 0.5 : 2
+          const delta = step * (modifier.left ? -1 : 1)
+
+          currentLeft.value += delta
+
+          verifyPosition()
+          prevLeft = currentLeft.value
+          handleChange()
+        }
+      }
+    })
+
+    const { moving: editing } = useMoving({
+      target: wrapper,
+      onStart: (state, event) => {
+        if (!wrapper.value || event.button > 0) {
+          return false
+        }
+
+        const rect = wrapper.value.getBoundingClientRect()
+        const { left, width } = rect
+
+        widthLimit = width
+        currentLeft.value = ((leftStartAt = state.clientX - left) / width) * 100
+
+        verifyPosition()
+        emit('edit-start')
+
+        if (Math.abs(currentLeft.value - prevLeft) >= 0.01) {
+          prevLeft = currentLeft.value
+          handleChange()
+        }
+      },
+      onMove: state => {
+        currentLeft.value = ((leftStartAt + state.deltaX) / widthLimit) * 100
+
+        verifyPosition()
+        handleChange()
+      },
+      onEnd: () => {
+        emit('edit-end')
+      }
+    })
 
     watch(
       () => props.hue,
@@ -37,62 +88,8 @@ export default defineComponent({
       { immediate: true }
     )
 
-    let widthLimit: number
-    let leftStartAt: number
-    let cursorXPosition: number
-
-    const refreshPosition = throttle((clientX: number) => {
-      currentLeft.value = ((leftStartAt + clientX - cursorXPosition) / widthLimit) * 100
-
-      verifyPosition()
-      handleChange()
-    })
-
-    function handleMouseDown(event: MouseEvent) {
-      if (event.button !== 0 || !wrapper.value) {
-        return false
-      }
-
-      event.stopPropagation()
-
-      const rect = wrapper.value.getBoundingClientRect()
-
-      widthLimit = rect.width
-      currentLeft.value = ((leftStartAt = event.clientX - rect.left) / rect.width) * 100
-      cursorXPosition = event.clientX
-
-      verifyPosition()
-
-      if (Math.abs(currentLeft.value - prevLeft) >= 0.01) {
-        prevLeft = currentLeft.value
-        handleChange()
-      }
-
-      document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
-
-      emit('edit-start')
-    }
-
-    function handleMouseMove(event: MouseEvent) {
-      // 阻止默认操作不可节流
-      event.preventDefault()
-      event.stopPropagation()
-
-      refreshPosition(event.clientX)
-    }
-
-    function handleMouseUp(event: MouseEvent) {
-      event.stopPropagation()
-
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-
-      emit('edit-end')
-    }
-
     function verifyPosition() {
-      currentLeft.value = toFixed(Math.max(0, Math.min(currentLeft.value, 100)), 3)
+      currentLeft.value = toFixed(boundRange(currentLeft.value, 0, 100), 3)
     }
 
     function handleChange() {
@@ -102,10 +99,9 @@ export default defineComponent({
     return {
       nh: useNameHelper('color-picker'),
       currentLeft,
+      editing,
 
-      wrapper,
-
-      handleMouseDown
+      wrapper
     }
   }
 })

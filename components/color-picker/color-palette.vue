@@ -2,10 +2,10 @@
   <div
     ref="wrapper"
     :class="nh.be('palette')"
+    tabindex="-1"
     :style="{
       backgroundColor: `hsl(${hue}, 100%, 50%)`
     }"
-    @mousedown="handleMouseDown"
   >
     <div :class="nh.be('saturation')"></div>
     <div :class="nh.be('value')"></div>
@@ -24,7 +24,8 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { toFixed, throttle } from '@vexip-ui/utils'
+import { useModifier, useMoving } from '@vexip-ui/mixins'
+import { toFixed, boundRange } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'ColorPalette',
@@ -56,10 +57,81 @@ export default defineComponent({
     const currentTop = ref((1 - props.value) * 100)
     const currentLeft = ref(props.saturation * 100)
 
-    const wrapper = ref<HTMLElement | null>(null)
-
     let prevTop = currentTop.value
     let prevLeft = currentLeft.value
+    let widthLimit: number
+    let heightLimit: number
+    let topStartAt: number
+    let leftStartAt: number
+
+    const { target: wrapper } = useModifier({
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down || modifier.left || modifier.right) {
+          event.preventDefault()
+
+          const step = modifier.ctrl ? 10 : modifier.alt ? 0.5 : 2
+          const sign = modifier.up || modifier.left ? -1 : 1
+          const delta = step * sign
+
+          if (modifier.up || modifier.down) {
+            currentTop.value += delta
+          } else {
+            currentLeft.value += delta
+          }
+
+          verifyPosition()
+          prevTop = currentTop.value
+          prevLeft = currentLeft.value
+          handleChange()
+        }
+      }
+    })
+
+    const { moving: editing } = useMoving({
+      target: wrapper,
+      onStart: (state, event) => {
+        if (!wrapper.value || event.button > 0) {
+          return false
+        }
+
+        const rect = wrapper.value.getBoundingClientRect()
+        const { top, left, width, height } = rect
+
+        widthLimit = width
+        heightLimit = height
+
+        currentTop.value = ((topStartAt = state.clientY - top) / height) * 100
+        currentLeft.value = ((leftStartAt = state.clientX - left) / width) * 100
+
+        verifyPosition()
+        emit('edit-start')
+
+        let changed = false
+
+        if (Math.abs(currentTop.value - prevTop) >= 0.01) {
+          prevTop = currentTop.value
+          changed = true
+        }
+
+        if (Math.abs(currentLeft.value - prevLeft) >= 0.01) {
+          prevLeft = currentLeft.value
+          changed = true
+        }
+
+        changed && handleChange()
+      },
+      onMove: state => {
+        currentTop.value = ((topStartAt + state.deltaY) / heightLimit) * 100
+        currentLeft.value = ((leftStartAt + state.deltaX) / widthLimit) * 100
+
+        verifyPosition()
+        handleChange()
+      },
+      onEnd: () => {
+        emit('edit-end')
+      }
+    })
 
     watch(
       () => props.value,
@@ -78,83 +150,9 @@ export default defineComponent({
       { immediate: true }
     )
 
-    let widthLimit: number
-    let heightLimit: number
-    let topStartAt: number
-    let leftStartAt: number
-    let cursorXPosition: number
-    let cursorYPosition: number
-
-    const refreshPosition = throttle((clientX: number, clientY: number) => {
-      currentTop.value = ((topStartAt + clientY - cursorYPosition) / heightLimit) * 100
-      currentLeft.value = ((leftStartAt + clientX - cursorXPosition) / widthLimit) * 100
-
-      verifyPosition()
-      handleChange()
-    })
-
-    function handleMouseDown(event: MouseEvent) {
-      if (event.button !== 0 || !wrapper.value) {
-        return false
-      }
-
-      event.stopPropagation()
-
-      const rect = wrapper.value.getBoundingClientRect()
-      const { top, left, width, height } = rect
-      const { clientX, clientY } = event
-
-      widthLimit = width
-      heightLimit = height
-
-      currentTop.value = ((topStartAt = clientY - top) / height) * 100
-      currentLeft.value = ((leftStartAt = clientX - left) / width) * 100
-
-      cursorXPosition = clientX
-      cursorYPosition = clientY
-
-      verifyPosition()
-
-      let changed = false
-
-      if (Math.abs(currentTop.value - prevTop) >= 0.01) {
-        prevTop = currentTop.value
-        changed = true
-      }
-
-      if (Math.abs(currentLeft.value - prevLeft) >= 0.01) {
-        prevLeft = currentLeft.value
-        changed = true
-      }
-
-      changed && handleChange()
-
-      document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
-
-      emit('edit-start')
-    }
-
-    function handleMouseMove(event: MouseEvent) {
-      // 阻止默认操作不可节流
-      event.preventDefault()
-      event.stopPropagation()
-
-      refreshPosition(event.clientX, event.clientY)
-    }
-
-    function handleMouseUp(event: MouseEvent) {
-      event.stopPropagation()
-
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-
-      emit('edit-end')
-    }
-
     function verifyPosition() {
-      currentTop.value = toFixed(Math.max(0, Math.min(currentTop.value, 100)), 3)
-      currentLeft.value = toFixed(Math.max(0, Math.min(currentLeft.value, 100)), 3)
+      currentTop.value = toFixed(boundRange(currentTop.value, 0, 100), 3)
+      currentLeft.value = toFixed(boundRange(currentLeft.value, 0, 100), 3)
     }
 
     function handleChange() {
@@ -169,10 +167,11 @@ export default defineComponent({
       nh: useNameHelper('color-picker'),
       currentTop,
       currentLeft,
+      editing,
 
-      wrapper,
+      wrapper
 
-      handleMouseDown
+      // handleMouseDown
     }
   }
 })
