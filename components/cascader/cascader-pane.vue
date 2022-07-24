@@ -155,7 +155,7 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['select', 'check', 'hover', 'back', 'close'],
+  emits: ['select', 'check', 'hover', 'open', 'back', 'close'],
   setup(props, { emit }) {
     const nh = useNameHelper('cascader')
     const currentHitting = ref(-1)
@@ -190,7 +190,9 @@ export default defineComponent({
           if (modifier.right) {
             const option = props.options[currentHitting.value]
 
-            option && hasChildren(option) && emit('select', option)
+            if (option && hasChildren(option)) {
+              emit('open', option)
+            }
           } else {
             emit('back')
           }
@@ -219,8 +221,13 @@ export default defineComponent({
     watch(
       () => props.ready,
       value => {
-        value && list.value?.refresh()
         requestAnimationFrame(computeListHeight)
+
+        if (value) {
+          list.value?.refresh()
+        } else {
+          currentHitting.value = -1
+        }
       }
     )
 

@@ -43,7 +43,14 @@
     </div>
     <Portal :to="transferTo">
       <transition :name="props.transitionName">
-        <div v-show="currentVisible" ref="popper" :class="[nh.be('popper'), nh.bs('vars')]">
+        <div
+          v-show="currentVisible"
+          ref="popper"
+          :class="[nh.be('popper'), nh.bs('vars')]"
+          @keydown.tab.stop="handleTabDown"
+          @keydown.space="handleSpaceDown"
+          @keydown.escape="handleEscDown"
+        >
           <div :class="nh.be('pane')">
             <div :class="nh.be('section')">
               <ColorPalette

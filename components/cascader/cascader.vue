@@ -138,8 +138,9 @@
                 :merged="usingMerged"
                 :no-cascaded="props.noCascaded"
                 @select="handleOptionSelect($event, index)"
-                @hover="usingHover && handlePaneOpen($event, index)"
+                @hover="usingHover && handlePanelOpen($event, index)"
                 @check="handleOptionCheck($event)"
+                @open="handlePanelKeyOpen($event, index)"
                 @back="handlePanelBack"
                 @close="currentVisible = false"
               >
@@ -562,14 +563,6 @@ export default defineComponent({
 
           if (panel?.$el) {
             panel.$el.focus()
-
-            if (panel.currentHitting < 0) {
-              panel.currentHitting = panel.options.findIndex(option => option.id === prevClosedId)
-
-              if (panel.currentHitting < 0) {
-                panel.currentHitting = 0
-              }
-            }
           }
 
           prevClosedId = -1
@@ -787,7 +780,7 @@ export default defineComponent({
       }
     }
 
-    async function handlePaneOpen(option: OptionState, depth: number) {
+    async function handlePanelOpen(option: OptionState, depth: number) {
       if (!option.hasChild && !option.children?.length) return
 
       if (isAsyncLoad.value && !option.children?.length && !option.loaded) {
@@ -850,7 +843,7 @@ export default defineComponent({
       if (!option) return
 
       if (option.hasChild || option.children?.length) {
-        handlePaneOpen(option, depth)
+        handlePanelOpen(option, depth)
       } else {
         handleSingleSelect(option.fullValue)
       }
@@ -1203,6 +1196,22 @@ export default defineComponent({
       nextTick(computeTagsOverflow)
     }
 
+    function handlePanelKeyOpen(option: OptionState, depth: number) {
+      handlePanelOpen(option, depth)
+
+      requestAnimationFrame(() => {
+        const panel = panelElList.value.at(-1)
+
+        if (panel && panel.currentHitting < 0) {
+          panel.currentHitting = panel.options.findIndex(option => option.id === prevClosedId)
+
+          if (panel.currentHitting < 0) {
+            panel.currentHitting = 0
+          }
+        }
+      })
+    }
+
     function handlePanelBack() {
       prevClosedId = openedIds.value.pop()!
     }
@@ -1241,13 +1250,14 @@ export default defineComponent({
       tagCounter,
       panelElList,
 
-      handlePaneOpen,
+      handlePanelOpen,
       handleOptionSelect,
       handleOptionCheck,
       handleClick,
       handleClear,
       toggleShowRestTip,
       handleTipClose,
+      handlePanelKeyOpen,
       handlePanelBack
     }
   }
