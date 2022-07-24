@@ -2,7 +2,7 @@
   <ConfigProvider :props="{ default: { clearable: true } }">
     <Form
       ref="form"
-      style="width: 500px;"
+      style="max-width: 500px;"
       :model="formModel"
       :label-width="100"
     >

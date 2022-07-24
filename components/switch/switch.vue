@@ -88,9 +88,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>(
-      () => input.value?.focus()
-    )
+    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('switch', _props, {
       size: createSizeProp(),
@@ -99,7 +98,7 @@ export default defineComponent({
         default: () => getFieldValue(false),
         static: true
       },
-      disabled: false,
+      disabled: () => disabled.value,
       openColor: '',
       closeColor: '',
       loading: false,

@@ -1,7 +1,7 @@
 <template>
   <Form
     ref="form"
-    style="width: 300px;"
+    style="max-width: 300px;"
     :model="loginForm"
     hide-label
     action="/components/form"

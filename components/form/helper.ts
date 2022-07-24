@@ -111,12 +111,14 @@ export function setValueByPath(
 
 const defaultProp = computed(() => '')
 const defaultState = computed(() => 'default' as ComponentState)
+const defaultDisabled = computed(() => false)
 
 function getEmptyActions<V = unknown>() {
   return {
     isField: false,
     idFor: defaultProp,
     state: defaultState,
+    disabled: defaultDisabled,
     validateField: noop as FieldOptions['validate'],
     clearField: noop as FieldOptions['clearError'],
     resetField: noop as FieldOptions['reset'],
@@ -158,6 +160,7 @@ export function useFieldStore<V = unknown>(onFocus?: () => void) {
     isField: true,
     idFor: fieldActions.idFor,
     state: fieldActions.state,
+    disabled: fieldActions.disabled,
     validateField: fieldActions.validate,
     clearField,
     resetField: fieldActions.reset,

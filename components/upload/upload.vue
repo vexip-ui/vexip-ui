@@ -19,6 +19,7 @@
         ref="input"
         type="file"
         :class="nh.be('input')"
+        :disabled="props.disabled"
         :multiple="props.multiple"
         :accept="acceptString"
         :webkitdirectory="props.directory"
@@ -26,7 +27,12 @@
       />
       <slot :is-drag-over="(props.allowDrag || props.disabledClick) && isDragOver">
         <template v-if="!props.allowDrag && !props.disabledClick">
-          <Button ref="button" :icon="Upload" :type="props.state">
+          <Button
+            ref="button"
+            :icon="Upload"
+            :type="props.state"
+            :disabled="props.disabled"
+          >
             {{ props.buttonLabel ?? locale.upload }}
           </Button>
           <slot name="tip">
@@ -38,10 +44,10 @@
         <div
           v-else
           ref="panel"
-          :class="nh.be('drag-pane')"
+          :class="[nh.be('drag-pane'), props.disabled && nh.bem('drag-pane', 'disabled')]"
           tabindex="0"
         >
-          <Icon :class="nh.be('cloud')" :scale="4">
+          <Icon :class="[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]" :scale="4">
             <CloudArrowUp></CloudArrowUp>
           </Icon>
           <slot name="tip">
@@ -137,6 +143,7 @@ export default defineComponent({
     pathField: String,
     disabledClick: booleanProp,
     buttonLabel: String,
+    disabled: booleanProp,
     onExceed: eventProp<(files: FileState[], sources: File[]) => void>(),
     onChange: eventProp<(files: FileState[], sources: File[]) => void>(),
     onFilterError: eventProp<(files: FileState, sources: File) => void>(),
@@ -149,7 +156,7 @@ export default defineComponent({
   },
   emits: ['update:file-list'],
   setup(_props, { emit }) {
-    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<
+    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } = useFieldStore<
       FileState[]
     >(() => {
       if (button.value?.$el) {
@@ -210,7 +217,8 @@ export default defineComponent({
       directory: false,
       pathField: 'path',
       disabledClick: false,
-      buttonLabel: null
+      buttonLabel: null,
+      disabled: () => disabled.value
     })
 
     const nh = useNameHelper('upload')

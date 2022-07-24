@@ -85,6 +85,8 @@ $transfer: map.merge(
     }
 
     &--disabled {
+      cursor: not-allowed;
+
       &,
       &:hover,
       &:focus,

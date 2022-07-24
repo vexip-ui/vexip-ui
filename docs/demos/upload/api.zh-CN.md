@@ -30,6 +30,7 @@
 | path-field       | `string`                                                         | 设置文件路径在请求表单数据中的字段，开启了文件夹上传后用于记录文件的相对位置                                                         | `'path'`           | -       |
 | disabled-click   | `boolean`                                                        | 设置是否禁用点击上传，禁用后将默认打开拖拽上传                                                                                       | `false`            | -       |
 | button-label     | `string`                                                         | 设置内置上传按钮的文本内容                                                                                                           | `locale.upload`    | `2.0.0` |
+| disabled         | `boolean`                                                        | 设置是否禁用上传                                                                                                                     | `false`            | `2.0.0` |
 
 组件内部对 File 的各项状态进行了封装：
 

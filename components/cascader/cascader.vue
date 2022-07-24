@@ -272,7 +272,7 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<CascaderValue>(() => reference.value?.focus())
 
     const props = useProps('cascader', _props, {
@@ -297,7 +297,7 @@ export default defineComponent({
       suffixColor: '',
       noCascaded: false,
       multiple: false,
-      disabled: false,
+      disabled: () => disabled.value,
       clearable: false,
       placement: {
         default: 'bottom-start' as Placement,

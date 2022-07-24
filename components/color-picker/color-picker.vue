@@ -9,7 +9,7 @@
   >
     <div
       ref="reference"
-      :class="[nh.be('trigger'), currentVisible ? nh.bem('trigger', 'visible') : '']"
+      :class="selectorClass"
       tabindex="0"
       @click="handleToggleTrigger"
     >
@@ -247,7 +247,7 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit }) {
-    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<Color | null>(() => reference.value?.focus())
 
     const props = useProps('colorPicker', _props, {
@@ -265,7 +265,7 @@ export default defineComponent({
         }
       },
       alpha: false,
-      disabled: false,
+      disabled: () => disabled.value,
       transitionName: 'vxp-drop',
       noInput: false,
       shortcut: false,
@@ -338,6 +338,17 @@ export default defineComponent({
         [nh.bm('alpha')]: props.alpha,
         [nh.bm(props.size)]: props.size !== 'default',
         [nh.bm(props.state)]: props.state !== 'default'
+      }
+    })
+    const selectorClass = computed(() => {
+      const baseCls = nh.be('selector')
+
+      return {
+        [baseCls]: true,
+        [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--${props.size}`]: props.size !== 'default',
+        [`${baseCls}--focused}`]: currentVisible.value,
+        [`${baseCls}--${props.state}`]: props.state !== 'default'
       }
     })
     const rgb = computed(() => {
@@ -632,6 +643,7 @@ export default defineComponent({
       shortcutsFocused,
 
       className,
+      selectorClass,
       rgb,
       hex,
       shortcutList,

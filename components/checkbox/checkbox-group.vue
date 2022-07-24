@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :id="idFor" :class="className">
     <slot>
       <template v-for="(item, index) in props.options" :key="index">
         <Checkbox v-if="isObject(item)" :value="item.value">
@@ -59,9 +59,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<Values>(() =>
-      Array.from(inputSet)[0]?.value?.focus()
-    )
+    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<Values>(() => Array.from(inputSet)[0]?.value?.focus())
 
     const props = useProps('checkboxGroup', _props, {
       size: createSizeProp(),
@@ -71,7 +70,7 @@ export default defineComponent({
         static: true
       },
       vertical: false,
-      disabled: false,
+      disabled: () => disabled.value,
       border: false,
       options: {
         default: () => [],
@@ -215,6 +214,7 @@ export default defineComponent({
 
     return {
       props,
+      idFor,
       className,
 
       isObject,

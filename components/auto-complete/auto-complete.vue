@@ -138,9 +138,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
-      string | number
-    >(() => control.value?.focus())
+    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<string | number>(() => control.value?.focus())
 
     const props = useProps('autoComplete', _props, {
       size: createSizeProp(),
@@ -160,7 +159,7 @@ export default defineComponent({
       suffix: null,
       suffixColor: '',
       placeholder: null,
-      disabled: false,
+      disabled: () => disabled.value,
       transitionName: 'vxp-drop',
       dropDisabled: false,
       placement: {

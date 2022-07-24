@@ -30,6 +30,7 @@
 | path-field       | `string`                                                         | Set the field of the file path in the request form data, enable the relative location of the file after the folder is uploaded                                                                                                      | `'path'`           | -       |
 | disabled-click   | `boolean`                                                        | Set whether to disable click to upload, if disabled, drag and drop upload will be enabled by default                                                                                                                                | `false`            | -       |
 | button-label     | `string`                                                         | Set the text content of the built-in upload button                                                                                                                                                                                  | `locale.upload`    | `2.0.0` |
+| disabled         | `boolean`                                                        | Set whether the upload is disabled                                                                                                                                                                                                  | `false`            | `2.0.0` |
 
 The various states of the File are encapsulated inside the component:
 

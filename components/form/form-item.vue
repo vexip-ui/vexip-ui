@@ -115,8 +115,10 @@ export default defineComponent({
     const instances = new Set<any>()
 
     const fieldObject = Object.freeze({
+      prop: computed(() => props.prop),
       idFor: computed(() => props.prop),
       state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
+      disabled: computed(() => !!formProps.disabled),
       emitter,
       validate,
       clearError,

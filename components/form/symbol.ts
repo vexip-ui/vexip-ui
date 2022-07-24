@@ -18,7 +18,8 @@ export interface FormProps {
   labelSuffix: string,
   hideAsterisk: boolean,
   validateAll: boolean,
-  hideLabel: boolean
+  hideLabel: boolean,
+  disabled: boolean
 }
 
 export interface FormItemProps {
@@ -36,8 +37,10 @@ export interface FormItemProps {
 }
 
 export interface FieldOptions {
+  prop: ComputedRef<string>,
   idFor: ComputedRef<string>,
   state: ComputedRef<ComponentState>,
+  disabled: ComputedRef<boolean>,
   emitter: EventEmitter,
   validate: () => Promise<string[] | null>,
   reset: () => boolean,

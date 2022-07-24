@@ -1,6 +1,7 @@
 import { defineComponent, ref, computed, inject } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
+import { FIELD_OPTIONS } from '@/components/form'
 import {
   useNameHelper,
   useProps,
@@ -44,6 +45,8 @@ export default defineComponent({
   },
   emits: [],
   setup(_props, { slots }) {
+    const fieldActions = inject(FIELD_OPTIONS, null)
+
     const props = useProps('button', _props, {
       size: createSizeProp(),
       type: {
@@ -54,7 +57,7 @@ export default defineComponent({
       text: false,
       simple: false,
       ghost: false,
-      disabled: false,
+      disabled: () => (fieldActions ? fieldActions.disabled.value : false),
       loading: false,
       circle: false,
       loadingIcon: Spinner,

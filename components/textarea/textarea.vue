@@ -67,9 +67,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<string>(
-      () => textarea.value?.focus()
-    )
+    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<string>(() => textarea.value?.focus())
 
     const props = useProps('textarea', _props, {
       state: createStateProp(state),
@@ -84,7 +83,7 @@ export default defineComponent({
       spellcheck: false,
       autocomplete: false,
       readonly: false,
-      disabled: false,
+      disabled: () => disabled.value,
       debounce: false,
       maxLength: 0
     })

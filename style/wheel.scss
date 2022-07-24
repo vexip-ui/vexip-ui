@@ -49,6 +49,10 @@ $wheel: map.merge(
     flex-direction: row;
   }
 
+  &--disabled {
+    cursor: not-allowed;
+  }
+
   &__scroll {
     position: relative;
     user-select: none;
@@ -82,6 +86,10 @@ $wheel: map.merge(
     &--disabled {
       color: get-css-var('wheel-item-color-disabled');
     }
+  }
+
+  &--disabled &__item {
+    color: get-css-var('wheel-item-color-disabled');
   }
 
   &__arrow {
@@ -121,11 +129,11 @@ $wheel: map.merge(
     transition: get-css-var('transition-background'), get-css-var('transition-border');
   }
 
-  &:hover &__mask {
+  &:hover:not(#{&}--disabled) &__mask {
     background-color: get-css-var('wheel-mask-bg-color-hover');
   }
 
-  &:focus &__mask {
+  &:focus:not(#{&}--disabled) &__mask {
     background-color: get-css-var('wheel-mask-bg-color-focus');
   }
 
@@ -168,11 +176,11 @@ $wheel: map.merge(
     transition: get-css-var('transition-border');
   }
 
-  &:hover &__border {
+  &:hover:not(#{&}--disabled) &__border {
     border-color: get-css-var('wheel-b-color-hover');
   }
 
-  &:focus &__border {
+  &:focus:not(#{&}--disabled) &__border {
     border-color: get-css-var('wheel-b-color-focus');
   }
 

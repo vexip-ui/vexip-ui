@@ -135,7 +135,7 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<number>(() => inputControl.value?.focus())
 
     const props = useProps('numberInput', _props, {
@@ -166,7 +166,7 @@ export default defineComponent({
       ctrlStep: 100,
       shiftStep: 10,
       altStep: 0.1,
-      disabled: false,
+      disabled: () => disabled.value,
       inputClass: null,
       debounce: false,
       clearable: false

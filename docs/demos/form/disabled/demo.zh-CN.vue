@@ -1,16 +1,24 @@
 <template>
+  <p>
+    是否禁用：
+    <Switch v-model:value="disabled"></Switch>
+  </p>
   <ConfigProvider :props="{ default: { clearable: true } }">
     <Form
       ref="form"
       style="max-width: 500px;"
       :model="formModel"
       :label-width="100"
+      :disabled="disabled"
     >
       <FormItem required label="Input" prop="input">
         <Input></Input>
       </FormItem>
       <FormItem required label="Cascader" prop="cascader">
         <Cascader :options="treeOptions"></Cascader>
+      </FormItem>
+      <FormItem required label="Complete" prop="complete">
+        <AutoComplete :options="options"></AutoComplete>
       </FormItem>
       <FormItem required label="Select" prop="select">
         <Select :options="options"></Select>
@@ -53,10 +61,10 @@
       </FormItem>
       <FormItem action>
         <Button type="primary" @click="handleSubmit()">
-          Submit
+          提交
         </Button>
         <Button @click="handleReset()">
-          Reset
+          重置
         </Button>
       </FormItem>
     </Form>
@@ -68,12 +76,14 @@ import { ref, reactive } from 'vue'
 
 import type { Form } from 'vexip-ui'
 
+const disabled = ref(true)
 const formModel = reactive({
   input: '',
   cascader: [],
   date: '',
   time: '',
   number: null,
+  complete: '',
   select: '',
   color: '',
   checkbox: [],
@@ -88,7 +98,7 @@ const formModel = reactive({
 
 const form = ref<InstanceType<typeof Form> | null>(null)
 
-const options = ['Option 1', 'Option 2', 'Option 3']
+const options = ['选项1', '选项2', '选项3']
 const treeOptions = createOptions(3)
 
 function createOptions(depth: number, prefix = 'Op', iterator = 1) {

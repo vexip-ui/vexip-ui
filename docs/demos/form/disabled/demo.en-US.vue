@@ -1,10 +1,15 @@
 <template>
+  <p>
+    Disabled:
+    <Switch v-model:value="disabled"></Switch>
+  </p>
   <ConfigProvider :props="{ default: { clearable: true } }">
     <Form
       ref="form"
       style="max-width: 500px;"
       :model="formModel"
       :label-width="100"
+      :disabled="disabled"
     >
       <FormItem required label="Input" prop="input">
         <Input></Input>
@@ -68,6 +73,7 @@ import { ref, reactive } from 'vue'
 
 import type { Form } from 'vexip-ui'
 
+const disabled = ref(true)
 const formModel = reactive({
   input: '',
   cascader: [],

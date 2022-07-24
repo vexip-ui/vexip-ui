@@ -68,7 +68,7 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
-    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<string>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
@@ -95,7 +95,7 @@ export default defineComponent({
       spellcheck: false,
       autocomplete: false,
       readonly: false,
-      disabled: false,
+      disabled: () => disabled.value,
       inputClass: '',
       debounce: false,
       maxLength: 0,

@@ -9,6 +9,7 @@
 | candidate    | `number`                                         | 设置滚轮上下的候选个数，可选范围为 0 ~ 3         | `2`         | -       |
 | arrow        | `boolean`                                        | 设置是否使用滚轮的箭头指示器                     | `false`     | -       |
 | insert-empty | `boolean \| string`                              | 设置是否插入空值，传入字符串可以指定空值的显示值 | `false`     | `2.0.0` |
+| disabled     | `boolean`                                        | 设置是否禁用滚轮                                 | `false`     | `2.0.0` |
 
 一些内置类型：
 

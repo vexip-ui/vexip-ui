@@ -7,7 +7,7 @@
   >
     <div
       ref="reference"
-      :class="nh.be('selector')"
+      :class="selectorClass"
       tabindex="0"
       @keydown.space.prevent="handleTirggerClick"
     >
@@ -209,9 +209,8 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
-      Dateable | Dateable[]
-    >(() => reference.value?.focus())
+    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<Dateable | Dateable[]>(() => reference.value?.focus())
 
     const props = useProps('datePicker', _props, {
       size: createSizeProp(),
@@ -252,7 +251,7 @@ export default defineComponent({
       prefixColor: '',
       suffix: null,
       suffixColor: '',
-      disabled: false,
+      disabled: () => disabled.value,
       transitionName: 'vxp-drop',
       confirmText: null,
       cancelText: null,
@@ -303,6 +302,17 @@ export default defineComponent({
           [nh.bm('is-range')]: props.isRange
         }
       ]
+    })
+    const selectorClass = computed(() => {
+      const baseCls = nh.be('selector')
+
+      return {
+        [baseCls]: true,
+        [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--${props.size}`]: props.size !== 'default',
+        [`${baseCls}--focused}`]: focused.value,
+        [`${baseCls}--${props.state}`]: props.state !== 'default'
+      }
     })
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
@@ -937,6 +947,7 @@ export default defineComponent({
       currentState,
 
       className,
+      selectorClass,
       hasPrefix,
       startActivated,
       endActivated,

@@ -1,53 +1,54 @@
 ### Form Props
 
-| Name            | Type    | Description                                                                                                   | Default  | Since |
-| --------------- | ------- | ------------------------------------------------------------------------------------------------------ | ------- | --- |
-| method | `'get' \| 'post' \| 'put' \| 'delete'` | Set the method value of the native form object, which takes effect after setting the action | `'post'` | - |
-| action | `string` | Set the action value of the native form tag | `null` | - |
-| model | `Record<string, any>` | The form data source | `{}` | - |
-| rules | `Record<string, any>` | The form validation rules | `{}` | - |
-| label-width | `number` | The width of the form label | `80` | - |
-| labell-position | `'right' \| 'top' \| 'left'` | The position of form label | `'right'` | - |
-| all-required | `boolean` | Set whether all form content is required | `false` | - |
-| label-suffix | `string` | The suffix of the form label, such as `:` | `''` | - |
-| hide-asterisk | `boolean` | Set whether to hide required asterisks | `false` | - |
-| validate-all | `boolean` | Set whether to perform all rule validation during form validation (by default each field encounters an error and stops subsequent validation) | `false` | - |
-| hide-label | `boolean` | Set whether to hide the form label, commonly used in login forms | `false` | - |
+| Name            | Type                                   | Description                                                                                                                                   | Default   | Since   |
+| --------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- |
+| method          | `'get' \| 'post' \| 'put' \| 'delete'` | Set the method value of the native form object, which takes effect after setting the action                                                   | `'post'`  | -       |
+| action          | `string`                               | Set the action value of the native form tag                                                                                                   | `null`    | -       |
+| model           | `Record<string, any>`                  | The form data source                                                                                                                          | `{}`      | -       |
+| rules           | `Record<string, any>`                  | The form validation rules                                                                                                                     | `{}`      | -       |
+| label-width     | `number`                               | The width of the form label                                                                                                                   | `80`      | -       |
+| labell-position | `'right' \| 'top' \| 'left'`           | The position of form label                                                                                                                    | `'right'` | -       |
+| all-required    | `boolean`                              | Set whether all form content is required                                                                                                      | `false`   | -       |
+| label-suffix    | `string`                               | The suffix of the form label, such as `:`                                                                                                     | `''`      | -       |
+| hide-asterisk   | `boolean`                              | Set whether to hide required asterisks                                                                                                        | `false`   | -       |
+| validate-all    | `boolean`                              | Set whether to perform all rule validation during form validation (by default each field encounters an error and stops subsequent validation) | `false`   | -       |
+| hide-label      | `boolean`                              | Set whether to hide the form label, commonly used in login forms                                                                              | `false`   | -       |
+| disabled        | `boolean`                              | Set whether to disable all controls under the form                                                                                            | `false`   | `2.0.0` |
 
 ### Form Methods
 
-| Name             | Description                                                             | Signature            | Since |
-| ---------------- | ---------------------------------------------------------------- | --------------- | --- |
-| validate | Validate all fields of the form | `() => Promise<string[]>` | - |
-| validateFields | Validate the fields specified by the form according to the properties | `(props: string \| string[]) => Promise<string[]>` | - |
-| reset | resets all fields of the form | `() => void` | - |
-| resetFields | Reset the fields specified by the form according to the properties | `(props: string \| string[]) => void` | - |
-| clearError | Clear all error messages of the form | `() => void` | - |
-| clearFieldsError | Clears the error information of the fields specified by the form according to the property | `(props: string \| string[]) => void` | - |
+| Name             | Description                                                                                | Signature                                          | Since |
+| ---------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------- | ----- |
+| validate         | Validate all fields of the form                                                            | `() => Promise<string[]>`                          | -     |
+| validateFields   | Validate the fields specified by the form according to the properties                      | `(props: string \| string[]) => Promise<string[]>` | -     |
+| reset            | resets all fields of the form                                                              | `() => void`                                       | -     |
+| resetFields      | Reset the fields specified by the form according to the properties                         | `(props: string \| string[]) => void`              | -     |
+| clearError       | Clear all error messages of the form                                                       | `() => void`                                       | -     |
+| clearFieldsError | Clears the error information of the fields specified by the form according to the property | `(props: string \| string[]) => void`              | -     |
 
 ### Form Slots
 
 | Name    | Description           | Parameters | Since |
-| ------- | -------------- | --- | --- |
-| default | Slot for form content | - | - |
+| ------- | --------------------- | ---------- | ----- |
+| default | Slot for form content | -          | -     |
 
 ### FormItem Props
 
-| Name           | Type            | Description                                                                 | Default | Since |
-| -------------- | --------------- | -------------------------------------------------------------------- | ------ | --- |
-| label | `string` | label of the form field | `''` | - |
-| prop | `string` | property of the form field | `''` | - |
-| rules | `Rule \| Rule[]` | Validation specification for form fields | `[]` | - |
-| label-width | `number` | width of the form field label | `null` | - |
-| required | `boolean` | Set whether the field is required | `false` | - |
-| html-for | `string` | `for` attribute of native `<label>` | `null` | - |
-| default-value | `unknown` | set the default value of the field | `null` | - |
-| hide-error-tip | `boolean` | Set whether to hide the error tip | `false` | - |
-| validate-all | `boolean` | Set whether to perform all rule validation when validating, if not set, it will inherit the property value of the same name of the Form component | `null` | - |
-| hide-asterisk | `boolean` | Set whether to hide the required asterisk, if not set, it will inherit the property value of the same name of the Form component | `null` | - |
-| hide-label | `boolean` | Set whether to hide the form label, if not set, it will inherit the property value of the same name of the Form component | `null` | - |
-| action | `boolean` | Set whether it is a pure action FormItem, if so, the style is centered and the content is centered and has no bottom margin | `false` | - |
-| error-transition | `string` | transition effect name for error message | `'vxp-fade'` | - |
+| Name             | Type             | Description                                                                                                                                       | Default      | Since |
+| ---------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ----- |
+| label            | `string`         | label of the form field                                                                                                                           | `''`         | -     |
+| prop             | `string`         | property of the form field                                                                                                                        | `''`         | -     |
+| rules            | `Rule \| Rule[]` | Validation specification for form fields                                                                                                          | `[]`         | -     |
+| label-width      | `number`         | width of the form field label                                                                                                                     | `null`       | -     |
+| required         | `boolean`        | Set whether the field is required                                                                                                                 | `false`      | -     |
+| html-for         | `string`         | `for` attribute of native `<label>`                                                                                                               | `null`       | -     |
+| default-value    | `unknown`        | set the default value of the field                                                                                                                | `null`       | -     |
+| hide-error-tip   | `boolean`        | Set whether to hide the error tip                                                                                                                 | `false`      | -     |
+| validate-all     | `boolean`        | Set whether to perform all rule validation when validating, if not set, it will inherit the property value of the same name of the Form component | `null`       | -     |
+| hide-asterisk    | `boolean`        | Set whether to hide the required asterisk, if not set, it will inherit the property value of the same name of the Form component                  | `null`       | -     |
+| hide-label       | `boolean`        | Set whether to hide the form label, if not set, it will inherit the property value of the same name of the Form component                         | `null`       | -     |
+| action           | `boolean`        | Set whether it is a pure action FormItem, if so, the style is centered and the content is centered and has no bottom margin                       | `false`      | -     |
+| error-transition | `string`         | transition effect name for error message                                                                                                          | `'vxp-fade'` | -     |
 
 The types related to `Rule`:
 
@@ -83,40 +84,40 @@ interface Rule<T = any> {
 
 ### FormItem Slots
 
-| Name    | Description               | Parameters | Since |
-| ------- | ------------------ | --- | --- |
-| default | Slot for field content | - | - |
-| label | Slot for field label content | - | - |
-| error | Slot for error content tip | `(tip: string)` | - |
+| Name    | Description                  | Parameters      | Since |
+| ------- | ---------------------------- | --------------- | ----- |
+| default | Slot for field content       | -               | -     |
+| label   | Slot for field label content | -               | -     |
+| error   | Slot for error content tip   | `(tip: string)` | -     |
 
 ### FormSubmit Props
 
 > The FormSubmit component is a repackage of the Button component and supports most of the properties of the Button component. Only the properties specific to the Submit component are listed below.
 
-| Name          | Type     | Description                                                                  | Default    | Since |
-| ------------- | -------- | --------------------------------------------------------------------- | --------- | --- |
-| type | `string` | Same as the `type` property of the Button component, but with a different default value | `'primary'` | - |
-| label | `string` | Set the content of the submit button, it will be invalid when using the slot | `locale.submit` | - |
-| on-before-submit | `() => unknown` | Set callback before form submission, support asynchronous function and Promise, return value of `false` will prevent submission | `null` | - |
+| Name             | Type            | Description                                                                                                                     | Default         | Since |
+| ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----- |
+| type             | `string`        | Same as the `type` property of the Button component, but with a different default value                                         | `'primary'`     | -     |
+| label            | `string`        | Set the content of the submit button, it will be invalid when using the slot                                                    | `locale.submit` | -     |
+| on-before-submit | `() => unknown` | Set callback before form submission, support asynchronous function and Promise, return value of `false` will prevent submission | `null`          | -     |
 
 ### FormSubmit Events
 
-| Name      | Description                                                                 | Parameters   | Since |
-| --------- | -------------------------------------------------------------------- | ------ | --- |
-| submit | The event callback before the submission jump is about to occur, there is no return value, triggering this event means that the submission is not blocked | - | - |
-| error | Emitted when an error occurs in form validation before submitting, and returns the validation error message | `(errors: string[])` | - |
+| Name   | Description                                                                                                                                               | Parameters           | Since |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| submit | The event callback before the submission jump is about to occur, there is no return value, triggering this event means that the submission is not blocked | -                    | -     |
+| error  | Emitted when an error occurs in form validation before submitting, and returns the validation error message                                               | `(errors: string[])` | -     |
 
 ### FormReset Props
 
 > The FormReset component is a repackage of the Button component and supports most of the properties of the Button component. Only the properties specific to the Reset component are listed below.
 
-| Name         | Type     | Description                                                                  | Default | Since |
-| ------------ | -------- | --------------------------------------------------------------------- | ------ | --- |
-| text | `string` | Set the content of the reset button, it will be invalid when using the slot | `locale.reset` | - |
-| on-before-reset | `() => unknown` | Set callback before form submission, support asynchronous function and Promise, return value of `false` will prevent submission | `null` | - |
+| Name            | Type            | Description                                                                                                                     | Default        | Since |
+| --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----- |
+| text            | `string`        | Set the content of the reset button, it will be invalid when using the slot                                                     | `locale.reset` | -     |
+| on-before-reset | `() => unknown` | Set callback before form submission, support asynchronous function and Promise, return value of `false` will prevent submission | `null`         | -     |
 
 ### FormReset Events
 
-| Name     | Description                                                                 | Parameters | Since |
-| -------- | -------------------------------------------------------------------- | ---- | --- |
-| reset | Event callback before commit reset is about to occur, no return value, triggering this event means reset is not blocked | - | - |
+| Name  | Description                                                                                                             | Parameters | Since |
+| ----- | ----------------------------------------------------------------------------------------------------------------------- | ---------- | ----- |
+| reset | Event callback before commit reset is about to occur, no return value, triggering this event means reset is not blocked | -          | -     |

@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" role="radiogroup">
+  <div :id="idFor" :class="className" role="radiogroup">
     <slot>
       <template v-for="item in props.options" :key="item">
         <Radio :label="item">
@@ -48,9 +48,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string | number>(
-      () => Array.from(inputSet)[0]?.value?.focus()
-    )
+    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } = useFieldStore<
+      string | number
+    >(() => Array.from(inputSet)[0]?.value?.focus())
 
     const props = useProps('radioGroup', _props, {
       size: createSizeProp(),
@@ -60,7 +60,7 @@ export default defineComponent({
         static: true
       },
       vertical: false,
-      disabled: false,
+      disabled: () => disabled.value,
       button: false,
       border: false,
       options: {
@@ -128,6 +128,7 @@ export default defineComponent({
 
     return {
       props,
+      idFor,
       className
     }
   }

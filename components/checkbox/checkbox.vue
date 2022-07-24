@@ -61,9 +61,8 @@ export default defineComponent({
   },
   emits: ['update:checked'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>(
-      () => input.value?.focus()
-    )
+    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('checkbox', _props, {
       size: createSizeProp(),
@@ -78,7 +77,7 @@ export default defineComponent({
         static: true
       },
       labelClass: null,
-      disabled: false,
+      disabled: () => disabled.value,
       border: false,
       control: false,
       partial: false,

@@ -65,9 +65,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<Values>(
-      () => source.value?.$el?.focus()
-    )
+    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<Values>(() => source.value?.$el?.focus())
 
     const props = useProps('transfer', _props, {
       state: createStateProp(state),
@@ -79,7 +78,7 @@ export default defineComponent({
         default: () => getFieldValue([]),
         static: true
       },
-      disabled: false,
+      disabled: () => disabled.value,
       paged: false,
       filter: false,
       emptyText: null,

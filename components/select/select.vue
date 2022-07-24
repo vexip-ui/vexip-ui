@@ -235,7 +235,7 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<SelectValue>(() => reference.value?.focus())
 
     const props = useProps('select', _props, {
@@ -249,7 +249,7 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      disabled: false,
+      disabled: () => disabled.value,
       transitionName: 'vxp-drop',
       outsideClose: true,
       placeholder: null,

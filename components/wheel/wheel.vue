@@ -118,13 +118,14 @@ export default defineComponent({
     pointer: booleanProp,
     options: Array as PropType<RawOption[]>,
     insertEmpty: booleanStringProp,
+    disabled: booleanProp,
     onChange: eventProp<(value: string | number, data: RawOption) => void>(),
     onPrev: eventProp<(value: string | number, data: RawOption) => void>(),
     onNext: eventProp<(value: string | number, data: RawOption) => void>()
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<
+    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } = useFieldStore<
       string | number
     >(() => wrapper.value?.focus())
 
@@ -145,7 +146,8 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      insertEmpty: false
+      insertEmpty: false,
+      disabled: () => disabled.value
     })
 
     const nh = useNameHelper('wheel')
@@ -209,7 +211,8 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.horizontal ? 'horizontal' : 'vertical'),
         {
-          [nh.bm(props.state)]: props.state !== 'default'
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm('disabled')]: props.disabled
         }
       ]
     })
@@ -255,10 +258,13 @@ export default defineComponent({
       return style
     })
     const prevDisabled = computed(() => {
-      return !itemList.value.slice(0, currentActive.value).some(item => !item.disabled)
+      return (
+        props.disabled || !itemList.value.slice(0, currentActive.value).some(item => !item.disabled)
+      )
     })
     const nextDisabled = computed(() => {
       return (
+        props.disabled ||
         currentActive.value >= itemList.value.length - 1 ||
         !itemList.value
           .slice(currentActive.value + 1, itemList.value.length)
@@ -404,6 +410,8 @@ export default defineComponent({
     }
 
     function beforeScroll({ signX, signY }: { signX: number, signY: number }) {
+      if (props.disabled) return false
+
       const sign = props.horizontal ? signX : signY
 
       return !((sign < 0 && prevDisabled.value) || (sign > 0 && nextDisabled.value))

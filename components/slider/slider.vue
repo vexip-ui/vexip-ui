@@ -89,9 +89,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<number>(
-      () => handler.value?.focus()
-    )
+    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<number>(() => handler.value?.focus())
 
     const props = useProps('slider', _props, {
       state: createStateProp(state),
@@ -108,7 +107,7 @@ export default defineComponent({
       vertical: false,
       hideTip: false,
       tipTransfer: null,
-      disabled: false
+      disabled: () => disabled.value
     })
 
     const nh = useNameHelper('slider')
