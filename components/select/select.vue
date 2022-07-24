@@ -1,6 +1,6 @@
 <template>
   <div
-    :id="prop"
+    :id="idFor"
     ref="wrapper"
     :class="className"
     :aria-disabled="props.disabled ? 'true' : undefined"
@@ -235,8 +235,8 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { prop, state, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<SelectValue>()
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<SelectValue>(() => reference.value?.focus())
 
     const props = useProps('select', _props, {
       size: createSizeProp(),
@@ -637,7 +637,6 @@ export default defineComponent({
     }
 
     function handleFocus(event: FocusEvent) {
-      console.log('a')
       emitEvent(props.onFocus, event)
     }
 
@@ -649,7 +648,7 @@ export default defineComponent({
       props,
       nh,
       locale,
-      prop,
+      idFor,
       currentVisible,
       currentValues,
       currentLabels,

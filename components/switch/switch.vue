@@ -1,5 +1,6 @@
 <template>
   <label
+    :id="idFor"
     :class="className"
     role="switch"
     :aria-checked="currentValue"
@@ -33,6 +34,7 @@
       </span>
     </span>
     <input
+      ref="input"
       type="checkbox"
       :class="nh.be('input')"
       :checked="currentValue"
@@ -86,7 +88,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>()
+    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>(
+      () => input.value?.focus()
+    )
 
     const props = useProps('switch', _props, {
       size: createSizeProp(),
@@ -112,6 +116,8 @@ export default defineComponent({
 
     const nh = useNameHelper('switch')
     const currentValue = ref(props.value)
+
+    const input = ref<HTMLElement | null>(null)
 
     const className = computed(() => {
       return [
@@ -174,12 +180,15 @@ export default defineComponent({
     return {
       props,
       nh,
+      idFor,
       currentValue,
 
       className,
       style,
       signalStyle,
       isDisabled,
+
+      input,
 
       handleChange
     }

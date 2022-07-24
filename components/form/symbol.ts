@@ -1,5 +1,6 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 import type { ComponentState } from '@vexip-ui/config'
+import type { EventEmitter } from '@vexip-ui/utils'
 import type { Rule } from './validator'
 
 export type LabelPosition = 'right' | 'top' | 'left'
@@ -35,8 +36,9 @@ export interface FormItemProps {
 }
 
 export interface FieldOptions {
-  prop: ComputedRef<string>,
+  idFor: ComputedRef<string>,
   state: ComputedRef<ComponentState>,
+  emitter: EventEmitter,
   validate: () => Promise<string[] | null>,
   reset: () => boolean,
   clearError: () => void,

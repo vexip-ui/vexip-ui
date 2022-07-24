@@ -1,5 +1,10 @@
 <template>
-  <div ref="wrapper" :class="className" tabindex="0">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    tabindex="0"
+  >
     <div
       v-if="props.arrow"
       ref="prevArrow"
@@ -119,7 +124,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string | number>()
+    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<
+      string | number
+    >(() => wrapper.value?.focus())
 
     const props = useProps('wheel', _props, {
       state: createStateProp(state),
@@ -402,7 +409,7 @@ export default defineComponent({
       return !((sign < 0 && prevDisabled.value) || (sign > 0 && nextDisabled.value))
     }
 
-    function handleScrollEnd({ clientX, clientY }: MouseEvent) {
+    function handleScrollEnd({ clientX, clientY }: { clientX: number, clientY: number }) {
       const aboutActive = props.horizontal
         ? clientX / targetWidth.value
         : clientY / targetHeight.value
@@ -415,7 +422,15 @@ export default defineComponent({
       }
     }
 
-    function handleWheel({ sign, clientX, clientY }: WheelEvent & { sign: 1 | -1 }) {
+    function handleWheel({
+      sign,
+      clientX,
+      clientY
+    }: {
+      clientX: number,
+      clientY: number,
+      sign: 1 | -1
+    }) {
       const active = props.horizontal
         ? Math.round(clientX / targetWidth.value)
         : Math.round(clientY / targetHeight.value)
@@ -442,6 +457,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      idFor,
       currentActive,
       isInit,
       targetWidth,

@@ -19,6 +19,7 @@ import type { PropType } from 'vue'
 import type { TransferKeyConfig, TransferOptionState } from './symbol'
 
 type RawOption = string | Record<string, any>
+type Values = (string | number)[]
 type FilterHandler = (
   value: string,
   options: TransferOptionState,
@@ -26,7 +27,7 @@ type FilterHandler = (
 ) => boolean
 type SelectHandler = (
   type: 'source' | 'target',
-  selected: { source: (string | number)[], target: (string | number)[] },
+  selected: { source: Values, target: Values },
   data: { source: RawOption[], target: RawOption[] }
 ) => void
 
@@ -45,7 +46,7 @@ export default defineComponent({
   props: {
     state: stateProp,
     options: Array as PropType<RawOption[]>,
-    value: Array as PropType<(string | number)[]>,
+    value: Array as PropType<Values>,
     disabled: booleanProp,
     paged: booleanProp,
     filter: {
@@ -59,13 +60,14 @@ export default defineComponent({
     sourceTitle: String,
     targetTitle: String,
     deepState: booleanProp,
-    onChange: eventProp<(values: (string | number)[]) => void>(),
+    onChange: eventProp<(values: Values) => void>(),
     onSelect: eventProp<SelectHandler>()
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<(string | number)[]>()
+    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<Values>(
+      () => source.value?.$el?.focus()
+    )
 
     const props = useProps('transfer', _props, {
       state: createStateProp(state),
@@ -272,7 +274,7 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class={className.value}>
+        <div id={idFor.value} class={className.value}>
           <TransferPanel
             ref={source}
             v-model:selected={sourceSelected.value}

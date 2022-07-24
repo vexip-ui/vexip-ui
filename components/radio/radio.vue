@@ -5,6 +5,7 @@
       <slot>{{ props.label }}</slot>
     </span>
     <input
+      ref="input"
       type="radio"
       :class="nh.be('input')"
       :checked="currentValue === props.label"
@@ -16,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from 'vue'
+import { defineComponent, ref, computed, watch, inject, onMounted, onBeforeUnmount } from 'vue'
 import {
   useNameHelper,
   useProps,
@@ -70,6 +71,8 @@ export default defineComponent({
     const nh = useNameHelper('radio')
     const currentValue = ref(props.value)
 
+    const input = ref<HTMLElement | null>(null)
+
     const size = computed(() => groupState?.size || props.size)
     const state = computed(() => groupState?.state || props.state)
     const isDisabled = computed(() => groupState?.disabled || props.disabled)
@@ -110,6 +113,14 @@ export default defineComponent({
         },
         { immediate: true }
       )
+
+      onMounted(() => {
+        groupState.registerInput(input)
+      })
+
+      onBeforeUnmount(() => {
+        groupState.unregisterInput(input)
+      })
     }
 
     function handleChange() {
@@ -123,6 +134,8 @@ export default defineComponent({
 
       className,
       isDisabled,
+
+      input,
 
       handleChange
     }

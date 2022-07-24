@@ -1,5 +1,5 @@
 <template>
-  <div ref="wrapper" :class="className">
+  <div :id="idFor" ref="wrapper" :class="className">
     <input
       ref="input"
       type="text"
@@ -135,8 +135,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<number>()
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<number>(() => inputControl.value?.focus())
 
     const props = useProps('numberInput', _props, {
       size: createSizeProp(),
@@ -420,6 +420,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('input'),
+      idFor,
       focused,
       isHover,
 

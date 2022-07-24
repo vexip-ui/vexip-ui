@@ -12,7 +12,6 @@ $switch: map.merge(
     opacity-disabled: 60%,
     opacity-loading: get-css-var('switch-opacity-disabled'),
     s-color-focus: get-css-var('color-primary-opacity-6'),
-    shadow-focus: get-css-var('shadow-focus') get-css-var('switch-s-color-focus'),
     label-color: get-css-var('color-white'),
     height: 22px,
     signal-size: calc(get-css-var('switch-height') - 4px),
@@ -71,7 +70,7 @@ $switch: map.merge(
   }
 
   &:focus-within {
-    box-shadow: get-css-var('switch-shadow-focus');
+    box-shadow: get-css-var('shadow-focus') get-css-var('switch-s-color-focus');
   }
 
   &--loading {

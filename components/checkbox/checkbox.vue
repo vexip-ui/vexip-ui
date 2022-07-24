@@ -5,6 +5,7 @@
       <slot>{{ props.label }}</slot>
     </span>
     <input
+      ref="input"
       type="checkbox"
       :class="nh.be('input')"
       :checked="currentChecked"
@@ -60,7 +61,9 @@ export default defineComponent({
   },
   emits: ['update:checked'],
   setup(_props, { slots, emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>()
+    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<boolean>(
+      () => input.value?.focus()
+    )
 
     const props = useProps('checkbox', _props, {
       size: createSizeProp(),
@@ -87,6 +90,8 @@ export default defineComponent({
     const nh = useNameHelper('checkbox')
     const currentChecked = ref(props.checked)
     const currentPartial = ref(props.partial)
+
+    const input = ref<HTMLElement | null>(null)
 
     const controlState = reactive({
       checked: currentChecked,
@@ -139,6 +144,8 @@ export default defineComponent({
     })
 
     if (groupState) {
+      let increased = false
+
       watch(currentValue, (value, prevValue) => {
         if (isFunction(groupState.replaceValue)) {
           groupState.replaceValue(prevValue, value)
@@ -148,6 +155,11 @@ export default defineComponent({
         () => props.control,
         value => {
           if (value) {
+            if (increased) {
+              groupState.decreaseItem(currentValue.value, input)
+              increased = false
+            }
+
             groupState.increaseControl(controlState)
           } else {
             groupState.decreaseControl(controlState)
@@ -166,14 +178,17 @@ export default defineComponent({
       )
 
       onMounted(() => {
-        if (!props.control && isFunction(groupState.increaseItem)) {
-          groupState.increaseItem(currentValue.value, currentChecked.value)
+        if (!props.control) {
+          groupState.increaseItem(currentValue.value, currentChecked.value, input)
+          increased = true
         }
       })
 
       onBeforeUnmount(() => {
-        if (!props.control && isFunction(groupState.decreaseItem)) {
-          groupState.decreaseItem(currentValue.value)
+        if (!props.control) {
+          groupState.decreaseItem(currentValue.value, input)
+        } else {
+          groupState.decreaseControl(controlState)
         }
       })
     }
@@ -202,12 +217,15 @@ export default defineComponent({
     return {
       props,
       nh,
+      idFor,
       currentChecked,
 
       isDisabled,
       className,
       hasLabel,
       hasSlot,
+
+      input,
 
       handleChange
     }

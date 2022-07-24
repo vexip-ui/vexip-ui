@@ -1,5 +1,10 @@
 <template>
-  <div ref="wrapper" :class="className" @click="handleClick">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    @click="handleClick"
+  >
     <div
       ref="reference"
       :class="selectorClass"
@@ -266,8 +271,8 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<CascaderValue>()
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<CascaderValue>(() => reference.value?.focus())
 
     const props = useProps('cascader', _props, {
       size: createSizeProp(),
@@ -1206,6 +1211,7 @@ export default defineComponent({
       props,
       nh,
       locale,
+      idFor,
       currentVisible,
       isPopperShow,
       currentValues,

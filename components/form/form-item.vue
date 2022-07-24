@@ -12,6 +12,7 @@
       :class="nh.be('label')"
       :style="{ width: `${computedlabelWidth}px` }"
       :for="props.htmlFor || props.prop"
+      @click="handleLabelClick"
     >
       <slot name="label">
         {{ props.label + (labelSuffix || '') }}
@@ -51,7 +52,7 @@ import {
   onBeforeUnmount
 } from 'vue'
 import { useNameHelper, useProps, useLocale, booleanProp, makeSentence } from '@vexip-ui/config'
-import { isNull, isFunction } from '@vexip-ui/utils'
+import { isNull, isFunction, createEventEmitter } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
@@ -105,6 +106,7 @@ export default defineComponent({
     const formProps = inject(FORM_PROPS, {})
 
     const nh = useNameHelper('form')
+    const emitter = createEventEmitter()
 
     const { isRequired, allRules } = useRules(props, formProps)
     const { isError, errorTip, currentValue, validate, clearError, reset, getValue, setValue } =
@@ -113,8 +115,9 @@ export default defineComponent({
     const instances = new Set<any>()
 
     const fieldObject = Object.freeze({
-      prop: computed(() => props.prop),
+      idFor: computed(() => props.prop),
       state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
+      emitter,
       validate,
       clearError,
       reset,
@@ -190,6 +193,10 @@ export default defineComponent({
       return value
     })
 
+    function handleLabelClick() {
+      emitter.emit('focus')
+    }
+
     return {
       props,
       nh,
@@ -204,7 +211,9 @@ export default defineComponent({
       useAsterisk,
       hasLabel,
       computedlabelWidth,
-      controlStyle
+      controlStyle,
+
+      handleLabelClick
     }
   }
 })

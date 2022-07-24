@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue'
+import type { Ref, InjectionKey } from 'vue'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 
 export interface ControlState {
@@ -11,8 +11,8 @@ export interface GroupState {
   size: ComponentSize,
   state: ComponentState,
   disabled: boolean,
-  increaseItem(value: string | number, checked?: boolean): void,
-  decreaseItem(value: string | number): void,
+  increaseItem(value: string | number, checked: boolean, input: Ref<HTMLElement | null>): void,
+  decreaseItem(value: string | number, input: Ref<HTMLElement | null>): void,
   increaseControl(state: ControlState): void,
   decreaseControl(state: ControlState): void,
   handleControlChange(): void,

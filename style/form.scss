@@ -73,11 +73,13 @@ $form: map.merge(
   }
 
   &--label-right &__label {
+    align-self: stretch;
     justify-content: flex-end;
     text-align: right;
   }
 
   &--label-left &__label {
+    align-self: stretch;
     justify-content: flex-start;
     text-align: left;
   }

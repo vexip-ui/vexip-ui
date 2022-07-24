@@ -1,5 +1,6 @@
 <template>
   <Select
+    :id="idFor"
     ref="select"
     v-model:visible="visible"
     :class="nh.b()"
@@ -137,9 +138,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
       string | number
-    >()
+    >(() => control.value?.focus())
 
     const props = useProps('autoComplete', _props, {
       size: createSizeProp(),
@@ -437,6 +438,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('input'),
+      idFor,
       currentValue,
       currentIndex,
       visible,

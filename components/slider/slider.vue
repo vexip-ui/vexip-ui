@@ -1,5 +1,6 @@
 <template>
   <div
+    :id="idFor"
     ref="wrapper"
     :class="className"
     tabindex="-1"
@@ -17,7 +18,6 @@
     >
       <Tooltip
         ref="tooltip"
-        tabindex="0"
         theme="dark"
         trigger="custom"
         :transfer="props.tipTransfer"
@@ -30,6 +30,7 @@
       >
         <template #trigger>
           <div
+            ref="handler"
             :class="nh.be('handler')"
             role="slider"
             tabindex="0"
@@ -88,7 +89,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<number>()
+    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<number>(
+      () => handler.value?.focus()
+    )
 
     const props = useProps('slider', _props, {
       state: createStateProp(state),
@@ -134,6 +137,7 @@ export default defineComponent({
 
     const track = ref<HTMLElement | null>(null)
     const tooltip = ref<(InstanceType<typeof Tooltip> & TooltipExposed) | null>(null)
+    const handler = ref<HTMLElement | null>(null)
 
     const className = computed(() => {
       return {
@@ -310,6 +314,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      idFor,
       sliding,
       isTipShow,
 
@@ -321,6 +326,7 @@ export default defineComponent({
       wrapper,
       track,
       tooltip,
+      handler,
 
       handleTrackDown,
       handleMoveStart,

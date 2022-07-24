@@ -1,5 +1,6 @@
 <template>
   <div
+    :id="idFor"
     ref="wrapper"
     :class="className"
     @keydown.tab.stop="handleTabDown"
@@ -239,8 +240,8 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<Color | null>()
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<Color | null>(() => reference.value?.focus())
 
     const props = useProps('colorPicker', _props, {
       size: createSizeProp(),
@@ -613,6 +614,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('colorPicker'),
+      idFor,
       isEmpty,
       currentVisible,
       currentValue,
