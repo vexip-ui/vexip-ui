@@ -69,6 +69,7 @@ export interface TreeState {
   renderer: RenderFn,
   dragging: boolean,
   boundAsyncLoad: boolean,
+  updateVisibleNodeEls(): void,
   computeCheckedState(originNode: TreeNodeProps, able: boolean): void,
   handleNodeClick(node: TreeNodeProps): void,
   handleNodeSelect(node: TreeNodeProps): void,
@@ -79,10 +80,13 @@ export interface TreeState {
   handleNodeDragStart(nodeInstance: TreeNodeInstance): void,
   handleNodeDragOver(nodeInstance: TreeNodeInstance, event: DragEvent): void,
   handleNodeDrop(nodeInstance: TreeNodeInstance): void,
-  handleNodeDragEnd(nodeInstance: TreeNodeInstance): void
+  handleNodeDragEnd(nodeInstance: TreeNodeInstance): void,
+  handleHittingChange(type: 'up' | 'down'): void,
+  handleNodeHitting(nodeEl: HTMLElement | null): void
 }
 
 export interface TreeNodePropsState {
+  el: HTMLElement | null,
   depth: number,
   disabled: boolean,
   readonly: boolean

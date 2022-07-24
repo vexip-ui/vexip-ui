@@ -1,6 +1,16 @@
 <template>
-  <div ref="wrapper" :class="className" @click="handleClick">
-    <div ref="reference" :class="selectorClass">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    @click="handleClick"
+  >
+    <div
+      ref="reference"
+      :class="selectorClass"
+      tabindex="0"
+      @keydown.space.prevent="handleClick"
+    >
       <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
@@ -118,6 +128,7 @@
               <CascaderPane
                 v-for="(items, index) in optionsList"
                 :key="index"
+                :ref="(panel: any) => panel && panelElList.push(panel)"
                 :options="items"
                 :opened-id="openedIds[index]"
                 :values="currentValues"
@@ -127,47 +138,17 @@
                 :merged="usingMerged"
                 :no-cascaded="props.noCascaded"
                 @select="handleOptionSelect($event, index)"
-                @hover="usingHover && handlePaneOpen($event, index)"
+                @hover="usingHover && handlePanelOpen($event, index)"
                 @check="handleOptionCheck($event)"
+                @open="handlePanelKeyOpen($event, index)"
+                @back="handlePanelBack"
+                @close="currentVisible = false"
               >
-                <template
-                  #default="{
-                    option,
-                    index: optionIndex,
-                    selected,
-                    canCheck,
-                    hasChild,
-                    handleSelect
-                  }"
-                >
-                  <slot
-                    :option="option"
-                    :index="optionIndex"
-                    :selected="selected"
-                    :can-check="canCheck"
-                    :has-child="hasChild"
-                    :handle-select="handleSelect"
-                  ></slot>
+                <template #default="payload">
+                  <slot v-bind="payload"></slot>
                 </template>
-                <template
-                  #label="{
-                    option,
-                    index: optionIndex,
-                    selected,
-                    canCheck,
-                    hasChild,
-                    handleSelect
-                  }"
-                >
-                  <slot
-                    name="label"
-                    :option="option"
-                    :index="optionIndex"
-                    :selected="selected"
-                    :can-check="canCheck"
-                    :has-child="hasChild"
-                    :handle-select="handleSelect"
-                  ></slot>
+                <template #label="payload">
+                  <slot name="label" v-bind="payload"></slot>
                 </template>
               </CascaderPane>
             </template>
@@ -193,6 +174,7 @@ import {
   watch,
   watchEffect,
   onMounted,
+  onBeforeUpdate,
   nextTick
 } from 'vue'
 import CascaderPane from './cascader-pane.vue'
@@ -290,8 +272,8 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<CascaderValue>()
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<CascaderValue>(() => reference.value?.focus())
 
     const props = useProps('cascader', _props, {
       size: createSizeProp(),
@@ -361,6 +343,8 @@ export default defineComponent({
     let optionList: OptionState[] = null!
     let optionIdMap: Map<number, OptionState> = null!
     let optionValueMap: Map<string, OptionState> = null!
+    let outsideClosed = false
+    let prevClosedId = -1
 
     const updateTrigger = ref(0)
 
@@ -431,6 +415,7 @@ export default defineComponent({
     const locale = useLocale('select')
     const tagWrapper = ref<HTMLElement | null>(null)
     const tagCounter = ref<InstanceType<typeof Tag> | null>(null)
+    const panelElList = ref<InstanceType<typeof CascaderPane>[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)
     const selectorWidth = ref(0)
@@ -481,10 +466,18 @@ export default defineComponent({
         restTipShow.value = false
         selectorWidth.value = wrapper.value?.offsetWidth || 0
         updatePopper()
+        nextTick(() => {
+          panelElList.value.at(-1)?.$el?.focus()
+        })
       } else {
         isPopperShow.value = false
+
+        if (reference.value && !outsideClosed) {
+          reference.value.focus()
+        }
       }
 
+      outsideClosed = false
       emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
@@ -562,9 +555,26 @@ export default defineComponent({
 
       emitMultipleChange()
     })
+    watch(
+      () => optionsList.value.length,
+      () => {
+        nextTick(() => {
+          const panel = panelElList.value.at(-1)
+
+          if (panel?.$el) {
+            panel.$el.focus()
+          }
+
+          prevClosedId = -1
+        })
+      }
+    )
 
     onMounted(() => {
       nextTick(hideTagCounter)
+    })
+    onBeforeUpdate(() => {
+      panelElList.value.length = 0
     })
 
     function createOptionStates(rawOptions: Record<string | symbol, any>[]) {
@@ -770,7 +780,7 @@ export default defineComponent({
       }
     }
 
-    async function handlePaneOpen(option: OptionState, depth: number) {
+    async function handlePanelOpen(option: OptionState, depth: number) {
       if (!option.hasChild && !option.children?.length) return
 
       if (isAsyncLoad.value && !option.children?.length && !option.loaded) {
@@ -833,7 +843,7 @@ export default defineComponent({
       if (!option) return
 
       if (option.hasChild || option.children?.length) {
-        handlePaneOpen(option, depth)
+        handlePanelOpen(option, depth)
       } else {
         handleSingleSelect(option.fullValue)
       }
@@ -1140,6 +1150,7 @@ export default defineComponent({
 
       if (props.outsideClose && currentVisible.value) {
         currentVisible.value = false
+        outsideClosed = true
         emitEvent(props.onOutsideClose)
       }
     }
@@ -1185,10 +1196,31 @@ export default defineComponent({
       nextTick(computeTagsOverflow)
     }
 
+    function handlePanelKeyOpen(option: OptionState, depth: number) {
+      handlePanelOpen(option, depth)
+
+      requestAnimationFrame(() => {
+        const panel = panelElList.value.at(-1)
+
+        if (panel && panel.currentHitting < 0) {
+          panel.currentHitting = panel.options.findIndex(option => option.id === prevClosedId)
+
+          if (panel.currentHitting < 0) {
+            panel.currentHitting = 0
+          }
+        }
+      })
+    }
+
+    function handlePanelBack() {
+      prevClosedId = openedIds.value.pop()!
+    }
+
     return {
       props,
       nh,
       locale,
+      idFor,
       currentVisible,
       isPopperShow,
       currentValues,
@@ -1216,14 +1248,17 @@ export default defineComponent({
       popper,
       tagWrapper,
       tagCounter,
+      panelElList,
 
-      handlePaneOpen,
+      handlePanelOpen,
       handleOptionSelect,
       handleOptionCheck,
       handleClick,
       handleClear,
       toggleShowRestTip,
-      handleTipClose
+      handleTipClose,
+      handlePanelKeyOpen,
+      handlePanelBack
     }
   }
 })

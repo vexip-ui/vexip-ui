@@ -4,7 +4,10 @@
       v-show="wrapShow"
       ref="wrapper"
       :class="className"
+      tabindex="-1"
       v-bind="$attrs"
+      @focusin="handleFocusIn"
+      @keydown.escape.prevent="handleClose"
     >
       <transition
         v-if="!props.disabled"
@@ -17,9 +20,21 @@
           <div :class="nh.be('mask-inner')"></div>
         </div>
       </transition>
+      <span
+        ref="topTrap"
+        tabindex="0"
+        aria-hidden="true"
+        style="width: 0; height: 0; overflow: hidden; outline: none;"
+      ></span>
       <transition :appear="props.autoRemove" :name="props.transitionName">
         <slot :show="currentActive"></slot>
       </transition>
+      <span
+        ref="bottomTrap"
+        tabindex="0"
+        aria-hidden="true"
+        style="width: 0; height: 0; overflow: hidden; outline: none;"
+      ></span>
     </div>
   </Portal>
 </template>
@@ -35,7 +50,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { isPromise } from '@vexip-ui/utils'
+import { isPromise, queryTabables } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 
@@ -84,6 +99,11 @@ export default defineComponent({
     const wrapShow = ref(props.active)
 
     const wrapper = ref<HTMLElement | null>(null)
+    const topTrap = ref<HTMLElement | null>(null)
+    const bottomTrap = ref<HTMLElement | null>(null)
+
+    let showing = false
+    let prevFocusdEl: HTMLElement | null = null
 
     const className = computed(() => {
       return [
@@ -116,6 +136,15 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
+      if (!value) {
+        showing = false
+
+        if (prevFocusdEl) {
+          prevFocusdEl.focus()
+          prevFocusdEl = null
+        }
+      }
+
       emitEvent(props.onToggle, value)
       emit('update:active', value)
     })
@@ -153,9 +182,32 @@ export default defineComponent({
     }
 
     function afterOpen() {
+      prevFocusdEl = document.activeElement as HTMLElement
+      topTrap.value?.focus()
       nextTick(() => {
+        showing = true
         emitEvent(props.onShow)
       })
+    }
+
+    function handleFocusIn(event: FocusEvent) {
+      const target = event.target as HTMLElement
+
+      if (!showing || !wrapper.value || !target || !topTrap.value || !bottomTrap.value) {
+        return
+      }
+
+      const tabables = queryTabables(wrapper.value)
+
+      if (!tabables.length) {
+        return
+      }
+
+      if (topTrap.value === target) {
+        tabables.at(-1)!.focus()
+      } else if (bottomTrap.value === target) {
+        tabables[0].focus()
+      }
     }
 
     return {
@@ -168,10 +220,13 @@ export default defineComponent({
       transferTo,
 
       wrapper,
+      topTrap,
+      bottomTrap,
 
       handleClose,
       afterClose,
-      afterOpen
+      afterOpen,
+      handleFocusIn
     }
   }
 })

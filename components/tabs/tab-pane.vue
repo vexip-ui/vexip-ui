@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" role="tabpanel" :aria-hidden="!active">
     <slot></slot>
   </div>
 </template>
@@ -103,6 +103,7 @@ export default defineComponent({
     }
 
     return {
+      active,
       className
     }
   }

@@ -9,6 +9,8 @@
       ref="reference"
       :class="[nh.be('trigger'), currentVisible ? nh.bem('trigger', 'active') : '']"
       @click="handleTriggerClick"
+      @keydown.enter.prevent="handleTriggerClick"
+      @keydown.space.prevent="handleTriggerClick"
     >
       <slot></slot>
     </div>

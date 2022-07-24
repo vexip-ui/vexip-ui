@@ -1,5 +1,10 @@
 <template>
-  <div ref="wrapper" :class="className" :style="style">
+  <div
+    ref="wrapper"
+    :class="className"
+    role="list"
+    :style="style"
+  >
     <div
       :style="{
         position: 'relative',

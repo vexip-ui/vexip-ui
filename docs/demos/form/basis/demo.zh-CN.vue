@@ -12,6 +12,9 @@
       <FormItem required label="Cascader" prop="cascader">
         <Cascader :options="treeOptions"></Cascader>
       </FormItem>
+      <FormItem required label="Complete" prop="complete">
+        <AutoComplete :options="options"></AutoComplete>
+      </FormItem>
       <FormItem required label="Select" prop="select">
         <Select :options="options"></Select>
       </FormItem>
@@ -74,6 +77,7 @@ const formModel = reactive({
   date: '',
   time: '',
   number: null,
+  complete: '',
   select: '',
   color: '',
   checkbox: [],

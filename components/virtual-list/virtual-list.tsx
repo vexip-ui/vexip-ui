@@ -30,7 +30,8 @@ export default defineComponent({
     listTag: String,
     itemsTag: String,
     itemsAttrs: Object as PropType<Record<string, any>>,
-    onScroll: eventProp<(payload: ScrollPayload) => void>()
+    onScroll: eventProp<(payload: ScrollPayload) => void>(),
+    onResize: eventProp<(entry: ResizeObserverEntry) => void>()
   },
   emits: [],
   setup(_props, { slots, attrs, expose }) {
@@ -96,6 +97,11 @@ export default defineComponent({
       emitEvent(props.onScroll, payload)
     }
 
+    function onResize(entry: ResizeObserverEntry) {
+      handleResize(entry)
+      emitEvent(props.onResize, entry)
+    }
+
     function refresh() {
       scroll.value?.refresh()
     }
@@ -118,7 +124,8 @@ export default defineComponent({
           scroll-y={scrollOffset.value}
           {...attrs}
           onScroll={onScroll}
-          onReady={handleResize}
+          onReady={onResize}
+          onResize={onResize}
         >
           <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
             <ItemsTag

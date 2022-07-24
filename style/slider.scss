@@ -39,7 +39,10 @@ $slider: map.merge(
 
   @include basis;
 
-  $padding: max(0px, calc((get-css-var('slider-handler-size') - get-css-var('slider-track-height')) * 0.5));
+  $padding: max(
+    0px,
+    calc((get-css-var('slider-handler-size') - get-css-var('slider-track-height')) * 0.5)
+  );
   $margin: calc(get-css-var('slider-handler-size') * 0.5 + 1px);
 
   position: relative;
@@ -120,6 +123,7 @@ $slider: map.merge(
     background-color: get-css-var('slider-handler-bg-color');
     border: get-css-var('slider-handler-b-width') solid get-css-var('slider-handler-b-color');
     border-radius: $handler-size;
+    outline: 0;
     box-shadow: get-css-var('slider-handler-shadow');
     transition: get-css-var('transition-shadow'), get-css-var('transition-transform');
 
@@ -165,11 +169,13 @@ $slider: map.merge(
 
   @each $state in $states {
     &--#{$state} {
-      @include define-slider-style((
-        filler-bg-color: 'color' $state 'base',
-        handler-b-color: 'color' $state 'base',
-        handler-s-color: 'color' state 'light-6'
-      ));
+      @include define-slider-style(
+        (
+          filler-bg-color: 'color' $state 'base',
+          handler-b-color: 'color' $state 'base',
+          handler-s-color: 'color' state 'light-6'
+        )
+      );
     }
   }
 }

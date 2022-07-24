@@ -3,11 +3,11 @@
     <span>
       <slot></slot>
     </span>
-    <div v-if="props.closable" :class="nh.be('close')" @click.left.stop="handleClose">
-      <Icon :scale="0.8">
+    <button v-if="props.closable" :class="nh.be('close')" @click.left.stop="handleClose">
+      <Icon label="close">
         <Xmark></Xmark>
       </Icon>
-    </div>
+    </button>
   </div>
 </template>
 

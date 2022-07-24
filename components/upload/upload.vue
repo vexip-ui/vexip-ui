@@ -1,14 +1,18 @@
 <template>
-  <div :class="className">
+  <div :id="idFor" :class="className">
     <div
+      ref="control"
       :class="{
         [nh.be('control')]: true,
         [nh.bem('control', 'drag-over')]: isDragOver
       }"
+      tabindex="-1"
       @click="handleClick"
       @drop.prevent="handleDrop"
       @dragover.prevent="handleDragEnter"
       @dragleave.prevent="handleDragLeave"
+      @keydown.enter.prevent="handleClick"
+      @keydown.space.prevent="handleClick"
     >
       <input
         v-if="!props.disabledClick"
@@ -22,7 +26,7 @@
       />
       <slot :is-drag-over="(props.allowDrag || props.disabledClick) && isDragOver">
         <template v-if="!props.allowDrag && !props.disabledClick">
-          <Button :icon="Upload" :type="props.state">
+          <Button ref="button" :icon="Upload" :type="props.state">
             {{ props.buttonLabel ?? locale.upload }}
           </Button>
           <slot name="tip">
@@ -31,7 +35,12 @@
             </p>
           </slot>
         </template>
-        <div v-else :class="nh.be('drag-pane')">
+        <div
+          v-else
+          ref="panel"
+          :class="nh.be('drag-pane')"
+          tabindex="0"
+        >
           <Icon :class="nh.be('cloud')" :scale="4">
             <CloudArrowUp></CloudArrowUp>
           </Icon>
@@ -140,7 +149,15 @@ export default defineComponent({
   },
   emits: ['update:file-list'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<FileState[]>()
+    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<
+      FileState[]
+    >(() => {
+      if (button.value?.$el) {
+        button.value.$el.focus()
+      } else {
+        panel.value?.focus()
+      }
+    })
 
     const props = useProps('upload', _props, {
       state: createStateProp(state),
@@ -201,6 +218,8 @@ export default defineComponent({
     const isDragOver = ref(false)
 
     const input = ref<HTMLInputElement | null>(null)
+    const button = ref<InstanceType<typeof Button> | null>(null)
+    const panel = ref<HTMLElement | null>(null)
 
     const className = computed(() => {
       return [
@@ -620,6 +639,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('upload'),
+      idFor,
       fileStates,
       isDragOver,
 
@@ -628,6 +648,8 @@ export default defineComponent({
       renderFiles,
 
       input,
+      button,
+      panel,
 
       handleClick,
       handleInputChange,

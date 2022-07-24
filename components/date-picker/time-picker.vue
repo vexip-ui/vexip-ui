@@ -1,6 +1,16 @@
 <template>
-  <div ref="wrapper" :class="className" @click="handleTirggerClick">
-    <div ref="reference" :class="nh.be('selector')">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    @click="handleTirggerClick"
+  >
+    <div
+      ref="reference"
+      :class="nh.be('selector')"
+      tabindex="0"
+      @keydown.space.prevent="handleTirggerClick"
+    >
       <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
@@ -229,9 +239,9 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
       string | string[]
-    >()
+    >(() => reference.value?.focus())
 
     const props = useProps('timePicker', _props, {
       size: createSizeProp(),
@@ -687,6 +697,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('timePicker'),
+      idFor,
       isHover,
       currentVisible,
       focused,

@@ -24,9 +24,7 @@ $calendar: map.merge(
     date-b-color-selected: get-css-var('color-primary-light-2'),
     date-b-color-disabled: get-css-var('border-color-light-2'),
     date-b-color-outside: get-css-var('border-color-light-1'),
-    date-border:
-    get-css-var('calendar-date-b-width')
-    get-css-var('calendar-date-b-style')
+    date-border: get-css-var('calendar-date-b-width') get-css-var('calendar-date-b-style')
     get-css-var('calendar-date-b-color'),
     content-height: 90px,
     content-v-padding: 4px,
@@ -96,12 +94,14 @@ $calendar: map.merge(
     cursor: pointer;
     background-color: get-css-var('calendar-date-bg-color');
     border-top: get-css-var('calendar-date-border');
+    outline: 0;
     transition:
       get-css-var('transition-color'),
       get-css-var('transition-background'),
       get-css-var('transition-border');
 
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: get-css-var('calendar-date-bg-color-hover');
     }
 
@@ -118,7 +118,8 @@ $calendar: map.merge(
 
     &--selected {
       &,
-      &:hover {
+      &:hover,
+      &:focus {
         background-color: get-css-var('calendar-date-bg-color-selected');
         border-top-color: get-css-var('calendar-date-b-color-selected');
       }
@@ -126,7 +127,8 @@ $calendar: map.merge(
 
     &--disabled {
       &,
-      &:hover {
+      &:hover,
+      &:focus {
         color: get-css-var('calendar-date-color-disabled');
         cursor: not-allowed;
         background-color: get-css-var('calendar-date-bg-color-disabled');

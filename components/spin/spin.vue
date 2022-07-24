@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!props.inner" :class="[nh.b(), nh.bs('vars')]">
+  <div
+    v-if="!props.inner"
+    :class="[nh.b(), nh.bs('vars')]"
+    :aria-busy="currentActive ? 'true' : undefined"
+  >
     <slot></slot>
     <transition appear :name="props.transitionName">
       <div v-if="currentActive" :class="nh.be('loading')">

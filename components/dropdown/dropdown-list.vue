@@ -1,5 +1,5 @@
 <template>
-  <ul :class="nh.be('list')">
+  <ul :class="nh.be('list')" role="menu">
     <slot></slot>
   </ul>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <CollapseTransition v-if="!hidden" fade-effect @after-leave="handleAfterLeave">
-    <div v-if="!closed" :class="className">
+    <div v-if="!closed" :class="className" role="alert">
       <div :class="nh.be('wrapper')">
         <div v-if="hasTitle" :class="nh.be('title')">
           <slot name="title">
@@ -11,11 +11,13 @@
           <slot></slot>
         </div>
       </div>
-      <div v-if="props.closable" :class="nh.be('close')" @click="handleClose">
+      <button v-if="props.closable" :class="nh.be('close')" @click="handleClose">
         <slot name="close">
-          <Icon><Xmark></Xmark></Icon>
+          <Icon label="close">
+            <Xmark></Xmark>
+          </Icon>
         </slot>
-      </div>
+      </button>
       <div v-if="hasIcon" :class="nh.be('icon')">
         <slot name="icon">
           <Icon

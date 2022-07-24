@@ -5,17 +5,19 @@
       <slot>{{ props.label }}</slot>
     </span>
     <input
+      ref="input"
       type="radio"
       :class="nh.be('input')"
       :checked="currentValue === props.label"
       :disabled="isDisabled"
+      :tabindex="props.tabIndex"
       @change="handleChange"
     />
   </label>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from 'vue'
+import { defineComponent, ref, computed, watch, inject, onMounted, onBeforeUnmount } from 'vue'
 import {
   useNameHelper,
   useProps,
@@ -41,6 +43,7 @@ export default defineComponent({
     labelClass: classProp,
     disabled: booleanProp,
     border: booleanProp,
+    tabIndex: [String, Number],
     onChange: eventProp<(value: string | number) => void>()
   },
   emits: ['update:value'],
@@ -59,13 +62,16 @@ export default defineComponent({
       },
       labelClass: null,
       disabled: false,
-      border: false
+      border: false,
+      tabIndex: 0
     })
 
     const groupState = inject(GROUP_STATE, null)
 
     const nh = useNameHelper('radio')
     const currentValue = ref(props.value)
+
+    const input = ref<HTMLElement | null>(null)
 
     const size = computed(() => groupState?.size || props.size)
     const state = computed(() => groupState?.state || props.state)
@@ -107,6 +113,14 @@ export default defineComponent({
         },
         { immediate: true }
       )
+
+      onMounted(() => {
+        groupState.registerInput(input)
+      })
+
+      onBeforeUnmount(() => {
+        groupState.unregisterInput(input)
+      })
     }
 
     function handleChange() {
@@ -120,6 +134,8 @@ export default defineComponent({
 
       className,
       isDisabled,
+
+      input,
 
       handleChange
     }

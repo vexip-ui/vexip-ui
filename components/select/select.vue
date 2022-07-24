@@ -1,6 +1,18 @@
 <template>
-  <div ref="wrapper" :class="className" @click="handleClick">
-    <div ref="reference" :class="selectorClass">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    :aria-disabled="props.disabled ? 'true' : undefined"
+    @click="handleClick"
+  >
+    <div
+      ref="reference"
+      :class="selectorClass"
+      tabindex="0"
+      @focus="handleFocus"
+      @blur="handleBlur"
+    >
       <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
@@ -80,7 +92,8 @@
             height="100%"
             id-key="value"
             :items-attrs="{
-              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : '']
+              class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
+              role: 'listbox'
             }"
           >
             <template #default="{ item, index }">
@@ -133,7 +146,14 @@ import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
 import { VirtualList } from '@/components/virtual-list'
 import { useFieldStore } from '@/components/form'
-import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import {
+  useHover,
+  usePopper,
+  placementWhileList,
+  useClickOutside,
+  useModifier,
+  useMounted
+} from '@vexip-ui/mixins'
 import {
   useNameHelper,
   useProps,
@@ -203,6 +223,8 @@ export default defineComponent({
     emptyText: String,
     staticSuffix: booleanProp,
     keyConfig: Object as PropType<OptionKeyConfig>,
+    onFocus: eventProp<(event: FocusEvent) => void>(),
+    onBlur: eventProp<(event: FocusEvent) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
     onSelect: eventProp<(value: string | number, data: RawOption) => void>(),
     onCancel: eventProp<(value: string | number, data: RawOption) => void>(),
@@ -213,8 +235,8 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<SelectValue>()
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<SelectValue>(() => reference.value?.focus())
 
     const props = useProps('select', _props, {
       size: createSizeProp(),
@@ -256,13 +278,17 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('select')
+    const locale = useLocale('select')
     const currentVisible = ref(props.visible)
     const currentLabels = ref<string[]>([])
     const currentValues = ref<(string | number)[]>([])
+    const currentIndex = ref(-1)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
     const optionStates = ref<OptionState[]>([])
+
+    const { isMounted } = useMounted()
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
@@ -340,7 +366,45 @@ export default defineComponent({
       isDrop: true
     })
     const { isHover } = useHover(reference)
-    const locale = useLocale('select')
+
+    useModifier({
+      target: wrapper,
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (!currentVisible.value) {
+          if (modifier.space) {
+            event.preventDefault()
+            event.stopPropagation()
+            handleClick()
+          }
+
+          return
+        }
+
+        if (modifier.up || modifier.down) {
+          event.preventDefault()
+          event.stopPropagation()
+
+          const length = visibleOptions.value.length
+
+          currentIndex.value += modifier.down ? 1 : -1
+          currentIndex.value = (currentIndex.value + length) % length
+        } else if (modifier.enter || modifier.space) {
+          event.preventDefault()
+          event.stopPropagation()
+
+          if (currentIndex.value >= 0) {
+            handleSelect(visibleOptions.value[currentIndex.value])
+          } else {
+            currentVisible.value = false
+            modifier.resetAll()
+          }
+        } else if (modifier.tab || modifier.escape) {
+          currentVisible.value = false
+          modifier.resetAll()
+        }
+      }
+    })
 
     const className = computed(() => {
       return {
@@ -385,6 +449,7 @@ export default defineComponent({
     watch(currentVisible, value => {
       if (value) {
         updatePopper()
+        initHittingIndex()
 
         if (wrapper.value && popper.value) {
           popper.value.style.minWidth = `${wrapper.value.offsetWidth}px`
@@ -402,6 +467,11 @@ export default defineComponent({
       }
     )
     watch(() => visibleOptions.value.length, computeListHeight)
+    watch(currentIndex, value => {
+      visibleOptions.value.forEach((option, index) => {
+        option.hitting = value === index
+      })
+    })
 
     function initValueAndLabel(value: SelectValue | null) {
       if (!value) {
@@ -427,6 +497,20 @@ export default defineComponent({
 
       currentValues.value = selectedValues
       currentLabels.value = selectedLabels
+
+      initHittingIndex()
+    }
+
+    function initHittingIndex() {
+      const value = currentValues.value[0]
+
+      if (isNull(value)) {
+        currentIndex.value = -1
+      } else {
+        if (!isMounted.value) return
+
+        currentIndex.value = visibleOptions.value.findIndex(option => option.value === value)
+      }
     }
 
     function isSelected(option: OptionState) {
@@ -552,10 +636,19 @@ export default defineComponent({
       }
     }
 
+    function handleFocus(event: FocusEvent) {
+      emitEvent(props.onFocus, event)
+    }
+
+    function handleBlur(event: FocusEvent) {
+      emitEvent(props.onFocus, event)
+    }
+
     return {
       props,
       nh,
       locale,
+      idFor,
       currentVisible,
       currentValues,
       currentLabels,
@@ -581,7 +674,9 @@ export default defineComponent({
       handleTagClose,
       handleSelect,
       handleClick,
-      handleClear
+      handleClear,
+      handleFocus,
+      handleBlur
     }
   }
 })

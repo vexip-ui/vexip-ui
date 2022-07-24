@@ -1,5 +1,6 @@
 <template>
   <Select
+    :id="idFor"
     ref="select"
     v-model:visible="visible"
     :class="nh.b()"
@@ -17,10 +18,12 @@
     :no-suffix="!hasSuffix"
     :placeholder="props.placeholder"
     :options="props.options"
-    :key-config="props.keyConfig"
+    :key-config="{ ...props.keyConfig, label: props.keyConfig.value || 'value' }"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
+    @focus="control?.focus()"
+    @blur="control?.blur()"
   >
     <template v-if="hasPrefix" #prefix>
       <slot name="prefix">
@@ -39,12 +42,12 @@
         <input
           ref="control"
           :class="nh.be('input')"
-          :value="inputValue"
           :autofocus="props.autofocus"
           :spellcheck="props.spellcheck"
           :disabled="props.disabled"
           :placeholder="props.placeholder ?? locale.placeholder"
           autocomplete="off"
+          tabindex="-1"
           @input="handleInput"
           @change="handleInputChange"
           @keyup.enter="handleEnter"
@@ -125,7 +128,7 @@ export default defineComponent({
     ignoreCase: booleanProp,
     autofocus: booleanProp,
     spellcheck: booleanProp,
-    keyConfig: Object as PropType<OptionKeyConfig>,
+    keyConfig: Object as PropType<Omit<OptionKeyConfig, 'label'>>,
     onSelect: eventProp<(value: string | number, data: RawOption) => void>(),
     onInput: eventProp<(value: string) => void>(),
     onChange: eventProp<(value: string | number, data: RawOption) => void>(),
@@ -135,9 +138,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } = useFieldStore<
       string | number
-    >()
+    >(() => control.value?.focus())
 
     const props = useProps('autoComplete', _props, {
       size: createSizeProp(),
@@ -194,7 +197,9 @@ export default defineComponent({
       const hittingOption = filteredOptions.value[currentIndex.value]
 
       if (hittingOption) {
-        return hittingOption.label || hittingOption.value?.toString()
+        return String(hittingOption.value)
+      } else if (control.value?.value) {
+        return control.value.value
       } else if (select.value) {
         if (select.value.currentVisible) {
           return currentValue.value?.toString()
@@ -204,10 +209,10 @@ export default defineComponent({
           ({ value }) => value === currentValue.value
         )
 
-        return currentOption ? currentOption.label : currentValue.value?.toString()
+        return String(currentOption ? currentOption.value : currentValue.value)
       }
 
-      return currentValue.value?.toString()
+      return String(currentValue.value)
     })
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
@@ -245,7 +250,7 @@ export default defineComponent({
             const filter = props.filter
 
             optionsStates.value.forEach(state => {
-              state.hidden = !filter(value, { label: state.label, value: state.value })
+              state.hidden = !filter(value, state)
             })
           } else {
             if (props.ignoreCase) {
@@ -276,6 +281,12 @@ export default defineComponent({
         if (!state.hidden) {
           index += 1
           state.hitting = currentIndex.value === index
+
+          if (state.hitting) {
+            if (control.value) {
+              control.value.value = String(state.value)
+            }
+          }
         } else {
           state.hitting = false
         }
@@ -322,13 +333,11 @@ export default defineComponent({
         const noCaseValue = value.toLocaleLowerCase()
 
         matchedOption = filteredOptions.value.find(
-          option =>
-            !option.disabled &&
-            (option.value === value || option.label?.toLocaleLowerCase() === noCaseValue)
+          option => !option.disabled && String(option.value).toLocaleLowerCase() === noCaseValue
         )
       } else {
         matchedOption = filteredOptions.value.find(
-          option => !option.disabled && (option.value === value || option.label === value)
+          option => !option.disabled && option.value === value
         )
       }
 
@@ -371,19 +380,26 @@ export default defineComponent({
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      const key = event.key
+      const key = event.code || event.key
 
       if (key === 'ArrowDown' || key === 'ArrowUp') {
         event.preventDefault()
+        event.stopPropagation()
 
         currentIndex.value += key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0
         currentIndex.value = Math.min(
           Math.max(-1, currentIndex.value),
           filteredOptions.value.length - 1
         )
-      } else if (!['Enter', 'ArrowLeft', 'ArrowRight'].includes(key)) {
-        // 进行了其他按键则重置
-        currentIndex.value = -1
+      } else {
+        if (['Space', ' '].includes(key)) {
+          event.stopPropagation()
+        }
+
+        if (!['Enter', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+          // 进行了其他按键则重置
+          currentIndex.value = -1
+        }
       }
     }
 
@@ -422,6 +438,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('input'),
+      idFor,
       currentValue,
       currentIndex,
       visible,

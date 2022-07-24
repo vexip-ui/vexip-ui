@@ -24,9 +24,7 @@ $calendar-pane: map.merge(
     index-b-color-disabled: get-css-var('border-color-opacity-2'),
     index-b-color-outside: get-css-var('border-color-opacity-1'),
     index-size: 28px,
-    index-border:
-    get-css-var('calendar-index-b-width')
-    get-css-var('calendar-index-b-style')
+    index-border: get-css-var('calendar-index-b-width') get-css-var('calendar-index-b-style')
     get-css-var('calendar-index-b-color'),
     index-radius: get-css-var('radius-base'),
     range-bg-color: get-css-var('color-primary-opacity-8'),
@@ -74,6 +72,7 @@ $calendar-pane: map.merge(
     user-select: none;
     background-color: transparent;
     border-radius: get-css-var('calendar-index-radius');
+    outline: 0;
 
     &-inner {
       position: relative;
@@ -101,21 +100,24 @@ $calendar-pane: map.merge(
       border-color: get-css-var('calendar-index-b-color-outside');
     }
 
-    &:hover &-inner {
+    &:hover &-inner,
+    &:focus &-inner {
       color: get-css-var('calendar-index-color-hover');
       background-color: get-css-var('calendar-index-bg-color-hover');
       border-color: get-css-var('calendar-index-b-color-hover');
     }
 
     &--selected &-inner,
-    &--selected:hover &-inner {
+    &--selected:hover &-inner,
+    &--selected:focus &-inner {
       color: get-css-var('calendar-index-color-selected');
       background-color: get-css-var('calendar-index-bg-color-selected');
       border-color: get-css-var('calendar-index-b-color-selected');
     }
 
     &--disabled &-inner,
-    &--disabled:hover &-inner {
+    &--disabled:hover &-inner,
+    &--disabled:focus &-inner {
       color: get-css-var('calendar-index-color-disabled');
       cursor: not-allowed;
       background-color: get-css-var('calendar-index-bg-color-disabled');

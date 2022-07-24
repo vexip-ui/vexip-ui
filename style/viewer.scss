@@ -162,11 +162,16 @@ $viewer: map.merge(
     justify-content: center;
     width: get-css-var('viewer-action-size');
     height: get-css-var('viewer-action-size');
+    padding: 0;
     color: get-css-var('viewer-action-color');
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     transition: get-css-var('transition-color');
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('viewer-action-color-hover');
     }
   }

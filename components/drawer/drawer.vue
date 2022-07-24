@@ -13,18 +13,30 @@
     @hide="handleHide"
   >
     <template #default="{ show }">
-      <section v-show="show" :class="wrapperClass" :style="wrapperStyle">
-        <div v-if="hasTitle" :class="nh.be('title')">
-          <slot name="title">
-            {{ props.title }}
-          </slot>
-          <div v-if="props.closable" :class="nh.be('close')" @click="handleClose()">
-            <slot name="close">
-              <Icon><Xmark></Xmark></Icon>
+      <section
+        v-show="show"
+        :class="wrapperClass"
+        :style="wrapperStyle"
+        role="dialog"
+        :aria-modal="show ? 'true' : undefined"
+        :aria-labelledby="titleId"
+        :aria-describedby="bodyId"
+      >
+        <div v-if="hasTitle" :class="nh.be('header')">
+          <div :id="titleId" :class="nh.be('title')">
+            <slot name="title">
+              {{ props.title }}
             </slot>
           </div>
+          <button v-if="props.closable" :class="nh.be('close')" @click="handleClose()">
+            <slot name="close">
+              <Icon :scale="1.2" label="close">
+                <Xmark></Xmark>
+              </Icon>
+            </slot>
+          </button>
         </div>
-        <div :class="nh.be('content')">
+        <div :id="bodyId" :class="nh.be('content')">
           <slot></slot>
         </div>
         <div
@@ -67,6 +79,8 @@ import type { PropType } from 'vue'
 export type DrawerPlacement = 'top' | 'right' | 'bottom' | 'left'
 
 const drawerPlacements = Object.freeze<DrawerPlacement>(['top', 'right', 'bottom', 'left'])
+
+let idCount = 0
 
 export default defineComponent({
   name: 'Drawer',
@@ -119,7 +133,7 @@ export default defineComponent({
         validator: (value: DrawerPlacement) => drawerPlacements.includes(value)
       },
       title: '',
-      closable: false,
+      closable: true,
       inner: false,
       maskClose: true,
       drawerClass: null,
@@ -136,6 +150,8 @@ export default defineComponent({
     const currentActive = ref(props.active)
     const currentWidth = ref(props.width)
     const currentHeight = ref(props.height)
+
+    const idIndex = `${idCount++}`
 
     const { target: resizer, moving: resizing } = useMoving({
       onStart: (state, event) => {
@@ -194,7 +210,8 @@ export default defineComponent({
         nh.b(),
         nh.bs('vars'),
         {
-          [nh.bm('inner')]: props.inner
+          [nh.bm('inner')]: props.inner,
+          [nh.bem('wrapper', 'closable')]: props.closable
         }
       ]
     })
@@ -206,7 +223,6 @@ export default defineComponent({
         nh.be('wrapper'),
         nh.bem('wrapper', props.placement),
         {
-          [nh.bem('wrapper', 'closable')]: props.closable,
           [nh.bem('wrapper', 'resizing')]: resizing.value
         },
         props.drawerClass
@@ -232,6 +248,8 @@ export default defineComponent({
     const hasTitle = computed(() => {
       return !!(slots.title ?? props.title)
     })
+    const titleId = computed(() => `${nh.bs(idIndex)}__title`)
+    const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
 
     watch(
       () => props.active,
@@ -297,13 +315,15 @@ export default defineComponent({
       currentActive,
       resizing,
 
-      resizer,
-
       className,
       moveTransition,
       wrapperClass,
       wrapperStyle,
       hasTitle,
+      titleId,
+      bodyId,
+
+      resizer,
 
       handleClose,
       handleMaskClose,

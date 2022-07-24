@@ -328,6 +328,8 @@ export default defineComponent({
                     [nh.bem('popper', 'no-hover')]: props.noHover,
                     [nh.bem('popper', 'no-arrow')]: props.noArrow
                   }}
+                  role={'tooltip'}
+                  tabindex={-1}
                   onClick={stopPropagation}
                   onAnimationend={syncRendering}
                   onTransitionend={syncRendering}

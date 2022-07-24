@@ -145,6 +145,7 @@ $cascader: map.merge(
     min-width: get-css-var('cascader-pane-min-width');
     max-width: get-css-var('cascader-pane-max-width');
     height: 100%;
+    outline: 0;
 
     &:not(:first-child) {
       border-left: get-css-var('cascader-pane-border');
@@ -157,7 +158,7 @@ $cascader: map.merge(
     padding: 0;
     margin: 0;
 
-    &--multiple .#{$namespace}-option--selected,
+    &--multiple .#{$namespace}-option--selected:not(.#{$namespace}-option--hitting),
     &--no-cascaded .#{$namespace}-option--selected {
       background-color: transparent;
 

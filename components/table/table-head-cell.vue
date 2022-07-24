@@ -1,5 +1,11 @@
 <template>
-  <div ref="wrapper" :class="className" :style="style">
+  <div
+    ref="wrapper"
+    :class="className"
+    role="columnheader"
+    :style="style"
+    :aria-sort="sorter.type ? (sorter.type === 'asc' ? 'ascending' : 'descending') : 'none'"
+  >
     <Checkbox
       v-if="isSelection(column)"
       control

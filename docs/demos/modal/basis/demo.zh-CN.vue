@@ -1,19 +1,17 @@
 <template>
-  <div>
-    <Button type="primary" @click="active = !active">
-      打开
-    </Button>
-    <Modal
-      v-model:active="active"
-      transfer
-      title="标题"
-      :width="500"
-    >
-      <p>一些内容</p>
-      <p>一些内容</p>
-      <p>一些内容</p>
-    </Modal>
-  </div>
+  <Button type="primary" @click="active = !active">
+    打开
+  </Button>
+  <Modal
+    v-model:active="active"
+    transfer
+    title="标题"
+    :width="500"
+  >
+    <p>一些内容</p>
+    <p>一些内容</p>
+    <p>一些内容</p>
+  </Modal>
 </template>
 
 <script setup lang="ts">

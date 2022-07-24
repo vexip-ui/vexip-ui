@@ -1,7 +1,12 @@
 <template>
-  <div :class="nh.be('pane')" @mouseleave="handleMouseLeave">
+  <div
+    ref="wrapper"
+    :class="nh.be('pane')"
+    tabindex="-1"
+    @mouseleave="handleMouseLeave"
+  >
     <VirtualList
-      ref="virtualList"
+      ref="list"
       :items="options"
       :item-size="32"
       height="100%"
@@ -11,8 +16,10 @@
           nh.be('options'),
           multiple ? nh.bem('options', 'multiple') : null,
           noCascaded ? nh.bem('options', 'no-cascaded') : null
-        ]
+        ],
+        role: 'listbox'
       }"
+      @resize="computeListHeight"
     >
       <template #default="{ item, index }">
         <slot
@@ -31,6 +38,7 @@
             :label="item.label"
             :disabled="item.disabled"
             :selected="isSelected(item)"
+            :hitting="index === currentHitting"
             @select="handleSelect(item)"
             @mouseenter="handleMouseEnter(item)"
           >
@@ -80,13 +88,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { VirtualList } from '@/components/virtual-list'
 import { ChevronRight, Check, Spinner, ArrowsRotate } from '@vexip-ui/icons'
 import { useNameHelper } from '@vexip-ui/config'
+import { useModifier } from '@vexip-ui/mixins'
+import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { VirtualListExposed } from '@/components/virtual-list'
@@ -139,22 +149,91 @@ export default defineComponent({
     noCascaded: {
       type: Boolean,
       default: false
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['select', 'check', 'hover'],
+  emits: ['select', 'check', 'hover', 'open', 'back', 'close'],
   setup(props, { emit }) {
     const nh = useNameHelper('cascader')
-    const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed | null>(null)
+    const currentHitting = ref(-1)
 
+    const list = ref<VirtualListExposed | null>(null)
+
+    const { target: wrapper } = useModifier({
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down) {
+          event.preventDefault()
+
+          if (currentHitting.value < 0) {
+            currentHitting.value = props.options.findIndex(isSelected)
+
+            if (currentHitting.value < 0) {
+              currentHitting.value = 0
+            }
+
+            return
+          }
+
+          currentHitting.value = boundRange(
+            findEnabledIndex(currentHitting.value + (modifier.up ? -1 : 1), modifier.up ? -1 : 1),
+            0,
+            props.options.length - 1
+          )
+          ensureOptionInView(currentHitting.value, modifier.up ? 'top' : 'bottom')
+        } else if (modifier.left || modifier.right) {
+          event.preventDefault()
+
+          if (modifier.right) {
+            const option = props.options[currentHitting.value]
+
+            if (option && hasChildren(option)) {
+              emit('open', option)
+            }
+          } else {
+            emit('back')
+          }
+        } else if (modifier.enter || modifier.space) {
+          event.preventDefault()
+          event.stopPropagation()
+
+          const option = props.options[currentHitting.value]
+
+          if (option) {
+            if (props.multiple) {
+              handleToggleCheck(option)
+            } else {
+              handleSelect(option)
+            }
+          }
+        } else if (modifier.escape) {
+          emit('close')
+        }
+      }
+    })
+
+    let listHeight = 0
     let hoverTimer = 0
 
     watch(
       () => props.ready,
       value => {
-        value && virtualList.value?.refresh()
+        requestAnimationFrame(computeListHeight)
+
+        if (value) {
+          list.value?.refresh()
+        } else {
+          currentHitting.value = -1
+        }
       }
     )
 
+    onMounted(() => {
+      requestAnimationFrame(computeListHeight)
+    })
     onBeforeUnmount(handleMouseLeave)
 
     function hasChildren(option: OptionState) {
@@ -162,7 +241,10 @@ export default defineComponent({
     }
 
     function isSelected(option: OptionState) {
-      return (hasChildren(option) && option.id === props.openedId) || props.values.includes(option.fullValue)
+      return (
+        (hasChildren(option) && option.id === props.openedId) ||
+        props.values.includes(option.fullValue)
+      )
     }
 
     function isCheckboxDisabled(option: OptionState) {
@@ -202,10 +284,75 @@ export default defineComponent({
       clearTimeout(hoverTimer)
     }
 
+    function computeListHeight() {
+      const el = list.value?.wrapper
+
+      if (el) {
+        const style = getComputedStyle(el)
+        const paddingTop = parseInt(style.paddingTop)
+        const paddingBottom = parseInt(style.paddingBottom)
+
+        listHeight = el.offsetHeight - paddingTop - paddingBottom
+      }
+    }
+
+    function queryEnabledIndex(index: number, step: number) {
+      const options = props.options
+      step = step / Math.abs(step)
+
+      while (options[index]?.disabled) {
+        index += step
+
+        if (index < 0 || index >= options.length) break
+      }
+
+      return index
+    }
+
+    function findEnabledIndex(index: number, sign: 1 | -1 = 1) {
+      const options = props.options
+
+      if (options[index]?.disabled) {
+        index = queryEnabledIndex(index, sign)
+
+        if (sign > 0 ? index >= options.length : index < 0) {
+          index = queryEnabledIndex(index, -sign)
+
+          // 全禁用
+          if (sign > 0 ? index < 0 : index >= options.length) index = -1
+        }
+      }
+
+      return index
+    }
+
+    function ensureOptionInView(index: number, direction: 'top' | 'bottom') {
+      const option = props.options[index]
+      const optionHeight = 32
+
+      if (!option || !list.value) return
+
+      if (direction === 'bottom') {
+        const target = (index + 1) * optionHeight
+
+        if (list.value.scrollOffset + listHeight < target) {
+          list.value.scrollTo(target - listHeight)
+        }
+      } else {
+        const target = index * optionHeight
+
+        if (list.value.scrollOffset > target) {
+          list.value.scrollTo(target)
+        }
+      }
+    }
+
     return {
       nh,
+      currentHitting,
 
-      virtualList,
+      wrapper,
+      list,
 
       hasChildren,
       isSelected,
@@ -213,7 +360,8 @@ export default defineComponent({
       handleSelect,
       handleToggleCheck,
       handleMouseEnter,
-      handleMouseLeave
+      handleMouseLeave,
+      computeListHeight
     }
   }
 })

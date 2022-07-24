@@ -1,5 +1,5 @@
 <template>
-  <section :class="className">
+  <section :class="className" :role="inGroup ? 'tab' : undefined" :aria-expanded="currentExpanded">
     <div :class="nh.be('header')" @click="handleToggle">
       <div :class="nh.be('arrow')">
         <Icon><ChevronRight></ChevronRight></Icon>
@@ -176,6 +176,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      inGroup: !!collapseState,
       currentExpanded,
 
       className,

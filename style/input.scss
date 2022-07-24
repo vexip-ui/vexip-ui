@@ -12,7 +12,6 @@ $input: map.merge(
     b-color-hover: get-css-var('color-primary-light-1'),
     b-color-focus: get-css-var('input-b-color-hover'),
     s-color-focus: get-css-var('color-primary-opacity-6'),
-    shadow-focus: get-css-var('shadow-focus') get-css-var('input-s-color-focus'),
     placeholder-color: get-css-var('content-color-placeholder'),
     control-color: get-css-var('content-color-base'),
     control-color-disabled: get-css-var('content-color-disabled'),
@@ -64,10 +63,11 @@ $input: map.merge(
     }
 
     &:focus,
+    &:focus-within,
     &--focused {
       z-index: 2;
       border-color: get-css-var('input-b-color-focus');
-      box-shadow: get-css-var('input-shadow-focus');
+      box-shadow: get-css-var('shadow-focus') get-css-var('input-s-color-focus');
     }
 
     &--small {
@@ -119,7 +119,8 @@ $input: map.merge(
 
       &,
       &:hover,
-      &:focus {
+      &:focus,
+      &:focus-within {
         border-color: get-css-var('border-color-base');
         box-shadow: none;
       }

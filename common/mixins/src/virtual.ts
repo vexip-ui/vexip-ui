@@ -163,7 +163,6 @@ export function useVirtual(options: VirtualOptions) {
   }
 
   function handleItemResize(key: Key, entry: ResizeObserverEntry) {
-    console.log('a')
     if (itemFixed.value) return
 
     const index = indexMap.value.get(key)!

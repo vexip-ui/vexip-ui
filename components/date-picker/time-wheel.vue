@@ -9,6 +9,7 @@
       :options="hourRange"
       @mouseenter="handleToggleColumn('hour')"
       @touchstart="handleToggleColumn('hour')"
+      @keydown.stop
     >
       <template #default="{ option }">
         {{ doubleDigits(option.value) }}
@@ -23,6 +24,7 @@
       :options="secondRange"
       @mouseenter="handleToggleColumn('minute')"
       @touchstart="handleToggleColumn('minute')"
+      @keydown.stop
     >
       <template #default="{ option }">
         {{ doubleDigits(option.value) }}
@@ -37,6 +39,7 @@
       :options="secondRange"
       @mouseenter="handleToggleColumn('second')"
       @touchstart="handleToggleColumn('second')"
+      @keydown.stop
     >
       <template #default="{ option }">
         {{ doubleDigits(option.value) }}

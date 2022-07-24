@@ -74,9 +74,11 @@ $dropdown: map.merge(
     list-style: none;
     cursor: pointer;
     background-color: transparent;
+    outline: 0;
     transition: get-css-var('transition-background');
 
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: get-css-var('dropdown-bg-color-hover');
     }
 
@@ -88,7 +90,8 @@ $dropdown: map.merge(
       color: get-css-var('dropdown-color-disabled');
       cursor: not-allowed;
 
-      &:hover {
+      &:hover,
+      &:focus {
         background-color: transparent;
       }
     }

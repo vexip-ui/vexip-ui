@@ -1,5 +1,12 @@
 <template>
-  <div :class="className" @pointerdown="handleTrackDown" @touchstart="disableEvent">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    tabindex="-1"
+    @pointerdown="handleTrackDown"
+    @touchstart="disableEvent"
+  >
     <div ref="track" :class="nh.be('track')">
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
@@ -11,7 +18,6 @@
     >
       <Tooltip
         ref="tooltip"
-        tabindex="0"
         theme="dark"
         trigger="custom"
         :transfer="props.tipTransfer"
@@ -23,7 +29,18 @@
         @tip-leave="hideTooltip"
       >
         <template #trigger>
-          <div :class="nh.be('handler')" @mouseenter="showTooltip" @mouseleave="hideTooltip"></div>
+          <div
+            ref="handler"
+            :class="nh.be('handler')"
+            role="slider"
+            tabindex="0"
+            :aria-valuenow="truthValue"
+            :aria-valuemin="props.min"
+            :aria-valuemax="props.max"
+            :aria-disabled="props.disabled"
+            @mouseenter="showTooltip"
+            @mouseleave="hideTooltip"
+          ></div>
         </template>
         <slot name="tip" :value="truthValue">
           {{ truthValue }}
@@ -47,7 +64,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useSetTimeout } from '@vexip-ui/mixins'
+import { useSetTimeout, useModifier } from '@vexip-ui/mixins'
 import { throttle } from '@vexip-ui/utils'
 
 import type { TooltipExposed } from '@/components/tooltip'
@@ -72,7 +89,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<number>()
+    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<number>(
+      () => handler.value?.focus()
+    )
 
     const props = useProps('slider', _props, {
       state: createStateProp(state),
@@ -98,9 +117,27 @@ export default defineComponent({
     const isTipShow = ref(false)
 
     const { timer } = useSetTimeout()
+    const { target: wrapper } = useModifier({
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down || modifier.left || modifier.right) {
+          event.preventDefault()
+          event.stopPropagation()
+
+          if (modifier.up || modifier.left) {
+            currentValue.value -= 1
+          } else {
+            currentValue.value += 1
+          }
+
+          verifyValue()
+        }
+      }
+    })
 
     const track = ref<HTMLElement | null>(null)
     const tooltip = ref<(InstanceType<typeof Tooltip> & TooltipExposed) | null>(null)
+    const handler = ref<HTMLElement | null>(null)
 
     const className = computed(() => {
       return {
@@ -277,6 +314,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      idFor,
       sliding,
       isTipShow,
 
@@ -285,8 +323,10 @@ export default defineComponent({
       fillerStyle,
       handlerStyle,
 
+      wrapper,
       track,
       tooltip,
+      handler,
 
       handleTrackDown,
       handleMoveStart,

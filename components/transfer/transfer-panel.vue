@@ -46,7 +46,7 @@
           clearable
           :disabled="disabled"
           :suffix="MagnifyingGlass"
-          :placeholder="searching ? null : locale.search"
+          :placeholder="searching ? undefined : locale.search"
           @keydown.stop
           @input="currentFilter = $event"
           @focus="searching = true"
@@ -58,6 +58,7 @@
       v-if="paged || $slots.body"
       ref="body"
       :class="nh.be('body')"
+      role="listbox"
       :style="{ height: bodyHeight }"
     >
       <slot name="body" v-bind="getSlotPayload()">
@@ -85,6 +86,7 @@
       use-y-bar
       id-key="value"
       :height="bodyHeight"
+      :items-attrs="{ role: 'listbox' }"
     >
       <template #default="{ item: option, index }">
         <Renderer :renderer="renderOption" :data="{ option, index }"></Renderer>
@@ -217,7 +219,6 @@ export default defineComponent({
     const locale = useLocale('transfer')
 
     const bodyHeight = ref('100%')
-    const bodyRealHeight = ref(0)
     const currentSelected = ref(new Set(props.selected))
     const pageSize = ref(10)
     const currentPage = ref(1)
@@ -233,6 +234,7 @@ export default defineComponent({
     const input = ref<InstanceType<typeof Input> | null>(null)
     const list = ref<VirtualListExposed | null>(null)
 
+    let bodyRealHeight = 0
     let lastSelected: string | number | null = null
     let keyUsed = false
 
@@ -265,7 +267,7 @@ export default defineComponent({
           }
 
           event.preventDefault()
-        } else if (props.paged && modifier.ctrl && (modifier.left || modifier.right)) {
+        } else if (props.paged && (modifier.left || modifier.right) && event.ctrlKey) {
           handlePageChange(currentPage.value + (modifier.left ? -1 : 1))
           currentHitting.value = 0
           event.preventDefault()
@@ -396,7 +398,7 @@ export default defineComponent({
           const paddingBottom = parseInt(style.paddingBottom)
           const innerHeight = bodyEl.offsetHeight - paddingTop - paddingBottom
 
-          bodyRealHeight.value = innerHeight
+          bodyRealHeight = innerHeight
           pageSize.value = Math.floor(innerHeight / (props.optionHeight || 1))
         }
       })
@@ -534,14 +536,16 @@ export default defineComponent({
     }
 
     function findEnabledIndex(index: number, sign: 1 | -1 = 1) {
-      if (currentOptions.value[index]?.disabled) {
+      const options = currentOptions.value
+
+      if (options[index]?.disabled) {
         index = queryEnabledIndex(index, sign)
 
-        if (sign > 0 ? index >= currentOptions.value.length : index < 0) {
+        if (sign > 0 ? index >= options.length : index < 0) {
           index = queryEnabledIndex(index, -sign)
 
           // 全禁用
-          if (sign > 0 ? index < 0 : index >= currentOptions.value.length) index = -1
+          if (sign > 0 ? index < 0 : index >= options.length) index = -1
         }
       }
 
@@ -556,7 +560,7 @@ export default defineComponent({
       if (direction === 'bottom') {
         const target = (index + 1) * props.optionHeight
 
-        if (list.value.scrollOffset + bodyRealHeight.value < target) {
+        if (list.value.scrollOffset + bodyRealHeight < target) {
           list.value.scrollTo((index - pageSize.value + 1) * props.optionHeight)
         }
       } else {
@@ -584,6 +588,7 @@ export default defineComponent({
     }
 
     function renderOption({ option, index }: { option: TransferOptionState, index: number }) {
+      const disabled = props.disabled || option.disabled
       const handleCheck = (event: MouseEvent) => {
         event.preventDefault()
         event.stopPropagation()
@@ -594,9 +599,11 @@ export default defineComponent({
         <li
           class={{
             [nh.be('option')]: true,
-            [nh.bem('option', 'disabled')]: props.disabled || option.disabled,
+            [nh.bem('option', 'disabled')]: disabled,
             [nh.bem('option', 'hitting')]: currentHitting.value === index
           }}
+          role={'option'}
+          aria-disabled={disabled ? 'true' : undefined}
           onClick={() => toggleSelect(option)}
         >
           {slots.option
@@ -606,7 +613,7 @@ export default defineComponent({
                   class={nh.be('checkbox')}
                   state={props.deepState ? props.state : undefined}
                   checked={currentSelected.value.has(option.value)}
-                  disabled={props.disabled || option.disabled}
+                  disabled={disabled}
                   tab-index={-1}
                   onClick={handleCheck}
                 ></Checkbox>,

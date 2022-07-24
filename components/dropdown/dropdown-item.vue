@@ -1,5 +1,11 @@
 <template>
-  <li ref="wrapper" :class="className" @click="handleSelect">
+  <li
+    ref="wrapper"
+    :class="className"
+    role="menuitem"
+    tabindex="0"
+    @click="handleSelect"
+  >
     <slot></slot>
   </li>
 </template>

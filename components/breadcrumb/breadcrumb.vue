@@ -1,11 +1,11 @@
 <template>
-  <div :class="className">
+  <ol :class="className">
     <slot>
       <BreadcrumbItem v-for="label in props.options" :key="label" :label="label">
         {{ label }}
       </BreadcrumbItem>
     </slot>
-  </div>
+  </ol>
 </template>
 
 <script lang="ts">

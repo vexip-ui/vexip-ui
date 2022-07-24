@@ -31,7 +31,7 @@ import { useFieldStore } from '@/components/form'
 import { isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
-import type { PropType } from 'vue'
+import type { PropType, Ref } from 'vue'
 import type { ControlState } from './symbol'
 
 type RawOption =
@@ -40,6 +40,7 @@ type RawOption =
       value: string | number,
       label?: string
     }
+type Values = (string | number)[]
 
 export default defineComponent({
   name: 'CheckboxGroup',
@@ -49,17 +50,18 @@ export default defineComponent({
   props: {
     size: sizeProp,
     state: stateProp,
-    value: Array as PropType<(string | number)[]>,
+    value: Array as PropType<Values>,
     vertical: booleanProp,
     disabled: booleanProp,
     border: booleanProp,
     options: Array as PropType<RawOption[]>,
-    onChange: eventProp<(value: (string | number)[]) => void>()
+    onChange: eventProp<(value: Values) => void>()
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<(string | number)[]>()
+    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<Values>(() =>
+      Array.from(inputSet)[0]?.value?.focus()
+    )
 
     const props = useProps('checkboxGroup', _props, {
       size: createSizeProp(),
@@ -79,8 +81,9 @@ export default defineComponent({
 
     const nh = useNameHelper('checkbox-group')
     const valueMap = new Map<string | number, boolean>()
+    const inputSet = new Set<Ref<HTMLElement | null>>()
     const controlSet = new Set<ControlState>()
-    const currentValues = ref<(string | number)[]>(props.value || [])
+    const currentValues = ref<Values>(props.value || [])
 
     const className = computed(() => {
       return [
@@ -147,12 +150,18 @@ export default defineComponent({
       updateControl()
     })
 
-    function increaseItem(value: string | number, checked = false) {
+    function increaseItem(
+      value: string | number,
+      checked: boolean,
+      input: Ref<HTMLElement | null>
+    ) {
       valueMap.set(value, checked)
+      inputSet.add(input)
     }
 
-    function decreaseItem(value: string | number) {
+    function decreaseItem(value: string | number, input: Ref<HTMLElement | null>) {
       valueMap.delete(value)
+      inputSet.delete(input)
     }
 
     function increaseControl(state: ControlState) {
@@ -185,7 +194,7 @@ export default defineComponent({
       updateControl()
     }
 
-    function handleChange(value: (string | number)[]) {
+    function handleChange(value: Values) {
       setFieldValue(value)
       emitEvent(props.onChange, value)
       emit('update:value', value)

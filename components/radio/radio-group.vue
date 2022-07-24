@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" role="radiogroup">
     <slot>
       <template v-for="item in props.options" :key="item">
         <Radio :label="item">
@@ -28,7 +28,7 @@ import { useFieldStore } from '@/components/form'
 import { debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
-import type { PropType } from 'vue'
+import type { PropType, Ref } from 'vue'
 
 export default defineComponent({
   name: 'RadioGroup',
@@ -48,7 +48,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string | number>()
+    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string | number>(
+      () => Array.from(inputSet)[0]?.value?.focus()
+    )
 
     const props = useProps('radioGroup', _props, {
       size: createSizeProp(),
@@ -69,6 +71,7 @@ export default defineComponent({
 
     const nh = useNameHelper('radio-group')
     const currentValue = ref(props.value)
+    const inputSet = new Set<Ref<HTMLElement | null>>()
 
     const className = computed(() => {
       return [
@@ -90,7 +93,9 @@ export default defineComponent({
       size: toRef(props, 'size'),
       state: toRef(props, 'state'),
       disabled: toRef(props, 'disabled'),
-      updateValue: debounceMinor(updateValue)
+      updateValue: debounceMinor(updateValue),
+      registerInput,
+      unregisterInput
     })
 
     // 此处直接定义 reactive 会出现类型推断错误，存疑？
@@ -111,6 +116,14 @@ export default defineComponent({
 
     function updateValue(value: string | number) {
       currentValue.value = value
+    }
+
+    function registerInput(input: Ref<HTMLElement | null>) {
+      inputSet.add(input)
+    }
+
+    function unregisterInput(input: Ref<HTMLElement | null>) {
+      inputSet.delete(input)
     }
 
     return {

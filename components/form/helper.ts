@@ -115,7 +115,7 @@ const defaultState = computed(() => 'default' as ComponentState)
 function getEmptyActions<V = unknown>() {
   return {
     isField: false,
-    prop: defaultProp,
+    idFor: defaultProp,
     state: defaultState,
     validateField: noop as FieldOptions['validate'],
     clearField: noop as FieldOptions['clearError'],
@@ -125,7 +125,7 @@ function getEmptyActions<V = unknown>() {
   }
 }
 
-export function useFieldStore<V = unknown>() {
+export function useFieldStore<V = unknown>(onFocus?: () => void) {
   const instance = getCurrentInstance()
 
   if (!instance) return getEmptyActions<V>()
@@ -140,9 +140,11 @@ export function useFieldStore<V = unknown>() {
   // e.g. AutoComplete -> Select, ColorPicker -> Input
   provide(FIELD_OPTIONS, null)
   fieldActions.sync(instance)
+  onFocus && fieldActions.emitter.on('focus', onFocus)
 
   onBeforeUnmount(() => {
     fieldActions.unsync(instance)
+    onFocus && fieldActions.emitter.off('focus', onFocus)
   })
 
   function clearField(defaultValue?: V) {
@@ -154,7 +156,7 @@ export function useFieldStore<V = unknown>() {
 
   return {
     isField: true,
-    prop: fieldActions.prop,
+    idFor: fieldActions.idFor,
     state: fieldActions.state,
     validateField: fieldActions.validate,
     clearField,

@@ -7,10 +7,7 @@
   >
     <div
       v-if="enabled.hour"
-      :class="[
-        nh.be('unit'),
-        visible && unitType === 'hour' ? nh.bem('unit', 'focused') : ''
-      ]"
+      :class="[nh.be('unit'), visible && unitType === 'hour' ? nh.bem('unit', 'focused') : '']"
       @click="handleInputFocus('hour')"
     >
       {{ formattedHour }}
@@ -23,10 +20,7 @@
         {{ separator }}
       </div>
       <div
-        :class="[
-          nh.be('unit'),
-          visible && unitType === 'minute' ? nh.bem('unit', 'focused') : ''
-        ]"
+        :class="[nh.be('unit'), visible && unitType === 'minute' ? nh.bem('unit', 'focused') : '']"
         @click="handleInputFocus('minute')"
       >
         {{ formattedMinute }}
@@ -40,10 +34,7 @@
         {{ separator }}
       </div>
       <div
-        :class="[
-          nh.be('unit'),
-          visible && unitType === 'second' ? nh.bem('unit', 'focused') : ''
-        ]"
+        :class="[nh.be('unit'), visible && unitType === 'second' ? nh.bem('unit', 'focused') : '']"
         @click="handleInputFocus('second')"
       >
         {{ formattedSecond }}
@@ -117,16 +108,7 @@ export default defineComponent({
       default: () => ({})
     }
   },
-  emits: [
-    'input',
-    'plus',
-    'minus',
-    'enter',
-    'cancel',
-    'unit-focus',
-    'prev-unit',
-    'next-unit'
-  ],
+  emits: ['input', 'plus', 'minus', 'enter', 'cancel', 'unit-focus', 'prev-unit', 'next-unit'],
   setup(props, { emit }) {
     const nh = useNameHelper('time-picker')
 
@@ -153,6 +135,8 @@ export default defineComponent({
     }
 
     function handleInput(event: KeyboardEvent) {
+      if (!props.visible) return
+
       const type = handleKeyEnter(event)
 
       switch (type) {

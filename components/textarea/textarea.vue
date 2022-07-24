@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :id="idFor" :class="className">
     <textarea
       ref="textarea"
       :class="nh.be('control')"
@@ -67,7 +67,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { state, validateField, getFieldValue, setFieldValue } = useFieldStore<string>()
+    const { idFor, state, validateField, getFieldValue, setFieldValue } = useFieldStore<string>(
+      () => textarea.value?.focus()
+    )
 
     const props = useProps('textarea', _props, {
       state: createStateProp(state),
@@ -91,6 +93,8 @@ export default defineComponent({
     const focused = ref(false)
     const currentValue = ref(props.value)
     const currentLength = ref(props.value ? props.value.length : 0)
+
+    const textarea = ref<HTMLElement | null>(null)
 
     // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
@@ -191,10 +195,13 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('input'),
+      idFor,
       currentValue,
       currentLength,
 
       className,
+
+      textarea,
 
       handleFocus,
       handleBlur,

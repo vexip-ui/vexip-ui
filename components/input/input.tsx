@@ -68,8 +68,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
-    const { state, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<string>()
+    const { idFor, state, validateField, clearField, getFieldValue, setFieldValue } =
+      useFieldStore<string>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
       size: createSizeProp(),
@@ -374,7 +374,7 @@ export default defineComponent({
 
     function createInputElement() {
       return (
-        <div ref={wrapper} class={className.value}>
+        <div id={idFor.value} ref={wrapper} class={className.value}>
           <input
             ref={inputControl}
             class={[nh.be('control'), props.inputClass]}

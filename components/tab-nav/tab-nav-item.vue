@@ -1,12 +1,16 @@
 <template>
-  <li
-    ref="wrapper"
-    :class="nh.be('item')"
-    :aria-disabled="disabled"
-    @click="handleSelect"
-  >
+  <li ref="wrapper" :class="nh.be('item')" role="none">
     <div :class="nh.be('pad')"></div>
-    <div :class="contentClass">
+    <div
+      :class="contentClass"
+      role="tab"
+      tabindex="0"
+      :aria-disabled="disabled"
+      :aria-setsize="total || undefined"
+      :aria-posinset="index || undefined"
+      @click="handleSelect"
+      @keydown.enter.stop="handleSelect"
+    >
       <Icon v-if="icon" :class="nh.be('icon')" :icon="icon"></Icon>
       <slot>
         {{ label }}
@@ -51,6 +55,8 @@ export default defineComponent({
     const nh = useNameHelper('tab-nav')
     const active = ref(false)
     const currentLabel = ref(props.label)
+    const index = ref(0)
+    const total = ref(0)
 
     const wrapper = ref<HTMLElement | null>(null)
 
@@ -78,7 +84,9 @@ export default defineComponent({
     if (tabNavState) {
       const state: ItemState = reactive({
         el: wrapper,
-        label: currentLabel
+        label: currentLabel,
+        index,
+        total
       })
 
       watch(currentLabel, (value, prevValue) => {
@@ -113,6 +121,8 @@ export default defineComponent({
 
     return {
       nh,
+      index,
+      total,
       contentClass,
       wrapper,
       handleSelect
