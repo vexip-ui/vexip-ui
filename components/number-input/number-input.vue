@@ -191,7 +191,7 @@ export default defineComponent({
 
           changeStep(
             modifier.up ? 'plus' : 'minus',
-            modifier.ctrl ? 'ctrl' : modifier.shift ? 'shift' : modifier.alt ? 'alt' : undefined
+            event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
           )
         }
       },

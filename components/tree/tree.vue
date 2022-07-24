@@ -3,9 +3,17 @@
     ref="wrapper"
     :class="[nh.b(), nh.bs('vars')]"
     role="tree"
+    tabindex="-1"
     :aria-disabled="props.disabled"
     :aria-readonly="props.readonly"
+    @focusin="handleFocusIn"
   >
+    <span
+      ref="trap"
+      tabindex="0"
+      aria-hidden="true"
+      style="width: 0; height: 0; overflow: hidden; outline: none;"
+    ></span>
     <ul :class="nh.be('list')">
       <TreeNode
         v-for="(item, index) in treeData"
@@ -34,35 +42,11 @@
         :upper-matched="item.upperMatched"
         :node-props="getNodeProps"
       >
-        <template
-          #default="{
-            data: nodeDta,
-            node,
-            depth,
-            children,
-            toggleCheck,
-            toggleExpand,
-            toggleSelect
-          }"
-        >
-          <slot
-            name="node"
-            :data="nodeDta"
-            :node="node"
-            :depth="depth"
-            :children="children"
-            :toggle-check="toggleCheck"
-            :toggle-expand="toggleExpand"
-            :toggle-select="toggleSelect"
-          ></slot>
+        <template #default="payload">
+          <slot name="node" v-bind="payload"></slot>
         </template>
-        <template #label="{ data: nodeData, node, children }">
-          <slot
-            name="label"
-            :data="nodeData"
-            :node="node"
-            :children="children"
-          ></slot>
+        <template #label="payload">
+          <slot name="label" v-bind="payload"></slot>
         </template>
       </TreeNode>
     </ul>
@@ -81,7 +65,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, reactive, computed, watch, watchEffect, provide } from 'vue'
+import {
+  defineComponent,
+  ref,
+  toRef,
+  reactive,
+  computed,
+  watch,
+  watchEffect,
+  provide,
+  onMounted
+} from 'vue'
 import TreeNode from './tree-node.vue'
 import {
   useNameHelper,
@@ -91,7 +85,15 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { isNull, isPromise, transformTree, flatTree, removeArrayItem } from '@vexip-ui/utils'
+import { useMounted } from '@vexip-ui/mixins'
+import {
+  isNull,
+  isPromise,
+  transformTree,
+  flatTree,
+  removeArrayItem,
+  queryAll
+} from '@vexip-ui/utils'
 import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -213,8 +215,13 @@ export default defineComponent({
     const dragging = ref(false)
     const indicatorShow = ref(false)
 
+    const { isMounted } = useMounted()
+
     const wrapper = ref<HTMLElement | null>(null)
+    const trap = ref<HTMLElement | null>(null)
     const indicator = ref<HTMLElement | null>(null)
+
+    let visibleNodeEls: HTMLElement[] = []
 
     const keyConfig = computed(() => {
       return { ...defaultKeyConfig, ...props.keyConfig }
@@ -297,6 +304,7 @@ export default defineComponent({
         renderer: toRef(props, 'renderer'),
         dragging,
         boundAsyncLoad,
+        updateVisibleNodeEls,
         computeCheckedState,
         handleNodeClick,
         handleNodeSelect,
@@ -307,7 +315,9 @@ export default defineComponent({
         handleNodeDragStart,
         handleNodeDragOver,
         handleNodeDrop,
-        handleNodeDragEnd
+        handleNodeDragEnd,
+        handleHittingChange,
+        handleNodeHitting
       })
     )
     provide(
@@ -324,6 +334,7 @@ export default defineComponent({
 
     // created
     parseAndTransformData()
+    onMounted(updateVisibleNodeEls)
 
     const checkedNodes = flattedData.value.filter(item => item.checked)
 
@@ -340,6 +351,14 @@ export default defineComponent({
           updateCheckedUpward(item)
         }
       }
+    }
+
+    function updateVisibleNodeEls() {
+      requestAnimationFrame(() => {
+        if (wrapper.value) {
+          visibleNodeEls = queryAll(`.${nh.be('node')}`, wrapper.value)
+        }
+      })
     }
 
     function parseAndTransformData() {
@@ -377,6 +396,8 @@ export default defineComponent({
         childField: 'children',
         rootId: props.rootId
       })
+
+      isMounted.value && updateVisibleNodeEls()
     }
 
     function forceUpdateData() {
@@ -442,7 +463,8 @@ export default defineComponent({
         childField: 'children',
         rootId: props.rootId
       })
-      // flatData.value = nodes
+
+      isMounted.value && updateVisibleNodeEls()
     }
 
     function syncNodeStateIntoData() {
@@ -459,6 +481,8 @@ export default defineComponent({
         data.loading = loading
         data.readonly = readonly
       })
+
+      isMounted.value && updateVisibleNodeEls()
     }
 
     function createNodeItem(data: Data): TreeNodeProps {
@@ -756,15 +780,6 @@ export default defineComponent({
         }
       }
 
-      // nextTick(() => {
-      //   flattedData.value = flatTree(treeData.value, {
-      //     keyField: 'id',
-      //     parentField: 'parent',
-      //     childField: 'children',
-      //     rootId: props.rootId
-      //   })
-      // })
-
       emitEvent(props.onDrop, nodeInstance.node.data, nodeInstance.node, dropType)
     }
 
@@ -773,6 +788,38 @@ export default defineComponent({
       indicatorShow.value = false
       dragState = null
       emitEvent(props.onDragEnd, nodeInstance.node.data, nodeInstance.node)
+    }
+
+    function handleHittingChange(type: 'up' | 'down') {
+      const activeEl = document.activeElement
+
+      if (!visibleNodeEls.length || !activeEl) return
+
+      const index = visibleNodeEls.findIndex(nodeEl => nodeEl === activeEl)
+
+      if (~index) {
+        visibleNodeEls.at((index + (type === 'up' ? -1 : 1)) % visibleNodeEls.length)?.focus()
+      }
+    }
+
+    function handleNodeHitting(nodeEl: HTMLElement | null) {
+      if (!nodeEl || !visibleNodeEls.length) return
+
+      if (visibleNodeEls.includes(nodeEl)) {
+        nodeEl.focus()
+      }
+    }
+
+    function handleFocusIn(event: FocusEvent) {
+      const target = event.target as HTMLElement
+
+      if (!visibleNodeEls.length || !target || !trap.value) {
+        return
+      }
+
+      if (target === trap.value) {
+        visibleNodeEls[0].focus()
+      }
     }
 
     function getCheckedNodes(): TreeNodeProps[] {
@@ -937,7 +984,10 @@ export default defineComponent({
       }),
 
       wrapper,
+      trap,
       indicator,
+
+      handleFocusIn,
 
       // api
       parseAndTransformData,

@@ -16,11 +16,11 @@ export default defineComponent({
     timing: String,
     fadeEffect: booleanProp,
     onBeforeEnter: eventProp<(el: Element) => void>(),
-    onEnter: eventProp<(el: Element, done: () => void) => void>(),
+    onEnter: eventProp<(el: Element) => void>(),
     onAfterEnter: eventProp<(el: Element) => void>(),
     onEnterCancelled: eventProp<(el: Element) => void>(),
     onBeforeLeave: eventProp<(el: Element) => void>(),
-    onLeave: eventProp<(el: Element, done: () => void) => void>(),
+    onLeave: eventProp<(el: Element) => void>(),
     onAfterLeave: eventProp<(el: Element) => void>(),
     onLeaveCancelled: eventProp<(el: Element) => void>()
   },
@@ -115,7 +115,7 @@ export default defineComponent({
 
             emitEvent(props.onBeforeEnter, $el)
           },
-          onEnter($el, done) {
+          onEnter($el) {
             const el = $el as HTMLElement
 
             styleRecord.overflow = el.style.overflow
@@ -136,7 +136,7 @@ export default defineComponent({
               el.style.opacity = styleRecord.opacity!
             }
 
-            emitEvent(props.onEnter, $el, done)
+            emitEvent(props.onEnter, $el)
           },
           onAfterEnter($el) {
             const el = $el as HTMLElement
@@ -147,6 +147,16 @@ export default defineComponent({
             el.style.boxSizing = styleRecord.boxSizing!
 
             emitEvent(props.onAfterEnter, $el)
+          },
+          onEnterCancelled($el) {
+            const el = $el as HTMLElement
+
+            el.style.transition = styleRecord.transition || ''
+            el.style[height] = ''
+            el.style.overflow = styleRecord.overflow!
+            el.style.boxSizing = styleRecord.boxSizing!
+
+            emitEvent(props.onEnterCancelled, $el)
           },
           onBeforeLeave($el) {
             const el = $el as HTMLElement
@@ -164,7 +174,7 @@ export default defineComponent({
 
             emitEvent(props.onBeforeLeave, $el)
           },
-          onLeave($el, done) {
+          onLeave($el) {
             const el = $el as HTMLElement
 
             if (el[scrollHeight] !== 0) {
@@ -183,7 +193,7 @@ export default defineComponent({
               }
             }
 
-            emitEvent(props.onLeave, $el, done)
+            emitEvent(props.onLeave, $el)
           },
           onAfterLeave($el) {
             const el = $el as HTMLElement
@@ -199,6 +209,21 @@ export default defineComponent({
             el.style.opacity = styleRecord.opacity!
 
             emitEvent(props.onAfterLeave, $el)
+          },
+          onLeaveCancelled($el) {
+            const el = $el as HTMLElement
+
+            el.style[height] = ''
+            el.style[paddingTop] = styleRecord.paddingTop!
+            el.style[paddingBottom] = styleRecord.paddingBottom!
+            el.style[marginTop] = styleRecord.marginTop!
+            el.style[marginBottom] = styleRecord.marginBottom!
+            el.style.overflow = styleRecord.overflow!
+            el.style.transition = styleRecord.transition || ''
+            el.style.boxSizing = styleRecord.boxSizing!
+            el.style.opacity = styleRecord.opacity!
+
+            emitEvent(props.onLeaveCancelled, $el)
           }
         },
         {

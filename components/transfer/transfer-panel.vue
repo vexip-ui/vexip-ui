@@ -267,7 +267,7 @@ export default defineComponent({
           }
 
           event.preventDefault()
-        } else if (props.paged && modifier.ctrl && (modifier.left || modifier.right)) {
+        } else if (props.paged && (modifier.left || modifier.right) && event.ctrlKey) {
           handlePageChange(currentPage.value + (modifier.left ? -1 : 1))
           currentHitting.value = 0
           event.preventDefault()

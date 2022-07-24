@@ -70,7 +70,7 @@ export default defineComponent({
         if (modifier.up || modifier.down || modifier.left || modifier.right) {
           event.preventDefault()
 
-          const step = modifier.ctrl ? 10 : modifier.alt ? 0.5 : 2
+          const step = event.ctrlKey ? 10 : event.altKey ? 0.5 : 2
           const sign = modifier.up || modifier.left ? -1 : 1
           const delta = step * sign
 

@@ -1,5 +1,10 @@
 <template>
-  <div ref="viewer" :class="className" :style="style">
+  <div
+    ref="viewer"
+    :class="className"
+    tabindex="0"
+    :style="style"
+  >
     <div ref="container" :class="nh.be('container')" @wheel="handleWheel">
       <div :class="nh.be('content')" :style="contentStyle">
         <div
@@ -17,7 +22,7 @@
     <div :class="toolbarClass" @mouseenter="handleEnterToolbar" @mouseleave="handleLeaveToolbar">
       <template v-for="action in allActions" :key="action.name">
         <template v-if="!getActionProp(action, 'hidden')">
-          <div
+          <button
             :class="{
               [nh.be('action')]: true,
               [nh.bem('action', 'disabled')]: getActionProp(action, 'disabled')
@@ -36,7 +41,7 @@
               :style="getActionProp(action, 'iconStyle')"
               :scale="getActionProp(action, 'iconScale') || 1"
             ></Icon>
-          </div>
+          </button>
           <Divider v-if="getActionProp(action, 'divided')" :vertical="!toolbarVertical"></Divider>
         </template>
       </template>
@@ -68,7 +73,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useMoving, useFullScreen, useSetTimeout } from '@vexip-ui/mixins'
+import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/mixins'
 import { boundRange } from '@vexip-ui/utils'
 import { InternalActionName } from './symbol'
 
@@ -177,6 +182,23 @@ export default defineComponent({
       moving,
       x: currentLeft,
       y: currentTop
+    })
+
+    useModifier({
+      target: viewer,
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down || modifier.left || modifier.right) {
+          event.preventDefault()
+
+          const current = modifier.up || modifier.down ? currentTop : currentLeft
+          const step = modifier.up || modifier.left ? -10 : 10
+
+          current.value += event.ctrlKey ? 5 * step : step
+
+          modifier.resetAll()
+        }
+      }
     })
 
     function getState() {
