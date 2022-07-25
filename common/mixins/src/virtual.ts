@@ -246,6 +246,35 @@ export function useVirtual(options: VirtualOptions) {
     }
   }
 
+  function ensureIndexInView(index: number, behavior?: Behavior) {
+    if (!wrapper.value) return
+
+    const tree = heightTree.value
+    const viewTop = wrapper.value.scrollTop
+    const top = tree.sum(index)
+
+    if (top < viewTop) {
+      scrollToIndex(index, behavior)
+      return
+    }
+
+    const viewHeight = wrapper.value.offsetHeight
+    const viewBottom = viewTop + viewHeight
+    const bottom = tree.sum(index + 1)
+
+    if (bottom > viewBottom) {
+      scrollTo(bottom - viewHeight, behavior)
+    }
+  }
+
+  function ensureKeyInView(key: Key, behavior?: Behavior) {
+    const index = indexMap.value.get(key)
+
+    if (index !== undefined) {
+      ensureIndexInView(index, behavior)
+    }
+  }
+
   return {
     wrapper,
     scrollOffset,
@@ -259,6 +288,8 @@ export function useVirtual(options: VirtualOptions) {
     scrollTo,
     scrollBy,
     scrollToKey,
-    scrollToIndex
+    scrollToIndex,
+    ensureIndexInView,
+    ensureKeyInView
   }
 }
