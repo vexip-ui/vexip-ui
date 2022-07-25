@@ -2,7 +2,7 @@
   <AutoComplete
     v-model:value="value"
     :options="options"
-    style="width: 400px;"
+    style="max-width: 400px;"
     @input="setOptions"
   >
     <template #default="{ option }">

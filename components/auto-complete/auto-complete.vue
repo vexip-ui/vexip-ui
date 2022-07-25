@@ -18,7 +18,7 @@
     :no-suffix="!hasSuffix"
     :placeholder="props.placeholder"
     :options="props.options"
-    :key-config="{ ...props.keyConfig, label: props.keyConfig.value || 'value' }"
+    :key-config="props.keyConfig"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
@@ -61,12 +61,10 @@
       </slot>
     </template>
     <template #default="{ option, index, selected }">
-      <slot
-        :option="option"
-        :index="index"
-        :selected="selected"
-        :handle-select="handleSelect"
-      ></slot>
+      <slot :option="option" :index="index" :selected="selected"></slot>
+    </template>
+    <template #group="{ option, index }">
+      <slot name="group" :option="option" :index="index"></slot>
     </template>
   </Select>
 </template>
@@ -94,7 +92,7 @@ import { isNull } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-import type { OptionKeyConfig, OptionState, RawOption } from '@/components/option'
+import type { SelectKeyConfig, SelectOptionState, SelectRawOption } from '@/components/select'
 
 export default defineComponent({
   name: 'AutoComplete',
@@ -107,7 +105,7 @@ export default defineComponent({
     state: stateProp,
     transfer: booleanStringProp,
     value: [String, Number],
-    options: Array as PropType<RawOption[]>,
+    options: Array as PropType<SelectRawOption[]>,
     filter: {
       type: [Boolean, Function] as PropType<
         | boolean
@@ -128,10 +126,10 @@ export default defineComponent({
     ignoreCase: booleanProp,
     autofocus: booleanProp,
     spellcheck: booleanProp,
-    keyConfig: Object as PropType<Omit<OptionKeyConfig, 'label'>>,
-    onSelect: eventProp<(value: string | number, data: RawOption) => void>(),
+    keyConfig: Object as PropType<Omit<SelectKeyConfig, 'label'>>,
+    onSelect: eventProp<(value: string | number, data: SelectRawOption) => void>(),
     onInput: eventProp<(value: string) => void>(),
-    onChange: eventProp<(value: string | number, data: RawOption) => void>(),
+    onChange: eventProp<(value: string | number, data: SelectRawOption) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
     onEnter: eventProp<(value: string | number) => void>(),
     onClear: eventProp()
@@ -187,8 +185,11 @@ export default defineComponent({
     let lastValue = props.value
     let lastInput = String(lastValue)
 
-    const optionsStates = computed<OptionState[]>(() => {
+    const optionsStates = computed<SelectOptionState[]>(() => {
       return select.value?.optionStates ?? []
+    })
+    const normalOptions = computed(() => {
+      return optionsStates.value.filter(option => !option.group)
     })
     const filteredOptions = computed(() => {
       return optionsStates.value.filter(({ hidden }) => !hidden)
@@ -199,12 +200,31 @@ export default defineComponent({
     const hasSuffix = computed(() => {
       return !!(slots.suffix || props.suffix)
     })
+    const optionParentMap = computed(() => {
+      const options = normalOptions.value
+      const map = new Map<string | number, SelectOptionState>()
+
+      for (let i = 0, len = options.length; i < len; ++i) {
+        const option = options[i]
+
+        if (option.parent) {
+          map.set(option.value, option.parent)
+        }
+      }
+
+      return map
+    })
 
     watch(
       () => props.value,
       value => {
         currentValue.value = value
         lastValue = value
+        lastInput = String(value)
+
+        if (control.value) {
+          control.value.value = String(value)
+        }
       }
     )
     watch(currentIndex, computeHittding)
@@ -225,28 +245,45 @@ export default defineComponent({
             state.hidden = false
           })
         } else {
+          optionsStates.value.forEach(state => {
+            state.hidden = true
+          })
+
           if (typeof props.filter === 'function') {
             const filter = props.filter
 
-            optionsStates.value.forEach(state => {
+            normalOptions.value.forEach(state => {
               state.hidden = !filter(value, state)
             })
           } else {
             if (props.ignoreCase) {
               const ignoreCaseValue = value?.toString().toLocaleLowerCase()
 
-              optionsStates.value.forEach(state => {
+              normalOptions.value.forEach(state => {
                 state.hidden = !state.value
                   ?.toString()
                   .toLocaleLowerCase()
                   .includes(ignoreCaseValue)
               })
             } else {
-              optionsStates.value.forEach(state => {
+              normalOptions.value.forEach(state => {
                 state.hidden = !state.value?.toString().includes(value?.toString())
               })
             }
           }
+
+          const parentMap = optionParentMap.value
+
+          normalOptions.value.forEach(option => {
+            if (!option.hidden && option.parent) {
+              let parent = parentMap.get(option.value) || null
+
+              while (parent && parent.hidden) {
+                parent.hidden = false
+                parent = parent.parent
+              }
+            }
+          })
         }
 
         computeHittding()
@@ -276,7 +313,7 @@ export default defineComponent({
       }
     }
 
-    function handleSelect(value: string | number, data: RawOption) {
+    function handleSelect(value: string | number, data: SelectRawOption) {
       if (isNull(value)) {
         return
       }
@@ -311,7 +348,7 @@ export default defineComponent({
 
     function handleInputChange(event: string | Event) {
       const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
-      let matchedOption: OptionState | undefined
+      let matchedOption: SelectOptionState | undefined
 
       if (props.ignoreCase) {
         const noCaseValue = value.toLocaleLowerCase()
@@ -375,11 +412,23 @@ export default defineComponent({
         event.preventDefault()
         event.stopPropagation()
 
-        currentIndex.value += key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0
-        currentIndex.value = Math.min(
-          Math.max(-1, currentIndex.value),
-          filteredOptions.value.length - 1
-        )
+        const options = filteredOptions.value
+        const length = options.length
+
+        if (!length) return
+
+        const step = key === 'ArrowDown' ? 1 : -1
+
+        let index = (currentIndex.value + step) % length
+        let option = options[index]
+
+        for (let i = 0; (option.disabled || option.group) && i < length; ++i) {
+          index += step
+          index = (index + length) % length
+          option = options[index]
+        }
+
+        currentIndex.value = index
       } else {
         if (['Space', ' '].includes(key)) {
           event.stopPropagation()
