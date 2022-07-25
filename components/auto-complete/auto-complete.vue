@@ -50,7 +50,7 @@
           tabindex="-1"
           @input="handleInput"
           @change="handleInputChange"
-          @keyup.enter="handleEnter"
+          @keydown.enter="handleEnter"
           @keydown="handleKeyDown"
         />
       </slot>
@@ -185,33 +185,13 @@ export default defineComponent({
     let changed = false
     // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
+    let lastInput = String(lastValue)
 
     const optionsStates = computed<OptionState[]>(() => {
       return select.value?.optionStates ?? []
     })
     const filteredOptions = computed(() => {
       return optionsStates.value.filter(({ hidden }) => !hidden)
-    })
-    const inputValue = computed(() => {
-      const hittingOption = filteredOptions.value[currentIndex.value]
-
-      if (hittingOption) {
-        return String(hittingOption.value)
-      } else if (control.value?.value) {
-        return control.value.value
-      } else if (select.value) {
-        if (select.value.currentVisible) {
-          return currentValue.value?.toString()
-        }
-
-        const currentOption = filteredOptions.value.find(
-          ({ value }) => value === currentValue.value
-        )
-
-        return String(currentOption ? currentOption.value : currentValue.value)
-      }
-
-      return String(currentValue.value)
     })
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
@@ -290,6 +270,10 @@ export default defineComponent({
           state.hitting = false
         }
       })
+
+      if (control.value && currentIndex.value < 0) {
+        control.value.value = lastInput
+      }
     }
 
     function handleSelect(value: string | number, data: RawOption) {
@@ -316,6 +300,7 @@ export default defineComponent({
       visible.value = !props.dropDisabled
       currentValue.value = value
       changed = true
+      lastInput = value
 
       if (currentIndex.value !== -1) {
         currentIndex.value = 0
@@ -351,6 +336,7 @@ export default defineComponent({
 
       changed = false
       lastValue = currentValue.value
+      lastInput = String(lastValue)
 
       const option = optionsStates.value.find(option => option.value === lastValue)
 
@@ -360,7 +346,11 @@ export default defineComponent({
       validateField()
 
       visible.value = false
-      control.value?.blur()
+
+      if (control.value) {
+        control.value.value = String(lastValue)
+        control.value.blur()
+      }
     }
 
     function handleToggle() {
@@ -442,7 +432,6 @@ export default defineComponent({
       currentIndex,
       visible,
 
-      inputValue,
       hasPrefix,
       hasSuffix,
 
