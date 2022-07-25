@@ -1,3 +1,39 @@
+# [2.0.0-beta.16](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2022-07-25)
+
+### Bug Fixes
+
+- **auto-complete:** correct input value when enter without hitting ([2e9fb90](https://github.com/qmhc/vexip-ui/commit/2e9fb9046de5e96029a784568df9a62e787885f6))
+- **collapse:** infinite loop when toggle in accordion mode ([973c522](https://github.com/qmhc/vexip-ui/commit/973c522be26f1b40621219c53f40bedff790d2eb)), closes [#50](https://github.com/qmhc/vexip-ui/issues/50)
+- **contextmenu:** adjust promise returns to array ([165681b](https://github.com/qmhc/vexip-ui/commit/165681b37cf5bf19ae840c935e9eb1667bdfe55f))
+- **mixins:** useModifier support auto reset when blur ([0f6a993](https://github.com/qmhc/vexip-ui/commit/0f6a993096fd81b5d6254137247463fc889f44fd))
+- **mixins:** useModifier unable to read activeKeys ([5c36e65](https://github.com/qmhc/vexip-ui/commit/5c36e658b97914f8d09c3aec39b8768329049ff1))
+- **mixins:** useVirtual implement scroll api methods ([012258a](https://github.com/qmhc/vexip-ui/commit/012258a61bf3965d43e36a635b597e819a6e96b0))
+- **transfer:** correct panel tab index ([a27aa27](https://github.com/qmhc/vexip-ui/commit/a27aa27dca215b3b24fe627eef1d756133b9b9ae))
+- **transfer:** follow hitting option when using keyboard ([75d7284](https://github.com/qmhc/vexip-ui/commit/75d72843da49d62a0aaef38179678bc8a1dae6bf))
+- **virtual-list:** auto refresh when item count change ([2860b32](https://github.com/qmhc/vexip-ui/commit/2860b329ac451d7ce8a2699540aa3715e27e3872))
+- **virtual-list:** expose scroll api methods ([5010651](https://github.com/qmhc/vexip-ui/commit/50106515154b9eae8ccb02896b1275da4b7765ef))
+- **virtual-list:** normalize items tag styles ([5f8638d](https://github.com/qmhc/vexip-ui/commit/5f8638d77742eb49ce9fde42963795d5c49f1909))
+
+### Code Refactoring
+
+- `pane` rename to `panel` ([9a150f2](https://github.com/qmhc/vexip-ui/commit/9a150f28f4c614c85000198974043819440f97b3))
+
+### Features
+
+- **checkbox:** add tab-index prop ([7b574f2](https://github.com/qmhc/vexip-ui/commit/7b574f243be9d957c61acee6011b50b3ac66dded))
+- **form:** support disable all controls under form ([998c219](https://github.com/qmhc/vexip-ui/commit/998c2199504bd3637e1053f04f6ba4aa7818eba6))
+- **menu:** support accessible keyboard ([ede2772](https://github.com/qmhc/vexip-ui/commit/ede2772a41b523f335670217d364a93505b21071))
+- **native-scroll:** add wrapper-tag prop ([700e07d](https://github.com/qmhc/vexip-ui/commit/700e07d7b8df63f440ef480478298643c9aa4893))
+- **scroll:** add wrapper-tag prop ([ad364e6](https://github.com/qmhc/vexip-ui/commit/ad364e685203a6e37f00b679fdc49f39c2bfcc32))
+- support accessibility for components ([#97](https://github.com/qmhc/vexip-ui/issues/97)) ([51d5556](https://github.com/qmhc/vexip-ui/commit/51d555612d72ae495569cfbf56472d6764ac3dce))
+- **transfer:** add Transfer component ([#96](https://github.com/qmhc/vexip-ui/issues/96)) ([454e05b](https://github.com/qmhc/vexip-ui/commit/454e05b937106767522f83c7d2fee16095eda3ca))
+- **utils:** add dom utils ([b461c9a](https://github.com/qmhc/vexip-ui/commit/b461c9a133365f3c4fa786bc669ddabd18c05724))
+
+### BREAKING CHANGES
+
+- CollapsePane and TabPane deprecated, using
+  CollapsePanel and TabPanel instead.
+
 # [2.0.0-beta.15](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2022-07-18)
 
 ### Bug Fixes
