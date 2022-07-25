@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="style">
+  <div :class="className" role="group" :style="style">
     <div v-for="(option, index) in renderAvatars" :key="index" :class="nh.be('item')">
       <slot :option="option" :index="index">
         <Avatar

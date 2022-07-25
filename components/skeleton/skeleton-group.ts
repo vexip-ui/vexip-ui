@@ -35,7 +35,8 @@ export default defineComponent({
         return h(
           typeof props.tag === 'string' ? props.tag : 'div',
           {
-            class: nh.b()
+            class: nh.b(),
+            role: 'group'
           },
           {
             default: () => slots.default?.()

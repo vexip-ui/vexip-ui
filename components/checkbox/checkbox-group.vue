@@ -1,5 +1,5 @@
 <template>
-  <div :id="idFor" :class="className">
+  <div :id="idFor" :class="className" role="group">
     <slot>
       <template v-for="(item, index) in props.options" :key="index">
         <Checkbox v-if="isObject(item)" :value="item.value">
