@@ -11,7 +11,6 @@ import {
   reactive,
   toRef,
   computed,
-  watch,
   watchEffect,
   provide,
   onMounted,
@@ -88,12 +87,6 @@ export default defineComponent({
       currentExpanded.value = Array.isArray(expanded) ? Array.from(expanded) : [expanded]
     })
 
-    watch(currentExpanded, value => {
-      updateItemExpanded()
-      emitEvent(props.onChange, value)
-      emit('update:expanded', value)
-    })
-
     onMounted(() => {
       nextTick(updateItemExpanded)
     })
@@ -126,7 +119,13 @@ export default defineComponent({
         }
       }
 
+      emitChangeEvent()
       updateItemExpanded()
+    }
+
+    function emitChangeEvent() {
+      emitEvent(props.onChange, currentExpanded.value)
+      emit('update:expanded', currentExpanded.value)
     }
 
     function updateItemExpanded() {
