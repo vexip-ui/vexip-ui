@@ -99,12 +99,12 @@
             <template #default="{ item: option, index }">
               <li
                 v-if="option.group"
-                :class="['vxp-option-vars', nh.be('group')]"
+                :class="[nh.ns('option-vars'), nh.be('group')]"
                 :title="option.label"
               >
                 <slot name="group" :option="option" :index="index">
                   <div
-                    :class="['vxp-option-vars', nh.be('label'), nh.bem('label', 'group')]"
+                    :class="[nh.be('label'), nh.bem('label', 'group')]"
                     :style="{ paddingLeft: `${option.depth * 6}px` }"
                   >
                     {{ option.label }}
@@ -250,6 +250,7 @@ export default defineComponent({
     const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<SelectValue>(() => reference.value?.focus())
 
+    const nh = useNameHelper('select')
     const props = useProps('select', _props, {
       size: createSizeProp(),
       state: createStateProp(state),
@@ -262,7 +263,7 @@ export default defineComponent({
         static: true
       },
       disabled: () => disabled.value,
-      transitionName: 'vxp-drop',
+      transitionName: () => nh.ns('drop'),
       outsideClose: true,
       placeholder: null,
       prefix: null,
@@ -289,7 +290,6 @@ export default defineComponent({
       keyConfig: () => ({})
     })
 
-    const nh = useNameHelper('select')
     const locale = useLocale('select')
     const currentVisible = ref(props.visible)
     const currentLabels = ref<string[]>([])
@@ -460,7 +460,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [nh.b()]: true,
-        'vxp-input-vars': true,
+        [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
         [nh.bm('multiple')]: props.multiple
       }

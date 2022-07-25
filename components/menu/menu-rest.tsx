@@ -146,7 +146,7 @@ export default defineComponent({
             </Icon>
           </div>
           <Portal to={transferTo.value}>
-            <Transition name={'vxp-drop'}>
+            <Transition name={nh.ns('drop')}>
               <div
                 v-show={groupExpanded.value}
                 ref={popper}

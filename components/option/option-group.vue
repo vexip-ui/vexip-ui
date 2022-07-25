@@ -2,7 +2,7 @@
   <li
     :class="{
       [nh.b()]: true,
-      'vxp-option-vars': true,
+      [nh.ns('option-vars')]: true,
       [nh.bm('divided')]: divided
     }"
   >

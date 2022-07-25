@@ -61,6 +61,7 @@ export default defineComponent({
   },
   emits: ['update:active'],
   setup(_props, { emit }) {
+    const nh = useNameHelper('anchor')
     const props = useProps('anchor', _props, {
       active: {
         default: '',
@@ -73,10 +74,9 @@ export default defineComponent({
       offset: 8,
       marker: false,
       scrollDuration: 500,
-      markerTransition: 'vxp-fade'
+      markerTransition: () => nh.ns('fade')
     })
 
-    const nh = useNameHelper('anchor')
     const currentActive = ref(props.active)
     const animating = ref(false)
     const markerTop = ref(0)
@@ -169,7 +169,7 @@ export default defineComponent({
             const name = _container.type?.name
 
             if (name === 'Scroll' || name === 'NativeScroll') {
-              scroller = _container.proxy as ScrollType
+              scroller = _container.proxy as any as ScrollType
               break
             }
 

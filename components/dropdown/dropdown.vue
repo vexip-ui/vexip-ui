@@ -93,6 +93,7 @@ export default defineComponent({
   },
   emits: ['update:visible'],
   setup(_props, { emit }) {
+    const nh = useNameHelper('dropdown')
     const props = useProps('dropdown', _props, {
       visible: {
         default: false,
@@ -111,7 +112,7 @@ export default defineComponent({
         default: null,
         static: true
       },
-      transitionName: 'vxp-drop',
+      transitionName: () => nh.ns('drop'),
       transfer: false,
       dropClass: null,
       appear: false,
@@ -120,7 +121,6 @@ export default defineComponent({
 
     const parentState = inject(DROPDOWN_STATE, null)
 
-    const nh = useNameHelper('dropdown')
     const isNested = !!parentState
     const label = toRef(props, 'label')
     const placement = ref(props.placement)

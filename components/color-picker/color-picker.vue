@@ -250,6 +250,7 @@ export default defineComponent({
     const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<Color | null>(() => reference.value?.focus())
 
+    const nh = useNameHelper('color-picker')
     const props = useProps('colorPicker', _props, {
       size: createSizeProp(),
       state: createStateProp(state),
@@ -266,7 +267,7 @@ export default defineComponent({
       },
       alpha: false,
       disabled: () => disabled.value,
-      transitionName: 'vxp-drop',
+      transitionName: () => nh.ns('drop'),
       noInput: false,
       shortcut: false,
       placement: {
@@ -280,7 +281,6 @@ export default defineComponent({
       confirmText: null
     })
 
-    const nh = useNameHelper('color-picker')
     const isEmpty = ref(true)
     const currentVisible = ref(props.visible)
     const currentValue = ref<HSVColor>(null!)
@@ -330,7 +330,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [nh.b()]: true,
-        'vxp-input-vars': true,
+        [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
         [nh.bm('empty')]: isEmpty.value && !currentVisible.value,
         [nh.bm('focused')]: currentVisible.value,

@@ -81,6 +81,7 @@ export default defineComponent({
     action: booleanProp
   },
   setup(_props, { slots }) {
+    const nh = useNameHelper('form')
     const props = useProps('formItem', _props, {
       label: {
         default: '',
@@ -94,7 +95,7 @@ export default defineComponent({
       labelWidth: null,
       required: false,
       htmlFor: null,
-      errorTransition: 'vxp-fade',
+      errorTransition: () => nh.ns('fade'),
       defaultValue: null,
       hideErrorTip: false,
       validateAll: null,
@@ -104,8 +105,6 @@ export default defineComponent({
     })
 
     const formProps = inject(FORM_PROPS, {})
-
-    const nh = useNameHelper('form')
     const emitter = createEventEmitter()
 
     const { isRequired, allRules } = useRules(props, formProps)

@@ -139,6 +139,7 @@ export default defineComponent({
     const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<string | number>(() => control.value?.focus())
 
+    const nh = useNameHelper('auto-complete')
     const props = useProps('autoComplete', _props, {
       size: createSizeProp(),
       state: createStateProp(state),
@@ -158,7 +159,7 @@ export default defineComponent({
       suffixColor: '',
       placeholder: null,
       disabled: () => disabled.value,
-      transitionName: 'vxp-drop',
+      transitionName: () => nh.ns('fade'),
       dropDisabled: false,
       placement: {
         default: 'bottom',
@@ -170,8 +171,6 @@ export default defineComponent({
       spellcheck: false,
       keyConfig: () => ({})
     })
-
-    const nh = useNameHelper('auto-complete')
 
     const currentValue = ref(props.value)
     const currentIndex = ref(-1)

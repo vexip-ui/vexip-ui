@@ -32,7 +32,7 @@
         >
           <Option
             :class="{
-              'vxp-option--error': item.error
+              [nh.ns('option--error')]: item.error
             }"
             :value="item.value"
             :label="item.label"

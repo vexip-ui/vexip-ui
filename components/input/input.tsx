@@ -395,7 +395,7 @@ export default defineComponent({
             onKeyup={handleKeyUp}
           />
           {hasPrefix.value && createAffixElement('prefix')}
-          <Transition name={'vxp-fade'}>{createSuffixElement()}</Transition>
+          <Transition name={nh.ns('fade')}>{createSuffixElement()}</Transition>
           {props.maxLength
             ? (
             <div class={nh.be('count')} style={countStyle.value}>

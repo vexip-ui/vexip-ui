@@ -236,7 +236,7 @@ const MenuItem = defineComponent({
     const tooltipTheme = computed(() => (menuState ? menuState.tooltipTheme : 'dark'))
     const isHorizontal = computed(() => menuState?.horizontal && !parentItemState)
     const transition = computed(() => {
-      return props.transitionName ?? isHorizontal.value ? 'vxp-drop' : 'vxp-zoom'
+      return props.transitionName ?? isHorizontal.value ? nh.ns('drop') : nh.ns('zoom')
     })
     const dropTrigger = computed(() => props.trigger || menuState?.trigger || 'hover')
 

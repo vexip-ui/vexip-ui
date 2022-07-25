@@ -124,7 +124,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [nh.b()]: true,
-        'vxp-avatar-vars': true,
+        [nh.ns('avatar-vars')]: true,
         [nh.bm(props.size)]: typeof props.size !== 'number' && props.size !== 'default',
         [nh.bm('circle')]: props.circle,
         [nh.bm('vertical')]: props.vertical

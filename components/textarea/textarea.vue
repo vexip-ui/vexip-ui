@@ -101,7 +101,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [nh.b()]: true,
-        'vxp-input-vars': true,
+        [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
         [nh.bm('focused')]: focused.value,
         [nh.bm('disabled')]: props.disabled,

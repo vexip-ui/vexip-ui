@@ -212,6 +212,7 @@ export default defineComponent({
     const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<Dateable | Dateable[]>(() => reference.value?.focus())
 
+    const nh = useNameHelper('date-picker')
     const props = useProps('datePicker', _props, {
       size: createSizeProp(),
       state: createStateProp(state),
@@ -252,7 +253,7 @@ export default defineComponent({
       suffix: null,
       suffixColor: '',
       disabled: () => disabled.value,
-      transitionName: 'vxp-drop',
+      transitionName: () => nh.ns('drop'),
       confirmText: null,
       cancelText: null,
       today: {
@@ -262,7 +263,6 @@ export default defineComponent({
       isRange: false
     })
 
-    const nh = useNameHelper('date-picker')
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const currentVisible = ref(props.visible)

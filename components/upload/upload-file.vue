@@ -218,7 +218,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('upload')
-    const transitionName = 'vxp-fade'
+    const transitionName = computed(() => nh.ns('fade'))
 
     const useIconRenderer = computed(() => typeof props.iconRenderer === 'function')
     const fileName = computed(() => props.file.path || props.file.name)

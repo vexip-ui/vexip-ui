@@ -76,6 +76,7 @@ export default defineComponent({
   },
   emits: ['update:active'],
   setup(_props, { emit }) {
+    const nh = useNameHelper('masker')
     const props = useProps('masker', _props, {
       active: {
         default: false,
@@ -83,8 +84,8 @@ export default defineComponent({
       },
       closable: false,
       inner: false,
-      maskTransition: 'vxp-fade',
-      transitionName: 'vxp-fade',
+      maskTransition: () => nh.ns('fade'),
+      transitionName: () => nh.ns('fade'),
       disabled: false,
       onBeforeClose: {
         default: null,
@@ -94,7 +95,6 @@ export default defineComponent({
       autoRemove: false
     })
 
-    const nh = useNameHelper('masker')
     const currentActive = ref(props.active)
     const wrapShow = ref(props.active)
 

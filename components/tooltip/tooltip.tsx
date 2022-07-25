@@ -67,6 +67,7 @@ export default defineComponent({
   },
   emits: ['update:visible'],
   setup(_props, { attrs, slots, emit, expose }) {
+    const nh = useNameHelper('tooltip')
     const props = useProps('tooltip', _props, {
       trigger: {
         default: 'hover' as ToopTipTrigger,
@@ -74,7 +75,7 @@ export default defineComponent({
       },
       wrapper: false,
       noArrow: false,
-      transitionName: 'vxp-fade',
+      transitionName: () => nh.ns('fade'),
       visible: false,
       placement: {
         default: 'top',
@@ -99,7 +100,6 @@ export default defineComponent({
       onOutsideClose: null
     })
 
-    const nh = useNameHelper('tooltip')
     const placement = toRef(props, 'placement')
     const currentVisible = ref(props.visible)
     const rendering = ref(props.visible)
@@ -130,7 +130,7 @@ export default defineComponent({
       return originalTrigger.value
     })
     const trigger = computed(() => {
-      return reference.value instanceof Element ? reference.value : null
+      return reference.value instanceof HTMLElement ? reference.value : null
     })
 
     useClickOutside(handleClickOutside, originalTrigger)

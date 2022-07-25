@@ -242,6 +242,7 @@ export default defineComponent({
     const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<string | string[]>(() => reference.value?.focus())
 
+    const nh = useNameHelper('time-picker')
     const props = useProps('timePicker', _props, {
       size: createSizeProp(),
       state: createStateProp(state),
@@ -275,7 +276,7 @@ export default defineComponent({
       shortcuts: () => [],
       isRange: false,
       disabled: () => disabled.value,
-      transitionName: 'vxp-drop',
+      transitionName: () => nh.ns('drop'),
       confirmText: null,
       cancelText: null,
       ctrlSteps: () => [5, 5, 5],
@@ -286,7 +287,6 @@ export default defineComponent({
       exchange: false
     })
 
-    const nh = useNameHelper('time-picker')
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const currentVisible = ref(props.visible)

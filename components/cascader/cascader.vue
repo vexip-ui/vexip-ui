@@ -275,6 +275,7 @@ export default defineComponent({
     const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<CascaderValue>(() => reference.value?.focus())
 
+    const nh = useNameHelper('cascader')
     const props = useProps('cascader', _props, {
       size: createSizeProp(),
       state: createStateProp(state),
@@ -306,7 +307,7 @@ export default defineComponent({
       transfer: false,
       staticSuffix: false,
       noSuffix: false,
-      transitionName: 'vxp-drop',
+      transitionName: () => nh.ns('drop'),
       outsideClose: true,
       keyConfig: () => ({}),
       separator: {
@@ -326,7 +327,6 @@ export default defineComponent({
       emptyText: null
     })
 
-    const nh = useNameHelper('cascader')
     const currentVisible = ref(props.visible)
     const currentValues = ref<string[]>([])
     const currentLabels = ref<string[]>([])
@@ -423,7 +423,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [nh.b()]: true,
-        'vxp-input-vars': true,
+        [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
         [nh.bm('multiple')]: props.multiple,
         [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0

@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, toRef, inject } from 'vue'
-import { eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
 import { useLabel } from './mixins'
 import { SELECT_HANDLER } from './symbol'
 
@@ -49,7 +49,7 @@ export default defineComponent({
   setup(props) {
     const parentSelectHandler = inject(SELECT_HANDLER, null)
 
-    const baseClass = 'vxp-dropdown__item'
+    const nh = useNameHelper('dropdown')
     const wrapper = ref(null)
     const label = toRef(props, 'label')
     const isReference = ref(props.reference)
@@ -57,6 +57,8 @@ export default defineComponent({
     const currentLabel = useLabel(label, wrapper)
 
     const className = computed(() => {
+      const baseClass = nh.be('item')
+
       return {
         [baseClass]: true,
         [`${baseClass}--disabled`]: props.disabled,

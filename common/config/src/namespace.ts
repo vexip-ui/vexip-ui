@@ -29,14 +29,37 @@ export function useNamespace() {
 }
 
 export function useNameHelper(block: string, namespace: Ref<string> | string = useNamespace()) {
+  /**
+   * @returns `${namespace}-${block}`
+   */
   const b = () => `${unref(namespace)}-${block}`
+  /**
+   * @returns `${namespace}-${block}__${element}`
+   */
   const be = (element: string) => `${b()}__${element}`
+  /**
+   * @returns `${namespace}-${block}--${modifier}`
+   */
   const bm = (modifier: string | number) => `${b()}--${modifier}`
+  /**
+   * @returns `${namespace}-${block}__${element}--${modifier}`
+   */
   const bem = (element: string, modifier: string | number) => `${b()}__${element}--${modifier}`
+  /**
+   * @returns `${namespace}-${block}-${suffix}`
+   */
   const bs = (suffix: string) => `${b()}-${suffix}`
+  /**
+   * @returns `${namespace}-${suffix}`
+   */
   const ns = (suffix: string) => `${unref(namespace)}-${suffix}`
-
+  /**
+   * @returns `${namespace}-${block}-${name}`
+   */
   const cv = (name: string) => `--${b()}-${name}`
+  /**
+   * @returns a map that is transformed origin style map's key to cv(key)
+   */
   const cvm = (map: Record<string, string>, style: Record<string, string> = {}) => {
     Object.keys(map).forEach(name => {
       style[cv(name)] = map[name]
@@ -52,7 +75,6 @@ export function useNameHelper(block: string, namespace: Ref<string> | string = u
     bem,
     bs,
     ns,
-
     cv,
     cvm
   }

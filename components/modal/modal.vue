@@ -99,6 +99,10 @@ const positionType = [Number, String]
 const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
+const positionProp = {
+  default: 'auto',
+  validator: positionValidator
+}
 
 let idCount = 0
 
@@ -151,36 +155,22 @@ export default defineComponent({
   },
   emits: ['update:active'],
   setup(_props, { slots, emit }) {
+    const nh = useNameHelper('modal')
     const props = useProps('modal', _props, {
       transfer: false,
       active: {
         default: false,
         static: true
       },
-      width: {
-        default: 'auto',
-        validator: positionValidator
-      },
-      height: {
-        default: 'auto',
-        validator: positionValidator
-      },
+      width: positionProp,
+      height: positionProp,
       top: {
         default: 100,
         validator: positionValidator
       },
-      left: {
-        default: 'auto',
-        validator: positionValidator
-      },
-      right: {
-        default: 'auto',
-        validator: positionValidator
-      },
-      bottom: {
-        default: 'auto',
-        validator: positionValidator
-      },
+      left: positionProp,
+      right: positionProp,
+      bottom: positionProp,
       title: '',
       closable: true,
       inner: false,
@@ -197,13 +187,12 @@ export default defineComponent({
       loading: false,
       minWidth: 150,
       minHeight: 120,
-      transitionName: 'vxp-ease',
+      transitionName: () => nh.ns('ease'),
       confirmText: null,
       cancelText: null,
       autoRemove: false
     })
 
-    const nh = useNameHelper('modal')
     const currentActive = ref(props.active)
     const currentTop = ref(toNumber(props.top))
     const currentLeft = ref(toNumber(props.left))
