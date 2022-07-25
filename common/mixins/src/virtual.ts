@@ -151,7 +151,6 @@ export function useVirtual(options: VirtualOptions) {
 
   function handleScroll() {
     nextFrameOnce(syncScrollOffset)
-    // typeof onScroll === 'function' && onScroll(event)
   }
 
   function handleResize(entry: ResizeObserverEntry) {
@@ -163,7 +162,6 @@ export function useVirtual(options: VirtualOptions) {
     }
 
     visibleHeight.value = entry.contentRect.height
-    // typeof onResize === 'function' && onResize(entry)
   }
 
   function handleItemResize(key: Key, entry: ResizeObserverEntry) {
@@ -205,6 +203,8 @@ export function useVirtual(options: VirtualOptions) {
       if (wrapper.value.scrollTop > prevTop) {
         wrapper.value.scrollBy(0, delta)
       }
+
+      scrollOffset.value = wrapper.value.scrollTop
     }
   }
 
