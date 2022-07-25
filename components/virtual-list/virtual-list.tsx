@@ -70,7 +70,9 @@ export default defineComponent({
       scrollTo,
       scrollBy,
       scrollToKey,
-      scrollToIndex
+      scrollToIndex,
+      ensureIndexInView,
+      ensureKeyInView
     } = useVirtual({
       items,
       itemSize,
@@ -90,6 +92,8 @@ export default defineComponent({
       scrollBy,
       scrollToKey,
       scrollToIndex,
+      ensureIndexInView,
+      ensureKeyInView,
       refresh
     })
 
