@@ -37,7 +37,7 @@ export default defineConfig(({ command }) => {
             ]
           : [])
       ],
-      dedupe: useServer ? ['../components'] : []
+      dedupe: useServer ? ['../components', 'vue'] : ['vue']
     },
     server: {
       port: 9000,
