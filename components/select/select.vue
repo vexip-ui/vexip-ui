@@ -97,7 +97,11 @@
             }"
           >
             <template #default="{ item: option, index }">
-              <li v-if="option.group" :class="['vxp-option-vars', nh.be('group')]">
+              <li
+                v-if="option.group"
+                :class="['vxp-option-vars', nh.be('group')]"
+                :title="option.label"
+              >
                 <slot name="group" :option="option" :index="index">
                   <div
                     :class="['vxp-option-vars', nh.be('label'), nh.bem('label', 'group')]"
