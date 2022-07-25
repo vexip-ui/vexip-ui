@@ -2,8 +2,8 @@
 
 @use './design' as *;
 
-$calendar-pane: () !default;
-$calendar-pane: map.merge(
+$calendar-panel: () !default;
+$calendar-panel: map.merge(
   (
     index-color-hover: get-css-var('content-color-base'),
     index-color-selected: get-css-var('color-white'),
@@ -30,15 +30,15 @@ $calendar-pane: map.merge(
     range-bg-color: get-css-var('color-primary-opacity-8'),
     range-opacity: 60%
   ),
-  $calendar-pane
+  $calendar-panel
 );
 
 .#{$namespace}-calendar {
   &-vars {
-    @include define-preset-values('calendar', $calendar-pane);
+    @include define-preset-values('calendar', $calendar-panel);
   }
 
-  &__pane {
+  &__panel {
     @include basis;
 
     display: flex;

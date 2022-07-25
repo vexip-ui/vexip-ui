@@ -95,7 +95,7 @@
           :class="[nh.be('popper'), nh.bs('vars')]"
           @click.stop="handleFocused"
         >
-          <div :class="nh.be('pane')">
+          <div :class="nh.be('panel')">
             <div v-if="props.shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
               <div
                 v-for="(item, index) in props.shortcuts"

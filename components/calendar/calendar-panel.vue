@@ -1,5 +1,5 @@
 <template>
-  <div :class="[nh.be('pane'), nh.bs('vars')]">
+  <div :class="[nh.be('panel'), nh.bs('vars')]">
     <slot name="header"></slot>
     <div :class="[nh.be('row'), nh.bem('row', 'week')]">
       <div v-for="week in 7" :key="week" :class="[nh.be('cell'), nh.be('cell-week')]">
@@ -80,7 +80,7 @@ import type { Dateable } from '@vexip-ui/utils'
 import type { WeekIndex } from './symbol'
 
 export default defineComponent({
-  name: 'CalendarPane',
+  name: 'CalendarPanel',
   props: {
     // 选中的日期
     value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,

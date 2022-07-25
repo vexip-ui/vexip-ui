@@ -1,14 +1,14 @@
 <template>
   <Tabs v-model:active="active">
-    <TabPane label="标签页1">
+    <TabPanel label="标签页1">
       <p>标签页一的内容。</p>
-    </TabPane>
-    <TabPane label="标签页2">
+    </TabPanel>
+    <TabPanel label="标签页2">
       <p>标签页二的内容。</p>
-    </TabPane>
-    <TabPane label="标签页3">
+    </TabPanel>
+    <TabPanel label="标签页3">
       <p>标签页三的内容。</p>
-    </TabPane>
+    </TabPanel>
   </Tabs>
 </template>
 

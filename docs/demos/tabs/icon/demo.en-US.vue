@@ -1,27 +1,27 @@
 <template>
   <Tabs>
-    <TabPane label="Tab 1">
+    <TabPanel label="Tab 1">
       <p>Some content for Tab 1.</p>
-    </TabPane>
-    <TabPane label="Tab 2" :icon="ChartArea">
+    </TabPanel>
+    <TabPanel label="Tab 2" :icon="ChartArea">
       <p>Some content for Tab 2.</p>
-    </TabPane>
-    <TabPane label="Tab 3">
+    </TabPanel>
+    <TabPanel label="Tab 3">
       <p>Some content for Tab 3.</p>
-    </TabPane>
+    </TabPanel>
   </Tabs>
   <br />
   <br />
   <Tabs card>
-    <TabPane label="Tab 1">
+    <TabPanel label="Tab 1">
       <p>Some content for Tab 1.</p>
-    </TabPane>
-    <TabPane label="Tab 2" :icon="ChartArea">
+    </TabPanel>
+    <TabPanel label="Tab 2" :icon="ChartArea">
       <p>Some content for Tab 2.</p>
-    </TabPane>
-    <TabPane label="Tab 3">
+    </TabPanel>
+    <TabPanel label="Tab 3">
       <p>Some content for Tab 3.</p>
-    </TabPane>
+    </TabPanel>
   </Tabs>
 </template>
 

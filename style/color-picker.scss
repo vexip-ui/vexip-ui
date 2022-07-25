@@ -97,7 +97,7 @@ $color-picker: map.merge(
     padding: 5px 0;
   }
 
-  &__pane {
+  &__panel {
     width: 270px;
     background-color: get-css-var('color-picker-pane-bg-color');
     border-radius: get-css-var('color-picker-pane-radius');

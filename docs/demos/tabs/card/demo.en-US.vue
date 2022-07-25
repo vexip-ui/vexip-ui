@@ -1,14 +1,14 @@
 <template>
   <Tabs v-model:active="active" card>
-    <TabPane label="Tab 1">
+    <TabPanel label="Tab 1">
       <p>Some content for Tab 1.</p>
-    </TabPane>
-    <TabPane label="Tab 2">
+    </TabPanel>
+    <TabPanel label="Tab 2">
       <p>Some content for Tab 2.</p>
-    </TabPane>
-    <TabPane label="Tab 3">
+    </TabPanel>
+    <TabPanel label="Tab 3">
       <p>Some content for Tab 3.</p>
-    </TabPane>
+    </TabPanel>
   </Tabs>
 </template>
 

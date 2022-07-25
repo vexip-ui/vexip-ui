@@ -1,17 +1,17 @@
 <template>
   <Collapse v-model:expanded="expanded" arrow-type="left">
-    <CollapsePane title="Panel 1">
+    <CollapsePanel title="Panel 1">
       <p>Some content to fill</p>
       <p>Some content to fill</p>
-    </CollapsePane>
-    <CollapsePane title="Panel 2">
+    </CollapsePanel>
+    <CollapsePanel title="Panel 2">
       <p>Some content to fill</p>
       <p>Some content to fill</p>
-    </CollapsePane>
-    <CollapsePane title="Panel 3">
+    </CollapsePanel>
+    <CollapsePanel title="Panel 3">
       <p>Some content to fill</p>
       <p>Some content to fill</p>
-    </CollapsePane>
+    </CollapsePanel>
   </Collapse>
 </template>
 

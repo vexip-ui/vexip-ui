@@ -125,7 +125,7 @@
             }"
           >
             <template v-if="optionsList[0] && optionsList[0].length">
-              <CascaderPane
+              <CascaderPanel
                 v-for="(items, index) in optionsList"
                 :key="index"
                 :ref="(panel: any) => panel && panelElList.push(panel)"
@@ -150,7 +150,7 @@
                 <template #label="payload">
                   <slot name="label" v-bind="payload"></slot>
                 </template>
-              </CascaderPane>
+              </CascaderPanel>
             </template>
             <div v-else :class="nh.be('empty')" :style="{ width: `${selectorWidth}px` }">
               <slot name="empty">
@@ -177,7 +177,7 @@ import {
   onBeforeUpdate,
   nextTick
 } from 'vue'
-import CascaderPane from './cascader-pane.vue'
+import CascaderPanel from './cascader-panel.vue'
 import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
 import { Portal } from '@/components/portal'
@@ -222,7 +222,7 @@ const defaultKeyConfig: Required<OptionKeyConfig> = {
 export default defineComponent({
   name: 'Cascader',
   components: {
-    CascaderPane,
+    CascaderPanel,
     Icon,
     NativeScroll,
     Portal,
@@ -415,7 +415,7 @@ export default defineComponent({
     const locale = useLocale('select')
     const tagWrapper = ref<HTMLElement | null>(null)
     const tagCounter = ref<InstanceType<typeof Tag> | null>(null)
-    const panelElList = ref<InstanceType<typeof CascaderPane>[]>([])
+    const panelElList = ref<InstanceType<typeof CascaderPanel>[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)
     const selectorWidth = ref(0)

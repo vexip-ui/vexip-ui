@@ -51,7 +51,7 @@
           @keydown.space="handleSpaceDown"
           @keydown.escape="handleEscDown"
         >
-          <div :class="nh.be('pane')">
+          <div :class="nh.be('panel')">
             <div :class="nh.be('section')">
               <ColorPalette
                 ref="palette"

@@ -1,17 +1,17 @@
 <template>
-  <CollapsePane title="独立面板一" arrow-type="left">
+  <CollapsePanel title="独立面板一" arrow-type="left">
     <p>一些内容一些内容一些内容</p>
     <p>一些内容一些内容一些内容</p>
-  </CollapsePane>
+  </CollapsePanel>
   <br />
-  <CollapsePane card>
+  <CollapsePanel card>
     <template #title>
       <Icon><ChartLine></ChartLine></Icon>
       独立面板二
     </template>
     <p>一些内容一些内容一些内容</p>
     <p>一些内容一些内容一些内容</p>
-  </CollapsePane>
+  </CollapsePanel>
 </template>
 
 <script setup lang="ts">
@@ -19,7 +19,7 @@ import { ChartLine } from '@vexip-ui/icons'
 </script>
 
 <style scoped>
-.vxp-collapse__pane {
+.vxp-collapse__panel {
   max-width: 500px;
 }
 </style>

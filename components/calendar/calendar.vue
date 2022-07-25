@@ -1,5 +1,5 @@
 <template>
-  <CalendarPane
+  <CalendarPanel
     v-model:value="calendarValue"
     :class="nh.b()"
     :year="calendarYear"
@@ -78,7 +78,7 @@
         </div>
       </div>
     </template>
-  </CalendarPane>
+  </CalendarPanel>
 </template>
 
 <script lang="ts">
@@ -86,7 +86,7 @@ import { defineComponent, ref } from 'vue'
 import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
-import CalendarPane from './calendar-pane.vue'
+import CalendarPanel from './calendar-panel.vue'
 import { useNameHelper, useProps, useLocale, eventProp, emitEvent } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
@@ -95,7 +95,7 @@ import type { Dateable } from '@vexip-ui/utils'
 export default defineComponent({
   name: 'Calendar',
   components: {
-    CalendarPane,
+    CalendarPanel,
     Column,
     NumberInput,
     Row

@@ -1,7 +1,7 @@
 <template>
   <div
     ref="wrapper"
-    :class="nh.be('pane')"
+    :class="nh.be('panel')"
     tabindex="-1"
     @mouseleave="handleMouseLeave"
   >
@@ -103,7 +103,7 @@ import type { VirtualListExposed } from '@/components/virtual-list'
 import type { OptionState } from './symbol'
 
 export default defineComponent({
-  name: 'CascaderPane',
+  name: 'CascaderPanel',
   components: {
     Checkbox,
     Icon,

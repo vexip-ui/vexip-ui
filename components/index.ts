@@ -11,7 +11,7 @@ import { Bubble } from './bubble'
 import { Button } from './button'
 import { ButtonGroup } from './button-group'
 import { Calendar } from './calendar'
-import { CalendarPane } from './calendar-pane'
+import { CalendarPanel } from './calendar-panel'
 import { Card } from './card'
 import { Carousel } from './carousel'
 import { CarouselItem } from './carousel-item'
@@ -20,7 +20,7 @@ import { Cell } from './cell'
 import { Checkbox } from './checkbox'
 import { CheckboxGroup } from './checkbox-group'
 import { Collapse } from './collapse'
-import { CollapsePane } from './collapse-pane'
+import { CollapsePanel } from './collapse-panel'
 import { CollapseTransition } from './collapse-transition'
 import { ColorPicker } from './color-picker'
 import { Column } from './column'
@@ -78,7 +78,7 @@ import { Split } from './split'
 import { Switch } from './switch'
 import { TabNav } from './tab-nav'
 import { TabNavItem } from './tab-nav-item'
-import { TabPane } from './tab-pane'
+import { TabPanel } from './tab-panel'
 import { Table } from './table'
 import { TableColumn } from './table-column'
 import { Tabs } from './tabs'
@@ -118,7 +118,7 @@ const components = [
   Button,
   ButtonGroup,
   Calendar,
-  CalendarPane,
+  CalendarPanel,
   Card,
   Carousel,
   CarouselItem,
@@ -127,7 +127,7 @@ const components = [
   Checkbox,
   CheckboxGroup,
   Collapse,
-  CollapsePane,
+  CollapsePanel,
   CollapseTransition,
   ColorPicker,
   Column,
@@ -180,7 +180,7 @@ const components = [
   Switch,
   TabNav,
   TabNavItem,
-  TabPane,
+  TabPanel,
   Table,
   TableColumn,
   Tabs,
@@ -224,7 +224,7 @@ export {
   Button,
   ButtonGroup,
   Calendar,
-  CalendarPane,
+  CalendarPanel,
   Card,
   Carousel,
   CarouselItem,
@@ -233,7 +233,7 @@ export {
   Checkbox,
   CheckboxGroup,
   Collapse,
-  CollapsePane,
+  CollapsePanel,
   CollapseTransition,
   ColorPicker,
   Column,
@@ -291,7 +291,7 @@ export {
   Switch,
   TabNav,
   TabNavItem,
-  TabPane,
+  TabPanel,
   Table,
   TableColumn,
   Tabs,

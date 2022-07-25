@@ -22,6 +22,6 @@ export interface MenuOptions {
 }
 
 export interface ContextmenuInstance extends ComponentPublicInstance {
-  openContextmenu: (options: MenuOptions) => Promise<Key | null>,
+  openContextmenu: (options: MenuOptions) => Promise<Key[] | null>,
   handleCancel: () => void
 }

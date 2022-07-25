@@ -124,7 +124,7 @@ $cascader: map.merge(
     padding: 5px 0;
   }
 
-  &__panes {
+  &__panels {
     position: relative;
     display: flex;
     height: get-css-var('cascader-pane-height');
@@ -140,7 +140,7 @@ $cascader: map.merge(
     }
   }
 
-  &__pane {
+  &__panel {
     display: inline-block;
     min-width: get-css-var('cascader-pane-min-width');
     max-width: get-css-var('cascader-pane-max-width');

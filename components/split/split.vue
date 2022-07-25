@@ -1,13 +1,13 @@
 <template>
   <div ref="wrapper" :class="className" @transitionend="removeTransition">
     <div
-      :class="[nh.be('pane'), nh.bem('pane', props.vertical ? 'top' : 'left')]"
+      :class="[nh.be('panel'), nh.bem('panel', props.vertical ? 'top' : 'left')]"
       :style="leftPaneStyle"
     >
       <slot name="left"></slot>
     </div>
     <div
-      :class="[nh.be('pane'), nh.bem('pane', props.vertical ? 'bottom' : 'right')]"
+      :class="[nh.be('panel'), nh.bem('panel', props.vertical ? 'bottom' : 'right')]"
       :style="rightPaneStyle"
     >
       <slot name="right"></slot>

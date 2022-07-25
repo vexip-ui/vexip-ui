@@ -22,7 +22,7 @@ import { TABS_STATE } from './symbol'
 import type { ItemState } from './symbol'
 
 export default defineComponent({
-  name: 'TabPane',
+  name: 'TabPanel',
   props: {
     label: {
       type: [String, Number],
@@ -47,7 +47,7 @@ export default defineComponent({
     const currentLabel = ref(props.label)
 
     const className = computed(() => {
-      const baseClass = nh.be('pane')
+      const baseClass = nh.be('panel')
 
       return {
         [baseClass]: true,

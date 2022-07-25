@@ -41,7 +41,7 @@ import type { PropType } from 'vue'
 import type { CollapseArrowType } from './symbol'
 
 export default defineComponent({
-  name: 'CollapsePane',
+  name: 'CollapsePanel',
   components: {
     CollapseTransition,
     Icon,
@@ -108,14 +108,14 @@ export default defineComponent({
     })
     const className = computed(() => {
       return [
-        nh.be('pane'),
+        nh.be('panel'),
         nh.bs('vars'),
-        nh.bem('pane', `arrow-${useArrowType.value}`),
+        nh.bem('panel', `arrow-${useArrowType.value}`),
         {
-          [nh.bem('pane', 'card')]: useCard.value,
-          [nh.bem('pane', 'ghost')]: !useCard.value && useGhost.value,
-          [nh.bem('pane', 'expanded')]: currentExpanded.value,
-          [nh.bem('pane', 'disabled')]: props.disabled
+          [nh.bem('panel', 'card')]: useCard.value,
+          [nh.bem('panel', 'ghost')]: !useCard.value && useGhost.value,
+          [nh.bem('panel', 'expanded')]: currentExpanded.value,
+          [nh.bem('panel', 'disabled')]: props.disabled
         }
       ]
     })

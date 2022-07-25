@@ -2,7 +2,7 @@
 
 @use './design' as *;
 @use './button.scss';
-@use './calendar-pane.scss';
+@use './calendar-panel.scss';
 @use './input.scss' as input;
 @use './wheel.scss';
 
@@ -125,7 +125,7 @@ $date-picker: map.merge(
     padding: 8px 0;
   }
 
-  &__pane {
+  &__panel {
     display: flex;
     background-color: get-css-var('date-picker-pane-bg-color');
     border-radius: get-css-var('date-picker-pane-border-radius');

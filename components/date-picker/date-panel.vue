@@ -1,5 +1,5 @@
 <template>
-  <div :class="nh.be('pane')" @click="handleClick">
+  <div :class="nh.be('panel')" @click="handleClick">
     <div v-if="shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
       <div
         v-for="(item, index) in shortcuts"
@@ -15,10 +15,7 @@
       <div style="display: flex;">
         <div>
           <div :class="nh.be('header')">
-            <div
-              :class="[nh.be('arrow'), nh.be('prev-year')]"
-              @click="handleDoublePrevClick"
-            >
+            <div :class="[nh.be('arrow'), nh.be('prev-year')]" @click="handleDoublePrevClick">
               <Icon><AnglesLeft></AnglesLeft></Icon>
             </div>
             <div
@@ -50,10 +47,7 @@
             >
               <Icon><AngleRight></AngleRight></Icon>
             </div>
-            <div
-              :class="[nh.be('arrow'), nh.be('next-year')]"
-              @click="handleDoubleNextClick"
-            >
+            <div :class="[nh.be('arrow'), nh.be('next-year')]" @click="handleDoubleNextClick">
               <Icon><AnglesRight></AnglesRight></Icon>
             </div>
           </div>
@@ -107,7 +101,7 @@
                 </div>
               </div>
             </div>
-            <CalendarPane
+            <CalendarPanel
               v-else
               :value="calendarValue"
               :year="calendarYear"
@@ -117,7 +111,7 @@
               :value-type="valueType"
               @select="handleSelectDate"
               @hover="handleHoverDate"
-            ></CalendarPane>
+            ></CalendarPanel>
           </div>
         </div>
         <div v-if="isDatetime" :class="nh.be('time-wheel')">
@@ -148,7 +142,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Button } from '@/components/button'
-import { CalendarPane } from '@/components/calendar-pane'
+import { CalendarPanel } from '@/components/calendar-panel'
 import { Icon } from '@/components/icon'
 import TimeWheel from './time-wheel.vue'
 import { useHover } from '@vexip-ui/mixins'
@@ -163,10 +157,10 @@ import type { Dateable } from '@vexip-ui/utils'
 import type { DateType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
 
 export default defineComponent({
-  name: 'DatePane',
+  name: 'DatePanel',
   components: {
     Button,
-    CalendarPane,
+    CalendarPanel,
     Icon,
     TimeWheel,
     AngleRight,
@@ -242,16 +236,7 @@ export default defineComponent({
       default: () => ({})
     }
   },
-  emits: [
-    'click',
-    'shortcut',
-    'toggle-col',
-    'change',
-    'cancel',
-    'confirm',
-    'hover',
-    'type-change'
-  ],
+  emits: ['click', 'shortcut', 'toggle-col', 'change', 'cancel', 'confirm', 'hover', 'type-change'],
   setup(props, { emit }) {
     const today = toDate(props.today)
 

@@ -36,7 +36,8 @@ $collapse: map.merge(
   $divider: get-css-var('collapse-divider');
   $radius: get-css-var('collapse-radius');
 
-  $content-padding: get-css-var('collapse-content-v-padding') get-css-var('collapse-content-h-padding');
+  $content-padding: get-css-var('collapse-content-v-padding')
+    get-css-var('collapse-content-h-padding');
 
   display: flex;
   flex-direction: column;
@@ -45,7 +46,7 @@ $collapse: map.merge(
   border-top: $divider;
 
   @at-root {
-    &__pane {
+    &__panel {
       @include basis;
 
       padding: 0;
@@ -78,7 +79,7 @@ $collapse: map.merge(
     }
   }
 
-  & &__pane {
+  & &__panel {
     border-top: 0;
   }
 
@@ -91,7 +92,7 @@ $collapse: map.merge(
     transition: get-css-var('transition-color');
   }
 
-  &__pane--disabled &__header {
+  &__panel--disabled &__header {
     color: get-css-var('collapse-header-color-disabled');
     cursor: not-allowed;
   }
@@ -109,7 +110,7 @@ $collapse: map.merge(
   }
 
   &--arrow-left,
-  &__pane--arrow-left {
+  &__panel--arrow-left {
     #{$header} {
       padding-left: 36px;
     }
@@ -120,7 +121,7 @@ $collapse: map.merge(
   }
 
   &--arrow-right,
-  &__pane--arrow-right {
+  &__panel--arrow-right {
     #{$header} {
       padding-right: 36px;
     }
@@ -131,17 +132,17 @@ $collapse: map.merge(
   }
 
   &--arrow-none,
-  &__pane--arrow-none {
+  &__panel--arrow-none {
     #{$arrow} {
       display: none;
     }
   }
 
-  &__pane--expanded &__arrow {
+  &__panel--expanded &__arrow {
     transform: translate(-50%, -50%) rotate(90deg);
   }
 
-  &__pane--disabled &__arrow {
+  &__panel--disabled &__arrow {
     color: get-css-var('collapse-arrow-color-disabled');
   }
 
@@ -162,12 +163,12 @@ $collapse: map.merge(
     margin-right: 4px;
   }
 
-  &__pane--disabled &__content {
+  &__panel--disabled &__content {
     color: get-css-var('collapse-content-color-disabled');
   }
 
   &--card,
-  &__pane--card {
+  &__panel--card {
     border: get-css-var('collapse-border');
     border-radius: $radius;
 
@@ -177,7 +178,7 @@ $collapse: map.merge(
     }
   }
 
-  &--card &__pane {
+  &--card &__panel {
     border-color: get-css-var('collapse-d-color');
 
     &:first-child #{$header} {
@@ -193,7 +194,7 @@ $collapse: map.merge(
     }
   }
 
-  &--card &__pane--expanded {
+  &--card &__panel--expanded {
     #{$header} {
       border-bottom-color: get-css-var('collapse-d-color');
     }
@@ -204,7 +205,7 @@ $collapse: map.merge(
   }
 
   &--ghost,
-  &--ghost &__pane {
+  &--ghost &__panel {
     border: 0;
   }
 }

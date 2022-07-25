@@ -93,8 +93,8 @@
             :class="[nh.be('popper'), nh.ns('calendar-vars'), nh.bs('vars')]"
             @click.stop="handleFocused"
           >
-            <DatePane
-              ref="pane"
+            <DatePanel
+              ref="panel"
               :type="props.type"
               :column="(currentState === 'start' ? startState : endState).column"
               :start-value="startState.dateValue"
@@ -115,7 +115,7 @@
               @toggle-col="handleInputFocus"
               @cancel="handleCancel"
               @confirm="handlePaneConfirm"
-            ></DatePane>
+            ></DatePanel>
           </div>
         </transition>
       </Portal>
@@ -128,7 +128,7 @@ import { defineComponent, ref, reactive, computed, watch, toRef, nextTick } from
 import { Icon } from '@/components/icon'
 import { Portal } from '@/components/portal'
 import DateControl from './date-control.vue'
-import DatePane from './date-pane.vue'
+import DatePanel from './date-panel.vue'
 import { useFieldStore } from '@/components/form'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import {
@@ -157,7 +157,7 @@ export default defineComponent({
   name: 'DatePicker',
   components: {
     DateControl,
-    DatePane,
+    DatePanel,
     Icon,
     Portal,
     CircleXmark,
@@ -283,7 +283,7 @@ export default defineComponent({
 
     const startInput = ref<InstanceType<typeof DateControl> | null>(null)
     const endInput = ref<InstanceType<typeof DateControl> | null>(null)
-    const datePane = ref<InstanceType<typeof DatePane> | null>(null)
+    const datePanel = ref<InstanceType<typeof DatePanel> | null>(null)
 
     const className = computed(() => {
       return [
@@ -751,7 +751,7 @@ export default defineComponent({
 
         verifyValue(type)
         emitEvent(props[isPlus ? 'onPlus' : 'onMinus'], type, state.dateValue[type])
-        datePane.value?.refreshCalendar()
+        datePanel.value?.refreshCalendar()
       }
     }
 
@@ -893,7 +893,7 @@ export default defineComponent({
       handleInputFocus(type)
 
       nextTick(() => {
-        datePane.value?.refreshCalendar()
+        datePanel.value?.refreshCalendar()
       })
     }
 
@@ -902,7 +902,7 @@ export default defineComponent({
       handleInputFocus(type)
 
       nextTick(() => {
-        datePane.value?.refreshCalendar()
+        datePanel.value?.refreshCalendar()
       })
     }
 
@@ -923,7 +923,7 @@ export default defineComponent({
     }
 
     function handlePaneHide() {
-      datePane.value?.refreshCalendar()
+      datePanel.value?.refreshCalendar()
     }
 
     function handleClickOutside() {
@@ -957,7 +957,7 @@ export default defineComponent({
       popper,
       start: startInput,
       end: endInput,
-      pane: datePane,
+      panel: datePanel,
 
       handleFocused,
       handleTirggerClick,
