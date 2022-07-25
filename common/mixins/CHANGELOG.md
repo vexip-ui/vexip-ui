@@ -1,3 +1,15 @@
+## [1.5.1](https://github.com/qmhc/vexip-ui/compare/mixins@1.5.0...mixins@1.5.1) (2022-07-25)
+
+### Bug Fixes
+
+- **mixins:** useModifier support auto reset when blur ([0f6a993](https://github.com/qmhc/vexip-ui/commit/0f6a993096fd81b5d6254137247463fc889f44fd))
+- **mixins:** useModifier unable to read activeKeys ([5c36e65](https://github.com/qmhc/vexip-ui/commit/5c36e658b97914f8d09c3aec39b8768329049ff1))
+- **mixins:** useVirtual implement scroll api methods ([012258a](https://github.com/qmhc/vexip-ui/commit/012258a61bf3965d43e36a635b597e819a6e96b0))
+
+### Features
+
+- support accessibility for components ([#97](https://github.com/qmhc/vexip-ui/issues/97)) ([51d5556](https://github.com/qmhc/vexip-ui/commit/51d555612d72ae495569cfbf56472d6764ac3dce))
+
 ## 1.5.0 (2022-07-18)
 
 - types(mixins): fix useClickOutside target param type ([76e64cd](https://github.com/qmhc/vexip-ui/commit/76e64cd))
