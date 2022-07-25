@@ -96,33 +96,39 @@
               role: 'listbox'
             }"
           >
-            <template #default="{ item, index }">
-              <slot
-                :option="item"
-                :index="index"
-                :selected="isSelected(item)"
-                :handle-select="handleSelect"
+            <template #default="{ item: option, index }">
+              <li v-if="option.group" :class="['vxp-option-vars', nh.be('group')]">
+                <slot name="group" :option="option" :index="index">
+                  <div
+                    :class="['vxp-option-vars', nh.be('label'), nh.bem('label', 'group')]"
+                    :style="{ paddingLeft: `${option.depth * 6}px` }"
+                  >
+                    {{ option.label }}
+                  </div>
+                </slot>
+              </li>
+              <Option
+                v-else
+                :label="option.label"
+                :value="option.value"
+                :disabled="option.disabled"
+                :divided="option.divided"
+                :no-title="option.noTitle"
+                :hitting="option.hitting"
+                :selected="isSelected(option)"
+                @select="handleSelect(option)"
               >
-                <Option
-                  :label="item.label"
-                  :value="item.value"
-                  :disabled="item.disabled"
-                  :divided="item.divided"
-                  :no-title="item.noTitle"
-                  :hitting="item.hitting"
-                  :selected="isSelected(item)"
-                  @select="handleSelect(item)"
-                >
-                  <span :class="nh.be('label')">
-                    {{ item.label }}
+                <slot :option="option" :index="index" :selected="isSelected(option)">
+                  <span :class="nh.be('label')" :style="{ paddingLeft: `${option.depth * 6}px` }">
+                    {{ option.label }}
                   </span>
                   <transition v-if="props.optionCheck" name="vxp-fade" appear>
-                    <Icon v-if="isSelected(item)" :class="nh.be('check')">
+                    <Icon v-if="isSelected(option)" :class="nh.be('check')">
                       <Check></Check>
                     </Icon>
                   </transition>
-                </Option>
-              </slot>
+                </slot>
+              </Option>
             </template>
             <template #empty>
               <div v-if="hasEmptyTip" :class="nh.be('empty')">
@@ -173,17 +179,19 @@ import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-import type { OptionKeyConfig, RawOption, OptionState } from '@/components/option'
 import type { VirtualListExposed } from '@/components/virtual-list'
+import type { SelectKeyConfig, SelectRawOption, SelectOptionState } from './symbol'
 
 type SelectValue = string | number | (string | number)[]
 
-const defaultKeyConfig: Required<OptionKeyConfig> = {
+const defaultKeyConfig: Required<SelectKeyConfig> = {
   value: 'value',
   label: 'label',
   disabled: 'disabled',
   divided: 'divided',
-  noTitle: 'noTitle'
+  noTitle: 'noTitle',
+  group: 'group',
+  children: 'children'
 }
 
 export default defineComponent({
@@ -202,7 +210,7 @@ export default defineComponent({
     size: sizeProp,
     state: stateProp,
     visible: booleanProp,
-    options: Array as PropType<RawOption[]>,
+    options: Array as PropType<SelectRawOption[]>,
     disabled: booleanProp,
     transitionName: String,
     outsideClose: booleanProp,
@@ -222,13 +230,13 @@ export default defineComponent({
     optionCheck: booleanProp,
     emptyText: String,
     staticSuffix: booleanProp,
-    keyConfig: Object as PropType<OptionKeyConfig>,
+    keyConfig: Object as PropType<SelectKeyConfig>,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
-    onSelect: eventProp<(value: string | number, data: RawOption) => void>(),
-    onCancel: eventProp<(value: string | number, data: RawOption) => void>(),
-    onChange: eventProp<(value: SelectValue, data: RawOption | RawOption[]) => void>(),
+    onSelect: eventProp<(value: string | number, data: SelectRawOption) => void>(),
+    onCancel: eventProp<(value: string | number, data: SelectRawOption) => void>(),
+    onChange: eventProp<(value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void>(),
     onClickOutside: eventProp(),
     onOutsideClose: eventProp(),
     onClear: eventProp()
@@ -286,13 +294,13 @@ export default defineComponent({
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
-    const optionStates = ref<OptionState[]>([])
+    const optionStates = ref<SelectOptionState[]>([])
 
     const { isMounted } = useMounted()
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
-    let optionValueMap = new Map<string | number, OptionState>()
+    let optionValueMap = new Map<string | number, SelectOptionState>()
     let emittedValue: typeof props.value | null = props.value
 
     const updateTrigger = ref(0)
@@ -318,22 +326,31 @@ export default defineComponent({
         label: labelKey,
         disabled: disabledKey,
         divided: dividedKey,
-        noTitle: noTitleKey
+        noTitle: noTitleKey,
+        group: groupKey,
+        children: childrenKey
       } = keyConfig.value
       const oldMap = optionValueMap
-      const map = new Map<string | number, OptionState>()
+      const map = new Map<string | number, SelectOptionState>()
+      const states: SelectOptionState[] = []
+      const loop = props.options
+        .map(option => ({ option, depth: 0, parent: null as SelectOptionState | null }))
+        .reverse()
 
-      props.options.forEach(option => {
+      while (loop.length) {
+        const { option, depth, parent } = loop.pop()!
         const rawOption = typeof option === 'string' ? { [valueKey]: option } : option
+        const group = !!rawOption[groupKey]
         const value = rawOption[valueKey]
 
-        if (isNull(value)) return
+        if (!group && isNull(value)) return
 
         const label = rawOption[labelKey] || String(value)
         const {
           [disabledKey]: disabled = false,
           [dividedKey]: divided = false,
-          [noTitleKey]: noTitle = false
+          [noTitleKey]: noTitle = false,
+          [childrenKey]: children = null
         } = rawOption
         const oldState = oldMap.get(rawOption.value)
         const optionState = reactive({
@@ -342,16 +359,33 @@ export default defineComponent({
           noTitle,
           value,
           label,
+          group,
+          depth,
+          parent,
           hidden: oldState?.hidden ?? false,
           hitting: oldState?.hitting ?? false,
           data: option
-        })
+        }) as SelectOptionState
 
-        map.set(value, optionState)
-      })
+        states.push(optionState)
+
+        if (!group) {
+          map.set(value, optionState)
+        }
+
+        if (Array.isArray(children) && children.length) {
+          loop.push(
+            ...children
+              .map(child => {
+                return { option: child, depth: depth + 1, parent: optionState }
+              })
+              .reverse()
+          )
+        }
+      }
 
       optionValueMap = map
-      optionStates.value = Array.from(map.values())
+      optionStates.value = states
 
       initValueAndLabel(emittedValue)
     }
@@ -385,10 +419,23 @@ export default defineComponent({
           event.preventDefault()
           event.stopPropagation()
 
-          const length = visibleOptions.value.length
+          const options = visibleOptions.value
+          const length = options.length
 
-          currentIndex.value += modifier.down ? 1 : -1
-          currentIndex.value = (currentIndex.value + length) % length
+          if (!length) return
+
+          const step = modifier.down ? 1 : -1
+
+          let index = (currentIndex.value + step) % length
+          let option = options[index]
+
+          for (let i = 0; (option.disabled || option.group) && i < length; ++i) {
+            index += step
+            index = (index + length) % length
+            option = options[index]
+          }
+
+          currentIndex.value = index
         } else if (modifier.enter || modifier.space) {
           event.preventDefault()
           event.stopPropagation()
@@ -457,9 +504,9 @@ export default defineComponent({
 
         setTimeout(() => {
           if (virtualList.value && !isNull(currentValues.value[0])) {
-            virtualList.value.scrollToKey(currentValues.value[0])
+            virtualList.value.ensureKeyInView(currentValues.value[0])
           }
-        }, 16)
+        }, 32)
       }
 
       emitEvent(props.onToggle, value)
@@ -477,6 +524,10 @@ export default defineComponent({
       visibleOptions.value.forEach((option, index) => {
         option.hitting = value === index
       })
+
+      if (currentVisible.value && virtualList.value) {
+        virtualList.value.ensureIndexInView(value)
+      }
     })
 
     function initValueAndLabel(value: SelectValue | null) {
@@ -519,7 +570,7 @@ export default defineComponent({
       }
     }
 
-    function isSelected(option: OptionState) {
+    function isSelected(option: SelectOptionState) {
       if (props.multiple) {
         return currentValues.value.includes(option.value)
       }
@@ -545,7 +596,7 @@ export default defineComponent({
       handleSelect(optionValueMap.get(value)!)
     }
 
-    function handleSelect(option: OptionState) {
+    function handleSelect(option: SelectOptionState) {
       if (!option) return
 
       emitEvent(
@@ -562,7 +613,7 @@ export default defineComponent({
       }
     }
 
-    function handleChange(option: OptionState) {
+    function handleChange(option: SelectOptionState) {
       if (props.multiple) {
         if (isSelected(option)) {
           const index = currentValues.value.findIndex(v => v === option.value)

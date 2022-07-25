@@ -1,12 +1,7 @@
 <template>
   <Select v-model:value="value" :options="options">
     <template #default="{ option, index }">
-      <Option
-        :value="option.value"
-        :label="option.label"
-      >
-        {{ `${index + 1}、${option.label}` }}
-      </Option>
+      {{ `${index + 1}、${option.label}` }}
     </template>
   </Select>
 </template>

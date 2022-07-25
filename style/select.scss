@@ -124,11 +124,20 @@ $select: map.merge(
     }
   }
 
+  &__group {
+    padding: get-css-var('option-label-v-padding') get-css-var('option-label-h-padding');
+  }
+
   &__label {
     flex: auto;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &--group {
+      font-size: get-css-var('option-group-font-size');
+      color: get-css-var('option-group-color');
+    }
   }
 
   &__check {
