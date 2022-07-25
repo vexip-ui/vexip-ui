@@ -15,7 +15,7 @@ export default defineComponent({
   setup() {
     async function contextmenu(event: MouseEvent) {
       // 未选择是则返回 null
-      const selectedKey = await Contextmenu.open({
+      const selectedKeys = await Contextmenu.open({
         clientX: event.clientX,
         clientY: event.clientY,
         appear: true,
@@ -30,7 +30,7 @@ export default defineComponent({
         ]
       })
 
-      console.info(selectedKey)
+      console.info(selectedKeys)
     }
 
     return { contextmenu }

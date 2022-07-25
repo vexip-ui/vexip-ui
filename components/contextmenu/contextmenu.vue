@@ -66,7 +66,7 @@ export default defineComponent({
       y: 0
     })
 
-    const onSelect = ref<((key: Key) => void) | null>(null)
+    const onSelect = ref<((keys: Key[]) => void) | null>(null)
     const onCancel = ref<(() => void) | null>(null)
 
     function openContextmenu(options: MenuOptions) {
@@ -77,9 +77,9 @@ export default defineComponent({
 
       visible.value = true
 
-      return new Promise<Key | null>(resolve => {
-        onSelect.value = (key: Key) => {
-          resolve(key)
+      return new Promise<Key[] | null>(resolve => {
+        onSelect.value = (keys: Key[]) => {
+          resolve(keys)
         }
         onCancel.value = () => {
           resolve(null)
@@ -92,11 +92,11 @@ export default defineComponent({
       onCancel.value = null
     }
 
-    function handleSelect(key: Key) {
+    function handleSelect(keys: Key[]) {
       visible.value = false
 
       if (isFunction(onSelect.value)) {
-        onSelect.value(key)
+        onSelect.value(keys)
         afterContextmenu()
       }
     }
