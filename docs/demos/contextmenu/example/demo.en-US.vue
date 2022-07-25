@@ -1,6 +1,6 @@
 <template>
   <div
-    style="width: 400px; height: 100px; border: var(--vxp-border-base);"
+    style="max-width: 400px; height: 100px; border: var(--vxp-border-base);"
     @contextmenu.prevent="contextmenu"
   >
     Right click here

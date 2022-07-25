@@ -3,7 +3,7 @@
     v-model:value="value"
     :min="50"
     :max="200"
-    style="width: 400px;"
+    style="max-width: 400px;"
   ></Slider>
 </template>
 

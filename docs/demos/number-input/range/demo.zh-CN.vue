@@ -3,7 +3,7 @@
     v-model:value="value"
     :min="0"
     :max="10"
-    style="width: 300px;"
+    style="max-width: 300px;"
   ></NumberInput>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 240px;">
+  <div style="max-width: 240px;">
     <Button style="margin-bottom: 20px;" @click="reduced = !reduced">
       展开/收起
     </Button>

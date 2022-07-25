@@ -1,5 +1,5 @@
 <template>
-  <NumberInput v-model:value="value" :step="2" style="width: 300px;"></NumberInput>
+  <NumberInput v-model:value="value" :step="2" style="max-width: 300px;"></NumberInput>
 </template>
 
 <script setup lang="ts">

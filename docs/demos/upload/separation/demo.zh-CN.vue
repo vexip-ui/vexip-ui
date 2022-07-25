@@ -22,7 +22,7 @@
     </template>
   </Upload>
   <Modal v-model:active="listActive" transfer title="上传列表">
-    <div style="width: 500px;">
+    <div style="max-width: 500px;">
       <UploadList :files="files" type="card" @delete="deleteFile"></UploadList>
     </div>
   </Modal>

@@ -1,28 +1,20 @@
 <template>
-  <Space style="width: 900px;">
+  <Space style="max-width: 900px;">
     <div v-for="placement in placements.slice(0, 6)" :key="placement">
-      <div style="width: 400px;">
+      <div style="max-width: 400px;">
         {{ placement }}
       </div>
-      <Viewer
-        :toolbar-placement="placement"
-        width="400"
-        height="100"
-      >
+      <Viewer :toolbar-placement="placement" width="400" height="100">
         <div class="content"></div>
       </Viewer>
     </div>
   </Space>
-  <Space style="width: 900px; margin-top: 10px;">
+  <Space style="max-width: 900px; margin-top: 10px;">
     <div v-for="placement in placements.slice(6)" :key="placement">
-      <div style="width: 100px;">
+      <div style="max-width: 100px;">
         {{ placement }}
       </div>
-      <Viewer
-        :toolbar-placement="placement"
-        width="100"
-        height="400"
-      >
+      <Viewer :toolbar-placement="placement" width="100" height="400">
         <div class="content"></div>
       </Viewer>
     </div>

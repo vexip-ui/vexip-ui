@@ -1,5 +1,5 @@
 <template>
-  <Menu :router="router" style="width: 240px;" @select="handleSelect"></Menu>
+  <Menu :router="router" style="max-width: 240px;" @select="handleSelect"></Menu>
 </template>
 
 <script setup lang="ts">

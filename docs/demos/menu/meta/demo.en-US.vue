@@ -1,5 +1,5 @@
 <template>
-  <Menu style="width: 240px;" @select="handleSelect">
+  <Menu style="max-width: 240px;" @select="handleSelect">
     <MenuItem label="1" :icon="EnvelopesBulk">
       Menu 1
       <template #group>

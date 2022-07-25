@@ -1,4 +1,3 @@
-
 <template>
   <DatePicker
     v-model:value="yearRange"
@@ -6,18 +5,14 @@
     type="year"
     style="max-width: 300px;"
   ></DatePicker>
-  <p>
-    Current Year Range: {{ yearRange }}
-  </p>
+  <p>Current Year Range: {{ yearRange }}</p>
   <DatePicker
     v-model:value="dateRange"
     is-range
     type="datetime"
-    style="width: 380px;"
+    style="max-width: 380px;"
   ></DatePicker>
-  <p>
-    Current Date Range: {{ dateRange }}
-  </p>
+  <p>Current Date Range: {{ dateRange }}</p>
 </template>
 
 <script setup lang="ts">

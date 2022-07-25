@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 400px;">
+  <div style="max-width: 400px;">
     <Slider v-model:value="value"></Slider>
   </div>
 </template>

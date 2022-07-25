@@ -1,6 +1,6 @@
 <template>
   <div
-    style="width: 200px; height: 200px; padding: 20px; background-color: orange;"
+    style="max-width: 200px; height: 200px; padding: 20px; background-color: orange;"
     @click="handleClick"
   >
     Click on the orange area

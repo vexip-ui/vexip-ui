@@ -1,5 +1,5 @@
 <template>
-  <Menu style="width: 240px;">
+  <Menu style="max-width: 240px;">
     <MenuGroup label="分组一">
       <MenuItem label="1" :icon="EnvelopesBulk">
         菜单一
