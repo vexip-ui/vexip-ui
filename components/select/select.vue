@@ -89,7 +89,7 @@
             :items="visibleOptions"
             :item-size="32"
             :use-y-bar="!!listHeight"
-            height="100%"
+            :height="'100%'"
             id-key="value"
             :items-attrs="{
               class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
@@ -454,6 +454,12 @@ export default defineComponent({
         if (wrapper.value && popper.value) {
           popper.value.style.minWidth = `${wrapper.value.offsetWidth}px`
         }
+
+        setTimeout(() => {
+          if (virtualList.value && !isNull(currentValues.value[0])) {
+            virtualList.value.scrollToKey(currentValues.value[0])
+          }
+        }, 16)
       }
 
       emitEvent(props.onToggle, value)
@@ -529,7 +535,8 @@ export default defineComponent({
         if (scrollWrapper) {
           const wrapperHeight = scrollWrapper.getBoundingClientRect().height
 
-          listHeight.value = wrapperHeight < props.maxListHeight ? undefined : `${wrapperHeight}px`
+          listHeight.value =
+            wrapperHeight < props.maxListHeight ? undefined : `${props.maxListHeight}px`
         }
       })
     }

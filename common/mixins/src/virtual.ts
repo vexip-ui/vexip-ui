@@ -1,5 +1,5 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { createBITree, nextFrameOnce } from '@vexip-ui/utils'
+import { isDefined, createBITree, nextFrameOnce } from '@vexip-ui/utils'
 import { isHiddenElement } from './display'
 import { observeResize, unobserveResize } from './resize'
 
@@ -29,7 +29,7 @@ export interface VirtualOptions {
   /**
    * 默认停留在的元素的主键，未实现
    */
-  defaultKeyAt?: Ref<Key>,
+  defaultKeyAt?: Key,
   /**
    * 设置前后的缓冲元素的个数
    */
@@ -48,7 +48,7 @@ export function useVirtual(options: VirtualOptions) {
     itemSize,
     itemFixed,
     idKey,
-    // defaultKeyAt,
+    defaultKeyAt,
     bufferSize = ref(5),
     wrapper = ref(null)
     // onResize,
@@ -131,6 +131,10 @@ export function useVirtual(options: VirtualOptions) {
     nextTick(() => {
       if (wrapper.value) {
         observeResize(wrapper.value, handleResize)
+      }
+
+      if (isDefined(defaultKeyAt)) {
+        scrollToKey(defaultKeyAt)
       }
     })
   })

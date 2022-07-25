@@ -52,7 +52,7 @@ export default defineComponent({
 
     const nh = useNameHelper('virtual-list')
 
-    const { items, itemSize, itemFixed, idKey, defaultKeyAt, bufferSize } = toRefs(props)
+    const { items, itemSize, itemFixed, idKey, bufferSize } = toRefs(props)
     const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
     const list = ref<HTMLElement | null>(null)
 
@@ -71,7 +71,15 @@ export default defineComponent({
       scrollBy,
       scrollToKey,
       scrollToIndex
-    } = useVirtual({ items, itemSize, itemFixed, idKey, defaultKeyAt, bufferSize, wrapper })
+    } = useVirtual({
+      items,
+      itemSize,
+      itemFixed,
+      idKey,
+      bufferSize,
+      wrapper,
+      defaultKeyAt: props.defaultKeyAt
+    })
 
     expose({
       scroll,
