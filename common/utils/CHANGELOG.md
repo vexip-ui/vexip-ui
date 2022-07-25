@@ -1,3 +1,9 @@
+# [1.5.0](https://github.com/qmhc/vexip-ui/compare/utils@1.4.0...utils@1.5.0) (2022-07-25)
+
+### Features
+
+- **utils:** add dom utils ([b461c9a](https://github.com/qmhc/vexip-ui/commit/b461c9a133365f3c4fa786bc669ddabd18c05724))
+
 # [1.4.0](https://github.com/qmhc/vexip-ui/compare/utils@1.3.0...utils@1.4.0) (2022-07-10)
 
 ### Bug Fixes
