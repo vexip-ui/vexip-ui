@@ -1,3 +1,20 @@
+# [2.0.0-beta.17](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.16...v2.0.0-beta.17) (2022-07-26)
+
+### Bug Fixes
+
+- all transition names using injected namespace ([432f0f7](https://github.com/qmhc/vexip-ui/commit/432f0f7bf2e2f41fab7712cbd8e4ea5cf92f1158))
+- **layout:** correct main size when aside reduced ([1b9d350](https://github.com/qmhc/vexip-ui/commit/1b9d350ab61a257e5a8cf3d683218657216a0628))
+- **mixins:** useVirtual sync scroll top after item resize ([fe7122e](https://github.com/qmhc/vexip-ui/commit/fe7122e2a4449608a267959ecc4a874db4480d30))
+- **select:** auto scroll to active option ([1e72722](https://github.com/qmhc/vexip-ui/commit/1e727223698006a35c7a88af207f2e3027fef0e4))
+- **transfer:** improve panel resize ([c695607](https://github.com/qmhc/vexip-ui/commit/c69560728dffceb0e291bd992b95f16cd39a540d))
+- **virtual-list:** not emit resize event ([17caeec](https://github.com/qmhc/vexip-ui/commit/17caeec1f71d1bb70aab5b6a56bf1e196df9c690))
+
+### Features
+
+- **auto-complete:** support group options ([ee94d77](https://github.com/qmhc/vexip-ui/commit/ee94d77b9d0d2b5c0c7f31230258c46735d0dcf2))
+- **mixins:** useVirtual add methods to ensure item in view ([e77fc2c](https://github.com/qmhc/vexip-ui/commit/e77fc2cab89811c9aafee60152879cc95715453d))
+- **select:** support group options via using prop ([9a37e0d](https://github.com/qmhc/vexip-ui/commit/9a37e0d126aa07889136531ed1cbcf7c1dd2aaad))
+
 # [2.0.0-beta.16](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2022-07-25)
 
 ### Bug Fixes
