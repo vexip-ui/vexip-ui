@@ -1,5 +1,5 @@
 packages:
   - common/*
+  - dev-server
   - docs
-  - example
   - playground

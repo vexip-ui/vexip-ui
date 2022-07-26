@@ -158,7 +158,7 @@
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
     "commit": "git-cz",
     "create": "ts-node scripts/create.ts",
-    "lint": "eslint --fix --ext .js,.ts,.tsx,.vue common/*/src/** components/** playground/** example/**",
+    "lint": "eslint --fix --ext .js,.ts,.tsx,.vue common/*/src/** components/** playground/** dev-server/**",
     "lint:script": "eslint --fix --ext .js,.ts scripts/**",
     "lint:style": "stylelint **/*.{vue,scss} --fix",
     "postpublish": "pinst --enable",

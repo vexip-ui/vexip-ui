@@ -1,5 +1,5 @@
 {
-  "name": "@vexip-ui/example",
+  "name": "@vexip-ui/dev-server",
   "private": true,
   "scripts": {
     "serve": "vite"

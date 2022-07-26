@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "vite/client"
+    ],
+    "paths": {
+      "@/*": ["../*"],
+      "vexip-ui/es/*": ["../components/*"],
+      "vexip-ui": ["../components"]
+    }
+  },
+  "include": [
+    "*.vue",
+    "*.ts",
+    "global.d.ts"
+  ]
+}

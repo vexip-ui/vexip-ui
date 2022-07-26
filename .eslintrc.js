@@ -152,7 +152,7 @@ module.exports = {
       }
     },
     {
-      files: ['example/**'],
+      files: ['dev-server/**'],
       globals: {
         __DEMOS__: 'readonly',
         __TARGET__: 'readonly',
