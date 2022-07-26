@@ -5,77 +5,69 @@
     tabindex="0"
     @blur="handleBlur"
   >
-    <ResizeObserver throttle :on-resize="computeBodyHeight">
-      <div ref="header" :class="nh.be('header')">
-        <slot name="header" v-bind="getSlotPayload()">
-          <Checkbox
-            control
-            :class="nh.be('checkbox')"
-            :state="deepState ? state : undefined"
-            :checked="allSelected"
-            :partial="partial"
-            :disabled="disabled"
-            :tab-index="-1"
-            @click.prevent="toggleSelectAll"
-          ></Checkbox>
-          <div
-            :class="[nh.be('reverse'), disabled && nh.bem('reverse', 'disabled')]"
-            :title="locale.reverse"
-            @click="handleReverse"
-          >
-            <Icon :scale="1.2">
-              <Retweet></Retweet>
-            </Icon>
-          </div>
-          <div :class="nh.be('counter')">
-            {{ `${currentSelected.size}/${visibleOptions.length}` }}
-          </div>
-          <span v-if="title || $slots.title" :class="nh.be('title')">
-            <slot name="title" v-bind="getSlotPayload()">
-              {{ title }}
-            </slot>
-          </span>
-        </slot>
-      </div>
-    </ResizeObserver>
-    <ResizeObserver v-if="typeof filter === 'function'" throttle :on-resize="computeBodyHeight">
-      <div ref="search" :class="nh.be('filter')">
-        <Input
-          ref="input"
-          v-model:value="currentFilter"
-          clearable
+    <div ref="header" :class="nh.be('header')">
+      <slot name="header" v-bind="getSlotPayload()">
+        <Checkbox
+          control
+          :class="nh.be('checkbox')"
+          :state="deepState ? state : undefined"
+          :checked="allSelected"
+          :partial="partial"
           :disabled="disabled"
-          :suffix="MagnifyingGlass"
-          :placeholder="searching ? undefined : locale.search"
-          @keydown.stop
-          @input="currentFilter = $event"
-          @focus="searching = true"
-          @blur="searching = false"
-        ></Input>
-      </div>
-    </ResizeObserver>
-    <ul
-      v-if="paged || $slots.body"
-      ref="body"
-      :class="nh.be('body')"
-      role="listbox"
-      :style="{ height: bodyHeight }"
-    >
-      <slot name="body" v-bind="getSlotPayload()">
-        <template v-if="pagedOptions.length">
-          <Renderer
-            v-for="(option, index) in pagedOptions"
-            :key="index"
-            :renderer="renderOption"
-            :data="{ option, index }"
-          >
-          </Renderer>
-        </template>
-        <div v-else :class="nh.be('empty')">
-          {{ emptyText || locale.empty }}
+          :tab-index="-1"
+          @click.prevent="toggleSelectAll"
+        ></Checkbox>
+        <div
+          :class="[nh.be('reverse'), disabled && nh.bem('reverse', 'disabled')]"
+          :title="locale.reverse"
+          @click="handleReverse"
+        >
+          <Icon :scale="1.2">
+            <Retweet></Retweet>
+          </Icon>
         </div>
+        <div :class="nh.be('counter')">
+          {{ `${currentSelected.size}/${visibleOptions.length}` }}
+        </div>
+        <span v-if="title || $slots.title" :class="nh.be('title')">
+          <slot name="title" v-bind="getSlotPayload()">
+            {{ title }}
+          </slot>
+        </span>
       </slot>
-    </ul>
+    </div>
+    <div v-if="typeof filter === 'function'" ref="search" :class="nh.be('filter')">
+      <Input
+        ref="input"
+        v-model:value="currentFilter"
+        clearable
+        :disabled="disabled"
+        :suffix="MagnifyingGlass"
+        :placeholder="searching ? undefined : locale.search"
+        @keydown.stop
+        @input="currentFilter = $event"
+        @focus="searching = true"
+        @blur="searching = false"
+      ></Input>
+    </div>
+    <ResizeObserver v-if="paged || $slots.body" throttle @resize="computePageSize">
+      <ul ref="body" :class="nh.be('body')" role="listbox">
+        <slot name="body" v-bind="getSlotPayload()">
+          <template v-if="pagedOptions.length">
+            <Renderer
+              v-for="(option, index) in pagedOptions"
+              :key="index"
+              :renderer="renderOption"
+              :data="{ option, index }"
+            >
+            </Renderer>
+          </template>
+          <div v-else :class="nh.be('empty')">
+            {{ emptyText || locale.empty }}
+          </div>
+        </slot>
+      </ul>
+    </ResizeObserver>
     <VirtualList
       v-else
       ref="list"
@@ -85,8 +77,8 @@
       item-fixed
       use-y-bar
       id-key="value"
-      :height="bodyHeight"
       :items-attrs="{ role: 'listbox' }"
+      @resize="computePageSize"
     >
       <template #default="{ item: option, index }">
         <Renderer :renderer="renderOption" :data="{ option, index }"></Renderer>
@@ -97,46 +89,44 @@
         </div>
       </template>
     </VirtualList>
-    <ResizeObserver v-if="paged || $slots.footer" throttle :on-resize="computeBodyHeight">
-      <div ref="footer" :class="nh.be('footer')">
-        <slot name="footer" v-bind="getSlotPayload()">
-          <div :class="nh.be('pagination')">
-            <Icon
-              :class="[nh.be('page-plus'), currentPage <= 1 && nh.bem('page-plus', 'disabled')]"
-              @click="handlePageChange(currentPage - 1)"
-            >
-              <ChevronLeft></ChevronLeft>
-            </Icon>
-            <NumberInput
-              :value="currentPage"
-              :class="nh.be('page-input')"
-              size="small"
-              :min="1"
-              :max="totalPages"
-              @change="handlePageChange"
-            ></NumberInput>
-            <span style="margin: 0 4px;">/</span>
-            <span>
-              {{ totalPages }}
-            </span>
-            <Icon
-              :class="[
-                nh.be('page-minus'),
-                currentPage >= totalPages && nh.bem('page-minus', 'disabled')
-              ]"
-              @click="handlePageChange(currentPage + 1)"
-            >
-              <ChevronRight></ChevronRight>
-            </Icon>
-          </div>
-        </slot>
-      </div>
-    </ResizeObserver>
+    <div v-if="paged || $slots.footer" ref="footer" :class="nh.be('footer')">
+      <slot name="footer" v-bind="getSlotPayload()">
+        <div :class="nh.be('pagination')">
+          <Icon
+            :class="[nh.be('page-plus'), currentPage <= 1 && nh.bem('page-plus', 'disabled')]"
+            @click="handlePageChange(currentPage - 1)"
+          >
+            <ChevronLeft></ChevronLeft>
+          </Icon>
+          <NumberInput
+            :value="currentPage"
+            :class="nh.be('page-input')"
+            size="small"
+            :min="1"
+            :max="totalPages"
+            @change="handlePageChange"
+          ></NumberInput>
+          <span style="margin: 0 4px;">/</span>
+          <span>
+            {{ totalPages }}
+          </span>
+          <Icon
+            :class="[
+              nh.be('page-minus'),
+              currentPage >= totalPages && nh.bem('page-minus', 'disabled')
+            ]"
+            @click="handlePageChange(currentPage + 1)"
+          >
+            <ChevronRight></ChevronRight>
+          </Icon>
+        </div>
+      </slot>
+    </div>
   </div>
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref, computed, watch, watchEffect, onMounted } from 'vue'
+import { defineComponent, ref, computed, watch, watchEffect } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
@@ -218,7 +208,6 @@ export default defineComponent({
     const nh = useNameHelper('transfer')
     const locale = useLocale('transfer')
 
-    const bodyHeight = ref('100%')
     const currentSelected = ref(new Set(props.selected))
     const pageSize = ref(10)
     const currentPage = ref(1)
@@ -337,19 +326,6 @@ export default defineComponent({
         currentSelected.value = value
       }
     )
-    watch(bodyHeight, computePageSize)
-    watch(
-      () => props.paged,
-      value => {
-        requestAnimationFrame(() => {
-          computeBodyHeight()
-          !value &&
-            requestAnimationFrame(() => {
-              list.value?.refresh()
-            })
-        })
-      }
-    )
     watch(optionSize, () => {
       keyUsed = false
       currentHitting.value = -1
@@ -386,8 +362,6 @@ export default defineComponent({
       partial.value = !allSelected.value && selected.size > 0
     })
 
-    onMounted(computePageSize)
-
     function computePageSize() {
       requestAnimationFrame(() => {
         const bodyEl = body.value || list.value?.wrapper
@@ -402,14 +376,6 @@ export default defineComponent({
           pageSize.value = Math.floor(innerHeight / (props.optionHeight || 1))
         }
       })
-    }
-
-    function computeBodyHeight() {
-      const headerHeight = header.value ? header.value.offsetHeight : 0
-      const searchHeight = search.value ? search.value.offsetHeight : 0
-      const footerHeight = footer.value ? footer.value.offsetHeight : 0
-
-      bodyHeight.value = `calc(100% - ${headerHeight + searchHeight + footerHeight}px)`
     }
 
     function toggleSelect(option: TransferOptionState) {
@@ -630,7 +596,6 @@ export default defineComponent({
 
       nh,
       locale,
-      bodyHeight,
       currentSelected,
       pageSize,
       currentPage,
@@ -653,7 +618,8 @@ export default defineComponent({
       input,
       list,
 
-      computeBodyHeight,
+      // computeBodyHeight,
+      computePageSize,
       toggleSelect,
       toggleSelectAll,
       handleReverse,
