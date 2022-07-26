@@ -29,8 +29,8 @@
     "@types/node": "^18.0.3",
     "@types/prettier": "^2.6.3",
     "@types/semver": "^7.3.10",
-    "@vitejs/plugin-vue": "^3.0.0",
-    "@vitejs/plugin-vue-jsx": "^2.0.0",
+    "@vitejs/plugin-vue": "2.3.3",
+    "@vitejs/plugin-vue-jsx": "1.3.10",
     "@vue/eslint-config-typescript": "^11.0.0",
     "@vue/repl": "^1.0.0",
     "@vue/test-utils": "^2.0.2",
@@ -78,7 +78,7 @@
     "sucrase": "^3.23.0",
     "ts-node": "^10.8.2",
     "typescript": "4.6.4",
-    "vite": "^3.0.0",
+    "vite": "2.9.14",
     "vite-plugin-dts": "^1.3.0",
     "vitest": "^0.17.0",
     "vue": "^3.2.37",
@@ -177,7 +177,7 @@
   "sideEffects": [
     "dist/*",
     "css/*.css",
-    "es/components/*/style.js",
+    "es/components/*/style.mjs",
     "lib/components/*/style.js",
     "style/**/*.scss",
     "theme/**/*.css"
