@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/qmhc/vexip-ui/compare/mixins@1.5.1...mixins@1.6.0) (2022-07-26)
+
+### Bug Fixes
+
+- **mixins:** useVirtual sync scroll top after item resize ([fe7122e](https://github.com/qmhc/vexip-ui/commit/fe7122e2a4449608a267959ecc4a874db4480d30))
+- **select:** auto scroll to active option ([1e72722](https://github.com/qmhc/vexip-ui/commit/1e727223698006a35c7a88af207f2e3027fef0e4))
+- **virtual-list:** not emit resize event ([17caeec](https://github.com/qmhc/vexip-ui/commit/17caeec1f71d1bb70aab5b6a56bf1e196df9c690))
+
+### Features
+
+- **mixins:** useVirtual add methods to ensure item in view ([e77fc2c](https://github.com/qmhc/vexip-ui/commit/e77fc2cab89811c9aafee60152879cc95715453d))
+
 ## [1.5.1](https://github.com/qmhc/vexip-ui/compare/mixins@1.5.0...mixins@1.5.1) (2022-07-25)
 
 ### Bug Fixes
