@@ -82,10 +82,10 @@ createApp(App).use(install, { namespace: 'vxp' })
 ```
 
 ```scss
-@use 'vexip-ui/design' with (
+// 在 scss 里你可以省略 index.scss
+@use 'vexip-ui/style' with (
   $namespace: 'vxp'
 );
-@use 'vexip-ui/style'; // 在 scss 里你可以省略 index.scss
 ```
 
 ### 组件名命名空间
