@@ -80,7 +80,8 @@ export default defineComponent({
       idKey,
       bufferSize,
       wrapper,
-      defaultKeyAt: props.defaultKeyAt
+      defaultKeyAt: props.defaultKeyAt,
+      autoResize: false
     })
 
     expose({

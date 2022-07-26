@@ -37,9 +37,13 @@ export interface VirtualOptions {
   /**
    * 虚拟滚动的包围元素
    */
-  wrapper?: Ref<HTMLElement | null>
-  // onResize?: ResizeHandler,
-  // onScroll?: (event: Event) => void
+  wrapper?: Ref<HTMLElement | null>,
+  /**
+   * 是否自动观察 wrapper 缩放
+   *
+   * @default true
+   */
+  autoResize?: boolean
 }
 
 export function useVirtual(options: VirtualOptions) {
@@ -50,9 +54,8 @@ export function useVirtual(options: VirtualOptions) {
     idKey,
     defaultKeyAt,
     bufferSize = ref(5),
-    wrapper = ref(null)
-    // onResize,
-    // onScroll
+    wrapper = ref(null),
+    autoResize = true
   } = options
 
   const indexMap = computed(() => {
@@ -129,7 +132,7 @@ export function useVirtual(options: VirtualOptions) {
 
   onMounted(() => {
     nextTick(() => {
-      if (wrapper.value) {
+      if (autoResize && wrapper.value) {
         observeResize(wrapper.value, handleResize)
       }
 
@@ -139,9 +142,11 @@ export function useVirtual(options: VirtualOptions) {
     })
   })
 
-  onBeforeUnmount(() => {
-    wrapper.value && unobserveResize(wrapper.value)
-  })
+  if (autoResize) {
+    onBeforeUnmount(() => {
+      wrapper.value && unobserveResize(wrapper.value)
+    })
+  }
 
   function syncScrollOffset() {
     if (wrapper.value) {

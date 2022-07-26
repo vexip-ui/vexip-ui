@@ -1,5 +1,5 @@
 import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
-import { throttle, toNumber, multipleFixed } from '@vexip-ui/utils'
+import { toNumber, multipleFixed } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 import type { ScrollMode } from './symbol'
@@ -212,10 +212,10 @@ export function useScrollWrapper({
     percentY.value = Math.max(0, Math.min(percentY.value, 100))
   }
 
-  const handleResize = throttle((entity: ResizeObserverEntry) => {
+  function handleResize(entity: ResizeObserverEntry) {
     refresh()
     onResize?.(entity)
-  })
+  }
 
   let isMounted = false
 

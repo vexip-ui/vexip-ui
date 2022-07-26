@@ -1,6 +1,6 @@
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useMounted, isHiddenElement } from '@vexip-ui/mixins'
-import { throttle, multipleFixed, boundRange } from '@vexip-ui/utils'
+import { multipleFixed, boundRange } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
 import type { Ref } from 'vue'
@@ -137,10 +137,10 @@ export function useScrollWrapper({
     }
   }
 
-  const handleResize = throttle((entity: ResizeObserverEntry) => {
+  function handleResize(entity: ResizeObserverEntry) {
     refresh()
     onResize?.(entity)
-  })
+  }
 
   onMounted(() => {
     refresh()
