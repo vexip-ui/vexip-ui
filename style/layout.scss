@@ -168,6 +168,8 @@ $layout: map.merge(
     padding-top: get-css-var('layout-header-height');
   }
 
+  $scroll: #{&}__scroll;
+
   &--header-main &__scroll {
     transition: padding-left get-css-var('transition-base');
 
@@ -175,7 +177,7 @@ $layout: map.merge(
       padding-left: get-css-var('layout-aside-width');
     }
 
-    &--away#{&}--reduced {
+    &--away#{$scroll}--reduced {
       padding-left: 64px;
     }
   }
