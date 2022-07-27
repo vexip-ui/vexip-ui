@@ -35,6 +35,12 @@
     "types",
     "vue"
   ],
+  "homepage": "https://github.com/qmhc/vexip-ui/tree/main/common/icons#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qmhc/vexip-ui.git",
+    "directory": "common/icons"
+  },
   "devDependencies": {
     "@types/node": "^17.0.33",
     "@types/prettier": "^2.6.1",
