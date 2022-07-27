@@ -17,11 +17,11 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/qmhc/vexip-ui/tree/main/common/config#readme",
+  "homepage": "https://github.com/qmhc/vexip-ui/tree/main/common/utils#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/qmhc/vexip-ui.git",
-    "directory": "common/config"
+    "directory": "common/utils"
   },
   "devDependencies": {
     "typescript": "4.6.4",

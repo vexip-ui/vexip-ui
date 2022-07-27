@@ -36,7 +36,6 @@ import { defineComponent, ref, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
-
 import {
   Flag,
   CircleInfo,
@@ -45,6 +44,7 @@ import {
   Xmark,
   CircleXmark
 } from '@vexip-ui/icons'
+import { useStyle } from './style'
 
 import type { PropType } from 'vue'
 
@@ -101,6 +101,8 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('alert')
+
+    useStyle(nh)
 
     const closed = ref(false)
     const hidden = ref(false)

@@ -10,7 +10,7 @@ export interface EventPayload extends EventInit {
   [prop: string]: any
 }
 
-export const USE_TOUCH = isDefined(window) && ('ontouchstart' in window || getMaxTouchPoints() > 0)
+export const USE_TOUCH = !!window && ('ontouchstart' in window || getMaxTouchPoints() > 0)
 export const CLICK_TYPE = USE_TOUCH ? 'touchstart' : 'click'
 
 function getMaxTouchPoints() {
@@ -65,15 +65,15 @@ export function disconnect(el: TransferNode, types: string | string[]) {
   }
 }
 
-export function dispatchEvent(el: TransferNode, payload: EventPayload, Event = window.Event) {
+export function dispatchEvent(el: TransferNode, payload: EventPayload, EventConstruct = Event) {
   const { type, bubbles = false, cancelable = false, ...data } = payload
 
   if (!isDefined(type) || type === '') return false
 
   let event
 
-  if (isDefined(Event)) {
-    event = new Event(type, { bubbles, cancelable })
+  if (isDefined(EventConstruct)) {
+    event = new EventConstruct(type, { bubbles, cancelable })
   } else {
     event = document.createEvent('HTMLEvents')
     event.initEvent(type, bubbles, cancelable)

@@ -1,0 +1,38 @@
+{
+  "name": "@vexip-ui/css-render",
+  "version": "0.0.0",
+  "license": "MIT",
+  "author": "qmhc",
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/qmhc/vexip-ui/tree/main/common/css-render#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qmhc/vexip-ui.git",
+    "directory": "common/css-render"
+  },
+  "dependencies": {
+    "@vexip-ui/utils": "workspace:^"
+  },
+  "devDependencies": {
+    "csstype": "^3.1.0",
+    "happy-dom": "^6.0.4",
+    "i": "^0.3.7",
+    "typescript": "4.6.4",
+    "vite": "^3.0.0",
+    "vite-plugin-dts": "^1.3.0",
+    "vitest": "^0.17.0"
+  }
+}
