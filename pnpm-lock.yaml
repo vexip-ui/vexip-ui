@@ -221,6 +221,25 @@ importers:
       vite: 3.0.0
       vite-plugin-dts: 1.3.0_vite@3.0.0
 
+  dev-server:
+    specifiers:
+      '@vitejs/plugin-vue': ^3.0.0
+      '@vitejs/plugin-vue-jsx': ^2.0.0
+      typescript: 4.6.4
+      unplugin-vue-components: ^0.19.6
+      vite: ^3.0.0
+      vue: ^3.2.37
+      vue-router: ^4.1.1
+    dependencies:
+      vue: 3.2.37
+      vue-router: 4.1.1_vue@3.2.37
+    devDependencies:
+      '@vitejs/plugin-vue': 3.0.0_vite@3.0.0+vue@3.2.37
+      '@vitejs/plugin-vue-jsx': 2.0.0_vite@3.0.0+vue@3.2.37
+      typescript: 4.6.4
+      unplugin-vue-components: 0.19.6_vite@3.0.0+vue@3.2.37
+      vite: 3.0.0
+
   docs:
     specifiers:
       '@intlify/vite-plugin-vue-i18n': ^3.4.0
@@ -271,25 +290,6 @@ importers:
       typescript: 4.6.4
       vite: 3.0.0_sass@1.53.0
       vite-plugin-md: 0.13.1_vite@3.0.0
-
-  example:
-    specifiers:
-      '@vitejs/plugin-vue': ^3.0.0
-      '@vitejs/plugin-vue-jsx': ^2.0.0
-      typescript: 4.6.4
-      unplugin-vue-components: ^0.19.6
-      vite: ^3.0.0
-      vue: ^3.2.37
-      vue-router: ^4.1.1
-    dependencies:
-      vue: 3.2.37
-      vue-router: 4.1.1_vue@3.2.37
-    devDependencies:
-      '@vitejs/plugin-vue': 3.0.0_vite@3.0.0+vue@3.2.37
-      '@vitejs/plugin-vue-jsx': 2.0.0_vite@3.0.0+vue@3.2.37
-      typescript: 4.6.4
-      unplugin-vue-components: 0.19.6_vite@3.0.0+vue@3.2.37
-      vite: 3.0.0
 
   playground:
     specifiers:
@@ -7751,7 +7751,7 @@ packages:
       local-pkg: 0.4.1
       magic-string: 0.26.2
       minimatch: 5.1.0
-      resolve: 1.22.0
+      resolve: 1.22.1
       unplugin: 0.6.3_vite@3.0.0
       vue: 3.2.37
     transitivePeerDependencies:

@@ -72,12 +72,12 @@ pnpm i -D vite-plugin-style-import
 ```ts
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import styleImport from 'vite-plugin-style-import'
+import { createStyleImportPlugin } from 'vite-plugin-style-import'
 
 export default defineConfig({
   plugins: [
     vue(),
-    styleImport({
+    createStyleImportPlugin({
       include: ['**/*.ts', '**/*.vue'],
       libs: [
         {
@@ -121,6 +121,8 @@ module.exports = {
   ]
 }
 ```
+
+由于插件的局限性，你仍需要手动引入 `vexip-ui/css/preset.css`。
 
 ## 全局类型支持
 

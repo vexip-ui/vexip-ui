@@ -72,12 +72,12 @@ Add following in `vite.config.ts`:
 ```ts
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import styleImport from 'vite-plugin-style-import'
+import { createStyleImportPlugin } from 'vite-plugin-style-import'
 
 export default defineConfig({
   plugins: [
     vue(),
-    styleImport({
+    createStyleImportPlugin({
       include: ['**/*.ts', '**/*.vue'],
       libs: [
         {
@@ -121,6 +121,8 @@ module.exports = {
   ]
 }
 ```
+
+Due to plugin limitations, you still need to manually import `vexip-ui/css/preset.css`.
 
 ## Global Types Infer
 
