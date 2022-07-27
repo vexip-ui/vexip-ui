@@ -20,15 +20,22 @@
   <br />
   <br />
   <Input v-model:value="value3" placeholder="vexip-ui" style="max-width: 420px;">
-    <template #after>
-      <Icon><Gear></Gear></Icon>
+    <template #before-button>
+      <Button :icon="MagnifyingGlass"></Button>
+    </template>
+  </Input>
+  <br />
+  <br />
+  <Input v-model:value="value3" placeholder="vexip-ui" style="max-width: 420px;">
+    <template #after-button>
+      <Button :icon="MagnifyingGlass"></Button>
     </template>
   </Input>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Gear } from '@vexip-ui/icons'
+import { MagnifyingGlass } from '@vexip-ui/icons'
 
 const value1 = ref('')
 const value2 = ref('')

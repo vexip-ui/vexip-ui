@@ -216,12 +216,14 @@ $input: map.merge(
     display: inline-flex;
     align-items: center;
     width: 100%;
+    background-color: get-css-var('input-bg-color');
   }
 
   @include basis;
   @include handler;
 
   &-wrapper & {
+    background-color: transparent;
     border-radius: 0;
   }
 
@@ -231,6 +233,16 @@ $input: map.merge(
 
   &-wrapper--after-only & {
     border-radius: $radius 0 0 $radius;
+  }
+
+  &--before {
+    z-index: 1;
+    border-left-color: transparent;
+  }
+
+  &--after {
+    z-index: 1;
+    border-right-color: transparent;
   }
 
   &__icon {
@@ -277,15 +289,9 @@ $input: map.merge(
     padding: 0 get-css-var('input-h-padding');
     border: get-css-var('input-border');
 
-    #{$wrapper}--small & {
-      height: calc(get-css-var('input-small-height') + get-css-var('border-width') * 2);
-      padding: 0 get-css-var('input-small-h-padding');
+    &--button {
+      border: 0;
     }
-
-    // #{$wrapper}--large & {
-    //   height: calc(get-css-var('input-large-height') + get-css-var('border-width') * 2);
-    //   padding: 0 get-css-var('input-large-h-padding');
-    // }
 
     #{$self} {
       padding: 0;
@@ -307,11 +313,28 @@ $input: map.merge(
   }
 
   @mixin inner-select($bg-color) {
-    .#{$namespace}-select__selector {
-      min-width: 60px;
-      background-color: transparent;
-      border: 0;
-      box-shadow: unset;
+    .#{$namespace}-select {
+      width: calc(100% + 2 * get-css-var('input-h-padding'));
+      margin: 0 calc(get-css-var('input-h-padding') * -1);
+
+      &__selector {
+        min-width: 60px;
+        background-color: transparent;
+        border: 0;
+        box-shadow: unset;
+      }
+    }
+  }
+
+  @mixin inner-button {
+    .#{$namespace}-button {
+      width: calc(100% + 2 * get-css-var('input-h-padding'));
+      height: 100%;
+      margin: 0 calc(get-css-var('input-h-padding') * -1);
+
+      &--icon-only {
+        width: calc(get-css-var('button-height') + 2 * get-css-var('input-h-padding'));
+      }
     }
   }
 
@@ -322,6 +345,15 @@ $input: map.merge(
     border-right: 0;
     border-radius: $radius 0 0 $radius;
 
+    &--button {
+      margin-right: -1px;
+    }
+
+    .#{$namespace}-button {
+      border-radius: $radius 0 0 $radius;
+    }
+
+    @include inner-button;
     @include inner-select($bg-color);
   }
 
@@ -332,6 +364,15 @@ $input: map.merge(
     border-left: 0;
     border-radius: 0 $radius $radius 0;
 
+    &--button {
+      margin-left: -1px;
+    }
+
+    .#{$namespace}-button {
+      border-radius: 0 $radius $radius 0;
+    }
+
+    @include inner-button;
     @include inner-select($bg-color);
   }
 }

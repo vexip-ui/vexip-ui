@@ -111,6 +111,8 @@ export default defineComponent({
     const showPassword = ref(false)
     const currentLength = ref(props.value ? props.value.length : 0)
     const inputControl = ref<HTMLElement | null>(null)
+    const beforeHover = ref(false)
+    const afterHover = ref(false)
 
     const { wrapper, isHover } = useHover()
     const locale = useLocale('input')
@@ -119,10 +121,10 @@ export default defineComponent({
     let lastValue = props.value
 
     const hasBefore = computed(() => {
-      return !!(slots.before || props.before)
+      return !!(slots.before || slots.beforeButton || slots['before-button'] || props.before)
     })
     const hasAfter = computed(() => {
-      return !!(slots.after || props.after)
+      return !!(slots.after || slots.afterButton || slots['after-button'] || props.after)
     })
     const className = computed(() => {
       return [
@@ -136,7 +138,9 @@ export default defineComponent({
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('has-prefix')]: hasPrefix.value,
-          [nh.bm('has-suffix')]: hasSuffix.value || props.type === 'password'
+          [nh.bm('has-suffix')]: hasSuffix.value || props.type === 'password',
+          [nh.bm('before')]: slots.beforeButton || slots['before-button'],
+          [nh.bm('after')]: slots.afterButton || slots['after-button']
         }
       ]
     })
@@ -407,17 +411,31 @@ export default defineComponent({
       )
     }
 
+    function renderAside(type: 'before' | 'after') {
+      const buttonSlot = slots[`${type}Button`] || slots[`${type}-button`]
+
+      if (buttonSlot) {
+        return (
+          <div
+            class={[nh.be(type), nh.bem(type, 'button')]}
+            onMouseenter={() => ((type === 'before' ? beforeHover : afterHover).value = true)}
+            onMouseleave={() => ((type === 'before' ? beforeHover : afterHover).value = false)}
+          >
+            {buttonSlot()}
+          </div>
+        )
+      }
+
+      return <div class={nh.be(type)}>{slots[type] ? slots[type]!() : props[type]}</div>
+    }
+
     return () => {
       if (hasBefore.value || hasAfter.value) {
         return (
           <div class={wrapperClass.value}>
-            {hasBefore.value && (
-              <div class={nh.be('before')}>{slots.before ? slots.before() : props.before}</div>
-            )}
+            {hasBefore.value && renderAside('before')}
             {createInputElement()}
-            {hasAfter.value && (
-              <div class={nh.be('after')}>{slots.after ? slots.after() : props.after}</div>
-            )}
+            {hasAfter.value && renderAside('after')}
           </div>
         )
       }
