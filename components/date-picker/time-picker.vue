@@ -3,13 +3,13 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
-    @click="handleTirggerClick"
+    @click="toggleVisible"
   >
     <div
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @keydown.space.prevent="handleTirggerClick"
+      @keydown.space.prevent="toggleVisible"
     >
       <div
         v-if="hasPrefix"
@@ -76,7 +76,23 @@
           ></TimeControl>
         </template>
       </div>
-      <transition name="vxp-fade">
+      <div
+        v-if="!props.noSuffix"
+        :class="[nh.be('icon'), nh.be('suffix')]"
+        :style="{
+          color: props.suffixColor,
+          opacity: showClear || props.loading ? '0%' : ''
+        }"
+      >
+        <slot name="suffix">
+          <Icon :icon="props.suffix || ClockR"></Icon>
+        </slot>
+      </div>
+      <div
+        v-else-if="props.clearable || props.loading"
+        :class="[nh.be('icon'), nh.bem('icon', 'placeholder')]"
+      ></div>
+      <transition name="vxp-fade" appear>
         <div
           v-if="!props.disabled && props.clearable && isHover && lastValue"
           :class="[nh.be('icon'), nh.be('clear')]"
@@ -84,10 +100,12 @@
         >
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div v-else :class="[nh.be('icon'), nh.be('suffix')]" :style="{ color: props.suffixColor }">
-          <slot name="suffix">
-            <Icon :icon="props.suffix || ClockR"></Icon>
-          </slot>
+        <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+          <Icon
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+          ></Icon>
         </div>
       </transition>
     </div>
@@ -176,7 +194,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { USE_TOUCH, doubleDigits, boundRange } from '@vexip-ui/utils'
-import { CircleXmark, ClockR, ArrowRightArrowLeft } from '@vexip-ui/icons'
+import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { useColumn } from './helper'
 
 import type { PropType } from 'vue'
@@ -226,7 +244,12 @@ export default defineComponent({
     prefixColor: String,
     suffix: Object,
     suffixColor: String,
+    noSuffix: booleanProp,
     exchange: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onInput: eventProp<(type: TimeType, value: number) => void>(),
     onPlus: eventProp<(type: TimeType, value: number) => void>(),
     onMinus: eventProp<(type: TimeType, value: number) => void>(),
@@ -288,7 +311,12 @@ export default defineComponent({
       prefixColor: '',
       suffix: null,
       suffixColor: '',
-      exchange: false
+      noSuffix: false,
+      exchange: false,
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const placement = toRef(props, 'placement')
@@ -335,6 +363,7 @@ export default defineComponent({
       return {
         [baseCls]: true,
         [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--focused}`]: focused.value,
         [`${baseCls}--${props.state}`]: props.state !== 'default'
@@ -349,6 +378,9 @@ export default defineComponent({
       })
 
       return props.isRange ? values : values[0]
+    })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && !!lastValue.value
     })
 
     parseValue(props.value, false)
@@ -396,6 +428,30 @@ export default defineComponent({
       value => {
         if (currentVisible.value) {
           emitEvent(props.onChangeCol, value)
+        }
+      }
+    )
+    watch(
+      () => props.disabled,
+      value => {
+        if (value) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loading,
+      value => {
+        if (value && props.loadingLock) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loadingLock,
+      value => {
+        if (props.loading && value) {
+          currentVisible.value = false
         }
       }
     )
@@ -522,8 +578,8 @@ export default defineComponent({
       }, 120)
     }
 
-    function handleTirggerClick() {
-      if (props.disabled) return
+    function toggleVisible() {
+      if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = true
 
@@ -725,6 +781,7 @@ export default defineComponent({
       className,
       selectorClass,
       hasPrefix,
+      showClear,
 
       wrapper,
       reference,
@@ -733,7 +790,7 @@ export default defineComponent({
       end: endInput,
 
       handleFocused,
-      handleTirggerClick,
+      toggleVisible,
       handleClear,
       handleShortcut,
       handleWheelChange,

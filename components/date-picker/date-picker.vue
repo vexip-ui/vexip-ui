@@ -3,13 +3,13 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
-    @click="handleTirggerClick"
+    @click="toggleVisible"
   >
     <div
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @keydown.space.prevent="handleTirggerClick"
+      @keydown.space.prevent="toggleVisible"
     >
       <div
         v-if="hasPrefix"
@@ -75,18 +75,32 @@
           ></DateControl>
         </template>
       </div>
-      <transition name="vxp-fade">
-        <div
-          v-if="!props.disabled && props.clearable && isHover && lastValue"
-          :class="[nh.be('icon'), nh.be('clear')]"
-          @click.stop="handleClear"
-        >
+      <div
+        v-if="!props.noSuffix"
+        :class="[nh.be('icon'), nh.be('suffix')]"
+        :style="{
+          color: props.suffixColor,
+          opacity: showClear || props.loading ? '0%' : ''
+        }"
+      >
+        <slot name="suffix">
+          <Icon :icon="props.suffix || CalendarR"></Icon>
+        </slot>
+      </div>
+      <div
+        v-else-if="props.clearable || props.loading"
+        :class="[nh.be('icon'), nh.bem('icon', 'placeholder')]"
+      ></div>
+      <transition name="vxp-fade" appear>
+        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div v-else :class="[nh.be('icon'), nh.be('suffix')]" :style="{ color: props.suffixColor }">
-          <slot name="suffix">
-            <Icon :icon="props.suffix || CalendarR"></Icon>
-          </slot>
+        <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+          <Icon
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+          ></Icon>
         </div>
       </transition>
       <Portal :to="transferTo">
@@ -148,7 +162,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
-import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
+import { CalendarR, CircleXmark, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { useColumn } from './helper'
 import { datePickerTypes } from './symbol'
 
@@ -191,12 +205,17 @@ export default defineComponent({
     prefixColor: String,
     suffix: Object,
     suffixColor: String,
+    noSuffix: booleanProp,
     disabled: booleanProp,
     transitionName: String,
     confirmText: String,
     cancelText: String,
     today: [Number, String, Date] as PropType<Dateable>,
     isRange: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onInput: eventProp<(type: DateTimeType, value: number) => void>(),
     onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
     onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
@@ -256,6 +275,7 @@ export default defineComponent({
       prefixColor: '',
       suffix: null,
       suffixColor: '',
+      noSuffix: false,
       disabled: () => disabled.value,
       transitionName: () => nh.ns('drop'),
       confirmText: null,
@@ -264,7 +284,11 @@ export default defineComponent({
         default: () => new Date(),
         validator: (value: Dateable) => !Number.isNaN(new Date(value))
       },
-      isRange: false
+      isRange: false,
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const placement = toRef(props, 'placement')
@@ -313,6 +337,7 @@ export default defineComponent({
       return {
         [baseCls]: true,
         [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--focused}`]: focused.value,
         [`${baseCls}--${props.state}`]: props.state !== 'default'
@@ -339,6 +364,9 @@ export default defineComponent({
       const activated = endState.activated
 
       return activated.year && activated.month && activated.date
+    })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && !!lastValue.value
     })
 
     startState.enabled.year = true
@@ -407,6 +435,30 @@ export default defineComponent({
       value => {
         if (currentVisible.value) {
           emitEvent(props.onChangeCol, value)
+        }
+      }
+    )
+    watch(
+      () => props.disabled,
+      value => {
+        if (value) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loading,
+      value => {
+        if (value && props.loadingLock) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loadingLock,
+      value => {
+        if (props.loading && value) {
+          currentVisible.value = false
         }
       }
     )
@@ -663,8 +715,8 @@ export default defineComponent({
       }, 120)
     }
 
-    function handleTirggerClick() {
-      if (props.disabled) return
+    function toggleVisible() {
+      if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = true
 
@@ -955,6 +1007,7 @@ export default defineComponent({
       hasPrefix,
       startActivated,
       endActivated,
+      showClear,
 
       wrapper,
       reference,
@@ -964,7 +1017,7 @@ export default defineComponent({
       panel: datePanel,
 
       handleFocused,
-      handleTirggerClick,
+      toggleVisible,
       handleInput,
       handleInputFocus,
       handlePlus,

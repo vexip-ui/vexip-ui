@@ -48,7 +48,7 @@
         </slot>
       </div>
       <div
-        v-if="!noSuffix"
+        v-if="!props.noSuffix"
         :class="[nh.be('icon'), nh.be('suffix')]"
         :style="{
           color: props.suffixColor,
