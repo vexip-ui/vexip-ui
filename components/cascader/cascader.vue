@@ -120,8 +120,8 @@
         >
           <div
             :class="{
-              [nh.be('panes')]: true,
-              [nh.bem('panes', 'empty')]: !optionsList[0] || !optionsList[0].length
+              [nh.be('panels')]: true,
+              [nh.bem('panels', 'empty')]: !optionsList[0] || !optionsList[0].length
             }"
           >
             <template v-if="optionsList[0] && optionsList[0].length">
