@@ -78,7 +78,7 @@
       <transition name="vxp-fade">
         <div
           v-if="!props.disabled && props.clearable && isHover && lastValue"
-          :class="nh.be('clear')"
+          :class="[nh.be('icon'), nh.be('clear')]"
           @click.stop="handleClear"
         >
           <Icon><CircleXmark></CircleXmark></Icon>

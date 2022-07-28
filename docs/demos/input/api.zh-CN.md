@@ -1,31 +1,35 @@
 ### Input 属性
 
-| 名称         | 类型                                                     | 说明                                             | 默认值      | 始于 |
-| ------------ | -------------------------------------------------------- | ------------------------------------------------ | ----------- | ---- |
-| type         | `'text' \| 'password' \| 'date' \| 'datetime' \| 'time'` | 输入框的类型，其中时间相关类型为原生类型         | `'text'`    | -    |
-| size         | `'small' \| 'default' \| 'large'`                        | 输入框的大小                                     | `'default'` | -    |
-| state        | `'default' \| 'success' \| 'error' \| 'warning'`         | 输入框的状态                                     | `'default'` | -    |
-| prefix       | `Record<string, any>`                                    | 前缀图标，使用前缀插槽时无效                     | `null`      | -    |
-| prefix-color | `string`                                                 | 前缀内容的颜色，会影响前缀插槽                   | `''`        | -    |
-| suffix       | `Record<string, any>`                                    | 后缀图标，使用后缀插槽时无效                     | `null`      | -    |
-| suffix-color | `string`                                                 | 后缀内容的颜色，会影响后缀插槽                   | `''`        | -    |
-| formatter    | `(value: string) => string`                              | 设置在每次值变化后，对输入框的值进行格式化的方法 | `null`      | -    |
-| accessor     | `(value: string) => any`                                 | 设置在事件回调时，对输入的值的读取方法           | `null`      | -    |
-| value        | `string`                                                 | 设置输入框的值                                   | `''`        | -    |
-| placeholder  | `string`                                                 | 设置输入框的占位符                               | `''`        | -    |
-| autofocus    | `boolean`                                                | 设置输入框的自动聚焦                             | `false`     | -    |
-| spellcheck   | `boolean`                                                | 设置输入框的拼写检查                             | `false`     | -    |
-| autocomplete | `boolean`                                                | 设置输入框的自动完成                             | `false`     | -    |
-| readonly     | `boolean`                                                | 设置输入框的只读属性                             | `false`     | -    |
-| disabled     | `boolean`                                                | 设置是否禁用输入框                               | `false`     | -    |
-| input-class  | `ClassType`                                              | 设置输入框 `<input>` 元素的类名                  | `''`        | -    |
-| debounce     | `boolean`                                                | 开启防抖，当快速输入时只触发一次 `input` 事件    | `false`     | -    |
-| clearable    | `boolean`                                                | 设置是否可以清空值                               | `false`     | -    |
-| max-length   | `number`                                                 | 设置输入内容的最大长度，值为 `0` 时不限制        | `0`         | -    |
-| before       | `string`                                                 | 设置输入框的前置内容                             | `''`        | -    |
-| after        | `string`                                                 | 设置输入框的后置内容                             | `''`        | -    |
-| password     | `boolean`                                                | 设置是否显示切换密码可见的按钮                   | `false`     | -    |
-| clearable    | `boolean`                                                | 设置是否可以清空值                               | `false`     | -    |
+| 名称         | 类型                                                     | 说明                                             | 默认值      | 始于    |
+| ------------ | -------------------------------------------------------- | ------------------------------------------------ | ----------- | ------- |
+| type         | `'text' \| 'password' \| 'date' \| 'datetime' \| 'time'` | 输入框的类型，其中时间相关类型为原生类型         | `'text'`    | -       |
+| size         | `'small' \| 'default' \| 'large'`                        | 输入框的大小                                     | `'default'` | -       |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'`         | 输入框的状态                                     | `'default'` | -       |
+| prefix       | `Record<string, any>`                                    | 前缀图标，使用前缀插槽时无效                     | `null`      | -       |
+| prefix-color | `string`                                                 | 前缀内容的颜色，会影响前缀插槽                   | `''`        | -       |
+| suffix       | `Record<string, any>`                                    | 后缀图标，使用后缀插槽时无效                     | `null`      | -       |
+| suffix-color | `string`                                                 | 后缀内容的颜色，会影响后缀插槽                   | `''`        | -       |
+| formatter    | `(value: string) => string`                              | 设置在每次值变化后，对输入框的值进行格式化的方法 | `null`      | -       |
+| accessor     | `(value: string) => any`                                 | 设置在事件回调时，对输入的值的读取方法           | `null`      | -       |
+| value        | `string`                                                 | 设置输入框的值                                   | `''`        | -       |
+| placeholder  | `string`                                                 | 设置输入框的占位符                               | `''`        | -       |
+| autofocus    | `boolean`                                                | 设置输入框的自动聚焦                             | `false`     | -       |
+| spellcheck   | `boolean`                                                | 设置输入框的拼写检查                             | `false`     | -       |
+| autocomplete | `boolean`                                                | 设置输入框的自动完成                             | `false`     | -       |
+| readonly     | `boolean`                                                | 设置输入框的只读属性                             | `false`     | -       |
+| disabled     | `boolean`                                                | 设置是否禁用输入框                               | `false`     | -       |
+| input-class  | `ClassType`                                              | 设置输入框 `<input>` 元素的类名                  | `''`        | -       |
+| debounce     | `boolean`                                                | 开启防抖，当快速输入时只触发一次 `input` 事件    | `false`     | -       |
+| clearable    | `boolean`                                                | 设置是否可以清空值                               | `false`     | -       |
+| max-length   | `number`                                                 | 设置输入内容的最大长度，值为 `0` 时不限制        | `0`         | -       |
+| before       | `string`                                                 | 设置输入框的前置内容                             | `''`        | -       |
+| after        | `string`                                                 | 设置输入框的后置内容                             | `''`        | -       |
+| password     | `boolean`                                                | 设置是否显示切换密码可见的按钮                   | `false`     | -       |
+| clearable    | `boolean`                                                | 设置是否可以清空值                               | `false`     | -       |
+| loading      | `boolean`                                                | 设置是否为加载中                                 | `false`     | `2.0.0` |
+| loading-icon | `Record<string, any>`                                    | 设置加载中的图标                                 | `Spinner`   | `2.0.0` |
+| loading-lock | `boolean`                                                | 设置在加载中时是否为只读                         | `false`     | `2.0.0` |
+| loading-spin | `boolean`                                                | 设置加载中图标是否使用旋转动画                   | `false`     | `2.0.0` |
 
 ### Input 事件
 

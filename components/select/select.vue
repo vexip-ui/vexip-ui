@@ -4,7 +4,7 @@
     ref="wrapper"
     :class="className"
     :aria-disabled="props.disabled ? 'true' : undefined"
-    @click="handleClick"
+    @click="toggleVisible"
   >
     <div
       ref="reference"
@@ -30,7 +30,7 @@
               :key="index"
               :class="nh.be('tag')"
               closable
-              @click.stop="handleClick"
+              @click.stop="toggleVisible"
               @close="handleTagClose(item)"
             >
               {{ currentLabels[index] }}
@@ -50,10 +50,17 @@
       <transition name="vxp-fade">
         <div
           v-if="!props.disabled && props.clearable && isHover && hasValue"
-          :class="nh.be('clear')"
+          :class="[nh.be('icon'), nh.be('clear')]"
           @click.stop="handleClear"
         >
           <Icon><CircleXmark></CircleXmark></Icon>
+        </div>
+        <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+          <Icon
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+          ></Icon>
         </div>
         <div
           v-else-if="!noSuffix"
@@ -183,7 +190,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
-import { ChevronDown, Check, CircleXmark } from '@vexip-ui/icons'
+import { ChevronDown, Check, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -238,6 +245,10 @@ export default defineComponent({
     optionCheck: booleanProp,
     emptyText: String,
     staticSuffix: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     keyConfig: Object as PropType<SelectKeyConfig>,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
@@ -291,7 +302,11 @@ export default defineComponent({
       optionCheck: false,
       emptyText: null,
       staticSuffix: false,
-      keyConfig: () => ({})
+      keyConfig: () => ({}),
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const locale = useLocale('select')
@@ -417,7 +432,7 @@ export default defineComponent({
           if (modifier.space) {
             event.preventDefault()
             event.stopPropagation()
-            handleClick()
+            toggleVisible()
           }
 
           return
@@ -537,6 +552,22 @@ export default defineComponent({
         virtualList.value.ensureIndexInView(value)
       }
     })
+    watch(
+      () => props.loading,
+      value => {
+        if (value && props.loadingLock) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loadingLock,
+      value => {
+        if (props.loading && value) {
+          currentVisible.value = false
+        }
+      }
+    )
 
     function initValueAndLabel(value: SelectValue | null) {
       if (!value) {
@@ -668,8 +699,8 @@ export default defineComponent({
       }
     }
 
-    function handleClick() {
-      if (props.disabled) return
+    function toggleVisible() {
+      if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = !currentVisible.value
 
@@ -739,7 +770,7 @@ export default defineComponent({
       computeListHeight,
       handleTagClose,
       handleSelect,
-      handleClick,
+      toggleVisible,
       handleClear,
       handleFocus,
       handleBlur

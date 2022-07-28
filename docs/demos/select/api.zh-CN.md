@@ -24,6 +24,10 @@
 | option-check    | `boolean`                                        | 设置开启被选选项打勾功能                                    | `false`        | -       |
 | empty-text      | `string`                                         | 设置空选项时的提示语                                        | `locale.empty` | -       |
 | key-config      | `SelectKeyConfig`                                | 设置选项解析 `options` 时的各项键名                         | `{}`           | `2.0.0` |
+| loading         | `boolean`                                        | 设置是否为加载中                                            | `false`        | `2.0.0` |
+| loading-icon    | `Record<string, any>`                            | 设置加载中的图标                                            | `Spinner`      | `2.0.0` |
+| loading-lock    | `boolean`                                        | 设置在加载中时是否为只读                                    | `false`        | `2.0.0` |
+| loading-spin    | `boolean`                                        | 设置加载中图标是否使用旋转动画                              | `false`        | `2.0.0` |
 
 一些预设类型：
 
