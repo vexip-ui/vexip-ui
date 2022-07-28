@@ -129,10 +129,10 @@ export default defineComponent({
     let lastValue = props.value
 
     const hasBefore = computed(() => {
-      return !!(slots.before || slots.beforeButton || slots['before-button'] || props.before)
+      return !!(slots.before || slots.beforeAction || slots['before-action'] || props.before)
     })
     const hasAfter = computed(() => {
-      return !!(slots.after || slots.afterButton || slots['after-button'] || props.after)
+      return !!(slots.after || slots.afterAction || slots['after-action'] || props.after)
     })
     const className = computed(() => {
       return [
@@ -147,8 +147,8 @@ export default defineComponent({
           [nh.bm(props.state)]: props.state !== 'default',
           // [nh.bm('has-prefix')]: hasPrefix.value,
           // [nh.bm('has-suffix')]: hasSuffix.value || props.type === 'password',
-          [nh.bm('before')]: slots.beforeButton || slots['before-button'],
-          [nh.bm('after')]: slots.afterButton || slots['after-button'],
+          [nh.bm('before')]: slots.beforeAction || slots['before-action'],
+          [nh.bm('after')]: slots.afterAction || slots['after-action'],
           [nh.bm('loading')]: props.loading
         }
       ]
@@ -367,7 +367,7 @@ export default defineComponent({
 
       if (props.loading) {
         return (
-          <div key={'loading'} class={nh.bem('icon', 'loading')}>
+          <div key={'loading'} class={[nh.be('icon'), nh.be('loading')]}>
             <Icon
               spin={props.loadingSpin}
               pulse={!props.loadingSpin}
@@ -432,12 +432,12 @@ export default defineComponent({
     }
 
     function renderAside(type: 'before' | 'after') {
-      const buttonSlot = slots[`${type}Button`] || slots[`${type}-button`]
+      const buttonSlot = slots[`${type}Action`] || slots[`${type}-action`]
 
       if (buttonSlot) {
         return (
           <div
-            class={[nh.be(type), nh.bem(type, 'button')]}
+            class={[nh.be(type), nh.bem(type, 'action')]}
             onMouseenter={() => ((type === 'before' ? beforeHover : afterHover).value = true)}
             onMouseleave={() => ((type === 'before' ? beforeHover : afterHover).value = false)}
           >

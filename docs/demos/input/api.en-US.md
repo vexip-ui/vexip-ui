@@ -45,11 +45,11 @@
 
 ### Input Slots
 
-| Name          | Description                                                                                  | Parameters | Since   |
-| ------------- | -------------------------------------------------------------------------------------------- | ---------- | ------- |
-| prefix        | Slot for prefix content, usually a single icon                                               | -          | -       |
-| suffix        | Slot for suffix content, usually a single icon                                               | -          | -       |
-| before        | Slot for the before content, usually text or selector                                        | -          | -       |
-| after         | Slot for the after content, usually text or selector                                         | -          | -       |
-| before-button | Before button slot, which takes precedence over the `before` slot, is used to place a button | -          | `2.0.0` |
-| after-button  | After button slot, which takes precedence over the `after` slot, is used to place a button   | -          | `2.0.0` |
+| Name          | Description                                                                                   | Parameters | Since   |
+| ------------- | --------------------------------------------------------------------------------------------- | ---------- | ------- |
+| prefix        | Slot for prefix content, usually a single icon                                                | -          | -       |
+| suffix        | Slot for suffix content, usually a single icon                                                | -          | -       |
+| before        | Slot for the before content, usually text content                                             | -          | -       |
+| after         | Slot for the after content, usually text content                                              | -          | -       |
+| before-action | Before button slot, which takes precedence over the `before` slot, is used to place a control | -          | `2.0.0` |
+| after-action  | After button slot, which takes precedence over the `after` slot, is used to place a control   | -          | `2.0.0` |

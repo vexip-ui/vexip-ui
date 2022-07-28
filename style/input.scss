@@ -209,7 +209,8 @@ $input: map.merge(
   @include handler;
 
   &-wrapper & {
-    width: 100%;
+    flex: 1 0 0;
+    width: auto;
     background-color: transparent;
     border-radius: 0;
   }
@@ -263,54 +264,51 @@ $input: map.merge(
     padding: 0 get-css-var('input-h-padding');
     border: get-css-var('input-border');
 
-    &--button {
-      border: 0;
-    }
-
-    #{$self} {
+    &--action {
       padding: 0;
-      background-color: transparent;
-      border-color: transparent;
-      box-shadow: none;
-
-      &__control {
-        padding: 0 !important;
-      }
-
-      &__icon {
-        &--prefix,
-        &--suffix {
-          width: auto;
-        }
-      }
+      border: 0;
     }
   }
 
-  @mixin inner-select($bg-color) {
-    .#{$namespace}-select {
+  @mixin inner-input($inner-radius) {
+    & > #{$wrapper},
+    .#{$namespace}-number-input {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
-      margin: 0 calc(get-css-var('input-h-padding') * -1);
+      border-radius: $inner-radius;
+    }
+  }
+
+  @mixin inner-select($inner-radius) {
+    .#{$namespace}-cascader,
+    .#{$namespace}-color-picker,
+    .#{$namespace}-date-picker,
+    .#{$namespace}-select,
+    .#{$namespace}-time-picker {
+      width: calc(100% + 2 * get-css-var('input-h-padding'));
 
       &__selector {
         min-width: 60px;
         background-color: transparent;
-        border: 0;
+        border-radius: $inner-radius;
         box-shadow: unset;
       }
     }
   }
 
-  @mixin inner-button {
+  @mixin inner-button($inner-radius) {
     .#{$namespace}-button {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
       height: 100%;
-      margin: 0 calc(get-css-var('input-h-padding') * -1);
+      border-radius: $inner-radius;
 
       &--icon-only {
         width: calc(get-css-var('button-height') + 2 * get-css-var('input-h-padding'));
       }
     }
   }
+
+  $before-radius: $radius 0 0 $radius;
+  $after-radius: 0 $radius $radius 0;
 
   &__before {
     $bg-color: get-css-var('input-before-bg-color');
@@ -319,16 +317,14 @@ $input: map.merge(
     border-right: 0;
     border-radius: $radius 0 0 $radius;
 
-    &--button {
+    &--action {
       margin-right: -1px;
-    }
+      background-color: transparent;
 
-    .#{$namespace}-button {
-      border-radius: $radius 0 0 $radius;
+      @include inner-button($before-radius);
+      @include inner-input($before-radius);
+      @include inner-select($before-radius);
     }
-
-    @include inner-button;
-    @include inner-select($bg-color);
   }
 
   &__after {
@@ -338,15 +334,13 @@ $input: map.merge(
     border-left: 0;
     border-radius: 0 $radius $radius 0;
 
-    &--button {
+    &--action {
       margin-left: -1px;
-    }
+      background-color: transparent;
 
-    .#{$namespace}-button {
-      border-radius: 0 $radius $radius 0;
+      @include inner-button($after-radius);
+      @include inner-input($after-radius);
+      @include inner-select($after-radius);
     }
-
-    @include inner-button;
-    @include inner-select($bg-color);
   }
 }
