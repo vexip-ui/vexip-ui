@@ -9,7 +9,7 @@
     :options="options"
   ></Select>
   <p>
-    加载中:
+    加载中：
     <Switch v-model:value="loading"></Switch>
   </p>
 </template>

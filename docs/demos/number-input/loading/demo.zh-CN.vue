@@ -4,7 +4,7 @@
   <br />
   <NumberInput :loading="loading" loading-lock placeholder="加载中不可编辑"></NumberInput>
   <p>
-    加载中:
+    加载中：
     <Switch v-model:value="loading"></Switch>
   </p>
 </template>

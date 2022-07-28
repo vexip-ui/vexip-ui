@@ -22,25 +22,24 @@
       @resize="computeListHeight"
     >
       <template #default="{ item, index }">
-        <slot
-          :option="item"
-          :index="index"
+        <Option
+          :class="{
+            [nh.ns('option--error')]: item.error
+          }"
+          :value="item.value"
+          :label="item.label"
+          :disabled="item.disabled"
           :selected="isSelected(item)"
-          :can-check="isCheckboxDisabled(item)"
-          :has-child="hasChildren(item)"
-          :handle-select="handleSelect"
+          :hitting="index === currentHitting"
+          @select="handleSelect(item)"
+          @mouseenter="handleMouseEnter(item)"
         >
-          <Option
-            :class="{
-              [nh.ns('option--error')]: item.error
-            }"
-            :value="item.value"
-            :label="item.label"
-            :disabled="item.disabled"
+          <slot
+            :option="item"
+            :index="index"
             :selected="isSelected(item)"
-            :hitting="index === currentHitting"
-            @select="handleSelect(item)"
-            @mouseenter="handleMouseEnter(item)"
+            :can-check="isCheckboxDisabled(item)"
+            :has-child="hasChildren(item)"
           >
             <Checkbox
               v-if="multiple || noCascaded"
@@ -80,8 +79,8 @@
                 :icon="checkIcon"
               ></Icon>
             </div>
-          </Option>
-        </slot>
+          </slot>
+        </Option>
       </template>
     </VirtualList>
   </div>
@@ -100,7 +99,7 @@ import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { VirtualListExposed } from '@/components/virtual-list'
-import type { OptionState } from './symbol'
+import type { CascaderOptionState } from './symbol'
 
 export default defineComponent({
   name: 'CascaderPanel',
@@ -115,7 +114,7 @@ export default defineComponent({
   },
   props: {
     options: {
-      type: Array as PropType<OptionState[]>,
+      type: Array as PropType<CascaderOptionState[]>,
       default: () => []
     },
     openedId: {
@@ -236,18 +235,18 @@ export default defineComponent({
     })
     onBeforeUnmount(handleMouseLeave)
 
-    function hasChildren(option: OptionState) {
+    function hasChildren(option: CascaderOptionState) {
       return !!(option.hasChild || option.children?.length)
     }
 
-    function isSelected(option: OptionState) {
+    function isSelected(option: CascaderOptionState) {
       return (
         (hasChildren(option) && option.id === props.openedId) ||
         props.values.includes(option.fullValue)
       )
     }
 
-    function isCheckboxDisabled(option: OptionState) {
+    function isCheckboxDisabled(option: CascaderOptionState) {
       return (
         option.disabled ||
         (!props.merged &&
@@ -258,7 +257,7 @@ export default defineComponent({
       )
     }
 
-    function handleSelect(option: OptionState) {
+    function handleSelect(option: CascaderOptionState) {
       if (option.disabled) return
 
       if (props.multiple || props.noCascaded) {
@@ -268,11 +267,11 @@ export default defineComponent({
       }
     }
 
-    function handleToggleCheck(option: OptionState) {
+    function handleToggleCheck(option: CascaderOptionState) {
       !isCheckboxDisabled(option) && emit('check', option)
     }
 
-    function handleMouseEnter(option: OptionState) {
+    function handleMouseEnter(option: CascaderOptionState) {
       clearTimeout(hoverTimer)
 
       hoverTimer = window.setTimeout(() => {

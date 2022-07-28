@@ -3,6 +3,10 @@
   <br />
   <br />
   <Input :loading="loading" loading-lock placeholder="loading and readonly"></Input>
+  <p>
+    Loaidng:
+    <Switch v-model:value="loading"></Switch>
+  </p>
 </template>
 
 <script setup lang="ts">

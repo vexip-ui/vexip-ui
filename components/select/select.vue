@@ -494,7 +494,7 @@ export default defineComponent({
         [baseCls]: true,
         [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
         [`${baseCls}--disabled`]: props.disabled,
-        [`${baseCls}--loading`]: props.loading,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
@@ -559,6 +559,14 @@ export default defineComponent({
         virtualList.value.ensureIndexInView(value)
       }
     })
+    watch(
+      () => props.disabled,
+      value => {
+        if (value) {
+          currentVisible.value = false
+        }
+      }
+    )
     watch(
       () => props.loading,
       value => {

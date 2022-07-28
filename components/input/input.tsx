@@ -143,10 +143,9 @@ export default defineComponent({
           [nh.bs('wrapper')]: !hasBefore.value && !hasAfter.value,
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default',
-          // [nh.bm('has-prefix')]: hasPrefix.value,
-          // [nh.bm('has-suffix')]: hasSuffix.value || props.type === 'password',
           [nh.bm('before')]: slots.beforeAction || slots['before-action'],
           [nh.bm('after')]: slots.afterAction || slots['after-action'],
           [nh.bm('loading')]: props.loading

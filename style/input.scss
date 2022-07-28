@@ -105,6 +105,10 @@ $input: map.merge(
       }
     }
 
+    &--loading {
+      cursor: auto;
+    }
+
     &--disabled {
       cursor: not-allowed;
       background-color: get-css-var('input-bg-color-disabled');
@@ -151,6 +155,10 @@ $input: map.merge(
     }
 
     @extend %disabled-item;
+  }
+
+  #{$handler}--loading &__control {
+    cursor: auto;
   }
 
   &__icon {

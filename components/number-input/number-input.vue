@@ -231,7 +231,7 @@ export default defineComponent({
         {
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading,
+          [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default'
         }

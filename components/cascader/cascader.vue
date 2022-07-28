@@ -3,13 +3,13 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
-    @click="handleClick"
+    @click="toggleVisible"
   >
     <div
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @keydown.space.prevent="handleClick"
+      @keydown.space.prevent="toggleVisible"
     >
       <div
         v-if="hasPrefix"
@@ -29,7 +29,7 @@
               :class="nh.be('tag')"
               :type="props.tagType"
               closable
-              @click.stop="handleClick"
+              @click.stop="toggleVisible"
               @close="handleTipClose(item)"
             >
               {{ templateLabels[index] }}
@@ -86,31 +86,41 @@
           </span>
         </slot>
       </div>
-      <transition name="vxp-fade">
-        <div
-          v-if="!props.disabled && props.clearable && isHover && hasValue"
-          :class="[nh.be('icon'), nh.be('clear')]"
-          @click.stop="handleClear"
-        >
+      <div
+        v-if="!noSuffix"
+        :class="[nh.be('icon'), nh.be('suffix')]"
+        :style="{
+          color: props.suffixColor,
+          opacity: showClear || props.loading ? '0%' : ''
+        }"
+      >
+        <slot name="suffix">
+          <Icon
+            v-if="props.suffix"
+            :icon="props.suffix"
+            :class="{
+              [nh.be('arrow')]: !props.staticSuffix
+            }"
+          ></Icon>
+          <Icon v-else :class="nh.be('arrow')">
+            <ChevronDown></ChevronDown>
+          </Icon>
+        </slot>
+      </div>
+      <div
+        v-else-if="props.clearable || props.loading"
+        :class="[nh.be('icon'), nh.bem('icon', 'placeholder')]"
+      ></div>
+      <transition name="vxp-fade" appear>
+        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div
-          v-else-if="!noSuffix"
-          :class="[nh.be('icon'), nh.be('suffix')]"
-          :style="{ color: props.suffixColor }"
-        >
-          <slot name="suffix">
-            <Icon
-              v-if="props.suffix"
-              :icon="props.suffix"
-              :class="{
-                [nh.be('arrow')]: !props.staticSuffix
-              }"
-            ></Icon>
-            <Icon v-else :class="nh.be('arrow')">
-              <ChevronDown></ChevronDown>
-            </Icon>
-          </slot>
+        <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+          <Icon
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+          ></Icon>
         </div>
       </transition>
     </div>
@@ -203,19 +213,19 @@ import {
 } from '@vexip-ui/config'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
-import { ChevronDown, CircleXmark } from '@vexip-ui/icons'
+import { ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { TagType } from '@/components/tag'
-import type { CascaderValue, OptionKeyConfig, OptionState } from './symbol'
+import type { CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
 
 type MaybeArrayData = Record<string, any> | Array<Record<string, any>>
 
 const ID_KEY = Symbol('ID_KEY')
 const PARENT_KEY = Symbol('PARENT_KEY')
 
-const defaultKeyConfig: Required<OptionKeyConfig> = {
+const defaultKeyConfig: Required<CascaderKeyConfig> = {
   value: 'value',
   label: 'label',
   children: 'children',
@@ -256,7 +266,7 @@ export default defineComponent({
     noSuffix: booleanProp,
     transitionName: String,
     outsideClose: booleanProp,
-    keyConfig: Object as PropType<OptionKeyConfig>,
+    keyConfig: Object as PropType<CascaderKeyConfig>,
     separator: String,
     hoverTrigger: booleanProp,
     maxTagCount: Number,
@@ -266,6 +276,10 @@ export default defineComponent({
     mergeTags: booleanProp,
     tagType: String as PropType<TagType>,
     emptyText: String,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onToggle: eventProp<(visible: boolean) => void>(),
     onSelect: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
     onCancel: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
@@ -328,7 +342,11 @@ export default defineComponent({
       },
       mergeTags: false,
       tagType: null,
-      emptyText: null
+      emptyText: null,
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const currentVisible = ref(props.visible)
@@ -341,12 +359,12 @@ export default defineComponent({
     const transfer = toRef(props, 'transfer')
 
     const emittedValue = ref<CascaderValue | null>(null)
-    const optionTree = ref<OptionState[]>(null!)
+    const optionTree = ref<CascaderOptionState[]>(null!)
     const isAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
 
-    let optionList: OptionState[] = null!
-    let optionIdMap: Map<number, OptionState> = null!
-    let optionValueMap: Map<string, OptionState> = null!
+    let optionList: CascaderOptionState[] = null!
+    let optionIdMap: Map<number, CascaderOptionState> = null!
+    let optionValueMap: Map<string, CascaderOptionState> = null!
     let outsideClosed = false
     let prevClosedId = -1
 
@@ -440,6 +458,7 @@ export default defineComponent({
         [baseCls]: true,
         [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
         [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
@@ -458,6 +477,9 @@ export default defineComponent({
     )
     const hasValue = computed(() => !!templateValues.value[0])
     const usingHover = computed(() => props.hoverTrigger && !isAsyncLoad.value)
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && hasValue.value
+    })
 
     watch(
       () => props.visible,
@@ -537,7 +559,7 @@ export default defineComponent({
       }
 
       if (isAsyncLoad.value) {
-        const originalOptions: OptionState[] = []
+        const originalOptions: CascaderOptionState[] = []
 
         for (const option of optionIdMap.values()) {
           if (option.checked) {
@@ -573,6 +595,30 @@ export default defineComponent({
         })
       }
     )
+    watch(
+      () => props.disabled,
+      value => {
+        if (value) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loading,
+      value => {
+        if (value && props.loadingLock) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loadingLock,
+      value => {
+        if (props.loading && value) {
+          currentVisible.value = false
+        }
+      }
+    )
 
     onMounted(() => {
       nextTick(hideTagCounter)
@@ -599,7 +645,7 @@ export default defineComponent({
           [hasChildKey]: hasChild
         } = rawOption
 
-        return reactive<OptionState>({
+        return reactive<CascaderOptionState>({
           id,
           parent,
           value,
@@ -620,7 +666,7 @@ export default defineComponent({
       })
     }
 
-    function initOptionFull(option: OptionState, separator: string) {
+    function initOptionFull(option: CascaderOptionState, separator: string) {
       let value = option.value as string
       let label = option.label
       let parent = optionIdMap.get(option.parent)
@@ -635,12 +681,12 @@ export default defineComponent({
       option.fullLabel = label
     }
 
-    function queryChildrenLoaded(option: OptionState) {
+    function queryChildrenLoaded(option: CascaderOptionState) {
       if (option.hasChild && !option.children?.length) {
         return option.loaded
       }
 
-      const loop: OptionState[] = [...option.children]
+      const loop: CascaderOptionState[] = [...option.children]
 
       while (loop.length) {
         const child = loop.shift()!
@@ -716,7 +762,7 @@ export default defineComponent({
         const valueSet = new Set<string>(normalizedValue.map(v => v.join(props.separator)))
         const selectedValues: string[] = []
         const selectedLabels: string[] = []
-        const selectedOptions: OptionState[] = []
+        const selectedOptions: CascaderOptionState[] = []
 
         valueSet.forEach(value => {
           const option = optionValueMap.get(value)
@@ -784,7 +830,7 @@ export default defineComponent({
       }
     }
 
-    async function handlePanelOpen(option: OptionState, depth: number) {
+    async function handlePanelOpen(option: CascaderOptionState, depth: number) {
       if (!option.hasChild && !option.children?.length) return
 
       if (isAsyncLoad.value && !option.children?.length && !option.loaded) {
@@ -843,7 +889,7 @@ export default defineComponent({
       openedIds.value.push(option.id)
     }
 
-    function handleOptionSelect(option: OptionState, depth: number) {
+    function handleOptionSelect(option: CascaderOptionState, depth: number) {
       if (!option) return
 
       if (option.hasChild || option.children?.length) {
@@ -853,7 +899,7 @@ export default defineComponent({
       }
     }
 
-    function queryUpstreamOptions(option: OptionState) {
+    function queryUpstreamOptions(option: CascaderOptionState) {
       const options = [option]
       let parent = optionIdMap.get(option.parent)
 
@@ -865,7 +911,7 @@ export default defineComponent({
       return options
     }
 
-    function updateCheckedUpward(originalOption: OptionState) {
+    function updateCheckedUpward(originalOption: CascaderOptionState) {
       let option = originalOption
 
       while (!isNull(option.parent)) {
@@ -889,7 +935,7 @@ export default defineComponent({
       }
     }
 
-    function updateCheckedDown(originalOption: OptionState) {
+    function updateCheckedDown(originalOption: CascaderOptionState) {
       const checked = originalOption.checked
       const partial = originalOption.partial
 
@@ -911,7 +957,7 @@ export default defineComponent({
       }
     }
 
-    function handleOptionCheck(option: OptionState) {
+    function handleOptionCheck(option: CascaderOptionState) {
       if (!option) return
 
       const options = Array.from(optionIdMap.values())
@@ -1142,8 +1188,8 @@ export default defineComponent({
       }
     }
 
-    function handleClick() {
-      if (props.disabled) return
+    function toggleVisible() {
+      if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = !currentVisible.value
     }
@@ -1200,7 +1246,7 @@ export default defineComponent({
       nextTick(computeTagsOverflow)
     }
 
-    function handlePanelKeyOpen(option: OptionState, depth: number) {
+    function handlePanelKeyOpen(option: CascaderOptionState, depth: number) {
       handlePanelOpen(option, depth)
 
       requestAnimationFrame(() => {
@@ -1246,6 +1292,7 @@ export default defineComponent({
       templateValues,
       templateLabels,
       usingHover,
+      showClear,
 
       wrapper,
       reference,
@@ -1257,7 +1304,7 @@ export default defineComponent({
       handlePanelOpen,
       handleOptionSelect,
       handleOptionCheck,
-      handleClick,
+      toggleVisible,
       handleClear,
       toggleShowRestTip,
       handleTipClose,
