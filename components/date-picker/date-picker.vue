@@ -89,7 +89,7 @@
       </div>
       <div
         v-else-if="props.clearable || props.loading"
-        :class="[nh.be('icon'), nh.bem('icon', 'placeholder')]"
+        :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <transition name="vxp-fade" appear>
         <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">

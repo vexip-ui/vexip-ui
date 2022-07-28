@@ -9,10 +9,12 @@
 | disabled        | `boolean`                                        | Set whether to disable the selector                                                                           | `false`        | -       |
 | outside-close   | `boolean`                                        | Set whether to close the component by clicking outside                                                        | `false`        | -       |
 | placeholder     | `string`                                         | Same as native palceholder                                                                                    | `''`           | -       |
-| prefix          | `Record<string, any>`                            | The prefix icon, invalid when using prefix slot                                                               | `''`           | -       |
+| prefix          | `Record<string, any>`                            | The prefix icon, invalid when using prefix slot                                                               | `null`         | -       |
 | prefix-color    | `string`                                         | The color of the prefix content, affects the prefix slot                                                      | `''`           | -       |
-| suffix          | `Record<string, any>`                            | The suffix icon, invalid when using suffix slot                                                               | `''`           | -       |
+| suffix          | `Record<string, any>`                            | The suffix icon, invalid when using suffix slot                                                               | `null`         | -       |
 | suffix-color    | `string`                                         | The color of the suffix content, which affects the suffix slot                                                | `''`           | -       |
+| no-suffix       | `boolean`                                        | Set whether to disable suffix icon                                                                            | `false`        | -       |
+| static-suffix   | `boolean`                                        | Set whether the suffix icon is static                                                                         | `false`        | -       |
 | value           | `string \| number \| (string \| number)[]`       | The value of the selector, you can use `v-model` for two-way binding, and it is an array in multi-select mode | `null`         | -       |
 | clearable       | `boolean`                                        | Set whether the value can be cleared                                                                          | `false`        | -       |
 | max-list-height | `number`                                         | Set the max height of the option list, after which a scroll bar will appear                                   | `300`          | -       |

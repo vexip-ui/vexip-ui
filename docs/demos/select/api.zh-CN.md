@@ -9,10 +9,12 @@
 | disabled        | `boolean`                                        | 设置是否禁用选择器                                          | `false`        | -       |
 | outside-close   | `boolean`                                        | 设置是否可以通过点击组件外部进行关闭                        | `false`        | -       |
 | placeholder     | `string`                                         | 同原生的 palceholder                                        | `''`           | -       |
-| prefix          | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                | `''`           | -       |
+| prefix          | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                                | `null`         | -       |
 | prefix-color    | `string`                                         | 前缀内容的颜色，会影响前缀插槽                              | `''`           | -       |
-| suffix          | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                | `''`           | -       |
+| suffix          | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                                | `null`         | -       |
 | suffix-color    | `string`                                         | 后缀内容的颜色，会影响后缀插槽                              | `''`           | -       |
+| no-suffix       | `boolean`                                        | 设置是否禁用后缀图标                                        | `false`        | -       |
+| static-suffix   | `boolean`                                        | 设置后缀图标是否为静态的                                    | `false`        | -       |
 | value           | `string \| number \| (string \| number)[]`       | 选择器的值，可以使用 `v-model` 双向绑定，多选模式时为数组   | `null`         | -       |
 | clearable       | `boolean`                                        | 设置是否可以清空值                                          | `false`        | -       |
 | max-list-height | `number`                                         | 设置选项列表的最大高度，超过高度后会出现滚动条              | `300`          | -       |

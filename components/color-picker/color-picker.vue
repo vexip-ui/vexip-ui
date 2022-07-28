@@ -11,7 +11,7 @@
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @click="handleToggleTrigger"
+      @click="toggleVisible"
     >
       <slot
         name="control"
@@ -19,6 +19,15 @@
         :alpha="currentAlpha"
         :empty="isEmpty"
       >
+        <div
+          v-if="hasPrefix"
+          :class="[nh.be('icon'), nh.be('prefix')]"
+          :style="{ color: props.prefixColor }"
+        >
+          <slot name="prefix">
+            <Icon :icon="props.prefix"></Icon>
+          </slot>
+        </div>
         <div :class="nh.be('control')">
           <div :class="nh.be('marker')">
             <Icon v-if="!currentVisible && isEmpty">
@@ -35,10 +44,44 @@
               }"
             ></div>
           </div>
-          <div :class="nh.be('arrow')">
-            <Icon><ChevronDown></ChevronDown></Icon>
-          </div>
         </div>
+        <div
+          v-if="!props.noSuffix"
+          :class="[nh.be('icon'), nh.be('suffix')]"
+          :style="{
+            color: props.suffixColor,
+            opacity: showClear || props.loading ? '0%' : ''
+          }"
+        >
+          <slot name="suffix">
+            <Icon
+              v-if="props.suffix"
+              :icon="props.suffix"
+              :class="{
+                [nh.be('arrow')]: !props.staticSuffix
+              }"
+            ></Icon>
+            <Icon v-else :class="nh.be('arrow')">
+              <ChevronDown></ChevronDown>
+            </Icon>
+          </slot>
+        </div>
+        <div
+          v-else-if="props.clearable || props.loading"
+          :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
+        ></div>
+        <transition name="vxp-fade" appear>
+          <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+            <Icon><CircleXmark></CircleXmark></Icon>
+          </div>
+          <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+            <Icon
+              :spin="props.loadingSpin"
+              :pulse="!props.loadingSpin"
+              :icon="props.loadingIcon"
+            ></Icon>
+          </div>
+        </transition>
       </slot>
     </div>
     <Portal :to="transferTo">
@@ -144,7 +187,7 @@ import ColorAlpha from './color-alpha.vue'
 import ColorHue from './color-hue.vue'
 import ColorPalette from './color-palette.vue'
 import { useFieldStore } from '@/components/form'
-import { usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import { usePopper, placementWhileList, useClickOutside, useHover } from '@vexip-ui/mixins'
 import {
   useNameHelper,
   useProps,
@@ -167,7 +210,7 @@ import {
   hsvToHsl,
   rgbaToHex
 } from '@vexip-ui/utils'
-import { Xmark, ChevronDown } from '@vexip-ui/icons'
+import { Xmark, ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
@@ -216,7 +259,8 @@ export default defineComponent({
     Input,
     Portal,
     Xmark,
-    ChevronDown
+    ChevronDown,
+    CircleXmark
   },
   props: {
     size: sizeProp,
@@ -238,6 +282,16 @@ export default defineComponent({
     clearable: booleanProp,
     cancelText: String,
     confirmText: String,
+    prefix: Object,
+    prefixColor: String,
+    suffix: Object,
+    suffixColor: String,
+    noSuffix: booleanProp,
+    staticSuffix: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onToggle: eventProp<(visible: boolean) => void>(),
     onClickOutside: eventProp(),
     onOutsideClose: eventProp(),
@@ -246,7 +300,7 @@ export default defineComponent({
     onShortcut: eventProp<(color: FormattedColor) => void>()
   },
   emits: ['update:value', 'update:visible'],
-  setup(_props, { emit }) {
+  setup(_props, { slots, emit }) {
     const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
       useFieldStore<Color | null>(() => reference.value?.focus())
 
@@ -278,7 +332,17 @@ export default defineComponent({
       outsideClose: true,
       clearable: false,
       cancelText: null,
-      confirmText: null
+      confirmText: null,
+      prefix: null,
+      prefixColor: '',
+      suffix: null,
+      suffixColor: '',
+      noSuffix: false,
+      staticSuffix: false,
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const isEmpty = ref(true)
@@ -308,6 +372,7 @@ export default defineComponent({
       wrapper,
       isDrop: true
     })
+    const { isHover } = useHover(reference)
 
     const unitList = computed(() => {
       return [
@@ -346,6 +411,7 @@ export default defineComponent({
       return {
         [baseCls]: true,
         [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--focused}`]: currentVisible.value,
         [`${baseCls}--${props.state}`]: props.state !== 'default'
@@ -376,6 +442,12 @@ export default defineComponent({
       }
 
       return defaultShotcuts
+    })
+    const hasPrefix = computed(() => {
+      return !!(slots.prefix || props.prefix)
+    })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && !isEmpty.value
     })
 
     watch(
@@ -422,8 +494,8 @@ export default defineComponent({
       }
     }
 
-    function handleToggleTrigger() {
-      if (props.disabled) return
+    function toggleVisible() {
+      if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = !currentVisible.value
     }
@@ -647,6 +719,8 @@ export default defineComponent({
       rgb,
       hex,
       shortcutList,
+      hasPrefix,
+      showClear,
 
       wrapper,
       reference,
@@ -659,7 +733,7 @@ export default defineComponent({
       cancel,
       confirm,
 
-      handleToggleTrigger,
+      toggleVisible,
       handleClear,
       handleOk,
       handlePaletteChange,

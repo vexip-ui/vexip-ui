@@ -22,6 +22,7 @@
 | prefix-color    | `string`                                                  | 前缀内容的颜色，会影响前缀插槽                                                     | `''`             | -       |
 | suffix          | `Record<string, any>`                                     | 后缀图标，使用后缀插槽时无效                                                       | `null`           | -       |
 | suffix-color    | `string`                                                  | 后缀内容的颜色，会影响后缀插槽                                                     | `''`             | -       |
+| no-suffix       | `boolean`                                                 | 设置是否禁用后缀图标                                                               | `false`          | -       |
 | disabled        | `boolean`                                                 | 设置是否禁用日期选择框                                                             | `false`          | -       |
 | transition-name | `string`                                                  | 设置时间选择窗口的显示隐藏过渡效果                                                 | `'vxp-drop'`     | -       |
 | ok-text         | `string`                                                  | 时间选择窗口确认按钮的文本内容                                                     | `locale.confirm` | -       |

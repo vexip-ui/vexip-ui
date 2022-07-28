@@ -170,6 +170,7 @@ $input: map.merge(
     user-select: none;
 
     &--placeholder {
+      min-width: 14px;
       opacity: 0%;
     }
 

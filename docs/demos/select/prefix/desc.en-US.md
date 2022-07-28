@@ -1,3 +1,3 @@
 ### Prefix Icon
 
-Prefix icons can be added to the selector by setting the `prefix` prop or using the slot of the same name.
+Prefix icon can be added to select by setting the `prefix` prop or using the slot of the same name.
