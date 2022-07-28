@@ -135,22 +135,28 @@ export default defineComponent({
 
         return (
           <i {...iAttrs}>
-            <svg viewBox={viewBox.value}>
-              {...content}
-              {icon.value
-                ? icon.value.paths
-                  .map((path, index) => <path {...path} key={index}></path>)
-                  .concat(
-                    icon.value.polygons.map((polygon, index) => (
-                        <polygon {...polygon} key={index}></polygon>
-                    ))
-                  )
-                : []}
-            </svg>
+            <g>
+              <svg viewBox={viewBox.value}>
+                {...content}
+                {icon.value
+                  ? icon.value.paths
+                    .map((path, index) => <path {...path} key={index}></path>)
+                    .concat(
+                      icon.value.polygons.map((polygon, index) => (
+                          <polygon {...polygon} key={index}></polygon>
+                      ))
+                    )
+                  : []}
+              </svg>
+            </g>
           </i>
         )
       } else {
-        return <i {...iAttrs}>{h(props.icon)}</i>
+        return (
+          <i {...iAttrs}>
+            <g>{h(props.icon)}</g>
+          </i>
+        )
       }
     }
   }
