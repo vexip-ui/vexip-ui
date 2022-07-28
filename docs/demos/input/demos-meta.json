@@ -6,5 +6,6 @@
   "before",
   "clearable",
   "password",
+  "loading",
   "state"
 ]

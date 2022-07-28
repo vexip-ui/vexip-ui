@@ -16,7 +16,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { isNull, throttle } from '@vexip-ui/utils'
-import { EyeSlashR, EyeR, CircleXmark } from '@vexip-ui/icons'
+import { EyeSlashR, EyeR, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -54,6 +54,10 @@ export default defineComponent({
     // 是否显示切换 passwrod 为明文的按钮
     plainPassword: booleanProp,
     clearable: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onInput: eventProp<(value: string) => void>(),
@@ -102,7 +106,11 @@ export default defineComponent({
       before: '',
       after: '',
       plainPassword: false,
-      clearable: false
+      clearable: false,
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const nh = useNameHelper('input')
@@ -140,7 +148,8 @@ export default defineComponent({
           // [nh.bm('has-prefix')]: hasPrefix.value,
           // [nh.bm('has-suffix')]: hasSuffix.value || props.type === 'password',
           [nh.bm('before')]: slots.beforeButton || slots['before-button'],
-          [nh.bm('after')]: slots.afterButton || slots['after-button']
+          [nh.bm('after')]: slots.afterButton || slots['after-button'],
+          [nh.bm('loading')]: props.loading
         }
       ]
     })
@@ -153,12 +162,8 @@ export default defineComponent({
         [nh.bs('wrapper--after-only')]: !hasBefore.value && hasAfter.value
       }
     })
-    const hasPrefix = computed(() => {
-      return !!(slots.prefix || props.prefix)
-    })
-    const hasSuffix = computed(() => {
-      return !!(slots.suffix || props.suffix)
-    })
+    const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
+    const hasSuffix = computed(() => !!(slots.suffix || props.suffix))
     const inputType = computed(() => {
       const type = props.type
 
@@ -177,9 +182,7 @@ export default defineComponent({
         ? props.formatter(currentValue.value)
         : currentValue.value
     })
-    const passwordIcon = computed(() => {
-      return showPassword.value ? EyeR : EyeSlashR
-    })
+    const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
     const countStyle = computed(() => {
       let fix = 0
 
@@ -196,6 +199,7 @@ export default defineComponent({
     const hasValue = computed(() => {
       return !(isNull(currentValue.value) || currentValue.value === '')
     })
+    const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
 
     watch(
       () => props.value,
@@ -361,6 +365,18 @@ export default defineComponent({
         )
       }
 
+      if (props.loading) {
+        return (
+          <div key={'loading'} class={nh.bem('icon', 'loading')}>
+            <Icon
+              spin={props.loadingSpin}
+              pulse={!props.loadingSpin}
+              icon={props.loadingIcon}
+            ></Icon>
+          </div>
+        )
+      }
+
       if (hasSuffix.value) return createAffixElement('suffix')
 
       if (props.type === 'password' && props.plainPassword) {
@@ -393,7 +409,7 @@ export default defineComponent({
             autocomplete={props.autocomplete ? 'on' : 'off'}
             spellcheck={props.spellcheck}
             disabled={props.disabled}
-            readonly={props.readonly}
+            readonly={readonly.value}
             placeholder={props.placeholder ?? locale.value.placeholder}
             onBlur={handleBlur}
             onFocus={handleFocus}

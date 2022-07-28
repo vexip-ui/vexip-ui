@@ -209,6 +209,7 @@ $input: map.merge(
   @include handler;
 
   &-wrapper & {
+    width: 100%;
     background-color: transparent;
     border-radius: 0;
   }
