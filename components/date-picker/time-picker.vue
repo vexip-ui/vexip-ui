@@ -11,7 +11,11 @@
       tabindex="0"
       @keydown.space.prevent="handleTirggerClick"
     >
-      <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
+      <div
+        v-if="hasPrefix"
+        :class="[nh.be('icon'), nh.be('prefix')]"
+        :style="{ color: props.prefixColor }"
+      >
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
@@ -80,7 +84,7 @@
         >
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div v-else :class="nh.bem('icon', 'suffix')" :style="{ color: props.suffixColor }">
+        <div v-else :class="[nh.be('icon'), nh.be('suffix')]" :style="{ color: props.suffixColor }">
           <slot name="suffix">
             <Icon :icon="props.suffix || ClockR"></Icon>
           </slot>

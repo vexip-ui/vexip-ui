@@ -1,11 +1,20 @@
 <template>
   <div :id="idFor" ref="wrapper" :class="className">
+    <div
+      v-if="hasPrefix"
+      :class="[nh.be('icon'), nh.be('prefix')]"
+      :style="{ color: props.prefixColor }"
+      @click="handlePrefixClick"
+    >
+      <slot name="prefix">
+        <Icon :icon="props.prefix"></Icon>
+      </slot>
+    </div>
     <input
       ref="input"
       type="text"
       :class="[nh.be('control'), inputClass]"
       :value="focused ? preciseNumber : formattedValue"
-      :style="inputStyle"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"
       :spellcheck="props.spellcheck"
@@ -18,26 +27,6 @@
       @input="handleInput"
       @change="handleChange"
     />
-    <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
-      <Icon :scale="0.8">
-        <CaretUp></CaretUp>
-      </Icon>
-    </div>
-    <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
-      <Icon :scale="0.8">
-        <CaretDown></CaretDown>
-      </Icon>
-    </div>
-    <div
-      v-if="hasPrefix"
-      :class="nh.bem('icon', 'prefix')"
-      :style="{ color: props.prefixColor }"
-      @click="handlePrefixClick"
-    >
-      <slot name="prefix">
-        <Icon :icon="props.prefix"></Icon>
-      </slot>
-    </div>
     <transition name="vxp-fade">
       <div
         v-if="!props.disabled && props.clearable && isHover && hasValue"
@@ -48,7 +37,7 @@
       </div>
       <div
         v-else-if="hasSuffix"
-        :class="nh.bem('icon', 'suffix')"
+        :class="[nh.be('icon'), nh.be('suffix')]"
         :style="{ color: props.suffixColor }"
         @click="handleSuffixClick"
       >
@@ -57,6 +46,16 @@
         </slot>
       </div>
     </transition>
+    <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
+      <Icon :scale="0.8">
+        <CaretUp></CaretUp>
+      </Icon>
+    </div>
+    <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
+      <Icon :scale="0.8">
+        <CaretDown></CaretDown>
+      </Icon>
+    </div>
   </div>
 </template>
 

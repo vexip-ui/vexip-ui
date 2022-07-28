@@ -90,13 +90,13 @@ $input: map.merge(
       );
     }
 
-    &--has-prefix {
-      padding-left: get-css-var('input-prefix-width');
-    }
+    // &--has-prefix {
+    //   padding-left: get-css-var('input-prefix-width');
+    // }
 
-    &--has-suffix {
-      padding-right: get-css-var('input-suffix-width');
-    }
+    // &--has-suffix {
+    //   padding-right: get-css-var('input-suffix-width');
+    // }
 
     $states: success, error, warning;
 
@@ -161,41 +161,27 @@ $input: map.merge(
     @extend %disabled-item;
   }
 
-  @at-root {
-    %icon {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      color: get-css-var('input-icon-color');
-      user-select: none;
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: get-css-var('input-icon-color');
+    user-select: none;
 
-      @extend %disabled-item;
-    }
+    @extend %disabled-item;
   }
 
-  &__icon {
-    &--prefix {
-      @extend %icon;
+  &__prefix {
+    margin-right: 4px;
+  }
 
-      left: 0;
-      width: get-css-var('input-prefix-width');
-    }
-
-    &--suffix {
-      @extend %icon;
-
-      right: 0;
-      width: get-css-var('input-suffix-width');
-    }
+  &__suffix {
+    margin-left: 4px;
   }
 
   &__clear {
-    @extend %icon;
-
-    right: 0;
-    width: get-css-var('input-suffix-width');
+    margin-left: 4px;
     cursor: pointer;
   }
 }
@@ -245,21 +231,8 @@ $input: map.merge(
     border-right-color: transparent;
   }
 
-  &__icon {
-    &--password {
-      position: absolute;
-      right: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: get-css-var('input-suffix-width');
-      height: 100%;
-      color: get-css-var('input-icon-color');
-      cursor: pointer;
-      user-select: none;
-
-      @extend %disabled-item;
-    }
+  &__password {
+    cursor: pointer;
   }
 
   &__count {

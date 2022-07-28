@@ -11,7 +11,11 @@
       tabindex="0"
       @keydown.space.prevent="handleClick"
     >
-      <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
+      <div
+        v-if="hasPrefix"
+        :class="[nh.be('icon'), nh.be('prefix')]"
+        :style="{ color: props.prefixColor }"
+      >
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
@@ -92,7 +96,7 @@
         </div>
         <div
           v-else-if="!noSuffix"
-          :class="nh.bem('icon', 'suffix')"
+          :class="[nh.be('icon'), nh.be('suffix')]"
           :style="{ color: props.suffixColor }"
         >
           <slot name="suffix">

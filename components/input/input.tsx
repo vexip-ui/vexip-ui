@@ -52,7 +52,7 @@ export default defineComponent({
     before: String,
     after: String,
     // 是否显示切换 passwrod 为明文的按钮
-    password: booleanProp,
+    plainPassword: booleanProp,
     clearable: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
@@ -101,7 +101,7 @@ export default defineComponent({
       maxLength: 0,
       before: '',
       after: '',
-      password: false,
+      plainPassword: false,
       clearable: false
     })
 
@@ -114,7 +114,7 @@ export default defineComponent({
     const beforeHover = ref(false)
     const afterHover = ref(false)
 
-    const { wrapper, isHover } = useHover()
+    const { wrapper: control, isHover } = useHover()
     const locale = useLocale('input')
 
     // eslint-disable-next-line vue/no-setup-props-destructure
@@ -137,8 +137,8 @@ export default defineComponent({
           [nh.bm('disabled')]: props.disabled,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('has-prefix')]: hasPrefix.value,
-          [nh.bm('has-suffix')]: hasSuffix.value || props.type === 'password',
+          // [nh.bm('has-prefix')]: hasPrefix.value,
+          // [nh.bm('has-suffix')]: hasSuffix.value || props.type === 'password',
           [nh.bm('before')]: slots.beforeButton || slots['before-button'],
           [nh.bm('after')]: slots.afterButton || slots['after-button']
         }
@@ -178,7 +178,7 @@ export default defineComponent({
         : currentValue.value
     })
     const passwordIcon = computed(() => {
-      return showPassword.value ? EyeSlashR : EyeR
+      return showPassword.value ? EyeR : EyeSlashR
     })
     const countStyle = computed(() => {
       let fix = 0
@@ -343,7 +343,7 @@ export default defineComponent({
       return (
         <div
           key={type}
-          class={nh.bem('icon', type)}
+          class={[nh.be('icon'), nh.be(type)]}
           style={isPrefix ? { color: props.prefixColor } : { color: props.suffixColor }}
           onClick={isPrefix ? handlePrefixClick : handleSuffixClick}
         >
@@ -355,7 +355,7 @@ export default defineComponent({
     function createSuffixElement() {
       if (!props.disabled && props.clearable && hasValue.value && isHover.value) {
         return (
-          <div key={'clear'} class={nh.be('clear')} onClick={handleClear}>
+          <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
             <Icon icon={CircleXmark}></Icon>
           </div>
         )
@@ -363,9 +363,13 @@ export default defineComponent({
 
       if (hasSuffix.value) return createAffixElement('suffix')
 
-      if (props.type === 'password' && props.password) {
+      if (props.type === 'password' && props.plainPassword) {
         return (
-          <div key={'password'} class={nh.bem('icon', 'password')} onClick={toggleShowPassword}>
+          <div
+            key={'password'}
+            class={[nh.be('icon'), nh.be('password')]}
+            onClick={toggleShowPassword}
+          >
             <Icon icon={passwordIcon.value}></Icon>
           </div>
         )
@@ -378,7 +382,8 @@ export default defineComponent({
 
     function createInputElement() {
       return (
-        <div id={idFor.value} ref={wrapper} class={className.value}>
+        <div id={idFor.value} ref={control} class={className.value}>
+          {hasPrefix.value && createAffixElement('prefix')}
           <input
             ref={inputControl}
             class={[nh.be('control'), props.inputClass]}
@@ -398,7 +403,6 @@ export default defineComponent({
             onKeydown={handleKeyDown}
             onKeyup={handleKeyUp}
           />
-          {hasPrefix.value && createAffixElement('prefix')}
           <Transition name={nh.ns('fade')}>{createSuffixElement()}</Transition>
           {props.maxLength
             ? (
