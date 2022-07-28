@@ -47,12 +47,33 @@
           </span>
         </slot>
       </div>
-      <transition name="vxp-fade">
-        <div
-          v-if="!props.disabled && props.clearable && isHover && hasValue"
-          :class="[nh.be('icon'), nh.be('clear')]"
-          @click.stop="handleClear"
-        >
+      <div
+        v-if="!noSuffix"
+        :class="[nh.be('icon'), nh.be('suffix')]"
+        :style="{
+          color: props.suffixColor,
+          opacity: showClear || props.loading ? '0%' : ''
+        }"
+      >
+        <slot name="suffix">
+          <Icon
+            v-if="props.suffix"
+            :icon="props.suffix"
+            :class="{
+              [nh.be('arrow')]: !props.staticSuffix
+            }"
+          ></Icon>
+          <Icon v-else :class="nh.be('arrow')">
+            <ChevronDown></ChevronDown>
+          </Icon>
+        </slot>
+      </div>
+      <div
+        v-else-if="props.clearable || props.loading"
+        :class="[nh.be('icon'), nh.bem('icon', 'placeholder')]"
+      ></div>
+      <transition name="vxp-fade" appear>
+        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
@@ -61,24 +82,6 @@
             :pulse="!props.loadingSpin"
             :icon="props.loadingIcon"
           ></Icon>
-        </div>
-        <div
-          v-else-if="!noSuffix"
-          :class="[nh.be('icon'), nh.be('suffix')]"
-          :style="{ color: props.suffixColor }"
-        >
-          <slot name="suffix">
-            <Icon
-              v-if="props.suffix"
-              :icon="props.suffix"
-              :class="{
-                [nh.be('arrow')]: !props.staticSuffix
-              }"
-            ></Icon>
-            <Icon v-else :class="nh.be('arrow')">
-              <ChevronDown></ChevronDown>
-            </Icon>
-          </slot>
         </div>
       </transition>
     </div>
@@ -491,6 +494,7 @@ export default defineComponent({
         [baseCls]: true,
         [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
         [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
@@ -508,6 +512,9 @@ export default defineComponent({
       return (
         !!(props.emptyText || slots.empty || locale.value.empty) && !visibleOptions.value.length
       )
+    })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && hasValue.value
     })
 
     watch(
@@ -760,6 +767,7 @@ export default defineComponent({
       hasPrefix,
       visibleOptions,
       hasEmptyTip,
+      showClear,
 
       wrapper,
       reference,

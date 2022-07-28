@@ -200,6 +200,9 @@ export default defineComponent({
       return !(isNull(currentValue.value) || currentValue.value === '')
     })
     const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && hasValue.value && isHover.value
+    })
 
     watch(
       () => props.value,
@@ -340,24 +343,60 @@ export default defineComponent({
       emitEvent(props.onKeyUp, event)
     }
 
-    function createAffixElement(type: 'prefix' | 'suffix') {
-      const isPrefix = type === 'prefix'
-      const affixSlot = isPrefix ? slots.prefix : slots.suffix
-
+    function renderPrefix() {
       return (
         <div
-          key={type}
-          class={[nh.be('icon'), nh.be(type)]}
-          style={isPrefix ? { color: props.prefixColor } : { color: props.suffixColor }}
-          onClick={isPrefix ? handlePrefixClick : handleSuffixClick}
+          class={[nh.be('icon'), nh.be('prefix')]}
+          style={{ color: props.prefixColor }}
+          onClick={handlePrefixClick}
         >
-          {affixSlot ? affixSlot() : <Icon icon={isPrefix ? props.prefix : props.suffix}></Icon>}
+          {slots.prefix ? slots.prefix() : <Icon icon={props.prefix}></Icon>}
         </div>
       )
     }
 
-    function createSuffixElement() {
-      if (!props.disabled && props.clearable && hasValue.value && isHover.value) {
+    function renderSuffix() {
+      if (hasSuffix.value) {
+        return (
+          <div
+            key={'suffix'}
+            class={[nh.be('icon'), nh.be('suffix')]}
+            style={{
+              color: props.suffixColor,
+              opacity: showClear.value || props.loading ? '0%' : ''
+            }}
+            onClick={handleSuffixClick}
+          >
+            {slots.suffix ? slots.suffix() : <Icon icon={props.suffix}></Icon>}
+          </div>
+        )
+      }
+
+      if (props.type === 'password' && props.plainPassword) {
+        return (
+          <div
+            key={'password'}
+            class={[nh.be('icon'), nh.be('password')]}
+            style={{
+              color: props.suffixColor,
+              opacity: showClear.value || props.loading ? '0%' : ''
+            }}
+            onClick={toggleShowPassword}
+          >
+            <Icon icon={passwordIcon.value}></Icon>
+          </div>
+        )
+      }
+
+      if (props.clearable || props.loading) {
+        return <div key={'placeholder'} class={[nh.be('icon'), nh.be('placeholder')]}></div>
+      }
+
+      return null
+    }
+
+    function renderSuffixAction() {
+      if (showClear.value) {
         return (
           <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
             <Icon icon={CircleXmark}></Icon>
@@ -377,29 +416,15 @@ export default defineComponent({
         )
       }
 
-      if (hasSuffix.value) return createAffixElement('suffix')
-
-      if (props.type === 'password' && props.plainPassword) {
-        return (
-          <div
-            key={'password'}
-            class={[nh.be('icon'), nh.be('password')]}
-            onClick={toggleShowPassword}
-          >
-            <Icon icon={passwordIcon.value}></Icon>
-          </div>
-        )
-      }
-
       return null
     }
 
     const handleInput = throttle(handleChange)
 
-    function createInputElement() {
+    function renderControl() {
       return (
         <div id={idFor.value} ref={control} class={className.value}>
-          {hasPrefix.value && createAffixElement('prefix')}
+          {hasPrefix.value && renderPrefix()}
           <input
             ref={inputControl}
             class={[nh.be('control'), props.inputClass]}
@@ -419,7 +444,10 @@ export default defineComponent({
             onKeydown={handleKeyDown}
             onKeyup={handleKeyUp}
           />
-          <Transition name={nh.ns('fade')}>{createSuffixElement()}</Transition>
+          {renderSuffix()}
+          <Transition name={nh.ns('fade')} appear>
+            {renderSuffixAction()}
+          </Transition>
           {props.maxLength
             ? (
             <div class={nh.be('count')} style={countStyle.value}>
@@ -454,13 +482,13 @@ export default defineComponent({
         return (
           <div class={wrapperClass.value}>
             {hasBefore.value && renderAside('before')}
-            {createInputElement()}
+            {renderControl()}
             {hasAfter.value && renderAside('after')}
           </div>
         )
       }
 
-      return createInputElement()
+      return renderControl()
     }
   },
   methods: {

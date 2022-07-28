@@ -90,14 +90,6 @@ $input: map.merge(
       );
     }
 
-    // &--has-prefix {
-    //   padding-left: get-css-var('input-prefix-width');
-    // }
-
-    // &--has-suffix {
-    //   padding-right: get-css-var('input-suffix-width');
-    // }
-
     $states: success, error, warning;
 
     @each $state in $states {
@@ -169,6 +161,10 @@ $input: map.merge(
     color: get-css-var('input-icon-color');
     user-select: none;
 
+    &--placeholder {
+      opacity: 0%;
+    }
+
     @extend %disabled-item;
   }
 
@@ -178,9 +174,14 @@ $input: map.merge(
 
   &__suffix {
     margin-left: 4px;
+    transition: get-css-var('transition-opacity');
   }
 
-  &__clear {
+  &__clear,
+  &__loading {
+    position: absolute;
+    right: get-css-var('input-h-padding');
+    min-width: 14px;
     margin-left: 4px;
     cursor: pointer;
   }

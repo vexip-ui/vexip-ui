@@ -2,9 +2,10 @@
   "basis",
   "disabled",
   "size",
+  "clearable",
   "icon",
   "range",
   "precision",
   "step",
-  "clearable"
+  "loading"
 ]

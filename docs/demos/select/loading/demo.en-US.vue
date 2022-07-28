@@ -8,6 +8,10 @@
     placeholder="loading and readonly"
     :options="options"
   ></Select>
+  <p>
+    Loaidng:
+    <Switch v-model:value="loading"></Switch>
+  </p>
 </template>
 
 <script setup lang="ts">

@@ -14,12 +14,12 @@
       ref="input"
       type="text"
       :class="[nh.be('control'), inputClass]"
-      :value="focused ? preciseNumber : formattedValue"
+      :value="inputValue"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"
       :spellcheck="props.spellcheck"
       :disabled="props.disabled"
-      :readonly="props.readonly"
+      :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
       @blur="handleBlur"
       @focus="handleFocus"
@@ -27,23 +27,33 @@
       @input="handleInput"
       @change="handleChange"
     />
-    <transition name="vxp-fade">
-      <div
-        v-if="!props.disabled && props.clearable && isHover && hasValue"
-        :class="[nh.be('icon'), nh.be('clear')]"
-        @click.stop="handleClear"
-      >
+    <div
+      v-if="hasSuffix"
+      :class="[nh.be('icon'), nh.be('suffix')]"
+      :style="{
+        color: props.suffixColor,
+        opacity: showClear || props.loading ? '0%' : ''
+      }"
+      @click="handleSuffixClick"
+    >
+      <slot name="suffix">
+        <Icon :icon="props.suffix"></Icon>
+      </slot>
+    </div>
+    <div
+      v-else-if="props.clearable || props.loading"
+      :class="[nh.be('icon'), nh.bem('icon', 'placeholder')]"
+    ></div>
+    <transition name="vxp-fade" appear>
+      <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
         <Icon><CircleXmark></CircleXmark></Icon>
       </div>
-      <div
-        v-else-if="hasSuffix"
-        :class="[nh.be('icon'), nh.be('suffix')]"
-        :style="{ color: props.suffixColor }"
-        @click="handleSuffixClick"
-      >
-        <slot name="suffix">
-          <Icon :icon="props.suffix"></Icon>
-        </slot>
+      <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+        <Icon
+          :spin="props.loadingSpin"
+          :pulse="!props.loadingSpin"
+          :icon="props.loadingIcon"
+        ></Icon>
       </div>
     </transition>
     <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
@@ -78,7 +88,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { isNull, toFixed, toNumber, boundRange, throttle, plus, minus } from '@vexip-ui/utils'
-import { CaretUp, CaretDown, CircleXmark } from '@vexip-ui/icons'
+import { CaretUp, CaretDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
@@ -120,6 +130,10 @@ export default defineComponent({
     inputClass: classProp,
     debounce: booleanProp,
     clearable: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onInput: eventProp<(value: number) => void>(),
@@ -135,7 +149,7 @@ export default defineComponent({
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
     const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<number>(() => inputControl.value?.focus())
+      useFieldStore<number>(focus)
 
     const props = useProps('numberInput', _props, {
       size: createSizeProp(),
@@ -168,7 +182,11 @@ export default defineComponent({
       disabled: () => disabled.value,
       inputClass: null,
       debounce: false,
-      clearable: false
+      clearable: false,
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const nh = useNameHelper('number-input')
@@ -176,7 +194,7 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const inputting = ref(false)
 
-    const inputControl = ref<HTMLElement | null>(null)
+    const inputControl = ref<HTMLInputElement | null>(null)
     const { wrapper, isHover } = useHover()
 
     useModifier({
@@ -213,6 +231,7 @@ export default defineComponent({
         {
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default'
         }
@@ -251,6 +270,17 @@ export default defineComponent({
     const hasValue = computed(() => {
       return currentValue.value || currentValue.value === 0
     })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && hasValue.value
+    })
+    const inputValue = computed(() => {
+      if (Number.isNaN(currentValue.value)) {
+        return ''
+      }
+
+      return focused.value ? preciseNumber.value : formattedValue.value
+    })
+    const isReadonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
 
     watch(
       () => props.value,
@@ -307,11 +337,11 @@ export default defineComponent({
     }
 
     function changeStep(type: 'plus' | 'minus', modifier?: 'ctrl' | 'shift' | 'alt') {
-      if (props.disabled) {
+      if (props.disabled || (props.loading && props.loadingLock)) {
         return
       }
 
-      let value = currentValue.value ?? 0
+      let value = currentValue.value || 0
       let step!: number
 
       switch (modifier) {
@@ -368,7 +398,7 @@ export default defineComponent({
 
     function setValue(value: number, type: InputEventType) {
       if (type !== 'input') {
-        currentValue.value = boundRange(value || 0, props.min, props.max)
+        currentValue.value = boundRange(value, props.min, props.max)
       } else {
         currentValue.value = value
       }
@@ -432,6 +462,9 @@ export default defineComponent({
       plusDisabled,
       minusDisabled,
       hasValue,
+      showClear,
+      inputValue,
+      isReadonly,
 
       wrapper,
       input: inputControl,
