@@ -26,6 +26,8 @@
           <li
             v-if="menu.to"
             class="vxp-menu__item vxp-menu__item--no-icon"
+            role="menuitem"
+            tabindex="0"
             @click="openPage(menu.to)"
           >
             <div class="vxp-menu__label">
@@ -39,9 +41,11 @@
       </Menu>
     </div>
     <Dropdown class="language" trigger="click">
-      <Icon :scale="2">
-        <Language></Language>
-      </Icon>
+      <button class="language-trigger">
+        <Icon :scale="2">
+          <Language></Language>
+        </Icon>
+      </button>
       <template #drop>
         <DropdownList>
           <DropdownItem
@@ -165,7 +169,10 @@ watchEffect(() => {
   currentMenu.value = matchedMenu ? matchedMenu.label! : ''
 })
 
-watch(() => route.path, () => emit('toggle-menu', false))
+watch(
+  () => route.path,
+  () => emit('toggle-menu', false)
+)
 
 function selectMenu(label: string) {
   if (!route.path.startsWith(`/${language.value}/${label}`)) {
@@ -320,7 +327,7 @@ function formatComponentName(name: string) {
     }
 
     .vxp-menu {
-      margin-right: 24px;
+      margin-right: 20px;
       border: 0;
     }
 
@@ -333,6 +340,14 @@ function formatComponentName(name: string) {
     display: inline-flex;
     margin-right: 24px;
     cursor: pointer;
+
+    &-trigger {
+      display: flex;
+      padding: 0;
+      color: var(--vxp-content-color-base);
+      background-color: transparent;
+      border: 0;
+    }
   }
 
   .theme {

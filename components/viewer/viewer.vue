@@ -19,7 +19,12 @@
         </div>
       </div>
     </div>
-    <div :class="toolbarClass" @mouseenter="handleEnterToolbar" @mouseleave="handleLeaveToolbar">
+    <div
+      :class="toolbarClass"
+      role="toolbar"
+      @mouseenter="handleEnterToolbar"
+      @mouseleave="handleLeaveToolbar"
+    >
       <template v-for="action in allActions" :key="action.name">
         <template v-if="!getActionProp(action, 'hidden')">
           <button

@@ -48,6 +48,8 @@
           :placeholder="props.placeholder ?? locale.placeholder"
           autocomplete="off"
           tabindex="-1"
+          role="combobox"
+          aria-autocomplete="list"
           @input="handleInput"
           @change="handleInputChange"
           @keydown.enter="handleEnter"
