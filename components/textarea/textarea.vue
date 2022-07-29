@@ -9,7 +9,7 @@
       :autocomplete="props.autocomplete ? 'on' : 'off'"
       :spellcheck="props.spellcheck"
       :disabled="props.disabled"
-      :readonly="props.readonly"
+      :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
       @blur="handleBlur"
       @focus="handleFocus"
@@ -20,8 +20,19 @@
       @input="handleInput"
       @change="handleChange"
     ></textarea>
-    <div v-if="props.maxLength" :class="nh.be('count')">
-      {{ `${currentLength}/${props.maxLength}` }}
+    <div :class="nh.be('extra')">
+      <transition name="vxp-fade" appear>
+        <div v-if="props.loading" :class="nh.be('loading')">
+          <Icon
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+          ></Icon>
+        </div>
+      </transition>
+      <div v-if="props.maxLength" :class="nh.be('count')">
+        {{ `${currentLength}/${props.maxLength}` }}
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +40,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { useFieldStore } from '@/components/form'
+import { Spinner } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
@@ -56,6 +68,10 @@ export default defineComponent({
     disabled: booleanProp,
     debounce: booleanProp,
     maxLength: Number,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onInput: eventProp<(value: string) => void>(),
@@ -85,7 +101,11 @@ export default defineComponent({
       readonly: false,
       disabled: () => disabled.value,
       debounce: false,
-      maxLength: 0
+      maxLength: 0,
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const nh = useNameHelper('textarea')
@@ -105,9 +125,13 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bm('focused')]: focused.value,
         [nh.bm('disabled')]: props.disabled,
+        [nh.bm('loading')]: props.loading && props.loadingLock,
         [nh.bm('no-resize')]: props.noResize,
         [nh.bm(props.state)]: props.state !== 'default'
       }
+    })
+    const isReadonly = computed(() => {
+      return (props.loading && props.loadingLock) || props.readonly
     })
 
     watch(
@@ -199,6 +223,7 @@ export default defineComponent({
       currentLength,
 
       className,
+      isReadonly,
 
       textarea,
 
