@@ -1,6 +1,6 @@
 <template>
-  <label :class="className">
-    <span :class="nh.be('signal')"></span>
+  <label :class="className" :aria-disabled="isDisabled">
+    <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span v-if="hasLabel || hasSlot" :class="[nh.be('label'), props.labelClass]">
       <slot>{{ props.label }}</slot>
     </span>
@@ -57,6 +57,8 @@ export default defineComponent({
     control: booleanProp,
     partial: booleanProp,
     tabIndex: [String, Number],
+    loading: booleanProp,
+    loadingLock: booleanProp,
     onChange: eventProp<(checked: boolean) => void>()
   },
   emits: ['update:checked'],
@@ -81,7 +83,9 @@ export default defineComponent({
       border: false,
       control: false,
       partial: false,
-      tabIndex: 0
+      tabIndex: 0,
+      loading: false,
+      loadingLock: false
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -100,6 +104,8 @@ export default defineComponent({
     const size = computed(() => groupState?.size || props.size)
     const computedState = computed(() => groupState?.state || props.state)
     const isDisabled = computed(() => groupState?.disabled || props.disabled)
+    const isLoading = computed(() => groupState?.loading || props.loading)
+    const isLoadingLock = computed(() => groupState?.loadingLock || props.loadingLock)
     const className = computed(() => {
       return [
         nh.b(),
@@ -107,6 +113,7 @@ export default defineComponent({
         {
           [nh.bm('checked')]: currentChecked.value,
           [nh.bm('disabled')]: isDisabled.value,
+          [nh.bm('loading')]: isLoading.value && isLoadingLock.value,
           [nh.bm(size.value)]: size.value !== 'default',
           [nh.bm('border')]: props.border,
           [nh.bm('partial')]: props.control && currentPartial.value,
@@ -201,6 +208,10 @@ export default defineComponent({
     }
 
     function handleChange(checked: boolean) {
+      if (isDisabled.value || (isLoading.value && isLoadingLock.value)) {
+        return
+      }
+
       setCurrentChecked(checked)
 
       if (!props.control && groupState) {
@@ -223,6 +234,7 @@ export default defineComponent({
       className,
       hasLabel,
       hasSlot,
+      isLoading,
 
       input,
 

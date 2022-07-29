@@ -11,6 +11,8 @@ export interface GroupState {
   size: ComponentSize,
   state: ComponentState,
   disabled: boolean,
+  loading: boolean,
+  loadingLock: boolean,
   increaseItem(value: string | number, checked: boolean, input: Ref<HTMLElement | null>): void,
   decreaseItem(value: string | number, input: Ref<HTMLElement | null>): void,
   increaseControl(state: ControlState): void,

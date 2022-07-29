@@ -48,3 +48,40 @@
     @content;
   }
 }
+
+@mixin around-border($border-color, $border-radius, $duration: 2000ms) {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    pointer-events: none;
+    content: '';
+    border: get-css-var('border-shape') $border-color;
+    border-radius: $border-radius;
+    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    animation: vxp-border-clip $duration infinite linear;
+  }
+}
+
+@keyframes vxp-border-clip {
+  0%,
+  100% {
+    clip-path: inset(0 0 calc(100% - 1px) 0);
+  }
+
+  25% {
+    clip-path: inset(0 0 0 calc(100% - 1px));
+  }
+
+  50% {
+    clip-path: inset(calc(100% - 1px) 0 0 0);
+  }
+
+  75% {
+    clip-path: inset(0 calc(100% - 1px) 0 0);
+  }
+}

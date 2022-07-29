@@ -55,6 +55,8 @@ export default defineComponent({
     disabled: booleanProp,
     border: booleanProp,
     options: Array as PropType<RawOption[]>,
+    loading: booleanProp,
+    loadingLock: booleanProp,
     onChange: eventProp<(value: Values) => void>()
   },
   emits: ['update:value'],
@@ -75,7 +77,9 @@ export default defineComponent({
       options: {
         default: () => [],
         static: true
-      }
+      },
+      loading: false,
+      loadingLock: false
     })
 
     const nh = useNameHelper('checkbox-group')
@@ -91,6 +95,7 @@ export default defineComponent({
         {
           [nh.bm('vertical')]: props.vertical,
           [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm('border')]: props.border,
           [nh.bm(props.state)]: props.state !== 'default'
@@ -128,6 +133,8 @@ export default defineComponent({
         size: toRef(props, 'size'),
         state: toRef(props, 'state'),
         disabled: toRef(props, 'disabled'),
+        loading: toRef(props, 'loading'),
+        loadingLock: toRef(props, 'loadingLock'),
         increaseItem,
         decreaseItem,
         increaseControl,
