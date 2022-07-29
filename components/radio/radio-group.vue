@@ -13,6 +13,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
+import { Spinner } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
@@ -44,6 +45,10 @@ export default defineComponent({
     button: booleanProp,
     border: booleanProp,
     options: Array as PropType<(string | number)[]>,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onChange: eventProp<(value: string | number) => void>()
   },
   emits: ['update:value'],
@@ -66,7 +71,11 @@ export default defineComponent({
       options: {
         default: () => [],
         static: true
-      }
+      },
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const nh = useNameHelper('radio-group')
@@ -93,6 +102,12 @@ export default defineComponent({
       size: toRef(props, 'size'),
       state: toRef(props, 'state'),
       disabled: toRef(props, 'disabled'),
+      button: toRef(props, 'button'),
+      border: toRef(props, 'border'),
+      loading: toRef(props, 'loading'),
+      loadingIcon: toRef(props, 'loadingIcon'),
+      loadingLock: toRef(props, 'loadingLock'),
+      loadingSpin: toRef(props, 'loadingSpin'),
       updateValue: debounceMinor(updateValue),
       registerInput,
       unregisterInput

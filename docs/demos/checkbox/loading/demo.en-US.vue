@@ -1,10 +1,10 @@
 <template>
-  <p>Loading and editable</p>
+  <p>Loading and editable:</p>
   <CheckboxGroup :loading="loading" :options="options"></CheckboxGroup>
-  <p>Loading and readonly</p>
+  <p>Loading and readonly:</p>
   <CheckboxGroup :loading="loading" loading-lock :options="options"></CheckboxGroup>
   <p>
-    加载中：
+    Loading:
     <Switch v-model:value="loading"></Switch>
   </p>
 </template>

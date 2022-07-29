@@ -85,3 +85,29 @@
     clip-path: inset(0 calc(100% - 1px) 0 0);
   }
 }
+
+@mixin round-border($border-color, $duration: 2000ms) {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    clip-path: inset(0 0 50% 50%);
+    pointer-events: none;
+    content: '';
+    border: get-css-var('border-shape') $border-color;
+    border-radius: 50%;
+    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    transform-origin: 50% 50%;
+    animation: vxp-border-round $duration infinite linear;
+  }
+}
+
+@keyframes vxp-border-round {
+  100% {
+    transform: rotate(1turn);
+  }
+}
