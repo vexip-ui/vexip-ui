@@ -135,7 +135,8 @@ $input: map.merge(
   }
 
   &__control {
-    width: 100%;
+    flex: 1 0 0;
+    min-width: 0;
     height: 100%;
     padding: 0;
     font-size: inherit;
@@ -193,6 +194,10 @@ $input: map.merge(
     min-width: 14px;
     margin-left: 4px;
     cursor: pointer;
+  }
+
+  &__loading {
+    pointer-events: none;
   }
 }
 
