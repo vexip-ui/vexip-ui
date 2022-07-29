@@ -1,3 +1,23 @@
+# [2.0.0-beta.18](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.17...v2.0.0-beta.18) (2022-07-29)
+
+### Bug Fixes
+
+- **cascader:** correct panels class name ([fef30d8](https://github.com/qmhc/vexip-ui/commit/fef30d839e03327f656ee437f3b540721e4585bb))
+- **icon:** add `<g>` wrapper to isolate transform styles ([4f88644](https://github.com/qmhc/vexip-ui/commit/4f8864444c75f5de8d0a276d651bcc0c4242ca4d))
+- **icon:** improve inner `<g>` styles ([1d961f4](https://github.com/qmhc/vexip-ui/commit/1d961f44eb4df5451947fd3d0a5ef2f0241b2a6a))
+- **input:** before/after-button rename to before/after-action ([a4f202b](https://github.com/qmhc/vexip-ui/commit/a4f202bf48aa4b8bcba1102e14fa5fc899062346))
+
+### Features
+
+- **cascader:** support control loading state ([18cca8e](https://github.com/qmhc/vexip-ui/commit/18cca8e268b9a64da87e49cf0013dba556216144))
+- **color-picker:** support control loading state ([55ffc55](https://github.com/qmhc/vexip-ui/commit/55ffc553b4190995749a514744bf585f194d6373))
+- **date-picker:** support control loading state ([0389a80](https://github.com/qmhc/vexip-ui/commit/0389a80980ee618e6d329d206410f237f8e6de15))
+- **input:** add custom slots to place button in before or after ([6c0a1f7](https://github.com/qmhc/vexip-ui/commit/6c0a1f7e651c8b85ebbbb0d0e556a347486408f8))
+- **input:** support control loading state ([3ec0e59](https://github.com/qmhc/vexip-ui/commit/3ec0e59e34f9000f62fbd296c36966c36b07ea9b))
+- **number-input:** suport control loading state ([a3ba14d](https://github.com/qmhc/vexip-ui/commit/a3ba14d3430fb795e951563c209b2fe956baf142))
+- **select:** support control loading state ([77083f4](https://github.com/qmhc/vexip-ui/commit/77083f4e32327c1caae780a94ea3bd269f94541f))
+- **textarea:** support control loading state ([a889b18](https://github.com/qmhc/vexip-ui/commit/a889b1873343c5cdaa71759da1fd8b353fea8262))
+
 # [2.0.0-beta.17](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.16...v2.0.0-beta.17) (2022-07-26)
 
 ### Bug Fixes
