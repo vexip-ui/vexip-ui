@@ -2,7 +2,7 @@ import { defineComponent, ref, reactive, computed, watchEffect, watch } from 'vu
 import { Button } from '@/components/button'
 import TransferPanel from './transfer-panel.vue'
 import { useFieldStore } from '@/components/form'
-import { ChevronRight, ChevronLeft } from '@vexip-ui/icons'
+import { ChevronRight, ChevronLeft, Spinner } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
@@ -60,11 +60,15 @@ export default defineComponent({
     sourceTitle: String,
     targetTitle: String,
     deepState: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onChange: eventProp<(values: Values) => void>(),
     onSelect: eventProp<SelectHandler>()
   },
   emits: ['update:value'],
-  setup(_props, { slots, emit }) {
+  setup(_props, { slots, emit, expose }) {
     const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
       useFieldStore<Values>(() => source.value?.$el?.focus())
 
@@ -90,7 +94,11 @@ export default defineComponent({
       ignoreCase: false,
       sourceTitle: null,
       targetTitle: null,
-      deepState: false
+      deepState: false,
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const nh = useNameHelper('transfer')
@@ -211,6 +219,8 @@ export default defineComponent({
       }
     )
 
+    expose({ handleToTarget, handleToSource, handlePanelFocus, handlePanelBlur })
+
     function getFilterMethod(type: 'source' | 'target') {
       const filter = props.filter
 
@@ -263,12 +273,17 @@ export default defineComponent({
       emitEvent(props.onSelect, type, selected, data)
     }
 
-    function handleSwitchPanel(to: 'source' | 'target') {
-      if (to === 'source') {
+    function handlePanelFocus(type: 'source' | 'target') {
+      if (type === 'source') {
         source.value?.$el.focus()
       } else {
         target.value?.$el.focus()
       }
+    }
+
+    function handlePanelBlur() {
+      source.value?.$el.blur()
+      target.value?.$el.blur()
     }
 
     return () => {
@@ -289,9 +304,13 @@ export default defineComponent({
             option-height={props.optionHeight}
             ignore-case={props.ignoreCase}
             deep-state={props.deepState}
+            loading={props.loading}
+            loading-icon={props.loadingIcon}
+            loading-lock={props.loadingLock}
+            loading-spin={props.loadingSpin}
             onSelect={() => handleSelect('source')}
             onEnter={handleToTarget}
-            onSwitch={() => handleSwitchPanel('target')}
+            onSwitch={() => handlePanelFocus('target')}
           >
             {{
               header: slots['source-header'] || slots.sourceHeader || slots.header,
@@ -311,6 +330,9 @@ export default defineComponent({
                     size={'small'}
                     icon={ChevronRight}
                     disabled={props.disabled || !toTargetEnabled.value}
+                    loading={props.loading && props.loadingLock}
+                    loading-icon={props.loadingIcon}
+                    loading-spin={props.loadingSpin}
                     style={{ marginBottom: '6px' }}
                     onClick={handleToTarget}
                   ></Button>,
@@ -320,6 +342,9 @@ export default defineComponent({
                     size={'small'}
                     icon={ChevronLeft}
                     disabled={props.disabled || !toSourceEnabled.value}
+                    loading={props.loading && props.loadingLock}
+                    loading-icon={props.loadingIcon}
+                    loading-spin={props.loadingSpin}
                     style={{ margin: '0' }}
                     onClick={handleToSource}
                   ></Button>
@@ -340,9 +365,13 @@ export default defineComponent({
             option-height={props.optionHeight}
             ignore-case={props.ignoreCase}
             deep-state={props.deepState}
+            loading={props.loading}
+            loading-icon={props.loadingIcon}
+            loading-lock={props.loadingLock}
+            loading-spin={props.loadingSpin}
             onSelect={() => handleSelect('target')}
             onEnter={handleToSource}
-            onSwitch={() => handleSwitchPanel('source')}
+            onSwitch={() => handlePanelFocus('source')}
           >
             {{
               header: slots['target-header'] || slots.targetHeader || slots.header,

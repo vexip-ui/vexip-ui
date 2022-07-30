@@ -34,6 +34,11 @@
             {{ title }}
           </slot>
         </span>
+        <CollapseTransition appear horizontal fade-effect>
+          <div v-if="loading" :class="nh.be('loading')">
+            <Icon :spin="loadingSpin" :pulse="!loadingSpin" :icon="loadingIcon"></Icon>
+          </div>
+        </CollapseTransition>
       </slot>
     </div>
     <div v-if="typeof filter === 'function'" ref="search" :class="nh.be('filter')">
@@ -128,6 +133,7 @@
 <script lang="tsx">
 import { defineComponent, ref, computed, watch, watchEffect } from 'vue'
 import { Checkbox } from '@/components/checkbox'
+import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { NumberInput } from '@/components/number-input'
@@ -147,6 +153,7 @@ export default defineComponent({
   name: 'TransferPanel',
   components: {
     Checkbox,
+    CollapseTransition,
     Icon,
     Input,
     NumberInput,
@@ -199,6 +206,22 @@ export default defineComponent({
       default: 32
     },
     deepState: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    loadingIcon: {
+      type: Object,
+      default: null
+    },
+    loadingLock: {
+      type: Boolean,
+      default: false
+    },
+    loadingSpin: {
       type: Boolean,
       default: false
     }

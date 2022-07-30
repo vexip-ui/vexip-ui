@@ -14,6 +14,10 @@
 | ignore-case   | `boolean`                                        | Set whether to ignore case when using default filter method                               | `false`         | -     |
 | source-title  | `string`                                         | Set the title of the source panel                                                         | `locale.source` | -     |
 | target-title  | `string`                                         | Set the title of the target panel                                                         | `locale.target` | -     |
+| loading       | `boolean`                                        | Set whether is loading                                                                    | `false`         | -     |
+| loading-icon  | `Record<string, any>`                            | Set the loading icon                                                                      | `Spinner`       | -     |
+| loading-lock  | `boolean`                                        | Set whether to be read-only when loading                                                  | `false`         | -     |
+| loading-spin  | `boolean`                                        | Set whether to use spin animation for the loading icon                                    | `false`         | -     |
 
 Some preset types:
 

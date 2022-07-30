@@ -12,3 +12,10 @@ export interface TransferOptionState {
   hitting: boolean,
   data: string | Record<string, any>
 }
+
+export interface TransferExposed {
+  handleToTarget: () => void,
+  handleToSource: () => void,
+  handlePanelFocus: (type: 'source' | 'target') => void,
+  handlePanelBlur: () => void
+}

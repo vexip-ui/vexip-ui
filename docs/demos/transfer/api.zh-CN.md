@@ -14,6 +14,10 @@
 | ignore-case   | `boolean`                                        | 设置使用查询方法时是否忽略大小写               | `false`         | -    |
 | source-title  | `string`                                         | 设置源面板的标题                               | `locale.source` | -    |
 | target-title  | `string`                                         | 设置目标面板的标题                             | `locale.target` | -    |
+| loading       | `boolean`                                        | 设置是否为加载中                               | `false`         | -    |
+| loading-icon  | `Record<string, any>`                            | 设置加载中的图标                               | `Spinner`       | -    |
+| loading-lock  | `boolean`                                        | 设置在加载中时是否为只读                       | `false`         | -    |
+| loading-spin  | `boolean`                                        | 设置加载中图标是否使用旋转动画                 | `false`         | -    |
 
 一些预设的类型：
 
