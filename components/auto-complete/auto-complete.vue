@@ -19,6 +19,10 @@
     :placeholder="props.placeholder"
     :options="props.options"
     :key-config="props.keyConfig"
+    :loading="props.loading"
+    :loading-icon="props.loadingIcon"
+    :loading-lock="props.loadingLock"
+    :loading-spin="props.loadingSpin"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
@@ -46,6 +50,7 @@
           :spellcheck="props.spellcheck"
           :disabled="props.disabled"
           :placeholder="props.placeholder ?? locale.placeholder"
+          :readonly="props.loading && props.loadingLock"
           autocomplete="off"
           tabindex="-1"
           role="combobox"
@@ -94,7 +99,11 @@ import { isNull } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-import type { SelectKeyConfig, SelectOptionState, SelectRawOption } from '@/components/select'
+import type {
+  AutoCompleteKeyConfig,
+  AutoCompleteOptionState,
+  AutoCompleteRawOption
+} from './symbol'
 
 export default defineComponent({
   name: 'AutoComplete',
@@ -107,11 +116,10 @@ export default defineComponent({
     state: stateProp,
     transfer: booleanStringProp,
     value: [String, Number],
-    options: Array as PropType<SelectRawOption[]>,
+    options: Array as PropType<AutoCompleteRawOption[]>,
     filter: {
       type: [Boolean, Function] as PropType<
-        | boolean
-        | ((value: string | number, options: { label: string, value: string | number }) => boolean)
+        boolean | ((value: string | number, options: AutoCompleteOptionState) => boolean)
       >,
       default: null
     },
@@ -128,10 +136,14 @@ export default defineComponent({
     ignoreCase: booleanProp,
     autofocus: booleanProp,
     spellcheck: booleanProp,
-    keyConfig: Object as PropType<Omit<SelectKeyConfig, 'label'>>,
-    onSelect: eventProp<(value: string | number, data: SelectRawOption) => void>(),
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
+    keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
+    onSelect: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
     onInput: eventProp<(value: string) => void>(),
-    onChange: eventProp<(value: string | number, data: SelectRawOption) => void>(),
+    onChange: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
     onEnter: eventProp<(value: string | number) => void>(),
     onClear: eventProp()
@@ -171,7 +183,11 @@ export default defineComponent({
       ignoreCase: false,
       autofocus: false,
       spellcheck: false,
-      keyConfig: () => ({})
+      keyConfig: () => ({}),
+      loading: false,
+      loadingIcon: null,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const currentValue = ref(props.value)
@@ -186,7 +202,7 @@ export default defineComponent({
     let lastValue = props.value
     let lastInput = String(lastValue)
 
-    const optionsStates = computed<SelectOptionState[]>(() => {
+    const optionsStates = computed<AutoCompleteOptionState[]>(() => {
       return select.value?.optionStates ?? []
     })
     const normalOptions = computed(() => {
@@ -203,7 +219,7 @@ export default defineComponent({
     })
     const optionParentMap = computed(() => {
       const options = normalOptions.value
-      const map = new Map<string | number, SelectOptionState>()
+      const map = new Map<string | number, AutoCompleteOptionState>()
 
       for (let i = 0, len = options.length; i < len; ++i) {
         const option = options[i]
@@ -314,7 +330,7 @@ export default defineComponent({
       }
     }
 
-    function handleSelect(value: string | number, data: SelectRawOption) {
+    function handleSelect(value: string | number, data: AutoCompleteRawOption) {
       if (isNull(value)) {
         return
       }
@@ -349,7 +365,7 @@ export default defineComponent({
 
     function handleInputChange(event: string | Event) {
       const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
-      let matchedOption: SelectOptionState | undefined
+      let matchedOption: AutoCompleteOptionState | undefined
 
       if (props.ignoreCase) {
         const noCaseValue = value.toLocaleLowerCase()

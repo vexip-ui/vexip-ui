@@ -15,7 +15,7 @@
 | suffix-color    | `string`                                         | The color of the suffix content, which affects the suffix slot                                                | `''`           | -       |
 | no-suffix       | `boolean`                                        | Set whether to disable suffix icon                                                                            | `false`        | -       |
 | static-suffix   | `boolean`                                        | Set whether the suffix icon is static                                                                         | `false`        | -       |
-| value           | `string \| number \| (string \| number)[]`       | The value of the selector, you can use `v-model` for two-way binding, and it is an array in multi-select mode | `null`         | -       |
+| value           | `SelectValue`                                    | The value of the selector, you can use `v-model` for two-way binding, and it is an array in multi-select mode | `null`         | -       |
 | clearable       | `boolean`                                        | Set whether the value can be cleared                                                                          | `false`        | -       |
 | max-list-height | `number`                                         | Set the max height of the option list, after which a scroll bar will appear                                   | `300`          | -       |
 | transition-name | `string`                                         | The transition animation for options list                                                                     | `'vxp-drop'`   | -       |
@@ -45,6 +45,7 @@ export interface SelectKeyConfig {
 }
 
 type SelectRawOption = string | Record<string, any>
+type SelectValue = string | number | (string | number)[]
 
 interface SelectOptionState {
   value: string | number,
@@ -63,15 +64,17 @@ interface SelectOptionState {
 
 ### Select Events
 
-| Name          | Description                                                                                                                              | Parameters                                 | Since |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----- |
-| toggle        | Emitted when the option list display state changes, returns the current state                                                            | `(visible: boolean)`                       | -     |
-| select        | Emitted when an option is selected (whether changed or not), returns the value and label of the selected option                          | `(value: string \| number, label: string)` | -     |
-| cancel        | Emitted when an option is canceled, only in multi-select mode, returns the value and label of the canceled option                        | `(value: string \| number, label: string)` | -     |
-| change        | Emitted when the selected value changes, returns the value and label of the option, the value array and label array in multi-select mode | `(value: string \| number, label: string)` | -     |
-| outside-click | Emitted when clicking outside the selector, no return value                                                                              | -                                          | -     |
-| outside-close | Emitted when the option list is closed by clicking outside, no return value                                                              | -                                          | -     |
-| clear         | Emitted when the value is cleared by the clear button, no return value                                                                   | -                                          | -     |
+| Name          | Description                                                                                                                              | Parameters                                                         | Since   |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- |
+| toggle        | Emitted when the option list display state changes, returns the current state                                                            | `(visible: boolean)`                                               | -       |
+| select        | Emitted when an option is selected (whether changed or not), returns the value and label of the selected option                          | `(value: string \| number, data: SelectRawOption)`                 | -       |
+| cancel        | Emitted when an option is canceled, only in multi-select mode, returns the value and label of the canceled option                        | `(value: string \| number, data: SelectRawOption)`                 | -       |
+| change        | Emitted when the selected value changes, returns the value and label of the option, the value array and label array in multi-select mode | `(value: SelectValue, data: SelectRawOption \| SelectRawOption[])` | -       |
+| outside-click | Emitted when clicking outside the selector, no return value                                                                              | -                                                                  | -       |
+| outside-close | Emitted when the option list is closed by clicking outside, no return value                                                              | -                                                                  | -       |
+| clear         | Emitted when the value is cleared by the clear button, no return value                                                                   | -                                                                  | -       |
+| focus         | Emitted when the control element is focused, returns the event object                                                                    | `(event: FocusEvent)`                                              | `2.0.0` |
+| blur          | Emitted when the control element loses focus, returns the event object                                                                   | `(event: FocusEvent)`                                              | `2.0.0` |
 
 ### Select Slots
 

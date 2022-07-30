@@ -15,7 +15,7 @@
 | suffix-color    | `string`                                         | 后缀内容的颜色，会影响后缀插槽                              | `''`           | -       |
 | no-suffix       | `boolean`                                        | 设置是否禁用后缀图标                                        | `false`        | -       |
 | static-suffix   | `boolean`                                        | 设置后缀图标是否为静态的                                    | `false`        | -       |
-| value           | `string \| number \| (string \| number)[]`       | 选择器的值，可以使用 `v-model` 双向绑定，多选模式时为数组   | `null`         | -       |
+| value           | `SelectValue`                                    | 选择器的值，可以使用 `v-model` 双向绑定，多选模式时为数组   | `null`         | -       |
 | clearable       | `boolean`                                        | 设置是否可以清空值                                          | `false`        | -       |
 | max-list-height | `number`                                         | 设置选项列表的最大高度，超过高度后会出现滚动条              | `300`          | -       |
 | transition-name | `string`                                         | 选项列表的过渡动画                                          | `'vxp-drop'`   | -       |
@@ -45,6 +45,7 @@ export interface SelectKeyConfig {
 }
 
 type SelectRawOption = string | Record<string, any>
+type SelectValue = string | number | (string | number)[]
 
 interface SelectOptionState {
   value: string | number,
@@ -63,23 +64,25 @@ interface SelectOptionState {
 
 ### Select 事件
 
-| 名称          | 说明                                                                 | 参数                                       | 始于 |
-| ------------- | -------------------------------------------------------------------- | ------------------------------------------ | ---- |
-| toggle        | 当选项列表显示状态改变时触发，返回当前的状态                         | `(visible: boolean)`                       | -    |
-| select        | 当选项被选时触发（无论是否改变），返回被选选项的值和标签             | `(value: string \| number, label: string)` | -    |
-| cancel        | 当选项被取消时触发，仅在多选模式下触发，返回被取消选项的值和标签     | `(value: string \| number, label: string)` | -    |
-| change        | 当被选值改变时触发，返回选项的值和标签，多选模式下为值数组和标签数组 | `(value: string \| number, label: string)` | -    |
-| outside-click | 当点击选择器外部是触发，无返回值                                     | -                                          | -    |
-| outside-close | 当通过点击外部关闭选项列表时触发，无返回值                           | -                                          | -    |
-| clear         | 当通过清除按钮清空值时触发，无返回值                                 | -                                          | -    |
+| 名称          | 说明                                                                 | 参数                                                               | 始于    |
+| ------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- |
+| toggle        | 当选项列表显示状态改变时触发，返回当前的状态                         | `(visible: boolean)`                                               | -       |
+| select        | 当选项被选时触发（无论是否改变），返回被选选项的值和标签             | `(value: string \| number, data: SelectRawOption)`                 | -       |
+| cancel        | 当选项被取消时触发，仅在多选模式下触发，返回被取消选项的值和标签     | `(value: string \| number, data: SelectRawOption)`                 | -       |
+| change        | 当被选值改变时触发，返回选项的值和标签，多选模式下为值数组和标签数组 | `(value: SelectValue, data: SelectRawOption \| SelectRawOption[])` | -       |
+| outside-click | 当点击选择器外部是触发，无返回值                                     | -                                                                  | -       |
+| outside-close | 当通过点击外部关闭选项列表时触发，无返回值                           | -                                                                  | -       |
+| clear         | 当通过清除按钮清空值时触发，无返回值                                 | -                                                                  | -       |
+| focus         | 当控件元素聚焦时触发，返回事件对象                                   | `(event: FocusEvent)`                                              | `2.0.0` |
+| blur          | 当控件元素失去焦点时触发，返回事件对象                               | `(event: FocusEvent)`                                              | `2.0.0` |
 
 ### Select 插槽
 
-| 名称    | 说明                                         | 参数                                                        | 始于    |
-| ------- | -------------------------------------------- | ----------------------------------------------------------- | ------- |
-| default | 选项内容的插槽                               | `{ option: OptionState, index: number, selected: boolean }` | -       |
-| group   | 组标签的内容插槽                             | `{ option: SelectOptionState, index: number }`              | `2.0.0` |
-| prefix  | 前置图标内容的插槽                           | -                                                           | -       |
-| control | 选择器主控件内容的插槽，通常情况下不应该使用 | -                                                           | -       |
-| suffix  | 后缀图标内容的插槽                           | -                                                           | -       |
-| empty   | 空选项提示内容的插槽                         | -                                                           | -       |
+| 名称    | 说明                                         | 参数                                                              | 始于    |
+| ------- | -------------------------------------------- | ----------------------------------------------------------------- | ------- |
+| default | 选项内容的插槽                               | `{ option: SelectOptionState, index: number, selected: boolean }` | -       |
+| group   | 组标签的内容插槽                             | `{ option: SelectOptionState, index: number }`                    | `2.0.0` |
+| prefix  | 前置图标内容的插槽                           | -                                                                 | -       |
+| control | 选择器主控件内容的插槽，通常情况下不应该使用 | -                                                                 | -       |
+| suffix  | 后缀图标内容的插槽                           | -                                                                 | -       |
+| empty   | 空选项提示内容的插槽                         | -                                                                 | -       |
