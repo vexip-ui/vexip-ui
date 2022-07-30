@@ -1,14 +1,16 @@
 ### Slider 属性
 
-| 名称         | 类型      | 说明                                             | 默认值  | 始于 |
-| ------------ | --------- | ------------------------------------------------ | ------- | ---- |
-| value        | `number`  | 滑动输入条的值，可以使用 `v-model` 双向绑定      | `0`     | -    |
-| min          | `number`  | 滑动输入条的最小值                               | `0`     | -    |
-| max          | `number`  | 滑动输入条的最大值                               | `100`   | -    |
-| step         | `number`  | 滑动输入条每次值变化的跨度                       | `1`     | -    |
-| vertical     | `boolean` | 设置滑动输入条是否为纵向，需要父元素具有有效高度 | `false` | -    |
-| hide-tip     | `boolean` | 设置是否禁用 tooltip                             | `false` | -    |
-| tip-transfer | `boolean` | 设置 Tooltip 的 `transfer` 属性                  | `false` | -    |
+| 名称         | 类型      | 说明                                             | 默认值  | 始于    |
+| ------------ | --------- | ------------------------------------------------ | ------- | ------- |
+| value        | `number`  | 滑动输入条的值，可以使用 `v-model` 双向绑定      | `0`     | -       |
+| min          | `number`  | 滑动输入条的最小值                               | `0`     | -       |
+| max          | `number`  | 滑动输入条的最大值                               | `100`   | -       |
+| step         | `number`  | 滑动输入条每次值变化的跨度                       | `1`     | -       |
+| vertical     | `boolean` | 设置滑动输入条是否为纵向，需要父元素具有有效高度 | `false` | -       |
+| hide-tip     | `boolean` | 设置是否禁用 tooltip                             | `false` | -       |
+| tip-transfer | `boolean` | 设置 Tooltip 的 `transfer` 属性                  | `false` | -       |
+| loading      | `boolean` | 设置是否为加载中                                 | `false` | `2.0.0` |
+| loading-lock | `boolean` | 设置在加载中时是否为只读                         | `false` | `2.0.0` |
 
 ### Slider 事件
 

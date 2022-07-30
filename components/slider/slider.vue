@@ -31,7 +31,7 @@
         <template #trigger>
           <div
             ref="handler"
-            :class="nh.be('handler')"
+            :class="[nh.be('handler'), props.loading && nh.bem('handler', 'active')]"
             role="slider"
             tabindex="0"
             :aria-valuenow="truthValue"
@@ -84,6 +84,8 @@ export default defineComponent({
     hideTip: booleanProp,
     tipTransfer: booleanStringProp,
     disabled: booleanProp,
+    loading: booleanProp,
+    loadingLock: booleanProp,
     onChange: eventProp<(value: number) => void>(),
     onInput: eventProp<(value: number) => void>()
   },
@@ -107,7 +109,9 @@ export default defineComponent({
       vertical: false,
       hideTip: false,
       tipTransfer: null,
-      disabled: () => disabled.value
+      disabled: () => disabled.value,
+      loading: false,
+      loadingLock: false
     })
 
     const nh = useNameHelper('slider')
@@ -145,7 +149,8 @@ export default defineComponent({
         [nh.bm(props.state)]: props.state !== 'default',
         [nh.bm('vertical')]: props.vertical,
         [nh.bm('sliding')]: sliding.value,
-        [nh.bm('disabled')]: props.disabled
+        [nh.bm('disabled')]: props.disabled,
+        [nh.bm('loading')]: props.loading && props.loadingLock
       }
     })
     // 按每 step 算的最小值
@@ -230,7 +235,7 @@ export default defineComponent({
     })
 
     function handleTrackDown(event: PointerEvent) {
-      if (!track.value || props.disabled) return
+      if (!track.value || props.disabled || (props.loading && props.loadingLock)) return
 
       window.clearTimeout(timer.sliding)
       event.stopPropagation()
@@ -255,7 +260,7 @@ export default defineComponent({
     }
 
     function handleMoveStart(event: PointerEvent) {
-      if (!track.value || props.disabled) return
+      if (!track.value || props.disabled || (props.loading && props.loadingLock)) return
 
       window.clearTimeout(timer.sliding)
       event.stopPropagation()
