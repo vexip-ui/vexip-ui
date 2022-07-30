@@ -67,7 +67,7 @@
       @mouseenter="handleEnterPrevEllipsis"
       @mouseleave="handleLeavePrevEllipsis"
     >
-      <transition name="vxp-fade">
+      <transition :name="nh.ns('fade')">
         <Icon v-if="inPrevEllipsis" :scale="0.8">
           <AnglesLeft></AnglesLeft>
         </Icon>
@@ -119,7 +119,7 @@
       @mouseenter="handleEnterNextEllipsis"
       @mouseleave="handleLeaveNextEllipsis"
     >
-      <transition name="vxp-fade">
+      <transition :name="nh.ns('fade')">
         <Icon v-if="inNextEllipsis" :scale="0.8">
           <AnglesRight></AnglesRight>
         </Icon>

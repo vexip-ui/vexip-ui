@@ -144,6 +144,11 @@ $switch: map.merge(
     }
   }
 
+  &--open &__signal {
+    left: calc(100% - (#{$height} - #{$signal}) * 0.5);
+    transform: translate(-100%, -50%);
+  }
+
   &--loading &__signal .#{$namespace}-icon {
     color: get-css-var('switch-icon-color-loading');
   }
@@ -161,11 +166,6 @@ $switch: map.merge(
         )
       );
     }
-  }
-
-  &--open &__signal {
-    left: calc(100% - (#{$height} - #{$signal}) * 0.5);
-    transform: translate(-100%, -50%);
   }
 
   &--disabled {

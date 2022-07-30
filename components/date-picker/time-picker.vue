@@ -92,7 +92,7 @@
         v-else-if="props.clearable || props.loading"
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
-      <transition name="vxp-fade" appear>
+      <transition :name="nh.ns('fade')" appear>
         <div
           v-if="!props.disabled && props.clearable && isHover && lastValue"
           :class="[nh.be('icon'), nh.be('clear')]"

@@ -1,5 +1,5 @@
 <template>
-  <transition name="vxp-fade" appear>
+  <transition :name="nh.ns('fade')" appear>
     <div
       v-show="visible"
       :class="className"

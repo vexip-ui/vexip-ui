@@ -21,7 +21,7 @@
       @change="handleChange"
     ></textarea>
     <div :class="nh.be('extra')">
-      <transition name="vxp-fade" appear>
+      <transition :name="nh.ns('fade')" appear>
         <div v-if="props.loading" :class="nh.be('loading')">
           <Icon
             :spin="props.loadingSpin"

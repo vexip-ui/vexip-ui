@@ -16,9 +16,11 @@
     </span>
     <span :class="nh.be('signal')" :style="signalStyle">
       <slot v-if="props.loading" name="loading">
-        <Icon pulse>
-          <Spinner></Spinner>
-        </Icon>
+        <Icon
+          :spin="props.loadingSpin"
+          :pulse="!props.loadingSpin"
+          :icon="props.loadingIcon"
+        ></Icon>
       </slot>
       <slot v-else name="icon" :value="currentValue">
         <Icon v-if="currentValue && props.openIcon" :icon="props.openIcon"></Icon>
@@ -67,8 +69,7 @@ import type { PropType } from 'vue'
 export default defineComponent({
   name: 'Switch',
   components: {
-    Icon,
-    Spinner
+    Icon
   },
   props: {
     size: sizeProp,
@@ -78,6 +79,8 @@ export default defineComponent({
     openColor: String,
     closeColor: String,
     loading: booleanProp,
+    loadingIcon: Object,
+    loadingSpin: booleanProp,
     icon: Object,
     openIcon: Object,
     closeIcon: Object,
@@ -102,6 +105,8 @@ export default defineComponent({
       openColor: '',
       closeColor: '',
       loading: false,
+      loadingIcon: Spinner,
+      loadingSpin: false,
       icon: null,
       openIcon: null,
       closeIcon: null,
