@@ -10,6 +10,8 @@
 | arrow        | `boolean`                                        | 设置是否使用滚轮的箭头指示器                     | `false`     | -       |
 | insert-empty | `boolean \| string`                              | 设置是否插入空值，传入字符串可以指定空值的显示值 | `false`     | `2.0.0` |
 | disabled     | `boolean`                                        | 设置是否禁用滚轮                                 | `false`     | `2.0.0` |
+| loading      | `boolean`                                        | 设置是否为加载中                                 | `false`     | `2.0.0` |
+| loading-lock | `boolean`                                        | 设置在加载中时是否为只读                         | `false`     | `2.0.0` |
 
 一些内置类型：
 

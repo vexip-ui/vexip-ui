@@ -10,6 +10,8 @@
 | arrow        | `boolean`                                        | Set whether to use the scroll wheel arrow indicator                                    | `false`     | -       |
 | insert-empty | `boolean \| string`                              | Set whether insert a empty value, can be specify the label when passing a string       | `false`     | `2.0.0` |
 | disabled     | `boolean`                                        | Set whether the wheel is disabled                                                      | `false`     | `2.0.0` |
+| loading      | `boolean`                                        | Set whether is loading                                                                 | `false`     | `2.0.0` |
+| loading-lock | `boolean`                                        | Set whether to be read-only when loading                                               | `false`     | `2.0.0` |
 
 Some preset types:
 

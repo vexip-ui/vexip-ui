@@ -20,6 +20,8 @@
     <div :class="nh.be('scroll')">
       <Scroll
         ref="scroll"
+        :scroll-x="props.horizontal ? targetWidth * currentActive : 0"
+        :scroll-y="props.horizontal ? 0 : targetHeight * currentActive"
         :width="props.horizontal ? wrapperWidth : '100%'"
         :height="props.horizontal ? '100%' : wrapperHeight"
         :pointer="props.pointer"
@@ -51,7 +53,14 @@
         <div :class="[nh.be('mask'), nh.bem('mask', 'top')]" :style="maskStyle"></div>
         <div :class="[nh.be('mask'), nh.bem('mask', 'bottom')]" :style="maskStyle"></div>
       </template>
-      <div :class="nh.be('border')" :style="borderStyle"></div>
+      <div
+        :class="{
+          [nh.be('border')]: true,
+          [nh.bem('border', 'active')]: props.loading,
+          [nh.bem('border', 'vertical')]: props.horizontal
+        }"
+        :style="borderStyle"
+      ></div>
     </div>
     <div
       v-if="props.arrow"
@@ -119,6 +128,8 @@ export default defineComponent({
     options: Array as PropType<RawOption[]>,
     insertEmpty: booleanStringProp,
     disabled: booleanProp,
+    loading: booleanProp,
+    loadingLock: booleanProp,
     onChange: eventProp<(value: string | number, data: RawOption) => void>(),
     onPrev: eventProp<(value: string | number, data: RawOption) => void>(),
     onNext: eventProp<(value: string | number, data: RawOption) => void>()
@@ -147,7 +158,9 @@ export default defineComponent({
         static: true
       },
       insertEmpty: false,
-      disabled: () => disabled.value
+      disabled: () => disabled.value,
+      loading: false,
+      loadingLock: false
     })
 
     const nh = useNameHelper('wheel')
@@ -212,7 +225,8 @@ export default defineComponent({
         nh.bm(props.horizontal ? 'horizontal' : 'vertical'),
         {
           [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('disabled')]: props.disabled
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading && props.loadingLock
         }
       ]
     })
@@ -410,7 +424,7 @@ export default defineComponent({
     }
 
     function beforeScroll({ signX, signY }: { signX: number, signY: number }) {
-      if (props.disabled) return false
+      if (props.disabled || (props.loading && props.loadingLock)) return false
 
       const sign = props.horizontal ? signX : signY
 

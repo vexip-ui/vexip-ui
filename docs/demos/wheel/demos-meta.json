@@ -3,6 +3,7 @@
   "empty",
   "arrow",
   "disabled",
-  "state",
-  "horizontal"
+  "horizontal",
+  "loading",
+  "state"
 ]

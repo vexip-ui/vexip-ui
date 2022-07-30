@@ -111,3 +111,115 @@
     transform: rotate(1turn);
   }
 }
+
+@mixin h-moving-border($border-color, $duration: 2000ms) {
+  position: relative;
+  will-change: left, right;
+
+  &::before {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 0;
+    content: '';
+    border-top: get-css-var('border-shape') $border-color;
+    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    animation: vxp-h-moving-border $duration infinite;
+  }
+
+  &::after {
+    position: absolute;
+    top: auto;
+    right: 0;
+    bottom: -4px;
+    left: 0;
+    width: auto;
+    height: 0;
+    content: '';
+    border-top: get-css-var('border-shape') $border-color;
+    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    animation: vxp-h-moving-border $duration #{-$duration / 2} infinite;
+  }
+}
+
+@keyframes vxp-h-moving-border {
+  0%,
+  100% {
+    right: 90%;
+    left: 0;
+  }
+
+  25% {
+    right: 25%;
+    left: 25%;
+  }
+
+  50% {
+    right: 0;
+    left: 90%;
+  }
+
+  75% {
+    right: 25%;
+    left: 25%;
+  }
+}
+
+@mixin v-moving-border($border-color, $duration: 2000ms) {
+  position: relative;
+  will-change: top, bottom;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    right: auto;
+    bottom: 0;
+    left: -4px;
+    width: 0;
+    height: auto;
+    content: '';
+    border-left: get-css-var('border-shape') $border-color;
+    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    animation: vxp-v-moving-border $duration infinite;
+  }
+
+  &::after {
+    position: absolute;
+    top: 0;
+    right: -4px;
+    bottom: 0;
+    left: auto;
+    width: 0;
+    height: auto;
+    content: '';
+    border-left: get-css-var('border-shape') $border-color;
+    transition: get-css-var('transition-border'), get-css-var('transition-opacity');
+    animation: vxp-v-moving-border $duration #{$duration / 2} infinite;
+  }
+}
+
+@keyframes vxp-v-moving-border {
+  0%,
+  100% {
+    top: 0;
+    bottom: 90%;
+  }
+
+  25% {
+    top: 25%;
+    bottom: 25%;
+  }
+
+  50% {
+    top: 90%;
+    bottom: 0;
+  }
+
+  75% {
+    top: 25%;
+    bottom: 25%;
+  }
+}
