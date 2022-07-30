@@ -10,7 +10,7 @@ $upload: map.merge(
     color-success: get-css-var('color-success-base'),
     color-fail: get-css-var('color-error-base'),
     color-loading: get-css-var('content-color-disabled'),
-    panel-bg-color: get-css-var('fill=color-base'),
+    panel-bg-color: get-css-var('fill-color-base'),
     panel-b-width: get-css-var('border-width'),
     panel-b-style: dashed,
     panel-b-color: get-css-var('border-color-base'),
@@ -162,7 +162,17 @@ $upload: map.merge(
     }
   }
 
+  &__loading-icon {
+    pointer-events: none;
+    opacity: 0%;
+  }
+
+  &__tip {
+    margin: 4px 0;
+  }
+
   &__drag-pane &__tip {
+    margin: 8px 0 4px;
     user-select: none;
   }
 

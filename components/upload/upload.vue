@@ -32,6 +32,9 @@
             :icon="Upload"
             :type="props.state"
             :disabled="props.disabled"
+            :loading="props.loading"
+            :loading-icon="props.loadingIcon"
+            :loading-spin="props.loadingSpin"
           >
             {{ props.buttonLabel ?? locale.upload }}
           </Button>
@@ -55,6 +58,13 @@
               {{ props.tip || locale.dragOrClick }}
             </p>
           </slot>
+          <Icon
+            :class="nh.be('loading-icon')"
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+            :style="{ opacity: props.loading ? '100%' : '0%' }"
+          ></Icon>
         </div>
       </slot>
     </div>
@@ -92,7 +102,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
-import { CloudArrowUp, Upload } from '@vexip-ui/icons'
+import { CloudArrowUp, Upload, Spinner } from '@vexip-ui/icons'
 import { upload } from './request'
 import { UploadStatusType, uploadListTypes } from './symbol'
 
@@ -144,6 +154,10 @@ export default defineComponent({
     disabledClick: booleanProp,
     buttonLabel: String,
     disabled: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
     onExceed: eventProp<(files: FileState[], sources: File[]) => void>(),
     onChange: eventProp<(files: FileState[], sources: File[]) => void>(),
     onFilterError: eventProp<(files: FileState, sources: File) => void>(),
@@ -218,7 +232,11 @@ export default defineComponent({
       pathField: 'path',
       disabledClick: false,
       buttonLabel: null,
-      disabled: () => disabled.value
+      disabled: () => disabled.value,
+      loading: false,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const nh = useNameHelper('upload')
