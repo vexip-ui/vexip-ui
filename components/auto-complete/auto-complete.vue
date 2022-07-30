@@ -150,8 +150,16 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<string | number>(() => control.value?.focus())
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<string | number>(() => control.value?.focus())
 
     const nh = useNameHelper('auto-complete')
     const props = useProps('autoComplete', _props, {
@@ -184,7 +192,7 @@ export default defineComponent({
       autofocus: false,
       spellcheck: false,
       keyConfig: () => ({}),
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
       loadingSpin: false

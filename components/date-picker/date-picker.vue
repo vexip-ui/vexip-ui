@@ -232,8 +232,16 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<Dateable | Dateable[]>(() => reference.value?.focus())
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<Dateable | Dateable[]>(() => reference.value?.focus())
 
     const nh = useNameHelper('date-picker')
     const props = useProps('datePicker', _props, {
@@ -285,7 +293,7 @@ export default defineComponent({
         validator: (value: Dateable) => !Number.isNaN(new Date(value))
       },
       isRange: false,
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false

@@ -91,7 +91,7 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
       useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('switch', _props, {
@@ -104,7 +104,7 @@ export default defineComponent({
       disabled: () => disabled.value,
       openColor: '',
       closeColor: '',
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingSpin: false,
       icon: null,

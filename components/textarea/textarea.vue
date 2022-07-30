@@ -83,7 +83,7 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
       useFieldStore<string>(() => textarea.value?.focus())
 
     const props = useProps('textarea', _props, {
@@ -102,7 +102,7 @@ export default defineComponent({
       disabled: () => disabled.value,
       debounce: false,
       maxLength: 0,
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false

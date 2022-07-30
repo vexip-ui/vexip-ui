@@ -53,9 +53,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } = useFieldStore<
-      string | number
-    >(() => Array.from(inputSet)[0]?.value?.focus())
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<string | number>(() => Array.from(inputSet)[0]?.value?.focus())
 
     const props = useProps('radioGroup', _props, {
       size: createSizeProp(),
@@ -72,7 +71,7 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false

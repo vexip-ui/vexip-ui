@@ -58,7 +58,7 @@ export default defineComponent({
       simple: false,
       ghost: false,
       disabled: () => (fieldActions ? fieldActions.disabled.value : false),
-      loading: false,
+      loading: () => (fieldActions ? fieldActions.loading.value : false),
       circle: false,
       loadingIcon: Spinner,
       loadingSpin: false,

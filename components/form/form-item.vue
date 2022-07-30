@@ -118,6 +118,7 @@ export default defineComponent({
       idFor: computed(() => props.prop),
       state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
       disabled: computed(() => !!formProps.disabled),
+      loading: computed(() => !!formProps.loading),
       emitter,
       validate,
       clearError,

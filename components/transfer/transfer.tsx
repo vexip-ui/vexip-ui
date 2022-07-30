@@ -69,7 +69,7 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
       useFieldStore<Values>(() => source.value?.$el?.focus())
 
     const props = useProps('transfer', _props, {
@@ -95,7 +95,7 @@ export default defineComponent({
       sourceTitle: null,
       targetTitle: null,
       deepState: false,
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false

@@ -111,14 +111,15 @@ export function setValueByPath(
 
 const defaultProp = computed(() => '')
 const defaultState = computed(() => 'default' as ComponentState)
-const defaultDisabled = computed(() => false)
+const defaultFalse = computed(() => false)
 
 function getEmptyActions<V = unknown>() {
   return {
     isField: false,
     idFor: defaultProp,
     state: defaultState,
-    disabled: defaultDisabled,
+    disabled: defaultFalse,
+    loading: defaultFalse,
     validateField: noop as FieldOptions['validate'],
     clearField: noop as FieldOptions['clearError'],
     resetField: noop as FieldOptions['reset'],
@@ -132,39 +133,40 @@ export function useFieldStore<V = unknown>(onFocus?: () => void) {
 
   if (!instance) return getEmptyActions<V>()
 
-  const fieldActions = inject(FIELD_OPTIONS, null)
+  const fieldOptions = inject(FIELD_OPTIONS, null)
 
-  if (!fieldActions) {
+  if (!fieldOptions) {
     return getEmptyActions<V>()
   }
 
   // Block the provided if there are dependencies between control components.
   // e.g. AutoComplete -> Select, ColorPicker -> Input
   provide(FIELD_OPTIONS, null)
-  fieldActions.sync(instance)
-  onFocus && fieldActions.emitter.on('focus', onFocus)
+  fieldOptions.sync(instance)
+  onFocus && fieldOptions.emitter.on('focus', onFocus)
 
   onBeforeUnmount(() => {
-    fieldActions.unsync(instance)
-    onFocus && fieldActions.emitter.off('focus', onFocus)
+    fieldOptions.unsync(instance)
+    onFocus && fieldOptions.emitter.off('focus', onFocus)
   })
 
   function clearField(defaultValue?: V) {
-    if (!fieldActions) return
+    if (!fieldOptions) return
 
-    fieldActions.setValue(defaultValue)
-    fieldActions.clearError()
+    fieldOptions.setValue(defaultValue)
+    fieldOptions.clearError()
   }
 
   return {
     isField: true,
-    idFor: fieldActions.idFor,
-    state: fieldActions.state,
-    disabled: fieldActions.disabled,
-    validateField: fieldActions.validate,
+    idFor: fieldOptions.idFor,
+    state: fieldOptions.state,
+    disabled: fieldOptions.disabled,
+    loading: fieldOptions.loading,
+    validateField: fieldOptions.validate,
     clearField,
-    resetField: fieldActions.reset,
-    getFieldValue: fieldActions.getValue as (defaultValue?: V) => V,
-    setFieldValue: fieldActions.setValue as (value: V, strict?: boolean) => void
+    resetField: fieldOptions.reset,
+    getFieldValue: fieldOptions.getValue as (defaultValue?: V) => V,
+    setFieldValue: fieldOptions.setValue as (value: V, strict?: boolean) => void
   }
 }

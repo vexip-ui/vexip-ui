@@ -63,7 +63,7 @@ export default defineComponent({
   },
   emits: ['update:checked'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
       useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('checkbox', _props, {
@@ -84,7 +84,7 @@ export default defineComponent({
       control: false,
       partial: false,
       tabIndex: 0,
-      loading: false,
+      loading: () => loading.value,
       loadingLock: false
     })
 

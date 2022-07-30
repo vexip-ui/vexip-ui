@@ -29,7 +29,8 @@ export default defineComponent({
     hideAsterisk: booleanProp,
     validateAll: booleanProp,
     hideLabel: booleanProp,
-    disabled: booleanProp
+    disabled: booleanProp,
+    loading: booleanProp
   },
   setup(_props) {
     const props = useProps('form', _props, {
@@ -53,7 +54,8 @@ export default defineComponent({
       hideAsterisk: false,
       validateAll: false,
       hideLabel: false,
-      disabled: false
+      disabled: false,
+      loading: false
     })
 
     const nh = useNameHelper('form')

@@ -72,8 +72,16 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<string>(() => inputControl.value?.focus())
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<string>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
       size: createSizeProp(),
@@ -107,7 +115,7 @@ export default defineComponent({
       after: '',
       plainPassword: false,
       clearable: false,
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false

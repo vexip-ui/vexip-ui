@@ -136,9 +136,8 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } = useFieldStore<
-      string | number
-    >(() => wrapper.value?.focus())
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<string | number>(() => wrapper.value?.focus())
 
     const props = useProps('wheel', _props, {
       state: createStateProp(state),
@@ -159,7 +158,7 @@ export default defineComponent({
       },
       insertEmpty: false,
       disabled: () => disabled.value,
-      loading: false,
+      loading: () => loading.value,
       loadingLock: false
     })
 

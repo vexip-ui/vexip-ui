@@ -290,8 +290,16 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<CascaderValue>(() => reference.value?.focus())
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<CascaderValue>(() => reference.value?.focus())
 
     const nh = useNameHelper('cascader')
     const props = useProps('cascader', _props, {
@@ -343,7 +351,7 @@ export default defineComponent({
       mergeTags: false,
       tagType: null,
       emptyText: null,
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false

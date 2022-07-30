@@ -152,8 +152,16 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<number>(focus)
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<number>(focus)
 
     const props = useProps('numberInput', _props, {
       size: createSizeProp(),
@@ -187,7 +195,7 @@ export default defineComponent({
       inputClass: null,
       debounce: false,
       clearable: false,
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false

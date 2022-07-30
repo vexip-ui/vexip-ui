@@ -170,15 +170,14 @@ export default defineComponent({
   },
   emits: ['update:file-list'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } = useFieldStore<
-      FileState[]
-    >(() => {
-      if (button.value?.$el) {
-        button.value.$el.focus()
-      } else {
-        panel.value?.focus()
-      }
-    })
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<FileState[]>(() => {
+        if (button.value?.$el) {
+          button.value.$el.focus()
+        } else {
+          panel.value?.focus()
+        }
+      })
 
     const props = useProps('upload', _props, {
       state: createStateProp(state),
@@ -233,7 +232,7 @@ export default defineComponent({
       disabledClick: false,
       buttonLabel: null,
       disabled: () => disabled.value,
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false

@@ -198,9 +198,7 @@ import { ChevronDown, Check, CircleXmark, Spinner } from '@vexip-ui/icons'
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { VirtualListExposed } from '@/components/virtual-list'
-import type { SelectKeyConfig, SelectRawOption, SelectOptionState } from './symbol'
-
-type SelectValue = string | number | (string | number)[]
+import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectOptionState } from './symbol'
 
 const defaultKeyConfig: Required<SelectKeyConfig> = {
   value: 'value',
@@ -265,8 +263,16 @@ export default defineComponent({
   },
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<SelectValue>(() => reference.value?.focus())
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<SelectValue>(() => reference.value?.focus())
 
     const nh = useNameHelper('select')
     const props = useProps('select', _props, {
@@ -306,7 +312,7 @@ export default defineComponent({
       emptyText: null,
       staticSuffix: false,
       keyConfig: () => ({}),
-      loading: false,
+      loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false
