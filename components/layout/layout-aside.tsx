@@ -76,6 +76,9 @@ export default defineComponent({
     const hasTop = computed(() => {
       return !!(props.logo || props.signName || slots.top)
     })
+    const hasMenu = computed(() => {
+      return !!(props.menus?.length || props.menuProps?.router)
+    })
 
     watch(
       () => props.reduced,
@@ -175,7 +178,7 @@ export default defineComponent({
               ? (
                   slots.default(getSlotParams())
                 )
-              : props.menus?.length
+              : hasMenu.value
                 ? (
               <Menu
                 {...(props.menuProps || {})}

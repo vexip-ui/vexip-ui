@@ -1,11 +1,16 @@
 <template>
   <Layout
-    no-aside
     logo="https://www.vexipui.com/logo.png"
     sign-name="Vexip UI"
     :user="user"
-    :menus="menus"
+    :menu-props="{ router }"
+    :no-aside="!showAside"
   >
+    <template #header-right>
+      <div style="margin-right: 24px;">
+        <Switch v-model:value="showAside" open-text="显示侧边栏" close-text="隐藏侧边栏"></Switch>
+      </div>
+    </template>
     <template #main>
       <div style="width: 100%; height: 1200px;"></div>
     </template>
@@ -13,48 +18,90 @@
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { ref } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { RouteLocationRaw } from 'vue-router'
+
+const showAside = ref(true)
 
 const user = {
   name: 'VexipUI',
   email: 'email@vexip-ui.com'
 }
 
-const menus: MenuOptions[] = [
-  {
-    label: '1',
-    name: '菜单 1',
-    icon: EnvelopesBulk,
-    children: [
-      { label: '1-1', name: '子菜单 1' },
-      { label: '1-2', name: '子菜单 2' },
-      { label: '1-3', name: '子菜单 3' }
-    ]
-  },
-  {
-    label: '2',
-    name: '菜单 2',
-    icon: City,
-    disabled: true
-  },
-  {
-    label: '3',
-    name: '菜单 3',
-    icon: ChartPie
-  },
-  {
-    label: '4',
-    name: '菜单 4',
-    icon: User
-  },
-  {
-    label: '5',
-    name: '菜单 5',
-    icon: Marker
-  }
-]
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/m1',
+      component: {},
+      meta: {
+        label: '1',
+        name: '菜单 1',
+        icon: EnvelopesBulk
+      },
+      children: [
+        {
+          path: 'c1',
+          component: {},
+          meta: {
+            label: '1-1',
+            name: '子菜单 1'
+          }
+        },
+        {
+          path: 'c2',
+          component: {},
+          meta: {
+            label: '1-2',
+            name: '子菜单 2'
+          }
+        }
+      ]
+    },
+    {
+      path: '/m2',
+      component: {},
+      meta: {
+        label: '2',
+        name: '菜单 2',
+        icon: City
+      }
+    },
+    {
+      path: '/m3',
+      component: {},
+      meta: {
+        label: '3',
+        name: '菜单 3',
+        icon: ChartPie
+      }
+    },
+    {
+      path: '/m4',
+      component: {},
+      meta: {
+        label: '4',
+        name: '菜单 4',
+        icon: User
+      }
+    },
+    {
+      path: '/m5',
+      component: {},
+      meta: {
+        menu: false
+      }
+    }
+  ]
+})
+
+// 模拟 push 方法
+router.push = async (to: RouteLocationRaw) => {
+  console.info(to)
+}
 </script>
 
 <style scoped>

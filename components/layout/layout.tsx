@@ -258,7 +258,7 @@ export default defineComponent({
         <LayoutAside
           v-model:reduced={asideReduced.value}
           menus={props.menus}
-          menus-props={props.menuProps}
+          menu-props={props.menuProps}
           onReducedChange={toggleReduce}
           onMenuSelect={handleMenuSelect}
         >
