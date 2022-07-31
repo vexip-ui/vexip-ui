@@ -3,12 +3,19 @@ import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
 import { Indent, Outdent, CaretRight } from '@vexip-ui/icons'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
 import type { PropType } from 'vue'
 import type { MenuOptions } from '@/components/menu'
-import type { AsideMenuProps } from './symbol'
+import type { LayoutMenuProps } from './symbol'
 
 export default defineComponent({
   name: 'LayoutAside',
@@ -16,12 +23,11 @@ export default defineComponent({
     tag: String,
     expanded: booleanProp,
     reduced: booleanProp,
-    menus: Object as PropType<MenuOptions[]>,
-    menuActive: String,
-    menuProps: Object as PropType<AsideMenuProps>,
+    menus: Array as PropType<MenuOptions[]>,
+    menuProps: Object as PropType<LayoutMenuProps>,
     logo: String,
     signName: String,
-    expandedMedia: String,
+    fixed: booleanStringProp,
     onReducedChange: eventProp<(reduced: boolean) => void>(),
     onExpandedChange: eventProp<(expanded: boolean) => void>(),
     onSignClick: eventProp<(event: MouseEvent) => void>(),
@@ -36,14 +42,10 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      menuActive: {
-        default: null,
-        static: true
-      },
       menuProps: null,
       logo: '',
       signName: '',
-      expandedMedia: 'lg',
+      fixed: 'lg',
       onReducedChange: null,
       onExpandedChange: null,
       onSignClick: null,
@@ -56,7 +58,7 @@ export default defineComponent({
     const currentExpanded = ref(props.expanded)
     const scrollHeight = ref('100%')
 
-    const matched = useMediaQuery(toRef(props, 'expandedMedia'))
+    const matched = useMediaQuery(toRef(props, 'fixed'))
     const counter = useUpdateCounter()
 
     const top = ref<HTMLElement | null>(null)
@@ -67,7 +69,7 @@ export default defineComponent({
         nh.be('aside'),
         {
           [nh.bs('vars')]: !layoutState.isLayout,
-          [nh.bem('aside', 'fixed')]: layoutState.expandMatched,
+          [nh.bem('aside', 'fixed')]: matched.value,
           [nh.bem('aside', 'expanded')]: currentExpanded.value,
           [nh.bem('aside', 'reduced')]: currentReduced.value
         }

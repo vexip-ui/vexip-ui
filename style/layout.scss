@@ -156,6 +156,8 @@ $layout: map.merge(
     }
 
     .#{$namespace}-menu {
+      height: 100%;
+
       & > .#{$namespace}-menu__item {
         height: get-css-var('layout-header-height');
       }

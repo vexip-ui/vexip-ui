@@ -4,14 +4,14 @@ import { Linker } from '@/components/linker'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
-import type { FooterLink } from './symbol'
+import type { LayoutFooterLink } from './symbol'
 
 export default defineComponent({
   name: 'LayoutFooter',
   props: {
     tag: String,
     copyright: String,
-    links: Array as PropType<FooterLink[]>
+    links: Array as PropType<LayoutFooterLink[]>
   },
   setup(_props, { slots }) {
     const props = useProps('layout', _props, {
@@ -73,13 +73,9 @@ export default defineComponent({
       return (
         <CustomTag class={className.value}>
           {slots.links ? slots.links() : renderLinks()}
-          {slots.copyright
-            ? (
-                slots.copyright()
-              )
-            : (
-            <div class={nh.be('copyright')}>{props.copyright}</div>
-              )}
+          <div class={nh.be('copyright')}>
+            {slots.copyright ? slots.copyright() : props.copyright}
+          </div>
         </CustomTag>
       )
     }

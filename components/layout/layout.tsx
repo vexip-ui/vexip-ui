@@ -20,11 +20,11 @@ import type { PropType } from 'vue'
 import type { MenuOptions } from '@/components/menu'
 import type {
   LayoutConfig,
-  AsideMenuProps,
+  LayoutMenuProps,
   LayoutSignType,
-  HeaderAction,
-  HeaderUser,
-  FooterLink
+  LayoutHeaderAction,
+  LayoutUser,
+  LayoutFooterLink
 } from './symbol'
 
 export default defineComponent({
@@ -42,19 +42,19 @@ export default defineComponent({
     footer: booleanProp,
     tag: String,
     menus: Object as PropType<MenuOptions[]>,
-    menuProps: Object as PropType<AsideMenuProps>,
+    menuProps: Object as PropType<LayoutMenuProps>,
     logo: String,
     signName: String,
     config: Array as PropType<LayoutConfig[]>,
-    user: Object as PropType<HeaderUser>,
-    actions: Array as PropType<HeaderAction[]>,
+    user: Object as PropType<LayoutUser>,
+    actions: Array as PropType<LayoutHeaderAction[]>,
     reduced: booleanProp,
     avatarCircle: booleanProp,
     signType: String as PropType<LayoutSignType>,
     headerFixed: booleanStringProp,
     asideFixed: booleanStringProp,
     copyright: String,
-    links: Array as PropType<FooterLink[]>,
+    links: Array as PropType<LayoutFooterLink[]>,
     onReducedChange: eventProp<(target: boolean) => void>(),
     onSignClick: eventProp<(event: MouseEvent) => void>(),
     onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
@@ -213,8 +213,11 @@ export default defineComponent({
           actions={props.actions}
           config={props.config}
           avatar-circle={props.avatarCircle}
+          menus={props.noAside ? props.menus : []}
+          menu-props={props.noAside ? props.menuProps : null}
           onUserAction={handleUserAction}
           onReducedChange={toggleReduce}
+          onMenuSelect={handleMenuSelect}
         >
           {{
             left:
@@ -224,20 +227,7 @@ export default defineComponent({
                 props.noAside || currentSignType.value === 'header' || state.expanded
                   ? renderSign()
                   : null),
-            default:
-              slots['header-main'] ||
-              slots.headerMain ||
-              (() =>
-                props.noAside
-                  ? (
-                  <Menu
-                    {...(props.menuProps || {})}
-                    horizontal
-                    options={props.menus}
-                    onSelect={handleMenuSelect}
-                  ></Menu>
-                    )
-                  : null),
+            default: slots['header-main'] || slots.headerMain || null,
             right: slots['header-right'] || slots.headerRight || null,
             user: slots['header-user'] || slots.headerUser || null
           }}
@@ -259,6 +249,7 @@ export default defineComponent({
           v-model:reduced={asideReduced.value}
           menus={props.menus}
           menu-props={props.menuProps}
+          fixed={props.asideFixed}
           onReducedChange={toggleReduce}
           onMenuSelect={handleMenuSelect}
         >

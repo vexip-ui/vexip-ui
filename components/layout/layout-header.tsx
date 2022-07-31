@@ -4,6 +4,7 @@ import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
+import { Menu } from '@/components/menu'
 import { User, ArrowRightFromBracket, Check } from '@vexip-ui/icons'
 import {
   useNameHelper,
@@ -16,7 +17,14 @@ import {
 import { computeSeriesColors, useLayoutState } from './helper'
 
 import type { PropType } from 'vue'
-import type { LayoutConfig, HeaderUser, HeaderAction, LayoutSignType } from './symbol'
+import type { MenuOptions } from '@/components/menu'
+import type {
+  LayoutConfig,
+  LayoutUser,
+  LayoutHeaderAction,
+  LayoutSignType,
+  LayoutMenuProps
+} from './symbol'
 
 export default defineComponent({
   name: 'LayoutHeader',
@@ -24,20 +32,23 @@ export default defineComponent({
     tag: String,
     logo: String,
     signName: String,
-    user: Object as PropType<HeaderUser>,
+    user: Object as PropType<LayoutUser>,
     userDropped: booleanProp,
     avatarCircle: booleanProp,
     config: Array as PropType<LayoutConfig[]>,
-    actions: Array as PropType<HeaderAction[]>,
+    actions: Array as PropType<LayoutHeaderAction[]>,
     signType: String as PropType<LayoutSignType>,
     colors: Array as PropType<string[]>,
     color: String,
+    menus: Object as PropType<MenuOptions[]>,
+    menuProps: Object as PropType<LayoutMenuProps>,
     onNavChange: eventProp<(type: LayoutSignType) => void>(),
     onColorChange: eventProp<(color: string) => void>(),
     onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>(),
     onSignClick: eventProp<(event: MouseEvent) => void>(),
     onDropChange: eventProp<(target: boolean) => void>(),
-    onReducedChange: eventProp<(reduced: boolean) => void>()
+    onReducedChange: eventProp<(reduced: boolean) => void>(),
+    onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>()
   },
   emits: ['update:sign-type', 'update:color', 'update:user-dropped'],
   setup(_props, { emit, slots }) {
@@ -56,6 +67,11 @@ export default defineComponent({
       signType: 'aside',
       colors: () => ['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707'],
       color: '',
+      menus: {
+        default: () => [],
+        static: true
+      },
+      menuProps: null,
       onNavChange: null,
       onColorChange: null,
       onUserAction: null,
@@ -91,13 +107,16 @@ export default defineComponent({
             name: locale.value.signOut,
             icon: ArrowRightFromBracket
           }
-        ] as HeaderAction[]
+        ] as LayoutHeaderAction[]
       }
 
       return props.actions
     })
     const hasLeft = computed(() => {
       return !!(props.logo || props.signName || slots.left)
+    })
+    const hasMenu = computed(() => {
+      return !!(props.menus?.length || props.menuProps?.router)
     })
 
     watch(
@@ -175,6 +194,10 @@ export default defineComponent({
 
       emitEvent(props.onDropChange, target)
       emit('update:user-dropped', target)
+    }
+
+    function handleMenuSelect(label: string, meta: Record<string, any>) {
+      emitEvent(props.onMenuSelect, label, meta)
     }
 
     function getSlotParams() {
@@ -255,7 +278,23 @@ export default defineComponent({
                   )}
             </div>
           )}
-          <div class={nh.be('header-main')}>{slots.default?.(getSlotParams())}</div>
+          <div class={nh.be('header-main')}>
+            {slots.default
+              ? (
+                  slots.default(getSlotParams())
+                )
+              : hasMenu.value
+                ? (
+              <Menu
+                {...(props.menuProps || {})}
+                horizontal
+                transfer
+                options={props.menus}
+                onSelect={handleMenuSelect}
+              ></Menu>
+                  )
+                : null}
+          </div>
           {slots.right && <div class={nh.be('header-right')}>{slots.right(getSlotParams())}</div>}
           {slots.user
             ? (

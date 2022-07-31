@@ -43,6 +43,9 @@ import { Highlight } from './highlight'
 import { Icon } from './icon'
 import { Input } from './input'
 import { Layout } from './layout'
+import { LayoutAside } from './layout-aside'
+import { LayoutFooter } from './layout-footer'
+import { LayoutHeader } from './layout-header'
 import { Linker } from './linker'
 import { Loading } from './loading'
 import { Masker } from './masker'
@@ -148,6 +151,9 @@ const components = [
   Icon,
   Input,
   Layout,
+  LayoutAside,
+  LayoutFooter,
+  LayoutHeader,
   Linker,
   Masker,
   Menu,
@@ -256,6 +262,9 @@ export {
   Icon,
   Input,
   Layout,
+  LayoutAside,
+  LayoutFooter,
+  LayoutHeader,
   Linker,
   Loading,
   Masker,
