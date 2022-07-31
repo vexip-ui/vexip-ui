@@ -181,7 +181,7 @@ export default defineComponent({
       suffixColor: '',
       placeholder: null,
       disabled: () => disabled.value,
-      transitionName: () => nh.ns('fade'),
+      transitionName: () => nh.ns('drop'),
       dropDisabled: false,
       placement: {
         default: 'bottom',
