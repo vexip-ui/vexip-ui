@@ -1,12 +1,5 @@
 <template>
-  <li
-    ref="wrapper"
-    :class="className"
-    role="menuitem"
-    tabindex="0"
-    :aria-disabled="props.disabled ? 'true' : undefined"
-    @keydown.enter.stop="handleSelect"
-  >
+  <li ref="wrapper" :class="className" role="none">
     <Tooltip
       placement="right"
       :reverse="tooltipReverse"
@@ -21,8 +14,13 @@
             [nh.bem('label', `marker-${markerType}`)]: true,
             [nh.bem('label', 'in-popper')]: isUsePopper
           }"
+          role="menuitem"
+          tabindex="0"
+          :aria-disabled="props.disabled ? 'true' : undefined"
           :style="labelStyle"
           @click="handleSelect"
+          @keydown.enter.stop="handleSelect"
+          @keydown.space.stop.prevent="handleSelect"
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >

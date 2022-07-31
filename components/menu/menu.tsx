@@ -336,7 +336,7 @@ export default defineComponent({
 
     return () => {
       return (
-        <ul ref={wrapper} class={className.value} role={'menu'} tabindex={0}>
+        <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1}>
           {slots.default
             ? (
                 slots.default()

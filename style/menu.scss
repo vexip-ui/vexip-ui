@@ -11,6 +11,7 @@ $menu: map.merge(
     bg-color-selected: get-css-var('color-primary-opacity-8'),
     b-color: get-css-var('border-color-light-2'),
     d-color: get-css-var('border-color-light-1'),
+    o-color: get-css-var('color-primary-opacity-6'),
     icon-color: get-css-var('content-color-secondary'),
     arrow-color: get-css-var('menu-icon-color'),
     label-color: get-css-var('content-color-base'),
@@ -47,12 +48,17 @@ $menu: map.merge(
   margin: 0;
   background-color: get-css-var('menu-bg-color');
   border-right: get-css-var('border-shape') get-css-var('menu-b-color');
-  transition: width get-css-var('transition-base');
+  outline: 0;
+  transition: width get-css-var('transition-base'), get-css-var('transition-shadow');
 
   &--horizontal {
     flex-direction: row;
     width: auto;
     border-right: 0;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px get-css-var('menu-o-color');
   }
 
   &::before,
@@ -112,10 +118,12 @@ $menu: map.merge(
     color: get-css-var('menu-label-color');
     cursor: pointer;
     background-color: get-css-var('menu-bg-color');
+    outline: 0;
     transition:
       padding-left get-css-var('transition-base'),
       get-css-var('transition-color'),
-      get-css-var('transition-background');
+      get-css-var('transition-background'),
+      get-css-var('transition-shadow');
 
     &::after {
       position: absolute;
@@ -184,6 +192,10 @@ $menu: map.merge(
           opacity: 100%;
         }
       }
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 2px get-css-var('menu-o-color');
     }
 
     #{$item}--selected & {
