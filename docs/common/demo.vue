@@ -19,35 +19,43 @@
       </div>
     </Column>
     <Column :class="`${prefix}__actions`">
-      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
+      <Tooltip reverse transfer>
         <template #trigger>
-          <Icon :scale="1.1" @click="copyCode">
-            <CopyR></CopyR>
-          </Icon>
+          <button :class="`${prefix}__action`">
+            <Icon :scale="1.1" @click="copyCode">
+              <CopyR></CopyR>
+            </Icon>
+          </button>
         </template>
         {{ $t('common.copyCode') }}
       </Tooltip>
-      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
+      <Tooltip reverse transfer>
         <template #trigger>
-          <Icon :scale="1.1" @click="editInGithub">
-            <PenToSquareR></PenToSquareR>
-          </Icon>
+          <button :class="`${prefix}__action`">
+            <Icon :scale="1.1" @click="editInGithub">
+              <PenToSquareR></PenToSquareR>
+            </Icon>
+          </button>
         </template>
         {{ $t('common.editInGithub') }}
       </Tooltip>
-      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
+      <Tooltip reverse transfer>
         <template #trigger>
-          <Icon :scale="1.1" @click="editOnPlayground">
-            <PaperPlaneR></PaperPlaneR>
-          </Icon>
+          <button :class="`${prefix}__action`">
+            <Icon :scale="1.1" @click="editOnPlayground">
+              <PaperPlaneR></PaperPlaneR>
+            </Icon>
+          </button>
         </template>
         {{ $t('common.editInPlayground') }}
       </Tooltip>
-      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
+      <Tooltip reverse transfer>
         <template #trigger>
-          <Icon :scale="1.1" @click="expandCode">
-            <Code></Code>
-          </Icon>
+          <button :class="`${prefix}__action`">
+            <Icon :scale="1.1" @click="expandCode">
+              <Code></Code>
+            </Icon>
+          </button>
         </template>
         {{ codeExpanded ? $t('common.hideCode') : $t('common.showCode') }}
       </Tooltip>
@@ -272,12 +280,17 @@ function editOnPlayground() {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
     margin-left: 3px;
     color: var(--vxp-content-color-placeholder);
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     transition: var(--vxp-transition-color);
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: var(--vxp-color-primary-opacity-2);
     }
 

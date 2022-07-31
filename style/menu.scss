@@ -57,10 +57,6 @@ $menu: map.merge(
     border-right: 0;
   }
 
-  &:focus {
-    box-shadow: 0 0 0 2px get-css-var('menu-o-color');
-  }
-
   &::before,
   &::after {
     display: table;
@@ -194,7 +190,7 @@ $menu: map.merge(
       }
     }
 
-    &:focus {
+    &:focus-visible {
       box-shadow: 0 0 0 2px get-css-var('menu-o-color');
     }
 

@@ -23,14 +23,15 @@
     <div class="navigation">
       <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
         <template v-for="menu in menus" :key="menu.label">
-          <li
-            v-if="menu.to"
-            class="vxp-menu__item vxp-menu__item--no-icon"
-            role="menuitem"
-            tabindex="0"
-            @click="openPage(menu.to)"
-          >
-            <div class="vxp-menu__label vxp-menu__label--marker-bottom">
+          <li v-if="menu.to" class="vxp-menu__item vxp-menu__item--no-icon" role="none">
+            <div
+              class="vxp-menu__label vxp-menu__label--marker-bottom"
+              role="menuitem"
+              tabindex="0"
+              @click="openPage(menu.to)"
+              @keydown.enter.stop="openPage(menu.to)"
+              @keydown.space.stop.prevent="openPage(menu.to)"
+            >
               <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
             </div>
           </li>

@@ -88,6 +88,7 @@
 <script lang="tsx">
 import {
   defineComponent,
+  defineAsyncComponent,
   ref,
   reactive,
   computed,
@@ -101,7 +102,7 @@ import {
 } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { MenuGroup } from '@/components/menu-group'
+// import { MenuGroup } from '@/components/menu-group'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
 import { Renderer } from '@/components/renderer'
@@ -122,6 +123,8 @@ import type { RouteLocationRaw } from 'vue-router'
 import type { Placement } from '@vexip-ui/mixins'
 import type { IconMinorProps } from '@/components/icon'
 import type { MenuOptions } from './symbol'
+
+const MenuGroup = defineAsyncComponent(() => import('./menu-group'))
 
 const MenuItem = defineComponent({
   name: 'MenuItem',
