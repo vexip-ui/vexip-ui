@@ -54,9 +54,9 @@ export function useNameHelper(block: string, namespace: Ref<string> | string = u
    */
   const ns = (suffix: string) => `${unref(namespace)}-${suffix}`
   /**
-   * @returns `${namespace}-${block}-${name}`
+   * @returns `--vxp-${block}-${name}`
    */
-  const cv = (name: string) => `--${b()}-${name}`
+  const cv = (name: string) => `--vxp-${block}-${name}`
   /**
    * @returns a map that is transformed origin style map's key to cv(key)
    */
@@ -67,6 +67,18 @@ export function useNameHelper(block: string, namespace: Ref<string> | string = u
 
     return style
   }
+  /**
+   * @returns `var(--vxp-${block}-${name})`
+   */
+  const gcv = (name: string) => `var(--vxp-${block}-${name})`
+  /**
+   * @returns `--vxp-${name}`
+   */
+  const nv = (name: string) => `--vxp-${name}`
+  /**
+   * @returns `var(--vxp-${name})`
+   */
+  const gnv = (name: string) => `var(--vxp-${name})`
 
   return {
     b,
@@ -76,7 +88,10 @@ export function useNameHelper(block: string, namespace: Ref<string> | string = u
     bs,
     ns,
     cv,
-    cvm
+    cvm,
+    gcv,
+    nv,
+    gnv
   }
 }
 

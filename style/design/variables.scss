@@ -10,7 +10,8 @@
 $namespace: 'vxp' !default;
 
 @function to-css-var-name($name-units...) {
-  $name: '--' + $namespace;
+  // variable prefix is fixed to '--vxp'
+  $name: '--vxp';
 
   @each $unit in $name-units {
     @if $unit != '' {
@@ -80,7 +81,8 @@ $color-map: map.deep-merge(
     $color-map: map.deep-merge(
       (
         $type: (
-          '#{$mode}-#{$i}': color.mix(
+          '#{$mode}-#{$i}':
+          color.mix(
             $mixed-color,
             map.get($color-map, $type, 'base'),
             math.percentage(math.div($i, 10))
@@ -97,10 +99,8 @@ $color-map: map.deep-merge(
     $color-map: map.deep-merge(
       (
         $type: (
-          'opacity-#{$i}': rgba(
-            map.get($color-map, $type, 'base'),
-            math.percentage(math.div(10 - $i, 10))
-          )
+          'opacity-#{$i}':
+          rgba(map.get($color-map, $type, 'base'), math.percentage(math.div(10 - $i, 10)))
         )
       ),
       $color-map
@@ -220,8 +220,7 @@ $shadow-color-map: map.merge(
 $shadow-x: 0 !default;
 $shadow-y: 0 !default;
 $shadow-blur: 6px !default;
-$shadow-shape: get-css-var('shadow-x') get-css-var('shadow-y')
-  get-css-var('shadow-blur') !default;
+$shadow-shape: get-css-var('shadow-x') get-css-var('shadow-y') get-css-var('shadow-blur') !default;
 $shadow-base: get-css-var('shadow-shape') get-css-var('border-color-base') !default;
 
 $shadow-border: 0 0 0 1px !default;
