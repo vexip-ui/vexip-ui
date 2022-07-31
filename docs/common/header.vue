@@ -30,7 +30,7 @@
             tabindex="0"
             @click="openPage(menu.to)"
           >
-            <div class="vxp-menu__label">
+            <div class="vxp-menu__label vxp-menu__label--marker-bottom">
               <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
             </div>
           </li>

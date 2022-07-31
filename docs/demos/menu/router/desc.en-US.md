@@ -2,7 +2,7 @@
 
 Passing a `vue-router` Router object through the `router` prop can quickly create a menu based on the routes.
 
-When using router, each `route.meta` is assumed to be parsed as a menu options, and the route itself is automatically set to `route` option.
+When using router, each `route.meta` is assumed to be parsed as a menu options, and the route itself is automatically set to `option.route` option.
 
 Configure `route.meta.menu` to `false` to exclude a route when parsing.
 

@@ -12,7 +12,6 @@ $dropdown: map.merge(
     bg-color-hover: get-css-var('fill-color-hover'),
     bg-color-active: get-css-var('dropdown-bg-color-hover'),
     b-color: get-css-var('border-color-light-2'),
-    border: get-css-var('border-shape') get-css-var('dropdown-b-color'),
     radius: get-css-var('radius-base'),
     s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('dropdown-s-color'),
@@ -61,7 +60,7 @@ $dropdown: map.merge(
     margin: 0;
     user-select: none;
     background-color: get-css-var('dropdown-bg-color');
-    border: get-css-var('dropdown-border');
+    border: get-css-var('border-shape') get-css-var('dropdown-b-color');
     border-radius: get-css-var('dropdown-radius');
     box-shadow: get-css-var('dropdown-shadow');
   }

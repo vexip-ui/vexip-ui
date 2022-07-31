@@ -25,15 +25,7 @@ import { MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { Router, RouteRecordRaw, RouteLocationRaw } from 'vue-router'
-import type { TooltipTheme } from '@/components/tooltip'
-import type {
-  MenuOptions,
-  MenuMarkerType,
-  MenuGroupType,
-  MenuTheme,
-  MenuItemState,
-  MenuState
-} from './symbol'
+import type { MenuOptions, MenuMarkerType, MenuGroupType, MenuItemState, MenuState } from './symbol'
 
 const menuMarkerTypes = Object.freeze<MenuMarkerType>(['top', 'right', 'bottom', 'left', 'none'])
 
@@ -54,8 +46,7 @@ export default defineComponent({
     transfer: booleanStringProp,
     trigger: String as PropType<'hover' | 'click'>,
     groupType: String as PropType<MenuGroupType>,
-    theme: String as PropType<MenuTheme>,
-    tooltipTheme: String as PropType<TooltipTheme>,
+    tooltipReverse: booleanProp,
     options: Array as PropType<MenuOptions[]>,
     router: Object as PropType<Router>,
     manualRoute: booleanProp,
@@ -73,7 +64,7 @@ export default defineComponent({
       accordion: false,
       markerType: {
         default: 'right' as MenuMarkerType,
-        validator: (value: MenuMarkerType) => menuMarkerTypes.includes(value)
+        validator: value => menuMarkerTypes.includes(value)
       },
       reduced: false,
       horizontal: false,
@@ -83,14 +74,7 @@ export default defineComponent({
         default: 'collapse' as MenuGroupType,
         validator: (value: MenuGroupType) => ['collapse', 'dropdown'].includes(value)
       },
-      theme: {
-        default: 'light' as MenuTheme,
-        validator: (value: MenuTheme) => ['light', 'dark'].includes(value)
-      },
-      tooltipTheme: {
-        default: 'dark' as TooltipTheme,
-        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
-      },
+      tooltipReverse: null,
       options: {
         default: () => [],
         static: true
@@ -107,25 +91,23 @@ export default defineComponent({
     const wrapper = ref<HTMLElement | null>(null)
     const rest = ref<InstanceType<typeof MenuRest> | null>(null)
 
-    const className = computed(() => {
-      let computedMarkerType
-
+    const markerType = computed(() => {
       if (props.horizontal && (props.markerType === 'left' || props.markerType === 'right')) {
-        computedMarkerType = 'bottom'
+        return 'bottom'
       } else if (
         !props.horizontal &&
         (props.markerType === 'top' || props.markerType === 'bottom')
       ) {
-        computedMarkerType = 'right'
+        return 'right'
       } else {
-        computedMarkerType = props.markerType ?? (props.horizontal ? 'bottom' : 'right')
+        return props.markerType ?? (props.horizontal ? 'bottom' : 'right')
       }
-
+    })
+    const className = computed(() => {
       return [
         nh.b(),
         nh.bs('vars'),
-        nh.bm(props.theme),
-        nh.bm(`marker-${computedMarkerType}`),
+        nh.bm(`marker-${markerType.value}`),
         {
           [nh.bm('reduced')]: isReduced.value,
           [nh.bm('dropdown')]: props.groupType === 'dropdown',
@@ -156,10 +138,10 @@ export default defineComponent({
         horizontal: toRef(props, 'horizontal'),
         accordion: toRef(props, 'accordion'),
         groupType: toRef(props, 'groupType'),
-        theme: toRef(props, 'theme'),
-        tooltipTheme: toRef(props, 'tooltipTheme'),
+        tooltipReverse: toRef(props, 'tooltipReverse'),
         transfer: toRef(props, 'transfer'),
         trigger: toRef(props, 'trigger'),
+        markerType,
         handleSelect,
         handleExpand,
         increaseItem,

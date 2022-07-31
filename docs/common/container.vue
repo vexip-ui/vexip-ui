@@ -110,6 +110,11 @@ function setScrollY() {
     @include query-media('xl') {
       width: var(--aside-width-large);
     }
+
+    .vxp-menu-group__title {
+      padding: 10px 20px;
+      color: var(--vxp-content-color-third);
+    }
   }
 
   &__main {

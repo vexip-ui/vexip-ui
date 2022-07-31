@@ -3,7 +3,7 @@
     <Button style="margin-bottom: 20px;" @click="reduced = !reduced">
       Expand/Reduce
     </Button>
-    <Menu :reduced="reduced" transfer :options="options"></Menu>
+    <Menu :reduced="reduced" :options="options"></Menu>
   </div>
 </template>
 

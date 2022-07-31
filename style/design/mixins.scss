@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:math';
 @use './variables.scss' as *;
 
 @mixin basis {
@@ -141,7 +142,7 @@
     content: '';
     border-top: get-css-var('border-shape') $border-color;
     transition: get-css-var('transition-border'), get-css-var('transition-opacity');
-    animation: vxp-h-moving-border $duration #{-$duration / 2} infinite;
+    animation: vxp-h-moving-border $duration #{math.div(-$duration, 2)} infinite;
   }
 }
 
@@ -197,7 +198,7 @@
     content: '';
     border-left: get-css-var('border-shape') $border-color;
     transition: get-css-var('transition-border'), get-css-var('transition-opacity');
-    animation: vxp-v-moving-border $duration #{$duration / 2} infinite;
+    animation: vxp-v-moving-border $duration #{math.div(-$duration, 2)} infinite;
   }
 }
 

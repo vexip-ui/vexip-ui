@@ -34,7 +34,7 @@ const MenuGroup = defineComponent({
       indent.value = parentItemState.indent + 1
     }
 
-    const labelStyle = computed(() => {
+    const titleStyle = computed(() => {
       return {
         paddingLeft: parentItemState?.isUsePopper
           ? undefined
@@ -93,8 +93,8 @@ const MenuGroup = defineComponent({
 
       return (
         <li class={nh.b()}>
-          <div class={nh.be('title')}>
-            <span class={nh.be('label')} style={labelStyle.value}>
+          <div class={nh.be('label')}>
+            <span class={nh.be('title')} style={titleStyle.value}>
               {slots.label ? slots.label() : props.label}
             </span>
           </div>

@@ -9,32 +9,22 @@ $menu: map.merge(
   (
     bg-color: transparent,
     bg-color-selected: get-css-var('color-primary-opacity-8'),
-    bg-color-dark: get-css-var('bg-color-reverse'),
-    bg-color-selected-dark: get-css-var('color-primary-base'),
-    b-color: get-css-var('border-color-base'),
-    // b-color-dark: transparent,
+    b-color: get-css-var('border-color-light-2'),
     d-color: get-css-var('border-color-light-1'),
-    d-color-dark: get-css-var('border-color-light-1'),
-    border: get-css-var('border-shape') get-css-var('menu-b-color'),
     icon-color: get-css-var('content-color-secondary'),
     arrow-color: get-css-var('menu-icon-color'),
+    label-color: get-css-var('content-color-base'),
     label-color-hover: get-css-var('color-primary-base'),
     label-color-visible: get-css-var('menu-label-color-hover'),
+    label-color-selected: get-css-var('menu-label-color-hover'),
     label-color-disabled: get-css-var('content-color-disabled'),
-    label-color-dark: rgba($color-white, 0.65),
-    label-color-hover-dark: get-css-var('color-white'),
-    label-color-visible-dark: get-css-var('menu-label-color-hover-dark'),
-    label-color-disabled-dark: rgba($color-white, 0.45),
     marker-bg-color: get-css-var('color-primary-base'),
-    group-bg-color-dark: get-css-var('color-black'),
     popper-bg-color: get-css-var('bg-color-base'),
-    popper-bg-color-dark: get-css-var('bg-color-reverse'),
     popper-b-color: get-css-var('border-color-light-2'),
-    popper-border: get-css-var('border-shape') get-css-var('menu-popper-b-color'),
     popper-z-index: get-css-var('z-index-popper'),
     popper-radius: get-css-var('radius-base'),
-    popper-shadow: get-css-var('shadow-base'),
-    popper-shadow-dark: unset
+    popper-s-color: get-css-var('shadow-color-base'),
+    group-color: get-css-var('content-color-secondary')
   ),
   $menu
 );
@@ -42,6 +32,10 @@ $menu: map.merge(
 .#{$namespace}-menu {
   &-vars {
     @include define-preset-values('menu', $menu);
+  }
+
+  @mixin define-menu-style($style-map) {
+    @include define-preset-style('menu', $style-map);
   }
 
   @include basis;
@@ -52,17 +46,12 @@ $menu: map.merge(
   padding: 0;
   margin: 0;
   background-color: get-css-var('menu-bg-color');
-  border-right: get-css-var('menu-border');
+  border-right: get-css-var('border-shape') get-css-var('menu-b-color');
   transition: width get-css-var('transition-base');
 
   &--horizontal {
     flex-direction: row;
     width: auto;
-    border-right: 0;
-  }
-
-  &--dark {
-    background-color: get-css-var('menu-bg-color-dark');
     border-right: 0;
   }
 
@@ -120,19 +109,13 @@ $menu: map.merge(
     width: 100%;
     height: 100%;
     padding: 10px 20px;
+    color: get-css-var('menu-label-color');
     cursor: pointer;
     background-color: get-css-var('menu-bg-color');
-    transition: get-css-var('transition-color'), get-css-var('transition-background');
-
-    #{$self}--dark &,
-    #{$popper} #{$list}--dark & {
-      color: get-css-var('menu-label-color-dark');
-      background-color: get-css-var('menu-bg-color-dark');
-    }
-
-    #{$list}--dark &:not(#{&}--in-popper) {
-      background-color: get-css-var('menu-group-bg-color-dark');
-    }
+    transition:
+      padding-left get-css-var('transition-base'),
+      get-css-var('transition-color'),
+      get-css-var('transition-background');
 
     &::after {
       position: absolute;
@@ -146,12 +129,18 @@ $menu: map.merge(
       opacity: 0%;
       transition: get-css-var('transition-opacity');
 
-      #{$self}--marker-left & {
-        right: auto;
-        left: 0;
+      #{$popper} & {
+        display: none;
       }
+    }
 
-      #{$self}--horizontal & {
+    &--marker-left::after {
+      right: auto;
+      left: 0;
+    }
+
+    #{$self}--horizontal & {
+      &::after {
         top: auto;
         right: 0;
         bottom: auto;
@@ -160,31 +149,22 @@ $menu: map.merge(
         height: 2px;
       }
 
-      #{$self}--marker-top & {
+      &--marker-top::after {
         top: 0;
       }
 
-      #{$self}--marker-bottom & {
+      &--marker-bottom::after {
         bottom: 0;
-      }
-
-      #{$self}--marker-none &,
-      #{$self}--dark &,
-      #{$popper} & {
-        display: none;
       }
     }
 
-    &:hover,
-    // #{$item}--selected &,
-    // #{$self}--reduced #{$item}--son-selected &,
-    #{$item}--son-selected > .#{$namespace}-tooltip > .#{$namespace}-tooltip__trigger > & {
-      color: get-css-var('menu-label-color-hover');
+    &--marker-none::after {
+      display: none;
+    }
 
-      #{$self}--dark &,
-      #{$popper} #{$list}--dark & {
-        color: get-css-var('menu-label-color-hover-dark');
-      }
+    &:hover,
+    #{$item}--son-selected > & {
+      color: get-css-var('menu-label-color-hover');
 
       #{$self}--horizontal &::after {
         opacity: 100%;
@@ -196,29 +176,18 @@ $menu: map.merge(
     }
 
     #{$item}--selected &,
-    #{$item}--group-visible > .#{$namespace}-tooltip > .#{$namespace}-tooltip__trigger > &,
-    .#{$namespace}-dropdown__trigger--active & {
+    #{$item}--group-visible > & {
       color: get-css-var('menu-label-color-visible');
 
       #{$self}--horizontal & {
-        color: get-css-var('menu-label-color-visible');
-
         &::after {
           opacity: 100%;
         }
       }
-
-      #{$self}--dark &,
-      #{$list}--dark & {
-        color: get-css-var('menu-label-color-visible-dark');
-      }
-
-      // #{$self}--horizontal#{$self}--dark & {
-      //   color: get-css-var('menu-label-color-hover-dark');
-      // }
     }
 
     #{$item}--selected & {
+      color: get-css-var('menu-label-color-selected');
       background-color: get-css-var('menu-bg-color-selected');
 
       &::after {
@@ -228,29 +197,11 @@ $menu: map.merge(
       #{$self}--horizontal > & {
         background-color: get-css-var('menu-bg-color');
       }
-
-      #{$self}--dark &,
-      #{$list}--dark & {
-        background-color: get-css-var('menu-bg-color-selected-dark');
-      }
-
-      // #{$self}--horizontal#{$self}--dark & {
-      //   background-color: get-css-var('menu-bg-color-selected-dark');
-      // }
     }
 
     #{$item}--disabled & {
       color: get-css-var('menu-label-color-disabled');
       cursor: not-allowed;
-
-      #{$self}--dark &,
-      #{$popper} #{$list}--dark & {
-        color: get-css-var('menu-label-color-disabled-dark');
-      }
-
-      // &:hover {
-      //   background-color: get-css-var('menu-bg-color');
-      // }
     }
   }
 
@@ -360,10 +311,6 @@ $menu: map.merge(
 
     @include clear-both;
 
-    #{$self}--dark & {
-      background-color: get-css-var('menu-group-bg-color-dark');
-    }
-
     #{$popper} & {
       // @include basis;
 
@@ -373,14 +320,9 @@ $menu: map.merge(
       padding: 5px 0;
       user-select: none;
       background-color: get-css-var('menu-popper-bg-color');
-      border: get-css-var('menu-popper-border');
+      border: get-css-var('border-shape') get-css-var('menu-popper-b-color');
       border-radius: get-css-var('menu-popper-radius');
-      box-shadow: get-css-var('menu-popper-shadow');
-
-      &--dark {
-        background-color: get-css-var('menu-popper-bg-color-dark');
-        box-shadow: get-css-var('menu-popper-shadow-dark');
-      }
+      box-shadow: get-css-var('shadow-shape') get-css-var('menu-popper-s-color');
     }
   }
 
@@ -397,11 +339,6 @@ $menu: map.merge(
 
     &--selected {
       color: get-css-var('menu-label-color-hover');
-
-      #{$self}--dark &,
-      #{$popper} #{$list}--dark & {
-        color: get-css-var('menu-label-color-hover-dark');
-      }
     }
   }
 
@@ -413,8 +350,9 @@ $menu: map.merge(
       list-style: none;
       user-select: none;
 
-      &__title {
+      &__label {
         position: relative;
+        color: get-css-var('menu-group-color');
         background-color: get-css-var('menu-bg-color');
 
         &::before {
@@ -429,19 +367,11 @@ $menu: map.merge(
           transition: get-css-var('transition-opacity');
           transform: translate(-50%, -50%);
         }
-
-        #{$self}--dark & {
-          background-color: get-css-var('menu-bg-color-dark');
-
-          &::before {
-            background-color: get-css-var('menu-d-color-dark');
-          }
-        }
       }
 
-      &__label {
+      &__title {
         display: inline-block;
-        padding: 5px 20px;
+        padding: 8px 20px;
         font-size: get-css-var('font-size-secondary');
         transition: get-css-var('transition-opacity');
 
@@ -464,13 +394,13 @@ $menu: map.merge(
       }
 
       #{$self}--reduced & {
-        &__title {
+        &__label {
           &::before {
             opacity: 100%;
           }
         }
 
-        &__label {
+        &__title {
           opacity: 0%;
         }
       }

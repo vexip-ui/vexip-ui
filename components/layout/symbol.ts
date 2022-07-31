@@ -1,7 +1,7 @@
 import type { InjectionKey } from 'vue'
 import type { Router } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
-import type { MenuMarkerType, MenuGroupType, MenuTheme } from '@/components/menu'
+import type { MenuMarkerType, MenuGroupType } from '@/components/menu'
 import type { TooltipTheme } from '@/components/tooltip'
 
 export type LayoutSignType = 'aside' | 'header'
@@ -11,7 +11,6 @@ export interface AsideMenuProps {
   accordion?: boolean,
   markerType?: MenuMarkerType,
   groupType?: MenuGroupType,
-  theme?: MenuTheme,
   tooltipTheme?: TooltipTheme,
   router?: Router,
   manualRoute?: boolean

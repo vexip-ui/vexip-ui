@@ -9,7 +9,7 @@
   >
     <Tooltip
       placement="right"
-      :theme="tooltipTheme"
+      :reverse="tooltipReverse"
       :transfer="true"
       :disabled="tooltipDisabled"
     >
@@ -18,6 +18,7 @@
           ref="reference"
           :class="{
             [nh.be('label')]: true,
+            [nh.bem('label', `marker-${markerType}`)]: true,
             [nh.bem('label', 'in-popper')]: isUsePopper
           }"
           :style="labelStyle"
@@ -59,7 +60,7 @@
     </Tooltip>
     <span v-if="!isUsePopper">
       <CollapseTransition>
-        <ul v-show="showGroup" :class="[nh.be('list'), nh.bem('list', 'theme')]">
+        <ul v-show="showGroup" :class="nh.be('list')">
           <slot name="group">
             <Renderer :renderer="renderChildren"></Renderer>
           </slot>
@@ -75,7 +76,7 @@
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >
-          <ul :class="[nh.be('list'), nh.bem('list', 'theme')]">
+          <ul :class="nh.be('list')">
             <slot name="group">
               <Renderer :renderer="renderChildren"></Renderer>
             </slot>
@@ -106,6 +107,7 @@ import { MenuGroup } from '@/components/menu-group'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
 import { Renderer } from '@/components/renderer'
+import { ChevronDown } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
@@ -115,7 +117,6 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/mixins'
-import { ChevronDown } from '@vexip-ui/icons'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -186,6 +187,7 @@ const MenuItem = defineComponent({
     const propTransfer = computed(() => props.transfer ?? menuState?.transfer ?? false)
     const inTransfer = computed(() => (parentItemState ? parentItemState.transfer : false))
     const transfer = computed(() => !inTransfer.value && propTransfer.value)
+    const markerType = computed(() => menuState?.markerType || 'right')
 
     const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
@@ -214,7 +216,8 @@ const MenuItem = defineComponent({
           parentItemState && parentItemState.isUsePopper
             ? undefined
             : `${
-                indent.value * baseIndentWidth + (groupState?.indent ?? 0) * 0.25 * baseIndentWidth
+                indent.value * baseIndentWidth +
+                (menuState?.isReduced ? 0 : groupState?.indent ?? 0) * 0.25 * baseIndentWidth
               }px`
       }
     })
@@ -232,8 +235,7 @@ const MenuItem = defineComponent({
         isGroup.value || !!(parentItemState?.isUsePopper || (menuState && !menuState.isReduced))
       )
     })
-    const theme = computed(() => (menuState ? menuState.theme : 'light'))
-    const tooltipTheme = computed(() => (menuState ? menuState.tooltipTheme : 'dark'))
+    const tooltipReverse = computed(() => !!menuState?.tooltipReverse)
     const isHorizontal = computed(() => menuState?.horizontal && !parentItemState)
     const transition = computed(() => {
       return props.transitionName ?? isHorizontal.value ? nh.ns('drop') : nh.ns('zoom')
@@ -428,8 +430,8 @@ const MenuItem = defineComponent({
       showGroup,
       isUsePopper,
       tooltipDisabled,
-      theme,
-      tooltipTheme,
+      markerType,
+      tooltipReverse,
       isHorizontal,
       transition,
       dropTrigger,
