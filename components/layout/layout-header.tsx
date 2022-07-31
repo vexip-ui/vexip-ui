@@ -14,6 +14,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
+import { useMounted } from '@vexip-ui/mixins'
 import { computeSeriesColors, useLayoutState } from './helper'
 
 import type { PropType } from 'vue'
@@ -84,11 +85,14 @@ export default defineComponent({
     const currentSignType = ref<LayoutSignType>(props.signType)
     const currentUserDropped = ref(props.userDropped)
 
-    const rootEl = document.documentElement
-    const rootStyle = getComputedStyle(rootEl)
-    const currentColor = ref(
-      props.color || props.colors?.[0] || rootStyle.getPropertyValue('--vxp-color-primary-base')
-    )
+    const { isMounted } = useMounted()
+
+    const rootEl = computed(() => {
+      // eslint-disable-next-line no-unused-expressions
+      isMounted.value
+      return document ? document.documentElement : null
+    })
+    const currentColor = ref(props.color || props.colors?.[0] || getBaseColor())
 
     const className = computed(() => {
       return [
@@ -128,8 +132,7 @@ export default defineComponent({
     watch(
       () => props.color,
       value => {
-        currentColor.value =
-          value || props.colors?.[0] || rootStyle.getPropertyValue('--vxp-color-primary-base')
+        currentColor.value = value || props.colors?.[0] || getBaseColor()
       }
     )
     watch(
@@ -143,6 +146,14 @@ export default defineComponent({
     onBeforeMount(() => {
       computeSeriesColors(currentColor.value)
     })
+
+    function getBaseColor() {
+      if (rootEl.value) {
+        return getComputedStyle(rootEl.value).getPropertyValue('--vxp-color-primary-base')
+      }
+
+      return '#339af0'
+    }
 
     function handleUserActionSelect(label: string, meta: Record<string, any>) {
       emitEvent(props.onUserAction, label, meta)
@@ -266,7 +277,8 @@ export default defineComponent({
                 ? (
                     slots.left(getSlotParams())
                   )
-                : (
+                : props.signType === 'header'
+                  ? (
                 <div class={nh.be('sign')} onClick={handleSignClick}>
                   {props.logo && (
                     <div class={nh.be('logo')}>
@@ -275,7 +287,8 @@ export default defineComponent({
                   )}
                   {props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>}
                 </div>
-                  )}
+                    )
+                  : null}
             </div>
           )}
           <div class={nh.be('header-main')}>

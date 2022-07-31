@@ -58,25 +58,27 @@ interface LayoutState {
 
 ### Layout Props
 
-| Name          | Type                   | Description                                                                                                                        | Default            | Since |
-| ------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| no-aside      | `boolean`              | Set whether to disable the sidebar                                                                                                 | `false`            | -     |
-| footer        | `boolean`              | Set whether to use footer                                                                                                          | `false`            | -     |
-| tag           | `string`               | Set rendering tag                                                                                                                  | `'section'`        | -     |
-| menus         | `MenuOptions[]`        | Set menu options                                                                                                                   | `[]`               | -     |
-| menu-props    | `AsideMenuProps`       | Set menu properties                                                                                                                | `null`             | -     |
-| logo          | `string`               | Set Logo image address                                                                                                             | `''`               | -     |
-| sign-name     | `string`               | Set the sign                                                                                                                       | `''`               | -     |
-| config        | `('nav' \| 'color')[]` | Set configuration options for user drop-down panels                                                                                | `['nav', 'color']` | -     |
-| user          | `HeaderUser`           | Set user information                                                                                                               | `null`             | -     |
-| actions       | `HeaderAction[]`       | Set the action options of the user drop-down panel                                                                                 | `[]`               | -     |
-| reduced       | `boolean`              | Set whether the aside is reduced or not, can use `v-model` two-way binding                                                         | `false`            | -     |
-| avatar-circle | `boolean`              | Set whether the user avatar is circular                                                                                            | `false`            | -     |
-| sign-type     | `'aside' \| 'header'`  | Set the block where the sign is located                                                                                            | `'aside'`          | -     |
-| header-fixed  | `boolean \| string`    | Set whether the header is fixed, you can pass a breakpoint or media query string, and it will be fixed when the query is satisfied | `'lg'`             | -     |
-| aside-fixed   | `boolean \| string`    | Set whether the aside is fixed, you can pass a breakpoint or media query string, and it will be fixed when the query is satisfied  | `'lg'`             | -     |
-| copyright     | `string`               | Set the copyright information of the footer                                                                                        | `''`               | -     |
-| links         | `FooterLink[]`         | Set footer link options                                                                                                            | `[]`               | -     |
+| Name          | Type                   | Description                                                                                                                        | Default                                                              | Since |
+| ------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ----- |
+| no-aside      | `boolean`              | Set whether to disable the sidebar                                                                                                 | `false`                                                              | -     |
+| footer        | `boolean`              | Set whether to use footer                                                                                                          | `false`                                                              | -     |
+| tag           | `string`               | Set rendering tag                                                                                                                  | `'section'`                                                          | -     |
+| menus         | `MenuOptions[]`        | Set menu options                                                                                                                   | `[]`                                                                 | -     |
+| menu-props    | `AsideMenuProps`       | Set menu properties                                                                                                                | `null`                                                               | -     |
+| logo          | `string`               | Set Logo image address                                                                                                             | `''`                                                                 | -     |
+| sign-name     | `string`               | Set the sign                                                                                                                       | `''`                                                                 | -     |
+| config        | `('nav' \| 'color')[]` | Set configuration options for user drop-down panels                                                                                | `['nav', 'color']`                                                   | -     |
+| user          | `HeaderUser`           | Set user information                                                                                                               | `null`                                                               | -     |
+| actions       | `HeaderAction[]`       | Set the action options of the user drop-down panel                                                                                 | `[]`                                                                 | -     |
+| reduced       | `boolean`              | Set whether the aside is reduced or not, can use `v-model` two-way binding                                                         | `false`                                                              | -     |
+| avatar-circle | `boolean`              | Set whether the user avatar is circular                                                                                            | `false`                                                              | -     |
+| sign-type     | `'aside' \| 'header'`  | Set the block where the sign is located                                                                                            | `'aside'`                                                            | -     |
+| header-fixed  | `boolean \| string`    | Set whether the header is fixed, you can pass a breakpoint or media query string, and it will be fixed when the query is satisfied | `'lg'`                                                               | -     |
+| aside-fixed   | `boolean \| string`    | Set whether the aside is fixed, you can pass a breakpoint or media query string, and it will be fixed when the query is satisfied  | `'lg'`                                                               | -     |
+| copyright     | `string`               | Set the copyright information of the footer                                                                                        | `''`                                                                 | -     |
+| links         | `FooterLink[]`         | Set footer link options                                                                                                            | `[]`                                                                 | -     |
+| colors        | `string[]`             | Set candidates for theme color                                                                                                     | `['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707']` | -     |
+| color         | `string`               | Set the currently selected theme color                                                                                             | `''`                                                                 | -     |
 
 ### Layout Events
 

@@ -13,6 +13,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
+import { useMounted } from '@vexip-ui/mixins'
 import { useMediaQuery } from './helper'
 import { LAYOUT_STATE } from './symbol'
 
@@ -55,12 +56,16 @@ export default defineComponent({
     asideFixed: booleanStringProp,
     copyright: String,
     links: Array as PropType<LayoutFooterLink[]>,
+    colors: Array as PropType<string[]>,
+    color: String,
     onReducedChange: eventProp<(target: boolean) => void>(),
     onSignClick: eventProp<(event: MouseEvent) => void>(),
     onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
-    onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>()
+    onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>(),
+    onNavChange: eventProp<(type: LayoutSignType) => void>(),
+    onColorChange: eventProp<(color: string) => void>()
   },
-  emits: ['update:reduced'],
+  emits: ['update:reduced', 'update:sign-type', 'update:color'],
   setup(_props, { emit, slots }) {
     const props = useProps('layout', _props, {
       noAside: false,
@@ -83,6 +88,8 @@ export default defineComponent({
       asideFixed: 'lg',
       copyright: '',
       links: () => [],
+      colors: () => ['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707'],
+      color: '',
       onReducedChange: null,
       onSignClick: null,
       onMenuSelect: null,
@@ -94,6 +101,9 @@ export default defineComponent({
     const asideReduced = ref(props.reduced)
     const currentSignType = ref<LayoutSignType>(props.signType)
     const userDropped = ref(false)
+    const currentColor = ref(props.color)
+
+    const { isMounted } = useMounted()
 
     const section = ref<HTMLElement | null>(null)
     const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
@@ -123,6 +133,11 @@ export default defineComponent({
         }
       ]
     })
+    const rootEl = computed(() => {
+      // eslint-disable-next-line no-unused-expressions
+      isMounted.value
+      return document ? document.documentElement : null
+    })
 
     provide(LAYOUT_STATE, state)
 
@@ -150,6 +165,28 @@ export default defineComponent({
         }
       }
     )
+    watch(currentSignType, value => {
+      emitEvent(props.onNavChange, value)
+      emit('update:sign-type', value)
+    })
+    watch(
+      () => props.color,
+      value => {
+        currentColor.value = value || props.colors?.[0] || getBaseColor()
+      }
+    )
+    watch(currentColor, value => {
+      emitEvent(props.onColorChange, value)
+      emit('update:color', value)
+    })
+
+    function getBaseColor() {
+      if (rootEl.value) {
+        return getComputedStyle(rootEl.value).getPropertyValue('--vxp-color-primary-base')
+      }
+
+      return '#339af0'
+    }
 
     function toggleReduce(target = !asideReduced.value) {
       asideReduced.value = target
@@ -209,12 +246,14 @@ export default defineComponent({
         <LayoutHeader
           v-model:sign-type={currentSignType.value}
           v-model:user-dropped={userDropped.value}
+          v-model:color={currentColor.value}
           user={props.user}
           actions={props.actions}
           config={props.config}
           avatar-circle={props.avatarCircle}
           menus={props.noAside ? props.menus : []}
           menu-props={props.noAside ? props.menuProps : null}
+          colors={props.colors}
           onUserAction={handleUserAction}
           onReducedChange={toggleReduce}
           onMenuSelect={handleMenuSelect}
