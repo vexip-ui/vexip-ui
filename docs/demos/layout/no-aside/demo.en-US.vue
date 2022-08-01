@@ -24,7 +24,7 @@ import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
 import type { RouteLocationRaw } from 'vue-router'
 
-const showAside = ref(true)
+const showAside = ref(false)
 
 const user = {
   name: 'VexipUI',

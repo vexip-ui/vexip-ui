@@ -330,10 +330,6 @@ export default defineComponent({
       )
     }
 
-    function getCounter() {
-      return rest.value?.$el
-    }
-
     return () => {
       return (
         <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1}>
@@ -343,7 +339,7 @@ export default defineComponent({
               )
             : props.horizontal
               ? (
-            <Overflow get-counter={getCounter}>
+            <Overflow>
               {{
                 default: renderMenus,
                 counter: ({ count }: { count: number }) => (
