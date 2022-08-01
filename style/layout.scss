@@ -461,6 +461,11 @@ $layout: map.merge(
       padding: 0 8px;
       border-bottom: get-css-var('border-light-2');
     }
+
+    &--vertical &-row {
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   &__link {
@@ -476,9 +481,16 @@ $layout: map.merge(
     }
 
     &-group {
+      display: inline-flex;
       flex: 1 0 0;
+      flex-direction: column;
       padding-right: 24px;
       padding-bottom: 32px;
+
+      &--vertical {
+        align-items: center;
+        padding-right: 0;
+      }
     }
 
     &-name--group {

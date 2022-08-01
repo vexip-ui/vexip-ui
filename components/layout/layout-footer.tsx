@@ -1,7 +1,8 @@
-import { defineComponent, computed } from 'vue'
+import { defineComponent, toRef, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Linker } from '@/components/linker'
-import { useNameHelper, useProps } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanStringProp } from '@vexip-ui/config'
+import { useMediaQuery } from './helper'
 
 import type { PropType } from 'vue'
 import type { LayoutFooterLink } from './symbol'
@@ -11,16 +12,19 @@ export default defineComponent({
   props: {
     tag: String,
     copyright: String,
-    links: Array as PropType<LayoutFooterLink[]>
+    links: Array as PropType<LayoutFooterLink[]>,
+    verticalLinks: booleanStringProp
   },
   setup(_props, { slots }) {
     const props = useProps('layout', _props, {
       tag: 'footer',
       copyright: '',
-      links: () => []
+      links: () => [],
+      verticalLinks: 'md'
     })
 
     const nh = useNameHelper('layout')
+    const horizontalMatched = useMediaQuery(toRef(props, 'verticalLinks'))
 
     const className = computed(() => {
       return [nh.be('footer')]
@@ -32,10 +36,15 @@ export default defineComponent({
       }
 
       return (
-        <div class={nh.be('links')}>
+        <div class={[nh.be('links'), !horizontalMatched.value && nh.bem('links', 'vertical')]}>
           <div class={nh.be('links-row')}>
             {props.links.map(group => (
-              <div class={nh.be('link-group')}>
+              <div
+                class={[
+                  nh.be('link-group'),
+                  !horizontalMatched.value && nh.bem('link-group', 'vertical')
+                ]}
+              >
                 <div class={[nh.be('link-name'), nh.bem('link-name', 'group')]}>
                   {group.to
                     ? (

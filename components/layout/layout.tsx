@@ -59,6 +59,7 @@ export default defineComponent({
     colors: Array as PropType<string[]>,
     color: String,
     miniHeaderSign: booleanStringProp,
+    verticalLinks: booleanStringProp,
     onReducedChange: eventProp<(target: boolean) => void>(),
     onSignClick: eventProp<(event: MouseEvent) => void>(),
     onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
@@ -92,6 +93,7 @@ export default defineComponent({
       colors: () => ['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707'],
       color: '',
       miniHeaderSign: 'lg',
+      verticalLinks: 'md',
       onReducedChange: null,
       onSignClick: null,
       onMenuSelect: null,
@@ -334,7 +336,11 @@ export default defineComponent({
       }
 
       return (
-        <LayoutFooter copyright={props.copyright} links={props.links}>
+        <LayoutFooter
+          copyright={props.copyright}
+          links={props.links}
+          vertical-links={props.verticalLinks}
+        >
           {{
             links: slots['footer-links'] || slots.footerLinks || null,
             copyright: slots['footer-copyright'] || slots.footerCopyright || null
