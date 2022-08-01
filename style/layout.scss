@@ -227,6 +227,10 @@ $layout: map.merge(
   &__header &__sign {
     padding-right: 16px;
     margin-left: -16px;
+
+    &--logo-only {
+      padding-right: 0;
+    }
   }
 
   &--header-main &__sign {

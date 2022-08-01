@@ -66,7 +66,6 @@ export function useLayoutState() {
       scrollY: 0,
       affixMatched: false,
       expanded: false,
-      expandMatched: false,
       reduced: false,
       navConfig: false
     })

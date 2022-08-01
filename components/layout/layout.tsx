@@ -58,6 +58,7 @@ export default defineComponent({
     links: Array as PropType<LayoutFooterLink[]>,
     colors: Array as PropType<string[]>,
     color: String,
+    miniHeaderSign: booleanStringProp,
     onReducedChange: eventProp<(target: boolean) => void>(),
     onSignClick: eventProp<(event: MouseEvent) => void>(),
     onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
@@ -90,6 +91,7 @@ export default defineComponent({
       links: () => [],
       colors: () => ['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707'],
       color: '',
+      miniHeaderSign: 'lg',
       onReducedChange: null,
       onSignClick: null,
       onMenuSelect: null,
@@ -110,6 +112,7 @@ export default defineComponent({
 
     const affixMatched = useMediaQuery(toRef(props, 'headerFixed'))
     const expandMatched = useMediaQuery(toRef(props, 'asideFixed'))
+    const signNameMatched = useMediaQuery(toRef(props, 'miniHeaderSign'))
 
     const state = reactive({
       isLayout: true,
@@ -118,7 +121,6 @@ export default defineComponent({
       scrollY: 0,
       affixMatched,
       expanded: false,
-      expandMatched,
       reduced: asideReduced,
       navConfig: computed(() => !props.noAside)
     })
@@ -137,6 +139,9 @@ export default defineComponent({
       // eslint-disable-next-line no-unused-expressions
       isMounted.value
       return document ? document.documentElement : null
+    })
+    const signInHeader = computed(() => {
+      return props.noAside || currentSignType.value === 'header' || state.expanded
     })
 
     provide(LAYOUT_STATE, state)
@@ -221,18 +226,25 @@ export default defineComponent({
         return null
       }
 
+      if (slots.sign) {
+        return slots.sign(getSlotParams())
+      }
+
+      const showSignName = props.signName && !(signInHeader.value && !signNameMatched.value)
+
       return (
-        <div class={nh.be('sign')} onClick={handleSignClick}>
-          {slots.sign
-            ? slots.sign(getSlotParams())
-            : [
-                props.logo && (
-                  <div class={nh.be('logo')}>
-                    <img src={props.logo} alt={'Logo'} />
-                  </div>
-                ),
-                props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>
-              ]}
+        <div
+          class={[nh.be('sign'), !showSignName && nh.bem('sign', 'logo-only')]}
+          onClick={handleSignClick}
+        >
+          {[
+            props.logo && (
+              <div class={nh.be('logo')}>
+                <img src={props.logo} alt={'Logo'} />
+              </div>
+            ),
+            showSignName && <span class={nh.be('sign-name')}>{props.signName}</span>
+          ]}
         </div>
       )
     }
@@ -262,10 +274,7 @@ export default defineComponent({
             left:
               slots['header-left'] ||
               slots.headerLeft ||
-              (() =>
-                props.noAside || currentSignType.value === 'header' || state.expanded
-                  ? renderSign()
-                  : null),
+              (() => (signInHeader.value ? renderSign() : null)),
             default: slots['header-main'] || slots.headerMain || null,
             right: slots['header-right'] || slots.headerRight || null,
             user: slots['header-user'] || slots.headerUser || null
@@ -296,7 +305,7 @@ export default defineComponent({
             top:
               slots['aside-top'] ||
               slots.asideTop ||
-              (() => (currentSignType.value === 'aside' && !state.expanded ? renderSign() : null)),
+              (() => (!signInHeader.value ? renderSign() : null)),
             default: slots['aside-main'] || slots.asideMain || null,
             bottom: slots['aside-bottom'] || slots.asideBottom || null,
             expand: slots['aside-expand'] || slots.asideExpand || null

@@ -48,7 +48,6 @@ export interface LayoutState {
   scrollY: number,
   affixMatched: boolean,
   expanded: boolean,
-  expandMatched: boolean,
   reduced: boolean,
   navConfig: boolean
 }
