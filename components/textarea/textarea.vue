@@ -39,6 +39,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
+import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 import { Spinner } from '@vexip-ui/icons'
 import {
@@ -55,6 +56,9 @@ import { throttle } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'Textarea',
+  components: {
+    Icon
+  },
   props: {
     state: stateProp,
     value: String,
