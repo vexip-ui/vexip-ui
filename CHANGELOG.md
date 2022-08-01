@@ -1,3 +1,35 @@
+# [2.0.0-beta.19](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.18...v2.0.0-beta.19) (2022-08-01)
+
+### Bug Fixes
+
+- fixed css vars prefix to '--vxp' ([e4c1da3](https://github.com/qmhc/vexip-ui/commit/e4c1da34964bfde8faf3f4bb3f96df51d1625a6d))
+- improve input-like control styles ([fb6ec62](https://github.com/qmhc/vexip-ui/commit/fb6ec626c4a17a390b6907f8e6e14ef57010a65e))
+- **layout:** router menu not effective in aside ([de2aec9](https://github.com/qmhc/vexip-ui/commit/de2aec9d6c67bd8dfb250ed6679a885409745987)), closes [#100](https://github.com/qmhc/vexip-ui/issues/100)
+- **menu:** improve menu focus and styles ([d905e9b](https://github.com/qmhc/vexip-ui/commit/d905e9b87795ae6badfcf33c263c27d486fcf7b5))
+
+### Code Refactoring
+
+- **menu:** improve class names to flat styles ([5f9eb15](https://github.com/qmhc/vexip-ui/commit/5f9eb157276c43d02b77a72c9a460ed70a0ebb5e)), closes [#91](https://github.com/qmhc/vexip-ui/issues/91)
+
+### Features
+
+- **auto-complete:** support control loading state ([0dc2098](https://github.com/qmhc/vexip-ui/commit/0dc20984488778d3294e6a270d908bde96941232))
+- **checkbox:** support control loading state ([0a2b4be](https://github.com/qmhc/vexip-ui/commit/0a2b4be78676cd17c66a9ac1e6f84cf13f67e7ce))
+- **form:** support set loading for all controls under form ([a43ca86](https://github.com/qmhc/vexip-ui/commit/a43ca86d1a3338df7f33b33f9bc3f8000c1e9f3e))
+- **layout:** add color and colors props ([f639db3](https://github.com/qmhc/vexip-ui/commit/f639db3390d94e9a2fb32afa40122593bebf692c))
+- **layout:** export header, aside and footer components ([7a1bdae](https://github.com/qmhc/vexip-ui/commit/7a1bdae080c902c257131fc363c661b6835e64aa))
+- **radio:** support control loading state ([eefc325](https://github.com/qmhc/vexip-ui/commit/eefc325580b2c098405e771f6e60189a46ba4f09))
+- **slider:** support control loading state ([4c121cc](https://github.com/qmhc/vexip-ui/commit/4c121cc6ac14c97bc0d2bc653abd85071a5b2f23))
+- **switch:** support custom loading icon ([c1aa3da](https://github.com/qmhc/vexip-ui/commit/c1aa3da06ac5fe4f9ff77b81d740cdc0bb1a72ae))
+- **transfer:** support control loading state ([69c93f9](https://github.com/qmhc/vexip-ui/commit/69c93f9f435b04bfc032c7af96b1f5df338c1471))
+- **upload:** support control loading state ([1a289f1](https://github.com/qmhc/vexip-ui/commit/1a289f199c92066d49ffc2aa5231b8943148c022))
+- **wheel:** support control loading state ([3e3c517](https://github.com/qmhc/vexip-ui/commit/3e3c517a9cecdffd06f063772b8b2ff33c3ea889))
+
+### BREAKING CHANGES
+
+- **menu:** `theme` prop has deprecated, using css vars to adjust
+  menu styles. `tooltipTheme` rename to `tooltipReverse`.
+
 # [2.0.0-beta.18](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.17...v2.0.0-beta.18) (2022-07-29)
 
 ### Bug Fixes
