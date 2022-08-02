@@ -2,8 +2,9 @@
   <ConfigProvider :props="providedProps">
     <Form
       ref="form"
-      style="max-width: 500px;"
+      style="max-width: 1000px;"
       :model="formModel"
+      label-position="top"
       :label-width="100"
     >
       <FormItem label="Input" prop="input">
@@ -11,6 +12,9 @@
       </FormItem>
       <FormItem label="Cascader" prop="cascader">
         <Cascader :options="treeOptions"></Cascader>
+      </FormItem>
+      <FormItem label="Complete" prop="complete">
+        <AutoComplete :options="options"></AutoComplete>
       </FormItem>
       <FormItem label="Select" prop="select">
         <Select :options="options"></Select>
@@ -42,11 +46,11 @@
       <FormItem label="Textarea" prop="textarea">
         <Textarea></Textarea>
       </FormItem>
-      <FormItem label="Transfer" prop="transfer">
-        <Transfer :options="options"></Transfer>
-      </FormItem>
       <FormItem label="Wheel" prop="wheel">
         <Wheel insert-empty :options="options"></Wheel>
+      </FormItem>
+      <FormItem label="Transfer" prop="transfer">
+        <Transfer :options="options"></Transfer>
       </FormItem>
       <FormItem label="Upload" prop="upload">
         <Upload allow-drag></Upload>
@@ -70,7 +74,11 @@ import type { Form } from 'vexip-ui'
 
 const providedProps = {
   default: { clearable: true },
-  formItem: { required: true }
+  formItem: {
+    required: true,
+    span: 24,
+    lg: 12
+  }
 }
 
 const formModel = reactive({
@@ -94,7 +102,7 @@ const formModel = reactive({
 
 const form = ref<InstanceType<typeof Form> | null>(null)
 
-const options = ['选项1', '选项2', '选项3']
+const options = ['Option 1', 'Option 2', 'Option 3']
 const treeOptions = createOptions(3)
 
 function createOptions(depth: number, prefix = 'Op', iterator = 1) {

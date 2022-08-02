@@ -23,15 +23,12 @@ $form: map.merge(
   @include basis;
 
   position: relative;
-  display: flex;
-  flex-direction: column;
 
   &__item {
     @include basis;
 
     display: flex;
     align-items: center;
-    width: 100%;
     margin-bottom: 28px;
 
     &--action {

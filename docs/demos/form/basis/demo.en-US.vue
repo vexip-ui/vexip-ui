@@ -1,54 +1,54 @@
 <template>
-  <ConfigProvider :props="{ default: { clearable: true } }">
+  <ConfigProvider :props="providedProps">
     <Form
       ref="form"
       style="max-width: 500px;"
       :model="formModel"
       :label-width="100"
     >
-      <FormItem required label="Input" prop="input">
+      <FormItem label="Input" prop="input">
         <Input></Input>
       </FormItem>
-      <FormItem required label="Cascader" prop="cascader">
+      <FormItem label="Cascader" prop="cascader">
         <Cascader :options="treeOptions"></Cascader>
       </FormItem>
-      <FormItem required label="Select" prop="select">
+      <FormItem label="Select" prop="select">
         <Select :options="options"></Select>
       </FormItem>
-      <FormItem required label="Date" prop="date">
+      <FormItem label="Date" prop="date">
         <DatePicker></DatePicker>
       </FormItem>
-      <FormItem required label="Time" prop="time">
+      <FormItem label="Time" prop="time">
         <TimePicker></TimePicker>
       </FormItem>
-      <FormItem required label="Number" prop="number">
+      <FormItem label="Number" prop="number">
         <NumberInput></NumberInput>
       </FormItem>
-      <FormItem required label="Color" prop="color">
+      <FormItem label="Color" prop="color">
         <ColorPicker format="hex"></ColorPicker>
       </FormItem>
-      <FormItem required label="Checkbox" prop="checkbox">
+      <FormItem label="Checkbox" prop="checkbox">
         <CheckboxGroup :options="options"></CheckboxGroup>
       </FormItem>
-      <FormItem required label="Radio" prop="radio">
+      <FormItem label="Radio" prop="radio">
         <RadioGroup :options="options"></RadioGroup>
       </FormItem>
-      <FormItem required label="Slider" prop="slider">
+      <FormItem label="Slider" prop="slider">
         <Slider></Slider>
       </FormItem>
-      <FormItem required label="Switch" prop="switch">
+      <FormItem label="Switch" prop="switch">
         <Switch></Switch>
       </FormItem>
-      <FormItem required label="Textarea" prop="textarea">
+      <FormItem label="Textarea" prop="textarea">
         <Textarea></Textarea>
       </FormItem>
-      <FormItem required label="Transfer" prop="transfer">
+      <FormItem label="Transfer" prop="transfer">
         <Transfer :options="options"></Transfer>
       </FormItem>
-      <FormItem required label="Wheel" prop="wheel">
+      <FormItem label="Wheel" prop="wheel">
         <Wheel insert-empty :options="options"></Wheel>
       </FormItem>
-      <FormItem required label="Upload" prop="upload">
+      <FormItem label="Upload" prop="upload">
         <Upload allow-drag></Upload>
       </FormItem>
       <FormItem action>
@@ -67,6 +67,11 @@
 import { ref, reactive } from 'vue'
 
 import type { Form } from 'vexip-ui'
+
+const providedProps = {
+  default: { clearable: true },
+  formItem: { required: true }
+}
 
 const formModel = reactive({
   input: '',

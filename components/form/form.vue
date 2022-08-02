@@ -1,15 +1,27 @@
 <template>
-  <form :class="className" :method="props.action && props.method" :action="props.action">
+  <Row
+    v-bind="$attrs"
+    :class="className"
+    tag="form"
+    :method="props.action && props.method"
+    :action="props.action"
+    :gap="props.gap"
+    :justify="props.justify"
+    :align="props.align"
+    :column-flex="undefined"
+  >
     <slot></slot>
-  </form>
+  </Row>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide } from 'vue'
+import { Row } from '@/components/row'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
 import type { PropType } from 'vue'
+import type { RowGridJustify, RowGridAlign } from '@/components/row'
 import type { LabelPosition, SubmitMethod, FieldOptions } from './symbol'
 
 const submitMethods = Object.freeze<SubmitMethod>(['get', 'post', 'put', 'delete'])
@@ -17,6 +29,10 @@ const labelPropstions = Object.freeze<LabelPosition>(['right', 'top', 'left'])
 
 export default defineComponent({
   name: 'Form',
+  components: {
+    Row
+  },
+  inheritAttrs: true,
   props: {
     method: String as PropType<SubmitMethod>,
     action: String,
@@ -30,7 +46,10 @@ export default defineComponent({
     validateAll: booleanProp,
     hideLabel: booleanProp,
     disabled: booleanProp,
-    loading: booleanProp
+    loading: booleanProp,
+    gap: [Number, Array] as PropType<number | number[]>,
+    justify: String as PropType<RowGridJustify>,
+    align: String as PropType<RowGridAlign>
   },
   setup(_props) {
     const props = useProps('form', _props, {
@@ -55,7 +74,10 @@ export default defineComponent({
       validateAll: false,
       hideLabel: false,
       disabled: false,
-      loading: false
+      loading: false,
+      gap: [8, 0],
+      justify: 'start',
+      align: 'top'
     })
 
     const nh = useNameHelper('form')

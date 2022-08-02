@@ -132,6 +132,11 @@ function isNewComponent(config: ComponentConfig) {
   &__menu {
     padding: 20px 0;
     border-right: 0;
+
+    .vxp-menu__title {
+      display: flex;
+      align-items: center;
+    }
   }
 
   &__tag {
@@ -149,15 +154,6 @@ function isNewComponent(config: ComponentConfig) {
     .vxp-menu__item--selected .vxp-menu__label & {
       color: var(--vxp-menu-label-color-hover);
     }
-  }
-
-  .vxp-select {
-    max-width: 400px;
-  }
-
-  .vxp-menu__title {
-    display: flex;
-    align-items: center;
   }
 }
 </style>

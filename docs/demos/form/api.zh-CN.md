@@ -14,6 +14,9 @@
 | validate-all    | `boolean`                              | 设置表单验证时是否进行所有规则验证 (默认每个字段遇到错误就停止后续验证) | `false`   | -       |
 | hide-label      | `boolean`                              | 设置是否隐藏表单标签，常用在登陆表单                                    | `false`   | -       |
 | disabled        | `boolean`                              | 设置是否禁用表单下的所有控件                                            | `false`   | `2.0.0` |
+| gap             | `number \| number[]`                   | 栅格间隔，参考 Row 组件同名属性                                         | `[8, 0]`  | `2.0.0` |
+| justify         | `RowGridJustify`                       | 水平排列方式，参考 Row 组件同名属性                                     | `'start'` | `2.0.0` |
+| align           | `RowGridAlign`                         | 垂直对齐方式，参考 Row 组件同名属性                                     | `'top'`   | `2.0.0` |
 
 ### Form 方法
 
@@ -50,10 +53,11 @@
 | action           | `boolean`        | 设置是否为纯操作 FormItem，若为是则样式变位内容居中并无下边距        | `false`      | -    |
 | error-transition | `string`         | 错误提示的过渡效果名称                                               | `'vxp-fade'` | -    |
 
+> 支持的 Column 组件的属性包括：span、offset、push、pull、order、flex、xs、sm、md、lg、xl、xxl
+
 `Rule` 相关的类型定义：
 
 ```ts
-type Trigger = 'blur' | 'change'
 type Types =
   | 'string'
   | 'number'
@@ -70,7 +74,6 @@ type Range = [number, number]
 type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
 
 interface Rule<T = any> {
-  trigger?: Trigger,
   required?: boolean,
   type?: Types,
   length?: number,

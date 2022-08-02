@@ -79,7 +79,7 @@ export default defineComponent({
         input4: {
           validator: (value: string) =>
             new Promise((resolve, reject) => {
-              window.setTimeout(() => {
+              setTimeout(() => {
                 // 直接 resolve 验证结果
                 resolve(['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'].includes(value))
 

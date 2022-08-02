@@ -3,18 +3,25 @@ import { useNameHelper, useProps } from '@vexip-ui/config'
 import { ROW_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { Justify, Align, ColumnFlex } from './symbol'
+import type { RowGridJustify, RowGridAlign, ColumnFlex } from './symbol'
 
-const justifyList = Object.freeze<Justify>(['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'])
-const alignList = Object.freeze<Align>(['top', 'middle', 'bottom', 'stretch'])
+const justifyList = Object.freeze<RowGridJustify>([
+  'start',
+  'end',
+  'center',
+  'space-around',
+  'space-between',
+  'space-evenly'
+])
+const alignList = Object.freeze<RowGridAlign>(['top', 'middle', 'bottom', 'stretch'])
 
 export default defineComponent({
   name: 'Row',
   props: {
     tag: String,
     gap: [Number, Array] as PropType<number | number[]>,
-    justify: String as PropType<Justify>,
-    align: String as PropType<Align>,
+    justify: String as PropType<RowGridJustify>,
+    align: String as PropType<RowGridAlign>,
     columnFlex: {
       type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
       default: null
@@ -25,12 +32,12 @@ export default defineComponent({
       tag: 'div',
       gap: 0,
       justify: {
-        default: 'start' as Justify,
-        validator: (value: Justify) => justifyList.includes(value)
+        default: 'start',
+        validator: value => justifyList.includes(value)
       },
       align: {
-        default: 'top' as Align,
-        validator: (value: Align) => alignList.includes(value)
+        default: 'top',
+        validator: value => alignList.includes(value)
       },
       columnFlex: false
     })
@@ -81,10 +88,13 @@ export default defineComponent({
       return false
     })
 
-    provide(ROW_STATE, reactive({
-      columnFlex,
-      gap: toRef(props, 'gap')
-    }))
+    provide(
+      ROW_STATE,
+      reactive({
+        columnFlex,
+        gap: toRef(props, 'gap')
+      })
+    )
 
     return () =>
       h(

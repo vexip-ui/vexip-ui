@@ -14,6 +14,9 @@
 | validate-all    | `boolean`                              | Set whether to perform all rule validation during form validation (by default each field encounters an error and stops subsequent validation) | `false`   | -       |
 | hide-label      | `boolean`                              | Set whether to hide the form label, commonly used in login forms                                                                              | `false`   | -       |
 | disabled        | `boolean`                              | Set whether to disable all controls under the form                                                                                            | `false`   | `2.0.0` |
+| gap             | `number \| number[]`                   | Grid gap, refer to the prop of the same name of the Row component                                                                             | `[8, 0]`  | `2.0.0` |
+| justify         | `RowGridJustify`                       | Horizontal arrangement, refer to the prop of the same name of the Row component                                                               | `'start'` | `2.0.0` |
+| align           | `RowGridAlign`                         | Vertical alignment, refer to the prop of the same name of the Row component                                                                   | `'top'`   | `2.0.0` |
 
 ### Form Methods
 
@@ -50,10 +53,11 @@
 | action           | `boolean`        | Set whether it is a pure action FormItem, if so, the style is centered and the content is centered and has no bottom margin                       | `false`      | -     |
 | error-transition | `string`         | transition effect name for error message                                                                                                          | `'vxp-fade'` | -     |
 
+> Supported props of Column component include: span, offset, push, pull, order, flex, xs, sm, md, lg, xl, xxl
+
 The types related to `Rule`:
 
 ```ts
-type Trigger = 'blur' | 'change'
 type Types =
   | 'string'
   | 'number'
@@ -70,7 +74,6 @@ type Range = [number, number]
 type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
 
 interface Rule<T = any> {
-  trigger?: Trigger,
   required?: boolean,
   type?: Types,
   length?: number,

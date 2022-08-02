@@ -1,6 +1,6 @@
 import { isDefined, isPromise, isObject, toDate, isColor, toNumber } from '@vexip-ui/utils'
 
-export type Trigger = 'blur' | 'change'
+// export type Trigger = 'blur' | 'change'
 
 export type Types =
   | 'string'
@@ -18,7 +18,7 @@ type Range = [number, number]
 type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
 
 export interface Rule<T = any> {
-  trigger?: Trigger,
+  // trigger?: Trigger,
   required?: boolean,
   type?: Types,
   length?: number,

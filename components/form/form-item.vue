@@ -1,5 +1,22 @@
 <template>
-  <div :class="className" role="group">
+  <Column
+    v-bind="$attrs"
+    :class="className"
+    role="group"
+    tag="div"
+    :span="props.span"
+    :offset="props.offset"
+    :push="props.push"
+    :pull="props.pull"
+    :order="props.order"
+    :xs="props.xs"
+    :sm="props.sm"
+    :md="props.md"
+    :lg="props.lg"
+    :xl="props.xl"
+    :xxl="props.xxl"
+    :flex="props.flex"
+  >
     <input
       v-if="isNative"
       type="hidden"
@@ -36,7 +53,7 @@
         </div>
       </transition>
     </div>
-  </div>
+  </Column>
 </template>
 
 <script lang="ts">
@@ -51,6 +68,7 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
+import { Column } from '@/components/column'
 import { useNameHelper, useProps, useLocale, booleanProp, makeSentence } from '@vexip-ui/config'
 import { isNull, isFunction, createEventEmitter } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
@@ -60,17 +78,24 @@ import { VALIDATE_FIELD, CLEAR_FIELD, FIELD_OPTIONS } from './symbol'
 
 import type { Ref, PropType } from 'vue'
 import type { ComponentState } from '@vexip-ui/config'
+import type { ColumnOptions } from '@/components/row'
 import type { FormProps, FormItemProps, FieldOptions } from './symbol'
-import type { Trigger, Rule } from './validator'
+import type { Rule } from './validator'
+
+const mediaProp = [Number, Object] as PropType<number | ColumnOptions>
 
 export default defineComponent({
   name: 'FormItem',
+  components: {
+    Column
+  },
+  inheritAttrs: true,
   props: {
     label: String,
     prop: String,
     rules: [Object, Array] as PropType<Rule | Rule[]>,
     labelWidth: Number,
-    required: Boolean,
+    required: booleanProp,
     htmlFor: String,
     errorTransition: String,
     defaultValue: Object as PropType<unknown>,
@@ -78,7 +103,19 @@ export default defineComponent({
     validateAll: booleanProp,
     hideAsterisk: booleanProp,
     hideLabel: booleanProp,
-    action: booleanProp
+    action: booleanProp,
+    span: Number,
+    offset: Number,
+    push: Number,
+    pull: Number,
+    order: Number,
+    xs: mediaProp,
+    sm: mediaProp,
+    md: mediaProp,
+    lg: mediaProp,
+    xl: mediaProp,
+    xxl: mediaProp,
+    flex: [Number, String]
   },
   setup(_props, { slots }) {
     const nh = useNameHelper('form')
@@ -101,7 +138,19 @@ export default defineComponent({
       validateAll: null,
       hideAsterisk: null,
       hideLabel: null,
-      action: false
+      action: false,
+      span: 24,
+      offset: null,
+      push: null,
+      pull: null,
+      order: null,
+      xs: null,
+      sm: null,
+      md: null,
+      lg: null,
+      xl: null,
+      xxl: null,
+      flex: null
     })
 
     const formProps = inject(FORM_PROPS, {})
@@ -298,8 +347,8 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     } catch (e) {}
   }
 
-  function validate(type?: Trigger) {
-    return handleValidate(type)
+  function validate() {
+    return handleValidate()
   }
 
   function clearError() {
@@ -329,7 +378,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     return setValueByPath(formProps.model, props.prop, resetValue, true)
   }
 
-  async function handleValidate(type?: Trigger) {
+  async function handleValidate() {
     if (disabledValidate.value) {
       disabledValidate.value = false
 
@@ -343,9 +392,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     validating.value = true
 
     const value = currentValue.value
-    const useRules = type
-      ? allRules.value.filter(rule => !rule.trigger || rule.trigger === type)
-      : allRules.value
+    const useRules = allRules.value
     const model = formProps.model
 
     let errors: string[] | null = await asyncValidate(useRules, value, model, isValidateAll.value)

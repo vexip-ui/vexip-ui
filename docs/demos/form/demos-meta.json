@@ -1,7 +1,9 @@
 [
   "basis",
   "validate",
+  "label",
   "disabled",
   "loading",
-  "native"
+  "native",
+  "layout"
 ]
