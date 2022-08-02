@@ -1,9 +1,9 @@
 <template>
   <li :class="nh.be('item')">
-    <div :class="nh.be('label')" @click="handleClick">
+    <a :class="nh.be('label')" href="" @click="handleClick">
       <slot>{{ label }}</slot>
-    </div>
-    <div :class="nh.be('separator')" @click="handleSeparatorClick">
+    </a>
+    <span :class="nh.be('separator')" role="separator" @click="handleSeparatorClick">
       <slot name="separator">
         <Renderer
           v-if="isFunction(separatorRenderer)"
@@ -14,7 +14,7 @@
           {{ separator }}
         </template>
       </slot>
-    </div>
+    </span>
   </li>
 </template>
 
