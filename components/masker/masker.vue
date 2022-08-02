@@ -1,10 +1,13 @@
 <template>
   <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
     <div
-      v-show="wrapShow"
       ref="wrapper"
       :class="className"
       tabindex="-1"
+      :style="{
+        pointerEvents: wrapShow ? undefined : 'none',
+        visibility: wrapShow ? undefined : 'hidden'
+      }"
       v-bind="$attrs"
       @focusin="handleFocusIn"
       @keydown.escape.prevent="handleClose"
@@ -143,6 +146,8 @@ export default defineComponent({
           prevFocusdEl.focus()
           prevFocusdEl = null
         }
+      } else {
+        prevFocusdEl = document.activeElement as HTMLElement
       }
 
       emitEvent(props.onToggle, value)
@@ -182,8 +187,12 @@ export default defineComponent({
     }
 
     function afterOpen() {
-      prevFocusdEl = document.activeElement as HTMLElement
-      topTrap.value?.focus()
+      const activeEl = document && document.activeElement
+
+      if (!activeEl || !wrapper.value || !wrapper.value.contains(activeEl)) {
+        topTrap.value?.focus()
+      }
+
       nextTick(() => {
         showing = true
         emitEvent(props.onShow)
