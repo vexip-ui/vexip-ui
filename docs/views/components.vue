@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import { toKebabCase } from '@vexip-ui/utils'
@@ -64,6 +64,9 @@ import { getComponentConfig } from '../router/components'
 
 import type { Scroll } from 'vexip-ui'
 import type { ComponentConfig } from '../router/components'
+import type { Store } from '../symbol'
+
+const store = inject<Store>('store')!
 
 const prefix = 'components'
 
@@ -95,6 +98,12 @@ watch(
   { immediate: true }
 )
 watch(currentMenu, scrollToMenuItem)
+watch(
+  () => store.expanded,
+  value => {
+    value && setTimeout(() => scrollToMenuItem(currentMenu.value), 200)
+  }
+)
 
 function selectComponent(label: string) {
   router.push(`/${language.value}/components/${label}`)
@@ -103,18 +112,26 @@ function selectComponent(label: string) {
 function scrollToMenuItem(label: string) {
   const scrollEl = menuScroll.value?.$el
 
-  if (!label || !scrollEl || !wrapper.value?.$el) return
+  if (!label || !menuScroll.value || !scrollEl) return
 
-  const menuItemEl = wrapper.value.$el.querySelector(`.vxp-menu__item[data-name=${label}]`)
+  const menuItemEl = scrollEl.querySelector(`.vxp-menu__item[data-name=${label}]`)
 
   if (!menuItemEl) return
 
   const scrollRect = scrollEl.getBoundingClientRect()
   const menuItemRect = menuItemEl.getBoundingClientRect()
 
-  if (menuItemRect.y < scrollRect.y || menuItemRect.y >= scrollRect.y + scrollRect.height) {
-    menuScroll.value?.scrollToElement(menuItemEl, 500, -10)
+  if (menuItemRect.y < scrollRect.y) {
+    menuScroll.value.scrollToElement(menuItemEl, 500, -10)
+  } else if (menuItemRect.y >= scrollRect.y + scrollRect.height) {
+    menuScroll.value.scrollBy(
+      0,
+      menuItemRect.y - (scrollRect.y + scrollRect.height) + menuItemRect.height + 10,
+      500
+    )
   }
+
+  menuItemEl.querySelector('[tabindex="0"]')?.focus()
 }
 
 function isNewComponent(config: ComponentConfig) {

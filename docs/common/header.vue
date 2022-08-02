@@ -1,5 +1,5 @@
 <template>
-  <header :class="['header', isAffix && 'header--reduced']">
+  <header :class="['header', affixed && 'header--reduced']">
     <a class="index" @click="toHomepage">
       <img class="index__logo" src="/logo.png" alt="logo.pne" />
       <span class="index__title"> Vexip UI </span>
@@ -70,7 +70,7 @@
       </Icon>
     </Linker>
   </header>
-  <section v-if="currentMenu" :class="['sub-menu', isAffix && 'sub-menu--affix']">
+  <section v-if="currentMenu" :class="['sub-menu', affixed && 'sub-menu--affix']">
     <Button class="sub-menu__reduce" text @click="$emit('toggle-menu', true)">
       <Icon :scale="1.4">
         <Bars></Bars>
@@ -116,10 +116,10 @@ const emit = defineEmits(['toggle-menu'])
 
 const store = inject<Store>('store')!
 const emitter = inject<EventEmitter>('emitter')!
-const isAffix = toRef(store, 'isAffix')
+const affixed = toRef(store, 'affixed')
 
 emitter.on('toggle-affix', (affix: boolean) => {
-  isAffix.value = affix
+  affixed.value = affix
 })
 
 const version = __VERSION__
