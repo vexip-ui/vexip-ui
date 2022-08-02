@@ -51,6 +51,7 @@
                 role="combobox"
                 aria-autocomplete="list"
                 @input="handleFilterInput"
+                @keydown="handleBackspace"
               />
               <span ref="device" :class="nh.be('device')" aria-hidden="true">
                 {{ currentFilter }}
@@ -914,7 +915,18 @@ export default defineComponent({
 
           anchorWidth.value = range.getBoundingClientRect().width
         }
+
+        updatePopper()
       })
+    }
+
+    function handleBackspace(event: KeyboardEvent) {
+      if (!input.value) return
+
+      if (event.key === 'Backspace' && !input.value.value && !isNull(currentValues.value.at(-1))) {
+        event.stopPropagation()
+        handleTagClose(currentValues.value.at(-1)!)
+      }
     }
 
     return {
@@ -957,7 +969,8 @@ export default defineComponent({
       handleClear,
       handleFocus,
       handleBlur,
-      handleFilterInput
+      handleFilterInput,
+      handleBackspace
     }
   }
 })
