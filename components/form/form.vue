@@ -38,7 +38,7 @@ export default defineComponent({
     action: String,
     model: Object,
     rules: Object,
-    labelWidth: Number,
+    labelWidth: [Number, String] as PropType<number | 'auto'>,
     labelPosition: String as PropType<LabelPosition>,
     allRequired: booleanProp,
     labelSuffix: String,
@@ -63,7 +63,7 @@ export default defineComponent({
         static: true
       },
       rules: () => ({}),
-      labelWidth: 80,
+      labelWidth: 'auto',
       labelPosition: {
         default: 'right' as LabelPosition,
         validator: (value: LabelPosition) => labelPropstions.includes(value)
@@ -86,10 +86,14 @@ export default defineComponent({
     const className = computed(() => {
       return [nh.b(), nh.bs('vars'), nh.bm(`label-${props.labelPosition}`)]
     })
+    const labelWidth = computed(() => {
+      return Math.max(...Array.from(fieldSet).map(field => field.labelWidth.value))
+    })
 
     provide(FORM_PROPS, props)
     provide(FORM_FIELDS, fieldSet)
     provide(FORM_ACTIONS, {
+      getLabelWidth,
       validate,
       validateFields,
       reset,
@@ -97,6 +101,14 @@ export default defineComponent({
       clearError,
       clearFieldsError
     })
+
+    function getLabelWidth() {
+      if (typeof props.labelWidth === 'number') {
+        return props.labelWidth
+      }
+
+      return labelWidth.value
+    }
 
     function getPropMap() {
       const propMap: Record<string, FieldOptions> = {}

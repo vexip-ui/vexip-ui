@@ -6,7 +6,7 @@
 | action          | `string`                               | 设置原生 form 标签的 action 值                                          | `null`    | -       |
 | model           | `Record<string, any>`                  | 表单的数据源                                                            | `{}`      | -       |
 | rules           | `Record<string, any>`                  | 表单的验证规则                                                          | `{}`      | -       |
-| label-width     | `number`                               | 表单标签的宽度                                                          | `80`      | -       |
+| label-width     | `number \| 'auto'`                     | 表单标签的宽度                                                          | `'auto'`  | -       |
 | lablel-position | `'right' \| 'top' \| 'left'`           | 表单标签的位置                                                          | `'right'` | -       |
 | all-required    | `boolean`                              | 设置表单内容是否全部必填                                                | `false`   | -       |
 | label-suffix    | `string`                               | 表单标签的后置内容，比如 `:`                                            | `''`      | -       |

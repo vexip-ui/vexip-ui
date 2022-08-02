@@ -26,6 +26,7 @@
     />
     <label
       v-if="hasLabel"
+      ref="labelEl"
       :class="nh.be('label')"
       :style="{ width: `${computedlabelWidth}px` }"
       :for="props.htmlFor || props.prop"
@@ -74,7 +75,7 @@ import { isNull, isFunction, createEventEmitter } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
-import { VALIDATE_FIELD, CLEAR_FIELD, FIELD_OPTIONS } from './symbol'
+import { FIELD_OPTIONS, FORM_ACTIONS } from './symbol'
 
 import type { Ref, PropType } from 'vue'
 import type { ComponentState } from '@vexip-ui/config'
@@ -154,7 +155,11 @@ export default defineComponent({
     })
 
     const formProps = inject(FORM_PROPS, {})
+    const formActions = inject(FORM_ACTIONS, null)
     const emitter = createEventEmitter()
+
+    const labelWidth = ref(0)
+    const labelEl = ref<HTMLInputElement | null>(null)
 
     const { isRequired, allRules } = useRules(props, formProps)
     const { isError, errorTip, currentValue, validate, clearError, reset, getValue, setValue } =
@@ -169,6 +174,7 @@ export default defineComponent({
       disabled: computed(() => !!formProps.disabled),
       loading: computed(() => !!formProps.loading),
       emitter,
+      labelWidth,
       validate,
       clearError,
       reset,
@@ -207,14 +213,16 @@ export default defineComponent({
     })
     const computedlabelWidth = computed(() => {
       if (formProps.labelPosition) {
-        return formProps.labelPosition === 'top'
-          ? 0
-          : hideLabel.value
+        return getLabelWidth(
+          formProps.labelPosition === 'top'
             ? 0
-            : props.labelWidth || formProps.labelWidth || 80
+            : hideLabel.value
+              ? 0
+              : props.labelWidth || formProps.labelWidth || 80
+        )
       }
 
-      return hideLabel.value ? 0 : props.labelWidth || 80
+      return getLabelWidth(hideLabel.value ? 0 : props.labelWidth || 80)
     })
     const className = computed(() => {
       return {
@@ -244,6 +252,26 @@ export default defineComponent({
       return value
     })
 
+    onMounted(() => {
+      if (labelEl.value) {
+        const range = document.createRange()
+
+        range.setStart(labelEl.value, 0)
+        range.setEnd(labelEl.value, labelEl.value.childNodes.length)
+
+        const rangeWidth = range.getBoundingClientRect().width
+        const computedStyle = getComputedStyle(labelEl.value)
+        const horizontalPending =
+          parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
+
+        labelWidth.value = rangeWidth + horizontalPending
+      }
+    })
+
+    function getLabelWidth(width: number | 'auto') {
+      return width === 'auto' ? formActions?.getLabelWidth() || 80 : width
+    }
+
     function handleLabelClick() {
       emitter.emit('focus')
     }
@@ -263,6 +291,8 @@ export default defineComponent({
       hasLabel,
       computedlabelWidth,
       controlStyle,
+
+      labelEl,
 
       handleLabelClick
     }
@@ -429,10 +459,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
 
 function useRelation(field: FieldOptions) {
   const formFields = inject(FORM_FIELDS, null)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-  provide(VALIDATE_FIELD, field.validate)
-  provide(CLEAR_FIELD, field.clearError)
   provide(FIELD_OPTIONS, field)
 
   onMounted(() => {

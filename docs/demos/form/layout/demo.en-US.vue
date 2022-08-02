@@ -5,7 +5,6 @@
       style="max-width: 1000px;"
       :model="formModel"
       label-position="top"
-      :label-width="100"
     >
       <FormItem label="Input" prop="input">
         <Input></Input>

@@ -8,7 +8,6 @@
       ref="form"
       style="max-width: 500px;"
       :model="formModel"
-      :label-width="100"
       :loading="loading"
     >
       <FormItem required label="Input" prop="input">

@@ -1,11 +1,6 @@
 <template>
   <ConfigProvider :props="providedProps">
-    <Form
-      ref="form"
-      style="max-width: 500px;"
-      :model="formModel"
-      :label-width="100"
-    >
+    <Form ref="form" style="max-width: 500px;" :model="formModel">
       <FormItem label="Input" prop="input">
         <Input></Input>
       </FormItem>
@@ -53,10 +48,10 @@
       </FormItem>
       <FormItem action>
         <Button type="primary" @click="handleSubmit()">
-          Submit
+          提交
         </Button>
         <Button @click="handleReset()">
-          Reset
+          重置
         </Button>
       </FormItem>
     </Form>
