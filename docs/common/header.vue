@@ -43,7 +43,7 @@
     </div>
     <Dropdown class="language" trigger="click">
       <button class="language-trigger">
-        <Icon :scale="2">
+        <Icon label="language" :scale="2">
           <Language></Language>
         </Icon>
       </button>
@@ -65,26 +65,29 @@
       <ThemeSwitch></ThemeSwitch>
     </div>
     <Linker class="github-link" to="//github.com/qmhc/vexip-ui/">
-      <Icon :scale="1.6">
+      <Icon label="github" :scale="1.6">
         <GithubB></GithubB>
       </Icon>
     </Linker>
   </header>
   <section v-if="currentMenu" :class="['sub-menu', isAffix && 'sub-menu--affix']">
-    <div class="sub-menu__reduce" @click="$emit('toggle-menu', true)">
+    <Button class="sub-menu__reduce" text @click="$emit('toggle-menu', true)">
       <Icon :scale="1.4">
         <Bars></Bars>
       </Icon>
-    </div>
+    </Button>
     <div style="flex: auto;"></div>
     <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
       <template v-for="menu in menus" :key="menu.label">
-        <li
-          v-if="menu.to"
-          class="vxp-menu__item vxp-menu__item--no-icon"
-          @click="openPage(menu.to)"
-        >
-          <div class="vxp-menu__label">
+        <li v-if="menu.to" class="vxp-menu__item vxp-menu__item--no-icon" role="none">
+          <div
+            class="vxp-menu__label vxp-menu__label--marker-bottom"
+            role="menuitem"
+            tabindex="0"
+            @click="openPage(menu.to)"
+            @keydown.enter.stop="openPage(menu.to)"
+            @keydown.space.stop.prevent="openPage(menu.to)"
+          >
             <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
           </div>
         </li>
@@ -388,6 +391,14 @@ function formatComponentName(name: string) {
   &__reduce {
     display: flex;
     padding: 0 16px 0 24px;
+    color: inherit;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+
+    &:focus {
+      color: var(--vxp-color-primary-base);
+    }
   }
 
   .vxp-menu {

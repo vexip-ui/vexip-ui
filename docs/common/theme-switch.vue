@@ -4,6 +4,7 @@
     class="theme-switch"
     :open-icon="Moon"
     :close-icon="Sun"
+    aria-label="theme"
     @change="toggleDark"
   ></Switch>
 </template>
