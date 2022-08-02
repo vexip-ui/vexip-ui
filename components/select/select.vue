@@ -35,12 +35,53 @@
             >
               {{ currentLabels[index] }}
             </Tag>
+            <div
+              v-if="props.filter"
+              :class="nh.be('anchor')"
+              :style="{
+                width: `${anchorWidth}px`
+              }"
+            >
+              <input
+                ref="input"
+                :class="[nh.be('input'), nh.bem('input', 'multiple')]"
+                :disabled="props.disabled"
+                autocomplete="off"
+                tabindex="-1"
+                role="combobox"
+                aria-autocomplete="list"
+                @input="handleFilterInput"
+              />
+              <span ref="device" :class="nh.be('device')" aria-hidden="true">
+                {{ currentFilter }}
+              </span>
+            </div>
           </template>
           <template v-else>
-            {{ currentLabels[0] }}
+            <template v-if="props.filter">
+              <input
+                ref="input"
+                :class="nh.be('input')"
+                :disabled="props.disabled"
+                :placeholder="currentLabels[0] || (props.placeholder ?? locale.placeholder)"
+                autocomplete="off"
+                tabindex="-1"
+                role="combobox"
+                aria-autocomplete="list"
+                @input="handleFilterInput"
+              />
+            </template>
+            <template v-else>
+              {{ currentLabels[0] }}
+            </template>
           </template>
           <span
-            v-if="(props.placeholder ?? locale.placeholder) && !hasValue"
+            v-if="
+              (props.multiple || !props.filter) &&
+                (!currentVisible || !currentFilter) &&
+                (props.placeholder ?? locale.placeholder) &&
+                !hasValue
+            "
             :class="nh.be('placeholder')"
           >
             {{ props.placeholder ?? locale.placeholder }}
@@ -86,7 +127,7 @@
       </transition>
     </div>
     <Portal :to="transferTo">
-      <transition :name="props.transitionName" @after-enter="computeListHeight">
+      <transition :name="props.transitionName" @after-leave="currentFilter = ''">
         <div
           v-show="currentVisible"
           ref="popper"
@@ -102,7 +143,7 @@
             }"
             :items="visibleOptions"
             :item-size="32"
-            :use-y-bar="!!listHeight"
+            use-y-bar
             :height="'100%'"
             id-key="value"
             :items-attrs="{
@@ -163,9 +204,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef, nextTick } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef } from 'vue'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
+// import { Overflow } from '@/components/overflow'
 import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
 import { VirtualList } from '@/components/virtual-list'
@@ -214,6 +256,7 @@ export default defineComponent({
   name: 'Select',
   components: {
     Icon,
+    // Overflow,
     Option,
     Portal,
     Tag,
@@ -251,6 +294,13 @@ export default defineComponent({
     loadingLock: booleanProp,
     loadingSpin: booleanProp,
     keyConfig: Object as PropType<SelectKeyConfig>,
+    filter: {
+      type: [Boolean, Function] as PropType<
+        boolean | ((value: string | number, options: SelectOptionState) => boolean)
+      >,
+      default: null
+    },
+    ignoreCase: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
@@ -304,18 +354,20 @@ export default defineComponent({
       maxListHeight: 300,
       listClass: null,
       placement: {
-        default: 'bottom' as Placement,
-        validator: (value: Placement) => placementWhileList.includes(value)
+        default: 'bottom',
+        validator: value => placementWhileList.includes(value)
       },
       transfer: false,
       optionCheck: false,
       emptyText: null,
       staticSuffix: false,
-      keyConfig: () => ({}),
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      keyConfig: () => ({}),
+      filter: false,
+      ignoreCase: false
     })
 
     const locale = useLocale('select')
@@ -327,6 +379,8 @@ export default defineComponent({
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
     const optionStates = ref<SelectOptionState[]>([])
+    const currentFilter = ref('')
+    const anchorWidth = ref(0)
 
     const { isMounted } = useMounted()
 
@@ -423,6 +477,8 @@ export default defineComponent({
     }
 
     const wrapper = useClickOutside(handleClickOutside)
+    const input = ref<HTMLInputElement | null>(null)
+    const device = ref<HTMLElement | null>(null)
     const virtualList = ref<(InstanceType<typeof VirtualList> & VirtualListExposed) | null>(null)
 
     const { reference, popper, transferTo, updatePopper } = usePopper({
@@ -458,7 +514,7 @@ export default defineComponent({
 
           const step = modifier.down ? 1 : -1
 
-          let index = (currentIndex.value + step) % length
+          let index = (Math.max(-1, currentIndex.value + step) + length) % length
           let option = options[index]
 
           for (let i = 0; (option.disabled || option.group) && i < length; ++i) {
@@ -490,7 +546,8 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
-        [nh.bm('multiple')]: props.multiple
+        [nh.bm('multiple')]: props.multiple,
+        [nh.bm('filter')]: props.filter
       }
     })
     const selectorClass = computed(() => {
@@ -513,6 +570,23 @@ export default defineComponent({
     })
     const visibleOptions = computed(() => {
       return optionStates.value.filter(state => !state.hidden)
+    })
+    const normalOptions = computed(() => {
+      return optionStates.value.filter(option => !option.group)
+    })
+    const optionParentMap = computed(() => {
+      const options = normalOptions.value
+      const map = new Map<string | number, SelectOptionState>()
+
+      for (let i = 0, len = options.length; i < len; ++i) {
+        const option = options[i]
+
+        if (option.parent) {
+          map.set(option.value, option.parent)
+        }
+      }
+
+      return map
     })
     const hasEmptyTip = computed(() => {
       return (
@@ -545,6 +619,7 @@ export default defineComponent({
         }, 32)
       }
 
+      syncInputValue()
       emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
@@ -555,16 +630,7 @@ export default defineComponent({
         initValueAndLabel(value)
       }
     )
-    watch(() => visibleOptions.value.length, computeListHeight)
-    watch(currentIndex, value => {
-      visibleOptions.value.forEach((option, index) => {
-        option.hitting = value === index
-      })
-
-      if (currentVisible.value && virtualList.value) {
-        virtualList.value.ensureIndexInView(value)
-      }
-    })
+    watch(currentIndex, computeHitting)
     watch(
       () => props.disabled,
       value => {
@@ -589,6 +655,7 @@ export default defineComponent({
         }
       }
     )
+    watch(currentFilter, filterOptions)
 
     function initValueAndLabel(value: SelectValue | null) {
       if (!value) {
@@ -616,6 +683,7 @@ export default defineComponent({
       currentLabels.value = selectedLabels
 
       initHittingIndex()
+      filterOptions(currentFilter.value)
     }
 
     function initHittingIndex() {
@@ -630,6 +698,24 @@ export default defineComponent({
       }
     }
 
+    function computeHitting() {
+      const hitting = currentIndex.value
+      let index = -1
+
+      visibleOptions.value.forEach(option => {
+        if (!option.hidden) {
+          index += 1
+          option.hitting = hitting === index
+        } else {
+          option.hitting = false
+        }
+      })
+
+      if (currentVisible.value && virtualList.value) {
+        virtualList.value.ensureIndexInView(hitting)
+      }
+    }
+
     function isSelected(option: SelectOptionState) {
       if (props.multiple) {
         return currentValues.value.includes(option.value)
@@ -638,18 +724,53 @@ export default defineComponent({
       return currentValues.value[0] === option.value
     }
 
-    function computeListHeight() {
-      virtualList.value?.refresh()
-      nextTick(() => {
-        const scrollWrapper = virtualList.value?.list
+    function filterOptions(value: string | number) {
+      const filter = props.filter
 
-        if (scrollWrapper) {
-          const wrapperHeight = scrollWrapper.getBoundingClientRect().height
+      if (!filter) return
 
-          listHeight.value =
-            wrapperHeight < props.maxListHeight ? undefined : `${props.maxListHeight}px`
+      if (!value) {
+        optionStates.value.forEach(state => {
+          state.hidden = false
+        })
+      } else {
+        optionStates.value.forEach(state => {
+          state.hidden = true
+        })
+
+        if (typeof filter === 'function') {
+          normalOptions.value.forEach(state => {
+            state.hidden = !filter(value, state)
+          })
+        } else {
+          if (props.ignoreCase) {
+            const ignoreCaseValue = value.toString().toLocaleLowerCase()
+
+            normalOptions.value.forEach(state => {
+              state.hidden = !state.value?.toString().toLocaleLowerCase().includes(ignoreCaseValue)
+            })
+          } else {
+            normalOptions.value.forEach(state => {
+              state.hidden = !state.value?.toString().includes(value?.toString())
+            })
+          }
         }
-      })
+
+        const parentMap = optionParentMap.value
+
+        normalOptions.value.forEach(option => {
+          if (!option.hidden && option.parent) {
+            let parent = parentMap.get(option.value) || null
+
+            while (parent && parent.hidden) {
+              parent.hidden = false
+              parent = parent.parent
+            }
+          }
+        })
+      }
+
+      computeHitting()
     }
 
     function handleTagClose(value: string | number) {
@@ -667,6 +788,9 @@ export default defineComponent({
       handleChange(option)
 
       if (props.multiple) {
+        currentFilter.value = ''
+
+        syncInputValue()
         updatePopper()
       } else {
         currentVisible.value = false
@@ -724,10 +848,6 @@ export default defineComponent({
       if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = !currentVisible.value
-
-      if (currentVisible.value && popper.value && wrapper.value) {
-        popper.value.style.minWidth = `${wrapper.value.offsetWidth}`
-      }
     }
 
     function handleClickOutside() {
@@ -762,6 +882,41 @@ export default defineComponent({
       emitEvent(props.onFocus, event)
     }
 
+    function syncInputValue() {
+      if (!input.value) return
+
+      const visible = currentVisible.value
+
+      if (props.multiple) {
+        input.value.value = ''
+      } else {
+        input.value.value = visible ? '' : currentLabels.value[0] || ''
+      }
+
+      visible ? input.value.focus() : input.value.blur()
+    }
+
+    function handleFilterInput() {
+      if (!input.value) return
+
+      currentFilter.value = input.value.value
+
+      if (currentIndex.value !== -1) {
+        currentIndex.value = 0
+      }
+
+      requestAnimationFrame(() => {
+        if (props.multiple && device.value) {
+          const range = document.createRange()
+
+          range.setStart(device.value, 0)
+          range.setEnd(device.value, device.value.childNodes.length)
+
+          anchorWidth.value = range.getBoundingClientRect().width
+        }
+      })
+    }
+
     return {
       props,
       nh,
@@ -774,6 +929,8 @@ export default defineComponent({
       listHeight,
       optionStates,
       isHover,
+      currentFilter,
+      anchorWidth,
 
       className,
       selectorClass,
@@ -782,20 +939,25 @@ export default defineComponent({
       visibleOptions,
       hasEmptyTip,
       showClear,
+      normalOptions,
+      optionParentMap,
 
       wrapper,
       reference,
       popper,
+      input,
+      device,
       virtualList,
 
       isSelected,
-      computeListHeight,
+      filterOptions,
       handleTagClose,
       handleSelect,
       toggleVisible,
       handleClear,
       handleFocus,
-      handleBlur
+      handleBlur,
+      handleFilterInput
     }
   }
 })

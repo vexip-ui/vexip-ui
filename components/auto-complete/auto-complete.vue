@@ -28,6 +28,7 @@
     @clear="handleClear"
     @focus="control?.focus()"
     @blur="control?.blur()"
+    @outside-close="handleChange"
   >
     <template v-if="hasPrefix" #prefix>
       <slot name="prefix">
@@ -56,7 +57,6 @@
           role="combobox"
           aria-autocomplete="list"
           @input="handleInput"
-          @change="handleInputChange"
           @keydown.enter="handleEnter"
           @keydown="handleKeyDown"
         />
@@ -185,7 +185,7 @@ export default defineComponent({
       dropDisabled: false,
       placement: {
         default: 'bottom',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       clearable: false,
       ignoreCase: false,
@@ -210,35 +210,12 @@ export default defineComponent({
     let lastValue = props.value
     let lastInput = String(lastValue)
 
-    const optionsStates = computed<AutoCompleteOptionState[]>(() => {
-      return select.value?.optionStates ?? []
-    })
-    const normalOptions = computed(() => {
-      return optionsStates.value.filter(option => !option.group)
-    })
-    const filteredOptions = computed(() => {
-      return optionsStates.value.filter(({ hidden }) => !hidden)
-    })
-    const hasPrefix = computed(() => {
-      return !!(slots.prefix || props.prefix)
-    })
-    const hasSuffix = computed(() => {
-      return !!(slots.suffix || props.suffix)
-    })
-    const optionParentMap = computed(() => {
-      const options = normalOptions.value
-      const map = new Map<string | number, AutoCompleteOptionState>()
-
-      for (let i = 0, len = options.length; i < len; ++i) {
-        const option = options[i]
-
-        if (option.parent) {
-          map.set(option.value, option.parent)
-        }
-      }
-
-      return map
-    })
+    const optionStates = computed(() => select.value?.optionStates || [])
+    const normalOptions = computed(() => select.value?.normalOptions || [])
+    const filteredOptions = computed(() => select.value?.visibleOptions || [])
+    const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
+    const hasSuffix = computed(() => !!(slots.suffix || props.suffix))
+    const optionParentMap = computed(() => select.value?.optionParentMap || new Map())
 
     watch(
       () => props.value,
@@ -252,7 +229,7 @@ export default defineComponent({
         }
       }
     )
-    watch(currentIndex, computeHittding)
+    watch(currentIndex, computeHitting)
     watch(visible, value => {
       if (!value) {
         currentIndex.value = -1
@@ -266,11 +243,11 @@ export default defineComponent({
         const value = currentValue.value
 
         if (isNull(value)) {
-          optionsStates.value.forEach(state => {
+          optionStates.value.forEach(state => {
             state.hidden = false
           })
         } else {
-          optionsStates.value.forEach(state => {
+          optionStates.value.forEach(state => {
             state.hidden = true
           })
 
@@ -311,17 +288,18 @@ export default defineComponent({
           })
         }
 
-        computeHittding()
+        computeHitting()
       }
     })
 
-    function computeHittding() {
+    function computeHitting() {
+      const hitting = currentIndex.value
       let index = -1
 
-      optionsStates.value.forEach(state => {
+      optionStates.value.forEach(state => {
         if (!state.hidden) {
           index += 1
-          state.hitting = currentIndex.value === index
+          state.hitting = hitting === index
 
           if (state.hitting) {
             if (control.value) {
@@ -333,7 +311,7 @@ export default defineComponent({
         }
       })
 
-      if (control.value && currentIndex.value < 0) {
+      if (control.value && hitting < 0) {
         control.value.value = lastInput
       }
     }
@@ -371,28 +349,6 @@ export default defineComponent({
       emitEvent(props.onInput, value)
     }
 
-    function handleInputChange(event: string | Event) {
-      const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
-      let matchedOption: AutoCompleteOptionState | undefined
-
-      if (props.ignoreCase) {
-        const noCaseValue = value.toLocaleLowerCase()
-
-        matchedOption = filteredOptions.value.find(
-          option => !option.disabled && String(option.value).toLocaleLowerCase() === noCaseValue
-        )
-      } else {
-        matchedOption = filteredOptions.value.find(
-          option => !option.disabled && option.value === value
-        )
-      }
-
-      if (matchedOption) {
-        currentValue.value = matchedOption.value
-        handleChange()
-      }
-    }
-
     function handleChange() {
       if (!changed || currentValue.value === lastValue) return
 
@@ -400,7 +356,7 @@ export default defineComponent({
       lastValue = currentValue.value
       lastInput = String(lastValue)
 
-      const option = optionsStates.value.find(option => option.value === lastValue)
+      const option = optionStates.value.find(option => option.value === lastValue)
 
       setFieldValue(currentValue.value)
       emitEvent(props.onChange, currentValue.value, option?.data || null!)
@@ -514,7 +470,6 @@ export default defineComponent({
 
       handleSelect,
       handleInput,
-      handleInputChange,
       handleChange,
       handleToggle,
       handleKeyDown,
