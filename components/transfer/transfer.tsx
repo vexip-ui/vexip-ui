@@ -1,5 +1,6 @@
 import { defineComponent, ref, reactive, computed, watchEffect, watch } from 'vue'
 import { Button } from '@/components/button'
+import { Icon } from '@/components/icon'
 import TransferPanel from './transfer-panel.vue'
 import { useFieldStore } from '@/components/form'
 import { ChevronRight, ChevronLeft, Spinner } from '@vexip-ui/icons'
@@ -326,28 +327,36 @@ export default defineComponent({
               : [
                   <Button
                     class={nh.be('action')}
+                    icon-only
                     type={actionType.value}
                     size={'small'}
-                    icon={ChevronRight}
                     disabled={props.disabled || !toTargetEnabled.value}
                     loading={props.loading && props.loadingLock}
                     loading-icon={props.loadingIcon}
                     loading-spin={props.loadingSpin}
                     style={{ marginBottom: '6px' }}
                     onClick={handleToTarget}
-                  ></Button>,
+                  >
+                    <Icon label="to right">
+                      <ChevronRight></ChevronRight>
+                    </Icon>
+                  </Button>,
                   <Button
                     class={nh.be('action')}
+                    icon-only
                     type={actionType.value}
                     size={'small'}
-                    icon={ChevronLeft}
                     disabled={props.disabled || !toSourceEnabled.value}
                     loading={props.loading && props.loadingLock}
                     loading-icon={props.loadingIcon}
                     loading-spin={props.loadingSpin}
                     style={{ margin: '0' }}
                     onClick={handleToSource}
-                  ></Button>
+                  >
+                    <Icon label="to left">
+                      <ChevronLeft></ChevronLeft>
+                    </Icon>
+                  </Button>
                 ]}
           </div>
           <TransferPanel

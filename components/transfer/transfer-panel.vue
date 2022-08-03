@@ -82,7 +82,7 @@
       item-fixed
       use-y-bar
       id-key="value"
-      :items-attrs="{ role: 'listbox' }"
+      :items-attrs="{ role: 'listbox', ariaLabel: type }"
       @resize="computePageSize"
     >
       <template #default="{ item: option, index }">

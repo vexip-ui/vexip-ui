@@ -149,7 +149,8 @@
             id-key="value"
             :items-attrs="{
               class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
-              role: 'listbox'
+              role: 'listbox',
+              ariaLabel: 'options'
             }"
           >
             <template #default="{ item: option, index }">
