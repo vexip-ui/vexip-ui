@@ -29,11 +29,12 @@
       </template>
     </div>
     <div :class="nh.be('actions')">
-      <Button :class="nh.be('button')" @click="handleCancel">
+      <Button :class="nh.be('button')" no-pulse @click="handleCancel">
         {{ cancelTextR || locale.cancel }}
       </Button>
       <Button
         :class="nh.be('button')"
+        no-pulse
         :type="confirmTypeR"
         :loading="loading"
         @click="handleConfirm"

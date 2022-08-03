@@ -41,6 +41,8 @@ export default defineComponent({
     buttonType: String as PropType<ButtonAttrType>,
     block: booleanProp,
     tag: String,
+    noPulse: booleanProp,
+    iconOnly: booleanProp,
     onClick: eventProp<(event: MouseEvent) => void>()
   },
   emits: [],
@@ -69,7 +71,9 @@ export default defineComponent({
         validator: (value: ButtonAttrType) => ['button', 'submit', 'reset'].includes(value)
       },
       block: false,
-      tag: 'button'
+      tag: 'button',
+      noPulse: false,
+      iconOnly: false
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -77,7 +81,7 @@ export default defineComponent({
     const nh = useNameHelper('button')
     const pulsing = ref(false)
     const isIconOnly = computed(() => {
-      return !slots.default
+      return props.iconOnly || !slots.default
     })
     const type = computed(() => {
       return props.type ?? groupState?.type ?? 'default'
@@ -217,11 +221,12 @@ export default defineComponent({
     function handleClick(event: MouseEvent) {
       if (props.disabled || props.loading || event.button) return
 
-      pulsing.value = false
-
-      requestAnimationFrame(() => {
-        pulsing.value = true
-      })
+      if (!props.noPulse) {
+        pulsing.value = false
+        requestAnimationFrame(() => {
+          pulsing.value = true
+        })
+      }
 
       emitEvent(props.onClick, event)
     }
