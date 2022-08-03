@@ -54,7 +54,7 @@ interface SelectOptionState {
 | transfer        | `boolean \| string`                                                            | Set the rendering position of the option list, when set to `true`, it will render to `<body>` by default      | `false`        | -       |
 | list-class      | `ClassType`                                                                    | Custom class name for option list                                                                             | `null`         | -       |
 | multiple        | `boolean`                                                                      | Set whether to enable multiple selection mode                                                                 | `false`        | -       |
-| option-check    | `boolean`                                                                      | Set to enable the check function of selected options                                                          | `false`        | -       |
+| option-check    | `boolean`                                                                      | Set to add suffix check for selected options                                                                  | `false`        | -       |
 | empty-text      | `string`                                                                       | Prompt for empty options                                                                                      | `locale.empty` | -       |
 | key-config      | `SelectKeyConfig`                                                              | Set the key names of options when parsing `options`                                                           | `{}`           | `2.0.0` |
 | loading         | `boolean`                                                                      | Set whether is loading                                                                                        | `false`        | `2.0.0` |
@@ -63,6 +63,7 @@ interface SelectOptionState {
 | loading-spin    | `boolean`                                                                      | Set whether to use spin animation for the loading icon                                                        | `false`        | `2.0.0` |
 | filter          | `boolean \| (value: string \| number, options: SelectOptionState) => boolean)` | The method of filtering `options`, the built-in filter method is used when `true` is passed                   | `false`        | `2.0.0` |
 | ignore-case     | `boolean`                                                                      | Set whether to ignore case when using built-in filtering                                                      | `false`        | `2.0.0` |
+| creatable       | `boolean`                                                                      | Set whether to support dynamic create options when filter options is enabled                                  | `false`        | `2.0.0` |
 
 ### Select Events
 

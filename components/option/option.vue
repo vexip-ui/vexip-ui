@@ -43,6 +43,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    noHover: {
+      type: Boolean,
+      default: false
+    },
     selected: {
       type: Boolean,
       default: false
@@ -59,7 +63,8 @@ export default defineComponent({
         [nh.bm('disabled')]: props.disabled,
         [nh.bm('selected')]: !props.disabled && props.selected,
         [nh.bm('divided')]: props.divided,
-        [nh.bm('hitting')]: props.hitting
+        [nh.bm('hitting')]: props.hitting,
+        [nh.bm('no-hover')]: props.noHover
       }
     })
 

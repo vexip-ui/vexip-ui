@@ -142,7 +142,7 @@
               height: listHeight,
               maxHeight: `${props.maxListHeight}px`
             }"
-            :items="visibleOptions"
+            :items="totalOptions"
             :item-size="32"
             use-y-bar
             :height="'100%'"
@@ -176,7 +176,9 @@
                 :no-title="option.noTitle"
                 :hitting="option.hitting"
                 :selected="isSelected(option)"
+                no-hover
                 @select="handleSelect(option)"
+                @mousemove="updateHitting(index, false)"
               >
                 <slot :option="option" :index="index" :selected="isSelected(option)">
                   <span :class="nh.be('label')" :style="{ paddingLeft: `${option.depth * 6}px` }">
@@ -191,7 +193,7 @@
               </Option>
             </template>
             <template #empty>
-              <div v-if="hasEmptyTip" :class="nh.be('empty')">
+              <div :class="nh.be('empty')">
                 <slot name="empty">
                   {{ props.emptyText ?? locale.empty }}
                 </slot>
@@ -235,7 +237,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { isNull } from '@vexip-ui/utils'
+import { isNull, removeArrayItem } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -302,6 +304,7 @@ export default defineComponent({
       default: null
     },
     ignoreCase: booleanProp,
+    creatable: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
@@ -368,7 +371,8 @@ export default defineComponent({
       loadingSpin: false,
       keyConfig: () => ({}),
       filter: false,
-      ignoreCase: false
+      ignoreCase: false,
+      creatable: false
     })
 
     const locale = useLocale('select')
@@ -379,11 +383,26 @@ export default defineComponent({
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const listHeight = ref<string | undefined>(undefined)
-    const optionStates = ref<SelectOptionState[]>([])
+    const baseOptions = ref<SelectOptionState[]>([])
     const currentFilter = ref('')
     const anchorWidth = ref(0)
+    const userOptions = ref<SelectOptionState[]>([])
 
     const { isMounted } = useMounted()
+
+    const dynamicOption = reactive<SelectOptionState>({
+      disabled: false,
+      divided: false,
+      noTitle: false,
+      value: '',
+      label: '',
+      group: false,
+      depth: 0,
+      parent: null,
+      hidden: false,
+      hitting: true,
+      data: ''
+    })
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
@@ -423,6 +442,10 @@ export default defineComponent({
       const loop = props.options
         .map(option => ({ option, depth: 0, parent: null as SelectOptionState | null }))
         .reverse()
+
+      for (const option of userOptions.value) {
+        map.set(option.value, option)
+      }
 
       while (loop.length) {
         const { option, depth, parent } = loop.pop()!
@@ -472,7 +495,7 @@ export default defineComponent({
       }
 
       optionValueMap = map
-      optionStates.value = states
+      baseOptions.value = states
 
       initValueAndLabel(emittedValue)
     }
@@ -524,17 +547,21 @@ export default defineComponent({
             option = options[index]
           }
 
-          currentIndex.value = index
+          updateHitting(index)
+          modifier.resetAll()
         } else if (modifier.enter || modifier.space) {
           event.preventDefault()
           event.stopPropagation()
 
           if (currentIndex.value >= 0) {
-            handleSelect(visibleOptions.value[currentIndex.value])
+            handleSelect(totalOptions.value[currentIndex.value])
+          } else if (showDynamic.value) {
+            handleSelect(dynamicOption)
           } else {
             currentVisible.value = false
-            modifier.resetAll()
           }
+
+          modifier.resetAll()
         } else if (modifier.tab || modifier.escape) {
           currentVisible.value = false
           modifier.resetAll()
@@ -566,15 +593,21 @@ export default defineComponent({
       }
     })
     const hasValue = computed(() => !isNull(currentValues.value[0]))
-    const hasPrefix = computed(() => {
-      return !!(slots.prefix || props.prefix)
+    const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
+    const optionStates = computed(() => userOptions.value.concat(baseOptions.value))
+    const visibleOptions = computed(() => optionStates.value.filter(state => !state.hidden))
+    const showDynamic = computed(() => {
+      return !!(
+        props.filter &&
+        props.creatable &&
+        dynamicOption.value &&
+        !currentValues.value.includes(dynamicOption.value)
+      )
     })
-    const visibleOptions = computed(() => {
-      return optionStates.value.filter(state => !state.hidden)
+    const totalOptions = computed(() => {
+      return showDynamic.value ? [dynamicOption].concat(visibleOptions.value) : visibleOptions.value
     })
-    const normalOptions = computed(() => {
-      return optionStates.value.filter(option => !option.group)
-    })
+    const normalOptions = computed(() => optionStates.value.filter(option => !option.group))
     const optionParentMap = computed(() => {
       const options = normalOptions.value
       const map = new Map<string | number, SelectOptionState>()
@@ -588,11 +621,6 @@ export default defineComponent({
       }
 
       return map
-    })
-    const hasEmptyTip = computed(() => {
-      return (
-        !!(props.emptyText || slots.empty || locale.value.empty) && !visibleOptions.value.length
-      )
     })
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && hasValue.value
@@ -631,7 +659,6 @@ export default defineComponent({
         initValueAndLabel(value)
       }
     )
-    watch(currentIndex, computeHitting)
     watch(
       () => props.disabled,
       value => {
@@ -656,7 +683,13 @@ export default defineComponent({
         }
       }
     )
-    watch(currentFilter, filterOptions)
+    watch(currentFilter, value => {
+      dynamicOption.value = value
+      dynamicOption.label = value
+      dynamicOption.data = value
+
+      filterOptions(value)
+    })
 
     function initValueAndLabel(value: SelectValue | null) {
       if (!value) {
@@ -691,16 +724,16 @@ export default defineComponent({
       const value = currentValues.value[0]
 
       if (isNull(value)) {
-        currentIndex.value = -1
+        updateHitting(-1)
       } else {
         if (!isMounted.value) return
 
-        currentIndex.value = visibleOptions.value.findIndex(option => option.value === value)
+        updateHitting(visibleOptions.value.findIndex(option => option.value === value))
       }
     }
 
-    function computeHitting() {
-      const hitting = currentIndex.value
+    function updateHitting(hitting: number, ensureInView = true) {
+      currentIndex.value = hitting
       let index = -1
 
       visibleOptions.value.forEach(option => {
@@ -712,7 +745,7 @@ export default defineComponent({
         }
       })
 
-      if (currentVisible.value && virtualList.value) {
+      if (ensureInView && currentVisible.value && virtualList.value) {
         virtualList.value.ensureIndexInView(hitting)
       }
     }
@@ -771,7 +804,7 @@ export default defineComponent({
         })
       }
 
-      computeHitting()
+      updateHitting(currentIndex.value)
     }
 
     function handleTagClose(value: string | number) {
@@ -781,11 +814,26 @@ export default defineComponent({
     function handleSelect(option: SelectOptionState) {
       if (!option) return
 
-      emitEvent(
-        props[props.multiple && isSelected(option) ? 'onCancel' : 'onSelect'],
-        option.value,
-        option.data
-      )
+      const selected = isSelected(option)
+      const value = option.value
+
+      if (selected) {
+        removeArrayItem(userOptions.value, item => item.value === value)
+        optionValueMap.delete(value)
+      } else {
+        if (!props.multiple) {
+          userOptions.value.length = 0
+        }
+
+        if (dynamicOption.value && value === dynamicOption.value) {
+          const newOption = { ...dynamicOption }
+
+          userOptions.value.push(newOption)
+          optionValueMap.set(value, newOption)
+        }
+      }
+
+      emitEvent(props[props.multiple && selected ? 'onCancel' : 'onSelect'], value, option.data)
       handleChange(option)
 
       if (props.multiple) {
@@ -862,6 +910,11 @@ export default defineComponent({
 
     function handleClear() {
       if (props.clearable) {
+        for (const option of userOptions.value) {
+          optionValueMap.delete(option.value)
+        }
+
+        userOptions.value.length = 0
         currentValues.value.length = 0
         currentLabels.value.length = 0
 
@@ -902,7 +955,7 @@ export default defineComponent({
 
       currentFilter.value = input.value.value
 
-      if (currentIndex.value !== -1) {
+      if (showDynamic.value || currentIndex.value !== -1) {
         currentIndex.value = 0
       }
 
@@ -949,7 +1002,7 @@ export default defineComponent({
       hasValue,
       hasPrefix,
       visibleOptions,
-      hasEmptyTip,
+      totalOptions,
       showClear,
       normalOptions,
       optionParentMap,
@@ -963,6 +1016,7 @@ export default defineComponent({
 
       isSelected,
       filterOptions,
+      updateHitting,
       handleTagClose,
       handleSelect,
       toggleVisible,
