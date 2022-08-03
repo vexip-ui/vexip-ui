@@ -119,14 +119,11 @@ export default defineComponent({
         tag.value || 'div',
         {
           class: className.value,
-          style: style.value,
+          style: style.value
         },
-        props.image
-          ? [<Icon icon={props.imageIcon || ImageR} scale={props.iconScale}></Icon>]
-          : []
-      );
+        props.image ? [<Icon icon={props.imageIcon || ImageR} scale={props.iconScale}></Icon>] : []
+      )
     }
-    
 
     return () => {
       if (props.repeat > 1) {

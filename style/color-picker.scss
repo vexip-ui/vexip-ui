@@ -11,12 +11,14 @@ $color-picker: map.merge(
     marker-b-color: get-css-var('border-color-base'),
     marker-border: get-css-var('border-shape') get-css-var('color-picker-marker-b-color'),
     marker-radius: get-css-var('radius-small'),
-    marker-bg-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg=='),
+    marker-bg-image:
+    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg=='),
     arrow-color: get-css-var('content-color-secondary'),
     popper-z-index: get-css-var('z-index-popper'),
     pane-bg-color: get-css-var('bg-color-base'),
     pane-radius: get-css-var('radius-base'),
     pane-shadow: get-css-var('shadow-base'),
+    unit-s-color: get-css-var('color-primary-opacity-6'),
     d-color: get-css-var('border-color-light-2'),
     divider: get-css-var('border-shape') get-css-var('color-picker-d-color'),
     pointer-size: 6px,
@@ -27,7 +29,9 @@ $color-picker: map.merge(
     handler-radius: 3px,
     shortcut-b-color: get-css-var('border-color-base'),
     shortcut-b-color-hover: get-css-var('color-primary-base'),
-    shortcut-radius: get-css-var('radius-base')
+    shortcut-radius: get-css-var('radius-base'),
+    shortcut-width: 20px,
+    shortcut-height: 16px
   ),
   $color-picker
 );
@@ -41,9 +45,9 @@ $color-picker: map.merge(
 
   display: inline-flex;
 
-  @include input.handler(#{&}__trigger);
+  @include input.handler(#{&}__selector);
 
-  &__trigger {
+  &__selector {
     width: auto;
   }
 
@@ -93,7 +97,7 @@ $color-picker: map.merge(
     padding: 5px 0;
   }
 
-  &__pane {
+  &__panel {
     width: 270px;
     background-color: get-css-var('color-picker-pane-bg-color');
     border-radius: get-css-var('color-picker-pane-radius');
@@ -110,6 +114,12 @@ $color-picker: map.merge(
     width: 100%;
     height: 188px;
     cursor: crosshair;
+    outline: 0;
+    transition: get-css-var('transition-shadow');
+
+    &:focus {
+      box-shadow: get-css-var('shadow-focus') get-css-var('color-picker-unit-s-color');
+    }
   }
 
   &__saturation,
@@ -139,6 +149,12 @@ $color-picker: map.merge(
     height: 14px;
     margin-top: 10px;
     cursor: pointer;
+    outline: 0;
+    transition: get-css-var('transition-shadow');
+
+    &:focus {
+      box-shadow: get-css-var('shadow-focus') get-css-var('color-picker-unit-s-color');
+    }
   }
 
   &__hue {
@@ -209,19 +225,24 @@ $color-picker: map.merge(
     align-items: center;
     width: 100%;
     margin-top: 10px;
+    outline: 0;
   }
 
   &__shortcut-item {
-    width: 16px;
-    height: 16px;
-    margin: 2px;
+    width: get-css-var('color-picker-shortcut-width');
+    height: get-css-var('color-picker-shortcut-height');
+    margin: 4px;
     cursor: pointer;
     border-radius: get-css-var('color-picker-shortcut-radius');
     box-shadow: get-css-var('shadow-border') get-css-var('color-picker-shortcut-b-color');
     transition: box-shadow 200ms;
 
     &:hover {
-      box-shadow: 0 0 2px 1px get-css-var('color-picker-shortcut-b-color-hover');
+      box-shadow: 0 0 2px 2px get-css-var('color-picker-shortcut-b-color-hover');
+    }
+
+    &--hitting {
+      box-shadow: 0 0 2px 2px get-css-var('color-picker-shortcut-b-color-hover');
     }
   }
 }

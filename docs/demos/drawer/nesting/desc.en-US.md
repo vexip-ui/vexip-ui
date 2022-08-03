@@ -1,3 +1,3 @@
 ### Nesting Usage
 
-在抽屉的内容插槽内可以在打开新的抽屉，可以解决内容需要多层多分支的情况。
+In the content slot of the drawer, a new drawer can be opened, which can solve the situation that the content needs to be multi-layered and multi-branched.

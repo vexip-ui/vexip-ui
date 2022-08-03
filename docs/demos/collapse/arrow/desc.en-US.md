@@ -1,3 +1,3 @@
-### 调整箭头
+### Adjust Arrow
 
-添加 `arrow-type` 属性的值可以改变面板箭头的位置或者隐藏箭头。
+Adding the value of the `arrow-type` prop can change the position of the panel arrow or hide the arrow.

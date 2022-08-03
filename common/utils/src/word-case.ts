@@ -1,3 +1,6 @@
+/**
+ * 将给定的常量字符串类型拓展为不区分大小写的任意组合
+ */
 export type AnyCase<S> = string extends S
   ? string
   : S extends `${infer F1}${infer F2}${infer R}`
@@ -8,7 +11,8 @@ export type AnyCase<S> = string extends S
 
 /**
  * 将命名转换为短横线命名
- * @param value - 需要转换的命名
+ *
+ * @param value 需要转换的命名
  */
 export function toKebabCase(value: string) {
   return (
@@ -22,7 +26,8 @@ export function toKebabCase(value: string) {
 
 /**
  * 将命名转换为全大写命名Capital
- * @param value - 需要转换的命名
+ *
+ * @param value 需要转换的命名
  */
 export function toCapitalCase(value: string) {
   return (
@@ -33,7 +38,8 @@ export function toCapitalCase(value: string) {
 
 /**
  *  将命名转换为驼峰命名
- * @param value - 需要转换的命名
+ *
+ * @param value 需要转换的命名
  */
 export function toCamelCase(value: string) {
   const capitalName = toCapitalCase(value)

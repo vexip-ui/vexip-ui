@@ -1,5 +1,5 @@
-### 可关闭
+### Closable
 
-设置 `closable` 属性为 `true` 可以使打开的消息可以手动关闭。
+Set the `closable` option to `true` to make open messages manually closed.
 
-同时，这个例子展示了如何在组合式 Api 中使用 Message 组件。
+Also, this example shows how to use the Message component in a composite API.

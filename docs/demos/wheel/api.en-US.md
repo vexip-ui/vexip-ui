@@ -1,22 +1,33 @@
 ### Wheel Props
 
-| Name      | Type    | Description                                          | Default       | Since |
-| --------- | ------- | --------------------------------------------- | ------------ | --- |
-| horizontal      | `boolean`  | 设置滚轮的是否为横向模式 | `false` | - |
-| value    | `string \| number`  | 当前激活元素的索引，可以使用 `v-model` 双向绑定 | `0`            | - |
-| candidate | `number`  | 设置滚轮上下的候选个数，可选范围为 0 ~ 3      | `2`            | - |
-| arrow     | `boolean` | 设置是否使用滚轮的箭头指示器                  | `false`        | - |
-| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 | - |
+| Name         | Type                                             | Description                                                                            | Default     | Since   |
+| ------------ | ------------------------------------------------ | -------------------------------------------------------------------------------------- | ----------- | ------- |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'` | The state of wheel                                                                     | `'default'` | `2.0.0` |
+| options      | `RawOption[]`                                    | Set the options of wheel                                                               | `[]`        | `2.0.0` |
+| horizontal   | `boolean`                                        | Set whether the scroll wheel is in landscape mode                                      | `false`     | -       |
+| value        | `string \| number`                               | The index of the currently active element, can use `v-model` two-way binding           | `0`         | -       |
+| candidate    | `number`                                         | Set the number of candidates up and down the scroll wheel, the optional range is 0 ~ 3 | `2`         | -       |
+| arrow        | `boolean`                                        | Set whether to use the scroll wheel arrow indicator                                    | `false`     | -       |
+| insert-empty | `boolean \| string`                              | Set whether insert a empty value, can be specify the label when passing a string       | `false`     | `2.0.0` |
+| disabled     | `boolean`                                        | Set whether the wheel is disabled                                                      | `false`     | `2.0.0` |
+| loading      | `boolean`                                        | Set whether is loading                                                                 | `false`     | `2.0.0` |
+| loading-lock | `boolean`                                        | Set whether to be read-only when loading                                               | `false`     | `2.0.0` |
+
+Some preset types:
+
+```ts
+type RawOption =
+  | string
+  | number
+  | {
+      value: string | number,
+      label?: string,
+      disabled?: boolean
+    }
+```
 
 ### Wheel Events
 
-| Name      | Description                                               | Parameters          | Since |
-| --------- | -------------------------------------------------- | ------------- | --- |
-| change | 当前激活的元素发生改变时触发，返回该元素的索引和值 | `(value: string \| number)` | - |
-
-### WheelItem Props
-
-| Name  | Type                        | Description         | Default | Since |
-| ----- | --------------------------- | ------------ | ------ | --- |
-| value | `number \| string` | 滚轮元素的值 | `null`   | - |
-| disabled | `boolean` | 设置是否禁用元素 | `false`   | - |
+| Name   | Description                                                                                | Parameters                  | Since |
+| ------ | ------------------------------------------------------------------------------------------ | --------------------------- | ----- |
+| change | Triggered when the currently active element changes, returns the element's index and value | `(value: string \| number)` | -     |

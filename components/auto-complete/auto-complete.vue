@@ -1,5 +1,6 @@
 <template>
   <Select
+    :id="idFor"
     ref="select"
     v-model:visible="visible"
     :class="nh.b()"
@@ -18,9 +19,16 @@
     :placeholder="props.placeholder"
     :options="props.options"
     :key-config="props.keyConfig"
+    :loading="props.loading"
+    :loading-icon="props.loadingIcon"
+    :loading-lock="props.loadingLock"
+    :loading-spin="props.loadingSpin"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
+    @focus="control?.focus()"
+    @blur="control?.blur()"
+    @outside-close="handleChange"
   >
     <template v-if="hasPrefix" #prefix>
       <slot name="prefix">
@@ -39,15 +47,17 @@
         <input
           ref="control"
           :class="nh.be('input')"
-          :value="inputValue"
           :autofocus="props.autofocus"
           :spellcheck="props.spellcheck"
           :disabled="props.disabled"
           :placeholder="props.placeholder ?? locale.placeholder"
+          :readonly="props.loading && props.loadingLock"
           autocomplete="off"
+          tabindex="-1"
+          role="combobox"
+          aria-autocomplete="list"
           @input="handleInput"
-          @change="handleInputChange"
-          @keyup.enter="handleEnter"
+          @keydown.enter="handleEnter"
           @keydown="handleKeyDown"
         />
       </slot>
@@ -58,21 +68,19 @@
       </slot>
     </template>
     <template #default="{ option, index, selected }">
-      <slot
-        :option="option"
-        :index="index"
-        :selected="selected"
-        :handle-select="handleSelect"
-      ></slot>
+      <slot :option="option" :index="index" :selected="selected"></slot>
+    </template>
+    <template #group="{ option, index }">
+      <slot name="group" :option="option" :index="index"></slot>
     </template>
   </Select>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject, watch, watchEffect } from 'vue'
+import { defineComponent, ref, computed, watch, watchEffect, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { placementWhileList } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -83,13 +91,19 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
-import { isNull, noop } from '@vexip-ui/utils'
+import { isNull } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
-import type { OptionKeyConfig, OptionState, RawOption } from '@/components/option'
+import type {
+  AutoCompleteKeyConfig,
+  AutoCompleteOptionState,
+  AutoCompleteRawOption
+} from './symbol'
 
 export default defineComponent({
   name: 'AutoComplete',
@@ -102,11 +116,10 @@ export default defineComponent({
     state: stateProp,
     transfer: booleanStringProp,
     value: [String, Number],
-    options: Array as PropType<RawOption[]>,
+    options: Array as PropType<AutoCompleteRawOption[]>,
     filter: {
       type: [Boolean, Function] as PropType<
-        | boolean
-        | ((value: string | number, options: { label: string, value: string | number }) => boolean)
+        boolean | ((value: string | number, options: AutoCompleteOptionState) => boolean)
       >,
       default: null
     },
@@ -119,29 +132,42 @@ export default defineComponent({
     transitionName: String,
     dropDisabled: booleanProp,
     placement: String as PropType<Placement>,
-    disableValidate: booleanProp,
     clearable: booleanProp,
     ignoreCase: booleanProp,
     autofocus: booleanProp,
     spellcheck: booleanProp,
-    keyConfig: Object as PropType<OptionKeyConfig>
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
+    keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
+    onSelect: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
+    onInput: eventProp<(value: string) => void>(),
+    onChange: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onEnter: eventProp<(value: string | number) => void>(),
+    onClear: eventProp()
   },
-  emits: [
-    'select',
-    'input',
-    'change',
-    'toggle',
-    'enter',
-    'clear',
-    'update:value'
-  ],
+  emits: ['update:value'],
   setup(_props, { slots, emit }) {
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<string | number>(() => control.value?.focus())
+
+    const nh = useNameHelper('auto-complete')
     const props = useProps('autoComplete', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       transfer: false,
       value: {
-        default: '',
+        default: () => getFieldValue(''),
         static: true
       },
       options: {
@@ -154,25 +180,23 @@ export default defineComponent({
       suffix: null,
       suffixColor: '',
       placeholder: null,
-      disabled: false,
-      transitionName: 'vxp-drop',
+      disabled: () => disabled.value,
+      transitionName: () => nh.ns('drop'),
       dropDisabled: false,
       placement: {
         default: 'bottom',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
-      disableValidate: false,
       clearable: false,
       ignoreCase: false,
       autofocus: false,
       spellcheck: false,
-      keyConfig: () => ({})
+      keyConfig: () => ({}),
+      loading: () => loading.value,
+      loadingIcon: null,
+      loadingLock: false,
+      loadingSpin: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
-
-    const nh = useNameHelper('auto-complete')
 
     const currentValue = ref(props.value)
     const currentIndex = ref(-1)
@@ -184,47 +208,28 @@ export default defineComponent({
     let changed = false
     // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
+    let lastInput = String(lastValue)
 
-    const optionsStates = computed<OptionState[]>(() => {
-      return select.value?.optionStates ?? []
-    })
-    const filteredOptions = computed(() => {
-      return optionsStates.value.filter(({ hidden }) => !hidden)
-    })
-    const inputValue = computed(() => {
-      const hittingOption = filteredOptions.value[currentIndex.value]
-
-      if (hittingOption) {
-        return hittingOption.label || hittingOption.value?.toString()
-      } else if (select.value) {
-        if (select.value.currentVisible) {
-          return currentValue.value?.toString()
-        }
-
-        const currentOption = filteredOptions.value.find(
-          ({ value }) => value === currentValue.value
-        )
-
-        return currentOption ? currentOption.label : currentValue.value?.toString()
-      }
-
-      return currentValue.value?.toString()
-    })
-    const hasPrefix = computed(() => {
-      return !!(slots.prefix || props.prefix)
-    })
-    const hasSuffix = computed(() => {
-      return !!(slots.suffix || props.suffix)
-    })
+    const optionStates = computed(() => select.value?.optionStates || [])
+    const normalOptions = computed(() => select.value?.normalOptions || [])
+    const filteredOptions = computed(() => select.value?.visibleOptions || [])
+    const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
+    const hasSuffix = computed(() => !!(slots.suffix || props.suffix))
+    const optionParentMap = computed(() => select.value?.optionParentMap || new Map())
 
     watch(
       () => props.value,
       value => {
         currentValue.value = value
         lastValue = value
+        lastInput = String(value)
+
+        if (control.value) {
+          control.value.value = String(value)
+        }
       }
     )
-    watch(currentIndex, computeHittding)
+    watch(currentIndex, computeHitting)
     watch(visible, value => {
       if (!value) {
         currentIndex.value = -1
@@ -238,52 +243,80 @@ export default defineComponent({
         const value = currentValue.value
 
         if (isNull(value)) {
-          optionsStates.value.forEach(state => {
+          optionStates.value.forEach(state => {
             state.hidden = false
           })
         } else {
+          optionStates.value.forEach(state => {
+            state.hidden = true
+          })
+
           if (typeof props.filter === 'function') {
             const filter = props.filter
 
-            optionsStates.value.forEach(state => {
-              state.hidden = !filter(value, { label: state.label, value: state.value })
+            normalOptions.value.forEach(state => {
+              state.hidden = !filter(value, state)
             })
           } else {
             if (props.ignoreCase) {
               const ignoreCaseValue = value?.toString().toLocaleLowerCase()
 
-              optionsStates.value.forEach(state => {
+              normalOptions.value.forEach(state => {
                 state.hidden = !state.value
                   ?.toString()
                   .toLocaleLowerCase()
                   .includes(ignoreCaseValue)
               })
             } else {
-              optionsStates.value.forEach(state => {
+              normalOptions.value.forEach(state => {
                 state.hidden = !state.value?.toString().includes(value?.toString())
               })
             }
           }
+
+          const parentMap = optionParentMap.value
+
+          normalOptions.value.forEach(option => {
+            if (!option.hidden && option.parent) {
+              let parent = parentMap.get(option.value) || null
+
+              while (parent && parent.hidden) {
+                parent.hidden = false
+                parent = parent.parent
+              }
+            }
+          })
         }
 
-        computeHittding()
+        computeHitting()
       }
     })
 
-    function computeHittding() {
+    function computeHitting() {
+      const hitting = currentIndex.value
       let index = -1
 
-      optionsStates.value.forEach(state => {
+      optionStates.value.forEach(state => {
         if (!state.hidden) {
           index += 1
-          state.hitting = currentIndex.value === index
+          state.hitting = hitting === index
+
+          if (state.hitting) {
+            if (control.value) {
+              control.value.value = String(state.value)
+            }
+          }
         } else {
           state.hitting = false
         }
       })
+
+      if (control.value && hitting < 0) {
+        control.value.value = lastInput
+      }
     }
 
-    function handleSelect(value: string | number, data: RawOption) {
+    function handleSelect(value: string | number, data: AutoCompleteRawOption) {
       if (isNull(value)) {
         return
       }
@@ -291,7 +324,7 @@ export default defineComponent({
       const prevValue = currentValue.value
       currentValue.value = value
 
-      emit('select', value, data)
+      emitEvent(props.onSelect, value, data)
 
       if (value !== prevValue) {
         changed = true
@@ -307,30 +340,13 @@ export default defineComponent({
       visible.value = !props.dropDisabled
       currentValue.value = value
       changed = true
+      lastInput = value
 
       if (currentIndex.value !== -1) {
         currentIndex.value = 0
       }
 
-      emit('input', value)
-    }
-
-    function handleInputChange(event: string | Event) {
-      const value = typeof event === 'string' ? event : (event.target as HTMLInputElement).value
-      let matchedOption: OptionState | undefined
-
-      if (props.ignoreCase) {
-        const noCaseValue = value.toLocaleLowerCase()
-
-        matchedOption = filteredOptions.value.find(option => !option.disabled && (option.value === value || option.label?.toLocaleLowerCase() === noCaseValue))
-      } else {
-        matchedOption = filteredOptions.value.find(option => !option.disabled && (option.value === value || option.label === value))
-      }
-
-      if (matchedOption) {
-        currentValue.value = matchedOption.value
-        handleChange()
-      }
+      emitEvent(props.onInput, value)
     }
 
     function handleChange() {
@@ -338,24 +354,26 @@ export default defineComponent({
 
       changed = false
       lastValue = currentValue.value
+      lastInput = String(lastValue)
 
-      const option = optionsStates.value.find(option => option.value === lastValue)
+      const option = optionStates.value.find(option => option.value === lastValue)
 
-      emit('change', currentValue.value, option?.data || null)
+      setFieldValue(currentValue.value)
+      emitEvent(props.onChange, currentValue.value, option?.data || null!)
       emit('update:value', currentValue.value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      validateField()
 
       visible.value = false
-      control.value?.blur()
+
+      if (control.value) {
+        control.value.value = String(lastValue)
+        control.value.blur()
+      }
     }
 
     function handleToggle() {
       testOptionCanDrop()
-
-      emit('toggle', visible.value)
+      emitEvent(props.onToggle, visible.value)
 
       if (!visible.value) {
         currentIndex.value = -1
@@ -369,19 +387,38 @@ export default defineComponent({
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      const key = event.key
+      const key = event.code || event.key
 
       if (key === 'ArrowDown' || key === 'ArrowUp') {
         event.preventDefault()
+        event.stopPropagation()
 
-        currentIndex.value += key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0
-        currentIndex.value = Math.min(
-          Math.max(-1, currentIndex.value),
-          filteredOptions.value.length - 1
-        )
-      } else if (!['Enter', 'ArrowLeft', 'ArrowRight'].includes(key)) {
-        // 进行了其他按键则重置
-        currentIndex.value = -1
+        const options = filteredOptions.value
+        const length = options.length
+
+        if (!length) return
+
+        const step = key === 'ArrowDown' ? 1 : -1
+
+        let index = (currentIndex.value + step) % length
+        let option = options[index]
+
+        for (let i = 0; (option.disabled || option.group) && i < length; ++i) {
+          index += step
+          index = (index + length) % length
+          option = options[index]
+        }
+
+        currentIndex.value = index
+      } else {
+        if (['Space', ' '].includes(key)) {
+          event.stopPropagation()
+        }
+
+        if (!['Enter', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+          // 进行了其他按键则重置
+          currentIndex.value = -1
+        }
       }
     }
 
@@ -394,7 +431,7 @@ export default defineComponent({
         handleChange()
       }
 
-      emit('enter', currentValue.value)
+      emitEvent(props.onEnter, currentValue.value)
       control.value?.blur()
       visible.value = false
     }
@@ -411,8 +448,8 @@ export default defineComponent({
         }
 
         handleChange()
-        emit('clear')
-        clearField()
+        emitEvent(props.onClear)
+        nextTick(clearField)
       }
     }
 
@@ -420,11 +457,11 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('input'),
+      idFor,
       currentValue,
       currentIndex,
       visible,
 
-      inputValue,
       hasPrefix,
       hasSuffix,
 
@@ -433,7 +470,6 @@ export default defineComponent({
 
       handleSelect,
       handleInput,
-      handleInputChange,
       handleChange,
       handleToggle,
       handleKeyDown,

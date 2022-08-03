@@ -1,3 +1,3 @@
-### 气泡提示
+### Tooltip
 
-设置 `info-type` 属性的值可以让进度提示变为气泡提示。
+Setting the value of the `info-type` prop can make progress indicators into bubbles.

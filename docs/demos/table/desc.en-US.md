@@ -1,1 +1,1 @@
-用于展示结构化二维数据。
+Used to display structured 2D data.

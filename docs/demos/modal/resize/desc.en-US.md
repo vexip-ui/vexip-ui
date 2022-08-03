@@ -1,3 +1,3 @@
-### 调整大小
+### Adjust Size
 
-添加 `resizable` 属性可以开启模态框的调整大小功能。
+Add the `resizable` prop to enable resizing of the modal box.

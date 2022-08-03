@@ -2,29 +2,33 @@
   <div>
     <Button
       type="primary"
-      @click="$message.info({ content: '一条字体有颜色的消息', color: true })"
+      @click="$message.info({ content: 'A colorful text message', color: true })"
     >
-      字体颜色
+      Colorful Text
     </Button>
     <Button
       type="success"
-      @click="$message.success({ content: '一条背景有颜色的消息', background: true })"
+      @click="$message.success({ content: 'A message with background color', background: true })"
     >
-      背景颜色
+      Background Color
     </Button>
     <Button
       type="warning"
       @click="
-        $message.warning({ content: '一条字体和背景有颜色的消息', color: true, background: true })
+        $message.warning({
+          content: 'A message with background color and colorful text',
+          color: true,
+          background: true
+        })
       "
     >
-      字体和背景颜色
+      Both
     </Button>
     <Button
       type="error"
-      @click="$message.error({ content: '一条自定义颜色的消息', color: '#e88d1c' })"
+      @click="$message.error({ content: 'A message with custom color', color: '#e88d1c' })"
     >
-      自定义颜色
+      Custom Color
     </Button>
   </div>
 </template>

@@ -1,3 +1,3 @@
 ### Max Value
 
-通过 `max` 属性可以设置一个最大值，当徽标的值超过该值后会显示为加号状态。
+A max value can be set via the `max` prop, and it will be displayed as a plus sign when the passing value exceeds this value.

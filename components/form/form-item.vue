@@ -1,5 +1,22 @@
 <template>
-  <div :class="className">
+  <Column
+    v-bind="$attrs"
+    :class="className"
+    role="group"
+    tag="div"
+    :span="props.span"
+    :offset="props.offset"
+    :push="props.push"
+    :pull="props.pull"
+    :order="props.order"
+    :xs="props.xs"
+    :sm="props.sm"
+    :md="props.md"
+    :lg="props.lg"
+    :xl="props.xl"
+    :xxl="props.xxl"
+    :flex="props.flex"
+  >
     <input
       v-if="isNative"
       type="hidden"
@@ -9,9 +26,11 @@
     />
     <label
       v-if="hasLabel"
+      ref="labelEl"
       :class="nh.be('label')"
       :style="{ width: `${computedlabelWidth}px` }"
-      :for="props.htmlFor"
+      :for="props.htmlFor || props.prop"
+      @click="handleLabelClick"
     >
       <slot name="label">
         {{ props.label + (labelSuffix || '') }}
@@ -22,6 +41,8 @@
         [nh.be('control')]: true,
         [nh.bem('control', 'no-label')]: !hasLabel
       }"
+      role="alert"
+      aria-relevant="all"
       :style="controlStyle"
     >
       <slot></slot>
@@ -33,14 +54,13 @@
         </div>
       </transition>
     </div>
-  </div>
+  </Column>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
   ref,
-  reactive,
   computed,
   toRef,
   watch,
@@ -49,25 +69,34 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
+import { Column } from '@/components/column'
 import { useNameHelper, useProps, useLocale, booleanProp, makeSentence } from '@vexip-ui/config'
-import { isNull, isFunction } from '@vexip-ui/utils'
+import { isNull, isFunction, createEventEmitter } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
-import { VALIDATE_FIELD, CLEAR_FIELD } from './symbol'
+import { FIELD_OPTIONS, FORM_ACTIONS } from './symbol'
 
 import type { Ref, PropType } from 'vue'
+import type { ComponentState } from '@vexip-ui/config'
+import type { ColumnOptions } from '@/components/row'
 import type { FormProps, FormItemProps, FieldOptions } from './symbol'
-import type { Trigger, Rule } from './validator'
+import type { Rule } from './validator'
+
+const mediaProp = [Number, Object] as PropType<number | ColumnOptions>
 
 export default defineComponent({
   name: 'FormItem',
+  components: {
+    Column
+  },
+  inheritAttrs: true,
   props: {
     label: String,
     prop: String,
     rules: [Object, Array] as PropType<Rule | Rule[]>,
     labelWidth: Number,
-    required: Boolean,
+    required: booleanProp,
     htmlFor: String,
     errorTransition: String,
     defaultValue: Object as PropType<unknown>,
@@ -75,9 +104,22 @@ export default defineComponent({
     validateAll: booleanProp,
     hideAsterisk: booleanProp,
     hideLabel: booleanProp,
-    action: booleanProp
+    action: booleanProp,
+    span: Number,
+    offset: Number,
+    push: Number,
+    pull: Number,
+    order: Number,
+    xs: mediaProp,
+    sm: mediaProp,
+    md: mediaProp,
+    lg: mediaProp,
+    xl: mediaProp,
+    xxl: mediaProp,
+    flex: [Number, String]
   },
   setup(_props, { slots }) {
+    const nh = useNameHelper('form')
     const props = useProps('formItem', _props, {
       label: {
         default: '',
@@ -91,31 +133,63 @@ export default defineComponent({
       labelWidth: null,
       required: false,
       htmlFor: null,
-      errorTransition: 'vxp-fade',
+      errorTransition: () => nh.ns('fade'),
       defaultValue: null,
       hideErrorTip: false,
       validateAll: null,
       hideAsterisk: null,
       hideLabel: null,
-      action: false
+      action: false,
+      span: 24,
+      offset: null,
+      push: null,
+      pull: null,
+      order: null,
+      xs: null,
+      sm: null,
+      md: null,
+      lg: null,
+      xl: null,
+      xxl: null,
+      flex: null
     })
 
     const formProps = inject(FORM_PROPS, {})
+    const formActions = inject(FORM_ACTIONS, null)
+    const emitter = createEventEmitter()
 
-    const nh = useNameHelper('form')
+    const labelWidth = ref(0)
+    const labelEl = ref<HTMLInputElement | null>(null)
 
     const { isRequired, allRules } = useRules(props, formProps)
-    const { isError, errorTip, currentValue, validate, clearError, reset } = useField(
-      props,
-      formProps,
-      allRules
-    )
+    const { isError, errorTip, currentValue, validate, clearError, reset, getValue, setValue } =
+      useField(props, formProps, allRules)
 
-    const fieldObject = reactive({
-      prop: toRef(props, 'prop'),
+    const instances = new Set<any>()
+
+    const fieldObject = Object.freeze({
+      prop: computed(() => props.prop),
+      idFor: computed(() => props.prop),
+      state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
+      disabled: computed(() => !!formProps.disabled),
+      loading: computed(() => !!formProps.loading),
+      emitter,
+      labelWidth,
       validate,
       clearError,
-      reset
+      reset,
+      getValue,
+      setValue,
+      sync: (instance: any) => {
+        if (instances.size) {
+          console.warn('[vexip-ui]: must only be one control component under FormItem.')
+        }
+
+        instances.add(instance)
+      },
+      unsync: (instance: any) => {
+        instances.delete(instance)
+      }
     })
 
     useRelation(fieldObject)
@@ -139,14 +213,16 @@ export default defineComponent({
     })
     const computedlabelWidth = computed(() => {
       if (formProps.labelPosition) {
-        return formProps.labelPosition === 'top'
-          ? 0
-          : hideLabel.value
+        return getLabelWidth(
+          formProps.labelPosition === 'top'
             ? 0
-            : props.labelWidth || formProps.labelWidth || 80
+            : hideLabel.value
+              ? 0
+              : props.labelWidth || formProps.labelWidth || 80
+        )
       }
 
-      return hideLabel.value ? 0 : props.labelWidth || 80
+      return getLabelWidth(hideLabel.value ? 0 : props.labelWidth || 80)
     })
     const className = computed(() => {
       return {
@@ -176,6 +252,30 @@ export default defineComponent({
       return value
     })
 
+    onMounted(() => {
+      if (labelEl.value) {
+        const range = document.createRange()
+
+        range.setStart(labelEl.value, 0)
+        range.setEnd(labelEl.value, labelEl.value.childNodes.length)
+
+        const rangeWidth = range.getBoundingClientRect().width
+        const computedStyle = getComputedStyle(labelEl.value)
+        const horizontalPending =
+          parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
+
+        labelWidth.value = rangeWidth + horizontalPending
+      }
+    })
+
+    function getLabelWidth(width: number | 'auto') {
+      return width === 'auto' ? formActions?.getLabelWidth() || 80 : width
+    }
+
+    function handleLabelClick() {
+      emitter.emit('focus')
+    }
+
     return {
       props,
       nh,
@@ -190,7 +290,11 @@ export default defineComponent({
       useAsterisk,
       hasLabel,
       computedlabelWidth,
-      controlStyle
+      controlStyle,
+
+      labelEl,
+
+      handleLabelClick
     }
   }
 })
@@ -253,20 +357,28 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     }
   })
 
-  function getValue() {
-    if (!formProps.model || !props.prop) return ''
+  function getValue(defaultValue?: unknown) {
+    if (!formProps.model || !props.prop) return defaultValue
 
     try {
       return getValueByPath(formProps.model, props.prop, true)
     } catch (e) {
-      setValueByPath(formProps.model, props.prop, '', false)
+      setValueByPath(formProps.model, props.prop, defaultValue, false)
 
-      return ''
+      return defaultValue
     }
   }
 
-  function validate(type?: Trigger) {
-    return handleValidate(type)
+  function setValue(value: unknown, strict = false) {
+    if (!formProps.model || !props.prop) return
+
+    try {
+      return setValueByPath(formProps.model, props.prop, value, strict)
+    } catch (e) {}
+  }
+
+  function validate() {
+    return handleValidate()
   }
 
   function clearError() {
@@ -296,7 +408,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     return setValueByPath(formProps.model, props.prop, resetValue, true)
   }
 
-  async function handleValidate(type?: Trigger) {
+  async function handleValidate() {
     if (disabledValidate.value) {
       disabledValidate.value = false
 
@@ -310,9 +422,7 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     validating.value = true
 
     const value = currentValue.value
-    const useRules = type
-      ? allRules.value.filter(rule => !rule.trigger || rule.trigger === type)
-      : allRules.value
+    const useRules = allRules.value
     const model = formProps.model
 
     let errors: string[] | null = await asyncValidate(useRules, value, model, isValidateAll.value)
@@ -335,24 +445,32 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     return errors
   }
 
-  return { isError, errorTip, currentValue, validate, clearError, reset, getValue }
+  return {
+    isError,
+    errorTip,
+    currentValue,
+    validate,
+    clearError,
+    reset,
+    getValue,
+    setValue
+  }
 }
 
 function useRelation(field: FieldOptions) {
   const formFields = inject(FORM_FIELDS, null)
 
-  provide(VALIDATE_FIELD, field.validate)
-  provide(CLEAR_FIELD, field.clearError)
+  provide(FIELD_OPTIONS, field)
 
   onMounted(() => {
     if (formFields) {
-      formFields.value.add(field)
+      formFields.add(field)
     }
   })
 
   onBeforeUnmount(() => {
     if (formFields) {
-      formFields.value.delete(field)
+      formFields.delete(field)
     }
   })
 }

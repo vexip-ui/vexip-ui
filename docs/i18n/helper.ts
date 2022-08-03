@@ -41,6 +41,7 @@ export interface I18nConfig {
 
     Grid: string,
     Divider: string,
+    Layout: string,
     Row: string,
     Space: string,
     Split: string,
@@ -65,6 +66,7 @@ export interface I18nConfig {
     Switch: string,
     Textarea: string,
     TimePicker: string,
+    Transfer: string,
     Upload: string,
     Wheel: string,
 
@@ -102,6 +104,8 @@ export interface I18nConfig {
     ConfigProvider: string,
     Masker: string,
     NativeScroll: string,
+    Overflow: string,
+    Renderer: string,
     ResizeObserver: string,
     Scroll: string,
     Scrollbar: string,

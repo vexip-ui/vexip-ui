@@ -1,0 +1,263 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$transfer: () !default;
+$transfer: map.merge(
+  (
+    d-color: get-css-var('border-color-light-2'),
+    panel-bg-color: transparent,
+    panel-bg-color-disabled: get-css-var('fill-color-humble'),
+    panel-b-color: get-css-var('border-color-base'),
+    panel-b-color-hover: get-css-var('color-primary-light-1'),
+    panel-b-color-focus: get-css-var('transfer-panel-b-color-hover'),
+    panel-b-color-disabled: get-css-var('border-color-light-2'),
+    panel-s-color-focus: get-css-var('color-primary-opacity-6'),
+    panel-radius: get-css-var('radius-base'),
+    panel-width: 200px,
+    panel-height: 280px,
+    header-bg-color: get-css-var('fill-color-background'),
+    reverse-color-hover: get-css-var('color-primary-base'),
+    reverse-color-disabled: get-css-var('content-color-disabled'),
+    option-color-hitting: get-css-var('color-primary-base'),
+    option-color-disabled: get-css-var('content-color-disabled'),
+    option-bg-color: transparent,
+    option-bg-color-hover: get-css-var('fill-color-hover'),
+    option-bg-color-hitting: get-css-var('fill-color-humble'),
+    empty-color: get-css-var('content-color-placeholder')
+  ),
+  $transfer
+);
+
+.#{$namespace}-transfer {
+  &-vars {
+    @include define-preset-values('transfer', $transfer);
+  }
+
+  @mixin define-transfer-style($style-map) {
+    @include define-preset-style('transfer', $style-map);
+  }
+
+  $radius: get-css-var('transfer-panel-radius');
+
+  @include basis;
+
+  display: flex;
+  align-items: center;
+
+  $states: success, error, warning;
+
+  @each $state in $states {
+    &--#{$state} {
+      @include define-transfer-style(
+        (
+          panel-b-color: 'color' $state 'light-1',
+          panel-b-color-hover: 'color' $state 'light-1',
+          panel-s-color-focus: 'color' $state 'opacity-6',
+          reverse-color-hover: 'color' $state 'base'
+        )
+      );
+    }
+  }
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    width: get-css-var('transfer-panel-width');
+    height: get-css-var('transfer-panel-height');
+    user-select: none;
+    border: get-css-var('border-shape') get-css-var('transfer-panel-b-color');
+    border-radius: $radius;
+    outline: 0;
+    transition:
+      get-css-var('transition-background'),
+      get-css-var('transition-border'),
+      get-css-var('transition-shadow');
+
+    &:hover {
+      border-color: get-css-var('transfer-panel-b-color-hover');
+    }
+
+    &:focus,
+    &:focus-within {
+      border-color: get-css-var('transfer-panel-b-color-focus');
+      box-shadow: get-css-var('shadow-focus') get-css-var('transfer-panel-s-color-focus');
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+
+      &,
+      &:hover,
+      &:focus,
+      &:focus-within {
+        background-color: get-css-var('transfer-panel-bg-color-disabled');
+        border-color: get-css-var('transfer-panel-b-color-disabled');
+        box-shadow: none;
+      }
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px 9px;
+    background-color: get-css-var('transfer-header-bg-color');
+    border-bottom: get-css-var('border-shape') get-css-var('transfer-d-color');
+    border-radius: $radius $radius 0 0;
+  }
+
+  &__body {
+    flex: 1 0 0;
+    padding: 3px 0;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    padding: 7px 12px 6px;
+    border-top: get-css-var('border-shape') get-css-var('transfer-d-color');
+    border-radius: 0 0 $radius $radius;
+  }
+
+  &__checkbox {
+    margin-right: 6px;
+  }
+
+  &__reverse {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    margin-right: 6px;
+    cursor: pointer;
+    transition: get-css-var('transition-color');
+
+    &:hover {
+      color: get-css-var('transfer-reverse-color-hover');
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+
+      &,
+      &:hover {
+        color: get-css-var('transfer-reverse-color-disabled');
+      }
+    }
+  }
+
+  &__counter {
+    user-select: none;
+  }
+
+  &__title {
+    display: flex;
+    flex: 1 0 0;
+    justify-content: flex-end;
+  }
+
+  &__loading {
+    display: flex;
+    margin-left: 4px;
+  }
+
+  &__filter {
+    padding: 0 6px;
+    border-bottom: get-css-var('border-shape') get-css-var('transfer-d-color');
+
+    .#{$namespace}-input {
+      background-color: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    margin: 0 8px;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    padding: 0 12px;
+    cursor: pointer;
+    background-color: get-css-var('transfer-option-bg-color');
+    transition: get-css-var('transition-color'), get-css-var('transition-background');
+
+    &:hover {
+      background-color: get-css-var('transfer-option-bg-color-hover');
+    }
+
+    &--hitting {
+      color: get-css-var('transfer-option-color-hitting');
+      background-color: get-css-var('transfer-option-bg-color-hitting');
+    }
+
+    &--disabled {
+      color: get-css-var('transfer-option-color-disabled');
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: get-css-var('transfer-option-bg-color');
+      }
+    }
+  }
+
+  &__label {
+    padding: 0 4px;
+  }
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  &__page-input {
+    width: 60px;
+  }
+
+  &__page-plus,
+  &__page-minus {
+    cursor: pointer;
+    transition: get-css-var('transition-color');
+
+    &:hover {
+      color: get-css-var('color-primary-base');
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+
+      &,
+      &:hover {
+        color: get-css-var('content-color-disabled');
+      }
+    }
+  }
+
+  &__page-plus {
+    margin-right: 2px;
+  }
+
+  &__page-minus {
+    margin-left: 2px;
+  }
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 16px 16px 3px;
+    color: get-css-var('transfer-empty-color');
+    white-space: nowrap;
+    cursor: default;
+  }
+}

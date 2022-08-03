@@ -14,6 +14,8 @@ const theme = args.theme || args.t
 
 const langs = ['zh-CN']
 
+const devDir = resolve(__dirname, '../dev-server')
+
 main().catch(error => {
   logger.error(error)
   process.exit(1)
@@ -41,6 +43,8 @@ async function serveComponent() {
   const router = `
     import { createRouter, createWebHashHistory } from 'vue-router'
 
+    document.title = '${target} | Vexip UI'
+
     export const router = createRouter({
       history: createWebHashHistory('/'),
       routes: [
@@ -64,13 +68,13 @@ async function serveComponent() {
   `
 
   writeFileSync(
-    resolve(__dirname, '../example/router.ts'),
+    resolve(devDir, 'router.ts'),
     format(router, { ...(await resolveConfig(resolve('.prettierrc.js'))), parser: 'typescript' }),
     'utf-8'
   )
 
   await run('vite', ['serve'], {
-    cwd: resolve(__dirname, '../example'),
+    cwd: devDir,
     stdio: 'inherit',
     env: {
       NODE_ENV: prodMode ? 'production' : 'development',
@@ -85,7 +89,7 @@ async function serveComponent() {
 
 async function serveTheme() {
   await run('vite', ['serve'], {
-    cwd: resolve(__dirname, '../example'),
+    cwd: devDir,
     stdio: 'inherit',
     env: {
       NODE_ENV: prodMode ? 'production' : 'development',

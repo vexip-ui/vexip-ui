@@ -7,6 +7,7 @@ export function enUSLocale() {
 
     calendar: {
       year: '',
+      month: '',
       month1: 'Jan',
       month2: 'Feb',
       month3: 'Mar',
@@ -51,6 +52,12 @@ export function enUSLocale() {
 
     input: {
       placeholder: 'Please input'
+    },
+
+    layout: {
+      signOut: 'Sign out',
+      signType: 'Navigation Type',
+      majorColor: 'Major Color'
     },
 
     modal: {
@@ -102,6 +109,14 @@ export function enUSLocale() {
       cancel: 'Cancel'
     },
 
+    transfer: {
+      source: 'Source',
+      target: 'Target',
+      empty: 'No data',
+      reverse: 'Reverse selection',
+      search: 'Search (Ctrl + F)'
+    },
+
     tree: {
       empty: 'No data'
     },
@@ -115,6 +130,8 @@ export function enUSLocale() {
     viewer: {
       rotateRight: 'Rotate right',
       rotateLeft: 'Rotate left',
+      flipHorizontal: 'Flip horizontal',
+      flipVertical: 'Flip vertical',
       zoomIn: 'Zoom in',
       zoomOut: 'Zoom out',
       fullScreen: 'Full screen',

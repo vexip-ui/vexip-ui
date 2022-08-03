@@ -1,26 +1,26 @@
 ### Spin Props
 
-| Name            | Type                            | Description                                                                                                   | Default      | Since   |
-| --------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------ | ------- |
-| active          | `boolean`                       | 加载中的激活状态                                                                                              | `false`      | -       |
-| icon            | `Record<string, any>`           | 加载中显示的图标，使用插槽后失效                                                                              | `Spinner`    | -       |
-| spin            | `boolean`                       | 设置加载中的图标是使用旋转动画，默认情况下为脉冲动画，需要进一步定制化应使用插槽                              | `false`      | -       |
-| inner           | `boolean`                       | 设置是否为内嵌的加载中效果，一般用在不便于修改父级根元素的场合                                                | `false`      | -       |
-| delay           | `boolean \| number \| number[]` | 设置加载中的延迟显示或消失的毫秒数，传入 true 时默认为 500ms 延迟，传入数组可以分别控制显示和消失的延迟毫秒数 | `false`      | -       |
-| tip             | `string`                        | 设置加载中的提示内容                                                                                          | `''`         | -       |
-| mask-color      | `string`                        | 设置加载中的遮罩基础颜色                                                                                      | `''`         | -       |
-| transition-name | `string`                        | 设置加载中出现的过渡效果                                                                                      | `'vxp-fade'` | `2.0.0` |
+| Name            | Type                            | Description                                                                                                                                                                                                                         | Default      | Since   |
+| --------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------- |
+| active          | `boolean`                       | The active state of spin                                                                                                                                                                                                            | `false`      | -       |
+| icon            | `Record<string, any>`           | Icon displayed during loading, invalid after using slot                                                                                                                                                                             | `Spinner`    | -       |
+| spin            | `boolean`                       | Set the loading icon to use the spin animation, by default it is a pulse animation, if further customization is required, the slot should be used                                                                                   | `false`      | -       |
+| inner           | `boolean`                       | Set whether it is an inline loading effect, generally used when it is not convenient to modify the parent root element                                                                                                              | `false`      | -       |
+| delay           | `boolean \| number \| number[]` | Set the number of milliseconds for delay display or disappearance during loading. When true is passed in, the default is 500ms delay. Passing in an array can control the display and disappearance delay milliseconds respectively | `false`      | -       |
+| tip             | `string`                        | Set the tip content during loading                                                                                                                                                                                                  | `''`         | -       |
+| mask-color      | `string`                        | Set the mask base color in loading                                                                                                                                                                                                  | `''`         | -       |
+| transition-name | `string`                        | Set the transition effect to appear during loading                                                                                                                                                                                  | `'vxp-fade'` | `2.0.0` |
 
 ### Spin Slots
 
-| Name    | Description                                           | Parameters | Since |
-| ------- | ----------------------------------------------------- | ---------- | ----- |
-| default | 需要添加加载中效果的内容的插槽，开启 inner 模式时无效 | -          | -     |
-| icon    | 加载中的图标内容的插槽                                | -          | -     |
-| tip     | 加载中的提示内容的插槽                                | -          | -     |
+| Name    | Description                                                                       | Parameters | Since |
+| ------- | --------------------------------------------------------------------------------- | ---------- | ----- |
+| default | Slot to add the content of the loading effect, invalid when inner mode is enabled | -          | -     |
+| icon    | Slot for loading icon content                                                     | -          | -     |
+| tip     | Slot for loading tip content                                                      | -          | -     |
 
-### Spin 指令
+### Spin Directives
 
-| Name      | Description                                                                                               | Parameters                        | Since |
-| --------- | --------------------------------------------------------------------------------------------------------- | --------------------------------- | ----- |
-| v-loading | 用于为元素快速添加加载中效果，接收一个布尔值标记是否激活加载中效果，也可以传入 Spin 的 props 进一步定制化 | `(binding: boolean \| SpinProps)` | -     |
+| Name      | Description                                                                                                                                                                 | Parameters                        | Since |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ----- |
+| v-loading | Used to quickly add a loading effect to an element, receive a boolean value to mark whether to activate the loading effect, or pass in Spin props for further customization | `(binding: boolean \| SpinProps)` | -     |

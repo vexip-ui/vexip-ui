@@ -1,5 +1,5 @@
 <template>
-  <Article ref="article" :class="prefix">
+  <Article ref="article" :class="prefix" :anchor-level="3">
     <ResizeObserver @resize="refreshScroll?.()">
       <div :style="{ visibility: allLoaded ? undefined : 'hidden' }">
         <h1 :class="`${prefix}__title`">
@@ -23,9 +23,7 @@
         </div>
         <h2 class="anchor">
           <span class="anchor__title">
-            {{
-              getMetaName(language, { name: 'Demos', cname: '代码示例' }, false)
-            }}
+            {{ getMetaName(language, { name: 'Demos', cname: '代码示例' }, false) }}
           </span>
           <a class="anchor__link" href="">#</a>
         </h2>
@@ -62,15 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  defineAsyncComponent,
-  markRaw,
-  ref,
-  computed,
-  watch,
-  watchEffect,
-  inject
-} from 'vue'
+import { defineAsyncComponent, markRaw, ref, computed, watch, watchEffect, inject } from 'vue'
 import Article from './article.vue'
 import Demo from './demo.vue'
 import { Spinner } from '@vexip-ui/icons'
@@ -153,15 +143,21 @@ async function internalInit(name: string, language: string) {
 
   examples.value = demos.map(demo => {
     return {
-      demo: markRaw(defineAsyncComponent(() => import(`../demos/${name}/${demo}/demo.${language}.vue`))),
-      desc: markRaw(defineAsyncComponent(() => import(`../demos/${name}/${demo}/desc.${language}.md`))),
+      demo: markRaw(
+        defineAsyncComponent(() => import(`../demos/${name}/${demo}/demo.${language}.vue`))
+      ),
+      desc: markRaw(
+        defineAsyncComponent(() => import(`../demos/${name}/${demo}/desc.${language}.md`))
+      ),
       code: '',
       github: `demos/${name}/${demo}/demo.${language}.vue`
     }
   })
 
   demos.forEach(async (demo, index) => {
-    examples.value[index].code = (await import(`../demos/${name}/${demo}/demo.${language}.vue?raw`)).default
+    examples.value[index].code = (
+      await import(`../demos/${name}/${demo}/demo.${language}.vue?raw`)
+    ).default
   })
 }
 

@@ -11,18 +11,18 @@
     @change="listActive = true"
   >
     <template #default="{ isDragOver }">
-      <Alert icon type="info" :title="`自定义的内容${isDragOver ? '（松开进行上传）' : ''}`">
+      <Alert icon type="info" :title="`Custom Content${isDragOver ? ' (Drop to Upload)' : ''}`">
         <p style="margin: 0;">
-          将 Upload 组件作为一个包裹组件，在内部渲染自定义内容。
+          Use the Upload component as a wrapper to render custom content inside.
         </p>
         <p style="margin: 0;">
-          尝试将文件或文件夹拖拽进此处。
+          Try to drag and drop a file or folder into here.
         </p>
       </Alert>
     </template>
   </Upload>
   <Modal v-model:active="listActive" transfer title="上传列表">
-    <div style="width: 500px;">
+    <div style="max-width: 500px;">
       <UploadList :files="files" type="card" @delete="deleteFile"></UploadList>
     </div>
   </Modal>

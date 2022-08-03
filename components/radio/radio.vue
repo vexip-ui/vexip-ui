@@ -1,21 +1,35 @@
 <template>
   <label :class="className">
-    <span :class="nh.be('signal')"></span>
+    <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span :class="[nh.be('label'), props.labelClass]">
+      <CollapseTransition
+        v-if="isButton"
+        appear
+        horizontal
+        fade-effect
+      >
+        <div v-if="isLoading" :class="nh.be('loading')">
+          <Icon :spin="isLoadingSpin" :pulse="!isLoadingSpin" :icon="computedLoadingIcon"></Icon>
+        </div>
+      </CollapseTransition>
       <slot>{{ props.label }}</slot>
     </span>
     <input
+      ref="input"
       type="radio"
       :class="nh.be('input')"
       :checked="currentValue === props.label"
       :disabled="isDisabled"
+      :tabindex="props.tabIndex"
       @change="handleChange"
     />
   </label>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from 'vue'
+import { defineComponent, ref, computed, watch, inject, onMounted, onBeforeUnmount } from 'vue'
+import { CollapseTransition } from '@/components/collapse-transition'
+import { Icon } from '@/components/icon'
 import {
   useNameHelper,
   useProps,
@@ -24,14 +38,19 @@ import {
   stateProp,
   createSizeProp,
   createStateProp,
-  classProp
+  classProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
-import { VALIDATE_FIELD } from '@/components/form-item'
-import { isDefined, noop } from '@vexip-ui/utils'
+import { isDefined } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 export default defineComponent({
   name: 'Radio',
+  components: {
+    CollapseTransition,
+    Icon
+  },
   props: {
     size: sizeProp,
     state: stateProp,
@@ -40,9 +59,12 @@ export default defineComponent({
     labelClass: classProp,
     disabled: booleanProp,
     border: booleanProp,
-    disableValidate: booleanProp
+    tabIndex: [String, Number],
+    loading: booleanProp,
+    loadingLock: booleanProp,
+    onChange: eventProp<(value: string | number) => void>()
   },
-  emits: ['change', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('radio', _props, {
       size: createSizeProp(),
@@ -59,18 +81,27 @@ export default defineComponent({
       labelClass: null,
       disabled: false,
       border: false,
-      disableValidate: false
+      tabIndex: 0,
+      loading: false,
+      loadingLock: false
     })
 
     const groupState = inject(GROUP_STATE, null)
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('radio')
     const currentValue = ref(props.value)
 
-    const isDisabled = computed(() => {
-      return groupState?.disabled || props.disabled
-    })
+    const input = ref<HTMLElement | null>(null)
+
+    const size = computed(() => groupState?.size || props.size)
+    const state = computed(() => groupState?.state || props.state)
+    const isDisabled = computed(() => groupState?.disabled || props.disabled)
+    const isButton = computed(() => groupState?.button)
+    const isBorder = computed(() => groupState?.border || props.border)
+    const isLoading = computed(() => groupState?.loading || props.loading)
+    const LoadingIcon = computed(() => groupState?.loadingIcon || null!)
+    const isLoadingLock = computed(() => groupState?.loadingLock || false)
+    const isLoadingSpin = computed(() => groupState?.loadingSpin || false)
     const className = computed(() => {
       return [
         nh.b(),
@@ -78,9 +109,10 @@ export default defineComponent({
         {
           [nh.bm('checked')]: currentValue.value === props.label,
           [nh.bm('disabled')]: isDisabled.value,
-          [nh.bm(props.size)]: props.size !== 'default',
-          [nh.bm('border')]: props.border,
-          [nh.bm(props.state)]: props.state !== 'default'
+          [nh.bm('loading')]: isLoading.value && isLoadingLock.value,
+          [nh.bm(size.value)]: size.value !== 'default',
+          [nh.bm('border')]: isBorder.value,
+          [nh.bm(state.value)]: state.value !== 'default'
         }
       ]
     })
@@ -92,15 +124,11 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:value', value)
 
       if (groupState && value === props.label) {
         groupState.updateValue(value)
-      }
-
-      if (!groupState && !props.disableValidate) {
-        validateField()
       }
     })
 
@@ -112,9 +140,21 @@ export default defineComponent({
         },
         { immediate: true }
       )
+
+      onMounted(() => {
+        groupState.registerInput(input)
+      })
+
+      onBeforeUnmount(() => {
+        groupState.unregisterInput(input)
+      })
     }
 
     function handleChange() {
+      if (isDisabled.value || (isLoading.value && isLoadingLock.value)) {
+        return
+      }
+
       currentValue.value = props.label!
     }
 
@@ -125,6 +165,12 @@ export default defineComponent({
 
       className,
       isDisabled,
+      isButton,
+      isLoading,
+      computedLoadingIcon: LoadingIcon,
+      isLoadingSpin,
+
+      input,
 
       handleChange
     }

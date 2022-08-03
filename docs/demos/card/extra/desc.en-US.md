@@ -1,3 +1,3 @@
-### 拓展内容
+### Extra Content
 
-添加 `extra` 插槽可以添加右上角自定义内容，通常用于添加操作按钮。
+Adding an `extra` slot allows you to add top-right custom content, typically used to add action buttons.

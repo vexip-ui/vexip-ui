@@ -1,3 +1,5 @@
-### 简单例子
+### Simple Example
 
-渲染 `10000` 个元素的列表。
+Renders a list of `10000` elements.
+
+Since the height of elements is not fixed, each element will calculate its real height for correction after rendering, so the scrollbar may jitter during scrolling.

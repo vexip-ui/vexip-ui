@@ -24,6 +24,7 @@
               :key="component.name"
               :label="toKebabCase(component.name)"
               :data-name="toKebabCase(component.name)"
+              @focusin="moveMenuIntoView(toKebabCase(component.name))"
             >
               {{ $t(`components.${component.name}`) }}
               <span v-if="language !== 'en-US'" :class="`${prefix}__sub-name`">
@@ -54,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import { toKebabCase } from '@vexip-ui/utils'
@@ -64,6 +65,9 @@ import { getComponentConfig } from '../router/components'
 
 import type { Scroll } from 'vexip-ui'
 import type { ComponentConfig } from '../router/components'
+import type { Store } from '../symbol'
+
+const store = inject<Store>('store')!
 
 const prefix = 'components'
 
@@ -95,6 +99,12 @@ watch(
   { immediate: true }
 )
 watch(currentMenu, scrollToMenuItem)
+watch(
+  () => store.expanded,
+  value => {
+    value && setTimeout(() => scrollToMenuItem(currentMenu.value), 200)
+  }
+)
 
 function selectComponent(label: string) {
   router.push(`/${language.value}/components/${label}`)
@@ -103,22 +113,32 @@ function selectComponent(label: string) {
 function scrollToMenuItem(label: string) {
   const scrollEl = menuScroll.value?.$el
 
-  if (!label || !scrollEl || !wrapper.value?.$el) return
+  if (!label || !menuScroll.value || !scrollEl) return
 
-  const menuItemEl = wrapper.value.$el.querySelector(`.vxp-menu__item[data-name=${label}]`)
+  const menuItemEl = scrollEl.querySelector(`.vxp-menu__item[data-name=${label}]`)
 
   if (!menuItemEl) return
 
-  const scrollRect = scrollEl.getBoundingClientRect()
-  const menuItemRect = menuItemEl.getBoundingClientRect()
-
-  if (menuItemRect.y < scrollRect.y || menuItemRect.y >= scrollRect.y + scrollRect.height) {
-    menuScroll.value?.scrollToElement(menuItemEl, 500, -10)
-  }
+  menuScroll.value.ensureInView(menuItemEl, 500, 10)
+  menuItemEl.querySelector('[tabindex="0"]')?.focus()
 }
 
 function isNewComponent(config: ComponentConfig) {
   return config.since && config.since.startsWith(minorVersion)
+}
+
+function moveMenuIntoView(label: string) {
+  requestAnimationFrame(() => {
+    const scrollEl = menuScroll.value?.$el
+
+    if (!label || !menuScroll.value || !scrollEl) return
+
+    const menuItemEl = scrollEl.querySelector(`.vxp-menu__item[data-name=${label}]`)
+
+    if (!menuItemEl) return
+
+    menuScroll.value.ensureInView(menuItemEl, 0, 10)
+  })
 }
 </script>
 
@@ -132,6 +152,11 @@ function isNewComponent(config: ComponentConfig) {
   &__menu {
     padding: 20px 0;
     border-right: 0;
+
+    .vxp-menu__title {
+      display: flex;
+      align-items: center;
+    }
   }
 
   &__tag {
@@ -142,22 +167,13 @@ function isNewComponent(config: ComponentConfig) {
 
   &__sub-name {
     margin-left: 8px;
-    color: var(--vxp-content-color-third);
+    color: var(--vxp-content-color-secondary);
     transition: var(--vxp-transition-color);
 
     .vxp-menu__label:hover &,
     .vxp-menu__item--selected .vxp-menu__label & {
       color: var(--vxp-menu-label-color-hover);
     }
-  }
-
-  .vxp-select {
-    max-width: 400px;
-  }
-
-  .vxp-menu__title {
-    display: flex;
-    align-items: center;
   }
 }
 </style>

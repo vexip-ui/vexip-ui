@@ -1,23 +1,23 @@
 ### Tag Props
 
-| Name     | Type                                                                                                                                                             | Description                                                  | Default     | Since |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | ----------- | ----- |
-| type     | `'default' \| 'primary' \| 'success' \| 'error' \| 'warning' \| 'lime' \| 'pink' \| 'magenta' \| 'tomato' \| 'orange' \| 'cyan' \| 'navy' \| 'gold' \| 'purple'` | 设置标签的类型，包含状态类型和颜色类型                       | `'default'` | -     |
-| size     | `'small' \| 'default' \| 'large'`                                                                                                                                | 标签的大小，与其他组件不同的是，该属性会同时改变标签字体大小 | `'default'` | -     |
-| border   | `boolean`                                                                                                                                                        | 设置标签是否具有边框                                         | `false`     | -     |
-| closable | `boolean`                                                                                                                                                        | 设置标签是否具有关闭功能                                     | `false`     | -     |
-| color    | `string`                                                                                                                                                         | 设置标签的自定义颜色，其优先级高于 `type` 预设类型           | `null`      | -     |
-| simple   | `boolean`                                                                                                                                                        | 设置标签是否为简约模式                                       | `false`     | -     |
-| circle   | `boolean`                                                                                                                                                        | 设置标签是否为圆角标签                                       | `false`     | -     |
+| Name     | Type                                                                                                                                                              | Description                                                                                        | Default     | Since |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- | ----- |
+| type     | `'default' \| 'primary' \| 'success' \| 'error' \| 'warning' \| 'lime' \| 'pink' \| 'magenta' \| 'tomato' \| ' orange' \| 'cyan' \| 'navy' \| 'gold' \| 'purple'` | Set the type of label, including state type and color type                                         | `'default'` | -     |
+| size     | `'small' \| 'default' \| 'large'`                                                                                                                                 | The size of the label, unlike other components, this property will also change the label font size | `'default'` | -     |
+| border   | `boolean`                                                                                                                                                         | Set whether the label has a border                                                                 | `false`     | -     |
+| closable | `boolean`                                                                                                                                                         | Set whether the label has a close function                                                         | `false`     | -     |
+| color    | `string`                                                                                                                                                          | Set the custom color of the label, which takes precedence over the `type` preset type              | `null`      | -     |
+| simple   | `boolean`                                                                                                                                                         | Set whether the label is in simple mode                                                            | `false`     | -     |
+| circle   | `boolean`                                                                                                                                                         | Set whether the label is a rounded label                                                           | `false`     | -     |
 
 ### Tag Events
 
-| Name  | Description                                  | Parameters | Since |
-| ----- | -------------------------------------------- | ---------- | ----- |
-| close | 当标签可关闭，并点击关闭按钮时触发，无返回值 | -          | -     |
+| Name  | Description                                                                         | Parameters | Since |
+| ----- | ----------------------------------------------------------------------------------- | ---------- | ----- |
+| close | Emitted when the tab can be closed and the close button is clicked, no return value | -          | -     |
 
 ### Tag Slots
 
-| Name    | Description    | Parameters | Since |
-| ------- | -------------- | ---------- | ----- |
-| default | 标签内容的插槽 | -          | -     |
+| Name    | Description            | Parameters | Since |
+| ------- | ---------------------- | ---------- | ----- |
+| default | Slot for label content | -          | -     |

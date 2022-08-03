@@ -1,5 +1,12 @@
 <template>
-  <div :class="className" @pointerdown="handleTrackDown" @touchstart="disableEvent">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    tabindex="-1"
+    @pointerdown="handleTrackDown"
+    @touchstart="disableEvent"
+  >
     <div ref="track" :class="nh.be('track')">
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
@@ -11,7 +18,6 @@
     >
       <Tooltip
         ref="tooltip"
-        tabindex="0"
         theme="dark"
         trigger="custom"
         :transfer="props.tipTransfer"
@@ -22,35 +28,46 @@
         @tip-enter="showTooltip"
         @tip-leave="hideTooltip"
       >
-        <div
-          :class="nh.be('handler')"
-          @mouseenter="showTooltip"
-          @mouseleave="hideTooltip"
-        ></div>
-        <template #tip>
-          <slot name="tip" :value="truthValue">
-            {{ truthValue }}
-          </slot>
+        <template #trigger>
+          <div
+            ref="handler"
+            :class="[nh.be('handler'), props.loading && nh.bem('handler', 'active')]"
+            role="slider"
+            tabindex="0"
+            :aria-valuenow="truthValue"
+            :aria-valuemin="props.min"
+            :aria-valuemax="props.max"
+            :aria-disabled="props.disabled"
+            @mouseenter="showTooltip"
+            @mouseleave="hideTooltip"
+          ></div>
         </template>
+        <slot name="tip" :value="truthValue">
+          {{ truthValue }}
+        </slot>
       </Tooltip>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject, onMounted } from 'vue'
+import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { Tooltip } from '@/components/tooltip'
-import { VALIDATE_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
   booleanProp,
   booleanStringProp,
   stateProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
-import { useSetTimeout } from '@vexip-ui/mixins'
-import { noop, throttle } from '@vexip-ui/utils'
+import { useSetTimeout, useModifier } from '@vexip-ui/mixins'
+import { throttle } from '@vexip-ui/utils'
+
+import type { TooltipExposed } from '@/components/tooltip'
 
 export default defineComponent({
   name: 'Slider',
@@ -67,14 +84,20 @@ export default defineComponent({
     hideTip: booleanProp,
     tipTransfer: booleanStringProp,
     disabled: booleanProp,
-    disableValidate: booleanProp
+    loading: booleanProp,
+    loadingLock: booleanProp,
+    onChange: eventProp<(value: number) => void>(),
+    onInput: eventProp<(value: number) => void>()
   },
-  emits: ['change', 'input', 'change', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<number>(() => handler.value?.focus())
+
     const props = useProps('slider', _props, {
-      state: createStateProp(),
+      state: createStateProp(state),
       value: {
-        default: 0,
+        default: () => getFieldValue(0),
         static: true
       },
       min: 0,
@@ -86,11 +109,10 @@ export default defineComponent({
       vertical: false,
       hideTip: false,
       tipTransfer: null,
-      disabled: false,
-      disableValidate: false
+      disabled: () => disabled.value,
+      loading: () => loading.value,
+      loadingLock: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('slider')
     const currentValue = ref(props.value / props.step) // 按每 step 为 1 的 value
@@ -98,9 +120,27 @@ export default defineComponent({
     const isTipShow = ref(false)
 
     const { timer } = useSetTimeout()
+    const { target: wrapper } = useModifier({
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down || modifier.left || modifier.right) {
+          event.preventDefault()
+          event.stopPropagation()
+
+          if (modifier.up || modifier.left) {
+            currentValue.value -= 1
+          } else {
+            currentValue.value += 1
+          }
+
+          verifyValue()
+        }
+      }
+    })
 
     const track = ref<HTMLElement | null>(null)
-    const tooltip = ref<InstanceType<typeof Tooltip> | null>(null)
+    const tooltip = ref<(InstanceType<typeof Tooltip> & TooltipExposed) | null>(null)
+    const handler = ref<HTMLElement | null>(null)
 
     const className = computed(() => {
       return {
@@ -109,7 +149,8 @@ export default defineComponent({
         [nh.bm(props.state)]: props.state !== 'default',
         [nh.bm('vertical')]: props.vertical,
         [nh.bm('sliding')]: sliding.value,
-        [nh.bm('disabled')]: props.disabled
+        [nh.bm('disabled')]: props.disabled,
+        [nh.bm('loading')]: props.loading && props.loadingLock
       }
     })
     // 按每 step 算的最小值
@@ -163,12 +204,10 @@ export default defineComponent({
     }
 
     function emitChange() {
-      emit('change', truthValue.value)
+      setFieldValue(truthValue.value)
+      emitEvent(props.onChange, truthValue.value)
       emit('update:value', truthValue.value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      validateField()
     }
 
     let trackRect: DOMRect | null = null
@@ -192,11 +231,11 @@ export default defineComponent({
         tooltip.value.updatePopper()
       }
 
-      emit('input', truthValue.value)
+      emitEvent(props.onInput, truthValue.value)
     })
 
     function handleTrackDown(event: PointerEvent) {
-      if (!track.value || props.disabled) return
+      if (!track.value || props.disabled || (props.loading && props.loadingLock)) return
 
       window.clearTimeout(timer.sliding)
       event.stopPropagation()
@@ -221,7 +260,7 @@ export default defineComponent({
     }
 
     function handleMoveStart(event: PointerEvent) {
-      if (!track.value || props.disabled) return
+      if (!track.value || props.disabled || (props.loading && props.loadingLock)) return
 
       window.clearTimeout(timer.sliding)
       event.stopPropagation()
@@ -279,6 +318,7 @@ export default defineComponent({
     return {
       props,
       nh,
+      idFor,
       sliding,
       isTipShow,
 
@@ -287,8 +327,10 @@ export default defineComponent({
       fillerStyle,
       handlerStyle,
 
+      wrapper,
       track,
       tooltip,
+      handler,
 
       handleTrackDown,
       handleMoveStart,

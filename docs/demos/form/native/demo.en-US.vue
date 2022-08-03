@@ -1,21 +1,21 @@
 <template>
   <Form
     ref="form"
-    style="width: 300px;"
+    style="max-width: 300px;"
     :model="loginForm"
     hide-label
     action="/components/form"
     target="_blank"
   >
     <FormItem label="username" prop="username">
-      <Input v-model:value="loginForm.username" placeholder="Place input account">
+      <Input placeholder="Place input account">
         <template #prefix>
           <Icon><User></User></Icon>
         </template>
       </Input>
     </FormItem>
     <FormItem label="password" prop="password">
-      <Input v-model:value="loginForm.password" type="password" placeholder="Place input password">
+      <Input type="password" placeholder="Place input password">
         <template #prefix>
           <Icon><Lock></Lock></Icon>
         </template>

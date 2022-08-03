@@ -1,95 +1,117 @@
 <template>
-  <Form
-    ref="form"
-    style="width: 500px;"
-    :model="formModel"
-    :label-width="100"
-  >
-    <FormItem required label="Input" prop="input">
-      <Input v-model:value="formModel.input"></Input>
-    </FormItem>
-    <FormItem required label="Select" prop="select">
-      <Select v-model:value="formModel.select">
-        <Option>Option 1</Option>
-        <Option>Option 2</Option>
-        <Option>Option 3</Option>
-      </Select>
-    </FormItem>
-    <FormItem required label="Date" prop="date">
-      <DatePicker v-model:value="formModel.date" clearable></DatePicker>
-    </FormItem>
-    <FormItem required label="Time" prop="time">
-      <TimePicker v-model:value="formModel.time"></TimePicker>
-    </FormItem>
-    <FormItem required label="Number" prop="number">
-      <NumberInput v-model:value="formModel.number"></NumberInput>
-    </FormItem>
-    <FormItem required label="Color" prop="color">
-      <ColorPicker v-model:value="formModel.color"></ColorPicker>
-    </FormItem>
-    <FormItem required label="Checkbox" prop="checkbox">
-      <CheckboxGroup v-model:values="formModel.checkbox">
-        <Checkbox label="Option 1" value="1"></Checkbox>
-        <Checkbox label="Option 2" value="2"></Checkbox>
-        <Checkbox label="Option 3" value="3"></Checkbox>
-      </CheckboxGroup>
-    </FormItem>
-    <FormItem required label="Radio" prop="radio">
-      <RadioGroup v-model:value="formModel.radio">
-        <Radio label="Option 1"></Radio>
-        <Radio label="Option 2"></Radio>
-        <Radio label="Option 3"></Radio>
-      </RadioGroup>
-    </FormItem>
-    <FormItem required label="Textarea" prop="textarea">
-      <Textarea v-model:value="formModel.textarea"></Textarea>
-    </FormItem>
-    <FormItem action>
-      <Button type="primary" @click="handleSubmit()">
-        Submit
-      </Button>
-      <Button @click="handleReset()">
-        Reset
-      </Button>
-    </FormItem>
-  </Form>
+  <ConfigProvider :props="providedProps">
+    <Form ref="form" style="max-width: 500px;" :model="formModel">
+      <FormItem label="Input" prop="input">
+        <Input></Input>
+      </FormItem>
+      <FormItem label="Cascader" prop="cascader">
+        <Cascader :options="treeOptions"></Cascader>
+      </FormItem>
+      <FormItem label="Select" prop="select">
+        <Select :options="options"></Select>
+      </FormItem>
+      <FormItem label="Date" prop="date">
+        <DatePicker></DatePicker>
+      </FormItem>
+      <FormItem label="Time" prop="time">
+        <TimePicker></TimePicker>
+      </FormItem>
+      <FormItem label="Number" prop="number">
+        <NumberInput></NumberInput>
+      </FormItem>
+      <FormItem label="Color" prop="color">
+        <ColorPicker format="hex"></ColorPicker>
+      </FormItem>
+      <FormItem label="Checkbox" prop="checkbox">
+        <CheckboxGroup :options="options"></CheckboxGroup>
+      </FormItem>
+      <FormItem label="Radio" prop="radio">
+        <RadioGroup :options="options"></RadioGroup>
+      </FormItem>
+      <FormItem label="Slider" prop="slider">
+        <Slider></Slider>
+      </FormItem>
+      <FormItem label="Switch" prop="switch">
+        <Switch></Switch>
+      </FormItem>
+      <FormItem label="Textarea" prop="textarea">
+        <Textarea></Textarea>
+      </FormItem>
+      <FormItem label="Transfer" prop="transfer">
+        <Transfer :options="options"></Transfer>
+      </FormItem>
+      <FormItem label="Wheel" prop="wheel">
+        <Wheel insert-empty :options="options"></Wheel>
+      </FormItem>
+      <FormItem label="Upload" prop="upload">
+        <Upload allow-drag></Upload>
+      </FormItem>
+      <FormItem action>
+        <Button type="primary" @click="handleSubmit()">
+          Submit
+        </Button>
+        <Button @click="handleReset()">
+          Reset
+        </Button>
+      </FormItem>
+    </Form>
+  </ConfigProvider>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, reactive } from 'vue'
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
 
 import type { Form } from 'vexip-ui'
 
-export default defineComponent({
-  setup() {
-    const formModel = reactive({
-      input: '',
-      date: '',
-      time: '',
-      number: null,
-      select: '',
-      color: '',
-      checkbox: [],
-      radio: '',
-      textarea: ''
-    })
+const providedProps = {
+  default: { clearable: true },
+  formItem: { required: true }
+}
 
-    const form = ref<InstanceType<typeof Form> | null>(null)
-
-    function handleSubmit() {
-      form.value?.validate()
-    }
-
-    function handleReset() {
-      form.value?.reset()
-    }
-
-    return {
-      formModel,
-      form,
-      handleSubmit,
-      handleReset
-    }
-  }
+const formModel = reactive({
+  input: '',
+  cascader: [],
+  date: '',
+  time: '',
+  number: null,
+  select: '',
+  color: '',
+  checkbox: [],
+  radio: '',
+  slider: 0,
+  switch: false,
+  textarea: '',
+  transfer: [],
+  wheel: '',
+  upload: []
 })
+
+const form = ref<InstanceType<typeof Form> | null>(null)
+
+const options = ['Option 1', 'Option 2', 'Option 3']
+const treeOptions = createOptions(3)
+
+function createOptions(depth: number, prefix = 'Op', iterator = 1) {
+  const options: Array<Record<string, any>> = []
+  const isLeaf = iterator === depth
+
+  for (let i = 1; i <= 10; ++i) {
+    options.push({
+      value: `${prefix}-${i}`,
+      label: `${prefix}-${i}`,
+      disabled: i % 4 === 0,
+      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1)
+    })
+  }
+
+  return options
+}
+
+function handleSubmit() {
+  form.value?.validate()
+}
+
+function handleReset() {
+  form.value?.reset()
+}
 </script>

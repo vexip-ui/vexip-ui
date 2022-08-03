@@ -60,6 +60,7 @@ export default defineComponent({
     tipMaxWidth: [Number, String]
   },
   setup(_props) {
+    const nh = useNameHelper('ellipsis')
     const props = useProps('ellipsis', _props, {
       placement: {
         default: 'top',
@@ -67,7 +68,7 @@ export default defineComponent({
       },
       transfer: 'body',
       noHover: false,
-      transitionName: 'vxp-fade',
+      transitionName: () => nh.ns('fade'),
       tooltipTheme: {
         default: 'dark' as TooltipTheme,
         validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
@@ -76,7 +77,6 @@ export default defineComponent({
       tipMaxWidth: 500
     })
 
-    const nh = useNameHelper('ellipsis')
     const tooltipNh = useNameHelper('tooltip')
     const visible = ref(false)
     const active = ref(false)

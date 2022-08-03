@@ -29,11 +29,12 @@
       </template>
     </div>
     <div :class="nh.be('actions')">
-      <Button :class="nh.be('button')" @click="handleCancel">
+      <Button :class="nh.be('button')" no-pulse @click="handleCancel">
         {{ cancelTextR || locale.cancel }}
       </Button>
       <Button
         :class="nh.be('button')"
+        no-pulse
         :type="confirmTypeR"
         :loading="loading"
         @click="handleConfirm"
@@ -62,7 +63,14 @@ const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
 
-const confirmTypes = Object.freeze<ConfirmType>(['default', 'primary', 'info', 'success', 'warning', 'error'])
+const confirmTypes = Object.freeze<ConfirmType>([
+  'default',
+  'primary',
+  'info',
+  'success',
+  'warning',
+  'error'
+])
 
 export default defineComponent({
   name: 'Confirm',
@@ -85,7 +93,6 @@ export default defineComponent({
     renderer: Function as PropType<() => any>,
     iconColor: String
   },
-  emits: ['confirm', 'cancel'],
   setup(_props) {
     const props = useProps('confirm', _props, {
       top: {

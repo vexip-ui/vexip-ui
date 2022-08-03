@@ -11,7 +11,7 @@ import { Bubble } from './bubble'
 import { Button } from './button'
 import { ButtonGroup } from './button-group'
 import { Calendar } from './calendar'
-import { CalendarPane } from './calendar-pane'
+import { CalendarPanel } from './calendar-panel'
 import { Card } from './card'
 import { Carousel } from './carousel'
 import { CarouselItem } from './carousel-item'
@@ -20,7 +20,7 @@ import { Cell } from './cell'
 import { Checkbox } from './checkbox'
 import { CheckboxGroup } from './checkbox-group'
 import { Collapse } from './collapse'
-import { CollapsePane } from './collapse-pane'
+import { CollapsePanel } from './collapse-panel'
 import { CollapseTransition } from './collapse-transition'
 import { ColorPicker } from './color-picker'
 import { Column } from './column'
@@ -42,6 +42,10 @@ import { Grid } from './grid'
 import { Highlight } from './highlight'
 import { Icon } from './icon'
 import { Input } from './input'
+import { Layout } from './layout'
+import { LayoutAside } from './layout-aside'
+import { LayoutFooter } from './layout-footer'
+import { LayoutHeader } from './layout-header'
 import { Linker } from './linker'
 import { Loading } from './loading'
 import { Masker } from './masker'
@@ -55,6 +59,7 @@ import { Notice } from './notice'
 import { NumberInput } from './number-input'
 import { Option } from './option'
 import { OptionGroup } from './option-group'
+import { Overflow } from './overflow'
 import { Pagination } from './pagination'
 import { Popup } from './popup'
 import { Portal } from './portal'
@@ -76,7 +81,7 @@ import { Split } from './split'
 import { Switch } from './switch'
 import { TabNav } from './tab-nav'
 import { TabNavItem } from './tab-nav-item'
-import { TabPane } from './tab-pane'
+import { TabPanel } from './tab-panel'
 import { Table } from './table'
 import { TableColumn } from './table-column'
 import { Tabs } from './tabs'
@@ -87,6 +92,7 @@ import { TimePicker } from './time-picker'
 import { Timeline } from './timeline'
 import { TimelineItem } from './timeline-item'
 import { Tooltip } from './tooltip'
+import { Transfer } from './transfer'
 import { Tree } from './tree'
 import { Upload } from './upload'
 import { UploadFile } from './upload-file'
@@ -94,7 +100,6 @@ import { UploadList } from './upload-list'
 import { Viewer } from './viewer'
 import { VirtualList } from './virtual-list'
 import { Wheel } from './wheel'
-import { WheelItem } from './wheel-item'
 
 import { buildInstall } from './create'
 
@@ -116,7 +121,7 @@ const components = [
   Button,
   ButtonGroup,
   Calendar,
-  CalendarPane,
+  CalendarPanel,
   Card,
   Carousel,
   CarouselItem,
@@ -125,7 +130,7 @@ const components = [
   Checkbox,
   CheckboxGroup,
   Collapse,
-  CollapsePane,
+  CollapsePanel,
   CollapseTransition,
   ColorPicker,
   Column,
@@ -145,6 +150,10 @@ const components = [
   Highlight,
   Icon,
   Input,
+  Layout,
+  LayoutAside,
+  LayoutFooter,
+  LayoutHeader,
   Linker,
   Masker,
   Menu,
@@ -155,6 +164,7 @@ const components = [
   NumberInput,
   Option,
   OptionGroup,
+  Overflow,
   Pagination,
   Popup,
   Portal,
@@ -176,7 +186,7 @@ const components = [
   Switch,
   TabNav,
   TabNavItem,
-  TabPane,
+  TabPanel,
   Table,
   TableColumn,
   Tabs,
@@ -187,6 +197,7 @@ const components = [
   Timeline,
   TimelineItem,
   Tooltip,
+  Transfer,
   Tree,
   Upload,
   UploadFile,
@@ -194,7 +205,6 @@ const components = [
   Viewer,
   VirtualList,
   Wheel,
-  WheelItem,
   // plugins
   Confirm,
   Contextmenu,
@@ -220,7 +230,7 @@ export {
   Button,
   ButtonGroup,
   Calendar,
-  CalendarPane,
+  CalendarPanel,
   Card,
   Carousel,
   CarouselItem,
@@ -229,7 +239,7 @@ export {
   Checkbox,
   CheckboxGroup,
   Collapse,
-  CollapsePane,
+  CollapsePanel,
   CollapseTransition,
   ColorPicker,
   Column,
@@ -251,6 +261,10 @@ export {
   Highlight,
   Icon,
   Input,
+  Layout,
+  LayoutAside,
+  LayoutFooter,
+  LayoutHeader,
   Linker,
   Loading,
   Masker,
@@ -264,6 +278,7 @@ export {
   NumberInput,
   Option,
   OptionGroup,
+  Overflow,
   Pagination,
   Popup,
   Portal,
@@ -285,7 +300,7 @@ export {
   Switch,
   TabNav,
   TabNavItem,
-  TabPane,
+  TabPanel,
   Table,
   TableColumn,
   Tabs,
@@ -296,12 +311,12 @@ export {
   Timeline,
   TimelineItem,
   Tooltip,
+  Transfer,
   Tree,
   Upload,
   UploadFile,
   UploadList,
   Viewer,
   VirtualList,
-  Wheel,
-  WheelItem
+  Wheel
 }

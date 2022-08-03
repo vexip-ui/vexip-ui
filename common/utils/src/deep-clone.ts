@@ -1,8 +1,7 @@
 /**
  * 深度拷贝对象或数组 (避免一层死循环)
- * @param obj - 需要拷贝的对象或数组
  *
- * @returns 克隆后的对象或数组
+ * @param obj 需要拷贝的对象或数组
  */
 export function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== 'object') {

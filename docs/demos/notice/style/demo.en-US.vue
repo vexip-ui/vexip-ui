@@ -1,16 +1,49 @@
 <template>
   <div>
-    <Button type="primary" @click="$notice.info({ title: 'Notice Title', content: '一条字体有颜色的提示消息', color: true })">
-      字体颜色
+    <Button
+      type="primary"
+      @click="
+        $notice.info({ title: 'Notice Title', content: 'A colorful text notice', color: true })
+      "
+    >
+      Colorful Text
     </Button>
-    <Button type="success" @click="$notice.success({ title: 'Notice Title', content: '一条背景有颜色的提示消息', background: true })">
-      背景颜色
+    <Button
+      type="success"
+      @click="
+        $notice.success({
+          title: 'Notice Title',
+          content: 'A notice with background color',
+          background: true
+        })
+      "
+    >
+      Background Color
     </Button>
-    <Button type="warning" @click="$notice.warning({ title: 'Notice Title', content: '一条字体和背景有颜色的提示消息', color: true, background: true })">
-      字体和背景颜色
+    <Button
+      type="warning"
+      @click="
+        $notice.warning({
+          title: 'Notice Title',
+          content: 'A notice with background color and colorful text',
+          color: true,
+          background: true
+        })
+      "
+    >
+      Both
     </Button>
-    <Button type="error" @click="$notice.error({ title: 'Notice Title', content: '一条自定义颜色的提示消息', color: '#e88d1c' })">
-      自定义颜色
+    <Button
+      type="error"
+      @click="
+        $notice.error({
+          title: 'Notice Title',
+          content: 'A notice with custom color',
+          color: '#e88d1c'
+        })
+      "
+    >
+      Custom Color
     </Button>
   </div>
 </template>

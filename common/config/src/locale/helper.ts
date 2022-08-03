@@ -10,6 +10,7 @@ export interface LocaleConfig {
 
   calendar: {
     year: string,
+    month: string,
     month1: string,
     month2: string,
     month3: string,
@@ -54,6 +55,12 @@ export interface LocaleConfig {
 
   input: {
     placeholder: string
+  },
+
+  layout: {
+    signOut: string,
+    signType: string,
+    majorColor: string
   },
 
   modal: {
@@ -105,6 +112,14 @@ export interface LocaleConfig {
     cancel: string
   },
 
+  transfer: {
+    source: string,
+    target: string,
+    empty: string,
+    reverse: string,
+    search: string
+  },
+
   tree: {
     empty: string
   },
@@ -118,6 +133,8 @@ export interface LocaleConfig {
   viewer: {
     rotateRight: string,
     rotateLeft: string,
+    flipHorizontal: string,
+    flipVertical: string,
     zoomIn: string,
     zoomOut: string,
     fullScreen: string,

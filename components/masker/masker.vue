@@ -1,10 +1,16 @@
 <template>
   <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
     <div
-      v-show="wrapShow"
       ref="wrapper"
       :class="className"
+      tabindex="-1"
+      :style="{
+        pointerEvents: wrapShow ? undefined : 'none',
+        visibility: wrapShow ? undefined : 'hidden'
+      }"
       v-bind="$attrs"
+      @focusin="handleFocusIn"
+      @keydown.escape.prevent="handleClose"
     >
       <transition
         v-if="!props.disabled"
@@ -17,9 +23,21 @@
           <div :class="nh.be('mask-inner')"></div>
         </div>
       </transition>
+      <span
+        ref="topTrap"
+        tabindex="0"
+        aria-hidden="true"
+        style="width: 0; height: 0; overflow: hidden; outline: none;"
+      ></span>
       <transition :appear="props.autoRemove" :name="props.transitionName">
         <slot :show="currentActive"></slot>
       </transition>
+      <span
+        ref="bottomTrap"
+        tabindex="0"
+        aria-hidden="true"
+        style="width: 0; height: 0; overflow: hidden; outline: none;"
+      ></span>
     </div>
   </Portal>
 </template>
@@ -27,8 +45,15 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, booleanProp, booleanStringProp } from '@vexip-ui/config'
-import { isPromise } from '@vexip-ui/utils'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanStringProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
+import { isPromise, queryTabables } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 
@@ -46,10 +71,15 @@ export default defineComponent({
     disabled: booleanProp,
     onBeforeClose: Function as PropType<() => any | Promise<any>>,
     transfer: booleanStringProp,
-    autoRemove: booleanProp
+    autoRemove: booleanProp,
+    onToggle: eventProp<(active: boolean) => void>(),
+    onClose: eventProp(),
+    onHide: eventProp(),
+    onShow: eventProp()
   },
-  emits: ['toggle', 'close', 'hide', 'show', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
+    const nh = useNameHelper('masker')
     const props = useProps('masker', _props, {
       active: {
         default: false,
@@ -57,8 +87,8 @@ export default defineComponent({
       },
       closable: false,
       inner: false,
-      maskTransition: 'vxp-fade',
-      transitionName: 'vxp-fade',
+      maskTransition: () => nh.ns('fade'),
+      transitionName: () => nh.ns('fade'),
       disabled: false,
       onBeforeClose: {
         default: null,
@@ -68,11 +98,15 @@ export default defineComponent({
       autoRemove: false
     })
 
-    const nh = useNameHelper('masker')
     const currentActive = ref(props.active)
     const wrapShow = ref(props.active)
 
     const wrapper = ref<HTMLElement | null>(null)
+    const topTrap = ref<HTMLElement | null>(null)
+    const bottomTrap = ref<HTMLElement | null>(null)
+
+    let showing = false
+    let prevFocusdEl: HTMLElement | null = null
 
     const className = computed(() => {
       return [
@@ -87,7 +121,11 @@ export default defineComponent({
     const transferTo = computed(() => {
       return props.inner
         ? ''
-        : typeof props.transfer === 'boolean' ? (props.transfer ? 'body' : '') : props.transfer
+        : typeof props.transfer === 'boolean'
+          ? props.transfer
+            ? 'body'
+            : ''
+          : props.transfer
     })
 
     watch(
@@ -101,7 +139,18 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('toggle', value)
+      if (!value) {
+        showing = false
+
+        if (prevFocusdEl) {
+          prevFocusdEl.focus()
+          prevFocusdEl = null
+        }
+      } else {
+        prevFocusdEl = document.activeElement as HTMLElement
+      }
+
+      emitEvent(props.onToggle, value)
       emit('update:active', value)
     })
 
@@ -125,7 +174,7 @@ export default defineComponent({
       if (result !== false) {
         nextTick(() => {
           toggleActive(false)
-          emit('close')
+          emitEvent(props.onClose)
         })
       }
     }
@@ -133,14 +182,41 @@ export default defineComponent({
     function afterClose() {
       nextTick(() => {
         wrapShow.value = false
-        emit('hide')
+        emitEvent(props.onHide)
       })
     }
 
     function afterOpen() {
+      const activeEl = document && document.activeElement
+
+      if (!activeEl || !wrapper.value || !wrapper.value.contains(activeEl)) {
+        topTrap.value?.focus()
+      }
+
       nextTick(() => {
-        emit('show')
+        showing = true
+        emitEvent(props.onShow)
       })
+    }
+
+    function handleFocusIn(event: FocusEvent) {
+      const target = event.target as HTMLElement
+
+      if (!showing || !wrapper.value || !target || !topTrap.value || !bottomTrap.value) {
+        return
+      }
+
+      const tabables = queryTabables(wrapper.value)
+
+      if (!tabables.length) {
+        return
+      }
+
+      if (topTrap.value === target) {
+        tabables.at(-1)!.focus()
+      } else if (bottomTrap.value === target) {
+        tabables[0].focus()
+      }
     }
 
     return {
@@ -153,10 +229,13 @@ export default defineComponent({
       transferTo,
 
       wrapper,
+      topTrap,
+      bottomTrap,
 
       handleClose,
       afterClose,
-      afterOpen
+      afterOpen,
+      handleFocusIn
     }
   }
 })

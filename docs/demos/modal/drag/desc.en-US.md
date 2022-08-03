@@ -1,3 +1,3 @@
-### 可拖拽
+### Draggable
 
-添加 `draggable` 属性可以开启模态框的拖拽功能。
+Add the `draggable` prop to enable dragging of modals.

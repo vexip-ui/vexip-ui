@@ -1,10 +1,10 @@
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useMounted, isHiddenElement } from '@vexip-ui/mixins'
-import { throttle, multipleFixed, boundRange } from '@vexip-ui/utils'
+import { multipleFixed, boundRange } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
 import type { Ref } from 'vue'
-import type { ScrollMode } from './symbol'
+import type { ScrollMode } from '@/components/scroll'
 
 export function useScrollWrapper({
   mode,
@@ -44,10 +44,20 @@ export function useScrollWrapper({
     return content.el ? content.scrollHeight - content.offsetHeight : 0
   })
   const enableXScroll = computed(() => {
-    return !disabled.value && mode.value !== 'vertical' && !!content.el && content.scrollWidth > content.offsetWidth
+    return (
+      !disabled.value &&
+      mode.value !== 'vertical' &&
+      !!content.el &&
+      content.scrollWidth > content.offsetWidth
+    )
   })
   const enableYScroll = computed(() => {
-    return !disabled.value && mode.value !== 'horizontal' && !!content.el && content.scrollHeight > content.offsetHeight
+    return (
+      !disabled.value &&
+      mode.value !== 'horizontal' &&
+      !!content.el &&
+      content.scrollHeight > content.offsetHeight
+    )
   })
   const xBarLength = computed(() => {
     if (content.el) {
@@ -127,10 +137,10 @@ export function useScrollWrapper({
     }
   }
 
-  const handleResize = throttle((entity: ResizeObserverEntry) => {
+  function handleResize(entity: ResizeObserverEntry) {
     refresh()
     onResize?.(entity)
-  })
+  }
 
   onMounted(() => {
     refresh()

@@ -12,5 +12,6 @@
   "expand",
   "pagination",
   "draggable",
-  "virtual"
+  "virtual",
+  "toggle-data"
 ]

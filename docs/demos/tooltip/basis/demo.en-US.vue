@@ -1,10 +1,8 @@
 <template>
-  <Tooltip style="display: inline-block;">
-    <Button>
-      Tooltip
-    </Button>
-    <template #tip>
-      Some tip content
+  <Tooltip>
+    <template #trigger>
+      <Button> Tooltip </Button>
     </template>
+    Some tip content
   </Tooltip>
 </template>

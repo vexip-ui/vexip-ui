@@ -1,7 +1,7 @@
 ### Custom Icon
 
-设置 `icon` 属性可以设置确认框的图标。
+Set the `icon` prop to set the icon of the confirm.
 
-设置 `iconColor` 属性可以设置确认框图标的颜色。
+Set the `iconColor` prop to set the color of the confirm icon.
 
-当需要更细粒度地控制图标时，可以设置 `icon` 为函数，传函数时为自定义渲染方法。
+When you need more fine-grained control of the icon, you can set `icon` as a function, it will as a custom rendering method.

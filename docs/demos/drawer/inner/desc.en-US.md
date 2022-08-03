@@ -1,3 +1,3 @@
 ### Inner Drawer
 
-添加 `inner` 属性可以使抽屉根据最近的具有定位属性的元素进行定位，从而实现内置抽屉。
+Adding the `inner` prop enables the drawer to be positioned according to the nearest element with the positioned attribute, thus implementing a built-in drawer.

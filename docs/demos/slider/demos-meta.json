@@ -2,5 +2,7 @@
   "basis",
   "maxmin",
   "step",
-  "vertical"
+  "vertical",
+  "loading",
+  "state"
 ]

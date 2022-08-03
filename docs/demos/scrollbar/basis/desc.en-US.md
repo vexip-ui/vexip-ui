@@ -1,3 +1,3 @@
 ### Basis Usage
 
-单独使用有点麻烦，需要手动同步滚动位置信息。
+It's a bit cumbersome to use alone, requiring manual synchronization of scroll position information.

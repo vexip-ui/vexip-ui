@@ -1,9 +1,17 @@
 <template>
-  <div ref="wrapper" :class="className" @clickoutside="handleClickOutside">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    @keydown.tab.stop="handleTabDown"
+    @keydown.space="handleSpaceDown"
+    @keydown.escape="handleEscDown"
+  >
     <div
       ref="reference"
-      :class="[nh.be('trigger'), currentVisible ? nh.bem('trigger', 'visible') : '']"
-      @click="handleTriggerClick"
+      :class="selectorClass"
+      tabindex="0"
+      @click="toggleVisible"
     >
       <slot
         name="control"
@@ -11,6 +19,15 @@
         :alpha="currentAlpha"
         :empty="isEmpty"
       >
+        <div
+          v-if="hasPrefix"
+          :class="[nh.be('icon'), nh.be('prefix')]"
+          :style="{ color: props.prefixColor }"
+        >
+          <slot name="prefix">
+            <Icon :icon="props.prefix"></Icon>
+          </slot>
+        </div>
         <div :class="nh.be('control')">
           <div :class="nh.be('marker')">
             <Icon v-if="!currentVisible && isEmpty">
@@ -27,18 +44,60 @@
               }"
             ></div>
           </div>
-          <div :class="nh.be('arrow')">
-            <Icon><ChevronDown></ChevronDown></Icon>
-          </div>
         </div>
+        <div
+          v-if="!props.noSuffix"
+          :class="[nh.be('icon'), nh.be('suffix')]"
+          :style="{
+            color: props.suffixColor,
+            opacity: showClear || props.loading ? '0%' : ''
+          }"
+        >
+          <slot name="suffix">
+            <Icon
+              v-if="props.suffix"
+              :icon="props.suffix"
+              :class="{
+                [nh.be('arrow')]: !props.staticSuffix
+              }"
+            ></Icon>
+            <Icon v-else :class="nh.be('arrow')">
+              <ChevronDown></ChevronDown>
+            </Icon>
+          </slot>
+        </div>
+        <div
+          v-else-if="props.clearable || props.loading"
+          :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
+        ></div>
+        <transition :name="nh.ns('fade')" appear>
+          <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+            <Icon><CircleXmark></CircleXmark></Icon>
+          </div>
+          <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+            <Icon
+              :spin="props.loadingSpin"
+              :pulse="!props.loadingSpin"
+              :icon="props.loadingIcon"
+            ></Icon>
+          </div>
+        </transition>
       </slot>
     </div>
     <Portal :to="transferTo">
       <transition :name="props.transitionName">
-        <div v-show="currentVisible" ref="popper" :class="[nh.be('popper'), nh.bs('vars')]">
-          <div :class="nh.be('pane')">
+        <div
+          v-show="currentVisible"
+          ref="popper"
+          :class="[nh.be('popper'), nh.bs('vars')]"
+          @keydown.tab.stop="handleTabDown"
+          @keydown.space="handleSpaceDown"
+          @keydown.escape="handleEscDown"
+        >
+          <div :class="nh.be('panel')">
             <div :class="nh.be('section')">
               <ColorPalette
+                ref="palette"
                 :hue="currentValue.h"
                 :saturation="currentValue.s"
                 :value="currentValue.v"
@@ -47,6 +106,7 @@
                 @change="handlePaletteChange"
               ></ColorPalette>
               <ColorHue
+                ref="hue"
                 :hue="currentValue.h"
                 @edit-start="toggleEditing(true)"
                 @edit-end="toggleEditing(false)"
@@ -54,17 +114,30 @@
               ></ColorHue>
               <ColorAlpha
                 v-if="props.alpha"
+                ref="alphaUnit"
                 :rgb="rgb"
                 :alpha="currentAlpha"
                 @edit-start="toggleEditing(true)"
                 @edit-end="toggleEditing(false)"
                 @change="handleAlphaChange"
               ></ColorAlpha>
-              <div v-if="props.shortcut" :class="nh.be('shortcuts')">
+              <div
+                v-if="props.shortcut"
+                ref="shortcutUnit"
+                :class="nh.be('shortcuts')"
+                tabindex="-1"
+                @focus="handleShrtcutsFocus"
+                @blur="shortcutsFocused = false"
+                @keydown="handleShortcutsKeydown"
+              >
                 <div
-                  v-for="(item, index) in props.shortcutList"
+                  v-for="(item, index) in shortcutList"
                   :key="index"
-                  :class="nh.be('shortcut-item')"
+                  :class="{
+                    [nh.be('shortcut-item')]: true,
+                    [nh.bem('shortcut-item', 'hitting')]:
+                      shortcutsFocused && shortcutHitting === index
+                  }"
                   :style="{ backgroundColor: item }"
                   @click="handleShortcutClick(item)"
                 ></div>
@@ -73,6 +146,7 @@
             <div :class="nh.be('action')">
               <Input
                 v-if="!props.noInput"
+                ref="input"
                 size="small"
                 :value="hex.toUpperCase()"
                 :respond="false"
@@ -80,13 +154,19 @@
               ></Input>
               <Button
                 v-if="props.clearable"
+                ref="cancel"
                 text
                 size="small"
                 @click="handleClear"
               >
                 {{ props.cancelText || locale.cancel }}
               </Button>
-              <Button type="primary" size="small" @click="handleOk">
+              <Button
+                ref="confirm"
+                type="primary"
+                size="small"
+                @click="handleOk"
+              >
                 {{ props.confirmText || locale.confirm }}
               </Button>
             </div>
@@ -98,7 +178,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch, inject, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
@@ -106,8 +186,8 @@ import { Portal } from '@/components/portal'
 import ColorAlpha from './color-alpha.vue'
 import ColorHue from './color-hue.vue'
 import ColorPalette from './color-palette.vue'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
-import { usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import { useFieldStore } from '@/components/form'
+import { usePopper, placementWhileList, useClickOutside, useHover } from '@vexip-ui/mixins'
 import {
   useNameHelper,
   useProps,
@@ -117,10 +197,11 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
 import {
-  noop,
   toFixed,
   parseColorToRgba,
   rgbToHsv,
@@ -129,17 +210,18 @@ import {
   hsvToHsl,
   rgbaToHex
 } from '@vexip-ui/utils'
-import { Xmark, ChevronDown } from '@vexip-ui/icons'
+import { Xmark, ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/mixins'
 import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
 
+type FormattedColor = string | RGBAColor | HSLAColor | HSVAColor
 export type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
 
-const defaultShotcuts = [
+const defaultShotcuts = Object.freeze([
   '#2d8cf0',
   '#19be6b',
   '#ff9900',
@@ -164,7 +246,7 @@ const defaultShotcuts = [
   '#607d8b',
   '#000000',
   '#ffffff'
-]
+])
 
 export default defineComponent({
   name: 'ColorPicker',
@@ -177,7 +259,8 @@ export default defineComponent({
     Input,
     Portal,
     Xmark,
-    ChevronDown
+    ChevronDown,
+    CircleXmark
   },
   props: {
     size: sizeProp,
@@ -189,32 +272,52 @@ export default defineComponent({
     disabled: booleanProp,
     transitionName: String,
     noInput: booleanProp,
-    shortcut: booleanProp,
-    shortcutList: Array as PropType<string[]>,
+    shortcut: {
+      type: [Boolean, Array] as PropType<boolean | string[]>,
+      default: null
+    },
     placement: String as PropType<Placement>,
     transfer: booleanStringProp,
     outsideClose: booleanProp,
     clearable: booleanProp,
-    disableValidate: booleanProp,
     cancelText: String,
-    confirmText: String
+    confirmText: String,
+    prefix: Object,
+    prefixColor: String,
+    suffix: Object,
+    suffixColor: String,
+    noSuffix: booleanProp,
+    staticSuffix: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onClickOutside: eventProp(),
+    onOutsideClose: eventProp(),
+    onClear: eventProp(),
+    onChange: eventProp<(color: FormattedColor) => void>(),
+    onShortcut: eventProp<(color: FormattedColor) => void>()
   },
-  emits: [
-    'toggle',
-    'click-outside',
-    'outside-close',
-    'clear',
-    'change',
-    'shortcut',
-    'update:value',
-    'update:visible'
-  ],
-  setup(_props, { emit }) {
+  emits: ['update:value', 'update:visible'],
+  setup(_props, { slots, emit }) {
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<Color | null>(() => reference.value?.focus())
+
+    const nh = useNameHelper('color-picker')
     const props = useProps('colorPicker', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       value: {
-        default: '#339af0',
+        default: () => getFieldValue('#339af0')!,
         static: true
       },
       visible: false,
@@ -225,11 +328,10 @@ export default defineComponent({
         }
       },
       alpha: false,
-      disabled: false,
-      transitionName: 'vxp-drop',
+      disabled: () => disabled.value,
+      transitionName: () => nh.ns('drop'),
       noInput: false,
       shortcut: false,
-      shortcutList: () => Array.from(defaultShotcuts),
       placement: {
         default: 'bottom',
         validator: (value: Placement) => placementWhileList.includes(value)
@@ -237,15 +339,20 @@ export default defineComponent({
       transfer: false,
       outsideClose: true,
       clearable: false,
-      disableValidate: false,
       cancelText: null,
-      confirmText: null
+      confirmText: null,
+      prefix: null,
+      prefixColor: '',
+      suffix: null,
+      suffixColor: '',
+      noSuffix: false,
+      staticSuffix: false,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
-
-    const nh = useNameHelper('color-picker')
     const isEmpty = ref(true)
     const currentVisible = ref(props.visible)
     const currentValue = ref<HSVColor>(null!)
@@ -253,16 +360,38 @@ export default defineComponent({
     const editing = ref(false)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
+    const shortcutHitting = ref(0)
+    const shortcutsFocused = ref(false)
 
     parseValue(props.value)
 
-    const wrapper = useClickOutside()
+    const palette = ref(null)
+    const hue = ref(null)
+    const alpha = ref(null)
+    const shortcut = ref(null)
+    const input = ref(null)
+    const cancel = ref(null)
+    const confirm = ref(null)
 
+    const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
       wrapper,
       isDrop: true
+    })
+    const { isHover } = useHover(reference)
+
+    const unitList = computed(() => {
+      return [
+        palette.value,
+        hue.value,
+        alpha.value,
+        shortcut.value,
+        input.value,
+        cancel.value,
+        confirm.value
+      ].filter(Boolean) as any[]
     })
 
     const lastValue = ref<HSVAColor>({
@@ -274,7 +403,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [nh.b()]: true,
-        'vxp-input-vars': true,
+        [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
         [nh.bm('empty')]: isEmpty.value && !currentVisible.value,
         [nh.bm('focused')]: currentVisible.value,
@@ -282,6 +411,18 @@ export default defineComponent({
         [nh.bm('alpha')]: props.alpha,
         [nh.bm(props.size)]: props.size !== 'default',
         [nh.bm(props.state)]: props.state !== 'default'
+      }
+    })
+    const selectorClass = computed(() => {
+      const baseCls = nh.be('selector')
+
+      return {
+        [baseCls]: true,
+        [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
+        [`${baseCls}--${props.size}`]: props.size !== 'default',
+        [`${baseCls}--focused}`]: currentVisible.value,
+        [`${baseCls}--${props.state}`]: props.state !== 'default'
       }
     })
     const rgb = computed(() => {
@@ -301,6 +442,21 @@ export default defineComponent({
 
       return rgbToHex(r, g, b)
     })
+    const shortcutList = computed(() => {
+      if (!props.shortcut) return []
+
+      if (Array.isArray(props.shortcut)) {
+        return props.shortcut
+      }
+
+      return defaultShotcuts
+    })
+    const hasPrefix = computed(() => {
+      return !!(slots.prefix || props.prefix)
+    })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && !isEmpty.value
+    })
 
     watch(
       () => props.visible,
@@ -310,13 +466,16 @@ export default defineComponent({
     )
     watch(currentVisible, value => {
       value && updatePopper()
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
-    watch(() => props.value, value => {
-      parseValue(value)
-      lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
-    })
+    watch(
+      () => props.value,
+      value => {
+        parseValue(value)
+        lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
+      }
+    )
 
     function parseValue(value: Color | null) {
       if (value) {
@@ -334,18 +493,17 @@ export default defineComponent({
 
     function handleClickOutside() {
       if (!editing.value) {
-        emit('click-outside')
+        emitEvent(props.onClickOutside)
 
         if (props.outsideClose && currentVisible.value) {
           currentVisible.value = false
-
-          emit('outside-close')
+          emitEvent(props.onOutsideClose)
         }
       }
     }
 
-    function handleTriggerClick() {
-      if (props.disabled) return
+    function toggleVisible() {
+      if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = !currentVisible.value
     }
@@ -357,7 +515,7 @@ export default defineComponent({
         nextTick(() => {
           parseValue(null)
           clearField()
-          emit('clear')
+          emitEvent(props.onClear)
         })
       }
     }
@@ -417,12 +575,10 @@ export default defineComponent({
     function handleChange() {
       const formattedColor = getForamttedColor()
 
-      emit('change', formattedColor)
+      setFieldValue(formattedColor)
+      emitEvent(props.onChange, formattedColor)
       emit('update:value', formattedColor)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      validateField()
     }
 
     function handlePaletteChange({ s, v }: HSVColor) {
@@ -451,7 +607,7 @@ export default defineComponent({
       currentValue.value = rgbToHsv(r, g, b)
       currentAlpha.value = a
 
-      emit('shortcut', getForamttedColor())
+      emitEvent(props.onShortcut, getForamttedColor())
     }
 
     function toggleEditing(able: boolean) {
@@ -463,28 +619,129 @@ export default defineComponent({
         editing.value = true
       }
     }
+    function handleTabDown(event: KeyboardEvent) {
+      if (currentVisible.value) {
+        const activeEl = document && document.activeElement
+
+        if (!activeEl) return
+
+        event.preventDefault()
+
+        const shift = event.shiftKey
+        const elList = Array.from(unitList.value)
+        const index = elList.findIndex(unit => {
+          const el = unit instanceof Element ? unit : unit.$el
+
+          return el === activeEl || el.contains(activeEl)
+        })
+
+        let maybeEl: any
+
+        if (!~index) {
+          maybeEl = elList.at(shift ? -1 : 0)
+        } else if (shift ? !index : index === elList.length - 1) {
+          maybeEl = reference.value
+        } else {
+          maybeEl = elList.at(index + (shift ? -1 : 1))
+        }
+
+        if (maybeEl) {
+          if (typeof maybeEl.focus === 'function') {
+            maybeEl.focus()
+          } else {
+            maybeEl.$el?.focus()
+          }
+        }
+      }
+    }
+
+    function handleShrtcutsFocus() {
+      shortcutHitting.value = 0
+      shortcutsFocused.value = true
+    }
+
+    function handleShortcutsKeydown(event: KeyboardEvent) {
+      const key = event.code || event.key
+      const shortcutCount = shortcutList.value.length
+
+      switch (key) {
+        case 'ArrowUp':
+        case 'ArrowLeft': {
+          shortcutHitting.value--
+          break
+        }
+        case 'ArrowDown':
+        case 'ArrowRight': {
+          shortcutHitting.value++
+          break
+        }
+        case 'Enter':
+        case 'Space':
+        case ' ': {
+          const color = shortcutList.value.at(shortcutHitting.value)
+
+          color && handleShortcutClick(color)
+          break
+        }
+      }
+
+      shortcutHitting.value = (shortcutHitting.value + shortcutCount) % shortcutCount
+    }
+
+    function handleSpaceDown(event: KeyboardEvent) {
+      if (props.disabled) {
+        currentVisible.value = false
+      } else {
+        event.preventDefault()
+
+        if (currentVisible.value) {
+          handleOk()
+          reference.value?.focus()
+        } else {
+          currentVisible.value = true
+        }
+      }
+    }
+
+    function handleEscDown() {
+      currentVisible.value = false
+      reference.value?.focus()
+    }
 
     return {
       props,
       nh,
       locale: useLocale('colorPicker'),
+      idFor,
       isEmpty,
       currentVisible,
       currentValue,
       currentAlpha,
       transferTo,
       lastValue,
+      shortcutHitting,
+      shortcutsFocused,
 
       className,
+      selectorClass,
       rgb,
       hex,
+      shortcutList,
+      hasPrefix,
+      showClear,
 
       wrapper,
       reference,
       popper,
+      palette,
+      hue,
+      alphaUnit: alpha,
+      shortcutUnit: shortcut,
+      input,
+      cancel,
+      confirm,
 
-      handleClickOutside,
-      handleTriggerClick,
+      toggleVisible,
       handleClear,
       handleOk,
       handlePaletteChange,
@@ -492,7 +749,12 @@ export default defineComponent({
       handleAlphaChange,
       handleInputColor,
       handleShortcutClick,
-      toggleEditing
+      toggleEditing,
+      handleTabDown,
+      handleShrtcutsFocus,
+      handleShortcutsKeydown,
+      handleSpaceDown,
+      handleEscDown
     }
   }
 })

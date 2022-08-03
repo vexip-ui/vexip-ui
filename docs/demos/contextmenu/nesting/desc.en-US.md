@@ -1,5 +1,5 @@
-### 嵌套菜单
+### Nesting Usage
 
-通过 `children` 选项可以配置嵌套的菜单。
+Nested menus can be configured via the `children` option.
 
-Contextmenu 组件是通过 Dropdown 组件封装的，因此选择菜单后返回的 key 值结构与 Dropdown 组件是一致。
+The Contextmenu component is encapsulated by the Dropdown component, so the key value structure returned after selecting the menu is consistent with the Dropdown component.

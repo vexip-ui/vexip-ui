@@ -1,5 +1,10 @@
 <template>
-  <div ref="wrapper" :class="className" :style="style">
+  <div
+    ref="wrapper"
+    :class="className"
+    role="list"
+    :style="style"
+  >
     <div
       :style="{
         position: 'relative',
@@ -93,7 +98,14 @@ import {
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanNumberProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useHover, useSetTimeout } from '@vexip-ui/mixins'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
@@ -119,9 +131,13 @@ export default defineComponent({
     pointer: String as PropType<PointerType>,
     speed: Number,
     activeOffset: Number,
-    height: [Number, String]
+    height: [Number, String],
+    onChange: eventProp<(active: number) => void>(),
+    onPrev: eventProp<(active: number) => void>(),
+    onNext: eventProp<(active: number) => void>(),
+    onSelect: eventProp<(active: number) => void>()
   },
-  emits: ['change', 'prev', 'next', 'select', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('carousel', _props, {
       active: {
@@ -145,7 +161,7 @@ export default defineComponent({
       },
       autoplay: {
         default: false,
-        validator: (value: boolean | number) => typeof value === 'number' ? value > 500 : true
+        validator: (value: boolean | number) => (typeof value === 'number' ? value > 500 : true)
       },
       pointer: {
         default: 'none' as PointerType,
@@ -238,7 +254,7 @@ export default defineComponent({
     watch(currentActive, value => {
       const active = (value + props.activeOffset) % itemStates.value.size
 
-      emit('change', active)
+      emitEvent(props.onChange, active)
       emit('update:active', active)
     })
     watch(isHover, value => {
@@ -521,16 +537,16 @@ export default defineComponent({
 
     function handlePrevClick() {
       handlePrev(1)
-      emit('prev', (currentActive.value + props.activeOffset) % itemStates.value.size)
+      emitEvent(props.onPrev, (currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleNextClick() {
       handleNext(1)
-      emit('next', (currentActive.value + props.activeOffset) % itemStates.value.size)
+      emitEvent(props.onNext, (currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleSelect(label: number) {
-      emit('select', label)
+      emitEvent(props.onSelect, label)
     }
 
     const { timer } = useSetTimeout()

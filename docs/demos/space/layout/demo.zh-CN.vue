@@ -1,6 +1,11 @@
 <template>
   <div
-    style="width: 800px; padding: 20px; border: var(--vxp-border-base); border-radius: var(--vxp-radius-base);"
+    style="
+      max-width: 800px;
+      padding: 20px;
+      border: var(--vxp-border-base);
+      border-radius: var(--vxp-radius-base);
+"
   >
     <p>Start</p>
     <Space justify="start">

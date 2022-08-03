@@ -3,18 +3,24 @@ import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 
 export default defineComponent({
-  functional: true,
+  name: 'Renderer',
   props: {
     renderer: {
       type: Function,
-      required: true
+      default: null
     },
     data: {
-      type: Object as PropType<Record<string, unknown>>,
+      type: Object as PropType<Record<string, any>>,
       default: undefined
     }
   },
   setup(props) {
-    return () => props.renderer(props.data)
+    return () => {
+      if (typeof props.renderer !== 'function') {
+        return null
+      }
+
+      return props.renderer(props.data)
+    }
   }
 })

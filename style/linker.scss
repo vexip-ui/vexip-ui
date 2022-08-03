@@ -36,13 +36,15 @@ $linker: map.merge(
   text-decoration: none;
   vertical-align: inherit;
   cursor: pointer;
+  outline: 0;
   transition: get-css-var('transition-color');
 
   & + & {
     margin-left: get-css-var('linker-series-span');
   }
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: get-css-var('linker-color-hover');
     text-decoration: none;
   }
@@ -78,6 +80,7 @@ $linker: map.merge(
 
     &,
     &:hover,
+    &:focus,
     &:active {
       color: get-css-var('linker-color-disabled');
     }
@@ -93,12 +96,14 @@ $linker: map.merge(
 
   @each $type in $types {
     &--#{$type} {
-      @include define-linker-style((
-        color: 'color' $type 'base',
-        color-hover: 'color' $type 'light-2',
-        color-active: 'color' $type 'dark-1',
-        color-disabled: 'color' $type 'opacity-5'
-      ));
+      @include define-linker-style(
+        (
+          color: 'color' $type 'base',
+          color-hover: 'color' $type 'light-2',
+          color-active: 'color' $type 'dark-1',
+          color-disabled: 'color' $type 'opacity-5'
+        )
+      );
     }
   }
 }

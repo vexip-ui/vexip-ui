@@ -1,23 +1,23 @@
 ### Badge Props
 
-| Name     | Type             | Description                                                                                  | Default  | Since |
-| -------- | ---------------- | ------------------------------------------------------------------------------------- | ------- | --- |
-| content  | `number \| string` | 徽标的内容                                                                            | `null`    | - |
-| max      | `number`           | 当徽标为数字时，可以设置最大值，超过最大值后会显示为 `` `${max}+` ``                  | `0`       | - |
-| disabled | `boolean`          | 设置徽标是否禁用，禁用后将不显示任何内容                                              | `false`   | - |
-| is-dot   | `boolean`          | 设置徽标是否为状态点                                                                  | `false`   | - |
-| type     | `'error' \| 'primary' \| 'success' \| 'warning' \| 'info' \| 'disabled'`           | 设置徽标的类型 | `'error'` | - |
-| color    | `String`           | 设置徽标的颜色，当内置类型无法满足需求是可以使用                                      | `null`    | - |
+| Name     | Type                                                                     | Description                                                                                                                            | Default   | Since |
+| -------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----- |
+| content  | `number \| string`                                                       | The content of the logo                                                                                                                | `null`    | -     |
+| max      | `number`                                                                 | When the logo is a number, you can set the maximum value, after the maximum value is exceeded, it will be displayed as `` `${max}+` `` | `0`       | -     |
+| disabled | `boolean`                                                                | Set whether the logo is disabled, no content will be displayed when disabled                                                           | `false`   | -     |
+| is-dot   | `boolean`                                                                | Set whether the logo is a status dot                                                                                                   | `false`   | -     |
+| type     | `'error' \| 'primary' \| 'success' \| 'warning' \| 'info' \| 'disabled'` | Set the type of logo                                                                                                                   | `'error'` | -     |
+| color    | `String`                                                                 | Set the color of the logo, can be used when the built-in type cannot meet the needs                                                    | `null`    | -     |
 
 ### Badge Events
 
-| Name           | Description                       | Parameters | Since |
-| -------------- | -------------------------- | ---- | --- |
-| badge-click | 当点击徽标时触发，无返回值 | -    | - |
+| Name        | Description                                       | Parameters | Since |
+| ----------- | ------------------------------------------------- | ---------- | ----- |
+| badge-click | Emitted when the logo is clicked, no return value | -          | -     |
 
 ### Badge Slots
 
-| Name    | Description                   | Parameters | Since |
-| ------- | ---------------------- | ---- | --- |
-| default | 需要设置徽标的内容插槽 | - | - |
-| content | 徽标的内容插槽         | - | - |
+| Name    | Description                             | Parameters | Since |
+| ------- | --------------------------------------- | ---------- | ----- |
+| default | Content slot where logo needs to be set | -          | -     |
+| content | Content slot for logo                   | -          | -     |

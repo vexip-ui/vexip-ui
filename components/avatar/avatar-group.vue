@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="style">
+  <div :class="className" role="group" :style="style">
     <div v-for="(option, index) in renderAvatars" :key="index" :class="nh.be('item')">
       <slot :option="option" :index="index">
         <Avatar
@@ -18,29 +18,29 @@
     </div>
     <div v-if="restAvatars.length" :class="[nh.be('item'), nh.bem('item', 'rest')]">
       <Tooltip v-if="props.showTip" :trigger="props.tipTrigger" :tip-class="nh.be('rest')">
-        <slot name="rest" :options="restAvatars" :count="restAvatars.length">
-          <Avatar :color="props.restColor" :background="props.restBackground">
-            {{ `+${restAvatars.length}` }}
-          </Avatar>
-        </slot>
-        <template #tip>
-          <slot name="tip" :options="restAvatars" :count="restAvatars.length">
-            <Avatar
-              v-for="(option, index) in restAvatars"
-              :key="index"
-              :src="option.src"
-              :icon="option.icon"
-              :alt="option.alt"
-              :fit="option.fit"
-              :src-set="option.srcSet"
-              :gap="option.gap"
-              :icon-scale="option.iconScale"
-              :fallback-src="option.fallbackSrc"
-            >
-              {{ option.text }}
+        <template #trigger>
+          <slot name="rest" :options="restAvatars" :count="restAvatars.length">
+            <Avatar :color="props.restColor" :background="props.restBackground">
+              {{ `+${restAvatars.length}` }}
             </Avatar>
           </slot>
         </template>
+        <slot name="tip" :options="restAvatars" :count="restAvatars.length">
+          <Avatar
+            v-for="(option, index) in restAvatars"
+            :key="index"
+            :src="option.src"
+            :icon="option.icon"
+            :alt="option.alt"
+            :fit="option.fit"
+            :src-set="option.srcSet"
+            :gap="option.gap"
+            :icon-scale="option.iconScale"
+            :fallback-src="option.fallbackSrc"
+          >
+            {{ option.text }}
+          </Avatar>
+        </slot>
       </Tooltip>
       <slot
         v-else
@@ -124,7 +124,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [nh.b()]: true,
-        'vxp-avatar-vars': true,
+        [nh.ns('avatar-vars')]: true,
         [nh.bm(props.size)]: typeof props.size !== 'number' && props.size !== 'default',
         [nh.bm('circle')]: props.circle,
         [nh.bm('vertical')]: props.vertical

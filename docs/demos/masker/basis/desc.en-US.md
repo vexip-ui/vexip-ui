@@ -1,3 +1,3 @@
 ### Basis Usage
 
-直接打开遮罩，当然也可以渲染一些东西在遮罩上。
+Open the mask directly, and of course you can render something on the mask.

@@ -1,5 +1,5 @@
-### 聚焦元素
+### Active Element
 
-Item 组件默认插槽可以通过 `active` 属性获取当前元素是否处理激活状态。
+The default slot of the Item component can obtain whether the current element handles the active state through the `active` prop.
 
-使用该属性可以轻松地对激活与非激活的元素添加定制化样式。
+Use this prop to easily add custom styles to active and inactive elements.

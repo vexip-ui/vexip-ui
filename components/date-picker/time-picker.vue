@@ -1,12 +1,21 @@
 <template>
   <div
+    :id="idFor"
     ref="wrapper"
     :class="className"
-    @click="handleTirggerClick"
-    @clickoutside="finishInput"
+    @click="toggleVisible"
   >
-    <div ref="reference" :class="nh.be('selector')">
-      <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
+    <div
+      ref="reference"
+      :class="selectorClass"
+      tabindex="0"
+      @keydown.space.prevent="toggleVisible"
+    >
+      <div
+        v-if="hasPrefix"
+        :class="[nh.be('icon'), nh.be('prefix')]"
+        :style="{ color: props.prefixColor }"
+      >
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
@@ -67,18 +76,36 @@
           ></TimeControl>
         </template>
       </div>
-      <transition name="vxp-fade">
+      <div
+        v-if="!props.noSuffix"
+        :class="[nh.be('icon'), nh.be('suffix')]"
+        :style="{
+          color: props.suffixColor,
+          opacity: showClear || props.loading ? '0%' : ''
+        }"
+      >
+        <slot name="suffix">
+          <Icon :icon="props.suffix || ClockR"></Icon>
+        </slot>
+      </div>
+      <div
+        v-else-if="props.clearable || props.loading"
+        :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
+      ></div>
+      <transition :name="nh.ns('fade')" appear>
         <div
           v-if="!props.disabled && props.clearable && isHover && lastValue"
-          :class="nh.be('clear')"
+          :class="[nh.be('icon'), nh.be('clear')]"
           @click.stop="handleClear"
         >
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div v-else :class="nh.bem('icon', 'suffix')" :style="{ color: props.suffixColor }">
-          <slot name="suffix">
-            <Icon :icon="props.suffix || ClockR"></Icon>
-          </slot>
+        <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+          <Icon
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+          ></Icon>
         </div>
       </transition>
     </div>
@@ -90,7 +117,7 @@
           :class="[nh.be('popper'), nh.bs('vars')]"
           @click.stop="handleFocused"
         >
-          <div :class="nh.be('pane')">
+          <div :class="nh.be('panel')">
             <div v-if="props.shortcuts.length" :class="[nh.be('list'), nh.bem('list', 'sub')]">
               <div
                 v-for="(item, index) in props.shortcuts"
@@ -145,13 +172,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, inject, toRef, nextTick } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, toRef, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Portal } from '@/components/portal'
 import TimeControl from './time-control.vue'
 import TimeWheel from './time-wheel.vue'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
+import { useFieldStore } from '@/components/form'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
 import {
   useNameHelper,
@@ -162,10 +189,12 @@ import {
   sizeProp,
   stateProp,
   createSizeProp,
-  createStateProp
+  createStateProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
-import { USE_TOUCH, noop, doubleDigits, boundRange } from '@vexip-ui/utils'
-import { CircleXmark, ClockR, ArrowRightArrowLeft } from '@vexip-ui/icons'
+import { USE_TOUCH, doubleDigits, boundRange } from '@vexip-ui/utils'
+import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { useColumn } from './helper'
 
 import type { PropType } from 'vue'
@@ -215,29 +244,43 @@ export default defineComponent({
     prefixColor: String,
     suffix: Object,
     suffixColor: String,
+    noSuffix: booleanProp,
     exchange: booleanProp,
-    disableValidate: booleanProp
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
+    onInput: eventProp<(type: TimeType, value: number) => void>(),
+    onPlus: eventProp<(type: TimeType, value: number) => void>(),
+    onMinus: eventProp<(type: TimeType, value: number) => void>(),
+    onEnter: eventProp(),
+    onCancel: eventProp(),
+    onChange: eventProp<(value: string | string[]) => void>(),
+    onClear: eventProp(),
+    onShortcut: eventProp<(name: string, value: string) => void>(),
+    onToggle: eventProp<(visible: boolean) => void>(),
+    onFocus: eventProp(),
+    onBlur: eventProp(),
+    onChangeCol: eventProp<(type: TimeType) => void>(),
+    onClickOutside: eventProp()
   },
-  emits: [
-    'change-col',
-    'change',
-    'focus',
-    'blur',
-    'plus',
-    'minus',
-    'enter',
-    'cancel',
-    'input',
-    'clear',
-    'shortcut',
-    'toggle',
-    'update:value',
-    'update:visible'
-  ],
+  emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<string | string[]>(() => reference.value?.focus())
+
+    const nh = useNameHelper('time-picker')
     const props = useProps('timePicker', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       visible: false,
       placement: {
         default: 'bottom-start',
@@ -247,7 +290,7 @@ export default defineComponent({
       format: 'HH:mm:ss',
       separator: ':',
       value: {
-        default: '00:00:00',
+        default: () => getFieldValue('00:00:00'),
         static: true
       },
       filler: {
@@ -267,8 +310,8 @@ export default defineComponent({
       labels: () => ({}),
       shortcuts: () => [],
       isRange: false,
-      disabled: false,
-      transitionName: 'vxp-drop',
+      disabled: () => disabled.value,
+      transitionName: () => nh.ns('drop'),
       confirmText: null,
       cancelText: null,
       ctrlSteps: () => [5, 5, 5],
@@ -276,14 +319,14 @@ export default defineComponent({
       prefixColor: '',
       suffix: null,
       suffixColor: '',
+      noSuffix: false,
       exchange: false,
-      disableValidate: false
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
-
-    const nh = useNameHelper('time-picker')
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const currentVisible = ref(props.visible)
@@ -293,7 +336,7 @@ export default defineComponent({
     const endState = createDateState()
     const currentState = ref<'start' | 'end'>('start')
 
-    const wrapper = useClickOutside()
+    const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
       transfer,
@@ -322,6 +365,18 @@ export default defineComponent({
         }
       ]
     })
+    const selectorClass = computed(() => {
+      const baseCls = nh.be('selector')
+
+      return {
+        [baseCls]: true,
+        [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
+        [`${baseCls}--${props.size}`]: props.size !== 'default',
+        [`${baseCls}--focused}`]: focused.value,
+        [`${baseCls}--${props.state}`]: props.state !== 'default'
+      }
+    })
     const hasPrefix = computed(() => {
       return !!(slots.prefix || props.prefix)
     })
@@ -331,6 +386,9 @@ export default defineComponent({
       })
 
       return props.isRange ? values : values[0]
+    })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && !!lastValue.value
     })
 
     parseValue(props.value, false)
@@ -355,21 +413,21 @@ export default defineComponent({
         emitChange()
       }
 
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:visible', value)
     })
     watch(focused, value => {
       if (value) {
-        emit('focus')
+        emitEvent(props.onFocus)
       } else {
-        emit('blur')
+        emitEvent(props.onBlur)
       }
     })
     watch(
       () => startState.column,
       value => {
         if (currentVisible.value) {
-          emit('change-col', value)
+          emitEvent(props.onChangeCol, value)
         }
       }
     )
@@ -377,7 +435,31 @@ export default defineComponent({
       () => endState.column,
       value => {
         if (currentVisible.value) {
-          emit('change-col', value)
+          emitEvent(props.onChangeCol, value)
+        }
+      }
+    )
+    watch(
+      () => props.disabled,
+      value => {
+        if (value) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loading,
+      value => {
+        if (value && props.loadingLock) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loadingLock,
+      value => {
+        if (props.loading && value) {
+          currentVisible.value = false
         }
       }
     )
@@ -481,13 +563,10 @@ export default defineComponent({
         lastValue.value = getStringValue()
 
         toggleActivated(true)
-
-        emit('change', currentValue.value)
+        setFieldValue(currentValue.value)
+        emitEvent(props.onChange, currentValue.value)
         emit('update:value', currentValue.value)
-
-        if (!props.disableValidate) {
-          validateField()
-        }
+        validateField()
       }
     }
 
@@ -507,8 +586,8 @@ export default defineComponent({
       }, 120)
     }
 
-    function handleTirggerClick() {
-      if (props.disabled) return
+    function toggleVisible() {
+      if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = true
 
@@ -529,10 +608,10 @@ export default defineComponent({
         finishInput()
         nextTick(() => {
           parseValue('')
-          emit('clear')
-          emit('change', currentValue.value)
+          emitEvent(props.onChange, currentValue.value)
           emit('update:value', currentValue.value)
-          clearField()
+          emitEvent(props.onClear)
+          clearField(currentValue.value)
 
           nextTick(() => {
             toggleActivated(false)
@@ -572,7 +651,7 @@ export default defineComponent({
       }
 
       verifyValue(type)
-      emit('input', type, state.timeValue[type])
+      emitEvent(props.onInput, type, state.timeValue[type])
     }
 
     function verifyValue(type: TimeType) {
@@ -590,7 +669,7 @@ export default defineComponent({
         state.timeValue[type] += ctrlKey ? getCtrlStep(type) : getStep(type)
 
         verifyValue(type)
-        emit('plus', type, state.timeValue[type])
+        emitEvent(props.onPlus, type, state.timeValue[type])
       }
     }
 
@@ -602,7 +681,7 @@ export default defineComponent({
         state.timeValue[type] -= ctrlKey ? getCtrlStep(type) : getStep(type)
 
         verifyValue(type)
-        emit('minus', type, state.timeValue[type])
+        emitEvent(props.onMinus, type, state.timeValue[type])
       }
     }
 
@@ -616,13 +695,13 @@ export default defineComponent({
 
     function handleEnter() {
       finishInput()
-      emit('enter')
+      emitEvent(props.onEnter)
     }
 
     function handleCancel() {
       parseValue(props.value)
       finishInput()
-      emit('cancel')
+      emitEvent(props.onCancel)
     }
 
     function handleShortcut(index: number) {
@@ -633,7 +712,7 @@ export default defineComponent({
       }
 
       parseValue(value)
-      emit('shortcut', name, value)
+      emitEvent(props.onShortcut, name, value)
       finishInput()
     }
 
@@ -685,12 +764,18 @@ export default defineComponent({
       }
     }
 
+    function handleClickOutside() {
+      emitEvent(props.onClickOutside)
+      finishInput()
+    }
+
     return {
       ClockR,
 
       props,
       nh,
       locale: useLocale('timePicker'),
+      idFor,
       isHover,
       currentVisible,
       focused,
@@ -702,7 +787,9 @@ export default defineComponent({
       currentValue,
 
       className,
+      selectorClass,
       hasPrefix,
+      showClear,
 
       wrapper,
       reference,
@@ -711,7 +798,7 @@ export default defineComponent({
       end: endInput,
 
       handleFocused,
-      handleTirggerClick,
+      toggleVisible,
       handleClear,
       handleShortcut,
       handleWheelChange,

@@ -1,12 +1,11 @@
 import { defineComponent, inject, provide } from 'vue'
-import { SELECT_HANDLER, DROP_SELECT_HANDLER } from './symbol'
+import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
 
 export default defineComponent({
-  functional: true,
   setup(_, { slots }) {
-    const parentSelectHandler = inject(SELECT_HANDLER, null)
+    const dropdownState = inject(DROPDOWN_STATE, null)
 
-    provide(DROP_SELECT_HANDLER, parentSelectHandler)
+    provide(SELECT_HANDLER, dropdownState?.handleSelect)
 
     return () => slots.default?.() ?? null
   }

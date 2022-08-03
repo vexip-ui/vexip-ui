@@ -7,7 +7,7 @@
       :type="tag.type"
       @close="removeTag(tag.key)"
     >
-      标签
+      Tag
     </Tag>
     <Button
       dashed
@@ -16,7 +16,7 @@
       :icon="Plus"
       @click="addTag"
     >
-      添加标签
+      Add Tag
     </Button>
   </div>
 </template>
@@ -31,9 +31,7 @@ const tags = ref(types.map((type, index) => ({ key: index, type })))
 function addTag() {
   tags.value.push({
     key: tags.value.length ? tags.value[tags.value.length - 1].key + 1 : 0,
-    type: types[
-      Math.round(Math.random() * 5)
-    ]
+    type: types[Math.round(Math.random() * 5)]
   })
 }
 

@@ -21,6 +21,7 @@
           },
           item.className
         ]"
+        role="alert"
         :style="[
           {
             color: typeof item.color === 'string' ? item.color : undefined,
@@ -28,6 +29,8 @@
           },
           item.style
         ]"
+        aria-atomic="true"
+        :aria-live="item.type && assertiveTypes.includes(item.type) ? 'assertive' : 'polite'"
       >
         <div :class="nh.be('wrapper')">
           <div v-if="item.icon" :class="nh.be('icon')" :style="{ color: item.iconColor }">
@@ -53,9 +56,11 @@
             </div>
           </template>
         </div>
-        <div v-if="item.closable" :class="nh.be('close')" @click="remove(item.key)">
-          <Icon><Xmark></Xmark></Icon>
-        </div>
+        <button v-if="item.closable" :class="nh.be('close')" @click="remove(item.key)">
+          <Icon label="close">
+            <Xmark></Xmark>
+          </Icon>
+        </button>
       </div>
     </template>
   </Popup>
@@ -98,6 +103,7 @@ export default defineComponent({
     return {
       nh: useNameHelper('message'),
       effectiveTypes: ['info', 'success', 'warning', 'error'],
+      assertiveTypes: ['success', 'warning', 'error'],
       placement,
 
       placementCenter: computed(() => {

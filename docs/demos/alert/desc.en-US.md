@@ -1,1 +1,1 @@
-提供一个静态的警告提示，展现需要关注的内容，不会自动消失，可以由用户点击关闭。
+Provide a static alert, showing the content that needs attention, it will not disappear automatically, and can be closed by the user by clicking.

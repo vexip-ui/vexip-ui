@@ -1,5 +1,5 @@
-### 表格分页
+### Page Table
 
-结合 Pagination 组件可以实现表格分页，一般用于数据较多，不便于一页展示的情况。
+Combined with the Pagination component, table pagination can be implemented, which is generally used when there is a lot of data and it is not convenient to display on one page.
 
-通过 `current-page` 和 `page-size` 属性可以轻松做到 Pagination 和 Table 组件数据联动。
+Link the data between Pagination and Table components can be easily done via the `current-page` and `page-size` prop.

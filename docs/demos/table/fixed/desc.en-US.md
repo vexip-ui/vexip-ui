@@ -1,5 +1,5 @@
-### 固定行列
+### Fixed Width And Height
 
-设置 `width` 和 `height` 属性可以为表格限制宽度和高度。
+Set the `width` and `height` props to constrain the width and height of the table.
 
-为 Column 设置 `width` 属性可以指定该列宽，设置 `fixed` 属性可以指定固定的列。
+Set the `width` prop for a Column to specify the width of the column, and set the `fixed` prop to specify a fixed column.

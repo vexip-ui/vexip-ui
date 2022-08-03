@@ -1,3 +1,3 @@
-### 进度内容
+### Progress Content
 
-通过默认插槽可以自定义进度提示的内容。
+The content of the progress prompt can be customized through the default slot.

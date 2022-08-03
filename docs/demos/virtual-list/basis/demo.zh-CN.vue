@@ -11,13 +11,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const items = ref(Array.from({ length: 10000 }, (_, index) => {
-  return {
-    id: index,
-    value: `选项${index}`,
-    height: Math.round(Math.random() * 36 + 36)
-  }
-}))
+const items = ref(
+  Array.from({ length: 10000 }, (_, index) => {
+    return {
+      id: index,
+      value: `元素${index}`,
+      height: Math.round(Math.random() * 36 + 36)
+    }
+  })
+)
 </script>
 
 <style scoped>

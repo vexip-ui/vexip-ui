@@ -1,3 +1,3 @@
-### 简约模式
+### Simple Mode
 
-添加 `simple` 属性启用简约模式，简约模式使用浅色系色调，常用在简约风格页面上。
+Add the `simple` prop to enable simple mode, which uses light tones and is commonly used on simple style pages.

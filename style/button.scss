@@ -153,17 +153,23 @@ $button: map.merge(
   }
 
   &--small {
-    @include define-preset-values('button', (
-      height: 24px,
-      h-padding: 10px
-    ));
+    @include define-preset-values(
+      'button',
+      (
+        height: 24px,
+        h-padding: 10px
+      )
+    );
   }
 
   &--large {
-    @include define-preset-values('button', (
-      height: 40px,
-      h-padding: 20px
-    ));
+    @include define-preset-values(
+      'button',
+      (
+        height: 40px,
+        h-padding: 20px
+      )
+    );
   }
 
   &::after {
@@ -236,23 +242,25 @@ $button: map.merge(
   }
 
   &--ghost {
-    @include define-button-style((
-      bg-color: 'button-bg-color-ghost',
-      b-color: 'button-b-color-ghost',
-      color: 'button-color-ghost',
-      bg-color-hover: 'button-bg-color-hover-ghost',
-      b-color-hover: 'button-b-color-hover-ghost',
-      color-hover: 'button-color-hover-ghost',
-      bg-color-focus: 'button-bg-color-focus-ghost',
-      b-color-focus: 'button-b-color-focus-ghost',
-      color-focus: 'button-color-focus-ghost',
-      bg-color-active: 'button-bg-color-active-ghost',
-      b-color-active: 'button-b-color-active-ghost',
-      color-active: 'button-color-active-ghost',
-      bg-color-disabled: 'button-bg-color-disabled-ghost',
-      b-color-disabled: 'button-b-color-disabled-ghost',
-      color-disabled: 'button-color-disabled-ghost'
-    ));
+    @include define-button-style(
+      (
+        bg-color: 'button-bg-color-ghost',
+        b-color: 'button-b-color-ghost',
+        color: 'button-color-ghost',
+        bg-color-hover: 'button-bg-color-hover-ghost',
+        b-color-hover: 'button-b-color-hover-ghost',
+        color-hover: 'button-color-hover-ghost',
+        bg-color-focus: 'button-bg-color-focus-ghost',
+        b-color-focus: 'button-b-color-focus-ghost',
+        color-focus: 'button-color-focus-ghost',
+        bg-color-active: 'button-bg-color-active-ghost',
+        b-color-active: 'button-b-color-active-ghost',
+        color-active: 'button-color-active-ghost',
+        bg-color-disabled: 'button-bg-color-disabled-ghost',
+        b-color-disabled: 'button-b-color-disabled-ghost',
+        color-disabled: 'button-color-disabled-ghost'
+      )
+    );
   }
 
   &--text#{&}--ghost {
@@ -264,70 +272,78 @@ $button: map.merge(
   @each $type in $types {
     @at-root {
       &--#{$type} {
-        @include define-button-style((
-          color: 'button-color-typed',
-          color-hover: 'button-color-hover-typed',
-          color-focus: 'button-color-focus-typed',
-          color-active: 'button-color-active-typed',
-          color-disabled: 'button-color-disabled-typed',
-          bg-color: 'color' $type 'base',
-          bg-color-hover: 'color' $type 'light-2',
-          bg-color-focus: 'color' $type 'light-2',
-          bg-color-active: 'color' $type 'dark-1',
-          bg-color-disabled: 'button-bg-color-disabled-typed',
-          b-color: 'color' $type 'base',
-          b-color-hover: 'color' $type 'light-2',
-          b-color-focus: 'color' $type 'light-2',
-          b-color-active: 'color' $type 'dark-1',
-          b-color-disabled: 'button-b-color-disabled-typed',
-          pulse-s-color: 'color' $type 'dark-1'
-        ));
+        @include define-button-style(
+          (
+            color: 'button-color-typed',
+            color-hover: 'button-color-hover-typed',
+            color-focus: 'button-color-focus-typed',
+            color-active: 'button-color-active-typed',
+            color-disabled: 'button-color-disabled-typed',
+            bg-color: 'color' $type 'base',
+            bg-color-hover: 'color' $type 'light-2',
+            bg-color-focus: 'color' $type 'light-2',
+            bg-color-active: 'color' $type 'dark-1',
+            bg-color-disabled: 'button-bg-color-disabled-typed',
+            b-color: 'color' $type 'base',
+            b-color-hover: 'color' $type 'light-2',
+            b-color-focus: 'color' $type 'light-2',
+            b-color-active: 'color' $type 'dark-1',
+            b-color-disabled: 'button-b-color-disabled-typed',
+            pulse-s-color: 'color' $type 'dark-1'
+          )
+        );
       }
 
       &--#{$type}#{&}--simple {
-        @include define-button-style((
-          color: 'color' $type 'base',
-          color-hover: 'color' $type 'base',
-          color-focus: 'button-color-focus-typed-simple',
-          color-active: 'button-color-active-typed-simple',
-          color-disabled: 'button-color-disabled-typed-simple',
-          bg-color: 'color' $type 'opacity-8',
-          bg-color-hover: 'color' $type 'opacity-7',
-          bg-color-focus: 'color' $type 'opacity-1',
-          bg-color-active: 'color' $type 'opacity-1',
-          bg-color-disabled: 'button-bg-color-disabled-typed-simple',
-          b-color: 'color' $type 'opacity-4',
-          b-color-hover: 'color' $type 'opacity-4',
-          b-color-focus: 'color' $type 'opacity-3',
-          b-color-active: 'color' $type 'opacity-3',
-          b-color-disabled: 'button-b-color-disabled-typed-simple'
-        ));
+        @include define-button-style(
+          (
+            color: 'color' $type 'base',
+            color-hover: 'color' $type 'base',
+            color-focus: 'button-color-focus-typed-simple',
+            color-active: 'button-color-active-typed-simple',
+            color-disabled: 'button-color-disabled-typed-simple',
+            bg-color: 'color' $type 'opacity-8',
+            bg-color-hover: 'color' $type 'opacity-7',
+            bg-color-focus: 'color' $type 'opacity-1',
+            bg-color-active: 'color' $type 'opacity-1',
+            bg-color-disabled: 'button-bg-color-disabled-typed-simple',
+            b-color: 'color' $type 'opacity-4',
+            b-color-hover: 'color' $type 'opacity-4',
+            b-color-focus: 'color' $type 'opacity-3',
+            b-color-active: 'color' $type 'opacity-3',
+            b-color-disabled: 'button-b-color-disabled-typed-simple'
+          )
+        );
       }
 
       &--#{$type}#{&}--ghost {
-        @include define-button-style((
-          color: 'color' $type 'base',
-          color-hover: 'color' $type 'base',
-          color-focus: 'color' $type 'base',
-          color-active: 'color' $type 'base',
-          color-disabled: 'button-color-disabled-typed-ghost',
-          bg-color: 'button-bg-color-typed-ghost',
-          bg-color-hover: 'button-bg-color-hover-typed-ghost',
-          bg-color-focus: 'button-bg-color-focus-typed-ghost',
-          bg-color-active: 'button-bg-color-active-typed-ghost',
-          bg-color-disabled: 'button-bg-color-disabled-typed-ghost',
-          b-color-disabled: 'button-b-color-disabled-typed-ghost'
-        ));
+        @include define-button-style(
+          (
+            color: 'color' $type 'base',
+            color-hover: 'color' $type 'base',
+            color-focus: 'color' $type 'base',
+            color-active: 'color' $type 'base',
+            color-disabled: 'button-color-disabled-typed-ghost',
+            bg-color: 'button-bg-color-typed-ghost',
+            bg-color-hover: 'button-bg-color-hover-typed-ghost',
+            bg-color-focus: 'button-bg-color-focus-typed-ghost',
+            bg-color-active: 'button-bg-color-active-typed-ghost',
+            bg-color-disabled: 'button-bg-color-disabled-typed-ghost',
+            b-color-disabled: 'button-b-color-disabled-typed-ghost'
+          )
+        );
       }
 
       &--#{$type}#{&}--text,
       &--#{$type}#{&}--dashed {
-        @include define-button-style((
-          color: 'color' $type 'base',
-          color-hover: 'color' $type 'light-2',
-          color-focus: 'color' $type 'light-2',
-          color-active: 'color' $type 'dark-1'
-        ));
+        @include define-button-style(
+          (
+            color: 'color' $type 'base',
+            color-hover: 'color' $type 'light-2',
+            color-focus: 'color' $type 'light-2',
+            color-active: 'color' $type 'dark-1'
+          )
+        );
       }
 
       &-group &--#{$type} {
@@ -339,7 +355,7 @@ $button: map.merge(
           border-left-color: $d-color;
         }
 
-        &:not(:first-child):not(:last-child) {
+        &:not(:first-child, :last-child) {
           border-right-color: $d-color;
           border-left-color: $d-color;
         }

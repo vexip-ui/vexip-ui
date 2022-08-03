@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :id="idFor" :class="className" role="group">
     <slot>
       <template v-for="(item, index) in props.options" :key="index">
         <Checkbox v-if="isObject(item)" :value="item.value">
@@ -14,14 +14,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject, provide, reactive, toRef, computed, watch } from 'vue'
+import { defineComponent, ref, provide, reactive, toRef, computed, watch } from 'vue'
 import { Checkbox } from '@/components/checkbox'
-import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
-import { VALIDATE_FIELD } from '@/components/form-item'
-import { noop, isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
+import { useFieldStore } from '@/components/form'
+import { isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
-import type { PropType } from 'vue'
+import type { PropType, Ref } from 'vue'
 import type { ControlState } from './symbol'
 
 type RawOption =
@@ -30,6 +40,7 @@ type RawOption =
       value: string | number,
       label?: string
     }
+type Values = (string | number)[]
 
 export default defineComponent({
   name: 'CheckboxGroup',
@@ -39,42 +50,43 @@ export default defineComponent({
   props: {
     size: sizeProp,
     state: stateProp,
-    values: {
-      type: Array as PropType<(string | number)[]>,
-      default: () => []
-    },
+    value: Array as PropType<Values>,
     vertical: booleanProp,
     disabled: booleanProp,
     border: booleanProp,
-    disableValidate: booleanProp,
-    options: Array as PropType<RawOption[]>
+    options: Array as PropType<RawOption[]>,
+    loading: booleanProp,
+    loadingLock: booleanProp,
+    onChange: eventProp<(value: Values) => void>()
   },
-  emits: ['change', 'update:values'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<Values>(() => Array.from(inputSet)[0]?.value?.focus())
+
     const props = useProps('checkboxGroup', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
-      values: {
-        default: () => [],
+      state: createStateProp(state),
+      value: {
+        default: () => getFieldValue([]),
         static: true
       },
       vertical: false,
-      disabled: false,
+      disabled: () => disabled.value,
       border: false,
-      disableValidate: false,
       options: {
         default: () => [],
         static: true
-      }
+      },
+      loading: () => loading.value,
+      loadingLock: false
     })
 
-    const validateField = inject(VALIDATE_FIELD, noop)
-
     const nh = useNameHelper('checkbox-group')
-    const valueMap = new Map<string, string | number>()
+    const valueMap = new Map<string | number, boolean>()
+    const inputSet = new Set<Ref<HTMLElement | null>>()
     const controlSet = new Set<ControlState>()
-    const currentValues = ref<(string | number)[]>(props.values ?? [])
-    const checkedLabels = ref(new Set<string>())
+    const currentValues = ref<Values>(props.value || [])
 
     const className = computed(() => {
       return [
@@ -83,6 +95,7 @@ export default defineComponent({
         {
           [nh.bm('vertical')]: props.vertical,
           [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm('border')]: props.border,
           [nh.bm(props.state)]: props.state !== 'default'
@@ -93,8 +106,8 @@ export default defineComponent({
     const updateValue = debounceMinor(() => {
       currentValues.value = []
 
-      valueMap.forEach((value, label) => {
-        if (checkedLabels.value.has(label)) {
+      valueMap.forEach((checked, value) => {
+        if (checked) {
           currentValues.value.push(value)
         }
       })
@@ -117,20 +130,23 @@ export default defineComponent({
       GROUP_STATE,
       reactive({
         currentValues,
+        size: toRef(props, 'size'),
+        state: toRef(props, 'state'),
         disabled: toRef(props, 'disabled'),
+        loading: toRef(props, 'loading'),
+        loadingLock: toRef(props, 'loadingLock'),
         increaseItem,
         decreaseItem,
         increaseControl,
         decreaseControl,
         handleControlChange,
-        setLabelChecked,
-        replaceLabel,
+        setItemChecked,
         replaceValue
       })
     )
 
     watch(
-      () => props.values,
+      () => props.value,
       value => {
         currentValues.value = Array.from(value)
       },
@@ -140,16 +156,18 @@ export default defineComponent({
       updateControl()
     })
 
-    function increaseItem(label: string, value: string | number, checked = false) {
-      valueMap.set(label, value)
-
-      if (checked) {
-        checkedLabels.value.add(label)
-      }
+    function increaseItem(
+      value: string | number,
+      checked: boolean,
+      input: Ref<HTMLElement | null>
+    ) {
+      valueMap.set(value, checked)
+      inputSet.add(input)
     }
 
-    function decreaseItem(label: string) {
-      valueMap.delete(label)
+    function decreaseItem(value: string | number, input: Ref<HTMLElement | null>) {
+      valueMap.delete(value)
+      inputSet.delete(input)
     }
 
     function increaseControl(state: ControlState) {
@@ -161,65 +179,49 @@ export default defineComponent({
       controlSet.delete(state)
     }
 
-    function setLabelChecked(label: string, checked: boolean) {
-      if (!isDefined(label) || !valueMap.has(label)) return
+    function setItemChecked(value: string | number, checked: boolean) {
+      if (!isDefined(value) || !valueMap.has(value)) return
 
-      if (checked) {
-        checkedLabels.value.add(label)
-      } else {
-        checkedLabels.value.delete(label)
-      }
-
+      valueMap.set(value, checked)
       updateValue()
       updateControl()
     }
 
     function handleControlChange() {
       // 在 group 层进行更新, 未选满则全选, 反之全不选
-      const allLabels = Array.from(valueMap.keys())
+      const allValues = Array.from(valueMap.keys())
+      const checked = currentValues.value.length === allValues.length
 
-      if (currentValues.value.length === allLabels.length) {
-        checkedLabels.value.clear()
-      } else {
-        // 重新实例化以保持 item 顺序
-        checkedLabels.value = new Set(allLabels)
-      }
+      allValues.forEach(value => {
+        valueMap.set(value, checked)
+      })
 
       updateValue()
       updateControl()
     }
 
-    function handleChange(value: (string | number)[]) {
-      emit('change', value)
-      emit('update:values', value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+    function handleChange(value: Values) {
+      setFieldValue(value)
+      emitEvent(props.onChange, value)
+      emit('update:value', value)
+      validateField()
     }
 
-    function replaceLabel(oldLabel: string, newLabel: string) {
-      if (valueMap.has(oldLabel)) {
-        const value = valueMap.get(oldLabel)!
-
-        valueMap.delete(oldLabel)
-        isDefined(newLabel) && valueMap.set(newLabel, value)
-      }
-
-      if (checkedLabels.value.has(oldLabel)) {
-        checkedLabels.value.delete(oldLabel)
-        isDefined(newLabel) && checkedLabels.value.add(newLabel)
-      }
-    }
-
-    function replaceValue(label: string, value: string | number) {
-      if (isDefined(label) && valueMap.has(label)) {
-        valueMap.set(label, value)
+    function replaceValue(prevValue: string | number, newValue: string | number) {
+      if (
+        isDefined(prevValue) &&
+        isDefined(newValue) &&
+        prevValue !== newValue &&
+        valueMap.has(prevValue)
+      ) {
+        valueMap.set(newValue, valueMap.get(prevValue)!)
+        valueMap.delete(prevValue)
       }
     }
 
     return {
       props,
+      idFor,
       className,
 
       isObject,

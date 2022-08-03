@@ -13,7 +13,7 @@ import { ref } from 'vue'
 
 const values = ref<number[]>([])
 const options = Array.from({ length: 12 }, (_, i) => ({
-  label: `选项${i + 1}`,
+  label: `Option ${i + 1}`,
   value: i + 1
 }))
 </script>

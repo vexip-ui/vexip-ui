@@ -1,13 +1,19 @@
 <template>
   <div>
-    <Button type="warning" @click="$message.warning({ content: '一条自定义图标的消息', icon: CircleQuestion })">
-      自定义图标
+    <Button
+      type="warning"
+      @click="$message.warning({ content: 'A message with custom icon', icon: CircleQuestion })"
+    >
+      Custom Icon
     </Button>
-    <Button type="error" @click="$message.error({ content: '一条自定义图标颜色的消息', iconColor: 'green' })">
-      自定义图标颜色
+    <Button
+      type="error"
+      @click="$message.error({ content: 'A message with custom icon color', iconColor: 'green' })"
+    >
+      Custom Icon Color
     </Button>
     <Button type="success" @click="sendCustomizedIconMessage">
-      函数渲染图标
+      Render Method
     </Button>
   </div>
 </template>
@@ -24,7 +30,7 @@ export default defineComponent({
   methods: {
     sendCustomizedIconMessage() {
       this.$message.success({
-        content: '一条函数渲染图标的消息',
+        content: 'A message that using icon render method',
         icon: () => {
           return h(Icon, {
             icon: Share,

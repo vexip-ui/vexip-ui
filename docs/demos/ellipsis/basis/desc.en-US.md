@@ -1,3 +1,5 @@
 ### Basis Usage
 
-最简单的用法，当内容的长度超过包裹元素的宽度时，将会显示为省略内容，并在鼠标移入时通过 Tooltip 展示完整内容。
+The simplest usage, it will be displayed as omitted content when the length of the content exceeds the width of the wrapping element.
+
+And the full content will be displayed through Tooltip when the mouse is moved in.

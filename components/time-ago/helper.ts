@@ -1,4 +1,4 @@
-import { useLocale, getCountWord, makeSentence } from '@vexip-ui/config'
+import { getCountWord, makeSentence } from '@vexip-ui/config'
 import { SECOND_ON_MILLS, MINUTE_ON_MILLS, HOUR_ON_MILLS, DAY_ON_MILLIS } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
@@ -6,7 +6,8 @@ import type { Ref } from 'vue'
 export interface TimeAgoRecord {
   datetime: Date,
   timeAgo: Ref<string>,
-  interval: number,
+  locale: Ref<Record<string, string>>,
+  interval: false | number,
   updated: number
 }
 
@@ -33,8 +34,10 @@ export function subscribe(id: number, record: TimeAgoRecord) {
       const current = Date.now()
 
       recordMap.forEach(record => {
+        if (!record.interval) return
+
         if (current - record.updated > record.interval) {
-          record.timeAgo.value = computeTimeAgo(record.datetime, current)
+          record.timeAgo.value = computeTimeAgo(record.datetime, current, record.locale.value)
           record.updated = current
         }
       })
@@ -51,8 +54,7 @@ export function unsubscribe(id: number) {
   }
 }
 
-export function computeTimeAgo(date: Date, current = Date.now()) {
-  const locale = useLocale('timeAgo').value
+export function computeTimeAgo(date: Date, current: number, locale: Record<string, string>) {
   const diff = Math.abs(current - date.getTime())
   const type = current > date.getTime() ? locale.ago : locale.late
 

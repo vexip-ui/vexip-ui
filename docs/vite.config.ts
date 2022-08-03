@@ -1,6 +1,6 @@
 import { resolve } from 'path'
 import { readFileSync } from 'fs'
-import { defineConfig } from 'vite'
+import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/vite-plugin-vue-i18n'
@@ -25,13 +25,19 @@ export default defineConfig(({ command }) => {
         ...(useServer
           ? [
               { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
-              { find: /^@vexip-ui\/((?!icons).+)/, replacement: resolve(__dirname, '../common/$1/src') },
-              { find: /^vexip-ui\/(es|lib)\/(.+)/, replacement: resolve(__dirname, '../components/$2') },
+              {
+                find: /^@vexip-ui\/((?!icons).+)/,
+                replacement: resolve(__dirname, '../common/$1/src')
+              },
+              {
+                find: /^vexip-ui\/(es|lib)\/(.+)/,
+                replacement: resolve(__dirname, '../components/$2')
+              },
               { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
             ]
           : [])
       ],
-      dedupe: useServer ? ['../components'] : []
+      dedupe: useServer ? ['../components', 'vue'] : ['vue']
     },
     server: {
       port: 9000,
@@ -52,6 +58,7 @@ export default defineConfig(({ command }) => {
     plugins: [
       vue({ include: [/\.vue$/, /\.md$/] }),
       vueJsx(),
+      splitVendorChunkPlugin(),
       i18n({
         compositionOnly: false,
         include: resolve(__dirname, 'i18n')
@@ -62,7 +69,6 @@ export default defineConfig(({ command }) => {
           highlight
         },
         markdownItSetup,
-        // wrapperClasses: 'markdown',
         wrapperComponent: 'Markdown'
       }),
       useServer && {

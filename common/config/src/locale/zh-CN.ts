@@ -7,6 +7,7 @@ export function zhCNLocale() {
 
     calendar: {
       year: '年',
+      month: '月',
       month1: '01月',
       month2: '02月',
       month3: '03月',
@@ -51,6 +52,12 @@ export function zhCNLocale() {
 
     input: {
       placeholder: '请输入'
+    },
+
+    layout: {
+      signOut: '注销',
+      signType: '导航模式',
+      majorColor: '主题颜色'
     },
 
     modal: {
@@ -102,6 +109,14 @@ export function zhCNLocale() {
       cancel: '取消'
     },
 
+    transfer: {
+      source: '源',
+      target: '目标',
+      empty: '暂无数据',
+      reverse: '反选',
+      search: '搜索 (Ctrl + F)'
+    },
+
     tree: {
       empty: '暂无数据'
     },
@@ -115,6 +130,8 @@ export function zhCNLocale() {
     viewer: {
       rotateRight: '向右旋转',
       rotateLeft: '向左旋转',
+      flipHorizontal: '横向翻转',
+      flipVertical: '纵向翻转',
       zoomIn: '放大',
       zoomOut: '缩小',
       fullScreen: '全屏',

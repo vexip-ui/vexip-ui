@@ -1,5 +1,10 @@
 <template>
-  <div :class="className" :style="style" @click="handleClick">
+  <div
+    :class="className"
+    role="listitem"
+    :style="style"
+    @click="handleClick"
+  >
     <slot :active="active"></slot>
   </div>
 </template>

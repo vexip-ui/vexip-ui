@@ -1,7 +1,7 @@
 ### Custom Icon
 
-设置 `icon` 属性可以设置消息的前置图标。
+Set the `icon` option to set the front icon of the message.
 
-设置 `iconColor` 属性可以设置消息前置图标的颜色。
+Set the `iconColor` option to set the color of the message prepended icon.
 
-当需要更细粒度地控制图标时，可以设置 `icon` 属性为一个函数，传函数时为自定义渲染方法。
+When you need more fine-grained control over the icon, the `icon` option can be set to an or function as a custom rendering method.

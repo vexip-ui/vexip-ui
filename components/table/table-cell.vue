@@ -1,5 +1,10 @@
 <template>
-  <div v-if="isTypeColumn(column)" :class="className" :style="style">
+  <div
+    v-if="isTypeColumn(column)"
+    :class="className"
+    role="cell"
+    :style="style"
+  >
     <Checkbox
       v-if="isSelection(column)"
       :class="nh.be('selection')"

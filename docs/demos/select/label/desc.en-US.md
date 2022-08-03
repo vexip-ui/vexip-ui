@@ -1,3 +1,3 @@
-### Custom Label
+### Custom Option
 
-有的场合，需要选项显示内容、选择器显示内容、选项值均不相同，可以结合选项的 `label` 属性和插槽实现。
+In some cases, the display of options, the display of the selector label, and the value of options need to be different, which can be implemented by combining the `label` prop and default slot.

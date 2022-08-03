@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" role="tablist">
     <slot></slot>
   </div>
 </template>
@@ -11,13 +11,12 @@ import {
   reactive,
   toRef,
   computed,
-  watch,
   watchEffect,
   provide,
   onMounted,
   nextTick
 } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { removeArrayItem } from '@vexip-ui/utils'
 import { COLLAPSE_STATE } from './symbol'
 
@@ -31,9 +30,10 @@ export default defineComponent({
     card: booleanProp,
     accordion: booleanProp,
     arrowType: String as PropType<CollapseArrowType>,
-    ghost: booleanProp
+    ghost: booleanProp,
+    onChange: eventProp<(expanded: (string | number)[]) => void>()
   },
-  emits: ['change', 'update:expanded'],
+  emits: ['update:expanded'],
   setup(_props, { emit }) {
     const props = useProps('collapse', _props, {
       expanded: {
@@ -87,12 +87,6 @@ export default defineComponent({
       currentExpanded.value = Array.isArray(expanded) ? Array.from(expanded) : [expanded]
     })
 
-    watch(currentExpanded, value => {
-      updateItemExpanded()
-      emit('change', value)
-      emit('update:expanded', value)
-    })
-
     onMounted(() => {
       nextTick(updateItemExpanded)
     })
@@ -125,7 +119,13 @@ export default defineComponent({
         }
       }
 
+      emitChangeEvent()
       updateItemExpanded()
+    }
+
+    function emitChangeEvent() {
+      emitEvent(props.onChange, currentExpanded.value)
+      emit('update:expanded', currentExpanded.value)
     }
 
     function updateItemExpanded() {

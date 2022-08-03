@@ -2,7 +2,7 @@
 
 .#{$namespace}-popup {
   position: fixed;
-  z-index: get-css-var('z-index-popper');
+  z-index: get-css-var('z-index-popup');
   width: 0;
   height: 0;
   padding: 0;

@@ -1,3 +1,3 @@
-### 日程表
+### Schedule
 
-通过 `content` 插槽可以自定义渲染日历单元格的内容。
+The content of the rendered calendar cell can be customized via the `content` slot.

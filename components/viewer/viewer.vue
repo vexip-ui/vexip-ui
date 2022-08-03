@@ -1,5 +1,10 @@
 <template>
-  <div ref="viewer" :class="className" :style="style">
+  <div
+    ref="viewer"
+    :class="className"
+    tabindex="0"
+    :style="style"
+  >
     <div ref="container" :class="nh.be('container')" @wheel="handleWheel">
       <div :class="nh.be('content')" :style="contentStyle">
         <div
@@ -14,10 +19,15 @@
         </div>
       </div>
     </div>
-    <div :class="toolbarClass" @mouseenter="handleEnterToolbar" @mouseleave="handleLeaveToolbar">
+    <div
+      :class="toolbarClass"
+      role="toolbar"
+      @mouseenter="handleEnterToolbar"
+      @mouseleave="handleLeaveToolbar"
+    >
       <template v-for="action in allActions" :key="action.name">
         <template v-if="!getActionProp(action, 'hidden')">
-          <div
+          <button
             :class="{
               [nh.be('action')]: true,
               [nh.bem('action', 'disabled')]: getActionProp(action, 'disabled')
@@ -30,8 +40,13 @@
               :renderer="action.icon"
               :data="{ state }"
             ></Renderer>
-            <Icon v-else :icon="action.icon" :scale="getActionProp(action, 'iconScale') || 0"></Icon>
-          </div>
+            <Icon
+              v-else
+              :icon="action.icon"
+              :style="getActionProp(action, 'iconStyle')"
+              :scale="getActionProp(action, 'iconScale') || 1"
+            ></Icon>
+          </button>
           <Divider v-if="getActionProp(action, 'divided')" :vertical="!toolbarVertical"></Divider>
         </template>
       </template>
@@ -47,18 +62,28 @@ import { Renderer } from '@/components/renderer'
 import {
   ArrowRotateLeft,
   ArrowRotateRight,
+  Repeat,
   Plus,
   Minus,
   Expand,
   Compress,
   ArrowsRotate
 } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, booleanProp, booleanNumberProp } from '@vexip-ui/config'
-import { useMoving, useFullScreen, useSetTimeout } from '@vexip-ui/mixins'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  booleanNumberProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
+import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/mixins'
+import { boundRange } from '@vexip-ui/utils'
 import { InternalActionName } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ToolbarPlacement, ToolbarAction } from './symbol'
+import type { ViewerState, ToolbarPlacement, ToolbarAction } from './symbol'
 
 export default defineComponent({
   name: 'Viewer',
@@ -73,32 +98,39 @@ export default defineComponent({
     moveDisabled: booleanProp,
     zoomDisabled: booleanProp,
     zoomDelta: Number,
+    zoomMin: Number,
+    zoomMax: Number,
+    flipDisabled: booleanProp,
     rotateDisabled: booleanProp,
     rotateDelta: Number,
     fullDisabled: booleanProp,
     toolbarPlacement: String as PropType<ToolbarPlacement>,
     actions: Array as PropType<ToolbarAction[]>,
-    toolbarFade: booleanNumberProp
+    toolbarFade: booleanNumberProp,
+    onMoveStart: eventProp<(state: ViewerState) => void>(),
+    onMove: eventProp<(state: ViewerState) => void>(),
+    onMoveEnd: eventProp<(state: ViewerState) => void>(),
+    onWheel: eventProp<(sign: 1 | -1, state: ViewerState) => void>(),
+    onRotate: eventProp<(deg: number, state: ViewerState) => void>(),
+    onFlipX: eventProp<(flip: boolean, state: ViewerState) => void>(),
+    onFlipY: eventProp<(flip: boolean, state: ViewerState) => void>(),
+    onZoom: eventProp<(zoom: number, state: ViewerState) => void>(),
+    onFull: eventProp<(full: boolean, state: ViewerState) => void>(),
+    onReset: eventProp<(state: ViewerState) => void>()
   },
-  emits: [
-    'move-start',
-    'move',
-    'move-end',
-    'wheel',
-    'rotate',
-    'zoom',
-    'full',
-    'reset'
-  ],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('viewer', _props, {
       width: '100%',
       height: '100%',
       moveDisabled: false,
       zoomDisabled: false,
       zoomDelta: 0.15,
+      zoomMin: 0.1,
+      zoomMax: Infinity,
       rotateDisabled: false,
       rotateDelta: 90,
+      flipDisabled: false,
       fullDisabled: false,
       toolbarPlacement: 'bottom',
       actions: () => [],
@@ -113,33 +145,65 @@ export default defineComponent({
 
     const zoom = ref(1)
     const rotate = ref(0)
+    const flipX = ref(false)
+    const flipY = ref(false)
 
     const transition = ref<HTMLElement | null>(null)
 
-    const { supported: fullSupported, target: viewer, full, enter: enterFull, exit: exitFull } = useFullScreen()
-    const { target: container, x: currentLeft, y: currentTop, moving } = useMoving({
+    const {
+      supported: fullSupported,
+      target: viewer,
+      full,
+      enter: enterFull,
+      exit: exitFull
+    } = useFullScreen()
+    const {
+      target: container,
+      x: currentLeft,
+      y: currentTop,
+      moving
+    } = useMoving({
       onStart: (_, event) => {
         if (props.moveDisabled || event.button > 0) {
           return false
         }
 
-        emit('move-start', getState())
+        emitEvent(props.onMoveStart, getState())
       },
       onMove: () => {
-        emit('move-start', getState())
+        emitEvent(props.onMoveStart, getState())
       },
       onEnd: () => {
-        emit('move-start', getState())
+        emitEvent(props.onMoveStart, getState())
       }
     })
 
     const state = reactive({
       zoom,
       rotate,
+      flipX,
+      flipY,
       full,
       moving,
       x: currentLeft,
       y: currentTop
+    })
+
+    useModifier({
+      target: viewer,
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down || modifier.left || modifier.right) {
+          event.preventDefault()
+
+          const current = modifier.up || modifier.down ? currentTop : currentLeft
+          const step = modifier.up || modifier.left ? -10 : 10
+
+          current.value += event.ctrlKey ? 5 * step : step
+
+          modifier.resetAll()
+        }
+      }
     })
 
     function getState() {
@@ -152,7 +216,10 @@ export default defineComponent({
     ) {
       const value = action[prop]
 
-      return (typeof value === 'function' ? value(state) : value) as Exclude<ToolbarAction[K], (...args: any) => any>
+      return (typeof value === 'function' ? value(state) : value) as Exclude<
+        ToolbarAction[K],
+        (...args: any) => any
+      >
     }
 
     const internalActions: ToolbarAction[] = [
@@ -169,6 +236,22 @@ export default defineComponent({
         process: () => handleRotate(-1 * props.rotateDelta),
         title: () => locale.value.rotateLeft,
         hidden: () => props.rotateDisabled,
+        divided: true
+      },
+      {
+        name: InternalActionName.FlipHorizontal,
+        icon: Repeat,
+        process: () => toggleFlipHorizontal(),
+        title: () => locale.value.flipHorizontal,
+        hidden: () => props.flipDisabled
+      },
+      {
+        name: InternalActionName.FlipVertical,
+        icon: Repeat,
+        process: () => toggleFlipVertical(),
+        title: () => locale.value.flipVertical,
+        hidden: () => props.flipDisabled,
+        iconStyle: 'transform: rotate(90deg)',
         divided: true
       },
       {
@@ -242,7 +325,9 @@ export default defineComponent({
     })
     const contentStyle = computed(() => {
       return {
-        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0)`
+        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scaleX(${
+          flipX.value ? -1 : 1
+        }) scaleY(${flipY.value ? -1 : 1})`
       }
     })
     const transitionStyle = computed(() => {
@@ -272,7 +357,7 @@ export default defineComponent({
 
       const sign = event.deltaY > 0 ? -1 : 1
 
-      emit('wheel', sign, state)
+      emitEvent(props.onWheel, sign, state)
       handleZoom(sign * props.zoomDelta)
     }
 
@@ -282,7 +367,25 @@ export default defineComponent({
       }
 
       rotate.value += deg
-      emit('rotate', deg, state)
+      emitEvent(props.onRotate, deg, state)
+    }
+
+    function toggleFlipHorizontal(target = !flipX.value) {
+      if (props.flipDisabled) {
+        return
+      }
+
+      flipX.value = target
+      emitEvent(props.onFlipX, target, state)
+    }
+
+    function toggleFlipVertical(target = !flipY.value) {
+      if (props.flipDisabled) {
+        return
+      }
+
+      flipY.value = target
+      emitEvent(props.onFlipY, target, state)
     }
 
     function handleZoom(ratio: number) {
@@ -290,21 +393,24 @@ export default defineComponent({
         return
       }
 
-      zoom.value += ratio
-      emit('zoom', zoom.value, state)
+      zoom.value = boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax)
+      emitEvent(props.onZoom, zoom.value, state)
     }
 
     async function toggleFull(target = !full.value) {
       target ? await enterFull() : await exitFull()
-      emit('full', target, state)
+
+      emitEvent(props.onFull, target, state)
     }
 
     function handleReset() {
       currentTop.value = 0
       currentLeft.value = 0
       rotate.value = 0
+      flipX.value = false
+      flipY.value = false
       zoom.value = 1
-      emit('reset', state)
+      emitEvent(props.onReset, state)
     }
 
     function normalizeProps() {
@@ -344,7 +450,8 @@ export default defineComponent({
     function handleLeaveToolbar() {
       clearTimeout(timer.toolbarFade)
 
-      const fade = typeof props.toolbarFade === 'number' ? props.toolbarFade : (props.toolbarFade ? 1500 : 0)
+      const fade =
+        typeof props.toolbarFade === 'number' ? props.toolbarFade : props.toolbarFade ? 1500 : 0
 
       if (fade > 0) {
         timer.toolbarFade = window.setTimeout(() => {
@@ -375,6 +482,8 @@ export default defineComponent({
       getActionProp,
       handleWheel,
       handleRotate,
+      toggleFlipHorizontal,
+      toggleFlipVertical,
       handleZoom,
       toggleFull,
       handleReset,

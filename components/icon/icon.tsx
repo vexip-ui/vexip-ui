@@ -27,14 +27,16 @@ export default defineComponent({
       name: {
         default: null,
         validator: (value: string) => {
-          console.warn(`[vexip-ui:Icon] prop 'name' has been deprecated, use 'icon' instead it.`)
-    
+          console.warn("[vexip-ui:Icon] prop 'name' has been deprecated, use 'icon' instead it.")
+
           if (value && iconMap.has(value)) {
             return true
           }
-    
-          console.warn(`[vexip-ui:Icon] prop 'name' is referring to an unregistered icon '${value}'.`)
-    
+
+          console.warn(
+            `[vexip-ui:Icon] prop 'name' is referring to an unregistered icon '${value}'.`
+          )
+
           return false
         },
         static: true
@@ -48,11 +50,13 @@ export default defineComponent({
       label: null,
       spin: {
         default: false,
-        validator: (value: boolean | string) => typeof value === 'boolean' || value === 'in' || value === 'out'
+        validator: (value: boolean | string) =>
+          typeof value === 'boolean' || value === 'in' || value === 'out'
       },
       pulse: {
         default: false,
-        validator: (value: boolean | string) => typeof value === 'boolean' || value === 'in' || value === 'out'
+        validator: (value: boolean | string) =>
+          typeof value === 'boolean' || value === 'in' || value === 'out'
       },
       flip: {
         default: null,
@@ -65,7 +69,7 @@ export default defineComponent({
     const childrenHeight = ref(0)
 
     const computedScale = computed(() => {
-      return (Number(props.scale) || 1)
+      return Number(props.scale) || 1
     })
     const className = computed(() => {
       const spin = props.spin && (props.spin === true || props.spin === 'in' ? 'in' : 'out')
@@ -103,9 +107,7 @@ export default defineComponent({
       )
     })
     const style = computed<CSSProperties>(() => {
-      return computedScale.value === 1
-        ? {}
-        : { fontSize: `${1 * computedScale.value}em` }
+      return computedScale.value === 1 ? {} : { fontSize: `${1 * computedScale.value}em` }
     })
     const viewBox = computed(() => {
       return icon.value
@@ -117,38 +119,44 @@ export default defineComponent({
       const iAttrs = {
         class: className.value,
         style: style.value,
-        role: attrs.role as string || (props.label || props.title ? 'img' : undefined),
+        role: (attrs.role as string) || (props.label || props.title ? 'img' : undefined),
         'aria-label': props.label,
-        'aria-hidden': !(props.label || props.title),
+        'aria-hidden': !(props.label || props.title)
       }
 
       if (slots.default) {
-        return (<i{...iAttrs}>{slots.default && slots.default()}</i>)
+        return <i {...iAttrs}>{slots.default && slots.default()}</i>
       } else if (!props.name && !props.icon) {
-        return (<i {...iAttrs}></i>)
+        return <i {...iAttrs}></i>
       }
 
       if (props.name) {
-        const content = props.title ? [(<title>{props.title}</title>)] : []
+        const content = props.title ? [<title>{props.title}</title>] : []
 
         return (
           <i {...iAttrs}>
-            <svg viewBox={viewBox.value}>
-              {...content}
-              {icon.value
-                ? icon.value.paths
+            <g>
+              <svg viewBox={viewBox.value}>
+                {...content}
+                {icon.value
+                  ? icon.value.paths
                     .map((path, index) => <path {...path} key={index}></path>)
                     .concat(
                       icon.value.polygons.map((polygon, index) => (
-                        <polygon {...polygon} key={index}></polygon>
+                          <polygon {...polygon} key={index}></polygon>
                       ))
                     )
-                : []}
-            </svg>
+                  : []}
+              </svg>
+            </g>
           </i>
         )
       } else {
-        return (<i {...iAttrs}>{h(props.icon)}</i>)
+        return (
+          <i {...iAttrs}>
+            <g>{h(props.icon)}</g>
+          </i>
+        )
       }
     }
   }

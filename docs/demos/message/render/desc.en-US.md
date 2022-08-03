@@ -1,5 +1,5 @@
-### 渲染函数
+### Render Method
 
-通过 `renderer` 属性可以设置消息的自定义渲染方法。
+A custom rendering method for messages can be set via the `renderer` option.
 
-通常配合 `tsx` 使用会更好。
+Often it is better to use with `tsx`.

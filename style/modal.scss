@@ -86,6 +86,7 @@ $modal: map.merge(
   }
 
   &__title {
+    flex: 1 0 0;
     font-size: get-css-var('modal-title-font-size');
     font-weight: get-css-var('modal-title-weight');
     color: get-css-var('modal-title-color');
@@ -106,16 +107,20 @@ $modal: map.merge(
   }
 
   &__close {
-    position: absolute;
-    top: 50%;
-    right: 14px;
     display: flex;
+    align-items: center;
+    height: 24px;
+    padding: 0;
+    margin-left: 6px;
     color: get-css-var('modal-close-color');
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     transition: get-css-var('transition-color');
-    transform: translateY(-50%);
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('modal-close-color-hover');
     }
   }

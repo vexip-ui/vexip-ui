@@ -1,6 +1,6 @@
 <template>
   <Button type="primary" @click="sendCustomizedMessage">
-    自定义渲染
+    Custom Render
   </Button>
 </template>
 
@@ -23,7 +23,7 @@ export default defineComponent({
                 color: '#339af0'
               }
             }),
-            '一条自定义的',
+            'A custom ',
             h(
               'span',
               {
@@ -32,7 +32,7 @@ export default defineComponent({
                   fontStyle: 'italic'
                 }
               },
-              '消息'
+              'message'
             )
           ])
         }

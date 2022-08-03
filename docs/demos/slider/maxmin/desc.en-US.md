@@ -1,3 +1,3 @@
-### 设置边界
+### Value Bounds
 
-通过 `min` 和 `max` 属性可以设置滑动输入条的边界值。
+The `min` and `max` props can be used to set the bounds of the slidier.

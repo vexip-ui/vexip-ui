@@ -1,3 +1,3 @@
 ### Closable
 
-添加 `closable` 属性可以显示关闭按钮，点击关闭按钮可关闭警告提示。
+Add the `closable` prop to display a close button, click the close button to close the alert.

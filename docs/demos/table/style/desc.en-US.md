@@ -1,9 +1,9 @@
-### 预设样式
+### Preset Styles
 
-添加 `stripe` 属性可以为表格添加斑马纹。
+Adding `stripe` prop to add stripe to the table.
 
-添加 `border` 属性可以为表格添加边框。
+Adding `border` prop to add a border to the table.
 
-添加 `highlight` 属性可以为表格行设置移入时高亮。
+Adding `highlight` prop to set table row highlighting when moving in.
 
-如果你想要一个清爽的表格，可以添加 `transparent` 属性。
+If you want a clean table via adding the `transparent` prop.

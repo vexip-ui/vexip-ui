@@ -1,3 +1,3 @@
-### 拓展内容
+### Expand Content
 
-在 Column 选项添加 `type` 属性并设置其值为 `expand` 可以使该列作为拓展列，该列的默认插槽内容将作为拓展模版内容渲染。
+Adding a `type` prop to the column options and setting its value to `'expand'` can make the column as an expansion column, the default slot content of the column will be rendered as the expansion template content.

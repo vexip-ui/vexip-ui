@@ -5,7 +5,8 @@ export interface ItemState {
   height: number,
   el: HTMLElement | null,
   value: number | string,
-  disabled: boolean
+  disabled: boolean,
+  meta: any
 }
 
 export interface WheelState {

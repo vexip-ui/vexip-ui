@@ -5,7 +5,7 @@
       :key="item.key"
       ref="instances"
       :state="item"
-      :transition-name="transitionName"
+      :transition-name="transition"
       :inner-class="innerClass"
       :style="getItemStyle(item)"
     >
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, provide } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
 import PopupItem from './popup-item.vue'
 import { useNameHelper, classProp } from '@vexip-ui/config'
 import { isFunction, noop } from '@vexip-ui/utils'
@@ -47,20 +47,19 @@ type QueneState =
 
 let globalIndex = 0
 
+function getIndex() {
+  return globalIndex++
+}
+
 export default defineComponent({
   name: 'Popup',
   components: {
     PopupItem
   },
   props: {
-    zIndex: {
-      type: Number,
-      default: 2000,
-      validator: (value: number) => value > 0
-    },
     transitionName: {
       type: String,
-      default: 'vxp-popup-top'
+      default: null
     },
     innerClass: {
       type: classProp,
@@ -91,6 +90,7 @@ export default defineComponent({
     const placementArray = computed(() => {
       return props.placement.split('-') as ['top' | 'bottom', 'right' | 'center' | 'left']
     })
+    const transition = computed(() => props.transitionName || nh.ns('popup-top'))
 
     provide(DELETE_HANDLER, deleteItem)
 
@@ -173,10 +173,6 @@ export default defineComponent({
           removeItem(state.param)
         }
 
-        // this.$nextTick(() => {
-        //   this.queueOut()
-        // })
-
         requestAnimationFrame(() => {
           queueOut()
         })
@@ -189,6 +185,7 @@ export default defineComponent({
       let item = options.key ? find(options.key as Key) : null
 
       if (!item?.visible) {
+        // const zIndex = useZIndex('popup')
         const index = getIndex()
         const key = (options.key as Key) ?? nh.bs(`${index}`)
 
@@ -200,21 +197,23 @@ export default defineComponent({
           }
         })
 
-        item = Object.assign(
-          {
-            key,
-            content: '',
-            closable: false,
-            onOpen: noop,
-            onClose: noop
-          },
-          options,
-          {
-            zIndex: index,
-            height: 0,
-            visible: true,
-            verticalPosition: currentVertical
-          }
+        item = reactive(
+          Object.assign(
+            {
+              key,
+              content: '',
+              closable: false,
+              onOpen: noop,
+              onClose: noop
+            },
+            options,
+            {
+              // zIndex,
+              height: 0,
+              visible: true,
+              verticalPosition: currentVertical
+            }
+          )
         )
 
         items.value.push(item)
@@ -263,13 +262,10 @@ export default defineComponent({
       items.value = []
     }
 
-    function getIndex() {
-      return props.zIndex + globalIndex++
-    }
-
     return {
       nh,
       items,
+      transition,
 
       wrapper,
 

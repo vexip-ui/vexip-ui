@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 1000px;">
+  <div style="max-width: 1000px;">
     <Table
       :data="data"
       :current-page="currentPage"

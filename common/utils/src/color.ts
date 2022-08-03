@@ -79,7 +79,8 @@ export type Color =
   | HEX6Color
   | HEX8Color
 
-export interface ColorObject {
+export type ObjectColor = Exclude<Color, string>
+export interface ColorMeta {
   rgb: RGBColor,
   hsl: HSLColor,
   hsv: HSVColor,
@@ -270,8 +271,15 @@ export const NAMED_COLORS = Object.freeze({
 
 export type ColorName = keyof typeof NAMED_COLORS
 
-export const COLOR_NAMES = Object.freeze(new Set(Object.keys(NAMED_COLORS))) as Readonly<Set<ColorName>>
+export const COLOR_NAMES = Object.freeze(new Set(Object.keys(NAMED_COLORS))) as Readonly<
+  Set<ColorName>
+>
 
+/**
+ * 判断给定的字符串是否为一个合法颜色值
+ *
+ * @param value 原始字符串
+ */
 export function isColor(value: string): boolean {
   value = String(value).trim().toLowerCase()
 
@@ -299,11 +307,16 @@ export function isColor(value: string): boolean {
   )
 }
 
-export function parseStringColor(color: string): Color | null {
+/**
+ * 将给定的字符串转化为 {@link ObjectColor}，无法转换时返回 null
+ *
+ * @param color 原始颜色字符串
+ */
+export function parseStringColor(color: string) {
   color = color.toString().trim().toLowerCase()
 
   if (color === 'transparent') {
-    return { r: 0, g: 0, b: 0, a: 0, format: 'name', toString: toRgbString } as Color
+    return { r: 0, g: 0, b: 0, a: 0, format: 'name', toString: toRgbString } as ObjectColor
   }
 
   let named = false
@@ -318,7 +331,13 @@ export function parseStringColor(color: string): Color | null {
   if ((match = RGB_REG.exec(color))) {
     const { r, g, b } = normalizeRgb(match[1], match[2], match[3])
 
-    return { r: r * 255, g: g * 255, b: b * 255, format: 'rgb', toString: toRgbString } as Color
+    return {
+      r: r * 255,
+      g: g * 255,
+      b: b * 255,
+      format: 'rgb',
+      toString: toRgbString
+    } as ObjectColor
   }
 
   if ((match = RGBA_REG.exec(color))) {
@@ -331,13 +350,13 @@ export function parseStringColor(color: string): Color | null {
       a: normalizeAlpha(match[4]),
       format: 'rgba',
       toString: toRgbString
-    } as Color
+    } as ObjectColor
   }
 
   if ((match = HSL_REG.exec(color))) {
     const { h, s, l } = normalizeHsl(match[0], match[1], match[3])
 
-    return { h: h * 360, s, l, format: 'hsl', toString: toHslString } as Color
+    return { h: h * 360, s, l, format: 'hsl', toString: toHslString } as ObjectColor
   }
 
   if ((match = HSLA_REG.exec(color))) {
@@ -350,13 +369,13 @@ export function parseStringColor(color: string): Color | null {
       a: normalizeAlpha(match[4]),
       format: 'hsla',
       toString: toHslString
-    } as Color
+    } as ObjectColor
   }
 
   if ((match = HSV_REG.exec(color))) {
     const { h, s, v } = normalizeHsv(match[0], match[1], match[3])
 
-    return { h: h * 360, s, v, format: 'hsv', toString: toHsvString } as Color
+    return { h: h * 360, s, v, format: 'hsv', toString: toHsvString } as ObjectColor
   }
 
   if ((match = HSVA_REG.exec(color))) {
@@ -369,7 +388,7 @@ export function parseStringColor(color: string): Color | null {
       a: normalizeAlpha(match[4]),
       format: 'hsva',
       toString: toHsvString
-    } as Color
+    } as ObjectColor
   }
 
   if ((match = HEX_REG_3.exec(color))) {
@@ -379,7 +398,7 @@ export function parseStringColor(color: string): Color | null {
       b: parseInt(`${match[3]}${match[3]}`, 16),
       format: named ? 'name' : 'hex3',
       toString: toRgbString
-    } as Color
+    } as ObjectColor
   }
 
   if ((match = HEX_REG_4.exec(color))) {
@@ -390,7 +409,7 @@ export function parseStringColor(color: string): Color | null {
       a: convertHexToDecimal(`${match[4]}${match[4]}`),
       format: named ? 'name' : 'hex4',
       toString: toRgbString
-    } as Color
+    } as ObjectColor
   }
 
   if ((match = HEX_REG_6.exec(color))) {
@@ -400,7 +419,7 @@ export function parseStringColor(color: string): Color | null {
       b: parseInt(match[3], 16),
       format: named ? 'name' : 'hex6',
       toString: toRgbString
-    } as Color
+    } as ObjectColor
   }
 
   if ((match = HEX_REG_8.exec(color))) {
@@ -411,13 +430,18 @@ export function parseStringColor(color: string): Color | null {
       a: convertHexToDecimal(match[4]),
       format: named ? 'name' : 'hex8',
       toString: toRgbString
-    } as Color
+    } as ObjectColor
   }
 
   return null
 }
 
-export function parseColor(color: Color): ColorObject {
+/**
+ * 将给定的 {@link Color} 解析为 {@link ColorMeta}
+ *
+ * @param color 原始颜色值
+ */
+export function parseColor(color: Color): ColorMeta {
   const { a, ...rgb } = parseColorToRgba(color)
 
   delete rgb.format
@@ -442,6 +466,11 @@ export function parseColor(color: Color): ColorObject {
   }
 }
 
+/**
+ * 将给定的 {@link Color} 解析为 {@link RGBAColor}
+ *
+ * @param originColor 原始颜色值
+ */
 export function parseColorToRgba(originColor: Color) {
   let rgb: RGBColor = { r: 0, g: 0, b: 0 }
   let a = 1
@@ -474,35 +503,58 @@ export function parseColorToRgba(originColor: Color) {
   return { ...rgb, a, format: 'rgba', toString: toRgbString } as RGBAColor
 }
 
+/**
+ * 将原始的 h、s、l 值标准化为 0 ~ 1 的值
+ *
+ * @param h 0 ~ 360
+ * @param s 0 ~ 1，0% ~ 100%
+ * @param l 0 ~ 1，0% ~ 100%
+ */
 export function normalizeHsl(h: number | string, s: number | string, l: number | string) {
   return {
     h: boundRange(h, 0, 360) / 360,
     s: boundRange(isPercentage(s) ? parsePercentage(s) : s, 0, 1),
-    l: boundRange(isPercentage(l) ? parsePercentage(l) : l, 0, 1),
-    toString: toHslString
-  } as HSLColor
+    l: boundRange(isPercentage(l) ? parsePercentage(l) : l, 0, 1)
+  }
 }
 
+/**
+ * 将原始的 r、g、b 值标准化为 0 ~ 1 的值
+ *
+ * @param r 0 ~ 255
+ * @param g 0 ~ 255
+ * @param b 0 ~ 255
+ */
 export function normalizeRgb(r: number | string, g: number | string, b: number | string) {
   return {
     r: boundRange(r, 0, 255) / 255,
     g: boundRange(g, 0, 255) / 255,
-    b: boundRange(b, 0, 255) / 255,
-    toString: toRgbString
-  } as RGBColor
+    b: boundRange(b, 0, 255) / 255
+  }
 }
 
+/**
+ * 将原始的 h、s、v 值标准化为 0 ~ 1 的值
+ *
+ * @param h 0 ~ 360
+ * @param s 0 ~ 1，0% ~ 100%
+ * @param v 0 ~ 1，0% ~ 100%
+ */
 export function normalizeHsv(h: number | string, s: number | string, v: number | string) {
   return {
     h: boundRange(h, 0, 360) / 360,
     s: boundRange(isPercentage(s) ? parsePercentage(s) : s, 0, 1),
-    v: boundRange(isPercentage(v) ? parsePercentage(v) : v, 0, 1),
-    toString: toHsvString
-  } as HSVColor
+    v: boundRange(isPercentage(v) ? parsePercentage(v) : v, 0, 1)
+  }
 }
 
+/**
+ * 将原始透明度值标准化为 0 ~ 1 的值
+ *
+ * @param a 0 ~ 1，0% ~ 100%
+ */
 export function normalizeAlpha(a: number | string) {
-  return boundRange(a, 0, 1)
+  return boundRange(isPercentage(a) ? parsePercentage(a) : a, 0, 1)
 }
 
 export function hslToRgb(h: number | string, s: number | string, l: number | string) {
@@ -711,9 +763,10 @@ export function mixColor(color1: Color, color2: Color, weight = 0.5) {
   const normalizedWeight = originalWeight * 2 - 1
 
   const alphaDistance = rgba1.a - rgba2.a
-  const mixWeight = normalizedWeight * alphaDistance === -1
-    ? normalizedWeight
-    : (normalizedWeight + alphaDistance) / (1 + normalizedWeight * alphaDistance)
+  const mixWeight =
+    normalizedWeight * alphaDistance === -1
+      ? normalizedWeight
+      : (normalizedWeight + alphaDistance) / (1 + normalizedWeight * alphaDistance)
   const weight1 = (mixWeight + 1) / 2
   const weight2 = 1 - weight1
 

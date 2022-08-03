@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!props.inner" :class="[nh.b(), nh.bs('vars')]">
+  <div
+    v-if="!props.inner"
+    :class="[nh.b(), nh.bs('vars')]"
+    :aria-busy="currentActive ? 'true' : undefined"
+  >
     <slot></slot>
     <transition appear :name="props.transitionName">
       <div v-if="currentActive" :class="nh.be('loading')">
@@ -64,6 +68,7 @@ export default defineComponent({
     transitionName: String
   },
   setup(_props, { slots }) {
+    const nh = useNameHelper('spin')
     const props = useProps('spin', _props, {
       active: {
         default: false,
@@ -75,7 +80,7 @@ export default defineComponent({
       delay: false,
       tip: '',
       maskColor: '',
-      transitionName: 'vxp-fade'
+      transitionName: () => nh.ns('fade')
     })
 
     const currentActive = ref(props.active)
@@ -129,7 +134,7 @@ export default defineComponent({
 
     return {
       props,
-      nh: useNameHelper('spin'),
+      nh,
 
       currentActive,
 

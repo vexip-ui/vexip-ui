@@ -6,8 +6,12 @@
   "label",
   "multiple",
   "options",
+  "filter",
+  "creatable",
   "prefix",
   "custom-key",
+  "group",
+  "loading",
   "virtual",
   "async-options"
 ]

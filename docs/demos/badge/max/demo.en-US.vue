@@ -1,5 +1,5 @@
 <template>
   <Badge :content="120" :max="99">
-    <Button>消息</Button>
+    <Button>Message</Button>
   </Badge>
 </template>

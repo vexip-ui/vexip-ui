@@ -1,3 +1,3 @@
 ### Inline Icon
 
-为 Pane 设置 `icon` 属性的值可以快速添加一个前置图标。
+Set the value of the `icon` prop for the TabPanel to quickly add a prefix icon.

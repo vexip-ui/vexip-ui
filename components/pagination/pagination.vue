@@ -1,13 +1,26 @@
 <template>
-  <ul :class="className">
+  <ul
+    ref="wrapper"
+    :class="className"
+    role="menubar"
+    aria-label="Pagination"
+    :aria-disabled="props.disabled ? 'true' : undefined"
+  >
     <li
+      :ref="el => el && !disabledPrev && itemElList.push(el as any)"
       :class="[
         nh.be('item'),
         nh.bem('item', 'prev'),
         disabledPrev ? nh.bem('item', 'disabled') : ''
       ]"
       :title="locale.prevPage"
+      role="menuitem"
+      tabindex="-1"
+      :aria-label="locale.prevPage"
+      :aria-hidden="disabledPrev ? 'true' : undefined"
       @click="handlePrev"
+      @keydown.enter="handlePrev"
+      @keydown.space="handlePrev"
     >
       <slot name="prev">
         <Icon :scale="0.8">
@@ -16,12 +29,21 @@
       </slot>
     </li>
     <li
+      :ref="el => el && itemElList.push(el as any)"
       :class="{
         [nh.be('item')]: true,
-        [nh.bem('item', 'disabled')]: isFunction(disableItem) && disableItem(1),
+        [nh.bem('item', 'disabled')]: props.disableItem(1),
         [nh.bem('item', 'active')]: currentActive === 1
       }"
+      title="1"
+      role="menuitemradio"
+      :tabindex="currentActive === 1 ? '0' : '-1'"
+      aria-posinset="1"
+      :aria-setsize="pagerCount"
+      :aria-disabled="props.disableItem(1) ? 'true' : undefined"
       @click="changeActive(1)"
+      @keydown.enter="changeActive(1)"
+      @keydown.space="changeActive(1)"
     >
       <slot name="item" :page="1">
         {{ 1 }}
@@ -29,17 +51,23 @@
     </li>
     <li
       v-if="useEllipsis && mode !== PaginationMode.LEFT"
+      :ref="el => el && itemElList.push(el as any)"
       :class="{
         [nh.be('item')]: true,
         [nh.bem('item', 'more')]: true,
         [nh.bem('item', 'disabled')]: !prevEllipsisTarget
       }"
       :title="prevTurnPageTitle"
+      role="menuitem"
+      tabindex="-1"
+      :aria-label="prevTurnPageTitle"
       @click="handleClickPrevEllipsis"
+      @keydown.enter="handleClickPrevEllipsis"
+      @keydown.space="handleClickPrevEllipsis"
       @mouseenter="handleEnterPrevEllipsis"
       @mouseleave="handleLeavePrevEllipsis"
     >
-      <transition name="vxp-fade">
+      <transition :name="nh.ns('fade')">
         <Icon v-if="inPrevEllipsis" :scale="0.8">
           <AnglesLeft></AnglesLeft>
         </Icon>
@@ -52,12 +80,21 @@
       <li
         v-for="(page, index) in currentPagers"
         :key="index"
+        :ref="el => el && itemElList.push(el as any)"
         :class="{
           [nh.be('item')]: true,
-          [nh.bem('item', 'disabled')]: isFunction(disableItem) && disableItem(page),
+          [nh.bem('item', 'disabled')]: props.disableItem(page),
           [nh.bem('item', 'active')]: currentActive === page
         }"
+        :title="`${page}`"
+        role="menuitemradio"
+        :tabindex="currentActive === page ? '0' : '-1'"
+        :aria-posinset="page"
+        :aria-setsize="pagerCount"
+        :aria-disabled="props.disableItem(page) ? 'true' : undefined"
         @click="changeActive(page)"
+        @keydown.enter="changeActive(page)"
+        @keydown.space="changeActive(page)"
       >
         <slot name="item" :page="page">
           {{ page }}
@@ -66,17 +103,23 @@
     </template>
     <li
       v-if="useEllipsis && mode !== PaginationMode.RIGHT"
+      :ref="el => el && itemElList.push(el as any)"
       :class="{
         [nh.be('item')]: true,
         [nh.bem('item', 'more')]: true,
         [nh.bem('item', 'disabled')]: !nextEllipsisTarget
       }"
       :title="nextTurnPageTitle"
+      role="menuitem"
+      tabindex="-1"
+      :aria-label="nextTurnPageTitle"
       @click="handleClickNextEllipsis"
+      @keydown.enter="handleClickNextEllipsis"
+      @keydown.space="handleClickNextEllipsis"
       @mouseenter="handleEnterNextEllipsis"
       @mouseleave="handleLeaveNextEllipsis"
     >
-      <transition name="vxp-fade">
+      <transition :name="nh.ns('fade')">
         <Icon v-if="inNextEllipsis" :scale="0.8">
           <AnglesRight></AnglesRight>
         </Icon>
@@ -87,25 +130,41 @@
     </li>
     <li
       v-if="pagerCount > 1"
+      :ref="el => el && itemElList.push(el as any)"
       :class="{
         [nh.be('item')]: true,
-        [nh.bem('item', 'disabled')]: isFunction(disableItem) && disableItem(pagerCount),
+        [nh.bem('item', 'disabled')]: props.disableItem(pagerCount),
         [nh.bem('item', 'active')]: currentActive === pagerCount
       }"
-      :title="locale.nextPage"
+      :title="`${pagerCount}`"
+      role="menuitemradio"
+      :tabindex="currentActive === pagerCount ? '0' : '-1'"
+      :aria-posinset="pagerCount"
+      :aria-setsize="pagerCount"
+      :aria-disabled="props.disableItem(pagerCount) ? 'true' : undefined"
       @click="changeActive(pagerCount)"
+      @keydown.enter="changeActive(pagerCount)"
+      @keydown.space="changeActive(pagerCount)"
     >
       <slot name="item" :page="pagerCount">
         {{ pagerCount }}
       </slot>
     </li>
     <li
+      :ref="el => el && !disabledNext && itemElList.push(el as any)"
       :class="[
         nh.be('item'),
         nh.bem('item', 'next'),
         disabledNext ? nh.bem('item', 'disabled') : ''
       ]"
+      :title="locale.nextPage"
+      role="menuitem"
+      tabindex="-1"
+      :aria-label="locale.nextPage"
+      :aria-hidden="disabledNext ? 'true' : undefined"
       @click="handleNext"
+      @keydown.enter="handleNext"
+      @keydown.space="handleNext"
     >
       <slot name="next">
         <Icon :scale="0.8">
@@ -134,12 +193,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
+import { defineComponent, ref, computed, watch, onMounted, onBeforeUpdate, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
 import { Select } from '@/components/select'
-import { useNameHelper, useProps, useLocale, booleanProp, sizeProp, getCountWord, getCountWordOnly, createSizeProp } from '@vexip-ui/config'
-import { isFunction, range } from '@vexip-ui/utils'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  sizeProp,
+  getCountWord,
+  getCountWordOnly,
+  createSizeProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
+import { useModifier } from '@vexip-ui/mixins'
+import { isFunction, range, boundRange } from '@vexip-ui/utils'
 import { PaginationMode } from './symbol'
 import { ChevronRight, ChevronLeft, AnglesRight, AnglesLeft, Ellipsis } from '@vexip-ui/icons'
 
@@ -172,9 +243,11 @@ export default defineComponent({
     pageJump: booleanProp,
     pageCount: booleanProp,
     pageTotal: booleanProp,
-    itemUnit: String
+    itemUnit: String,
+    onChange: eventProp<(page: number) => void>(),
+    onPageSizeChange: eventProp<(size: number) => void>()
   },
-  emits: ['change', 'page-size-change', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('pagination', _props, {
       size: createSizeProp(),
@@ -201,8 +274,8 @@ export default defineComponent({
       },
       disabled: false,
       disableItem: {
-        default: null,
-        isFunc: false
+        default: () => false,
+        isFunc: true
       },
       turnPageCount: 5,
       pageJump: false,
@@ -219,8 +292,44 @@ export default defineComponent({
     const inPrevEllipsis = ref(false)
     const inNextEllipsis = ref(false)
     const jumpValue = ref(props.active)
+    const itemElList = ref<HTMLElement[]>([])
 
     const locale = useLocale('pagination')
+
+    const { target: wrapper } = useModifier({
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        if (modifier.up || modifier.down || modifier.left || modifier.right) {
+          event.preventDefault()
+
+          const sign = modifier.up || modifier.left ? -1 : 1
+
+          if (document && document.activeElement) {
+            const index = itemElList.value.findIndex(el => el === document.activeElement)
+
+            if (!~index) return
+
+            const target =
+              itemElList.value[boundRange(index + sign, 0, itemElList.value.length - 1)]
+
+            target.focus()
+          }
+        } else if (modifier.enter || modifier.space) {
+          event.preventDefault()
+
+          if (document && document.activeElement) {
+            const index = itemElList.value.findIndex(el => el === document.activeElement)
+
+            if (!~index) {
+              const activeClass = nh.bem('item', 'active')
+              const activeEl = itemElList.value.find(el => el.classList.contains(activeClass))
+
+              activeEl?.focus()
+            }
+          }
+        }
+      }
+    })
 
     const className = computed(() => {
       return {
@@ -293,7 +402,7 @@ export default defineComponent({
     watch(currentActive, value => {
       computePagers()
       jumpValue.value = value
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:active', value)
     })
     watch(() => props.maxCount, computePagers)
@@ -305,7 +414,7 @@ export default defineComponent({
       }
     )
     watch(currentPageSize, (value, prevValue) => {
-      emit('page-size-change', value)
+      emitEvent(props.onPageSizeChange, value)
 
       // 按当前页的第一条数据计算新的页码
       const anchor = Math.ceil((prevValue * (currentActive.value - 1) + 1) / value)
@@ -324,16 +433,17 @@ export default defineComponent({
     onMounted(() => {
       nextTick(computePagers)
     })
+    onBeforeUpdate(() => {
+      itemElList.value.length = 0
+    })
 
     function queryEnabledActive(active: number, step: number) {
       step = step / Math.abs(step)
 
-      if (isFunction(props.disableItem)) {
-        while (props.disableItem(active)) {
-          active += step
+      while (props.disableItem(active)) {
+        active += step
 
-          if (active < 1 || active > pagerCount.value) break
-        }
+        if (active < 1 || active > pagerCount.value) break
       }
 
       return active
@@ -342,12 +452,7 @@ export default defineComponent({
     function changeActive(active: number) {
       active = parseInt(active.toString())
 
-      if (
-        props.disabled ||
-        active < 1 ||
-        active > pagerCount.value ||
-        (isFunction(props.disableItem) && props.disableItem(active))
-      ) {
+      if (props.disabled || active < 1 || active > pagerCount.value || props.disableItem(active)) {
         return
       }
 
@@ -471,6 +576,8 @@ export default defineComponent({
     }
 
     return {
+      PaginationMode,
+
       props,
       nh,
       locale,
@@ -481,7 +588,7 @@ export default defineComponent({
       inPrevEllipsis,
       inNextEllipsis,
       jumpValue,
-      PaginationMode,
+      itemElList,
 
       className,
       pagerCount,
@@ -493,6 +600,8 @@ export default defineComponent({
       prevEllipsisTarget,
       nextEllipsisTarget,
       sizeObjectOptions,
+
+      wrapper,
 
       isFunction,
       getCountWord,

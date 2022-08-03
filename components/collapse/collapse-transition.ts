@@ -1,5 +1,5 @@
 import { defineComponent, h, Transition } from 'vue'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -14,10 +14,18 @@ export default defineComponent({
     horizontal: booleanProp,
     duration: Number,
     timing: String,
-    fadeEffect: booleanProp
+    fadeEffect: booleanProp,
+    onBeforeEnter: eventProp<(el: Element) => void>(),
+    onEnter: eventProp<(el: Element) => void>(),
+    onAfterEnter: eventProp<(el: Element) => void>(),
+    onEnterCancelled: eventProp<(el: Element) => void>(),
+    onBeforeLeave: eventProp<(el: Element) => void>(),
+    onLeave: eventProp<(el: Element) => void>(),
+    onAfterLeave: eventProp<(el: Element) => void>(),
+    onLeaveCancelled: eventProp<(el: Element) => void>()
   },
-  emits: ['before-enter', 'enter', 'after-enter', 'before-leave', 'leave', 'after-leave'],
-  setup(_props, { slots, emit }) {
+  emits: [],
+  setup(_props, { slots }) {
     const props = useProps('collapseTransition', _props, {
       appear: false,
       mode: {
@@ -105,7 +113,7 @@ export default defineComponent({
               el.style.opacity = '0'
             }
 
-            emit('before-enter', $el)
+            emitEvent(props.onBeforeEnter, $el)
           },
           onEnter($el) {
             const el = $el as HTMLElement
@@ -128,7 +136,7 @@ export default defineComponent({
               el.style.opacity = styleRecord.opacity!
             }
 
-            emit('enter', $el)
+            emitEvent(props.onEnter, $el)
           },
           onAfterEnter($el) {
             const el = $el as HTMLElement
@@ -138,7 +146,17 @@ export default defineComponent({
             el.style.overflow = styleRecord.overflow!
             el.style.boxSizing = styleRecord.boxSizing!
 
-            emit('after-enter', $el)
+            emitEvent(props.onAfterEnter, $el)
+          },
+          onEnterCancelled($el) {
+            const el = $el as HTMLElement
+
+            el.style.transition = styleRecord.transition || ''
+            el.style[height] = ''
+            el.style.overflow = styleRecord.overflow!
+            el.style.boxSizing = styleRecord.boxSizing!
+
+            emitEvent(props.onEnterCancelled, $el)
           },
           onBeforeLeave($el) {
             const el = $el as HTMLElement
@@ -154,7 +172,7 @@ export default defineComponent({
             el.style[height] = `${el[scrollHeight]}px`
             el.style.overflow = 'hidden'
 
-            emit('before-leave', $el)
+            emitEvent(props.onBeforeLeave, $el)
           },
           onLeave($el) {
             const el = $el as HTMLElement
@@ -175,7 +193,7 @@ export default defineComponent({
               }
             }
 
-            emit('leave', $el)
+            emitEvent(props.onLeave, $el)
           },
           onAfterLeave($el) {
             const el = $el as HTMLElement
@@ -190,7 +208,22 @@ export default defineComponent({
             el.style.boxSizing = styleRecord.boxSizing!
             el.style.opacity = styleRecord.opacity!
 
-            emit('after-leave', $el)
+            emitEvent(props.onAfterLeave, $el)
+          },
+          onLeaveCancelled($el) {
+            const el = $el as HTMLElement
+
+            el.style[height] = ''
+            el.style[paddingTop] = styleRecord.paddingTop!
+            el.style[paddingBottom] = styleRecord.paddingBottom!
+            el.style[marginTop] = styleRecord.marginTop!
+            el.style[marginBottom] = styleRecord.marginBottom!
+            el.style.overflow = styleRecord.overflow!
+            el.style.transition = styleRecord.transition || ''
+            el.style.boxSizing = styleRecord.boxSizing!
+            el.style.opacity = styleRecord.opacity!
+
+            emitEvent(props.onLeaveCancelled, $el)
           }
         },
         {

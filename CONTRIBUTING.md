@@ -28,9 +28,9 @@ pnpm run build:common
 
 ### Developing for Component
 
-We use a vite project in `example` for development.
+We use a vite project in `dev-server` for development.
 
-Using the following command you can start development server for specify component: 
+Using the following command you can start development server for specify component:
 
 ```sh
 pnpm run serve [component]

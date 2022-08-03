@@ -43,6 +43,7 @@ export const enUS = defineI18n({
 
     Grid: 'Grid',
     Divider: 'Divider',
+    Layout: 'Layout',
     Row: 'Row',
     Space: 'Space',
     Split: 'Split',
@@ -67,6 +68,7 @@ export const enUS = defineI18n({
     Switch: 'Switch',
     Textarea: 'Textarea',
     TimePicker: 'TimePicker',
+    Transfer: 'Transfer',
     Upload: 'Upload',
     Wheel: 'Wheel',
 
@@ -104,6 +106,8 @@ export const enUS = defineI18n({
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',
     NativeScroll: 'NativeScroll',
+    Overflow: 'Overflow',
+    Renderer: 'Renderer',
     ResizeObserver: 'ResizeObserver',
     Scroll: 'Scroll',
     Scrollbar: 'Scrollbar',

@@ -1,5 +1,5 @@
-### 内嵌加载中
+### Inner Spin
 
-通过设置 `inner` 属性可以开启加载中的内嵌模式。
+Inner mode can be enabled by setting the `inner` prop.
 
-常用于不方便修改上级组件根元素的且需要一定程度定制化的场合。
+It is often used in situations where it is inconvenient to modify the root element of the parent component and a certain degree of customization is required.

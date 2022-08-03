@@ -16,8 +16,8 @@
       :loading-text="props.loadingText"
       :select-to-add="props.selectToAdd"
       :precision="props.precision"
-      @delete="$emit('delete', $event)"
-      @preview="$emit('preview', $event)"
+      @delete="handleDelete"
+      @preview="handleDelete"
     >
       <template #default="{ file, status: _status, percentage }">
         <slot
@@ -42,8 +42,8 @@
       :loading-text="props.loadingText"
       :select-to-add="props.selectToAdd"
       :precision="props.precision"
-      @delete="$emit('delete', $event)"
-      @preview="$emit('preview', $event)"
+      @delete="handleDelete"
+      @preview="handlePreview"
     >
       <template #default="{ file, status: _status, percentage }">
         <slot
@@ -63,7 +63,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import UploadFile from './upload-file.vue'
-import { useNameHelper, useProps, booleanProp, styleProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  styleProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { uploadListTypes } from './symbol'
 
 import type { PropType } from 'vue'
@@ -81,9 +88,11 @@ export default defineComponent({
     type: String as PropType<UploadListType>,
     loadingText: String,
     style: styleProp,
-    precision: Number
+    precision: Number,
+    onDelete: eventProp<(file: FileState, source: File) => void>(),
+    onPreview: eventProp<(file: FileState, source: File) => void>()
   },
-  emits: ['preview', 'delete'],
+  emits: [],
   setup(_props) {
     const props = useProps('uploadList', _props, {
       files: {
@@ -104,9 +113,20 @@ export default defineComponent({
       precision: 2
     })
 
+    function handleDelete(file: FileState) {
+      emitEvent(props.onDelete, file, file.source)
+    }
+
+    function handlePreview(file: FileState) {
+      emitEvent(props.onPreview, file, file.source)
+    }
+
     return {
       props,
-      nh: useNameHelper('upload')
+      nh: useNameHelper('upload'),
+
+      handleDelete,
+      handlePreview
     }
   }
 })

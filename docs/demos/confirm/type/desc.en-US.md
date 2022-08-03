@@ -1,5 +1,5 @@
 ### Confirm Type
 
-设置 `confirmType` 选项可以改变确认按钮的类型。
+Set the `confirmType` option to change the type of the confirm button.
 
-同时，这个例子展示了如何在组合式 Api 中使用 Confirm 组件。
+Also, this example shows how to use the Confirm component with composition API.

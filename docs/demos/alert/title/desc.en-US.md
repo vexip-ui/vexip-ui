@@ -1,3 +1,3 @@
 ### With Title
 
-当需要为警告添加一个简要的概括时，可以设置 `title` 属性或同名插槽添加一个标题。
+When you need to add a brief summary to the alert, you can set the `title` prop or slot with the same name to add a title.

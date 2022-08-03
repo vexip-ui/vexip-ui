@@ -1,0 +1,17 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$overflow: () !default;
+$overflow: map.merge((), $overflow);
+
+.#{$namespace}-overflow {
+  &-vars {
+    @include define-preset-values('overflow', $overflow);
+  }
+
+  @include basis;
+
+  display: flex;
+  width: 100%;
+}

@@ -1,4 +1,5 @@
-import type { InjectionKey } from 'vue'
+import type { Ref, InjectionKey } from 'vue'
+import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 
 export interface ControlState {
   checked: boolean,
@@ -7,15 +8,18 @@ export interface ControlState {
 
 export interface GroupState {
   currentValues: (string | number)[],
+  size: ComponentSize,
+  state: ComponentState,
   disabled: boolean,
-  increaseItem(label: string, value: string | number, checked: boolean): void,
-  decreaseItem(label: string): void,
+  loading: boolean,
+  loadingLock: boolean,
+  increaseItem(value: string | number, checked: boolean, input: Ref<HTMLElement | null>): void,
+  decreaseItem(value: string | number, input: Ref<HTMLElement | null>): void,
   increaseControl(state: ControlState): void,
   decreaseControl(state: ControlState): void,
   handleControlChange(): void,
-  setLabelChecked(label: string, checked: boolean): void,
-  replaceLabel(label: string, newLabel: string): void,
-  replaceValue(label: string, value: string | number): void
+  setItemChecked(value: string | number, checked: boolean): void,
+  replaceValue(prevValue: string | number, newValue: string | number): void
 }
 
 export const GROUP_STATE: InjectionKey<GroupState> = Symbol('CHECKBOX_GROUP_STATE')

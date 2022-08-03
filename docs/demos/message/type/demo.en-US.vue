@@ -1,16 +1,16 @@
 <template>
   <div>
-    <Button type="primary" @click="$message.info('一条一般消息')">
-      一般消息
+    <Button type="primary" @click="$message.info('A normal message')">
+      Normal
     </Button>
-    <Button type="success" @click="$message.success('一条成功消息')">
-      成功消息
+    <Button type="success" @click="$message.success('A success message')">
+      Success
     </Button>
-    <Button type="warning" @click="$message.warning('一条警告消息')">
-      警告消息
+    <Button type="warning" @click="$message.warning('A warning message')">
+      Warning
     </Button>
-    <Button type="error" @click="$message.error('一条错误消息')">
-      错误消息
+    <Button type="error" @click="$message.error('A error message')">
+      Error
     </Button>
   </div>
 </template>

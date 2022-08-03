@@ -8,12 +8,15 @@ $drawer: map.merge(
   (
     z-index: get-css-var('z-index-masker'),
     bg-color: get-css-var('bg-color-base'),
+    header-v-padding: 10px,
+    header-h-padding: 14px,
     title-color: get-css-var('content-color-primary'),
     title-d-color: get-css-var('border-color-light-2'),
     title-font-size: get-css-var('font-size-primary'),
     title-divider: get-css-var('border-shape') get-css-var('drawer-title-d-color'),
     close-color: get-css-var('content-color-placeholder'),
     close-color-hover: get-css-var('content-color-base'),
+    title-weight: 500,
     handler-bg-color-hover: rgba($color-black, 0.15),
     handler-width: 5px
   ),
@@ -80,16 +83,19 @@ $drawer: map.merge(
     position: absolute;
   }
 
-  &__title {
+  &__header {
     position: relative;
-    padding: 10px 14px;
-    font-size: get-css-var('drawer-title-font-size');
-    color: get-css-var('drawer-title-color');
+    display: flex;
+    align-items: center;
+    padding: get-css-var('drawer-header-v-padding') get-css-var('drawer-header-h-padding');
     border-bottom: get-css-var('drawer-title-divider');
   }
 
-  &__wrapper--closable &__title {
-    padding-right: 32px;
+  &__title {
+    flex: 1 0 0;
+    font-size: get-css-var('drawer-title-font-size');
+    font-weight: get-css-var('drawer-title-weight');
+    color: get-css-var('drawer-title-color');
   }
 
   &__content {
@@ -97,22 +103,29 @@ $drawer: map.merge(
   }
 
   &__close {
-    position: absolute;
-    top: 50%;
-    right: 10px;
     display: flex;
+    align-items: center;
+    height: 24px;
+    padding: 0;
+    margin-left: 6px;
     color: get-css-var('drawer-close-color');
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     transition: get-css-var('transition-color');
-    transform: translateY(-50%);
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('drawer-close-color-hover');
     }
   }
 
   &__handler {
-    @include define-css-var('drawer-hanlder-offset', calc(get-css-var('drawer-handler-width') * -0.5 + 0.5px));
+    @include define-css-var(
+      'drawer-hanlder-offset',
+      calc(get-css-var('drawer-handler-width') * -0.5 + 0.5px)
+    );
 
     position: absolute;
     z-index: 1;

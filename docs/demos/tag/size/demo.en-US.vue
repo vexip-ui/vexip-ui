@@ -1,34 +1,34 @@
 <template>
   <Tag
-    v-for="(type) in tags"
+    v-for="type in tags"
     :key="type"
     :type="type"
     closable
     size="small"
   >
-    标签
+    Tag
   </Tag>
   <br />
   <br />
   <Tag
-    v-for="(type) in tags"
+    v-for="type in tags"
     :key="type"
     :type="type"
     closable
     size="default"
   >
-    标签
+    Tag
   </Tag>
   <br />
   <br />
   <Tag
-    v-for="(type) in tags"
+    v-for="type in tags"
     :key="type"
     :type="type"
     closable
     size="large"
   >
-    标签
+    Tag
   </Tag>
 </template>
 

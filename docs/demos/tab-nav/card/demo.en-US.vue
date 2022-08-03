@@ -1,13 +1,13 @@
 <template>
   <TabNav v-model:active="active" card>
-    <TabNavItem label="标签页1">
-      标签页1
+    <TabNavItem label="Tab 1">
+      Tab 1
     </TabNavItem>
-    <TabNavItem label="标签页2">
-      标签页2
+    <TabNavItem label="Tab 2">
+      Tab 2
     </TabNavItem>
-    <TabNavItem label="标签页3">
-      标签页3
+    <TabNavItem label="Tab 3">
+      Tab 3
     </TabNavItem>
   </TabNav>
 </template>
@@ -17,7 +17,7 @@ import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   setup() {
-    const active = ref('标签页1')
+    const active = ref('Tab 1')
 
     return { active }
   }

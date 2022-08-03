@@ -1,3 +1,3 @@
-### 卡片模式
+### Card Mode
 
-添加 `card` 属性可以开启卡片模式。
+Add the `card` prop to enable card mode.

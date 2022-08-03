@@ -1,5 +1,5 @@
 <template>
-  <header :class="['header', isAffix && 'header--reduced']">
+  <header :class="['header', affixed && 'header--reduced']">
     <a class="index" @click="toHomepage">
       <img class="index__logo" src="/logo.png" alt="logo.pne" />
       <span class="index__title"> Vexip UI </span>
@@ -23,12 +23,15 @@
     <div class="navigation">
       <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
         <template v-for="menu in menus" :key="menu.label">
-          <li
-            v-if="menu.to"
-            class="vxp-menu__item vxp-menu__item--no-icon"
-            @click="openPage(menu.to)"
-          >
-            <div class="vxp-menu__label">
+          <li v-if="menu.to" class="vxp-menu__item vxp-menu__item--no-icon" role="none">
+            <div
+              class="vxp-menu__label vxp-menu__label--marker-bottom"
+              role="menuitem"
+              tabindex="0"
+              @click="openPage(menu.to)"
+              @keydown.enter.stop="openPage(menu.to)"
+              @keydown.space.stop.prevent="openPage(menu.to)"
+            >
               <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
             </div>
           </li>
@@ -39,9 +42,11 @@
       </Menu>
     </div>
     <Dropdown class="language" trigger="click">
-      <Icon :scale="2">
-        <Language></Language>
-      </Icon>
+      <button class="language-trigger">
+        <Icon label="language" :scale="2">
+          <Language></Language>
+        </Icon>
+      </button>
       <template #drop>
         <DropdownList>
           <DropdownItem
@@ -60,26 +65,29 @@
       <ThemeSwitch></ThemeSwitch>
     </div>
     <Linker class="github-link" to="//github.com/qmhc/vexip-ui/">
-      <Icon :scale="1.6">
+      <Icon label="github" :scale="1.6">
         <GithubB></GithubB>
       </Icon>
     </Linker>
   </header>
-  <section v-if="currentMenu" :class="['sub-menu', isAffix && 'sub-menu--affix']">
-    <div class="sub-menu__reduce" @click="$emit('toggle-menu', true)">
+  <section v-if="currentMenu" :class="['sub-menu', affixed && 'sub-menu--affix']">
+    <Button class="sub-menu__reduce" text @click="$emit('toggle-menu', true)">
       <Icon :scale="1.4">
         <Bars></Bars>
       </Icon>
-    </div>
+    </Button>
     <div style="flex: auto;"></div>
     <Menu v-model:active="currentMenu" horizontal @select="selectMenu">
       <template v-for="menu in menus" :key="menu.label">
-        <li
-          v-if="menu.to"
-          class="vxp-menu__item vxp-menu__item--no-icon"
-          @click="openPage(menu.to)"
-        >
-          <div class="vxp-menu__label">
+        <li v-if="menu.to" class="vxp-menu__item vxp-menu__item--no-icon" role="none">
+          <div
+            class="vxp-menu__label vxp-menu__label--marker-bottom"
+            role="menuitem"
+            tabindex="0"
+            @click="openPage(menu.to)"
+            @keydown.enter.stop="openPage(menu.to)"
+            @keydown.space.stop.prevent="openPage(menu.to)"
+          >
             <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
           </div>
         </li>
@@ -108,10 +116,10 @@ const emit = defineEmits(['toggle-menu'])
 
 const store = inject<Store>('store')!
 const emitter = inject<EventEmitter>('emitter')!
-const isAffix = toRef(store, 'isAffix')
+const affixed = toRef(store, 'affixed')
 
 emitter.on('toggle-affix', (affix: boolean) => {
-  isAffix.value = affix
+  affixed.value = affix
 })
 
 const version = __VERSION__
@@ -165,7 +173,10 @@ watchEffect(() => {
   currentMenu.value = matchedMenu ? matchedMenu.label! : ''
 })
 
-watch(() => route.path, () => emit('toggle-menu', false))
+watch(
+  () => route.path,
+  () => emit('toggle-menu', false)
+)
 
 function selectMenu(label: string) {
   if (!route.path.startsWith(`/${language.value}/${label}`)) {
@@ -320,7 +331,7 @@ function formatComponentName(name: string) {
     }
 
     .vxp-menu {
-      margin-right: 24px;
+      margin-right: 20px;
       border: 0;
     }
 
@@ -333,6 +344,14 @@ function formatComponentName(name: string) {
     display: inline-flex;
     margin-right: 24px;
     cursor: pointer;
+
+    &-trigger {
+      display: flex;
+      padding: 0;
+      color: var(--vxp-content-color-base);
+      background-color: transparent;
+      border: 0;
+    }
   }
 
   .theme {
@@ -372,6 +391,14 @@ function formatComponentName(name: string) {
   &__reduce {
     display: flex;
     padding: 0 16px 0 24px;
+    color: inherit;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+
+    &:focus {
+      color: var(--vxp-color-primary-base);
+    }
   }
 
   .vxp-menu {

@@ -1,9 +1,9 @@
 <template>
-  <div :class="nh.be('item')">
-    <div :class="nh.be('label')" @click="handleClick">
+  <li :class="nh.be('item')">
+    <a :class="nh.be('label')" href="" @click="handleClick">
       <slot>{{ label }}</slot>
-    </div>
-    <div :class="nh.be('separator')" @click="handleSeparatorClick">
+    </a>
+    <span :class="nh.be('separator')" role="separator" @click="handleSeparatorClick">
       <slot name="separator">
         <Renderer
           v-if="isFunction(separatorRenderer)"
@@ -14,14 +14,14 @@
           {{ separator }}
         </template>
       </slot>
-    </div>
-  </div>
+    </span>
+  </li>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, reactive, watch, inject, onBeforeUnmount } from 'vue'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { BREADCRUMB_STATE } from './symbol'
 
@@ -36,10 +36,12 @@ export default defineComponent({
     label: {
       type: [String, Number],
       default: null
-    }
+    },
+    onSelect: eventProp<(label: string | number) => void>(),
+    onSeparatorClick: eventProp<(label: string | number) => void>()
   },
-  emits: ['select', 'separator-click'],
-  setup(props, { emit }) {
+  emits: [],
+  setup(props) {
     const breadcrumbState = inject(BREADCRUMB_STATE, null)
 
     const currentLabel = ref(props.label)
@@ -82,12 +84,12 @@ export default defineComponent({
     }
 
     function handleClick() {
-      emit('select', currentLabel.value)
+      emitEvent(props.onSelect!, currentLabel.value)
       breadcrumbState?.handleSelect(currentLabel.value)
     }
 
     function handleSeparatorClick() {
-      emit('separator-click', currentLabel.value)
+      emitEvent(props.onSeparatorClick!, currentLabel.value)
       breadcrumbState?.handleSeparatorClick(currentLabel.value)
     }
 

@@ -1,48 +1,51 @@
 ### NumberInput Props
 
-| Name             | Type                                             | Description                                      | Default     | Since |
-| ---------------- | ------------------------------------------------ | ------------------------------------------------ | ----------- | ----- |
-| size             | `'small' \| 'default' \| 'large'`                | 输入框的大小，可选值为                           | `'default'` | -     |
-| state            | `'default' \| 'success' \| 'error' \| 'warning'` | 输入框的状态                                     | `'default'` | -     |
-| prefix           | `Record<string, any>`                            | 前缀图标，使用前缀插槽时无效                     | `''`        | -     |
-| prefix-color     | `string`                                         | 前缀内容的颜色，会影响前缀插槽                   | `''`        | -     |
-| suffix           | `Record<string, any>`                            | 后缀图标，使用后缀插槽时无效                     | `''`        | -     |
-| suffix-color     | `string`                                         | 后缀内容的颜色，会影响后缀插槽                   | `''`        | -     |
-| formatter        | `(value: number) => string`                      | 设置在每次值变化后，对输入框的值进行格式化的方法 | `null`      | -     |
-| accessor         | `(value: number \| null) => any`                 | 设置在事件回调时，对输入的值的读取方法           | `null`      | -     |
-| value            | `number \| null`                                 | 设置输入框的值                                   | `null`      | -     |
-| placeholder      | `string`                                         | 设置输入框的占位符                               | `''`        | -     |
-| autofocus        | `boolean`                                        | 设置输入框的自动聚焦                             | `false`     | -     |
-| spellcheck       | `boolean`                                        | 设置输入框的拼写检查                             | `false`     | -     |
-| autocomplete     | `boolean`                                        | 设置输入框的自动完成                             | `false`     | -     |
-| precision        | `number`                                         | 用于设置值的精度 (小数位数)                      | `0`         | -     |
-| readonly         | `boolean`                                        | 设置输入框的只读属性                             | `false`     | -     |
-| step             | `number`                                         | 在数字类型时，用于设置增减按钮单次变化的幅度     | `1`         | -     |
-| min              | `number`                                         | 设置最小值限制                                   | `-Infinity` | -     |
-| max              | `number`                                         | 设置最大值限制                                   | `Infinity`  | -     |
-| disabled         | `boolean`                                        | 设置是否禁用输入框                               | `false`     | -     |
-| input-class      | `string \| Record<string, boolean>`              | 设置输入框 `<input>` 元素的类名                  | `''`        | -     |
-| debounce         | `boolean`                                        | 开启防抖，当快速输入时只触发一次 `input` 事件    | `false`     | -     |
-| clearable        | `boolean`                                        | 设置是否可以清空值                               | `false`     | -     |
-| disable-validate | `boolean`                                        | 是否禁用触发表单字段验证                         | `false`     | -     |
+| Name         | Type                                             | Description                                                                 | Default     | Since   |
+| ------------ | ------------------------------------------------ | --------------------------------------------------------------------------- | ----------- | ------- |
+| size         | `'small' \| 'default' \| 'large'`                | The size of the input box, the optional value is                            | `'default'` | -       |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'` | The state of the input box                                                  | `'default'` | -       |
+| prefix       | `Record<string, any>`                            | The prefix icon, invalid when using prefix slot                             | `''`        | -       |
+| prefix-color | `string`                                         | The color of the prefix content, affects the prefix slot                    | `''`        | -       |
+| suffix       | `Record<string, any>`                            | The suffix icon, invalid when using suffix slot                             | `''`        | -       |
+| suffix-color | `string`                                         | The color of the suffix content, which affects the suffix slot              | `''`        | -       |
+| formatter    | `(value: number) => string`                      | Set the method to format the value of the input box after each value change | `null`      | -       |
+| accessor     | `(value: number \| null) => any`                 | Set the method for reading the input value when the event is called back    | `null`      | -       |
+| value        | `number \| null`                                 | Set the value of the input box                                              | `null`      | -       |
+| placeholder  | `string`                                         | Set the placeholder for the input box                                       | `''`        | -       |
+| autofocus    | `boolean`                                        | Set the autofocus of the input field                                        | `false`     | -       |
+| spellcheck   | `boolean`                                        | Set spellcheck for input fields                                             | `false`     | -       |
+| autocomplete | `boolean`                                        | Set autocomplete for input fields                                           | `false`     | -       |
+| precision    | `number`                                         | Set the precision of the value                                              | `0`         | -       |
+| readonly     | `boolean`                                        | Set the read-only property of the input box                                 | `false`     | -       |
+| step         | `number`                                         | Set the amplitude of the single change of the increase and decrease buttons | `1`         | -       |
+| min          | `number`                                         | Set min limit                                                               | `-Infinity` | -       |
+| max          | `number`                                         | Set max limit                                                               | `Infinity`  | -       |
+| disabled     | `boolean`                                        | Set whether to disable the input box                                        | `false`     | -       |
+| input-class  | `ClassType`                                      | Set the class name of the input box `<input>` element                       | `''`        | -       |
+| debounce     | `boolean`                                        | Enable debounce, only trigger `input` event once when typing fast           | `false`     | -       |
+| clearable    | `boolean`                                        | Set whether the value can be cleared                                        | `false`     | -       |
+| loading      | `boolean`                                        | Set whether is loading                                                      | `false`     | `2.0.0` |
+| loading-icon | `Record<string, any>`                            | Set the loading icon                                                        | `Spinner`   | `2.0.0` |
+| loading-lock | `boolean`                                        | Set whether to be read-only when loading                                    | `false`     | `2.0.0` |
+| loading-spin | `boolean`                                        | Set whether to use spin animation for the loading icon                      | `false`     | `2.0.0` |
 
 ### NumberInput Events
 
-| Name         | Description                                                                       | Parameters                                          | Since |
-| ------------ | --------------------------------------------------------------------------------- | --------------------------------------------------- | ----- |
-| focus        | 输入框聚焦时触发，返回事件对象                                                    | `(event: FocusEvent)`                               | -     |
-| blur         | 输入框失去焦点时触发，返回事件对象                                                | `(event: FocusEvent)`                               | -     |
-| change       | 当输入框值改变时触发，根据 respond 属性会有不同的触发节点，返回读取后的值和原始值 | `(accessedValue: any, originValue: number \| null)` | -     |
-| enter        | 当键入回车时触发，返回按键事件                                                    | `(event: KeyboardEvent)`                            | -     |
-| prefix-click | 当点击前缀部分时触发，返回点击事件                                                | `(event: MouseEvent)`                               | -     |
-| suffix-click | 当点击后缀部分时触发，返回点击事件                                                | `(event: MouseEvent)`                               | -     |
-| key-down     | 当键按下时触发，返回按键事件                                                      | `(event: KeyboardEvent)`                            | -     |
-| key-press    | 当键按住时触发，返回按键事件                                                      | `(event: KeyboardEvent)`                            | -     |
-| key-up       | 当键松开时触发，返回按键事件                                                      | `(event: KeyboardEvent)`                            | -     |
+| Name         | Description                                                                                                                                                               | Parameters                                          | Since |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ----- |
+| focus        | Emitted when the input box is focused, returns the event object                                                                                                           | `(event: FocusEvent)`                               | -     |
+| blur         | Emitted when the input box loses focus, returns the event object                                                                                                          | `(event: FocusEvent)`                               | -     |
+| change       | Emitted when the value of the input box changes, there will be different trigger nodes according to the respond property, returning the read value and the original value | `(accessedValue: any, originValue: number \| null)` | -     |
+| enter        | Emitted when enter, returns the key event                                                                                                                                 | `(event: KeyboardEvent)`                            | -     |
+| prefix-click | Emitted when the prefix part is clicked, returns the click event                                                                                                          | `(event: MouseEvent)`                               | -     |
+| suffix-click | Emitted when the suffix part is clicked, returns the click event                                                                                                          | `(event: MouseEvent)`                               | -     |
+| key-down     | Emitted when a key is pressed, returns the key event                                                                                                                      | `(event: KeyboardEvent)`                            | -     |
+| key-press    | Emitted when the key is held down, returns the key event                                                                                                                  | `(event: KeyboardEvent)`                            | -     |
+| key-up       | Emitted when the key is released, returns the key event                                                                                                                   | `(event: KeyboardEvent)`                            | -     |
 
 ### NumberInput Slots
 
-| Name   | Description                    | Parameters | Since |
-| ------ | ------------------------------ | ---------- | ----- |
-| prefix | 前缀内容的插槽，一般为单个图标 | -          | -     |
-| suffix | 后缀内容的插槽，一般为单个图标 | -          | -     |
+| Name   | Description                                    | Parameters | Since |
+| ------ | ---------------------------------------------- | ---------- | ----- |
+| prefix | Slot for prefix content, usually a single icon | -          | -     |
+| suffix | Slot for suffix content, usually a single icon | -          | -     |

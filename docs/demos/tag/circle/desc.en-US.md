@@ -1,3 +1,3 @@
-### 圆角标签
+### Circle Tag
 
-添加 `circle` 属性可以设置标签为圆角标签。
+Add the `circle` prop to set the label to be a rounded label.

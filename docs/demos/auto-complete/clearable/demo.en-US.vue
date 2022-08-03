@@ -3,13 +3,11 @@
     v-model:value="value"
     filter
     ignore-case
-    style="width: 400px;"
+    style="max-width: 400px;"
     :options="options"
     clearable
   ></AutoComplete>
-  <p>
-    Current Value: {{ value }}
-  </p>
+  <p>Current Value: {{ value }}</p>
 </template>
 
 <script setup lang="ts">

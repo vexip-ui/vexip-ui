@@ -5,5 +5,7 @@
   "group",
   "vertical",
   "total",
-  "layout"
+  "layout",
+  "loading",
+  "state"
 ]

@@ -58,12 +58,17 @@ $message: map.merge(
   &__close {
     display: flex;
     align-items: center;
+    padding: 0;
     margin-left: 14px;
     color: get-css-var('message-close-color');
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     transition: get-css-var('transition-color');
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('message-close-color-hover');
     }
   }
@@ -96,34 +101,42 @@ $message: map.merge(
       $color: if($type == 'info', 'primary', $type);
 
       &--color-only#{&}--#{$type} {
-        @include define-message-style((
-          color: 'color' $color 'base',
-          close-color: 'color' $color 'opacity-5',
-          close-color-hover: 'color' $color 'base'
-        ));
+        @include define-message-style(
+          (
+            color: 'color' $color 'base',
+            close-color: 'color' $color 'opacity-5',
+            close-color-hover: 'color' $color 'base'
+          )
+        );
       }
 
       &--background#{&}--#{$type} {
-        @include define-message-style((
-          b-color: 'color' $color 'opacity-5',
-          mask-bg-color: 'color' $color 'opacity-9',
-          shadow: unset,
-          close-color: 'color' $color 'opacity-7',
-          close-color-hover: 'color' $color 'opacity-2'
-        ));
+        @include define-message-style(
+          (
+            b-color: 'color' $color 'opacity-5',
+            mask-bg-color: 'color' $color 'opacity-9',
+            shadow: unset,
+            close-color: 'color' $color 'opacity-7',
+            close-color-hover: 'color' $color 'opacity-2'
+          )
+        );
       }
 
       &--background#{&}--color#{&}--#{$type} {
-        @include define-message-style((
-          color: 'color' $color 'dark-2',
-          icon-color: 'color' $color 'dark-1'
-        ));
+        @include define-message-style(
+          (
+            color: 'color' $color 'dark-2',
+            icon-color: 'color' $color 'dark-1'
+          )
+        );
       }
 
       &--#{$type} {
-        @include define-message-style((
-          icon-color: 'color' $color 'base'
-        ));
+        @include define-message-style(
+          (
+            icon-color: 'color' $color 'base'
+          )
+        );
       }
     }
   }

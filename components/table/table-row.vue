@@ -12,7 +12,13 @@
     @dragend="handleDragEnd"
     @drop="handleDrop"
   >
-    <div ref="rowEl" :class="className" :style="style">
+    <div
+      ref="rowEl"
+      :class="className"
+      role="row"
+      :style="style"
+      :aria-rowindex="index"
+    >
       <slot></slot>
     </div>
     <CollapseTransition
@@ -105,7 +111,7 @@ export default defineComponent({
       row: toRef(props, 'row')
     })
 
-    const rowKey = computed(() => props.isHead ? TABLE_HEAD_KEY : props.row.key)
+    const rowKey = computed(() => (props.isHead ? TABLE_HEAD_KEY : props.row.key))
     const className = computed(() => {
       let customClass = null
 
@@ -258,10 +264,7 @@ export default defineComponent({
         const borderHeight = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
 
         mutations.setBorderHeight(rowKey.value, borderHeight)
-        mutations.setRowExpandHeight(
-          rowKey.value,
-          expandElement.value?.offsetHeight || 0
-        )
+        mutations.setRowExpandHeight(rowKey.value, expandElement.value?.offsetHeight || 0)
       }
     }
 

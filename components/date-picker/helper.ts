@@ -3,13 +3,17 @@ import { ref, reactive } from 'vue'
 import type { Ref } from 'vue'
 
 export function handleKeyEnter(event: KeyboardEvent) {
-  const key = event.key
+  const key = event.code || event.key
 
   let type: null | number | 'next' | 'prev' | 'up' | 'down' | 'ok' | 'esc' = null
   let isMatch = false
 
   switch (key) {
-    case 'Tab':
+    case 'Tab': {
+      isMatch = true
+      type = event.shiftKey ? 'prev' : 'next'
+      break
+    }
     case 'ArrowRight': {
       // 下一列
       isMatch = true
@@ -36,6 +40,8 @@ export function handleKeyEnter(event: KeyboardEvent) {
       type = 'down'
       break
     }
+    case 'Space':
+    case ' ':
     case 'Enter': {
       // 确认
       isMatch = true
@@ -52,6 +58,7 @@ export function handleKeyEnter(event: KeyboardEvent) {
 
   if (isMatch) {
     event.preventDefault()
+    event.stopPropagation()
   } else {
     // 键入数字
     const numberKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -61,6 +68,7 @@ export function handleKeyEnter(event: KeyboardEvent) {
       type = inputtedNumber
 
       event.preventDefault()
+      event.stopPropagation()
     }
   }
 
@@ -77,7 +85,7 @@ export function useColumn<T extends string>(
     columnTypes.reduce((prev, current) => {
       prev[current] = false
       return prev
-    }, {} as Record<T, boolean>)
+    }, {} as any)
   ) as Record<T, boolean>
 
   function findEnabledColumn(types: T[]) {

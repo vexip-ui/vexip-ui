@@ -1,7 +1,11 @@
 [
   "basis",
   "disabled",
+  "clearable",
   "icon",
   "size",
-  "before"
+  "before",
+  "password",
+  "loading",
+  "state"
 ]

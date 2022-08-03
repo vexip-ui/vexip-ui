@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <article :class="className">
     <div v-if="hasHeader" :class="nh.be('header')">
       <slot name="header">
         <div v-if="hasTitle" :class="nh.be('title')">
@@ -15,7 +15,7 @@
     <div :class="nh.be('content')" :style="props.contentStyle">
       <slot></slot>
     </div>
-  </div>
+  </article>
 </template>
 
 <script lang="ts">

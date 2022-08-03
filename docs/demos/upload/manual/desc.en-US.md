@@ -1,5 +1,5 @@
 ### Manual Upload
 
-在未设置 `url` 属性时，内部的 `execute` 方法将会被阻断，需要手动上传文件。
+When the `url` prop is not set, the internal `execute` method will be blocked and the file needs to be uploaded manually.
 
-也可以显示地设置 `manual` 属性以开启手动上传模式。
+It is also possible to explicitly set the `manual` prop to enable manual upload mode.

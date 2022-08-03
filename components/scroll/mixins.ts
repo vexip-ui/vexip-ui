@@ -1,5 +1,5 @@
-import { ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { throttle, debounce, toNumber, multipleFixed } from '@vexip-ui/utils'
+import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
+import { toNumber, multipleFixed } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 import type { ScrollMode } from './symbol'
@@ -11,6 +11,7 @@ export function useScrollWrapper({
   height,
   scrollX,
   scrollY,
+  onResize,
   onBeforeRefresh,
   onAfterRefresh
 }: {
@@ -20,6 +21,7 @@ export function useScrollWrapper({
   height: Ref<number | string>,
   scrollX: Ref<number>,
   scrollY: Ref<number>,
+  onResize?: (entry: ResizeObserverEntry) => void,
   onBeforeRefresh?: () => void,
   onAfterRefresh?: () => void
 }) {
@@ -210,48 +212,17 @@ export function useScrollWrapper({
     percentY.value = Math.max(0, Math.min(percentY.value, 100))
   }
 
-  const handleResize = throttle(refresh)
+  function handleResize(entity: ResizeObserverEntry) {
+    refresh()
+    onResize?.(entity)
+  }
 
   let isMounted = false
 
   onMounted(() => {
     refresh()
-    window.addEventListener('resize', handleResize)
-
     isMounted = true
   })
-
-  onBeforeUnmount(() => {
-    destroyMutationObserver()
-    window.removeEventListener('resize', handleResize)
-
-    isMounted = false
-  })
-
-  let mutationObserver: MutationObserver | null
-
-  function createMutationObserver() {
-    const target = content.el?.children[0]
-
-    if (!target) return
-
-    mutationObserver = new MutationObserver(debounce(computeContentSize))
-
-    mutationObserver.observe(target, {
-      attributes: true,
-      childList: true,
-      characterData: true,
-      subtree: true,
-      attributeFilter: ['style']
-    })
-  }
-
-  function destroyMutationObserver() {
-    if (mutationObserver) {
-      mutationObserver.disconnect()
-      mutationObserver = null
-    }
-  }
 
   function refresh() {
     if (typeof onBeforeRefresh === 'function') {
@@ -260,11 +231,6 @@ export function useScrollWrapper({
 
     computeContentSize()
     refreshWrapper()
-
-    nextTick(() => {
-      destroyMutationObserver()
-      createMutationObserver()
-    })
 
     window.setTimeout(
       () => {
@@ -294,6 +260,7 @@ export function useScrollWrapper({
     xBarLength,
     yBarLength,
 
+    handleResize,
     verifyScroll,
     computePercent,
     refresh

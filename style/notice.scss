@@ -71,12 +71,18 @@ $notice: map.merge(
   &__close {
     display: flex;
     align-items: flex-start;
+    align-self: flex-start;
+    padding: 0 0 3px;
     margin-left: 8px;
     color: get-css-var('notice-close-color');
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     transition: get-css-var('transition-color');
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('notice-close-color-hover');
     }
   }
@@ -107,6 +113,7 @@ $notice: map.merge(
 
       #{$close} {
         align-items: center;
+        align-self: stretch;
       }
     }
 
@@ -151,38 +158,46 @@ $notice: map.merge(
       $color: if($type == 'info', 'primary', $type);
 
       &--color-only#{&}--#{$type} {
-        @include define-notice-style((
-          title-color: 'color' $color 'dark-1',
-          color: 'color' $color 'base',
-          close-color: 'color' $color 'opacity-5',
-          close-color-hover: 'color' $color 'base'
-        ));
+        @include define-notice-style(
+          (
+            title-color: 'color' $color 'dark-1',
+            color: 'color' $color 'base',
+            close-color: 'color' $color 'opacity-5',
+            close-color-hover: 'color' $color 'base'
+          )
+        );
       }
 
       &--background#{&}--#{$type} {
-        @include define-notice-style((
-          b-color: 'color' $color 'opacity-5',
-          mask-bg-color: 'color' $color 'opacity-9',
-          shadow: unset,
-          close-color: 'color' $color 'opacity-7',
-          close-color-hover: 'color' $color 'opacity-2'
-        ));
+        @include define-notice-style(
+          (
+            b-color: 'color' $color 'opacity-5',
+            mask-bg-color: 'color' $color 'opacity-9',
+            shadow: unset,
+            close-color: 'color' $color 'opacity-7',
+            close-color-hover: 'color' $color 'opacity-2'
+          )
+        );
       }
 
       &--background#{&}--color#{&}--#{$type} {
-        @include define-notice-style((
-          title-color: 'color' $color 'dark-2',
-          color: 'color' $color 'dark-2',
-          icon-color: 'color' $color 'dark-1',
-          marker-bg-color: 'color' $color 'dark-1'
-        ));
+        @include define-notice-style(
+          (
+            title-color: 'color' $color 'dark-2',
+            color: 'color' $color 'dark-2',
+            icon-color: 'color' $color 'dark-1',
+            marker-bg-color: 'color' $color 'dark-1'
+          )
+        );
       }
 
       &--#{$type} {
-        @include define-notice-style((
-          icon-color: 'color' $color 'base',
-          marker-bg-color: 'color' $color 'base'
-        ));
+        @include define-notice-style(
+          (
+            icon-color: 'color' $color 'base',
+            marker-bg-color: 'color' $color 'base'
+          )
+        );
       }
     }
   }

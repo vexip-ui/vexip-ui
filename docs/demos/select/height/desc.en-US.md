@@ -1,5 +1,5 @@
 ### List Height
 
-当选项数量过多时，会自动使用滚动条以方便用户浏览选项。
+The scroll bar is automatically used to facilitate the user to browse the options when there are too many options.
 
-设置 `max-list-height` 属性可以调整选项列表的最大高度值。
+Set the `max-list-height` prop to adjust the max height of the options list.

@@ -1,3 +1,3 @@
-### 序号列
+### Order Column
 
-在 Column 选项添加 `type` 属性并设置其值为 `order` 可以使该列作为序号列。
+Add a `type` prop to the column options and set its value to `'order'` to make the column as an order column.

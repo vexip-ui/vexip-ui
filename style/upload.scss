@@ -10,15 +10,18 @@ $upload: map.merge(
     color-success: get-css-var('color-success-base'),
     color-fail: get-css-var('color-error-base'),
     color-loading: get-css-var('content-color-disabled'),
-    pane-bg-color: get-css-var('fill=color-base'),
-    pane-b-width: get-css-var('border-width'),
-    pane-b-style: dashed,
-    pane-b-color: get-css-var('border-color-base'),
-    pane-b-color-hover: get-css-var('color-primary-base'),
-    pane-b-color-over: get-css-var('color-primary-base'),
-    pane-radius: get-css-var('radius-base'),
+    panel-bg-color: get-css-var('fill-color-base'),
+    panel-b-width: get-css-var('border-width'),
+    panel-b-style: dashed,
+    panel-b-color: get-css-var('border-color-base'),
+    panel-b-color-hover: get-css-var('color-primary-base'),
+    panel-b-color-focus: get-css-var('upload-panel-b-color-hover'),
+    panel-b-color-over: get-css-var('color-primary-base'),
+    panel-b-color-disabled: get-css-var('border-color-light-2'),
+    panel-radius: get-css-var('radius-base'),
     cloud-color: get-css-var('content-color-secondary'),
     cloud-color-over: get-css-var('color-primary-base'),
+    cloud-color-disabled: get-css-var('content-color-disabled'),
     file-bg-color: transparent,
     file-bg-color-hover: get-css-var('fill-color-hover'),
     file-b-color: get-css-var('border-color-base'),
@@ -29,11 +32,11 @@ $upload: map.merge(
     thumbnail-color: get-css-var('content-color-secondary'),
     mask-bg-color: get-css-var('color-black'),
     mask-opacity: 45%,
-    action-color: get-css-var('content-color-secondary'),
-    action-color-hover: get-css-var('content-color-base'),
+    action-color: get-css-var('content-color-third'),
+    action-color-hover: get-css-var('color-primary-base'),
     action-color-disabled: get-css-var('content-color-disabled'),
     action-color-light: get-css-var('content-color-placeholder'),
-    action-color-reverse: get-css-var('color-white'),
+    action-color-reverse: get-css-var('color-primary-base'),
     percentage-color: get-css-var('content-color-secondary')
   ),
   $upload
@@ -42,6 +45,10 @@ $upload: map.merge(
 .#{$namespace}-upload {
   &-vars {
     @include define-preset-values('upload', $upload);
+  }
+
+  @mixin define-upload-style($style-map) {
+    @include define-preset-style('upload', $style-map);
   }
 
   @include basis;
@@ -57,6 +64,22 @@ $upload: map.merge(
 
   &--block {
     width: 100%;
+  }
+
+  $states: success, error, warning;
+
+  @each $state in $states {
+    &--#{$state} {
+      @include define-upload-style(
+        (
+          panel-b-color: 'color' $state 'opacity-3',
+          panel-b-color-hover: 'color' $state 'base',
+          panel-b-color-over: 'color' $state 'base',
+          cloud-color: 'color' $state 'opacity-2',
+          cloud-color-over: 'color' $state 'base'
+        )
+      );
+    }
   }
 
   &__input {
@@ -83,16 +106,31 @@ $upload: map.merge(
     padding: 20px;
     overflow: hidden;
     cursor: pointer;
-    background-color: get-css-var('upload-pane-bg-color');
+    background-color: get-css-var('upload-panel-bg-color');
     border:
-      get-css-var('upload-pane-b-width')
-      get-css-var('upload-pane-b-style')
-      get-css-var('upload-pane-b-color');
-    border-radius: get-css-var('upload-pane-radius');
-    transition: get-css-var('transition-border');
+      get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
+      get-css-var('upload-panel-b-color');
+    border-radius: get-css-var('upload-panel-radius');
+    outline: 0;
+    transition: get-css-var('transition-color'), get-css-var('transition-border');
 
     &:hover {
-      border-color: get-css-var('upload-pane-b-color-hover');
+      border-color: get-css-var('upload-panel-b-color-hover');
+    }
+
+    &:focus {
+      border-color: get-css-var('upload-panel-b-color-focus');
+    }
+
+    &--disabled {
+      color: get-css-var('content-color-disabled');
+      cursor: not-allowed;
+
+      &,
+      &:hover,
+      &:focus {
+        border-color: get-css-var('upload-panel-b-color-disabled');
+      }
     }
   }
 
@@ -101,18 +139,40 @@ $upload: map.merge(
   }
 
   &__control--drag-over &__drag-pane {
-    border-color: get-css-var('upload-pane-b-color-over');
+    border-color: get-css-var('upload-panel-b-color-over');
+
+    &--disabled {
+      border-color: get-css-var('upload-panel-b-color-disabled');
+    }
   }
 
   &__cloud {
     color: get-css-var('upload-cloud-color');
+
+    &--disabled {
+      color: get-css-var('upload-cloud-color-disabled');
+    }
   }
 
   &__control--drag-over &__cloud {
     color: get-css-var('upload-cloud-color-over');
+
+    &--disabled {
+      color: get-css-var('upload-cloud-color-disabled');
+    }
+  }
+
+  &__loading-icon {
+    pointer-events: none;
+    opacity: 0%;
+  }
+
+  &__tip {
+    margin: 4px 0;
   }
 
   &__drag-pane &__tip {
+    margin: 8px 0 4px;
     user-select: none;
   }
 
@@ -140,7 +200,9 @@ $upload: map.merge(
       background-color: get-css-var('upload-file-bg-color');
       transition: get-css-var('transition-background');
 
-      &:hover {
+      &:hover,
+      &:focus,
+      &:focus-within {
         background-color: get-css-var('upload-file-bg-color-hover');
       }
 
@@ -274,7 +336,9 @@ $upload: map.merge(
     opacity: get-css-var('upload-mask-opacity');
   }
 
-  &__card:hover &__actions {
+  &__card:hover &__actions,
+  &__card:focus &__actions,
+  &__card:focus-within &__actions {
     opacity: 100%;
   }
 
@@ -285,8 +349,12 @@ $upload: map.merge(
 
   &__action {
     position: relative;
+    padding: 0;
     margin: 0 4px;
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
 
     &--disabled {
       color: get-css-var('upload-action-color-disabled') !important;
@@ -297,7 +365,8 @@ $upload: map.merge(
   &__file--thumbnail &__action {
     color: get-css-var('upload-action-color-light');
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('upload-action-color-reverse');
     }
   }
@@ -305,7 +374,8 @@ $upload: map.merge(
   &__file--card &__action {
     color: get-css-var('upload-action-color');
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('upload-action-color-hover');
     }
   }
@@ -332,7 +402,16 @@ $upload: map.merge(
   &__close {
     position: absolute;
     right: 0;
+    padding: 0;
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+
+    &:hover,
+    &:focus {
+      color: get-css-var('upload-action-color-hover');
+    }
   }
 
   &__close,
@@ -344,10 +423,6 @@ $upload: map.merge(
 
   &__file:hover &__close {
     color: get-css-var('upload-action-color');
-
-    &:hover {
-      color: get-css-var('upload-action-color-hover');
-    }
   }
 
   &__success {

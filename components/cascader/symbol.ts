@@ -1,6 +1,6 @@
 export type CascaderValue = (string | number)[] | (string | number)[][]
 
-export interface OptionKeyConfig {
+export interface CascaderKeyConfig {
   value?: string,
   label?: string,
   children?: string,
@@ -8,14 +8,14 @@ export interface OptionKeyConfig {
   hasChild?: string
 }
 
-export interface OptionState {
+export interface CascaderOptionState {
   id: number,
   parent: number,
   value: string | number,
   fullValue: string,
   label: string,
   fullLabel: string,
-  children: OptionState[],
+  children: CascaderOptionState[],
   disabled: boolean,
   hasChild: boolean,
   checked: boolean,

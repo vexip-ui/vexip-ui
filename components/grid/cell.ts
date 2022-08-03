@@ -34,54 +34,18 @@ export default defineComponent({
   setup(_props, { slots }) {
     const props = useProps('cell', _props, {
       tag: 'div',
-      top: {
-        default: 'auto',
-        static: true
-      },
-      left: {
-        default: 'auto',
-        static: true
-      },
-      width: {
-        default: null,
-        static: true
-      },
-      height: {
-        default: 1,
-        static: true
-      },
-      right: {
-        default: '',
-        static: true
-      },
-      bottom: {
-        default: '',
-        static: true
-      },
-      xs: {
-        default: null,
-        static: true
-      },
-      sm: {
-        default: null,
-        static: true
-      },
-      md: {
-        default: null,
-        static: true
-      },
-      lg: {
-        default: null,
-        static: true
-      },
-      xl: {
-        default: null,
-        static: true
-      },
-      xxl: {
-        default: null,
-        static: true
-      },
+      top: 'auto',
+      left: 'auto',
+      width: null,
+      height: 1,
+      right: '',
+      bottom: '',
+      xs: null,
+      sm: null,
+      md: null,
+      lg: null,
+      xl: null,
+      xxl: null,
       useFlex: null
     })
 
@@ -97,7 +61,14 @@ export default defineComponent({
       width: props.width,
       height: props.height
     })
-    const leyoutKeys = Object.keys(layoutState) as ('top' | 'right' | 'bottom' | 'left' | 'width' | 'height')[]
+    const leyoutKeys = Object.keys(layoutState) as (
+      | 'top'
+      | 'right'
+      | 'bottom'
+      | 'left'
+      | 'width'
+      | 'height'
+    )[]
 
     const defaultWidth = computed(() => {
       if (isDefined(props.width)) {
@@ -108,7 +79,8 @@ export default defineComponent({
     })
 
     watch(
-      currentBreakPoint, value => {
+      currentBreakPoint,
+      value => {
         const matchSize = queryBreakPointOptions(value)
 
         if (matchSize) {
@@ -120,7 +92,7 @@ export default defineComponent({
             layoutState.width = matchSize
           } else {
             leyoutKeys.forEach(key => {
-              layoutState[key] = has(matchSize, key) ? matchSize[key] : props[key] as any
+              layoutState[key] = has(matchSize, key) ? matchSize[key] : (props[key] as any)
             })
 
             layoutState.width = layoutState.width ?? defaultWidth.value
@@ -137,13 +109,14 @@ export default defineComponent({
     )
 
     const className = computed(() => {
-      const cellFelx = props.useFlex !== false && (props.useFlex || gridState?.cellFlex) && {
+      const cellFelx = props.useFlex !== false &&
+        (props.useFlex || gridState?.cellFlex) && {
         ...(gridState?.cellFlex || {}),
-        ...(
-          props.useFlex
-            ? props.useFlex === true ? { justify: 'start', align: 'top' } : props.useFlex
-            : {}
-        )
+        ...(props.useFlex
+          ? props.useFlex === true
+            ? { justify: 'start', align: 'top' }
+            : props.useFlex
+          : {})
       }
       const className = {
         [nh.b()]: true,
@@ -216,15 +189,16 @@ export default defineComponent({
       return null
     }
 
-    return () => h(
-      props.tag || 'div',
-      {
-        class: className.value,
-        style: style.value
-      },
-      {
-        default: () => slots.default?.()
-      }
-    )
+    return () =>
+      h(
+        props.tag || 'div',
+        {
+          class: className.value,
+          style: style.value
+        },
+        {
+          default: () => slots.default?.()
+        }
+      )
   }
 })
