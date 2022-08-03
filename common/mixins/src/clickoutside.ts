@@ -17,9 +17,9 @@ export const CLICK_OUTSIDE = 'clickoutside'
 
 createEvent(CLICK_OUTSIDE)
 
-document.addEventListener(CLICK_TYPE, (event: Event & { path?: TransferNode[] }) => {
+document.addEventListener(CLICK_TYPE, (event: Event) => {
   const target = event.target
-  const path = event.path || (event.composedPath && event.composedPath())
+  const path = event.composedPath && event.composedPath()
 
   getObservers(CLICK_OUTSIDE).forEach((el: TransferNode) => {
     if (
