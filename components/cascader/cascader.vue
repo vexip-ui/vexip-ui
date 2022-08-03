@@ -895,6 +895,9 @@ export default defineComponent({
       }
 
       openedIds.value.push(option.id)
+      requestAnimationFrame(() => {
+        panelElList.value.at(-1)?.$el?.focus()
+      })
     }
 
     function handleOptionSelect(option: CascaderOptionState, depth: number) {

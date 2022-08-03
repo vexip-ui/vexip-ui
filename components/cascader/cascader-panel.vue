@@ -31,7 +31,7 @@
           :disabled="item.disabled"
           :selected="isSelected(item)"
           :hitting="index === currentHitting"
-          @select="handleSelect(item)"
+          @select="handleSelect(item, index)"
           @mouseenter="handleMouseEnter(item)"
         >
           <slot
@@ -59,7 +59,7 @@
                 :selected="isSelected(item)"
                 :can-check="isCheckboxDisabled(item)"
                 :has-child="hasChildren(item)"
-                :handle-select="handleSelect"
+                :handle-select="() => handleSelect(item, index)"
               >
                 {{ item.label }}
               </slot>
@@ -205,7 +205,7 @@ export default defineComponent({
             if (props.multiple) {
               handleToggleCheck(option)
             } else {
-              handleSelect(option)
+              handleSelect(option, currentHitting.value)
             }
           }
         } else if (modifier.escape) {
@@ -224,6 +224,7 @@ export default defineComponent({
 
         if (value) {
           list.value?.refresh()
+          currentHitting.value = props.options.findIndex(isSelected)
         } else {
           currentHitting.value = -1
         }
@@ -257,8 +258,10 @@ export default defineComponent({
       )
     }
 
-    function handleSelect(option: CascaderOptionState) {
+    function handleSelect(option: CascaderOptionState, index: number) {
       if (option.disabled) return
+
+      currentHitting.value = index
 
       if (props.multiple || props.noCascaded) {
         hasChildren(option) ? emit('select', option) : handleToggleCheck(option)
