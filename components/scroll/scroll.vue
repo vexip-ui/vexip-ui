@@ -5,6 +5,7 @@
     :style="style"
     @mousedown="handleMouseDown"
     @touchstart="handleTouchStart"
+    @scroll="ensureScrollOffset"
     @wheel.exact="handleWheel($event, 'vertical')"
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
@@ -620,6 +621,13 @@ export default defineComponent({
       })
     }
 
+    function ensureScrollOffset() {
+      if (wrapperElement.value) {
+        wrapperElement.value.scrollTop = 0
+        wrapperElement.value.scrollLeft = 0
+      }
+    }
+
     function scrollTo(clientX: number, clientY: number, duration?: number) {
       setDuration(duration)
 
@@ -712,6 +720,40 @@ export default defineComponent({
       scrollTo(clientX, clientY, duration)
     }
 
+    function ensureInView(el: string | Element, duration?: number, offset = 0) {
+      if (!wrapperElement.value) return
+
+      if (typeof el === 'string') {
+        el = wrapperElement.value.querySelector(el)!
+      }
+
+      if (!(el instanceof Node)) return
+
+      const wrapperRect = wrapperElement.value.getBoundingClientRect()
+      const elRect = el.getBoundingClientRect()
+
+      let clientX = 0
+      let clientY = 0
+
+      if (props.mode !== 'vertical') {
+        if (elRect.left < wrapperRect.left + offset) {
+          clientX = elRect.left - wrapperRect.left - offset
+        } else if (elRect.right > wrapperRect.right - offset) {
+          clientX = elRect.right - wrapperRect.right + offset
+        }
+      }
+
+      if (props.mode !== 'horizontal') {
+        if (elRect.top < wrapperRect.top + offset) {
+          clientY = elRect.top - wrapperRect.top - offset
+        } else if (elRect.bottom > wrapperRect.bottom - offset) {
+          clientY = elRect.bottom - wrapperRect.bottom + offset
+        }
+      }
+
+      scrollBy(clientX, clientY, duration)
+    }
+
     function addScrollListener(listener: EventHandler) {
       emitter.on('scroll', listener)
     }
@@ -750,6 +792,7 @@ export default defineComponent({
       handleBarScrollEnd,
       handleXBarScroll,
       handleYBarScroll,
+      ensureScrollOffset,
 
       refresh,
       scrollTo,
@@ -757,6 +800,7 @@ export default defineComponent({
       getXScrollLimit,
       getYScrollLimit,
       scrollToElement,
+      ensureInView,
       addScrollListener,
       removeScrollListener
     }

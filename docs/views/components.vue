@@ -24,6 +24,7 @@
               :key="component.name"
               :label="toKebabCase(component.name)"
               :data-name="toKebabCase(component.name)"
+              @focusin="moveMenuIntoView(toKebabCase(component.name))"
             >
               {{ $t(`components.${component.name}`) }}
               <span v-if="language !== 'en-US'" :class="`${prefix}__sub-name`">
@@ -118,24 +119,26 @@ function scrollToMenuItem(label: string) {
 
   if (!menuItemEl) return
 
-  const scrollRect = scrollEl.getBoundingClientRect()
-  const menuItemRect = menuItemEl.getBoundingClientRect()
-
-  if (menuItemRect.y < scrollRect.y) {
-    menuScroll.value.scrollToElement(menuItemEl, 500, -10)
-  } else if (menuItemRect.y >= scrollRect.y + scrollRect.height) {
-    menuScroll.value.scrollBy(
-      0,
-      menuItemRect.y - (scrollRect.y + scrollRect.height) + menuItemRect.height + 10,
-      500
-    )
-  }
-
+  menuScroll.value.ensureInView(menuItemEl, 500, 10)
   menuItemEl.querySelector('[tabindex="0"]')?.focus()
 }
 
 function isNewComponent(config: ComponentConfig) {
   return config.since && config.since.startsWith(minorVersion)
+}
+
+function moveMenuIntoView(label: string) {
+  requestAnimationFrame(() => {
+    const scrollEl = menuScroll.value?.$el
+
+    if (!label || !menuScroll.value || !scrollEl) return
+
+    const menuItemEl = scrollEl.querySelector(`.vxp-menu__item[data-name=${label}]`)
+
+    if (!menuItemEl) return
+
+    menuScroll.value.ensureInView(menuItemEl, 0, 10)
+  })
 }
 </script>
 
@@ -164,7 +167,7 @@ function isNewComponent(config: ComponentConfig) {
 
   &__sub-name {
     margin-left: 8px;
-    color: var(--vxp-content-color-third);
+    color: var(--vxp-content-color-secondary);
     transition: var(--vxp-transition-color);
 
     .vxp-menu__label:hover &,
