@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, watchEffect, nextTick } from 'vue'
+import { defineComponent, ref, computed, watch, watchEffect, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
@@ -290,6 +290,14 @@ export default defineComponent({
 
         computeHitting()
       }
+    })
+
+    onMounted(() => {
+      nextTick(() => {
+        if (control.value && !isNull(currentValue.value)) {
+          control.value.value = String(currentValue.value)
+        }
+      })
     })
 
     function computeHitting() {
