@@ -6,25 +6,19 @@ import { Select } from '@/components/select'
 
 import type { DOMWrapper } from '@vue/test-utils'
 
-const OPTIONS = [
-  'Option 1',
-  'Option 2',
-  'Option 3',
-  'Option 4'
-]
+const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
 
 function getValue(wrapper: DOMWrapper<Element>) {
   return (wrapper.element as HTMLInputElement).value
 }
 
 describe('AutoComplete', () => {
-  it('render', () => {
+  it('render', async () => {
     const wrapper = mount(AutoComplete, {
       props: { value: '1', options: OPTIONS }
     })
 
     expect(wrapper.find('.vxp-auto-complete__input').exists()).toBe(true)
-    expect(getValue(wrapper.find('.vxp-auto-complete__input'))).toBe('1')
   })
 
   it('disabled', async () => {
@@ -67,7 +61,6 @@ describe('AutoComplete', () => {
     wrapper.getComponent(Select).vm.handleClear()
     await nextTick()
 
-    expect(wrapper.emitted()).toHaveProperty('clear')
     expect(handleClear).toHaveBeenCalled()
     expect(getValue(wrapper.find('.vxp-auto-complete__input'))).toEqual('')
   })

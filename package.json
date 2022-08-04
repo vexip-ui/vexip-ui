@@ -54,7 +54,7 @@
     "gulp-autoprefixer": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-sass": "^5.1.0",
-    "happy-dom": "^6.0.0",
+    "happy-dom": "^6.0.4",
     "husky": "^8.0.1",
     "is-ci": "^3.0.1",
     "jszip": "^3.10.0",
@@ -81,7 +81,7 @@
     "typescript": "4.6.4",
     "vite": "2.9.14",
     "vite-plugin-dts": "^1.3.0",
-    "vitest": "^0.17.0",
+    "vitest": "^0.20.3",
     "vue": "^3.2.37",
     "vue-eslint-parser": "^9.0.3",
     "vue-router": "^4.1.1"
@@ -173,8 +173,7 @@
     "serve:docs": "pnpm -C docs serve",
     "serve:playground": "pnpm -C playground serve",
     "serve:theme": "ts-node scripts/serve.ts --theme",
-    "test": "vitest",
-    "test1": "ts-node scripts/create-tests.ts"
+    "test": "vitest"
   },
   "sideEffects": [
     "dist/*",

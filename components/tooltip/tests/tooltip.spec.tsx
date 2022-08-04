@@ -4,8 +4,12 @@ import { Tooltip } from '..'
 
 describe('Tooltip', () => {
   it('render', () => {
-    const wrapper = mount(Tooltip)
+    const wrapper = mount(Tooltip, {
+      slots: {
+        trigger: () => <span class={'trigger'}></span>
+      }
+    })
 
-    expect(wrapper.classes()).toContain('vxp-tooltip-vars')
+    expect(wrapper.find('.trigger').exists()).toBe(true)
   })
 })

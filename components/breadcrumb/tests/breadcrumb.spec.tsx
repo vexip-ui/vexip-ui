@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { Breadcrumb } from '..'
@@ -49,30 +49,34 @@ describe('Breadcrumb', () => {
   })
 
   it('click', async () => {
+    const onSelect = vi.fn()
     const wrapper = mount(Breadcrumb, {
+      props: {
+        onSelect
+      },
       slots: {
         default: () => <BreadcrumbItem label={'item'}>item</BreadcrumbItem>
       }
     })
 
     await wrapper.find('.vxp-breadcrumb__label').trigger('click')
-    expect(wrapper.findComponent(BreadcrumbItem).emitted()).toHaveProperty('select')
-    expect(wrapper.findComponent(BreadcrumbItem).emitted('select')![0]).toEqual(['item'])
-    expect(wrapper.emitted()).toHaveProperty('select')
-    expect(wrapper.emitted('select')![0]).toEqual(['item'])
+    expect(onSelect).toHaveBeenCalled()
+    expect(onSelect).toBeCalledWith('item')
   })
 
   it('separator click', async () => {
+    const onSeparatorClick = vi.fn()
     const wrapper = mount(Breadcrumb, {
+      props: {
+        onSeparatorClick
+      },
       slots: {
         default: () => <BreadcrumbItem label={'item'}>item</BreadcrumbItem>
       }
     })
 
     await wrapper.find('.vxp-breadcrumb__separator').trigger('click')
-    expect(wrapper.findComponent(BreadcrumbItem).emitted()).toHaveProperty('separator-click')
-    expect(wrapper.findComponent(BreadcrumbItem).emitted('separator-click')![0]).toEqual(['item'])
-    expect(wrapper.emitted()).toHaveProperty('separator-click')
-    expect(wrapper.emitted('separator-click')![0]).toEqual(['item'])
+    expect(onSeparatorClick).toHaveBeenCalled()
+    expect(onSeparatorClick).toBeCalledWith('item')
   })
 })

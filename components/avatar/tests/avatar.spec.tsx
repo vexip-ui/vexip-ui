@@ -1,11 +1,11 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { Avatar } from '..'
 import { User } from '@vexip-ui/icons'
 
 const IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='
 
-describe('AutoComplete', () => {
+describe('Avatar', () => {
   it('render', () => {
     const wrapper = mount(Avatar)
 
@@ -36,17 +36,19 @@ describe('AutoComplete', () => {
   })
 
   it('image fallback', async () => {
+    const onError = vi.fn()
     const wrapper = mount(Avatar, {
       props: {
         src: 'unknown image',
-        fallbackSrc: IMAGE
+        fallbackSrc: IMAGE,
+        onError
       }
     })
 
     expect(wrapper.find('.vxp-avatar__image').attributes('src')).toEqual('unknown image')
 
     await wrapper.find('.vxp-avatar__image').trigger('error')
-    expect(wrapper.emitted()).toHaveProperty('error')
+    expect(onError).toHaveBeenCalled()
     expect(wrapper.find('.vxp-avatar__image').attributes('src')).toEqual(IMAGE)
   })
 
