@@ -1,13 +1,9 @@
 <template>
-  <CheckboxGroup v-model:values="values">
+  <CheckboxGroup v-model:value="values">
     <Checkbox control>
       All
     </Checkbox>
-    <Checkbox
-      v-for="item in items"
-      :key="item"
-      :label="item"
-    ></Checkbox>
+    <Checkbox v-for="item in items" :key="item" :label="item"></Checkbox>
   </CheckboxGroup>
   <br />
   values: {{ values }}

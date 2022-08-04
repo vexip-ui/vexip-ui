@@ -190,7 +190,7 @@ export default defineComponent({
     function handleControlChange() {
       // 在 group 层进行更新, 未选满则全选, 反之全不选
       const allValues = Array.from(valueMap.keys())
-      const checked = currentValues.value.length === allValues.length
+      const checked = currentValues.value.length !== allValues.length
 
       allValues.forEach(value => {
         valueMap.set(value, checked)

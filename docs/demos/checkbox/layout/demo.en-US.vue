@@ -1,5 +1,5 @@
 <template>
-  <CheckboxGroup v-model:values="values">
+  <CheckboxGroup v-model:value="values">
     <Row>
       <Column>
         <Checkbox control>
