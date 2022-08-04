@@ -1,5 +1,5 @@
 <template>
-  <CheckboxGroup v-model:values="values" vertical>
+  <CheckboxGroup v-model:value="values" vertical>
     <Checkbox
       v-for="item in items"
       :key="item"
