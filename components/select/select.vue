@@ -405,6 +405,9 @@ export default defineComponent({
       data: ''
     })
 
+    const optionStates = computed(() => userOptions.value.concat(baseOptions.value))
+    const visibleOptions = computed(() => optionStates.value.filter(state => !state.hidden))
+
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
     let optionValueMap = new Map<string | number, SelectOptionState>()
@@ -595,8 +598,6 @@ export default defineComponent({
     })
     const hasValue = computed(() => !isNull(currentValues.value[0]))
     const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
-    const optionStates = computed(() => userOptions.value.concat(baseOptions.value))
-    const visibleOptions = computed(() => optionStates.value.filter(state => !state.hidden))
     const showDynamic = computed(() => {
       return !!(
         props.filter &&
