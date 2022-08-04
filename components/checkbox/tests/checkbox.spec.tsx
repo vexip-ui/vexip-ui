@@ -115,6 +115,15 @@ describe('Checkbox', () => {
     })
   })
 
+  it('loading', async () => {
+    const wrapper = mount(Checkbox)
+
+    expect(wrapper.find('.vxp-checkbox__signal--active').exists()).toBe(false)
+
+    await wrapper.setProps({ loading: true })
+    expect(wrapper.find('.vxp-checkbox__signal--active').exists()).toBe(true)
+  })
+
   it('loading lock', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Checkbox, {
@@ -279,15 +288,25 @@ describe('Checkbox', () => {
 
     await others[1].find('input[type="checkbox"]').trigger('change')
     await nextTick()
-
     expect(control.classes()).toContain('vxp-checkbox--partial')
 
     await control.find('input[type="checkbox"]').trigger('change')
     await nextTick()
-
     expect(control.classes()).not.toContain('vxp-checkbox--partial')
     items.forEach(item => {
       expect(item.classes()).toContain('vxp-checkbox--checked')
+    })
+
+    await others[1].find('input[type="checkbox"]').trigger('change')
+    await nextTick()
+    expect(control.classes()).toContain('vxp-checkbox--partial')
+
+    await others[1].find('input[type="checkbox"]').trigger('change')
+    await nextTick()
+    await control.find('input[type="checkbox"]').trigger('change')
+    await nextTick()
+    items.forEach(item => {
+      expect(item.classes()).not.toContain('vxp-checkbox--checked')
     })
   })
 })
