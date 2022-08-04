@@ -1,3 +1,26 @@
+# [2.0.0-beta.20](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2022-08-04)
+
+### Bug Fixes
+
+- **auto-complete:** correctly init input control value ([99669a2](https://github.com/qmhc/vexip-ui/commit/99669a2b7b4ef6fdcfa90f51cd8cad4e745b96ee))
+- **breadcrumb:** using `<a>` as label tag ([63832d2](https://github.com/qmhc/vexip-ui/commit/63832d2e8bd10af4257dc41e00e221953b3ff515))
+- **cascader:** correct focus when mixed using mouse and keyboard ([7e9535c](https://github.com/qmhc/vexip-ui/commit/7e9535ce37ec282721ec386061bc3f862d576046))
+- **layout:** auto adjust menu width when no aside ([a218943](https://github.com/qmhc/vexip-ui/commit/a21894303869124dd515e519251791ce4835be8d))
+- **masker:** using visibility hidden instead v-show ([a0d41bd](https://github.com/qmhc/vexip-ui/commit/a0d41bd14d763997d722c9326ba6ee73bbd22f3d))
+- **textarea:** missing Icon register ([b04627a](https://github.com/qmhc/vexip-ui/commit/b04627ac03f9c0c128b8d08c8f5f328432ea2072))
+
+### Features
+
+- **button:** add no-pulse and icon-only props ([342655c](https://github.com/qmhc/vexip-ui/commit/342655cff8728c7c39010475eb0e7fdd8f5115af))
+- **form:** add built in row layout ([561ff23](https://github.com/qmhc/vexip-ui/commit/561ff231edc04bf00ebed3653442f4b679d98e90))
+- **form:** support responsive label width ([e1ae713](https://github.com/qmhc/vexip-ui/commit/e1ae7132c06c9ab49720650ab81f598f72057356))
+- **layout:** auto toggle links layout when footer resize ([f5786ff](https://github.com/qmhc/vexip-ui/commit/f5786ffe2ff1938d64c65022c63aa4222e412268))
+- **layout:** auto toggle sign name show when header resize ([bceb75d](https://github.com/qmhc/vexip-ui/commit/bceb75d65a02ea3d7406a4b66ac5fa437eaab33f))
+- **scroll:** add ensureInView api method ([090367d](https://github.com/qmhc/vexip-ui/commit/090367d71c0d0ccdb54afd88a60feb1ffe7826d7))
+- **select:** support dynamic create options ([3673b83](https://github.com/qmhc/vexip-ui/commit/3673b83e344fb018ba495bd974d75497c4ef5c2d)), closes [#99](https://github.com/qmhc/vexip-ui/issues/99)
+- **select:** support filter options ([31d1cd8](https://github.com/qmhc/vexip-ui/commit/31d1cd89ddaec9197315c75456b51744cf2e7350))
+- **select:** support use backspace to delete tag ([f05e8f4](https://github.com/qmhc/vexip-ui/commit/f05e8f41bf03183e891d6b1fb6acdeb97ac7e098))
+
 # [2.0.0-beta.19](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.18...v2.0.0-beta.19) (2022-08-01)
 
 ### Bug Fixes
