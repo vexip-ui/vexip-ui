@@ -102,6 +102,10 @@ $select: map.merge(
     &--multiple {
       min-width: 1px;
     }
+
+    &::placeholder {
+      color: get-css-var('input-placeholder-color');
+    }
   }
 
   &__device {
