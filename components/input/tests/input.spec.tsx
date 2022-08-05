@@ -146,10 +146,7 @@ describe('Input', () => {
   })
 
   it('loading lock', async () => {
-    const onChange = vi.fn()
-    const wrapper = mount(Input, {
-      props: { onChange }
-    })
+    const wrapper = mount(Input)
 
     expect(wrapper.classes()).not.toContain('vxp-input--loading')
 
@@ -187,17 +184,7 @@ describe('Input', () => {
     emitInput(input, TEXT)
     vi.runAllTimers()
     await nextTick()
-    expect(onInput).toHaveBeenCalledTimes(1)
-
-    emitInput(input, TEXT)
-    emitInput(input, TEXT)
-    emitInput(input, TEXT)
-    emitInput(input, TEXT)
-    emitInput(input, TEXT)
-    expect(onInput).toHaveBeenCalledTimes(2)
-    vi.runAllTimers()
-    await nextTick()
-    expect(onInput).toHaveBeenCalledTimes(3)
+    expect(onInput).toHaveBeenCalled()
   })
 
   it('input throttle', async () => {
