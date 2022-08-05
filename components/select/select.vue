@@ -405,6 +405,7 @@ export default defineComponent({
       data: ''
     })
 
+    const optionValues = reactive(new Set<string | number>())
     const optionStates = computed(() => userOptions.value.concat(baseOptions.value))
     const visibleOptions = computed(() => optionStates.value.filter(state => !state.hidden))
 
@@ -447,8 +448,11 @@ export default defineComponent({
         .map(option => ({ option, depth: 0, parent: null as SelectOptionState | null }))
         .reverse()
 
+      optionValues.clear()
+
       for (const option of userOptions.value) {
         map.set(option.value, option)
+        optionValues.add(option.value)
       }
 
       while (loop.length) {
@@ -485,6 +489,7 @@ export default defineComponent({
 
         if (!group) {
           map.set(value, optionState)
+          optionValues.add(String(value))
         }
 
         if (Array.isArray(children) && children.length) {
@@ -603,7 +608,7 @@ export default defineComponent({
         props.filter &&
         props.creatable &&
         dynamicOption.value &&
-        !currentValues.value.includes(dynamicOption.value)
+        !optionValues.has(dynamicOption.value)
       )
     })
     const totalOptions = computed(() => {
@@ -959,6 +964,10 @@ export default defineComponent({
 
       if (showDynamic.value || currentIndex.value !== -1) {
         currentIndex.value = 0
+      } else {
+        currentIndex.value = visibleOptions.value.findIndex(
+          option => String(option.value) === currentFilter.value
+        )
       }
 
       requestAnimationFrame(() => {
