@@ -1,5 +1,4 @@
 import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { Radio } from '..'
 import { RadioGroup } from '@/components/radio-group'
@@ -52,11 +51,9 @@ describe('Radio', () => {
     expect(wrapper.classes()).not.toContain('vxp-radio--checked')
 
     await wrapper.find('input[type="radio"]').trigger('change')
-    await nextTick()
     expect(wrapper.classes()).toContain('vxp-radio--checked')
 
     await wrapper.find('input[type="radio"]').trigger('change')
-    await nextTick()
     expect(wrapper.classes()).toContain('vxp-radio--checked')
   })
 
@@ -84,7 +81,6 @@ describe('Radio', () => {
     expect(wrapper.classes()).toContain('vxp-radio--disabled')
 
     await wrapper.find('input[type="radio"]').trigger('change')
-    await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-radio--checked')
     expect(onChange).not.toHaveBeenCalled()
   })
@@ -149,7 +145,6 @@ describe('Radio', () => {
     const wrapper = mount(() => <RadioGroup options={OPTIONS} onChange={onChange}></RadioGroup>)
 
     await wrapper.find('input[type="radio"]').trigger('change')
-    await nextTick()
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith(OPTIONS[0])
   })
@@ -170,7 +165,6 @@ describe('Radio', () => {
     })
 
     await wrapper.find('input[type="radio"]').trigger('change')
-    await nextTick()
     expect(onChange).not.toHaveBeenCalled()
   })
 
@@ -199,7 +193,6 @@ describe('Radio', () => {
     })
 
     await wrapper.find('input[type="radio"]').trigger('change')
-    await nextTick()
     expect(onChange).not.toHaveBeenCalled()
   })
 

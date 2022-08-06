@@ -56,11 +56,9 @@ describe('Checkbox', () => {
     expect(wrapper.classes()).not.toContain('vxp-checkbox--checked')
 
     await wrapper.find('input[type="checkbox"]').trigger('change')
-    await nextTick()
     expect(wrapper.classes()).toContain('vxp-checkbox--checked')
 
     await wrapper.find('input[type="checkbox"]').trigger('change')
-    await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-checkbox--checked')
   })
 
@@ -88,7 +86,6 @@ describe('Checkbox', () => {
     expect(wrapper.classes()).toContain('vxp-checkbox--disabled')
 
     await wrapper.find('input[type="checkbox"]').trigger('change')
-    await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-checkbox--checked')
     expect(onChange).not.toHaveBeenCalled()
   })
@@ -184,7 +181,6 @@ describe('Checkbox', () => {
     ))
 
     await wrapper.find('input[type="checkbox"]').trigger('change')
-    await nextTick()
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith([OPTIONS[0]])
   })
@@ -204,7 +200,6 @@ describe('Checkbox', () => {
     })
 
     await wrapper.find('input[type="checkbox"]').trigger('change')
-    await nextTick()
     expect(onChange).not.toHaveBeenCalled()
   })
 
@@ -233,7 +228,6 @@ describe('Checkbox', () => {
     })
 
     await wrapper.find('input[type="checkbox"]').trigger('change')
-    await nextTick()
     expect(onChange).not.toHaveBeenCalled()
   })
 
