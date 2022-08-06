@@ -55,16 +55,6 @@ describe('Select', () => {
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
   })
 
-  it('disabled', async () => {
-    const wrapper = mount(Select)
-    const selector = wrapper.find('.vxp-select__selector')
-
-    expect(selector.classes()).not.toContain('vxp-select__selector--disabled')
-
-    await wrapper.setProps({ disabled: true })
-    expect(selector.classes()).toContain('vxp-select__selector--disabled')
-  })
-
   it('placeholder', async () => {
     const wrapper = mount(Select)
 
@@ -85,9 +75,25 @@ describe('Select', () => {
 
     await wrapper.trigger('click')
     expect(selector.classes()).not.toContain('vxp-select__selector--focused')
+  })
 
-    await wrapper.trigger('click')
-    await wrapper.setProps({ disabled: true })
+  it('key toggle visible', async () => {
+    const wrapper = mount(Select)
+    const selector = wrapper.find('.vxp-select__selector')
+
+    await nextTick()
+    await wrapper.trigger('keydown', { key: 'Space' })
+    expect(selector.classes()).toContain('vxp-select__selector--focused')
+
+    await wrapper.trigger('keydown', { key: 'Escape' })
+    expect(selector.classes()).not.toContain('vxp-select__selector--focused')
+
+    await wrapper.setProps({ visible: true })
+    await wrapper.trigger('keydown', { key: 'Tab' })
+    expect(selector.classes()).not.toContain('vxp-select__selector--focused')
+
+    await wrapper.setProps({ visible: true })
+    await wrapper.trigger('keydown', { key: 'Enter' })
     expect(selector.classes()).not.toContain('vxp-select__selector--focused')
   })
 
@@ -112,6 +118,26 @@ describe('Select', () => {
     await wrapper.trigger('click')
     expect(onToggle).toHaveBeenCalledTimes(2)
     expect(wrapper.emitted('update:visible')!.length).toBe(2)
+  })
+
+  it('disabled', async () => {
+    const onToggle = vi.fn()
+    const wrapper = mount(Select)
+    const selector = wrapper.find('.vxp-select__selector')
+
+    expect(selector.classes()).not.toContain('vxp-select__selector--disabled')
+
+    await wrapper.setProps({ visible: true })
+    expect(selector.classes()).toContain('vxp-select__selector--focused')
+
+    await wrapper.setProps({ disabled: true })
+    expect(selector.classes()).toContain('vxp-select__selector--disabled')
+    expect(selector.classes()).not.toContain('vxp-select__selector--focused')
+
+    await wrapper.setProps({ onToggle })
+    await wrapper.trigger('click')
+    expect(selector.classes()).not.toContain('vxp-select__selector--focused')
+    expect(onToggle).not.toHaveBeenCalled()
   })
 
   it('options show', async () => {
@@ -434,6 +460,27 @@ describe('Select', () => {
     expect(wrapper.findAll('.vxp-select__tag').length).toEqual(1)
   })
 
-  // TODO: hitting test
-  // it('hitting option')
+  it('hitting option', async () => {
+    const wrapper = mount(Select, {
+      props: {
+        visible: true,
+        options: OPTIONS
+      }
+    })
+
+    const options = wrapper.findAll('.vxp-option')
+
+    await nextTick()
+    await wrapper.trigger('keydown', { key: 'ArrowDown' })
+    expect(wrapper.findAll('.vxp-option--hitting').length).toEqual(1)
+    expect(options[0].classes()).toContain('vxp-option--hitting')
+
+    await wrapper.trigger('keydown', { key: 'ArrowUp' })
+    expect(options[0].classes()).not.toContain('vxp-option--hitting')
+    expect(options[3].classes()).toContain('vxp-option--hitting')
+
+    await options[2].trigger('mousemove')
+    expect(options[3].classes()).not.toContain('vxp-option--hitting')
+    expect(options[2].classes()).toContain('vxp-option--hitting')
+  })
 })
