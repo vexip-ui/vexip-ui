@@ -12,6 +12,7 @@ describe('Checkbox', () => {
     const wrapper = mount(Checkbox)
 
     expect(wrapper.classes()).toContain('vxp-checkbox-vars')
+    expect(wrapper.find('.vxp-checkbox__signal').exists()).toBe(true)
     expect(wrapper.find('input[type="checkbox"]').exists()).toBe(true)
   })
 
@@ -38,10 +39,15 @@ describe('Checkbox', () => {
     expect(wrapper.find('.vxp-checkbox__label').text()).toEqual('')
   })
 
-  it('size', () => {
-    const wrapper = mount(() => <Checkbox size={'large'}></Checkbox>)
+  it('size', async () => {
+    const wrapper = mount(Checkbox, {
+      props: { size: 'large' }
+    })
 
     expect(wrapper.find('.vxp-checkbox').classes()).toContain('vxp-checkbox--large')
+
+    await wrapper.setProps({ size: 'small' })
+    expect(wrapper.find('.vxp-checkbox').classes()).toContain('vxp-checkbox--small')
   })
 
   it('toggle checked', async () => {
@@ -235,7 +241,8 @@ describe('Checkbox', () => {
     (['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => (
         <CheckboxGroup state={state}>
-          <Checkbox></Checkbox>,<Checkbox state={'default'}></Checkbox>
+          <Checkbox></Checkbox>
+          <Checkbox state={'default'}></Checkbox>
         </CheckboxGroup>
       ))
 
@@ -249,7 +256,8 @@ describe('Checkbox', () => {
   it('group size', () => {
     const wrapper = mount(() => (
       <CheckboxGroup size={'large'}>
-        <Checkbox></Checkbox>,<Checkbox size={'default'}></Checkbox>
+        <Checkbox></Checkbox>
+        <Checkbox size={'default'}></Checkbox>
       </CheckboxGroup>
     ))
 
