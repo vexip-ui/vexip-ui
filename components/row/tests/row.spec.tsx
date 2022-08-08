@@ -88,7 +88,7 @@ describe('Row', () => {
     expect(wrapper.find('.vxp-column').element.tagName).toEqual('LI')
   })
 
-  it('use flex', () => {
+  it('column use flex', () => {
     const wrapper = mount(() => (
       <Row>
         <Column use-flex></Column>

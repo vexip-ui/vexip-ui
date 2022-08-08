@@ -63,7 +63,7 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.bm(props.justify)]: true,
         [nh.bm(props.align)]: props.align !== 'stretch',
-        [nh.bm('densc')]: props.dense
+        [nh.bm('dense')]: props.dense
       }
     })
     const style = computed(() => {
