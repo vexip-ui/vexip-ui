@@ -148,7 +148,13 @@ import { Portal } from '@/components/portal'
 import DateControl from './date-control.vue'
 import DatePanel from './date-panel.vue'
 import { useFieldStore } from '@/components/form'
-import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import {
+  useHover,
+  usePopper,
+  placementWhileList,
+  useClickOutside,
+  useSetTimeout
+} from '@vexip-ui/mixins'
 import {
   useNameHelper,
   useProps,
@@ -308,6 +314,8 @@ export default defineComponent({
     const currentState = ref<'start' | 'end'>('start')
     const lastValue = ref('')
 
+    const { timer } = useSetTimeout()
+
     const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
@@ -333,7 +341,7 @@ export default defineComponent({
           [nh.bm('no-hour')]: !startState.enabled.hour,
           [nh.bm('no-minute')]: !startState.enabled.minute,
           [nh.bm('no-second')]: !startState.enabled.second,
-          [nh.bm('focused')]: focused.value,
+          [nh.bm('visible')]: currentVisible.value,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('is-range')]: props.isRange
         }
@@ -451,6 +459,7 @@ export default defineComponent({
       value => {
         if (value) {
           currentVisible.value = false
+          handleBlur()
         }
       }
     )
@@ -712,7 +721,7 @@ export default defineComponent({
 
       focused.value = true
 
-      window.setTimeout(() => {
+      timer.focus = setTimeout(() => {
         if (focused.value) {
           if (currentState.value === 'start') {
             startInput.value?.focus()
@@ -721,6 +730,14 @@ export default defineComponent({
           }
         }
       }, 120)
+    }
+
+    function handleBlur() {
+      clearTimeout(timer.focus)
+
+      focused.value = false
+      startInput.value?.blur()
+      endInput.value?.blur()
     }
 
     function toggleVisible() {
@@ -1043,6 +1060,8 @@ export default defineComponent({
       handlePaneConfirm,
       handlePaneHide,
 
+      focus: handleFocused,
+      blur: handleBlur,
       updatePopper
     }
   }
