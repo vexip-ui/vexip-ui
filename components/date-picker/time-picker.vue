@@ -3,13 +3,13 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
-    @click="toggleVisible"
+    @click="showPanel"
   >
     <div
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @keydown.space.prevent="toggleVisible"
+      @keydown.space.prevent="showPanel"
     >
       <div
         v-if="hasPrefix"
@@ -179,7 +179,13 @@ import { Portal } from '@/components/portal'
 import TimeControl from './time-control.vue'
 import TimeWheel from './time-wheel.vue'
 import { useFieldStore } from '@/components/form'
-import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import {
+  useHover,
+  usePopper,
+  placementWhileList,
+  useClickOutside,
+  useSetTimeout
+} from '@vexip-ui/mixins'
 import {
   useNameHelper,
   useProps,
@@ -193,7 +199,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { USE_TOUCH, doubleDigits, boundRange } from '@vexip-ui/utils'
+import { USE_TOUCH, doubleDigits, boundRange, format } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { useColumn } from './helper'
 
@@ -277,6 +283,8 @@ export default defineComponent({
       setFieldValue
     } = useFieldStore<string | string[]>(() => reference.value?.focus())
 
+    const initValue = format(Date.now(), 'HH:mm:ss')
+
     const nh = useNameHelper('time-picker')
     const props = useProps('timePicker', _props, {
       size: createSizeProp(),
@@ -284,18 +292,18 @@ export default defineComponent({
       visible: false,
       placement: {
         default: 'bottom-start',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       transfer: false,
       format: 'HH:mm:ss',
       separator: ':',
       value: {
-        default: () => getFieldValue('00:00:00'),
+        default: () => getFieldValue(initValue),
         static: true
       },
       filler: {
         default: '-',
-        validator: (value: string) => value.length === 1
+        validator: value => value.length === 1
       },
       noFiller: false,
       clearable: false,
@@ -304,7 +312,7 @@ export default defineComponent({
       pointer: USE_TOUCH,
       candidate: {
         default: 3,
-        validator: (value: number) => [0, 1, 2, 3].includes(value)
+        validator: value => [0, 1, 2, 3].includes(value)
       },
       steps: () => [1, 1, 1],
       labels: () => ({}),
@@ -336,6 +344,8 @@ export default defineComponent({
     const endState = createDateState()
     const currentState = ref<'start' | 'end'>('start')
 
+    const { timer } = useSetTimeout()
+
     const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
@@ -359,7 +369,7 @@ export default defineComponent({
           [nh.bm('no-hour')]: !startState.enabled.hour,
           [nh.bm('no-minute')]: !startState.enabled.minute,
           [nh.bm('no-second')]: !startState.enabled.second,
-          [nh.bm('focused')]: focused.value,
+          [nh.bm('visible')]: currentVisible.value,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('is-range')]: props.isRange
         }
@@ -373,7 +383,7 @@ export default defineComponent({
         [`${baseCls}--disabled`]: props.disabled,
         [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
-        [`${baseCls}--focused}`]: focused.value,
+        [`${baseCls}--focused`]: focused.value,
         [`${baseCls}--${props.state}`]: props.state !== 'default'
       }
     })
@@ -392,6 +402,10 @@ export default defineComponent({
     })
 
     parseValue(props.value, false)
+
+    if (props.noFiller) {
+      lastValue.value = getStringValue()
+    }
 
     watch(
       () => props.value,
@@ -444,6 +458,7 @@ export default defineComponent({
       value => {
         if (value) {
           currentVisible.value = false
+          handleBlur()
         }
       }
     )
@@ -575,7 +590,7 @@ export default defineComponent({
 
       focused.value = true
 
-      window.setTimeout(() => {
+      timer.focus = setTimeout(() => {
         if (focused.value) {
           if (currentState.value === 'start') {
             startInput.value?.focus()
@@ -586,7 +601,15 @@ export default defineComponent({
       }, 120)
     }
 
-    function toggleVisible() {
+    function handleBlur() {
+      clearTimeout(timer.focus)
+
+      focused.value = false
+      startInput.value?.blur()
+      endInput.value?.blur()
+    }
+
+    function showPanel() {
       if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = true
@@ -651,6 +674,7 @@ export default defineComponent({
       }
 
       verifyValue(type)
+      state.activated[type] = true
       emitEvent(props.onInput, type, state.timeValue[type])
     }
 
@@ -798,7 +822,7 @@ export default defineComponent({
       end: endInput,
 
       handleFocused,
-      toggleVisible,
+      showPanel,
       handleClear,
       handleShortcut,
       handleWheelChange,
@@ -815,6 +839,8 @@ export default defineComponent({
       handleEndInput,
       handleExchangeClick,
 
+      focus: handleFocused,
+      blur: handleBlur,
       updatePopper
     }
   }

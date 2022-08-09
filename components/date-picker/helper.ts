@@ -2,6 +2,14 @@ import { ref, reactive } from 'vue'
 
 import type { Ref } from 'vue'
 
+type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+const numberKeys = Array.from({ length: 10 }, (_, i) => i) as Digit[]
+
+function isNumberKey(key: string, num: Digit) {
+  return key === `Digit${num}` || key === `Numpad${num}` || key === `${num}`
+}
+
 export function handleKeyEnter(event: KeyboardEvent) {
   const key = event.code || event.key
 
@@ -61,8 +69,7 @@ export function handleKeyEnter(event: KeyboardEvent) {
     event.stopPropagation()
   } else {
     // 键入数字
-    const numberKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    const inputtedNumber = numberKeys.findIndex(num => key === num)
+    const inputtedNumber = numberKeys.findIndex(num => isNumberKey(key, num))
 
     if (~inputtedNumber) {
       type = inputtedNumber
