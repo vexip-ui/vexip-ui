@@ -43,6 +43,17 @@ describe('Select', () => {
     expect(wrapper.find('.vxp-select__empty').exists()).toBe(true)
   })
 
+  it('transfer', async () => {
+    const wrapper = mount(Select, {
+      props: { transfer: true, options: OPTIONS }
+    })
+
+    await nextTick()
+    await nextTick()
+    expect(wrapper.find('.vxp-select__popper').exists()).toBe(false)
+    expect(document.querySelector('.vxp-select__popper')).not.toBeNull()
+  })
+
   it('single value', () => {
     const wrapper = mount(Select, {
       props: {
@@ -97,6 +108,20 @@ describe('Select', () => {
     expect(selector.classes()).not.toContain('vxp-select__selector--focused')
   })
 
+  it('disabled', async () => {
+    const wrapper = mount(Select)
+    const selector = wrapper.find('.vxp-select__selector')
+
+    expect(selector.classes()).not.toContain('vxp-select__selector--disabled')
+
+    await wrapper.setProps({ visible: true })
+    expect(selector.classes()).toContain('vxp-select__selector--focused')
+
+    await wrapper.setProps({ disabled: true })
+    expect(selector.classes()).toContain('vxp-select__selector--disabled')
+    expect(selector.classes()).not.toContain('vxp-select__selector--focused')
+  })
+
   it('toggle event', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(Select, {
@@ -118,26 +143,6 @@ describe('Select', () => {
     await wrapper.trigger('click')
     expect(onToggle).toHaveBeenCalledTimes(2)
     expect(wrapper.emitted('update:visible')!.length).toBe(2)
-  })
-
-  it('disabled', async () => {
-    const onToggle = vi.fn()
-    const wrapper = mount(Select)
-    const selector = wrapper.find('.vxp-select__selector')
-
-    expect(selector.classes()).not.toContain('vxp-select__selector--disabled')
-
-    await wrapper.setProps({ visible: true })
-    expect(selector.classes()).toContain('vxp-select__selector--focused')
-
-    await wrapper.setProps({ disabled: true })
-    expect(selector.classes()).toContain('vxp-select__selector--disabled')
-    expect(selector.classes()).not.toContain('vxp-select__selector--focused')
-
-    await wrapper.setProps({ onToggle })
-    await wrapper.trigger('click')
-    expect(selector.classes()).not.toContain('vxp-select__selector--focused')
-    expect(onToggle).not.toHaveBeenCalled()
   })
 
   it('options show', async () => {

@@ -50,7 +50,8 @@ export function handleKeyEnter(event: KeyboardEvent) {
     }
     case 'Space':
     case ' ':
-    case 'Enter': {
+    case 'Enter':
+    case 'NumpadEnter': {
       // 确认
       isMatch = true
       type = 'ok'

@@ -110,7 +110,7 @@
       </transition>
     </div>
     <Portal :to="transferTo">
-      <transition :name="props.transitionName">
+      <transition :name="props.transitionName" @after-leave="handlePanelClosed">
         <div
           v-show="currentVisible"
           ref="popper"
@@ -156,10 +156,10 @@
                 ></TimeWheel>
               </div>
               <div v-if="!props.noAction" :class="nh.be('action')">
-                <Button text size="small" @click="handleCancel">
+                <Button text size="small" @click.stop="handleCancel">
                   {{ props.cancelText || locale.cancel }}
                 </Button>
-                <Button type="primary" size="small" @click="finishInput">
+                <Button type="primary" size="small" @click.stop="finishInput">
                   {{ props.confirmText || locale.confirm }}
                 </Button>
               </div>
@@ -267,7 +267,7 @@ export default defineComponent({
     onToggle: eventProp<(visible: boolean) => void>(),
     onFocus: eventProp(),
     onBlur: eventProp(),
-    onChangeCol: eventProp<(type: TimeType) => void>(),
+    onChangeCol: eventProp<(type: TimeType, inputType: 'start' | 'end') => void>(),
     onClickOutside: eventProp()
   },
   emits: ['update:value', 'update:visible'],
@@ -437,19 +437,24 @@ export default defineComponent({
         emitEvent(props.onBlur)
       }
     })
+    watch(currentState, value => {
+      if (currentVisible.value) {
+        emitEvent(props.onChangeCol, getCurrentState().column, value)
+      }
+    })
     watch(
       () => startState.column,
       value => {
-        if (currentVisible.value) {
-          emitEvent(props.onChangeCol, value)
+        if (currentVisible.value && currentState.value === 'start') {
+          emitEvent(props.onChangeCol, value, 'start')
         }
       }
     )
     watch(
       () => endState.column,
       value => {
-        if (currentVisible.value) {
-          emitEvent(props.onChangeCol, value)
+        if (currentVisible.value && currentState.value === 'end') {
+          emitEvent(props.onChangeCol, value, 'end')
         }
       }
     )
@@ -609,17 +614,26 @@ export default defineComponent({
       endInput.value?.blur()
     }
 
-    function showPanel() {
+    function showPanel(event: Event) {
       if (props.disabled || (props.loading && props.loadingLock)) return
 
+      const target = event.target as Node
+      const lastVisible = currentVisible.value
       currentVisible.value = true
 
       handleFocused()
+
+      if (!lastVisible && wrapper.value && target) {
+        const units = Array.from(wrapper.value.querySelectorAll(`.${nh.be('unit')}`))
+
+        if (!units.some(unit => unit === target || unit.contains(target))) {
+          emitEvent(props.onChangeCol, getCurrentState().column, currentState.value)
+        }
+      }
     }
 
     function finishInput() {
       currentVisible.value = false
-      focused.value = false
 
       startState.resetColumn()
       endState.resetColumn()
@@ -791,6 +805,13 @@ export default defineComponent({
     function handleClickOutside() {
       emitEvent(props.onClickOutside)
       finishInput()
+      handleBlur()
+    }
+
+    function handlePanelClosed() {
+      const { hour, minute } = startState.enabled
+
+      handleStartInput(hour ? 'hour' : minute ? 'minute' : 'second')
     }
 
     return {
@@ -838,6 +859,7 @@ export default defineComponent({
       handleStartInput,
       handleEndInput,
       handleExchangeClick,
+      handlePanelClosed,
 
       focus: handleFocused,
       blur: handleBlur,
