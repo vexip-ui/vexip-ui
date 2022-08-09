@@ -7,6 +7,7 @@ export interface TimeAgoRecord {
   datetime: Date,
   timeAgo: Ref<string>,
   locale: Ref<Record<string, string>>,
+  wordSpace: Ref<boolean>,
   interval: false | number,
   updated: number
 }
@@ -37,7 +38,12 @@ export function subscribe(id: number, record: TimeAgoRecord) {
         if (!record.interval) return
 
         if (current - record.updated > record.interval) {
-          record.timeAgo.value = computeTimeAgo(record.datetime, current, record.locale.value)
+          record.timeAgo.value = computeTimeAgo(
+            record.datetime,
+            current,
+            record.locale.value,
+            record.wordSpace.value
+          )
           record.updated = current
         }
       })
@@ -54,7 +60,12 @@ export function unsubscribe(id: number) {
   }
 }
 
-export function computeTimeAgo(date: Date, current: number, locale: Record<string, string>) {
+export function computeTimeAgo(
+  date: Date,
+  current: number,
+  locale: Record<string, string>,
+  wordSpace: boolean
+) {
   const diff = Math.abs(current - date.getTime())
   const type = current > date.getTime() ? locale.ago : locale.late
 
@@ -107,5 +118,5 @@ export function computeTimeAgo(date: Date, current: number, locale: Record<strin
     return label
   }
 
-  return makeSentence(`${getCountWord(label, usedDiff!)} ${type}`)
+  return makeSentence(`${getCountWord(label, usedDiff!)} ${type}`, wordSpace)
 }
