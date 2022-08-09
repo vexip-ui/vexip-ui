@@ -194,6 +194,9 @@ export default defineComponent({
 
       focus: () => {
         wrapper.value?.focus()
+      },
+      blur: () => {
+        wrapper.value?.focus()
       }
     }
   }
