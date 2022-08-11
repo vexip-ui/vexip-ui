@@ -14,3 +14,16 @@
     padding: 8px 14px 10px;
   }
 }
+.#{$namespace}-ellipsis--multiple {
+  @include basis;
+
+  display: -webkit-inline-box;
+  width: 100%;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  &__tip {
+    padding: 8px 14px 10px;
+  }
+}
+

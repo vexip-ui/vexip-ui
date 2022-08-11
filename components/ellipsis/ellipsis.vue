@@ -1,7 +1,8 @@
 <template>
   <div
     ref="wrapper"
-    :class="nh.b()"
+    :class="props.maxLines > 0 ? nh.bm('multiple') : nh.b()"
+    :style="ellipsisStyle"
     v-bind="$attrs"
     @mouseenter="handleTriggerEnter"
     @mouseleave="handleTriggerLeave"
@@ -57,6 +58,7 @@ export default defineComponent({
     transitionName: String,
     tooltipTheme: String as PropType<TooltipTheme>,
     tipClass: classProp,
+    maxLines: Number,
     tipMaxWidth: [Number, String]
   },
   setup(_props) {
@@ -74,6 +76,7 @@ export default defineComponent({
         validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
       },
       tipClass: null,
+      maxLines: null,
       tipMaxWidth: 500
     })
 
@@ -92,7 +95,9 @@ export default defineComponent({
       wrapper,
       reference: wrapper
     })
-
+    const ellipsisStyle = computed(() => {
+      return props.maxLines > 0 ? { '-webkit-line-clamp': props.maxLines } : ''
+    })
     const tipStyle = computed(() => {
       return {
         maxWidth:
@@ -116,21 +121,27 @@ export default defineComponent({
       timer.hover = window.setTimeout(() => {
         if (!wrapper.value || !wrapper.value.childNodes.length) {
           visible.value = false
-
           return
         }
+        // In the case of multiple lines, use visual height and real content height to control whether to display
+        if (props.maxLines > 0) {
+          const scrollHeight = wrapper.value.scrollHeight
+          const clientHeight = wrapper.value.clientHeight
+          visible.value = scrollHeight > clientHeight
+        } else {
+          const range = document.createRange()
 
-        const range = document.createRange()
+          range.setStart(wrapper.value, 0)
+          range.setEnd(wrapper.value, wrapper.value.childNodes.length)
 
-        range.setStart(wrapper.value, 0)
-        range.setEnd(wrapper.value, wrapper.value.childNodes.length)
-
-        const rangeWidth = range.getBoundingClientRect().width
-        const computedStyle = getComputedStyle(wrapper.value)
-        const horizontalPending =
+          const rangeWidth = range.getBoundingClientRect().width
+          const computedStyle = getComputedStyle(wrapper.value)
+          const horizontalPending =
           parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
 
-        visible.value = rangeWidth + horizontalPending > wrapper.value.getBoundingClientRect().width
+          visible.value = rangeWidth + horizontalPending > wrapper.value.getBoundingClientRect().width
+        }
+
         content.value = visible.value ? wrapper.value.textContent ?? '' : ''
 
         nextTick(() => {
@@ -156,6 +167,7 @@ export default defineComponent({
       content,
       transferTo,
 
+      ellipsisStyle,
       tipStyle,
 
       wrapper,
