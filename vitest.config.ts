@@ -19,8 +19,5 @@ export default defineConfig({
       web: [/\.[jt]sx$/]
     }
   },
-  plugins: [
-    vue(),
-    vueJsx()
-  ]
+  plugins: [vue(), vueJsx()]
 })
