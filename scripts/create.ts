@@ -138,6 +138,22 @@ async function create(name: string) {
       `
     },
     {
+      filePath: path.resolve(dirPath, 'components', kebabCaseName, 'tests', `${kebabCaseName}.spec.tsx`),
+      source: `
+        import { describe, it, expect } from 'vitest'
+        import { mount } from '@vue/test-utils'
+        import { ${capitalCaseName} } from '..'
+
+        describe('${capitalCaseName}', () => {
+          it('render', () => {
+            const wrapper = mount(${capitalCaseName})
+        
+            expect(wrapper.classes()).toContain('vxp-${kebabCaseName}-vars')
+          })
+        })
+      `
+    },
+    {
       filePath: path.resolve(dirPath, 'style', `${kebabCaseName}.scss`),
       source: `
         @use 'sass:map';
