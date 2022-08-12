@@ -142,7 +142,7 @@ describe('Switch', () => {
     expect(wrapper.findComponent(GithubB).exists()).toBe(false)
   })
 
-  it('before close', async () => {
+  it('before change', async () => {
     const onBeforeChange = vi.fn()
     const wrapper = mount(Switch, {
       props: { onBeforeChange }
@@ -162,8 +162,8 @@ describe('Switch', () => {
         })
     )
     await wrapper.find('input').trigger('change')
-    expect(wrapper.classes()).toContain('vxp-switch--open')
     await nextTick()
+    expect(wrapper.classes()).toContain('vxp-switch--open')
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-switch--open')
   })
