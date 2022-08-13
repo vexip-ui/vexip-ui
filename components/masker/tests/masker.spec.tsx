@@ -46,7 +46,10 @@ describe('Masker', () => {
     await nextTick()
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toContain('display: none;')
     expect(onToggle).toHaveBeenCalled()
+    expect(onToggle).toHaveBeenLastCalledWith(false)
     expect(onClose).toHaveBeenCalled()
+    expect(wrapper.emitted()).toHaveProperty('update:active')
+    expect(wrapper.emitted()['update:active'][0]).toEqual([false])
 
     wrapper.vm.currentActive = true
     await nextTick()
