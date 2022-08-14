@@ -8,4 +8,4 @@
 | transition-name | `string`                            | Set the transition effect of showing and hiding the prompt gas                                             | `'vxp-fade'` | -     |
 | tooltip-theme   | `string`                            | Set the theme of the tooltip, optional values are `light`, `dark`                                          | `'dark'`     | -     |
 | tip-class       | `string \| Record<string, boolean>` | Custom class name for tip content                                                                          | `null`       | -     |
-| max-lines       | `number` | Set the max displayed lines                          | `null`       | -     |
+| max-lines       | `number` | Use `-webkit-line-clamp` to convert to multiline mode. Set the max displayed lines                          | `null`       | -     |
