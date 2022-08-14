@@ -3,6 +3,8 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { Modal } from '..'
 
+vi.useFakeTimers()
+
 const TEXT = 'Text'
 
 describe('Modal', () => {
@@ -144,5 +146,113 @@ describe('Modal', () => {
     await nextTick()
 
     expect(wrapper.find('.vxp-masker__mask').exists()).toBe(false)
+  })
+
+  it('draggable', async () => {
+    const onDragStart = vi.fn()
+    const onDragMove = vi.fn()
+    const onDragEnd = vi.fn()
+    const wrapper = mount(() => (
+      <Modal
+        active
+        draggable
+        title={TEXT}
+        top={0}
+        left={0}
+        onDragStart={onDragStart}
+        onDragMove={onDragMove}
+        onDragEnd={onDragEnd}
+      ></Modal>
+    ))
+    const modal = wrapper.find('.vxp-modal__wrapper')
+    const header = wrapper.find('.vxp-modal__header').element
+
+    await nextTick()
+    await nextTick()
+    expect(wrapper.find('.vxp-modal').classes()).toContain('vxp-modal--draggable')
+    expect(modal.attributes('style')).toContain('top: 0px; left: 0px;')
+
+    const downEvent = new CustomEvent('pointerdown') as any
+    downEvent.button = 0
+    downEvent.clientX = 0
+    downEvent.clientY = 0
+    header.dispatchEvent(downEvent)
+    expect(onDragStart).toHaveBeenCalled()
+    expect(onDragStart).toHaveBeenCalledWith(expect.objectContaining({ top: 0, left: 0 }))
+
+    await nextTick()
+    expect(modal.classes()).toContain('vxp-modal__wrapper--dragging')
+
+    const moveEvent = new CustomEvent('pointermove') as any
+    moveEvent.clientX = 40
+    moveEvent.clientY = 40
+    document.dispatchEvent(moveEvent)
+    vi.runAllTimers()
+    expect(onDragMove).toHaveBeenCalled()
+    expect(onDragMove).toHaveBeenCalledWith(expect.objectContaining({ top: 40, left: 40 }))
+    await nextTick()
+    expect(modal.attributes('style')).toContain('top: 40px; left: 40px;')
+
+    const upEvent = new CustomEvent('pointerup') as any
+    document.dispatchEvent(upEvent)
+    expect(onDragEnd).toHaveBeenCalled()
+    expect(onDragEnd).toHaveBeenCalledWith(expect.objectContaining({ top: 40, left: 40 }))
+
+    await nextTick()
+    expect(modal.classes()).not.toContain('vxp-modal__wrapper--dragging')
+  })
+
+  it('resize', async () => {
+    const onResizeStart = vi.fn()
+    const onResizeMove = vi.fn()
+    const onResizeEnd = vi.fn()
+    const wrapper = mount(() => (
+      <Modal
+        active
+        resizable
+        width={200}
+        height={100}
+        onResizeStart={onResizeStart}
+        onResizeMove={onResizeMove}
+        onResizeEnd={onResizeEnd}
+      ></Modal>
+    ))
+    const modal = wrapper.find('.vxp-modal__wrapper')
+    const resizer = wrapper.find('.vxp-modal__resizer').element
+
+    await nextTick()
+    await nextTick()
+    expect(wrapper.find('.vxp-modal__resizer').exists()).toBe(true)
+    expect(wrapper.find('.vxp-modal').classes()).toContain('vxp-modal--resizable')
+    expect(modal.attributes('style')).toContain('width: 200px; height: 100px;')
+
+    const downEvent = new CustomEvent('pointerdown') as any
+    downEvent.button = 0
+    downEvent.clientX = 0
+    downEvent.clientY = 0
+    resizer.dispatchEvent(downEvent)
+    expect(onResizeStart).toHaveBeenCalled()
+    expect(onResizeStart).toHaveBeenCalledWith(expect.objectContaining({ width: 200, height: 100 }))
+
+    await nextTick()
+    expect(modal.classes()).toContain('vxp-modal__wrapper--resizing')
+
+    const moveEvent = new CustomEvent('pointermove') as any
+    moveEvent.clientX = 40
+    moveEvent.clientY = 40
+    document.dispatchEvent(moveEvent)
+    vi.runAllTimers()
+    expect(onResizeMove).toHaveBeenCalled()
+    expect(onResizeMove).toHaveBeenCalledWith(expect.objectContaining({ width: 240, height: 140 }))
+    await nextTick()
+    expect(modal.attributes('style')).toContain('width: 240px; height: 140px;')
+
+    const upEvent = new CustomEvent('pointerup') as any
+    document.dispatchEvent(upEvent)
+    expect(onResizeEnd).toHaveBeenCalled()
+    expect(onResizeEnd).toHaveBeenCalledWith(expect.objectContaining({ width: 240, height: 140 }))
+
+    await nextTick()
+    expect(modal.classes()).not.toContain('vxp-modal__wrapper--resizing')
   })
 })
