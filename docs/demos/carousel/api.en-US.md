@@ -13,7 +13,7 @@
 | pointer       | `'outside' \| 'inside' \| 'none'` | How to display the pointer, optional values ​​are `outside`, `inside`, `none`                                                               | `'none'`    | -     |
 | speed         | `number`                          | The speed at which the element toggles the transition effect                                                                                | `300`       | -     |
 | active-offset | `number`                          | The offset to mark the activation of the item, when it is 0, the first element of the default window is active                              | `0`         | -     |
-| height        | `number` \| `string`              | In `vertical` mode, the height can be set                                                                                                   | `null`      | -     |
+| height        | `number \| string`                | In `vertical` mode, the height can be set                                                                                                   | `null`      | -     |
 
 ### Carousel Events
 
