@@ -21,7 +21,7 @@
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
-      :options="secondRange"
+      :options="minuteRange"
       @mouseenter="handleToggleColumn('minute')"
       @touchstart="handleToggleColumn('minute')"
       @keydown.stop
