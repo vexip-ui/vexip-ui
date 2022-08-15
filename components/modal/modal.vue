@@ -274,7 +274,7 @@ export default defineComponent({
 
         emitEvent(props.onResizeStart, {
           width: widthStart,
-          height: widthStart
+          height: heightStart
         })
       },
       onMove: state => {
