@@ -107,6 +107,14 @@ describe('Modal', () => {
     expect(wrapper.findAllComponents('.vxp-button')[1].classes()).toContain('vxp-button--loading')
   })
 
+  it('transfer', async () => {
+    mount(() => <Modal transfer></Modal>)
+
+    await nextTick()
+    await nextTick()
+    expect(document.querySelector('.vxp-modal')).not.toBeNull()
+  })
+
   it('closable', async () => {
     const onClose = vi.fn()
     const onConfirm = vi.fn()
