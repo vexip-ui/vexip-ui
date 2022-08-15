@@ -8,3 +8,5 @@
 | transition-name | `string`           | 设置提示气的显示隐藏过渡效果                 | `'vxp-fade'` | - |
 | tooltip-theme   | `string`           | 设置提示气泡的主题，可选值为 `light`、`dark` | `'dark'`     | - |
 | tip-class       | `string \| Record<string, boolean>` | 提示内容的自定义类名                         | `null`       | - |
+| max-lines       | `number` |  设置最大行数，传入一个大于 0 的整数后将开启多行模式，其实现基于 `-webkit-line-clamp`       | `null`       | - |
+
