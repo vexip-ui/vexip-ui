@@ -50,7 +50,7 @@
             }
           ]"
         >
-          <slot name="handler"></slot>
+          <slot name="handler" :resizing="resizing"></slot>
         </div>
       </section>
     </template>
@@ -211,7 +211,8 @@ export default defineComponent({
         nh.bs('vars'),
         {
           [nh.bm('inner')]: props.inner,
-          [nh.bem('wrapper', 'closable')]: props.closable
+          [nh.bm('closable')]: props.closable,
+          [nh.bm('resizable')]: props.resizable
         }
       ]
     })

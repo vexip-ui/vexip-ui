@@ -30,9 +30,9 @@
 
 ### Drawer Slots
 
-| Name    | Description                   | Parameters | Since |
-| ------- | ----------------------------- | ---------- | ----- |
-| default | Content slot for drawer       | -          | -     |
-| title   | Title slot for drawer         | -          | -     |
-| close   | Close button slot for drawer  | -          | -     |
-| handler | Slot for drawer resize handle | -          | -     |
+| Name    | Description                   | Parameters              | Since |
+| ------- | ----------------------------- | ----------------------- | ----- |
+| default | Content slot for drawer       | -                       | -     |
+| title   | Title slot for drawer         | -                       | -     |
+| close   | Close button slot for drawer  | -                       | -     |
+| handler | Slot for drawer resize handle | `{ resizing: boolean }` | -     |

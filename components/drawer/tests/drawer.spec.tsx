@@ -65,16 +65,19 @@ describe('Drawer', () => {
   })
 
   it('closable', async () => {
+    const onToggle = vi.fn()
     const onClose = vi.fn()
     const wrapper = mount(Drawer, {
       props: {
         active: true,
+        onToggle,
         onClose
       }
     })
     const mask = wrapper.find('.vxp-masker__mask')
 
     await mask.trigger('click')
+    expect(onToggle).toHaveBeenCalled()
     expect(onClose).toHaveBeenCalled()
   })
 
@@ -94,5 +97,60 @@ describe('Drawer', () => {
         `vxp-drawer__wrapper--${placement}`
       )
     })
+  })
+
+  it('resize', async () => {
+    const onResizeStart = vi.fn()
+    const onResizeMove = vi.fn()
+    const onResizeEnd = vi.fn()
+    const wrapper = mount(() => (
+      <Drawer
+        active
+        resizable
+        placement={'right'}
+        width={200}
+        height={100}
+        onResizeStart={onResizeStart}
+        onResizeMove={onResizeMove}
+        onResizeEnd={onResizeEnd}
+      ></Drawer>
+    ))
+    const drawer = wrapper.find('.vxp-drawer__wrapper')
+    const resizer = wrapper.find('.vxp-drawer__handler').element
+
+    await nextTick()
+    await nextTick()
+    expect(wrapper.find('.vxp-drawer__handler').exists()).toBe(true)
+    expect(wrapper.find('.vxp-drawer').classes()).toContain('vxp-drawer--resizable')
+    expect(drawer.attributes('style')).toContain('width: 200px;')
+
+    const downEvent = new CustomEvent('pointerdown') as any
+    downEvent.button = 0
+    downEvent.clientX = 0
+    downEvent.clientY = 0
+    resizer.dispatchEvent(downEvent)
+    expect(onResizeStart).toHaveBeenCalled()
+    expect(onResizeStart).toHaveBeenCalledWith(expect.objectContaining({ width: 200 }))
+
+    await nextTick()
+    expect(drawer.classes()).toContain('vxp-drawer__wrapper--resizing')
+
+    const moveEvent = new CustomEvent('pointermove') as any
+    moveEvent.clientX = 40
+    moveEvent.clientY = 40
+    document.dispatchEvent(moveEvent)
+    vi.runAllTimers()
+    expect(onResizeMove).toHaveBeenCalled()
+    expect(onResizeMove).toHaveBeenCalledWith(expect.objectContaining({ width: 160 }))
+    await nextTick()
+    expect(drawer.attributes('style')).toContain('width: 160px;')
+
+    const upEvent = new CustomEvent('pointerup') as any
+    document.dispatchEvent(upEvent)
+    expect(onResizeEnd).toHaveBeenCalled()
+    expect(onResizeEnd).toHaveBeenCalledWith(expect.objectContaining({ width: 160 }))
+
+    await nextTick()
+    expect(drawer.classes()).not.toContain('vxp-drawer__wrapper--resizing')
   })
 })

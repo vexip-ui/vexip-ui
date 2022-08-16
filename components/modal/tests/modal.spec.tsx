@@ -116,12 +116,14 @@ describe('Modal', () => {
   })
 
   it('closable', async () => {
+    const onToggle = vi.fn()
     const onClose = vi.fn()
     const onConfirm = vi.fn()
     const onCancel = vi.fn()
     const wrapper = mount(Modal, {
       props: {
         active: true,
+        onToggle,
         onClose,
         onConfirm,
         onCancel
@@ -131,6 +133,8 @@ describe('Modal', () => {
 
     ;(buttons[0].element as HTMLButtonElement).click()
     await nextTick()
+    await nextTick()
+    expect(onToggle).toHaveBeenCalled()
     expect(onClose).toHaveBeenCalledTimes(1)
     expect(onCancel).toHaveBeenCalled()
 
