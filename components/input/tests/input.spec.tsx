@@ -171,7 +171,9 @@ describe('Input', () => {
     emitChange(input, TEXT)
     await nextTick()
     expect(onChange).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalledWith(TEXT)
     expect(wrapper.emitted()).toHaveProperty('update:value')
+    expect(wrapper.emitted()['update:value'][0]).toEqual([TEXT])
   })
 
   it('input event', async () => {
@@ -337,5 +339,11 @@ describe('Input', () => {
 
     await wrapper.setProps({ value: TEXT })
     expect(getValue(wrapper.find('input'))).toEqual(`${TEXT}1`)
+  })
+
+  it('input class', () => {
+    const wrapper = mount(() => <Input input-class={'test'}></Input>)
+
+    expect(wrapper.find('input').classes()).toContain('test')
   })
 })
