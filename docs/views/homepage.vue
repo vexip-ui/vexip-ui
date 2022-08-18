@@ -32,7 +32,7 @@ const router = useRouter()
 const language = computed(() => globalState.language)
 
 function getStarted() {
-  router.push(`/${globalState.language}/components`)
+  router.push(`/${globalState.language}/guides/setup`)
 }
 
 function toRepository() {
