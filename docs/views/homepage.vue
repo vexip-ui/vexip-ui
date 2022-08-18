@@ -1,22 +1,24 @@
 <template>
-  <section :class="prefix">
-    <img :class="`${prefix}__logo`" src="/logo.png" alt="logo.png" />
-    <h1 :class="`${prefix}__title`">
-      Vexip UI
-    </h1>
-    <p :class="`${prefix}__description`">
-      {{ $t('common.slogan') }}
-    </p>
-    <div :class="`${prefix}__actions`">
-      <Button type="primary" size="large" @click="getStarted">
-        {{ $t('common.getStarted') }}
-      </Button>
-      <Button size="large" :icon="GithubB" @click="toRepository">
-        GitHub
-      </Button>
-    </div>
-    <MajorColor :class="`${prefix}__colors`" :language="language"></MajorColor>
-  </section>
+  <Scroll use-y-bar height="100%" :delta-y="60">
+    <section :class="prefix">
+      <img :class="`${prefix}__logo`" src="/logo.png" alt="logo.png" />
+      <h1 :class="`${prefix}__title`">
+        Vexip UI
+      </h1>
+      <p :class="`${prefix}__description`">
+        {{ $t('common.slogan') }}
+      </p>
+      <div :class="`${prefix}__actions`">
+        <Button type="primary" size="large" @click="getStarted">
+          {{ $t('common.getStarted') }}
+        </Button>
+        <Button size="large" :icon="GithubB" @click="toRepository">
+          GitHub
+        </Button>
+      </div>
+      <MajorColor :class="`${prefix}__colors`" :language="language"></MajorColor>
+    </section>
+  </Scroll>
 </template>
 
 <script setup lang="ts">
