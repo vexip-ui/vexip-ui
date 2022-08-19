@@ -1,5 +1,5 @@
 <template>
-  <Scroll use-y-bar height="100%" :delta-y="60">
+  <NativeScroll use-y-bar height="100vh" :delta-y="60">
     <section :class="prefix">
       <img :class="`${prefix}__logo`" src="/logo.png" alt="logo.png" />
       <h1 :class="`${prefix}__title`">
@@ -18,7 +18,7 @@
       </div>
       <MajorColor :class="`${prefix}__colors`" :language="language"></MajorColor>
     </section>
-  </Scroll>
+  </NativeScroll>
 </template>
 
 <script setup lang="ts">
@@ -49,11 +49,8 @@ function toRepository() {
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  width: 100%;
-  height: 100%;
   padding: 40px 20px;
   padding-top: calc(var(--header-height) + 80px);
-  overflow-y: auto;
   user-select: none;
 
   &__logo {
