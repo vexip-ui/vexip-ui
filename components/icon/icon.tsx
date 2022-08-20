@@ -50,17 +50,15 @@ export default defineComponent({
       label: null,
       spin: {
         default: false,
-        validator: (value: boolean | string) =>
-          typeof value === 'boolean' || value === 'in' || value === 'out'
+        validator: value => typeof value === 'boolean' || value === 'in' || value === 'out'
       },
       pulse: {
         default: false,
-        validator: (value: boolean | string) =>
-          typeof value === 'boolean' || value === 'in' || value === 'out'
+        validator: value => typeof value === 'boolean' || value === 'in' || value === 'out'
       },
       flip: {
         default: null,
-        validator: (value: string) => ['horizontal', 'vertical', 'both'].includes(value)
+        validator: value => ['horizontal', 'vertical', 'both'].includes(value)
       }
     })
 
@@ -119,13 +117,18 @@ export default defineComponent({
       const iAttrs = {
         class: className.value,
         style: style.value,
+        title: props.title,
         role: (attrs.role as string) || (props.label || props.title ? 'img' : undefined),
         'aria-label': props.label,
         'aria-hidden': !(props.label || props.title)
       }
 
       if (slots.default) {
-        return <i {...iAttrs}>{slots.default && slots.default()}</i>
+        return (
+          <i {...iAttrs}>
+            <g>{slots.default && slots.default()}</g>
+          </i>
+        )
       } else if (!props.name && !props.icon) {
         return <i {...iAttrs}></i>
       }
