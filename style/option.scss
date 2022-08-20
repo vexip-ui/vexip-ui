@@ -61,7 +61,8 @@ $option: map.merge(
 
   &--selected {
     &,
-    &:hover {
+    &:hover,
+    &:not(#{&}--no-hover):hover {
       color: get-css-var('option-color-selected');
       background-color: get-css-var('option-bg-color-selected');
     }
