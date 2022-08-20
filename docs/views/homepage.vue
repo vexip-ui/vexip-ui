@@ -68,8 +68,10 @@ function toRepository() {
 
   &__description {
     margin-bottom: 1rem;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 300;
+    font-weight: 400;
+    line-height: 1.2;
     color: var(--vxp-content-color-secondary);
     text-align: center;
   }
