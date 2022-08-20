@@ -124,7 +124,11 @@ export default defineComponent({
       }
 
       if (slots.default) {
-        return <i {...iAttrs}>{slots.default && slots.default()}</i>
+        return (
+          <i {...iAttrs}>
+            <g>{slots.default && slots.default()}</g>
+          </i>
+        )
       } else if (!props.name && !props.icon) {
         return <i {...iAttrs}></i>
       }
