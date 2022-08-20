@@ -488,4 +488,25 @@ describe('Select', () => {
     expect(options[3].classes()).not.toContain('vxp-option--hitting')
     expect(options[2].classes()).toContain('vxp-option--hitting')
   })
+
+  it('key config', () => {
+    const wrapper = mount(Select, {
+      props: {
+        value: 'v',
+        options: [
+          {
+            l: 'l',
+            v: 'v'
+          }
+        ],
+        keyConfig: {
+          label: 'l',
+          value: 'v'
+        }
+      }
+    })
+
+    expect(wrapper.find('.vxp-select__control').text()).toEqual('l')
+    expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
+  })
 })
