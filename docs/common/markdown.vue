@@ -49,6 +49,9 @@ watch(isMounted, value => {
 
   p {
     margin: 14px 0;
+    font-size: 17px;
+    line-height: 1.7;
+    letter-spacing: 0.2px;
   }
 
   blockquote {

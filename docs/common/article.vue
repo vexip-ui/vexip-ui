@@ -42,9 +42,6 @@ defineExpose({ refreshAnchor })
 .article {
   position: relative;
   padding: 16px 30px 30px;
-  font-size: 16px;
-  line-height: 1.7;
-  letter-spacing: 0.2px;
 
   @include query-media('lg') {
     padding: 16px 60px 60px;
