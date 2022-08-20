@@ -224,7 +224,6 @@ function formatComponentName(name: string) {
   align-items: center;
   width: 100%;
   height: var(--header-height);
-  font-weight: 500;
   background-color: var(--bg-color);
   border-bottom: var(--vxp-border-light-2);
   transition: var(--vxp-transition-border), var(--vxp-transition-transform);
