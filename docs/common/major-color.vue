@@ -63,6 +63,7 @@ function resetMajorColor() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 80px;
   user-select: none;
 
   &__picker {

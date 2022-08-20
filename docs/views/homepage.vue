@@ -1,6 +1,6 @@
 <template>
-  <NativeScroll use-y-bar height="100vh" :delta-y="60">
-    <section :class="prefix">
+  <section :class="prefix">
+    <NativeScroll use-y-bar>
       <img :class="`${prefix}__logo`" src="/logo.png" alt="logo.png" />
       <h1 :class="`${prefix}__title`">
         Vexip UI
@@ -17,8 +17,8 @@
         </Button>
       </div>
       <MajorColor :class="`${prefix}__colors`" :language="language"></MajorColor>
-    </section>
-  </NativeScroll>
+    </NativeScroll>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -47,16 +47,17 @@ function toRepository() {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  padding: 40px 20px;
-  padding-top: calc(var(--header-height) + 80px);
+  justify-content: center;
+  height: 100%;
+  padding-top: var(--header-height);
+  text-align: center;
   user-select: none;
 
   &__logo {
     width: 30%;
     min-width: 90px;
     max-width: 240px;
+    margin-top: 80px;
   }
 
   &__title {
