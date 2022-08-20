@@ -11,8 +11,8 @@
       <Button type="primary" size="large" @click="getStarted">
         {{ $t('common.getStarted') }}
       </Button>
-      <Button size="large" :icon="GithubB" @click="toRepository">
-        GitHub
+      <Button size="large" @click="getComponents">
+        {{ $t('common.getComponents') }}
       </Button>
     </div>
     <MajorColor :class="`${prefix}__colors`" :language="language"></MajorColor>
@@ -22,7 +22,6 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import { GithubB } from '@vexip-ui/icons'
 import MajorColor from '../common/major-color.vue'
 
 const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
@@ -35,8 +34,8 @@ function getStarted() {
   router.push(`/${globalState.language}/guides/setup`)
 }
 
-function toRepository() {
-  window.open('//github.com/qmhc/vexip-ui/')
+function getComponents() {
+  router.push(`/${globalState.language}/components`)
 }
 </script>
 

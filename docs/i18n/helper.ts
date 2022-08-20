@@ -4,6 +4,7 @@ export interface I18nConfig {
     makeInterest: string,
     slogan: string,
     getStarted: string,
+    getComponents: string,
     guides: string,
     components: string,
     playground: string,

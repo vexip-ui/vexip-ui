@@ -6,6 +6,7 @@ export const enUS = defineI18n({
     makeInterest: 'Make interesting in development',
     slogan: 'Highly customizable property values, Full TypeScript, Performance should be good',
     getStarted: 'Get started',
+    getComponents: 'Components',
     guides: 'Guides',
     components: 'Components',
     playground: 'Playground',

@@ -6,6 +6,7 @@ export const zhCN = defineI18n({
     makeInterest: '创造有趣的开发体验',
     slogan: '高可定制化的属性值，全量的 TypeScript，性能应该还不错',
     getStarted: '开始使用',
+    getComponents: '浏览组件',
     guides: '指南',
     components: '组件',
     playground: '游乐场',
