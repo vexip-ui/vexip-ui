@@ -2803,8 +2803,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -7731,8 +7731,8 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: true
 
-  /tinyspy/1.0.0:
-    resolution: {integrity: sha512-FI5B2QdODQYDRjfuLF+OrJ8bjWRMCXokQPcwKm0W3IzcbUmBNv536cQc7eXGoAuXphZwgx1DFbqImwzz08Fnhw==}
+  /tinyspy/1.0.2:
+    resolution: {integrity: sha512-bSGlgwLBYf7PnUsQ6WOc6SJ3pGOcd+d8AA6EUnLDDM0kWEstC1JIlSZA3UNliDXhd9ABoS7hiRBDCu+XP/sf1Q==}
     engines: {node: '>=14.0.0'}
     dev: true
 
@@ -8376,7 +8376,7 @@ packages:
       happy-dom: 6.0.4
       local-pkg: 0.4.2
       tinypool: 0.2.4
-      tinyspy: 1.0.0
+      tinyspy: 1.0.2
       vite: 3.0.0_sass@1.53.0
     transitivePeerDependencies:
       - less

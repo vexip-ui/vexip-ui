@@ -3,18 +3,13 @@
     搜索
   </Button>
   <Button type="primary" :icon="MagnifyingGlass"></Button>
-  <Button
-    circle
-    type="primary"
-    :icon="MagnifyingGlass"
-  >
+  <Button circle type="primary" :icon="MagnifyingGlass">
     搜索
   </Button>
-  <Button
-    circle
-    type="primary"
-    :icon="MagnifyingGlass"
-  ></Button>
+  <Button circle type="primary" :icon="MagnifyingGlass"></Button>
+  <Button circle type="primary" icon-only>
+    <MagnifyingGlass></MagnifyingGlass>
+  </Button>
 </template>
 
 <script setup lang="ts">
