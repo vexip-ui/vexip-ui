@@ -1,21 +1,23 @@
 <template>
   <section :class="prefix">
-    <img :class="`${prefix}__logo`" src="/logo.png" alt="logo.png" />
-    <h1 :class="`${prefix}__title`">
-      Vexip UI
-    </h1>
-    <p :class="`${prefix}__description`">
-      {{ $t('common.slogan') }}
-    </p>
-    <div :class="`${prefix}__actions`">
-      <Button type="primary" size="large" @click="getStarted">
-        {{ $t('common.getStarted') }}
-      </Button>
-      <Button size="large" @click="getComponents">
-        {{ $t('common.getComponents') }}
-      </Button>
-    </div>
-    <MajorColor :class="`${prefix}__colors`" :language="language"></MajorColor>
+    <NativeScroll use-y-bar>
+      <img :class="`${prefix}__logo`" src="/logo.png" alt="logo.png" />
+      <h1 :class="`${prefix}__title`">
+        Vexip UI
+      </h1>
+      <p :class="`${prefix}__description`">
+        {{ $t('common.slogan') }}
+      </p>
+      <div :class="`${prefix}__actions`">
+        <Button type="primary" size="large" @click="getStarted">
+          {{ $t('common.getStarted') }}
+        </Button>
+        <Button size="large" @click="getComponents">
+          {{ $t('common.getComponents') }}
+        </Button>
+      </div>
+      <MajorColor :class="`${prefix}__colors`" :language="language"></MajorColor>
+    </NativeScroll>
   </section>
 </template>
 
