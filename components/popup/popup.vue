@@ -1,5 +1,5 @@
 <template>
-  <div :class="nh.b()">
+  <div :class="[nh.b(), nh.bm(placement)]">
     <PopupItem
       v-for="item in items"
       :key="item.key"
@@ -132,8 +132,8 @@ export default defineComponent({
         })
 
         if (!pending) {
-          queueOut()
           pending = true
+          queueOut()
         }
       })
     }
@@ -157,8 +157,8 @@ export default defineComponent({
         })
 
         if (!pending) {
-          queueOut()
           pending = true
+          queueOut()
         }
       })
     }
@@ -173,9 +173,7 @@ export default defineComponent({
           removeItem(state.param)
         }
 
-        requestAnimationFrame(() => {
-          queueOut()
-        })
+        requestAnimationFrame(queueOut)
       } else {
         pending = false
       }
