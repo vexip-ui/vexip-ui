@@ -46,19 +46,17 @@ function getComponents() {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  width: 100%;
+  justify-content: center;
   height: 100%;
-  padding: 40px 20px;
-  padding-top: calc(var(--header-height) + 80px);
-  overflow-y: auto;
+  padding-top: var(--header-height);
+  text-align: center;
   user-select: none;
 
   &__logo {
     width: 30%;
     min-width: 90px;
     max-width: 240px;
+    margin-top: 80px;
   }
 
   &__title {
@@ -71,6 +69,7 @@ function getComponents() {
     margin-bottom: 1rem;
     font-size: 1.4rem;
     font-weight: 300;
+    line-height: 1.2;
     color: var(--vxp-content-color-secondary);
     text-align: center;
   }
