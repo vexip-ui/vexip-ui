@@ -120,11 +120,11 @@ export function useScrollWrapper({
     content.offsetHeight = content.el.offsetHeight
 
     if (mode.value !== 'vertical') {
-      setScrollX(!isMounted.value && appear.value ? scrollX.value : currentScroll.x)
+      setScrollX(!isMounted.value && appear.value ? scrollX.value : currentScroll.x || 0)
     }
 
     if (mode.value !== 'horizontal') {
-      setScrollY(!isMounted.value && appear.value ? scrollY.value : currentScroll.y)
+      setScrollY(!isMounted.value && appear.value ? scrollY.value : currentScroll.y || 0)
     }
 
     computePercent()
@@ -156,7 +156,7 @@ export function useScrollWrapper({
     }
 
     computeContentSize()
-    window.setTimeout(() => {
+    setTimeout(() => {
       if (typeof onAfterRefresh === 'function') {
         onAfterRefresh()
       }

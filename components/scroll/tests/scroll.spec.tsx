@@ -222,7 +222,7 @@ describe('Scroll', () => {
     })
 
     await runScrollTimers()
-    expect(wrapper.vm.currentScroll !== 0).toBe(true)
+    expect(wrapper.vm.currentScroll.y !== 0).toBe(true)
   })
 
   it('using bar', async () => {
