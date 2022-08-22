@@ -81,7 +81,7 @@ describe('Icon', () => {
       props: { icon: Spinner }
     })
 
-    expect(wrapper.attributes('style')).toBe(undefined)
+    expect(wrapper.attributes('style')).toBeUndefined()
 
     await wrapper.setProps({ scale: 2 })
     expect(wrapper.attributes('style')).toContain('font-size: 2em;')

@@ -26,7 +26,7 @@ describe('Masker', () => {
     expect(wrapper.find('.content').attributes('data-show')).toEqual('false')
 
     await wrapper.setProps({ active: true })
-    expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBe(undefined)
+    expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBeUndefined()
     expect(wrapper.find('.content').attributes('data-show')).toEqual('true')
   })
 
@@ -85,7 +85,7 @@ describe('Masker', () => {
 
     onBeforeClose.mockReturnValue(false)
     await openAndClose()
-    expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBe(undefined)
+    expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBeUndefined()
 
     onBeforeClose.mockImplementation(
       () =>
@@ -94,7 +94,7 @@ describe('Masker', () => {
         })
     )
     await openAndClose()
-    expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBe(undefined)
+    expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBeUndefined()
     await nextTick()
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toContain('display: none;')
   })

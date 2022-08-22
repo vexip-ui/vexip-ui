@@ -24,7 +24,7 @@ describe('AutoComplete', () => {
   it('disabled', async () => {
     const wrapper = mount(AutoComplete)
 
-    expect(wrapper.find('.vxp-auto-complete__input').attributes('disabled')).toBe(undefined)
+    expect(wrapper.find('.vxp-auto-complete__input').attributes('disabled')).toBeFalsy()
 
     await wrapper.setProps({ disabled: true })
     expect(wrapper.find('.vxp-auto-complete__input').attributes('disabled')).toBe('')

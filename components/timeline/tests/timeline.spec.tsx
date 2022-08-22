@@ -117,7 +117,7 @@ describe('Timeline', () => {
     expect(items[0].find('.vxp-timeline__line').attributes('style')).toContain(
       'border-left-style: dashed;'
     )
-    expect(items[1].find('.vxp-timeline__line').attributes('style')).toBe(undefined)
+    expect(items[1].find('.vxp-timeline__line').attributes('style')).toBeUndefined()
     expect(items[2].find('.vxp-timeline__line').attributes('style')).toContain(
       'border-left-style: dashed;'
     )

@@ -56,7 +56,7 @@ describe('Option', () => {
   it('no title', () => {
     const wrapper = mount(() => <Option value={TEXT} no-title></Option>)
 
-    expect(wrapper.find('.vxp-option').attributes('title')).toEqual(undefined)
+    expect(wrapper.find('.vxp-option').attributes('title')).toBeFalsy()
   })
 
   it('state classes', async () => {
