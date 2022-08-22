@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { noop } from '@vexip-ui/utils'
 import { Scrollbar } from '..'
 
 vi.useFakeTimers()
@@ -71,19 +72,27 @@ describe('Scrollbar', () => {
     const trackEl = wrapper.find('.vxp-scrollbar__track').element as HTMLElement
     const barEl = wrapper.find('.vxp-scrollbar__bar').element as HTMLElement
 
-    const trackMock = vi
-      .spyOn(trackEl as any, 'getBoundingClientRect', 'get')
-      .mockReturnValue(() => ({
-        top: 0,
-        left: 0,
-        width: 0,
-        height: 100
-      }))
-    const barMock = vi.spyOn(barEl as any, 'getBoundingClientRect', 'get').mockReturnValue(() => ({
+    const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
       top: 0,
       left: 0,
       width: 0,
-      height: 20
+      height: 100,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
+    }))
+    const barMock = vi.spyOn(barEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      width: 0,
+      height: 20,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
     }))
 
     const downEvent = new CustomEvent('pointerdown') as any
@@ -127,19 +136,27 @@ describe('Scrollbar', () => {
     const trackEl = wrapper.find('.vxp-scrollbar__track').element as HTMLElement
     const barEl = wrapper.find('.vxp-scrollbar__bar').element as HTMLElement
 
-    const trackMock = vi
-      .spyOn(trackEl as any, 'getBoundingClientRect', 'get')
-      .mockReturnValue(() => ({
-        top: 0,
-        left: 0,
-        width: 0,
-        height: 100
-      }))
-    const barMock = vi.spyOn(barEl as any, 'getBoundingClientRect', 'get').mockReturnValue(() => ({
+    const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
       top: 0,
       left: 0,
       width: 0,
-      height: 20
+      height: 100,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
+    }))
+    const barMock = vi.spyOn(barEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      width: 0,
+      height: 20,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
     }))
 
     const downEvent = new CustomEvent('pointerdown') as any

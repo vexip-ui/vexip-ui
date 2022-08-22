@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+import { noop } from '@vexip-ui/utils'
 import { Slider } from '..'
 
 vi.useFakeTimers()
@@ -62,14 +63,17 @@ describe('Slider', () => {
     const trigger = wrapper.find('.vxp-slider__trigger')
     const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
 
-    const trackMock = vi
-      .spyOn(trackEl as any, 'getBoundingClientRect', 'get')
-      .mockReturnValue(() => ({
-        top: 0,
-        left: 0,
-        width: 100,
-        height: 100
-      }))
+    const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      width: 100,
+      height: 100,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
+    }))
 
     await toggleMove(trigger.element as HTMLElement)
     expect(onInput).toHaveBeenCalled()
@@ -97,14 +101,17 @@ describe('Slider', () => {
     const trigger = wrapper.find('.vxp-slider__trigger')
     const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
 
-    const trackMock = vi
-      .spyOn(trackEl as any, 'getBoundingClientRect', 'get')
-      .mockReturnValue(() => ({
-        top: 0,
-        left: 0,
-        width: 100,
-        height: 100
-      }))
+    const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      width: 100,
+      height: 100,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
+    }))
 
     await toggleMove(trigger.element as HTMLElement)
     expect(onChange).not.toHaveBeenCalled()
@@ -146,14 +153,17 @@ describe('Slider', () => {
     const trigger = wrapper.find('.vxp-slider__trigger')
     const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
 
-    const trackMock = vi
-      .spyOn(trackEl as any, 'getBoundingClientRect', 'get')
-      .mockReturnValue(() => ({
-        top: 0,
-        left: 0,
-        width: 100,
-        height: 100
-      }))
+    const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      width: 100,
+      height: 100,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
+    }))
 
     await toggleMove(trigger.element as HTMLElement, 2)
     expect(trigger.attributes('style')).toContain('left: 0%;')
@@ -172,14 +182,17 @@ describe('Slider', () => {
     const trigger = wrapper.find('.vxp-slider__trigger')
     const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
 
-    const trackMock = vi
-      .spyOn(trackEl as any, 'getBoundingClientRect', 'get')
-      .mockReturnValue(() => ({
-        top: 0,
-        left: 0,
-        width: 100,
-        height: 100
-      }))
+    const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      width: 100,
+      height: 100,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
+    }))
 
     await toggleMove(trigger.element as HTMLElement)
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('height: 40%;')
