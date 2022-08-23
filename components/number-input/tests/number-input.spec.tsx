@@ -244,7 +244,7 @@ describe('NumberInput', () => {
 
     expect(wrapper.find('.vxp-select__clear').exists()).toBe(false)
 
-    await wrapper.setProps({ value: TEXT })
+    await wrapper.setProps({ value: 1 })
     await wrapper.trigger('mouseenter')
     expect(wrapper.find('.vxp-number-input__clear').exists()).toBe(true)
     expect(wrapper.find('.vxp-number-input__suffix').exists()).toBe(true)
