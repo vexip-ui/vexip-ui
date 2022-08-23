@@ -145,7 +145,14 @@ export default defineComponent({
         handleSelect,
         handleExpand,
         increaseItem,
-        decreaseItem
+        decreaseItem,
+        beforeExpand: () => {
+          if (props.accordion) {
+            for (const item of menuItemSet) {
+              item.groupExpanded = false
+            }
+          }
+        }
       })
     )
 
