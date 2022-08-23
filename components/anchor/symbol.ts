@@ -3,6 +3,7 @@ import type { InjectionKey } from 'vue'
 export interface LinkState {
   el: HTMLElement | null,
   to: string,
+  active: boolean,
   indent: number
 }
 

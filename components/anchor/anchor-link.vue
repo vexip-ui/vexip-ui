@@ -10,7 +10,7 @@
     >
       <slot></slot>
     </a>
-    <ul :class="nh.be('list')">
+    <ul v-if="$slots.group" :class="nh.be('list')">
       <slot name="group"></slot>
     </ul>
   </li>
@@ -59,13 +59,14 @@ export default defineComponent({
     const state = reactive({
       el: link,
       to: toRef(props, 'to'),
+      active,
       indent
     })
 
     const linkClass = computed(() => {
       return {
         [nh.be('link')]: true,
-        [nh.be('link--active')]: active.value
+        [nh.bem('link', 'active')]: state.active
       }
     })
     const linkStyle = computed(() => {
