@@ -304,6 +304,7 @@ describe('Table', () => {
       }
     ]
     const data = Array.from({ length: 10 }, (_, i) => ({
+      id: i,
       name: `n${Math.floor(i / 2)}`,
       label: `l${i % 2}`
     })).sort(() => Math.random() - 0.5)
@@ -329,13 +330,11 @@ describe('Table', () => {
 
     const clickSorter = async (cell: DOMWrapper<Element>, type: 'asc' | 'desc') => {
       await cell.find(`.vxp-table__sorter--${type}`).trigger('click')
-      await runScrollTimers()
       await nextTick()
       rows = body.findAll('.vxp-table__row')
     }
 
     await clickSorter(headCells[1], 'asc')
-    console.log(body.text())
     expect(rows.map(row => row.findAll('.vxp-table__cell')[1].text())).toEqual([
       'n0',
       'n0',
@@ -351,9 +350,6 @@ describe('Table', () => {
     expect(sortMethod).toHaveBeenCalled()
 
     await clickSorter(headCells[1], 'desc')
-    // rows.forEach((row, i) => {
-    //   expect(row.findAll('.vxp-table__cell')[1].text()).toEqual(`n${Math.floor((9 - i) / 2)}`)
-    // })
     expect(rows.map(row => row.findAll('.vxp-table__cell')[1].text())).toEqual([
       'n4',
       'n4',
@@ -513,8 +509,12 @@ describe('Table', () => {
         key: 'name'
       }
     ]
-    const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}` }))
-    const wrapper = mount(() => <Table columns={columns} data={data}></Table>)
+    const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, label: `l${i}` }))
+    const wrapper = mount(() => (
+      <Table columns={columns} data={data}>
+        <TableColumn id-key={'label'} name={'Label'} order={1}></TableColumn>
+      </Table>
+    ))
 
     await runScrollTimers()
 
@@ -526,11 +526,114 @@ describe('Table', () => {
     rows.forEach(row => {
       expect(row.find('.vxp-table__cell').find('.vxp-table__selection').exists()).toBe(true)
     })
+
+    rows[0].find('.vxp-table__selection').trigger('click')
+    await nextTick()
+    expect(headCells[0].find('.vxp-checkbox').classes()).toContain('vxp-checkbox--partial')
+    expect(rows[0].find('.vxp-checkbox').classes()).toContain('vxp-checkbox--checked')
+
+    headCells[0].find('.vxp-table__selection').trigger('click')
+    await nextTick()
+    expect(headCells[0].find('.vxp-checkbox').classes()).toContain('vxp-checkbox--checked')
+    rows.forEach(row => {
+      expect(row.find('.vxp-checkbox').classes()).toContain('vxp-checkbox--checked')
+    })
   })
 
-  it('order column')
+  it('order column', async () => {
+    const columns = [
+      {
+        type: 'order',
+        key: 'order',
+        name: 'Order'
+      },
+      {
+        name: 'Name',
+        key: 'name'
+      }
+    ]
+    const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, label: `l${i}` }))
+    const wrapper = mount(() => (
+      <Table columns={columns} data={data}>
+        <TableColumn id-key={'label'} name={'Label'} order={1}></TableColumn>
+      </Table>
+    ))
 
-  it('expand column')
+    await runScrollTimers()
 
-  it('paged data')
+    const headRow = wrapper.find('.vxp-table__head .vxp-table__row')
+    const rows = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    const headCells = headRow.findAll('.vxp-table__head-cell')
+
+    expect(headCells[0].text()).toEqual('Order')
+    rows.forEach((row, i) => {
+      expect(row.find('.vxp-table__cell').text()).toEqual(`${i + 1}`)
+    })
+  })
+
+  it('expand column', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name'
+      }
+    ]
+    const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, label: `l${i}` }))
+    const wrapper = mount(() => (
+      <Table columns={columns} data={data}>
+        <TableColumn id-key={'expand'} type={'expand'}>
+          <div class={'expand'}></div>
+        </TableColumn>
+        <TableColumn id-key={'label'} name={'Label'}></TableColumn>
+      </Table>
+    ))
+
+    await runScrollTimers()
+
+    const rowGroups = wrapper.findAll('.vxp-table__body .vxp-table__group')
+
+    rowGroups.forEach(row => {
+      expect(row.find('.vxp-table__expand').exists()).toBe(true)
+    })
+
+    await rowGroups[0].find('.vxp-table__expand').trigger('click')
+    expect(rowGroups[0].find('.vxp-table__collapse').exists()).toBe(true)
+    expect(rowGroups[0].find('.expand').exists()).toBe(true)
+
+    await rowGroups[0].find('.vxp-table__expand').trigger('click')
+    expect(rowGroups[0].find('.vxp-table__collapse').exists()).not.toBe(true)
+    expect(rowGroups[0].find('.expand').exists()).not.toBe(true)
+  })
+
+  it('paged data', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name'
+      }
+    ]
+    const data = Array.from({ length: 10 }, (_, i) => ({ name: `${i}`, label: `l${i}` }))
+    const wrapper = mount(Table, {
+      props: {
+        columns,
+        data,
+        pageSize: 6
+      },
+      slots: {
+        default: () => <TableColumn id-key={'label'} name={'Label'}></TableColumn>
+      }
+    })
+
+    await runScrollTimers()
+
+    let row = wrapper.findAll('.vxp-table__body .vxp-table__row')
+
+    expect(row.length).toEqual(6)
+    expect(row[0].find('.vxp-table__cell').text()).toEqual(data[0].label)
+
+    await wrapper.setProps({ currentPage: 2 })
+    row = wrapper.findAll('.vxp-table__body .vxp-table__row')
+    expect(row.length).toEqual(4)
+    expect(row[0].find('.vxp-table__cell').text()).toEqual(data[6].label)
+  })
 })

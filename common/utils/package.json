@@ -4,7 +4,8 @@
   "license": "MIT",
   "author": "qmhc",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "test": "vitest"
   },
   "type": "module",
   "main": "dist/index.js",
