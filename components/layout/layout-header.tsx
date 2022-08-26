@@ -208,6 +208,7 @@ export default defineComponent({
     }
 
     function handleMenuSelect(label: string, meta: Record<string, any>) {
+      toggleUserDrop(false)
       emitEvent(props.onMenuSelect, label, meta)
     }
 
@@ -347,7 +348,7 @@ export default defineComponent({
                   <DropdownList>
                     {props.user?.name && (
                       <li class={nh.be('user-profile')}>
-                        <span>{props.user.name}</span>
+                        <span class={nh.be('user-name')}>{props.user.name}</span>
                         {props.user.email && (
                           <span class={nh.be('user-email')}>{props.user.email}</span>
                         )}
