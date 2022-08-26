@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, provide, onMounted } from 'vue'
 import { Renderer } from '@/components/renderer'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
@@ -119,14 +119,11 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentActive, value => {
-      computeIndex()
-      emitEvent(props.onChange, value)
-      emit('update:active', value)
-    })
     watch(currentIndex, () => {
       isTransition.value = true
     })
+
+    onMounted(computeIndex)
 
     function isActiveEmpty() {
       return isNull(currentActive.value) || currentActive.value === ''
@@ -144,6 +141,10 @@ export default defineComponent({
 
     function handleActive(label: string | number) {
       currentActive.value = label
+
+      computeIndex()
+      emitEvent(props.onChange, label)
+      emit('update:active', label)
     }
 
     return {
