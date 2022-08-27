@@ -45,7 +45,9 @@ describe('Skeleton', () => {
       }
     })
 
-    expect(wrapper.find('.vxp-skeleton').attributes('style')).toContain('width: 20px')
+    expect(wrapper.find('.vxp-skeleton').attributes('style')).toContain(
+      '--vxp-skeleton-width: 20px;'
+    )
   })
 
   it('height', async () => {
@@ -56,7 +58,9 @@ describe('Skeleton', () => {
       }
     })
 
-    expect(wrapper.find('.vxp-skeleton').attributes('style')).toContain('height: 20px')
+    expect(wrapper.find('.vxp-skeleton').attributes('style')).toContain(
+      '--vxp-skeleton-height: 20px;'
+    )
   })
 
   it('spread', async () => {
@@ -67,7 +71,9 @@ describe('Skeleton', () => {
       }
     })
 
-    expect(wrapper.find('.vxp-skeleton').attributes('style')).toContain('spread: 20px')
+    expect(wrapper.find('.vxp-skeleton').attributes('style')).toContain(
+      '--vxp-skeleton-spread: 20px;'
+    )
   })
 
   it('tag', () => {
@@ -103,5 +109,11 @@ describe('Skeleton', () => {
       loading: false
     })
     expect(wrapper.find('.content').exists()).toBe(true)
+  })
+
+  it('activated', () => {
+    const wrapper = mount(() => <Skeleton activated></Skeleton>)
+
+    expect(wrapper.find('.vxp-skeleton').classes()).toContain('vxp-skeleton--activated')
   })
 })

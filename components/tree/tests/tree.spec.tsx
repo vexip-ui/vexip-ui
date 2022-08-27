@@ -44,6 +44,10 @@ describe('Tree', () => {
       {
         id: 1,
         label: 'n1'
+      },
+      {
+        id: 2,
+        label: 'n2'
       }
     ]
     const wrapper = mount(() => (
@@ -51,15 +55,44 @@ describe('Tree', () => {
     ))
 
     await nextTick()
-    await wrapper.find('.vxp-tree__label').trigger('click')
-    expect(wrapper.find('.vxp-tree__node').classes()).toContain('vxp-tree__node--selected')
+    const nodes = wrapper.findAll('.vxp-tree__node')
+    await nodes[0].find('.vxp-tree__label').trigger('click')
+    expect(nodes[0].classes()).toContain('vxp-tree__node--selected')
     expect(onNodeSelect).toHaveBeenCalled()
     expect(onNodeSelect).toHaveBeenCalledWith(data[0], expect.objectContaining({ data: data[0] }))
 
-    await wrapper.find('.vxp-tree__label').trigger('click')
-    expect(wrapper.find('.vxp-tree__node').classes()).not.toContain('vxp-tree__node--selected')
+    await nodes[1].find('.vxp-tree__label').trigger('click')
+    expect(nodes[1].classes()).toContain('vxp-tree__node--selected')
+    expect(nodes[0].classes()).not.toContain('vxp-tree__node--selected')
+
+    await nodes[1].find('.vxp-tree__label').trigger('click')
+    expect(nodes[1].classes()).not.toContain('vxp-tree__node--selected')
     expect(onNodeCancel).toHaveBeenCalled()
-    expect(onNodeCancel).toHaveBeenCalledWith(data[0], expect.objectContaining({ data: data[0] }))
+    expect(onNodeCancel).toHaveBeenCalledWith(data[1], expect.objectContaining({ data: data[1] }))
+  })
+
+  it('multiple select', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      },
+      {
+        id: 2,
+        label: 'n2'
+      }
+    ]
+    const wrapper = mount(() => <Tree data={data} multiple></Tree>)
+
+    await nextTick()
+    const nodes = wrapper.findAll('.vxp-tree__node')
+
+    await nodes[0].find('.vxp-tree__label').trigger('click')
+    expect(nodes[0].classes()).toContain('vxp-tree__node--selected')
+
+    await nodes[1].find('.vxp-tree__label').trigger('click')
+    expect(nodes[1].classes()).toContain('vxp-tree__node--selected')
+    expect(nodes[0].classes()).toContain('vxp-tree__node--selected')
   })
 
   it('click node', async () => {
@@ -310,5 +343,90 @@ describe('Tree', () => {
     await wrapper.find('.vxp-tree__checkbox').trigger('click')
     expect(wrapper.find('.vxp-tree__checkbox').classes()).not.toContain('vxp-checkbox--checked')
     expect(onNodeChange).not.toHaveBeenCalled()
+  })
+
+  it('draggable', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1',
+        disabled: true
+      }
+    ]
+    const wrapper = mount(() => <Tree data={data} draggable></Tree>)
+
+    await nextTick()
+    expect(wrapper.find('.vxp-tree__node').attributes('draggable')).toEqual('true')
+  })
+
+  it('filter nodes', async () => {
+    const data = [
+      {
+        id: 1,
+        label: 'n1',
+        parent: 0,
+        expanded: true
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1
+      },
+      {
+        id: 3,
+        label: 'n3',
+        parent: 1
+      }
+    ]
+    const wrapper = mount(() => <Tree data={data} filter={'2'}></Tree>)
+
+    await nextTick()
+    const nodes = wrapper.findAll('.vxp-tree__node')
+    expect(nodes.length).toEqual(2)
+    expect(nodes[0].find('.vxp-tree__label').text()).toEqual('n1')
+    expect(nodes[1].find('.vxp-tree__label').text()).toEqual('n2')
+  })
+
+  it('async load', async () => {
+    const onAsyncLoad = vi.fn()
+    const data = [
+      {
+        id: 1,
+        label: 'n1'
+      }
+    ]
+    const wrapper = mount(() => <Tree data={data} on-async-load={onAsyncLoad}></Tree>)
+
+    await nextTick()
+    await wrapper.find('.vxp-tree__arrow').trigger('click')
+    expect(onAsyncLoad).toHaveBeenCalled()
+  })
+
+  it('key config', async () => {
+    const data = [
+      {
+        key: 1,
+        name: 'n1',
+        open: true
+      },
+      {
+        key: 2,
+        name: 'n2',
+        parentKey: 1
+      }
+    ]
+    const config = {
+      id: 'key',
+      label: 'name',
+      parent: 'parentKey',
+      expanded: 'open'
+    }
+    const wrapper = mount(() => <Tree data={data} key-config={config}></Tree>)
+
+    await nextTick()
+    const nodes = wrapper.findAll('.vxp-tree__node')
+    expect(nodes.length).toEqual(2)
+    expect(nodes[0].text()).toEqual('n1')
+    expect(nodes[1].text()).toEqual('n2')
   })
 })
