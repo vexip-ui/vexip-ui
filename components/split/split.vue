@@ -15,14 +15,14 @@
     <div :class="nh.be('trigger')" :style="triggerStyle">
       <div ref="handler" :class="nh.be('handler')">
         <template v-if="props.canFull">
-          <div
+          <button
             :class="[nh.be('button'), nh.bem('button', `${props.vertical ? 'top' : 'left'}-full`)]"
             @pointerdown.stop
             @click.left="handleFull(-1)"
           >
             <Icon :icon="fullIcons[0]" :scale="0.6"></Icon>
-          </div>
-          <div
+          </button>
+          <button
             :class="[
               nh.be('button'),
               nh.bem('button', `${props.vertical ? 'bottom' : 'right'}-full`)
@@ -31,7 +31,7 @@
             @click.left="handleFull(1)"
           >
             <Icon :icon="fullIcons[1]" :scale="0.6"></Icon>
-          </div>
+          </button>
         </template>
         <template v-else>
           <slot name="handler">
