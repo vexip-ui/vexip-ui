@@ -146,26 +146,26 @@ export default defineComponent({
       },
       viewSize: {
         default: 3,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       vertical: false,
       disabled: false,
       loop: false,
       arrow: {
-        default: 'outside' as ArrowType,
-        validator: (value: ArrowType) => ['outside', 'inside', 'none'].includes(value)
+        default: 'outside',
+        validator: value => ['outside', 'inside', 'none'].includes(value)
       },
       arrowTrigger: {
-        default: 'hover' as ArrowTrigger,
-        validator: (value: ArrowTrigger) => ['hover', 'always'].includes(value)
+        default: 'hover',
+        validator: value => ['hover', 'always'].includes(value)
       },
       autoplay: {
         default: false,
-        validator: (value: boolean | number) => (typeof value === 'number' ? value > 500 : true)
+        validator: value => (typeof value === 'number' ? value > 500 : true)
       },
       pointer: {
-        default: 'none' as PointerType,
-        validator: (value: PointerType) => ['outside', 'inside', 'none'].includes(value)
+        default: 'none',
+        validator: value => ['outside', 'inside', 'none'].includes(value)
       },
       speed: 300,
       activeOffset: 0,

@@ -26,14 +26,7 @@ export default defineComponent({
   setup() {
     return {
       // state type
-      states: [
-        'default',
-        'primary',
-        'info',
-        'success',
-        'error',
-        'warning'
-      ] as const,
+      states: ['default', 'primary', 'info', 'success', 'error', 'warning'] as const,
       // color type
       colors: [
         'lime',

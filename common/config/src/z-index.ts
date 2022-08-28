@@ -38,9 +38,7 @@ export function configZIndex(sourceZIndex: number | Ref<number>, app?: App) {
 
       return getOrDefault(
         zIndex,
-        upstreamZIndex
-          ? getOrDefault(upstreamZIndex.value, globalZIndex.value)
-          : globalZIndex.value
+        upstreamZIndex ? getOrDefault(upstreamZIndex.value, globalZIndex.value) : globalZIndex.value
       )
     })
 

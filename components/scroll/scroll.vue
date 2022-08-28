@@ -138,8 +138,8 @@ export default defineComponent({
     const props = useProps('scroll', _props, {
       scrollClass: null,
       mode: {
-        default: 'vertical' as ScrollMode,
-        validator: (value: ScrollMode) => scrollModes.includes(value)
+        default: 'vertical',
+        validator: value => scrollModes.includes(value)
       },
       width: '',
       height: '',

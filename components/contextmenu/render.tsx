@@ -16,7 +16,10 @@ function renderItemIcon(item: MenuConfig, nh: NameHelper) {
     icon = item.icon()
   } else {
     icon = (
-      <Icon icon={item.icon} style={[{ color: item.iconColor || item.color }, item.icon.style]}></Icon>
+      <Icon
+        icon={item.icon}
+        style={[{ color: item.iconColor || item.color }, item.icon.style]}
+      ></Icon>
     )
   }
 
@@ -49,7 +52,9 @@ function renderGroupItem(item: MenuConfig, nh: NameHelper) {
             disabled={item.disabled}
           >
             {renderItemIcon(item, nh)}
-            <span style={{ color: item.color }}>{item.label || item.key}</span>
+            <span class={nh.be('label')} style={{ color: item.color }}>
+              {item.label || item.key}
+            </span>
             {renderItemShortcut(item, nh)}
             <div class={[nh.be('icon'), nh.be('arrow')]}>
               <Icon icon={ChevronRight} style={{ color: item.iconColor || item.color }}></Icon>
@@ -88,7 +93,9 @@ export function renderItem({ config, nh }: { config: MenuConfig, nh: NameHelper 
         disabled={config.disabled}
       >
         {renderItemIcon(config, nh)}
-        <span style={{ color: config.color }}>{config.label || config.key}</span>
+        <span class={nh.be('label')} style={{ color: config.color }}>
+          {config.label || config.key}
+        </span>
         {renderItemShortcut(config, nh)}
       </DropdownItem>
     )

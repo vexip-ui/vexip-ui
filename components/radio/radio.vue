@@ -75,7 +75,7 @@ export default defineComponent({
       },
       label: {
         default: null,
-        validator: (value: string | number) => isDefined(value),
+        validator: isDefined,
         static: true
       },
       labelClass: null,

@@ -48,7 +48,8 @@ export interface MenuState {
   handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw): void,
   handleExpand(label: string, expanded: boolean, meta: Record<string, any>): void,
   increaseItem(state: MenuItemState): void,
-  decreaseItem(state: MenuItemState): void
+  decreaseItem(state: MenuItemState): void,
+  beforeExpand(): void
 }
 
 export const baseIndentWidth = 20 // px

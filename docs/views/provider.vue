@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, inject, provide } from 'vue'
+import { watch, inject, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { vexipuiLocale } from '../i18n'
 import Header from '../common/header.vue'
