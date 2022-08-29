@@ -1,18 +1,21 @@
-import { mount } from '@vue/test-utils'
-import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest'
 import { nextTick } from 'vue'
+import { mount } from '@vue/test-utils'
 import { Upload } from '..'
-import { sleep, getXhr, triggerUploadFiles, formData, fileReader } from './mock'
+import { getXhr, triggerUploadFiles, FormData, FileReader } from './mock'
 
-beforeEach(() => {
+vi.useFakeTimers()
+
+beforeAll(() => {
   vi.stubGlobal('XMLHttpRequest', getXhr('success'))
-  vi.stubGlobal('FormData', formData)
-  vi.stubGlobal('FileReader', fileReader)
+  vi.stubGlobal('FormData', FormData)
+  vi.stubGlobal('FileReader', FileReader)
 })
 
-afterEach(() => {
+afterAll(() => {
   vi.stubGlobal('XMLHttpRequest', undefined)
   vi.stubGlobal('FormData', undefined)
+  vi.stubGlobal('FileReader', undefined)
 })
 
 describe('Upload', () => {
@@ -236,7 +239,7 @@ describe('Upload', () => {
     expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(true)
 
     await triggerItem.trigger('dragleave')
-    await sleep(100)
+    vi.runAllTimers()
     expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(false)
 
     await triggerItem.trigger('dragover')

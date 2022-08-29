@@ -1,12 +1,17 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest'
 import { Upload } from '..'
-import { formData, getXhr, triggerUploadFiles } from './mock'
+import { FormData, getXhr, triggerUploadFiles } from './mock'
 
-vi.stubGlobal('FormData', formData)
+vi.useFakeTimers()
 
-afterAll(() => {
+beforeEach(() => {
+  vi.stubGlobal('FormData', FormData)
+})
+
+afterEach(() => {
   vi.stubGlobal('XMLHttpRequest', undefined)
+  vi.stubGlobal('FormData', undefined)
 })
 
 describe('Successful Requests', () => {
@@ -31,13 +36,11 @@ describe('Successful Requests', () => {
   })
 
   it('requests result with `response`', async () => {
-    const done = vi.fn()
+    const onChange = vi.fn()
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onChange() {
-          done()
-        }
+        onChange
       }
     })
 
@@ -45,17 +48,15 @@ describe('Successful Requests', () => {
     const fileList = [new File(['index'], 'file.txt')]
 
     await triggerUploadFiles(input, fileList)
-    expect(done).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalled()
   })
 
   it('should work with `withCredentials` prop', async () => {
-    const done = vi.fn()
+    const onChange = vi.fn()
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onChange() {
-          done()
-        },
+        onChange,
         withCredentials: true
       }
     })
@@ -64,17 +65,15 @@ describe('Successful Requests', () => {
     const fileList = [new File(['index'], 'file.txt')]
 
     await triggerUploadFiles(input, fileList)
-    expect(done).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalled()
   })
 
   it('should work with `headers` prop', async () => {
-    const done = vi.fn()
+    const onChange = vi.fn()
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onChange() {
-          done()
-        },
+        onChange,
         headers: {
           'Content-Type': 'application/json'
         }
@@ -85,17 +84,15 @@ describe('Successful Requests', () => {
     const fileList = [new File(['index'], 'file.txt')]
 
     await triggerUploadFiles(input, fileList)
-    expect(done).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalled()
   })
 
   it('should work with `data` prop', async () => {
-    const done = vi.fn()
+    const onChange = vi.fn()
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onChange() {
-          done()
-        },
+        onChange,
         data: {
           name: 'test'
         }
@@ -106,7 +103,7 @@ describe('Successful Requests', () => {
     const fileList = [new File(['index'], 'file.txt')]
 
     await triggerUploadFiles(input, fileList)
-    expect(done).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalled()
   })
 })
 
@@ -129,25 +126,6 @@ describe('Failed Requests', () => {
 
     await triggerUploadFiles(input, fileList)
     expect(onError).toHaveBeenCalled()
-  })
-
-  it('should work with upload failed event', async () => {
-    try {
-      const onError = vi.fn()
-      const wrapper = mount(Upload, {
-        props: {
-          url: '//jsonplaceholder.typicode.com/posts/',
-          onError
-        }
-      })
-
-      const input = wrapper.find('input')
-      const fileList = [new File(['index'], 'file.txt')]
-
-      await triggerUploadFiles(input, fileList)
-    } catch (e) {
-      expect(e).toBe('Error: fail to post //jsonplaceholder.typicode.com/posts/ 199')
-    }
   })
 })
 

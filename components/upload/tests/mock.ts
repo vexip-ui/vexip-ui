@@ -1,9 +1,9 @@
-import type { DOMWrapper } from '@vue/test-utils'
-import { vi } from 'vitest'
 import { nextTick } from 'vue'
+
+import type { DOMWrapper } from '@vue/test-utils'
 import type { SourceFile } from '..'
 
-const getMockFile = (element: Element, files: File[]): void => {
+const getMockFile = (element: Element, files: File[]) => {
   Object.defineProperty(element, 'files', {
     get() {
       return files
@@ -14,13 +14,8 @@ const getMockFile = (element: Element, files: File[]): void => {
   })
 }
 
-export const sleep = async (ms: number): Promise<void> => {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms)
-  })
-}
 export const getXhr = (type: 'success' | 'error' | 'abort') => {
-  return class xhr {
+  return class XMLHttpRequest {
     status = 0
     withCredentials = false
     responseText = '{"success": true}'
@@ -77,21 +72,19 @@ export const getXhr = (type: 'success' | 'error' | 'abort') => {
   }
 }
 
-export const triggerUploadFiles = async (
-  input: DOMWrapper<HTMLInputElement>,
-  fileList: any[],
-  sleepCount = 0
-): Promise<void> => {
+export const triggerUploadFiles = async (input: DOMWrapper<HTMLInputElement>, fileList: any[]) => {
   getMockFile(input.element, fileList)
   await input.trigger('change')
-  await sleep(sleepCount)
+  await nextTick()
 }
 
-export function formData(this: any) {
-  this.append = vi.fn()
+export class FormData {
+  append() {
+    // mock FormData append
+  }
 }
 
-export class fileReader {
+export class FileReader {
   result = ''
 
   readAsDataURL(source: SourceFile) {
@@ -102,6 +95,6 @@ export class fileReader {
   }
 
   onload() {
-    // mock fileReader onload
+    // mock FileReader onload
   }
 }
