@@ -1,35 +1,28 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
+import { nextTick } from 'vue'
 import { Upload } from '..'
+import { sleep, getXhr, triggerUploadFiles, formData, fileReader } from './mock'
 
-const sleep = async (ms: number): Promise<void> => {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms)
-  })
-}
+beforeEach(() => {
+  vi.stubGlobal('XMLHttpRequest', getXhr('success'))
+  vi.stubGlobal('FormData', formData)
+  vi.stubGlobal('FileReader', fileReader)
+})
 
-const getMockFile = (element: Element, files: File[]): void => {
-  Object.defineProperty(element, 'files', {
-    get() {
-      return files
-    },
-    set() {
-      return true
-    }
-  })
-}
-
-function FormDataMock(this: any) {
-  this.append = vi.fn()
-}
-
-vi.stubGlobal('FormData', FormDataMock)
+afterEach(() => {
+  vi.stubGlobal('XMLHttpRequest', undefined)
+  vi.stubGlobal('FormData', undefined)
+})
 
 describe('Upload', () => {
   it('should render', async () => {
     const wrapper = mount(() => <Upload></Upload>)
     expect(wrapper.find('.vxp-upload').exists()).toBe(true)
+    expect(wrapper.find('.vxp-upload').classes()).toContain('vxp-upload-vars')
+    expect(wrapper.find('input[type=file]').exists()).toBe(true)
   })
+
   it('should work with `file list`', async () => {
     const fileList = [
       {
@@ -40,15 +33,18 @@ describe('Upload', () => {
     const wrapper = mount(() => <Upload file-list={fileList}></Upload>)
     expect(wrapper.find('.vxp-upload__files').exists()).toBe(true)
   })
+
   it('should work with `multiple` prop ', async () => {
     const wrapper = mount(() => <Upload multiple></Upload>)
     expect(wrapper.find('input').attributes('multiple')).toBe('')
   })
+
   it('should work with `tip` prop ', async () => {
     const tipText = 'test tip'
     const wrapper = mount(() => <Upload tip={tipText}></Upload>)
     expect(wrapper.find('.vxp-upload__tip').text()).toBe(tipText)
   })
+
   it('should work with `list-type` prop ', async () => {
     let listType = 'name'
 
@@ -56,8 +52,7 @@ describe('Upload', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
+    await triggerUploadFiles(input, fileList)
     expect(wrapper.findAll('.vxp-upload__file--name').length).toBe(1)
 
     listType = 'thumbnail'
@@ -72,10 +67,12 @@ describe('Upload', () => {
     })
     expect(wrapper.findAll('.vxp-upload__file--card').length).toBe(1)
   })
+
   it('should work with `block` prop ', async () => {
     const wrapper = mount(() => <Upload block></Upload>)
     expect(wrapper.find('.vxp-upload--block').exists()).toBe(true)
   })
+
   it('should work with `accept` prop ', async () => {
     let accept: string | string[] = 'test'
     const wrapper = mount(() => <Upload accept={accept}></Upload>)
@@ -87,6 +84,7 @@ describe('Upload', () => {
     })
     expect(wrapper.find('input').attributes('accept')).toBe(accept.join(','))
   })
+
   it('should work with `filter` prop and `on-filter-error` event ', async () => {
     const onFilterError = vi.fn()
     const done = vi.fn()
@@ -107,9 +105,7 @@ describe('Upload', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.svg')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
+    await triggerUploadFiles(input, fileList)
 
     expect(onFilterError).toHaveBeenCalled()
     expect(done).toHaveBeenCalled()
@@ -118,13 +114,17 @@ describe('Upload', () => {
       filter: ['png', 'jpg']
     })
 
-    getMockFile(input.element, [new File(['index'], 'file.svg'), new File(['index'], 'image.jpg')])
+    await triggerUploadFiles(input, [
+      new File(['index'], 'file.svg'),
+      new File(['index'], 'image.jpg')
+    ])
     await input.trigger('change')
-    await sleep(0)
+    await nextTick()
 
     expect(onFilterError).toHaveBeenCalled()
     expect(done).toHaveBeenCalled()
   })
+
   it('should work with `max-size` prop and `size-error` event ', async () => {
     const onSizeError = vi.fn()
     const wrapper = mount(Upload, {
@@ -138,32 +138,26 @@ describe('Upload', () => {
     const input = wrapper.find('input')
     const fileList = [new File([new Array(1025).fill(1).join('')], 'file.svg')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
+    await triggerUploadFiles(input, fileList)
     expect(onSizeError).toHaveBeenCalled()
   })
+
   it('should work with normal upload', async () => {
-    const done = vi.fn()
+    const onChange = vi.fn()
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onChange() {
-          done()
-        }
+        onChange
       }
     })
 
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
-    expect(done).toHaveBeenCalled()
+    await triggerUploadFiles(input, fileList)
+    expect(onChange).toHaveBeenCalled()
   })
+
   it('should work with `on-before-upload` event', async () => {
     const onBeforeUpload = vi.fn(async () => true)
     const wrapper = mount(Upload, {
@@ -176,12 +170,10 @@ describe('Upload', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
+    await triggerUploadFiles(input, fileList)
     expect(onBeforeUpload).toHaveBeenCalled()
   })
+
   it('should work with `on-before-select` event', async () => {
     const onBeforeSelect = vi.fn(async () => true)
     const wrapper = mount(Upload, {
@@ -194,12 +186,10 @@ describe('Upload', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
+    await triggerUploadFiles(input, fileList)
     expect(onBeforeSelect).toHaveBeenCalled()
   })
+
   it('should work with delete event', async () => {
     const wrapper = mount(Upload, {
       props: {
@@ -210,10 +200,7 @@ describe('Upload', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
+    await triggerUploadFiles(input, fileList)
     expect(wrapper.findAll('.vxp-upload__file').length).toBe(1)
 
     const deleteIcon = wrapper.find('.vxp-upload__close')
@@ -221,41 +208,8 @@ describe('Upload', () => {
 
     expect(wrapper.findAll('.vxp-upload__file').length).toBe(0)
   })
+
   it('should work with `on-progress` event', async () => {
-    class xhr {
-      status = 0
-      upload = {
-        // eslint-disable-next-line @typescript-eslint/member-delimiter-style
-        onprogress(event: { loaded: number; total: number }) {
-          // mock xhr progress
-          console.log(event)
-        }
-      }
-
-      open() {
-        // start mock xhr
-      }
-
-      setRequestHeader() {
-        // set mock xhr header
-      }
-
-      send() {
-        // send mock xhr
-        this.status = 200
-        this.onload()
-        this.upload.onprogress({
-          loaded: 50,
-          total: 100
-        })
-      }
-
-      onload() {
-        // mock xhr onload
-      }
-    }
-    vi.stubGlobal('XMLHttpRequest', xhr)
-
     const onProgress = vi.fn(async () => true)
     const wrapper = mount(Upload, {
       props: {
@@ -267,42 +221,47 @@ describe('Upload', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
+    await triggerUploadFiles(input, fileList)
     expect(onProgress).toHaveBeenCalled()
-    vi.stubGlobal('XMLHttpRequest', undefined)
+  })
+
+  it('should work with `drag` event ', async () => {
+    const wrapper = mount(() => <Upload allow-drag manual></Upload>)
+
+    const triggerItem = wrapper.find('.vxp-upload__control')
+
+    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(false)
+
+    await triggerItem.trigger('dragover')
+    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(true)
+
+    await triggerItem.trigger('dragleave')
+    await sleep(100)
+    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(false)
+
+    await triggerItem.trigger('dragover')
+    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(true)
+
+    await triggerItem.trigger('drop')
+    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(false)
   })
 
   it('should work with `on-preview` event', async () => {
-    const onPreview = vi.fn(async () => true)
+    const onPreview = vi.fn()
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
         onPreview,
-        listType: 'card',
-        onChange(file) {
-          console.log(file)
-        }
+        listType: 'card'
       }
     })
 
     const input = wrapper.find('input')
-    const fileList = [
-      new File(['index'], 'file.png', {
-        type: 'image/png',
-        base64:'dasdasdas'
-      })
-    ]
+    const fileList = [new File(['index'], 'file.png', { type: 'image/png' })]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
-    const button = wrapper.findAll('.vxp-upload__actions > button')[0]
-    console.log(button.attributes())
-    await button.trigger('click')
+    await triggerUploadFiles(input, fileList)
+    const button = wrapper.findAll('.vxp-upload__action')[0]
+    await button.find('i').trigger('click')
 
     expect(onPreview).toHaveBeenCalled()
   })

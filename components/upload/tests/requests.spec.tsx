@@ -1,111 +1,36 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest'
 import { Upload } from '..'
+import { formData, getXhr, triggerUploadFiles } from './mock'
 
-function FormDataMock(this: any) {
-  this.append = vi.fn()
-}
+vi.stubGlobal('FormData', formData)
 
-vi.stubGlobal('FormData', FormDataMock)
+afterAll(() => {
+  vi.stubGlobal('XMLHttpRequest', undefined)
+})
 
-const getMockFile = (element: Element, files: File[]): void => {
-  Object.defineProperty(element, 'files', {
-    get() {
-      return files
-    },
-    set() {
-      return true
-    }
+describe('Successful Requests', () => {
+  beforeEach(() => {
+    vi.stubGlobal('XMLHttpRequest', getXhr('success'))
   })
-}
 
-const sleep = async (ms: number): Promise<void> => {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms)
-  })
-}
-
-describe('Requests', () => {
   it('requests result with `responseText`', async () => {
-    class xhr {
-      status = 0
-      withCredentials = false
-      responseText = '{"success": true}'
-      open() {
-        // start mock xhr
-      }
-
-      setRequestHeader() {
-        // set mock xhr header
-      }
-
-      send() {
-        // send mock xhr
-        this.status = 200
-        this.onload()
-        this.onabort()
-      }
-
-      onload() {
-        // mock xhr onload
-      }
-
-      onabort() {
-        // mock xhr onabort
-      }
-    }
-    vi.stubGlobal('XMLHttpRequest', xhr)
-
-    const done = vi.fn()
+    const onChange = vi.fn()
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onChange() {
-          done()
-        }
+        onChange
       }
     })
 
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
-    expect(done).toHaveBeenCalled()
-    vi.stubGlobal('XMLHttpRequest', undefined)
+    await triggerUploadFiles(input, fileList)
+    expect(onChange).toHaveBeenCalled()
   })
+
   it('requests result with `response`', async () => {
-    class xhr {
-      status = 0
-      withCredentials = false
-      response = 'success'
-      open() {
-        // start mock xhr
-      }
-
-      setRequestHeader() {
-        // set mock xhr header
-      }
-
-      send() {
-        // send mock xhr
-        this.status = 200
-        this.onload()
-        this.onabort()
-      }
-
-      onload() {
-        // mock xhr onload
-      }
-
-      onabort() {
-        // mock xhr onabort
-      }
-    }
-    vi.stubGlobal('XMLHttpRequest', xhr)
-
     const done = vi.fn()
     const wrapper = mount(Upload, {
       props: {
@@ -119,186 +44,11 @@ describe('Requests', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
+    await triggerUploadFiles(input, fileList)
     expect(done).toHaveBeenCalled()
-    vi.stubGlobal('XMLHttpRequest', undefined)
   })
-  it('should work with `on-error` event', async () => {
-    class xhr {
-      status = 0
 
-      open() {
-        // start mock xhr
-      }
-
-      setRequestHeader() {
-        // set mock xhr header
-      }
-
-      send() {
-        // send mock xhr
-        this.status = 200
-        this.onload()
-        this.onerror()
-      }
-
-      onload() {
-        // mock xhr onload
-      }
-
-      onerror() {
-        // mock xhr onerror
-      }
-    }
-    vi.stubGlobal('XMLHttpRequest', xhr)
-
-    const onError = vi.fn(async () => true)
-    const wrapper = mount(Upload, {
-      props: {
-        url: '//jsonplaceholder.typicode.com/posts/',
-        onError
-      }
-    })
-
-    const input = wrapper.find('input')
-    const fileList = [new File(['index'], 'file.txt')]
-
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
-    expect(onError).toHaveBeenCalled()
-    vi.stubGlobal('XMLHttpRequest', undefined)
-  })
-  it('should work with upload failed event', async () => {
-    try {
-      class xhr {
-        status = 0
-
-        open() {
-          // start mock xhr
-        }
-
-        setRequestHeader() {
-          // set mock xhr header
-        }
-
-        send() {
-          // send mock xhr
-          this.status = 199
-          this.onload()
-          this.onerror()
-        }
-
-        onload() {
-          // mock xhr onload
-        }
-
-        onerror() {
-          // mock xhr onerror
-        }
-      }
-      vi.stubGlobal('XMLHttpRequest', xhr)
-      const onError = vi.fn()
-      const wrapper = mount(Upload, {
-        props: {
-          url: '//jsonplaceholder.typicode.com/posts/',
-          onError
-        }
-      })
-
-      const input = wrapper.find('input')
-      const fileList = [new File(['index'], 'file.txt')]
-
-      getMockFile(input.element, fileList)
-      await input.trigger('change')
-    } catch (e) {
-      expect(e).toBe('Error: fail to post //jsonplaceholder.typicode.com/posts/ 199')
-    }
-  })
-  it('should work with `on-abort` event', async () => {
-    class xhr {
-      status = 0
-
-      open() {
-        // start mock xhr
-      }
-
-      setRequestHeader() {
-        // set mock xhr header
-      }
-
-      send() {
-        // send mock xhr
-        this.status = 200
-        this.onload()
-        this.onabort()
-      }
-
-      onload() {
-        // mock xhr onload
-      }
-
-      onabort() {
-        // mock xhr onabort
-      }
-    }
-    vi.stubGlobal('XMLHttpRequest', xhr)
-
-    const done = vi.fn()
-    const wrapper = mount(Upload, {
-      props: {
-        url: '//jsonplaceholder.typicode.com/posts/',
-        onChange(files: any) {
-          if (files[0].status === 'pending') {
-            done()
-          }
-        }
-      }
-    })
-
-    const input = wrapper.find('input')
-    const fileList = [new File(['index'], 'file.txt')]
-
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
-    expect(done).toHaveBeenCalled()
-    vi.stubGlobal('XMLHttpRequest', undefined)
-  })
   it('should work with `withCredentials` prop', async () => {
-    class xhr {
-      status = 0
-      withCredentials = false
-      open() {
-        // start mock xhr
-      }
-
-      setRequestHeader() {
-        // set mock xhr header
-      }
-
-      send() {
-        // send mock xhr
-        this.status = 200
-        this.onload()
-        this.onabort()
-      }
-
-      onload() {
-        // mock xhr onload
-      }
-
-      onabort() {
-        // mock xhr onabort
-      }
-    }
-    vi.stubGlobal('XMLHttpRequest', xhr)
-
     const done = vi.fn()
     const wrapper = mount(Upload, {
       props: {
@@ -313,41 +63,11 @@ describe('Requests', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
+    await triggerUploadFiles(input, fileList)
     expect(done).toHaveBeenCalled()
-    vi.stubGlobal('XMLHttpRequest', undefined)
   })
+
   it('should work with `headers` prop', async () => {
-    class xhr {
-      status = 0
-      open() {
-        // start mock xhr
-      }
-
-      setRequestHeader() {
-        // set mock xhr header
-      }
-
-      send() {
-        // send mock xhr
-        this.status = 200
-        this.onload()
-        this.onabort()
-      }
-
-      onload() {
-        // mock xhr onload
-      }
-
-      onabort() {
-        // mock xhr onabort
-      }
-    }
-    vi.stubGlobal('XMLHttpRequest', xhr)
-
     const done = vi.fn()
     const wrapper = mount(Upload, {
       props: {
@@ -364,41 +84,11 @@ describe('Requests', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
+    await triggerUploadFiles(input, fileList)
     expect(done).toHaveBeenCalled()
-    vi.stubGlobal('XMLHttpRequest', undefined)
   })
+
   it('should work with `data` prop', async () => {
-    class xhr {
-      status = 0
-      open() {
-        // start mock xhr
-      }
-
-      setRequestHeader() {
-        // set mock xhr header
-      }
-
-      send() {
-        // send mock xhr
-        this.status = 200
-        this.onload()
-        this.onabort()
-      }
-
-      onload() {
-        // mock xhr onload
-      }
-
-      onabort() {
-        // mock xhr onabort
-      }
-    }
-    vi.stubGlobal('XMLHttpRequest', xhr)
-
     const done = vi.fn()
     const wrapper = mount(Upload, {
       props: {
@@ -415,11 +105,74 @@ describe('Requests', () => {
     const input = wrapper.find('input')
     const fileList = [new File(['index'], 'file.txt')]
 
-    getMockFile(input.element, fileList)
-    await input.trigger('change')
-    await sleep(0)
-
+    await triggerUploadFiles(input, fileList)
     expect(done).toHaveBeenCalled()
-    vi.stubGlobal('XMLHttpRequest', undefined)
+  })
+})
+
+describe('Failed Requests', () => {
+  beforeEach(() => {
+    vi.stubGlobal('XMLHttpRequest', getXhr('error'))
+  })
+
+  it('should work with `on-error` event', async () => {
+    const onError = vi.fn()
+    const wrapper = mount(Upload, {
+      props: {
+        url: '//jsonplaceholder.typicode.com/posts/',
+        onError
+      }
+    })
+
+    const input = wrapper.find('input')
+    const fileList = [new File(['index'], 'file.txt')]
+
+    await triggerUploadFiles(input, fileList)
+    expect(onError).toHaveBeenCalled()
+  })
+
+  it('should work with upload failed event', async () => {
+    try {
+      const onError = vi.fn()
+      const wrapper = mount(Upload, {
+        props: {
+          url: '//jsonplaceholder.typicode.com/posts/',
+          onError
+        }
+      })
+
+      const input = wrapper.find('input')
+      const fileList = [new File(['index'], 'file.txt')]
+
+      await triggerUploadFiles(input, fileList)
+    } catch (e) {
+      expect(e).toBe('Error: fail to post //jsonplaceholder.typicode.com/posts/ 199')
+    }
+  })
+})
+
+describe('Interrupted Requests', () => {
+  beforeEach(() => {
+    vi.stubGlobal('XMLHttpRequest', getXhr('abort'))
+  })
+
+  it('should work with `on-abort` event', async () => {
+    const done = vi.fn()
+    const wrapper = mount(Upload, {
+      props: {
+        url: '//jsonplaceholder.typicode.com/posts/',
+        onChange(files: any) {
+          if (files[0].status === 'pending') {
+            done()
+          }
+        }
+      }
+    })
+
+    const input = wrapper.find('input')
+    const fileList = [new File(['index'], 'file.txt')]
+
+    await triggerUploadFiles(input, fileList)
+    expect(done).toHaveBeenCalled()
   })
 })
