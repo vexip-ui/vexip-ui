@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 // Helper functions can be used to infer type deduction
-import { defineColumns } from 'vexip-ui/es/table'
+import { defineColumns } from 'vexip-ui'
 
 const columns = ref(
   defineColumns([

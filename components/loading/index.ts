@@ -3,9 +3,9 @@ import Component from './loading.vue'
 import { destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { LoadingOptions, LoadingInstance } from './symbol'
+import type { LoadingState, LoadingOptions, LoadingInstance } from './symbol'
 
-export * from './symbol'
+export type { LoadingState, LoadingOptions }
 
 type InitLoadingOptions = Omit<LoadingOptions, 'percent'>
 

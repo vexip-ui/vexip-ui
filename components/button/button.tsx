@@ -1,7 +1,7 @@
 import { defineComponent, ref, computed, inject } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { FIELD_OPTIONS } from '@/components/form'
+import { FIELD_OPTIONS } from '@/components/form/symbol'
 import {
   useNameHelper,
   useProps,

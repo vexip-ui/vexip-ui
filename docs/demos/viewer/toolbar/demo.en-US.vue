@@ -22,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import type { ToolbarPlacement } from 'vexip-ui/es/viewer'
+import type { ViewerToolbarPlacement } from 'vexip-ui'
 
-const placements: ToolbarPlacement[] = [
+const placements: ViewerToolbarPlacement[] = [
   'top',
   'bottom',
   'top-start',

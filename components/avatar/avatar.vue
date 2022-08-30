@@ -38,9 +38,15 @@ import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { ComponentSize, StyleType } from '@vexip-ui/config'
-import type { ObjectFit } from './symbol'
+import type { AvatarObjectFit } from './symbol'
 
-const objectFitValues = Object.freeze<ObjectFit>(['fill', 'contain', 'cover', 'none', 'scale-down'])
+const objectFitValues = Object.freeze<AvatarObjectFit>([
+  'fill',
+  'contain',
+  'cover',
+  'none',
+  'scale-down'
+])
 
 export default defineComponent({
   name: 'Avatar',
@@ -54,7 +60,7 @@ export default defineComponent({
     icon: Object,
     circle: booleanProp,
     alt: String,
-    fit: String as PropType<ObjectFit>,
+    fit: String as PropType<AvatarObjectFit>,
     srcSet: String,
     gap: Number,
     iconScale: Number,
@@ -75,8 +81,8 @@ export default defineComponent({
       circle: false,
       alt: '',
       fit: {
-        default: 'cover' as ObjectFit,
-        validator: (value: ObjectFit) => objectFitValues.includes(value)
+        default: 'cover' as AvatarObjectFit,
+        validator: (value: AvatarObjectFit) => objectFitValues.includes(value)
       },
       srcSet: '',
       gap: 4,

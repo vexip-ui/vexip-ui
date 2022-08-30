@@ -44,7 +44,7 @@ import { ANCHOR_STATE } from './symbol'
 import type { PropType, ComponentInternalInstance } from 'vue'
 import type { NativeScroll } from '@/components/native-scroll'
 import type { Scroll } from '@/components/scroll'
-import type { LinkState, AnchorState } from './symbol'
+import type { AnchorLinkState, AnchorState } from './symbol'
 
 type ScrollType = InstanceType<typeof Scroll | typeof NativeScroll>
 
@@ -80,7 +80,7 @@ export default defineComponent({
     const currentActive = ref(props.active)
     const animating = ref(false)
     const markerTop = ref(0)
-    const linkStates = new Set<LinkState>()
+    const linkStates = new Set<AnchorLinkState>()
 
     const wrapper = ref<HTMLElement | null>(null)
 
@@ -118,12 +118,12 @@ export default defineComponent({
       removeListener()
     })
 
-    function increaseLink(state: LinkState) {
+    function increaseLink(state: AnchorLinkState) {
       linkStates.add(state)
       state.active = currentActive.value === state.to
     }
 
-    function decreaseLink(state: LinkState) {
+    function decreaseLink(state: AnchorLinkState) {
       linkStates.delete(state)
     }
 

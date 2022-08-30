@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const options: MenuOptions[] = [
   {

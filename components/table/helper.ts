@@ -1,13 +1,17 @@
-import type { FilterOptions, ColumnOptions } from './symbol'
+import type { FilterOptions, SorterOptions, TableColumnOptions } from './symbol'
 
 export function defineFilter<T extends string | number, D>(filter: FilterOptions<T, D>) {
   return filter
 }
 
-export function defineColumn<T extends string | number, D>(column: ColumnOptions<T, D>) {
+export function defineSorter<D>(sorter: SorterOptions<D>) {
+  return sorter
+}
+
+export function defineColumn<T extends string | number, D>(column: TableColumnOptions<T, D>) {
   return column
 }
 
-export function defineColumns<T extends string | number, D>(columns: ColumnOptions<T, D>[]) {
+export function defineColumns<T extends string | number, D>(columns: TableColumnOptions<T, D>[]) {
   return columns
 }

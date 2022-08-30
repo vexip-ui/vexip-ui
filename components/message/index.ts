@@ -6,7 +6,7 @@ import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-
 import type { App } from 'vue'
 import type { Key, MessageType, MessagePlacement, MessageOptions, MessageInstance } from './symbol'
 
-export * from './symbol'
+export type { MessageType, MessagePlacement, MessageOptions }
 
 type FuzzyOptions = string | MessageOptions
 type ManagerOptions = { duration?: number, placement?: MessagePlacement } & Record<string, unknown>

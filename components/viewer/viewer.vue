@@ -81,7 +81,7 @@ import { boundRange, toFixed } from '@vexip-ui/utils'
 import { InternalActionName } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ViewerState, ToolbarPlacement, ToolbarAction } from './symbol'
+import type { ViewerState, ViewerToolbarPlacement, ToolbarAction } from './symbol'
 
 export default defineComponent({
   name: 'Viewer',
@@ -102,7 +102,7 @@ export default defineComponent({
     rotateDisabled: booleanProp,
     rotateDelta: Number,
     fullDisabled: booleanProp,
-    toolbarPlacement: String as PropType<ToolbarPlacement>,
+    toolbarPlacement: String as PropType<ViewerToolbarPlacement>,
     actions: Array as PropType<ToolbarAction[]>,
     toolbarFade: booleanNumberProp,
     onMoveStart: eventProp<(state: ViewerState) => void>(),

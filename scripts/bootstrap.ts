@@ -41,8 +41,8 @@ async function main() {
     export { buildInstall }
     export const install = buildInstall(components)
 
-    export {
-      ${exportComponents.map(toCapitalCase).join(',\n')}
+    ${
+      exportComponents.map(component => `export * from './${component}'`).join('\n')
     }
   `
 

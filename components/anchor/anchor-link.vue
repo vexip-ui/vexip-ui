@@ -32,8 +32,6 @@ import {
 import { useNameHelper } from '@vexip-ui/config'
 import { baseIndentWidth, LINK_STATE, ANCHOR_STATE } from './symbol'
 
-import type { LinkState } from './symbol'
-
 export default defineComponent({
   name: 'AnchorLink',
   props: {
@@ -75,7 +73,7 @@ export default defineComponent({
       }
     })
 
-    provide<LinkState>(LINK_STATE, state)
+    provide(LINK_STATE, state)
 
     if (anchorState) {
       watch(

@@ -1,4 +1,4 @@
-interface ScrollElement {
+export interface ScrollElement {
   scrollTo(x: number, y: number): void,
   [prop: string]: any
 }

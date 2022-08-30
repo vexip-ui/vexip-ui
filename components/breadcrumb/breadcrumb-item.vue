@@ -25,7 +25,7 @@ import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { BREADCRUMB_STATE } from './symbol'
 
-import type { SeparatorRenderFn, ItemState } from './symbol'
+import type { SeparatorRenderFn, BreadcrumbItemState } from './symbol'
 
 export default defineComponent({
   name: 'BreadcrumbItem',
@@ -57,7 +57,7 @@ export default defineComponent({
     )
 
     if (breadcrumbState) {
-      const state: ItemState = reactive({
+      const state: BreadcrumbItemState = reactive({
         label: currentLabel
       })
 

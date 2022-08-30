@@ -1,6 +1,6 @@
 import type { InjectionKey } from 'vue'
 
-export interface LinkState {
+export interface AnchorLinkState {
   el: HTMLElement | null,
   to: string,
   active: boolean,
@@ -9,11 +9,11 @@ export interface LinkState {
 
 export interface AnchorState {
   currentActive: string,
-  increaseLink(state: LinkState): void,
-  decreaseLink(state: LinkState): void,
+  increaseLink(state: AnchorLinkState): void,
+  decreaseLink(state: AnchorLinkState): void,
   handleActive(label: string): void
 }
 
 export const baseIndentWidth = 14 // px
-export const LINK_STATE: InjectionKey<LinkState> = Symbol('ANCHOR_LINK_STATE')
+export const LINK_STATE: InjectionKey<AnchorLinkState> = Symbol('ANCHOR_LINK_STATE')
 export const ANCHOR_STATE: InjectionKey<AnchorState> = Symbol('ANCHOR_STATE')

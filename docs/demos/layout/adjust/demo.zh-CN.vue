@@ -25,7 +25,7 @@
 import { ref } from 'vue'
 import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const width = ref(240)
 const height = ref(55)

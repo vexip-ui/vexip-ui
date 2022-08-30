@@ -72,10 +72,9 @@ import {
 import { Column } from '@/components/column'
 import { useNameHelper, useProps, useLocale, booleanProp, makeSentence } from '@vexip-ui/config'
 import { isNull, isFunction, createEventEmitter } from '@vexip-ui/utils'
-import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
-import { FIELD_OPTIONS, FORM_ACTIONS } from './symbol'
+import { FORM_PROPS, FORM_FIELDS, FIELD_OPTIONS, FORM_ACTIONS } from './symbol'
 
 import type { Ref, PropType } from 'vue'
 import type { ComponentState } from '@vexip-ui/config'

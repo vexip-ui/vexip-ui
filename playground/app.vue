@@ -143,7 +143,10 @@ store.setImportMap({
       : `${location.origin}/vexip-ui.es.js`,
     '@vexip-ui/icons': import.meta.env.PROD
       ? `${location.origin}/vexip-ui-icons.js`
-      : `${location.origin}/icons/index.es.js`
+      : `${location.origin}/icons/index.es.js`,
+    '@vexip-ui/utils': import.meta.env.PROD
+      ? `${location.origin}/vexip-ui-utils.js`
+      : `${location.origin}/utils/index.es.js`
   }
 })
 ;(!serializedState
