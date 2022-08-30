@@ -1,5 +1,5 @@
 <template>
-  <div id="w-fullscreen">
+  <div id="d-fullscreen">
     <!-- 切换全屏的插槽 -->
     <div class="fullscreen-change" @click="changeFull">
       <slot> </slot>
@@ -27,7 +27,7 @@ const isFullScreen = ref(false)
 const changeFull = () => {
   const fullScrenStatus =
     document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement
-  const targetElement = document.getElementById('w-fullscreen') as FullScreenDocumentElement
+  const targetElement = document.getElementById('d-fullscreen') as FullScreenDocumentElement
   if (!fullScrenStatus && !isFullScreen.value) {
     elementRequestFullscreen(targetElement)
     isFullScreen.value = true
