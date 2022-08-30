@@ -39,6 +39,21 @@
         <div :id="bodyId" :class="nh.be('content')">
           <slot></slot>
         </div>
+        <div v-if="props.footer || $slots.footer" :class="nh.be('footer')">
+          <slot name="footer">
+            <Button text size="small" @click="handleCancle">
+              {{ props.cancelText || locale.cancel }}
+            </Button>
+            <Button
+              type="primary"
+              size="small"
+              :loading="props.loading"
+              @click="handleConfirm"
+            >
+              {{ props.confirmText || locale.confirm }}
+            </Button>
+          </slot>
+        </div>
         <div
           v-if="props.resizable"
           ref="resizer"
@@ -64,6 +79,7 @@ import { Masker } from '@/components/masker'
 import {
   useNameHelper,
   useProps,
+  useLocale,
   booleanProp,
   booleanStringProp,
   classProp,
@@ -101,16 +117,22 @@ export default defineComponent({
     maskClose: booleanProp,
     drawerClass: classProp,
     hideMask: booleanProp,
-    onBeforeClose: Function as PropType<() => any>,
+    onBeforeClose: Function as PropType<(isConfirm?: boolean) => any>,
     resizable: booleanProp,
     autoRemove: booleanProp,
+    footer: booleanProp,
+    confirmText: String,
+    cancelText: String,
+    loading: booleanProp,
     onToggle: eventProp<(active: boolean) => void>(),
     onClose: eventProp(),
     onShow: eventProp(),
     onHide: eventProp(),
     onResizeStart: eventProp<(rect: { width: number, height: number }) => void>(),
     onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
-    onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>()
+    onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>(),
+    onConfirm: eventProp(),
+    onCancel: eventProp()
   },
   emits: ['update:active'],
   setup(_props, { slots, emit }) {
@@ -143,7 +165,11 @@ export default defineComponent({
         isFunc: true
       },
       resizable: false,
-      autoRemove: false
+      autoRemove: false,
+      footer: false,
+      confirmText: null,
+      cancelText: null,
+      loading: false
     })
 
     const nh = useNameHelper('drawer')
@@ -275,11 +301,11 @@ export default defineComponent({
       }
     )
 
-    async function handleClose() {
+    async function handleClose(isConfirm = false) {
       let result: unknown = true
 
       if (typeof props.onBeforeClose === 'function') {
-        result = props.onBeforeClose()
+        result = props.onBeforeClose(isConfirm)
 
         if (isPromise(result)) {
           result = await result
@@ -310,9 +336,20 @@ export default defineComponent({
       emitEvent(props.onHide)
     }
 
+    function handleConfirm() {
+      handleClose(true)
+      emitEvent(props.onConfirm)
+    }
+
+    function handleCancle() {
+      handleClose(false)
+      emitEvent(props.onCancel)
+    }
+
     return {
       props,
       nh,
+      locale: useLocale('modal'),
       currentActive,
       resizing,
 
@@ -329,7 +366,9 @@ export default defineComponent({
       handleClose,
       handleMaskClose,
       handleShow,
-      handleHide
+      handleHide,
+      handleConfirm,
+      handleCancle
     }
   }
 })

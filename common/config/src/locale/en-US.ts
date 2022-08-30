@@ -48,6 +48,11 @@ export function enUSLocale() {
       cancel: 'Cancel'
     },
 
+    drawer: {
+      confirm: 'Confrim',
+      cancel: 'Cancel'
+    },
+
     form: {
       submit: 'Submit',
       reset: 'Reset',

@@ -51,6 +51,11 @@ export interface LocaleConfig {
     cancel: string
   },
 
+  drawer: {
+    confirm: string,
+    cancel: string
+  },
+
   form: {
     submit: string,
     reset: string,

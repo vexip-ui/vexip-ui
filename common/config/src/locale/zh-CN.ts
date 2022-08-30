@@ -48,6 +48,11 @@ export function zhCNLocale() {
       cancel: '取消'
     },
 
+    drawer: {
+      confirm: '确认',
+      cancel: '取消'
+    },
+
     form: {
       submit: '提交',
       reset: '重置',
