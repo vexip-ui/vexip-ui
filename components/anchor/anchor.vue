@@ -8,7 +8,17 @@
     }"
   >
     <ul :class="nh.be('list')">
-      <slot></slot>
+      <slot>
+        <AnchorLink
+          v-for="link in props.options"
+          :key="link.to"
+          :to="link.to"
+          :title="link.title"
+          :children="link.children"
+        >
+          {{ link.label }}
+        </AnchorLink>
+      </slot>
     </ul>
     <transition appear :name="props.markerTransition">
       <div
@@ -37,6 +47,7 @@ import {
   getCurrentInstance,
   isVNode
 } from 'vue'
+import { AnchorLink } from '@/components/anchor-link'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
@@ -44,12 +55,15 @@ import { ANCHOR_STATE } from './symbol'
 import type { PropType, ComponentInternalInstance } from 'vue'
 import type { NativeScroll } from '@/components/native-scroll'
 import type { Scroll } from '@/components/scroll'
-import type { AnchorLinkState, AnchorState } from './symbol'
+import type { AnchorLinkOptions, AnchorLinkState, AnchorState } from './symbol'
 
 type ScrollType = InstanceType<typeof Scroll | typeof NativeScroll>
 
 export default defineComponent({
   name: 'Anchor',
+  components: {
+    AnchorLink
+  },
   props: {
     active: String,
     viewer: [String, Object, Function] as PropType<unknown>,
@@ -57,6 +71,7 @@ export default defineComponent({
     marker: booleanProp,
     scrollDuration: Number,
     markerTransition: String,
+    options: Array as PropType<AnchorLinkOptions[]>,
     onChange: eventProp<(value: string) => void>()
   },
   emits: ['update:active'],
@@ -74,7 +89,11 @@ export default defineComponent({
       offset: 8,
       marker: false,
       scrollDuration: 500,
-      markerTransition: () => nh.ns('fade')
+      markerTransition: () => nh.ns('fade'),
+      options: {
+        default: () => [],
+        static: true
+      }
     })
 
     const currentActive = ref(props.active)
@@ -112,6 +131,7 @@ export default defineComponent({
 
     onMounted(() => {
       updateContainer()
+      computeMarkerPoisiton()
     })
 
     onBeforeUnmount(() => {

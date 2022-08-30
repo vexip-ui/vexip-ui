@@ -1,5 +1,12 @@
 import type { InjectionKey } from 'vue'
 
+export interface AnchorLinkOptions {
+  to: string,
+  label: string,
+  title?: string,
+  children?: AnchorLinkOptions[]
+}
+
 export interface AnchorLinkState {
   el: HTMLElement | null,
   to: string,

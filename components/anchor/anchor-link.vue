@@ -10,8 +10,20 @@
     >
       <slot></slot>
     </a>
-    <ul v-if="$slots.group" :class="nh.be('list')">
-      <slot name="group"></slot>
+    <ul v-if="$slots.group || (children && children.length)" :class="nh.be('list')">
+      <slot name="group">
+        <template v-if="children && children.length">
+          <AnchorLink
+            v-for="child in children"
+            :key="child.to"
+            :to="child.to"
+            :title="child.title"
+            :children="child.children"
+          >
+            {{ child.label }}
+          </AnchorLink>
+        </template>
+      </slot>
     </ul>
   </li>
 </template>
@@ -32,6 +44,9 @@ import {
 import { useNameHelper } from '@vexip-ui/config'
 import { baseIndentWidth, LINK_STATE, ANCHOR_STATE } from './symbol'
 
+import type { PropType } from 'vue'
+import type { AnchorLinkOptions } from './symbol'
+
 export default defineComponent({
   name: 'AnchorLink',
   props: {
@@ -42,6 +57,10 @@ export default defineComponent({
     title: {
       type: String,
       default: ''
+    },
+    children: {
+      type: Array as PropType<AnchorLinkOptions[]>,
+      default: () => []
     }
   },
   setup(props) {

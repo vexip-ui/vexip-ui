@@ -1,5 +1,5 @@
 <template>
-  <Anchor marker>
+  <Anchor active="#api" marker>
     <AnchorLink to="#basis-usage">
       Basis Usage
     </AnchorLink>
