@@ -7,6 +7,7 @@
       :arrow="!noArrow"
       :candidate="candidate"
       :options="hourRange"
+      tabindex="-1"
       @mouseenter="handleToggleColumn('hour')"
       @touchstart="handleToggleColumn('hour')"
       @keydown.stop
@@ -21,7 +22,8 @@
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
-      :options="secondRange"
+      :options="minuteRange"
+      tabindex="-1"
       @mouseenter="handleToggleColumn('minute')"
       @touchstart="handleToggleColumn('minute')"
       @keydown.stop
@@ -37,6 +39,7 @@
       :arrow="!noArrow"
       :candidate="candidate"
       :options="secondRange"
+      tabindex="-1"
       @mouseenter="handleToggleColumn('second')"
       @touchstart="handleToggleColumn('second')"
       @keydown.stop

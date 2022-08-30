@@ -38,7 +38,7 @@ interface ColumnOptions {
 | push     | `number`                                                        | 栅格的右移格数                                                                                                                     | `null`  | -    |
 | pull     | `number`                                                        | 栅格的左移格数                                                                                                                     | `null`  | -    |
 | order    | `number`                                                        | 栅格元素的排序                                                                                                                     | `null`  | -    |
-| flex     | `number` \| `string`                                            | `flex` 布局属性，可传入数字或一个有效的 css 长度字符串或一个有效的 `flex` 属性字符串                                               | `null`  | -    |
+| flex     | `number \| string`                                              | `flex` 布局属性，可传入数字或一个有效的 css 长度字符串或一个有效的 `flex` 属性字符串                                               | `null`  | -    |
 | xs       | `number \| ColumnOptions`                                       | 媒体查询 `<576px` 时，栅格的占位，传入一个对象时可以细粒度设置其他属性                                                             | `null`  | -    |
 | sm       | `number \| ColumnOptions`                                       | 媒体查询 `≥576px` 时，栅格的占位，传入一个对象时可以细粒度设置其他属性                                                             | `null`  | -    |
 | md       | `number \| ColumnOptions`                                       | 媒体查询 `≥768px` 时，栅格的占位，传入一个对象时可以细粒度设置其他属性                                                             | `null`  | -    |

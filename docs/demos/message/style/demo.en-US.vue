@@ -15,7 +15,11 @@
     <Button
       type="warning"
       @click="
-        $message.warning({ content: 'A message with background color and colorful text', color: true, background: true })
+        $message.warning({
+          content: 'A message with background color and colorful text',
+          color: true,
+          background: true
+        })
       "
     >
       Both

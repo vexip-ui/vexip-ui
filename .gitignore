@@ -10,6 +10,10 @@ coverage
 /css
 /themes
 
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
 __unconfig_vite.config*
 
 .yarn/cache

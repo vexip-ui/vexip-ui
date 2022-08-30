@@ -32,6 +32,10 @@ export interface LocaleConfig {
     week7: string
   },
 
+  checkbox: {
+    all: string
+  },
+
   colorPicker: {
     confirm: string,
     cancel: string

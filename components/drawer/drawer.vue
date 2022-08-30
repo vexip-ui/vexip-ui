@@ -50,7 +50,7 @@
             }
           ]"
         >
-          <slot name="handler"></slot>
+          <slot name="handler" :resizing="resizing"></slot>
         </div>
       </section>
     </template>
@@ -122,15 +122,15 @@ export default defineComponent({
       },
       width: {
         default: 280,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       height: {
         default: 280,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       placement: {
-        default: 'right' as DrawerPlacement,
-        validator: (value: DrawerPlacement) => drawerPlacements.includes(value)
+        default: 'right',
+        validator: value => drawerPlacements.includes(value)
       },
       title: '',
       closable: true,
@@ -211,7 +211,8 @@ export default defineComponent({
         nh.bs('vars'),
         {
           [nh.bm('inner')]: props.inner,
-          [nh.bem('wrapper', 'closable')]: props.closable
+          [nh.bm('closable')]: props.closable,
+          [nh.bm('resizable')]: props.resizable
         }
       ]
     })

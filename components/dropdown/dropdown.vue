@@ -101,12 +101,12 @@ export default defineComponent({
       },
       placement: {
         default: 'bottom',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       outsideClose: true,
       trigger: {
-        default: 'hover' as DropdownTrigger,
-        validator: (value: DropdownTrigger) => ['hover', 'click', 'custom'].includes(value)
+        default: 'hover',
+        validator: value => ['hover', 'click', 'custom'].includes(value)
       },
       label: {
         default: null,

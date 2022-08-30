@@ -8,12 +8,12 @@ export type DatePickerType = 'date' | 'datetime' | 'year' | 'month'
 
 export interface DateShortcut {
   name: string,
-  value: Dateable | (() => Dateable)
+  value: Dateable | Dateable[] | (() => Dateable | Dateable[])
 }
 
 export interface TimeShortcut {
   name: string,
-  value: string | (() => string)
+  value: string | string[] | (() => string | string[])
 }
 
 export interface DatePickerState {

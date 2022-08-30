@@ -4,6 +4,7 @@
     :href="props.to"
     tabindex="0"
     :target="props.target"
+    @click="handleClick"
   >
     <slot name="icon">
       <Icon v-if="props.icon" :class="nh.be('icon')" :icon="props.icon"></Icon>
@@ -15,7 +16,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
@@ -41,7 +42,8 @@ export default defineComponent({
     icon: Object,
     underline: booleanProp,
     disabled: booleanProp,
-    target: String
+    target: String,
+    onClick: eventProp<(event: MouseEvent) => void>()
   },
   setup(_props) {
     const props = useProps('linker', _props, {
@@ -71,11 +73,21 @@ export default defineComponent({
       }
     })
 
+    function handleClick(event: MouseEvent) {
+      if (props.disabled) {
+        event.preventDefault()
+      }
+
+      emitEvent(props.onClick, event)
+    }
+
     return {
       props,
       nh,
 
-      className
+      className,
+
+      handleClick
     }
   }
 })

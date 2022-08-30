@@ -1,12 +1,6 @@
 <template>
-  <Textarea
-    v-model:value="value"
-    :max-length="10"
-    style="max-width: 300px;"
-  ></Textarea>
-  <p>
-    Textarea Value: {{ value }}
-  </p>
+  <Textarea v-model:value="value" :max-length="10" style="max-width: 300px;"></Textarea>
+  <p>Textarea Value: {{ value }}</p>
 </template>
 
 <script setup lang="ts">

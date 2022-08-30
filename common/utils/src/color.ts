@@ -271,7 +271,9 @@ export const NAMED_COLORS = Object.freeze({
 
 export type ColorName = keyof typeof NAMED_COLORS
 
-export const COLOR_NAMES = Object.freeze(new Set(Object.keys(NAMED_COLORS))) as Readonly<Set<ColorName>>
+export const COLOR_NAMES = Object.freeze(new Set(Object.keys(NAMED_COLORS))) as Readonly<
+  Set<ColorName>
+>
 
 /**
  * 判断给定的字符串是否为一个合法颜色值
@@ -329,7 +331,13 @@ export function parseStringColor(color: string) {
   if ((match = RGB_REG.exec(color))) {
     const { r, g, b } = normalizeRgb(match[1], match[2], match[3])
 
-    return { r: r * 255, g: g * 255, b: b * 255, format: 'rgb', toString: toRgbString } as ObjectColor
+    return {
+      r: r * 255,
+      g: g * 255,
+      b: b * 255,
+      format: 'rgb',
+      toString: toRgbString
+    } as ObjectColor
   }
 
   if ((match = RGBA_REG.exec(color))) {
@@ -755,9 +763,10 @@ export function mixColor(color1: Color, color2: Color, weight = 0.5) {
   const normalizedWeight = originalWeight * 2 - 1
 
   const alphaDistance = rgba1.a - rgba2.a
-  const mixWeight = normalizedWeight * alphaDistance === -1
-    ? normalizedWeight
-    : (normalizedWeight + alphaDistance) / (1 + normalizedWeight * alphaDistance)
+  const mixWeight =
+    normalizedWeight * alphaDistance === -1
+      ? normalizedWeight
+      : (normalizedWeight + alphaDistance) / (1 + normalizedWeight * alphaDistance)
   const weight1 = (mixWeight + 1) / 2
   const weight2 = 1 - weight1
 

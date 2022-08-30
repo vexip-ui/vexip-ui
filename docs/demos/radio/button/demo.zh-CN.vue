@@ -1,10 +1,6 @@
 <template>
   <RadioGroup button>
-    <Radio
-      v-for="item in items"
-      :key="item"
-      :label="item"
-    >
+    <Radio v-for="item in items" :key="item" :label="item">
       {{ item }}
     </Radio>
   </RadioGroup>
@@ -23,11 +19,7 @@
   <br />
   <br />
   <RadioGroup button disabled>
-    <Radio
-      v-for="item in items"
-      :key="item"
-      :label="item"
-    >
+    <Radio v-for="item in items" :key="item" :label="item">
       {{ item }}
     </Radio>
   </RadioGroup>

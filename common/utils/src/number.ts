@@ -121,7 +121,14 @@ export function boundRange(number: number | string, min: number, max: number) {
 export type SizeUnitWithAuto = AnyCase<'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'AUTO'>
 export type SizeUnit = Exclude<SizeUnitWithAuto, AnyCase<'AUTO'>>
 
-const SIZE_UNIT_WITH_AUTO = Object.freeze(['B', 'KB', 'MB', 'GB', 'TB', 'AUTO'] as Uppercase<SizeUnitWithAuto>[])
+const SIZE_UNIT_WITH_AUTO = Object.freeze([
+  'B',
+  'KB',
+  'MB',
+  'GB',
+  'TB',
+  'AUTO'
+] as Uppercase<SizeUnitWithAuto>[])
 
 /**
  * 根据给定的 Byte 数值，将其格式化成指定单位的大小
@@ -135,12 +142,23 @@ export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO') {
 
   let power
   switch (upperUnit) {
-    case 'AUTO': power = 0; break
-    case 'KB': power = 1; break
-    case 'MB': power = 2; break
-    case 'GB': power = 3; break
-    case 'TB': power = 4; break
-    default: return byte
+    case 'AUTO':
+      power = 0
+      break
+    case 'KB':
+      power = 1
+      break
+    case 'MB':
+      power = 2
+      break
+    case 'GB':
+      power = 3
+      break
+    case 'TB':
+      power = 4
+      break
+    default:
+      return byte
   }
 
   let targetSize
@@ -151,7 +169,7 @@ export function formatByteSize(byte: number, unit: SizeUnitWithAuto = 'AUTO') {
       targetSize = targetSize / 1024
     }
   } else {
-    targetSize = byte / (1024 ** power)
+    targetSize = byte / 1024 ** power
   }
 
   return targetSize
@@ -191,7 +209,7 @@ function multipleInt(number: number | string) {
 
   const dLength = digitLength(number)
 
-  return dLength > 0 ? toPrecision(Number(number) * (10 ** dLength)) : Number(number)
+  return dLength > 0 ? toPrecision(Number(number) * 10 ** dLength) : Number(number)
 }
 
 /**
@@ -222,7 +240,7 @@ export const times = createOperation((number1, number2) => {
   const base = digitLength(number1) + digitLength(number2)
   const int = int1 * int2
 
-  return int / (10 ** base)
+  return int / 10 ** base
 })
 
 /**

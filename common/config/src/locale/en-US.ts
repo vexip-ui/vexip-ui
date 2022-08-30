@@ -29,6 +29,10 @@ export function enUSLocale() {
       week7: 'Su'
     },
 
+    checkbox: {
+      all: 'All'
+    },
+
     colorPicker: {
       confirm: 'Confrim',
       cancel: 'Cancel'

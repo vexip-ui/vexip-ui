@@ -25,23 +25,27 @@ export default defineComponent({
                 color: '#339af0'
               }
             }),
-            h('div', {
-              style: {
-                paddingLeft: '3em'
-              }
-            }, [
-              'A custom ',
-              h(
-                'span',
-                {
-                  style: {
-                    color: '#fab005',
-                    fontStyle: 'italic'
-                  }
-                },
-                'notice'
-              )
-            ])
+            h(
+              'div',
+              {
+                style: {
+                  paddingLeft: '3em'
+                }
+              },
+              [
+                'A custom ',
+                h(
+                  'span',
+                  {
+                    style: {
+                      color: '#fab005',
+                      fontStyle: 'italic'
+                    }
+                  },
+                  'notice'
+                )
+              ]
+            )
           ])
         }
       })

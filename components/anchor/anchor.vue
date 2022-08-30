@@ -120,6 +120,7 @@ export default defineComponent({
 
     function increaseLink(state: LinkState) {
       linkStates.add(state)
+      state.active = currentActive.value === state.to
     }
 
     function decreaseLink(state: LinkState) {
@@ -153,7 +154,7 @@ export default defineComponent({
           _container = viewer
         }
 
-        if (container instanceof Element) {
+        if (_container instanceof Element) {
           isRawViewer = true
         } else {
           isRawViewer = false
@@ -197,8 +198,8 @@ export default defineComponent({
             container = instance.parent?.proxy?.$el as HTMLElement
           }
 
-          if (isRawViewer) {
-            container!.addEventListener('scroll', handleContainerScroll)
+          if (isRawViewer && container) {
+            container.addEventListener('scroll', handleContainerScroll)
           }
         } else {
           container = _container as HTMLElement
@@ -294,7 +295,7 @@ export default defineComponent({
       animating.value = true
 
       const elementTop = element.offsetTop
-      const duration = Math.max(props.scrollDuration, 160)
+      const duration = Math.max(props.scrollDuration, 0)
 
       if (isRawViewer && container) {
         const from = container.scrollTop

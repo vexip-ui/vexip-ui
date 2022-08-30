@@ -14,6 +14,10 @@ export function animateScrollTo(
   const step = Math.ceil((distance / duration) * 16)
 
   if (!distance) return
+  if (duration <= 0) {
+    el.scrollTo(0, to)
+    return
+  }
 
   let current = from
 

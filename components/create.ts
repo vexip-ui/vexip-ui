@@ -15,10 +15,7 @@ export interface InstallOptions {
   zIndex?: MaybeRef<number>
 }
 
-export function buildInstall(
-  components: any[] = [],
-  defaultLocale?: 'zh-CN' | 'en-US'
-) {
+export function buildInstall(components: any[] = [], defaultLocale?: 'zh-CN' | 'en-US') {
   return function install(app: App, options: InstallOptions = {}) {
     const {
       prefix = '',

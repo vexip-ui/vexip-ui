@@ -13,9 +13,7 @@
           :style="transitionStyle"
           @transitionend="normalizeProps"
         >
-          <slot>
-            <img src="https://www.vexipui.com/assets/4.23a4f29b.jpg" />
-          </slot>
+          <slot></slot>
         </div>
       </div>
     </div>
@@ -79,7 +77,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/mixins'
-import { boundRange } from '@vexip-ui/utils'
+import { boundRange, toFixed } from '@vexip-ui/utils'
 import { InternalActionName } from './symbol'
 
 import type { PropType } from 'vue'
@@ -393,7 +391,7 @@ export default defineComponent({
         return
       }
 
-      zoom.value = boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax)
+      zoom.value = toFixed(boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax), 3)
       emitEvent(props.onZoom, zoom.value, state)
     }
 

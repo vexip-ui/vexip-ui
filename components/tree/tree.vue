@@ -50,7 +50,7 @@
         </template>
       </TreeNode>
     </ul>
-    <div v-if="!props.data || !props.data.length" :class="nh.be('empty-tip')">
+    <div v-if="!props.data || !props.data.length || !anyMatched" :class="nh.be('empty-tip')">
       <slot name="empty">
         {{ props.emptyTip ?? locale.empty }}
       </slot>
@@ -214,6 +214,7 @@ export default defineComponent({
     const treeData = ref<TreeNodeProps[]>([])
     const dragging = ref(false)
     const indicatorShow = ref(false)
+    const anyMatched = ref(false)
 
     const { isMounted } = useMounted()
 
@@ -271,9 +272,13 @@ export default defineComponent({
           node.childMatched = false
           node.upperMatched = false
         }
+
+        anyMatched.value = true
       } else {
         const filter =
           typeof props.filter === 'function' ? props.filter : createDefaultFilter(props.filter)
+
+        anyMatched.value = false
 
         for (let i = 0, len = nodes.length; i < len; ++i) {
           const node = nodes[i]
@@ -282,6 +287,7 @@ export default defineComponent({
           node.matched = filter(node.data, node)
           node.childMatched = false
           node.upperMatched = !!parent && (parent.matched || parent.upperMatched)
+          anyMatched.value = anyMatched.value || node.matched
 
           if (node.matched) {
             let upper = parent
@@ -977,6 +983,7 @@ export default defineComponent({
       locale: useLocale('tree'),
       treeData,
       indicatorShow,
+      anyMatched,
       labelKey,
       childrenKey: computed(() => keyConfig.value.children),
       getNodeProps: computed(() => {

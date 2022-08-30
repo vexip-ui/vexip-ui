@@ -1,9 +1,15 @@
 <template>
   <div>
-    <Button type="warning" @click="$message.warning({ content: 'A message with custom icon', icon: CircleQuestion })">
+    <Button
+      type="warning"
+      @click="$message.warning({ content: 'A message with custom icon', icon: CircleQuestion })"
+    >
       Custom Icon
     </Button>
-    <Button type="error" @click="$message.error({ content: 'A message with custom icon color', iconColor: 'green' })">
+    <Button
+      type="error"
+      @click="$message.error({ content: 'A message with custom icon color', iconColor: 'green' })"
+    >
       Custom Icon Color
     </Button>
     <Button type="success" @click="sendCustomizedIconMessage">

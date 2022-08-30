@@ -3,13 +3,14 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
-    @click="toggleVisible"
+    @click="toggleVisible()"
   >
     <div
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @keydown.space.prevent="toggleVisible"
+      @keydown.space.prevent="toggleVisible()"
+      @keydown.tab="toggleVisible(false)"
     >
       <div
         v-if="hasPrefix"
@@ -29,7 +30,7 @@
               :class="nh.be('tag')"
               :type="props.tagType"
               closable
-              @click.stop="toggleVisible"
+              @click.stop="toggleVisible()"
               @close="handleTipClose(item)"
             >
               {{ templateLabels[index] }}
@@ -125,7 +126,7 @@
       </transition>
     </div>
     <Portal :to="transferTo">
-      <transition :name="props.transitionName" @after-enter="isPopperShow = true">
+      <transition :name="props.transitionName" @enter="handlePanelsEnter">
         <div
           v-show="currentVisible"
           ref="popper"
@@ -327,8 +328,8 @@ export default defineComponent({
       disabled: () => disabled.value,
       clearable: false,
       placement: {
-        default: 'bottom-start' as Placement,
-        validator: (value: Placement) => placementWhileList.includes(value)
+        default: 'bottom-start',
+        validator: value => placementWhileList.includes(value)
       },
       transfer: false,
       staticSuffix: false,
@@ -338,7 +339,7 @@ export default defineComponent({
       keyConfig: () => ({}),
       separator: {
         default: '/',
-        validator: (value: string) => value.length === 1
+        validator: value => value.length === 1
       },
       hoverTrigger: false,
       maxTagCount: 0,
@@ -1199,10 +1200,10 @@ export default defineComponent({
       }
     }
 
-    function toggleVisible() {
+    function toggleVisible(visible = !currentVisible.value) {
       if (props.disabled || (props.loading && props.loadingLock)) return
 
-      currentVisible.value = !currentVisible.value
+      currentVisible.value = visible
     }
 
     function handleClickOutside() {
@@ -1277,6 +1278,12 @@ export default defineComponent({
       prevClosedId = openedIds.value.pop()!
     }
 
+    function handlePanelsEnter() {
+      requestAnimationFrame(() => {
+        isPopperShow.value = true
+      })
+    }
+
     return {
       props,
       nh,
@@ -1320,7 +1327,8 @@ export default defineComponent({
       toggleShowRestTip,
       handleTipClose,
       handlePanelKeyOpen,
-      handlePanelBack
+      handlePanelBack,
+      handlePanelsEnter
     }
   }
 })

@@ -1,3 +1,20 @@
+# [2.0.0-beta.21](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.20...v2.0.0-beta.21) (2022-08-15)
+
+### Bug Fixes
+
+- **checkbox:** effective using control to check all ([70a5bb2](https://github.com/qmhc/vexip-ui/commit/70a5bb2778f3c9d441b5f072ab1762b4ed197381)), closes [#103](https://github.com/qmhc/vexip-ui/issues/103)
+- **date-picker:** effect key number input value ([75e1510](https://github.com/qmhc/vexip-ui/commit/75e1510f4bdec72fe71c021e47ffba927877666a))
+- **date-picker:** emit change column event when open panel ([1045cb4](https://github.com/qmhc/vexip-ui/commit/1045cb4674ef965dd8a8de78635dc0818c2e73fa))
+- **modal:** resize start event payload ([d04ebe6](https://github.com/qmhc/vexip-ui/commit/d04ebe69f17cf981be44e6a6c638e40086d174fd))
+- **select:** using string schema to match option value when filter ([470600e](https://github.com/qmhc/vexip-ui/commit/470600ebf0cb41d76a667f4969912abfa26bf576))
+- **time-picker:** minute column step is invaild ([02051e6](https://github.com/qmhc/vexip-ui/commit/02051e6df939cf5c5d280cda7a123e38a0814bca))
+
+### Features
+
+- **date-picker:** add focus and blur api methods ([2aeca22](https://github.com/qmhc/vexip-ui/commit/2aeca227976e5b7a116b23ef31a68299a4b876b7))
+- **ellipsis:** support multiple rows to ellipsis ([#108](https://github.com/qmhc/vexip-ui/issues/108)) ([5d78541](https://github.com/qmhc/vexip-ui/commit/5d78541c99aeaee6982a4b02da44efe75c8f0c22))
+- **time-picker:** add focus and blur api methods ([2080779](https://github.com/qmhc/vexip-ui/commit/20807791178caf39bbf14ecd0d4fe57eef1c8bb9))
+
 # [2.0.0-beta.20](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2022-08-04)
 
 ### Bug Fixes
