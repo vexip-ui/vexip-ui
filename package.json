@@ -159,7 +159,6 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
     "commit": "git-cz",
-    "coverage": "vitest run --coverage",
     "create": "ts-node scripts/create.ts",
     "lint": "eslint --fix --ext .js,.ts,.tsx,.vue common/*/src/** components/** playground/** dev-server/**",
     "lint:script": "eslint --fix --ext .js,.ts scripts/**",
@@ -175,7 +174,9 @@
     "serve:docs": "pnpm -C docs serve",
     "serve:playground": "pnpm -C playground serve",
     "serve:theme": "ts-node scripts/serve.ts --theme",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:cover": "vitest run --coverage",
+    "test:dev": "vitest dev"
   },
   "sideEffects": [
     "dist/*",
