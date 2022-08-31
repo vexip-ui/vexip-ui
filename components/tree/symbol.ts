@@ -54,6 +54,7 @@ export type TreeNodeProps<D = Data> = {
 
 export type RenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) => any
 export type AsyncLoadFn<D = Data> = (
+  data: D,
   node: Readonly<TreeNodeProps<D>>
 ) => void | boolean | Promise<any>
 export type FilterFn<D = Data> = (data: D, node: TreeNodeProps<D>) => boolean

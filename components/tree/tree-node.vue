@@ -420,7 +420,7 @@ export default defineComponent({
     function handleToggleSelect(able = !props.selected) {
       if (isDisabled.value) return
 
-      if (props.floorSelect && props.node.children?.length) {
+      if (props.floorSelect) {
         return handleToggleExpand()
       }
 

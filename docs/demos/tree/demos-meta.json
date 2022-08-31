@@ -6,6 +6,7 @@
   "filter",
   "drag",
   "props",
+  "async-load",
   "slot",
   "control"
 ]
