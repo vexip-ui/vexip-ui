@@ -731,16 +731,29 @@ export default defineComponent({
       emitEvent(props.onDragOver, nodeInstance.node.data, nodeInstance.node)
     }
 
+    function isLeftInsideRight(left: TreeNodeProps, right: TreeNodeProps) {
+      if (!left || !right) return true
+
+      while (left) {
+        if (left === right || left.id === right.id) {
+          return true
+        }
+
+        left = getParentNode(left)!
+      }
+
+      return false
+    }
+
     function handleNodeDrop(nodeInstance: TreeNodeInstance) {
       if (!dragState) return
 
       const { draggingNode, willDropNode, dropType } = dragState
 
-      if (!willDropNode || draggingNode.id === willDropNode.id) return
+      if (!willDropNode || isLeftInsideRight(willDropNode, draggingNode)) return
 
       let currentId: Key
       let parent: TreeNodeProps | null
-      // let index: number
 
       if (draggingNode) {
         parent = getParentNode(draggingNode)
