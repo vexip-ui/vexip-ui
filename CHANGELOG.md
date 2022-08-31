@@ -1,3 +1,37 @@
+# [2.0.0-rc.0](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.21...v2.0.0-rc.0) (2022-08-31)
+
+### Bug Fixes
+
+- **button:** incorrect render when loading with icon-only prop ([c051bc5](https://github.com/qmhc/vexip-ui/commit/c051bc56b0b2bddbb6a70690d7787c70b560ad9e))
+- **cascader:** options hitting init not in time ([36df57c](https://github.com/qmhc/vexip-ui/commit/36df57cd4f2ebf20850c19baf029d4c652e4b63f))
+- **color-picker:** hide panel when disabled change to true ([c152d67](https://github.com/qmhc/vexip-ui/commit/c152d67b2dcdcd8cc52afc59e71f83fcb6dd0c88))
+- **date-picker:** effect shortcut when using range select ([9fbfc71](https://github.com/qmhc/vexip-ui/commit/9fbfc7153cc51386fd22549a1d3b4e05bff82ffa)), closes [#105](https://github.com/qmhc/vexip-ui/issues/105)
+- **icon:** spin and pulse not effective ([11c6d69](https://github.com/qmhc/vexip-ui/commit/11c6d6961d22c341b456edba61aab19e15f1b5a6)), closes [#112](https://github.com/qmhc/vexip-ui/issues/112)
+- **option:** correct selected style priority ([48fd2f3](https://github.com/qmhc/vexip-ui/commit/48fd2f3f4e0c9194ffdc8a62fd4da22c78ae2f00))
+- **table:** incorrect y scroll after adding any row ([a597fea](https://github.com/qmhc/vexip-ui/commit/a597fea5fbb02f2b370e66885c737c3e235c1479)), closes [#121](https://github.com/qmhc/vexip-ui/issues/121)
+- **transfer:** correct params for select event ([c2d0d6f](https://github.com/qmhc/vexip-ui/commit/c2d0d6f86340da0a0b13f2437eb261c4d772cfdf))
+- **tree:** not trigger async load when click label with floor-select ([d4e63cc](https://github.com/qmhc/vexip-ui/commit/d4e63cccb4a82e7ec82aab37bfc6c8ba0cca7194))
+- **tree:** parent node will disappear when drop to its child node ([e0440fd](https://github.com/qmhc/vexip-ui/commit/e0440fd96b0e555e6d25c14dbb3734c449f94053)), closes [#125](https://github.com/qmhc/vexip-ui/issues/125)
+- **tree:** render empty tip when filter result is empty ([3d9cfb6](https://github.com/qmhc/vexip-ui/commit/3d9cfb6c16eb8d0beaecede5467f07d8c400c0b8)), closes [#123](https://github.com/qmhc/vexip-ui/issues/123)
+
+### Code Refactoring
+
+- export types of components in top ([092ffff](https://github.com/qmhc/vexip-ui/commit/092ffff033b3812bef9555052f50685ec6c63c82)), closes [#84](https://github.com/qmhc/vexip-ui/issues/84)
+
+### Features
+
+- **anchor:** support create links via using options prop ([1f712f6](https://github.com/qmhc/vexip-ui/commit/1f712f68231d26ab07a6ca5e900474e79c5e7604)), closes [#94](https://github.com/qmhc/vexip-ui/issues/94)
+- **checkbox:** support quickly add control via prop ([4d13ec2](https://github.com/qmhc/vexip-ui/commit/4d13ec23db7095415b8d24d17c0c56be564d1298)), closes [#104](https://github.com/qmhc/vexip-ui/issues/104)
+- **drawer:** support add footer with default action buttons ([ddbc8a3](https://github.com/qmhc/vexip-ui/commit/ddbc8a34526c1f9549e1a067795a488de43c3eaa)), closes [#117](https://github.com/qmhc/vexip-ui/issues/117)
+- **select:** add update:label event to quickly get label ([77f8372](https://github.com/qmhc/vexip-ui/commit/77f837279ad9d650db8c8516989726effd2b109c)), closes [#127](https://github.com/qmhc/vexip-ui/issues/127)
+
+### BREAKING CHANGES
+
+- **tree:** To unify the signatures of tree's function parameters,
+  `on-async-load` parameters is changed from `(node)` to `(data, node)`.
+- Currently can import types from `vexip-ui`, no longger
+  imports will be from `vexip-ui/es/xxx`.
+
 # [2.0.0-beta.21](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.20...v2.0.0-beta.21) (2022-08-15)
 
 ### Bug Fixes
