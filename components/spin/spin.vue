@@ -7,7 +7,12 @@
     <slot></slot>
     <transition appear :name="props.transitionName">
       <div v-if="currentActive" :class="nh.be('loading')">
-        <div :class="nh.be('mask')" :style="maskStyle"></div>
+        <div
+          v-if="!props.hideMask"
+          :class="[nh.be('mask'), props.maskClass]"
+          :style="maskStyle"
+          @click="handleMaskClick"
+        ></div>
         <div :class="nh.be('icon')">
           <slot name="icon">
             <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
@@ -24,7 +29,12 @@
   </div>
   <transition v-else appear :name="props.transitionName">
     <div v-if="currentActive" :class="[nh.b(), nh.bs('vars'), nh.bm('inner')]">
-      <div :class="nh.be('mask')" :style="maskStyle"></div>
+      <div
+        v-if="!props.hideMask"
+        :class="[nh.be('mask'), props.maskClass]"
+        :style="maskStyle"
+        @click="handleMaskClick"
+      ></div>
       <div :class="nh.be('icon')">
         <slot name="icon">
           <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
@@ -43,7 +53,14 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  classProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { toNumber } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
 
@@ -64,8 +81,11 @@ export default defineComponent({
       default: null
     },
     tip: String,
+    hideMask: booleanProp,
     maskColor: String,
-    transitionName: String
+    maskClass: classProp,
+    transitionName: String,
+    onMaskClick: eventProp<(event: MouseEvent) => void>()
   },
   setup(_props, { slots }) {
     const nh = useNameHelper('spin')
@@ -79,7 +99,9 @@ export default defineComponent({
       inner: false,
       delay: false,
       tip: '',
+      hideMask: false,
       maskColor: '',
+      maskClass: null,
       transitionName: () => nh.ns('fade')
     })
 
@@ -132,6 +154,10 @@ export default defineComponent({
       }
     )
 
+    function handleMaskClick(event: MouseEvent) {
+      emitEvent(props.onMouseClick, event)
+    }
+
     return {
       props,
       nh,
@@ -139,7 +165,9 @@ export default defineComponent({
       currentActive,
 
       hasTip,
-      maskStyle
+      maskStyle,
+
+      handleMaskClick
     }
   }
 })

@@ -1,0 +1,14 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$toast: () !default;
+$toast: map.merge((), $toast);
+
+.#{$namespace}-toast {
+  &-vars {
+    @include define-preset-values('toast', $toast);
+  }
+
+  @include basis;
+}

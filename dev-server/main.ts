@@ -21,7 +21,8 @@ if (__THEME__) {
     import('../components/contextmenu'),
     import('../components/loading'),
     import('../components/message'),
-    import('../components/notice')
+    import('../components/notice'),
+    import('../components/toast')
   ]).then(
     ([
       { router },
@@ -30,7 +31,8 @@ if (__THEME__) {
       { Contextmenu },
       { Loading },
       { Message },
-      { Notice }
+      { Notice },
+      { Toast }
     ]) => {
       createApp(App)
         .use(router)
@@ -39,6 +41,7 @@ if (__THEME__) {
         .use(Loading)
         .use(Message)
         .use(Notice)
+        .use(Toast)
         .mount('#app')
     }
   )

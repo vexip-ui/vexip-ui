@@ -12,7 +12,7 @@ const prodMode = args.prod
 const lang = args.lang || args.l
 const theme = args.theme || args.t
 
-const langs = ['zh-CN']
+const langs = ['zh-CN', 'en-US']
 
 const devDir = resolve(__dirname, '../dev-server')
 

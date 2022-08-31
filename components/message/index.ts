@@ -171,7 +171,7 @@ export class MessageManager {
     const message = this._getInstance()
     const convenienceOptions = type ? conveniences[type] ?? {} : {}
 
-    let timer: number
+    let timer: ReturnType<typeof setTimeout>
 
     const userCloseFn = options.onClose
     const onClose = () => {
@@ -197,7 +197,7 @@ export class MessageManager {
     const duration = typeof item.duration === 'number' ? item.duration : 3000
 
     if (duration >= 500) {
-      timer = window.setTimeout(() => {
+      timer = setTimeout(() => {
         message.remove(key)
       }, duration)
     }

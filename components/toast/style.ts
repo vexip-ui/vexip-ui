@@ -1,0 +1,1 @@
+import '@/style/toast.scss'
