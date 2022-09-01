@@ -1,6 +1,6 @@
 <template>
   <Button type="primary" @click="toast">
-    打开
+    打开提示
   </Button>
 </template>
 
@@ -10,7 +10,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   methods: {
     toast() {
-      this.$toast.open('一些提示', 0)
+      this.$toast.open('一些提示')
     }
   }
 })

@@ -12,7 +12,7 @@ And a composite method of opening the notice:
 
 - `this.$notice.judge(state, successTitle | successOptions, errorTitle | errorOptions[, duration])`
 
-> 在使用组合式 api 时需要 `import { Notice } from 'vexip-ui'` 后使用 `Notice.open(...)`。
+> `Notice.open(...)` is required after `import { Message } from 'vexip-ui'` when using the composition api.
 
 In addition, two methods to manually close the notice are provided:
 
@@ -30,7 +30,7 @@ const cancel = this.$notice.open(options)
 cancel()
 ```
 
-When you need to modify the default property value of a component, you can do this:
+When you need to modify the default value of options, you can do this:
 
 ```js
 // In addition to the option value, you can also modify placement to
@@ -39,7 +39,7 @@ When you need to modify the default property value of a component, you can do th
 this.$notice.config({ placement, ...options })
 ```
 
-Even, sometimes it is necessary to create multiple notice managers to manage various types of messages:
+Sometimes it is necessary to create multiple notice managers to manage various types of messages:
 
 ```js
 // This is a new notice manager

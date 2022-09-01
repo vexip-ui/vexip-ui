@@ -1,6 +1,6 @@
 <template>
   <Button type="primary" @click="toast">
-    Open
+    Open Toast
   </Button>
 </template>
 

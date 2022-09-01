@@ -14,7 +14,7 @@ export interface ToastOptions extends Record<string, any> {
   transitionName?: string,
   closable?: boolean,
   maskClose?: boolean,
-  hideMask?: boolean,
+  showMask?: boolean,
   maskClass?: ClassType,
   maskStyle?: StyleType,
   onClose?: () => void

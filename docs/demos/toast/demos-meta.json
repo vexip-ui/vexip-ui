@@ -1,1 +1,9 @@
-["basis"]
+[
+  "basis",
+  "type",
+  "position",
+  "close",
+  "duration",
+  "icon",
+  "render"
+]

@@ -5,7 +5,12 @@
     :aria-busy="currentActive ? 'true' : undefined"
   >
     <slot></slot>
-    <transition appear :name="props.transitionName">
+    <transition
+      appear
+      :name="props.transitionName"
+      @after-enter="handleShow"
+      @after-leave="handleHide"
+    >
       <div v-if="currentActive" :class="nh.be('loading')">
         <div
           v-if="!props.hideMask"
@@ -13,6 +18,37 @@
           :style="maskStyle"
           @click="handleMaskClick"
         ></div>
+        <slot name="content">
+          <div :class="nh.be('icon')">
+            <slot name="icon">
+              <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
+              <Icon v-else pulse :icon="props.icon"></Icon>
+            </slot>
+          </div>
+          <div v-if="hasTip" :class="nh.be('tip')">
+            <slot name="tip">
+              {{ props.tip }}
+            </slot>
+          </div>
+        </slot>
+      </div>
+    </transition>
+  </div>
+  <transition
+    v-else
+    appear
+    :name="props.transitionName"
+    @after-enter="handleShow"
+    @after-leave="handleHide"
+  >
+    <div v-if="currentActive" :class="[nh.b(), nh.bs('vars'), nh.bm('inner')]">
+      <div
+        v-if="!props.hideMask"
+        :class="[nh.be('mask'), props.maskClass]"
+        :style="maskStyle"
+        @click="handleMaskClick"
+      ></div>
+      <slot name="content">
         <div :class="nh.be('icon')">
           <slot name="icon">
             <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
@@ -24,28 +60,7 @@
             {{ props.tip }}
           </slot>
         </div>
-      </div>
-    </transition>
-  </div>
-  <transition v-else appear :name="props.transitionName">
-    <div v-if="currentActive" :class="[nh.b(), nh.bs('vars'), nh.bm('inner')]">
-      <div
-        v-if="!props.hideMask"
-        :class="[nh.be('mask'), props.maskClass]"
-        :style="maskStyle"
-        @click="handleMaskClick"
-      ></div>
-      <div :class="nh.be('icon')">
-        <slot name="icon">
-          <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
-          <Icon v-else pulse :icon="props.icon"></Icon>
-        </slot>
-      </div>
-      <div v-if="hasTip" :class="nh.be('tip')">
-        <slot name="tip">
-          {{ props.tip }}
-        </slot>
-      </div>
+      </slot>
     </div>
   </transition>
 </template>
@@ -85,7 +100,9 @@ export default defineComponent({
     maskColor: String,
     maskClass: classProp,
     transitionName: String,
-    onMaskClick: eventProp<(event: MouseEvent) => void>()
+    onMaskClick: eventProp<(event: MouseEvent) => void>(),
+    onShow: eventProp(),
+    onHide: eventProp()
   },
   setup(_props, { slots }) {
     const nh = useNameHelper('spin')
@@ -158,6 +175,14 @@ export default defineComponent({
       emitEvent(props.onMouseClick, event)
     }
 
+    function handleShow() {
+      emitEvent(props.onShow)
+    }
+
+    function handleHide() {
+      emitEvent(props.onHide)
+    }
+
     return {
       props,
       nh,
@@ -167,7 +192,9 @@ export default defineComponent({
       hasTip,
       maskStyle,
 
-      handleMaskClick
+      handleMaskClick,
+      handleShow,
+      handleHide
     }
   }
 })

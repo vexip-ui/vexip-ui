@@ -101,6 +101,7 @@ export interface I18nConfig {
     Progress: string,
     Skeleton: string,
     Spin: string,
+    Toast: string,
 
     ConfigProvider: string,
     Masker: string,

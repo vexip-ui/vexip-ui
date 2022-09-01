@@ -15,7 +15,7 @@ interface AipMethod {
   (options: FuzzyOptions, duration?: number): () => void
 }
 
-const conveniences: Record<ToastType, { icon: Record<string, any> }> = {
+const conveniences: Record<ToastType, Record<string, any>> = {
   success: {
     icon: Check
   },
@@ -26,7 +26,11 @@ const conveniences: Record<ToastType, { icon: Record<string, any> }> = {
     icon: Xmark
   },
   loading: {
-    icon: Spinner
+    icon: Spinner,
+    showMask: true,
+    iconProps: {
+      pulse: true
+    }
   }
 }
 
@@ -43,6 +47,7 @@ export class ToastManager {
   private _mountedApp: App<unknown> | null
   private _instance: ToastInstance | null
   private _container: HTMLElement | null
+  private _timer: ReturnType<typeof setTimeout> | null
 
   constructor(options: Partial<ToastOptions> = {}) {
     options = {
@@ -53,6 +58,7 @@ export class ToastManager {
     this._mountedApp = null
     this._instance = null
     this._container = null
+    this._timer = null
     this.name = 'Toast'
     this.defaults = {}
 
@@ -60,10 +66,6 @@ export class ToastManager {
 
     this.open = (content: FuzzyOptions, duration?: number) => {
       return this._open(null, content, duration)
-    }
-
-    this.loading = (content: FuzzyOptions, duration?: number) => {
-      return this._open('loading', content, duration)
     }
 
     this.success = (content: FuzzyOptions, duration?: number) => {
@@ -77,6 +79,15 @@ export class ToastManager {
     this.error = (content: FuzzyOptions, duration?: number) => {
       return this._open('error', content, duration)
     }
+
+    this.loading = (content: FuzzyOptions, duration?: number) => {
+      return this._open('loading', content, duration)
+    }
+  }
+
+  close() {
+    this._timer && clearTimeout(this._timer)
+    this._getInstance()?.cloasToast()
   }
 
   config(options: Record<string, unknown>) {
@@ -96,9 +107,11 @@ export class ToastManager {
     return false
   }
 
-  install(app: App, options: Partial<ToastOptions> = {}) {
-    this.config(options)
-    app.config.globalProperties.$toast = this
+  install(app: App, options: Partial<ToastOptions> & { property?: string } = {}) {
+    const { property, ...others } = options
+
+    this.config(others)
+    app.config.globalProperties[property || '$toast'] = this
     this._mountedApp = app
   }
 
@@ -124,14 +137,14 @@ export class ToastManager {
   }
 
   private _open(type: null | ToastType, content: FuzzyOptions, _duration?: number) {
+    this._timer && clearTimeout(this._timer)
+
     const options = typeof content === 'string' ? { content, duration: _duration } : content
     const convenienceOptions = type ? conveniences[type] ?? {} : {}
 
-    let timer: ReturnType<typeof setTimeout>
-
     const userCloseFn = options.onClose
     const onClose = () => {
-      clearTimeout(timer)
+      this._timer && clearTimeout(this._timer)
 
       if (typeof userCloseFn === 'function') {
         return userCloseFn()
@@ -150,13 +163,13 @@ export class ToastManager {
     const duration = typeof item.duration === 'number' ? item.duration : 2000
 
     if (duration >= 500) {
-      timer = setTimeout(() => {
+      this._timer = setTimeout(() => {
         toast?.cloasToast()
       }, duration)
     }
 
     return () => {
-      clearTimeout(timer)
+      this._timer && clearTimeout(this._timer)
       toast?.cloasToast()
     }
   }

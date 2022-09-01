@@ -30,7 +30,7 @@ const cancel = this.$message.open(options)
 cancel()
 ```
 
-When you need to modify the default property value of a component, you can do this:
+When you need to modify the default value of options, you can do this:
 
 ```js
 // In addition to the option value, you can also modify placement
@@ -38,7 +38,7 @@ When you need to modify the default property value of a component, you can do th
 this.$message.config({ placement, ...options })
 ```
 
-Even, sometimes it is necessary to create multiple message managers to manage various types of messages:
+Sometimes it is necessary to create multiple message managers to manage various types of messages:
 
 ```js
 // This is a new message manager
