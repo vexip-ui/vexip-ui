@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed } from 'vue'
+import { defineComponent, ref, reactive, computed, onMounted } from 'vue'
 import { Divider } from '@/components/divider'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
@@ -145,8 +145,6 @@ export default defineComponent({
     const rotate = ref(0)
     const flipX = ref(false)
     const flipY = ref(false)
-    const mouseX = ref('center')
-    const mouseY = ref('center')
 
     const transition = ref<HTMLElement | null>(null)
 
@@ -188,6 +186,10 @@ export default defineComponent({
       x: currentLeft,
       y: currentTop
     })
+    const zoomOrigin = {
+      x: 0,
+      y: 0
+    }
 
     useModifier({
       target: viewer,
@@ -325,15 +327,14 @@ export default defineComponent({
     })
     const contentStyle = computed(() => {
       return {
-        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scaleX(${
-          flipX.value ? -1 : 1
-        }) scaleY(${flipY.value ? -1 : 1})`
+        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scale(${zoom.value})`
       }
     })
     const transitionStyle = computed(() => {
       return {
-        transform: `scale(${zoom.value}) rotate(${rotate.value}deg)`,
-        transformOrigin: `${mouseX.value} ${mouseY.value}`
+        transform: `scaleX(${flipX.value ? -1 : 1}) scaleY(${flipY.value ? -1 : 1}) rotate(${
+          rotate.value
+        }deg)`
       }
     })
     const allActions = computed(() => {
@@ -348,19 +349,23 @@ export default defineComponent({
       return Array.from(map.values())
     })
 
-    function handleWheel(event: WheelEvent) {
-      if (props.zoomDisabled) {
-        return
-      }
+    onMounted(() => {
+      if (container.value) {
+        const rect = container.value.getBoundingClientRect()
 
+        zoomOrigin.x = rect.left + rect.width * 0.5
+        zoomOrigin.y = rect.top + rect.height * 0.5
+      }
+    })
+
+    function handleWheel(event: WheelEvent) {
       event.stopPropagation()
       event.preventDefault()
 
-      const { offsetX, offsetY } = event
-      mouseX.value = offsetX + 'px'
-      mouseY.value = offsetY + 'px'
-
       const sign = event.deltaY > 0 ? -1 : 1
+
+      zoomOrigin.x = event.clientX
+      zoomOrigin.y = event.clientY
 
       emitEvent(props.onWheel, sign, state)
       handleZoom(sign * props.zoomDelta)
@@ -394,11 +399,24 @@ export default defineComponent({
     }
 
     function handleZoom(ratio: number) {
-      if (props.zoomDisabled) {
+      if (props.zoomDisabled || !container.value) {
         return
       }
 
-      zoom.value = toFixed(boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax), 3)
+      const containerRect = container.value.getBoundingClientRect()
+      const { x, y } = zoomOrigin
+      const { offsetWidth, offsetHeight } = container.value
+      const prveZoom = zoom.value
+
+      zoom.value = toFixed(boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax), 5)
+
+      const delta = zoom.value / prveZoom - 1
+      const originX = delta * offsetWidth * 0.5
+      const originY = delta * offsetHeight * 0.5
+
+      currentLeft.value -= delta * (x - containerRect.left - currentLeft.value) - originX
+      currentTop.value -= delta * (y - containerRect.top - currentTop.value) - originY
+
       emitEvent(props.onZoom, zoom.value, state)
     }
 
@@ -415,8 +433,6 @@ export default defineComponent({
       flipX.value = false
       flipY.value = false
       zoom.value = 1
-      mouseX.value = 'center'
-      mouseY.value = 'center'
 
       emitEvent(props.onReset, state)
     }
