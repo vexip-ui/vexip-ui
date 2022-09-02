@@ -105,6 +105,7 @@ export default defineComponent({
     toolbarPlacement: String as PropType<ViewerToolbarPlacement>,
     actions: Array as PropType<ToolbarAction[]>,
     toolbarFade: booleanNumberProp,
+    noTransition: booleanProp,
     onMoveStart: eventProp<(state: ViewerState) => void>(),
     onMove: eventProp<(state: ViewerState) => void>(),
     onMoveEnd: eventProp<(state: ViewerState) => void>(),
@@ -132,7 +133,8 @@ export default defineComponent({
       fullDisabled: false,
       toolbarPlacement: 'bottom',
       actions: () => [],
-      toolbarFade: false
+      toolbarFade: false,
+      noTransition: false
     })
 
     const nh = useNameHelper('viewer')
@@ -303,7 +305,8 @@ export default defineComponent({
         [nh.bm('draggable')]: !props.moveDisabled,
         [nh.bm('resizable')]: !props.zoomDisabled,
         [nh.bm('full')]: full.value,
-        [nh.bm('moving')]: moving.value
+        [nh.bm('moving')]: moving.value,
+        [nh.bm('static')]: props.noTransition
       }
     })
     const style = computed(() => {
@@ -377,6 +380,11 @@ export default defineComponent({
       }
 
       rotate.value += deg
+
+      if (props.noTransition && rotate.value % 360 === 0) {
+        rotate.value = 0
+      }
+
       emitEvent(props.onRotate, deg, state)
     }
 

@@ -58,6 +58,11 @@ $viewer: map.merge(
     transition-duration: 0ms;
   }
 
+  &--static &__content,
+  &--static &__transition {
+    transition-duration: 0ms;
+  }
+
   $v-padding: get-css-var('viewer-toolbar-v-padding');
   $h-padding: get-css-var('viewer-toolbar-h-padding');
 
