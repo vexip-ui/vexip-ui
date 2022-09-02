@@ -4,6 +4,7 @@
   "position",
   "close",
   "duration",
+  "mask",
   "icon",
   "render"
 ]

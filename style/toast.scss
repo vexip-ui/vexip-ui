@@ -26,6 +26,15 @@ $toast: map.merge(
 
   @include basis;
 
+  position: fixed;
+  inset: 0;
+  z-index: get-css-var('z-index-masker');
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+
   &--text-only {
     @include define-preset-values(
       'toast',
@@ -34,6 +43,16 @@ $toast: map.merge(
         v-padding: 8px
       )
     );
+  }
+
+  & > * {
+    pointer-events: auto;
+  }
+
+  &__mask {
+    position: absolute;
+    inset: 0;
+    background-color: transparent;
   }
 
   &__wrapper {

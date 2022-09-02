@@ -172,7 +172,7 @@ export default defineComponent({
     )
 
     function handleMaskClick(event: MouseEvent) {
-      emitEvent(props.onMouseClick, event)
+      emitEvent(props.onMaskClick, event)
     }
 
     function handleShow() {
