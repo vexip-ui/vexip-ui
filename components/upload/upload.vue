@@ -1,20 +1,25 @@
 <template>
-  <div :class="className">
+  <div :id="idFor" :class="className">
     <div
+      ref="control"
       :class="{
         [nh.be('control')]: true,
         [nh.bem('control', 'drag-over')]: isDragOver
       }"
+      tabindex="-1"
       @click="handleClick"
       @drop.prevent="handleDrop"
       @dragover.prevent="handleDragEnter"
       @dragleave.prevent="handleDragLeave"
+      @keydown.enter.prevent="handleClick"
+      @keydown.space.prevent="handleClick"
     >
       <input
         v-if="!props.disabledClick"
         ref="input"
         type="file"
         :class="nh.be('input')"
+        :disabled="props.disabled"
         :multiple="props.multiple"
         :accept="acceptString"
         :webkitdirectory="props.directory"
@@ -22,7 +27,15 @@
       />
       <slot :is-drag-over="(props.allowDrag || props.disabledClick) && isDragOver">
         <template v-if="!props.allowDrag && !props.disabledClick">
-          <Button :icon="Upload">
+          <Button
+            ref="button"
+            :icon="Upload"
+            :type="props.state"
+            :disabled="props.disabled"
+            :loading="props.loading"
+            :loading-icon="props.loadingIcon"
+            :loading-spin="props.loadingSpin"
+          >
             {{ props.buttonLabel ?? locale.upload }}
           </Button>
           <slot name="tip">
@@ -31,8 +44,13 @@
             </p>
           </slot>
         </template>
-        <div v-else :class="nh.be('drag-pane')">
-          <Icon :class="nh.be('cloud')" :scale="4">
+        <div
+          v-else
+          ref="panel"
+          :class="[nh.be('drag-pane'), props.disabled && nh.bem('drag-pane', 'disabled')]"
+          tabindex="0"
+        >
+          <Icon :class="[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]" :scale="4">
             <CloudArrowUp></CloudArrowUp>
           </Icon>
           <slot name="tip">
@@ -40,6 +58,13 @@
               {{ props.tip || locale.dragOrClick }}
             </p>
           </slot>
+          <Icon
+            :class="nh.be('loading-icon')"
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+            :style="{ opacity: props.loading ? '100%' : '0%' }"
+          ></Icon>
         </div>
       </slot>
     </div>
@@ -54,8 +79,8 @@
         [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
           !props.hiddenFiles && renderFiles.length ? '0.5em' : undefined
       }"
-      @delete="deleteFile"
-      @preview="$emit('preview', $event)"
+      @delete="handleDelete"
+      @preview="handlePreview"
     ></UploadList>
   </div>
 </template>
@@ -65,11 +90,21 @@ import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import UploadList from './upload-list.vue'
-import { upload } from './request'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import { useFieldStore } from '@/components/form'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  stateProp,
+  booleanProp,
+  createStateProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
-import { CloudArrowUp, Upload } from '@vexip-ui/icons'
-import { UploadStatusType, uploadListTypes } from './symbol'
+import { CloudArrowUp, Upload, Spinner } from '@vexip-ui/icons'
+import { upload } from './request'
+import { StatusType, uploadListTypes } from './symbol'
 
 import type { PropType, Ref } from 'vue'
 import type {
@@ -91,7 +126,9 @@ export default defineComponent({
     CloudArrowUp
   },
   props: {
+    state: stateProp,
     url: String,
+    fileList: Array as PropType<FileState[]>,
     multiple: booleanProp,
     tip: String,
     accept: [String, Array] as PropType<string | string[]>,
@@ -115,23 +152,41 @@ export default defineComponent({
     directory: booleanProp,
     pathField: String,
     disabledClick: booleanProp,
-    buttonLabel: String
+    buttonLabel: String,
+    disabled: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
+    onExceed: eventProp<(files: FileState[], sources: File[]) => void>(),
+    onChange: eventProp<(files: FileState[], sources: File[]) => void>(),
+    onFilterError: eventProp<(files: FileState, sources: File) => void>(),
+    onSizeError: eventProp<(files: FileState, sources: File) => void>(),
+    onDelete: eventProp<(file: FileState, source: File) => void>(),
+    onPreview: eventProp<(file: FileState, source: File) => void>(),
+    onProgress: eventProp<(file: FileState, percent: number, source: File) => void>(),
+    onSuccess: eventProp<(file: FileState, response: any, source: File) => void>(),
+    onError: eventProp<(file: FileState, error: HttpError, source: File) => void>()
   },
-  emits: [
-    'exceed',
-    'change',
-    'filter-error',
-    'size-error',
-    'delete',
-    'progress',
-    'success',
-    'error',
-    'preview'
-  ],
+  emits: ['update:file-list'],
   setup(_props, { emit }) {
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<FileState[]>(() => {
+        if (button.value?.$el) {
+          button.value.$el.focus()
+        } else {
+          panel.value?.focus()
+        }
+      })
+
     const props = useProps('upload', _props, {
+      state: createStateProp(state),
       url: {
         default: '',
+        static: true
+      },
+      fileList: {
+        default: () => getFieldValue([]),
         static: true
       },
       multiple: false,
@@ -175,7 +230,12 @@ export default defineComponent({
       directory: false,
       pathField: 'path',
       disabledClick: false,
-      buttonLabel: null
+      buttonLabel: null,
+      disabled: () => disabled.value,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const nh = useNameHelper('upload')
@@ -183,6 +243,8 @@ export default defineComponent({
     const isDragOver = ref(false)
 
     const input = ref<HTMLInputElement | null>(null)
+    const button = ref<InstanceType<typeof Button> | null>(null)
+    const panel = ref<HTMLElement | null>(null)
 
     const className = computed(() => {
       return [
@@ -190,6 +252,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(`type-${props.listType}`),
         {
+          [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('multiple')]: props.multiple,
           [nh.bm('drag')]: props.allowDrag,
           [nh.bm('to-add')]: props.selectToAdd,
@@ -204,7 +267,7 @@ export default defineComponent({
       return accept && (typeof accept === 'string' ? accept : accept.join())
     })
     const renderFiles = computed(() => {
-      return fileStates.value.filter(item => item.status !== UploadStatusType.DELETE)
+      return fileStates.value.filter(item => item.status !== StatusType.DELETE)
     })
 
     function handleClick() {
@@ -242,10 +305,10 @@ export default defineComponent({
 
         if (fileState) {
           if (
-            fileState.status !== UploadStatusType.SUCCESS &&
-            fileState.status !== UploadStatusType.UPLOADING
+            fileState.status !== StatusType.SUCCESS &&
+            fileState.status !== StatusType.UPLOADING
           ) {
-            fileState.status = UploadStatusType.PENDING
+            fileState.status = StatusType.PENDING
           }
         } else {
           fileState = createFileState(file)
@@ -263,23 +326,24 @@ export default defineComponent({
 
         const exceedFiles = files.slice(countLimit)
 
-        emit(
-          'exceed',
-          exceedFiles.map(file => file.source),
-          getSourceFiles()
-        )
+        emitEvent(props.onExceed, exceedFiles, getSourceFiles())
       } else {
         fileStates.value = files
       }
 
-      const sourceFiles = getSourceFiles()
-
       syncInputFiles()
-      emit('change', sourceFiles)
+      emitChangeEvent()
 
       if (!props.manual) {
         execute()
       }
+    }
+
+    function emitChangeEvent() {
+      setFieldValue(fileStates.value)
+      emitEvent(props.onChange, fileStates.value, getSourceFiles())
+      emit('update:file-list', fileStates.value)
+      validateField()
     }
 
     function getFileStateBySource(file: SourceFile) {
@@ -305,7 +369,7 @@ export default defineComponent({
         size,
         type,
         base64: null,
-        status: UploadStatusType.PENDING,
+        status: StatusType.PENDING,
         percentage: 0,
         source: file,
         path: file.path || file.webkitRelativePath,
@@ -329,7 +393,7 @@ export default defineComponent({
       }
 
       const uploadFiles = fileStates.value.filter(
-        item => item.status !== UploadStatusType.SUCCESS && item.status !== UploadStatusType.DELETE
+        item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE
       )
       const requests: Promise<any>[] = []
 
@@ -345,10 +409,7 @@ export default defineComponent({
         let result = props.onBeforeUpload(
           file.source,
           fileStates.value
-            .filter(
-              item =>
-                item.status !== UploadStatusType.SUCCESS && item.status !== UploadStatusType.DELETE
-            )
+            .filter(item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE)
             .map(item => item.source)
         )
 
@@ -359,7 +420,7 @@ export default defineComponent({
         if (isFalse(result)) return
       }
 
-      file.status = UploadStatusType.UPLOADING
+      file.status = StatusType.UPLOADING
 
       const { url, headers, withCredentials, data, field, pathField } = props
 
@@ -404,13 +465,13 @@ export default defineComponent({
         const extension = getFileExtension(file)
 
         if (filter.length && !filter.includes(extension)) {
-          emit('filter-error', file.source)
+          emitEvent(props.onFilterError, file, file.source)
 
           return false
         }
 
         if (file.size > limitSize) {
-          emit('size-error', file.source)
+          emitEvent(props.onSizeError, file, file.source)
 
           return false
         }
@@ -419,22 +480,27 @@ export default defineComponent({
       return true
     }
 
-    function deleteFile(file: FileState) {
-      file.status = UploadStatusType.DELETE
+    function handleDelete(file: FileState) {
+      file.status = StatusType.DELETE
 
       if (file.xhr) {
         file.xhr.abort()
       }
 
       syncInputFiles()
-      emit('delete', file.source)
+      emitEvent(props.onDelete, file, file.source)
+      emitChangeEvent()
+    }
+
+    function handlePreview(file: FileState) {
+      emitEvent(props.onPreview, file, file.source)
     }
 
     function syncInputFiles() {
-      const files = fileStates.value.filter(item => item.status !== UploadStatusType.DELETE)
       const dataTransfer = new DataTransfer()
+      fileStates.value = fileStates.value.filter(item => item.status !== StatusType.DELETE)
 
-      files.forEach(item => {
+      fileStates.value.forEach(item => {
         dataTransfer.items.add(item.source)
       })
 
@@ -444,30 +510,30 @@ export default defineComponent({
     }
 
     function handleProgress(percent: number, file: FileState) {
-      if (file.status === UploadStatusType.DELETE) return
+      if (file.status === StatusType.DELETE) return
 
       file.percentage = percent
 
-      emit('progress', percent, file.source)
+      emitEvent(props.onProgress, file, percent, file.source)
     }
 
     function handleSuccess(response: any, file: FileState) {
-      if (file.status === UploadStatusType.DELETE) return
+      if (file.status === StatusType.DELETE) return
 
-      file.status = UploadStatusType.SUCCESS
+      file.status = StatusType.SUCCESS
       file.response = response
       file.error = null
 
-      emit('success', response, file.source)
+      emitEvent(props.onSuccess, file, response, file.source)
     }
 
     function handleError(error: HttpError, file: FileState) {
-      if (file.status === UploadStatusType.DELETE) return
+      if (file.status === StatusType.DELETE) return
 
-      file.status = UploadStatusType.FAIL
+      file.status = StatusType.FAIL
       file.error = error
 
-      emit('error', error, file.source)
+      emitEvent(props.onError, file, error, file.source)
     }
 
     let dragTimer: number
@@ -595,6 +661,7 @@ export default defineComponent({
       props,
       nh,
       locale: useLocale('upload'),
+      idFor,
       fileStates,
       isDragOver,
 
@@ -603,10 +670,13 @@ export default defineComponent({
       renderFiles,
 
       input,
+      button,
+      panel,
 
       handleClick,
       handleInputChange,
-      deleteFile,
+      handleDelete,
+      handlePreview,
       handleDrop,
       handleDragEnter,
       handleDragLeave,

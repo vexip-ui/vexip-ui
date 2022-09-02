@@ -33,7 +33,7 @@
   "include": [
     "common/*/src",
     "components",
-    "example",
+    "dev-server",
     "playground",
     "types.d.ts"
   ],

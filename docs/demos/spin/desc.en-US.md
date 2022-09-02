@@ -1,1 +1,3 @@
-为一个区块启用加载中状态的快速切换，常用在数据渲染或异步处理耗时较长的场合，以避免用户长时间无法获得有效反馈。
+Enable fast switching of the loading state for a block.
+
+It is often used in situations where data rendering or asynchronous processing takes a long time to avoid users being unable to obtain effective feedback for a long time.

@@ -1,17 +1,21 @@
 <template>
-  <DatePicker v-model:value="date" :shortcuts="shortcuts" style="width: 220px;"></DatePicker>
-  <p>
-    Current Date: {{ date }}
-  </p>
+  <DatePicker type="datetime" :shortcuts="singleShortcuts" style="max-width: 300px;"></DatePicker>
+  <br />
+  <br />
+  <DatePicker :shortcuts="multipleShortcuts" is-range style="max-width: 300px;"></DatePicker>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { addDays } from '@vexip-ui/utils'
 
-const date = ref('2020-05-30')
-const shortcuts = [
-  { name: 'Today', value: () => Date.now() },
+const singleShortcuts = [
+  { name: 'Today', value: Date.now() },
   { name: 'Yesterday', value: () => new Date(Date.now() - 24 * 60 * 60_000) },
   { name: 'Labor Day', value: () => new Date(new Date().getFullYear(), 4, 1) }
+]
+
+const multipleShortcuts = [
+  { name: 'Three Days', value: [Date.now(), addDays(Date.now(), 3)] },
+  { name: 'One Week', value: () => [Date.now(), addDays(Date.now(), 7)] }
 ]
 </script>

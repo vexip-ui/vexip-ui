@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" @click="handleClick">
+  <div :class="className">
     <div :class="[nh.be('content'), props.contentClass]" :style="contentStyle">
       <div :class="nh.be('arrow')" :style="arrowStyle"></div>
       <slot></slot>
@@ -23,8 +23,7 @@ export default defineComponent({
     shadow: booleanStringProp,
     contentClass: classProp
   },
-  emits: ['click'],
-  setup(_props, { emit }) {
+  setup(_props) {
     const props = useProps('bubble', _props, {
       placement: {
         default: 'right',
@@ -67,19 +66,13 @@ export default defineComponent({
       }
     })
 
-    function handleClick(event: MouseEvent) {
-      emit('click', event)
-    }
-
     return {
       props,
       nh,
 
       className,
       contentStyle,
-      arrowStyle,
-
-      handleClick
+      arrowStyle
     }
   }
 })

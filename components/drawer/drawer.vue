@@ -13,19 +13,46 @@
     @hide="handleHide"
   >
     <template #default="{ show }">
-      <section v-show="show" :class="wrapperClass" :style="wrapperStyle">
-        <div v-if="hasTitle" :class="nh.be('title')">
-          <slot name="title">
-            {{ props.title }}
-          </slot>
-          <div v-if="props.closable" :class="nh.be('close')" @click="handleClose()">
-            <slot name="close">
-              <Icon><Xmark></Xmark></Icon>
+      <section
+        v-show="show"
+        :class="wrapperClass"
+        :style="wrapperStyle"
+        role="dialog"
+        :aria-modal="show ? 'true' : undefined"
+        :aria-labelledby="titleId"
+        :aria-describedby="bodyId"
+      >
+        <div v-if="hasTitle" :class="nh.be('header')">
+          <div :id="titleId" :class="nh.be('title')">
+            <slot name="title">
+              {{ props.title }}
             </slot>
           </div>
+          <button v-if="props.closable" :class="nh.be('close')" @click="handleClose()">
+            <slot name="close">
+              <Icon :scale="1.2" label="close">
+                <Xmark></Xmark>
+              </Icon>
+            </slot>
+          </button>
         </div>
-        <div :class="nh.be('content')">
+        <div :id="bodyId" :class="nh.be('content')">
           <slot></slot>
+        </div>
+        <div v-if="props.footer || $slots.footer" :class="nh.be('footer')">
+          <slot name="footer">
+            <Button text size="small" @click="handleCancle">
+              {{ props.cancelText || locale.cancel }}
+            </Button>
+            <Button
+              type="primary"
+              size="small"
+              :loading="props.loading"
+              @click="handleConfirm"
+            >
+              {{ props.confirmText || locale.confirm }}
+            </Button>
+          </slot>
         </div>
         <div
           v-if="props.resizable"
@@ -38,7 +65,7 @@
             }
           ]"
         >
-          <slot name="handler"></slot>
+          <slot name="handler" :resizing="resizing"></slot>
         </div>
       </section>
     </template>
@@ -49,7 +76,16 @@
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useNameHelper, useProps, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  booleanStringProp,
+  classProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/mixins'
 import { isPromise } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
@@ -59,6 +95,8 @@ import type { PropType } from 'vue'
 export type DrawerPlacement = 'top' | 'right' | 'bottom' | 'left'
 
 const drawerPlacements = Object.freeze<DrawerPlacement>(['top', 'right', 'bottom', 'left'])
+
+let idCount = 0
 
 export default defineComponent({
   name: 'Drawer',
@@ -79,20 +117,24 @@ export default defineComponent({
     maskClose: booleanProp,
     drawerClass: classProp,
     hideMask: booleanProp,
-    onBeforeClose: Function as PropType<() => any>,
+    onBeforeClose: Function as PropType<(isConfirm?: boolean) => any>,
     resizable: booleanProp,
-    autoRemove: booleanProp
+    autoRemove: booleanProp,
+    footer: booleanProp,
+    confirmText: String,
+    cancelText: String,
+    loading: booleanProp,
+    onToggle: eventProp<(active: boolean) => void>(),
+    onClose: eventProp(),
+    onShow: eventProp(),
+    onHide: eventProp(),
+    onResizeStart: eventProp<(rect: { width: number, height: number }) => void>(),
+    onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
+    onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>(),
+    onConfirm: eventProp(),
+    onCancel: eventProp()
   },
-  emits: [
-    'toggle',
-    'close',
-    'show',
-    'hide',
-    'resize-start',
-    'resize-move',
-    'resize-end',
-    'update:active'
-  ],
+  emits: ['update:active'],
   setup(_props, { slots, emit }) {
     const props = useProps('drawer', _props, {
       transfer: false,
@@ -102,18 +144,18 @@ export default defineComponent({
       },
       width: {
         default: 280,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       height: {
         default: 280,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       placement: {
-        default: 'right' as DrawerPlacement,
-        validator: (value: DrawerPlacement) => drawerPlacements.includes(value)
+        default: 'right',
+        validator: value => drawerPlacements.includes(value)
       },
       title: '',
-      closable: false,
+      closable: true,
       inner: false,
       maskClose: true,
       drawerClass: null,
@@ -123,13 +165,19 @@ export default defineComponent({
         isFunc: true
       },
       resizable: false,
-      autoRemove: false
+      autoRemove: false,
+      footer: false,
+      confirmText: null,
+      cancelText: null,
+      loading: false
     })
 
     const nh = useNameHelper('drawer')
     const currentActive = ref(props.active)
     const currentWidth = ref(props.width)
     const currentHeight = ref(props.height)
+
+    const idIndex = `${idCount++}`
 
     const { target: resizer, moving: resizing } = useMoving({
       onStart: (state, event) => {
@@ -140,7 +188,7 @@ export default defineComponent({
         state.xStart = currentWidth.value
         state.yStart = currentHeight.value
 
-        emit('resize-start', {
+        emitEvent(props.onResizeStart, {
           width: currentWidth.value,
           height: currentHeight.value
         })
@@ -170,13 +218,13 @@ export default defineComponent({
         currentWidth.value = Math.max(currentWidth.value, 101)
         currentHeight.value = Math.max(currentHeight.value, 101)
 
-        emit('resize-move', {
+        emitEvent(props.onResizeMove, {
           width: currentWidth.value,
           height: currentHeight.value
         })
       },
       onEnd: () => {
-        emit('resize-end', {
+        emitEvent(props.onResizeEnd, {
           width: currentWidth.value,
           height: currentHeight.value
         })
@@ -188,7 +236,9 @@ export default defineComponent({
         nh.b(),
         nh.bs('vars'),
         {
-          [nh.bm('inner')]: props.inner
+          [nh.bm('inner')]: props.inner,
+          [nh.bm('closable')]: props.closable,
+          [nh.bm('resizable')]: props.resizable
         }
       ]
     })
@@ -200,7 +250,6 @@ export default defineComponent({
         nh.be('wrapper'),
         nh.bem('wrapper', props.placement),
         {
-          [nh.bem('wrapper', 'closable')]: props.closable,
           [nh.bem('wrapper', 'resizing')]: resizing.value
         },
         props.drawerClass
@@ -226,6 +275,8 @@ export default defineComponent({
     const hasTitle = computed(() => {
       return !!(slots.title ?? props.title)
     })
+    const titleId = computed(() => `${nh.bs(idIndex)}__title`)
+    const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
 
     watch(
       () => props.active,
@@ -234,7 +285,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:active', value)
     })
     watch(
@@ -250,11 +301,11 @@ export default defineComponent({
       }
     )
 
-    async function handleClose() {
+    async function handleClose(isConfirm = false) {
       let result: unknown = true
 
       if (typeof props.onBeforeClose === 'function') {
-        result = props.onBeforeClose()
+        result = props.onBeforeClose(isConfirm)
 
         if (isPromise(result)) {
           result = await result
@@ -264,7 +315,7 @@ export default defineComponent({
       if (result !== false) {
         nextTick(() => {
           currentActive.value = false
-          emit('close')
+          emitEvent(props.onClose)
         })
       }
 
@@ -278,31 +329,46 @@ export default defineComponent({
     }
 
     function handleShow() {
-      emit('show')
+      emitEvent(props.onShow)
     }
 
     function handleHide() {
-      emit('hide')
+      emitEvent(props.onHide)
+    }
+
+    function handleConfirm() {
+      handleClose(true)
+      emitEvent(props.onConfirm)
+    }
+
+    function handleCancle() {
+      handleClose(false)
+      emitEvent(props.onCancel)
     }
 
     return {
       props,
       nh,
+      locale: useLocale('modal'),
       currentActive,
       resizing,
-
-      resizer,
 
       className,
       moveTransition,
       wrapperClass,
       wrapperStyle,
       hasTitle,
+      titleId,
+      bodyId,
+
+      resizer,
 
       handleClose,
       handleMaskClose,
       handleShow,
-      handleHide
+      handleHide,
+      handleConfirm,
+      handleCancle
     }
   }
 })

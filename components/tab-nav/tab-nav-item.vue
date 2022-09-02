@@ -1,12 +1,16 @@
 <template>
-  <li
-    ref="wrapper"
-    :class="nh.be('item')"
-    :aria-disabled="disabled"
-    @click="handleSelect"
-  >
+  <li ref="wrapper" :class="nh.be('item')" role="none">
     <div :class="nh.be('pad')"></div>
-    <div :class="contentClass">
+    <div
+      :class="contentClass"
+      role="tab"
+      tabindex="0"
+      :aria-disabled="disabled"
+      :aria-setsize="total || undefined"
+      :aria-posinset="index || undefined"
+      @click="handleSelect"
+      @keydown.enter.stop="handleSelect"
+    >
       <Icon v-if="icon" :class="nh.be('icon')" :icon="icon"></Icon>
       <slot>
         {{ label }}
@@ -18,7 +22,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, watch, onBeforeUnmount } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper } from '@vexip-ui/config'
+import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
@@ -41,15 +45,18 @@ export default defineComponent({
     icon: {
       type: Object,
       default: null
-    }
+    },
+    onToggle: eventProp<(active: boolean) => void>()
   },
-  emits: ['toggle'],
-  setup(props, { emit }) {
+  emits: [],
+  setup(props) {
     const tabNavState = inject(TAB_NAV_STATE, null)
 
     const nh = useNameHelper('tab-nav')
     const active = ref(false)
     const currentLabel = ref(props.label)
+    const index = ref(0)
+    const total = ref(0)
 
     const wrapper = ref<HTMLElement | null>(null)
 
@@ -71,13 +78,15 @@ export default defineComponent({
       }
     )
     watch(active, value => {
-      emit('toggle', value)
+      emitEvent(props.onToggle!, value)
     })
 
     if (tabNavState) {
       const state: ItemState = reactive({
         el: wrapper,
-        label: currentLabel
+        label: currentLabel,
+        index,
+        total
       })
 
       watch(currentLabel, (value, prevValue) => {
@@ -112,6 +121,8 @@ export default defineComponent({
 
     return {
       nh,
+      index,
+      total,
       contentClass,
       wrapper,
       handleSelect

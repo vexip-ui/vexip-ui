@@ -1,7 +1,15 @@
 import { reactive, computed, markRaw } from 'vue'
-import { isNull, debounceMinor, toNumber, sortByProps, deepClone, createBITree } from '@vexip-ui/utils'
+import {
+  isNull,
+  debounceMinor,
+  toNumber,
+  sortByProps,
+  deepClone,
+  createBITree
+} from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY } from './symbol'
 
+import type { ClassType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Key,
@@ -13,13 +21,12 @@ import type {
   ParsedSorterOptions,
   SelectionColumn,
   ExpandColumn,
-  ColumnOptions,
+  TableColumnOptions,
   ColumnWithKey,
   RowState,
   StoreOptions,
   StoreState,
-  StoreGetters,
-  ClassType
+  StoreGetters
 } from './symbol'
 
 let indexId = 1
@@ -33,7 +40,7 @@ function defaultIndexLabel(index: number) {
 }
 
 export function useStore(options: StoreOptions) {
-  const state = reactive<StoreState>({
+  const state = reactive({
     columns: [],
     data: [],
     rowClass: '',
@@ -71,7 +78,7 @@ export function useStore(options: StoreOptions) {
     heightBITree: null!,
     virtualData: [],
     totalHeight: options.rowMinHeight * options.data.length
-  })
+  }) as StoreState
 
   setColumns(state, options.columns)
 
@@ -199,7 +206,7 @@ export function useStore(options: StoreOptions) {
 
 export type TableStore = ReturnType<typeof useStore>
 
-function setColumns(state: StoreState, columns: ColumnOptions[]) {
+function setColumns(state: StoreState, columns: TableColumnOptions[]) {
   columns = Array.from(columns).sort((prev, next) => {
     return (prev.order || 0) - (next.order || 0)
   })
@@ -363,15 +370,15 @@ function setData(state: StoreState, data: Data[]) {
     dataMap[key] = row
   }
 
-  if (!state.heightBITree || clonedData.length !== data.length) {
+  state.rowData = clonedData
+  state.dataMap = dataMap
+
+  if (!state.heightBITree || clonedData.length !== Object.keys(oldDataMap).length) {
     state.heightBITree = markRaw(
-      createBITree(clonedData.length, (state.rowHeight || state.rowMinHeight))
+      createBITree(clonedData.length, state.rowHeight || state.rowMinHeight)
     )
     updateTotalHeight(state)
   }
-
-  state.rowData = clonedData
-  state.dataMap = dataMap
 
   computePartial(state)
 }
@@ -709,7 +716,8 @@ function updateTotalHeight(state: StoreState) {
 
   if (heightBITree) {
     if (currentPage && pageSize > 0 && pageSize < rowData.length) {
-      state.totalHeight = heightBITree.sum(currentPage * pageSize) - heightBITree.sum((currentPage - 1) * pageSize)
+      state.totalHeight =
+        heightBITree.sum(currentPage * pageSize) - heightBITree.sum((currentPage - 1) * pageSize)
     } else {
       state.totalHeight = heightBITree.sum() ?? 0
     }
@@ -753,7 +761,11 @@ function parseFilter(filter: FilterOptions = { able: false, options: [] }): Pars
   return { able, options: formattedOptions, multiple, active, method }
 }
 
-function filterData(filters: Record<Key, ParsedFilterOptions>, data: RowState[], isSingle: boolean) {
+function filterData(
+  filters: Record<Key, ParsedFilterOptions>,
+  data: RowState[],
+  isSingle: boolean
+) {
   const keys = Object.keys(filters)
   const usedFilter: ParsedFilterOptions[] = []
   const filterData: RowState[] = []
@@ -798,7 +810,7 @@ function filterData(filters: Record<Key, ParsedFilterOptions>, data: RowState[],
 function sortData(
   sorters: Record<Key, ParsedSorterOptions>,
   data: RowState[],
-  columns: ColumnOptions[],
+  columns: TableColumnOptions[],
   isSingle: boolean
 ) {
   const keys = Object.keys(sorters)

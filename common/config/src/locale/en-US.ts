@@ -7,6 +7,7 @@ export function enUSLocale() {
 
     calendar: {
       year: '',
+      month: '',
       month1: 'Jan',
       month2: 'Feb',
       month3: 'Mar',
@@ -28,6 +29,10 @@ export function enUSLocale() {
       week7: 'Su'
     },
 
+    checkbox: {
+      all: 'All'
+    },
+
     colorPicker: {
       confirm: 'Confrim',
       cancel: 'Cancel'
@@ -43,6 +48,11 @@ export function enUSLocale() {
       cancel: 'Cancel'
     },
 
+    drawer: {
+      confirm: 'Confrim',
+      cancel: 'Cancel'
+    },
+
     form: {
       submit: 'Submit',
       reset: 'Reset',
@@ -51,6 +61,12 @@ export function enUSLocale() {
 
     input: {
       placeholder: 'Please input'
+    },
+
+    layout: {
+      signOut: 'Sign out',
+      signType: 'Navigation Type',
+      majorColor: 'Major Color'
     },
 
     modal: {
@@ -100,6 +116,14 @@ export function enUSLocale() {
     timePicker: {
       confirm: 'Confrim',
       cancel: 'Cancel'
+    },
+
+    transfer: {
+      source: 'Source',
+      target: 'Target',
+      empty: 'No data',
+      reverse: 'Reverse selection',
+      search: 'Search (Ctrl + F)'
     },
 
     tree: {

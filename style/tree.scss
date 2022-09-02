@@ -9,13 +9,15 @@ $tree: map.merge(
   (
     label-color: inherit,
     label-color-hover: get-css-var('tree-label-color'),
+    label-color-focus: get-css-var('tree-label-color-hover'),
     label-color-selected: get-css-var('tree-label-color-hover'),
     label-color-secondary: get-css-var('content-color-secondary'),
     label-color-disabled: get-css-var('content-color-disabled'),
     label-color-readonly: get-css-var('tree-label-color'),
     label-bg-color: transparent,
     label-bg-color-hover: get-css-var('color-primary-opacity-8'),
-    label-bg-color-selected: get-css-var('tree-label-bg-color-hover'),
+    label-bg-color-focus: get-css-var('tree-label-bg-color-hover'),
+    label-bg-color-selected: get-css-var('color-primary-opacity-6'),
     label-bg-color-disabled: get-css-var('tree-label-bg-color'),
     label-bg-color-readonly: get-css-var('tree-label-bg-color'),
     label-radius: get-css-var('radius-base'),
@@ -41,11 +43,13 @@ $tree: map.merge(
 
   &__list {
     padding: 0;
+    margin: 0;
   }
 
   &__node {
     // margin: 6px 0;
     padding-top: 6px;
+    outline: 0;
   }
 
   &__content {
@@ -66,6 +70,11 @@ $tree: map.merge(
     &:hover {
       color: get-css-var('tree-label-color-hover');
       background-color: get-css-var('tree-label-bg-color-hover');
+    }
+
+    &--focused {
+      color: get-css-var('tree-label-color-focus');
+      background-color: get-css-var('tree-label-bg-color-focus');
     }
 
     &--selected,

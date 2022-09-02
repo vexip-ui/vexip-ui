@@ -1,5 +1,5 @@
 <template>
-  <CalendarPane
+  <CalendarPanel
     v-model:value="calendarValue"
     :class="nh.b()"
     :year="calendarYear"
@@ -55,7 +55,10 @@
           [nh.bem('date', 'today')]: isToday,
           [nh.bem('date', 'disabled')]: disabled
         }"
+        tabindex="0"
         @click="handleClick(date)"
+        @keydown.enter.prevent="handleClick(date)"
+        @keydown.space.prevent="handleClick(date)"
       >
         <div :class="nh.be('date-header')">
           <div :class="nh.be('date-value')">
@@ -75,7 +78,7 @@
         </div>
       </div>
     </template>
-  </CalendarPane>
+  </CalendarPanel>
 </template>
 
 <script lang="ts">
@@ -83,8 +86,8 @@ import { defineComponent, ref } from 'vue'
 import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
-import CalendarPane from './calendar-pane.vue'
-import { useNameHelper, useProps } from '@vexip-ui/config'
+import CalendarPanel from './calendar-panel.vue'
+import { useNameHelper, useProps, useLocale, eventProp, emitEvent } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 import type { Dateable } from '@vexip-ui/utils'
@@ -92,7 +95,7 @@ import type { Dateable } from '@vexip-ui/utils'
 export default defineComponent({
   name: 'Calendar',
   components: {
-    CalendarPane,
+    CalendarPanel,
     Column,
     NumberInput,
     Row
@@ -106,9 +109,10 @@ export default defineComponent({
     weekDays: Array as PropType<string[]>,
     weekStart: Number,
     today: [Number, String, Date] as PropType<Dateable>,
-    disabledDate: Function as PropType<(data: Date) => boolean>
+    disabledDate: Function as PropType<(data: Date) => boolean>,
+    onSelect: eventProp<(date: Date) => void>()
   },
-  emits: ['select', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('calendar', _props, {
       value: {
@@ -139,17 +143,18 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('calendar')
+    const locale = useLocale('calendar')
 
     const calendarValue = ref(props.value)
     const calendarYear = ref(props.year)
     const calendarMonth = ref(props.month)
 
     function formatYearInput(value: number) {
-      return `${value}年`
+      return `${value}${locale.value.year}`
     }
 
     function formatMonthInput(value: number) {
-      return `${value}月`
+      return `${value}${locale.value.month}`
     }
 
     function isDisabled(date: Date) {
@@ -165,7 +170,7 @@ export default defineComponent({
         calendarValue.value = date
       }
 
-      emit('select', date)
+      emitEvent(props.onSelect, date)
       emit('update:value', date)
     }
 

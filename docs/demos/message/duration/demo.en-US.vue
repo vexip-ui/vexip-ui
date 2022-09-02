@@ -1,13 +1,19 @@
 <template>
   <div>
-    <Button type="primary" @click="$message.info('一条消息')">
-      正常时长
+    <Button type="primary" @click="$message.info('A message')">
+      Normal
     </Button>
-    <Button type="primary" @click="$message.info({ content: '一条持续 10 秒的消息', duration: 10000 })">
-      持续10秒
+    <Button
+      type="primary"
+      @click="$message.info({ content: '10 seconds duration message', duration: 10000 })"
+    >
+      10s Duration
     </Button>
-    <Button type="primary" @click="$message.info({ content: '一条不自动关闭的消息', duration: 0, closable: true })">
-      一直持续
+    <Button
+      type="primary"
+      @click="$message.info({ content: 'A permanent message', duration: 0, closable: true })"
+    >
+      Permanent
     </Button>
   </div>
 </template>

@@ -1,3 +1,3 @@
 ### Basis Usage
 
-默认的可视区域为 3 个元素，可以设置 `view-size` 属性进行调整。
+The default viewable area is 3 elements, which can be adjusted by setting the `view-size` property.

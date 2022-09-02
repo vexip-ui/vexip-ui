@@ -35,11 +35,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, provide, onMounted } from 'vue'
 import { Renderer } from '@/components/renderer'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { isNull, isFunction, debounceMinor } from '@vexip-ui/utils'
 import { TABS_STATE } from './symbol'
 
@@ -54,9 +54,10 @@ export default defineComponent({
   },
   props: {
     card: booleanProp,
-    active: [String, Number]
+    active: [String, Number],
+    onChange: eventProp<(active: string | number) => void>()
   },
-  emits: ['change', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('tabs', _props, {
       card: false,
@@ -118,14 +119,11 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentActive, value => {
-      computeIndex()
-      emit('change', value)
-      emit('update:active', value)
-    })
     watch(currentIndex, () => {
       isTransition.value = true
     })
+
+    onMounted(computeIndex)
 
     function isActiveEmpty() {
       return isNull(currentActive.value) || currentActive.value === ''
@@ -143,6 +141,10 @@ export default defineComponent({
 
     function handleActive(label: string | number) {
       currentActive.value = label
+
+      computeIndex()
+      emitEvent(props.onChange, label)
+      emit('update:active', label)
     }
 
     return {

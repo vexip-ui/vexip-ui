@@ -12,14 +12,10 @@ $switch: map.merge(
     opacity-disabled: 60%,
     opacity-loading: get-css-var('switch-opacity-disabled'),
     s-color-focus: get-css-var('color-primary-opacity-6'),
-    shadow-focus: get-css-var('shadow-focus') get-css-var('switch-s-color-focus'),
     label-color: get-css-var('color-white'),
     height: 22px,
     signal-size: calc(get-css-var('switch-height') - 4px),
     signal-bg-color: get-css-var('color-white'),
-    // signal-b-color: get-css-var('switch-signal-bg-color'),
-    // signal-b-color-disabled: get-css-var('switch-signal-bg-color'),
-    // signal-border: get-css-var('border-shape') get-css-var('switch-signal-b-color'),
     series-span: 8px,
     icon-color: get-css-var('color-black'),
     icon-color-loading: get-css-var('color-primary-base'),
@@ -52,15 +48,21 @@ $switch: map.merge(
     get-css-var('transition-opacity');
 
   &--small {
-    @include define-preset-values('switch', (
-      height: 18px
-    ));
+    @include define-preset-values(
+      'switch',
+      (
+        height: 18px
+      )
+    );
   }
 
   &--large {
-    @include define-preset-values('switch', (
-      height: 26px
-    ));
+    @include define-preset-values(
+      'switch',
+      (
+        height: 26px
+      )
+    );
   }
 
   & + & {
@@ -68,7 +70,7 @@ $switch: map.merge(
   }
 
   &:focus-within {
-    box-shadow: get-css-var('switch-shadow-focus');
+    box-shadow: get-css-var('shadow-focus') get-css-var('switch-s-color-focus');
   }
 
   &--loading {
@@ -134,29 +136,17 @@ $switch: map.merge(
     height: $signal;
     background-color: get-css-var('switch-signal-bg-color');
     border-radius: 50%;
-    transition:
-      left get-css-var('transition-base'),
-      // width get-css-var('transition-base'),
-      get-css-var('transition-transform');
+    transition: left get-css-var('transition-base'), get-css-var('transition-transform');
     transform: translateY(-50%);
-
-    // &::after {
-    //   position: absolute;
-    //   top: 50%;
-    //   left: 50%;
-    //   width: 60%;
-    //   height: 60%;
-    //   content: '';
-    //   border: get-css-var('switch-signal-border');
-    //   border-radius: 50%;
-    //   opacity: get-css-var('switch-circle-opacity');
-    //   transition: get-css-var('transition-border');
-    //   transform: translate(-50%, -50%);
-    // }
 
     .#{$namespace}-icon {
       color: get-css-var('switch-icon-color');
     }
+  }
+
+  &--open &__signal {
+    left: calc(100% - (#{$height} - #{$signal}) * 0.5);
+    transform: translate(-100%, -50%);
   }
 
   &--loading &__signal .#{$namespace}-icon {
@@ -176,11 +166,6 @@ $switch: map.merge(
         )
       );
     }
-  }
-
-  &--open &__signal {
-    left: calc(100% - (#{$height} - #{$signal}) * 0.5);
-    transform: translate(-100%, -50%);
   }
 
   &--disabled {

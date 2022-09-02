@@ -1,28 +1,28 @@
 <template>
   <Collapse v-model:expanded="expanded" card>
-    <CollapsePane title="面板一">
+    <CollapsePanel title="Panel 1">
       <p>Some content to fill</p>
       <p>Some content to fill</p>
-    </CollapsePane>
-    <CollapsePane title="面板二">
+    </CollapsePanel>
+    <CollapsePanel title="Panel 2">
       <p>Some content to fill</p>
       <p>Some content to fill</p>
-    </CollapsePane>
-    <CollapsePane title="面板三">
+    </CollapsePanel>
+    <CollapsePanel title="Panel 3">
       <p>Some content to fill</p>
       <p>Some content to fill</p>
-    </CollapsePane>
+    </CollapsePanel>
   </Collapse>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const expanded = ref(0)
-
-    return { expanded }
-  }
-})
+const expanded = ref(0)
 </script>
+
+<style scoped>
+.vxp-collapse {
+  max-width: 500px;
+}
+</style>

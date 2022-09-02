@@ -1,3 +1,3 @@
 ### Status Point
 
-添加 `is-dot` 属性并且不使用插槽，可以将徽标设置为状态点。
+Adding the `is-dot` prop and not using slot allows you to set the badge as a status dot.

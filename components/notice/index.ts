@@ -6,7 +6,7 @@ import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-
 import type { App } from 'vue'
 import type { Key, NoticeType, NoticePlacement, NoticeOptions, NoticeInstance } from './symbol'
 
-export * from './symbol'
+export type { NoticeType, NoticePlacement, NoticeOptions }
 
 type FuzzyOptions = string | NoticeOptions
 type ManagerOptions = { marker?: boolean, duration?: number, placement?: NoticePlacement } & Record<

@@ -1,5 +1,6 @@
 export interface Store {
   isLg: boolean,
   scrollY: number,
-  isAffix: boolean
+  affixed: boolean,
+  expanded: boolean
 }

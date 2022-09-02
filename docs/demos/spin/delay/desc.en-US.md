@@ -1,7 +1,7 @@
-### 延迟变化
+### Delay Switch
 
-通过设置 `delay` 属性控制加载中的状态变化的延迟时间。
+Control the delay time for loading state changes by setting the `delay` prop.
 
-当传入 `true` 时将会默认开启显示与消失的 `500ms` 延迟，通过传入数字可以控制该毫秒数。
+When `true` is passed in, `500ms` delay of showing and disappearing will be enabled by default, and the number of milliseconds can be controlled by passing in a number.
 
-当想要在显示与消失分别获得不一样的延迟时长时，可以传入一个包含两个数字的数组进行分别的控制。
+When you want to obtain different delay durations for display and disappearance, you can pass in an array containing two numbers for separate control.

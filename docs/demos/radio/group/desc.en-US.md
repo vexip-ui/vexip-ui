@@ -1,3 +1,3 @@
-### 单选框组
+### Radio Group
 
-使用单选框组可以轻松的通过数组结构生成系列单选框，这也是更常用的做法。
+Using a radio group can easily generate a series of radios through a list, which is also a more common usage.

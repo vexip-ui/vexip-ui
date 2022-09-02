@@ -1,8 +1,8 @@
 <template>
   <div
     ref="wrapper"
-    :class="nh.b()"
-    v-bind="$attrs"
+    :class="[nh.b(), props.maxLines > 0 && nh.bm('multiple')]"
+    :style="ellipsisStyle"
     @mouseenter="handleTriggerEnter"
     @mouseleave="handleTriggerLeave"
   >
@@ -57,26 +57,28 @@ export default defineComponent({
     transitionName: String,
     tooltipTheme: String as PropType<TooltipTheme>,
     tipClass: classProp,
+    maxLines: Number,
     tipMaxWidth: [Number, String]
   },
   setup(_props) {
+    const nh = useNameHelper('ellipsis')
     const props = useProps('ellipsis', _props, {
       placement: {
         default: 'top',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       transfer: 'body',
       noHover: false,
-      transitionName: 'vxp-fade',
+      transitionName: () => nh.ns('fade'),
       tooltipTheme: {
-        default: 'dark' as TooltipTheme,
-        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+        default: 'dark',
+        validator: value => ['light', 'dark'].includes(value)
       },
       tipClass: null,
+      maxLines: null,
       tipMaxWidth: 500
     })
 
-    const nh = useNameHelper('ellipsis')
     const tooltipNh = useNameHelper('tooltip')
     const visible = ref(false)
     const active = ref(false)
@@ -92,7 +94,9 @@ export default defineComponent({
       wrapper,
       reference: wrapper
     })
-
+    const ellipsisStyle = computed(() => {
+      return props.maxLines > 0 ? { '-webkit-line-clamp': props.maxLines } : ''
+    })
     const tipStyle = computed(() => {
       return {
         maxWidth:
@@ -116,21 +120,29 @@ export default defineComponent({
       timer.hover = window.setTimeout(() => {
         if (!wrapper.value || !wrapper.value.childNodes.length) {
           visible.value = false
-
           return
         }
+        // In the case of multiple lines, use visual height and real content height to control whether to display
+        if (props.maxLines > 0) {
+          const scrollHeight = wrapper.value.scrollHeight
+          const clientHeight = wrapper.value.clientHeight
 
-        const range = document.createRange()
+          visible.value = scrollHeight > clientHeight
+        } else {
+          const range = document.createRange()
 
-        range.setStart(wrapper.value, 0)
-        range.setEnd(wrapper.value, wrapper.value.childNodes.length)
+          range.setStart(wrapper.value, 0)
+          range.setEnd(wrapper.value, wrapper.value.childNodes.length)
 
-        const rangeWidth = range.getBoundingClientRect().width
-        const computedStyle = getComputedStyle(wrapper.value)
-        const horizontalPending =
-          parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
+          const rangeWidth = range.getBoundingClientRect().width
+          const computedStyle = getComputedStyle(wrapper.value)
+          const horizontalPending =
+            parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
 
-        visible.value = rangeWidth + horizontalPending > wrapper.value.getBoundingClientRect().width
+          visible.value =
+            rangeWidth + (horizontalPending || 0) > wrapper.value.getBoundingClientRect().width
+        }
+
         content.value = visible.value ? wrapper.value.textContent ?? '' : ''
 
         nextTick(() => {
@@ -156,6 +168,7 @@ export default defineComponent({
       content,
       transferTo,
 
+      ellipsisStyle,
       tipStyle,
 
       wrapper,

@@ -1,28 +1,28 @@
 <template>
   <Collapse v-model:expanded="expanded">
-    <CollapsePane title="面板一">
+    <CollapsePanel title="面板一">
       <p>一些内容一些内容一些内容</p>
       <p>一些内容一些内容一些内容</p>
-    </CollapsePane>
-    <CollapsePane title="面板二">
+    </CollapsePanel>
+    <CollapsePanel title="面板二">
       <p>一些内容一些内容一些内容</p>
       <p>一些内容一些内容一些内容</p>
-    </CollapsePane>
-    <CollapsePane title="面板三">
+    </CollapsePanel>
+    <CollapsePanel title="面板三">
       <p>一些内容一些内容一些内容</p>
       <p>一些内容一些内容一些内容</p>
-    </CollapsePane>
+    </CollapsePanel>
   </Collapse>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const expanded = ref(0)
-
-    return { expanded }
-  }
-})
+const expanded = ref(0)
 </script>
+
+<style scoped>
+.vxp-collapse {
+  max-width: 500px;
+}
+</style>

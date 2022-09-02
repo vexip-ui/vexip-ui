@@ -1,5 +1,5 @@
 ### List Separation
 
-添加 `hidden-files` 属性可以禁用内部的文件列表显示。
+Add the `hidden-files` prop to disable the internal file listing display.
 
-同时配合 UploadList 组件可以达到单独文件列表的效果，当然你可以自己写。
+And you can achieve the effect of a separate file list with the UploadList component. Of course you can write it by yourself.

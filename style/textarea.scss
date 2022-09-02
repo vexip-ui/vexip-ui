@@ -42,10 +42,28 @@ $textarea: map.merge(
     resize: none;
   }
 
-  &__count {
+  &__extra {
     position: absolute;
     right: 7px;
     bottom: 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__loading {
+    position: relative;
+    right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: get-css-var('input-icon-color');
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &__count {
+    margin-left: 4px;
     font-size: get-css-var('textarea-count-font-size');
     line-height: get-css-var('textarea-count-line-height');
     color: get-css-var('textarea-count-color');

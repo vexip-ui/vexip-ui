@@ -13,7 +13,6 @@ $modal: map.merge(
     s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('modal-s-color'),
     d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-shape') get-css-var('modal-d-color'),
     title-font-size: get-css-var('font-size-primary'),
     title-weight: 500,
     title-color: get-css-var('content-color-primary'),
@@ -77,7 +76,7 @@ $modal: map.merge(
     display: flex;
     align-items: center;
     padding: get-css-var('modal-header-v-padding') get-css-var('modal-header-h-padding');
-    border-bottom: get-css-var('modal-divider');
+    border-bottom: get-css-var('border-shape') get-css-var('modal-d-color');
   }
 
   &--draggable &__header {
@@ -86,6 +85,7 @@ $modal: map.merge(
   }
 
   &__title {
+    flex: 1 0 0;
     font-size: get-css-var('modal-title-font-size');
     font-weight: get-css-var('modal-title-weight');
     color: get-css-var('modal-title-color');
@@ -102,20 +102,24 @@ $modal: map.merge(
     align-items: center;
     justify-content: flex-end;
     padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding');
-    border-top: get-css-var('modal-divider');
+    border-top: get-css-var('border-shape') get-css-var('modal-d-color');
   }
 
   &__close {
-    position: absolute;
-    top: 50%;
-    right: 14px;
     display: flex;
+    align-items: center;
+    height: 24px;
+    padding: 0;
+    margin-left: 6px;
     color: get-css-var('modal-close-color');
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     transition: get-css-var('transition-color');
-    transform: translateY(-50%);
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('modal-close-color-hover');
     }
   }

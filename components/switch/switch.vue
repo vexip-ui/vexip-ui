@@ -1,5 +1,6 @@
 <template>
   <label
+    :id="idFor"
     :class="className"
     role="switch"
     :aria-checked="currentValue"
@@ -15,9 +16,11 @@
     </span>
     <span :class="nh.be('signal')" :style="signalStyle">
       <slot v-if="props.loading" name="loading">
-        <Icon pulse>
-          <Spinner></Spinner>
-        </Icon>
+        <Icon
+          :spin="props.loadingSpin"
+          :pulse="!props.loadingSpin"
+          :icon="props.loadingIcon"
+        ></Icon>
       </slot>
       <slot v-else name="icon" :value="currentValue">
         <Icon v-if="currentValue && props.openIcon" :icon="props.openIcon"></Icon>
@@ -33,6 +36,7 @@
       </span>
     </span>
     <input
+      ref="input"
       type="checkbox"
       :class="nh.be('input')"
       :checked="currentValue"
@@ -43,11 +47,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { VALIDATE_FIELD } from '@/components/form-item'
-import { useNameHelper, useProps, booleanProp, sizeProp, stateProp, createSizeProp, createStateProp } from '@vexip-ui/config'
-import { isPromise, noop } from '@vexip-ui/utils'
+import { useFieldStore } from '@/components/form'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  sizeProp,
+  stateProp,
+  createSizeProp,
+  createStateProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
+import { isPromise } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -55,8 +69,7 @@ import type { PropType } from 'vue'
 export default defineComponent({
   name: 'Switch',
   components: {
-    Icon,
-    Spinner
+    Icon
   },
   props: {
     size: sizeProp,
@@ -66,28 +79,33 @@ export default defineComponent({
     openColor: String,
     closeColor: String,
     loading: booleanProp,
-    icon: Object,
+    loadingIcon: Object,
+    loadingSpin: booleanProp,
     openIcon: Object,
     closeIcon: Object,
     openText: String,
     closeText: String,
     onBeforeChange: Function as PropType<(checked: boolean) => unknown>,
-    disableValidate: booleanProp
+    onChange: eventProp<(value: boolean) => void>()
   },
-  emits: ['change', 'update:value'],
+  emits: ['update:value'],
   setup(_props, { emit }) {
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<boolean>(() => input.value?.focus())
+
     const props = useProps('switch', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       value: {
-        default: false,
+        default: () => getFieldValue(false),
         static: true
       },
-      disabled: false,
+      disabled: () => disabled.value,
       openColor: '',
       closeColor: '',
-      loading: false,
-      icon: null,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingSpin: false,
       openIcon: null,
       closeIcon: null,
       openText: '',
@@ -95,14 +113,13 @@ export default defineComponent({
       onBeforeChange: {
         default: null,
         isFunc: true
-      },
-      disableValidate: false
+      }
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
 
     const nh = useNameHelper('switch')
     const currentValue = ref(props.value)
+
+    const input = ref<HTMLElement | null>(null)
 
     const className = computed(() => {
       return [
@@ -138,12 +155,10 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
-      emit('change', value)
+      setFieldValue(value)
+      emitEvent(props.onChange, value)
       emit('update:value', value)
-
-      if (!props.disableValidate) {
-        validateField()
-      }
+      validateField()
     })
 
     async function handleChange(checked = !currentValue.value) {
@@ -167,12 +182,15 @@ export default defineComponent({
     return {
       props,
       nh,
+      idFor,
       currentValue,
 
       className,
       style,
       signalStyle,
       isDisabled,
+
+      input,
 
       handleChange
     }

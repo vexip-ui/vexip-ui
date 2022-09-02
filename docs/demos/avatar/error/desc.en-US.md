@@ -1,5 +1,5 @@
 ### Fallback
 
-当使用图片时，加载失败会触发事件回调。
+When using an image, an error event will be emiited if the image load fails.
 
-如果你设置了 `fallback-src` 那会尝试使用该值作为源地址重新加载。
+it will try to reload using the value as the source address if you set `fallback-src` prop.

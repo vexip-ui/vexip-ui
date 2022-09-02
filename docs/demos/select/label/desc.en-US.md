@@ -1,3 +1,5 @@
-### Custom Label
+### Get Label
 
-有的场合，需要选项显示内容、选择器显示内容、选项值均不相同，可以结合选项的 `label` 属性和插槽实现。
+When you need to quickly get the `label` value, you can get it through the `@update:label` event.
+
+Of course you can use `v-model:label` as in the example, but the component will not update option according to `label`.

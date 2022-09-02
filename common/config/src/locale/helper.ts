@@ -10,6 +10,7 @@ export interface LocaleConfig {
 
   calendar: {
     year: string,
+    month: string,
     month1: string,
     month2: string,
     month3: string,
@@ -31,6 +32,10 @@ export interface LocaleConfig {
     week7: string
   },
 
+  checkbox: {
+    all: string
+  },
+
   colorPicker: {
     confirm: string,
     cancel: string
@@ -46,6 +51,11 @@ export interface LocaleConfig {
     cancel: string
   },
 
+  drawer: {
+    confirm: string,
+    cancel: string
+  },
+
   form: {
     submit: string,
     reset: string,
@@ -54,6 +64,12 @@ export interface LocaleConfig {
 
   input: {
     placeholder: string
+  },
+
+  layout: {
+    signOut: string,
+    signType: string,
+    majorColor: string
   },
 
   modal: {
@@ -103,6 +119,14 @@ export interface LocaleConfig {
   timePicker: {
     confirm: string,
     cancel: string
+  },
+
+  transfer: {
+    source: string,
+    target: string,
+    empty: string,
+    reverse: string,
+    search: string
   },
 
   tree: {

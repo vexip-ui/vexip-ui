@@ -12,7 +12,7 @@ $slider: map.merge(
     track-height: 4px,
     filler-bg-color: get-css-var('color-primary-base'),
     filler-bg-color-disabled: get-css-var('fill-color-disabled'),
-    handler-size: 14px,
+    handler-size: 16px,
     handler-bg-color: get-css-var('color-white'),
     handler-b-width: 2px,
     handler-b-color: get-css-var('color-primary-base'),
@@ -39,7 +39,10 @@ $slider: map.merge(
 
   @include basis;
 
-  $padding: max(0px, calc((get-css-var('slider-handler-size') - get-css-var('slider-track-height')) * 0.5));
+  $padding: max(
+    0px,
+    calc((get-css-var('slider-handler-size') - get-css-var('slider-track-height')) * 0.5)
+  );
   $margin: calc(get-css-var('slider-handler-size') * 0.5 + 1px);
 
   position: relative;
@@ -53,6 +56,10 @@ $slider: map.merge(
     height: 100%;
     padding: 0 $padding;
     margin: $margin 2px;
+  }
+
+  &--loading {
+    cursor: auto;
   }
 
   &--disabled {
@@ -114,12 +121,15 @@ $slider: map.merge(
   }
 
   &__handler {
+    @include round-border(get-css-var('slider-handler-b-color'));
+
     width: $handler-size;
     height: $handler-size;
     cursor: pointer;
     background-color: get-css-var('slider-handler-bg-color');
     border: get-css-var('slider-handler-b-width') solid get-css-var('slider-handler-b-color');
     border-radius: $handler-size;
+    outline: 0;
     box-shadow: get-css-var('slider-handler-shadow');
     transition: get-css-var('transition-shadow'), get-css-var('transition-transform');
 
@@ -131,6 +141,18 @@ $slider: map.merge(
     &:focus {
       box-shadow: get-css-var('slider-handler-shadow-focus');
       transform: scale(get-css-var('slider-handler-scale-focus'));
+    }
+
+    &::before {
+      top: 2px;
+      left: 2px;
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      opacity: 0%;
+    }
+
+    &--active::before {
+      opacity: 100%;
     }
   }
 
@@ -165,11 +187,13 @@ $slider: map.merge(
 
   @each $state in $states {
     &--#{$state} {
-      @include define-slider-style((
-        filler-bg-color: 'color' $state 'base',
-        handler-b-color: 'color' $state 'base',
-        handler-s-color: 'color' state 'light-6'
-      ));
+      @include define-slider-style(
+        (
+          filler-bg-color: 'color' $state 'base',
+          handler-b-color: 'color' $state 'base',
+          handler-s-color: 'color' state 'light-6'
+        )
+      );
     }
   }
 }

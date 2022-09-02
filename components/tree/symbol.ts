@@ -2,6 +2,7 @@ import type { InjectionKey } from 'vue'
 
 export type Key = string | number
 export type Data = Record<string, any>
+export type NodeDropType = 'before' | 'inner' | 'after'
 
 export interface NodeKeyConfig {
   id?: string,
@@ -20,13 +21,13 @@ export interface NodeKeyConfig {
   checkbox?: string
 }
 
-export enum DropType {
-  BEFORE,
-  INNER,
-  AFTER
+export const enum DropType {
+  BEFORE = 'before',
+  INNER = 'inner',
+  AFTER = 'after'
 }
 
-export type TreeNodeProps = {
+export type TreeNodeProps<D = Data> = {
   id: Key,
   parent: Key,
   children: TreeNodeProps[],
@@ -40,7 +41,7 @@ export type TreeNodeProps = {
   readonly: boolean,
   arrow: boolean | 'auto',
   checkbox: boolean,
-  data: Data,
+  data: D,
   /* @internal */
   partial: boolean,
   /* @internal */
@@ -51,10 +52,13 @@ export type TreeNodeProps = {
   upperMatched: boolean
 }
 
-export type RenderFn = (data: { data: Data, node: TreeNodeProps }) => any
-export type AsyncLoadFn = (node: Readonly<TreeNodeProps>) => void | boolean | Promise<any>
-export type FilterFn = (data: Data, node: TreeNodeProps) => boolean
-export type NodePropsFn = (data: Data, node: TreeNodeProps) => Data
+export type RenderFn<D = Data> = (data: { data: D, node: TreeNodeProps<D> }) => any
+export type AsyncLoadFn<D = Data> = (
+  data: D,
+  node: Readonly<TreeNodeProps<D>>
+) => void | boolean | Promise<any>
+export type FilterFn<D = Data> = (data: D, node: TreeNodeProps<D>) => boolean
+export type NodePropsFn<D = Data> = (data: D, node: TreeNodeProps<D>) => Data
 
 export interface TreeNodeInstance {
   el: HTMLElement | null,
@@ -69,6 +73,7 @@ export interface TreeState {
   renderer: RenderFn,
   dragging: boolean,
   boundAsyncLoad: boolean,
+  updateVisibleNodeEls(): void,
   computeCheckedState(originNode: TreeNodeProps, able: boolean): void,
   handleNodeClick(node: TreeNodeProps): void,
   handleNodeSelect(node: TreeNodeProps): void,
@@ -79,10 +84,13 @@ export interface TreeState {
   handleNodeDragStart(nodeInstance: TreeNodeInstance): void,
   handleNodeDragOver(nodeInstance: TreeNodeInstance, event: DragEvent): void,
   handleNodeDrop(nodeInstance: TreeNodeInstance): void,
-  handleNodeDragEnd(nodeInstance: TreeNodeInstance): void
+  handleNodeDragEnd(nodeInstance: TreeNodeInstance): void,
+  handleHittingChange(type: 'up' | 'down'): void,
+  handleNodeHitting(nodeEl: HTMLElement | null): void
 }
 
 export interface TreeNodePropsState {
+  el: HTMLElement | null,
   depth: number,
   disabled: boolean,
   readonly: boolean

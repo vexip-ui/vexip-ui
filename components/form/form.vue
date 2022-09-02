@@ -1,15 +1,27 @@
 <template>
-  <form :class="className" :method="props.action && props.method" :action="props.action">
+  <Row
+    v-bind="$attrs"
+    :class="className"
+    tag="form"
+    :method="props.action && props.method"
+    :action="props.action"
+    :gap="props.gap"
+    :justify="props.justify"
+    :align="props.align"
+    :column-flex="undefined"
+  >
     <slot></slot>
-  </form>
+  </Row>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, provide, ref } from 'vue'
+import { defineComponent, reactive, computed, provide } from 'vue'
+import { Row } from '@/components/row'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
 import type { PropType } from 'vue'
+import type { RowGridJustify, RowGridAlign } from '@/components/row'
 import type { LabelPosition, SubmitMethod, FieldOptions } from './symbol'
 
 const submitMethods = Object.freeze<SubmitMethod>(['get', 'post', 'put', 'delete'])
@@ -17,18 +29,27 @@ const labelPropstions = Object.freeze<LabelPosition>(['right', 'top', 'left'])
 
 export default defineComponent({
   name: 'Form',
+  components: {
+    Row
+  },
+  inheritAttrs: true,
   props: {
     method: String as PropType<SubmitMethod>,
     action: String,
     model: Object,
     rules: Object,
-    labelWidth: Number,
+    labelWidth: [Number, String] as PropType<number | 'auto'>,
     labelPosition: String as PropType<LabelPosition>,
     allRequired: booleanProp,
     labelSuffix: String,
     hideAsterisk: booleanProp,
     validateAll: booleanProp,
-    hideLabel: booleanProp
+    hideLabel: booleanProp,
+    disabled: booleanProp,
+    loading: booleanProp,
+    gap: [Number, Array] as PropType<number | number[]>,
+    justify: String as PropType<RowGridJustify>,
+    align: String as PropType<RowGridAlign>
   },
   setup(_props) {
     const props = useProps('form', _props, {
@@ -42,7 +63,7 @@ export default defineComponent({
         static: true
       },
       rules: () => ({}),
-      labelWidth: 80,
+      labelWidth: 'auto',
       labelPosition: {
         default: 'right' as LabelPosition,
         validator: (value: LabelPosition) => labelPropstions.includes(value)
@@ -51,19 +72,28 @@ export default defineComponent({
       labelSuffix: '',
       hideAsterisk: false,
       validateAll: false,
-      hideLabel: false
+      hideLabel: false,
+      disabled: false,
+      loading: false,
+      gap: [8, 0],
+      justify: 'start',
+      align: 'top'
     })
 
     const nh = useNameHelper('form')
-    const fieldSet = ref(new Set<FieldOptions>())
+    const fieldSet = reactive(new Set<FieldOptions>())
 
     const className = computed(() => {
       return [nh.b(), nh.bs('vars'), nh.bm(`label-${props.labelPosition}`)]
+    })
+    const labelWidth = computed(() => {
+      return Math.max(...Array.from(fieldSet).map(field => field.labelWidth.value))
     })
 
     provide(FORM_PROPS, props)
     provide(FORM_FIELDS, fieldSet)
     provide(FORM_ACTIONS, {
+      getLabelWidth,
       validate,
       validateFields,
       reset,
@@ -72,12 +102,20 @@ export default defineComponent({
       clearFieldsError
     })
 
+    function getLabelWidth() {
+      if (typeof props.labelWidth === 'number') {
+        return props.labelWidth
+      }
+
+      return labelWidth.value
+    }
+
     function getPropMap() {
       const propMap: Record<string, FieldOptions> = {}
 
-      for (const field of fieldSet.value) {
-        if (field.prop) {
-          propMap[field.prop] = field
+      for (const field of fieldSet) {
+        if (field.prop.value) {
+          propMap[field.prop.value] = field
         }
       }
 
@@ -85,7 +123,7 @@ export default defineComponent({
     }
 
     function validate() {
-      return validateItems(fieldSet.value)
+      return validateItems(fieldSet)
     }
 
     function validateFields(props: string | string[]) {
@@ -120,7 +158,7 @@ export default defineComponent({
     }
 
     function reset() {
-      fieldSet.value.forEach(field => {
+      fieldSet.forEach(field => {
         field.reset()
       })
     }
@@ -140,7 +178,7 @@ export default defineComponent({
     }
 
     function clearError() {
-      fieldSet.value.forEach(field => {
+      fieldSet.forEach(field => {
         field.clearError()
       })
     }

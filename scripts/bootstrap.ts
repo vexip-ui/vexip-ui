@@ -10,7 +10,7 @@ main().catch(error => {
 })
 
 async function main() {
-  const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice']
+  const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice', 'toast']
   const ignores: string[] = []
   const exportComponents = allComponents.filter(c => !ignores.includes(c))
   const components = exportComponents.filter(c => !plugins.includes(c))
@@ -41,8 +41,8 @@ async function main() {
     export { buildInstall }
     export const install = buildInstall(components)
 
-    export {
-      ${exportComponents.map(toCapitalCase).join(',\n')}
+    ${
+      exportComponents.map(component => `export * from './${component}'`).join('\n')
     }
   `
 

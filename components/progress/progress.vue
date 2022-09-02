@@ -1,5 +1,11 @@
 <template>
-  <div :class="className">
+  <div
+    :class="className"
+    role="progressbar"
+    :aria-valuenow="percentValue"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  >
     <div :class="nh.be('track')" :style="trackStyle">
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
       <div v-if="props.infoType === 'inside'" :class="nh.be('info')" :style="infoStyle">
@@ -52,7 +58,14 @@ export type ProgressInfoType =
 
 type StrokeColor = string | [string, string] | ((percentage: number) => string | [string, string])
 
-const infoTypes = Object.freeze<ProgressInfoType>(['outside', 'inside', 'bubble', 'bubble-top', 'bubble-bottom', 'none'])
+const infoTypes = Object.freeze<ProgressInfoType>([
+  'outside',
+  'inside',
+  'bubble',
+  'bubble-top',
+  'bubble-bottom',
+  'none'
+])
 
 export default defineComponent({
   name: 'Progress',
@@ -71,19 +84,19 @@ export default defineComponent({
     const props = useProps('progress', _props, {
       percentage: {
         default: 0,
-        validator: (value: number) => value >= 0 && value <= 100,
+        validator: value => value >= 0 && value <= 100,
         static: true
       },
       strokeWidth: 8,
       infoType: {
-        default: 'outside' as ProgressInfoType,
-        validator: (value: ProgressInfoType) => infoTypes.includes(value)
+        default: 'outside',
+        validator: value => infoTypes.includes(value)
       },
       precision: 2,
       activated: false,
       strokeColor: {
         default: null,
-        validator: (value: StrokeColor) => !(Array.isArray(value) && (!value[0] || !value[1]))
+        validator: value => !(Array.isArray(value) && (!value[0] || !value[1]))
       }
     })
 

@@ -1,27 +1,27 @@
 <template>
   <Tabs>
-    <TabPane label="标签页1">
-      <p>标签页一的内容。</p>
-    </TabPane>
-    <TabPane label="标签页2" :icon="ChartArea">
-      <p>标签页二的内容。</p>
-    </TabPane>
-    <TabPane label="标签页3">
-      <p>标签页三的内容。</p>
-    </TabPane>
+    <TabPanel label="Tab 1">
+      <p>Some content for Tab 1.</p>
+    </TabPanel>
+    <TabPanel label="Tab 2" :icon="ChartArea">
+      <p>Some content for Tab 2.</p>
+    </TabPanel>
+    <TabPanel label="Tab 3">
+      <p>Some content for Tab 3.</p>
+    </TabPanel>
   </Tabs>
   <br />
   <br />
   <Tabs card>
-    <TabPane label="标签页1">
-      <p>标签页一的内容。</p>
-    </TabPane>
-    <TabPane label="标签页2" :icon="ChartArea">
-      <p>标签页二的内容。</p>
-    </TabPane>
-    <TabPane label="标签页3">
-      <p>标签页三的内容。</p>
-    </TabPane>
+    <TabPanel label="Tab 1">
+      <p>Some content for Tab 1.</p>
+    </TabPanel>
+    <TabPanel label="Tab 2" :icon="ChartArea">
+      <p>Some content for Tab 2.</p>
+    </TabPanel>
+    <TabPanel label="Tab 3">
+      <p>Some content for Tab 3.</p>
+    </TabPanel>
   </Tabs>
 </template>
 

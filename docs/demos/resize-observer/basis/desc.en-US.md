@@ -1,3 +1,3 @@
-### 简单例子
+### Simple Example
 
-尝试缩放一下该元素。
+Try to resize this element.

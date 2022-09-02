@@ -1,11 +1,11 @@
 <template>
-  <div :class="nh.b()">
+  <div :class="[nh.b(), nh.bm(placement)]">
     <PopupItem
       v-for="item in items"
       :key="item.key"
       ref="instances"
       :state="item"
-      :transition-name="transitionName"
+      :transition-name="transition"
       :inner-class="innerClass"
       :style="getItemStyle(item)"
     >
@@ -59,7 +59,7 @@ export default defineComponent({
   props: {
     transitionName: {
       type: String,
-      default: 'vxp-popup-top'
+      default: null
     },
     innerClass: {
       type: classProp,
@@ -90,6 +90,7 @@ export default defineComponent({
     const placementArray = computed(() => {
       return props.placement.split('-') as ['top' | 'bottom', 'right' | 'center' | 'left']
     })
+    const transition = computed(() => props.transitionName || nh.ns('popup-top'))
 
     provide(DELETE_HANDLER, deleteItem)
 
@@ -131,8 +132,8 @@ export default defineComponent({
         })
 
         if (!pending) {
-          queueOut()
           pending = true
+          queueOut()
         }
       })
     }
@@ -156,8 +157,8 @@ export default defineComponent({
         })
 
         if (!pending) {
-          queueOut()
           pending = true
+          queueOut()
         }
       })
     }
@@ -172,9 +173,7 @@ export default defineComponent({
           removeItem(state.param)
         }
 
-        requestAnimationFrame(() => {
-          queueOut()
-        })
+        requestAnimationFrame(queueOut)
       } else {
         pending = false
       }
@@ -196,22 +195,24 @@ export default defineComponent({
           }
         })
 
-        item = reactive(Object.assign(
-          {
-            key,
-            content: '',
-            closable: false,
-            onOpen: noop,
-            onClose: noop
-          },
-          options,
-          {
-            // zIndex,
-            height: 0,
-            visible: true,
-            verticalPosition: currentVertical
-          }
-        ))
+        item = reactive(
+          Object.assign(
+            {
+              key,
+              content: '',
+              closable: false,
+              onOpen: noop,
+              onClose: noop
+            },
+            options,
+            {
+              // zIndex,
+              height: 0,
+              visible: true,
+              verticalPosition: currentVertical
+            }
+          )
+        )
 
         items.value.push(item)
       }
@@ -262,6 +263,7 @@ export default defineComponent({
     return {
       nh,
       items,
+      transition,
 
       wrapper,
 

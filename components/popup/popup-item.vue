@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject, onMounted, nextTick } from 'vue'
+import { defineComponent, ref, computed, inject, onMounted, nextTick } from 'vue'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper, useZIndex, classProp } from '@vexip-ui/config'
 import { noop } from '@vexip-ui/utils'
@@ -44,7 +44,7 @@ export default defineComponent({
     },
     transitionName: {
       type: String,
-      default: 'vxp-popup-top'
+      default: null
     },
     innerClass: {
       type: classProp,
@@ -53,8 +53,11 @@ export default defineComponent({
   },
   setup(props) {
     const handleDelete = inject(DELETE_HANDLER, noop)
+    const nh = useNameHelper('popup')
 
     const wrapper = ref<HTMLElement | null>(null)
+
+    const transition = computed(() => props.transitionName || nh.ns('popup-top'))
 
     onMounted(() => {
       nextTick(() => {
@@ -67,8 +70,9 @@ export default defineComponent({
     })
 
     return {
-      nh: useNameHelper('popup'),
+      nh,
       zIndex: useZIndex(),
+      transition,
 
       wrapper,
 

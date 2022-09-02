@@ -33,8 +33,16 @@
 
 <script lang="ts">
 import { defineComponent, ref, inject } from 'vue'
-import { Button, buttonTypes } from '@/components/button'
-import { useNameHelper, useProps, useLocale, booleanProp, sizeProp } from '@vexip-ui/config'
+import { Button } from '@/components/button'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  sizeProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { noop, isPromise } from '@vexip-ui/utils'
 import { FORM_PROPS, FORM_ACTIONS } from './symbol'
 
@@ -64,16 +72,15 @@ export default defineComponent({
     buttonType: String as PropType<ButtonAttrType>,
     block: booleanProp,
     tag: String,
-    onBeforeSubmit: Function as PropType<() => unknown>
+    onBeforeSubmit: Function as PropType<() => unknown>,
+    onSubmit: eventProp(),
+    onError: eventProp<(errors: string[]) => void>()
   },
-  emits: ['submit', 'error'],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('form-submit', _props, {
       size: null,
-      type: {
-        default: 'primary' as ButtonType,
-        validator: (value: ButtonType) => buttonTypes.includes(value)
-      },
+      type: 'primary',
       label: null,
       dashed: null,
       text: null,
@@ -95,6 +102,7 @@ export default defineComponent({
 
     const formProps = inject(FORM_PROPS, {})
     const actions = inject<FormActions>(FORM_ACTIONS, {
+      getLabelWidth: noop,
       validate: noop,
       validateFields: noop,
       reset: noop,
@@ -115,7 +123,7 @@ export default defineComponent({
       const errors = await actions.validate()
 
       if (errors.length) {
-        emit('error', errors)
+        emitEvent(props.onError, errors)
       } else {
         let result: unknown = true
 
@@ -128,7 +136,7 @@ export default defineComponent({
         }
 
         if (result !== false) {
-          emit('submit')
+          emitEvent(props.onSubmit)
           submit.value?.click()
         }
       }

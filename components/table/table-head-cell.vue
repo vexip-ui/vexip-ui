@@ -1,5 +1,11 @@
 <template>
-  <div ref="wrapper" :class="className" :style="style">
+  <div
+    ref="wrapper"
+    :class="className"
+    role="columnheader"
+    :style="style"
+    :aria-sort="sorter.type ? (sorter.type === 'asc' ? 'ascending' : 'descending') : 'none'"
+  >
     <Checkbox
       v-if="isSelection(column)"
       control
@@ -57,10 +63,12 @@
         [nh.bem('filter-wrapper', 'multiple')]: filter.multiple
       }"
     >
-      <div :class="nh.be('filter-trigger')">
-        <Icon><Filter></Filter></Icon>
-      </div>
-      <template v-if="filter.multiple" #tip>
+      <template #trigger>
+        <div :class="nh.be('filter-trigger')">
+          <Icon><Filter></Filter></Icon>
+        </div>
+      </template>
+      <template v-if="filter.multiple" #default>
         <div vertical :class="nh.be('filter-group')">
           <Checkbox
             v-for="item in filter.options"
@@ -85,7 +93,7 @@
           </Button>
         </div>
       </template>
-      <template v-else #tip>
+      <template v-else #default>
         <div
           :class="{
             [nh.be('filter-item')]: true,

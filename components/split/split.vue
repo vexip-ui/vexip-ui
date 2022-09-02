@@ -1,13 +1,13 @@
 <template>
   <div ref="wrapper" :class="className" @transitionend="removeTransition">
     <div
-      :class="[nh.be('pane'), nh.bem('pane', props.vertical ? 'top' : 'left')]"
+      :class="[nh.be('panel'), nh.bem('panel', props.vertical ? 'top' : 'left')]"
       :style="leftPaneStyle"
     >
       <slot name="left"></slot>
     </div>
     <div
-      :class="[nh.be('pane'), nh.bem('pane', props.vertical ? 'bottom' : 'right')]"
+      :class="[nh.be('panel'), nh.bem('panel', props.vertical ? 'bottom' : 'right')]"
       :style="rightPaneStyle"
     >
       <slot name="right"></slot>
@@ -15,14 +15,14 @@
     <div :class="nh.be('trigger')" :style="triggerStyle">
       <div ref="handler" :class="nh.be('handler')">
         <template v-if="props.canFull">
-          <div
+          <button
             :class="[nh.be('button'), nh.bem('button', `${props.vertical ? 'top' : 'left'}-full`)]"
             @pointerdown.stop
             @click.left="handleFull(-1)"
           >
             <Icon :icon="fullIcons[0]" :scale="0.6"></Icon>
-          </div>
-          <div
+          </button>
+          <button
             :class="[
               nh.be('button'),
               nh.bem('button', `${props.vertical ? 'bottom' : 'right'}-full`)
@@ -31,7 +31,7 @@
             @click.left="handleFull(1)"
           >
             <Icon :icon="fullIcons[1]" :scale="0.6"></Icon>
-          </div>
+          </button>
         </template>
         <template v-else>
           <slot name="handler">
@@ -47,7 +47,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/mixins'
 import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
 
@@ -63,17 +63,15 @@ export default defineComponent({
     vertical: booleanProp,
     noTransition: booleanProp,
     lazy: booleanProp,
-    canFull: booleanProp
+    canFull: booleanProp,
+    onChange: eventProp<(value: number) => void>(),
+    onFull: eventProp<(type: 'top' | 'right' | 'bottom' | 'left') => void>(),
+    onReset: eventProp(),
+    onMoveStart: eventProp<(value: number) => void>(),
+    onMove: eventProp<(value: number) => void>(),
+    onMoveEnd: eventProp<(value: number) => void>()
   },
-  emits: [
-    'change',
-    'full',
-    'reset',
-    'move',
-    'move-start',
-    'move-end',
-    'update:value'
-  ],
+  emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('split', _props, {
       value: {
@@ -123,7 +121,7 @@ export default defineComponent({
           guide.value.style.display = 'block'
         }
 
-        emit('move-start', currentValue.value)
+        emitEvent(props.onMoveStart, currentValue.value)
       },
       onMove: state => {
         const outer = state.outer as number
@@ -143,7 +141,7 @@ export default defineComponent({
           currentValue.value = value
         }
 
-        emit('move', value)
+        emitEvent(props.onMove, value)
       },
       onEnd: state => {
         if (guide.value) {
@@ -160,7 +158,7 @@ export default defineComponent({
           currentValue.value = target
         }
 
-        emit('move-end', currentValue.value)
+        emitEvent(props.onMoveEnd, currentValue.value)
       }
     })
 
@@ -234,7 +232,7 @@ export default defineComponent({
       }
     )
     watch(currentValue, value => {
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:value', value)
 
       if (guide.value) {
@@ -253,9 +251,9 @@ export default defineComponent({
           type = value < 0 ? 'left' : 'right'
         }
 
-        emit('full', type)
+        emitEvent(props.onFull, type)
       } else {
-        emit('reset')
+        emitEvent(props.onReset)
       }
     })
 

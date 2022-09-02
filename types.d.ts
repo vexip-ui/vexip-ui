@@ -13,7 +13,7 @@ declare module 'vue' {
     Button: typeof import('vexip-ui')['Button'],
     ButtonGroup: typeof import('vexip-ui')['ButtonGroup'],
     Calendar: typeof import('vexip-ui')['Calendar'],
-    CalendarPane: typeof import('vexip-ui')['CalendarPane'],
+    CalendarPanel: typeof import('vexip-ui')['CalendarPanel'],
     Card: typeof import('vexip-ui')['Card'],
     Carousel: typeof import('vexip-ui')['Carousel'],
     CarouselItem: typeof import('vexip-ui')['CarouselItem'],
@@ -22,7 +22,7 @@ declare module 'vue' {
     Checkbox: typeof import('vexip-ui')['Checkbox'],
     CheckboxGroup: typeof import('vexip-ui')['CheckboxGroup'],
     Collapse: typeof import('vexip-ui')['Collapse'],
-    CollapsePane: typeof import('vexip-ui')['CollapsePane'],
+    CollapsePanel: typeof import('vexip-ui')['CollapsePanel'],
     CollapseTransition: typeof import('vexip-ui')['CollapseTransition'],
     ColorPicker: typeof import('vexip-ui')['ColorPicker'],
     Column: typeof import('vexip-ui')['Column'],
@@ -42,6 +42,10 @@ declare module 'vue' {
     Highlight: typeof import('vexip-ui')['Highlight'],
     Icon: typeof import('vexip-ui')['Icon'],
     Input: typeof import('vexip-ui')['Input'],
+    Layout: typeof import('vexip-ui')['Layout'],
+    LayoutAside: typeof import('vexip-ui')['LayoutAside'],
+    LayoutFooter: typeof import('vexip-ui')['LayoutFooter'],
+    LayoutHeader: typeof import('vexip-ui')['LayoutHeader'],
     Linker: typeof import('vexip-ui')['Linker'],
     Masker: typeof import('vexip-ui')['Masker'],
     Menu: typeof import('vexip-ui')['Menu'],
@@ -52,6 +56,7 @@ declare module 'vue' {
     NumberInput: typeof import('vexip-ui')['NumberInput'],
     Option: typeof import('vexip-ui')['Option'],
     OptionGroup: typeof import('vexip-ui')['OptionGroup'],
+    Overflow: typeof import('vexip-ui')['Overflow'],
     Pagination: typeof import('vexip-ui')['Pagination'],
     Popup: typeof import('vexip-ui')['Popup'],
     Portal: typeof import('vexip-ui')['Portal'],
@@ -73,7 +78,7 @@ declare module 'vue' {
     Switch: typeof import('vexip-ui')['Switch'],
     TabNav: typeof import('vexip-ui')['TabNav'],
     TabNavItem: typeof import('vexip-ui')['TabNavItem'],
-    TabPane: typeof import('vexip-ui')['TabPane'],
+    TabPanel: typeof import('vexip-ui')['TabPanel'],
     Table: typeof import('vexip-ui')['Table'],
     TableColumn: typeof import('vexip-ui')['TableColumn'],
     Tabs: typeof import('vexip-ui')['Tabs'],
@@ -84,14 +89,14 @@ declare module 'vue' {
     Timeline: typeof import('vexip-ui')['Timeline'],
     TimelineItem: typeof import('vexip-ui')['TimelineItem'],
     Tooltip: typeof import('vexip-ui')['Tooltip'],
+    Transfer: typeof import('vexip-ui')['Transfer'],
     Tree: typeof import('vexip-ui')['Tree'],
     Upload: typeof import('vexip-ui')['Upload'],
     UploadFile: typeof import('vexip-ui')['UploadFile'],
     UploadList: typeof import('vexip-ui')['UploadList'],
     Viewer: typeof import('vexip-ui')['Viewer'],
     VirtualList: typeof import('vexip-ui')['VirtualList'],
-    Wheel: typeof import('vexip-ui')['Wheel'],
-    WheelItem: typeof import('vexip-ui')['WheelItem']
+    Wheel: typeof import('vexip-ui')['Wheel']
   }
 
   interface ComponentCustomProperties {
@@ -99,7 +104,8 @@ declare module 'vue' {
     $contextmenu: typeof import('vexip-ui')['Contextmenu'],
     $loading: typeof import('vexip-ui')['Loading'],
     $message: typeof import('vexip-ui')['Message'],
-    $notice: typeof import('vexip-ui')['Notice']
+    $notice: typeof import('vexip-ui')['Notice'],
+    $toast: typeof import('vexip-ui')['Toast']
   }
 }
 

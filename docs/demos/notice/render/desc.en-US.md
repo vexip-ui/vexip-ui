@@ -1,3 +1,3 @@
-### 渲染函数
+### Render Method
 
-通过 `renderer` 属性可以设置提示的自定义渲染方法。
+A custom rendering method for notice can be set via the `renderer` option.

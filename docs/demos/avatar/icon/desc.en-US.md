@@ -1,5 +1,5 @@
 ### Icon Avatar
 
-将图标传入 `icon` 属性可以使用图标作为头像。
+Pass an icon to the `icon` prop to use the icon as an avatar.
 
-设置 `icon-scale` 的值可以调整图标的缩放比例。
+Set the value of `icon-scale` prop to adjust the scaling of the icon.

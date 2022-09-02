@@ -1,22 +1,22 @@
 <template>
-  <div :class="className">
+  <ol :class="className">
     <slot>
       <BreadcrumbItem v-for="label in props.options" :key="label" :label="label">
         {{ label }}
       </BreadcrumbItem>
     </slot>
-  </div>
+  </ol>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, watch, toRef } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { BREADCRUMB_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ItemState, BreadcrumbState } from './symbol'
+import type { BreadcrumbItemState, BreadcrumbState } from './symbol'
 
 export default defineComponent({
   name: 'Breadcrumb',
@@ -26,10 +26,12 @@ export default defineComponent({
   props: {
     separator: String,
     border: booleanProp,
-    options: Array as PropType<string[]>
+    options: Array as PropType<string[]>,
+    onSelect: eventProp<(label: string | number) => void>(),
+    onSeparatorClick: eventProp<(label: string | number) => void>()
   },
-  emits: ['select', 'separator-click'],
-  setup(_props, { slots, emit }) {
+  emits: [],
+  setup(_props, { slots }) {
     const props = useProps('breadcrumb', _props, {
       separator: '/',
       border: false,
@@ -40,7 +42,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('breadcrumb')
-    const itemStates = new Set<ItemState>()
+    const itemStates = new Set<BreadcrumbItemState>()
 
     const className = computed(() => {
       return {
@@ -78,22 +80,22 @@ export default defineComponent({
       { immediate: true }
     )
 
-    function increaseItem(item: ItemState) {
+    function increaseItem(item: BreadcrumbItemState) {
       itemStates.add(item)
       refreshLabels()
     }
 
-    function decreaseItem(item: ItemState) {
+    function decreaseItem(item: BreadcrumbItemState) {
       itemStates.delete(item)
       refreshLabels()
     }
 
     function handleSelect(label: string | number) {
-      emit('select', label)
+      emitEvent(props.onSelect, label)
     }
 
     function handleSeparatorClick(label: string | number) {
-      emit('separator-click', label)
+      emitEvent(props.onSeparatorClick, label)
     }
 
     return {

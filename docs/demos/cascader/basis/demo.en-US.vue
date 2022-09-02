@@ -1,8 +1,5 @@
 <template>
-  <Cascader
-    v-model:value="value"
-    :options="options"
-  ></Cascader>
+  <Cascader v-model:value="value" :options="options"></Cascader>
   <p>
     Current Value:
     {{ value }}

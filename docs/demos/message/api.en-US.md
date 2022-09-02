@@ -1,6 +1,6 @@
 ### Message Methods
 
-组件实例内提供了 5 种基础的打开消息的方法：
+There are 5 basic methods of opening a message within a component instance:
 
 - `this.$message.open(content[, duration] | options)`
 - `this.$message.info(content[, duration] | options)`
@@ -8,45 +8,46 @@
 - `this.$message.warning(content[, duration] | options)`
 - `this.$message.error(content[, duration] | options)`
 
-以及 1 个复合的打开消息的方法：
+And a composite method of opening the message:
 
 - `this.$message.judge(state, successContent | successOptions, errorContent | errorOptions[, duration])`
 
-> 在使用组合式 api 时需要 `import { Message } from 'vexip-ui'` 后使用 `Message.open(...)`。
+> `Message.open(...)` is required after `import { Message } from 'vexip-ui'` when using the composition api.
 
-此外，还提供了两个手动关闭消息的方法：
+In addition, two methods to manually close the message are provided:
 
 - `this.$message.close(key)`
 - `this.$message.clear()`
 
-> 当直接调用 `this.$message.close()` 而不传入 key 时和 `this.$message.clear()` 效果相同。
+> When `this.$message.close()` is called directly without passing a key, it has the same effect as `this.$message.clear()`.
 
-在打开消息的方法调用后会返回一个函数，该函数可以用于手动关闭刚刚打开的消息：
+After the method call to open the message will return a function that can be used to manually close the message that was just opened:
 
 ```js
 const cancel = this.$message.open(options)
 
-// 立即关闭该消息
+// close the message immediately
 cancel()
 ```
 
-需要修改组件的默认属性值时，可以这样做：
+When you need to modify the default value of options, you can do this:
 
 ```js
-// 除了选项值以外，还可以修改 placement 为 'top' | 'bottom' 来改变消息的位置
+// In addition to the option value, you can also modify placement
+// to 'top' | 'bottom' to change the position of the message
 this.$message.config({ placement, ...options })
 ```
 
-甚至，有时需要创建多个消息管理器以便于管理各类消息：
+Sometimes it is necessary to create multiple message managers to manage various types of messages:
 
 ```js
-// 这是一个全新的消息组件
+// This is a new message manager
 const myMessage = this.$message.clone()
 
 myMessage.config({ placement: 'bottom' })
 ```
 
-或者在引入组件时进行克隆：
+Or clone when importing the component:
 
 ```js
 import { createApp } from 'vue'
@@ -60,18 +61,18 @@ createApp().use(myMessage, { property: '$myMessage' })
 
 ### Message Options
 
-| Name       | Type                         | Description                                                                                     | Default | Since |
-| ---------- | ---------------------------- | ---------------------------------------------------------------------------------------- | ------ | --- |
-| type       | `'info' \| 'success' \| 'warning' \| 'error'`                       | 消息的类型                               | `''`      | - |
-| content    | `string`                       | 消息的内容                                                                               | `''`      | - |
-| key        | `number \| string`             | 消息的唯一索引，不设置时将使用内置的索引                                                 | `''`      | - |
-| parseHtml  | `boolean`                      | 是否解析 html，开启则将 `content` 内容作为 html 解析                                       | `false`  | - |
-| className  | `string \| Record<string, unknown>`             | 消息的自定义类名                                                                         | `null`   | - |
-| style      | `Record<string, any>`                       | 消息的内联样式                                                                           | `null`   | - |
-| duration   | `number`                       | 消息的持续毫秒，设置为小于 `500` 时则不会自动关闭                                          | `3000`   | - |
-| background | `boolean \| string`            | 是否显示背景颜色，传入有效颜色值时可以自定义颜色                                         | `false`  | - |
-| color      | `boolean \| string`            | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色                                       | `false`  | - |
-| closable   | `boolean`                      | 是否有关闭按钮进行关闭                                                                   | `false`  | - |
-| icon       | `Record<string, any> \| (() => any)` | 消息前缀的图标，传入函数时作为 render 函数渲染 | `null`      | - |
-| iconColor  | `string`                       | 前缀图标的颜色，设置后会覆盖 `type` 的默认设置                                             | `''`      | - |
-| renderer   | `() => any`                     | 使用 Vue 的 render 函数渲染自定义内容                                                    | `null`   | - |
+| Name       | Type                                          | Description                                                                                                | Default | Since |
+| ---------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------- | ----- |
+| type       | `'info' \| 'success' \| 'warning' \| 'error'` | The type of message                                                                                        | `''`    | -     |
+| content    | `string`                                      | The content of the message                                                                                 | `''`    | -     |
+| key        | `number \| string`                            | The unique index of the message, if not set, the built-in index will be used                               | `''`    | -     |
+| parseHtml  | `boolean`                                     | Whether to parse html, if enabled, the content of `content` will be parsed as html                         | `false` | -     |
+| className  | `string \| Record<string, unknown>`           | Custom class for the message                                                                               | `null`  | -     |
+| style      | `Record<string, any>`                         | Inline style for the message                                                                               | `null`  | -     |
+| duration   | `number`                                      | Message duration in milliseconds, set to less than `500` to not close automatically                        | `3000`  | -     |
+| background | `boolean \| string`                           | Whether to display the background color, the color can be customized when a valid color value is passed in | `false` | -     |
+| color      | `boolean \| string`                           | Whether to set the color of the font, you can customize the color when a valid color value is passed in    | `false` | -     |
+| closable   | `boolean`                                     | Whether there is a close button to close                                                                   | `false` | -     |
+| icon       | `Record<string, any> \| (() => any)`          | The prefix icon of message, rendered as render function when passed in function                            | `null`  | -     |
+| iconColor  | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -     |
+| renderer   | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -     |

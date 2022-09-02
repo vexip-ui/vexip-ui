@@ -4,10 +4,15 @@
   "size",
   "height",
   "label",
+  "custom",
   "multiple",
   "options",
+  "filter",
+  "creatable",
   "prefix",
   "custom-key",
+  "group",
+  "loading",
   "virtual",
   "async-options"
 ]

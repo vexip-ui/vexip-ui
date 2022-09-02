@@ -1,1 +1,1 @@
-通常用于反馈一些全局的加载状态，如页面路由切换、全局请求等。
+It is usually used to feedback some global loading status, such as page routing switch, global request, etc.

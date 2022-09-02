@@ -1,3 +1,3 @@
-### 内置颜色
+### Preset Colors
 
-除了基础的状态类型外，还内置了一些颜色类型，用于快速生成各种颜色的标签。
+In addition to the basic state types, there are also built-in color types for quickly generating labels of various colors.

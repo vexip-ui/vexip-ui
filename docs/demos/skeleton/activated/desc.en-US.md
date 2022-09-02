@@ -1,3 +1,3 @@
 ### Activated Status
 
-添加 `activated` 属性可以使骨架屏处于激活状态。
+Add the `activated` prop to make the skeleton activated.

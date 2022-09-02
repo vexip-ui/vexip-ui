@@ -1,11 +1,21 @@
-import { defineComponent, computed, h, renderSlot,} from 'vue'
+import { defineComponent, computed, h, renderSlot } from 'vue'
 import { useNameHelper, useProps, booleanProp, styleProp } from '@vexip-ui/config'
 import { supportFlexGap } from '@vexip-ui/utils'
 import { flatVNodes } from './helper'
 
 import type { PropType } from 'vue'
 import type { ComponentSize } from '@vexip-ui/config'
-import type { Align, Justify } from './symbol'
+import type { SpaceAlign, SpaceJustify } from './symbol'
+
+const justifyList = Object.freeze<SpaceJustify>([
+  'start',
+  'end',
+  'center',
+  'space-around',
+  'space-between',
+  'space-evenly'
+])
+const alignList = Object.freeze<SpaceAlign>(['start', 'end', 'center', 'baseline', 'stretch'])
 
 const useFlexGap = supportFlexGap()
 
@@ -19,8 +29,8 @@ export default defineComponent({
     vertical: booleanProp,
     inline: booleanProp,
     tag: String,
-    align: String as PropType<Align>,
-    justify: String as PropType<Justify>,
+    align: String as PropType<SpaceAlign>,
+    justify: String as PropType<SpaceJustify>,
     noWrap: booleanProp,
     size: [String, Number, Array] as PropType<ComponentSize | number | [number, number]>,
     itemStyle: styleProp,
@@ -31,8 +41,14 @@ export default defineComponent({
       vertical: false,
       inline: false,
       tag: 'div',
-      align: 'stretch',
-      justify: 'start',
+      align: {
+        default: 'stretch',
+        validator: value => alignList.includes(value)
+      },
+      justify: {
+        default: 'start',
+        validator: value => justifyList.includes(value)
+      },
       noWrap: false,
       size: 'default',
       itemStyle: null,
@@ -76,7 +92,7 @@ export default defineComponent({
       if (typeof size !== 'string') {
         const normalizedSize = Array.isArray(size) ? size : [size, size]
 
-        style['--vxp-space-h-gap'] = `${normalizedSize[0]}px`,
+        style['--vxp-space-h-gap'] = `${normalizedSize[0]}px`
         style['--vxp-space-v-gap'] = `${normalizedSize[1]}px`
       }
 
@@ -114,25 +130,25 @@ export default defineComponent({
               !props.gapDisabled
                 ? ''
                 : props.vertical
-                ? {
-                    marginBottom: index !== lastIndex ? varMap.v : undefined
-                  }
-                : {
-                    paddingTop: varMap.hv,
-                    paddingBottom: varMap.hv,
-                    marginRight: justifySpace
-                      ? notBetween || index !== lastIndex
-                        ? varMap.hh
+                  ? {
+                      marginBottom: index !== lastIndex ? varMap.v : undefined
+                    }
+                  : {
+                      paddingTop: varMap.hv,
+                      paddingBottom: varMap.hv,
+                      marginRight: justifySpace
+                        ? notBetween || index !== lastIndex
+                          ? varMap.hh
+                          : undefined
+                        : index !== lastIndex
+                          ? varMap.h
+                          : undefined,
+                      marginLeft: justifySpace
+                        ? notBetween || index !== 0
+                          ? varMap.hh
+                          : undefined
                         : undefined
-                      : index !== lastIndex
-                      ? varMap.h
-                      : undefined,
-                    marginLeft: justifySpace
-                      ? notBetween || index !== 0
-                        ? varMap.hh
-                        : undefined
-                      : undefined
-                  }
+                    }
             ]}
           >
             {vnode}

@@ -2,7 +2,7 @@ import type { ComponentPublicInstance } from 'vue'
 
 export type Key = string | number
 
-export interface MenuConfig {
+export interface ContextmenuConfig {
   key: Key,
   label?: string,
   icon?: Record<string, unknown> | (() => any),
@@ -11,17 +11,17 @@ export interface MenuConfig {
   shortcut?: string,
   divided?: boolean,
   disabled?: boolean,
-  children?: MenuConfig[]
+  children?: ContextmenuConfig[]
 }
 
-export interface MenuOptions {
+export interface ContextmenuOptions {
   clientX: number,
   clientY: number,
   appear?: boolean,
-  configs: MenuConfig[]
+  configs: ContextmenuConfig[]
 }
 
 export interface ContextmenuInstance extends ComponentPublicInstance {
-  openContextmenu: (options: MenuOptions) => Promise<Key | null>,
+  openContextmenu: (options: ContextmenuOptions) => Promise<Key[] | null>,
   handleCancel: () => void
 }

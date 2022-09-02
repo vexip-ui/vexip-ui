@@ -1,3 +1,3 @@
-### 激活状态
+### Activated State
 
-添加 `activated` 属性可以使进度条处于激活状态。
+Adding the `activated` prop makes the progress bar activated.

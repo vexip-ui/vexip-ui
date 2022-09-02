@@ -4,9 +4,9 @@ Vexip UI 在初始化时可以提供一个配置项以改变一些组件行为�
 
 ## 默认属性
 
-Vexip UI 提供了以配置的形式改变属性默认值的能力，使得可以区域性地为组件设置同一个属性。
+Vexip UI 提供了以配置的形式改变属性默认值的能力。
 
-设想一下，在一个有数百个表单控件的应用中，需求提出将所有的表单控件从默认大小改为大号，你可能需要这样做：
+设想一下，在一个有数百个表单控件的应用中，需求提出将所有的表单控件的大小从 `'default'` 改为 `'large'`，你可能需要这样做：
 
 ```vue
 <!-- a.vue -->
@@ -82,10 +82,10 @@ createApp(App).use(install, { namespace: 'vxp' })
 ```
 
 ```scss
-@use 'vexip-ui/design' with (
+// 在 scss 里你可以省略 index.scss
+@use 'vexip-ui/style' with (
   $namespace: 'vxp'
 );
-@use 'vexip-ui/style'; // 在 scss 里你可以省略 index.scss
 ```
 
 ### 组件名命名空间
@@ -94,35 +94,16 @@ createApp(App).use(install, { namespace: 'vxp' })
 
 当与一些其他的组件一同使用时, 可能会发生命名冲突，使用该特性可以轻松地解决这个问题。
 
-### CapitalCase 命名
-
 ```ts
-createApp(App).use(install, { prefix: 'Vxp' })
+createApp(App).use(install, { prefix: 'V' })
 ```
 
-配置后, 所有的组件在使用时名称将带有 `Vxp` 前缀。
+配置后, 所有的组件在使用时名称将带有 `V` 前缀。
 
 ```vue
 <template>
-  <VxpButton></VxpButton>
-  <VxpInput></VxpInput>
-</template>
-```
-
-### KebabCase 命名
-
-> 如果传入了一个首字母小写的前缀, 所有的组件的命名将会变为由 `-` 连接的全小写形式。
-
-```ts
-createApp(App).use(install, { prefix: 'vxp' })
-```
-
-配置后, 所有的组件在使用时名称将带有 `vxp-` 前缀，并且变为 `kebab-case` 命名。
-
-```vue
-<template>
-  <vxp-button></vxp-button>
-  <vxp-input></vxp-input>
+  <VButton></VButton>
+  <VInput></VInput>
 </template>
 ```
 

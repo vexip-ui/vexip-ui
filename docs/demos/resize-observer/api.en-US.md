@@ -1,6 +1,6 @@
 ### ResizeObserver Props
 
-| Name      | Type                                  | Description                                                   | Default  | Since |
-| --------- | ------------------------------------- | ------------------------------------------------------ | ------- | --- |
-| on-resize | `(entry: ResizeObserverEntry) => any` | 大小变化后的回调                                       | `null`  | - |
-| throttle  | `boolean \| number`                   | 设置是否开启回调的节流，传入数字时可以定制节流的毫秒数 | `false` | - |
+| Name      | Type                                  | Description                                                                                                                               | Default | Since |
+| --------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
+| on-resize | `(entry: ResizeObserverEntry) => any` | The callback when resized                                                                                                                 | `null`  | -     |
+| throttle  | `boolean \| number`                   | Set whether to enable the throttling of the callback, the number of milliseconds of throttling can be customized when passing in a number | `false` | -     |

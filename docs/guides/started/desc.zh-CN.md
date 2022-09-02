@@ -64,7 +64,7 @@ createApp(App).use(install)
 安装插件：
 
 ```sh
-yarn add -D vite-plugin-style-import
+pnpm i -D vite-plugin-style-import
 ```
 
 在 `vite.config.ts` 中拓展以下内容：
@@ -72,17 +72,18 @@ yarn add -D vite-plugin-style-import
 ```ts
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import styleImport from 'vite-plugin-style-import'
+import { createStyleImportPlugin } from 'vite-plugin-style-import'
 
 export default defineConfig({
   plugins: [
     vue(),
-    styleImport({
+    createStyleImportPlugin({
       include: ['**/*.ts', '**/*.vue'],
       libs: [
         {
           libraryName: 'vexip-ui',
           esModule: true,
+          base: 'vexip-ui/css/preset.css',
           resolveStyle: name => `vexip-ui/css/${name}.css`
         }
       ]
@@ -98,7 +99,7 @@ export default defineConfig({
 安装插件：
 
 ```sh
-yarn add -D babel-plugin-import
+pnpm i -D babel-plugin-import
 ```
 
 修改 `babel.config.js` 为以下内容：
@@ -120,6 +121,8 @@ module.exports = {
   ]
 }
 ```
+
+由于插件的局限性，你仍需要手动引入 `vexip-ui/css/preset.css`。
 
 ## 全局类型支持
 

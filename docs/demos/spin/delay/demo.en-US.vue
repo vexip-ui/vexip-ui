@@ -1,20 +1,20 @@
 <template>
   <Spin :active="active" tip="Loading..." delay>
-    <Alert icon type="info" title="提示标题">
-      消息提示的内容
+    <Alert icon type="info" title="Alert Title">
+      Some content of info type Alert
     </Alert>
   </Spin>
   <Spin :active="active" tip="Loading..." :delay="1000">
-    <Alert icon type="success" title="提示标题">
-      成功提示的内容
+    <Alert icon type="success" title="Alert Title">
+      Some content of success type Alert
     </Alert>
   </Spin>
   <Spin :active="active" tip="Loading..." :delay="[300, 0]">
-    <Alert icon type="error" title="提示标题">
-      错误提示的内容
+    <Alert icon type="error" title="Alert Title">
+      Some content of error type Alert
     </Alert>
   </Spin>
-  <p>切换加载中状态：<Switch v-model:value="active"></Switch></p>
+  <p>Switch the loading state: <Switch v-model:value="active"></Switch></p>
 </template>
 
 <script lang="ts">

@@ -1,1 +1,1 @@
-基础的容器，可承载文字、列表、图片、段落等内容，常用于需要集中浏览的一组内容。
+A basic container that can carry content such as text, lists, pictures, paragraphs, etc. It is often used for a group of content that needs to be browsed centrally.

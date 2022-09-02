@@ -1,43 +1,47 @@
 ### Radio Props
 
-| Name        | Type             | Description                                                             | Default    | Since |
-| ----------- | ---------------- | ---------------------------------------------------------------- | --------- | --- |
-| value       | `string \| number` | 单选框的值，通常配合 group 组件使用                              | `null`      | - |
-| label       | `string \| number` | 单选框的标签值，当值与标签全等时，单选框将被选中，标签值**必需设置** | `null`         | - |
-| label-class | `string \| Record<string, boolean>` | 单选框的标签内容的自定义类名                                     | `null`      | - |
-| size        | `'small' \| 'default' \| 'large'`           | 单选框的大小               | `'default'` | - |
-| state        | `'default' \| 'success' \| 'error' \| 'warning'`           | 单选框的状态                                   | `'default'` | - |
-| disabled    | `boolean`          | 设置是否禁用单选框                                               | `false`     | - |
-| border      | `boolean`          | 设置单选框是否具有边框                                           | `false`     | - |
-| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | ``false``                 | - |
+| Name         | Type                                             | Description                                                                                                                                    | Default     | Since   |
+| ------------ | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
+| value        | `string \| number`                               | The value of the radio box, usually used with the group component                                                                              | `null`      | -       |
+| label        | `string \| number`                               | The label value of the radio box, when the value is equal to the label, the radio box will be selected, the label value **required to be set** | `null`      | -       |
+| label-class  | `string \| Record<string, boolean>`              | Custom class name of the label content of the radio button                                                                                     | `null`      | -       |
+| size         | `'small' \| 'default' \| 'large'`                | The size of the radio box                                                                                                                      | `'default'` | -       |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'` | The state of radio                                                                                                                             | `'default'` | -       |
+| disabled     | `boolean`                                        | Set whether to disable the radio button                                                                                                        | `false`     | -       |
+| border       | `boolean`                                        | Set whether the radio button has a border                                                                                                      | `false`     | -       |
+| loading      | `boolean`                                        | Set whether is loading                                                                                                                         | `false`     | `2.0.0` |
+| loading-lock | `boolean`                                        | Set whether to be read-only when loading                                                                                                       | `false`     | `2.0.0` |
 
 ### Radio Events
 
-| Name      | Description                                   | Parameters  | Since |
-| --------- | -------------------------------------- | ----- | --- |
-| change | 当单选框的值发生变化时触发，返回当前值 | `(value: string \| number)` | - |
+| Name   | Description                                                                   | Parameters                  | Since |
+| ------ | ----------------------------------------------------------------------------- | --------------------------- | ----- |
+| change | Emitted when the value of the radio button changes, returns the current value | `(value: string \| number)` | -     |
 
 ### Radio Slots
 
-| Name    | Description                 | Parameters | Since |
-| ------- | -------------------- | --- | --- |
-| defalut | 单选框标签内容的插槽 | - | - |
+| Name    | Description                  | Parameters | Since |
+| ------- | ---------------------------- | ---------- | ----- |
+| defalut | Slot for radio label content | -          | -     |
 
 ### RadioGroup Props
 
-| Name     | Type             | Description                                               | Default    | Since |
-| -------- | ---------------- | -------------------------------------------------- | --------- | --- |
-| value    | `string \| number` | 单选框组的值，标签值与该值相同的单选框将被选中     | `null`      | - |
-| vertical | `boolean`          | 设置是否开启纵向显示                               | `false`         | - |
-| size     | `'small' \| 'default' \| 'large'`           | 单选框的大小，会覆盖单选框单独设置的 `size` | `'default'` | - |
-| disabled | `boolean`          | 设置是否禁用单选框组                               | `false`     | - |
-| button   | `boolean`          | 设置是否开启按钮模式，在纵向显示时暂不支持         | `false`     | - |
-| border   | `boolean`          | 设置单选框是否具有边框                             | `false`     | - |
-| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 | - |
-| options | `(string \| number)[]` | 设置选子单选框的选项，一般用于简单快速生成单选框组，使用插槽后失效 | `[]` | - |
+| Name         | Type                              | Description                                                                                                                            | Default     | Since   |
+| ------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
+| value        | `string \| number`                | The value of the radio group, the radio with the same label value will be selected                                                     | `null`      | -       |
+| vertical     | `boolean`                         | Set whether to enable vertical display                                                                                                 | `false`     | -       |
+| size         | `'small' \| 'default' \| 'large'` | The size of the radio box, it will override the `size` set by the radio box alone                                                      | `'default'` | -       |
+| disabled     | `boolean`                         | Set whether to disable the radio group                                                                                                 | `false`     | -       |
+| button       | `boolean`                         | Set whether to enable button mode, it is not supported in vertical display                                                             | `false`     | -       |
+| border       | `boolean`                         | Set whether the radio button has a border                                                                                              | `false`     | -       |
+| options      | `(string \| number)[]`            | Set the options of the sub-radio box, generally used for simple and quick generation of radio box groups, invalid after using the slot | `[]`        | -       |
+| loading      | `boolean`                         | Set whether is loading                                                                                                                 | `false`     | `2.0.0` |
+| loading-icon | `Record<string, any>`             | Set the loading icon, only effective in button mode                                                                                    | `Spinner`   | `2.0.0` |
+| loading-lock | `boolean`                         | Set whether to be read-only when loading                                                                                               | `false`     | `2.0.0` |
+| loading-spin | `boolean`                         | Set whether to use spin animation for the loading icon, only effective in button mode                                                  | `false`     | `2.0.0` |
 
 ### RadioGruop Events
 
-| Name      | Description                                     | Parameters  | Since |
-| --------- | ---------------------------------------- | ----- | --- |
-| change | 当单选框组的值发生变化时触发，返回当前值 | `(value: string \| number)` | - |
+| Name   | Description                                                                         | Parameters                  | Since |
+| ------ | ----------------------------------------------------------------------------------- | --------------------------- | ----- |
+| change | Emitted when the value of the radio button group changes, returns the current value | `(value: string \| number)` | -     |

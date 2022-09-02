@@ -1,33 +1,9 @@
 <template>
-  <div style="width: 240px;">
+  <div style="max-width: 240px;">
     <Button style="margin-bottom: 20px;" @click="reduced = !reduced">
       Expand/Reduce
     </Button>
-    <Menu :reduced="reduced" transfer>
-      <MenuItem label="1" :icon="EnvelopesBulk">
-        Menu 1
-        <template #group>
-          <MenuItem label="1-1">
-            Child Menu 1
-          </MenuItem>
-          <MenuItem label="1-2">
-            Child Menu 2
-          </MenuItem>
-          <MenuItem label="1-3">
-            Child Menu 3
-          </MenuItem>
-        </template>
-      </MenuItem>
-      <MenuItem label="2" :icon="City">
-        Menu 2
-      </MenuItem>
-      <MenuItem label="3" :icon="ChartPie">
-        Menu 3
-      </MenuItem>
-      <MenuItem label="4" :icon="User">
-        Menu 4
-      </MenuItem>
-    </Menu>
+    <Menu :reduced="reduced" :options="options"></Menu>
   </div>
 </template>
 
@@ -35,5 +11,35 @@
 import { ref } from 'vue'
 import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
+import type { MenuOptions } from 'vexip-ui'
+
 const reduced = ref(false)
+const options: MenuOptions[] = [
+  {
+    label: '1',
+    name: 'Menu 1',
+    icon: EnvelopesBulk,
+    children: [
+      { label: '1-1', name: 'Child Menu 1' },
+      { label: '1-2', name: 'Child Menu 2' },
+      { label: '1-3', name: 'Child Menu 3' }
+    ]
+  },
+  {
+    label: '2',
+    name: 'Menu 2',
+    icon: City,
+    disabled: true
+  },
+  {
+    label: '3',
+    name: 'Menu 3',
+    icon: ChartPie
+  },
+  {
+    label: '4',
+    name: 'Menu 4',
+    icon: User
+  }
+]
 </script>

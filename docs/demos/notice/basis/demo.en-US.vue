@@ -1,13 +1,13 @@
 <template>
   <div>
-    <Button type="primary" @click="$notice.open('提示的标题', '提示消息的具体内容')">
-      打开提示
+    <Button type="primary" @click="$notice.open('Notice Title', 'Some content to notice')">
+      Open
     </Button>
-    <Button type="primary" @click="$notice.open('一条仅有标题的提示消息')">
-      仅标题提示
+    <Button type="primary" @click="$notice.open('A Tiltle Only Notice')">
+      Title Only
     </Button>
-    <Button type="primary" @click="$notice.open({ content: '一条仅有内容的提示消息' })">
-      仅内容提示
+    <Button type="primary" @click="$notice.open({ content: 'A content only notice' })">
+      Content Only
     </Button>
   </div>
 </template>

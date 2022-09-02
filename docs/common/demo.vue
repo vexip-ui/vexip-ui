@@ -19,37 +19,49 @@
       </div>
     </Column>
     <Column :class="`${prefix}__actions`">
-      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
-        <Icon :scale="1.1" @click="copyCode">
-          <CopyR></CopyR>
-        </Icon>
-        <template #tip>
-          {{ $t('common.copyCode') }}
+      <Tooltip reverse transfer>
+        <template #trigger>
+          <button :class="`${prefix}__action`">
+            <Icon :scale="1.1" @click="copyCode">
+              <CopyR></CopyR>
+            </Icon>
+          </button>
         </template>
+        {{ $t('common.copyCode') }}
       </Tooltip>
-      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
-        <Icon :scale="1.1" @click="editInGithub">
-          <PenToSquareR></PenToSquareR>
-        </Icon>
-        <template #tip>
-          {{ $t('common.editInGithub') }}
+      <Tooltip reverse transfer>
+        <template #trigger>
+          <button :class="`${prefix}__action`">
+            <Icon :scale="1.1" :label="$t('common.editInGithub')" @click="editInGithub">
+              <PenToSquareR></PenToSquareR>
+            </Icon>
+          </button>
         </template>
+        {{ $t('common.editInGithub') }}
       </Tooltip>
-      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
-        <Icon :scale="1.1" @click="editOnPlayground">
-          <PaperPlaneR></PaperPlaneR>
-        </Icon>
-        <template #tip>
-          {{ $t('common.editInPlayground') }}
+      <Tooltip reverse transfer>
+        <template #trigger>
+          <button :class="`${prefix}__action`">
+            <Icon :scale="1.1" :label="$t('common.editInPlayground')" @click="editOnPlayground">
+              <PaperPlaneR></PaperPlaneR>
+            </Icon>
+          </button>
         </template>
+        {{ $t('common.editInPlayground') }}
       </Tooltip>
-      <Tooltip theme="dark" :class="`${prefix}__action`" transfer>
-        <Icon :scale="1.1" @click="expandCode">
-          <Code></Code>
-        </Icon>
-        <template #tip>
-          {{ codeExpanded ? $t('common.hideCode') : $t('common.showCode') }}
+      <Tooltip reverse transfer>
+        <template #trigger>
+          <button :class="`${prefix}__action`">
+            <Icon
+              :scale="1.1"
+              :label="codeExpanded ? $t('common.hideCode') : $t('common.showCode')"
+              @click="expandCode"
+            >
+              <Code></Code>
+            </Icon>
+          </button>
         </template>
+        {{ codeExpanded ? $t('common.hideCode') : $t('common.showCode') }}
       </Tooltip>
     </Column>
     <CollapseTransition>
@@ -57,12 +69,12 @@
         <slot name="code">
           <pre :class="`language-${lang}`"><code ref="codeRef"></code></pre>
         </slot>
-        <div :class="`${prefix}__reduce`" @click="expandCode">
+        <button :class="`${prefix}__reduce`" @click="expandCode">
           <Icon><ChevronUp></ChevronUp></Icon>
           <span :class="`${prefix}__tip`">
             {{ $t('common.hideCode') }}
           </span>
-        </div>
+        </button>
       </Column>
     </CollapseTransition>
   </Row>
@@ -272,12 +284,17 @@ function editOnPlayground() {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
     margin-left: 3px;
     color: var(--vxp-content-color-placeholder);
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     transition: var(--vxp-transition-color);
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: var(--vxp-color-primary-opacity-2);
     }
 
@@ -304,6 +321,16 @@ function editOnPlayground() {
     }
   }
 
+  &__actions:hover &__action,
+  &__actions:focus-within &__action {
+    color: var(--vxp-content-color-third);
+
+    &:hover,
+    &:focus {
+      color: var(--vxp-color-primary-opacity-2);
+    }
+  }
+
   &__code {
     overflow: hidden;
     border-top: var(--vxp-border-light-2);
@@ -314,13 +341,18 @@ function editOnPlayground() {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     height: 32px;
     padding: 6px 0;
     color: var(--vxp-content-color-placeholder);
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
     border-top: var(--vxp-border-light-2);
+    outline: 0;
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: var(--vxp-color-primary-opacity-2);
     }
   }
@@ -337,7 +369,8 @@ function editOnPlayground() {
       var(--vxp-transition-opacity);
   }
 
-  &__reduce:hover &__tip {
+  &__reduce:hover &__tip,
+  &__reduce:focus &__tip {
     margin-right: 0;
     opacity: 100%;
   }

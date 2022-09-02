@@ -15,7 +15,7 @@
 @use './button.scss';
 @use './button-group.scss';
 @use './calendar.scss';
-@use './calendar-pane.scss';
+@use './calendar-panel.scss';
 @use './card.scss';
 @use './carousel.scss';
 @use './carousel-item.scss';
@@ -24,7 +24,7 @@
 @use './checkbox.scss';
 @use './checkbox-group.scss';
 @use './collapse.scss';
-@use './collapse-pane.scss';
+@use './collapse-panel.scss';
 @use './collapse-transition.scss';
 @use './color-picker.scss';
 @use './column.scss';
@@ -46,6 +46,10 @@
 @use './highlight.scss';
 @use './icon.scss';
 @use './input.scss';
+@use './layout.scss';
+@use './layout-aside.scss';
+@use './layout-footer.scss';
+@use './layout-header.scss';
 @use './linker.scss';
 @use './loading.scss';
 @use './masker.scss';
@@ -59,6 +63,7 @@
 @use './number-input.scss';
 @use './option.scss';
 @use './option-group.scss';
+@use './overflow.scss';
 @use './pagination.scss';
 @use './popup.scss';
 @use './portal.scss';
@@ -80,7 +85,7 @@
 @use './switch.scss';
 @use './tab-nav.scss';
 @use './tab-nav-item.scss';
-@use './tab-pane.scss';
+@use './tab-panel.scss';
 @use './table.scss';
 @use './table-column.scss';
 @use './tabs.scss';
@@ -90,7 +95,9 @@
 @use './time-picker.scss';
 @use './timeline.scss';
 @use './timeline-item.scss';
+@use './toast.scss';
 @use './tooltip.scss';
+@use './transfer.scss';
 @use './tree.scss';
 @use './upload.scss';
 @use './upload-file.scss';
@@ -98,4 +105,3 @@
 @use './viewer.scss';
 @use './virtual-list.scss';
 @use './wheel.scss';
-@use './wheel-item.scss';

@@ -1,3 +1,3 @@
-### 综合用例
+### Comprehensive Example
 
-这个用例展示了如何设置自定义颜色、如何设置自定义图标、如何禁用选项、如何设置菜单快捷键提示、如何添加分割线进行分组。
+This use case shows how to set custom colors, how to set custom icons, how to disable options, how to set menu shortcuts, and how to add dividers for grouping.

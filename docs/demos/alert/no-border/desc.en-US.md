@@ -1,3 +1,3 @@
 ### No Border
 
-添加 `no-border` 属性可以禁用边框，在一些浅色调主题中可以让视觉效果更轻。
+Add the `no-border` prop to disable borders, making it visually lighter in some light-toned themes.

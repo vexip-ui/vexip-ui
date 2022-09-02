@@ -18,7 +18,6 @@
     "outDir": "dist",
     "types": [
       "vite/client",
-      "jest",
       "vexip-ui/types"
     ],
     "paths": {
@@ -33,14 +32,6 @@
     ]
   },
   "include": [
-    "./*.vue",
-    "./*.ts",
-    "builds",
-    "demos",
-    "guides",
-    "i18n",
-    "router",
-    "views",
-    "global.d.ts"
+    "."
   ]
 }

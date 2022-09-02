@@ -2,7 +2,9 @@ import type { InjectionKey } from 'vue'
 
 export interface ItemState {
   el: HTMLElement | null,
-  label: string | number
+  label: string | number,
+  index: number,
+  total: number
 }
 
 export interface TabNavState {

@@ -1,17 +1,11 @@
 <template>
-  <div style="width: 400px;">
+  <div style="max-width: 400px;">
     <Slider v-model:value="value"></Slider>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const value = ref(0)
-
-    return { value }
-  }
-})
+const value = ref(0)
 </script>

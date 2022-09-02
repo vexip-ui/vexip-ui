@@ -1,3 +1,3 @@
 ### Basis Usage
 
-基础用法，可以使用 `v-model:active` 进行双向绑定。
+Basic usage, you can use `v-model:active` for two-way binding.

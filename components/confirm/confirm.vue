@@ -29,11 +29,12 @@
       </template>
     </div>
     <div :class="nh.be('actions')">
-      <Button :class="nh.be('button')" @click="handleCancel">
+      <Button :class="nh.be('button')" no-pulse @click="handleCancel">
         {{ cancelTextR || locale.cancel }}
       </Button>
       <Button
         :class="nh.be('button')"
+        no-pulse
         :type="confirmTypeR"
         :loading="loading"
         @click="handleConfirm"
@@ -62,7 +63,14 @@ const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
 
-const confirmTypes = Object.freeze<ConfirmType>(['default', 'primary', 'info', 'success', 'warning', 'error'])
+const confirmTypes = Object.freeze<ConfirmType>([
+  'default',
+  'primary',
+  'info',
+  'success',
+  'warning',
+  'error'
+])
 
 export default defineComponent({
   name: 'Confirm',
@@ -82,10 +90,9 @@ export default defineComponent({
     cancelText: String,
     icon: [Object, Function] as PropType<Record<string, any> | (() => any)>,
     style: styleProp,
-    renderer: Function as PropType<() => any>,
+    renderer: Function as PropType<(options: ConfirmOptions) => any>,
     iconColor: String
   },
-  emits: ['confirm', 'cancel'],
   setup(_props) {
     const props = useProps('confirm', _props, {
       top: {
@@ -126,7 +133,7 @@ export default defineComponent({
     const cancelTextR = ref(props.cancelText)
     const maskCloseR = ref(props.maskClose)
     const iconR = ref(props.icon)
-    const rendererR = ref<(() => any) | null>(props.renderer)
+    const rendererR = ref<((options: ConfirmOptions) => any) | null>(props.renderer)
     const onBeforeConfirm = ref<(() => unknown) | null>(null)
 
     const onConfirm = ref<(() => void) | null>(null)
@@ -141,7 +148,7 @@ export default defineComponent({
     async function openConfirm(options: ConfirmOptions) {
       await mounted
 
-      return new Promise<boolean>(resolve => {
+      return await new Promise<boolean>(resolve => {
         content.value = options.content ?? ''
         styleR.value = options.style ?? props.style
         iconColorR.value = options.iconColor ?? props.iconColor
@@ -152,6 +159,11 @@ export default defineComponent({
         iconR.value = options.icon ?? props.icon
         rendererR.value = isFunction(options.renderer) ? options.renderer : props.renderer
         onBeforeConfirm.value = isFunction(options.onBeforeConfirm) ? options.onBeforeConfirm : null
+
+        if (isFunction(rendererR.value)) {
+          const render = rendererR.value
+          rendererR.value = () => render(options)
+        }
 
         visible.value = true
 

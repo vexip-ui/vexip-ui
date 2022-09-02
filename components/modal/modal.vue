@@ -17,26 +17,35 @@
         v-show="show"
         ref="wrapper"
         :class="wrapperClass"
+        role="dialog"
         :style="wrapperStyle"
+        :aria-modal="show ? 'true' : undefined"
+        :aria-labelledby="titleId"
+        :aria-describedby="bodyId"
       >
         <div v-if="hasTitle" ref="header" :class="nh.be('header')">
-          <div
-            v-if="props.closable"
-            :class="nh.be('close')"
-            @mousedown.stop
-            @click="handleClose(false)"
-          >
-            <slot name="close">
-              <Icon><Xmark></Xmark></Icon>
-            </slot>
-          </div>
           <slot name="header">
-            <div :class="nh.be('title')">
-              {{ props.title }}
+            <div :id="titleId" :class="nh.be('title')">
+              <slot name="title">
+                {{ props.title }}
+              </slot>
             </div>
+            <button
+              v-if="props.closable"
+              :class="nh.be('close')"
+              @mousedown.stop
+              @click="handleClose(false)"
+            >
+              <slot name="close">
+                <Icon :scale="1.2" label="close">
+                  <Xmark></Xmark>
+                </Icon>
+              </slot>
+            </button>
           </slot>
         </div>
         <div
+          :id="bodyId"
           :class="nh.be('content')"
           :style="{
             overflow: resizing ? 'hidden' : undefined
@@ -70,7 +79,16 @@ import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import { useNameHelper, useProps, useLocale, booleanProp, booleanStringProp, classProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  booleanStringProp,
+  classProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/mixins'
 import { isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
@@ -81,6 +99,12 @@ const positionType = [Number, String]
 const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
+const positionProp = {
+  default: 'auto',
+  validator: positionValidator
+}
+
+let idCount = 0
 
 export default defineComponent({
   name: 'Modal',
@@ -115,54 +139,38 @@ export default defineComponent({
     transitionName: String,
     confirmText: String,
     cancelText: String,
-    autoRemove: booleanProp
+    autoRemove: booleanProp,
+    onToggle: eventProp<(active: boolean) => void>(),
+    onConfirm: eventProp(),
+    onCancel: eventProp(),
+    onClose: eventProp(),
+    onShow: eventProp(),
+    onHide: eventProp(),
+    onDragStart: eventProp<(position: { top: number, left: number }) => void>(),
+    onDragMove: eventProp<(position: { top: number, left: number }) => void>(),
+    onDragEnd: eventProp<(position: { top: number, left: number }) => void>(),
+    onResizeStart: eventProp<(rect: { width: number, height: number }) => void>(),
+    onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
+    onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>()
   },
-  emits: [
-    'toggle',
-    'confirm',
-    'cancel',
-    'close',
-    'show',
-    'hide',
-    'drag-start',
-    'drag-move',
-    'drag-end',
-    'resize-start',
-    'resize-move',
-    'resize-end',
-    'update:active'
-  ],
+  emits: ['update:active'],
   setup(_props, { slots, emit }) {
+    const nh = useNameHelper('modal')
     const props = useProps('modal', _props, {
       transfer: false,
       active: {
         default: false,
         static: true
       },
-      width: {
-        default: 'auto',
-        validator: positionValidator
-      },
-      height: {
-        default: 'auto',
-        validator: positionValidator
-      },
+      width: positionProp,
+      height: positionProp,
       top: {
         default: 100,
         validator: positionValidator
       },
-      left: {
-        default: 'auto',
-        validator: positionValidator
-      },
-      right: {
-        default: 'auto',
-        validator: positionValidator
-      },
-      bottom: {
-        default: 'auto',
-        validator: positionValidator
-      },
+      left: positionProp,
+      right: positionProp,
+      bottom: positionProp,
       title: '',
       closable: true,
       inner: false,
@@ -179,18 +187,19 @@ export default defineComponent({
       loading: false,
       minWidth: 150,
       minHeight: 120,
-      transitionName: 'vxp-ease',
+      transitionName: () => nh.ns('ease'),
       confirmText: null,
       cancelText: null,
       autoRemove: false
     })
 
-    const nh = useNameHelper('modal')
     const currentActive = ref(props.active)
     const currentTop = ref(toNumber(props.top))
     const currentLeft = ref(toNumber(props.left))
     const currentWidth = ref<'auto' | number>(normalizeSizeValue(props.width))
     const currentHeight = ref<'auto' | number>(normalizeSizeValue(props.height))
+
+    const idIndex = `${idCount++}`
 
     let hasComputedTop = false
     let hasComputedLeft = false
@@ -207,7 +216,7 @@ export default defineComponent({
         state.xStart = currentLeft.value
         state.yStart = currentTop.value
 
-        emit('drag-start', {
+        emitEvent(props.onDragStart, {
           top: currentTop.value,
           left: currentLeft.value
         })
@@ -216,13 +225,13 @@ export default defineComponent({
         currentLeft.value = state.xEnd
         currentTop.value = state.yEnd
 
-        emit('drag-move', {
+        emitEvent(props.onDragMove, {
           top: currentTop.value,
           left: currentLeft.value
         })
       },
       onEnd: () => {
-        emit('drag-end', {
+        emitEvent(props.onDragEnd, {
           top: currentTop.value,
           left: currentLeft.value
         })
@@ -263,9 +272,9 @@ export default defineComponent({
         state.yStart = heightStart
         state.minHeight = Math.max(minHeight, props.minHeight)
 
-        emit('resize-start', {
+        emitEvent(props.onResizeStart, {
           width: widthStart,
-          height: widthStart
+          height: heightStart
         })
       },
       onMove: state => {
@@ -275,13 +284,13 @@ export default defineComponent({
         currentWidth.value = Math.max(props.minWidth, state.xEnd)
         currentHeight.value = Math.max(state.minHeight as number, state.yEnd)
 
-        emit('resize-move', {
+        emitEvent(props.onResizeMove, {
           width: currentWidth.value as number,
           height: currentHeight.value as number
         })
       },
       onEnd: () => {
-        emit('resize-end', {
+        emitEvent(props.onResizeEnd, {
           width: currentWidth.value as number,
           height: currentHeight.value as number
         })
@@ -327,6 +336,8 @@ export default defineComponent({
     const hasTitle = computed(() => {
       return !!(slots.header || props.title)
     })
+    const titleId = computed(() => `${nh.bs(idIndex)}__title`)
+    const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
 
     watch(
       () => props.active,
@@ -335,7 +346,7 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('toggle', value)
+      emitEvent(props.onToggle, value)
       emit('update:active', value)
 
       if (value) {
@@ -435,12 +446,12 @@ export default defineComponent({
 
     function handleConfirm() {
       handleClose(true)
-      emit('confirm')
+      emitEvent(props.onConfirm)
     }
 
     function handleCancle() {
       handleClose(false)
-      emit('cancel')
+      emitEvent(props.onCancel)
     }
 
     async function handleClose(isConfirm: boolean) {
@@ -457,7 +468,7 @@ export default defineComponent({
       if (result !== false) {
         nextTick(() => {
           currentActive.value = false
-          emit('close')
+          emitEvent(props.onClose)
         })
       }
 
@@ -465,11 +476,11 @@ export default defineComponent({
     }
 
     function handleShow() {
-      emit('show')
+      emitEvent(props.onShow)
     }
 
     function handleHide() {
-      emit('hide')
+      emitEvent(props.onHide)
     }
 
     function handleMaskClose() {
@@ -485,6 +496,8 @@ export default defineComponent({
       currentActive,
       dragging,
       resizing,
+      titleId,
+      bodyId,
 
       className,
       wrapperClass,

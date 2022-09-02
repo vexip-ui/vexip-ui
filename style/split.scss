@@ -29,7 +29,7 @@ $split: map.merge(
 
   @include basis;
 
-  $pane: #{&}__pane;
+  $pane: #{&}__panel;
   $trigger: #{&}__trigger;
   $handler: #{&}__handler;
   $button: #{&}__button;
@@ -47,7 +47,7 @@ $split: map.merge(
   width: 100%;
   height: 100%;
 
-  &__pane {
+  &__panel {
     position: absolute;
   }
 
@@ -70,10 +70,13 @@ $split: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
     color: get-css-var('split-button-color');
     cursor: pointer;
     background-color: $button-color;
+    border: 0;
     border-radius: get-css-var('split-button-radius');
+    outline: 0;
     transition: get-css-var('transition-background');
 
     &::before,
@@ -99,7 +102,8 @@ $split: map.merge(
         border-left-color: $button-color;
       }
 
-      &:hover {
+      &:hover,
+      &:focus {
         &::before {
           border-bottom-color: $button-hover-color;
           border-left-color: $button-hover-color;
@@ -127,7 +131,8 @@ $split: map.merge(
         border-right-color: $button-color;
       }
 
-      &:hover {
+      &:hover,
+      &:focus {
         &::before {
           border-right-color: $button-hover-color;
           border-bottom-color: $button-hover-color;
@@ -155,7 +160,8 @@ $split: map.merge(
         border-left-color: $button-color;
       }
 
-      &:hover {
+      &:hover,
+      &:focus {
         &::before {
           border-top-color: $button-hover-color;
           border-right-color: $button-hover-color;
@@ -183,7 +189,8 @@ $split: map.merge(
         border-left-color: $button-color;
       }
 
-      &:hover {
+      &:hover,
+      &:focus {
         &::before {
           border-right-color: $button-hover-color;
           border-bottom-color: $button-hover-color;
@@ -196,7 +203,8 @@ $split: map.merge(
       }
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: $button-hover-color;
     }
   }

@@ -3,5 +3,7 @@
   "clearable",
   "filter",
   "option",
-  "custom-key"
+  "custom-key",
+  "group",
+  "loading"
 ]

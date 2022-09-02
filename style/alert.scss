@@ -101,12 +101,17 @@ $alert: map.merge(
     position: relative;
     display: inline-flex;
     align-items: center;
+    padding: 3px 0;
     margin-left: 6px;
     color: get-css-var('alert-close-color');
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
     transition: get-css-var('transition-color');
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('alert-close-color-hover');
     }
   }
@@ -121,12 +126,14 @@ $alert: map.merge(
     $color: if($type == 'info', 'primary', $type);
 
     &--#{$type} {
-      @include define-alert-style((
-        bg-color: 'color' $color 'opacity-8',
-        b-color: 'color' $color 'opacity-5',
-        icon-color: 'color' $color 'dark-2',
-        text-color: 'color' $color 'dark-2'
-      ));
+      @include define-alert-style(
+        (
+          bg-color: 'color' $color 'opacity-8',
+          b-color: 'color' $color 'opacity-5',
+          icon-color: 'color' $color 'dark-2',
+          text-color: 'color' $color 'dark-2'
+        )
+      );
     }
   }
 }

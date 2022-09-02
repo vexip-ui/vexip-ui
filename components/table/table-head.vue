@@ -1,5 +1,5 @@
 <template>
-  <div :class="nh.be('head')" :style="style">
+  <div :class="nh.be('head')" role="rowgroup" :style="style">
     <TableRow is-head :row="headRow">
       <TableHeadCell
         v-for="(item, index) in currentColumns"

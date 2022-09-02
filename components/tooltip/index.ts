@@ -1,2 +1,2 @@
-export * from './symbol'
-export { default as Tooltip } from './tooltip.vue'
+export { default as Tooltip } from './tooltip'
+export type { TooltipTheme, ToopTipTrigger, TooltipVirtual, TooltipExposed } from './symbol'

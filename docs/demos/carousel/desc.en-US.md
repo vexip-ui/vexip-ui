@@ -1,1 +1,1 @@
-轮播组件可以快速构建一个轮播的区域，常用与一组平级内容的灵活展示。
+The carousel component can quickly build a carousel area, which is often used for flexible display of a set of horizontal content.

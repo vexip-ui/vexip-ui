@@ -3,9 +3,9 @@ import Component from './contextmenu.vue'
 import { destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { MenuOptions, ContextmenuInstance } from './symbol'
+import type { Key, ContextmenuConfig, ContextmenuOptions, ContextmenuInstance } from './symbol'
 
-export * from './symbol'
+export type { ContextmenuConfig, ContextmenuOptions }
 
 export class ContextmenuManager {
   name: string
@@ -13,7 +13,7 @@ export class ContextmenuManager {
   private _instance: ContextmenuInstance | null
   private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
-  private _pending: Promise<any> | null
+  private _pending: Promise<Key[] | null> | null
 
   constructor() {
     this._instance = null
@@ -23,7 +23,7 @@ export class ContextmenuManager {
     this.name = 'Contextmenu'
   }
 
-  open(options: MenuOptions) {
+  open(options: ContextmenuOptions) {
     this._pending = this._getInstance().openContextmenu(options)
 
     return this._pending

@@ -1,5 +1,5 @@
-### 进度条颜色
+### Progress Bar Color
 
-通过 `stroke-color` 属性可以改变进度条的颜色。
+The color of the progress bar can be changed via the `stroke-color` prop.
 
-该属性支持传入一个合法的颜色值、颜色数组或者返回前两种值的函数。
+This prop supports passing in a valid color value, an array of colors, or a function that returns the first two values.

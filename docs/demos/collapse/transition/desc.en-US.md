@@ -1,5 +1,5 @@
-### 过渡组件
+### Transition Component
 
-折叠面板内部使用了一个自定义的 Transition 组件实现折叠过渡效果。
+A custom Transition component is used inside the accordion panel to implement the accordion transition effect.
 
-该组件可以独立使用，为内部元素添加折叠过渡效果，同时支持原生 Transition 的所有属性。
+This component can be used independently to add collapsing transition effects to internal elements, while supporting all properties of native Transition.

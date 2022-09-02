@@ -1,3 +1,3 @@
-### 加载状态
+### Loading State
 
-添加 `loading` 属性可以使确认按钮显示为加载状态，通常配合 `on-before-close` 使用。
+Add the `loading` prop to make the confirm button appear loading, usually used with `on-before-close`.

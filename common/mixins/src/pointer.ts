@@ -4,8 +4,19 @@ import { throttle } from '@vexip-ui/utils'
 import type { Ref } from 'vue'
 
 export interface UsePointerOption {
+  /**
+   * 横向位置的初始值
+   */
   x?: number,
+  /**
+   * 纵向位置的初始值
+   */
   y?: number,
+  /**
+   * 是否手动停止，默认情况下会在组件的 BeforeUnmount 生命周期注销
+   *
+   * @default false
+   */
   manualStop?: boolean
 }
 

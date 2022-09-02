@@ -1,5 +1,5 @@
 <template>
-  <Carousel v-model:active="active" style="width: 600px;">
+  <Carousel v-model:active="active" style="max-width: 600px;">
     <CarouselItem v-for="n in 5" :key="n">
       <div class="demo-pane">
         Content {{ n }}

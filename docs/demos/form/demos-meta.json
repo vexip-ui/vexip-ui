@@ -1,6 +1,9 @@
 [
   "basis",
   "validate",
-  "upload",
-  "native"
+  "label",
+  "disabled",
+  "loading",
+  "native",
+  "layout"
 ]

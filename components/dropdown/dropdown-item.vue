@@ -1,13 +1,20 @@
 <template>
-  <li ref="wrapper" :class="className" @click="handleSelect">
+  <li
+    ref="wrapper"
+    :class="className"
+    role="menuitem"
+    tabindex="0"
+    @click="handleSelect"
+  >
     <slot></slot>
   </li>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, toRef, inject } from 'vue'
+import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
 import { useLabel } from './mixins'
-import { DROP_SELECT_HANDLER } from './symbol'
+import { SELECT_HANDLER } from './symbol'
 
 export default defineComponent({
   name: 'DropdownItem',
@@ -31,13 +38,18 @@ export default defineComponent({
     reference: {
       type: Boolean,
       default: false
-    }
+    },
+    meta: {
+      type: Object,
+      default: () => ({})
+    },
+    onSelect: eventProp<(label: string | number) => void>()
   },
-  emits: ['select'],
-  setup(props, { emit }) {
-    const parentSelectHandler = inject(DROP_SELECT_HANDLER, null)
+  emits: [],
+  setup(props) {
+    const parentSelectHandler = inject(SELECT_HANDLER, null)
 
-    const baseClass = 'vxp-dropdown__item'
+    const nh = useNameHelper('dropdown')
     const wrapper = ref(null)
     const label = toRef(props, 'label')
     const isReference = ref(props.reference)
@@ -45,6 +57,8 @@ export default defineComponent({
     const currentLabel = useLabel(label, wrapper)
 
     const className = computed(() => {
+      const baseClass = nh.be('item')
+
       return {
         [baseClass]: true,
         [`${baseClass}--disabled`]: props.disabled,
@@ -59,10 +73,10 @@ export default defineComponent({
       }
 
       if (typeof parentSelectHandler === 'function') {
-        parentSelectHandler(currentLabel.value!)
+        parentSelectHandler([currentLabel.value!], [props.meta || {}])
       }
 
-      emit('select', currentLabel.value)
+      emitEvent(props.onSelect!, currentLabel.value!)
     }
 
     return {

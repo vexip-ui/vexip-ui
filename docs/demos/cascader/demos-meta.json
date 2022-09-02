@@ -8,5 +8,6 @@
   "no-cascaded",
   "brief-label",
   "merged",
-  "async-load"
+  "async-load",
+  "loading"
 ]

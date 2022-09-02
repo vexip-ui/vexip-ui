@@ -1,3 +1,3 @@
-### 纵向轮播
+### Vertical Carousel
 
-通过添加 `vertical` 属性可以使轮播变为纵向。
+The carousel can be vertical by adding the `vertical` prop.

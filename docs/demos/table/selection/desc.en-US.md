@@ -1,5 +1,5 @@
-### 复选框
+### Checkbox Column
 
-为 Column 选项添加 `type` 属性并设置其值为 `selection` 可以使该列作为复选框。
+Add a `type` prop to a column option and set its value to `'selection'` to make the column act as a checkbox.
 
-获取组件实例后，可以调用 `getSelected` 方法回去被勾选的行数据，或者通过 `clearSelected` 清空勾选。
+After getting the component instance, you can call the `getSelected` method to get back the selected row data, or use `clearSelected` to clear the check.

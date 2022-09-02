@@ -1,3 +1,3 @@
 ### Basis Usage
 
-最简单的用法，传入一个 `0` ~ `100` 的数字可以刷新当前的进度，直到传入 `100` 则认为本次加载完成。
+The simplest usage, pass in a number from `0` ~ `100` to refresh the current progress, until `100` is passed in, the loading is considered complete.

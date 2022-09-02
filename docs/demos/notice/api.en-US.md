@@ -1,6 +1,6 @@
 ### Notice Methods
 
-组件实例内提供了 5 种基础的打开提示的方法：
+There are 5 basic methods of opening a notice within a component instance:
 
 - `this.$notice.open(title[, content][, duration] | options)`
 - `this.$notice.info(title[, content][, duration] | options)`
@@ -8,45 +8,47 @@
 - `this.$notice.warning(title[, content][, duration] | options)`
 - `this.$notice.error(title[, content][, duration] | options)`
 
-以及 1 个复合的打开消息的方法：
+And a composite method of opening the notice:
 
-- `this.$message.judge(state, successTitle | successOptions, errorTitle | errorOptions[, duration])`
+- `this.$notice.judge(state, successTitle | successOptions, errorTitle | errorOptions[, duration])`
 
-> 在使用组合式 api 时需要 `import { Notice } from 'vexip-ui'` 后使用 `Notice.open(...)`。
+> `Notice.open(...)` is required after `import { Message } from 'vexip-ui'` when using the composition api.
 
-此外，还提供了两个手动关闭提示的方法：
+In addition, two methods to manually close the notice are provided:
 
 - `this.$notice.close(key)`
 - `this.$notice.clear()`
 
-> 当直接调用 `this.$notice.close()` 而不传入 key 时和 `this.$notice.clear()` 效果相同。
+> When `this.$notice.close()` is called directly without passing a key, it has the same effect as `this.$notice.clear()`.
 
-在打开提示的方法调用后会返回一个函数，该函数可以用于手动关闭刚刚打开的提示：
+After the method call to open the message will return a function that can be used to manually close the message that was just opened:
 
 ```js
 const cancel = this.$notice.open(options)
 
-// 立即关闭该提示
+// close the notice immediately
 cancel()
 ```
 
-需要修改组件的默认属性值时，可以这样做：
+When you need to modify the default value of options, you can do this:
 
 ```js
-// 除了选项值以外，还可以修改 placement 为 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' 来改变提示的位置
+// In addition to the option value, you can also modify placement to
+// 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' to change
+// the position of the message
 this.$notice.config({ placement, ...options })
 ```
 
-甚至，有时需要创建多个提示管理器以便于管理各类提示：
+Sometimes it is necessary to create multiple notice managers to manage various types of messages:
 
 ```js
-// 这是一个全新的提示组件
+// This is a new notice manager
 const myNotice = this.$notice.clone()
 
 myNotice.config({ placement: 'bottom-right' })
 ```
 
-或者在按需引入组件时进行克隆：
+Or clone when importing the component:
 
 ```js
 import { createApp } from 'vue'
@@ -60,21 +62,21 @@ createApp().use(myNotice, { property: '$myNotice' })
 
 ### Notice Options
 
-| Name       | Type                         | Description                                                                                     | Default | Since |
-| ---------- | ---------------------------- | ---------------------------------------------------------------------------------------- | ------ | --- |
-| type       | `'info' \| 'success' \| 'warning' \| 'error'`                       | 内置的类型                               | `''`      | - |
-| title      | `string`                       | 提示的标题                                                                               | `''`      | - |
-| content    | `string`                       | 提示的内容                                                                               | `''`      | - |
-| key        | `number \| string`             | 提示的唯一索引，不设置时将使用内置的索引                                                 | `''`      | - |
-| parseHtml  | `boolean`                      | 是否解析 html，开启则将 `title` 和 `content` 内容作为 html 解析                              | `false`  | - |
-| className  | `string \| Record<string, boolean>`             | 提示的自定义类名                                                                         | `null`   | - |
-| style      | `Record<string, any>`                       | 提示的内联样式                                                                           | `null`   | - |
-| duration   | `number`                       | 提示的持续毫秒，设置为小于 500 时则不会自动关闭                                          | `4000`   | - |
-| background | `boolean \| string`            | 是否显示背景颜色，传入有效颜色值时可以自定义颜色                                         | `false`  | - |
-| color      | `boolean \| string`            | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色                                       | `false`  | - |
-| titleColor | `string`                       | 单独设置提示标题字体的颜色                                                               | `''`      | - |
-| closable   | `boolean`                      | 是否有关闭按钮进行关闭                                                                   | `false`  | - |
-| icon       | `Record<string, any> \| (() => any)` | 提示前缀的图标，传入函数时作为 render 函数渲染 | `null`      | - |
-| iconColor  | `string`                       | 前缀图标的颜色，设置后会覆盖 `type` 的默认设置                                             | `''`      | - |
-| renderer   | `() => any`                     | 使用 Vue 的 render 函数渲染自定义内容                                                    | `null`   | - |
-| marker     | `boolean`                      | 是否显示侧边 marker                                                                      | `false`   | - |
+| Name       | Type                                          | Description                                                                                                | Default | Since |
+| ---------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------- | ----- |
+| type       | `'info' \| 'success' \| 'warning' \| 'error'` | The type of notice                                                                                         | `''`    | -     |
+| title      | `string`                                      | The title of the notice                                                                                    | `''`    | -     |
+| content    | `string`                                      | The content of the notice                                                                                  | `''`    | -     |
+| key        | `number \| string`                            | The unique index of the hint, if not set, the built-in index will be used                                  | `''`    | -     |
+| parseHtml  | `boolean`                                     | Whether to parse html, if enabled, the content of `title` and `content` will be parsed as html             | `false` | -     |
+| className  | `string \| Record<string, boolean>`           | Custom class for the notice                                                                                | `null`  | -     |
+| style      | `Record<string, any>`                         | Inline style for the notice                                                                                | `null`  | -     |
+| duration   | `number`                                      | The duration of the notice in milliseconds, if set to less than 500, it will not automatically close       | `4000`  | -     |
+| background | `boolean \| string`                           | Whether to display the background color, the color can be customized when a valid color value is passed in | `false` | -     |
+| color      | `boolean \| string`                           | Whether to set the color of the font, you can customize the color when a valid color value is passed in    | `false` | -     |
+| titleColor | `string`                                      | Set the color of the notice title font individually                                                        | `''`    | -     |
+| closable   | `boolean`                                     | whether there is a close button to close                                                                   | `false` | -     |
+| icon       | `Record<string, any> \| (() => any)`          | The prefix icon of the notice, rendered as the render function when passed to the function                 | `null`  | -     |
+| iconColor  | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -     |
+| renderer   | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -     |
+| marker     | `boolean`                                     | Set whether to show side marker                                                                            | `false` | -     |

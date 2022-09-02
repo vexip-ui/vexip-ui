@@ -46,7 +46,7 @@ import { renderItem } from './render'
 import { Renderer } from '@/components/renderer'
 import { isFunction } from '@vexip-ui/utils'
 
-import type { Key, MenuOptions, MenuConfig } from './symbol'
+import type { Key, ContextmenuOptions, ContextmenuConfig } from './symbol'
 
 export default defineComponent({
   name: 'Contextmenu',
@@ -58,7 +58,7 @@ export default defineComponent({
   setup() {
     const nh = useNameHelper('contextmenu')
     const visible = ref(false)
-    const configs = ref<MenuConfig[]>([])
+    const configs = ref<ContextmenuConfig[]>([])
     const appear = ref(false)
 
     const position = reactive({
@@ -66,10 +66,10 @@ export default defineComponent({
       y: 0
     })
 
-    const onSelect = ref<((key: Key) => void) | null>(null)
+    const onSelect = ref<((keys: Key[]) => void) | null>(null)
     const onCancel = ref<(() => void) | null>(null)
 
-    function openContextmenu(options: MenuOptions) {
+    function openContextmenu(options: ContextmenuOptions) {
       position.x = options.clientX || 0
       position.y = options.clientY || 0
       configs.value = options.configs
@@ -77,9 +77,9 @@ export default defineComponent({
 
       visible.value = true
 
-      return new Promise<Key | null>(resolve => {
-        onSelect.value = (key: Key) => {
-          resolve(key)
+      return new Promise<Key[] | null>(resolve => {
+        onSelect.value = (keys: Key[]) => {
+          resolve(keys)
         }
         onCancel.value = () => {
           resolve(null)
@@ -92,11 +92,11 @@ export default defineComponent({
       onCancel.value = null
     }
 
-    function handleSelect(key: Key) {
+    function handleSelect(keys: Key[]) {
       visible.value = false
 
       if (isFunction(onSelect.value)) {
-        onSelect.value(key)
+        onSelect.value(keys)
         afterContextmenu()
       }
     }

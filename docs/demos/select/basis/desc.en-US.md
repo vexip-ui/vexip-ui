@@ -1,3 +1,3 @@
 ### Basis Usage
 
-直接传入 `options` 提供选项。
+Set `options` prop to provide options directly.

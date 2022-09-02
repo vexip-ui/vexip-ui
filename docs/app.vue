@@ -18,16 +18,17 @@ const query = matchMedia(`only screen and ${media}`)
 const store = reactive<Store>({
   isLg: query.matches,
   scrollY: 0,
-  isAffix: false
+  affixed: false,
+  expanded: false
 })
 
 query.addEventListener('change', () => {
   store.isLg = query.matches
-  store.isAffix = !store.isLg && store.scrollY >= 50
+  store.affixed = !store.isLg && store.scrollY >= 50
 })
 
 watch(
-  () => store.isAffix,
+  () => store.affixed,
   value => {
     emitter.emit('toggle-affix', value)
   }

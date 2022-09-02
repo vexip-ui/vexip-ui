@@ -1,18 +1,10 @@
 <template>
-  <TimePicker v-model:value="time" no-filler style="width: 220px;"></TimePicker>
-  <p>
-    Current Time: {{ time }}
-  </p>
+  <TimePicker v-model:value="time" no-filler style="max-width: 300px;"></TimePicker>
+  <p>Current Time: {{ time }}</p>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const time = ref('09:24:47')
-
-    return { time }
-  }
-})
+const time = ref('09:24:47')
 </script>

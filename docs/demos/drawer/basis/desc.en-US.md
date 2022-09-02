@@ -1,3 +1,3 @@
 ### Basis Usage
 
-简单的用法，通过双向绑定控制 `active` 属性进而控制抽屉显示，点击遮罩区域关闭抽屉。
+Simple usage, control the `active` prop through two-way binding to control the display of the drawer, and click the mask area to close the drawer.

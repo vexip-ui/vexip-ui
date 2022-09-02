@@ -1,5 +1,6 @@
 import { computed, unref } from 'vue'
 import { configNamespace, configProps, configLocale, configZIndex } from '@vexip-ui/config'
+import { toCapitalCase } from '@vexip-ui/utils'
 
 import type { Ref, App } from 'vue'
 import type { PropsOptions, LocaleOptions } from '@vexip-ui/config'
@@ -14,10 +15,7 @@ export interface InstallOptions {
   zIndex?: MaybeRef<number>
 }
 
-export function buildInstall(
-  components: any[] = [],
-  defaultLocale?: 'zh-CN' | 'en-US'
-) {
+export function buildInstall(components: any[] = [], defaultLocale?: 'zh-CN' | 'en-US') {
   return function install(app: App, options: InstallOptions = {}) {
     const {
       prefix = '',
@@ -39,16 +37,13 @@ export function buildInstall(
       configZIndex(zIndex, app)
     }
 
-    const formatName =
-      typeof prefix === 'string' && prefix.charAt(0).match(/[a-z]/)
-        ? (name: string) => name.replace(/([A-Z])/g, '-$1').toLowerCase()
-        : (name: string) => name
+    const normalizedPrefix = toCapitalCase(prefix || '')
 
     components.forEach(component => {
       if (typeof component.install === 'function') {
         app.use(component)
       } else {
-        app.component(`${prefix || ''}${formatName(component.name)}`, component)
+        app.component(`${normalizedPrefix}${component.name}`, component)
 
         if (typeof component.installDirective === 'function') {
           component.installDirective(app)

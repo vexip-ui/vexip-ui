@@ -1,3 +1,3 @@
 ### Basis Usage
 
-最简单的用法，可以使用 `v-model:value` 双向绑定。
+The simplest usage, you can use `v-model:value` two-way binding.

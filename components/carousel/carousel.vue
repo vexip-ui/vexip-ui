@@ -1,5 +1,10 @@
 <template>
-  <div ref="wrapper" :class="className" :style="style">
+  <div
+    ref="wrapper"
+    :class="className"
+    role="list"
+    :style="style"
+  >
     <div
       :style="{
         position: 'relative',
@@ -93,7 +98,14 @@ import {
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, booleanNumberProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanNumberProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { useHover, useSetTimeout } from '@vexip-ui/mixins'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
@@ -119,9 +131,13 @@ export default defineComponent({
     pointer: String as PropType<PointerType>,
     speed: Number,
     activeOffset: Number,
-    height: [Number, String]
+    height: [Number, String],
+    onChange: eventProp<(active: number) => void>(),
+    onPrev: eventProp<(active: number) => void>(),
+    onNext: eventProp<(active: number) => void>(),
+    onSelect: eventProp<(active: number) => void>()
   },
-  emits: ['change', 'prev', 'next', 'select', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('carousel', _props, {
       active: {
@@ -130,26 +146,26 @@ export default defineComponent({
       },
       viewSize: {
         default: 3,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       vertical: false,
       disabled: false,
       loop: false,
       arrow: {
-        default: 'outside' as ArrowType,
-        validator: (value: ArrowType) => ['outside', 'inside', 'none'].includes(value)
+        default: 'outside',
+        validator: value => ['outside', 'inside', 'none'].includes(value)
       },
       arrowTrigger: {
-        default: 'hover' as ArrowTrigger,
-        validator: (value: ArrowTrigger) => ['hover', 'always'].includes(value)
+        default: 'hover',
+        validator: value => ['hover', 'always'].includes(value)
       },
       autoplay: {
         default: false,
-        validator: (value: boolean | number) => typeof value === 'number' ? value > 500 : true
+        validator: value => (typeof value === 'number' ? value > 500 : true)
       },
       pointer: {
-        default: 'none' as PointerType,
-        validator: (value: PointerType) => ['outside', 'inside', 'none'].includes(value)
+        default: 'none',
+        validator: value => ['outside', 'inside', 'none'].includes(value)
       },
       speed: 300,
       activeOffset: 0,
@@ -238,7 +254,7 @@ export default defineComponent({
     watch(currentActive, value => {
       const active = (value + props.activeOffset) % itemStates.value.size
 
-      emit('change', active)
+      emitEvent(props.onChange, active)
       emit('update:active', active)
     })
     watch(isHover, value => {
@@ -521,16 +537,16 @@ export default defineComponent({
 
     function handlePrevClick() {
       handlePrev(1)
-      emit('prev', (currentActive.value + props.activeOffset) % itemStates.value.size)
+      emitEvent(props.onPrev, (currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleNextClick() {
       handleNext(1)
-      emit('next', (currentActive.value + props.activeOffset) % itemStates.value.size)
+      emitEvent(props.onNext, (currentActive.value + props.activeOffset) % itemStates.value.size)
     }
 
     function handleSelect(label: number) {
-      emit('select', label)
+      emitEvent(props.onSelect, label)
     }
 
     const { timer } = useSetTimeout()

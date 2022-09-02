@@ -19,8 +19,10 @@ export function getDefaultLocaleConfig(locale?: string) {
   }
 
   switch (locale) {
-    case 'en-US': return enUSLocale()
-    default: return zhCNLocale()
+    case 'en-US':
+      return enUSLocale()
+    default:
+      return zhCNLocale()
   }
 }
 
@@ -59,7 +61,7 @@ export function useLocale<T extends LocaleNames>(name?: T) {
     return locale
   }
 
-  return computed(() => locale.value?.[name] ?? {} as LocaleConfig[T])
+  return computed(() => locale.value?.[name] ?? ({} as LocaleConfig[T]))
 }
 
 export function getCountWord(wordTemplate: string, count: number) {
@@ -78,12 +80,6 @@ export function getCountWordOnly(wordTemplate: string, count: number) {
   return count > 1 ? words[1].trim() : words[0].trim()
 }
 
-export function makeSentence(words: string) {
-  const locale = useLocale()
-
-  if (!locale?.value) {
-    return words
-  }
-
-  return !locale.value.wordSpace ? words.replace(/\s+/g, '') : words
+export function makeSentence(words: string, wordSpace = useLocale()?.value.wordSpace || false) {
+  return !wordSpace ? words.replace(/\s+/g, '') : words
 }

@@ -1,49 +1,92 @@
+### Preset Types
+
+```ts
+export interface SelectKeyConfig {
+  value?: string,
+  label?: string,
+  disabled?: string,
+  divided?: string,
+  noTitle?: string,
+  group?: string,
+  children?: string
+}
+
+type SelectRawOption = string | Record<string, any>
+type SelectValue = string | number | (string | number)[]
+
+interface SelectOptionState {
+  value: string | number,
+  label: string,
+  disabled: boolean,
+  divided: boolean,
+  noTitle: boolean,
+  hidden: boolean,
+  hitting: boolean,
+  group: boolean,
+  depth: number,
+  parent: SelectOptionState | null,
+  data: SelectRawOption
+}
+```
+
 ### Select Props
 
-| Name            | Type                      | Description                                                                | Default     | Since |
-| --------------- | ------------------------- | ------------------------------------------------------------------- | ---------- | --- |
-| visible         | `boolean`                   | 设置选项列表是否显示                                                | `false`      | - |
-| options         | `(string \| { value: string \| number, label?: string, disabled?: boolean, divided?: boolean, noTitle?: boolean })[]`                     | 设置选择器的选项，一般用于简单快速生成选项，使用 default 插槽后失效 | `[]`         | - |
-| size            | `'small' \| 'default' \| 'large'`                    | 选择器的大小                  | `'default'`  | - |
-| state           | `'default' \| 'success' \| 'error' \| 'warning'`                    | 选择器的状态     | `'default'`  | - |
-| disabled        | `boolean`                   | 设置是否禁用选择器                                                  | `false`      | - |
-| outside-close   | `boolean`                   | 设置是否可以通过点击组件外部进行关闭                                | `false`      | - |
-| placeholder     | `string`                    | 同原生的 palceholder                                                | `''` | - |
-| prefix          | `Record<string, any>`                    | 前缀图标，使用前缀插槽时无效                                  | `''`         | - |
-| prefix-color    | `string`                    | 前缀内容的颜色，会影响前缀插槽                                      | `''`         | - |
-| suffix          | `Record<string, any>`                    | 后缀图标，使用后缀插槽时无效                                  | `''`         | - |
-| suffix-color    | `string`                    | 后缀内容的颜色，会影响后缀插槽                                      | `''`         | - |
-| value           | `string \| number \| (string \| number)[]` | 选择器的值，可以使用 `v-model` 双向绑定，多选模式时为数组             | `null`       | - |
-| clearable       | `boolean`                   | 设置是否可以清空值                                                  | `false`      | - |
-| max-list-height | Number                    | 设置选项列表的最大高度，超过高度后会出现滚动条                      | `300`        | - |
-| transition-name | `string`                    | 选项列表的过渡动画                                                  | `'vxp-drop'` | - |
-| placement       | `Placement`                    | 选项列表的出现位置，可选值同 Popper.js                              | `'bottom'`   | - |
-| transfer        | `boolean \| string`         | 设置选项列表的渲染位置，设置为 `true` 时默认渲染至 `<body>`     | `false`      | - |
-| list-class      | `string \| Record<string, boolean>`          | 选项列表的自定义类名                                                | `null`       | - |
-| multiple        | `boolean`                   | 设置是否开启多选模式                                                | `false`      | - |
-| option-check    | `boolean`                   | 设置开启被选选项打勾功能                                            | `false`      | - |
-| empty-text      | `string`                    | 设置空选项时的提示语                                                | `locale.empty` | - |
-| disable-validate | `boolean`                           | 是否禁用触发表单字段验证                                                         | `false`                 | - |
-| key-config | `{ value?: string, label?: string, disabled?: string, divided?: string, noTitle?: string }` | 设置选项解析 `options` 时的各项键名 | `{}` | `2.0.0` |
+| Name            | Type                                                                           | Description                                                                                                   | Default        | Since   |
+| --------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | -------------- | ------- |
+| visible         | `boolean`                                                                      | Set whether the option list is displayed                                                                      | `false`        | -       |
+| options         | `SelectRawOption[]`                                                            | Set the options of select                                                                                     | `[]`           | -       |
+| size            | `'small' \| 'default' \| 'large'`                                              | The size of selector                                                                                          | `'default'`    | -       |
+| state           | `'default' \| 'success' \| 'error' \| 'warning'`                               | The state of the selector                                                                                     | `'default'`    | -       |
+| disabled        | `boolean`                                                                      | Set whether to disable the selector                                                                           | `false`        | -       |
+| outside-close   | `boolean`                                                                      | Set whether to close the component by clicking outside                                                        | `false`        | -       |
+| placeholder     | `string`                                                                       | Same as native palceholder                                                                                    | `''`           | -       |
+| prefix          | `Record<string, any>`                                                          | The prefix icon, invalid when using prefix slot                                                               | `null`         | -       |
+| prefix-color    | `string`                                                                       | The color of the prefix content, affects the prefix slot                                                      | `''`           | -       |
+| suffix          | `Record<string, any>`                                                          | The suffix icon, invalid when using suffix slot                                                               | `null`         | -       |
+| suffix-color    | `string`                                                                       | The color of the suffix content, which affects the suffix slot                                                | `''`           | -       |
+| no-suffix       | `boolean`                                                                      | Set whether to disable suffix icon                                                                            | `false`        | -       |
+| static-suffix   | `boolean`                                                                      | Set whether the suffix icon is static                                                                         | `false`        | -       |
+| value           | `SelectValue`                                                                  | The value of the selector, you can use `v-model` for two-way binding, and it is an array in multi-select mode | `null`         | -       |
+| clearable       | `boolean`                                                                      | Set whether the value can be cleared                                                                          | `false`        | -       |
+| max-list-height | `number`                                                                       | Set the max height of the option list, after which a scroll bar will appear                                   | `300`          | -       |
+| transition-name | `string`                                                                       | The transition animation for options list                                                                     | `'vxp-drop'`   | -       |
+| placement       | `Placement`                                                                    | The position of the option list, the optional value is the same as Popper.js                                  | `'bottom'`     | -       |
+| transfer        | `boolean \| string`                                                            | Set the rendering position of the option list, when set to `true`, it will render to `<body>` by default      | `false`        | -       |
+| list-class      | `ClassType`                                                                    | Custom class name for option list                                                                             | `null`         | -       |
+| multiple        | `boolean`                                                                      | Set whether to enable multiple selection mode                                                                 | `false`        | -       |
+| option-check    | `boolean`                                                                      | Set to add suffix check for selected options                                                                  | `false`        | -       |
+| empty-text      | `string`                                                                       | Prompt for empty options                                                                                      | `locale.empty` | -       |
+| key-config      | `SelectKeyConfig`                                                              | Set the key names of options when parsing `options`                                                           | `{}`           | `2.0.0` |
+| loading         | `boolean`                                                                      | Set whether is loading                                                                                        | `false`        | `2.0.0` |
+| loading-icon    | `Record<string, any>`                                                          | Set the loading icon                                                                                          | `Spinner`      | `2.0.0` |
+| loading-lock    | `boolean`                                                                      | Set whether to be read-only when loading                                                                      | `false`        | `2.0.0` |
+| loading-spin    | `boolean`                                                                      | Set whether to use spin animation for the loading icon                                                        | `false`        | `2.0.0` |
+| filter          | `boolean \| (value: string \| number, options: SelectOptionState) => boolean)` | The method of filtering `options`, the built-in filter method is used when `true` is passed                   | `false`        | `2.0.0` |
+| ignore-case     | `boolean`                                                                      | Set whether to ignore case when using built-in filtering                                                      | `false`        | `2.0.0` |
+| creatable       | `boolean`                                                                      | Set whether to support dynamic create options when filter options is enabled                                  | `false`        | `2.0.0` |
 
 ### Select Events
 
-| Name             | Description                                                                 | Parameters         | Since |
-| ---------------- | -------------------------------------------------------------------- | ------------ | --- |
-| toggle        | 当选项列表显示状态改变时触发，返回当前的状态                         | `(visible: boolean)`      | - |
-| select        | 当选项被选时触发（无论是否改变），返回被选选项的值和标签             | `(value: string \| number, label: string)` | - |
-| cancel        | 当选项被取消时触发，仅在多选模式下触发，返回被取消选项的值和标签     | `(value: string \| number, label: string)` | - |
-| change        | 当被选值改变时触发，返回选项的值和标签，多选模式下为值数组和标签数组 | `(value: string \| number, label: string)` | - |
-| outside-click | 当点击选择器外部是触发，无返回值                                     | -            | - |
-| outside-close | 当通过点击外部关闭选项列表时触发，无返回值                           | -            | - |
-| clear         | 当通过清除按钮清空值时触发，无返回值                                 | -            | - |
+| Name          | Description                                                                                                                              | Parameters                                                         | Since   |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- |
+| toggle        | Emitted when the option list display state changes, returns the current state                                                            | `(visible: boolean)`                                               | -       |
+| select        | Emitted when an option is selected (whether changed or not), returns the value and label of the selected option                          | `(value: string \| number, data: SelectRawOption)`                 | -       |
+| cancel        | Emitted when an option is canceled, only in multi-select mode, returns the value and label of the canceled option                        | `(value: string \| number, data: SelectRawOption)`                 | -       |
+| change        | Emitted when the selected value changes, returns the value and label of the option, the value array and label array in multi-select mode | `(value: SelectValue, data: SelectRawOption \| SelectRawOption[])` | -       |
+| outside-click | Emitted when clicking outside the selector, no return value                                                                              | -                                                                  | -       |
+| outside-close | Emitted when the option list is closed by clicking outside, no return value                                                              | -                                                                  | -       |
+| clear         | Emitted when the value is cleared by the clear button, no return value                                                                   | -                                                                  | -       |
+| focus         | Emitted when the control element is focused, returns the event object                                                                    | `(event: FocusEvent)`                                              | `2.0.0` |
+| blur          | Emitted when the control element loses focus, returns the event object                                                                   | `(event: FocusEvent)`                                              | `2.0.0` |
+| update:label  | Emitted when option value changes, used to quickly get label of current option                                                           | `(label: string)`                                                  | `2.0.0` |
 
 ### Select Slots
 
-| Name    | Description                   | Parameters | Since |
-| ------- | ---------------------- | --- | --- |
-| default | 选项内容的插槽         | `(option: { value: string \| number, label?: string, disabled?: boolean, divided?: boolean, noTitle?: boolean }, index: number, selected: boolean, handleSelect: (value: string \| number, label: string) => void)` | - |
-| prefix  | 前置图标内容的插槽     | - | - |
-| control | 选择器主控件内容的插槽 | - | - |
-| suffix  | 后缀图标内容的插槽     | - | - |
-| empty   | 空选项提示内容的插槽   | - | - |
+| Name    | Description                                                 | Parameters                                                        | Since   |
+| ------- | ----------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
+| default | Slot for option content                                     | `{ option: SelectOptionState, index: number, selected: boolean }` | -       |
+| group   | Slot for content of group label                             | `{ option: SelectOptionState, index: number }`                    | `2.0.0` |
+| prefix  | Slot to prepend icon content                                | -                                                                 | -       |
+| control | Slot for selector main control, should not normally be used | -                                                                 | -       |
+| suffix  | Slot for suffix icon content                                | -                                                                 | -       |
+| empty   | Slot for empty option prompt content                        | -                                                                 | -       |

@@ -1,5 +1,5 @@
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { createBITree, nextFrameOnce } from '@vexip-ui/utils'
+import { isDefined, createBITree, nextFrameOnce } from '@vexip-ui/utils'
 import { isHiddenElement } from './display'
 import { observeResize, unobserveResize } from './resize'
 
@@ -7,17 +7,43 @@ import type { Ref } from 'vue'
 // import type { ResizeHandler } from './resize'
 
 type Key = number | string | symbol
+type Behavior = ScrollToOptions['behavior']
 
 export interface VirtualOptions {
+  /**
+   * 虚拟滚动的元素
+   */
   items: Ref<Array<Record<string, any>>>,
+  /**
+   * 设置元素的最小高度
+   */
   itemSize: Ref<number>,
+  /**
+   * 设置元素是否为固定高度，固定高度时不处理 resize
+   */
   itemFixed: Ref<boolean>,
+  /**
+   * 元素的主键
+   */
   idKey: Ref<string>,
-  defaultKeyAt?: Ref<Key>,
+  /**
+   * 默认停留在的元素的主键，未实现
+   */
+  defaultKeyAt?: Key,
+  /**
+   * 设置前后的缓冲元素的个数
+   */
   bufferSize?: Ref<number>,
-  wrapper?: Ref<HTMLElement | null>
-  // onResize?: ResizeHandler,
-  // onScroll?: (event: Event) => void
+  /**
+   * 虚拟滚动的包围元素
+   */
+  wrapper?: Ref<HTMLElement | null>,
+  /**
+   * 是否自动观察 wrapper 缩放
+   *
+   * @default true
+   */
+  autoResize?: boolean
 }
 
 export function useVirtual(options: VirtualOptions) {
@@ -26,11 +52,10 @@ export function useVirtual(options: VirtualOptions) {
     itemSize,
     itemFixed,
     idKey,
-    // defaultKeyAt,
+    defaultKeyAt,
     bufferSize = ref(5),
-    wrapper = ref(null)
-    // onResize,
-    // onScroll
+    wrapper = ref(null),
+    autoResize = true
   } = options
 
   const indexMap = computed(() => {
@@ -76,7 +101,9 @@ export function useVirtual(options: VirtualOptions) {
     if (!visibleHeight.value || visibleHeight.value < 0) return []
 
     const endIndex = Math.min(
-      heightTree.value.boundIndex(scrollOffset.value + visibleHeight.value) + 1 + Math.max(bufferSize.value, 0),
+      heightTree.value.boundIndex(scrollOffset.value + visibleHeight.value) +
+        1 +
+        Math.max(bufferSize.value, 0),
       items.value.length
     )
 
@@ -105,15 +132,21 @@ export function useVirtual(options: VirtualOptions) {
 
   onMounted(() => {
     nextTick(() => {
-      if (wrapper.value) {
+      if (autoResize && wrapper.value) {
         observeResize(wrapper.value, handleResize)
+      }
+
+      if (isDefined(defaultKeyAt)) {
+        scrollToKey(defaultKeyAt)
       }
     })
   })
 
-  onBeforeUnmount(() => {
-    wrapper.value && unobserveResize(wrapper.value)
-  })
+  if (autoResize) {
+    onBeforeUnmount(() => {
+      wrapper.value && unobserveResize(wrapper.value)
+    })
+  }
 
   function syncScrollOffset() {
     if (wrapper.value) {
@@ -123,30 +156,32 @@ export function useVirtual(options: VirtualOptions) {
 
   function handleScroll() {
     nextFrameOnce(syncScrollOffset)
-    // typeof onScroll === 'function' && onScroll(event)
   }
 
   function handleResize(entry: ResizeObserverEntry) {
-    if (isHiddenElement(entry.target as HTMLElement) || entry.contentRect.height === visibleHeight.value) {
+    if (
+      isHiddenElement(entry.target as HTMLElement) ||
+      entry.contentRect.height === visibleHeight.value
+    ) {
       return
     }
 
     visibleHeight.value = entry.contentRect.height
-    // typeof onResize === 'function' && onResize(entry)
   }
 
   function handleItemResize(key: Key, entry: ResizeObserverEntry) {
     if (itemFixed.value) return
 
     const index = indexMap.value.get(key)!
-    const prevHeight = heightTree.value.get(index)
+    const tree = heightTree.value
+    const prevHeight = tree.get(index)
     const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height
 
     if (height === prevHeight) return
 
     if (isHiddenElement(entry.target as HTMLElement)) {
       if (prevHeight) {
-        heightTree.value.add(index, -1 * prevHeight)
+        tree.add(index, -prevHeight)
         treeUpdateDep.value++
       }
 
@@ -162,8 +197,87 @@ export function useVirtual(options: VirtualOptions) {
       heightDiffMap.delete(key)
     }
 
-    heightTree.value.add(index, delta)
+    if (!delta) return
+
+    tree.add(index, delta)
     treeUpdateDep.value++
+
+    if (wrapper.value) {
+      const prevTop = tree.sum(index)
+
+      if (wrapper.value.scrollTop > prevTop) {
+        wrapper.value.scrollBy(0, delta)
+      }
+
+      scrollOffset.value = wrapper.value.scrollTop
+    }
+  }
+
+  function scrollTo(top: number, behavior?: Behavior) {
+    if (wrapper.value) {
+      wrapper.value.scrollTo({
+        behavior,
+        top,
+        left: 0
+      })
+    }
+  }
+
+  function scrollBy(delta: number, behavior?: Behavior) {
+    if (wrapper.value) {
+      wrapper.value.scrollBy({
+        behavior,
+        top: delta,
+        left: 0
+      })
+    }
+  }
+
+  function scrollToKey(key: Key, behavior?: Behavior) {
+    const index = indexMap.value.get(key)
+
+    if (index !== undefined) {
+      scrollToIndex(index, behavior)
+    }
+  }
+
+  function scrollToIndex(index: number, behavior?: Behavior) {
+    if (wrapper.value) {
+      wrapper.value.scrollTo({
+        behavior,
+        top: heightTree.value.sum(index),
+        left: 0
+      })
+    }
+  }
+
+  function ensureIndexInView(index: number, behavior?: Behavior) {
+    if (!wrapper.value) return
+
+    const tree = heightTree.value
+    const viewTop = wrapper.value.scrollTop
+    const top = tree.sum(index)
+
+    if (top < viewTop) {
+      scrollToIndex(index, behavior)
+      return
+    }
+
+    const viewHeight = wrapper.value.offsetHeight
+    const viewBottom = viewTop + viewHeight
+    const bottom = tree.sum(index + 1)
+
+    if (bottom > viewBottom) {
+      scrollTo(bottom - viewHeight, behavior)
+    }
+  }
+
+  function ensureKeyInView(key: Key, behavior?: Behavior) {
+    const index = indexMap.value.get(key)
+
+    if (index !== undefined) {
+      ensureIndexInView(index, behavior)
+    }
   }
 
   return {
@@ -175,6 +289,12 @@ export function useVirtual(options: VirtualOptions) {
     itemsStyle,
     handleScroll,
     handleResize,
-    handleItemResize
+    handleItemResize,
+    scrollTo,
+    scrollBy,
+    scrollToKey,
+    scrollToIndex,
+    ensureIndexInView,
+    ensureKeyInView
   }
 }

@@ -3,16 +3,18 @@ import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 import { GRID_STATE } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
-import type {
-  LayoutProp,
-  GridJustify,
-  GridAlign,
-  CellFlex
-} from './symbol'
+import type { LayoutProp, GridJustify, GridAlign, CellFlex } from './symbol'
 
 const numberRE = /^\d+$/
 
-const justifyList = Object.freeze<GridJustify>(['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'])
+const justifyList = Object.freeze<GridJustify>([
+  'start',
+  'end',
+  'center',
+  'space-around',
+  'space-between',
+  'space-evenly'
+])
 const alignList = Object.freeze<GridAlign>(['top', 'middle', 'bottom', 'stretch'])
 
 const layoutProp = [Number, String, Array] as PropType<LayoutProp>
@@ -44,12 +46,12 @@ export default defineComponent({
       autoColumns: 'auto',
       dense: false,
       justify: {
-        default: 'start' as GridJustify,
-        validator: (value: GridJustify) => justifyList.includes(value)
+        default: 'start',
+        validator: value => justifyList.includes(value)
       },
       align: {
-        default: 'stretch' as GridAlign,
-        validator: (value: GridAlign) => alignList.includes(value)
+        default: 'stretch',
+        validator: value => alignList.includes(value)
       },
       cellFlex: false
     })
@@ -61,14 +63,16 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.bm(props.justify)]: true,
         [nh.bm(props.align)]: props.align !== 'stretch',
-        [nh.bm('densc')]: props.dense
+        [nh.bm('dense')]: props.dense
       }
     })
     const style = computed(() => {
       const style: CSSProperties = {}
 
       if (props.gap) {
-        style.gap = Array.isArray(props.gap) ? `${props.gap[0]}px ${props.gap[1]}px` : `${props.gap}px`
+        style.gap = Array.isArray(props.gap)
+          ? `${props.gap[0]}px ${props.gap[1]}px`
+          : `${props.gap}px`
       }
 
       style.gridTemplateColumns = parseSizeLayout(props.columns)
@@ -116,17 +120,19 @@ export default defineComponent({
       }
 
       if (Array.isArray(value)) {
-        return value.map(item => {
-          if (typeof item === 'number') {
-            return `${item}fr`
-          }
+        return value
+          .map(item => {
+            if (typeof item === 'number') {
+              return `${item}fr`
+            }
 
-          if (typeof item === 'string') {
-            return numberRE.test(item.trim()) ? `${item}fr` : item
-          }
+            if (typeof item === 'string') {
+              return numberRE.test(item.trim()) ? `${item}fr` : item
+            }
 
-          return item
-        }).join(' ')
+            return item
+          })
+          .join(' ')
       }
 
       return value
@@ -142,31 +148,34 @@ export default defineComponent({
       }
 
       if (Array.isArray(value)) {
-        return value.map(item => {
-          if (typeof item === 'number') {
-            return `${item}fr`
-          }
+        return value
+          .map(item => {
+            if (typeof item === 'number') {
+              return `${item}fr`
+            }
 
-          if (typeof item === 'string') {
-            return numberRE.test(item.trim()) ? `${item}fr` : item
-          }
+            if (typeof item === 'string') {
+              return numberRE.test(item.trim()) ? `${item}fr` : item
+            }
 
-          return item
-        }).join(' ')
+            return item
+          })
+          .join(' ')
       }
 
       return value
     }
 
-    return () => h(
-      props.tag || 'div',
-      {
-        class: className.value,
-        style: style.value
-      },
-      {
-        default: () => slots.default?.()
-      }
-    )
+    return () =>
+      h(
+        props.tag || 'div',
+        {
+          class: className.value,
+          style: style.value
+        },
+        {
+          default: () => slots.default?.()
+        }
+      )
   }
 })

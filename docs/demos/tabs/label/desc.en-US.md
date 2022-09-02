@@ -1,3 +1,3 @@
-### 标签插槽
+### Label Slot
 
-需要自定义显示标签导航的内容时，可以为每个标签页添加 `label` 的插槽。
+You can add a `label` slot for each tab when you need to customize the navigation content.

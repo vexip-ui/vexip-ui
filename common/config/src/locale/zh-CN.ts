@@ -7,6 +7,7 @@ export function zhCNLocale() {
 
     calendar: {
       year: '年',
+      month: '月',
       month1: '01月',
       month2: '02月',
       month3: '03月',
@@ -28,6 +29,10 @@ export function zhCNLocale() {
       week7: '日'
     },
 
+    checkbox: {
+      all: '全选'
+    },
+
     colorPicker: {
       confirm: '确定',
       cancel: '重置'
@@ -43,6 +48,11 @@ export function zhCNLocale() {
       cancel: '取消'
     },
 
+    drawer: {
+      confirm: '确认',
+      cancel: '取消'
+    },
+
     form: {
       submit: '提交',
       reset: '重置',
@@ -51,6 +61,12 @@ export function zhCNLocale() {
 
     input: {
       placeholder: '请输入'
+    },
+
+    layout: {
+      signOut: '注销',
+      signType: '导航模式',
+      majorColor: '主题颜色'
     },
 
     modal: {
@@ -100,6 +116,14 @@ export function zhCNLocale() {
     timePicker: {
       confirm: '确认',
       cancel: '取消'
+    },
+
+    transfer: {
+      source: '源',
+      target: '目标',
+      empty: '暂无数据',
+      reverse: '反选',
+      search: '搜索 (Ctrl + F)'
     },
 
     tree: {

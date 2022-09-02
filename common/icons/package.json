@@ -9,7 +9,9 @@
   "main": "lib/index.js",
   "module": "es/index.mjs",
   "types": "types/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "dist/*"
+  ],
   "exports": {
     ".": {
       "require": "./lib/index.js",
@@ -23,7 +25,8 @@
       "require": "./lib/regular/*",
       "import": "./es/regular/*"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./*": "./*"
   },
   "files": [
     "dist",
@@ -32,10 +35,16 @@
     "types",
     "vue"
   ],
+  "homepage": "https://github.com/qmhc/vexip-ui/tree/main/common/icons#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qmhc/vexip-ui.git",
+    "directory": "common/icons"
+  },
   "devDependencies": {
     "@types/node": "^17.0.33",
     "@types/prettier": "^2.6.1",
-    "@vitejs/plugin-vue": "^2.3.3",
+    "@vitejs/plugin-vue": "2.3.3",
     "chalk": "^4.1.2",
     "execa": "^5.1.1",
     "fast-glob": "^3.2.11",
@@ -43,10 +52,10 @@
     "prettier": "^2.6.2",
     "ts-node": "^10.7.0",
     "typescript": "4.6.4",
-    "vite": "^2.9.9",
-    "vue": "^3.2.33"
+    "vite": "2.9.14",
+    "vue": "^3.2.37"
   },
   "peerDependencies": {
-    "vue": "^3.2.6"
+    "vue": "^3.2.25"
   }
 }

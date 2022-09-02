@@ -144,6 +144,18 @@ $tooltip: map.merge(
       }
     }
 
+    &--no-arrow {
+      &[data-popper-placement^='top'],
+      &[data-popper-placement^='bottom'] {
+        padding: 5px 0;
+      }
+
+      &[data-popper-placement^='left'],
+      &[data-popper-placement^='right'] {
+        padding: 0 5px;
+      }
+    }
+
     $v-offset: get-css-var('tooltip-arrow-v-offset');
     $h-offset: get-css-var('tooltip-arrow-h-offset');
 

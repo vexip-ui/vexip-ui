@@ -4,6 +4,7 @@ export interface I18nConfig {
     makeInterest: string,
     slogan: string,
     getStarted: string,
+    getComponents: string,
     guides: string,
     components: string,
     playground: string,
@@ -41,6 +42,7 @@ export interface I18nConfig {
 
     Grid: string,
     Divider: string,
+    Layout: string,
     Row: string,
     Space: string,
     Split: string,
@@ -65,6 +67,7 @@ export interface I18nConfig {
     Switch: string,
     Textarea: string,
     TimePicker: string,
+    Transfer: string,
     Upload: string,
     Wheel: string,
 
@@ -98,10 +101,13 @@ export interface I18nConfig {
     Progress: string,
     Skeleton: string,
     Spin: string,
+    Toast: string,
 
     ConfigProvider: string,
     Masker: string,
     NativeScroll: string,
+    Overflow: string,
+    Renderer: string,
     ResizeObserver: string,
     Scroll: string,
     Scrollbar: string,

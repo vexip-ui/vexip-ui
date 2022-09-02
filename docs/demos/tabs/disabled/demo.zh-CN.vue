@@ -1,27 +1,27 @@
 <template>
   <Tabs>
-    <TabPane label="标签页1">
+    <TabPanel label="标签页1">
       <p>标签页一的内容。</p>
-    </TabPane>
-    <TabPane label="标签页2" disabled>
+    </TabPanel>
+    <TabPanel label="标签页2" disabled>
       <p>标签页二的内容。</p>
-    </TabPane>
-    <TabPane label="标签页3">
+    </TabPanel>
+    <TabPanel label="标签页3">
       <p>标签页三的内容。</p>
-    </TabPane>
+    </TabPanel>
   </Tabs>
   <br />
   <br />
   <Tabs card>
-    <TabPane label="标签页1">
+    <TabPanel label="标签页1">
       <p>标签页一的内容。</p>
-    </TabPane>
-    <TabPane label="标签页2" disabled>
+    </TabPanel>
+    <TabPanel label="标签页2" disabled>
       <p>标签页二的内容。</p>
-    </TabPane>
-    <TabPane label="标签页3">
+    </TabPanel>
+    <TabPanel label="标签页3">
       <p>标签页三的内容。</p>
-    </TabPane>
+    </TabPanel>
   </Tabs>
 </template>
 

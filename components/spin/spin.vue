@@ -1,9 +1,54 @@
 <template>
-  <div v-if="!props.inner" :class="[nh.b(), nh.bs('vars')]">
+  <div
+    v-if="!props.inner"
+    :class="[nh.b(), nh.bs('vars')]"
+    :aria-busy="currentActive ? 'true' : undefined"
+  >
     <slot></slot>
-    <transition appear :name="props.transitionName">
+    <transition
+      appear
+      :name="props.transitionName"
+      @after-enter="handleShow"
+      @after-leave="handleHide"
+    >
       <div v-if="currentActive" :class="nh.be('loading')">
-        <div :class="nh.be('mask')" :style="maskStyle"></div>
+        <div
+          v-if="!props.hideMask"
+          :class="[nh.be('mask'), props.maskClass]"
+          :style="maskStyle"
+          @click="handleMaskClick"
+        ></div>
+        <slot name="content">
+          <div :class="nh.be('icon')">
+            <slot name="icon">
+              <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
+              <Icon v-else pulse :icon="props.icon"></Icon>
+            </slot>
+          </div>
+          <div v-if="hasTip" :class="nh.be('tip')">
+            <slot name="tip">
+              {{ props.tip }}
+            </slot>
+          </div>
+        </slot>
+      </div>
+    </transition>
+  </div>
+  <transition
+    v-else
+    appear
+    :name="props.transitionName"
+    @after-enter="handleShow"
+    @after-leave="handleHide"
+  >
+    <div v-if="currentActive" :class="[nh.b(), nh.bs('vars'), nh.bm('inner')]">
+      <div
+        v-if="!props.hideMask"
+        :class="[nh.be('mask'), props.maskClass]"
+        :style="maskStyle"
+        @click="handleMaskClick"
+      ></div>
+      <slot name="content">
         <div :class="nh.be('icon')">
           <slot name="icon">
             <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
@@ -15,23 +60,7 @@
             {{ props.tip }}
           </slot>
         </div>
-      </div>
-    </transition>
-  </div>
-  <transition v-else appear :name="props.transitionName">
-    <div v-if="currentActive" :class="[nh.b(), nh.bs('vars'), nh.bm('inner')]">
-      <div :class="nh.be('mask')" :style="maskStyle"></div>
-      <div :class="nh.be('icon')">
-        <slot name="icon">
-          <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
-          <Icon v-else pulse :icon="props.icon"></Icon>
-        </slot>
-      </div>
-      <div v-if="hasTip" :class="nh.be('tip')">
-        <slot name="tip">
-          {{ props.tip }}
-        </slot>
-      </div>
+      </slot>
     </div>
   </transition>
 </template>
@@ -39,7 +68,14 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  classProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { toNumber } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
 
@@ -60,10 +96,16 @@ export default defineComponent({
       default: null
     },
     tip: String,
+    hideMask: booleanProp,
     maskColor: String,
-    transitionName: String
+    maskClass: classProp,
+    transitionName: String,
+    onMaskClick: eventProp<(event: MouseEvent) => void>(),
+    onShow: eventProp(),
+    onHide: eventProp()
   },
   setup(_props, { slots }) {
+    const nh = useNameHelper('spin')
     const props = useProps('spin', _props, {
       active: {
         default: false,
@@ -74,8 +116,10 @@ export default defineComponent({
       inner: false,
       delay: false,
       tip: '',
+      hideMask: false,
       maskColor: '',
-      transitionName: 'vxp-fade'
+      maskClass: null,
+      transitionName: () => nh.ns('fade')
     })
 
     const currentActive = ref(props.active)
@@ -127,14 +171,30 @@ export default defineComponent({
       }
     )
 
+    function handleMaskClick(event: MouseEvent) {
+      emitEvent(props.onMaskClick, event)
+    }
+
+    function handleShow() {
+      emitEvent(props.onShow)
+    }
+
+    function handleHide() {
+      emitEvent(props.onHide)
+    }
+
     return {
       props,
-      nh: useNameHelper('spin'),
+      nh,
 
       currentActive,
 
       hasTip,
-      maskStyle
+      maskStyle,
+
+      handleMaskClick,
+      handleShow,
+      handleHide
     }
   }
 })

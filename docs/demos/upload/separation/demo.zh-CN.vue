@@ -22,7 +22,7 @@
     </template>
   </Upload>
   <Modal v-model:active="listActive" transfer title="上传列表">
-    <div style="width: 500px;">
+    <div style="max-width: 500px;">
       <UploadList :files="files" type="card" @delete="deleteFile"></UploadList>
     </div>
   </Modal>
@@ -31,8 +31,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-import type { Upload } from 'vexip-ui'
-import type { FileState } from 'vexip-ui/es/upload'
+import type { Upload, FileState } from 'vexip-ui'
 
 const listActive = ref(false)
 const upload = ref<InstanceType<typeof Upload> | null>(null)

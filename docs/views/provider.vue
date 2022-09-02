@@ -1,19 +1,19 @@
-
 <template>
-  <Header @toggle-menu="menuExpanded = $event"></Header>
+  <Header @toggle-menu="store.expanded = $event"></Header>
   <router-view v-slot="{ Component }">
     <transition name="vxp-fade" mode="out-in">
-      <component :is="Component" :menu-expanded="menuExpanded"></component>
+      <component :is="Component"></component>
     </transition>
   </router-view>
-  <Masker v-model:active="menuExpanded" closable></Masker>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, provide } from 'vue'
+import { watch, inject, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { vexipuiLocale } from '../i18n'
 import Header from '../common/header.vue'
+
+import type { Store } from '../symbol'
 
 const props = defineProps({
   language: {
@@ -21,6 +21,8 @@ const props = defineProps({
     default: __ROLLBACK_LANG__
   }
 })
+
+const store = inject<Store>('store')!
 
 const i18n = useI18n({ useScope: 'global' })
 i18n.locale.value = props.language
@@ -35,8 +37,6 @@ watch(
     vexipuiLocale.value.locale = value
   }
 )
-
-const menuExpanded = ref(false)
 </script>
 
 <style>

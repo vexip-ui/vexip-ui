@@ -8,6 +8,10 @@
   transition: get-css-var('transition-transform');
   transform-origin: 50% 50%;
 
+  & > g {
+    display: flex;
+  }
+
   svg {
     width: 1em;
     height: 1em;
@@ -16,31 +20,31 @@
     fill: currentcolor;
   }
 
-  &--flip-horizontal svg {
+  &--flip-horizontal > g {
     transform: scale(-1, 1);
   }
 
-  &--flip-vertical svg {
+  &--flip-vertical > g {
     transform: scale(1, -1);
   }
 
-  &--flip-both svg {
+  &--flip-both > g {
     transform: scale(-1, -1);
   }
 
-  &--spin-in svg {
+  &--spin-in > g {
     animation: #{$namespace}-spin-in 1s 0s infinite linear;
   }
 
-  &--spin-out svg {
+  &--spin-out > g {
     animation: #{$namespace}-spin-out 1s 0s infinite linear;
   }
 
-  &--pulse-in svg {
+  &--pulse-in > g {
     animation: #{$namespace}-spin-in 1s infinite steps(8);
   }
 
-  &--pulse-out svg {
+  &--pulse-out > g {
     animation: #{$namespace}-spin-out 1s infinite steps(8);
   }
 }

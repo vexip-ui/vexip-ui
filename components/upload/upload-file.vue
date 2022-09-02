@@ -1,12 +1,9 @@
 <template>
   <transition appear :name="props.selectToAdd ? transitionName : undefined">
     <li
-      :class="[
-        nh.be('file'),
-        nh.bem('file', props.listType),
-        nh.bem('file', props.file.status)
-      ]"
+      :class="[nh.be('file'), nh.bem('file', props.listType), nh.bem('file', props.file.status)]"
       :title="fileName"
+      tabindex="-1"
     >
       <slot :file="props.file.source" :status="props.file.status" :percentage="percentage">
         <template v-if="props.listType === 'name'">
@@ -27,37 +24,31 @@
           </div>
           <div :class="nh.be('actions')">
             <span
-              v-if="props.file.status === status.UPLOADING"
+              v-if="props.file.status === 'uploading'"
               style="margin-right: 0.5em;"
               :class="nh.be('percentage')"
             >
               {{ `${percentage}%` }}
             </span>
-            <div
-              v-if="props.file.status === status.SUCCESS"
-              :class="[nh.be('icon'), nh.be('success')]"
-            >
+            <div v-if="props.file.status === 'success'" :class="[nh.be('icon'), nh.be('success')]">
               <Icon><CircleCheck></CircleCheck></Icon>
             </div>
-            <div
-              v-else-if="props.file.status === status.FAIL"
-              :class="[nh.be('icon'), nh.be('fail')]"
-            >
+            <div v-else-if="props.file.status === 'fail'" :class="[nh.be('icon'), nh.be('fail')]">
               <Icon><CircleExclamation></CircleExclamation></Icon>
             </div>
             <div
-              v-else-if="props.file.status === status.UPLOADING"
+              v-else-if="props.file.status === 'uploading'"
               :class="[nh.be('icon'), nh.be('loading')]"
             >
               <Icon pulse>
                 <Spinner></Spinner>
               </Icon>
             </div>
-            <div :class="[nh.be('icon'), nh.be('close')]" @click="deleteFile(props.file)">
+            <button :class="[nh.be('icon'), nh.be('close')]" @click="handleDelete(props.file)">
               <Icon><TrashCanR></TrashCanR></Icon>
-            </div>
+            </button>
           </div>
-          <div v-if="props.file.status === status.UPLOADING" :class="nh.be('progress')">
+          <div v-if="props.file.status === 'uploading'" :class="nh.be('progress')">
             <Progress
               info-type="none"
               :stroke-width="2"
@@ -69,7 +60,7 @@
         <template v-else-if="props.listType === 'thumbnail' || props.listType === 'card'">
           <div :class="nh.be('card')">
             <div :class="nh.be('thumbnail')">
-              <template v-if="props.file.status === status.UPLOADING">
+              <template v-if="props.file.status === 'uploading'">
                 <div v-if="props.listType === 'thumbnail'" :class="nh.be('progress')">
                   <span style="margin-bottom: 0.3em;">
                     {{ props.loadingText ?? locale.uploading }}
@@ -111,7 +102,7 @@
                 {{ fileName }}
               </span>
               <CollapseTransition>
-                <div v-if="props.file.status === status.UPLOADING" :class="nh.be('progress')">
+                <div v-if="props.file.status === 'uploading'" :class="nh.be('progress')">
                   <Progress
                     info-type="none"
                     :stroke-width="4"
@@ -122,29 +113,31 @@
               </CollapseTransition>
             </div>
             <div
-              v-if="props.listType === 'card' || props.file.status !== status.UPLOADING"
+              v-if="props.listType === 'card' || props.file.status !== 'uploading'"
               :class="nh.be('actions')"
             >
               <div v-if="props.listType === 'thumbnail'" :class="nh.be('mask')"></div>
-              <div
+              <button
                 :class="[
                   nh.be('icon'),
                   nh.be('action'),
                   {
-                    [nh.bem('action', 'disabled')]: !props.file.type.startsWith('image/') || !props.file.base64
+                    [nh.bem('action', 'disabled')]:
+                      !props.file.type.startsWith('image/') || !props.file.base64
                   }
                 ]"
-                @click="$emit('preview', props.file.source)"
+                :disabled="!props.file.type.startsWith('image/') || !props.file.base64"
+                @click="handlePreview(props.file)"
               >
                 <Icon :scale="1.4">
                   <EyeR></EyeR>
                 </Icon>
-              </div>
-              <div :class="[nh.be('icon'), nh.be('action')]" @click="deleteFile(props.file)">
+              </button>
+              <button :class="[nh.be('icon'), nh.be('action')]" @click="handleDelete(props.file)">
                 <Icon :scale="1.4">
                   <TrashCanR></TrashCanR>
                 </Icon>
-              </div>
+              </button>
             </div>
           </div>
         </template>
@@ -160,10 +153,17 @@ import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
 import { CircleCheck, CircleExclamation, Spinner, EyeR, TrashCanR } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { toFixed } from '@vexip-ui/utils'
 import { iconMaps } from './file-icon'
-import { UploadStatusType, uploadListTypes } from './symbol'
+import { StatusType, uploadListTypes } from './symbol'
 
 import type { PropType } from 'vue'
 import type { UploadListType, RenderFn, FileState } from './symbol'
@@ -187,10 +187,12 @@ export default defineComponent({
     listType: String as PropType<UploadListType>,
     loadingText: String,
     selectToAdd: booleanProp,
-    precision: Number
+    precision: Number,
+    onDelete: eventProp<(file: FileState, source: File) => void>(),
+    onPreview: eventProp<(file: FileState, source: File) => void>()
   },
-  emits: ['delete', 'preview'],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('uploadFile', _props, {
       file: {
         default: () => ({} as FileState),
@@ -210,7 +212,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('upload')
-    const transitionName = 'vxp-fade'
+    const transitionName = computed(() => nh.ns('fade'))
 
     const useIconRenderer = computed(() => typeof props.iconRenderer === 'function')
     const fileName = computed(() => props.file.path || props.file.name)
@@ -230,8 +232,12 @@ export default defineComponent({
       return iconMaps.default
     }
 
-    function deleteFile(file: FileState) {
-      emit('delete', file)
+    function handleDelete(file: FileState) {
+      emitEvent(props.onDelete, file, file.source)
+    }
+
+    function handlePreview(file: FileState) {
+      emitEvent(props.onPreview, file, file.source)
     }
 
     function transformfileToBase64(file: FileState) {
@@ -240,7 +246,7 @@ export default defineComponent({
       reader.readAsDataURL(file.source)
 
       reader.onload = () => {
-        if (file.status !== UploadStatusType.DELETE) {
+        if (file.status !== StatusType.DELETE) {
           file.base64 = reader.result?.toString() ?? null
         }
       }
@@ -251,14 +257,14 @@ export default defineComponent({
       nh,
       locale: useLocale('upload'),
       transitionName,
-      status: UploadStatusType,
 
       useIconRenderer,
       fileName,
       percentage,
 
       getFileIcon,
-      deleteFile,
+      handleDelete,
+      handlePreview,
       transformfileToBase64
     }
   }

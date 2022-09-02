@@ -2,12 +2,18 @@ import type { InjectionKey } from 'vue'
 
 export type BreakPoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
 
-export type Justify = 'start' | 'end' | 'center' | 'space-around' | 'space-between' | 'space-evenly'
-export type Align = 'top' | 'middle' | 'bottom' | 'stretch'
+export type RowGridJustify =
+  | 'start'
+  | 'end'
+  | 'center'
+  | 'space-around'
+  | 'space-between'
+  | 'space-evenly'
+export type RowGridAlign = 'top' | 'middle' | 'bottom' | 'stretch'
 
 export interface ColumnFlex {
-  justify: Justify,
-  align: Align
+  justify: RowGridJustify,
+  align: RowGridAlign
 }
 
 export interface RowState {

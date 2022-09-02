@@ -1,13 +1,11 @@
 <template>
-  <Select v-model:value="value" :options="options"></Select>
+  <Select v-model:value="value" :loading="loading" :options="options"></Select>
   <br />
   <br />
   <Button type="primary" :loading="loading" @click="loadOptions">
     加载选项
   </Button>
-  <p>
-    当前值：{{ value }}
-  </p>
+  <p>当前值：{{ value }}</p>
 </template>
 
 <script setup lang="ts">
@@ -23,13 +21,7 @@ function loadOptions() {
   loading.value = true
 
   setTimeout(() => {
-    options.value = [
-      '选项1',
-      '选项2',
-      '选项3',
-      '选项4',
-      '选项5'
-    ]
+    options.value = ['选项1', '选项2', '选项3', '选项4', '选项5']
     loading.value = false
   }, 2000)
 }

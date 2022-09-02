@@ -1,18 +1,12 @@
 <template>
-  <div>
-    <Button type="primary" @click="active = !active">
-      Open
-    </Button>
-    <Drawer
-      v-model:active="active"
-      transfer
-      title="Title"
-    >
-      <p>Some content</p>
-      <p>Some content</p>
-      <p>Some content</p>
-    </Drawer>
-  </div>
+  <Button type="primary" @click="active = !active">
+    Open
+  </Button>
+  <Drawer v-model:active="active" transfer title="Title">
+    <p>Some content</p>
+    <p>Some content</p>
+    <p>Some content</p>
+  </Drawer>
 </template>
 
 <script setup lang="ts">

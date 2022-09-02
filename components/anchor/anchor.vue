@@ -8,7 +8,17 @@
     }"
   >
     <ul :class="nh.be('list')">
-      <slot></slot>
+      <slot>
+        <AnchorLink
+          v-for="link in props.options"
+          :key="link.to"
+          :to="link.to"
+          :title="link.title"
+          :children="link.children"
+        >
+          {{ link.label }}
+        </AnchorLink>
+      </slot>
     </ul>
     <transition appear :name="props.markerTransition">
       <div
@@ -37,29 +47,36 @@ import {
   getCurrentInstance,
   isVNode
 } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { AnchorLink } from '@/components/anchor-link'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
 import type { PropType, ComponentInternalInstance } from 'vue'
 import type { NativeScroll } from '@/components/native-scroll'
 import type { Scroll } from '@/components/scroll'
-import type { LinkState, AnchorState } from './symbol'
+import type { AnchorLinkOptions, AnchorLinkState, AnchorState } from './symbol'
 
 type ScrollType = InstanceType<typeof Scroll | typeof NativeScroll>
 
 export default defineComponent({
   name: 'Anchor',
+  components: {
+    AnchorLink
+  },
   props: {
     active: String,
     viewer: [String, Object, Function] as PropType<unknown>,
     offset: Number,
     marker: booleanProp,
     scrollDuration: Number,
-    markerTransition: String
+    markerTransition: String,
+    options: Array as PropType<AnchorLinkOptions[]>,
+    onChange: eventProp<(value: string) => void>()
   },
-  emits: ['change', 'update:active'],
+  emits: ['update:active'],
   setup(_props, { emit }) {
+    const nh = useNameHelper('anchor')
     const props = useProps('anchor', _props, {
       active: {
         default: '',
@@ -72,14 +89,17 @@ export default defineComponent({
       offset: 8,
       marker: false,
       scrollDuration: 500,
-      markerTransition: 'vxp-fade'
+      markerTransition: () => nh.ns('fade'),
+      options: {
+        default: () => [],
+        static: true
+      }
     })
 
-    const nh = useNameHelper('anchor')
     const currentActive = ref(props.active)
     const animating = ref(false)
     const markerTop = ref(0)
-    const linkStates = new Set<LinkState>()
+    const linkStates = new Set<AnchorLinkState>()
 
     const wrapper = ref<HTMLElement | null>(null)
 
@@ -104,24 +124,26 @@ export default defineComponent({
       }
     )
     watch(currentActive, value => {
-      emit('change', value)
+      emitEvent(props.onChange, value)
       emit('update:active', value)
     })
     watch(() => props.viewer, updateContainer)
 
     onMounted(() => {
       updateContainer()
+      computeMarkerPoisiton()
     })
 
     onBeforeUnmount(() => {
       removeListener()
     })
 
-    function increaseLink(state: LinkState) {
+    function increaseLink(state: AnchorLinkState) {
       linkStates.add(state)
+      state.active = currentActive.value === state.to
     }
 
-    function decreaseLink(state: LinkState) {
+    function decreaseLink(state: AnchorLinkState) {
       linkStates.delete(state)
     }
 
@@ -152,7 +174,7 @@ export default defineComponent({
           _container = viewer
         }
 
-        if (container instanceof Element) {
+        if (_container instanceof Element) {
           isRawViewer = true
         } else {
           isRawViewer = false
@@ -168,7 +190,7 @@ export default defineComponent({
             const name = _container.type?.name
 
             if (name === 'Scroll' || name === 'NativeScroll') {
-              scroller = _container.proxy as ScrollType
+              scroller = _container.proxy as any as ScrollType
               break
             }
 
@@ -196,8 +218,8 @@ export default defineComponent({
             container = instance.parent?.proxy?.$el as HTMLElement
           }
 
-          if (isRawViewer) {
-            container!.addEventListener('scroll', handleContainerScroll)
+          if (isRawViewer && container) {
+            container.addEventListener('scroll', handleContainerScroll)
           }
         } else {
           container = _container as HTMLElement
@@ -293,7 +315,7 @@ export default defineComponent({
       animating.value = true
 
       const elementTop = element.offsetTop
-      const duration = Math.max(props.scrollDuration, 160)
+      const duration = Math.max(props.scrollDuration, 0)
 
       if (isRawViewer && container) {
         const from = container.scrollTop

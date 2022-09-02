@@ -33,6 +33,19 @@ html,
 body,
 #app {
   height: 100%;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
 }
 
 body {
@@ -86,11 +99,6 @@ article {
 
 p .vxp-linker {
   margin-bottom: 4px;
-}
-
-.vxp-menu-group__label {
-  padding: 10px 20px;
-  color: var(--vxp-content-color-third);
 }
 
 .anchor {

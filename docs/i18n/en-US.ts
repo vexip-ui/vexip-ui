@@ -6,6 +6,7 @@ export const enUS = defineI18n({
     makeInterest: 'Make interesting in development',
     slogan: 'Highly customizable property values, Full TypeScript, Performance should be good',
     getStarted: 'Get started',
+    getComponents: 'Components',
     guides: 'Guides',
     components: 'Components',
     playground: 'Playground',
@@ -43,6 +44,7 @@ export const enUS = defineI18n({
 
     Grid: 'Grid',
     Divider: 'Divider',
+    Layout: 'Layout',
     Row: 'Row',
     Space: 'Space',
     Split: 'Split',
@@ -67,6 +69,7 @@ export const enUS = defineI18n({
     Switch: 'Switch',
     Textarea: 'Textarea',
     TimePicker: 'TimePicker',
+    Transfer: 'Transfer',
     Upload: 'Upload',
     Wheel: 'Wheel',
 
@@ -100,10 +103,13 @@ export const enUS = defineI18n({
     Progress: 'Progress',
     Skeleton: 'Skeleton',
     Spin: 'Spin',
+    Toast: 'Toast',
 
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',
     NativeScroll: 'NativeScroll',
+    Overflow: 'Overflow',
+    Renderer: 'Renderer',
     ResizeObserver: 'ResizeObserver',
     Scroll: 'Scroll',
     Scrollbar: 'Scrollbar',

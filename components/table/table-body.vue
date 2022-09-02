@@ -1,9 +1,9 @@
 <template>
-  <div :class="nh.be('body')" :style="style">
+  <div :class="nh.be('body')" role="rowgroup" :style="style">
     <div v-if="renderData.length" :class="nh.be('row-list')" :style="listStyle">
       <TableRow
-        v-for="row in renderData"
-        :key="row.index"
+        v-for="(row, index) in renderData"
+        :key="index"
         :row="row"
         :index="row.index"
         :is-fixed="!!fixed"
@@ -68,7 +68,7 @@ export default defineComponent({
 
       return state.columns
     })
-    const renderData = computed(() => state.virtual ? state.virtualData : getters.processedData)
+    const renderData = computed(() => (state.virtual ? state.virtualData : getters.processedData))
     const style = computed(() => {
       const { widths, totalHeight } = state
       const columns = currentColumns.value

@@ -1,5 +1,5 @@
-### 自定义位置
+### Custom Placement
 
-通过 `config` 方法可以配置 `placement` 属性以改变提示出现的位置。
+The `placement` option can be configured via the `config` method to change where the notice appears.
 
-可选的位置共有四个，分别为右上角、右下角、左下角、左上角。
+There are four optional positions, top-left, top-right, bottom-left and bottom-right.

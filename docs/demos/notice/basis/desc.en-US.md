@@ -1,7 +1,7 @@
 ### Basis Usage
 
-通过 `open` 方法打开一条纯文字的提示。
+Open a text-only notice with the `open` method.
 
-该方法可以接收一个字符串或对象，传入字符串时将作为提示内容，传入对象可以更细粒度地控制提示属性，具体可选属性参考 api 说明。
+This method can receive a string or object, which will be used as the notice content when passed in. The passed object can control the notice attribute in a finer-grained manner. For specific optional attributes, please refer to the api description.
 
-组件根据 `title` 和 `content` 属性有无的情况，会分别渲染成正常、仅标题和仅内容三重状态。
+Depending on the presence or absence of the `title` and `content` options, the component will be rendered into a triple state of normal, title only, and content only.

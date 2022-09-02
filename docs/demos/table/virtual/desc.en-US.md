@@ -1,3 +1,3 @@
-### 虚拟滚动
+### Virtual Scroll
 
-数据太多的时候，你应该会需要它。
+You should need it when there is too much data.

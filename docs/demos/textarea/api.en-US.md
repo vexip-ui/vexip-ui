@@ -1,31 +1,34 @@
 ### Textarea Props
 
-| Name             | Type                                             | Description                                 | Default              | Since |
-| ---------------- | ------------------------------------------------ | ------------------------------------------- | -------------------- | ----- |
-| state            | `'default' \| 'success' \| 'error' \| 'warning'` | 输入框的状态                                | `'default'`          | -    |
-| value            | `string`                                         | 设置输入框的值                              | `''`                 | -    |
-| placeholder      | `string`                                         | 设置输入框的占位                            | `locale.placeholder` | -    |
-| rows             | `number`                                         | 设置输入框的默认行数                        | `2`                  | -    |
-| no-resize        | `boolean`                                         | 是否禁用缩放功能                            | `false`              | -    |
-| autofocus        | `boolean`                                        | 设置输入框的自动聚焦                        | `false`              | -    |
-| spellcheck       | `boolean`                                        | 设置输入框的拼写检查                        | `false`              | -    |
-| autocomplete     | `boolean`                                        | 设置输入框的自动完成                        | `false`              | -    |
-| readonly         | `boolean`                                        | 设置输入框的只读属性                        | `false`              | -    |
-| disabled         | `boolean`                                        | 设置是否禁用输入框                          | `false`              | -    |
-| debounce         | `boolean`                                        | 开启防抖，当快速输入时只触发一次 `input` 事 | `false`              | -    |
-| max-length       | `number`                                         | 设置输入内容的最大长度，值为 `0` 时不限     | `0`                  | -    |
-| disable-validate | `boolean`                                        | 是否禁用触发表单字段验                      | `false`              | -    |
+| Name         | Type                                             | Description                                                                         | Default              | Since   |
+| ------------ | ------------------------------------------------ | ----------------------------------------------------------------------------------- | -------------------- | ------- |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'` | The state of the input box                                                          | `'default'`          | -       |
+| value        | `string`                                         | Set the value of the input box                                                      | `''`                 | -       |
+| placeholder  | `string`                                         | Set the placeholder of the input box                                                | `locale.placeholder` | -       |
+| rows         | `number`                                         | Set the default number of rows in the input box                                     | `2`                  | -       |
+| no-resize    | `boolean`                                        | Set whether to disable resize                                                       | `false`              | -       |
+| autofocus    | `boolean`                                        | Set the autofocus of the input field                                                | `false`              | -       |
+| spellcheck   | `boolean`                                        | Set spellcheck for input fields                                                     | `false`              | -       |
+| autocomplete | `boolean`                                        | Set autocomplete for input fields                                                   | `false`              | -       |
+| readonly     | `boolean`                                        | Set the read-only property of the input box                                         | `false`              | -       |
+| disabled     | `boolean`                                        | set whether to disable the input box                                                | `false`              | -       |
+| debounce     | `boolean`                                        | Enable debounce, only trigger `input` event once when typing fast                   | `false`              | -       |
+| max-length   | `number`                                         | Set the maximum length of the input content, if the value is `0`, there is no limit | `0`                  | -       |
+| loading      | `boolean`                                        | Set whether is loading                                                              | `false`              | `2.0.0` |
+| loading-icon | `Record<string, any>`                            | Set the loading icon                                                                | `Spinner`            | `2.0.0` |
+| loading-lock | `boolean`                                        | Set whether to be read-only when loading                                            | `false`              | `2.0.0` |
+| loading-spin | `boolean`                                        | Set whether to use spin animation for the loading icon                              | `false`              | `2.0.0` |
 
 ### Textarea Events
 
-| Name      | Description                                  | Parameters                                  | Since |
-| --------- | -------------------------------------------- | ------------------------------------------- | ----- |
-| focus     | 输入框聚焦时触发，返回事件对象               | `(event: FocusEvent)`                       | -     |
-| blur      | 输入框失去焦点时触发，返回事件对象           | `(event: FocusEvent)`                       | -     |
-| change    | 当输入框值改变时触发，返回读取后的值和原始值 | `(accessedValue: any, originValue: string)` | -     |
-| input     | 当键入了值时触发，返回读取后的值和原始值     | `(accessedValue: any, originValue: string)` | -     |
-| enter     | 当键入回车时触发，返回按键事件               | `(event: KeyboardEvent)`                    | -     |
-| key-down  | 当键按下时触发，返回按键事件                 | `(event: KeyboardEvent)`                    | -     |
-| key-press | 当键按住时触发，返回按键事件                 | `(event: KeyboardEvent)`                    | -     |
-| key-up    | 当键松开时触发，返回按键事件                 | `(event: KeyboardEvent)`                    | -     |
-| clear     | 当通过清除按钮清空值时触发，无返回值         | -                                           | -     |
+| Name      | Description                                                                                    | Parameters               | Since |
+| --------- | ---------------------------------------------------------------------------------------------- | ------------------------ | ----- |
+| focus     | Emitter when the input box is focused, returns the event object                                | `(event: FocusEvent)`    | -     |
+| blur      | Emitter when the input box loses focus, returns the event object                               | `(event: FocusEvent)`    | -     |
+| change    | Emitter when the value of the input box changes, returns the read value and the original value | `(value: string)`        | -     |
+| input     | Emitter when a value is entered, returns the read value and the original value                 | `(value: string)`        | -     |
+| enter     | Emitter when enter, returns the key event                                                      | `(event: KeyboardEvent)` | -     |
+| key-down  | Emitter when a key is pressed, returns the key event                                           | `(event: KeyboardEvent)` | -     |
+| key-press | Emitter when the key is held down, returns the key event                                       | `(event: KeyboardEvent)` | -     |
+| key-up    | Emitter when the key is released, returns the key event                                        | `(event: KeyboardEvent)` | -     |
+| clear     | Emitter when the value is cleared by the clear button, no return value                         | -                        | -     |

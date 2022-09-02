@@ -1,6 +1,19 @@
 <template>
-  <li ref="wrapper" :class="nh.be('item')" :style="style">
-    <slot></slot>
+  <li
+    ref="wrapper"
+    :class="[
+      nh.be('item'),
+      disabled && nh.bem('item', 'disabled'),
+      active && nh.bem('item', 'active')
+    ]"
+    role="option"
+    :aria-disabled="disabled ? 'true' : undefined"
+    :aria-selected="active"
+    :style="style"
+  >
+    <slot>
+      {{ value }}
+    </slot>
   </li>
 </template>
 
@@ -28,6 +41,14 @@ export default defineComponent({
     disabled: {
       type: Boolean,
       default: false
+    },
+    active: {
+      type: Boolean,
+      default: false
+    },
+    meta: {
+      type: [String, Number, Object],
+      default: null
     }
   },
   setup(props) {
@@ -43,7 +64,8 @@ export default defineComponent({
       height,
       el: wrapper,
       value: toRef(props, 'value'),
-      disabled: toRef(props, 'disabled')
+      disabled: toRef(props, 'disabled'),
+      meta: toRef(props, 'meta')
     })
 
     const style = computed(() => {

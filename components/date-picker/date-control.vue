@@ -7,10 +7,7 @@
   >
     <div
       v-if="enabled.year"
-      :class="[
-        nh.be('unit'),
-        visible && unitType === 'year' ? nh.bem('unit', 'focused') : ''
-      ]"
+      :class="[nh.be('unit'), visible && unitType === 'year' ? nh.bem('unit', 'focused') : '']"
       @click="handleInputFocus('year')"
     >
       {{ formattedYear }}
@@ -23,10 +20,7 @@
         {{ dateSeparator }}
       </div>
       <div
-        :class="[
-          nh.be('unit'),
-          visible && unitType === 'month' ? nh.bem('unit', 'focused') : ''
-        ]"
+        :class="[nh.be('unit'), visible && unitType === 'month' ? nh.bem('unit', 'focused') : '']"
         @click="handleInputFocus('month')"
       >
         {{ formattedMonth }}
@@ -40,10 +34,7 @@
         {{ dateSeparator }}
       </div>
       <div
-        :class="[
-          nh.be('unit'),
-          visible && unitType === 'date' ? nh.bem('unit', 'focused') : ''
-        ]"
+        :class="[nh.be('unit'), visible && unitType === 'date' ? nh.bem('unit', 'focused') : '']"
         @click="handleInputFocus('date')"
       >
         {{ formattedDate }}
@@ -56,10 +47,7 @@
     <template v-if="showTimeUnits">
       <div
         v-if="enabled.hour"
-        :class="[
-          nh.be('unit'),
-          visible && unitType === 'hour' ? nh.bem('unit', 'focused') : ''
-        ]"
+        :class="[nh.be('unit'), visible && unitType === 'hour' ? nh.bem('unit', 'focused') : '']"
         @click="handleInputFocus('hour')"
       >
         {{ formattedHour }}
@@ -173,16 +161,7 @@ export default defineComponent({
       default: () => ({})
     }
   },
-  emits: [
-    'input',
-    'plus',
-    'minus',
-    'enter',
-    'cancel',
-    'unit-focus',
-    'prev-unit',
-    'next-unit'
-  ],
+  emits: ['input', 'plus', 'minus', 'enter', 'cancel', 'unit-focus', 'prev-unit', 'next-unit'],
   setup(props, { emit }) {
     const nh = useNameHelper('date-picker')
 
@@ -237,6 +216,8 @@ export default defineComponent({
     }
 
     function handleInput(event: KeyboardEvent) {
+      if (!props.visible) return
+
       const type = handleKeyEnter(event)
 
       switch (type) {
@@ -291,6 +272,9 @@ export default defineComponent({
 
       focus: () => {
         wrapper.value?.focus()
+      },
+      blur: () => {
+        wrapper.value?.blur()
       }
     }
   }

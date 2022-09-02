@@ -43,6 +43,7 @@ $tab-nav: map.merge(
 
   position: relative;
   background-color: transparent;
+  outline: 0;
 
   &__list {
     display: flex;

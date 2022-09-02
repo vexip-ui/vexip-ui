@@ -7,18 +7,12 @@
       minute: '分',
       second: '秒'
     }"
-    style="width: 220px;"
+    style="max-width: 300px;"
   ></TimePicker>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const time = ref('')
-
-    return { time }
-  }
-})
+const time = ref('')
 </script>

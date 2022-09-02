@@ -1,23 +1,23 @@
 ### Scrollbar Props
 
-| Name        | Type             | Description                                                                                 | Default  | Since |
-| ----------- | ---------------- | ------------------------------------------------------------------------------------ | ------- | --- |
-| placement   | `'top' \| 'right' \| 'bottom' \| 'left'`           | 滚动条的位置                              | `'right'` | - |
-| scroll      | `number`           | 设置滚动条的滚动位置，百分比                                                         | `0`       | - |
-| bar-length  | `number`           | 滚动条的长度 (纵向时为高度)，单位为百分比，可选值 `1` ~ `99`                             | `35`      | - |
-| appear      | `boolean`          | 设置滚动条是否在初始渲染就启用过渡效果                                               | `false`   | - |
-| fade        | `number`           | 设置触发滚动条渐隐的等待毫秒，若小于 `300` 则关闭渐隐效果                              | `1500`    | - |
-| bar-color   | `string`           | 滚动条的背景颜色                                                                     | `null`    | - |
-| disabled    | `boolean`          | 设置滚动条的禁用状态                                                                 | `false`   | - |
-| wrapper     | `string \| HTMLElement` | 传入 id 选择器或一个 Node 对象，设置滚动条的容器，用于感知鼠标移动已显示和隐藏滚动条 | `null`    | - |
-| duration    | `number`           | 设置滚动条过渡效果的持续时间，单位为毫秒                                             | `null`    | - |
-| use-track   | `boolean`          | 设置是否开启滚动条轨道交互                                                           | `false`   | - |
-| track-speed | `number`           | 设置点击轨道触发滚动的基础移动速度，单位为百分比，可选值为 `1` ~ `9`                     | `2`       | - |
+| Name        | Type                                     | Description                                                                                                                                | Default   | Since |
+| ----------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ----- |
+| placement   | `'top' \| 'right' \| 'bottom' \| 'left'` | Scrollbar placement                                                                                                                        | `'right'` | -     |
+| scroll      | `number`                                 | Set the scroll position of the scroll bar, percentage                                                                                      | `0`       | -     |
+| bar-length  | `number`                                 | The length of the scroll bar (height when vertical), the unit is percentage, optional value `1` ~ `99`                                     | `35`      | -     |
+| appear      | `boolean`                                | Set whether the scrollbar transitions are enabled on initial render                                                                        | `false`   | -     |
+| fade        | `number`                                 | Set the milliseconds to wait for the scroll bar to fade, if it is less than `300`, the fade effect is turned off                           | `1500`    | -     |
+| bar-color   | `string`                                 | The background color of the scroll bar                                                                                                     | `null`    | -     |
+| disabled    | `boolean`                                | Set scrollbar disabled state                                                                                                               | `false`   | -     |
+| wrapper     | `string \| HTMLElement`                  | Pass in an id selector or a Node object, set the container of the scroll bar, used to sense mouse movement to show and hide the scroll bar | `null`    | -     |
+| duration    | `number`                                 | Sets the duration of the scroll bar transition effect in milliseconds                                                                      | `null`    | -     |
+| use-track   | `boolean`                                | Set whether to enable scrollbar track interaction                                                                                          | `false`   | -     |
+| track-speed | `number`                                 | Set the basic movement speed of clicking on the track to trigger scrolling, the unit is percentage, the optional value is `1` ~ `9`        | `2`       | -     |
 
 ### Scrollbar Events
 
-| Name            | Description                                                        | Parameters   | Since |
-| --------------- | ----------------------------------------------------------- | ------ | --- |
-| scroll-start | 当即将使用滚动条进行滚动时触发，返回当前的滚动位置 (百分比) | `(percent: number)` | - |
-| scroll       | 当使用滚动条进行滚动时触发，返回当前的滚动位置 (百分比)     | `(percent: number)` | - |
-| scroll-end   | 当停止使用滚动条进行滚动时触发，返回当前的滚动位置 (百分比) | `(percent: number)` | - |
+| Name         | Description                                                                                        | Parameters          | Since |
+| ------------ | -------------------------------------------------------------------------------------------------- | ------------------- | ----- |
+| scroll-start | Emitted when the scroll bar is about to be scrolled, returns the current scroll position (percent) | `(percent: number)` | -     |
+| scroll       | Emitted when scrolling with the scroll bar, returns the current scroll position (percent)          | `(percent: number)` | -     |
+| scroll-end   | Emitted when you stop scrolling with the scroll bar, returns the current scroll position (percent) | `(percent: number)` | -     |

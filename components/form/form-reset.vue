@@ -27,8 +27,16 @@
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue'
-import { Button, buttonTypes } from '@/components/button'
-import { useNameHelper, useProps, useLocale, booleanProp, sizeProp } from '@vexip-ui/config'
+import { Button } from '@/components/button'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  sizeProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { noop, isPromise } from '@vexip-ui/utils'
 import { FORM_ACTIONS } from './symbol'
 
@@ -59,16 +67,14 @@ export default defineComponent({
     buttonType: String as PropType<ButtonAttrType>,
     block: booleanProp,
     tag: String,
-    onBeforeReset: Function as PropType<() => unknown>
+    onBeforeReset: Function as PropType<() => unknown>,
+    onReset: eventProp()
   },
-  emits: ['reset'],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('formReset', _props, {
       size: null,
-      type: {
-        default: 'default' as ButtonType,
-        validator: (value: ButtonType) => buttonTypes.includes(value)
-      },
+      type: 'default',
       label: null,
       dashed: null,
       text: null,
@@ -89,6 +95,7 @@ export default defineComponent({
       }
     })
     const actions = inject<FormActions>(FORM_ACTIONS, {
+      getLabelWidth: noop,
       validate: noop,
       validateFields: noop,
       reset: noop,
@@ -112,7 +119,7 @@ export default defineComponent({
 
       if (result !== false) {
         actions.reset()
-        emit('reset')
+        emitEvent(props.onReset)
       }
     }
 

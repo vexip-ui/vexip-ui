@@ -1,8 +1,13 @@
 <template>
-  <section :class="[prefix, isAffix && `${prefix}--affix`]">
-    <aside :class="[`${prefix}__aside`, menuExpanded && `${prefix}__aside--expanded`]">
+  <section :class="[prefix, affixed && `${prefix}--affix`]">
+    <aside v-if="store.isLg" :class="`${prefix}__aside`">
       <slot name="aside"></slot>
     </aside>
+    <Masker v-else v-model:active="store.expanded" closable>
+      <aside :class="[`${prefix}__aside`, store.expanded && `${prefix}__aside--expanded`]">
+        <slot name="aside"></slot>
+      </aside>
+    </Masker>
     <main :class="`${prefix}__main`">
       <NativeScroll
         ref="scroll"
@@ -35,10 +40,12 @@ defineProps({
   }
 })
 
+defineEmits(['update:menu-expanded'])
+
 const prefix = 'container'
 const store = inject<Store>('store')!
 const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
-const isAffix = toRef(store, 'isAffix')
+const affixed = toRef(store, 'affixed')
 const route = useRoute()
 
 let refreshed = false
@@ -54,9 +61,9 @@ onMounted(() => {
   requestAnimationFrame(setScrollY)
 })
 
-function handleScroll({ clientY } : { clientY: number }) {
+function handleScroll({ clientY }: { clientY: number }) {
   store.scrollY = clientY
-  isAffix.value = !store.isLg && clientY >= 50
+  affixed.value = !store.isLg && clientY >= 50
 }
 
 provide('refreshScroll', refreshScroll)
@@ -74,8 +81,8 @@ function refreshScroll() {
 
 function setScrollY() {
   if (scroll.value) {
-    scroll.value.currentScroll.y = store.isAffix ? 65 : 0
-    store.scrollY = store.isAffix ? 65 : 0
+    scroll.value.currentScroll.y = store.affixed ? 65 : 0
+    store.scrollY = store.affixed ? 65 : 0
   }
 }
 </script>
@@ -90,7 +97,7 @@ function setScrollY() {
   &__aside {
     @include fixed;
 
-    z-index: calc(var(--vxp-z-index-popper) + 100);
+    z-index: calc(var(--vxp-z-index-masker) + 100);
     width: var(--aside-width);
     background-color: var(--bg-color);
     border-right: var(--vxp-border-light-2);
@@ -110,6 +117,11 @@ function setScrollY() {
     @include query-media('xl') {
       width: var(--aside-width-large);
     }
+
+    .vxp-menu-group__title {
+      padding: 10px 20px;
+      color: var(--vxp-content-color-third);
+    }
   }
 
   &__main {
@@ -126,7 +138,7 @@ function setScrollY() {
   }
 
   &__scroll {
-    .vxp-scrollbar--right {
+    & > .vxp-scrollbar--right {
       top: calc(var(--header-height) + var(--sub-menu-height));
 
       @include query-media('lg') {

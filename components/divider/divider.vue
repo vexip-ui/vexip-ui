@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="className" role="separator">
     <span v-if="!props.vertical && hasText" :class="nh.be('text')">
       <slot></slot>
     </span>

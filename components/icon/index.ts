@@ -6,3 +6,4 @@ const Icon = _Icon as typeof _Icon & {
 }
 
 export { Icon, register }
+export type { IconProps, IconMinorProps } from './symbol'

@@ -17,7 +17,6 @@ export const loading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord 
         ? { ...binding.value }
         : ({ active: binding.value } as any)
 
-      props.class = 'vxp-spin--directive'
       props.inner = true
 
       const spin = createVNode(Spin, props, null, 0, Object.keys(props))
@@ -49,10 +48,6 @@ export const loading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord 
         })
 
         component.props.inner = true
-
-        if (component.proxy?.$el.classList) {
-          component.proxy.$el.classList.add('vxp-spin--directive')
-        }
       }
     })
   },

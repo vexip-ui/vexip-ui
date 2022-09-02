@@ -5,7 +5,7 @@ import { destroyObject } from '@vexip-ui/utils'
 import type { App } from 'vue'
 import type { ConfirmType, ConfirmOptions, ConfirmInstance } from './symbol'
 
-export * from './symbol'
+export type { ConfirmType, ConfirmOptions }
 
 type FuzzyOptions = string | ConfirmOptions
 
@@ -47,6 +47,10 @@ export class ConfirmManager {
     this.defaults = { ...this.defaults, ...options }
   }
 
+  clone() {
+    return new ConfirmManager(this.defaults)
+  }
+
   destroy() {
     this._container && render(null, this._container)
     destroyObject(this)
@@ -64,7 +68,7 @@ export class ConfirmManager {
 
   private _getInstance() {
     if (!this._mountedApp) {
-      console.warn('[vexip-ui:Confirm]: App missing, the plugin maybe not install.')
+      console.warn('[vexip-ui:Confirm]: App missing, the plugin maybe not installed.')
       return null
     }
 

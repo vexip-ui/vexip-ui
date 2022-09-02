@@ -12,17 +12,14 @@ export function getComponentConfig(): ComponentGroup[] {
   return [
     {
       name: 'basis',
-      components: [
-        { name: 'Button' },
-        { name: 'Icon' },
-        { name: 'Linker' }
-      ]
+      components: [{ name: 'Button' }, { name: 'Icon' }, { name: 'Linker' }]
     },
     {
       name: 'layout',
       components: [
         { name: 'Grid', since: '2.0.0' },
         { name: 'Divider' },
+        { name: 'Layout', since: '2.0.0' },
         { name: 'Row' },
         { name: 'Space', since: '2.0.0' },
         { name: 'Split' }
@@ -55,6 +52,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Switch' },
         { name: 'Textarea' },
         { name: 'TimePicker' },
+        { name: 'Transfer', since: '2.0.0' },
         { name: 'Upload' },
         { name: 'Wheel' }
       ]
@@ -95,7 +93,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Notice' },
         { name: 'Progress' },
         { name: 'Skeleton', since: '2.0.0' },
-        { name: 'Spin', since: '1.3.0' }
+        { name: 'Spin', since: '1.3.0' },
+        { name: 'Toast', since: '2.0.0' }
       ]
     },
     {
@@ -104,6 +103,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'ConfigProvider', since: '2.0.0' },
         { name: 'Masker' },
         { name: 'NativeScroll', since: '1.3.1' },
+        { name: 'Overflow', since: '2.0.0' },
+        { name: 'Renderer' },
         { name: 'ResizeObserver', since: '2.0.0' },
         { name: 'Scroll' },
         { name: 'Scrollbar' },

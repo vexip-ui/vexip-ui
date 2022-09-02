@@ -1,6 +1,6 @@
 <template>
   <Button type="primary" @click="sendCustomizedNotice">
-    自定义渲染
+    Custom Render
   </Button>
 </template>
 
@@ -25,23 +25,27 @@ export default defineComponent({
                 color: '#339af0'
               }
             }),
-            h('div', {
-              style: {
-                paddingLeft: '3em'
-              }
-            }, [
-              '一条自定义的',
-              h(
-                'span',
-                {
-                  style: {
-                    color: '#fab005',
-                    fontStyle: 'italic'
-                  }
-                },
-                '消息'
-              )
-            ])
+            h(
+              'div',
+              {
+                style: {
+                  paddingLeft: '3em'
+                }
+              },
+              [
+                'A custom ',
+                h(
+                  'span',
+                  {
+                    style: {
+                      color: '#fab005',
+                      fontStyle: 'italic'
+                    }
+                  },
+                  'notice'
+                )
+              ]
+            )
           ])
         }
       })

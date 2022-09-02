@@ -10,13 +10,6 @@ const format = (process.env.FORMAT || 'es') as LibraryFormats
 const logLevel = process.env.LOG_LEVEL
 
 export default defineConfig(async () => {
-  const input = await glob('vue/**/*.{ts,vue}', {
-    cwd: __dirname,
-    absolute: true,
-    onlyFiles: true,
-    ignore: ['**/__serve__/**']
-  })
-
   return {
     logLevel: (logLevel || 'info') as LogLevel,
     build: {
@@ -27,8 +20,8 @@ export default defineConfig(async () => {
         formats: [format]
       },
       rollupOptions: {
-        input,
-        external: ['vue', '@vue'],
+        input: [resolve(__dirname, 'vue/index.ts')],
+        external: ['vue'],
         output: {
           preserveModules: true,
           preserveModulesRoot: resolve(__dirname, 'vue'),

@@ -1,3 +1,3 @@
-### 按钮样式
+### Button Type
 
-添加 `button` 属性可以设置单选框组为按钮样式。
+Add the `button` prop to set the radios with button style in group.

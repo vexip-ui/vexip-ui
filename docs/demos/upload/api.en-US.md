@@ -1,35 +1,42 @@
 ### Upload Props
 
-| Name             | Type            | Description                                                                                                                               | Default   | Since |
-| ---------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------- | --- |
-| url              | `string`          | 文件的上传的目标地址                                                                                                               | `''`       | - |
-| multiple         | `boolean`         | 设置是否可以多选文件                                                                                                               | `false`    | - |
-| tip              | `string`          | 设置上传的提示语                                                                                                                   | `''`       | - |
-| loading-text     | `string`          | 设置加载时的文字提示                                                                                                               | `locale.uploading` | - |
-| list-type        | `string`          | 设置文件列表的类型，可选值为 `name`、`thumbnail`、`card`                                                                           | `'name'`   | - |
-| select-to-add    | `boolean`        | 设置选择文件时是否为增量模式                                                                                                       | `false`    | - |
-| block            | `boolean`         | 是否为块级元素，设置后宽度变为 `100%`                                                                                                | `false`    | - |
-| accept           | `string \| string[]` | 原生 `<input>` 的 `accept` 属性，传入数组时会自动用 `,` 连接                                                                             | `null`     | - |
-| filter           | `string \| string[]` | 设置文件的类型过滤，采用文件的拓展名过滤                                                                                           | `''`       | - |
-| max-size         | `number`          | 设置上传文件的最大大小                                                                                                             | `null`     | - |
-| field            | `string`          | 设置文件在请求表单数据中的字段                                                                                                     | `'file'`   | - |
-| data             | `Record<string, string \| Blob>`          | 设置同文件一同上传的数据，`key-value` 的形式                                                                                         | `{}`       | - |
-| headers          | `Record<string, string>`          | 设置上传请求的请求头                                                                                                               | `{}`       | - |
-| with-credentials | `boolean`         | 设置上传请求是否携带 cookie 信息                                                                                                   | `false`    | - |
-| manual           | `boolean`         | 设置是否在选择文件后不自动发起上传                                                                                                 | `false`    | - |
-| hidden-files     | `boolean`         | 设置是否隐藏文件列表                                                                                                               | `false`    | - |
-| hidden-icon      | `boolean`         | 设置是否隐藏文件图标                                                                                                               | `false`    | - |
-| count-limit      | `number`          | 在多选文件时设置文件的上传最大数量，为 `0` 时不做限制                                                                                | `0`        | - |
-| allow-drag       | `boolean`         | 设置是否允许使用拖拽文件进行上传                                                                                                   | `false`    | - |
-| on-before-upload    | `(file: SourceFile, files: SourceFile[]) => any \| Promise<any>`        | 设置文件上传前的回调，接收上传 File 对象和待上传的文件列表，支持异步函数和 Promise，返回值为 `false` 会阻止上传                      | `null`     | - |
-| on-before-select    | `(file: SourceFile, files: SourceFile[]) => any \| Promise<any>`        | 设置文件选择前的回调，接收选择的 File 对象 (如果为增量模式还会接收已有文件列表)，支持异步函数和 Promise，返回值为 `false` 会阻止选择 | `null`     | - |
-| icon-renderer    | `(data: { file: SourceFile }) => any`        | 文件图标的渲染方法，第一个参数为 h，第二个参数为 File 对象                                                                         | `null`     | - |
-| directory        | `boolean`         | 设置是否开启文件夹上传，注意，当使用点击上传时将会强制只能上传文件夹，同时该特性需要浏览器支持 `webkitdirectory`                   | `false`    | - |
-| path-field       | `string`          | 设置文件路径在请求表单数据中的字段，开启了文件夹上传后用于记录文件的相对位置                                                       | `'path'`   | - |
-| disabled-click   | `boolean`         | 设置是否禁用点击上传，禁用后将默认打开拖拽上传                                                                                     | `false`    | - |
-| button-label | `string` | 设置内置上传按钮的文本内容 | `locale.upload` | `2.0.0` |
+| Name             | Type                                                             | Description                                                                                                                                                                                                                         | Default            | Since   |
+| ---------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------- |
+| state            | `'default' \| 'success' \| 'error' \| 'warning'`                 | the state of upload                                                                                                                                                                                                                 | `'default'`        | `2.0.0` |
+| url              | `string`                                                         | The file upload destination url                                                                                                                                                                                                     | `''`               | -       |
+| file-list        | `FileState[]`                                                    | Set the file list of upload, can use `v-model` for two-way binding                                                                                                                                                                  | `[]`               | `2.0.0` |
+| multiple         | `boolean`                                                        | Set whether to select multiple files                                                                                                                                                                                                | `false`            | -       |
+| tip              | `string`                                                         | Set the upload tip                                                                                                                                                                                                                  | `''`               | -       |
+| loading-text     | `string`                                                         | Set the text prompt when loading                                                                                                                                                                                                    | `locale.uploading` | -       |
+| list-type        | `string`                                                         | Set the type of file list, optional values ​​are `name`, `thumbnail`, `card`                                                                                                                                                        | `'name'`           | -       |
+| select-to-add    | `boolean`                                                        | Set whether to select files in incremental mode                                                                                                                                                                                     | `false`            | -       |
+| block            | `boolean`                                                        | Whether it is a block-level element, the width becomes `100%` after setting                                                                                                                                                         | `false`            | -       |
+| accept           | `string \| string[]`                                             | The `accept` attribute of the native `<input>`, when an array is passed in, it will be automatically connected with `,`                                                                                                             | `null`             | -       |
+| filter           | `string \| string[]`                                             | Set file type filter, filter by file extension                                                                                                                                                                                      | `''`               | -       |
+| max-size         | `number`                                                         | Set the max size of uploaded files                                                                                                                                                                                                  | `null`             | -       |
+| field            | `string`                                                         | The field that sets the file in the request form data                                                                                                                                                                               | `'file'`           | -       |
+| data             | `Record<string, string \| Blob>`                                 | Set the data to upload with the file, in the form of `key-value`                                                                                                                                                                    | `{}`               | -       |
+| headers          | `Record<string, string>`                                         | Set request headers for upload request                                                                                                                                                                                              | `{}`               | -       |
+| with-credentials | `boolean`                                                        | Set whether upload request carries cookie information                                                                                                                                                                               | `false`            | -       |
+| manual           | `boolean`                                                        | Set whether to not automatically initiate upload after file selection                                                                                                                                                               | `false`            | -       |
+| hidden-files     | `boolean`                                                        | Set whether to hide the file list                                                                                                                                                                                                   | `false`            | -       |
+| hidden-icon      | `boolean`                                                        | Set whether to hide the file icon                                                                                                                                                                                                   | `false`            | -       |
+| count-limit      | `number`                                                         | Set the max number of files to upload when multiple files are selected. When it is `0`, there is no limit                                                                                                                           | `0`                | -       |
+| allow-drag       | `boolean`                                                        | Set whether to allow uploading by dragging files                                                                                                                                                                                    | `false`            | -       |
+| on-before-upload | `(file: SourceFile, files: SourceFile[]) => any \| Promise<any>` | Set the callback before file upload, receive the uploaded File object and the list of files to be uploaded, support asynchronous Function and Promise, return value of `false` will prevent upload                                  | `null`             | -       |
+| on-before-select | `(file: SourceFile, files: SourceFile[]) => any \| Promise<any>` | Set the callback before file selection, receive the selected File object (if in incremental mode, also Receives a list of existing files), supports async functions and promises, returns a value of `false` will prevent selection | `null`             | -       |
+| icon-renderer    | `(data: { file: SourceFile }) => any`                            | The rendering method of the file icon, the first parameter is h, the second parameter is the File object                                                                                                                            | `null`             | -       |
+| directory        | `boolean`                                                        | Set whether to enable folder uploading. Note that when using click upload, only folders can be forced to be uploaded. At the same time, this feature requires browsers to support `webkitdirectory`                                 | `false`            | -       |
+| path-field       | `string`                                                         | Set the field of the file path in the request form data, enable the relative location of the file after the folder is uploaded                                                                                                      | `'path'`           | -       |
+| disabled-click   | `boolean`                                                        | Set whether to disable click to upload, if disabled, drag and drop upload will be enabled by default                                                                                                                                | `false`            | -       |
+| button-label     | `string`                                                         | Set the text content of the built-in upload button                                                                                                                                                                                  | `locale.upload`    | `2.0.0` |
+| disabled         | `boolean`                                                        | Set whether the upload is disabled                                                                                                                                                                                                  | `false`            | `2.0.0` |
+| loading          | `boolean`                                                        | Set whether is loading                                                                                                                                                                                                              | `false`            | `2.0.0` |
+| loading-icon     | `Record<string, any>`                                            | Set the loading icon                                                                                                                                                                                                                | `Spinner`          | `2.0.0` |
+| loading-lock     | `boolean`                                                        | Set whether to be read-only when loading                                                                                                                                                                                            | `false`            | `2.0.0` |
+| loading-spin     | `boolean`                                                        | Set whether to use spin animation for the loading icon                                                                                                                                                                              | `false`            | `2.0.0` |
 
-组件内部对 File 的各项状态进行了封装：
+The various states of the File are encapsulated inside the component:
 
 ```ts
 type HttpError = Error & {
@@ -67,44 +74,44 @@ interface FileState {
 
 ### Upload Events
 
-| Name            | Description                                                           | Parameters               | Since |
-| --------------- | -------------------------------------------------------------- | ------------------ | --- |
-| change       | 选择的文件发生改变时触发，返回已选的文件列表                   | `(files: SourceFile[])`              | - |
-| filter-error | 当文件类型校验失败时触发，返回失败的文件                       | `(errorFile: SourceFile)`          | - |
-| size-error   | 当文件大小校验失败时触发，返回失败的文件                       | `(errorFile: SourceFile)`          | - |
-| progress     | 当上传文件的进度更新时触发，返回最新进度和文件                 | `(percent: number, file: SourceFile)`      | - |
-| success      | 当文件上传成功时触发，返回最新进度和文件                       | `(response: any, file: SourceFile)`     | - |
-| error        | 当文件上传失败时触发，返回最新进度和文件                       | `(error: HttpError, file: SourceFile)`        | - |
-| delete       | 当删除了选择 (上传) 的文件时触发，返回被删除的文件             | `(file: SourceFile)`               | - |
-| exceed       | 当选择的文件超过上限时触发，返回超出的文件列表和已选的文件列表 | `(exceedFiles: SourceFile[], files: SourceFile[])` | - |
-| preview      | 当对文件进行预览时触发，返回预览的文件                         | `(file: SourceFile)`               | - |
+| Name         | Description                                                                                                               | Parameters                                         | Since |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ----- |
+| change       | Emitter when the selected file changes, returns the list of selected files                                                | `(files: SourceFile[])`                            | -     |
+| filter-error | Emitter when file type verification fails, returns the failed file                                                        | `(errorFile: SourceFile)`                          | -     |
+| size-error   | Emitter when the file size check fails, returns the failed file                                                           | `(errorFile: SourceFile)`                          | -     |
+| progress     | Emitted when the progress of the uploaded file is updated, returns the latest progress and file                           | `(percent: number, file: SourceFile)`              | -     |
+| success      | Emitter when the file is uploaded successfully, returns the latest progress and file                                      | `(response: any, file: SourceFile)`                | -     |
+| error        | Emitter when file upload fails, returns the latest progress and file                                                      | `(error: HttpError, file: SourceFile)`             | -     |
+| delete       | Emitter when the selected (uploaded) file is deleted, returns the deleted file                                            | `(file: SourceFile)`                               | -     |
+| exceed       | Emitter when the selected file exceeds the upper limit, returns the list of exceeded files and the list of selected files | `(exceedFiles: SourceFile[], files: SourceFile[])` | -     |
+| preview      | Emitter when a file is previewed, returns the previewed file                                                              | `(file: SourceFile)`                               | -     |
 
 ### Upload Slots
 
-| Name    | Description                                                                                     | Parameters | Since |
-| ------- | ---------------------------------------------------------------------------------------- | --- | --- |
-| default | 选择文件的控件插槽，`isDragOver` 用于标记是否有内容往控件上拖拽 | `(isDragOver: boolean)` | - |
-| tip     | 提示语内容插槽，如果使用了默认插槽，该插槽会失效                                         | - | - |
+| Name    | Description                                                                                                             | Parameters                | Since |
+| ------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------- | ----- |
+| default | Select the control slot of the file, `isDragOver` is used to mark whether there is content to be dragged on the control | `{ isDragOver: boolean }` | -     |
+| tip     | Tip content slot, if the default slot is used, the slot will be invalid                                                 | -                         | -     |
 
 ### UploadList Props
 
-| Name          | Type     | Description                                                                                                              | Default   | Since |
-| ------------- | -------- | ----------------------------------------------------------------------------------------------------------------- | -------- | --- |
-| files         | `FileState[]`    | 设置文件列表渲染的文件数据，其元素是 Upload 组件内部的一个代理对象，可以通过 Upload 组件的 `renderFiles` 属性获取 | `[]`       | - |
-| select-to-add | `boolean`  | 设置文件列表变化时是否为增量变化，这将会产生不一样的过渡效果                                                      | `false`    | - |
-| icon-renderer | `(data: { file: SourceFile }) => any` | 同 Upload 的同名属性                                                                                              | `null`     | - |
-| loading-text  | `string`   | 设置文件加载时的文字提示                                                                                          | `locale.uploading` | - |
+| Name          | Type                                  | Description                                                                                                                                                                              | Default            | Since |
+| ------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| files         | `FileState[]`                         | Set the file data rendered by the file list. Its element is a proxy object inside the Upload component, which can be obtained through the `renderFiles` property of the Upload component | `[]`               | -     |
+| select-to-add | `boolean`                             | Set whether to change the file list incrementally, which will produce different transition effects                                                                                       | `false`            | -     |
+| icon-renderer | `(data: { file: SourceFile }) => any` | Same to Upload `icon-renderer` prop                                                                                                                                                      | `null`             | -     |
+| loading-text  | `string`                              | Set the text prompt when the file is loaded                                                                                                                                              | `locale.uploading` | -     |
 
 ### UploadList Events
 
-| Name       | Description                                               | Parameters | Since |
-| ---------- | -------------------------------------------------- | ---- | --- |
-| delete  | 当删除了选择 (上传) 的文件时触发，返回被删除的文件 | `(file: SourceFile)` | - |
-| preview | 当对文件进行预览时触发，返回预览的文件             | `(file: SourceFile)` | - |
+| Name    | Description                                                                    | Parameters           | Since |
+| ------- | ------------------------------------------------------------------------------ | -------------------- | ----- |
+| delete  | Emitter when the selected (uploaded) file is deleted, returns the deleted file | `(file: SourceFile)` | -     |
+| preview | Emitter when a file is previewed, returns the previewed file                   | `(file: SourceFile)` | -     |
 
 ### UploadList Slots
 
-| Name | Description                         | Parameters | Since |
-| ---- | ---------------------------- | --- | --- |
-| item | 文件列表中文件信息的内容插槽 | `(file: SourceFile, status: UploadStatusType, percentage: number)` | - |
-| icon | 文件图标的插槽               | `(file: SourceFile)` | - |
+| Name | Description                             | Parameters                                                           | Since |
+| ---- | --------------------------------------- | -------------------------------------------------------------------- | ----- |
+| item | Content slot for file info in file list | `{ file: SourceFile, status: UploadStatusType, percentage: number }` | -     |
+| icon | Slot for file icon                      | `{ file: SourceFile }`                                               | -     |

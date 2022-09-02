@@ -1,5 +1,10 @@
+interface ScrollElement {
+  scrollTo(x: number, y: number): void,
+  [prop: string]: any
+}
+
 export function animateScrollTo(options: {
-  el: HTMLElement,
+  el: ScrollElement,
   xFrom?: number,
   xTo?: number,
   yFrom?: number,

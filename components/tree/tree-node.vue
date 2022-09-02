@@ -5,7 +5,12 @@
     v-bind="$attrs"
     :class="className"
     :draggable="draggable"
+    tabindex="-1"
+    :aria-disabled="isDisabled"
+    :aria-grabbed="draggable && dragging ? 'true' : undefined"
     @click.left="handleClick"
+    @focus="focused = true"
+    @blur="focused = false"
     @dragstart.stop="handleDragStart"
     @dragover="handleDragOver"
     @dragleave="handleDragLeave"
@@ -16,6 +21,7 @@
       :data="node.data"
       :node="node"
       :depth="depth"
+      :focused="focused"
       :toggle-check="handleToggleCheck"
       :toggle-expand="handleToggleExpand"
       :toggle-select="handleToggleSelect"
@@ -28,6 +34,7 @@
             [nh.bem('arrow', 'transparent')]: !loading && !hasArrow,
             [nh.bem('arrow', 'expanded')]: expanded
           }"
+          :aria-hidden="!loading && !hasArrow"
           @click.stop="handleToggleExpand()"
         >
           <Icon v-if="loading" pulse><Spinner></Spinner></Icon>
@@ -36,6 +43,7 @@
         <Checkbox
           v-if="hasCheckbox && !suffixCheckbox"
           :class="nh.be('checkbox')"
+          :tab-index="-1"
           :control="hasArrow"
           :checked="checked"
           :disabled="isDisabled"
@@ -45,6 +53,7 @@
         <div
           :class="{
             [nh.be('label')]: true,
+            [nh.bem('label', 'focused')]: focused,
             [nh.bem('label', 'selected')]: selected,
             [nh.bem('label', 'disabled')]: isDisabled,
             [nh.bem('label', 'readonly')]: isReadonly,
@@ -64,6 +73,7 @@
               :data="node.data"
               :node="node"
               :depth="depth"
+              :focused="focused"
             >
               {{ data[labelKey] }}
             </slot>
@@ -72,6 +82,7 @@
         <Checkbox
           v-if="hasCheckbox && suffixCheckbox"
           :class="[nh.be('checkbox'), nh.bem('checkbox', 'suffix')]"
+          :tab-index="-1"
           :control="hasArrow"
           :checked="checked"
           :disabled="isDisabled"
@@ -81,7 +92,7 @@
       </div>
     </slot>
   </li>
-  <CollapseTransition :appear="appear">
+  <CollapseTransition :appear="appear" @after-enter="updateVisible" @after-leave="updateVisible">
     <ul v-if="showChildren" :class="nh.be('list')">
       <TreeNode
         v-for="(item, index) in node.children"
@@ -110,27 +121,11 @@
         :upper-matched="item.upperMatched"
         :node-props="nodeProps"
       >
-        <template
-          #default="{
-            data: childData,
-            node: childNode,
-            depth: childDepth,
-            toggleCheck,
-            toggleExpand,
-            toggleSelect
-          }"
-        >
-          <slot
-            :data="childData"
-            :node="childNode"
-            :depth="childDepth"
-            :toggle-check="toggleCheck"
-            :toggle-expand="toggleExpand"
-            :toggle-select="toggleSelect"
-          ></slot>
+        <template #default="payload">
+          <slot v-bind="payload"></slot>
         </template>
-        <template #label="{ data: childData, node: childNode }">
-          <slot name="label" :data="childData" :node="childNode"></slot>
+        <template #label="payload">
+          <slot name="label" v-bind="payload"></slot>
         </template>
       </TreeNode>
     </ul>
@@ -144,6 +139,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper } from '@vexip-ui/config'
+import { useModifier } from '@vexip-ui/mixins'
 import { isNull, noop } from '@vexip-ui/utils'
 import { ChevronRight, Spinner } from '@vexip-ui/icons'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
@@ -262,9 +258,43 @@ export default defineComponent({
     const nodeElement = ref<HTMLElement | null>(null)
     const arrowElement = ref<HTMLElement | null>(null)
 
+    useModifier({
+      target: nodeElement,
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        const prevent = () => {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        if (modifier.up || modifier.down) {
+          prevent()
+          treeState.handleHittingChange(modifier.up ? 'up' : 'down')
+        } else if (modifier.left || modifier.right) {
+          prevent()
+          const hasChild = props.node.children?.length > 0
+
+          if (modifier.right && props.expanded && hasChild) {
+            treeState.handleHittingChange('down')
+          } else if (modifier.left && (!props.expanded || !hasChild)) {
+            treeState.handleNodeHitting(parentState.el)
+          } else {
+            handleToggleExpand(modifier.right)
+          }
+        } else if (hasCheckbox.value && modifier.space) {
+          prevent()
+          handleToggleCheck()
+        } else if (modifier.enter) {
+          prevent()
+          handleToggleSelect()
+        }
+      }
+    })
+
     const loaded = ref(props.loaded)
     const dragging = ref(false)
     const isDragOver = ref(false)
+    const focused = ref(false)
 
     const isDisabled = computed(() => parentState.disabled || props.disabled)
     const isReadonly = computed(() => parentState.readonly || props.readonly)
@@ -291,7 +321,9 @@ export default defineComponent({
 
       return {
         paddingLeft: depth.value
-          ? depth.value === 1 ? indent : `calc(${depth.value} * ${indent})`
+          ? depth.value === 1
+            ? indent
+            : `calc(${depth.value} * ${indent})`
           : 0
       }
     })
@@ -328,6 +360,7 @@ export default defineComponent({
     provide(
       TREE_NODE_STATE,
       reactive({
+        el: nodeElement,
         depth,
         disabled: isDisabled,
         readonly: isReadonly
@@ -340,6 +373,10 @@ export default defineComponent({
         loaded.value = value
       }
     )
+
+    function updateVisible() {
+      treeState.updateVisibleNodeEls()
+    }
 
     function setValue<T = unknown>(key: keyof TreeNodeProps, value: T) {
       (props.node as any)[key] = value
@@ -383,7 +420,7 @@ export default defineComponent({
     function handleToggleSelect(able = !props.selected) {
       if (isDisabled.value) return
 
-      if (props.floorSelect && props.node.children?.length) {
+      if (props.floorSelect) {
         return handleToggleExpand()
       }
 
@@ -460,6 +497,8 @@ export default defineComponent({
 
     return {
       nh,
+      dragging,
+      focused,
 
       isDisabled,
       isReadonly,
@@ -476,6 +515,7 @@ export default defineComponent({
       wrapper: nodeElement,
       arrowEl: arrowElement,
 
+      updateVisible,
       handleClick,
       handleToggleCheck,
       handleToggleExpand,

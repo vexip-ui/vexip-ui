@@ -1,1 +1,1 @@
-需要在一组选项中进行单项选择时使用，或是结合单选框组用于需要表示两种状态之间的切换的场合。
+It is used when you need to make a single selection in a group of options, or when you need to use a radio group to indicate a switch between two states.

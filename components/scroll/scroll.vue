@@ -5,17 +5,21 @@
     :style="style"
     @mousedown="handleMouseDown"
     @touchstart="handleTouchStart"
+    @scroll="ensureScrollOffset"
     @wheel.exact="handleWheel($event, 'vertical')"
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
-    <div
-      ref="content"
-      :class="wrapperClass"
-      :style="wrapperStyle"
-      @transitionend="transitionDuration = -1"
-    >
-      <slot></slot>
-    </div>
+    <ResizeObserver throttle :on-resize="handleResize">
+      <component
+        :is="props.wrapperTag || 'div'"
+        ref="content"
+        :class="wrapperClass"
+        :style="wrapperStyle"
+        @transitionend="transitionDuration = -1"
+      >
+        <slot></slot>
+      </component>
+    </ResizeObserver>
     <Scrollbar
       v-if="props.useXBar"
       ref="xBar"
@@ -50,13 +54,38 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
-import { useNameHelper, useProps, booleanProp, booleanNumberProp, classProp } from '@vexip-ui/config'
+import { ResizeObserver } from '@/components/resize-observer'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  booleanNumberProp,
+  classProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './mixins'
 
 import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode } from './symbol'
+
+interface ScrollPayload {
+  type: ScrollMode,
+  clientX: number,
+  clientY: number,
+  percentX: number,
+  percentY: number
+}
+
+interface BarScrollPayload {
+  type: 'vertical' | 'horizontal',
+  clientX: number,
+  clientY: number,
+  percentX: number,
+  percentY: number
+}
 
 const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
 
@@ -66,7 +95,8 @@ const UP_EVENT = USE_TOUCH ? 'touchend' : 'mouseup'
 export default defineComponent({
   name: 'Scroll',
   components: {
-    Scrollbar
+    Scrollbar,
+    ResizeObserver
   },
   props: {
     scrollClass: classProp,
@@ -89,25 +119,27 @@ export default defineComponent({
     noBuffer: booleanProp,
     noTransition: booleanProp,
     onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
-    useBarTrack: booleanProp
+    useBarTrack: booleanProp,
+    wrapperTag: String,
+    onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
+    onXEnabledChange: eventProp<(enabled: boolean) => void>(),
+    onYEnabledChange: eventProp<(enabled: boolean) => void>(),
+    onWheel: eventProp<(payload: BarScrollPayload & { sign: 1 | -1 }) => void>(),
+    onScrollStart: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
+    onScroll: eventProp<(payload: ScrollPayload) => void>(),
+    onScrollEnd: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
+    onBarScrollStart: eventProp<(payload: BarScrollPayload) => void>(),
+    onBarScroll: eventProp<(payload: BarScrollPayload) => void>(),
+    onBarScrollEnd: eventProp<(payload: BarScrollPayload) => void>(),
+    onReady: eventProp()
   },
-  emits: [
-    'x-enable-change',
-    'y-enable-change',
-    'wheel',
-    'scroll-start',
-    'scroll',
-    'scroll-end',
-    'bar-scroll-start',
-    'bar-scroll-end',
-    'ready'
-  ],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('scroll', _props, {
       scrollClass: null,
       mode: {
-        default: 'vertical' as ScrollMode,
-        validator: (value: ScrollMode) => scrollModes.includes(value)
+        default: 'vertical',
+        validator: value => scrollModes.includes(value)
       },
       width: '',
       height: '',
@@ -136,7 +168,8 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      useBarTrack: false
+      useBarTrack: false,
+      wrapperTag: 'div'
     })
 
     const emitter = createEventEmitter()
@@ -162,6 +195,7 @@ export default defineComponent({
       xBarLength,
       yBarLength,
 
+      handleResize,
       verifyScroll,
       computePercent,
       refresh
@@ -172,6 +206,9 @@ export default defineComponent({
       height: toRef(props, 'height'),
       scrollX: toRef(props, 'scrollX'),
       scrollY: toRef(props, 'scrollY'),
+      onResize: entry => {
+        emitEvent(props.onResize, entry)
+      },
       onBeforeRefresh: stopAutoplay,
       onAfterRefresh: startAutoplay
     })
@@ -313,13 +350,13 @@ export default defineComponent({
     })
 
     watch(enableXScroll, value => {
-      emit('x-enable-change', value)
+      emitEvent(props.onXEnabledChange, value)
     })
     watch(enableYScroll, value => {
-      emit('y-enable-change', value)
+      emitEvent(props.onYEnabledChange, value)
     })
     watch(isReady, value => {
-      if (value) emit('ready')
+      if (value) emitEvent(props.onReady)
     })
 
     const xBar = ref<InstanceType<typeof Scrollbar> | null>(null)
@@ -385,7 +422,7 @@ export default defineComponent({
       document.addEventListener(MOVE_EVENT, handlePointerMove)
       document.addEventListener(UP_EVENT, handlePointerUp)
 
-      emit('scroll-start', {
+      emitEvent(props.onScrollStart, {
         clientX: -currentScroll.x,
         clientY: -currentScroll.y,
         percentX: percentX.value,
@@ -427,7 +464,7 @@ export default defineComponent({
       }
 
       syncBarScroll()
-      emitScrollEvent('both')
+      emitScrollEvent(props.mode)
     }
 
     function handlePointerUp(event: MouseEvent | TouchEvent) {
@@ -444,8 +481,7 @@ export default defineComponent({
       handleBuffer()
       verifyScroll()
       syncBarScroll()
-      emitScrollEvent('both')
-      emit('scroll-end', {
+      emitEvent(props.onScrollEnd, {
         clientX: -currentScroll.x,
         clientY: -currentScroll.y,
         percentX: percentX.value,
@@ -489,9 +525,9 @@ export default defineComponent({
       syncBarScroll()
       emitScrollEvent(type)
 
-      emit('wheel', {
+      emitEvent(props.onWheel, {
         type,
-        sign: -sign,
+        sign: -sign as 1 | -1,
         clientX: -currentScroll.x,
         clientY: -currentScroll.y,
         percentX: percentX.value,
@@ -520,18 +556,37 @@ export default defineComponent({
 
     function handleBarScrollStart(type: 'vertical' | 'horizontal') {
       usingBar.value = true
-      emit('bar-scroll-start', type)
+      emitEvent(props.onBarScrollStart, {
+        type,
+        clientX: -currentScroll.x,
+        clientY: -currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value
+      })
     }
 
     function handleBarScrollEnd(type: 'vertical' | 'horizontal') {
       usingBar.value = false
-      emit('bar-scroll-end', type)
+      emitEvent(props.onBarScrollEnd, {
+        type,
+        clientX: -currentScroll.x,
+        clientY: -currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value
+      })
     }
 
     function handleXBarScroll(percent: number) {
       percentX.value = percent
       currentScroll.x = (percent * xScrollLimit.value) / 100
 
+      emitEvent(props.onBarScroll, {
+        type: 'horizontal',
+        clientX: -currentScroll.x,
+        clientY: -currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value
+      })
       emitScrollEvent('horizontal')
     }
 
@@ -539,11 +594,18 @@ export default defineComponent({
       percentY.value = percent
       currentScroll.y = (percent * yScrollLimit.value) / 100
 
+      emitEvent(props.onBarScroll, {
+        type: 'vertical',
+        clientX: -currentScroll.x,
+        clientY: -currentScroll.y,
+        percentX: percentX.value,
+        percentY: percentY.value
+      })
       emitScrollEvent('vertical')
     }
 
     function emitScrollEvent(type: ScrollMode) {
-      emit('scroll', {
+      emitEvent(props.onScroll, {
         type,
         clientX: -currentScroll.x,
         clientY: -currentScroll.y,
@@ -557,6 +619,13 @@ export default defineComponent({
         percentX: percentX.value,
         percentY: percentY.value
       })
+    }
+
+    function ensureScrollOffset() {
+      if (wrapperElement.value) {
+        wrapperElement.value.scrollTop = 0
+        wrapperElement.value.scrollLeft = 0
+      }
     }
 
     function scrollTo(clientX: number, clientY: number, duration?: number) {
@@ -651,6 +720,40 @@ export default defineComponent({
       scrollTo(clientX, clientY, duration)
     }
 
+    function ensureInView(el: string | Element, duration?: number, offset = 0) {
+      if (!wrapperElement.value) return
+
+      if (typeof el === 'string') {
+        el = wrapperElement.value.querySelector(el)!
+      }
+
+      if (!(el instanceof Node)) return
+
+      const wrapperRect = wrapperElement.value.getBoundingClientRect()
+      const elRect = el.getBoundingClientRect()
+
+      let clientX = 0
+      let clientY = 0
+
+      if (props.mode !== 'vertical') {
+        if (elRect.left < wrapperRect.left + offset) {
+          clientX = elRect.left - wrapperRect.left - offset
+        } else if (elRect.right > wrapperRect.right - offset) {
+          clientX = elRect.right - wrapperRect.right + offset
+        }
+      }
+
+      if (props.mode !== 'horizontal') {
+        if (elRect.top < wrapperRect.top + offset) {
+          clientY = elRect.top - wrapperRect.top - offset
+        } else if (elRect.bottom > wrapperRect.bottom - offset) {
+          clientY = elRect.bottom - wrapperRect.bottom + offset
+        }
+      }
+
+      scrollBy(clientX, clientY, duration)
+    }
+
     function addScrollListener(listener: EventHandler) {
       emitter.on('scroll', listener)
     }
@@ -681,6 +784,7 @@ export default defineComponent({
       xBar,
       yBar,
 
+      handleResize,
       handleMouseDown,
       handleTouchStart,
       handleWheel,
@@ -688,6 +792,7 @@ export default defineComponent({
       handleBarScrollEnd,
       handleXBarScroll,
       handleYBarScroll,
+      ensureScrollOffset,
 
       refresh,
       scrollTo,
@@ -695,6 +800,7 @@ export default defineComponent({
       getXScrollLimit,
       getYScrollLimit,
       scrollToElement,
+      ensureInView,
       addScrollListener,
       removeScrollListener
     }

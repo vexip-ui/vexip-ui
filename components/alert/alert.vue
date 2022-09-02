@@ -1,6 +1,6 @@
 <template>
   <CollapseTransition v-if="!hidden" fade-effect @after-leave="handleAfterLeave">
-    <div v-if="!closed" :class="className">
+    <div v-if="!closed" :class="className" role="alert">
       <div :class="nh.be('wrapper')">
         <div v-if="hasTitle" :class="nh.be('title')">
           <slot name="title">
@@ -11,14 +11,20 @@
           <slot></slot>
         </div>
       </div>
-      <div v-if="props.closable" :class="nh.be('close')" @click="handleClose">
+      <button v-if="props.closable" :class="nh.be('close')" @click="handleClose">
         <slot name="close">
-          <Icon><Xmark></Xmark></Icon>
+          <Icon label="close">
+            <Xmark></Xmark>
+          </Icon>
         </slot>
-      </div>
+      </button>
       <div v-if="hasIcon" :class="nh.be('icon')">
         <slot name="icon">
-          <Icon :icon="iconComp" :scale="hasTitle ? 2 : 1" :style="{ color: props.iconColor }"></Icon>
+          <Icon
+            :icon="iconComp"
+            :scale="hasTitle ? 2 : 1"
+            :style="{ color: props.iconColor }"
+          ></Icon>
         </slot>
       </div>
     </div>
@@ -29,7 +35,7 @@
 import { defineComponent, ref, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 
 import {
   Flag,
@@ -73,10 +79,12 @@ export default defineComponent({
     iconColor: String,
     noBorder: booleanProp,
     banner: booleanProp,
-    manual: booleanProp
+    manual: booleanProp,
+    onClose: eventProp(),
+    onHide: eventProp()
   },
-  emits: ['close', 'hide'],
-  setup(_props, { slots, emit }) {
+  emits: [],
+  setup(_props, { slots }) {
     const props = useProps('alert', _props, {
       type: {
         default: 'info' as AlertType,
@@ -129,11 +137,11 @@ export default defineComponent({
         closed.value = true
       }
 
-      emit('close')
+      emitEvent(props.onClose)
     }
 
     function handleAfterLeave() {
-      emit('hide')
+      emitEvent(props.onHide)
       hidden.value = true
     }
 

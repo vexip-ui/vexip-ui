@@ -1,7 +1,16 @@
-import { defineComponent, h, ref, computed, inject } from 'vue'
+import { defineComponent, ref, computed, inject } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
+import { FIELD_OPTIONS } from '@/components/form/symbol'
+import {
+  useNameHelper,
+  useProps,
+  booleanProp,
+  sizeProp,
+  createSizeProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
 import { Spinner } from '@vexip-ui/icons'
 import { parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
 import { GROUP_STATE, buttonTypes } from './symbol'
@@ -31,10 +40,15 @@ export default defineComponent({
     color: String,
     buttonType: String as PropType<ButtonAttrType>,
     block: booleanProp,
-    tag: String
+    tag: String,
+    noPulse: booleanProp,
+    iconOnly: booleanProp,
+    onClick: eventProp<(event: MouseEvent) => void>()
   },
-  emits: ['click'],
-  setup(_props, { emit, slots }) {
+  emits: [],
+  setup(_props, { slots }) {
+    const fieldActions = inject(FIELD_OPTIONS, null)
+
     const props = useProps('button', _props, {
       size: createSizeProp(),
       type: {
@@ -45,8 +59,8 @@ export default defineComponent({
       text: false,
       simple: false,
       ghost: false,
-      disabled: false,
-      loading: false,
+      disabled: () => (fieldActions ? fieldActions.disabled.value : false),
+      loading: () => (fieldActions ? fieldActions.loading.value : false),
       circle: false,
       loadingIcon: Spinner,
       loadingSpin: false,
@@ -57,7 +71,9 @@ export default defineComponent({
         validator: (value: ButtonAttrType) => ['button', 'submit', 'reset'].includes(value)
       },
       block: false,
-      tag: 'button'
+      tag: 'button',
+      noPulse: false,
+      iconOnly: false
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -65,7 +81,7 @@ export default defineComponent({
     const nh = useNameHelper('button')
     const pulsing = ref(false)
     const isIconOnly = computed(() => {
-      return !slots.default
+      return props.iconOnly || !slots.default
     })
     const type = computed(() => {
       return props.type ?? groupState?.type ?? 'default'
@@ -93,8 +109,8 @@ export default defineComponent({
     const colorMap = computed(() => {
       if (props.color) {
         const rootStyle = getComputedStyle(document.documentElement)
-        const black = parseColorToRgba(rootStyle.getPropertyValue('--vxp-color-black') || '#000')
-        const white = parseColorToRgba(rootStyle.getPropertyValue('--vxp-color-white') || '#fff')
+        const black = parseColorToRgba(rootStyle.getPropertyValue(nh.nv('color-black')) || '#000')
+        const white = parseColorToRgba(rootStyle.getPropertyValue(nh.nv('color-white')) || '#fff')
         const baseColor = parseColorToRgba(props.color)
 
         return {
@@ -113,7 +129,9 @@ export default defineComponent({
     })
     const style = computed(() => {
       if (colorMap.value) {
-        const { base, light2, dark1, opacity1, opacity3, opacity4, opacity7, opacity8 } = colorMap.value
+        const { base, light2, dark1, opacity1, opacity3, opacity4, opacity7, opacity8 } =
+          colorMap.value
+        const gcv = nh.gcv
 
         let style: Record<string, string>
 
@@ -124,47 +142,49 @@ export default defineComponent({
             'color-focus': base,
             'color-active': base,
             'color-disabled': base,
-            'bg-color': 'var(--vxp-button-bg-color-typed-ghost)',
-            'bg-color-hover': 'var(--vxp-button-bg-color-hover-typed-ghost)',
-            'bg-color-focus': 'var(--vxp-button-bg-color-focus-typed-ghost)',
-            'bg-color-active': 'var(--vxp-button-bg-color-active-typed-ghost)',
-            'bg-color-disabled': 'var(--vxp-button-bg-color-disabled-typed-ghost)',
+            'bg-color': gcv('bg-color-typed-ghost'),
+            'bg-color-hover': gcv('bg-color-hover-typed-ghost'),
+            'bg-color-focus': gcv('bg-color-focus-typed-ghost'),
+            'bg-color-active': gcv('bg-color-active-typed-ghost'),
+            'bg-color-disabled': gcv('bg-color-disabled-typed-ghost'),
             'b-color': base,
             'b-color-hover': light2,
             'b-color-focus': light2,
             'b-color-active': dark1,
-            'b-color-disabled': 'var(--vxp-button-b-color-disabled-typed-ghost)',
+            'b-color-disabled': gcv('b-color-disabled-typed-ghost'),
             'pulse-s-color': dark1
           })
         } else if (props.simple) {
           style = nh.cvm({
             color: base,
             'color-hover': base,
-            'color-focus': 'var(--vxp-button-color-focus-typed-simple)',
-            'color-active': 'var(--vxp-button-color-active-typed-simple)',
-            'color-disabled': 'var(--vxp-button-color-disabled-typed-simple)',
+            'color-focus': gcv('color-focus-typed-simple'),
+            'color-active': gcv('color-active-typed-simple'),
+            'color-disabled': gcv('color-disabled-typed-simple'),
             'bg-color': opacity8,
             'bg-color-hover': opacity7,
             'bg-color-focus': opacity1,
             'bg-color-active': opacity1,
-            'bg-color-disabled': 'var(--vxp-button-bg-color-disabled-typed-simple)',
+            'bg-color-disabled': gcv('bg-color-disabled-typed-simple'),
             'b-color': opacity4,
             'b-color-hover': opacity4,
             'b-color-focus': opacity3,
             'b-color-active': opacity3,
-            'b-color-disabled': 'var(--vxp-button-b-color-disabled-typed-simple)',
+            'b-color-disabled': gcv('b-color-disabled-typed-simple'),
             'pulse-s-color': dark1
           })
         } else if (props.text || props.dashed) {
           style = nh.cvm({
-            ...(props.dashed ? {
-              'b-color': base,
-              'b-color-hover': light2,
-              'b-color-focus': light2,
-              'b-color-active': dark1,
-              'b-color-disabled': 'var(--vxp-button-b-color-disabled-typed)',
-              'pulse-s-color': dark1
-            }: {}),
+            ...(props.dashed
+              ? {
+                  'b-color': base,
+                  'b-color-hover': light2,
+                  'b-color-focus': light2,
+                  'b-color-active': dark1,
+                  'b-color-disabled': gcv('b-color-disabled-typed'),
+                  'pulse-s-color': dark1
+                }
+              : {}),
             color: base,
             'color-hover': light2,
             'color-focus': light2,
@@ -182,12 +202,12 @@ export default defineComponent({
             'bg-color-hover': light2,
             'bg-color-focus': light2,
             'bg-color-active': dark1,
-            'bg-color-disabled': 'var(--vxp-button-bg-color-disabled-typed)',
+            'bg-color-disabled': gcv('bg-color-disabled-typed'),
             'b-color': base,
             'b-color-hover': light2,
             'b-color-focus': light2,
             'b-color-active': dark1,
-            'b-color-disabled': 'var(--vxp-button-b-color-disabled-typed)',
+            'b-color-disabled': gcv('b-color-disabled-typed'),
             'pulse-s-color': dark1
           })
         }
@@ -201,35 +221,50 @@ export default defineComponent({
     function handleClick(event: MouseEvent) {
       if (props.disabled || props.loading || event.button) return
 
-      pulsing.value = false
+      if (!props.noPulse) {
+        pulsing.value = false
+        requestAnimationFrame(() => {
+          pulsing.value = true
+        })
+      }
 
-      requestAnimationFrame(() => {
-        pulsing.value = true
-      })
-
-      emit('click', event)
+      emitEvent(props.onClick, event)
     }
 
     function handleAnimationEnd() {
       pulsing.value = false
     }
 
-    function renderIconWithDefined() {
-      return props.loading ? (
+    function renderSingleIcon() {
+      return props.loading
+        ? (
         <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
-          {slots.loading ? (
-            slots.loading()
-          ) : props.loadingSpin ? (
+          {slots.loading
+            ? (
+                slots.loading()
+              )
+            : props.loadingSpin
+              ? (
             <Icon spin icon={props.loadingIcon}></Icon>
-          ) : (
+                )
+              : (
             <Icon pulse icon={props.loadingIcon}></Icon>
-          )}
+                )}
         </div>
-      ) : (
+          )
+        : (
         <div class={nh.be('icon')}>
-          <Icon icon={props.icon}></Icon>
+          {slots.default
+            ? (
+            <Icon>{slots.default()}</Icon>
+              )
+            : props.icon
+              ? (
+            <Icon icon={props.icon}></Icon>
+                )
+              : null}
         </div>
-      )
+          )
     }
 
     function renderCollapseIcon() {
@@ -237,33 +272,40 @@ export default defineComponent({
         <CollapseTransition appear horizontal fade-effect>
           {props.loading && (
             <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
-              {slots.loading ? (
-                slots.loading()
-              ) : props.loadingSpin ? (
+              {slots.loading
+                ? (
+                    slots.loading()
+                  )
+                : props.loadingSpin
+                  ? (
                 <Icon spin icon={props.loadingIcon}></Icon>
-              ) : (
+                    )
+                  : (
                 <Icon pulse icon={props.loadingIcon}></Icon>
-              )}
+                    )}
             </div>
           )}
         </CollapseTransition>
       )
     }
 
-    return () => h(
-      props.tag || 'button',
-      {
-        type: props.buttonType,
-        class: className.value,
-        style: style.value,
-        disabled: props.disabled,
-        onClick: handleClick,
-        onAnimationend: handleAnimationEnd
-      },
-      [
-        props.icon ? renderIconWithDefined() : renderCollapseIcon(),
-        slots.default ? slots.default() : null
-      ]
-    )
+    return () => {
+      const Button = (props.tag || 'button') as any
+
+      return (
+        <Button
+          type={props.buttonType}
+          class={className.value}
+          role={'button'}
+          style={style.value}
+          disabled={props.disabled}
+          onClick={handleClick}
+          onAnimationend={handleAnimationEnd}
+        >
+          {isIconOnly.value ? renderSingleIcon() : renderCollapseIcon()}
+          {!isIconOnly.value && slots.default ? slots.default() : null}
+        </Button>
+      )
+    }
   }
 })

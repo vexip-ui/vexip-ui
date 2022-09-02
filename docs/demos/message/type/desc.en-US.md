@@ -1,5 +1,5 @@
-### 消息类型
+### Message Types
 
-通过调用不同的方法，可以打开预设好的几种消息。
+The messages with preset type can be opened by calling different methods.
 
-目前组件共内置了四种预设类型，分别调用 `info`、`success`、`warning`、 `error` 四种方法打开。
+There are currently four built-in preset types in the component, which are opened by calling `info`, `success`, `warning`, and `error` respectively.

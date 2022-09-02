@@ -1,3 +1,3 @@
-### 自动播放
+### Autoplay
 
-添加 `autoplay` 属性可以开启自动播放，到最后一个元素时会回到第一个元素。
+Add the `autoplay` prop to enable autoplay, returning to the first element when the last element is reached.

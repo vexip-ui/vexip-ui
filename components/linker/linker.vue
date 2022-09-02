@@ -2,6 +2,7 @@
   <a
     :class="className"
     :href="props.to"
+    tabindex="0"
     :target="props.target"
     @click="handleClick"
   >
@@ -15,13 +16,20 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 
 export type LinkerType = 'default' | 'primary' | 'success' | 'error' | 'warning' | 'info'
 
-const linkerTypes = Object.freeze<LinkerType>(['default', 'primary', 'success', 'error', 'warning', 'info'])
+const linkerTypes = Object.freeze<LinkerType>([
+  'default',
+  'primary',
+  'success',
+  'error',
+  'warning',
+  'info'
+])
 
 export default defineComponent({
   name: 'Linker',
@@ -34,10 +42,10 @@ export default defineComponent({
     icon: Object,
     underline: booleanProp,
     disabled: booleanProp,
-    target: String
+    target: String,
+    onClick: eventProp<(event: MouseEvent) => void>()
   },
-  emits: ['click'],
-  setup(_props, { emit }) {
+  setup(_props) {
     const props = useProps('linker', _props, {
       to: {
         default: null,
@@ -66,7 +74,11 @@ export default defineComponent({
     })
 
     function handleClick(event: MouseEvent) {
-      emit('click', event)
+      if (props.disabled) {
+        event.preventDefault()
+      }
+
+      emitEvent(props.onClick, event)
     }
 
     return {

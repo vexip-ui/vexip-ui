@@ -2,9 +2,18 @@
   <div
     ref="wrapper"
     :class="[nh.b(), nh.bs('vars')]"
+    role="tree"
+    tabindex="-1"
     :aria-disabled="props.disabled"
     :aria-readonly="props.readonly"
   >
+    <span
+      ref="trap"
+      tabindex="0"
+      aria-hidden="true"
+      style="width: 0; height: 0; overflow: hidden; outline: none;"
+      @focus="handleTreeFocus"
+    ></span>
     <ul :class="nh.be('list')">
       <TreeNode
         v-for="(item, index) in treeData"
@@ -33,29 +42,15 @@
         :upper-matched="item.upperMatched"
         :node-props="getNodeProps"
       >
-        <template #default="{ data: nodeDta, node, depth, children, toggleCheck, toggleExpand, toggleSelect }">
-          <slot
-            name="node"
-            :data="nodeDta"
-            :node="node"
-            :depth="depth"
-            :children="children"
-            :toggle-check="toggleCheck"
-            :toggle-expand="toggleExpand"
-            :toggle-select="toggleSelect"
-          ></slot>
+        <template #default="payload">
+          <slot name="node" v-bind="payload"></slot>
         </template>
-        <template #label="{ data: nodeData, node, children }">
-          <slot
-            name="label"
-            :data="nodeData"
-            :node="node"
-            :children="children"
-          ></slot>
+        <template #label="payload">
+          <slot name="label" v-bind="payload"></slot>
         </template>
       </TreeNode>
     </ul>
-    <div v-if="!props.data || !props.data.length" :class="nh.be('empty-tip')">
+    <div v-if="!props.data || !props.data.length || !anyMatched" :class="nh.be('empty-tip')">
       <slot name="empty">
         {{ props.emptyTip ?? locale.empty }}
       </slot>
@@ -70,10 +65,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, reactive, computed, watch, watchEffect, provide } from 'vue'
+import {
+  defineComponent,
+  ref,
+  toRef,
+  reactive,
+  computed,
+  watch,
+  watchEffect,
+  provide,
+  onMounted
+} from 'vue'
 import TreeNode from './tree-node.vue'
-import { useNameHelper, useProps, useLocale, booleanProp } from '@vexip-ui/config'
-import { isNull, isPromise, transformTree, flatTree, removeArrayItem } from '@vexip-ui/utils'
+import {
+  useNameHelper,
+  useProps,
+  useLocale,
+  booleanProp,
+  eventProp,
+  emitEvent
+} from '@vexip-ui/config'
+import { useMounted } from '@vexip-ui/mixins'
+import {
+  isNull,
+  isPromise,
+  transformTree,
+  flatTree,
+  removeArrayItem,
+  queryAll
+} from '@vexip-ui/utils'
 import { DropType, TREE_STATE, TREE_NODE_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -137,22 +157,20 @@ export default defineComponent({
     noCascaded: booleanProp,
     filter: [String, Function] as PropType<string | FilterFn>,
     ignoreCase: booleanProp,
-    nodeProps: [Object, Function] as PropType<Data | NodePropsFn>
+    nodeProps: [Object, Function] as PropType<Data | NodePropsFn>,
+    onNodeChange: eventProp<(data: Data, node: TreeNodeProps, checked: boolean) => void>(),
+    onNodeClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onNodeSelect: eventProp<(data: Data | Data[], node: TreeNodeProps | TreeNodeProps[]) => void>(),
+    onNodeCancel: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onNodeExpand: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onNodeReduce: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onDragStart: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onDragOver: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onDrop: eventProp<(data: Data, node: TreeNodeProps, type: DropType) => void>(),
+    onDragEnd: eventProp<(data: Data, node: TreeNodeProps) => void>()
   },
-  emits: [
-    'node-change',
-    'node-click',
-    'node-select',
-    'node-cancel',
-    'node-expand',
-    'node-reduce',
-    'node-shrink',
-    'drag-start',
-    'drag-over',
-    'drop',
-    'drag-end'
-  ],
-  setup(_props, { emit }) {
+  emits: [],
+  setup(_props) {
     const props = useProps('tree', _props, {
       arrow: {
         default: 'auto',
@@ -196,9 +214,28 @@ export default defineComponent({
     const treeData = ref<TreeNodeProps[]>([])
     const dragging = ref(false)
     const indicatorShow = ref(false)
+    const anyMatched = ref(false)
+
+    const { isMounted } = useMounted()
 
     const wrapper = ref<HTMLElement | null>(null)
+    const trap = ref<HTMLElement | null>(null)
     const indicator = ref<HTMLElement | null>(null)
+
+    let visibleNodeEls: HTMLElement[] = []
+
+    const defaultNodeProperties = {
+      visible: true,
+      selected: false,
+      expanded: false,
+      disabled: false,
+      checked: false,
+      loading: false,
+      loaded: false,
+      readonly: false,
+      arrow: 'auto' as boolean | 'auto',
+      checkbox: null! as boolean
+    }
 
     const keyConfig = computed(() => {
       return { ...defaultKeyConfig, ...props.keyConfig }
@@ -248,8 +285,13 @@ export default defineComponent({
           node.childMatched = false
           node.upperMatched = false
         }
+
+        anyMatched.value = true
       } else {
-        const filter = typeof props.filter === 'function' ? props.filter : createDefaultFilter(props.filter)
+        const filter =
+          typeof props.filter === 'function' ? props.filter : createDefaultFilter(props.filter)
+
+        anyMatched.value = false
 
         for (let i = 0, len = nodes.length; i < len; ++i) {
           const node = nodes[i]
@@ -258,6 +300,7 @@ export default defineComponent({
           node.matched = filter(node.data, node)
           node.childMatched = false
           node.upperMatched = !!parent && (parent.matched || parent.upperMatched)
+          anyMatched.value = anyMatched.value || node.matched
 
           if (node.matched) {
             let upper = parent
@@ -280,6 +323,7 @@ export default defineComponent({
         renderer: toRef(props, 'renderer'),
         dragging,
         boundAsyncLoad,
+        updateVisibleNodeEls,
         computeCheckedState,
         handleNodeClick,
         handleNodeSelect,
@@ -290,7 +334,9 @@ export default defineComponent({
         handleNodeDragStart,
         handleNodeDragOver,
         handleNodeDrop,
-        handleNodeDragEnd
+        handleNodeDragEnd,
+        handleHittingChange,
+        handleNodeHitting
       })
     )
     provide(
@@ -307,6 +353,7 @@ export default defineComponent({
 
     // created
     parseAndTransformData()
+    onMounted(updateVisibleNodeEls)
 
     const checkedNodes = flattedData.value.filter(item => item.checked)
 
@@ -323,6 +370,14 @@ export default defineComponent({
           updateCheckedUpward(item)
         }
       }
+    }
+
+    function updateVisibleNodeEls() {
+      requestAnimationFrame(() => {
+        if (wrapper.value) {
+          visibleNodeEls = queryAll(`.${nh.be('node')}`, wrapper.value)
+        }
+      })
     }
 
     function parseAndTransformData() {
@@ -343,9 +398,10 @@ export default defineComponent({
 
       for (let i = 0, len = data.length; i < len; ++i) {
         const item = data[i]
+        const oldNode = oldDataMap.get(item) ?? oldIpMap.get(item[idKey])
         const node = props.cacheNode
-          ? oldDataMap.get(item) ?? oldIpMap.get(item[idKey]) ?? createNodeItem(item)
-          : createNodeItem(item)
+          ? oldNode ?? createNodeItem(item)
+          : createNodeItem(item, oldNode)
 
         node.parent = item[parentKey]
         node.data = item
@@ -360,6 +416,8 @@ export default defineComponent({
         childField: 'children',
         rootId: props.rootId
       })
+
+      isMounted.value && updateVisibleNodeEls()
     }
 
     function forceUpdateData() {
@@ -387,20 +445,21 @@ export default defineComponent({
         let node: TreeNodeProps
 
         if (nodeMaps.has(id)) {
+          node = nodeMaps.get(id)!
+
           const {
-            [visibleKey]: visible = true,
-            [selectedKey]: selected = false,
-            [expandedKey]: expanded = false,
-            [disabledKey]: disabled = false,
-            [checkedKey]: checked = false,
-            [loadingKey]: loading = false,
-            [loadedKey]: loaded = false,
-            [readonlyKey]: readonly = false,
-            [arrowKey]: arrow = 'auto',
-            [checkboxKey]: checkbox = null
+            [visibleKey]: visible = node.visible,
+            [selectedKey]: selected = node.selected,
+            [expandedKey]: expanded = node.expanded,
+            [disabledKey]: disabled = node.disabled,
+            [checkedKey]: checked = node.checked,
+            [loadingKey]: loading = node.loading,
+            [loadedKey]: loaded = node.loaded,
+            [readonlyKey]: readonly = node.readonly,
+            [arrowKey]: arrow = node.arrow,
+            [checkboxKey]: checkbox = node.checkbox
           } = item
 
-          node = nodeMaps.get(id)!
           node.visible = visible
           node.selected = selected
           node.expanded = expanded
@@ -425,7 +484,8 @@ export default defineComponent({
         childField: 'children',
         rootId: props.rootId
       })
-      // flatData.value = nodes
+
+      isMounted.value && updateVisibleNodeEls()
     }
 
     function syncNodeStateIntoData() {
@@ -442,9 +502,11 @@ export default defineComponent({
         data.loading = loading
         data.readonly = readonly
       })
+
+      isMounted.value && updateVisibleNodeEls()
     }
 
-    function createNodeItem(data: Data): TreeNodeProps {
+    function createNodeItem(data: Data, defaults = defaultNodeProperties): TreeNodeProps {
       const {
         id: idKey,
         parent: parentKey,
@@ -461,16 +523,16 @@ export default defineComponent({
       } = keyConfig.value
 
       const {
-        [visibleKey]: visible = true,
-        [selectedKey]: selected = false,
-        [expandedKey]: expanded = false,
-        [disabledKey]: disabled = false,
-        [checkedKey]: checked = false,
-        [loadingKey]: loading = false,
-        [loadedKey]: loaded = false,
-        [readonlyKey]: readonly = false,
-        [arrowKey]: arrow = 'auto',
-        [checkboxKey]: checkbox = null
+        [visibleKey]: visible = defaults.visible,
+        [selectedKey]: selected = defaults.selected,
+        [expandedKey]: expanded = defaults.expanded,
+        [disabledKey]: disabled = defaults.disabled,
+        [checkedKey]: checked = defaults.checked,
+        [loadingKey]: loading = defaults.loading,
+        [loadedKey]: loaded = defaults.loaded,
+        [readonlyKey]: readonly = defaults.readonly,
+        [arrowKey]: arrow = defaults.arrow,
+        [checkboxKey]: checkbox = defaults.checkbox
       } = data
       const id = data[idKey]
       const parent = data[parentKey]
@@ -520,9 +582,7 @@ export default defineComponent({
           parent.partial = !parent.checked
         } else {
           parent.checked = false
-          parent.partial = parent.children.some(
-            item => item.checked || item.partial
-          )
+          parent.partial = parent.children.some(item => item.checked || item.partial)
         }
 
         node = parent
@@ -566,19 +626,19 @@ export default defineComponent({
         }
       }
 
-      emit('node-change', originNode.data, originNode, able)
+      emitEvent(props.onNodeChange, originNode.data, originNode, able)
     }
 
     function handleNodeClick(node: TreeNodeProps) {
-      emit('node-click', node.data, node)
+      emitEvent(props.onNodeClick, node.data, node)
     }
 
     function handleNodeSelect(node: TreeNodeProps) {
       const selectedNodes = flattedData.value.filter(item => item.selected)
 
       if (props.multiple) {
-        emit(
-          'node-select',
+        emitEvent(
+          props.onNodeSelect,
           selectedNodes.map(item => item.data),
           selectedNodes
         )
@@ -591,12 +651,12 @@ export default defineComponent({
           item.selected = item.id === currentId
         }
 
-        emit('node-select', node.data, node)
+        emitEvent(props.onNodeSelect, node.data, node)
       }
     }
 
     function handleNodeCancel(node: TreeNodeProps) {
-      emit('node-cancel', node.data, node)
+      emitEvent(props.onNodeCancel, node.data, node)
     }
 
     function handleNodeExpand(node: TreeNodeProps) {
@@ -608,17 +668,17 @@ export default defineComponent({
         }
       }
 
-      emit('node-expand', node.data, node)
+      emitEvent(props.onNodeExpand, node.data, node)
     }
 
     function handleNodeReduce(node: TreeNodeProps) {
-      emit('node-reduce', node.data, node)
+      emitEvent(props.onNodeReduce, node.data, node)
     }
 
     async function handleAsyncLoad(node: TreeNodeProps) {
       if (!boundAsyncLoad.value) return false
 
-      let result = props.onAsyncLoad(node)
+      let result = props.onAsyncLoad(node.data, node)
 
       if (isPromise(result)) {
         result = await result
@@ -645,7 +705,7 @@ export default defineComponent({
       }
 
       dragging.value = true
-      emit('drag-start', nodeInstance.node.data, nodeInstance.node)
+      emitEvent(props.onDragStart, nodeInstance.node.data, nodeInstance.node)
     }
 
     function handleNodeDragOver(nodeInstance: TreeNodeInstance, event: DragEvent) {
@@ -683,7 +743,21 @@ export default defineComponent({
       dragState.dropType = dropType
 
       indicatorShow.value = isIndicatorShow
-      emit('drag-over', nodeInstance.node.data, nodeInstance.node)
+      emitEvent(props.onDragOver, nodeInstance.node.data, nodeInstance.node)
+    }
+
+    function isLeftInsideRight(left: TreeNodeProps, right: TreeNodeProps) {
+      if (!left || !right) return true
+
+      while (left) {
+        if (left === right || left.id === right.id) {
+          return true
+        }
+
+        left = getParentNode(left)!
+      }
+
+      return false
     }
 
     function handleNodeDrop(nodeInstance: TreeNodeInstance) {
@@ -691,11 +765,10 @@ export default defineComponent({
 
       const { draggingNode, willDropNode, dropType } = dragState
 
-      if (!willDropNode || draggingNode.id === willDropNode.id) return
+      if (!willDropNode || isLeftInsideRight(willDropNode, draggingNode)) return
 
       let currentId: Key
       let parent: TreeNodeProps | null
-      // let index: number
 
       if (draggingNode) {
         parent = getParentNode(draggingNode)
@@ -735,33 +808,52 @@ export default defineComponent({
         const index = parent.children.findIndex(item => item.id === currentId)
 
         if (~index) {
-          parent.children.splice(
-            +(dropType === DropType.AFTER) + index,
-            0,
-            draggingNode
-          )
+          parent.children.splice(+(dropType === DropType.AFTER) + index, 0, draggingNode)
 
           draggingNode.parent = parent.id
         }
       }
 
-      // nextTick(() => {
-      //   flattedData.value = flatTree(treeData.value, {
-      //     keyField: 'id',
-      //     parentField: 'parent',
-      //     childField: 'children',
-      //     rootId: props.rootId
-      //   })
-      // })
-
-      emit('drop', nodeInstance.node.data, nodeInstance.node, dropType)
+      emitEvent(props.onDrop, nodeInstance.node.data, nodeInstance.node, dropType)
     }
 
     function handleNodeDragEnd(nodeInstance: TreeNodeInstance) {
       dragging.value = true
       indicatorShow.value = false
       dragState = null
-      emit('drag-end', nodeInstance.node.data, nodeInstance.node)
+      emitEvent(props.onDragEnd, nodeInstance.node.data, nodeInstance.node)
+    }
+
+    function handleHittingChange(type: 'up' | 'down') {
+      const activeEl = document.activeElement
+
+      if (!visibleNodeEls.length || !activeEl) return
+
+      const index = visibleNodeEls.findIndex(nodeEl => nodeEl === activeEl)
+
+      if (~index) {
+        visibleNodeEls.at((index + (type === 'up' ? -1 : 1)) % visibleNodeEls.length)?.focus()
+      }
+    }
+
+    function handleNodeHitting(nodeEl: HTMLElement | null) {
+      if (!nodeEl || !visibleNodeEls.length) return
+
+      if (visibleNodeEls.includes(nodeEl)) {
+        nodeEl.focus()
+      }
+    }
+
+    function handleTreeFocus(event: FocusEvent) {
+      const target = event.target as HTMLElement
+
+      if (!visibleNodeEls.length || !target || !trap.value) {
+        return
+      }
+
+      if (target === trap.value) {
+        visibleNodeEls[0].focus()
+      }
     }
 
     function getCheckedNodes(): TreeNodeProps[] {
@@ -800,7 +892,7 @@ export default defineComponent({
       const parent = getParentNode(node)
 
       const currentId = node.id as Key
-      const parentId = parent ? parent.id as Key : null
+      const parentId = parent ? (parent.id as Key) : null
 
       return flattedData.value.filter(item => {
         const isChild = parentId === null ? !item.parent : item.parent === parentId
@@ -919,6 +1011,7 @@ export default defineComponent({
       locale: useLocale('tree'),
       treeData,
       indicatorShow,
+      anyMatched,
       labelKey,
       childrenKey: computed(() => keyConfig.value.children),
       getNodeProps: computed(() => {
@@ -926,7 +1019,10 @@ export default defineComponent({
       }),
 
       wrapper,
+      trap,
       indicator,
+
+      handleTreeFocus,
 
       // api
       parseAndTransformData,

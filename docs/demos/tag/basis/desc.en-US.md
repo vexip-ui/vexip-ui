@@ -1,3 +1,3 @@
 ### Basis Usage
 
-通过设置 `type` 属性的值为 `primary`、`success`、`error`、`warning` 创建不同类型的标签，不设置为默认类型。
+Create tags of different types by setting the value of the `type` prop to `primary`, `success`, `error`, `warning`, or be the default type when not set.

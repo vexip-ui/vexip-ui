@@ -1,5 +1,5 @@
-### 自定义高亮
+### Custom Highlight
 
-通过 `light` 插槽可以自定义高亮内容。
+Highlight content can be customized via the `light` slot.
 
-如果同时还想要自定义未高亮的内容，可以使用默认插槽进行渲染。
+You also can use the default slot for rendering unhighlighted content if you also want to customize it.

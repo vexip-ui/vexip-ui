@@ -29,6 +29,11 @@ $select: map.merge(
 
   display: inline-flex;
   width: 100%;
+  cursor: pointer;
+
+  &--filter {
+    cursor: text;
+  }
 
   @include input.handler(#{&}__selector);
 
@@ -41,7 +46,6 @@ $select: map.merge(
 
   &__control,
   &__input {
-    cursor: pointer;
     user-select: none;
   }
 
@@ -74,6 +78,44 @@ $select: map.merge(
 
   &__control &__tag + &__tag {
     margin-left: 0;
+  }
+
+  &__anchor {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    height: calc(get-css-var('input-height') - 8px);
+    margin: 2px 4px;
+    margin-left: 0;
+  }
+
+  &__input {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: inherit;
+    user-select: auto;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+
+    &--multiple {
+      min-width: 1px;
+    }
+
+    &::placeholder {
+      color: get-css-var('input-placeholder-color');
+    }
+  }
+
+  &__device {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    white-space: pre;
+    visibility: hidden;
+    opacity: 0%;
   }
 
   &__placeholder {
@@ -124,11 +166,20 @@ $select: map.merge(
     }
   }
 
+  &__group {
+    padding: get-css-var('option-label-v-padding') get-css-var('option-label-h-padding');
+  }
+
   &__label {
     flex: auto;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &--group {
+      font-size: get-css-var('option-group-font-size');
+      color: get-css-var('option-group-color');
+    }
   }
 
   &__check {

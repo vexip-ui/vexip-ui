@@ -3,7 +3,7 @@
     v-model:value="value"
     :options="options"
     :key-config="keyConfig"
-    style="width: 400px;"
+    style="max-width: 400px;"
     @input="setOptions"
   ></AutoComplete>
 </template>

@@ -1,26 +1,65 @@
 <template>
-  <div ref="wrapper" :class="className">
+  <div :id="idFor" ref="wrapper" :class="className">
+    <div
+      v-if="hasPrefix"
+      :class="[nh.be('icon'), nh.be('prefix')]"
+      :style="{ color: props.prefixColor }"
+      @click="handlePrefixClick"
+    >
+      <slot name="prefix">
+        <Icon :icon="props.prefix"></Icon>
+      </slot>
+    </div>
     <input
       ref="input"
       type="text"
       :class="[nh.be('control'), inputClass]"
-      :value="focused ? preciseNumber : formattedValue"
-      :style="inputStyle"
+      :value="inputValue"
       :autofocus="props.autofocus"
       :autocomplete="props.autocomplete ? 'on' : 'off'"
       :spellcheck="props.spellcheck"
       :disabled="props.disabled"
-      :readonly="props.readonly"
+      :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
+      role="spinbutton"
+      :aria-valuenow="preciseNumber"
+      :aria-valuemin="props.min !== -Infinity ? props.min : undefined"
+      :aria-valuemax="props.max !== Infinity ? props.max : undefined"
       @blur="handleBlur"
       @focus="handleFocus"
-      @keyup.enter="handleEnter"
-      @keyup="handleKeyUp"
       @keypress="handleKeyPress"
-      @keydown="handleKeyDown"
       @input="handleInput"
       @change="handleChange"
     />
+    <div
+      v-if="hasSuffix"
+      :class="[nh.be('icon'), nh.be('suffix')]"
+      :style="{
+        color: props.suffixColor,
+        opacity: showClear || props.loading ? '0%' : ''
+      }"
+      @click="handleSuffixClick"
+    >
+      <slot name="suffix">
+        <Icon :icon="props.suffix"></Icon>
+      </slot>
+    </div>
+    <div
+      v-else-if="props.clearable || props.loading"
+      :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
+    ></div>
+    <transition :name="nh.ns('fade')" appear>
+      <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+        <Icon><CircleXmark></CircleXmark></Icon>
+      </div>
+      <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+        <Icon
+          :spin="props.loadingSpin"
+          :pulse="!props.loadingSpin"
+          :icon="props.loadingIcon"
+        ></Icon>
+      </div>
+    </transition>
     <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
       <Icon :scale="0.8">
         <CaretUp></CaretUp>
@@ -31,43 +70,14 @@
         <CaretDown></CaretDown>
       </Icon>
     </div>
-    <div
-      v-if="hasPrefix"
-      :class="nh.bem('icon', 'prefix')"
-      :style="{ color: props.prefixColor }"
-      @click="handlePrefixClick"
-    >
-      <slot name="prefix">
-        <Icon :icon="props.prefix"></Icon>
-      </slot>
-    </div>
-    <transition name="vxp-fade">
-      <div
-        v-if="!props.disabled && props.clearable && isHover && hasValue"
-        :class="nh.be('clear')"
-        @click.stop="handleClear"
-      >
-        <Icon><CircleXmark></CircleXmark></Icon>
-      </div>
-      <div
-        v-else-if="hasSuffix"
-        :class="nh.bem('icon', 'suffix')"
-        :style="{ color: props.suffixColor }"
-        @click="handleSuffixClick"
-      >
-        <slot name="suffix">
-          <Icon :icon="props.suffix"></Icon>
-        </slot>
-      </div>
-    </transition>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, inject } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { VALIDATE_FIELD, CLEAR_FIELD } from '@/components/form-item'
-import { useHover } from '@vexip-ui/mixins'
+import { useFieldStore } from '@/components/form'
+import { useHover, useModifier } from '@vexip-ui/mixins'
 import {
   useNameHelper,
   useProps,
@@ -77,14 +87,18 @@ import {
   stateProp,
   createSizeProp,
   createStateProp,
-  classProp
+  classProp,
+  eventProp,
+  emitEvent
 } from '@vexip-ui/config'
-import { isNull, noop, toFixed, toNumber, boundRange, throttle } from '@vexip-ui/utils'
-import { CaretUp, CaretDown, CircleXmark } from '@vexip-ui/icons'
+import { isNull, toFixed, toNumber, boundRange, throttle, plus, minus } from '@vexip-ui/utils'
+import { CaretUp, CaretDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
 
 type InputEventType = 'input' | 'change'
+
+const isNullOrNaN = (value: unknown) => isNull(value) || Number.isNaN(value)
 
 export default defineComponent({
   name: 'NumberInput',
@@ -103,9 +117,7 @@ export default defineComponent({
     suffixColor: String,
     // 格式化后显示
     formatter: Function as PropType<(value: number) => string>,
-    // 格式化后读取
-    accessor: Function as PropType<(value: number | null) => any>,
-    value: Number as PropType<number | null>,
+    value: Number,
     min: Number,
     max: Number,
     placeholder: String,
@@ -115,30 +127,45 @@ export default defineComponent({
     precision: Number,
     readonly: booleanProp,
     step: Number,
+    ctrlStep: Number,
+    shiftStep: Number,
+    altStep: Number,
     disabled: booleanProp,
     inputClass: classProp,
     debounce: booleanProp,
-    disableValidate: booleanProp,
-    clearable: booleanProp
+    clearable: booleanProp,
+    loading: booleanProp,
+    loadingIcon: Object,
+    loadingLock: booleanProp,
+    loadingSpin: booleanProp,
+    onFocus: eventProp<(event: FocusEvent) => void>(),
+    onBlur: eventProp<(event: FocusEvent) => void>(),
+    onInput: eventProp<(value: number) => void>(),
+    onChange: eventProp<(value: number) => void>(),
+    onEnter: eventProp(),
+    onClear: eventProp(),
+    onPrefixClick: eventProp<(event: MouseEvent) => void>(),
+    onSuffixClick: eventProp<(event: MouseEvent) => void>(),
+    onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
+    onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
+    onKeyUp: eventProp<(event: KeyboardEvent) => void>()
   },
-  emits: [
-    'focus',
-    'blur',
-    'input',
-    'change',
-    'enter',
-    'clear',
-    'prefix-click',
-    'suffix-click',
-    'key-down',
-    'key-press',
-    'key-up',
-    'update:value'
-  ],
+  emits: ['update:value'],
   setup(_props, { slots, emit }) {
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<number>(focus)
+
     const props = useProps('numberInput', _props, {
       size: createSizeProp(),
-      state: createStateProp(),
+      state: createStateProp(state),
       prefix: null,
       prefixColor: '',
       suffix: null,
@@ -148,13 +175,8 @@ export default defineComponent({
         default: null,
         isFunc: true
       },
-      // 格式化后读取
-      accessor: {
-        default: null,
-        isFunc: true
-      },
       value: {
-        default: null,
+        default: () => getFieldValue(null!),
         static: true
       },
       min: -Infinity,
@@ -166,23 +188,50 @@ export default defineComponent({
       precision: 0,
       readonly: false,
       step: 1,
-      disabled: false,
+      ctrlStep: 100,
+      shiftStep: 10,
+      altStep: 0.1,
+      disabled: () => disabled.value,
       inputClass: null,
       debounce: false,
-      disableValidate: false,
-      clearable: false
+      clearable: false,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
-
-    const validateField = inject(VALIDATE_FIELD, noop)
-    const clearField = inject(CLEAR_FIELD, noop)
 
     const nh = useNameHelper('number-input')
     const focused = ref(false)
-    const currentValue = ref<number | null>(props.value)
+    const currentValue = ref(props.value)
     const inputting = ref(false)
 
-    const inputControl = ref<HTMLElement | null>(null)
+    const inputControl = ref<HTMLInputElement | null>(null)
     const { wrapper, isHover } = useHover()
+
+    useModifier({
+      target: inputControl,
+      passive: false,
+      onKeyDown: (event, modifier) => {
+        emitEvent(props.onKeyDown, event)
+
+        if (modifier.up || modifier.down) {
+          event.preventDefault()
+          changeStep(
+            modifier.up ? 'plus' : 'minus',
+            event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
+          )
+          modifier.resetAll()
+        }
+      },
+      onKeyUp: (event, modifier) => {
+        emitEvent(props.onKeyUp, event)
+
+        if (event.key === 'Enter') {
+          handleEnter()
+        }
+      }
+    })
 
     // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue: number | null = props.value
@@ -194,6 +243,7 @@ export default defineComponent({
         {
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default'
         }
@@ -224,20 +274,31 @@ export default defineComponent({
         : preciseNumber.value.toString()
     })
     const plusDisabled = computed(() => {
-      return !isNull(currentValue.value) && currentValue.value >= props.max
+      return !isNullOrNaN(currentValue.value) && currentValue.value >= props.max
     })
     const minusDisabled = computed(() => {
-      return !isNull(currentValue.value) && currentValue.value <= props.min
+      return !isNullOrNaN(currentValue.value) && currentValue.value <= props.min
     })
     const hasValue = computed(() => {
       return currentValue.value || currentValue.value === 0
     })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && hasValue.value
+    })
+    const inputValue = computed(() => {
+      if (Number.isNaN(currentValue.value)) {
+        return ''
+      }
+
+      return focused.value ? preciseNumber.value : formattedValue.value
+    })
+    const isReadonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
 
     watch(
       () => props.value,
       value => {
-        currentValue.value = value
-        lastValue = value
+        currentValue.value = isNull(value) ? NaN : value
+        lastValue = currentValue.value
       }
     )
 
@@ -248,7 +309,7 @@ export default defineComponent({
     function handleFocus(event: FocusEvent) {
       focused.value = true
       inputting.value = true
-      emit('focus', event)
+      emitEvent(props.onFocus, event)
     }
 
     function handleBlur(event: FocusEvent) {
@@ -257,47 +318,68 @@ export default defineComponent({
       window.setTimeout(() => {
         if (!focused.value) {
           inputting.value = false
-          emit('blur', event)
+          emitEvent(props.onBlur, event)
           emitChangeEvent('change')
         }
       }, 120)
     }
 
-    function plusNumber() {
+    function plusNumber(event: MouseEvent) {
       if (plusDisabled.value) {
         return
       }
 
       !focused.value && focus()
-      changeStep('plus')
+      changeStep(
+        'plus',
+        event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
+      )
     }
 
-    function minusNumber() {
+    function minusNumber(event: MouseEvent) {
       if (minusDisabled.value) {
         return
       }
 
       !focused.value && focus()
-      changeStep('minus')
+      changeStep(
+        'minus',
+        event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
+      )
     }
 
-    function changeStep(type: 'plus' | 'minus') {
-      if (props.disabled) {
+    function changeStep(type: 'plus' | 'minus', modifier?: 'ctrl' | 'shift' | 'alt') {
+      if (props.disabled || (props.loading && props.loadingLock)) {
         return
       }
 
-      let value = currentValue.value ?? 0
+      let value = currentValue.value || 0
+      let step!: number
 
-      const stringValue = value.toString()
+      switch (modifier) {
+        case 'ctrl':
+          step = props.ctrlStep
+          break
+        case 'shift':
+          step = props.shiftStep
+          break
+        case 'alt':
+          step = props.altStep
+          break
+        default:
+          step = props.step
+      }
 
-      if (/\.$/.test(stringValue)) {
+      const stringValue = value.toString().trim()
+
+      if (stringValue.endsWith('.')) {
         value = toNumber(stringValue.slice(0, -1))
       }
 
       if (type === 'plus') {
-        value += props.step
+        value = plus(value, step)
       } else {
-        value -= props.step
+        value = minus(value, step)
       }
 
       setValue(value, 'input')
@@ -326,9 +408,9 @@ export default defineComponent({
       setValue(toNumber(value), type)
     }
 
-    function setValue(value: number | null, type: InputEventType) {
+    function setValue(value: number, type: InputEventType) {
       if (type !== 'input') {
-        currentValue.value = boundRange(value || 0, props.min, props.max)
+        currentValue.value = boundRange(value, props.min, props.max)
       } else {
         currentValue.value = value
       }
@@ -339,61 +421,47 @@ export default defineComponent({
     function emitChangeEvent(type: InputEventType) {
       type = type === 'input' ? 'input' : 'change'
 
-      const value =
-        typeof props.accessor === 'function'
-          ? props.accessor(currentValue.value)
-          : currentValue.value
-
       if (type === 'change') {
         if (lastValue === currentValue.value) return
 
         lastValue = currentValue.value
 
-        emit('change', value, currentValue.value)
+        setFieldValue(currentValue.value!)
+        emitEvent(props.onChange, currentValue.value)
         emit('update:value', currentValue.value)
-
-        if (!props.disableValidate) {
-          validateField()
-        }
+        validateField()
       } else {
-        emit('input', value, currentValue.value)
+        emitEvent(props.onInput, currentValue.value!)
       }
     }
 
     function handleClear() {
-      setValue(null, 'change')
-      emit('clear')
+      setValue(NaN, 'change')
+      emitEvent(props.onClear)
       clearField()
     }
 
-    function handleEnter(event: KeyboardEvent) {
-      emit('enter', event)
+    function handleEnter() {
+      emitEvent(props.onEnter)
     }
 
     function handlePrefixClick(event: MouseEvent) {
-      emit('prefix-click', event)
+      emitEvent(props.onPrefixClick, event)
     }
 
     function handleSuffixClick(event: MouseEvent) {
-      emit('suffix-click', event)
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      emit('key-down', event)
+      emitEvent(props.onSuffixClick, event)
     }
 
     function handleKeyPress(event: KeyboardEvent) {
-      emit('key-press', event)
-    }
-
-    function handleKeyUp(event: KeyboardEvent) {
-      emit('key-up', event)
+      emitEvent(props.onKeyPress, event)
     }
 
     return {
       props,
       nh,
       locale: useLocale('input'),
+      idFor,
       focused,
       isHover,
 
@@ -406,6 +474,9 @@ export default defineComponent({
       plusDisabled,
       minusDisabled,
       hasValue,
+      showClear,
+      inputValue,
+      isReadonly,
 
       wrapper,
       input: inputControl,
@@ -417,12 +488,9 @@ export default defineComponent({
       handleInput: throttle(handleChange),
       handleChange,
       handleClear,
-      handleEnter,
       handlePrefixClick,
       handleSuffixClick,
-      handleKeyDown,
-      handleKeyPress,
-      handleKeyUp
+      handleKeyPress
     }
   }
 })

@@ -7,7 +7,7 @@ export function useListener<E = Event>(
   target: MaybeRef<EventTarget | null>,
   event: string,
   listener: (event: E) => any,
-  options: AddEventListenerOptions | boolean
+  options?: AddEventListenerOptions | boolean
 ) {
   if (!target) {
     return noop

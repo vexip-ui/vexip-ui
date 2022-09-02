@@ -34,12 +34,16 @@ $spin: map.merge(
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
+
+    & > * {
+      pointer-events: auto;
+    }
   }
 
   &__mask {
     position: absolute;
     inset: 0;
-    content: '';
     background-color: get-css-var('spin-mask-bg-color');
     opacity: get-css-var('spin-mask-opacity');
   }

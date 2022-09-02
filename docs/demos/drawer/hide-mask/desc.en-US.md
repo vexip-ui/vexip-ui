@@ -1,5 +1,5 @@
 ### Hide Mask
 
-添加 `hide-mask` 可以关闭抽屉的遮罩效果。
+Add `hide-mask` prop to turn off the drawer's masking effect.
 
-关闭了遮罩效果后，别忘了提供其他关闭途径。
+After turning off the mask effect, don't forget to provide other ways to turn it off.

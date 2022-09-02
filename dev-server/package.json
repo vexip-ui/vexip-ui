@@ -1,0 +1,18 @@
+{
+  "name": "@vexip-ui/dev-server",
+  "private": true,
+  "scripts": {
+    "serve": "vite"
+  },
+  "dependencies": {
+    "vue": "^3.2.37",
+    "vue-router": "^4.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.0.0",
+    "@vitejs/plugin-vue-jsx": "^2.0.0",
+    "typescript": "4.6.4",
+    "unplugin-vue-components": "^0.19.6",
+    "vite": "^3.0.0"
+  }
+}
