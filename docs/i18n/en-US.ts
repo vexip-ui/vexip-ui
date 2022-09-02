@@ -103,6 +103,7 @@ export const enUS = defineI18n({
     Progress: 'Progress',
     Skeleton: 'Skeleton',
     Spin: 'Spin',
+    Toast: 'Toast',
 
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',

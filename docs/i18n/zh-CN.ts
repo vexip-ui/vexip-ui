@@ -103,6 +103,7 @@ export const zhCN = defineI18n({
     Progress: '进度条',
     Skeleton: '骨架屏',
     Spin: '加载中',
+    Toast: '吐司提示',
 
     ConfigProvider: '配置注入',
     Masker: '遮罩',

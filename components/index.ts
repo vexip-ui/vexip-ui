@@ -91,6 +91,7 @@ import { TimeAgo } from './time-ago'
 import { TimePicker } from './time-picker'
 import { Timeline } from './timeline'
 import { TimelineItem } from './timeline-item'
+import { Toast } from './toast'
 import { Tooltip } from './tooltip'
 import { Transfer } from './transfer'
 import { Tree } from './tree'
@@ -210,7 +211,8 @@ const components = [
   Contextmenu,
   Loading,
   Message,
-  Notice
+  Notice,
+  Toast
 ]
 
 export { buildInstall }
@@ -309,6 +311,7 @@ export * from './time-ago'
 export * from './time-picker'
 export * from './timeline'
 export * from './timeline-item'
+export * from './toast'
 export * from './tooltip'
 export * from './transfer'
 export * from './tree'

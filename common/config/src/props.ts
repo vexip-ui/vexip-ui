@@ -157,9 +157,9 @@ export function createStateProp(defaultValue: MaybeRef<ComponentState> = 'defaul
 }
 
 type MaybeArray<T> = T | T[]
-type MaybeArrayDeep<T> = T | MaybeArrayDeep<T>[]
+type MaybeArrayDeep<T> = T | (MaybeArrayDeep<T>[] extends infer R ? R : never)
 
-export type ClassType = MaybeArrayDeep<string | { [x: string]: ClassType }>
+export type ClassType = MaybeArrayDeep<string | { [x: string]: unknown }>
 export type StyleType = MaybeArrayDeep<
   string | (CSSProperties & { [x: `--${string}`]: string | number })
 >
