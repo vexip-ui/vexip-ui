@@ -141,8 +141,12 @@ describe('Button', () => {
     const wrapper = mount(() => <Button color={'orange'}></Button>)
     const rgbColor = parseColorToRgba('orange')
 
-    expect(wrapper.find('.vxp-button').attributes('style')).toContain(`--vxp-button-bg-color: ${rgbColor};`)
-    expect(wrapper.find('.vxp-button').attributes('style')).toContain(`--vxp-button-b-color: ${rgbColor};`)
+    expect(wrapper.find('.vxp-button').attributes('style')).toContain(
+      `--vxp-button-bg-color: ${rgbColor};`
+    )
+    expect(wrapper.find('.vxp-button').attributes('style')).toContain(
+      `--vxp-button-b-color: ${rgbColor};`
+    )
   })
 
   it('group', () => {

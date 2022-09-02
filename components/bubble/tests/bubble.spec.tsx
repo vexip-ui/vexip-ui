@@ -24,15 +24,21 @@ describe('Bubble', () => {
     const wrapper = mount(() => <Bubble background={'cyan'} placement={'right'}></Bubble>)
 
     expect(wrapper.find('.vxp-bubble').classes()).toContain('vxp-bubble--background')
-    expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain('background-color: cyan;')
-    expect(wrapper.find('.vxp-bubble__arrow').attributes('style')).toContain('border-right-color: cyan;')
+    expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain(
+      'background-color: cyan;'
+    )
+    expect(wrapper.find('.vxp-bubble__arrow').attributes('style')).toContain(
+      'border-right-color: cyan;'
+    )
   })
 
   it('shadow', () => {
     const wrapper = mount(() => <Bubble shadow={'cyan'}></Bubble>)
 
     expect(wrapper.find('.vxp-bubble').classes()).toContain('vxp-bubble--shadow')
-    expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain('box-shadow: 0 0 4px cyan;')
+    expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain(
+      'box-shadow: 0 0 4px cyan;'
+    )
   })
 
   it('content class', () => {

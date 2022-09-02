@@ -46,7 +46,9 @@ $viewer: map.merge(
     user-select: none;
   }
 
-  &__content {
+  &__content,
+  &__transition {
+    display: flex;
     pointer-events: none;
     user-select: none;
     transition: get-css-var('transition-transform');
@@ -54,12 +56,6 @@ $viewer: map.merge(
 
   &--moving &__content {
     transition-duration: 0ms;
-  }
-
-  &__transition {
-    pointer-events: none;
-    user-select: none;
-    transition: get-css-var('transition-transform');
   }
 
   $v-padding: get-css-var('viewer-toolbar-v-padding');
