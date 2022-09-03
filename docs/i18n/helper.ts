@@ -10,6 +10,8 @@ export interface I18nConfig {
     playground: string,
     searchComponent: string,
     copyCode: string,
+    copySuccess: string,
+    copyFail: string,
     showCode: string,
     hideCode: string,
     editInGithub: string,

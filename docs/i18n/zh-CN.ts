@@ -12,6 +12,8 @@ export const zhCN = defineI18n({
     playground: '游乐场',
     searchComponent: '在 Vexip UI 中搜索组件',
     copyCode: '复制代码',
+    copySuccess: '复制成功',
+    copyFail: '复制失败',
     showCode: '展开代码',
     hideCode: '收起代码',
     editInGithub: '在 Github 中编辑',

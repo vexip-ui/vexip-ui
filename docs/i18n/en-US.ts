@@ -12,6 +12,8 @@ export const enUS = defineI18n({
     playground: 'Playground',
     searchComponent: 'Search component in Vexip UI',
     copyCode: 'Copy code',
+    copySuccess: 'Copy success',
+    copyFail: 'Copy fail',
     showCode: 'Show code',
     hideCode: 'Hide code',
     editInGithub: 'Edit in Github',
