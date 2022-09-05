@@ -67,6 +67,7 @@ function handleScroll({ clientY }: { clientY: number }) {
 }
 
 provide('refreshScroll', refreshScroll)
+provide('scrollToElement', scrollToElement)
 
 function refreshScroll() {
   if (!scroll.value) return
@@ -83,6 +84,12 @@ function setScrollY() {
   if (scroll.value) {
     scroll.value.currentScroll.y = store.affixed ? 65 : 0
     store.scrollY = store.affixed ? 65 : 0
+  }
+}
+
+function scrollToElement(element: Element) {
+  if (scroll.value) {
+    scroll.value.scrollToElement(element, 500, store.affixed ? 0 : -75)
   }
 }
 </script>

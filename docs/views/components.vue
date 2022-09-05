@@ -17,7 +17,7 @@
           <MenuGroup
             v-for="group in componentGroups"
             :key="group.name"
-            :label="`${$t(`group.${group.name}`)} (${group.components.length})`"
+            :label="`${t(`group.${group.name}`)} (${group.components.length})`"
           >
             <MenuItem
               v-for="component in group.components"
@@ -26,7 +26,7 @@
               :data-name="toKebabCase(component.name)"
               @focusin="moveMenuIntoView(toKebabCase(component.name))"
             >
-              {{ $t(`components.${component.name}`) }}
+              {{ t(`components.${component.name}`) }}
               <span v-if="language !== 'en-US'" :class="`${prefix}__sub-name`">
                 {{ component.name }}
               </span>
@@ -80,6 +80,7 @@ const wrapper = ref<InstanceType<typeof Container> | null>(null)
 const menuScroll = ref<InstanceType<typeof Scroll> | null>(null)
 
 const i18n = useI18n({ useScope: 'global' })
+const { t } = i18n
 const router = useRouter()
 const route = useRoute()
 

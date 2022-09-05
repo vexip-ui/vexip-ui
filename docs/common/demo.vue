@@ -239,6 +239,10 @@ function editOnPlayground() {
     box-shadow: var(--vxp-shadow-base);
   }
 
+  &:target {
+    border-color: var(--vxp-color-primary-opacity-2);
+  }
+
   &__example {
     padding: 20px 12px 8px;
   }

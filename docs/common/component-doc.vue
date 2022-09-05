@@ -3,17 +3,17 @@
     <ResizeObserver @resize="refreshScroll?.()">
       <div :style="{ visibility: allLoaded ? undefined : 'hidden' }">
         <h1 :class="`${prefix}__title`">
-          {{ $t(`components.${$route.meta.name}`) }}
+          {{ t(`components.${route.meta.name}`) }}
           <span v-if="language !== 'en-US'" :class="`${prefix}__sub-name`">
-            {{ $route.meta.name }}
+            {{ route.meta.name }}
           </span>
           <Tag
-            v-if="$route.meta.since"
+            v-if="route.meta.since"
             type="warning"
             simple
             style="margin-left: 8px;"
           >
-            {{ `Since v${$route.meta.since}` }}
+            {{ `Since v${route.meta.since}` }}
           </Tag>
         </h1>
         <div :class="`${prefix}__desc`">
@@ -32,6 +32,7 @@
           :key="index"
           :code="example.code"
           :github="example.github"
+          :active="example.id && activeDemo === example.id"
         >
           <component :is="example.demo"></component>
           <template #desc>
@@ -61,6 +62,8 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent, markRaw, ref, computed, watch, watchEffect, inject } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import Article from './article.vue'
 import Demo from './demo.vue'
 import { Spinner } from '@vexip-ui/icons'
@@ -71,6 +74,7 @@ interface Example {
   demo: Record<string, any>,
   desc: Record<string, any>,
   code: string,
+  id: string,
   github: string
 }
 
@@ -85,10 +89,15 @@ const props = defineProps({
   }
 })
 
+const { t } = useI18n({ useScope: 'global' })
+const route = useRoute()
+
 const prefix = 'component-doc'
+const activeDemo = ref('')
 const article = ref<InstanceType<typeof Article> | null>(null)
 
 const refreshScroll = inject<() => void>('refreshScroll', noop)
+const scrollToElement = inject<(el: Element) => void>('scrollToElement', noop)
 
 const desc = ref<Record<string, any> | null>(null)
 const examples = ref<Example[]>([])
@@ -109,6 +118,19 @@ function refresh() {
   requestAnimationFrame(() => {
     refreshScroll?.()
     article.value?.refreshAnchor()
+
+    try {
+      let element = document.querySelector(decodeURIComponent(location.hash))
+
+      while (element && !element.classList.contains('demo')) {
+        element = element.parentElement
+      }
+
+      if (element) {
+        scrollToElement(element)
+        location.replace(location.href)
+      }
+    } catch (e) {}
   })
 }
 
@@ -150,6 +172,7 @@ async function internalInit(name: string, language: string) {
         defineAsyncComponent(() => import(`../demos/${name}/${demo}/desc.${language}.md`))
       ),
       code: '',
+      id: '',
       github: `demos/${name}/${demo}/demo.${language}.vue`
     }
   })
