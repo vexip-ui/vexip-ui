@@ -72,6 +72,7 @@ export default defineComponent({
     scrollDuration: Number,
     markerTransition: String,
     options: Array as PropType<AnchorLinkOptions[]>,
+    bindHash: booleanProp,
     onChange: eventProp<(value: string) => void>()
   },
   emits: ['update:active'],
@@ -93,7 +94,8 @@ export default defineComponent({
       options: {
         default: () => [],
         static: true
-      }
+      },
+      bindHash: false
     })
 
     const currentActive = ref(props.active)
@@ -103,9 +105,15 @@ export default defineComponent({
 
     const wrapper = ref<HTMLElement | null>(null)
 
+    let timer: ReturnType<typeof setTimeout>
+
     let isRawViewer = false
     let container: HTMLElement | null = null
     let scroller: ScrollType | null = null
+
+    if (!currentActive.value && props.bindHash) {
+      currentActive.value = decodeURIComponent(location.hash)
+    }
 
     provide<AnchorState>(
       ANCHOR_STATE,
@@ -136,6 +144,7 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       removeListener()
+      clearTimeout(timer)
     })
 
     function increaseLink(state: AnchorLinkState) {
@@ -299,8 +308,6 @@ export default defineComponent({
       }
     }
 
-    let timer: number
-
     function handleActive(link: string) {
       if (link === currentActive.value || !link.startsWith('#') || link.length < 2) {
         return
@@ -325,7 +332,7 @@ export default defineComponent({
         )
 
         animateScrollTo(container, from, to, duration, () => {
-          timer = window.setTimeout(() => {
+          timer = setTimeout(() => {
             animating.value = false
           }, 10)
         })
@@ -337,7 +344,7 @@ export default defineComponent({
 
         scroller.scrollTo(0, clientY, duration)
 
-        timer = window.setTimeout(() => {
+        timer = setTimeout(() => {
           animating.value = false
         }, duration + 10)
 
@@ -345,6 +352,10 @@ export default defineComponent({
         computeMarkerPoisiton()
       } else {
         animating.value = false
+      }
+
+      if (props.bindHash && location) {
+        location.hash = encodeURIComponent(currentActive.value.replace(/^#/, ''))
       }
     }
 
