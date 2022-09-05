@@ -15,6 +15,17 @@ describe('Ellipsis', () => {
     expect(wrapper.text()).toEqual(TEXT)
   })
 
+  it('render with attrs', () => {
+    const wrapper = mount(() => (
+      <Ellipsis class={'test'} style={{ color: 'red' }}>
+        {TEXT}
+      </Ellipsis>
+    ))
+
+    expect(wrapper.find('.vxp-ellipsis').classes()).toContain('test')
+    expect(wrapper.find('.vxp-ellipsis').attributes('style')).toContain('color: red;')
+  })
+
   it('tooltip visible', async () => {
     const wrapper = mount(() => <Ellipsis>{TEXT}</Ellipsis>)
     const rectMock = vi

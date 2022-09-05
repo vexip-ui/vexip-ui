@@ -3,6 +3,7 @@
     ref="wrapper"
     :class="[nh.b(), props.maxLines > 0 && nh.bm('multiple')]"
     :style="ellipsisStyle"
+    v-bind="$attrs"
     @mouseenter="handleTriggerEnter"
     @mouseleave="handleTriggerLeave"
   >
