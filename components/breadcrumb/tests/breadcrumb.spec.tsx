@@ -64,6 +64,22 @@ describe('Breadcrumb', () => {
     expect(onSelect).toBeCalledWith('item')
   })
 
+  it('enter down', async () => {
+    const onSelect = vi.fn()
+    const wrapper = mount(Breadcrumb, {
+      props: {
+        onSelect
+      },
+      slots: {
+        default: () => <BreadcrumbItem label={'item'}>item</BreadcrumbItem>
+      }
+    })
+
+    await wrapper.find('.vxp-breadcrumb__label').trigger('keydown.enter')
+    expect(onSelect).toHaveBeenCalled()
+    expect(onSelect).toBeCalledWith('item')
+  })
+
   it('separator click', async () => {
     const onSeparatorClick = vi.fn()
     const wrapper = mount(Breadcrumb, {

@@ -1,6 +1,11 @@
 <template>
   <li :class="nh.be('item')">
-    <a :class="nh.be('label')" href="" @click="handleClick">
+    <a
+      :class="nh.be('label')"
+      tabindex="0"
+      @click="handleClick"
+      @keydown.enter="handleClick"
+    >
       <slot>{{ label }}</slot>
     </a>
     <span :class="nh.be('separator')" role="separator" @click="handleSeparatorClick">
