@@ -11,8 +11,8 @@
       @drop.prevent="handleDrop"
       @dragover.prevent="handleDragEnter"
       @dragleave.prevent="handleDragLeave"
-      @keydown.enter.prevent="handleClick"
-      @keydown.space.prevent="handleClick"
+      @keydown.enter="handleClick"
+      @keydown.space="handleClick"
     >
       <input
         v-if="!props.disabledClick"
