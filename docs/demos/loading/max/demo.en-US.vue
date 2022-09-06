@@ -22,23 +22,16 @@
   </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { Loading } from 'vexip-ui'
 
 type LoadingState = 'default' | 'success' | 'error' | 'warning'
 
-export default defineComponent({
-  setup() {
-    function doLoading(percent: number, maxPercent: number, state: LoadingState = 'default') {
-      Loading.open({
-        percent,
-        maxPercent,
-        state: percent === 100 ? state : 'default'
-      })
-    }
-
-    return { doLoading }
-  }
-})
+function doLoading(percent: number, maxPercent: number, state: LoadingState = 'default') {
+  Loading.open({
+    percent,
+    maxPercent,
+    state: percent === 100 ? state : 'default'
+  })
+}
 </script>

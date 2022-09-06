@@ -8,16 +8,10 @@
   </Carousel>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref(0)
-
-    return { active }
-  }
-})
+const active = ref(0)
 </script>
 
 <style scoped>

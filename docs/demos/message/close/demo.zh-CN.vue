@@ -4,17 +4,10 @@
   </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { Message } from 'vexip-ui'
 
-export default defineComponent({
-  setup() {
-    function sendMessage() {
-      Message.info({ content: '一条可关闭的消息', closable: true })
-    }
-
-    return { sendMessage }
-  }
-})
+function sendMessage() {
+  Message.info({ content: '一条可关闭的消息', closable: true })
+}
 </script>
