@@ -104,7 +104,8 @@ declare module 'vue' {
     $contextmenu: typeof import('vexip-ui')['Contextmenu'],
     $loading: typeof import('vexip-ui')['Loading'],
     $message: typeof import('vexip-ui')['Message'],
-    $notice: typeof import('vexip-ui')['Notice']
+    $notice: typeof import('vexip-ui')['Notice'],
+    $toast: typeof import('vexip-ui')['Toast']
   }
 }
 

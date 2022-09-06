@@ -32,11 +32,11 @@
               @keydown.enter.stop="openPage(menu.to)"
               @keydown.space.stop.prevent="openPage(menu.to)"
             >
-              <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
+              <span class="vxp-menu__title">{{ t(`common.${menu.label}`) }}</span>
             </div>
           </li>
           <MenuItem v-else :label="menu.label">
-            {{ $t(`common.${menu.label}`) }}
+            {{ t(`common.${menu.label}`) }}
           </MenuItem>
         </template>
       </Menu>
@@ -88,11 +88,11 @@
             @keydown.enter.stop="openPage(menu.to)"
             @keydown.space.stop.prevent="openPage(menu.to)"
           >
-            <span class="vxp-menu__title">{{ $t(`common.${menu.label}`) }}</span>
+            <span class="vxp-menu__title">{{ t(`common.${menu.label}`) }}</span>
           </div>
         </li>
         <MenuItem v-else :label="menu.label">
-          {{ $t(`common.${menu.label}`) }}
+          {{ t(`common.${menu.label}`) }}
         </MenuItem>
       </template>
     </Menu>
@@ -130,6 +130,7 @@ const placeholder = ref('')
 const currentSearch = ref('')
 
 const i18n = useI18n({ useScope: 'global' })
+const { t } = i18n
 const router = useRouter()
 const route = useRoute()
 
@@ -144,7 +145,9 @@ const langOptions = computed(() => {
   })
 })
 
-const menus = [
+type MenuLabel = 'guides' | 'components' | 'playground'
+
+const menus: Array<{ label: MenuLabel, to?: string }> = [
   { label: 'guides' },
   { label: 'components' },
   { label: 'playground', to: 'https://playground.vexipui.com' }
@@ -188,8 +191,8 @@ function toHomepage() {
   router.push(`/${language.value}`)
 }
 
-function openPage(url: string) {
-  window.open(url)
+function openPage(url?: string) {
+  url && window.open(url)
 }
 
 function toComponentDoc(fullName: string) {

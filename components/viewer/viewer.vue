@@ -13,9 +13,7 @@
           :style="transitionStyle"
           @transitionend="normalizeProps"
         >
-          <slot>
-            <img src="https://www.vexipui.com/assets/4.23a4f29b.jpg" />
-          </slot>
+          <slot></slot>
         </div>
       </div>
     </div>
@@ -55,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed } from 'vue'
+import { defineComponent, ref, reactive, computed, onMounted } from 'vue'
 import { Divider } from '@/components/divider'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
@@ -79,11 +77,11 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/mixins'
-import { boundRange } from '@vexip-ui/utils'
+import { boundRange, toFixed } from '@vexip-ui/utils'
 import { InternalActionName } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ViewerState, ToolbarPlacement, ToolbarAction } from './symbol'
+import type { ViewerState, ViewerToolbarPlacement, ToolbarAction } from './symbol'
 
 export default defineComponent({
   name: 'Viewer',
@@ -104,9 +102,10 @@ export default defineComponent({
     rotateDisabled: booleanProp,
     rotateDelta: Number,
     fullDisabled: booleanProp,
-    toolbarPlacement: String as PropType<ToolbarPlacement>,
+    toolbarPlacement: String as PropType<ViewerToolbarPlacement>,
     actions: Array as PropType<ToolbarAction[]>,
     toolbarFade: booleanNumberProp,
+    noTransition: booleanProp,
     onMoveStart: eventProp<(state: ViewerState) => void>(),
     onMove: eventProp<(state: ViewerState) => void>(),
     onMoveEnd: eventProp<(state: ViewerState) => void>(),
@@ -134,7 +133,8 @@ export default defineComponent({
       fullDisabled: false,
       toolbarPlacement: 'bottom',
       actions: () => [],
-      toolbarFade: false
+      toolbarFade: false,
+      noTransition: false
     })
 
     const nh = useNameHelper('viewer')
@@ -188,6 +188,10 @@ export default defineComponent({
       x: currentLeft,
       y: currentTop
     })
+    const zoomOrigin = {
+      x: 0,
+      y: 0
+    }
 
     useModifier({
       target: viewer,
@@ -301,7 +305,8 @@ export default defineComponent({
         [nh.bm('draggable')]: !props.moveDisabled,
         [nh.bm('resizable')]: !props.zoomDisabled,
         [nh.bm('full')]: full.value,
-        [nh.bm('moving')]: moving.value
+        [nh.bm('moving')]: moving.value,
+        [nh.bm('static')]: props.noTransition
       }
     })
     const style = computed(() => {
@@ -325,14 +330,14 @@ export default defineComponent({
     })
     const contentStyle = computed(() => {
       return {
-        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scaleX(${
-          flipX.value ? -1 : 1
-        }) scaleY(${flipY.value ? -1 : 1})`
+        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scale(${zoom.value})`
       }
     })
     const transitionStyle = computed(() => {
       return {
-        transform: `scale(${zoom.value}) rotate(${rotate.value}deg)`
+        transform: `scaleX(${flipX.value ? -1 : 1}) scaleY(${flipY.value ? -1 : 1}) rotate(${
+          rotate.value
+        }deg)`
       }
     })
     const allActions = computed(() => {
@@ -347,15 +352,23 @@ export default defineComponent({
       return Array.from(map.values())
     })
 
-    function handleWheel(event: WheelEvent) {
-      if (props.zoomDisabled) {
-        return
-      }
+    onMounted(() => {
+      if (container.value) {
+        const rect = container.value.getBoundingClientRect()
 
+        zoomOrigin.x = rect.left + rect.width * 0.5
+        zoomOrigin.y = rect.top + rect.height * 0.5
+      }
+    })
+
+    function handleWheel(event: WheelEvent) {
       event.stopPropagation()
       event.preventDefault()
 
       const sign = event.deltaY > 0 ? -1 : 1
+
+      zoomOrigin.x = event.clientX
+      zoomOrigin.y = event.clientY
 
       emitEvent(props.onWheel, sign, state)
       handleZoom(sign * props.zoomDelta)
@@ -367,6 +380,11 @@ export default defineComponent({
       }
 
       rotate.value += deg
+
+      if (props.noTransition && rotate.value % 360 === 0) {
+        rotate.value = 0
+      }
+
       emitEvent(props.onRotate, deg, state)
     }
 
@@ -389,11 +407,24 @@ export default defineComponent({
     }
 
     function handleZoom(ratio: number) {
-      if (props.zoomDisabled) {
+      if (props.zoomDisabled || !container.value) {
         return
       }
 
-      zoom.value = boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax)
+      const containerRect = container.value.getBoundingClientRect()
+      const { x, y } = zoomOrigin
+      const { offsetWidth, offsetHeight } = container.value
+      const prveZoom = zoom.value
+
+      zoom.value = toFixed(boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax), 5)
+
+      const delta = zoom.value / prveZoom - 1
+      const originX = delta * offsetWidth * 0.5
+      const originY = delta * offsetHeight * 0.5
+
+      currentLeft.value -= delta * (x - containerRect.left - currentLeft.value) - originX
+      currentTop.value -= delta * (y - containerRect.top - currentTop.value) - originY
+
       emitEvent(props.onZoom, zoom.value, state)
     }
 
@@ -410,6 +441,7 @@ export default defineComponent({
       flipX.value = false
       flipY.value = false
       zoom.value = 1
+
       emitEvent(props.onReset, state)
     }
 

@@ -29,14 +29,16 @@ This library is using base on vue 3.0 with only using **composition api**, and d
 
 Almost all the **default value of props** for each component can be quickly modified by configuration (except value and options props), for easy customization.
 
-Currently more then **70** components, many you can see everywhere and a few may bright your eyes.
+And, the writing of component codes pay great attention to lowering the threshold of **source codes reading**, and the style of code is as close to the usual business code habits as possible to avoid dazzling encapsulation.
+
+There are currently **70+** components, many you can see everywhere and a few may bright your eyes.
 
 ## Work List
 
 - ~~Transfer to use css vars~~ (Released in `2.0.0-beta.0`)
 - ~~Refactor icons~~ (Released in `2.0.0-beta.0`)
 - ~~Refactor global config~~ (Released in `2.0.0-beta.4`)
-- Write unit tests (In progress, see `tests` branch)
+- ~~Write unit tests~~ (Released in `2.0.0-beta.22`)
 - Adapt ssr render
 
 ## Features
@@ -45,6 +47,7 @@ Currently more then **70** components, many you can see everywhere and a few may
 - Vue3 components of out-of-the-box (may not help if you still using Vue2)
 - Configurable **default value of props** for easy customization
 - entirely using the composition api, the performance and extensibility should be good
+- **700+** unit tests to provide good basic stability for component usage
 
 ## Install
 

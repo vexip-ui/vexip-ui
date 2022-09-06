@@ -161,7 +161,7 @@ import type {
   Key,
   Data,
   RenderFn,
-  ColumnOptions,
+  TableColumnOptions,
   RowClassFn,
   RowState,
   RowInstance
@@ -193,7 +193,7 @@ export default defineComponent({
   },
   props: {
     // TODO: colums 正确的类型推导
-    columns: Array as PropType<ColumnOptions<any, any>[]>,
+    columns: Array as PropType<TableColumnOptions<any, any>[]>,
     data: Array as PropType<Data[]>,
     dataKey: String,
     width: [Number, String],
@@ -299,7 +299,7 @@ export default defineComponent({
     const yScrollPercent = ref(0)
     const headHeight = ref(0)
     const indicatorShow = ref(false)
-    const templateColumns = ref(new Set<ColumnOptions>())
+    const templateColumns = ref(new Set<TableColumnOptions>())
     const tableWidth = ref<number | string | null>(null)
     const yScrollEnable = ref(false)
 
@@ -312,7 +312,7 @@ export default defineComponent({
     const locale = useLocale('table')
 
     const store = useStore({
-      columns: props.columns as ColumnOptions[],
+      columns: props.columns as TableColumnOptions[],
       data: props.data,
       rowClass: props.rowClass,
       dataKey: props.dataKey,
@@ -403,7 +403,7 @@ export default defineComponent({
       return 35
     })
     const allColumns = computed(() => {
-      return [...templateColumns.value].concat(props.columns as ColumnOptions[])
+      return [...templateColumns.value].concat(props.columns as TableColumnOptions[])
     })
     const emptyText = computed(() => props.emptyText ?? locale.value.empty)
 
@@ -551,11 +551,11 @@ export default defineComponent({
       emitEvent(props.onBodyScroll, { client, percent })
     }
 
-    function increaseColumn(column: ColumnOptions) {
+    function increaseColumn(column: TableColumnOptions) {
       templateColumns.value.add(column)
     }
 
-    function decreaseColumn(column: ColumnOptions) {
+    function decreaseColumn(column: TableColumnOptions) {
       templateColumns.value.delete(column)
     }
 
@@ -763,7 +763,7 @@ export default defineComponent({
 
     function syncVerticalScroll() {
       if (mainScroll.value) {
-        setBodyScroll(mainScroll.value.currentScroll.y)
+        setBodyScroll(-mainScroll.value.currentScroll.y)
       }
     }
 

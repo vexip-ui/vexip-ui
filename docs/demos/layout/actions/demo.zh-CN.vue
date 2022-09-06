@@ -27,7 +27,7 @@ import {
   User
 } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',

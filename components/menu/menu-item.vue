@@ -324,6 +324,7 @@ const MenuItem = defineComponent({
       if (isGroup.value) {
         if (isUsePopper.value && dropTrigger.value !== 'click') return
 
+        menuState?.beforeExpand()
         groupExpanded.value = !groupExpanded.value
       } else {
         if (isUsePopper.value) {
@@ -341,6 +342,7 @@ const MenuItem = defineComponent({
     function toggleGroupExpanded(expanded: boolean, upwrad = false) {
       window.clearTimeout(timer.hover)
 
+      menuState?.beforeExpand()
       groupExpanded.value = expanded
 
       if (upwrad && typeof parentItemState?.toggleGroupExpanded === 'function') {

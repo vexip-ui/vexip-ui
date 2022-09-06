@@ -2,7 +2,7 @@
   <article ref="wrapper" class="article">
     <slot></slot>
     <Portal to="#toc-anchor">
-      <Anchor :offset="15">
+      <Anchor v-model:active="currentActive" :offset="15" bind-hash>
         <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
           {{ item.name }}
         </AnchorLink>
@@ -12,26 +12,41 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue'
+import { ref, watch } from 'vue'
 import { ussTocAnchor } from './toc-anchor'
 
 import type { PropType } from 'vue'
 
 const props = defineProps({
+  active: {
+    type: String,
+    default: ''
+  },
   anchorLevel: {
     type: Number as PropType<2 | 3>,
     default: 2
   }
 })
+const emit = defineEmits(['update:active'])
 
+const currentActive = ref(props.active)
 const { anchors, wrapper, refreshAnchor } = ussTocAnchor(props.anchorLevel || 3)
 
+watch(
+  () => props.active,
+  value => {
+    currentActive.value = value
+  }
+)
 watch(
   () => props.anchorLevel,
   value => {
     refreshAnchor(value)
   }
 )
+watch(currentActive, value => {
+  emit('update:active', value)
+})
 
 defineExpose({ refreshAnchor })
 </script>

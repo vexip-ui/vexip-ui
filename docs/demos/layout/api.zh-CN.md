@@ -2,8 +2,7 @@
 
 ```ts
 import type { Router } from 'vue-router'
-import type { IconMinorProps } from 'vexip-ui/es/icon'
-import type { MenuMarkerType, MenuGroupType } from 'vexip-ui/es/menu'
+import type { IconMinorProps, MenuMarkerType, MenuGroupType } from 'vexip-ui'
 
 type LayoutSignType = 'aside' | 'header'
 type LayoutConfig = 'nav' | 'color'

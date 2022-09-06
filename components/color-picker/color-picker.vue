@@ -322,10 +322,8 @@ export default defineComponent({
       },
       visible: false,
       format: {
-        default: 'rgb' as ColorFormat,
-        validator: (value: ColorFormat) => {
-          return ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
-        }
+        default: 'rgb',
+        validator: value => ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
       },
       alpha: false,
       disabled: () => disabled.value,
@@ -334,7 +332,7 @@ export default defineComponent({
       shortcut: false,
       placement: {
         default: 'bottom',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       transfer: false,
       outsideClose: true,
@@ -421,7 +419,7 @@ export default defineComponent({
         [`${baseCls}--disabled`]: props.disabled,
         [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
-        [`${baseCls}--focused}`]: currentVisible.value,
+        [`${baseCls}--focused`]: currentVisible.value,
         [`${baseCls}--${props.state}`]: props.state !== 'default'
       }
     })
@@ -474,6 +472,14 @@ export default defineComponent({
       value => {
         parseValue(value)
         lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
+      }
+    )
+    watch(
+      () => props.disabled,
+      value => {
+        if (value) {
+          currentVisible.value = false
+        }
       }
     )
 

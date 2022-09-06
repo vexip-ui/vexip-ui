@@ -93,7 +93,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Notice' },
         { name: 'Progress' },
         { name: 'Skeleton', since: '2.0.0' },
-        { name: 'Spin', since: '1.3.0' }
+        { name: 'Spin', since: '1.3.0' },
+        { name: 'Toast', since: '2.0.0' }
       ]
     },
     {

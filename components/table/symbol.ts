@@ -13,15 +13,7 @@ export type Accessor<T extends string | number = string | number, D = Data> = (
 ) => T
 export type RenderFn = (data: Data) => any
 
-export type ColumnType = 'order' | 'selection' | 'expand'
-
-// export interface FilterOptions {
-//   able: boolean,
-//   options: (string | { value: string | number, label?: string, active?: boolean })[],
-//   multiple?: boolean,
-//   active?: null | FilterActive,
-//   method?: null | ((active: FilterActive, data: Data) => boolean)
-// }
+export type TableColumnType = 'order' | 'selection' | 'expand'
 
 export type FilterOptions<T extends string | number = string | number, D = Data> =
   | {
@@ -92,25 +84,34 @@ export type TypeColumn<T extends string | number = string | number, D = Data> =
   | OrderColumn<T, D>
   | SelectionColumn<T, D>
   | ExpandColumn<T, D>
-export type ColumnOptions<T extends string | number = string | number, D = Data> =
+export type TableColumnOptions<T extends string | number = string | number, D = Data> =
   | BaseColumn<T, D>
   | TypeColumn<T, D>
-export type ColumnWithKey<T extends string | number = string | number, D = Data> = ColumnOptions<
+export type ColumnWithKey<
+  T extends string | number = string | number,
+  D = Data
+> = TableColumnOptions<T, D> & { key: Key }
+
+export type ColumnProfile<T extends string | number = string | number, D = Data> = Pick<
+  ColumnWithKey<T, D>,
+  'name' | 'key' | 'metaData'
+>
+
+export type FilterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<
   T,
   D
-> & { key: Key }
-
-export type ColumnProfile<T extends string | number = string | number, D = Data> = Pick<ColumnWithKey<T, D>, 'name' | 'key' | 'metaData'>
-
-export type FilterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<T, D> & {
+> & {
   active: T | T[]
 }
-export type SorterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<T, D> & {
+export type SorterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<
+  T,
+  D
+> & {
   type: 'asc' | 'desc'
 }
 
 export interface StoreOptions {
-  columns: ColumnOptions[],
+  columns: TableColumnOptions[],
   data: Data[],
   rowClass: ClassType | RowClassFn,
   dataKey: string,
@@ -178,8 +179,8 @@ export interface RowInstance {
 }
 
 export interface TableAction {
-  increaseColumn(column: ColumnOptions): void,
-  decreaseColumn(column: ColumnOptions): void,
+  increaseColumn(column: TableColumnOptions): void,
+  decreaseColumn(column: TableColumnOptions): void,
   emitRowEnter(data: Data, key: Key, index: number): void,
   emitRowLeave(data: Data, key: Key, index: number): void,
   emitRowClick(data: Data, key: Key, index: number): void,

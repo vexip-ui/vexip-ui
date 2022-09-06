@@ -1,4 +1,8 @@
-import type { SelectKeyConfig, SelectRawOption, SelectOptionState } from '@/components/select'
+import type {
+  SelectKeyConfig,
+  SelectRawOption,
+  SelectOptionState
+} from '@/components/select/symbol'
 
 export type AutoCompleteKeyConfig = Omit<SelectKeyConfig, 'label'>
 export type AutoCompleteRawOption = SelectRawOption

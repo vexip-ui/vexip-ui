@@ -8,7 +8,7 @@
     :aria-selected="selected"
     @click="handleSelect"
   >
-    <slot>{{ label }}</slot>
+    <slot>{{ label || value }}</slot>
   </li>
 </template>
 

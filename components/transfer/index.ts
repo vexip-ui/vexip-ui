@@ -1,2 +1,2 @@
-export * from './symbol'
 export { default as Transfer } from './transfer'
+export type { TransferKeyConfig, TransferExposed } from './symbol'

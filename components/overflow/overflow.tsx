@@ -91,16 +91,16 @@ export default defineComponent({
 
     function computeHorizontalMargin(el: HTMLElement) {
       const style = getComputedStyle(el)
-      const marginLeft = parseFloat(style.marginLeft)
-      const marginRight = parseFloat(style.marginRight)
+      const marginLeft = parseFloat(style.marginLeft) || 0
+      const marginRight = parseFloat(style.marginRight) || 0
 
       return marginLeft + marginRight
     }
 
     function computeHorizontalPadding(el: HTMLElement) {
       const style = getComputedStyle(el)
-      const paddingLeft = parseFloat(style.paddingLeft)
-      const paddingRight = parseFloat(style.paddingRight)
+      const paddingLeft = parseFloat(style.paddingLeft) || 0
+      const paddingRight = parseFloat(style.paddingRight) || 0
 
       return paddingLeft + paddingRight
     }

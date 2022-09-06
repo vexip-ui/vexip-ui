@@ -11,8 +11,8 @@
       @drop.prevent="handleDrop"
       @dragover.prevent="handleDragEnter"
       @dragleave.prevent="handleDragLeave"
-      @keydown.enter.prevent="handleClick"
-      @keydown.space.prevent="handleClick"
+      @keydown.enter="handleClick"
+      @keydown.space="handleClick"
     >
       <input
         v-if="!props.disabledClick"
@@ -104,7 +104,7 @@ import {
 import { noop, isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload, Spinner } from '@vexip-ui/icons'
 import { upload } from './request'
-import { UploadStatusType, uploadListTypes } from './symbol'
+import { StatusType, uploadListTypes } from './symbol'
 
 import type { PropType, Ref } from 'vue'
 import type {
@@ -267,7 +267,7 @@ export default defineComponent({
       return accept && (typeof accept === 'string' ? accept : accept.join())
     })
     const renderFiles = computed(() => {
-      return fileStates.value.filter(item => item.status !== UploadStatusType.DELETE)
+      return fileStates.value.filter(item => item.status !== StatusType.DELETE)
     })
 
     function handleClick() {
@@ -305,10 +305,10 @@ export default defineComponent({
 
         if (fileState) {
           if (
-            fileState.status !== UploadStatusType.SUCCESS &&
-            fileState.status !== UploadStatusType.UPLOADING
+            fileState.status !== StatusType.SUCCESS &&
+            fileState.status !== StatusType.UPLOADING
           ) {
-            fileState.status = UploadStatusType.PENDING
+            fileState.status = StatusType.PENDING
           }
         } else {
           fileState = createFileState(file)
@@ -369,7 +369,7 @@ export default defineComponent({
         size,
         type,
         base64: null,
-        status: UploadStatusType.PENDING,
+        status: StatusType.PENDING,
         percentage: 0,
         source: file,
         path: file.path || file.webkitRelativePath,
@@ -393,7 +393,7 @@ export default defineComponent({
       }
 
       const uploadFiles = fileStates.value.filter(
-        item => item.status !== UploadStatusType.SUCCESS && item.status !== UploadStatusType.DELETE
+        item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE
       )
       const requests: Promise<any>[] = []
 
@@ -409,10 +409,7 @@ export default defineComponent({
         let result = props.onBeforeUpload(
           file.source,
           fileStates.value
-            .filter(
-              item =>
-                item.status !== UploadStatusType.SUCCESS && item.status !== UploadStatusType.DELETE
-            )
+            .filter(item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE)
             .map(item => item.source)
         )
 
@@ -423,7 +420,7 @@ export default defineComponent({
         if (isFalse(result)) return
       }
 
-      file.status = UploadStatusType.UPLOADING
+      file.status = StatusType.UPLOADING
 
       const { url, headers, withCredentials, data, field, pathField } = props
 
@@ -484,7 +481,7 @@ export default defineComponent({
     }
 
     function handleDelete(file: FileState) {
-      file.status = UploadStatusType.DELETE
+      file.status = StatusType.DELETE
 
       if (file.xhr) {
         file.xhr.abort()
@@ -501,7 +498,7 @@ export default defineComponent({
 
     function syncInputFiles() {
       const dataTransfer = new DataTransfer()
-      fileStates.value = fileStates.value.filter(item => item.status !== UploadStatusType.DELETE)
+      fileStates.value = fileStates.value.filter(item => item.status !== StatusType.DELETE)
 
       fileStates.value.forEach(item => {
         dataTransfer.items.add(item.source)
@@ -513,7 +510,7 @@ export default defineComponent({
     }
 
     function handleProgress(percent: number, file: FileState) {
-      if (file.status === UploadStatusType.DELETE) return
+      if (file.status === StatusType.DELETE) return
 
       file.percentage = percent
 
@@ -521,9 +518,9 @@ export default defineComponent({
     }
 
     function handleSuccess(response: any, file: FileState) {
-      if (file.status === UploadStatusType.DELETE) return
+      if (file.status === StatusType.DELETE) return
 
-      file.status = UploadStatusType.SUCCESS
+      file.status = StatusType.SUCCESS
       file.response = response
       file.error = null
 
@@ -531,9 +528,9 @@ export default defineComponent({
     }
 
     function handleError(error: HttpError, file: FileState) {
-      if (file.status === UploadStatusType.DELETE) return
+      if (file.status === StatusType.DELETE) return
 
-      file.status = UploadStatusType.FAIL
+      file.status = StatusType.FAIL
       file.error = error
 
       emitEvent(props.onError, file, error, file.source)

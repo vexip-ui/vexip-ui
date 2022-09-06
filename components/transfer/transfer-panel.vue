@@ -503,8 +503,8 @@ export default defineComponent({
     }
 
     function emitSelectedChange() {
-      emit('select')
       emit('update:selected', currentSelected.value)
+      emit('select')
     }
 
     function handlePageChange(page: number) {

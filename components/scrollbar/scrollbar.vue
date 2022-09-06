@@ -67,17 +67,17 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('scrollbar', _props, {
       placement: {
-        default: 'right' as ScrollbarPlacement,
-        validator: (value: ScrollbarPlacement) => scrollbarPlacements.includes(value)
+        default: 'right',
+        validator: value => scrollbarPlacements.includes(value)
       },
       scroll: {
         default: 0,
-        validator: (value: number) => value >= 0 && value <= 100,
+        validator: value => value >= 0 && value <= 100,
         static: true
       },
       barLength: {
         default: 35,
-        validator: (value: number) => value > 0 && value < 100
+        validator: value => value > 0 && value < 100
       },
       width: null,
       appear: false,
@@ -90,7 +90,7 @@ export default defineComponent({
       useTrack: false,
       trackSpeed: {
         default: 2,
-        validator: (value: number) => value > 0 && value < 10
+        validator: value => value > 0 && value < 10
       }
     })
 

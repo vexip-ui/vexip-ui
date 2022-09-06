@@ -1,6 +1,6 @@
 export type TagState = 'default' | 'primary' | 'info' | 'success' | 'error' | 'warning'
 
-export type NamedColor =
+export type TagNamedColor =
   | 'lime'
   | 'pink'
   | 'magenta'
@@ -11,4 +11,4 @@ export type NamedColor =
   | 'gold'
   | 'purple'
 
-export type TagType = TagState | NamedColor
+export type TagType = TagState | TagNamedColor

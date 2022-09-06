@@ -1,20 +1,12 @@
 <template>
-  <ColorPicker
-    v-model:value="color1"
-    shortcut
-    style="margin-right: 25px;"
-  ></ColorPicker>
-  <ColorPicker
-    v-model:value="color2"
-    shortcut
-    :shortcut-list="shortcuts"
-  ></ColorPicker>
+  <ColorPicker v-model:value="color1" shortcut style="margin-right: 25px;"></ColorPicker>
+  <ColorPicker v-model:value="color2" shortcut :shortcut-list="shortcuts"></ColorPicker>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
-import type { Color } from 'vexip-ui/es/color-picker'
+import type { Color } from 'vexip-ui'
 
 export default defineComponent({
   setup() {

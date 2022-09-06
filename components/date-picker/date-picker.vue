@@ -229,7 +229,7 @@ export default defineComponent({
     onCancel: eventProp(),
     onChange: eventProp<(value: string | number | string[] | number[] | null) => void>(),
     onClear: eventProp(),
-    onShortcut: eventProp<(name: string, value: Dateable) => void>(),
+    onShortcut: eventProp<(name: string, value: Dateable | Dateable[]) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
     onFocus: eventProp(),
     onBlur: eventProp(),
@@ -909,7 +909,7 @@ export default defineComponent({
       }
     }
 
-    function handleShortcut(name: string, value: Dateable) {
+    function handleShortcut(name: string, value: Dateable | Dateable[]) {
       parseValue(value)
       emitEvent(props.onShortcut, name, value)
       finishInput()

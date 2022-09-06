@@ -10,8 +10,20 @@
     >
       <slot></slot>
     </a>
-    <ul :class="nh.be('list')">
-      <slot name="group"></slot>
+    <ul v-if="$slots.group || (children && children.length)" :class="nh.be('list')">
+      <slot name="group">
+        <template v-if="children && children.length">
+          <AnchorLink
+            v-for="child in children"
+            :key="child.to"
+            :to="child.to"
+            :title="child.title"
+            :children="child.children"
+          >
+            {{ child.label }}
+          </AnchorLink>
+        </template>
+      </slot>
     </ul>
   </li>
 </template>
@@ -32,7 +44,8 @@ import {
 import { useNameHelper } from '@vexip-ui/config'
 import { baseIndentWidth, LINK_STATE, ANCHOR_STATE } from './symbol'
 
-import type { LinkState } from './symbol'
+import type { PropType } from 'vue'
+import type { AnchorLinkOptions } from './symbol'
 
 export default defineComponent({
   name: 'AnchorLink',
@@ -44,6 +57,10 @@ export default defineComponent({
     title: {
       type: String,
       default: ''
+    },
+    children: {
+      type: Array as PropType<AnchorLinkOptions[]>,
+      default: () => []
     }
   },
   setup(props) {
@@ -59,13 +76,14 @@ export default defineComponent({
     const state = reactive({
       el: link,
       to: toRef(props, 'to'),
+      active,
       indent
     })
 
     const linkClass = computed(() => {
       return {
         [nh.be('link')]: true,
-        [nh.be('link--active')]: active.value
+        [nh.bem('link', 'active')]: state.active
       }
     })
     const linkStyle = computed(() => {
@@ -74,7 +92,7 @@ export default defineComponent({
       }
     })
 
-    provide<LinkState>(LINK_STATE, state)
+    provide(LINK_STATE, state)
 
     if (anchorState) {
       watch(

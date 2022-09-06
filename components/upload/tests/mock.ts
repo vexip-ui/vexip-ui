@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 
 import type { DOMWrapper } from '@vue/test-utils'
-import type { SourceFile } from '..'
+import type { SourceFile } from '../symbol'
 
 const getMockFile = (element: Element, files: File[]) => {
   Object.defineProperty(element, 'files', {

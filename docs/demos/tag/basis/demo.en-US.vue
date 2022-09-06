@@ -1,9 +1,5 @@
 <template>
-  <Tag
-    v-for="type in tags"
-    :key="type"
-    :type="type"
-  >
+  <Tag v-for="type in tags" :key="type" :type="type">
     Tag
   </Tag>
 </template>

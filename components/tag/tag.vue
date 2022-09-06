@@ -84,7 +84,7 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.bs('vars')]: true,
         [nh.bm(props.size)]: props.size !== 'default',
-        [nh.bm(props.type)]: props.type,
+        [nh.bm(props.type)]: props.type !== 'default',
         [nh.bm('border')]: props.border,
         [nh.bm('simple')]: props.simple,
         [nh.bm('circle')]: props.circle

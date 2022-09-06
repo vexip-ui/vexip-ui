@@ -1,8 +1,11 @@
 <template>
   <div :id="idFor" :class="className" role="group">
     <slot>
+      <Checkbox v-if="props.control" control>
+        {{ controlLabel }}
+      </Checkbox>
       <template v-for="(item, index) in props.options" :key="index">
-        <Checkbox v-if="isObject(item)" :value="item.value">
+        <Checkbox v-if="isObject(item)" :value="item.value" :control="item.control">
           {{ item.label || item.value }}
         </Checkbox>
         <Checkbox v-else :value="item">
@@ -14,12 +17,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide, reactive, toRef, computed, watch } from 'vue'
+import { defineComponent, ref, reactive, toRef, computed, watch, provide } from 'vue'
 import { Checkbox } from '@/components/checkbox'
 import {
   useNameHelper,
   useProps,
+  useLocale,
   booleanProp,
+  booleanStringProp,
   sizeProp,
   stateProp,
   createSizeProp,
@@ -38,7 +43,8 @@ type RawOption =
   | string
   | {
       value: string | number,
-      label?: string
+      label?: string,
+      control?: boolean
     }
 type Values = (string | number)[]
 
@@ -57,6 +63,7 @@ export default defineComponent({
     options: Array as PropType<RawOption[]>,
     loading: booleanProp,
     loadingLock: booleanProp,
+    control: booleanStringProp,
     onChange: eventProp<(value: Values) => void>()
   },
   emits: ['update:value'],
@@ -79,10 +86,12 @@ export default defineComponent({
         static: true
       },
       loading: () => loading.value,
+      control: null,
       loadingLock: false
     })
 
     const nh = useNameHelper('checkbox-group')
+    const locale = useLocale('checkbox')
     const valueMap = new Map<string | number, boolean>()
     const inputSet = new Set<Ref<HTMLElement | null>>()
     const controlSet = new Set<ControlState>()
@@ -101,6 +110,9 @@ export default defineComponent({
           [nh.bm(props.state)]: props.state !== 'default'
         }
       ]
+    })
+    const controlLabel = computed(() => {
+      return typeof props.control === 'string' ? props.control : locale.value.all
     })
 
     const updateValue = debounceMinor(() => {
@@ -223,6 +235,7 @@ export default defineComponent({
       props,
       idFor,
       className,
+      controlLabel,
 
       isObject,
       increaseControl,

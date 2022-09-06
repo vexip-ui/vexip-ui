@@ -43,8 +43,8 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('timelineItem', _props, {
       type: {
-        default: 'default' as TimelinkItemType,
-        validator: (value: TimelinkItemType) => timelineItemTypes.includes(value)
+        default: 'default',
+        validator: value => timelineItemTypes.includes(value)
       },
       color: '',
       label: {
