@@ -1,8 +1,8 @@
 <template>
   <Tag
-    v-for="type in states"
-    :key="type"
-    :type="type"
+    v-for="tagType in states"
+    :key="tagType"
+    :type="tagType"
     closable
   >
     标签
@@ -10,43 +10,28 @@
   <br />
   <br />
   <Tag
-    v-for="type in colors"
-    :key="type"
-    :type="type"
+    v-for="tagType in colors"
+    :key="tagType"
+    :type="tagType"
     closable
   >
     标签
   </Tag>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  setup() {
-    return {
-      // state type
-      states: [
-        'default',
-        'primary',
-        'info',
-        'success',
-        'error',
-        'warning'
-      ] as const,
-      // color type
-      colors: [
-        'lime',
-        'pink',
-        'magenta',
-        'tomato',
-        'orange',
-        'cyan',
-        'navy',
-        'gold',
-        'purple'
-      ] as const
-    }
-  }
-})
+<script setup lang="ts">
+// state type
+const states = ['default', 'primary', 'info', 'success', 'error', 'warning'] as const
+// color type
+const colors = [
+  'lime',
+  'pink',
+  'magenta',
+  'tomato',
+  'orange',
+  'cyan',
+  'navy',
+  'gold',
+  'purple'
+] as const
 </script>

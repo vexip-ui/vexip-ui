@@ -1,6 +1,6 @@
 import type { StyleType } from '@vexip-ui/config'
 
-export type ToolbarPlacement =
+export type ViewerToolbarPlacement =
   | 'top'
   | 'top-start'
   | 'top-end'
@@ -14,7 +14,7 @@ export type ToolbarPlacement =
   | 'right-start'
   | 'right-end'
 
-export enum InternalActionName {
+export const enum InternalActionName {
   RotateRight = 'rotateRight',
   RotateLeft = 'rotateLeft',
   FlipHorizontal = 'flipHorizontal',

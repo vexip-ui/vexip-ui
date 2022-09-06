@@ -2,8 +2,8 @@
   <div :class="nh.be('body')" role="rowgroup" :style="style">
     <div v-if="renderData.length" :class="nh.be('row-list')" :style="listStyle">
       <TableRow
-        v-for="row in renderData"
-        :key="row.index"
+        v-for="(row, index) in renderData"
+        :key="index"
         :row="row"
         :index="row.index"
         :is-fixed="!!fixed"

@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, onMounted, provide } from 'vue'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/mixins'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
@@ -93,11 +93,8 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentActive, value => {
-      updateMarkerPosition()
-      emitEvent(props.onChange, value)
-      emit('update:active', value)
-    })
+
+    onMounted(updateMarkerPosition)
 
     function isActiveEmpty() {
       return isNull(currentActive.value) || currentActive.value === ''
@@ -115,6 +112,10 @@ export default defineComponent({
 
     function handleActive(label: string | number) {
       currentActive.value = label
+
+      updateMarkerPosition()
+      emitEvent(props.onChange, label)
+      emit('update:active', label)
     }
 
     function updateMarkerPosition() {

@@ -78,6 +78,7 @@ interface SelectOptionState {
 | clear         | 当通过清除按钮清空值时触发，无返回值                                 | -                                                                  | -       |
 | focus         | 当控件元素聚焦时触发，返回事件对象                                   | `(event: FocusEvent)`                                              | `2.0.0` |
 | blur          | 当控件元素失去焦点时触发，返回事件对象                               | `(event: FocusEvent)`                                              | `2.0.0` |
+| update:label  | 当选项值改变时触发，用于快速当前选项的标签值                         | `(label: string)`                                                  | `2.0.0` |
 
 ### Select 插槽
 

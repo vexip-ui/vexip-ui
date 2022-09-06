@@ -263,7 +263,7 @@ export default defineComponent({
     onCancel: eventProp(),
     onChange: eventProp<(value: string | string[]) => void>(),
     onClear: eventProp(),
-    onShortcut: eventProp<(name: string, value: string) => void>(),
+    onShortcut: eventProp<(name: string, value: string | string[]) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
     onFocus: eventProp(),
     onBlur: eventProp(),

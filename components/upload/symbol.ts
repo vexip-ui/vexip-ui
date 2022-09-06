@@ -1,5 +1,5 @@
-// export type UploadStatusType = 'pending' | 'uploading' | 'fail' | 'success' | 'delete'
 export type UploadListType = 'name' | 'detail' | 'thumbnail' | 'card'
+export type UploadStatusType = 'pending' | 'uploading' | 'fail' | 'success' | 'delete'
 
 export type SourceFile = File & { path?: string }
 
@@ -13,7 +13,7 @@ export type HttpError = Error & {
   method: string
 }
 
-export enum UploadStatusType {
+export const enum StatusType {
   PENDING = 'pending',
   UPLOADING = 'uploading',
   FAIL = 'fail',
@@ -27,7 +27,7 @@ export interface FileState {
   size: number,
   type: string,
   base64: string | null,
-  status: UploadStatusType,
+  status: StatusType,
   percentage: number,
   source: SourceFile,
   path: string,
@@ -66,4 +66,9 @@ export interface DirectoryReader {
   ) => void
 }
 
-export const uploadListTypes = Object.freeze<UploadListType>(['name', 'detail', 'thumbnail', 'card'])
+export const uploadListTypes = Object.freeze<UploadListType>([
+  'name',
+  'detail',
+  'thumbnail',
+  'card'
+])

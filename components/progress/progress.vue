@@ -84,19 +84,19 @@ export default defineComponent({
     const props = useProps('progress', _props, {
       percentage: {
         default: 0,
-        validator: (value: number) => value >= 0 && value <= 100,
+        validator: value => value >= 0 && value <= 100,
         static: true
       },
       strokeWidth: 8,
       infoType: {
-        default: 'outside' as ProgressInfoType,
-        validator: (value: ProgressInfoType) => infoTypes.includes(value)
+        default: 'outside',
+        validator: value => infoTypes.includes(value)
       },
       precision: 2,
       activated: false,
       strokeColor: {
         default: null,
-        validator: (value: StrokeColor) => !(Array.isArray(value) && (!value[0] || !value[1]))
+        validator: value => !(Array.isArray(value) && (!value[0] || !value[1]))
       }
     })
 

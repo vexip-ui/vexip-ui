@@ -316,7 +316,7 @@ export default defineComponent({
     onOutsideClose: eventProp(),
     onClear: eventProp()
   },
-  emits: ['update:value', 'update:visible'],
+  emits: ['update:value', 'update:visible', 'update:label'],
   setup(_props, { emit, slots }) {
     const {
       idFor,
@@ -876,6 +876,7 @@ export default defineComponent({
           emittedValue.map(value => optionValueMap.get(value)?.data ?? '')
         )
         emit('update:value', emittedValue)
+        emit('update:label', currentLabels.value)
         validateField()
       } else {
         currentLabels.value.length = 0
@@ -895,6 +896,7 @@ export default defineComponent({
           setFieldValue(emittedValue)
           emitEvent(props.onChange, emittedValue, option.data)
           emit('update:value', emittedValue)
+          emit('update:label', currentLabels.value[0])
           validateField()
         }
       }

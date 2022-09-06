@@ -1,4 +1,4 @@
-export * from './symbol'
+export { default as Form } from './form.vue'
 export * from './helper'
 export * from './validator'
-export { default as Form } from './form.vue'
+export type { LabelPosition, SubmitMethod } from './symbol'

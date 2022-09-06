@@ -39,6 +39,21 @@
         <div :id="bodyId" :class="nh.be('content')">
           <slot></slot>
         </div>
+        <div v-if="props.footer || $slots.footer" :class="nh.be('footer')">
+          <slot name="footer">
+            <Button text size="small" @click="handleCancle">
+              {{ props.cancelText || locale.cancel }}
+            </Button>
+            <Button
+              type="primary"
+              size="small"
+              :loading="props.loading"
+              @click="handleConfirm"
+            >
+              {{ props.confirmText || locale.confirm }}
+            </Button>
+          </slot>
+        </div>
         <div
           v-if="props.resizable"
           ref="resizer"
@@ -50,7 +65,7 @@
             }
           ]"
         >
-          <slot name="handler"></slot>
+          <slot name="handler" :resizing="resizing"></slot>
         </div>
       </section>
     </template>
@@ -59,11 +74,13 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
+import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import {
   useNameHelper,
   useProps,
+  useLocale,
   booleanProp,
   booleanStringProp,
   classProp,
@@ -85,6 +102,7 @@ let idCount = 0
 export default defineComponent({
   name: 'Drawer',
   components: {
+    Button,
     Icon,
     Masker,
     Xmark
@@ -101,16 +119,22 @@ export default defineComponent({
     maskClose: booleanProp,
     drawerClass: classProp,
     hideMask: booleanProp,
-    onBeforeClose: Function as PropType<() => any>,
+    onBeforeClose: Function as PropType<(isConfirm?: boolean) => any>,
     resizable: booleanProp,
     autoRemove: booleanProp,
+    footer: booleanProp,
+    confirmText: String,
+    cancelText: String,
+    loading: booleanProp,
     onToggle: eventProp<(active: boolean) => void>(),
     onClose: eventProp(),
     onShow: eventProp(),
     onHide: eventProp(),
     onResizeStart: eventProp<(rect: { width: number, height: number }) => void>(),
     onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
-    onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>()
+    onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>(),
+    onConfirm: eventProp(),
+    onCancel: eventProp()
   },
   emits: ['update:active'],
   setup(_props, { slots, emit }) {
@@ -122,15 +146,15 @@ export default defineComponent({
       },
       width: {
         default: 280,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       height: {
         default: 280,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       placement: {
-        default: 'right' as DrawerPlacement,
-        validator: (value: DrawerPlacement) => drawerPlacements.includes(value)
+        default: 'right',
+        validator: value => drawerPlacements.includes(value)
       },
       title: '',
       closable: true,
@@ -143,7 +167,11 @@ export default defineComponent({
         isFunc: true
       },
       resizable: false,
-      autoRemove: false
+      autoRemove: false,
+      footer: false,
+      confirmText: null,
+      cancelText: null,
+      loading: false
     })
 
     const nh = useNameHelper('drawer')
@@ -211,7 +239,8 @@ export default defineComponent({
         nh.bs('vars'),
         {
           [nh.bm('inner')]: props.inner,
-          [nh.bem('wrapper', 'closable')]: props.closable
+          [nh.bm('closable')]: props.closable,
+          [nh.bm('resizable')]: props.resizable
         }
       ]
     })
@@ -274,11 +303,11 @@ export default defineComponent({
       }
     )
 
-    async function handleClose() {
+    async function handleClose(isConfirm = false) {
       let result: unknown = true
 
       if (typeof props.onBeforeClose === 'function') {
-        result = props.onBeforeClose()
+        result = props.onBeforeClose(isConfirm)
 
         if (isPromise(result)) {
           result = await result
@@ -309,9 +338,20 @@ export default defineComponent({
       emitEvent(props.onHide)
     }
 
+    function handleConfirm() {
+      handleClose(true)
+      emitEvent(props.onConfirm)
+    }
+
+    function handleCancle() {
+      handleClose(false)
+      emitEvent(props.onCancel)
+    }
+
     return {
       props,
       nh,
+      locale: useLocale('modal'),
       currentActive,
       resizing,
 
@@ -328,7 +368,9 @@ export default defineComponent({
       handleClose,
       handleMaskClose,
       handleShow,
-      handleHide
+      handleHide,
+      handleConfirm,
+      handleCancle
     }
   }
 })

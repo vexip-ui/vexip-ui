@@ -66,14 +66,14 @@ export default defineComponent({
     const props = useProps('ellipsis', _props, {
       placement: {
         default: 'top',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       transfer: 'body',
       noHover: false,
       transitionName: () => nh.ns('fade'),
       tooltipTheme: {
-        default: 'dark' as TooltipTheme,
-        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+        default: 'dark',
+        validator: value => ['light', 'dark'].includes(value)
       },
       tipClass: null,
       maxLines: null,
@@ -127,6 +127,7 @@ export default defineComponent({
         if (props.maxLines > 0) {
           const scrollHeight = wrapper.value.scrollHeight
           const clientHeight = wrapper.value.clientHeight
+
           visible.value = scrollHeight > clientHeight
         } else {
           const range = document.createRange()
@@ -137,9 +138,10 @@ export default defineComponent({
           const rangeWidth = range.getBoundingClientRect().width
           const computedStyle = getComputedStyle(wrapper.value)
           const horizontalPending =
-          parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
+            parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
 
-          visible.value = rangeWidth + horizontalPending > wrapper.value.getBoundingClientRect().width
+          visible.value =
+            rangeWidth + (horizontalPending || 0) > wrapper.value.getBoundingClientRect().width
         }
 
         content.value = visible.value ? wrapper.value.textContent ?? '' : ''

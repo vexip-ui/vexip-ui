@@ -15,25 +15,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { Notice } from 'vexip-ui'
 
-export default defineComponent({
-  setup() {
-    const brNotice = Notice.clone()
-    const tlNotice = Notice.clone()
-    const blNotice = Notice.clone()
+const brNotice = Notice.clone()
+const tlNotice = Notice.clone()
+const blNotice = Notice.clone()
 
-    brNotice.config({ placement: 'bottom-right' })
-    tlNotice.config({ placement: 'top-left' })
-    blNotice.config({ placement: 'bottom-left' })
-
-    return {
-      brNotice,
-      tlNotice,
-      blNotice
-    }
-  }
-})
+brNotice.config({ placement: 'bottom-right' })
+tlNotice.config({ placement: 'top-left' })
+blNotice.config({ placement: 'bottom-left' })
 </script>

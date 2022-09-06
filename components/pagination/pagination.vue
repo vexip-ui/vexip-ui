@@ -50,7 +50,7 @@
       </slot>
     </li>
     <li
-      v-if="useEllipsis && mode !== PaginationMode.LEFT"
+      v-if="useEllipsis && mode !== 'left'"
       :ref="el => el && itemElList.push(el as any)"
       :class="{
         [nh.be('item')]: true,
@@ -102,7 +102,7 @@
       </li>
     </template>
     <li
-      v-if="useEllipsis && mode !== PaginationMode.RIGHT"
+      v-if="useEllipsis && mode !== 'right'"
       :ref="el => el && itemElList.push(el as any)"
       :class="{
         [nh.be('item')]: true,
@@ -197,6 +197,7 @@ import { defineComponent, ref, computed, watch, onMounted, onBeforeUpdate, nextT
 import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
 import { Select } from '@/components/select'
+import { ChevronRight, ChevronLeft, AnglesRight, AnglesLeft, Ellipsis } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
@@ -211,10 +212,14 @@ import {
 } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/mixins'
 import { isFunction, range, boundRange } from '@vexip-ui/utils'
-import { PaginationMode } from './symbol'
-import { ChevronRight, ChevronLeft, AnglesRight, AnglesLeft, Ellipsis } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
+
+const enum PaginationMode {
+  LEFT = 'left',
+  CENTER = 'center',
+  RIGHT = 'right'
+}
 
 export default defineComponent({
   name: 'Pagination',
@@ -576,8 +581,6 @@ export default defineComponent({
     }
 
     return {
-      PaginationMode,
-
       props,
       nh,
       locale,

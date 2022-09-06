@@ -1,5 +1,5 @@
 ### Closable
 
-Set the `closable` options to `true` to make open prompts manually closed.
+Set the `closable` option to `true` to make notice can be manually closed.
 
 Also, this example shows how to use the Notice component in a composition Api.

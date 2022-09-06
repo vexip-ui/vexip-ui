@@ -1,15 +1,15 @@
 <template>
-  <Select v-model:value="value" :options="options">
-    <template #default="{ option, index }">
-      {{ `${index + 1}、${option.label}` }}
-    </template>
-  </Select>
+  <Select v-model:label="label" :options="options"></Select>
+  <p>
+    当前标签：
+    {{ label }}
+  </p>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const value = ref('')
+const label = ref('')
 
 const options = [
   {

@@ -22,57 +22,62 @@
       <Tooltip reverse transfer>
         <template #trigger>
           <button :class="`${prefix}__action`">
-            <Icon :scale="1.1" @click="copyCode">
+            <Icon :scale="1.1" @click="copyCodes">
               <CopyR></CopyR>
             </Icon>
           </button>
         </template>
-        {{ $t('common.copyCode') }}
+        {{ t('common.copyCode') }}
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
           <button :class="`${prefix}__action`">
-            <Icon :scale="1.1" :label="$t('common.editInGithub')" @click="editInGithub">
+            <Icon :scale="1.1" :label="t('common.editInGithub')" @click="editInGithub">
               <PenToSquareR></PenToSquareR>
             </Icon>
           </button>
         </template>
-        {{ $t('common.editInGithub') }}
+        {{ t('common.editInGithub') }}
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
           <button :class="`${prefix}__action`">
-            <Icon :scale="1.1" :label="$t('common.editInPlayground')" @click="editOnPlayground">
+            <Icon :scale="1.1" :label="t('common.editInPlayground')" @click="editOnPlayground">
               <PaperPlaneR></PaperPlaneR>
             </Icon>
           </button>
         </template>
-        {{ $t('common.editInPlayground') }}
+        {{ t('common.editInPlayground') }}
       </Tooltip>
       <Tooltip reverse transfer>
         <template #trigger>
           <button :class="`${prefix}__action`">
             <Icon
               :scale="1.1"
-              :label="codeExpanded ? $t('common.hideCode') : $t('common.showCode')"
-              @click="expandCode"
+              :label="codeExpanded ? t('common.hideCode') : t('common.showCode')"
+              @click="expandCodes"
             >
               <Code></Code>
             </Icon>
           </button>
         </template>
-        {{ codeExpanded ? $t('common.hideCode') : $t('common.showCode') }}
+        {{ codeExpanded ? t('common.hideCode') : t('common.showCode') }}
       </Tooltip>
     </Column>
     <CollapseTransition>
       <Column v-show="codeExpanded" :class="`${prefix}__code`">
-        <slot name="code">
-          <pre :class="`language-${lang}`"><code ref="codeRef"></code></pre>
-        </slot>
-        <button :class="`${prefix}__reduce`" @click="expandCode">
+        <div :class="`language-${lang}`">
+          <slot name="code">
+            <pre :class="`language-${lang}`" :lang="lang"><code ref="codeRef"></code></pre>
+          </slot>
+          <span v-if="codeLines > 0" class="code-line-numbers">
+            <span v-for="n in codeLines" :key="n"></span>
+          </span>
+        </div>
+        <button :class="`${prefix}__reduce`" @click="expandCodes">
           <Icon><ChevronUp></ChevronUp></Icon>
           <span :class="`${prefix}__tip`">
-            {{ $t('common.hideCode') }}
+            {{ t('common.hideCode') }}
           </span>
         </button>
       </Column>
@@ -82,6 +87,7 @@
 
 <script setup lang="ts">
 import { useSlots, ref, watch, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { highlight, languages } from 'prismjs'
 import { Message } from 'vexip-ui'
 import { CopyR, PenToSquareR, PaperPlaneR, Code, ChevronUp } from '@vexip-ui/icons'
@@ -117,6 +123,10 @@ const props = defineProps({
     type: String,
     default: 'vue'
   },
+  lines: {
+    type: Number,
+    default: 0
+  },
   github: {
     type: String,
     default: ''
@@ -128,23 +138,16 @@ const props = defineProps({
 })
 const slots = useSlots()
 
+const { t } = useI18n({ useScope: 'global' })
+
 const prefix = 'demo'
 const codeExpanded = ref(false)
+const codeLines = ref(props.lines)
+
 const wrapper = ref<InstanceType<typeof Row> | null>(null)
 const codeRef = ref<HTMLElement | null>(null)
 
-watch(
-  () => props.code,
-  value => {
-    if (value) {
-      const lang = getCodeLang(props.lang.toLowerCase())
-
-      if (languages[lang] && codeRef.value) {
-        codeRef.value.innerHTML = highlight(props.code, languages[lang], lang)
-      }
-    }
-  }
-)
+watch(() => props.code, renderCodes)
 
 onMounted(() => {
   if (props.code && !slots.code && codeRef.value) {
@@ -160,11 +163,22 @@ onMounted(() => {
   }
 })
 
-function expandCode() {
+function renderCodes() {
+  if (props.code && !slots.code && codeRef.value) {
+    const lang = getCodeLang(props.lang.toLowerCase())
+
+    if (languages[lang]) {
+      codeLines.value = props.code.split('\n').length - 1
+      codeRef.value.innerHTML = highlight(props.code, languages[lang], lang)
+    }
+  }
+}
+
+function expandCodes() {
   codeExpanded.value = !codeExpanded.value
 }
 
-function copyCode() {
+function copyCodes() {
   let isSuccess = false
 
   if (wrapper.value?.$el) {
@@ -185,9 +199,9 @@ function copyCode() {
   }
 
   if (isSuccess) {
-    Message.success('复制成功')
+    Message.success(t('common.copySuccess'))
   } else {
-    Message.error('复制失败')
+    Message.error(t('common.copyFail'))
   }
 }
 
@@ -223,6 +237,10 @@ function editOnPlayground() {
 
   &:hover {
     box-shadow: var(--vxp-shadow-base);
+  }
+
+  &:target {
+    border-color: var(--vxp-color-primary-opacity-2);
   }
 
   &__example {
@@ -373,6 +391,10 @@ function editOnPlayground() {
   &__reduce:focus &__tip {
     margin-right: 0;
     opacity: 100%;
+  }
+
+  div[class*='language-'] {
+    border-radius: 0;
   }
 }
 </style>

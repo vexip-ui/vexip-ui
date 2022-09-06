@@ -36,7 +36,6 @@ watch(isMounted, value => {
 .markdown {
   pre {
     margin: 14px 0;
-    border-radius: 2px;
   }
 
   :not(pre) > code {

@@ -21,7 +21,7 @@ import type {
   ParsedSorterOptions,
   SelectionColumn,
   ExpandColumn,
-  ColumnOptions,
+  TableColumnOptions,
   ColumnWithKey,
   RowState,
   StoreOptions,
@@ -206,7 +206,7 @@ export function useStore(options: StoreOptions) {
 
 export type TableStore = ReturnType<typeof useStore>
 
-function setColumns(state: StoreState, columns: ColumnOptions[]) {
+function setColumns(state: StoreState, columns: TableColumnOptions[]) {
   columns = Array.from(columns).sort((prev, next) => {
     return (prev.order || 0) - (next.order || 0)
   })
@@ -810,7 +810,7 @@ function filterData(
 function sortData(
   sorters: Record<Key, ParsedSorterOptions>,
   data: RowState[],
-  columns: ColumnOptions[],
+  columns: TableColumnOptions[],
   isSingle: boolean
 ) {
   const keys = Object.keys(sorters)

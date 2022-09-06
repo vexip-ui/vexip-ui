@@ -11,7 +11,7 @@
 import { ref } from 'vue'
 import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const reduced = ref(false)
 const options: MenuOptions[] = [

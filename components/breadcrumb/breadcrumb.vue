@@ -16,7 +16,7 @@ import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { BREADCRUMB_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ItemState, BreadcrumbState } from './symbol'
+import type { BreadcrumbItemState, BreadcrumbState } from './symbol'
 
 export default defineComponent({
   name: 'Breadcrumb',
@@ -42,7 +42,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('breadcrumb')
-    const itemStates = new Set<ItemState>()
+    const itemStates = new Set<BreadcrumbItemState>()
 
     const className = computed(() => {
       return {
@@ -80,12 +80,12 @@ export default defineComponent({
       { immediate: true }
     )
 
-    function increaseItem(item: ItemState) {
+    function increaseItem(item: BreadcrumbItemState) {
       itemStates.add(item)
       refreshLabels()
     }
 
-    function decreaseItem(item: ItemState) {
+    function decreaseItem(item: BreadcrumbItemState) {
       itemStates.delete(item)
       refreshLabels()
     }

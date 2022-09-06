@@ -1,7 +1,10 @@
 import { resolve } from 'path'
+import { readdirSync, statSync } from 'fs'
 import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+
+const dirs = readdirSync(__dirname).filter(f => statSync(resolve(f)).isDirectory())
 
 export default defineConfig({
   resolve: {
@@ -17,6 +20,11 @@ export default defineConfig({
     setupFiles: [resolve(__dirname, 'scripts/test-setup.ts')],
     transformMode: {
       web: [/\.[jt]sx$/]
+    },
+    coverage: {
+      exclude: dirs.filter(f => f !== 'components').map(f => `${f}/**`),
+      reporter: ['text'],
+      extension: ['ts', 'tsx', 'vue']
     }
   },
   plugins: [vue(), vueJsx()]

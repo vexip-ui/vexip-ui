@@ -78,6 +78,7 @@ interface SelectOptionState {
 | clear         | Emitted when the value is cleared by the clear button, no return value                                                                   | -                                                                  | -       |
 | focus         | Emitted when the control element is focused, returns the event object                                                                    | `(event: FocusEvent)`                                              | `2.0.0` |
 | blur          | Emitted when the control element loses focus, returns the event object                                                                   | `(event: FocusEvent)`                                              | `2.0.0` |
+| update:label  | Emitted when option value changes, used to quickly get label of current option                                                           | `(label: string)`                                                  | `2.0.0` |
 
 ### Select Slots
 

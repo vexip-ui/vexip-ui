@@ -1,8 +1,8 @@
 <template>
   <Tag
-    v-for="(type) in tags"
-    :key="type"
-    :type="type"
+    v-for="tagType in tags"
+    :key="tagType"
+    :type="tagType"
     closable
     size="small"
   >
@@ -11,9 +11,9 @@
   <br />
   <br />
   <Tag
-    v-for="(type) in tags"
-    :key="type"
-    :type="type"
+    v-for="tagType in tags"
+    :key="tagType"
+    :type="tagType"
     closable
     size="default"
   >
@@ -22,9 +22,9 @@
   <br />
   <br />
   <Tag
-    v-for="(type) in tags"
-    :key="type"
-    :type="type"
+    v-for="tagType in tags"
+    :key="tagType"
+    :type="tagType"
     closable
     size="large"
   >
@@ -32,14 +32,6 @@
   </Tag>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  setup() {
-    return {
-      tags: ['default', 'info', 'primary', 'success', 'error', 'warning'] as const
-    }
-  }
-})
+<script setup lang="ts">
+const tags = ['default', 'info', 'primary', 'success', 'error', 'warning'] as const
 </script>

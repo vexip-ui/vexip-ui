@@ -9,7 +9,7 @@ const args = require('minimist')(process.argv.slice(2))
 
 const inputPkg = args._[0]
 const isDryRun = args.dry || args.d
-// const skipTests = args.skipTests || args.t
+const skipTests = args.skipTests || args.t
 const skipBuild = args.skipBuild || args.b
 const skipPush = args.skipPush || args.s
 
@@ -84,18 +84,15 @@ async function main() {
   if (!confirm) return
 
   // 执行单元测试
-  // logStep('Running test...')
+  logStep('Running test...')
 
-  // if (!skipTests && !isDryRun) {
-  //   await run(bin('jest'), ['--clearCache'])
-  //   await run(bin('jest'), [
-  //     '--bail',
-  //     '--runInBand',
-  //     '--passWithNoTests'
-  //   ])
-  // } else {
-  //   logSkipped()
-  // }
+  if (!skipTests && !isDryRun) {
+    if (isRoot) {
+      await run('pnpm', ['test'])
+    }
+  } else {
+    logSkipped()
+  }
 
   logStep('Updating version...')
 

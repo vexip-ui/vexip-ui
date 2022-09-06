@@ -1,7 +1,7 @@
 import { defineComponent, ref, computed, inject } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { FIELD_OPTIONS } from '@/components/form'
+import { FIELD_OPTIONS } from '@/components/form/symbol'
 import {
   useNameHelper,
   useProps,
@@ -235,7 +235,7 @@ export default defineComponent({
       pulsing.value = false
     }
 
-    function renderIconWithDefined() {
+    function renderSingleIcon() {
       return props.loading
         ? (
         <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
@@ -254,7 +254,15 @@ export default defineComponent({
           )
         : (
         <div class={nh.be('icon')}>
-          <Icon icon={props.icon}></Icon>
+          {slots.default
+            ? (
+            <Icon>{slots.default()}</Icon>
+              )
+            : props.icon
+              ? (
+            <Icon icon={props.icon}></Icon>
+                )
+              : null}
         </div>
           )
     }
@@ -294,8 +302,8 @@ export default defineComponent({
           onClick={handleClick}
           onAnimationend={handleAnimationEnd}
         >
-          {props.icon ? renderIconWithDefined() : renderCollapseIcon()}
-          {slots.default ? slots.default() : null}
+          {isIconOnly.value ? renderSingleIcon() : renderCollapseIcon()}
+          {!isIconOnly.value && slots.default ? slots.default() : null}
         </Button>
       )
     }

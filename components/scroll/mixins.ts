@@ -229,8 +229,8 @@ export function useScrollWrapper({
       onBeforeRefresh()
     }
 
-    computeContentSize()
     refreshWrapper()
+    computeContentSize()
 
     window.setTimeout(
       () => {

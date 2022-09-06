@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, inject } from 'vue'
-import { Button, buttonTypes } from '@/components/button'
+import { Button } from '@/components/button'
 import {
   useNameHelper,
   useProps,
@@ -80,10 +80,7 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('form-submit', _props, {
       size: null,
-      type: {
-        default: 'primary' as ButtonType,
-        validator: (value: ButtonType) => buttonTypes.includes(value)
-      },
+      type: 'primary',
       label: null,
       dashed: null,
       text: null,
@@ -105,6 +102,7 @@ export default defineComponent({
 
     const formProps = inject(FORM_PROPS, {})
     const actions = inject<FormActions>(FORM_ACTIONS, {
+      getLabelWidth: noop,
       validate: noop,
       validateFields: noop,
       reset: noop,

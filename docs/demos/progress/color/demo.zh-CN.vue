@@ -6,14 +6,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  methods: {
-    getColor(/* percentage: number */) {
-      return 'cyan'
-    }
-  }
-})
+<script setup lang="ts">
+function getColor(/* percentage: number */) {
+  return 'cyan'
+}
 </script>

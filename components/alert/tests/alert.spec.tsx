@@ -38,16 +38,14 @@ describe('Alert', () => {
   })
 
   it('close', async () => {
-    const handleClose = vi.fn()
-    const wrapper = mount(() => <Alert closable onClose={handleClose}></Alert>)
+    const onClose = vi.fn()
+    const wrapper = mount(() => <Alert closable onClose={onClose}></Alert>)
     const close = wrapper.find('.vxp-alert__close')
 
     expect(close.exists()).toBe(true)
 
     await close.trigger('click')
-
-    expect(wrapper.findComponent(Alert).emitted()).toHaveProperty('close')
-    expect(handleClose).toHaveBeenCalled()
+    expect(onClose).toHaveBeenCalled()
   })
 
   it('slots', () => {

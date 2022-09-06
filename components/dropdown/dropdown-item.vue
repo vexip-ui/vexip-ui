@@ -41,7 +41,7 @@ export default defineComponent({
     },
     meta: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     onSelect: eventProp<(label: string | number) => void>()
   },
@@ -73,7 +73,7 @@ export default defineComponent({
       }
 
       if (typeof parentSelectHandler === 'function') {
-        parentSelectHandler([currentLabel.value!], [props.meta])
+        parentSelectHandler([currentLabel.value!], [props.meta || {}])
       }
 
       emitEvent(props.onSelect!, currentLabel.value!)

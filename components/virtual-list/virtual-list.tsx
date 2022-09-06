@@ -129,6 +129,13 @@ export default defineComponent({
       const ListTag = (props.listTag || 'div') as any
       const ItemsTag = (props.itemsTag || 'ul') as any
 
+      let renderingItems = visibleItems.value
+
+      if (process.env.NODE_ENV === 'test') {
+        // It is difficult to test ResizeObserver in vitest, so directly rendering all items
+        renderingItems = props.items
+      }
+
       return (
         <NativeScroll
           ref={scroll}
@@ -147,7 +154,7 @@ export default defineComponent({
               style={[itemsStyle.value, itemsOtherStyle]}
             >
               {itemSlot && props.items.length
-                ? visibleItems.value.map(item => {
+                ? renderingItems.map(item => {
                   const key = item[keyField]
                   const index = keyIndexMap.get(key)
                   const vnode = itemSlot({ item, index })[0]

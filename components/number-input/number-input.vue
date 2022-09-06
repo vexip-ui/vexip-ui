@@ -217,17 +217,17 @@ export default defineComponent({
 
         if (modifier.up || modifier.down) {
           event.preventDefault()
-
           changeStep(
             modifier.up ? 'plus' : 'minus',
             event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
           )
+          modifier.resetAll()
         }
       },
       onKeyUp: (event, modifier) => {
         emitEvent(props.onKeyUp, event)
 
-        if (modifier.enter) {
+        if (event.key === 'Enter') {
           handleEnter()
         }
       }
@@ -488,7 +488,6 @@ export default defineComponent({
       handleInput: throttle(handleChange),
       handleChange,
       handleClear,
-      handleEnter,
       handlePrefixClick,
       handleSuffixClick,
       handleKeyPress

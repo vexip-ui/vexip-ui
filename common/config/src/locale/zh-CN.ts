@@ -29,6 +29,10 @@ export function zhCNLocale() {
       week7: '日'
     },
 
+    checkbox: {
+      all: '全选'
+    },
+
     colorPicker: {
       confirm: '确定',
       cancel: '重置'
@@ -40,6 +44,11 @@ export function zhCNLocale() {
     },
 
     datePicker: {
+      confirm: '确认',
+      cancel: '取消'
+    },
+
+    drawer: {
       confirm: '确认',
       cancel: '取消'
     },

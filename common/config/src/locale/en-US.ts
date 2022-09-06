@@ -29,6 +29,10 @@ export function enUSLocale() {
       week7: 'Su'
     },
 
+    checkbox: {
+      all: 'All'
+    },
+
     colorPicker: {
       confirm: 'Confrim',
       cancel: 'Cancel'
@@ -40,6 +44,11 @@ export function enUSLocale() {
     },
 
     datePicker: {
+      confirm: 'Confrim',
+      cancel: 'Cancel'
+    },
+
+    drawer: {
       confirm: 'Confrim',
       cancel: 'Cancel'
     },

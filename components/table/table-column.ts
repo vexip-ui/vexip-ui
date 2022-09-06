@@ -6,7 +6,7 @@ import { TABLE_ACTION } from './symbol'
 import type { PropType } from 'vue'
 import type {
   Data,
-  ColumnType,
+  TableColumnType,
   FilterOptions,
   SorterOptions,
   RenderFn,
@@ -23,7 +23,7 @@ const props = {
     default: null
   },
   className: classProp,
-  type: String as PropType<ColumnType>,
+  type: String as PropType<TableColumnType>,
   width: Number,
   filter: Object as PropType<FilterOptions<any, any>>,
   sorter: {
@@ -46,7 +46,7 @@ const aliases: Partial<Record<keyof typeof props, string>> = {
   idKey: 'key'
 }
 
-const columnTypes = Object.freeze<ColumnType>(['order', 'selection', 'expand'])
+const columnTypes = Object.freeze<TableColumnType>(['order', 'selection', 'expand'])
 
 export default defineComponent({
   name: 'TableColumn',
@@ -71,7 +71,7 @@ export default defineComponent({
       className: null,
       type: {
         default: null,
-        validator: (value: ColumnType) => columnTypes.includes(value),
+        validator: (value: TableColumnType) => columnTypes.includes(value),
         static: true
       },
       width: null,

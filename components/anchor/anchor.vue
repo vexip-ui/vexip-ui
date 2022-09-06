@@ -8,7 +8,17 @@
     }"
   >
     <ul :class="nh.be('list')">
-      <slot></slot>
+      <slot>
+        <AnchorLink
+          v-for="link in props.options"
+          :key="link.to"
+          :to="link.to"
+          :title="link.title"
+          :children="link.children"
+        >
+          {{ link.label }}
+        </AnchorLink>
+      </slot>
     </ul>
     <transition appear :name="props.markerTransition">
       <div
@@ -37,6 +47,7 @@ import {
   getCurrentInstance,
   isVNode
 } from 'vue'
+import { AnchorLink } from '@/components/anchor-link'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
@@ -44,12 +55,15 @@ import { ANCHOR_STATE } from './symbol'
 import type { PropType, ComponentInternalInstance } from 'vue'
 import type { NativeScroll } from '@/components/native-scroll'
 import type { Scroll } from '@/components/scroll'
-import type { LinkState, AnchorState } from './symbol'
+import type { AnchorLinkOptions, AnchorLinkState, AnchorState } from './symbol'
 
 type ScrollType = InstanceType<typeof Scroll | typeof NativeScroll>
 
 export default defineComponent({
   name: 'Anchor',
+  components: {
+    AnchorLink
+  },
   props: {
     active: String,
     viewer: [String, Object, Function] as PropType<unknown>,
@@ -57,6 +71,8 @@ export default defineComponent({
     marker: booleanProp,
     scrollDuration: Number,
     markerTransition: String,
+    options: Array as PropType<AnchorLinkOptions[]>,
+    bindHash: booleanProp,
     onChange: eventProp<(value: string) => void>()
   },
   emits: ['update:active'],
@@ -74,19 +90,30 @@ export default defineComponent({
       offset: 8,
       marker: false,
       scrollDuration: 500,
-      markerTransition: () => nh.ns('fade')
+      markerTransition: () => nh.ns('fade'),
+      options: {
+        default: () => [],
+        static: true
+      },
+      bindHash: false
     })
 
     const currentActive = ref(props.active)
     const animating = ref(false)
     const markerTop = ref(0)
-    const linkStates = new Set<LinkState>()
+    const linkStates = new Set<AnchorLinkState>()
 
     const wrapper = ref<HTMLElement | null>(null)
+
+    let timer: ReturnType<typeof setTimeout>
 
     let isRawViewer = false
     let container: HTMLElement | null = null
     let scroller: ScrollType | null = null
+
+    if (!currentActive.value && props.bindHash) {
+      currentActive.value = decodeURIComponent(location.hash)
+    }
 
     provide<AnchorState>(
       ANCHOR_STATE,
@@ -112,17 +139,20 @@ export default defineComponent({
 
     onMounted(() => {
       updateContainer()
+      computeMarkerPoisiton()
     })
 
     onBeforeUnmount(() => {
       removeListener()
+      clearTimeout(timer)
     })
 
-    function increaseLink(state: LinkState) {
+    function increaseLink(state: AnchorLinkState) {
       linkStates.add(state)
+      state.active = currentActive.value === state.to
     }
 
-    function decreaseLink(state: LinkState) {
+    function decreaseLink(state: AnchorLinkState) {
       linkStates.delete(state)
     }
 
@@ -153,7 +183,7 @@ export default defineComponent({
           _container = viewer
         }
 
-        if (container instanceof Element) {
+        if (_container instanceof Element) {
           isRawViewer = true
         } else {
           isRawViewer = false
@@ -197,8 +227,8 @@ export default defineComponent({
             container = instance.parent?.proxy?.$el as HTMLElement
           }
 
-          if (isRawViewer) {
-            container!.addEventListener('scroll', handleContainerScroll)
+          if (isRawViewer && container) {
+            container.addEventListener('scroll', handleContainerScroll)
           }
         } else {
           container = _container as HTMLElement
@@ -278,8 +308,6 @@ export default defineComponent({
       }
     }
 
-    let timer: number
-
     function handleActive(link: string) {
       if (link === currentActive.value || !link.startsWith('#') || link.length < 2) {
         return
@@ -294,7 +322,7 @@ export default defineComponent({
       animating.value = true
 
       const elementTop = element.offsetTop
-      const duration = Math.max(props.scrollDuration, 160)
+      const duration = Math.max(props.scrollDuration, 0)
 
       if (isRawViewer && container) {
         const from = container.scrollTop
@@ -304,7 +332,7 @@ export default defineComponent({
         )
 
         animateScrollTo(container, from, to, duration, () => {
-          timer = window.setTimeout(() => {
+          timer = setTimeout(() => {
             animating.value = false
           }, 10)
         })
@@ -316,7 +344,7 @@ export default defineComponent({
 
         scroller.scrollTo(0, clientY, duration)
 
-        timer = window.setTimeout(() => {
+        timer = setTimeout(() => {
           animating.value = false
         }, duration + 10)
 
@@ -324,6 +352,10 @@ export default defineComponent({
         computeMarkerPoisiton()
       } else {
         animating.value = false
+      }
+
+      if (props.bindHash && location) {
+        location.hash = encodeURIComponent(currentActive.value.replace(/^#/, ''))
       }
     }
 
