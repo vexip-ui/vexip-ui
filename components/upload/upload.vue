@@ -101,7 +101,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
+import { noop, isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload, Spinner } from '@vexip-ui/icons'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
@@ -398,7 +398,7 @@ export default defineComponent({
       const requests: Promise<any>[] = []
 
       for (const file of uploadFiles) {
-        requests.push(uploadFile(file))
+        requests.push(uploadFile(file).catch(noop))
       }
 
       return Promise.all(requests).then(responses => responses.filter(response => response))
