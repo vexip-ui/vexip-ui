@@ -104,10 +104,10 @@ describe('Viewer', () => {
 
     await nextTick()
     await emitWheel(container, 'top')
-    expect(wrapper.find('.vxp-viewer__transition').attributes('style')).toContain('scale(1.15)')
+    expect(wrapper.find('.vxp-viewer__content').attributes('style')).toContain('scale(1.15)')
 
     await emitWheel(container, 'bottom')
-    expect(wrapper.find('.vxp-viewer__transition').attributes('style')).toContain('scale(1)')
+    expect(wrapper.find('.vxp-viewer__content').attributes('style')).toContain('scale(1)')
   })
 
   it('custom actions', async () => {

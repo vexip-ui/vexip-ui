@@ -1,3 +1,18 @@
+# [2.0.0-rc.1](https://github.com/qmhc/vexip-ui/compare/v2.0.0-rc.0...v2.0.0-rc.1) (2022-09-06)
+
+### Bug Fixes
+
+- **breadcrumb:** unexpected page reloads when item clicked ([19f387e](https://github.com/qmhc/vexip-ui/commit/19f387ebcd720ce09d9c7c4bf7d271820d872414)), closes [#131](https://github.com/qmhc/vexip-ui/issues/131)
+- **ellipsis:** html attributes not effective ([a2b7857](https://github.com/qmhc/vexip-ui/commit/a2b7857243794ed837fc2cab87561958e51919b0)), closes [#129](https://github.com/qmhc/vexip-ui/issues/129)
+- **upload:** should not prevent default when keydown ([b4b92f4](https://github.com/qmhc/vexip-ui/commit/b4b92f43b0265ec749ca60337a883fbdd3c41fa8)), closes [#130](https://github.com/qmhc/vexip-ui/issues/130)
+
+### Features
+
+- **anchor:** support bind url hash ([797bd87](https://github.com/qmhc/vexip-ui/commit/797bd871c2c0d9d4a25948f37abfc2aaeb8cf7ab))
+- **toast:** add toast plugin (manager) ([#128](https://github.com/qmhc/vexip-ui/issues/128)) ([a3be410](https://github.com/qmhc/vexip-ui/commit/a3be4101f870fe0eab242ad2bccf22f584d1dc78))
+- **viewer:** add on-transition prop ([689ecd0](https://github.com/qmhc/vexip-ui/commit/689ecd0ceff2be465b9b3812fcd6b619c1330f9c))
+- **Viewer:** using mouse position as transform origin for zooming ([#73](https://github.com/qmhc/vexip-ui/issues/73)) ([2ed544e](https://github.com/qmhc/vexip-ui/commit/2ed544e4a90b09be3fb047a6ff52687d9dccfdbe))
+
 # [2.0.0-rc.0](https://github.com/qmhc/vexip-ui/compare/v2.0.0-beta.21...v2.0.0-rc.0) (2022-08-31)
 
 ### Bug Fixes

@@ -74,6 +74,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
+import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import {
@@ -101,6 +102,7 @@ let idCount = 0
 export default defineComponent({
   name: 'Drawer',
   components: {
+    Button,
     Icon,
     Masker,
     Xmark
