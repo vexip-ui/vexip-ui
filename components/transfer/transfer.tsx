@@ -327,7 +327,6 @@ export default defineComponent({
               : [
                   <Button
                     class={nh.be('action')}
-                    icon-only
                     type={actionType.value}
                     size={'small'}
                     disabled={props.disabled || !toTargetEnabled.value}
@@ -337,13 +336,16 @@ export default defineComponent({
                     style={{ marginBottom: '6px' }}
                     onClick={handleToTarget}
                   >
-                    <Icon label="to right">
-                      <ChevronRight></ChevronRight>
-                    </Icon>
+                    {{
+                      icon: () => (
+                        <Icon label="to right">
+                          <ChevronRight></ChevronRight>
+                        </Icon>
+                      )
+                    }}
                   </Button>,
                   <Button
                     class={nh.be('action')}
-                    icon-only
                     type={actionType.value}
                     size={'small'}
                     disabled={props.disabled || !toSourceEnabled.value}
@@ -353,9 +355,13 @@ export default defineComponent({
                     style={{ margin: '0' }}
                     onClick={handleToSource}
                   >
-                    <Icon label="to left">
-                      <ChevronLeft></ChevronLeft>
-                    </Icon>
+                    {{
+                      icon: () => (
+                        <Icon label="to left">
+                          <ChevronLeft></ChevronLeft>
+                        </Icon>
+                      )
+                    }}
                   </Button>
                 ]}
           </div>

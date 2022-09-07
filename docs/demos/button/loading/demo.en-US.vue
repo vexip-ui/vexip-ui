@@ -9,13 +9,10 @@
     Loading
   </Button>
   <Button loading circle type="primary"></Button>
-  <Button
-    circle
-    loading
-    type="primary"
-    icon-only
-  >
-    <MagnifyingGlass></MagnifyingGlass>
+  <Button circle loading type="primary">
+    <template #icon>
+      <Icon><MagnifyingGlass></MagnifyingGlass></Icon>
+    </template>
   </Button>
 </template>
 

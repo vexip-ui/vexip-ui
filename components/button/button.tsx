@@ -42,7 +42,6 @@ export default defineComponent({
     block: booleanProp,
     tag: String,
     noPulse: booleanProp,
-    iconOnly: booleanProp,
     onClick: eventProp<(event: MouseEvent) => void>()
   },
   emits: [],
@@ -72,8 +71,7 @@ export default defineComponent({
       },
       block: false,
       tag: 'button',
-      noPulse: false,
-      iconOnly: false
+      noPulse: false
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -81,7 +79,7 @@ export default defineComponent({
     const nh = useNameHelper('button')
     const pulsing = ref(false)
     const isIconOnly = computed(() => {
-      return props.iconOnly || !slots.default
+      return !slots.default
     })
     const type = computed(() => {
       return props.type ?? groupState?.type ?? 'default'
@@ -235,9 +233,8 @@ export default defineComponent({
       pulsing.value = false
     }
 
-    function renderSingleIcon() {
-      return props.loading
-        ? (
+    function renderLoadingIcon() {
+      return (
         <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
           {slots.loading
             ? (
@@ -251,40 +248,37 @@ export default defineComponent({
             <Icon pulse icon={props.loadingIcon}></Icon>
                 )}
         </div>
+      )
+    }
+
+    function renderSingleIcon() {
+      return props.loading
+        ? (
+            renderLoadingIcon()
           )
         : (
         <div class={nh.be('icon')}>
-          {slots.default
-            ? (
-            <Icon>{slots.default()}</Icon>
-              )
-            : props.icon
-              ? (
-            <Icon icon={props.icon}></Icon>
-                )
-              : null}
+          {slots.icon ? slots.icon() : props.icon ? <Icon icon={props.icon}></Icon> : null}
         </div>
           )
     }
 
     function renderCollapseIcon() {
+      if (props.icon || slots.icon) {
+        return props.loading
+          ? (
+              renderLoadingIcon()
+            )
+          : (
+          <div class={nh.be('icon')}>
+            {slots.icon ? slots.icon() : <Icon icon={props.icon}></Icon>}
+          </div>
+            )
+      }
+
       return (
         <CollapseTransition appear horizontal fade-effect>
-          {props.loading && (
-            <div class={[nh.be('icon'), nh.bem('icon', 'loading')]}>
-              {slots.loading
-                ? (
-                    slots.loading()
-                  )
-                : props.loadingSpin
-                  ? (
-                <Icon spin icon={props.loadingIcon}></Icon>
-                    )
-                  : (
-                <Icon pulse icon={props.loadingIcon}></Icon>
-                    )}
-            </div>
-          )}
+          {props.loading && renderLoadingIcon()}
         </CollapseTransition>
       )
     }

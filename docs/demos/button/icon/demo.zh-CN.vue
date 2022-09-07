@@ -7,8 +7,10 @@
     搜索
   </Button>
   <Button circle type="primary" :icon="MagnifyingGlass"></Button>
-  <Button circle type="primary" icon-only>
-    <MagnifyingGlass></MagnifyingGlass>
+  <Button circle type="primary">
+    <template #icon>
+      <Icon><MagnifyingGlass></MagnifyingGlass></Icon>
+    </template>
   </Button>
 </template>
 

@@ -100,9 +100,17 @@ describe('Button', () => {
     expect(handleClick).toBeCalledTimes(1)
   })
 
-  it('icon', () => {
+  it('icon', async () => {
+    const wrapper = mount(() => <Button icon={User}>{TEXT}</Button>)
+
+    expect(wrapper.find('.vxp-button__icon').exists()).toBe(true)
+    expect(wrapper.findComponent(User).exists()).toBe(true)
+  })
+
+  it('icon only', async () => {
     const wrapper = mount(() => <Button icon={User}></Button>)
 
+    expect(wrapper.find('.vxp-button__icon').exists()).toBe(true)
     expect(wrapper.findComponent(User).exists()).toBe(true)
   })
 
