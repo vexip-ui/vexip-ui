@@ -4,6 +4,7 @@
   "label",
   "disabled",
   "loading",
+  "dynamic",
   "native",
   "layout"
 ]

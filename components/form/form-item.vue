@@ -356,13 +356,21 @@ function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules:
     }
   })
 
+  let inited = false
+
   function getValue(defaultValue?: unknown) {
     if (!formProps.model || !props.prop) return defaultValue
 
     try {
-      return getValueByPath(formProps.model, props.prop, true)
+      const value = getValueByPath(formProps.model, props.prop, true)
+      inited = true
+
+      return value
     } catch (e) {
-      setValueByPath(formProps.model, props.prop, defaultValue, false)
+      if (!inited) {
+        setValueByPath(formProps.model, props.prop, defaultValue, false)
+        inited = true
+      }
 
       return defaultValue
     }

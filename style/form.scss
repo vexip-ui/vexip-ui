@@ -47,10 +47,16 @@ $form: map.merge(
 
   &__control {
     position: relative;
+    display: flex;
+    align-items: center;
 
     &__no-label {
       width: 100%;
     }
+  }
+
+  &__item--action &__control {
+    justify-content: center;
   }
 
   &--label-top &__item {
