@@ -37,21 +37,22 @@
 
 ### FormItem 属性
 
-| 名称             | 类型             | 说明                                                                 | 默认值       | 始于 |
-| ---------------- | ---------------- | -------------------------------------------------------------------- | ------------ | ---- |
-| label            | `string`         | 表单字段的标签                                                       | `''`         | -    |
-| prop             | `string`         | 表单字段的属性                                                       | `''`         | -    |
-| rules            | `Rule \| Rule[]` | 表单字段的验证规格                                                   | `[]`         | -    |
-| label-width      | `number`         | 表单字段标签的宽度                                                   | `null`       | -    |
-| required         | `boolean`        | 设置字段是否必填                                                     | `false`      | -    |
-| html-for         | `string`         | 原生 `<label>` 的 `for` 属性                                         | `null`       | -    |
-| default-value    | `unknown`        | 设置字段的默认值                                                     | `null`       | -    |
-| hide-error-tip   | `boolean`        | 设置是否隐藏错误提示                                                 | `false`      | -    |
-| validate-all     | `boolean`        | 设置验证时是否进行所有规则验证，未设置时将继承 Form 组件的同名属性值 | `null`       | -    |
-| hide-asterisk    | `boolean`        | 设置是否隐藏必填星号，未设置时将继承 Form 组件的同名属性值           | `null`       | -    |
-| hide-label       | `boolean`        | 设置是否隐藏表单标签，未设置时将继承 Form 组件的同名属性值           | `null`       | -    |
-| action           | `boolean`        | 设置是否为纯操作 FormItem，若为是则样式变位内容居中并无下边距        | `false`      | -    |
-| error-transition | `string`         | 错误提示的过渡效果名称                                               | `'vxp-fade'` | -    |
+| 名称             | 类型             | 说明                                                                 | 默认值       | 始于    |
+| ---------------- | ---------------- | -------------------------------------------------------------------- | ------------ | ------- |
+| label            | `string`         | 表单字段的标签                                                       | `''`         | -       |
+| prop             | `string`         | 表单字段的属性                                                       | `''`         | -       |
+| rules            | `Rule \| Rule[]` | 表单字段的验证规格                                                   | `[]`         | -       |
+| label-width      | `number`         | 表单字段标签的宽度                                                   | `null`       | -       |
+| required         | `boolean`        | 设置字段是否必填                                                     | `false`      | -       |
+| html-for         | `string`         | 原生 `<label>` 的 `for` 属性                                         | `null`       | -       |
+| default-value    | `unknown`        | 设置字段的默认值                                                     | `null`       | -       |
+| hide-error-tip   | `boolean`        | 设置是否隐藏错误提示                                                 | `false`      | -       |
+| validate-all     | `boolean`        | 设置验证时是否进行所有规则验证，未设置时将继承 Form 组件的同名属性值 | `null`       | -       |
+| hide-asterisk    | `boolean`        | 设置是否隐藏必填星号，未设置时将继承 Form 组件的同名属性值           | `null`       | -       |
+| hide-label       | `boolean`        | 设置是否隐藏表单标签，未设置时将继承 Form 组件的同名属性值           | `null`       | -       |
+| action           | `boolean`        | 设置是否为纯操作 FormItem，若为是则样式变位内容居中并无下边距        | `false`      | -       |
+| error-transition | `string`         | 错误提示的过渡效果名称                                               | `'vxp-fade'` | -       |
+| help             | `string`         | 设置字段的帮助信息                                                   | `''`         | `2.0.0` |
 
 > 支持的 Column 组件的属性包括：span、offset、push、pull、order、flex、xs、sm、md、lg、xl、xxl
 
@@ -87,11 +88,12 @@ interface Rule<T = any> {
 
 ### FormItem 插槽
 
-| 名称    | 说明               | 参数            | 始于 |
-| ------- | ------------------ | --------------- | ---- |
-| default | 字段内容的插槽     | -               | -    |
-| label   | 字段标签内容的插槽 | -               | -    |
-| error   | 错误内容提示的插槽 | `(tip: string)` | -    |
+| 名称    | 说明               | 参数            | 始于    |
+| ------- | ------------------ | --------------- | ------- |
+| default | 字段内容的插槽     | -               | -       |
+| label   | 字段标签内容的插槽 | -               | -       |
+| help    | 字段帮助信息的插槽 | -               | `2.0.0` |
+| error   | 错误内容提示的插槽 | `(tip: string)` | -       |
 
 ### FormSubmit 属性
 

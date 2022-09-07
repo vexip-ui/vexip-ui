@@ -87,6 +87,18 @@ $form: map.merge(
     text-align: left;
   }
 
+  &__help {
+    margin-right: 3px;
+    cursor: help;
+  }
+
+  &--label-top &__help,
+  &--label-left &__help {
+    order: 1;
+    margin-right: 0;
+    margin-left: 3px;
+  }
+
   @mixin asterisk {
     display: inline-block;
     font-family: get-css-var('form-asterisk-family');

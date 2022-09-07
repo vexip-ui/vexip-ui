@@ -33,6 +33,16 @@
       @click="handleLabelClick"
     >
       <slot name="label">
+        <Tooltip v-if="props.help || $slots.help" transfer>
+          <template #trigger>
+            <Icon :class="nh.be('help')"><CircleQuestionR></CircleQuestionR></Icon>
+          </template>
+          <slot name="help">
+            <div :class="nh.be('help-tip')">
+              {{ props.help }}
+            </div>
+          </slot>
+        </Tooltip>
         {{ props.label + (labelSuffix || '') }}
       </slot>
     </label>
@@ -70,6 +80,9 @@ import {
   onBeforeUnmount
 } from 'vue'
 import { Column } from '@/components/column'
+import { Icon } from '@/components/icon'
+import { Tooltip } from '@/components/tooltip'
+import { CircleQuestionR } from '@vexip-ui/icons'
 import { useNameHelper, useProps, useLocale, booleanProp, makeSentence } from '@vexip-ui/config'
 import { isNull, isFunction, createEventEmitter } from '@vexip-ui/utils'
 import { validate as asyncValidate } from './validator'
@@ -87,7 +100,10 @@ const mediaProp = [Number, Object] as PropType<number | ColumnOptions>
 export default defineComponent({
   name: 'FormItem',
   components: {
-    Column
+    Column,
+    Icon,
+    Tooltip,
+    CircleQuestionR
   },
   inheritAttrs: true,
   props: {
@@ -104,6 +120,7 @@ export default defineComponent({
     hideAsterisk: booleanProp,
     hideLabel: booleanProp,
     action: booleanProp,
+    help: String,
     span: Number,
     offset: Number,
     push: Number,
@@ -139,6 +156,7 @@ export default defineComponent({
       hideAsterisk: null,
       hideLabel: null,
       action: false,
+      help: '',
       span: 24,
       offset: null,
       push: null,
