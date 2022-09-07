@@ -3,7 +3,7 @@ import type { ComponentState } from '@vexip-ui/config'
 import type { EventEmitter } from '@vexip-ui/utils'
 import type { Rule } from './validator'
 
-export type LabelPosition = 'right' | 'top' | 'left'
+export type FormLabelAlign = 'right' | 'top' | 'left'
 
 export type SubmitMethod = 'get' | 'post' | 'put' | 'delete'
 
@@ -13,7 +13,7 @@ export interface FormProps {
   model: Record<string, any>,
   rules: Record<string, any>,
   labelWidth: number | 'auto',
-  labelPosition: LabelPosition,
+  labelAlign: FormLabelAlign,
   allRequired: boolean,
   labelSuffix: string,
   hideAsterisk: boolean,

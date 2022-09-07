@@ -211,9 +211,9 @@ export default defineComponent({
       return !(hideLabel.value || !(props.label || slots.label))
     })
     const computedlabelWidth = computed(() => {
-      if (formProps.labelPosition) {
+      if (formProps.labelAlign) {
         return getLabelWidth(
-          formProps.labelPosition === 'top'
+          formProps.labelAlign === 'top'
             ? 0
             : hideLabel.value
               ? 0
@@ -236,7 +236,7 @@ export default defineComponent({
       return {
         width: `calc(100% - ${computedlabelWidth.value}px)`,
         marginLeft:
-          hasLabel.value || formProps.labelPosition === 'top'
+          hasLabel.value || formProps.labelAlign === 'top'
             ? undefined
             : `${computedlabelWidth.value}px`
       }

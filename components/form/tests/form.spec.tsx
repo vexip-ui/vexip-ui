@@ -113,17 +113,17 @@ describe('Form', () => {
     expect(wrapper.find('.vxp-form__label').exists()).toBe(false)
   })
 
-  it('label position', () => {
-    (['right', 'top', 'left'] as const).forEach(position => {
+  it('label align', () => {
+    (['right', 'top', 'left'] as const).forEach(align => {
       const wrapper = mount(() => (
-        <Form label-position={position}>
+        <Form label-align={align}>
           <FormItem label={'input'} prop={'input'}>
             <Input></Input>
           </FormItem>
         </Form>
       ))
 
-      expect(wrapper.find('.vxp-form').classes()).toContain(`vxp-form--label-${position}`)
+      expect(wrapper.find('.vxp-form').classes()).toContain(`vxp-form--label-${align}`)
     })
   })
 

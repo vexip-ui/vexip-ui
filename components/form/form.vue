@@ -22,10 +22,10 @@ import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
 import type { PropType } from 'vue'
 import type { RowGridJustify, RowGridAlign } from '@/components/row'
-import type { LabelPosition, SubmitMethod, FieldOptions } from './symbol'
+import type { FormLabelAlign, SubmitMethod, FieldOptions } from './symbol'
 
 const submitMethods = Object.freeze<SubmitMethod>(['get', 'post', 'put', 'delete'])
-const labelPropstions = Object.freeze<LabelPosition>(['right', 'top', 'left'])
+const labelAligns = Object.freeze<FormLabelAlign>(['right', 'top', 'left'])
 
 export default defineComponent({
   name: 'Form',
@@ -39,7 +39,7 @@ export default defineComponent({
     model: Object,
     rules: Object,
     labelWidth: [Number, String] as PropType<number | 'auto'>,
-    labelPosition: String as PropType<LabelPosition>,
+    labelAlign: String as PropType<FormLabelAlign>,
     allRequired: booleanProp,
     labelSuffix: String,
     hideAsterisk: booleanProp,
@@ -54,8 +54,8 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('form', _props, {
       method: {
-        default: 'post' as SubmitMethod,
-        validator: (value: SubmitMethod) => submitMethods.includes(value)
+        default: 'post',
+        validator: value => submitMethods.includes(value)
       },
       action: null,
       model: {
@@ -64,9 +64,9 @@ export default defineComponent({
       },
       rules: () => ({}),
       labelWidth: 'auto',
-      labelPosition: {
-        default: 'right' as LabelPosition,
-        validator: (value: LabelPosition) => labelPropstions.includes(value)
+      labelAlign: {
+        default: 'right',
+        validator: value => labelAligns.includes(value)
       },
       allRequired: false,
       labelSuffix: '',
@@ -84,7 +84,7 @@ export default defineComponent({
     const fieldSet = reactive(new Set<FieldOptions>())
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars'), nh.bm(`label-${props.labelPosition}`)]
+      return [nh.b(), nh.bs('vars'), nh.bm(`label-${props.labelAlign}`)]
     })
     const labelWidth = computed(() => {
       return Math.max(...Array.from(fieldSet).map(field => field.labelWidth.value))

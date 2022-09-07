@@ -1,22 +1,22 @@
 ### Form Props
 
-| Name            | Type                                   | Description                                                                                                                                   | Default   | Since   |
-| --------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- |
-| method          | `'get' \| 'post' \| 'put' \| 'delete'` | Set the method value of the native form object, which takes effect after setting the action                                                   | `'post'`  | -       |
-| action          | `string`                               | Set the action value of the native form tag                                                                                                   | `null`    | -       |
-| model           | `Record<string, any>`                  | The form data source                                                                                                                          | `{}`      | -       |
-| rules           | `Record<string, any>`                  | The form validation rules                                                                                                                     | `{}`      | -       |
-| label-width     | `number \| 'auto'`                     | The width of the form label                                                                                                                   | `'auto'`  | -       |
-| labell-position | `'right' \| 'top' \| 'left'`           | The position of form label                                                                                                                    | `'right'` | -       |
-| all-required    | `boolean`                              | Set whether all form content is required                                                                                                      | `false`   | -       |
-| label-suffix    | `string`                               | The suffix of the form label, such as `:`                                                                                                     | `''`      | -       |
-| hide-asterisk   | `boolean`                              | Set whether to hide required asterisks                                                                                                        | `false`   | -       |
-| validate-all    | `boolean`                              | Set whether to perform all rule validation during form validation (by default each field encounters an error and stops subsequent validation) | `false`   | -       |
-| hide-label      | `boolean`                              | Set whether to hide the form label, commonly used in login forms                                                                              | `false`   | -       |
-| disabled        | `boolean`                              | Set whether to disable all controls under the form                                                                                            | `false`   | `2.0.0` |
-| gap             | `number \| number[]`                   | Grid gap, refer to the prop of the same name of the Row component                                                                             | `[8, 0]`  | `2.0.0` |
-| justify         | `RowGridJustify`                       | Horizontal arrangement, refer to the prop of the same name of the Row component                                                               | `'start'` | `2.0.0` |
-| align           | `RowGridAlign`                         | Vertical alignment, refer to the prop of the same name of the Row component                                                                   | `'top'`   | `2.0.0` |
+| Name          | Type                                   | Description                                                                                                                                   | Default   | Since   |
+| ------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------- |
+| method        | `'get' \| 'post' \| 'put' \| 'delete'` | Set the method value of the native form object, which takes effect after setting the action                                                   | `'post'`  | -       |
+| action        | `string`                               | Set the action value of the native form tag                                                                                                   | `null`    | -       |
+| model         | `Record<string, any>`                  | The form data source                                                                                                                          | `{}`      | -       |
+| rules         | `Record<string, any>`                  | The form validation rules                                                                                                                     | `{}`      | -       |
+| label-width   | `number \| 'auto'`                     | The width of the form label                                                                                                                   | `'auto'`  | -       |
+| labell-align  | `'right' \| 'top' \| 'left'`           | The alignment of form labels                                                                                                                  | `'right'` | -       |
+| all-required  | `boolean`                              | Set whether all form content is required                                                                                                      | `false`   | -       |
+| label-suffix  | `string`                               | The suffix of the form label, such as `:`                                                                                                     | `''`      | -       |
+| hide-asterisk | `boolean`                              | Set whether to hide required asterisks                                                                                                        | `false`   | -       |
+| validate-all  | `boolean`                              | Set whether to perform all rule validation during form validation (by default each field encounters an error and stops subsequent validation) | `false`   | -       |
+| hide-label    | `boolean`                              | Set whether to hide the form label, commonly used in login forms                                                                              | `false`   | -       |
+| disabled      | `boolean`                              | Set whether to disable all controls under the form                                                                                            | `false`   | `2.0.0` |
+| gap           | `number \| number[]`                   | Grid gap, refer to the prop of the same name of the Row component                                                                             | `[8, 0]`  | `2.0.0` |
+| justify       | `RowGridJustify`                       | Horizontal arrangement, refer to the prop of the same name of the Row component                                                               | `'start'` | `2.0.0` |
+| align         | `RowGridAlign`                         | Vertical alignment, refer to the prop of the same name of the Row component                                                                   | `'top'`   | `2.0.0` |
 
 ### Form Methods
 

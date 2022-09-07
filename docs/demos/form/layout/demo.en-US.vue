@@ -4,7 +4,7 @@
       ref="form"
       style="max-width: 1000px;"
       :model="formModel"
-      label-position="top"
+      label-align="top"
     >
       <FormItem label="Input" prop="input">
         <Input></Input>

@@ -1,5 +1,5 @@
 <template>
-  <Form :model="formModel" label-position="top" style="max-width: 400px;">
+  <Form :model="formModel" label-align="top" style="max-width: 400px;">
     <FormItem label="Input" prop="input">
       <Input></Input>
     </FormItem>

@@ -1,22 +1,22 @@
 ### Form 属性
 
-| 名称            | 类型                                   | 说明                                                                    | 默认值    | 始于    |
-| --------------- | -------------------------------------- | ----------------------------------------------------------------------- | --------- | ------- |
-| method          | `'get' \| 'post' \| 'put' \| 'delete'` | 设置原生 form 对象的 method 值，需要在设置了 action 后才生效            | `'post'`  | -       |
-| action          | `string`                               | 设置原生 form 标签的 action 值                                          | `null`    | -       |
-| model           | `Record<string, any>`                  | 表单的数据源                                                            | `{}`      | -       |
-| rules           | `Record<string, any>`                  | 表单的验证规则                                                          | `{}`      | -       |
-| label-width     | `number \| 'auto'`                     | 表单标签的宽度                                                          | `'auto'`  | -       |
-| lablel-position | `'right' \| 'top' \| 'left'`           | 表单标签的位置                                                          | `'right'` | -       |
-| all-required    | `boolean`                              | 设置表单内容是否全部必填                                                | `false`   | -       |
-| label-suffix    | `string`                               | 表单标签的后置内容，比如 `:`                                            | `''`      | -       |
-| hide-asterisk   | `boolean`                              | 设置是否隐藏必填星号                                                    | `false`   | -       |
-| validate-all    | `boolean`                              | 设置表单验证时是否进行所有规则验证 (默认每个字段遇到错误就停止后续验证) | `false`   | -       |
-| hide-label      | `boolean`                              | 设置是否隐藏表单标签，常用在登陆表单                                    | `false`   | -       |
-| disabled        | `boolean`                              | 设置是否禁用表单下的所有控件                                            | `false`   | `2.0.0` |
-| gap             | `number \| number[]`                   | 栅格间隔，参考 Row 组件同名属性                                         | `[8, 0]`  | `2.0.0` |
-| justify         | `RowGridJustify`                       | 水平排列方式，参考 Row 组件同名属性                                     | `'start'` | `2.0.0` |
-| align           | `RowGridAlign`                         | 垂直对齐方式，参考 Row 组件同名属性                                     | `'top'`   | `2.0.0` |
+| 名称          | 类型                                   | 说明                                                                    | 默认值    | 始于    |
+| ------------- | -------------------------------------- | ----------------------------------------------------------------------- | --------- | ------- |
+| method        | `'get' \| 'post' \| 'put' \| 'delete'` | 设置原生 form 对象的 method 值，需要在设置了 action 后才生效            | `'post'`  | -       |
+| action        | `string`                               | 设置原生 form 标签的 action 值                                          | `null`    | -       |
+| model         | `Record<string, any>`                  | 表单的数据源                                                            | `{}`      | -       |
+| rules         | `Record<string, any>`                  | 表单的验证规则                                                          | `{}`      | -       |
+| label-width   | `number \| 'auto'`                     | 表单标签的宽度                                                          | `'auto'`  | -       |
+| lablel-align  | `'right' \| 'top' \| 'left'`           | 表单标签的对齐位置                                                      | `'right'` | -       |
+| all-required  | `boolean`                              | 设置表单内容是否全部必填                                                | `false`   | -       |
+| label-suffix  | `string`                               | 表单标签的后置内容，比如 `:`                                            | `''`      | -       |
+| hide-asterisk | `boolean`                              | 设置是否隐藏必填星号                                                    | `false`   | -       |
+| validate-all  | `boolean`                              | 设置表单验证时是否进行所有规则验证 (默认每个字段遇到错误就停止后续验证) | `false`   | -       |
+| hide-label    | `boolean`                              | 设置是否隐藏表单标签，常用在登陆表单                                    | `false`   | -       |
+| disabled      | `boolean`                              | 设置是否禁用表单下的所有控件                                            | `false`   | `2.0.0` |
+| gap           | `number \| number[]`                   | 栅格间隔，参考 Row 组件同名属性                                         | `[8, 0]`  | `2.0.0` |
+| justify       | `RowGridJustify`                       | 水平排列方式，参考 Row 组件同名属性                                     | `'start'` | `2.0.0` |
+| align         | `RowGridAlign`                         | 垂直对齐方式，参考 Row 组件同名属性                                     | `'top'`   | `2.0.0` |
 
 ### Form 方法
 
