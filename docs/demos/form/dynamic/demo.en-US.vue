@@ -1,7 +1,7 @@
 <template>
   <Form ref="form" :model="formModel" style="max-width: 400px;">
     <FormItem
-      v-for="(skill, index) in formModel.skills"
+      v-for="(_, index) in formModel.skills"
       :key="index"
       required
       :prop="`skills.${index}.value`"

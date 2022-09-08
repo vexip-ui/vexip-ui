@@ -49,10 +49,10 @@ export default defineComponent({
     const fieldActions = inject(FIELD_OPTIONS, null)
 
     const props = useProps('button', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(fieldActions ? fieldActions.size : undefined),
       type: {
         default: null,
-        validator: (value: ButtonType) => buttonTypes.includes(value)
+        validator: value => buttonTypes.includes(value)
       },
       dashed: false,
       text: false,
@@ -66,8 +66,8 @@ export default defineComponent({
       icon: null,
       color: null,
       buttonType: {
-        default: 'button' as ButtonAttrType,
-        validator: (value: ButtonAttrType) => ['button', 'submit', 'reset'].includes(value)
+        default: 'button',
+        validator: value => ['button', 'submit', 'reset'].includes(value)
       },
       block: false,
       tag: 'button',

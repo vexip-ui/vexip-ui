@@ -157,6 +157,7 @@ export default defineComponent({
       state,
       disabled,
       loading,
+      size,
       validateField,
       clearField,
       getFieldValue,
@@ -164,7 +165,7 @@ export default defineComponent({
     } = useFieldStore<number>(focus)
 
     const props = useProps('numberInput', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       prefix: null,
       prefixColor: '',
@@ -224,7 +225,7 @@ export default defineComponent({
           modifier.resetAll()
         }
       },
-      onKeyUp: (event, modifier) => {
+      onKeyUp: event => {
         emitEvent(props.onKeyUp, event)
 
         if (event.key === 'Enter') {

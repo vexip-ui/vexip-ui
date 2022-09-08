@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, reactive, computed, provide } from 'vue'
 import { Row } from '@/components/row'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
 import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
 import type { PropType } from 'vue'
@@ -47,6 +47,7 @@ export default defineComponent({
     hideLabel: booleanProp,
     disabled: booleanProp,
     loading: booleanProp,
+    size: sizeProp,
     gap: [Number, Array] as PropType<number | number[]>,
     justify: String as PropType<RowGridJustify>,
     align: String as PropType<RowGridAlign>
@@ -75,6 +76,7 @@ export default defineComponent({
       hideLabel: false,
       disabled: false,
       loading: false,
+      size: createSizeProp(),
       gap: [8, 0],
       justify: 'start',
       align: 'top'
@@ -84,7 +86,16 @@ export default defineComponent({
     const fieldSet = reactive(new Set<FieldOptions>())
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars'), nh.bm(`label-${props.labelAlign}`)]
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(`label-${props.labelAlign}`),
+        {
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading,
+          [nh.bm(props.size)]: props.size !== 'default'
+        }
+      ]
     })
     const labelWidth = computed(() => {
       return Math.max(...Array.from(fieldSet).map(field => field.labelWidth.value))

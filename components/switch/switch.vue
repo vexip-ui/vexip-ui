@@ -90,11 +90,11 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
       useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('switch', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
         default: () => getFieldValue(false),

@@ -68,11 +68,11 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
       useFieldStore<Values>(() => Array.from(inputSet)[0]?.value?.focus())
 
     const props = useProps('checkboxGroup', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
         default: () => getFieldValue([]),

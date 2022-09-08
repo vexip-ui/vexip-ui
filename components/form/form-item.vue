@@ -190,6 +190,7 @@ export default defineComponent({
       state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
       disabled: computed(() => !!formProps.disabled),
       loading: computed(() => !!formProps.loading),
+      size: computed(() => formProps.size || 'default'),
       emitter,
       labelWidth,
       validate,

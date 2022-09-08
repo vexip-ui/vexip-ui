@@ -243,6 +243,7 @@ export default defineComponent({
       state,
       disabled,
       loading,
+      size,
       validateField,
       clearField,
       getFieldValue,
@@ -251,7 +252,7 @@ export default defineComponent({
 
     const nh = useNameHelper('date-picker')
     const props = useProps('datePicker', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       type: {
         default: 'date',

@@ -104,7 +104,14 @@ import { Wheel } from './wheel'
 
 import { buildInstall } from './create'
 
-export type { PropsOptions, LocaleConfig, LocaleNames, LocaleOptions } from '@vexip-ui/config'
+export type {
+  ComponentSize,
+  ComponentState,
+  PropsOptions,
+  LocaleConfig,
+  LocaleNames,
+  LocaleOptions
+} from '@vexip-ui/config'
 
 export { version } from './version'
 

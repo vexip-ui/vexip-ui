@@ -77,6 +77,7 @@ export default defineComponent({
       state,
       disabled,
       loading,
+      size,
       validateField,
       clearField,
       getFieldValue,
@@ -84,11 +85,11 @@ export default defineComponent({
     } = useFieldStore<string>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       type: {
-        default: 'text' as InputType,
-        validator: (value: InputType) => inputTypes.includes(value)
+        default: 'text',
+        validator: value => inputTypes.includes(value)
       },
       prefix: null,
       prefixColor: '',

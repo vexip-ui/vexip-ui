@@ -277,6 +277,7 @@ export default defineComponent({
       state,
       disabled,
       loading,
+      size,
       validateField,
       clearField,
       getFieldValue,
@@ -287,7 +288,7 @@ export default defineComponent({
 
     const nh = useNameHelper('time-picker')
     const props = useProps('timePicker', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       visible: false,
       placement: {

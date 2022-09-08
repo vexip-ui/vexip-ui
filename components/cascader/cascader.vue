@@ -296,6 +296,7 @@ export default defineComponent({
       state,
       disabled,
       loading,
+      size,
       validateField,
       clearField,
       getFieldValue,
@@ -304,7 +305,7 @@ export default defineComponent({
 
     const nh = useNameHelper('cascader')
     const props = useProps('cascader', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
         default: () => getFieldValue([]),

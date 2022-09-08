@@ -13,6 +13,7 @@
           marker-type="left"
           :class="`${prefix}__menu`"
           @select="selectComponent"
+          @keydown.tab="moveMenuIntoView"
         >
           <MenuGroup
             v-for="group in componentGroups"
@@ -24,7 +25,6 @@
               :key="component.name"
               :label="toKebabCase(component.name)"
               :data-name="toKebabCase(component.name)"
-              @focusin="moveMenuIntoView(toKebabCase(component.name))"
             >
               {{ t(`components.${component.name}`) }}
               <span v-if="language !== 'en-US'" :class="`${prefix}__sub-name`">
@@ -128,17 +128,21 @@ function isNewComponent(config: ComponentConfig) {
   return config.since && config.since.startsWith(minorVersion)
 }
 
-function moveMenuIntoView(label: string) {
+function moveMenuIntoView() {
   requestAnimationFrame(() => {
     const scrollEl = menuScroll.value?.$el
+    const activeEl = document.activeElement
 
-    if (!label || !menuScroll.value || !scrollEl) return
+    if (
+      !menuScroll.value ||
+      !scrollEl ||
+      !activeEl ||
+      !activeEl.classList.contains('vxp-menu__label')
+    ) { return }
 
-    const menuItemEl = scrollEl.querySelector(`.vxp-menu__item[data-name=${label}]`)
-
-    if (!menuItemEl) return
-
-    menuScroll.value.ensureInView(menuItemEl, 0, 10)
+    if (activeEl.parentElement) {
+      menuScroll.value.ensureInView(activeEl.parentElement, 0, 10)
+    }
   })
 }
 </script>

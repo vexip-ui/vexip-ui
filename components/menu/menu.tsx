@@ -194,7 +194,7 @@ export default defineComponent({
 
       while (loop.length) {
         const { parent, route } = loop.shift()!
-        const routeMeta = route.meta || {}
+        const routeMeta = (route.meta || {}) as any
 
         if (routeMeta.menu === false) {
           continue

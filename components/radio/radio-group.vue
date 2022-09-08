@@ -2,7 +2,10 @@
   <div :id="idFor" :class="className" role="radiogroup">
     <slot>
       <template v-for="item in props.options" :key="item">
-        <Radio :label="item">
+        <Radio v-if="isObject(item)" :label="item.label">
+          {{ item.content || item.label }}
+        </Radio>
+        <Radio v-else :label="item">
           {{ item }}
         </Radio>
       </template>
@@ -26,10 +29,17 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { useFieldStore } from '@/components/form'
-import { debounceMinor } from '@vexip-ui/utils'
+import { debounceMinor, isObject } from '@vexip-ui/utils'
 import { GROUP_STATE } from './symbol'
 
 import type { PropType, Ref } from 'vue'
+
+type RawOption =
+  | string
+  | {
+      label: string | number,
+      content?: string
+    }
 
 export default defineComponent({
   name: 'RadioGroup',
@@ -44,7 +54,7 @@ export default defineComponent({
     disabled: booleanProp,
     button: booleanProp,
     border: booleanProp,
-    options: Array as PropType<(string | number)[]>,
+    options: Array as PropType<RawOption[]>,
     loading: booleanProp,
     loadingIcon: Object,
     loadingLock: booleanProp,
@@ -53,11 +63,11 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
       useFieldStore<string | number>(() => Array.from(inputSet)[0]?.value?.focus())
 
     const props = useProps('radioGroup', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
         default: () => getFieldValue(null!),
@@ -143,7 +153,9 @@ export default defineComponent({
     return {
       props,
       idFor,
-      className
+      className,
+
+      isObject
     }
   }
 })

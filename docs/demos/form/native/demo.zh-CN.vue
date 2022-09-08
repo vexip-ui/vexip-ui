@@ -21,7 +21,7 @@
         </template>
       </Input>
     </FormItem>
-    <FormItem style="margin-bottom: 5px; text-align: center;">
+    <FormItem action style="margin-bottom: 5px; text-align: center;">
       <FormSubmit type="success" :icon="Check">
         登 陆
       </FormSubmit>

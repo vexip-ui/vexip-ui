@@ -1,10 +1,9 @@
 import type { Ref, ComputedRef, InjectionKey } from 'vue'
-import type { ComponentState } from '@vexip-ui/config'
+import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 import type { EventEmitter } from '@vexip-ui/utils'
 import type { Rule } from './validator'
 
 export type FormLabelAlign = 'right' | 'top' | 'left'
-
 export type SubmitMethod = 'get' | 'post' | 'put' | 'delete'
 
 export interface FormProps {
@@ -20,7 +19,8 @@ export interface FormProps {
   validateAll: boolean,
   hideLabel: boolean,
   disabled: boolean,
-  loading: boolean
+  loading: boolean,
+  size: ComponentSize
 }
 
 export interface FormItemProps {
@@ -43,6 +43,7 @@ export interface FieldOptions {
   state: ComputedRef<ComponentState>,
   disabled: ComputedRef<boolean>,
   loading: ComputedRef<boolean>,
+  size: ComputedRef<ComponentSize>,
   emitter: EventEmitter,
   labelWidth: Ref<number>,
   validate: () => Promise<string[] | null>,

@@ -2,7 +2,7 @@ import { computed, inject, provide, getCurrentInstance, onBeforeUnmount } from '
 import { isNull, noop } from '@vexip-ui/utils'
 import { FIELD_OPTIONS } from './symbol'
 
-import type { ComponentState } from '@vexip-ui/config'
+import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 import type { FieldOptions } from './symbol'
 
 /**
@@ -112,6 +112,7 @@ export function setValueByPath(
 const defaultProp = computed(() => '')
 const defaultState = computed(() => 'default' as ComponentState)
 const defaultFalse = computed(() => false)
+const defaultSize = computed(() => 'default' as ComponentSize)
 
 function getEmptyActions<V = unknown>() {
   return {
@@ -120,6 +121,7 @@ function getEmptyActions<V = unknown>() {
     state: defaultState,
     disabled: defaultFalse,
     loading: defaultFalse,
+    size: defaultSize,
     validateField: noop as FieldOptions['validate'],
     clearField: noop as FieldOptions['clearError'],
     resetField: noop as FieldOptions['reset'],
@@ -163,6 +165,7 @@ export function useFieldStore<V = unknown>(onFocus?: () => void) {
     state: fieldOptions.state,
     disabled: fieldOptions.disabled,
     loading: fieldOptions.loading,
+    size: fieldOptions.size,
     validateField: fieldOptions.validate,
     clearField,
     resetField: fieldOptions.reset,

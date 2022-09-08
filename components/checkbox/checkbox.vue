@@ -63,11 +63,11 @@ export default defineComponent({
   },
   emits: ['update:checked'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
       useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('checkbox', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       checked: {
         default: () => getFieldValue(false),
@@ -101,7 +101,7 @@ export default defineComponent({
       partial: currentPartial
     })
 
-    const size = computed(() => groupState?.size || props.size)
+    const computedSize = computed(() => groupState?.size || props.size)
     const computedState = computed(() => groupState?.state || props.state)
     const isDisabled = computed(() => groupState?.disabled || props.disabled)
     const isLoading = computed(() => groupState?.loading || props.loading)
@@ -114,7 +114,7 @@ export default defineComponent({
           [nh.bm('checked')]: currentChecked.value,
           [nh.bm('disabled')]: isDisabled.value,
           [nh.bm('loading')]: isLoading.value && isLoadingLock.value,
-          [nh.bm(size.value)]: size.value !== 'default',
+          [nh.bm(computedSize.value)]: computedSize.value !== 'default',
           [nh.bm('border')]: props.border,
           [nh.bm('partial')]: props.control && currentPartial.value,
           [nh.bm(computedState.value)]: computedState.value !== 'default'

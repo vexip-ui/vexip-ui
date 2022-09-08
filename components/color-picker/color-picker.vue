@@ -306,6 +306,7 @@ export default defineComponent({
       state,
       disabled,
       loading,
+      size,
       validateField,
       clearField,
       getFieldValue,
@@ -314,7 +315,7 @@ export default defineComponent({
 
     const nh = useNameHelper('color-picker')
     const props = useProps('colorPicker', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
         default: () => getFieldValue('#339af0')!,

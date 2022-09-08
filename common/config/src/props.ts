@@ -46,7 +46,11 @@ export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOpti
   }
 }
 
-export function useProps<T>(name: string, sourceProps: T, config: PropsConfigOptions<T> = {}) {
+export function useProps<T extends Record<string, any>>(
+  name: string,
+  sourceProps: T,
+  config: PropsConfigOptions<T> = {}
+) {
   const providedProps = inject<ComputedRef<Record<string, PropsConfigOptions<T>>> | null>(
     PROVIDED_PROPS,
     null

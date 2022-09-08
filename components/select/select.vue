@@ -323,6 +323,7 @@ export default defineComponent({
       state,
       disabled,
       loading,
+      size,
       validateField,
       clearField,
       getFieldValue,
@@ -331,7 +332,7 @@ export default defineComponent({
 
     const nh = useNameHelper('select')
     const props = useProps('select', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       visible: {
         default: false,

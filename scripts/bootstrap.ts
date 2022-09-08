@@ -24,6 +24,8 @@ async function main() {
     import { buildInstall } from './create'
 
     export type {
+      ComponentSize,
+      ComponentState,
       PropsOptions,
       LocaleConfig,
       LocaleNames,

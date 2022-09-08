@@ -155,6 +155,7 @@ export default defineComponent({
       state,
       disabled,
       loading,
+      size,
       validateField,
       clearField,
       getFieldValue,
@@ -163,7 +164,7 @@ export default defineComponent({
 
     const nh = useNameHelper('auto-complete')
     const props = useProps('autoComplete', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       transfer: false,
       value: {

@@ -29,7 +29,8 @@
         <template v-if="!props.allowDrag && !props.disabledClick">
           <Button
             ref="button"
-            :icon="Upload"
+            :size="size"
+            :icon="IUpload"
             :type="props.state"
             :disabled="props.disabled"
             :loading="props.loading"
@@ -102,7 +103,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { noop, isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
-import { CloudArrowUp, Upload, Spinner } from '@vexip-ui/icons'
+import { CloudArrowUp, Upload as IUpload, Spinner } from '@vexip-ui/icons'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
 
@@ -170,7 +171,7 @@ export default defineComponent({
   },
   emits: ['update:file-list'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
       useFieldStore<FileState[]>(() => {
         if (button.value?.$el) {
           button.value.$el.focus()
@@ -656,11 +657,12 @@ export default defineComponent({
     }
 
     return {
-      Upload,
+      IUpload,
 
       props,
       nh,
       locale: useLocale('upload'),
+      size,
       idFor,
       fileStates,
       isDragOver,
