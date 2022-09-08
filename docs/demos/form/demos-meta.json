@@ -7,6 +7,7 @@
   "disabled",
   "loading",
   "dynamic",
+  "pure",
   "native",
   "layout"
 ]

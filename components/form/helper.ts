@@ -39,11 +39,15 @@ export function getValueByPath<T = unknown>(
 
       if (isNull(obj)) {
         if (strict) {
-          throw new Error('[Vexip warn] Get value by an invalid path')
+          throw new Error('[vexip-ui:Form] Get value by an invalid path')
         }
 
         return obj
       }
+    }
+
+    if (strict && isNull(obj[lastKey])) {
+      throw new Error('[vexip-ui:Form] Get value by an invalid path')
     }
 
     return obj[lastKey]
@@ -92,13 +96,17 @@ export function setValueByPath(
 
       if (typeof obj[key] !== 'object') {
         if (strict) {
-          throw new Error('[Vexip warn] Set value by an invalid path')
+          throw new Error('[vexip-ui:Form] Set value by an invalid path')
         }
 
         obj[key] = {}
       }
 
       obj = obj[key]
+    }
+
+    if (strict && typeof obj !== 'object') {
+      throw new Error('[vexip-ui:Form] Set value by an invalid path')
     }
 
     obj[lastKey] = value

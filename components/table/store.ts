@@ -264,7 +264,7 @@ function setColumns(state: StoreState, columns: TableColumnOptions[]) {
     if (isNull(key)) {
       key = getIndexId()
 
-      console.error('[Vexip warn] Table column requires key prop, but missing')
+      console.error('[vexip-ui:Table] Table column requires key prop, but missing')
     }
 
     const fixed = column.fixed

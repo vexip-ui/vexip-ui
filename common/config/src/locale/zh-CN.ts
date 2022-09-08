@@ -56,7 +56,8 @@ export function zhCNLocale() {
     form: {
       submit: '提交',
       reset: '重置',
-      notNullable: '不可为空'
+      notNullable: '不可为空',
+      validateFail: '验证未通过'
     },
 
     input: {

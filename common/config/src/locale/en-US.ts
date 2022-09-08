@@ -56,7 +56,8 @@ export function enUSLocale() {
     form: {
       submit: 'Submit',
       reset: 'Reset',
-      notNullable: 'must not be null'
+      notNullable: 'must not be null',
+      validateFail: 'Validate failed'
     },
 
     input: {
