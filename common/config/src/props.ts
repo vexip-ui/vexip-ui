@@ -24,7 +24,7 @@ type PropsConfigOptions<T> = {
 }
 
 export const PROVIDED_PROPS = '__vxp-provided-props'
-const eventPropRE = /$on[A-Z]/
+const eventPropRE = /^on[A-Z]/
 
 export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOptions>>, app?: App) {
   if (app) {
