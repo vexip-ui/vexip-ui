@@ -12,6 +12,7 @@
 | tip-transfer | `boolean` | Set Tooltip's `transfer` property                                                              | `false` | -       |
 | loading      | `boolean` | Set whether is loading                                                                         | `false` | `2.0.0` |
 | loading-lock | `boolean` | Set whether to be read-only when loading                                                       | `false` | `2.0.0` |
+| reverse      | `boolean` | Set whether to reverse operation                                                               | `false` | `2.0.0` |
 
 ### Slider Events
 

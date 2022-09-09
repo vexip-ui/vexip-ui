@@ -12,6 +12,7 @@
 | tip-transfer | `boolean` | 设置 Tooltip 的 `transfer` 属性                  | `false` | -       |
 | loading      | `boolean` | 设置是否为加载中                                 | `false` | `2.0.0` |
 | loading-lock | `boolean` | 设置在加载中时是否为只读                         | `false` | `2.0.0` |
+| reverse      | `boolean` | 设置是否为反向操作                               | `false` | `2.0.0` |
 
 ### Slider 事件
 

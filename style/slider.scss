@@ -67,6 +67,8 @@ $slider: map.merge(
   }
 
   &__track {
+    display: flex;
+    align-items: flex-start;
     width: 100%;
     height: get-css-var('slider-track-height');
     background-color: get-css-var('slider-track-bg-color');
@@ -78,18 +80,24 @@ $slider: map.merge(
     background-color: get-css-var('slider-track-bg-color-hover');
   }
 
-  &--disabled &__track,
-  &--disabled:hover &__track {
-    background-color: get-css-var('slider-track-bg-color-disabled');
-  }
-
   &--vertical &__track {
     width: get-css-var('slider-track-height');
     height: 100%;
   }
 
+  &--reverse &__track {
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  &--disabled &__track,
+  &--disabled:hover &__track {
+    background-color: get-css-var('slider-track-bg-color-disabled');
+  }
+
   &__filler {
-    height: get-css-var('slider-track-height');
+    width: 100%;
+    height: 100%;
     background-color: get-css-var('slider-filler-bg-color');
     border-radius: get-css-var('slider-track-height');
     transition: get-css-var('transition-background');
@@ -105,7 +113,6 @@ $slider: map.merge(
     position: absolute;
     width: $handler-size;
     height: $handler-size;
-    transform: translate(-50%, -50%);
 
     .#{$namespace}-tooltip {
       line-height: 1;

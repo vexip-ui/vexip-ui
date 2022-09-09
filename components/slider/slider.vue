@@ -86,6 +86,7 @@ export default defineComponent({
     disabled: booleanProp,
     loading: booleanProp,
     loadingLock: booleanProp,
+    reverse: booleanProp,
     onChange: eventProp<(value: number) => void>(),
     onInput: eventProp<(value: number) => void>()
   },
@@ -111,7 +112,8 @@ export default defineComponent({
       tipTransfer: null,
       disabled: () => disabled.value,
       loading: () => loading.value,
-      loadingLock: false
+      loadingLock: false,
+      reverse: false
     })
 
     const nh = useNameHelper('slider')
@@ -150,37 +152,29 @@ export default defineComponent({
         [nh.bm('vertical')]: props.vertical,
         [nh.bm('sliding')]: sliding.value,
         [nh.bm('disabled')]: props.disabled,
-        [nh.bm('loading')]: props.loading && props.loadingLock
+        [nh.bm('loading')]: props.loading && props.loadingLock,
+        [nh.bm('reverse')]: props.reverse
       }
     })
     // 按每 step 算的最小值
-    const stepMin = computed(() => {
-      return Math.round(Math.min(props.min, props.max) / props.step)
-    })
+    const stepMin = computed(() => Math.round(Math.min(props.min, props.max) / props.step))
     // 按每 step 算的最大值
-    const stepMax = computed(() => {
-      return Math.round(Math.max(props.min, props.max) / props.step)
-    })
-    const truthValue = computed(() => {
-      return Math.round(currentValue.value * props.step)
-    })
-    const total = computed(() => {
-      return stepMax.value - stepMin.value || 1
-    })
-    const percent = computed(() => {
-      return ((currentValue.value - stepMin.value) / total.value) * 100
-    })
+    const stepMax = computed(() => Math.round(Math.max(props.min, props.max) / props.step))
+    const truthValue = computed(() => Math.round(currentValue.value * props.step))
+    const total = computed(() => stepMax.value - stepMin.value || 1)
+    const percent = computed(() => ((currentValue.value - stepMin.value) / total.value) * 100)
     const fillerStyle = computed(() => {
       return {
-        top: props.vertical ? '0' : '50%',
-        left: props.vertical ? '50%' : '0',
         [props.vertical ? 'height' : 'width']: `${percent.value}%`
       }
     })
     const handlerStyle = computed(() => {
+      const reverse = props.reverse
+
       return {
-        top: props.vertical ? `${percent.value}%` : '50%',
-        left: props.vertical ? '50%' : `${percent.value}%`
+        [reverse ? 'bottom' : 'top']: props.vertical ? `${percent.value}%` : '50%',
+        [reverse ? 'right' : 'left']: props.vertical ? '50%' : `${percent.value}%`,
+        transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
       }
     })
 
@@ -212,19 +206,28 @@ export default defineComponent({
 
     let trackRect: DOMRect | null = null
 
-    const throttleMove = throttle((event: MouseEvent) => {
+    function computeValue(event: PointerEvent) {
+      if (!trackRect) return
+
+      const vertical = props.vertical
+      const reverse = props.reverse
+      const client = vertical ? event.clientY : event.clientX
+
+      currentValue.value =
+        (reverse ? -1 : 1) *
+          ((client -
+            trackRect[vertical ? (reverse ? 'bottom' : 'top') : reverse ? 'right' : 'left']) /
+            trackRect[vertical ? 'height' : 'width']) *
+          total.value +
+        stepMin.value
+    }
+
+    const throttleMove = throttle((event: PointerEvent) => {
       if (!trackRect || props.disabled) return
 
       event.preventDefault()
 
-      const vertical = props.vertical
-      const client = vertical ? event.clientY : event.clientX
-
-      currentValue.value =
-        ((client - trackRect[vertical ? 'top' : 'left']) /
-          trackRect[vertical ? 'height' : 'width']) *
-          total.value +
-        stepMin.value
+      computeValue(event)
       verifyValue()
 
       if (tooltip.value) {
@@ -237,22 +240,14 @@ export default defineComponent({
     function handleTrackDown(event: PointerEvent) {
       if (!track.value || props.disabled || (props.loading && props.loadingLock)) return
 
-      window.clearTimeout(timer.sliding)
+      clearTimeout(timer.sliding)
       event.stopPropagation()
       event.preventDefault()
-
-      const vertical = props.vertical
-      const client = vertical ? event.clientY : event.clientX
 
       trackRect = track.value.getBoundingClientRect()
       sliding.value = true
 
-      currentValue.value =
-        ((client - trackRect[vertical ? 'top' : 'left']) /
-          trackRect[vertical ? 'height' : 'width']) *
-          total.value +
-        stepMin.value
-
+      computeValue(event)
       verifyValue()
 
       document.addEventListener('pointermove', handleMove)
@@ -262,7 +257,7 @@ export default defineComponent({
     function handleMoveStart(event: PointerEvent) {
       if (!track.value || props.disabled || (props.loading && props.loadingLock)) return
 
-      window.clearTimeout(timer.sliding)
+      clearTimeout(timer.sliding)
       event.stopPropagation()
       event.preventDefault()
 
@@ -291,7 +286,7 @@ export default defineComponent({
     }
 
     function showTooltip() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       if (!props.disabled) {
         timer.hover = window.setTimeout(() => {
@@ -301,7 +296,7 @@ export default defineComponent({
     }
 
     function hideTooltip() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       timer.hover = window.setTimeout(() => {
         isTipShow.value = false
