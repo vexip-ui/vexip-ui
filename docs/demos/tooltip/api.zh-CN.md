@@ -10,7 +10,7 @@
 | tip-class       | `ClassType`                                                       | 提示内容的自定义类名                                                   | `null`       | -       |
 | tip-style       | `StyleType`                                                       | 提示内容的自定义样式                                                   | `null`       | `2.0.0` |
 | disabled        | `boolean`                                                         | 设置是否禁用提示，禁用后将不显示任何内容                               | `false`      | -       |
-| reverse         | `false`                                                           | 设置气泡是否为反色主题                                                 | `false`      | `2.0.0` |
+| reverse         | `boolean`                                                         | 设置气泡是否为反色主题                                                 | `false`      | `2.0.0` |
 | transfer        | `boolean \| string`                                               | 设置气泡的渲染位置，设置为 `true` 时默认渲染至 `<body>`                | `false`      | -       |
 | transition-name | `string`                                                          | 设置气泡的显示隐藏过渡效果                                             | `'vxp-fade'` | -       |
 | wrapper         | `boolean \| string`                                               | 设置是否渲染包围元素                                                   | `false`      | `2.0.0` |
