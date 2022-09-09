@@ -89,7 +89,7 @@ import { install } from 'vexip-ui'
 createApp(App).use(install).mount('#app')
 ```
 
-具体的 `sass` 变量可以在 [源码](https://github.com/qmhc/vexip-ui/blob/main/style/design/variables.scss) 查找。
+具体的 `sass` 变量可以在 [源码](https://github.com/vexip-ui/vexip-ui/blob/main/style/design/variables.scss) 查找。
 
 ## 过渡效果
 

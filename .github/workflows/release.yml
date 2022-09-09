@@ -21,4 +21,4 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           body: |
-            Please refer to [CHANGELOG.md](https://github.com/qmhc/vexip-ui/blob/main/CHANGELOG.md) for details.
+            Please refer to [CHANGELOG.md](https://github.com/vexip-ui/vexip-ui/blob/main/CHANGELOG.md) for details.

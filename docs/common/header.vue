@@ -64,7 +64,7 @@
     <div class="theme">
       <ThemeSwitch></ThemeSwitch>
     </div>
-    <Linker class="github-link" to="//github.com/qmhc/vexip-ui/">
+    <Linker class="github-link" to="//github.com/vexip-ui/vexip-ui/">
       <Icon label="github" :scale="1.6">
         <GithubB></GithubB>
       </Icon>

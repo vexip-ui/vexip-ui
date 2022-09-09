@@ -1,7 +1,7 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
     <img
-      src="https://raw.githubusercontent.com/qmhc/vexip-ui/main/docs/public/logo.png"
+      src="https://raw.githubusercontent.com/vexip-ui/vexip-ui/main/docs/public/logo.png"
       style="width: 180px;"
     />
   </a>
@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/package-json/v/qmhc/vexip-ui" />
+  <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" />
 </p>
 
 <p align="center">
@@ -67,7 +67,7 @@ yarn add vexip-ui
 
 ## Help
 
-Open a [issue](https://github.com/qmhc/vexip-ui/issues) to request help.
+Open a [issue](https://github.com/vexip-ui/vexip-ui/issues) to request help.
 
 If you take maybe some bugs, please use the [Vexip UI Playground](https://playground.vexipui.com/) to provide a minimal reproduction.
 

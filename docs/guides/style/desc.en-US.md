@@ -89,7 +89,7 @@ import { install } from 'vexip-ui'
 createApp(App).use(install).mount('#app')
 ```
 
-The full `sass` variables can be found in [here](https://github.com/qmhc/vexip-ui/blob/main/style/design/variables.scss).
+The full `sass` variables can be found in [here](https://github.com/vexip-ui/vexip-ui/blob/main/style/design/variables.scss).
 
 ## Transition Effects
 

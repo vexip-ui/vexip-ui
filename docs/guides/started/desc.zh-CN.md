@@ -138,4 +138,4 @@ module.exports = {
 
 ## 完整组件列表
 
-你可以在 [这里](https://github.com/qmhc/vexip-ui/blob/main/components/index.ts#L105) 查看完整的组件列表。
+你可以在 [这里](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts#L105) 查看完整的组件列表。

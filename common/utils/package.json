@@ -18,10 +18,10 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/qmhc/vexip-ui/tree/main/common/utils#readme",
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/utils#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qmhc/vexip-ui.git",
+    "url": "git+https://github.com/vexip-ui/vexip-ui.git",
     "directory": "common/utils"
   },
   "devDependencies": {

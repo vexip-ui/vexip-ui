@@ -134,4 +134,4 @@ app.use(install, {
 })
 ```
 
-> 完整的国际化选项可以浏览 [此处](https://github.com/qmhc/vexip-ui/blob/main/common/config/src/locale/helper.ts)。
+> 完整的国际化选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts)。

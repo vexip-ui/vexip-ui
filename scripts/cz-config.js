@@ -5,21 +5,21 @@ const type = (name, description) => {
 
 module.exports = {
   types: [
-    type('feat', '一个新的特性'),
-    type('fix', '一个BUG的修复'),
-    type('perf', '用于提高性能的代码修改 (性能优化)'),
-    type('style', '代码样式相关的修改 (增减空格, 修改格式, 行末分号修改等)'),
-    type('docs', '仅限文档相关的修改'),
-    type('test', '添加或修改测试相关的代码'),
-    type('refactor', '未影响实际功能和特性的代码重写 (重构)'),
-    type('build', '与构建和依赖相关的开发或更改'),
-    type('ci', '与持续集成和部署相关的开发或修改'),
-    type('chore', '日常事务的调整或修改'),
-    type('revert', '回退到某次的提交 (还原代码)'),
-    type('workflow', '与工作流相关的开发或修改'),
-    type('wip', '正在开发中的, 未完整的代码'),
-    type('types', 'TypeScript 类型相关的修改'),
-    type('release', '新版本的发布')
+    type('feat', 'A new feature | 一个新的特性'),
+    type('fix', 'A bug fix | 一个BUG的修复'),
+    type('perf', 'Performance optimization | 性能优化'),
+    type('style', 'Code style tuning | 代码样式调优'),
+    type('docs', 'Documentation related changes | 文档相关的修改'),
+    type('test', 'Testing related | 测试相关'),
+    type('refactor', 'Code refactoring | 代码重构'),
+    type('build', 'build and dependencies | 构建和依赖相关'),
+    type('ci', 'Continuous integration related | 持续集成和部署相关'),
+    type('chore', 'Change for chore | 日常事务的修改'),
+    type('revert', 'Rollback to a commit | 回退到某次的提交'),
+    type('workflow', 'Workflow related | 工作流相关'),
+    type('wip', 'Code in progress | 正在开发中的代码'),
+    type('types', 'Types related 类型相关'),
+    type('release', 'New version release | 新版本的发布')
   ],
 
   scopes: [
@@ -48,19 +48,19 @@ module.exports = {
   */
   // override the messages, defaults are as follows
   messages: {
-    type: '选择您要提交的更改类型:',
-    scope: '选择此更改的范围 (可选的):',
+    type: 'Select the type of change you want to submit:',
+    scope: 'Select the scope of this change (optional):',
     // used if allowCustomScopes is true
-    customScope: '填写此更改的范围:',
-    subject: '对此更改撰写一个简短的描述:\n',
-    body: '提供此更改更详细的描述, 使用 "|" 来进行换行 (可选的):\n',
-    breaking: '列出此更改的任意破坏性更改 (可选的):\n',
-    footer: '列出此更改关闭的所有问题, 例如 "#31, #34" (可选的):\n',
-    confirmCommit: '您确定要继续上面的提交吗?'
+    customScope: 'Fill in the scope of this change:',
+    subject: 'Write a brief description of this change:\n',
+    body: 'To provide a more detailed description of this change, use \'|\' for newlines (optional):\n',
+    breaking: 'List any breaking change for this change (optional):\n',
+    footer: 'List all issues closed by this change, e.g. \'#31, #34\' (optional):\n',
+    confirmCommit: 'Confirm to commit?'
   },
 
   allowCustomScopes: true,
-  allowBreakingChanges: ['feat', 'fix', 'revert'],
+  allowBreakingChanges: ['feat', 'fix', 'refactor', 'revert'],
   // skip any questions you want
   skipQuestions: ['body'],
 

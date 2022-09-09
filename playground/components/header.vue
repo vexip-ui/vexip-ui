@@ -36,7 +36,11 @@
           <ArrowRotateLeft></ArrowRotateLeft>
         </Icon>
       </div>
-      <Linker class="github-link" title="Github" to="//github.com/qmhc/vexip-ui/tree/main/playground">
+      <Linker
+        class="github-link"
+        title="Github"
+        to="//github.com/vexip-ui/vexip-ui/tree/main/playground"
+      >
         <Icon :scale="1.4">
           <GithubB></GithubB>
         </Icon>
@@ -108,7 +112,10 @@ function reset() {
   background-color: var(--bg);
   border-bottom: 1px solid transparent;
   box-shadow: 0 0 4px rgba(0, 0, 0, 30%);
-  transition: var(--vxp-transition-background), var(--vxp-transition-border), var(--vxp-transition-shadow);
+  transition:
+    var(--vxp-transition-background),
+    var(--vxp-transition-border),
+    var(--vxp-transition-shadow);
 
   .dark & {
     --base: #ddd;

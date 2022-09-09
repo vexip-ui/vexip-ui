@@ -30,7 +30,7 @@ Vexip UI 提供了一系类开箱即用的组件。
 
 ## 最新版本
 
-![version](https://img.shields.io/github/package-json/v/qmhc/vexip-ui)
+![version](https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui)
 
 > 左上方的版本为文档构建时依赖的组件库版本，可能与最新的不一致，因为文档的更新往往会落后一些。
 
@@ -48,10 +48,10 @@ pnpm install vexip-ui
 
 ## 帮助
 
-创建一个 [issue](https://github.com/qmhc/vexip-ui/issues) 来寻求帮助。
+创建一个 [issue](https://github.com/vexip-ui/vexip-ui/issues) 来寻求帮助。
 
 如果你遇到一些可能是 bug 的问题, 可以用 [Vexip UI Playground](https://playground.vexipui.com/) 来提供一个最小的复现。
 
 ## 贡献
 
-欢迎你的加入！你可以查阅 [贡献指南](https://github.com/qmhc/vexip-ui/blob/main/CONTRIBUTING.md) 了解如何开始。
+欢迎你的加入！你可以查阅 [贡献指南](https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md) 了解如何开始。

@@ -142,7 +142,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qmhc/vexip-ui.git"
+    "url": "git+https://github.com/vexip-ui/vexip-ui.git"
   },
   "scripts": {
     "bootstrap": "ts-node scripts/bootstrap.ts",

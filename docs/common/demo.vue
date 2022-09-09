@@ -209,7 +209,7 @@ function getCodeLang(extension: string) {
   return extensionMap[extension] ?? extension
 }
 
-const githubBaseUrl = 'https://github.com/qmhc/vexip-ui/blob/main/docs/'
+const githubBaseUrl = 'https://github.com/vexip-ui/vexip-ui/blob/main/docs/'
 
 function editInGithub() {
   if (props.github) {
