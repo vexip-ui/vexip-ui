@@ -537,16 +537,16 @@ export default defineComponent({
       emitEvent(props.onError, file, error, file.source)
     }
 
-    let dragTimer: number
+    let dragTimer: ReturnType<typeof setTimeout>
 
     onBeforeUnmount(() => {
-      window.clearTimeout(dragTimer)
+      clearTimeout(dragTimer)
     })
 
     async function handleDrop(event: DragEvent) {
       if (!props.allowDrag) return
 
-      window.clearTimeout(dragTimer)
+      clearTimeout(dragTimer)
 
       isDragOver.value = false
 
@@ -560,7 +560,7 @@ export default defineComponent({
     function handleDragEnter() {
       if (!props.allowDrag) return
 
-      window.clearTimeout(dragTimer)
+      clearTimeout(dragTimer)
 
       isDragOver.value = true
     }
@@ -568,7 +568,7 @@ export default defineComponent({
     function handleDragLeave() {
       if (!props.allowDrag) return
 
-      dragTimer = window.setTimeout(() => {
+      dragTimer = setTimeout(() => {
         isDragOver.value = false
       }, 100)
     }

@@ -242,7 +242,7 @@ export default defineComponent({
       if (focused.value) {
         focused.value = false
 
-        window.setTimeout(() => {
+        setTimeout(() => {
           if (!focused.value) {
             emitEvent(props.onBlur, event)
             emitChangeEvent('change')

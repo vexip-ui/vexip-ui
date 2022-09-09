@@ -486,7 +486,7 @@ export default defineComponent({
         typeof props.toolbarFade === 'number' ? props.toolbarFade : props.toolbarFade ? 1500 : 0
 
       if (fade > 0) {
-        timer.toolbarFade = window.setTimeout(() => {
+        timer.toolbarFade = setTimeout(() => {
           toolbarActive.value = false
         }, fade)
       }

@@ -144,12 +144,12 @@ export function useScrollWrapper({
   const percentX = ref(0)
   const percentY = ref(0)
 
-  let timer: number
+  let timer: ReturnType<typeof setTimeout>
 
   function computeContentSize() {
-    window.clearTimeout(timer)
+    clearTimeout(timer)
 
-    timer = window.setTimeout(() => {
+    timer = setTimeout(() => {
       if (!content.el) return
 
       if (mode.value !== 'vertical') {
@@ -178,7 +178,7 @@ export function useScrollWrapper({
 
       isReady.value = false
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         isReady.value = true
         verifyScroll()
       }, 1)
@@ -232,7 +232,7 @@ export function useScrollWrapper({
     refreshWrapper()
     computeContentSize()
 
-    window.setTimeout(
+    setTimeout(
       () => {
         verifyScroll()
 

@@ -16,11 +16,11 @@ export default defineComponent({
   },
   methods: {
     doLoading() {
-      window.clearTimeout(this.timer)
+      clearTimeout(this.timer)
       this.loading = true
       this.$loading.open(10)
 
-      this.timer = window.setTimeout(() => {
+      this.timer = setTimeout(() => {
         this.$loading.open(100)
         this.loading = false
       }, 5000)

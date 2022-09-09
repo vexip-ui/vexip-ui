@@ -157,12 +157,12 @@ export default defineComponent({
     watch(
       () => props.active,
       value => {
-        window.clearTimeout(timer)
+        clearTimeout(timer)
 
         const delay = value ? delayTime.value.enter : delayTime.value.leave
 
         if (delay) {
-          timer = window.setTimeout(() => {
+          timer = setTimeout(() => {
             currentActive.value = value
           }, delay)
         } else {

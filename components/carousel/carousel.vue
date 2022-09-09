@@ -307,7 +307,7 @@ export default defineComponent({
       handleWheel(props.active - props.activeOffset)
       handleAfterMove()
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         isLocked.value = false
         inTransition = false
 
@@ -395,7 +395,7 @@ export default defineComponent({
         handleNext(0)
       }
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         isLocked.value = false
         inTransition = false
       }, 0)
@@ -527,7 +527,7 @@ export default defineComponent({
           trackRect.offset =
             -currentActive.value * (props.vertical ? itemRect.height : itemRect.width)
 
-          window.setTimeout(() => {
+          setTimeout(() => {
             isLocked.value = false
             inTransition = false
           }, 0)
@@ -573,9 +573,9 @@ export default defineComponent({
 
     function handleMouseEnter() {
       if (props.autoplay) {
-        window.clearTimeout(timer.hover)
+        clearTimeout(timer.hover)
 
-        timer.hover = window.setTimeout(() => {
+        timer.hover = setTimeout(() => {
           window.clearInterval(timer.play)
         }, 250)
       }
@@ -587,9 +587,9 @@ export default defineComponent({
 
     function handleMouseLeave() {
       if (props.autoplay) {
-        window.clearTimeout(timer.hover)
+        clearTimeout(timer.hover)
 
-        timer.hover = window.setTimeout(() => {
+        timer.hover = setTimeout(() => {
           setAutoplay()
         }, 250)
       }

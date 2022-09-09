@@ -280,7 +280,7 @@ export default defineComponent({
 
       emitChange()
 
-      timer.sliding = window.setTimeout(() => {
+      timer.sliding = setTimeout(() => {
         sliding.value = false
       }, 250)
     }
@@ -289,7 +289,7 @@ export default defineComponent({
       clearTimeout(timer.hover)
 
       if (!props.disabled) {
-        timer.hover = window.setTimeout(() => {
+        timer.hover = setTimeout(() => {
           isTipShow.value = true
         }, 250)
       }
@@ -298,7 +298,7 @@ export default defineComponent({
     function hideTooltip() {
       clearTimeout(timer.hover)
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         isTipShow.value = false
       }, 250)
     }

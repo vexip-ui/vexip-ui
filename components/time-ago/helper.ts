@@ -20,7 +20,7 @@ export function getId() {
 
 const recordMap = new Map<number, TimeAgoRecord>()
 
-let timer: number
+let timer: ReturnType<typeof setInterval>
 let isRunning: boolean
 
 export function subscribe(id: number, record: TimeAgoRecord) {
@@ -29,7 +29,7 @@ export function subscribe(id: number, record: TimeAgoRecord) {
   if (recordMap.size && !isRunning) {
     window.clearInterval(timer)
 
-    timer = window.setInterval(() => {
+    timer = setInterval(() => {
       isRunning = true
 
       const current = Date.now()

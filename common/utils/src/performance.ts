@@ -10,7 +10,7 @@ export function throttle<T extends(...args: any[]) => any>(method: T, delay = 16
   }
 
   let start = Date.now()
-  let timer: number
+  let timer: ReturnType<typeof setTimeout>
 
   return function (...args: Parameters<T>) {
     const current = Date.now()
@@ -22,7 +22,7 @@ export function throttle<T extends(...args: any[]) => any>(method: T, delay = 16
       method(...args)
       start = Date.now()
     } else {
-      timer = window.setTimeout(() => {
+      timer = setTimeout(() => {
         method(...args)
       }, delay)
     }
@@ -40,12 +40,12 @@ export function debounce<T extends(...args: any[]) => any>(method: T, delay = 10
     return method
   }
 
-  let timer: number
+  let timer: ReturnType<typeof setTimeout>
 
   return function (...args: Parameters<T>) {
     clearTimeout(timer)
 
-    timer = window.setTimeout(() => {
+    timer = setTimeout(() => {
       method(...args)
     }, delay)
   }

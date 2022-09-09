@@ -1,13 +1,13 @@
 import type { Ref } from 'vue'
 
 export function useTriggerHandler(trigger: Ref<string>, currentVisible: Ref<boolean>, delay = 250) {
-  let timer: number
+  let timer: ReturnType<typeof setTimeout>
 
   function handleTriggerEnter() {
     if (trigger.value === 'hover') {
       clearTimeout(timer)
 
-      timer = window.setTimeout(() => {
+      timer = setTimeout(() => {
         currentVisible.value = true
       }, delay)
     }
@@ -17,7 +17,7 @@ export function useTriggerHandler(trigger: Ref<string>, currentVisible: Ref<bool
     if (trigger.value === 'hover') {
       clearTimeout(timer)
 
-      timer = window.setTimeout(() => {
+      timer = setTimeout(() => {
         currentVisible.value = false
       }, delay)
     }

@@ -220,7 +220,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      window.setTimeout(() => {
+      setTimeout(() => {
         if (wrapper.value) {
           mutations.setColumnWidth(props.column.key, wrapper.value.getBoundingClientRect().width)
         }

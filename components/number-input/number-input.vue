@@ -316,7 +316,7 @@ export default defineComponent({
     function handleBlur(event: FocusEvent) {
       focused.value = false
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         if (!focused.value) {
           inputting.value = false
           emitEvent(props.onBlur, event)

@@ -238,9 +238,9 @@ export default defineComponent({
       }
     )
 
-    let playTimer: number
-    let startTimer: number
-    let endTimer: number
+    let playTimer: ReturnType<typeof setTimeout>
+    let startTimer: ReturnType<typeof setTimeout>
+    let endTimer: ReturnType<typeof setTimeout>
 
     onBeforeUnmount(stopAutoplay)
 
@@ -272,10 +272,10 @@ export default defineComponent({
           computePercent()
           syncBarScroll()
 
-          endTimer = window.setTimeout(() => {
+          endTimer = setTimeout(() => {
             scrollTo(0, 0, 500)
 
-            startTimer = window.setTimeout(() => {
+            startTimer = setTimeout(() => {
               canPlay.value = true
               scroll()
             }, 500 + waiting)
@@ -290,7 +290,7 @@ export default defineComponent({
         }
       }
 
-      playTimer = window.setTimeout(() => {
+      playTimer = setTimeout(() => {
         canPlay.value = true
         scroll()
       }, waiting)
@@ -299,9 +299,9 @@ export default defineComponent({
     function stopAutoplay() {
       canPlay.value = false
 
-      window.clearTimeout(playTimer)
-      window.clearTimeout(startTimer)
-      window.clearTimeout(endTimer)
+      clearTimeout(playTimer)
+      clearTimeout(startTimer)
+      clearTimeout(endTimer)
     }
     /* autoplay */
 

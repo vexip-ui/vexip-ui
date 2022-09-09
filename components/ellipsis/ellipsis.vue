@@ -116,9 +116,9 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     function handleTriggerEnter() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         if (!wrapper.value || !wrapper.value.childNodes.length) {
           visible.value = false
           return
@@ -153,9 +153,9 @@ export default defineComponent({
     }
 
     function handleTriggerLeave() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         active.value = false
       })
     }

@@ -317,7 +317,7 @@ const MenuItem = defineComponent({
     const { timer } = useSetTimeout()
 
     function handleSelect() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       if (props.disabled) return
 
@@ -340,7 +340,7 @@ const MenuItem = defineComponent({
     }
 
     function toggleGroupExpanded(expanded: boolean, upwrad = false) {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       menuState?.beforeExpand()
       groupExpanded.value = expanded
@@ -351,7 +351,7 @@ const MenuItem = defineComponent({
     }
 
     function handleMouseEnter() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       if (props.disabled || !isUsePopper.value || dropTrigger.value !== 'hover') return
 
@@ -361,13 +361,13 @@ const MenuItem = defineComponent({
 
       if (!isGroup.value) return
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         groupExpanded.value = true
       }, 250)
     }
 
     function handleMouseLeave() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       if (props.disabled || !isUsePopper.value || dropTrigger.value !== 'hover') return
 
@@ -377,7 +377,7 @@ const MenuItem = defineComponent({
 
       if (!isGroup.value) return
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         groupExpanded.value = false
       }, 250)
     }

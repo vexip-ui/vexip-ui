@@ -208,9 +208,9 @@ export default defineComponent({
       if (props.disabled) return
 
       if (props.trigger === 'hover') {
-        window.clearTimeout(timer.hover)
+        clearTimeout(timer.hover)
 
-        timer.hover = window.setTimeout(() => {
+        timer.hover = setTimeout(() => {
           toggleVisible(true)
         }, 250)
       }
@@ -222,9 +222,9 @@ export default defineComponent({
       if (props.disabled) return
 
       if (props.trigger === 'hover') {
-        window.clearTimeout(timer.hover)
+        clearTimeout(timer.hover)
 
-        timer.hover = window.setTimeout(() => {
+        timer.hover = setTimeout(() => {
           toggleVisible(false)
         }, 250)
       }

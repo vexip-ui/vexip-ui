@@ -317,7 +317,7 @@ export default defineComponent({
 
       if (!element) return
 
-      window.clearTimeout(timer)
+      clearTimeout(timer)
 
       animating.value = true
 

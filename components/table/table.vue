@@ -770,9 +770,9 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     function refreshPercentScroll() {
-      window.clearTimeout(timer.scroll)
+      clearTimeout(timer.scroll)
 
-      timer.scroll = window.setTimeout(() => {
+      timer.scroll = setTimeout(() => {
         const { totalHeight, bodyScroll } = state
 
         yScrollPercent.value = Math.max(

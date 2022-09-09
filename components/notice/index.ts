@@ -198,7 +198,7 @@ export class NoticeManager {
     const notice = this._getInstance()
     const convenienceOptions = type ? conveniences[type] ?? {} : {}
 
-    let timer: number
+    let timer: ReturnType<typeof setTimeout>
 
     const userCloseFn = options.onClose
     const onClose = () => {
@@ -224,7 +224,7 @@ export class NoticeManager {
     const duration = typeof item.duration === 'number' ? item.duration : 4000
 
     if (duration >= 500) {
-      timer = window.setTimeout(() => {
+      timer = setTimeout(() => {
         notice.remove(key)
       }, duration)
     }

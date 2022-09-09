@@ -24,7 +24,7 @@ const loading = ref(false)
 let timer: ReturnType<typeof setTimeout>
 
 function doLoading(state: LoadingState = 'default') {
-  window.clearTimeout(timer)
+  clearTimeout(timer)
 
   loading.value = true
   Loading.open(30)

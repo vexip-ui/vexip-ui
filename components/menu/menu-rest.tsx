@@ -76,21 +76,21 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     function handleMouseEnter() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       if (dropTrigger.value !== 'hover') return
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         groupExpanded.value = true
       }, 250)
     }
 
     function handleMouseLeave() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       if (dropTrigger.value !== 'hover') return
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         groupExpanded.value = false
       }, 250)
     }

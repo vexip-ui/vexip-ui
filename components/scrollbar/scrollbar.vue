@@ -103,7 +103,7 @@ export default defineComponent({
     const bar = ref<HTMLElement | null>(null)
     const track = ref<HTMLElement | null>(null)
 
-    let fadeTimer: number
+    let fadeTimer: ReturnType<typeof setTimeout>
 
     const type = computed(() => {
       return props.placement === 'right' || props.placement === 'left'
@@ -120,10 +120,10 @@ export default defineComponent({
       barLength: toRef(props, 'barLength'),
       disabled: toRef(props, 'disabled'),
       handleDown: scroll => {
-        window.clearTimeout(fadeTimer)
+        clearTimeout(fadeTimer)
         emitEvent(props.onScrollStart, scroll)
       },
-      handleMove: () => window.clearTimeout(fadeTimer),
+      handleMove: () => clearTimeout(fadeTimer),
       handleUp: scroll => {
         setScrollbarFade()
         emitEvent(props.onScrollEnd, scroll)
@@ -194,7 +194,7 @@ export default defineComponent({
     }
 
     const handleWrapperMouseMove = throttle(() => {
-      window.clearTimeout(fadeTimer)
+      clearTimeout(fadeTimer)
 
       if (props.disabled) {
         active.value = false
@@ -253,7 +253,7 @@ export default defineComponent({
       }
 
       wrapperElement = null
-      window.clearTimeout(fadeTimer)
+      clearTimeout(fadeTimer)
     })
 
     let length: number
@@ -286,7 +286,7 @@ export default defineComponent({
         cursorAt = event.clientX
       }
 
-      window.clearTimeout(fadeTimer)
+      clearTimeout(fadeTimer)
 
       scrolling.value = true
       emitEvent(props.onScrollStart, currentScroll.value)
@@ -315,7 +315,7 @@ export default defineComponent({
         event.preventDefault()
       }
 
-      window.clearTimeout(fadeTimer)
+      clearTimeout(fadeTimer)
 
       handleBarMove(event)
     }
@@ -338,7 +338,7 @@ export default defineComponent({
 
     function setScrollbarFade() {
       if (props.fade >= 300) {
-        fadeTimer = window.setTimeout(() => {
+        fadeTimer = setTimeout(() => {
           active.value = false
         }, props.fade)
       }

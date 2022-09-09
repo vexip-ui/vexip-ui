@@ -248,7 +248,7 @@ export default defineComponent({
               mutations.setRowHeight(rowKey.value, rowElement.value.offsetHeight)
             }
           } else {
-            window.setTimeout(() => {
+            setTimeout(() => {
               if (rowElement.value) {
                 rowElement.value.style.height = `${props.row.height}px`
               }

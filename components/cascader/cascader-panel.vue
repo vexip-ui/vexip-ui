@@ -277,7 +277,7 @@ export default defineComponent({
     function handleMouseEnter(option: CascaderOptionState) {
       clearTimeout(hoverTimer)
 
-      hoverTimer = window.setTimeout(() => {
+      hoverTimer = setTimeout(() => {
         !option.disabled && emit('hover', option)
       }, 250)
     }

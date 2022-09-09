@@ -619,7 +619,7 @@ export default defineComponent({
 
     function toggleEditing(able: boolean) {
       if (!able) {
-        window.setTimeout(() => {
+        setTimeout(() => {
           editing.value = false
         }, 0)
       } else {
