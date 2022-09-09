@@ -3,8 +3,10 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { Table } from '..'
 import { TableColumn } from '@/components/table-column'
+import TableBody from '../table-body.vue'
 
 import type { DOMWrapper } from '@vue/test-utils'
+import type { RowState } from '../symbol'
 
 vi.useFakeTimers()
 
@@ -316,7 +318,7 @@ describe('Table', () => {
 
     await runScrollTimers()
 
-    const body = wrapper.find('.vxp-table__body')
+    const body = wrapper.findComponent(TableBody)
     const headRow = wrapper.find('.vxp-table__head .vxp-table__row')
     const headCells = headRow.findAll('.vxp-table__head-cell')
 
@@ -326,16 +328,16 @@ describe('Table', () => {
       expect(cell.find('.vxp-table__sorter--desc').exists()).toBe(true)
     })
 
-    let rows = body.findAll('.vxp-table__row')
+    let renderRows = body.vm.renderData as RowState[]
 
     const clickSorter = async (cell: DOMWrapper<Element>, type: 'asc' | 'desc') => {
       await cell.find(`.vxp-table__sorter--${type}`).trigger('click')
       await nextTick()
-      rows = body.findAll('.vxp-table__row')
+      renderRows = body.vm.renderData
     }
 
     await clickSorter(headCells[1], 'asc')
-    expect(rows.map(row => row.findAll('.vxp-table__cell')[1].text())).toEqual([
+    expect(renderRows.map(row => row.data.name)).toEqual([
       'n0',
       'n0',
       'n1',
@@ -350,7 +352,7 @@ describe('Table', () => {
     expect(sortMethod).toHaveBeenCalled()
 
     await clickSorter(headCells[1], 'desc')
-    expect(rows.map(row => row.findAll('.vxp-table__cell')[1].text())).toEqual([
+    expect(renderRows.map(row => row.data.name)).toEqual([
       'n4',
       'n4',
       'n3',
@@ -364,7 +366,7 @@ describe('Table', () => {
     ])
 
     await clickSorter(headCells[0], 'desc')
-    expect(rows.map(row => row.text())).toEqual([
+    expect(renderRows.map(row => `${row.data.label}${row.data.name}`)).toEqual([
       'l1n4',
       'l0n4',
       'l1n3',
@@ -378,7 +380,7 @@ describe('Table', () => {
     ])
 
     await clickSorter(headCells[0], 'asc')
-    expect(rows.map(row => row.text())).toEqual([
+    expect(renderRows.map(row => `${row.data.label}${row.data.name}`)).toEqual([
       'l0n4',
       'l1n4',
       'l0n3',
