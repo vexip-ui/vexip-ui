@@ -6,6 +6,7 @@
 | min          | `number`  | The min value of the slider                                                                    | `0`     | -       |
 | max          | `number`  | The max value of the slider                                                                    | `100`   | -       |
 | step         | `number`  | The span of each value change of the sliding input bar                                         | `1`     | -       |
+| disabled     | `boolean` | Set whether to disable                                                                         | `false` | -       |
 | vertical     | `boolean` | Set whether the sliding input bar is vertical, the parent element needs to have a valid height | `false` | -       |
 | hide-tip     | `boolean` | Set whether to disable tooltip                                                                 | `false` | -       |
 | tip-transfer | `boolean` | Set Tooltip's `transfer` property                                                              | `false` | -       |

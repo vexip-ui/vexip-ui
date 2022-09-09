@@ -6,6 +6,7 @@
 | min          | `number`  | 滑动输入条的最小值                               | `0`     | -       |
 | max          | `number`  | 滑动输入条的最大值                               | `100`   | -       |
 | step         | `number`  | 滑动输入条每次值变化的跨度                       | `1`     | -       |
+| disabled     | `boolean` | 设置是否为禁用状态                               | `false` | -       |
 | vertical     | `boolean` | 设置滑动输入条是否为纵向，需要父元素具有有效高度 | `false` | -       |
 | hide-tip     | `boolean` | 设置是否禁用 tooltip                             | `false` | -       |
 | tip-transfer | `boolean` | 设置 Tooltip 的 `transfer` 属性                  | `false` | -       |
