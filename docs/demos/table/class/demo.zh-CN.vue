@@ -55,12 +55,12 @@ const data = ref([
 ])
 </script>
 
-<style>
-.demo-row-class {
+<style scoped>
+:deep(.demo-row-class) {
   color: #339af0;
 }
 
-.demo-column-class {
+:deep(.demo-column-class) {
   background-color: #fab005;
 }
 </style>

@@ -20,7 +20,8 @@ export interface FormProps {
   hideLabel: boolean,
   disabled: boolean,
   loading: boolean,
-  size: ComponentSize
+  size: ComponentSize,
+  inline: boolean
 }
 
 export interface FormItemProps {

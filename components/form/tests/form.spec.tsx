@@ -1,9 +1,11 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { Form } from '..'
 import { FormItem } from '@/components/form-item'
 import { Input } from '@/components/input'
+
+vi.useFakeTimers()
 
 describe('Form', () => {
   it('render', () => {
@@ -15,10 +17,22 @@ describe('Form', () => {
       </Form>
     ))
 
-    expect(wrapper.classes()).toContain('vxp-form-vars')
+    expect(wrapper.find('.vxp-form').classes()).toContain('vxp-form-vars')
     expect(wrapper.find('.vxp-form__item').exists()).toBe(true)
     expect(wrapper.find('.vxp-form__label').text()).toEqual('input')
     expect(wrapper.findComponent(Input).exists()).toBe(true)
+  })
+
+  it('inline', () => {
+    const wrapper = mount(() => (
+      <Form inline>
+        <FormItem label={'input'}>
+          <Input></Input>
+        </FormItem>
+      </Form>
+    ))
+
+    expect(wrapper.find('.vxp-form').classes()).toContain('vxp-form--inline')
   })
 
   it('item required prop', () => {
@@ -188,5 +202,48 @@ describe('Form', () => {
 
     await form.validate()
     expect(item.find('.vxp-form__error-tip').exists()).toBe(false)
+  })
+
+  it('help tip', async () => {
+    const wrapper = mount(() => (
+      <Form>
+        <FormItem required label={'input'} prop={'input'} help={'help'}>
+          <Input></Input>
+        </FormItem>
+      </Form>
+    ))
+    const item = wrapper.find('.vxp-form__item')
+
+    expect(item.find('.vxp-form__help').exists()).toBe(true)
+
+    await item.find('.vxp-form__help').trigger('mouseenter')
+    vi.runAllTimers()
+    await nextTick()
+
+    expect(document.querySelector('.vxp-form__help-tip')).toBeTruthy()
+    expect(document.querySelector('.vxp-form__help-tip')!.textContent).toEqual('help')
+  })
+
+  it('help tip slot', async () => {
+    const wrapper = mount(() => (
+      <Form>
+        <FormItem required label={'input'} prop={'input'}>
+          {{
+            default: () => <Input></Input>,
+            help: () => <span class={'help'}>{'help'}</span>
+          }}
+        </FormItem>
+      </Form>
+    ))
+    const item = wrapper.find('.vxp-form__item')
+
+    expect(item.find('.vxp-form__help').exists()).toBe(true)
+
+    await item.find('.vxp-form__help').trigger('mouseenter')
+    vi.runAllTimers()
+    await nextTick()
+
+    expect(document.querySelector('.help')).toBeTruthy()
+    expect(document.querySelector('.help')!.textContent).toEqual('help')
   })
 })

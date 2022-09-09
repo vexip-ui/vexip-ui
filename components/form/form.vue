@@ -48,6 +48,7 @@ export default defineComponent({
     disabled: booleanProp,
     loading: booleanProp,
     size: sizeProp,
+    inline: booleanProp,
     gap: [Number, Array] as PropType<number | number[]>,
     justify: String as PropType<RowGridJustify>,
     align: String as PropType<RowGridAlign>
@@ -77,6 +78,7 @@ export default defineComponent({
       disabled: false,
       loading: false,
       size: createSizeProp(),
+      inline: false,
       gap: [8, 0],
       justify: 'start',
       align: 'top'
@@ -93,7 +95,8 @@ export default defineComponent({
         {
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading,
-          [nh.bm(props.size)]: props.size !== 'default'
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm('inline')]: props.inline
         }
       ]
     })

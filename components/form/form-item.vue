@@ -51,7 +51,8 @@
     <div
       :class="{
         [nh.be('control')]: true,
-        [nh.bem('control', 'no-label')]: !hasLabel
+        [nh.bem('control', 'no-label')]: !hasLabel,
+        [nh.bem('control', 'action')]: props.action
       }"
       role="alert"
       aria-relevant="all"
@@ -189,9 +190,7 @@ export default defineComponent({
 
     const labelEl = ref<HTMLInputElement | null>(null)
 
-    const isRequired = computed(() => {
-      return formProps.allRequired || props.required
-    })
+    const isRequired = computed(() => formProps.allRequired || props.required)
     const requiredTip = computed(() => {
       return makeSentence(`${props.label || props.prop} ${locale.value.notNullable}`)
     })
@@ -228,12 +227,10 @@ export default defineComponent({
 
       return isRequired.value
     })
-    const hideLabel = computed(() => {
-      return props.action || props.hideLabel === true || formProps.hideLabel
-    })
-    const hasLabel = computed(() => {
-      return !(hideLabel.value || !(props.label || slots.label))
-    })
+    const hideLabel = computed(
+      () => props.action || props.hideLabel === true || formProps.hideLabel
+    )
+    const hasLabel = computed(() => !(hideLabel.value || !(props.label || slots.label)))
     const computedlabelWidth = computed(() => {
       if (formProps.labelAlign) {
         return getLabelWidth(
@@ -253,12 +250,15 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bem('item', 'required')]: !formProps.hideAsterisk && useAsterisk.value,
         [nh.bem('item', 'error')]: isError.value,
-        [nh.bem('item', 'action')]: props.action
+        [nh.bem('item', 'action')]: props.action,
+        [nh.bem('item', 'padding')]:
+          formProps.inline && formProps.labelAlign === 'top' && !hasLabel.value
       }
     })
     const controlStyle = computed(() => {
       return {
-        width: `calc(100% - ${computedlabelWidth.value}px)`,
+        width:
+          formProps.labelAlign === 'top' ? undefined : `calc(100% - ${computedlabelWidth.value}px)`,
         marginLeft:
           hasLabel.value || formProps.labelAlign === 'top'
             ? undefined
