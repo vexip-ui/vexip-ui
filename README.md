@@ -33,14 +33,6 @@ And, the writing of component codes pay great attention to lowering the threshol
 
 There are currently **70+** components, many you can see everywhere and a few may bright your eyes.
 
-## Work List
-
-- ~~Transfer to use css vars~~ (Released in `2.0.0-beta.0`)
-- ~~Refactor icons~~ (Released in `2.0.0-beta.0`)
-- ~~Refactor global config~~ (Released in `2.0.0-beta.4`)
-- ~~Write unit tests~~ (Released in `2.0.0-beta.22`)
-- Adapt ssr render
-
 ## Features
 
 - Not less components and functions for website development, hoping may improve efficiency
@@ -74,6 +66,14 @@ If you take maybe some bugs, please use the [Vexip UI Playground](https://playgr
 ## Contributing
 
 Welcome to join us! You can check out the [Contributing Guide](./CONTRIBUTING.md) to learn how to get started.
+
+## Contributors
+
+Thanks for all their contributions!
+
+<a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
+</a>
 
 ## Environment
 

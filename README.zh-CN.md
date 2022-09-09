@@ -33,14 +33,6 @@ Vexip UI 提供了一系列开箱即用的组件。
 
 目前有 **70+** 个组件，一些你几乎看烂了的组件这里大多有，或许也有一些你不太常见的组件。
 
-## 工作清单
-
-- ~~迁移至 css 变量~~（已在 `2.0.0-beta.0` 发布）
-- ~~重构图标~~（已在 `2.0.0-beta.0` 发布）
-- ~~重构全局配置~~（已在 `2.0.0-beta.4` 发布）
-- ~~编写单元测试~~（已在 `2.0.0-beta.22` 发布）
-- 适配 ssr 渲染
-
 ## 特性
 
 - 还算多的组件和功能，为网站开发助力，希望能提高点效率
@@ -74,6 +66,14 @@ yarn add vexip-ui
 ## 贡献
 
 欢迎你的加入！你可以查阅 [贡献指南](./CONTRIBUTING.md) 了解如何开始。
+
+## 贡献者
+
+感谢他们的所做的一切贡献！
+
+<a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
+</a>
 
 ## 兼容环境
 

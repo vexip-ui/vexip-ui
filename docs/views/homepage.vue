@@ -1,7 +1,10 @@
 <template>
   <section :class="prefix" :style="{ '--wave-top': `${waveTop}px` }">
     <NativeScroll use-y-bar @resize="handleResize">
-      <Wave ref="wave" :class="`${prefix}__wave`"></Wave>
+      <div :class="`${prefix}__wave`">
+        <div :class="`${prefix}__wave-block`"></div>
+        <Wave ref="wave"></Wave>
+      </div>
       <div ref="sign" :class="`${prefix}__sign`">
         <img :class="`${prefix}__logo`" src="/logo.png" alt="logo.png" />
         <h1 :class="`${prefix}__title`">
@@ -78,22 +81,28 @@ function handleResize() {
   text-align: center;
   user-select: none;
 
+  &__wave {
+    position: absolute;
+    top: 0;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: none;
+
+    &-block {
+      height: var(--wave-top);
+      background-image: linear-gradient(to bottom, transparent, var(--vxp-color-primary-opacity-8));
+    }
+
+    .wave {
+      position: relative;
+    }
+  }
+
   &__sign {
     position: relative;
     margin-bottom: 100px;
-    background-image:
-      linear-gradient(
-        to bottom,
-        transparent,
-        var(--vxp-color-primary-opacity-8) var(--wave-top),
-        transparent var(--wave-top)
-      );
-  }
-
-  &__wave {
-    top: var(--wave-top);
-    z-index: 0;
-    pointer-events: none;
   }
 
   &__logo {
