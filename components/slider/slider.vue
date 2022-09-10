@@ -1,7 +1,6 @@
 <template>
   <div
     :id="idFor"
-    ref="wrapper"
     :class="className"
     tabindex="-1"
     @pointerdown="handleTrackDown"
@@ -10,49 +9,53 @@
     <div ref="track" :class="nh.be('track')">
       <div :class="nh.be('filler')" :style="fillerStyle"></div>
     </div>
-    <div
-      :class="nh.be('trigger')"
-      :style="handlerStyle"
-      @pointerdown="handleMoveStart"
-      @touchstart="disableEvent"
+    <SliderTrigger
+      v-if="props.range"
+      ref="startTrigger"
+      :value="truthValue[0]"
+      :tip-transfer="props.tipTransfer"
+      :hide-tip="props.hideTip"
+      :vertical="props.vertical"
+      :min="props.min"
+      :max="props.max"
+      :disabled="props.disabled"
+      :loading="props.loading"
+      :reverse="props.reverse"
+      :sliding="sliding[0]"
+      :style="startTriggerStyle"
     >
-      <Tooltip
-        ref="tooltip"
-        theme="dark"
-        trigger="custom"
-        :transfer="props.tipTransfer"
-        :visible="isTipShow || sliding"
-        :tip-class="nh.be('tip')"
-        :disabled="props.hideTip"
-        :placement="props.vertical ? 'right' : 'top'"
-        @tip-enter="showTooltip"
-        @tip-leave="hideTooltip"
-      >
-        <template #trigger>
-          <div
-            ref="handler"
-            :class="[nh.be('handler'), props.loading && nh.bem('handler', 'active')]"
-            role="slider"
-            tabindex="0"
-            :aria-valuenow="truthValue"
-            :aria-valuemin="props.min"
-            :aria-valuemax="props.max"
-            :aria-disabled="props.disabled"
-            @mouseenter="showTooltip"
-            @mouseleave="hideTooltip"
-          ></div>
-        </template>
-        <slot name="tip" :value="truthValue">
-          {{ truthValue }}
+      <template #tip="{ value: startValue }">
+        <slot name="tip" :value="startValue">
+          {{ startValue }}
         </slot>
-      </Tooltip>
-    </div>
+      </template>
+    </SliderTrigger>
+    <SliderTrigger
+      ref="endTrigger"
+      :value="truthValue[1]"
+      :tip-transfer="props.tipTransfer"
+      :hide-tip="props.hideTip"
+      :vertical="props.vertical"
+      :min="props.min"
+      :max="props.max"
+      :disabled="props.disabled"
+      :loading="props.loading"
+      :reverse="props.reverse"
+      :sliding="sliding[1]"
+      :style="endTriggerStyle"
+    >
+      <template #tip="{ value: endValue }">
+        <slot name="tip" :value="endValue">
+          {{ endValue }}
+        </slot>
+      </template>
+    </SliderTrigger>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, onMounted } from 'vue'
-import { Tooltip } from '@/components/tooltip'
+import { defineComponent, ref, computed, watch } from 'vue'
+import SliderTrigger from './slider-trigger.vue'
 import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
@@ -64,19 +67,24 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useSetTimeout, useModifier } from '@vexip-ui/mixins'
+import { useSetTimeout } from '@vexip-ui/mixins'
 import { throttle } from '@vexip-ui/utils'
 
-import type { TooltipExposed } from '@/components/tooltip'
+import type { PropType } from 'vue'
+
+const enum TriggerType {
+  START = 0,
+  END = 1
+}
 
 export default defineComponent({
   name: 'Slider',
   components: {
-    Tooltip
+    SliderTrigger
   },
   props: {
     state: stateProp,
-    value: Number,
+    value: [Number, Array] as PropType<number | number[]>,
     min: Number,
     max: Number,
     step: Number,
@@ -87,13 +95,14 @@ export default defineComponent({
     loading: booleanProp,
     loadingLock: booleanProp,
     reverse: booleanProp,
-    onChange: eventProp<(value: number) => void>(),
-    onInput: eventProp<(value: number) => void>()
+    range: booleanProp,
+    onChange: eventProp<(value: number | number[]) => void>(),
+    onInput: eventProp<(value: number | number[]) => void>()
   },
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<number>(() => handler.value?.focus())
+      useFieldStore<number | number[]>(() => (startTrigger.value || endTrigger.value)?.focus())
 
     const props = useProps('slider', _props, {
       state: createStateProp(state),
@@ -105,7 +114,7 @@ export default defineComponent({
       max: 100,
       step: {
         default: 1,
-        validator: (value: number) => value > 0 && Math.ceil(value) === value
+        validator: value => value > 0 && Math.ceil(value) === value
       },
       vertical: false,
       hideTip: false,
@@ -113,36 +122,20 @@ export default defineComponent({
       disabled: () => disabled.value,
       loading: () => loading.value,
       loadingLock: false,
-      reverse: false
+      reverse: false,
+      range: false
     })
 
     const nh = useNameHelper('slider')
-    const currentValue = ref(props.value / props.step) // 按每 step 为 1 的 value
-    const sliding = ref(false)
-    const isTipShow = ref(false)
+    const currentValue = ref([0, 0]) // 按每 step 为 1 的 value
+    const sliding = ref([false, false])
+    const triggerType = ref(TriggerType.END)
 
     const { timer } = useSetTimeout()
-    const { target: wrapper } = useModifier({
-      passive: false,
-      onKeyDown: (event, modifier) => {
-        if (modifier.up || modifier.down || modifier.left || modifier.right) {
-          event.preventDefault()
-          event.stopPropagation()
-
-          if (modifier.up || modifier.left) {
-            currentValue.value -= 1
-          } else {
-            currentValue.value += 1
-          }
-
-          verifyValue()
-        }
-      }
-    })
 
     const track = ref<HTMLElement | null>(null)
-    const tooltip = ref<(InstanceType<typeof Tooltip> & TooltipExposed) | null>(null)
-    const handler = ref<HTMLElement | null>(null)
+    const startTrigger = ref<InstanceType<typeof SliderTrigger> | null>(null)
+    const endTrigger = ref<InstanceType<typeof SliderTrigger> | null>(null)
 
     const className = computed(() => {
       return {
@@ -150,7 +143,7 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bm(props.state)]: props.state !== 'default',
         [nh.bm('vertical')]: props.vertical,
-        [nh.bm('sliding')]: sliding.value,
+        [nh.bm('sliding')]: sliding.value[1] || sliding.value[0],
         [nh.bm('disabled')]: props.disabled,
         [nh.bm('loading')]: props.loading && props.loadingLock,
         [nh.bm('reverse')]: props.reverse
@@ -160,47 +153,89 @@ export default defineComponent({
     const stepMin = computed(() => Math.round(Math.min(props.min, props.max) / props.step))
     // 按每 step 算的最大值
     const stepMax = computed(() => Math.round(Math.max(props.min, props.max) / props.step))
-    const truthValue = computed(() => Math.round(currentValue.value * props.step))
-    const total = computed(() => stepMax.value - stepMin.value || 1)
-    const percent = computed(() => ((currentValue.value - stepMin.value) / total.value) * 100)
-    const fillerStyle = computed(() => {
-      return {
-        [props.vertical ? 'height' : 'width']: `${percent.value}%`
-      }
+    const truthValue = computed(() => {
+      return [
+        Math.round(currentValue.value[0] * props.step),
+        Math.round(currentValue.value[1] * props.step)
+      ]
     })
-    const handlerStyle = computed(() => {
-      const reverse = props.reverse
+    const total = computed(() => stepMax.value - stepMin.value || 1)
+    const percent = computed(() => {
+      return [
+        ((currentValue.value[0] - stepMin.value) / total.value) * 100,
+        ((currentValue.value[1] - stepMin.value) / total.value) * 100
+      ]
+    })
+    const fillerStyle = computed(() => {
+      const { vertical, reverse } = props
+      const offset = props.range ? Math.min(percent.value[0], percent.value[1]) : 0
 
       return {
-        [reverse ? 'bottom' : 'top']: props.vertical ? `${percent.value}%` : '50%',
-        [reverse ? 'right' : 'left']: props.vertical ? '50%' : `${percent.value}%`,
+        transform: `
+          translate${vertical ? 'Y' : 'X'}(${reverse ? '-' : ''}${offset}%)
+          translateZ(0)
+          scale${vertical ? 'Y' : 'X'}(${Math.abs(percent.value[0] - percent.value[1]) / 100})
+        `,
+        transformOrigin: `${vertical ? 50 : reverse ? 100 : 0}% ${
+          vertical ? (reverse ? 100 : 0) : 50
+        }%`
+      }
+    })
+    const startTriggerStyle = computed(() => {
+      const { vertical, reverse } = props
+
+      return {
+        [reverse ? 'bottom' : 'top']: vertical ? `${percent.value[0]}%` : '50%',
+        [reverse ? 'right' : 'left']: vertical ? '50%' : `${percent.value[0]}%`,
+        zIndex: triggerType.value === TriggerType.START ? 1 : undefined,
+        transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
+      }
+    })
+    const endTriggerStyle = computed(() => {
+      const { vertical, reverse } = props
+
+      return {
+        [reverse ? 'bottom' : 'top']: vertical ? `${percent.value[1]}%` : '50%',
+        [reverse ? 'right' : 'left']: vertical ? '50%' : `${percent.value[1]}%`,
+        zIndex: triggerType.value === TriggerType.END ? 1 : undefined,
         transform: `translate(${reverse ? '' : '-'}50%, ${reverse ? '' : '-'}50%)`
       }
     })
 
+    parseValue(props.value)
+    verifyValue()
+
     watch(
       () => props.value,
       value => {
-        currentValue.value = value / props.step
+        parseValue(value)
         verifyValue()
       }
     )
 
-    onMounted(() => {
-      verifyValue()
-    })
+    function parseValue(value: number | number[]) {
+      if (props.range) {
+        const values = Array.isArray(value) ? value : [value, 100]
+
+        currentValue.value = [values[0] / props.step, values[1] / props.step]
+      } else {
+        currentValue.value = [stepMin.value, (Array.isArray(value) ? value[0] : value) / props.step]
+      }
+    }
 
     function verifyValue() {
-      currentValue.value = Math.max(
-        stepMin.value,
-        Math.min(stepMax.value, Math.round(currentValue.value))
-      )
+      currentValue.value = currentValue.value.map(value => {
+        return Math.max(stepMin.value, Math.min(stepMax.value, Math.round(value)))
+      })
     }
 
     function emitChange() {
-      setFieldValue(truthValue.value)
-      emitEvent(props.onChange, truthValue.value)
-      emit('update:value', truthValue.value)
+      const [start, end] = truthValue.value
+      const value = props.range ? (start > end ? [end, start] : [start, end]) : end
+
+      setFieldValue(value)
+      emitEvent(props.onChange, value)
+      emit('update:value', value)
       validateField()
     }
 
@@ -213,7 +248,7 @@ export default defineComponent({
       const reverse = props.reverse
       const client = vertical ? event.clientY : event.clientX
 
-      currentValue.value =
+      currentValue.value[triggerType.value] =
         (reverse ? -1 : 1) *
           ((client -
             trackRect[vertical ? (reverse ? 'bottom' : 'top') : reverse ? 'right' : 'left']) /
@@ -230,11 +265,17 @@ export default defineComponent({
       computeValue(event)
       verifyValue()
 
-      if (tooltip.value) {
-        tooltip.value.updatePopper()
+      if (startTrigger.value) {
+        startTrigger.value.updateTooltip()
       }
 
-      emitEvent(props.onInput, truthValue.value)
+      if (endTrigger.value) {
+        endTrigger.value.updateTooltip()
+      }
+
+      const [start, end] = truthValue.value
+      const value = props.range ? (start > end ? [end, start] : [start, end]) : end
+      emitEvent(props.onInput, value)
     })
 
     function handleTrackDown(event: PointerEvent) {
@@ -245,24 +286,29 @@ export default defineComponent({
       event.preventDefault()
 
       trackRect = track.value.getBoundingClientRect()
-      sliding.value = true
+
+      if (props.range) {
+        const { vertical, reverse } = props
+        const client = vertical ? event.clientY : event.clientX
+        const downPercent =
+          ((reverse
+            ? trackRect[vertical ? 'bottom' : 'right'] - client
+            : client - trackRect[vertical ? 'top' : 'left']) /
+            trackRect[vertical ? 'height' : 'width']) *
+          100
+
+        triggerType.value =
+          Math.abs(downPercent - percent.value[0]) < Math.abs(downPercent - percent.value[1])
+            ? TriggerType.START
+            : TriggerType.END
+      } else {
+        triggerType.value = TriggerType.END
+      }
+
+      sliding.value[triggerType.value] = true
 
       computeValue(event)
       verifyValue()
-
-      document.addEventListener('pointermove', handleMove)
-      document.addEventListener('pointerup', handleMoveEnd)
-    }
-
-    function handleMoveStart(event: PointerEvent) {
-      if (!track.value || props.disabled || (props.loading && props.loadingLock)) return
-
-      clearTimeout(timer.sliding)
-      event.stopPropagation()
-      event.preventDefault()
-
-      trackRect = track.value.getBoundingClientRect()
-      sliding.value = true
 
       document.addEventListener('pointermove', handleMove)
       document.addEventListener('pointerup', handleMoveEnd)
@@ -281,25 +327,7 @@ export default defineComponent({
       emitChange()
 
       timer.sliding = setTimeout(() => {
-        sliding.value = false
-      }, 250)
-    }
-
-    function showTooltip() {
-      clearTimeout(timer.hover)
-
-      if (!props.disabled) {
-        timer.hover = setTimeout(() => {
-          isTipShow.value = true
-        }, 250)
-      }
-    }
-
-    function hideTooltip() {
-      clearTimeout(timer.hover)
-
-      timer.hover = setTimeout(() => {
-        isTipShow.value = false
+        sliding.value[triggerType.value] = false
       }, 250)
     }
 
@@ -315,22 +343,18 @@ export default defineComponent({
       nh,
       idFor,
       sliding,
-      isTipShow,
 
       className,
       truthValue,
       fillerStyle,
-      handlerStyle,
+      startTriggerStyle,
+      endTriggerStyle,
 
-      wrapper,
       track,
-      tooltip,
-      handler,
+      startTrigger,
+      endTrigger,
 
       handleTrackDown,
-      handleMoveStart,
-      showTooltip,
-      hideTooltip,
       disableEvent
     }
   }

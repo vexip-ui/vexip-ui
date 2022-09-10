@@ -1,6 +1,6 @@
 <template>
   <div style="max-width: 400px;">
-    <Slider v-model:value="value" :disabled="disabled"></Slider>
+    <Slider v-model:value="value" range :disabled="disabled"></Slider>
   </div>
   <p>
     Disabled:
@@ -11,6 +11,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const value = ref(20)
+const value = ref(0)
 const disabled = ref(false)
 </script>

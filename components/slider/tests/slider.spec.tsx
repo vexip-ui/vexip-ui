@@ -9,8 +9,8 @@ vi.useFakeTimers()
 async function toggleMove(el: HTMLElement, value = 40) {
   const downEvent = new CustomEvent('pointerdown') as any
   downEvent.button = 0
-  downEvent.clientX = 0
-  downEvent.clientY = 0
+  downEvent.clientX = value
+  downEvent.clientY = value
   el.dispatchEvent(downEvent)
   await nextTick()
 
@@ -41,18 +41,19 @@ describe('Slider', () => {
       props: { value: 40 }
     })
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('width: 40%;')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.4)')
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 40%;')
 
     await wrapper.setProps({ value: 60 })
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('width: 60%;')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.6)')
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 60%;')
   })
 
-  it('min and max', () => {
+  it('min and max', async () => {
     const wrapper = mount(() => <Slider value={65} min={50} max={200}></Slider>)
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('width: 10%;')
+    await nextTick()
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.1)')
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 10%;')
   })
 
@@ -75,13 +76,13 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(trigger.element as HTMLElement)
+    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement)
     expect(onInput).toHaveBeenCalled()
     expect(onInput).toHaveBeenCalledWith(40)
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith(40)
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('width: 40%;')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.4)')
     expect(trigger.attributes('style')).toContain('left: 40%;')
 
     trackMock.mockRestore()
@@ -113,7 +114,7 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(trigger.element as HTMLElement)
+    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement)
     expect(onChange).not.toHaveBeenCalled()
     expect(trigger.attributes('style')).toContain('left: 0%;')
 
@@ -165,10 +166,10 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(trigger.element as HTMLElement, 2)
+    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 2)
     expect(trigger.attributes('style')).toContain('left: 0%;')
 
-    await toggleMove(trigger.element as HTMLElement, 3)
+    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 3)
     expect(trigger.attributes('style')).toContain('left: 5%;')
 
     trackMock.mockRestore()
@@ -194,8 +195,8 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(trigger.element as HTMLElement)
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('height: 40%;')
+    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement)
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleY(0.4)')
     expect(trigger.attributes('style')).toContain('top: 40%;')
 
     trackMock.mockRestore()
@@ -220,14 +221,61 @@ describe('Slider', () => {
       toJSON: noop
     }))
 
-    await toggleMove(trigger.element as HTMLElement, -40)
+    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, -40)
     expect(onInput).toHaveBeenCalled()
     expect(onInput).toHaveBeenCalledWith(40)
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith(40)
 
-    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('width: 40%;')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.4)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
+      'transform-origin: 100% 50%;'
+    )
     expect(trigger.attributes('style')).toContain('right: 40%;')
+
+    trackMock.mockRestore()
+  })
+
+  it('range', async () => {
+    const onInput = vi.fn()
+    const onChange = vi.fn()
+    const wrapper = mount(() => (
+      <Slider value={[20, 50]} range onInput={onInput} onChange={onChange}></Slider>
+    ))
+
+    const trackEl = wrapper.find('.vxp-slider__track').element as HTMLElement
+
+    const trackMock = vi.spyOn(trackEl, 'getBoundingClientRect').mockImplementation(() => ({
+      x: 0,
+      y: 0,
+      top: 0,
+      left: 0,
+      width: 100,
+      height: 100,
+      right: 0,
+      bottom: 0,
+      toJSON: noop
+    }))
+
+    const triggers = wrapper.findAll('.vxp-slider__trigger')
+
+    expect(triggers.length).toEqual(2)
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.3)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(20%)')
+
+    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 30)
+    expect(onInput).toHaveBeenCalled()
+    expect(onInput).toHaveBeenCalledWith([30, 50])
+    expect(onChange).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalledWith([30, 50])
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.2)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(30%)')
+
+    await toggleMove(wrapper.find('.vxp-slider').element as HTMLElement, 80)
+    expect(onInput).toHaveBeenCalledWith([30, 80])
+    expect(onChange).toHaveBeenCalledWith([30, 80])
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('scaleX(0.5)')
+    expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain('translateX(30%)')
 
     trackMock.mockRestore()
   })

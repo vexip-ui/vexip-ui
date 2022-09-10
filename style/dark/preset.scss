@@ -10,19 +10,34 @@
   @include c.define-preset-values('fill-color', $fill-color-map);
   @include c.define-preset-values('shadow-color', $shadow-color-map);
 
-  .vxp-button-vars {
-    @include c.define-preset-values('button', (
-      pulse-size: 8px,
-      pulse-opacity: 90%
-    ));
+  .#{c.$namespace}-button-vars {
+    @include c.define-preset-values(
+      'button',
+      (
+        pulse-size: 8px,
+        pulse-opacity: 90%
+      )
+    );
   }
 
-  .vxp-menu-vars {
-    @include c.define-preset-values('menu', (
-      label-color-dark: #495057,
-      label-color-hover-dark: c.get-css-var('color-primary-base'),
-      label-color-visible-dark: c.get-css-var('color-white'),
-      label-color-disabled-dark: #adb5bd,
-    ));
+  .#{c.$namespace}-menu-vars {
+    @include c.define-preset-values(
+      'menu',
+      (
+        label-color-dark: #495057,
+        label-color-hover-dark: c.get-css-var('color-primary-base'),
+        label-color-visible-dark: c.get-css-var('color-white'),
+        label-color-disabled-dark: #adb5bd
+      )
+    );
+  }
+
+  .#{c.$namespace}-slider {
+    @include c.define-preset-values(
+      'slider',
+      (
+        handler-b-color-disabled: rgba(0, 0, 0, 0.4)
+      )
+    );
   }
 }

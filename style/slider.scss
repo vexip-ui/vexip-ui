@@ -138,7 +138,10 @@ $slider: map.merge(
     border-radius: $handler-size;
     outline: 0;
     box-shadow: get-css-var('slider-handler-shadow');
-    transition: get-css-var('transition-shadow'), get-css-var('transition-transform');
+    transition:
+      get-css-var('transition-border'),
+      get-css-var('transition-shadow'),
+      get-css-var('transition-transform');
 
     &:hover {
       box-shadow: get-css-var('slider-handler-shadow-hover');
@@ -146,6 +149,11 @@ $slider: map.merge(
     }
 
     &:focus {
+      box-shadow: get-css-var('slider-handler-shadow-focus');
+      transform: scale(get-css-var('slider-handler-scale-focus'));
+    }
+
+    &--sliding {
       box-shadow: get-css-var('slider-handler-shadow-focus');
       transform: scale(get-css-var('slider-handler-scale-focus'));
     }
@@ -161,11 +169,6 @@ $slider: map.merge(
     &--active::before {
       opacity: 100%;
     }
-  }
-
-  &--sliding &__handler {
-    box-shadow: get-css-var('slider-handler-shadow-focus');
-    transform: scale(get-css-var('slider-handler-scale-focus'));
   }
 
   &--disabled &__handler {
