@@ -6,7 +6,7 @@
 | simple       | `boolean`                                                               | 开启后，按钮将变为浅色系的简约风格             | `false`     | -       |
 | ghost        | `boolean`                                                               | 开启后，按钮将变成背景颜色透明的样式           | `false`     | -       |
 | text         | `boolean`                                                               | 设置是否为文本按钮                             | `false`     | `2.0.0` |
-| dsahed       | `boolean`                                                               | 设置是否为虚线边框按钮                         | `false`     | `2.0.0` |
+| dashed       | `boolean`                                                               | 设置是否为虚线边框按钮                         | `false`     | `2.0.0` |
 | size         | `'small' \| 'default' \| 'large'`                                       | 按钮的大小                                     | `'default'` | -       |
 | disabled     | `boolean`                                                               | 设置是否为禁用状态 设置                        | `false`     | -       |
 | loading      | `boolean`                                                               | 设置是否为加载状态 设置                        | `false`     | -       |
