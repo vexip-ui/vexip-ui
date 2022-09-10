@@ -6,7 +6,7 @@
 | simple       | `boolean`                                                               | Once set, the button will change to a minimalist style in light colors                 | `false`     | -       |
 | ghost        | `boolean`                                                               | Once set, the button will be styled with a transparent background color                | `false`     | -       |
 | text         | `boolean`                                                               | Set whether it is a text button                                                        | `false`     | `2.0.0` |
-| dsahed       | `boolean`                                                               | Set whether it is a dashed button                                                      | `false`     | `2.0.0` |
+| dashed       | `boolean`                                                               | Set whether it is a dashed button                                                      | `false`     | `2.0.0` |
 | size         | `'small' \| 'default' \| 'large'`                                       | The size of the button                                                                 | `'default'` | -       |
 | disabled     | `boolean`                                                               | Set whether it is a disabled button                                                    | `false`     | -       |
 | loading      | `boolean`                                                               | Set whether it is a loading button                                                     | `false`     | -       |
