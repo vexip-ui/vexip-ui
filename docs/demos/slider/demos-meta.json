@@ -5,6 +5,8 @@
   "range",
   "vertical",
   "reverse",
+  "markers",
+  "marker-only",
   "loading",
   "state"
 ]

@@ -16,14 +16,15 @@ $slider: map.merge(
     handler-bg-color: get-css-var('color-white'),
     handler-b-width: 2px,
     handler-b-color: get-css-var('color-primary-base'),
-    handler-b-color-disabled: get-css-var('content-color-disabled'),
+    handler-b-color-disabled: get-css-var('fill-color-disabled'),
     handler-s-color: get-css-var('color-primary-light-6'),
     handler-shadow: unset,
     handler-shadow-hover: unset,
     handler-shadow-focus: 0 0 4px 1px get-css-var('slider-handler-s-color'),
     handler-shadow-disabled: unset,
     handler-scale-hover: 1.25,
-    handler-scale-focus: 1.25
+    handler-scale-focus: 1.25,
+    marker-size: 8px
   ),
   $slider
 );
@@ -47,15 +48,25 @@ $slider: map.merge(
 
   position: relative;
   display: flex;
+  flex-direction: column;
   padding: $padding 0;
   margin: 2px $margin;
   cursor: pointer;
 
   &--vertical {
     display: inline-flex;
+    flex-direction: row;
     height: 100%;
     padding: 0 $padding;
     margin: $margin 2px;
+  }
+
+  &--with-marker {
+    margin-bottom: 32px;
+  }
+
+  &--vertical#{&}--with-marker {
+    margin-right: 32px;
   }
 
   &--loading {
@@ -190,6 +201,42 @@ $slider: map.merge(
   &__tip {
     min-width: auto;
     min-height: auto;
+    user-select: none;
+  }
+
+  $marker-size: get-css-var('slider-marker-size');
+
+  &__point {
+    position: absolute;
+    width: $marker-size;
+    height: $marker-size;
+    pointer-events: none;
+    background-color: get-css-var('slider-handler-bg-color');
+    border:
+      get-css-var('slider-handler-b-width') solid
+      get-css-var('slider-handler-b-color-disabled');
+    border-radius: $marker-size;
+
+    &--in-range {
+      border-color: get-css-var('slider-handler-b-color');
+    }
+  }
+
+  &__markers {
+    position: absolute;
+    top: calc(get-css-var('slider-handler-size') + 6px);
+    width: 100%;
+  }
+
+  &--vertical &__markers {
+    top: auto;
+    left: calc(get-css-var('slider-handler-size') + 6px);
+    width: auto;
+    height: 100%;
+  }
+
+  &__marker {
+    position: absolute;
     user-select: none;
   }
 
