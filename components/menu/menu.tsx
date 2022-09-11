@@ -55,7 +55,7 @@ export default defineComponent({
     onReduce: eventProp<(label: string, meta: Record<string, any>) => void>()
   },
   emits: ['update:active'],
-  setup(_props, { slots, emit }) {
+  setup(_props, { slots, emit, expose }) {
     const props = useProps('menu', _props, {
       active: {
         default: null,
@@ -188,6 +188,8 @@ export default defineComponent({
       })
     })
 
+    expose({ expandItemByLabel })
+
     function parseRoutesToMenus(routes: Readonly<RouteRecordRaw[]>) {
       const root: MenuOptions = { label: '', children: [] }
       const loop = Array.from(routes).map(route => ({ parent: root, route }))
@@ -305,6 +307,14 @@ export default defineComponent({
         }
 
         el.addEventListener('transitionend', callback)
+      }
+    }
+
+    function expandItemByLabel(label: string) {
+      for (const item of menuItemSet) {
+        if (item.label === label) {
+          item.toggleGroupExpanded(true, true)
+        }
       }
     }
 
