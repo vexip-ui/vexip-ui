@@ -1,2 +1,2 @@
 export { default as Menu } from './menu'
-export type { MenuMarkerType, MenuGroupType, MenuOptions } from './symbol'
+export type { MenuMarkerType, MenuGroupType, MenuOptions, MenuExposed } from './symbol'
