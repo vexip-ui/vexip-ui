@@ -2,13 +2,13 @@
 
 | Name         | Type                                               | Description                                                                                    | Default   | Since   |
 | ------------ | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- | ------- |
-| state        | `'default' \| 'success' \| 'error' \| 'warning'`   | Set the lider type                                                                             | `default` | -       |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'`   | Set the slider type                                                                            | `default` | `2.0.0` |
 | value        | `number \| number[]`                               | The value of the sliding input bar, you can use `v-model` two-way binding                      | `0`       | `2.0.0` |
 | min          | `number`                                           | The min value of the slider                                                                    | `0`       | -       |
 | max          | `number`                                           | The max value of the slider                                                                    | `100`     | -       |
 | step         | `number`                                           | The span of each value change of the sliding input bar                                         | `1`       | -       |
 | vertical     | `boolean`                                          | Set whether the sliding input bar is vertical, the parent element needs to have a valid height | `false`   | -       |
-| hide-tip     | `boolean`                                          | Set whether to disable tooltip                                                                 | `false`   | -       |
+| hide-tip     | `boolean`                                          | Set whether to disable Tooltip                                                                 | `false`   | -       |
 | tip-transfer | `boolean`                                          | Set Tooltip's `transfer` property                                                              | `false`   | -       |
 | disabled     | `boolean`                                          | Set whether to disable                                                                         | `false`   | -       |
 | loading      | `boolean`                                          | Set whether is loading                                                                         | `false`   | `2.0.0` |
