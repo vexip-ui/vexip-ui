@@ -8,5 +8,6 @@
   "props",
   "async-load",
   "slot",
-  "control"
+  "control",
+  "floor-select"
 ]

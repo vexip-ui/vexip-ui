@@ -86,7 +86,8 @@ export interface TreeState {
   handleNodeDrop(nodeInstance: TreeNodeInstance): void,
   handleNodeDragEnd(nodeInstance: TreeNodeInstance): void,
   handleHittingChange(type: 'up' | 'down'): void,
-  handleNodeHitting(nodeEl: HTMLElement | null): void
+  handleNodeHitting(nodeEl: HTMLElement | null): void,
+  handleLabelClick(node: TreeNodeProps): void
 }
 
 export interface TreeNodePropsState {

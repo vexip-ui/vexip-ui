@@ -60,7 +60,7 @@
             [nh.bem('label', 'is-floor')]: floorSelect && node.children?.length,
             [nh.bem('label', 'secondary')]: secondary
           }"
-          @click="handleToggleSelect()"
+          @click="handleLabelClick()"
         >
           <Renderer
             v-if="renderer"
@@ -433,6 +433,11 @@ export default defineComponent({
       }
     }
 
+    function handleLabelClick() {
+      treeState.handleLabelClick(props.node)
+      handleToggleSelect()
+    }
+
     function asyncLoadCallback(success = true) {
       setValue('loading', false)
       setValue('expanded', success !== false)
@@ -520,6 +525,7 @@ export default defineComponent({
       handleToggleCheck,
       handleToggleExpand,
       handleToggleSelect,
+      handleLabelClick,
       handleDragStart,
       handleDragOver,
       handleDragLeave,

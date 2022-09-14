@@ -167,7 +167,8 @@ export default defineComponent({
     onDragStart: eventProp<(data: Data, node: TreeNodeProps) => void>(),
     onDragOver: eventProp<(data: Data, node: TreeNodeProps) => void>(),
     onDrop: eventProp<(data: Data, node: TreeNodeProps, type: DropType) => void>(),
-    onDragEnd: eventProp<(data: Data, node: TreeNodeProps) => void>()
+    onDragEnd: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+    onLabelClick: eventProp<(data: Data, node: TreeNodeProps) => void>()
   },
   emits: [],
   setup(_props) {
@@ -336,7 +337,8 @@ export default defineComponent({
         handleNodeDrop,
         handleNodeDragEnd,
         handleHittingChange,
-        handleNodeHitting
+        handleNodeHitting,
+        handleLabelClick
       })
     )
     provide(
@@ -631,6 +633,10 @@ export default defineComponent({
 
     function handleNodeClick(node: TreeNodeProps) {
       emitEvent(props.onNodeClick, node.data, node)
+    }
+
+    function handleLabelClick(node: TreeNodeProps) {
+      emitEvent(props.onLabelClick, node.data, node)
     }
 
     function handleNodeSelect(node: TreeNodeProps) {
