@@ -8,7 +8,7 @@
   "private": true,
   "dependencies": {
     "@vexip-ui/icons": "workspace:*",
-    "@vexip-ui/mixins": "workspace:*",
+    "@vexip-ui/hooks": "workspace:*",
     "@vexip-ui/utils": "workspace:*",
     "prismjs": "^1.28.0",
     "vexip-ui": "workspace:*",

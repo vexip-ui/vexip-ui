@@ -83,7 +83,7 @@ import WheelItem from './wheel-item.vue'
 import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
-import { useDisplay, useModifier } from '@vexip-ui/mixins'
+import { useDisplay, useModifier } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,

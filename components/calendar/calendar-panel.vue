@@ -64,7 +64,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import { useHover } from '@vexip-ui/mixins'
+import { useHover } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,

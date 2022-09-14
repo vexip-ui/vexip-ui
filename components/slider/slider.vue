@@ -113,7 +113,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useSetTimeout } from '@vexip-ui/mixins'
+import { useSetTimeout } from '@vexip-ui/hooks'
 import { throttle } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'

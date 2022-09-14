@@ -87,7 +87,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useMoving } from '@vexip-ui/mixins'
+import { useMoving } from '@vexip-ui/hooks'
 import { isPromise } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 

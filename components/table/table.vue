@@ -150,7 +150,7 @@ import {
   toNumber,
   nextFrameOnce
 } from '@vexip-ui/utils'
-import { useSetTimeout } from '@vexip-ui/mixins'
+import { useSetTimeout } from '@vexip-ui/hooks'
 import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 

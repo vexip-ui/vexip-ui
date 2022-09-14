@@ -190,8 +190,8 @@ const packages = [
   'vexip-ui',
   // 'plaground',
   'common/config',
+  'common/hooks',
   'common/icons',
-  'common/mixins',
   'common/utils'
 ]
 

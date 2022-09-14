@@ -154,7 +154,7 @@ import {
   placementWhileList,
   useClickOutside,
   useSetTimeout
-} from '@vexip-ui/mixins'
+} from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
@@ -173,7 +173,7 @@ import { useColumn } from './helper'
 import { datePickerTypes } from './symbol'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 import type { Dateable } from '@vexip-ui/utils'
 import type { TimeType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
 

@@ -16,7 +16,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useResize } from '@vexip-ui/mixins'
+import { useResize } from '@vexip-ui/hooks'
 import { nextFrameOnce } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'

@@ -1,7 +1,7 @@
 import { defineComponent, ref, computed, watch, Transition, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
-import { useHover } from '@vexip-ui/mixins'
+import { useHover } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,

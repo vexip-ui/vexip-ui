@@ -210,7 +210,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/mixins'
+import { useModifier } from '@vexip-ui/hooks'
 import { isFunction, range, boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'

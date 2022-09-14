@@ -35,7 +35,7 @@ import {
 } from 'vue'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { USE_TOUCH, isDefined, throttle, boundRange } from '@vexip-ui/utils'
-import { useTrack } from './mixins'
+import { useTrack } from './hooks'
 import { ScrollbarType } from './symbol'
 
 import type { PropType } from 'vue'

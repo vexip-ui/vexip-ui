@@ -115,12 +115,12 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/mixins'
+import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 import type { IconMinorProps } from '@/components/icon'
 import type { MenuOptions } from './symbol'
 

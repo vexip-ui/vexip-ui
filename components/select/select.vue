@@ -223,7 +223,7 @@ import {
   useClickOutside,
   useModifier,
   useMounted
-} from '@vexip-ui/mixins'
+} from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
@@ -242,7 +242,7 @@ import { isNull, removeArrayItem } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 import type { VirtualListExposed } from '@/components/virtual-list'
 import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectOptionState } from './symbol'
 

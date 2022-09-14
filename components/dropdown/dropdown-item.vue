@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, toRef, inject } from 'vue'
 import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
-import { useLabel } from './mixins'
+import { useLabel } from './hooks'
 import { SELECT_HANDLER } from './symbol'
 
 export default defineComponent({

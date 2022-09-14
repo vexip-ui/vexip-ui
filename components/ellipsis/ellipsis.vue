@@ -37,10 +37,10 @@
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
 import { useNameHelper, useProps, booleanProp, classProp } from '@vexip-ui/config'
-import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
+import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 import type { TooltipTheme } from '@/components/tooltip'
 
 export default defineComponent({

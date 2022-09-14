@@ -1,5 +1,5 @@
 import { ref, reactive, computed, watch, onMounted } from 'vue'
-import { useMounted, isHiddenElement } from '@vexip-ui/mixins'
+import { useMounted, isHiddenElement } from '@vexip-ui/hooks'
 import { multipleFixed, boundRange } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 

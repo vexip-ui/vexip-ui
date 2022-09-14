@@ -9,11 +9,11 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { placementWhileList } from '@vexip-ui/mixins'
+import { placementWhileList } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, booleanStringProp, classProp } from '@vexip-ui/config'
 
 import type { PropType, CSSProperties } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 
 export default defineComponent({
   name: 'Bubble',

@@ -46,7 +46,7 @@
 import { defineComponent, ref } from 'vue'
 import { Tooltip } from '@/components/tooltip'
 import { useNameHelper } from '@vexip-ui/config'
-import { useSetTimeout, useModifier } from '@vexip-ui/mixins'
+import { useSetTimeout, useModifier } from '@vexip-ui/hooks'
 
 import type { TooltipExposed } from '@/components/tooltip'
 

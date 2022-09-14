@@ -1,5 +1,5 @@
 {
-  "name": "@vexip-ui/mixins",
+  "name": "@vexip-ui/hooks",
   "version": "1.6.0",
   "license": "MIT",
   "author": "qmhc",
@@ -17,11 +17,11 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/mixins#readme",
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/hooks#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vexip-ui/vexip-ui.git",
-    "directory": "common/mixins"
+    "directory": "common/hooks"
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.3.1",

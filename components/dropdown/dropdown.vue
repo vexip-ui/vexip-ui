@@ -51,7 +51,7 @@ import {
 } from 'vue'
 import { Portal } from '@/components/portal'
 import DropdownDrop from './dropdown-drop'
-import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
+import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
@@ -61,11 +61,11 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useLabel } from './mixins'
+import { useLabel } from './hooks'
 import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 
 export type DropdownTrigger = 'hover' | 'click' | 'custom'
 

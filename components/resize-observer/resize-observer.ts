@@ -1,6 +1,6 @@
 import { defineComponent, onMounted, onBeforeUnmount, getCurrentInstance, renderSlot } from 'vue'
 import { useProps, booleanNumberProp, eventProp, emitEvent } from '@vexip-ui/config'
-import { useResize } from '@vexip-ui/mixins'
+import { useResize } from '@vexip-ui/hooks'
 import { throttle } from '@vexip-ui/utils'
 
 export default defineComponent({

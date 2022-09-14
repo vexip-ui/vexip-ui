@@ -142,7 +142,7 @@ import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
 import { MagnifyingGlass, Retweet, ChevronRight, ChevronLeft } from '@vexip-ui/icons'
 import { useNameHelper, useLocale, stateProp } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/mixins'
+import { useModifier } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'

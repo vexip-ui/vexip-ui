@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { Bubble } from '..'
-import { placementWhileList } from '@vexip-ui/mixins'
+import { placementWhileList } from '@vexip-ui/hooks'
 
 describe('Bubble', () => {
   it('render', () => {
