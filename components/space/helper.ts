@@ -12,13 +12,13 @@ export function flatVNodes(children: VNodeNormalizedChildren) {
     if (vnode === null) continue
 
     if (Array.isArray(vnode)) {
-      loop.push(...vnode)
+      loop.unshift(...vnode)
     }
 
     if (!isVNode(vnode) || vnode.type === Comment) continue
 
     if (vnode.type === Fragment && Array.isArray(vnode.children)) {
-      loop.push(vnode.children)
+      loop.unshift(vnode.children)
     } else if (typeof vnode === 'string' || typeof vnode === 'number') {
       result.push(createTextVNode(vnode))
     } else {

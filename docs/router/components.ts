@@ -12,7 +12,12 @@ export function getComponentConfig(): ComponentGroup[] {
   return [
     {
       name: 'basis',
-      components: [{ name: 'Button' }, { name: 'Icon' }, { name: 'Linker' }]
+      components: [
+        { name: 'Button' },
+        { name: 'Icon' },
+        { name: 'Linker' },
+        { name: 'Typography', since: '2.0.0' }
+      ]
     },
     {
       name: 'layout',

@@ -176,6 +176,31 @@ $fill-color-map: map.merge(
   $fill-color-map
 );
 
+$font-family-map: () !default;
+$font-family-map: map.merge(
+  (
+    base: #{-apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji'},
+    mono: #{Lucida,
+    'lucida console',
+    'Courier New',
+    Consolas,
+    Monaco,
+    'andale mono',
+    'ubuntu mono',
+    monospace}
+  ),
+  $font-family-map
+);
+
 $font-size-map: () !default;
 $font-size-map: map.merge(
   (

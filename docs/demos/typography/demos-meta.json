@@ -1,1 +1,6 @@
-["basis"]
+[
+  "basis",
+  "text",
+  "title",
+  "title-marker"
+]

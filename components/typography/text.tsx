@@ -2,18 +2,23 @@ import { defineComponent, computed } from 'vue'
 import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
-import type { TextType } from './symbol'
+import type { TypographyType } from './symbol'
 
 export default defineComponent({
   name: 'Text',
   props: {
-    type: String as PropType<TextType>,
+    type: String as PropType<TypographyType>,
     tag: String,
     delete: booleanProp,
     strong: booleanProp,
     italic: booleanProp,
     underline: booleanProp,
-    code: booleanProp
+    code: booleanProp,
+    mark: booleanProp,
+    disabled: booleanProp,
+    keyboard: booleanProp,
+    thin: booleanProp,
+    reversed: booleanProp
   },
   emits: [],
   setup(_props, { slots }) {
@@ -24,7 +29,8 @@ export default defineComponent({
       strong: false,
       italic: false,
       underline: false,
-      code: false
+      code: false,
+      reversed: false
     })
 
     const nh = useNameHelper('text')
@@ -38,7 +44,12 @@ export default defineComponent({
         [nh.bm('strong')]: props.strong,
         [nh.bm('italic')]: props.italic,
         [nh.bm('underline')]: props.underline,
-        [nh.bm('code')]: props.code
+        [nh.bm('code')]: props.code,
+        [nh.bm('mark')]: props.mark,
+        [nh.bm('disabled')]: props.disabled,
+        [nh.bm('keyboard')]: props.keyboard,
+        [nh.bm('thin')]: props.thin,
+        [nh.bm('reversed')]: props.reversed
       }
     })
 

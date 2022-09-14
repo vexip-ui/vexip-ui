@@ -41,6 +41,7 @@ export interface I18nConfig {
     Button: string,
     Icon: string,
     Linker: string,
+    Typography: string,
 
     Grid: string,
     Divider: string,

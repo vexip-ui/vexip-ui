@@ -11,7 +11,8 @@ main().catch(error => {
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice', 'toast']
-  const ignores: string[] = []
+  const ignores = ['typography']
+  const typography = ['Title', 'Text', 'Blockquote', 'OL', 'UL', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'Strong']
   const exportComponents = allComponents.filter(c => !ignores.includes(c))
   const components = exportComponents.filter(c => !plugins.includes(c))
   const prettierConfig = await prettier.resolveConfig(path.resolve('.prettierrc.js'))
@@ -20,6 +21,10 @@ async function main() {
     ${
       exportComponents.map(component => `import { ${toCapitalCase(component)} } from './${component}'`).join('\n')
     }
+
+    import {
+      ${typography.join(',\n')}
+    } from './typography'
 
     import { buildInstall } from './create'
 
@@ -37,21 +42,27 @@ async function main() {
     const components = [
       ${components.map(toCapitalCase).join(',\n')},
       // plugins
-      ${plugins.map(toCapitalCase).join(', ')}
+      ${plugins.map(toCapitalCase).join(', ')},
+      // typography
+      ${typography.join(',\n')}
     ]
 
     export { buildInstall }
     export const install = buildInstall(components)
 
     ${
-      exportComponents.map(component => `export * from './${component}'`).join('\n')
+      allComponents.map(component => `export * from './${component}'`).join('\n')
     }
   `
 
   const types = `
     declare module 'vue' {
       export interface GlobalComponents {
-        ${components.map(name => `${toCapitalCase(name)}: typeof import('vexip-ui')['${toCapitalCase(name)}']`).join(',\n')}
+        ${
+          [...components, ...typography]
+            .map(name => `${toCapitalCase(name)}: typeof import('vexip-ui')['${toCapitalCase(name)}']`)
+            .join(',\n')
+        }
       }
 
       interface ComponentCustomProperties {
@@ -81,12 +92,12 @@ async function main() {
   await ESLint.outputFixes(await eslint.lintFiles(indexPath))
   await ESLint.outputFixes(await eslint.lintFiles(typesPath))
 
-  exportComponents
+  allComponents
     .filter(component => !fs.existsSync(`style/${component}.scss`))
     .forEach(component => fs.writeFileSync(`style/${component}.scss`, '', 'utf-8'))
 
   const styleIndex = '@forward \'./design/variables.scss\';\n\n@use \'./preset.scss\';\n\n' +
-    exportComponents.map(component => `@use './${component}.scss';`).join('\n') + '\n'
+    allComponents.map(component => `@use './${component}.scss';`).join('\n') + '\n'
   const stylePath = path.resolve(__dirname, '../style/index.scss')
 
   fs.writeFileSync(
