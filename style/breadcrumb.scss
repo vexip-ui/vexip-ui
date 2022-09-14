@@ -84,6 +84,7 @@ $breadcrumb: map.merge(
   }
 
   &__separator {
+    display: inline-flex;
     padding: 0 6px;
     color: get-css-var('breadcrumb-separator-color');
     cursor: pointer;

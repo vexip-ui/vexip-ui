@@ -11,7 +11,8 @@ $anchor: map.merge(
     track-width: 2px,
     track-style: solid,
     track-color: get-css-var('border-color-light-2'),
-    track: get-css-var('anchor-track-width') get-css-var('anchor-track-style') get-css-var('anchor-track-color'),
+    track: get-css-var('anchor-track-width') get-css-var('anchor-track-style')
+    get-css-var('anchor-track-color'),
     track-color-active: get-css-var('anchor-link-color-active'),
     pointer-size: 8px,
     pointer-bg-color: get-css-var('color-white'),
@@ -32,6 +33,7 @@ $anchor: map.merge(
   display: flex;
   flex-direction: column;
   padding-left: calc(get-css-var('anchor-pointer-size') * 0.5);
+  vertical-align: middle;
 
   &__list {
     padding: 0;

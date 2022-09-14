@@ -1,3 +1,11 @@
+### 预设类型
+
+```ts
+type DateType = 'year' | 'month' | 'date'
+type TimeType = 'hour' | 'minute' | 'second'
+type DateTimeType = DateType | TimeType
+```
+
 ### DatePicker 属性
 
 | 名称            | 类型                                                                    | 说明                                                                                                   | 默认值                  | 始于    |
@@ -36,14 +44,6 @@
 | loading-icon    | `Record<string, any>`                                                   | 设置加载中的图标                                                                                       | `Spinner`               | `2.0.0` |
 | loading-lock    | `boolean`                                                               | 设置在加载中时是否为只读                                                                               | `false`                 | `2.0.0` |
 | loading-spin    | `boolean`                                                               | 设置加载中图标是否使用旋转动画                                                                         | `false`                 | `2.0.0` |
-
-一些预设的类型：
-
-```ts
-type DateType = 'year' | 'month' | 'date'
-type TimeType = 'hour' | 'minute' | 'second'
-type DateTimeType = DateType | TimeType
-```
 
 ### DatePicker 事件
 

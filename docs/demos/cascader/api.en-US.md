@@ -1,3 +1,55 @@
+### Preset Types
+
+```ts
+type CascaderValue = (string | number)[] | (string | number)[][]
+
+interface CascaderKeyConfig {
+  value?: string,
+  label?: string,
+  children?: string,
+  disabled?: string,
+  hasChild?: string
+}
+
+interface CascaderOptionState {
+  id: number,
+  parent: number,
+  value: string | number,
+  fullValue: string,
+  label: string,
+  fullLabel: string,
+  children: CascaderOptionState[],
+  disabled: boolean,
+  hasChild: boolean,
+  checked: boolean,
+  partial: boolean,
+  loading: boolean,
+  loaded: boolean,
+  error: boolean,
+  childrenLoaded: boolean,
+  data: Record<string, any>
+}
+
+interface OptionState {
+  id: number
+  parent: number
+  value: string | number
+  fullValue: string
+  label: string
+  fullLabel: string
+  children: OptionState[]
+  disabled: boolean
+  hasChild: boolean
+  checked: boolean
+  partial: boolean
+  loading: boolean
+  loaded: boolean
+  error: boolean
+  childrenLoaded: boolean
+  data: Record<string, any>
+}
+```
+
 ### Cascader Props
 
 | Name            | Type                                                                                                                                                             | Description                                                                                                                                                                        | Default          | Since |
@@ -37,39 +89,6 @@
 | loading-lock    | `boolean`                                                                                                                                                        | Set whether to be read-only when loading                                                                                                                                           | `false`          | -     |
 | loading-spin    | `boolean`                                                                                                                                                        | Set whether to use spin animation for the loading icon                                                                                                                             | `false`          | -     |
 
-Some preset types:
-
-```ts
-type CascaderValue = (string | number)[] | (string | number)[][]
-
-interface CascaderKeyConfig {
-  value?: string,
-  label?: string,
-  children?: string,
-  disabled?: string,
-  hasChild?: string
-}
-
-interface CascaderOptionState {
-  id: number,
-  parent: number,
-  value: string | number,
-  fullValue: string,
-  label: string,
-  fullLabel: string,
-  children: CascaderOptionState[],
-  disabled: boolean,
-  hasChild: boolean,
-  checked: boolean,
-  partial: boolean,
-  loading: boolean,
-  loaded: boolean,
-  error: boolean,
-  childrenLoaded: boolean,
-  data: Record<string, any>
-}
-```
-
 ### Cascader Events
 
 | Name          | Description                                                                                                                                                    | Parameters                                                                        | Since |
@@ -92,26 +111,3 @@ interface CascaderOptionState {
 | control | Slot for selector main control content                                                                    | -                                                                                                         | -     |
 | suffix  | Slot for suffix icon content                                                                              | -                                                                                                         | -     |
 | empty   | Slot for empty option prompt content                                                                      | -                                                                                                         | -     |
-
-Type definitions for option states:
-
-```ts
-interface OptionState {
-  id: number
-  parent: number
-  value: string | number
-  fullValue: string
-  label: string
-  fullLabel: string
-  children: OptionState[]
-  disabled: boolean
-  hasChild: boolean
-  checked: boolean
-  partial: boolean
-  loading: boolean
-  loaded: boolean
-  error: boolean
-  childrenLoaded: boolean
-  data: Record<string, any>
-}
-```

@@ -1,3 +1,16 @@
+### Preset Types
+
+```ts
+type RawOption =
+  | string
+  | number
+  | {
+      value: string | number,
+      label?: string,
+      disabled?: boolean
+    }
+```
+
 ### Wheel Props
 
 | Name         | Type                                             | Description                                                                            | Default     | Since   |
@@ -12,19 +25,6 @@
 | disabled     | `boolean`                                        | Set whether the wheel is disabled                                                      | `false`     | `2.0.0` |
 | loading      | `boolean`                                        | Set whether is loading                                                                 | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | Set whether to be read-only when loading                                               | `false`     | `2.0.0` |
-
-Some preset types:
-
-```ts
-type RawOption =
-  | string
-  | number
-  | {
-      value: string | number,
-      label?: string,
-      disabled?: boolean
-    }
-```
 
 ### Wheel Events
 

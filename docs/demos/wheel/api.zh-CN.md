@@ -1,3 +1,16 @@
+### 预设类型
+
+```ts
+type RawOption =
+  | string
+  | number
+  | {
+      value: string | number,
+      label?: string,
+      disabled?: boolean
+    }
+```
+
 ### Wheel 属性
 
 | 名称         | 类型                                             | 说明                                             | 默认值      | 始于    |
@@ -12,19 +25,6 @@
 | disabled     | `boolean`                                        | 设置是否禁用滚轮                                 | `false`     | `2.0.0` |
 | loading      | `boolean`                                        | 设置是否为加载中                                 | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                        | 设置在加载中时是否为只读                         | `false`     | `2.0.0` |
-
-一些内置类型：
-
-```ts
-type RawOption =
-  | string
-  | number
-  | {
-      value: string | number,
-      label?: string,
-      disabled?: boolean
-    }
-```
 
 ### Wheel 事件
 

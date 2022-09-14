@@ -1,3 +1,33 @@
+### Preset Types
+
+```ts
+type Types =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'int'
+  | 'float'
+  | 'array'
+  | 'object'
+  | 'date'
+  | 'url'
+  | 'color'
+  | 'email'
+type Range = [number, number]
+type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
+
+interface Rule<T = any> {
+  required?: boolean,
+  type?: Types,
+  length?: number,
+  range?: Range,
+  strict?: boolean,
+  enums?: T[],
+  message?: string,
+  validator?(value: T, model: Record<string, any>): ValidatorReslut
+}
+```
+
 ### Form Props
 
 | Name          | Type                                   | Description                                                                                                                                   | Default     | Since   |
@@ -58,36 +88,6 @@
 | help             | `string`         | Set the help information for field                                                                                                                | `''`         | `2.0.0` |
 
 > Supported props of Column component include: span, offset, push, pull, order, flex, xs, sm, md, lg, xl, xxl
-
-The types related to `Rule`:
-
-```ts
-type Types =
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'int'
-  | 'float'
-  | 'array'
-  | 'object'
-  | 'date'
-  | 'url'
-  | 'color'
-  | 'email'
-type Range = [number, number]
-type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
-
-interface Rule<T = any> {
-  required?: boolean,
-  type?: Types,
-  length?: number,
-  range?: Range,
-  strict?: boolean,
-  enums?: T[],
-  message?: string,
-  validator?(value: T, model: Record<string, any>): ValidatorReslut
-}
-```
 
 ### FormItem Slots
 
