@@ -160,9 +160,18 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValues.value = Array.from(value)
-      },
-      { deep: true }
+        const checkedValues = new Set(value)
+        const allValues = Array.from(valueMap.keys())
+
+        currentValues.value = []
+
+        allValues.forEach(value => {
+          const checked = checkedValues.has(value)
+
+          valueMap.set(value, checkedValues.has(value))
+          checked && currentValues.value.push(value)
+        })
+      }
     )
     watch(currentValues, () => {
       updateControl()
