@@ -106,7 +106,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useHover, useSetTimeout } from '@vexip-ui/mixins'
+import { useHover, useSetTimeout } from '@vexip-ui/hooks'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
 import { CAROUSEL_STATE } from './symbol'

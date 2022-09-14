@@ -48,7 +48,7 @@
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
-import { useMoving } from '@vexip-ui/mixins'
+import { useMoving } from '@vexip-ui/hooks'
 import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
 
 export default defineComponent({

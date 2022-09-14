@@ -77,7 +77,7 @@
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
-import { useHover, useModifier } from '@vexip-ui/mixins'
+import { useHover, useModifier } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,

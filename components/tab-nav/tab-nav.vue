@@ -14,7 +14,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, onMounted, provide } from 'vue'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
-import { useDisplay } from '@vexip-ui/mixins'
+import { useDisplay } from '@vexip-ui/hooks'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 

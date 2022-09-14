@@ -187,7 +187,7 @@ import ColorAlpha from './color-alpha.vue'
 import ColorHue from './color-hue.vue'
 import ColorPalette from './color-palette.vue'
 import { useFieldStore } from '@/components/form'
-import { usePopper, placementWhileList, useClickOutside, useHover } from '@vexip-ui/mixins'
+import { usePopper, placementWhileList, useClickOutside, useHover } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
@@ -213,7 +213,7 @@ import {
 import { Xmark, ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
 
 type FormattedColor = string | RGBAColor | HSLAColor | HSVAColor

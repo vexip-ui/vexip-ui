@@ -26,10 +26,10 @@ import {
   usePopper,
   useSetTimeout,
   useListener
-} from '@vexip-ui/mixins'
+} from '@vexip-ui/hooks'
 
 import type { PropType } from 'vue'
-import type { Placement, VirtualElement } from '@vexip-ui/mixins'
+import type { Placement, VirtualElement } from '@vexip-ui/hooks'
 import type { ToopTipTrigger, TooltipVirtual } from './symbol'
 
 const TEXT_VNODE = createTextVNode('').type

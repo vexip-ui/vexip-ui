@@ -76,7 +76,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/mixins'
+import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/hooks'
 import { boundRange, toFixed } from '@vexip-ui/utils'
 import { InternalActionName } from './symbol'
 

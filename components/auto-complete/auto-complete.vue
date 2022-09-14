@@ -81,7 +81,7 @@ import { defineComponent, ref, computed, watch, watchEffect, onMounted, nextTick
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
-import { placementWhileList } from '@vexip-ui/mixins'
+import { placementWhileList } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
@@ -98,7 +98,7 @@ import {
 import { isNull } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 import type {
   AutoCompleteKeyConfig,
   AutoCompleteOptionState,

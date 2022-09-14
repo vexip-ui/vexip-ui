@@ -14,7 +14,7 @@ import { MenuItem } from '@/components/menu-item'
 import { Portal } from '@/components/portal'
 import { Ellipsis } from '@vexip-ui/icons'
 import { useNameHelper } from '@vexip-ui/config'
-import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/mixins'
+import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
 import { MENU_STATE, MENU_ITEM_STATE } from './symbol'
 
 import type { PropType } from 'vue'

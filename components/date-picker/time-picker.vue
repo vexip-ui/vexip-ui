@@ -185,7 +185,7 @@ import {
   placementWhileList,
   useClickOutside,
   useSetTimeout
-} from '@vexip-ui/mixins'
+} from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
@@ -204,7 +204,7 @@ import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/ico
 import { useColumn } from './helper'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 import type { TimeType, TimeShortcut } from './symbol'
 
 // const TIME_REG = /^((?:[01]?[0-9])|(?:2[0-3]))((?::[0-5]?[0-9]))?((?::[0-5]?[0-9]))?$/

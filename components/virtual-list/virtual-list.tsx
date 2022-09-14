@@ -2,7 +2,7 @@ import { defineComponent, toRefs, ref, computed, watch, nextTick } from 'vue'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, eventProp, emitEvent } from '@vexip-ui/config'
-import { useVirtual } from '@vexip-ui/mixins'
+import { useVirtual } from '@vexip-ui/hooks'
 
 import type { PropType } from 'vue'
 

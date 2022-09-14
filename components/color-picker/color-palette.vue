@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { useModifier, useMoving } from '@vexip-ui/mixins'
+import { useModifier, useMoving } from '@vexip-ui/hooks'
 import { toFixed, boundRange } from '@vexip-ui/utils'
 
 export default defineComponent({

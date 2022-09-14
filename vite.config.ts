@@ -123,7 +123,7 @@ export default defineConfig(async () => {
       vue(),
       vueJsx(),
       dts({
-        exclude: ['node_modules', 'playground', 'common/icons', 'common/mixins', 'common/utils'],
+        exclude: ['node_modules', 'playground', 'common/hooks', 'common/icons', 'common/utils'],
         outputDir: ['lib', 'es'],
         compilerOptions: { sourceMap },
         copyDtsFiles: false

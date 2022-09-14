@@ -85,7 +85,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useMounted } from '@vexip-ui/mixins'
+import { useMounted } from '@vexip-ui/hooks'
 import {
   isNull,
   isPromise,

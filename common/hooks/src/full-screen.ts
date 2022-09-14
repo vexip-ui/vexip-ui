@@ -9,7 +9,7 @@ type FunctionMap = [
   'fullscreenElement',
   'fullscreenEnabled',
   'fullscreenchange',
-  'fullscreenerror',
+  'fullscreenerror'
 ]
 
 const functionsMap = [
@@ -81,12 +81,16 @@ if (document && map) {
   const ELEMENT = map[2]
   const EVENT = map[4]
 
-  document.addEventListener(EVENT, () => {
-    const full = !!document[ELEMENT]
-    subscriptions.forEach(s => {
-      s.value = full
-    })
-  }, false)
+  document.addEventListener(
+    EVENT,
+    () => {
+      const full = !!document[ELEMENT]
+      subscriptions.forEach(s => {
+        s.value = full
+      })
+    },
+    false
+  )
 }
 
 export function useFullScreen(target: Ref<HTMLElement | null> = ref(null)) {

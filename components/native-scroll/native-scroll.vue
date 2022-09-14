@@ -67,7 +67,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
-import { useScrollWrapper } from './mixins'
+import { useScrollWrapper } from './hooks'
 
 import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'

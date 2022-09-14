@@ -212,12 +212,12 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/hooks'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
 import { ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
 import type { CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
 

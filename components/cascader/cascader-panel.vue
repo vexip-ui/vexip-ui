@@ -94,7 +94,7 @@ import { Option } from '@/components/option'
 import { VirtualList } from '@/components/virtual-list'
 import { ChevronRight, Check, Spinner, ArrowsRotate } from '@vexip-ui/icons'
 import { useNameHelper } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/mixins'
+import { useModifier } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'

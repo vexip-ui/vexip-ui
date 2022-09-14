@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { watch } from 'vue'
-import { useMounted } from '@vexip-ui/mixins'
+import { useMounted } from '@vexip-ui/hooks'
 
 import type { PropType } from 'vue'
 
