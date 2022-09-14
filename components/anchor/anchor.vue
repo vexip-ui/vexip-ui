@@ -73,6 +73,7 @@ export default defineComponent({
     markerTransition: String,
     options: Array as PropType<AnchorLinkOptions[]>,
     bindHash: booleanProp,
+    forceActive: booleanProp,
     onChange: eventProp<(value: string) => void>()
   },
   emits: ['update:active'],
@@ -95,7 +96,8 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      bindHash: false
+      bindHash: false,
+      forceActive: false
     })
 
     const currentActive = ref(props.active)
@@ -309,7 +311,11 @@ export default defineComponent({
     }
 
     function handleActive(link: string) {
-      if (link === currentActive.value || !link.startsWith('#') || link.length < 2) {
+      if (
+        (!props.forceActive && link === currentActive.value) ||
+        !link.startsWith('#') ||
+        link.length < 2
+      ) {
         return
       }
 

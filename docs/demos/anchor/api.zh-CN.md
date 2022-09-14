@@ -19,6 +19,7 @@ interface AnchorLinkOptions {
 | marker          | `boolean`             | 设置是否使用 marker 标记当前激活的锚点                                                                                                                                                                                                                                      | `false` | -       |
 | scroll-duration | `number`              | 设置点击锚点时，容器的滚动持续时间，单位为毫秒                                                                                                                                                                                                                              | `500`   | -       |
 | options         | `AnchorLinkOptions[]` | 通过选项快速生成锚点                                                                                                                                                                                                                                                        | `[]`    | `2.0.0` |
+| force-active    | `boolean`             | 开启后，无论选择的锚点是否已处于激活状态，仍会强制定位                                                                                                                                                                                                                      | `false` | `2.0.0` |
 
 ### Anchor 事件
 

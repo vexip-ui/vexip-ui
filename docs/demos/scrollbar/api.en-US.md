@@ -10,7 +10,7 @@
 | bar-color   | `string`                                 | The background color of the scroll bar                                                                                                     | `null`    | -     |
 | disabled    | `boolean`                                | Set scrollbar disabled state                                                                                                               | `false`   | -     |
 | wrapper     | `string \| HTMLElement`                  | Pass in an id selector or a Node object, set the container of the scroll bar, used to sense mouse movement to show and hide the scroll bar | `null`    | -     |
-| duration    | `number`                                 | Sets the duration of the scroll bar transition effect in milliseconds                                                                      | `null`    | -     |
+| duration    | `number`                                 | Set the duration of the scroll bar transition effect in milliseconds                                                                       | `null`    | -     |
 | use-track   | `boolean`                                | Set whether to enable scrollbar track interaction                                                                                          | `false`   | -     |
 | track-speed | `number`                                 | Set the basic movement speed of clicking on the track to trigger scrolling, the unit is percentage, the optional value is `1` ~ `9`        | `2`       | -     |
 

@@ -3,13 +3,13 @@
     <Column :span="16">
       <div
         ref="viewer"
-        style="
-          height: 400px;
-          padding: 15px;
-          margin-right: 15px;
-          overflow: auto;
-          box-shadow: 0 0 1px;
-"
+        :style="{
+          height: '400px',
+          padding: '15px',
+          marginRight: '15px',
+          overflow: 'auto',
+          boxShadow: '0 0 1px'
+        }"
       >
         <p v-for="n in 5" :key="n" style="height: 50px;">
           Some content to fill
@@ -53,7 +53,7 @@
       </div>
     </Column>
     <Column :span="8">
-      <Anchor viewer="ref:viewer" :options="anchorLinks"></Anchor>
+      <Anchor viewer="ref:viewer" force-active :options="anchorLinks"></Anchor>
     </Column>
   </Row>
 </template>

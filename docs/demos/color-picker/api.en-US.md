@@ -3,7 +3,7 @@
 | Name          | Type                               | Description                                                                                   | Default     | Since   |
 | ------------- | ---------------------------------- | --------------------------------------------------------------------------------------------- | ----------- | ------- |
 | value         | `string`                           | The value of the color picker, can use `v-model` two-way binding                              | `'#339af0'` | -       |
-| visible       | `boolean`                          | Sets the display state of the color control panel                                             | `false`     | -       |
+| visible       | `boolean`                          | Set the display state of the color control panel                                              | `false`     | -       |
 | format        | `'rgb' \| 'hsl' \| 'hsv' \| 'hex'` | Type to format the color before updating value                                                | `'rgb'`     | -       |
 | size          | `small \| default \| large`        | The size of color picker                                                                      | `'default'` | -       |
 | alpha         | `boolean`                          | whether to use transparency selection                                                         | `false`     | -       |
