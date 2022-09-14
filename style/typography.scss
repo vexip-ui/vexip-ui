@@ -1,0 +1,244 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$text: () !default;
+$text: map.merge(
+  (
+    font-family-mono: get-css-var('font-family-mono'),
+    font-weight-strong: 600,
+    font-weight-thin: 300,
+    color: get-css-var('content-color-base'),
+    color-disabled: get-css-var('content-color-disabled'),
+    color-marked: get-css-var('content-color-base'),
+    color-reversed: get-css-var('bg-color-base'),
+    mark-color: get-css-var('fill-color-hover'),
+    code-bg-color: get-css-var('fill-color-hover'),
+    code-radius: get-css-var('radius-small'),
+    keyboard-bg-color: get-css-var('fill-color-humble'),
+    keyboard-b-color: get-css-var('border-color-base'),
+    keyboard-radius: get-css-var('radius-base')
+  ),
+  $text
+);
+
+.#{$namespace}-text {
+  &-vars {
+    @include define-preset-values('text', $text);
+  }
+
+  @mixin define-text-style($style-map) {
+    @include define-preset-style('text', $style-map);
+  }
+
+  @include basis;
+
+  color: get-css-var('text-color');
+  transition: get-css-var('transition-color'), get-css-var('transition-background');
+
+  @each $type in $types {
+    &--#{$type} {
+      @include define-text-style(
+        (
+          color: 'color' $type 'base',
+          mark-color: 'color' $type 'opacity-1'
+        )
+      );
+    }
+  }
+
+  &--strong {
+    font-weight: get-css-var('text-font-weight-strong');
+  }
+
+  &--italic {
+    font-style: italic;
+  }
+
+  &--underline {
+    text-decoration: underline;
+  }
+
+  &--mark {
+    padding: 0 1px;
+    color: get-css-var('text-color-marked');
+    background-color: get-css-var('text-mark-color');
+  }
+
+  &--reversed {
+    color: get-css-var('text-color-reversed');
+  }
+
+  &--disabled {
+    color: get-css-var('text-color-disabled');
+  }
+
+  &--thin {
+    font-weight: get-css-var('text-font-weight-strong');
+  }
+
+  &--code {
+    padding: 3px 5px 2px;
+    font-family: get-css-var('text-font-family-mono');
+    background-color: get-css-var('text-code-bg-color');
+    border-radius: get-css-var('text-code-radius');
+  }
+
+  &--keyboard {
+    padding: 4px 5px 3px;
+    font-family: get-css-var('text-font-family-mono');
+    background-color: get-css-var('text-keyboard-bg-color');
+    border: get-css-var('border-shape') get-css-var('text-keyboard-b-color');
+    border-radius: get-css-var('text-keyboard-radius');
+  }
+}
+
+$title: () !default;
+$title: map.merge(
+  (
+    font-size-level-1: 36px,
+    font-size-level-2: 30px,
+    font-size-level-3: 24px,
+    font-size-level-4: 20px,
+    font-size-level-5: get-css-var('font-size-primary'),
+    font-size-level-6: get-css-var('font-size-base'),
+    font-weight: 600,
+    font-weight-thin: 300,
+    color: get-css-var('content-color-primary'),
+    marker-width: 4px,
+    marker-color: get-css-var('content-color-placeholder'),
+    marker-offset: 16px
+  ),
+  $title
+);
+
+.#{$namespace}-title {
+  &-vars {
+    @include define-preset-values('title', $title);
+  }
+
+  @mixin define-title-style($style-map) {
+    @include define-preset-style('title', $style-map);
+  }
+
+  @include basis;
+
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: get-css-var('title-font-weight');
+  color: get-css-var('title-color');
+  transition: get-css-var('transition-color');
+
+  @each $type in $types {
+    &--#{$type} {
+      @include define-title-style(
+        (
+          color: 'color' $type 'base'
+        )
+      );
+    }
+
+    &--marker-#{$type} {
+      @include define-title-style(
+        (
+          marker-color: 'color' $type 'base'
+        )
+      );
+    }
+  }
+
+  &--top {
+    margin-top: 0;
+  }
+
+  &--thin {
+    font-weight: get-css-var('title-font-weight-thin');
+  }
+
+  @for $i from 1 through 6 {
+    @at-root h#{$i}#{&} {
+      font-size: get-css-var('title-font-size-level-#{$i}');
+    }
+  }
+
+  &--marker {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(get-css-var('title-marker-offset') * -1);
+      width: get-css-var('title-marker-width');
+      content: '';
+      background-color: get-css-var('title-marker-color');
+      transition: get-css-var('transition-background');
+    }
+  }
+
+  &--marker#{&}--aligned {
+    padding-left: get-css-var('title-marker-offset');
+
+    &::before {
+      left: 0;
+    }
+  }
+}
+
+$blockquote: () !default;
+$blockquote: map.merge(
+  (
+    color: get-css-var('content-color-base'),
+    padding-left: 10px,
+    marker-width: 4px,
+    marker-color: get-css-var('border-color-base')
+  ),
+  $blockquote
+);
+
+.#{$namespace}-blockquote {
+  &-vars {
+    @include define-preset-values('blockquote', $blockquote);
+  }
+
+  @mixin define-blockquote-style($style-map) {
+    @include define-preset-style('blockquote', $style-map);
+  }
+
+  @include basis;
+
+  padding-left: get-css-var('blockquote-padding-left');
+  margin: 1em 0;
+  color: get-css-var('blockquote-color');
+  border-left: get-css-var('blockquote-marker-width') solid get-css-var('blockquote-marker-color');
+  transition: get-css-var('transition-color');
+
+  @each $type in $types {
+    &--#{$type} {
+      @include define-blockquote-style(
+        (
+          color: 'color' $type 'base',
+          marker-color: 'color' $type 'opacity-3'
+        )
+      );
+    }
+  }
+}
+
+.#{$namespace}-ol,
+.#{$namespace}-ul {
+  @include basis;
+
+  padding: 0;
+
+  & > li {
+    padding-left: 4px;
+    margin-left: 20px;
+  }
+}
+
+.#{$namespace}-ul {
+  &--no-marker > li {
+    margin-left: 0;
+  }
+}

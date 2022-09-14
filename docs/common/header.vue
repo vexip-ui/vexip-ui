@@ -358,7 +358,8 @@ function formatComponentName(name: string) {
   }
 
   .theme {
-    display: block;
+    display: flex;
+    align-items: center;
     margin-right: 24px;
   }
 

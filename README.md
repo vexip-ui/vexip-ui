@@ -23,9 +23,9 @@
 
 **English** | [中文](./README.zh-CN.md)
 
-Vexip UI provides a series of out-of-the-box components.
+Vexip UI provides a series of out-of-box components.
 
-This library is using base on vue 3.0 with only using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript** (not AnyScript).
+This library is using base on vue 3.0 with using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript** (not AnyScript).
 
 Almost all the **default value of props** for each component can be quickly modified by configuration (except value and options props), for easy customization.
 
@@ -35,10 +35,10 @@ There are currently **70+** components, many you can see everywhere and a few ma
 
 ## Features
 
-- Not less components and functions for website development, hoping may improve efficiency
-- Vue3 components of out-of-the-box (may not help if you still using Vue2)
-- Configurable **default value of props** for easy customization
-- entirely using the composition api, the performance and extensibility should be good
+- Not less components for website development, hoping may improve efficiency
+- Out-of-box and high quality **Vue3** components
+- Follow the intuitive design, and write as directly as possible
+- Using the composition api, the performance and extensibility should be good
 - **700+** unit tests to provide good basic stability for component usage
 
 ## Install

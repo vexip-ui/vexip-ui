@@ -102,6 +102,8 @@ import { Viewer } from './viewer'
 import { VirtualList } from './virtual-list'
 import { Wheel } from './wheel'
 
+import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } from './typography'
+
 import { buildInstall } from './create'
 
 export type {
@@ -219,7 +221,21 @@ const components = [
   Loading,
   Message,
   Notice,
-  Toast
+  Toast,
+  // typography
+  Title,
+  Text,
+  Blockquote,
+  OL,
+  UL,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  P,
+  Strong
 ]
 
 export { buildInstall }
@@ -322,6 +338,7 @@ export * from './toast'
 export * from './tooltip'
 export * from './transfer'
 export * from './tree'
+export * from './typography'
 export * from './upload'
 export * from './upload-file'
 export * from './upload-list'

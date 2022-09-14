@@ -96,7 +96,20 @@ declare module 'vue' {
     UploadList: typeof import('vexip-ui')['UploadList'],
     Viewer: typeof import('vexip-ui')['Viewer'],
     VirtualList: typeof import('vexip-ui')['VirtualList'],
-    Wheel: typeof import('vexip-ui')['Wheel']
+    Wheel: typeof import('vexip-ui')['Wheel'],
+    Title: typeof import('vexip-ui')['Title'],
+    Text: typeof import('vexip-ui')['Text'],
+    Blockquote: typeof import('vexip-ui')['Blockquote'],
+    OL: typeof import('vexip-ui')['OL'],
+    UL: typeof import('vexip-ui')['UL'],
+    H1: typeof import('vexip-ui')['H1'],
+    H2: typeof import('vexip-ui')['H2'],
+    H3: typeof import('vexip-ui')['H3'],
+    H4: typeof import('vexip-ui')['H4'],
+    H5: typeof import('vexip-ui')['H5'],
+    H6: typeof import('vexip-ui')['H6'],
+    P: typeof import('vexip-ui')['P'],
+    Strong: typeof import('vexip-ui')['Strong']
   }
 
   interface ComponentCustomProperties {

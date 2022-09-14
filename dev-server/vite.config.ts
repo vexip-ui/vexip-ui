@@ -23,6 +23,22 @@ const components = readdirSync(componentsDir).filter(f => {
   return existsSync(`${path}/index.ts`)
 })
 
+const typography = [
+  'Title',
+  'Text',
+  'Blockquote',
+  'OL',
+  'UL',
+  'H1',
+  'H2',
+  'H3',
+  'H4',
+  'H5',
+  'H6',
+  'P',
+  'Strong'
+]
+
 export default defineConfig(() => {
   return {
     publicDir: '../docs/public',
@@ -58,10 +74,12 @@ export default defineConfig(() => {
           {
             type: 'component',
             resolve: name => {
-              if (components.includes(toKebabCase(name))) {
+              const kebabName = typography.includes(name) ? 'typography' : toKebabCase(name)
+
+              if (components.includes(kebabName)) {
                 return {
                   name,
-                  from: `@/components/${toKebabCase(name)}/index.ts`
+                  from: `@/components/${kebabName}/index.ts`
                 }
               }
             }

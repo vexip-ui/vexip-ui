@@ -27,6 +27,7 @@
   }
 
   @include define-preset-values('fill-color', $fill-color-map);
+  @include define-preset-values('font-family', $font-family-map);
   @include define-preset-values('font-size', $font-size-map);
   @include define-preset-values('line-height', $line-height-map);
   @include define-preset-values('radius', $radius-map);
