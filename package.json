@@ -113,6 +113,7 @@
     "style",
     "themes",
     "CHANGELOG.md",
+    "meta-data.json",
     "types.d.ts"
   ],
   "homepage": "https://www.vexipui.com",
@@ -154,6 +155,7 @@
     "build:hooks": "pnpm -C common/hooks build && pnpm i",
     "build:icons": "pnpm -C common/icons build && pnpm i",
     "build:playground": "pnpm -C playground build",
+    "build:plugins": "pnpm -C common/plugins build && pnpm i",
     "build:style": "gulp --require sucrase/register/ts",
     "build:utils": "pnpm -C common/utils build && pnpm i",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",

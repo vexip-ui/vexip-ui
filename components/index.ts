@@ -104,6 +104,8 @@ import { Wheel } from './wheel'
 
 import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } from './typography'
 
+import { install as installDirectives } from '@/directives'
+
 import { buildInstall } from './create'
 
 export type {
@@ -235,7 +237,9 @@ const components = [
   H5,
   H6,
   P,
-  Strong
+  Strong,
+  // directives
+  installDirectives
 ]
 
 export { buildInstall }
@@ -345,3 +349,5 @@ export * from './upload-list'
 export * from './viewer'
 export * from './virtual-list'
 export * from './wheel'
+
+export * from '@/directives/loading'

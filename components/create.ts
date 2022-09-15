@@ -40,14 +40,10 @@ export function buildInstall(components: any[] = [], defaultLocale?: 'zh-CN' | '
     const normalizedPrefix = toCapitalCase(prefix || '')
 
     components.forEach(component => {
-      if (typeof component.install === 'function') {
+      if (typeof component === 'function' || typeof component.install === 'function') {
         app.use(component)
       } else {
         app.component(`${normalizedPrefix}${component.name}`, component)
-
-        if (typeof component.installDirective === 'function') {
-          component.installDirective(app)
-        }
       }
     })
   }
