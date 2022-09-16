@@ -55,3 +55,11 @@ If you take maybe some bugs, please use the [Vexip UI Playground](https://playgr
 ## Contributing
 
 Welcome to join us! You can check out the [Contributing Guide](https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md) to learn how to get started.
+
+## Contributors
+
+Thanks for all their contributions!
+
+<a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
+</a>
