@@ -1,3 +1,42 @@
+# [2.0.0](https://github.com/vexip-ui/vexip-ui/compare/v2.0.0-rc.1...v2.0.0) (2022-09-16)
+
+### Bug Fixes
+
+- **button:** missing icon when has any content ([26e199b](https://github.com/vexip-ui/vexip-ui/commit/26e199bf4ec79347bea9d594ade4c75b937cfccb))
+- **checkbox-group:** incorrect update value from props.value ([9513ad7](https://github.com/vexip-ui/vexip-ui/commit/9513ad7cc054769e85d4082cc77c5d67bb443bfe)), closes [#147](https://github.com/vexip-ui/vexip-ui/issues/147)
+- **config:** incorrect event prop regexp ([849ac5b](https://github.com/vexip-ui/vexip-ui/commit/849ac5bc033751e706a329f8c745862c995ecaa0)), closes [#139](https://github.com/vexip-ui/vexip-ui/issues/139)
+- **form:** correctly delete form item ([4ce34e8](https://github.com/vexip-ui/vexip-ui/commit/4ce34e8110cbbae297f534fc230e838a43c05770))
+- **form:** rename label-position to label-align ([ad593bb](https://github.com/vexip-ui/vexip-ui/commit/ad593bb29c9ba56c67b78c0f43b87ddc3dc8cecb))
+- **slider:** incorrect judge to emit input event ([f13656e](https://github.com/vexip-ui/vexip-ui/commit/f13656e97ddf96b19675d698b60bdb23bc0a5591))
+- **table:** unstable row rendering ([4546389](https://github.com/vexip-ui/vexip-ui/commit/45463890af9b120eb587563dda813a2084f604a5))
+
+### Code Refactoring
+
+- **upload:** all callbacks and events first param change to FileState ([069edae](https://github.com/vexip-ui/vexip-ui/commit/069edae351b6992b4949a8f0d636d376f0221ad0))
+
+### Features
+
+- add Typography components ([#146](https://github.com/vexip-ui/vexip-ui/issues/146)) ([8cca389](https://github.com/vexip-ui/vexip-ui/commit/8cca38939c7517af0b9e4b56007073d4a95d90df))
+- **anchor:** add force-active prop ([ecdc9e3](https://github.com/vexip-ui/vexip-ui/commit/ecdc9e3568d51159c884245aaa80f789f786f5aa))
+- **form:** add help prop for item ([69e4996](https://github.com/vexip-ui/vexip-ui/commit/69e499661c2f5611bf0a14200903108645c44015))
+- **form:** add inline prop ([f2db62a](https://github.com/vexip-ui/vexip-ui/commit/f2db62a17bb32795f572d18c1096b041550d44ad))
+- **form:** support pure form item render ([65d6b30](https://github.com/vexip-ui/vexip-ui/commit/65d6b30dfed4277859234f288eb23e6ce3f1ac76))
+- **form:** support set size for all controls under form ([a332eca](https://github.com/vexip-ui/vexip-ui/commit/a332ecaad8993b1aac9c658b685570ebae198409))
+- **menu:** add expandItemByLabel api method ([38003cd](https://github.com/vexip-ui/vexip-ui/commit/38003cdd8b0493b428d14adb8bdc1e9b02aaf619)), closes [#141](https://github.com/vexip-ui/vexip-ui/issues/141)
+- **slider:** add reverse prop ([a1ee27e](https://github.com/vexip-ui/vexip-ui/commit/a1ee27efcdc13df1807a0dee2fbef3035d23601a)), closes [#142](https://github.com/vexip-ui/vexip-ui/issues/142)
+- **slider:** support add markers and only-marker select ([ea1be6b](https://github.com/vexip-ui/vexip-ui/commit/ea1be6ba83e507faff9b7cd367c262bb41fc3030))
+- **slider:** support range select mode ([b5534f9](https://github.com/vexip-ui/vexip-ui/commit/b5534f97945334262862fc37870fc3c8c67c6990)), closes [#77](https://github.com/vexip-ui/vexip-ui/issues/77)
+- **tree:** add label-click event ([61f2f7a](https://github.com/vexip-ui/vexip-ui/commit/61f2f7a022caa08eced7ff4fa88f5120963c499b)), closes [#149](https://github.com/vexip-ui/vexip-ui/issues/149)
+
+### BREAKING CHANGES
+
+- **upload:** Upload component all callbacks and events first param
+  change from SourceFile to FileState, this will make the states of files
+  inside the component controllable. This change also fix cannot init
+  file list via urls.
+- **form:** To better fit the description of this feature, change
+  the `label-position` name to `label-align`
+
 # [2.0.0-rc.1](https://github.com/vexip-ui/vexip-ui/compare/v2.0.0-rc.0...v2.0.0-rc.1) (2022-09-06)
 
 ### Bug Fixes
