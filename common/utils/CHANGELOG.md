@@ -1,3 +1,5 @@
+# [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.5.0...utils@1.6.0) (2022-09-16)
+
 # [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.4.0...utils@1.5.0) (2022-07-25)
 
 ### Features
