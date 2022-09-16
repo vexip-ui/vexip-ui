@@ -1,9 +1,20 @@
+### Preset Types
+
+```ts
+interface SliderMarker {
+  label?: string,
+  class?: ClassType,
+  style?: StyleType,
+  attrs?: Record<string, any>
+}
+```
+
 ### Slider Props
 
 | Name         | Type                                               | Description                                                                                    | Default   | Since   |
 | ------------ | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------- | ------- |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'`   | Set the slider type                                                                            | `default` | `2.0.0` |
-| value        | `number \| number[]`                               | The value of the sliding input bar, you can use `v-model` two-way binding                      | `0`       | `2.0.0` |
+| value        | `number \| number[]`                               | The value of the sliding input bar, you can use `v-model` two-way binding                      | `0`       | -       |
 | min          | `number`                                           | The min value of the slider                                                                    | `0`       | -       |
 | max          | `number`                                           | The max value of the slider                                                                    | `100`     | -       |
 | step         | `number`                                           | The span of each value change of the sliding input bar                                         | `1`       | -       |
