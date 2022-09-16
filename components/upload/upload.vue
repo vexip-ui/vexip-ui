@@ -76,18 +76,31 @@
       :type="props.listType"
       :icon-renderer="props.iconRenderer"
       :loading-text="props.loadingText"
+      :can-preview="props.canPreview"
       :style="{
         [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
           !props.hiddenFiles && renderFiles.length ? '0.5em' : undefined
       }"
       @delete="handleDelete"
       @preview="handlePreview"
-    ></UploadList>
+    >
+      <template #item="{ file, status: _status, percentage }">
+        <slot
+          name="item"
+          :file="file"
+          :status="_status"
+          :percentage="percentage"
+        ></slot>
+      </template>
+      <template #icon="{ file }">
+        <slot name="icon" :file="file"></slot>
+      </template>
+    </UploadList>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import UploadList from './upload-list.vue'
@@ -102,7 +115,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { noop, isFalse, isFunction, isPromise, randomString } from '@vexip-ui/utils'
+import { noop, isDefined, isFalse, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload as IUpload, Spinner } from '@vexip-ui/icons'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
@@ -110,13 +123,33 @@ import { StatusType, uploadListTypes } from './symbol'
 import type { PropType, Ref } from 'vue'
 import type {
   UploadListType,
-  BeforeFn,
+  BeforeUpload,
+  BeforeSelect,
   RenderFn,
   HttpError,
   SourceFile,
   FileState,
+  FileOptions,
   DirectoryEntity
 } from './symbol'
+
+function getDefaultFileState(): FileState {
+  return {
+    id: randomString(),
+    name: '',
+    size: 0,
+    type: '',
+    base64: null,
+    status: StatusType.PENDING,
+    percentage: 0,
+    source: null,
+    url: null,
+    path: '',
+    xhr: null,
+    response: null,
+    error: null
+  }
+}
 
 export default defineComponent({
   name: 'Upload',
@@ -129,7 +162,7 @@ export default defineComponent({
   props: {
     state: stateProp,
     url: String,
-    fileList: Array as PropType<FileState[]>,
+    fileList: Array as PropType<FileOptions[]>,
     multiple: booleanProp,
     tip: String,
     accept: [String, Array] as PropType<string | string[]>,
@@ -143,8 +176,8 @@ export default defineComponent({
     hiddenFiles: booleanProp,
     countLimit: Number,
     allowDrag: booleanProp,
-    onBeforeUpload: Function as PropType<BeforeFn>,
-    onBeforeSelect: Function as PropType<BeforeFn>,
+    onBeforeUpload: Function as PropType<BeforeUpload>,
+    onBeforeSelect: Function as PropType<BeforeSelect>,
     iconRenderer: Function as PropType<RenderFn>,
     selectToAdd: booleanProp,
     listType: String as PropType<UploadListType>,
@@ -159,20 +192,22 @@ export default defineComponent({
     loadingIcon: Object,
     loadingLock: booleanProp,
     loadingSpin: booleanProp,
-    onExceed: eventProp<(files: FileState[], sources: File[]) => void>(),
-    onChange: eventProp<(files: FileState[], sources: File[]) => void>(),
-    onFilterError: eventProp<(files: FileState, sources: File) => void>(),
-    onSizeError: eventProp<(files: FileState, sources: File) => void>(),
-    onDelete: eventProp<(file: FileState, source: File) => void>(),
-    onPreview: eventProp<(file: FileState, source: File) => void>(),
-    onProgress: eventProp<(file: FileState, percent: number, source: File) => void>(),
-    onSuccess: eventProp<(file: FileState, response: any, source: File) => void>(),
-    onError: eventProp<(file: FileState, error: HttpError, source: File) => void>()
+    defaultFiles: Array as PropType<FileOptions[]>,
+    canPreview: Function as PropType<(file: FileState) => boolean>,
+    onExceed: eventProp<(files: FileState[]) => void>(),
+    onChange: eventProp<(files: FileState[]) => void>(),
+    onFilterError: eventProp<(files: FileState) => void>(),
+    onSizeError: eventProp<(files: FileState) => void>(),
+    onDelete: eventProp<(file: FileState) => void>(),
+    onPreview: eventProp<(file: FileState) => void>(),
+    onProgress: eventProp<(file: FileState, percent: number) => void>(),
+    onSuccess: eventProp<(file: FileState, response: any) => void>(),
+    onError: eventProp<(file: FileState, error: HttpError) => void>()
   },
   emits: ['update:file-list'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<FileState[]>(() => {
+      useFieldStore<FileOptions[]>(() => {
         if (button.value?.$el) {
           button.value.$el.focus()
         } else {
@@ -236,7 +271,8 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      defaultFiles: () => []
     })
 
     const nh = useNameHelper('upload')
@@ -267,9 +303,39 @@ export default defineComponent({
 
       return accept && (typeof accept === 'string' ? accept : accept.join())
     })
+    const defaultList = computed(() => props.defaultFiles.map(file => createFileState(file)))
     const renderFiles = computed(() => {
-      return fileStates.value.filter(item => item.status !== StatusType.DELETE)
+      return defaultList.value
+        .concat(fileStates.value)
+        .filter(item => item.status !== StatusType.DELETE)
     })
+
+    watch(
+      () => props.fileList,
+      value => {
+        const idMap = new Map<string | number, FileState>()
+        const fileMap = new Map<SourceFile, FileState>()
+
+        for (const state of fileStates.value) {
+          if (isDefined(state.id)) {
+            idMap.set(state.id, state)
+          }
+
+          if (state.source) {
+            fileMap.set(state.source, state)
+          }
+        }
+
+        fileStates.value = value.map(file =>
+          createFileState(
+            file,
+            file.id ? idMap.get(file.id) : file.source ? fileMap.get(file.source) : undefined
+          )
+        )
+        syncInputFiles()
+      },
+      { immediate: true }
+    )
 
     function handleClick() {
       !props.disabledClick && input.value?.click()
@@ -285,21 +351,12 @@ export default defineComponent({
 
     async function handleFilesChange(inputFiles: FileList | SourceFile[]) {
       const originFiles = Array.from(inputFiles || []) as SourceFile[]
-      const files = props.selectToAdd ? fileStates.value : []
+      const shouldAdd = props.selectToAdd
+      const files = shouldAdd ? Array.from(fileStates.value) : []
 
       for (const file of originFiles) {
         if (!file.path) {
           file.path = file.webkitRelativePath
-        }
-
-        if (isFunction(props.onBeforeSelect)) {
-          let result = props.onBeforeSelect(file, props.selectToAdd ? getSourceFiles() : [])
-
-          if (isPromise(result)) {
-            result = await result
-          }
-
-          if (isFalse(result)) continue
         }
 
         let fileState = getFileStateBySource(file)
@@ -312,7 +369,22 @@ export default defineComponent({
             fileState.status = StatusType.PENDING
           }
         } else {
-          fileState = createFileState(file)
+          fileState = createFileState({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            source: file
+          })
+        }
+
+        if (typeof props.onBeforeSelect === 'function') {
+          let result = props.onBeforeSelect(fileState, files)
+
+          if (isPromise(result)) {
+            result = await result
+          }
+
+          if (isFalse(result)) continue
         }
 
         if (!files.includes(fileState)) {
@@ -323,11 +395,10 @@ export default defineComponent({
       const countLimit = props.countLimit
 
       if (countLimit > 0 && files.length > countLimit) {
-        fileStates.value = files.slice(0, countLimit)
-
         const exceedFiles = files.slice(countLimit)
 
-        emitEvent(props.onExceed, exceedFiles, getSourceFiles())
+        emitEvent(props.onExceed, exceedFiles)
+        fileStates.value = files.slice(0, countLimit)
       } else {
         fileStates.value = files
       }
@@ -342,7 +413,7 @@ export default defineComponent({
 
     function emitChangeEvent() {
       setFieldValue(fileStates.value)
-      emitEvent(props.onChange, fileStates.value, getSourceFiles())
+      emitEvent(props.onChange, fileStates.value)
       emit('update:file-list', fileStates.value)
       validateField()
     }
@@ -353,6 +424,7 @@ export default defineComponent({
 
       return fileStates.value.find(({ source }) => {
         return (
+          source &&
           (source.path || source.webkitRelativePath) === path &&
           source.name === name &&
           source.size === size &&
@@ -361,27 +433,26 @@ export default defineComponent({
       })
     }
 
-    function createFileState(file: SourceFile): FileState {
-      const { name, size, type } = file
+    function createFileState(file: FileOptions, defaults = getDefaultFileState()): FileState {
+      const { id, name, size, type, base64, status, percentage, source, url, path } = file
 
-      return {
-        id: randomString(),
-        name,
-        size,
-        type,
-        base64: null,
-        status: StatusType.PENDING,
-        percentage: 0,
-        source: file,
-        path: file.path || file.webkitRelativePath,
+      Object.assign(defaults, {
+        id: id ?? defaults.id ?? randomString(),
+        name: name || '',
+        size: size || 0,
+        type: type || '',
+        base64: base64 || null,
+        status: status ?? StatusType.PENDING,
+        percentage: percentage || 0,
+        source: source || null,
+        url: url || null,
+        path: path || '',
         xhr: null,
         response: null,
         error: null
-      }
-    }
+      })
 
-    function getSourceFiles(): SourceFile[] {
-      return fileStates.value.map(file => file.source)
+      return defaults
     }
 
     function getFileExtension(file: FileState) {
@@ -406,20 +477,36 @@ export default defineComponent({
     }
 
     async function uploadFile(file: FileState) {
-      if (isFunction(props.onBeforeUpload)) {
+      if (typeof props.onBeforeUpload === 'function') {
         let result = props.onBeforeUpload(
-          file.source,
-          fileStates.value
-            .filter(item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE)
-            .map(item => item.source)
+          file,
+          fileStates.value.filter(
+            item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE
+          )
         )
 
         if (isPromise(result)) {
-          result = await result
+          try {
+            result = await result
+          } catch (e) {
+            return
+          }
         }
 
         if (isFalse(result)) return
+
+        if (result instanceof Blob) {
+          if (result instanceof File) {
+            file.source = result
+          } else {
+            file.source = new File([result], file.name, {
+              type: file.type
+            })
+          }
+        }
       }
+
+      if (!file.source) return
 
       file.status = StatusType.UPLOADING
 
@@ -433,7 +520,7 @@ export default defineComponent({
           data,
           field,
           pathField,
-          file: file.source,
+          file: file.source!,
           onProgress: percent => {
             handleProgress(percent, file)
           },
@@ -466,13 +553,13 @@ export default defineComponent({
         const extension = getFileExtension(file)
 
         if (filter.length && !filter.includes(extension)) {
-          emitEvent(props.onFilterError, file, file.source)
+          emitEvent(props.onFilterError, file)
 
           return false
         }
 
         if (file.size > limitSize) {
-          emitEvent(props.onSizeError, file, file.source)
+          emitEvent(props.onSizeError, file)
 
           return false
         }
@@ -489,12 +576,12 @@ export default defineComponent({
       }
 
       syncInputFiles()
-      emitEvent(props.onDelete, file, file.source)
+      emitEvent(props.onDelete, file)
       emitChangeEvent()
     }
 
     function handlePreview(file: FileState) {
-      emitEvent(props.onPreview, file, file.source)
+      emitEvent(props.onPreview, file)
     }
 
     function syncInputFiles() {
@@ -502,7 +589,7 @@ export default defineComponent({
       fileStates.value = fileStates.value.filter(item => item.status !== StatusType.DELETE)
 
       fileStates.value.forEach(item => {
-        dataTransfer.items.add(item.source)
+        item.source && dataTransfer.items.add(item.source)
       })
 
       if (input.value) {
@@ -515,7 +602,8 @@ export default defineComponent({
 
       file.percentage = percent
 
-      emitEvent(props.onProgress, file, percent, file.source)
+      emitEvent(props.onProgress, file, percent)
+      emitChangeEvent()
     }
 
     function handleSuccess(response: any, file: FileState) {
@@ -525,7 +613,8 @@ export default defineComponent({
       file.response = response
       file.error = null
 
-      emitEvent(props.onSuccess, file, response, file.source)
+      emitEvent(props.onSuccess, file, response)
+      emitChangeEvent()
     }
 
     function handleError(error: HttpError, file: FileState) {
@@ -534,7 +623,8 @@ export default defineComponent({
       file.status = StatusType.FAIL
       file.error = error
 
-      emitEvent(props.onError, file, error, file.source)
+      emitEvent(props.onError, file, error)
+      emitChangeEvent()
     }
 
     let dragTimer: ReturnType<typeof setTimeout>

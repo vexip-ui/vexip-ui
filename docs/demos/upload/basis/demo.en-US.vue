@@ -7,9 +7,16 @@ import { ref } from 'vue'
 
 const fileId = ref<string | null>(null)
 
-// response 的具体类型由后端所决定
+// The specific type of response is determined by the backend
 function handleSuccess(response: { id: string | null }) {
-  // 成功回调后，可以返回文件的 id 已做后续用途
+  // After successful callback, the id of the file can be returned for subsequent use
   fileId.value = response.id
 }
 </script>
+
+<style scoped>
+.vxp-upload {
+  width: 100%;
+  max-width: 500px;
+}
+</style>

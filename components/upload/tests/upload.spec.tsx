@@ -268,4 +268,11 @@ describe('Upload', () => {
 
     expect(onPreview).toHaveBeenCalled()
   })
+
+  it('default files', () => {
+    const defaultFiles = [{ name: 'a.jpg' }]
+    const wrapper = mount(() => <Upload default-files={defaultFiles}></Upload>)
+
+    expect(wrapper.findAll('.vxp-upload__file--name').length).toBe(1)
+  })
 })

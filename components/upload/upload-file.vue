@@ -5,15 +5,15 @@
       :title="fileName"
       tabindex="-1"
     >
-      <slot :file="props.file.source" :status="props.file.status" :percentage="percentage">
+      <slot :file="props.file" :status="props.file.status" :percentage="percentage">
         <template v-if="props.listType === 'name'">
           <div :class="nh.be('label')">
             <div :class="[nh.be('icon'), nh.be('file-icon')]">
-              <slot name="icon" :file="props.file.source">
+              <slot name="icon" :file="props.file">
                 <Renderer
                   v-if="useIconRenderer"
                   :renderer="props.iconRenderer"
-                  :data="{ file: props.file.source }"
+                  :data="{ file: props.file }"
                 ></Renderer>
                 <Icon v-else :icon="getFileIcon(props.file)"></Icon>
               </slot>
@@ -80,18 +80,18 @@
                 </Icon>
               </template>
               <img
-                v-else-if="props.file.type.startsWith('image/') && props.file.base64"
+                v-else-if="showThumb"
                 :class="nh.be('image')"
-                :src="props.file.base64"
+                :src="props.file.url || props.file.base64 || ''"
                 :alt="fileName"
               />
               <template v-else>
                 {{ transformfileToBase64(props.file) }}
-                <slot name="icon" :file="props.file.source">
+                <slot name="icon" :file="props.file">
                   <Renderer
                     v-if="useIconRenderer"
                     :renderer="props.iconRenderer"
-                    :data="{ file: props.file.source }"
+                    :data="{ file: props.file }"
                   ></Renderer>
                   <Icon v-else :icon="getFileIcon(props.file)" :scale="2.8"></Icon>
                 </slot>
@@ -122,11 +122,10 @@
                   nh.be('icon'),
                   nh.be('action'),
                   {
-                    [nh.bem('action', 'disabled')]:
-                      !props.file.type.startsWith('image/') || !props.file.base64
+                    [nh.bem('action', 'disabled')]: !props.canPreview(props.file)
                   }
                 ]"
-                :disabled="!props.file.type.startsWith('image/') || !props.file.base64"
+                :disabled="!props.canPreview(props.file)"
                 @click="handlePreview(props.file)"
               >
                 <Icon :scale="1.4">
@@ -168,6 +167,23 @@ import { StatusType, uploadListTypes } from './symbol'
 import type { PropType } from 'vue'
 import type { UploadListType, RenderFn, FileState } from './symbol'
 
+const imageExtRE = /\.(webp|svg|png|gif|jpg|jpeg|jfif|bmp|dpg|ico)$/i
+const imageBase64RE = /^data:image\//
+
+function isImage(file: FileState) {
+  if (file.type) {
+    return file.type.startsWith('image/')
+  }
+
+  const { name, url, base64 } = file
+
+  return !!(
+    imageExtRE.test(name) ||
+    (url && imageBase64RE.test(url)) ||
+    (base64 && imageBase64RE.test(base64))
+  )
+}
+
 export default defineComponent({
   name: 'UploadFile',
   components: {
@@ -188,8 +204,9 @@ export default defineComponent({
     loadingText: String,
     selectToAdd: booleanProp,
     precision: Number,
-    onDelete: eventProp<(file: FileState, source: File) => void>(),
-    onPreview: eventProp<(file: FileState, source: File) => void>()
+    canPreview: Function as PropType<(file: FileState) => boolean>,
+    onDelete: eventProp<(file: FileState) => void>(),
+    onPreview: eventProp<(file: FileState) => void>()
   },
   emits: [],
   setup(_props) {
@@ -208,7 +225,11 @@ export default defineComponent({
       },
       loadingText: null,
       selectToAdd: false,
-      precision: 2
+      precision: 2,
+      canPreview: {
+        default: isImage,
+        isFunc: true
+      }
     })
 
     const nh = useNameHelper('upload')
@@ -217,6 +238,7 @@ export default defineComponent({
     const useIconRenderer = computed(() => typeof props.iconRenderer === 'function')
     const fileName = computed(() => props.file.path || props.file.name)
     const percentage = computed(() => toFixed(props.file.percentage, props.precision))
+    const showThumb = computed(() => isImage(props.file))
 
     function getFileExtension(file: FileState) {
       return file.name.split('.').pop()!.toLocaleLowerCase()
@@ -233,14 +255,16 @@ export default defineComponent({
     }
 
     function handleDelete(file: FileState) {
-      emitEvent(props.onDelete, file, file.source)
+      emitEvent(props.onDelete, file)
     }
 
     function handlePreview(file: FileState) {
-      emitEvent(props.onPreview, file, file.source)
+      emitEvent(props.onPreview, file)
     }
 
     function transformfileToBase64(file: FileState) {
+      if (!file.source) return
+
       const reader = new FileReader()
 
       reader.readAsDataURL(file.source)
@@ -261,6 +285,7 @@ export default defineComponent({
       useIconRenderer,
       fileName,
       percentage,
+      showThumb,
 
       getFileIcon,
       handleDelete,

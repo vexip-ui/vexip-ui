@@ -23,3 +23,10 @@ function handleSuccess(response: { id: string | null }) {
   }
 }
 </script>
+
+<style scoped>
+.vxp-upload {
+  width: 100%;
+  max-width: 500px;
+}
+</style>

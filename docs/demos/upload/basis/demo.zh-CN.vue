@@ -13,3 +13,10 @@ function handleSuccess(response: { id: string | null }) {
   fileId.value = response.id
 }
 </script>
+
+<style scoped>
+.vxp-upload {
+  width: 100%;
+  max-width: 500px;
+}
+</style>

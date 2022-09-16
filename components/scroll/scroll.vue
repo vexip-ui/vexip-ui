@@ -301,7 +301,7 @@ export default defineComponent({
       canPlay.value = false
 
       clearTimeout(playTimer)
-      window.clearTimeout(startTimer)
+      clearTimeout(startTimer)
       clearTimeout(endTimer)
     }
     /* autoplay */

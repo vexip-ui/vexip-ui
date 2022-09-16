@@ -16,6 +16,7 @@
       :loading-text="props.loadingText"
       :select-to-add="props.selectToAdd"
       :precision="props.precision"
+      :can-preview="props.canPreview"
       @delete="handleDelete"
       @preview="handleDelete"
     >
@@ -32,7 +33,7 @@
       </template>
     </UploadFile>
   </transition-group>
-  <ul v-else :class="nh.be('files')" :style="props.style">
+  <ul v-else :class="[nh.be('files'), nh.bs('vars')]" :style="props.style">
     <UploadFile
       v-for="item in props.files"
       :key="item.id"
@@ -42,6 +43,7 @@
       :loading-text="props.loadingText"
       :select-to-add="props.selectToAdd"
       :precision="props.precision"
+      :can-preview="props.canPreview"
       @delete="handleDelete"
       @preview="handlePreview"
     >
@@ -89,8 +91,9 @@ export default defineComponent({
     loadingText: String,
     style: styleProp,
     precision: Number,
-    onDelete: eventProp<(file: FileState, source: File) => void>(),
-    onPreview: eventProp<(file: FileState, source: File) => void>()
+    canPreview: Function as PropType<(file: FileState) => boolean>,
+    onDelete: eventProp<(file: FileState) => void>(),
+    onPreview: eventProp<(file: FileState) => void>()
   },
   emits: [],
   setup(_props) {
@@ -114,11 +117,11 @@ export default defineComponent({
     })
 
     function handleDelete(file: FileState) {
-      emitEvent(props.onDelete, file, file.source)
+      emitEvent(props.onDelete, file)
     }
 
     function handlePreview(file: FileState) {
-      emitEvent(props.onPreview, file, file.source)
+      emitEvent(props.onPreview, file)
     }
 
     return {

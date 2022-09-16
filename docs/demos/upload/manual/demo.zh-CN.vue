@@ -53,3 +53,10 @@ function handleChange(files: File[]) {
   console.info(files)
 }
 </script>
+
+<style scoped>
+.vxp-upload {
+  width: 100%;
+  max-width: 500px;
+}
+</style>

@@ -552,7 +552,7 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     function setAutoplay() {
-      window.clearInterval(timer.play)
+      clearInterval(timer.play)
 
       if (!props.autoplay) return
 
@@ -576,7 +576,7 @@ export default defineComponent({
         clearTimeout(timer.hover)
 
         timer.hover = setTimeout(() => {
-          window.clearInterval(timer.play)
+          clearInterval(timer.play)
         }, 250)
       }
 

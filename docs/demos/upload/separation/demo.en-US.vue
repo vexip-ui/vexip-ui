@@ -43,3 +43,10 @@ function deleteFile(file: FileState) {
   upload.value?.handleDelete(file)
 }
 </script>
+
+<style scoped>
+.vxp-upload {
+  width: 100%;
+  max-width: 500px;
+}
+</style>

@@ -1,8 +1,5 @@
 <template>
-  <Upload list-type="thumbnail" button-label="缩略图列表" :default-files="defaultFiles"></Upload>
-  <br />
-  <br />
-  <Upload list-type="card" button-label="卡片列表" :default-files="defaultFiles"></Upload>
+  <Upload url="//jsonplaceholder.typicode.com/posts/" :default-files="defaultFiles"></Upload>
 </template>
 
 <script setup lang="ts">

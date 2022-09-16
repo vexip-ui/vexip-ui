@@ -8,6 +8,12 @@ config.global.stubs = {
     setup(_, { slots }) {
       return () => slots.default?.()
     }
+  },
+  TransitionGroup: {
+    inheritAttrs: false,
+    setup(_, { slots }) {
+      return () => slots.default?.()
+    }
   }
 }
 

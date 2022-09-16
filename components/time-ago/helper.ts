@@ -27,7 +27,7 @@ export function subscribe(id: number, record: TimeAgoRecord) {
   recordMap.set(id, record)
 
   if (recordMap.size && !isRunning) {
-    window.clearInterval(timer)
+    clearInterval(timer)
 
     timer = setInterval(() => {
       isRunning = true
@@ -55,7 +55,7 @@ export function unsubscribe(id: number) {
   recordMap.delete(id)
 
   if (!recordMap.size) {
-    window.clearInterval(timer)
+    clearInterval(timer)
     isRunning = false
   }
 }

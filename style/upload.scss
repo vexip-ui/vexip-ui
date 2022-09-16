@@ -27,16 +27,19 @@ $upload: map.merge(
     file-b-color: get-css-var('border-color-base'),
     file-b-color-success: get-css-var('color-success-base'),
     file-b-color-fail: get-css-var('color-error-base'),
-    file-border: get-css-var('border-shape') get-css-var('upload-file-b-color'),
     file-radius: get-css-var('radius-base'),
     thumbnail-color: get-css-var('content-color-secondary'),
     mask-bg-color: get-css-var('color-black'),
     mask-opacity: 45%,
     action-color: get-css-var('content-color-third'),
-    action-color-hover: get-css-var('color-primary-base'),
+    action-color-hover: get-css-var('content-color-primary'),
     action-color-disabled: get-css-var('content-color-disabled'),
-    action-color-light: get-css-var('content-color-placeholder'),
-    action-color-reverse: get-css-var('color-primary-base'),
+    thumb-action-color: rgba(255, 255, 255, 70%),
+    thumb-action-color-hover: rgba(255, 255, 255, 100%),
+    thumb-action-color-disabled: rgba(255, 255, 255, 30%),
+    card-action-color: get-css-var('content-color-secondary'),
+    card-action-color-hover: get-css-var('color-primary-base'),
+    card-action-color-disabled: get-css-var('content-color-disabled'),
     percentage-color: get-css-var('content-color-secondary')
   ),
   $upload
@@ -216,17 +219,17 @@ $upload: map.merge(
       padding: 6px;
       margin-right: 6px;
       margin-bottom: 6px;
-      border: get-css-var('upload-file-border');
+      border: get-css-var('border-shape') get-css-var('upload-file-b-color');
       transition: get-css-var('transition-border');
     }
 
-    &--thumbnail &--success,
-    &--card &--success {
+    &--thumbnail#{&}--success,
+    &--card#{&}--success {
       border-color: get-css-var('upload-file-b-color-success');
     }
 
-    &--thumbnail &--fail,
-    &--card &--fail {
+    &--thumbnail#{&}--fail,
+    &--card#{&}--fail {
       border-color: get-css-var('upload-file-b-color-fail');
     }
 
@@ -243,11 +246,11 @@ $upload: map.merge(
   }
 
   &__file--success &__filename {
-    color: get-css-var('upload-success-color');
+    color: get-css-var('upload-color-success');
   }
 
   &__file--fail &__filename {
-    color: get-css-var('upload-fail-color');
+    color: get-css-var('upload-color-fail');
   }
 
   &__label {
@@ -357,26 +360,42 @@ $upload: map.merge(
     outline: 0;
 
     &--disabled {
-      color: get-css-var('upload-action-color-disabled') !important;
+      color: get-css-var('upload-action-color-disabled');
       cursor: not-allowed;
     }
   }
 
   &__file--thumbnail &__action {
-    color: get-css-var('upload-action-color-light');
+    color: get-css-var('upload-thumb-action-color');
 
     &:hover,
     &:focus {
-      color: get-css-var('upload-action-color-reverse');
+      color: get-css-var('upload-thumb-action-color-hover');
+    }
+
+    &--disabled {
+      &,
+      &:hover,
+      &:focus {
+        color: get-css-var('upload-thumb-action-color-disabled');
+      }
     }
   }
 
   &__file--card &__action {
-    color: get-css-var('upload-action-color');
+    color: get-css-var('upload-card-action-color');
 
     &:hover,
     &:focus {
-      color: get-css-var('upload-action-color-hover');
+      color: get-css-var('upload-card-action-color-hover');
+    }
+
+    &--disabled {
+      &,
+      &:hover,
+      &:focus {
+        color: get-css-var('upload-card-action-color-disabled');
+      }
     }
   }
 
@@ -423,18 +442,23 @@ $upload: map.merge(
 
   &__file:hover &__close {
     color: get-css-var('upload-action-color');
+
+    &:hover,
+    &:focus {
+      color: get-css-var('upload-action-color-hover');
+    }
   }
 
   &__success {
-    color: get-css-var('upload-success-color');
+    color: get-css-var('upload-color-success');
   }
 
   &__fail {
-    color: get-css-var('upload-fail-color');
+    color: get-css-var('upload-color-fail');
   }
 
   &__loading {
-    color: get-css-var('upload-loading-color');
+    color: get-css-var('upload-color-loading');
   }
 
   &__progress {

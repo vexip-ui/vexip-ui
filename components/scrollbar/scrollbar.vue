@@ -184,7 +184,7 @@ export default defineComponent({
 
     if (props.appear) {
       watch(currentScroll, () => {
-        window.clearInterval(fadeTimer)
+        clearInterval(fadeTimer)
         active.value = true
 
         if (!scrolling.value && !tracking.value) {
@@ -239,7 +239,7 @@ export default defineComponent({
 
         if (!props.appear) {
           watch(currentScroll, () => {
-            window.clearInterval(fadeTimer)
+            clearInterval(fadeTimer)
             active.value = true
             setScrollbarFade()
           })

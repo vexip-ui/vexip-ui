@@ -87,7 +87,7 @@ export default defineComponent({
 
             if (percent.value >= maxPercent) {
               percent.value = maxPercent
-              window.clearInterval(interval)
+              clearInterval(interval)
             }
           }, 500)
         }

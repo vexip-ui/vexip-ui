@@ -3,9 +3,6 @@ export type UploadStatusType = 'pending' | 'uploading' | 'fail' | 'success' | 'd
 
 export type SourceFile = File & { path?: string }
 
-export type BeforeFn = (file: SourceFile, files: SourceFile[]) => any | Promise<any>
-export type RenderFn = (data: { file: SourceFile }) => any
-
 export type HttpError = Error & {
   response: any,
   url: string,
@@ -21,20 +18,34 @@ export const enum StatusType {
   DELETE = 'delete'
 }
 
+export type FileStatus = 'pending' | 'uploading' | 'fail' | 'success' | 'delete'
+
 export interface FileState {
-  id: string,
+  id: string | number,
   name: string,
   size: number,
   type: string,
   base64: string | null,
-  status: StatusType,
+  status: FileStatus,
   percentage: number,
-  source: SourceFile,
+  source: SourceFile | null,
+  url: string | null,
   path: string,
   xhr: XMLHttpRequest | null,
   response: any,
   error: HttpError | null
 }
+
+export type FileOptions = Partial<Omit<FileState, 'xhr' | 'response' | 'error'>>
+
+type MaybePromise<T> = T | Promise<T>
+
+export type BeforeUpload = (
+  file: FileState,
+  files: FileState[]
+) => MaybePromise<boolean | Blob | SourceFile | void>
+export type BeforeSelect = (file: FileState, files: FileState[]) => MaybePromise<boolean | void>
+export type RenderFn = (data: { file: FileState }) => any
 
 export interface UploadOptions {
   url: string,
