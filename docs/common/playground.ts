@@ -5,7 +5,8 @@ let importMap = {
     'vexip-ui': `${playgroundUrl}vexip-ui.js`,
     '@vexip-ui/icons': `${playgroundUrl}vexip-ui-icons.js`,
     vue: `${playgroundUrl}vue.runtime.esm-browser.js`,
-    'vue/server-renderer': `${playgroundUrl}server-renderer.esm-browser.js`
+    'vue/server-renderer': `${playgroundUrl}server-renderer.esm-browser.js`,
+    'vue-router': `${playgroundUrl}vue-router.js`
   }
 }
 
@@ -17,7 +18,8 @@ if (import.meta.env.DEV) {
       'vexip-ui': `${playgroundUrl}vexip-ui.es.js`,
       '@vexip-ui/icons': `${playgroundUrl}icons/index.es.js`,
       vue: `${playgroundUrl}proxy/vue`,
-      'vue/server-renderer': `${playgroundUrl}proxy/vue-server`
+      'vue/server-renderer': `${playgroundUrl}proxy/vue-server`,
+      'vue-router': `${playgroundUrl}proxy/vue-router`
     }
   }
 }

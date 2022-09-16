@@ -146,7 +146,10 @@ store.setImportMap({
       : `${location.origin}/icons/index.es.js`,
     '@vexip-ui/utils': import.meta.env.PROD
       ? `${location.origin}/vexip-ui-utils.js`
-      : `${location.origin}/utils/index.es.js`
+      : `${location.origin}/utils/index.es.js`,
+    'vue-router': import.meta.env.PROD
+      ? `${location.origin}/vue-router.js`
+      : `${location.origin}/proxy/vue-router`
   }
 })
 ;(!serializedState
