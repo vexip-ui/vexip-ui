@@ -1,3 +1,5 @@
+# 1.7.0 (2022-09-16)
+
 # [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.5.1...hooks@1.6.0) (2022-07-26)
 
 ### Bug Fixes
