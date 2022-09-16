@@ -1,3 +1,39 @@
+### Preset Types
+
+```ts
+type HttpError = Error & {
+  response: any,
+  url: string,
+  status: number,
+  method: string
+}
+
+enum UploadStatusType {
+  PENDING = 'pending',
+  UPLOADING = 'uploading',
+  FAIL = 'fail',
+  SUCCESS = 'success',
+  DELETE = 'delete'
+}
+
+type SourceFile = File & { path?: string }
+
+interface FileState {
+  id: string,
+  name: string,
+  size: number,
+  type: string,
+  base64: string | null,
+  status: UploadStatusType,
+  percentage: number,
+  source: SourceFile,
+  path: string,
+  xhr: XMLHttpRequest | null,
+  response: any,
+  error: HttpError | null
+}
+```
+
 ### Upload Props
 
 | Name             | Type                                                             | Description                                                                                                                                                                                                                         | Default            | Since   |
@@ -35,42 +71,6 @@
 | loading-icon     | `Record<string, any>`                                            | Set the loading icon                                                                                                                                                                                                                | `Spinner`          | `2.0.0` |
 | loading-lock     | `boolean`                                                        | Set whether to be read-only when loading                                                                                                                                                                                            | `false`            | `2.0.0` |
 | loading-spin     | `boolean`                                                        | Set whether to use spin animation for the loading icon                                                                                                                                                                              | `false`            | `2.0.0` |
-
-The various states of the File are encapsulated inside the component:
-
-```ts
-type HttpError = Error & {
-  response: any,
-  url: string,
-  status: number,
-  method: string
-}
-
-enum UploadStatusType {
-  PENDING = 'pending',
-  UPLOADING = 'uploading',
-  FAIL = 'fail',
-  SUCCESS = 'success',
-  DELETE = 'delete'
-}
-
-type SourceFile = File & { path?: string }
-
-interface FileState {
-  id: string,
-  name: string,
-  size: number,
-  type: string,
-  base64: string | null,
-  status: UploadStatusType,
-  percentage: number,
-  source: SourceFile,
-  path: string,
-  xhr: XMLHttpRequest | null,
-  response: any,
-  error: HttpError | null
-}
-```
 
 ### Upload Events
 

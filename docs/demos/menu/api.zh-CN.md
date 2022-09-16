@@ -1,21 +1,4 @@
-### Menu 属性
-
-| 名称          | 类型                                               | 说明                                                                           | 默认值       | 始于    |
-| ------------- | -------------------------------------------------- | ------------------------------------------------------------------------------ | ------------ | ------- |
-| active        | `string`                                           | 设置默认激活的菜单                                                             | `null`       | -       |
-| accordion     | `boolean`                                          | 设置是否开启手风琴模式，该模式下同级菜单只能展开一个                           | `0`          | -       |
-| marker-type   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'none'` | 设置选中菜单的标记的类型                                                       | `'right'`    | -       |
-| reduced       | `boolean`                                          | 设置菜单是否搜索                                                               | `false`      | -       |
-| horizontal    | `boolean`                                          | 设置是否为横向菜单                                                             | `false`      | -       |
-| group-type    | `'collapse' \| 'dropdown'`                         | 在展开状态时子菜单的形式                                                       | `'collapse'` | -       |
-| theme         | `'light' \| 'dark'`                                | 设置菜单的主题                                                                 | `'light'`    | -       |
-| tooltip-theme | `'light' \| 'dark'`                                | 设置菜单气泡提示的主题                                                         | `'dark'`     | -       |
-| transfer      | `boolean \| string`                                | 设置其下 MenuItem 的 `transfer` 属性，当 MenuItem 单独设置了该属性时优先级更高 | `false`      | -       |
-| options       | `MenuOptions[]`                                    | 设置菜单的配置                                                                 | `[]`         | `2.0.0` |
-| router        | `Router`                                           | 设置 Router 对象，并自动解析生成菜单，会优先使用 `options` 解析菜单            | `null`       | `2.0.0` |
-| manual-route  | `boolean`                                          | 设置是否为手动路由模式，开启后将不会自动处理路由变化                           | `false`      | `2.0.0` |
-
-一些预设类型：
+### 预设类型
 
 ```ts
 import type { RouteLocationRaw } from 'vue-router'
@@ -32,6 +15,23 @@ interface MenuOptions {
   children?: MenuOptions[]
 }
 ```
+
+### Menu 属性
+
+| 名称          | 类型                                               | 说明                                                                           | 默认值       | 始于    |
+| ------------- | -------------------------------------------------- | ------------------------------------------------------------------------------ | ------------ | ------- |
+| active        | `string`                                           | 设置默认激活的菜单                                                             | `null`       | -       |
+| accordion     | `boolean`                                          | 设置是否开启手风琴模式，该模式下同级菜单只能展开一个                           | `0`          | -       |
+| marker-type   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'none'` | 设置选中菜单的标记的类型                                                       | `'right'`    | -       |
+| reduced       | `boolean`                                          | 设置菜单是否搜索                                                               | `false`      | -       |
+| horizontal    | `boolean`                                          | 设置是否为横向菜单                                                             | `false`      | -       |
+| group-type    | `'collapse' \| 'dropdown'`                         | 在展开状态时子菜单的形式                                                       | `'collapse'` | -       |
+| theme         | `'light' \| 'dark'`                                | 设置菜单的主题                                                                 | `'light'`    | -       |
+| tooltip-theme | `'light' \| 'dark'`                                | 设置菜单气泡提示的主题                                                         | `'dark'`     | -       |
+| transfer      | `boolean \| string`                                | 设置其下 MenuItem 的 `transfer` 属性，当 MenuItem 单独设置了该属性时优先级更高 | `false`      | -       |
+| options       | `MenuOptions[]`                                    | 设置菜单的配置                                                                 | `[]`         | `2.0.0` |
+| router        | `Router`                                           | 设置 Router 对象，并自动解析生成菜单，会优先使用 `options` 解析菜单            | `null`       | `2.0.0` |
+| manual-route  | `boolean`                                          | 设置是否为手动路由模式，开启后将不会自动处理路由变化                           | `false`      | `2.0.0` |
 
 ### Menu 事件
 

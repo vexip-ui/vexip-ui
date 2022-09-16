@@ -37,6 +37,7 @@ $switch: map.merge(
 
   position: relative;
   display: inline-flex;
+  vertical-align: middle;
   cursor: pointer;
   user-select: none;
   background-color: get-css-var('switch-bg-color');

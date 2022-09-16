@@ -1,3 +1,55 @@
+### 预设类型
+
+```ts
+type CascaderValue = (string | number)[] | (string | number)[][]
+
+interface CascaderKeyConfig {
+  value?: string,
+  label?: string,
+  children?: string,
+  disabled?: string,
+  hasChild?: string
+}
+
+interface CascaderOptionState {
+  id: number,
+  parent: number,
+  value: string | number,
+  fullValue: string,
+  label: string,
+  fullLabel: string,
+  children: CascaderOptionState[],
+  disabled: boolean,
+  hasChild: boolean,
+  checked: boolean,
+  partial: boolean,
+  loading: boolean,
+  loaded: boolean,
+  error: boolean,
+  childrenLoaded: boolean,
+  data: Record<string, any>
+}
+
+interface OptionState {
+  id: number
+  parent: number
+  value: string | number
+  fullValue: string
+  label: string
+  fullLabel: string
+  children: OptionState[]
+  disabled: boolean
+  hasChild: boolean
+  checked: boolean
+  partial: boolean
+  loading: boolean
+  loaded: boolean
+  error: boolean
+  childrenLoaded: boolean
+  data: Record<string, any>
+}
+```
+
 ### Cascader 属性
 
 | 名称            | 类型                                                                                                                                                             | 说明                                                                                                 | 默认值           | 始于 |
@@ -36,39 +88,6 @@
 | loading-icon    | `Record<string, any>`                                                                                                                                            | 设置加载中的图标                                                                                     | `Spinner`        | -    |
 | loading-lock    | `boolean`                                                                                                                                                        | 设置在加载中时是否为只读                                                                             | `false`          | -    |
 | loading-spin    | `boolean`                                                                                                                                                        | 设置加载中图标是否使用旋转动画                                                                       | `false`          | -    |
-
-预设的类型定义：
-
-```ts
-type CascaderValue = (string | number)[] | (string | number)[][]
-
-interface CascaderKeyConfig {
-  value?: string,
-  label?: string,
-  children?: string,
-  disabled?: string,
-  hasChild?: string
-}
-
-interface CascaderOptionState {
-  id: number,
-  parent: number,
-  value: string | number,
-  fullValue: string,
-  label: string,
-  fullLabel: string,
-  children: CascaderOptionState[],
-  disabled: boolean,
-  hasChild: boolean,
-  checked: boolean,
-  partial: boolean,
-  loading: boolean,
-  loaded: boolean,
-  error: boolean,
-  childrenLoaded: boolean,
-  data: Record<string, any>
-}
-```
 
 ### Cascader 事件
 

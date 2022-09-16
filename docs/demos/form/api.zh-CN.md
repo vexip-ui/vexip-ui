@@ -1,3 +1,33 @@
+### 预设类型
+
+```ts
+type Types =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'int'
+  | 'float'
+  | 'array'
+  | 'object'
+  | 'date'
+  | 'url'
+  | 'color'
+  | 'email'
+type Range = [number, number]
+type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
+
+interface Rule<T = any> {
+  required?: boolean,
+  type?: Types,
+  length?: number,
+  range?: Range,
+  strict?: boolean,
+  enums?: T[],
+  message?: string,
+  validator?(value: T, model: Record<string, any>): ValidatorReslut
+}
+```
+
 ### Form 属性
 
 | 名称          | 类型                                   | 说明                                                                    | 默认值      | 始于    |
@@ -58,36 +88,6 @@
 | help             | `string`         | 设置字段的帮助信息                                                   | `''`         | `2.0.0` |
 
 > 支持的 Column 组件的属性包括：span、offset、push、pull、order、flex、xs、sm、md、lg、xl、xxl
-
-`Rule` 相关的类型定义：
-
-```ts
-type Types =
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'int'
-  | 'float'
-  | 'array'
-  | 'object'
-  | 'date'
-  | 'url'
-  | 'color'
-  | 'email'
-type Range = [number, number]
-type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
-
-interface Rule<T = any> {
-  required?: boolean,
-  type?: Types,
-  length?: number,
-  range?: Range,
-  strict?: boolean,
-  enums?: T[],
-  message?: string,
-  validator?(value: T, model: Record<string, any>): ValidatorReslut
-}
-```
 
 ### FormItem 插槽
 

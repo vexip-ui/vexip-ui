@@ -1,3 +1,39 @@
+### 预设类型
+
+```ts
+type HttpError = Error & {
+  response: any,
+  url: string,
+  status: number,
+  method: string
+}
+
+enum UploadStatusType {
+  PENDING = 'pending',
+  UPLOADING = 'uploading',
+  FAIL = 'fail',
+  SUCCESS = 'success',
+  DELETE = 'delete'
+}
+
+type SourceFile = File & { path?: string }
+
+interface FileState {
+  id: string,
+  name: string,
+  size: number,
+  type: string,
+  base64: string | null,
+  status: UploadStatusType,
+  percentage: number,
+  source: SourceFile,
+  path: string,
+  xhr: XMLHttpRequest | null,
+  response: any,
+  error: HttpError | null
+}
+```
+
 ### Upload 属性
 
 | 名称             | 类型                                                             | 说明                                                                                                                                 | 默认值             | 始于    |
@@ -35,42 +71,6 @@
 | loading-icon     | `Record<string, any>`                                            | 设置加载中的图标                                                                                                                     | `Spinner`          | `2.0.0` |
 | loading-lock     | `boolean`                                                        | 设置在加载中时是否为只读                                                                                                             | `false`            | `2.0.0` |
 | loading-spin     | `boolean`                                                        | 设置加载中图标是否使用旋转动画                                                                                                       | `false`            | `2.0.0` |
-
-组件内部对 File 的各项状态进行了封装：
-
-```ts
-type HttpError = Error & {
-  response: any,
-  url: string,
-  status: number,
-  method: string
-}
-
-enum UploadStatusType {
-  PENDING = 'pending',
-  UPLOADING = 'uploading',
-  FAIL = 'fail',
-  SUCCESS = 'success',
-  DELETE = 'delete'
-}
-
-type SourceFile = File & { path?: string }
-
-interface FileState {
-  id: string,
-  name: string,
-  size: number,
-  type: string,
-  base64: string | null,
-  status: UploadStatusType,
-  percentage: number,
-  source: SourceFile,
-  path: string,
-  xhr: XMLHttpRequest | null,
-  response: any,
-  error: HttpError | null
-}
-```
 
 ### Upload 事件
 

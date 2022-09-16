@@ -1,21 +1,4 @@
-### Menu Props
-
-| Name          | Type                                               | Description                                                                                                                     | Default      | Since   |
-| ------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------- |
-| active        | `string`                                           | Set the default active menu                                                                                                     | `null`       | -       |
-| accordion     | `boolean`                                          | Set whether to enable accordion mode. In this mode, only one menu at the same level can be expanded                             | `0`          | -       |
-| marker-type   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'none'` | Set the marker type of the selected menu                                                                                        | `'right'`    | -       |
-| reduced       | `boolean`                                          | set menu search or not                                                                                                          | `false`      | -       |
-| horizontal    | `boolean`                                          | Set whether the menu is horizontal                                                                                              | `false`      | -       |
-| group-type    | `'collapse' \| 'dropdown'`                         | Submenu form in expanded state                                                                                                  | `'collapse'` | -       |
-| theme         | `'light' \| 'dark'`                                | set the theme of the menu                                                                                                       | `'light'`    | -       |
-| tooltip-theme | `'light' \| 'dark'`                                | Set the theme of the menu bubble tip                                                                                            | `'dark'`     | -       |
-| transfer      | `boolean \| string`                                | Set the `transfer` property of the MenuItem under it, the priority is higher when the MenuItem sets this property alone         | `false`      | -       |
-| options       | `MenuOptions[]`                                    | Set configuration of the menu                                                                                                   | `[]`         | `2.0.0` |
-| router        | `Router`                                           | Set the Router object and its routes will be parsed automatically and generate the menus, will use `options` to be parsed first | `null`       | `2.0.0` |
-| manual-route  | `boolean`                                          | Whether it is set to manual route mode, route changes will not be processed automatically after it is enabled                   | `false`      | `2.0.0` |
-
-Some preset types:
+### Preset Types
 
 ```ts
 import type { RouteLocationRaw } from 'vue-router'
@@ -32,6 +15,23 @@ interface MenuOptions {
   children?: MenuOptions[]
 }
 ```
+
+### Menu Props
+
+| Name          | Type                                               | Description                                                                                                                     | Default      | Since   |
+| ------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------- |
+| active        | `string`                                           | Set the default active menu                                                                                                     | `null`       | -       |
+| accordion     | `boolean`                                          | Set whether to enable accordion mode. In this mode, only one menu at the same level can be expanded                             | `0`          | -       |
+| marker-type   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'none'` | Set the marker type of the selected menu                                                                                        | `'right'`    | -       |
+| reduced       | `boolean`                                          | set menu search or not                                                                                                          | `false`      | -       |
+| horizontal    | `boolean`                                          | Set whether the menu is horizontal                                                                                              | `false`      | -       |
+| group-type    | `'collapse' \| 'dropdown'`                         | Submenu form in expanded state                                                                                                  | `'collapse'` | -       |
+| theme         | `'light' \| 'dark'`                                | set the theme of the menu                                                                                                       | `'light'`    | -       |
+| tooltip-theme | `'light' \| 'dark'`                                | Set the theme of the menu bubble tip                                                                                            | `'dark'`     | -       |
+| transfer      | `boolean \| string`                                | Set the `transfer` property of the MenuItem under it, the priority is higher when the MenuItem sets this property alone         | `false`      | -       |
+| options       | `MenuOptions[]`                                    | Set configuration of the menu                                                                                                   | `[]`         | `2.0.0` |
+| router        | `Router`                                           | Set the Router object and its routes will be parsed automatically and generate the menus, will use `options` to be parsed first | `null`       | `2.0.0` |
+| manual-route  | `boolean`                                          | Whether it is set to manual route mode, route changes will not be processed automatically after it is enabled                   | `false`      | `2.0.0` |
 
 ### Menu Events
 

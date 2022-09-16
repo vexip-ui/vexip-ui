@@ -1,3 +1,11 @@
+### Preset Types
+
+```ts
+type DateType = 'year' | 'month' | 'date'
+type TimeType = 'hour' | 'minute' | 'second'
+type DateTimeType = DateType | TimeType
+```
+
 ### DatePicker Props
 
 | Name            | Type                                                                    | Description                                                                                                                                                                           | Default                 | Since   |
@@ -36,14 +44,6 @@
 | loading-icon    | `Record<string, any>`                                                   | Set the loading icon                                                                                                                                                                  | `Spinner`               | `2.0.0` |
 | loading-lock    | `boolean`                                                               | Set whether to be read-only when loading                                                                                                                                              | `false`                 | `2.0.0` |
 | loading-spin    | `boolean`                                                               | Set whether to use spin animation for the loading icon                                                                                                                                | `false`                 | `2.0.0` |
-
-Some preset types:
-
-```ts
-type DateType = 'year' | 'month' | 'date'
-type TimeType = 'hour' | 'minute' | 'second'
-type DateTimeType = DateType | TimeType
-```
 
 ### DatePicker Events
 

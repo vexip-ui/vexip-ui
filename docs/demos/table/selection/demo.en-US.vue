@@ -41,7 +41,7 @@ const data = ref([
     firstName: 'Elisabeth',
     lastName: 'Rogers',
     age: '56',
-    _checked: true
+    checked: true
   },
   {
     id: '4',
