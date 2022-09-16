@@ -1,4 +1,4 @@
-### Preinstall Type
+### Preset Type
 
 ```ts
 interface SliderMarker {
