@@ -365,7 +365,7 @@ export default defineComponent({
       const [start, end] = truthValue.value
       const value = props.range ? (start > end ? [end, start] : [start, end]) : end
 
-      if (isEqualValue(lastValue, value)) {
+      if (!isEqualValue(lastValue, value)) {
         lastValue = value
         emitEvent(props.onInput, value)
       }
