@@ -16,6 +16,8 @@ pnpm-lock.yaml
 
 __unconfig_vite.config*
 
+meta-data.json
+
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml

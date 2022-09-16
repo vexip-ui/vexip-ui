@@ -7,9 +7,8 @@
     "build": "vite build",
     "test": "vitest"
   },
-  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "private": false,
   "engines": {

@@ -70,6 +70,7 @@ export default defineConfig(async () => {
     resolve: {
       alias: [
         { find: /^@\/components/, replacement: resolve(__dirname, 'components') },
+        { find: /^@\/directives/, replacement: resolve(__dirname, 'directives') },
         { find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }
       ]
     },
@@ -123,7 +124,14 @@ export default defineConfig(async () => {
       vue(),
       vueJsx(),
       dts({
-        exclude: ['node_modules', 'playground', 'common/hooks', 'common/icons', 'common/utils'],
+        exclude: [
+          'node_modules',
+          'playground',
+          'common/hooks',
+          'common/icons',
+          'common/plugins',
+          'common/utils'
+        ],
         outputDir: ['lib', 'es'],
         compilerOptions: { sourceMap },
         copyDtsFiles: false

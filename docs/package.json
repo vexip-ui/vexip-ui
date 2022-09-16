@@ -3,12 +3,13 @@
   "author": "qmhc",
   "scripts": {
     "build": "vite build",
+    "preview": "vite preview",
     "serve": "vite"
   },
   "private": true,
   "dependencies": {
-    "@vexip-ui/icons": "workspace:*",
     "@vexip-ui/hooks": "workspace:*",
+    "@vexip-ui/icons": "workspace:*",
     "@vexip-ui/utils": "workspace:*",
     "prismjs": "^1.28.0",
     "vexip-ui": "workspace:*",
@@ -30,7 +31,7 @@
     "postcss-discard-duplicates": "^5.1.0",
     "sass": "^1.53.0",
     "typescript": "4.6.4",
-    "vite": "^3.0.0",
-    "vite-plugin-md": "^0.13.1"
+    "vite": "^3.1.1",
+    "vite-plugin-vue-markdown": "^0.22.1"
   }
 }

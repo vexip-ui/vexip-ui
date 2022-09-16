@@ -15,7 +15,9 @@ function handleResize(entries: ResizeObserverEntry[]) {
   }
 }
 
-const resizeObserver = new (window.ResizeObserver || ResizeObserver)(handleResize)
+const resizeObserver = new (window ? window.ResizeObserver || ResizeObserver : ResizeObserver)(
+  handleResize
+)
 
 export function observeResize(el: Element, handler: ResizeHandler) {
   handlerMap.set(el, handler)
