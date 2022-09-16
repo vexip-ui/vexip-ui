@@ -92,9 +92,67 @@ export default defineConfig({
 })
 ```
 
+如果你连引入组件都觉得麻烦，那可以试试用 [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) 和 [unplugin-auto-import](https://github.com/antfu/unplugin-auto-import) 完成自动引入。
+
+安装插件：
+
+```sh
+pnpm i -D unplugin-vue-components unplugin-auto-import @vexip-ui/plugins
+```
+
+在 `vite.config.ts` 中拓展以下内容：
+
+```ts
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import Components from 'unplugin-vue-components/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import { VexipUIResolver } from '@vexip-ui/plugins'
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    Components({
+      resolvers: [
+        VexipUIResolver()
+      ]
+    }),
+    AutoImport({
+      resolvers: [
+        VexipUIResolver()
+      ]
+    })
+  ]
+})
+```
+
+然后就可以直接像下面这样使用组件库了：
+
+```vue
+<template>
+  <Button type="primary" @click="handleClick">
+    Button
+  </Button>
+  <div
+    v-loading="active"
+    style="position: relative; width: 400px; padding-top: 60px; background-color: #fab00577;"
+  ></div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const active = ref(true)
+
+function handleClick() {
+  Message.info('Clicked Button')
+}
+</script>
+```
+
 ### Webpack
 
-借助 Babel 插件 [babel-plugin-import](//github.com/ant-design/babel-plugin-import) 可以更简洁地进行按需引入。
+借助 Babel 插件 [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) 可以更简洁地进行按需引入。
 
 安装插件：
 
@@ -126,7 +184,7 @@ module.exports = {
 
 ## 全局类型支持
 
-如果全局引入了组件库，在项目的 `tsconfig.json` 文件配置 `compilerOptions.type` 选项可以快速获得全局类型支持：
+如果全局引入了组件库，在项目的 `tsconfig.json` 文件配置 `compilerOptions.types` 选项可以快速获得全局类型支持：
 
 ```json
 {
@@ -138,4 +196,4 @@ module.exports = {
 
 ## 完整组件列表
 
-你可以在 [这里](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts#L105) 查看完整的组件列表。
+你可以在 [这里](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts#L120) 查看完整的组件列表。

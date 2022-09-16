@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/vite-plugin-vue-i18n'
 import discardCss from 'postcss-discard-duplicates'
-import markdown from 'vite-plugin-md'
+import markdown from 'vite-plugin-vue-markdown'
 import { highlight } from './build/highlight'
 import { markdownItSetup } from './build/markdown'
 
@@ -29,10 +29,6 @@ export default defineConfig(({ command }) => {
                 find: /^@vexip-ui\/((?!icons).+)/,
                 replacement: resolve(__dirname, '../common/$1/src')
               },
-              // {
-              //   find: /^vexip-ui\/(es|lib)\/(.+)/,
-              //   replacement: resolve(__dirname, '../components/$2')
-              // },
               { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
             ]
           : [])

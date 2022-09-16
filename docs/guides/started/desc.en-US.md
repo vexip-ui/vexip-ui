@@ -92,6 +92,64 @@ export default defineConfig({
 })
 ```
 
+If you think this alos too complicated to import components, you can try to use [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components) and [unplugin-auto-import](https://github.com/antfu/unplugin-vue-components) to complete the automatic import.
+
+Install plugins:
+
+```sh
+pnpm i -D unplugin-vue-components unplugin-auto-import @vexip-ui/plugins
+```
+
+Add following in `vite.config.ts`:
+
+```ts
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import Components from 'unplugin-vue-components/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import { VexipUIResolver } from '@vexip-ui/plugins'
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    Components({
+      resolvers: [
+        VexipUIResolver()
+      ]
+    }),
+    AutoImport({
+      resolvers: [
+        VexipUIResolver()
+      ]
+    })
+  ]
+})
+```
+
+Then you can use components directly like this:
+
+```vue
+<template>
+  <Button type="primary" @click="handleClick">
+    Button
+  </Button>
+  <div
+    v-loading="active"
+    style="position: relative; width: 400px; padding-top: 60px; background-color: #fab00577;"
+  ></div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const active = ref(true)
+
+function handleClick() {
+  Message.info('Clicked Button')
+}
+</script>
+```
+
 ### Webpack
 
 On demand import can more concise with the help of the Webpack plugin [babel-plugin-import](https://github.com/ant-design/babel-plugin-import).
@@ -126,7 +184,7 @@ Due to plugin limitations, you still need to manually import `vexip-ui/css/prese
 
 ## Global Types Infer
 
-If the components are imported globally, add the `compilerOptions.type` option in your project's `tsconfig.json` file to quickly get global types infer:
+If the components are imported globally, add the `compilerOptions.types` option in your project's `tsconfig.json` file to quickly get global types infer:
 
 ```json
 {
@@ -138,4 +196,4 @@ If the components are imported globally, add the `compilerOptions.type` option i
 
 ## Full Compoennts List
 
-You can check full components list [here](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts#L105).
+You can check full components list [here](https://github.com/vexip-ui/vexip-ui/blob/main/components/index.ts#L120).
