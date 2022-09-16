@@ -1,4 +1,4 @@
-### Preset Type
+### Preset Types
 
 ```ts
 interface SliderMarker {
