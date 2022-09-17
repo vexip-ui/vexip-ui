@@ -27,6 +27,7 @@ import {
   useSetTimeout,
   useListener
 } from '@vexip-ui/hooks'
+import { isElement } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { Placement, VirtualElement } from '@vexip-ui/hooks'
@@ -130,7 +131,7 @@ export default defineComponent({
       return originalTrigger.value
     })
     const trigger = computed(() => {
-      return reference.value instanceof HTMLElement ? reference.value : null
+      return isElement(reference.value) ? reference.value : null
     })
 
     useClickOutside(handleClickOutside, originalTrigger)

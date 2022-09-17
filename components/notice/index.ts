@@ -1,6 +1,6 @@
 import { createApp, markRaw } from 'vue'
 import Component from './notice.vue'
-import { isNull, isObject, toNumber, destroyObject } from '@vexip-ui/utils'
+import { isClient, isNull, isObject, noop, toNumber, destroyObject } from '@vexip-ui/utils'
 import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
@@ -180,6 +180,10 @@ export class NoticeManager {
     content?: string | number,
     _duration?: number
   ) {
+    if (!isClient) {
+      return noop
+    }
+
     let options: NoticeOptions
 
     if (isObject(title)) {

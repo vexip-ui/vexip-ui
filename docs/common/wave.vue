@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { isClient } from '@vexip-ui/utils'
 
 const props = defineProps({
   reverse: {
@@ -15,12 +16,14 @@ const props = defineProps({
 })
 
 const canvas = ref<HTMLCanvasElement | null>(null)
-const rootEl = document.documentElement
+const rootEl = isClient ? document.documentElement : undefined
 
 let isMounted = false
 let cancelAnimate: (() => void) | undefined
 
 function animateWave() {
+  if (!isClient) return
+
   // 获取画布
   const canvasEl = canvas.value!
   const canvasPen = canvasEl.getContext('2d')! // 设置波浪海域（海浪宽度，高度）
@@ -43,7 +46,7 @@ function animateWave() {
 
   canvasPen.lineWidth = lineWidth
 
-  const rootStyle = getComputedStyle(rootEl)
+  const rootStyle = getComputedStyle(rootEl!)
   const bgColor = rootStyle.getPropertyValue('--vxp-color-primary-opacity-8')
 
   // 创建静态的曲线

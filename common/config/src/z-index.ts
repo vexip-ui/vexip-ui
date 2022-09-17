@@ -1,4 +1,5 @@
 import { computed, provide, inject, unref, getCurrentInstance } from 'vue'
+import { isClient } from '@vexip-ui/utils'
 
 import type { App, ComputedRef, Ref } from 'vue'
 
@@ -7,7 +8,7 @@ export const PROVIDED_Z_INDEX = '___vxp-provided-z-index'
 let counter = 0
 let initZIndex = 2000
 
-if (document) {
+if (isClient) {
   const rootStyle = getComputedStyle(document.documentElement)
   const cssZIndex = parseFloat(rootStyle.getPropertyValue('--vxp-z-index-popup').trim())
 

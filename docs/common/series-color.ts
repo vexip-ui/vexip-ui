@@ -2,10 +2,12 @@ import { parseColorToRgba, mixColor, adjustAlpha, toFixed } from '@vexip-ui/util
 
 import type { Color } from '@vexip-ui/utils'
 
-const rootEl = document.documentElement
-const rootStyle = getComputedStyle(rootEl)
+const rootEl = typeof document !== 'undefined' ? document.documentElement : undefined
+const rootStyle = rootEl && getComputedStyle(rootEl)
 
 export function computeSeriesColors(value: Color) {
+  if (!rootEl || !rootStyle) return {}
+
   const colors: Record<string, string[]> = {
     light: [],
     opacity: [],

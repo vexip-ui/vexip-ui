@@ -16,6 +16,7 @@ export default defineConfig(({ command }) => {
 
   return {
     define: {
+      __SSR__: JSON.stringify(process.env.SSR === 'true'),
       __ROLLBACK_LANG__: JSON.stringify('zh-CN'),
       __VERSION__: JSON.stringify(pkg.version || '')
     },

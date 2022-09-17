@@ -1,4 +1,5 @@
 import { ResizeObserver } from '@juggle/resize-observer'
+import { isClient } from '@vexip-ui/utils'
 
 export type ResizeHandler = (entry: ResizeObserverEntry) => any
 
@@ -15,7 +16,7 @@ function handleResize(entries: ResizeObserverEntry[]) {
   }
 }
 
-const resizeObserver = new (window ? window.ResizeObserver || ResizeObserver : ResizeObserver)(
+const resizeObserver = new (isClient ? window.ResizeObserver || ResizeObserver : ResizeObserver)(
   handleResize
 )
 

@@ -1,6 +1,6 @@
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useMounted, isHiddenElement } from '@vexip-ui/hooks'
-import { multipleFixed, boundRange } from '@vexip-ui/utils'
+import { isElement, multipleFixed, boundRange } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
 import type { Ref } from 'vue'
@@ -198,7 +198,7 @@ export function useScrollWrapper({
       el = content.el.querySelector(el)!
     }
 
-    if (!(el instanceof Node)) return Promise.resolve()
+    if (!isElement(el)) return Promise.resolve()
 
     const wrapperRect = content.el.getBoundingClientRect()
     const elRect = el.getBoundingClientRect()

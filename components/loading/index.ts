@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import Component from './loading.vue'
-import { destroyObject } from '@vexip-ui/utils'
+import { isClient, destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
 import type { LoadingState, LoadingOptions, LoadingInstance } from './symbol'
@@ -30,6 +30,8 @@ export class LoadingManager {
   open(percent: number): void
   open(options: LoadingOptions): void
   open(options: number | LoadingOptions) {
+    if (!isClient) return
+
     if (typeof options === 'number') {
       options = { percent: options }
     }
