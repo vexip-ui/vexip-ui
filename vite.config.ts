@@ -130,7 +130,8 @@ export default defineConfig(async () => {
           'common/hooks',
           'common/icons',
           'common/plugins',
-          'common/utils'
+          'common/utils',
+          'components/*/tests'
         ],
         outputDir: ['lib', 'es'],
         compilerOptions: { sourceMap },
