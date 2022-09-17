@@ -49,6 +49,7 @@ import {
 } from 'vue'
 import { AnchorLink } from '@/components/anchor-link'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { isClient, isElement } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
@@ -113,7 +114,7 @@ export default defineComponent({
     let container: HTMLElement | null = null
     let scroller: ScrollType | null = null
 
-    if (!currentActive.value && props.bindHash) {
+    if (isClient && !currentActive.value && props.bindHash) {
       currentActive.value = decodeURIComponent(location.hash)
     }
 
@@ -165,7 +166,7 @@ export default defineComponent({
       nextTick(() => {
         const viewer: unknown = props.viewer
 
-        let _container: Element | ComponentInternalInstance | null = null
+        let _container: Node | ComponentInternalInstance | null = null
         let refName = 'scroll'
 
         if (typeof viewer === 'string') {
@@ -181,11 +182,11 @@ export default defineComponent({
           }
         } else if (typeof viewer === 'function') {
           _container = viewer()
-        } else if (viewer instanceof Element) {
+        } else if (isElement(viewer)) {
           _container = viewer
         }
 
-        if (_container instanceof Element) {
+        if (isElement(_container)) {
           isRawViewer = true
         } else {
           isRawViewer = false
@@ -208,7 +209,7 @@ export default defineComponent({
             const refTemp = _container.refs?.[refName]
 
             if (refTemp) {
-              if (refTemp instanceof Element) {
+              if (isElement(refTemp)) {
                 isRawViewer = true
                 container = refTemp as HTMLElement
               } else {
@@ -360,7 +361,7 @@ export default defineComponent({
         animating.value = false
       }
 
-      if (props.bindHash && location) {
+      if (isClient && props.bindHash && location) {
         location.hash = encodeURIComponent(currentActive.value.replace(/^#/, ''))
       }
     }

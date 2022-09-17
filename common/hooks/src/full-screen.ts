@@ -1,5 +1,5 @@
 import { ref, computed, getCurrentScope, onScopeDispose } from 'vue'
-import { noop } from '@vexip-ui/utils'
+import { isClient, noop } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 
@@ -59,10 +59,12 @@ const functionsMap = [
 
 let map!: FunctionMap
 
-for (const m of functionsMap) {
-  if (m[1] in document) {
-    map = m
-    break
+if (isClient) {
+  for (const m of functionsMap) {
+    if (m[1] in document) {
+      map = m
+      break
+    }
   }
 }
 
@@ -77,7 +79,7 @@ const notSupportedResult = {
 
 const subscriptions = new Set<Ref<boolean>>()
 
-if (document && map) {
+if (isClient && map) {
   const ELEMENT = map[2]
   const EVENT = map[4]
 
@@ -94,7 +96,7 @@ if (document && map) {
 }
 
 export function useFullScreen(target: Ref<HTMLElement | null> = ref(null)) {
-  if (!document || !supported) {
+  if (!isClient || !supported) {
     return { ...notSupportedResult }
   }
 

@@ -9,16 +9,18 @@ import {
   onBeforeUnmount,
   inject
 } from 'vue'
-import { parseColorToRgba, mixColor, adjustAlpha, toFixed } from '@vexip-ui/utils'
+import { isClient, parseColorToRgba, mixColor, adjustAlpha, toFixed } from '@vexip-ui/utils'
 import { LAYOUT_STATE } from './symbol'
 
 import type { Ref } from 'vue'
 import type { Color } from '@vexip-ui/utils'
 
-const rootEl = document.documentElement
-const rootStyle = getComputedStyle(rootEl)
+const rootEl = isClient ? document.documentElement : undefined
+const rootStyle = rootEl && getComputedStyle(rootEl)
 
 export function computeSeriesColors(value: Color, storageName = '') {
+  if (!rootEl || !rootStyle) return
+
   const colors: Record<string, string[]> = {
     light: [],
     opacity: [],
@@ -75,6 +77,10 @@ export function useLayoutState() {
 const breakPoints = Object.freeze(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 
 export function useMediaQuery(query: Ref<string | boolean>) {
+  const matched = ref(false)
+
+  if (!isClient) return matched
+
   const computedStyle = getComputedStyle(document.documentElement)
   const computedQuery = computed(() => {
     if (breakPoints.includes(query.value as any)) {
@@ -86,7 +92,6 @@ export function useMediaQuery(query: Ref<string | boolean>) {
   })
 
   let mediaQuery: MediaQueryList | undefined
-  const matched = ref(false)
 
   const update = () => {
     if (typeof computedQuery.value === 'boolean') {

@@ -1,6 +1,6 @@
 import { createVNode, render, markRaw } from 'vue'
 import Component from './toast.vue'
-import { toNumber, destroyObject } from '@vexip-ui/utils'
+import { isClient, noop, toNumber, destroyObject } from '@vexip-ui/utils'
 import { Check, Exclamation, Xmark, Spinner } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
@@ -137,6 +137,10 @@ export class ToastManager {
   }
 
   private _open(type: null | ToastType, content: FuzzyOptions, _duration?: number) {
+    if (!isClient) {
+      return noop
+    }
+
     this._timer && clearTimeout(this._timer)
 
     const options = typeof content === 'string' ? { content, duration: _duration } : content

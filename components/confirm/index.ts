@@ -1,6 +1,6 @@
 import { createVNode, render, markRaw } from 'vue'
 import Component from './confirm.vue'
-import { destroyObject } from '@vexip-ui/utils'
+import { isClient, destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
 import type { ConfirmType, ConfirmOptions, ConfirmInstance } from './symbol'
@@ -30,6 +30,10 @@ export class ConfirmManager {
   open(content: string, type?: ConfirmType): Promise<boolean>
   open(options: ConfirmOptions): Promise<boolean>
   open(options: FuzzyOptions, type?: ConfirmType) {
+    if (!isClient) {
+      return
+    }
+
     if (typeof options === 'string') {
       options = { content: options, confirmType: type }
     }

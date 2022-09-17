@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import Component from './contextmenu.vue'
-import { destroyObject } from '@vexip-ui/utils'
+import { isClient, destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
 import type { Key, ContextmenuConfig, ContextmenuOptions, ContextmenuInstance } from './symbol'
@@ -24,6 +24,10 @@ export class ContextmenuManager {
   }
 
   open(options: ContextmenuOptions) {
+    if (!isClient) {
+      return
+    }
+
     this._pending = this._getInstance().openContextmenu(options)
 
     return this._pending

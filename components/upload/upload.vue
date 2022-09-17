@@ -115,7 +115,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { noop, isDefined, isFalse, isPromise, randomString } from '@vexip-ui/utils'
+import { isClient, noop, isDefined, isFalse, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload as IUpload, Spinner } from '@vexip-ui/icons'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
@@ -585,6 +585,8 @@ export default defineComponent({
     }
 
     function syncInputFiles() {
+      if (!isClient) return
+
       const dataTransfer = new DataTransfer()
       fileStates.value = fileStates.value.filter(item => item.status !== StatusType.DELETE)
 

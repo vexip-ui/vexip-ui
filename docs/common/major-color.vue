@@ -28,6 +28,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { ArrowRotateLeft } from '@vexip-ui/icons'
+import { isClient } from '@vexip-ui/utils'
 import { getMetaName } from './meta-name'
 import { computeSeriesColors } from './series-color'
 
@@ -47,14 +48,19 @@ const changeColor = {
   cname: '换个主题色'
 }
 
-const rootEl = document.documentElement
-const rootStyle = getComputedStyle(rootEl)
+const rootEl = isClient ? document.documentElement : undefined
+const rootStyle = rootEl && getComputedStyle(rootEl)
 
-const majorColor = ref(rootStyle.getPropertyValue('--vxp-color-primary-base'))
-const seriesColors = ref<Record<string, string[]>>(computeSeriesColors(majorColor.value))
+const majorColor = ref(rootStyle ? rootStyle.getPropertyValue('--vxp-color-primary-base') : '')
+const seriesColors = ref<Record<string, string[]>>(
+  majorColor.value ? computeSeriesColors(majorColor.value) : {}
+)
 
 watch(majorColor, value => {
-  seriesColors.value = computeSeriesColors(value)
+  if (value) {
+    seriesColors.value = computeSeriesColors(value)
+  }
+
   emit('change', value)
 })
 

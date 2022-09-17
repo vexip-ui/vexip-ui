@@ -20,6 +20,8 @@ config.global.stubs = {
 vi.stubGlobal('ResizeObserver', ResizeObserver)
 
 beforeEach(() => {
-  document.body.innerHTML = ''
-  document.head.innerHTML = ''
+  if (typeof document !== 'undefined') {
+    document.body.innerHTML = ''
+    document.head.innerHTML = ''
+  }
 })

@@ -15,6 +15,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
+import { isClient } from '@vexip-ui/utils'
 import { computeSeriesColors, useLayoutState } from './helper'
 
 import type { PropType } from 'vue'
@@ -90,7 +91,7 @@ export default defineComponent({
     const rootEl = computed(() => {
       // eslint-disable-next-line no-unused-expressions
       isMounted.value
-      return document ? document.documentElement : null
+      return isClient ? document.documentElement : null
     })
     const currentColor = ref(props.color || props.colors?.[0] || getBaseColor())
 

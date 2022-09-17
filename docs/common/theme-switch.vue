@@ -12,18 +12,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Sun, Moon } from '@vexip-ui/icons'
+import { isClient } from '@vexip-ui/utils'
 
-const rootCls = document.documentElement.classList
-const isDark = ref(rootCls.contains('dark'))
+const rootCls = isClient ? document.documentElement.classList : undefined
+const isDark = ref(rootCls && rootCls.contains('dark'))
 
 function toggleDark(value: boolean) {
+  if (!isClient) return
+
   requestAnimationFrame(() => {
     isDark.value = value
 
     if (value) {
-      rootCls.add('dark')
+      rootCls!.add('dark')
     } else {
-      rootCls.remove('dark')
+      rootCls!.remove('dark')
     }
 
     localStorage.setItem('vexip-docs-theme-prefer-dark', String(value))

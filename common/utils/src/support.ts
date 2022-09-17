@@ -1,7 +1,11 @@
+import { isClient } from './common'
+
 let flexGapSupported: boolean | null = null
 
 export function supportFlexGap() {
-  if (!window || !document) return true
+  if (!isClient) {
+    return true
+  }
 
   if (flexGapSupported === null) {
     const flex = document.createElement('div')

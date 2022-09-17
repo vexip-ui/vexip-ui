@@ -154,6 +154,31 @@ async function create(name: string) {
       `
     },
     {
+      filePath: path.resolve(dirPath, 'components', kebabCaseName, 'tests', 'ssr.spec.tsx'),
+      source: `
+        /**
+         * @vitest-environment node
+         */
+
+        import { describe, it, expect } from 'vitest'
+        import { createSSRApp } from 'vue'
+        import { renderToString } from 'vue/server-renderer'
+        import { ${capitalCaseName} } from '..'
+
+        describe('SSR for ${capitalCaseName}', () => {
+          it('render', async () => {
+            try {
+              await renderToString(
+                createSSRApp(() => <${capitalCaseName}></${capitalCaseName}>)
+              )
+            } catch (error) {
+              expect(error).toBeFalsy()
+            }
+          })
+        })
+      `
+    },
+    {
       filePath: path.resolve(dirPath, 'style', `${kebabCaseName}.scss`),
       source: `
         @use 'sass:map';

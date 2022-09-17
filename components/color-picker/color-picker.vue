@@ -202,6 +202,8 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import {
+  isClient,
+  isElement,
   toFixed,
   parseColorToRgba,
   rgbToHsv,
@@ -627,7 +629,7 @@ export default defineComponent({
       }
     }
     function handleTabDown(event: KeyboardEvent) {
-      if (currentVisible.value) {
+      if (isClient && currentVisible.value) {
         const activeEl = document && document.activeElement
 
         if (!activeEl) return
@@ -637,7 +639,7 @@ export default defineComponent({
         const shift = event.shiftKey
         const elList = Array.from(unitList.value)
         const index = elList.findIndex(unit => {
-          const el = unit instanceof Element ? unit : unit.$el
+          const el = isElement(unit) ? unit : unit.$el
 
           return el === activeEl || el.contains(activeEl)
         })

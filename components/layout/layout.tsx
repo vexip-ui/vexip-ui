@@ -14,6 +14,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
+import { isClient } from '@vexip-ui/utils'
 import { useMediaQuery } from './helper'
 import { LAYOUT_STATE } from './symbol'
 
@@ -140,7 +141,7 @@ export default defineComponent({
     const rootEl = computed(() => {
       // eslint-disable-next-line no-unused-expressions
       isMounted.value
-      return document ? document.documentElement : null
+      return isClient ? document.documentElement : null
     })
     const signInHeader = computed(() => {
       return props.noAside || currentSignType.value === 'header' || state.expanded

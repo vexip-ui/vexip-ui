@@ -1,6 +1,6 @@
 import { createApp, markRaw } from 'vue'
 import Component from './message.vue'
-import { isNull, toNumber, destroyObject } from '@vexip-ui/utils'
+import { isClient, isNull, noop, toNumber, destroyObject } from '@vexip-ui/utils'
 import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
@@ -165,6 +165,10 @@ export class MessageManager {
   }
 
   private _open(type: null | MessageType, content: FuzzyOptions, _duration?: number) {
+    if (!isClient) {
+      return noop
+    }
+
     const options = typeof content === 'string' ? { content, duration: _duration } : content
 
     const key = options.key ?? getKey()

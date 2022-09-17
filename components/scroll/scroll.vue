@@ -64,7 +64,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
+import { USE_TOUCH, isElement, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { useScrollWrapper } from './hooks'
 
 import type { PropType } from 'vue'
@@ -701,7 +701,7 @@ export default defineComponent({
         el = contentElement.value.querySelector(el)!
       }
 
-      if (!(el instanceof Node)) return
+      if (!isElement(el)) return
 
       const wrapperRect = contentElement.value.getBoundingClientRect()
       const elRect = el.getBoundingClientRect()
@@ -727,7 +727,7 @@ export default defineComponent({
         el = wrapperElement.value.querySelector(el)!
       }
 
-      if (!(el instanceof Node)) return
+      if (!isElement(el)) return
 
       const wrapperRect = wrapperElement.value.getBoundingClientRect()
       const elRect = el.getBoundingClientRect()
