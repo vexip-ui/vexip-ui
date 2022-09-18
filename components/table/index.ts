@@ -1,7 +1,7 @@
 export { default as Table } from './table.vue'
 export { defineFilter, defineSorter, defineColumn, defineColumns } from './helper'
 export type {
-  RowClassFn,
+  RowPropFn,
   TableColumnType,
   FilterOptions,
   SorterOptions,
@@ -10,5 +10,8 @@ export type {
   SelectionColumn,
   ExpandColumn,
   TypeColumn,
-  TableColumnOptions
+  TableColumnOptions,
+  TableRowPayload,
+  TableCellPayload,
+  TableHeadPayload
 } from './symbol'

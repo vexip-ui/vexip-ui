@@ -4,9 +4,11 @@
     ref="wrapper"
     :class="nh.be('group')"
     :draggable="draggable"
-    @click="handleClick"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
+    @click="handleClick"
+    @dbclick="handleDbclick"
+    @contextmenu="handleContextmenu"
     @dragstart.stop="handleDragStart"
     @dragover="handleDragOver"
     @dragend="handleDragEnd"
@@ -18,6 +20,7 @@
       role="row"
       :style="style"
       :aria-rowindex="index"
+      v-bind="attrs"
     >
       <slot></slot>
     </div>
@@ -133,9 +136,33 @@ export default defineComponent({
       ]
     })
     const style = computed(() => {
-      return {
-        minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
+      let customStyle: any = ''
+
+      if (!props.isHead) {
+        if (typeof state.rowStyle === 'function') {
+          customStyle = state.rowStyle(props.row.data, props.index)
+        } else {
+          customStyle = state.rowStyle
+        }
       }
+
+      return [
+        {
+          minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
+        },
+        customStyle
+      ]
+    })
+    const attrs = computed(() => {
+      if (!props.isHead) {
+        if (typeof state.rowAttrs === 'function') {
+          return state.rowAttrs(props.row.data, props.index)
+        } else {
+          return state.rowAttrs
+        }
+      }
+
+      return null
     })
     const draggable = computed(() => !props.isHead && state.rowDraggable)
     const dragging = computed(() => state.dragging)
@@ -268,38 +295,55 @@ export default defineComponent({
       }
     }
 
-    function handleMouseEnter() {
+    function buildEventPayload(event: Event) {
+      return {
+        row: props.row.data,
+        key: props.row.key,
+        index: props.index,
+        event
+      }
+    }
+
+    function handleMouseEnter(event: MouseEvent) {
       mutations.setRowHover(rowKey.value, true)
 
       if (!props.isHead && tableAction) {
         const { data, key, index } = props.row
 
-        tableAction.emitRowEnter(data, key, index)
+        tableAction.emitRowEnter({ row: data, key, index, event })
       }
     }
 
-    function handleMouseLeave() {
+    function handleMouseLeave(event: MouseEvent) {
       mutations.setRowHover(rowKey.value, false)
 
       if (!props.isHead && tableAction) {
-        const { data, key, index } = props.row
-
-        tableAction.emitRowLeave(data, key, index)
+        tableAction.emitRowLeave(buildEventPayload(event))
       }
     }
 
-    function handleClick() {
+    function handleClick(event: MouseEvent) {
       if (!props.isHead && tableAction) {
-        const { data, key, index } = props.row
-
-        tableAction.emitRowClick(data, key, index)
+        tableAction.emitRowClick(buildEventPayload(event))
       }
     }
 
-    function handleDragStart() {
+    function handleDbclick(event: MouseEvent) {
+      if (!props.isHead && tableAction) {
+        tableAction.emitRowDbclick(buildEventPayload(event))
+      }
+    }
+
+    function handleContextmenu(event: MouseEvent) {
+      if (!props.isHead && tableAction) {
+        tableAction.emitRowContextmenu(buildEventPayload(event))
+      }
+    }
+
+    function handleDragStart(event: DragEvent) {
       if (!draggable.value) return
 
-      tableAction.handleRowDragStart(instance)
+      tableAction.handleRowDragStart(instance, event)
     }
 
     function handleDragOver(event: DragEvent) {
@@ -315,14 +359,14 @@ export default defineComponent({
 
       event.stopPropagation()
       event.preventDefault()
-      tableAction.handleRowDrop(instance)
+      tableAction.handleRowDrop(instance, event)
     }
 
     function handleDragEnd(event: DragEvent) {
       if (!draggable.value || !dragging.value) return
 
       event.stopPropagation()
-      tableAction.handleRowDragEnd()
+      tableAction.handleRowDragEnd(event)
     }
 
     return {
@@ -330,6 +374,7 @@ export default defineComponent({
 
       className,
       style,
+      attrs,
       draggable,
       expandColumn,
       expandRenderer,
@@ -342,9 +387,11 @@ export default defineComponent({
       expand: expandElement,
 
       isFunction,
-      handleClick,
       handleMouseEnter,
       handleMouseLeave,
+      handleClick,
+      handleDbclick,
+      handleContextmenu,
       handleDragStart,
       handleDragOver,
       handleDrop,

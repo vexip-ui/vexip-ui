@@ -1,17 +1,24 @@
 import type { InjectionKey } from 'vue'
-import type { ComponentSize, ClassType } from '@vexip-ui/config'
+import type { ComponentSize, ClassType, StyleType } from '@vexip-ui/config'
 import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 
 export type Key = string | number | symbol
 export type Data = Record<string, unknown>
-export type RowClassFn = (data: Data, index: number) => ClassType
+export type RowPropFn<P = any> = (data: Data, index: number) => P
+
 export type Accessor<T extends string | number = string | number, D = Data> = (
   data: D,
   index: number
 ) => T
 export type RenderFn = (data: Data) => any
+export type ExpandRenderFn = (data: {
+  leftFixed: number,
+  rightFixed: number,
+  row: Data,
+  rowIndex: number
+}) => any
 
 export type TableColumnType = 'order' | 'selection' | 'expand'
 
@@ -50,6 +57,8 @@ export interface BaseColumn<T extends string | number = string | number, D = Dat
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
   className?: ClassType,
+  style?: StyleType,
+  attrs?: Record<string, any>,
   width?: number,
   filter?: FilterOptions<T, D>,
   sorter?: boolean | SorterOptions<D>,
@@ -97,6 +106,22 @@ export type ColumnProfile<T extends string | number = string | number, D = Data>
   'name' | 'key' | 'metaData'
 >
 
+export type ColumnRenderFn = (data: {
+  row: any,
+  rowIndex: number,
+  column: TableColumnOptions,
+  columnIndex: number
+}) => any
+export type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
+
+export type CellPropFn<P = any> = (
+  data: Data,
+  column: ColumnWithKey,
+  rowIndex: number,
+  columnIndex: number
+) => P
+export type HeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
+
 export type FilterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<
   T,
   D
@@ -113,7 +138,15 @@ export type SorterProfile<T extends string | number = string | number, D = Data>
 export interface StoreOptions {
   columns: TableColumnOptions[],
   data: Data[],
-  rowClass: ClassType | RowClassFn,
+  rowClass: ClassType | RowPropFn<ClassType>,
+  rowStyle: StyleType | RowPropFn<StyleType>,
+  rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>,
+  cellClass: ClassType | CellPropFn<ClassType>,
+  cellStyle: StyleType | CellPropFn<StyleType>,
+  cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>,
+  headClass: ClassType | HeadPropFn<ClassType>,
+  headStyle: StyleType | HeadPropFn<StyleType>,
+  headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>,
   dataKey: string,
   highlight: boolean,
   currentPage: number,
@@ -127,7 +160,7 @@ export interface StoreOptions {
   tooltipWidth: number | string,
   singleSorter: boolean,
   singleFilter: boolean,
-  expandRenderer: RenderFn | null
+  expandRenderer: ExpandRenderFn | null
 }
 
 export interface RowState {
@@ -178,21 +211,55 @@ export interface RowInstance {
   row: RowState
 }
 
+export interface TableRowPayload {
+  row: Data,
+  key: Key,
+  index: number,
+  event: Event
+}
+
+export interface TableCellPayload {
+  row: Data,
+  key: Key,
+  rowIndex: number,
+  column: TableColumnOptions,
+  columnIndex: number,
+  event: Event
+}
+
+export interface TableHeadPayload {
+  column: TableColumnOptions,
+  index: number,
+  event: Event
+}
+
 export interface TableAction {
   increaseColumn(column: TableColumnOptions): void,
   decreaseColumn(column: TableColumnOptions): void,
-  emitRowEnter(data: Data, key: Key, index: number): void,
-  emitRowLeave(data: Data, key: Key, index: number): void,
-  emitRowClick(data: Data, key: Key, index: number): void,
-  emitRowCheck(data: Data, checked: boolean, key: Key, index: number): void,
+  emitRowEnter(payload: TableRowPayload): void,
+  emitRowLeave(payload: TableRowPayload): void,
+  emitRowClick(payload: TableRowPayload): void,
+  emitRowDbclick(payload: TableRowPayload): void,
+  emitRowContextmenu(payload: TableRowPayload): void,
+  emitRowCheck(payload: Omit<TableRowPayload, 'event'> & { checked: boolean }): void,
   emitAllRowCheck(checked: boolean, partial: boolean): void,
-  emitRowExpand(data: Data, expanded: boolean, key: Key, index: number): void,
+  emitRowExpand(payload: Omit<TableRowPayload, 'event'> & { expanded: boolean }): void,
   emitRowFilter(): void,
   emitRowSort(): void,
-  handleRowDragStart(rowInstance: RowInstance): void,
+  handleRowDragStart(rowInstance: RowInstance, event: DragEvent): void,
   handleRowDragOver(rowInstance: RowInstance, event: DragEvent): void,
-  handleRowDrop(rowInstance: RowInstance): void,
-  handleRowDragEnd(): void
+  handleRowDrop(rowInstance: RowInstance, event: DragEvent): void,
+  handleRowDragEnd(event: DragEvent): void,
+  emitCellEnter(payload: TableCellPayload): void,
+  emitCellLeave(payload: TableCellPayload): void,
+  emitCellClick(payload: TableCellPayload): void,
+  emitCellDbclick(payload: TableCellPayload): void,
+  emitCellContextmenu(payload: TableCellPayload): void,
+  emitHeadEnter(payload: TableHeadPayload): void,
+  emitHeadLeave(payload: TableHeadPayload): void,
+  emitHeadClick(payload: TableHeadPayload): void,
+  emitHeadDbclick(payload: TableHeadPayload): void,
+  emitHeadContextmenu(payload: TableHeadPayload): void
 }
 
 export const DEFAULT_KEY_FIELD = 'id'

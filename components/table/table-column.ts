@@ -1,5 +1,12 @@
 import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
-import { useProps, booleanProp, sizeProp, createSizeProp, classProp } from '@vexip-ui/config'
+import {
+  useProps,
+  booleanProp,
+  sizeProp,
+  createSizeProp,
+  classProp,
+  styleProp
+} from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
 import { TABLE_ACTION } from './symbol'
 
@@ -9,7 +16,8 @@ import type {
   TableColumnType,
   FilterOptions,
   SorterOptions,
-  RenderFn,
+  ColumnRenderFn,
+  HeadRenderFn,
   RowState,
   ColumnWithKey
 } from './symbol'
@@ -17,12 +25,14 @@ import type {
 const props = {
   idKey: [Number, String],
   name: String,
-  accessor: Function as PropType<(row: Data, index: number) => any>,
+  accessor: Function as PropType<(row: any, index: number) => any>,
   fixed: {
     type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
     default: null
   },
   className: classProp,
+  style: styleProp,
+  attrs: Object,
   type: String as PropType<TableColumnType>,
   width: Number,
   filter: Object as PropType<FilterOptions<any, any>>,
@@ -30,8 +40,8 @@ const props = {
     type: [Boolean, Object] as PropType<boolean | SorterOptions<any>>,
     default: null
   },
-  renderer: Function as PropType<RenderFn>,
-  headRenderer: Function as PropType<RenderFn>,
+  renderer: Function as PropType<ColumnRenderFn>,
+  headRenderer: Function as PropType<HeadRenderFn>,
   order: Number,
   noEllipsis: booleanProp,
   checkboxSize: sizeProp,
@@ -69,6 +79,8 @@ export default defineComponent({
         static: true
       },
       className: null,
+      style: null,
+      attrs: null,
       type: {
         default: null,
         validator: (value: TableColumnType) => columnTypes.includes(value),
@@ -121,7 +133,8 @@ export default defineComponent({
         () => props[key],
         value => {
           (options[aliasKey] as any) = value
-        }
+        },
+        { deep: true }
       )
     }
 
@@ -140,7 +153,7 @@ export default defineComponent({
     })
 
     function setRenderer() {
-      options.renderer = (data: Data) => {
+      options.renderer = (data: any) => {
         if (typeof slots.default === 'function') {
           return slots.default(data)
         }
@@ -165,7 +178,7 @@ export default defineComponent({
     }
 
     function setHeadRenderer() {
-      options.headRenderer = (data: Data) => {
+      options.headRenderer = (data: any) => {
         if (typeof slots.head === 'function') {
           return slots.head(data)
         }

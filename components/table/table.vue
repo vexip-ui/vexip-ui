@@ -155,16 +155,20 @@ import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ClassType } from '@vexip-ui/config'
+import type { ClassType, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
-  Key,
   Data,
-  RenderFn,
+  ExpandRenderFn,
   TableColumnOptions,
-  RowClassFn,
+  RowPropFn,
+  CellPropFn,
+  HeadPropFn,
   RowState,
-  RowInstance
+  RowInstance,
+  TableRowPayload,
+  TableCellPayload,
+  TableHeadPayload
 } from './symbol'
 
 type DropType = 'before' | 'after' | 'none'
@@ -198,7 +202,9 @@ export default defineComponent({
     dataKey: String,
     width: [Number, String],
     height: Number,
-    rowClass: [String, Object, Array, Function] as PropType<ClassType | RowClassFn>,
+    rowClass: [String, Object, Array, Function] as PropType<ClassType | RowPropFn<ClassType>>,
+    rowStyle: [String, Object, Array, Function] as PropType<StyleType | RowPropFn<StyleType>>,
+    rowAttrs: [Object, Function] as PropType<Record<string, any> | RowPropFn<Record<string, any>>>,
     stripe: booleanProp,
     border: booleanProp,
     highlight: booleanProp,
@@ -216,7 +222,7 @@ export default defineComponent({
       left?: ClassType,
       right?: ClassType
     }>,
-    expandRenderer: Function as PropType<RenderFn>,
+    expandRenderer: Function as PropType<ExpandRenderFn>,
     currentPage: Number,
     pageSize: Number,
     transparent: booleanProp,
@@ -225,19 +231,43 @@ export default defineComponent({
     tooltipWidth: [Number, String],
     singleSorter: booleanProp,
     singleFilter: booleanProp,
+    cellClass: [String, Object, Array, Function] as PropType<ClassType | CellPropFn<ClassType>>,
+    cellStyle: [String, Object, Array, Function] as PropType<StyleType | CellPropFn<StyleType>>,
+    cellAttrs: [Object, Function] as PropType<
+      Record<string, any> | CellPropFn<Record<string, any>>
+    >,
+    headClass: [String, Object, Array, Function] as PropType<ClassType | HeadPropFn<ClassType>>,
+    headStyle: [String, Object, Array, Function] as PropType<StyleType | HeadPropFn<StyleType>>,
+    headAttrs: [Object, Function] as PropType<
+      Record<string, any> | HeadPropFn<Record<string, any>>
+    >,
     onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
-    onRowEnter: eventProp<(row: Data, key: Key, index: number) => void>(),
-    onRowLeave: eventProp<(row: Data, key: Key, index: number) => void>(),
-    onRowClick: eventProp<(row: Data, key: Key, index: number) => void>(),
-    onRowCheck: eventProp<(row: Data, checked: boolean, key: Key, index: number) => void>(),
+    onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
+    onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
+    onRowClick: eventProp<(payload: TableRowPayload) => void>(),
+    onRowDbclick: eventProp<(payload: TableRowPayload) => void>(),
+    onRowContextmenu: eventProp<(payload: TableRowPayload) => void>(),
+    onRowCheck:
+      eventProp<(payload: Omit<TableRowPayload, 'event'> & { checked: boolean }) => void>(),
     onRowCheckAll: eventProp<(checked: boolean, partial: boolean) => void>(),
-    onRowExpand: eventProp<(row: Data, expanded: boolean, key: Key, index: number) => void>(),
-    onRowDragStart: eventProp<(row: Data) => void>(),
-    onRowDragOver: eventProp<(row: Data) => void>(),
-    onRowDrop: eventProp<(row: Data, type: DropType) => void>(),
-    onRowDragEnd: eventProp<(row: Data, allRows: Data[]) => void>(),
+    onRowExpand:
+      eventProp<(payload: Omit<TableRowPayload, 'event'> & { expanded: boolean }) => void>(),
+    onRowDragStart: eventProp<(row: Data, event: DragEvent) => void>(),
+    onRowDragOver: eventProp<(row: Data, event: DragEvent) => void>(),
+    onRowDrop: eventProp<(row: Data, type: DropType, event: DragEvent) => void>(),
+    onRowDragEnd: eventProp<(row: Data, allRows: Data[], event: DragEvent) => void>(),
     onRowFilter: eventProp<(profiles: FilterProfile[], filteredRow: Data[]) => void>(),
-    onRowSort: eventProp<(profiles: SortProfile[], sortedRow: Data[]) => void>()
+    onRowSort: eventProp<(profiles: SortProfile[], sortedRow: Data[]) => void>(),
+    onCellEnter: eventProp<(payload: TableCellPayload) => void>(),
+    onCellLeave: eventProp<(payload: TableCellPayload) => void>(),
+    onCellClick: eventProp<(payload: TableCellPayload) => void>(),
+    onCellDbclick: eventProp<(payload: TableCellPayload) => void>(),
+    onCellContextmenu: eventProp<(payload: TableCellPayload) => void>(),
+    onHeadEnter: eventProp<(payload: TableHeadPayload) => void>(),
+    onHeadLeave: eventProp<(payload: TableHeadPayload) => void>(),
+    onHeadClick: eventProp<(payload: TableHeadPayload) => void>(),
+    onHeadDbclick: eventProp<(payload: TableHeadPayload) => void>(),
+    onHeadContextmenu: eventProp<(payload: TableHeadPayload) => void>()
   },
   emits: [],
   setup(_props) {
@@ -254,6 +284,8 @@ export default defineComponent({
       width: null,
       height: null,
       rowClass: null,
+      rowStyle: null,
+      rowAttrs: null,
       stripe: false,
       border: false,
       highlight: false,
@@ -290,7 +322,13 @@ export default defineComponent({
       },
       tooltipWidth: 500,
       singleSorter: false,
-      singleFilter: false
+      singleFilter: false,
+      cellClass: null,
+      cellStyle: null,
+      cellAttrs: null,
+      headClass: null,
+      headStyle: null,
+      headAttrs: null
     })
 
     const nh = useNameHelper('table')
@@ -315,6 +353,14 @@ export default defineComponent({
       columns: props.columns as TableColumnOptions[],
       data: props.data,
       rowClass: props.rowClass,
+      rowStyle: props.rowStyle,
+      rowAttrs: props.rowAttrs,
+      cellClass: props.cellClass,
+      cellStyle: props.cellStyle,
+      cellAttrs: props.cellAttrs,
+      headClass: props.headClass,
+      headStyle: props.headStyle,
+      headAttrs: props.headAttrs,
       dataKey: props.dataKey,
       highlight: props.highlight,
       currentPage: props.currentPage,
@@ -338,6 +384,8 @@ export default defineComponent({
       emitRowEnter,
       emitRowLeave,
       emitRowClick,
+      emitRowDbclick,
+      emitRowContextmenu,
       emitRowCheck,
       emitAllRowCheck,
       emitRowExpand,
@@ -346,7 +394,17 @@ export default defineComponent({
       handleRowDragStart,
       handleRowDragOver,
       handleRowDrop,
-      handleRowDragEnd
+      handleRowDragEnd,
+      emitCellEnter,
+      emitCellLeave,
+      emitCellClick,
+      emitCellDbclick,
+      emitCellContextmenu,
+      emitHeadEnter,
+      emitHeadLeave,
+      emitHeadClick,
+      emitHeadDbclick,
+      emitHeadContextmenu
     })
 
     const { state, getters, mutations } = store
@@ -559,28 +617,36 @@ export default defineComponent({
       templateColumns.value.delete(column)
     }
 
-    function emitRowEnter(data: Data, key: Key, index: number) {
-      emitEvent(props.onRowEnter, data, key, index)
+    function emitRowEnter(payload: TableRowPayload) {
+      emitEvent(props.onRowEnter, payload)
     }
 
-    function emitRowLeave(data: Data, key: Key, index: number) {
-      emitEvent(props.onRowLeave, data, key, index)
+    function emitRowLeave(payload: TableRowPayload) {
+      emitEvent(props.onRowLeave, payload)
     }
 
-    function emitRowClick(data: Data, key: Key, index: number) {
-      emitEvent(props.onRowClick, data, key, index)
+    function emitRowClick(payload: TableRowPayload) {
+      emitEvent(props.onRowClick, payload)
     }
 
-    function emitRowCheck(data: Data, checked: boolean, key: Key, index: number) {
-      emitEvent(props.onRowCheck, data, checked, key, index)
+    function emitRowDbclick(payload: TableRowPayload) {
+      emitEvent(props.onRowDbclick, payload)
+    }
+
+    function emitRowContextmenu(payload: TableRowPayload) {
+      emitEvent(props.onRowContextmenu, payload)
+    }
+
+    function emitRowCheck(payload: TableRowPayload & { checked: boolean }) {
+      emitEvent(props.onRowCheck, payload)
     }
 
     function emitAllRowCheck(checked: boolean, partial: boolean) {
       emitEvent(props.onRowCheckAll, checked, partial)
     }
 
-    function emitRowExpand(data: Data, expanded: boolean, key: Key, index: number) {
-      emitEvent(props.onRowExpand, data, expanded, key, index)
+    function emitRowExpand(payload: TableRowPayload & { expanded: boolean }) {
+      emitEvent(props.onRowExpand, payload)
     }
 
     function emitRowFilter() {
@@ -635,14 +701,14 @@ export default defineComponent({
       dropType?: DropType
     } | null
 
-    function handleRowDragStart(rowInstance: RowInstance) {
+    function handleRowDragStart(rowInstance: RowInstance, event: DragEvent) {
       dragState = {
         draggingRow: rowInstance.row,
         tableRect: wrapper.value!.getBoundingClientRect()
       }
 
       setDragging(true)
-      emitEvent(props.onRowDragStart, rowInstance.row.data)
+      emitEvent(props.onRowDragStart, rowInstance.row.data, event)
     }
 
     function handleRowDragOver(rowInstance: RowInstance, event: DragEvent) {
@@ -671,10 +737,10 @@ export default defineComponent({
       dragState.dropType = dropType
 
       indicatorShow.value = true
-      emitEvent(props.onRowDragOver, rowInstance.row.data)
+      emitEvent(props.onRowDragOver, rowInstance.row.data, event)
     }
 
-    function handleRowDrop(rowInstance: RowInstance) {
+    function handleRowDrop(rowInstance: RowInstance, event: DragEvent) {
       if (!dragState) return
 
       const { draggingRow, dropType } = dragState
@@ -699,11 +765,11 @@ export default defineComponent({
 
         rowData.splice(index, 0, draggingRow)
         refreshRowIndex()
-        emitEvent(props.onRowDrop, rowInstance.row.data, dropType!)
+        emitEvent(props.onRowDrop, rowInstance.row.data, dropType!, event)
       }
     }
 
-    function handleRowDragEnd() {
+    function handleRowDragEnd(event: DragEvent) {
       if (!dragState) return
 
       const { draggingRow } = dragState
@@ -715,8 +781,49 @@ export default defineComponent({
       emitEvent(
         props.onRowDragEnd,
         draggingRow.data,
-        state.rowData.map(row => row.data)
+        state.rowData.map(row => row.data),
+        event
       )
+    }
+
+    function emitCellEnter(payload: TableCellPayload) {
+      emitEvent(props.onCellEnter, payload)
+    }
+
+    function emitCellLeave(payload: TableCellPayload) {
+      emitEvent(props.onCellLeave, payload)
+    }
+
+    function emitCellClick(payload: TableCellPayload) {
+      emitEvent(props.onCellClick, payload)
+    }
+
+    function emitCellDbclick(payload: TableCellPayload) {
+      emitEvent(props.onCellDbclick, payload)
+    }
+
+    function emitCellContextmenu(payload: TableCellPayload) {
+      emitEvent(props.onCellContextmenu, payload)
+    }
+
+    function emitHeadEnter(payload: TableHeadPayload) {
+      emitEvent(props.onHeadEnter, payload)
+    }
+
+    function emitHeadLeave(payload: TableHeadPayload) {
+      emitEvent(props.onHeadLeave, payload)
+    }
+
+    function emitHeadClick(payload: TableHeadPayload) {
+      emitEvent(props.onHeadClick, payload)
+    }
+
+    function emitHeadDbclick(payload: TableHeadPayload) {
+      emitEvent(props.onHeadDbclick, payload)
+    }
+
+    function emitHeadContextmenu(payload: TableHeadPayload) {
+      emitEvent(props.onHeadContextmenu, payload)
     }
 
     function computeRenderRows() {

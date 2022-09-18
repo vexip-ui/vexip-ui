@@ -9,12 +9,14 @@ import {
 } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY } from './symbol'
 
-import type { ClassType } from '@vexip-ui/config'
+import type { ClassType, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Key,
   Data,
-  RowClassFn,
+  RowPropFn,
+  CellPropFn,
+  HeadPropFn,
   FilterOptions,
   ParsedFilterOptions,
   SorterOptions,
@@ -44,6 +46,14 @@ export function useStore(options: StoreOptions) {
     columns: [],
     data: [],
     rowClass: '',
+    rowStyle: '',
+    rowAttrs: null!,
+    cellClass: '',
+    cellStyle: '',
+    cellAttrs: null!,
+    headClass: '',
+    headStyle: '',
+    headAttrs: null!,
     width: 0,
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
     highlight: false,
@@ -87,6 +97,14 @@ export function useStore(options: StoreOptions) {
   setPageSize(state, options.pageSize)
 
   setRowClass(state, options.rowClass)
+  setRowStyle(state, options.rowStyle)
+  setRowAttrs(state, options.rowAttrs)
+  setCellClass(state, options.cellClass)
+  setCellStyle(state, options.cellStyle)
+  setCellAttrs(state, options.cellAttrs)
+  setHeadClass(state, options.headClass)
+  setHeadStyle(state, options.headStyle)
+  setHeadAttrs(state, options.headAttrs)
   setHighlight(state, options.highlight)
   setVirtual(state, options.virtual)
 
@@ -162,6 +180,14 @@ export function useStore(options: StoreOptions) {
     setCurrentPage: setCurrentPage.bind(null, state),
     setPageSize: setPageSize.bind(null, state),
     setRowClass: setRowClass.bind(null, state),
+    setRowStyle: setRowStyle.bind(null, state),
+    setRowAttrs: setRowAttrs.bind(null, state),
+    setCellClass: setCellClass.bind(null, state),
+    setCellStyle: setCellStyle.bind(null, state),
+    setCellAttrs: setCellAttrs.bind(null, state),
+    setHeadClass: setHeadClass.bind(null, state),
+    setHeadStyle: setHeadStyle.bind(null, state),
+    setHeadAttrs: setHeadAttrs.bind(null, state),
     setTableWidth: setTableWidth.bind(null, state),
     setColumnWidth: setColumnWidth.bind(null, state),
     setRowHeight: setRowHeight.bind(null, state),
@@ -391,8 +417,49 @@ function setPageSize(state: StoreState, pageSize: number) {
   state.pageSize = pageSize || state.rowData.length
 }
 
-function setRowClass(state: StoreState, rowClass: ClassType | RowClassFn) {
+function setRowClass(state: StoreState, rowClass: ClassType | RowPropFn<ClassType>) {
   state.rowClass = rowClass ?? ''
+}
+
+function setRowStyle(state: StoreState, rowStyle: StyleType | RowPropFn<StyleType>) {
+  state.rowStyle = rowStyle ?? ''
+}
+
+function setRowAttrs(
+  state: StoreState,
+  rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>
+) {
+  state.rowAttrs = rowAttrs ?? null!
+}
+
+function setCellClass(state: StoreState, cellClass: ClassType | CellPropFn<ClassType>) {
+  state.cellClass = cellClass ?? ''
+}
+
+function setCellStyle(state: StoreState, cellStyle: StyleType | CellPropFn<StyleType>) {
+  state.cellStyle = cellStyle ?? ''
+}
+
+function setCellAttrs(
+  state: StoreState,
+  cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>
+) {
+  state.cellAttrs = cellAttrs ?? null!
+}
+
+function setHeadClass(state: StoreState, headClass: ClassType | HeadPropFn<ClassType>) {
+  state.headClass = headClass ?? ''
+}
+
+function setHeadStyle(state: StoreState, headStyle: StyleType | HeadPropFn<StyleType>) {
+  state.headStyle = headStyle ?? ''
+}
+
+function setHeadAttrs(
+  state: StoreState,
+  headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>
+) {
+  state.headAttrs = headAttrs ?? null!
 }
 
 function setTableWidth(state: StoreState, width: number) {
