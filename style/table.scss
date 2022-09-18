@@ -186,6 +186,10 @@ $table: map.merge(
     }
   }
 
+  &--transparent &__body {
+    background-color: transparent;
+  }
+
   &--transparent:not(#{&}--border) {
     #{$head},
     #{$body},
