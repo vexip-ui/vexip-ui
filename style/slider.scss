@@ -49,6 +49,7 @@ $slider: map.merge(
   position: relative;
   display: flex;
   flex-direction: column;
+  width: 100%;
   padding: $padding 0;
   margin: 2px $margin;
   cursor: pointer;
@@ -56,6 +57,7 @@ $slider: map.merge(
   &--vertical {
     display: inline-flex;
     flex-direction: row;
+    width: auto;
     height: 100%;
     padding: 0 $padding;
     margin: $margin 2px;
@@ -82,6 +84,7 @@ $slider: map.merge(
     align-items: flex-start;
     width: 100%;
     height: get-css-var('slider-track-height');
+    overflow: hidden;
     background-color: get-css-var('slider-track-bg-color');
     border-radius: get-css-var('slider-track-height');
     transition: get-css-var('transition-background');
