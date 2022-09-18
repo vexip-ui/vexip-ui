@@ -10,7 +10,8 @@ $avatar: map.merge(
     b-color: get-css-var('border-color-base'),
     b-width: get-css-var('border-width'),
     b-style: get-css-var('border-style'),
-    border: get-css-var('avatar-b-width') get-css-var('avatar-b-style') get-css-var('avatar-b-color'),
+    border: get-css-var('avatar-b-width') get-css-var('avatar-b-style')
+    get-css-var('avatar-b-color'),
     size: 32px,
     radius: get-css-var('radius-base'),
     series-span: 8px,
@@ -40,6 +41,7 @@ $avatar: map.merge(
   overflow: hidden;
   line-height: 1;
   color: get-css-var('avatar-color');
+  vertical-align: middle;
   user-select: none;
   background-color: get-css-var('avatar-bg-color');
   border-radius: get-css-var('avatar-radius');
@@ -57,15 +59,21 @@ $avatar: map.merge(
   }
 
   &--small {
-    @include define-preset-values('avatar', (
-      size: 26px
-    ));
+    @include define-preset-values(
+      'avatar',
+      (
+        size: 26px
+      )
+    );
   }
 
   &--large {
-    @include define-preset-values('avatar', (
-      size: 40px
-    ));
+    @include define-preset-values(
+      'avatar',
+      (
+        size: 40px
+      )
+    );
   }
 
   &__image {

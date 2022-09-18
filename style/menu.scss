@@ -113,6 +113,7 @@ $menu: map.merge(
     padding: 10px 20px;
     color: get-css-var('menu-label-color');
     cursor: pointer;
+    user-select: none;
     background-color: get-css-var('menu-bg-color');
     outline: 0;
     transition:

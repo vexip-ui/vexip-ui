@@ -45,9 +45,8 @@ $checkbox: map.merge(
   position: relative;
   display: inline-flex;
   align-items: center;
-
-  // margin-right: 10px;
   line-height: 1;
+  vertical-align: middle;
   cursor: pointer;
   user-select: none;
   transition:
