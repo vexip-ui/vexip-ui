@@ -1,3 +1,14 @@
+## [2.0.1](https://github.com/vexip-ui/vexip-ui/compare/v2.0.0...v2.0.1) (2022-09-18)
+
+### Bug Fixes
+
+- **slider:** missing width when in flex layout ([7506916](https://github.com/vexip-ui/vexip-ui/commit/75069164ea8bfdac51acc33f0cda1d116b07e344))
+
+### Features
+
+- support ssr for components ([#153](https://github.com/vexip-ui/vexip-ui/issues/153)) ([c0c4fd8](https://github.com/vexip-ui/vexip-ui/commit/c0c4fd82a8c2aeda7462ccb936d9564038598a71))
+- **table:** support series of class, style, attrs and events ([d7291d8](https://github.com/vexip-ui/vexip-ui/commit/d7291d86490d2dc7ace6f8e06aee58a59f43df0e)), closes [#154](https://github.com/vexip-ui/vexip-ui/issues/154)
+
 # [2.0.0](https://github.com/vexip-ui/vexip-ui/compare/v2.0.0-rc.1...v2.0.0) (2022-09-16)
 
 ### Bug Fixes
