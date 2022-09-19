@@ -94,7 +94,6 @@ import {
   provide,
   onMounted,
   onBeforeUnmount,
-  nextTick,
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
@@ -409,7 +408,7 @@ export default defineComponent({
       const itemCount = itemList.length
       const targetIndex = (currentActive.value - amount + itemCount) % itemCount
 
-      if (targetIndex >= props.viewSize) {
+      if (targetIndex >= itemCount - props.viewSize) {
         if (!props.loop) return
 
         if (trackRect.offset < 0) {
@@ -523,14 +522,14 @@ export default defineComponent({
         shouldReset = false
         isLocked.value = true
 
-        nextTick(() => {
+        requestAnimationFrame(() => {
           trackRect.offset =
             -currentActive.value * (props.vertical ? itemRect.height : itemRect.width)
 
-          setTimeout(() => {
+          requestAnimationFrame(() => {
             isLocked.value = false
             inTransition = false
-          }, 0)
+          })
         })
       }
     }
