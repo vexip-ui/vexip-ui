@@ -306,6 +306,7 @@ export default defineComponent({
     },
     ignoreCase: booleanProp,
     creatable: booleanProp,
+    transparent: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onToggle: eventProp<(visible: boolean) => void>(),
@@ -374,7 +375,8 @@ export default defineComponent({
       keyConfig: () => ({}),
       filter: false,
       ignoreCase: false,
-      creatable: false
+      creatable: false,
+      transparent: false
     })
 
     const locale = useLocale('select')
@@ -599,7 +601,8 @@ export default defineComponent({
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
-        [`${baseCls}--has-suffix`]: !props.noSuffix
+        [`${baseCls}--has-suffix`]: !props.noSuffix,
+        [`${baseCls}--transparent`]: props.transparent
       }
     })
     const hasValue = computed(() => !isNull(currentValues.value[0]))

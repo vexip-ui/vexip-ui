@@ -14,5 +14,6 @@
   "group",
   "loading",
   "virtual",
-  "async-options"
+  "async-options",
+  "transparent"
 ]

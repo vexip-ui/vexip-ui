@@ -64,6 +64,7 @@ interface SelectOptionState {
 | filter          | `boolean \| (value: string \| number, options: SelectOptionState) => boolean)` | 过滤 `options` 的方法，传入 `ture` 时会使用内置比较方法     | `false`        | `2.0.0` |
 | ignore-case     | `boolean`                                                                      | 在使用内置的过滤时，设置是否忽略大小写                      | `false`        | `2.0.0` |
 | creatable       | `boolean`                                                                      | 设置在开启了过滤选项功能后，是否支持动态创建选项            | `false`        | `2.0.0` |
+| transparent     | `boolean`                                                                      | 设置是否为透明模式                                          | `false`        | `2.0.2` |
 
 ### Select 事件
 

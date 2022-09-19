@@ -64,6 +64,7 @@ interface SelectOptionState {
 | filter          | `boolean \| (value: string \| number, options: SelectOptionState) => boolean)` | The method of filtering `options`, the built-in filter method is used when `true` is passed                   | `false`        | `2.0.0` |
 | ignore-case     | `boolean`                                                                      | Set whether to ignore case when using built-in filtering                                                      | `false`        | `2.0.0` |
 | creatable       | `boolean`                                                                      | Set whether to support dynamic create options when filter options is enabled                                  | `false`        | `2.0.0` |
+| transparent     | `boolean`                                                                      | Set whether to be transparent                                                                                 | `false`        | `2.0.2` |
 
 ### Select Events
 
