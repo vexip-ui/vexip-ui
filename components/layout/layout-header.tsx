@@ -19,7 +19,7 @@ import { isClient } from '@vexip-ui/utils'
 import { computeSeriesColors, useLayoutState } from './helper'
 
 import type { PropType } from 'vue'
-import type { MenuOptions } from '@/components/menu'
+import type { MenuOptions, MenuExposed } from '@/components/menu'
 import type {
   LayoutConfig,
   LayoutUser,
@@ -53,7 +53,7 @@ export default defineComponent({
     onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>()
   },
   emits: ['update:sign-type', 'update:color', 'update:user-dropped'],
-  setup(_props, { emit, slots }) {
+  setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
       tag: 'header',
       logo: '',
@@ -85,6 +85,8 @@ export default defineComponent({
     const layoutState = useLayoutState()
     const currentSignType = ref<LayoutSignType>(props.signType)
     const currentUserDropped = ref(props.userDropped)
+
+    const menu = ref<MenuExposed | null>(null)
 
     const { isMounted } = useMounted()
 
@@ -123,6 +125,8 @@ export default defineComponent({
     const hasMenu = computed(() => {
       return !!(props.menus?.length || props.menuProps?.router)
     })
+
+    expose({ menu, expandMenuByLabel })
 
     watch(
       () => props.signType,
@@ -213,6 +217,10 @@ export default defineComponent({
       emitEvent(props.onMenuSelect, label, meta)
     }
 
+    function expandMenuByLabel(label: string) {
+      menu.value?.expandItemByLabel(label)
+    }
+
     function getSlotParams() {
       return {
         reduced: layoutState.reduced,
@@ -301,6 +309,7 @@ export default defineComponent({
               : hasMenu.value
                 ? (
               <Menu
+                ref={menu}
                 {...(props.menuProps || {})}
                 horizontal
                 transfer

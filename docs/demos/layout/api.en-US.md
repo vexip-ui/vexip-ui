@@ -110,6 +110,12 @@ interface LayoutState {
 | footer-links     | Slot for footer links                                                                           | -                                                                                                                                                       | -     |
 | footer-copyright | Slot for footer copyright information                                                           | -                                                                                                                                                       | -     |
 
+### Layout Methods
+
+| Name              | Description                                  | Parameters                | Since   |
+| ----------------- | -------------------------------------------- | ------------------------- | ------- |
+| expandMenuByLabel | Expand the inner menu according to the label | `(label: string) => void` | `2.0.2` |
+
 ### LayoutHeader Props
 
 | Name          | Type                   | Description                                   | Default                                                                     | Since |

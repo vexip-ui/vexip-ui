@@ -110,6 +110,12 @@ interface LayoutState {
 | footer-links     | 页脚链接的内容插槽                                                                      | -                                                                                                                                                      | -    |
 | footer-copyright | 页脚版权信息的内容插槽                                                                  | -                                                                                                                                                      | -    |
 
+### Layout 方法
+
+| 名称              | 说明                     | 签名                      | 始于    |
+| ----------------- | ------------------------ | ------------------------- | ------- |
+| expandMenuByLabel | 根据标签值展开内部的菜单 | `(label: string) => void` | `2.0.2` |
+
 ### LayoutHeader 属性
 
 | 名称          | 类型                   | 说明                           | 默认值                                                                      | 始于 |

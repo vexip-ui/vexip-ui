@@ -41,6 +41,12 @@ interface MenuOptions {
 | expand | 当菜单被展开组 (子菜单) 时触发，返回被展开组的菜单的 label | `(label: string, meta: Record<string, any>)` | -    |
 | reduce | 当菜单被收起组 (子菜单) 时触发，返回被收起组的菜单的 label | `(label: string, meta: Record<string, any>)` | -    |
 
+### Menu 方法
+
+| 名称              | 说明               | 签名                      | 始于    |
+| ----------------- | ------------------ | ------------------------- | ------- |
+| expandItemByLabel | 根据标签值展开菜单 | `(label: string) => void` | `2.0.0` |
+
 ### MenuItem 属性
 
 | 名称            | 类型                  | 说明                                                                                                            | 默认值  | 始于    |

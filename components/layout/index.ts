@@ -5,5 +5,8 @@ export type {
   LayoutMenuProps,
   LayoutHeaderAction,
   LayoutUser,
-  LayoutFooterLink
+  LayoutFooterLink,
+  LayoutExposed,
+  LayoutHeaderExposed,
+  LayoutAsideExposed
 } from './symbol'

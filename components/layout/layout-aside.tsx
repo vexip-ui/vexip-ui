@@ -14,7 +14,7 @@ import {
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
 import type { PropType } from 'vue'
-import type { MenuOptions } from '@/components/menu'
+import type { MenuOptions, MenuExposed } from '@/components/menu'
 import type { LayoutMenuProps } from './symbol'
 
 export default defineComponent({
@@ -34,7 +34,7 @@ export default defineComponent({
     onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>()
   },
   emits: ['update:reduced', 'update:expanded'],
-  setup(_props, { emit, slots }) {
+  setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
       tag: 'aside',
       reduced: false,
@@ -63,6 +63,7 @@ export default defineComponent({
 
     const top = ref<HTMLElement | null>(null)
     const bottom = ref<HTMLElement | null>(null)
+    const menu = ref<MenuExposed | null>(null)
 
     const className = computed(() => {
       return [
@@ -81,6 +82,8 @@ export default defineComponent({
     const hasMenu = computed(() => {
       return !!(props.menus?.length || props.menuProps?.router)
     })
+
+    expose({ menu, expandMenuByLabel })
 
     watch(
       () => props.reduced,
@@ -144,6 +147,10 @@ export default defineComponent({
       emitEvent(props.onMenuSelect, label, meta)
     }
 
+    function expandMenuByLabel(label: string) {
+      menu.value?.expandItemByLabel(label)
+    }
+
     function getSlotParams() {
       return {
         reduced: currentReduced.value,
@@ -183,6 +190,7 @@ export default defineComponent({
               : hasMenu.value
                 ? (
               <Menu
+                ref={menu}
                 {...(props.menuProps || {})}
                 transfer
                 options={props.menus}

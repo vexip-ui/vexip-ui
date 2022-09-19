@@ -56,15 +56,15 @@
         </slot>
       </span>
     </Tooltip>
-    <span v-if="!isUsePopper">
-      <CollapseTransition>
+    <template v-if="isGroup && !isUsePopper">
+      <CollapseTransition appear>
         <ul v-show="showGroup" :class="nh.be('list')">
           <slot name="group">
             <Renderer :renderer="renderChildren"></Renderer>
           </slot>
         </ul>
       </CollapseTransition>
-    </span>
+    </template>
     <Portal v-else-if="isGroup" :to="transferTo">
       <transition :name="transition">
         <div
@@ -201,7 +201,7 @@ const MenuItem = defineComponent({
       return {
         [baseClass]: true,
         [`${baseClass}--disabled`]: props.disabled,
-        [`${baseClass}--group-visible`]: groupExpanded.value,
+        [`${baseClass}--group-visible`]: isGroup.value && groupExpanded.value,
         [`${baseClass}--selected`]: selected.value,
         [`${baseClass}--no-icon`]: !props.icon,
         [`${baseClass}--son-selected`]: sonSelected.value

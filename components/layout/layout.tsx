@@ -26,7 +26,9 @@ import type {
   LayoutSignType,
   LayoutHeaderAction,
   LayoutUser,
-  LayoutFooterLink
+  LayoutFooterLink,
+  LayoutHeaderExposed,
+  LayoutAsideExposed
 } from './symbol'
 
 export default defineComponent({
@@ -69,7 +71,7 @@ export default defineComponent({
     onColorChange: eventProp<(color: string) => void>()
   },
   emits: ['update:reduced', 'update:sign-type', 'update:color'],
-  setup(_props, { emit, slots }) {
+  setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
       noAside: false,
       footer: false,
@@ -112,6 +114,8 @@ export default defineComponent({
 
     const section = ref<HTMLElement | null>(null)
     const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
+    const header = ref<LayoutHeaderExposed | null>(null)
+    const aside = ref<LayoutAsideExposed | null>(null)
 
     const affixMatched = useMediaQuery(toRef(props, 'headerFixed'))
     const expandMatched = useMediaQuery(toRef(props, 'asideFixed'))
@@ -146,8 +150,11 @@ export default defineComponent({
     const signInHeader = computed(() => {
       return props.noAside || currentSignType.value === 'header' || state.expanded
     })
+    const menu = computed(() => aside.value?.menu || header.value?.menu || null)
 
     provide(LAYOUT_STATE, state)
+
+    expose({ scroll, menu, expandMenuByLabel })
 
     watch(affixMatched, value => {
       state.affixMatched = value
@@ -220,6 +227,10 @@ export default defineComponent({
       emitEvent(props.onUserAction, label, meta)
     }
 
+    function expandMenuByLabel(label: string) {
+      menu.value?.expandItemByLabel(label)
+    }
+
     function getSlotParams() {
       return { reduced: asideReduced.value, toggleReduce }
     }
@@ -259,6 +270,7 @@ export default defineComponent({
 
       return (
         <LayoutHeader
+          ref={header}
           v-model:sign-type={currentSignType.value}
           v-model:user-dropped={userDropped.value}
           v-model:color={currentColor.value}
@@ -297,6 +309,7 @@ export default defineComponent({
 
       return (
         <LayoutAside
+          ref={aside}
           v-model:reduced={asideReduced.value}
           menus={props.menus}
           menu-props={props.menuProps}

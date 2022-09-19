@@ -41,6 +41,12 @@ interface MenuOptions {
 | expand | Emitted when the menu is expanded (submenu), returns the label of the menu of the expanded group         | `(label: string, meta: Record<string, any>)` | -     |
 | reduce | Emitted when the menu is collapsed group (submenu), returns the label of the menu in the collapsed group | `(label: string, meta: Record<string, any>)` | -     |
 
+### Menu Methods
+
+| Name              | Description                            | Parameters                | Since   |
+| ----------------- | -------------------------------------- | ------------------------- | ------- |
+| expandItemByLabel | Expand the menu according to the label | `(label: string) => void` | `2.0.0` |
+
 ### MenuItem Props
 
 | Name            | Type                  | Description                                                                                                                                                                                                              | Default | Since   |
