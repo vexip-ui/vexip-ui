@@ -30,6 +30,7 @@
 | loading-icon | `Record<string, any>`                                    | Set the loading icon                                                                  | `Spinner`   | `2.0.0` |
 | loading-lock | `boolean`                                                | Set whether to be read-only when loading                                              | `false`     | `2.0.0` |
 | loading-spin | `boolean`                                                | Set whether to use spin animation for the loading icon                                | `false`     | `2.0.0` |
+| transparent  | `boolean`                                                | Set whether to be transparent                                                         | `false`     | `2.0.2` |
 
 ### Input Events
 

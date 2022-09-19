@@ -58,6 +58,7 @@ export default defineComponent({
     loadingIcon: Object,
     loadingLock: booleanProp,
     loadingSpin: booleanProp,
+    transparent: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onInput: eventProp<(value: string) => void>(),
@@ -119,7 +120,8 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      transparent: false
     })
 
     const nh = useNameHelper('input')
@@ -157,7 +159,8 @@ export default defineComponent({
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('before')]: slots.beforeAction || slots['before-action'],
           [nh.bm('after')]: slots.afterAction || slots['after-action'],
-          [nh.bm('loading')]: props.loading
+          [nh.bm('loading')]: props.loading,
+          [nh.bm('transparent')]: props.transparent
         }
       ]
     })

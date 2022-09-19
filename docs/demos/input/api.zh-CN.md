@@ -30,6 +30,7 @@
 | loading-icon | `Record<string, any>`                                    | 设置加载中的图标                                 | `Spinner`   | `2.0.0` |
 | loading-lock | `boolean`                                                | 设置在加载中时是否为只读                         | `false`     | `2.0.0` |
 | loading-spin | `boolean`                                                | 设置加载中图标是否使用旋转动画                   | `false`     | `2.0.0` |
+| transparent  | `boolean`                                                | 设置是否为透明模式                               | `false`     | `2.0.2` |
 
 ### Input 事件
 
