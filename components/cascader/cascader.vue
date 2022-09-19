@@ -281,6 +281,7 @@ export default defineComponent({
     loadingIcon: Object,
     loadingLock: booleanProp,
     loadingSpin: booleanProp,
+    transparent: booleanProp,
     onToggle: eventProp<(visible: boolean) => void>(),
     onSelect: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
     onCancel: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
@@ -356,7 +357,8 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      transparent: false
     })
 
     const currentVisible = ref(props.visible)
@@ -472,7 +474,8 @@ export default defineComponent({
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
-        [`${baseCls}--has-suffix`]: !props.noSuffix
+        [`${baseCls}--has-suffix`]: !props.noSuffix,
+        [`${baseCls}--transparent`]: props.transparent
       }
     })
     const hasPrefix = computed(() => {
