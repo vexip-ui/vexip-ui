@@ -23,6 +23,7 @@
     :loading-icon="props.loadingIcon"
     :loading-lock="props.loadingLock"
     :loading-spin="props.loadingSpin"
+    :transparent="transparent"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"
@@ -140,6 +141,7 @@ export default defineComponent({
     loadingIcon: Object,
     loadingLock: booleanProp,
     loadingSpin: booleanProp,
+    transparent: booleanProp,
     keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
     onSelect: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
     onInput: eventProp<(value: string) => void>(),
@@ -196,7 +198,8 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      transparent: false
     })
 
     const currentValue = ref(props.value)
