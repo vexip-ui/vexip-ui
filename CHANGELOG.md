@@ -1,3 +1,18 @@
+## [2.0.2](https://github.com/vexip-ui/vexip-ui/compare/v2.0.1...v2.0.2) (2022-09-19)
+
+### Bug Fixes
+
+- **carousel:** confusion when switch left or top in loop ([0483eeb](https://github.com/vexip-ui/vexip-ui/commit/0483eebe23cf9ff4e518498b855581b9fd666590))
+- **table:** incorrect bg color when transparent in dark theme ([c197979](https://github.com/vexip-ui/vexip-ui/commit/c197979fea6cef7e56f6ed06d0643e19928c68e2))
+
+### Features
+
+- **auto-complete:** add transparent prop ([1111b96](https://github.com/vexip-ui/vexip-ui/commit/1111b96b4766bf38ac7e24e33e6c968d434673f3))
+- **cascader:** add transparent prop ([379c862](https://github.com/vexip-ui/vexip-ui/commit/379c862a6b497f9a870faa81dcc8a24289a75c55))
+- **input:** add transparent prop ([cdc6e08](https://github.com/vexip-ui/vexip-ui/commit/cdc6e087e1246f1bde12a74abcbca277dea9b7fb))
+- **layout:** add expandMenuByLabel api method ([bd864b0](https://github.com/vexip-ui/vexip-ui/commit/bd864b0d777b06344058b082aee14cc85a686e71)), closes [#156](https://github.com/vexip-ui/vexip-ui/issues/156)
+- **select:** add transparent prop ([972ca83](https://github.com/vexip-ui/vexip-ui/commit/972ca834670afbc059458e330487ecdc8b8a9c95))
+
 ## [2.0.1](https://github.com/vexip-ui/vexip-ui/compare/v2.0.0...v2.0.1) (2022-09-18)
 
 ### Bug Fixes
