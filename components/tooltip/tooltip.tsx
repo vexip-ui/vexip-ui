@@ -114,7 +114,8 @@ export default defineComponent({
       if (virtual) {
         if ('getBoundingClientRect' in virtual) {
           return virtual as VirtualElement
-        } else if ('x' in virtual && 'y' in virtual) {
+        }
+        if ('x' in virtual && 'y' in virtual) {
           return {
             getBoundingClientRect: () => ({
               x: virtual.x,
