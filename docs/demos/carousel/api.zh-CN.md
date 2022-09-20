@@ -1,19 +1,20 @@
 ### Carousel 属性
 
-| 名称          | 类型                              | 说明                                                                           | 默认值      | 始于 |
-| ------------- | --------------------------------- | ------------------------------------------------------------------------------ | ----------- | ---- |
-| active        | `number`                          | 当前激活的元素，可以使用 `v-model` 双向绑定                                    | `0`         | -    |
-| view-size     | `number`                          | 视窗中可容纳的 item 数                                                         | `3`         | -    |
-| vertical      | `boolean`                         | 设置是否开启纵向轮播模式                                                       | `false`     | -    |
-| disabled      | `boolean`                         | 是否为禁用状态                                                                 | `false`     | -    |
-| loop          | `boolean`                         | 是否开启循环轮播模式                                                           | `false`     | -    |
-| arrow         | `'outside' \| 'inside' \| 'none'` | 箭头显示的方式                                                                 | `'outside'` | -    |
-| arrow-trigger | `'hover' \| 'always'`             | 箭头显示的触发方式，可选值为 `hover`、`always`，仅当箭头类型为 `inside` 时有效 | `'hover'`   | -    |
-| autoplay      | `boolean \| number`               | 设置轮播自动播放，传入数值时可以设置间隔毫秒数，最低有效值为 300               | `false`     | -    |
-| pointer       | `'outside' \| 'inside' \| 'none'` | 指示器显示的方式，可选值为 `outside`、`inside`、`none`                         | `'none'`    | -    |
-| speed         | `number`                          | 元素切换过渡效果的速度                                                         | `300`       | -    |
-| active-offset | `number`                          | 标记 item 激活的偏移量，为 0 时默认视窗第一个元素为激活状态                    | `0`         | -    |
-| height        | `number \| string`                | 在 `vertical` 模式下，可以设置高度                                             | `null`      | -    |
+| 名称          | 类型                              | 说明                                                                           | 默认值      | 始于    |
+| ------------- | --------------------------------- | ------------------------------------------------------------------------------ | ----------- | ------- |
+| active        | `number`                          | 当前激活的元素，可以使用 `v-model` 双向绑定                                    | `0`         | -       |
+| view-size     | `number`                          | 视窗中可容纳的 item 数                                                         | `3`         | -       |
+| vertical      | `boolean`                         | 设置是否开启纵向轮播模式                                                       | `false`     | -       |
+| disabled      | `boolean`                         | 是否为禁用状态                                                                 | `false`     | -       |
+| loop          | `boolean`                         | 是否开启循环轮播模式                                                           | `false`     | -       |
+| arrow         | `'outside' \| 'inside' \| 'none'` | 箭头显示的方式                                                                 | `'outside'` | -       |
+| arrow-trigger | `'hover' \| 'always'`             | 箭头显示的触发方式，可选值为 `hover`、`always`，仅当箭头类型为 `inside` 时有效 | `'hover'`   | -       |
+| autoplay      | `boolean \| number`               | 设置轮播自动播放，传入数值时可以设置间隔毫秒数，最低有效值为 300               | `false`     | -       |
+| pointer       | `'outside' \| 'inside' \| 'none'` | 指示器显示的方式，可选值为 `outside`、`inside`、`none`                         | `'none'`    | -       |
+| speed         | `number`                          | 元素切换过渡效果的速度                                                         | `300`       | -       |
+| active-offset | `number`                          | 标记 item 激活的偏移量，为 0 时默认视窗第一个元素为激活状态                    | `0`         | -       |
+| height        | `number \| string`                | 在 `vertical` 模式下，可以设置高度                                             | `null`      | -       |
+| ignore-hover  | `boolean`                         | 开启自动轮播后是否忽略鼠标移入                                                 | `false`     | `2.0.3` |
 
 ### Carousel 事件
 

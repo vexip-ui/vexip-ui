@@ -120,6 +120,10 @@ $alert: map.merge(
     align-self: start;
   }
 
+  &__content {
+    display: flex;
+  }
+
   $types: info success warning error;
 
   @each $type in $types {

@@ -1,19 +1,20 @@
 ### Carousel Props
 
-| Name          | Type                              | Description                                                                                                                                 | Default     | Since |
-| ------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ----- |
-| active        | `number`                          | The currently active element, can use `v-model` two-way binding                                                                             | `0`         | -     |
-| view-size     | `number`                          | The number of items that can fit in the viewport                                                                                            | `3`         | -     |
-| vertical      | `boolean`                         | Set whether to enable vertical rotation mode                                                                                                | `false`     | -     |
-| disabled      | `boolean`                         | Set whether is disabled                                                                                                                     | `false`     | -     |
-| loop          | `boolean`                         | Whether to enable loop mode                                                                                                                 | `false`     | -     |
-| arrow         | `'outside' \| 'inside' \| 'none'` | Set how the arrow is displayed                                                                                                              | `'outside'` | -     |
-| arrow-trigger | `'hover' \| 'always'`             | The trigger mode of arrow display, optional values ​​are `hover`, `always`, only valid when the arrow type is `inside`                      | `'hover'`   | -     |
-| autoplay      | `boolean \| number`               | Set the carousel to play automatically, the interval in milliseconds can be set when the value is passed in, the minimum valid value is 300 | `false`     | -     |
-| pointer       | `'outside' \| 'inside' \| 'none'` | How to display the pointer, optional values ​​are `outside`, `inside`, `none`                                                               | `'none'`    | -     |
-| speed         | `number`                          | The speed at which the element toggles the transition effect                                                                                | `300`       | -     |
-| active-offset | `number`                          | The offset to mark the activation of the item, when it is 0, the first element of the default window is active                              | `0`         | -     |
-| height        | `number \| string`                | In `vertical` mode, the height can be set                                                                                                   | `null`      | -     |
+| Name          | Type                              | Description                                                                                                                                 | Default     | Since   |
+| ------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
+| active        | `number`                          | The currently active element, can use `v-model` two-way binding                                                                             | `0`         | -       |
+| view-size     | `number`                          | The number of items that can fit in the viewport                                                                                            | `3`         | -       |
+| vertical      | `boolean`                         | Set whether to enable vertical rotation mode                                                                                                | `false`     | -       |
+| disabled      | `boolean`                         | Set whether is disabled                                                                                                                     | `false`     | -       |
+| loop          | `boolean`                         | Whether to enable loop mode                                                                                                                 | `false`     | -       |
+| arrow         | `'outside' \| 'inside' \| 'none'` | Set how the arrow is displayed                                                                                                              | `'outside'` | -       |
+| arrow-trigger | `'hover' \| 'always'`             | The trigger mode of arrow display, optional values ​​are `hover`, `always`, only valid when the arrow type is `inside`                      | `'hover'`   | -       |
+| autoplay      | `boolean \| number`               | Set the carousel to play automatically, the interval in milliseconds can be set when the value is passed in, the minimum valid value is 300 | `false`     | -       |
+| pointer       | `'outside' \| 'inside' \| 'none'` | How to display the pointer, optional values ​​are `outside`, `inside`, `none`                                                               | `'none'`    | -       |
+| speed         | `number`                          | The speed at which the element toggles the transition effect                                                                                | `300`       | -       |
+| active-offset | `number`                          | The offset to mark the activation of the item, when it is 0, the first element of the default window is active                              | `0`         | -       |
+| height        | `number \| string`                | In `vertical` mode, the height can be set                                                                                                   | `null`      | -       |
+| ignore-hover  | `boolean`                         | Whether to ignore mouse enter when `autoplay` is enabled                                                                                    | `false`     | `2.0.3` |
 
 ### Carousel Events
 

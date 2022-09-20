@@ -131,6 +131,7 @@ export default defineComponent({
     speed: Number,
     activeOffset: Number,
     height: [Number, String],
+    ignoreHover: booleanProp,
     onChange: eventProp<(active: number) => void>(),
     onPrev: eventProp<(active: number) => void>(),
     onNext: eventProp<(active: number) => void>(),
@@ -168,7 +169,8 @@ export default defineComponent({
       },
       speed: 300,
       activeOffset: 0,
-      height: null
+      height: null,
+      ignoreHover: false
     })
 
     const nh = useNameHelper('carousel')
@@ -257,6 +259,8 @@ export default defineComponent({
       emit('update:active', active)
     })
     watch(isHover, value => {
+      if (props.ignoreHover) return
+
       if (value) {
         handleMouseEnter()
       } else {
