@@ -1,3 +1,9 @@
+## [1.7.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.7.0...hooks@1.7.1) (2022-09-20)
+
+### Features
+
+- support ssr for components ([#153](https://github.com/vexip-ui/vexip-ui/issues/153)) ([c0c4fd8](https://github.com/vexip-ui/vexip-ui/commit/c0c4fd82a8c2aeda7462ccb936d9564038598a71))
+
 # 1.7.0 (2022-09-16)
 
 # [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.5.1...hooks@1.6.0) (2022-07-26)
