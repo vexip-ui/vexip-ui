@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/vexip-ui/vexip-ui/compare/v2.0.2...v2.0.3) (2022-09-20)
+
+### Features
+
+- **carousel:** add ignore-hover prop ([0c1c221](https://github.com/vexip-ui/vexip-ui/commit/0c1c221b9c9c8542508af5f2e497cc0f24c53d02))
+- **utils:** add compute dom react methods ([20fcb71](https://github.com/vexip-ui/vexip-ui/commit/20fcb7134286b7ad99a8e3f5e39ca695354b944f))
+
 ## [2.0.2](https://github.com/vexip-ui/vexip-ui/compare/v2.0.1...v2.0.2) (2022-09-19)
 
 ### Bug Fixes
