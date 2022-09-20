@@ -100,7 +100,8 @@ export function useProps<T extends Record<string, any>>(
         if (isNull(sourceProps[key])) {
           if (!isNull(configProps.value[key])) {
             return getValue(configProps.value[key])
-          } else if (!isNull(commonProps.value[key])) {
+          }
+          if (!isNull(commonProps.value[key])) {
             return getValue(commonProps.value[key])
           }
 

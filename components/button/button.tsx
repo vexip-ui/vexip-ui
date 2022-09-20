@@ -130,10 +130,8 @@ export default defineComponent({
           colorMap.value
         const gcv = nh.gcv
 
-        let style: Record<string, string>
-
         if (props.ghost) {
-          style = nh.cvm({
+          return nh.cvm({
             color: base,
             'color-hover': base,
             'color-focus': base,
@@ -151,8 +149,9 @@ export default defineComponent({
             'b-color-disabled': gcv('b-color-disabled-typed-ghost'),
             'pulse-s-color': dark1
           })
-        } else if (props.simple) {
-          style = nh.cvm({
+        }
+        if (props.simple) {
+          return nh.cvm({
             color: base,
             'color-hover': base,
             'color-focus': gcv('color-focus-typed-simple'),
@@ -170,8 +169,9 @@ export default defineComponent({
             'b-color-disabled': gcv('b-color-disabled-typed-simple'),
             'pulse-s-color': dark1
           })
-        } else if (props.text || props.dashed) {
-          style = nh.cvm({
+        }
+        if (props.text || props.dashed) {
+          return nh.cvm({
             ...(props.dashed
               ? {
                   'b-color': base,
@@ -188,28 +188,26 @@ export default defineComponent({
             'color-active': dark1,
             'color-disabled': opacity4
           })
-        } else {
-          style = nh.cvm({
-            color: '#fff',
-            'color-hover': '#fff',
-            'color-focus': '#fff',
-            'color-active': '#fff',
-            'color-disabled': '#fff',
-            'bg-color': base,
-            'bg-color-hover': light2,
-            'bg-color-focus': light2,
-            'bg-color-active': dark1,
-            'bg-color-disabled': gcv('bg-color-disabled-typed'),
-            'b-color': base,
-            'b-color-hover': light2,
-            'b-color-focus': light2,
-            'b-color-active': dark1,
-            'b-color-disabled': gcv('b-color-disabled-typed'),
-            'pulse-s-color': dark1
-          })
         }
 
-        return style
+        return nh.cvm({
+          color: '#fff',
+          'color-hover': '#fff',
+          'color-focus': '#fff',
+          'color-active': '#fff',
+          'color-disabled': '#fff',
+          'bg-color': base,
+          'bg-color-hover': light2,
+          'bg-color-focus': light2,
+          'bg-color-active': dark1,
+          'bg-color-disabled': gcv('bg-color-disabled-typed'),
+          'b-color': base,
+          'b-color-hover': light2,
+          'b-color-focus': light2,
+          'b-color-active': dark1,
+          'b-color-disabled': gcv('b-color-disabled-typed'),
+          'pulse-s-color': dark1
+        })
       }
 
       return {}
