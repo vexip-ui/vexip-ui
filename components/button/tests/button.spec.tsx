@@ -157,6 +157,22 @@ describe('Button', () => {
     )
   })
 
+  it('badge', async () => {
+    const wrapper = mount(Button, {
+      props: {
+        badge: 12
+      }
+    })
+
+    expect(wrapper.find('.vxp-button__badge').exists()).toBe(true)
+
+    await wrapper.setProps({ type: 'primary' })
+    expect(wrapper.find('.vxp-button__badge').classes()).toContain('vxp-button__badge--primary')
+
+    await wrapper.setProps({ disabled: true })
+    expect(wrapper.find('.vxp-button__badge').classes()).toContain('vxp-button__badge--disabled')
+  })
+
   it('group', () => {
     const wrapper = mount(() => (
       <ButtonGroup>

@@ -19,6 +19,7 @@
 | color        | `string`                                                                | Set the major color of the button                                                      | `null`      | `2.0.0` |
 | tag          | `string`                                                                | Set button rendering tag                                                               | `'button'`  | `2.0.0` |
 | no-pulse     | `boolean`                                                               | Set whether to disable the pulse effect after clicking                                 | `false`     | `2.0.0` |
+| badge        | `number \| string`                                                      | set inner badge content                                                                | `null`      | `2.0.4` |
 
 ### Button Events
 

@@ -1,4 +1,5 @@
 import { defineComponent, ref, computed, inject } from 'vue'
+import { Badge } from '@/components/badge'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { FIELD_OPTIONS } from '@/components/form/symbol'
@@ -20,10 +21,6 @@ import type { ButtonType, ButtonAttrType } from './symbol'
 
 export default defineComponent({
   name: 'Button',
-  components: {
-    CollapseTransition,
-    Icon
-  },
   props: {
     size: sizeProp,
     type: String as PropType<ButtonType>,
@@ -42,6 +39,7 @@ export default defineComponent({
     block: booleanProp,
     tag: String,
     noPulse: booleanProp,
+    badge: [String, Number],
     onClick: eventProp<(event: MouseEvent) => void>()
   },
   emits: [],
@@ -71,7 +69,8 @@ export default defineComponent({
       },
       block: false,
       tag: 'button',
-      noPulse: false
+      noPulse: false,
+      badge: null
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -283,6 +282,22 @@ export default defineComponent({
       )
     }
 
+    function renderBadge() {
+      const badgeType = props.disabled
+        ? 'disabled'
+        : props.type === 'default'
+          ? 'error'
+          : props.type
+
+      return (
+        <Badge
+          class={[nh.be('badge'), nh.bem('badge', badgeType)]}
+          content={props.badge}
+          type={badgeType}
+        ></Badge>
+      )
+    }
+
     return () => {
       const Button = (props.tag || 'button') as any
 
@@ -298,6 +313,7 @@ export default defineComponent({
         >
           {isIconOnly.value ? renderSingleIcon() : renderCollapseIcon()}
           {!isIconOnly.value && slots.default ? slots.default() : null}
+          {!isIconOnly.value && (props.badge || props.badge === 0) ? renderBadge() : null}
         </Button>
       )
     }

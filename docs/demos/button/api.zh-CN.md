@@ -19,6 +19,7 @@
 | color        | `string`                                                                | 设置按钮的主题色                               | `null`      | `2.0.0` |
 | tag          | `string`                                                                | 设置按钮的渲染标签                             | `'button'`  | `2.0.0` |
 | no-pulse     | `boolean`                                                               | 设置是否禁用点击后的脉冲效果                   | `false`     | `2.0.0` |
+| badge        | `number \| string`                                                      | 设置内置徽标内容                               | `null`      | `2.0.4` |
 
 ### Button 事件
 

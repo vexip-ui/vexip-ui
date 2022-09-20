@@ -68,7 +68,10 @@ $button: map.merge(
     font-size: get-css-var('font-size-base'),
     series-span: 8px,
     icon-span: 6px,
-    d-color-typed: rgba($color-white, 50%)
+    d-color-typed: rgba($color-white, 50%),
+    badge-color: get-css-var('color-white'),
+    badge-bg-color: get-css-var('color-error-base'),
+    badge-b-color: get-css-var('color-error-base')
   ),
   $button
 );
@@ -304,8 +307,8 @@ $button: map.merge(
             color-disabled: 'button-color-disabled-typed-simple',
             bg-color: 'color' $type 'opacity-8',
             bg-color-hover: 'color' $type 'opacity-7',
-            bg-color-focus: 'color' $type 'opacity-1',
-            bg-color-active: 'color' $type 'opacity-1',
+            bg-color-focus: 'color' $type 'opacity-3',
+            bg-color-active: 'color' $type 'opacity-3',
             bg-color-disabled: 'button-bg-color-disabled-typed-simple',
             b-color: 'color' $type 'opacity-4',
             b-color-hover: 'color' $type 'opacity-4',
@@ -419,6 +422,58 @@ $button: map.merge(
 
   &--icon-only#{&}--large {
     width: get-css-var('button-height');
+  }
+
+  &__badge {
+    margin-left: 8px;
+    pointer-events: none;
+
+    .#{$namespace}-badge__content {
+      color: get-css-var('button-badge-color');
+      background-color: get-css-var('button-badge-bg-color');
+      box-shadow: get-css-var('shadow-border') get-css-var('button-badge-b-color');
+    }
+  }
+
+  @each $type in $types {
+    &__badge--#{$type} {
+      @include define-button-style(
+        (
+          badge-color: 'button-bg-color',
+          badge-bg-color: 'button-color',
+          badge-b-color: 'button-color'
+        )
+      );
+    }
+
+    &--ghost &__badge--#{$type} {
+      @include define-button-style(
+        (
+          badge-color: 'button-color',
+          badge-bg-color: transparent
+        )
+      );
+    }
+
+    &--simple &__badge--#{$type},
+    &--text &__badge--#{$type},
+    &--dashed &__badge--#{$type} {
+      @include define-button-style(
+        (
+          badge-color: 'button-color-typed'
+        )
+      );
+    }
+  }
+
+  &__badge--disabled .#{$namespace}-badge__content {
+    @include define-button-style(
+      (
+        badge-color: 'button-color-disabled',
+        badge-bg-color: 'button-bg-color-disabled',
+        badge-b-color: 'button-b-color-disabled'
+      )
+    );
   }
 
   @at-root {

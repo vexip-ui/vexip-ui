@@ -26,8 +26,7 @@ import { defineComponent, computed } from 'vue'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
-
-export type BadgeType = 'error' | 'primary' | 'success' | 'warning' | 'info' | 'disabled'
+import type { BadgeType } from './symbol'
 
 const badgeTypes = Object.freeze<BadgeType>([
   'error',
