@@ -1,3 +1,3 @@
 ### 轮播通知
 
-通过设置 `type` 属性为 info、success、warning、error 以创建不同类型的警告提示。
+这个示例展示了如何结合 Carousel 组件开发一个内容轮播的警告。

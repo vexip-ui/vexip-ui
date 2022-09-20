@@ -28,3 +28,9 @@ import { Bullhorn } from '@vexip-ui/icons'
   padding: 0 0 1px;
 }
 </style>
+
+<style scoped>
+.vxp-alert {
+  max-width: 600px;
+}
+</style>

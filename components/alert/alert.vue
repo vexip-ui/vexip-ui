@@ -7,8 +7,17 @@
             {{ title }}
           </slot>
         </div>
-        <div :class="nh.be('content')">
-          <slot></slot>
+        <div ref="content" :class="[nh.be('content'), props.scroll && nh.bem('content', 'scroll')]">
+          <span
+            v-if="props.scroll"
+            ref="scrollEl"
+            :class="nh.be('scroll')"
+            :style="scrollStyle"
+            @transitionend="handleScrollEnd"
+          >
+            <slot></slot>
+          </span>
+          <slot v-else></slot>
         </div>
       </div>
       <button v-if="props.closable" :class="nh.be('close')" @click="handleClose">
@@ -32,10 +41,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { getRangeWidth } from '@vexip-ui/utils'
 
 import {
   Flag,
@@ -80,8 +90,11 @@ export default defineComponent({
     noBorder: booleanProp,
     banner: booleanProp,
     manual: booleanProp,
+    scroll: booleanProp,
+    scrollSpeed: Number,
     onClose: eventProp(),
-    onHide: eventProp()
+    onHide: eventProp(),
+    onScrollEnd: eventProp()
   },
   emits: [],
   setup(_props, { slots }) {
@@ -97,13 +110,20 @@ export default defineComponent({
       iconColor: '',
       noBorder: false,
       banner: false,
-      manual: false
+      manual: false,
+      scroll: false,
+      scrollSpeed: 1
     })
 
     const nh = useNameHelper('alert')
 
     const closed = ref(false)
     const hidden = ref(false)
+    const scrollDuration = ref(0)
+    const scrollOffset = ref(0)
+
+    const content = ref<HTMLElement | null>(null)
+    const scroll = ref<HTMLElement | null>(null)
 
     const hasTitle = computed(() => {
       return !!(props.title || slots.title)
@@ -131,6 +151,23 @@ export default defineComponent({
 
       return props.icon
     })
+    const scrollStyle = computed(() => {
+      return {
+        transitionDuration: `${scrollDuration.value}ms`,
+        transform: `translateX(${scrollOffset.value}px)`
+      }
+    })
+
+    watch(
+      () => props.scroll,
+      value => {
+        value && startScroll()
+      }
+    )
+
+    onMounted(() => {
+      props.scroll && startScroll()
+    })
 
     function handleClose() {
       if (!props.manual) {
@@ -145,6 +182,30 @@ export default defineComponent({
       hidden.value = true
     }
 
+    function startScroll() {
+      if (content.value && scroll.value) {
+        const contentRect = content.value.getBoundingClientRect()
+        const rangeWidth = getRangeWidth(scroll.value)
+        const duration =
+          ((contentRect.width + rangeWidth) * 12) / (Math.max(props.scrollSpeed, 0) || 1)
+
+        scrollDuration.value = 0
+        scrollOffset.value = contentRect.width
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            scrollDuration.value = duration
+            scrollOffset.value = -rangeWidth
+          })
+        })
+      }
+    }
+
+    function handleScrollEnd() {
+      emitEvent(props.onScrollEnd)
+      requestAnimationFrame(startScroll)
+    }
+
     return {
       props,
       nh,
@@ -152,13 +213,18 @@ export default defineComponent({
       closed,
       hidden,
 
+      content,
+      scrollEl: scroll,
+
       hasTitle,
       hasIcon,
       className,
       iconComp,
+      scrollStyle,
 
       handleClose,
-      handleAfterLeave
+      handleAfterLeave,
+      handleScrollEnd
     }
   }
 })

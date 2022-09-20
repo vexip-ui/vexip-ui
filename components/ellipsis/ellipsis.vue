@@ -38,6 +38,7 @@ import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
 import { useNameHelper, useProps, booleanProp, classProp } from '@vexip-ui/config'
 import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
+import { getRangeWidth } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/hooks'
@@ -123,6 +124,7 @@ export default defineComponent({
           visible.value = false
           return
         }
+
         // In the case of multiple lines, use visual height and real content height to control whether to display
         if (props.maxLines > 0) {
           const scrollHeight = wrapper.value.scrollHeight
@@ -130,18 +132,7 @@ export default defineComponent({
 
           visible.value = scrollHeight > clientHeight
         } else {
-          const range = document.createRange()
-
-          range.setStart(wrapper.value, 0)
-          range.setEnd(wrapper.value, wrapper.value.childNodes.length)
-
-          const rangeWidth = range.getBoundingClientRect().width
-          const computedStyle = getComputedStyle(wrapper.value)
-          const horizontalPending =
-            parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
-
-          visible.value =
-            rangeWidth + (horizontalPending || 0) > wrapper.value.getBoundingClientRect().width
+          visible.value = getRangeWidth(wrapper.value) > wrapper.value.getBoundingClientRect().width
         }
 
         content.value = visible.value ? wrapper.value.textContent ?? '' : ''

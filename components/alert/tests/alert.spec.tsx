@@ -65,4 +65,10 @@ describe('Alert', () => {
     expect(wrapper.find('.vxp-alert__icon').text()).toEqual(TEXT)
     expect(wrapper.find('.vxp-alert__close').text()).toEqual(TEXT)
   })
+
+  it('scroll', () => {
+    const wrapper = mount(() => <Alert scroll>{TEXT}</Alert>)
+
+    expect(wrapper.find('.vxp-alert__scroll').exists()).toBe(true)
+  })
 })

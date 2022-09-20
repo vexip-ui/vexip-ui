@@ -1,3 +1,3 @@
 ### Carousel Content
 
-Create different types of alerts by setting the `type` prop to info, success, warning, error.
+This example shows how to make a carousel content in Alert with the Carousel component.

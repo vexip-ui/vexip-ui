@@ -87,7 +87,7 @@ import { Icon } from '@/components/icon'
 import { Tooltip } from '@/components/tooltip'
 import { CircleQuestionR } from '@vexip-ui/icons'
 import { useNameHelper, useProps, useLocale, booleanProp, makeSentence } from '@vexip-ui/config'
-import { isNull, isFunction, createEventEmitter } from '@vexip-ui/utils'
+import { isNull, isFunction, createEventEmitter, getRangeWidth } from '@vexip-ui/utils'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
 import { FORM_PROPS, FORM_FIELDS, FIELD_OPTIONS, FORM_ACTIONS } from './symbol'
@@ -320,17 +320,7 @@ export default defineComponent({
       }
 
       if (labelEl.value) {
-        const range = document.createRange()
-
-        range.setStart(labelEl.value, 0)
-        range.setEnd(labelEl.value, labelEl.value.childNodes.length)
-
-        const rangeWidth = range.getBoundingClientRect().width
-        const computedStyle = getComputedStyle(labelEl.value)
-        const horizontalPending =
-          parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
-
-        labelWidth.value = rangeWidth + horizontalPending
+        labelWidth.value = getRangeWidth(labelEl.value)
       }
 
       if (formFields) {

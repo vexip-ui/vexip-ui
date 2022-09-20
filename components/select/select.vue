@@ -238,7 +238,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { isNull, removeArrayItem } from '@vexip-ui/utils'
+import { isNull, removeArrayItem, getRangeWidth } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -978,12 +978,7 @@ export default defineComponent({
 
       requestAnimationFrame(() => {
         if (props.multiple && device.value) {
-          const range = document.createRange()
-
-          range.setStart(device.value, 0)
-          range.setEnd(device.value, device.value.childNodes.length)
-
-          anchorWidth.value = range.getBoundingClientRect().width
+          anchorWidth.value = getRangeWidth(device.value)
         }
 
         updatePopper()

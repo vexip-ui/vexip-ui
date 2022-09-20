@@ -1,7 +1,5 @@
 <template>
-  <Alert>
-    Some content to alert
-  </Alert>
+  <Alert> Some content to alert </Alert>
   <Alert type="success">
     Some content to alert
   </Alert>
@@ -12,3 +10,9 @@
     Some content to alert
   </Alert>
 </template>
+
+<style scoped>
+.vxp-alert {
+  max-width: 600px;
+}
+</style>
