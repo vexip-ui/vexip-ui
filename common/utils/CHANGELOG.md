@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.6.0...utils@1.7.0) (2022-09-20)
+
+### Features
+
+- support ssr for components ([#153](https://github.com/vexip-ui/vexip-ui/issues/153)) ([c0c4fd8](https://github.com/vexip-ui/vexip-ui/commit/c0c4fd82a8c2aeda7462ccb936d9564038598a71))
+- **utils:** add compute dom react methods ([20fcb71](https://github.com/vexip-ui/vexip-ui/commit/20fcb7134286b7ad99a8e3f5e39ca695354b944f))
+
 # [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.5.0...utils@1.6.0) (2022-09-16)
 
 # [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.4.0...utils@1.5.0) (2022-07-25)
