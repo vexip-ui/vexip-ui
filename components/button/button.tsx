@@ -118,7 +118,9 @@ export default defineComponent({
           opacity3: adjustAlpha(baseColor, 0.7).toString(),
           opacity4: adjustAlpha(baseColor, 0.6).toString(),
           opacity7: adjustAlpha(baseColor, 0.3).toString(),
-          opacity8: adjustAlpha(baseColor, 0.2).toString()
+          opacity8: adjustAlpha(baseColor, 0.2).toString(),
+          white8: adjustAlpha(white, 0.2).toString(),
+          white9: adjustAlpha(white, 0.1).toString()
         }
       }
 
@@ -126,59 +128,70 @@ export default defineComponent({
     })
     const style = computed(() => {
       if (colorMap.value) {
-        const { base, light2, dark1, opacity1, opacity3, opacity4, opacity7, opacity8 } =
-          colorMap.value
-        const gcv = nh.gcv
+        const {
+          base,
+          light2,
+          dark1,
+          opacity1,
+          opacity3,
+          opacity4,
+          opacity7,
+          opacity8,
+          white8,
+          white9
+        } = colorMap.value
+        const { cvm, gnv } = nh
 
         if (props.ghost) {
-          return nh.cvm({
+          return cvm({
             color: base,
             'color-hover': base,
             'color-focus': base,
             'color-active': base,
             'color-disabled': base,
-            'bg-color': gcv('bg-color-typed-ghost'),
-            'bg-color-hover': gcv('bg-color-hover-typed-ghost'),
-            'bg-color-focus': gcv('bg-color-focus-typed-ghost'),
-            'bg-color-active': gcv('bg-color-active-typed-ghost'),
-            'bg-color-disabled': gcv('bg-color-disabled-typed-ghost'),
+            'bg-color': 'transparent',
+            'bg-color-hover': white9,
+            'bg-color-focus': white9,
+            'bg-color-active': white8,
+            'bg-color-disabled': 'transparent',
             'b-color': base,
             'b-color-hover': light2,
             'b-color-focus': light2,
             'b-color-active': dark1,
-            'b-color-disabled': gcv('b-color-disabled-typed-ghost'),
+            'b-color-disabled': gnv('content-color-disabled'),
             'pulse-s-color': dark1
           })
         }
+
         if (props.simple) {
-          return nh.cvm({
+          return cvm({
             color: base,
             'color-hover': base,
-            'color-focus': gcv('color-focus-typed-simple'),
-            'color-active': gcv('color-active-typed-simple'),
-            'color-disabled': gcv('color-disabled-typed-simple'),
+            'color-focus': gnv('color-white'),
+            'color-active': gnv('color-white'),
+            'color-disabled': gnv('content-color-disabled'),
             'bg-color': opacity8,
             'bg-color-hover': opacity7,
             'bg-color-focus': opacity1,
             'bg-color-active': opacity1,
-            'bg-color-disabled': gcv('bg-color-disabled-typed-simple'),
+            'bg-color-disabled': gnv('fill-color-background'),
             'b-color': opacity4,
             'b-color-hover': opacity4,
             'b-color-focus': opacity3,
             'b-color-active': opacity3,
-            'b-color-disabled': gcv('b-color-disabled-typed-simple'),
+            'b-color-disabled': gnv('border-color-light-1'),
             'pulse-s-color': dark1
           })
         }
+
         if (props.text || props.dashed) {
-          return nh.cvm({
+          return cvm({
             ...(props.dashed
               ? {
                   'b-color': base,
                   'b-color-hover': light2,
                   'b-color-focus': light2,
                   'b-color-active': dark1,
-                  'b-color-disabled': gcv('b-color-disabled-typed'),
                   'pulse-s-color': dark1
                 }
               : {}),
@@ -190,22 +203,22 @@ export default defineComponent({
           })
         }
 
-        return nh.cvm({
-          color: '#fff',
-          'color-hover': '#fff',
-          'color-focus': '#fff',
-          'color-active': '#fff',
-          'color-disabled': '#fff',
+        return cvm({
+          color: gnv('color-white'),
+          'color-hover': gnv('color-white'),
+          'color-focus': gnv('color-white'),
+          'color-active': gnv('color-white'),
+          'color-disabled': gnv('content-color-disabled'),
           'bg-color': base,
           'bg-color-hover': light2,
           'bg-color-focus': light2,
           'bg-color-active': dark1,
-          'bg-color-disabled': gcv('bg-color-disabled-typed'),
+          'bg-color-disabled': gnv('fill-color-background'),
           'b-color': base,
           'b-color-hover': light2,
           'b-color-focus': light2,
           'b-color-active': dark1,
-          'b-color-disabled': gcv('b-color-disabled-typed'),
+          'b-color-disabled': gnv('border-color-light-1'),
           'pulse-s-color': dark1
         })
       }

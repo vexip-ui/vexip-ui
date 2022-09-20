@@ -17,4 +17,7 @@
   <Button simple type="error">
     Error
   </Button>
+  <Button simple type="primary" disabled>
+    Disabled
+  </Button>
 </template>

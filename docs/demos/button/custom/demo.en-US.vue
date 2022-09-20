@@ -2,6 +2,9 @@
   <Button color="orange">
     Orange
   </Button>
+  <Button ghost color="orange">
+    Orange
+  </Button>
   <Button simple color="orange">
     Orange
   </Button>
@@ -9,6 +12,9 @@
     Orange
   </Button>
   <Button dashed color="orange">
+    Orange
+  </Button>
+  <Button color="orange" disabled>
     Orange
   </Button>
 </template>

@@ -17,4 +17,7 @@
   <Button dashed type="error">
     Error
   </Button>
+  <Button dashed disabled>
+    Disabled
+  </Button>
 </template>

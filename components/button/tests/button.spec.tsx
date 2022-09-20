@@ -161,6 +161,9 @@ describe('Button', () => {
     const wrapper = mount(Button, {
       props: {
         badge: 12
+      },
+      slots: {
+        default: () => TEXT
       }
     })
 
