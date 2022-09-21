@@ -22,9 +22,7 @@
       <Button type="success" :icon="Plus" @click="addSkill">
         添加
       </Button>
-      <Button type="primary" :icon="Check" @click="handleSubmit">
-        提交
-      </Button>
+      <FormSubmit :icon="Check" @submit="handleSubmit" @error="handleError"></FormSubmit>
     </FormItem>
   </Form>
 </template>
@@ -58,6 +56,10 @@ function removeSkill(index: number) {
 }
 
 function handleSubmit() {
-  form.value?.validate()
+  console.info('validation passed')
+}
+
+function handleError(errors: string[]) {
+  console.error(errors)
 }
 </script>

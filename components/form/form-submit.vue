@@ -23,6 +23,7 @@
       {{ props.label || locale.submit }}
     </slot>
     <button
+      v-if="isNative"
       ref="submit"
       type="submit"
       style="display: none;"
@@ -32,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject } from 'vue'
+import { defineComponent, ref, computed, inject } from 'vue'
 import { Button } from '@/components/button'
 import {
   useNameHelper,
@@ -115,8 +116,10 @@ export default defineComponent({
 
     const submit = ref<HTMLElement | null>(null)
 
+    const isNative = computed(() => formProps.method && formProps.action)
+
     async function handleSubmit() {
-      if (props.disabled || !formProps.method || !formProps.action) return
+      if (props.disabled) return
 
       loading.value = true
 
@@ -137,7 +140,10 @@ export default defineComponent({
 
         if (result !== false) {
           emitEvent(props.onSubmit)
-          submit.value?.click()
+
+          if (isNative.value) {
+            submit.value?.click()
+          }
         }
       }
 
@@ -151,6 +157,8 @@ export default defineComponent({
       loading,
 
       submit,
+
+      isNative,
 
       handleSubmit
     }

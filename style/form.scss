@@ -8,8 +8,7 @@ $form: map.merge(
     error-color: get-css-var('color-error-light-1'),
     error-shadow: get-css-var('box-shaodw-focus') get-css-var('color-error-opacity-6'),
     asterisk-color: get-css-var('color-error-base'),
-    asterisk-family: #{SimSun,
-    sans-serif},
+    asterisk-family: get-css-var('font-family-base'),
     tip-color: get-css-var('color-error-base')
   ),
   $form
@@ -23,8 +22,6 @@ $form: map.merge(
   @include basis;
 
   position: relative;
-  display: flex;
-  flex-direction: column;
 
   &--inline {
     display: inline-flex;

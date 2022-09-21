@@ -32,11 +32,7 @@ const sizes: Array<{ label: ComponentSize, content: string }> = [
   { label: 'large', content: 'Large' }
 ]
 
-const formModel = reactive({
-  input: '',
-  select: '',
-  checkbox: []
-})
+const formModel = reactive({})
 
 const options = ['Option 1', 'Option 2', 'Option 3']
 </script>

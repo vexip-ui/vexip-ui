@@ -27,11 +27,7 @@ const aligns: Array<{ label: FormLabelAlign, content: string }> = [
   { label: 'top', content: '上对齐' }
 ]
 
-const formModel = reactive({
-  input: '',
-  select: '',
-  checkbox: []
-})
+const formModel = reactive({})
 
 const options = ['选项1', '选项2', '选项3']
 </script>

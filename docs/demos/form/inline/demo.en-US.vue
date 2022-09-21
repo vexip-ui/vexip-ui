@@ -21,9 +21,7 @@
       <Select :options="options"></Select>
     </FormItem>
     <FormItem action>
-      <Button type="primary">
-        Submit
-      </Button>
+      <FormSubmit></FormSubmit>
     </FormItem>
   </Form>
 </template>
@@ -31,10 +29,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 
-const formModel = reactive({
-  input: '',
-  select: ''
-})
+const formModel = reactive({})
 
 const options = ['Option 1', 'Option 2', 'Option 3']
 </script>

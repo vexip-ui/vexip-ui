@@ -22,28 +22,20 @@
       <Button type="success" :icon="Plus" @click="addSkill">
         Add Skill
       </Button>
-      <Button type="primary" :icon="Check" @click="handleSubmit">
-        Submit
-      </Button>
+      <FormSubmit :icon="Check" @submit="handleSubmit" @error="handleError"></FormSubmit>
     </FormItem>
   </Form>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import { Minus, Plus, Check } from '@vexip-ui/icons'
 
-import type { Form } from 'vexip-ui'
+interface Model {
+  skills: { value: string }[]
+}
 
-const formModel = reactive({
-  skills: [
-    {
-      value: ''
-    }
-  ]
-})
-
-const form = ref<InstanceType<typeof Form> | null>(null)
+const formModel = reactive({} as Model)
 
 function addSkill() {
   formModel.skills.push({ value: '' })
@@ -58,6 +50,10 @@ function removeSkill(index: number) {
 }
 
 function handleSubmit() {
-  form.value?.validate()
+  console.info('validation passed')
+}
+
+function handleError(errors: string[]) {
+  console.error(errors)
 }
 </script>

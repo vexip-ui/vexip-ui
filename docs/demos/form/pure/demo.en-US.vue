@@ -15,7 +15,7 @@
 import { reactive } from 'vue'
 
 const formModel = reactive({
-  firstName: '',
-  lastName: ''
+  // firstName: '',
+  // lastName: ''
 })
 </script>

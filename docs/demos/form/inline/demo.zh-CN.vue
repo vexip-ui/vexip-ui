@@ -21,9 +21,7 @@
       <Select :options="options"></Select>
     </FormItem>
     <FormItem action>
-      <Button type="primary">
-        提交
-      </Button>
+      <FormSubmit></FormSubmit>
     </FormItem>
   </Form>
 </template>
@@ -31,10 +29,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 
-const formModel = reactive({
-  input: '',
-  select: ''
-})
+const formModel = reactive({})
 
 const options = ['选项1', '选项2', '选项3']
 </script>
