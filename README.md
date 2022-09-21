@@ -87,4 +87,4 @@ I have limited energy and it's not start writing unit tests currently, if you en
 
 ## License
 
-All in [MIT](./LICENSE) license.
+All in [MIT](./LICENSE.md) license.
