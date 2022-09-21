@@ -87,4 +87,4 @@ yarn add vexip-ui
 
 ## 授权
 
-所有文件都基于 [MIT](./LICENSE) 授权。
+所有文件都基于 [MIT](./LICENSE.md) 授权。
