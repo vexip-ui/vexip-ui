@@ -12,11 +12,18 @@ There are currently **70+** components, many you can see everywhere and a few ma
 
 ## Features
 
-- Not less components for website development, hoping may improve efficiency
-- Out-of-box and high quality **Vue3** components
-- Follow the intuitive design, and write as directly as possible
-- Using the composition api, the performance and extensibility should be good
-- **700+** unit tests to provide good basic stability for component usage
+- 📦 70+ out-of-box high quality Vue 3 components
+- 📐 Intuitive, minimalistic Api design
+- 🔧 Configurable default value of props, quickly complete global/local modifications
+- ⚡ Composition Api, good performance base
+- 🔨 With TypeScript, fully types
+- 💪 800+ unit tests to provide good stability
+- 🎨 Support CSS variable, built-in dark theme
+- 🚩 Support i18n
+- 🛫 Provide resolver, support unplugin
+- 🚤 Support SSR
+- 🩹 Good a11n
+- 👀 Close to business code arrangement, lower threshold for source code reading
 
 ## Environment
 

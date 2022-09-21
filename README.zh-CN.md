@@ -35,11 +35,18 @@ Vexip UI 提供了一系列开箱即用的组件。
 
 ## 特性
 
-- 还算多的组件，为网站开发助力，希望能提高点效率
-- 开箱即用 **Vue3** 组件（如果你还在用 Vue2，这里可能帮不到你）
-- 遵循直觉的设计，代码也尽可能写得直接一些，不要拐弯抹角
-- 使用组合式 Api 编写，性能与拓展性应该还不错
-- **700+** 单元测试，为组件的使用提供良好的基础稳定性
+- 📦 70+ 高质量的开箱即用 Vue 3 组件
+- 📐 遵循直觉的、简约的 Api 设计
+- 🔧 自由配置的属性默认值，快速完成全局/局部修改
+- ⚡ 组合式 Api，良好的性能基础
+- 🔨 TypeScript 编写，完整的类型
+- 💪 800+ 单元测试，为组件的提供良好的稳定性
+- 🎨 CSS 变量，内置暗黑主题
+- 🚩 国际化支持
+- 🛫 配套 Resolver，支持 unplugin 插件
+- 🚤 支持 SSR
+- 🩹 全面的可访问性
+- 👀 贴近业务代码编排，较低的源码阅读门槛
 
 ## 安装
 
@@ -62,6 +69,15 @@ yarn add vexip-ui
 在 [issue](https://github.com/vexip-ui/vexip-ui/issues) 给我留言，以便第一时间获得帮助。
 
 如果你遇到可能是 bugs 的问题，请使用 [Vexip UI Playground](https://playground.vexipui.com/) 提供一个最小的复现。
+
+你也可以扫下方的二维码加入技术交流 QQ 群（点击也可以）：
+
+<a href="https://jq.qq.com/?_wv=1027&k=5KlA84xG">
+  <img
+    src="./docs/public/vexip-ui-group-qrcode.png"
+    style="width: 240px;"
+  />
+</a>
 
 ## 贡献
 
