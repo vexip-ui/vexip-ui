@@ -87,7 +87,7 @@
     <Portal :to="transferTo">
       <transition :name="props.transitionName">
         <div
-          v-show="currentVisible"
+          v-if="currentVisible"
           ref="popper"
           :class="[nh.be('popper'), nh.bs('vars')]"
           @keydown.tab.stop="handleTabDown"

@@ -16,7 +16,9 @@ async function runScrollTimers() {
 
 describe('TimePicker', () => {
   it('render', () => {
-    const wrapper = mount(TimePicker)
+    const wrapper = mount(TimePicker, {
+      props: { visible: true }
+    })
 
     expect(wrapper.classes()).toContain('vxp-time-picker-vars')
     expect(wrapper.classes()).toContain('vxp-input-vars')
@@ -31,7 +33,7 @@ describe('TimePicker', () => {
 
   it('transfer', async () => {
     const wrapper = mount(TimePicker, {
-      props: { transfer: true }
+      props: { visible: true, transfer: true }
     })
 
     await nextTick()
@@ -48,7 +50,6 @@ describe('TimePicker', () => {
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
     const units = wrapper.findAll('.vxp-time-picker__unit')
-    const buttons = wrapper.find('.vxp-time-picker__action').findAll('.vxp-button')
 
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
     expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
@@ -70,12 +71,14 @@ describe('TimePicker', () => {
     expect(onBlur).toHaveBeenCalledTimes(1)
 
     await wrapper.trigger('click')
+    let buttons = wrapper.find('.vxp-time-picker__action').findAll('.vxp-button')
     ;(buttons[0].element as HTMLButtonElement).click()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
     expect(selector.classes()).toContain('vxp-time-picker__selector--focused')
 
     await wrapper.trigger('click')
+    buttons = wrapper.find('.vxp-time-picker__action').findAll('.vxp-button')
     ;(buttons[1].element as HTMLButtonElement).click()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
@@ -176,7 +179,9 @@ describe('TimePicker', () => {
   })
 
   it('button text', () => {
-    const wrapper = mount(() => <TimePicker confirm-text={'OK'} cancel-text={'NO'}></TimePicker>)
+    const wrapper = mount(() => (
+      <TimePicker visible confirm-text={'OK'} cancel-text={'NO'}></TimePicker>
+    ))
     const buttons = wrapper.find('.vxp-time-picker__action').findAll('.vxp-button')
 
     expect(buttons[0].text()).toEqual('NO')
@@ -513,16 +518,16 @@ describe('TimePicker', () => {
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
 
+    await wrapper.trigger('click')
     expect(wrapper.find('.vxp-time-picker__list--sub').exists()).toBe(true)
 
-    const shortcutItems = wrapper.findAll('.vxp-time-picker__shortcut')
+    let shortcutItems = wrapper.findAll('.vxp-time-picker__shortcut')
 
     expect(shortcutItems.length).toEqual(shortcuts.length)
     shortcutItems.forEach((item, i) => {
       expect(item.text()).toEqual(shortcuts[i].name)
     })
 
-    await wrapper.trigger('click')
     await shortcutItems[0].trigger('click')
     expect(selector.text()).toEqual(shortcuts[0].value)
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
@@ -530,6 +535,7 @@ describe('TimePicker', () => {
     expect(onShortcut).toHaveBeenLastCalledWith(shortcuts[0].name, shortcuts[0].value)
 
     await wrapper.trigger('click')
+    shortcutItems = wrapper.findAll('.vxp-time-picker__shortcut')
     await shortcutItems[1].trigger('click')
     expect(fnValue).toHaveBeenCalled()
     expect(selector.text()).toEqual('12:00:00')

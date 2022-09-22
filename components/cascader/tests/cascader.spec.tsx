@@ -64,7 +64,9 @@ function getData(options: CascaderOption[], indexs: number[]) {
 
 describe('Cascader', () => {
   it('render', () => {
-    const wrapper = mount(Cascader)
+    const wrapper = mount(Cascader, {
+      props: { visible: true }
+    })
 
     expect(wrapper.classes()).toContain('vxp-cascader-vars')
     expect(wrapper.classes()).toContain('vxp-input-vars')
@@ -76,7 +78,7 @@ describe('Cascader', () => {
 
   it('has empty', async () => {
     const wrapper = mount(Cascader, {
-      props: { options: createOptions() }
+      props: { visible: true, options: createOptions() }
     })
 
     expect(wrapper.find('.vxp-cascader__empty').exists()).toBe(false)
@@ -87,7 +89,7 @@ describe('Cascader', () => {
 
   it('transfer', async () => {
     const wrapper = mount(Cascader, {
-      props: { transfer: true, options: createOptions() }
+      props: { visible: true, transfer: true, options: createOptions() }
     })
 
     await nextTick()
@@ -100,6 +102,7 @@ describe('Cascader', () => {
     const options = createOptions()
     const wrapper = mount(Cascader, {
       props: {
+        visible: true,
         value: getValues(options, [2, 2, 2]),
         options
       }
@@ -191,12 +194,10 @@ describe('Cascader', () => {
       props: { options: createOptions() }
     })
 
-    expect(wrapper.find('.vxp-cascader__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-cascader__popper').exists()).toBe(false)
 
     await wrapper.trigger('click')
-    expect(wrapper.find('.vxp-cascader__popper').attributes('style')).not.toContain(
-      'display: none;'
-    )
+    expect(wrapper.find('.vxp-cascader__popper').exists()).toBe(true)
   })
 
   it('multiple', async () => {
@@ -359,6 +360,9 @@ describe('Cascader', () => {
       getValues(options, [0, 0, 0]),
       getData(options, [0, 0, 0])
     )
+    expect(getPanels().length).toEqual(0)
+
+    await wrapper.trigger('click')
     expect(getPanels().length).toEqual(3)
   })
 
@@ -391,6 +395,7 @@ describe('Cascader', () => {
   it('key config', () => {
     const wrapper = mount(Cascader, {
       props: {
+        visible: true,
         options: [
           {
             l: 'l-1',

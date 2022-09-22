@@ -21,7 +21,7 @@ function emitInput(input: HTMLInputElement, value: string) {
 describe('Select', () => {
   it('render', () => {
     const wrapper = mount(Select, {
-      props: { options: OPTIONS }
+      props: { visible: true, options: OPTIONS }
     })
 
     expect(wrapper.classes()).toContain('vxp-select-vars')
@@ -34,7 +34,7 @@ describe('Select', () => {
 
   it('has empty', async () => {
     const wrapper = mount(Select, {
-      props: { options: OPTIONS }
+      props: { visible: true, options: OPTIONS }
     })
 
     expect(wrapper.find('.vxp-select__empty').exists()).toBe(false)
@@ -45,7 +45,7 @@ describe('Select', () => {
 
   it('transfer', async () => {
     const wrapper = mount(Select, {
-      props: { transfer: true, options: OPTIONS }
+      props: { visible: true, transfer: true, options: OPTIONS }
     })
 
     await nextTick()
@@ -57,6 +57,7 @@ describe('Select', () => {
   it('single value', () => {
     const wrapper = mount(Select, {
       props: {
+        visible: true,
         value: OPTIONS[0],
         options: OPTIONS
       }
@@ -150,10 +151,10 @@ describe('Select', () => {
       props: { options: OPTIONS }
     })
 
-    expect(wrapper.find('.vxp-select__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-select__popper').exists()).toBe(false)
 
     await wrapper.trigger('click')
-    expect(wrapper.find('.vxp-select__popper').attributes('style')).not.toContain('display: none;')
+    expect(wrapper.find('.vxp-select__popper').exists()).toBe(true)
   })
 
   it('multiple', async () => {
@@ -167,7 +168,7 @@ describe('Select', () => {
 
   it('multiple value', () => {
     const wrapper = mount(() => (
-      <Select value={OPTIONS.slice(0, 2)} multiple options={OPTIONS}></Select>
+      <Select visible value={OPTIONS.slice(0, 2)} multiple options={OPTIONS}></Select>
     ))
     const tags = wrapper.findAll('.vxp-select__tag')
 
@@ -309,6 +310,7 @@ describe('Select', () => {
     expect(wrapper.emitted()).toHaveProperty('update:value')
     expect(wrapper.emitted('update:value')![0]).toEqual([OPTIONS[0]])
 
+    await wrapper.trigger('click')
     await wrapper.find('.vxp-option').trigger('click')
     expect(onChange).toHaveBeenCalledTimes(1)
     expect(onSelect).toHaveBeenCalledTimes(2)
@@ -390,6 +392,7 @@ describe('Select', () => {
     await wrapper.find('.vxp-option').trigger('click')
     expect(getValue(wrapper.find('input'))).toEqual(OPTIONS[0])
 
+    await wrapper.trigger('click')
     await wrapper.setProps({ disabled: true })
     expect(wrapper.find('input').element.disabled).toBe(true)
 
@@ -397,6 +400,7 @@ describe('Select', () => {
     expect(wrapper.find('input').element.disabled).toBe(true)
 
     await wrapper.setProps({ disabled: false })
+    await wrapper.trigger('click')
     await wrapper.find('.vxp-option').trigger('click')
     expect(getValue(wrapper.find('input'))).toEqual('')
   })
@@ -444,7 +448,7 @@ describe('Select', () => {
     await wrapper.find('.vxp-option').trigger('click')
     expect(getValue(wrapper.find('input'))).toEqual('222')
 
-    await wrapper.setProps({ visible: true })
+    await wrapper.trigger('click')
     emitInput(input, '22')
     await nextTick()
     expect(wrapper.findAll('.vxp-option').length).toEqual(2)
@@ -492,6 +496,7 @@ describe('Select', () => {
   it('key config', () => {
     const wrapper = mount(Select, {
       props: {
+        visible: true,
         value: 'v',
         options: [
           {

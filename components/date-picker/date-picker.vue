@@ -107,7 +107,7 @@
     <Portal :to="transferTo">
       <transition :name="props.transitionName" @after-leave="handlePaneHide">
         <div
-          v-show="currentVisible"
+          v-if="currentVisible"
           ref="popper"
           :class="[nh.be('popper'), nh.ns('calendar-vars'), nh.bs('vars')]"
           @click.stop="handleFocused"

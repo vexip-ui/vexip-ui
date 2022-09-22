@@ -16,7 +16,9 @@ async function runScrollTimers() {
 
 describe('DatePicker', () => {
   it('render', () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, {
+      props: { visible: true }
+    })
 
     expect(wrapper.classes()).toContain('vxp-date-picker-vars')
     expect(wrapper.classes()).toContain('vxp-input-vars')
@@ -34,7 +36,7 @@ describe('DatePicker', () => {
 
   it('transfer', async () => {
     const wrapper = mount(DatePicker, {
-      props: { transfer: true }
+      props: { visible: true, transfer: true }
     })
 
     await nextTick()
@@ -45,7 +47,7 @@ describe('DatePicker', () => {
 
   it('type', async () => {
     const wrapper = mount(DatePicker, {
-      props: { type: 'datetime' }
+      props: { visible: true, type: 'datetime' }
     })
 
     expect(wrapper.findAll('.vxp-date-picker__unit').length).toEqual(6)
@@ -66,7 +68,6 @@ describe('DatePicker', () => {
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
     const units = wrapper.findAll('.vxp-date-picker__unit')
-    const buttons = wrapper.find('.vxp-date-picker__action').findAll('.vxp-button')
 
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
     expect(selector.classes()).not.toContain('vxp-date-picker__selector--focused')
@@ -88,12 +89,14 @@ describe('DatePicker', () => {
     expect(onBlur).toHaveBeenCalledTimes(1)
 
     await wrapper.trigger('click')
+    let buttons = wrapper.find('.vxp-date-picker__action').findAll('.vxp-button')
     ;(buttons[0].element as HTMLButtonElement).click()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
     expect(selector.classes()).toContain('vxp-date-picker__selector--focused')
 
     await wrapper.trigger('click')
+    buttons = wrapper.find('.vxp-date-picker__action').findAll('.vxp-button')
     ;(buttons[1].element as HTMLButtonElement).click()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
@@ -170,7 +173,9 @@ describe('DatePicker', () => {
   it('panel actions', async () => {
     vi.setSystemTime('2022-05-27 09:24:47')
 
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, {
+      props: { visible: true }
+    })
     await nextTick()
 
     expect(wrapper.find('.vxp-date-picker__year').text()).toEqual('2022年')
@@ -181,7 +186,7 @@ describe('DatePicker', () => {
     const prefYear = wrapper.find('.vxp-date-picker__prev-year')
     const nextYear = wrapper.find('.vxp-date-picker__next-year')
 
-    await wrapper.trigger('click')
+    // await wrapper.trigger('click')
     await prevMonth.trigger('click')
     expect(wrapper.find('.vxp-date-picker__month').text()).toEqual('04月')
 
@@ -251,7 +256,9 @@ describe('DatePicker', () => {
   })
 
   it('button text', () => {
-    const wrapper = mount(() => <DatePicker confirm-text={'OK'} cancel-text={'NO'}></DatePicker>)
+    const wrapper = mount(() => (
+      <DatePicker visible confirm-text={'OK'} cancel-text={'NO'}></DatePicker>
+    ))
     const buttons = wrapper.find('.vxp-date-picker__action').findAll('.vxp-button')
 
     expect(buttons[0].text()).toEqual('NO')
@@ -493,6 +500,7 @@ describe('DatePicker', () => {
     const onChangeCol = vi.fn()
     const wrapper = mount(DatePicker, {
       props: {
+        visible: true,
         type: 'datetime',
         value: '2022-05-27 09:24:47',
         onInput,
@@ -582,16 +590,16 @@ describe('DatePicker', () => {
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
 
+    await wrapper.trigger('click')
     expect(wrapper.find('.vxp-date-picker__list--sub').exists()).toBe(true)
 
-    const shortcutItems = wrapper.findAll('.vxp-date-picker__shortcut')
+    let shortcutItems = wrapper.findAll('.vxp-date-picker__shortcut')
 
     expect(shortcutItems.length).toEqual(shortcuts.length)
     shortcutItems.forEach((item, i) => {
       expect(item.text()).toEqual(shortcuts[i].name)
     })
 
-    await wrapper.trigger('click')
     await shortcutItems[0].trigger('click')
     expect(selector.text()).toEqual('2022/05/01')
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
@@ -599,6 +607,7 @@ describe('DatePicker', () => {
     expect(onShortcut).toHaveBeenLastCalledWith(shortcuts[0].name, shortcuts[0].value)
 
     await wrapper.trigger('click')
+    shortcutItems = wrapper.findAll('.vxp-date-picker__shortcut')
     await shortcutItems[1].trigger('click')
     expect(fnValue).toHaveBeenCalled()
     expect(selector.text()).toEqual('2022/06/01')

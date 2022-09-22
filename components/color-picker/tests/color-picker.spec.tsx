@@ -42,7 +42,9 @@ async function toggleMove(el: HTMLElement, value = 40) {
 
 describe('ColorPicker', () => {
   it('render', () => {
-    const wrapper = mount(ColorPicker)
+    const wrapper = mount(ColorPicker, {
+      props: { visible: true }
+    })
 
     expect(wrapper.classes()).toContain('vxp-color-picker-vars')
     expect(wrapper.classes()).toContain('vxp-input-vars')
@@ -53,7 +55,7 @@ describe('ColorPicker', () => {
   })
 
   it('transfer', async () => {
-    const wrapper = mount(() => <ColorPicker transfer></ColorPicker>)
+    const wrapper = mount(() => <ColorPicker visible transfer></ColorPicker>)
 
     await nextTick()
     await nextTick()
@@ -231,11 +233,11 @@ describe('ColorPicker', () => {
   it('select color', async () => {
     const wrapper = mount(ColorPicker)
     const selector = wrapper.find('.vxp-color-picker__selector')
-    const palette = wrapper.find('.vxp-color-picker__palette')
 
     await selector.trigger('click')
-    await toggleMove(palette.element as HTMLElement)
 
+    const palette = wrapper.find('.vxp-color-picker__palette')
+    await toggleMove(palette.element as HTMLElement)
     expect(palette.find('.vxp-color-picker__palette-handler').attributes('style')).toContain(
       'top: 50%; left: 50%;'
     )
@@ -244,11 +246,11 @@ describe('ColorPicker', () => {
   it('hue color', async () => {
     const wrapper = mount(ColorPicker)
     const selector = wrapper.find('.vxp-color-picker__selector')
-    const hue = wrapper.find('.vxp-color-picker__hue')
 
     await selector.trigger('click')
-    await toggleMove(hue.element as HTMLElement)
 
+    const hue = wrapper.find('.vxp-color-picker__hue')
+    await toggleMove(hue.element as HTMLElement)
     expect(hue.find('.vxp-color-picker__hue-handler').attributes('style')).toContain('left: 50%;')
   })
 
@@ -259,12 +261,12 @@ describe('ColorPicker', () => {
     expect(wrapper.find('.vxp-color-picker__alpha').exists()).toBe(false)
 
     await wrapper.setProps({ alpha: true })
+    await selector.trigger('click')
+
     const alpha = wrapper.find('.vxp-color-picker__alpha')
     expect(alpha.exists()).toBe(true)
 
-    await selector.trigger('click')
     await toggleMove(alpha.element as HTMLElement)
-
     expect(alpha.find('.vxp-color-picker__alpha-handler').attributes('style')).toContain(
       'left: 50%;'
     )
@@ -272,7 +274,7 @@ describe('ColorPicker', () => {
 
   it('shortcut', async () => {
     const wrapper = mount(ColorPicker, {
-      props: { shortcut: true }
+      props: { visible: true, shortcut: true }
     })
 
     expect(wrapper.find('.vxp-color-picker__shortcuts').exists()).toBe(true)

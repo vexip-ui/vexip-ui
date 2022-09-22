@@ -130,7 +130,7 @@
     <Portal :to="transferTo">
       <transition :name="props.transitionName" @after-leave="currentFilter = ''">
         <div
-          v-show="currentVisible"
+          v-if="currentVisible"
           ref="popper"
           :class="[nh.be('popper'), nh.bs('vars')]"
           @click.stop
@@ -645,12 +645,15 @@ export default defineComponent({
     )
     watch(currentVisible, value => {
       if (value) {
-        updatePopper()
         initHittingIndex()
 
-        if (wrapper.value && popper.value) {
-          popper.value.style.minWidth = `${wrapper.value.offsetWidth}px`
-        }
+        requestAnimationFrame(() => {
+          updatePopper()
+
+          if (wrapper.value && popper.value) {
+            popper.value.style.minWidth = `${wrapper.value.offsetWidth}px`
+          }
+        })
 
         setTimeout(() => {
           if (virtualList.value && !isNull(currentValues.value[0])) {
