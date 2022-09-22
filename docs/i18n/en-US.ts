@@ -28,7 +28,9 @@ export const enUS = defineI18n({
     introduction: 'Introduction',
     gettingStart: 'Getting Start',
     globalConfig: 'Global Config',
-    styleConfig: 'Style Config'
+    styleConfig: 'Style Config',
+    nameOrigin: 'Why Call Vexip?',
+    logoOrigin: 'Origin Of Logo'
   },
   group: {
     basis: 'Basis',

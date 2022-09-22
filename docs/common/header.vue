@@ -1,7 +1,7 @@
 <template>
   <header :class="['header', affixed && 'header--reduced']">
     <a class="index" @click="toHomepage">
-      <img class="index__logo" src="/logo.png" alt="logo.pne" />
+      <img class="index__logo" src="/vexip-ui.svg" alt="vexip-ui" />
       <span class="index__title"> Vexip UI </span>
       <Tag class="index__version">
         {{ `v${version}` }}

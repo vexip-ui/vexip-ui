@@ -26,7 +26,9 @@ export interface I18nConfig {
     introduction: string,
     gettingStart: string,
     globalConfig: string,
-    styleConfig: string
+    styleConfig: string,
+    nameOrigin: string,
+    logoOrigin: string
   },
   group: {
     basis: string,

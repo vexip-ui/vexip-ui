@@ -28,7 +28,9 @@ export const zhCN = defineI18n({
     introduction: '介绍',
     gettingStart: '快速上手',
     globalConfig: '全局配置',
-    styleConfig: '样式配置'
+    styleConfig: '样式配置',
+    nameOrigin: '为什么叫 Vexip？',
+    logoOrigin: 'Logo 的由来'
   },
   group: {
     basis: '基础',

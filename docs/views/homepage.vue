@@ -6,7 +6,7 @@
         <Wave ref="wave"></Wave>
       </div>
       <div ref="sign" :class="`${prefix}__sign`">
-        <img :class="`${prefix}__logo`" src="/logo.png" alt="logo.png" />
+        <img :class="`${prefix}__logo`" src="/vexip-ui.svg" alt="vexip-ui" />
         <h1 :class="`${prefix}__title`">
           Vexip UI
         </h1>

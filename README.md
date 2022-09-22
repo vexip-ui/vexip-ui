@@ -1,9 +1,6 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img
-      src="https://raw.githubusercontent.com/vexip-ui/vexip-ui/main/docs/public/logo.png"
-      style="width: 180px;"
-    />
+    <img src="./docs/public/vexip-ui.svg" style="width: 180px;" />
   </a>
 </p>
 

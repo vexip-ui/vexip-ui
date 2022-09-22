@@ -59,6 +59,15 @@ pnpm install vexip-ui
 
 如果你遇到一些可能是 bug 的问题, 可以用 [Vexip UI Playground](https://playground.vexipui.com/) 来提供一个最小的复现。
 
+你也可以扫下方的二维码加入技术交流 QQ 群（点击也可以）：
+
+<a href="https://jq.qq.com/?_wv=1027&k=5KlA84xG" target="_blank">
+  <img
+    src="./docs/public/vexip-ui-group-qrcode.png"
+    style="width: 240px;"
+  />
+</a>
+
 ## 贡献
 
 欢迎你的加入！你可以查阅 [贡献指南](https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md) 了解如何开始。

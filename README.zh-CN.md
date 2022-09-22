@@ -1,9 +1,6 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img
-      src="https://raw.githubusercontent.com/vexip-ui/vexip-ui/main/docs/public/logo.png"
-      style="width: 180px;"
-    />
+    <img src="./docs/public/vexip-ui.svg" style="width: 180px;" />
   </a>
 </p>
 
@@ -72,7 +69,7 @@ yarn add vexip-ui
 
 你也可以扫下方的二维码加入技术交流 QQ 群（点击也可以）：
 
-<a href="https://jq.qq.com/?_wv=1027&k=5KlA84xG">
+<a href="https://jq.qq.com/?_wv=1027&k=5KlA84xG" target="_blank">
   <img
     src="./docs/public/vexip-ui-group-qrcode.png"
     style="width: 240px;"
