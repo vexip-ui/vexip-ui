@@ -147,6 +147,7 @@
               <Input
                 v-if="!props.noInput"
                 ref="input"
+                :class="nh.be('input')"
                 size="small"
                 :value="hex.toUpperCase()"
                 :respond="false"

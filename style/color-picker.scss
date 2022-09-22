@@ -245,4 +245,10 @@ $color-picker: map.merge(
       box-shadow: 0 0 2px 2px get-css-var('color-picker-shortcut-b-color-hover');
     }
   }
+
+  &__input {
+    flex: 1 0 0;
+    width: auto;
+    min-width: 0;
+  }
 }
