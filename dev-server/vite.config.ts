@@ -1,5 +1,5 @@
-import { resolve } from 'path'
-import { readdirSync, statSync, existsSync } from 'fs'
+import { resolve } from 'node:path'
+import { readdirSync, statSync, existsSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'

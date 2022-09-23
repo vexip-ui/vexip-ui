@@ -1,5 +1,4 @@
-// import { readFile } from 'fs/promises'
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import execa from 'execa'
 import chalk from 'chalk'
 

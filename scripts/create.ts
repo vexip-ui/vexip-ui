@@ -1,5 +1,5 @@
 import fs from 'fs-extra'
-import path from 'path'
+import path from 'node:path'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import stylelint from 'stylelint'

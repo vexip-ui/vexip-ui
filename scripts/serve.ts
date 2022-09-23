@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { readdirSync, statSync, existsSync, writeFileSync } from 'fs-extra'
 import minimist from 'minimist'
 import { resolveConfig, format } from 'prettier'

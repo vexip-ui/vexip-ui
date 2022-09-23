@@ -33,5 +33,11 @@
   "include": [
     ".",
     "../types.d.ts"
-  ]
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "moduleTypes": {
+      "scripts/*": "cjs"
+    }
+  }
 }

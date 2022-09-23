@@ -63,7 +63,7 @@ pnpm install vexip-ui
 
 <a href="https://jq.qq.com/?_wv=1027&k=5KlA84xG" target="_blank">
   <img
-    src="./docs/public/vexip-ui-group-qrcode.png"
+    src="/vexip-ui-group-qrcode.png"
     style="width: 240px;"
   />
 </a>

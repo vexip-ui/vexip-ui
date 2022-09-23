@@ -1,5 +1,5 @@
-import { resolve, basename } from 'path'
-import { readFile, writeFile } from 'fs/promises'
+import { resolve, basename } from 'node:path'
+import { readFile, writeFile } from 'node:fs/promises'
 import { existsSync, emptyDir, mkdirSync } from 'fs-extra'
 import execa from 'execa'
 import chalk from 'chalk'

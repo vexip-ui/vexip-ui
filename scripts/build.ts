@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import minimist from 'minimist'
 import { logger, run, emptyDir } from './utils'
 

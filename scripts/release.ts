@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'node:fs'
 import semver from 'semver'
 import { prompt } from 'enquirer'
 import { logger, run, dryRun, getPackageInfo } from './utils'

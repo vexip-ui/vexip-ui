@@ -1,5 +1,5 @@
-import { resolve } from 'path'
-import { readdirSync, statSync, existsSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
+import { resolve } from 'node:path'
+import { readdirSync, statSync, existsSync, lstatSync, rmdirSync, unlinkSync } from 'node:fs'
 import execa from 'execa'
 import chalk from 'chalk'
 import { prompt } from 'enquirer'

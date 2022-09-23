@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { existsSync, emptyDir, mkdirSync } from 'fs-extra'
 // import chalk from 'chalk'
 import { dest, src, parallel } from 'gulp'
