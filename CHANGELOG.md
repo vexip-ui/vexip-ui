@@ -1,3 +1,20 @@
+## [2.0.4](https://github.com/vexip-ui/vexip-ui/compare/v2.0.3...v2.0.4) (2022-09-23)
+
+### Bug Fixes
+
+- **color-picker:** incorrect inner input style ([b49bb49](https://github.com/vexip-ui/vexip-ui/commit/b49bb494dde6bfa297ad00f2091c0d0ce14d6b6b))
+- **form:** should not submit when form is not native ([8b27f2a](https://github.com/vexip-ui/vexip-ui/commit/8b27f2a7277fd0eabac1139e6d68484dc2894847))
+- **menu:** content disappears not in time when collapsing ([cfd93c1](https://github.com/vexip-ui/vexip-ui/commit/cfd93c1e1e74bfcad231d9d4e2dd63c7c6f0f412)), closes [#162](https://github.com/vexip-ui/vexip-ui/issues/162)
+
+### Features
+
+- **alert:** support auto scroll for content ([a3594c0](https://github.com/vexip-ui/vexip-ui/commit/a3594c09a1836dc523ee02901ab81e3ae1c79ebb))
+- **button:** support create inner badge ([3353761](https://github.com/vexip-ui/vexip-ui/commit/33537615b64bce84fea5285cf33588dffa10f702))
+
+### Performance Improvements
+
+- lazy render popper for select type components ([f7b96cc](https://github.com/vexip-ui/vexip-ui/commit/f7b96cca8a58b95586d64572c7cae6d1634f4449))
+
 ## [2.0.3](https://github.com/vexip-ui/vexip-ui/compare/v2.0.2...v2.0.3) (2022-09-20)
 
 ### Features
