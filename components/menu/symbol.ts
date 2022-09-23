@@ -18,13 +18,14 @@ export interface MenuOptions {
 }
 
 export interface MenuItemState {
-  el: HTMLElement | null,
-  label: string,
-  indent: number,
+  el: Readonly<HTMLElement | null>,
+  label: Readonly<string>,
+  indent: Readonly<number>,
   groupExpanded: boolean,
-  isUsePopper: boolean,
+  showGroup: Readonly<boolean>,
+  isUsePopper: Readonly<boolean>,
   parentState: MenuItemState | null,
-  transfer: boolean | string,
+  transfer: Readonly<boolean | string>,
   updateSonSelected(selected: boolean): void,
   toggleGroupExpanded(expanded: boolean, upword?: boolean): void,
   handleMouseEnter(): void,

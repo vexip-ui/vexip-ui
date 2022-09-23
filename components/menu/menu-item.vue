@@ -56,16 +56,14 @@
         </slot>
       </span>
     </Tooltip>
-    <template v-if="isGroup && !isUsePopper">
-      <CollapseTransition appear>
-        <ul v-show="showGroup" :class="nh.be('list')">
-          <slot name="group">
-            <Renderer :renderer="renderChildren"></Renderer>
-          </slot>
-        </ul>
-      </CollapseTransition>
-    </template>
-    <Portal v-else-if="isGroup" :to="transferTo">
+    <CollapseTransition appear>
+      <ul v-if="isGroup && !isUsePopper" v-show="showGroup" :class="nh.be('list')">
+        <slot name="group">
+          <Renderer :renderer="renderChildren"></Renderer>
+        </slot>
+      </ul>
+    </CollapseTransition>
+    <Portal v-if="isGroup && isUsePopper" :to="transferTo">
       <transition :name="transition">
         <div
           v-show="showGroup"
@@ -248,6 +246,7 @@ const MenuItem = defineComponent({
       label: toRef(props, 'label'),
       indent,
       groupExpanded,
+      showGroup,
       isUsePopper,
       parentState: parentItemState,
       transfer: computed(() => inTransfer.value || propTransfer.value),

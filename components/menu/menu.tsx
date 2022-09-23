@@ -258,28 +258,14 @@ export default defineComponent({
       let firstExpandedItem: MenuItemState | null = null
 
       for (const item of menuItemSet) {
-        if (!firstExpandedItem && item.groupExpanded) {
+        if (!firstExpandedItem && item.showGroup) {
           firstExpandedItem = item
         }
 
         item.toggleGroupExpanded(false)
       }
 
-      const handler = () => {
-        isReduced.value = true
-      }
-
-      if (firstExpandedItem?.el) {
-        const el = firstExpandedItem.el
-        const callback = () => {
-          nextTick(handler)
-          el.removeEventListener('transitionend', callback)
-        }
-
-        el.addEventListener('transitionend', callback)
-      } else {
-        handler()
-      }
+      isReduced.value = true
     }
 
     function handleMenuExpand() {
@@ -290,20 +276,24 @@ export default defineComponent({
       if (wrapper.value) {
         const el = wrapper.value
         const callback = () => {
+          el.removeEventListener('transitionend', callback)
+
           const selectedItem = Array.from(menuItemSet).find(
             item => item.label === currentActive.value
           )
 
-          if (selectedItem) {
-            let parent = selectedItem.parentState
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              if (selectedItem) {
+                let parent = selectedItem.parentState
 
-            while (parent) {
-              parent.groupExpanded = true
-              parent = parent.parentState
-            }
-          }
-
-          el.removeEventListener('transitionend', callback)
+                while (parent) {
+                  parent.groupExpanded = true
+                  parent = parent.parentState
+                }
+              }
+            })
+          })
         }
 
         el.addEventListener('transitionend', callback)
