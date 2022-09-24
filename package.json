@@ -178,8 +178,7 @@
     "serve:theme": "ts-node scripts/serve.ts --theme",
     "test": "vitest run",
     "test:cover": "vitest run --coverage",
-    "test:dev": "vitest dev",
-    "create-test": "ts-node scripts/create-ssr-tests.ts"
+    "test:dev": "vitest dev"
   },
   "sideEffects": [
     "dist/*",
