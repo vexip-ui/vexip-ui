@@ -7,7 +7,7 @@
 | disabled | `boolean`                                                                | Set whether the logo is disabled, no content will be displayed when disabled                                                           | `false`   | -     |
 | is-dot   | `boolean`                                                                | Set whether the logo is a status dot                                                                                                   | `false`   | -     |
 | type     | `'error' \| 'primary' \| 'success' \| 'warning' \| 'info' \| 'disabled'` | Set the type of logo                                                                                                                   | `'error'` | -     |
-| color    | `String`                                                                 | Set the color of the logo, can be used when the built-in type cannot meet the needs                                                    | `null`    | -     |
+| color    | `string`                                                                 | Set the color of the logo, can be used when the built-in type cannot meet the needs                                                    | `null`    | -     |
 
 ### Badge Events
 
