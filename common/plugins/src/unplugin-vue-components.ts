@@ -32,6 +32,7 @@ export interface VexipUIResolverOptions {
 }
 
 let components: string[] | undefined
+let styleAlias: Record<string, string> | undefined
 let directives: Record<string, string[]> | undefined
 
 function queryMetaData() {
@@ -43,6 +44,7 @@ function queryMetaData() {
     const metaData = JSON.parse(readFileSync(path!, 'utf-8'))
 
     components = metaData.components
+    styleAlias = metaData.styleAlias
     directives = metaData.directives
   } catch (e) {
     console.error(e)
@@ -54,6 +56,10 @@ function getSideEffects(name: string, options: VexipUIResolverOptions) {
   const { importStyle, importDarkTheme } = options
 
   if (!importStyle) return
+
+  if (styleAlias && styleAlias[name]) {
+    name = styleAlias[name]
+  }
 
   name = toKebabCase(name)
 

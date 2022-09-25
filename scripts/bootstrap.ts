@@ -89,6 +89,9 @@ async function main() {
         ${exportComponents.map(name => `"${toCapitalCase(name)}"`).join(',\n')},
         ${typography.map(name => `"${name}"`).join(',\n')}
       ],
+      styleAlias: {
+        ${typography.map(name => `"${toCapitalCase(name)}": "Typography"`)}
+      },
       directives: {
         ${directives.map(directive => `"v${toCapitalCase(directive.name)}": ${JSON.stringify(directive.components)}`).join(',\n')}
       }
