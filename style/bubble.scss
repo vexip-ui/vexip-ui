@@ -38,6 +38,7 @@ $bubble: map.merge(
     min-width: get-css-var('bubble-min-width');
     min-height: get-css-var('bubble-min-height');
     padding: get-css-var('bubble-content-v-padding') get-css-var('bubble-content-h-padding');
+    word-break: break-all;
     background-color: get-css-var('bubble-bg-color');
     border: get-css-var('bubble-border');
     border-radius: get-css-var('bubble-radius');
