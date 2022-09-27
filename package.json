@@ -189,5 +189,5 @@
     "theme/**/*.css"
   ],
   "types": "es/components/index.d.ts",
-  "version": "2.0.4"
+  "version": "2.0.5"
 }

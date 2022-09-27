@@ -1,3 +1,12 @@
+## [2.0.5](https://github.com/vexip-ui/vexip-ui/compare/v2.0.4...v2.0.5) (2022-09-27)
+
+### Bug Fixes
+
+- **bubble:** keep consistent behavior for newline ([7bb25a2](https://github.com/vexip-ui/vexip-ui/commit/7bb25a24109d14a0468ac94deed1f144b5211966)), closes [#164](https://github.com/vexip-ui/vexip-ui/issues/164)
+- **divider:** missing text-color css var ([509f932](https://github.com/vexip-ui/vexip-ui/commit/509f932c34872108ded8ba638eed5626f774a4c1))
+- **form:** add submit and reset style deps ([a8ac3ec](https://github.com/vexip-ui/vexip-ui/commit/a8ac3ec6787f006a22ac269d0f30ba2ce2c3e17c))
+- **plugins:** support typography style alias ([f89cfef](https://github.com/vexip-ui/vexip-ui/commit/f89cfefbe43da61c4fce258e5d55166f89b9b152))
+
 ## [2.0.4](https://github.com/vexip-ui/vexip-ui/compare/v2.0.3...v2.0.4) (2022-09-23)
 
 ### Bug Fixes
