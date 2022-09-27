@@ -392,7 +392,7 @@ export default defineComponent({
       props.separator
       props.options
       isAsyncLoad.value
-      /* eslint-disable no-unused-expressions */
+      /* eslint-enable no-unused-expressions */
 
       updateTrigger.value++
     })

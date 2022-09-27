@@ -136,7 +136,6 @@ export default defineComponent({
     const { wrapper: control, isHover } = useHover()
     const locale = useLocale('input')
 
-    // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
 
     const hasBefore = computed(() => {

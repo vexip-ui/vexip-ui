@@ -126,7 +126,6 @@ export default defineComponent({
 
       const aliasKey = (aliases[key] || key) as keyof ColumnWithKey
 
-      // eslint-disable-next-line vue/no-setup-props-destructure
       ;(options[aliasKey] as any) = props[key]
 
       watch(

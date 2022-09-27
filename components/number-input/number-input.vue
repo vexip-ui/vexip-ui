@@ -234,7 +234,6 @@ export default defineComponent({
       }
     })
 
-    // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue: number | null = props.value
 
     const className = computed(() => {

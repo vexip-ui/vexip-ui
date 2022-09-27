@@ -119,7 +119,6 @@ export default defineComponent({
 
     const textarea = ref<HTMLElement | null>(null)
 
-    // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
 
     const className = computed(() => {

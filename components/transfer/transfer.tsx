@@ -128,7 +128,7 @@ export default defineComponent({
       props.keyConfig.label
       props.keyConfig.disabled
       props.options
-      /* eslint-disable no-unused-expressions */
+      /* eslint-enable no-unused-expressions */
 
       updateTrigger.value++
     })

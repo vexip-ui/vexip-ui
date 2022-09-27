@@ -210,7 +210,6 @@ export default defineComponent({
     const control = ref<HTMLInputElement | null>(null)
 
     let changed = false
-    // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
     let lastInput = String(lastValue)
 

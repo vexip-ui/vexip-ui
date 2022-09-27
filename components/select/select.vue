@@ -427,7 +427,7 @@ export default defineComponent({
       props.keyConfig.divided
       props.keyConfig.noTitle
       props.options
-      /* eslint-disable no-unused-expressions */
+      /* eslint-enable no-unused-expressions */
 
       updateTrigger.value++
     })
