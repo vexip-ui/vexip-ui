@@ -7,7 +7,7 @@
 <h1 align="center">Vexip UI</h1>
 
 <p align="center">
-  Highly customizable property values, Full TypeScript, Performance should be good
+  Highly performant and customizable Vue design library with full Typescript support
 </p>
 
 <p align="center">
@@ -15,35 +15,35 @@
 </p>
 
 <p align="center">
-  You may let me know if you've written any awesome thing with Vexip UI! You are very welcome if you would like to contribute codes!
+  Let us know if you've made any awesome creations using Vexip UI! Pull Requests are greatly appreciated!
 </p>
 
 **English** | [中文](./README.zh-CN.md)
 
-Vexip UI provides a series of out-of-box components.
+Vexip UI provides a plethora of free Vue components.
 
-This library is using base on vue 3.0 with using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript** (not AnyScript).
+This library is uses the Vue 3.0 **composition api**, components are designed and developed in a traditional Vue way, and is fully written with **TypeScript**.
 
-Almost all the **default value of props** for each component can be quickly modified by configuration (except value and options props), for easy customization.
+Nearly all **default prop values** for components can be quickly modified via the configuration (except value and options props) for easy customization.
 
 And, the writing of component codes pay great attention to lowering the threshold of **source codes reading**, and the style of code is as close to the usual business code habits as possible to avoid dazzling encapsulation.
 
-There are currently **70+** components, many you can see everywhere and a few may bright your eyes.
+There are currently **70+** beautiful components.
 
 ## Features
 
-- 📦 70+ out-of-box high quality Vue 3 components
-- 📐 Intuitive, minimalistic Api design
+- 📦 70+ out-of-the-box high quality Vue 3 components
+- 📐 Intuitive, minimalistic API design
 - 🔧 Configurable default value of props, quickly complete global/local modifications
-- ⚡ Composition Api, good performance base
-- 🔨 With TypeScript, fully types
+- ⚡ Composition API providing good performance
+- 🔨 Fully developed with Typescript
 - 💪 800+ unit tests to provide good stability
-- 🎨 Support CSS variable, built-in dark theme
-- 🚩 Support i18n
+- 🎨 Support for CSS variables, built-in dark theme
+- 🚩 I18n support
 - 🛫 Provide resolver, support unplugin
 - 🚤 Support SSR
-- 🩹 Good a11n
-- 👀 Close to business code arrangement, lower threshold for source code reading
+- 🩹 A11y support
+- 👀 Business-level code quality
 
 ## Install
 
@@ -57,15 +57,13 @@ pnpm install vexip-ui
 yarn add vexip-ui
 ```
 
-## Document
-
-[Here](https://www.vexipui.com) The online document.
+## [Documentation](https://www.vexipui.com)
 
 ## Help
 
-Open a [issue](https://github.com/vexip-ui/vexip-ui/issues) to request help.
+Open an [issue](https://github.com/vexip-ui/vexip-ui/issues) to request help.
 
-If you take maybe some bugs, please use the [Vexip UI Playground](https://playground.vexipui.com/) to provide a minimal reproduction.
+If you find bugs, please use the [Vexip UI Playground](https://playground.vexipui.com/) to provide a minimal reproduction.
 
 ## Contributing
 
@@ -82,8 +80,7 @@ Thanks for all their contributions!
 ## Environment
 
 All components supported in modern browsers, I try to ensure the support of neerly two or three versions.
-
-I have limited energy and it's not start writing unit tests currently, if you encountered any bug, don't scold me and create a issue or PR.
+Be respecful regarding the progress of development. At the moment, unit tests are currently not being written.
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Opera | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Electron |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
