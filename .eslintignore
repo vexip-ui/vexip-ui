@@ -9,6 +9,7 @@ public/
 .husky/
 
 .*rc.js
+.*rc.cjs
 *.config.js
 *.css
 *.pcss
