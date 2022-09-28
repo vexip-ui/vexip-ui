@@ -13,18 +13,12 @@
     "sourceMap": false,
     "outDir": "dist",
     "declaration": true,
-    "types": [
-      "vite/client"
-    ],
+    "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
       "@vexip-ui/*": ["../common/*/src"]
     }
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

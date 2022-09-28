@@ -1,11 +1,10 @@
-assets/
-dist/
-icons/
-lib/
-node_modules/
-public/
-scripts/
-.husky/
+dist
+es
+lib
+node_modules
+public
+scripts
+.husky
 
-**/*.svg
-**/*.sh
+*.svg
+*.sh

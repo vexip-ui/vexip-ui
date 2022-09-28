@@ -16,24 +16,16 @@
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
-    "types": [
-      "vite/client"
-    ],
+    "types": ["vite/client"],
     "paths": {
       "@/*": ["../*"],
       "@docs/*": ["./*"],
       "vexip-ui/es/*": ["../components/*"],
       "vexip-ui": ["../components"]
     },
-    "lib": [
-      "esnext",
-      "dom"
-    ]
+    "lib": ["esnext", "dom"]
   },
-  "include": [
-    ".",
-    "../types.d.ts"
-  ],
+  "include": [".", "../types.d.ts"],
   "ts-node": {
     "transpileOnly": true,
     "moduleTypes": {

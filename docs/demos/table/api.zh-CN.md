@@ -2,7 +2,7 @@
 
 ```ts
 type Key = string | number | symbol
-type Data = Record<string, unknown>
+type Data = Record<string, any>
 type RowPropFn<P = any> = (data: Data, index: number) => P
 
 type Accessor<T extends string | number = string | number, D = Data> = (
@@ -53,7 +53,7 @@ interface BaseColumn<T extends string | number = string | number, D = Data> {
   noEllipsis?: boolean,
   accessor?: Accessor<T, D>,
   renderer?: ColumnRenderFn,
-  headRenderer?: ColumnRenderFn
+  headRenderer?: HeadRenderFn
 }
 
 interface OrderColumn<T extends string | number = string | number, D = Data>

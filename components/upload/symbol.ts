@@ -66,7 +66,7 @@ export interface DirectoryEntity {
   isFile: boolean,
   isDirectory: boolean,
   file: (callback: (file: SourceFile) => void) => void,
-  // eslint-disable-next-line no-use-before-define
+
   createReader: () => DirectoryReader
 }
 

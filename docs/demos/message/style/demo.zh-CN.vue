@@ -1,9 +1,6 @@
 <template>
   <div>
-    <Button
-      type="primary"
-      @click="$message.info({ content: '一条字体有颜色的消息', color: true })"
-    >
+    <Button type="primary" @click="$message.info({ content: '一条字体有颜色的消息', color: true })">
       字体颜色
     </Button>
     <Button

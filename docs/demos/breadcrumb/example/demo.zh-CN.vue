@@ -37,14 +37,8 @@ interface Record {
 const recordMap = ref(new Map<string, Record>())
 
 recordMap.value
-  .set(
-    '此电脑',
-    reactive({ visible: false, children: ['系统 (C:)', '文档 (D:)', '软件 (E:)'] })
-  )
-  .set(
-    '文档 (D:)',
-    reactive({ visible: false, children: ['vexip-ui', 'font-awesome', 'vue'] })
-  )
+  .set('此电脑', reactive({ visible: false, children: ['系统 (C:)', '文档 (D:)', '软件 (E:)'] }))
+  .set('文档 (D:)', reactive({ visible: false, children: ['vexip-ui', 'font-awesome', 'vue'] }))
   .set('vexip-ui', reactive({ visible: false, children: [] }))
 </script>
 

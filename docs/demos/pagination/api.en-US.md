@@ -19,8 +19,8 @@
 
 ### Pagination Events
 
-| Name             | Description                                                                                       | Parameters           | Since |
-| ---------------- | ------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| Name             | Description                                                                                     | Parameters           | Since |
+| ---------------- | ----------------------------------------------------------------------------------------------- | -------------------- | ----- |
 | change           | Emitted when the page number changes, returns the current page number                           | `(active: number)`   | -     |
 | page-size-change | Emitted when the number of items per page changes, returns the current number of items per page | `(pageSize: number)` | -     |
 

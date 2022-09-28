@@ -4,9 +4,7 @@
     <p>Card's content</p>
     <p>Card's content</p>
     <template #extra>
-      <Button>
-        Button
-      </Button>
+      <Button> Button </Button>
     </template>
   </Card>
 </template>

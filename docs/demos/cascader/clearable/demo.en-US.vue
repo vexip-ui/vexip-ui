@@ -1,9 +1,5 @@
 <template>
-  <Cascader
-    :value="value"
-    :options="options"
-    clearable
-  ></Cascader>
+  <Cascader :value="value" :options="options" clearable></Cascader>
 </template>
 
 <script setup lang="ts">

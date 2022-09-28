@@ -12,11 +12,7 @@
     "esModuleInterop": true,
     "sourceMap": false,
     "outDir": "dist",
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

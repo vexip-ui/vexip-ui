@@ -1,9 +1,5 @@
 <template>
-  <Select
-    v-model:value="value"
-    :options="options"
-    :key-config="keyConfig"
-  ></Select>
+  <Select v-model:value="value" :options="options" :key-config="keyConfig"></Select>
 </template>
 
 <script setup lang="ts">

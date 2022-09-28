@@ -152,6 +152,9 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
+    const select = ref<InstanceType<typeof Select> | null>(null)
+    const control = ref<HTMLInputElement | null>(null)
+
     const {
       idFor,
       state,
@@ -205,9 +208,6 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const currentIndex = ref(-1)
     const visible = ref(false)
-
-    const select = ref<InstanceType<typeof Select> | null>(null)
-    const control = ref<HTMLInputElement | null>(null)
 
     let changed = false
     let lastValue = props.value

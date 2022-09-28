@@ -1,4 +1,3 @@
-
 <template>
   <Button type="error" @click="confirm">
     Delete

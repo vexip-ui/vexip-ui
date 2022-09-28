@@ -138,7 +138,9 @@ function moveMenuIntoView() {
       !scrollEl ||
       !activeEl ||
       !activeEl.classList.contains('vxp-menu__label')
-    ) { return }
+    ) {
+      return
+    }
 
     if (activeEl.parentElement) {
       menuScroll.value.ensureInView(activeEl.parentElement, 0, 10)

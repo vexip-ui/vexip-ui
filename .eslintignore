@@ -1,12 +1,10 @@
-assets/
-icons/
-dist/
-es/
-lib/
-css/
-node_modules/
-public/
-.husky/
+dist
+es
+lib
+css
+node_modules
+public
+.husky
 
 .*rc.js
 .*rc.cjs
@@ -14,5 +12,4 @@ public/
 *.css
 *.pcss
 *.scss
-*.json
-*.md
+*.svg

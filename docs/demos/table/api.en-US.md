@@ -53,7 +53,7 @@ interface BaseColumn<T extends string | number = string | number, D = Data> {
   noEllipsis?: boolean,
   accessor?: Accessor<T, D>,
   renderer?: ColumnRenderFn,
-  headRenderer?: ColumnRenderFn
+  headRenderer?: HeadRenderFn
 }
 
 interface OrderColumn<T extends string | number = string | number, D = Data>

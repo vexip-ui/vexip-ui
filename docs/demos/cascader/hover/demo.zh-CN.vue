@@ -1,9 +1,5 @@
 <template>
-  <Cascader
-    v-model:value="value"
-    :options="options"
-    hover-trigger
-  ></Cascader>
+  <Cascader v-model:value="value" :options="options" hover-trigger></Cascader>
   <p>
     当前值：
     {{ value }}

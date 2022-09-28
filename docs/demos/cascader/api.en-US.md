@@ -31,21 +31,21 @@ interface CascaderOptionState {
 }
 
 interface OptionState {
-  id: number
-  parent: number
-  value: string | number
-  fullValue: string
-  label: string
-  fullLabel: string
-  children: OptionState[]
-  disabled: boolean
-  hasChild: boolean
-  checked: boolean
-  partial: boolean
-  loading: boolean
-  loaded: boolean
-  error: boolean
-  childrenLoaded: boolean
+  id: number,
+  parent: number,
+  value: string | number,
+  fullValue: string,
+  label: string,
+  fullLabel: string,
+  children: OptionState[],
+  disabled: boolean,
+  hasChild: boolean,
+  checked: boolean,
+  partial: boolean,
+  loading: boolean,
+  loaded: boolean,
+  error: boolean,
+  childrenLoaded: boolean,
   data: Record<string, any>
 }
 ```

@@ -1,10 +1,10 @@
-dist/
-es/
-lib/
-icons/
-css/
-public/
-node_modules/
+dist
+es
+lib
+css
+public
+node_modules
+.husky
 
 *.js
 *.cjs

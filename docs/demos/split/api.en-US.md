@@ -2,7 +2,7 @@
 
 | Name          | Type      | Description                                                                                                                              | Default | Since |
 | ------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
-| value         | `number`  | The proportion of the left or top page, the value is between `0` ~ `1`                                                                       | `0.5`   | -     |
+| value         | `number`  | The proportion of the left or top page, the value is between `0` ~ `1`                                                                   | `0.5`   | -     |
 | min           | `number`  | Set the minimum value of the left or upper layout, when the value is between 0 ~ 1, it is a scale value, otherwise it is a pixel value   | `0.1`   | -     |
 | max           | `number`  | Set the maximum value of the left or upper layout, when the value is between 0 ~ 1, it is a scale value, otherwise it is a pixel value   | `0.9`   | -     |
 | vertical      | `boolean` | Set whether to split vertically                                                                                                          | `false` | -     |
@@ -12,8 +12,8 @@
 
 ### Split Events
 
-| Name   | Description                                                                                       | Parameters                                       | Since |
-| ------ | ------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----- |
+| Name   | Description                                                                                     | Parameters                                       | Since |
+| ------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----- |
 | change | Emitted when the scale of the panel changes, returns the current scale of the left or top panel | `(value: number)`                                | -     |
 | full   | Emitted when full screen mode is enabled, returns the current full screen panel                 | `(pane: 'top' \| 'right' \| 'bottom' \| 'left')` | -     |
 | reset  | Emitted when fullscreen mode is closed, no return value                                         | -                                                | -     |
