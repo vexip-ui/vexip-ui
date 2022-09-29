@@ -53,9 +53,11 @@ export default defineConfig(async () => {
       vue(),
       vueJsx(),
       dts({
-        exclude: ['node_modules', 'playground', 'common/hooks', 'common/icons', 'common/utils'],
+        exclude: ['node_modules', 'playground', 'dev-server', 'common/hooks', 'common/icons', 'common/utils'],
         compilerOptions: { sourceMap },
-        copyDtsFiles: false
+        copyDtsFiles: true,
+        skipDiagnostics: false,
+        logDiagnostics: true
       })
     ]
   }

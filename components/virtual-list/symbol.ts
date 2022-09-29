@@ -13,3 +13,10 @@ export interface VirtualListExposed {
   ensureKeyInView: (key: string | number | symbol, behavior?: ScrollBehavior) => void,
   refresh: () => void
 }
+
+export interface ScrollPayload {
+  clientX: number,
+  clientY: number,
+  percentX: number,
+  percentY: number
+}

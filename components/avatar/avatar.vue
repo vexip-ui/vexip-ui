@@ -67,7 +67,8 @@ export default defineComponent({
     fallbackSrc: String,
     color: String,
     background: String,
-    onError: eventProp<(event: Event) => void>()
+    onError: eventProp<(event: Event) => void>(),
+    onClick: eventProp<(event: MouseEvent) => void>()
   },
   emits: [],
   setup(_props) {

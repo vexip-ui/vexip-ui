@@ -1,4 +1,4 @@
-export type ScrollMode = 'horizontal' | 'vertical' | 'both'
+import type { ScrollMode } from '@/components/scroll'
 
 export interface ScrollPayload {
   type: ScrollMode,

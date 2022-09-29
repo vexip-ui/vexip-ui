@@ -169,7 +169,7 @@ export default defineComponent({
     watch(
       () => state!.locked,
       value => {
-        if (!section.value || !scroll.value.content) return
+        if (!section.value || !scroll.value?.content) return
 
         if (value) {
           section.value.style.transitionDuration = '0ms'

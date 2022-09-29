@@ -50,6 +50,7 @@ export default defineComponent({
       label: '',
       indent: 1,
       groupExpanded,
+      showGroup: groupExpanded,
       isUsePopper: true,
       parentState: null,
       transfer,

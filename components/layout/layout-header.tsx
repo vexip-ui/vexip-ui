@@ -331,7 +331,7 @@ export default defineComponent({
               placement={'bottom-end'}
               visible={currentUserDropped.value}
               trigger={'custom'}
-              onClickoutside={() => toggleUserDrop(false)}
+              onClickOutside={() => toggleUserDrop(false)}
             >
               {{
                 default: () => {

@@ -5,13 +5,7 @@ import { useNameHelper, useProps, eventProp, emitEvent } from '@vexip-ui/config'
 import { useVirtual } from '@vexip-ui/hooks'
 
 import type { PropType } from 'vue'
-
-interface ScrollPayload {
-  clientX: number,
-  clientY: number,
-  percentX: number,
-  percentY: number
-}
+import type { ScrollPayload } from './symbol'
 
 export default defineComponent({
   name: 'VirtualList',
@@ -56,7 +50,7 @@ export default defineComponent({
     const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
     const list = ref<HTMLElement | null>(null)
 
-    const wrapper = computed(() => scroll.value?.content)
+    const wrapper = computed(() => scroll.value?.content ?? null)
 
     const {
       indexMap,
@@ -144,7 +138,6 @@ export default defineComponent({
           scroll-y={scrollOffset.value}
           {...attrs}
           onScroll={onScroll}
-          onReady={onResize}
           onResize={onResize}
         >
           <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>

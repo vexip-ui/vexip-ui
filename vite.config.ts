@@ -135,7 +135,9 @@ export default defineConfig(async () => {
         ],
         outputDir: ['lib', 'es'],
         compilerOptions: { sourceMap },
-        copyDtsFiles: false
+        copyDtsFiles: false,
+        skipDiagnostics: false,
+        logDiagnostics: true
       })
     ]
   }

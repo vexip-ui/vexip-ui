@@ -59,7 +59,8 @@ export default defineComponent({
     tabIndex: [String, Number],
     loading: booleanProp,
     loadingLock: booleanProp,
-    onChange: eventProp<(checked: boolean) => void>()
+    onChange: eventProp<(checked: boolean) => void>(),
+    onClick: eventProp<(event: MouseEvent) => void>()
   },
   emits: ['update:checked'],
   setup(_props, { slots, emit }) {

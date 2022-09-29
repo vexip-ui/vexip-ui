@@ -127,7 +127,7 @@ export default defineComponent({
     const loading = ref(false)
     const content = ref('')
     const iconColorR = ref(props.iconColor)
-    const styleR = ref(props.style || {})
+    const styleR = ref(props.style || {} as any)
     const confirmTypeR = ref(props.confirmType)
     const confirmTextR = ref(props.confirmText)
     const cancelTextR = ref(props.cancelText)

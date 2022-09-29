@@ -63,7 +63,7 @@ export default defineComponent({
     onToggle: eventProp<(visible: boolean) => void>(),
     onTipEnter: eventProp(),
     onTipLeave: eventProp(),
-    onClickoutside: eventProp(),
+    onClickOutside: eventProp(),
     onOutsideClose: eventProp()
   },
   emits: ['update:visible'],
@@ -93,12 +93,7 @@ export default defineComponent({
       tipAlive: false,
       reverse: false,
       width: 'auto',
-      virtual: null,
-      onToggle: null,
-      onTipEnter: null,
-      onTipLeave: null,
-      onClickoutside: null,
-      onOutsideClose: null
+      virtual: null
     })
 
     const placement = toRef(props, 'placement')
@@ -261,7 +256,7 @@ export default defineComponent({
     function handleClickOutside() {
       if (props.disabled) return
 
-      emitEvent(props.onClickoutside)
+      emitEvent(props.onClickOutside)
 
       if (props.outsideClose && props.trigger !== 'custom' && currentVisible.value) {
         toggleVisible(false)

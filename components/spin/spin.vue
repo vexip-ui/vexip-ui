@@ -152,7 +152,7 @@ export default defineComponent({
       return { enter: 0, leave: 0 }
     })
 
-    let timer = -1
+    let timer: ReturnType<typeof setTimeout>
 
     watch(
       () => props.active,

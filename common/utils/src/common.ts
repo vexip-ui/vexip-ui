@@ -112,7 +112,7 @@ export function isEmpty(value: unknown) {
 export function isElement(value: unknown): value is Element {
   if (!isClient) return false
 
-  return !!(value && 'nodeType' in value)
+  return !!(value && 'nodeType' in (value as any))
 }
 
 export function noop(...args: any[]): any

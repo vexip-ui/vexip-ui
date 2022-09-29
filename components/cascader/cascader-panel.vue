@@ -215,7 +215,7 @@ export default defineComponent({
     })
 
     let listHeight = 0
-    let hoverTimer = 0
+    let hoverTimer: ReturnType<typeof setTimeout>
 
     watch(
       () => props.ready,

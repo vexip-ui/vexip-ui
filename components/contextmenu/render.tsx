@@ -5,9 +5,9 @@ import { Icon } from '@/components/icon'
 import { ChevronRight } from '@vexip-ui/icons'
 import type { NameHelper } from '@vexip-ui/config'
 
-import type { MenuConfig } from './symbol'
+import type { ContextmenuConfig } from './symbol'
 
-function renderItemIcon(item: MenuConfig, nh: NameHelper) {
+function renderItemIcon(item: ContextmenuConfig, nh: NameHelper) {
   if (!item.icon) return null
 
   let icon: any
@@ -26,13 +26,13 @@ function renderItemIcon(item: MenuConfig, nh: NameHelper) {
   return <div class={nh.be('icon')}>{icon}</div>
 }
 
-function renderItemShortcut(item: MenuConfig, nh: NameHelper) {
+function renderItemShortcut(item: ContextmenuConfig, nh: NameHelper) {
   if (!item.shortcut) return null
 
   return <div class={nh.be('shortcut')}>{item.shortcut}</div>
 }
 
-function renderGroupItem(item: MenuConfig, nh: NameHelper) {
+function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
   return (
     <Dropdown
       transfer={false}
@@ -81,7 +81,7 @@ function renderGroupItem(item: MenuConfig, nh: NameHelper) {
   )
 }
 
-export function renderItem({ config, nh }: { config: MenuConfig, nh: NameHelper }) {
+export function renderItem({ config, nh }: { config: ContextmenuConfig, nh: NameHelper }) {
   if (config.children?.length) {
     return renderGroupItem(config, nh)
   } else {
