@@ -1,15 +1,16 @@
+import minimist from 'minimist'
 import { logger, run, getPackageInfo } from './utils'
 
-const args = require('minimist')(process.argv.slice(2))
+const args = minimist<{
+  d?: boolean,
+  dry?: boolean,
+  t?: string,
+  tag?: string
+}>(process.argv.slice(2))
 
 const inputPkg = args._[0]
 const isDryRun = args.dry || args.d
 const releaseTag = args.tag || args.t
-
-main().catch(error => {
-  logger.error(error)
-  process.exit(1)
-})
 
 async function main() {
   const { pkgDir, currentVersion } = await getPackageInfo(inputPkg)
@@ -44,3 +45,8 @@ async function main() {
     }
   }
 }
+
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})

@@ -1,11 +1,12 @@
 import { resolve } from 'node:path'
-import { existsSync, emptyDir, mkdirSync } from 'fs-extra'
-// import chalk from 'chalk'
+import fs from 'fs-extra'
 import { dest, src, parallel } from 'gulp'
 import gulpSass from 'gulp-sass'
 import dartSass from 'sass'
 import autoprefixer from 'gulp-autoprefixer'
 import cleanCSS from 'gulp-clean-css'
+
+const { existsSync, emptyDir, mkdirSync } = fs
 
 const cssDir = resolve(__dirname, 'css')
 const themesDir = resolve(__dirname, 'themes')

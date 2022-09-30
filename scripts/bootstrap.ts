@@ -3,12 +3,7 @@ import { statSync, existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
-import { logger, components as allComponents, toCapitalCase } from './utils'
-
-main().catch(error => {
-  logger.error(error)
-  process.exit(1)
-})
+import { rootDir, prettierConfig, logger, components as allComponents, toCapitalCase } from './utils'
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice', 'toast']
@@ -17,7 +12,6 @@ async function main() {
   const exportComponents = allComponents.filter(c => !ignores.includes(c))
   const components = exportComponents.filter(c => !plugins.includes(c))
   const directives = await readDirectives()
-  const prettierConfig = await prettier.resolveConfig(resolve('.prettierrc.js'))
 
   const index = `
     ${
@@ -99,9 +93,9 @@ async function main() {
   `
 
   const eslint = new ESLint({ fix: true })
-  const indexPath = resolve(__dirname, '../components/index.ts')
-  const typesPath = resolve(__dirname, '../types.d.ts')
-  const metaDataPath = resolve(__dirname, '../meta-data.json')
+  const indexPath = resolve(rootDir, 'components/index.ts')
+  const typesPath = resolve(rootDir, 'types.d.ts')
+  const metaDataPath = resolve(rootDir, 'meta-data.json')
 
   await writeFile(
     indexPath,
@@ -132,7 +126,7 @@ async function main() {
 
   const styleIndex = '@forward \'./design/variables.scss\';\n\n@use \'./preset.scss\';\n\n' +
     allComponents.map(component => `@use './${component}.scss';`).join('\n') + '\n'
-  const stylePath = resolve(__dirname, '../style/index.scss')
+  const stylePath = resolve(rootDir, 'style/index.scss')
 
   await writeFile(
     stylePath,
@@ -143,7 +137,7 @@ async function main() {
 
 async function readDirectives() {
   const componentRE = /import \{ (.+) \} from '@\/components\/.+'/
-  const directivesDir = resolve(__dirname, '../directives')
+  const directivesDir = resolve(rootDir, 'directives')
   const directives = await Promise.all(
     (await readdir(directivesDir))
       .filter(f => statSync(resolve(directivesDir, f)).isDirectory())
@@ -169,3 +163,8 @@ async function readDirectives() {
 
   return directives
 }
+
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})

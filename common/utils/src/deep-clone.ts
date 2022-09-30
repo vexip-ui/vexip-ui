@@ -8,7 +8,7 @@ export function deepClone<T>(obj: T): T {
     return obj
   }
 
-  const _root = (Array.isArray(obj) ? [] : {}) as T
+  const _root = (Array.isArray(obj) ? [] : {}) as any
 
   // 循环数组栈
   const loopList: Array<{

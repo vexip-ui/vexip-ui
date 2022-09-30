@@ -1,12 +1,12 @@
 import { resolve } from 'node:path'
 import { readFileSync, readdirSync, statSync, existsSync, writeFileSync } from 'node:fs'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
-import chalk from 'chalk'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/vite-plugin-vue-i18n'
 import discardCss from 'postcss-discard-duplicates'
 import markdown from 'vite-plugin-vue-markdown'
+import { cyan, green, red } from 'kolorist'
 import { highlight } from './build/highlight'
 import { markdownItSetup } from './build/markdown'
 
@@ -93,7 +93,7 @@ export default defineConfig(({ command }) => {
 })
 
 function createZipPlugin(): Plugin {
-  const logPrefix = chalk.cyan('[vite:zip]')
+  const logPrefix = cyan('[vite:zip]')
 
   let logger: Logger
   let outDir = 'dist'
@@ -124,11 +124,11 @@ function createZipPlugin(): Plugin {
       const dir = resolve(root, outDir)
 
       if (!existsSync(dir)) {
-        logger.error(chalk.red(`\n${logPrefix} cannot file outDir '${dir}'`))
+        logger.error(red(`\n${logPrefix} cannot file outDir '${dir}'`))
         return
       }
 
-      logger.info(chalk.green(`\n${logPrefix} zipping outDir...`))
+      logger.info(green(`\n${logPrefix} zipping outDir...`))
 
       try {
         const { default: JSZip } = await import('jszip')
@@ -141,9 +141,9 @@ function createZipPlugin(): Plugin {
           'utf-8'
         )
 
-        logger.info(chalk.green(`${logPrefix} zip successful\n`))
+        logger.info(green(`${logPrefix} zip successful\n`))
       } catch (error) {
-        logger.error(chalk.red(`${logPrefix} zip fail with something wrong\n`))
+        logger.error(red(`${logPrefix} zip fail with something wrong\n`))
         logger.error(error as string)
       }
     }

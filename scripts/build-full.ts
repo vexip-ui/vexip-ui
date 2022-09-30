@@ -1,23 +1,22 @@
 import minimist from 'minimist'
 import { logger, run } from './utils'
 
-const args = minimist(process.argv.slice(2))
+const args = minimist<{
+  d?: boolean,
+  dev?: boolean,
+  s?: boolean,
+  sourcemap?: boolean
+}>(process.argv.slice(2))
 
 const devOnly = args.dev || args.d
 const sourceMap = args.sourcemap || args.s
 
 const env = devOnly ? 'development' : 'production'
 
-main().catch(error => {
-  logger.error(error)
-  process.exit(1)
-})
-
 async function main() {
   logger.withBothLn(() => logger.successText('start building full lib...'))
 
   await run('pnpm', ['bootstrap'])
-
   await run('vite', ['build', '--config', 'vite.full.config.ts'], {
     stdio: 'inherit',
     env: {
@@ -32,3 +31,8 @@ async function main() {
     logger.withEndLn(() => logger.success('All builds completed successfully.'))
   }
 }
+
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})

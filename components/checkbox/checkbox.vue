@@ -1,5 +1,5 @@
 <template>
-  <label :class="className" :aria-disabled="isDisabled">
+  <label :class="className" :aria-disabled="isDisabled" @click="handleClick">
     <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span v-if="hasLabel || hasSlot" :class="[nh.be('label'), props.labelClass]">
       <slot>{{ props.label }}</slot>
@@ -225,6 +225,10 @@ export default defineComponent({
       }
     }
 
+    function handleClick(event: MouseEvent) {
+      emitEvent(props.onClick, event)
+    }
+
     return {
       props,
       nh,
@@ -239,7 +243,8 @@ export default defineComponent({
 
       input,
 
-      handleChange
+      handleChange,
+      handleClick
     }
   }
 })

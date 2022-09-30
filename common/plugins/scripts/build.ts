@@ -1,13 +1,11 @@
 import { resolve } from 'node:path'
-import execa from 'execa'
-import chalk from 'chalk'
+import { fileURLToPath } from 'node:url'
+import { execa } from 'execa'
+import { red } from 'kolorist'
 
-const bin = (name: string) => resolve(__dirname, '../node_modules/.bin/' + name)
+const rootDir = resolve(fileURLToPath(import.meta.url), '../..')
 
-main().catch(error => {
-  console.error(chalk.red(error))
-  process.exit(1)
-})
+const bin = (name: string) => resolve(rootDir, 'node_modules/.bin/' + name)
 
 async function main() {
   await execa(
@@ -21,3 +19,8 @@ async function main() {
     { stdio: 'inherit' }
   )
 }
+
+main().catch(error => {
+  console.error(red(error))
+  process.exit(1)
+})

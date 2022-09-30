@@ -50,10 +50,10 @@ export default defineConfig(({ command }) => {
         generateBundle() {
           const depPaths: Record<string, string> = {
             'vue.runtime.esm-browser.js': '../node_modules/vue/dist/vue.runtime.esm-browser.js',
-            'vexip-ui.js': '../dist/vexip-ui.es.js',
+            'vexip-ui.js': '../dist/vexip-ui.mjs',
             'style.css': '../dist/style.css',
-            'vexip-ui-icons.js': '../common/icons/dist/index.es.js',
-            'vexip-ui-utils.js': '../common/utils/dist/index.js'
+            'vexip-ui-icons.js': '../common/icons/dist/index.mjs',
+            'vexip-ui-utils.js': '../common/utils/dist/index.mjs'
           }
 
           Object.keys(depPaths).forEach(fileName => {

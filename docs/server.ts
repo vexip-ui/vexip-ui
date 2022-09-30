@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import express from 'express'
-import chalk from 'chalk'
+import { green } from 'kolorist'
 
 import type { ViteDevServer } from 'vite'
 
@@ -15,8 +15,8 @@ export async function createServer(
   isProd = process.env.NODE_ENV === 'production',
   hmrPort?: number
 ) {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url))
-  const resolve = (p: string) => path.resolve(__dirname, p)
+  const rootDir = path.dirname(fileURLToPath(import.meta.url))
+  const resolve = (p: string) => path.resolve(rootDir, p)
 
   const indexProd = isProd ? fs.readFileSync(resolve('./dist/index.html'), 'utf-8') : ''
 
@@ -101,7 +101,7 @@ export async function createServer(
 if (!isTest) {
   createServer().then(({ app }) =>
     app.listen(6173, () => {
-      console.log(`${chalk.green('SSR started at')} http://localhost:6173`)
+      console.log(`${green('SSR started at')} http://localhost:6173`)
     })
   )
 }

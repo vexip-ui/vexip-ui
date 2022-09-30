@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "composite": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "target": "es2019",
+    "target": "esnext",
+    "module": "esnext",
+    "allowJs": false,
     "strict": true,
-    "noImplicitOverride": true,
+    "moduleResolution": "node",
     "noUnusedLocals": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
     "useUnknownInCatchVariables": false,
     "types": ["node"]
   },

@@ -1,47 +1,84 @@
 import { resolve } from 'node:path'
-import { readdirSync, statSync, existsSync, lstatSync, rmdirSync, unlinkSync } from 'node:fs'
-import execa from 'execa'
-import chalk from 'chalk'
-import { prompt } from 'enquirer'
+import { readdirSync, statSync, existsSync, lstatSync, rmdirSync, unlinkSync, readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { execa } from 'execa'
+import { bgYellow, bgCyan, bgGreen, bgRed, yellow, cyan, green, red, lightBlue } from 'kolorist'
+import prompts from 'prompts'
 
 import type { Options } from 'execa'
 import type { ParsedArgs } from 'minimist'
+import type { Config } from 'prettier'
+
+export const rootDir = resolve(fileURLToPath(import.meta.url), '../..')
+
+export const prettierConfig: Config = {
+  printWidth: 100,
+  arrowParens: 'avoid',
+  bracketSpacing: true,
+  endOfLine: 'lf',
+  bracketSameLine: false,
+  quoteProps: 'as-needed',
+  semi: false,
+  singleQuote: true,
+  tabWidth: 2,
+  trailingComma: 'none',
+  useTabs: false,
+  vueIndentScriptAndStyle: false,
+  overrides: [
+    {
+      files: '*.md',
+      options: {
+        embeddedLanguageFormatting: 'off'
+      }
+    }
+  ]
+}
 
 type LogFn = () => void
 
 export const logger = {
   ln: () => console.log(),
-  withStartLn: (log: LogFn) => (logger.ln(), log()),
-  withEndLn: (log: LogFn) => (log(), logger.ln()),
-  withBothLn: (log: LogFn) => (logger.ln(), log(), logger.ln()),
+  withStartLn: (log: LogFn) => {
+    logger.ln()
+    log()
+  },
+  withEndLn: (log: LogFn) => {
+    log()
+    logger.ln()
+  },
+  withBothLn: (log: LogFn) => {
+    logger.ln()
+    log()
+    logger.ln()
+  },
   warning: (msg: string) => {
-    console.warn(`${chalk.bgYellow.black(' WARNING ')} ${chalk.yellow(msg)}`)
+    console.warn(`${bgYellow(' WARNING ')} ${yellow(msg)}`)
   },
   info: (msg: string) => {
-    console.log(`${chalk.bgCyan.black(' INFO ')} ${chalk.cyan(msg)}`)
+    console.log(`${bgCyan(' INFO ')} ${cyan(msg)}`)
   },
   success: (msg: string) => {
-    console.log(`${chalk.bgGreen.black(' SUCCESS ')} ${chalk.green(msg)}`)
+    console.log(`${bgGreen(' SUCCESS ')} ${green(msg)}`)
   },
   error: (msg: string) => {
-    console.error(`${chalk.bgRed.black(' ERROR ')} ${chalk.red(msg)}`)
+    console.error(`${bgRed(' ERROR ')} ${red(msg)}`)
   },
   warningText: (msg: string) => {
-    console.warn(`${chalk.yellow(msg)}`)
+    console.warn(`${yellow(msg)}`)
   },
   infoText: (msg: string) => {
-    console.log(`${chalk.cyan(msg)}`)
+    console.log(`${cyan(msg)}`)
   },
   successText: (msg: string) => {
-    console.log(`${chalk.green(msg)}`)
+    console.log(`${green(msg)}`)
   },
   errorText: (msg: string) => {
-    console.error(`${chalk.red(msg)}`)
+    console.error(`${red(msg)}`)
   }
 }
 
 export function bin(name: string) {
-  return resolve(__dirname, '../node_modules/.bin/' + name)
+  return resolve(rootDir, 'node_modules/.bin/' + name)
 }
 
 export async function run(bin: string, args: string[], opts: Options = {}) {
@@ -49,7 +86,7 @@ export async function run(bin: string, args: string[], opts: Options = {}) {
 }
 
 export async function dryRun(bin: string, args: string[], opts: Options = {}) {
-  console.log(chalk.blue(`[dryrun] ${bin} ${args.join(' ')}`), opts)
+  console.log(lightBlue(`[dryrun] ${bin} ${args.join(' ')}`), opts)
 }
 
 // 短横线命名
@@ -78,7 +115,6 @@ export function toCamelCase(value: string) {
   return capitalName.charAt(0).toLowerCase() + capitalName.slice(1)
 }
 
-export const rootDir = resolve(__dirname, '..')
 export const componentsDir = resolve(rootDir, 'components')
 
 export const components = readdirSync(componentsDir).filter(f => {
@@ -113,7 +149,7 @@ export function fuzzyMatchComponent(partialComponents: string[], includeAll = fa
   if (matched.length) {
     return matched
   } else {
-    logger.withBothLn(() => logger.error(`Component '${chalk.underline(partialComponents)}' not found!`))
+    logger.withBothLn(() => logger.error(`Any component matches '${partialComponents}'!`))
     process.exit(1)
   }
 }
@@ -124,14 +160,13 @@ export async function specifyComponent(args: ParsedArgs, allComponents = compone
   let component: string
 
   if (matchedComponents.length > 1 || !matchedComponents[0]) {
-    const { prompt } = require('enquirer')
-
     component = (
-      await prompt({
+      await prompts({
         type: 'select',
         name: 'component',
         message: 'Select a component:',
-        choices: matchedComponents.length > 1 ? matchedComponents : allComponents
+        choices: (matchedComponents.length > 1 ? matchedComponents : allComponents)
+          .map(name => ({ title: name, value: name }))
       })
     ).component
   } else {
@@ -209,11 +244,11 @@ export async function getPackageInfo(inputPkg: string) {
     } else if (options.length === 1) {
       pkgName = options[0]
     } else {
-      pkgName = (await prompt<{ pkgName: string }>({
+      pkgName = (await prompts({
         type: 'select',
         name: 'pkgName',
         message: 'Select release package:',
-        choices: options
+        choices: options.map(n => ({ title: n, value: n }))
       })).pkgName
     }
   }
@@ -223,14 +258,14 @@ export async function getPackageInfo(inputPkg: string) {
   }
 
   const isRoot = pkgName === 'vexip-ui'
-  const pkgDir = resolve(__dirname, isRoot ? '..' : `../${pkgName}`)
+  const pkgDir = isRoot ? rootDir : resolve(rootDir, pkgName)
   const pkgPath = resolve(pkgDir, 'package.json')
 
   if (!existsSync(pkgPath)) {
     throw new Error(`Release package ${pkgName} not found`)
   }
 
-  const pkg = require(pkgPath)
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'))
 
   if (pkg.private) {
     throw new Error(`Release package ${pkgName} is private`)

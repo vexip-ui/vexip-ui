@@ -25,11 +25,5 @@
     },
     "lib": ["esnext", "dom"]
   },
-  "include": [".", "../types.d.ts"],
-  "ts-node": {
-    "transpileOnly": true,
-    "moduleTypes": {
-      "scripts/*": "cjs"
-    }
-  }
+  "include": [".", "../types.d.ts"]
 }

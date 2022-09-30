@@ -5,8 +5,8 @@
     "build": "vite build"
   },
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "private": true,
   "engines": {
@@ -16,10 +16,10 @@
     "@vexip-ui/utils": "workspace:^"
   },
   "devDependencies": {
-    "typescript": "4.6.4",
-    "vite": "^3.0.0",
-    "vite-plugin-dts": "^1.3.0",
-    "vue": "^3.2.37"
+    "typescript": "4.7.4",
+    "vite": "^3.1.4",
+    "vite-plugin-dts": "^1.6.3",
+    "vue": "^3.2.40"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

@@ -4,11 +4,18 @@
   "license": "MIT",
   "anchor": "qmhc",
   "scripts": {
-    "build": "ts-node scripts/build.ts"
+    "build": "tsx scripts/build.ts"
   },
-  "main": "dist/index.js",
+  "type": "module",
+  "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
   "private": false,
   "engines": {
     "node": ">=14"
@@ -27,16 +34,15 @@
     "local-pkg": "^0.4.2"
   },
   "devDependencies": {
-    "@types/node": "^17.0.33",
-    "chalk": "^4.1.2",
-    "execa": "^5.1.1",
-    "ts-node": "^10.9.1",
+    "@types/node": "^18.7.23",
+    "execa": "^6.1.0",
+    "kolorist": "^1.6.0",
     "tsup": "^6.2.3",
-    "typescript": "4.6.4",
-    "unplugin-vue-components": "^0.19.6",
-    "vite": "^3.0.0",
-    "vite-plugin-dts": "^1.5.0",
-    "vue": "^3.2.37"
+    "typescript": "4.7.4",
+    "unplugin-vue-components": "^0.22.7",
+    "vite": "^3.1.4",
+    "vite-plugin-dts": "^1.6.3",
+    "vue": "^3.2.40"
   },
   "pnpm": {
     "peerDependencyRules": {

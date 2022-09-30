@@ -5,7 +5,6 @@ import { readFileSync, existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import dts from 'vite-plugin-dts'
 import glob from 'fast-glob'
 
 import type { LogLevel, Plugin } from 'vite'
@@ -19,8 +18,6 @@ interface Manifest {
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')) as Manifest
 const componentsDir = resolve(__dirname, 'components')
 
-// const outDir = process.env.OUT_DIR || 'dist'
-// const format = (process.env.FORMAT || 'es') as LibraryFormats
 const logLevel = process.env.LOG_LEVEL
 const sourceMap = process.env.SOURCE_MAP === 'true'
 
@@ -88,14 +85,14 @@ export default defineConfig(async () => {
           {
             format: 'cjs',
             preserveModules: true,
-            preserveModulesRoot: componentsDir,
+            preserveModulesRoot: __dirname,
             dir: 'lib',
-            entryFileNames: '[name].js'
+            entryFileNames: '[name].cjs'
           },
           {
             format: 'es',
             preserveModules: true,
-            preserveModulesRoot: componentsDir,
+            preserveModulesRoot: __dirname,
             dir: 'es',
             entryFileNames: '[name].mjs'
           }
@@ -122,23 +119,7 @@ export default defineConfig(async () => {
         }
       ]),
       vue(),
-      vueJsx(),
-      dts({
-        exclude: [
-          'node_modules',
-          'playground',
-          'common/hooks',
-          'common/icons',
-          'common/plugins',
-          'common/utils',
-          'components/*/tests'
-        ],
-        outputDir: ['lib', 'es'],
-        compilerOptions: { sourceMap },
-        copyDtsFiles: false,
-        skipDiagnostics: false,
-        logDiagnostics: true
-      })
+      vueJsx()
     ]
   }
 })

@@ -2,23 +2,15 @@
   "author": {
     "name": "qmhc"
   },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-customizable"
-    },
-    "cz-customizable": {
-      "config": "scripts/cz-config.js"
-    }
-  },
   "dependencies": {
     "@vexip-ui/hooks": "workspace:^",
     "@vexip-ui/icons": "workspace:^",
     "@vexip-ui/utils": "workspace:^"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.0.3",
-    "@juggle/resize-observer": "^3.3.1",
-    "@types/eslint": "^8.4.5",
+    "@commitlint/cli": "^17.1.2",
+    "@juggle/resize-observer": "^3.4.0",
+    "@types/eslint": "^8.4.6",
     "@types/fs-extra": "^9.0.13",
     "@types/gulp": "^4.0.9",
     "@types/gulp-autoprefixer": "^0.0.33",
@@ -26,25 +18,22 @@
     "@types/gulp-sass": "^5.0.0",
     "@types/minimist": "^1.2.2",
     "@types/node": "^18.7.23",
-    "@types/prettier": "^2.6.3",
-    "@types/semver": "^7.3.10",
+    "@types/prettier": "^2.7.1",
+    "@types/prompts": "^2.0.14",
+    "@types/semver": "^7.3.12",
     "@vexip-ui/commitlint-config": "^0.1.0",
     "@vexip-ui/eslint-config": "^0.1.1",
     "@vexip-ui/prettier-config": "^0.1.0",
     "@vexip-ui/stylelint-config": "^0.1.1",
     "@vitejs/plugin-vue": "2.3.3",
     "@vitejs/plugin-vue-jsx": "1.3.10",
-    "@vitest/coverage-c8": "^0.22.1",
-    "@vue/repl": "^1.0.0",
-    "@vue/test-utils": "^2.0.2",
-    "chalk": "^4.1.2",
-    "commitizen": "^4.2.4",
+    "@vitest/coverage-c8": "^0.23.4",
+    "@vue/repl": "^1.3.2",
+    "@vue/test-utils": "^2.1.0",
     "conventional-changelog-cli": "^2.2.2",
-    "cz-customizable": "^6.9.0",
-    "enquirer": "^2.3.6",
-    "eslint": "^8.19.0",
-    "execa": "^5.1.1",
-    "fast-glob": "^3.2.11",
+    "eslint": "^8.24.0",
+    "execa": "^6.1.0",
+    "fast-glob": "^3.2.12",
     "file-saver": "^2.0.5",
     "fs-extra": "^10.1.0",
     "gulp": "^4.0.2",
@@ -54,24 +43,26 @@
     "happy-dom": "^6.0.4",
     "husky": "^8.0.1",
     "is-ci": "^3.0.1",
-    "jszip": "^3.10.0",
+    "jszip": "^3.10.1",
+    "kolorist": "^1.6.0",
     "lint-staged": "^13.0.3",
     "minimist": "^1.2.6",
     "pinst": "^3.0.0",
     "prettier": "^2.7.1",
+    "prompts": "^2.4.2",
     "rimraf": "^3.0.2",
-    "sass": "^1.53.0",
+    "sass": "^1.55.0",
     "semver": "^7.3.7",
-    "stylelint": "^14.9.1",
+    "stylelint": "^14.13.0",
     "stylelint-prettier": "^2.0.0",
-    "sucrase": "^3.23.0",
-    "ts-node": "^10.8.2",
-    "typescript": "4.6.4",
+    "sucrase": "^3.27.0",
+    "tsx": "^3.9.0",
+    "typescript": "4.8.4",
     "vite": "2.9.14",
-    "vite-plugin-dts": "1.5.0",
-    "vitest": "^0.22.1",
-    "vue": "^3.2.37",
-    "vue-router": "^4.1.1"
+    "vite-plugin-dts": "^1.6.3",
+    "vitest": "^0.23.4",
+    "vue": "^3.2.40",
+    "vue-router": "^4.1.5"
   },
   "engines": {
     "node": ">=14"
@@ -79,14 +70,15 @@
   "exports": {
     ".": {
       "import": "./es/components/index.mjs",
-      "require": "./lib/components/index.js"
+      "require": "./lib/components/index.js",
+      "types": "./dist/components/index.d.ts"
     },
     "./es": "./es/components/index.mjs",
-    "./lib": "./lib/components/index.js",
+    "./lib": "./lib/components/index.cjs",
     "./es/*.mjs": "./es/components/*/index.mjs",
     "./es/*": "./es/components/*/index.mjs",
-    "./lib/*.js": "./lib/components/*/index.js",
-    "./lib/*": "./lib/components/*/index.js",
+    "./lib/*.cjs": "./lib/components/*/index.cjs",
+    "./lib/*": "./lib/components/*/index.cjs",
     "./package.json": "./package.json",
     "./*": "./*"
   },
@@ -114,7 +106,7 @@
     "vite"
   ],
   "license": "MIT",
-  "main": "lib/components/index.js",
+  "main": "lib/components/index.cjs",
   "module": "es/components/index.mjs",
   "name": "vexip-ui",
   "peerDependencies": {
@@ -132,12 +124,12 @@
     "url": "git+https://github.com/vexip-ui/vexip-ui.git"
   },
   "scripts": {
-    "bootstrap": "ts-node scripts/bootstrap.ts",
-    "build": "ts-node scripts/build.ts",
+    "bootstrap": "tsx scripts/bootstrap.ts",
+    "build": "tsx scripts/build.ts",
     "build:common": "pnpm run build:utils && pnpm run build:hooks && pnpm run build:icons",
     "build:config": "pnpm -C common/config build && pnpm i",
     "build:docs": "pnpm -C docs build",
-    "build:full": "ts-node scripts/build-full.ts",
+    "build:full": "tsx scripts/build-full.ts",
     "build:hooks": "pnpm -C common/hooks build && pnpm i",
     "build:icons": "pnpm -C common/icons build && pnpm i",
     "build:playground": "pnpm -C playground build",
@@ -146,8 +138,7 @@
     "build:utils": "pnpm -C common/utils build && pnpm i",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path .",
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
-    "commit": "git-cz",
-    "create": "ts-node scripts/create.ts",
+    "create": "tsx scripts/create.ts",
     "lint": "eslint --fix --ext .js,.ts,.tsx,.vue common/*/src/** components/** directives/** playground/** dev-server/** docs/**",
     "lint:script": "eslint --fix --ext .js,.ts scripts/**",
     "lint:style": "stylelint **/*.{vue,scss} --fix",
@@ -157,12 +148,12 @@
     "prepare": "is-ci || husky install",
     "prepublishOnly": "pinst --disable",
     "prettier": "prettier --write \"{common,component,directives,playground,dev-server,docs}/**/*.{ts,js,json,css,pcss,scss,vue,html,md}\"",
-    "publish:ci": "ts-node scripts/publish.ts",
-    "release": "ts-node scripts/release.ts",
-    "serve": "ts-node scripts/serve.ts",
+    "publish:ci": "tsx scripts/publish.ts",
+    "release": "tsx scripts/release.ts",
+    "serve": "tsx scripts/serve.ts",
     "serve:docs": "pnpm -C docs serve",
     "serve:playground": "pnpm -C playground serve",
-    "serve:theme": "ts-node scripts/serve.ts --theme",
+    "serve:theme": "tsx scripts/serve.ts --theme",
     "test": "vitest run",
     "test:cover": "vitest run --coverage",
     "test:dev": "vitest dev"
@@ -175,6 +166,7 @@
     "style/**/*.scss",
     "theme/**/*.css"
   ],
+  "type": "module",
   "types": "dist/components/index.d.ts",
   "version": "2.0.5"
 }

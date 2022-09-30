@@ -21,6 +21,8 @@ const componentsDir = resolve(__dirname, 'components')
 const logLevel = process.env.LOG_LEVEL
 const sourceMap = process.env.SOURCE_MAP === 'true'
 
+const outDir = 'dist'
+
 export default defineConfig(async () => {
   return {
     logLevel: (logLevel || 'info') as LogLevel,
@@ -35,11 +37,12 @@ export default defineConfig(async () => {
       ]
     },
     build: {
+      outDir,
       sourcemap: sourceMap,
       lib: {
         entry: resolve(componentsDir, 'full-lib.ts'),
         formats: ['es', 'cjs'],
-        fileName: 'vexip-ui'
+        fileName: format => `vexip-ui.${format === 'es' ? 'mjs' : 'cjs'}`
       },
       rollupOptions: {
         external: ['vue']
@@ -53,7 +56,15 @@ export default defineConfig(async () => {
       vue(),
       vueJsx(),
       dts({
-        exclude: ['node_modules', 'playground', 'dev-server', 'common/hooks', 'common/icons', 'common/utils'],
+        exclude: [
+          'node_modules',
+          'playground',
+          'dev-server',
+          'common/hooks',
+          'common/icons',
+          'common/utils'
+        ],
+        outputDir: outDir,
         compilerOptions: { sourceMap },
         copyDtsFiles: true,
         skipDiagnostics: false,

@@ -5,6 +5,8 @@ function readPackage(pkg) {
     pkg.dependencies.chokidar = '^3.5.3'
   } else if (pkg.dependencies.micromatch && pkg.dependencies.micromatch.match(/[\^~]?3./)) {
     pkg.dependencies.micromatch = '^4.0.5'
+  } else if (pkg.dependencies.uuid && pkg.dependencies.uuid.match(/[\^~]?3./)) {
+    pkg.dependencies.uuid = '^7.0.3'
   }
 
   return pkg

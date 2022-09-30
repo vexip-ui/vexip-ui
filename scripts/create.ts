@@ -1,37 +1,22 @@
 import fs from 'fs-extra'
 import path from 'node:path'
+import { cpus } from 'node:os'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import stylelint from 'stylelint'
 import minimist from 'minimist'
-import { logger, components as allComponents, runParallel, toKebabCase, toCapitalCase, toCamelCase } from './utils'
-
-import type { Options } from 'prettier'
+import prompts from 'prompts'
+import { rootDir, prettierConfig, logger, components as allComponents, runParallel, toKebabCase, toCapitalCase, toCamelCase } from './utils'
 
 const args = minimist(process.argv.slice(2))
 const targets = args._
 
-const dirPath = path.resolve(__dirname, '..')
 const eslint = new ESLint({ fix: true })
 
-main().catch(error => {
-  logger.error(error)
-  process.exit(1)
-})
-
-let prettierConfig: Options
-
 async function main() {
-  prettierConfig = (await prettier.resolveConfig(path.resolve(dirPath, '.prettierrc.js')))!
-
-  if (!prettierConfig) {
-    throw new Error('Config file of prettier not found')
-  }
-
   if (!targets.length) {
-    const { prompt } = require('enquirer')
-    const name = (await prompt({
-      type: 'input',
+    const name = (await prompts({
+      type: 'text',
       name: 'component',
       message: 'Input a component name:'
     })).component
@@ -48,19 +33,19 @@ async function main() {
     if (targets.some(name => !name || allComponents.includes(name))) {
       process.exit(1)
     } else {
-      await runParallel(require('os').cpus().length, targets, create)
+      await runParallel(cpus().length, targets, create)
     }
   }
 
   logger.withBothLn(() => {
     if (!process.exitCode) {
       if (targets.length > 1) {
-        logger.success('All components created successfully.')
+        logger.success('All components created successfully')
       } else {
-        logger.success(`Component '${targets[0]}' created successfully.`)
+        logger.success(`Component '${targets[0]}' created successfully`)
       }
     } else {
-      logger.error('Component name must be specified and not exists.')
+      logger.error('Component name must be specified and not exists')
     }
   })
 }
@@ -84,15 +69,15 @@ async function create(name: string) {
 
   const generatedFiles = [
     {
-      filePath: path.resolve(dirPath, 'components', kebabCaseName, 'index.ts'),
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'index.ts'),
       source: `export { default as ${capitalCaseName} } from './${kebabCaseName}.vue'\n`
     },
     {
-      filePath: path.resolve(dirPath, 'components', kebabCaseName, 'style.ts'),
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'style.ts'),
       source: `import '@/style/${kebabCaseName}.scss'\n`
     },
     {
-      filePath: path.resolve(dirPath, 'components', kebabCaseName, `${kebabCaseName}.vue`),
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, `${kebabCaseName}.vue`),
       source: `
         <template>
           <div :class="className"></div>
@@ -138,7 +123,7 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(dirPath, 'components', kebabCaseName, 'tests', `${kebabCaseName}.spec.tsx`),
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'tests', `${kebabCaseName}.spec.tsx`),
       source: `
         import { describe, it, expect } from 'vitest'
         import { mount } from '@vue/test-utils'
@@ -154,7 +139,7 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(dirPath, 'components', kebabCaseName, 'tests', 'ssr.spec.tsx'),
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'tests', 'ssr.spec.tsx'),
       source: `
         /**
          * @vitest-environment node
@@ -179,7 +164,7 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(dirPath, 'style', `${kebabCaseName}.scss`),
+      filePath: path.resolve(rootDir, 'style', `${kebabCaseName}.scss`),
       source: `
         @use 'sass:map';
 
@@ -202,7 +187,7 @@ async function create(name: string) {
     }
   ]
 
-  const demosDir = path.resolve(dirPath, 'docs/demos', kebabCaseName)
+  const demosDir = path.resolve(rootDir, 'docs/demos', kebabCaseName)
 
   generatedFiles.push(
     {
@@ -305,7 +290,7 @@ async function create(name: string) {
       if (filePath.match(/\.(s|p)?css$/)) {
         await fs.writeFile(filePath, source)
         await stylelint.lint({
-          cwd: dirPath,
+          cwd: rootDir,
           fix: true,
           files: filePath
         })
@@ -351,3 +336,8 @@ async function create(name: string) {
     })
   )
 }
+
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})

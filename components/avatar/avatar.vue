@@ -1,5 +1,10 @@
 <template>
-  <div ref="wrapper" :class="className" :style="style">
+  <div
+    ref="wrapper"
+    :class="className"
+    :style="style"
+    @click="handleClick"
+  >
     <img
       v-if="(props.src || props.srcSet) && !loadFail"
       :class="nh.be('image')"
@@ -173,6 +178,10 @@ export default defineComponent({
       }
     }
 
+    function handleClick(event: MouseEvent) {
+      emitEvent(props.onClick, event)
+    }
+
     return {
       props,
       nh,
@@ -186,7 +195,8 @@ export default defineComponent({
       style,
 
       handleError,
-      scaleText
+      scaleText,
+      handleClick
     }
   }
 })
