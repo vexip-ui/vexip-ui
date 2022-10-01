@@ -439,7 +439,7 @@ $button: map.merge(
     &--dashed &__badge--#{$type} {
       @include define-button-style(
         (
-          badge-color: 'button-color-typed'
+          badge-color: 'color-white'
         )
       );
     }
