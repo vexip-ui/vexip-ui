@@ -28,7 +28,13 @@ export interface VexipUIResolverOptions {
    *
    * @default true
    */
-  directives?: boolean
+  directives?: boolean,
+  /**
+   * resolve icon components from '@vexip-ui/icons'
+   *
+   * @default true
+   */
+  resolveIcon?: boolean
 }
 
 let components: string[] | undefined
@@ -125,16 +131,45 @@ function resolveDirective(
   }
 }
 
+const iconNameRE = /^I[0-9A-Z].*/
+const firstNumberRE = /^I[0-9].*/
+
+function resolveIconComponent(
+  name: string,
+  options: VexipUIResolverOptions
+): ComponentInfo | undefined {
+  if (!options.resolveIcon) return
+
+  const { prefix } = options
+
+  if (prefix) {
+    if (!name.startsWith(prefix)) return
+
+    name = name.substring(prefix.length)
+  }
+
+  if (!name.match(iconNameRE)) return
+
+  if (!name.match(firstNumberRE)) {
+    name = name.substring(1)
+  }
+
+  return {
+    name,
+    from: '@vexip-ui/icons'
+  }
+}
+
 /**
  * The unplugin-vue-components Resolver for Vexip UI
  */
 export function VexipUIResolver(options: VexipUIResolverOptions = {}): ComponentResolver[] {
-  options = { importStyle: 'css', directives: true, ...options }
+  options = { importStyle: 'css', directives: true, resolveIcon: true, ...options }
 
   return [
     {
       type: 'component',
-      resolve: (name: string) => {
+      resolve: name => {
         if (!components) {
           queryMetaData()
         }
@@ -144,13 +179,17 @@ export function VexipUIResolver(options: VexipUIResolverOptions = {}): Component
     },
     {
       type: 'directive',
-      resolve: (name: string) => {
+      resolve: name => {
         if (!directives) {
           queryMetaData()
         }
 
         return resolveDirective(name, options)
       }
+    },
+    {
+      type: 'component',
+      resolve: name => resolveIconComponent(name, options)
     }
   ]
 }
