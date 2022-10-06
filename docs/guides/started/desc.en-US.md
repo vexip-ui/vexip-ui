@@ -6,14 +6,36 @@ Through this chapter, you will know how to quickly start using Vexip UI.
 
 ## Install Vexip UI
 
+### Using Template
+
+Vexip UI provides some templates for quick start and you can use them with the following command:
+
+```sh
+# 使用 pnpm
+pnpm create vexip
+
+# 使用 yarn
+yarn create vexip
+```
+
+Then follow the prompts.
+
+You can also specify template and some other dependencies with additional options, see [create-vexip](https://github.com/vexip-ui/create-vexip) for more details.
+
+:::info
+The template project is configured with the relevant plugins, you can still read the following content to understand how they work.
+:::
+
+### In Existing Project
+
 Run following command in your project:
 
 ```sh
+# pnpm
+pnpm add vexip-ui
+
 # yarn
 yarn add vexip-ui
-
-# pnpm
-pnpm install vexip-ui
 ```
 
 ## Import Directly
@@ -137,6 +159,7 @@ Then you can use components directly like this:
     v-loading="active"
     style="position: relative; width: 400px; padding-top: 60px; background-color: #fab00577;"
   ></div>
+  <Icon><IUser></IUser></Icon>
 </template>
 
 <script setup lang="ts">
@@ -149,6 +172,43 @@ function handleClick() {
 }
 </script>
 ```
+
+:::warning
+The icon components need to be prefixed with `I` when auto import, such as `User` -> `IUser`.
+:::
+
+However, when only Resolver is used, the icon components can only be used via tag type. If you want to use it via prop, you still need to import them by yourself.
+
+The configuration can be extended to support the auto import including using icon components via prop:
+
+```ts
+export default defineConfig(async () => ({
+  plugins: [
+    vue(),
+    Components({
+      resolvers: [
+        VexipUIResolver()
+      ]
+    }),
+    AutoImport({
+      vueTemplate: true,
+      resolvers: [
+        VexipUIResolver()
+      ],
+      imports: [
+        {
+          '@vexip-ui/icons': Object.keys(await import('@vexip-ui/icons'))
+            // The following processing is to make the name of icon components
+            // also starts with 'I' when using via prop
+            .map(name => name.match(/^I[0-9]/) ? name : [name, `I${name}`])
+        }
+      ]
+    })
+  ]
+}))
+```
+
+So far, all components including icon components can be imported automatically.
 
 ### Webpack
 
