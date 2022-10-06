@@ -1,3 +1,9 @@
+# [1.1.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.0.1...plugins@1.1.0) (2022-10-06)
+
+### Features
+
+- **plugins:** support auto resolve icon components ([#167](https://github.com/vexip-ui/vexip-ui/issues/167)) ([fef768c](https://github.com/vexip-ui/vexip-ui/commit/fef768cd14ccf1245ec3db9e45c3651bc8ca1ca6))
+
 ## [1.0.1](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.0.0...plugins@1.0.1) (2022-09-27)
 
 ### Bug Fixes
