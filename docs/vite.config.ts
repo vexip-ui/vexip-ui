@@ -106,7 +106,7 @@ function createZipPlugin(): Plugin {
       if (statSync(path).isDirectory()) {
         zipFolder(zip.folder(f)!, path)
       } else {
-        zip.file(f, readFileSync(path, 'utf-8'))
+        zip.file(f, readFileSync(path))
       }
     })
   }
