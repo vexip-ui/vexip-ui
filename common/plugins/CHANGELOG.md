@@ -1,3 +1,9 @@
+# [1.2.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.1.0...plugins@1.2.0) (2022-10-10)
+
+### Features
+
+- **plugins:** add iconPrefix option for resolver ([11ccffd](https://github.com/vexip-ui/vexip-ui/commit/11ccffd91bee0f4491990045b94855bd76db375b))
+
 # [1.1.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.0.1...plugins@1.1.0) (2022-10-06)
 
 ### Features
