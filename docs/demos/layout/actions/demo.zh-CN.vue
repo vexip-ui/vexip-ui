@@ -1,6 +1,6 @@
 <template>
   <Layout
-    logo="https://www.vexipui.com/logo.png"
+    logo="https://www.vexipui.com/vexip-ui.svg"
     sign-name="Vexip UI"
     :user="user"
     :actions="actions"
