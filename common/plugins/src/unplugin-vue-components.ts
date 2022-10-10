@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { resolveModule } from 'local-pkg'
-import { toKebabCase } from '@vexip-ui/utils'
+import { toKebabCase, isNull } from '@vexip-ui/utils'
 
 import type { ComponentInfo, ComponentResolver } from 'unplugin-vue-components/types'
 
@@ -34,7 +34,13 @@ export interface VexipUIResolverOptions {
    *
    * @default true
    */
-  resolveIcon?: boolean
+  resolveIcon?: boolean,
+  /**
+   * prefix for name of icon components, same to `prefix` if not be specified
+   *
+   * @default undefined
+   */
+  iconPrefix?: string
 }
 
 let components: string[] | undefined
@@ -140,7 +146,7 @@ function resolveIconComponent(
 ): ComponentInfo | undefined {
   if (!options.resolveIcon) return
 
-  const { prefix } = options
+  const { iconPrefix: prefix } = options
 
   if (prefix) {
     if (!name.startsWith(prefix)) return
@@ -165,6 +171,10 @@ function resolveIconComponent(
  */
 export function VexipUIResolver(options: VexipUIResolverOptions = {}): ComponentResolver[] {
   options = { importStyle: 'css', directives: true, resolveIcon: true, ...options }
+
+  if (isNull(options.iconPrefix)) {
+    options.iconPrefix = options.prefix
+  }
 
   return [
     {
