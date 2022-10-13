@@ -15,7 +15,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { isNull, throttle } from '@vexip-ui/utils'
+import { isNull, throttle, debounce } from '@vexip-ui/utils'
 import { EyeSlashR, EyeR, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -429,7 +429,7 @@ export default defineComponent({
       return null
     }
 
-    const handleInput = throttle(handleChange)
+    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
 
     function renderControl() {
       return (
