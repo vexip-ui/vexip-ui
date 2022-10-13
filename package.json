@@ -59,7 +59,7 @@
     "tsx": "^3.9.0",
     "typescript": "4.7.4",
     "vite": "2.9.14",
-    "vite-plugin-dts": "^1.6.4",
+    "vite-plugin-dts": "^1.6.6",
     "vitest": "^0.23.4",
     "vue": "^3.2.40",
     "vue-router": "^4.1.5"

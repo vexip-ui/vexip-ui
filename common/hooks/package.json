@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "vite": "^3.1.4",
-    "vite-plugin-dts": "^1.6.4",
+    "vite-plugin-dts": "^1.6.6",
     "vue": "^3.2.40"
   },
   "peerDependencies": {
