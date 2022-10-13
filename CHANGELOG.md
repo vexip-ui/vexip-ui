@@ -1,3 +1,22 @@
+## [2.0.6](https://github.com/vexip-ui/vexip-ui/compare/v2.0.4...v2.0.6) (2022-10-13)
+
+### Bug Fixes
+
+- **bubble:** keep consistent behavior for newline ([7bb25a2](https://github.com/vexip-ui/vexip-ui/commit/7bb25a24109d14a0468ac94deed1f144b5211966)), closes [#164](https://github.com/vexip-ui/vexip-ui/issues/164)
+- **button:** missing button badge color css var ([bdb22c7](https://github.com/vexip-ui/vexip-ui/commit/bdb22c72b99fd97674ff42afada9cd12ce5f0e68))
+- **divider:** missing text-color css var ([509f932](https://github.com/vexip-ui/vexip-ui/commit/509f932c34872108ded8ba638eed5626f774a4c1))
+- **form:** add submit and reset style deps ([a8ac3ec](https://github.com/vexip-ui/vexip-ui/commit/a8ac3ec6787f006a22ac269d0f30ba2ce2c3e17c))
+- **input:** not effective debounce prop ([46c5d31](https://github.com/vexip-ui/vexip-ui/commit/46c5d31f29aa390f441e278874f6bbcebddee093))
+- **layout:** add style dependencies ([04edd03](https://github.com/vexip-ui/vexip-ui/commit/04edd03b4dfcb7079d6d51ecc19a53cdca6116d6))
+- **plugins:** support typography style alias ([f89cfef](https://github.com/vexip-ui/vexip-ui/commit/f89cfefbe43da61c4fce258e5d55166f89b9b152))
+
+### Features
+
+- **input:** add sync prop ([7dc7289](https://github.com/vexip-ui/vexip-ui/commit/7dc7289b12820a4ba74ce092dd45c11b2cb40d75)), closes [#169](https://github.com/vexip-ui/vexip-ui/issues/169)
+- **number-input:** add sync prop ([7b50304](https://github.com/vexip-ui/vexip-ui/commit/7b50304abfb38a8d47a5e84ba456b43ec7757c08))
+- **plugins:** add iconPrefix option for resolver ([11ccffd](https://github.com/vexip-ui/vexip-ui/commit/11ccffd91bee0f4491990045b94855bd76db375b))
+- **plugins:** support auto resolve icon components ([#167](https://github.com/vexip-ui/vexip-ui/issues/167)) ([fef768c](https://github.com/vexip-ui/vexip-ui/commit/fef768cd14ccf1245ec3db9e45c3651bc8ca1ca6))
+
 ## [2.0.5](https://github.com/vexip-ui/vexip-ui/compare/v2.0.4...v2.0.5) (2022-09-27)
 
 ### Bug Fixes
