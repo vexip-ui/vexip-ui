@@ -1,1 +1,13 @@
-["basis", "disabled", "size", "clearable", "icon", "range", "precision", "step", "loading"]
+[
+  "basis",
+  "disabled",
+  "size",
+  "clearable",
+  "icon",
+  "range",
+  "precision",
+  "step",
+  "loading",
+  "sync",
+  "state"
+]
