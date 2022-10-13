@@ -59,6 +59,7 @@ export default defineComponent({
     loadingLock: booleanProp,
     loadingSpin: booleanProp,
     transparent: booleanProp,
+    sync: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onInput: eventProp<(value: string) => void>(),
@@ -121,7 +122,8 @@ export default defineComponent({
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false,
-      transparent: false
+      transparent: false,
+      sync: false
     })
 
     const nh = useNameHelper('input')
@@ -279,10 +281,18 @@ export default defineComponent({
 
         setFieldValue(currentValue.value)
         emitEvent(props.onChange, currentValue.value)
-        emit('update:value', currentValue.value)
-        validateField()
+
+        if (!props.sync) {
+          emit('update:value', currentValue.value)
+          validateField()
+        }
       } else {
         emitEvent(props.onInput, currentValue.value)
+
+        if (props.sync) {
+          emit('update:value', currentValue.value)
+          validateField()
+        }
       }
     }
 

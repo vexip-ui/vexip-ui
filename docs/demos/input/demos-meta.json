@@ -4,6 +4,7 @@
   "clearable",
   "icon",
   "size",
+  "sync",
   "before",
   "password",
   "loading",
