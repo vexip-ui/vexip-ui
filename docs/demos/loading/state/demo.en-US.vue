@@ -1,15 +1,15 @@
 <template>
   <Button type="primary" :loading="loading" @click="doLoading">
-    加载结束
+    Loading(Normal)
   </Button>
   <Button type="success" :loading="loading" @click="doLoading('success')">
-    加载成功
+    Loading(Success)
   </Button>
   <Button type="error" :loading="loading" @click="doLoading('error')">
-    加载失败
+    Loading(Error)
   </Button>
   <Button type="warning" :loading="loading" @click="doLoading('warning')">
-    加载异常
+    Loading(Warning)
   </Button>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <Button type="primary" :loading="loading" @click="doLoading">
-    加载
+    Loading
   </Button>
 </template>
 
@@ -11,7 +11,7 @@ export default defineComponent({
   data() {
     return {
       loading: false,
-      timer: -1
+      timer: undefined! as ReturnType<typeof setTimeout>
     }
   },
   methods: {

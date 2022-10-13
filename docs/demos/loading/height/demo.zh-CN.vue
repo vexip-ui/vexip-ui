@@ -11,7 +11,7 @@ export default defineComponent({
   data() {
     return {
       loading: false,
-      timer: -1
+      timer: undefined! as ReturnType<typeof setTimeout>
     }
   },
   methods: {

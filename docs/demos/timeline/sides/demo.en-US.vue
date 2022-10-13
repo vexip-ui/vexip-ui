@@ -1,24 +1,37 @@
 <template>
   <Timeline both-sides style="max-width: 500px;">
     <TimelineItem>
-      <span style="margin-bottom: 10px;">项目负责人</span>
-      <Card> 今日客户提出了XXX的需求，请及时做技术可行性分析 </Card>
+      <span style="margin-bottom: 10px;">PM</span>
+      <Card>
+        Today, the customer put forward the demand of XXX, please do the technical feasibility
+        analysis in time.
+      </Card>
     </TimelineItem>
     <TimelineItem>
-      <span style="margin-bottom: 10px;">技术负责人</span>
-      <Card> 经过会议讨论，XXX需求可以实现，请实施人员跟进 </Card>
+      <span style="margin-bottom: 10px;">CTO</span>
+      <Card>
+        After discussion at the meeting, XXX requirements can be realized, please follow up.
+      </Card>
     </TimelineItem>
     <TimelineItem>
-      <span style="margin-bottom: 10px;">技术骨干</span>
-      <Card> 已收到开发需求，目前开发进度为30% </Card>
+      <span style="margin-bottom: 10px;">Staff</span>
+      <Card>
+        The development needs have been received, and the current development progress is 30%.
+      </Card>
     </TimelineItem>
     <TimelineItem>
-      <span style="margin-bottom: 10px;">项目负责人</span>
-      <Card> 请及时跟进XXX需求开发，目前客户对这块的进度提出了疑问 </Card>
+      <span style="margin-bottom: 10px;">PM</span>
+      <Card>
+        Please follow up the development of XXX requirements in time. At present, customers have
+        raised questions about the progress of this piece.
+      </Card>
     </TimelineItem>
     <TimelineItem>
-      <span style="margin-bottom: 10px;">技术负责人</span>
-      <Card> 收到，已及时跟进开发情况，增加开发人员投入 </Card>
+      <span style="margin-bottom: 10px;">CTO</span>
+      <Card>
+        Received, the development situation has been followed up in time, and the investment of
+        developers has been increased.
+      </Card>
     </TimelineItem>
   </Timeline>
 </template>
