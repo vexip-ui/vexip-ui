@@ -37,7 +37,9 @@ I have limited energy, if you encountered any bug, don't scold me and create a i
 
 ## Latest Version
 
-![version](https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui)
+<a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
+  <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm version"/>
+</a>
 
 > The version on the top-left is the version of the component library that the docs depends on when it is built, which may be inconsistent with the latest version.
 
