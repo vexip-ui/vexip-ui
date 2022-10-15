@@ -53,7 +53,7 @@ It is recommended to use pnpm or yarn to install:
 
 ```sh
 # use pnpm
-pnpm install vexip-ui
+pnpm add vexip-ui
 
 # use yarn
 yarn add vexip-ui

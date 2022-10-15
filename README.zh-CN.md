@@ -53,7 +53,7 @@ Vexip UI 提供了一系列开箱即用的组件。
 
 ```sh
 # 使用 pnpm
-pnpm install vexip-ui
+pnpm add vexip-ui
 
 # 使用 yarn
 yarn add vexip-ui
