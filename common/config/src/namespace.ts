@@ -56,7 +56,7 @@ export function useNameHelper(block: string, namespace: Ref<string> | string = u
   /**
    * @returns `--vxp-${block}-${name}`
    */
-  const cv = (name: string) => `--vxp-${block}-${name}`
+  const cv = (name: string) => `--${unref(namespace)}-${block}-${name}`
   /**
    * @returns a map that is transformed origin style map's key to cv(key)
    */
@@ -68,17 +68,17 @@ export function useNameHelper(block: string, namespace: Ref<string> | string = u
     return style
   }
   /**
-   * @returns `var(--vxp-${block}-${name})`
+   * @returns `var(--${namespace}-${block}-${name})`
    */
-  const gcv = (name: string) => `var(--vxp-${block}-${name})`
+  const gcv = (name: string) => `var(--${unref(namespace)}-${block}-${name})`
   /**
-   * @returns `--vxp-${name}`
+   * @returns `--${namespace}-${name}`
    */
-  const nv = (name: string) => `--vxp-${name}`
+  const nv = (name: string) => `--${unref(namespace)}-${name}`
   /**
-   * @returns `var(--vxp-${name})`
+   * @returns `var(--${namespace}-${name})`
    */
-  const gnv = (name: string) => `var(--vxp-${name})`
+  const gnv = (name: string) => `var(--${unref(namespace)}-${name})`
 
   return {
     b,
