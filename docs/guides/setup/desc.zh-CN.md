@@ -37,7 +37,9 @@ Vexip UI 提供了一系类开箱即用的组件。
 
 ## 最新版本
 
-![version](https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui)
+<a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
+  <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm version"/>
+</a>
 
 > 左上方的版本为文档构建时依赖的组件库版本，可能与最新的不一致，因为文档的更新往往会落后一些。
 
