@@ -45,14 +45,14 @@ Vexip UI 提供了一系类开箱即用的组件。
 
 ## 安装
 
-推荐使用 yarn 或 pnpm 的方式进行安装：
+推荐使用 pnpm 或 yarn 的方式进行安装：
 
 ```sh
+# 使用 pnpm
+pnpm add vexip-ui
+
 # 使用 yarn
 yarn add vexip-ui
-
-# 使用 pnpm
-pnpm install vexip-ui
 ```
 
 ## 帮助
