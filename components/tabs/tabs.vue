@@ -2,6 +2,9 @@
   <div :class="nh.b()">
     <div :class="nh.be('header')">
       <TabNav :active="currentActive" :card="props.card" @change="handleActive">
+        <template v-if="$slots.prefix" #prefix>
+          <slot name="prefix"></slot>
+        </template>
         <TabNavItem
           v-for="(item, index) in itemList"
           :key="index"
@@ -19,6 +22,9 @@
             {{ item.label }}
           </template>
         </TabNavItem>
+        <template v-if="$slots.suffix" #suffix>
+          <slot name="suffix"></slot>
+        </template>
       </TabNav>
     </div>
     <div

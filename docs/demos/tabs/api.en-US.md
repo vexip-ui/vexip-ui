@@ -11,6 +11,14 @@
 | ------ | ---------------------------------------------------------------------------------- | --------------------------- | ----- |
 | change | Emitted when the active tab changes, returns the label of the currently active tab | `(label: string \| number)` | -     |
 
+### TabNav Slots
+
+| Name    | Description                      | Parameters | Since   |
+| ------- | -------------------------------- | ---------- | ------- |
+| default | Slot of tab tabs content         | -          | -       |
+| prefix  | Slot of nav prefix extra content | -          | `2.0.7` |
+| suffix  | Slot of nav suffix extra content | -          | `2.0.7` |
+
 ### TabPanel Props
 
 | Name     | Type               | Description                            | Default | Since |
