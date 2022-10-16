@@ -1,9 +1,24 @@
+### Preset Types
+
+```ts
+interface TabNavItemOptions {
+  label: string | number,
+  content?: string,
+  icon?: Record<string, any>,
+  disabled?: boolean,
+  onToggle?: (active: boolean) => void
+}
+
+type TabNavOptions = TabNavItemOptions | string | number
+```
+
 ### TabNav Props
 
-| Name   | Type               | Description                                                            | Default | Since |
-| ------ | ------------------ | ---------------------------------------------------------------------- | ------- | ----- |
-| active | `string \| number` | Set the currently active navigation, can use `v-model` two-way binding | `null`  | -     |
-| card   | `boolean`          | Set whether to enable card mode                                        | `false` | -     |
+| Name    | Type               | Description                                                            | Default | Since   |
+| ------- | ------------------ | ---------------------------------------------------------------------- | ------- | ------- |
+| active  | `string \| number` | Set the currently active navigation, can use `v-model` two-way binding | `null`  | -       |
+| card    | `boolean`          | Set whether to enable card mode                                        | `false` | -       |
+| options | `TabNavOptions[]`  | Quick set tab items, invalid after using slot                          | `[]`    | `2.0.7` |
 
 ### TabNav Events
 

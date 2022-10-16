@@ -1,5 +1,15 @@
 import type { InjectionKey } from 'vue'
 
+export interface TabNavItemOptions {
+  label: string | number,
+  content?: string,
+  icon?: Record<string, any>,
+  disabled?: boolean,
+  onToggle?: (active: boolean) => void
+}
+
+export type TabNavOptions = TabNavItemOptions | string | number
+
 export interface ItemState {
   el: HTMLElement | null,
   label: string | number,

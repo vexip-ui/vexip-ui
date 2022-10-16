@@ -8,7 +8,18 @@
           </div>
         </li>
       </ResizeObserver>
-      <slot></slot>
+      <slot>
+        <TabNavItem
+          v-for="item in items"
+          :key="item.label"
+          :label="item.label"
+          :icon="item.icon"
+          :disabled="item.disabled"
+          @toggle="item.onToggle"
+        >
+          {{ item.content || item.label }}
+        </TabNavItem>
+      </slot>
       <ResizeObserver :on-resize="updateMarkerPosition">
         <li :class="[nh.be('extra'), nh.bem('extra', 'suffix')]">
           <div v-if="$slots.suffix" :class="nh.be('suffix')">
@@ -28,21 +39,25 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, onMounted, provide } from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
+import { TabNavItem } from '@/components/tab-nav-item'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/hooks'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
-import type { ItemState } from './symbol'
+import type { PropType } from 'vue'
+import type { TabNavOptions, ItemState } from './symbol'
 
 export default defineComponent({
   name: 'TabNav',
   components: {
-    ResizeObserver
+    ResizeObserver,
+    TabNavItem
   },
   props: {
     active: [String, Number],
     card: booleanProp,
+    options: Array as PropType<TabNavOptions[]>,
     onChange: eventProp<(active: string | number) => void>()
   },
   emits: ['update:active'],
@@ -52,7 +67,11 @@ export default defineComponent({
         default: null,
         static: true
       },
-      card: false
+      card: false,
+      options: {
+        default: () => [],
+        static: true
+      }
     })
 
     const nh = useNameHelper('tab-nav')
@@ -75,6 +94,15 @@ export default defineComponent({
         left: `${markerLeft.value}px`,
         width: `${markerWidth.value}px`
       }
+    })
+    const items = computed(() => {
+      return props.options.map(item => {
+        if (typeof item === 'string' || typeof item === 'number') {
+          return { label: item }
+        }
+
+        return item
+      })
     })
 
     const refreshLabels = debounceMinor(() => {
@@ -154,6 +182,7 @@ export default defineComponent({
 
       className,
       markerStyle,
+      items,
 
       wrapper,
 
