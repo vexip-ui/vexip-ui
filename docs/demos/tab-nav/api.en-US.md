@@ -11,6 +11,14 @@
 | ------ | ----------------------------------------------------------------------------------------------- | --------------------------- | ----- |
 | change | Emitted when the active navigation changes, returns the name of the currently active navigation | `(label: string \| number)` | -     |
 
+### TabNav Slots
+
+| Name    | Description                  | Parameters | Since   |
+| ------- | ---------------------------- | ---------- | ------- |
+| default | Slot of tab nav content      | -          | -       |
+| prefix  | Slot of prefix extra content | -          | `2.0.7` |
+| suffix  | Slot of suffix extra content | -          | `2.0.7` |
+
 ### TabNavItem Props
 
 | Name     | Type               | Description                                                    | Default | Since |

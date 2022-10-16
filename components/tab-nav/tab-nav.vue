@@ -1,7 +1,21 @@
 <template>
   <div ref="wrapper" :class="className" tabindex="-1">
     <ul :class="nh.be('list')" role="tablist">
+      <ResizeObserver :on-resize="updateMarkerPosition">
+        <li :class="[nh.be('extra'), nh.bem('extra', 'prefix')]">
+          <div v-if="$slots.prefix" :class="nh.be('prefix')">
+            <slot name="prefix"></slot>
+          </div>
+        </li>
+      </ResizeObserver>
       <slot></slot>
+      <ResizeObserver :on-resize="updateMarkerPosition">
+        <li :class="[nh.be('extra'), nh.bem('extra', 'suffix')]">
+          <div v-if="$slots.suffix" :class="nh.be('suffix')">
+            <slot name="suffix"></slot>
+          </div>
+        </li>
+      </ResizeObserver>
     </ul>
     <div v-if="!props.card" :class="nh.be('track')" :style="markerStyle">
       <slot name="marker">
@@ -13,6 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, onMounted, provide } from 'vue'
+import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/hooks'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
@@ -22,6 +37,9 @@ import type { ItemState } from './symbol'
 
 export default defineComponent({
   name: 'TabNav',
+  components: {
+    ResizeObserver
+  },
   props: {
     active: [String, Number],
     card: booleanProp,
@@ -137,7 +155,9 @@ export default defineComponent({
       className,
       markerStyle,
 
-      wrapper
+      wrapper,
+
+      updateMarkerPosition
     }
   }
 })

@@ -24,12 +24,11 @@ $tab-nav: map.merge(
     card-b-color-disabled: get-css-var('tab-nav-card-b-color'),
     card-border: get-css-var('border-shape') get-css-var('tab-nav-card-b-color'),
     card-radius: get-css-var('radius-base'),
-    item-span: 4px,
+    item-pad-width: 4px,
     marker-bg-color: get-css-var('tab-nav-color-active'),
     marker-height: 2px,
     v-padding: 8px,
-    h-padding: 16px,
-    padding: get-css-var('tab-nav-v-padding') get-css-var('tab-nav-h-padding')
+    h-padding: 16px
   ),
   $tab-nav
 );
@@ -48,10 +47,37 @@ $tab-nav: map.merge(
   &__list {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
     padding: 0;
     margin: 0;
     list-style: none;
+  }
+
+  &__extra {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    border-bottom: get-css-var('tab-nav-divider');
+
+    &--suffix {
+      flex: 1 0 auto;
+      justify-content: flex-end;
+    }
+  }
+
+  &__prefix,
+  &__suffix {
+    padding: get-css-var('tab-nav-v-padding') get-css-var('tab-nav-h-padding');
+  }
+
+  &__prefix {
+    padding-left: 3px;
+  }
+
+  &__suffix {
+    padding-right: 3px;
   }
 
   &__item {
@@ -61,7 +87,9 @@ $tab-nav: map.merge(
   &__content {
     position: relative;
     display: flex;
-    padding: get-css-var('tab-nav-padding');
+    align-items: center;
+    justify-content: center;
+    padding: get-css-var('tab-nav-v-padding') get-css-var('tab-nav-h-padding');
     color: get-css-var('tab-nav-color');
     cursor: pointer;
     user-select: none;
@@ -84,14 +112,7 @@ $tab-nav: map.merge(
     }
   }
 
-  &__pad {
-    width: get-css-var('tab-nav-item-span');
-    pointer-events: none;
-    border-bottom: get-css-var('tab-nav-divider');
-  }
-
   &--card &__content {
-    // margin-right: 4px;
     color: get-css-var('tab-nav-card-color');
     background-color: get-css-var('tab-nav-card-bg-color');
     border: get-css-var('tab-nav-card-border');
@@ -121,7 +142,18 @@ $tab-nav: map.merge(
     }
   }
 
-  &__item:first-child &__pad {
+  &__pad {
+    display: none;
+    width: get-css-var('tab-nav-item-pad-width');
+    pointer-events: none;
+    border-bottom: get-css-var('tab-nav-divider');
+  }
+
+  &--card &__pad {
+    display: block;
+  }
+
+  &__item:nth-child(2) &__pad {
     display: none;
   }
 
