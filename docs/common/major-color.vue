@@ -1,12 +1,25 @@
 <template>
   <div :class="prefix">
     <div :class="`${prefix}__picker`">
-      <p :class="`${prefix}__tip`">
-        {{ getMetaName(language!, changeColor, false) }}
-        <Icon :scale="1.2" @click="resetMajorColor">
-          <ArrowRotateLeft></ArrowRotateLeft>
-        </Icon>
-      </p>
+      <Space :class="`${prefix}__tip`" :size="4">
+        {{ t('common.changeColor') }}
+        <Tooltip>
+          <template #trigger>
+            <Icon :scale="1.4" @click="rollMajorColor">
+              <Dice></Dice>
+            </Icon>
+          </template>
+          {{ t('common.rollColor') }}
+        </Tooltip>
+        <Tooltip>
+          <template #trigger>
+            <Icon :scale="1.2" @click="resetMajorColor">
+              <ArrowRotateLeft></ArrowRotateLeft>
+            </Icon>
+          </template>
+          {{ t('common.resetColor') }}
+        </Tooltip>
+      </Space>
       <ColorPicker v-model:value="majorColor" format="rgb"></ColorPicker>
     </div>
     <div v-for="(colors, name) in seriesColors" :key="name" :class="`${prefix}__series`">
@@ -27,9 +40,9 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { ArrowRotateLeft } from '@vexip-ui/icons'
-import { isClient } from '@vexip-ui/utils'
-import { getMetaName } from './meta-name'
+import { useI18n } from 'vue-i18n'
+import { ArrowRotateLeft, Dice } from '@vexip-ui/icons'
+import { isClient, randomColor } from '@vexip-ui/utils'
 import { computeSeriesColors } from './series-color'
 
 defineProps({
@@ -40,13 +53,9 @@ defineProps({
 })
 
 const emit = defineEmits(['change'])
+const { t } = useI18n()
 
 const prefix = 'major-color'
-
-const changeColor = {
-  name: 'Change Major Color',
-  cname: '换个主题色'
-}
 
 const rootEl = isClient ? document.documentElement : undefined
 const rootStyle = rootEl && getComputedStyle(rootEl)
@@ -63,6 +72,10 @@ watch(majorColor, value => {
 
   emit('change', value)
 })
+
+function rollMajorColor() {
+  majorColor.value = randomColor()
+}
 
 function resetMajorColor() {
   majorColor.value = '#339af0'
