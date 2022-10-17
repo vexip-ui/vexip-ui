@@ -6,8 +6,7 @@
 $tab-nav: () !default;
 $tab-nav: map.merge(
   (
-    d-color: get-css-var('border-color-base'),
-    divider: get-css-var('border-shape') get-css-var('tab-nav-d-color'),
+    d-color: get-css-var('border-color-light-2'),
     color: get-css-var('content-color-base'),
     color-hover: get-css-var('color-primary-base'),
     color-active: get-css-var('tab-nav-color-hover'),
@@ -19,10 +18,9 @@ $tab-nav: map.merge(
     card-bg-color: get-css-var('fill-color-background'),
     card-bg-color-active: transparent,
     card-bg-color-disabled: get-css-var('tab-nav-card-bg-color'),
-    card-b-color: get-css-var('border-color-base'),
+    card-b-color: get-css-var('tab-nav-d-color'),
     card-b-color-active: get-css-var('tab-nav-color-active'),
     card-b-color-disabled: get-css-var('tab-nav-card-b-color'),
-    card-border: get-css-var('border-shape') get-css-var('tab-nav-card-b-color'),
     card-radius: get-css-var('radius-base'),
     item-pad-width: 4px,
     marker-bg-color: get-css-var('tab-nav-color-active'),
@@ -59,7 +57,7 @@ $tab-nav: map.merge(
     display: flex;
     flex: 0 0 auto;
     align-items: center;
-    border-bottom: get-css-var('tab-nav-divider');
+    border-bottom: get-css-var('border-shape') get-css-var('tab-nav-d-color');
 
     &--suffix {
       flex: 1 0 auto;
@@ -93,7 +91,7 @@ $tab-nav: map.merge(
     color: get-css-var('tab-nav-color');
     cursor: pointer;
     user-select: none;
-    border-bottom: get-css-var('tab-nav-divider');
+    border-bottom: get-css-var('border-shape') get-css-var('tab-nav-d-color');
     transition: get-css-var('transition-color');
 
     &:hover {
@@ -115,7 +113,7 @@ $tab-nav: map.merge(
   &--card &__content {
     color: get-css-var('tab-nav-card-color');
     background-color: get-css-var('tab-nav-card-bg-color');
-    border: get-css-var('tab-nav-card-border');
+    border: get-css-var('border-shape') get-css-var('tab-nav-card-b-color');
     border-radius: get-css-var('tab-nav-card-radius') get-css-var('tab-nav-card-radius') 0 0;
     transition:
       get-css-var('transition-color'),
@@ -146,7 +144,7 @@ $tab-nav: map.merge(
     display: none;
     width: get-css-var('tab-nav-item-pad-width');
     pointer-events: none;
-    border-bottom: get-css-var('tab-nav-divider');
+    border-bottom: get-css-var('border-shape') get-css-var('tab-nav-d-color');
   }
 
   &--card &__pad {
