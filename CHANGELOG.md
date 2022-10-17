@@ -1,3 +1,20 @@
+## [2.0.7](https://github.com/vexip-ui/vexip-ui/compare/v2.0.6...v2.0.7) (2022-10-17)
+
+### Bug Fixes
+
+- **config:** ensure responsive variables namespace ([4b334c9](https://github.com/vexip-ui/vexip-ui/commit/4b334c9a0602524f65d9921e6c4f837dcdd5a766))
+- **space:** items should default flex display ([2b34b10](https://github.com/vexip-ui/vexip-ui/commit/2b34b107eae5a815f19b278e7149e7b402f87883))
+- **tab-nav:** list should default no margin ([4dad8da](https://github.com/vexip-ui/vexip-ui/commit/4dad8da121c0719381884fb32a14539f20ec469c))
+
+### Features
+
+- **layout:** add header-avatar slot ([7574693](https://github.com/vexip-ui/vexip-ui/commit/7574693663e8f53c1451165404fff53216d7f957))
+- **tab-nav:** add options prop ([d9f868f](https://github.com/vexip-ui/vexip-ui/commit/d9f868fb0f67d67d6bd3e533230a18ecc5d4f558))
+- **tab-nav:** add prefix and suffix slots ([f6034cd](https://github.com/vexip-ui/vexip-ui/commit/f6034cd3c263ff29480042b183326d70f5c5fb3a))
+- **tabs:** add prefix and suffix slots ([db8a5ab](https://github.com/vexip-ui/vexip-ui/commit/db8a5ab2e8637f663c7921238c32e49c1bd34d04))
+- **utils:** add randomColor method ([adc3878](https://github.com/vexip-ui/vexip-ui/commit/adc387828749bd4426f5ffc14123a75e2d874111))
+- **utils:** add series log once methods ([c4fc460](https://github.com/vexip-ui/vexip-ui/commit/c4fc4608ebd72fa516700f032cca22d3df67d673))
+
 ## [2.0.6](https://github.com/vexip-ui/vexip-ui/compare/v2.0.4...v2.0.6) (2022-10-13)
 
 ### Bug Fixes

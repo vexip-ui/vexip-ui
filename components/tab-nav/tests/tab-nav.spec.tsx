@@ -35,6 +35,7 @@ describe('TabNav', () => {
     const items = wrapper.findAll('.vxp-tab-nav__item')
 
     await nextTick()
+    await nextTick()
     expect(items[0].find('.vxp-tab-nav__content').classes()).toContain(
       'vxp-tab-nav__content--active'
     )
