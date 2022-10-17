@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.7.0...utils@1.8.0) (2022-10-17)
+
+### Features
+
+- **utils:** add randomColor method ([adc3878](https://github.com/vexip-ui/vexip-ui/commit/adc387828749bd4426f5ffc14123a75e2d874111))
+- **utils:** add series log once methods ([c4fc460](https://github.com/vexip-ui/vexip-ui/commit/c4fc4608ebd72fa516700f032cca22d3df67d673))
+
 # [1.7.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.6.0...utils@1.7.0) (2022-09-20)
 
 ### Features
