@@ -292,7 +292,8 @@ export default defineComponent({
               (() => (signInHeader.value ? renderSign() : null)),
             default: slots['header-main'] || slots.headerMain || null,
             right: slots['header-right'] || slots.headerRight || null,
-            user: slots['header-user'] || slots.headerUser || null
+            user: slots['header-user'] || slots.headerUser || null,
+            avatar: slots['header-avatar'] || slots.headerAvatar || null
           }}
         </LayoutHeader>
       )

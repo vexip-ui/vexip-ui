@@ -335,6 +335,10 @@ export default defineComponent({
             >
               {{
                 default: () => {
+                  if (slots.avatar) {
+                    return slots.avatar(getSlotParams())
+                  }
+
                   if (typeof props.user?.avatar === 'string') {
                     return (
                       <Avatar
