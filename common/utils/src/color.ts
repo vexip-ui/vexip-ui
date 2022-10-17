@@ -1,3 +1,5 @@
+import { isDefined } from './common'
+
 interface RGB {
   r: number,
   g: number,
@@ -788,6 +790,32 @@ export function adjustAlpha(color: Color, alpha: number | string) {
   return rgba
 }
 
+export function randomColor(withAlpha = false, type: 'hex' | 'rgb' | 'hsv' | 'hsl' = 'hex') {
+  const r = Math.round(Math.random() * 255)
+  const g = Math.round(Math.random() * 255)
+  const b = Math.round(Math.random() * 255)
+
+  if (type === 'hex') {
+    return withAlpha ? rgbaToHex(r, g, b, Math.random()) : rgbToHex(r, g, b)
+  }
+
+  let color: ObjectColor
+
+  if (type === 'hsl') {
+    color = rgbToHsl(r, g, b)
+  } else if (type === 'hsv') {
+    color = rgbToHsv(r, g, b)
+  } else {
+    color = { r, g, b }
+  }
+
+  if (withAlpha) {
+    (color as RGBAColor).a = Math.random()
+  }
+
+  return color.toString()
+}
+
 function repairDigits(str: string) {
   return str.length === 1 ? `0${str}` : str.toString()
 }
@@ -833,7 +861,7 @@ function parsePercentage(percent: number | string): number {
 }
 
 function toRgbString(this: RGB) {
-  if (this.a && this.a >= 0 && this.a < 1) {
+  if (isDefined(this.a) && this.a >= 0 && this.a < 1) {
     return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`
   }
 
@@ -841,7 +869,7 @@ function toRgbString(this: RGB) {
 }
 
 function toHslString(this: HSL) {
-  if (this.a && this.a >= 0 && this.a < 1) {
+  if (isDefined(this.a) && this.a >= 0 && this.a < 1) {
     return `hsla(${this.h}, ${this.s}, ${this.l}, ${this.a})`
   }
 
@@ -849,7 +877,7 @@ function toHslString(this: HSL) {
 }
 
 function toHsvString(this: HSV) {
-  if (this.a && this.a >= 0 && this.a < 1) {
+  if (isDefined(this.a) && this.a >= 0 && this.a < 1) {
     return `hsva(${this.h}, ${this.s}, ${this.v}, ${this.a})`
   }
 
