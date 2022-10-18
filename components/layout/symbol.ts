@@ -8,12 +8,15 @@ export type LayoutSignType = 'aside' | 'header'
 export type LayoutConfig = 'nav' | 'color'
 
 export interface LayoutMenuProps {
+  active?: string,
   accordion?: boolean,
   markerType?: MenuMarkerType,
   groupType?: MenuGroupType,
   tooltipReverse?: boolean,
   router?: Router,
-  manualRoute?: boolean
+  manualRoute?: boolean,
+  onExpand: (label: string, meta: Record<string, any>) => void,
+  onReduce: (label: string, meta: Record<string, any>) => void
 }
 
 export interface LayoutHeaderAction {
