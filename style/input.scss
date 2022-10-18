@@ -169,6 +169,15 @@ $input: map.merge(
       color: get-css-var('input-placeholder-color');
     }
 
+    /* stylelint-disable no-duplicate-selectors */
+    &::-ms-clear,
+    &::-ms-clear,
+    &::-ms-reveal,
+    &::-ms-reveal {
+      display: none;
+    }
+    /* stylelint-enable no-duplicate-selectors */
+
     @extend %disabled-item;
   }
 
