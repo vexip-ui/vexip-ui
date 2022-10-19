@@ -142,17 +142,6 @@ import type { SelectionColumn, TypeColumn, ColumnWithKey } from './symbol'
 
 const columnTypes = ['order', 'selection', 'expand']
 
-const props = {
-  column: {
-    type: Object as PropType<ColumnWithKey>,
-    default: () => ({})
-  },
-  index: {
-    type: Number,
-    default: -1
-  }
-}
-
 export default defineComponent({
   name: 'TableHeadCell',
   components: {
@@ -165,7 +154,16 @@ export default defineComponent({
     CaretDown,
     Filter
   },
-  props,
+  props: {
+    column: {
+      type: Object as PropType<ColumnWithKey>,
+      default: () => ({})
+    },
+    index: {
+      type: Number,
+      default: -1
+    }
+  },
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
     const tableAction = inject(TABLE_ACTION)!

@@ -73,32 +73,30 @@ import { TABLE_STORE, TABLE_ACTION, TABLE_HEAD_KEY } from './symbol'
 import type { PropType, CSSProperties } from 'vue'
 import type { RowState, ExpandColumn, ColumnWithKey } from './symbol'
 
-const props = {
-  row: {
-    type: Object as PropType<RowState>,
-    default: () => ({})
-  },
-  index: {
-    type: Number,
-    default: null
-  },
-  isHead: {
-    type: Boolean,
-    default: false
-  },
-  isFixed: {
-    type: Boolean,
-    default: false
-  }
-}
-
 export default defineComponent({
   name: 'TableRow',
   components: {
     CollapseTransition,
     Renderer
   },
-  props,
+  props: {
+    row: {
+      type: Object as PropType<RowState>,
+      default: () => ({})
+    },
+    index: {
+      type: Number,
+      default: null
+    },
+    isHead: {
+      type: Boolean,
+      default: false
+    },
+    isFixed: {
+      type: Boolean,
+      default: false
+    }
+  },
   setup(props) {
     const { state, mutations } = inject(TABLE_STORE)!
     const tableAction = inject(TABLE_ACTION)!
@@ -129,7 +127,7 @@ export default defineComponent({
       return [
         nh.be('row'),
         {
-          [nh.bem('row', 'hover')]: state.highlight && props.row.hover,
+          [nh.bem('row', 'hover')]: !props.isHead && state.highlight && props.row.hover,
           [nh.bem('row', 'stripe')]: props.index % 2 === 1
         },
         customClass

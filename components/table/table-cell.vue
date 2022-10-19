@@ -100,25 +100,6 @@ import type {
 
 const columnTypes = ['order', 'selection', 'expand']
 
-const props = {
-  row: {
-    type: Object as PropType<RowState>,
-    default: () => ({})
-  },
-  rowIndex: {
-    type: Number,
-    default: -1
-  },
-  column: {
-    type: Object as PropType<ColumnWithKey>,
-    default: () => ({})
-  },
-  columnIndex: {
-    type: Number,
-    default: -1
-  }
-}
-
 export default defineComponent({
   name: 'TableCell',
   components: {
@@ -128,7 +109,24 @@ export default defineComponent({
     Renderer,
     AngleRight
   },
-  props,
+  props: {
+    row: {
+      type: Object as PropType<RowState>,
+      default: () => ({})
+    },
+    rowIndex: {
+      type: Number,
+      default: -1
+    },
+    column: {
+      type: Object as PropType<ColumnWithKey>,
+      default: () => ({})
+    },
+    columnIndex: {
+      type: Number,
+      default: -1
+    }
+  },
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
     const tableAction = inject<TableAction>(TABLE_ACTION)!

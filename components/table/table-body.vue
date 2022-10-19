@@ -37,23 +37,21 @@ import { TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
 
-const props = {
-  fixed: {
-    type: String as PropType<'left' | 'right'>,
-    default: null,
-    validator: (value: string) => {
-      return value === 'left' || value === 'right'
-    }
-  }
-}
-
 export default defineComponent({
   name: 'TableBody',
   components: {
     TableCell,
     TableRow
   },
-  props,
+  props: {
+    fixed: {
+      type: String as PropType<'left' | 'right'>,
+      default: null,
+      validator: (value: string) => {
+        return value === 'left' || value === 'right'
+      }
+    }
+  },
   setup(props) {
     const { state, getters } = inject(TABLE_STORE)!
 

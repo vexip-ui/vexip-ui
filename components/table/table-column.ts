@@ -22,7 +22,7 @@ import type {
   ColumnWithKey
 } from './symbol'
 
-const props = {
+const columnProps = {
   idKey: [Number, String],
   name: String,
   accessor: Function as PropType<(row: any, index: number) => any>,
@@ -51,8 +51,8 @@ const props = {
   metaData: Object as PropType<Data>
 }
 
-const propKeys = Object.keys(props) as (keyof typeof props)[]
-const aliases: Partial<Record<keyof typeof props, string>> = {
+const propKeys = Object.keys(columnProps) as (keyof typeof columnProps)[]
+const aliases: Partial<Record<keyof typeof columnProps, string>> = {
   idKey: 'key'
 }
 
@@ -61,7 +61,7 @@ const columnTypes = Object.freeze<TableColumnType>(['order', 'selection', 'expan
 export default defineComponent({
   name: 'TableColumn',
   functional: true,
-  props,
+  props: columnProps,
   setup(_props, { slots }) {
     const props = useProps('tableColumn', _props, {
       idKey: {
