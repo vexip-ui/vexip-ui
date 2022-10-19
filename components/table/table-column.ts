@@ -51,12 +51,14 @@ const columnProps = {
   metaData: Object as PropType<Data>
 }
 
-const propKeys = Object.keys(columnProps) as (keyof typeof columnProps)[]
-const aliases: Partial<Record<keyof typeof columnProps, string>> = {
+type ColumnPropKey = keyof typeof columnProps
+
+const propKeys = Object.keys(columnProps) as ColumnPropKey[]
+const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
-
-const columnTypes = Object.freeze<TableColumnType>(['order', 'selection', 'expand'])
+const deepProps: ColumnPropKey[] = ['className', 'style', 'attrs', 'filter', 'sorter', 'metaData']
+const columnTypes: TableColumnType[] = ['order', 'selection', 'expand']
 
 export default defineComponent({
   name: 'TableColumn',
@@ -145,7 +147,7 @@ export default defineComponent({
           value => {
             (options[aliasKey] as any) = value
           },
-          { deep: true }
+          { deep: deepProps.includes(key) }
         )
       }
     }
