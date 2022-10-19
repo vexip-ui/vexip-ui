@@ -39,6 +39,7 @@ $pagination: map.merge(
   @include basis;
 
   display: inline-flex;
+  align-items: center;
   padding: 0;
 
   &__item {
@@ -150,8 +151,9 @@ $pagination: map.merge(
     white-space: nowrap;
     user-select: none;
 
-    .#{$namespace}-number-input {
+    &-input {
       width: 60px;
+      height: get-css-var('pagination-size');
       margin: 0 4px;
       user-select: auto;
     }
@@ -160,8 +162,12 @@ $pagination: map.merge(
   &__size {
     min-width: 106px;
 
-    .#{$namespace}-select {
+    &-select {
       width: 100%;
+
+      .#{$namespace}-select__selector {
+        height: get-css-var('pagination-size');
+      }
     }
   }
 
