@@ -128,13 +128,26 @@ export default defineComponent({
 
       ;(options[aliasKey] as any) = props[key]
 
-      watch(
-        () => props[key],
-        value => {
-          (options[aliasKey] as any) = value
-        },
-        { deep: true }
-      )
+      if (key === 'idKey') {
+        watch(
+          () => props[key],
+          value => {
+            if (isNull(value) && props.type) {
+              (options[aliasKey] as any) = value = `__vxp_${props.type}`
+            } else {
+              (options[aliasKey] as any) = value
+            }
+          }
+        )
+      } else {
+        watch(
+          () => props[key],
+          value => {
+            (options[aliasKey] as any) = value
+          },
+          { deep: true }
+        )
+      }
     }
 
     watch(() => slots.default, setRenderer)
