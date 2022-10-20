@@ -107,9 +107,9 @@ createApp(App).use(install).mount('#app')
 
 - `vxp-drop` 向下展开或向上收起
 - `vxp-fade` 渐显渐隐
-- `vxp-ease` 渐隐渐显并便随微弱的放大缩小
+- `vxp-ease` 渐隐渐显并伴随微弱的放大缩小
 - `vxp-move-top` 从上往下移入
 - `vxp-move-right` 从右往左移入
 - `vxp-move-bottom` 从下往上移入
 - `vxp-move-left` 从左往右移入
-- `vxp-zoom` 渐隐渐显并便明显的放大缩小
+- `vxp-zoom` 渐隐渐显并伴随明显的放大缩小
