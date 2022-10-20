@@ -3,7 +3,7 @@
     <Column flex="0">
       <Linker to="https://www.vexipui.com">
         <h1 class="index">
-          <img class="index__logo" src="/logo.png" alt="logo.png" />
+          <img class="index__logo" src="/vexip-ui.svg" alt="vexip-ui.svg" />
           <span class="index__title"> Vexip SFC Playground </span>
         </h1>
         <Tag v-if="libVersion" style="margin: 4px 0 0 6px; transform: scale(0.8);">
