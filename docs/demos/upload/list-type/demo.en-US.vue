@@ -14,18 +14,18 @@ import type { FileOptions } from 'vexip-ui'
 
 const defaultFiles: FileOptions[] = [
   {
-    name: 'logo.png',
-    url: '/logo.png',
+    name: 'vexip-ui.svg',
+    url: '/vexip-ui.svg',
     status: 'success'
   },
   {
-    name: 'logo.png',
-    url: '/logo.png',
+    name: 'vexip-ui.svg',
+    url: '/vexip-ui.svg',
     status: 'fail'
   },
   {
-    name: 'logo.png',
-    url: '/logo.png',
+    name: 'vexip-ui.svg',
+    url: '/vexip-ui.svg',
     percentage: 66,
     status: 'uploading'
   }

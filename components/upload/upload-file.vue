@@ -238,7 +238,7 @@ export default defineComponent({
     const useIconRenderer = computed(() => typeof props.iconRenderer === 'function')
     const fileName = computed(() => props.file.path || props.file.name)
     const percentage = computed(() => toFixed(props.file.percentage, props.precision))
-    const showThumb = computed(() => isImage(props.file))
+    const showThumb = computed(() => isImage(props.file) && (props.file.url || props.file.base64))
 
     function getFileExtension(file: FileState) {
       return file.name.split('.').pop()!.toLocaleLowerCase()
