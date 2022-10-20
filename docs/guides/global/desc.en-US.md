@@ -46,7 +46,11 @@ import { install } from 'vexip-ui'
 
 createApp(App)
   .use(install, {
-    prop: {
+    props: {
+      // The props of all components can be modified via 'default'
+      // default: {
+      //   size: 'large'
+      // },
       input: {
         size: 'large'
       },

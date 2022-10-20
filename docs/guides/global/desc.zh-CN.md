@@ -46,7 +46,11 @@ import { install } from 'vexip-ui'
 
 createApp(App)
   .use(install, {
-    prop: {
+    props: {
+      // 通过 default 可以修改全部组件的属性
+      // default: {
+      //   size: 'large'
+      // },
       input: {
         size: 'large'
       },
