@@ -32,6 +32,7 @@
         <slot name="icon" :file="file"></slot>
       </template>
     </UploadFile>
+    <slot name="suffix"></slot>
   </transition-group>
   <ul v-else :class="[nh.be('files'), nh.bs('vars')]" :style="props.style">
     <UploadFile
@@ -59,6 +60,7 @@
         <slot name="icon" :file="file"></slot>
       </template>
     </UploadFile>
+    <slot name="suffix"></slot>
   </ul>
 </template>
 
