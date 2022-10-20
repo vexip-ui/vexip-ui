@@ -1,105 +1,3 @@
-<template>
-  <div :id="idFor" :class="className">
-    <div
-      ref="control"
-      :class="{
-        [nh.be('control')]: true,
-        [nh.bem('control', 'drag-over')]: isDragOver
-      }"
-      tabindex="-1"
-      @click="handleClick"
-      @drop.prevent="handleDrop"
-      @dragover.prevent="handleDragEnter"
-      @dragleave.prevent="handleDragLeave"
-      @keydown.enter="handleClick"
-      @keydown.space="handleClick"
-    >
-      <input
-        v-if="!props.disabledClick"
-        ref="input"
-        type="file"
-        :class="nh.be('input')"
-        :disabled="props.disabled"
-        :multiple="props.multiple"
-        :accept="acceptString"
-        :webkitdirectory="props.directory"
-        @change="handleInputChange"
-      />
-      <slot :is-drag-over="(props.allowDrag || props.disabledClick) && isDragOver">
-        <template v-if="!props.allowDrag && !props.disabledClick">
-          <Button
-            ref="button"
-            :size="size"
-            :icon="IUpload"
-            :type="props.state"
-            :disabled="props.disabled"
-            :loading="props.loading"
-            :loading-icon="props.loadingIcon"
-            :loading-spin="props.loadingSpin"
-          >
-            {{ props.buttonLabel ?? locale.upload }}
-          </Button>
-          <slot name="tip">
-            <p v-if="props.tip" :class="nh.be('tip')">
-              {{ props.tip }}
-            </p>
-          </slot>
-        </template>
-        <div
-          v-else
-          ref="panel"
-          :class="[nh.be('drag-pane'), props.disabled && nh.bem('drag-pane', 'disabled')]"
-          tabindex="0"
-        >
-          <Icon :class="[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]" :scale="4">
-            <CloudArrowUp></CloudArrowUp>
-          </Icon>
-          <slot name="tip">
-            <p :class="nh.be('tip')">
-              {{ props.tip || locale.dragOrClick }}
-            </p>
-          </slot>
-          <Icon
-            :class="nh.be('loading-icon')"
-            :spin="props.loadingSpin"
-            :pulse="!props.loadingSpin"
-            :icon="props.loadingIcon"
-            :style="{ opacity: props.loading ? '100%' : '0%' }"
-          ></Icon>
-        </div>
-      </slot>
-    </div>
-    <UploadList
-      v-if="!props.hiddenFiles"
-      :files="renderFiles"
-      :select-to-add="props.selectToAdd"
-      :type="props.listType"
-      :icon-renderer="props.iconRenderer"
-      :loading-text="props.loadingText"
-      :can-preview="props.canPreview"
-      :style="{
-        [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
-          !props.hiddenFiles && renderFiles.length ? '0.5em' : undefined
-      }"
-      @delete="handleDelete"
-      @preview="handlePreview"
-    >
-      <template #item="{ file, status: _status, percentage }">
-        <slot
-          name="item"
-          :file="file"
-          :status="_status"
-          :percentage="percentage"
-        ></slot>
-      </template>
-      <template #icon="{ file }">
-        <slot name="icon" :file="file"></slot>
-      </template>
-    </UploadList>
-  </div>
-</template>
-
-<script lang="ts">
 import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
@@ -192,6 +90,7 @@ export default defineComponent({
     loadingIcon: Object,
     loadingLock: booleanProp,
     loadingSpin: booleanProp,
+    image: booleanProp,
     defaultFiles: Array as PropType<FileOptions[]>,
     canPreview: Function as PropType<(file: FileState) => boolean>,
     onExceed: eventProp<(files: FileState[]) => void>(),
@@ -205,7 +104,7 @@ export default defineComponent({
     onError: eventProp<(file: FileState, error: HttpError) => void>()
   },
   emits: ['update:file-list'],
-  setup(_props, { emit }) {
+  setup(_props, { slots, emit, expose }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
       useFieldStore<FileOptions[]>(() => {
         if (button.value?.$el) {
@@ -276,6 +175,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('upload')
+    const locale = useLocale('upload')
     const fileStates = ref([]) as Ref<FileState[]>
     const isDragOver = ref(false)
 
@@ -337,8 +237,18 @@ export default defineComponent({
       { immediate: true }
     )
 
+    expose({ execute })
+
     function handleClick() {
       !props.disabledClick && input.value?.click()
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      const key = event.code || event.key
+
+      if (key === 'Enter' || key === 'Space') {
+        handleClick()
+      }
     }
 
     function handleInputChange(event: Event) {
@@ -639,6 +549,7 @@ export default defineComponent({
       if (!props.allowDrag) return
 
       clearTimeout(dragTimer)
+      event.preventDefault()
 
       isDragOver.value = false
 
@@ -649,16 +560,19 @@ export default defineComponent({
       }
     }
 
-    function handleDragEnter() {
+    function handleDragEnter(event: DragEvent) {
       if (!props.allowDrag) return
 
       clearTimeout(dragTimer)
+      event.preventDefault()
 
       isDragOver.value = true
     }
 
-    function handleDragLeave() {
+    function handleDragLeave(event: DragEvent) {
       if (!props.allowDrag) return
+
+      event.preventDefault()
 
       dragTimer = setTimeout(() => {
         isDragOver.value = false
@@ -748,6 +662,109 @@ export default defineComponent({
       return collectedFiles
     }
 
+    return () => (
+      <div id={idFor.value} class={className.value}>
+        <div
+          class={{
+            [nh.be('control')]: true,
+            [nh.bem('control', 'drag-over')]: isDragOver
+          }}
+          tabindex={-1}
+          onClick={handleClick}
+          onDrop={handleDrop}
+          onDragover={handleDragEnter}
+          onDragleave={handleDragLeave}
+          onKeydown={handleKeyDown}
+        >
+          {!props.disabledClick && (
+            <input
+              ref={input}
+              type={'file'}
+              class={nh.be('input')}
+              disabled={props.disabled}
+              multiple={props.multiple}
+              accept={acceptString.value}
+              webkitdirectory={props.directory}
+              onChange={handleInputChange}
+            />
+          )}
+          {slots.default
+            ? (
+                slots.default({
+                  isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
+                })
+              )
+            : !props.allowDrag && !props.disabledClick
+                ? (
+                    [
+              <Button
+                ref={button}
+                size={size.value}
+                icon={IUpload}
+                type={props.state}
+                disabled={props.disabled}
+                loading={props.loading}
+                loading-icon={props.loadingIcon}
+                loading-spin={props.loadingSpin}
+              >
+                {props.buttonLabel ?? locale.value.upload}
+              </Button>,
+              slots.tip ? slots.tip() : props.tip && <p class={nh.be('tip')}>{props.tip}</p>
+                    ]
+                  )
+                : (
+            <div
+              ref={panel}
+              class={[nh.be('drag-pane'), props.disabled && nh.bem('drag-pane', 'disabled')]}
+              tabindex={0}
+            >
+              <Icon
+                class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
+                scale={4}
+              >
+                <CloudArrowUp></CloudArrowUp>
+              </Icon>
+              {slots.tip
+                ? (
+                    slots.tip()
+                  )
+                : (
+                <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
+                  )}
+              <Icon
+                class={nh.be('loading-icon')}
+                spin={props.loadingSpin}
+                pulse={!props.loadingSpin}
+                icon={props.loadingIcon}
+                style={{ opacity: props.loading ? '100%' : '0%' }}
+              ></Icon>
+            </div>
+                  )}
+        </div>
+        {!props.hiddenFiles && (
+          <UploadList
+            files={renderFiles.value}
+            select-to-add={props.selectToAdd}
+            type={props.listType}
+            icon-renderer={props.iconRenderer}
+            loading-text={props.loadingText}
+            can-preview={props.canPreview}
+            style={{
+              [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
+                !props.hiddenFiles && renderFiles.value.length ? '0.5em' : undefined
+            }}
+            onDelete={handleDelete}
+            onPreview={handlePreview}
+          >
+            {{
+              item: slots.item,
+              icon: slots.icon
+            }}
+          </UploadList>
+        )}
+      </div>
+    )
+
     return {
       IUpload,
 
@@ -773,10 +790,7 @@ export default defineComponent({
       handlePreview,
       handleDrop,
       handleDragEnter,
-      handleDragLeave,
-
-      execute
+      handleDragLeave
     }
   }
 })
-</script>

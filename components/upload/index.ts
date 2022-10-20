@@ -1,4 +1,4 @@
-export { default as Upload } from './upload.vue'
+export { default as Upload } from './upload'
 export { iconMaps as uploadFileIconMap } from './file-icon'
 export type {
   UploadListType,
