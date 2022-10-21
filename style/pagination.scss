@@ -26,7 +26,8 @@ $pagination: map.merge(
     border: get-css-var('border-shape') get-css-var('pagination-b-color'),
     radius: get-css-var('radius-base'),
     size: 32px,
-    item-span: 6px
+    item-span: 6px,
+    plugin-span: 10px
   ),
   $pagination
 );
@@ -40,7 +41,13 @@ $pagination: map.merge(
 
   display: inline-flex;
   align-items: center;
-  padding: 0;
+
+  &__list {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
 
   &__item {
     position: relative;
@@ -178,6 +185,11 @@ $pagination: map.merge(
   & > &__jump,
   & > &__size,
   & > &__total {
-    margin-left: 10px;
+    margin-left: get-css-var('pagination-plugin-span');
+
+    &--prefix {
+      margin-right: get-css-var('pagination-plugin-span');
+      margin-left: 0;
+    }
   }
 }

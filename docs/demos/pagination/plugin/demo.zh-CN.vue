@@ -1,9 +1,3 @@
 <template>
-  <Pagination
-    page-jump
-    page-total
-    page-count
-    :total="100"
-    :page-size="10"
-  ></Pagination>
+  <Pagination :total="100" :page-size="10" :plugins="['total', , 'size', 'jump']"></Pagination>
 </template>
