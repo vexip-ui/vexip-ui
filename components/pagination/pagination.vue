@@ -256,7 +256,7 @@ export default defineComponent({
     onChange: eventProp<(page: number) => void>(),
     onPageSizeChange: eventProp<(size: number) => void>()
   },
-  emits: ['update:active'],
+  emits: ['update:active', 'update:page-size'],
   setup(_props, { emit }) {
     const props = useProps('pagination', _props, {
       size: createSizeProp(),
@@ -424,6 +424,7 @@ export default defineComponent({
     )
     watch(currentPageSize, (value, prevValue) => {
       emitEvent(props.onPageSizeChange, value)
+      emit('update:page-size', value)
 
       // 按当前页的第一条数据计算新的页码
       const anchor = Math.ceil((prevValue * (currentActive.value - 1) + 1) / value)

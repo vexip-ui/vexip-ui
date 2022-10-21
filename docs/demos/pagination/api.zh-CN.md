@@ -6,10 +6,10 @@
 | size            | `'small' \| 'default' \| 'large'` | 设置页码的大小                                           | `'default'`         | -    |
 | no-border       | `boolean`                         | 设置页码是否具有边框                                     | `false`             | -    |
 | background      | `boolean`                         | 设置页面是否具有背景颜色                                 | `false`             | -    |
-| page-size       | `number`                          | 设置每页显示的数据条数                                   | `10`                | -    |
+| page-size       | `number`                          | 设置每页显示的数据条数，可以使用 `v-model` 双向绑定      | `10`                | -    |
 | size-options    | `number[]`                        | 每页显示条目数的选项，用于 page-count 插件               | `[10, 20, 50, 100]` | -    |
 | max-count       | `number`                          | 设置页码数界限，最小为 7，超过界限后会处理成省略号的形式 | `7`                 | -    |
-| active          | `number \| string`                | 当前激活的页码数，从 1 开始                              | `1`                 | -    |
+| active          | `number \| string`                | 当前激活的页码数，从 1 开始，可以使用 `v-model` 双向绑定 | `1`                 | -    |
 | disabled        | `boolean`                         | 设置是否禁用分页器                                       | `false`             | -    |
 | disable-item    | `(page: number) => boolean`       | 设置禁用页码的判断方法                                   | `[]`                | -    |
 | turn-page-count | `number`                          | 设置大翻页的翻页页数                                     | `5`                 | -    |
