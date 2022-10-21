@@ -66,7 +66,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import UploadFile from './upload-file.vue'
+import { UploadFile } from '@/components/upload-file'
 import {
   useNameHelper,
   useProps,

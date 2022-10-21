@@ -1,7 +1,7 @@
 import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
-import UploadList from './upload-list.vue'
+import { UploadList } from '@/components/upload-list'
 import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
@@ -14,7 +14,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { isClient, noop, isDefined, isFalse, isPromise, randomString } from '@vexip-ui/utils'
-import { CloudArrowUp, Upload as IUpload, Spinner } from '@vexip-ui/icons'
+import { CloudArrowUp, Upload as IUpload, Spinner, Plus } from '@vexip-ui/icons'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
 
@@ -194,11 +194,27 @@ export default defineComponent({
           [nh.bm('drag')]: props.allowDrag,
           [nh.bm('to-add')]: props.selectToAdd,
           [nh.bm('block')]: props.block,
-          [nh.bm('drag-only')]: props.disabledClick
+          [nh.bm('drag-only')]: props.disabledClick,
+          [nh.bm('image')]: props.image
         }
       ]
     })
+    const controlClass = computed(() => {
+      if (props.image) {
+        return {
+          [nh.be('image-control')]: true,
+          [nh.bem('image-control', 'drag-over')]: isDragOver.value
+        }
+      }
+
+      return {
+        [nh.be('control')]: true,
+        [nh.bem('control', 'drag-over')]: isDragOver.value
+      }
+    })
     const acceptString = computed(() => {
+      if (props.image) return 'image/*'
+
       const accept = props.accept
 
       return accept && (typeof accept === 'string' ? accept : accept.join())
@@ -662,13 +678,91 @@ export default defineComponent({
       return collectedFiles
     }
 
-    return () => (
-      <div id={idFor.value} class={className.value}>
+    function renderNormalAction() {
+      return !props.allowDrag && !props.disabledClick
+        ? (
+        <>
+          <Button
+            ref={button}
+            size={size.value}
+            icon={IUpload}
+            type={props.state}
+            disabled={props.disabled}
+            loading={props.loading}
+            loading-icon={props.loadingIcon}
+            loading-spin={props.loadingSpin}
+          >
+            {props.buttonLabel ?? locale.value.upload}
+          </Button>
+          {slots.tip ? slots.tip() : props.tip && <p class={nh.be('tip')}>{props.tip}</p>}
+        </>
+          )
+        : (
         <div
-          class={{
-            [nh.be('control')]: true,
-            [nh.bem('control', 'drag-over')]: isDragOver
-          }}
+          ref={panel}
+          class={[nh.be('drag-panel'), props.disabled && nh.bem('drag-panel', 'disabled')]}
+          tabindex={0}
+        >
+          <Icon class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]} scale={4}>
+            <CloudArrowUp></CloudArrowUp>
+          </Icon>
+          {slots.tip
+            ? (
+                slots.tip()
+              )
+            : (
+            <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
+              )}
+          <Icon
+            class={nh.be('loading-icon')}
+            spin={props.loadingSpin}
+            pulse={!props.loadingSpin}
+            icon={props.loadingIcon}
+            style={{ opacity: props.loading ? '100%' : '0%' }}
+          ></Icon>
+        </div>
+          )
+    }
+
+    function renderImageAction() {
+      return (
+        <div class={nh.be('image-action')}>
+          {slots.default
+            ? (
+                slots.default({
+                  isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
+                })
+              )
+            : (
+            <>
+              {props.loading
+                ? (
+                <Icon
+                  class={nh.be('loading-icon')}
+                  spin={props.loadingSpin}
+                  pulse={!props.loadingSpin}
+                  icon={props.loadingIcon}
+                  style={{ marginBottom: '6px' }}
+                ></Icon>
+                  )
+                : (
+                <Icon class={nh.be('cloud')} scale={1.2} style={{ marginBottom: '6px' }}>
+                  <Plus></Plus>
+                </Icon>
+                  )}
+              <span>{props.buttonLabel ?? locale.value.upload}</span>
+            </>
+              )}
+        </div>
+      )
+    }
+
+    function renderControl() {
+      const HtmlTag = props.image ? 'li' : 'div'
+
+      return (
+        <HtmlTag
+          class={controlClass.value}
           tabindex={-1}
           onClick={handleClick}
           onDrop={handleDrop}
@@ -688,109 +782,50 @@ export default defineComponent({
               onChange={handleInputChange}
             />
           )}
-          {slots.default
-            ? (
-                slots.default({
-                  isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
-                })
-              )
-            : !props.allowDrag && !props.disabledClick
-                ? (
-                    [
-              <Button
-                ref={button}
-                size={size.value}
-                icon={IUpload}
-                type={props.state}
-                disabled={props.disabled}
-                loading={props.loading}
-                loading-icon={props.loadingIcon}
-                loading-spin={props.loadingSpin}
-              >
-                {props.buttonLabel ?? locale.value.upload}
-              </Button>,
-              slots.tip ? slots.tip() : props.tip && <p class={nh.be('tip')}>{props.tip}</p>
-                    ]
-                  )
-                : (
-            <div
-              ref={panel}
-              class={[nh.be('drag-pane'), props.disabled && nh.bem('drag-pane', 'disabled')]}
-              tabindex={0}
-            >
-              <Icon
-                class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
-                scale={4}
-              >
-                <CloudArrowUp></CloudArrowUp>
-              </Icon>
-              {slots.tip
-                ? (
-                    slots.tip()
-                  )
-                : (
-                <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
-                  )}
-              <Icon
-                class={nh.be('loading-icon')}
-                spin={props.loadingSpin}
-                pulse={!props.loadingSpin}
-                icon={props.loadingIcon}
-                style={{ opacity: props.loading ? '100%' : '0%' }}
-              ></Icon>
-            </div>
-                  )}
-        </div>
-        {!props.hiddenFiles && (
-          <UploadList
-            files={renderFiles.value}
-            select-to-add={props.selectToAdd}
-            type={props.listType}
-            icon-renderer={props.iconRenderer}
-            loading-text={props.loadingText}
-            can-preview={props.canPreview}
-            style={{
-              [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
-                !props.hiddenFiles && renderFiles.value.length ? '0.5em' : undefined
-            }}
-            onDelete={handleDelete}
-            onPreview={handlePreview}
-          >
-            {{
-              item: slots.item,
-              icon: slots.icon
-            }}
-          </UploadList>
-        )}
+          {props.image
+            ? renderImageAction()
+            : slots.default
+              ? slots.default({
+                isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
+              })
+              : renderNormalAction()}
+        </HtmlTag>
+      )
+    }
+
+    function renderFileList() {
+      return (
+        <UploadList
+          files={renderFiles.value}
+          select-to-add={props.selectToAdd}
+          type={props.image ? 'thumbnail' : props.listType}
+          icon-renderer={props.iconRenderer}
+          loading-text={props.loadingText}
+          can-preview={props.canPreview}
+          style={{
+            [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
+              !props.hiddenFiles && renderFiles.value.length ? '8px' : undefined
+          }}
+          onDelete={handleDelete}
+          onPreview={handlePreview}
+        >
+          {{
+            item: slots.item,
+            icon: slots.icon,
+            suffix: () =>
+              props.image && (!props.maxSize || renderFiles.value.length < props.maxSize)
+                ? renderControl()
+                : null
+          }}
+        </UploadList>
+      )
+    }
+
+    return () => (
+      <div id={idFor.value} class={className.value}>
+        {!props.image && renderControl()}
+        {!props.hiddenFiles && renderFileList()}
       </div>
     )
-
-    return {
-      IUpload,
-
-      props,
-      nh,
-      locale: useLocale('upload'),
-      size,
-      idFor,
-      fileStates,
-      isDragOver,
-
-      className,
-      acceptString,
-      renderFiles,
-
-      input,
-      button,
-      panel,
-
-      handleClick,
-      handleInputChange,
-      handleDelete,
-      handlePreview,
-      handleDrop,
-      handleDragEnter,
-      handleDragLeave
-    }
   }
 })

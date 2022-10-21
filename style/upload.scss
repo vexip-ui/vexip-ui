@@ -101,7 +101,55 @@ $upload: map.merge(
     width: 100%;
   }
 
-  &__drag-pane {
+  &__image-control {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    padding: 6px;
+    margin-bottom: 6px;
+    overflow: hidden;
+    vertical-align: middle;
+    cursor: pointer;
+    border:
+      get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
+      get-css-var('upload-panel-b-color');
+    border-radius: get-css-var('upload-file-radius');
+    outline: 0;
+    transition: get-css-var('transition-color'), get-css-var('transition-border');
+
+    &:hover,
+    &--drag-over {
+      border-color: get-css-var('upload-panel-b-color-hover');
+    }
+
+    &:focus {
+      border-color: get-css-var('upload-panel-b-color-focus');
+    }
+
+    &--disabled {
+      color: get-css-var('content-color-disabled');
+      cursor: not-allowed;
+
+      &,
+      &:hover,
+      &:focus {
+        border-color: get-css-var('upload-panel-b-color-disabled');
+      }
+    }
+  }
+
+  &__image-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: get-css-var('upload-thumb-size');
+    height: get-css-var('upload-thumb-size');
+    color: get-css-var('upload-thumb-color');
+  }
+
+  &__drag-panel {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -139,11 +187,11 @@ $upload: map.merge(
     }
   }
 
-  &--drag-only &__drag-pane {
+  &--drag-only &__drag-panel {
     cursor: auto;
   }
 
-  &__control--drag-over &__drag-pane {
+  &__control--drag-over &__drag-panel {
     border-color: get-css-var('upload-panel-b-color-over');
 
     &--disabled {
@@ -153,13 +201,15 @@ $upload: map.merge(
 
   &__cloud {
     color: get-css-var('upload-cloud-color');
+    transition: get-css-var('transition-color');
 
     &--disabled {
       color: get-css-var('upload-cloud-color-disabled');
     }
   }
 
-  &__control--drag-over &__cloud {
+  &__control--drag-over &__cloud,
+  &__image-control--drag-over &__cloud {
     color: get-css-var('upload-cloud-color-over');
 
     &--disabled {
@@ -169,20 +219,22 @@ $upload: map.merge(
 
   &__loading-icon {
     pointer-events: none;
-    opacity: 0%;
+    transition: get-css-var('transition-opacity');
   }
 
   &__tip {
     margin: 4px 0;
   }
 
-  &__drag-pane &__tip {
+  &__drag-panel &__tip {
     margin: 8px 0 4px;
     user-select: none;
   }
 
   &__files {
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
     width: 100%;
     padding: 0;
     margin: 0;
@@ -219,10 +271,13 @@ $upload: map.merge(
     &--thumbnail,
     &--card {
       padding: 6px;
-      margin-right: 6px;
       margin-bottom: 6px;
       border: get-css-var('border-shape') get-css-var('upload-file-b-color');
       transition: get-css-var('transition-border');
+    }
+
+    &--thumbnail {
+      margin-right: 6px;
     }
 
     &--thumbnail#{&}--success,
@@ -310,6 +365,7 @@ $upload: map.merge(
     width: 100%;
     height: 100%;
     user-select: none;
+    object-fit: cover;
   }
 
   &__actions {
