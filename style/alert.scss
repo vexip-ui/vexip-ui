@@ -124,6 +124,7 @@ $alert: map.merge(
   &__content {
     position: relative;
     display: flex;
+    flex-direction: column;
 
     &--scroll {
       overflow: hidden;
