@@ -265,7 +265,7 @@ export default defineComponent({
       },
       transfer: false,
       value: {
-        default: () => getFieldValue(new Date()),
+        default: () => getFieldValue(null!),
         static: true
       },
       format: 'yyyy-MM-dd HH:mm:ss',

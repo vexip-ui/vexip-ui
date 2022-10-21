@@ -321,7 +321,7 @@ export default defineComponent({
       size: createSizeProp(size),
       state: createStateProp(state),
       value: {
-        default: () => getFieldValue('#339af0')!,
+        default: () => getFieldValue('')!,
         static: true
       },
       visible: false,

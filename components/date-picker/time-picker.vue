@@ -299,7 +299,7 @@ export default defineComponent({
       format: 'HH:mm:ss',
       separator: ':',
       value: {
-        default: () => getFieldValue(initValue),
+        default: () => getFieldValue(''),
         static: true
       },
       filler: {
@@ -523,7 +523,7 @@ export default defineComponent({
       }
 
       for (let i = 0; i < 2; ++i) {
-        const match = TIME_REG.exec(value[i])
+        const match = TIME_REG.exec(value[i] || initValue)
         const state = i === 0 ? startState : endState
         const { activated, timeValue } = state
 
