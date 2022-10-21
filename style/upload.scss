@@ -28,15 +28,17 @@ $upload: map.merge(
     file-b-color-success: get-css-var('color-success-base'),
     file-b-color-fail: get-css-var('color-error-base'),
     file-radius: get-css-var('radius-base'),
-    thumbnail-color: get-css-var('content-color-secondary'),
     mask-bg-color: get-css-var('color-black'),
     mask-opacity: 45%,
     action-color: get-css-var('content-color-third'),
     action-color-hover: get-css-var('content-color-primary'),
     action-color-disabled: get-css-var('content-color-disabled'),
+    thumb-color: get-css-var('content-color-secondary'),
+    thumb-size: 70px,
     thumb-action-color: rgba(255, 255, 255, 70%),
     thumb-action-color-hover: rgba(255, 255, 255, 100%),
     thumb-action-color-disabled: rgba(255, 255, 255, 30%),
+    card-thumb-size: 56px,
     card-action-color: get-css-var('content-color-secondary'),
     card-action-color-hover: get-css-var('color-primary-base'),
     card-action-color-disabled: get-css-var('content-color-disabled'),
@@ -99,7 +101,55 @@ $upload: map.merge(
     width: 100%;
   }
 
-  &__drag-pane {
+  &__image-control {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    padding: 6px;
+    margin-bottom: 6px;
+    overflow: hidden;
+    vertical-align: middle;
+    cursor: pointer;
+    border:
+      get-css-var('upload-panel-b-width') get-css-var('upload-panel-b-style')
+      get-css-var('upload-panel-b-color');
+    border-radius: get-css-var('upload-file-radius');
+    outline: 0;
+    transition: get-css-var('transition-color'), get-css-var('transition-border');
+
+    &:hover,
+    &--drag-over {
+      border-color: get-css-var('upload-panel-b-color-hover');
+    }
+
+    &:focus {
+      border-color: get-css-var('upload-panel-b-color-focus');
+    }
+
+    &--disabled {
+      color: get-css-var('content-color-disabled');
+      cursor: not-allowed;
+
+      &,
+      &:hover,
+      &:focus {
+        border-color: get-css-var('upload-panel-b-color-disabled');
+      }
+    }
+  }
+
+  &__image-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: get-css-var('upload-thumb-size');
+    height: get-css-var('upload-thumb-size');
+    color: get-css-var('upload-thumb-color');
+  }
+
+  &__drag-panel {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -137,11 +187,11 @@ $upload: map.merge(
     }
   }
 
-  &--drag-only &__drag-pane {
+  &--drag-only &__drag-panel {
     cursor: auto;
   }
 
-  &__control--drag-over &__drag-pane {
+  &__control--drag-over &__drag-panel {
     border-color: get-css-var('upload-panel-b-color-over');
 
     &--disabled {
@@ -151,13 +201,15 @@ $upload: map.merge(
 
   &__cloud {
     color: get-css-var('upload-cloud-color');
+    transition: get-css-var('transition-color');
 
     &--disabled {
       color: get-css-var('upload-cloud-color-disabled');
     }
   }
 
-  &__control--drag-over &__cloud {
+  &__control--drag-over &__cloud,
+  &__image-control--drag-over &__cloud {
     color: get-css-var('upload-cloud-color-over');
 
     &--disabled {
@@ -167,20 +219,22 @@ $upload: map.merge(
 
   &__loading-icon {
     pointer-events: none;
-    opacity: 0%;
+    transition: get-css-var('transition-opacity');
   }
 
   &__tip {
     margin: 4px 0;
   }
 
-  &__drag-pane &__tip {
+  &__drag-panel &__tip {
     margin: 8px 0 4px;
     user-select: none;
   }
 
   &__files {
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
     width: 100%;
     padding: 0;
     margin: 0;
@@ -217,10 +271,13 @@ $upload: map.merge(
     &--thumbnail,
     &--card {
       padding: 6px;
-      margin-right: 6px;
       margin-bottom: 6px;
       border: get-css-var('border-shape') get-css-var('upload-file-b-color');
       transition: get-css-var('transition-border');
+    }
+
+    &--thumbnail {
+      margin-right: 6px;
     }
 
     &--thumbnail#{&}--success,
@@ -268,8 +325,6 @@ $upload: map.merge(
 
   &__file--thumbnail &__card {
     justify-content: center;
-    width: 70px;
-    height: 70px;
   }
 
   &__file--card &__card {
@@ -280,17 +335,17 @@ $upload: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    color: get-css-var('upload-thumbnail-color');
+    color: get-css-var('upload-thumb-color');
   }
 
   &__file--thumbnail &__thumbnail {
-    width: 100%;
-    height: 100%;
+    width: get-css-var('upload-thumb-size');
+    height: get-css-var('upload-thumb-size');
   }
 
   &__file--card &__thumbnail {
-    width: 56px;
-    height: 56px;
+    width: get-css-var('upload-card-thumb-size');
+    height: get-css-var('upload-card-thumb-size');
     margin-right: 14px;
   }
 
@@ -310,6 +365,7 @@ $upload: map.merge(
     width: 100%;
     height: 100%;
     user-select: none;
+    object-fit: cover;
   }
 
   &__actions {

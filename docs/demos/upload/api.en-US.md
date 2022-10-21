@@ -82,6 +82,7 @@ type BeforeSelect = (file: FileState, files: FileState[]) => MaybePromise<boolea
 | loading-spin     | `boolean`                                        | Set whether to use spin animation for the loading icon                                                                                                                                              | `false`            | `2.0.0` |
 | default-files    | `FileOptions`                                    | Set static file list                                                                                                                                                                                | `[]`               | `2.0.0` |
 | can-preview      | `(file: FileState) => boolean>`                  | Determine whether the file can be previewed                                                                                                                                                         | `isImage`          | `2.0.0` |
+| image            | `boolean`                                        | Whether to enable image upload mode, `accept` and `list-type` props will be invalid after enable                                                                                                    | `false`            | `2.0.8` |
 
 ### Upload Events
 
