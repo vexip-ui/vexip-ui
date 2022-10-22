@@ -8,7 +8,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
-    @dbclick="handleDbclick"
+    @dblclick="handleDbclick"
     @contextmenu="handleContextmenu"
   >
     <Checkbox
@@ -44,7 +44,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
-    @dbclick="handleDbclick"
+    @dblclick="handleDbclick"
     @contextmenu="handleContextmenu"
   >
     <Ellipsis v-if="!column.noEllipsis" :tooltip-theme="tooltipTheme" :tip-max-width="tooltipWidth">

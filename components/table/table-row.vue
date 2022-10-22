@@ -7,7 +7,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
-    @dbclick="handleDbclick"
+    @dblclick="handleDbclick"
     @contextmenu="handleContextmenu"
     @dragstart.stop="handleDragStart"
     @dragover="handleDragOver"
