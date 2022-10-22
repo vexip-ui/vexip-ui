@@ -7,7 +7,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
-    @dblclick="handleDbclick"
+    @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
     @dragstart.stop="handleDragStart"
     @dragover="handleDragOver"
@@ -326,9 +326,9 @@ export default defineComponent({
       }
     }
 
-    function handleDbclick(event: MouseEvent) {
+    function handleDblclick(event: MouseEvent) {
       if (!props.isHead && tableAction) {
-        tableAction.emitRowDbclick(buildEventPayload(event))
+        tableAction.emitRowDblclick(buildEventPayload(event))
       }
     }
 
@@ -388,7 +388,7 @@ export default defineComponent({
       handleMouseEnter,
       handleMouseLeave,
       handleClick,
-      handleDbclick,
+      handleDblclick,
       handleContextmenu,
       handleDragStart,
       handleDragOver,

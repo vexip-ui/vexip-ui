@@ -245,7 +245,7 @@ export default defineComponent({
     onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
     onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
     onRowClick: eventProp<(payload: TableRowPayload) => void>(),
-    onRowDbclick: eventProp<(payload: TableRowPayload) => void>(),
+    onRowDblclick: eventProp<(payload: TableRowPayload) => void>(),
     onRowContextmenu: eventProp<(payload: TableRowPayload) => void>(),
     onRowCheck:
       eventProp<(payload: Omit<TableRowPayload, 'event'> & { checked: boolean }) => void>(),
@@ -261,12 +261,12 @@ export default defineComponent({
     onCellEnter: eventProp<(payload: TableCellPayload) => void>(),
     onCellLeave: eventProp<(payload: TableCellPayload) => void>(),
     onCellClick: eventProp<(payload: TableCellPayload) => void>(),
-    onCellDbclick: eventProp<(payload: TableCellPayload) => void>(),
+    onCellDblclick: eventProp<(payload: TableCellPayload) => void>(),
     onCellContextmenu: eventProp<(payload: TableCellPayload) => void>(),
     onHeadEnter: eventProp<(payload: TableHeadPayload) => void>(),
     onHeadLeave: eventProp<(payload: TableHeadPayload) => void>(),
     onHeadClick: eventProp<(payload: TableHeadPayload) => void>(),
-    onHeadDbclick: eventProp<(payload: TableHeadPayload) => void>(),
+    onHeadDblclick: eventProp<(payload: TableHeadPayload) => void>(),
     onHeadContextmenu: eventProp<(payload: TableHeadPayload) => void>()
   },
   emits: [],
@@ -384,7 +384,7 @@ export default defineComponent({
       emitRowEnter,
       emitRowLeave,
       emitRowClick,
-      emitRowDbclick,
+      emitRowDblclick,
       emitRowContextmenu,
       emitRowCheck,
       emitAllRowCheck,
@@ -398,12 +398,12 @@ export default defineComponent({
       emitCellEnter,
       emitCellLeave,
       emitCellClick,
-      emitCellDbclick,
+      emitCellDblclick,
       emitCellContextmenu,
       emitHeadEnter,
       emitHeadLeave,
       emitHeadClick,
-      emitHeadDbclick,
+      emitHeadDblclick,
       emitHeadContextmenu
     })
 
@@ -629,8 +629,8 @@ export default defineComponent({
       emitEvent(props.onRowClick, payload)
     }
 
-    function emitRowDbclick(payload: TableRowPayload) {
-      emitEvent(props.onRowDbclick, payload)
+    function emitRowDblclick(payload: TableRowPayload) {
+      emitEvent(props.onRowDblclick, payload)
     }
 
     function emitRowContextmenu(payload: TableRowPayload) {
@@ -798,8 +798,8 @@ export default defineComponent({
       emitEvent(props.onCellClick, payload)
     }
 
-    function emitCellDbclick(payload: TableCellPayload) {
-      emitEvent(props.onCellDbclick, payload)
+    function emitCellDblclick(payload: TableCellPayload) {
+      emitEvent(props.onCellDblclick, payload)
     }
 
     function emitCellContextmenu(payload: TableCellPayload) {
@@ -818,8 +818,8 @@ export default defineComponent({
       emitEvent(props.onHeadClick, payload)
     }
 
-    function emitHeadDbclick(payload: TableHeadPayload) {
-      emitEvent(props.onHeadDbclick, payload)
+    function emitHeadDblclick(payload: TableHeadPayload) {
+      emitEvent(props.onHeadDblclick, payload)
     }
 
     function emitHeadContextmenu(payload: TableHeadPayload) {
