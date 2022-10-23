@@ -1,3 +1,5 @@
+## [1.7.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.7.1...hooks@1.7.2) (2022-10-23)
+
 ## [1.7.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.7.0...hooks@1.7.1) (2022-09-20)
 
 ### Features
