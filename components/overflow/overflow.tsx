@@ -2,8 +2,10 @@ import {
   defineComponent,
   ref,
   computed,
+  watch,
   onMounted,
   onBeforeUnmount,
+  nextTick,
   createTextVNode,
   Fragment
 } from 'vue'
@@ -17,7 +19,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { useResize } from '@vexip-ui/hooks'
-import { nextFrameOnce } from '@vexip-ui/utils'
+import { isDefined } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 
@@ -26,7 +28,7 @@ const TEXT_VNODE = createTextVNode('').type
 export default defineComponent({
   name: 'Overflow',
   props: {
-    items: Array as PropType<Array<Record<string, any>>>,
+    items: Array as PropType<any[]>,
     tag: String,
     attrFlag: booleanStringProp,
     static: booleanProp,
@@ -37,7 +39,7 @@ export default defineComponent({
   setup(_props, { slots, expose }) {
     const props = useProps('overflow', _props, {
       items: {
-        default: () => [],
+        default: null,
         static: true
       },
       tag: 'div',
@@ -67,11 +69,18 @@ export default defineComponent({
       return props.attrFlag ? (props.attrFlag === true ? 'hidden' : props.attrFlag) : false
     })
 
+    watch(
+      () => props.items?.length,
+      () => {
+        nextTick(refresh)
+      }
+    )
+
     expose({ refresh })
 
     onMounted(() => {
       refresh()
-      wrapper.value && observeResize(wrapper.value, handleResize)
+      wrapper.value && observeResize(wrapper.value, refresh)
     })
     onBeforeUnmount(() => {
       wrapper.value && unobserveResize(wrapper.value)
@@ -110,6 +119,7 @@ export default defineComponent({
     }
 
     let lastOverflow = false
+    let lastRestCount = restCount.value
 
     function refresh() {
       const counterEl = counter.value
@@ -150,8 +160,6 @@ export default defineComponent({
             restCount.value = len - j
             totalWidth -= childWidths[j]
 
-            updateRest(restCount.value)
-
             if (totalWidth + counterEl.offsetWidth + counterMargin <= wrapperWidth || !j) {
               overflow = true
               i = j - 1
@@ -161,18 +169,17 @@ export default defineComponent({
         }
       }
 
-      if (!overflow) {
-        toggleDisplay(counterEl, false)
+      if (lastRestCount !== restCount.value) {
+        lastRestCount = restCount.value
+        updateRest(restCount.value)
       }
+
+      toggleDisplay(counterEl, overflow)
 
       if (overflow !== lastOverflow) {
         lastOverflow = overflow
         emitEvent(props.onToggle, overflow)
       }
-    }
-
-    function handleResize() {
-      nextFrameOnce(refresh)
     }
 
     function syncCounterRef(el: HTMLElement | null) {
@@ -194,7 +201,7 @@ export default defineComponent({
 
       return (
         <CustomTag ref={wrapper} class={className.value}>
-          {itemSlot && props.items.length
+          {itemSlot && isDefined(props.items)
             ? props.items.map((item, index) => {
               const vnode = itemSlot({ item, index })[0]
 
@@ -205,7 +212,7 @@ export default defineComponent({
               }
 
               return (
-                  <ResizeObserver key={index} throttle onResize={handleResize}>
+                  <ResizeObserver key={index} onResize={refresh}>
                     {() => vnode}
                   </ResizeObserver>
               )
