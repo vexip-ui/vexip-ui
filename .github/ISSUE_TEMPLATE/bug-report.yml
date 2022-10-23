@@ -1,6 +1,6 @@
 name: Bug report
 
-description: Report an issue with Vexip UI
+description: Report a bug about Vexip UI
 
 body:
   - type: markdown
