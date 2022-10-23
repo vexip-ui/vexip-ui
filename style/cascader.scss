@@ -105,7 +105,15 @@ $cascader: map.merge(
 
   &__rest-tip {
     display: flex;
-    max-height: 180px;
+    flex-wrap: wrap;
+
+    .#{$namespace}-native-scroll {
+      max-height: 180px;
+    }
+  }
+
+  &__rest-tip &__tag {
+    margin-right: 0;
   }
 
   &__placeholder {

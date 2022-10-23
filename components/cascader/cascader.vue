@@ -23,59 +23,62 @@
       </div>
       <div :class="nh.be('control')">
         <slot name="control">
-          <div v-if="props.multiple" ref="tagWrapper" :class="[nh.be('tags')]">
-            <Tag
-              v-for="(item, index) in templateValues"
-              :key="index"
-              :class="nh.be('tag')"
-              :type="props.tagType"
-              closable
-              @click.stop="toggleVisible()"
-              @close="handleTipClose(item)"
-            >
-              {{ templateLabels[index] }}
-            </Tag>
-            <Tag
-              v-if="props.noRestTip"
-              ref="tagCounter"
-              :class="[nh.be('tag'), nh.be('counter')]"
-              :type="props.tagType"
-            >
-              {{ `+${restTagCount}` }}
-            </Tag>
-            <Tooltip
-              v-else
-              :class="nh.be('tooltip')"
-              :visible="restTipShow"
-              trigger="custom"
-              placement="top-end"
-              :tip-class="nh.be('rest-tip')"
-              @click.stop="toggleShowRestTip"
-            >
-              <template #trigger>
-                <Tag
-                  ref="tagCounter"
-                  :class="[nh.be('tag'), nh.be('counter')]"
-                  :type="props.tagType"
+          <Overflow
+            v-if="props.multiple"
+            :class="[nh.be('tags')]"
+            :items="templateValues"
+            @rest-change="restTagCount = $event"
+          >
+            <template #default="{ item, index }">
+              <Tag
+                :class="nh.be('tag')"
+                :type="props.tagType"
+                closable
+                @click.stop="toggleVisible()"
+                @close="handleTipClose(item)"
+              >
+                {{ templateLabels[index] }}
+              </Tag>
+            </template>
+            <template #counter="{ count }">
+              <Tag
+                v-if="props.noRestTip"
+                :class="[nh.be('tag'), nh.be('counter')]"
+                :type="props.tagType"
+              >
+                {{ `+${count}` }}
+              </Tag>
+              <span v-else>
+                <Tooltip
+                  :transfer="false"
+                  :visible="restTipShow"
+                  trigger="custom"
+                  placement="top-end"
+                  :tip-class="nh.be('rest-tip')"
+                  @click.stop="toggleShowRestTip"
                 >
-                  {{ `+${restTagCount}` }}
-                </Tag>
-              </template>
-              <NativeScroll use-y-bar>
-                <template v-for="(item, index) in templateValues" :key="index">
-                  <Tag
-                    v-if="index >= templateValues.length - restTagCount"
-                    :class="nh.be('tag')"
-                    closable
-                    :type="props.tagType"
-                    @close="handleTipClose(item)"
-                  >
-                    {{ templateLabels[index] }}
-                  </Tag>
-                </template>
-              </NativeScroll>
-            </Tooltip>
-          </div>
+                  <template #trigger>
+                    <Tag :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                      {{ `+${count}` }}
+                    </Tag>
+                  </template>
+                  <NativeScroll use-y-bar>
+                    <template v-for="(item, index) in templateValues" :key="index">
+                      <Tag
+                        v-if="index >= templateValues.length - restTagCount"
+                        :class="nh.be('tag')"
+                        closable
+                        :type="props.tagType"
+                        @close="handleTipClose(item)"
+                      >
+                        {{ templateLabels[index] }}
+                      </Tag>
+                    </template>
+                  </NativeScroll>
+                </Tooltip>
+              </span>
+            </template>
+          </Overflow>
           <template v-else>
             {{ currentLabels[0] }}
           </template>
@@ -188,13 +191,13 @@ import {
   computed,
   watch,
   watchEffect,
-  onMounted,
   onBeforeUpdate,
   nextTick
 } from 'vue'
 import CascaderPanel from './cascader-panel.vue'
 import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
+import { Overflow } from '@/components/overflow'
 import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
@@ -240,6 +243,7 @@ export default defineComponent({
     CascaderPanel,
     Icon,
     NativeScroll,
+    Overflow,
     Portal,
     Tag,
     Tooltip,
@@ -447,8 +451,6 @@ export default defineComponent({
     })
     const { isHover } = useHover(reference)
     const locale = useLocale('select')
-    const tagWrapper = ref<HTMLElement | null>(null)
-    const tagCounter = ref<InstanceType<typeof Tag> | null>(null)
     const panelElList = ref<InstanceType<typeof CascaderPanel>[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)
@@ -529,6 +531,7 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
+        debugger
         if (value !== emittedValue.value || outsideChanged) {
           emittedValue.value = value
           initValueAndLabel(value)
@@ -539,13 +542,6 @@ export default defineComponent({
       },
       { immediate: true }
     )
-    watch(() => props.maxTagCount, computeTagsOverflow)
-    watch(
-      () => props.noRestTip,
-      () => {
-        nextTick(computeTagsOverflow)
-      }
-    )
     watch(
       () => props.briefLabel,
       brief => {
@@ -553,7 +549,7 @@ export default defineComponent({
           .map(value => optionValueMap.get(value)?.[brief ? 'label' : 'fullLabel'] as string)
           .filter(Boolean)
 
-        nextTick(computeTagsOverflow)
+        // nextTick(computeTagsOverflow)
       }
     )
     watch(isAsyncLoad, value => {
@@ -633,9 +629,6 @@ export default defineComponent({
       }
     )
 
-    onMounted(() => {
-      nextTick(hideTagCounter)
-    })
     onBeforeUpdate(() => {
       panelElList.value.length = 0
     })
@@ -762,6 +755,11 @@ export default defineComponent({
     }
 
     function initValueAndLabel(value: CascaderValue | null) {
+      for (const option of optionList) {
+        option.checked = false
+        option.partial = false
+      }
+
       if (!value?.length) {
         currentValues.value = []
         currentLabels.value = []
@@ -1063,84 +1061,7 @@ export default defineComponent({
       }
 
       emitChangeEvent(values, dataList)
-      nextTick(computeTagsOverflow)
-    }
-
-    function computeTagsOverflow() {
-      if (!tagWrapper.value || !tagCounter.value?.$el) return
-
-      const conter = tagCounter.value?.$el as HTMLElement
-      const children = tagWrapper.value.children
-      const maxTagCount = props.maxTagCount
-
-      if (maxTagCount > 0) {
-        const childCount = children.length
-
-        for (let i = 0, len = childCount - 1; i < len; ++i) {
-          const child = children[i] as HTMLElement
-
-          child.style.display = i < maxTagCount ? '' : 'none'
-        }
-
-        if (maxTagCount > childCount - 1) {
-          conter.style.display = 'none'
-          restTagCount.value = 0
-        } else {
-          conter.style.display = ''
-          restTagCount.value = childCount - 1 - maxTagCount
-        }
-
-        return
-      }
-
-      conter.style.display = ''
-
-      const wrapperWidth = tagWrapper.value.offsetWidth
-      const childWidths: number[] = []
-
-      let totalWidth = 0
-      let hidden = false
-
-      for (let i = 0, len = children.length - 1; i < len; ++i) {
-        if (i < 0) continue
-
-        const child = children[i] as HTMLElement
-
-        if (hidden) {
-          child.style.display = 'none'
-          continue
-        } else {
-          child.style.display = ''
-        }
-
-        totalWidth += child.offsetWidth
-        childWidths[i] = child.offsetWidth
-
-        if (totalWidth > wrapperWidth) {
-          for (let j = i; j >= 0; --j) {
-            restTagCount.value = len - j
-            totalWidth -= childWidths[j]
-
-            if (totalWidth + conter.offsetWidth <= wrapperWidth || !j) {
-              hidden = true
-              i = j - 1
-              break
-            }
-          }
-        }
-      }
-
-      if (!hidden) {
-        conter.style.display = 'none'
-      }
-
       nextTick(updatePopper)
-    }
-
-    function hideTagCounter() {
-      if (tagCounter.value?.$el) {
-        tagCounter.value.$el.style.display = 'none'
-      }
     }
 
     function handleSingleSelect(fullValue: string) {
@@ -1240,7 +1161,6 @@ export default defineComponent({
         emit('update:value', emittedValue.value)
         emitEvent(props.onClear)
         clearField(emittedValue.value)
-        hideTagCounter()
       }
     }
 
@@ -1258,8 +1178,6 @@ export default defineComponent({
       } else {
         handleSingleSelect(fullValue)
       }
-
-      nextTick(computeTagsOverflow)
     }
 
     function handlePanelKeyOpen(option: CascaderOptionState, depth: number) {
@@ -1319,8 +1237,6 @@ export default defineComponent({
       wrapper,
       reference,
       popper,
-      tagWrapper,
-      tagCounter,
       panelElList,
 
       handlePanelOpen,
