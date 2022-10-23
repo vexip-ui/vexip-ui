@@ -1,8 +1,13 @@
 <template>
-  <TimePicker :shortcuts="singleShortcuts" style="max-width: 300px;"></TimePicker>
+  <TimePicker :shortcuts="singleShortcuts" clearable style="max-width: 300px;"></TimePicker>
   <br />
   <br />
-  <TimePicker is-range :shortcuts="multipleShortcuts" style="max-width: 300px;"></TimePicker>
+  <TimePicker
+    is-range
+    :shortcuts="multipleShortcuts"
+    clearable
+    style="max-width: 300px;"
+  ></TimePicker>
 </template>
 
 <script setup lang="ts">

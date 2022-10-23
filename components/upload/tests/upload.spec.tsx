@@ -230,23 +230,31 @@ describe('Upload', () => {
 
   it('should work with `drag` event ', async () => {
     const wrapper = mount(() => <Upload allow-drag manual></Upload>)
-
     const triggerItem = wrapper.find('.vxp-upload__control')
+    const hasDargOver = () =>
+      expect(wrapper.find('.vxp-upload__control').classes()).toContain(
+        'vxp-upload__control--drag-over'
+      )
+    const notDragOver = () =>
+      expect(wrapper.find('.vxp-upload__control').classes()).not.toContain(
+        'vxp-upload__control--drag-over'
+      )
 
-    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(false)
+    notDragOver()
 
     await triggerItem.trigger('dragover')
-    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(true)
+    hasDargOver()
 
     await triggerItem.trigger('dragleave')
     vi.runAllTimers()
-    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(false)
+    await nextTick()
+    notDragOver()
 
     await triggerItem.trigger('dragover')
-    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(true)
+    hasDargOver()
 
     await triggerItem.trigger('drop')
-    expect(wrapper.getComponent(Upload).vm.isDragOver).toBe(false)
+    notDragOver()
   })
 
   it('should work with `on-preview` event', async () => {

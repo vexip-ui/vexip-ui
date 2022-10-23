@@ -367,6 +367,7 @@ describe('TimePicker', () => {
     expect(wrapper.find('.vxp-time-picker__suffix').attributes('style')).toContain('opacity: 0%;')
 
     await wrapper.find('.vxp-time-picker__clear').trigger('click')
+    await nextTick()
     expect(onClear).toHaveBeenCalled()
     expect(selector.text()).toEqual('--:--:--')
   })

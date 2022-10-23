@@ -27,14 +27,15 @@ describe('Row', () => {
       }
     })
 
-    expect(wrapper.attributes('style')).toContain('margin-right: -4px;')
-    expect(wrapper.attributes('style')).toContain('margin-left: -4px;')
+    expect(wrapper.attributes('style')).toContain('--vxp-row-h-gap: 8px;')
     expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-left: 4px;')
     expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-right: 4px;')
 
     await wrapper.setProps({ gap: [16, 24] })
-    expect(wrapper.attributes('style')).toContain('margin: -12px -8px 12px;')
-    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding: 12px 8px;')
+    expect(wrapper.attributes('style')).toContain('--vxp-row-h-gap: 16px;')
+    expect(wrapper.attributes('style')).toContain('--vxp-row-v-gap: 24px;')
+    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-left: 8px;')
+    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-right: 8px;')
   })
 
   it('justify', () => {
