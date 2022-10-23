@@ -3,7 +3,7 @@
   <Popup
     ref="popup"
     :class="nh.b()"
-    :transition-name="`vxp-popup-${placement.split('-')[1]}`"
+    :transition-name="nh.ns(`popup-${placement.split('-')[1]}`)"
     :placement="placement"
   >
     <template #item="{ item }">

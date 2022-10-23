@@ -28,6 +28,11 @@ export function useNamespace() {
   return inject(PROVIDED_NAMESPACE, globalNamespace)
 }
 
+/**
+ * Create a name helper for BEM.
+ *
+ * For css vars name, the namespace is fixed to 'vxp' (not responsive).
+ */
 export function useNameHelper(block: string, namespace: Ref<string> | string = useNamespace()) {
   /**
    * @returns `${namespace}-${block}`
@@ -56,7 +61,7 @@ export function useNameHelper(block: string, namespace: Ref<string> | string = u
   /**
    * @returns `--vxp-${block}-${name}`
    */
-  const cv = (name: string) => `--${unref(namespace)}-${block}-${name}`
+  const cv = (name: string) => `--vxp-${block}-${name}`
   /**
    * @returns a map that is transformed origin style map's key to cv(key)
    */
@@ -68,17 +73,17 @@ export function useNameHelper(block: string, namespace: Ref<string> | string = u
     return style
   }
   /**
-   * @returns `var(--${namespace}-${block}-${name})`
+   * @returns `var(--vxp-${block}-${name})`
    */
-  const gcv = (name: string) => `var(--${unref(namespace)}-${block}-${name})`
+  const gcv = (name: string) => `var(--vxp-${block}-${name})`
   /**
-   * @returns `--${namespace}-${name}`
+   * @returns `--vxp-${name}`
    */
-  const nv = (name: string) => `--${unref(namespace)}-${name}`
+  const nv = (name: string) => `--vxp-${name}`
   /**
-   * @returns `var(--${namespace}-${name})`
+   * @returns `var(--vxp-${name})`
    */
-  const gnv = (name: string) => `var(--${unref(namespace)}-${name})`
+  const gnv = (name: string) => `var(--vxp-${name})`
 
   return {
     b,

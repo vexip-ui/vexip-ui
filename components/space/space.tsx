@@ -92,8 +92,8 @@ export default defineComponent({
       if (typeof size !== 'string') {
         const normalizedSize = Array.isArray(size) ? size : [size, size]
 
-        style['--vxp-space-h-gap'] = `${normalizedSize[0]}px`
-        style['--vxp-space-v-gap'] = `${normalizedSize[1]}px`
+        style[nh.cv('h-gap')] = `${normalizedSize[0]}px`
+        style[nh.cv('v-gap')] = `${normalizedSize[1]}px`
       }
 
       if (props.gapDisabled && !props.vertical) {

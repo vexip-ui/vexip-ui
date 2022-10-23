@@ -42,7 +42,7 @@ import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vex
 import { GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { ComponentSize, StyleType } from '@vexip-ui/config'
+import type { ComponentSize } from '@vexip-ui/config'
 import type { AvatarObjectFit } from './symbol'
 
 const objectFitValues = Object.freeze<AvatarObjectFit>([
@@ -120,14 +120,14 @@ export default defineComponent({
       }
     })
     const style = computed(() => {
-      const style: StyleType = {
-        '--vxp-avatar-color': props.color,
-        '--vxp-avatar-bg-color': props.background,
-        '--vxp-avatar-image-fit': props.fit
+      const style: Record<string, string> = {
+        [nh.cv('color')]: props.color,
+        [nh.cv('bg-color')]: props.background,
+        [nh.cv('image-fit')]: props.fit
       }
 
       if (typeof size.value === 'number') {
-        style['--vxp-avatar-size'] = `${size.value}px`
+        style[nh.cv('size')] = `${size.value}px`
       }
 
       return style

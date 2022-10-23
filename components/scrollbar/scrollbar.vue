@@ -149,9 +149,9 @@ export default defineComponent({
     })
     const style = computed<Record<string, string>>(() => {
       return {
-        '--vxp-scrollbar-bar-bg-color': props.barColor,
-        '--vxp-scrollbar-track-bg-color': props.trackColor,
-        '--vxp-scrollbar-width': props.width ? `${props.width}px` : null!
+        [nh.cv('bar-bg-color')]: props.barColor,
+        [nh.cv('track-bg-color')]: props.trackColor,
+        [nh.cv('width')]: props.width ? `${props.width}px` : null!
       }
     })
     const barStyle = computed(() => {

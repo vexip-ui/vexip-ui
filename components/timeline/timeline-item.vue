@@ -70,12 +70,12 @@ export default defineComponent({
     const itemStyle = computed(() => {
       const spacing = props.spacing || props.spacing === 0 ? props.spacing : timelineState?.spacing
       const style: Record<string, any> = {
-        '--vxp-timeline-item-span': typeof spacing === 'number' ? `${spacing}px` : spacing
+        [nh.cv('item-span')]: typeof spacing === 'number' ? `${spacing}px` : spacing
       }
 
       if (props.color) {
-        style['--vxp-timeline-pointer-color'] = props.color
-        style['--vxp-timeline-pointer-b-color'] = props.color
+        style[nh.cv('pointer-color')] = props.color
+        style[nh.cv('pointer-b-color')] = props.color
       }
 
       return style

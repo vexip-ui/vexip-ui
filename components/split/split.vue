@@ -215,7 +215,7 @@ export default defineComponent({
             ? '100%'
             : currentFull.value > 0
               ? '0'
-              : `calc(${currentValue.value * 100}% - var(--vxp-split-handler-size) * 0.5)`
+              : `calc(${currentValue.value * 100}% - var(${nh.cv('handler-size')}) * 0.5)`
       }
     })
     const fullIcons = computed(() => {

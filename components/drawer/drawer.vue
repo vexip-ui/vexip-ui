@@ -245,7 +245,7 @@ export default defineComponent({
       ]
     })
     const moveTransition = computed(() => {
-      return `vxp-move-${props.placement}`
+      return nh.ns(`move-${props.placement}`)
     })
     const wrapperClass = computed(() => {
       return [

@@ -129,7 +129,7 @@ export default defineComponent({
       const style = {} as any
 
       if (props.maskColor) {
-        style['--vxp-spin-mask-bg-color'] = props.maskColor
+        style[nh.cv('mask-bg-color')] = props.maskColor
       }
 
       return style
