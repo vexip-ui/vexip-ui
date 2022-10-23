@@ -531,7 +531,6 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        debugger
         if (value !== emittedValue.value || outsideChanged) {
           emittedValue.value = value
           initValueAndLabel(value)
