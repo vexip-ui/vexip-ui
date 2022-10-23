@@ -45,8 +45,8 @@ const { t } = useI18n({ useScope: 'global' })
 const router = useRouter()
 const language = computed(() => globalState.language)
 
-const wave = ref<InstanceType<typeof Wave> | null>(null)
-const sign = ref<HTMLElement | null>(null)
+const wave = ref<InstanceType<typeof Wave>>()
+const sign = ref<HTMLElement>()
 
 const waveTop = ref(494)
 

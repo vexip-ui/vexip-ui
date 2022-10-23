@@ -331,8 +331,8 @@ export default defineComponent({
       emitEvent(props.onYEnabledChange, value)
     })
 
-    const xBar = ref<InstanceType<typeof Scrollbar> | null>(null)
-    const yBar = ref<InstanceType<typeof Scrollbar> | null>(null)
+    const xBar = ref<InstanceType<typeof Scrollbar>>()
+    const yBar = ref<InstanceType<typeof Scrollbar>>()
 
     function syncBarScroll() {
       xBar.value?.handleScroll(percentX.value)
@@ -565,7 +565,7 @@ export default defineComponent({
       enableXScroll,
       enableYScroll,
 
-      wrapper: ref<HTMLElement | null>(null),
+      wrapper: ref<HTMLElement>(),
       content: contentElement,
       xBar,
       yBar,

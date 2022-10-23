@@ -356,8 +356,8 @@ export default defineComponent({
     })
     const { isHover } = useHover(reference)
 
-    const startInput = ref<InstanceType<typeof TimeControl> | null>(null)
-    const endInput = ref<InstanceType<typeof TimeControl> | null>(null)
+    const startInput = ref<InstanceType<typeof TimeControl>>()
+    const endInput = ref<InstanceType<typeof TimeControl>>()
 
     const className = computed(() => {
       return [

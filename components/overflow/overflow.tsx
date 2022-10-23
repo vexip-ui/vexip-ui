@@ -59,8 +59,8 @@ export default defineComponent({
     const { observeResize, unobserveResize } = useResize()
     const restCount = ref(0)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const counter = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const counter = ref<HTMLElement>()
 
     const className = computed(() => {
       return [nh.b(), nh.bs('vars')]
@@ -182,11 +182,11 @@ export default defineComponent({
       }
     }
 
-    function syncCounterRef(el: HTMLElement | null) {
+    function syncCounterRef(el?: HTMLElement | null) {
       if (el) {
-        counter.value = el.nextElementSibling as HTMLElement | null
+        counter.value = el.nextElementSibling as HTMLElement | undefined
       } else {
-        counter.value = null
+        counter.value = undefined
       }
     }
 

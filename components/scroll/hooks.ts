@@ -25,8 +25,8 @@ export function useScrollWrapper({
   onBeforeRefresh?: () => void,
   onAfterRefresh?: () => void
 }) {
-  const wrapperElement = ref<HTMLElement | null>(null)
-  const contentElement = ref<HTMLElement | null>(null)
+  const wrapperElement = ref<HTMLElement>()
+  const contentElement = ref<HTMLElement>()
 
   // 容器长宽
   const wrapper = reactive({

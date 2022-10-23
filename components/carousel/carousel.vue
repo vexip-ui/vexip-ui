@@ -195,8 +195,8 @@ export default defineComponent({
 
     const { wrapper, isHover } = useHover()
 
-    const prev = ref<HTMLElement | null>(null)
-    const next = ref<HTMLElement | null>(null)
+    const prev = ref<HTMLElement>()
+    const next = ref<HTMLElement>()
 
     const isDisabled = computed(() => {
       return props.disabled || itemStates.value.size <= props.viewSize

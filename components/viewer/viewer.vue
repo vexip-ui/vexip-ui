@@ -148,7 +148,7 @@ export default defineComponent({
     const flipX = ref(false)
     const flipY = ref(false)
 
-    const transition = ref<HTMLElement | null>(null)
+    const transition = ref<HTMLElement>()
 
     const {
       supported: fullSupported,

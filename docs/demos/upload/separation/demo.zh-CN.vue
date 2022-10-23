@@ -37,7 +37,7 @@ import type { Upload, FileState } from 'vexip-ui'
 const listActive = ref(false)
 const files = ref<FileState[]>([])
 
-const upload = ref<InstanceType<typeof Upload> | null>(null)
+const upload = ref<InstanceType<typeof Upload>>()
 
 function deleteFile(file: FileState) {
   upload.value?.handleDelete(file)

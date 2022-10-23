@@ -101,7 +101,7 @@ export default defineComponent({
     const rendering = ref(props.visible)
     const transfer = toRef(props, 'transfer')
     const triggerWidth = ref(100)
-    const originalTrigger = ref<HTMLElement | null>(null)
+    const originalTrigger = ref<HTMLElement>()
 
     const reference = computed(() => {
       const virtual = (props.virtual as any)?.$el ?? props.virtual
@@ -264,11 +264,11 @@ export default defineComponent({
       }
     }
 
-    function syncTriggerRef(el: HTMLElement | null) {
+    function syncTriggerRef(el?: HTMLElement | null) {
       if (el) {
-        originalTrigger.value = el.nextElementSibling as HTMLElement | null
+        originalTrigger.value = el.nextElementSibling as HTMLElement | undefined
       } else {
-        originalTrigger.value = null
+        originalTrigger.value = undefined
       }
     }
 

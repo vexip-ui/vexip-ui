@@ -204,8 +204,8 @@ export default defineComponent({
     let hasComputedTop = false
     let hasComputedLeft = false
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const footer = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const footer = ref<HTMLElement>()
 
     const { target: header, moving: dragging } = useMoving({
       onStart: (state, event) => {

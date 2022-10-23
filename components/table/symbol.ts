@@ -207,7 +207,7 @@ export interface StoreGetters {
 }
 
 export interface RowInstance {
-  el: HTMLElement | null,
+  el?: HTMLElement | null,
   row: RowState
 }
 

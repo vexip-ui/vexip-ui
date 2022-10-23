@@ -105,8 +105,8 @@ export default defineComponent({
     const loadFail = ref(false)
     const fallbackFail = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const text = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const text = ref<HTMLElement>()
 
     const size = computed(() => {
       return groupState?.size ?? props.size

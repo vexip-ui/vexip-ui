@@ -44,7 +44,7 @@ defineEmits(['update:menu-expanded'])
 
 const prefix = 'container'
 const store = inject<Store>('store')!
-const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
+const scroll = ref<InstanceType<typeof NativeScroll>>()
 const affixed = toRef(store, 'affixed')
 const route = useRoute()
 

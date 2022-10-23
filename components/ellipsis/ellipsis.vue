@@ -88,7 +88,7 @@ export default defineComponent({
     const transfer = toRef(props, 'transfer')
     const content = ref('')
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const { popper, transferTo, updatePopper } = usePopper({
       placement,

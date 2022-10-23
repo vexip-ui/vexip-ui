@@ -20,8 +20,8 @@ import { boundRange, multipleFixed } from '@vexip-ui/utils'
 
 import type { Scrollbar } from 'vexip-ui'
 
-const pane = ref<HTMLElement | null>(null)
-const bar = ref<InstanceType<typeof Scrollbar> | null>(null)
+const pane = ref<HTMLElement>()
+const bar = ref<InstanceType<typeof Scrollbar>>()
 const barLength = ref(35)
 
 onMounted(() => {

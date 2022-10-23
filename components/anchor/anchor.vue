@@ -106,7 +106,7 @@ export default defineComponent({
     const markerTop = ref(0)
     const linkStates = new Set<AnchorLinkState>()
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     let timer: ReturnType<typeof setTimeout>
 

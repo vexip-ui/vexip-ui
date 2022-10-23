@@ -47,8 +47,8 @@ export default defineComponent({
     const nh = useNameHelper('virtual-list')
 
     const { items, itemSize, itemFixed, idKey, bufferSize } = toRefs(props)
-    const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
-    const list = ref<HTMLElement | null>(null)
+    const scroll = ref<InstanceType<typeof NativeScroll>>()
+    const list = ref<HTMLElement>()
 
     const wrapper = computed(() => scroll.value?.content ?? null)
 

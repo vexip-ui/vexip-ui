@@ -101,9 +101,9 @@ export default defineComponent({
     const currentActive = ref(props.active)
     const wrapShow = ref(props.active)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const topTrap = ref<HTMLElement | null>(null)
-    const bottomTrap = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const topTrap = ref<HTMLElement>()
+    const bottomTrap = ref<HTMLElement>()
 
     let showing = false
     let prevFocusdEl: HTMLElement | null = null

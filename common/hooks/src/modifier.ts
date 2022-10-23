@@ -15,7 +15,7 @@ export interface UseModifierOptions {
   /**
    * 作用的目标元素的 Ref
    */
-  target?: Ref<HTMLElement | null>,
+  target?: Ref<HTMLElement | null | undefined>,
   /**
    * 配置键名的别名，会与默认别名动态合并
    */

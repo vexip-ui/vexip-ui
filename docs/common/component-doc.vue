@@ -94,7 +94,7 @@ const route = useRoute()
 
 const prefix = 'component-doc'
 const activeDemo = ref('')
-const article = ref<InstanceType<typeof Article> | null>(null)
+const article = ref<InstanceType<typeof Article>>()
 
 const refreshScroll = inject<() => void>('refreshScroll', noop)
 const scrollToElement = inject<(el: Element) => void>('scrollToElement', noop)

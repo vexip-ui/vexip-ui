@@ -152,7 +152,7 @@ export default defineComponent({
   },
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
-    const select = ref<InstanceType<typeof Select> | null>(null)
+    const select = ref<InstanceType<typeof Select>>()
     const control = ref<HTMLInputElement | null>(null)
 
     const {

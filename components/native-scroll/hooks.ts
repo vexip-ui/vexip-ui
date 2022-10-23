@@ -27,7 +27,7 @@ export function useScrollWrapper({
   onBeforeRefresh?: () => void,
   onAfterRefresh?: () => void
 }) {
-  const contentElement = ref<HTMLElement | null>(null)
+  const contentElement = ref<HTMLElement>()
 
   const content = reactive({
     el: contentElement,

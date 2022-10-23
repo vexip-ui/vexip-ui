@@ -76,8 +76,8 @@ const minorVersion = version.split('.').slice(0, 2).join('.')
 
 const componentGroups = getComponentConfig()
 const currentMenu = ref('')
-const wrapper = ref<InstanceType<typeof Container> | null>(null)
-const menuScroll = ref<InstanceType<typeof Scroll> | null>(null)
+const wrapper = ref<InstanceType<typeof Container>>()
+const menuScroll = ref<InstanceType<typeof Scroll>>()
 
 const i18n = useI18n({ useScope: 'global' })
 const { t } = i18n

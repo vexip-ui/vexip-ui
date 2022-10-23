@@ -122,8 +122,8 @@ export default defineComponent({
     const scrollDuration = ref(0)
     const scrollOffset = ref(0)
 
-    const content = ref<HTMLElement | null>(null)
-    const scroll = ref<HTMLElement | null>(null)
+    const content = ref<HTMLElement>()
+    const scroll = ref<HTMLElement>()
 
     const hasTitle = computed(() => {
       return !!(props.title || slots.title)

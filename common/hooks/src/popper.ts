@@ -25,7 +25,7 @@ interface UsePopperOptions {
    *
    * 即使 popper 元素迁移至 wrapper 元素外部，点击 popper 元素时仍认为处于 wrapper 元素内部
    */
-  wrapper: Ref<HTMLElement | null>,
+  wrapper: Ref<HTMLElement | null | undefined>,
   /**
    * 设置 popper 元素为否需要 drop，此时 transform-origin 会自动调整
    */
@@ -33,11 +33,11 @@ interface UsePopperOptions {
   /**
    * 参考元素，popper 元素的位置计算依据
    */
-  reference?: Ref<HTMLElement | VirtualElement | null>,
+  reference?: Ref<HTMLElement | VirtualElement | null | undefined>,
   /**
    * popper 元素
    */
-  popper?: Ref<HTMLElement | null>,
+  popper?: Ref<HTMLElement | null | undefined>,
   /**
    * popper 元素的偏移量，可传入一个回调函数
    */
@@ -67,8 +67,8 @@ export const placementWhileList = Object.freeze([
 export function usePopper(initOptions: UsePopperOptions) {
   const { placement, transfer, wrapper, isDrop = false } = initOptions
 
-  const reference: Ref<HTMLElement | null> = (initOptions.reference as any) ?? ref(null)
-  const popper: Ref<HTMLElement | null> = initOptions.popper ?? ref(null)
+  const reference: Ref<HTMLElement | null | undefined> = (initOptions.reference as any) ?? ref(null)
+  const popper: Ref<HTMLElement | null | undefined> = initOptions.popper ?? ref(null)
   const transferTo = ref('')
 
   const options: {

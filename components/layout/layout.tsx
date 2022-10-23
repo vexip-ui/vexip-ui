@@ -112,8 +112,8 @@ export default defineComponent({
 
     const { isMounted } = useMounted()
 
-    const section = ref<HTMLElement | null>(null)
-    const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
+    const section = ref<HTMLElement>()
+    const scroll = ref<InstanceType<typeof NativeScroll>>()
     const header = ref<LayoutHeaderExposed | null>(null)
     const aside = ref<LayoutAsideExposed | null>(null)
 

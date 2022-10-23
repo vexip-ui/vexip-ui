@@ -119,7 +119,7 @@ export default defineComponent({
     const nh = useNameHelper('switch')
     const currentValue = ref(props.value)
 
-    const input = ref<HTMLElement | null>(null)
+    const input = ref<HTMLElement>()
 
     const className = computed(() => {
       return [

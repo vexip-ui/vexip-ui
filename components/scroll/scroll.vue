@@ -343,8 +343,8 @@ export default defineComponent({
       if (value) emitEvent(props.onReady)
     })
 
-    const xBar = ref<InstanceType<typeof Scrollbar> | null>(null)
-    const yBar = ref<InstanceType<typeof Scrollbar> | null>(null)
+    const xBar = ref<InstanceType<typeof Scrollbar>>()
+    const yBar = ref<InstanceType<typeof Scrollbar>>()
 
     function syncBarScroll() {
       xBar.value?.handleScroll(percentX.value)

@@ -184,9 +184,9 @@ export default defineComponent({
 
     const { timer } = useSetTimeout()
 
-    const track = ref<HTMLElement | null>(null)
-    const startTrigger = ref<InstanceType<typeof SliderTrigger> | null>(null)
-    const endTrigger = ref<InstanceType<typeof SliderTrigger> | null>(null)
+    const track = ref<HTMLElement>()
+    const startTrigger = ref<InstanceType<typeof SliderTrigger>>()
+    const endTrigger = ref<InstanceType<typeof SliderTrigger>>()
 
     const markerPercent = computed(() => {
       return Object.keys(props.markers)

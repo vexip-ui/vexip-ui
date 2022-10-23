@@ -341,11 +341,11 @@ export default defineComponent({
     const tableWidth = ref<number | string | null>(null)
     const yScrollEnable = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const thead = ref<InstanceType<typeof TableHead> | null>(null)
-    const mainScroll = ref<InstanceType<typeof Scroll> | null>(null)
-    const indicator = ref<HTMLElement | null>(null)
-    const scrollbar = ref<InstanceType<typeof Scrollbar> | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const thead = ref<InstanceType<typeof TableHead>>()
+    const mainScroll = ref<InstanceType<typeof Scroll>>()
+    const indicator = ref<HTMLElement>()
+    const scrollbar = ref<InstanceType<typeof Scrollbar>>()
 
     const locale = useLocale('table')
 

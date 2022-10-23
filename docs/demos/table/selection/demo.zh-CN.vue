@@ -16,7 +16,7 @@ import { ref } from 'vue'
 
 import type { Table } from 'vexip-ui'
 
-const table = ref<InstanceType<typeof Table> | null>(null)
+const table = ref<InstanceType<typeof Table>>()
 const data = ref([
   {
     id: '1',

@@ -103,9 +103,9 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const rowElement = ref<HTMLElement | null>(null)
-    const expandElement = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const rowElement = ref<HTMLElement>()
+    const expandElement = ref<HTMLElement>()
 
     const instance = reactive({
       el: wrapper,

@@ -112,8 +112,8 @@ export default defineComponent({
     const targetOptions = ref<TransferOptionState[]>([])
     const optionStates = ref<TransferOptionState[]>([])
 
-    const source = ref<InstanceType<typeof TransferPanel> | null>(null)
-    const target = ref<InstanceType<typeof TransferPanel> | null>(null)
+    const source = ref<InstanceType<typeof TransferPanel>>()
+    const target = ref<InstanceType<typeof TransferPanel>>()
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 

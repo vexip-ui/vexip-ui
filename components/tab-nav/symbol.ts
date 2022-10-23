@@ -11,7 +11,7 @@ export interface TabNavItemOptions {
 export type TabNavOptions = TabNavItemOptions | string | number
 
 export interface ItemState {
-  el: HTMLElement | null,
+  el?: HTMLElement | null,
   label: string | number,
   index: number,
   total: number

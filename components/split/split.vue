@@ -92,8 +92,8 @@ export default defineComponent({
     const currentFull = ref<0 | 1 | -1>(0)
     const transition = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const guide = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const guide = ref<HTMLElement>()
 
     const { target: handler, moving } = useMoving({
       lazy: true,
