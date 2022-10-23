@@ -1,3 +1,30 @@
+## [2.0.8](https://github.com/vexip-ui/vexip-ui/compare/v2.0.7...v2.0.8) (2022-10-23)
+
+### Bug Fixes
+
+- **alert:** content display direction should be column ([1d208c5](https://github.com/vexip-ui/vexip-ui/commit/1d208c5c2044dfdc2b75afc9c9c52e3d3db83f6f))
+- **cascader:** counter fails to disappear when passing empty array ([2589335](https://github.com/vexip-ui/vexip-ui/commit/258933545f220ad7d008b0dbcb0c58d9f76b7774)), closes [#181](https://github.com/vexip-ui/vexip-ui/issues/181)
+- incorrect form control components init value ([24909c0](https://github.com/vexip-ui/vexip-ui/commit/24909c0c5f34fb30642340078b9c15a4de83e0c0))
+- **input:** should hide native toggle plaintext button in Edge ([6bc0554](https://github.com/vexip-ui/vexip-ui/commit/6bc05540f3a5b3dc1cae30657309f975c5faa549)), closes [#178](https://github.com/vexip-ui/vexip-ui/issues/178)
+- **overflow:** unexpectedly render slot when items passed empty array ([f3af8e2](https://github.com/vexip-ui/vexip-ui/commit/f3af8e23269800788ad368793641596f288be031))
+- **pagination:** sync height of plugin controls to item height ([2de1fc9](https://github.com/vexip-ui/vexip-ui/commit/2de1fc9d707f40111859f9dc77602ed6344b02d9))
+- **tab-nav:** not nested divider css vars ([77765dc](https://github.com/vexip-ui/vexip-ui/commit/77765dc5f55d3ed7fba54f99e04ec152101385dd))
+- **table:** clearFilter method fails to reset options active ([865a69f](https://github.com/vexip-ui/vexip-ui/commit/865a69f9b91b67188ec2663478443fdc6b8782c7)), closes [#183](https://github.com/vexip-ui/vexip-ui/issues/183)
+- **table:** maker double-click events work ([#186](https://github.com/vexip-ui/vexip-ui/issues/186)) ([137db89](https://github.com/vexip-ui/vexip-ui/commit/137db8910239ac6062884ebf4b2657754334bb43))
+- **table:** rows in table head should not highlight ([ef091dc](https://github.com/vexip-ui/vexip-ui/commit/ef091dc17fdee17119bb7b1211bb4cf8a9bc11cd))
+- **upload:** image thumbnail not effective ([b71b5dc](https://github.com/vexip-ui/vexip-ui/commit/b71b5dc231949542a3a0ad54ff9161675dfde786))
+
+### Features
+
+- **pagination:** support customize plugins position ([48cd1fd](https://github.com/vexip-ui/vexip-ui/commit/48cd1fd11ff553fd66719a3fdd597bf914159242))
+- **pagination:** support page-size two way binding ([16f1750](https://github.com/vexip-ui/vexip-ui/commit/16f17508afa9d09cf6265c36a4aa0225394ff407))
+- **table:** improve type columns will have default key if not define ([1cdcc6f](https://github.com/vexip-ui/vexip-ui/commit/1cdcc6f3cffca840f3a9bdf9573490bbfe09ce28))
+- **upload:** add image upload mode ([#180](https://github.com/vexip-ui/vexip-ui/issues/180)) ([d1e3201](https://github.com/vexip-ui/vexip-ui/commit/d1e3201d1b62e9feba9cf41249bed637c7da1f42))
+
+### Performance Improvements
+
+- **table:** improve to precisely deep watch column props ([f74c4df](https://github.com/vexip-ui/vexip-ui/commit/f74c4dfc98ac85d2a959a030741eff9dd427e1fd))
+
 ## [2.0.7](https://github.com/vexip-ui/vexip-ui/compare/v2.0.6...v2.0.7) (2022-10-17)
 
 ### Bug Fixes
