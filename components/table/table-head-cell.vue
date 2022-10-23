@@ -9,7 +9,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
-    @dbclick="handleDbclick"
+    @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
     <Checkbox
@@ -291,9 +291,9 @@ export default defineComponent({
       }
     }
 
-    function handleDbclick(event: MouseEvent) {
+    function handleDblclick(event: MouseEvent) {
       if (tableAction) {
-        tableAction.emitHeadDbclick(buildEventPayload(event))
+        tableAction.emitHeadDblclick(buildEventPayload(event))
       }
     }
 
@@ -394,7 +394,7 @@ export default defineComponent({
       handleMouseEnter,
       handleMouseLeave,
       handleClick,
-      handleDbclick,
+      handleDblclick,
       handleContextmenu,
       handleSortAsc,
       handleSortDesc,

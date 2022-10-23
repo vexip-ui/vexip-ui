@@ -8,7 +8,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
-    @dbclick="handleDbclick"
+    @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
     <Checkbox
@@ -44,7 +44,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @click="handleClick"
-    @dbclick="handleDbclick"
+    @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
     <Ellipsis v-if="!column.noEllipsis" :tooltip-theme="tooltipTheme" :tip-max-width="tooltipWidth">
@@ -245,9 +245,9 @@ export default defineComponent({
       }
     }
 
-    function handleDbclick(event: MouseEvent) {
+    function handleDblclick(event: MouseEvent) {
       if (tableAction) {
-        tableAction.emitCellDbclick(buildEventPayload(event))
+        tableAction.emitCellDblclick(buildEventPayload(event))
       }
     }
 
@@ -296,7 +296,7 @@ export default defineComponent({
       handleMouseEnter,
       handleMouseLeave,
       handleClick,
-      handleDbclick,
+      handleDblclick,
       handleContextmenu,
       handleCheckRow,
       handleExpandRow

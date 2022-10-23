@@ -6,6 +6,7 @@
     @row-contextmenu="handleRowContextmenu"
     @cell-enter="handleCellEnter"
     @cell-click="handleCellClick"
+    @cell-dblclick="handleCellDblclick"
   >
     <TableColumn name="First Name" id-key="firstName"></TableColumn>
     <TableColumn name="Last Name" id-key="lastName"></TableColumn>
@@ -16,6 +17,7 @@
   <p>打开菜单的行：{{ menuRow }}</p>
   <p>当前单元格：{{ currentCell }}</p>
   <p>点击了的单元格：{{ clickedCell }}</p>
+  <p>双击了的单元格：{{ dblclickedCell }}</p>
 </template>
 
 <script setup lang="ts">
@@ -23,12 +25,11 @@ import { ref } from 'vue'
 
 import type { TableRowPayload, TableCellPayload } from 'vexip-ui'
 
-// type ItemType<D> = D extends (infer I)[] ? I : Record<string, any>
-
 const currentRow = ref(-1)
 const menuRow = ref(-1)
 const currentCell = ref([-1, -1])
 const clickedCell = ref([-1, -1])
+const dblclickedCell = ref([-1, -1])
 
 const data = [
   {
@@ -91,5 +92,10 @@ function handleCellEnter(payload: TableCellPayload) {
 function handleCellClick(payload: TableCellPayload) {
   clickedCell.value[0] = payload.rowIndex
   clickedCell.value[1] = payload.columnIndex
+}
+
+function handleCellDblclick(payload: TableCellPayload) {
+  dblclickedCell.value[0] = payload.rowIndex
+  dblclickedCell.value[1] = payload.columnIndex
 }
 </script>

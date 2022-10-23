@@ -183,7 +183,7 @@ interface TableHeadPayload {
 | row-enter        | 当鼠标移入了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -       |
 | row-leave        | 当鼠标移出了行时触发，返回行数据、行索引和行的位置索引                       | `(payload: TableRowPayload)`                                                            | -       |
 | row-click        | 当点击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | -       |
-| row-dbclick      | 当双击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1` |
+| row-dblclick     | 当双击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1` |
 | row-contextmenu  | 当右击了行时触发，返回行数据、行索引和行的位置索引                           | `(payload: TableRowPayload)`                                                            | `2.0.1` |
 | row-check        | 当勾选了行复选框时触发，返回行数据、勾选状态、行索引和行的位置索引           | `(payload: Omit<TableRowPayload, 'event'> & { checked: boolean })`                      | -       |
 | row-check-all    | 当进行了全选时触发，返回当前是否为全选状态以及是否处于部分全选状态           | `(checked: boolean, partial: boolean)`                                                  | -       |
@@ -197,12 +197,12 @@ interface TableHeadPayload {
 | cell-enter       | 当鼠标移入了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引   | `(payload: TableCellPayload)`                                                           | `2.0.1` |
 | cell-leave       | 当鼠标移出了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引   | `(payload: TableCellPayload)`                                                           | `2.0.1` |
 | cell-click       | 当点击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1` |
-| cell-dbclick     | 当双击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1` |
+| cell-dblclick    | 当双击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1` |
 | cell-contextmenu | 当右击了单元格时触发，返回行数据、行索引、行的位置索引、列数据和列索引       | `(payload: TableCellPayload)`                                                           | `2.0.1` |
 | head-enter       | 当鼠标移入了头部单元格时触发，返回列数据和列索引                             | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
 | head-leave       | 当鼠标移出了头部单元格时触发，返回列数据和列索引                             | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
 | head-click       | 当点击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
-| head-dbclick     | 当双击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
+| head-dblclick    | 当双击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
 | head-contextmenu | 当右击了头部单元格时触发，返回列数据和列索引                                 | `(payload: TableHeadPayload)`                                                           | `2.0.1` |
 
 ### Table 插槽

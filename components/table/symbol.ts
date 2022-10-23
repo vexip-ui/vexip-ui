@@ -239,7 +239,7 @@ export interface TableAction {
   emitRowEnter(payload: TableRowPayload): void,
   emitRowLeave(payload: TableRowPayload): void,
   emitRowClick(payload: TableRowPayload): void,
-  emitRowDbclick(payload: TableRowPayload): void,
+  emitRowDblclick(payload: TableRowPayload): void,
   emitRowContextmenu(payload: TableRowPayload): void,
   emitRowCheck(payload: Omit<TableRowPayload, 'event'> & { checked: boolean }): void,
   emitAllRowCheck(checked: boolean, partial: boolean): void,
@@ -253,12 +253,12 @@ export interface TableAction {
   emitCellEnter(payload: TableCellPayload): void,
   emitCellLeave(payload: TableCellPayload): void,
   emitCellClick(payload: TableCellPayload): void,
-  emitCellDbclick(payload: TableCellPayload): void,
+  emitCellDblclick(payload: TableCellPayload): void,
   emitCellContextmenu(payload: TableCellPayload): void,
   emitHeadEnter(payload: TableHeadPayload): void,
   emitHeadLeave(payload: TableHeadPayload): void,
   emitHeadClick(payload: TableHeadPayload): void,
-  emitHeadDbclick(payload: TableHeadPayload): void,
+  emitHeadDblclick(payload: TableHeadPayload): void,
   emitHeadContextmenu(payload: TableHeadPayload): void
 }
 
