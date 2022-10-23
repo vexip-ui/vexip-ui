@@ -103,9 +103,10 @@ export default defineComponent({
         if (typeof rowState.gap === 'number') {
           style.paddingRight = style.paddingLeft = `${rowState.gap / 2}px`
         } else if (Array.isArray(rowState.gap)) {
-          const [horizontal, vertical] = rowState.gap
+          // const [horizontal] = rowState.gap
 
-          style.padding = `${vertical / 2}px ${horizontal / 2}px`
+          // style.padding = `${vertical / 2}px ${horizontal / 2}px`
+          style.paddingRight = style.paddingLeft = `${rowState.gap[0] / 2}px`
         }
       }
 

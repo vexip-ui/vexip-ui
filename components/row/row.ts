@@ -45,27 +45,23 @@ export default defineComponent({
     const nh = useNameHelper('row')
 
     const className = computed(() => {
-      return [nh.b(), nh.bm(props.justify), nh.bm(props.align)]
+      return [nh.b(), nh.bs('vars'), nh.bm(props.justify), nh.bm(props.align)]
     })
     const style = computed(() => {
       if (!props.gap) return null
 
       if (typeof props.gap === 'number') {
-        const horizontalMargin = `-${props.gap / 2}px`
-
         return {
-          marginRight: horizontalMargin,
-          marginLeft: horizontalMargin
+          [nh.cv('h-gap')]: `${props.gap}px`
         }
       }
 
       if (Array.isArray(props.gap)) {
         const [horizontal, vertical] = props.gap
-        const horizontalMargin = `-${horizontal / 2}px`
-        const verticalMargin = `${vertical / 2}px`
 
         return {
-          margin: `-${verticalMargin} ${horizontalMargin} ${verticalMargin}`
+          [nh.cv('h-gap')]: `${horizontal}px`,
+          [nh.cv('v-gap')]: `${vertical}px`
         }
       }
 
