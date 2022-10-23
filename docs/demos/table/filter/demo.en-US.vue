@@ -1,10 +1,20 @@
 <template>
-  <Table :columns="columns" :data="data" :width="1000"></Table>
+  <Table
+    ref="table"
+    :columns="columns"
+    :data="data"
+    :width="1000"
+  ></Table>
+  <Button style="margin-top: 10px;" @click="clearFilter">
+    Clear Filter
+  </Button>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { defineFilter } from 'vexip-ui'
+
+import type { Table } from 'vexip-ui'
 
 interface RowData {
   id: string,
@@ -14,6 +24,8 @@ interface RowData {
   lastName: string,
   age: string
 }
+
+const table = ref<InstanceType<typeof Table>>()
 
 const columns = ref([
   {
@@ -104,4 +116,8 @@ const data = ref([
     age: '26'
   }
 ])
+
+function clearFilter() {
+  table.value?.clearFilter()
+}
 </script>

@@ -942,9 +942,9 @@ export default defineComponent({
 
       clearSort,
       clearFilter,
+      clearSelected: clearCheckAll,
       refresh,
-      getSelected,
-      clearSelected: clearCheckAll
+      getSelected
     }
   }
 })

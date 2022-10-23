@@ -594,9 +594,9 @@ function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type
 function clearSort(state: StoreState) {
   const sorters = state.sorters
 
-  Object.keys(sorters).forEach(key => {
+  for (const key of Object.keys(sorters)) {
     sorters[key].type = null
-  })
+  }
 }
 
 function handleFilter(state: StoreState, key: Key, active: ParsedFilterOptions['active']) {
@@ -612,9 +612,13 @@ function handleFilter(state: StoreState, key: Key, active: ParsedFilterOptions['
 function clearFilter(state: StoreState) {
   const filters = state.filters
 
-  Object.keys(filters).forEach(key => {
+  for (const key of Object.keys(filters)) {
     filters[key].active = null
-  })
+
+    for (const option of filters[key].options) {
+      option.active = false
+    }
+  }
 }
 
 function handleCheck(state: StoreState, getters: StoreGetters, key: Key, checked: boolean) {
