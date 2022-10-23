@@ -2,7 +2,7 @@ import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 import type { Ref } from 'vue'
 
-export function useHover(wrapper: Ref<HTMLElement | null> = ref(null)) {
+export function useHover(wrapper: Ref<HTMLElement | null | undefined> = ref(null)) {
   const isHover = ref(false)
 
   onMounted(() => {

@@ -326,9 +326,9 @@ export default defineComponent({
     })
     const { isHover } = useHover(reference)
 
-    const startInput = ref<InstanceType<typeof DateControl> | null>(null)
-    const endInput = ref<InstanceType<typeof DateControl> | null>(null)
-    const datePanel = ref<InstanceType<typeof DatePanel> | null>(null)
+    const startInput = ref<InstanceType<typeof DateControl>>()
+    const endInput = ref<InstanceType<typeof DateControl>>()
+    const datePanel = ref<InstanceType<typeof DatePanel>>()
 
     const className = computed(() => {
       return [

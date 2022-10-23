@@ -114,7 +114,7 @@ export default defineComponent({
 
     const loading = ref(false)
 
-    const submit = ref<HTMLElement | null>(null)
+    const submit = ref<HTMLElement>()
 
     const isNative = computed(() => formProps.method && formProps.action)
 

@@ -255,8 +255,8 @@ export default defineComponent({
 
     const nh = useNameHelper('tree')
 
-    const nodeElement = ref<HTMLElement | null>(null)
-    const arrowElement = ref<HTMLElement | null>(null)
+    const nodeElement = ref<HTMLElement>()
+    const arrowElement = ref<HTMLElement>()
 
     useModifier({
       target: nodeElement,

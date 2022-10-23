@@ -174,7 +174,7 @@ export default defineComponent({
     const isInit = ref(false)
 
     const wrapper = useDisplay(displayInit)
-    const scroll = ref<InstanceType<typeof Scroll> | null>(null)
+    const scroll = ref<InstanceType<typeof Scroll>>()
 
     useModifier({
       target: wrapper,

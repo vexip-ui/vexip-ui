@@ -86,7 +86,7 @@ export default defineComponent({
   },
   setup() {
     const placement = ref<MessagePlacement>('top')
-    const popup = ref<InstanceType<typeof Popup> | null>(null)
+    const popup = ref<InstanceType<typeof Popup>>()
 
     async function add(options: Record<string, unknown>) {
       return popup.value ? await popup.value.add(options) : null

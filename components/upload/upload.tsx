@@ -180,8 +180,8 @@ export default defineComponent({
     const isDragOver = ref(false)
 
     const input = ref<HTMLInputElement | null>(null)
-    const button = ref<InstanceType<typeof Button> | null>(null)
-    const panel = ref<HTMLElement | null>(null)
+    const button = ref<InstanceType<typeof Button>>()
+    const panel = ref<HTMLElement>()
 
     const className = computed(() => {
       return [

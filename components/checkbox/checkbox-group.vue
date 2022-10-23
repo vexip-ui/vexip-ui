@@ -93,7 +93,7 @@ export default defineComponent({
     const nh = useNameHelper('checkbox-group')
     const locale = useLocale('checkbox')
     const valueMap = new Map<string | number, boolean>()
-    const inputSet = new Set<Ref<HTMLElement | null>>()
+    const inputSet = new Set<Ref<HTMLElement | null | undefined>>()
     const controlSet = new Set<ControlState>()
     const currentValues = ref<Values>(props.value || [])
 
@@ -180,13 +180,13 @@ export default defineComponent({
     function increaseItem(
       value: string | number,
       checked: boolean,
-      input: Ref<HTMLElement | null>
+      input: Ref<HTMLElement | null | undefined>
     ) {
       valueMap.set(value, checked)
       inputSet.add(input)
     }
 
-    function decreaseItem(value: string | number, input: Ref<HTMLElement | null>) {
+    function decreaseItem(value: string | number, input: Ref<HTMLElement | null | undefined>) {
       valueMap.delete(value)
       inputSet.delete(input)
     }

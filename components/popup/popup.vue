@@ -83,7 +83,7 @@ export default defineComponent({
     const items = ref<PopupItemState[]>([])
     const queue: QueneState[] = []
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     let pending = false
 

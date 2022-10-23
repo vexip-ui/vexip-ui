@@ -239,11 +239,11 @@ export default defineComponent({
     const currentFilter = ref('')
     const searching = ref(false)
 
-    const header = ref<HTMLElement | null>(null)
-    const body = ref<HTMLElement | null>()
-    const footer = ref<HTMLElement | null>(null)
-    const search = ref<HTMLElement | null>(null)
-    const input = ref<InstanceType<typeof Input> | null>(null)
+    const header = ref<HTMLElement>()
+    const body = ref<HTMLElement>()
+    const footer = ref<HTMLElement>()
+    const search = ref<HTMLElement>()
+    const input = ref<InstanceType<typeof Input>>()
     const list = ref<VirtualListExposed | null>(null)
 
     let bodyRealHeight = 0

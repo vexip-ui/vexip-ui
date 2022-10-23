@@ -22,7 +22,7 @@ export interface UseMovingOptions {
   /**
    * 作用的目标元素的 Ref
    */
-  target?: Ref<HTMLElement | null>,
+  target?: Ref<HTMLElement | null | undefined>,
   /**
    * 横向位置的初始值
    */

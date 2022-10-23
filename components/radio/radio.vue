@@ -91,7 +91,7 @@ export default defineComponent({
     const nh = useNameHelper('radio')
     const currentValue = ref(props.value)
 
-    const input = ref<HTMLElement | null>(null)
+    const input = ref<HTMLElement>()
 
     const size = computed(() => groupState?.size || props.size)
     const state = computed(() => groupState?.state || props.state)

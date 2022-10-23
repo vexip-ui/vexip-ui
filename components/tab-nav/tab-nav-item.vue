@@ -58,7 +58,7 @@ export default defineComponent({
     const index = ref(0)
     const total = ref(0)
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const contentClass = computed(() => {
       const baseClass = nh.be('content')

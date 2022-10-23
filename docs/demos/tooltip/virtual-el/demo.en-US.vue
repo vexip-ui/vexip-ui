@@ -10,5 +10,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const button = ref<HTMLElement | null>(null)
+const button = ref<HTMLElement>()
 </script>

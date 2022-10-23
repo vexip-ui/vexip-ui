@@ -95,7 +95,7 @@ if (isClient && map) {
   )
 }
 
-export function useFullScreen(target: Ref<HTMLElement | null> = ref(null)) {
+export function useFullScreen(target: Ref<HTMLElement | null | undefined> = ref(null)) {
   if (!isClient || !supported) {
     return { ...notSupportedResult }
   }

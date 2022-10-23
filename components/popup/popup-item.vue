@@ -55,7 +55,7 @@ export default defineComponent({
     const handleDelete = inject(DELETE_HANDLER, noop)
     const nh = useNameHelper('popup')
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const transition = computed(() => props.transitionName || nh.ns('popup-top'))
 

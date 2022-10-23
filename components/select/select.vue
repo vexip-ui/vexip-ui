@@ -514,7 +514,7 @@ export default defineComponent({
 
     const wrapper = useClickOutside(handleClickOutside)
     const input = ref<HTMLInputElement | null>(null)
-    const device = ref<HTMLElement | null>(null)
+    const device = ref<HTMLElement>()
     const virtualList = ref<(InstanceType<typeof VirtualList> & VirtualListExposed) | null>(null)
 
     const { reference, popper, transferTo, updatePopper } = usePopper({

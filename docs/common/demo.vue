@@ -144,8 +144,8 @@ const prefix = 'demo'
 const codeExpanded = ref(false)
 const codeLines = ref(props.lines)
 
-const wrapper = ref<InstanceType<typeof Row> | null>(null)
-const codeRef = ref<HTMLElement | null>(null)
+const wrapper = ref<InstanceType<typeof Row>>()
+const codeRef = ref<HTMLElement>()
 
 watch(() => props.code, renderCodes)
 

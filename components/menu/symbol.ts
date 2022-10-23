@@ -18,7 +18,7 @@ export interface MenuOptions {
 }
 
 export interface MenuItemState {
-  el: Readonly<HTMLElement | null>,
+  el: Readonly<HTMLElement | null | undefined>,
   label: Readonly<string>,
   indent: Readonly<number>,
   groupExpanded: boolean,

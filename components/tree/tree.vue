@@ -219,9 +219,9 @@ export default defineComponent({
 
     const { isMounted } = useMounted()
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const trap = ref<HTMLElement | null>(null)
-    const indicator = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const trap = ref<HTMLElement>()
+    const indicator = ref<HTMLElement>()
 
     let visibleNodeEls: HTMLElement[] = []
 
@@ -842,7 +842,7 @@ export default defineComponent({
       }
     }
 
-    function handleNodeHitting(nodeEl: HTMLElement | null) {
+    function handleNodeHitting(nodeEl?: HTMLElement | null) {
       if (!nodeEl || !visibleNodeEls.length) return
 
       if (visibleNodeEls.includes(nodeEl)) {

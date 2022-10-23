@@ -89,7 +89,7 @@ export default defineComponent({
 
     const nh = useNameHelper('radio-group')
     const currentValue = ref(props.value)
-    const inputSet = new Set<Ref<HTMLElement | null>>()
+    const inputSet = new Set<Ref<HTMLElement | null | undefined>>()
 
     const className = computed(() => {
       return [
@@ -142,11 +142,11 @@ export default defineComponent({
       currentValue.value = value
     }
 
-    function registerInput(input: Ref<HTMLElement | null>) {
+    function registerInput(input: Ref<HTMLElement | null | undefined>) {
       inputSet.add(input)
     }
 
-    function unregisterInput(input: Ref<HTMLElement | null>) {
+    function unregisterInput(input: Ref<HTMLElement | null | undefined>) {
       inputSet.delete(input)
     }
 

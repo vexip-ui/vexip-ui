@@ -4,7 +4,7 @@ import { noop } from '@vexip-ui/utils'
 import type { MaybeRef } from './shared/types'
 
 export function useListener<E = Event>(
-  target: MaybeRef<EventTarget | null>,
+  target: MaybeRef<EventTarget | null | undefined>,
   event: string,
   listener: (event: E) => any,
   options?: AddEventListenerOptions | boolean

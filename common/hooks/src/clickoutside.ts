@@ -42,7 +42,10 @@ if (isClient) {
  * @param
  * @param target 需要处理的元素 ref，可不传
  */
-export function useClickOutside(handler: () => void, target: Ref<HTMLElement | null> = ref(null)) {
+export function useClickOutside(
+  handler: () => void,
+  target: Ref<HTMLElement | null | undefined> = ref(null)
+) {
   let remove = noop
 
   const stopWatch = watch(

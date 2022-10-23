@@ -171,7 +171,7 @@ export default defineComponent({
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const className = computed(() => {
       let customClass = null

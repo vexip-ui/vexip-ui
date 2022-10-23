@@ -71,7 +71,7 @@ export default defineComponent({
     const indent = ref(parentLinkState?.indent ? parentLinkState?.indent + 1 : 1)
     const active = ref(false)
 
-    const link = ref<HTMLElement | null>(null)
+    const link = ref<HTMLElement>()
 
     const state = reactive({
       el: link,

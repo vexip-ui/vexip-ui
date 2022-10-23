@@ -88,8 +88,8 @@ export default defineComponent({
     const currentActive = ref(props.active)
     const isReduced = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const rest = ref<InstanceType<typeof MenuRest> | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const rest = ref<InstanceType<typeof MenuRest>>()
 
     const markerType = computed(() => {
       if (props.horizontal && (props.markerType === 'left' || props.markerType === 'right')) {

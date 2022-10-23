@@ -3,7 +3,7 @@ import type { InjectionKey } from 'vue'
 export interface ItemState {
   width: number,
   height: number,
-  el: HTMLElement | null,
+  el?: HTMLElement | null,
   value: number | string,
   disabled: boolean,
   meta: any

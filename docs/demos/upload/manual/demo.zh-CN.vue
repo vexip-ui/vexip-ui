@@ -29,7 +29,7 @@ import { Upload as IUpload, Check } from '@vexip-ui/icons'
 import { Upload } from 'vexip-ui'
 
 const fileIds = ref<string[]>([])
-const upload = ref<InstanceType<typeof Upload> | null>(null)
+const upload = ref<InstanceType<typeof Upload>>()
 
 // 设置了 url 时，可以通过 ref 获取组件并调用 execute 进行上传
 async function doUpload() {

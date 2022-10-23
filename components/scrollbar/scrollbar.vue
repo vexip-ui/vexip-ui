@@ -99,9 +99,9 @@ export default defineComponent({
     const currentScroll = ref(props.scroll)
     const scrolling = ref(false)
 
-    const contaniner = ref<HTMLElement | null>(null)
-    const bar = ref<HTMLElement | null>(null)
-    const track = ref<HTMLElement | null>(null)
+    const contaniner = ref<HTMLElement>()
+    const bar = ref<HTMLElement>()
+    const track = ref<HTMLElement>()
 
     let fadeTimer: ReturnType<typeof setTimeout>
 

@@ -41,7 +41,7 @@ const formModel = reactive({
   ]
 })
 
-const form = ref<InstanceType<typeof Form> | null>(null)
+const form = ref<InstanceType<typeof Form>>()
 
 function addSkill() {
   formModel.skills.push({ value: '' })

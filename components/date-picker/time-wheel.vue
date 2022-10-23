@@ -120,9 +120,9 @@ export default defineComponent({
     const minuteRange = ref<number[]>([])
     const secondRange = ref<number[]>([])
 
-    const hourWheel = ref<InstanceType<typeof Wheel> | null>(null)
-    const minuteWheel = ref<InstanceType<typeof Wheel> | null>(null)
-    const secondWheel = ref<InstanceType<typeof Wheel> | null>(null)
+    const hourWheel = ref<InstanceType<typeof Wheel>>()
+    const minuteWheel = ref<InstanceType<typeof Wheel>>()
+    const secondWheel = ref<InstanceType<typeof Wheel>>()
 
     watch(() => props.steps, updateTimeRange, { immediate: true })
     watch(

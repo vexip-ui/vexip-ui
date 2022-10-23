@@ -61,8 +61,8 @@ export default defineComponent({
     const matched = useMediaQuery(toRef(props, 'fixed'))
     const counter = useUpdateCounter()
 
-    const top = ref<HTMLElement | null>(null)
-    const bottom = ref<HTMLElement | null>(null)
+    const top = ref<HTMLElement>()
+    const bottom = ref<HTMLElement>()
     const menu = ref<MenuExposed | null>(null)
 
     const className = computed(() => {

@@ -131,7 +131,7 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const showPassword = ref(false)
     const currentLength = ref(props.value ? props.value.length : 0)
-    const inputControl = ref<HTMLElement | null>(null)
+    const inputControl = ref<HTMLElement>()
     const beforeHover = ref(false)
     const afterHover = ref(false)
 

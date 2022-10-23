@@ -8,7 +8,7 @@ export interface AnchorLinkOptions {
 }
 
 export interface AnchorLinkState {
-  el: HTMLElement | null,
+  el?: HTMLElement,
   to: string,
   active: boolean,
   indent: number

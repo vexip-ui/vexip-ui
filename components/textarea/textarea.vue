@@ -117,7 +117,7 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const currentLength = ref(props.value ? props.value.length : 0)
 
-    const textarea = ref<HTMLElement | null>(null)
+    const textarea = ref<HTMLElement>()
 
     let lastValue = props.value
 

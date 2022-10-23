@@ -20,7 +20,7 @@ import { ref, watch } from 'vue'
 
 import type { Viewer } from 'vexip-ui'
 
-const viewer = ref<InstanceType<typeof Viewer> | null>(null)
+const viewer = ref<InstanceType<typeof Viewer>>()
 const active = ref(0)
 const images = [
   '/picture-1.jpg',

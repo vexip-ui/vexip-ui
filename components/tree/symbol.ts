@@ -61,8 +61,8 @@ export type FilterFn<D = Data> = (data: D, node: TreeNodeProps<D>) => boolean
 export type NodePropsFn<D = Data> = (data: D, node: TreeNodeProps<D>) => Data
 
 export interface TreeNodeInstance {
-  el: HTMLElement | null,
-  arrow: HTMLElement | null,
+  el?: HTMLElement | null,
+  arrow?: HTMLElement | null,
   node: TreeNodeProps
 }
 
@@ -86,12 +86,12 @@ export interface TreeState {
   handleNodeDrop(nodeInstance: TreeNodeInstance): void,
   handleNodeDragEnd(nodeInstance: TreeNodeInstance): void,
   handleHittingChange(type: 'up' | 'down'): void,
-  handleNodeHitting(nodeEl: HTMLElement | null): void,
+  handleNodeHitting(nodeEl?: HTMLElement | null): void,
   handleLabelClick(node: TreeNodeProps): void
 }
 
 export interface TreeNodePropsState {
-  el: HTMLElement | null,
+  el?: HTMLElement | null,
   depth: number,
   disabled: boolean,
   readonly: boolean

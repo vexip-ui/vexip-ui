@@ -165,7 +165,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const nh = useNameHelper('date-picker')
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const isActivated = computed(() => {
       return (Object.keys(props.enabled) as DateTimeType[]).every(type => {

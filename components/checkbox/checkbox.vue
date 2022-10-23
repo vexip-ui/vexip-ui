@@ -95,7 +95,7 @@ export default defineComponent({
     const currentChecked = ref(props.checked)
     const currentPartial = ref(props.partial)
 
-    const input = ref<HTMLElement | null>(null)
+    const input = ref<HTMLElement>()
 
     const controlState = reactive({
       checked: currentChecked,

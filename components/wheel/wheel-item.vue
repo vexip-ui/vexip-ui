@@ -57,7 +57,7 @@ export default defineComponent({
     const width = ref(0)
     const height = ref(0)
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const state = reactive({
       width,

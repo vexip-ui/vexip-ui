@@ -29,7 +29,7 @@ import { Upload as IUpload, Check } from '@vexip-ui/icons'
 import { Upload } from 'vexip-ui'
 
 const fileIds = ref<string[]>([])
-const upload = ref<InstanceType<typeof Upload> | null>(null)
+const upload = ref<InstanceType<typeof Upload>>()
 
 // When the url is set, you can get the component through ref and call execute to upload it
 async function doUpload() {

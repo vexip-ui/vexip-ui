@@ -37,7 +37,7 @@ export interface VirtualOptions {
   /**
    * 虚拟滚动的包围元素
    */
-  wrapper?: Ref<HTMLElement | null>,
+  wrapper?: Ref<HTMLElement | null | undefined>,
   /**
    * 是否自动观察 wrapper 缩放
    *

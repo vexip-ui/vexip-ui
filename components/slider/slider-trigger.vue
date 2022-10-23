@@ -102,7 +102,7 @@ export default defineComponent({
     const isTipShow = ref(false)
 
     const tooltip = ref<(InstanceType<typeof Tooltip> & TooltipExposed) | null>(null)
-    const handler = ref<HTMLElement | null>(null)
+    const handler = ref<HTMLElement>()
 
     const { timer } = useSetTimeout()
     const { target: wrapper } = useModifier({

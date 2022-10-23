@@ -247,7 +247,7 @@ export default defineComponent({
     const hoveredMonth = ref(0) // 0 = false
     const yearRange = ref<number[]>([])
 
-    const calendar = ref<HTMLElement | null>(null)
+    const calendar = ref<HTMLElement>()
 
     const { isHover } = useHover(calendar)
 

@@ -9,7 +9,10 @@ import type { Ref } from 'vue'
  * @param displayInit 元素初次显示后执行的回调
  * @returns 观察了 display 变化的元素 Ref
  */
-export function useDisplay(displayInit = noop, element: Ref<HTMLElement | null> = ref(null)) {
+export function useDisplay(
+  displayInit = noop,
+  element: Ref<HTMLElement | null | undefined> = ref(null)
+) {
   let observer: MutationObserver | null
 
   onMounted(() => {
@@ -48,7 +51,7 @@ export function useDisplay(displayInit = noop, element: Ref<HTMLElement | null> 
   return element
 }
 
-export function queryOutsideHiddenElement(el: Element | null) {
+export function queryOutsideHiddenElement(el?: Element | null) {
   if (el) {
     let parentElement = el.parentElement
 
@@ -64,7 +67,7 @@ export function queryOutsideHiddenElement(el: Element | null) {
   return null
 }
 
-export function isHiddenElement(el: HTMLElement | null) {
+export function isHiddenElement(el?: HTMLElement | null) {
   if (el?.style.display !== 'none') {
     return !!queryOutsideHiddenElement(el)
   }
