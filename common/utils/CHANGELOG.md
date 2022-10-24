@@ -1,3 +1,9 @@
+# [1.9.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.8.0...utils@1.9.0) (2022-10-24)
+
+### Features
+
+- **utils:** add ensureArray and callIfFunc methods ([2b4e986](https://github.com/vexip-ui/vexip-ui/commit/2b4e986bcce50a620c9dd2d71a96f025123d70fb))
+
 # [1.8.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.7.0...utils@1.8.0) (2022-10-17)
 
 ### Features
