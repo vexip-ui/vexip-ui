@@ -52,7 +52,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { throttle } from '@vexip-ui/utils'
+import { throttle, debounce } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'Textarea',
@@ -76,6 +76,7 @@ export default defineComponent({
     loadingIcon: Object,
     loadingLock: booleanProp,
     loadingSpin: booleanProp,
+    sync: booleanProp,
     onFocus: eventProp<(event: FocusEvent) => void>(),
     onBlur: eventProp<(event: FocusEvent) => void>(),
     onInput: eventProp<(value: string) => void>(),
@@ -109,7 +110,8 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      sync: false
     })
 
     const nh = useNameHelper('textarea')
@@ -175,10 +177,18 @@ export default defineComponent({
 
         setFieldValue(currentValue.value)
         emitEvent(props.onChange, currentValue.value)
-        emit('update:value', currentValue.value)
-        validateField()
+
+        if (!props.sync) {
+          emit('update:value', currentValue.value)
+          validateField()
+        }
       } else {
         emitEvent(props.onInput, currentValue.value)
+
+        if (props.sync) {
+          emit('update:value', currentValue.value)
+          validateField()
+        }
       }
     }
 
@@ -232,7 +242,7 @@ export default defineComponent({
 
       handleFocus,
       handleBlur,
-      handleInput: throttle(handleChange),
+      handleInput: props.debounce ? debounce(handleChange) : throttle(handleChange),
       handleChange,
       handleEnter,
       handleKeyDown,
