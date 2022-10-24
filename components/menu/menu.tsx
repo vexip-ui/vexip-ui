@@ -21,6 +21,7 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
+import { callIfFunc } from '@vexip-ui/utils'
 import { MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -318,7 +319,7 @@ export default defineComponent({
           children={item.children}
           route={item.route}
         >
-          {item.name || item.label}
+          {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
       )
     }
@@ -327,7 +328,7 @@ export default defineComponent({
       return menus.value.map(menu =>
         menu.group
           ? (
-          <MenuGroup label={menu.name || menu.label}>
+          <MenuGroup label={menu.name ? callIfFunc(menu.name) : menu.label}>
             {menu.children?.length ? menu.children.map(renderMenuItem) : null}
           </MenuGroup>
             )

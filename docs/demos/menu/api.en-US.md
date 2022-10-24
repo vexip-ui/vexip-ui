@@ -7,7 +7,7 @@ interface MenuOptions {
   label: string,
   icon?: Record<string, any>,
   iconProps?: IconMinorProps,
-  name?: string,
+  name?: string | (() => string),
   disabled?: boolean,
   group?: boolean,
   meta?: Record<string, any>,

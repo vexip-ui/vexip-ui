@@ -41,7 +41,7 @@ const options: MenuOptions[] = [
     children: [
       {
         label: '4',
-        name: '菜单 4',
+        name: () => '菜单 4',
         icon: User
       },
       {

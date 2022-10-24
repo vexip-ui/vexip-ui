@@ -15,6 +15,7 @@ import { Portal } from '@/components/portal'
 import { Ellipsis } from '@vexip-ui/icons'
 import { useNameHelper } from '@vexip-ui/config'
 import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
+import { callIfFunc } from '@vexip-ui/utils'
 import { MENU_STATE, MENU_ITEM_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -124,7 +125,7 @@ export default defineComponent({
           children={item.children}
           route={item.route}
         >
-          {item.name || item.label}
+          {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
       ))
     }
