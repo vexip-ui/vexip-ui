@@ -107,6 +107,7 @@ $upload: map.merge(
     align-items: center;
     width: auto;
     padding: 6px;
+    margin-right: 6px;
     margin-bottom: 6px;
     overflow: hidden;
     vertical-align: middle;
@@ -544,18 +545,5 @@ $upload: map.merge(
 
   &__percentage {
     color: get-css-var('upload-percentage-color');
-  }
-
-  // list transition group class names
-  &-list-transition {
-    &-enter,
-    &-leave-to {
-      opacity: 0%;
-      transform: scale(0.35);
-    }
-
-    &-leave-active {
-      position: absolute !important;
-    }
   }
 }

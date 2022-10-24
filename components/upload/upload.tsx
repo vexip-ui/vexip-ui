@@ -794,6 +794,15 @@ export default defineComponent({
     }
 
     function renderFileList() {
+      const style = props.image
+        ? {
+            marginBottom: '-8px'
+          }
+        : {
+            [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
+              !props.hiddenFiles && renderFiles.value.length ? '8px' : undefined
+          }
+
       return (
         <UploadList
           files={renderFiles.value}
@@ -802,10 +811,7 @@ export default defineComponent({
           icon-renderer={props.iconRenderer}
           loading-text={props.loadingText}
           can-preview={props.canPreview}
-          style={{
-            [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
-              !props.hiddenFiles && renderFiles.value.length ? '8px' : undefined
-          }}
+          style={style}
           onDelete={handleDelete}
           onPreview={handlePreview}
         >

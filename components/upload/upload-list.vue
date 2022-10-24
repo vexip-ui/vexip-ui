@@ -1,71 +1,41 @@
 <template>
-  <transition-group
-    v-if="props.type === 'thumbnail'"
-    tag="ul"
-    :appear="props.selectToAdd"
-    :name="nh.bs('list-transition')"
-    :class="[nh.be('files'), nh.bs('vars')]"
-    :style="props.style"
-  >
-    <UploadFile
+  <ul :class="[nh.be('files'), nh.bs('vars')]" :style="props.style">
+    <transition
       v-for="item in props.files"
       :key="item.id"
-      :file="item"
-      :icon-renderer="props.iconRenderer"
-      :list-type="props.type"
-      :loading-text="props.loadingText"
-      :select-to-add="props.selectToAdd"
-      :precision="props.precision"
-      :can-preview="props.canPreview"
-      @delete="handleDelete"
-      @preview="handleDelete"
+      appear
+      :name="props.selectToAdd ? transitionName : undefined"
     >
-      <template #default="{ file, status: _status, percentage }">
-        <slot
-          name="item"
-          :file="file"
-          :status="_status"
-          :percentage="percentage"
-        ></slot>
-      </template>
-      <template #icon="{ file }">
-        <slot name="icon" :file="file"></slot>
-      </template>
-    </UploadFile>
-    <slot name="suffix"></slot>
-  </transition-group>
-  <ul v-else :class="[nh.be('files'), nh.bs('vars')]" :style="props.style">
-    <UploadFile
-      v-for="item in props.files"
-      :key="item.id"
-      :file="item"
-      :icon-renderer="props.iconRenderer"
-      :list-type="props.type"
-      :loading-text="props.loadingText"
-      :select-to-add="props.selectToAdd"
-      :precision="props.precision"
-      :can-preview="props.canPreview"
-      @delete="handleDelete"
-      @preview="handlePreview"
-    >
-      <template #default="{ file, status: _status, percentage }">
-        <slot
-          name="item"
-          :file="file"
-          :status="_status"
-          :percentage="percentage"
-        ></slot>
-      </template>
-      <template #icon="{ file }">
-        <slot name="icon" :file="file"></slot>
-      </template>
-    </UploadFile>
+      <UploadFile
+        :file="item"
+        :icon-renderer="props.iconRenderer"
+        :list-type="props.type"
+        :loading-text="props.loadingText"
+        :select-to-add="props.selectToAdd"
+        :precision="props.precision"
+        :can-preview="props.canPreview"
+        @delete="handleDelete"
+        @preview="handlePreview"
+      >
+        <template #default="{ file, status, percentage }">
+          <slot
+            name="item"
+            :file="file"
+            :status="status"
+            :percentage="percentage"
+          ></slot>
+        </template>
+        <template #icon="{ file }">
+          <slot name="icon" :file="file"></slot>
+        </template>
+      </UploadFile>
+    </transition>
     <slot name="suffix"></slot>
   </ul>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { UploadFile } from '@/components/upload-file'
 import {
   useNameHelper,
@@ -118,6 +88,9 @@ export default defineComponent({
       precision: 2
     })
 
+    const nh = useNameHelper('upload')
+    const transitionName = computed(() => nh.ns('fade'))
+
     function handleDelete(file: FileState) {
       emitEvent(props.onDelete, file)
     }
@@ -128,7 +101,8 @@ export default defineComponent({
 
     return {
       props,
-      nh: useNameHelper('upload'),
+      nh,
+      transitionName,
 
       handleDelete,
       handlePreview
