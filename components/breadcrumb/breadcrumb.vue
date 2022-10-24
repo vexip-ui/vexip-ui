@@ -1,8 +1,8 @@
 <template>
   <ol :class="className">
     <slot>
-      <BreadcrumbItem v-for="label in props.options" :key="label" :label="label">
-        {{ label }}
+      <BreadcrumbItem v-for="option in normalizedOptions" :key="option.label" :label="option.label">
+        {{ option.name ? callIfFunc(option.name) : option.label }}
       </BreadcrumbItem>
     </slot>
   </ol>
@@ -11,12 +11,12 @@
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, watch, toRef } from 'vue'
 import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
-import { isNull, debounceMinor } from '@vexip-ui/utils'
+import { isNull, debounceMinor, callIfFunc } from '@vexip-ui/utils'
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { BREADCRUMB_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { BreadcrumbItemState, BreadcrumbState } from './symbol'
+import type { BreadcrumbOptions, BreadcrumbItemState, BreadcrumbState } from './symbol'
 
 export default defineComponent({
   name: 'Breadcrumb',
@@ -26,7 +26,7 @@ export default defineComponent({
   props: {
     separator: String,
     border: booleanProp,
-    options: Array as PropType<string[]>,
+    options: Array as PropType<(string | BreadcrumbOptions)[]>,
     onSelect: eventProp<(label: string | number) => void>(),
     onSeparatorClick: eventProp<(label: string | number) => void>()
   },
@@ -50,6 +50,15 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bm('border')]: props.border
       }
+    })
+    const normalizedOptions = computed(() => {
+      return props.options.map(option => {
+        if (typeof option === 'string') {
+          return { label: option }
+        }
+
+        return option
+      })
     })
 
     const refreshLabels = debounceMinor(() => {
@@ -100,7 +109,10 @@ export default defineComponent({
 
     return {
       props,
-      className
+      className,
+      normalizedOptions,
+
+      callIfFunc
     }
   }
 })

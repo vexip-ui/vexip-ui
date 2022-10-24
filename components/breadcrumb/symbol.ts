@@ -1,5 +1,10 @@
 import type { InjectionKey } from 'vue'
 
+export interface BreadcrumbOptions {
+  label: string,
+  name?: string | (() => string)
+}
+
 export type SeparatorRenderFn = (data: { label: string | number }) => any
 
 export interface BreadcrumbItemState {

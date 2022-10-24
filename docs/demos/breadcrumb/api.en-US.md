@@ -1,10 +1,19 @@
+### Preset Types
+
+```ts
+interface BreadcrumbOptions {
+  label: string,
+  name?: string | (() => string)
+}
+```
+
 ### Breadcrumb Props
 
-| Name      | Type       | Description                                               | Default | Since |
-| --------- | ---------- | --------------------------------------------------------- | ------- | ----- |
-| separator | `string`   | Set the breadcrumb separator                              | `'/'`   | -     |
-| border    | `boolean`  | Set whether to enable border mode                         | `false` | -     |
-| options   | `string[]` | Shortcut to set child elements, invalid after using slots | `[]`    | -     |
+| Name      | Type                              | Description                                               | Default | Since |
+| --------- | --------------------------------- | --------------------------------------------------------- | ------- | ----- |
+| separator | `string`                          | Set the breadcrumb separator                              | `'/'`   | -     |
+| border    | `boolean`                         | Set whether to enable border mode                         | `false` | -     |
+| options   | `(string \| BreadcrumbOptions)[]` | Shortcut to set child elements, invalid after using slots | `[]`    | -     |
 
 ### Breadcrumb Events
 

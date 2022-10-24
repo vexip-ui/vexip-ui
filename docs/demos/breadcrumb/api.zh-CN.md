@@ -1,10 +1,19 @@
+### 预设类型
+
+```ts
+interface BreadcrumbOptions {
+  label: string,
+  name?: string | (() => string)
+}
+```
+
 ### Breadcrumb 属性
 
-| 名称      | 类型       | 说明                           | 默认值  | 始于 |
-| --------- | ---------- | ------------------------------ | ------- | ---- |
-| separator | `string`   | 设置面包屑的分隔符             | `'/'`   | -    |
-| border    | `boolean`  | 设置是否开启 border 模式       | `false` | -    |
-| options   | `string[]` | 快捷设置子元素，使用插槽后失效 | `[]`    | -    |
+| 名称      | 类型                              | 说明                           | 默认值  | 始于 |
+| --------- | --------------------------------- | ------------------------------ | ------- | ---- |
+| separator | `string`                          | 设置面包屑的分隔符             | `'/'`   | -    |
+| border    | `boolean`                         | 设置是否开启 border 模式       | `false` | -    |
+| options   | `(string \| BreadcrumbOptions)[]` | 快捷设置子元素，使用插槽后失效 | `[]`    | -    |
 
 ### Breadcrumb 事件
 
