@@ -1,6 +1,14 @@
 import { isDefined, isObject, isFunction } from './common'
 import { deepClone } from './deep-clone'
 
+export function ensureArray<T>(value: T | T[]) {
+  return Array.isArray(value) ? value : [value]
+}
+
+export function callIfFunc<T>(value: T | (() => T)) {
+  return isFunction(value) ? value() : value
+}
+
 /**
  * 根据数组元素中某个或多个属性的值转换为映射
  *
