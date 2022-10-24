@@ -1,3 +1,20 @@
+## [2.0.9](https://github.com/vexip-ui/vexip-ui/compare/v2.0.8...v2.0.9) (2022-10-24)
+
+### Bug Fixes
+
+- **alert:** incomplete content when using scroll with prefix icon ([f03da86](https://github.com/vexip-ui/vexip-ui/commit/f03da86dfa649dc96762bb149973c72ea0fc1e1c))
+- **upload:** unexpectedly refresh router when delete file with thumbnail type ([15ea453](https://github.com/vexip-ui/vexip-ui/commit/15ea45368b27ce7cb1f341296e01434a519e3620))
+
+### Features
+
+- **breadcrumb:** support passing a function as name in options ([a60c663](https://github.com/vexip-ui/vexip-ui/commit/a60c663d82c6104126ea2b3eaf39b93548a1253f))
+- **menu:** support passing a function as name in options ([ef240b7](https://github.com/vexip-ui/vexip-ui/commit/ef240b7b1120d5d4fc0236434567b0742658e0e2))
+- **utils:** add ensureArray and callIfFunc methods ([2b4e986](https://github.com/vexip-ui/vexip-ui/commit/2b4e986bcce50a620c9dd2d71a96f025123d70fb))
+
+### Performance Improvements
+
+- **menu:** adjust to dynamic render poppers ([3805628](https://github.com/vexip-ui/vexip-ui/commit/380562862296566b7ecab4e5eec316b6ca46ba33))
+
 ## [2.0.8](https://github.com/vexip-ui/vexip-ui/compare/v2.0.7...v2.0.8) (2022-10-23)
 
 ### Bug Fixes
