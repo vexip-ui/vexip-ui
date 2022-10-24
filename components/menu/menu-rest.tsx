@@ -35,6 +35,7 @@ export default defineComponent({
     const nh = useNameHelper('menu')
     const groupExpanded = ref(false)
     const sonSelected = ref(false)
+    const popperShow = ref(false)
 
     const transfer = computed(() => menuState?.transfer ?? false)
     const dropTrigger = computed(() => menuState?.trigger || 'hover')
@@ -64,7 +65,10 @@ export default defineComponent({
     provide(MENU_ITEM_STATE, itemState)
 
     watch(groupExpanded, value => {
-      value && updatePopper()
+      if (value) {
+        popperShow.value = true
+        updatePopper()
+      }
     })
 
     function updateSonSelected(selected: boolean) {
@@ -111,6 +115,10 @@ export default defineComponent({
       }
     }
 
+    function handlePopperHide() {
+      popperShow.value = false
+    }
+
     function renderMenuItems() {
       if (!props.menus?.length) {
         return null
@@ -148,14 +156,16 @@ export default defineComponent({
             </Icon>
           </div>
           <Portal to={transferTo.value}>
-            <Transition name={nh.ns('drop')}>
-              <div
-                v-show={groupExpanded.value}
-                ref={popper}
-                class={[nh.be('popper'), nh.bs('vars'), nh.bem('popper', 'drop')]}
-              >
-                <ul class={[nh.be('list'), nh.bem('list', 'theme')]}>{renderMenuItems()}</ul>
-              </div>
+            <Transition name={nh.ns('drop')} appear onAfterLeave={handlePopperHide}>
+              {popperShow.value && (
+                <div
+                  v-show={groupExpanded.value}
+                  ref={popper}
+                  class={[nh.be('popper'), nh.bs('vars'), nh.bem('popper', 'drop')]}
+                >
+                  <ul class={[nh.be('list'), nh.bem('list', 'theme')]}>{renderMenuItems()}</ul>
+                </div>
+              )}
             </Transition>
           </Portal>
         </div>

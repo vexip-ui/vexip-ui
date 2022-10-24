@@ -64,9 +64,10 @@
       </ul>
     </CollapseTransition>
     <Portal v-if="isGroup && isUsePopper" :to="transferTo">
-      <transition :name="transition">
+      <transition :name="transition" appear @after-leave="popperShow = false">
         <div
-          v-show="showGroup"
+          v-if="popperShow"
+          v-show="popperShow && showGroup"
           ref="popper"
           :class="[nh.be('popper'), nh.bs('vars'), isHorizontal ? nh.bem('popper', 'drop') : '']"
           @mouseenter="handleMouseEnter"
@@ -181,6 +182,7 @@ const MenuItem = defineComponent({
     const groupExpanded = ref(false)
     const selected = ref(false)
     const sonSelected = ref(false)
+    const popperShow = ref(false)
 
     const indent = computed(() => (parentItemState?.indent ?? 0) + 1)
     const propTransfer = computed(() => props.transfer ?? menuState?.transfer ?? false)
@@ -260,6 +262,7 @@ const MenuItem = defineComponent({
 
     watch(showGroup, value => {
       if (value && isUsePopper.value) {
+        popperShow.value = true
         updatePopper()
       }
     })
@@ -426,6 +429,7 @@ const MenuItem = defineComponent({
       groupExpanded,
       transferTo,
 
+      popperShow,
       className,
       labelStyle,
       isGroup,
