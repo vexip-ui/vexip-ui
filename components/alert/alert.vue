@@ -121,6 +121,7 @@ export default defineComponent({
     const hidden = ref(false)
     const scrollDuration = ref(0)
     const scrollOffset = ref(0)
+    const scrollWidth = ref(0)
 
     const content = ref<HTMLElement>()
     const scroll = ref<HTMLElement>()
@@ -153,6 +154,7 @@ export default defineComponent({
     })
     const scrollStyle = computed(() => {
       return {
+        width: `${scrollWidth.value}px`,
         transitionDuration: `${scrollDuration.value}ms`,
         transform: `translateX(${scrollOffset.value}px)`
       }
@@ -191,6 +193,7 @@ export default defineComponent({
 
         scrollDuration.value = 0
         scrollOffset.value = contentRect.width
+        scrollWidth.value = rangeWidth
 
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
