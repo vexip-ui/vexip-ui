@@ -76,7 +76,7 @@ $table: map.merge(
   }
 
   &__body-wrapper {
-    border-bottom: get-css-var('table-b-shape') get-css-var('table-b-color');
+    border-bottom: $border-a get-css-var('table-b-color');
   }
 
   &__row-list {
