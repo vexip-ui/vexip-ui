@@ -177,7 +177,7 @@ function isImage(file: FileState) {
 
   return !!(
     imageExtRE.test(name) ||
-    (url && imageBase64RE.test(url)) ||
+    (url && (imageExtRE.test(url) || imageBase64RE.test(url))) ||
     (base64 && imageBase64RE.test(base64))
   )
 }
