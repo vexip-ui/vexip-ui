@@ -7,7 +7,7 @@ export type MenuGroupType = 'collapse' | 'dropdown'
 
 export interface MenuOptions {
   label: string,
-  icon?: Record<string, any>,
+  icon?: Record<string, any> | (() => any),
   iconProps?: IconMinorProps,
   name?: string | (() => string),
   disabled?: boolean,

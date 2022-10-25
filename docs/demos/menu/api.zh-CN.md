@@ -5,7 +5,7 @@ import type { RouteLocationRaw } from 'vue-router'
 
 interface MenuOptions {
   label: string,
-  icon?: Record<string, any>,
+  icon?: Record<string, any> | (() => any),
   iconProps?: IconMinorProps,
   name?: string | (() => string),
   disabled?: boolean,

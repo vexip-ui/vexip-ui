@@ -26,7 +26,8 @@
         >
           <div v-if="props.icon" :class="nh.be('icon')">
             <slot name="icon">
-              <Icon v-bind="props.iconProps" :icon="props.icon"></Icon>
+              <Renderer v-if="typeof props.icon === 'function'" :renderer="props.icon"></Renderer>
+              <Icon v-else v-bind="props.iconProps" :icon="props.icon"></Icon>
             </slot>
           </div>
           <span
@@ -137,7 +138,7 @@ const MenuItem = defineComponent({
   },
   props: {
     label: String,
-    icon: Object,
+    icon: [Object, Function],
     iconProps: Object as PropType<IconMinorProps>,
     disabled: booleanProp,
     transfer: booleanStringProp,
@@ -155,7 +156,10 @@ const MenuItem = defineComponent({
         default: null,
         static: true
       },
-      icon: null,
+      icon: {
+        isFunc: true,
+        default: null
+      },
       iconProps: null,
       disabled: {
         default: false,
