@@ -1,3 +1,18 @@
+## [2.0.10](https://github.com/vexip-ui/vexip-ui/compare/v2.0.9...v2.0.10) (2022-10-25)
+
+### Bug Fixes
+
+- **pagination:** out of bounds when pages more then 4 digits ([638b2fd](https://github.com/vexip-ui/vexip-ui/commit/638b2fd124e3f1a0c67918f85fd2d5a99c9e7577))
+- **split:** improve full button angles color ([9c92f74](https://github.com/vexip-ui/vexip-ui/commit/9c92f74f9793d2d0be618b51156a3d63011666a3))
+- **tab-nav:** active not update when dynamic with using index as key ([aacc76a](https://github.com/vexip-ui/vexip-ui/commit/aacc76a250388dd096050e4f6d3d37de80305649))
+- **table:** missing body bottom border style ([8aaf0a3](https://github.com/vexip-ui/vexip-ui/commit/8aaf0a3056769d0ba1a277338dd9c3eed1a227b5))
+- **upload:** should show thumbnial when only non-base64 url ([18c26de](https://github.com/vexip-ui/vexip-ui/commit/18c26def771898cc4ca49cd4f8ae9a4ff71a1e26))
+
+### Features
+
+- **menu:** support passing a function as icon options ([257a150](https://github.com/vexip-ui/vexip-ui/commit/257a150b88fa3dd59e608892550bce4a3fdaeb42))
+- **textarea:** add sync prop ([be5a73a](https://github.com/vexip-ui/vexip-ui/commit/be5a73aa8e10738db54a693248874fc2ff0f4c8e))
+
 ## [2.0.9](https://github.com/vexip-ui/vexip-ui/compare/v2.0.8...v2.0.9) (2022-10-24)
 
 ### Bug Fixes
