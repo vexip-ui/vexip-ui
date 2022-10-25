@@ -6,15 +6,13 @@
 $split: () !default;
 $split: map.merge(
   (
-    handler-bg-color: get-css-var('fill-color-background'),
-    handler-b-color: get-css-var('border-color-base'),
+    handler-bg-color: get-css-var('fill-color-humble'),
     handler-z-index: 10,
     handler-size: 6px,
     button-color: get-css-var('color-white'),
-    button-bg-color: get-css-var('split-handler-b-color'),
+    button-bg-color: get-css-var('border-color-light-2'),
     button-bg-color-hover: get-css-var('color-primary-base'),
-    button-radius: get-css-var('radius-base'),
-    button-size: 28px,
+    button-size: 24px,
     guide-bg-color: get-css-var('border-color-light-1'),
     guide-opacity: 50%,
     pointer-bg-color: get-css-var('border-color-base')
@@ -39,7 +37,8 @@ $split: map.merge(
 
   $handler-size: get-css-var('split-handler-size');
   $handler-size-h: calc(get-css-var('split-handler-size') * 0.5);
-  $handler-size-rh: calc(get-css-var('split-handler-size') * -0.5);
+  $button-position: calc(get-css-var('split-handler-size') * -1);
+  $button-margin: calc(get-css-var('split-handler-size') * 0.5 + 2px);
   $button-color: get-css-var('split-button-bg-color');
   $button-hover-color: get-css-var('split-button-bg-color-hover');
 
@@ -63,6 +62,7 @@ $split: map.merge(
     justify-content: center;
     background-color: get-css-var('split-handler-bg-color');
     border: 0 solid get-css-var('split-handler-b-color');
+    transition: get-css-var('transition-background'), get-css-var('transition-transform');
   }
 
   &__button {
@@ -75,7 +75,6 @@ $split: map.merge(
     cursor: pointer;
     background-color: $button-color;
     border: 0;
-    border-radius: get-css-var('split-button-radius');
     outline: 0;
     transition: get-css-var('transition-background');
 
@@ -83,21 +82,21 @@ $split: map.merge(
     &::after {
       position: absolute;
       content: '';
-      border: calc(#{$handler-size} * 0.5 - 1px) solid transparent;
+      border: calc(#{$handler-size} * 0.5) solid transparent;
       transition: get-css-var('transition-border');
     }
 
     &--left-full {
-      margin-bottom: $handler-size-h;
+      margin-bottom: $button-margin;
 
       &::before {
-        top: $handler-size-rh;
+        top: $button-position;
         border-bottom-color: $button-color;
         border-left-color: $button-color;
       }
 
       &::after {
-        bottom: $handler-size-rh;
+        bottom: $button-position;
         border-top-color: $button-color;
         border-left-color: $button-color;
       }
@@ -117,16 +116,16 @@ $split: map.merge(
     }
 
     &--right-full {
-      margin-top: $handler-size-h;
+      margin-top: $button-margin;
 
       &::before {
-        top: $handler-size-rh;
+        top: $button-position;
         border-right-color: $button-color;
         border-bottom-color: $button-color;
       }
 
       &::after {
-        bottom: $handler-size-rh;
+        bottom: $button-position;
         border-top-color: $button-color;
         border-right-color: $button-color;
       }
@@ -146,16 +145,16 @@ $split: map.merge(
     }
 
     &--top-full {
-      margin-right: $handler-size-h;
+      margin-right: $button-margin;
 
       &::before {
-        left: $handler-size-rh;
+        left: $button-position;
         border-top-color: $button-color;
         border-right-color: $button-color;
       }
 
       &::after {
-        right: $handler-size-rh;
+        right: $button-position;
         border-top-color: $button-color;
         border-left-color: $button-color;
       }
@@ -175,16 +174,16 @@ $split: map.merge(
     }
 
     &--bottom-full {
-      margin-left: $handler-size-h;
+      margin-left: $button-margin;
 
       &::before {
-        left: $handler-size-rh;
+        left: $button-position;
         border-right-color: $button-color;
         border-bottom-color: $button-color;
       }
 
       &::after {
-        right: $handler-size-rh;
+        right: $button-position;
         border-bottom-color: $button-color;
         border-left-color: $button-color;
       }
@@ -248,6 +247,10 @@ $split: map.merge(
         timing-function: get-css-var('transition-timing');
         duration: get-css-var('transition-duration');
       }
+    }
+
+    #{$pane} {
+      overflow: hidden;
     }
   }
 
@@ -396,12 +399,6 @@ $split: map.merge(
         width: $handler-size;
         height: 100%;
         cursor: col-resize;
-        border: {
-          top-width: 0;
-          right-width: 1px;
-          bottom-width: 0;
-          left-width: 1px;
-        }
       }
 
       #{$button} {
@@ -452,12 +449,6 @@ $split: map.merge(
         width: 100%;
         height: $handler-size;
         cursor: row-resize;
-        border: {
-          top-width: 1px;
-          right-width: 0;
-          bottom-width: 1px;
-          left-width: 0;
-        }
       }
 
       #{$button} {
