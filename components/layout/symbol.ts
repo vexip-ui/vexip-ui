@@ -15,8 +15,8 @@ export interface LayoutMenuProps {
   tooltipReverse?: boolean,
   router?: Router,
   manualRoute?: boolean,
-  onExpand: (label: string, meta: Record<string, any>) => void,
-  onReduce: (label: string, meta: Record<string, any>) => void
+  onExpand?: (label: string, meta: Record<string, any>) => void,
+  onReduce?: (label: string, meta: Record<string, any>) => void
 }
 
 export interface LayoutHeaderAction {
