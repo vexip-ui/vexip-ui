@@ -322,6 +322,10 @@ $upload: map.merge(
     position: relative;
     display: flex;
     align-items: center;
+
+    * {
+      flex-shrink: 0;
+    }
   }
 
   &__file--thumbnail &__card {
@@ -354,8 +358,8 @@ $upload: map.merge(
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: calc(100% - 56px);
-    padding-right: 56px;
+    width: calc(100% - #{get-css-var('upload-card-thumb-size')} - 14px);
+    padding-right: calc(#{get-css-var('upload-card-thumb-size')} + 14px);
   }
 
   &__file--card &__filename {
