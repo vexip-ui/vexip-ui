@@ -201,6 +201,7 @@
       <NumberInput
         v-model:value="jumpValue"
         :class="nh.be('jump-input')"
+        :style="{ width: `${jumpInputWidth}px` }"
         @change="handleJumpPage"
       ></NumberInput>
       {{ getCountWordOnly(locale.page, 1) }}
@@ -356,36 +357,6 @@ export default defineComponent({
       }
     })
 
-    const usedPlugins = computed(() => {
-      if (props.plugins) {
-        return props.plugins
-      }
-
-      const plugins: (PaginationPlugin | undefined | null)[] = [undefined]
-
-      props.pageTotal && plugins.push('total')
-      props.pageCount && plugins.push('size')
-      props.pageJump && plugins.push('jump')
-
-      if (plugins.length) {
-        warnOnce(
-          "[vexip-ui:Pagination] 'page-jump', 'page-count' and 'page-total' props" +
-            " have been deprecated, please using 'plugins' prop to instead them"
-        )
-      }
-
-      return plugins
-    })
-    const pluginOrders = computed(() => {
-      const plugins = usedPlugins.value
-      const pagerPosition = plugins.findIndex(isNull)
-
-      return {
-        total: plugins.findIndex(p => p === 'total') - pagerPosition,
-        size: plugins.findIndex(p => p === 'size') - pagerPosition,
-        jump: plugins.findIndex(p => p === 'jump') - pagerPosition
-      }
-    })
     const className = computed(() => {
       return {
         [nh.b()]: true,
@@ -451,6 +422,49 @@ export default defineComponent({
           label: `${size} ${locale.value.prePage}`
         }
       })
+    })
+    const usedPlugins = computed(() => {
+      if (props.plugins) {
+        return props.plugins
+      }
+
+      const plugins: (PaginationPlugin | undefined | null)[] = [undefined]
+
+      props.pageTotal && plugins.push('total')
+      props.pageCount && plugins.push('size')
+      props.pageJump && plugins.push('jump')
+
+      if (plugins.length) {
+        warnOnce(
+          "[vexip-ui:Pagination] 'page-jump', 'page-count' and 'page-total' props" +
+            " have been deprecated, please using 'plugins' prop to instead them"
+        )
+      }
+
+      return plugins
+    })
+    const pluginOrders = computed(() => {
+      const plugins = usedPlugins.value
+      const pagerPosition = plugins.findIndex(isNull)
+
+      return {
+        total: plugins.findIndex(p => p === 'total') - pagerPosition,
+        size: plugins.findIndex(p => p === 'size') - pagerPosition,
+        jump: plugins.findIndex(p => p === 'jump') - pagerPosition
+      }
+    })
+    const jumpInputWidth = computed(() => {
+      if (!usedPlugins.value.includes('jump')) return 0
+
+      let pageCount = 0
+
+      if (usedPlugins.value.includes('size')) {
+        pageCount = Math.ceil(props.total / (Math.min(...props.sizeOptions) || 10))
+      } else {
+        pageCount = Math.ceil(props.total / (props.pageSize || 10))
+      }
+
+      return pageCount.toString().length * 10 + 30
     })
 
     watch(() => props.active, changeActive)
@@ -644,8 +658,6 @@ export default defineComponent({
       jumpValue,
       itemElList,
 
-      usedPlugins,
-      pluginOrders,
       className,
       pagerCount,
       disabledPrev,
@@ -656,6 +668,9 @@ export default defineComponent({
       prevEllipsisTarget,
       nextEllipsisTarget,
       sizeObjectOptions,
+      usedPlugins,
+      pluginOrders,
+      jumpInputWidth,
 
       wrapper,
 
