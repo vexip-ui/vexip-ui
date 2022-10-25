@@ -5,7 +5,7 @@ import type { MenuMarkerType, MenuGroupType, MenuExposed } from '@/components/me
 import type { NativeScroll } from '@/components/native-scroll'
 
 export type LayoutSignType = 'aside' | 'header'
-export type LayoutConfig = 'nav' | 'color'
+export type LayoutConfig = 'nav' | 'color' | 'theme'
 
 export interface LayoutMenuProps {
   active?: string,

@@ -83,7 +83,7 @@ export default defineComponent({
       menuProps: null,
       logo: '',
       signName: '',
-      config: () => ['nav', 'color'] as LayoutConfig[],
+      config: () => ['nav', 'theme', 'color'] as LayoutConfig[],
       user: null,
       actions: () => [],
       reduced: false,

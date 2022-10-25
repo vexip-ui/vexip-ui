@@ -7,6 +7,7 @@
 @use './linker.scss';
 @use './menu.scss';
 @use './native-scroll.scss';
+@use './switch.scss';
 
 $layout: () !default;
 $layout: map.merge(
@@ -430,6 +431,21 @@ $layout: map.merge(
       right: 3px;
       bottom: 3px;
       color: get-css-var('color-primary-base');
+    }
+  }
+
+  &__theme-mode {
+    border: get-css-var('border-base');
+
+    &--dark {
+      @include define-preset-values(
+        'switch',
+        (
+          bg-color-open: get-css-var('fill-color-background'),
+          signal-bg-color: get-css-var('color-black'),
+          icon-color: get-css-var('content-color-secondary')
+        )
+      );
     }
   }
 

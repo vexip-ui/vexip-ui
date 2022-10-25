@@ -67,7 +67,8 @@ export function enUSLocale() {
     layout: {
       signOut: 'Sign out',
       signType: 'Navigation Type',
-      majorColor: 'Major Color'
+      majorColor: 'Major Color',
+      themeMode: 'Theme Mode'
     },
 
     modal: {

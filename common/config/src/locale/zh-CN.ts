@@ -67,7 +67,8 @@ export function zhCNLocale() {
     layout: {
       signOut: '注销',
       signType: '导航模式',
-      majorColor: '主题颜色'
+      majorColor: '主题颜色',
+      themeMode: '主题模式'
     },
 
     modal: {

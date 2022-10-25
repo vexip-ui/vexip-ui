@@ -39,10 +39,9 @@ function toggleDark(value: boolean) {
   border: 1px solid var(--vxp-border-color-base);
 
   html.dark & {
-    --vxp-switch-bg-color-open: #{rgba(#fff, 0.05)};
+    --vxp-switch-bg-color-open: var(--vxp-fill-color-background);
     --vxp-switch-signal-bg-color: #000;
     --vxp-switch-icon-color: var(--vxp-content-color-secondary);
-    --vxp-switch-shadow-focus: unset;
   }
 }
 </style>

@@ -70,7 +70,8 @@ export interface LocaleConfig {
   layout: {
     signOut: string,
     signType: string,
-    majorColor: string
+    majorColor: string,
+    themeMode: string
   },
 
   modal: {

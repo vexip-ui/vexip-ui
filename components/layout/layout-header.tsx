@@ -5,7 +5,8 @@ import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
-import { User, ArrowRightFromBracket, Check } from '@vexip-ui/icons'
+import { Switch } from '@/components/switch'
+import { User, ArrowRightFromBracket, Check, Sun, Moon } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
@@ -64,7 +65,7 @@ export default defineComponent({
       },
       userDropped: false,
       avatarCircle: false,
-      config: () => ['nav', 'color'] as LayoutConfig[],
+      config: () => ['nav', 'theme', 'color'] as LayoutConfig[],
       actions: () => [],
       signType: 'aside',
       colors: () => ['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707'],
@@ -96,6 +97,7 @@ export default defineComponent({
       return isClient ? document.documentElement : null
     })
     const currentColor = ref(props.color || props.colors?.[0] || getBaseColor())
+    const isDark = ref(rootEl.value?.classList.contains('dark') ?? false)
 
     const className = computed(() => {
       return [
@@ -221,6 +223,22 @@ export default defineComponent({
       menu.value?.expandItemByLabel(label)
     }
 
+    function toggleTheme(darkMode: boolean) {
+      if (!isClient) return
+
+      requestAnimationFrame(() => {
+        isDark.value = darkMode
+
+        if (rootEl.value) {
+          if (darkMode) {
+            rootEl.value.classList.add('dark')
+          } else {
+            rootEl.value.classList.remove('dark')
+          }
+        }
+      })
+    }
+
     function getSlotParams() {
       return {
         reduced: layoutState.reduced,
@@ -250,6 +268,21 @@ export default defineComponent({
           <div class={nh.be('brief-block')} onClick={() => handleSignTypeChange('header')}>
             {currentSignType.value === 'header' && renderCheck()}
           </div>
+        </div>
+      )
+    }
+
+    function renderThemeConfig() {
+      return (
+        <div class={nh.be('config-unit')}>
+          <Switch
+            value={isDark.value}
+            class={[nh.be('theme-mode'), isDark.value && nh.bem('theme-mode', 'dark')]}
+            open-icon={Moon}
+            close-icon={Sun}
+            aria-label={'theme'}
+            onChange={toggleTheme}
+          ></Switch>
         </div>
       )
     }
@@ -375,6 +408,10 @@ export default defineComponent({
                           layoutState.navConfig && [
                             <div class={nh.be('config-label')}>{locale.value.signType}</div>,
                             renderLayoutConfig()
+                        ]}
+                        {props.config.includes('theme') && [
+                          <div class={nh.be('config-label')}>{locale.value.themeMode}</div>,
+                          renderThemeConfig()
                         ]}
                         {props.config.includes('color') && [
                           <div class={nh.be('config-label')}>{locale.value.majorColor}</div>,

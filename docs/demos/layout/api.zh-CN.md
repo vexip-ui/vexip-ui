@@ -5,7 +5,7 @@ import type { Router } from 'vue-router'
 import type { IconMinorProps, MenuMarkerType, MenuGroupType } from 'vexip-ui'
 
 type LayoutSignType = 'aside' | 'header'
-type LayoutConfig = 'nav' | 'color'
+type LayoutConfig = 'nav' | 'color' | 'theme'
 
 interface LayoutMenuProps {
   accordion?: boolean,
@@ -65,7 +65,7 @@ interface LayoutState {
 | menu-props       | `LayoutMenuProps`      | 设置菜单属性                                                                       | `null`                                                               | -    |
 | logo             | `string`               | 设置 Logo 图片地址                                                                 | `''`                                                                 | -    |
 | sign-name        | `string`               | 设置标语                                                                           | `''`                                                                 | -    |
-| config           | `('nav' \| 'color')[]` | 设置用户下拉面板具备的配置选项                                                     | `['nav', 'color']`                                                   | -    |
+| config           | `LayoutConfig[]`       | 设置用户下拉面板具备的配置选项                                                     | `['nav', 'theme', 'color']`                                          | -    |
 | user             | `LayoutUser`           | 设置用户信息                                                                       | `null`                                                               | -    |
 | actions          | `LayoutHeaderAction[]` | 设置用户下拉面板的操作选项                                                         | `[]`                                                                 | -    |
 | reduced          | `boolean`              | 设置边栏是否为缩小状态，可以使用 `v-model` 双向绑定                                | `false`                                                              | -    |
