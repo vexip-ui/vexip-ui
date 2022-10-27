@@ -4,7 +4,7 @@
 | --------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------- | ------- |
 | total           | `number`                                              | Set the total number of data                                                                               | `0`                 | -       |
 | size            | `'small' \| 'default' \| 'large'`                     | Set page item size                                                                                         | `'default'`         | -       |
-| no-border       | `boolean`                                             | Set whether page numbers have borders                                                                      | `false`             | -       |
+| no-border       | `boolean`                                             | Set whether page numbers disable borders                                                                   | `false`             | -       |
 | background      | `boolean`                                             | Set whether the page has a background color                                                                | `false`             | -       |
 | page-size       | `number`                                              | Set the number of data bars displayed per page, can use `v-model` two-way binding                          | `10`                | -       |
 | size-options    | `number[]`                                            | Option to display number of items per page, for page-count plugin                                          | `[10, 20, 50, 100]` | -       |

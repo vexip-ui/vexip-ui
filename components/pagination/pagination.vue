@@ -87,7 +87,6 @@
             [nh.bem('item', 'disabled')]: props.disableItem(page),
             [nh.bem('item', 'active')]: currentActive === page
           }"
-          :title="`${page}`"
           role="menuitemradio"
           :tabindex="currentActive === page ? '0' : '-1'"
           :aria-posinset="page"
@@ -228,7 +227,7 @@ import {
   emitEvent
 } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
-import { isNull, isFunction, range, boundRange, warnOnce } from '@vexip-ui/utils'
+import { isClient, isNull, isFunction, range, boundRange, warnOnce } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 
@@ -330,7 +329,7 @@ export default defineComponent({
 
           const sign = modifier.up || modifier.left ? -1 : 1
 
-          if (document && document.activeElement) {
+          if (isClient && document.activeElement) {
             const index = itemElList.value.findIndex(el => el === document.activeElement)
 
             if (!~index) return
@@ -467,7 +466,12 @@ export default defineComponent({
       return pageCount.toString().length * 10 + 30
     })
 
-    watch(() => props.active, changeActive)
+    watch(
+      () => props.active,
+      value => {
+        changeActive(value, false)
+      }
+    )
     watch(currentActive, value => {
       computePagers()
       jumpValue.value = value
@@ -519,7 +523,7 @@ export default defineComponent({
       return active
     }
 
-    function changeActive(active: number) {
+    function changeActive(active: number, focus = true) {
       active = parseInt(active.toString())
 
       if (props.disabled || active < 1 || active > pagerCount.value || props.disableItem(active)) {
@@ -527,6 +531,17 @@ export default defineComponent({
       }
 
       currentActive.value = active
+
+      if (isClient && focus) {
+        const activeEl = itemElList.value.find(el => el === document.activeElement)
+
+        activeEl?.blur()
+
+        nextTick(() => {
+          const el = itemElList.value.find(el => el.tabIndex >= 0)
+          el?.focus()
+        })
+      }
     }
 
     function handlePrev() {
@@ -546,7 +561,7 @@ export default defineComponent({
     }
 
     function computePagers() {
-      let pagers
+      let pagers: number[]
 
       if (pagerCount.value <= props.maxCount) {
         // 未超过最大值，显示所有页号

@@ -37,6 +37,10 @@ $pagination: map.merge(
     @include define-preset-values('pagination', $pagination);
   }
 
+  @mixin define-pagination-style($style-map) {
+    @include define-preset-style('pagination', $style-map);
+  }
+
   @include basis;
 
   display: inline-flex;
@@ -137,10 +141,20 @@ $pagination: map.merge(
     }
   }
 
-  &--background &__item#{&}__item--active {
-    @include define-css-var('pagination-color-active', get-css-var('color-white'));
+  &--background &__item--active {
+    @include define-pagination-style(
+      (
+        color-active: 'color-white',
+        color-hover: 'color-white',
+        color-focus: 'color-white'
+      )
+    );
 
-    background-color: get-css-var('pagination-bg-color-active');
+    &,
+    &:hover,
+    &:focus {
+      background-color: get-css-var('pagination-bg-color-active');
+    }
   }
 
   &--no-border &__item {
