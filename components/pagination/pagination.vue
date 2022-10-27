@@ -14,7 +14,7 @@
           nh.bem('item', 'prev'),
           disabledPrev ? nh.bem('item', 'disabled') : ''
         ]"
-        :title="locale.prevPage"
+        :title="props.noTitle ? undefined : locale.prevPage"
         role="menuitem"
         tabindex="-1"
         :aria-label="locale.prevPage"
@@ -36,7 +36,7 @@
           [nh.bem('item', 'disabled')]: props.disableItem(1),
           [nh.bem('item', 'active')]: currentActive === 1
         }"
-        title="1"
+        :title="props.noTitle ? undefined : '1'"
         role="menuitemradio"
         :tabindex="currentActive === 1 ? '0' : '-1'"
         aria-posinset="1"
@@ -58,7 +58,7 @@
           [nh.bem('item', 'more')]: true,
           [nh.bem('item', 'disabled')]: !prevEllipsisTarget
         }"
-        :title="prevTurnPageTitle"
+        :title="props.noTitle ? undefined : prevTurnPageTitle"
         role="menuitem"
         tabindex="-1"
         :aria-label="prevTurnPageTitle"
@@ -109,7 +109,7 @@
           [nh.bem('item', 'more')]: true,
           [nh.bem('item', 'disabled')]: !nextEllipsisTarget
         }"
-        :title="nextTurnPageTitle"
+        :title="props.noTitle ? undefined : nextTurnPageTitle"
         role="menuitem"
         tabindex="-1"
         :aria-label="nextTurnPageTitle"
@@ -136,7 +136,7 @@
           [nh.bem('item', 'disabled')]: props.disableItem(pagerCount),
           [nh.bem('item', 'active')]: currentActive === pagerCount
         }"
-        :title="`${pagerCount}`"
+        :title="props.noTitle ? undefined : `${pagerCount}`"
         role="menuitemradio"
         :tabindex="currentActive === pagerCount ? '0' : '-1'"
         :aria-posinset="pagerCount"
@@ -157,7 +157,7 @@
           nh.bem('item', 'next'),
           disabledNext ? nh.bem('item', 'disabled') : ''
         ]"
-        :title="locale.nextPage"
+        :title="props.noTitle ? undefined : locale.nextPage"
         role="menuitem"
         tabindex="-1"
         :aria-label="locale.nextPage"
@@ -268,6 +268,7 @@ export default defineComponent({
     pageTotal: booleanProp,
     itemUnit: String,
     plugins: Array as PropType<(PaginationPlugin | undefined | null)[]>,
+    noTitle: booleanProp,
     onChange: eventProp<(page: number) => void>(),
     onPageSizeChange: eventProp<(size: number) => void>()
   },
@@ -306,7 +307,8 @@ export default defineComponent({
       pageCount: false,
       pageTotal: false,
       itemUnit: null,
-      plugins: null
+      plugins: null,
+      noTitle: false
     })
 
     const nh = useNameHelper('pagination')
