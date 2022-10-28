@@ -148,6 +148,10 @@ $upload: map.merge(
     width: get-css-var('upload-thumb-size');
     height: get-css-var('upload-thumb-size');
     color: get-css-var('upload-thumb-color');
+
+    &--disabled {
+      color: get-css-var('content-color-disabled');
+    }
   }
 
   &__drag-panel {

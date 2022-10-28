@@ -203,7 +203,8 @@ export default defineComponent({
       if (props.image) {
         return {
           [nh.be('image-control')]: true,
-          [nh.bem('image-control', 'drag-over')]: isDragOver.value
+          [nh.bem('image-control', 'drag-over')]: isDragOver.value,
+          [nh.bem('image-control', 'disabled')]: props.disabled
         }
       }
 
@@ -726,7 +727,7 @@ export default defineComponent({
 
     function renderImageAction() {
       return (
-        <div class={nh.be('image-action')}>
+        <div class={[nh.be('image-action'), props.disabled && nh.bem('image-action', 'disabled')]}>
           {slots.default
             ? (
                 slots.default({
@@ -746,7 +747,11 @@ export default defineComponent({
                 ></Icon>
                   )
                 : (
-                <Icon class={nh.be('cloud')} scale={1.2} style={{ marginBottom: '6px' }}>
+                <Icon
+                  class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
+                  scale={1.2}
+                  style={{ marginBottom: '6px' }}
+                >
                   <Plus></Plus>
                 </Icon>
                   )}
