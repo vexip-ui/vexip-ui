@@ -1,9 +1,16 @@
+### Preset Types
+
+```ts
+type TabNavAlign = 'left' | 'center' | 'right'
+```
+
 ### Tabs Props
 
-| Name   | Type               | Description                                                         | Default | Since |
-| ------ | ------------------ | ------------------------------------------------------------------- | ------- | ----- |
-| card   | `boolean`          | Set whether to enable card mode in the navigation bar               | `false` | -     |
-| active | `string \| number` | Set the currently active tab, you can use `v-model` two-way binding | `''`    | -     |
+| Name   | Type               | Description                                                         | Default  | Since    |
+| ------ | ------------------ | ------------------------------------------------------------------- | -------- | -------- |
+| card   | `boolean`          | Set whether to enable card mode in the navigation bar               | `false`  | -        |
+| active | `string \| number` | Set the currently active tab, you can use `v-model` two-way binding | `''`     | -        |
+| align  | `TabNavAlign`      | Set the alignment of the tab items                                  | `'left'` | `2.0.11` |
 
 ### Tabs Events
 

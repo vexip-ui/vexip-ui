@@ -1,7 +1,12 @@
 <template>
   <div :class="nh.b()">
     <div :class="nh.be('header')">
-      <TabNav :active="currentActive" :card="props.card" @change="handleActive">
+      <TabNav
+        :active="currentActive"
+        :card="props.card"
+        :align="props.align"
+        @change="handleActive"
+      >
         <template v-if="$slots.prefix" #prefix>
           <slot name="prefix"></slot>
         </template>
@@ -49,6 +54,8 @@ import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vex
 import { isNull, isFunction, debounceMinor } from '@vexip-ui/utils'
 import { TABS_STATE } from './symbol'
 
+import type { PropType } from 'vue'
+import type { TabNavAlign } from '@/components/tab-nav'
 import type { ItemState } from './symbol'
 
 export default defineComponent({
@@ -61,6 +68,7 @@ export default defineComponent({
   props: {
     card: booleanProp,
     active: [String, Number],
+    align: String as PropType<TabNavAlign>,
     onChange: eventProp<(active: string | number) => void>()
   },
   emits: ['update:active'],

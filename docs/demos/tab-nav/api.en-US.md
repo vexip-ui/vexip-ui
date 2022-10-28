@@ -1,6 +1,8 @@
 ### Preset Types
 
 ```ts
+type TabNavAlign = 'left' | 'center' | 'right'
+
 interface TabNavItemOptions {
   label: string | number,
   content?: string,
@@ -14,11 +16,12 @@ type TabNavOptions = TabNavItemOptions | string | number
 
 ### TabNav Props
 
-| Name    | Type               | Description                                                            | Default | Since   |
-| ------- | ------------------ | ---------------------------------------------------------------------- | ------- | ------- |
-| active  | `string \| number` | Set the currently active navigation, can use `v-model` two-way binding | `null`  | -       |
-| card    | `boolean`          | Set whether to enable card mode                                        | `false` | -       |
-| options | `TabNavOptions[]`  | Quick set tab items, invalid after using slot                          | `[]`    | `2.0.7` |
+| Name    | Type               | Description                                                            | Default  | Since    |
+| ------- | ------------------ | ---------------------------------------------------------------------- | -------- | -------- |
+| active  | `string \| number` | Set the currently active navigation, can use `v-model` two-way binding | `null`   | -        |
+| card    | `boolean`          | Set whether to enable card mode                                        | `false`  | -        |
+| options | `TabNavOptions[]`  | Quick set tab items, invalid after using slot                          | `[]`     | `2.0.7`  |
+| align   | `TabNavAlign`      | Set the alignment of the tab items                                     | `'left'` | `2.0.11` |
 
 ### TabNav Events
 

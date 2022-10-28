@@ -46,7 +46,7 @@ import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { TabNavOptions, ItemState } from './symbol'
+import type { TabNavAlign, TabNavOptions, ItemState } from './symbol'
 
 export default defineComponent({
   name: 'TabNav',
@@ -58,6 +58,7 @@ export default defineComponent({
     active: [String, Number],
     card: booleanProp,
     options: Array as PropType<TabNavOptions[]>,
+    align: String as PropType<TabNavAlign>,
     onChange: eventProp<(active: string | number) => void>()
   },
   emits: ['update:active'],
@@ -71,7 +72,8 @@ export default defineComponent({
       options: {
         default: () => [],
         static: true
-      }
+      },
+      align: 'left'
     })
 
     const nh = useNameHelper('tab-nav')
@@ -86,6 +88,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm(`align-${props.align}`)]: true,
         [nh.bm('card')]: props.card
       }
     })

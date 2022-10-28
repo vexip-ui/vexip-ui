@@ -65,6 +65,18 @@ $tab-nav: map.merge(
     }
   }
 
+  &--align-center &__extra {
+    flex: 1 0 auto;
+  }
+
+  &--align-right &__extra {
+    flex: 1 0 auto;
+
+    &--suffix {
+      flex: 0 0 auto;
+    }
+  }
+
   &__prefix,
   &__suffix {
     padding: get-css-var('tab-nav-v-padding') get-css-var('tab-nav-h-padding');
