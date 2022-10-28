@@ -204,6 +204,7 @@
         v-model:value="jumpValue"
         :class="nh.be('jump-input')"
         :clearable="false"
+        :sync="false"
         :style="{ width: `${jumpInputWidth}px` }"
         @change="handleJumpPage"
       ></NumberInput>

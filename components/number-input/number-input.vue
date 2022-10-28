@@ -91,7 +91,16 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { isNull, toFixed, toNumber, boundRange, throttle, plus, minus } from '@vexip-ui/utils'
+import {
+  isNull,
+  toFixed,
+  toNumber,
+  boundRange,
+  throttle,
+  debounce,
+  plus,
+  minus
+} from '@vexip-ui/utils'
 import { CaretUp, CaretDown, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
@@ -224,6 +233,10 @@ export default defineComponent({
             modifier.up ? 'plus' : 'minus',
             event.ctrlKey ? 'ctrl' : event.shiftKey ? 'shift' : event.altKey ? 'alt' : undefined
           )
+          modifier.resetAll()
+        } else if (modifier.enter) {
+          event.preventDefault()
+          emitChangeEvent('change')
           modifier.resetAll()
         }
       },
@@ -467,6 +480,8 @@ export default defineComponent({
       emitEvent(props.onKeyPress, event)
     }
 
+    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
+
     return {
       props,
       nh,
@@ -495,7 +510,7 @@ export default defineComponent({
       handleBlur,
       plusNumber,
       minusNumber,
-      handleInput: throttle(handleChange),
+      handleInput,
       handleChange,
       handleClear,
       handlePrefixClick,
