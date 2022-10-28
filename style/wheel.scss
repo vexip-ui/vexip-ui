@@ -10,6 +10,7 @@ $wheel: map.merge(
     b-color: get-css-var('border-color-base'),
     b-color-hover: get-css-var('color-primary-opacity-1'),
     b-color-focus: get-css-var('wheel-b-color-hover'),
+    b-color-disabled: get-css-var('border-color-light-2'),
     item-v-padding: 3px,
     item-h-padding: 8px,
     item-opacity: 50%,
@@ -216,6 +217,10 @@ $wheel: map.merge(
     &::after {
       border-color: get-css-var('wheel-b-color-focus');
     }
+  }
+
+  &--disabled &__border {
+    border-color: get-css-var('wheel-b-color-disabled');
   }
 
   $states: success, error, warning;
