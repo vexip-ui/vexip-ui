@@ -2,6 +2,12 @@
 
 This package provides svg icons witch vue component (`.vue`), its icons are base the free icons of `fontawesome@6`.
 
+## Install
+
+```sh
+pnpm i @vexip-ui/icons
+```
+
 ## Usage
 
 You can search icons in this [page](https://fontawesome.com/search?m=free).
