@@ -189,6 +189,9 @@
         v-model:value="currentPageSize"
         :class="nh.be('size-select')"
         :options="sizeObjectOptions"
+        :filter="false"
+        :multiple="false"
+        :clearable="false"
       ></Select>
     </div>
     <div
@@ -200,6 +203,7 @@
       <NumberInput
         v-model:value="jumpValue"
         :class="nh.be('jump-input')"
+        :clearable="false"
         :style="{ width: `${jumpInputWidth}px` }"
         @change="handleJumpPage"
       ></NumberInput>
