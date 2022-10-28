@@ -1,3 +1,9 @@
+# [1.8.0](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.7.2...hooks@1.8.0) (2022-10-28)
+
+### Features
+
+- **hooks:** add useIntersection hook ([37b6147](https://github.com/vexip-ui/vexip-ui/commit/37b6147a5913215b49cd388b222bc0e14c23f937))
+
 ## [1.7.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.7.1...hooks@1.7.2) (2022-10-23)
 
 ## [1.7.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@1.7.0...hooks@1.7.1) (2022-09-20)
