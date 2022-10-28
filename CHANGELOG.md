@@ -1,3 +1,21 @@
+## [2.0.11](https://github.com/vexip-ui/vexip-ui/compare/v2.0.10...v2.0.11) (2022-10-28)
+
+### Bug Fixes
+
+- **number-input:** should emit change event when enter ([83d7054](https://github.com/vexip-ui/vexip-ui/commit/83d7054606d277031de729efd7114b5743ec38df))
+- **pagination:** explicitly plugins props values ([be46519](https://github.com/vexip-ui/vexip-ui/commit/be4651995e132a6cd3937bdc5a0ba098e29f4f5a))
+- **pagination:** incorrect focus when change page with ellipsis show ([8ee696e](https://github.com/vexip-ui/vexip-ui/commit/8ee696e1abb09cb3e87467ec76f02023ed6d0189))
+- **upload:** improve card type list style ([9119dbf](https://github.com/vexip-ui/vexip-ui/commit/9119dbf95f1e42cb1efa27d65f562d8c80bde56d))
+- **upload:** incorrct control disabled style in image mode ([489f710](https://github.com/vexip-ui/vexip-ui/commit/489f710c33a76ca669696911c1e841ad586d5dc5))
+- **wheel:** improve border style when disabled ([7d305bb](https://github.com/vexip-ui/vexip-ui/commit/7d305bbab63f4e407d99c6f117a1635d5d11ca56))
+
+### Features
+
+- **hooks:** add useIntersection hook ([37b6147](https://github.com/vexip-ui/vexip-ui/commit/37b6147a5913215b49cd388b222bc0e14c23f937))
+- **layout:** add theme mode config ([394fa8c](https://github.com/vexip-ui/vexip-ui/commit/394fa8c720ef40ee993ac449af2f8ba6a4f0c0ee))
+- **pagination:** add no-title prop ([c57fb2c](https://github.com/vexip-ui/vexip-ui/commit/c57fb2c427f1b950d6a2956d36e791944e0e906f))
+- **tab-nav:** support specify tab items alignment ([19bf1b5](https://github.com/vexip-ui/vexip-ui/commit/19bf1b54fc1831007d63d74ec3ce6155502c86e4)), closes [#190](https://github.com/vexip-ui/vexip-ui/issues/190)
+
 ## [2.0.10](https://github.com/vexip-ui/vexip-ui/compare/v2.0.9...v2.0.10) (2022-10-25)
 
 ### Bug Fixes
