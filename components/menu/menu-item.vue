@@ -256,6 +256,7 @@ const MenuItem = defineComponent({
       isUsePopper,
       parentState: parentItemState,
       transfer: computed(() => inTransfer.value || propTransfer.value),
+      cachedExpanded: groupExpanded.value,
       updateSonSelected,
       toggleGroupExpanded,
       handleMouseEnter,

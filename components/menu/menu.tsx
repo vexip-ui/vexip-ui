@@ -259,6 +259,8 @@ export default defineComponent({
       let firstExpandedItem: MenuItemState | null = null
 
       for (const item of menuItemSet) {
+        item.cachedExpanded = item.showGroup
+
         if (!firstExpandedItem && item.showGroup) {
           firstExpandedItem = item
         }
@@ -277,22 +279,28 @@ export default defineComponent({
       if (wrapper.value) {
         const el = wrapper.value
         const callback = () => {
-          el.removeEventListener('transitionend', callback)
-
-          const selectedItem = Array.from(menuItemSet).find(
-            item => item.label === currentActive.value
-          )
-
           requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              if (selectedItem) {
-                let parent = selectedItem.parentState
+            el.removeEventListener('transitionend', callback)
 
-                while (parent) {
-                  parent.groupExpanded = true
-                  parent = parent.parentState
+            const selectedItem = Array.from(menuItemSet).find(
+              item => item.label === currentActive.value
+            )
+
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                for (const item of menuItemSet) {
+                  item.groupExpanded = item.cachedExpanded
                 }
-              }
+
+                if (selectedItem) {
+                  let parent = selectedItem.parentState
+
+                  while (parent) {
+                    parent.groupExpanded = true
+                    parent = parent.parentState
+                  }
+                }
+              })
             })
           })
         }

@@ -26,6 +26,7 @@ export interface MenuItemState {
   isUsePopper: Readonly<boolean>,
   parentState: MenuItemState | null,
   transfer: Readonly<boolean | string>,
+  cachedExpanded: boolean,
   updateSonSelected(selected: boolean): void,
   toggleGroupExpanded(expanded: boolean, upword?: boolean): void,
   handleMouseEnter(): void,
