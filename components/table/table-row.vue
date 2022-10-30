@@ -2,7 +2,7 @@
   <div
     v-if="!row.hidden"
     ref="wrapper"
-    :class="nh.be('group')"
+    :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
     :draggable="draggable"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
@@ -128,7 +128,8 @@ export default defineComponent({
         nh.be('row'),
         {
           [nh.bem('row', 'hover')]: !props.isHead && state.highlight && props.row.hover,
-          [nh.bem('row', 'stripe')]: props.index % 2 === 1
+          [nh.bem('row', 'stripe')]: props.index % 2 === 1,
+          [nh.bem('row', 'checked')]: props.row.checked
         },
         customClass
       ]
