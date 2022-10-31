@@ -11,6 +11,7 @@
       :disabled="props.disabled"
       :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
+      :maxlength="props.maxLength > 0 ? props.maxLength : undefined"
       @blur="handleBlur"
       @focus="handleFocus"
       @keyup.enter="handleEnter"
@@ -30,8 +31,10 @@
           ></Icon>
         </div>
       </transition>
-      <div v-if="props.maxLength" :class="nh.be('count')">
-        {{ `${currentLength}/${props.maxLength}` }}
+      <div v-if="props.maxLength > 0" :class="nh.be('count')">
+        <slot name="count" :value="currentValue">
+          {{ `${currentLength}/${props.maxLength}` }}
+        </slot>
       </div>
     </div>
   </div>

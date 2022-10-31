@@ -33,3 +33,9 @@
 | key-press | Emitter when the key is held down, returns the key event                                       | `(event: KeyboardEvent)` | -     |
 | key-up    | Emitter when the key is released, returns the key event                                        | `(event: KeyboardEvent)` | -     |
 | clear     | Emitter when the value is cleared by the clear button, no return value                         | -                        | -     |
+
+### Textarea Slots
+
+| Name  | Description             | Parameters          | Since    |
+| ----- | ----------------------- | ------------------- | -------- |
+| count | Word count content slot | `{ value: string }` | `2.0.12` |
