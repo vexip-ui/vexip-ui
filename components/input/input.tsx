@@ -332,6 +332,12 @@ export default defineComponent({
     function handleClear(event: MouseEvent) {
       event.stopPropagation()
       setValue('', 'change')
+
+      if (props.sync) {
+        emit('update:value', currentValue.value)
+        validateField()
+      }
+
       emitEvent(props.onClear)
       nextTick(clearField)
     }

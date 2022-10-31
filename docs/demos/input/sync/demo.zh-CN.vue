@@ -1,5 +1,10 @@
 <template>
-  <Input v-model:value="value" sync style="max-width: 300px;"></Input>
+  <Input
+    v-model:value="value"
+    sync
+    clearable=""
+    style="max-width: 300px;"
+  ></Input>
   <p>Input Value: {{ value }}</p>
 </template>
 
