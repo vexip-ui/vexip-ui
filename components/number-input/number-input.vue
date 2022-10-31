@@ -460,6 +460,12 @@ export default defineComponent({
 
     function handleClear() {
       setValue(NaN, 'change')
+
+      if (props.sync) {
+        emit('update:value', currentValue.value)
+        validateField()
+      }
+
       emitEvent(props.onClear)
       clearField()
     }
