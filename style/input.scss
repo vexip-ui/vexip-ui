@@ -195,6 +195,9 @@ $input: map.merge(
 
     &--placeholder {
       min-width: 14px;
+      min-height: 1px;
+      margin-left: 4px;
+      visibility: hidden;
       opacity: 0%;
     }
 
@@ -271,22 +274,29 @@ $input: map.merge(
     border-right-color: transparent;
   }
 
+  &__suffix-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__clear,
+  &__loading {
+    right: 0;
+  }
+
   &__password {
     cursor: pointer;
   }
 
   &__count {
-    position: absolute;
-    top: 50%;
-    right: 7px;
-    margin-top: -0.5px;
+    margin-left: 4px;
     font-size: get-css-var('input-count-font-size');
     line-height: get-css-var('input-count-line-height');
     color: get-css-var('input-count-color');
     pointer-events: none;
     user-select: none;
     transition: get-css-var('transition-color');
-    transform: translateY(-50%);
   }
 
   &--disabled &__count {

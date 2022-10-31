@@ -131,9 +131,10 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const showPassword = ref(false)
     const currentLength = ref(props.value ? props.value.length : 0)
-    const inputControl = ref<HTMLElement>()
     const beforeHover = ref(false)
     const afterHover = ref(false)
+
+    const inputControl = ref<HTMLElement>()
 
     const { wrapper: control, isHover } = useHover()
     const locale = useLocale('input')
@@ -195,19 +196,19 @@ export default defineComponent({
         : currentValue.value
     })
     const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
-    const countStyle = computed(() => {
-      let fix = 0
+    // const countStyle = computed(() => {
+    //   let fix = 0
 
-      if (hasSuffix.value) {
-        fix += 2
-      }
+    //   if (hasSuffix.value) {
+    //     fix += 2
+    //   }
 
-      if (fix) {
-        return { right: `calc(${fix}em + 7px)` }
-      }
+    //   if (fix) {
+    //     return { right: `calc(${fix}em + 7px)` }
+    //   }
 
-      return {}
-    })
+    //   return {}
+    // })
     const hasValue = computed(() => {
       return !(isNull(currentValue.value) || currentValue.value === '')
     })
@@ -363,6 +364,8 @@ export default defineComponent({
       emitEvent(props.onKeyUp, event)
     }
 
+    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
+
     function renderPrefix() {
       return (
         <div
@@ -375,7 +378,7 @@ export default defineComponent({
       )
     }
 
-    function renderSuffix() {
+    function renderCustomSuffix() {
       if (hasSuffix.value) {
         return (
           <div
@@ -409,7 +412,9 @@ export default defineComponent({
       }
 
       if (props.clearable || props.loading) {
-        return <div key={'placeholder'} class={[nh.be('icon'), nh.be('placeholder')]}></div>
+        return (
+          <div key={'placeholder'} class={[nh.be('icon'), nh.bem('icon', 'placeholder')]}></div>
+        )
       }
 
       return null
@@ -439,7 +444,26 @@ export default defineComponent({
       return null
     }
 
-    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
+    function renderSuffix() {
+      return (
+        <div class={nh.be('suffix-wrapper')}>
+          {renderCustomSuffix()}
+          <Transition name={nh.ns('fade')} appear>
+            {renderSuffixAction()}
+          </Transition>
+        </div>
+      )
+    }
+
+    function renderCount() {
+      return (
+        <div class={nh.be('count')}>
+          {slots.count
+            ? slots.count({ value: currentValue.value })
+            : `${currentLength.value}/${props.maxLength}`}
+        </div>
+      )
+    }
 
     function renderControl() {
       return (
@@ -456,6 +480,7 @@ export default defineComponent({
             disabled={props.disabled}
             readonly={readonly.value}
             placeholder={props.placeholder ?? locale.value.placeholder}
+            maxlength={props.maxLength > 0 ? props.maxLength : undefined}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}
@@ -465,16 +490,7 @@ export default defineComponent({
             onKeyup={handleKeyUp}
           />
           {renderSuffix()}
-          <Transition name={nh.ns('fade')} appear>
-            {renderSuffixAction()}
-          </Transition>
-          {props.maxLength
-            ? (
-            <div class={nh.be('count')} style={countStyle.value}>
-              {`${currentLength.value}/${props.maxLength}`}
-            </div>
-              )
-            : null}
+          {props.maxLength > 0 ? renderCount() : null}
         </div>
       )
     }
