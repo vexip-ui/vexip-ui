@@ -251,6 +251,27 @@ describe('Input', () => {
     expect(getValue(wrapper.find('.vxp-input__control'))).toEqual('')
   })
 
+  it('clearable with sync', async () => {
+    const onClear = vi.fn()
+    const wrapper = mount(Input, {
+      props: {
+        clearable: true,
+        sync: true,
+        onClear
+      }
+    })
+
+    expect(wrapper.find('.vxp-select__clear').exists()).toBe(false)
+
+    await wrapper.setProps({ value: TEXT })
+    await wrapper.trigger('mouseenter')
+    expect(wrapper.find('.vxp-input__clear').exists()).toBe(true)
+
+    await wrapper.find('.vxp-input__clear').trigger('click')
+    expect(onClear).toHaveBeenCalled()
+    expect(getValue(wrapper.find('.vxp-input__control'))).toEqual('')
+  })
+
   it('enter event', async () => {
     const onEnter = vi.fn()
     const wrapper = mount(() => <Input onEnter={onEnter}></Input>)
@@ -345,5 +366,18 @@ describe('Input', () => {
     const wrapper = mount(() => <Input input-class={'test'}></Input>)
 
     expect(wrapper.find('input').classes()).toContain('test')
+  })
+
+  it('sync', async () => {
+    const wrapper = mount(Input, {
+      props: { sync: true }
+    })
+    const input = wrapper.find('input').element
+
+    emitInput(input, TEXT)
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.emitted()).toHaveProperty('update:value')
+    expect(wrapper.emitted()['update:value'][0]).toEqual([TEXT])
   })
 })

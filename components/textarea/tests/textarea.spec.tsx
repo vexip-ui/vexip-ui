@@ -182,4 +182,17 @@ describe('Textarea', () => {
     await wrapper.setProps({ noResize: true })
     expect(wrapper.classes()).toContain('vxp-textarea--no-resize')
   })
+
+  it('sync', async () => {
+    const wrapper = mount(Textarea, {
+      props: { sync: true }
+    })
+    const textarea = wrapper.find('textarea').element
+
+    emitInput(textarea, TEXT)
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.emitted()).toHaveProperty('update:value')
+    expect(wrapper.emitted()['update:value'][0]).toEqual([TEXT])
+  })
 })

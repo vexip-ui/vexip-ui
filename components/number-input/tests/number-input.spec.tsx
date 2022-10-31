@@ -8,39 +8,39 @@ import type { DOMWrapper } from '@vue/test-utils'
 
 vi.useFakeTimers()
 
-const TEXT = 'Text'
+const NUMBER = 100
 
 function getValue(wrapper: DOMWrapper<Element>) {
   return (wrapper.element as HTMLInputElement).value
 }
 
-function emitInput(input: HTMLInputElement, value: string) {
-  input.value = value
+function emitInput(input: HTMLInputElement, value: number) {
+  input.value = String(value)
   input.dispatchEvent(new Event('input'))
 }
 
-function emitChange(input: HTMLInputElement, value: string) {
-  input.value = value
+function emitChange(input: HTMLInputElement, value: number) {
+  input.value = String(value)
   input.dispatchEvent(new Event('change'))
 }
 
 describe('NumberInput', () => {
   it('render', () => {
-    const wrapper = mount(() => <NumberInput placeholder={TEXT}></NumberInput>)
+    const wrapper = mount(() => <NumberInput placeholder={NUMBER}></NumberInput>)
 
     expect(wrapper.classes()).toContain('vxp-input-vars')
     expect(wrapper.find('input[type="text"]').exists()).toBe(true)
-    expect(wrapper.find('input[type="text"]').attributes('placeholder')).toEqual(TEXT)
+    expect(wrapper.find('input[type="text"]').attributes('placeholder')).toEqual(String(NUMBER))
     expect(wrapper.find('.vxp-number-input__plus').exists()).toBe(true)
     expect(wrapper.find('.vxp-number-input__minus').exists()).toBe(true)
   })
 
   it('value', async () => {
     const wrapper = mount(NumberInput, {
-      props: { value: 100 }
+      props: { value: NUMBER }
     })
 
-    expect(getValue(wrapper.find('input'))).toEqual('100')
+    expect(getValue(wrapper.find('input'))).toEqual(String(NUMBER))
 
     await wrapper.setProps({ value: null })
     expect(getValue(wrapper.find('input'))).toEqual('')
@@ -172,12 +172,12 @@ describe('NumberInput', () => {
     })
     const input = wrapper.find('input').element
 
-    emitChange(input, '100')
+    emitChange(input, NUMBER)
     await nextTick()
     expect(onChange).toHaveBeenCalled()
-    expect(onChange).toHaveBeenCalledWith(100)
+    expect(onChange).toHaveBeenCalledWith(NUMBER)
     expect(wrapper.emitted()).toHaveProperty('update:value')
-    expect(wrapper.emitted()['update:value'][0]).toEqual([100])
+    expect(wrapper.emitted()['update:value'][0]).toEqual([NUMBER])
   })
 
   it('input event', async () => {
@@ -187,7 +187,7 @@ describe('NumberInput', () => {
     })
     const input = wrapper.find('input').element
 
-    emitInput(input, TEXT)
+    emitInput(input, NUMBER)
     vi.runAllTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalled()
@@ -200,11 +200,11 @@ describe('NumberInput', () => {
     })
     const input = wrapper.find('input').element
 
-    emitInput(input, TEXT)
-    emitInput(input, TEXT)
-    emitInput(input, TEXT)
-    emitInput(input, TEXT)
-    emitInput(input, TEXT)
+    emitInput(input, NUMBER)
+    emitInput(input, NUMBER)
+    emitInput(input, NUMBER)
+    emitInput(input, NUMBER)
+    emitInput(input, NUMBER)
     expect(onInput).toHaveBeenCalledTimes(0)
     vi.runAllTimers()
     await nextTick()
@@ -249,6 +249,27 @@ describe('NumberInput', () => {
     expect(wrapper.find('.vxp-number-input__clear').exists()).toBe(true)
     expect(wrapper.find('.vxp-number-input__suffix').exists()).toBe(true)
     expect(wrapper.find('.vxp-number-input__suffix').attributes('style')).toContain('opacity: 0%;')
+
+    await wrapper.find('.vxp-number-input__clear').trigger('click')
+    expect(onClear).toHaveBeenCalled()
+    expect(getValue(wrapper.find('.vxp-number-input__control'))).toEqual('')
+  })
+
+  it('clearable with sync', async () => {
+    const onClear = vi.fn()
+    const wrapper = mount(NumberInput, {
+      props: {
+        clearable: true,
+        sync: true,
+        onClear
+      }
+    })
+
+    expect(wrapper.find('.vxp-select__clear').exists()).toBe(false)
+
+    await wrapper.setProps({ value: 1 })
+    await wrapper.trigger('mouseenter')
+    expect(wrapper.find('.vxp-number-input__clear').exists()).toBe(true)
 
     await wrapper.find('.vxp-number-input__clear').trigger('click')
     expect(onClear).toHaveBeenCalled()
@@ -332,8 +353,8 @@ describe('NumberInput', () => {
       }
     })
 
-    await wrapper.setProps({ value: 100 })
-    expect(getValue(wrapper.find('input'))).toEqual('100Y')
+    await wrapper.setProps({ value: NUMBER })
+    expect(getValue(wrapper.find('input'))).toEqual(`${NUMBER}Y`)
   })
 
   it('input class', () => {
@@ -386,5 +407,18 @@ describe('NumberInput', () => {
 
     await input.trigger('keydown.shift', { key: 'ArrowDown' })
     expect(getValue(input)).toEqual('0')
+  })
+
+  it('sync', async () => {
+    const wrapper = mount(NumberInput, {
+      props: { sync: true }
+    })
+    const input = wrapper.find('input').element
+
+    emitInput(input, NUMBER)
+    vi.runAllTimers()
+    await nextTick()
+    expect(wrapper.emitted()).toHaveProperty('update:value')
+    expect(wrapper.emitted()['update:value'][0]).toEqual([NUMBER])
   })
 })
