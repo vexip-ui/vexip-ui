@@ -7,5 +7,6 @@ export type {
   HttpError,
   FileState,
   FileOptions,
-  UploadOptions
+  UploadOptions,
+  UploadExposed
 } from './symbol'

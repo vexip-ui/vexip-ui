@@ -56,6 +56,7 @@ export default defineComponent({
       isUsePopper: true,
       parentState: null,
       transfer,
+      cachedExpanded: false,
       updateSonSelected,
       toggleGroupExpanded,
       handleMouseEnter,

@@ -179,7 +179,7 @@ export default defineComponent({
     const fileStates = ref([]) as Ref<FileState[]>
     const isDragOver = ref(false)
 
-    const input = ref<HTMLInputElement | null>(null)
+    const input = ref<HTMLInputElement>()
     const button = ref<InstanceType<typeof Button>>()
     const panel = ref<HTMLElement>()
 
@@ -386,7 +386,7 @@ export default defineComponent({
       return file.name.split('.').pop()!.toLocaleLowerCase()
     }
 
-    function execute() {
+    async function execute() {
       if (!props.url || !verifyFiles()) {
         return false
       }
@@ -400,7 +400,7 @@ export default defineComponent({
         requests.push(uploadFile(file).catch(noop))
       }
 
-      return Promise.all(requests).then(responses => responses.filter(response => response))
+      return await Promise.all(requests).then(responses => responses.filter(response => response))
     }
 
     async function uploadFile(file: FileState) {
@@ -838,5 +838,8 @@ export default defineComponent({
         {!props.hiddenFiles && renderFileList()}
       </div>
     )
+  },
+  methods: {
+    execute: noop as () => Promise<false | any[]>
   }
 })

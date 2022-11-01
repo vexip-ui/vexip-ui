@@ -15,12 +15,12 @@ import {
   eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { isNull, throttle, debounce } from '@vexip-ui/utils'
+import { isNull, noop, throttle, debounce } from '@vexip-ui/utils'
 import { EyeSlashR, EyeR, CircleXmark, Spinner } from '@vexip-ui/icons'
 
 import type { PropType } from 'vue'
+import type { InputType } from './symbol'
 
-export type InputType = 'text' | 'password' | 'date' | 'datetime' | 'time'
 type InputEventType = 'input' | 'change'
 
 const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
@@ -196,19 +196,6 @@ export default defineComponent({
         : currentValue.value
     })
     const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
-    // const countStyle = computed(() => {
-    //   let fix = 0
-
-    //   if (hasSuffix.value) {
-    //     fix += 2
-    //   }
-
-    //   if (fix) {
-    //     return { right: `calc(${fix}em + 7px)` }
-    //   }
-
-    //   return {}
-    // })
     const hasValue = computed(() => {
       return !(isNull(currentValue.value) || currentValue.value === '')
     })
@@ -228,6 +215,7 @@ export default defineComponent({
     // Expose api methods.
     // Need to define some same name methods in 'methods' option to support infer types.
     expose({
+      input: inputControl,
       focus: () => {
         inputControl.value?.focus()
       },
@@ -304,10 +292,6 @@ export default defineComponent({
         currentLength.value = 0
 
         return
-      }
-
-      if (typeof value !== 'string') {
-        value = String(value)
       }
 
       const maxLength = props.maxLength
@@ -534,11 +518,7 @@ export default defineComponent({
     }
   },
   methods: {
-    focus() {
-      // define type only
-    },
-    blur() {
-      // define type only
-    }
+    focus: noop as () => void,
+    blur: noop as () => void
   }
 })

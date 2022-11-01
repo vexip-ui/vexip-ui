@@ -77,6 +77,10 @@ export interface DirectoryReader {
   ) => void
 }
 
+export interface UploadExposed {
+  execute: () => Promise<false | any[]>
+}
+
 export const uploadListTypes = Object.freeze<UploadListType>([
   'name',
   'detail',
