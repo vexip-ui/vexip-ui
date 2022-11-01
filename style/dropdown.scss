@@ -67,6 +67,8 @@ $dropdown: map.merge(
 
   &__item {
     position: relative;
+    display: flex;
+    align-items: center;
     min-height: 32px;
     padding: 5px 16px;
     white-space: nowrap;

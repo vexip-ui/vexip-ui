@@ -296,9 +296,9 @@ const MenuItem = defineComponent({
 
     if (menuState) {
       watch(
-        () => menuState.currentActive,
-        value => {
-          selected.value = props.label === value
+        () => [props.label, menuState.currentActive],
+        () => {
+          selected.value = props.label === menuState.currentActive
         },
         { immediate: true }
       )
