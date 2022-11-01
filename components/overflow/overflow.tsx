@@ -27,6 +27,7 @@ const TEXT_VNODE = createTextVNode('').type
 
 export default defineComponent({
   name: 'Overflow',
+  inheritAttrs: false,
   props: {
     items: Array as PropType<any[]>,
     tag: String,
@@ -36,7 +37,7 @@ export default defineComponent({
     onToggle: eventProp<(overflow: boolean) => void>()
   },
   emits: [],
-  setup(_props, { slots, expose }) {
+  setup(_props, { attrs, slots, expose }) {
     const props = useProps('overflow', _props, {
       items: {
         default: null,
@@ -200,32 +201,34 @@ export default defineComponent({
         counterVNode?.type === TEXT_VNODE ? <span>{counterVNode}</span> : counterVNode
 
       return (
-        <CustomTag ref={wrapper} class={className.value}>
-          {itemSlot && isDefined(props.items)
-            ? props.items.map((item, index) => {
-              const vnode = itemSlot({ item, index })[0]
+        <ResizeObserver onResize={refresh}>
+          <CustomTag ref={wrapper} {...attrs} class={className.value}>
+            {itemSlot && isDefined(props.items)
+              ? props.items.map((item, index) => {
+                const vnode = itemSlot({ item, index })[0]
 
-              if (staticItem) {
-                vnode.key = index
+                if (staticItem) {
+                  vnode.key = index
 
-                return vnode
-              }
+                  return vnode
+                }
 
-              return (
-                  <ResizeObserver key={index} onResize={refresh}>
-                    {() => vnode}
-                  </ResizeObserver>
-              )
-            })
-            : itemSlot?.()}
-          {counterVNode
-            ? (
-            <Fragment ref={syncCounterRef as any}>{renderCounter()}</Fragment>
-              )
-            : (
-            <span ref={counter} style={{ display: 'inline-block' }}></span>
-              )}
-        </CustomTag>
+                return (
+                    <ResizeObserver key={index} onResize={refresh}>
+                      {() => vnode}
+                    </ResizeObserver>
+                )
+              })
+              : itemSlot?.()}
+            {counterVNode
+              ? (
+              <Fragment ref={syncCounterRef as any}>{renderCounter()}</Fragment>
+                )
+              : (
+              <span ref={counter} style={{ display: 'inline-block' }}></span>
+                )}
+          </CustomTag>
+        </ResizeObserver>
       )
     }
   }
