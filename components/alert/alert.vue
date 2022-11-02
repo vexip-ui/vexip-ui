@@ -44,8 +44,9 @@
 import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { getRangeWidth } from '@vexip-ui/utils'
+import { alertProps } from './props'
 
 import {
   Flag,
@@ -55,8 +56,6 @@ import {
   Xmark,
   CircleXmark
 } from '@vexip-ui/icons'
-
-import type { PropType } from 'vue'
 
 export type AlertType = 'default' | 'info' | 'success' | 'warning' | 'error'
 
@@ -77,25 +76,7 @@ export default defineComponent({
     Icon,
     Xmark
   },
-  props: {
-    type: String as PropType<AlertType>,
-    title: String,
-    colorfulText: booleanProp,
-    icon: {
-      type: [Boolean, Object],
-      default: null
-    },
-    closable: booleanProp,
-    iconColor: String,
-    noBorder: booleanProp,
-    banner: booleanProp,
-    manual: booleanProp,
-    scroll: booleanProp,
-    scrollSpeed: Number,
-    onClose: eventProp(),
-    onHide: eventProp(),
-    onScrollEnd: eventProp()
-  },
+  props: alertProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('alert', _props, {

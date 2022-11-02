@@ -10,3 +10,4 @@ export type {
   UploadOptions,
   UploadExposed
 } from './symbol'
+export type {} from './props'

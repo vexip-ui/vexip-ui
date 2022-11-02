@@ -1,7 +1,14 @@
 import { reactive, computed, watch, provide, inject, unref } from 'vue'
 import { has, isNull, isObject, isFunction, mergeObjects } from '@vexip-ui/utils'
 
-import type { App, ComputedRef, PropType, Ref, CSSProperties } from 'vue'
+import type {
+  App,
+  ComputedRef,
+  PropType,
+  Ref,
+  CSSProperties,
+  ComponentObjectPropsOptions
+} from 'vue'
 
 export type PropsOptions = Record<string, Record<string, unknown>>
 
@@ -133,6 +140,21 @@ export const booleanStringProp = {
 export const booleanNumberProp = {
   type: [Boolean, Number],
   default: null
+}
+
+export type ConfigurableProps<T, E = never, I = never> = {
+  [P in keyof T]: P extends I
+    ? T[P]
+    : P extends `on${Capitalize<string>}`
+    ? never
+    : T[Exclude<P, 'value' | 'checked' | 'active' | 'visible' | 'label' | 'options' | E>]
+}
+
+export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
+  return Object.freeze({
+    inherit: booleanProp,
+    ...props
+  }) as T
 }
 
 export type ComponentSize = 'small' | 'default' | 'large'

@@ -7,3 +7,4 @@ export type {
   DateShortcut,
   TimeShortcut
 } from './symbol'
+export type {} from './props'

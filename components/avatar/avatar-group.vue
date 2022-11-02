@@ -60,10 +60,10 @@
 import { defineComponent, ref, computed, watchEffect, provide } from 'vue'
 import { Avatar } from '@/components/avatar'
 import { Tooltip } from '@/components/tooltip'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { avatarGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-import type { PropType } from 'vue'
 import type { ComponentSize } from '@vexip-ui/config'
 import type { AvatarOption } from './symbol'
 
@@ -73,18 +73,7 @@ export default defineComponent({
     Avatar,
     Tooltip
   },
-  props: {
-    size: [Number, String] as PropType<number | ComponentSize>,
-    options: Object as PropType<AvatarOption[]>,
-    circle: booleanProp,
-    max: Number,
-    showTip: booleanProp,
-    tipTrigger: String as PropType<'hover' | 'click'>,
-    vertical: booleanProp,
-    offset: Number,
-    restColor: String,
-    restBackground: String
-  },
+  props: avatarGroupProps,
   setup(_props) {
     const props = useProps('avatarGroup', _props, {
       size: 'default' as ComponentSize,

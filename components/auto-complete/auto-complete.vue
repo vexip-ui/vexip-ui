@@ -87,24 +87,14 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
+import { autoCompleteProps } from './props'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/hooks'
-import type {
-  AutoCompleteKeyConfig,
-  AutoCompleteOptionState,
-  AutoCompleteRawOption
-} from './symbol'
+import type { AutoCompleteRawOption } from './symbol'
 
 export default defineComponent({
   name: 'AutoComplete',
@@ -112,44 +102,7 @@ export default defineComponent({
     Icon,
     Select
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    transfer: booleanStringProp,
-    value: [String, Number],
-    options: Array as PropType<AutoCompleteRawOption[]>,
-    filter: {
-      type: [Boolean, Function] as PropType<
-        boolean | ((value: string | number, options: AutoCompleteOptionState) => boolean)
-      >,
-      default: null
-    },
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    placeholder: String,
-    disabled: booleanProp,
-    transitionName: String,
-    dropDisabled: booleanProp,
-    placement: String as PropType<Placement>,
-    clearable: booleanProp,
-    ignoreCase: booleanProp,
-    autofocus: booleanProp,
-    spellcheck: booleanProp,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    transparent: booleanProp,
-    keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
-    onSelect: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
-    onInput: eventProp<(value: string) => void>(),
-    onChange: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onEnter: eventProp<(value: string | number) => void>(),
-    onClear: eventProp()
-  },
+  props: autoCompleteProps,
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
     const select = ref<InstanceType<typeof Select>>()

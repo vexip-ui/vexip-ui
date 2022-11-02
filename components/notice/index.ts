@@ -241,3 +241,4 @@ export class NoticeManager {
 }
 
 export const Notice = new NoticeManager()
+export type {} from './props'

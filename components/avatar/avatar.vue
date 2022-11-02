@@ -38,10 +38,10 @@
 import { defineComponent, ref, computed, watch, inject } from 'vue'
 import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { avatarProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-import type { PropType } from 'vue'
 import type { ComponentSize } from '@vexip-ui/config'
 import type { AvatarObjectFit } from './symbol'
 
@@ -59,22 +59,7 @@ export default defineComponent({
     Icon,
     ResizeObserver
   },
-  props: {
-    size: [Number, String] as PropType<number | ComponentSize>,
-    src: String,
-    icon: Object,
-    circle: booleanProp,
-    alt: String,
-    fit: String as PropType<AvatarObjectFit>,
-    srcSet: String,
-    gap: Number,
-    iconScale: Number,
-    fallbackSrc: String,
-    color: String,
-    background: String,
-    onError: eventProp<(event: Event) => void>(),
-    onClick: eventProp<(event: MouseEvent) => void>()
-  },
+  props: avatarProps,
   emits: [],
   setup(_props) {
     const props = useProps('avatar', _props, {

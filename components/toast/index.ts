@@ -180,3 +180,4 @@ export class ToastManager {
 }
 
 export const Toast = new ToastManager()
+export type {} from './props'

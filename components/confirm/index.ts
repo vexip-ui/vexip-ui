@@ -93,3 +93,4 @@ export class ConfirmManager {
 }
 
 export const Confirm = new ConfirmManager()
+export type {} from './props'

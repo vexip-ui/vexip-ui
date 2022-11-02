@@ -10,3 +10,4 @@ export type {
   LayoutHeaderExposed,
   LayoutAsideExposed
 } from './symbol'
+export type {} from './props'

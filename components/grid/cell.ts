@@ -6,7 +6,6 @@ import { GRID_STATE } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
 import type { BreakPoint } from './helpler'
-import type { CellFlex, CellOptions } from './symbol'
 
 const mediaProp = [Number, Object] as PropType<CellOptions>
 

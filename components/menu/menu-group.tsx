@@ -5,7 +5,6 @@ import { callIfFunc } from '@vexip-ui/utils'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
-import type { MenuOptions } from './symbol'
 
 const MenuGroup = defineComponent({
   name: 'MenuGroup',

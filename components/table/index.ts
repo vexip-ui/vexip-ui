@@ -15,3 +15,4 @@ export type {
   TableCellPayload,
   TableHeadPayload
 } from './symbol'
+export type {} from './props'

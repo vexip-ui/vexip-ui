@@ -3,7 +3,6 @@ import { useNameHelper, useProps } from '@vexip-ui/config'
 import { ROW_STATE, breakPoints } from './symbol'
 
 import type { PropType, CSSProperties } from 'vue'
-import type { ColumnFlex, ColumnOptions } from './symbol'
 
 type LayerProp = 'span' | 'offset' | 'pull' | 'push' | 'order'
 
