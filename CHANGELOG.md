@@ -1,3 +1,20 @@
+## [2.0.12](https://github.com/vexip-ui/vexip-ui/compare/v2.0.11...v2.0.12) (2022-11-02)
+
+### Bug Fixes
+
+- **input:** value not clear when in sync mode ([81af6c6](https://github.com/vexip-ui/vexip-ui/commit/81af6c6a6e280282fa3386744bfbb96763e28207))
+- **menu:** cache and reset group expanded when menu reduced change ([eca0dbb](https://github.com/vexip-ui/vexip-ui/commit/eca0dbb38660fba71968b1ed70ac7551b3d55be2))
+- **menu:** item selected not update when label change ([6c97c83](https://github.com/vexip-ui/vexip-ui/commit/6c97c835945aae7306275763796391c9ff35db8c))
+- **number-input:** value not clear when in sync mode ([608f2b5](https://github.com/vexip-ui/vexip-ui/commit/608f2b5527bd2b5fde6d88e20737db1eeb8e0eee))
+- **overflow:** should refresh when wrapper resize ([5102c40](https://github.com/vexip-ui/vexip-ui/commit/5102c40d3fea565eca0a91277333e3439b5bd0d1))
+- **tabs:** panel height should follow content ([e9a25ea](https://github.com/vexip-ui/vexip-ui/commit/e9a25eac42a16e1aec52610c22f20ffd00979592)), closes [#191](https://github.com/vexip-ui/vexip-ui/issues/191)
+
+### Features
+
+- **input:** add count slot ([0a27106](https://github.com/vexip-ui/vexip-ui/commit/0a271066a3603416ff179ed0495af86de1e0a193))
+- **table:** aad checked class for rows ([0e02ac8](https://github.com/vexip-ui/vexip-ui/commit/0e02ac8ee38b7be61968dee7456675e881435886))
+- **textarea:** add count slot ([70387be](https://github.com/vexip-ui/vexip-ui/commit/70387beb61d136ae9466c1ce1780ebe4d081a524))
+
 ## [2.0.11](https://github.com/vexip-ui/vexip-ui/compare/v2.0.10...v2.0.11) (2022-10-28)
 
 ### Bug Fixes
