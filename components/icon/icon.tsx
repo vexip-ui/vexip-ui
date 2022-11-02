@@ -44,19 +44,19 @@ export default defineComponent({
 
     const nh = useNameHelper('icon')
 
-    const computedScale = computed(() => {
-      return Number(props.scale) || 1
-    })
     const className = computed(() => {
-      const spin = props.spin && (props.spin === true || props.spin === 'in' ? 'in' : 'out')
+      const spin = props.spin === true || props.spin === 'in' ? 'in' : 'out'
       const pulse = props.pulse === true || props.pulse === 'in' ? 'in' : 'out'
 
       return {
         [nh.b()]: true,
         [nh.bm(`spin-${spin}`)]: props.spin,
-        [nh.bm(`flip-${props.flip}`)]: props.flip,
-        [nh.bm(`pulse-${pulse}`)]: props.pulse
+        [nh.bm(`pulse-${pulse}`)]: props.pulse,
+        [nh.bm(`flip-${props.flip}`)]: props.flip
       }
+    })
+    const computedScale = computed(() => {
+      return Number(props.scale) || 1
     })
     const style = computed<CSSProperties>(() => {
       return computedScale.value === 1 ? {} : { fontSize: `${computedScale.value}em` }
@@ -75,7 +75,7 @@ export default defineComponent({
       if (slots.default) {
         return (
           <i {...iAttrs}>
-            <g>{slots.default && slots.default()}</g>
+            <g>{slots.default()}</g>
           </i>
         )
       }
