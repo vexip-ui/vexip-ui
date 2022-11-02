@@ -199,37 +199,41 @@ export default defineComponent({
 
       const renderCounter = () =>
         counterVNode?.type === TEXT_VNODE ? <span>{counterVNode}</span> : counterVNode
+      const render = () => (
+        <CustomTag ref={wrapper} {...attrs} class={className.value}>
+          {itemSlot && isDefined(props.items)
+            ? props.items.map((item, index) => {
+              const vnode = itemSlot({ item, index })[0]
 
-      return (
-        <ResizeObserver onResize={refresh}>
-          <CustomTag ref={wrapper} {...attrs} class={className.value}>
-            {itemSlot && isDefined(props.items)
-              ? props.items.map((item, index) => {
-                const vnode = itemSlot({ item, index })[0]
+              if (staticItem) {
+                vnode.key = index
 
-                if (staticItem) {
-                  vnode.key = index
+                return vnode
+              }
 
-                  return vnode
-                }
-
-                return (
-                    <ResizeObserver key={index} onResize={refresh}>
-                      {() => vnode}
-                    </ResizeObserver>
-                )
-              })
-              : itemSlot?.()}
-            {counterVNode
-              ? (
-              <Fragment ref={syncCounterRef as any}>{renderCounter()}</Fragment>
-                )
-              : (
-              <span ref={counter} style={{ display: 'inline-block' }}></span>
-                )}
-          </CustomTag>
-        </ResizeObserver>
+              return (
+                  <ResizeObserver key={index} onResize={refresh}>
+                    {() => vnode}
+                  </ResizeObserver>
+              )
+            })
+            : itemSlot?.()}
+          {counterVNode
+            ? (
+            <Fragment ref={syncCounterRef as any}>{renderCounter()}</Fragment>
+              )
+            : (
+            <span ref={counter} style={{ display: 'inline-block' }}></span>
+              )}
+        </CustomTag>
       )
+
+      if (import.meta.env.MODE === 'test') {
+        // It is difficult to test ResizeObserver in vitest, so directly rendering all items
+        return render()
+      }
+
+      return <ResizeObserver onResize={refresh}>{render()}</ResizeObserver>
     }
   }
 })

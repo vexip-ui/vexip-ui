@@ -125,7 +125,7 @@ export default defineComponent({
 
       let renderingItems = visibleItems.value
 
-      if (process.env.NODE_ENV === 'test') {
+      if (import.meta.env.MODE === 'test') {
         // It is difficult to test ResizeObserver in vitest, so directly rendering all items
         renderingItems = props.items
       }
