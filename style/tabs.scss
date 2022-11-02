@@ -16,23 +16,19 @@
     display: flex;
     transition: get-css-var('transition-transform');
 
-    &--transition {
-      pointer-events: none;
-      user-select: none;
-
-      %pane {
-        visibility: visible;
-      }
-    }
+    // &--transition {
+    //   pointer-events: none;
+    //   user-select: none;
+    // }
   }
 
   &__panel {
+    display: none;
     flex-shrink: 0;
     width: 100%;
-    visibility: hidden;
 
     &--active {
-      visibility: visible;
+      display: block;
     }
   }
 }

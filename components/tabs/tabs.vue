@@ -37,7 +37,6 @@
         [nh.be('main')]: true,
         [nh.bem('main', 'transition')]: isTransition
       }"
-      :style="mainStyle"
       @transitionend="isTransition = false"
     >
       <slot></slot>
@@ -133,9 +132,9 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentIndex, () => {
-      isTransition.value = true
-    })
+    // watch(currentIndex, () => {
+    //   isTransition.value = true
+    // })
 
     onMounted(computeIndex)
 
