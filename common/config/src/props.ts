@@ -24,10 +24,10 @@ interface PropsConfig<T = any> {
 
 type PropsConfigOptions<T> = {
   [K in keyof T]?:
-    | PropsConfig<EnsureValue<T[K]>>
-    | EnsureValue<T[K]>
-    | (() => EnsureValue<T[K]>)
-    | null
+  | PropsConfig<EnsureValue<T[K]>>
+  | EnsureValue<T[K]>
+  | (() => EnsureValue<T[K]>)
+  | null
 }
 
 export const PROVIDED_PROPS = '__vxp-provided-props'
@@ -146,8 +146,8 @@ export type ConfigurableProps<T, E = never, I = never> = {
   [P in keyof T]: P extends I
     ? T[P]
     : P extends `on${Capitalize<string>}`
-    ? never
-    : T[Exclude<P, 'value' | 'checked' | 'active' | 'visible' | 'label' | 'options' | E>]
+      ? never
+      : T[Exclude<P, 'value' | 'checked' | 'active' | 'visible' | 'label' | 'options' | E>]
 }
 
 export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {

@@ -110,7 +110,7 @@ export function useVirtual(options: VirtualOptions) {
     return items.value.slice(startIndex.value, endIndex)
   })
   const listStyle = computed(() => {
-    // eslint-disable-next-line no-unused-expressions
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     treeUpdateDep.value
 
     const height = heightTree.value.sum()
@@ -122,7 +122,7 @@ export function useVirtual(options: VirtualOptions) {
     }
   })
   const itemsStyle = computed(() => {
-    // eslint-disable-next-line no-unused-expressions
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     treeUpdateDep.value
 
     return {

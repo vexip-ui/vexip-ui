@@ -190,22 +190,16 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { USE_TOUCH, doubleDigits, boundRange, format } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
+import { timePickerProps } from './props'
 import { useColumn } from './helper'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/hooks'
-import type { TimeType, TimeShortcut } from './symbol'
+import type { TimeType } from './symbol'
 
 // const TIME_REG = /^((?:[01]?[0-9])|(?:2[0-3]))((?::[0-5]?[0-9]))?((?::[0-5]?[0-9]))?$/
 const TIME_REG = /^((?:\d{1,2}))((?::\d{1,2}))?((?::\d{1,2}))?$/
@@ -221,55 +215,7 @@ export default defineComponent({
     CircleXmark,
     ArrowRightArrowLeft
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    visible: booleanProp,
-    placement: String as PropType<Placement>,
-    transfer: booleanStringProp,
-    format: String,
-    separator: String,
-    value: [String, Array] as PropType<string | string[]>,
-    filler: String,
-    noFiller: booleanProp,
-    clearable: booleanProp,
-    noAction: booleanProp,
-    noArrow: booleanProp,
-    pointer: booleanProp,
-    candidate: Number as PropType<0 | 1 | 2 | 3>,
-    steps: Array as PropType<number[]>,
-    labels: Object as PropType<Partial<Record<TimeType, string>>>,
-    shortcuts: Array as PropType<TimeShortcut[]>,
-    isRange: booleanProp,
-    disabled: booleanProp,
-    transitionName: String,
-    confirmText: String,
-    cancelText: String,
-    ctrlSteps: Array as PropType<number[]>,
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    noSuffix: booleanProp,
-    exchange: booleanProp,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    onInput: eventProp<(type: TimeType, value: number) => void>(),
-    onPlus: eventProp<(type: TimeType, value: number) => void>(),
-    onMinus: eventProp<(type: TimeType, value: number) => void>(),
-    onEnter: eventProp(),
-    onCancel: eventProp(),
-    onChange: eventProp<(value: string | string[]) => void>(),
-    onClear: eventProp(),
-    onShortcut: eventProp<(name: string, value: string | string[]) => void>(),
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onFocus: eventProp(),
-    onBlur: eventProp(),
-    onChangeCol: eventProp<(type: TimeType, inputType: 'start' | 'end') => void>(),
-    onClickOutside: eventProp()
-  },
+  props: timePickerProps,
   emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
     const {

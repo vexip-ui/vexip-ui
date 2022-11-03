@@ -1,4 +1,5 @@
 export { default as DatePicker } from './date-picker.vue'
+export type { DatePickerProps, DatePickerCProps } from './props'
 export type {
   DateType,
   TimeType,
@@ -7,4 +8,3 @@ export type {
   DateShortcut,
   TimeShortcut
 } from './symbol'
-export type {} from './props'

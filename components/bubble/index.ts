@@ -1,2 +1,2 @@
 export { default as Bubble } from './bubble.vue'
-export type {} from './props'
+export type { BubbleProps, BubbleCProps } from './props'

@@ -158,24 +158,18 @@ import {
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
+import { datePickerProps } from './props'
 import { useColumn } from './helper'
 import { datePickerTypes } from './symbol'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/hooks'
 import type { Dateable } from '@vexip-ui/utils'
-import type { TimeType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
+import type { TimeType, DateTimeType } from './symbol'
 
 export default defineComponent({
   name: 'DatePicker',
@@ -187,55 +181,7 @@ export default defineComponent({
     CircleXmark,
     ArrowRightArrowLeft
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    type: String as PropType<DatePickerType>,
-    visible: booleanProp,
-    placement: String as PropType<Placement>,
-    transfer: booleanStringProp,
-    value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
-    format: String,
-    filler: String,
-    noFiller: booleanProp,
-    clearable: booleanProp,
-    noAction: booleanProp,
-    labels: Object as PropType<Partial<Record<DateTimeType, string>>>,
-    dateSeparator: String,
-    timeSeparator: String,
-    shortcuts: Array as PropType<DateShortcut[]>,
-    disabledDate: Function as PropType<(date: Date) => boolean>,
-    steps: Array as PropType<number[]>,
-    ctrlSteps: Array as PropType<number[]>,
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    noSuffix: booleanProp,
-    disabled: booleanProp,
-    transitionName: String,
-    confirmText: String,
-    cancelText: String,
-    today: [Number, String, Date] as PropType<Dateable>,
-    isRange: booleanProp,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    onInput: eventProp<(type: DateTimeType, value: number) => void>(),
-    onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
-    onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
-    onEnter: eventProp(),
-    onCancel: eventProp(),
-    onChange: eventProp<(value: string | number | string[] | number[] | null) => void>(),
-    onClear: eventProp(),
-    onShortcut: eventProp<(name: string, value: Dateable | Dateable[]) => void>(),
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onFocus: eventProp(),
-    onBlur: eventProp(),
-    onChangeCol: eventProp<(type: DateTimeType, inputType: 'start' | 'end') => void>(),
-    onClickOutside: eventProp()
-  },
+  props: datePickerProps,
   emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
     const {

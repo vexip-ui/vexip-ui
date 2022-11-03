@@ -1,36 +1,17 @@
 import { defineComponent, h, Transition } from 'vue'
-import { useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
-
-type TransitionMode = 'in-out' | 'out-in' | 'default'
+import { useProps, emitEvent } from '@vexip-ui/config'
+import { collapseTransitionProps } from './props'
 
 export default defineComponent({
   name: 'CollapseTransition',
-  functional: true,
-  props: {
-    appear: booleanProp,
-    mode: String as PropType<TransitionMode>,
-    horizontal: booleanProp,
-    duration: Number,
-    timing: String,
-    fadeEffect: booleanProp,
-    onBeforeEnter: eventProp<(el: Element) => void>(),
-    onEnter: eventProp<(el: Element) => void>(),
-    onAfterEnter: eventProp<(el: Element) => void>(),
-    onEnterCancelled: eventProp<(el: Element) => void>(),
-    onBeforeLeave: eventProp<(el: Element) => void>(),
-    onLeave: eventProp<(el: Element) => void>(),
-    onAfterLeave: eventProp<(el: Element) => void>(),
-    onLeaveCancelled: eventProp<(el: Element) => void>()
-  },
+  props: collapseTransitionProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('collapseTransition', _props, {
       appear: false,
       mode: {
-        default: 'default' as TransitionMode,
-        validator: (value: TransitionMode) => ['in-out', 'out-in', 'default'].includes(value)
+        default: 'default',
+        validator: value => ['in-out', 'out-in', 'default'].includes(value)
       },
       horizontal: false,
       duration: {

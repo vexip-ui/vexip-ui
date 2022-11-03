@@ -37,9 +37,9 @@ import type { PropType, Ref } from 'vue'
 type RawOption =
   | string
   | {
-      label: string | number,
-      content?: string
-    }
+    label: string | number,
+    content?: string
+  }
 
 export default defineComponent({
   name: 'RadioGroup',

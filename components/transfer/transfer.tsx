@@ -123,12 +123,12 @@ export default defineComponent({
     const updateTrigger = ref(0)
 
     watchEffect(() => {
-      /* eslint-disable no-unused-expressions */
+      /* eslint-disable @typescript-eslint/no-unused-expressions */
       props.keyConfig.value
       props.keyConfig.label
       props.keyConfig.disabled
       props.options
-      /* eslint-enable no-unused-expressions */
+      /* eslint-enable */
 
       updateTrigger.value++
     })

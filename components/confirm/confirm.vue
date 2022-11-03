@@ -51,14 +51,13 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useLocale, booleanProp, styleProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale } from '@vexip-ui/config'
 import { isPromise, isFunction } from '@vexip-ui/utils'
 import { CircleQuestion } from '@vexip-ui/icons'
+import { confirmProps } from './props'
 
-import type { PropType } from 'vue'
 import type { ConfirmType, ConfirmOptions } from './symbol'
 
-const positionType = [Number, String]
 const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
@@ -80,19 +79,7 @@ export default defineComponent({
     Modal,
     Renderer
   },
-  props: {
-    top: positionType,
-    left: positionType,
-    width: positionType,
-    maskClose: booleanProp,
-    confirmType: String as PropType<ConfirmType>,
-    confirmText: String,
-    cancelText: String,
-    icon: [Object, Function] as PropType<Record<string, any> | (() => any)>,
-    style: styleProp,
-    renderer: Function as PropType<(options: ConfirmOptions) => any>,
-    iconColor: String
-  },
+  props: confirmProps,
   setup(_props) {
     const props = useProps('confirm', _props, {
       top: {
@@ -109,8 +96,8 @@ export default defineComponent({
       },
       maskClose: false,
       confirmType: {
-        default: 'default' as ConfirmType,
-        validator: (value: ConfirmType) => confirmTypes.includes(value)
+        default: 'default',
+        validator: value => confirmTypes.includes(value)
       },
       confirmText: null,
       cancelText: null,
@@ -127,7 +114,7 @@ export default defineComponent({
     const loading = ref(false)
     const content = ref('')
     const iconColorR = ref(props.iconColor)
-    const styleR = ref(props.style || {} as any)
+    const styleR = ref(props.style || ({} as any))
     const confirmTypeR = ref(props.confirmType)
     const confirmTextR = ref(props.confirmText)
     const cancelTextR = ref(props.cancelText)

@@ -3,45 +3,15 @@ import { Badge } from '@/components/badge'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { FIELD_OPTIONS } from '@/components/form/symbol'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  sizeProp,
-  createSizeProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, createSizeProp, emitEvent } from '@vexip-ui/config'
 import { Spinner } from '@vexip-ui/icons'
 import { parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
+import { buttonProps } from './props'
 import { GROUP_STATE, buttonTypes } from './symbol'
-
-import type { PropType } from 'vue'
-import type { ButtonType, ButtonAttrType } from './symbol'
 
 export default defineComponent({
   name: 'Button',
-  props: {
-    size: sizeProp,
-    type: String as PropType<ButtonType>,
-    dashed: booleanProp,
-    text: booleanProp,
-    simple: booleanProp,
-    ghost: booleanProp,
-    disabled: booleanProp,
-    loading: booleanProp,
-    circle: booleanProp,
-    loadingIcon: Object,
-    loadingSpin: booleanProp,
-    icon: Object,
-    color: String,
-    buttonType: String as PropType<ButtonAttrType>,
-    block: booleanProp,
-    tag: String,
-    noPulse: booleanProp,
-    badge: [String, Number],
-    onClick: eventProp<(event: MouseEvent) => void>()
-  },
+  props: buttonProps,
   emits: [],
   setup(_props, { slots }) {
     const fieldActions = inject(FIELD_OPTIONS, null)

@@ -6,19 +6,15 @@
 
 <script lang="ts">
 import { defineComponent, computed, provide } from 'vue'
-import { useNameHelper, useProps, booleanProp, sizeProp } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { buttonGroupProps } from './props'
 import { GROUP_STATE, buttonTypes } from './symbol'
 
-import type { PropType } from 'vue'
 import type { ButtonType } from './symbol'
 
 export default defineComponent({
   name: 'ButtonGroup',
-  props: {
-    size: sizeProp,
-    type: String as PropType<ButtonType>,
-    circle: booleanProp
-  },
+  props: buttonGroupProps,
   setup(_props) {
     const props = useProps('buttonGroup', _props, {
       size: null,

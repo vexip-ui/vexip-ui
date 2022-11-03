@@ -37,13 +37,13 @@ const popupPlacements = Object.freeze<PopupPlacement>([
 
 type QueneState =
   | {
-      type: 'add',
-      param: Record<string, unknown>
-    }
+    type: 'add',
+    param: Record<string, unknown>
+  }
   | {
-      type: 'clear',
-      param: Key
-    }
+    type: 'clear',
+    param: Key
+  }
 
 let globalIndex = 0
 

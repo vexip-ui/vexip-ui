@@ -206,25 +206,16 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/hooks'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
 import { ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
+import { cascaderProps } from './props'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/hooks'
-import type { TagType } from '@/components/tag'
 import type { CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
-
-type MaybeArrayData = Record<string, any> | Array<Record<string, any>>
 
 const ID_KEY = Symbol('ID_KEY')
 const PARENT_KEY = Symbol('PARENT_KEY')
@@ -250,50 +241,7 @@ export default defineComponent({
     ChevronDown,
     CircleXmark
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: Array as PropType<CascaderValue>,
-    visible: booleanProp,
-    options: Array as PropType<Array<Record<string, any>>>,
-    placeholder: String,
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    noCascaded: booleanProp,
-    multiple: booleanProp,
-    disabled: booleanProp,
-    clearable: booleanProp,
-    placement: String as PropType<Placement>,
-    transfer: booleanStringProp,
-    staticSuffix: booleanProp,
-    noSuffix: booleanProp,
-    transitionName: String,
-    outsideClose: booleanProp,
-    keyConfig: Object as PropType<CascaderKeyConfig>,
-    separator: String,
-    hoverTrigger: booleanProp,
-    maxTagCount: Number,
-    briefLabel: booleanProp,
-    noRestTip: booleanProp,
-    onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>,
-    mergeTags: booleanProp,
-    tagType: String as PropType<TagType>,
-    emptyText: String,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    transparent: booleanProp,
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onSelect: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
-    onCancel: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
-    onChange: eventProp<(value: CascaderValue, data: MaybeArrayData) => void>(),
-    onClickOutside: eventProp(),
-    onOutsideClose: eventProp(),
-    onClear: eventProp()
-  },
+  props: cascaderProps,
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
     const {
@@ -387,7 +335,7 @@ export default defineComponent({
     const updateTrigger = ref(0)
 
     watchEffect(() => {
-      /* eslint-disable no-unused-expressions */
+      /* eslint-disable @typescript-eslint/no-unused-expressions */
       props.keyConfig.value
       props.keyConfig.label
       props.keyConfig.children
@@ -396,7 +344,7 @@ export default defineComponent({
       props.separator
       props.options
       isAsyncLoad.value
-      /* eslint-enable no-unused-expressions */
+      /* eslint-enable */
 
       updateTrigger.value++
     })

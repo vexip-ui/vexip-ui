@@ -30,38 +30,18 @@ import {
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  classProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { useFieldStore } from '@/components/form'
 import { isDefined, isFunction } from '@vexip-ui/utils'
+import { checkboxProps } from './props'
 import { GROUP_STATE } from './symbol'
 
 export default defineComponent({
   name: 'Checkbox',
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    checked: booleanProp,
-    label: String,
-    value: [String, Number],
-    labelClass: classProp,
-    disabled: booleanProp,
-    border: booleanProp,
-    control: booleanProp,
-    partial: booleanProp,
-    tabIndex: [String, Number],
-    loading: booleanProp,
-    loadingLock: booleanProp,
-    onChange: eventProp<(checked: boolean) => void>(),
-    onClick: eventProp<(event: MouseEvent) => void>()
-  },
+  props: checkboxProps,
   emits: ['update:checked'],
   setup(_props, { slots, emit }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =

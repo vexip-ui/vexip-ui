@@ -24,19 +24,19 @@ export type TableColumnType = 'order' | 'selection' | 'expand'
 
 export type FilterOptions<T extends string | number = string | number, D = Data> =
   | {
-      able: boolean,
-      options: (string | { value: T, label?: string, active?: boolean })[],
-      multiple?: false,
-      active?: null | T,
-      method?: null | ((active: T, data: D) => boolean)
-    }
+    able: boolean,
+    options: (string | { value: T, label?: string, active?: boolean })[],
+    multiple?: false,
+    active?: null | T,
+    method?: null | ((active: T, data: D) => boolean)
+  }
   | {
-      able: boolean,
-      options: (string | { value: T, label?: string, active?: boolean })[],
-      multiple: true,
-      active?: null | T[],
-      method?: null | ((active: T[], data: D) => boolean)
-    }
+    able: boolean,
+    options: (string | { value: T, label?: string, active?: boolean })[],
+    multiple: true,
+    active?: null | T[],
+    method?: null | ((active: T[], data: D) => boolean)
+  }
 
 export interface ParsedFilterOptions extends Omit<Required<FilterOptions>, 'options'> {
   options: { value: string | number, label: string, active: boolean }[]

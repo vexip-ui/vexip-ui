@@ -105,10 +105,10 @@ type RawOption =
   | string
   | number
   | {
-      value: string | number,
-      label?: string,
-      disabled?: boolean
-    }
+    value: string | number,
+    label?: string,
+    disabled?: boolean
+  }
 
 export default defineComponent({
   name: 'Wheel',

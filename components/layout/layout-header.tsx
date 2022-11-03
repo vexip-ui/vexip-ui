@@ -92,7 +92,7 @@ export default defineComponent({
     const { isMounted } = useMounted()
 
     const rootEl = computed(() => {
-      // eslint-disable-next-line no-unused-expressions
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       isMounted.value
       return isClient ? document.documentElement : null
     })

@@ -1,11 +1,24 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, styleProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ConfirmType, ConfirmOptions } from './symbol'
+
+const positionType = [Number, String]
 
 export const confirmProps = buildProps({
-  //
+  top: positionType,
+  left: positionType,
+  width: positionType,
+  maskClose: booleanProp,
+  confirmType: String as PropType<ConfirmType>,
+  confirmText: String,
+  cancelText: String,
+  icon: [Object, Function] as PropType<Record<string, any> | (() => any)>,
+  style: styleProp,
+  renderer: Function as PropType<(options: ConfirmOptions) => any>,
+  iconColor: String
 })
 
 export type ConfirmProps = ExtractPropTypes<typeof confirmProps>
-export type ConfirmCProps = ConfigurableProps<ConfirmProps, 'viewer'>
+export type ConfirmCProps = ConfigurableProps<ConfirmProps>
