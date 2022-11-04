@@ -68,42 +68,17 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  classProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { toNumber } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
-
-import type { PropType } from 'vue'
+import { spinProps } from './props'
 
 export default defineComponent({
   name: 'Spin',
   components: {
     Icon
   },
-  props: {
-    active: booleanProp,
-    icon: Object,
-    spin: booleanProp,
-    inner: booleanProp,
-    delay: {
-      type: [Boolean, Number, Array] as PropType<boolean | number | number[]>,
-      default: null
-    },
-    tip: String,
-    hideMask: booleanProp,
-    maskColor: String,
-    maskClass: classProp,
-    transitionName: String,
-    onMaskClick: eventProp<(event: MouseEvent) => void>(),
-    onShow: eventProp(),
-    onHide: eventProp()
-  },
+  props: spinProps,
   setup(_props, { slots }) {
     const nh = useNameHelper('spin')
     const props = useProps('spin', _props, {

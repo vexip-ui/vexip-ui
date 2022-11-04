@@ -84,31 +84,13 @@ import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
 import { useDisplay, useModifier } from '@vexip-ui/hooks'
-import {
-  useNameHelper,
-  useProps,
-  stateProp,
-  booleanProp,
-  booleanStringProp,
-  createStateProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, createStateProp, emitEvent } from '@vexip-ui/config'
 import { USE_TOUCH, debounce, debounceMinor } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
+import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
-import type { PropType } from 'vue'
 import type { ItemState } from './symbol'
-
-type RawOption =
-  | string
-  | number
-  | {
-    value: string | number,
-    label?: string,
-    disabled?: boolean
-  }
 
 export default defineComponent({
   name: 'Wheel',
@@ -117,23 +99,7 @@ export default defineComponent({
     Icon,
     Scroll
   },
-  props: {
-    state: stateProp,
-    horizontal: booleanProp,
-    value: [String, Number],
-    // 上下或左右两侧的候选数
-    candidate: Number as PropType<0 | 1 | 2 | 3>,
-    arrow: booleanProp,
-    pointer: booleanProp,
-    options: Array as PropType<RawOption[]>,
-    insertEmpty: booleanStringProp,
-    disabled: booleanProp,
-    loading: booleanProp,
-    loadingLock: booleanProp,
-    onChange: eventProp<(value: string | number, data: RawOption) => void>(),
-    onPrev: eventProp<(value: string | number, data: RawOption) => void>(),
-    onNext: eventProp<(value: string | number, data: RawOption) => void>()
-  },
+  props: wheelProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =

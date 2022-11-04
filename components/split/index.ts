@@ -1,2 +1,2 @@
 export { default as Split } from './split.vue'
-export type {} from './props'
+export type { SplitProps, SplitCProps } from './props'

@@ -14,10 +14,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } from 'vue'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { timelineItemProps } from './props'
 import { TIMELINE_STATE } from './symbol'
 
-import type { PropType } from 'vue'
 import type { TimelinkItemType, ItemState } from './symbol'
 
 const timelineItemTypes = Object.freeze<TimelinkItemType>([
@@ -30,15 +30,7 @@ const timelineItemTypes = Object.freeze<TimelinkItemType>([
 
 export default defineComponent({
   name: 'TimelineItem',
-  props: {
-    type: String as PropType<TimelinkItemType>,
-    color: String,
-    label: [Number, String],
-    dashed: booleanProp,
-    lineColor: String,
-    spacing: [Number, String],
-    onSignalClick: eventProp<(label: string | number) => void>()
-  },
+  props: timelineItemProps,
   emits: [],
   setup(_props) {
     const props = useProps('timelineItem', _props, {

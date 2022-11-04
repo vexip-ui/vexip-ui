@@ -10,16 +10,7 @@ import {
   Transition
 } from 'vue'
 import { Portal } from '@/components/portal'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  classProp,
-  styleProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import {
   useClickOutside,
   placementWhileList,
@@ -28,10 +19,9 @@ import {
   useListener
 } from '@vexip-ui/hooks'
 import { isElement } from '@vexip-ui/utils'
+import { tooltipProps } from './props'
 
-import type { PropType } from 'vue'
-import type { Placement, VirtualElement } from '@vexip-ui/hooks'
-import type { ToopTipTrigger, TooltipVirtual } from './symbol'
+import type { VirtualElement } from '@vexip-ui/hooks'
 
 const TEXT_VNODE = createTextVNode('').type
 
@@ -41,38 +31,14 @@ export default defineComponent({
     Portal
   },
   inheritAttrs: true,
-  props: {
-    trigger: String as PropType<ToopTipTrigger>,
-    wrapper: booleanStringProp,
-    noArrow: booleanProp,
-    transitionName: String,
-    visible: booleanProp,
-    placement: String as PropType<Placement>,
-    outsideClose: booleanProp,
-    noHover: booleanProp,
-    tipClass: classProp,
-    tipStyle: styleProp,
-    transfer: booleanStringProp,
-    disabled: booleanProp,
-    raw: booleanProp,
-    delay: Number,
-    tipAlive: booleanProp,
-    reverse: booleanProp,
-    width: [String, Number] as PropType<number | 'trigger' | 'auto'>,
-    virtual: Object as PropType<TooltipVirtual>,
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onTipEnter: eventProp(),
-    onTipLeave: eventProp(),
-    onClickOutside: eventProp(),
-    onOutsideClose: eventProp()
-  },
+  props: tooltipProps,
   emits: ['update:visible'],
   setup(_props, { attrs, slots, emit, expose }) {
     const nh = useNameHelper('tooltip')
     const props = useProps('tooltip', _props, {
       trigger: {
-        default: 'hover' as ToopTipTrigger,
-        validator: (value: ToopTipTrigger) => ['hover', 'click', 'focus', 'custom'].includes(value)
+        default: 'hover',
+        validator: value => ['hover', 'click', 'focus', 'custom'].includes(value)
       },
       wrapper: false,
       noArrow: false,
@@ -80,7 +46,7 @@ export default defineComponent({
       visible: false,
       placement: {
         default: 'top',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       outsideClose: true,
       noHover: false,

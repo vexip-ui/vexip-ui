@@ -1,5 +1,6 @@
 export { default as Upload } from './upload'
 export { iconMaps as uploadFileIconMap } from './file-icon'
+export type { UploadProps, UploadCProps } from './props'
 export type {
   UploadListType,
   UploadStatusType,
@@ -10,4 +11,3 @@ export type {
   UploadOptions,
   UploadExposed
 } from './symbol'
-export type {} from './props'

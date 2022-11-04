@@ -1,5 +1,7 @@
 import { has, isDefined } from '@vexip-ui/utils'
 
+import type { HttpError, UploadOptions } from './symbol'
+
 function getError(url: string, xhr: XMLHttpRequest) {
   const message = `fail to post ${url} ${xhr.status}'`
   const error = new Error(message) as HttpError

@@ -8,27 +8,18 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
-
-export type DividerTextPosition = 'center' | 'left' | 'right'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { dividerProps } from './props'
 
 export default defineComponent({
   name: 'Divider',
-  props: {
-    vertical: booleanProp,
-    textPosition: String as PropType<DividerTextPosition>,
-    // 字体增大加粗
-    primary: booleanProp,
-    dashed: booleanProp
-  },
+  props: dividerProps,
   setup(_props, { slots }) {
     const props = useProps('divider', _props, {
       vertical: false,
       textPosition: {
-        default: 'center' as DividerTextPosition,
-        validator: (value: DividerTextPosition) => ['center', 'left', 'right'].includes(value)
+        default: 'center',
+        validator: value => ['center', 'left', 'right'].includes(value)
       },
       primary: false,
       dashed: false

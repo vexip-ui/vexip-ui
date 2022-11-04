@@ -13,19 +13,12 @@ import MenuRest from './menu-rest'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
 import { Overflow } from '@/components/overflow'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { callIfFunc } from '@vexip-ui/utils'
+import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { Router, RouteRecordRaw, RouteLocationRaw } from 'vue-router'
+import type { RouteRecordRaw, RouteLocationRaw } from 'vue-router'
 import type { MenuOptions, MenuMarkerType, MenuGroupType, MenuItemState, MenuState } from './symbol'
 
 const menuMarkerTypes = Object.freeze<MenuMarkerType>(['top', 'right', 'bottom', 'left', 'none'])
@@ -38,23 +31,7 @@ export default defineComponent({
     MenuGroup,
     Overflow
   },
-  props: {
-    active: String,
-    accordion: booleanProp,
-    markerType: String as PropType<MenuMarkerType>,
-    reduced: booleanProp,
-    horizontal: booleanProp,
-    transfer: booleanStringProp,
-    trigger: String as PropType<'hover' | 'click'>,
-    groupType: String as PropType<MenuGroupType>,
-    tooltipReverse: booleanProp,
-    options: Array as PropType<MenuOptions[]>,
-    router: Object as PropType<Router>,
-    manualRoute: booleanProp,
-    onSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
-    onExpand: eventProp<(label: string, meta: Record<string, any>) => void>(),
-    onReduce: eventProp<(label: string, meta: Record<string, any>) => void>()
-  },
+  props: menuProps,
   emits: ['update:active'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('menu', _props, {

@@ -40,13 +40,13 @@
 import { defineComponent, ref, reactive, computed, watch, onMounted, provide } from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/hooks'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
+import { tabNavProps } from './props'
 import { TAB_NAV_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { TabNavAlign, TabNavOptions, ItemState } from './symbol'
+import type { ItemState } from './symbol'
 
 export default defineComponent({
   name: 'TabNav',
@@ -54,13 +54,7 @@ export default defineComponent({
     ResizeObserver,
     TabNavItem
   },
-  props: {
-    active: [String, Number],
-    card: booleanProp,
-    options: Array as PropType<TabNavOptions[]>,
-    align: String as PropType<TabNavAlign>,
-    onChange: eventProp<(active: string | number) => void>()
-  },
+  props: tabNavProps,
   emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('tabNav', _props, {

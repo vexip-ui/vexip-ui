@@ -33,36 +33,19 @@ import {
   nextTick,
   getCurrentInstance
 } from 'vue'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { USE_TOUCH, isDefined, throttle, boundRange } from '@vexip-ui/utils'
+import { scrollbarProps } from './props'
 import { useTrack } from './hooks'
 import { ScrollbarType } from './symbol'
 
-import type { PropType } from 'vue'
 import type { ScrollbarPlacement } from './symbol'
 
 const scrollbarPlacements = Object.freeze<ScrollbarPlacement>(['top', 'right', 'bottom', 'left'])
 
 export default defineComponent({
   name: 'Scrollbar',
-  props: {
-    placement: String as PropType<ScrollbarPlacement>,
-    scroll: Number,
-    barLength: Number,
-    width: Number,
-    appear: booleanProp,
-    fade: Number,
-    barColor: String,
-    trackColor: String,
-    disabled: booleanProp,
-    wrapper: [String, Object] as PropType<string | HTMLElement>,
-    duration: Number,
-    useTrack: booleanProp,
-    trackSpeed: Number,
-    onScrollStart: eventProp<(percent: number) => void>(),
-    onScroll: eventProp<(percent: number) => void>(),
-    onScrollEnd: eventProp<(percent: number) => void>()
-  },
+  props: scrollbarProps,
   emits: [],
   setup(_props) {
     const props = useProps('scrollbar', _props, {

@@ -1,2 +1,2 @@
 export { default as Switch } from './switch.vue'
-export type {} from './props'
+export type { SwitchProps, SwitchCProps } from './props'

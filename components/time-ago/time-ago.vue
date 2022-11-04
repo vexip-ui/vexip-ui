@@ -6,27 +6,16 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanStringProp,
-  booleanNumberProp
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale } from '@vexip-ui/config'
 import { toDate, format } from '@vexip-ui/utils'
 import { getId, subscribe, unsubscribe, computeTimeAgo } from './helper'
+import { timeAgoProps } from './props'
 
-import type { PropType } from 'vue'
 import type { Dateable } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'TimeAgo',
-  props: {
-    datetime: [String, Number, Date] as PropType<Dateable>,
-    interval: booleanNumberProp,
-    title: booleanStringProp,
-    titleFormat: String
-  },
+  props: timeAgoProps,
   setup(_props) {
     const props = useProps('timeAgo', _props, {
       datetime: {

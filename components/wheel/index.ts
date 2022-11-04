@@ -1,2 +1,2 @@
 export { default as Wheel } from './wheel.vue'
-export type {} from './props'
+export type { WheelProps, WheelCProps } from './props'

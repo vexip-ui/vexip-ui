@@ -223,26 +223,22 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  sizeProp,
   getCountWord,
   getCountWordOnly,
   createSizeProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { useModifier } from '@vexip-ui/hooks'
 import { isClient, isNull, isFunction, range, boundRange, warnOnce } from '@vexip-ui/utils'
+import { paginationProps } from './props'
 
-import type { PropType } from 'vue'
+import type { PaginationPlugin } from './symbol'
 
 const enum PaginationMode {
   LEFT = 'left',
   CENTER = 'center',
   RIGHT = 'right'
 }
-
-type PaginationPlugin = 'total' | 'jump' | 'size'
 
 export default defineComponent({
   name: 'Pagination',
@@ -256,27 +252,7 @@ export default defineComponent({
     AnglesLeft,
     Ellipsis
   },
-  props: {
-    size: sizeProp,
-    total: Number,
-    noBorder: booleanProp,
-    background: booleanProp,
-    pageSize: Number,
-    sizeOptions: Array as PropType<number[]>,
-    maxCount: Number,
-    active: Number,
-    disabled: booleanProp,
-    disableItem: Function as PropType<(page: number) => boolean>,
-    turnPageCount: Number,
-    pageJump: booleanProp,
-    pageCount: booleanProp,
-    pageTotal: booleanProp,
-    itemUnit: String,
-    plugins: Array as PropType<(PaginationPlugin | undefined | null)[]>,
-    noTitle: booleanProp,
-    onChange: eventProp<(page: number) => void>(),
-    onPageSizeChange: eventProp<(size: number) => void>()
-  },
+  props: paginationProps,
   emits: ['update:active', 'update:page-size'],
   setup(_props, { emit }) {
     const props = useProps('pagination', _props, {

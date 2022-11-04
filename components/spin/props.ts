@@ -1,11 +1,26 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, classProp, eventProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
 export const spinProps = buildProps({
-  //
+  active: booleanProp,
+  icon: Object,
+  spin: booleanProp,
+  inner: booleanProp,
+  delay: {
+    type: [Boolean, Number, Array] as PropType<boolean | number | number[]>,
+    default: null
+  },
+  tip: String,
+  hideMask: booleanProp,
+  maskColor: String,
+  maskClass: classProp,
+  transitionName: String,
+  onMaskClick: eventProp<(event: MouseEvent) => void>(),
+  onShow: eventProp(),
+  onHide: eventProp()
 })
 
 export type SpinProps = ExtractPropTypes<typeof spinProps>
-export type SpinCProps = ConfigurableProps<SpinProps, 'viewer'>
+export type SpinCProps = ConfigurableProps<SpinProps>

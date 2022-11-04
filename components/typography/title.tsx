@@ -1,24 +1,14 @@
 import { defineComponent, computed } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 import { boundRange, isColor } from '@vexip-ui/utils'
-
-import type { PropType } from 'vue'
-import type { TypographyType, TitleLevel } from './symbol'
+import { titleProps } from './props'
 
 export default defineComponent({
   name: 'Title',
-  props: {
-    type: String as PropType<TypographyType>,
-    level: Number as PropType<TitleLevel>,
-    top: booleanProp,
-    marker: booleanProp,
-    aligned: booleanProp,
-    thin: booleanProp,
-    markerType: String
-  },
+  props: titleProps,
   emits: [],
   setup(_props, { slots }) {
-    const props = useProps('text', _props, {
+    const props = useProps('title', _props, {
       type: 'default',
       level: 5,
       top: false,

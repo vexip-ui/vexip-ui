@@ -1,2 +1,2 @@
 export { default as Spin } from './spin.vue'
-export type {} from './props'
+export type { SpinProps, SpinCProps } from './props'

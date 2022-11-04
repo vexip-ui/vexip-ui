@@ -1,14 +1,13 @@
 import { defineComponent, computed } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
+import { ulProps } from './props'
 
 export default defineComponent({
   name: 'UL',
-  props: {
-    listStyle: String
-  },
+  props: ulProps,
   emits: [],
   setup(_props, { slots }) {
-    const props = useProps('text', _props, {
+    const props = useProps('ul', _props, {
       listStyle: 'circle'
     })
 

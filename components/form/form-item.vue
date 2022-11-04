@@ -86,18 +86,15 @@ import { Column } from '@/components/column'
 import { Icon } from '@/components/icon'
 import { Tooltip } from '@/components/tooltip'
 import { CircleQuestionR } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, booleanProp, makeSentence } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, makeSentence } from '@vexip-ui/config'
 import { isNull, isFunction, createEventEmitter, getRangeWidth } from '@vexip-ui/utils'
+import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
 import { FORM_PROPS, FORM_FIELDS, FIELD_OPTIONS, FORM_ACTIONS } from './symbol'
 
-import type { PropType } from 'vue'
 import type { ComponentState } from '@vexip-ui/config'
-import type { ColumnOptions } from '@/components/row'
 import type { Rule } from './validator'
-
-const mediaProp = [Number, Object] as PropType<number | ColumnOptions>
 
 export default defineComponent({
   name: 'FormItem',
@@ -108,35 +105,7 @@ export default defineComponent({
     CircleQuestionR
   },
   inheritAttrs: true,
-  props: {
-    label: String,
-    prop: String,
-    rules: [Object, Array] as PropType<Rule | Rule[]>,
-    labelWidth: Number,
-    required: booleanProp,
-    htmlFor: String,
-    errorTransition: String,
-    defaultValue: Object as PropType<unknown>,
-    hideErrorTip: booleanProp,
-    validateAll: booleanProp,
-    hideAsterisk: booleanProp,
-    hideLabel: booleanProp,
-    action: booleanProp,
-    help: String,
-    pure: booleanProp,
-    span: Number,
-    offset: Number,
-    push: Number,
-    pull: Number,
-    order: Number,
-    xs: mediaProp,
-    sm: mediaProp,
-    md: mediaProp,
-    lg: mediaProp,
-    xl: mediaProp,
-    xxl: mediaProp,
-    flex: [Number, String]
-  },
+  props: formItemProps,
   setup(_props, { slots }) {
     const nh = useNameHelper('form')
     const props = useProps('formItem', _props, {
@@ -151,9 +120,15 @@ export default defineComponent({
       rules: () => [],
       labelWidth: null,
       required: false,
-      htmlFor: null,
+      htmlFor: {
+        default: null,
+        static: true
+      },
       errorTransition: () => nh.ns('fade'),
-      defaultValue: null,
+      defaultValue: {
+        default: null,
+        static: true
+      },
       hideErrorTip: false,
       validateAll: null,
       hideAsterisk: null,

@@ -1,14 +1,10 @@
 import { defineComponent, computed } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
-import type { TypographyType } from './symbol'
+import { blockquoteProps } from './props'
 
 export default defineComponent({
   name: 'Blockquote',
-  props: {
-    type: String as PropType<TypographyType>
-  },
+  props: blockquoteProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('blockquote', _props, {

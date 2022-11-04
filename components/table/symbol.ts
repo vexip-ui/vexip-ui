@@ -7,6 +7,7 @@ import type { TableStore } from './store'
 export type Key = string | number | symbol
 export type Data = Record<string, unknown>
 export type RowPropFn<P = any> = (data: Data, index: number) => P
+export type DropType = 'before' | 'after' | 'none'
 
 export type Accessor<T extends string | number = string | number, D = Data> = (
   data: D,

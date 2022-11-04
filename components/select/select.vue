@@ -211,7 +211,6 @@
 import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef } from 'vue'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
-// import { Overflow } from '@/components/overflow'
 import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
 import { VirtualList } from '@/components/virtual-list'
@@ -228,23 +227,16 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  classProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isNull, removeArrayItem, getRangeWidth } from '@vexip-ui/utils'
 import { ChevronDown, Check, CircleXmark, Spinner } from '@vexip-ui/icons'
+import { selectProps } from './props'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/hooks'
 import type { VirtualListExposed } from '@/components/virtual-list'
-import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectOptionState } from './symbol'
+import type { SelectKeyConfig, SelectValue, SelectOptionState } from './symbol'
 
 const defaultKeyConfig: Required<SelectKeyConfig> = {
   value: 'value',
@@ -260,7 +252,6 @@ export default defineComponent({
   name: 'Select',
   components: {
     Icon,
-    // Overflow,
     Option,
     Portal,
     Tag,
@@ -269,54 +260,7 @@ export default defineComponent({
     CircleXmark,
     ChevronDown
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    visible: booleanProp,
-    options: Array as PropType<SelectRawOption[]>,
-    disabled: booleanProp,
-    transitionName: String,
-    outsideClose: booleanProp,
-    placeholder: String,
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    noSuffix: booleanProp,
-    value: [String, Number, Array] as PropType<SelectValue>,
-    multiple: booleanProp,
-    clearable: booleanProp,
-    maxListHeight: Number,
-    listClass: classProp,
-    placement: String as PropType<Placement>,
-    transfer: booleanStringProp,
-    optionCheck: booleanProp,
-    emptyText: String,
-    staticSuffix: booleanProp,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    keyConfig: Object as PropType<SelectKeyConfig>,
-    filter: {
-      type: [Boolean, Function] as PropType<
-        boolean | ((value: string | number, options: SelectOptionState) => boolean)
-      >,
-      default: null
-    },
-    ignoreCase: booleanProp,
-    creatable: booleanProp,
-    transparent: booleanProp,
-    onFocus: eventProp<(event: FocusEvent) => void>(),
-    onBlur: eventProp<(event: FocusEvent) => void>(),
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onSelect: eventProp<(value: string | number, data: SelectRawOption) => void>(),
-    onCancel: eventProp<(value: string | number, data: SelectRawOption) => void>(),
-    onChange: eventProp<(value: SelectValue, data: SelectRawOption | SelectRawOption[]) => void>(),
-    onClickOutside: eventProp(),
-    onOutsideClose: eventProp(),
-    onClear: eventProp()
-  },
+  props: selectProps,
   emits: ['update:value', 'update:visible', 'update:label'],
   setup(_props, { emit, slots }) {
     const {

@@ -75,4 +75,3 @@ export class LoadingManager {
 }
 
 export const Loading = new LoadingManager()
-export type {} from './props'

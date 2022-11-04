@@ -3,27 +3,16 @@ import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { UploadList } from '@/components/upload-list'
 import { useFieldStore } from '@/components/form'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  stateProp,
-  booleanProp,
-  createStateProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
 import { isClient, noop, isDefined, isFalse, isPromise, randomString } from '@vexip-ui/utils'
 import { CloudArrowUp, Upload as IUpload, Spinner, Plus } from '@vexip-ui/icons'
+import { uploadProps } from './props'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
 
-import type { PropType, Ref } from 'vue'
+import type { Ref } from 'vue'
 import type {
   UploadListType,
-  BeforeUpload,
-  BeforeSelect,
-  RenderFn,
   HttpError,
   SourceFile,
   FileState,
@@ -57,52 +46,7 @@ export default defineComponent({
     UploadList,
     CloudArrowUp
   },
-  props: {
-    state: stateProp,
-    url: String,
-    fileList: Array as PropType<FileOptions[]>,
-    multiple: booleanProp,
-    tip: String,
-    accept: [String, Array] as PropType<string | string[]>,
-    filter: [String, Array] as PropType<string | string[]>,
-    maxSize: Number,
-    field: String,
-    data: Object as PropType<Record<string, string | Blob>>,
-    headers: Object as PropType<Record<string, string>>,
-    withCredentials: booleanProp,
-    manual: booleanProp,
-    hiddenFiles: booleanProp,
-    countLimit: Number,
-    allowDrag: booleanProp,
-    onBeforeUpload: Function as PropType<BeforeUpload>,
-    onBeforeSelect: Function as PropType<BeforeSelect>,
-    iconRenderer: Function as PropType<RenderFn>,
-    selectToAdd: booleanProp,
-    listType: String as PropType<UploadListType>,
-    block: booleanProp,
-    loadingText: String,
-    directory: booleanProp,
-    pathField: String,
-    disabledClick: booleanProp,
-    buttonLabel: String,
-    disabled: booleanProp,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    image: booleanProp,
-    defaultFiles: Array as PropType<FileOptions[]>,
-    canPreview: Function as PropType<(file: FileState) => boolean>,
-    onExceed: eventProp<(files: FileState[]) => void>(),
-    onChange: eventProp<(files: FileState[]) => void>(),
-    onFilterError: eventProp<(files: FileState) => void>(),
-    onSizeError: eventProp<(files: FileState) => void>(),
-    onDelete: eventProp<(file: FileState) => void>(),
-    onPreview: eventProp<(file: FileState) => void>(),
-    onProgress: eventProp<(file: FileState, percent: number) => void>(),
-    onSuccess: eventProp<(file: FileState, response: any) => void>(),
-    onError: eventProp<(file: FileState, error: HttpError) => void>()
-  },
+  props: uploadProps,
   emits: ['update:file-list'],
   setup(_props, { slots, emit, expose }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
@@ -130,7 +74,7 @@ export default defineComponent({
       filter: '',
       maxSize: {
         default: null,
-        validator: (value: number) => value >= 0
+        validator: value => value >= 0
       },
       field: 'file',
       data: () => ({}),
@@ -140,7 +84,7 @@ export default defineComponent({
       hiddenFiles: false,
       countLimit: {
         default: 0,
-        validator: (value: number) => value >= 0
+        validator: value => value >= 0
       },
       allowDrag: false,
       onBeforeUpload: {

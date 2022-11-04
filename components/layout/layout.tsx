@@ -5,28 +5,16 @@ import LayoutHeader from './layout-header'
 import LayoutMain from './layout-main'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import { isClient } from '@vexip-ui/utils'
+import { layoutProps } from './props'
 import { useMediaQuery } from './helper'
 import { LAYOUT_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { MenuOptions } from '@/components/menu'
 import type {
   LayoutConfig,
-  LayoutMenuProps,
   LayoutSignType,
-  LayoutHeaderAction,
-  LayoutUser,
-  LayoutFooterLink,
   LayoutHeaderExposed,
   LayoutAsideExposed
 } from './symbol'
@@ -41,35 +29,7 @@ export default defineComponent({
     Menu,
     NativeScroll
   },
-  props: {
-    noAside: booleanProp,
-    footer: booleanProp,
-    tag: String,
-    menus: Object as PropType<MenuOptions[]>,
-    menuProps: Object as PropType<LayoutMenuProps>,
-    logo: String,
-    signName: String,
-    config: Array as PropType<LayoutConfig[]>,
-    user: Object as PropType<LayoutUser>,
-    actions: Array as PropType<LayoutHeaderAction[]>,
-    reduced: booleanProp,
-    avatarCircle: booleanProp,
-    signType: String as PropType<LayoutSignType>,
-    headerFixed: booleanStringProp,
-    asideFixed: booleanStringProp,
-    copyright: String,
-    links: Array as PropType<LayoutFooterLink[]>,
-    colors: Array as PropType<string[]>,
-    color: String,
-    miniHeaderSign: booleanStringProp,
-    verticalLinks: booleanStringProp,
-    onReducedChange: eventProp<(target: boolean) => void>(),
-    onSignClick: eventProp<(event: MouseEvent) => void>(),
-    onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
-    onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>(),
-    onNavChange: eventProp<(type: LayoutSignType) => void>(),
-    onColorChange: eventProp<(color: string) => void>()
-  },
+  props: layoutProps,
   emits: ['update:reduced', 'update:sign-type', 'update:color'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {

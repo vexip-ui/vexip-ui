@@ -214,4 +214,3 @@ export class MessageManager {
 }
 
 export const Message = new MessageManager()
-export type {} from './props'

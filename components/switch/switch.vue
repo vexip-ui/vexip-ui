@@ -53,41 +53,20 @@ import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
-
-import type { PropType } from 'vue'
+import { switchProps } from './props'
 
 export default defineComponent({
   name: 'Switch',
   components: {
     Icon
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: booleanProp,
-    disabled: booleanProp,
-    openColor: String,
-    closeColor: String,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingSpin: booleanProp,
-    openIcon: Object,
-    closeIcon: Object,
-    openText: String,
-    closeText: String,
-    onBeforeChange: Function as PropType<(checked: boolean) => unknown>,
-    onChange: eventProp<(value: boolean) => void>()
-  },
+  props: switchProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =

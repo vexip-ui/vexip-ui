@@ -1,5 +1,6 @@
 export { default as Table } from './table.vue'
 export { defineFilter, defineSorter, defineColumn, defineColumns } from './helper'
+export type { TableProps, TableCProps } from './props'
 export type {
   RowPropFn,
   TableColumnType,
@@ -15,4 +16,3 @@ export type {
   TableCellPayload,
   TableHeadPayload
 } from './symbol'
-export type {} from './props'

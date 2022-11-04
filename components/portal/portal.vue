@@ -10,7 +10,6 @@ import { defineComponent, ref, onMounted, nextTick } from 'vue'
 
 export default defineComponent({
   name: 'Portal',
-  functional: true,
   props: {
     to: {
       type: String,

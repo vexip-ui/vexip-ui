@@ -4,33 +4,11 @@ import { Icon } from '@/components/icon'
 import TransferPanel from './transfer-panel.vue'
 import { useFieldStore } from '@/components/form'
 import { ChevronRight, ChevronLeft, Spinner } from '@vexip-ui/icons'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  createStateProp,
-  booleanProp,
-  stateProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
+import { transferProps } from './props'
 
-import type { PropType } from 'vue'
 import type { TransferKeyConfig, TransferOptionState } from './symbol'
-
-type RawOption = string | Record<string, any>
-type Values = (string | number)[]
-type FilterHandler = (
-  value: string,
-  options: TransferOptionState,
-  type: 'source' | 'target'
-) => boolean
-type SelectHandler = (
-  type: 'source' | 'target',
-  selected: { source: Values, target: Values },
-  data: { source: RawOption[], target: RawOption[] }
-) => void
 
 const defaultKeyConfig: Required<TransferKeyConfig> = {
   value: 'value',
@@ -44,34 +22,11 @@ export default defineComponent({
     Button,
     TransferPanel
   },
-  props: {
-    state: stateProp,
-    options: Array as PropType<RawOption[]>,
-    value: Array as PropType<Values>,
-    disabled: booleanProp,
-    paged: booleanProp,
-    filter: {
-      type: [Boolean, Function] as PropType<boolean | FilterHandler>,
-      default: null
-    },
-    emptyText: String,
-    keyConfig: Object as PropType<TransferKeyConfig>,
-    optionHeight: Number,
-    ignoreCase: booleanProp,
-    sourceTitle: String,
-    targetTitle: String,
-    deepState: booleanProp,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    onChange: eventProp<(values: Values) => void>(),
-    onSelect: eventProp<SelectHandler>()
-  },
+  props: transferProps,
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
     const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<Values>(() => source.value?.$el?.focus())
+      useFieldStore<(string | number)[]>(() => source.value?.$el?.focus())
 
     const props = useProps('transfer', _props, {
       state: createStateProp(state),

@@ -1,2 +1,2 @@
 export { default as Masker } from './masker.vue'
-export type {} from './props'
+export type { MaskerProps, MaskerCProps } from './props'

@@ -51,19 +51,11 @@
 import { defineComponent, reactive, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
-import {
-  useNameHelper,
-  useProps,
-  useZIndex,
-  booleanProp,
-  classProp,
-  styleProp
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
+import { toastProps } from './props'
 
-import type { PropType } from 'vue'
-import type { IconMinorProps } from '@/components/icon'
-import type { ToastPosition, ToastOptions } from './symbol'
+import type { ToastOptions } from './symbol'
 
 export default defineComponent({
   name: 'Toast',
@@ -71,19 +63,7 @@ export default defineComponent({
     Icon,
     Renderer
   },
-  props: {
-    bodyWidth: Number,
-    icon: [Object, Function] as PropType<Record<string, any> | (() => any)>,
-    iconProps: Object as PropType<IconMinorProps>,
-    position: String as PropType<ToastPosition>,
-    transitionName: String,
-    closable: booleanProp,
-    maskClose: booleanProp,
-    showMask: booleanProp,
-    maskClass: classProp,
-    maskStyle: styleProp,
-    renderer: Function as PropType<(options: ToastOptions) => any>
-  },
+  props: toastProps,
   emits: [],
   setup(_props) {
     const nh = useNameHelper('toast')
@@ -100,7 +80,8 @@ export default defineComponent({
       maskStyle: null,
       renderer: {
         default: null,
-        isFunc: true
+        isFunc: true,
+        static: true
       }
     })
 

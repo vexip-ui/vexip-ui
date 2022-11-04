@@ -7,52 +7,18 @@ import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { Switch } from '@/components/switch'
 import { User, ArrowRightFromBracket, Check, Sun, Moon } from '@vexip-ui/icons'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { useMounted } from '@vexip-ui/hooks'
 import { isClient } from '@vexip-ui/utils'
+import { layoutHeaderProps } from './props'
 import { computeSeriesColors, useLayoutState } from './helper'
 
-import type { PropType } from 'vue'
-import type { MenuOptions, MenuExposed } from '@/components/menu'
-import type {
-  LayoutConfig,
-  LayoutUser,
-  LayoutHeaderAction,
-  LayoutSignType,
-  LayoutMenuProps
-} from './symbol'
+import type { MenuExposed } from '@/components/menu'
+import type { LayoutConfig, LayoutHeaderAction, LayoutSignType } from './symbol'
 
 export default defineComponent({
   name: 'LayoutHeader',
-  props: {
-    tag: String,
-    logo: String,
-    signName: String,
-    user: Object as PropType<LayoutUser>,
-    userDropped: booleanProp,
-    avatarCircle: booleanProp,
-    config: Array as PropType<LayoutConfig[]>,
-    actions: Array as PropType<LayoutHeaderAction[]>,
-    signType: String as PropType<LayoutSignType>,
-    colors: Array as PropType<string[]>,
-    color: String,
-    menus: Object as PropType<MenuOptions[]>,
-    menuProps: Object as PropType<LayoutMenuProps>,
-    onNavChange: eventProp<(type: LayoutSignType) => void>(),
-    onColorChange: eventProp<(color: string) => void>(),
-    onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>(),
-    onSignClick: eventProp<(event: MouseEvent) => void>(),
-    onDropChange: eventProp<(target: boolean) => void>(),
-    onReducedChange: eventProp<(reduced: boolean) => void>(),
-    onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>()
-  },
+  props: layoutHeaderProps,
   emits: ['update:sign-type', 'update:color', 'update:user-dropped'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {

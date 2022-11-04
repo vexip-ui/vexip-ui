@@ -20,47 +20,23 @@ import { Spinner } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { useFieldStore } from '@/components/form'
 import { debounceMinor, isObject } from '@vexip-ui/utils'
+import { radioGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-import type { PropType, Ref } from 'vue'
-
-type RawOption =
-  | string
-  | {
-    label: string | number,
-    content?: string
-  }
+import type { Ref } from 'vue'
 
 export default defineComponent({
   name: 'RadioGroup',
   components: {
     Radio
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: [String, Number],
-    vertical: booleanProp,
-    disabled: booleanProp,
-    button: booleanProp,
-    border: booleanProp,
-    options: Array as PropType<RawOption[]>,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    onChange: eventProp<(value: string | number) => void>()
-  },
+  props: radioGroupProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =

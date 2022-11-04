@@ -35,20 +35,11 @@
 <script lang="ts">
 import { defineComponent, ref, computed, inject } from 'vue'
 import { Button } from '@/components/button'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  sizeProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { noop, isPromise } from '@vexip-ui/utils'
+import { formSubmitProps } from './props'
 import { FORM_PROPS, FORM_ACTIONS } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ButtonType, ButtonAttrType } from '@/components/button'
 import type { FormActions } from './symbol'
 
 export default defineComponent({
@@ -56,27 +47,7 @@ export default defineComponent({
   components: {
     Button
   },
-  props: {
-    size: sizeProp,
-    type: String as PropType<ButtonType>,
-    label: String,
-    dashed: booleanProp,
-    text: booleanProp,
-    simple: booleanProp,
-    ghost: booleanProp,
-    disabled: booleanProp,
-    circle: booleanProp,
-    loadingIcon: Object,
-    loadingSpin: booleanProp,
-    icon: Object,
-    color: String,
-    buttonType: String as PropType<ButtonAttrType>,
-    block: booleanProp,
-    tag: String,
-    onBeforeSubmit: Function as PropType<() => unknown>,
-    onSubmit: eventProp(),
-    onError: eventProp<(errors: string[]) => void>()
-  },
+  props: formSubmitProps,
   emits: [],
   setup(_props) {
     const props = useProps('form-submit', _props, {

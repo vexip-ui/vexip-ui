@@ -1,9 +1,9 @@
 import { defineComponent, reactive, computed, h, provide, toRef } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
+import { rowProps } from './props'
 import { ROW_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { RowGridJustify, RowGridAlign, ColumnFlex } from './symbol'
+import type { RowGridJustify, RowGridAlign } from './symbol'
 
 const justifyList = Object.freeze<RowGridJustify>([
   'start',
@@ -17,16 +17,7 @@ const alignList = Object.freeze<RowGridAlign>(['top', 'middle', 'bottom', 'stret
 
 export default defineComponent({
   name: 'Row',
-  props: {
-    tag: String,
-    gap: [Number, Array] as PropType<number | number[]>,
-    justify: String as PropType<RowGridJustify>,
-    align: String as PropType<RowGridAlign>,
-    columnFlex: {
-      type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
-      default: null
-    }
-  },
+  props: rowProps,
   setup(_props, { slots }) {
     const props = useProps('row', _props, {
       tag: 'div',

@@ -82,13 +82,8 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  classProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import {
@@ -102,8 +97,7 @@ import {
   minus
 } from '@vexip-ui/utils'
 import { CaretUp, CaretDown, CircleXmark, Spinner } from '@vexip-ui/icons'
-
-import type { PropType } from 'vue'
+import { numberInputProps } from './props'
 
 type InputEventType = 'input' | 'change'
 
@@ -117,49 +111,7 @@ export default defineComponent({
     CaretDown,
     CircleXmark
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    // 格式化后显示
-    formatter: Function as PropType<(value: number) => string>,
-    value: Number,
-    min: Number,
-    max: Number,
-    placeholder: String,
-    autofocus: booleanProp,
-    spellcheck: booleanProp,
-    autocomplete: booleanProp,
-    precision: Number,
-    readonly: booleanProp,
-    step: Number,
-    ctrlStep: Number,
-    shiftStep: Number,
-    altStep: Number,
-    disabled: booleanProp,
-    inputClass: classProp,
-    debounce: booleanProp,
-    clearable: booleanProp,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    sync: booleanProp,
-    onFocus: eventProp<(event: FocusEvent) => void>(),
-    onBlur: eventProp<(event: FocusEvent) => void>(),
-    onInput: eventProp<(value: number) => void>(),
-    onChange: eventProp<(value: number) => void>(),
-    onEnter: eventProp(),
-    onClear: eventProp(),
-    onPrefixClick: eventProp<(event: MouseEvent) => void>(),
-    onSuffixClick: eventProp<(event: MouseEvent) => void>(),
-    onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
-    onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
-    onKeyUp: eventProp<(event: KeyboardEvent) => void>()
-  },
+  props: numberInputProps,
   emits: ['update:value'],
   setup(_props, { slots, emit }) {
     const {

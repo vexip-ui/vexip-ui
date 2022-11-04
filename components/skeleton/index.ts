@@ -1,2 +1,2 @@
 export { default as Skeleton } from './skeleton'
-export type {} from './props'
+export type { SkeletonProps, SkeletonCProps } from './props'

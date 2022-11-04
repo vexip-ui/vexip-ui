@@ -1,2 +1,2 @@
 export { default as Tabs } from './tabs.vue'
-export type {} from './props'
+export type { TabsProps, TabsCProps } from './props'

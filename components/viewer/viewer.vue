@@ -67,21 +67,13 @@ import {
   Compress,
   ArrowsRotate
 } from '@vexip-ui/icons'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  booleanNumberProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/hooks'
 import { boundRange, toFixed } from '@vexip-ui/utils'
+import { viewerProps } from './props'
 import { InternalActionName } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ViewerState, ViewerToolbarPlacement, ToolbarAction } from './symbol'
+import type { ToolbarAction } from './symbol'
 
 export default defineComponent({
   name: 'Viewer',
@@ -90,33 +82,7 @@ export default defineComponent({
     Icon,
     Renderer
   },
-  props: {
-    width: [String, Number],
-    height: [String, Number],
-    moveDisabled: booleanProp,
-    zoomDisabled: booleanProp,
-    zoomDelta: Number,
-    zoomMin: Number,
-    zoomMax: Number,
-    flipDisabled: booleanProp,
-    rotateDisabled: booleanProp,
-    rotateDelta: Number,
-    fullDisabled: booleanProp,
-    toolbarPlacement: String as PropType<ViewerToolbarPlacement>,
-    actions: Array as PropType<ToolbarAction[]>,
-    toolbarFade: booleanNumberProp,
-    noTransition: booleanProp,
-    onMoveStart: eventProp<(state: ViewerState) => void>(),
-    onMove: eventProp<(state: ViewerState) => void>(),
-    onMoveEnd: eventProp<(state: ViewerState) => void>(),
-    onWheel: eventProp<(sign: 1 | -1, state: ViewerState) => void>(),
-    onRotate: eventProp<(deg: number, state: ViewerState) => void>(),
-    onFlipX: eventProp<(flip: boolean, state: ViewerState) => void>(),
-    onFlipY: eventProp<(flip: boolean, state: ViewerState) => void>(),
-    onZoom: eventProp<(zoom: number, state: ViewerState) => void>(),
-    onFull: eventProp<(full: boolean, state: ViewerState) => void>(),
-    onReset: eventProp<(state: ViewerState) => void>()
-  },
+  props: viewerProps,
   emits: [],
   setup(_props) {
     const props = useProps('viewer', _props, {

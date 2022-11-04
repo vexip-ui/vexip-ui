@@ -3,36 +3,15 @@ import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
 import { Indent, Outdent, CaretRight } from '@vexip-ui/icons'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { layoutAsideProps } from './props'
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
-import type { PropType } from 'vue'
-import type { MenuOptions, MenuExposed } from '@/components/menu'
-import type { LayoutMenuProps } from './symbol'
+import type { MenuExposed } from '@/components/menu'
 
 export default defineComponent({
   name: 'LayoutAside',
-  props: {
-    tag: String,
-    expanded: booleanProp,
-    reduced: booleanProp,
-    menus: Array as PropType<MenuOptions[]>,
-    menuProps: Object as PropType<LayoutMenuProps>,
-    logo: String,
-    signName: String,
-    fixed: booleanStringProp,
-    onReducedChange: eventProp<(reduced: boolean) => void>(),
-    onExpandedChange: eventProp<(expanded: boolean) => void>(),
-    onSignClick: eventProp<(event: MouseEvent) => void>(),
-    onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>()
-  },
+  props: layoutAsideProps,
   emits: ['update:reduced', 'update:expanded'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {

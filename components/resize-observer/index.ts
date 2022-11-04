@@ -1,2 +1,2 @@
 export { default as ResizeObserver } from './resize-observer'
-export type {} from './props'
+export type { ResizeObserverProps, ResizeObserverCProps } from './props'

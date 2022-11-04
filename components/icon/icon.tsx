@@ -1,24 +1,12 @@
 import { defineComponent, h, computed } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
+import { iconProps } from './props'
 
-import type { PropType, CSSProperties } from 'vue'
-
-const inOutProp = {
-  type: [Boolean, String] as PropType<boolean | 'in' | 'out'>,
-  default: null
-}
+import type { CSSProperties } from 'vue'
 
 export default defineComponent({
   name: 'Icon',
-  props: {
-    icon: Object,
-    scale: [Number, String] as PropType<number | string>,
-    title: String,
-    label: String,
-    spin: inOutProp,
-    pulse: inOutProp,
-    flip: String as PropType<'horizontal' | 'vertical' | 'both'>
-  },
+  props: iconProps,
   setup(_props, { attrs, slots }) {
     const props = useProps('icon', _props, {
       icon: {

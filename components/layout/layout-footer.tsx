@@ -1,20 +1,13 @@
 import { defineComponent, toRef, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Linker } from '@/components/linker'
-import { useNameHelper, useProps, booleanStringProp } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { layoutFooterProps } from './props'
 import { useMediaQuery } from './helper'
-
-import type { PropType } from 'vue'
-import type { LayoutFooterLink } from './symbol'
 
 export default defineComponent({
   name: 'LayoutFooter',
-  props: {
-    tag: String,
-    copyright: String,
-    links: Array as PropType<LayoutFooterLink[]>,
-    verticalLinks: booleanStringProp
-  },
+  props: layoutFooterProps,
   setup(_props, { slots }) {
     const props = useProps('layout', _props, {
       tag: 'footer',

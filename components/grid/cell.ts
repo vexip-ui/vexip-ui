@@ -1,35 +1,16 @@
 import { defineComponent, reactive, computed, watch, h, inject } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { isDefined, has } from '@vexip-ui/utils'
+import { cellProps } from './props'
 import { breakPoints, currentBreakPoint } from './helpler'
 import { GRID_STATE } from './symbol'
 
-import type { PropType, CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
 import type { BreakPoint } from './helpler'
-
-const mediaProp = [Number, Object] as PropType<CellOptions>
 
 export default defineComponent({
   name: 'Cell',
-  props: {
-    tag: String,
-    top: [Number, String],
-    left: [Number, String],
-    width: Number,
-    height: Number,
-    right: [Number, String],
-    bottom: [Number, String],
-    xs: mediaProp,
-    sm: mediaProp,
-    md: mediaProp,
-    lg: mediaProp,
-    xl: mediaProp,
-    xxl: mediaProp,
-    useFlex: {
-      type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
-      default: null
-    }
-  },
+  props: cellProps,
   setup(_props, { slots }) {
     const props = useProps('cell', _props, {
       tag: 'div',

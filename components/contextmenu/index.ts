@@ -73,4 +73,3 @@ export class ContextmenuManager {
 }
 
 export const Contextmenu = new ContextmenuManager()
-export type {} from './props'

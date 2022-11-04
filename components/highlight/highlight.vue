@@ -17,17 +17,12 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { highlightProps } from './props'
 
 export default defineComponent({
   name: 'Highlight',
-  props: {
-    content: String,
-    keyWords: Array as PropType<string[]>,
-    ignoreCase: booleanProp
-  },
+  props: highlightProps,
   setup(_props) {
     const props = useProps('highlight', _props, {
       content: {

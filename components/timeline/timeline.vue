@@ -6,22 +6,16 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, toRef } from 'vue'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
+import { timelineProps } from './props'
 import { TIMELINE_STATE } from './symbol'
 
 import type { ItemState, TimelineState } from './symbol'
 
 export default defineComponent({
   name: 'Timeline',
-  props: {
-    pending: booleanProp,
-    bothSides: booleanProp,
-    dashed: booleanProp,
-    lineColor: String,
-    spacing: [Number, String],
-    onSignalClick: eventProp<(label: string | number) => void>()
-  },
+  props: timelineProps,
   emits: [],
   setup(_props) {
     const props = useProps('timeline', _props, {

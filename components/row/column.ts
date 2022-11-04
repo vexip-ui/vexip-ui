@@ -1,35 +1,17 @@
 import { defineComponent, computed, h, inject } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
+import { columnProps } from './props'
 import { ROW_STATE, breakPoints } from './symbol'
 
-import type { PropType, CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
 
 type LayerProp = 'span' | 'offset' | 'pull' | 'push' | 'order'
 
-const mediaProp = [Number, Object] as PropType<number | ColumnOptions>
 const colProps: LayerProp[] = ['span', 'offset', 'pull', 'push', 'order']
 
 export default defineComponent({
   name: 'Column',
-  props: {
-    tag: String,
-    span: Number,
-    offset: Number,
-    push: Number,
-    pull: Number,
-    order: Number,
-    xs: mediaProp,
-    sm: mediaProp,
-    md: mediaProp,
-    lg: mediaProp,
-    xl: mediaProp,
-    xxl: mediaProp,
-    flex: [Number, String],
-    useFlex: {
-      type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
-      default: null
-    }
-  },
+  props: columnProps,
   setup(_props, { slots }) {
     const props = useProps('column', _props, {
       tag: 'div',

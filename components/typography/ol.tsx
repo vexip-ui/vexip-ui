@@ -1,16 +1,13 @@
 import { defineComponent } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
+import { olProps } from './props'
 
 export default defineComponent({
   name: 'OL',
-  props: {
-    type: String as PropType<'a' | 'A' | 'i' | 'I' | '1'>
-  },
+  props: olProps,
   emits: [],
   setup(_props, { slots }) {
-    const props = useProps('text', _props, {
+    const props = useProps('ol', _props, {
       type: '1'
     })
 

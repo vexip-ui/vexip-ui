@@ -6,6 +6,9 @@ import { Check, Exclamation, Xmark, Spinner } from '@vexip-ui/icons'
 import type { App } from 'vue'
 import type { ToastType, ToastOptions, ToastInstance } from './symbol'
 
+export type { ToastProps, ToastCProps } from './props'
+export type { ToastType, ToastOptions }
+
 type FuzzyOptions = string | ToastOptions
 
 interface AipMethod {
@@ -180,4 +183,3 @@ export class ToastManager {
 }
 
 export const Toast = new ToastManager()
-export type {} from './props'

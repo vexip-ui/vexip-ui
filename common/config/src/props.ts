@@ -157,6 +157,23 @@ export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
   }) as T
 }
 
+export function omitProps<T extends ComponentObjectPropsOptions, K extends keyof T>(
+  props: T,
+  keys: K[]
+) {
+  const omittedKeys = new Set(keys)
+
+  return Object.freeze(
+    (Object.keys(props) as any[]).reduce((prev, current) => {
+      if (!omittedKeys.has(current)) {
+        prev[current] = props[current]
+      }
+
+      return prev
+    }, {})
+  ) as Omit<T, K>
+}
+
 export type ComponentSize = 'small' | 'default' | 'large'
 
 export const sizeProp = String as PropType<ComponentSize>
