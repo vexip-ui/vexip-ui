@@ -259,23 +259,23 @@ export default defineComponent({
       size: createSizeProp(),
       total: {
         default: 0,
-        validator: (value: number) => value >= 0,
+        validator: value => value >= 0,
         static: true
       },
       noBorder: false,
       background: false,
       pageSize: {
         default: 10,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       sizeOptions: () => [10, 20, 50, 100],
       maxCount: {
         default: 7,
-        validator: (value: number) => value === parseInt(value.toString()) && value > 6
+        validator: value => value === parseInt(value.toString()) && value > 6
       },
       active: {
         default: 1,
-        validator: (value: number) => value > 0,
+        validator: value => value > 0,
         static: true
       },
       disabled: false,
@@ -300,7 +300,7 @@ export default defineComponent({
     const inPrevEllipsis = ref(false)
     const inNextEllipsis = ref(false)
     const jumpValue = ref(props.active)
-    const itemElList = ref<HTMLElement[]>([])
+    const itemElList = ref<unknown[]>([])
 
     const locale = useLocale('pagination')
 
@@ -317,8 +317,9 @@ export default defineComponent({
 
             if (!~index) return
 
-            const target =
-              itemElList.value[boundRange(index + sign, 0, itemElList.value.length - 1)]
+            const target = itemElList.value[
+              boundRange(index + sign, 0, itemElList.value.length - 1)
+            ] as HTMLElement
 
             target.focus()
           }
@@ -330,7 +331,9 @@ export default defineComponent({
 
             if (!~index) {
               const activeClass = nh.bem('item', 'active')
-              const activeEl = itemElList.value.find(el => el.classList.contains(activeClass))
+              const activeEl = (itemElList.value as HTMLElement[]).find(el =>
+                el.classList.contains(activeClass)
+              )
 
               activeEl?.focus()
             }
@@ -516,12 +519,12 @@ export default defineComponent({
       currentActive.value = active
 
       if (isClient && focus) {
-        const activeEl = itemElList.value.find(el => el === document.activeElement)
+        const activeEl = itemElList.value.find(el => el === document.activeElement) as HTMLElement
 
         activeEl?.blur()
 
         nextTick(() => {
-          const el = itemElList.value.find(el => el.tabIndex >= 0)
+          const el = (itemElList.value as HTMLElement[]).find(el => el.tabIndex >= 0)
           el?.focus()
         })
       }

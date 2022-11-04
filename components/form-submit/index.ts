@@ -1,2 +1,2 @@
 export { default as FormSubmit } from '../form/form-submit.vue'
-export { FormSubmitProps, FormSubmitCProps } from '../form/props'
+export type { FormSubmitProps, FormSubmitCProps } from '../form/props'

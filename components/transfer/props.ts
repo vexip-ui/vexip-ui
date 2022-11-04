@@ -4,14 +4,14 @@ import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { TransferKeyConfig, TransferOptionState } from './symbol'
 
-type RawOption = string | Record<string, any>
-type Values = (string | number)[]
-type FilterHandler = (
+export type RawOption = string | Record<string, any>
+export type Values = (string | number)[]
+export type FilterHandler = (
   value: string,
   options: TransferOptionState,
   type: 'source' | 'target'
 ) => boolean
-type SelectHandler = (
+export type SelectHandler = (
   type: 'source' | 'target',
   selected: { source: Values, target: Values },
   data: { source: RawOption[], target: RawOption[] }

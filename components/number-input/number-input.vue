@@ -170,7 +170,7 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const inputting = ref(false)
 
-    const inputControl = ref<HTMLInputElement | null>(null)
+    const inputControl = ref<HTMLInputElement>()
     const { wrapper, isHover } = useHover()
 
     useModifier({

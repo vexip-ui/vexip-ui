@@ -89,8 +89,18 @@ export async function dryRun(bin: string, args: string[], opts: Options = {}) {
   console.log(lightBlue(`[dryrun] ${bin} ${args.join(' ')}`), opts)
 }
 
+function allCapital(value: string) {
+  const matched = value.match(/[A-Z]+/)
+
+  return matched && matched[0] === value
+}
+
 // 短横线命名
 export function toKebabCase(value: string) {
+  if (allCapital(value)) {
+    return value.toLocaleLowerCase()
+  }
+
   return (
     value.charAt(0).toLowerCase() +
     value
@@ -111,6 +121,10 @@ export function toCapitalCase(value: string) {
 // 驼峰命名
 export function toCamelCase(value: string) {
   const capitalName = toCapitalCase(value)
+
+  if (allCapital(capitalName)) {
+    return capitalName.toLocaleLowerCase()
+  }
 
   return capitalName.charAt(0).toLowerCase() + capitalName.slice(1)
 }

@@ -27,14 +27,14 @@ import type {
   TableCellPayload,
   TableHeadPayload
 } from './symbol'
-interface FilterProfile {
+export interface FilterProfile {
   name: string,
   key: string | number,
   metaData: Data,
   active: string | number | (string | number)[] | null
 }
 
-interface SortProfile {
+export interface SortProfile {
   name: string,
   key: string | number,
   metaData: Data,

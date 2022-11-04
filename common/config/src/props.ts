@@ -142,13 +142,15 @@ export const booleanNumberProp = {
   default: null
 }
 
-export type ConfigurableProps<T, E = never, I = never> = {
-  [P in keyof T]: P extends I
+type Expand<T> = T extends unknown ? { [K in keyof T]: T[K] } : never
+
+export type ConfigurableProps<T, E = never, I = never> = Expand<{
+  [P in keyof T]?: P extends I
     ? T[P]
     : P extends `on${Capitalize<string>}`
       ? never
       : T[Exclude<P, 'value' | 'checked' | 'active' | 'visible' | 'label' | 'options' | E>]
-}
+}>
 
 export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
   return Object.freeze({

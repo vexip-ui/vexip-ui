@@ -17,7 +17,9 @@ export const numberInputProps = buildProps({
   prefixColor: String,
   suffix: Object,
   suffixColor: String,
-  // 格式化后显示
+  /**
+   * 格式化后显示
+   */
   formatter: Function as PropType<(value: number) => string>,
   value: Number,
   min: Number,

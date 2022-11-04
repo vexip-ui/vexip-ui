@@ -24,7 +24,8 @@
         "./*"
       ],
       "@vexip-ui/*": ["common/*/src"],
-      "vexip-ui": ["components"]
+      "vexip-ui": ["components"],
+      "vue-router": ["node_modules/vue-router"]
     },
     "lib": [
       "esnext",

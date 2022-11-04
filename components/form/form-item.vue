@@ -163,7 +163,7 @@ export default defineComponent({
     const disabledValidate = ref(false)
     const labelWidth = ref(0)
 
-    const labelEl = ref<HTMLInputElement | null>(null)
+    const labelEl = ref<HTMLInputElement>()
 
     const isRequired = computed(() => formProps.allRequired || props.required)
     const requiredTip = computed(() => {

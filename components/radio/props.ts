@@ -27,7 +27,7 @@ export const radioProps = buildProps({
 export type RadioProps = ExtractPropTypes<typeof radioProps>
 export type RadioCProps = ConfigurableProps<RadioProps>
 
-type RawOption =
+export type RawOption =
   | string
   | {
     label: string | number,

@@ -41,11 +41,17 @@ export default defineConfig(async () => {
       sourcemap: sourceMap,
       lib: {
         entry: resolve(componentsDir, 'full-lib.ts'),
-        formats: ['es', 'cjs'],
-        fileName: format => `vexip-ui.${format === 'es' ? 'mjs' : 'cjs'}`
+        formats: ['es', 'cjs', 'iife'],
+        name: 'VexipUI',
+        fileName: format => `vexip-ui.${format === 'es' ? 'mjs' : format === 'cjs' ? 'cjs' : 'js'}`
       },
       rollupOptions: {
-        external: ['vue']
+        external: ['vue'],
+        output: {
+          globals: {
+            vue: 'Vue'
+          }
+        }
       },
       commonjsOptions: {
         sourceMap: false
@@ -65,7 +71,9 @@ export default defineConfig(async () => {
           'common/utils'
         ],
         outputDir: outDir,
-        compilerOptions: { sourceMap },
+        compilerOptions: {
+          sourceMap: false
+        },
         copyDtsFiles: true,
         skipDiagnostics: false,
         logDiagnostics: true

@@ -330,7 +330,7 @@ export default defineComponent({
     const currentIndex = ref(-1)
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
-    const listHeight = ref<string | undefined>(undefined)
+    const listHeight = ref<string>()
     const baseOptions = ref<SelectOptionState[]>([])
     const currentFilter = ref('')
     const anchorWidth = ref(0)
@@ -457,9 +457,9 @@ export default defineComponent({
     }
 
     const wrapper = useClickOutside(handleClickOutside)
-    const input = ref<HTMLInputElement | null>(null)
+    const input = ref<HTMLInputElement>()
     const device = ref<HTMLElement>()
-    const virtualList = ref<(InstanceType<typeof VirtualList> & VirtualListExposed) | null>(null)
+    const virtualList = ref<InstanceType<typeof VirtualList> & VirtualListExposed>()
 
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,

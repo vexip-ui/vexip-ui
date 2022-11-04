@@ -3,12 +3,13 @@ import { configProps, configLocale } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 import type { LocaleOptions } from '@vexip-ui/config'
+import type { ProvidedProps } from '@/components/props'
 
 export default defineComponent({
   name: 'ConfigProvider',
   props: {
     props: {
-      type: Object,
+      type: Object as PropType<ProvidedProps>,
       default: () => ({})
     },
     locale: {
@@ -17,7 +18,7 @@ export default defineComponent({
     }
   },
   setup(props, { slots }) {
-    configProps(toRef(props, 'props'))
+    configProps(toRef(props, 'props') as any)
     configLocale(toRef(props, 'locale'))
 
     return () => renderSlot(slots, 'default')

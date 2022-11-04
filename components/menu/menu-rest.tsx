@@ -19,6 +19,7 @@ import { callIfFunc } from '@vexip-ui/utils'
 import { MENU_STATE, MENU_ITEM_STATE } from './symbol'
 
 import type { PropType } from 'vue'
+import type { MenuOptions } from './symbol'
 
 export default defineComponent({
   name: 'MenuRest',

@@ -3,7 +3,7 @@ import { buildProps, booleanProp, booleanStringProp, stateProp, eventProp } from
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
-type RawOption =
+export type RawOption =
   | string
   | number
   | {

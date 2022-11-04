@@ -1,2 +1,2 @@
 export { default as TimelineItem } from '../timeline/timeline-item.vue'
-export { TimelineItemProps, TimelineItemCProps } from '../timeline/props'
+export type { TimelineItemProps, TimelineItemCProps } from '../timeline/props'

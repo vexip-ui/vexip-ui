@@ -32,7 +32,7 @@ export const checkboxProps = buildProps({
 export type CheckboxProps = ExtractPropTypes<typeof checkboxProps>
 export type CheckboxCProps = ConfigurableProps<CheckboxProps>
 
-type RawOption =
+export type RawOption =
   | string
   | {
     value: string | number,

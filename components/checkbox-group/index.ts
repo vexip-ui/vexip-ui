@@ -1,2 +1,2 @@
 export { default as CheckboxGroup } from '../checkbox/checkbox-group.vue'
-export { CheckboxGroupProps, CheckboxGroupCProps } from '../checkbox/props'
+export type { CheckboxGroupProps, CheckboxGroupCProps } from '../checkbox/props'

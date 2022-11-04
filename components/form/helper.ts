@@ -3,6 +3,7 @@ import { isNull, noop } from '@vexip-ui/utils'
 import { FIELD_OPTIONS } from './symbol'
 
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
+import type { FieldOptions } from './symbol'
 
 /**
  * 根据路径读取对象中的值 (实现 ?. 的逻辑)

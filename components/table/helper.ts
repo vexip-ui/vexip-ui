@@ -1,3 +1,5 @@
+import type { FilterOptions, SorterOptions, TableColumnOptions } from './symbol'
+
 export function defineFilter<T extends string | number, D>(filter: FilterOptions<T, D>) {
   return filter
 }

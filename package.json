@@ -147,6 +147,7 @@
     "prepare": "is-ci || husky install",
     "prepublishOnly": "pinst --disable",
     "prettier": "prettier --write \"{common,component,directives,playground,dev-server,docs}/**/*.{ts,js,json,css,pcss,scss,vue,html,md}\"",
+    "props": "tsx scripts/props.ts",
     "publish:ci": "tsx scripts/publish.ts",
     "release": "tsx scripts/release.ts",
     "serve": "tsx scripts/serve.ts",

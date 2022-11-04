@@ -159,7 +159,7 @@ export default defineComponent({
     const nh = useNameHelper('cascader')
     const currentHitting = ref(-1)
 
-    const list = ref<VirtualListExposed | null>(null)
+    const list = ref<VirtualListExposed>()
 
     const { target: wrapper } = useModifier({
       passive: false,
