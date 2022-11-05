@@ -30,6 +30,9 @@ jobs:
       - name: Install
         run: nci
 
+      - name: build common
+        run: nr build:common
+
       - name: Lint
         run: nr lint
 
@@ -59,6 +62,9 @@ jobs:
 
       - name: Install
         run: nci
+
+      - name: build common
+        run: nr build:common
 
       - name: Build
         run: nr build
