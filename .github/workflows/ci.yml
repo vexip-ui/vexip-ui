@@ -30,7 +30,7 @@ jobs:
       - name: Install
         run: nci
 
-      - name: build common
+      - name: build
         run: nr build:common
 
       - name: Lint
