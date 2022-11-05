@@ -11,7 +11,7 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
 
@@ -41,7 +41,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [14.x, 16.x]
+        node: [16.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: false
 
