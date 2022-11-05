@@ -40,16 +40,16 @@ async function main() {
     const cprops = `${toCapitalCase(component)}CProps`
 
     imports.push(`import { ${cprops} } from './${component}'`)
-    types.push(`${toCamelCase(component)}: ${cprops}`)
+    types.push(`${toCamelCase(component)}?: ${cprops}`)
   }
 
   const props = `
     ${imports.join('\n')}
     import { ${typography.map(name => `${toCapitalCase(name)}CProps`).join()} } from './typography'
 
-    export interface ProvidedProps {
+    export interface PropsOptions {
       ${types.join(',\n')},
-      ${typography.map(name => `${toCamelCase(name)}: ${toCapitalCase(name)}CProps`).join(',\n')}
+      ${typography.map(name => `${toCamelCase(name)}?: ${toCapitalCase(name)}CProps`).join(',\n')}
     }
   `
 

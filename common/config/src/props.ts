@@ -33,7 +33,7 @@ type PropsConfigOptions<T> = {
 export const PROVIDED_PROPS = '__vxp-provided-props'
 const eventPropRE = /^on[A-Z]/
 
-export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOptions>>, app?: App) {
+export function configProps<T>(props: MaybeRef<T>, app?: App) {
   if (app) {
     app.provide(
       PROVIDED_PROPS,
@@ -46,7 +46,7 @@ export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOpti
         return unref(props)
       }
 
-      return mergeObjects(upstreamProps.value, unref(props))
+      return mergeObjects(upstreamProps.value, unref(props) as any)
     })
 
     provide(PROVIDED_PROPS, providedProps)

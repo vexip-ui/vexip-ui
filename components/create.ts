@@ -4,14 +4,14 @@ import { toCapitalCase } from '@vexip-ui/utils'
 
 import type { Ref, App } from 'vue'
 import type { LocaleOptions } from '@vexip-ui/config'
-import type { ProvidedProps } from './props'
+import type { PropsOptions } from './props'
 
 type MaybeRef<T> = T | Ref<T>
 
 export interface InstallOptions {
   prefix?: string,
   namespace?: MaybeRef<string>,
-  props?: MaybeRef<ProvidedProps>,
+  props?: MaybeRef<PropsOptions>,
   locale?: MaybeRef<LocaleOptions>,
   zIndex?: MaybeRef<number>
 }
