@@ -482,6 +482,7 @@ describe('DatePicker', () => {
     expect(onChangeCol).toHaveBeenLastCalledWith('date', 'start')
 
     await wrapper.trigger('clickoutside')
+    await wrapper.trigger('click')
     await units[1].trigger('click')
     expect(selector.classes()).toContain('vxp-date-picker__selector--focused')
     expect(units[1].classes()).toContain('vxp-date-picker__unit--focused')
