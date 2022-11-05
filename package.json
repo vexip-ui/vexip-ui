@@ -2,7 +2,7 @@
   "author": {
     "name": "qmhc"
   },
-  "packageManager": "pnpm@7",
+  "packageManager": "pnpm@7.1.0",
   "scripts": {
     "bootstrap": "tsx scripts/bootstrap.ts",
     "serve": "tsx scripts/serve.ts",
