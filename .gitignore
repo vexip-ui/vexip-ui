@@ -10,9 +10,8 @@ coverage
 /css
 /themes
 
-package-lock.json
 yarn.lock
-pnpm-lock.yaml
+package-lock.json
 
 __unconfig_vite.config*
 

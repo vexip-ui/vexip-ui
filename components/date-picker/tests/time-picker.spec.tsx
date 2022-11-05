@@ -385,6 +385,7 @@ describe('TimePicker', () => {
     expect(onChangeCol).toHaveBeenLastCalledWith('hour', 'start')
 
     await wrapper.trigger('clickoutside')
+    await wrapper.trigger('click')
     await units[2].trigger('click')
     expect(selector.classes()).toContain('vxp-time-picker__selector--focused')
     expect(units[2].classes()).toContain('vxp-time-picker__unit--focused')
