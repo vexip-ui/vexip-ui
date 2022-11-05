@@ -76,7 +76,7 @@
     "gulp-autoprefixer": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-sass": "^5.1.0",
-    "happy-dom": "^7.6.6",
+    "happy-dom": "6.0.4",
     "husky": "^8.0.1",
     "is-ci": "^3.0.1",
     "jszip": "^3.10.1",
