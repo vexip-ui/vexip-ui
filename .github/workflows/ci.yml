@@ -63,11 +63,8 @@ jobs:
       - name: Install
         run: nci
 
-      - name: build common
+      - name: build
         run: nr build:common
-
-      - name: Build
-        run: nr build
 
       - name: Test
         run: nr test
