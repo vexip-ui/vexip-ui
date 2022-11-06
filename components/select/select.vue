@@ -297,7 +297,7 @@ export default defineComponent({
       suffixColor: '',
       noSuffix: false,
       value: {
-        default: () => getFieldValue(null!),
+        default: () => getFieldValue(null)!,
         static: true
       },
       multiple: false,
@@ -613,8 +613,10 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        emittedValue = value
-        initValueAndLabel(value)
+        if (emittedValue !== value) {
+          emittedValue = value
+          initValueAndLabel(value)
+        }
       }
     )
     watch(
@@ -650,7 +652,7 @@ export default defineComponent({
     })
 
     function initValueAndLabel(value: SelectValue | null) {
-      if (!value) {
+      if (isNull(value)) {
         currentValues.value = []
         currentLabels.value = []
         return
@@ -830,16 +832,12 @@ export default defineComponent({
         emit('update:label', currentLabels.value)
         validateField()
       } else {
-        currentLabels.value.length = 0
-
-        if (!isNull(option.value) && option.value !== '') {
-          currentLabels.value.push(option.label)
-        }
-
         const prevValue = currentValues.value[0]
 
         currentValues.value.length = 0
+        currentLabels.value.length = 0
         currentValues.value.push(option.value)
+        currentLabels.value.push(option.label)
 
         if (prevValue !== option.value) {
           emittedValue = option.value

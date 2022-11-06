@@ -12,7 +12,7 @@ export interface SelectKeyConfig {
 }
 
 type SelectRawOption = string | Record<string, any>
-type SelectValue = string | number | (string | number)[]
+type SelectValue = string | number | null | (string | number)[]
 
 interface SelectOptionState {
   value: string | number,
