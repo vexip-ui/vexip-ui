@@ -40,8 +40,6 @@ body:
       description: Output of `npx envinfo --system --npmPackages '{vexip-ui,@vexip-ui/*}' --binaries --browsers`
       render: shell
       placeholder: System, Binaries, Browsers
-    validations:
-      required: true
 
   - type: checkboxes
     id: checkboxes
