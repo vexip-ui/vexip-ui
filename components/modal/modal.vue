@@ -79,23 +79,12 @@ import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  booleanStringProp,
-  classProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
+import { modalProps } from './props'
 
-import type { PropType } from 'vue'
-
-const positionType = [Number, String]
 const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
@@ -114,45 +103,7 @@ export default defineComponent({
     Masker,
     Xmark
   },
-  props: {
-    transfer: booleanStringProp,
-    active: booleanProp,
-    width: positionType,
-    height: positionType,
-    top: positionType,
-    left: positionType,
-    right: positionType,
-    bottom: positionType,
-    title: String,
-    closable: booleanProp,
-    inner: booleanProp,
-    maskClose: booleanProp,
-    modalClass: classProp,
-    noFooter: booleanProp,
-    hideMask: booleanProp,
-    draggable: booleanProp,
-    resizable: booleanProp,
-    onBeforeClose: Function as PropType<(isConfirm: boolean) => any>,
-    loading: booleanProp,
-    minWidth: Number,
-    minHeight: Number,
-    transitionName: String,
-    confirmText: String,
-    cancelText: String,
-    autoRemove: booleanProp,
-    onToggle: eventProp<(active: boolean) => void>(),
-    onConfirm: eventProp(),
-    onCancel: eventProp(),
-    onClose: eventProp(),
-    onShow: eventProp(),
-    onHide: eventProp(),
-    onDragStart: eventProp<(position: { top: number, left: number }) => void>(),
-    onDragMove: eventProp<(position: { top: number, left: number }) => void>(),
-    onDragEnd: eventProp<(position: { top: number, left: number }) => void>(),
-    onResizeStart: eventProp<(rect: { width: number, height: number }) => void>(),
-    onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
-    onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>()
-  },
+  props: modalProps,
   emits: ['update:active'],
   setup(_props, { slots, emit }) {
     const nh = useNameHelper('modal')

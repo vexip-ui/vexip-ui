@@ -23,53 +23,28 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { useFieldStore } from '@/components/form'
 import { isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
+import { checkboxGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-import type { PropType, Ref } from 'vue'
+import type { Ref } from 'vue'
 import type { ControlState } from './symbol'
-
-type RawOption =
-  | string
-  | {
-      value: string | number,
-      label?: string,
-      control?: boolean
-    }
-type Values = (string | number)[]
 
 export default defineComponent({
   name: 'CheckboxGroup',
   components: {
     Checkbox
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: Array as PropType<Values>,
-    vertical: booleanProp,
-    disabled: booleanProp,
-    border: booleanProp,
-    options: Array as PropType<RawOption[]>,
-    loading: booleanProp,
-    loadingLock: booleanProp,
-    control: booleanStringProp,
-    onChange: eventProp<(value: Values) => void>()
-  },
+  props: checkboxGroupProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<Values>(() => Array.from(inputSet)[0]?.value?.focus())
+      useFieldStore<(string | number)[]>(() => Array.from(inputSet)[0]?.value?.focus())
 
     const props = useProps('checkboxGroup', _props, {
       size: createSizeProp(size),
@@ -95,7 +70,7 @@ export default defineComponent({
     const valueMap = new Map<string | number, boolean>()
     const inputSet = new Set<Ref<HTMLElement | null | undefined>>()
     const controlSet = new Set<ControlState>()
-    const currentValues = ref<Values>(props.value || [])
+    const currentValues = ref<(string | number)[]>(props.value || [])
 
     const className = computed(() => {
       return [
@@ -221,7 +196,7 @@ export default defineComponent({
       updateControl()
     }
 
-    function handleChange(value: Values) {
+    function handleChange(value: (string | number)[]) {
       setFieldValue(value)
       emitEvent(props.onChange, value)
       emit('update:value', value)

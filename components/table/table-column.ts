@@ -1,59 +1,14 @@
 import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
-import {
-  useProps,
-  booleanProp,
-  sizeProp,
-  createSizeProp,
-  classProp,
-  styleProp
-} from '@vexip-ui/config'
+import { useProps, createSizeProp } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
+import { tableColumnProps } from './props'
 import { TABLE_ACTION } from './symbol'
 
-import type { PropType } from 'vue'
-import type {
-  Data,
-  TableColumnType,
-  FilterOptions,
-  SorterOptions,
-  ColumnRenderFn,
-  HeadRenderFn,
-  RowState,
-  ColumnWithKey
-} from './symbol'
+import type { Data, TableColumnType, FilterOptions, RowState, ColumnWithKey } from './symbol'
 
-const columnProps = {
-  idKey: [Number, String],
-  name: String,
-  accessor: Function as PropType<(row: any, index: number) => any>,
-  fixed: {
-    type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
-    default: null
-  },
-  className: classProp,
-  style: styleProp,
-  attrs: Object,
-  type: String as PropType<TableColumnType>,
-  width: Number,
-  filter: Object as PropType<FilterOptions<any, any>>,
-  sorter: {
-    type: [Boolean, Object] as PropType<boolean | SorterOptions<any>>,
-    default: null
-  },
-  renderer: Function as PropType<ColumnRenderFn>,
-  headRenderer: Function as PropType<HeadRenderFn>,
-  order: Number,
-  noEllipsis: booleanProp,
-  checkboxSize: sizeProp,
-  disableRow: Function as PropType<(data: Data) => boolean>,
-  truthIndex: booleanProp,
-  orderLabel: Function as PropType<(index: number) => string | number>,
-  metaData: Object as PropType<Data>
-}
+type ColumnPropKey = keyof typeof tableColumnProps
 
-type ColumnPropKey = keyof typeof columnProps
-
-const propKeys = Object.keys(columnProps) as ColumnPropKey[]
+const propKeys = Object.keys(tableColumnProps) as ColumnPropKey[]
 const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
@@ -62,8 +17,7 @@ const columnTypes: TableColumnType[] = ['order', 'selection', 'expand']
 
 export default defineComponent({
   name: 'TableColumn',
-  functional: true,
-  props: columnProps,
+  props: tableColumnProps,
   setup(_props, { slots }) {
     const props = useProps('tableColumn', _props, {
       idKey: {
@@ -71,10 +25,14 @@ export default defineComponent({
         validator: (value: number | string) => !isNull(value),
         static: true
       },
-      name: '',
+      name: {
+        default: '',
+        static: true
+      },
       accessor: {
         default: null,
-        isFunc: true
+        isFunc: true,
+        static: true
       },
       fixed: {
         default: false,
@@ -93,15 +51,17 @@ export default defineComponent({
       sorter: false,
       renderer: {
         default: null,
-        isFunc: true
+        isFunc: true,
+        static: true
       },
       headRenderer: {
         default: null,
-        isFunc: true
+        isFunc: true,
+        static: true
       },
       order: {
         default: 0,
-        isFunc: true
+        static: true
       },
       noEllipsis: false,
       checkboxSize: createSizeProp(),

@@ -1,6 +1,6 @@
+import { resolve } from 'node:path'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { statSync, existsSync } from 'node:fs'
-import { resolve } from 'node:path'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import { rootDir, prettierConfig, logger, components as allComponents, toCapitalCase } from './utils'
@@ -29,11 +29,11 @@ async function main() {
     export type {
       ComponentSize,
       ComponentState,
-      PropsOptions,
       LocaleConfig,
       LocaleNames,
       LocaleOptions
     } from '@vexip-ui/config'
+    export type { PropsOptions } from './props'
 
     export { version } from './version'
 

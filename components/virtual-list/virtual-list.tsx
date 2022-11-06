@@ -1,10 +1,10 @@
 import { defineComponent, toRefs, ref, computed, watch, nextTick } from 'vue'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { useVirtual } from '@vexip-ui/hooks'
+import { virtualListProps } from './props'
 
-import type { PropType } from 'vue'
 import type { ScrollPayload } from './symbol'
 
 export default defineComponent({
@@ -14,19 +14,7 @@ export default defineComponent({
     ResizeObserver
   },
   inheritAttrs: false,
-  props: {
-    items: Array as PropType<Array<Record<string, any>>>,
-    itemSize: Number,
-    itemFixed: Boolean,
-    idKey: String,
-    defaultKeyAt: [Number, String, Symbol],
-    bufferSize: Number,
-    listTag: String,
-    itemsTag: String,
-    itemsAttrs: Object as PropType<Record<string, any>>,
-    onScroll: eventProp<(payload: ScrollPayload) => void>(),
-    onResize: eventProp<(entry: ResizeObserverEntry) => void>()
-  },
+  props: virtualListProps,
   emits: [],
   setup(_props, { slots, attrs, expose }) {
     const props = useProps('virtualList', _props, {

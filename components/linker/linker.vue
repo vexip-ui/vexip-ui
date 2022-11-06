@@ -16,11 +16,10 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { linkerProps } from './props'
 
-import type { PropType } from 'vue'
-
-export type LinkerType = 'default' | 'primary' | 'success' | 'error' | 'warning' | 'info'
+import type { LinkerType } from './symbol'
 
 const linkerTypes = Object.freeze<LinkerType>([
   'default',
@@ -36,15 +35,7 @@ export default defineComponent({
   components: {
     Icon
   },
-  props: {
-    to: String,
-    type: String as PropType<LinkerType>,
-    icon: Object,
-    underline: booleanProp,
-    disabled: booleanProp,
-    target: String,
-    onClick: eventProp<(event: MouseEvent) => void>()
-  },
+  props: linkerProps,
   setup(_props) {
     const props = useProps('linker', _props, {
       to: {

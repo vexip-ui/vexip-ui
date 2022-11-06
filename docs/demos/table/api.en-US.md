@@ -17,19 +17,19 @@ type TableColumnType = 'order' | 'selection' | 'expand'
 
 type FilterOptions<T extends string | number = string | number, D = Data> =
   | {
-      able: boolean,
-      options: (string | { value: T, label?: string, active?: boolean })[],
-      multiple?: false,
-      active?: null | T,
-      method?: null | ((active: T, data: D) => boolean)
-    }
+    able: boolean,
+    options: (string | { value: T, label?: string, active?: boolean })[],
+    multiple?: false,
+    active?: null | T,
+    method?: null | ((active: T, data: D) => boolean)
+  }
   | {
-      able: boolean,
-      options: (string | { value: T, label?: string, active?: boolean })[],
-      multiple: true,
-      active?: null | T[],
-      method?: null | ((active: T[], data: D) => boolean)
-    }
+    able: boolean,
+    options: (string | { value: T, label?: string, active?: boolean })[],
+    multiple: true,
+    active?: null | T[],
+    method?: null | ((active: T[], data: D) => boolean)
+  }
 
 interface SorterOptions<D = Data> {
   able: boolean,
@@ -99,19 +99,19 @@ type CellPropFn<P = any> = (data: Data, column: ColumnWithKey, rowIndex: number,
 type HeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
 
 type ColumnProfile<T extends string | number = string | number, D = Data> = Pick<
-  ColumnWithKey<T, D>,
-  'name' | 'key' | 'metaData'
+ColumnWithKey<T, D>,
+'name' | 'key' | 'metaData'
 >
 
 type FilterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<
-  T,
-  D
+T,
+D
 > & {
   active: T | T[]
 }
 type SorterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<
-  T,
-  D
+T,
+D
 > & {
   type: 'asc' | 'desc'
 }

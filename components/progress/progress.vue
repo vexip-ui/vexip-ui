@@ -43,20 +43,12 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Bubble } from '@/components/bubble'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 import { toFixed } from '@vexip-ui/utils'
+import { progressProps } from './props'
 
-import type { PropType, CSSProperties } from 'vue'
-
-export type ProgressInfoType =
-  | 'outside'
-  | 'inside'
-  | 'bubble'
-  | 'bubble-top'
-  | 'bubble-bottom'
-  | 'none'
-
-type StrokeColor = string | [string, string] | ((percentage: number) => string | [string, string])
+import type { CSSProperties } from 'vue'
+import type { ProgressInfoType } from './symbol'
 
 const infoTypes = Object.freeze<ProgressInfoType>([
   'outside',
@@ -72,14 +64,7 @@ export default defineComponent({
   components: {
     Bubble
   },
-  props: {
-    percentage: Number,
-    strokeWidth: Number,
-    infoType: String as PropType<ProgressInfoType>,
-    precision: Number,
-    activated: booleanProp,
-    strokeColor: [String, Array, Function] as PropType<StrokeColor>
-  },
+  props: progressProps,
   setup(_props) {
     const props = useProps('progress', _props, {
       percentage: {

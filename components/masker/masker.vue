@@ -45,38 +45,16 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { isPromise, queryTabables } from '@vexip-ui/utils'
-
-import type { PropType } from 'vue'
+import { maskerProps } from './props'
 
 export default defineComponent({
   name: 'Masker',
   components: {
     Portal
   },
-  props: {
-    active: booleanProp,
-    closable: booleanProp,
-    inner: booleanProp,
-    maskTransition: String,
-    transitionName: String,
-    disabled: booleanProp,
-    onBeforeClose: Function as PropType<() => any | Promise<any>>,
-    transfer: booleanStringProp,
-    autoRemove: booleanProp,
-    onToggle: eventProp<(active: boolean) => void>(),
-    onClose: eventProp(),
-    onHide: eventProp(),
-    onShow: eventProp()
-  },
+  props: maskerProps,
   emits: ['update:active'],
   setup(_props, { emit }) {
     const nh = useNameHelper('masker')

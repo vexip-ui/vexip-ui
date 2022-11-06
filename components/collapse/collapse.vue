@@ -16,23 +16,17 @@ import {
   onMounted,
   nextTick
 } from 'vue'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { removeArrayItem } from '@vexip-ui/utils'
+import { collapseProps } from './props'
 import { COLLAPSE_STATE } from './symbol'
 
-import type { PropType, Ref } from 'vue'
+import type { Ref } from 'vue'
 import type { CollapseArrowType } from './symbol'
 
 export default defineComponent({
   name: 'Collapse',
-  props: {
-    expanded: [String, Number, Array] as PropType<string | number | (string | number)[]>,
-    card: booleanProp,
-    accordion: booleanProp,
-    arrowType: String as PropType<CollapseArrowType>,
-    ghost: booleanProp,
-    onChange: eventProp<(expanded: (string | number)[]) => void>()
-  },
+  props: collapseProps,
   emits: ['update:expanded'],
   setup(_props, { emit }) {
     const props = useProps('collapse', _props, {

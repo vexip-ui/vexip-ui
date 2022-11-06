@@ -1,24 +1,17 @@
 import { defineComponent } from 'vue'
 import Title from './title'
-import { useProps, booleanProp } from '@vexip-ui/config'
+import { useProps } from '@vexip-ui/config'
+import { hProps } from './props'
 
-import type { PropType } from 'vue'
-import type { TypographyType, TitleLevel } from './symbol'
+import type { TitleLevel } from './symbol'
 
 function createHComponent(level: TitleLevel) {
   return defineComponent({
     name: `H${level}`,
-    props: {
-      type: String as PropType<TypographyType>,
-      top: booleanProp,
-      marker: booleanProp,
-      aligned: booleanProp,
-      thin: booleanProp,
-      markerType: String as PropType<TypographyType>
-    },
+    props: hProps,
     emits: [],
     setup(_props, { slots }) {
-      const props = useProps('text', _props, {
+      const props = useProps(`h${level}`, _props, {
         type: 'default',
         top: false,
         marker: false,

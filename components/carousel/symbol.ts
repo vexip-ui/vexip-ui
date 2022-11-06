@@ -1,8 +1,8 @@
 import type { InjectionKey } from 'vue'
 
-export type ArrowType = 'outside' | 'inside' | 'none'
-export type ArrowTrigger = 'hover' | 'always'
-export type PointerType = 'outside' | 'inside' | 'none'
+export type CarouselArrowType = 'outside' | 'inside' | 'none'
+export type CarouselArrowTrigger = 'hover' | 'always'
+export type CarouselPointerType = 'outside' | 'inside' | 'none'
 
 export interface ItemState {
   label: number,

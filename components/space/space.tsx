@@ -1,10 +1,9 @@
 import { defineComponent, computed, h, renderSlot } from 'vue'
-import { useNameHelper, useProps, booleanProp, styleProp } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 import { supportFlexGap } from '@vexip-ui/utils'
+import { spaceProps } from './props'
 import { flatVNodes } from './helper'
 
-import type { PropType } from 'vue'
-import type { ComponentSize } from '@vexip-ui/config'
 import type { SpaceAlign, SpaceJustify } from './symbol'
 
 const justifyList = Object.freeze<SpaceJustify>([
@@ -25,17 +24,7 @@ function parseFlexStyle(value: string) {
 
 export default defineComponent({
   name: 'Space',
-  props: {
-    vertical: booleanProp,
-    inline: booleanProp,
-    tag: String,
-    align: String as PropType<SpaceAlign>,
-    justify: String as PropType<SpaceJustify>,
-    noWrap: booleanProp,
-    size: [String, Number, Array] as PropType<ComponentSize | number | [number, number]>,
-    itemStyle: styleProp,
-    gapDisabled: booleanProp
-  },
+  props: spaceProps,
   setup(_props, { slots }) {
     const props = useProps('space', _props, {
       vertical: false,

@@ -7,6 +7,7 @@ import type { TableStore } from './store'
 export type Key = string | number | symbol
 export type Data = Record<string, unknown>
 export type RowPropFn<P = any> = (data: Data, index: number) => P
+export type DropType = 'before' | 'after' | 'none'
 
 export type Accessor<T extends string | number = string | number, D = Data> = (
   data: D,
@@ -24,19 +25,19 @@ export type TableColumnType = 'order' | 'selection' | 'expand'
 
 export type FilterOptions<T extends string | number = string | number, D = Data> =
   | {
-      able: boolean,
-      options: (string | { value: T, label?: string, active?: boolean })[],
-      multiple?: false,
-      active?: null | T,
-      method?: null | ((active: T, data: D) => boolean)
-    }
+    able: boolean,
+    options: (string | { value: T, label?: string, active?: boolean })[],
+    multiple?: false,
+    active?: null | T,
+    method?: null | ((active: T, data: D) => boolean)
+  }
   | {
-      able: boolean,
-      options: (string | { value: T, label?: string, active?: boolean })[],
-      multiple: true,
-      active?: null | T[],
-      method?: null | ((active: T[], data: D) => boolean)
-    }
+    able: boolean,
+    options: (string | { value: T, label?: string, active?: boolean })[],
+    multiple: true,
+    active?: null | T[],
+    method?: null | ((active: T[], data: D) => boolean)
+  }
 
 export interface ParsedFilterOptions extends Omit<Required<FilterOptions>, 'options'> {
   options: { value: string | number, label: string, active: boolean }[]

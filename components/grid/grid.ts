@@ -1,9 +1,10 @@
 import { defineComponent, reactive, computed, toRef, h, provide } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { gridProps } from './props'
 import { GRID_STATE } from './symbol'
 
-import type { PropType, CSSProperties } from 'vue'
-import type { LayoutProp, GridJustify, GridAlign, CellFlex } from './symbol'
+import type { CSSProperties } from 'vue'
+import type { LayoutProp, GridJustify, GridAlign } from './symbol'
 
 const numberRE = /^\d+$/
 
@@ -17,25 +18,9 @@ const justifyList = Object.freeze<GridJustify>([
 ])
 const alignList = Object.freeze<GridAlign>(['top', 'middle', 'bottom', 'stretch'])
 
-const layoutProp = [Number, String, Array] as PropType<LayoutProp>
-
 export default defineComponent({
   name: 'Grid',
-  props: {
-    tag: String,
-    gap: [Number, Array] as PropType<number | number[]>,
-    rows: layoutProp,
-    columns: layoutProp,
-    autoRows: layoutProp,
-    autoColumns: layoutProp,
-    dense: booleanProp,
-    justify: String as PropType<GridJustify>,
-    align: String as PropType<GridAlign>,
-    cellFlex: {
-      type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
-      default: null
-    }
-  },
+  props: gridProps,
   setup(_props, { slots }) {
     const props = useProps('grid', _props, {
       tag: 'div',

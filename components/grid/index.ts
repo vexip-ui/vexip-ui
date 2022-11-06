@@ -1,2 +1,3 @@
 export { default as Grid } from './grid'
-export type { GridJustify, GridAlign, CellFlex, CellOptions } from './symbol'
+export type { GridProps, GridCProps } from './props'
+export type { GridJustify, GridAlign, CellFlex } from './symbol'

@@ -150,20 +150,13 @@ import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
 import { Renderer } from '@/components/renderer'
 import { CircleCheck, CircleExclamation, Spinner, EyeR, TrashCanR } from '@vexip-ui/icons'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { toFixed } from '@vexip-ui/utils'
+import { uploadFileProps } from './props'
 import { iconMaps } from './file-icon'
 import { StatusType, uploadListTypes } from './symbol'
 
-import type { PropType } from 'vue'
-import type { UploadListType, RenderFn, FileState } from './symbol'
+import type { FileState } from './symbol'
 
 const imageExtRE = /\.(webp|svg|png|gif|jpg|jpeg|jfif|bmp|dpg|ico)$/i
 const imageBase64RE = /^data:image\//
@@ -195,17 +188,7 @@ export default defineComponent({
     EyeR,
     TrashCanR
   },
-  props: {
-    file: Object as PropType<FileState>,
-    iconRenderer: Function as PropType<RenderFn>,
-    listType: String as PropType<UploadListType>,
-    loadingText: String,
-    selectToAdd: booleanProp,
-    precision: Number,
-    canPreview: Function as PropType<(file: FileState) => boolean>,
-    onDelete: eventProp<(file: FileState) => void>(),
-    onPreview: eventProp<(file: FileState) => void>()
-  },
+  props: uploadFileProps,
   emits: [],
   setup(_props) {
     const props = useProps('uploadFile', _props, {
@@ -218,8 +201,8 @@ export default defineComponent({
         isFunc: true
       },
       listType: {
-        default: 'name' as UploadListType,
-        validator: (value: UploadListType) => uploadListTypes.includes(value)
+        default: 'name',
+        validator: value => uploadListTypes.includes(value)
       },
       loadingText: null,
       selectToAdd: false,

@@ -66,8 +66,6 @@ export interface FormActions {
   clearFieldsError: (props: string | string[]) => void
 }
 
-// export type FieldActions = Omit<FieldOptions, 'prop'>
-
 // form
 export const FORM_PROPS: InjectionKey<Partial<FormProps>> = Symbol('FORM_PROPS')
 export const FORM_FIELDS: InjectionKey<Set<FieldOptions>> = Symbol('FORM_FIELDS')

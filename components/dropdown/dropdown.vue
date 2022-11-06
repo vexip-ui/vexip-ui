@@ -52,22 +52,12 @@ import {
 import { Portal } from '@/components/portal'
 import DropdownDrop from './dropdown-drop'
 import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  classProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { dropdownProps } from './props'
 import { useLabel } from './hooks'
 import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
 
-import type { PropType } from 'vue'
 import type { Placement } from '@vexip-ui/hooks'
-
-export type DropdownTrigger = 'hover' | 'click' | 'custom'
 
 export default defineComponent({
   name: 'Dropdown',
@@ -75,22 +65,7 @@ export default defineComponent({
     DropdownDrop,
     Portal
   },
-  props: {
-    visible: booleanProp,
-    placement: String as PropType<Placement>,
-    outsideClose: booleanProp,
-    trigger: String as PropType<DropdownTrigger>,
-    label: [String, Number],
-    transitionName: String,
-    transfer: booleanStringProp,
-    dropClass: classProp,
-    appear: booleanProp,
-    meta: Object as PropType<Record<string, any>>,
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onSelect: eventProp<(labels: (string | number)[], metas: Array<Record<string, any>>) => void>(),
-    onClickOutside: eventProp(),
-    onOutsideClose: eventProp()
-  },
+  props: dropdownProps,
   emits: ['update:visible'],
   setup(_props, { emit }) {
     const nh = useNameHelper('dropdown')

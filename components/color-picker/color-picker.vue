@@ -193,13 +193,8 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import {
@@ -214,13 +209,9 @@ import {
   rgbaToHex
 } from '@vexip-ui/utils'
 import { Xmark, ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
+import { colorPickerProps } from './props'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/hooks'
 import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
-
-type FormattedColor = string | RGBAColor | HSLAColor | HSVAColor
-export type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
 
@@ -265,43 +256,7 @@ export default defineComponent({
     ChevronDown,
     CircleXmark
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: [String, Object] as PropType<Color | null>,
-    visible: booleanProp,
-    format: String as PropType<ColorFormat>,
-    alpha: booleanProp,
-    disabled: booleanProp,
-    transitionName: String,
-    noInput: booleanProp,
-    shortcut: {
-      type: [Boolean, Array] as PropType<boolean | string[]>,
-      default: null
-    },
-    placement: String as PropType<Placement>,
-    transfer: booleanStringProp,
-    outsideClose: booleanProp,
-    clearable: booleanProp,
-    cancelText: String,
-    confirmText: String,
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    noSuffix: booleanProp,
-    staticSuffix: booleanProp,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onClickOutside: eventProp(),
-    onOutsideClose: eventProp(),
-    onClear: eventProp(),
-    onChange: eventProp<(color: FormattedColor) => void>(),
-    onShortcut: eventProp<(color: FormattedColor) => void>()
-  },
+  props: colorPickerProps,
   emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
     const {

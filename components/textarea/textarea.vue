@@ -45,50 +45,16 @@ import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 import { Spinner } from '@vexip-ui/icons'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  stateProp,
-  createStateProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
 import { throttle, debounce } from '@vexip-ui/utils'
+import { textareaProps } from './props'
 
 export default defineComponent({
   name: 'Textarea',
   components: {
     Icon
   },
-  props: {
-    state: stateProp,
-    value: String,
-    placeholder: String,
-    rows: Number,
-    noResize: booleanProp,
-    autofocus: booleanProp,
-    spellcheck: booleanProp,
-    autocomplete: booleanProp,
-    readonly: booleanProp,
-    disabled: booleanProp,
-    debounce: booleanProp,
-    maxLength: Number,
-    loading: booleanProp,
-    loadingIcon: Object,
-    loadingLock: booleanProp,
-    loadingSpin: booleanProp,
-    sync: booleanProp,
-    onFocus: eventProp<(event: FocusEvent) => void>(),
-    onBlur: eventProp<(event: FocusEvent) => void>(),
-    onInput: eventProp<(value: string) => void>(),
-    onChange: eventProp<(value: string) => void>(),
-    onEnter: eventProp(),
-    onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
-    onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
-    onKeyUp: eventProp<(event: KeyboardEvent) => void>()
-  },
+  props: textareaProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =

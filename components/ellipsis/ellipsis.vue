@@ -36,32 +36,17 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, booleanProp, classProp } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { getRangeWidth } from '@vexip-ui/utils'
-
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/hooks'
-import type { TooltipTheme } from '@/components/tooltip'
+import { ellipsisProps } from './props'
 
 export default defineComponent({
   name: 'Ellipsis',
   components: {
     Portal
   },
-  props: {
-    placement: String as PropType<Placement>,
-    transfer: {
-      type: [String, Boolean],
-      default: null
-    },
-    noHover: booleanProp,
-    transitionName: String,
-    tooltipTheme: String as PropType<TooltipTheme>,
-    tipClass: classProp,
-    maxLines: Number,
-    tipMaxWidth: [Number, String]
-  },
+  props: ellipsisProps,
   setup(_props) {
     const nh = useNameHelper('ellipsis')
     const props = useProps('ellipsis', _props, {

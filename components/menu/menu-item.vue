@@ -106,22 +106,13 @@ import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
 import { Renderer } from '@/components/renderer'
 import { ChevronDown } from '@vexip-ui/icons'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
+import { menuItemProps } from './props'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { RouteLocationRaw } from 'vue-router'
 import type { Placement } from '@vexip-ui/hooks'
-import type { IconMinorProps } from '@/components/icon'
 import type { MenuOptions } from './symbol'
 
 const MenuGroup = defineAsyncComponent(() => import('./menu-group'))
@@ -136,19 +127,7 @@ const MenuItem = defineComponent({
     Renderer,
     ChevronDown
   },
-  props: {
-    label: String,
-    icon: [Object, Function],
-    iconProps: Object as PropType<IconMinorProps>,
-    disabled: booleanProp,
-    transfer: booleanStringProp,
-    trigger: String as PropType<'hover' | 'click'>,
-    transitionName: String,
-    meta: Object,
-    children: Array as PropType<MenuOptions[]>,
-    route: [String, Object] as PropType<RouteLocationRaw>,
-    onSelect: eventProp()
-  },
+  props: menuItemProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('menuItem', _props, {
@@ -161,10 +140,7 @@ const MenuItem = defineComponent({
         default: null
       },
       iconProps: null,
-      disabled: {
-        default: false,
-        static: true
-      },
+      disabled: false,
       transfer: null,
       trigger: null,
       transitionName: null,

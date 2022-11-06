@@ -1,5 +1,7 @@
 import type { InjectionKey } from 'vue'
 
+export type DropdownTrigger = 'hover' | 'click' | 'custom'
+
 type SelectHandler = (labels: (string | number)[], metas: Array<Record<string, any>>) => void
 
 export interface DropdownState {

@@ -48,15 +48,16 @@ import {
   isVNode
 } from 'vue'
 import { AnchorLink } from '@/components/anchor-link'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { isClient, isElement } from '@vexip-ui/utils'
+import { anchorProps } from './props'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
-import type { PropType, ComponentInternalInstance } from 'vue'
+import type { ComponentInternalInstance } from 'vue'
 import type { NativeScroll } from '@/components/native-scroll'
 import type { Scroll } from '@/components/scroll'
-import type { AnchorLinkOptions, AnchorLinkState, AnchorState } from './symbol'
+import type { AnchorLinkState, AnchorState } from './symbol'
 
 type ScrollType = InstanceType<typeof Scroll | typeof NativeScroll>
 
@@ -65,18 +66,7 @@ export default defineComponent({
   components: {
     AnchorLink
   },
-  props: {
-    active: String,
-    viewer: [String, Object, Function] as PropType<unknown>,
-    offset: Number,
-    marker: booleanProp,
-    scrollDuration: Number,
-    markerTransition: String,
-    options: Array as PropType<AnchorLinkOptions[]>,
-    bindHash: booleanProp,
-    forceActive: booleanProp,
-    onChange: eventProp<(value: string) => void>()
-  },
+  props: anchorProps,
   emits: ['update:active'],
   setup(_props, { emit }) {
     const nh = useNameHelper('anchor')

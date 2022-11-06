@@ -49,12 +49,11 @@ import { defineComponent, ref, reactive, computed, watch, provide, onMounted } f
 import { Renderer } from '@/components/renderer'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { isNull, isFunction, debounceMinor } from '@vexip-ui/utils'
+import { tabsProps } from './props'
 import { TABS_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { TabNavAlign } from '@/components/tab-nav'
 import type { ItemState } from './symbol'
 
 export default defineComponent({
@@ -64,12 +63,7 @@ export default defineComponent({
     TabNav,
     TabNavItem
   },
-  props: {
-    card: booleanProp,
-    active: [String, Number],
-    align: String as PropType<TabNavAlign>,
-    onChange: eventProp<(active: string | number) => void>()
-  },
+  props: tabsProps,
   emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('tabs', _props, {

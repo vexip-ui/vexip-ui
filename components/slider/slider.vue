@@ -103,21 +103,10 @@
 import { defineComponent, ref, computed, watch } from 'vue'
 import SliderTrigger from './slider-trigger.vue'
 import { useFieldStore } from '@/components/form'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  stateProp,
-  createStateProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, createStateProp, emitEvent } from '@vexip-ui/config'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { throttle } from '@vexip-ui/utils'
-
-import type { PropType } from 'vue'
-import type { SliderMarker } from './symbol'
+import { sliderProps } from './props'
 
 const enum TriggerType {
   START = 0,
@@ -129,25 +118,7 @@ export default defineComponent({
   components: {
     SliderTrigger
   },
-  props: {
-    state: stateProp,
-    value: [Number, Array] as PropType<number | number[]>,
-    min: Number,
-    max: Number,
-    step: Number,
-    vertical: booleanProp,
-    hideTip: booleanProp,
-    tipTransfer: booleanStringProp,
-    disabled: booleanProp,
-    loading: booleanProp,
-    loadingLock: booleanProp,
-    reverse: booleanProp,
-    range: booleanProp,
-    markers: Object as PropType<Record<string | number, string | SliderMarker>>,
-    markerOnly: booleanProp,
-    onChange: eventProp<(value: number | number[]) => void>(),
-    onInput: eventProp<(value: number | number[]) => void>()
-  },
+  props: sliderProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =

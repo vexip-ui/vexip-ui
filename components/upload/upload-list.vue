@@ -37,36 +37,18 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { UploadFile } from '@/components/upload-file'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  styleProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { uploadListProps } from './props'
 import { uploadListTypes } from './symbol'
 
-import type { PropType } from 'vue'
-import type { UploadListType, RenderFn, FileState } from './symbol'
+import type { FileState } from './symbol'
 
 export default defineComponent({
   name: 'UploadList',
   components: {
     UploadFile
   },
-  props: {
-    files: Array as PropType<FileState[]>,
-    selectToAdd: booleanProp,
-    iconRenderer: Function as PropType<RenderFn>,
-    type: String as PropType<UploadListType>,
-    loadingText: String,
-    style: styleProp,
-    precision: Number,
-    canPreview: Function as PropType<(file: FileState) => boolean>,
-    onDelete: eventProp<(file: FileState) => void>(),
-    onPreview: eventProp<(file: FileState) => void>()
-  },
+  props: uploadListProps,
   emits: [],
   setup(_props) {
     const props = useProps('uploadList', _props, {
@@ -80,8 +62,8 @@ export default defineComponent({
         isFunc: true
       },
       type: {
-        default: 'name' as UploadListType,
-        validator: (value: UploadListType) => uploadListTypes.includes(value)
+        default: 'name',
+        validator: value => uploadListTypes.includes(value)
       },
       loadingText: null,
       style: null,

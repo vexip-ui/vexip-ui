@@ -17,11 +17,10 @@
 <script lang="ts">
 import { defineComponent, reactive, computed, provide } from 'vue'
 import { Row } from '@/components/row'
-import { useNameHelper, useProps, booleanProp, sizeProp, createSizeProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, createSizeProp } from '@vexip-ui/config'
+import { formProps } from './props'
 import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
-import type { PropType } from 'vue'
-import type { RowGridJustify, RowGridAlign } from '@/components/row'
 import type { FormLabelAlign, SubmitMethod, FieldOptions } from './symbol'
 
 const submitMethods = Object.freeze<SubmitMethod>(['get', 'post', 'put', 'delete'])
@@ -33,26 +32,7 @@ export default defineComponent({
     Row
   },
   inheritAttrs: true,
-  props: {
-    method: String as PropType<SubmitMethod>,
-    action: String,
-    model: Object,
-    rules: Object,
-    labelWidth: [Number, String] as PropType<number | 'auto'>,
-    labelAlign: String as PropType<FormLabelAlign>,
-    allRequired: booleanProp,
-    labelSuffix: String,
-    hideAsterisk: booleanProp,
-    validateAll: booleanProp,
-    hideLabel: booleanProp,
-    disabled: booleanProp,
-    loading: booleanProp,
-    size: sizeProp,
-    inline: booleanProp,
-    gap: [Number, Array] as PropType<number | number[]>,
-    justify: String as PropType<RowGridJustify>,
-    align: String as PropType<RowGridAlign>
-  },
+  props: formProps,
   setup(_props) {
     const props = useProps('form', _props, {
       method: {

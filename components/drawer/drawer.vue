@@ -77,23 +77,13 @@ import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  booleanStringProp,
-  classProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { isPromise } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
+import { drawerProps } from './props'
 
-import type { PropType } from 'vue'
-
-export type DrawerPlacement = 'top' | 'right' | 'bottom' | 'left'
+import type { DrawerPlacement } from './symbol'
 
 const drawerPlacements = Object.freeze<DrawerPlacement>(['top', 'right', 'bottom', 'left'])
 
@@ -107,35 +97,7 @@ export default defineComponent({
     Masker,
     Xmark
   },
-  props: {
-    transfer: booleanStringProp,
-    active: booleanProp,
-    width: Number,
-    height: Number,
-    placement: String as PropType<DrawerPlacement>,
-    title: String,
-    closable: booleanProp,
-    inner: booleanProp,
-    maskClose: booleanProp,
-    drawerClass: classProp,
-    hideMask: booleanProp,
-    onBeforeClose: Function as PropType<(isConfirm?: boolean) => any>,
-    resizable: booleanProp,
-    autoRemove: booleanProp,
-    footer: booleanProp,
-    confirmText: String,
-    cancelText: String,
-    loading: booleanProp,
-    onToggle: eventProp<(active: boolean) => void>(),
-    onClose: eventProp(),
-    onShow: eventProp(),
-    onHide: eventProp(),
-    onResizeStart: eventProp<(rect: { width: number, height: number }) => void>(),
-    onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
-    onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>(),
-    onConfirm: eventProp(),
-    onCancel: eventProp()
-  },
+  props: drawerProps,
   emits: ['update:active'],
   setup(_props, { slots, emit }) {
     const props = useProps('drawer', _props, {

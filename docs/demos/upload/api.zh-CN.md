@@ -35,10 +35,10 @@ interface FileState {
 
 type FileOptions = Partial<Omit<FileState, 'xhr' | 'response' | 'error'>>
 type BeforeUpload = (file: FileState, files: FileState[]) => MaybePromise<
-  | boolean
-  | Blob
-  | SourceFile
-  | void
+| boolean
+| Blob
+| SourceFile
+| void
 >
 type BeforeSelect = (file: FileState, files: FileState[]) => MaybePromise<boolean | void>
 ```

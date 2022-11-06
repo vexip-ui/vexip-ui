@@ -134,14 +134,7 @@ import { Scroll } from '@/components/scroll'
 import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import {
   isDefined,
   debounce,
@@ -151,41 +144,19 @@ import {
   nextFrameOnce
 } from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/hooks'
+import { tableProps } from './props'
 import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ClassType, StyleType } from '@vexip-ui/config'
-import type { TooltipTheme } from '@/components/tooltip'
 import type {
-  Data,
-  ExpandRenderFn,
+  DropType,
   TableColumnOptions,
-  RowPropFn,
-  CellPropFn,
-  HeadPropFn,
   RowState,
   RowInstance,
   TableRowPayload,
   TableCellPayload,
   TableHeadPayload
 } from './symbol'
-
-type DropType = 'before' | 'after' | 'none'
-
-interface FilterProfile {
-  name: string,
-  key: string | number,
-  metaData: Data,
-  active: string | number | (string | number)[] | null
-}
-
-interface SortProfile {
-  name: string,
-  key: string | number,
-  metaData: Data,
-  type: 'asc' | 'desc' | null
-}
 
 export default defineComponent({
   name: 'Table',
@@ -195,80 +166,7 @@ export default defineComponent({
     TableHead,
     TableBody
   },
-  props: {
-    // TODO: colums 正确的类型推导
-    columns: Array as PropType<TableColumnOptions<any, any>[]>,
-    data: Array as PropType<Data[]>,
-    dataKey: String,
-    width: [Number, String],
-    height: Number,
-    rowClass: [String, Object, Array, Function] as PropType<ClassType | RowPropFn<ClassType>>,
-    rowStyle: [String, Object, Array, Function] as PropType<StyleType | RowPropFn<StyleType>>,
-    rowAttrs: [Object, Function] as PropType<Record<string, any> | RowPropFn<Record<string, any>>>,
-    stripe: booleanProp,
-    border: booleanProp,
-    highlight: booleanProp,
-    useYBar: booleanProp,
-    barFade: Number,
-    scrollDeltaY: Number,
-    rowDraggable: booleanProp,
-    rowHeight: Number,
-    rowMinHeight: Number,
-    virtual: booleanProp,
-    bufferCount: Number,
-    scrollClass: Object as PropType<{
-      horizontal?: ClassType,
-      major?: ClassType,
-      left?: ClassType,
-      right?: ClassType
-    }>,
-    expandRenderer: Function as PropType<ExpandRenderFn>,
-    currentPage: Number,
-    pageSize: Number,
-    transparent: booleanProp,
-    emptyText: String,
-    tooltipTheme: String as PropType<TooltipTheme>,
-    tooltipWidth: [Number, String],
-    singleSorter: booleanProp,
-    singleFilter: booleanProp,
-    cellClass: [String, Object, Array, Function] as PropType<ClassType | CellPropFn<ClassType>>,
-    cellStyle: [String, Object, Array, Function] as PropType<StyleType | CellPropFn<StyleType>>,
-    cellAttrs: [Object, Function] as PropType<
-      Record<string, any> | CellPropFn<Record<string, any>>
-    >,
-    headClass: [String, Object, Array, Function] as PropType<ClassType | HeadPropFn<ClassType>>,
-    headStyle: [String, Object, Array, Function] as PropType<StyleType | HeadPropFn<StyleType>>,
-    headAttrs: [Object, Function] as PropType<
-      Record<string, any> | HeadPropFn<Record<string, any>>
-    >,
-    onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
-    onRowEnter: eventProp<(payload: TableRowPayload) => void>(),
-    onRowLeave: eventProp<(payload: TableRowPayload) => void>(),
-    onRowClick: eventProp<(payload: TableRowPayload) => void>(),
-    onRowDblclick: eventProp<(payload: TableRowPayload) => void>(),
-    onRowContextmenu: eventProp<(payload: TableRowPayload) => void>(),
-    onRowCheck:
-      eventProp<(payload: Omit<TableRowPayload, 'event'> & { checked: boolean }) => void>(),
-    onRowCheckAll: eventProp<(checked: boolean, partial: boolean) => void>(),
-    onRowExpand:
-      eventProp<(payload: Omit<TableRowPayload, 'event'> & { expanded: boolean }) => void>(),
-    onRowDragStart: eventProp<(row: Data, event: DragEvent) => void>(),
-    onRowDragOver: eventProp<(row: Data, event: DragEvent) => void>(),
-    onRowDrop: eventProp<(row: Data, type: DropType, event: DragEvent) => void>(),
-    onRowDragEnd: eventProp<(row: Data, allRows: Data[], event: DragEvent) => void>(),
-    onRowFilter: eventProp<(profiles: FilterProfile[], filteredRow: Data[]) => void>(),
-    onRowSort: eventProp<(profiles: SortProfile[], sortedRow: Data[]) => void>(),
-    onCellEnter: eventProp<(payload: TableCellPayload) => void>(),
-    onCellLeave: eventProp<(payload: TableCellPayload) => void>(),
-    onCellClick: eventProp<(payload: TableCellPayload) => void>(),
-    onCellDblclick: eventProp<(payload: TableCellPayload) => void>(),
-    onCellContextmenu: eventProp<(payload: TableCellPayload) => void>(),
-    onHeadEnter: eventProp<(payload: TableHeadPayload) => void>(),
-    onHeadLeave: eventProp<(payload: TableHeadPayload) => void>(),
-    onHeadClick: eventProp<(payload: TableHeadPayload) => void>(),
-    onHeadDblclick: eventProp<(payload: TableHeadPayload) => void>(),
-    onHeadContextmenu: eventProp<(payload: TableHeadPayload) => void>()
-  },
+  props: tableProps,
   emits: [],
   setup(_props) {
     const props = useProps('table', _props, {
@@ -296,12 +194,12 @@ export default defineComponent({
       rowHeight: null,
       rowMinHeight: {
         default: 36,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       virtual: false,
       bufferCount: {
         default: 5,
-        validator: (value: number) => value >= 0
+        validator: value => value >= 0
       },
       scrollClass: () => ({}),
       expandRenderer: {
@@ -310,15 +208,15 @@ export default defineComponent({
       },
       currentPage: {
         default: 1,
-        validator: (value: number) => value > 0,
+        validator: value => value > 0,
         static: true
       },
       pageSize: 0,
       transparent: false,
       emptyText: null,
       tooltipTheme: {
-        default: 'dark' as TooltipTheme,
-        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+        default: 'dark',
+        validator: value => ['light', 'dark'].includes(value)
       },
       tooltipWidth: 500,
       singleSorter: false,

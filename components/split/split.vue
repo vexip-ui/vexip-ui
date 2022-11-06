@@ -47,30 +47,17 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
 import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
+import { splitProps } from './props'
 
 export default defineComponent({
   name: 'Split',
   components: {
     Icon
   },
-  props: {
-    value: Number,
-    min: Number,
-    max: Number,
-    vertical: booleanProp,
-    noTransition: booleanProp,
-    lazy: booleanProp,
-    canFull: booleanProp,
-    onChange: eventProp<(value: number) => void>(),
-    onFull: eventProp<(type: 'top' | 'right' | 'bottom' | 'left') => void>(),
-    onReset: eventProp(),
-    onMoveStart: eventProp<(value: number) => void>(),
-    onMove: eventProp<(value: number) => void>(),
-    onMoveEnd: eventProp<(value: number) => void>()
-  },
+  props: splitProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('split', _props, {

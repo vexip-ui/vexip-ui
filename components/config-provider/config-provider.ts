@@ -3,12 +3,13 @@ import { configProps, configLocale } from '@vexip-ui/config'
 
 import type { PropType } from 'vue'
 import type { LocaleOptions } from '@vexip-ui/config'
+import type { PropsOptions } from '@/components/props'
 
 export default defineComponent({
   name: 'ConfigProvider',
   props: {
     props: {
-      type: Object,
+      type: Object as PropType<PropsOptions>,
       default: () => ({})
     },
     locale: {

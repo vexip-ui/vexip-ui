@@ -10,32 +10,17 @@ import {
   Fragment
 } from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { useResize } from '@vexip-ui/hooks'
 import { isDefined } from '@vexip-ui/utils'
-
-import type { PropType } from 'vue'
+import { overflowProps } from './props'
 
 const TEXT_VNODE = createTextVNode('').type
 
 export default defineComponent({
   name: 'Overflow',
   inheritAttrs: false,
-  props: {
-    items: Array as PropType<any[]>,
-    tag: String,
-    attrFlag: booleanStringProp,
-    static: booleanProp,
-    onRestChange: eventProp<(rest: number) => void>(),
-    onToggle: eventProp<(overflow: boolean) => void>()
-  },
+  props: overflowProps,
   emits: [],
   setup(_props, { attrs, slots, expose }) {
     const props = useProps('overflow', _props, {
@@ -45,15 +30,7 @@ export default defineComponent({
       },
       tag: 'div',
       attrFlag: false,
-      static: false,
-      onRestChange: {
-        default: null,
-        isFunc: true
-      },
-      onToggle: {
-        default: null,
-        isFunc: true
-      }
+      static: false
     })
 
     const nh = useNameHelper('overflow')

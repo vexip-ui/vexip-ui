@@ -5,6 +5,7 @@ import { isClient, destroyObject } from '@vexip-ui/utils'
 import type { App } from 'vue'
 import type { ConfirmType, ConfirmOptions, ConfirmInstance } from './symbol'
 
+export type { ConfirmProps, ConfirmCProps } from './props'
 export type { ConfirmType, ConfirmOptions }
 
 type FuzzyOptions = string | ConfirmOptions

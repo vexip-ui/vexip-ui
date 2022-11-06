@@ -23,9 +23,9 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { badgeProps } from './props'
 
-import type { PropType } from 'vue'
 import type { BadgeType } from './symbol'
 
 const badgeTypes = Object.freeze<BadgeType>([
@@ -39,15 +39,7 @@ const badgeTypes = Object.freeze<BadgeType>([
 
 export default defineComponent({
   name: 'Badge',
-  props: {
-    content: [Number, String],
-    max: Number,
-    disabled: booleanProp,
-    isDot: booleanProp,
-    type: String as PropType<BadgeType>,
-    color: String,
-    onBadgeClick: eventProp<(event: MouseEvent) => void>()
-  },
+  props: badgeProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('badge', _props, {
@@ -59,8 +51,8 @@ export default defineComponent({
       disabled: false,
       isDot: false,
       type: {
-        default: 'error' as BadgeType,
-        validator: (value: BadgeType) => badgeTypes.includes(value)
+        default: 'error',
+        validator: value => badgeTypes.includes(value)
       },
       color: null
     })

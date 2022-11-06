@@ -33,16 +33,12 @@ import { Icon } from '@/components/icon'
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  classProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
+import { radioProps } from './props'
 import { GROUP_STATE } from './symbol'
 
 export default defineComponent({
@@ -51,19 +47,7 @@ export default defineComponent({
     CollapseTransition,
     Icon
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: [String, Number],
-    label: [String, Number],
-    labelClass: classProp,
-    disabled: booleanProp,
-    border: booleanProp,
-    tabIndex: [String, Number],
-    loading: booleanProp,
-    loadingLock: booleanProp,
-    onChange: eventProp<(value: string | number) => void>()
-  },
+  props: radioProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('radio', _props, {

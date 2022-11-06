@@ -1,25 +1,10 @@
 import { defineComponent, computed } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
-import type { TypographyType } from './symbol'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { textProps } from './props'
 
 export default defineComponent({
   name: 'Text',
-  props: {
-    type: String as PropType<TypographyType>,
-    tag: String,
-    delete: booleanProp,
-    strong: booleanProp,
-    italic: booleanProp,
-    underline: booleanProp,
-    code: booleanProp,
-    mark: booleanProp,
-    disabled: booleanProp,
-    keyboard: booleanProp,
-    thin: booleanProp,
-    reversed: booleanProp
-  },
+  props: textProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('text', _props, {

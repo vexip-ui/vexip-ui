@@ -244,7 +244,7 @@ export default defineComponent({
     const footer = ref<HTMLElement>()
     const search = ref<HTMLElement>()
     const input = ref<InstanceType<typeof Input>>()
-    const list = ref<VirtualListExposed | null>(null)
+    const list = ref<VirtualListExposed>()
 
     let bodyRealHeight = 0
     let lastSelected: string | number | null = null

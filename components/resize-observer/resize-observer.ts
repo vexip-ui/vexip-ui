@@ -1,21 +1,14 @@
 import { defineComponent, onMounted, onBeforeUnmount, getCurrentInstance, renderSlot } from 'vue'
-import { useProps, booleanNumberProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useProps, emitEvent } from '@vexip-ui/config'
 import { useResize } from '@vexip-ui/hooks'
 import { throttle } from '@vexip-ui/utils'
+import { resizeObserverProps } from './props'
 
 export default defineComponent({
   name: 'ResizeObserver',
-  functional: true,
-  props: {
-    throttle: booleanNumberProp,
-    onResize: eventProp<(entry: ResizeObserverEntry) => void>()
-  },
+  props: resizeObserverProps,
   setup(_props, { slots }) {
     const props = useProps('resizeObserver', _props, {
-      onResize: {
-        default: null,
-        isFunc: true
-      },
       throttle: {
         default: false,
         validator: (value: boolean | number) => typeof value === 'boolean' || value > 0

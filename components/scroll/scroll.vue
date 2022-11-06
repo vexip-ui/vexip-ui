@@ -55,21 +55,13 @@
 import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanNumberProp,
-  classProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { USE_TOUCH, isElement, isTrue, createEventEmitter } from '@vexip-ui/utils'
+import { scrollProps } from './props'
 import { useScrollWrapper } from './hooks'
 
-import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
-import type { ScrollMode, ScrollPayload, BarScrollPayload } from './symbol'
+import type { ScrollMode } from './symbol'
 
 const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
 
@@ -82,41 +74,7 @@ export default defineComponent({
     Scrollbar,
     ResizeObserver
   },
-  props: {
-    scrollClass: classProp,
-    mode: String as PropType<ScrollMode>,
-    width: [Number, String],
-    height: [Number, String],
-    deltaX: Number,
-    deltaY: Number,
-    disabled: booleanProp,
-    pointer: booleanProp,
-    wheel: booleanProp,
-    scrollX: Number,
-    scrollY: Number,
-    useXBar: booleanProp,
-    useYBar: booleanProp,
-    barFade: Number,
-    barClass: classProp,
-    autoplay: booleanNumberProp,
-    playWaiting: Number,
-    noBuffer: booleanProp,
-    noTransition: booleanProp,
-    onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
-    useBarTrack: booleanProp,
-    wrapperTag: String,
-    onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
-    onXEnabledChange: eventProp<(enabled: boolean) => void>(),
-    onYEnabledChange: eventProp<(enabled: boolean) => void>(),
-    onWheel: eventProp<(payload: BarScrollPayload & { sign: 1 | -1 }) => void>(),
-    onScrollStart: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
-    onScroll: eventProp<(payload: ScrollPayload) => void>(),
-    onScrollEnd: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
-    onBarScrollStart: eventProp<(payload: BarScrollPayload) => void>(),
-    onBarScroll: eventProp<(payload: BarScrollPayload) => void>(),
-    onBarScrollEnd: eventProp<(payload: BarScrollPayload) => void>(),
-    onReady: eventProp()
-  },
+  props: scrollProps,
   emits: [],
   setup(_props) {
     const props = useProps('scroll', _props, {

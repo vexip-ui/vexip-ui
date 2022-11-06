@@ -97,46 +97,21 @@ import {
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanNumberProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { useHover, useSetTimeout } from '@vexip-ui/hooks'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
+import { carouselProps } from './props'
 import { CAROUSEL_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ArrowType, ArrowTrigger, PointerType, ItemState, CarouselState } from './symbol'
+import type { ItemState, CarouselState } from './symbol'
 
 export default defineComponent({
   name: 'Carousel',
   components: {
     Icon
   },
-  props: {
-    active: Number,
-    viewSize: Number,
-    vertical: booleanProp,
-    disabled: booleanProp,
-    loop: booleanProp,
-    arrow: String as PropType<ArrowType>,
-    arrowTrigger: String as PropType<ArrowTrigger>,
-    autoplay: booleanNumberProp,
-    pointer: String as PropType<PointerType>,
-    speed: Number,
-    activeOffset: Number,
-    height: [Number, String],
-    ignoreHover: booleanProp,
-    onChange: eventProp<(active: number) => void>(),
-    onPrev: eventProp<(active: number) => void>(),
-    onNext: eventProp<(active: number) => void>(),
-    onSelect: eventProp<(active: number) => void>()
-  },
+  props: carouselProps,
   emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('carousel', _props, {
