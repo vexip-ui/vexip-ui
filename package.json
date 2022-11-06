@@ -1,8 +1,14 @@
 {
-  "author": {
-    "name": "qmhc"
-  },
+  "name": "vexip-ui",
+  "version": "2.0.12",
+  "type": "module",
+  "license": "MIT",
+  "author": "qmhc",
+  "description": "A Vue 3 UI library, Highly customizable property values, Full TypeScript, Performance should be good",
   "packageManager": "pnpm@7.14.2",
+  "main": "lib/components/index.cjs",
+  "module": "es/components/index.mjs",
+  "types": "dist/components/index.d.ts",
   "scripts": {
     "bootstrap": "tsx scripts/bootstrap.ts",
     "serve": "tsx scripts/serve.ts",
@@ -37,6 +43,53 @@
     "test": "vitest run",
     "test:cover": "vitest run --coverage",
     "test:dev": "vitest dev"
+  },
+  "files": [
+    "css",
+    "dist",
+    "es",
+    "lib",
+    "style",
+    "themes",
+    "CHANGELOG.md",
+    "meta-data.json",
+    "types.d.ts"
+  ],
+  "exports": {
+    ".": {
+      "import": "./es/components/index.mjs",
+      "require": "./lib/components/index.js",
+      "types": "./dist/components/index.d.ts"
+    },
+    "./es": "./es/components/index.mjs",
+    "./lib": "./lib/components/index.cjs",
+    "./es/*.mjs": "./es/components/*/index.mjs",
+    "./es/*": "./es/components/*/index.mjs",
+    "./lib/*.cjs": "./lib/components/*/index.cjs",
+    "./lib/*": "./lib/components/*/index.cjs",
+    "./package.json": "./package.json",
+    "./*": "./*"
+  },
+  "keywords": [
+    "flex",
+    "components",
+    "vue",
+    "vexip",
+    "plugin",
+    "toolkit",
+    "vexip-ui",
+    "vite"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vexip-ui/vexip-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vexip-ui/vexip-ui/issues"
+  },
+  "homepage": "https://www.vexipui.com",
+  "engines": {
+    "node": ">=16"
   },
   "dependencies": {
     "@vexip-ui/hooks": "workspace:^",
@@ -100,63 +153,8 @@
     "vue": "^3.2.41",
     "vue-router": "^4.1.6"
   },
-  "engines": {
-    "node": ">=14"
-  },
-  "exports": {
-    ".": {
-      "import": "./es/components/index.mjs",
-      "require": "./lib/components/index.js",
-      "types": "./dist/components/index.d.ts"
-    },
-    "./es": "./es/components/index.mjs",
-    "./lib": "./lib/components/index.cjs",
-    "./es/*.mjs": "./es/components/*/index.mjs",
-    "./es/*": "./es/components/*/index.mjs",
-    "./lib/*.cjs": "./lib/components/*/index.cjs",
-    "./lib/*": "./lib/components/*/index.cjs",
-    "./package.json": "./package.json",
-    "./*": "./*"
-  },
-  "files": [
-    "css",
-    "dist",
-    "es",
-    "lib",
-    "style",
-    "themes",
-    "CHANGELOG.md",
-    "meta-data.json",
-    "types.d.ts"
-  ],
-  "homepage": "https://www.vexipui.com",
-  "keywords": [
-    "flex",
-    "components",
-    "vue",
-    "vexip",
-    "plugin",
-    "toolkit",
-    "vexip-ui",
-    "vite"
-  ],
-  "license": "MIT",
-  "main": "lib/components/index.cjs",
-  "module": "es/components/index.mjs",
-  "name": "vexip-ui",
   "peerDependencies": {
     "vue": "^3.2.25"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "vite": "^3.0.0"
-      }
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vexip-ui/vexip-ui.git"
   },
   "sideEffects": [
     "dist/*",
@@ -166,7 +164,11 @@
     "style/**/*.scss",
     "theme/**/*.css"
   ],
-  "type": "module",
-  "types": "dist/components/index.d.ts",
-  "version": "2.0.12"
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "vite": "^3.0.0"
+      }
+    }
+  }
 }
