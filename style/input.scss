@@ -97,7 +97,6 @@ $input: map.merge(
       &#{&}--#{$state} {
         @include define-input-style(
           (
-            bg-color: 'color' $state 'opacity-9',
             b-color: 'color' $state 'light-1',
             b-color-hover: 'color' $state 'light-1',
             s-color-focus: 'color' $state 'opacity-6'
