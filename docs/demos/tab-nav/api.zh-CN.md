@@ -2,6 +2,7 @@
 
 ```ts
 type TabNavAlign = 'left' | 'center' | 'right'
+type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 
 interface TabNavItemOptions {
   label: string | number,
@@ -16,12 +17,13 @@ type TabNavOptions = TabNavItemOptions | string | number
 
 ### TabNav 属性
 
-| 名称    | 类型               | 说明                                            | 默认值   | 始于     |
-| ------- | ------------------ | ----------------------------------------------- | -------- | -------- |
-| active  | `string \| number` | 设置当前激活的导航，可以使用 `v-model` 双向绑定 | `null`   | -        |
-| card    | `boolean`          | 设置是否开启卡片模式                            | `false`  | -        |
-| options | `TabNavOptions[]`  | 快捷设置标签导航，使用插槽后失效                | `[]`     | `2.0.7`  |
-| align   | `TabNavAlign`      | 设置标签导航的对齐位置                          | `'left'` | `2.0.11` |
+| 名称      | 类型               | 说明                                            | 默认值   | 始于     |
+| --------- | ------------------ | ----------------------------------------------- | -------- | -------- |
+| active    | `string \| number` | 设置当前激活的导航，可以使用 `v-model` 双向绑定 | `null`   | -        |
+| card      | `boolean`          | 设置是否开启卡片模式                            | `false`  | -        |
+| options   | `TabNavOptions[]`  | 快捷设置标签导航，使用插槽后失效                | `[]`     | `2.0.7`  |
+| align     | `TabNavAlign`      | 设置标签导航的对齐位置                          | `'left'` | `2.0.11` |
+| placement | `TabNavPlacement`  | 设置标签导航的放置位置                          | `'top'`  | `2.0.13` |
 
 ### TabNav 事件
 

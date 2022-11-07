@@ -1,6 +1,7 @@
 import type { InjectionKey } from 'vue'
 
 export type TabNavAlign = 'left' | 'center' | 'right'
+export type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 
 export interface TabNavItemOptions {
   label: string | number,

@@ -110,7 +110,7 @@ describe('TabNav', () => {
     expect(wrapper.findComponent(GithubB).exists()).toBe(true)
   })
 
-  it('card', async () => {
+  it('card', () => {
     const wrapper = mount(() => (
       <TabNav card>
         <TabNavItem>{'tab'}</TabNavItem>
@@ -118,5 +118,29 @@ describe('TabNav', () => {
     ))
 
     expect(wrapper.find('.vxp-tab-nav').classes()).toContain('vxp-tab-nav--card')
+  })
+
+  it('align', () => {
+    (['left', 'center', 'right'] as const).forEach(align => {
+      const wrapper = mount(() => (
+        <TabNav align={align}>
+          <TabNavItem>{'tab'}</TabNavItem>
+        </TabNav>
+      ))
+
+      expect(wrapper.find('.vxp-tab-nav').classes()).toContain(`vxp-tab-nav--align-${align}`)
+    })
+  })
+
+  it('card', () => {
+    (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+      const wrapper = mount(() => (
+        <TabNav placement={placement}>
+          <TabNavItem>{'tab'}</TabNavItem>
+        </TabNav>
+      ))
+
+      expect(wrapper.find('.vxp-tab-nav').classes()).toContain(`vxp-tab-nav--${placement}`)
+    })
   })
 })

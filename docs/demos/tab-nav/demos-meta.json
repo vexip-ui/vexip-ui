@@ -1,1 +1,11 @@
-["basis", "card", "disabled", "icon", "align", "extra", "dynamic", "options"]
+[
+  "basis",
+  "card",
+  "disabled",
+  "icon",
+  "align",
+  "placement",
+  "extra",
+  "dynamic",
+  "options"
+]

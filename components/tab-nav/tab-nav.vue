@@ -48,6 +48,13 @@ import { TAB_NAV_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
 
+const trackStyleMap = {
+  top: ['left', 'width'],
+  right: ['top', 'height'],
+  bottom: ['left', 'width'],
+  left: ['top', 'height']
+} as const
+
 export default defineComponent({
   name: 'TabNav',
   components: {
@@ -67,13 +74,14 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      align: 'left'
+      align: 'left',
+      placement: 'top'
     })
 
     const nh = useNameHelper('tab-nav')
     const currentActive = ref(props.active)
-    const markerLeft = ref(0)
-    const markerWidth = ref(0)
+    const markerPosition = ref(0)
+    const markerSize = ref(0)
     const itemStates = new Set<ItemState>()
 
     const wrapper = useDisplay(updateMarkerPosition)
@@ -83,13 +91,16 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.bs('vars')]: true,
         [nh.bm(`align-${props.align}`)]: true,
+        [nh.bm(props.placement)]: true,
         [nh.bm('card')]: props.card
       }
     })
     const markerStyle = computed(() => {
+      const [position, length] = trackStyleMap[props.placement]
+
       return {
-        left: `${markerLeft.value}px`,
-        width: `${markerWidth.value}px`
+        [position]: `${markerPosition.value}px`,
+        [length]: `${markerSize.value}px`
       }
     })
     const items = computed(() => {
@@ -136,6 +147,13 @@ export default defineComponent({
         currentActive.value = value
       }
     )
+    watch(
+      () => props.placement,
+      () => {
+        // refreshLabels()
+        requestAnimationFrame(updateMarkerPosition)
+      }
+    )
 
     onMounted(updateMarkerPosition)
 
@@ -165,11 +183,16 @@ export default defineComponent({
       const activeItem = Array.from(itemStates).find(item => item.label === currentActive.value)
 
       if (activeItem?.el) {
-        markerLeft.value = activeItem.el.offsetLeft
-        markerWidth.value = activeItem.el.offsetWidth
+        if (props.placement === 'top' || props.placement === 'bottom') {
+          markerPosition.value = activeItem.el.offsetLeft
+          markerSize.value = activeItem.el.offsetWidth
+        } else {
+          markerPosition.value = activeItem.el.offsetTop
+          markerSize.value = activeItem.el.offsetHeight
+        }
       } else {
-        markerLeft.value = 0
-        markerWidth.value = 0
+        markerPosition.value = 0
+        markerSize.value = 0
       }
     }
 

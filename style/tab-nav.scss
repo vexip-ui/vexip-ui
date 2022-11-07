@@ -22,9 +22,9 @@ $tab-nav: map.merge(
     card-b-color-active: get-css-var('tab-nav-color-active'),
     card-b-color-disabled: get-css-var('tab-nav-card-b-color'),
     card-radius: get-css-var('radius-base'),
-    item-pad-width: 4px,
+    item-pad-size: 4px,
     marker-bg-color: get-css-var('tab-nav-color-active'),
-    marker-height: 2px,
+    marker-size: 2px,
     v-padding: 8px,
     h-padding: 16px
   ),
@@ -39,8 +39,14 @@ $tab-nav: map.merge(
   @include basis;
 
   position: relative;
+  display: flex;
   background-color: transparent;
   outline: 0;
+
+  &--right,
+  &--left {
+    display: inline-flex;
+  }
 
   &__list {
     display: flex;
@@ -53,11 +59,22 @@ $tab-nav: map.merge(
     list-style: none;
   }
 
+  &--right &__list,
+  &--left &__list {
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  &--right &__list,
+  &--bottom &__list {
+    align-items: flex-start;
+  }
+
   &__extra {
     display: flex;
     flex: 0 0 auto;
     align-items: center;
-    border-bottom: get-css-var('border-shape') get-css-var('tab-nav-d-color');
+    border: 0 solid get-css-var('tab-nav-d-color');
 
     &--suffix {
       flex: 1 0 auto;
@@ -94,6 +111,11 @@ $tab-nav: map.merge(
     display: flex;
   }
 
+  &--right &__item,
+  &--left &__item {
+    flex-direction: column;
+  }
+
   &__content {
     position: relative;
     display: flex;
@@ -103,7 +125,7 @@ $tab-nav: map.merge(
     color: get-css-var('tab-nav-color');
     cursor: pointer;
     user-select: none;
-    border-bottom: get-css-var('border-shape') get-css-var('tab-nav-d-color');
+    border: 0 solid get-css-var('tab-nav-d-color');
     transition: get-css-var('transition-color');
 
     &:hover {
@@ -122,11 +144,13 @@ $tab-nav: map.merge(
     }
   }
 
+  $content-radius: get-css-var('tab-nav-card-radius');
+
   &--card &__content {
     color: get-css-var('tab-nav-card-color');
     background-color: get-css-var('tab-nav-card-bg-color');
     border: get-css-var('border-shape') get-css-var('tab-nav-card-b-color');
-    border-radius: get-css-var('tab-nav-card-radius') get-css-var('tab-nav-card-radius') 0 0;
+    border-radius: $content-radius $content-radius 0 0;
     transition:
       get-css-var('transition-color'),
       get-css-var('transition-background'),
@@ -141,7 +165,6 @@ $tab-nav: map.merge(
       color: get-css-var('tab-nav-card-color-active');
       background-color: get-css-var('tab-nav-card-bg-color-active');
       border-color: get-css-var('tab-nav-card-b-color-active');
-      border-bottom-color: transparent;
     }
 
     &--disabled,
@@ -154,13 +177,19 @@ $tab-nav: map.merge(
 
   &__pad {
     display: none;
-    width: get-css-var('tab-nav-item-pad-width');
+    width: get-css-var('tab-nav-item-pad-size');
     pointer-events: none;
-    border-bottom: get-css-var('border-shape') get-css-var('tab-nav-d-color');
+    border: 0 solid get-css-var('tab-nav-d-color');
   }
 
   &--card &__pad {
     display: block;
+  }
+
+  &--right &__pad,
+  &--left &__pad {
+    width: auto;
+    height: get-css-var('tab-nav-item-pad-size');
   }
 
   &__item:nth-child(2) &__pad {
@@ -169,16 +198,115 @@ $tab-nav: map.merge(
 
   &__track {
     position: absolute;
-    bottom: 0;
-    width: 70px;
     pointer-events: none;
-    transition: left get-css-var('transition-base'), width get-css-var('transition-base');
+    transition:
+      top get-css-var('transition-base'),
+      left get-css-var('transition-base'),
+      width get-css-var('transition-base'),
+      height get-css-var('transition-base');
+  }
+
+  $extra: #{&}__extra;
+  $content: #{&}__content;
+  $pad: #{&}__pad;
+  $track: #{&}__track;
+
+  &--top {
+    #{$extra},
+    #{$content},
+    #{$pad} {
+      border-bottom-width: 1px;
+    }
+
+    #{$content} {
+      &--active,
+      &--active:hover {
+        border-bottom-color: transparent;
+      }
+    }
+
+    #{$track} {
+      bottom: 0;
+      width: 70px;
+    }
+  }
+
+  &--right {
+    #{$extra},
+    #{$content},
+    #{$pad} {
+      border-left-width: 1px;
+    }
+
+    #{$content} {
+      border-radius: 0 $content-radius $content-radius 0;
+
+      &--active,
+      &--active:hover {
+        border-left-color: transparent;
+      }
+    }
+
+    #{$track} {
+      left: 0;
+      height: 70px;
+    }
+  }
+
+  &--bottom {
+    #{$extra},
+    #{$content},
+    #{$pad} {
+      border-top-width: 1px;
+    }
+
+    #{$content} {
+      border-radius: 0 0 $content-radius $content-radius;
+
+      &--active,
+      &--active:hover {
+        border-top-color: transparent;
+      }
+    }
+
+    #{$track} {
+      top: 0;
+      width: 70px;
+    }
+  }
+
+  &--left {
+    #{$extra},
+    #{$content},
+    #{$pad} {
+      border-right-width: 1px;
+    }
+
+    #{$content} {
+      border-radius: $content-radius 0 0 $content-radius;
+
+      &--active,
+      &--active:hover {
+        border-right-color: transparent;
+      }
+    }
+
+    #{$track} {
+      right: 0;
+      height: 70px;
+    }
   }
 
   &__marker {
     width: 100%;
-    height: get-css-var('tab-nav-marker-height');
+    height: get-css-var('tab-nav-marker-size');
     background-color: get-css-var('tab-nav-marker-bg-color');
+  }
+
+  &--right &__marker,
+  &--left &__marker {
+    width: get-css-var('tab-nav-marker-size');
+    height: 100%;
   }
 
   &__icon {
