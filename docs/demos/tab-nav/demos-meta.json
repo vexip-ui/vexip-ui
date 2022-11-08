@@ -3,6 +3,7 @@
   "card",
   "disabled",
   "icon",
+  "closable",
   "align",
   "placement",
   "extra",

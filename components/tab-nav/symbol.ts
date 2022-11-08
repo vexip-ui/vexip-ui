@@ -8,6 +8,7 @@ export interface TabNavItemOptions {
   content?: string,
   icon?: Record<string, any>,
   disabled?: boolean,
+  closable?: boolean,
   onToggle?: (active: boolean) => void
 }
 
@@ -22,9 +23,11 @@ export interface ItemState {
 
 export interface TabNavState {
   currentActive: string | number,
+  closable: boolean,
   increaseItem: (item: ItemState) => void,
   decreaseItem: (item: ItemState) => void,
   handleActive: (label: string | number) => void,
+  handleClose: (label: string | number) => void,
   refreshLabels: () => void
 }
 

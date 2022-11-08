@@ -1,10 +1,12 @@
 <template>
-  <TabNav v-model:active="active">
-    <TabNavItem v-for="(tab, index) in tabs" :key="index" :label="tab.label">
+  <TabNav v-model:active="active" @close="removeTab">
+    <TabNavItem
+      v-for="(tab, index) in tabs"
+      :key="index"
+      :label="tab.label"
+      :closable="!tab.static"
+    >
       {{ tab.name }}
-      <Icon v-if="!tab.static" class="close-btn" @click.stop="removeTab(tab.label)">
-        <Xmark></Xmark>
-      </Icon>
     </TabNavItem>
     <template #suffix>
       <Button size="small" :icon="Plus" @click="addTab"></Button>
@@ -14,7 +16,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Xmark, Plus } from '@vexip-ui/icons'
+import { Plus } from '@vexip-ui/icons'
 
 let labelCount = 4
 

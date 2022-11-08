@@ -10,7 +10,9 @@ export const tabNavProps = buildProps({
   options: Array as PropType<TabNavOptions[]>,
   align: String as PropType<TabNavAlign>,
   placement: String as PropType<TabNavPlacement>,
-  onChange: eventProp<(active: string | number) => void>()
+  closable: booleanProp,
+  onChange: eventProp<(label: string | number) => void>(),
+  onClose: eventProp<(label: string | number) => void>()
 })
 
 export type TabNavProps = ExtractPropTypes<typeof tabNavProps>

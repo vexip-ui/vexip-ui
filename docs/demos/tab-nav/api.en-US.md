@@ -9,6 +9,7 @@ interface TabNavItemOptions {
   content?: string,
   icon?: Record<string, any>,
   disabled?: boolean,
+  closable?: boolean,
   onToggle?: (active: boolean) => void
 }
 
@@ -24,6 +25,7 @@ type TabNavOptions = TabNavItemOptions | string | number
 | options   | `TabNavOptions[]`  | Quick set tab items, invalid after using slot                          | `[]`     | `2.0.7`  |
 | align     | `TabNavAlign`      | Set the alignment of the tab items                                     | `'left'` | `2.0.11` |
 | placement | `TabNavPlacement`  | Set the placement of the tab items                                     | `'top'`  | `2.0.13` |
+| closable  | `boolean`          | Set whether to display the close button                                | `false`  | `2.0.13` |
 
 ### TabNav Events
 
@@ -41,11 +43,12 @@ type TabNavOptions = TabNavItemOptions | string | number
 
 ### TabNavItem Props
 
-| Name     | Type               | Description                                                    | Default | Since |
-| -------- | ------------------ | -------------------------------------------------------------- | ------- | ----- |
-| label    | `string \| number` | Unique index for navigation, internal `index` value if not set | `null`  | -     |
-| disabled | `boolean`          | Set whether to disable this navigation                         | `false` | -     |
-| icon     | `string`           | set the front icon for navigation                              | `''`    | -     |
+| Name     | Type               | Description                                                    | Default | Since    |
+| -------- | ------------------ | -------------------------------------------------------------- | ------- | -------- |
+| label    | `string \| number` | Unique index for navigation, internal `index` value if not set | `null`  | -        |
+| disabled | `boolean`          | Set whether to disable this navigation                         | `false` | -        |
+| icon     | `string`           | set the front icon for navigation                              | `''`    | -        |
+| closable | `boolean`          | Set whether to display the close button                        | `false` | `2.0.13` |
 
 ### TabNavItem Events
 

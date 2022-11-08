@@ -15,6 +15,7 @@
           :label="item.label"
           :icon="item.icon"
           :disabled="item.disabled"
+          :closable="item.closable"
           @toggle="item.onToggle"
         >
           {{ item.content || item.label }}
@@ -37,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, onMounted, provide } from 'vue'
+import { defineComponent, ref, reactive, toRef, computed, watch, onMounted, provide } from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
 import { TabNavItem } from '@/components/tab-nav-item'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
@@ -75,7 +76,8 @@ export default defineComponent({
         static: true
       },
       align: 'left',
-      placement: 'top'
+      placement: 'top',
+      closable: false
     })
 
     const nh = useNameHelper('tab-nav')
@@ -134,9 +136,11 @@ export default defineComponent({
       TAB_NAV_STATE,
       reactive({
         currentActive,
-        handleActive,
+        closable: toRef(props, 'closable'),
         increaseItem,
         decreaseItem,
+        handleActive,
+        handleClose,
         refreshLabels
       })
     )
@@ -177,6 +181,12 @@ export default defineComponent({
       updateMarkerPosition()
       emitEvent(props.onChange, label)
       emit('update:active', label)
+    }
+
+    function handleClose(label: string | number) {
+      emitEvent(props.onClose, label)
+
+      requestAnimationFrame(updateMarkerPosition)
     }
 
     function updateMarkerPosition() {

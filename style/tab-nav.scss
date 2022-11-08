@@ -312,4 +312,28 @@ $tab-nav: map.merge(
   &__icon {
     margin-right: 4px;
   }
+
+  &__close {
+    position: relative;
+    left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin-left: -2px;
+    color: inherit;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    border-radius: 50%;
+    outline: 0;
+    transition: get-css-var('transition-background');
+
+    &:hover,
+    &:focus {
+      background-color: get-css-var('color-primary-opacity-9');
+    }
+  }
 }

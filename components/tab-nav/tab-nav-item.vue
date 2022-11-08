@@ -15,6 +15,11 @@
       <slot>
         {{ label }}
       </slot>
+      <button v-if="isClosable" :class="nh.be('close')" @click.stop="handleClose">
+        <Icon>
+          <Xmark></Xmark>
+        </Icon>
+      </button>
     </div>
   </li>
 </template>
@@ -23,6 +28,7 @@
 import { defineComponent, ref, reactive, computed, inject, watch, onBeforeUnmount } from 'vue'
 import { Icon } from '@/components/icon'
 import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
+import { Xmark } from '@vexip-ui/icons'
 import { isDefined } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
@@ -31,7 +37,8 @@ import type { ItemState } from './symbol'
 export default defineComponent({
   name: 'TabNavItem',
   components: {
-    Icon
+    Icon,
+    Xmark
   },
   props: {
     label: {
@@ -44,6 +51,10 @@ export default defineComponent({
     },
     icon: {
       type: Object,
+      default: null
+    },
+    closable: {
+      type: Boolean,
       default: null
     },
     onToggle: eventProp<(active: boolean) => void>()
@@ -68,6 +79,13 @@ export default defineComponent({
         [`${baseClass}--disabled`]: props.disabled,
         [`${baseClass}--active`]: !props.disabled && active.value
       }
+    })
+    const isClosable = computed(() => {
+      if (isDefined(props.closable)) {
+        return props.closable
+      }
+
+      return tabNavState?.closable ?? false
     })
 
     watch(
@@ -116,18 +134,29 @@ export default defineComponent({
         return
       }
 
-      if (tabNavState) {
-        tabNavState.handleActive(currentLabel.value)
+      tabNavState?.handleActive(currentLabel.value)
+    }
+
+    function handleClose() {
+      if (props.disabled) {
+        return
       }
+
+      tabNavState?.handleClose(currentLabel.value)
     }
 
     return {
       nh,
       index,
       total,
+
       contentClass,
+      isClosable,
+
       wrapper,
-      handleSelect
+
+      handleSelect,
+      handleClose
     }
   }
 })
