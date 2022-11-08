@@ -2,13 +2,13 @@ import { buildProps, booleanProp, booleanStringProp, classProp, eventProp } from
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { DrawerPlacement } from './symbol'
+import type { DrawerSize, DrawerPlacement } from './symbol'
 
 export const drawerProps = buildProps({
   transfer: booleanStringProp,
   active: booleanProp,
-  width: Number,
-  height: Number,
+  width: [Number, String] as PropType<DrawerSize>,
+  height: [Number, String] as PropType<DrawerSize>,
   placement: String as PropType<DrawerPlacement>,
   title: String,
   closable: booleanProp,

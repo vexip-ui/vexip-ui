@@ -15,6 +15,7 @@
     <template #default="{ show }">
       <section
         v-show="show"
+        ref="wrapper"
         :class="wrapperClass"
         :style="wrapperStyle"
         role="dialog"
@@ -79,13 +80,11 @@ import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { isPromise } from '@vexip-ui/utils'
+import { isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 import { drawerProps } from './props'
 
-import type { DrawerPlacement } from './symbol'
-
-const drawerPlacements = Object.freeze<DrawerPlacement>(['top', 'right', 'bottom', 'left'])
+const drawerPlacements = Object.freeze(['top', 'right', 'bottom', 'left'])
 
 let idCount = 0
 
@@ -141,56 +140,66 @@ export default defineComponent({
     const currentWidth = ref(props.width)
     const currentHeight = ref(props.height)
 
+    const wrapper = ref<HTMLElement>()
+
     const idIndex = `${idCount++}`
 
     const { target: resizer, moving: resizing } = useMoving({
       onStart: (state, event) => {
-        if (!props.resizable || event.button > 0) {
+        if (!props.resizable || event.button > 0 || !wrapper.value) {
           return false
         }
 
-        state.xStart = currentWidth.value
-        state.yStart = currentHeight.value
+        const width = `${currentWidth.value}`.endsWith('%')
+          ? wrapper.value.offsetWidth
+          : toNumber(currentWidth.value)
+        const height = `${currentHeight.value}`.endsWith('%')
+          ? wrapper.value.offsetHeight
+          : toNumber(currentHeight.value)
 
-        emitEvent(props.onResizeStart, {
-          width: currentWidth.value,
-          height: currentHeight.value
-        })
+        console.log({ width, height })
+        state.xStart = width
+        state.yStart = height
+
+        emitEvent(props.onResizeStart, { width, height })
       },
       onMove: (state, event) => {
         const deltaX = event.clientX - state.clientX
         const deltaY = event.clientY - state.clientY
 
+        let width = toNumber(currentWidth.value)
+        let height = toNumber(currentHeight.value)
+
         switch (props.placement) {
           case 'top': {
-            currentHeight.value = state.yStart + deltaY
+            height = state.yStart + deltaY
             break
           }
           case 'right': {
-            currentWidth.value = state.xStart - deltaX
+            width = state.xStart - deltaX
             break
           }
           case 'bottom': {
-            currentHeight.value = state.yStart - deltaY
+            height = state.yStart - deltaY
             break
           }
           default: {
-            currentWidth.value = state.xStart + deltaX
+            width = state.xStart + deltaX
           }
         }
 
-        currentWidth.value = Math.max(currentWidth.value, 101)
-        currentHeight.value = Math.max(currentHeight.value, 101)
+        currentWidth.value = Math.max(width, 100)
+        currentHeight.value = Math.max(height, 100)
 
         emitEvent(props.onResizeMove, {
-          width: currentWidth.value,
-          height: currentHeight.value
+          width: toNumber(currentWidth.value),
+          height: toNumber(currentHeight.value)
         })
       },
       onEnd: () => {
         emitEvent(props.onResizeEnd, {
-          width: currentWidth.value,
-          height: currentHeight.value
+          width: toNumber(currentWidth.value),
+          height: toNumber(currentHeight.value)
         })
       }
     })
@@ -226,14 +235,14 @@ export default defineComponent({
         const height = currentHeight.value
 
         return {
-          height: height > 100 ? `${height}px` : `${height}%`
+          height: `${height}`.endsWith('%') ? height : `${height}px`
         }
       }
 
       const width = currentWidth.value
 
       return {
-        width: width > 100 ? `${width}px` : `${width}%`
+        width: `${width}`.endsWith('%') ? width : `${width}px`
       }
     })
     const hasTitle = computed(() => {
@@ -325,6 +334,7 @@ export default defineComponent({
       titleId,
       bodyId,
 
+      wrapper,
       resizer,
 
       handleClose,
