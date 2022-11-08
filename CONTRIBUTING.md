@@ -1,16 +1,12 @@
 # Contributing
 
-First, thanks for being interested in contributing on this project!
+Thank you for being interested in helping with the development of this project. Please read the below information to get started.
 
 ## Development
 
-### Pre-request
+### Prerequisites
 
-Before starting, you should ensure your mechine is having:
-
-Node >= 16
-
-pnpm >= 7
+Before starting, you should ensure you are running atleast Node V16 and PNPM V7:
 
 ### Setup
 
@@ -26,7 +22,7 @@ Then you need to build all packages under `common`:
 pnpm run build:common
 ```
 
-### Developing for Component
+### Developing Components
 
 We use a vite project in `dev-server` for development.
 
@@ -36,9 +32,9 @@ Using the following command you can start development server for specify compone
 pnpm run serve [component]
 ```
 
-### Developing for Document
+### Developing Documentation
 
-We alse use a vite project for documenting, you can start it locally:
+We alse use a vite project for documentation, you can start it locally:
 
 ```sh
 pnpm run serve:docs
@@ -46,7 +42,7 @@ pnpm run serve:docs
 
 ## Create New Component
 
-you can create some templete files by:
+You can create some templete files by:
 
 ```sh
 pnpm run create [component-name]
