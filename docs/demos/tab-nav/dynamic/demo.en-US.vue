@@ -1,5 +1,11 @@
 <template>
-  <TabNav v-model:active="active" @close="removeTab">
+  <TabNav
+    v-model:active="active"
+    card
+    show-add
+    @add="addTab"
+    @close="removeTab"
+  >
     <TabNavItem
       v-for="(tab, index) in tabs"
       :key="index"
@@ -8,15 +14,11 @@
     >
       {{ tab.name }}
     </TabNavItem>
-    <template #suffix>
-      <Button size="small" :icon="Plus" @click="addTab"></Button>
-    </template>
   </TabNav>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Plus } from '@vexip-ui/icons'
 
 let labelCount = 4
 
@@ -36,7 +38,7 @@ function removeTab(label: number) {
 
   if (index > -1) {
     if (active.value === label) {
-      active.value = index ? index - 1 : index + 1
+      active.value = tabs.value[index ? index - 1 : index + 1].label
     }
 
     tabs.value.splice(index, 1)

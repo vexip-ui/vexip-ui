@@ -21,6 +21,16 @@
           {{ item.content || item.label }}
         </TabNavItem>
       </slot>
+      <li v-if="props.showAdd || $slots.add" :class="nh.be('item')" role="none">
+        <div :class="nh.be('pad')"></div>
+        <button :class="nh.be('add')" @click="handleAdd">
+          <slot name="add">
+            <Icon :scale="1.2">
+              <Plus></Plus>
+            </Icon>
+          </slot>
+        </button>
+      </li>
       <ResizeObserver :on-resize="updateMarkerPosition">
         <li :class="[nh.be('extra'), nh.bem('extra', 'suffix')]">
           <div v-if="$slots.suffix" :class="nh.be('suffix')">
@@ -39,9 +49,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, toRef, computed, watch, onMounted, provide } from 'vue'
+import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
 import { TabNavItem } from '@/components/tab-nav-item'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { Plus } from '@vexip-ui/icons'
 import { useDisplay } from '@vexip-ui/hooks'
 import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { tabNavProps } from './props'
@@ -59,8 +71,10 @@ const trackStyleMap = {
 export default defineComponent({
   name: 'TabNav',
   components: {
+    Icon,
     ResizeObserver,
-    TabNavItem
+    TabNavItem,
+    Plus
   },
   props: tabNavProps,
   emits: ['update:active'],
@@ -183,6 +197,10 @@ export default defineComponent({
       emit('update:active', label)
     }
 
+    function handleAdd() {
+      emitEvent(props.onAdd)
+    }
+
     function handleClose(label: string | number) {
       emitEvent(props.onClose, label)
 
@@ -216,7 +234,8 @@ export default defineComponent({
 
       wrapper,
 
-      updateMarkerPosition
+      updateMarkerPosition,
+      handleAdd
     }
   }
 })

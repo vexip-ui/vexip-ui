@@ -11,7 +11,9 @@ export const tabNavProps = buildProps({
   align: String as PropType<TabNavAlign>,
   placement: String as PropType<TabNavPlacement>,
   closable: booleanProp,
+  showAdd: booleanProp,
   onChange: eventProp<(label: string | number) => void>(),
+  onAdd: eventProp(),
   onClose: eventProp<(label: string | number) => void>()
 })
 

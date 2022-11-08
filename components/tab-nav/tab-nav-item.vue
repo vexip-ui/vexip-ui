@@ -107,11 +107,7 @@ export default defineComponent({
         total
       })
 
-      watch(currentLabel, (value, prevValue) => {
-        if (isDefined(prevValue) && prevValue === tabNavState.currentActive) {
-          tabNavState.handleActive(value)
-        }
-
+      watch(currentLabel, () => {
         active.value = currentLabel.value === tabNavState.currentActive
       })
       watch(

@@ -51,7 +51,6 @@ $tab-nav: map.merge(
   &__list {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
     width: 100%;
     height: 100%;
     padding: 0;
@@ -63,11 +62,6 @@ $tab-nav: map.merge(
   &--left &__list {
     display: inline-flex;
     flex-direction: column;
-  }
-
-  &--right &__list,
-  &--bottom &__list {
-    align-items: flex-start;
   }
 
   &__extra {
@@ -126,21 +120,29 @@ $tab-nav: map.merge(
     cursor: pointer;
     user-select: none;
     border: 0 solid get-css-var('tab-nav-d-color');
+    outline: 0;
     transition: get-css-var('transition-color');
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('tab-nav-color-hover');
     }
 
-    &--active,
-    &--active:hover {
-      color: get-css-var('tab-nav-color-active');
+    &--active {
+      &,
+      &:hover,
+      &:focus {
+        color: get-css-var('tab-nav-color-active');
+      }
     }
 
-    &--disabled,
-    &--disabled:hover {
-      color: get-css-var('tab-nav-color-disabled');
-      cursor: not-allowed;
+    &--disabled {
+      &,
+      &:hover,
+      &:focus {
+        color: get-css-var('tab-nav-color-disabled');
+        cursor: not-allowed;
+      }
     }
   }
 
@@ -150,28 +152,66 @@ $tab-nav: map.merge(
     color: get-css-var('tab-nav-card-color');
     background-color: get-css-var('tab-nav-card-bg-color');
     border: get-css-var('border-shape') get-css-var('tab-nav-card-b-color');
-    border-radius: $content-radius $content-radius 0 0;
     transition:
       get-css-var('transition-color'),
       get-css-var('transition-background'),
       get-css-var('transition-border');
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: get-css-var('tab-nav-card-color-hover');
     }
 
-    &--active,
-    &--active:hover {
-      color: get-css-var('tab-nav-card-color-active');
-      background-color: get-css-var('tab-nav-card-bg-color-active');
-      border-color: get-css-var('tab-nav-card-b-color-active');
+    &--active {
+      &,
+      &:hover,
+      &:focus {
+        color: get-css-var('tab-nav-card-color-active');
+        background-color: get-css-var('tab-nav-card-bg-color-active');
+        border-color: get-css-var('tab-nav-card-b-color-active');
+      }
     }
 
-    &--disabled,
-    &--disabled:hover {
-      color: get-css-var('tab-nav-card-color-disabled');
-      background-color: get-css-var('tab-nav-card-bg-color-disabled');
-      border-color: get-css-var('tab-nav-card-b-color-disabled');
+    &--disabled {
+      &,
+      &:hover,
+      &:focus {
+        color: get-css-var('tab-nav-card-color-disabled');
+        background-color: get-css-var('tab-nav-card-bg-color-disabled');
+        border-color: get-css-var('tab-nav-card-b-color-disabled');
+      }
+    }
+  }
+
+  &__add {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    line-height: inherit;
+    color: get-css-var('tab-nav-color');
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    border: 0 solid get-css-var('tab-nav-d-color');
+    outline: 0;
+    transition: get-css-var('transition-color');
+
+    &:hover,
+    &:focus {
+      color: get-css-var('tab-nav-color-hover');
+    }
+  }
+
+  &--card &__add {
+    color: get-css-var('tab-nav-card-color');
+    background-color: get-css-var('tab-nav-card-bg-color');
+    border: get-css-var('border-shape') get-css-var('tab-nav-card-b-color');
+
+    &:hover,
+    &:focus {
+      color: get-css-var('tab-nav-card-color-hover');
     }
   }
 
@@ -206,22 +246,35 @@ $tab-nav: map.merge(
       height get-css-var('transition-base');
   }
 
+  $card: #{&}--card;
   $extra: #{&}__extra;
   $content: #{&}__content;
+  $add: #{&}__add;
   $pad: #{&}__pad;
   $track: #{&}__track;
 
   &--top {
     #{$extra},
     #{$content},
+    #{$add},
     #{$pad} {
       border-bottom-width: 1px;
     }
 
     #{$content} {
-      &--active,
-      &--active:hover {
-        border-bottom-color: transparent;
+      &--active {
+        &,
+        &:hover,
+        &:focus {
+          border-bottom-color: transparent;
+        }
+      }
+    }
+
+    &#{$card} {
+      #{$content},
+      #{$add} {
+        border-radius: $content-radius $content-radius 0 0;
       }
     }
 
@@ -234,16 +287,25 @@ $tab-nav: map.merge(
   &--right {
     #{$extra},
     #{$content},
+    #{$add},
     #{$pad} {
       border-left-width: 1px;
     }
 
     #{$content} {
-      border-radius: 0 $content-radius $content-radius 0;
+      &--active {
+        &,
+        &:hover,
+        &:focus {
+          border-left-color: transparent;
+        }
+      }
+    }
 
-      &--active,
-      &--active:hover {
-        border-left-color: transparent;
+    &#{$card} {
+      #{$content},
+      #{$add} {
+        border-radius: 0 $content-radius $content-radius 0;
       }
     }
 
@@ -256,16 +318,25 @@ $tab-nav: map.merge(
   &--bottom {
     #{$extra},
     #{$content},
+    #{$add},
     #{$pad} {
       border-top-width: 1px;
     }
 
     #{$content} {
-      border-radius: 0 0 $content-radius $content-radius;
+      &--active {
+        &,
+        &:hover,
+        &:focus {
+          border-top-color: transparent;
+        }
+      }
+    }
 
-      &--active,
-      &--active:hover {
-        border-top-color: transparent;
+    &#{$card} {
+      #{$content},
+      #{$add} {
+        border-radius: 0 0 $content-radius $content-radius;
       }
     }
 
@@ -278,16 +349,25 @@ $tab-nav: map.merge(
   &--left {
     #{$extra},
     #{$content},
+    #{$add},
     #{$pad} {
       border-right-width: 1px;
     }
 
     #{$content} {
-      border-radius: $content-radius 0 0 $content-radius;
+      &--active {
+        &,
+        &:hover,
+        &:focus {
+          border-right-color: transparent;
+        }
+      }
+    }
 
-      &--active,
-      &--active:hover {
-        border-right-color: transparent;
+    &#{$card} {
+      #{$content},
+      #{$add} {
+        border-radius: $content-radius 0 0 $content-radius;
       }
     }
 

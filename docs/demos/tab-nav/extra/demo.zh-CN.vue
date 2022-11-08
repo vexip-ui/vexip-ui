@@ -1,9 +1,7 @@
 <template>
   <TabNav>
     <template #prefix>
-      <Button size="small">
-        前置操作
-      </Button>
+      <Button> 前置操作 </Button>
     </template>
     <TabNavItem label="标签页1">
       标签页1
@@ -15,9 +13,7 @@
       标签页3
     </TabNavItem>
     <template #suffix>
-      <Button size="small">
-        后置操作
-      </Button>
+      <Button> 后置操作 </Button>
     </template>
   </TabNav>
 </template>
