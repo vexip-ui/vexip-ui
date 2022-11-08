@@ -9,10 +9,10 @@ export type Data = Record<string, unknown>
 export type RowPropFn<P = any> = (data: Data, index: number) => P
 export type DropType = 'before' | 'after' | 'none'
 
-export type Accessor<T extends string | number = string | number, D = Data> = (
+export type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
   index: number
-) => T
+) => Val
 export type RenderFn = (data: Data) => any
 export type ExpandRenderFn = (data: {
   leftFixed: number,
@@ -23,20 +23,20 @@ export type ExpandRenderFn = (data: {
 
 export type TableColumnType = 'order' | 'selection' | 'expand'
 
-export type FilterOptions<T extends string | number = string | number, D = Data> =
+export type FilterOptions<D = Data, Val extends string | number = string | number> =
   | {
     able: boolean,
-    options: (string | { value: T, label?: string, active?: boolean })[],
+    options: (string | { value: Val, label?: string, active?: boolean })[],
     multiple?: false,
-    active?: null | T,
-    method?: null | ((active: T, data: D) => boolean)
+    active?: null | Val,
+    method?: null | ((active: Val, data: D) => boolean)
   }
   | {
     able: boolean,
-    options: (string | { value: T, label?: string, active?: boolean })[],
+    options: (string | { value: Val, label?: string, active?: boolean })[],
     multiple: true,
-    active?: null | T[],
-    method?: null | ((active: T[], data: D) => boolean)
+    active?: null | Val[],
+    method?: null | ((active: Val[], data: D) => boolean)
   }
 
 export interface ParsedFilterOptions extends Omit<Required<FilterOptions>, 'options'> {
@@ -52,60 +52,55 @@ export interface SorterOptions<D = Data> {
 
 export type ParsedSorterOptions = Required<SorterOptions>
 
-export interface BaseColumn<T extends string | number = string | number, D = Data> {
+export interface BaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
-  key?: string | number,
+  key?: keyof D,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
   className?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number,
-  filter?: FilterOptions<T, D>,
+  filter?: FilterOptions<D, Val>,
   sorter?: boolean | SorterOptions<D>,
   order?: number,
   noEllipsis?: boolean,
-  accessor?: Accessor<T, D>,
+  accessor?: Accessor<D, Val>,
   renderer?: RenderFn,
   headRenderer?: RenderFn
 }
 
-export interface OrderColumn<T extends string | number = string | number, D = Data>
-  extends BaseColumn<T, D> {
+export interface OrderColumn<D = Data, Val extends string | number = string | number>
+  extends BaseColumn<D, Val> {
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
-export interface SelectionColumn<T extends string | number = string | number, D = Data>
-  extends BaseColumn<T, D> {
+export interface SelectionColumn<D = Data, Val extends string | number = string | number>
+  extends BaseColumn<D, Val> {
   type: 'selection',
   checkboxSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
-export interface ExpandColumn<T extends string | number = string | number, D = Data>
-  extends BaseColumn<T, D> {
+export interface ExpandColumn<D = Data, Val extends string | number = string | number>
+  extends BaseColumn<D, Val> {
   type: 'expand',
   disableRow?: (data: Data) => boolean
 }
 
-export type TypeColumn<T extends string | number = string | number, D = Data> =
-  | OrderColumn<T, D>
-  | SelectionColumn<T, D>
-  | ExpandColumn<T, D>
-export type TableColumnOptions<T extends string | number = string | number, D = Data> =
-  | BaseColumn<T, D>
-  | TypeColumn<T, D>
+export type TypeColumn<D = Data, Val extends string | number = string | number> =
+  | OrderColumn<D, Val>
+  | SelectionColumn<D, Val>
+  | ExpandColumn<D, Val>
+export type TableColumnOptions<D = Data, Val extends string | number = string | number> =
+  | BaseColumn<D, Val>
+  | TypeColumn<D, Val>
 export type ColumnWithKey<
-  T extends string | number = string | number,
-  D = Data
-> = TableColumnOptions<T, D> & { key: Key }
-
-export type ColumnProfile<T extends string | number = string | number, D = Data> = Pick<
-  ColumnWithKey<T, D>,
-  'name' | 'key' | 'metaData'
->
+  D = Data,
+  Val extends string | number = string | number
+> = TableColumnOptions<D, Val> & { key: Key }
 
 export type ColumnRenderFn = (data: {
   row: any,
@@ -123,15 +118,19 @@ export type CellPropFn<P = any> = (
 ) => P
 export type HeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
 
-export type FilterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<
-  T,
-  D
+export type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
+  ColumnWithKey<D, Val>,
+  'name' | 'key' | 'metaData'
+>
+export type FilterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
+  D,
+  Val
 > & {
-  active: T | T[]
+  active: Val | Val[]
 }
-export type SorterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<
-  T,
-  D
+export type SorterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
+  D,
+  Val
 > & {
   type: 'asc' | 'desc'
 }
@@ -264,6 +263,12 @@ export interface TableAction {
 }
 
 export const DEFAULT_KEY_FIELD = 'id'
-export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE') // 表格状态管理
-export const TABLE_ACTION: InjectionKey<TableAction> = Symbol('TABLE_ACTION') // 表格组件的顶层 Api
+/**
+ * 表格状态管理
+ */
+export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
+/**
+ * 表格组件的顶层 Api
+ */
+export const TABLE_ACTION: InjectionKey<TableAction> = Symbol('TABLE_ACTION')
 export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')

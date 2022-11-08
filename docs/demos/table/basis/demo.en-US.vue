@@ -20,7 +20,7 @@ const columns = ref(
     {
       name: 'Job',
       key: 'job',
-      accessor(row: { job: string }) {
+      accessor(row) {
         return row.job
       }
     },

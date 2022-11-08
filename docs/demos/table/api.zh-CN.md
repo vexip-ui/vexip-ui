@@ -2,34 +2,43 @@
 
 ```ts
 type Key = string | number | symbol
-type Data = Record<string, any>
+type Data = Record<string, unknown>
 type RowPropFn<P = any> = (data: Data, index: number) => P
+type DropType = 'before' | 'after' | 'none'
 
-type Accessor<T extends string | number = string | number, D = Data> = (
+type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
   index: number
-) => T
-type ExpandRenderFn = (data: { leftFixed: number, rightFixed: number, row: Data, rowIndex: number }) => any
-type ColumnRenderFn = (data: { row: Data, rowIndex: number, column: TableColumnOptions, columnIndex: number }) => any
-type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
+) => Val
+type RenderFn = (data: Data) => any
+type ExpandRenderFn = (data: {
+  leftFixed: number,
+  rightFixed: number,
+  row: Data,
+  rowIndex: number
+}) => any
 
 type TableColumnType = 'order' | 'selection' | 'expand'
 
-type FilterOptions<T extends string | number = string | number, D = Data> =
+type FilterOptions<D = Data, Val extends string | number = string | number> =
   | {
     able: boolean,
-    options: (string | { value: T, label?: string, active?: boolean })[],
+    options: (string | { value: Val, label?: string, active?: boolean })[],
     multiple?: false,
-    active?: null | T,
-    method?: null | ((active: T, data: D) => boolean)
+    active?: null | Val,
+    method?: null | ((active: Val, data: D) => boolean)
   }
   | {
     able: boolean,
-    options: (string | { value: T, label?: string, active?: boolean })[],
+    options: (string | { value: Val, label?: string, active?: boolean })[],
     multiple: true,
-    active?: null | T[],
-    method?: null | ((active: T[], data: D) => boolean)
+    active?: null | Val[],
+    method?: null | ((active: Val[], data: D) => boolean)
   }
+
+interface ParsedFilterOptions extends Omit<Required<FilterOptions>, 'options'> {
+  options: { value: string | number, label: string, active: boolean }[]
+}
 
 interface SorterOptions<D = Data> {
   able: boolean,
@@ -38,80 +47,79 @@ interface SorterOptions<D = Data> {
   method?: null | ((prev: D, next: D) => number)
 }
 
-interface BaseColumn<T extends string | number = string | number, D = Data> {
+type ParsedSorterOptions = Required<SorterOptions>
+
+interface BaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
-  key?: string | number,
+  key?: keyof D,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
   className?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number,
-  filter?: FilterOptions<T, D>,
+  filter?: FilterOptions<D, Val>,
   sorter?: boolean | SorterOptions<D>,
   order?: number,
   noEllipsis?: boolean,
-  accessor?: Accessor<T, D>,
-  renderer?: ColumnRenderFn,
-  headRenderer?: HeadRenderFn
+  accessor?: Accessor<D, Val>,
+  renderer?: RenderFn,
+  headRenderer?: RenderFn
 }
 
-interface OrderColumn<T extends string | number = string | number, D = Data>
-  extends BaseColumn<T, D> {
+interface OrderColumn<D = Data, Val extends string | number = string | number>
+  extends BaseColumn<D, Val> {
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
-interface SelectionColumn<T extends string | number = string | number, D = Data>
-  extends BaseColumn<T, D> {
+interface SelectionColumn<D = Data, Val extends string | number = string | number>
+  extends BaseColumn<D, Val> {
   type: 'selection',
   checkboxSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
-interface ExpandColumn<T extends string | number = string | number, D = Data>
-  extends BaseColumn<T, D> {
+interface ExpandColumn<D = Data, Val extends string | number = string | number>
+  extends BaseColumn<D, Val> {
   type: 'expand',
   disableRow?: (data: Data) => boolean
 }
 
-type TypeColumn<T extends string | number = string | number, D = Data> =
-  | OrderColumn<T, D>
-  | SelectionColumn<T, D>
-  | ExpandColumn<T, D>
-type TableColumnOptions<T extends string | number = string | number, D = Data> =
-  | BaseColumn<T, D>
-  | TypeColumn<T, D>
+type TypeColumn<D = Data, Val extends string | number = string | number> =
+  | OrderColumn<D, Val>
+  | SelectionColumn<D, Val>
+  | ExpandColumn<D, Val>
+type TableColumnOptions<D = Data, Val extends string | number = string | number> =
+  | BaseColumn<D, Val>
+  | TypeColumn<D, Val>
 type ColumnWithKey<
-  T extends string | number = string | number,
-  D = Data
-> = TableColumnOptions<T, D> & { key: Key }
+  D = Data,
+  Val extends string | number = string | number
+> = TableColumnOptions<D, Val> & { key: Key }
 
-interface ScrollClass {
-  horizontal?: string | Record<string, boolean>,
-  major?: string | Record<string, boolean>,
-  left?: string | Record<string, boolean>,
-  right?: string | Record<string, boolean>
-}
-
-type CellPropFn<P = any> = (data: Data, column: ColumnWithKey, rowIndex: number, columnIndex: number) => P
+type CellPropFn<P = any> = (
+  data: Data,
+  column: ColumnWithKey,
+  rowIndex: number,
+  columnIndex: number
+) => P
 type HeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
 
-type ColumnProfile<T extends string | number = string | number, D = Data> = Pick<
-ColumnWithKey<T, D>,
-'name' | 'key' | 'metaData'
+type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
+  ColumnWithKey<D, Val>,
+  'name' | 'key' | 'metaData'
 >
-
-type FilterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<
-T,
-D
+type FilterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
+  D,
+  Val
 > & {
-  active: T | T[]
+  active: Val | Val[]
 }
-type SorterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<
-T,
-D
+type SorterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
+  D,
+  Val
 > & {
   type: 'asc' | 'desc'
 }

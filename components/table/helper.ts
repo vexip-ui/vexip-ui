@@ -1,17 +1,23 @@
-import type { FilterOptions, SorterOptions, TableColumnOptions } from './symbol'
+import type { Data, FilterOptions, SorterOptions, TableColumnOptions } from './symbol'
 
-export function defineFilter<T extends string | number, D>(filter: FilterOptions<T, D>) {
+export function defineFilter<D = Data, Val extends string | number = string | number>(
+  filter: FilterOptions<D, Val>
+) {
   return filter
 }
 
-export function defineSorter<D>(sorter: SorterOptions<D>) {
+export function defineSorter<D = Data>(sorter: SorterOptions<D>) {
   return sorter
 }
 
-export function defineColumn<T extends string | number, D>(column: TableColumnOptions<T, D>) {
+export function defineColumn<D = Data, Val extends string | number = string | number>(
+  column: TableColumnOptions<D, Val>
+) {
   return column
 }
 
-export function defineColumns<T extends string | number, D>(columns: TableColumnOptions<T, D>[]) {
+export function defineColumns<D = Data, Val extends string | number = string | number>(
+  columns: TableColumnOptions<D, Val>[]
+) {
   return columns
 }

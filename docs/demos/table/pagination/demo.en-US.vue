@@ -41,7 +41,7 @@ const pageSize = ref(5)
 const currentPage = ref(1)
 
 function mockData() {
-  const data = []
+  const data: RowData[] = []
 
   for (let i = 0; i < 20; ++i) {
     data.push({
