@@ -89,7 +89,7 @@ const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
 const positionProp = {
-  default: 'auto',
+  default: 'auto' as const,
   validator: positionValidator
 }
 
