@@ -1,1 +1,10 @@
-["basis", "card", "disabled", "icon", "label", "align", "extra"]
+[
+  "basis",
+  "card",
+  "disabled",
+  "icon",
+  "label",
+  "align",
+  "placement",
+  "extra"
+]

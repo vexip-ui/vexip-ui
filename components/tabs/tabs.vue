@@ -1,10 +1,11 @@
 <template>
-  <div :class="nh.b()">
+  <div :class="[nh.b(), nh.bm(props.placement)]">
     <div :class="nh.be('header')">
       <TabNav
         :active="currentActive"
         :card="props.card"
         :align="props.align"
+        :placement="props.placement"
         @change="handleActive"
       >
         <template v-if="$slots.prefix" #prefix>
@@ -71,7 +72,9 @@ export default defineComponent({
       active: {
         default: null,
         static: true
-      }
+      },
+      align: 'left',
+      placement: 'top'
     })
 
     const currentActive = ref(props.active)

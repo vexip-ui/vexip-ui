@@ -2,15 +2,17 @@
 
 ```ts
 type TabNavAlign = 'left' | 'center' | 'right'
+type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 ```
 
 ### Tabs 属性
 
-| 名称   | 类型               | 说明                                              | 默认值   | 始于     |
-| ------ | ------------------ | ------------------------------------------------- | -------- | -------- |
-| card   | `boolean`          | 设置导航栏是否开启卡片模式                        | `false`  | -        |
-| active | `string \| number` | 设置当前激活的标签页，可以使用 `v-model` 双向绑定 | `''`     | -        |
-| align  | `TabNavAlign`      | 设置标签导航的对齐位置                            | `'left'` | `2.0.11` |
+| 名称      | 类型               | 说明                                              | 默认值   | 始于     |
+| --------- | ------------------ | ------------------------------------------------- | -------- | -------- |
+| card      | `boolean`          | 设置导航栏是否开启卡片模式                        | `false`  | -        |
+| active    | `string \| number` | 设置当前激活的标签页，可以使用 `v-model` 双向绑定 | `''`     | -        |
+| align     | `TabNavAlign`      | 设置标签导航的对齐位置                            | `'left'` | `2.0.11` |
+| placement | `TabNavPlacement`  | 设置标签导航的放置位置                            | `'top'`  | `2.0.13` |
 
 ### Tabs 事件
 

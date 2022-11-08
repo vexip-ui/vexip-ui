@@ -2,15 +2,17 @@
 
 ```ts
 type TabNavAlign = 'left' | 'center' | 'right'
+type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 ```
 
 ### Tabs Props
 
-| Name   | Type               | Description                                                         | Default  | Since    |
-| ------ | ------------------ | ------------------------------------------------------------------- | -------- | -------- |
-| card   | `boolean`          | Set whether to enable card mode in the navigation bar               | `false`  | -        |
-| active | `string \| number` | Set the currently active tab, you can use `v-model` two-way binding | `''`     | -        |
-| align  | `TabNavAlign`      | Set the alignment of the tab items                                  | `'left'` | `2.0.11` |
+| Name      | Type               | Description                                                         | Default  | Since    |
+| --------- | ------------------ | ------------------------------------------------------------------- | -------- | -------- |
+| card      | `boolean`          | Set whether to enable card mode in the navigation bar               | `false`  | -        |
+| active    | `string \| number` | Set the currently active tab, you can use `v-model` two-way binding | `''`     | -        |
+| align     | `TabNavAlign`      | Set the alignment of the tab items                                  | `'left'` | `2.0.11` |
+| placement | `TabNavPlacement`  | Set the placement of the tab items                                  | `'top'`  | `2.0.13` |
 
 ### Tabs Events
 

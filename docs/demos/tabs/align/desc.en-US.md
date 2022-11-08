@@ -1,3 +1,3 @@
-### Basis Usage
+### Tab Alignment
 
-Basic usage, you can use `v-model:active` for two-way binding.
+The alignment of tab items can be set via the `align` prop.
