@@ -1,3 +1,19 @@
+## [2.0.13](https://github.com/vexip-ui/vexip-ui/compare/v2.0.12...v2.0.13) (2022-11-09)
+
+### Bug Fixes
+
+- **drawer:** size abruptly change on resize when using percentage size ([4f81bd0](https://github.com/vexip-ui/vexip-ui/commit/4f81bd08ccb2ca62a31d928cabaf0fa0dacb3d86))
+- improve input like components state style ([456f6bf](https://github.com/vexip-ui/vexip-ui/commit/456f6bf3bde9c6147b962a6c5c8f06fb76bb6d89))
+- **select:** label not render when value is falsy ([5cbc2bf](https://github.com/vexip-ui/vexip-ui/commit/5cbc2bf00d576069b724888441a39a862cff4bb4)), closes [#207](https://github.com/vexip-ui/vexip-ui/issues/207)
+
+### Features
+
+- **tab-nav:** add placement prop ([8148eb0](https://github.com/vexip-ui/vexip-ui/commit/8148eb04cfc3ad3276852cdb5ac3ecf53d95949e)), closes [#176](https://github.com/vexip-ui/vexip-ui/issues/176)
+- **tab-nav:** support built-in close button ([7ef0787](https://github.com/vexip-ui/vexip-ui/commit/7ef0787a8e72a73fc4f7c6b167b1f226b3ec2a4c)), closes [#201](https://github.com/vexip-ui/vexip-ui/issues/201)
+- **tab-nav:** support create built-in add button ([f45d47c](https://github.com/vexip-ui/vexip-ui/commit/f45d47cf79e4d6c617a9db43e0254f9e0e1573ae)), closes [#208](https://github.com/vexip-ui/vexip-ui/issues/208)
+- **tabs:** add closable and show-add props ([908abaa](https://github.com/vexip-ui/vexip-ui/commit/908abaa4f6a92e0eb5a14505b5e276d35519a8fe))
+- **tabs:** add placement prop ([9d35443](https://github.com/vexip-ui/vexip-ui/commit/9d35443d61d20eeef82f11b1fa5fab9c5ababb7d))
+
 ## [2.0.12](https://github.com/vexip-ui/vexip-ui/compare/v2.0.11...v2.0.12) (2022-11-02)
 
 ### Bug Fixes
