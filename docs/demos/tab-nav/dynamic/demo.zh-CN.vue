@@ -45,11 +45,3 @@ function removeTab(label: number) {
   }
 }
 </script>
-
-<style scoped>
-.close-btn {
-  position: relative;
-  left: 6px;
-  margin-left: 3px;
-}
-</style>

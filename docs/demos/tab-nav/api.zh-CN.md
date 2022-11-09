@@ -53,3 +53,9 @@ type TabNavOptions = TabNavItemOptions | string | number
 | disabled | `boolean`          | 设置是否禁用该导航                              | `false` | -        |
 | icon     | `string`           | 设置导航的前置图标                              | `''`    | -        |
 | closable | `boolean`          | 设置是否显示关闭按钮                            | `false` | `2.0.13` |
+
+### TabNavItem 事件
+
+| 名称   | 说明                                           | 参数                | 始于 |
+| ------ | ---------------------------------------------- | ------------------- | ---- |
+| toggle | 当该导航被选择时触发，返回当前是否处于激活状态 | `(active: boolean)` | -    |

@@ -6,7 +6,11 @@
         :card="props.card"
         :align="props.align"
         :placement="props.placement"
+        :closable="props.closable"
+        :show-add="props.showAdd"
         @change="handleActive"
+        @add="handleAdd"
+        @close="handleClose"
       >
         <template v-if="$slots.prefix" #prefix>
           <slot name="prefix"></slot>
@@ -17,6 +21,7 @@
           :label="item.label"
           :icon="item.icon"
           :disabled="item.disabled"
+          :closable="item.closable"
         >
           <template v-if="isFunction(item.labelRenderer)">
             <Renderer
@@ -25,11 +30,14 @@
             ></Renderer>
           </template>
           <template v-else>
-            {{ item.label }}
+            {{ item.name || item.label }}
           </template>
         </TabNavItem>
         <template v-if="$slots.suffix" #suffix>
           <slot name="suffix"></slot>
+        </template>
+        <template v-if="$slots.add">
+          <slot name="add"></slot>
         </template>
       </TabNav>
     </div>
@@ -68,13 +76,15 @@ export default defineComponent({
   emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('tabs', _props, {
-      card: false,
       active: {
         default: null,
         static: true
       },
+      card: false,
       align: 'left',
-      placement: 'top'
+      placement: 'top',
+      closable: false,
+      showAdd: false
     })
 
     const currentActive = ref(props.active)
@@ -157,6 +167,14 @@ export default defineComponent({
       emit('update:active', label)
     }
 
+    function handleAdd() {
+      emitEvent(props.onAdd)
+    }
+
+    function handleClose(label: string | number) {
+      emitEvent(props.onClose, label)
+    }
+
     return {
       props,
       nh: useNameHelper('tabs'),
@@ -167,7 +185,9 @@ export default defineComponent({
       itemList,
 
       isFunction,
-      handleActive
+      handleActive,
+      handleAdd,
+      handleClose
     }
   }
 })

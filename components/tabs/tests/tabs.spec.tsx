@@ -86,4 +86,16 @@ describe('Tabs', () => {
     expect(panels[1].classes()).not.toContain('vxp-tabs__panel--active')
     expect(onChange).not.toHaveBeenCalled()
   })
+
+  it('placement', () => {
+    (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+      const wrapper = mount(() => (
+        <Tabs placement={placement}>
+          <TabPanel label={'1'}>{'1'}</TabPanel>
+        </Tabs>
+      ))
+
+      expect(wrapper.find('.vxp-tabs').classes()).toContain(`vxp-tabs--${placement}`)
+    })
+  })
 })

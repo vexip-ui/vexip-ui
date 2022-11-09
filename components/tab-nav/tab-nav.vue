@@ -91,7 +91,8 @@ export default defineComponent({
       },
       align: 'left',
       placement: 'top',
-      closable: false
+      closable: false,
+      showAdd: false
     })
 
     const nh = useNameHelper('tab-nav')
@@ -168,7 +169,6 @@ export default defineComponent({
     watch(
       () => props.placement,
       () => {
-        // refreshLabels()
         requestAnimationFrame(updateMarkerPosition)
       }
     )

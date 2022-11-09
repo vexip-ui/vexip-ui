@@ -6,5 +6,6 @@
   "label",
   "align",
   "placement",
-  "extra"
+  "extra",
+  "dynamic"
 ]

@@ -16,7 +16,6 @@ import {
   toRef
 } from 'vue'
 import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
-import { isDefined } from '@vexip-ui/utils'
 import { TABS_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
@@ -28,12 +27,20 @@ export default defineComponent({
       type: [String, Number],
       default: null
     },
+    name: {
+      type: String,
+      default: ''
+    },
     disabled: {
       type: Boolean,
       default: false
     },
     icon: {
       type: Object,
+      default: null
+    },
+    closable: {
+      type: Boolean,
       default: null
     },
     onToggle: eventProp<(active: boolean) => void>()
@@ -70,8 +77,10 @@ export default defineComponent({
     if (tabsState) {
       const state: ItemState = reactive({
         label: currentLabel,
+        name: toRef(props, 'name'),
         icon: toRef(props, 'icon'),
         disabled: toRef(props, 'disabled'),
+        closable: toRef(props, 'closable'),
         labelRenderer: null
       })
 
@@ -83,9 +92,7 @@ export default defineComponent({
         { immediate: true }
       )
       watch(currentLabel, (value, prevValue) => {
-        if (isDefined(prevValue) && prevValue === tabsState.currentActive) {
-          tabsState.handleActive(value)
-        }
+        active.value = currentLabel.value === tabsState.currentActive
       })
       watch(
         () => tabsState.currentActive,

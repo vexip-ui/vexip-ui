@@ -132,7 +132,7 @@ describe('TabNav', () => {
     })
   })
 
-  it('card', () => {
+  it('placement', () => {
     (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
       const wrapper = mount(() => (
         <TabNav placement={placement}>
@@ -142,5 +142,38 @@ describe('TabNav', () => {
 
       expect(wrapper.find('.vxp-tab-nav').classes()).toContain(`vxp-tab-nav--${placement}`)
     })
+  })
+
+  it('closable', async () => {
+    const onClose = vi.fn()
+    const wrapper = mount(() => (
+      <TabNav closable onClose={onClose}>
+        <TabNavItem>{'tab'}</TabNavItem>
+        <TabNavItem closable={false}>{'tab'}</TabNavItem>
+      </TabNav>
+    ))
+    const items = wrapper.findAll('.vxp-tab-nav__item')
+
+    expect(items[0].find('.vxp-tab-nav__close').exists()).toBe(true)
+    expect(items[1].find('.vxp-tab-nav__close').exists()).toBe(false)
+
+    await items[0].find('.vxp-tab-nav__close').trigger('click')
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('add button', async () => {
+    const onAdd = vi.fn()
+    const wrapper = mount(() => (
+      <TabNav show-add onAdd={onAdd}>
+        <TabNavItem>{'tab'}</TabNavItem>
+      </TabNav>
+    ))
+    const items = wrapper.findAll('.vxp-tab-nav__item')
+
+    expect(items.length).toEqual(2)
+    expect(items[1].find('.vxp-tab-nav__add').exists()).toBe(true)
+
+    await items[1].find('.vxp-tab-nav__add').trigger('click')
+    expect(onAdd).toHaveBeenCalled()
   })
 })

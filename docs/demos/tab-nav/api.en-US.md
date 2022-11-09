@@ -53,3 +53,9 @@ type TabNavOptions = TabNavItemOptions | string | number
 | disabled | `boolean`          | Set whether to disable this navigation                         | `false` | -        |
 | icon     | `string`           | set the front icon for navigation                              | `''`    | -        |
 | closable | `boolean`          | Set whether to display the close button                        | `false` | `2.0.13` |
+
+### TabNavItem Events
+
+| Name   | Description                                                                     | Parameters          | Since |
+| ------ | ------------------------------------------------------------------------------- | ------------------- | ----- |
+| toggle | Emitted when the navigation is selected, returns whether it is currently active | `(active: boolean)` | -     |

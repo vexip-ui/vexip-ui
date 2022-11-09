@@ -142,6 +142,9 @@ export const booleanNumberProp = {
   default: null
 }
 
+/**
+ * Use to deconstruct advanced types
+ */
 type Expand<T> = T extends unknown ? { [K in keyof T]: T[K] } : never
 
 export type ConfigurableProps<T, E = never, I = never> = Expand<{
@@ -166,12 +169,12 @@ export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
 export function omitProps<T extends ComponentObjectPropsOptions, K extends keyof T>(
   props: T,
   keys: K[]
-): Omit<T, K>
+): Expand<Omit<T, K>>
 export function omitProps<
   T extends ComponentObjectPropsOptions,
   K extends keyof T,
   E extends ComponentObjectPropsOptions
->(props: T, keys: K[], extra: E): Omit<T, K> & E
+>(props: T, keys: K[], extra: E): Expand<Omit<T, K> & E>
 export function omitProps<
   T extends ComponentObjectPropsOptions,
   K extends keyof T,
@@ -190,7 +193,7 @@ export function omitProps<
       }, {}),
       extra || {}
     )
-  ) as Expand<Omit<T, K> & E>
+  )
 }
 
 export type ComponentSize = 'small' | 'default' | 'large'
