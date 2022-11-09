@@ -11,6 +11,7 @@
   "types": "dist/components/index.d.ts",
   "scripts": {
     "bootstrap": "tsx scripts/bootstrap.ts",
+    "props": "tsx scripts/props.ts",
     "serve": "tsx scripts/serve.ts",
     "serve:docs": "pnpm -C docs serve",
     "serve:playground": "pnpm -C playground serve",

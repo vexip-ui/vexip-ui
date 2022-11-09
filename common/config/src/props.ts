@@ -149,31 +149,48 @@ export type ConfigurableProps<T, E = never, I = never> = Expand<{
     ? T[P]
     : P extends `on${Capitalize<string>}`
       ? never
-      : T[Exclude<P, 'value' | 'checked' | 'active' | 'visible' | 'label' | 'options' | E>]
+      : T[Exclude<
+        P,
+        'inherit' | 'value' | 'checked' | 'active' | 'visible' | 'label' | 'options' | E
+      >]
 }>
 
 export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
-  return Object.freeze({
-    inherit: booleanProp,
-    ...props
-  }) as T
+  const common = {
+    inherit: booleanProp
+  }
+
+  return Object.freeze({ ...common, ...props }) as Expand<typeof common & T>
 }
 
 export function omitProps<T extends ComponentObjectPropsOptions, K extends keyof T>(
   props: T,
   keys: K[]
-) {
+): Omit<T, K>
+export function omitProps<
+  T extends ComponentObjectPropsOptions,
+  K extends keyof T,
+  E extends ComponentObjectPropsOptions
+>(props: T, keys: K[], extra: E): Omit<T, K> & E
+export function omitProps<
+  T extends ComponentObjectPropsOptions,
+  K extends keyof T,
+  E extends ComponentObjectPropsOptions
+>(props: T, keys: K[], extra?: E) {
   const omittedKeys = new Set(keys)
 
   return Object.freeze(
-    (Object.keys(props) as any[]).reduce((prev, current) => {
-      if (!omittedKeys.has(current)) {
-        prev[current] = props[current]
-      }
+    Object.assign(
+      (Object.keys(props) as any[]).reduce((prev, current) => {
+        if (!omittedKeys.has(current)) {
+          prev[current] = props[current]
+        }
 
-      return prev
-    }, {})
-  ) as Omit<T, K>
+        return prev
+      }, {}),
+      extra || {}
+    )
+  ) as Expand<Omit<T, K> & E>
 }
 
 export type ComponentSize = 'small' | 'default' | 'large'
