@@ -33,7 +33,7 @@ class ReplStore extends _ReplStore {
   }
 }
 
-const mianCode = `import { createApp } from 'vue'
+const mainCode = `import { createApp } from 'vue'
 import { install } from 'vexip-ui'
 import App from './App.vue'
 import ThemeSwitch from './ThemeSwitch.vue'
@@ -156,7 +156,7 @@ store.setImportMap({
   ? store.setFiles(
     {
       'import-map.json': store.getFiles()['import-map.json'],
-      'main.ts': mianCode,
+      'main.ts': mainCode,
       'App.vue': welcomeCode,
       'ThemeSwitch.vue': themeCode
     },
