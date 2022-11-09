@@ -17,7 +17,8 @@ module.exports = {
       globals: {
         __DEMOS__: 'readonly',
         __TARGET__: 'readonly',
-        __THEME__: 'readonly'
+        __THEME__: 'readonly',
+        __PORT__: 'readonly'
       }
     },
     {

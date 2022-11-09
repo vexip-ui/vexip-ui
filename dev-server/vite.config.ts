@@ -11,6 +11,7 @@ if (!process.env.TARGET && process.env.THEME !== 'true') {
 
 const target = process.env.TARGET
 const demos = process.env.DEMOS
+const port = parseInt(process.env.PORT || '') || 8008
 
 const componentsDir = resolve(__dirname, '../components')
 const components = readdirSync(componentsDir).filter(f => {
@@ -46,7 +47,8 @@ export default defineConfig(() => {
       __TARGET__: JSON.stringify(target),
       __DEMOS__: demos,
       __VERSION__: JSON.stringify('*'),
-      __THEME__: JSON.stringify(process.env.THEME === 'true')
+      __THEME__: JSON.stringify(process.env.THEME === 'true'),
+      __PORT__: JSON.stringify(port)
     },
     resolve: {
       alias: [
@@ -56,7 +58,7 @@ export default defineConfig(() => {
       ]
     },
     server: {
-      port: parseInt(process.env.PORT || '') || 8000,
+      port,
       fs: {
         allow: ['..']
       }

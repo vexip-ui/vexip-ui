@@ -59,7 +59,7 @@ async function serveComponent() {
           return `{
             path: '${index ? `/${demo}` : '/'}',
             name: '${demo}',
-            component: () => import('../docs/demos/${target}/${demo}/demo.${matchedLang}.vue')
+            component: () => import('../../docs/demos/${target}/${demo}/demo.${matchedLang}.vue')
           }`
         }).join(',\n')},
         {
@@ -75,7 +75,7 @@ async function serveComponent() {
   `
 
   writeFileSync(
-    resolve(devDir, 'router.ts'),
+    resolve(devDir, 'router', `port-${port}.ts`),
     format(router, { ...prettierConfig, parser: 'typescript' }),
     'utf-8'
   )

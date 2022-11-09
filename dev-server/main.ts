@@ -15,7 +15,7 @@ if (__THEME__) {
   })
 } else {
   Promise.all([
-    import('./router'),
+    import(`./router/port-${__PORT__}.ts`),
     import('./app.vue'),
     import('../components/confirm'),
     import('../components/contextmenu'),
