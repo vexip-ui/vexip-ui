@@ -62,21 +62,21 @@ createApp().use(myNotice, { property: '$myNotice' })
 
 ### Notice Options
 
-| Name       | Type                                          | Description                                                                                                | Default | Since |
-| ---------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------- | ----- |
-| type       | `'info' \| 'success' \| 'warning' \| 'error'` | The type of notice                                                                                         | `''`    | -     |
-| title      | `string`                                      | The title of the notice                                                                                    | `''`    | -     |
-| content    | `string`                                      | The content of the notice                                                                                  | `''`    | -     |
-| key        | `number \| string`                            | The unique index of the hint, if not set, the built-in index will be used                                  | `''`    | -     |
-| parseHtml  | `boolean`                                     | Whether to parse html, if enabled, the content of `title` and `content` will be parsed as html             | `false` | -     |
-| className  | `string \| Record<string, boolean>`           | Custom class for the notice                                                                                | `null`  | -     |
-| style      | `Record<string, any>`                         | Inline style for the notice                                                                                | `null`  | -     |
-| duration   | `number`                                      | The duration of the notice in milliseconds, if set to less than 500, it will not automatically close       | `4000`  | -     |
-| background | `boolean \| string`                           | Whether to display the background color, the color can be customized when a valid color value is passed in | `false` | -     |
-| color      | `boolean \| string`                           | Whether to set the color of the font, you can customize the color when a valid color value is passed in    | `false` | -     |
-| titleColor | `string`                                      | Set the color of the notice title font individually                                                        | `''`    | -     |
-| closable   | `boolean`                                     | whether there is a close button to close                                                                   | `false` | -     |
-| icon       | `Record<string, any> \| (() => any)`          | The prefix icon of the notice, rendered as the render function when passed to the function                 | `null`  | -     |
-| iconColor  | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -     |
-| renderer   | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -     |
-| marker     | `boolean`                                     | Set whether to show side marker                                                                            | `false` | -     |
+| Name       | Type                                          | Description                                                                                                | Default | Since    |
+| ---------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------- | -------- |
+| type       | `'info' \| 'success' \| 'warning' \| 'error'` | The type of notice                                                                                         | `''`    | -        |
+| title      | `string`                                      | The title of the notice                                                                                    | `''`    | -        |
+| content    | `string`                                      | The content of the notice                                                                                  | `''`    | -        |
+| key        | `number \| string`                            | The unique index of the hint, if not set, the built-in index will be used                                  | `''`    | -        |
+| className  | `string \| Record<string, boolean>`           | Custom class for the notice                                                                                | `null`  | -        |
+| style      | `Record<string, any>`                         | Inline style for the notice                                                                                | `null`  | -        |
+| duration   | `number`                                      | The duration of the notice in milliseconds, if set to less than 500, it will not automatically close       | `4000`  | -        |
+| background | `boolean \| string`                           | Whether to display the background color, the color can be customized when a valid color value is passed in | `false` | -        |
+| color      | `boolean \| string`                           | Whether to set the color of the font, you can customize the color when a valid color value is passed in    | `false` | -        |
+| titleColor | `string`                                      | Set the color of the notice title font individually                                                        | `''`    | -        |
+| closable   | `boolean`                                     | whether there is a close button to close                                                                   | `false` | -        |
+| icon       | `Record<string, any> \| (() => any)`          | The prefix icon of the notice, rendered as the render function when passed to the function                 | `null`  | -        |
+| iconColor  | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -        |
+| renderer   | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -        |
+| marker     | `boolean`                                     | Set whether to show side marker                                                                            | `false` | -        |
+| parseHtml  | `boolean`                                     | Whether to parse html, if enabled, the content of `title` and `content` will be parsed as html             | `false` | `2.0.14` |
