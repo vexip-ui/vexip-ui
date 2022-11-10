@@ -3,7 +3,7 @@ import { buildProps, booleanProp, booleanStringProp, classProp, eventProp } from
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
-const positionType = [Number, String] as PropType<number | 'auto' | `${number}`>
+const positionType = [Number, String]
 
 export const modalProps = buildProps({
   transfer: booleanStringProp,

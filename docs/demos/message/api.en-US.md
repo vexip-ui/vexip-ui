@@ -75,4 +75,4 @@ createApp().use(myMessage, { property: '$myMessage' })
 | icon       | `Record<string, any> \| (() => any)`          | The prefix icon of message, rendered as render function when passed in function                            | `null`  | -        |
 | iconColor  | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -        |
 | renderer   | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -        |
-| parseHtml  | `boolean`                                     | Whether to parse html, if enabled, the content of `content` will be parsed as html                         | `false` | `2.0.13` |
+| parseHtml  | `boolean`                                     | Whether to parse html, if enabled, the content of `content` will be parsed as html                         | `false` | `2.0.14` |

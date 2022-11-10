@@ -77,4 +77,4 @@ createApp().use(myNotice, { property: '$myNotice' })
 | iconColor  | `string`                                      | 前缀图标的颜色，设置后会覆盖 `type` 的默认设置                  | `''`    | -        |
 | renderer   | `() => any`                                   | 使用 Vue 的 render 函数渲染自定义内容                           | `null`  | -        |
 | marker     | `boolean`                                     | 是否显示侧边 marker                                             | `false` | -        |
-| parseHtml  | `boolean`                                     | 是否解析 html，开启则将 `title` 和 `content` 内容作为 html 解析 | `false` | `2.0.13` |
+| parseHtml  | `boolean`                                     | 是否解析 html，开启则将 `title` 和 `content` 内容作为 html 解析 | `false` | `2.0.14` |

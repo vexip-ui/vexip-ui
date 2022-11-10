@@ -5,6 +5,7 @@
     :closable="false"
     :active="visible"
     :class="[nh.b(), nh.bs('vars')]"
+    :modal-class="classR"
     :top="props.top"
     :left="props.left"
     :width="props.width"
@@ -23,7 +24,8 @@
             :style="{ color: iconColorR }"
           ></Icon>
         </div>
-        <div :class="nh.be('content')">
+        <div v-if="parseHtmlR" :class="nh.be('content')" v-html="content"></div>
+        <div v-else :class="nh.be('content')">
           {{ content }}
         </div>
       </template>
@@ -102,23 +104,28 @@ export default defineComponent({
       confirmText: null,
       cancelText: null,
       icon: null,
+      className: null,
       style: null,
       renderer: {
         default: null,
-        isFunc: true
+        isFunc: true,
+        static: true
       },
-      iconColor: ''
+      iconColor: '',
+      parseHtml: false
     })
 
     const visible = ref(false)
     const loading = ref(false)
     const content = ref('')
     const iconColorR = ref(props.iconColor)
+    const classR = ref(props.className)
     const styleR = ref(props.style || ({} as any))
     const confirmTypeR = ref(props.confirmType)
     const confirmTextR = ref(props.confirmText)
     const cancelTextR = ref(props.cancelText)
     const maskCloseR = ref(props.maskClose)
+    const parseHtmlR = ref(props.parseHtml)
     const iconR = ref(props.icon)
     const rendererR = ref<((options: ConfirmOptions) => any) | null>(props.renderer)
     const onBeforeConfirm = ref<(() => unknown) | null>(null)
@@ -137,12 +144,14 @@ export default defineComponent({
 
       return await new Promise<boolean>(resolve => {
         content.value = options.content ?? ''
+        classR.value = options.className ?? props.className
         styleR.value = options.style ?? props.style
         iconColorR.value = options.iconColor ?? props.iconColor
         maskCloseR.value = options.maskClose ?? props.maskClose
         confirmTypeR.value = options.confirmType ?? props.confirmType
         confirmTextR.value = options.confirmText ?? props.confirmText
         cancelTextR.value = options.cancelText ?? props.cancelText
+        parseHtmlR.value = options.parseHtml ?? props.parseHtml
         iconR.value = options.icon ?? props.icon
         rendererR.value = isFunction(options.renderer) ? options.renderer : props.renderer
         onBeforeConfirm.value = isFunction(options.onBeforeConfirm) ? options.onBeforeConfirm : null
@@ -204,11 +213,13 @@ export default defineComponent({
       visible.value = false
       content.value = ''
       iconColorR.value = props.iconColor
+      classR.value = props.className
       styleR.value = props.style
       maskCloseR.value = props.maskClose
       confirmTypeR.value = props.confirmType
       confirmTextR.value = props.confirmText
       cancelTextR.value = props.cancelText
+      parseHtmlR.value = props.parseHtml
       iconR.value = props.icon
       rendererR.value = props.renderer
     }
@@ -223,12 +234,14 @@ export default defineComponent({
       loading,
       content,
 
+      classR,
       styleR,
       iconColorR,
       maskCloseR,
       confirmTypeR,
       confirmTextR,
       cancelTextR,
+      parseHtmlR,
       iconR,
       rendererR,
 

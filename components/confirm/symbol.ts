@@ -9,8 +9,10 @@ export interface ConfirmOptions extends Record<string, any> {
   cancelText?: string,
   icon?: Record<string, any> | (() => any) | null,
   iconColor?: string,
-  style?: Record<string, any>,
+  className?: string | Record<string, any>,
+  style?: string | Record<string, any>,
   maskClose?: boolean,
+  parseHtml?: boolean,
   renderer?: (options: ConfirmOptions) => any,
   onBeforeConfirm?: () => unknown
 }
