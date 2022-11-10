@@ -79,4 +79,4 @@ createApp().use(myNotice, { property: '$myNotice' })
 | iconColor  | `string`                                      | The color of the prefix icon, after setting it will override the default setting of `type`                 | `''`    | -        |
 | renderer   | `() => any`                                   | Render custom content using Vue's render function                                                          | `null`  | -        |
 | marker     | `boolean`                                     | Set whether to show side marker                                                                            | `false` | -        |
-| parseHtml  | `boolean`                                     | Whether to parse html, if enabled, the content of `title` and `content` will be parsed as html             | `false` | `2.0.14` |
+| parseHtml  | `boolean`                                     | Whether to parse title and content as html                                                                 | `false` | `2.0.14` |

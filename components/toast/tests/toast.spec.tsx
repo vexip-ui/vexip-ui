@@ -139,4 +139,15 @@ describe('Toast', () => {
       icon.find('svg').element.innerHTML
     )
   })
+
+  it('parse html', async () => {
+    const Toast = createToast()
+
+    Toast.open({
+      content: '<div class="test"></div>',
+      parseHtml: true
+    })
+    await toastOpened()
+    expect(document.querySelector('.test')).toBeTruthy()
+  })
 })

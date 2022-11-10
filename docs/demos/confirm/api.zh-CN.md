@@ -18,4 +18,4 @@ type ConfirmType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'err
 | iconColor       | `string`                             | 确认框的图标的颜色                                                            | `''`             | -        |
 | onBeforeConfirm | `() => unknown`                      | 设置确认框的确认前回调，支持异步函数和 `Promise`，返回值为 `false` 会阻止关闭 | `null`           | -        |
 | renderer        | `() => any`                          | 使用 render 函数渲染自定义渲染                                                | `null`           | -        |
-| parseHtml       | `boolean`                            | 是否解析 html，开启则将 `content` 内容作为 html 解析                          | `false`          | `2.0.14` |
+| parseHtml       | `boolean`                            | 是否将 `content` 作为 html 解析                                               | `false`          | `2.0.14` |

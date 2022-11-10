@@ -17,4 +17,4 @@ type ConfirmType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'err
 | iconColor       | `string`                             | The color of the icon of the confirm                                                                         | `''`             | -        |
 | onBeforeConfirm | `() => unknown`                      | Set the callback before confirm, supports async function and `Promise`, returns `false` will prevent closing | `null`           | -        |
 | renderer        | `() => any`                          | Use render function to render custom renderer                                                                | `null`           | -        |
-| parseHtml       | `boolean`                            | Whether to parse html, if enabled, the content of `content` will be parsed as html                           | `false`          | `2.0.14` |
+| parseHtml       | `boolean`                            | Whether to parse content as html                                                                             | `false`          | `2.0.14` |

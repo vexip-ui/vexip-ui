@@ -38,7 +38,8 @@
               v-bind="state.iconProps"
             ></Icon>
           </div>
-          <div :class="nh.be('content')">
+          <div v-if="state.parseHtml" :class="nh.be('content')" v-html="state.content"></div>
+          <div v-else :class="nh.be('content')">
             {{ state.content }}
           </div>
         </template>
@@ -82,7 +83,8 @@ export default defineComponent({
         default: null,
         isFunc: true,
         static: true
-      }
+      },
+      parseHtml: false
     })
 
     const state = reactive({
@@ -98,6 +100,7 @@ export default defineComponent({
       showMask: props.showMask,
       maskClass: props.maskClass as any,
       maskStyle: props.maskStyle as any,
+      parseHtml: props.parseHtml,
       textOnly: false,
       renderer: props.renderer,
       onClose: null as (() => void) | null
@@ -124,6 +127,7 @@ export default defineComponent({
       state.showMask = options.showMask ?? props.showMask
       state.maskClass = options.maskClass ?? props.maskClass
       state.maskStyle = options.maskStyle ?? props.maskStyle
+      state.parseHtml = options.parseHtml ?? props.parseHtml
       state.renderer = isFunction(options.renderer) ? options.renderer : props.renderer
       state.onClose = options.onClose || null
 
@@ -160,6 +164,7 @@ export default defineComponent({
       state.showMask = props.showMask
       state.maskClass = props.maskClass
       state.maskStyle = props.maskStyle
+      state.parseHtml = props.parseHtml
       state.textOnly = false
       state.renderer = props.renderer
       state.onClose = null

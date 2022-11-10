@@ -52,17 +52,18 @@ createApp().use(topToast, { property: '$topToast' })
 
 ### Toast 选项
 
-| 名称           | 类型                                             | 说明                         | 默认值       | 始于 |
-| -------------- | ------------------------------------------------ | ---------------------------- | ------------ | ---- |
-| type           | `'success' \| 'warning' \| 'error' \| 'loading'` | 吐司提示的类型               | `''`         | -    |
-| content        | `string`                                         | 吐司提示的内容               | `''`         | -    |
-| icon           | `Record<string, any> \| (() => any)`             | 吐司提示的图标               | `null`       | -    |
-| iconProps      | `IconMinorProps`                                 | 吐司提示的图标属性           | `{}`         | -    |
-| position       | `'top' \| 'center' \| 'bottom'`                  | 吐司提示的位置               | `'center'`   | -    |
-| transitionName | `string`                                         | 吐司提示的过渡效果           | `'vxp-ease'` | -    |
-| closable       | `boolean`                                        | 是否可以点击关闭吐司提示     | `false`      | -    |
-| maskClose      | `boolean`                                        | 是否可以点击遮罩关闭吐司提示 | `false`      | -    |
-| showMask       | `boolean`                                        | 是否有隐形遮罩               | `false`      | -    |
-| maskClass      | `ClassType`                                      | 遮罩的自定义类名             | `null`       | -    |
-| maskStyle      | `StyleType`                                      | 遮罩的自定义样式             | `null`       | -    |
-| onClose        | `() => void`                                     | 吐司提示关闭时的回调方法     | `null`       | -    |
+| 名称           | 类型                                             | 说明                            | 默认值       | 始于     |
+| -------------- | ------------------------------------------------ | ------------------------------- | ------------ | -------- |
+| type           | `'success' \| 'warning' \| 'error' \| 'loading'` | 吐司提示的类型                  | `''`         | -        |
+| content        | `string`                                         | 吐司提示的内容                  | `''`         | -        |
+| icon           | `Record<string, any> \| (() => any)`             | 吐司提示的图标                  | `null`       | -        |
+| iconProps      | `IconMinorProps`                                 | 吐司提示的图标属性              | `{}`         | -        |
+| position       | `'top' \| 'center' \| 'bottom'`                  | 吐司提示的位置                  | `'center'`   | -        |
+| transitionName | `string`                                         | 吐司提示的过渡效果              | `'vxp-ease'` | -        |
+| closable       | `boolean`                                        | 是否可以点击关闭吐司提示        | `false`      | -        |
+| maskClose      | `boolean`                                        | 是否可以点击遮罩关闭吐司提示    | `false`      | -        |
+| showMask       | `boolean`                                        | 是否有隐形遮罩                  | `false`      | -        |
+| maskClass      | `ClassType`                                      | 遮罩的自定义类名                | `null`       | -        |
+| maskStyle      | `StyleType`                                      | 遮罩的自定义样式                | `null`       | -        |
+| parseHtml      | `boolean`                                        | 是否将 `content` 作为 html 解析 | `false`      | `2.0.14` |
+| onClose        | `() => void`                                     | 吐司提示关闭时的回调方法        | `null`       | -        |

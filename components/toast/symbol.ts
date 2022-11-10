@@ -17,6 +17,7 @@ export interface ToastOptions extends Record<string, any> {
   showMask?: boolean,
   maskClass?: ClassType,
   maskStyle?: StyleType,
+  parseHtml?: boolean,
   onClose?: () => void
 }
 

@@ -52,17 +52,18 @@ createApp().use(topToast, { property: '$topToast' })
 
 ### Toast Options
 
-| Name           | Type                                             | Description                                         | Default      | Since |
-| -------------- | ------------------------------------------------ | --------------------------------------------------- | ------------ | ----- |
-| type           | `'success' \| 'warning' \| 'error' \| 'loading'` | type of toast                                       | `''`         | -     |
-| content        | `string`                                         | The content of the toast                            | `''`         | -     |
-| icon           | `Record<string, any> \| (() => any)`             | Icon for the toast                                  | `null`       | -     |
-| iconProps      | `IconMinorProps`                                 | Icon props for toast icon                           | `{}`         | -     |
-| position       | `'top' \| 'center' \| 'bottom'`                  | Position of toast                                   | `'center'`   | -     |
-| transitionName | `string`                                         | Transition name of toast                            | `'vxp-ease'` | -     |
-| closable       | `boolean`                                        | Whether to enable click to close the toast          | `false`      | -     |
-| maskClose      | `boolean`                                        | Whether to enable click the mask to close the toast | `false`      | -     |
-| showMask       | `boolean`                                        | Whether there has an invisible mask                 | `false`      | -     |
-| maskClass      | `ClassType`                                      | Custom classes of the mask                          | `null`       | -     |
-| maskStyle      | `StyleType`                                      | Custom styles for the mask                          | `null`       | -     |
-| onClose        | `() => void`                                     | The callback method when the toast is closed        | `null`       | -     |
+| Name           | Type                                             | Description                                                             | Default      | Since    |
+| -------------- | ------------------------------------------------ | ----------------------------------------------------------------------- | ------------ | -------- |
+| type           | `'success' \| 'warning' \| 'error' \| 'loading'` | type of toast                                                           | `''`         | -        |
+| content        | `string`                                         | The content of the toast                                                | `''`         | -        |
+| icon           | `Record<string, any> \| (() => any)`             | Icon for the toast                                                      | `null`       | -        |
+| iconProps      | `IconMinorProps`                                 | Icon props for toast icon                                               | `{}`         | -        |
+| position       | `'top' \| 'center' \| 'bottom'`                  | Position of toast                                                       | `'center'`   | -        |
+| transitionName | `string`                                         | Transition name of toast                                                | `'vxp-ease'` | -        |
+| closable       | `boolean`                                        | Whether to enable click to close the toast                              | `false`      | -        |
+| maskClose      | `boolean`                                        | Whether to enable click the mask to close the toast                     | `false`      | -        |
+| showMask       | `boolean`                                        | Whether there has an invisible mask                                     | `false`      | -        |
+| maskClass      | `ClassType`                                      | Custom classes of the mask                                              | `null`       | -        |
+| maskStyle      | `StyleType`                                      | Custom styles for the mask                                              | `null`       | -        |
+| parseHtml      | `boolean`                                        | Whether to parse html, if enabled, the `content` will be parsed as html | `false`      | `2.0.14` |
+| onClose        | `() => void`                                     | The callback method when the toast is closed                            | `null`       | -        |
