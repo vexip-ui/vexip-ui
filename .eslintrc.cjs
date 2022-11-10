@@ -3,6 +3,7 @@ module.exports = {
   root: true,
   rules: {
     '@typescript-eslint/no-use-before-define': 'off',
+    'vue/no-v-html': 'off',
     'vue/no-textarea-mustache': 'off'
   },
   overrides: [

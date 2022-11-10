@@ -6,13 +6,13 @@
     :transition-name="nh.ns(`popup-${placement}`)"
     :placement="placementCenter"
   >
-    <template #item="{ item }">
+    <template #item="{ item }: { item: import('./symbol').MessageOptions }">
       <div
         :class="[
           {
             [nh.be('item')]: true,
             [nh.bs('vars')]: true,
-            [nh.bem('item', item.type)]: item.type && effectiveTypes.includes(item.type),
+            [nh.bem('item', item.type!)]: item.type && effectiveTypes.includes(item.type),
             [nh.bem('item', 'background')]: item.background,
             [nh.bem('item', 'color')]: item.background && item.color,
             [nh.bem('item', 'color-only')]: !item.background && item.color,
@@ -27,7 +27,7 @@
             color: typeof item.color === 'string' ? item.color : undefined,
             backgroundColor: typeof item.background === 'string' ? item.background : undefined
           },
-          item.style
+          item.style || {}
         ]"
         aria-atomic="true"
         :aria-live="item.type && assertiveTypes.includes(item.type) ? 'assertive' : 'polite'"
@@ -51,12 +51,13 @@
             :data="item"
           ></Renderer>
           <template v-else>
-            <div :class="nh.be('content')">
+            <div v-if="item.parseHtml" :class="nh.be('content')" v-html="item.content"></div>
+            <div v-else :class="nh.be('content')">
               {{ item.content || '' }}
             </div>
           </template>
         </div>
-        <button v-if="item.closable" :class="nh.be('close')" @click="remove(item.key)">
+        <button v-if="item.closable" :class="nh.be('close')" @click="remove(item.key!)">
           <Icon label="close">
             <Xmark></Xmark>
           </Icon>
@@ -88,7 +89,7 @@ export default defineComponent({
     const placement = ref<MessagePlacement>('top')
     const popup = ref<InstanceType<typeof Popup>>()
 
-    async function add(options: Record<string, unknown>) {
+    async function add(options: Record<string, any>) {
       return popup.value ? await popup.value.add(options) : null
     }
 
