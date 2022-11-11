@@ -12,11 +12,18 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     redirect: `/${defaultLanguage || __ROLLBACK_LANG__}`
   },
-  ...langOptions.map(useLanguageRouter)
-  // {
-  //   path: '/:catchAll(.*)',
-  //   redirect: '/'
-  // }
+  ...langOptions.map(useLanguageRouter),
+  {
+    path: '/:catchAll(.*)',
+    component: () => import('../views/provider.vue'),
+    children: [
+      {
+        path: '',
+        name: 'NotFound',
+        component: () => import('../views/not-found.vue')
+      }
+    ]
+  }
 ]
 
 function useLanguageRouter(language: string): RouteRecordRaw {
