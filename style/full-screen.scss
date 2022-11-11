@@ -1,0 +1,18 @@
+@use 'sass:map';
+@use './design' as *;
+
+$full-screen: () !default;
+$full-screen: map.merge(
+  (
+    z-index-full: get-css-var(z-index-full)
+  ),
+  $full-screen
+);
+
+.#{$namespace}-full-screen {
+  position: fixed;
+  inset: 0;
+  z-index: map.get($map: $full-screen, $key: z-index-full);
+  width: 100vw;
+  height: 100vh;
+}

@@ -107,6 +107,7 @@ import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } fr
 import { install as installDirectives } from '@/directives'
 
 import { buildInstall } from './create'
+import { FullScreen } from './full-screen'
 
 export type {
   ComponentSize,
@@ -158,6 +159,7 @@ const components = [
   FormItem,
   FormReset,
   FormSubmit,
+  FullScreen,
   Grid,
   Highlight,
   Icon,
@@ -285,6 +287,7 @@ export * from './form'
 export * from './form-item'
 export * from './form-reset'
 export * from './form-submit'
+export * from './full-screen'
 export * from './grid'
 export * from './highlight'
 export * from './icon'
