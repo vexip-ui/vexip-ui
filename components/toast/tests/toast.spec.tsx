@@ -16,6 +16,23 @@ const typeIconMap = {
 
 const TEXT = 'Text'
 
+function createToast() {
+  const Toast = new ToastManager()
+
+  mount({
+    setup() {
+      const instance = getCurrentInstance()
+      const app = instance?.appContext.app
+
+      app?.use(Toast)
+
+      return () => <div></div>
+    }
+  })
+
+  return Toast
+}
+
 async function toastOpened() {
   await nextTick()
   await nextTick()
@@ -23,24 +40,6 @@ async function toastOpened() {
 }
 
 describe('Toast', () => {
-  function createToast() {
-    const Toast = new ToastManager()
-    mount({
-      setup() {
-        const instance = getCurrentInstance()
-        const app = instance?.appContext.app
-
-        if (app) {
-          app.use(Toast)
-        }
-
-        return () => <div></div>
-      }
-    })
-
-    return Toast
-  }
-
   it('render', () => {
     const wrapper = mount(Toast)
 
@@ -67,7 +66,10 @@ describe('Toast', () => {
     await nextTick()
     expect(document.querySelector('.vxp-toast__wrapper')).toBeFalsy()
   })
-  ;(['success', 'warning', 'error', 'loading'] as const).forEach(type => {
+
+  const types = ['success', 'warning', 'error', 'loading'] as const
+
+  types.forEach(type => {
     it(`type ${type}`, async () => {
       const Toast = createToast()
 
