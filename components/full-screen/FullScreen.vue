@@ -7,8 +7,8 @@
 <script lang="ts">
 import { ref, defineComponent, computed } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { useBrowserFullScreen, fullScreenMaxZIndex } from './utils'
-import { FullScreenTriggerType } from './types'
+import { FullScreenTriggerType, fullScreenMaxZIndex } from './symbol'
+import { useFullScreen } from '@vexip-ui/hooks'
 
 export default defineComponent({
   name: 'FullScreen',
@@ -21,7 +21,7 @@ export default defineComponent({
     const nh = useNameHelper('full-screen')
     const className = computed(() => [nh.b(), nh.bs('vars'), { [nh.bm('full')]: isEntered.value }])
 
-    const { browserEnter, browserExit } = useBrowserFullScreen(rootRef)
+    const { enter: browserEnter, exit: browserExit } = useFullScreen(rootRef)
 
     const enter = (type: FullScreenTriggerType = 'window', zIndex = fullScreenMaxZIndex) => {
       if (isEntered.value) {

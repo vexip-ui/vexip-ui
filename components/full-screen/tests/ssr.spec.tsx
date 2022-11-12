@@ -10,7 +10,7 @@ import { FullScreen } from '..'
 describe('SSR for FullScreen', () => {
   it('render', async () => {
     try {
-      await renderToString(createSSRApp(() => <FullScreen />))
+      await renderToString(createSSRApp(() => <FullScreen></FullScreen>))
     } catch (error) {
       expect(error).toBeFalsy()
     }
