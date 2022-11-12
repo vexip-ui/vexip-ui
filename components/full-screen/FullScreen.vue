@@ -7,7 +7,7 @@
 <script lang="ts">
 import { ref, defineComponent, computed } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { FullScreenTriggerType, fullScreenMaxZIndex } from './symbol'
+import { FullScreenTriggerType } from './symbol'
 import { useFullScreen } from '@vexip-ui/hooks'
 
 export default defineComponent({
@@ -15,7 +15,7 @@ export default defineComponent({
   setup() {
     const rootRef = ref(null)
     const isEntered = ref(false)
-    const zIndexRef = ref(fullScreenMaxZIndex)
+    const zIndexRef = ref()
     const state = ref<FullScreenTriggerType>()
 
     const nh = useNameHelper('full-screen')
