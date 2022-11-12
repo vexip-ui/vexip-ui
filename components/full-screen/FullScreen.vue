@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, computed } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
 import { useBrowserFullScreen, fullScreenMaxZIndex } from './utils'
 import { FullScreenTriggerType } from './types'
@@ -14,34 +14,23 @@ export default defineComponent({
   name: 'FullScreen',
   setup() {
     const rootRef = ref(null)
-    const isEnterted = ref(false)
+    const isEntered = ref(false)
     const zIndexRef = ref(fullScreenMaxZIndex)
     const state = ref<FullScreenTriggerType>()
 
     const nh = useNameHelper('full-screen')
-    const defaultCls = nh.b()
-    const className = ref('')
+    const className = computed(() => [nh.b(), nh.bs('vars'), { [nh.bm('full')]: isEntered.value }])
 
-    const { browserEnter, browserExit } = useBrowserFullScreen(rootRef, className, defaultCls)
-
-    const windowEnter = () => {
-      className.value = defaultCls
-    }
-
-    const windowExit = () => {
-      className.value = ''
-    }
+    const { browserEnter, browserExit } = useBrowserFullScreen(rootRef)
 
     const enter = (type: FullScreenTriggerType = 'window', zIndex = fullScreenMaxZIndex) => {
-      if (isEnterted.value) {
+      if (isEntered.value) {
         exit()
       }
 
-      isEnterted.value = true
+      isEntered.value = true
 
-      if (type === 'window') {
-        windowEnter()
-      } else {
+      if (type !== 'window') {
         browserEnter()
       }
 
@@ -50,13 +39,12 @@ export default defineComponent({
     }
 
     const exit = () => {
-      isEnterted.value = false
+      isEntered.value = false
 
-      windowExit()
       browserExit()
     }
     const toggle = (type: FullScreenTriggerType = 'window', zIndex = fullScreenMaxZIndex) => {
-      if (isEnterted.value) {
+      if (isEntered.value) {
         if (state.value !== type) {
           enter(type, zIndex)
         } else {

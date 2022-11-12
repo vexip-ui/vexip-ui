@@ -9,7 +9,7 @@ $full-screen: map.merge(
   $full-screen
 );
 
-.#{$namespace}-full-screen {
+.#{$namespace}-full-screen--full {
   position: fixed;
   inset: 0;
   z-index: map.get($map: $full-screen, $key: z-index-full);
