@@ -4,15 +4,26 @@
 $full-screen: () !default;
 $full-screen: map.merge(
   (
-    z-index-full: get-css-var(z-index-full)
+    z-index-full: get-css-var(z-index-full),
+    inset: 0,
+    width: 100vw,
+    height: 100vh
   ),
   $full-screen
 );
 
-.#{$namespace}-full-screen--full {
-  position: fixed;
-  inset: 0;
-  z-index: map.get($map: $full-screen, $key: z-index-full);
-  width: 100vw;
-  height: 100vh;
+.#{$namespace}-full-screen {
+  &-vars {
+    @include define-preset-values('full-screen', $full-screen);
+  }
+
+  @include basis;
+
+  &--full {
+    position: fixed;
+    inset: get-css-var(full-screen-inset);
+    z-index: map.get($map: $full-screen, $key: z-index-full);
+    width: get-css-var(full-screen-width);
+    height: get-css-var(full-screen-height);
+  }
 }
