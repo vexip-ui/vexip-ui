@@ -3,17 +3,13 @@
     <div style="position: relative; border: 1px solid red;">
       <p>我是全屏展示的元素</p>
       <div>
-        <Button @click="toggle('window')">
+        <Button type="primary" @click="toggle('window')">
           Window
         </Button>
-        <Button @click="toggle('browser')">
+        <Button type="primary" @click="toggle('browser')">
           Browser
         </Button>
       </div>
     </div>
   </FullScreen>
 </template>
-
-<script setup lang="ts">
-import { FullScreen } from 'vexip-ui'
-</script>

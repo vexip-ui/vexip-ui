@@ -64,9 +64,9 @@ describe('FullScreen', () => {
 
     const { enter } = wrapper.findComponent(FullScreen).vm
 
-    expect(wrapper.find('div').attributes().style).eq('z-index: 2147483584;')
+    expect(wrapper.find('div').attributes().style).eq(undefined)
     await enter('window', 1)
-    expect(wrapper.find('div').attributes().style).eq('z-index: 1;')
+    expect(wrapper.find('div').attributes().style).toContain('--vxp-full-screen-z-index: 1;')
   })
 
   test('should switch to another enterted state when current state is enterted.', async () => {

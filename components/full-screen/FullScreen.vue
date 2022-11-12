@@ -1,5 +1,5 @@
 <template>
-  <div ref="rootRef" :class="className" :style="{ [nh.cv('z-index')]: zIndexRef.value }">
+  <div ref="rootRef" :class="className" :style="{ [nh.cv('z-index')]: zIndexRef }">
     <slot :enter="enter" :exit="exit" :toggle="toggle"></slot>
   </div>
 </template>
@@ -15,7 +15,7 @@ export default defineComponent({
   setup() {
     const rootRef = ref(null)
     const isEntered = ref(false)
-    const zIndexRef = ref()
+    const zIndexRef = ref<number>()
     const state = ref<FullScreenTriggerType>()
 
     const nh = useNameHelper('full-screen')
