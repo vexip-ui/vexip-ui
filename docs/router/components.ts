@@ -106,6 +106,7 @@ export function getComponentConfig(): ComponentGroup[] {
       name: 'else',
       components: [
         { name: 'ConfigProvider', since: '2.0.0' },
+        { name: 'FullScreen', since: '2.1.0' },
         { name: 'Masker' },
         { name: 'NativeScroll', since: '1.3.1' },
         { name: 'Overflow', since: '2.0.0' },

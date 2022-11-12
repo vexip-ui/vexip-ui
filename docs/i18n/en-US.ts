@@ -69,6 +69,7 @@ export const enUS = defineI18n({
     ColorPicker: 'ColorPicker',
     DatePicker: 'DatePicker',
     Form: 'Form',
+    FullScreen: 'FullScreen',
     Input: 'Input',
     NumberInput: 'NumberInput',
     Radio: 'Radio',

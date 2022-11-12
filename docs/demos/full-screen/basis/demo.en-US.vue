@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { FullScreen } from '@/components'
+import { FullScreen } from 'vexip-ui'
 import { ref } from 'vue'
-import type { FullScreenType, FullScreenInstance } from '@/components/full-screen'
+import type { FullScreenType, FullScreenInstance } from 'vexip-ui/components/full-screen'
 
 const fullScreen = ref<FullScreenInstance | null>(null)
 
@@ -21,22 +21,22 @@ const type = ref<FullScreenType>(options[0])
   >
     <div style="margin-top: 20px;">
       slots
-      <button @click="enter()">
+      <Button type="primary" @click="enter()">
         enter
-      </button>
-      <button @click="exit()">
+      </Button>
+      <Button type="primary" @click="exit()">
         exit
-      </button>
+      </Button>
     </div>
 
     <div style="margin-top: 20px;">
       ref
-      <button @click="fullScreen!.enter()">
+      <Button type="primary" @click="fullScreen!.enter()">
         enter
-      </button>
-      <button @click="fullScreen!.exit()">
+      </Button>
+      <Button type="primary" @click="fullScreen!.exit()">
         exit
-      </button>
+      </Button>
     </div>
   </FullScreen>
 </template>
