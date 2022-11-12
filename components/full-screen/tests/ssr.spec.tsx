@@ -7,7 +7,7 @@ import { createSSRApp } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import { FullScreen } from '..'
 
-describe('SSR for Form', () => {
+describe('SSR for FullScreen', () => {
   it('render', async () => {
     try {
       await renderToString(createSSRApp(() => <FullScreen />))

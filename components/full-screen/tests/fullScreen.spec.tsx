@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { FullScreen } from '..'
 
-describe('Form', () => {
+describe('FullScreen', () => {
   it('should keep exited state when init', () => {
     const wrapper = mount(() => <FullScreen></FullScreen>)
 
