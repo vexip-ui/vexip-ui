@@ -1,5 +1,5 @@
 <template>
-  <div ref="rootRef" :class="className" :style="{ zIndex: zIndexRef }">
+  <div ref="rootRef" :class="className" :style="{ [nh.cv('z-index')]: zIndexRef.value }">
     <slot :enter="enter" :exit="exit" :toggle="toggle"></slot>
   </div>
 </template>
@@ -7,8 +7,8 @@
 <script lang="ts">
 import { ref, defineComponent, computed } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { FullScreenTriggerType } from './symbol'
 import { useFullScreen } from '@vexip-ui/hooks'
+import { FullScreenTriggerType } from './symbol'
 
 export default defineComponent({
   name: 'FullScreen',
@@ -23,7 +23,7 @@ export default defineComponent({
 
     const { enter: browserEnter, exit: browserExit } = useFullScreen(rootRef)
 
-    const enter = (type: FullScreenTriggerType = 'window', zIndex = fullScreenMaxZIndex) => {
+    const enter = (type: FullScreenTriggerType = 'window', zIndex?: number) => {
       if (isEntered.value) {
         exit()
       }
@@ -43,7 +43,7 @@ export default defineComponent({
 
       browserExit()
     }
-    const toggle = (type: FullScreenTriggerType = 'window', zIndex = fullScreenMaxZIndex) => {
+    const toggle = (type: FullScreenTriggerType = 'window', zIndex?: number) => {
       if (isEntered.value) {
         if (state.value !== type) {
           enter(type, zIndex)
