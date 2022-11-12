@@ -6,8 +6,8 @@
 
 ### FullScreen Methods
 
-| Name   | Description                   | Signature                                                | Since |
-| ------ | ----------------------------- | -------------------------------------------------------- | ----- |
-| enter  | enter to the full screen mode | `(mode: 'window' \| 'browser', zIndex?: number) => void` | -     |
-| exit   | exit the full screen mode     | `() => void`                                             | -     |
-| toggle | toggle for the screen mode    | `(mode: 'window' \| 'browser') => void`                  | -     |
+| Name   | Description                   | Signature                                                 | Since |
+| ------ | ----------------------------- | --------------------------------------------------------- | ----- |
+| enter  | enter to the full screen mode | `(mode?: 'window' \| 'browser', zIndex?: number) => void` | -     |
+| exit   | exit the full screen mode     | `() => void`                                              | -     |
+| toggle | toggle for the screen mode    | `(mode?: 'window' \| 'browser') => void`                  | -     |
