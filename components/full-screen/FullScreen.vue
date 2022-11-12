@@ -8,7 +8,7 @@
 import { ref, defineComponent, computed } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
 import { useFullScreen } from '@vexip-ui/hooks'
-import { FullScreenTriggerType } from './symbol'
+import type { FullScreenTriggerType } from './symbol'
 
 export default defineComponent({
   name: 'FullScreen',
