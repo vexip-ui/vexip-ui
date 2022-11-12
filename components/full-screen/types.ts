@@ -1,3 +1,1 @@
-import type FullScreen from './FullScreen.vue'
-
-export type FullScreenInstance = InstanceType<typeof FullScreen>
+export type FullScreenTriggerType = 'window' | 'browser'

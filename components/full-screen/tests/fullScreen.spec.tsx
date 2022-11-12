@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, test } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { FullScreen } from '..'
 
@@ -41,5 +41,42 @@ describe('FullScreen', () => {
     expect(wrapper.classes()).toContain('vxp-full-screen')
     await exit()
     expect(wrapper.classes()).not.toContain('vxp-full-screen')
+
+    await enter('browser')
+    expect(wrapper.classes()).toContain('vxp-full-screen')
+    await exit()
+    expect(wrapper.classes()).not.toContain('vxp-full-screen')
+  })
+
+  it('should work via toggle', async () => {
+    const wrapper = mount(() => <FullScreen></FullScreen>)
+
+    const { toggle } = wrapper.findComponent(FullScreen).vm
+
+    await toggle()
+    expect(wrapper.classes()).toContain('vxp-full-screen')
+    await toggle()
+    expect(wrapper.classes()).not.toContain('vxp-full-screen')
+  })
+
+  test('zIndex should valid', async () => {
+    const wrapper = mount(() => <FullScreen></FullScreen>)
+
+    const { enter } = wrapper.findComponent(FullScreen).vm
+
+    expect(wrapper.find('div').attributes().style).eq('z-index: 2147483584;')
+    await enter('window', 1)
+    expect(wrapper.find('div').attributes().style).eq('z-index: 1;')
+  })
+
+  test('should switch to another enterted state when current state is enterted.', async () => {
+    const wrapper = mount(() => <FullScreen></FullScreen>)
+
+    const { toggle } = wrapper.findComponent(FullScreen).vm
+
+    await toggle()
+    expect(wrapper.classes()).toContain('vxp-full-screen')
+    await toggle('browser')
+    expect(wrapper.classes()).toContain('vxp-full-screen')
   })
 })

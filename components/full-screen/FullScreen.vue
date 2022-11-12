@@ -1,50 +1,80 @@
 <template>
-  <div ref="rootRef" :class="className">
-    <slot :enter="enter" :exit="exit"></slot>
+  <div ref="rootRef" :class="className" :style="{ zIndex: zIndexRef }">
+    <slot :enter="enter" :exit="exit" :toggle="toggle"></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { useFullScreen } from '@vexip-ui/hooks'
-import { useNameHelper, useProps } from '@vexip-ui/config'
-import { ref, computed, defineComponent } from 'vue'
-import { fullScreenProps, fullScreenTypeProps } from './props'
+import { ref, defineComponent } from 'vue'
+import { useNameHelper } from '@vexip-ui/config'
+import { useBrowserFullScreen, fullScreenMaxZIndex } from './utils'
+import { FullScreenTriggerType } from './types'
 
 export default defineComponent({
   name: 'FullScreen',
-  props: fullScreenProps,
-  setup(_props) {
-    const props = useProps('fullScreen', _props, {
-      type: {
-        default: 'window',
-        validator: val => fullScreenTypeProps.includes(val)
-      }
-    })
-
+  setup() {
     const rootRef = ref(null)
+    const isEnterted = ref(false)
+    const zIndexRef = ref(fullScreenMaxZIndex)
+    const state = ref<FullScreenTriggerType>()
 
     const nh = useNameHelper('full-screen')
     const defaultCls = nh.b()
-
     const className = ref('')
+
+    const { browserEnter, browserExit } = useBrowserFullScreen(rootRef, className, defaultCls)
 
     const windowEnter = () => {
       className.value = defaultCls
     }
+
     const windowExit = () => {
       className.value = ''
     }
 
-    const { enter: browserEnter, exit: browserExit } = useFullScreen(rootRef)
+    const enter = (type: FullScreenTriggerType = 'window', zIndex = fullScreenMaxZIndex) => {
+      if (isEnterted.value) {
+        exit()
+      }
 
-    const enter = computed(() => (props.type === 'browser' ? browserEnter : windowEnter))
-    const exit = computed(() => (props.type === 'browser' ? browserExit : windowExit))
+      isEnterted.value = true
+
+      if (type === 'window') {
+        windowEnter()
+      } else {
+        browserEnter()
+      }
+
+      zIndexRef.value = zIndex
+      state.value = type
+    }
+
+    const exit = () => {
+      isEnterted.value = false
+
+      windowExit()
+      browserExit()
+    }
+    const toggle = (type: FullScreenTriggerType = 'window', zIndex = fullScreenMaxZIndex) => {
+      if (isEnterted.value) {
+        if (state.value !== type) {
+          enter(type, zIndex)
+        } else {
+          exit()
+        }
+      } else {
+        enter(type, zIndex)
+      }
+    }
 
     return {
       nh,
       className,
+      rootRef,
+      zIndexRef,
       enter,
-      exit
+      exit,
+      toggle
     }
   }
 })
