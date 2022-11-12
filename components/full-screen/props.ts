@@ -1,4 +1,4 @@
-import { buildProps } from '@/common/config/src/props'
+import { buildProps } from '@vexip-ui/config'
 import type { PropType, ExtractPropTypes } from 'vue'
 
 export type FullScreenType = 'window' | 'browser'
@@ -6,8 +6,7 @@ export type FullScreenType = 'window' | 'browser'
 export type FullScreenProps = ExtractPropTypes<typeof fullScreenProps>
 
 export const fullScreenProps = buildProps({
-  type: {
-    type: String as PropType<FullScreenType>,
-    default: 'window'
-  }
+  type: String as PropType<FullScreenType>
 })
+
+export const fullScreenTypeProps: FullScreenType[] = ['window', 'browser']

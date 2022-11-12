@@ -38,6 +38,7 @@ import { Form } from './form'
 import { FormItem } from './form-item'
 import { FormReset } from './form-reset'
 import { FormSubmit } from './form-submit'
+import { FullScreen } from './full-screen'
 import { Grid } from './grid'
 import { Highlight } from './highlight'
 import { Icon } from './icon'
@@ -107,7 +108,6 @@ import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } fr
 import { install as installDirectives } from '@/directives'
 
 import { buildInstall } from './create'
-import { FullScreen } from './full-screen'
 
 export type {
   ComponentSize,

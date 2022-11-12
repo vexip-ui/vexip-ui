@@ -1,15 +1,3 @@
-<script setup lang="ts">
-import { FullScreen } from 'vexip-ui'
-import { ref } from 'vue'
-import type { FullScreenType, FullScreenInstance } from 'vexip-ui/components/full-screen'
-
-const fullScreen = ref<FullScreenInstance | null>(null)
-
-const options: FullScreenType[] = ['window', 'browser']
-
-const type = ref<FullScreenType>(options[0])
-</script>
-
 <template>
   <p>当前FullScreen类型: {{ type }}</p>
   <Select v-model:value="type" :options="options"></Select>
@@ -40,3 +28,15 @@ const type = ref<FullScreenType>(options[0])
     </div>
   </FullScreen>
 </template>
+
+<script setup lang="ts">
+import { FullScreen } from 'vexip-ui'
+import { ref } from 'vue'
+import type { FullScreenType, FullScreenInstance } from 'vexip-ui/components/full-screen'
+
+const fullScreen = ref<FullScreenInstance | null>(null)
+
+const options: FullScreenType[] = ['window', 'browser']
+
+const type = ref<FullScreenType>(options[0])
+</script>
