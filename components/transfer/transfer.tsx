@@ -1,7 +1,7 @@
 import { defineComponent, ref, reactive, computed, watchEffect, watch } from 'vue'
+import TransferPanel from './transfer-panel.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
-import TransferPanel from './transfer-panel.vue'
 import { useFieldStore } from '@/components/form'
 import { ChevronRight, ChevronLeft, Spinner } from '@vexip-ui/icons'
 import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'

@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { CheckboxGroup } from '@/components/checkbox-group'
 import { renderToString } from 'vue/server-renderer'
 import { Checkbox } from '..'
-import { CheckboxGroup } from '@/components/checkbox-group'
 
 describe('SSR for Checkbox', () => {
   it('render', async () => {

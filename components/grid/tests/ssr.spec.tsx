@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { Cell } from '@/components/cell'
 import { renderToString } from 'vue/server-renderer'
 import { Grid } from '..'
-import { Cell } from '@/components/cell'
 
 describe('SSR for Grid', () => {
   it('render', async () => {

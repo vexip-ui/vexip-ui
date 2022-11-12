@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
+import { GithubB, City } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import { Layout } from '..'
-import { GithubB, City } from '@vexip-ui/icons'
 
 describe('Layout', () => {
   it('render', async () => {

@@ -1,5 +1,5 @@
-import { ResizeObserver } from '@juggle/resize-observer'
 import { isClient } from '@vexip-ui/utils'
+import { ResizeObserver } from '@juggle/resize-observer'
 
 export type ResizeHandler = (entry: ResizeObserverEntry) => any
 

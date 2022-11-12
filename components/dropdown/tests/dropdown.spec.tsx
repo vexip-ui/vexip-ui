@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
-import { Dropdown } from '..'
 import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
+import { mount } from '@vue/test-utils'
+import { Dropdown } from '..'
 
 vi.useFakeTimers()
 

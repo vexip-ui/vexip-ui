@@ -4,10 +4,10 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
-import { renderToString } from 'vue/server-renderer'
-import { Menu } from '..'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
+import { renderToString } from 'vue/server-renderer'
+import { Menu } from '..'
 
 describe('SSR for Menu', () => {
   it('render', async () => {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
+import { RadioGroup } from '@/components/radio-group'
 import { mount } from '@vue/test-utils'
 import { Radio } from '..'
-import { RadioGroup } from '@/components/radio-group'
 
 const TEXT = 'Text'
 const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']

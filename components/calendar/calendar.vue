@@ -83,10 +83,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import CalendarPanel from './calendar-panel.vue'
 import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
-import CalendarPanel from './calendar-panel.vue'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { calendarProps } from './props'
 

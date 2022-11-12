@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
+import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { mount } from '@vue/test-utils'
 import { Breadcrumb } from '..'
-import { BreadcrumbItem } from '@/components/breadcrumb-item'
 
 describe('Breadcrumb', () => {
   it('render', () => {

@@ -4,10 +4,10 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
-import { renderToString } from 'vue/server-renderer'
-import { Dropdown } from '..'
 import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
+import { renderToString } from 'vue/server-renderer'
+import { Dropdown } from '..'
 
 describe('SSR for Dropdown', () => {
   it('render', async () => {

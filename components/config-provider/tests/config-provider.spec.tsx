@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { Input } from '@/components/input'
 import { mount } from '@vue/test-utils'
 import { ConfigProvider } from '..'
-import { Input } from '@/components/input'
 
 describe('ConfigProvider', () => {
   it('render', () => {

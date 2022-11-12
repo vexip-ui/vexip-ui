@@ -19,8 +19,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
 import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import type { RouteLocationRaw } from 'vue-router'
 

@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { BreadcrumbItem } from '@/components/breadcrumb-item'
 import { renderToString } from 'vue/server-renderer'
 import { Breadcrumb } from '..'
-import { BreadcrumbItem } from '@/components/breadcrumb-item'
 
 describe('SSR for Breadcrumb', () => {
   it('render', async () => {

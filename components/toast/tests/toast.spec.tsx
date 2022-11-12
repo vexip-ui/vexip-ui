@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
+import { Check, Exclamation, Xmark, Spinner, GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import Toast from '../toast.vue'
 import { ToastManager } from '..'
-import { Check, Exclamation, Xmark, Spinner, GithubB } from '@vexip-ui/icons'
 
 vi.useFakeTimers()
 

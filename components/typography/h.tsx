@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue'
-import Title from './title'
 import { useProps } from '@vexip-ui/config'
+import Title from './title'
 import { hProps } from './props'
 
 import type { TitleLevel } from './symbol'

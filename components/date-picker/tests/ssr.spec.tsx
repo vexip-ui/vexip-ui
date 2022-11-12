@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { TimePicker } from '@/components/time-picker'
 import { renderToString } from 'vue/server-renderer'
 import { DatePicker } from '..'
-import { TimePicker } from '@/components/time-picker'
 
 describe('SSR for DatePicker', () => {
   it('render', async () => {

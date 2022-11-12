@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { ButtonGroup } from '@/components/button-group'
 import { renderToString } from 'vue/server-renderer'
 import { Button } from '..'
-import { ButtonGroup } from '@/components/button-group'
 
 describe('SSR for Button', () => {
   it('render', async () => {

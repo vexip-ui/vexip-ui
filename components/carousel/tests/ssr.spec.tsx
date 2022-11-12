@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { CarouselItem } from '@/components/carousel-item'
 import { renderToString } from 'vue/server-renderer'
 import { Carousel } from '..'
-import { CarouselItem } from '@/components/carousel-item'
 
 describe('SSR for Carousel', () => {
   it('render', async () => {

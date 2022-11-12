@@ -1,10 +1,10 @@
 import './style/index.scss'
 
 import { createApp as _createApp, createSSRApp } from 'vue'
+import App from './app.vue'
+import { isColor } from '@vexip-ui/utils'
 import prismjs from 'prismjs'
 import { install } from 'vexip-ui'
-import { isColor } from '@vexip-ui/utils'
-import App from './app.vue'
 import { createRouter } from './router'
 import { i18n, vexipuiLocale } from './i18n'
 import Markdown from './common/markdown.vue'

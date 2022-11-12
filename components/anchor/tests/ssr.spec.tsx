@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { AnchorLink } from '@/components/anchor-link'
 import { renderToString } from 'vue/server-renderer'
 import { Anchor } from '..'
-import { AnchorLink } from '@/components/anchor-link'
 
 describe('SSR for Anchor', () => {
   it('render', async () => {

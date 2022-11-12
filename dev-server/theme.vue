@@ -468,10 +468,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ArrowUpFromBracket } from '@vexip-ui/icons'
 import ThemeSwitch from '../docs/common/theme-switch.vue'
 import { Message, Notice, Confirm } from '../components'
 import { defineFilter } from '../components/table'
-import { ArrowUpFromBracket } from '@vexip-ui/icons'
 
 document.title = 'theme dev | Vexip UI'
 

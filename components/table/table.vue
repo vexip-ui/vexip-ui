@@ -130,10 +130,10 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
-import { Scroll } from '@/components/scroll'
-import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
+import { Scroll } from '@/components/scroll'
+import { Scrollbar } from '@/components/scrollbar'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import {
   isDefined,

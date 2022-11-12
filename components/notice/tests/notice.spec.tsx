@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
+import { GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import Notice from '../notice.vue'
 import { NoticeManager } from '..'
-import { GithubB } from '@vexip-ui/icons'
 
 const TEXT = 'Text'
 

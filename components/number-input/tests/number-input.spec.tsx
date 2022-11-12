@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
+import { GithubB, Spinner } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import { NumberInput } from '..'
-import { GithubB, Spinner } from '@vexip-ui/icons'
 
 import type { DOMWrapper } from '@vue/test-utils'
 

@@ -1,11 +1,11 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import { mount } from '@vue/test-utils'
-import { Menu } from '..'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
 import { City, User } from '@vexip-ui/icons'
+import { createRouter, createWebHistory } from 'vue-router'
+import { mount } from '@vue/test-utils'
+import { Menu } from '..'
 
 describe('Menu', () => {
   it('render', () => {

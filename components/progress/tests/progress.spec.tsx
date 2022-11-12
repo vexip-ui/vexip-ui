@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
+import { Bubble } from '@/components/bubble'
 import { mount } from '@vue/test-utils'
 import { Progress } from '..'
-import { Bubble } from '@/components/bubble'
 
 describe('Progress', () => {
   it('render', () => {

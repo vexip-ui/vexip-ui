@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
 import { noop } from '@vexip-ui/utils'
+import { mount } from '@vue/test-utils'
 import { Scrollbar } from '..'
 
 vi.useFakeTimers()

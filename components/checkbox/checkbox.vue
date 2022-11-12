@@ -27,6 +27,7 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
+import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
@@ -34,7 +35,6 @@ import {
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useFieldStore } from '@/components/form'
 import { isDefined, isFunction } from '@vexip-ui/utils'
 import { checkboxProps } from './props'
 import { GROUP_STATE } from './symbol'

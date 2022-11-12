@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { Column } from '@/components/column'
 import { renderToString } from 'vue/server-renderer'
 import { Row } from '..'
-import { Column } from '@/components/column'
 
 describe('SSR for Row', () => {
   it('render', async () => {

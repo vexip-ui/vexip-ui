@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
+import { GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import Message from '../message.vue'
 import { MessageManager } from '..'
-import { GithubB } from '@vexip-ui/icons'
 
 vi.useFakeTimers()
 

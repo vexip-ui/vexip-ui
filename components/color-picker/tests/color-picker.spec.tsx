@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
 import { noop } from '@vexip-ui/utils'
-import { ColorPicker } from '..'
 import { GithubB, ChevronDown, Spinner } from '@vexip-ui/icons'
+import { mount } from '@vue/test-utils'
+import { ColorPicker } from '..'
 
 vi.useFakeTimers()
 

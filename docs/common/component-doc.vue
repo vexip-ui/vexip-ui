@@ -62,12 +62,12 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent, markRaw, ref, computed, watch, watchEffect, inject } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
 import Article from './article.vue'
 import Demo from './demo.vue'
 import { Spinner } from '@vexip-ui/icons'
 import { noop } from '@vexip-ui/utils'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { getMetaName } from './meta-name'
 
 interface Example {
