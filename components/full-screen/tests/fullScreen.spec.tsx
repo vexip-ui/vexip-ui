@@ -6,7 +6,7 @@ describe('FullScreen', () => {
   it('should keep exited state when init', () => {
     const wrapper = mount(() => <FullScreen></FullScreen>)
 
-    expect(wrapper.classes()).toStrictEqual([])
+    expect(wrapper.classes()).toStrictEqual(['vxp-full-screen', 'vxp-full-screen-vars'])
   })
 
   it('should work', async () => {
@@ -26,10 +26,10 @@ describe('FullScreen', () => {
     ))
 
     await wrapper.find('.enter').trigger('click')
-    expect(wrapper.classes()).toContain('vxp-full-screen')
+    expect(wrapper.classes()).toContain('vxp-full-screen--full')
 
     await wrapper.find('.exit').trigger('click')
-    expect(wrapper.classes()).not.toContain('vxp-full-screen')
+    expect(wrapper.classes()).not.toContain('vxp-full-screen--full')
   })
 
   it('should work via exposed methods', async () => {
@@ -38,14 +38,14 @@ describe('FullScreen', () => {
     const { enter, exit } = wrapper.findComponent(FullScreen).vm
 
     await enter()
-    expect(wrapper.classes()).toContain('vxp-full-screen')
+    expect(wrapper.classes()).toContain('vxp-full-screen--full')
     await exit()
-    expect(wrapper.classes()).not.toContain('vxp-full-screen')
+    expect(wrapper.classes()).not.toContain('vxp-full-screen--full')
 
     await enter('browser')
-    expect(wrapper.classes()).toContain('vxp-full-screen')
+    expect(wrapper.classes()).toContain('vxp-full-screen--full')
     await exit()
-    expect(wrapper.classes()).not.toContain('vxp-full-screen')
+    expect(wrapper.classes()).not.toContain('vxp-full-screen--full')
   })
 
   it('should work via toggle', async () => {
@@ -54,9 +54,9 @@ describe('FullScreen', () => {
     const { toggle } = wrapper.findComponent(FullScreen).vm
 
     await toggle()
-    expect(wrapper.classes()).toContain('vxp-full-screen')
+    expect(wrapper.classes()).toContain('vxp-full-screen--full')
     await toggle()
-    expect(wrapper.classes()).not.toContain('vxp-full-screen')
+    expect(wrapper.classes()).not.toContain('vxp-full-screen--full')
   })
 
   test('zIndex should valid', async () => {
@@ -75,8 +75,8 @@ describe('FullScreen', () => {
     const { toggle } = wrapper.findComponent(FullScreen).vm
 
     await toggle()
-    expect(wrapper.classes()).toContain('vxp-full-screen')
+    expect(wrapper.classes()).toContain('vxp-full-screen--full')
     await toggle('browser')
-    expect(wrapper.classes()).toContain('vxp-full-screen')
+    expect(wrapper.classes()).toContain('vxp-full-screen--full')
   })
 })
