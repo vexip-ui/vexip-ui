@@ -1,5 +1,5 @@
 <template>
-  <FullScreen ref="fullScreen" style="background-color: white;">
+  <FullScreen ref="fullScreen" style="background-color: var(--vxp-bg-color-base);">
     <div style="padding: 5px; border: var(--vxp-border-base);">
       <p>I am FullScreen Content</p>
       <div>
