@@ -13,7 +13,6 @@ import { FullScreenTriggerType } from './symbol'
 export default defineComponent({
   name: 'FullScreen',
   setup() {
-    const rootRef = ref(null)
     const isEntered = ref(false)
     const zIndexRef = ref<number>()
     const state = ref<FullScreenTriggerType>()
@@ -21,7 +20,7 @@ export default defineComponent({
     const nh = useNameHelper('full-screen')
     const className = computed(() => [nh.b(), nh.bs('vars'), { [nh.bm('full')]: isEntered.value }])
 
-    const { enter: browserEnter, exit: browserExit } = useFullScreen(rootRef)
+    const { enter: browserEnter, exit: browserExit, target: rootRef } = useFullScreen()
 
     const enter = (type: FullScreenTriggerType = 'window', zIndex?: number) => {
       if (isEntered.value) {
@@ -43,6 +42,7 @@ export default defineComponent({
 
       browserExit()
     }
+
     const toggle = (type: FullScreenTriggerType = 'window', zIndex?: number) => {
       if (isEntered.value) {
         if (state.value !== type) {
