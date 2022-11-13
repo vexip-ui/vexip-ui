@@ -1,6 +1,11 @@
 <template>
   <Portal :to="transferTo">
-    <div ref="rootRef" :class="className" :style="{ [nh.cv('z-index')]: zIndexRef }">
+    <div
+      ref="rootRef"
+      :class="className"
+      :style="{ [nh.cv('z-index')]: zIndexRef }"
+      v-bind="$attrs"
+    >
       <slot :enter="enter" :exit="exit" :toggle="toggle"></slot>
     </div>
   </Portal>
@@ -18,6 +23,7 @@ export default defineComponent({
   components: {
     Portal
   },
+  inheritAttrs: false,
   setup() {
     const isEntered = ref(false)
     const zIndexRef = ref<number>()
