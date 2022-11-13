@@ -15,7 +15,8 @@ export const iconProps = buildProps({
   label: String,
   spin: inOutProp,
   pulse: inOutProp,
-  flip: String as PropType<'horizontal' | 'vertical' | 'both'>
+  flip: String as PropType<'horizontal' | 'vertical' | 'both'>,
+  effect: String
 })
 
 export type IconProps = ExtractPropTypes<typeof iconProps>
