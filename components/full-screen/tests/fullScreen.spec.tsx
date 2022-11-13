@@ -19,8 +19,8 @@ describe('FullScreen', () => {
           default: ({ enter, exit }: any) => {
             return (
               <>
-                <button className={'enter'} onClick={() => enter()}></button>
-                <button className={'exit'} onClick={() => exit()}></button>
+                <button class={'enter'} onClick={() => enter()}></button>
+                <button class={'exit'} onClick={() => exit()}></button>
               </>
             )
           }
@@ -71,13 +71,15 @@ describe('FullScreen', () => {
   test('zIndex should valid', async () => {
     const wrapper = mount(() => <FullScreen></FullScreen>)
 
-    const { enter } = wrapper.findComponent(FullScreen).vm
+    const { enter, exit } = wrapper.findComponent(FullScreen).vm
 
     expect(wrapper.find('.vxp-full-screen').attributes().style).eq(undefined)
     await enter('window', 1)
     expect(wrapper.find('.vxp-full-screen').attributes().style).toContain(
       '--vxp-full-screen-z-index: 1;'
     )
+    await exit()
+    expect(wrapper.find('.vxp-full-screen').attributes().style).eq(undefined)
   })
 
   test('should switch to another enterted state when current state is enterted.', async () => {

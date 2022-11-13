@@ -1,8 +1,8 @@
 ### FullScreen Slots
 
-| Name    | Description                                                                                                                       | Parameters | Since |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- |
-| default | You can get `enter`, `exit` and `toggle` methods, the usage of these please reference [`FullScreen Methods`](#fullscreen-methods) | -          | -     |
+| Name    | Description                                                                                                                     | Parameters | Since |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- |
+| default | You can get `enter`, `exit` and `toggle` methods, the usage of these please reference [FullScreen Methods](#fullscreen-methods) | -          | -     |
 
 ### FullScreen Methods
 

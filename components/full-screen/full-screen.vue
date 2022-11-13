@@ -16,6 +16,7 @@ import { ref, defineComponent, computed } from 'vue'
 import { Portal } from '@/components/portal'
 import { useNameHelper } from '@vexip-ui/config'
 import { useFullScreen } from '@vexip-ui/hooks'
+
 import type { FullScreenTriggerType } from './symbol'
 
 export default defineComponent({
@@ -52,6 +53,7 @@ export default defineComponent({
     }
 
     const exit = () => {
+      zIndexRef.value = undefined
       isEntered.value = false
 
       browserExit()
