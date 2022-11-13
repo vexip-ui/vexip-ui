@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import { Timeline } from '..'
 import { TimelineItem } from '@/components/timeline-item'
 import { GithubB } from '@vexip-ui/icons'
+import { mount } from '@vue/test-utils'
+import { Timeline } from '..'
 
 describe('Timeline', () => {
   it('render', () => {

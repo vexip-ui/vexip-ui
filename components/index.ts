@@ -105,9 +105,8 @@ import { Wheel } from './wheel'
 
 import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } from './typography'
 
-import { install as installDirectives } from '@/directives'
-
 import { buildInstall } from './create'
+import { install as installDirectives } from '@/directives'
 
 export type {
   ComponentSize,

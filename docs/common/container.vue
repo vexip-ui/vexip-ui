@@ -27,8 +27,8 @@
 
 <script setup lang="ts">
 import { ref, toRef, watch, onMounted, provide, inject } from 'vue'
-import { useRoute } from 'vue-router'
 import { nextFrameOnce } from '@vexip-ui/utils'
+import { useRoute } from 'vue-router'
 
 import type { NativeScroll } from 'vexip-ui'
 import type { Store } from '../symbol'

@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import { h } from 'vue'
-import { Icon } from 'vexip-ui'
 import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { Icon } from 'vexip-ui'
 
 import type { MenuOptions } from 'vexip-ui'
 

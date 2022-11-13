@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
 import { noop } from '@vexip-ui/utils'
+import { mount } from '@vue/test-utils'
 import { Ellipsis } from '..'
 
 vi.useFakeTimers()

@@ -1,6 +1,6 @@
+import { isClient, toKebabCase } from '@vexip-ui/utils'
 import { createRouter as _createRouter, createMemoryHistory, createWebHistory } from 'vue-router'
 import { Loading } from 'vexip-ui'
-import { isClient, toKebabCase } from '@vexip-ui/utils'
 import { defaultLanguage, langOptions, i18n } from '../i18n'
 import { getGuideConfig } from './guides'
 import { getComponentConfig } from './components'
@@ -12,11 +12,18 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     redirect: `/${defaultLanguage || __ROLLBACK_LANG__}`
   },
-  ...langOptions.map(useLanguageRouter)
-  // {
-  //   path: '/:catchAll(.*)',
-  //   redirect: '/'
-  // }
+  ...langOptions.map(useLanguageRouter),
+  {
+    path: '/:catchAll(.*)',
+    component: () => import('../views/provider.vue'),
+    children: [
+      {
+        path: '',
+        name: 'NotFound',
+        component: () => import('../views/not-found.vue')
+      }
+    ]
+  }
 ]
 
 function useLanguageRouter(language: string): RouteRecordRaw {

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
-import { resolveModule } from 'local-pkg'
 import { toKebabCase, isNull } from '@vexip-ui/utils'
+import { resolveModule } from 'local-pkg'
 
 import type { ComponentInfo, ComponentResolver } from 'unplugin-vue-components/types'
 

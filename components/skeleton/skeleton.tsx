@@ -1,6 +1,6 @@
 import { defineComponent, computed, inject, h, renderSlot } from 'vue'
-import { ImageR } from '@vexip-ui/icons'
 import { Icon } from '@/components/icon'
+import { ImageR } from '@vexip-ui/icons'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { skeletonProps } from './props'
 import { GROUP_STATE } from './symbol'

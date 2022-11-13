@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { createRouter, createWebHistory } from 'vue-router'
 import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import type { RouteLocationRaw } from 'vue-router'
 

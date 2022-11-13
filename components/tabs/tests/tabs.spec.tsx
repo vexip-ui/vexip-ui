@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
+import { TabPanel } from '@/components/tab-panel'
 import { mount } from '@vue/test-utils'
 import { Tabs } from '..'
-import { TabPanel } from '@/components/tab-panel'
 
 describe('Tabs', () => {
   it('render', () => {

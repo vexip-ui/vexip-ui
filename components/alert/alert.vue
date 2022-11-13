@@ -45,9 +45,6 @@ import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { getRangeWidth } from '@vexip-ui/utils'
-import { alertProps } from './props'
-
 import {
   Flag,
   CircleInfo,
@@ -56,6 +53,8 @@ import {
   Xmark,
   CircleXmark
 } from '@vexip-ui/icons'
+import { getRangeWidth } from '@vexip-ui/utils'
+import { alertProps } from './props'
 
 export type AlertType = 'default' | 'info' | 'success' | 'warning' | 'error'
 

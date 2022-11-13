@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
+import { TableColumn } from '@/components/table-column'
 import { mount } from '@vue/test-utils'
 import { Table } from '..'
-import { TableColumn } from '@/components/table-column'
 import TableBody from '../table-body.vue'
 
 import type { DOMWrapper } from '@vue/test-utils'

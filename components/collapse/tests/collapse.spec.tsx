@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
-import { Collapse } from '..'
 import { CollapsePanel } from '@/components/collapse-panel'
 import { GithubB } from '@vexip-ui/icons'
+import { mount } from '@vue/test-utils'
+import { Collapse } from '..'
 
 describe('Collapse', () => {
   it('render', () => {

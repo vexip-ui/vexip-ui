@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
+import { addMinutes, addHours, addDays, format } from '@vexip-ui/utils'
 import { mount } from '@vue/test-utils'
 import { TimeAgo } from '..'
-import { addMinutes, addHours, addDays, format } from '@vexip-ui/utils'
 
 vi.useFakeTimers()
 

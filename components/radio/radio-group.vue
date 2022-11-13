@@ -16,6 +16,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
+import { useFieldStore } from '@/components/form'
 import { Spinner } from '@vexip-ui/icons'
 import {
   useNameHelper,
@@ -24,7 +25,6 @@ import {
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useFieldStore } from '@/components/form'
 import { debounceMinor, isObject } from '@vexip-ui/utils'
 import { radioGroupProps } from './props'
 import { GROUP_STATE } from './symbol'

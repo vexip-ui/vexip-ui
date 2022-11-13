@@ -1,5 +1,5 @@
-import { omitProps } from '@vexip-ui/config'
 import { tabNavProps } from '@/components/tab-nav/props'
+import { omitProps } from '@vexip-ui/config'
 
 import type { ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'

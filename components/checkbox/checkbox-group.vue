@@ -19,6 +19,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, toRef, computed, watch, provide } from 'vue'
 import { Checkbox } from '@/components/checkbox'
+import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
@@ -27,7 +28,6 @@ import {
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useFieldStore } from '@/components/form'
 import { isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
 import { checkboxGroupProps } from './props'
 import { GROUP_STATE } from './symbol'

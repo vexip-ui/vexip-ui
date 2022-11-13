@@ -18,7 +18,9 @@ export interface I18nConfig {
     showCode: string,
     hideCode: string,
     editInGithub: string,
-    editInPlayground: string
+    editInPlayground: string,
+    pageNotFound: string,
+    backHomepage: string
   },
   alert: {
     info: string,

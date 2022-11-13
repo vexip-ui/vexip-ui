@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
+import { User } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import { Avatar } from '..'
-import { User } from '@vexip-ui/icons'
 
 const IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='
 

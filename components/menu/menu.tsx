@@ -9,12 +9,12 @@ import {
   nextTick,
   provide
 } from 'vue'
-import MenuRest from './menu-rest'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
 import { Overflow } from '@/components/overflow'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { callIfFunc } from '@vexip-ui/utils'
+import MenuRest from './menu-rest'
 import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
 

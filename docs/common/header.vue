@@ -101,11 +101,11 @@
 
 <script setup lang="ts">
 import { ref, toRef, computed, watch, watchEffect, inject, nextTick } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRouter, useRoute } from 'vue-router'
+import ThemeSwitch from './theme-switch.vue'
 import { MagnifyingGlass, GithubB, Language, Bars } from '@vexip-ui/icons'
 import { toKebabCase } from '@vexip-ui/utils'
-import ThemeSwitch from './theme-switch.vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter, useRoute } from 'vue-router'
 import { getComponentConfig } from '../router/components'
 
 import type { EventEmitter } from '@vexip-ui/utils'

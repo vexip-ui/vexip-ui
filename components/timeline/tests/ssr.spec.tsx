@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { TimelineItem } from '@/components/timeline-item'
 import { renderToString } from 'vue/server-renderer'
 import { Timeline } from '..'
-import { TimelineItem } from '@/components/timeline-item'
 
 describe('SSR for Timeline', () => {
   it('render', async () => {

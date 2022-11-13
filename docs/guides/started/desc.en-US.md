@@ -69,8 +69,8 @@ If you also don't care about the package size at all, or you use almost all comp
 import 'vexip-ui/css/index.css'
 
 import { createApp } from 'vue'
-import { install } from 'vexip-ui'
 import App from './app.vue'
+import { install } from 'vexip-ui'
 
 createApp(App).use(install)
 ```
@@ -125,11 +125,11 @@ pnpm i -D unplugin-vue-components unplugin-auto-import @vexip-ui/plugins
 Add following in `vite.config.ts`:
 
 ```ts
+import { VexipUIResolver } from '@vexip-ui/plugins'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
-import { VexipUIResolver } from '@vexip-ui/plugins'
 
 export default defineConfig({
   plugins: [

@@ -1,7 +1,7 @@
 import { afterEach, describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
 import { noop } from '@vexip-ui/utils'
+import { mount } from '@vue/test-utils'
 import { NativeScroll } from '..'
 
 import type { VueWrapper } from '@vue/test-utils'

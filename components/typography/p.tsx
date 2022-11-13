@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue'
-import Text from './text'
 import { useProps } from '@vexip-ui/config'
+import Text from './text'
 import { pProps } from './props'
 
 export default defineComponent({

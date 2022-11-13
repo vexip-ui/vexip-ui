@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { nextTick } from 'vue'
+import { Cell } from '@/components/cell'
 import { mount } from '@vue/test-utils'
 import { Grid } from '..'
-import { Cell } from '@/components/cell'
 
 describe('Grid', () => {
   it('render', () => {

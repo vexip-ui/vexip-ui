@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { nextTick } from 'vue'
+import { Select } from '@/components/select'
 import { mount } from '@vue/test-utils'
 import { AutoComplete } from '..'
-import { Select } from '@/components/select'
 
 import type { DOMWrapper } from '@vue/test-utils'
 

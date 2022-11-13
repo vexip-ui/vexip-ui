@@ -50,9 +50,9 @@ import {
   provide
 } from 'vue'
 import { Portal } from '@/components/portal'
-import DropdownDrop from './dropdown-drop'
 import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import DropdownDrop from './dropdown-drop'
 import { dropdownProps } from './props'
 import { useLabel } from './hooks'
 import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'

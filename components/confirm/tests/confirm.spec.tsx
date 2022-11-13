@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { nextTick } from 'vue'
+import { GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import Confirm from '../confirm.vue'
-import { GithubB } from '@vexip-ui/icons'
 
 describe('Confirm', () => {
   it('render', () => {

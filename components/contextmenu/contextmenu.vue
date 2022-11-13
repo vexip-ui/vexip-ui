@@ -40,11 +40,10 @@
 import { defineComponent, ref, reactive } from 'vue'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
-import { useNameHelper } from '@vexip-ui/config'
-import { renderItem } from './render'
-
 import { Renderer } from '@/components/renderer'
+import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
+import { renderItem } from './render'
 
 import type { Key, ContextmenuOptions, ContextmenuConfig } from './symbol'
 

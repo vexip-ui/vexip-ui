@@ -20,7 +20,9 @@ export const enUS = defineI18n({
     showCode: 'Show code',
     hideCode: 'Hide code',
     editInGithub: 'Edit in Github',
-    editInPlayground: 'Edit in Playground'
+    editInPlayground: 'Edit in Playground',
+    pageNotFound: 'Page Not Found',
+    backHomepage: 'Back to homepage'
   },
   alert: {
     info: 'Tip',

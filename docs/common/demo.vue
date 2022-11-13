@@ -87,10 +87,10 @@
 
 <script setup lang="ts">
 import { useSlots, ref, watch, onMounted } from 'vue'
+import { CopyR, PenToSquareR, PaperPlaneR, Code, ChevronUp } from '@vexip-ui/icons'
 import { useI18n } from 'vue-i18n'
 import { highlight, languages } from 'prismjs'
 import { Message } from 'vexip-ui'
-import { CopyR, PenToSquareR, PaperPlaneR, Code, ChevronUp } from '@vexip-ui/icons'
 import { usePlayground } from './playground'
 
 import type { PropType } from 'vue'

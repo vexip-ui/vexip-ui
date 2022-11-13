@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { Spinner } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import { Icon } from '..'
-import { Spinner } from '@vexip-ui/icons'
 
 describe('Icon', () => {
   it('render', () => {

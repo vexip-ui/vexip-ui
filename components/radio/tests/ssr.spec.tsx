@@ -4,9 +4,9 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
+import { RadioGroup } from '@/components/radio-group'
 import { renderToString } from 'vue/server-renderer'
 import { Radio } from '..'
-import { RadioGroup } from '@/components/radio-group'
 
 describe('SSR for Radio', () => {
   it('render', async () => {

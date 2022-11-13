@@ -4,10 +4,10 @@
 
 import { describe, it, expect } from 'vitest'
 import { createSSRApp } from 'vue'
-import { renderToString } from 'vue/server-renderer'
-import { Form } from '..'
 import { FormItem } from '@/components/form-item'
 import { Input } from '@/components/input'
+import { renderToString } from 'vue/server-renderer'
+import { Form } from '..'
 
 describe('SSR for Form', () => {
   it('render', async () => {

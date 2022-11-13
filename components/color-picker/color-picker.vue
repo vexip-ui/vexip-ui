@@ -180,13 +180,13 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
+import ColorAlpha from './color-alpha.vue'
+import ColorHue from './color-hue.vue'
+import ColorPalette from './color-palette.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { Portal } from '@/components/portal'
-import ColorAlpha from './color-alpha.vue'
-import ColorHue from './color-hue.vue'
-import ColorPalette from './color-palette.vue'
 import { useFieldStore } from '@/components/form'
 import { usePopper, placementWhileList, useClickOutside, useHover } from '@vexip-ui/hooks'
 import {
