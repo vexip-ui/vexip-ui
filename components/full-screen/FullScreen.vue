@@ -1,17 +1,23 @@
 <template>
-  <div ref="rootRef" :class="className" :style="{ [nh.cv('z-index')]: zIndexRef }">
-    <slot :enter="enter" :exit="exit" :toggle="toggle"></slot>
-  </div>
+  <Portal :to="transferTo">
+    <div ref="rootRef" :class="className" :style="{ [nh.cv('z-index')]: zIndexRef }">
+      <slot :enter="enter" :exit="exit" :toggle="toggle"></slot>
+    </div>
+  </Portal>
 </template>
 
 <script lang="ts">
 import { ref, defineComponent, computed } from 'vue'
+import { Portal } from '@/components/portal'
 import { useNameHelper } from '@vexip-ui/config'
 import { useFullScreen } from '@vexip-ui/hooks'
 import type { FullScreenTriggerType } from './symbol'
 
 export default defineComponent({
   name: 'FullScreen',
+  components: {
+    Portal
+  },
   setup() {
     const isEntered = ref(false)
     const zIndexRef = ref<number>()
@@ -19,6 +25,8 @@ export default defineComponent({
 
     const nh = useNameHelper('full-screen')
     const className = computed(() => [nh.b(), nh.bs('vars'), { [nh.bm('full')]: isEntered.value }])
+
+    const transferTo = computed(() => (isEntered.value ? 'body' : ''))
 
     const { enter: browserEnter, exit: browserExit, target: rootRef } = useFullScreen()
 
@@ -60,6 +68,8 @@ export default defineComponent({
       className,
       rootRef,
       zIndexRef,
+      isEntered,
+      transferTo,
       enter,
       exit,
       toggle
