@@ -4,7 +4,7 @@ import type * as CSS from 'csstype'
 
 export interface CSSProperties
   extends CSS.Properties<string | number>,
-    CSS.PropertiesHyphen<string | number> {
+  CSS.PropertiesHyphen<string | number> {
   [x: `--${string}`]: string | number | undefined
 }
 
@@ -28,24 +28,22 @@ export type AtRuleConfig = {
   [x: `@${string}`]: MaybeArray<StyleConfig>
 }
 
+export type CSSConfig = MaybeArray<StyleConfig | AtRuleConfig>
+
 const styleSheets = new Map<Id, Context>()
 
 function ensureArray<T>(value: T | T[]) {
   return Array.isArray(value) ? value : [value]
 }
 
-export function css(
-  id: Id,
-  styles: MaybeArray<StyleConfig | AtRuleConfig>,
-  options: RenderOptions = {}
-) {
+export function css(id: Id, css: CSSConfig, options: RenderOptions = {}) {
   let context = styleSheets.get(id)
 
   if (context) {
     if (options.refresh) {
       document.head.removeChild(context.style)
       context.style = document.createElement('style')
-      context.style.textContent = redner(styles, options.minify)
+      context.style.textContent = redner(css, options.minify)
       document.head.appendChild(context.style)
       context.sheet = document.styleSheets[document.styleSheets.length - 1]
     } else {
@@ -53,7 +51,8 @@ export function css(
     }
   } else {
     const style = document.createElement('style')
-    style.textContent = redner(styles, options.minify)
+
+    style.textContent = redner(css, options.minify)
     document.head.appendChild(style)
 
     context = {
