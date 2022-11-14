@@ -56,7 +56,7 @@ import {
 import { getRangeWidth } from '@vexip-ui/utils'
 import { alertProps } from './props'
 
-export type AlertType = 'default' | 'info' | 'success' | 'warning' | 'error'
+import type { AlertType } from './symbol'
 
 const predefinedIcons = {
   default: Flag,

@@ -18,7 +18,7 @@ importers:
       '@types/prompts': ^2.4.1
       '@types/semver': ^7.3.13
       '@vexip-ui/commitlint-config': ^0.1.0
-      '@vexip-ui/eslint-config': ^0.5.0
+      '@vexip-ui/eslint-config': ^0.5.1
       '@vexip-ui/hooks': workspace:^
       '@vexip-ui/icons': workspace:^
       '@vexip-ui/prettier-config': ^0.1.0
@@ -81,7 +81,7 @@ importers:
       '@types/prompts': 2.4.1
       '@types/semver': 7.3.13
       '@vexip-ui/commitlint-config': 0.1.0
-      '@vexip-ui/eslint-config': 0.5.0_wyqvi574yv7oiwfeinomdzmc3m
+      '@vexip-ui/eslint-config': 0.5.1_wyqvi574yv7oiwfeinomdzmc3m
       '@vexip-ui/prettier-config': 0.1.0_prettier@2.7.1
       '@vexip-ui/stylelint-config': 0.1.1_stylelint@14.14.1
       '@vitejs/plugin-vue': 2.3.3_vite@2.9.14+vue@3.2.41
@@ -1772,8 +1772,8 @@ packages:
       '@commitlint/config-conventional': 17.2.0
     dev: true
 
-  /@vexip-ui/eslint-config/0.5.0_wyqvi574yv7oiwfeinomdzmc3m:
-    resolution: {integrity: sha512-Itnk54Dq9zAUS1rUMOYKfPSEybodOHIksELfNvJByUzYDNGwhIbR9K5ElrtYkjzX84pPNLryWNL8DSVrB4hWVQ==}
+  /@vexip-ui/eslint-config/0.5.1_wyqvi574yv7oiwfeinomdzmc3m:
+    resolution: {integrity: sha512-mid65O8/T9mMreBG4ajSD45Xi2pGJtf5KjTZzJwnleXp44DDMgw3eLLHOM7UyIzJerHrgX0FpgfQdSZdQDaPog==}
     peerDependencies:
       eslint: '>=8.0.0'
     dependencies:
