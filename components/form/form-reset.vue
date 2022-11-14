@@ -11,7 +11,7 @@
     :loading="props.loading"
     :circle="props.circle"
     :loading-icon="props.loadingIcon"
-    :loading-spin="props.loadingSpin"
+    :loading-effect="props.loadingEffect"
     :icon="props.icon"
     :color="props.color"
     :button-type="props.buttonType"
@@ -55,7 +55,7 @@ export default defineComponent({
       loading: null,
       circle: null,
       loadingIcon: null,
-      loadingSpin: null,
+      loadingEffect: null,
       icon: null,
       color: null,
       buttonType: null,

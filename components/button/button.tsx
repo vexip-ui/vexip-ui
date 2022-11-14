@@ -30,7 +30,7 @@ export default defineComponent({
       loading: () => (fieldActions ? fieldActions.loading.value : false),
       circle: false,
       loadingIcon: Spinner,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       icon: null,
       color: null,
       buttonType: {
@@ -220,13 +220,9 @@ export default defineComponent({
             ? (
                 slots.loading()
               )
-            : props.loadingSpin
-              ? (
-            <Icon spin icon={props.loadingIcon}></Icon>
-                )
-              : (
-            <Icon pulse icon={props.loadingIcon}></Icon>
-                )}
+            : (
+            <Icon effect={props.loadingEffect} icon={props.loadingIcon}></Icon>
+              )}
         </div>
       )
     }

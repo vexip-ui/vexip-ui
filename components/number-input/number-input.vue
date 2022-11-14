@@ -53,11 +53,7 @@
         <Icon><CircleXmark></CircleXmark></Icon>
       </div>
       <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-        <Icon
-          :spin="props.loadingSpin"
-          :pulse="!props.loadingSpin"
-          :icon="props.loadingIcon"
-        ></Icon>
+        <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
       </div>
     </transition>
     <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
@@ -161,7 +157,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       sync: false
     })
 

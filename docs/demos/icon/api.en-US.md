@@ -1,3 +1,9 @@
+### Preset Types
+
+```ts
+type IconEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out' | string
+```
+
 ### Icon Props
 
 | Name      | Type                                   | Description                                         | Default | Since   |
@@ -8,4 +14,4 @@
 | ~~pulse~~ | `boolean \| 'in' \| 'out'`             | Set whether the icon has a pulse effect             | `false` | -       |
 | flip      | `'horizontal' \| 'vertical' \| 'both'` | Set whether the icon is flipped                     | `null`  | -       |
 | title     | `string`                               | Set the title prop of the icon                      | `''`    | -       |
-| effect    | `string`                               | Set effect animation name or a customize class name | `null`  | `2.1.0` |
+| effect    | `IconEffect`                           | Set effect animation name or a customize class name | `null`  | `2.1.0` |

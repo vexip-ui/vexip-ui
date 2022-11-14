@@ -54,7 +54,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingEffect: 'pulse-in'
     })
 
     const nh = useNameHelper('transfer')
@@ -263,7 +263,7 @@ export default defineComponent({
             loading={props.loading}
             loading-icon={props.loadingIcon}
             loading-lock={props.loadingLock}
-            loading-spin={props.loadingSpin}
+            loading-effect={props.loadingEffect}
             onSelect={() => handleSelect('source')}
             onEnter={handleToTarget}
             onSwitch={() => handlePanelFocus('target')}
@@ -287,7 +287,7 @@ export default defineComponent({
                     disabled={props.disabled || !toTargetEnabled.value}
                     loading={props.loading && props.loadingLock}
                     loading-icon={props.loadingIcon}
-                    loading-spin={props.loadingSpin}
+                    loading-effect={props.loadingEffect}
                     style={{ marginBottom: '6px' }}
                     onClick={handleToTarget}
                   >
@@ -306,7 +306,7 @@ export default defineComponent({
                     disabled={props.disabled || !toSourceEnabled.value}
                     loading={props.loading && props.loadingLock}
                     loading-icon={props.loadingIcon}
-                    loading-spin={props.loadingSpin}
+                    loading-effect={props.loadingEffect}
                     style={{ margin: '0' }}
                     onClick={handleToSource}
                   >
@@ -338,7 +338,7 @@ export default defineComponent({
             loading={props.loading}
             loading-icon={props.loadingIcon}
             loading-lock={props.loadingLock}
-            loading-spin={props.loadingSpin}
+            loading-effect={props.loadingEffect}
             onSelect={() => handleSelect('target')}
             onEnter={handleToSource}
             onSwitch={() => handlePanelFocus('source')}
