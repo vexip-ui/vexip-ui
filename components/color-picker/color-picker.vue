@@ -11,7 +11,7 @@
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @click="handleToggleTrigger"
+      @click="toggleVisible"
     >
       <slot
         name="control"
@@ -19,6 +19,15 @@
         :alpha="currentAlpha"
         :empty="isEmpty"
       >
+        <div
+          v-if="hasPrefix"
+          :class="[nh.be('icon'), nh.be('prefix')]"
+          :style="{ color: props.prefixColor }"
+        >
+          <slot name="prefix">
+            <Icon :icon="props.prefix"></Icon>
+          </slot>
+        </div>
         <div :class="nh.be('control')">
           <div :class="nh.be('marker')">
             <Icon v-if="!currentVisible && isEmpty">
@@ -35,16 +44,50 @@
               }"
             ></div>
           </div>
-          <div :class="nh.be('arrow')">
-            <Icon><ChevronDown></ChevronDown></Icon>
-          </div>
         </div>
+        <div
+          v-if="!props.noSuffix"
+          :class="[nh.be('icon'), nh.be('suffix')]"
+          :style="{
+            color: props.suffixColor,
+            opacity: showClear || props.loading ? '0%' : ''
+          }"
+        >
+          <slot name="suffix">
+            <Icon
+              v-if="props.suffix"
+              :icon="props.suffix"
+              :class="{
+                [nh.be('arrow')]: !props.staticSuffix
+              }"
+            ></Icon>
+            <Icon v-else :class="nh.be('arrow')">
+              <ChevronDown></ChevronDown>
+            </Icon>
+          </slot>
+        </div>
+        <div
+          v-else-if="props.clearable || props.loading"
+          :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
+        ></div>
+        <transition :name="nh.ns('fade')" appear>
+          <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+            <Icon><CircleXmark></CircleXmark></Icon>
+          </div>
+          <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+            <Icon
+              :spin="props.loadingSpin"
+              :pulse="!props.loadingSpin"
+              :icon="props.loadingIcon"
+            ></Icon>
+          </div>
+        </transition>
       </slot>
     </div>
     <Portal :to="transferTo">
       <transition :name="props.transitionName">
         <div
-          v-show="currentVisible"
+          v-if="currentVisible"
           ref="popper"
           :class="[nh.be('popper'), nh.bs('vars')]"
           @keydown.tab.stop="handleTabDown"
@@ -104,6 +147,7 @@
               <Input
                 v-if="!props.noInput"
                 ref="input"
+                :class="nh.be('input')"
                 size="small"
                 :value="hex.toUpperCase()"
                 :respond="false"
@@ -136,29 +180,26 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
+import ColorAlpha from './color-alpha.vue'
+import ColorHue from './color-hue.vue'
+import ColorPalette from './color-palette.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { Portal } from '@/components/portal'
-import ColorAlpha from './color-alpha.vue'
-import ColorHue from './color-hue.vue'
-import ColorPalette from './color-palette.vue'
 import { useFieldStore } from '@/components/form'
-import { usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import { usePopper, placementWhileList, useClickOutside, useHover } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import {
+  isClient,
+  isElement,
   toFixed,
   parseColorToRgba,
   rgbToHsv,
@@ -167,14 +208,10 @@ import {
   hsvToHsl,
   rgbaToHex
 } from '@vexip-ui/utils'
-import { Xmark, ChevronDown } from '@vexip-ui/icons'
+import { Xmark, ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
+import { colorPickerProps } from './props'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
 import type { Color, HSVColor, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
-
-type FormattedColor = string | RGBAColor | HSLAColor | HSVAColor
-export type ColorFormat = 'rgb' | 'hsl' | 'hsv' | 'hex'
 
 const getDefaultHsv = () => rgbToHsv(0, 0, 0)
 
@@ -216,54 +253,36 @@ export default defineComponent({
     Input,
     Portal,
     Xmark,
-    ChevronDown
+    ChevronDown,
+    CircleXmark
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: [String, Object] as PropType<Color | null>,
-    visible: booleanProp,
-    format: String as PropType<ColorFormat>,
-    alpha: booleanProp,
-    disabled: booleanProp,
-    transitionName: String,
-    noInput: booleanProp,
-    shortcut: {
-      type: [Boolean, Array] as PropType<boolean | string[]>,
-      default: null
-    },
-    placement: String as PropType<Placement>,
-    transfer: booleanStringProp,
-    outsideClose: booleanProp,
-    clearable: booleanProp,
-    cancelText: String,
-    confirmText: String,
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onClickOutside: eventProp(),
-    onOutsideClose: eventProp(),
-    onClear: eventProp(),
-    onChange: eventProp<(color: FormattedColor) => void>(),
-    onShortcut: eventProp<(color: FormattedColor) => void>()
-  },
+  props: colorPickerProps,
   emits: ['update:value', 'update:visible'],
-  setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<Color | null>(() => reference.value?.focus())
+  setup(_props, { slots, emit }) {
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      size,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<Color | null>(() => reference.value?.focus())
 
     const nh = useNameHelper('color-picker')
     const props = useProps('colorPicker', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
-        default: () => getFieldValue('#339af0')!,
+        default: () => getFieldValue('')!,
         static: true
       },
       visible: false,
       format: {
-        default: 'rgb' as ColorFormat,
-        validator: (value: ColorFormat) => {
-          return ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
-        }
+        default: 'rgb',
+        validator: value => ['rgb', 'hsl', 'hsv', 'hex'].includes(value)
       },
       alpha: false,
       disabled: () => disabled.value,
@@ -272,13 +291,23 @@ export default defineComponent({
       shortcut: false,
       placement: {
         default: 'bottom',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       transfer: false,
       outsideClose: true,
       clearable: false,
       cancelText: null,
-      confirmText: null
+      confirmText: null,
+      prefix: null,
+      prefixColor: '',
+      suffix: null,
+      suffixColor: '',
+      noSuffix: false,
+      staticSuffix: false,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const isEmpty = ref(true)
@@ -308,6 +337,7 @@ export default defineComponent({
       wrapper,
       isDrop: true
     })
+    const { isHover } = useHover(reference)
 
     const unitList = computed(() => {
       return [
@@ -346,8 +376,9 @@ export default defineComponent({
       return {
         [baseCls]: true,
         [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
-        [`${baseCls}--focused}`]: currentVisible.value,
+        [`${baseCls}--focused`]: currentVisible.value,
         [`${baseCls}--${props.state}`]: props.state !== 'default'
       }
     })
@@ -377,6 +408,12 @@ export default defineComponent({
 
       return defaultShotcuts
     })
+    const hasPrefix = computed(() => {
+      return !!(slots.prefix || props.prefix)
+    })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && !isEmpty.value
+    })
 
     watch(
       () => props.visible,
@@ -394,6 +431,14 @@ export default defineComponent({
       value => {
         parseValue(value)
         lastValue.value = { ...currentValue.value, a: currentAlpha.value, format: 'hsva' }
+      }
+    )
+    watch(
+      () => props.disabled,
+      value => {
+        if (value) {
+          currentVisible.value = false
+        }
       }
     )
 
@@ -422,8 +467,8 @@ export default defineComponent({
       }
     }
 
-    function handleToggleTrigger() {
-      if (props.disabled) return
+    function toggleVisible() {
+      if (props.disabled || (props.loading && props.loadingLock)) return
 
       currentVisible.value = !currentVisible.value
     }
@@ -532,7 +577,7 @@ export default defineComponent({
 
     function toggleEditing(able: boolean) {
       if (!able) {
-        window.setTimeout(() => {
+        setTimeout(() => {
           editing.value = false
         }, 0)
       } else {
@@ -540,7 +585,7 @@ export default defineComponent({
       }
     }
     function handleTabDown(event: KeyboardEvent) {
-      if (currentVisible.value) {
+      if (isClient && currentVisible.value) {
         const activeEl = document && document.activeElement
 
         if (!activeEl) return
@@ -550,7 +595,7 @@ export default defineComponent({
         const shift = event.shiftKey
         const elList = Array.from(unitList.value)
         const index = elList.findIndex(unit => {
-          const el = unit instanceof Element ? unit : unit.$el
+          const el = isElement(unit) ? unit : unit.$el
 
           return el === activeEl || el.contains(activeEl)
         })
@@ -647,6 +692,8 @@ export default defineComponent({
       rgb,
       hex,
       shortcutList,
+      hasPrefix,
+      showClear,
 
       wrapper,
       reference,
@@ -659,7 +706,7 @@ export default defineComponent({
       cancel,
       confirm,
 
-      handleToggleTrigger,
+      toggleVisible,
       handleClear,
       handleOk,
       handlePaletteChange,

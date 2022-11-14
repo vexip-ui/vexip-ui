@@ -14,10 +14,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } from 'vue'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { timelineItemProps } from './props'
 import { TIMELINE_STATE } from './symbol'
 
-import type { PropType } from 'vue'
 import type { TimelinkItemType, ItemState } from './symbol'
 
 const timelineItemTypes = Object.freeze<TimelinkItemType>([
@@ -30,21 +30,13 @@ const timelineItemTypes = Object.freeze<TimelinkItemType>([
 
 export default defineComponent({
   name: 'TimelineItem',
-  props: {
-    type: String as PropType<TimelinkItemType>,
-    color: String,
-    label: [Number, String],
-    dashed: booleanProp,
-    lineColor: String,
-    spacing: [Number, String],
-    onSignalClick: eventProp<(label: string | number) => void>()
-  },
+  props: timelineItemProps,
   emits: [],
   setup(_props) {
     const props = useProps('timelineItem', _props, {
       type: {
-        default: 'default' as TimelinkItemType,
-        validator: (value: TimelinkItemType) => timelineItemTypes.includes(value)
+        default: 'default',
+        validator: value => timelineItemTypes.includes(value)
       },
       color: '',
       label: {
@@ -70,12 +62,12 @@ export default defineComponent({
     const itemStyle = computed(() => {
       const spacing = props.spacing || props.spacing === 0 ? props.spacing : timelineState?.spacing
       const style: Record<string, any> = {
-        '--vxp-timeline-item-span': typeof spacing === 'number' ? `${spacing}px` : spacing
+        [nh.cv('item-span')]: typeof spacing === 'number' ? `${spacing}px` : spacing
       }
 
       if (props.color) {
-        style['--vxp-timeline-pointer-color'] = props.color
-        style['--vxp-timeline-pointer-b-color'] = props.color
+        style[nh.cv('pointer-color')] = props.color
+        style[nh.cv('pointer-b-color')] = props.color
       }
 
       return style

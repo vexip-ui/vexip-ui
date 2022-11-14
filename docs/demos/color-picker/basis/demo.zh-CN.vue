@@ -2,16 +2,10 @@
   <ColorPicker v-model:value="color"></ColorPicker>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-import type { Color } from 'vexip-ui/es/color-picker'
+import type { Color } from 'vexip-ui'
 
-export default defineComponent({
-  setup() {
-    const color = ref<Color | null>(null)
-
-    return { color }
-  }
-})
+const color = ref<Color | null>(null)
 </script>

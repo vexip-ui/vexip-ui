@@ -1,3 +1,21 @@
+### 预设类型
+
+```ts
+import type { RouteLocationRaw } from 'vue-router'
+
+interface MenuOptions {
+  label: string,
+  icon?: Record<string, any> | (() => any),
+  iconProps?: IconMinorProps,
+  name?: string | (() => string),
+  disabled?: boolean,
+  group?: boolean,
+  meta?: Record<string, any>,
+  route?: RouteLocationRaw,
+  children?: MenuOptions[]
+}
+```
+
 ### Menu 属性
 
 | 名称          | 类型                                               | 说明                                                                           | 默认值       | 始于    |
@@ -15,24 +33,6 @@
 | router        | `Router`                                           | 设置 Router 对象，并自动解析生成菜单，会优先使用 `options` 解析菜单            | `null`       | `2.0.0` |
 | manual-route  | `boolean`                                          | 设置是否为手动路由模式，开启后将不会自动处理路由变化                           | `false`      | `2.0.0` |
 
-一些预设类型：
-
-```ts
-import type { RouteLocationRaw } from 'vue-router'
-
-interface MenuOptions {
-  label: string,
-  icon?: Record<string, any>,
-  iconProps?: IconMinorProps,
-  name?: string,
-  disabled?: boolean,
-  group?: boolean,
-  meta?: Record<string, any>,
-  route?: RouteLocationRaw,
-  children?: MenuOptions[]
-}
-```
-
 ### Menu 事件
 
 | 名称   | 说明                                                       | 参数                                         | 始于 |
@@ -40,6 +40,12 @@ interface MenuOptions {
 | select | 当菜单被选择时触发，返回被选菜单的 label                   | `(label: string, meta: Record<string, any>)` | -    |
 | expand | 当菜单被展开组 (子菜单) 时触发，返回被展开组的菜单的 label | `(label: string, meta: Record<string, any>)` | -    |
 | reduce | 当菜单被收起组 (子菜单) 时触发，返回被收起组的菜单的 label | `(label: string, meta: Record<string, any>)` | -    |
+
+### Menu 方法
+
+| 名称              | 说明               | 签名                      | 始于    |
+| ----------------- | ------------------ | ------------------------- | ------- |
+| expandItemByLabel | 根据标签值展开菜单 | `(label: string) => void` | `2.0.0` |
 
 ### MenuItem 属性
 

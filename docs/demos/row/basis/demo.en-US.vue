@@ -5,8 +5,6 @@
         span-24
       </div>
     </Column>
-  </Row>
-  <Row :gap="8">
     <Column :span="12">
       <div class="content">
         span-12

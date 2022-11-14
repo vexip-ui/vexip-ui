@@ -1,15 +1,8 @@
 <template>
-  <li
-    ref="wrapper"
-    :class="className"
-    role="menuitem"
-    tabindex="0"
-    :aria-disabled="props.disabled ? 'true' : undefined"
-    @keydown.enter.stop="handleSelect"
-  >
+  <li ref="wrapper" :class="className" role="none">
     <Tooltip
       placement="right"
-      :theme="tooltipTheme"
+      :reverse="tooltipReverse"
       :transfer="true"
       :disabled="tooltipDisabled"
     >
@@ -18,16 +11,23 @@
           ref="reference"
           :class="{
             [nh.be('label')]: true,
+            [nh.bem('label', `marker-${markerType}`)]: true,
             [nh.bem('label', 'in-popper')]: isUsePopper
           }"
+          role="menuitem"
+          tabindex="0"
+          :aria-disabled="props.disabled ? 'true' : undefined"
           :style="labelStyle"
           @click="handleSelect"
+          @keydown.enter.stop="handleSelect"
+          @keydown.space.stop.prevent="handleSelect"
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >
           <div v-if="props.icon" :class="nh.be('icon')">
             <slot name="icon">
-              <Icon v-bind="props.iconProps" :icon="props.icon"></Icon>
+              <Renderer v-if="typeof props.icon === 'function'" :renderer="props.icon"></Renderer>
+              <Icon v-else v-bind="props.iconProps" :icon="props.icon"></Icon>
             </slot>
           </div>
           <span
@@ -57,25 +57,24 @@
         </slot>
       </span>
     </Tooltip>
-    <span v-if="!isUsePopper">
-      <CollapseTransition>
-        <ul v-show="showGroup" :class="[nh.be('list'), nh.bem('list', 'theme')]">
-          <slot name="group">
-            <Renderer :renderer="renderChildren"></Renderer>
-          </slot>
-        </ul>
-      </CollapseTransition>
-    </span>
-    <Portal v-else-if="isGroup" :to="transferTo">
-      <transition :name="transition">
+    <CollapseTransition appear>
+      <ul v-if="isGroup && !isUsePopper" v-show="showGroup" :class="nh.be('list')">
+        <slot name="group">
+          <Renderer :renderer="renderChildren"></Renderer>
+        </slot>
+      </ul>
+    </CollapseTransition>
+    <Portal v-if="isGroup && isUsePopper" :to="transferTo">
+      <transition :name="transition" appear @after-leave="popperShow = false">
         <div
-          v-show="showGroup"
+          v-if="popperShow"
+          v-show="popperShow && showGroup"
           ref="popper"
           :class="[nh.be('popper'), nh.bs('vars'), isHorizontal ? nh.bem('popper', 'drop') : '']"
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >
-          <ul :class="[nh.be('list'), nh.bem('list', 'theme')]">
+          <ul :class="nh.be('list')">
             <slot name="group">
               <Renderer :renderer="renderChildren"></Renderer>
             </slot>
@@ -89,6 +88,7 @@
 <script lang="tsx">
 import {
   defineComponent,
+  defineAsyncComponent,
   ref,
   reactive,
   computed,
@@ -102,27 +102,20 @@ import {
 } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { MenuGroup } from '@/components/menu-group'
 import { Portal } from '@/components/portal'
 import { Tooltip } from '@/components/tooltip'
 import { Renderer } from '@/components/renderer'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
-import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/mixins'
 import { ChevronDown } from '@vexip-ui/icons'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
+import { callIfFunc } from '@vexip-ui/utils'
+import { menuItemProps } from './props'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { RouteLocationRaw } from 'vue-router'
-import type { Placement } from '@vexip-ui/mixins'
-import type { IconMinorProps } from '@/components/icon'
+import type { Placement } from '@vexip-ui/hooks'
 import type { MenuOptions } from './symbol'
+
+const MenuGroup = defineAsyncComponent(() => import('./menu-group'))
 
 const MenuItem = defineComponent({
   name: 'MenuItem',
@@ -134,19 +127,7 @@ const MenuItem = defineComponent({
     Renderer,
     ChevronDown
   },
-  props: {
-    label: String,
-    icon: Object,
-    iconProps: Object as PropType<IconMinorProps>,
-    disabled: booleanProp,
-    transfer: booleanStringProp,
-    trigger: String as PropType<'hover' | 'click'>,
-    transitionName: String,
-    meta: Object,
-    children: Array as PropType<MenuOptions[]>,
-    route: [String, Object] as PropType<RouteLocationRaw>,
-    onSelect: eventProp()
-  },
+  props: menuItemProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('menuItem', _props, {
@@ -154,12 +135,12 @@ const MenuItem = defineComponent({
         default: null,
         static: true
       },
-      icon: null,
-      iconProps: null,
-      disabled: {
-        default: false,
-        static: true
+      icon: {
+        isFunc: true,
+        default: null
       },
+      iconProps: null,
+      disabled: false,
       transfer: null,
       trigger: null,
       transitionName: null,
@@ -181,11 +162,13 @@ const MenuItem = defineComponent({
     const groupExpanded = ref(false)
     const selected = ref(false)
     const sonSelected = ref(false)
+    const popperShow = ref(false)
 
     const indent = computed(() => (parentItemState?.indent ?? 0) + 1)
     const propTransfer = computed(() => props.transfer ?? menuState?.transfer ?? false)
     const inTransfer = computed(() => (parentItemState ? parentItemState.transfer : false))
     const transfer = computed(() => !inTransfer.value && propTransfer.value)
+    const markerType = computed(() => menuState?.markerType || 'right')
 
     const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
@@ -198,7 +181,7 @@ const MenuItem = defineComponent({
       return {
         [baseClass]: true,
         [`${baseClass}--disabled`]: props.disabled,
-        [`${baseClass}--group-visible`]: groupExpanded.value,
+        [`${baseClass}--group-visible`]: isGroup.value && groupExpanded.value,
         [`${baseClass}--selected`]: selected.value,
         [`${baseClass}--no-icon`]: !props.icon,
         [`${baseClass}--son-selected`]: sonSelected.value
@@ -214,7 +197,8 @@ const MenuItem = defineComponent({
           parentItemState && parentItemState.isUsePopper
             ? undefined
             : `${
-                indent.value * baseIndentWidth + (groupState?.indent ?? 0) * 0.25 * baseIndentWidth
+                indent.value * baseIndentWidth +
+                (menuState?.isReduced ? 0 : groupState?.indent ?? 0) * 0.25 * baseIndentWidth
               }px`
       }
     })
@@ -232,8 +216,7 @@ const MenuItem = defineComponent({
         isGroup.value || !!(parentItemState?.isUsePopper || (menuState && !menuState.isReduced))
       )
     })
-    const theme = computed(() => (menuState ? menuState.theme : 'light'))
-    const tooltipTheme = computed(() => (menuState ? menuState.tooltipTheme : 'dark'))
+    const tooltipReverse = computed(() => !!menuState?.tooltipReverse)
     const isHorizontal = computed(() => menuState?.horizontal && !parentItemState)
     const transition = computed(() => {
       return props.transitionName ?? isHorizontal.value ? nh.ns('drop') : nh.ns('zoom')
@@ -245,9 +228,11 @@ const MenuItem = defineComponent({
       label: toRef(props, 'label'),
       indent,
       groupExpanded,
+      showGroup,
       isUsePopper,
       parentState: parentItemState,
       transfer: computed(() => inTransfer.value || propTransfer.value),
+      cachedExpanded: groupExpanded.value,
       updateSonSelected,
       toggleGroupExpanded,
       handleMouseEnter,
@@ -258,6 +243,7 @@ const MenuItem = defineComponent({
 
     watch(showGroup, value => {
       if (value && isUsePopper.value) {
+        popperShow.value = true
         updatePopper()
       }
     })
@@ -286,9 +272,9 @@ const MenuItem = defineComponent({
 
     if (menuState) {
       watch(
-        () => menuState.currentActive,
-        value => {
-          selected.value = props.label === value
+        () => [props.label, menuState.currentActive],
+        () => {
+          selected.value = props.label === menuState.currentActive
         },
         { immediate: true }
       )
@@ -314,13 +300,14 @@ const MenuItem = defineComponent({
     const { timer } = useSetTimeout()
 
     function handleSelect() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       if (props.disabled) return
 
       if (isGroup.value) {
         if (isUsePopper.value && dropTrigger.value !== 'click') return
 
+        menuState?.beforeExpand()
         groupExpanded.value = !groupExpanded.value
       } else {
         if (isUsePopper.value) {
@@ -336,8 +323,9 @@ const MenuItem = defineComponent({
     }
 
     function toggleGroupExpanded(expanded: boolean, upwrad = false) {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
+      menuState?.beforeExpand()
       groupExpanded.value = expanded
 
       if (upwrad && typeof parentItemState?.toggleGroupExpanded === 'function') {
@@ -346,7 +334,7 @@ const MenuItem = defineComponent({
     }
 
     function handleMouseEnter() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       if (props.disabled || !isUsePopper.value || dropTrigger.value !== 'hover') return
 
@@ -356,13 +344,13 @@ const MenuItem = defineComponent({
 
       if (!isGroup.value) return
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         groupExpanded.value = true
       }, 250)
     }
 
     function handleMouseLeave() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
       if (props.disabled || !isUsePopper.value || dropTrigger.value !== 'hover') return
 
@@ -372,7 +360,7 @@ const MenuItem = defineComponent({
 
       if (!isGroup.value) return
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         groupExpanded.value = false
       }, 250)
     }
@@ -399,14 +387,14 @@ const MenuItem = defineComponent({
           children={item.children}
           route={item.route}
         >
-          {item.name || item.label}
+          {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
       )
 
       return props.children.map(child => {
         if (child.group) {
           return (
-            <MenuGroup label={child.name || child.label}>
+            <MenuGroup label={child.name ? callIfFunc(child.name) : child.label}>
               {child.children?.map(renderItem)}
             </MenuGroup>
           )
@@ -422,14 +410,15 @@ const MenuItem = defineComponent({
       groupExpanded,
       transferTo,
 
+      popperShow,
       className,
       labelStyle,
       isGroup,
       showGroup,
       isUsePopper,
       tooltipDisabled,
-      theme,
-      tooltipTheme,
+      markerType,
+      tooltipReverse,
       isHorizontal,
       transition,
       dropTrigger,

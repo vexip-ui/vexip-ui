@@ -6,15 +6,23 @@ export const zhCN = defineI18n({
     makeInterest: '创造有趣的开发体验',
     slogan: '高可定制化的属性值，全量的 TypeScript，性能应该还不错',
     getStarted: '开始使用',
+    getComponents: '浏览组件',
+    changeColor: '换个主题色',
+    rollColor: '随机一个颜色，可能很奇怪',
+    resetColor: '重置主题色',
     guides: '指南',
     components: '组件',
     playground: '游乐场',
     searchComponent: '在 Vexip UI 中搜索组件',
     copyCode: '复制代码',
+    copySuccess: '复制成功',
+    copyFail: '复制失败',
     showCode: '展开代码',
     hideCode: '收起代码',
     editInGithub: '在 Github 中编辑',
-    editInPlayground: '在 Playground 中编辑'
+    editInPlayground: '在 Playground 中编辑',
+    pageNotFound: '页面不见了',
+    backHomepage: '返回首页'
   },
   alert: {
     info: '提示',
@@ -25,7 +33,9 @@ export const zhCN = defineI18n({
     introduction: '介绍',
     gettingStart: '快速上手',
     globalConfig: '全局配置',
-    styleConfig: '样式配置'
+    styleConfig: '样式配置',
+    nameOrigin: '为什么叫 Vexip？',
+    logoOrigin: 'Logo 的由来'
   },
   group: {
     basis: '基础',
@@ -40,6 +50,7 @@ export const zhCN = defineI18n({
     Button: '按钮',
     Icon: '图标',
     Linker: '链接',
+    Typography: '排版',
 
     Grid: '栅格布局',
     Divider: '分割线',
@@ -58,7 +69,7 @@ export const zhCN = defineI18n({
     Cascader: '联级选择器',
     Checkbox: '多选框',
     ColorPicker: '颜色选择器',
-    DatePicker: '日期选择框',
+    DatePicker: '日期选择器',
     Form: '表单',
     Input: '输入框',
     NumberInput: '数字输入框',
@@ -67,7 +78,7 @@ export const zhCN = defineI18n({
     Slider: '滑动输入条',
     Switch: '开关',
     Textarea: '多行输入框',
-    TimePicker: '时间选择框',
+    TimePicker: '时间选择器',
     Transfer: '穿梭框',
     Upload: '上传',
     Wheel: '滚轮',
@@ -102,6 +113,7 @@ export const zhCN = defineI18n({
     Progress: '进度条',
     Skeleton: '骨架屏',
     Spin: '加载中',
+    Toast: '吐司提示',
 
     ConfigProvider: '配置注入',
     Masker: '遮罩',

@@ -8,7 +8,16 @@
   @include basis;
   @include input.handler;
 
-  padding-right: 20px;
+  @at-root {
+    & {
+      padding-right: calc(get-css-var('input-v-padding') + 20px);
+    }
+  }
+
+  &__clear,
+  &__loading {
+    right: calc(get-css-var('input-v-padding') + 20px);
+  }
 
   &__plus,
   &__minus {
@@ -47,8 +56,8 @@
     border-top-width: 1px;
   }
 
-  &__icon--suffix,
-  &__clear {
-    right: 20px;
-  }
+  // &__icon--suffix,
+  // &__clear {
+  //   right: 20px;
+  // }
 }

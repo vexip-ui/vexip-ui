@@ -5,6 +5,7 @@
     :style="style"
     @mousedown="handleMouseDown"
     @touchstart="handleTouchStart"
+    @scroll="ensureScrollOffset"
     @wheel.exact="handleWheel($event, 'vertical')"
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
@@ -54,37 +55,13 @@
 import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick } from 'vue'
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanNumberProp,
-  classProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
-import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
-import { useScrollWrapper } from './mixins'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { USE_TOUCH, isElement, isTrue, createEventEmitter } from '@vexip-ui/utils'
+import { scrollProps } from './props'
+import { useScrollWrapper } from './hooks'
 
-import type { PropType } from 'vue'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode } from './symbol'
-
-interface ScrollPayload {
-  type: ScrollMode,
-  clientX: number,
-  clientY: number,
-  percentX: number,
-  percentY: number
-}
-
-interface BarScrollPayload {
-  type: 'vertical' | 'horizontal',
-  clientX: number,
-  clientY: number,
-  percentX: number,
-  percentY: number
-}
 
 const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
 
@@ -97,48 +74,14 @@ export default defineComponent({
     Scrollbar,
     ResizeObserver
   },
-  props: {
-    scrollClass: classProp,
-    mode: String as PropType<ScrollMode>,
-    width: [Number, String],
-    height: [Number, String],
-    deltaX: Number,
-    deltaY: Number,
-    disabled: booleanProp,
-    pointer: booleanProp,
-    wheel: booleanProp,
-    scrollX: Number,
-    scrollY: Number,
-    useXBar: booleanProp,
-    useYBar: booleanProp,
-    barFade: Number,
-    barClass: classProp,
-    autoplay: booleanNumberProp,
-    playWaiting: Number,
-    noBuffer: booleanProp,
-    noTransition: booleanProp,
-    onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
-    useBarTrack: booleanProp,
-    wrapperTag: String,
-    onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
-    onXEnabledChange: eventProp<(enabled: boolean) => void>(),
-    onYEnabledChange: eventProp<(enabled: boolean) => void>(),
-    onWheel: eventProp<(payload: BarScrollPayload & { sign: 1 | -1 }) => void>(),
-    onScrollStart: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
-    onScroll: eventProp<(payload: ScrollPayload) => void>(),
-    onScrollEnd: eventProp<(payload: Omit<ScrollPayload, 'type'>) => void>(),
-    onBarScrollStart: eventProp<(payload: BarScrollPayload) => void>(),
-    onBarScroll: eventProp<(payload: BarScrollPayload) => void>(),
-    onBarScrollEnd: eventProp<(payload: BarScrollPayload) => void>(),
-    onReady: eventProp()
-  },
+  props: scrollProps,
   emits: [],
   setup(_props) {
     const props = useProps('scroll', _props, {
       scrollClass: null,
       mode: {
-        default: 'vertical' as ScrollMode,
-        validator: (value: ScrollMode) => scrollModes.includes(value)
+        default: 'vertical',
+        validator: value => scrollModes.includes(value)
       },
       width: '',
       height: '',
@@ -239,9 +182,9 @@ export default defineComponent({
       }
     )
 
-    let playTimer: number
-    let startTimer: number
-    let endTimer: number
+    let playTimer: ReturnType<typeof setTimeout>
+    let startTimer: ReturnType<typeof setTimeout>
+    let endTimer: ReturnType<typeof setTimeout>
 
     onBeforeUnmount(stopAutoplay)
 
@@ -272,10 +215,10 @@ export default defineComponent({
           computePercent()
           syncBarScroll()
 
-          endTimer = window.setTimeout(() => {
+          endTimer = setTimeout(() => {
             scrollTo(0, 0, 500)
 
-            startTimer = window.setTimeout(() => {
+            startTimer = setTimeout(() => {
               canPlay.value = true
               scroll()
             }, 500 + waiting)
@@ -290,7 +233,7 @@ export default defineComponent({
         }
       }
 
-      playTimer = window.setTimeout(() => {
+      playTimer = setTimeout(() => {
         canPlay.value = true
         scroll()
       }, waiting)
@@ -299,9 +242,9 @@ export default defineComponent({
     function stopAutoplay() {
       canPlay.value = false
 
-      window.clearTimeout(playTimer)
-      window.window.clearTimeout(startTimer)
-      window.clearTimeout(endTimer)
+      clearTimeout(playTimer)
+      clearTimeout(startTimer)
+      clearTimeout(endTimer)
     }
     /* autoplay */
 
@@ -358,8 +301,8 @@ export default defineComponent({
       if (value) emitEvent(props.onReady)
     })
 
-    const xBar = ref<InstanceType<typeof Scrollbar> | null>(null)
-    const yBar = ref<InstanceType<typeof Scrollbar> | null>(null)
+    const xBar = ref<InstanceType<typeof Scrollbar>>()
+    const yBar = ref<InstanceType<typeof Scrollbar>>()
 
     function syncBarScroll() {
       xBar.value?.handleScroll(percentX.value)
@@ -536,16 +479,16 @@ export default defineComponent({
       startAutoplay()
     }
 
-    let bufferTimer: number
+    let bufferTimer: ReturnType<typeof setTimeout>
 
     function prepareScroll() {
       stopAutoplay()
-      window.clearTimeout(bufferTimer)
+      clearTimeout(bufferTimer)
     }
 
     function handleBuffer() {
       if (props.noBuffer) {
-        bufferTimer = window.setTimeout(() => {
+        bufferTimer = setTimeout(() => {
           scrolling.value = false
         }, 300)
       } else {
@@ -618,6 +561,13 @@ export default defineComponent({
         percentX: percentX.value,
         percentY: percentY.value
       })
+    }
+
+    function ensureScrollOffset() {
+      if (wrapperElement.value) {
+        wrapperElement.value.scrollTop = 0
+        wrapperElement.value.scrollLeft = 0
+      }
     }
 
     function scrollTo(clientX: number, clientY: number, duration?: number) {
@@ -693,7 +643,7 @@ export default defineComponent({
         el = contentElement.value.querySelector(el)!
       }
 
-      if (!(el instanceof Node)) return
+      if (!isElement(el)) return
 
       const wrapperRect = contentElement.value.getBoundingClientRect()
       const elRect = el.getBoundingClientRect()
@@ -710,6 +660,40 @@ export default defineComponent({
       }
 
       scrollTo(clientX, clientY, duration)
+    }
+
+    function ensureInView(el: string | Element, duration?: number, offset = 0) {
+      if (!wrapperElement.value) return
+
+      if (typeof el === 'string') {
+        el = wrapperElement.value.querySelector(el)!
+      }
+
+      if (!isElement(el)) return
+
+      const wrapperRect = wrapperElement.value.getBoundingClientRect()
+      const elRect = el.getBoundingClientRect()
+
+      let clientX = 0
+      let clientY = 0
+
+      if (props.mode !== 'vertical') {
+        if (elRect.left < wrapperRect.left + offset) {
+          clientX = elRect.left - wrapperRect.left - offset
+        } else if (elRect.right > wrapperRect.right - offset) {
+          clientX = elRect.right - wrapperRect.right + offset
+        }
+      }
+
+      if (props.mode !== 'horizontal') {
+        if (elRect.top < wrapperRect.top + offset) {
+          clientY = elRect.top - wrapperRect.top - offset
+        } else if (elRect.bottom > wrapperRect.bottom - offset) {
+          clientY = elRect.bottom - wrapperRect.bottom + offset
+        }
+      }
+
+      scrollBy(clientX, clientY, duration)
     }
 
     function addScrollListener(listener: EventHandler) {
@@ -750,6 +734,7 @@ export default defineComponent({
       handleBarScrollEnd,
       handleXBarScroll,
       handleYBarScroll,
+      ensureScrollOffset,
 
       refresh,
       scrollTo,
@@ -757,6 +742,7 @@ export default defineComponent({
       getXScrollLimit,
       getYScrollLimit,
       scrollToElement,
+      ensureInView,
       addScrollListener,
       removeScrollListener
     }

@@ -1,6 +1,14 @@
 [
   "basis",
   "validate",
+  "label",
+  "inline",
+  "size",
+  "help-tip",
+  "disabled",
+  "loading",
+  "dynamic",
+  "pure",
   "native",
-  "disabled"
+  "layout"
 ]

@@ -1,0 +1,45 @@
+{
+  "name": "@vexip-ui/hooks",
+  "version": "1.8.0",
+  "license": "MIT",
+  "author": "qmhc",
+  "scripts": {
+    "build": "vite build"
+  },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "private": false,
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/hooks#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vexip-ui/vexip-ui.git",
+    "directory": "common/hooks"
+  },
+  "dependencies": {
+    "@juggle/resize-observer": "^3.4.0",
+    "@popperjs/core": "^2.11.6",
+    "@vexip-ui/utils": "workspace:^"
+  },
+  "devDependencies": {
+    "vite": "^3.1.4",
+    "vite-plugin-dts": "^1.6.6",
+    "vue": "^3.2.41"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.25"
+  }
+}

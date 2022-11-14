@@ -1,17 +1,15 @@
 import type { InjectionKey } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
-import type { TooltipTheme } from '@/components/tooltip'
 
 export type MenuMarkerType = 'top' | 'right' | 'bottom' | 'left' | 'none'
 export type MenuGroupType = 'collapse' | 'dropdown'
-export type MenuTheme = 'light' | 'dark'
 
 export interface MenuOptions {
   label: string,
-  icon?: Record<string, any>,
+  icon?: Record<string, any> | (() => any),
   iconProps?: IconMinorProps,
-  name?: string,
+  name?: string | (() => string),
   disabled?: boolean,
   group?: boolean,
   meta?: Record<string, any>,
@@ -20,13 +18,15 @@ export interface MenuOptions {
 }
 
 export interface MenuItemState {
-  el: HTMLElement | null,
-  label: string,
-  indent: number,
+  el: Readonly<HTMLElement | null | undefined>,
+  label: Readonly<string>,
+  indent: Readonly<number>,
   groupExpanded: boolean,
-  isUsePopper: boolean,
+  showGroup: Readonly<boolean>,
+  isUsePopper: Readonly<boolean>,
   parentState: MenuItemState | null,
-  transfer: boolean | string,
+  transfer: Readonly<boolean | string>,
+  cachedExpanded: boolean,
   updateSonSelected(selected: boolean): void,
   toggleGroupExpanded(expanded: boolean, upword?: boolean): void,
   handleMouseEnter(): void,
@@ -41,16 +41,21 @@ export interface MenuState {
   horizontal: boolean,
   accordion: boolean,
   groupType: MenuGroupType,
-  theme: MenuTheme,
-  tooltipTheme: TooltipTheme,
+  tooltipReverse: boolean,
   currentActive: string,
   isReduced: boolean,
   transfer: boolean | string,
   trigger: 'hover' | 'click',
+  markerType: MenuMarkerType,
   handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw): void,
   handleExpand(label: string, expanded: boolean, meta: Record<string, any>): void,
   increaseItem(state: MenuItemState): void,
-  decreaseItem(state: MenuItemState): void
+  decreaseItem(state: MenuItemState): void,
+  beforeExpand(): void
+}
+
+export interface MenuExposed {
+  expandItemByLabel: (label: string) => void
 }
 
 export const baseIndentWidth = 20 // px

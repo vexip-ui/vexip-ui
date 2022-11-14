@@ -9,31 +9,17 @@ import {
   nextTick,
   provide
 } from 'vue'
-import MenuRest from './menu-rest'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
 import { Overflow } from '@/components/overflow'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { callIfFunc } from '@vexip-ui/utils'
+import MenuRest from './menu-rest'
+import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { Router, RouteRecordRaw, RouteLocationRaw } from 'vue-router'
-import type { TooltipTheme } from '@/components/tooltip'
-import type {
-  MenuOptions,
-  MenuMarkerType,
-  MenuGroupType,
-  MenuTheme,
-  MenuItemState,
-  MenuState
-} from './symbol'
+import type { RouteRecordRaw, RouteLocationRaw } from 'vue-router'
+import type { MenuOptions, MenuMarkerType, MenuGroupType, MenuItemState, MenuState } from './symbol'
 
 const menuMarkerTypes = Object.freeze<MenuMarkerType>(['top', 'right', 'bottom', 'left', 'none'])
 
@@ -45,26 +31,9 @@ export default defineComponent({
     MenuGroup,
     Overflow
   },
-  props: {
-    active: String,
-    accordion: booleanProp,
-    markerType: String as PropType<MenuMarkerType>,
-    reduced: booleanProp,
-    horizontal: booleanProp,
-    transfer: booleanStringProp,
-    trigger: String as PropType<'hover' | 'click'>,
-    groupType: String as PropType<MenuGroupType>,
-    theme: String as PropType<MenuTheme>,
-    tooltipTheme: String as PropType<TooltipTheme>,
-    options: Array as PropType<MenuOptions[]>,
-    router: Object as PropType<Router>,
-    manualRoute: booleanProp,
-    onSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
-    onExpand: eventProp<(label: string, meta: Record<string, any>) => void>(),
-    onReduce: eventProp<(label: string, meta: Record<string, any>) => void>()
-  },
+  props: menuProps,
   emits: ['update:active'],
-  setup(_props, { slots, emit }) {
+  setup(_props, { slots, emit, expose }) {
     const props = useProps('menu', _props, {
       active: {
         default: null,
@@ -73,7 +42,7 @@ export default defineComponent({
       accordion: false,
       markerType: {
         default: 'right' as MenuMarkerType,
-        validator: (value: MenuMarkerType) => menuMarkerTypes.includes(value)
+        validator: value => menuMarkerTypes.includes(value)
       },
       reduced: false,
       horizontal: false,
@@ -83,14 +52,7 @@ export default defineComponent({
         default: 'collapse' as MenuGroupType,
         validator: (value: MenuGroupType) => ['collapse', 'dropdown'].includes(value)
       },
-      theme: {
-        default: 'light' as MenuTheme,
-        validator: (value: MenuTheme) => ['light', 'dark'].includes(value)
-      },
-      tooltipTheme: {
-        default: 'dark' as TooltipTheme,
-        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
-      },
+      tooltipReverse: null,
       options: {
         default: () => [],
         static: true
@@ -104,28 +66,26 @@ export default defineComponent({
     const currentActive = ref(props.active)
     const isReduced = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const rest = ref<InstanceType<typeof MenuRest> | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const rest = ref<InstanceType<typeof MenuRest>>()
 
-    const className = computed(() => {
-      let computedMarkerType
-
+    const markerType = computed(() => {
       if (props.horizontal && (props.markerType === 'left' || props.markerType === 'right')) {
-        computedMarkerType = 'bottom'
+        return 'bottom'
       } else if (
         !props.horizontal &&
         (props.markerType === 'top' || props.markerType === 'bottom')
       ) {
-        computedMarkerType = 'right'
+        return 'right'
       } else {
-        computedMarkerType = props.markerType ?? (props.horizontal ? 'bottom' : 'right')
+        return props.markerType ?? (props.horizontal ? 'bottom' : 'right')
       }
-
+    })
+    const className = computed(() => {
       return [
         nh.b(),
         nh.bs('vars'),
-        nh.bm(props.theme),
-        nh.bm(`marker-${computedMarkerType}`),
+        nh.bm(`marker-${markerType.value}`),
         {
           [nh.bm('reduced')]: isReduced.value,
           [nh.bm('dropdown')]: props.groupType === 'dropdown',
@@ -156,14 +116,21 @@ export default defineComponent({
         horizontal: toRef(props, 'horizontal'),
         accordion: toRef(props, 'accordion'),
         groupType: toRef(props, 'groupType'),
-        theme: toRef(props, 'theme'),
-        tooltipTheme: toRef(props, 'tooltipTheme'),
+        tooltipReverse: toRef(props, 'tooltipReverse'),
         transfer: toRef(props, 'transfer'),
         trigger: toRef(props, 'trigger'),
+        markerType,
         handleSelect,
         handleExpand,
         increaseItem,
-        decreaseItem
+        decreaseItem,
+        beforeExpand: () => {
+          if (props.accordion) {
+            for (const item of menuItemSet) {
+              item.groupExpanded = false
+            }
+          }
+        }
       })
     )
 
@@ -199,13 +166,15 @@ export default defineComponent({
       })
     })
 
+    expose({ expandItemByLabel })
+
     function parseRoutesToMenus(routes: Readonly<RouteRecordRaw[]>) {
       const root: MenuOptions = { label: '', children: [] }
       const loop = Array.from(routes).map(route => ({ parent: root, route }))
 
       while (loop.length) {
         const { parent, route } = loop.shift()!
-        const routeMeta = route.meta || {}
+        const routeMeta = (route.meta || {}) as any
 
         if (routeMeta.menu === false) {
           continue
@@ -267,28 +236,16 @@ export default defineComponent({
       let firstExpandedItem: MenuItemState | null = null
 
       for (const item of menuItemSet) {
-        if (!firstExpandedItem && item.groupExpanded) {
+        item.cachedExpanded = item.showGroup
+
+        if (!firstExpandedItem && item.showGroup) {
           firstExpandedItem = item
         }
 
         item.toggleGroupExpanded(false)
       }
 
-      const handler = () => {
-        isReduced.value = true
-      }
-
-      if (firstExpandedItem?.el) {
-        const el = firstExpandedItem.el
-        const callback = () => {
-          nextTick(handler)
-          el.removeEventListener('transitionend', callback)
-        }
-
-        el.addEventListener('transitionend', callback)
-      } else {
-        handler()
-      }
+      isReduced.value = true
     }
 
     function handleMenuExpand() {
@@ -299,23 +256,41 @@ export default defineComponent({
       if (wrapper.value) {
         const el = wrapper.value
         const callback = () => {
-          const selectedItem = Array.from(menuItemSet).find(
-            item => item.label === currentActive.value
-          )
+          requestAnimationFrame(() => {
+            el.removeEventListener('transitionend', callback)
 
-          if (selectedItem) {
-            let parent = selectedItem.parentState
+            const selectedItem = Array.from(menuItemSet).find(
+              item => item.label === currentActive.value
+            )
 
-            while (parent) {
-              parent.groupExpanded = true
-              parent = parent.parentState
-            }
-          }
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                for (const item of menuItemSet) {
+                  item.groupExpanded = item.cachedExpanded
+                }
 
-          el.removeEventListener('transitionend', callback)
+                if (selectedItem) {
+                  let parent = selectedItem.parentState
+
+                  while (parent) {
+                    parent.groupExpanded = true
+                    parent = parent.parentState
+                  }
+                }
+              })
+            })
+          })
         }
 
         el.addEventListener('transitionend', callback)
+      }
+    }
+
+    function expandItemByLabel(label: string) {
+      for (const item of menuItemSet) {
+        if (item.label === label) {
+          item.toggleGroupExpanded(true, true)
+        }
       }
     }
 
@@ -329,7 +304,7 @@ export default defineComponent({
           children={item.children}
           route={item.route}
         >
-          {item.name || item.label}
+          {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
       )
     }
@@ -338,7 +313,7 @@ export default defineComponent({
       return menus.value.map(menu =>
         menu.group
           ? (
-          <MenuGroup label={menu.name || menu.label}>
+          <MenuGroup label={menu.name ? callIfFunc(menu.name) : menu.label}>
             {menu.children?.length ? menu.children.map(renderMenuItem) : null}
           </MenuGroup>
             )
@@ -348,20 +323,16 @@ export default defineComponent({
       )
     }
 
-    function getCounter() {
-      return rest.value?.$el
-    }
-
     return () => {
       return (
-        <ul ref={wrapper} class={className.value} role={'menu'} tabindex={0}>
+        <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1}>
           {slots.default
             ? (
                 slots.default()
               )
             : props.horizontal
               ? (
-            <Overflow get-counter={getCounter}>
+            <Overflow>
               {{
                 default: renderMenus,
                 counter: ({ count }: { count: number }) => (

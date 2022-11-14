@@ -5,16 +5,8 @@
   <p>切换加载中状态：<Switch v-model:value="active"></Switch></p>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const active = ref(true)
-
-    return {
-      active
-    }
-  }
-})
+const active = ref(true)
 </script>

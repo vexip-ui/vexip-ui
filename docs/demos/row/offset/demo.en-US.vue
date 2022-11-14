@@ -10,8 +10,6 @@
         span-8 offset-8
       </div>
     </Column>
-  </Row>
-  <Row :gap="[16, 24]">
     <Column :span="6" :offset="6">
       <div class="content">
         span-6 offset-6

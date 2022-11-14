@@ -1,21 +1,9 @@
 <template>
-  <Tag
-    v-for="type in tags"
-    :key="type"
-    :type="type"
-  >
+  <Tag v-for="tagType in tags" :key="tagType" :type="tagType">
     Tag
   </Tag>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  setup() {
-    return {
-      tags: ['default', 'info', 'primary', 'success', 'error', 'warning'] as const
-    }
-  }
-})
+<script setup lang="ts">
+const tags = ['default', 'info', 'primary', 'success', 'error', 'warning'] as const
 </script>

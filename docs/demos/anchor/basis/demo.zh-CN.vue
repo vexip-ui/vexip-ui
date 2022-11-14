@@ -1,5 +1,5 @@
 <template>
-  <Anchor>
+  <Anchor active="#api">
     <AnchorLink to="#基础用法">
       基础用法
     </AnchorLink>

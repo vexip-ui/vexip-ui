@@ -1,0 +1,33 @@
+name: Others
+
+description: Create an issue for Vexip UI
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in the project and taking the time to create this issue!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Clear and concise description of the issue. Thanks!
+      placeholder: There are some thing I want to ...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checkboxes
+    attributes:
+      label: Validations
+      description: Before submitting the issue, please make sure you do the following
+      options:
+        - label: Ensure this issue neither a bug report nor a feature proposal.
+          required: true
+        - label: Read the [Contributing Guidelines](https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md).
+          required: true
+        - label: Read the [docs](https://www.vexipui.com/).
+          required: true
+        - label: Check that there isn't [already an issue](https://github.com/vexip-ui/vexip-ui/issues) that descript the same thing to avoid creating a duplicate.
+          required: true

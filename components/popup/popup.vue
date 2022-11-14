@@ -1,5 +1,5 @@
 <template>
-  <div :class="nh.b()">
+  <div :class="[nh.b(), nh.bm(placement)]">
     <PopupItem
       v-for="item in items"
       :key="item.key"
@@ -37,13 +37,13 @@ const popupPlacements = Object.freeze<PopupPlacement>([
 
 type QueneState =
   | {
-      type: 'add',
-      param: Record<string, unknown>
-    }
+    type: 'add',
+    param: Record<string, unknown>
+  }
   | {
-      type: 'clear',
-      param: Key
-    }
+    type: 'clear',
+    param: Key
+  }
 
 let globalIndex = 0
 
@@ -83,7 +83,7 @@ export default defineComponent({
     const items = ref<PopupItemState[]>([])
     const queue: QueneState[] = []
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     let pending = false
 
@@ -132,8 +132,8 @@ export default defineComponent({
         })
 
         if (!pending) {
-          queueOut()
           pending = true
+          queueOut()
         }
       })
     }
@@ -157,8 +157,8 @@ export default defineComponent({
         })
 
         if (!pending) {
-          queueOut()
           pending = true
+          queueOut()
         }
       })
     }
@@ -173,9 +173,7 @@ export default defineComponent({
           removeItem(state.param)
         }
 
-        requestAnimationFrame(() => {
-          queueOut()
-        })
+        requestAnimationFrame(queueOut)
       } else {
         pending = false
       }

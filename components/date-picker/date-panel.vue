@@ -141,11 +141,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
+import TimeWheel from './time-wheel.vue'
 import { Button } from '@/components/button'
 import { CalendarPanel } from '@/components/calendar-panel'
 import { Icon } from '@/components/icon'
-import TimeWheel from './time-wheel.vue'
-import { useHover } from '@vexip-ui/mixins'
+import { useHover } from '@vexip-ui/hooks'
 import { useNameHelper, useLocale } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
 import { AngleRight, AngleLeft, AnglesRight, AnglesLeft } from '@vexip-ui/icons'
@@ -247,7 +247,7 @@ export default defineComponent({
     const hoveredMonth = ref(0) // 0 = false
     const yearRange = ref<number[]>([])
 
-    const calendar = ref<HTMLElement | null>(null)
+    const calendar = ref<HTMLElement>()
 
     const { isHover } = useHover(calendar)
 

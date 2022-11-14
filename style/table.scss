@@ -15,9 +15,7 @@ $table: map.merge(
     b-color: get-css-var('border-color-base'),
     b-width: get-css-var('border-width'),
     b-style: get-css-var('border-style'),
-    b-shape: get-css-var('table-b-width') get-css-var('table-b-style'),
     s-color: get-css-var('shadow-color-base'),
-    border: get-css-var('table-b-shape') get-css-var('table-b-color'),
     head-bg-color: get-css-var('fill-color-humble'),
     row-bg-color: transparent,
     row-bg-color-hover: get-css-var('color-primary-opacity-8'),
@@ -50,7 +48,7 @@ $table: map.merge(
     @include define-preset-values('table', $table);
   }
 
-  $border-a: get-css-var('table-b-shape');
+  $border-a: get-css-var('table-b-width') get-css-var('table-b-style');
 
   @include basis;
 
@@ -78,7 +76,7 @@ $table: map.merge(
   }
 
   &__body-wrapper {
-    border-bottom: get-css-var('table-border');
+    border-bottom: $border-a get-css-var('table-b-color');
   }
 
   &__row-list {
@@ -184,6 +182,10 @@ $table: map.merge(
     #{$row} {
       background-color: transparent;
     }
+  }
+
+  &--transparent &__body {
+    background-color: transparent;
   }
 
   &--transparent:not(#{&}--border) {

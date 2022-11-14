@@ -9,8 +9,9 @@
       :autocomplete="props.autocomplete ? 'on' : 'off'"
       :spellcheck="props.spellcheck"
       :disabled="props.disabled"
-      :readonly="props.readonly"
+      :readonly="isReadonly"
       :placeholder="props.placeholder ?? locale.placeholder"
+      :maxlength="props.maxLength > 0 ? props.maxLength : undefined"
       @blur="handleBlur"
       @focus="handleFocus"
       @keyup.enter="handleEnter"
@@ -20,54 +21,43 @@
       @input="handleInput"
       @change="handleChange"
     ></textarea>
-    <div v-if="props.maxLength" :class="nh.be('count')">
-      {{ `${currentLength}/${props.maxLength}` }}
+    <div :class="nh.be('extra')">
+      <transition :name="nh.ns('fade')" appear>
+        <div v-if="props.loading" :class="nh.be('loading')">
+          <Icon
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+          ></Icon>
+        </div>
+      </transition>
+      <div v-if="props.maxLength > 0" :class="nh.be('count')">
+        <slot name="count" :value="currentValue">
+          {{ `${currentLength}/${props.maxLength}` }}
+        </slot>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
+import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  stateProp,
-  createStateProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
-import { throttle } from '@vexip-ui/utils'
+import { Spinner } from '@vexip-ui/icons'
+import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
+import { throttle, debounce } from '@vexip-ui/utils'
+import { textareaProps } from './props'
 
 export default defineComponent({
   name: 'Textarea',
-  props: {
-    state: stateProp,
-    value: String,
-    placeholder: String,
-    rows: Number,
-    noResize: booleanProp,
-    autofocus: booleanProp,
-    spellcheck: booleanProp,
-    autocomplete: booleanProp,
-    readonly: booleanProp,
-    disabled: booleanProp,
-    debounce: booleanProp,
-    maxLength: Number,
-    onFocus: eventProp<(event: FocusEvent) => void>(),
-    onBlur: eventProp<(event: FocusEvent) => void>(),
-    onInput: eventProp<(value: string) => void>(),
-    onChange: eventProp<(value: string) => void>(),
-    onEnter: eventProp(),
-    onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
-    onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
-    onKeyUp: eventProp<(event: KeyboardEvent) => void>()
+  components: {
+    Icon
   },
+  props: textareaProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
       useFieldStore<string>(() => textarea.value?.focus())
 
     const props = useProps('textarea', _props, {
@@ -85,7 +75,12 @@ export default defineComponent({
       readonly: false,
       disabled: () => disabled.value,
       debounce: false,
-      maxLength: 0
+      maxLength: 0,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false,
+      sync: false
     })
 
     const nh = useNameHelper('textarea')
@@ -93,9 +88,8 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const currentLength = ref(props.value ? props.value.length : 0)
 
-    const textarea = ref<HTMLElement | null>(null)
+    const textarea = ref<HTMLElement>()
 
-    // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
 
     const className = computed(() => {
@@ -105,9 +99,13 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bm('focused')]: focused.value,
         [nh.bm('disabled')]: props.disabled,
+        [nh.bm('loading')]: props.loading && props.loadingLock,
         [nh.bm('no-resize')]: props.noResize,
         [nh.bm(props.state)]: props.state !== 'default'
       }
+    })
+    const isReadonly = computed(() => {
+      return (props.loading && props.loadingLock) || props.readonly
     })
 
     watch(
@@ -148,10 +146,18 @@ export default defineComponent({
 
         setFieldValue(currentValue.value)
         emitEvent(props.onChange, currentValue.value)
-        emit('update:value', currentValue.value)
-        validateField()
+
+        if (!props.sync) {
+          emit('update:value', currentValue.value)
+          validateField()
+        }
       } else {
         emitEvent(props.onInput, currentValue.value)
+
+        if (props.sync) {
+          emit('update:value', currentValue.value)
+          validateField()
+        }
       }
     }
 
@@ -199,12 +205,13 @@ export default defineComponent({
       currentLength,
 
       className,
+      isReadonly,
 
       textarea,
 
       handleFocus,
       handleBlur,
-      handleInput: throttle(handleChange),
+      handleInput: props.debounce ? debounce(handleChange) : throttle(handleChange),
       handleChange,
       handleEnter,
       handleKeyDown,

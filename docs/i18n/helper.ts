@@ -4,15 +4,23 @@ export interface I18nConfig {
     makeInterest: string,
     slogan: string,
     getStarted: string,
+    getComponents: string,
+    changeColor: string,
+    rollColor: string,
+    resetColor: string,
     guides: string,
     components: string,
     playground: string,
     searchComponent: string,
     copyCode: string,
+    copySuccess: string,
+    copyFail: string,
     showCode: string,
     hideCode: string,
     editInGithub: string,
-    editInPlayground: string
+    editInPlayground: string,
+    pageNotFound: string,
+    backHomepage: string
   },
   alert: {
     info: string,
@@ -23,7 +31,9 @@ export interface I18nConfig {
     introduction: string,
     gettingStart: string,
     globalConfig: string,
-    styleConfig: string
+    styleConfig: string,
+    nameOrigin: string,
+    logoOrigin: string
   },
   group: {
     basis: string,
@@ -38,6 +48,7 @@ export interface I18nConfig {
     Button: string,
     Icon: string,
     Linker: string,
+    Typography: string,
 
     Grid: string,
     Divider: string,
@@ -100,6 +111,7 @@ export interface I18nConfig {
     Progress: string,
     Skeleton: string,
     Spin: string,
+    Toast: string,
 
     ConfigProvider: string,
     Masker: string,

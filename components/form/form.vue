@@ -1,41 +1,43 @@
 <template>
-  <form :class="className" :method="props.action && props.method" :action="props.action">
+  <Row
+    v-bind="$attrs"
+    :class="className"
+    tag="form"
+    :method="props.action && props.method"
+    :action="props.action"
+    :gap="props.gap"
+    :justify="props.justify"
+    :align="props.align"
+    :column-flex="undefined"
+  >
     <slot></slot>
-  </form>
+  </Row>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide } from 'vue'
-import { useNameHelper, useProps, booleanProp } from '@vexip-ui/config'
+import { Row } from '@/components/row'
+import { useNameHelper, useProps, createSizeProp } from '@vexip-ui/config'
+import { formProps } from './props'
 import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
-import type { PropType } from 'vue'
-import type { LabelPosition, SubmitMethod, FieldOptions } from './symbol'
+import type { FormLabelAlign, SubmitMethod, FieldOptions } from './symbol'
 
 const submitMethods = Object.freeze<SubmitMethod>(['get', 'post', 'put', 'delete'])
-const labelPropstions = Object.freeze<LabelPosition>(['right', 'top', 'left'])
+const labelAligns = Object.freeze<FormLabelAlign>(['right', 'top', 'left'])
 
 export default defineComponent({
   name: 'Form',
-  props: {
-    method: String as PropType<SubmitMethod>,
-    action: String,
-    model: Object,
-    rules: Object,
-    labelWidth: Number,
-    labelPosition: String as PropType<LabelPosition>,
-    allRequired: booleanProp,
-    labelSuffix: String,
-    hideAsterisk: booleanProp,
-    validateAll: booleanProp,
-    hideLabel: booleanProp,
-    disabled: booleanProp
+  components: {
+    Row
   },
+  inheritAttrs: true,
+  props: formProps,
   setup(_props) {
     const props = useProps('form', _props, {
       method: {
-        default: 'post' as SubmitMethod,
-        validator: (value: SubmitMethod) => submitMethods.includes(value)
+        default: 'post',
+        validator: value => submitMethods.includes(value)
       },
       action: null,
       model: {
@@ -43,29 +45,49 @@ export default defineComponent({
         static: true
       },
       rules: () => ({}),
-      labelWidth: 80,
-      labelPosition: {
-        default: 'right' as LabelPosition,
-        validator: (value: LabelPosition) => labelPropstions.includes(value)
+      labelWidth: 'auto',
+      labelAlign: {
+        default: 'right',
+        validator: value => labelAligns.includes(value)
       },
       allRequired: false,
       labelSuffix: '',
       hideAsterisk: false,
       validateAll: false,
       hideLabel: false,
-      disabled: false
+      disabled: false,
+      loading: false,
+      size: createSizeProp(),
+      inline: false,
+      gap: [8, 0],
+      justify: 'start',
+      align: 'top'
     })
 
     const nh = useNameHelper('form')
     const fieldSet = reactive(new Set<FieldOptions>())
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars'), nh.bm(`label-${props.labelPosition}`)]
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(`label-${props.labelAlign}`),
+        {
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading,
+          [nh.bm(props.size)]: props.size !== 'default',
+          [nh.bm('inline')]: props.inline
+        }
+      ]
+    })
+    const labelWidth = computed(() => {
+      return Math.max(...Array.from(fieldSet).map(field => field.labelWidth.value))
     })
 
     provide(FORM_PROPS, props)
     provide(FORM_FIELDS, fieldSet)
     provide(FORM_ACTIONS, {
+      getLabelWidth,
       validate,
       validateFields,
       reset,
@@ -73,6 +95,14 @@ export default defineComponent({
       clearError,
       clearFieldsError
     })
+
+    function getLabelWidth() {
+      if (typeof props.labelWidth === 'number') {
+        return props.labelWidth
+      }
+
+      return labelWidth.value
+    }
 
     function getPropMap() {
       const propMap: Record<string, FieldOptions> = {}

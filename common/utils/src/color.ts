@@ -1,3 +1,5 @@
+import { isDefined } from './common'
+
 interface RGB {
   r: number,
   g: number,
@@ -271,7 +273,9 @@ export const NAMED_COLORS = Object.freeze({
 
 export type ColorName = keyof typeof NAMED_COLORS
 
-export const COLOR_NAMES = Object.freeze(new Set(Object.keys(NAMED_COLORS))) as Readonly<Set<ColorName>>
+export const COLOR_NAMES = Object.freeze(new Set(Object.keys(NAMED_COLORS))) as Readonly<
+  Set<ColorName>
+>
 
 /**
  * 判断给定的字符串是否为一个合法颜色值
@@ -329,7 +333,13 @@ export function parseStringColor(color: string) {
   if ((match = RGB_REG.exec(color))) {
     const { r, g, b } = normalizeRgb(match[1], match[2], match[3])
 
-    return { r: r * 255, g: g * 255, b: b * 255, format: 'rgb', toString: toRgbString } as ObjectColor
+    return {
+      r: r * 255,
+      g: g * 255,
+      b: b * 255,
+      format: 'rgb',
+      toString: toRgbString
+    } as ObjectColor
   }
 
   if ((match = RGBA_REG.exec(color))) {
@@ -755,9 +765,10 @@ export function mixColor(color1: Color, color2: Color, weight = 0.5) {
   const normalizedWeight = originalWeight * 2 - 1
 
   const alphaDistance = rgba1.a - rgba2.a
-  const mixWeight = normalizedWeight * alphaDistance === -1
-    ? normalizedWeight
-    : (normalizedWeight + alphaDistance) / (1 + normalizedWeight * alphaDistance)
+  const mixWeight =
+    normalizedWeight * alphaDistance === -1
+      ? normalizedWeight
+      : (normalizedWeight + alphaDistance) / (1 + normalizedWeight * alphaDistance)
   const weight1 = (mixWeight + 1) / 2
   const weight2 = 1 - weight1
 
@@ -777,6 +788,32 @@ export function adjustAlpha(color: Color, alpha: number | string) {
   rgba.a = normalizeAlpha(isPercentage(alpha) ? parsePercentage(alpha) : alpha)
 
   return rgba
+}
+
+export function randomColor(withAlpha = false, type: 'hex' | 'rgb' | 'hsv' | 'hsl' = 'hex') {
+  const r = Math.round(Math.random() * 255)
+  const g = Math.round(Math.random() * 255)
+  const b = Math.round(Math.random() * 255)
+
+  if (type === 'hex') {
+    return withAlpha ? rgbaToHex(r, g, b, Math.random()) : rgbToHex(r, g, b)
+  }
+
+  let color: ObjectColor
+
+  if (type === 'hsl') {
+    color = rgbToHsl(r, g, b)
+  } else if (type === 'hsv') {
+    color = rgbToHsv(r, g, b)
+  } else {
+    color = { r, g, b }
+  }
+
+  if (withAlpha) {
+    (color as RGBAColor).a = Math.random()
+  }
+
+  return color.toString()
 }
 
 function repairDigits(str: string) {
@@ -824,7 +861,7 @@ function parsePercentage(percent: number | string): number {
 }
 
 function toRgbString(this: RGB) {
-  if (this.a && this.a >= 0 && this.a < 1) {
+  if (isDefined(this.a) && this.a >= 0 && this.a < 1) {
     return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`
   }
 
@@ -832,7 +869,7 @@ function toRgbString(this: RGB) {
 }
 
 function toHslString(this: HSL) {
-  if (this.a && this.a >= 0 && this.a < 1) {
+  if (isDefined(this.a) && this.a >= 0 && this.a < 1) {
     return `hsla(${this.h}, ${this.s}, ${this.l}, ${this.a})`
   }
 
@@ -840,7 +877,7 @@ function toHslString(this: HSL) {
 }
 
 function toHsvString(this: HSV) {
-  if (this.a && this.a >= 0 && this.a < 1) {
+  if (isDefined(this.a) && this.a >= 0 && this.a < 1) {
     return `hsva(${this.h}, ${this.s}, ${this.v}, ${this.a})`
   }
 

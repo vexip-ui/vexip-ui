@@ -60,7 +60,7 @@
             [nh.bem('label', 'is-floor')]: floorSelect && node.children?.length,
             [nh.bem('label', 'secondary')]: secondary
           }"
-          @click="handleToggleSelect()"
+          @click="handleLabelClick()"
         >
           <Renderer
             v-if="renderer"
@@ -139,7 +139,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/mixins'
+import { useModifier } from '@vexip-ui/hooks'
 import { isNull, noop } from '@vexip-ui/utils'
 import { ChevronRight, Spinner } from '@vexip-ui/icons'
 import { TREE_STATE, TREE_NODE_STATE } from './symbol'
@@ -255,8 +255,8 @@ export default defineComponent({
 
     const nh = useNameHelper('tree')
 
-    const nodeElement = ref<HTMLElement | null>(null)
-    const arrowElement = ref<HTMLElement | null>(null)
+    const nodeElement = ref<HTMLElement>()
+    const arrowElement = ref<HTMLElement>()
 
     useModifier({
       target: nodeElement,
@@ -420,7 +420,7 @@ export default defineComponent({
     function handleToggleSelect(able = !props.selected) {
       if (isDisabled.value) return
 
-      if (props.floorSelect && props.node.children?.length) {
+      if (props.floorSelect) {
         return handleToggleExpand()
       }
 
@@ -431,6 +431,11 @@ export default defineComponent({
       } else {
         treeState.handleNodeCancel(props.node)
       }
+    }
+
+    function handleLabelClick() {
+      treeState.handleLabelClick(props.node)
+      handleToggleSelect()
     }
 
     function asyncLoadCallback(success = true) {
@@ -520,6 +525,7 @@ export default defineComponent({
       handleToggleCheck,
       handleToggleExpand,
       handleToggleSelect,
+      handleLabelClick,
       handleDragStart,
       handleDragOver,
       handleDragLeave,

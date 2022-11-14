@@ -2,16 +2,18 @@ import type { ComponentPublicInstance } from 'vue'
 
 export type ConfirmType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
 
-export interface ConfirmOptions extends Record<string, unknown> {
+export interface ConfirmOptions extends Record<string, any> {
   content?: string,
   confirmType?: ConfirmType,
   confirmText?: string,
   cancelText?: string,
-  icon?: Record<string, unknown> | (() => any) | null,
+  icon?: Record<string, any> | (() => any) | null,
   iconColor?: string,
-  style?: Record<string, any>,
+  className?: string | Record<string, any>,
+  style?: string | Record<string, any>,
   maskClose?: boolean,
-  renderer?: () => any,
+  parseHtml?: boolean,
+  renderer?: (options: ConfirmOptions) => any,
   onBeforeConfirm?: () => unknown
 }
 

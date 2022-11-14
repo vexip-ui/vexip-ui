@@ -1,25 +1,32 @@
-import { resolve } from 'path'
-import { readdirSync, statSync, existsSync, writeFileSync } from 'fs-extra'
+import { resolve } from 'node:path'
+import fs from 'fs-extra'
 import minimist from 'minimist'
-import { resolveConfig, format } from 'prettier'
-import { logger, run, specifyComponent } from './utils'
+import { format } from 'prettier'
+import { rootDir, prettierConfig, logger, run, specifyComponent } from './utils'
 
-const args = minimist(process.argv.slice(2))
+const { readdirSync, statSync, existsSync, writeFileSync } = fs
+
+const args = minimist<{
+  s?: boolean,
+  sourcemap?: boolean,
+  p?: string,
+  port?: string,
+  prod?: boolean,
+  l?: string,
+  lang?: string,
+  t?: boolean,
+  theme?: boolean
+}>(process.argv.slice(2))
 
 const sourceMap = args.sourcemap || args.s
-const port = args.port || args.p || 8008
+const port = args.port || args.p || '8008'
 const prodMode = args.prod
 const lang = args.lang || args.l
 const theme = args.theme || args.t
 
-const langs = ['zh-CN']
+const langs = ['zh-CN', 'en-US']
 
-const devDir = resolve(__dirname, '../dev-server')
-
-main().catch(error => {
-  logger.error(error)
-  process.exit(1)
-})
+const devDir = resolve(rootDir, 'dev-server')
 
 async function main() {
   if (theme) {
@@ -30,14 +37,14 @@ async function main() {
 }
 
 async function serveComponent() {
-  const demosDir = resolve(__dirname, '../docs/demos')
+  const demosDir = resolve(rootDir, 'docs/demos')
   const targets = readdirSync(demosDir).filter(f => statSync(resolve(demosDir, f)).isDirectory())
 
   const target = await specifyComponent(args, targets)
 
   logger.withBothLn(() => logger.success(`matched target: ${target}`))
 
-  const matchedLang = langs.find(l => l === lang || l.startsWith(lang)) || 'zh-CN'
+  const matchedLang = lang ? langs.find(l => l === lang || l.startsWith(lang)) || 'zh-CN' : 'zh-CN'
   const demos = queryDemos(target, matchedLang)
 
   const router = `
@@ -52,7 +59,7 @@ async function serveComponent() {
           return `{
             path: '${index ? `/${demo}` : '/'}',
             name: '${demo}',
-            component: () => import('../docs/demos/${target}/${demo}/demo.${matchedLang}.vue')
+            component: () => import('../../docs/demos/${target}/${demo}/demo.${matchedLang}.vue')
           }`
         }).join(',\n')},
         {
@@ -68,8 +75,8 @@ async function serveComponent() {
   `
 
   writeFileSync(
-    resolve(devDir, 'router.ts'),
-    format(router, { ...(await resolveConfig(resolve('.prettierrc.js'))), parser: 'typescript' }),
+    resolve(devDir, 'router', `port-${port}.ts`),
+    format(router, { ...prettierConfig, parser: 'typescript' }),
     'utf-8'
   )
 
@@ -101,9 +108,14 @@ async function serveTheme() {
 }
 
 function queryDemos(target: string, lang: string) {
-  const dir = resolve(__dirname, '../docs/demos', target)
+  const dir = resolve(rootDir, 'docs/demos', target)
 
   return readdirSync(dir).filter(
     f => statSync(resolve(dir, f)).isDirectory() && existsSync(resolve(dir, f, `demo.${lang}.vue`))
   )
 }
+
+main().catch(error => {
+  logger.error(error)
+  process.exit(1)
+})

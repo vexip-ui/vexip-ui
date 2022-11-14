@@ -1,10 +1,13 @@
 <template>
   <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
     <div
-      v-show="wrapShow"
       ref="wrapper"
       :class="className"
       tabindex="-1"
+      :style="{
+        pointerEvents: wrapShow ? undefined : 'none',
+        visibility: wrapShow ? undefined : 'hidden'
+      }"
       v-bind="$attrs"
       @focusin="handleFocusIn"
       @keydown.escape.prevent="handleClose"
@@ -42,38 +45,16 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { isPromise, queryTabables } from '@vexip-ui/utils'
-
-import type { PropType } from 'vue'
+import { maskerProps } from './props'
 
 export default defineComponent({
   name: 'Masker',
   components: {
     Portal
   },
-  props: {
-    active: booleanProp,
-    closable: booleanProp,
-    inner: booleanProp,
-    maskTransition: String,
-    transitionName: String,
-    disabled: booleanProp,
-    onBeforeClose: Function as PropType<() => any | Promise<any>>,
-    transfer: booleanStringProp,
-    autoRemove: booleanProp,
-    onToggle: eventProp<(active: boolean) => void>(),
-    onClose: eventProp(),
-    onHide: eventProp(),
-    onShow: eventProp()
-  },
+  props: maskerProps,
   emits: ['update:active'],
   setup(_props, { emit }) {
     const nh = useNameHelper('masker')
@@ -98,9 +79,9 @@ export default defineComponent({
     const currentActive = ref(props.active)
     const wrapShow = ref(props.active)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const topTrap = ref<HTMLElement | null>(null)
-    const bottomTrap = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const topTrap = ref<HTMLElement>()
+    const bottomTrap = ref<HTMLElement>()
 
     let showing = false
     let prevFocusdEl: HTMLElement | null = null
@@ -143,6 +124,8 @@ export default defineComponent({
           prevFocusdEl.focus()
           prevFocusdEl = null
         }
+      } else {
+        prevFocusdEl = document.activeElement as HTMLElement
       }
 
       emitEvent(props.onToggle, value)
@@ -182,8 +165,12 @@ export default defineComponent({
     }
 
     function afterOpen() {
-      prevFocusdEl = document.activeElement as HTMLElement
-      topTrap.value?.focus()
+      const activeEl = document && document.activeElement
+
+      if (!activeEl || !wrapper.value || !wrapper.value.contains(activeEl)) {
+        topTrap.value?.focus()
+      }
+
       nextTick(() => {
         showing = true
         emitEvent(props.onShow)

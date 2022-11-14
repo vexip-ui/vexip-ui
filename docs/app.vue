@@ -4,30 +4,36 @@
 
 <script setup lang="ts">
 import { reactive, watch, provide } from 'vue'
-import { createEventEmitter } from '@vexip-ui/utils'
+import { isClient, createEventEmitter } from '@vexip-ui/utils'
 
 import type { Store } from './symbol'
 
 const emitter = createEventEmitter()
 
-const computedStyle = getComputedStyle(document.documentElement)
+let query: MediaQueryList | undefined
 
-const media = computedStyle.getPropertyValue('--vxp-break-point-lg').trim()
-const query = matchMedia(`only screen and ${media}`)
+if (isClient) {
+  const computedStyle = getComputedStyle(document.documentElement)
+
+  const media = computedStyle.getPropertyValue('--vxp-break-point-lg').trim()
+  query = matchMedia(`only screen and ${media}`)
+}
 
 const store = reactive<Store>({
-  isLg: query.matches,
+  isLg: query ? query.matches : false,
   scrollY: 0,
-  isAffix: false
+  affixed: false,
+  expanded: false
 })
 
-query.addEventListener('change', () => {
-  store.isLg = query.matches
-  store.isAffix = !store.isLg && store.scrollY >= 50
-})
+query &&
+  query.addEventListener('change', () => {
+    store.isLg = query!.matches
+    store.affixed = !store.isLg && store.scrollY >= 50
+  })
 
 watch(
-  () => store.isAffix,
+  () => store.affixed,
   value => {
     emitter.emit('toggle-affix', value)
   }

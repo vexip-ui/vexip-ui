@@ -1,9 +1,6 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img
-      src="https://raw.githubusercontent.com/qmhc/vexip-ui/main/docs/public/logo.png"
-      style="width: 180px;"
-    />
+    <img src="./docs/public/vexip-ui.svg" style="width: 180px;" />
   </a>
 </p>
 
@@ -14,7 +11,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/package-json/v/qmhc/vexip-ui" />
+  <a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
+    <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm version"/>
+  </a>
 </p>
 
 <p align="center">
@@ -25,26 +24,28 @@
 
 Vexip UI 提供了一系列开箱即用的组件。
 
-该组件库使用全新的 **组合式 Api** 编写，并尽可能采用 Vue 传统的方式设计和编写组件，全量的 **TypeScript**（不是 AnyScript）。
+组件库使用全新的 **组合式 Api** 编写，并尽可能采用 Vue 传统的方式设计和编写组件，全量的 **TypeScript**（不是 AnyScript）。
 
 每个组件几乎所有的 **属性默认值** 均可以通过注入配置快速修改（除了值和选项属性），轻松实现定制化。
 
-目前有 **70** 多个组件，一些你几乎看烂了的组件这里大多有，或许也有一些你不太常见的组件。
+同时，组件代码的编写非常注重降低 **源码阅读** 的门槛，代码的排布尽可能的贴近平时的业务代码的习惯，避免让人眼花缭乱的封装。
 
-## 工作清单
-
-- ~~迁移至 css 变量~~（已在 `2.0.0-beta.0` 发布）
-- ~~重构图标~~（已在 `2.0.0-beta.0` 发布）
-- ~~重构全局配置~~（已在 `2.0.0-beta.4` 发布）
-- 编写单元测试（进行中，见 `tests` 分支）
-- 适配 ssr 渲染
+目前有 **70+** 个组件，一些你几乎看烂了的组件这里大多有，或许也有一些你不太常见的组件。
 
 ## 特性
 
-- 还算多的组件和功能，为网站开发助力，希望能提高点效率
-- 开箱即用 **Vue3** 组件（如果你还在用 Vue2，这里可能帮不到你）
-- 可配置的 **属性默认值**，轻松实现定制化
-- 完全使用组合式 Api 编写，性能与拓展性应该还不错
+- 📦 70+ 高质量的开箱即用 Vue 3 组件
+- 📐 遵循直觉的、简约的 Api 设计
+- 🔧 自由配置的属性默认值，快速完成全局/局部修改
+- ⚡ 组合式 Api，良好的性能基础
+- 🔨 TypeScript 编写，完整的类型
+- 💪 800+ 单元测试，为组件的提供良好的稳定性
+- 🎨 CSS 变量，内置暗黑主题
+- 🚩 国际化支持
+- 🛫 配套 Resolver，支持 unplugin 插件
+- 🚤 支持 SSR
+- 🩹 全面的可访问性
+- 👀 贴近业务代码编排，较低的源码阅读门槛
 
 ## 安装
 
@@ -52,7 +53,7 @@ Vexip UI 提供了一系列开箱即用的组件。
 
 ```sh
 # 使用 pnpm
-pnpm install vexip-ui
+pnpm add vexip-ui
 
 # 使用 yarn
 yarn add vexip-ui
@@ -64,13 +65,30 @@ yarn add vexip-ui
 
 ## 帮助
 
-在 [issue](https://github.com/qmhc/vexip-ui/issues) 给我留言，以便第一时间获得帮助。
+在 [issue](https://github.com/vexip-ui/vexip-ui/issues) 给我留言，以便第一时间获得帮助。
 
 如果你遇到可能是 bugs 的问题，请使用 [Vexip UI Playground](https://playground.vexipui.com/) 提供一个最小的复现。
+
+你也可以扫下方的二维码加入技术交流 QQ 群（点击也可以）：
+
+<a href="https://jq.qq.com/?_wv=1027&k=5KlA84xG" target="_blank">
+  <img
+    src="./docs/public/vexip-ui-group-qrcode.png"
+    style="width: 240px;"
+  />
+</a>
 
 ## 贡献
 
 欢迎你的加入！你可以查阅 [贡献指南](./CONTRIBUTING.md) 了解如何开始。
+
+## 贡献者
+
+感谢他们的所做的一切贡献！
+
+<a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
+</a>
 
 ## 兼容环境
 
@@ -84,4 +102,4 @@ yarn add vexip-ui
 
 ## 授权
 
-所有文件都基于 [MIT](./LICENSE) 授权。
+所有文件都基于 [MIT](./LICENSE.md) 授权。

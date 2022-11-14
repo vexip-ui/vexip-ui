@@ -1,5 +1,4 @@
-code[class*='language-'],
-pre[class*='language-'] {
+[class*='language-'] {
   font-family:
     Lucida,
     'lucida console',
@@ -11,7 +10,7 @@ pre[class*='language-'] {
     monospace;
   font-size: 14px;
   hyphens: none;
-  line-height: 2;
+  line-height: 28px;
   color: var(--vxp-content-color-base);
   text-align: left;
   word-break: normal;
@@ -25,6 +24,54 @@ pre[class*='language-'] {
   ::selection {
     text-shadow: none;
     background-color: var(--vxp-color-info-opacity-2);
+  }
+}
+
+div[class*='language-'] {
+  position: relative;
+  background-color: var(--vxp-fill-color-background);
+  border-radius: var(--vxp-radius-large);
+}
+
+pre[class*='language-'] {
+  padding: 12px 20px;
+  padding-left: 56px;
+  margin: 0;
+  overflow-x: auto;
+
+  &::before {
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    z-index: 1;
+    font-size: 12px;
+    color: var(--vxp-content-color-disabled);
+    content: attr(lang);
+  }
+}
+
+.code-line-numbers {
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 0;
+  width: 56px;
+  padding-top: 1.5px;
+  text-align: center;
+  letter-spacing: -0.5px;
+  pointer-events: none;
+  counter-reset: code-line-number;
+  user-select: none;
+
+  & > span {
+    display: block;
+    font-size: 13px;
+    color: var(--vxp-content-color-disabled);
+    counter-increment: code-line-number;
+
+    &::before {
+      content: counter(code-line-number);
+    }
   }
 }
 
@@ -47,7 +94,7 @@ pre[class*='language-'] {
   &.prolog,
   &.doctype,
   &.cdata {
-    color: var(--vxp-content-color-disabled);
+    color: var(--vxp-content-color-third);
   }
 
   &.punctuation {

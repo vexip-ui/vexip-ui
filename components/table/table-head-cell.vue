@@ -5,6 +5,12 @@
     role="columnheader"
     :style="style"
     :aria-sort="sorter.type ? (sorter.type === 'asc' ? 'ascending' : 'descending') : 'none'"
+    v-bind="attrs"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+    @click="handleClick"
+    @dblclick="handleDblclick"
+    @contextmenu="handleContextmenu"
   >
     <Checkbox
       v-if="isSelection(column)"
@@ -136,17 +142,6 @@ import type { SelectionColumn, TypeColumn, ColumnWithKey } from './symbol'
 
 const columnTypes = ['order', 'selection', 'expand']
 
-const props = {
-  column: {
-    type: Object as PropType<ColumnWithKey>,
-    default: () => ({})
-  },
-  index: {
-    type: Number,
-    required: true
-  }
-}
-
 export default defineComponent({
   name: 'TableHeadCell',
   components: {
@@ -159,7 +154,16 @@ export default defineComponent({
     CaretDown,
     Filter
   },
-  props,
+  props: {
+    column: {
+      type: Object as PropType<ColumnWithKey>,
+      default: () => ({})
+    },
+    index: {
+      type: Number,
+      default: -1
+    }
+  },
   setup(props) {
     const { state, getters, mutations } = inject(TABLE_STORE)!
     const tableAction = inject(TABLE_ACTION)!
@@ -167,27 +171,57 @@ export default defineComponent({
     const nh = useNameHelper('table')
     const filterVisible = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const className = computed(() => {
-      const customClass = props.column.className || null
+      let customClass = null
+
+      if (typeof state.headClass === 'function') {
+        customClass = state.headClass(props.column, props.index)
+      } else {
+        customClass = state.headClass
+      }
 
       return [
         nh.be('head-cell'),
         {
           [nh.bem('head-cell', 'center')]: columnTypes.includes((props.column as TypeColumn).type)
         },
+        props.column.className || null,
         customClass
       ]
     })
     const style = computed(() => {
       const width = state.widths[props.column.key]
 
-      return {
-        flex: `${width} 0 auto`,
-        width: `${props.column.width ?? width}px`,
-        maxWidth: `${props.column.width}px`
+      let customStyle: any = ''
+
+      if (typeof state.headStyle === 'function') {
+        customStyle = state.headStyle(props.column, props.index)
+      } else {
+        customStyle = state.headStyle
       }
+
+      return [
+        {
+          flex: `${width} 0 auto`,
+          width: `${props.column.width ?? width}px`,
+          maxWidth: `${props.column.width}px`
+        },
+        props.column.style || '',
+        customStyle
+      ]
+    })
+    const attrs = computed(() => {
+      let customAttrs: Record<string, any>
+
+      if (typeof state.headAttrs === 'function') {
+        customAttrs = state.headAttrs(props.column, props.index)
+      } else {
+        customAttrs = state.headAttrs
+      }
+
+      return { ...(props.column.attrs || {}), ...(customAttrs || {}) }
     })
     const sorter = computed(() => {
       return state.sorters[props.column.key] || {}
@@ -220,7 +254,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      window.setTimeout(() => {
+      setTimeout(() => {
         if (wrapper.value) {
           mutations.setColumnWidth(props.column.key, wrapper.value.getBoundingClientRect().width)
         }
@@ -229,6 +263,44 @@ export default defineComponent({
 
     function isSelection(column: unknown): column is SelectionColumn {
       return (column as TypeColumn).type === 'selection'
+    }
+
+    function buildEventPayload(event: Event) {
+      return {
+        column: props.column,
+        index: props.index,
+        event
+      }
+    }
+
+    function handleMouseEnter(event: MouseEvent) {
+      if (tableAction) {
+        tableAction.emitHeadEnter(buildEventPayload(event))
+      }
+    }
+
+    function handleMouseLeave(event: MouseEvent) {
+      if (tableAction) {
+        tableAction.emitHeadLeave(buildEventPayload(event))
+      }
+    }
+
+    function handleClick(event: MouseEvent) {
+      if (tableAction) {
+        tableAction.emitHeadClick(buildEventPayload(event))
+      }
+    }
+
+    function handleDblclick(event: MouseEvent) {
+      if (tableAction) {
+        tableAction.emitHeadDblclick(buildEventPayload(event))
+      }
+    }
+
+    function handleContextmenu(event: MouseEvent) {
+      if (tableAction) {
+        tableAction.emitHeadContextmenu(buildEventPayload(event))
+      }
     }
 
     function handleSortAsc() {
@@ -309,6 +381,7 @@ export default defineComponent({
 
       className,
       style,
+      attrs,
       sorter,
       filter,
       hasFilterActive,
@@ -318,6 +391,11 @@ export default defineComponent({
 
       isFunction,
       isSelection,
+      handleMouseEnter,
+      handleMouseLeave,
+      handleClick,
+      handleDblclick,
+      handleContextmenu,
       handleSortAsc,
       handleSortDesc,
       handleFilterItemSelect,

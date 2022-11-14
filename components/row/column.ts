@@ -1,87 +1,32 @@
 import { defineComponent, computed, h, inject } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
+import { columnProps } from './props'
 import { ROW_STATE, breakPoints } from './symbol'
 
-import type { PropType, CSSProperties } from 'vue'
-import type { ColumnFlex, ColumnOptions } from './symbol'
+import type { CSSProperties } from 'vue'
 
 type LayerProp = 'span' | 'offset' | 'pull' | 'push' | 'order'
 
-const mediaProp = [Number, Object] as PropType<number | ColumnOptions>
 const colProps: LayerProp[] = ['span', 'offset', 'pull', 'push', 'order']
 
 export default defineComponent({
   name: 'Column',
-  props: {
-    tag: String,
-    span: Number,
-    offset: Number,
-    push: Number,
-    pull: Number,
-    order: Number,
-    xs: mediaProp,
-    sm: mediaProp,
-    md: mediaProp,
-    lg: mediaProp,
-    xl: mediaProp,
-    xxl: mediaProp,
-    flex: [Number, String],
-    useFlex: {
-      type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
-      default: null
-    }
-  },
+  props: columnProps,
   setup(_props, { slots }) {
     const props = useProps('column', _props, {
       tag: 'div',
-      span: {
-        default: 24,
-        static: true
-      },
-      offset: {
-        default: null,
-        static: true
-      },
-      push: {
-        default: null,
-        static: true
-      },
-      pull: {
-        default: null,
-        static: true
-      },
-      order: {
-        default: null,
-        static: true
-      },
-      xs: {
-        default: null,
-        static: true
-      },
-      sm: {
-        default: null,
-        static: true
-      },
-      md: {
-        default: null,
-        static: true
-      },
-      lg: {
-        default: null,
-        static: true
-      },
-      xl: {
-        default: null,
-        static: true
-      },
-      xxl: {
-        default: null,
-        static: true
-      },
-      flex: {
-        default: null,
-        static: true
-      },
+      span: 24,
+      offset: null,
+      push: null,
+      pull: null,
+      order: null,
+      xs: null,
+      sm: null,
+      md: null,
+      lg: null,
+      xl: null,
+      xxl: null,
+      flex: null,
       useFlex: null
     })
 
@@ -92,11 +37,11 @@ export default defineComponent({
     const className = computed(() => {
       const columnFlex = (props.useFlex || rowState?.columnFlex) && {
         ...(rowState?.columnFlex || {}),
-        ...(
-          props.useFlex
-            ? props.useFlex === true ? { justify: 'start', align: 'top' } : props.useFlex
-            : {}
-        )
+        ...(props.useFlex
+          ? props.useFlex === true
+            ? { justify: 'start', align: 'top' }
+            : props.useFlex
+          : {})
       }
       const className = [nh.b(), { [nh.bm('flex')]: columnFlex }]
 
@@ -107,9 +52,7 @@ export default defineComponent({
 
       colProps.forEach(prop => {
         if (typeof props[prop] === 'number') {
-          className.push(
-            prop === 'span' ? nh.bm(props[prop]) : nh.bm(`${prop}-${props[prop]}`)
-          )
+          className.push(prop === 'span' ? nh.bm(props[prop]) : nh.bm(`${prop}-${props[prop]}`))
         }
       })
 
@@ -141,9 +84,10 @@ export default defineComponent({
         if (typeof rowState.gap === 'number') {
           style.paddingRight = style.paddingLeft = `${rowState.gap / 2}px`
         } else if (Array.isArray(rowState.gap)) {
-          const [horizontal, vertical] = rowState.gap
+          // const [horizontal] = rowState.gap
 
-          style.padding = `${vertical / 2}px ${horizontal / 2}px`
+          // style.padding = `${vertical / 2}px ${horizontal / 2}px`
+          style.paddingRight = style.paddingLeft = `${rowState.gap[0] / 2}px`
         }
       }
 

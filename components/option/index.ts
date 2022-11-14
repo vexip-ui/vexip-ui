@@ -1,2 +1,2 @@
-export * from './symbol'
 export { default as Option } from './option.vue'
+export type { OptionKeyConfig, RawOption, OptionState } from './symbol'

@@ -1,9 +1,12 @@
 [
   "basis",
   "drag",
+  "default-files",
   "list-type",
-  "separation",
   "manual",
+  "image",
+  "select-to-add",
+  "separation",
   "multiple",
   "directory"
 ]

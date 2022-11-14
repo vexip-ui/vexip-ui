@@ -1,11 +1,20 @@
 import { defineComponent, computed, h, renderSlot } from 'vue'
-import { useNameHelper, useProps, booleanProp, styleProp } from '@vexip-ui/config'
+import { useNameHelper, useProps } from '@vexip-ui/config'
 import { supportFlexGap } from '@vexip-ui/utils'
+import { spaceProps } from './props'
 import { flatVNodes } from './helper'
 
-import type { PropType } from 'vue'
-import type { ComponentSize } from '@vexip-ui/config'
-import type { Align, Justify } from './symbol'
+import type { SpaceAlign, SpaceJustify } from './symbol'
+
+const justifyList = Object.freeze<SpaceJustify>([
+  'start',
+  'end',
+  'center',
+  'space-around',
+  'space-between',
+  'space-evenly'
+])
+const alignList = Object.freeze<SpaceAlign>(['start', 'end', 'center', 'baseline', 'stretch'])
 
 const useFlexGap = supportFlexGap()
 
@@ -15,24 +24,20 @@ function parseFlexStyle(value: string) {
 
 export default defineComponent({
   name: 'Space',
-  props: {
-    vertical: booleanProp,
-    inline: booleanProp,
-    tag: String,
-    align: String as PropType<Align>,
-    justify: String as PropType<Justify>,
-    noWrap: booleanProp,
-    size: [String, Number, Array] as PropType<ComponentSize | number | [number, number]>,
-    itemStyle: styleProp,
-    gapDisabled: booleanProp
-  },
+  props: spaceProps,
   setup(_props, { slots }) {
     const props = useProps('space', _props, {
       vertical: false,
       inline: false,
       tag: 'div',
-      align: 'stretch',
-      justify: 'start',
+      align: {
+        default: 'stretch',
+        validator: value => alignList.includes(value)
+      },
+      justify: {
+        default: 'start',
+        validator: value => justifyList.includes(value)
+      },
       noWrap: false,
       size: 'default',
       itemStyle: null,
@@ -76,8 +81,8 @@ export default defineComponent({
       if (typeof size !== 'string') {
         const normalizedSize = Array.isArray(size) ? size : [size, size]
 
-        style['--vxp-space-h-gap'] = `${normalizedSize[0]}px`
-        style['--vxp-space-v-gap'] = `${normalizedSize[1]}px`
+        style[nh.cv('h-gap')] = `${normalizedSize[0]}px`
+        style[nh.cv('v-gap')] = `${normalizedSize[1]}px`
       }
 
       if (props.gapDisabled && !props.vertical) {

@@ -1,9 +1,15 @@
 <template>
   <div>
-    <Button type="warning" @click="$notice.warning({ content: 'A notice with custom icon', icon: CircleQuestion })">
+    <Button
+      type="warning"
+      @click="Notice.warning({ content: 'A notice with custom icon', icon: CircleQuestion })"
+    >
       Custom Icon
     </Button>
-    <Button type="error" @click="$notice.error({ content: 'A notice with custom icon color', iconColor: 'green' })">
+    <Button
+      type="error"
+      @click="Notice.error({ content: 'A notice with custom icon color', iconColor: 'green' })"
+    >
       Custom Icon Color
     </Button>
     <Button type="success" @click="sendCustomizedIconNotice">
@@ -12,27 +18,20 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, h } from 'vue'
-import { Icon } from 'vexip-ui'
+<script setup lang="ts">
+import { h } from 'vue'
 import { CircleQuestion, Share } from '@vexip-ui/icons'
+import { Icon, Notice } from 'vexip-ui'
 
-export default defineComponent({
-  setup() {
-    return { CircleQuestion }
-  },
-  methods: {
-    sendCustomizedIconNotice() {
-      this.$notice.success({
-        content: 'A notice that using icon render method',
-        icon: () => {
-          return h(Icon, {
-            icon: Share,
-            flip: 'horizontal'
-          })
-        }
+function sendCustomizedIconNotice() {
+  Notice.success({
+    content: 'A notice that using icon render method',
+    icon: () => {
+      return h(Icon, {
+        icon: Share,
+        flip: 'horizontal'
       })
     }
-  }
-})
+  })
+}
 </script>

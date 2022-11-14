@@ -34,6 +34,11 @@
             {{ title }}
           </slot>
         </span>
+        <CollapseTransition appear horizontal fade-effect>
+          <div v-if="loading" :class="nh.be('loading')">
+            <Icon :spin="loadingSpin" :pulse="!loadingSpin" :icon="loadingIcon"></Icon>
+          </div>
+        </CollapseTransition>
       </slot>
     </div>
     <div v-if="typeof filter === 'function'" ref="search" :class="nh.be('filter')">
@@ -77,7 +82,7 @@
       item-fixed
       use-y-bar
       id-key="value"
-      :items-attrs="{ role: 'listbox' }"
+      :items-attrs="{ role: 'listbox', ariaLabel: type }"
       @resize="computePageSize"
     >
       <template #default="{ item: option, index }">
@@ -128,6 +133,7 @@
 <script lang="tsx">
 import { defineComponent, ref, computed, watch, watchEffect } from 'vue'
 import { Checkbox } from '@/components/checkbox'
+import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Input } from '@/components/input'
 import { NumberInput } from '@/components/number-input'
@@ -136,7 +142,7 @@ import { ResizeObserver } from '@/components/resize-observer'
 import { VirtualList } from '@/components/virtual-list'
 import { MagnifyingGlass, Retweet, ChevronRight, ChevronLeft } from '@vexip-ui/icons'
 import { useNameHelper, useLocale, stateProp } from '@vexip-ui/config'
-import { useModifier } from '@vexip-ui/mixins'
+import { useModifier } from '@vexip-ui/hooks'
 import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
@@ -147,6 +153,7 @@ export default defineComponent({
   name: 'TransferPanel',
   components: {
     Checkbox,
+    CollapseTransition,
     Icon,
     Input,
     NumberInput,
@@ -201,6 +208,22 @@ export default defineComponent({
     deepState: {
       type: Boolean,
       default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    loadingIcon: {
+      type: Object,
+      default: null
+    },
+    loadingLock: {
+      type: Boolean,
+      default: false
+    },
+    loadingSpin: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:selected', 'select', 'enter', 'switch'],
@@ -216,12 +239,12 @@ export default defineComponent({
     const currentFilter = ref('')
     const searching = ref(false)
 
-    const header = ref<HTMLElement | null>(null)
-    const body = ref<HTMLElement | null>()
-    const footer = ref<HTMLElement | null>(null)
-    const search = ref<HTMLElement | null>(null)
-    const input = ref<InstanceType<typeof Input> | null>(null)
-    const list = ref<VirtualListExposed | null>(null)
+    const header = ref<HTMLElement>()
+    const body = ref<HTMLElement>()
+    const footer = ref<HTMLElement>()
+    const search = ref<HTMLElement>()
+    const input = ref<InstanceType<typeof Input>>()
+    const list = ref<VirtualListExposed>()
 
     let bodyRealHeight = 0
     let lastSelected: string | number | null = null
@@ -480,8 +503,8 @@ export default defineComponent({
     }
 
     function emitSelectedChange() {
-      emit('select')
       emit('update:selected', currentSelected.value)
+      emit('select')
     }
 
     function handlePageChange(page: number) {

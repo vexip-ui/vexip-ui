@@ -1,9 +1,1 @@
-[
-  "basis",
-  "closable",
-  "inner",
-  "nesting",
-  "position",
-  "hide-mask",
-  "resize"
-]
+["basis", "inner", "nesting", "position", "hide-mask", "footer", "resize"]

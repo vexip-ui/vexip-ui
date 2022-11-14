@@ -38,6 +38,7 @@ body,
 body {
   margin: 0;
   overflow: hidden;
+  font-family: var(--vxp-font-family-base);
   color: var(--vxp-content-color-base);
   background-color: var(--bg-color);
   transition: var(--vxp-transition-background);
@@ -47,24 +48,16 @@ ul {
   padding: 0;
 }
 
-pre {
-  padding: 12px 20px;
-  margin: 0;
-  overflow-x: auto;
-  line-height: 2;
-  background-color: var(--vxp-fill-color-background) !important;
-}
+// pre {
+//   padding: 12px 20px;
+//   margin: 0;
+//   overflow-x: auto;
+//   line-height: 2;
+//   background-color: var(--vxp-fill-color-background) !important;
+// }
 
 code {
-  font-family:
-    Lucida,
-    'lucida console',
-    'Courier New',
-    Consolas,
-    Monaco,
-    'andale mono',
-    'ubuntu mono',
-    monospace;
+  font-family: var(--vxp-font-family-mono);
   line-height: 2;
 }
 
@@ -86,11 +79,6 @@ article {
 
 p .vxp-linker {
   margin-bottom: 4px;
-}
-
-.vxp-menu-group__label {
-  padding: 10px 20px;
-  color: var(--vxp-content-color-third);
 }
 
 .anchor {

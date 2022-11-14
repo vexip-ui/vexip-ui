@@ -13,9 +13,10 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "baseUrl": ".",
     "types": [
+      "node",
       "vite/client"
     ],
     "paths": {
@@ -23,7 +24,8 @@
         "./*"
       ],
       "@vexip-ui/*": ["common/*/src"],
-      "vexip-ui": ["components"]
+      "vexip-ui": ["components"],
+      "vue-router": ["node_modules/vue-router"]
     },
     "lib": [
       "esnext",
@@ -33,7 +35,8 @@
   "include": [
     "common/*/src",
     "components",
-    "example",
+    "dev-server",
+    "directives",
     "playground",
     "types.d.ts"
   ],

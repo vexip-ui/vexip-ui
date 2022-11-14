@@ -7,6 +7,7 @@
       :arrow="!noArrow"
       :candidate="candidate"
       :options="hourRange"
+      tabindex="-1"
       @mouseenter="handleToggleColumn('hour')"
       @touchstart="handleToggleColumn('hour')"
       @keydown.stop
@@ -21,7 +22,8 @@
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
-      :options="secondRange"
+      :options="minuteRange"
+      tabindex="-1"
       @mouseenter="handleToggleColumn('minute')"
       @touchstart="handleToggleColumn('minute')"
       @keydown.stop
@@ -37,6 +39,7 @@
       :arrow="!noArrow"
       :candidate="candidate"
       :options="secondRange"
+      tabindex="-1"
       @mouseenter="handleToggleColumn('second')"
       @touchstart="handleToggleColumn('second')"
       @keydown.stop
@@ -117,9 +120,9 @@ export default defineComponent({
     const minuteRange = ref<number[]>([])
     const secondRange = ref<number[]>([])
 
-    const hourWheel = ref<InstanceType<typeof Wheel> | null>(null)
-    const minuteWheel = ref<InstanceType<typeof Wheel> | null>(null)
-    const secondWheel = ref<InstanceType<typeof Wheel> | null>(null)
+    const hourWheel = ref<InstanceType<typeof Wheel>>()
+    const minuteWheel = ref<InstanceType<typeof Wheel>>()
+    const secondWheel = ref<InstanceType<typeof Wheel>>()
 
     watch(() => props.steps, updateTimeRange, { immediate: true })
     watch(

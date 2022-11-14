@@ -10,6 +10,7 @@ $wheel: map.merge(
     b-color: get-css-var('border-color-base'),
     b-color-hover: get-css-var('color-primary-opacity-1'),
     b-color-focus: get-css-var('wheel-b-color-hover'),
+    b-color-disabled: get-css-var('border-color-light-2'),
     item-v-padding: 3px,
     item-h-padding: 8px,
     item-opacity: 50%,
@@ -55,8 +56,13 @@ $wheel: map.merge(
 
   &__scroll {
     position: relative;
+    cursor: pointer;
     user-select: none;
     border: get-css-var('border-shape') transparent;
+  }
+
+  &--loading &__scroll {
+    cursor: auto;
   }
 
   &__list {
@@ -169,19 +175,52 @@ $wheel: map.merge(
     }
   }
 
+  $unit-size: 16px;
+
   &__border {
+    @include h-moving-border(get-css-var('wheel-b-color'));
+
     position: absolute;
     pointer-events: none;
     border: get-css-var('border-shape') get-css-var('wheel-b-color');
-    transition: get-css-var('transition-border');
+
+    &--vertical {
+      @include v-moving-border(get-css-var('wheel-b-color'));
+
+      position: absolute;
+    }
+
+    &::before,
+    &::after {
+      opacity: 0%;
+    }
+
+    &--active {
+      &::before,
+      &::after {
+        opacity: 100%;
+      }
+    }
   }
 
   &:hover:not(#{&}--disabled) &__border {
-    border-color: get-css-var('wheel-b-color-hover');
+    &,
+    &::before,
+    &::after {
+      border-color: get-css-var('wheel-b-color-hover');
+    }
   }
 
   &:focus:not(#{&}--disabled) &__border {
-    border-color: get-css-var('wheel-b-color-focus');
+    &,
+    &::before,
+    &::after {
+      border-color: get-css-var('wheel-b-color-focus');
+    }
+  }
+
+  &--disabled &__border {
+    border-color: get-css-var('wheel-b-color-disabled');
   }
 
   $states: success, error, warning;

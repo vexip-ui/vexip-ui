@@ -75,3 +75,53 @@ export function queryTabables(root?: HTMLElement, includeDisabled = false) {
     el => isVisible(el) && el.tabIndex > -1 && !isDis(el)
   )
 }
+
+export function getXPadding(el: HTMLElement | null) {
+  if (!el) return 0
+
+  const computedStyle = getComputedStyle(el)
+  const padding = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight)
+
+  return padding || 0
+}
+
+export function getYPadding(el: HTMLElement | null) {
+  if (!el) return 0
+
+  const computedStyle = getComputedStyle(el)
+  const padding = parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom)
+
+  return padding || 0
+}
+
+export function getXMargin(el: HTMLElement | null) {
+  if (!el) return 0
+
+  const computedStyle = getComputedStyle(el)
+  const margin = parseFloat(computedStyle.marginLeft) + parseFloat(computedStyle.marginRight)
+
+  return margin || 0
+}
+
+export function getYMargin(el: HTMLElement | null) {
+  if (!el) return 0
+
+  const computedStyle = getComputedStyle(el)
+  const margin = parseFloat(computedStyle.marginTop) + parseFloat(computedStyle.marginBottom)
+
+  return margin || 0
+}
+
+export function getRangeWidth(el: HTMLElement | null) {
+  if (!el) return 0
+
+  const range = document.createRange()
+
+  range.setStart(el, 0)
+  range.setEnd(el, el.childNodes.length)
+
+  const rangeWidth = range.getBoundingClientRect().width
+  const xPadding = getXPadding(el)
+
+  return rangeWidth + xPadding
+}

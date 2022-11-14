@@ -1,36 +1,17 @@
 import { defineComponent, h, Transition } from 'vue'
-import { useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
-
-type TransitionMode = 'in-out' | 'out-in' | 'default'
+import { useProps, emitEvent } from '@vexip-ui/config'
+import { collapseTransitionProps } from './props'
 
 export default defineComponent({
   name: 'CollapseTransition',
-  functional: true,
-  props: {
-    appear: booleanProp,
-    mode: String as PropType<TransitionMode>,
-    horizontal: booleanProp,
-    duration: Number,
-    timing: String,
-    fadeEffect: booleanProp,
-    onBeforeEnter: eventProp<(el: Element) => void>(),
-    onEnter: eventProp<(el: Element) => void>(),
-    onAfterEnter: eventProp<(el: Element) => void>(),
-    onEnterCancelled: eventProp<(el: Element) => void>(),
-    onBeforeLeave: eventProp<(el: Element) => void>(),
-    onLeave: eventProp<(el: Element) => void>(),
-    onAfterLeave: eventProp<(el: Element) => void>(),
-    onLeaveCancelled: eventProp<(el: Element) => void>()
-  },
+  props: collapseTransitionProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('collapseTransition', _props, {
       appear: false,
       mode: {
-        default: 'default' as TransitionMode,
-        validator: (value: TransitionMode) => ['in-out', 'out-in', 'default'].includes(value)
+        default: 'default',
+        validator: value => ['in-out', 'out-in', 'default'].includes(value)
       },
       horizontal: false,
       duration: {
@@ -40,6 +21,9 @@ export default defineComponent({
       timing: null,
       fadeEffect: false
     })
+
+    let enterStage: 'before' | 'in' | null = null
+    let leaveStage: 'before' | 'in' | null = null
 
     return () => {
       const duration = props.duration
@@ -82,7 +66,8 @@ export default defineComponent({
         `
       }
 
-      const styleRecord: Partial<CSSStyleDeclaration> = {}
+      const enterRecord: Partial<CSSStyleDeclaration> = {}
+      const leaveRecord: Partial<CSSStyleDeclaration> = {}
 
       return h(
         Transition,
@@ -90,15 +75,18 @@ export default defineComponent({
           appear: props.appear,
           mode: props.mode,
           onBeforeEnter($el) {
+            if (enterStage) return
+
+            enterStage = 'before'
             const el = $el as HTMLElement
 
-            styleRecord.paddingTop = el.style[paddingTop]
-            styleRecord.paddingBottom = el.style[paddingBottom]
-            styleRecord.marginTop = el.style[marginTop]
-            styleRecord.marginBottom = el.style[marginBottom]
-            styleRecord.transition = el.style.transition
-            styleRecord.boxSizing = el.style.boxSizing
-            styleRecord.opacity = el.style.opacity
+            enterRecord.paddingTop = el.style[paddingTop]
+            enterRecord.paddingBottom = el.style[paddingBottom]
+            enterRecord.marginTop = el.style[marginTop]
+            enterRecord.marginBottom = el.style[marginBottom]
+            enterRecord.transition = el.style.transition
+            enterRecord.boxSizing = el.style.boxSizing
+            enterRecord.opacity = el.style.opacity
 
             el.style.transition = transition
 
@@ -116,9 +104,12 @@ export default defineComponent({
             emitEvent(props.onBeforeEnter, $el)
           },
           onEnter($el) {
+            if (enterStage === 'in') return
+
+            enterStage = 'in'
             const el = $el as HTMLElement
 
-            styleRecord.overflow = el.style.overflow
+            enterRecord.overflow = el.style.overflow
 
             if (el[scrollHeight] !== 0) {
               el.style[height] = `${el[scrollHeight]}px`
@@ -126,14 +117,14 @@ export default defineComponent({
               el.style[height] = ''
             }
 
-            el.style[paddingTop] = styleRecord.paddingTop!
-            el.style[paddingBottom] = styleRecord.paddingBottom!
-            el.style[marginTop] = styleRecord.marginTop!
-            el.style[marginBottom] = styleRecord.marginBottom!
+            el.style[paddingTop] = enterRecord.paddingTop!
+            el.style[paddingBottom] = enterRecord.paddingBottom!
+            el.style[marginTop] = enterRecord.marginTop!
+            el.style[marginBottom] = enterRecord.marginBottom!
             el.style.overflow = 'hidden'
 
             if (props.fadeEffect) {
-              el.style.opacity = styleRecord.opacity!
+              el.style.opacity = enterRecord.opacity!
             }
 
             emitEvent(props.onEnter, $el)
@@ -141,33 +132,38 @@ export default defineComponent({
           onAfterEnter($el) {
             const el = $el as HTMLElement
 
-            el.style.transition = styleRecord.transition || ''
+            el.style.transition = enterRecord.transition || ''
             el.style[height] = ''
-            el.style.overflow = styleRecord.overflow!
-            el.style.boxSizing = styleRecord.boxSizing!
+            el.style.overflow = enterRecord.overflow!
+            el.style.boxSizing = enterRecord.boxSizing!
 
+            enterStage = null
             emitEvent(props.onAfterEnter, $el)
           },
           onEnterCancelled($el) {
             const el = $el as HTMLElement
 
-            el.style.transition = styleRecord.transition || ''
+            el.style.transition = enterRecord.transition || ''
             el.style[height] = ''
-            el.style.overflow = styleRecord.overflow!
-            el.style.boxSizing = styleRecord.boxSizing!
+            el.style.overflow = enterRecord.overflow!
+            el.style.boxSizing = enterRecord.boxSizing!
 
+            enterStage = null
             emitEvent(props.onEnterCancelled, $el)
           },
           onBeforeLeave($el) {
+            if (leaveStage) return
+
+            leaveStage = 'before'
             const el = $el as HTMLElement
 
-            styleRecord.paddingTop = el.style[paddingTop]
-            styleRecord.paddingBottom = el.style[paddingBottom]
-            styleRecord.marginTop = el.style[marginTop]
-            styleRecord.marginBottom = el.style[marginBottom]
-            styleRecord.overflow = el.style.overflow
-            styleRecord.boxSizing = el.style.boxSizing
-            styleRecord.opacity = el.style.opacity
+            leaveRecord.paddingTop = el.style[paddingTop]
+            leaveRecord.paddingBottom = el.style[paddingBottom]
+            leaveRecord.marginTop = el.style[marginTop]
+            leaveRecord.marginBottom = el.style[marginBottom]
+            leaveRecord.overflow = el.style.overflow
+            leaveRecord.boxSizing = el.style.boxSizing
+            leaveRecord.opacity = el.style.opacity
 
             el.style[height] = `${el[scrollHeight]}px`
             el.style.overflow = 'hidden'
@@ -175,10 +171,13 @@ export default defineComponent({
             emitEvent(props.onBeforeLeave, $el)
           },
           onLeave($el) {
+            if (leaveStage === 'in') return
+
+            leaveStage = 'in'
             const el = $el as HTMLElement
 
             if (el[scrollHeight] !== 0) {
-              styleRecord.transition = el.style.transition
+              leaveRecord.transition = el.style.transition
 
               el.style.transition = transition
 
@@ -199,37 +198,37 @@ export default defineComponent({
             const el = $el as HTMLElement
 
             el.style[height] = ''
-            el.style[paddingTop] = styleRecord.paddingTop!
-            el.style[paddingBottom] = styleRecord.paddingBottom!
-            el.style[marginTop] = styleRecord.marginTop!
-            el.style[marginBottom] = styleRecord.marginBottom!
-            el.style.overflow = styleRecord.overflow!
-            el.style.transition = styleRecord.transition || ''
-            el.style.boxSizing = styleRecord.boxSizing!
-            el.style.opacity = styleRecord.opacity!
+            el.style[paddingTop] = leaveRecord.paddingTop!
+            el.style[paddingBottom] = leaveRecord.paddingBottom!
+            el.style[marginTop] = leaveRecord.marginTop!
+            el.style[marginBottom] = leaveRecord.marginBottom!
+            el.style.overflow = leaveRecord.overflow!
+            el.style.transition = leaveRecord.transition || ''
+            el.style.boxSizing = leaveRecord.boxSizing!
+            el.style.opacity = leaveRecord.opacity!
 
+            leaveStage = null
             emitEvent(props.onAfterLeave, $el)
           },
           onLeaveCancelled($el) {
             const el = $el as HTMLElement
 
             el.style[height] = ''
-            el.style[paddingTop] = styleRecord.paddingTop!
-            el.style[paddingBottom] = styleRecord.paddingBottom!
-            el.style[marginTop] = styleRecord.marginTop!
-            el.style[marginBottom] = styleRecord.marginBottom!
-            el.style.overflow = styleRecord.overflow!
-            el.style.transition = styleRecord.transition || ''
-            el.style.boxSizing = styleRecord.boxSizing!
-            el.style.opacity = styleRecord.opacity!
+            el.style[paddingTop] = leaveRecord.paddingTop!
+            el.style[paddingBottom] = leaveRecord.paddingBottom!
+            el.style[marginTop] = leaveRecord.marginTop!
+            el.style[marginBottom] = leaveRecord.marginBottom!
+            el.style.overflow = leaveRecord.overflow!
+            el.style.transition = leaveRecord.transition || ''
+            el.style.boxSizing = leaveRecord.boxSizing!
+            el.style.opacity = leaveRecord.opacity!
 
+            leaveStage = null
             emitEvent(props.onLeaveCancelled, $el)
           }
         },
         {
-          default() {
-            return slots.default && slots.default()
-          }
+          default: () => slots.default && slots.default()
         }
       )
     }

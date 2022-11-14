@@ -1,11 +1,11 @@
 import { createApp } from 'vue'
 import Component from './contextmenu.vue'
-import { destroyObject } from '@vexip-ui/utils'
+import { isClient, destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
-import type { Key, MenuOptions, ContextmenuInstance } from './symbol'
+import type { Key, ContextmenuConfig, ContextmenuOptions, ContextmenuInstance } from './symbol'
 
-export * from './symbol'
+export type { ContextmenuConfig, ContextmenuOptions }
 
 export class ContextmenuManager {
   name: string
@@ -23,7 +23,11 @@ export class ContextmenuManager {
     this.name = 'Contextmenu'
   }
 
-  open(options: MenuOptions) {
+  open(options: ContextmenuOptions) {
+    if (!isClient) {
+      return
+    }
+
     this._pending = this._getInstance().openContextmenu(options)
 
     return this._pending

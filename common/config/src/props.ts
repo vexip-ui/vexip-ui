@@ -1,7 +1,14 @@
 import { reactive, computed, watch, provide, inject, unref } from 'vue'
 import { has, isNull, isObject, isFunction, mergeObjects } from '@vexip-ui/utils'
 
-import type { App, ComputedRef, PropType, Ref, CSSProperties } from 'vue'
+import type {
+  App,
+  ComputedRef,
+  PropType,
+  Ref,
+  CSSProperties,
+  ComponentObjectPropsOptions
+} from 'vue'
 
 export type PropsOptions = Record<string, Record<string, unknown>>
 
@@ -17,16 +24,16 @@ interface PropsConfig<T = any> {
 
 type PropsConfigOptions<T> = {
   [K in keyof T]?:
-    | PropsConfig<EnsureValue<T[K]>>
-    | EnsureValue<T[K]>
-    | (() => EnsureValue<T[K]>)
-    | null
+  | PropsConfig<EnsureValue<T[K]>>
+  | EnsureValue<T[K]>
+  | (() => EnsureValue<T[K]>)
+  | null
 }
 
 export const PROVIDED_PROPS = '__vxp-provided-props'
-const eventPropRE = /$on[A-Z]/
+const eventPropRE = /^on[A-Z]/
 
-export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOptions>>, app?: App) {
+export function configProps<T>(props: MaybeRef<T>, app?: App) {
   if (app) {
     app.provide(
       PROVIDED_PROPS,
@@ -39,14 +46,18 @@ export function configProps(props: Partial<PropsOptions> | Ref<Partial<PropsOpti
         return unref(props)
       }
 
-      return mergeObjects(upstreamProps.value, unref(props))
+      return mergeObjects(upstreamProps.value, unref(props) as any)
     })
 
     provide(PROVIDED_PROPS, providedProps)
   }
 }
 
-export function useProps<T>(name: string, sourceProps: T, config: PropsConfigOptions<T> = {}) {
+export function useProps<T extends Record<string, any>>(
+  name: string,
+  sourceProps: T,
+  config: PropsConfigOptions<T> = {}
+) {
   const providedProps = inject<ComputedRef<Record<string, PropsConfigOptions<T>>> | null>(
     PROVIDED_PROPS,
     null
@@ -96,7 +107,8 @@ export function useProps<T>(name: string, sourceProps: T, config: PropsConfigOpt
         if (isNull(sourceProps[key])) {
           if (!isNull(configProps.value[key])) {
             return getValue(configProps.value[key])
-          } else if (!isNull(commonProps.value[key])) {
+          }
+          if (!isNull(commonProps.value[key])) {
             return getValue(commonProps.value[key])
           }
 
@@ -130,6 +142,60 @@ export const booleanNumberProp = {
   default: null
 }
 
+/**
+ * Use to deconstruct advanced types
+ */
+type Expand<T> = T extends unknown ? { [K in keyof T]: T[K] } : never
+
+export type ConfigurableProps<T, E = never, I = never> = Expand<{
+  [P in keyof T]?: P extends I
+    ? T[P]
+    : P extends `on${Capitalize<string>}`
+      ? never
+      : T[Exclude<
+        P,
+        'inherit' | 'value' | 'checked' | 'active' | 'visible' | 'label' | 'options' | E
+      >]
+}>
+
+export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
+  const common = {
+    inherit: booleanProp
+  }
+
+  return Object.freeze({ ...common, ...props }) as Expand<typeof common & T>
+}
+
+export function omitProps<T extends ComponentObjectPropsOptions, K extends keyof T>(
+  props: T,
+  keys: K[]
+): Expand<Omit<T, K>>
+export function omitProps<
+  T extends ComponentObjectPropsOptions,
+  K extends keyof T,
+  E extends ComponentObjectPropsOptions
+>(props: T, keys: K[], extra: E): Expand<Omit<T, K> & E>
+export function omitProps<
+  T extends ComponentObjectPropsOptions,
+  K extends keyof T,
+  E extends ComponentObjectPropsOptions
+>(props: T, keys: K[], extra?: E) {
+  const omittedKeys = new Set(keys)
+
+  return Object.freeze(
+    Object.assign(
+      (Object.keys(props) as any[]).reduce((prev, current) => {
+        if (!omittedKeys.has(current)) {
+          prev[current] = props[current]
+        }
+
+        return prev
+      }, {}),
+      extra || {}
+    )
+  )
+}
+
 export type ComponentSize = 'small' | 'default' | 'large'
 
 export const sizeProp = String as PropType<ComponentSize>
@@ -157,12 +223,10 @@ export function createStateProp(defaultValue: MaybeRef<ComponentState> = 'defaul
 }
 
 type MaybeArray<T> = T | T[]
-type MaybeArrayDeep<T> = T | MaybeArrayDeep<T>[]
+// type MaybeArrayDeep<T> = T | (MaybeArrayDeep<T>[] extends infer R ? R : never)
 
-export type ClassType = MaybeArrayDeep<string | { [x: string]: ClassType }>
-export type StyleType = MaybeArrayDeep<
-  string | (CSSProperties & { [x: `--${string}`]: string | number })
->
+export type ClassType = string | Record<string, any> | Array<string | Record<string, any>>
+export type StyleType = string | CSSProperties | Array<string | CSSProperties>
 
 export const classProp = [String, Object, Array] as PropType<ClassType>
 export const styleProp = [String, Object, Array] as PropType<StyleType>

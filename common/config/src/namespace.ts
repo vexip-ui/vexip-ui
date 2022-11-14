@@ -30,6 +30,11 @@ export function useNamespace<N extends string = string>() {
 
 type Token = string | number
 
+/**
+ * Create a name helper for BEM.
+ *
+ * For css vars name, the namespace is fixed to 'vxp' (not responsive).
+ */
 export function useNameHelper<B extends Token, N extends string = string>(
   block: B,
   namespace: Ref<N> | N = useNamespace()
@@ -60,9 +65,9 @@ export function useNameHelper<B extends Token, N extends string = string>(
    */
   const ns = (suffix: Token) => `${unref(namespace)}-${suffix}` as const
   /**
-   * @returns `${namespace}-${block}-${name}`
+   * @returns `--vxp-${block}-${name}`
    */
-  const cv = <S extends Token>(name: S) => `--${b()}-${name}` as const
+  const cv = (name: string) => `--vxp-${block}-${name}`
   /**
    * @returns a map that is transformed origin style map's key to cv(key)
    */
@@ -73,9 +78,20 @@ export function useNameHelper<B extends Token, N extends string = string>(
 
     return style
   }
-  const v = <S extends Token>(name: S) => `--${unref(namespace)}-${name}` as const
+  const v = <S extends Token>(name: S) => `--vxp-${name}` as const
   const gv = <S extends Token>(name: S) => `var(${v(name)})` as const
-  const gcv = <S extends Token>(name: S) => `var(${cv(name)})` as const
+  /**
+   * @returns `var(--vxp-${block}-${name})`
+   */
+  const gcv = (name: string) => `var(--vxp-${block}-${name})`
+  /**
+   * @returns `--vxp-${name}`
+   */
+  const nv = (name: string) => `--vxp-${name}`
+  /**
+   * @returns `var(--vxp-${name})`
+   */
+  const gnv = (name: string) => `var(--vxp-${name})`
 
   return {
     b,
@@ -88,7 +104,9 @@ export function useNameHelper<B extends Token, N extends string = string>(
     cvm,
     v,
     gv,
-    gcv
+    gcv,
+    nv,
+    gnv
   }
 }
 

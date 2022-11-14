@@ -1,3 +1,3 @@
 ### Dashed Button
 
-Add the `dsahed` prop can change button to dashed.
+Add the `dashed` prop can change button to dashed.

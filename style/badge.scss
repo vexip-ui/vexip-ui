@@ -12,7 +12,10 @@ $badge: map.merge(
     height: 16px,
     v-padding: 0,
     h-padding: 6px,
-    family: #{Helvetica, 'Microsoft YaHei', SimSun, sans-serif},
+    family: #{Helvetica,
+    'Microsoft YaHei',
+    SimSun,
+    sans-serif},
     font-size: get-css-var('font-size-secondary'),
     dot-size: 7px
   ),
@@ -28,10 +31,12 @@ $badge: map.merge(
     @include define-preset-style('badge', $style-map);
   }
 
+  $types: primary info success warning;
+
   @include basis;
 
   position: relative;
-  display: inline-block;
+  display: inline-flex;
 
   &--not-wrapper {
     line-height: 1;
@@ -69,22 +74,24 @@ $badge: map.merge(
       transform: translate(50%, -50%);
     }
 
-    $types: primary info success warning;
-
     @each $type in $types {
       &--#{$type} {
-        @include define-badge-style((
-          bg-color: 'color' $type 'base',
-          b-color: 'color' $type 'opacity-8'
-        ));
+        @include define-badge-style(
+          (
+            bg-color: 'color' $type 'base',
+            b-color: 'color' $type 'opacity-8'
+          )
+        );
       }
     }
 
     &--disabled {
-      @include define-badge-style((
-        bg-color: 'content-color-disabled',
-        b-color: 'border-color-light-2'
-      ));
+      @include define-badge-style(
+        (
+          bg-color: 'content-color-disabled',
+          b-color: 'border-color-light-2'
+        )
+      );
     }
   }
 

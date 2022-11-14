@@ -3,7 +3,7 @@
     <Column flex="0">
       <Linker to="https://www.vexipui.com">
         <h1 class="index">
-          <img class="index__logo" src="/logo.png" alt="logo.png" />
+          <img class="index__logo" src="/vexip-ui.svg" alt="vexip-ui.svg" />
           <span class="index__title"> Vexip SFC Playground </span>
         </h1>
         <Tag v-if="libVersion" style="margin: 4px 0 0 6px; transform: scale(0.8);">
@@ -36,7 +36,11 @@
           <ArrowRotateLeft></ArrowRotateLeft>
         </Icon>
       </div>
-      <Linker class="github-link" title="Github" to="//github.com/qmhc/vexip-ui/tree/main/playground">
+      <Linker
+        class="github-link"
+        title="Github"
+        to="//github.com/vexip-ui/vexip-ui/tree/main/playground"
+      >
         <Icon :scale="1.4">
           <GithubB></GithubB>
         </Icon>
@@ -47,8 +51,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Confirm, Message } from 'vexip-ui'
 import { Moon, Sun, ShareNodes, Download, ArrowRotateLeft, GithubB } from '@vexip-ui/icons'
+import { Confirm, Message } from 'vexip-ui'
 import { downloadProject } from '../download/download'
 
 const props = defineProps({
@@ -108,7 +112,10 @@ function reset() {
   background-color: var(--bg);
   border-bottom: 1px solid transparent;
   box-shadow: 0 0 4px rgba(0, 0, 0, 30%);
-  transition: var(--vxp-transition-background), var(--vxp-transition-border), var(--vxp-transition-shadow);
+  transition:
+    var(--vxp-transition-background),
+    var(--vxp-transition-border),
+    var(--vxp-transition-shadow);
 
   .dark & {
     --base: #ddd;

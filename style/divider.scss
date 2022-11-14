@@ -10,9 +10,10 @@ $divider: map.merge(
     v-margin: 24px,
     v-margin-text: 14px,
     h-margin: 8px,
+    text-color: get-css-var('content-color-base'),
     text-v-padding: 0,
     text-h-padding: 14px,
-    text-size-primary: get-css-var('font-size-primary'),
+    text-size-primary: get-css-var('font-size-primary')
   ),
   $divider
 );

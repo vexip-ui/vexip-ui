@@ -1,35 +1,14 @@
 import { defineComponent, ref, reactive, computed, watchEffect, watch } from 'vue'
-import { Button } from '@/components/button'
 import TransferPanel from './transfer-panel.vue'
+import { Button } from '@/components/button'
+import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
-import { ChevronRight, ChevronLeft } from '@vexip-ui/icons'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  createStateProp,
-  booleanProp,
-  stateProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { ChevronRight, ChevronLeft, Spinner } from '@vexip-ui/icons'
+import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
+import { transferProps } from './props'
 
-import type { PropType } from 'vue'
 import type { TransferKeyConfig, TransferOptionState } from './symbol'
-
-type RawOption = string | Record<string, any>
-type Values = (string | number)[]
-type FilterHandler = (
-  value: string,
-  options: TransferOptionState,
-  type: 'source' | 'target'
-) => boolean
-type SelectHandler = (
-  type: 'source' | 'target',
-  selected: { source: Values, target: Values },
-  data: { source: RawOption[], target: RawOption[] }
-) => void
 
 const defaultKeyConfig: Required<TransferKeyConfig> = {
   value: 'value',
@@ -43,30 +22,11 @@ export default defineComponent({
     Button,
     TransferPanel
   },
-  props: {
-    state: stateProp,
-    options: Array as PropType<RawOption[]>,
-    value: Array as PropType<Values>,
-    disabled: booleanProp,
-    paged: booleanProp,
-    filter: {
-      type: [Boolean, Function] as PropType<boolean | FilterHandler>,
-      default: null
-    },
-    emptyText: String,
-    keyConfig: Object as PropType<TransferKeyConfig>,
-    optionHeight: Number,
-    ignoreCase: booleanProp,
-    sourceTitle: String,
-    targetTitle: String,
-    deepState: booleanProp,
-    onChange: eventProp<(values: Values) => void>(),
-    onSelect: eventProp<SelectHandler>()
-  },
+  props: transferProps,
   emits: ['update:value'],
-  setup(_props, { slots, emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<Values>(() => source.value?.$el?.focus())
+  setup(_props, { slots, emit, expose }) {
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<(string | number)[]>(() => source.value?.$el?.focus())
 
     const props = useProps('transfer', _props, {
       state: createStateProp(state),
@@ -90,7 +50,11 @@ export default defineComponent({
       ignoreCase: false,
       sourceTitle: null,
       targetTitle: null,
-      deepState: false
+      deepState: false,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const nh = useNameHelper('transfer')
@@ -103,8 +67,8 @@ export default defineComponent({
     const targetOptions = ref<TransferOptionState[]>([])
     const optionStates = ref<TransferOptionState[]>([])
 
-    const source = ref<InstanceType<typeof TransferPanel> | null>(null)
-    const target = ref<InstanceType<typeof TransferPanel> | null>(null)
+    const source = ref<InstanceType<typeof TransferPanel>>()
+    const target = ref<InstanceType<typeof TransferPanel>>()
 
     const keyConfig = computed(() => ({ ...defaultKeyConfig, ...props.keyConfig }))
 
@@ -114,12 +78,12 @@ export default defineComponent({
     const updateTrigger = ref(0)
 
     watchEffect(() => {
-      /* eslint-disable no-unused-expressions */
+      /* eslint-disable @typescript-eslint/no-unused-expressions */
       props.keyConfig.value
       props.keyConfig.label
       props.keyConfig.disabled
       props.options
-      /* eslint-disable no-unused-expressions */
+      /* eslint-enable */
 
       updateTrigger.value++
     })
@@ -211,6 +175,8 @@ export default defineComponent({
       }
     )
 
+    expose({ handleToTarget, handleToSource, handlePanelFocus, handlePanelBlur })
+
     function getFilterMethod(type: 'source' | 'target') {
       const filter = props.filter
 
@@ -263,12 +229,17 @@ export default defineComponent({
       emitEvent(props.onSelect, type, selected, data)
     }
 
-    function handleSwitchPanel(to: 'source' | 'target') {
-      if (to === 'source') {
+    function handlePanelFocus(type: 'source' | 'target') {
+      if (type === 'source') {
         source.value?.$el.focus()
       } else {
         target.value?.$el.focus()
       }
+    }
+
+    function handlePanelBlur() {
+      source.value?.$el.blur()
+      target.value?.$el.blur()
     }
 
     return () => {
@@ -289,9 +260,13 @@ export default defineComponent({
             option-height={props.optionHeight}
             ignore-case={props.ignoreCase}
             deep-state={props.deepState}
+            loading={props.loading}
+            loading-icon={props.loadingIcon}
+            loading-lock={props.loadingLock}
+            loading-spin={props.loadingSpin}
             onSelect={() => handleSelect('source')}
             onEnter={handleToTarget}
-            onSwitch={() => handleSwitchPanel('target')}
+            onSwitch={() => handlePanelFocus('target')}
           >
             {{
               header: slots['source-header'] || slots.sourceHeader || slots.header,
@@ -309,20 +284,40 @@ export default defineComponent({
                     class={nh.be('action')}
                     type={actionType.value}
                     size={'small'}
-                    icon={ChevronRight}
                     disabled={props.disabled || !toTargetEnabled.value}
+                    loading={props.loading && props.loadingLock}
+                    loading-icon={props.loadingIcon}
+                    loading-spin={props.loadingSpin}
                     style={{ marginBottom: '6px' }}
                     onClick={handleToTarget}
-                  ></Button>,
+                  >
+                    {{
+                      icon: () => (
+                        <Icon label="to right">
+                          <ChevronRight></ChevronRight>
+                        </Icon>
+                      )
+                    }}
+                  </Button>,
                   <Button
                     class={nh.be('action')}
                     type={actionType.value}
                     size={'small'}
-                    icon={ChevronLeft}
                     disabled={props.disabled || !toSourceEnabled.value}
+                    loading={props.loading && props.loadingLock}
+                    loading-icon={props.loadingIcon}
+                    loading-spin={props.loadingSpin}
                     style={{ margin: '0' }}
                     onClick={handleToSource}
-                  ></Button>
+                  >
+                    {{
+                      icon: () => (
+                        <Icon label="to left">
+                          <ChevronLeft></ChevronLeft>
+                        </Icon>
+                      )
+                    }}
+                  </Button>
                 ]}
           </div>
           <TransferPanel
@@ -340,9 +335,13 @@ export default defineComponent({
             option-height={props.optionHeight}
             ignore-case={props.ignoreCase}
             deep-state={props.deepState}
+            loading={props.loading}
+            loading-icon={props.loadingIcon}
+            loading-lock={props.loadingLock}
+            loading-spin={props.loadingSpin}
             onSelect={() => handleSelect('target')}
             onEnter={handleToSource}
-            onSwitch={() => handleSwitchPanel('source')}
+            onSwitch={() => handlePanelFocus('source')}
           >
             {{
               header: slots['target-header'] || slots.targetHeader || slots.header,

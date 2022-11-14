@@ -1,6 +1,6 @@
 export type ScrollbarPlacement = 'top' | 'right' | 'bottom' | 'left'
 
-export enum ScrollbarType {
+export const enum ScrollbarType {
   HORIZONTAL,
   VERTICAL
 }

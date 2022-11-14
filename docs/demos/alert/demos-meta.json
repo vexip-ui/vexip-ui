@@ -1,9 +1,1 @@
-[
-  "basis",
-  "title",
-  "closable",
-  "close",
-  "icon",
-  "colorful-text",
-  "no-border"
-]
+["basis", "title", "closable", "close", "icon", "colorful-text", "no-border", "scroll", "carousel"]

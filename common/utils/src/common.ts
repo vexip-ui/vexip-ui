@@ -1,3 +1,9 @@
+export const isClient = typeof window !== 'undefined'
+export const isIOS =
+  /* #__PURE__ */ isClient &&
+  window?.navigator?.userAgent &&
+  /iP(ad|hone|od)/.test(window.navigator.userAgent)
+
 const toString = Object.prototype.toString
 const hasOwnProperty = Object.prototype.hasOwnProperty
 
@@ -101,6 +107,12 @@ export function isEmpty(value: unknown) {
   }
 
   return false
+}
+
+export function isElement(value: unknown): value is Element {
+  if (!isClient) return false
+
+  return !!(value && 'nodeType' in (value as any))
 }
 
 export function noop(...args: any[]): any

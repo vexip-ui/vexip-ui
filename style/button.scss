@@ -22,39 +22,6 @@ $button: map.merge(
     b-color-focus: get-css-var('color-primary-light-2'),
     b-color-active: get-css-var('color-primary-dark-1'),
     b-color-disabled: get-css-var('border-color-light-1'),
-    color-ghost: rgba(#fff, 0.8),
-    color-hover-ghost: get-css-var('color-primary-base'),
-    color-focus-ghost: get-css-var('color-primary-base'),
-    color-active-ghost: get-css-var('color-primary-base'),
-    color-disabled-ghost: get-css-var('content-color-disabled'),
-    bg-color-ghost: transparent,
-    bg-color-hover-ghost: get-css-var('button-bg-color-ghost'),
-    bg-color-focus-ghost: get-css-var('button-bg-color-ghost'),
-    bg-color-active-ghost: get-css-var('button-bg-color-ghost'),
-    bg-color-disabled-ghost: get-css-var('button-bg-color-ghost'),
-    b-color-ghost: rgba(#fff, 0.6),
-    b-color-hover-ghost: get-css-var('color-primary-base'),
-    b-color-active-ghost: get-css-var('color-primary-base'),
-    b-color-disabled-ghost: get-css-var('content-color-disabled'),
-    color-typed: get-css-var('color-white'),
-    color-hover-typed: get-css-var('button-color-typed'),
-    color-focus-typed: get-css-var('button-color-typed'),
-    color-active-typed: get-css-var('button-color-typed'),
-    color-disabled-typed: get-css-var('content-color-disabled'),
-    bg-color-disabled-typed: get-css-var('fill-color-background'),
-    b-color-disabled-typed: get-css-var('border-color-light-1'),
-    color-focus-typed-simple: get-css-var('color-white'),
-    color-active-typed-simple: get-css-var('color-white'),
-    color-disabled-typed-simple: get-css-var('content-color-disabled'),
-    bg-color-disabled-typed-simple: get-css-var('fill-color-background'),
-    b-color-disabled-typed-simple: get-css-var('border-color-light-1'),
-    color-disabled-typed-ghost: get-css-var('button-color-disabled-ghost'),
-    bg-color-typed-ghost: transparent,
-    bg-color-hover-typed-ghost: rgba($color-white, 0.1),
-    bg-color-focus-typed-ghost: rgba($color-white, 0.1),
-    bg-color-active-typed-ghost: rgba($color-white, 0.2),
-    bg-color-disabled-typed-ghost: get-css-var('button-bg-color-typed-ghost'),
-    b-color-disabled-typed-ghost: get-css-var('content-color-disabled'),
     border: get-css-var('border-shape') get-css-var('button-b-color'),
     radius: get-css-var('radius-base'),
     pulse-s-color: get-css-var('color-primary-base'),
@@ -68,7 +35,10 @@ $button: map.merge(
     font-size: get-css-var('font-size-base'),
     series-span: 8px,
     icon-span: 6px,
-    d-color-typed: rgba($color-white, 50%)
+    d-color-typed: rgba($color-white, 50%),
+    badge-color: get-css-var('color-white'),
+    badge-bg-color: get-css-var('color-error-base'),
+    badge-b-color: get-css-var('color-error-base')
   ),
   $button
 );
@@ -109,6 +79,7 @@ $button: map.merge(
   line-height: 1;
   color: get-css-var('button-color');
   white-space: nowrap;
+  vertical-align: middle;
   cursor: pointer;
   user-select: none;
   background-color: get-css-var('button-bg-color');
@@ -242,23 +213,28 @@ $button: map.merge(
   }
 
   &--ghost {
+    @include define-preset-values(
+      'button',
+      (
+        color: rgba($color-white, 0.8),
+        bg-color: transparent,
+        bg-color-hover: transparent,
+        bg-color-focus: transparent,
+        bg-color-active: transparent,
+        bg-color-disabled: transparent,
+        b-color: rgba($color-white, 0.6)
+      )
+    );
+
     @include define-button-style(
       (
-        bg-color: 'button-bg-color-ghost',
-        b-color: 'button-b-color-ghost',
-        color: 'button-color-ghost',
-        bg-color-hover: 'button-bg-color-hover-ghost',
-        b-color-hover: 'button-b-color-hover-ghost',
-        color-hover: 'button-color-hover-ghost',
-        bg-color-focus: 'button-bg-color-focus-ghost',
-        b-color-focus: 'button-b-color-focus-ghost',
-        color-focus: 'button-color-focus-ghost',
-        bg-color-active: 'button-bg-color-active-ghost',
-        b-color-active: 'button-b-color-active-ghost',
-        color-active: 'button-color-active-ghost',
-        bg-color-disabled: 'button-bg-color-disabled-ghost',
-        b-color-disabled: 'button-b-color-disabled-ghost',
-        color-disabled: 'button-color-disabled-ghost'
+        color-hover: 'color-primary-base',
+        color-focus: 'color-primary-base',
+        color-active: 'color-primary-base',
+        color-disabled: 'content-color-disabled',
+        b-color-hover: 'color-primary-base',
+        b-color-active: 'color-primary-base',
+        b-color-disabled: 'content-color-disabled'
       )
     );
   }
@@ -274,21 +250,21 @@ $button: map.merge(
       &--#{$type} {
         @include define-button-style(
           (
-            color: 'button-color-typed',
-            color-hover: 'button-color-hover-typed',
-            color-focus: 'button-color-focus-typed',
-            color-active: 'button-color-active-typed',
-            color-disabled: 'button-color-disabled-typed',
+            color: 'color-white',
+            color-hover: 'color-white',
+            color-focus: 'color-white',
+            color-active: 'color-white',
+            color-disabled: 'content-color-disabled',
             bg-color: 'color' $type 'base',
             bg-color-hover: 'color' $type 'light-2',
             bg-color-focus: 'color' $type 'light-2',
             bg-color-active: 'color' $type 'dark-1',
-            bg-color-disabled: 'button-bg-color-disabled-typed',
+            bg-color-disabled: 'fill-color-background',
             b-color: 'color' $type 'base',
             b-color-hover: 'color' $type 'light-2',
             b-color-focus: 'color' $type 'light-2',
             b-color-active: 'color' $type 'dark-1',
-            b-color-disabled: 'button-b-color-disabled-typed',
+            b-color-disabled: 'border-color-light-1',
             pulse-s-color: 'color' $type 'dark-1'
           )
         );
@@ -299,37 +275,43 @@ $button: map.merge(
           (
             color: 'color' $type 'base',
             color-hover: 'color' $type 'base',
-            color-focus: 'button-color-focus-typed-simple',
-            color-active: 'button-color-active-typed-simple',
-            color-disabled: 'button-color-disabled-typed-simple',
+            color-focus: 'color-white',
+            color-active: 'color-white',
+            color-disabled: 'content-color-disabled',
             bg-color: 'color' $type 'opacity-8',
             bg-color-hover: 'color' $type 'opacity-7',
-            bg-color-focus: 'color' $type 'opacity-1',
-            bg-color-active: 'color' $type 'opacity-1',
-            bg-color-disabled: 'button-bg-color-disabled-typed-simple',
+            bg-color-focus: 'color' $type 'opacity-3',
+            bg-color-active: 'color' $type 'opacity-3',
+            bg-color-disabled: 'fill-color-background',
             b-color: 'color' $type 'opacity-4',
             b-color-hover: 'color' $type 'opacity-4',
             b-color-focus: 'color' $type 'opacity-3',
             b-color-active: 'color' $type 'opacity-3',
-            b-color-disabled: 'button-b-color-disabled-typed-simple'
+            b-color-disabled: 'border-color-light-1'
           )
         );
       }
 
       &--#{$type}#{&}--ghost {
+        @include define-preset-values(
+          'button',
+          (
+            bg-color: transparent,
+            bg-color-hover: rgba($color-white, 0.1),
+            bg-color-focus: rgba($color-white, 0.1),
+            bg-color-active: rgba($color-white, 0.2),
+            bg-color-disabled: transparent
+          )
+        );
+
         @include define-button-style(
           (
             color: 'color' $type 'base',
             color-hover: 'color' $type 'base',
             color-focus: 'color' $type 'base',
             color-active: 'color' $type 'base',
-            color-disabled: 'button-color-disabled-typed-ghost',
-            bg-color: 'button-bg-color-typed-ghost',
-            bg-color-hover: 'button-bg-color-hover-typed-ghost',
-            bg-color-focus: 'button-bg-color-focus-typed-ghost',
-            bg-color-active: 'button-bg-color-active-typed-ghost',
-            bg-color-disabled: 'button-bg-color-disabled-typed-ghost',
-            b-color-disabled: 'button-b-color-disabled-typed-ghost'
+            color-disabled: 'content-color-disabled',
+            b-color-disabled: 'content-color-disabled'
           )
         );
       }
@@ -419,6 +401,58 @@ $button: map.merge(
 
   &--icon-only#{&}--large {
     width: get-css-var('button-height');
+  }
+
+  &__badge {
+    margin-left: 8px;
+    pointer-events: none;
+
+    .#{$namespace}-badge__content {
+      color: get-css-var('button-badge-color');
+      background-color: get-css-var('button-badge-bg-color');
+      box-shadow: get-css-var('shadow-border') get-css-var('button-badge-b-color');
+    }
+  }
+
+  @each $type in $types {
+    &__badge--#{$type} {
+      @include define-button-style(
+        (
+          badge-color: 'button-bg-color',
+          badge-bg-color: 'button-color',
+          badge-b-color: 'button-color'
+        )
+      );
+    }
+
+    &--ghost &__badge--#{$type} {
+      @include define-button-style(
+        (
+          badge-color: 'button-color',
+          badge-bg-color: transparent
+        )
+      );
+    }
+
+    &--simple &__badge--#{$type},
+    &--text &__badge--#{$type},
+    &--dashed &__badge--#{$type} {
+      @include define-button-style(
+        (
+          badge-color: 'color-white'
+        )
+      );
+    }
+  }
+
+  &__badge--disabled .#{$namespace}-badge__content {
+    @include define-button-style(
+      (
+        badge-color: 'button-color-disabled',
+        badge-bg-color: 'button-bg-color-disabled',
+        badge-b-color: 'button-b-color-disabled'
+      )
+    );
   }
 
   @at-root {

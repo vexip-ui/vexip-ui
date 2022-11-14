@@ -6,9 +6,15 @@ export interface GroupState {
   size: ComponentSize,
   state: ComponentState,
   disabled: boolean,
+  button: boolean,
+  border: boolean,
+  loading: boolean,
+  loadingIcon: Record<string, any>,
+  loadingLock: boolean,
+  loadingSpin: boolean,
   updateValue(value: string | number): void,
-  registerInput(input: Ref<HTMLElement | null>): void,
-  unregisterInput(input: Ref<HTMLElement | null>): void
+  registerInput(input: Ref<HTMLElement | null | undefined>): void,
+  unregisterInput(input: Ref<HTMLElement | null | undefined>): void
 }
 
 export const GROUP_STATE: InjectionKey<GroupState> = Symbol('RADIO_GROUP_STATE')

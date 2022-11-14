@@ -1,57 +1,23 @@
 import { defineComponent, reactive, watch, inject, onBeforeUnmount } from 'vue'
-import { useProps, booleanProp, sizeProp, createSizeProp, classProp } from '@vexip-ui/config'
+import { useProps, createSizeProp } from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
+import { tableColumnProps } from './props'
 import { TABLE_ACTION } from './symbol'
 
-import type { PropType } from 'vue'
-import type {
-  Data,
-  ColumnType,
-  FilterOptions,
-  SorterOptions,
-  RenderFn,
-  RowState,
-  ColumnWithKey
-} from './symbol'
+import type { Data, TableColumnType, FilterOptions, RowState, ColumnWithKey } from './symbol'
 
-const props = {
-  idKey: [Number, String],
-  name: String,
-  accessor: Function as PropType<(row: Data, index: number) => any>,
-  fixed: {
-    type: [Boolean, String] as PropType<boolean | 'left' | 'right'>,
-    default: null
-  },
-  className: classProp,
-  type: String as PropType<ColumnType>,
-  width: Number,
-  filter: Object as PropType<FilterOptions<any, any>>,
-  sorter: {
-    type: [Boolean, Object] as PropType<boolean | SorterOptions<any>>,
-    default: null
-  },
-  renderer: Function as PropType<RenderFn>,
-  headRenderer: Function as PropType<RenderFn>,
-  order: Number,
-  noEllipsis: booleanProp,
-  checkboxSize: sizeProp,
-  disableRow: Function as PropType<(data: Data) => boolean>,
-  truthIndex: booleanProp,
-  orderLabel: Function as PropType<(index: number) => string | number>,
-  metaData: Object as PropType<Data>
-}
+type ColumnPropKey = keyof typeof tableColumnProps
 
-const propKeys = Object.keys(props) as (keyof typeof props)[]
-const aliases: Partial<Record<keyof typeof props, string>> = {
+const propKeys = Object.keys(tableColumnProps) as ColumnPropKey[]
+const aliases: Partial<Record<ColumnPropKey, string>> = {
   idKey: 'key'
 }
-
-const columnTypes = Object.freeze<ColumnType>(['order', 'selection', 'expand'])
+const deepProps: ColumnPropKey[] = ['className', 'style', 'attrs', 'filter', 'sorter', 'metaData']
+const columnTypes: TableColumnType[] = ['order', 'selection', 'expand']
 
 export default defineComponent({
   name: 'TableColumn',
-  functional: true,
-  props,
+  props: tableColumnProps,
   setup(_props, { slots }) {
     const props = useProps('tableColumn', _props, {
       idKey: {
@@ -59,19 +25,25 @@ export default defineComponent({
         validator: (value: number | string) => !isNull(value),
         static: true
       },
-      name: '',
+      name: {
+        default: '',
+        static: true
+      },
       accessor: {
         default: null,
-        isFunc: true
+        isFunc: true,
+        static: true
       },
       fixed: {
         default: false,
         static: true
       },
       className: null,
+      style: null,
+      attrs: null,
       type: {
         default: null,
-        validator: (value: ColumnType) => columnTypes.includes(value),
+        validator: (value: TableColumnType) => columnTypes.includes(value),
         static: true
       },
       width: null,
@@ -79,15 +51,17 @@ export default defineComponent({
       sorter: false,
       renderer: {
         default: null,
-        isFunc: true
+        isFunc: true,
+        static: true
       },
       headRenderer: {
         default: null,
-        isFunc: true
+        isFunc: true,
+        static: true
       },
       order: {
         default: 0,
-        isFunc: true
+        static: true
       },
       noEllipsis: false,
       checkboxSize: createSizeProp(),
@@ -114,15 +88,28 @@ export default defineComponent({
 
       const aliasKey = (aliases[key] || key) as keyof ColumnWithKey
 
-      // eslint-disable-next-line vue/no-setup-props-destructure
       ;(options[aliasKey] as any) = props[key]
 
-      watch(
-        () => props[key],
-        value => {
-          (options[aliasKey] as any) = value
-        }
-      )
+      if (key === 'idKey') {
+        watch(
+          () => props[key],
+          value => {
+            if (isNull(value) && props.type) {
+              (options[aliasKey] as any) = value = `__vxp_${props.type}`
+            } else {
+              (options[aliasKey] as any) = value
+            }
+          }
+        )
+      } else {
+        watch(
+          () => props[key],
+          value => {
+            (options[aliasKey] as any) = value
+          },
+          { deep: deepProps.includes(key) }
+        )
+      }
     }
 
     watch(() => slots.default, setRenderer)
@@ -140,7 +127,7 @@ export default defineComponent({
     })
 
     function setRenderer() {
-      options.renderer = (data: Data) => {
+      options.renderer = (data: any) => {
         if (typeof slots.default === 'function') {
           return slots.default(data)
         }
@@ -165,7 +152,7 @@ export default defineComponent({
     }
 
     function setHeadRenderer() {
-      options.headRenderer = (data: Data) => {
+      options.headRenderer = (data: any) => {
         if (typeof slots.head === 'function') {
           return slots.head(data)
         }

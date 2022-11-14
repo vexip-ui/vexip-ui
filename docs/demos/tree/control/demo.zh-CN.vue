@@ -18,7 +18,7 @@ import { ref } from 'vue'
 
 import type { Tree } from 'vexip-ui'
 
-const tree = ref<InstanceType<typeof Tree> | null>(null)
+const tree = ref<InstanceType<typeof Tree>>()
 const data = ref([
   {
     id: 1,

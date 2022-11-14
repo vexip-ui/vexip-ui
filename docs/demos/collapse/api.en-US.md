@@ -5,7 +5,7 @@
 | expanded   | `string \| number \| (string \| number)[]` | Set the label value of the expanded panel, can be passed in an array when not in accordion mode | `null`    | -     |
 | card       | `boolean`                                  | Set whether to be in card mode                                                                  | `false`   | -     |
 | accordion  | `boolean`                                  | Set whether to accordion mode                                                                   | `false`   | -     |
-| arrow-type | `'right' \| 'left' \| 'none'`              | Sets the type of the panel's indicator arrow                                                    | `'right'` | -     |
+| arrow-type | `'right' \| 'left' \| 'none'`              | Set the type of the panel's indicator arrow                                                     | `'right'` | -     |
 | ghost      | `boolean`                                  | Set whether to set borderless mode                                                              | `false`   | -     |
 
 ### Collapse Events
@@ -25,7 +25,7 @@
 | expanded      | `boolean`                     | Set whether the panel is expanded                      | `false`   | -     |
 | card          | `boolean`                     | Set whether to be in card mode                         | `false`   | -     |
 | arrow-type    | `'right' \| 'left' \| 'none'` | Set the type of the panel's indicator arrow            | `'right'` | -     |
-| icon          | `string`                      | Sets the subordinate icon for the panel title          | `''`      | -     |
+| icon          | `string`                      | Set the subordinate icon for the panel title           | `''`      | -     |
 | ghost         | `boolean`                     | Set whether to be in borderless mode                   | `false`   | -     |
 
 ### CollapsePanel Slots

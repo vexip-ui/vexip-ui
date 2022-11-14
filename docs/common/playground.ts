@@ -1,24 +1,28 @@
-const playgroundUrl = 'https://playground.vexipui.com/'
+let playgroundUrl = 'https://playground.vexipui.com/'
 
-const importMap = {
+let importMap = {
   imports: {
     'vexip-ui': `${playgroundUrl}vexip-ui.js`,
     '@vexip-ui/icons': `${playgroundUrl}vexip-ui-icons.js`,
     vue: `${playgroundUrl}vue.runtime.esm-browser.js`,
-    'vue/server-renderer': `${playgroundUrl}server-renderer.esm-browser.js`
+    'vue/server-renderer': `${playgroundUrl}server-renderer.esm-browser.js`,
+    'vue-router': `${playgroundUrl}vue-router.js`
   }
 }
 
-// const playgroundUrl = 'http://localhost:6012/'
+if (import.meta.env.DEV) {
+  playgroundUrl = 'http://localhost:6012/'
 
-// const importMap = {
-//   imports: {
-//     'vexip-ui': `${playgroundUrl}vexip-ui.es.js`,
-//     '@vexip-ui/icons': `${playgroundUrl}icons/index.es.js`,
-//     vue: `${playgroundUrl}proxy/vue`,
-//     'vue/server-renderer': `${playgroundUrl}proxy/vue-server`
-//   }
-// }
+  importMap = {
+    imports: {
+      'vexip-ui': `${playgroundUrl}vexip-ui.es.js`,
+      '@vexip-ui/icons': `${playgroundUrl}icons/index.es.js`,
+      vue: `${playgroundUrl}proxy/vue`,
+      'vue/server-renderer': `${playgroundUrl}proxy/vue-server`,
+      'vue-router': `${playgroundUrl}proxy/vue-router`
+    }
+  }
+}
 
 const mianCode = `import { createApp } from 'vue'
 import { install } from 'vexip-ui'
@@ -93,8 +97,8 @@ function utoa(data: string) {
 
 export function usePlayground(code: string) {
   code = code.replace(
-    '</template>',
-    '\r\n  <!-- This is the dark theme trigger -->\r\n  <ThemeSwitch></ThemeSwitch>\r\n</template>'
+    /\n<\/template>/,
+    '\n\r\n  <!-- This is the dark theme trigger -->\r\n  <ThemeSwitch></ThemeSwitch>\r\n</template>'
   )
 
   const meta = {

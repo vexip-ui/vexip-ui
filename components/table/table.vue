@@ -130,18 +130,11 @@ import {
   onBeforeUnmount,
   toRef
 } from 'vue'
-import { Scroll } from '@/components/scroll'
-import { Scrollbar } from '@/components/scrollbar'
 import TableHead from './table-head.vue'
 import TableBody from './table-body.vue'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { Scroll } from '@/components/scroll'
+import { Scrollbar } from '@/components/scrollbar'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import {
   isDefined,
   debounce,
@@ -150,38 +143,20 @@ import {
   toNumber,
   nextFrameOnce
 } from '@vexip-ui/utils'
-import { useSetTimeout } from '@vexip-ui/mixins'
+import { useSetTimeout } from '@vexip-ui/hooks'
+import { tableProps } from './props'
 import { useStore } from './store'
 import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ClassType } from '@vexip-ui/config'
-import type { TooltipTheme } from '@/components/tooltip'
 import type {
-  Key,
-  Data,
-  RenderFn,
-  ColumnOptions,
-  RowClassFn,
+  DropType,
+  TableColumnOptions,
   RowState,
-  RowInstance
+  RowInstance,
+  TableRowPayload,
+  TableCellPayload,
+  TableHeadPayload
 } from './symbol'
-
-type DropType = 'before' | 'after' | 'none'
-
-interface FilterProfile {
-  name: string,
-  key: string | number,
-  metaData: Data,
-  active: string | number | (string | number)[] | null
-}
-
-interface SortProfile {
-  name: string,
-  key: string | number,
-  metaData: Data,
-  type: 'asc' | 'desc' | null
-}
 
 export default defineComponent({
   name: 'Table',
@@ -191,54 +166,7 @@ export default defineComponent({
     TableHead,
     TableBody
   },
-  props: {
-    // TODO: colums 正确的类型推导
-    columns: Array as PropType<ColumnOptions<any, any>[]>,
-    data: Array as PropType<Data[]>,
-    dataKey: String,
-    width: [Number, String],
-    height: Number,
-    rowClass: [String, Object, Array, Function] as PropType<ClassType | RowClassFn>,
-    stripe: booleanProp,
-    border: booleanProp,
-    highlight: booleanProp,
-    useYBar: booleanProp,
-    barFade: Number,
-    scrollDeltaY: Number,
-    rowDraggable: booleanProp,
-    rowHeight: Number,
-    rowMinHeight: Number,
-    virtual: booleanProp,
-    bufferCount: Number,
-    scrollClass: Object as PropType<{
-      horizontal?: ClassType,
-      major?: ClassType,
-      left?: ClassType,
-      right?: ClassType
-    }>,
-    expandRenderer: Function as PropType<RenderFn>,
-    currentPage: Number,
-    pageSize: Number,
-    transparent: booleanProp,
-    emptyText: String,
-    tooltipTheme: String as PropType<TooltipTheme>,
-    tooltipWidth: [Number, String],
-    singleSorter: booleanProp,
-    singleFilter: booleanProp,
-    onBodyScroll: eventProp<(payload: { client: number, percent: number }) => void>(),
-    onRowEnter: eventProp<(row: Data, key: Key, index: number) => void>(),
-    onRowLeave: eventProp<(row: Data, key: Key, index: number) => void>(),
-    onRowClick: eventProp<(row: Data, key: Key, index: number) => void>(),
-    onRowCheck: eventProp<(row: Data, checked: boolean, key: Key, index: number) => void>(),
-    onRowCheckAll: eventProp<(checked: boolean, partial: boolean) => void>(),
-    onRowExpand: eventProp<(row: Data, expanded: boolean, key: Key, index: number) => void>(),
-    onRowDragStart: eventProp<(row: Data) => void>(),
-    onRowDragOver: eventProp<(row: Data) => void>(),
-    onRowDrop: eventProp<(row: Data, type: DropType) => void>(),
-    onRowDragEnd: eventProp<(row: Data, allRows: Data[]) => void>(),
-    onRowFilter: eventProp<(profiles: FilterProfile[], filteredRow: Data[]) => void>(),
-    onRowSort: eventProp<(profiles: SortProfile[], sortedRow: Data[]) => void>()
-  },
+  props: tableProps,
   emits: [],
   setup(_props) {
     const props = useProps('table', _props, {
@@ -254,6 +182,8 @@ export default defineComponent({
       width: null,
       height: null,
       rowClass: null,
+      rowStyle: null,
+      rowAttrs: null,
       stripe: false,
       border: false,
       highlight: false,
@@ -264,12 +194,12 @@ export default defineComponent({
       rowHeight: null,
       rowMinHeight: {
         default: 36,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       virtual: false,
       bufferCount: {
         default: 5,
-        validator: (value: number) => value >= 0
+        validator: value => value >= 0
       },
       scrollClass: () => ({}),
       expandRenderer: {
@@ -278,19 +208,25 @@ export default defineComponent({
       },
       currentPage: {
         default: 1,
-        validator: (value: number) => value > 0,
+        validator: value => value > 0,
         static: true
       },
       pageSize: 0,
       transparent: false,
       emptyText: null,
       tooltipTheme: {
-        default: 'dark' as TooltipTheme,
-        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+        default: 'dark',
+        validator: value => ['light', 'dark'].includes(value)
       },
       tooltipWidth: 500,
       singleSorter: false,
-      singleFilter: false
+      singleFilter: false,
+      cellClass: null,
+      cellStyle: null,
+      cellAttrs: null,
+      headClass: null,
+      headStyle: null,
+      headAttrs: null
     })
 
     const nh = useNameHelper('table')
@@ -299,22 +235,30 @@ export default defineComponent({
     const yScrollPercent = ref(0)
     const headHeight = ref(0)
     const indicatorShow = ref(false)
-    const templateColumns = ref(new Set<ColumnOptions>())
+    const templateColumns = ref(new Set<TableColumnOptions>())
     const tableWidth = ref<number | string | null>(null)
     const yScrollEnable = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const thead = ref<InstanceType<typeof TableHead> | null>(null)
-    const mainScroll = ref<InstanceType<typeof Scroll> | null>(null)
-    const indicator = ref<HTMLElement | null>(null)
-    const scrollbar = ref<InstanceType<typeof Scrollbar> | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const thead = ref<InstanceType<typeof TableHead>>()
+    const mainScroll = ref<InstanceType<typeof Scroll>>()
+    const indicator = ref<HTMLElement>()
+    const scrollbar = ref<InstanceType<typeof Scrollbar>>()
 
     const locale = useLocale('table')
 
     const store = useStore({
-      columns: props.columns as ColumnOptions[],
+      columns: props.columns as TableColumnOptions[],
       data: props.data,
       rowClass: props.rowClass,
+      rowStyle: props.rowStyle,
+      rowAttrs: props.rowAttrs,
+      cellClass: props.cellClass,
+      cellStyle: props.cellStyle,
+      cellAttrs: props.cellAttrs,
+      headClass: props.headClass,
+      headStyle: props.headStyle,
+      headAttrs: props.headAttrs,
       dataKey: props.dataKey,
       highlight: props.highlight,
       currentPage: props.currentPage,
@@ -338,6 +282,8 @@ export default defineComponent({
       emitRowEnter,
       emitRowLeave,
       emitRowClick,
+      emitRowDblclick,
+      emitRowContextmenu,
       emitRowCheck,
       emitAllRowCheck,
       emitRowExpand,
@@ -346,7 +292,17 @@ export default defineComponent({
       handleRowDragStart,
       handleRowDragOver,
       handleRowDrop,
-      handleRowDragEnd
+      handleRowDragEnd,
+      emitCellEnter,
+      emitCellLeave,
+      emitCellClick,
+      emitCellDblclick,
+      emitCellContextmenu,
+      emitHeadEnter,
+      emitHeadLeave,
+      emitHeadClick,
+      emitHeadDblclick,
+      emitHeadContextmenu
     })
 
     const { state, getters, mutations } = store
@@ -403,7 +359,7 @@ export default defineComponent({
       return 35
     })
     const allColumns = computed(() => {
-      return [...templateColumns.value].concat(props.columns as ColumnOptions[])
+      return [...templateColumns.value].concat(props.columns as TableColumnOptions[])
     })
     const emptyText = computed(() => props.emptyText ?? locale.value.empty)
 
@@ -551,36 +507,44 @@ export default defineComponent({
       emitEvent(props.onBodyScroll, { client, percent })
     }
 
-    function increaseColumn(column: ColumnOptions) {
+    function increaseColumn(column: TableColumnOptions) {
       templateColumns.value.add(column)
     }
 
-    function decreaseColumn(column: ColumnOptions) {
+    function decreaseColumn(column: TableColumnOptions) {
       templateColumns.value.delete(column)
     }
 
-    function emitRowEnter(data: Data, key: Key, index: number) {
-      emitEvent(props.onRowEnter, data, key, index)
+    function emitRowEnter(payload: TableRowPayload) {
+      emitEvent(props.onRowEnter, payload)
     }
 
-    function emitRowLeave(data: Data, key: Key, index: number) {
-      emitEvent(props.onRowLeave, data, key, index)
+    function emitRowLeave(payload: TableRowPayload) {
+      emitEvent(props.onRowLeave, payload)
     }
 
-    function emitRowClick(data: Data, key: Key, index: number) {
-      emitEvent(props.onRowClick, data, key, index)
+    function emitRowClick(payload: TableRowPayload) {
+      emitEvent(props.onRowClick, payload)
     }
 
-    function emitRowCheck(data: Data, checked: boolean, key: Key, index: number) {
-      emitEvent(props.onRowCheck, data, checked, key, index)
+    function emitRowDblclick(payload: TableRowPayload) {
+      emitEvent(props.onRowDblclick, payload)
+    }
+
+    function emitRowContextmenu(payload: TableRowPayload) {
+      emitEvent(props.onRowContextmenu, payload)
+    }
+
+    function emitRowCheck(payload: TableRowPayload & { checked: boolean }) {
+      emitEvent(props.onRowCheck, payload)
     }
 
     function emitAllRowCheck(checked: boolean, partial: boolean) {
       emitEvent(props.onRowCheckAll, checked, partial)
     }
 
-    function emitRowExpand(data: Data, expanded: boolean, key: Key, index: number) {
-      emitEvent(props.onRowExpand, data, expanded, key, index)
+    function emitRowExpand(payload: TableRowPayload & { expanded: boolean }) {
+      emitEvent(props.onRowExpand, payload)
     }
 
     function emitRowFilter() {
@@ -635,14 +599,14 @@ export default defineComponent({
       dropType?: DropType
     } | null
 
-    function handleRowDragStart(rowInstance: RowInstance) {
+    function handleRowDragStart(rowInstance: RowInstance, event: DragEvent) {
       dragState = {
         draggingRow: rowInstance.row,
         tableRect: wrapper.value!.getBoundingClientRect()
       }
 
       setDragging(true)
-      emitEvent(props.onRowDragStart, rowInstance.row.data)
+      emitEvent(props.onRowDragStart, rowInstance.row.data, event)
     }
 
     function handleRowDragOver(rowInstance: RowInstance, event: DragEvent) {
@@ -671,10 +635,10 @@ export default defineComponent({
       dragState.dropType = dropType
 
       indicatorShow.value = true
-      emitEvent(props.onRowDragOver, rowInstance.row.data)
+      emitEvent(props.onRowDragOver, rowInstance.row.data, event)
     }
 
-    function handleRowDrop(rowInstance: RowInstance) {
+    function handleRowDrop(rowInstance: RowInstance, event: DragEvent) {
       if (!dragState) return
 
       const { draggingRow, dropType } = dragState
@@ -699,11 +663,11 @@ export default defineComponent({
 
         rowData.splice(index, 0, draggingRow)
         refreshRowIndex()
-        emitEvent(props.onRowDrop, rowInstance.row.data, dropType!)
+        emitEvent(props.onRowDrop, rowInstance.row.data, dropType!, event)
       }
     }
 
-    function handleRowDragEnd() {
+    function handleRowDragEnd(event: DragEvent) {
       if (!dragState) return
 
       const { draggingRow } = dragState
@@ -715,8 +679,49 @@ export default defineComponent({
       emitEvent(
         props.onRowDragEnd,
         draggingRow.data,
-        state.rowData.map(row => row.data)
+        state.rowData.map(row => row.data),
+        event
       )
+    }
+
+    function emitCellEnter(payload: TableCellPayload) {
+      emitEvent(props.onCellEnter, payload)
+    }
+
+    function emitCellLeave(payload: TableCellPayload) {
+      emitEvent(props.onCellLeave, payload)
+    }
+
+    function emitCellClick(payload: TableCellPayload) {
+      emitEvent(props.onCellClick, payload)
+    }
+
+    function emitCellDblclick(payload: TableCellPayload) {
+      emitEvent(props.onCellDblclick, payload)
+    }
+
+    function emitCellContextmenu(payload: TableCellPayload) {
+      emitEvent(props.onCellContextmenu, payload)
+    }
+
+    function emitHeadEnter(payload: TableHeadPayload) {
+      emitEvent(props.onHeadEnter, payload)
+    }
+
+    function emitHeadLeave(payload: TableHeadPayload) {
+      emitEvent(props.onHeadLeave, payload)
+    }
+
+    function emitHeadClick(payload: TableHeadPayload) {
+      emitEvent(props.onHeadClick, payload)
+    }
+
+    function emitHeadDblclick(payload: TableHeadPayload) {
+      emitEvent(props.onHeadDblclick, payload)
+    }
+
+    function emitHeadContextmenu(payload: TableHeadPayload) {
+      emitEvent(props.onHeadContextmenu, payload)
     }
 
     function computeRenderRows() {
@@ -763,16 +768,16 @@ export default defineComponent({
 
     function syncVerticalScroll() {
       if (mainScroll.value) {
-        setBodyScroll(mainScroll.value.currentScroll.y)
+        setBodyScroll(-mainScroll.value.currentScroll.y)
       }
     }
 
     const { timer } = useSetTimeout()
 
     function refreshPercentScroll() {
-      window.clearTimeout(timer.scroll)
+      clearTimeout(timer.scroll)
 
-      timer.scroll = window.setTimeout(() => {
+      timer.scroll = setTimeout(() => {
         const { totalHeight, bodyScroll } = state
 
         yScrollPercent.value = Math.max(
@@ -835,9 +840,9 @@ export default defineComponent({
 
       clearSort,
       clearFilter,
+      clearSelected: clearCheckAll,
       refresh,
-      getSelected,
-      clearSelected: clearCheckAll
+      getSelected
     }
   }
 })

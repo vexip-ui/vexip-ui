@@ -1,13 +1,11 @@
 <template>
-  <Select v-model:value="value" :options="options"></Select>
+  <Select v-model:value="value" :loading="loading" :options="options"></Select>
   <br />
   <br />
   <Button type="primary" :loading="loading" @click="loadOptions">
     Load options
   </Button>
-  <p>
-    Current value: {{ value }}
-  </p>
+  <p>Current value: {{ value }}</p>
 </template>
 
 <script setup lang="ts">
@@ -23,13 +21,7 @@ function loadOptions() {
   loading.value = true
 
   setTimeout(() => {
-    options.value = [
-      'Option 1',
-      'Option 2',
-      'Option 3',
-      'Option 4',
-      'Option 5'
-    ]
+    options.value = ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']
     loading.value = false
   }, 2000)
 }

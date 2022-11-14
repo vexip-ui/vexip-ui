@@ -1,8 +1,1 @@
-[
-  "basis",
-  "empty",
-  "arrow",
-  "disabled",
-  "state",
-  "horizontal"
-]
+["basis", "empty", "arrow", "disabled", "horizontal", "loading", "state"]

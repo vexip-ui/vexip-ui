@@ -6,21 +6,16 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
-import { useNameHelper, useProps, useLocale, booleanStringProp, booleanNumberProp } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale } from '@vexip-ui/config'
 import { toDate, format } from '@vexip-ui/utils'
 import { getId, subscribe, unsubscribe, computeTimeAgo } from './helper'
+import { timeAgoProps } from './props'
 
-import type { PropType } from 'vue'
 import type { Dateable } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'TimeAgo',
-  props: {
-    datetime: [String, Number, Date] as PropType<Dateable>,
-    interval: booleanNumberProp,
-    title: booleanStringProp,
-    titleFormat: String
-  },
+  props: timeAgoProps,
   setup(_props) {
     const props = useProps('timeAgo', _props, {
       datetime: {
@@ -38,13 +33,15 @@ export default defineComponent({
     const nh = useNameHelper('time-ago')
     const datetime = toDateValue(props.datetime)
     const locale = useLocale('timeAgo')
-    const timeAgo = ref(computeTimeAgo(datetime, Date.now(), locale.value))
+    const wordSpace = computed(() => useLocale()?.value.wordSpace || false)
+    const timeAgo = ref(computeTimeAgo(datetime, Date.now(), locale.value, wordSpace.value))
 
     const id = getId()
     const record = {
       datetime,
       timeAgo,
       locale,
+      wordSpace,
       interval: parseInterval(props.interval),
       updated: Date.now()
     }
@@ -63,6 +60,7 @@ export default defineComponent({
       () => props.datetime,
       value => {
         record.datetime = toDateValue(value)
+        timeAgo.value = computeTimeAgo(datetime, Date.now(), locale.value, wordSpace.value)
       }
     )
     watch(
@@ -77,7 +75,7 @@ export default defineComponent({
     })
 
     function parseInterval(interval: boolean | number) {
-      return interval && (interval === true ? 10000 : interval * 1000)
+      return interval && (interval === true ? 1e4 : interval * 1000)
     }
 
     function toDateValue(value: Dateable) {

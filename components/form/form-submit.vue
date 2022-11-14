@@ -23,6 +23,7 @@
       {{ props.label || locale.submit }}
     </slot>
     <button
+      v-if="isNative"
       ref="submit"
       type="submit"
       style="display: none;"
@@ -32,22 +33,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject } from 'vue'
-import { Button, buttonTypes } from '@/components/button'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  sizeProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { defineComponent, ref, computed, inject } from 'vue'
+import { Button } from '@/components/button'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { noop, isPromise } from '@vexip-ui/utils'
+import { formSubmitProps } from './props'
 import { FORM_PROPS, FORM_ACTIONS } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ButtonType, ButtonAttrType } from '@/components/button'
 import type { FormActions } from './symbol'
 
 export default defineComponent({
@@ -55,35 +47,12 @@ export default defineComponent({
   components: {
     Button
   },
-  props: {
-    size: sizeProp,
-    type: String as PropType<ButtonType>,
-    label: String,
-    dashed: booleanProp,
-    text: booleanProp,
-    simple: booleanProp,
-    ghost: booleanProp,
-    disabled: booleanProp,
-    circle: booleanProp,
-    loadingIcon: Object,
-    loadingSpin: booleanProp,
-    icon: Object,
-    color: String,
-    buttonType: String as PropType<ButtonAttrType>,
-    block: booleanProp,
-    tag: String,
-    onBeforeSubmit: Function as PropType<() => unknown>,
-    onSubmit: eventProp(),
-    onError: eventProp<(errors: string[]) => void>()
-  },
+  props: formSubmitProps,
   emits: [],
   setup(_props) {
     const props = useProps('form-submit', _props, {
       size: null,
-      type: {
-        default: 'primary' as ButtonType,
-        validator: (value: ButtonType) => buttonTypes.includes(value)
-      },
+      type: 'primary',
       label: null,
       dashed: null,
       text: null,
@@ -105,6 +74,7 @@ export default defineComponent({
 
     const formProps = inject(FORM_PROPS, {})
     const actions = inject<FormActions>(FORM_ACTIONS, {
+      getLabelWidth: noop,
       validate: noop,
       validateFields: noop,
       reset: noop,
@@ -115,10 +85,12 @@ export default defineComponent({
 
     const loading = ref(false)
 
-    const submit = ref<HTMLElement | null>(null)
+    const submit = ref<HTMLElement>()
+
+    const isNative = computed(() => formProps.method && formProps.action)
 
     async function handleSubmit() {
-      if (props.disabled || !formProps.method || !formProps.action) return
+      if (props.disabled) return
 
       loading.value = true
 
@@ -139,7 +111,10 @@ export default defineComponent({
 
         if (result !== false) {
           emitEvent(props.onSubmit)
-          submit.value?.click()
+
+          if (isNative.value) {
+            submit.value?.click()
+          }
         }
       }
 
@@ -153,6 +128,8 @@ export default defineComponent({
       loading,
 
       submit,
+
+      isNative,
 
       handleSubmit
     }

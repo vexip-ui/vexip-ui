@@ -1,7 +1,17 @@
 <template>
   <label :class="className">
-    <span :class="nh.be('signal')"></span>
+    <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span :class="[nh.be('label'), props.labelClass]">
+      <CollapseTransition
+        v-if="isButton"
+        appear
+        horizontal
+        fade-effect
+      >
+        <div v-if="isLoading" :class="nh.be('loading')">
+          <Icon :spin="isLoadingSpin" :pulse="!isLoadingSpin" :icon="computedLoadingIcon"></Icon>
+        </div>
+      </CollapseTransition>
       <slot>{{ props.label }}</slot>
     </span>
     <input
@@ -18,34 +28,26 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, inject, onMounted, onBeforeUnmount } from 'vue'
+import { CollapseTransition } from '@/components/collapse-transition'
+import { Icon } from '@/components/icon'
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  classProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
+import { radioProps } from './props'
 import { GROUP_STATE } from './symbol'
 
 export default defineComponent({
   name: 'Radio',
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: [String, Number],
-    label: [String, Number],
-    labelClass: classProp,
-    disabled: booleanProp,
-    border: booleanProp,
-    tabIndex: [String, Number],
-    onChange: eventProp<(value: string | number) => void>()
+  components: {
+    CollapseTransition,
+    Icon
   },
+  props: radioProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('radio', _props, {
@@ -57,13 +59,15 @@ export default defineComponent({
       },
       label: {
         default: null,
-        validator: (value: string | number) => isDefined(value),
+        validator: isDefined,
         static: true
       },
       labelClass: null,
       disabled: false,
       border: false,
-      tabIndex: 0
+      tabIndex: 0,
+      loading: false,
+      loadingLock: false
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -71,11 +75,17 @@ export default defineComponent({
     const nh = useNameHelper('radio')
     const currentValue = ref(props.value)
 
-    const input = ref<HTMLElement | null>(null)
+    const input = ref<HTMLElement>()
 
     const size = computed(() => groupState?.size || props.size)
     const state = computed(() => groupState?.state || props.state)
     const isDisabled = computed(() => groupState?.disabled || props.disabled)
+    const isButton = computed(() => groupState?.button)
+    const isBorder = computed(() => groupState?.border || props.border)
+    const isLoading = computed(() => groupState?.loading || props.loading)
+    const LoadingIcon = computed(() => groupState?.loadingIcon || null!)
+    const isLoadingLock = computed(() => groupState?.loadingLock || false)
+    const isLoadingSpin = computed(() => groupState?.loadingSpin || false)
     const className = computed(() => {
       return [
         nh.b(),
@@ -83,8 +93,9 @@ export default defineComponent({
         {
           [nh.bm('checked')]: currentValue.value === props.label,
           [nh.bm('disabled')]: isDisabled.value,
+          [nh.bm('loading')]: isLoading.value && isLoadingLock.value,
           [nh.bm(size.value)]: size.value !== 'default',
-          [nh.bm('border')]: props.border,
+          [nh.bm('border')]: isBorder.value,
           [nh.bm(state.value)]: state.value !== 'default'
         }
       ]
@@ -124,6 +135,10 @@ export default defineComponent({
     }
 
     function handleChange() {
+      if (isDisabled.value || (isLoading.value && isLoadingLock.value)) {
+        return
+      }
+
       currentValue.value = props.label!
     }
 
@@ -134,6 +149,10 @@ export default defineComponent({
 
       className,
       isDisabled,
+      isButton,
+      isLoading,
+      computedLoadingIcon: LoadingIcon,
+      isLoadingSpin,
 
       input,
 

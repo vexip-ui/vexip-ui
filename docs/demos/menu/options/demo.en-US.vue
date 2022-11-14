@@ -3,9 +3,11 @@
 </template>
 
 <script setup lang="ts">
+import { h } from 'vue'
 import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { Icon } from 'vexip-ui'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const options: MenuOptions[] = [
   {
@@ -41,8 +43,8 @@ const options: MenuOptions[] = [
     children: [
       {
         label: '4',
-        name: 'Menu 4',
-        icon: User
+        name: () => 'Menu 4',
+        icon: () => h(Icon, { icon: User })
       },
       {
         label: '5',

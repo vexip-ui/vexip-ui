@@ -15,26 +15,20 @@
     <Alert icon title="Alert Title">
       Some content to alert
     </Alert>
-    <Alert
-      icon
-      type="success"
-      title="Alert Title"
-    >
+    <Alert icon type="success" title="Alert Title">
       Some content to alert
     </Alert>
-    <Alert
-      icon
-      type="warning"
-      title="Alert Title"
-    >
+    <Alert icon type="warning" title="Alert Title">
       Some content to alert
     </Alert>
-    <Alert
-      icon
-      type="error"
-      title="Alert Title"
-    >
+    <Alert icon type="error" title="Alert Title">
       Some content to alert
     </Alert>
   </div>
 </template>
+
+<style scoped>
+.vxp-alert {
+  max-width: 600px;
+}
+</style>

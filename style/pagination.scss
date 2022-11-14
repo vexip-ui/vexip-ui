@@ -26,7 +26,8 @@ $pagination: map.merge(
     border: get-css-var('border-shape') get-css-var('pagination-b-color'),
     radius: get-css-var('radius-base'),
     size: 32px,
-    item-span: 6px
+    item-span: 6px,
+    plugin-span: 10px
   ),
   $pagination
 );
@@ -36,18 +37,30 @@ $pagination: map.merge(
     @include define-preset-values('pagination', $pagination);
   }
 
+  @mixin define-pagination-style($style-map) {
+    @include define-preset-style('pagination', $style-map);
+  }
+
   @include basis;
 
   display: inline-flex;
-  padding: 0;
+  align-items: center;
+
+  &__list {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
 
   &__item {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: get-css-var('pagination-size');
+    min-width: get-css-var('pagination-size');
     height: get-css-var('pagination-size');
+    padding: 0 6px;
     margin-right: get-css-var('pagination-item-span');
     list-style: none;
     cursor: pointer;
@@ -128,10 +141,20 @@ $pagination: map.merge(
     }
   }
 
-  &--background &__item#{&}__item--active {
-    @include define-css-var('pagination-color-active', get-css-var('color-white'));
+  &--background &__item--active {
+    @include define-pagination-style(
+      (
+        color-active: 'color-white',
+        color-hover: 'color-white',
+        color-focus: 'color-white'
+      )
+    );
 
-    background-color: get-css-var('pagination-bg-color-active');
+    &,
+    &:hover,
+    &:focus {
+      background-color: get-css-var('pagination-bg-color-active');
+    }
   }
 
   &--no-border &__item {
@@ -150,8 +173,9 @@ $pagination: map.merge(
     white-space: nowrap;
     user-select: none;
 
-    .#{$namespace}-number-input {
-      width: 60px;
+    &-input {
+      min-width: 60px;
+      height: get-css-var('pagination-size');
       margin: 0 4px;
       user-select: auto;
     }
@@ -160,8 +184,12 @@ $pagination: map.merge(
   &__size {
     min-width: 106px;
 
-    .#{$namespace}-select {
+    &-select {
       width: 100%;
+
+      .#{$namespace}-select__selector {
+        height: get-css-var('pagination-size');
+      }
     }
   }
 
@@ -172,6 +200,11 @@ $pagination: map.merge(
   & > &__jump,
   & > &__size,
   & > &__total {
-    margin-left: 10px;
+    margin-left: get-css-var('pagination-plugin-span');
+
+    &--prefix {
+      margin-right: get-css-var('pagination-plugin-span');
+      margin-left: 0;
+    }
   }
 }

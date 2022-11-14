@@ -5,5 +5,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const value = ref<number | null>(null)
+const value = ref<number>()
 </script>

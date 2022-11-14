@@ -40,13 +40,12 @@
 import { defineComponent, ref, reactive } from 'vue'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
+import { Renderer } from '@/components/renderer'
 import { useNameHelper } from '@vexip-ui/config'
+import { isFunction } from '@vexip-ui/utils'
 import { renderItem } from './render'
 
-import { Renderer } from '@/components/renderer'
-import { isFunction } from '@vexip-ui/utils'
-
-import type { Key, MenuOptions, MenuConfig } from './symbol'
+import type { Key, ContextmenuOptions, ContextmenuConfig } from './symbol'
 
 export default defineComponent({
   name: 'Contextmenu',
@@ -58,7 +57,7 @@ export default defineComponent({
   setup() {
     const nh = useNameHelper('contextmenu')
     const visible = ref(false)
-    const configs = ref<MenuConfig[]>([])
+    const configs = ref<ContextmenuConfig[]>([])
     const appear = ref(false)
 
     const position = reactive({
@@ -69,7 +68,7 @@ export default defineComponent({
     const onSelect = ref<((keys: Key[]) => void) | null>(null)
     const onCancel = ref<(() => void) | null>(null)
 
-    function openContextmenu(options: MenuOptions) {
+    function openContextmenu(options: ContextmenuOptions) {
       position.x = options.clientX || 0
       position.y = options.clientY || 0
       configs.value = options.configs

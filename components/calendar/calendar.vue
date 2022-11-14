@@ -83,14 +83,12 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import CalendarPanel from './calendar-panel.vue'
 import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
 import { Row } from '@/components/row'
-import CalendarPanel from './calendar-panel.vue'
-import { useNameHelper, useProps, useLocale, eventProp, emitEvent } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
-import type { Dateable } from '@vexip-ui/utils'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { calendarProps } from './props'
 
 export default defineComponent({
   name: 'Calendar',
@@ -100,18 +98,7 @@ export default defineComponent({
     NumberInput,
     Row
   },
-  props: {
-    value: [Number, String, Date] as PropType<Dateable | Dateable[]>,
-    year: Number,
-    // 当前日历显示的月份 (1 ~ 12)
-    month: Number,
-    // 头部星期显示的内容，数量须为 7 个
-    weekDays: Array as PropType<string[]>,
-    weekStart: Number,
-    today: [Number, String, Date] as PropType<Dateable>,
-    disabledDate: Function as PropType<(data: Date) => boolean>,
-    onSelect: eventProp<(date: Date) => void>()
-  },
+  props: calendarProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('calendar', _props, {
@@ -122,19 +109,19 @@ export default defineComponent({
       year: () => new Date().getFullYear(),
       month: {
         default: () => new Date().getMonth() + 1,
-        validator: (value: number) => value > 0 && value <= 12
+        validator: value => value > 0 && value <= 12
       },
       weekDays: {
         default: null,
-        validator: (value: string[]) => !value || value.length === 0 || value.length === 7
+        validator: value => !value || value.length === 0 || value.length === 7
       },
       weekStart: {
         default: 0,
-        validator: (value: number) => value >= 0 && value < 7
+        validator: value => value >= 0 && value < 7
       },
       today: {
         default: () => new Date(),
-        validator: (value: Dateable) => !Number.isNaN(+new Date(value))
+        validator: value => !Number.isNaN(+new Date(value))
       },
       disabledDate: {
         default: () => false,

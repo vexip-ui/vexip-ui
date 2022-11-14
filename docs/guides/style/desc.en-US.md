@@ -89,4 +89,27 @@ import { install } from 'vexip-ui'
 createApp(App).use(install).mount('#app')
 ```
 
-The full `sass` variables can be found in [here](https://github.com/qmhc/vexip-ui/blob/main/style/design/variables.scss).
+The full `sass` variables can be found in [here](https://github.com/vexip-ui/vexip-ui/blob/main/style/design/variables.scss).
+
+## Transition Effects
+
+After import style, you can directly use some transition effects built in Vexip UI:
+
+```vue
+<template>
+  <transition name="vxp-fade">
+    <div v-if="active"></div>
+  </transition>
+</template>
+```
+
+The list of common transition effects is as follows:
+
+- `vxp-drop` expands down or collapses up
+- `vxp-fade` fades in and out
+- `vxp-ease` fades in and out and zooms in and out slightly
+- `vxp-move-top` moves in from top to bottom
+- `vxp-move-right` moves in from right to left
+- `vxp-move-bottom` moves in from bottom to top
+- `vxp-move-left` moves in from left to right
+- `vxp-zoom` fades in and out and zooms in and out significantly

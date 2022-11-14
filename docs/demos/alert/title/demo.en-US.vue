@@ -20,3 +20,9 @@
     </Alert>
   </div>
 </template>
+
+<style scoped>
+.vxp-alert {
+  max-width: 600px;
+}
+</style>

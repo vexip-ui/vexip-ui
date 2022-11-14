@@ -6,15 +6,23 @@ export const enUS = defineI18n({
     makeInterest: 'Make interesting in development',
     slogan: 'Highly customizable property values, Full TypeScript, Performance should be good',
     getStarted: 'Get started',
+    getComponents: 'Components',
+    changeColor: 'Change Major Color',
+    rollColor: 'Roll a color, maybe strange',
+    resetColor: 'Reset the color',
     guides: 'Guides',
     components: 'Components',
     playground: 'Playground',
     searchComponent: 'Search component in Vexip UI',
     copyCode: 'Copy code',
+    copySuccess: 'Copy success',
+    copyFail: 'Copy fail',
     showCode: 'Show code',
     hideCode: 'Hide code',
     editInGithub: 'Edit in Github',
-    editInPlayground: 'Edit in Playground'
+    editInPlayground: 'Edit in Playground',
+    pageNotFound: 'Page Not Found',
+    backHomepage: 'Back to homepage'
   },
   alert: {
     info: 'Tip',
@@ -25,7 +33,9 @@ export const enUS = defineI18n({
     introduction: 'Introduction',
     gettingStart: 'Getting Start',
     globalConfig: 'Global Config',
-    styleConfig: 'Style Config'
+    styleConfig: 'Style Config',
+    nameOrigin: 'Why Call Vexip?',
+    logoOrigin: 'Origin Of Logo'
   },
   group: {
     basis: 'Basis',
@@ -40,6 +50,7 @@ export const enUS = defineI18n({
     Button: 'Button',
     Icon: 'Icon',
     Linker: 'Linker',
+    Typography: 'Typography',
 
     Grid: 'Grid',
     Divider: 'Divider',
@@ -102,6 +113,7 @@ export const enUS = defineI18n({
     Progress: 'Progress',
     Skeleton: 'Skeleton',
     Spin: 'Spin',
+    Toast: 'Toast',
 
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',

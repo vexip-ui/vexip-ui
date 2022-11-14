@@ -3,74 +3,82 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
-    @click="handleClick"
+    @click="toggleVisible()"
   >
     <div
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @keydown.space.prevent="handleClick"
+      @keydown.space.prevent="toggleVisible()"
+      @keydown.tab="toggleVisible(false)"
     >
-      <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
+      <div
+        v-if="hasPrefix"
+        :class="[nh.be('icon'), nh.be('prefix')]"
+        :style="{ color: props.prefixColor }"
+      >
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
       </div>
       <div :class="nh.be('control')">
         <slot name="control">
-          <div v-if="props.multiple" ref="tagWrapper" :class="[nh.be('tags')]">
-            <Tag
-              v-for="(item, index) in templateValues"
-              :key="index"
-              :class="nh.be('tag')"
-              :type="props.tagType"
-              closable
-              @click.stop="handleClick"
-              @close="handleTipClose(item)"
-            >
-              {{ templateLabels[index] }}
-            </Tag>
-            <Tag
-              v-if="props.noRestTip"
-              ref="tagCounter"
-              :class="[nh.be('tag'), nh.be('counter')]"
-              :type="props.tagType"
-            >
-              {{ `+${restTagCount}` }}
-            </Tag>
-            <Tooltip
-              v-else
-              :class="nh.be('tooltip')"
-              :visible="restTipShow"
-              trigger="custom"
-              placement="top-end"
-              :tip-class="nh.be('rest-tip')"
-              @click.stop="toggleShowRestTip"
-            >
-              <template #trigger>
-                <Tag
-                  ref="tagCounter"
-                  :class="[nh.be('tag'), nh.be('counter')]"
-                  :type="props.tagType"
+          <Overflow
+            v-if="props.multiple"
+            :class="[nh.be('tags')]"
+            :items="templateValues"
+            @rest-change="restTagCount = $event"
+          >
+            <template #default="{ item, index }">
+              <Tag
+                :class="nh.be('tag')"
+                :type="props.tagType"
+                closable
+                @click.stop="toggleVisible()"
+                @close="handleTipClose(item)"
+              >
+                {{ templateLabels[index] }}
+              </Tag>
+            </template>
+            <template #counter="{ count }">
+              <Tag
+                v-if="props.noRestTip"
+                :class="[nh.be('tag'), nh.be('counter')]"
+                :type="props.tagType"
+              >
+                {{ `+${count}` }}
+              </Tag>
+              <span v-else>
+                <Tooltip
+                  :transfer="false"
+                  :visible="restTipShow"
+                  trigger="custom"
+                  placement="top-end"
+                  :tip-class="nh.be('rest-tip')"
+                  @click.stop="toggleShowRestTip"
                 >
-                  {{ `+${restTagCount}` }}
-                </Tag>
-              </template>
-              <NativeScroll use-y-bar>
-                <template v-for="(item, index) in templateValues" :key="index">
-                  <Tag
-                    v-if="index >= templateValues.length - restTagCount"
-                    :class="nh.be('tag')"
-                    closable
-                    :type="props.tagType"
-                    @close="handleTipClose(item)"
-                  >
-                    {{ templateLabels[index] }}
-                  </Tag>
-                </template>
-              </NativeScroll>
-            </Tooltip>
-          </div>
+                  <template #trigger>
+                    <Tag :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                      {{ `+${count}` }}
+                    </Tag>
+                  </template>
+                  <NativeScroll use-y-bar>
+                    <template v-for="(item, index) in templateValues" :key="index">
+                      <Tag
+                        v-if="index >= templateValues.length - restTagCount"
+                        :class="nh.be('tag')"
+                        closable
+                        :type="props.tagType"
+                        @close="handleTipClose(item)"
+                      >
+                        {{ templateLabels[index] }}
+                      </Tag>
+                    </template>
+                  </NativeScroll>
+                </Tooltip>
+              </span>
+            </template>
+          </Overflow>
           <template v-else>
             {{ currentLabels[0] }}
           </template>
@@ -82,46 +90,56 @@
           </span>
         </slot>
       </div>
-      <transition name="vxp-fade">
-        <div
-          v-if="!props.disabled && props.clearable && isHover && hasValue"
-          :class="nh.be('clear')"
-          @click.stop="handleClear"
-        >
+      <div
+        v-if="!props.noSuffix"
+        :class="[nh.be('icon'), nh.be('suffix')]"
+        :style="{
+          color: props.suffixColor,
+          opacity: showClear || props.loading ? '0%' : ''
+        }"
+      >
+        <slot name="suffix">
+          <Icon
+            v-if="props.suffix"
+            :icon="props.suffix"
+            :class="{
+              [nh.be('arrow')]: !props.staticSuffix
+            }"
+          ></Icon>
+          <Icon v-else :class="nh.be('arrow')">
+            <ChevronDown></ChevronDown>
+          </Icon>
+        </slot>
+      </div>
+      <div
+        v-else-if="props.clearable || props.loading"
+        :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
+      ></div>
+      <transition :name="nh.ns('fade')" appear>
+        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div
-          v-else-if="!noSuffix"
-          :class="nh.bem('icon', 'suffix')"
-          :style="{ color: props.suffixColor }"
-        >
-          <slot name="suffix">
-            <Icon
-              v-if="props.suffix"
-              :icon="props.suffix"
-              :class="{
-                [nh.be('arrow')]: !props.staticSuffix
-              }"
-            ></Icon>
-            <Icon v-else :class="nh.be('arrow')">
-              <ChevronDown></ChevronDown>
-            </Icon>
-          </slot>
+        <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+          <Icon
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+          ></Icon>
         </div>
       </transition>
     </div>
     <Portal :to="transferTo">
-      <transition :name="props.transitionName" @after-enter="isPopperShow = true">
+      <transition :name="props.transitionName" @enter="handlePanelsEnter">
         <div
-          v-show="currentVisible"
+          v-if="currentVisible"
           ref="popper"
           :class="[nh.be('popper'), nh.bs('vars')]"
           @click.stop
         >
           <div
             :class="{
-              [nh.be('panes')]: true,
-              [nh.bem('panes', 'empty')]: !optionsList[0] || !optionsList[0].length
+              [nh.be('panels')]: true,
+              [nh.bem('panels', 'empty')]: !optionsList[0] || !optionsList[0].length
             }"
           >
             <template v-if="optionsList[0] && optionsList[0].length">
@@ -173,13 +191,13 @@ import {
   computed,
   watch,
   watchEffect,
-  onMounted,
   onBeforeUpdate,
   nextTick
 } from 'vue'
 import CascaderPanel from './cascader-panel.vue'
 import { Icon } from '@/components/icon'
 import { NativeScroll } from '@/components/native-scroll'
+import { Overflow } from '@/components/overflow'
 import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
 import { Tooltip } from '@/components/tooltip'
@@ -188,30 +206,21 @@ import {
   useNameHelper,
   useProps,
   useLocale,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/hooks'
 import { isNull, isPromise, transformTree, flatTree } from '@vexip-ui/utils'
-import { ChevronDown, CircleXmark } from '@vexip-ui/icons'
+import { ChevronDown, CircleXmark, Spinner } from '@vexip-ui/icons'
+import { cascaderProps } from './props'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
-import type { TagType } from '@/components/tag'
-import type { CascaderValue, OptionKeyConfig, OptionState } from './symbol'
-
-type MaybeArrayData = Record<string, any> | Array<Record<string, any>>
+import type { CascaderValue, CascaderKeyConfig, CascaderOptionState } from './symbol'
 
 const ID_KEY = Symbol('ID_KEY')
 const PARENT_KEY = Symbol('PARENT_KEY')
 
-const defaultKeyConfig: Required<OptionKeyConfig> = {
+const defaultKeyConfig: Required<CascaderKeyConfig> = {
   value: 'value',
   label: 'label',
   children: 'children',
@@ -225,59 +234,31 @@ export default defineComponent({
     CascaderPanel,
     Icon,
     NativeScroll,
+    Overflow,
     Portal,
     Tag,
     Tooltip,
     ChevronDown,
     CircleXmark
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: Array as PropType<CascaderValue>,
-    visible: booleanProp,
-    options: Array as PropType<Array<Record<string, any>>>,
-    placeholder: String,
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    noCascaded: booleanProp,
-    multiple: booleanProp,
-    disabled: booleanProp,
-    clearable: booleanProp,
-    placement: String as PropType<Placement>,
-    transfer: booleanStringProp,
-    staticSuffix: booleanProp,
-    noSuffix: booleanProp,
-    transitionName: String,
-    outsideClose: booleanProp,
-    keyConfig: Object as PropType<OptionKeyConfig>,
-    separator: String,
-    hoverTrigger: booleanProp,
-    maxTagCount: Number,
-    briefLabel: booleanProp,
-    noRestTip: booleanProp,
-    onAsyncLoad: Function as PropType<(data: Record<string, any>) => any[] | Promise<any[]>>,
-    mergeTags: booleanProp,
-    tagType: String as PropType<TagType>,
-    emptyText: String,
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onSelect: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
-    onCancel: eventProp<(fullValue: string, data: Record<string, any>) => void>(),
-    onChange: eventProp<(value: CascaderValue, data: MaybeArrayData) => void>(),
-    onClickOutside: eventProp(),
-    onOutsideClose: eventProp(),
-    onClear: eventProp()
-  },
+  props: cascaderProps,
   emits: ['update:value', 'update:visible'],
   setup(_props, { emit, slots }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<CascaderValue>(() => reference.value?.focus())
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      size,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<CascaderValue>(() => reference.value?.focus())
 
     const nh = useNameHelper('cascader')
     const props = useProps('cascader', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
         default: () => getFieldValue([]),
@@ -301,8 +282,8 @@ export default defineComponent({
       disabled: () => disabled.value,
       clearable: false,
       placement: {
-        default: 'bottom-start' as Placement,
-        validator: (value: Placement) => placementWhileList.includes(value)
+        default: 'bottom-start',
+        validator: value => placementWhileList.includes(value)
       },
       transfer: false,
       staticSuffix: false,
@@ -312,7 +293,7 @@ export default defineComponent({
       keyConfig: () => ({}),
       separator: {
         default: '/',
-        validator: (value: string) => value.length === 1
+        validator: value => value.length === 1
       },
       hoverTrigger: false,
       maxTagCount: 0,
@@ -324,7 +305,12 @@ export default defineComponent({
       },
       mergeTags: false,
       tagType: null,
-      emptyText: null
+      emptyText: null,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false,
+      transparent: false
     })
 
     const currentVisible = ref(props.visible)
@@ -337,19 +323,19 @@ export default defineComponent({
     const transfer = toRef(props, 'transfer')
 
     const emittedValue = ref<CascaderValue | null>(null)
-    const optionTree = ref<OptionState[]>(null!)
+    const optionTree = ref<CascaderOptionState[]>(null!)
     const isAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
 
-    let optionList: OptionState[] = null!
-    let optionIdMap: Map<number, OptionState> = null!
-    let optionValueMap: Map<string, OptionState> = null!
+    let optionList: CascaderOptionState[] = null!
+    let optionIdMap: Map<number, CascaderOptionState> = null!
+    let optionValueMap: Map<string, CascaderOptionState> = null!
     let outsideClosed = false
     let prevClosedId = -1
 
     const updateTrigger = ref(0)
 
     watchEffect(() => {
-      /* eslint-disable no-unused-expressions */
+      /* eslint-disable @typescript-eslint/no-unused-expressions */
       props.keyConfig.value
       props.keyConfig.label
       props.keyConfig.children
@@ -358,7 +344,7 @@ export default defineComponent({
       props.separator
       props.options
       isAsyncLoad.value
-      /* eslint-disable no-unused-expressions */
+      /* eslint-enable */
 
       updateTrigger.value++
     })
@@ -413,8 +399,6 @@ export default defineComponent({
     })
     const { isHover } = useHover(reference)
     const locale = useLocale('select')
-    const tagWrapper = ref<HTMLElement | null>(null)
-    const tagCounter = ref<InstanceType<typeof Tag> | null>(null)
     const panelElList = ref<InstanceType<typeof CascaderPanel>[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)
@@ -436,10 +420,12 @@ export default defineComponent({
         [baseCls]: true,
         [`${baseCls}--focused`]: !props.disabled && currentVisible.value,
         [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
         [`${baseCls}--${props.state}`]: props.state !== 'default',
         [`${baseCls}--has-prefix`]: hasPrefix.value,
-        [`${baseCls}--has-suffix`]: !props.noSuffix
+        [`${baseCls}--has-suffix`]: !props.noSuffix,
+        [`${baseCls}--transparent`]: props.transparent
       }
     })
     const hasPrefix = computed(() => {
@@ -454,6 +440,9 @@ export default defineComponent({
     )
     const hasValue = computed(() => !!templateValues.value[0])
     const usingHover = computed(() => props.hoverTrigger && !isAsyncLoad.value)
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && hasValue.value
+    })
 
     watch(
       () => props.visible,
@@ -500,13 +489,6 @@ export default defineComponent({
       },
       { immediate: true }
     )
-    watch(() => props.maxTagCount, computeTagsOverflow)
-    watch(
-      () => props.noRestTip,
-      () => {
-        nextTick(computeTagsOverflow)
-      }
-    )
     watch(
       () => props.briefLabel,
       brief => {
@@ -514,7 +496,7 @@ export default defineComponent({
           .map(value => optionValueMap.get(value)?.[brief ? 'label' : 'fullLabel'] as string)
           .filter(Boolean)
 
-        nextTick(computeTagsOverflow)
+        // nextTick(computeTagsOverflow)
       }
     )
     watch(isAsyncLoad, value => {
@@ -533,7 +515,7 @@ export default defineComponent({
       }
 
       if (isAsyncLoad.value) {
-        const originalOptions: OptionState[] = []
+        const originalOptions: CascaderOptionState[] = []
 
         for (const option of optionIdMap.values()) {
           if (option.checked) {
@@ -569,10 +551,31 @@ export default defineComponent({
         })
       }
     )
+    watch(
+      () => props.disabled,
+      value => {
+        if (value) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loading,
+      value => {
+        if (value && props.loadingLock) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loadingLock,
+      value => {
+        if (props.loading && value) {
+          currentVisible.value = false
+        }
+      }
+    )
 
-    onMounted(() => {
-      nextTick(hideTagCounter)
-    })
     onBeforeUpdate(() => {
       panelElList.value.length = 0
     })
@@ -595,7 +598,7 @@ export default defineComponent({
           [hasChildKey]: hasChild
         } = rawOption
 
-        return reactive<OptionState>({
+        return reactive<CascaderOptionState>({
           id,
           parent,
           value,
@@ -616,7 +619,7 @@ export default defineComponent({
       })
     }
 
-    function initOptionFull(option: OptionState, separator: string) {
+    function initOptionFull(option: CascaderOptionState, separator: string) {
       let value = option.value as string
       let label = option.label
       let parent = optionIdMap.get(option.parent)
@@ -631,12 +634,12 @@ export default defineComponent({
       option.fullLabel = label
     }
 
-    function queryChildrenLoaded(option: OptionState) {
+    function queryChildrenLoaded(option: CascaderOptionState) {
       if (option.hasChild && !option.children?.length) {
         return option.loaded
       }
 
-      const loop: OptionState[] = [...option.children]
+      const loop: CascaderOptionState[] = [...option.children]
 
       while (loop.length) {
         const child = loop.shift()!
@@ -699,6 +702,11 @@ export default defineComponent({
     }
 
     function initValueAndLabel(value: CascaderValue | null) {
+      for (const option of optionList) {
+        option.checked = false
+        option.partial = false
+      }
+
       if (!value?.length) {
         currentValues.value = []
         currentLabels.value = []
@@ -712,7 +720,7 @@ export default defineComponent({
         const valueSet = new Set<string>(normalizedValue.map(v => v.join(props.separator)))
         const selectedValues: string[] = []
         const selectedLabels: string[] = []
-        const selectedOptions: OptionState[] = []
+        const selectedOptions: CascaderOptionState[] = []
 
         valueSet.forEach(value => {
           const option = optionValueMap.get(value)
@@ -780,7 +788,7 @@ export default defineComponent({
       }
     }
 
-    async function handlePanelOpen(option: OptionState, depth: number) {
+    async function handlePanelOpen(option: CascaderOptionState, depth: number) {
       if (!option.hasChild && !option.children?.length) return
 
       if (isAsyncLoad.value && !option.children?.length && !option.loaded) {
@@ -837,9 +845,12 @@ export default defineComponent({
       }
 
       openedIds.value.push(option.id)
+      requestAnimationFrame(() => {
+        panelElList.value.at(-1)?.$el?.focus()
+      })
     }
 
-    function handleOptionSelect(option: OptionState, depth: number) {
+    function handleOptionSelect(option: CascaderOptionState, depth: number) {
       if (!option) return
 
       if (option.hasChild || option.children?.length) {
@@ -849,7 +860,7 @@ export default defineComponent({
       }
     }
 
-    function queryUpstreamOptions(option: OptionState) {
+    function queryUpstreamOptions(option: CascaderOptionState) {
       const options = [option]
       let parent = optionIdMap.get(option.parent)
 
@@ -861,7 +872,7 @@ export default defineComponent({
       return options
     }
 
-    function updateCheckedUpward(originalOption: OptionState) {
+    function updateCheckedUpward(originalOption: CascaderOptionState) {
       let option = originalOption
 
       while (!isNull(option.parent)) {
@@ -885,7 +896,7 @@ export default defineComponent({
       }
     }
 
-    function updateCheckedDown(originalOption: OptionState) {
+    function updateCheckedDown(originalOption: CascaderOptionState) {
       const checked = originalOption.checked
       const partial = originalOption.partial
 
@@ -907,7 +918,7 @@ export default defineComponent({
       }
     }
 
-    function handleOptionCheck(option: OptionState) {
+    function handleOptionCheck(option: CascaderOptionState) {
       if (!option) return
 
       const options = Array.from(optionIdMap.values())
@@ -997,84 +1008,7 @@ export default defineComponent({
       }
 
       emitChangeEvent(values, dataList)
-      nextTick(computeTagsOverflow)
-    }
-
-    function computeTagsOverflow() {
-      if (!tagWrapper.value || !tagCounter.value?.$el) return
-
-      const conter = tagCounter.value?.$el as HTMLElement
-      const children = tagWrapper.value.children
-      const maxTagCount = props.maxTagCount
-
-      if (maxTagCount > 0) {
-        const childCount = children.length
-
-        for (let i = 0, len = childCount - 1; i < len; ++i) {
-          const child = children[i] as HTMLElement
-
-          child.style.display = i < maxTagCount ? '' : 'none'
-        }
-
-        if (maxTagCount > childCount - 1) {
-          conter.style.display = 'none'
-          restTagCount.value = 0
-        } else {
-          conter.style.display = ''
-          restTagCount.value = childCount - 1 - maxTagCount
-        }
-
-        return
-      }
-
-      conter.style.display = ''
-
-      const wrapperWidth = tagWrapper.value.offsetWidth
-      const childWidths: number[] = []
-
-      let totalWidth = 0
-      let hidden = false
-
-      for (let i = 0, len = children.length - 1; i < len; ++i) {
-        if (i < 0) continue
-
-        const child = children[i] as HTMLElement
-
-        if (hidden) {
-          child.style.display = 'none'
-          continue
-        } else {
-          child.style.display = ''
-        }
-
-        totalWidth += child.offsetWidth
-        childWidths[i] = child.offsetWidth
-
-        if (totalWidth > wrapperWidth) {
-          for (let j = i; j >= 0; --j) {
-            restTagCount.value = len - j
-            totalWidth -= childWidths[j]
-
-            if (totalWidth + conter.offsetWidth <= wrapperWidth || !j) {
-              hidden = true
-              i = j - 1
-              break
-            }
-          }
-        }
-      }
-
-      if (!hidden) {
-        conter.style.display = 'none'
-      }
-
       nextTick(updatePopper)
-    }
-
-    function hideTagCounter() {
-      if (tagCounter.value?.$el) {
-        tagCounter.value.$el.style.display = 'none'
-      }
     }
 
     function handleSingleSelect(fullValue: string) {
@@ -1138,10 +1072,10 @@ export default defineComponent({
       }
     }
 
-    function handleClick() {
-      if (props.disabled) return
+    function toggleVisible(visible = !currentVisible.value) {
+      if (props.disabled || (props.loading && props.loadingLock)) return
 
-      currentVisible.value = !currentVisible.value
+      currentVisible.value = visible
     }
 
     function handleClickOutside() {
@@ -1174,7 +1108,6 @@ export default defineComponent({
         emit('update:value', emittedValue.value)
         emitEvent(props.onClear)
         clearField(emittedValue.value)
-        hideTagCounter()
       }
     }
 
@@ -1192,11 +1125,9 @@ export default defineComponent({
       } else {
         handleSingleSelect(fullValue)
       }
-
-      nextTick(computeTagsOverflow)
     }
 
-    function handlePanelKeyOpen(option: OptionState, depth: number) {
+    function handlePanelKeyOpen(option: CascaderOptionState, depth: number) {
       handlePanelOpen(option, depth)
 
       requestAnimationFrame(() => {
@@ -1214,6 +1145,12 @@ export default defineComponent({
 
     function handlePanelBack() {
       prevClosedId = openedIds.value.pop()!
+    }
+
+    function handlePanelsEnter() {
+      requestAnimationFrame(() => {
+        isPopperShow.value = true
+      })
     }
 
     return {
@@ -1242,23 +1179,23 @@ export default defineComponent({
       templateValues,
       templateLabels,
       usingHover,
+      showClear,
 
       wrapper,
       reference,
       popper,
-      tagWrapper,
-      tagCounter,
       panelElList,
 
       handlePanelOpen,
       handleOptionSelect,
       handleOptionCheck,
-      handleClick,
+      toggleVisible,
       handleClear,
       toggleShowRestTip,
       handleTipClose,
       handlePanelKeyOpen,
-      handlePanelBack
+      handlePanelBack,
+      handlePanelsEnter
     }
   }
 })

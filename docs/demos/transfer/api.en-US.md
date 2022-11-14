@@ -1,21 +1,4 @@
-### Transfer Props
-
-| Name          | Type                                             | Description                                                                               | Default         | Since |
-| ------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- | ----- |
-| state         | `'default' \| 'success' \| 'error' \| 'warning'` | The state of Transfer                                                                     | `'default'`     | -     |
-| options       | `(string \| Record<string, any>)[]`              | Set options for the Transfer                                                              | `[]`            | -     |
-| value         | `(string \| number)[]`                           | Set the value of the Transfer                                                             | `[]`            | -     |
-| disabled      | `boolean`                                        | Set whether disabled                                                                      | `false`         | -     |
-| paged         | `boolean`                                        | Set whether paged                                                                         | `false`         | -     |
-| filter        | `boolean \| FilterHandler`                       | Set whether to enable filter, the filter method can be customized when passing a function | `false`         | -     |
-| empty-text    | `string`                                         | The prompt when option empty                                                              | `locale.empty`  | -     |
-| key-config    | `TransferKeyConfig`                              | Set the key config when parsing `options`                                                 | `{}`            | -     |
-| option-height | `number`                                         | Set the height of the option                                                              | `32`            | -     |
-| ignore-case   | `boolean`                                        | Set whether to ignore case when using default filter method                               | `false`         | -     |
-| source-title  | `string`                                         | Set the title of the source panel                                                         | `locale.source` | -     |
-| target-title  | `string`                                         | Set the title of the target panel                                                         | `locale.target` | -     |
-
-Some preset types:
+### Preset Types
 
 ```ts
 interface TransferKeyConfig {
@@ -48,6 +31,27 @@ interface SlotPayload {
 
 type FilterHandler = (value: string, options: TransferOptionState, type: 'source' | 'target') => boolean
 ```
+
+### Transfer Props
+
+| Name          | Type                                             | Description                                                                               | Default         | Since |
+| ------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------- | --------------- | ----- |
+| state         | `'default' \| 'success' \| 'error' \| 'warning'` | The state of Transfer                                                                     | `'default'`     | -     |
+| options       | `(string \| Record<string, any>)[]`              | Set options for the Transfer                                                              | `[]`            | -     |
+| value         | `(string \| number)[]`                           | Set the value of the Transfer                                                             | `[]`            | -     |
+| disabled      | `boolean`                                        | Set whether disabled                                                                      | `false`         | -     |
+| paged         | `boolean`                                        | Set whether paged                                                                         | `false`         | -     |
+| filter        | `boolean \| FilterHandler`                       | Set whether to enable filter, the filter method can be customized when passing a function | `false`         | -     |
+| empty-text    | `string`                                         | The prompt when option empty                                                              | `locale.empty`  | -     |
+| key-config    | `TransferKeyConfig`                              | Set the key config when parsing `options`                                                 | `{}`            | -     |
+| option-height | `number`                                         | Set the height of the option                                                              | `32`            | -     |
+| ignore-case   | `boolean`                                        | Set whether to ignore case when using default filter method                               | `false`         | -     |
+| source-title  | `string`                                         | Set the title of the source panel                                                         | `locale.source` | -     |
+| target-title  | `string`                                         | Set the title of the target panel                                                         | `locale.target` | -     |
+| loading       | `boolean`                                        | Set whether is loading                                                                    | `false`         | -     |
+| loading-icon  | `Record<string, any>`                            | Set the loading icon                                                                      | `Spinner`       | -     |
+| loading-lock  | `boolean`                                        | Set whether to be read-only when loading                                                  | `false`         | -     |
+| loading-spin  | `boolean`                                        | Set whether to use spin animation for the loading icon                                    | `false`         | -     |
 
 ### Transfer Events
 

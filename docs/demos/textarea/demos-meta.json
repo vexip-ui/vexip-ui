@@ -1,7 +1,1 @@
-[
-  "basis",
-  "disabled",
-  "max-length",
-  "no-resize",
-  "state"
-]
+["basis", "disabled", "sync", "max-length", "no-resize", "loading", "state"]

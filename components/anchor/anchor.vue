@@ -8,7 +8,17 @@
     }"
   >
     <ul :class="nh.be('list')">
-      <slot></slot>
+      <slot>
+        <AnchorLink
+          v-for="link in props.options"
+          :key="link.to"
+          :to="link.to"
+          :title="link.title"
+          :children="link.children"
+        >
+          {{ link.label }}
+        </AnchorLink>
+      </slot>
     </ul>
     <transition appear :name="props.markerTransition">
       <div
@@ -37,28 +47,26 @@ import {
   getCurrentInstance,
   isVNode
 } from 'vue'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { AnchorLink } from '@/components/anchor-link'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { isClient, isElement } from '@vexip-ui/utils'
+import { anchorProps } from './props'
 import { animateScrollTo } from './helper'
 import { ANCHOR_STATE } from './symbol'
 
-import type { PropType, ComponentInternalInstance } from 'vue'
+import type { ComponentInternalInstance } from 'vue'
 import type { NativeScroll } from '@/components/native-scroll'
 import type { Scroll } from '@/components/scroll'
-import type { LinkState, AnchorState } from './symbol'
+import type { AnchorLinkState, AnchorState } from './symbol'
 
 type ScrollType = InstanceType<typeof Scroll | typeof NativeScroll>
 
 export default defineComponent({
   name: 'Anchor',
-  props: {
-    active: String,
-    viewer: [String, Object, Function] as PropType<unknown>,
-    offset: Number,
-    marker: booleanProp,
-    scrollDuration: Number,
-    markerTransition: String,
-    onChange: eventProp<(value: string) => void>()
+  components: {
+    AnchorLink
   },
+  props: anchorProps,
   emits: ['update:active'],
   setup(_props, { emit }) {
     const nh = useNameHelper('anchor')
@@ -74,19 +82,31 @@ export default defineComponent({
       offset: 8,
       marker: false,
       scrollDuration: 500,
-      markerTransition: () => nh.ns('fade')
+      markerTransition: () => nh.ns('fade'),
+      options: {
+        default: () => [],
+        static: true
+      },
+      bindHash: false,
+      forceActive: false
     })
 
     const currentActive = ref(props.active)
     const animating = ref(false)
     const markerTop = ref(0)
-    const linkStates = new Set<LinkState>()
+    const linkStates = new Set<AnchorLinkState>()
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+
+    let timer: ReturnType<typeof setTimeout>
 
     let isRawViewer = false
     let container: HTMLElement | null = null
     let scroller: ScrollType | null = null
+
+    if (isClient && !currentActive.value && props.bindHash) {
+      currentActive.value = decodeURIComponent(location.hash)
+    }
 
     provide<AnchorState>(
       ANCHOR_STATE,
@@ -112,17 +132,20 @@ export default defineComponent({
 
     onMounted(() => {
       updateContainer()
+      computeMarkerPoisiton()
     })
 
     onBeforeUnmount(() => {
       removeListener()
+      clearTimeout(timer)
     })
 
-    function increaseLink(state: LinkState) {
+    function increaseLink(state: AnchorLinkState) {
       linkStates.add(state)
+      state.active = currentActive.value === state.to
     }
 
-    function decreaseLink(state: LinkState) {
+    function decreaseLink(state: AnchorLinkState) {
       linkStates.delete(state)
     }
 
@@ -133,7 +156,7 @@ export default defineComponent({
       nextTick(() => {
         const viewer: unknown = props.viewer
 
-        let _container: Element | ComponentInternalInstance | null = null
+        let _container: Node | ComponentInternalInstance | null = null
         let refName = 'scroll'
 
         if (typeof viewer === 'string') {
@@ -149,11 +172,11 @@ export default defineComponent({
           }
         } else if (typeof viewer === 'function') {
           _container = viewer()
-        } else if (viewer instanceof Element) {
+        } else if (isElement(viewer)) {
           _container = viewer
         }
 
-        if (container instanceof Element) {
+        if (isElement(_container)) {
           isRawViewer = true
         } else {
           isRawViewer = false
@@ -176,7 +199,7 @@ export default defineComponent({
             const refTemp = _container.refs?.[refName]
 
             if (refTemp) {
-              if (refTemp instanceof Element) {
+              if (isElement(refTemp)) {
                 isRawViewer = true
                 container = refTemp as HTMLElement
               } else {
@@ -197,8 +220,8 @@ export default defineComponent({
             container = instance.parent?.proxy?.$el as HTMLElement
           }
 
-          if (isRawViewer) {
-            container!.addEventListener('scroll', handleContainerScroll)
+          if (isRawViewer && container) {
+            container.addEventListener('scroll', handleContainerScroll)
           }
         } else {
           container = _container as HTMLElement
@@ -278,10 +301,12 @@ export default defineComponent({
       }
     }
 
-    let timer: number
-
     function handleActive(link: string) {
-      if (link === currentActive.value || !link.startsWith('#') || link.length < 2) {
+      if (
+        (!props.forceActive && link === currentActive.value) ||
+        !link.startsWith('#') ||
+        link.length < 2
+      ) {
         return
       }
 
@@ -289,12 +314,12 @@ export default defineComponent({
 
       if (!element) return
 
-      window.clearTimeout(timer)
+      clearTimeout(timer)
 
       animating.value = true
 
       const elementTop = element.offsetTop
-      const duration = Math.max(props.scrollDuration, 160)
+      const duration = Math.max(props.scrollDuration, 0)
 
       if (isRawViewer && container) {
         const from = container.scrollTop
@@ -304,7 +329,7 @@ export default defineComponent({
         )
 
         animateScrollTo(container, from, to, duration, () => {
-          timer = window.setTimeout(() => {
+          timer = setTimeout(() => {
             animating.value = false
           }, 10)
         })
@@ -316,7 +341,7 @@ export default defineComponent({
 
         scroller.scrollTo(0, clientY, duration)
 
-        timer = window.setTimeout(() => {
+        timer = setTimeout(() => {
           animating.value = false
         }, duration + 10)
 
@@ -324,6 +349,10 @@ export default defineComponent({
         computeMarkerPoisiton()
       } else {
         animating.value = false
+      }
+
+      if (isClient && props.bindHash && location) {
+        location.hash = encodeURIComponent(currentActive.value.replace(/^#/, ''))
       }
     }
 

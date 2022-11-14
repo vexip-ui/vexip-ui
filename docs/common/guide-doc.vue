@@ -25,7 +25,7 @@ const props = defineProps({
 })
 
 const prefix = 'guide-doc'
-const article = ref<InstanceType<typeof Article> | null>(null)
+const article = ref<InstanceType<typeof Article>>()
 
 const refreshScroll = inject<() => void>('refreshScroll', noop)
 

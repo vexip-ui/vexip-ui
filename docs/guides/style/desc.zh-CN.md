@@ -89,4 +89,27 @@ import { install } from 'vexip-ui'
 createApp(App).use(install).mount('#app')
 ```
 
-具体的 `sass` 变量可以在 [源码](https://github.com/qmhc/vexip-ui/blob/main/style/design/variables.scss) 查找。
+具体的 `sass` 变量可以在 [源码](https://github.com/vexip-ui/vexip-ui/blob/main/style/design/variables.scss) 查找。
+
+## 过渡效果
+
+在引入了样式之后，可以直接使用 Vexip UI 内置的一些过渡效果：
+
+```vue
+<template>
+  <transition name="vxp-fade">
+    <div v-if="active"></div>
+  </transition>
+</template>
+```
+
+通用的过渡效果列表如下：
+
+- `vxp-drop` 向下展开或向上收起
+- `vxp-fade` 渐显渐隐
+- `vxp-ease` 渐隐渐显并伴随微弱的放大缩小
+- `vxp-move-top` 从上往下移入
+- `vxp-move-right` 从右往左移入
+- `vxp-move-bottom` 从下往上移入
+- `vxp-move-left` 从左往右移入
+- `vxp-zoom` 渐隐渐显并伴随明显的放大缩小

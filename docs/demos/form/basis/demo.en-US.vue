@@ -1,92 +1,68 @@
 <template>
-  <ConfigProvider :props="{ default: { clearable: true } }">
-    <Form
-      ref="form"
-      style="max-width: 500px;"
-      :model="formModel"
-      :label-width="100"
-    >
-      <FormItem required label="Input" prop="input">
+  <ConfigProvider :props="providedProps">
+    <Form style="max-width: 500px;" :model="formModel">
+      <FormItem label="Input" prop="input">
         <Input></Input>
       </FormItem>
-      <FormItem required label="Cascader" prop="cascader">
+      <FormItem label="Cascader" prop="cascader">
         <Cascader :options="treeOptions"></Cascader>
       </FormItem>
-      <FormItem required label="Select" prop="select">
+      <FormItem label="Select" prop="select">
         <Select :options="options"></Select>
       </FormItem>
-      <FormItem required label="Date" prop="date">
+      <FormItem label="Date" prop="date">
         <DatePicker></DatePicker>
       </FormItem>
-      <FormItem required label="Time" prop="time">
+      <FormItem label="Time" prop="time">
         <TimePicker></TimePicker>
       </FormItem>
-      <FormItem required label="Number" prop="number">
+      <FormItem label="Number" prop="number">
         <NumberInput></NumberInput>
       </FormItem>
-      <FormItem required label="Color" prop="color">
+      <FormItem label="Color" prop="color">
         <ColorPicker format="hex"></ColorPicker>
       </FormItem>
-      <FormItem required label="Checkbox" prop="checkbox">
+      <FormItem label="Checkbox" prop="checkbox">
         <CheckboxGroup :options="options"></CheckboxGroup>
       </FormItem>
-      <FormItem required label="Radio" prop="radio">
+      <FormItem label="Radio" prop="radio">
         <RadioGroup :options="options"></RadioGroup>
       </FormItem>
-      <FormItem required label="Slider" prop="slider">
+      <FormItem label="Slider" prop="slider">
         <Slider></Slider>
       </FormItem>
-      <FormItem required label="Switch" prop="switch">
+      <FormItem label="Switch" prop="switch">
         <Switch></Switch>
       </FormItem>
-      <FormItem required label="Textarea" prop="textarea">
+      <FormItem label="Textarea" prop="textarea">
         <Textarea></Textarea>
       </FormItem>
-      <FormItem required label="Transfer" prop="transfer">
+      <FormItem label="Transfer" prop="transfer">
         <Transfer :options="options"></Transfer>
       </FormItem>
-      <FormItem required label="Wheel" prop="wheel">
+      <FormItem label="Wheel" prop="wheel">
         <Wheel insert-empty :options="options"></Wheel>
       </FormItem>
-      <FormItem required label="Upload" prop="upload">
+      <FormItem label="Upload" prop="upload">
         <Upload allow-drag></Upload>
       </FormItem>
       <FormItem action>
-        <Button type="primary" @click="handleSubmit()">
-          Submit
-        </Button>
-        <Button @click="handleReset()">
-          Reset
-        </Button>
+        <FormSubmit @submit="handleSubmit" @error="handleError"></FormSubmit>
+        <FormReset></FormReset>
       </FormItem>
     </Form>
   </ConfigProvider>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 
-import type { Form } from 'vexip-ui'
+const providedProps = {
+  default: { clearable: true },
+  formItem: { required: true }
+}
 
-const formModel = reactive({
-  input: '',
-  cascader: [],
-  date: '',
-  time: '',
-  number: null,
-  select: '',
-  color: '',
-  checkbox: [],
-  radio: '',
-  slider: 0,
-  switch: false,
-  textarea: '',
-  transfer: [],
-  wheel: '',
-  upload: []
-})
-
-const form = ref<InstanceType<typeof Form> | null>(null)
+const formModel = reactive({})
 
 const options = ['Option 1', 'Option 2', 'Option 3']
 const treeOptions = createOptions(3)
@@ -108,10 +84,10 @@ function createOptions(depth: number, prefix = 'Op', iterator = 1) {
 }
 
 function handleSubmit() {
-  form.value?.validate()
+  console.info('validation passed')
 }
 
-function handleReset() {
-  form.value?.reset()
+function handleError(errors: string[]) {
+  console.error(errors)
 }
 </script>

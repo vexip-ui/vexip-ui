@@ -1,7 +1,5 @@
 <template>
-  <Alert>
-    警告提示的内容
-  </Alert>
+  <Alert> 警告提示的内容 </Alert>
   <Alert type="success">
     警告提示的内容
   </Alert>
@@ -12,3 +10,9 @@
     警告提示的内容
   </Alert>
 </template>
+
+<style scoped>
+.vxp-alert {
+  max-width: 600px;
+}
+</style>

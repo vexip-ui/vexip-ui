@@ -35,6 +35,9 @@ $textarea: map.merge(
     height: auto;
     padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
     overflow: hidden;
+    font-family: inherit;
+    font-feature-settings: 'tnum';
+    font-variant-numeric: inherit;
     resize: get-css-var('textarea-resize');
   }
 
@@ -42,10 +45,28 @@ $textarea: map.merge(
     resize: none;
   }
 
-  &__count {
+  &__extra {
     position: absolute;
     right: 7px;
     bottom: 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__loading {
+    position: relative;
+    right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: get-css-var('input-icon-color');
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &__count {
+    margin-left: 4px;
     font-size: get-css-var('textarea-count-font-size');
     line-height: get-css-var('textarea-count-line-height');
     color: get-css-var('textarea-count-color');

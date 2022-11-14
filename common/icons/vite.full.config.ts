@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -15,7 +15,7 @@ export default defineConfig(() => {
       lib: {
         entry: resolve(__dirname, 'vue/index.ts'),
         formats: ['es', 'cjs'],
-        fileName: 'index'
+        fileName: format => `index.${format === 'es' ? 'mjs' : 'cjs'}`
       },
       rollupOptions: {
         external: ['vue']

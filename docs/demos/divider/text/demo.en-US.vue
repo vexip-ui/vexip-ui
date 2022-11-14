@@ -1,8 +1,6 @@
 <template>
   <p>Some content to fill</p>
-  <Divider>
-    I'm Divider
-  </Divider>
+  <Divider> I'm Divider </Divider>
   <p>Some content to fill</p>
   <Divider text-position="left">
     I'm on the left

@@ -21,7 +21,7 @@
         </template>
       </Input>
     </FormItem>
-    <FormItem style="margin-bottom: 5px; text-align: center;">
+    <FormItem action style="margin-bottom: 5px; text-align: center;">
       <FormSubmit type="success" :icon="Check">
         Login
       </FormSubmit>
@@ -37,7 +37,7 @@ import { reactive } from 'vue'
 import { Lock, User, Check } from '@vexip-ui/icons'
 
 const loginForm = reactive({
-  username: '',
-  password: ''
+  // username: '',
+  // password: ''
 })
 </script>

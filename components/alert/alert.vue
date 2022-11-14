@@ -7,8 +7,17 @@
             {{ title }}
           </slot>
         </div>
-        <div :class="nh.be('content')">
-          <slot></slot>
+        <div ref="content" :class="[nh.be('content'), props.scroll && nh.bem('content', 'scroll')]">
+          <span
+            v-if="props.scroll"
+            ref="scrollEl"
+            :class="nh.be('scroll')"
+            :style="scrollStyle"
+            @transitionend="handleScrollEnd"
+          >
+            <slot></slot>
+          </span>
+          <slot v-else></slot>
         </div>
       </div>
       <button v-if="props.closable" :class="nh.be('close')" @click="handleClose">
@@ -32,10 +41,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import {
   Flag,
   CircleInfo,
@@ -44,9 +53,9 @@ import {
   Xmark,
   CircleXmark
 } from '@vexip-ui/icons'
+import { getRangeWidth } from '@vexip-ui/utils'
+import { alertProps } from './props'
 import { useStyle } from './style'
-
-import type { PropType } from 'vue'
 
 export type AlertType = 'default' | 'info' | 'success' | 'warning' | 'error'
 
@@ -67,22 +76,7 @@ export default defineComponent({
     Icon,
     Xmark
   },
-  props: {
-    type: String as PropType<AlertType>,
-    title: String,
-    colorfulText: booleanProp,
-    icon: {
-      type: [Boolean, Object],
-      default: null
-    },
-    closable: booleanProp,
-    iconColor: String,
-    noBorder: booleanProp,
-    banner: booleanProp,
-    manual: booleanProp,
-    onClose: eventProp(),
-    onHide: eventProp()
-  },
+  props: alertProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('alert', _props, {
@@ -97,7 +91,9 @@ export default defineComponent({
       iconColor: '',
       noBorder: false,
       banner: false,
-      manual: false
+      manual: false,
+      scroll: false,
+      scrollSpeed: 1
     })
 
     const nh = useNameHelper('alert')
@@ -106,6 +102,12 @@ export default defineComponent({
 
     const closed = ref(false)
     const hidden = ref(false)
+    const scrollDuration = ref(0)
+    const scrollOffset = ref(0)
+    const scrollWidth = ref(0)
+
+    const content = ref<HTMLElement>()
+    const scroll = ref<HTMLElement>()
 
     const hasTitle = computed(() => {
       return !!(props.title || slots.title)
@@ -133,6 +135,24 @@ export default defineComponent({
 
       return props.icon
     })
+    const scrollStyle = computed(() => {
+      return {
+        width: `${scrollWidth.value}px`,
+        transitionDuration: `${scrollDuration.value}ms`,
+        transform: `translateX(${scrollOffset.value}px)`
+      }
+    })
+
+    watch(
+      () => props.scroll,
+      value => {
+        value && startScroll()
+      }
+    )
+
+    onMounted(() => {
+      props.scroll && startScroll()
+    })
 
     function handleClose() {
       if (!props.manual) {
@@ -147,6 +167,31 @@ export default defineComponent({
       hidden.value = true
     }
 
+    function startScroll() {
+      if (content.value && scroll.value) {
+        const contentRect = content.value.getBoundingClientRect()
+        const rangeWidth = getRangeWidth(scroll.value)
+        const duration =
+          ((contentRect.width + rangeWidth) * 12) / (Math.max(props.scrollSpeed, 0) || 1)
+
+        scrollDuration.value = 0
+        scrollOffset.value = contentRect.width
+        scrollWidth.value = rangeWidth
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            scrollDuration.value = duration
+            scrollOffset.value = -rangeWidth
+          })
+        })
+      }
+    }
+
+    function handleScrollEnd() {
+      emitEvent(props.onScrollEnd)
+      requestAnimationFrame(startScroll)
+    }
+
     return {
       props,
       nh,
@@ -154,13 +199,18 @@ export default defineComponent({
       closed,
       hidden,
 
+      content,
+      scrollEl: scroll,
+
       hasTitle,
       hasIcon,
       className,
       iconComp,
+      scrollStyle,
 
       handleClose,
-      handleAfterLeave
+      handleAfterLeave,
+      handleScrollEnd
     }
   }
 })

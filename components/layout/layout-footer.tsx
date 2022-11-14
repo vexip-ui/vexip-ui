@@ -1,26 +1,23 @@
-import { defineComponent, computed } from 'vue'
+import { defineComponent, toRef, computed } from 'vue'
 import { Icon } from '@/components/icon'
 import { Linker } from '@/components/linker'
 import { useNameHelper, useProps } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
-import type { FooterLink } from './symbol'
+import { layoutFooterProps } from './props'
+import { useMediaQuery } from './helper'
 
 export default defineComponent({
   name: 'LayoutFooter',
-  props: {
-    tag: String,
-    copyright: String,
-    links: Array as PropType<FooterLink[]>
-  },
+  props: layoutFooterProps,
   setup(_props, { slots }) {
     const props = useProps('layout', _props, {
       tag: 'footer',
       copyright: '',
-      links: () => []
+      links: () => [],
+      verticalLinks: 'md'
     })
 
     const nh = useNameHelper('layout')
+    const horizontalMatched = useMediaQuery(toRef(props, 'verticalLinks'))
 
     const className = computed(() => {
       return [nh.be('footer')]
@@ -32,10 +29,15 @@ export default defineComponent({
       }
 
       return (
-        <div class={nh.be('links')}>
+        <div class={[nh.be('links'), !horizontalMatched.value && nh.bem('links', 'vertical')]}>
           <div class={nh.be('links-row')}>
             {props.links.map(group => (
-              <div class={nh.be('link-group')}>
+              <div
+                class={[
+                  nh.be('link-group'),
+                  !horizontalMatched.value && nh.bem('link-group', 'vertical')
+                ]}
+              >
                 <div class={[nh.be('link-name'), nh.bem('link-name', 'group')]}>
                   {group.to
                     ? (
@@ -73,13 +75,9 @@ export default defineComponent({
       return (
         <CustomTag class={className.value}>
           {slots.links ? slots.links() : renderLinks()}
-          {slots.copyright
-            ? (
-                slots.copyright()
-              )
-            : (
-            <div class={nh.be('copyright')}>{props.copyright}</div>
-              )}
+          <div class={nh.be('copyright')}>
+            {slots.copyright ? slots.copyright() : props.copyright}
+          </div>
         </CustomTag>
       )
     }

@@ -1,5 +1,5 @@
-import { resolve } from 'path'
-import { readFileSync } from 'fs'
+import { resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -41,6 +41,7 @@ export default defineConfig(({ command }) => {
           middlewares.use('/', serveStatic(resolve(__dirname, '../dist')))
           middlewares.use('/', serveStatic(resolve(__dirname, 'public')))
           middlewares.use('/icons', serveStatic(resolve(__dirname, '../common/icons/dist')))
+          middlewares.use('/utils', serveStatic(resolve(__dirname, '../common/utils/dist')))
         }
       },
       {
@@ -51,7 +52,8 @@ export default defineConfig(({ command }) => {
             'vue.runtime.esm-browser.js': '../node_modules/vue/dist/vue.runtime.esm-browser.js',
             'vexip-ui.js': '../dist/vexip-ui.mjs',
             'style.css': '../dist/style.css',
-            'vexip-ui-icons.js': '../common/icons/dist/index.es.js'
+            'vexip-ui-icons.js': '../common/icons/dist/index.mjs',
+            'vexip-ui-utils.js': '../common/utils/dist/index.mjs'
           }
 
           Object.keys(depPaths).forEach(fileName => {

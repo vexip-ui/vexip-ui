@@ -1,4 +1,5 @@
-import { computed, provide, inject, unref } from 'vue'
+import { computed, provide, inject, unref, getCurrentInstance } from 'vue'
+import { isClient } from '@vexip-ui/utils'
 
 import type { App, ComputedRef, Ref } from 'vue'
 
@@ -7,7 +8,7 @@ export const PROVIDED_Z_INDEX = '___vxp-provided-z-index'
 let counter = 0
 let initZIndex = 2000
 
-if (document) {
+if (isClient) {
   const rootStyle = getComputedStyle(document.documentElement)
   const cssZIndex = parseFloat(rootStyle.getPropertyValue('--vxp-z-index-popup').trim())
 
@@ -38,9 +39,7 @@ export function configZIndex(sourceZIndex: number | Ref<number>, app?: App) {
 
       return getOrDefault(
         zIndex,
-        upstreamZIndex
-          ? getOrDefault(upstreamZIndex.value, globalZIndex.value)
-          : globalZIndex.value
+        upstreamZIndex ? getOrDefault(upstreamZIndex.value, globalZIndex.value) : globalZIndex.value
       )
     })
 
@@ -49,7 +48,9 @@ export function configZIndex(sourceZIndex: number | Ref<number>, app?: App) {
 }
 
 export function useZIndex() {
-  const zIndex = inject<ComputedRef<number>>(PROVIDED_Z_INDEX, globalZIndex)
+  const zIndex = getCurrentInstance()
+    ? inject<ComputedRef<number>>(PROVIDED_Z_INDEX, globalZIndex)
+    : globalZIndex
 
   return computed(() => zIndex.value + counter++)
 }

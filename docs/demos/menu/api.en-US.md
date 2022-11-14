@@ -1,9 +1,27 @@
+### Preset Types
+
+```ts
+import type { RouteLocationRaw } from 'vue-router'
+
+interface MenuOptions {
+  label: string,
+  icon?: Record<string, any> | (() => any),
+  iconProps?: IconMinorProps,
+  name?: string | (() => string),
+  disabled?: boolean,
+  group?: boolean,
+  meta?: Record<string, any>,
+  route?: RouteLocationRaw,
+  children?: MenuOptions[]
+}
+```
+
 ### Menu Props
 
 | Name          | Type                                               | Description                                                                                                                     | Default      | Since   |
 | ------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------- |
 | active        | `string`                                           | Set the default active menu                                                                                                     | `null`       | -       |
-| accordion     | `boolean`                                          | Sets whether to enable accordion mode. In this mode, only one menu at the same level can be expanded                            | `0`          | -       |
+| accordion     | `boolean`                                          | Set whether to enable accordion mode. In this mode, only one menu at the same level can be expanded                             | `0`          | -       |
 | marker-type   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'none'` | Set the marker type of the selected menu                                                                                        | `'right'`    | -       |
 | reduced       | `boolean`                                          | set menu search or not                                                                                                          | `false`      | -       |
 | horizontal    | `boolean`                                          | Set whether the menu is horizontal                                                                                              | `false`      | -       |
@@ -15,24 +33,6 @@
 | router        | `Router`                                           | Set the Router object and its routes will be parsed automatically and generate the menus, will use `options` to be parsed first | `null`       | `2.0.0` |
 | manual-route  | `boolean`                                          | Whether it is set to manual route mode, route changes will not be processed automatically after it is enabled                   | `false`      | `2.0.0` |
 
-Some preset types:
-
-```ts
-import type { RouteLocationRaw } from 'vue-router'
-
-interface MenuOptions {
-  label: string,
-  icon?: Record<string, any>,
-  iconProps?: IconMinorProps,
-  name?: string,
-  disabled?: boolean,
-  group?: boolean,
-  meta?: Record<string, any>,
-  route?: RouteLocationRaw,
-  children?: MenuOptions[]
-}
-```
-
 ### Menu Events
 
 | Name   | Description                                                                                              | Parameters                                   | Since |
@@ -40,6 +40,12 @@ interface MenuOptions {
 | select | Emitted when the menu is selected, returns the label of the selected menu                                | `(label: string, meta: Record<string, any>)` | -     |
 | expand | Emitted when the menu is expanded (submenu), returns the label of the menu of the expanded group         | `(label: string, meta: Record<string, any>)` | -     |
 | reduce | Emitted when the menu is collapsed group (submenu), returns the label of the menu in the collapsed group | `(label: string, meta: Record<string, any>)` | -     |
+
+### Menu Methods
+
+| Name              | Description                            | Parameters                | Since   |
+| ----------------- | -------------------------------------- | ------------------------- | ------- |
+| expandItemByLabel | Expand the menu according to the label | `(label: string) => void` | `2.0.0` |
 
 ### MenuItem Props
 

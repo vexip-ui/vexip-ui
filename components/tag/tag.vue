@@ -14,19 +14,11 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import {
-  useNameHelper,
-  useProps,
-  createSizeProp,
-  booleanProp,
-  sizeProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, createSizeProp, emitEvent } from '@vexip-ui/config'
 import { Xmark } from '@vexip-ui/icons'
 import { parseColorToRgba, adjustAlpha } from '@vexip-ui/utils'
+import { tagProps } from './props'
 
-import type { PropType } from 'vue'
 import type { TagType } from './symbol'
 
 const tagTypes = Object.freeze<TagType>([
@@ -53,16 +45,7 @@ export default defineComponent({
     Icon,
     Xmark
   },
-  props: {
-    size: sizeProp,
-    type: String as PropType<TagType>,
-    border: booleanProp,
-    closable: booleanProp,
-    color: String,
-    simple: booleanProp,
-    circle: booleanProp,
-    onClose: eventProp()
-  },
+  props: tagProps,
   emits: [],
   setup(_props) {
     const props = useProps('tag', _props, {
@@ -84,7 +67,7 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.bs('vars')]: true,
         [nh.bm(props.size)]: props.size !== 'default',
-        [nh.bm(props.type)]: props.type,
+        [nh.bm(props.type)]: props.type !== 'default',
         [nh.bm('border')]: props.border,
         [nh.bm('simple')]: props.simple,
         [nh.bm('circle')]: props.circle

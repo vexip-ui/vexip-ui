@@ -41,10 +41,7 @@ recordMap.value
     'This Computer',
     reactive({ visible: false, children: ['System (C:)', 'Document (D:)', 'Software (E:)'] })
   )
-  .set(
-    'Document (D:)',
-    reactive({ visible: false, children: ['vexip-ui', 'font-awesome', 'vue'] })
-  )
+  .set('Document (D:)', reactive({ visible: false, children: ['vexip-ui', 'font-awesome', 'vue'] }))
   .set('vexip-ui', reactive({ visible: false, children: [] }))
 </script>
 

@@ -1,26 +1,21 @@
 import { defineComponent, ref, computed, watch, Transition, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
-import { useHover } from '@vexip-ui/mixins'
+import { useHover } from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
   useLocale,
   createSizeProp,
   createStateProp,
-  booleanProp,
-  sizeProp,
-  stateProp,
-  classProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { isNull, throttle } from '@vexip-ui/utils'
-import { EyeSlashR, EyeR, CircleXmark } from '@vexip-ui/icons'
+import { isNull, noop, throttle, debounce } from '@vexip-ui/utils'
+import { EyeSlashR, EyeR, CircleXmark, Spinner } from '@vexip-ui/icons'
+import { inputProps } from './props'
 
-import type { PropType } from 'vue'
+import type { InputType } from './symbol'
 
-export type InputType = 'text' | 'password' | 'date' | 'datetime' | 'time'
 type InputEventType = 'input' | 'change'
 
 const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
@@ -30,53 +25,27 @@ export default defineComponent({
   components: {
     Icon
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    type: String as PropType<InputType>,
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    formatter: Function as PropType<(value: string) => string>,
-    value: String,
-    placeholder: String,
-    autofocus: booleanProp,
-    spellcheck: booleanProp,
-    autocomplete: booleanProp,
-    readonly: booleanProp,
-    disabled: booleanProp,
-    inputClass: classProp,
-    debounce: booleanProp,
-    maxLength: Number,
-    before: String,
-    after: String,
-    // 是否显示切换 passwrod 为明文的按钮
-    password: booleanProp,
-    clearable: booleanProp,
-    onFocus: eventProp<(event: FocusEvent) => void>(),
-    onBlur: eventProp<(event: FocusEvent) => void>(),
-    onInput: eventProp<(value: string) => void>(),
-    onChange: eventProp<(value: string) => void>(),
-    onEnter: eventProp(),
-    onClear: eventProp(),
-    onPrefixClick: eventProp<(event: MouseEvent) => void>(),
-    onSuffixClick: eventProp<(event: MouseEvent) => void>(),
-    onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
-    onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
-    onKeyUp: eventProp<(event: KeyboardEvent) => void>()
-  },
+  props: inputProps,
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<string>(() => inputControl.value?.focus())
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      size,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<string>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       type: {
-        default: 'text' as InputType,
-        validator: (value: InputType) => inputTypes.includes(value)
+        default: 'text',
+        validator: value => inputTypes.includes(value)
       },
       prefix: null,
       prefixColor: '',
@@ -101,8 +70,14 @@ export default defineComponent({
       maxLength: 0,
       before: '',
       after: '',
-      password: false,
-      clearable: false
+      plainPassword: false,
+      clearable: false,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false,
+      transparent: false,
+      sync: false
     })
 
     const nh = useNameHelper('input')
@@ -110,19 +85,21 @@ export default defineComponent({
     const currentValue = ref(props.value)
     const showPassword = ref(false)
     const currentLength = ref(props.value ? props.value.length : 0)
-    const inputControl = ref<HTMLElement | null>(null)
+    const beforeHover = ref(false)
+    const afterHover = ref(false)
 
-    const { wrapper, isHover } = useHover()
+    const inputControl = ref<HTMLElement>()
+
+    const { wrapper: control, isHover } = useHover()
     const locale = useLocale('input')
 
-    // eslint-disable-next-line vue/no-setup-props-destructure
     let lastValue = props.value
 
     const hasBefore = computed(() => {
-      return !!(slots.before || props.before)
+      return !!(slots.before || slots.beforeAction || slots['before-action'] || props.before)
     })
     const hasAfter = computed(() => {
-      return !!(slots.after || props.after)
+      return !!(slots.after || slots.afterAction || slots['after-action'] || props.after)
     })
     const className = computed(() => {
       return [
@@ -133,10 +110,13 @@ export default defineComponent({
           [nh.bs('wrapper')]: !hasBefore.value && !hasAfter.value,
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('has-prefix')]: hasPrefix.value,
-          [nh.bm('has-suffix')]: hasSuffix.value || props.type === 'password'
+          [nh.bm('before')]: slots.beforeAction || slots['before-action'],
+          [nh.bm('after')]: slots.afterAction || slots['after-action'],
+          [nh.bm('loading')]: props.loading,
+          [nh.bm('transparent')]: props.transparent
         }
       ]
     })
@@ -149,12 +129,8 @@ export default defineComponent({
         [nh.bs('wrapper--after-only')]: !hasBefore.value && hasAfter.value
       }
     })
-    const hasPrefix = computed(() => {
-      return !!(slots.prefix || props.prefix)
-    })
-    const hasSuffix = computed(() => {
-      return !!(slots.suffix || props.suffix)
-    })
+    const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
+    const hasSuffix = computed(() => !!(slots.suffix || props.suffix))
     const inputType = computed(() => {
       const type = props.type
 
@@ -173,24 +149,13 @@ export default defineComponent({
         ? props.formatter(currentValue.value)
         : currentValue.value
     })
-    const passwordIcon = computed(() => {
-      return showPassword.value ? EyeSlashR : EyeR
-    })
-    const countStyle = computed(() => {
-      let fix = 0
-
-      if (hasSuffix.value) {
-        fix += 2
-      }
-
-      if (fix) {
-        return { right: `calc(${fix}em + 7px)` }
-      }
-
-      return {}
-    })
+    const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
     const hasValue = computed(() => {
       return !(isNull(currentValue.value) || currentValue.value === '')
+    })
+    const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && hasValue.value && isHover.value
     })
 
     watch(
@@ -204,6 +169,7 @@ export default defineComponent({
     // Expose api methods.
     // Need to define some same name methods in 'methods' option to support infer types.
     expose({
+      input: inputControl,
       focus: () => {
         inputControl.value?.focus()
       },
@@ -223,7 +189,7 @@ export default defineComponent({
       if (focused.value) {
         focused.value = false
 
-        window.setTimeout(() => {
+        setTimeout(() => {
           if (!focused.value) {
             emitEvent(props.onBlur, event)
             emitChangeEvent('change')
@@ -258,10 +224,18 @@ export default defineComponent({
 
         setFieldValue(currentValue.value)
         emitEvent(props.onChange, currentValue.value)
-        emit('update:value', currentValue.value)
-        validateField()
+
+        if (!props.sync) {
+          emit('update:value', currentValue.value)
+          validateField()
+        }
       } else {
         emitEvent(props.onInput, currentValue.value)
+
+        if (props.sync) {
+          emit('update:value', currentValue.value)
+          validateField()
+        }
       }
     }
 
@@ -272,10 +246,6 @@ export default defineComponent({
         currentLength.value = 0
 
         return
-      }
-
-      if (typeof value !== 'string') {
-        value = String(value)
       }
 
       const maxLength = props.maxLength
@@ -300,6 +270,12 @@ export default defineComponent({
     function handleClear(event: MouseEvent) {
       event.stopPropagation()
       setValue('', 'change')
+
+      if (props.sync) {
+        emit('update:value', currentValue.value)
+        validateField()
+      }
+
       emitEvent(props.onClear)
       nextTick(clearField)
     }
@@ -332,37 +308,79 @@ export default defineComponent({
       emitEvent(props.onKeyUp, event)
     }
 
-    function createAffixElement(type: 'prefix' | 'suffix') {
-      const isPrefix = type === 'prefix'
-      const affixSlot = isPrefix ? slots.prefix : slots.suffix
+    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
 
+    function renderPrefix() {
       return (
         <div
-          key={type}
-          class={nh.bem('icon', type)}
-          style={isPrefix ? { color: props.prefixColor } : { color: props.suffixColor }}
-          onClick={isPrefix ? handlePrefixClick : handleSuffixClick}
+          class={[nh.be('icon'), nh.be('prefix')]}
+          style={{ color: props.prefixColor }}
+          onClick={handlePrefixClick}
         >
-          {affixSlot ? affixSlot() : <Icon icon={isPrefix ? props.prefix : props.suffix}></Icon>}
+          {slots.prefix ? slots.prefix() : <Icon icon={props.prefix}></Icon>}
         </div>
       )
     }
 
-    function createSuffixElement() {
-      if (!props.disabled && props.clearable && hasValue.value && isHover.value) {
+    function renderCustomSuffix() {
+      if (hasSuffix.value) {
         return (
-          <div key={'clear'} class={nh.be('clear')} onClick={handleClear}>
+          <div
+            key={'suffix'}
+            class={[nh.be('icon'), nh.be('suffix')]}
+            style={{
+              color: props.suffixColor,
+              opacity: showClear.value || props.loading ? '0%' : ''
+            }}
+            onClick={handleSuffixClick}
+          >
+            {slots.suffix ? slots.suffix() : <Icon icon={props.suffix}></Icon>}
+          </div>
+        )
+      }
+
+      if (props.type === 'password' && props.plainPassword) {
+        return (
+          <div
+            key={'password'}
+            class={[nh.be('icon'), nh.be('password')]}
+            style={{
+              color: props.suffixColor,
+              opacity: showClear.value || props.loading ? '0%' : ''
+            }}
+            onClick={toggleShowPassword}
+          >
+            <Icon icon={passwordIcon.value}></Icon>
+          </div>
+        )
+      }
+
+      if (props.clearable || props.loading) {
+        return (
+          <div key={'placeholder'} class={[nh.be('icon'), nh.bem('icon', 'placeholder')]}></div>
+        )
+      }
+
+      return null
+    }
+
+    function renderSuffixAction() {
+      if (showClear.value) {
+        return (
+          <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
             <Icon icon={CircleXmark}></Icon>
           </div>
         )
       }
 
-      if (hasSuffix.value) return createAffixElement('suffix')
-
-      if (props.type === 'password' && props.password) {
+      if (props.loading) {
         return (
-          <div key={'password'} class={nh.bem('icon', 'password')} onClick={toggleShowPassword}>
-            <Icon icon={passwordIcon.value}></Icon>
+          <div key={'loading'} class={[nh.be('icon'), nh.be('loading')]}>
+            <Icon
+              spin={props.loadingSpin}
+              pulse={!props.loadingSpin}
+              icon={props.loadingIcon}
+            ></Icon>
           </div>
         )
       }
@@ -370,11 +388,31 @@ export default defineComponent({
       return null
     }
 
-    const handleInput = throttle(handleChange)
-
-    function createInputElement() {
+    function renderSuffix() {
       return (
-        <div id={idFor.value} ref={wrapper} class={className.value}>
+        <div class={nh.be('suffix-wrapper')}>
+          {renderCustomSuffix()}
+          <Transition name={nh.ns('fade')} appear>
+            {renderSuffixAction()}
+          </Transition>
+        </div>
+      )
+    }
+
+    function renderCount() {
+      return (
+        <div class={nh.be('count')}>
+          {slots.count
+            ? slots.count({ value: currentValue.value })
+            : `${currentLength.value}/${props.maxLength}`}
+        </div>
+      )
+    }
+
+    function renderControl() {
+      return (
+        <div id={idFor.value} ref={control} class={className.value}>
+          {hasPrefix.value && renderPrefix()}
           <input
             ref={inputControl}
             class={[nh.be('control'), props.inputClass]}
@@ -384,8 +422,9 @@ export default defineComponent({
             autocomplete={props.autocomplete ? 'on' : 'off'}
             spellcheck={props.spellcheck}
             disabled={props.disabled}
-            readonly={props.readonly}
+            readonly={readonly.value}
             placeholder={props.placeholder ?? locale.value.placeholder}
+            maxlength={props.maxLength > 0 ? props.maxLength : undefined}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}
@@ -394,43 +433,46 @@ export default defineComponent({
             onKeydown={handleKeyDown}
             onKeyup={handleKeyUp}
           />
-          {hasPrefix.value && createAffixElement('prefix')}
-          <Transition name={nh.ns('fade')}>{createSuffixElement()}</Transition>
-          {props.maxLength
-            ? (
-            <div class={nh.be('count')} style={countStyle.value}>
-              {`${currentLength.value}/${props.maxLength}`}
-            </div>
-              )
-            : null}
+          {renderSuffix()}
+          {props.maxLength > 0 ? renderCount() : null}
         </div>
       )
+    }
+
+    function renderAside(type: 'before' | 'after') {
+      const buttonSlot = slots[`${type}Action`] || slots[`${type}-action`]
+
+      if (buttonSlot) {
+        return (
+          <div
+            class={[nh.be(type), nh.bem(type, 'action')]}
+            onMouseenter={() => ((type === 'before' ? beforeHover : afterHover).value = true)}
+            onMouseleave={() => ((type === 'before' ? beforeHover : afterHover).value = false)}
+          >
+            {buttonSlot()}
+          </div>
+        )
+      }
+
+      return <div class={nh.be(type)}>{slots[type] ? slots[type]!() : props[type]}</div>
     }
 
     return () => {
       if (hasBefore.value || hasAfter.value) {
         return (
           <div class={wrapperClass.value}>
-            {hasBefore.value && (
-              <div class={nh.be('before')}>{slots.before ? slots.before() : props.before}</div>
-            )}
-            {createInputElement()}
-            {hasAfter.value && (
-              <div class={nh.be('after')}>{slots.after ? slots.after() : props.after}</div>
-            )}
+            {hasBefore.value && renderAside('before')}
+            {renderControl()}
+            {hasAfter.value && renderAside('after')}
           </div>
         )
       }
 
-      return createInputElement()
+      return renderControl()
     }
   },
   methods: {
-    focus() {
-      // define type only
-    },
-    blur() {
-      // define type only
-    }
+    focus: noop as () => void,
+    blur: noop as () => void
   }
 })

@@ -1,7 +1,5 @@
 <template>
-  <Avatar>
-    Qmhc
-  </Avatar>
+  <Avatar> Qmhc </Avatar>
   <Avatar circle>
     Qmhc
   </Avatar>

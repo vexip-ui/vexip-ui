@@ -1,10 +1,7 @@
-// export type UploadStatusType = 'pending' | 'uploading' | 'fail' | 'success' | 'delete'
 export type UploadListType = 'name' | 'detail' | 'thumbnail' | 'card'
+export type UploadStatusType = 'pending' | 'uploading' | 'fail' | 'success' | 'delete'
 
 export type SourceFile = File & { path?: string }
-
-export type BeforeFn = (file: SourceFile, files: SourceFile[]) => any | Promise<any>
-export type RenderFn = (data: { file: SourceFile }) => any
 
 export type HttpError = Error & {
   response: any,
@@ -13,7 +10,7 @@ export type HttpError = Error & {
   method: string
 }
 
-export enum UploadStatusType {
+export const enum StatusType {
   PENDING = 'pending',
   UPLOADING = 'uploading',
   FAIL = 'fail',
@@ -21,20 +18,34 @@ export enum UploadStatusType {
   DELETE = 'delete'
 }
 
+export type FileStatus = 'pending' | 'uploading' | 'fail' | 'success' | 'delete'
+
 export interface FileState {
-  id: string,
+  id: string | number,
   name: string,
   size: number,
   type: string,
   base64: string | null,
-  status: UploadStatusType,
+  status: FileStatus,
   percentage: number,
-  source: SourceFile,
+  source: SourceFile | null,
+  url: string | null,
   path: string,
   xhr: XMLHttpRequest | null,
   response: any,
   error: HttpError | null
 }
+
+export type FileOptions = Partial<Omit<FileState, 'xhr' | 'response' | 'error'>>
+
+type MaybePromise<T> = T | Promise<T>
+
+export type BeforeUpload = (
+  file: FileState,
+  files: FileState[]
+) => MaybePromise<boolean | Blob | SourceFile | void>
+export type BeforeSelect = (file: FileState, files: FileState[]) => MaybePromise<boolean | void>
+export type RenderFn = (data: { file: FileState }) => any
 
 export interface UploadOptions {
   url: string,
@@ -55,7 +66,7 @@ export interface DirectoryEntity {
   isFile: boolean,
   isDirectory: boolean,
   file: (callback: (file: SourceFile) => void) => void,
-  // eslint-disable-next-line no-use-before-define
+
   createReader: () => DirectoryReader
 }
 
@@ -66,4 +77,13 @@ export interface DirectoryReader {
   ) => void
 }
 
-export const uploadListTypes = Object.freeze<UploadListType>(['name', 'detail', 'thumbnail', 'card'])
+export interface UploadExposed {
+  execute: () => Promise<false | any[]>
+}
+
+export const uploadListTypes = Object.freeze<UploadListType>([
+  'name',
+  'detail',
+  'thumbnail',
+  'card'
+])

@@ -2,5 +2,11 @@
   "basis",
   "card",
   "disabled",
-  "icon"
+  "icon",
+  "closable",
+  "align",
+  "placement",
+  "extra",
+  "dynamic",
+  "options"
 ]

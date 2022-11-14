@@ -1,5 +1,24 @@
 <template>
-  <div :class="className" role="group">
+  <slot v-if="props.pure"></slot>
+  <Column
+    v-else
+    v-bind="$attrs"
+    :class="className"
+    role="group"
+    tag="div"
+    :span="props.span"
+    :offset="props.offset"
+    :push="props.push"
+    :pull="props.pull"
+    :order="props.order"
+    :xs="props.xs"
+    :sm="props.sm"
+    :md="props.md"
+    :lg="props.lg"
+    :xl="props.xl"
+    :xxl="props.xxl"
+    :flex="props.flex"
+  >
     <input
       v-if="isNative"
       type="hidden"
@@ -9,19 +28,31 @@
     />
     <label
       v-if="hasLabel"
+      ref="labelEl"
       :class="nh.be('label')"
       :style="{ width: `${computedlabelWidth}px` }"
       :for="props.htmlFor || props.prop"
       @click="handleLabelClick"
     >
       <slot name="label">
+        <Tooltip v-if="props.help || $slots.help" transfer>
+          <template #trigger>
+            <Icon :class="nh.be('help')"><CircleQuestionR></CircleQuestionR></Icon>
+          </template>
+          <slot name="help">
+            <div :class="nh.be('help-tip')">
+              {{ props.help }}
+            </div>
+          </slot>
+        </Tooltip>
         {{ props.label + (labelSuffix || '') }}
       </slot>
     </label>
     <div
       :class="{
         [nh.be('control')]: true,
-        [nh.bem('control', 'no-label')]: !hasLabel
+        [nh.bem('control', 'no-label')]: !hasLabel,
+        [nh.bem('control', 'action')]: props.action
       }"
       role="alert"
       aria-relevant="all"
@@ -36,7 +67,7 @@
         </div>
       </transition>
     </div>
-  </div>
+  </Column>
 </template>
 
 <script lang="ts">
@@ -51,35 +82,30 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
-import { useNameHelper, useProps, useLocale, booleanProp, makeSentence } from '@vexip-ui/config'
-import { isNull, isFunction, createEventEmitter } from '@vexip-ui/utils'
-import { FORM_PROPS, FORM_FIELDS } from '@/components/form'
+import { Column } from '@/components/column'
+import { Icon } from '@/components/icon'
+import { Tooltip } from '@/components/tooltip'
+import { CircleQuestionR } from '@vexip-ui/icons'
+import { useNameHelper, useProps, useLocale, makeSentence } from '@vexip-ui/config'
+import { isNull, isFunction, createEventEmitter, getRangeWidth } from '@vexip-ui/utils'
+import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
-import { VALIDATE_FIELD, CLEAR_FIELD, FIELD_OPTIONS } from './symbol'
+import { FORM_PROPS, FORM_FIELDS, FIELD_OPTIONS, FORM_ACTIONS } from './symbol'
 
-import type { Ref, PropType } from 'vue'
 import type { ComponentState } from '@vexip-ui/config'
-import type { FormProps, FormItemProps, FieldOptions } from './symbol'
-import type { Trigger, Rule } from './validator'
+import type { Rule } from './validator'
 
 export default defineComponent({
   name: 'FormItem',
-  props: {
-    label: String,
-    prop: String,
-    rules: [Object, Array] as PropType<Rule | Rule[]>,
-    labelWidth: Number,
-    required: Boolean,
-    htmlFor: String,
-    errorTransition: String,
-    defaultValue: Object as PropType<unknown>,
-    hideErrorTip: booleanProp,
-    validateAll: booleanProp,
-    hideAsterisk: booleanProp,
-    hideLabel: booleanProp,
-    action: booleanProp
+  components: {
+    Column,
+    Icon,
+    Tooltip,
+    CircleQuestionR
   },
+  inheritAttrs: true,
+  props: formItemProps,
   setup(_props, { slots }) {
     const nh = useNameHelper('form')
     const props = useProps('formItem', _props, {
@@ -94,50 +120,77 @@ export default defineComponent({
       rules: () => [],
       labelWidth: null,
       required: false,
-      htmlFor: null,
+      htmlFor: {
+        default: null,
+        static: true
+      },
       errorTransition: () => nh.ns('fade'),
-      defaultValue: null,
+      defaultValue: {
+        default: null,
+        static: true
+      },
       hideErrorTip: false,
       validateAll: null,
       hideAsterisk: null,
       hideLabel: null,
-      action: false
+      action: false,
+      help: '',
+      pure: false,
+      span: 24,
+      offset: null,
+      push: null,
+      pull: null,
+      order: null,
+      xs: null,
+      sm: null,
+      md: null,
+      lg: null,
+      xl: null,
+      xxl: null,
+      flex: null
     })
 
     const formProps = inject(FORM_PROPS, {})
+    const formActions = inject(FORM_ACTIONS, null)
+    const formFields = inject(FORM_FIELDS, null)
     const emitter = createEventEmitter()
+    const locale = useLocale('form')
 
-    const { isRequired, allRules } = useRules(props, formProps)
-    const { isError, errorTip, currentValue, validate, clearError, reset, getValue, setValue } =
-      useField(props, formProps, allRules)
+    const initValue = ref(props.defaultValue)
+    const isError = ref(false)
+    const errorTip = ref('')
+    const validating = ref(false)
+    const disabledValidate = ref(false)
+    const labelWidth = ref(0)
 
-    const instances = new Set<any>()
+    const labelEl = ref<HTMLInputElement>()
 
-    const fieldObject = Object.freeze({
-      prop: computed(() => props.prop),
-      idFor: computed(() => props.prop),
-      state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
-      disabled: computed(() => !!formProps.disabled),
-      emitter,
-      validate,
-      clearError,
-      reset,
-      getValue,
-      setValue,
-      sync: (instance: any) => {
-        if (instances.size) {
-          console.warn('[vexip-ui]: must only be one control component under FormItem.')
-        }
-
-        instances.add(instance)
-      },
-      unsync: (instance: any) => {
-        instances.delete(instance)
-      }
+    const isRequired = computed(() => formProps.allRequired || props.required)
+    const requiredTip = computed(() => {
+      return makeSentence(`${props.label || props.prop} ${locale.value.notNullable}`)
     })
+    const allRules = computed(() => {
+      if (!props.prop) return []
 
-    useRelation(fieldObject)
+      const requiredRule: Rule[] = isRequired.value
+        ? [{ required: isRequired.value, message: requiredTip.value }]
+        : []
+      const selfRules = Array.isArray(props.rules) ? props.rules : [props.rules]
 
+      let formRules: Rule[] = []
+
+      if (formProps.rules) {
+        formRules = (getValueByPath(formProps.rules, props.prop) as Rule[]) ?? []
+      }
+
+      formRules = Array.isArray(formRules) ? formRules : [formRules]
+
+      return requiredRule.concat(formRules, selfRules)
+    })
+    const currentValue = computed(getValue)
+    const isValidateAll = computed(() => {
+      return isNull(props.validateAll) ? formProps.validateAll ?? false : props.validateAll
+    })
     const useAsterisk = computed(() => {
       if (props.hideAsterisk === true || formProps.hideAsterisk) {
         return false
@@ -149,22 +202,22 @@ export default defineComponent({
 
       return isRequired.value
     })
-    const hideLabel = computed(() => {
-      return props.action || props.hideLabel === true || formProps.hideLabel
-    })
-    const hasLabel = computed(() => {
-      return !(hideLabel.value || !(props.label || slots.label))
-    })
+    const hideLabel = computed(
+      () => props.action || props.hideLabel === true || formProps.hideLabel
+    )
+    const hasLabel = computed(() => !(hideLabel.value || !(props.label || slots.label)))
     const computedlabelWidth = computed(() => {
-      if (formProps.labelPosition) {
-        return formProps.labelPosition === 'top'
-          ? 0
-          : hideLabel.value
+      if (formProps.labelAlign) {
+        return getLabelWidth(
+          formProps.labelAlign === 'top'
             ? 0
-            : props.labelWidth || formProps.labelWidth || 80
+            : hideLabel.value
+              ? 0
+              : props.labelWidth || formProps.labelWidth || 80
+        )
       }
 
-      return hideLabel.value ? 0 : props.labelWidth || 80
+      return getLabelWidth(hideLabel.value ? 0 : props.labelWidth || 80)
     })
     const className = computed(() => {
       return {
@@ -172,14 +225,17 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bem('item', 'required')]: !formProps.hideAsterisk && useAsterisk.value,
         [nh.bem('item', 'error')]: isError.value,
-        [nh.bem('item', 'action')]: props.action
+        [nh.bem('item', 'action')]: props.action,
+        [nh.bem('item', 'padding')]:
+          formProps.inline && formProps.labelAlign === 'top' && !hasLabel.value
       }
     })
     const controlStyle = computed(() => {
       return {
-        width: `calc(100% - ${computedlabelWidth.value}px)`,
+        width:
+          formProps.labelAlign === 'top' ? undefined : `calc(100% - ${computedlabelWidth.value}px)`,
         marginLeft:
-          hasLabel.value || formProps.labelPosition === 'top'
+          hasLabel.value || formProps.labelAlign === 'top'
             ? undefined
             : `${computedlabelWidth.value}px`
       }
@@ -193,6 +249,171 @@ export default defineComponent({
 
       return value
     })
+
+    const instances = new Set<any>()
+
+    const fieldObject = Object.freeze({
+      prop: computed(() => props.prop),
+      idFor: computed(() => props.prop),
+      state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
+      disabled: computed(() => !!formProps.disabled),
+      loading: computed(() => !!formProps.loading),
+      size: computed(() => formProps.size || 'default'),
+      emitter,
+      labelWidth,
+      validate,
+      clearError,
+      reset,
+      getValue,
+      setValue,
+      sync: (instance: any) => {
+        if (instances.size) {
+          console.warn('[vexip-ui:Form]: must only be one control component under FormItem.')
+        }
+
+        instances.add(instance)
+      },
+      unsync: (instance: any) => {
+        instances.delete(instance)
+      }
+    })
+
+    provide(FIELD_OPTIONS, fieldObject)
+
+    watch(
+      () => props.defaultValue,
+      value => {
+        initValue.value = value
+      }
+    )
+
+    onMounted(() => {
+      const value = currentValue.value
+
+      if (isNull(initValue.value)) {
+        initValue.value = Array.isArray(value) ? Array.from(value) : value
+      }
+
+      if (labelEl.value) {
+        labelWidth.value = getRangeWidth(labelEl.value)
+      }
+
+      if (formFields) {
+        formFields.add(fieldObject)
+      }
+    })
+
+    onBeforeUnmount(() => {
+      if (formFields) {
+        formFields.delete(fieldObject)
+      }
+    })
+
+    function getLabelWidth(width: number | 'auto') {
+      return width === 'auto' ? formActions?.getLabelWidth() || 80 : width
+    }
+
+    let inited = false
+
+    function getValue(defaultValue?: unknown) {
+      if (!formProps.model || !props.prop) return defaultValue
+
+      try {
+        const value = getValueByPath(formProps.model, props.prop, true)
+        inited = true
+
+        return value
+      } catch (e) {
+        if (!inited) {
+          setValueByPath(formProps.model, props.prop, defaultValue, false)
+          inited = true
+        }
+
+        return defaultValue
+      }
+    }
+
+    function setValue(value: unknown, strict = false) {
+      if (!formProps.model || !props.prop) return
+
+      try {
+        return setValueByPath(formProps.model, props.prop, value, strict)
+      } catch (e) {}
+    }
+
+    function validate() {
+      return handleValidate()
+    }
+
+    function clearError() {
+      isError.value = false
+      errorTip.value = ''
+    }
+
+    function reset() {
+      clearError()
+
+      if (!formProps.model || !props.prop) return false
+
+      const value = currentValue.value
+
+      let resetValue
+
+      if (Array.isArray(value)) {
+        resetValue = Array.isArray(initValue.value) ? Array.from(initValue.value) : []
+      } else {
+        resetValue = isFunction(initValue.value) ? initValue.value() : initValue.value
+      }
+
+      if (resetValue !== value) {
+        disabledValidate.value = true
+      }
+
+      return setValueByPath(formProps.model, props.prop, resetValue, true)
+    }
+
+    async function handleValidate() {
+      if (disabledValidate.value) {
+        disabledValidate.value = false
+
+        return handleValidateEnd(null)
+      }
+
+      if (!props.prop || !formProps.model || validating.value) {
+        return handleValidateEnd(null)
+      }
+
+      validating.value = true
+
+      const value = currentValue.value
+      const useRules = allRules.value
+      const model = formProps.model
+
+      let errors: string[] | null = await asyncValidate(
+        useRules,
+        value,
+        model,
+        isValidateAll.value,
+        locale.value.validateFail
+      )
+
+      errors = errors.length ? errors : null
+
+      return handleValidateEnd(errors)
+    }
+
+    function handleValidateEnd(errors: string[] | null) {
+      validating.value = false
+
+      if (!errors) {
+        clearError()
+      } else {
+        isError.value = true
+        errorTip.value = Array.isArray(errors) ? errors[0] : errors
+      }
+
+      return errors
+    }
 
     function handleLabelClick() {
       emitter.emit('focus')
@@ -214,189 +435,10 @@ export default defineComponent({
       computedlabelWidth,
       controlStyle,
 
+      labelEl,
+
       handleLabelClick
     }
   }
 })
-
-function useRules(props: FormItemProps, formProps: Partial<FormProps>) {
-  const locale = useLocale('form')
-
-  const isRequired = computed(() => {
-    return formProps.allRequired || props.required
-  })
-  const requiredTip = computed(() => {
-    return makeSentence(`${props.label} ${locale.value.notNullable}`)
-  })
-  const allRules = computed(() => {
-    if (!props.prop) return []
-
-    const requiredRule: Rule[] = isRequired.value
-      ? [{ required: isRequired.value, message: requiredTip.value }]
-      : []
-    const selfRules = Array.isArray(props.rules) ? props.rules : [props.rules]
-
-    let formRules: Rule[] = []
-
-    if (formProps.rules) {
-      formRules = (getValueByPath(formProps.rules, props.prop) as Rule[]) ?? []
-    }
-
-    formRules = Array.isArray(formRules) ? formRules : [formRules]
-
-    return requiredRule.concat(formRules, selfRules)
-  })
-
-  return { isRequired, allRules }
-}
-
-function useField(props: FormItemProps, formProps: Partial<FormProps>, allRules: Ref<Rule[]>) {
-  const initValue = ref(props.defaultValue)
-  const isError = ref(false)
-  const errorTip = ref('')
-  const validating = ref(false)
-  const disabledValidate = ref(false)
-
-  const currentValue = computed(getValue)
-  const isValidateAll = computed(() => {
-    return isNull(props.validateAll) ? formProps.validateAll ?? false : props.validateAll
-  })
-
-  watch(
-    () => props.defaultValue,
-    value => {
-      initValue.value = value
-    }
-  )
-
-  onMounted(() => {
-    const value = currentValue.value
-
-    if (isNull(initValue.value)) {
-      initValue.value = Array.isArray(value) ? Array.from(value) : value
-    }
-  })
-
-  function getValue(defaultValue?: unknown) {
-    if (!formProps.model || !props.prop) return defaultValue
-
-    try {
-      return getValueByPath(formProps.model, props.prop, true)
-    } catch (e) {
-      setValueByPath(formProps.model, props.prop, defaultValue, false)
-
-      return defaultValue
-    }
-  }
-
-  function setValue(value: unknown, strict = false) {
-    if (!formProps.model || !props.prop) return
-
-    try {
-      return setValueByPath(formProps.model, props.prop, value, strict)
-    } catch (e) {}
-  }
-
-  function validate(type?: Trigger) {
-    return handleValidate(type)
-  }
-
-  function clearError() {
-    isError.value = false
-    errorTip.value = ''
-  }
-
-  function reset() {
-    clearError()
-
-    if (!formProps.model || !props.prop) return false
-
-    const value = currentValue.value
-
-    let resetValue
-
-    if (Array.isArray(value)) {
-      resetValue = Array.isArray(initValue.value) ? Array.from(initValue.value) : []
-    } else {
-      resetValue = isFunction(initValue.value) ? initValue.value() : initValue.value
-    }
-
-    if (resetValue !== value) {
-      disabledValidate.value = true
-    }
-
-    return setValueByPath(formProps.model, props.prop, resetValue, true)
-  }
-
-  async function handleValidate(type?: Trigger) {
-    if (disabledValidate.value) {
-      disabledValidate.value = false
-
-      return handleValidateEnd(null)
-    }
-
-    if (!props.prop || !formProps.model || validating.value) {
-      return handleValidateEnd(null)
-    }
-
-    validating.value = true
-
-    const value = currentValue.value
-    const useRules = type
-      ? allRules.value.filter(rule => !rule.trigger || rule.trigger === type)
-      : allRules.value
-    const model = formProps.model
-
-    let errors: string[] | null = await asyncValidate(useRules, value, model, isValidateAll.value)
-
-    errors = errors.length ? errors : null
-
-    return handleValidateEnd(errors)
-  }
-
-  function handleValidateEnd(errors: string[] | null) {
-    validating.value = false
-
-    if (!errors) {
-      clearError()
-    } else {
-      isError.value = true
-      errorTip.value = Array.isArray(errors) ? errors[0] : errors
-    }
-
-    return errors
-  }
-
-  return {
-    isError,
-    errorTip,
-    currentValue,
-    validate,
-    clearError,
-    reset,
-    getValue,
-    setValue
-  }
-}
-
-function useRelation(field: FieldOptions) {
-  const formFields = inject(FORM_FIELDS, null)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
-  provide(VALIDATE_FIELD, field.validate)
-  provide(CLEAR_FIELD, field.clearError)
-  provide(FIELD_OPTIONS, field)
-
-  onMounted(() => {
-    if (formFields) {
-      formFields.add(field)
-    }
-  })
-
-  onBeforeUnmount(() => {
-    if (formFields) {
-      formFields.delete(field)
-    }
-  })
-}
 </script>

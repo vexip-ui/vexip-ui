@@ -32,6 +32,10 @@ export interface LocaleConfig {
     week7: string
   },
 
+  checkbox: {
+    all: string
+  },
+
   colorPicker: {
     confirm: string,
     cancel: string
@@ -47,10 +51,16 @@ export interface LocaleConfig {
     cancel: string
   },
 
+  drawer: {
+    confirm: string,
+    cancel: string
+  },
+
   form: {
     submit: string,
     reset: string,
-    notNullable: string
+    notNullable: string,
+    validateFail: string
   },
 
   input: {
@@ -60,7 +70,8 @@ export interface LocaleConfig {
   layout: {
     signOut: string,
     signType: string,
-    majorColor: string
+    majorColor: string,
+    themeMode: string
   },
 
   modal: {

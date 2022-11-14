@@ -1,5 +1,1 @@
-export enum PaginationMode {
-  LEFT,
-  CENTER,
-  RIGHT
-}
+export type PaginationPlugin = 'total' | 'jump' | 'size'

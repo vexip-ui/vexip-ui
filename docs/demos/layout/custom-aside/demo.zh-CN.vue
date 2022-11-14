@@ -1,5 +1,5 @@
 <template>
-  <Layout logo="https://www.vexipui.com/logo.png" sign-name="Vexip UI" :user="user">
+  <Layout logo="https://www.vexipui.com/vexip-ui.svg" sign-name="Vexip UI" :user="user">
     <template #aside-main="{ reduced }">
       <Menu transfer :options="menus" :reduced="reduced"></Menu>
     </template>
@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',

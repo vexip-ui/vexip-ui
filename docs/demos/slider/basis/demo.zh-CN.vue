@@ -1,17 +1,16 @@
 <template>
   <div style="max-width: 400px;">
-    <Slider v-model:value="value"></Slider>
+    <Slider v-model:value="value" :disabled="disabled"></Slider>
   </div>
+  <p>
+    Disabled:
+    <Switch v-model:value="disabled"></Switch>
+  </p>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const value = ref(0)
-
-    return { value }
-  }
-})
+const value = ref(20)
+const disabled = ref(false)
 </script>

@@ -1,6 +1,13 @@
 @use 'sass:map';
 
 @use './design' as *;
+@use './avatar.scss';
+@use './dropdown.scss';
+@use './icon.scss';
+@use './linker.scss';
+@use './menu.scss';
+@use './native-scroll.scss';
+@use './switch.scss';
 
 $layout: () !default;
 $layout: map.merge(
@@ -146,6 +153,7 @@ $layout: map.merge(
       display: flex;
       flex: 1 0 0%;
       align-items: center;
+      min-width: 0;
       height: 100%;
     }
 
@@ -156,6 +164,9 @@ $layout: map.merge(
     }
 
     .#{$namespace}-menu {
+      width: 100%;
+      height: 100%;
+
       & > .#{$namespace}-menu__item {
         height: get-css-var('layout-header-height');
       }
@@ -223,6 +234,10 @@ $layout: map.merge(
   &__header &__sign {
     padding-right: 16px;
     margin-left: -16px;
+
+    &--logo-only {
+      padding-right: 0;
+    }
   }
 
   &--header-main &__sign {
@@ -419,6 +434,21 @@ $layout: map.merge(
     }
   }
 
+  &__theme-mode {
+    border: get-css-var('border-base');
+
+    &--dark {
+      @include define-preset-values(
+        'switch',
+        (
+          bg-color-open: get-css-var('fill-color-background'),
+          signal-bg-color: get-css-var('color-black'),
+          icon-color: get-css-var('content-color-secondary')
+        )
+      );
+    }
+  }
+
   &__major-color {
     display: flex;
     align-items: center;
@@ -453,6 +483,11 @@ $layout: map.merge(
       padding: 0 8px;
       border-bottom: get-css-var('border-light-2');
     }
+
+    &--vertical &-row {
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   &__link {
@@ -468,9 +503,16 @@ $layout: map.merge(
     }
 
     &-group {
+      display: inline-flex;
       flex: 1 0 0;
+      flex-direction: column;
       padding-right: 24px;
       padding-bottom: 32px;
+
+      &--vertical {
+        align-items: center;
+        padding-right: 0;
+      }
     }
 
     &-name--group {

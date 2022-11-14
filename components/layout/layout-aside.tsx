@@ -3,32 +3,17 @@ import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
 import { Indent, Outdent, CaretRight } from '@vexip-ui/icons'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { layoutAsideProps } from './props'
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
-import type { PropType } from 'vue'
-import type { MenuOptions } from '@/components/menu'
-import type { AsideMenuProps } from './symbol'
+import type { MenuExposed } from '@/components/menu'
 
 export default defineComponent({
   name: 'LayoutAside',
-  props: {
-    tag: String,
-    expanded: booleanProp,
-    reduced: booleanProp,
-    menus: Object as PropType<MenuOptions[]>,
-    menuActive: String,
-    menuProps: Object as PropType<AsideMenuProps>,
-    logo: String,
-    signName: String,
-    expandedMedia: String,
-    onReducedChange: eventProp<(reduced: boolean) => void>(),
-    onExpandedChange: eventProp<(expanded: boolean) => void>(),
-    onSignClick: eventProp<(event: MouseEvent) => void>(),
-    onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>()
-  },
+  props: layoutAsideProps,
   emits: ['update:reduced', 'update:expanded'],
-  setup(_props, { emit, slots }) {
+  setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
       tag: 'aside',
       reduced: false,
@@ -36,14 +21,10 @@ export default defineComponent({
         default: () => [],
         static: true
       },
-      menuActive: {
-        default: null,
-        static: true
-      },
       menuProps: null,
       logo: '',
       signName: '',
-      expandedMedia: 'lg',
+      fixed: 'lg',
       onReducedChange: null,
       onExpandedChange: null,
       onSignClick: null,
@@ -56,18 +37,19 @@ export default defineComponent({
     const currentExpanded = ref(props.expanded)
     const scrollHeight = ref('100%')
 
-    const matched = useMediaQuery(toRef(props, 'expandedMedia'))
+    const matched = useMediaQuery(toRef(props, 'fixed'))
     const counter = useUpdateCounter()
 
-    const top = ref<HTMLElement | null>(null)
-    const bottom = ref<HTMLElement | null>(null)
+    const top = ref<HTMLElement>()
+    const bottom = ref<HTMLElement>()
+    const menu = ref<MenuExposed | null>(null)
 
     const className = computed(() => {
       return [
         nh.be('aside'),
         {
           [nh.bs('vars')]: !layoutState.isLayout,
-          [nh.bem('aside', 'fixed')]: layoutState.expandMatched,
+          [nh.bem('aside', 'fixed')]: matched.value,
           [nh.bem('aside', 'expanded')]: currentExpanded.value,
           [nh.bem('aside', 'reduced')]: currentReduced.value
         }
@@ -76,6 +58,11 @@ export default defineComponent({
     const hasTop = computed(() => {
       return !!(props.logo || props.signName || slots.top)
     })
+    const hasMenu = computed(() => {
+      return !!(props.menus?.length || props.menuProps?.router)
+    })
+
+    expose({ menu, expandMenuByLabel })
 
     watch(
       () => props.reduced,
@@ -139,6 +126,10 @@ export default defineComponent({
       emitEvent(props.onMenuSelect, label, meta)
     }
 
+    function expandMenuByLabel(label: string) {
+      menu.value?.expandItemByLabel(label)
+    }
+
     function getSlotParams() {
       return {
         reduced: currentReduced.value,
@@ -175,9 +166,10 @@ export default defineComponent({
               ? (
                   slots.default(getSlotParams())
                 )
-              : props.menus?.length
+              : hasMenu.value
                 ? (
               <Menu
+                ref={menu}
                 {...(props.menuProps || {})}
                 transfer
                 options={props.menus}

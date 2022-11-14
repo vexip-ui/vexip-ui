@@ -7,14 +7,8 @@
   ></Slider>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const value = ref(60)
-
-    return { value }
-  }
-})
+const value = ref(60)
 </script>

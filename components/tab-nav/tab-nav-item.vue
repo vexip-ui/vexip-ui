@@ -15,6 +15,11 @@
       <slot>
         {{ label }}
       </slot>
+      <button v-if="isClosable" :class="nh.be('close')" @click.stop="handleClose">
+        <Icon>
+          <Xmark></Xmark>
+        </Icon>
+      </button>
     </div>
   </li>
 </template>
@@ -23,6 +28,7 @@
 import { defineComponent, ref, reactive, computed, inject, watch, onBeforeUnmount } from 'vue'
 import { Icon } from '@/components/icon'
 import { useNameHelper, eventProp, emitEvent } from '@vexip-ui/config'
+import { Xmark } from '@vexip-ui/icons'
 import { isDefined } from '@vexip-ui/utils'
 import { TAB_NAV_STATE } from './symbol'
 
@@ -31,7 +37,8 @@ import type { ItemState } from './symbol'
 export default defineComponent({
   name: 'TabNavItem',
   components: {
-    Icon
+    Icon,
+    Xmark
   },
   props: {
     label: {
@@ -46,6 +53,10 @@ export default defineComponent({
       type: Object,
       default: null
     },
+    closable: {
+      type: Boolean,
+      default: null
+    },
     onToggle: eventProp<(active: boolean) => void>()
   },
   emits: [],
@@ -58,7 +69,7 @@ export default defineComponent({
     const index = ref(0)
     const total = ref(0)
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const contentClass = computed(() => {
       const baseClass = nh.be('content')
@@ -68,6 +79,13 @@ export default defineComponent({
         [`${baseClass}--disabled`]: props.disabled,
         [`${baseClass}--active`]: !props.disabled && active.value
       }
+    })
+    const isClosable = computed(() => {
+      if (isDefined(props.closable)) {
+        return props.closable
+      }
+
+      return tabNavState?.closable ?? false
     })
 
     watch(
@@ -89,10 +107,8 @@ export default defineComponent({
         total
       })
 
-      watch(currentLabel, (value, prevValue) => {
-        if (isDefined(prevValue) && prevValue === tabNavState.currentActive) {
-          tabNavState.handleActive(value)
-        }
+      watch(currentLabel, () => {
+        active.value = currentLabel.value === tabNavState.currentActive
       })
       watch(
         () => tabNavState.currentActive,
@@ -114,18 +130,29 @@ export default defineComponent({
         return
       }
 
-      if (tabNavState) {
-        tabNavState.handleActive(currentLabel.value)
+      tabNavState?.handleActive(currentLabel.value)
+    }
+
+    function handleClose() {
+      if (props.disabled) {
+        return
       }
+
+      tabNavState?.handleClose(currentLabel.value)
     }
 
     return {
       nh,
       index,
       total,
+
       contentClass,
+      isClosable,
+
       wrapper,
-      handleSelect
+
+      handleSelect,
+      handleClose
     }
   }
 })

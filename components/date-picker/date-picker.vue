@@ -3,15 +3,19 @@
     :id="idFor"
     ref="wrapper"
     :class="className"
-    @click="handleTirggerClick"
+    @click="showPanel"
   >
     <div
       ref="reference"
       :class="selectorClass"
       tabindex="0"
-      @keydown.space.prevent="handleTirggerClick"
+      @keydown.space.prevent="showPanel"
     >
-      <div v-if="hasPrefix" :class="nh.bem('icon', 'prefix')" :style="{ color: props.prefixColor }">
+      <div
+        v-if="hasPrefix"
+        :class="[nh.be('icon'), nh.be('prefix')]"
+        :style="{ color: props.prefixColor }"
+      >
         <slot name="prefix">
           <Icon :icon="props.prefix"></Icon>
         </slot>
@@ -71,87 +75,101 @@
           ></DateControl>
         </template>
       </div>
-      <transition name="vxp-fade">
-        <div
-          v-if="!props.disabled && props.clearable && isHover && lastValue"
-          :class="nh.be('clear')"
-          @click.stop="handleClear"
-        >
+      <div
+        v-if="!props.noSuffix"
+        :class="[nh.be('icon'), nh.be('suffix')]"
+        :style="{
+          color: props.suffixColor,
+          opacity: showClear || props.loading ? '0%' : ''
+        }"
+      >
+        <slot name="suffix">
+          <Icon :icon="props.suffix || CalendarR"></Icon>
+        </slot>
+      </div>
+      <div
+        v-else-if="props.clearable || props.loading"
+        :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
+      ></div>
+      <transition :name="nh.ns('fade')" appear>
+        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
-        <div v-else :class="nh.bem('icon', 'suffix')" :style="{ color: props.suffixColor }">
-          <slot name="suffix">
-            <Icon :icon="props.suffix || CalendarR"></Icon>
-          </slot>
+        <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
+          <Icon
+            :spin="props.loadingSpin"
+            :pulse="!props.loadingSpin"
+            :icon="props.loadingIcon"
+          ></Icon>
         </div>
       </transition>
-      <Portal :to="transferTo">
-        <transition :name="props.transitionName" @after-leave="handlePaneHide">
-          <div
-            v-show="currentVisible"
-            ref="popper"
-            :class="[nh.be('popper'), nh.ns('calendar-vars'), nh.bs('vars')]"
-            @click.stop="handleFocused"
-          >
-            <DatePanel
-              ref="panel"
-              :type="props.type"
-              :column="(currentState === 'start' ? startState : endState).column"
-              :start-value="startState.dateValue"
-              :end-value="endState.dateValue"
-              :start-activated="startState.activated"
-              :end-activated="endState.activated"
-              :value-type="currentState"
-              :shortcuts="props.shortcuts"
-              :confirm-text="props.confirmText"
-              :cancel-text="props.cancelText"
-              :today="props.today"
-              :disabled-date="props.disabledDate"
-              :no-action="props.noAction"
-              :steps="props.steps"
-              :is-range="props.isRange"
-              @shortcut="handleShortcut"
-              @change="handlePaneChange"
-              @toggle-col="handleInputFocus"
-              @cancel="handleCancel"
-              @confirm="handlePaneConfirm"
-            ></DatePanel>
-          </div>
-        </transition>
-      </Portal>
     </div>
+    <Portal :to="transferTo">
+      <transition :name="props.transitionName" @after-leave="handlePaneHide">
+        <div
+          v-if="currentVisible"
+          ref="popper"
+          :class="[nh.be('popper'), nh.ns('calendar-vars'), nh.bs('vars')]"
+          @click.stop="handleFocused"
+        >
+          <DatePanel
+            ref="panel"
+            :type="props.type"
+            :column="(currentState === 'start' ? startState : endState).column"
+            :start-value="startState.dateValue"
+            :end-value="endState.dateValue"
+            :start-activated="startState.activated"
+            :end-activated="endState.activated"
+            :value-type="currentState"
+            :shortcuts="props.shortcuts"
+            :confirm-text="props.confirmText"
+            :cancel-text="props.cancelText"
+            :today="props.today"
+            :disabled-date="props.disabledDate"
+            :no-action="props.noAction"
+            :steps="props.steps"
+            :is-range="props.isRange"
+            @shortcut="handleShortcut"
+            @change="handlePanelChange"
+            @toggle-col="handleInputFocus"
+            @cancel="handleCancel"
+            @confirm="handlePaneConfirm"
+          ></DatePanel>
+        </div>
+      </transition>
+    </Portal>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, toRef, nextTick } from 'vue'
-import { Icon } from '@/components/icon'
-import { Portal } from '@/components/portal'
 import DateControl from './date-control.vue'
 import DatePanel from './date-panel.vue'
+import { Icon } from '@/components/icon'
+import { Portal } from '@/components/portal'
 import { useFieldStore } from '@/components/form'
-import { useHover, usePopper, placementWhileList, useClickOutside } from '@vexip-ui/mixins'
+import {
+  useHover,
+  usePopper,
+  placementWhileList,
+  useClickOutside,
+  useSetTimeout
+} from '@vexip-ui/hooks'
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  booleanStringProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
-import { CalendarR, CircleXmark, ArrowRightArrowLeft } from '@vexip-ui/icons'
+import { CalendarR, CircleXmark, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
+import { datePickerProps } from './props'
 import { useColumn } from './helper'
 import { datePickerTypes } from './symbol'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
 import type { Dateable } from '@vexip-ui/utils'
-import type { TimeType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
+import type { TimeType, DateTimeType } from './symbol'
 
 export default defineComponent({
   name: 'DatePicker',
@@ -163,77 +181,43 @@ export default defineComponent({
     CircleXmark,
     ArrowRightArrowLeft
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    type: String as PropType<DatePickerType>,
-    visible: booleanProp,
-    placement: String as PropType<Placement>,
-    transfer: booleanStringProp,
-    value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
-    format: String,
-    filler: String,
-    noFiller: booleanProp,
-    clearable: booleanProp,
-    noAction: booleanProp,
-    labels: Object as PropType<Partial<Record<DateTimeType, string>>>,
-    dateSeparator: String,
-    timeSeparator: String,
-    shortcuts: Array as PropType<DateShortcut[]>,
-    disabledDate: Function as PropType<(date: Date) => boolean>,
-    steps: Array as PropType<number[]>,
-    ctrlSteps: Array as PropType<number[]>,
-    prefix: Object,
-    prefixColor: String,
-    suffix: Object,
-    suffixColor: String,
-    disabled: booleanProp,
-    transitionName: String,
-    confirmText: String,
-    cancelText: String,
-    today: [Number, String, Date] as PropType<Dateable>,
-    isRange: booleanProp,
-    onInput: eventProp<(type: DateTimeType, value: number) => void>(),
-    onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
-    onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
-    onEnter: eventProp(),
-    onCancel: eventProp(),
-    onChange: eventProp<(value: string | number | string[] | number[] | null) => void>(),
-    onClear: eventProp(),
-    onShortcut: eventProp<(name: string, value: Dateable) => void>(),
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onFocus: eventProp(),
-    onBlur: eventProp(),
-    onChangeCol: eventProp<(type: DateTimeType) => void>(),
-    onClickOutside: eventProp()
-  },
+  props: datePickerProps,
   emits: ['update:value', 'update:visible'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, disabled, validateField, clearField, getFieldValue, setFieldValue } =
-      useFieldStore<Dateable | Dateable[]>(() => reference.value?.focus())
+    const {
+      idFor,
+      state,
+      disabled,
+      loading,
+      size,
+      validateField,
+      clearField,
+      getFieldValue,
+      setFieldValue
+    } = useFieldStore<Dateable | Dateable[]>(() => reference.value?.focus())
 
     const nh = useNameHelper('date-picker')
     const props = useProps('datePicker', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       type: {
-        default: 'date' as DatePickerType,
-        validator: (value: DatePickerType) => datePickerTypes.includes(value)
+        default: 'date',
+        validator: value => datePickerTypes.includes(value)
       },
       visible: false,
       placement: {
         default: 'bottom-start',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       transfer: false,
       value: {
-        default: () => getFieldValue(new Date()),
+        default: () => getFieldValue(null!),
         static: true
       },
       format: 'yyyy-MM-dd HH:mm:ss',
       filler: {
         default: '-',
-        validator: (value: string) => value.length === 1
+        validator: value => value.length === 1
       },
       noFiller: false,
       clearable: false,
@@ -252,15 +236,20 @@ export default defineComponent({
       prefixColor: '',
       suffix: null,
       suffixColor: '',
+      noSuffix: false,
       disabled: () => disabled.value,
       transitionName: () => nh.ns('drop'),
       confirmText: null,
       cancelText: null,
       today: {
         default: () => new Date(),
-        validator: (value: Dateable) => !Number.isNaN(new Date(value))
+        validator: value => !Number.isNaN(new Date(value))
       },
-      isRange: false
+      isRange: false,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const placement = toRef(props, 'placement')
@@ -272,6 +261,8 @@ export default defineComponent({
     const currentState = ref<'start' | 'end'>('start')
     const lastValue = ref('')
 
+    const { timer } = useSetTimeout()
+
     const wrapper = useClickOutside(handleClickOutside)
     const { reference, popper, transferTo, updatePopper } = usePopper({
       placement,
@@ -281,9 +272,9 @@ export default defineComponent({
     })
     const { isHover } = useHover(reference)
 
-    const startInput = ref<InstanceType<typeof DateControl> | null>(null)
-    const endInput = ref<InstanceType<typeof DateControl> | null>(null)
-    const datePanel = ref<InstanceType<typeof DatePanel> | null>(null)
+    const startInput = ref<InstanceType<typeof DateControl>>()
+    const endInput = ref<InstanceType<typeof DateControl>>()
+    const datePanel = ref<InstanceType<typeof DatePanel>>()
 
     const className = computed(() => {
       return [
@@ -297,7 +288,7 @@ export default defineComponent({
           [nh.bm('no-hour')]: !startState.enabled.hour,
           [nh.bm('no-minute')]: !startState.enabled.minute,
           [nh.bm('no-second')]: !startState.enabled.second,
-          [nh.bm('focused')]: focused.value,
+          [nh.bm('visible')]: currentVisible.value,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('is-range')]: props.isRange
         }
@@ -309,8 +300,9 @@ export default defineComponent({
       return {
         [baseCls]: true,
         [`${baseCls}--disabled`]: props.disabled,
+        [`${baseCls}--loading`]: props.loading && props.loadingLock,
         [`${baseCls}--${props.size}`]: props.size !== 'default',
-        [`${baseCls}--focused}`]: focused.value,
+        [`${baseCls}--focused`]: focused.value,
         [`${baseCls}--${props.state}`]: props.state !== 'default'
       }
     })
@@ -335,6 +327,9 @@ export default defineComponent({
       const activated = endState.activated
 
       return activated.year && activated.month && activated.date
+    })
+    const showClear = computed(() => {
+      return !props.disabled && props.clearable && isHover.value && !!lastValue.value
     })
 
     startState.enabled.year = true
@@ -390,19 +385,49 @@ export default defineComponent({
         emitEvent(props.onBlur)
       }
     })
+    watch(currentState, value => {
+      if (currentVisible.value) {
+        emitEvent(props.onChangeCol, getCurrentState().column, value)
+      }
+    })
     watch(
       () => startState.column,
       value => {
-        if (currentVisible.value) {
-          emitEvent(props.onChangeCol, value)
+        if (currentVisible.value && currentState.value === 'start') {
+          emitEvent(props.onChangeCol, value, 'start')
         }
       }
     )
     watch(
       () => endState.column,
       value => {
-        if (currentVisible.value) {
-          emitEvent(props.onChangeCol, value)
+        if (currentVisible.value && currentState.value === 'end') {
+          emitEvent(props.onChangeCol, value, 'end')
+        }
+      }
+    )
+    watch(
+      () => props.disabled,
+      value => {
+        if (value) {
+          currentVisible.value = false
+          handleBlur()
+        }
+      }
+    )
+    watch(
+      () => props.loading,
+      value => {
+        if (value && props.loadingLock) {
+          currentVisible.value = false
+        }
+      }
+    )
+    watch(
+      () => props.loadingLock,
+      value => {
+        if (props.loading && value) {
+          currentVisible.value = false
         }
       }
     )
@@ -594,7 +619,6 @@ export default defineComponent({
 
     function finishInput() {
       currentVisible.value = false
-      focused.value = false
 
       startState.resetColumn('date')
       endState.resetColumn('date')
@@ -605,7 +629,7 @@ export default defineComponent({
 
       switch (type) {
         case 'year': {
-          dateValue.year = boundRange(dateValue.year, 1970, 2300)
+          dateValue.year = boundRange(dateValue.year, 1970, 9999)
           break
         }
         case 'month': {
@@ -648,7 +672,7 @@ export default defineComponent({
 
       focused.value = true
 
-      window.setTimeout(() => {
+      timer.focus = setTimeout(() => {
         if (focused.value) {
           if (currentState.value === 'start') {
             startInput.value?.focus()
@@ -659,12 +683,30 @@ export default defineComponent({
       }, 120)
     }
 
-    function handleTirggerClick() {
-      if (props.disabled) return
+    function handleBlur() {
+      clearTimeout(timer.focus)
 
+      focused.value = false
+      startInput.value?.blur()
+      endInput.value?.blur()
+    }
+
+    function showPanel(event: Event) {
+      if (props.disabled || (props.loading && props.loadingLock)) return
+
+      const target = event.target as Node
+      const lastVisible = currentVisible.value
       currentVisible.value = true
 
       handleFocused()
+
+      if (!lastVisible && wrapper.value && target) {
+        const units = Array.from(wrapper.value.querySelectorAll(`.${nh.be('unit')}`))
+
+        if (!units.some(unit => unit === target || unit.contains(target))) {
+          emitEvent(props.onChangeCol, getCurrentState().column, currentState.value)
+        }
+      }
     }
 
     function handleInput(value: number) {
@@ -673,8 +715,7 @@ export default defineComponent({
       handleInputNumber(state.column, value)
 
       if (
-        (state.column === 'year' && state.dateValue.year >= 1000) ||
-        (state.column !== 'second' && state.dateValue[state.column] >= 10)
+        state.column === 'year' ? state.dateValue.year >= 1000 : state.dateValue[state.column] >= 10
       ) {
         state.enterColumn('next', false)
       }
@@ -695,7 +736,7 @@ export default defineComponent({
         setActivated(type)
       }
 
-      verifyValue(type)
+      type !== 'year' && verifyValue(type)
       emitEvent(props.onInput, type, state.dateValue[type])
     }
 
@@ -815,7 +856,7 @@ export default defineComponent({
       }
     }
 
-    function handleShortcut(name: string, value: Dateable) {
+    function handleShortcut(name: string, value: Dateable | Dateable[]) {
       parseValue(value)
       emitEvent(props.onShortcut, name, value)
       finishInput()
@@ -831,7 +872,7 @@ export default defineComponent({
       return props.ctrlSteps[type === 'hour' ? 0 : type === 'minute' ? 1 : 2] || 1
     }
 
-    function handlePaneChange(type: DateTimeType, value: number) {
+    function handlePanelChange(type: DateTimeType, value: number) {
       getCurrentState().dateValue[type] = value
       updateDateActivated(type)
       verifyRangeValue()
@@ -929,6 +970,7 @@ export default defineComponent({
     function handleClickOutside() {
       emitEvent(props.onClickOutside)
       finishInput()
+      handleBlur()
     }
 
     return {
@@ -951,6 +993,7 @@ export default defineComponent({
       hasPrefix,
       startActivated,
       endActivated,
+      showClear,
 
       wrapper,
       reference,
@@ -960,7 +1003,7 @@ export default defineComponent({
       panel: datePanel,
 
       handleFocused,
-      handleTirggerClick,
+      showPanel,
       handleInput,
       handleInputFocus,
       handlePlus,
@@ -969,7 +1012,7 @@ export default defineComponent({
       handleCancel,
       handleClear,
       handleShortcut,
-      handlePaneChange,
+      handlePanelChange,
       finishInput,
       toggleCurrentState,
       enterColumn,
@@ -978,6 +1021,8 @@ export default defineComponent({
       handlePaneConfirm,
       handlePaneHide,
 
+      focus: handleFocused,
+      blur: handleBlur,
       updatePopper
     }
   }

@@ -1,19 +1,18 @@
-import { resolve, basename } from 'path'
-import { readFile, writeFile } from 'fs/promises'
-import { existsSync, emptyDir, mkdirSync } from 'fs-extra'
-import execa from 'execa'
-import chalk from 'chalk'
+import { resolve, basename } from 'node:path'
+import { readFile, writeFile } from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
+import fs from 'fs-extra'
+import { execa } from 'execa'
+import { red, cyan, green } from 'kolorist'
 import glob from 'fast-glob'
 import { format } from 'prettier'
 
-main().catch(error => {
-  console.error(chalk.red(error))
-  process.exit(1)
-})
+const rootDir = resolve(fileURLToPath(import.meta.url), '../..')
+const { existsSync, emptyDir, mkdirSync } = fs
 
 async function main() {
-  ensureEmptyDir(resolve(__dirname, '../vue'))
-  ensureEmptyDir(resolve(__dirname, '../types'))
+  ensureEmptyDir(resolve(rootDir, 'vue'))
+  ensureEmptyDir(resolve(rootDir, 'types'))
 
   const solid = await generateVueIcons('solid', '', '')
   const brands = await generateVueIcons('brands', 'brands', 'B')
@@ -21,39 +20,47 @@ async function main() {
 
   const exports = solid.exports + brands.exports + regular.exports
 
-  await writeFile(resolve(__dirname, '../vue/index.ts'), exports, 'utf-8')
-
-  await execa('vite', ['build', '--config', 'vite.config.ts'], {
-    stdio: 'inherit',
-    env: {
-      OUT_DIR: 'es',
-      FORMAT: 'es'
-    }
-  })
+  await writeFile(resolve(rootDir, 'vue/index.ts'), exports, 'utf-8')
 
   console.log()
-  console.log(chalk.cyan(`built es packages`))
+  console.log(green('start building cjs and es packages...'))
+  console.log()
 
-  await execa('vite', ['build', '--config', 'vite.config.ts'], {
-    stdio: 'inherit',
-    env: {
-      OUT_DIR: 'lib',
-      FORMAT: 'cjs'
-    }
-  })
+  await execa('vite', ['build', '--config', 'vite.config.ts'], { stdio: 'inherit' })
 
   console.log()
-  console.log(chalk.cyan(`built cjs packages`))
+  console.log(green('start building full package...'))
+  console.log()
 
   await execa('vite', ['build', '--config', 'vite.full.config.ts'], { stdio: 'inherit' })
 
   console.log()
-  console.log(chalk.cyan('build full packages successful'))
+  console.log(green('start generating types...'))
 
   const types = `
     declare module '@vexip-ui/icons' {
-      import type { DefineComponent } from 'vue'
-      type SvgIcon = DefineComponent<Record<string, unknown>, Record<string, unknown>, any>
+      import type {
+        DefineComponent,
+        ComponentOptionsMixin,
+        VNodeProps,
+        AllowedComponentProps,
+        ComponentCustomProps,
+        ExtractPropTypes
+      } from 'vue'
+      type SvgIcon = DefineComponent<
+        {},
+        {},
+        {},
+        {},
+        {},
+        ComponentOptionsMixin,
+        ComponentOptionsMixin,
+        {},
+        string,
+        VNodeProps & AllowedComponentProps & ComponentCustomProps,
+        Readonly<ExtractPropTypes<{}>>,
+        {}
+      >
       ${solid.types + brands.types + regular.types}
     }
 
@@ -61,24 +68,25 @@ async function main() {
   `
 
   await writeFile(
-    resolve(__dirname, '../types', 'index.d.ts'),
+    resolve(rootDir, 'types', 'index.d.ts'),
     format(types, { parser: 'typescript', semi: false, singleQuote: true }),
     'utf-8'
   )
 
   console.log()
-  console.log(chalk.green('build successful'))
+  console.log(green('all builds completed successfully'))
+  console.log()
 }
 
 async function generateVueIcons(dir: string, out: string, suffix: string) {
-  const outDir = resolve(__dirname, '../vue', out)
+  const outDir = resolve(rootDir, 'vue', out)
 
   if (!existsSync(outDir)) {
     mkdirSync(outDir)
   }
 
   const svgFiles = await glob('*.svg', {
-    cwd: resolve(__dirname, '../src', dir),
+    cwd: resolve(rootDir, 'src', dir),
     absolute: true
   })
 
@@ -115,7 +123,7 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
     types += `export const ${name}: SvgIcon\n`
   }))
 
-  console.log(chalk.cyan(`generated ${dir} vue icons`))
+  console.log(cyan(`generated icon vue components for: ${dir}`))
 
   return { exports, types }
 }
@@ -134,3 +142,8 @@ function toCapitalCase(value: string) {
     value.slice(1).replace(/-([a-z])/g, (_, char) => (char ? char.toUpperCase() : ''))
   )
 }
+
+main().catch(error => {
+  console.error(red(error))
+  process.exit(1)
+})

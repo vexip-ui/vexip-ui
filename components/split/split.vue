@@ -15,14 +15,14 @@
     <div :class="nh.be('trigger')" :style="triggerStyle">
       <div ref="handler" :class="nh.be('handler')">
         <template v-if="props.canFull">
-          <div
+          <button
             :class="[nh.be('button'), nh.bem('button', `${props.vertical ? 'top' : 'left'}-full`)]"
             @pointerdown.stop
             @click.left="handleFull(-1)"
           >
             <Icon :icon="fullIcons[0]" :scale="0.6"></Icon>
-          </div>
-          <div
+          </button>
+          <button
             :class="[
               nh.be('button'),
               nh.bem('button', `${props.vertical ? 'bottom' : 'right'}-full`)
@@ -31,7 +31,7 @@
             @click.left="handleFull(1)"
           >
             <Icon :icon="fullIcons[1]" :scale="0.6"></Icon>
-          </div>
+          </button>
         </template>
         <template v-else>
           <slot name="handler">
@@ -47,30 +47,17 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
-import { useMoving } from '@vexip-ui/mixins'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useMoving } from '@vexip-ui/hooks'
 import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
+import { splitProps } from './props'
 
 export default defineComponent({
   name: 'Split',
   components: {
     Icon
   },
-  props: {
-    value: Number,
-    min: Number,
-    max: Number,
-    vertical: booleanProp,
-    noTransition: booleanProp,
-    lazy: booleanProp,
-    canFull: booleanProp,
-    onChange: eventProp<(value: number) => void>(),
-    onFull: eventProp<(type: 'top' | 'right' | 'bottom' | 'left') => void>(),
-    onReset: eventProp(),
-    onMoveStart: eventProp<(value: number) => void>(),
-    onMove: eventProp<(value: number) => void>(),
-    onMoveEnd: eventProp<(value: number) => void>()
-  },
+  props: splitProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('split', _props, {
@@ -92,8 +79,8 @@ export default defineComponent({
     const currentFull = ref<0 | 1 | -1>(0)
     const transition = ref(false)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const guide = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const guide = ref<HTMLElement>()
 
     const { target: handler, moving } = useMoving({
       lazy: true,
@@ -215,7 +202,7 @@ export default defineComponent({
             ? '100%'
             : currentFull.value > 0
               ? '0'
-              : `calc(${currentValue.value * 100}% - var(--vxp-split-handler-size) * 0.5)`
+              : `calc(${currentValue.value * 100}% - var(${nh.cv('handler-size')}) * 0.5)`
       }
     })
     const fullIcons = computed(() => {

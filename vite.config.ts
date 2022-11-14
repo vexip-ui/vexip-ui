@@ -1,11 +1,10 @@
 // This config is for building library, do not use to create serve.
 
-import { resolve } from 'path'
-import { readFileSync, existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync } from 'fs'
+import { resolve } from 'node:path'
+import { readFileSync, existsSync, readdirSync, lstatSync, rmdirSync, unlinkSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import dts from 'vite-plugin-dts'
 import glob from 'fast-glob'
 
 import type { LogLevel, Plugin } from 'vite'
@@ -19,8 +18,6 @@ interface Manifest {
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')) as Manifest
 const componentsDir = resolve(__dirname, 'components')
 
-// const outDir = process.env.OUT_DIR || 'dist'
-// const format = (process.env.FORMAT || 'es') as LibraryFormats
 const logLevel = process.env.LOG_LEVEL
 const sourceMap = process.env.SOURCE_MAP === 'true'
 
@@ -70,6 +67,7 @@ export default defineConfig(async () => {
     resolve: {
       alias: [
         { find: /^@\/components/, replacement: resolve(__dirname, 'components') },
+        { find: /^@\/directives/, replacement: resolve(__dirname, 'directives') },
         { find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }
       ]
     },
@@ -87,14 +85,14 @@ export default defineConfig(async () => {
           {
             format: 'cjs',
             preserveModules: true,
-            preserveModulesRoot: componentsDir,
+            preserveModulesRoot: __dirname,
             dir: 'lib',
-            entryFileNames: '[name].js'
+            entryFileNames: '[name].cjs'
           },
           {
             format: 'es',
             preserveModules: true,
-            preserveModulesRoot: componentsDir,
+            preserveModulesRoot: __dirname,
             dir: 'es',
             entryFileNames: '[name].mjs'
           }
@@ -121,13 +119,7 @@ export default defineConfig(async () => {
         }
       ]),
       vue(),
-      vueJsx(),
-      dts({
-        exclude: ['node_modules', 'playground', 'common/icons', 'common/mixins', 'common/utils'],
-        outputDir: ['lib', 'es'],
-        compilerOptions: { sourceMap },
-        copyDtsFiles: false
-      })
+      vueJsx()
     ]
   }
 })

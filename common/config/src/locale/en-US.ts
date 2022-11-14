@@ -29,6 +29,10 @@ export function enUSLocale() {
       week7: 'Su'
     },
 
+    checkbox: {
+      all: 'All'
+    },
+
     colorPicker: {
       confirm: 'Confrim',
       cancel: 'Cancel'
@@ -44,10 +48,16 @@ export function enUSLocale() {
       cancel: 'Cancel'
     },
 
+    drawer: {
+      confirm: 'Confrim',
+      cancel: 'Cancel'
+    },
+
     form: {
       submit: 'Submit',
       reset: 'Reset',
-      notNullable: 'must not be null'
+      notNullable: 'must not be null',
+      validateFail: 'Validate failed'
     },
 
     input: {
@@ -57,7 +67,8 @@ export function enUSLocale() {
     layout: {
       signOut: 'Sign out',
       signType: 'Navigation Type',
-      majorColor: 'Major Color'
+      majorColor: 'Major Color',
+      themeMode: 'Theme Mode'
     },
 
     modal: {

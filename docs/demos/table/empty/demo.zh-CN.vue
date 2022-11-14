@@ -15,9 +15,7 @@
       <Icon :scale="3">
         <FaceGrinTearsR></FaceGrinTearsR>
       </Icon>
-      <span style="font-size: 18px;">
-        空空如也
-      </span>
+      <span style="font-size: 18px;"> 空空如也 </span>
     </template>
   </Table>
 </template>

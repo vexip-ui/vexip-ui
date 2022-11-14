@@ -1,0 +1,53 @@
+{
+  "name": "@vexip-ui/plugins",
+  "version": "1.2.0",
+  "license": "MIT",
+  "anchor": "qmhc",
+  "scripts": {
+    "build": "tsx scripts/build.ts"
+  },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "private": false,
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/plugins#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vexip-ui/vexip-ui.git",
+    "directory": "common/plugins"
+  },
+  "dependencies": {
+    "@vexip-ui/utils": "workspace:^",
+    "local-pkg": "^0.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.23",
+    "execa": "^6.1.0",
+    "kolorist": "^1.6.0",
+    "tsup": "^6.2.3",
+    "unplugin-vue-components": "^0.22.7",
+    "vite": "^3.1.4",
+    "vite-plugin-dts": "^1.6.6",
+    "vue": "^3.2.40"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "vue"
+      ]
+    }
+  }
+}

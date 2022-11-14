@@ -1,8 +1,1 @@
-[
-  "basis",
-  "clearable",
-  "filter",
-  "option",
-  "custom-key",
-  "group"
-]
+["basis", "clearable", "filter", "option", "custom-key", "group", "loading"]

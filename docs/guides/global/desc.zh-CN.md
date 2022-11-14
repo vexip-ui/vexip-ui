@@ -46,7 +46,11 @@ import { install } from 'vexip-ui'
 
 createApp(App)
   .use(install, {
-    prop: {
+    props: {
+      // 通过 default 可以修改全部组件的属性
+      // default: {
+      //   size: 'large'
+      // },
       input: {
         size: 'large'
       },
@@ -134,4 +138,4 @@ app.use(install, {
 })
 ```
 
-> 完整的国际化选项可以浏览 [此处](https://github.com/qmhc/vexip-ui/blob/main/common/config/src/locale/helper.ts)。
+> 完整的国际化选项可以浏览 [此处](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts)。

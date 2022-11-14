@@ -3,5 +3,9 @@
   "card",
   "disabled",
   "icon",
-  "label"
+  "label",
+  "align",
+  "placement",
+  "extra",
+  "dynamic"
 ]

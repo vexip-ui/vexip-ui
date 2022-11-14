@@ -20,6 +20,8 @@
     <div :class="nh.be('scroll')">
       <Scroll
         ref="scroll"
+        :scroll-x="props.horizontal ? targetWidth * currentActive : 0"
+        :scroll-y="props.horizontal ? 0 : targetHeight * currentActive"
         :width="props.horizontal ? wrapperWidth : '100%'"
         :height="props.horizontal ? '100%' : wrapperHeight"
         :pointer="props.pointer"
@@ -51,7 +53,14 @@
         <div :class="[nh.be('mask'), nh.bem('mask', 'top')]" :style="maskStyle"></div>
         <div :class="[nh.be('mask'), nh.bem('mask', 'bottom')]" :style="maskStyle"></div>
       </template>
-      <div :class="nh.be('border')" :style="borderStyle"></div>
+      <div
+        :class="{
+          [nh.be('border')]: true,
+          [nh.bem('border', 'active')]: props.loading,
+          [nh.bem('border', 'vertical')]: props.horizontal
+        }"
+        :style="borderStyle"
+      ></div>
     </div>
     <div
       v-if="props.arrow"
@@ -74,32 +83,14 @@ import WheelItem from './wheel-item.vue'
 import { Icon } from '@/components/icon/'
 import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
-import { useDisplay, useModifier } from '@vexip-ui/mixins'
-import {
-  useNameHelper,
-  useProps,
-  stateProp,
-  booleanProp,
-  booleanStringProp,
-  createStateProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useDisplay, useModifier } from '@vexip-ui/hooks'
+import { useNameHelper, useProps, createStateProp, emitEvent } from '@vexip-ui/config'
 import { USE_TOUCH, debounce, debounceMinor } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
+import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
-import type { PropType } from 'vue'
 import type { ItemState } from './symbol'
-
-type RawOption =
-  | string
-  | number
-  | {
-      value: string | number,
-      label?: string,
-      disabled?: boolean
-    }
 
 export default defineComponent({
   name: 'Wheel',
@@ -108,26 +99,11 @@ export default defineComponent({
     Icon,
     Scroll
   },
-  props: {
-    state: stateProp,
-    horizontal: booleanProp,
-    value: [String, Number],
-    // 上下或左右两侧的候选数
-    candidate: Number as PropType<0 | 1 | 2 | 3>,
-    arrow: booleanProp,
-    pointer: booleanProp,
-    options: Array as PropType<RawOption[]>,
-    insertEmpty: booleanStringProp,
-    disabled: booleanProp,
-    onChange: eventProp<(value: string | number, data: RawOption) => void>(),
-    onPrev: eventProp<(value: string | number, data: RawOption) => void>(),
-    onNext: eventProp<(value: string | number, data: RawOption) => void>()
-  },
+  props: wheelProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } = useFieldStore<
-      string | number
-    >(() => wrapper.value?.focus())
+    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<string | number>(() => wrapper.value?.focus())
 
     const props = useProps('wheel', _props, {
       state: createStateProp(state),
@@ -147,7 +123,9 @@ export default defineComponent({
         static: true
       },
       insertEmpty: false,
-      disabled: () => disabled.value
+      disabled: () => disabled.value,
+      loading: () => loading.value,
+      loadingLock: false
     })
 
     const nh = useNameHelper('wheel')
@@ -162,7 +140,7 @@ export default defineComponent({
     const isInit = ref(false)
 
     const wrapper = useDisplay(displayInit)
-    const scroll = ref<InstanceType<typeof Scroll> | null>(null)
+    const scroll = ref<InstanceType<typeof Scroll>>()
 
     useModifier({
       target: wrapper,
@@ -212,7 +190,8 @@ export default defineComponent({
         nh.bm(props.horizontal ? 'horizontal' : 'vertical'),
         {
           [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('disabled')]: props.disabled
+          [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading && props.loadingLock
         }
       ]
     })
@@ -410,7 +389,7 @@ export default defineComponent({
     }
 
     function beforeScroll({ signX, signY }: { signX: number, signY: number }) {
-      if (props.disabled) return false
+      if (props.disabled || (props.loading && props.loadingLock)) return false
 
       const sign = props.horizontal ? signX : signY
 

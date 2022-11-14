@@ -1,3 +1,4 @@
+declare const __SSR__: boolean
 declare const __ROLLBACK_LANG__: string
 declare const __VERSION__: string
 

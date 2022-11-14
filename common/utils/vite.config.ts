@@ -5,8 +5,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.ts',
-      formats: ['es'],
-      fileName: () => 'index.js'
+      formats: ['cjs', 'es'],
+      fileName: format => `index.${format === 'es' ? 'mjs' : 'cjs'}`
     }
   },
   plugins: [dts({ rollupTypes: true })]

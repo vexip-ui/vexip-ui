@@ -1,9 +1,6 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img
-      src="https://raw.githubusercontent.com/qmhc/vexip-ui/main/docs/public/logo.png"
-      style="width: 180px;"
-    />
+    <img src="./docs/public/vexip-ui.svg" style="width: 180px;" />
   </a>
 </p>
 
@@ -14,7 +11,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/package-json/v/qmhc/vexip-ui" />
+  <a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
+    <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm version"/>
+  </a>
 </p>
 
 <p align="center">
@@ -23,28 +22,30 @@
 
 **English** | [中文](./README.zh-CN.md)
 
-Vexip UI provides a series of out-of-the-box components.
+Vexip UI provides a series of out-of-box components.
 
-This library is using base on vue 3.0 with only using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript** (not AnyScript).
+This library is using base on vue 3.0 with using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript** (not AnyScript).
 
 Almost all the **default value of props** for each component can be quickly modified by configuration (except value and options props), for easy customization.
 
-Currently more then **70** components, many you can see everywhere and a few may bright your eyes.
+And, the writing of component codes pay great attention to lowering the threshold of **source codes reading**, and the style of code is as close to the usual business code habits as possible to avoid dazzling encapsulation.
 
-## Work List
-
-- ~~Transfer to use css vars~~ (Released in `2.0.0-beta.0`)
-- ~~Refactor icons~~ (Released in `2.0.0-beta.0`)
-- ~~Refactor global config~~ (Released in `2.0.0-beta.4`)
-- Write unit tests (In progress, see `tests` branch)
-- Adapt ssr render
+There are currently **70+** components, many you can see everywhere and a few may bright your eyes.
 
 ## Features
 
-- Not less components and functions for website development, hoping may improve efficiency
-- Vue3 components of out-of-the-box (may not help if you still using Vue2)
-- Configurable **default value of props** for easy customization
-- entirely using the composition api, the performance and extensibility should be good
+- 📦 70+ out-of-box high quality Vue 3 components
+- 📐 Intuitive, minimalistic Api design
+- 🔧 Configurable default value of props, quickly complete global/local modifications
+- ⚡ Composition Api, good performance base
+- 🔨 With TypeScript, fully types
+- 💪 800+ unit tests to provide good stability
+- 🎨 Support CSS variable, built-in dark theme
+- 🚩 Support i18n
+- 🛫 Provide resolver, support unplugin
+- 🚤 Support SSR
+- 🩹 Good a11n
+- 👀 Close to business code arrangement, lower threshold for source code reading
 
 ## Install
 
@@ -52,7 +53,7 @@ It is recommended to use pnpm or yarn to install:
 
 ```sh
 # use pnpm
-pnpm install vexip-ui
+pnpm add vexip-ui
 
 # use yarn
 yarn add vexip-ui
@@ -64,13 +65,21 @@ yarn add vexip-ui
 
 ## Help
 
-Open a [issue](https://github.com/qmhc/vexip-ui/issues) to request help.
+Open a [issue](https://github.com/vexip-ui/vexip-ui/issues) to request help.
 
 If you take maybe some bugs, please use the [Vexip UI Playground](https://playground.vexipui.com/) to provide a minimal reproduction.
 
 ## Contributing
 
 Welcome to join us! You can check out the [Contributing Guide](./CONTRIBUTING.md) to learn how to get started.
+
+## Contributors
+
+Thanks for all their contributions!
+
+<a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
+</a>
 
 ## Environment
 
@@ -84,4 +93,4 @@ I have limited energy and it's not start writing unit tests currently, if you en
 
 ## License
 
-All in [MIT](./LICENSE) license.
+All in [MIT](./LICENSE.md) license.

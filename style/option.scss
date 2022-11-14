@@ -11,9 +11,9 @@ $option: map.merge(
     color-selected: get-css-var('color-primary-base'),
     color-disabled: get-css-var('fill-color-disabled'),
     bg-color: transparent,
-    bg-color-hover: get-css-var('fill-color-hover'),
-    bg-color-hitting: get-css-var('fill-color-humble'),
-    bg-color-selected: get-css-var('option-bg-color-hover'),
+    bg-color-hover: get-css-var('fill-color-humble'),
+    bg-color-hitting: get-css-var('option-bg-color-hover'),
+    bg-color-selected: get-css-var('color-primary-opacity-8'),
     bg-color-disabled: get-css-var('option-bg-color'),
     d-color: get-css-var('border-color-light-2'),
     divider: get-css-var('border-shape') get-css-var('option-d-color'),
@@ -49,7 +49,7 @@ $option: map.merge(
   background-color: get-css-var('option-bg-color');
   transition: get-css-var('transition-color'), get-css-var('transition-background');
 
-  &:hover {
+  &:not(#{&}--no-hover):hover {
     // color: get-css-var('option-color-hover');
     background-color: get-css-var('option-bg-color-hover');
   }
@@ -60,8 +60,12 @@ $option: map.merge(
   }
 
   &--selected {
-    color: get-css-var('option-color-selected');
-    background-color: get-css-var('option-bg-color-selected');
+    &,
+    &:hover,
+    &:not(#{&}--no-hover):hover {
+      color: get-css-var('option-color-selected');
+      background-color: get-css-var('option-bg-color-selected');
+    }
   }
 
   &--disabled {

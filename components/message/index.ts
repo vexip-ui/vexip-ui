@@ -1,12 +1,12 @@
 import { createApp, markRaw } from 'vue'
 import Component from './message.vue'
-import { isNull, toNumber, destroyObject } from '@vexip-ui/utils'
+import { isClient, isNull, noop, toNumber, destroyObject } from '@vexip-ui/utils'
 import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
 import type { Key, MessageType, MessagePlacement, MessageOptions, MessageInstance } from './symbol'
 
-export * from './symbol'
+export type { MessageType, MessagePlacement, MessageOptions }
 
 type FuzzyOptions = string | MessageOptions
 type ManagerOptions = { duration?: number, placement?: MessagePlacement } & Record<string, unknown>
@@ -165,13 +165,17 @@ export class MessageManager {
   }
 
   private _open(type: null | MessageType, content: FuzzyOptions, _duration?: number) {
+    if (!isClient) {
+      return noop
+    }
+
     const options = typeof content === 'string' ? { content, duration: _duration } : content
 
     const key = options.key ?? getKey()
     const message = this._getInstance()
     const convenienceOptions = type ? conveniences[type] ?? {} : {}
 
-    let timer: number
+    let timer: ReturnType<typeof setTimeout>
 
     const userCloseFn = options.onClose
     const onClose = () => {
@@ -197,7 +201,7 @@ export class MessageManager {
     const duration = typeof item.duration === 'number' ? item.duration : 3000
 
     if (duration >= 500) {
-      timer = window.setTimeout(() => {
+      timer = setTimeout(() => {
         message.remove(key)
       }, duration)
     }

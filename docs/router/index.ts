@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { isClient, toKebabCase } from '@vexip-ui/utils'
+import { createRouter as _createRouter, createMemoryHistory, createWebHistory } from 'vue-router'
 import { Loading } from 'vexip-ui'
-import { toKebabCase } from '@vexip-ui/utils'
 import { defaultLanguage, langOptions, i18n } from '../i18n'
 import { getGuideConfig } from './guides'
 import { getComponentConfig } from './components'
@@ -12,11 +12,18 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     redirect: `/${defaultLanguage || __ROLLBACK_LANG__}`
   },
-  ...langOptions.map(useLanguageRouter)
-  // {
-  //   path: '/:catchAll(.*)',
-  //   redirect: '/'
-  // }
+  ...langOptions.map(useLanguageRouter),
+  {
+    path: '/:catchAll(.*)',
+    component: () => import('../views/provider.vue'),
+    children: [
+      {
+        path: '',
+        name: 'NotFound',
+        component: () => import('../views/not-found.vue')
+      }
+    ]
+  }
 ]
 
 function useLanguageRouter(language: string): RouteRecordRaw {
@@ -50,7 +57,7 @@ function useGuidesRouter(language: string): RouteRecordRaw[] {
 
   if (!children.length) return []
 
-  children.unshift({ path: '', redirect: { name: children[0].name } })
+  children.unshift({ path: '', redirect: { name: children[0].name as string } })
 
   return [
     {
@@ -88,7 +95,7 @@ function useComponentsRouter(language: string): RouteRecordRaw[] {
 
   if (!children.length) return []
 
-  children.unshift({ path: '', redirect: { name: children[0].name } })
+  children.unshift({ path: '', redirect: { name: children[0].name as string } })
 
   return [
     {
@@ -100,20 +107,28 @@ function useComponentsRouter(language: string): RouteRecordRaw[] {
   ]
 }
 
-export const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes
-})
-
-router.beforeResolve(() => {
-  Loading.open(5)
-})
-
-router.afterEach(to => {
-  requestAnimationFrame(() => {
-    document.title = to.meta.title
-      ? `${i18n.global.t(to.meta.title as string)} - Vexip UI`
-      : `Vexip UI - ${i18n.global.t('common.makeInterest')}`
-    Loading.open(100)
+export function createRouter() {
+  const router = _createRouter({
+    history: import.meta.env.SSR
+      ? createMemoryHistory(import.meta.env.BASE_URL)
+      : createWebHistory(import.meta.env.BASE_URL),
+    routes
   })
-})
+
+  router.beforeResolve(() => {
+    Loading.open(5)
+  })
+
+  if (isClient) {
+    router.afterEach(to => {
+      requestAnimationFrame(() => {
+        document.title = to.meta.title
+          ? `${i18n.global.t(to.meta.title as string)} - Vexip UI`
+          : `Vexip UI - ${i18n.global.t('common.makeInterest')}`
+        Loading.open(100)
+      })
+    })
+  }
+
+  return router
+}

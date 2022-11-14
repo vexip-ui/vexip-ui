@@ -1,17 +1,11 @@
 import { defineComponent, toRefs, ref, computed, watch, nextTick } from 'vue'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, eventProp, emitEvent } from '@vexip-ui/config'
-import { useVirtual } from '@vexip-ui/mixins'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useVirtual } from '@vexip-ui/hooks'
+import { virtualListProps } from './props'
 
-import type { PropType } from 'vue'
-
-interface ScrollPayload {
-  clientX: number,
-  clientY: number,
-  percentX: number,
-  percentY: number
-}
+import type { ScrollPayload } from './symbol'
 
 export default defineComponent({
   name: 'VirtualList',
@@ -20,19 +14,7 @@ export default defineComponent({
     ResizeObserver
   },
   inheritAttrs: false,
-  props: {
-    items: Array as PropType<Array<Record<string, any>>>,
-    itemSize: Number,
-    itemFixed: Boolean,
-    idKey: String,
-    defaultKeyAt: [Number, String, Symbol],
-    bufferSize: Number,
-    listTag: String,
-    itemsTag: String,
-    itemsAttrs: Object as PropType<Record<string, any>>,
-    onScroll: eventProp<(payload: ScrollPayload) => void>(),
-    onResize: eventProp<(entry: ResizeObserverEntry) => void>()
-  },
+  props: virtualListProps,
   emits: [],
   setup(_props, { slots, attrs, expose }) {
     const props = useProps('virtualList', _props, {
@@ -53,10 +35,10 @@ export default defineComponent({
     const nh = useNameHelper('virtual-list')
 
     const { items, itemSize, itemFixed, idKey, bufferSize } = toRefs(props)
-    const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
-    const list = ref<HTMLElement | null>(null)
+    const scroll = ref<InstanceType<typeof NativeScroll>>()
+    const list = ref<HTMLElement>()
 
-    const wrapper = computed(() => scroll.value?.content)
+    const wrapper = computed(() => scroll.value?.content ?? null)
 
     const {
       indexMap,
@@ -129,6 +111,13 @@ export default defineComponent({
       const ListTag = (props.listTag || 'div') as any
       const ItemsTag = (props.itemsTag || 'ul') as any
 
+      let renderingItems = visibleItems.value
+
+      if (import.meta.env.MODE === 'test') {
+        // It is difficult to test ResizeObserver in vitest, so directly rendering all items
+        renderingItems = props.items
+      }
+
       return (
         <NativeScroll
           ref={scroll}
@@ -137,7 +126,6 @@ export default defineComponent({
           scroll-y={scrollOffset.value}
           {...attrs}
           onScroll={onScroll}
-          onReady={onResize}
           onResize={onResize}
         >
           <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
@@ -147,7 +135,7 @@ export default defineComponent({
               style={[itemsStyle.value, itemsOtherStyle]}
             >
               {itemSlot && props.items.length
-                ? visibleItems.value.map(item => {
+                ? renderingItems.map(item => {
                   const key = item[keyField]
                   const index = keyIndexMap.get(key)
                   const vnode = itemSlot({ item, index })[0]

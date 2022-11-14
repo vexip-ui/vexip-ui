@@ -26,17 +26,17 @@
 import { ref } from 'vue'
 import { Upload as IUpload, Check } from '@vexip-ui/icons'
 
-import { Upload } from 'vexip-ui'
+import type { UploadExposed } from 'vexip-ui'
 
 const fileIds = ref<string[]>([])
-const upload = ref<InstanceType<typeof Upload> | null>(null)
+const upload = ref<UploadExposed>()
 
-// 设置了 url 时，可以通过 ref 获取组件并调用 execute 进行上传
+// When the url is set, you can get the component through ref and call execute to upload it
 async function doUpload() {
   if (!upload.value) return
 
-  // 所有文件上传成功后回调
-  // 发送了有效请求时 responses 为所有请求体的数组，否则为 false
+  // Callback after all files are uploaded successfully
+  // responses is an array of all request bodies when a valid request was sent, false otherwise
   const responses = await upload.value.execute()
 
   if (responses) {
@@ -48,8 +48,16 @@ async function doUpload() {
   }
 }
 
-// 未设置 url 时，可以通过 change 事件记录选择的文件，后续自行操作，如放入 FormData 中
+// When the url is not set, you can record the selected file through the change event,
+// and then operate it by yourself, such as putting it into a FormData
 function handleChange(files: File[]) {
   console.info(files)
 }
 </script>
+
+<style scoped>
+.vxp-upload {
+  width: 100%;
+  max-width: 500px;
+}
+</style>

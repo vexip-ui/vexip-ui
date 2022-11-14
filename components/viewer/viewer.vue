@@ -13,13 +13,16 @@
           :style="transitionStyle"
           @transitionend="normalizeProps"
         >
-          <slot>
-            <img src="https://www.vexipui.com/assets/4.23a4f29b.jpg" />
-          </slot>
+          <slot></slot>
         </div>
       </div>
     </div>
-    <div :class="toolbarClass" @mouseenter="handleEnterToolbar" @mouseleave="handleLeaveToolbar">
+    <div
+      :class="toolbarClass"
+      role="toolbar"
+      @mouseenter="handleEnterToolbar"
+      @mouseleave="handleLeaveToolbar"
+    >
       <template v-for="action in allActions" :key="action.name">
         <template v-if="!getActionProp(action, 'hidden')">
           <button
@@ -50,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed } from 'vue'
+import { defineComponent, ref, reactive, computed, onMounted } from 'vue'
 import { Divider } from '@/components/divider'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
@@ -64,21 +67,13 @@ import {
   Compress,
   ArrowsRotate
 } from '@vexip-ui/icons'
-import {
-  useNameHelper,
-  useProps,
-  useLocale,
-  booleanProp,
-  booleanNumberProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
-import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/mixins'
-import { boundRange } from '@vexip-ui/utils'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
+import { useMoving, useFullScreen, useSetTimeout, useModifier } from '@vexip-ui/hooks'
+import { boundRange, toFixed } from '@vexip-ui/utils'
+import { viewerProps } from './props'
 import { InternalActionName } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ViewerState, ToolbarPlacement, ToolbarAction } from './symbol'
+import type { ToolbarAction } from './symbol'
 
 export default defineComponent({
   name: 'Viewer',
@@ -87,32 +82,7 @@ export default defineComponent({
     Icon,
     Renderer
   },
-  props: {
-    width: [String, Number],
-    height: [String, Number],
-    moveDisabled: booleanProp,
-    zoomDisabled: booleanProp,
-    zoomDelta: Number,
-    zoomMin: Number,
-    zoomMax: Number,
-    flipDisabled: booleanProp,
-    rotateDisabled: booleanProp,
-    rotateDelta: Number,
-    fullDisabled: booleanProp,
-    toolbarPlacement: String as PropType<ToolbarPlacement>,
-    actions: Array as PropType<ToolbarAction[]>,
-    toolbarFade: booleanNumberProp,
-    onMoveStart: eventProp<(state: ViewerState) => void>(),
-    onMove: eventProp<(state: ViewerState) => void>(),
-    onMoveEnd: eventProp<(state: ViewerState) => void>(),
-    onWheel: eventProp<(sign: 1 | -1, state: ViewerState) => void>(),
-    onRotate: eventProp<(deg: number, state: ViewerState) => void>(),
-    onFlipX: eventProp<(flip: boolean, state: ViewerState) => void>(),
-    onFlipY: eventProp<(flip: boolean, state: ViewerState) => void>(),
-    onZoom: eventProp<(zoom: number, state: ViewerState) => void>(),
-    onFull: eventProp<(full: boolean, state: ViewerState) => void>(),
-    onReset: eventProp<(state: ViewerState) => void>()
-  },
+  props: viewerProps,
   emits: [],
   setup(_props) {
     const props = useProps('viewer', _props, {
@@ -129,7 +99,8 @@ export default defineComponent({
       fullDisabled: false,
       toolbarPlacement: 'bottom',
       actions: () => [],
-      toolbarFade: false
+      toolbarFade: false,
+      noTransition: false
     })
 
     const nh = useNameHelper('viewer')
@@ -143,7 +114,7 @@ export default defineComponent({
     const flipX = ref(false)
     const flipY = ref(false)
 
-    const transition = ref<HTMLElement | null>(null)
+    const transition = ref<HTMLElement>()
 
     const {
       supported: fullSupported,
@@ -183,6 +154,10 @@ export default defineComponent({
       x: currentLeft,
       y: currentTop
     })
+    const zoomOrigin = {
+      x: 0,
+      y: 0
+    }
 
     useModifier({
       target: viewer,
@@ -296,7 +271,8 @@ export default defineComponent({
         [nh.bm('draggable')]: !props.moveDisabled,
         [nh.bm('resizable')]: !props.zoomDisabled,
         [nh.bm('full')]: full.value,
-        [nh.bm('moving')]: moving.value
+        [nh.bm('moving')]: moving.value,
+        [nh.bm('static')]: props.noTransition
       }
     })
     const style = computed(() => {
@@ -320,14 +296,14 @@ export default defineComponent({
     })
     const contentStyle = computed(() => {
       return {
-        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scaleX(${
-          flipX.value ? -1 : 1
-        }) scaleY(${flipY.value ? -1 : 1})`
+        transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scale(${zoom.value})`
       }
     })
     const transitionStyle = computed(() => {
       return {
-        transform: `scale(${zoom.value}) rotate(${rotate.value}deg)`
+        transform: `scaleX(${flipX.value ? -1 : 1}) scaleY(${flipY.value ? -1 : 1}) rotate(${
+          rotate.value
+        }deg)`
       }
     })
     const allActions = computed(() => {
@@ -342,15 +318,23 @@ export default defineComponent({
       return Array.from(map.values())
     })
 
-    function handleWheel(event: WheelEvent) {
-      if (props.zoomDisabled) {
-        return
-      }
+    onMounted(() => {
+      if (container.value) {
+        const rect = container.value.getBoundingClientRect()
 
+        zoomOrigin.x = rect.left + rect.width * 0.5
+        zoomOrigin.y = rect.top + rect.height * 0.5
+      }
+    })
+
+    function handleWheel(event: WheelEvent) {
       event.stopPropagation()
       event.preventDefault()
 
       const sign = event.deltaY > 0 ? -1 : 1
+
+      zoomOrigin.x = event.clientX
+      zoomOrigin.y = event.clientY
 
       emitEvent(props.onWheel, sign, state)
       handleZoom(sign * props.zoomDelta)
@@ -362,6 +346,11 @@ export default defineComponent({
       }
 
       rotate.value += deg
+
+      if (props.noTransition && rotate.value % 360 === 0) {
+        rotate.value = 0
+      }
+
       emitEvent(props.onRotate, deg, state)
     }
 
@@ -384,11 +373,24 @@ export default defineComponent({
     }
 
     function handleZoom(ratio: number) {
-      if (props.zoomDisabled) {
+      if (props.zoomDisabled || !container.value) {
         return
       }
 
-      zoom.value = boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax)
+      const containerRect = container.value.getBoundingClientRect()
+      const { x, y } = zoomOrigin
+      const { offsetWidth, offsetHeight } = container.value
+      const prveZoom = zoom.value
+
+      zoom.value = toFixed(boundRange(zoom.value + ratio, props.zoomMin, props.zoomMax), 5)
+
+      const delta = zoom.value / prveZoom - 1
+      const originX = delta * offsetWidth * 0.5
+      const originY = delta * offsetHeight * 0.5
+
+      currentLeft.value -= delta * (x - containerRect.left - currentLeft.value) - originX
+      currentTop.value -= delta * (y - containerRect.top - currentTop.value) - originY
+
       emitEvent(props.onZoom, zoom.value, state)
     }
 
@@ -405,6 +407,7 @@ export default defineComponent({
       flipX.value = false
       flipY.value = false
       zoom.value = 1
+
       emitEvent(props.onReset, state)
     }
 
@@ -449,7 +452,7 @@ export default defineComponent({
         typeof props.toolbarFade === 'number' ? props.toolbarFade : props.toolbarFade ? 1500 : 0
 
       if (fade > 0) {
-        timer.toolbarFade = window.setTimeout(() => {
+        timer.toolbarFade = setTimeout(() => {
           toolbarActive.value = false
         }, fade)
       }

@@ -3,17 +3,17 @@
     <ResizeObserver @resize="refreshScroll?.()">
       <div :style="{ visibility: allLoaded ? undefined : 'hidden' }">
         <h1 :class="`${prefix}__title`">
-          {{ $t(`components.${$route.meta.name}`) }}
+          {{ t(`components.${route.meta.name}`) }}
           <span v-if="language !== 'en-US'" :class="`${prefix}__sub-name`">
-            {{ $route.meta.name }}
+            {{ route.meta.name }}
           </span>
           <Tag
-            v-if="$route.meta.since"
+            v-if="route.meta.since"
             type="warning"
             simple
             style="margin-left: 8px;"
           >
-            {{ `Since v${$route.meta.since}` }}
+            {{ `Since v${route.meta.since}` }}
           </Tag>
         </h1>
         <div :class="`${prefix}__desc`">
@@ -23,9 +23,7 @@
         </div>
         <h2 class="anchor">
           <span class="anchor__title">
-            {{
-              getMetaName(language, { name: 'Demos', cname: '代码示例' }, false)
-            }}
+            {{ getMetaName(language, { name: 'Demos', cname: '代码示例' }, false) }}
           </span>
           <a class="anchor__link" href="">#</a>
         </h2>
@@ -34,6 +32,7 @@
           :key="index"
           :code="example.code"
           :github="example.github"
+          :active="example.id && activeDemo === example.id"
         >
           <component :is="example.demo"></component>
           <template #desc>
@@ -62,25 +61,20 @@
 </template>
 
 <script setup lang="ts">
-import {
-  defineAsyncComponent,
-  markRaw,
-  ref,
-  computed,
-  watch,
-  watchEffect,
-  inject
-} from 'vue'
+import { defineAsyncComponent, markRaw, ref, computed, watch, watchEffect, inject } from 'vue'
 import Article from './article.vue'
 import Demo from './demo.vue'
 import { Spinner } from '@vexip-ui/icons'
 import { noop } from '@vexip-ui/utils'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { getMetaName } from './meta-name'
 
 interface Example {
   demo: Record<string, any>,
   desc: Record<string, any>,
   code: string,
+  id: string,
   github: string
 }
 
@@ -95,10 +89,15 @@ const props = defineProps({
   }
 })
 
+const { t } = useI18n({ useScope: 'global' })
+const route = useRoute()
+
 const prefix = 'component-doc'
-const article = ref<InstanceType<typeof Article> | null>(null)
+const activeDemo = ref('')
+const article = ref<InstanceType<typeof Article>>()
 
 const refreshScroll = inject<() => void>('refreshScroll', noop)
+const scrollToElement = inject<(el: Element) => void>('scrollToElement', noop)
 
 const desc = ref<Record<string, any> | null>(null)
 const examples = ref<Example[]>([])
@@ -119,6 +118,19 @@ function refresh() {
   requestAnimationFrame(() => {
     refreshScroll?.()
     article.value?.refreshAnchor()
+
+    try {
+      let element = document.querySelector(decodeURIComponent(location.hash))
+
+      while (element && !element.classList.contains('demo')) {
+        element = element.parentElement
+      }
+
+      if (element) {
+        scrollToElement(element)
+        location.replace(location.href)
+      }
+    } catch (e) {}
   })
 }
 
@@ -153,15 +165,22 @@ async function internalInit(name: string, language: string) {
 
   examples.value = demos.map(demo => {
     return {
-      demo: markRaw(defineAsyncComponent(() => import(`../demos/${name}/${demo}/demo.${language}.vue`))),
-      desc: markRaw(defineAsyncComponent(() => import(`../demos/${name}/${demo}/desc.${language}.md`))),
+      demo: markRaw(
+        defineAsyncComponent(() => import(`../demos/${name}/${demo}/demo.${language}.vue`))
+      ),
+      desc: markRaw(
+        defineAsyncComponent(() => import(`../demos/${name}/${demo}/desc.${language}.md`))
+      ),
       code: '',
+      id: '',
       github: `demos/${name}/${demo}/demo.${language}.vue`
     }
   })
 
   demos.forEach(async (demo, index) => {
-    examples.value[index].code = (await import(`../demos/${name}/${demo}/demo.${language}.vue?raw`)).default
+    examples.value[index].code = (
+      await import(`../demos/${name}/${demo}/demo.${language}.vue?raw`)
+    ).default
   })
 }
 

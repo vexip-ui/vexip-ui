@@ -1,9 +1,1 @@
-[
-  "basis",
-  "disabled",
-  "group",
-  "vertical",
-  "border",
-  "button",
-  "size"
-]
+["basis", "disabled", "group", "vertical", "border", "button", "size", "loading", "state"]

@@ -12,18 +12,19 @@ $slider: map.merge(
     track-height: 4px,
     filler-bg-color: get-css-var('color-primary-base'),
     filler-bg-color-disabled: get-css-var('fill-color-disabled'),
-    handler-size: 14px,
+    handler-size: 16px,
     handler-bg-color: get-css-var('color-white'),
     handler-b-width: 2px,
     handler-b-color: get-css-var('color-primary-base'),
-    handler-b-color-disabled: get-css-var('content-color-disabled'),
+    handler-b-color-disabled: get-css-var('fill-color-disabled'),
     handler-s-color: get-css-var('color-primary-light-6'),
     handler-shadow: unset,
     handler-shadow-hover: unset,
     handler-shadow-focus: 0 0 4px 1px get-css-var('slider-handler-s-color'),
     handler-shadow-disabled: unset,
     handler-scale-hover: 1.25,
-    handler-scale-focus: 1.25
+    handler-scale-focus: 1.25,
+    marker-size: 8px
   ),
   $slider
 );
@@ -47,15 +48,31 @@ $slider: map.merge(
 
   position: relative;
   display: flex;
+  flex-direction: column;
+  width: 100%;
   padding: $padding 0;
   margin: 2px $margin;
   cursor: pointer;
 
   &--vertical {
     display: inline-flex;
+    flex-direction: row;
+    width: auto;
     height: 100%;
     padding: 0 $padding;
     margin: $margin 2px;
+  }
+
+  &--with-marker {
+    margin-bottom: 32px;
+  }
+
+  &--vertical#{&}--with-marker {
+    margin-right: 32px;
+  }
+
+  &--loading {
+    cursor: auto;
   }
 
   &--disabled {
@@ -63,8 +80,11 @@ $slider: map.merge(
   }
 
   &__track {
+    display: flex;
+    align-items: flex-start;
     width: 100%;
     height: get-css-var('slider-track-height');
+    overflow: hidden;
     background-color: get-css-var('slider-track-bg-color');
     border-radius: get-css-var('slider-track-height');
     transition: get-css-var('transition-background');
@@ -74,18 +94,24 @@ $slider: map.merge(
     background-color: get-css-var('slider-track-bg-color-hover');
   }
 
-  &--disabled &__track,
-  &--disabled:hover &__track {
-    background-color: get-css-var('slider-track-bg-color-disabled');
-  }
-
   &--vertical &__track {
     width: get-css-var('slider-track-height');
     height: 100%;
   }
 
+  &--reverse &__track {
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  &--disabled &__track,
+  &--disabled:hover &__track {
+    background-color: get-css-var('slider-track-bg-color-disabled');
+  }
+
   &__filler {
-    height: get-css-var('slider-track-height');
+    width: 100%;
+    height: 100%;
     background-color: get-css-var('slider-filler-bg-color');
     border-radius: get-css-var('slider-track-height');
     transition: get-css-var('transition-background');
@@ -101,7 +127,6 @@ $slider: map.merge(
     position: absolute;
     width: $handler-size;
     height: $handler-size;
-    transform: translate(-50%, -50%);
 
     .#{$namespace}-tooltip {
       line-height: 1;
@@ -117,6 +142,8 @@ $slider: map.merge(
   }
 
   &__handler {
+    @include round-border(get-css-var('slider-handler-b-color'));
+
     width: $handler-size;
     height: $handler-size;
     cursor: pointer;
@@ -125,7 +152,10 @@ $slider: map.merge(
     border-radius: $handler-size;
     outline: 0;
     box-shadow: get-css-var('slider-handler-shadow');
-    transition: get-css-var('transition-shadow'), get-css-var('transition-transform');
+    transition:
+      get-css-var('transition-border'),
+      get-css-var('transition-shadow'),
+      get-css-var('transition-transform');
 
     &:hover {
       box-shadow: get-css-var('slider-handler-shadow-hover');
@@ -136,11 +166,23 @@ $slider: map.merge(
       box-shadow: get-css-var('slider-handler-shadow-focus');
       transform: scale(get-css-var('slider-handler-scale-focus'));
     }
-  }
 
-  &--sliding &__handler {
-    box-shadow: get-css-var('slider-handler-shadow-focus');
-    transform: scale(get-css-var('slider-handler-scale-focus'));
+    &--sliding {
+      box-shadow: get-css-var('slider-handler-shadow-focus');
+      transform: scale(get-css-var('slider-handler-scale-focus'));
+    }
+
+    &::before {
+      top: 2px;
+      left: 2px;
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      opacity: 0%;
+    }
+
+    &--active::before {
+      opacity: 100%;
+    }
   }
 
   &--disabled &__handler {
@@ -162,6 +204,42 @@ $slider: map.merge(
   &__tip {
     min-width: auto;
     min-height: auto;
+    user-select: none;
+  }
+
+  $marker-size: get-css-var('slider-marker-size');
+
+  &__point {
+    position: absolute;
+    width: $marker-size;
+    height: $marker-size;
+    pointer-events: none;
+    background-color: get-css-var('slider-handler-bg-color');
+    border:
+      get-css-var('slider-handler-b-width') solid
+      get-css-var('slider-handler-b-color-disabled');
+    border-radius: $marker-size;
+
+    &--in-range {
+      border-color: get-css-var('slider-handler-b-color');
+    }
+  }
+
+  &__markers {
+    position: absolute;
+    top: calc(get-css-var('slider-handler-size') + 6px);
+    width: 100%;
+  }
+
+  &--vertical &__markers {
+    top: auto;
+    left: calc(get-css-var('slider-handler-size') + 6px);
+    width: auto;
+    height: 100%;
+  }
+
+  &__marker {
+    position: absolute;
     user-select: none;
   }
 

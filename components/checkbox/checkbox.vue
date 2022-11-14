@@ -1,6 +1,6 @@
 <template>
-  <label :class="className">
-    <span :class="nh.be('signal')"></span>
+  <label :class="className" :aria-disabled="isDisabled" @click="handleClick">
+    <span :class="[nh.be('signal'), isLoading && nh.bem('signal', 'active')]"></span>
     <span v-if="hasLabel || hasSlot" :class="[nh.be('label'), props.labelClass]">
       <slot>{{ props.label }}</slot>
     </span>
@@ -27,45 +27,28 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue'
+import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  classProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useFieldStore } from '@/components/form'
 import { isDefined, isFunction } from '@vexip-ui/utils'
+import { checkboxProps } from './props'
 import { GROUP_STATE } from './symbol'
 
 export default defineComponent({
   name: 'Checkbox',
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    checked: booleanProp,
-    label: String,
-    value: [String, Number],
-    labelClass: classProp,
-    disabled: booleanProp,
-    border: booleanProp,
-    control: booleanProp,
-    partial: booleanProp,
-    tabIndex: [String, Number],
-    onChange: eventProp<(checked: boolean) => void>()
-  },
+  props: checkboxProps,
   emits: ['update:checked'],
   setup(_props, { slots, emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
       useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('checkbox', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       checked: {
         default: () => getFieldValue(false),
@@ -81,7 +64,9 @@ export default defineComponent({
       border: false,
       control: false,
       partial: false,
-      tabIndex: 0
+      tabIndex: 0,
+      loading: () => loading.value,
+      loadingLock: false
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -90,16 +75,18 @@ export default defineComponent({
     const currentChecked = ref(props.checked)
     const currentPartial = ref(props.partial)
 
-    const input = ref<HTMLElement | null>(null)
+    const input = ref<HTMLElement>()
 
     const controlState = reactive({
       checked: currentChecked,
       partial: currentPartial
     })
 
-    const size = computed(() => groupState?.size || props.size)
+    const computedSize = computed(() => groupState?.size || props.size)
     const computedState = computed(() => groupState?.state || props.state)
     const isDisabled = computed(() => groupState?.disabled || props.disabled)
+    const isLoading = computed(() => groupState?.loading || props.loading)
+    const isLoadingLock = computed(() => groupState?.loadingLock || props.loadingLock)
     const className = computed(() => {
       return [
         nh.b(),
@@ -107,7 +94,8 @@ export default defineComponent({
         {
           [nh.bm('checked')]: currentChecked.value,
           [nh.bm('disabled')]: isDisabled.value,
-          [nh.bm(size.value)]: size.value !== 'default',
+          [nh.bm('loading')]: isLoading.value && isLoadingLock.value,
+          [nh.bm(computedSize.value)]: computedSize.value !== 'default',
           [nh.bm('border')]: props.border,
           [nh.bm('partial')]: props.control && currentPartial.value,
           [nh.bm(computedState.value)]: computedState.value !== 'default'
@@ -201,6 +189,10 @@ export default defineComponent({
     }
 
     function handleChange(checked: boolean) {
+      if (isDisabled.value || (isLoading.value && isLoadingLock.value)) {
+        return
+      }
+
       setCurrentChecked(checked)
 
       if (!props.control && groupState) {
@@ -213,6 +205,10 @@ export default defineComponent({
       }
     }
 
+    function handleClick(event: MouseEvent) {
+      emitEvent(props.onClick, event)
+    }
+
     return {
       props,
       nh,
@@ -223,10 +219,12 @@ export default defineComponent({
       className,
       hasLabel,
       hasSlot,
+      isLoading,
 
       input,
 
-      handleChange
+      handleChange,
+      handleClick
     }
   }
 })

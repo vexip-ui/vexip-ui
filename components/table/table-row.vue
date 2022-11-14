@@ -2,11 +2,13 @@
   <div
     v-if="!row.hidden"
     ref="wrapper"
-    :class="nh.be('group')"
+    :class="[nh.be('group'), row.checked && nh.bem('group', 'checked')]"
     :draggable="draggable"
-    @click="handleClick"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
+    @click="handleClick"
+    @dblclick="handleDblclick"
+    @contextmenu="handleContextmenu"
     @dragstart.stop="handleDragStart"
     @dragover="handleDragOver"
     @dragend="handleDragEnd"
@@ -18,6 +20,7 @@
       role="row"
       :style="style"
       :aria-rowindex="index"
+      v-bind="attrs"
     >
       <slot></slot>
     </div>
@@ -70,41 +73,39 @@ import { TABLE_STORE, TABLE_ACTION, TABLE_HEAD_KEY } from './symbol'
 import type { PropType, CSSProperties } from 'vue'
 import type { RowState, ExpandColumn, ColumnWithKey } from './symbol'
 
-const props = {
-  row: {
-    type: Object as PropType<RowState>,
-    default: () => ({})
-  },
-  index: {
-    type: Number,
-    default: null
-  },
-  isHead: {
-    type: Boolean,
-    default: false
-  },
-  isFixed: {
-    type: Boolean,
-    default: false
-  }
-}
-
 export default defineComponent({
   name: 'TableRow',
   components: {
     CollapseTransition,
     Renderer
   },
-  props,
+  props: {
+    row: {
+      type: Object as PropType<RowState>,
+      default: () => ({})
+    },
+    index: {
+      type: Number,
+      default: null
+    },
+    isHead: {
+      type: Boolean,
+      default: false
+    },
+    isFixed: {
+      type: Boolean,
+      default: false
+    }
+  },
   setup(props) {
     const { state, mutations } = inject(TABLE_STORE)!
     const tableAction = inject(TABLE_ACTION)!
 
     const nh = useNameHelper('table')
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const rowElement = ref<HTMLElement | null>(null)
-    const expandElement = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const rowElement = ref<HTMLElement>()
+    const expandElement = ref<HTMLElement>()
 
     const instance = reactive({
       el: wrapper,
@@ -126,16 +127,41 @@ export default defineComponent({
       return [
         nh.be('row'),
         {
-          [nh.bem('row', 'hover')]: state.highlight && props.row.hover,
-          [nh.bem('row', 'stripe')]: props.index % 2 === 1
+          [nh.bem('row', 'hover')]: !props.isHead && state.highlight && props.row.hover,
+          [nh.bem('row', 'stripe')]: props.index % 2 === 1,
+          [nh.bem('row', 'checked')]: props.row.checked
         },
         customClass
       ]
     })
     const style = computed(() => {
-      return {
-        minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
+      let customStyle: any = ''
+
+      if (!props.isHead) {
+        if (typeof state.rowStyle === 'function') {
+          customStyle = state.rowStyle(props.row.data, props.index)
+        } else {
+          customStyle = state.rowStyle
+        }
       }
+
+      return [
+        {
+          minHeight: !state.rowHeight ? `${state.rowMinHeight}px` : undefined
+        },
+        customStyle
+      ]
+    })
+    const attrs = computed(() => {
+      if (!props.isHead) {
+        if (typeof state.rowAttrs === 'function') {
+          return state.rowAttrs(props.row.data, props.index)
+        } else {
+          return state.rowAttrs
+        }
+      }
+
+      return null
     })
     const draggable = computed(() => !props.isHead && state.rowDraggable)
     const dragging = computed(() => state.dragging)
@@ -248,7 +274,7 @@ export default defineComponent({
               mutations.setRowHeight(rowKey.value, rowElement.value.offsetHeight)
             }
           } else {
-            window.setTimeout(() => {
+            setTimeout(() => {
               if (rowElement.value) {
                 rowElement.value.style.height = `${props.row.height}px`
               }
@@ -268,38 +294,55 @@ export default defineComponent({
       }
     }
 
-    function handleMouseEnter() {
+    function buildEventPayload(event: Event) {
+      return {
+        row: props.row.data,
+        key: props.row.key,
+        index: props.index,
+        event
+      }
+    }
+
+    function handleMouseEnter(event: MouseEvent) {
       mutations.setRowHover(rowKey.value, true)
 
       if (!props.isHead && tableAction) {
         const { data, key, index } = props.row
 
-        tableAction.emitRowEnter(data, key, index)
+        tableAction.emitRowEnter({ row: data, key, index, event })
       }
     }
 
-    function handleMouseLeave() {
+    function handleMouseLeave(event: MouseEvent) {
       mutations.setRowHover(rowKey.value, false)
 
       if (!props.isHead && tableAction) {
-        const { data, key, index } = props.row
-
-        tableAction.emitRowLeave(data, key, index)
+        tableAction.emitRowLeave(buildEventPayload(event))
       }
     }
 
-    function handleClick() {
+    function handleClick(event: MouseEvent) {
       if (!props.isHead && tableAction) {
-        const { data, key, index } = props.row
-
-        tableAction.emitRowClick(data, key, index)
+        tableAction.emitRowClick(buildEventPayload(event))
       }
     }
 
-    function handleDragStart() {
+    function handleDblclick(event: MouseEvent) {
+      if (!props.isHead && tableAction) {
+        tableAction.emitRowDblclick(buildEventPayload(event))
+      }
+    }
+
+    function handleContextmenu(event: MouseEvent) {
+      if (!props.isHead && tableAction) {
+        tableAction.emitRowContextmenu(buildEventPayload(event))
+      }
+    }
+
+    function handleDragStart(event: DragEvent) {
       if (!draggable.value) return
 
-      tableAction.handleRowDragStart(instance)
+      tableAction.handleRowDragStart(instance, event)
     }
 
     function handleDragOver(event: DragEvent) {
@@ -315,14 +358,14 @@ export default defineComponent({
 
       event.stopPropagation()
       event.preventDefault()
-      tableAction.handleRowDrop(instance)
+      tableAction.handleRowDrop(instance, event)
     }
 
     function handleDragEnd(event: DragEvent) {
       if (!draggable.value || !dragging.value) return
 
       event.stopPropagation()
-      tableAction.handleRowDragEnd()
+      tableAction.handleRowDragEnd(event)
     }
 
     return {
@@ -330,6 +373,7 @@ export default defineComponent({
 
       className,
       style,
+      attrs,
       draggable,
       expandColumn,
       expandRenderer,
@@ -342,9 +386,11 @@ export default defineComponent({
       expand: expandElement,
 
       isFunction,
-      handleClick,
       handleMouseEnter,
       handleMouseLeave,
+      handleClick,
+      handleDblclick,
+      handleContextmenu,
       handleDragStart,
       handleDragOver,
       handleDrop,

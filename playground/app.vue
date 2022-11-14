@@ -33,7 +33,7 @@ class ReplStore extends _ReplStore {
   }
 }
 
-const mianCode = `import { createApp } from 'vue'
+const mainCode = `import { createApp } from 'vue'
 import { install } from 'vexip-ui'
 import App from './App.vue'
 import ThemeSwitch from './ThemeSwitch.vue'
@@ -140,17 +140,23 @@ store.setImportMap({
     // vue: vueRuntimeUrl,
     'vexip-ui': import.meta.env.PROD
       ? `${location.origin}/vexip-ui.js`
-      : `${location.origin}/vexip-ui.es.js`,
+      : `${location.origin}/vexip-ui.mjs`,
     '@vexip-ui/icons': import.meta.env.PROD
       ? `${location.origin}/vexip-ui-icons.js`
-      : `${location.origin}/icons/index.es.js`
+      : `${location.origin}/icons/index.mjs`,
+    '@vexip-ui/utils': import.meta.env.PROD
+      ? `${location.origin}/vexip-ui-utils.js`
+      : `${location.origin}/utils/index.mjs`,
+    'vue-router': import.meta.env.PROD
+      ? `${location.origin}/vue-router.js`
+      : `${location.origin}/proxy/vue-router`
   }
 })
 ;(!serializedState
   ? store.setFiles(
     {
       'import-map.json': store.getFiles()['import-map.json'],
-      'main.ts': mianCode,
+      'main.ts': mainCode,
       'App.vue': welcomeCode,
       'ThemeSwitch.vue': themeCode
     },

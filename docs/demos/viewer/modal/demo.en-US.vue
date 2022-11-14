@@ -2,11 +2,7 @@
   <Button type="primary" @click="active = !active">
     Open Viewer
   </Button>
-  <Modal
-    v-model:active="active"
-    title="View"
-    no-footer
-  >
+  <Modal v-model:active="active" title="View" no-footer>
     <Viewer>
       <img src="/picture-1.jpg" />
     </Viewer>

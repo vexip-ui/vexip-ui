@@ -33,51 +33,34 @@ import {
   nextTick,
   getCurrentInstance
 } from 'vue'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { USE_TOUCH, isDefined, throttle, boundRange } from '@vexip-ui/utils'
-import { useTrack } from './mixins'
+import { scrollbarProps } from './props'
+import { useTrack } from './hooks'
 import { ScrollbarType } from './symbol'
 
-import type { PropType } from 'vue'
 import type { ScrollbarPlacement } from './symbol'
 
 const scrollbarPlacements = Object.freeze<ScrollbarPlacement>(['top', 'right', 'bottom', 'left'])
 
 export default defineComponent({
   name: 'Scrollbar',
-  props: {
-    placement: String as PropType<ScrollbarPlacement>,
-    scroll: Number,
-    barLength: Number,
-    width: Number,
-    appear: booleanProp,
-    fade: Number,
-    barColor: String,
-    trackColor: String,
-    disabled: booleanProp,
-    wrapper: [String, Object] as PropType<string | HTMLElement>,
-    duration: Number,
-    useTrack: booleanProp,
-    trackSpeed: Number,
-    onScrollStart: eventProp<(percent: number) => void>(),
-    onScroll: eventProp<(percent: number) => void>(),
-    onScrollEnd: eventProp<(percent: number) => void>()
-  },
+  props: scrollbarProps,
   emits: [],
   setup(_props) {
     const props = useProps('scrollbar', _props, {
       placement: {
-        default: 'right' as ScrollbarPlacement,
-        validator: (value: ScrollbarPlacement) => scrollbarPlacements.includes(value)
+        default: 'right',
+        validator: value => scrollbarPlacements.includes(value)
       },
       scroll: {
         default: 0,
-        validator: (value: number) => value >= 0 && value <= 100,
+        validator: value => value >= 0 && value <= 100,
         static: true
       },
       barLength: {
         default: 35,
-        validator: (value: number) => value > 0 && value < 100
+        validator: value => value > 0 && value < 100
       },
       width: null,
       appear: false,
@@ -90,7 +73,7 @@ export default defineComponent({
       useTrack: false,
       trackSpeed: {
         default: 2,
-        validator: (value: number) => value > 0 && value < 10
+        validator: value => value > 0 && value < 10
       }
     })
 
@@ -99,11 +82,11 @@ export default defineComponent({
     const currentScroll = ref(props.scroll)
     const scrolling = ref(false)
 
-    const contaniner = ref<HTMLElement | null>(null)
-    const bar = ref<HTMLElement | null>(null)
-    const track = ref<HTMLElement | null>(null)
+    const contaniner = ref<HTMLElement>()
+    const bar = ref<HTMLElement>()
+    const track = ref<HTMLElement>()
 
-    let fadeTimer: number
+    let fadeTimer: ReturnType<typeof setTimeout>
 
     const type = computed(() => {
       return props.placement === 'right' || props.placement === 'left'
@@ -120,10 +103,10 @@ export default defineComponent({
       barLength: toRef(props, 'barLength'),
       disabled: toRef(props, 'disabled'),
       handleDown: scroll => {
-        window.clearTimeout(fadeTimer)
+        clearTimeout(fadeTimer)
         emitEvent(props.onScrollStart, scroll)
       },
-      handleMove: () => window.clearTimeout(fadeTimer),
+      handleMove: () => clearTimeout(fadeTimer),
       handleUp: scroll => {
         setScrollbarFade()
         emitEvent(props.onScrollEnd, scroll)
@@ -149,9 +132,9 @@ export default defineComponent({
     })
     const style = computed<Record<string, string>>(() => {
       return {
-        '--vxp-scrollbar-bar-bg-color': props.barColor,
-        '--vxp-scrollbar-track-bg-color': props.trackColor,
-        '--vxp-scrollbar-width': props.width ? `${props.width}px` : null!
+        [nh.cv('bar-bg-color')]: props.barColor,
+        [nh.cv('track-bg-color')]: props.trackColor,
+        [nh.cv('width')]: props.width ? `${props.width}px` : null!
       }
     })
     const barStyle = computed(() => {
@@ -184,7 +167,7 @@ export default defineComponent({
 
     if (props.appear) {
       watch(currentScroll, () => {
-        window.clearInterval(fadeTimer)
+        clearInterval(fadeTimer)
         active.value = true
 
         if (!scrolling.value && !tracking.value) {
@@ -194,7 +177,7 @@ export default defineComponent({
     }
 
     const handleWrapperMouseMove = throttle(() => {
-      window.clearTimeout(fadeTimer)
+      clearTimeout(fadeTimer)
 
       if (props.disabled) {
         active.value = false
@@ -239,7 +222,7 @@ export default defineComponent({
 
         if (!props.appear) {
           watch(currentScroll, () => {
-            window.clearInterval(fadeTimer)
+            clearInterval(fadeTimer)
             active.value = true
             setScrollbarFade()
           })
@@ -253,7 +236,7 @@ export default defineComponent({
       }
 
       wrapperElement = null
-      window.clearTimeout(fadeTimer)
+      clearTimeout(fadeTimer)
     })
 
     let length: number
@@ -286,7 +269,7 @@ export default defineComponent({
         cursorAt = event.clientX
       }
 
-      window.clearTimeout(fadeTimer)
+      clearTimeout(fadeTimer)
 
       scrolling.value = true
       emitEvent(props.onScrollStart, currentScroll.value)
@@ -315,7 +298,7 @@ export default defineComponent({
         event.preventDefault()
       }
 
-      window.clearTimeout(fadeTimer)
+      clearTimeout(fadeTimer)
 
       handleBarMove(event)
     }
@@ -338,7 +321,7 @@ export default defineComponent({
 
     function setScrollbarFade() {
       if (props.fade >= 300) {
-        fadeTimer = window.setTimeout(() => {
+        fadeTimer = setTimeout(() => {
           active.value = false
         }, props.fade)
       }

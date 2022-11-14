@@ -1,13 +1,27 @@
 <template>
-  <div :class="nh.b()">
+  <div :class="[nh.b(), nh.bm(props.placement)]">
     <div :class="nh.be('header')">
-      <TabNav :active="currentActive" :card="props.card" @change="handleActive">
+      <TabNav
+        :active="currentActive"
+        :card="props.card"
+        :align="props.align"
+        :placement="props.placement"
+        :closable="props.closable"
+        :show-add="props.showAdd"
+        @change="handleActive"
+        @add="handleAdd"
+        @close="handleClose"
+      >
+        <template v-if="$slots.prefix" #prefix>
+          <slot name="prefix"></slot>
+        </template>
         <TabNavItem
           v-for="(item, index) in itemList"
           :key="index"
           :label="item.label"
           :icon="item.icon"
           :disabled="item.disabled"
+          :closable="item.closable"
         >
           <template v-if="isFunction(item.labelRenderer)">
             <Renderer
@@ -16,9 +30,15 @@
             ></Renderer>
           </template>
           <template v-else>
-            {{ item.label }}
+            {{ item.name || item.label }}
           </template>
         </TabNavItem>
+        <template v-if="$slots.suffix" #suffix>
+          <slot name="suffix"></slot>
+        </template>
+        <template v-if="$slots.add">
+          <slot name="add"></slot>
+        </template>
       </TabNav>
     </div>
     <div
@@ -26,7 +46,6 @@
         [nh.be('main')]: true,
         [nh.bem('main', 'transition')]: isTransition
       }"
-      :style="mainStyle"
       @transitionend="isTransition = false"
     >
       <slot></slot>
@@ -35,12 +54,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, provide } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, provide, onMounted } from 'vue'
 import { Renderer } from '@/components/renderer'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { isNull, isFunction, debounceMinor } from '@vexip-ui/utils'
+import { tabsProps } from './props'
 import { TABS_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
@@ -52,19 +72,19 @@ export default defineComponent({
     TabNav,
     TabNavItem
   },
-  props: {
-    card: booleanProp,
-    active: [String, Number],
-    onChange: eventProp<(active: string | number) => void>()
-  },
+  props: tabsProps,
   emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('tabs', _props, {
-      card: false,
       active: {
         default: null,
         static: true
-      }
+      },
+      card: false,
+      align: 'left',
+      placement: 'top',
+      closable: false,
+      showAdd: false
     })
 
     const currentActive = ref(props.active)
@@ -119,14 +139,11 @@ export default defineComponent({
         currentActive.value = value
       }
     )
-    watch(currentActive, value => {
-      computeIndex()
-      emitEvent(props.onChange, value)
-      emit('update:active', value)
-    })
-    watch(currentIndex, () => {
-      isTransition.value = true
-    })
+    // watch(currentIndex, () => {
+    //   isTransition.value = true
+    // })
+
+    onMounted(computeIndex)
 
     function isActiveEmpty() {
       return isNull(currentActive.value) || currentActive.value === ''
@@ -144,6 +161,18 @@ export default defineComponent({
 
     function handleActive(label: string | number) {
       currentActive.value = label
+
+      computeIndex()
+      emitEvent(props.onChange, label)
+      emit('update:active', label)
+    }
+
+    function handleAdd() {
+      emitEvent(props.onAdd)
+    }
+
+    function handleClose(label: string | number) {
+      emitEvent(props.onClose, label)
     }
 
     return {
@@ -156,7 +185,9 @@ export default defineComponent({
       itemList,
 
       isFunction,
-      handleActive
+      handleActive,
+      handleAdd,
+      handleClose
     }
   }
 })

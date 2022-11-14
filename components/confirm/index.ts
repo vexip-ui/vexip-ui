@@ -1,11 +1,12 @@
 import { createVNode, render, markRaw } from 'vue'
 import Component from './confirm.vue'
-import { destroyObject } from '@vexip-ui/utils'
+import { isClient, destroyObject } from '@vexip-ui/utils'
 
 import type { App } from 'vue'
 import type { ConfirmType, ConfirmOptions, ConfirmInstance } from './symbol'
 
-export * from './symbol'
+export type { ConfirmProps, ConfirmCProps } from './props'
+export type { ConfirmType, ConfirmOptions }
 
 type FuzzyOptions = string | ConfirmOptions
 
@@ -30,6 +31,10 @@ export class ConfirmManager {
   open(content: string, type?: ConfirmType): Promise<boolean>
   open(options: ConfirmOptions): Promise<boolean>
   open(options: FuzzyOptions, type?: ConfirmType) {
+    if (!isClient) {
+      return
+    }
+
     if (typeof options === 'string') {
       options = { content: options, confirmType: type }
     }
@@ -45,6 +50,10 @@ export class ConfirmManager {
 
   config(options: Record<string, unknown>) {
     this.defaults = { ...this.defaults, ...options }
+  }
+
+  clone() {
+    return new ConfirmManager(this.defaults)
   }
 
   destroy() {
@@ -64,7 +73,7 @@ export class ConfirmManager {
 
   private _getInstance() {
     if (!this._mountedApp) {
-      console.warn('[vexip-ui:Confirm]: App missing, the plugin maybe not install.')
+      console.warn('[vexip-ui:Confirm]: App missing, the plugin maybe not installed.')
       return null
     }
 

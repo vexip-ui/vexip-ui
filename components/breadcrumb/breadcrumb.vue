@@ -1,8 +1,8 @@
 <template>
   <ol :class="className">
     <slot>
-      <BreadcrumbItem v-for="label in props.options" :key="label" :label="label">
-        {{ label }}
+      <BreadcrumbItem v-for="option in normalizedOptions" :key="option.label" :label="option.label">
+        {{ option.name ? callIfFunc(option.name) : option.label }}
       </BreadcrumbItem>
     </slot>
   </ol>
@@ -10,26 +10,20 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, provide, watch, toRef } from 'vue'
-import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
-import { isNull, debounceMinor } from '@vexip-ui/utils'
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { isNull, debounceMinor, callIfFunc } from '@vexip-ui/utils'
+import { breadcrumbProps } from './props'
 import { BREADCRUMB_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ItemState, BreadcrumbState } from './symbol'
+import type { BreadcrumbItemState, BreadcrumbState } from './symbol'
 
 export default defineComponent({
   name: 'Breadcrumb',
   components: {
     BreadcrumbItem
   },
-  props: {
-    separator: String,
-    border: booleanProp,
-    options: Array as PropType<string[]>,
-    onSelect: eventProp<(label: string | number) => void>(),
-    onSeparatorClick: eventProp<(label: string | number) => void>()
-  },
+  props: breadcrumbProps,
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('breadcrumb', _props, {
@@ -42,7 +36,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('breadcrumb')
-    const itemStates = new Set<ItemState>()
+    const itemStates = new Set<BreadcrumbItemState>()
 
     const className = computed(() => {
       return {
@@ -50,6 +44,15 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bm('border')]: props.border
       }
+    })
+    const normalizedOptions = computed(() => {
+      return props.options.map(option => {
+        if (typeof option === 'string') {
+          return { label: option }
+        }
+
+        return option
+      })
     })
 
     const refreshLabels = debounceMinor(() => {
@@ -80,12 +83,12 @@ export default defineComponent({
       { immediate: true }
     )
 
-    function increaseItem(item: ItemState) {
+    function increaseItem(item: BreadcrumbItemState) {
       itemStates.add(item)
       refreshLabels()
     }
 
-    function decreaseItem(item: ItemState) {
+    function decreaseItem(item: BreadcrumbItemState) {
       itemStates.delete(item)
       refreshLabels()
     }
@@ -100,7 +103,10 @@ export default defineComponent({
 
     return {
       props,
-      className
+      className,
+      normalizedOptions,
+
+      callIfFunc
     }
   }
 })

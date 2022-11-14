@@ -159,6 +159,11 @@ $transfer: map.merge(
     justify-content: flex-end;
   }
 
+  &__loading {
+    display: flex;
+    margin-left: 4px;
+  }
+
   &__filter {
     padding: 0 6px;
     border-bottom: get-css-var('border-shape') get-css-var('transfer-d-color');

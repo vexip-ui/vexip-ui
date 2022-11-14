@@ -1,9 +1,15 @@
 <template>
   <div>
-    <Button type="warning" @click="$message.warning({ content: 'A message with custom icon', icon: CircleQuestion })">
+    <Button
+      type="warning"
+      @click="Message.warning({ content: 'A message with custom icon', icon: CircleQuestion })"
+    >
       Custom Icon
     </Button>
-    <Button type="error" @click="$message.error({ content: 'A message with custom icon color', iconColor: 'green' })">
+    <Button
+      type="error"
+      @click="Message.error({ content: 'A message with custom icon color', iconColor: 'green' })"
+    >
       Custom Icon Color
     </Button>
     <Button type="success" @click="sendCustomizedIconMessage">
@@ -12,27 +18,20 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, h } from 'vue'
-import { Icon } from 'vexip-ui'
+<script setup lang="ts">
+import { h } from 'vue'
 import { CircleQuestion, Share } from '@vexip-ui/icons'
+import { Icon, Message } from 'vexip-ui'
 
-export default defineComponent({
-  setup() {
-    return { CircleQuestion }
-  },
-  methods: {
-    sendCustomizedIconMessage() {
-      this.$message.success({
-        content: 'A message that using icon render method',
-        icon: () => {
-          return h(Icon, {
-            icon: Share,
-            flip: 'horizontal'
-          })
-        }
+function sendCustomizedIconMessage() {
+  Message.success({
+    content: 'A message that using icon render method',
+    icon: () => {
+      return h(Icon, {
+        icon: Share,
+        flip: 'horizontal'
       })
     }
-  }
-})
+  })
+}
 </script>

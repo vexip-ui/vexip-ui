@@ -112,7 +112,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const nh = useNameHelper('time-picker')
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const formattedHour = computed(() => {
       return formatValue('hour')
@@ -194,6 +194,9 @@ export default defineComponent({
 
       focus: () => {
         wrapper.value?.focus()
+      },
+      blur: () => {
+        wrapper.value?.blur()
       }
     }
   }

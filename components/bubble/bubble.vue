@@ -9,25 +9,20 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { placementWhileList } from '@vexip-ui/mixins'
-import { useNameHelper, useProps, booleanStringProp, classProp } from '@vexip-ui/config'
+import { placementWhileList } from '@vexip-ui/hooks'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { bubbleProps } from './props'
 
-import type { PropType, CSSProperties } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
+import type { CSSProperties } from 'vue'
 
 export default defineComponent({
   name: 'Bubble',
-  props: {
-    placement: String as PropType<Placement>,
-    background: String,
-    shadow: booleanStringProp,
-    contentClass: classProp
-  },
+  props: bubbleProps,
   setup(_props) {
     const props = useProps('bubble', _props, {
       placement: {
         default: 'right',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       background: '',
       shadow: false,

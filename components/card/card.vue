@@ -20,19 +20,14 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useNameHelper, useProps, styleProp } from '@vexip-ui/config'
-
-import type { PropType } from 'vue'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { cardProps } from './props'
 
 export type CardShadowType = 'always' | 'hover' | 'never'
 
 export default defineComponent({
   name: 'Card',
-  props: {
-    title: String,
-    shadow: String as PropType<CardShadowType>,
-    contentStyle: styleProp
-  },
+  props: cardProps,
   setup(_props, { slots }) {
     const props = useProps('card', _props, {
       title: '',

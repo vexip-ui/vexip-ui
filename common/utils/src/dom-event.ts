@@ -10,11 +10,12 @@ export interface EventPayload extends EventInit {
   [prop: string]: any
 }
 
-export const USE_TOUCH = !!window && ('ontouchstart' in window || getMaxTouchPoints() > 0)
+export const USE_TOUCH =
+  typeof window !== 'undefined' && ('ontouchstart' in window || getMaxTouchPoints() > 0)
 export const CLICK_TYPE = USE_TOUCH ? 'touchstart' : 'click'
 
 function getMaxTouchPoints() {
-  return isDefined(navigator)
+  return typeof navigator !== 'undefined'
     ? navigator.maxTouchPoints || ((navigator as any).msMaxTouchPoints as number) || 0
     : 0
 }

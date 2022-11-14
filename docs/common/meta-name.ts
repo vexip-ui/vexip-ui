@@ -1,12 +1,17 @@
 import { useRoute } from 'vue-router'
 
-export function getMetaName(language: string, meta: Record<string, any> = useRoute().meta, suffix = true) {
+export function getMetaName(
+  language: string,
+  meta: Record<string, any> = useRoute().meta,
+  suffix = true
+) {
   language = language || __ROLLBACK_LANG__
 
   let prefixMeta: string | null = null
 
   switch (language) {
-    case 'zh-CN': prefixMeta = 'cname'
+    case 'zh-CN':
+      prefixMeta = 'cname'
   }
 
   if (prefixMeta && meta[prefixMeta]) {
@@ -17,5 +22,5 @@ export function getMetaName(language: string, meta: Record<string, any> = useRou
     return meta[prefixMeta]
   }
 
-  return meta.name as string ?? ''
+  return (meta.name as string) ?? ''
 }

@@ -1,7 +1,8 @@
 <template>
   <div
     ref="wrapper"
-    :class="nh.b()"
+    :class="[nh.b(), props.maxLines > 0 && nh.bm('multiple')]"
+    :style="ellipsisStyle"
     v-bind="$attrs"
     @mouseenter="handleTriggerEnter"
     @mouseleave="handleTriggerLeave"
@@ -35,45 +36,33 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
 import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, booleanProp, classProp } from '@vexip-ui/config'
-import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
-
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
-import type { TooltipTheme } from '@/components/tooltip'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
+import { getRangeWidth } from '@vexip-ui/utils'
+import { ellipsisProps } from './props'
 
 export default defineComponent({
   name: 'Ellipsis',
   components: {
     Portal
   },
-  props: {
-    placement: String as PropType<Placement>,
-    transfer: {
-      type: [String, Boolean],
-      default: null
-    },
-    noHover: booleanProp,
-    transitionName: String,
-    tooltipTheme: String as PropType<TooltipTheme>,
-    tipClass: classProp,
-    tipMaxWidth: [Number, String]
-  },
+  props: ellipsisProps,
   setup(_props) {
     const nh = useNameHelper('ellipsis')
     const props = useProps('ellipsis', _props, {
       placement: {
         default: 'top',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       transfer: 'body',
       noHover: false,
       transitionName: () => nh.ns('fade'),
       tooltipTheme: {
-        default: 'dark' as TooltipTheme,
-        validator: (value: TooltipTheme) => ['light', 'dark'].includes(value)
+        default: 'dark',
+        validator: value => ['light', 'dark'].includes(value)
       },
       tipClass: null,
+      maxLines: null,
       tipMaxWidth: 500
     })
 
@@ -84,7 +73,7 @@ export default defineComponent({
     const transfer = toRef(props, 'transfer')
     const content = ref('')
 
-    const wrapper = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
 
     const { popper, transferTo, updatePopper } = usePopper({
       placement,
@@ -92,7 +81,9 @@ export default defineComponent({
       wrapper,
       reference: wrapper
     })
-
+    const ellipsisStyle = computed(() => {
+      return props.maxLines > 0 ? { '-webkit-line-clamp': props.maxLines } : ''
+    })
     const tipStyle = computed(() => {
       return {
         maxWidth:
@@ -111,26 +102,24 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     function handleTriggerEnter() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         if (!wrapper.value || !wrapper.value.childNodes.length) {
           visible.value = false
-
           return
         }
 
-        const range = document.createRange()
+        // In the case of multiple lines, use visual height and real content height to control whether to display
+        if (props.maxLines > 0) {
+          const scrollHeight = wrapper.value.scrollHeight
+          const clientHeight = wrapper.value.clientHeight
 
-        range.setStart(wrapper.value, 0)
-        range.setEnd(wrapper.value, wrapper.value.childNodes.length)
+          visible.value = scrollHeight > clientHeight
+        } else {
+          visible.value = getRangeWidth(wrapper.value) > wrapper.value.getBoundingClientRect().width
+        }
 
-        const rangeWidth = range.getBoundingClientRect().width
-        const computedStyle = getComputedStyle(wrapper.value)
-        const horizontalPending =
-          parseInt(computedStyle.paddingLeft, 10) + parseInt(computedStyle.paddingRight, 10)
-
-        visible.value = rangeWidth + horizontalPending > wrapper.value.getBoundingClientRect().width
         content.value = visible.value ? wrapper.value.textContent ?? '' : ''
 
         nextTick(() => {
@@ -140,9 +129,9 @@ export default defineComponent({
     }
 
     function handleTriggerLeave() {
-      window.clearTimeout(timer.hover)
+      clearTimeout(timer.hover)
 
-      timer.hover = window.setTimeout(() => {
+      timer.hover = setTimeout(() => {
         active.value = false
       })
     }
@@ -156,6 +145,7 @@ export default defineComponent({
       content,
       transferTo,
 
+      ellipsisStyle,
       tipStyle,
 
       wrapper,

@@ -1,13 +1,16 @@
-import { resolve } from 'path'
-import { readFileSync } from 'fs'
+import { resolve } from 'node:path'
+import { readFileSync, readdirSync, statSync, existsSync, writeFileSync } from 'node:fs'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/vite-plugin-vue-i18n'
 import discardCss from 'postcss-discard-duplicates'
-import markdown from 'vite-plugin-md'
+import markdown from 'vite-plugin-vue-markdown'
+import { cyan, green, red } from 'kolorist'
 import { highlight } from './build/highlight'
 import { markdownItSetup } from './build/markdown'
+
+import type { Plugin, Logger } from 'vite'
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
 
@@ -16,6 +19,7 @@ export default defineConfig(({ command }) => {
 
   return {
     define: {
+      __SSR__: JSON.stringify(process.env.SSR === 'true'),
       __ROLLBACK_LANG__: JSON.stringify('zh-CN'),
       __VERSION__: JSON.stringify(pkg.version || '')
     },
@@ -28,10 +32,6 @@ export default defineConfig(({ command }) => {
               {
                 find: /^@vexip-ui\/((?!icons).+)/,
                 replacement: resolve(__dirname, '../common/$1/src')
-              },
-              {
-                find: /^vexip-ui\/(es|lib)\/(.+)/,
-                replacement: resolve(__dirname, '../components/$2')
               },
               { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') }
             ]
@@ -71,8 +71,9 @@ export default defineConfig(({ command }) => {
         markdownItSetup,
         wrapperComponent: 'Markdown'
       }),
-      useServer && {
+      {
         name: 'single-hmr',
+        apply: 'serve',
         handleHotUpdate({ modules, file }) {
           if (file.match(/xml$/)) return []
 
@@ -85,7 +86,66 @@ export default defineConfig(({ command }) => {
 
           return modules
         }
-      }
+      },
+      createZipPlugin()
     ]
   }
 })
+
+function createZipPlugin(): Plugin {
+  const logPrefix = cyan('[vite:zip]')
+
+  let logger: Logger
+  let outDir = 'dist'
+  let root = __dirname
+
+  function zipFolder(zip: import('jszip'), root: string) {
+    readdirSync(root).forEach(f => {
+      const path = resolve(root, f)
+
+      if (statSync(path).isDirectory()) {
+        zipFolder(zip.folder(f)!, path)
+      } else {
+        zip.file(f, readFileSync(path))
+      }
+    })
+  }
+
+  return {
+    name: 'vite:zip',
+    apply: 'build',
+    enforce: 'post',
+    configResolved(config) {
+      logger = config.logger
+      outDir = config.build.outDir
+      root = config.root
+    },
+    async closeBundle() {
+      const dir = resolve(root, outDir)
+
+      if (!existsSync(dir)) {
+        logger.error(red(`\n${logPrefix} cannot file outDir '${dir}'`))
+        return
+      }
+
+      logger.info(green(`\n${logPrefix} zipping outDir...`))
+
+      try {
+        const { default: JSZip } = await import('jszip')
+        const zip = new JSZip()
+
+        zipFolder(zip, dir)
+        writeFileSync(
+          resolve(dir, `${outDir}.zip`),
+          await zip.generateAsync({ type: 'nodebuffer' }),
+          'utf-8'
+        )
+
+        logger.info(green(`${logPrefix} zip successful\n`))
+      } catch (error) {
+        logger.error(red(`${logPrefix} zip fail with something wrong\n`))
+        logger.error(error as string)
+      }
+    }
+  }
+}

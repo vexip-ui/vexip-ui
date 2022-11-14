@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
+import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import { Alert } from '..'
-import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 const typeIconMap = {
   info: CircleInfo,
@@ -38,16 +38,14 @@ describe('Alert', () => {
   })
 
   it('close', async () => {
-    const handleClose = vi.fn()
-    const wrapper = mount(() => <Alert closable onClose={handleClose}></Alert>)
+    const onClose = vi.fn()
+    const wrapper = mount(() => <Alert closable onClose={onClose}></Alert>)
     const close = wrapper.find('.vxp-alert__close')
 
     expect(close.exists()).toBe(true)
 
     await close.trigger('click')
-
-    expect(wrapper.findComponent(Alert).emitted()).toHaveProperty('close')
-    expect(handleClose).toHaveBeenCalled()
+    expect(onClose).toHaveBeenCalled()
   })
 
   it('slots', () => {
@@ -66,5 +64,11 @@ describe('Alert', () => {
     expect(wrapper.find('.vxp-alert__content').text()).toEqual(TEXT)
     expect(wrapper.find('.vxp-alert__icon').text()).toEqual(TEXT)
     expect(wrapper.find('.vxp-alert__close').text()).toEqual(TEXT)
+  })
+
+  it('scroll', () => {
+    const wrapper = mount(() => <Alert scroll>{TEXT}</Alert>)
+
+    expect(wrapper.find('.vxp-alert__scroll').exists()).toBe(true)
   })
 })

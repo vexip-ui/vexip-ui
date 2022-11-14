@@ -1,9 +1,14 @@
 [
   "basis",
   "disabled",
+  "clearable",
   "icon",
   "size",
+  "sync",
   "before",
-  "clearable",
-  "state"
+  "password",
+  "loading",
+  "max-length",
+  "state",
+  "transparent"
 ]

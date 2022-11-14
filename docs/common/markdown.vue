@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { watch } from 'vue'
-import { useMounted } from '@vexip-ui/mixins'
+import { useMounted } from '@vexip-ui/hooks'
 
 import type { PropType } from 'vue'
 
@@ -36,7 +36,6 @@ watch(isMounted, value => {
 .markdown {
   pre {
     margin: 14px 0;
-    border-radius: 2px;
   }
 
   :not(pre) > code {

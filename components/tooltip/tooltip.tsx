@@ -10,27 +10,18 @@ import {
   Transition
 } from 'vue'
 import { Portal } from '@/components/portal'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  classProp,
-  styleProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import {
   useClickOutside,
   placementWhileList,
   usePopper,
   useSetTimeout,
   useListener
-} from '@vexip-ui/mixins'
+} from '@vexip-ui/hooks'
+import { isElement } from '@vexip-ui/utils'
+import { tooltipProps } from './props'
 
-import type { PropType } from 'vue'
-import type { Placement, VirtualElement } from '@vexip-ui/mixins'
-import type { ToopTipTrigger, TooltipVirtual } from './symbol'
+import type { VirtualElement } from '@vexip-ui/hooks'
 
 const TEXT_VNODE = createTextVNode('').type
 
@@ -40,38 +31,14 @@ export default defineComponent({
     Portal
   },
   inheritAttrs: true,
-  props: {
-    trigger: String as PropType<ToopTipTrigger>,
-    wrapper: booleanStringProp,
-    noArrow: booleanProp,
-    transitionName: String,
-    visible: booleanProp,
-    placement: String as PropType<Placement>,
-    outsideClose: booleanProp,
-    noHover: booleanProp,
-    tipClass: classProp,
-    tipStyle: styleProp,
-    transfer: booleanStringProp,
-    disabled: booleanProp,
-    raw: booleanProp,
-    delay: Number,
-    tipAlive: booleanProp,
-    reverse: booleanProp,
-    width: [String, Number] as PropType<number | 'trigger' | 'auto'>,
-    virtual: Object as PropType<TooltipVirtual>,
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onTipEnter: eventProp(),
-    onTipLeave: eventProp(),
-    onClickoutside: eventProp(),
-    onOutsideClose: eventProp()
-  },
+  props: tooltipProps,
   emits: ['update:visible'],
   setup(_props, { attrs, slots, emit, expose }) {
     const nh = useNameHelper('tooltip')
     const props = useProps('tooltip', _props, {
       trigger: {
-        default: 'hover' as ToopTipTrigger,
-        validator: (value: ToopTipTrigger) => ['hover', 'click', 'focus', 'custom'].includes(value)
+        default: 'hover',
+        validator: value => ['hover', 'click', 'focus', 'custom'].includes(value)
       },
       wrapper: false,
       noArrow: false,
@@ -79,7 +46,7 @@ export default defineComponent({
       visible: false,
       placement: {
         default: 'top',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       outsideClose: true,
       noHover: false,
@@ -92,12 +59,7 @@ export default defineComponent({
       tipAlive: false,
       reverse: false,
       width: 'auto',
-      virtual: null,
-      onToggle: null,
-      onTipEnter: null,
-      onTipLeave: null,
-      onClickoutside: null,
-      onOutsideClose: null
+      virtual: null
     })
 
     const placement = toRef(props, 'placement')
@@ -105,7 +67,7 @@ export default defineComponent({
     const rendering = ref(props.visible)
     const transfer = toRef(props, 'transfer')
     const triggerWidth = ref(100)
-    const originalTrigger = ref<HTMLElement | null>(null)
+    const originalTrigger = ref<HTMLElement>()
 
     const reference = computed(() => {
       const virtual = (props.virtual as any)?.$el ?? props.virtual
@@ -113,7 +75,8 @@ export default defineComponent({
       if (virtual) {
         if ('getBoundingClientRect' in virtual) {
           return virtual as VirtualElement
-        } else if ('x' in virtual && 'y' in virtual) {
+        }
+        if ('x' in virtual && 'y' in virtual) {
           return {
             getBoundingClientRect: () => ({
               x: virtual.x,
@@ -130,7 +93,7 @@ export default defineComponent({
       return originalTrigger.value
     })
     const trigger = computed(() => {
-      return reference.value instanceof HTMLElement ? reference.value : null
+      return isElement(reference.value) ? reference.value : null
     })
 
     useClickOutside(handleClickOutside, originalTrigger)
@@ -208,9 +171,9 @@ export default defineComponent({
       if (props.disabled) return
 
       if (props.trigger === 'hover') {
-        window.clearTimeout(timer.hover)
+        clearTimeout(timer.hover)
 
-        timer.hover = window.setTimeout(() => {
+        timer.hover = setTimeout(() => {
           toggleVisible(true)
         }, 250)
       }
@@ -222,9 +185,9 @@ export default defineComponent({
       if (props.disabled) return
 
       if (props.trigger === 'hover') {
-        window.clearTimeout(timer.hover)
+        clearTimeout(timer.hover)
 
-        timer.hover = window.setTimeout(() => {
+        timer.hover = setTimeout(() => {
           toggleVisible(false)
         }, 250)
       }
@@ -259,7 +222,7 @@ export default defineComponent({
     function handleClickOutside() {
       if (props.disabled) return
 
-      emitEvent(props.onClickoutside)
+      emitEvent(props.onClickOutside)
 
       if (props.outsideClose && props.trigger !== 'custom' && currentVisible.value) {
         toggleVisible(false)
@@ -267,11 +230,11 @@ export default defineComponent({
       }
     }
 
-    function syncTriggerRef(el: HTMLElement | null) {
+    function syncTriggerRef(el?: HTMLElement | null) {
       if (el) {
-        originalTrigger.value = el.nextElementSibling as HTMLElement | null
+        originalTrigger.value = el.nextElementSibling as HTMLElement | undefined
       } else {
-        originalTrigger.value = null
+        originalTrigger.value = undefined
       }
     }
 

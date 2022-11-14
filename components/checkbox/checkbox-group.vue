@@ -1,8 +1,11 @@
 <template>
   <div :id="idFor" :class="className" role="group">
     <slot>
+      <Checkbox v-if="props.control" control>
+        {{ controlLabel }}
+      </Checkbox>
       <template v-for="(item, index) in props.options" :key="index">
-        <Checkbox v-if="isObject(item)" :value="item.value">
+        <Checkbox v-if="isObject(item)" :value="item.value" :control="item.control">
           {{ item.label || item.value }}
         </Checkbox>
         <Checkbox v-else :value="item">
@@ -14,56 +17,37 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide, reactive, toRef, computed, watch } from 'vue'
+import { defineComponent, ref, reactive, toRef, computed, watch, provide } from 'vue'
 import { Checkbox } from '@/components/checkbox'
+import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  sizeProp,
-  stateProp,
+  useLocale,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useFieldStore } from '@/components/form'
 import { isDefined, isObject, debounceMinor } from '@vexip-ui/utils'
+import { checkboxGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-import type { PropType, Ref } from 'vue'
+import type { Ref } from 'vue'
 import type { ControlState } from './symbol'
-
-type RawOption =
-  | string
-  | {
-      value: string | number,
-      label?: string
-    }
-type Values = (string | number)[]
 
 export default defineComponent({
   name: 'CheckboxGroup',
   components: {
     Checkbox
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: Array as PropType<Values>,
-    vertical: booleanProp,
-    disabled: booleanProp,
-    border: booleanProp,
-    options: Array as PropType<RawOption[]>,
-    onChange: eventProp<(value: Values) => void>()
-  },
+  props: checkboxGroupProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<Values>(() => Array.from(inputSet)[0]?.value?.focus())
+    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<(string | number)[]>(() => Array.from(inputSet)[0]?.value?.focus())
 
     const props = useProps('checkboxGroup', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
         default: () => getFieldValue([]),
@@ -75,14 +59,18 @@ export default defineComponent({
       options: {
         default: () => [],
         static: true
-      }
+      },
+      loading: () => loading.value,
+      control: null,
+      loadingLock: false
     })
 
     const nh = useNameHelper('checkbox-group')
+    const locale = useLocale('checkbox')
     const valueMap = new Map<string | number, boolean>()
-    const inputSet = new Set<Ref<HTMLElement | null>>()
+    const inputSet = new Set<Ref<HTMLElement | null | undefined>>()
     const controlSet = new Set<ControlState>()
-    const currentValues = ref<Values>(props.value || [])
+    const currentValues = ref<(string | number)[]>(props.value || [])
 
     const className = computed(() => {
       return [
@@ -91,11 +79,15 @@ export default defineComponent({
         {
           [nh.bm('vertical')]: props.vertical,
           [nh.bm('disabled')]: props.disabled,
+          [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm('border')]: props.border,
           [nh.bm(props.state)]: props.state !== 'default'
         }
       ]
+    })
+    const controlLabel = computed(() => {
+      return typeof props.control === 'string' ? props.control : locale.value.all
     })
 
     const updateValue = debounceMinor(() => {
@@ -128,6 +120,8 @@ export default defineComponent({
         size: toRef(props, 'size'),
         state: toRef(props, 'state'),
         disabled: toRef(props, 'disabled'),
+        loading: toRef(props, 'loading'),
+        loadingLock: toRef(props, 'loadingLock'),
         increaseItem,
         decreaseItem,
         increaseControl,
@@ -141,9 +135,18 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValues.value = Array.from(value)
-      },
-      { deep: true }
+        const checkedValues = new Set(value)
+        const allValues = Array.from(valueMap.keys())
+
+        currentValues.value = []
+
+        allValues.forEach(value => {
+          const checked = checkedValues.has(value)
+
+          valueMap.set(value, checkedValues.has(value))
+          checked && currentValues.value.push(value)
+        })
+      }
     )
     watch(currentValues, () => {
       updateControl()
@@ -152,13 +155,13 @@ export default defineComponent({
     function increaseItem(
       value: string | number,
       checked: boolean,
-      input: Ref<HTMLElement | null>
+      input: Ref<HTMLElement | null | undefined>
     ) {
       valueMap.set(value, checked)
       inputSet.add(input)
     }
 
-    function decreaseItem(value: string | number, input: Ref<HTMLElement | null>) {
+    function decreaseItem(value: string | number, input: Ref<HTMLElement | null | undefined>) {
       valueMap.delete(value)
       inputSet.delete(input)
     }
@@ -183,7 +186,7 @@ export default defineComponent({
     function handleControlChange() {
       // 在 group 层进行更新, 未选满则全选, 反之全不选
       const allValues = Array.from(valueMap.keys())
-      const checked = currentValues.value.length === allValues.length
+      const checked = currentValues.value.length !== allValues.length
 
       allValues.forEach(value => {
         valueMap.set(value, checked)
@@ -193,7 +196,7 @@ export default defineComponent({
       updateControl()
     }
 
-    function handleChange(value: Values) {
+    function handleChange(value: (string | number)[]) {
       setFieldValue(value)
       emitEvent(props.onChange, value)
       emit('update:value', value)
@@ -216,6 +219,7 @@ export default defineComponent({
       props,
       idFor,
       className,
+      controlLabel,
 
       isObject,
       increaseControl,

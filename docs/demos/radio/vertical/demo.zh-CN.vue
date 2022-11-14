@@ -1,10 +1,6 @@
 <template>
   <RadioGroup v-model:value="value" vertical>
-    <Radio
-      v-for="item in items"
-      :key="item"
-      :label="item"
-    >
+    <Radio v-for="item in items" :key="item" :label="item">
       {{ item }}
     </Radio>
   </RadioGroup>

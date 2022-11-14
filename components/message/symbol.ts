@@ -4,17 +4,19 @@ export type Key = string | number
 export type MessageType = 'info' | 'success' | 'warning' | 'error'
 export type MessagePlacement = 'top' | 'bottom'
 
-export interface MessageOptions extends Record<string, unknown> {
+export interface MessageOptions extends Record<string, any> {
   content?: string,
   key?: Key,
-  icon?: Record<string, unknown> | (() => any),
+  icon?: Record<string, any> | (() => any),
   iconColor?: string,
   type?: MessageType,
   duration?: number,
-  className?: string | Record<string, unknown>,
+  className?: string | Record<string, any>,
+  style?: string | Record<string, any>,
   background?: boolean | string,
   color?: boolean | string,
   closable?: boolean,
+  parseHtml?: boolean,
   renderer?: () => any
 }
 

@@ -50,24 +50,14 @@ import {
   provide
 } from 'vue'
 import { Portal } from '@/components/portal'
+import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import DropdownDrop from './dropdown-drop'
-import { useClickOutside, placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/mixins'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  classProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
-import { useLabel } from './mixins'
+import { dropdownProps } from './props'
+import { useLabel } from './hooks'
 import { SELECT_HANDLER, DROPDOWN_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { Placement } from '@vexip-ui/mixins'
-
-export type DropdownTrigger = 'hover' | 'click' | 'custom'
+import type { Placement } from '@vexip-ui/hooks'
 
 export default defineComponent({
   name: 'Dropdown',
@@ -75,22 +65,7 @@ export default defineComponent({
     DropdownDrop,
     Portal
   },
-  props: {
-    visible: booleanProp,
-    placement: String as PropType<Placement>,
-    outsideClose: booleanProp,
-    trigger: String as PropType<DropdownTrigger>,
-    label: [String, Number],
-    transitionName: String,
-    transfer: booleanStringProp,
-    dropClass: classProp,
-    appear: booleanProp,
-    meta: Object as PropType<Record<string, any>>,
-    onToggle: eventProp<(visible: boolean) => void>(),
-    onSelect: eventProp<(labels: (string | number)[], metas: Array<Record<string, any>>) => void>(),
-    onClickOutside: eventProp(),
-    onOutsideClose: eventProp()
-  },
+  props: dropdownProps,
   emits: ['update:visible'],
   setup(_props, { emit }) {
     const nh = useNameHelper('dropdown')
@@ -101,12 +76,12 @@ export default defineComponent({
       },
       placement: {
         default: 'bottom',
-        validator: (value: Placement) => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value)
       },
       outsideClose: true,
       trigger: {
-        default: 'hover' as DropdownTrigger,
-        validator: (value: DropdownTrigger) => ['hover', 'click', 'custom'].includes(value)
+        default: 'hover',
+        validator: value => ['hover', 'click', 'custom'].includes(value)
       },
       label: {
         default: null,

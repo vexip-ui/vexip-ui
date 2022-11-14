@@ -1,43 +1,37 @@
 <template>
   <Button type="primary" :loading="loading" @click="doLoading">
-    加载结束
+    Loading(Normal)
   </Button>
   <Button type="success" :loading="loading" @click="doLoading('success')">
-    加载成功
+    Loading(Success)
   </Button>
   <Button type="error" :loading="loading" @click="doLoading('error')">
-    加载失败
+    Loading(Error)
   </Button>
   <Button type="warning" :loading="loading" @click="doLoading('warning')">
-    加载异常
+    Loading(Warning)
   </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { Loading } from 'vexip-ui'
 
 type LoadingState = 'default' | 'success' | 'error' | 'warning'
 
-export default defineComponent({
-  setup() {
-    const loading = ref(false)
+const loading = ref(false)
 
-    let timer: number
+let timer: ReturnType<typeof setTimeout>
 
-    function doLoading(state: LoadingState = 'default') {
-      window.clearTimeout(timer)
+function doLoading(state: LoadingState = 'default') {
+  clearTimeout(timer)
 
-      loading.value = true
-      Loading.open(30)
+  loading.value = true
+  Loading.open(30)
 
-      timer = window.setTimeout(() => {
-        Loading.open({ percent: 100, state })
-        loading.value = false
-      }, 3000)
-    }
-
-    return { loading, doLoading }
-  }
-})
+  timer = setTimeout(() => {
+    Loading.open({ percent: 100, state })
+    loading.value = false
+  }, 3000)
+}
 </script>

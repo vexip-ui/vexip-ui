@@ -9,7 +9,7 @@
           @select="selectGuide"
         >
           <MenuItem v-for="menu in menus" :key="menu.label" :label="menu.label">
-            {{ $t(`guides.${menu.i18n}`) }}
+            {{ t(`guides.${menu.i18n}`) }}
           </MenuItem>
         </Menu>
       </Scroll>
@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import { ref, watch, inject } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import Container from '../common/container.vue'
 import Footer from '../common/footer.vue'
@@ -39,6 +40,7 @@ const prefix = 'guides'
 const currentMenu = ref('')
 const menus = getGuideConfig()
 
+const { t } = useI18n({ useScope: 'global' })
 const router = useRouter()
 const route = useRoute()
 

@@ -8,7 +8,6 @@
       ref="form"
       style="max-width: 500px;"
       :model="formModel"
-      :label-width="100"
       :disabled="disabled"
     >
       <FormItem required label="Input" prop="input">
@@ -60,12 +59,8 @@
         <Upload allow-drag></Upload>
       </FormItem>
       <FormItem action>
-        <Button type="primary" @click="handleSubmit()">
-          提交
-        </Button>
-        <Button @click="handleReset()">
-          重置
-        </Button>
+        <FormSubmit @submit="handleSubmit" @error="handleError"></FormSubmit>
+        <FormReset></FormReset>
       </FormItem>
     </Form>
   </ConfigProvider>
@@ -74,29 +69,8 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 
-import type { Form } from 'vexip-ui'
-
 const disabled = ref(true)
-const formModel = reactive({
-  input: '',
-  cascader: [],
-  date: '',
-  time: '',
-  number: null,
-  complete: '',
-  select: '',
-  color: '',
-  checkbox: [],
-  radio: '',
-  slider: 0,
-  switch: false,
-  textarea: '',
-  transfer: [],
-  wheel: '',
-  upload: []
-})
-
-const form = ref<InstanceType<typeof Form> | null>(null)
+const formModel = reactive({})
 
 const options = ['选项1', '选项2', '选项3']
 const treeOptions = createOptions(3)
@@ -118,10 +92,10 @@ function createOptions(depth: number, prefix = 'Op', iterator = 1) {
 }
 
 function handleSubmit() {
-  form.value?.validate()
+  console.info('validation passed')
 }
 
-function handleReset() {
-  form.value?.reset()
+function handleError(errors: string[]) {
+  console.error(errors)
 }
 </script>

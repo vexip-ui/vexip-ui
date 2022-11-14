@@ -2,5 +2,11 @@
   "basis",
   "maxmin",
   "step",
-  "vertical"
+  "range",
+  "vertical",
+  "reverse",
+  "markers",
+  "marker-only",
+  "loading",
+  "state"
 ]

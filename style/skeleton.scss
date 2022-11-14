@@ -34,21 +34,30 @@ $skeleton: map.merge(
   border-radius: get-css-var('skeleton-radius');
 
   &--default {
-    @include define-preset-values('skeleton', (
-      height: 32px
-    ));
+    @include define-preset-values(
+      'skeleton',
+      (
+        height: 32px
+      )
+    );
   }
 
   &--small {
-    @include define-preset-values('skeleton', (
-      height: 24px
-    ));
+    @include define-preset-values(
+      'skeleton',
+      (
+        height: 24px
+      )
+    );
   }
 
   &--large {
-    @include define-preset-values('skeleton', (
-      height: 40px
-    ));
+    @include define-preset-values(
+      'skeleton',
+      (
+        height: 40px
+      )
+    );
   }
 
   &--block {
@@ -79,7 +88,7 @@ $skeleton: map.merge(
       transform: translate(-37.5%);
     }
 
-    to {
+    100% {
       transform: translate(37.5%);
     }
   }

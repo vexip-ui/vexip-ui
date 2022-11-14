@@ -1,5 +1,5 @@
 <template>
-  <transition name="vxp-fade" appear>
+  <transition :name="nh.ns('fade')" appear>
     <div
       v-show="visible"
       :class="className"
@@ -54,12 +54,12 @@ export default defineComponent({
       }
     })
 
-    let timer: number
-    let interval: number
+    let timer: ReturnType<typeof setTimeout>
+    let interval: ReturnType<typeof setInterval>
 
     function startLoading(options: LoadingOptions) {
       if (percent.value === 100) {
-        window.clearTimeout(timer)
+        clearTimeout(timer)
 
         visible.value = false
         percent.value = 0
@@ -68,7 +68,7 @@ export default defineComponent({
         position.value = 'top'
       }
 
-      window.clearInterval(interval)
+      clearInterval(interval)
 
       const setLoading = () => {
         percent.value = boundRange(options.percent, 0, 100)
@@ -78,16 +78,16 @@ export default defineComponent({
         maxPercent = boundRange(options.maxPercent ?? 95, percent.value, 95)
 
         if (percent.value === 100) {
-          timer = window.setTimeout(() => {
+          timer = setTimeout(() => {
             visible.value = false
           }, 500)
         } else {
-          interval = window.setInterval(() => {
+          interval = setInterval(() => {
             percent.value += Math.floor(Math.random() * 3 + 1)
 
             if (percent.value >= maxPercent) {
               percent.value = maxPercent
-              window.clearInterval(interval)
+              clearInterval(interval)
             }
           }, 500)
         }

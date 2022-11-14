@@ -4,13 +4,13 @@
  * @param method 需要节流的方法，需自行绑定 this
  * @param delay 节流后的触发间隔，默认 16 ms (1 帧/秒)
  */
-export function throttle<T extends(...args: any[]) => any>(method: T, delay = 16) {
+export function throttle<T extends (...args: any[]) => any>(method: T, delay = 16) {
   if (typeof method !== 'function') {
     return method
   }
 
   let start = Date.now()
-  let timer: number
+  let timer: ReturnType<typeof setTimeout>
 
   return function (...args: Parameters<T>) {
     const current = Date.now()
@@ -35,12 +35,12 @@ export function throttle<T extends(...args: any[]) => any>(method: T, delay = 16
  * @param method 需要防抖的方法，需自行绑定 this
  * @param delay 防抖的限制时间，默认 300 ms
  */
-export function debounce<T extends(...args: any[]) => any>(method: T, delay = 100) {
+export function debounce<T extends (...args: any[]) => any>(method: T, delay = 100) {
   if (typeof method !== 'function') {
     return method
   }
 
-  let timer: number
+  let timer: ReturnType<typeof setTimeout>
 
   return function (...args: Parameters<T>) {
     clearTimeout(timer)
@@ -56,7 +56,7 @@ export function debounce<T extends(...args: any[]) => any>(method: T, delay = 10
  *
  * @param method 需要防抖的方法，需自行绑定 this
  */
-export function debounceMinor<T extends(...args: any[]) => any>(method: T) {
+export function debounceMinor<T extends (...args: any[]) => any>(method: T) {
   if (typeof method !== 'function') {
     return method
   }
@@ -83,7 +83,7 @@ export function debounceMinor<T extends(...args: any[]) => any>(method: T) {
  *
  * @param method 需要防抖的方法，需自行绑定 this
  */
-export function debounceFrame<T extends(...args: any[]) => any>(method: T) {
+export function debounceFrame<T extends (...args: any[]) => any>(method: T) {
   if (typeof method !== 'function') {
     return method
   }
@@ -121,7 +121,7 @@ function flushTickCallbacks() {
  * @param method 需要执行的方法
  * @param args 方法的额外参数，在方法调用前多次传入将会覆盖之前的参数
  */
-export function nextTickOnce<T extends(...args: any[]) => any>(method: T, ...args: any[]) {
+export function nextTickOnce<T extends (...args: any[]) => any>(method: T, ...args: any[]) {
   if (typeof method !== 'function') {
     return method
   }
@@ -155,7 +155,7 @@ function flushFrameCallbacks() {
  * @param method 需要执行的方法
  * @param args 方法的额外参数，在方法调用前多次传入将会覆盖之前的参数
  */
-export function nextFrameOnce<T extends(...args: any[]) => any>(method: T, ...args: any[]) {
+export function nextFrameOnce<T extends (...args: any[]) => any>(method: T, ...args: any[]) {
   if (typeof method !== 'function') {
     return method
   }

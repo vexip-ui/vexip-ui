@@ -1,6 +1,6 @@
 <template>
   <Layout
-    logo="https://www.vexipui.com/logo.png"
+    logo="https://www.vexipui.com/vexip-ui.svg"
     sign-name="Vexip UI"
     :user="user"
     :menus="menus"
@@ -25,7 +25,7 @@
 import { ref } from 'vue'
 import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const width = ref(240)
 const height = ref(55)

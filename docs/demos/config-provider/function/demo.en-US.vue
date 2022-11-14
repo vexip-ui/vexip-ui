@@ -1,9 +1,7 @@
 <template>
   <ConfigProvider :props="provideProps">
     <Grid :gap="8">
-      <Cell>
-        width-24
-      </Cell>
+      <Cell> width-24 </Cell>
     </Grid>
     <br />
     <Grid :gap="8" :columns="24">

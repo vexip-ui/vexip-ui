@@ -1,19 +1,55 @@
+### 预设类型
+
+```ts
+type Types =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'int'
+  | 'float'
+  | 'array'
+  | 'object'
+  | 'date'
+  | 'url'
+  | 'color'
+  | 'email'
+type Range = [number, number]
+type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
+
+interface Rule<T = any> {
+  required?: boolean,
+  type?: Types,
+  length?: number,
+  range?: Range,
+  strict?: boolean,
+  enums?: T[],
+  message?: string,
+  validator?(value: T, model: Record<string, any>): ValidatorReslut
+}
+```
+
 ### Form 属性
 
-| 名称            | 类型                                   | 说明                                                                    | 默认值    | 始于    |
-| --------------- | -------------------------------------- | ----------------------------------------------------------------------- | --------- | ------- |
-| method          | `'get' \| 'post' \| 'put' \| 'delete'` | 设置原生 form 对象的 method 值，需要在设置了 action 后才生效            | `'post'`  | -       |
-| action          | `string`                               | 设置原生 form 标签的 action 值                                          | `null`    | -       |
-| model           | `Record<string, any>`                  | 表单的数据源                                                            | `{}`      | -       |
-| rules           | `Record<string, any>`                  | 表单的验证规则                                                          | `{}`      | -       |
-| label-width     | `number`                               | 表单标签的宽度                                                          | `80`      | -       |
-| lablel-position | `'right' \| 'top' \| 'left'`           | 表单标签的位置                                                          | `'right'` | -       |
-| all-required    | `boolean`                              | 设置表单内容是否全部必填                                                | `false`   | -       |
-| label-suffix    | `string`                               | 表单标签的后置内容，比如 `:`                                            | `''`      | -       |
-| hide-asterisk   | `boolean`                              | 设置是否隐藏必填星号                                                    | `false`   | -       |
-| validate-all    | `boolean`                              | 设置表单验证时是否进行所有规则验证 (默认每个字段遇到错误就停止后续验证) | `false`   | -       |
-| hide-label      | `boolean`                              | 设置是否隐藏表单标签，常用在登陆表单                                    | `false`   | -       |
-| disabled        | `boolean`                              | 设置是否禁用表单下的所有控件                                            | `false`   | `2.0.0` |
+| 名称          | 类型                                   | 说明                                                                    | 默认值      | 始于    |
+| ------------- | -------------------------------------- | ----------------------------------------------------------------------- | ----------- | ------- |
+| method        | `'get' \| 'post' \| 'put' \| 'delete'` | 设置原生 form 对象的 method 值，需要在设置了 action 后才生效            | `'post'`    | -       |
+| action        | `string`                               | 设置原生 form 标签的 action 值                                          | `null`      | -       |
+| model         | `Record<string, any>`                  | 表单的数据源                                                            | `{}`        | -       |
+| rules         | `Record<string, any>`                  | 表单的验证规则                                                          | `{}`        | -       |
+| label-width   | `number \| 'auto'`                     | 表单标签的宽度                                                          | `'auto'`    | -       |
+| lablel-align  | `'right' \| 'top' \| 'left'`           | 表单标签的对齐位置                                                      | `'right'`   | -       |
+| all-required  | `boolean`                              | 设置表单内容是否全部必填                                                | `false`     | -       |
+| label-suffix  | `string`                               | 表单标签的后置内容，比如 `:`                                            | `''`        | -       |
+| hide-asterisk | `boolean`                              | 设置是否隐藏必填星号                                                    | `false`     | -       |
+| validate-all  | `boolean`                              | 设置表单验证时是否进行所有规则验证 (默认每个字段遇到错误就停止后续验证) | `false`     | -       |
+| hide-label    | `boolean`                              | 设置是否隐藏表单标签，常用在登陆表单                                    | `false`     | -       |
+| disabled      | `boolean`                              | 设置是否禁用表单下的所有控件                                            | `false`     | `2.0.0` |
+| loading       | `boolean`                              | 设置表单下的所有控件是否为加载状态                                      | `false`     | `2.0.0` |
+| size          | `'small' \| 'default' \| 'large'`      | 设置表单下的所有控件的大小                                              | `'default'` | `2.0.0` |
+| inline        | `boolean`                              | 设置表单是否为行内布局                                                  | `false`     | `2.0.0` |
+| gap           | `number \| number[]`                   | 栅格间隔，参考 Row 组件同名属性                                         | `[8, 0]`    | `2.0.0` |
+| justify       | `RowGridJustify`                       | 水平排列方式，参考 Row 组件同名属性                                     | `'start'`   | `2.0.0` |
+| align         | `RowGridAlign`                         | 垂直对齐方式，参考 Row 组件同名属性                                     | `'top'`     | `2.0.0` |
 
 ### Form 方法
 
@@ -34,61 +70,33 @@
 
 ### FormItem 属性
 
-| 名称             | 类型             | 说明                                                                 | 默认值       | 始于 |
-| ---------------- | ---------------- | -------------------------------------------------------------------- | ------------ | ---- |
-| label            | `string`         | 表单字段的标签                                                       | `''`         | -    |
-| prop             | `string`         | 表单字段的属性                                                       | `''`         | -    |
-| rules            | `Rule \| Rule[]` | 表单字段的验证规格                                                   | `[]`         | -    |
-| label-width      | `number`         | 表单字段标签的宽度                                                   | `null`       | -    |
-| required         | `boolean`        | 设置字段是否必填                                                     | `false`      | -    |
-| html-for         | `string`         | 原生 `<label>` 的 `for` 属性                                         | `null`       | -    |
-| default-value    | `unknown`        | 设置字段的默认值                                                     | `null`       | -    |
-| hide-error-tip   | `boolean`        | 设置是否隐藏错误提示                                                 | `false`      | -    |
-| validate-all     | `boolean`        | 设置验证时是否进行所有规则验证，未设置时将继承 Form 组件的同名属性值 | `null`       | -    |
-| hide-asterisk    | `boolean`        | 设置是否隐藏必填星号，未设置时将继承 Form 组件的同名属性值           | `null`       | -    |
-| hide-label       | `boolean`        | 设置是否隐藏表单标签，未设置时将继承 Form 组件的同名属性值           | `null`       | -    |
-| action           | `boolean`        | 设置是否为纯操作 FormItem，若为是则样式变位内容居中并无下边距        | `false`      | -    |
-| error-transition | `string`         | 错误提示的过渡效果名称                                               | `'vxp-fade'` | -    |
+| 名称             | 类型             | 说明                                                                 | 默认值       | 始于    |
+| ---------------- | ---------------- | -------------------------------------------------------------------- | ------------ | ------- |
+| label            | `string`         | 表单字段的标签                                                       | `''`         | -       |
+| prop             | `string`         | 表单字段的属性                                                       | `''`         | -       |
+| rules            | `Rule \| Rule[]` | 表单字段的验证规格                                                   | `[]`         | -       |
+| label-width      | `number`         | 表单字段标签的宽度                                                   | `null`       | -       |
+| required         | `boolean`        | 设置字段是否必填                                                     | `false`      | -       |
+| html-for         | `string`         | 原生 `<label>` 的 `for` 属性                                         | `null`       | -       |
+| default-value    | `unknown`        | 设置字段的默认值                                                     | `null`       | -       |
+| hide-error-tip   | `boolean`        | 设置是否隐藏错误提示                                                 | `false`      | -       |
+| validate-all     | `boolean`        | 设置验证时是否进行所有规则验证，未设置时将继承 Form 组件的同名属性值 | `null`       | -       |
+| hide-asterisk    | `boolean`        | 设置是否隐藏必填星号，未设置时将继承 Form 组件的同名属性值           | `null`       | -       |
+| hide-label       | `boolean`        | 设置是否隐藏表单标签，未设置时将继承 Form 组件的同名属性值           | `null`       | -       |
+| action           | `boolean`        | 设置是否为纯操作 FormItem，若为是则样式变位内容居中并无下边距        | `false`      | -       |
+| error-transition | `string`         | 错误提示的过渡效果名称                                               | `'vxp-fade'` | -       |
+| help             | `string`         | 设置字段的帮助信息                                                   | `''`         | `2.0.0` |
 
-`Rule` 相关的类型定义：
-
-```ts
-type Trigger = 'blur' | 'change'
-type Types =
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'int'
-  | 'float'
-  | 'array'
-  | 'object'
-  | 'date'
-  | 'url'
-  | 'color'
-  | 'email'
-type Range = [number, number]
-type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
-
-interface Rule<T = any> {
-  trigger?: Trigger,
-  required?: boolean,
-  type?: Types,
-  length?: number,
-  range?: Range,
-  strict?: boolean,
-  enums?: T[],
-  message?: string,
-  validator?(value: T, model: Record<string, any>): ValidatorReslut
-}
-```
+> 支持的 Column 组件的属性包括：span、offset、push、pull、order、flex、xs、sm、md、lg、xl、xxl
 
 ### FormItem 插槽
 
-| 名称    | 说明               | 参数            | 始于 |
-| ------- | ------------------ | --------------- | ---- |
-| default | 字段内容的插槽     | -               | -    |
-| label   | 字段标签内容的插槽 | -               | -    |
-| error   | 错误内容提示的插槽 | `(tip: string)` | -    |
+| 名称    | 说明               | 参数            | 始于    |
+| ------- | ------------------ | --------------- | ------- |
+| default | 字段内容的插槽     | -               | -       |
+| label   | 字段标签内容的插槽 | -               | -       |
+| help    | 字段帮助信息的插槽 | -               | `2.0.0` |
+| error   | 错误内容提示的插槽 | `(tip: string)` | -       |
 
 ### FormSubmit 属性
 

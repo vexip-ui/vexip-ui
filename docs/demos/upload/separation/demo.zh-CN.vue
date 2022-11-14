@@ -1,6 +1,7 @@
 <template>
   <Upload
     ref="upload"
+    v-model:file-list="files"
     multiple
     allow-drag
     disabled-click
@@ -29,16 +30,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
-import type { Upload } from 'vexip-ui'
-import type { FileState } from 'vexip-ui/es/upload'
+import type { Upload, FileState } from 'vexip-ui'
 
 const listActive = ref(false)
-const upload = ref<InstanceType<typeof Upload> | null>(null)
-const files = computed(() => upload.value?.renderFiles ?? [])
+const files = ref<FileState[]>([])
+
+const upload = ref<InstanceType<typeof Upload>>()
 
 function deleteFile(file: FileState) {
-  upload.value?.deleteFile(file)
+  upload.value?.handleDelete(file)
 }
 </script>
+
+<style scoped>
+.vxp-upload {
+  width: 100%;
+  max-width: 500px;
+}
+</style>

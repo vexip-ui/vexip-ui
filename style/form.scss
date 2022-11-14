@@ -8,8 +8,7 @@ $form: map.merge(
     error-color: get-css-var('color-error-light-1'),
     error-shadow: get-css-var('box-shaodw-focus') get-css-var('color-error-opacity-6'),
     asterisk-color: get-css-var('color-error-base'),
-    asterisk-family: #{SimSun,
-    sans-serif},
+    asterisk-family: get-css-var('font-family-base'),
     tip-color: get-css-var('color-error-base')
   ),
   $form
@@ -23,8 +22,11 @@ $form: map.merge(
   @include basis;
 
   position: relative;
-  display: flex;
-  flex-direction: column;
+
+  &--inline {
+    display: inline-flex;
+    flex-flow: row wrap;
+  }
 
   &__item {
     @include basis;
@@ -39,6 +41,25 @@ $form: map.merge(
       margin-bottom: 0;
       text-align: center;
     }
+
+    &--padding::before {
+      padding-right: 8px;
+      margin-bottom: 4px;
+      pointer-events: none;
+      visibility: hidden;
+      content: '-';
+      opacity: 0%;
+    }
+  }
+
+  &--inline &__item {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+
+    &--action {
+      flex: 0 0 auto;
+    }
   }
 
   &__label {
@@ -50,10 +71,16 @@ $form: map.merge(
 
   &__control {
     position: relative;
+    display: flex;
+    align-items: center;
 
     &__no-label {
       width: 100%;
     }
+  }
+
+  &__item--action &__control {
+    justify-content: center;
   }
 
   &--label-top &__item {
@@ -72,6 +99,10 @@ $form: map.merge(
     width: 100%;
   }
 
+  // &--inline &__control {
+  //   width: auto;
+  // }
+
   &--label-right &__label {
     align-self: stretch;
     justify-content: flex-end;
@@ -82,6 +113,18 @@ $form: map.merge(
     align-self: stretch;
     justify-content: flex-start;
     text-align: left;
+  }
+
+  &__help {
+    margin-right: 3px;
+    cursor: help;
+  }
+
+  &--label-top &__help,
+  &--label-left &__help {
+    order: 1;
+    margin-right: 0;
+    margin-left: 3px;
   }
 
   @mixin asterisk {

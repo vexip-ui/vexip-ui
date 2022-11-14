@@ -46,7 +46,11 @@ import { install } from 'vexip-ui'
 
 createApp(App)
   .use(install, {
-    prop: {
+    props: {
+      // The props of all components can be modified via 'default'
+      // default: {
+      //   size: 'large'
+      // },
       input: {
         size: 'large'
       },
@@ -134,4 +138,4 @@ app.use(install, {
 })
 ```
 
-> The full i18n options can be viewed [here](https://github.com/qmhc/vexip-ui/blob/main/common/config/src/locale/helper.ts).
+> The full i18n options can be viewed [here](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts).

@@ -36,6 +36,12 @@ Using the following command you can start development server for specify compone
 pnpm run serve [component]
 ```
 
+You can also specify the port and language via additional command:
+
+```sh
+pnpm run serve [component] -p [port] -l [languagt]
+```
+
 ### Developing for Document
 
 We alse use a vite project for documenting, you can start it locally:

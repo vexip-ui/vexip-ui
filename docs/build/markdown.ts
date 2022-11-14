@@ -6,20 +6,22 @@ import type Token from 'markdown-it/lib/token'
 import type StateCore from 'markdown-it/lib/rules_core/state_core'
 
 export function markdownItSetup(md: MarkdownIt) {
-  md
-    .use(anchor, { permalink: true, renderPermalink })
+  md.use(anchor, { permalink: true, renderPermalink })
     .use(useLinkTarget)
     .use(useContainer)
     .use(useCodeWrapper)
     .use(useTableWrapper)
 }
 
-function renderPermalink(slug: string, opts: anchor.AnchorOptions, state: StateCore, index: number) {
+function renderPermalink(
+  slug: string,
+  opts: anchor.AnchorOptions,
+  state: StateCore,
+  index: number
+) {
   const [startToken, contentToken] = state.tokens.slice(index, index + 2)
 
-  startToken.attrs = [
-    ['class', 'anchor']
-  ]
+  startToken.attrs = [['class', 'anchor']]
 
   if (startToken.tag !== 'h2' && startToken.tag !== 'h3') return
 
@@ -62,15 +64,12 @@ function useLinkTarget(md: MarkdownIt, target = '_blank') {
 }
 
 function useContainer(md: MarkdownIt) {
-  md
-    .use(...createContainer('info'))
+  md.use(...createContainer('info'))
     .use(...createContainer('warning'))
     .use(...createContainer('error'))
     .use(container, 'v-pre', {
       render(tokens: Token[], index: number) {
-        return tokens[index].nesting === 1
-          ? '<div v-pre>\n'
-          : '</div>\n'
+        return tokens[index].nesting === 1 ? '<div v-pre>\n' : '</div>\n'
       }
     })
 }

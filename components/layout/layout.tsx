@@ -1,30 +1,22 @@
 import { defineComponent, ref, toRef, reactive, computed, watch, provide } from 'vue'
-import LayoutAside from './layout-aside'
-import LayoutFooter from './layout-footer'
-import LayoutHeader from './layout-header'
-import LayoutMain from './layout-main'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useMounted } from '@vexip-ui/hooks'
+import { isClient } from '@vexip-ui/utils'
+import LayoutMain from './layout-main'
+import LayoutHeader from './layout-header'
+import LayoutFooter from './layout-footer'
+import LayoutAside from './layout-aside'
+import { layoutProps } from './props'
 import { useMediaQuery } from './helper'
 import { LAYOUT_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { MenuOptions } from '@/components/menu'
 import type {
   LayoutConfig,
-  AsideMenuProps,
   LayoutSignType,
-  HeaderAction,
-  HeaderUser,
-  FooterLink
+  LayoutHeaderExposed,
+  LayoutAsideExposed
 } from './symbol'
 
 export default defineComponent({
@@ -37,31 +29,9 @@ export default defineComponent({
     Menu,
     NativeScroll
   },
-  props: {
-    noAside: booleanProp,
-    footer: booleanProp,
-    tag: String,
-    menus: Object as PropType<MenuOptions[]>,
-    menuProps: Object as PropType<AsideMenuProps>,
-    logo: String,
-    signName: String,
-    config: Array as PropType<LayoutConfig[]>,
-    user: Object as PropType<HeaderUser>,
-    actions: Array as PropType<HeaderAction[]>,
-    reduced: booleanProp,
-    avatarCircle: booleanProp,
-    signType: String as PropType<LayoutSignType>,
-    headerFixed: booleanStringProp,
-    asideFixed: booleanStringProp,
-    copyright: String,
-    links: Array as PropType<FooterLink[]>,
-    onReducedChange: eventProp<(target: boolean) => void>(),
-    onSignClick: eventProp<(event: MouseEvent) => void>(),
-    onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
-    onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>()
-  },
-  emits: ['update:reduced'],
-  setup(_props, { emit, slots }) {
+  props: layoutProps,
+  emits: ['update:reduced', 'update:sign-type', 'update:color'],
+  setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
       noAside: false,
       footer: false,
@@ -73,7 +43,7 @@ export default defineComponent({
       menuProps: null,
       logo: '',
       signName: '',
-      config: () => ['nav', 'color'] as LayoutConfig[],
+      config: () => ['nav', 'theme', 'color'] as LayoutConfig[],
       user: null,
       actions: () => [],
       reduced: false,
@@ -83,6 +53,10 @@ export default defineComponent({
       asideFixed: 'lg',
       copyright: '',
       links: () => [],
+      colors: () => ['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707'],
+      color: '',
+      miniHeaderSign: 'lg',
+      verticalLinks: 'md',
       onReducedChange: null,
       onSignClick: null,
       onMenuSelect: null,
@@ -94,12 +68,18 @@ export default defineComponent({
     const asideReduced = ref(props.reduced)
     const currentSignType = ref<LayoutSignType>(props.signType)
     const userDropped = ref(false)
+    const currentColor = ref(props.color)
 
-    const section = ref<HTMLElement | null>(null)
-    const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
+    const { isMounted } = useMounted()
+
+    const section = ref<HTMLElement>()
+    const scroll = ref<InstanceType<typeof NativeScroll>>()
+    const header = ref<LayoutHeaderExposed | null>(null)
+    const aside = ref<LayoutAsideExposed | null>(null)
 
     const affixMatched = useMediaQuery(toRef(props, 'headerFixed'))
     const expandMatched = useMediaQuery(toRef(props, 'asideFixed'))
+    const signNameMatched = useMediaQuery(toRef(props, 'miniHeaderSign'))
 
     const state = reactive({
       isLayout: true,
@@ -108,7 +88,6 @@ export default defineComponent({
       scrollY: 0,
       affixMatched,
       expanded: false,
-      expandMatched,
       reduced: asideReduced,
       navConfig: computed(() => !props.noAside)
     })
@@ -123,8 +102,19 @@ export default defineComponent({
         }
       ]
     })
+    const rootEl = computed(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      isMounted.value
+      return isClient ? document.documentElement : null
+    })
+    const signInHeader = computed(() => {
+      return props.noAside || currentSignType.value === 'header' || state.expanded
+    })
+    const menu = computed(() => aside.value?.menu || header.value?.menu || null)
 
     provide(LAYOUT_STATE, state)
+
+    expose({ scroll, menu, expandMenuByLabel })
 
     watch(affixMatched, value => {
       state.affixMatched = value
@@ -139,7 +129,7 @@ export default defineComponent({
     watch(
       () => state!.locked,
       value => {
-        if (!section.value || !scroll.value.content) return
+        if (!section.value || !scroll.value?.content) return
 
         if (value) {
           section.value.style.transitionDuration = '0ms'
@@ -150,6 +140,28 @@ export default defineComponent({
         }
       }
     )
+    watch(currentSignType, value => {
+      emitEvent(props.onNavChange, value)
+      emit('update:sign-type', value)
+    })
+    watch(
+      () => props.color,
+      value => {
+        currentColor.value = value || props.colors?.[0] || getBaseColor()
+      }
+    )
+    watch(currentColor, value => {
+      emitEvent(props.onColorChange, value)
+      emit('update:color', value)
+    })
+
+    function getBaseColor() {
+      if (rootEl.value) {
+        return getComputedStyle(rootEl.value).getPropertyValue('--vxp-color-primary-base')
+      }
+
+      return '#339af0'
+    }
 
     function toggleReduce(target = !asideReduced.value) {
       asideReduced.value = target
@@ -175,6 +187,10 @@ export default defineComponent({
       emitEvent(props.onUserAction, label, meta)
     }
 
+    function expandMenuByLabel(label: string) {
+      menu.value?.expandItemByLabel(label)
+    }
+
     function getSlotParams() {
       return { reduced: asideReduced.value, toggleReduce }
     }
@@ -184,18 +200,25 @@ export default defineComponent({
         return null
       }
 
+      if (slots.sign) {
+        return slots.sign(getSlotParams())
+      }
+
+      const showSignName = props.signName && !(signInHeader.value && !signNameMatched.value)
+
       return (
-        <div class={nh.be('sign')} onClick={handleSignClick}>
-          {slots.sign
-            ? slots.sign(getSlotParams())
-            : [
-                props.logo && (
-                  <div class={nh.be('logo')}>
-                    <img src={props.logo} alt={'Logo'} />
-                  </div>
-                ),
-                props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>
-              ]}
+        <div
+          class={[nh.be('sign'), !showSignName && nh.bem('sign', 'logo-only')]}
+          onClick={handleSignClick}
+        >
+          {[
+            props.logo && (
+              <div class={nh.be('logo')}>
+                <img src={props.logo} alt={'Logo'} />
+              </div>
+            ),
+            showSignName && <span class={nh.be('sign-name')}>{props.signName}</span>
+          ]}
         </div>
       )
     }
@@ -207,39 +230,30 @@ export default defineComponent({
 
       return (
         <LayoutHeader
+          ref={header}
           v-model:sign-type={currentSignType.value}
           v-model:user-dropped={userDropped.value}
+          v-model:color={currentColor.value}
           user={props.user}
           actions={props.actions}
           config={props.config}
           avatar-circle={props.avatarCircle}
+          menus={props.noAside ? props.menus : []}
+          menu-props={props.noAside ? props.menuProps : null}
+          colors={props.colors}
           onUserAction={handleUserAction}
           onReducedChange={toggleReduce}
+          onMenuSelect={handleMenuSelect}
         >
           {{
             left:
               slots['header-left'] ||
               slots.headerLeft ||
-              (() =>
-                props.noAside || currentSignType.value === 'header' || state.expanded
-                  ? renderSign()
-                  : null),
-            default:
-              slots['header-main'] ||
-              slots.headerMain ||
-              (() =>
-                props.noAside
-                  ? (
-                  <Menu
-                    {...(props.menuProps || {})}
-                    horizontal
-                    options={props.menus}
-                    onSelect={handleMenuSelect}
-                  ></Menu>
-                    )
-                  : null),
+              (() => (signInHeader.value ? renderSign() : null)),
+            default: slots['header-main'] || slots.headerMain || null,
             right: slots['header-right'] || slots.headerRight || null,
-            user: slots['header-user'] || slots.headerUser || null
+            user: slots['header-user'] || slots.headerUser || null,
+            avatar: slots['header-avatar'] || slots.headerAvatar || null
           }}
         </LayoutHeader>
       )
@@ -256,9 +270,11 @@ export default defineComponent({
 
       return (
         <LayoutAside
+          ref={aside}
           v-model:reduced={asideReduced.value}
           menus={props.menus}
-          menus-props={props.menuProps}
+          menu-props={props.menuProps}
+          fixed={props.asideFixed}
           onReducedChange={toggleReduce}
           onMenuSelect={handleMenuSelect}
         >
@@ -266,7 +282,7 @@ export default defineComponent({
             top:
               slots['aside-top'] ||
               slots.asideTop ||
-              (() => (currentSignType.value === 'aside' && !state.expanded ? renderSign() : null)),
+              (() => (!signInHeader.value ? renderSign() : null)),
             default: slots['aside-main'] || slots.asideMain || null,
             bottom: slots['aside-bottom'] || slots.asideBottom || null,
             expand: slots['aside-expand'] || slots.asideExpand || null
@@ -295,7 +311,11 @@ export default defineComponent({
       }
 
       return (
-        <LayoutFooter copyright={props.copyright} links={props.links}>
+        <LayoutFooter
+          copyright={props.copyright}
+          links={props.links}
+          vertical-links={props.verticalLinks}
+        >
           {{
             links: slots['footer-links'] || slots.footerLinks || null,
             copyright: slots['footer-copyright'] || slots.footerCopyright || null

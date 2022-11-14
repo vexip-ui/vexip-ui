@@ -1,12 +1,12 @@
 import { createApp, markRaw } from 'vue'
 import Component from './notice.vue'
-import { isNull, isObject, toNumber, destroyObject } from '@vexip-ui/utils'
+import { isClient, isNull, isObject, noop, toNumber, destroyObject } from '@vexip-ui/utils'
 import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 
 import type { App } from 'vue'
 import type { Key, NoticeType, NoticePlacement, NoticeOptions, NoticeInstance } from './symbol'
 
-export * from './symbol'
+export type { NoticeType, NoticePlacement, NoticeOptions }
 
 type FuzzyOptions = string | NoticeOptions
 type ManagerOptions = { marker?: boolean, duration?: number, placement?: NoticePlacement } & Record<
@@ -180,6 +180,10 @@ export class NoticeManager {
     content?: string | number,
     _duration?: number
   ) {
+    if (!isClient) {
+      return noop
+    }
+
     let options: NoticeOptions
 
     if (isObject(title)) {
@@ -198,7 +202,7 @@ export class NoticeManager {
     const notice = this._getInstance()
     const convenienceOptions = type ? conveniences[type] ?? {} : {}
 
-    let timer: number
+    let timer: ReturnType<typeof setTimeout>
 
     const userCloseFn = options.onClose
     const onClose = () => {
@@ -224,7 +228,7 @@ export class NoticeManager {
     const duration = typeof item.duration === 'number' ? item.duration : 4000
 
     if (duration >= 500) {
-      timer = window.setTimeout(() => {
+      timer = setTimeout(() => {
         notice.remove(key)
       }, duration)
     }

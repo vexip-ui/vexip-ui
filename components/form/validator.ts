@@ -1,6 +1,6 @@
 import { isDefined, isPromise, isObject, toDate, isColor, toNumber } from '@vexip-ui/utils'
 
-export type Trigger = 'blur' | 'change'
+// export type Trigger = 'blur' | 'change'
 
 export type Types =
   | 'string'
@@ -18,7 +18,7 @@ type Range = [number, number]
 type ValidatorReslut = boolean | string | Error | Promise<boolean | string | Error>
 
 export interface Rule<T = any> {
-  trigger?: Trigger,
+  // trigger?: Trigger,
   required?: boolean,
   type?: Types,
   length?: number,
@@ -31,7 +31,7 @@ export interface Rule<T = any> {
 
 type TypeOptions = Pick<Rule, 'length' | 'range' | 'strict'>
 
-const DEFAULT_MESSAGE = '验证未通过'
+const DEFAULT_MESSAGE = 'Validate failed'
 
 const N_100_200 = '1\\d\\d|2([0-4]\\d|5[0-5])'
 const IPV4_FIRST = `[1-9](\\d)?|${N_100_200}`
@@ -65,7 +65,8 @@ export async function validate(
   rules: Rule | Rule[],
   value: unknown,
   model: Record<string, unknown>,
-  validateAll = true
+  validateAll = true,
+  defaultMsg = DEFAULT_MESSAGE
 ) {
   if (!Array.isArray(rules)) {
     rules = [rules]
@@ -74,7 +75,7 @@ export async function validate(
   const errors: string[] = []
 
   for (const rule of rules as Rule[]) {
-    const { message = DEFAULT_MESSAGE, validator } = rule
+    const { message = defaultMsg, validator } = rule
 
     if (typeof validator === 'function') {
       let result

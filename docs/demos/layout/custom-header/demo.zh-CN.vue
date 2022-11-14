@@ -1,6 +1,6 @@
 <template>
   <Layout
-    logo="https://www.vexipui.com/logo.png"
+    logo="https://www.vexipui.com/vexip-ui.svg"
     sign-name="Vexip UI"
     :user="user"
     :menus="menus"
@@ -13,7 +13,7 @@
       </div>
     </template>
     <template #header-right>
-      <Linker to="https://github.com/qmhc/vexip-ui" style="display: flex; margin-right: 16px;">
+      <Linker to="https://github.com/vexip-ui/vexip-ui" style="display: flex; margin-right: 16px;">
         <Icon :scale="1.6">
           <GithubB></GithubB>
         </Icon>
@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { EnvelopesBulk, City, ChartPie, User, Indent, Outdent, GithubB } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',

@@ -1,28 +1,14 @@
 import { defineComponent, computed, inject, h, renderSlot } from 'vue'
-import { ImageR } from '@vexip-ui/icons'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, booleanProp, sizeProp } from '@vexip-ui/config'
+import { ImageR } from '@vexip-ui/icons'
+import { useNameHelper, useProps } from '@vexip-ui/config'
+import { skeletonProps } from './props'
 import { GROUP_STATE } from './symbol'
 
 export default defineComponent({
   name: 'Skeleton',
   inheritAttrs: false,
-  props: {
-    size: sizeProp,
-    width: [Number, String],
-    height: [Number, String],
-    repeat: Number,
-    tag: String,
-    activated: booleanProp,
-    image: booleanProp,
-    imageIcon: Object,
-    iconScale: Number,
-    round: booleanProp,
-    circle: booleanProp,
-    block: booleanProp,
-    spread: Number,
-    loading: booleanProp
-  },
+  props: skeletonProps,
   setup(_props, { slots }) {
     const props = useProps('skeleton', _props, {
       size: null,

@@ -1,7 +1,1 @@
-[
-  "basis",
-  "disabled",
-  "paged",
-  "filter",
-  "state"
-]
+["basis", "disabled", "paged", "filter", "loading", "state"]

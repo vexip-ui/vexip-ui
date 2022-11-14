@@ -1,8 +1,13 @@
 <template>
-  <section :class="[prefix, isAffix && `${prefix}--affix`]">
-    <aside :class="[`${prefix}__aside`, menuExpanded && `${prefix}__aside--expanded`]">
+  <section :class="[prefix, affixed && `${prefix}--affix`]">
+    <aside v-if="store.isLg" :class="`${prefix}__aside`">
       <slot name="aside"></slot>
     </aside>
+    <Masker v-else v-model:active="store.expanded" closable>
+      <aside :class="[`${prefix}__aside`, store.expanded && `${prefix}__aside--expanded`]">
+        <slot name="aside"></slot>
+      </aside>
+    </Masker>
     <main :class="`${prefix}__main`">
       <NativeScroll
         ref="scroll"
@@ -22,8 +27,8 @@
 
 <script setup lang="ts">
 import { ref, toRef, watch, onMounted, provide, inject } from 'vue'
-import { useRoute } from 'vue-router'
 import { nextFrameOnce } from '@vexip-ui/utils'
+import { useRoute } from 'vue-router'
 
 import type { NativeScroll } from 'vexip-ui'
 import type { Store } from '../symbol'
@@ -35,10 +40,12 @@ defineProps({
   }
 })
 
+defineEmits(['update:menu-expanded'])
+
 const prefix = 'container'
 const store = inject<Store>('store')!
-const scroll = ref<InstanceType<typeof NativeScroll> | null>(null)
-const isAffix = toRef(store, 'isAffix')
+const scroll = ref<InstanceType<typeof NativeScroll>>()
+const affixed = toRef(store, 'affixed')
 const route = useRoute()
 
 let refreshed = false
@@ -56,10 +63,11 @@ onMounted(() => {
 
 function handleScroll({ clientY }: { clientY: number }) {
   store.scrollY = clientY
-  isAffix.value = !store.isLg && clientY >= 50
+  affixed.value = !store.isLg && clientY >= 50
 }
 
 provide('refreshScroll', refreshScroll)
+provide('scrollToElement', scrollToElement)
 
 function refreshScroll() {
   if (!scroll.value) return
@@ -74,8 +82,14 @@ function refreshScroll() {
 
 function setScrollY() {
   if (scroll.value) {
-    scroll.value.currentScroll.y = store.isAffix ? 65 : 0
-    store.scrollY = store.isAffix ? 65 : 0
+    scroll.value.currentScroll.y = store.affixed ? 65 : 0
+    store.scrollY = store.affixed ? 65 : 0
+  }
+}
+
+function scrollToElement(element: Element) {
+  if (scroll.value) {
+    scroll.value.scrollToElement(element, 500, store.affixed ? 0 : -75)
   }
 }
 </script>
@@ -109,6 +123,11 @@ function setScrollY() {
 
     @include query-media('xl') {
       width: var(--aside-width-large);
+    }
+
+    .vxp-menu-group__title {
+      padding: 10px 20px;
+      color: var(--vxp-content-color-third);
     }
   }
 

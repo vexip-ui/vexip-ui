@@ -1,16 +1,21 @@
 import type { InjectionKey } from 'vue'
 
+export interface BreadcrumbOptions {
+  label: string,
+  name?: string | (() => string)
+}
+
 export type SeparatorRenderFn = (data: { label: string | number }) => any
 
-export interface ItemState {
+export interface BreadcrumbItemState {
   label: string | number
 }
 
 export interface BreadcrumbState {
   separator: string,
   separatorRenderer: null | SeparatorRenderFn,
-  increaseItem: (item: ItemState) => void,
-  decreaseItem: (item: ItemState) => void,
+  increaseItem: (item: BreadcrumbItemState) => void,
+  decreaseItem: (item: BreadcrumbItemState) => void,
   handleSelect: (label: string | number) => void,
   refreshLabels: () => void,
   handleSeparatorClick: (label: string | number) => void

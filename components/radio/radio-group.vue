@@ -2,7 +2,10 @@
   <div :id="idFor" :class="className" role="radiogroup">
     <slot>
       <template v-for="item in props.options" :key="item">
-        <Radio :label="item">
+        <Radio v-if="isObject(item)" :label="item.label">
+          {{ item.content || item.label }}
+        </Radio>
+        <Radio v-else :label="item">
           {{ item }}
         </Radio>
       </template>
@@ -13,47 +16,34 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, provide, toRef } from 'vue'
 import { Radio } from '@/components/radio'
+import { useFieldStore } from '@/components/form'
+import { Spinner } from '@vexip-ui/icons'
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
-import { useFieldStore } from '@/components/form'
-import { debounceMinor } from '@vexip-ui/utils'
+import { debounceMinor, isObject } from '@vexip-ui/utils'
+import { radioGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-import type { PropType, Ref } from 'vue'
+import type { Ref } from 'vue'
 
 export default defineComponent({
   name: 'RadioGroup',
   components: {
     Radio
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: [String, Number],
-    vertical: booleanProp,
-    disabled: booleanProp,
-    button: booleanProp,
-    border: booleanProp,
-    options: Array as PropType<(string | number)[]>,
-    onChange: eventProp<(value: string | number) => void>()
-  },
+  props: radioGroupProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } = useFieldStore<
-      string | number
-    >(() => Array.from(inputSet)[0]?.value?.focus())
+    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
+      useFieldStore<string | number>(() => Array.from(inputSet)[0]?.value?.focus())
 
     const props = useProps('radioGroup', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
         default: () => getFieldValue(null!),
@@ -66,12 +56,16 @@ export default defineComponent({
       options: {
         default: () => [],
         static: true
-      }
+      },
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingLock: false,
+      loadingSpin: false
     })
 
     const nh = useNameHelper('radio-group')
     const currentValue = ref(props.value)
-    const inputSet = new Set<Ref<HTMLElement | null>>()
+    const inputSet = new Set<Ref<HTMLElement | null | undefined>>()
 
     const className = computed(() => {
       return [
@@ -93,6 +87,12 @@ export default defineComponent({
       size: toRef(props, 'size'),
       state: toRef(props, 'state'),
       disabled: toRef(props, 'disabled'),
+      button: toRef(props, 'button'),
+      border: toRef(props, 'border'),
+      loading: toRef(props, 'loading'),
+      loadingIcon: toRef(props, 'loadingIcon'),
+      loadingLock: toRef(props, 'loadingLock'),
+      loadingSpin: toRef(props, 'loadingSpin'),
       updateValue: debounceMinor(updateValue),
       registerInput,
       unregisterInput
@@ -118,18 +118,20 @@ export default defineComponent({
       currentValue.value = value
     }
 
-    function registerInput(input: Ref<HTMLElement | null>) {
+    function registerInput(input: Ref<HTMLElement | null | undefined>) {
       inputSet.add(input)
     }
 
-    function unregisterInput(input: Ref<HTMLElement | null>) {
+    function unregisterInput(input: Ref<HTMLElement | null | undefined>) {
       inputSet.delete(input)
     }
 
     return {
       props,
       idFor,
-      className
+      className,
+
+      isObject
     }
   }
 })

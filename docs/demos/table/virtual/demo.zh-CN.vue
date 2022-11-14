@@ -9,7 +9,7 @@
     :row-height="40"
   >
     <TableColumn type="expand" id-key="expand">
-      <template #default="{ row, leftFixed, rightFixed, }">
+      <template #default="{ row, leftFixed, rightFixed }">
         <div
           :style="{
             padding: `20px ${rightFixed + 10}px 20px ${leftFixed + 10}px`,
@@ -29,10 +29,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const data = ref(Array.from({ length: 15000 }, (_, index) => {
-  return {
-    index,
-    name: `Row ${index}`
-  }
-}))
+const data = ref(
+  Array.from({ length: 15000 }, (_, index) => {
+    return {
+      index,
+      name: `Row ${index}`
+    }
+  })
+)
 </script>

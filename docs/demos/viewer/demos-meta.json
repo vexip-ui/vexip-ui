@@ -1,6 +1,1 @@
-[
-  "basis",
-  "modal",
-  "switch",
-  "toolbar"
-]
+["basis", "modal", "switch", "toolbar", "static"]

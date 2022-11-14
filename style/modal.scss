@@ -13,7 +13,6 @@ $modal: map.merge(
     s-color: get-css-var('shadow-color-base'),
     shadow: get-css-var('shadow-shape') get-css-var('modal-s-color'),
     d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-shape') get-css-var('modal-d-color'),
     title-font-size: get-css-var('font-size-primary'),
     title-weight: 500,
     title-color: get-css-var('content-color-primary'),
@@ -77,7 +76,7 @@ $modal: map.merge(
     display: flex;
     align-items: center;
     padding: get-css-var('modal-header-v-padding') get-css-var('modal-header-h-padding');
-    border-bottom: get-css-var('modal-divider');
+    border-bottom: get-css-var('border-shape') get-css-var('modal-d-color');
   }
 
   &--draggable &__header {
@@ -103,7 +102,7 @@ $modal: map.merge(
     align-items: center;
     justify-content: flex-end;
     padding: get-css-var('modal-footer-v-padding') get-css-var('modal-footer-h-padding');
-    border-top: get-css-var('modal-divider');
+    border-top: get-css-var('border-shape') get-css-var('modal-d-color');
   }
 
   &__close {

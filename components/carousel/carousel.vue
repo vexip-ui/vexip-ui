@@ -94,49 +94,24 @@ import {
   provide,
   onMounted,
   onBeforeUnmount,
-  nextTick,
   toRef
 } from 'vue'
 import { Icon } from '@/components/icon'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanNumberProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
-import { useHover, useSetTimeout } from '@vexip-ui/mixins'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useHover, useSetTimeout } from '@vexip-ui/hooks'
 import { debounceMinor } from '@vexip-ui/utils'
 import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from '@vexip-ui/icons'
+import { carouselProps } from './props'
 import { CAROUSEL_STATE } from './symbol'
 
-import type { PropType } from 'vue'
-import type { ArrowType, ArrowTrigger, PointerType, ItemState, CarouselState } from './symbol'
+import type { ItemState, CarouselState } from './symbol'
 
 export default defineComponent({
   name: 'Carousel',
   components: {
     Icon
   },
-  props: {
-    active: Number,
-    viewSize: Number,
-    vertical: booleanProp,
-    disabled: booleanProp,
-    loop: booleanProp,
-    arrow: String as PropType<ArrowType>,
-    arrowTrigger: String as PropType<ArrowTrigger>,
-    autoplay: booleanNumberProp,
-    pointer: String as PropType<PointerType>,
-    speed: Number,
-    activeOffset: Number,
-    height: [Number, String],
-    onChange: eventProp<(active: number) => void>(),
-    onPrev: eventProp<(active: number) => void>(),
-    onNext: eventProp<(active: number) => void>(),
-    onSelect: eventProp<(active: number) => void>()
-  },
+  props: carouselProps,
   emits: ['update:active'],
   setup(_props, { emit }) {
     const props = useProps('carousel', _props, {
@@ -146,30 +121,31 @@ export default defineComponent({
       },
       viewSize: {
         default: 3,
-        validator: (value: number) => value > 0
+        validator: value => value > 0
       },
       vertical: false,
       disabled: false,
       loop: false,
       arrow: {
-        default: 'outside' as ArrowType,
-        validator: (value: ArrowType) => ['outside', 'inside', 'none'].includes(value)
+        default: 'outside',
+        validator: value => ['outside', 'inside', 'none'].includes(value)
       },
       arrowTrigger: {
-        default: 'hover' as ArrowTrigger,
-        validator: (value: ArrowTrigger) => ['hover', 'always'].includes(value)
+        default: 'hover',
+        validator: value => ['hover', 'always'].includes(value)
       },
       autoplay: {
         default: false,
-        validator: (value: boolean | number) => (typeof value === 'number' ? value > 500 : true)
+        validator: value => (typeof value === 'number' ? value > 500 : true)
       },
       pointer: {
-        default: 'none' as PointerType,
-        validator: (value: PointerType) => ['outside', 'inside', 'none'].includes(value)
+        default: 'none',
+        validator: value => ['outside', 'inside', 'none'].includes(value)
       },
       speed: 300,
       activeOffset: 0,
-      height: null
+      height: null,
+      ignoreHover: false
     })
 
     const nh = useNameHelper('carousel')
@@ -194,8 +170,8 @@ export default defineComponent({
 
     const { wrapper, isHover } = useHover()
 
-    const prev = ref<HTMLElement | null>(null)
-    const next = ref<HTMLElement | null>(null)
+    const prev = ref<HTMLElement>()
+    const next = ref<HTMLElement>()
 
     const isDisabled = computed(() => {
       return props.disabled || itemStates.value.size <= props.viewSize
@@ -258,6 +234,8 @@ export default defineComponent({
       emit('update:active', active)
     })
     watch(isHover, value => {
+      if (props.ignoreHover) return
+
       if (value) {
         handleMouseEnter()
       } else {
@@ -307,7 +285,7 @@ export default defineComponent({
       handleWheel(props.active - props.activeOffset)
       handleAfterMove()
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         isLocked.value = false
         inTransition = false
 
@@ -395,7 +373,7 @@ export default defineComponent({
         handleNext(0)
       }
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         isLocked.value = false
         inTransition = false
       }, 0)
@@ -409,7 +387,7 @@ export default defineComponent({
       const itemCount = itemList.length
       const targetIndex = (currentActive.value - amount + itemCount) % itemCount
 
-      if (targetIndex >= props.viewSize) {
+      if (targetIndex >= itemCount - props.viewSize) {
         if (!props.loop) return
 
         if (trackRect.offset < 0) {
@@ -523,14 +501,14 @@ export default defineComponent({
         shouldReset = false
         isLocked.value = true
 
-        nextTick(() => {
+        requestAnimationFrame(() => {
           trackRect.offset =
             -currentActive.value * (props.vertical ? itemRect.height : itemRect.width)
 
-          window.setTimeout(() => {
+          requestAnimationFrame(() => {
             isLocked.value = false
             inTransition = false
-          }, 0)
+          })
         })
       }
     }
@@ -552,7 +530,7 @@ export default defineComponent({
     const { timer } = useSetTimeout()
 
     function setAutoplay() {
-      window.clearInterval(timer.play)
+      clearInterval(timer.play)
 
       if (!props.autoplay) return
 
@@ -573,10 +551,10 @@ export default defineComponent({
 
     function handleMouseEnter() {
       if (props.autoplay) {
-        window.clearTimeout(timer.hover)
+        clearTimeout(timer.hover)
 
-        timer.hover = window.setTimeout(() => {
-          window.clearInterval(timer.play)
+        timer.hover = setTimeout(() => {
+          clearInterval(timer.play)
         }, 250)
       }
 
@@ -587,9 +565,9 @@ export default defineComponent({
 
     function handleMouseLeave() {
       if (props.autoplay) {
-        window.clearTimeout(timer.hover)
+        clearTimeout(timer.hover)
 
-        timer.hover = window.setTimeout(() => {
+        timer.hover = setTimeout(() => {
           setAutoplay()
         }, 250)
       }

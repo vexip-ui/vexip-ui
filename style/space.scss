@@ -39,20 +39,27 @@ $space: map.merge(
   }
 
   &--small {
-    @include define-preset-values('space', (
-      v-gap: 4px,
-      h-gap: 8px
-    ));
+    @include define-preset-values(
+      'space',
+      (
+        v-gap: 4px,
+        h-gap: 8px
+      )
+    );
   }
 
   &--large {
-    @include define-preset-values('space', (
-      v-gap: 12px,
-      h-gap: 16px
-    ));
+    @include define-preset-values(
+      'space',
+      (
+        v-gap: 12px,
+        h-gap: 16px
+      )
+    );
   }
 
   &__item {
+    display: flex;
     max-width: 100%;
   }
 }

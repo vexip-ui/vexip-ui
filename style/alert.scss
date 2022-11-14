@@ -72,6 +72,7 @@ $alert: map.merge(
     flex: auto;
     flex-direction: column;
     justify-content: center;
+    max-width: 100%;
   }
 
   &__title {
@@ -118,6 +119,33 @@ $alert: map.merge(
 
   &--has-title &__close {
     align-self: start;
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    &--scroll {
+      overflow: hidden;
+    }
+  }
+
+  &__scroll {
+    // position: absolute;
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+    transition-timing-function: linear;
+    transition-property: transform;
+  }
+
+  &__placeholder {
+    display: flex;
+    white-space: nowrap;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0%;
   }
 
   $types: info success warning error;

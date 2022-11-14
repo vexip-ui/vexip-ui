@@ -1,43 +1,43 @@
 import type { InjectionKey } from 'vue'
-import type { ComponentSize, ClassType } from '@vexip-ui/config'
+import type { ComponentSize, ClassType, StyleType } from '@vexip-ui/config'
 import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
 
 export type Key = string | number | symbol
 export type Data = Record<string, unknown>
-export type RowClassFn = (data: Data, index: number) => ClassType
-export type Accessor<T extends string | number = string | number, D = Data> = (
+export type RowPropFn<P = any> = (data: Data, index: number) => P
+export type DropType = 'before' | 'after' | 'none'
+
+export type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
   index: number
-) => T
+) => Val
 export type RenderFn = (data: Data) => any
+export type ExpandRenderFn = (data: {
+  leftFixed: number,
+  rightFixed: number,
+  row: Data,
+  rowIndex: number
+}) => any
 
-export type ColumnType = 'order' | 'selection' | 'expand'
+export type TableColumnType = 'order' | 'selection' | 'expand'
 
-// export interface FilterOptions {
-//   able: boolean,
-//   options: (string | { value: string | number, label?: string, active?: boolean })[],
-//   multiple?: boolean,
-//   active?: null | FilterActive,
-//   method?: null | ((active: FilterActive, data: Data) => boolean)
-// }
-
-export type FilterOptions<T extends string | number = string | number, D = Data> =
+export type FilterOptions<D = Data, Val extends string | number = string | number> =
   | {
-      able: boolean,
-      options: (string | { value: T, label?: string, active?: boolean })[],
-      multiple?: false,
-      active?: null | T,
-      method?: null | ((active: T, data: D) => boolean)
-    }
+    able: boolean,
+    options: (string | { value: Val, label?: string, active?: boolean })[],
+    multiple?: false,
+    active?: null | Val,
+    method?: null | ((active: Val, data: D) => boolean)
+  }
   | {
-      able: boolean,
-      options: (string | { value: T, label?: string, active?: boolean })[],
-      multiple: true,
-      active?: null | T[],
-      method?: null | ((active: T[], data: D) => boolean)
-    }
+    able: boolean,
+    options: (string | { value: Val, label?: string, active?: boolean })[],
+    multiple: true,
+    active?: null | Val[],
+    method?: null | ((active: Val[], data: D) => boolean)
+  }
 
 export interface ParsedFilterOptions extends Omit<Required<FilterOptions>, 'options'> {
   options: { value: string | number, label: string, active: boolean }[]
@@ -52,67 +52,101 @@ export interface SorterOptions<D = Data> {
 
 export type ParsedSorterOptions = Required<SorterOptions>
 
-export interface BaseColumn<T extends string | number = string | number, D = Data> {
+export interface BaseColumn<D = Data, Val extends string | number = string | number> {
   name: string,
-  key?: string | number,
+  key?: keyof D,
   metaData?: Data,
   fixed?: boolean | 'left' | 'right',
   className?: ClassType,
+  style?: StyleType,
+  attrs?: Record<string, any>,
   width?: number,
-  filter?: FilterOptions<T, D>,
+  filter?: FilterOptions<D, Val>,
   sorter?: boolean | SorterOptions<D>,
   order?: number,
   noEllipsis?: boolean,
-  accessor?: Accessor<T, D>,
+  accessor?: Accessor<D, Val>,
   renderer?: RenderFn,
   headRenderer?: RenderFn
 }
 
-export interface OrderColumn<T extends string | number = string | number, D = Data>
-  extends BaseColumn<T, D> {
+export interface OrderColumn<D = Data, Val extends string | number = string | number>
+  extends BaseColumn<D, Val> {
   type: 'order',
   truthIndex?: boolean,
   orderLabel?: (index: number) => string | number
 }
 
-export interface SelectionColumn<T extends string | number = string | number, D = Data>
-  extends BaseColumn<T, D> {
+export interface SelectionColumn<D = Data, Val extends string | number = string | number>
+  extends BaseColumn<D, Val> {
   type: 'selection',
   checkboxSize?: ComponentSize,
   disableRow?: (data: Data) => boolean
 }
 
-export interface ExpandColumn<T extends string | number = string | number, D = Data>
-  extends BaseColumn<T, D> {
+export interface ExpandColumn<D = Data, Val extends string | number = string | number>
+  extends BaseColumn<D, Val> {
   type: 'expand',
   disableRow?: (data: Data) => boolean
 }
 
-export type TypeColumn<T extends string | number = string | number, D = Data> =
-  | OrderColumn<T, D>
-  | SelectionColumn<T, D>
-  | ExpandColumn<T, D>
-export type ColumnOptions<T extends string | number = string | number, D = Data> =
-  | BaseColumn<T, D>
-  | TypeColumn<T, D>
-export type ColumnWithKey<T extends string | number = string | number, D = Data> = ColumnOptions<
-  T,
-  D
-> & { key: Key }
+export type TypeColumn<D = Data, Val extends string | number = string | number> =
+  | OrderColumn<D, Val>
+  | SelectionColumn<D, Val>
+  | ExpandColumn<D, Val>
+export type TableColumnOptions<D = Data, Val extends string | number = string | number> =
+  | BaseColumn<D, Val>
+  | TypeColumn<D, Val>
+export type ColumnWithKey<
+  D = Data,
+  Val extends string | number = string | number
+> = TableColumnOptions<D, Val> & { key: Key }
 
-export type ColumnProfile<T extends string | number = string | number, D = Data> = Pick<ColumnWithKey<T, D>, 'name' | 'key' | 'metaData'>
+export type ColumnRenderFn = (data: {
+  row: any,
+  rowIndex: number,
+  column: TableColumnOptions,
+  columnIndex: number
+}) => any
+export type HeadRenderFn = (data: { column: TableColumnOptions, index: number }) => any
 
-export type FilterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<T, D> & {
-  active: T | T[]
+export type CellPropFn<P = any> = (
+  data: Data,
+  column: ColumnWithKey,
+  rowIndex: number,
+  columnIndex: number
+) => P
+export type HeadPropFn<P = any> = (column: ColumnWithKey, index: number) => P
+
+export type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
+  ColumnWithKey<D, Val>,
+  'name' | 'key' | 'metaData'
+>
+export type FilterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
+  D,
+  Val
+> & {
+  active: Val | Val[]
 }
-export type SorterProfile<T extends string | number = string | number, D = Data> = ColumnProfile<T, D> & {
+export type SorterProfile<D = Data, Val extends string | number = string | number> = ColumnProfile<
+  D,
+  Val
+> & {
   type: 'asc' | 'desc'
 }
 
 export interface StoreOptions {
-  columns: ColumnOptions[],
+  columns: TableColumnOptions[],
   data: Data[],
-  rowClass: ClassType | RowClassFn,
+  rowClass: ClassType | RowPropFn<ClassType>,
+  rowStyle: StyleType | RowPropFn<StyleType>,
+  rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>,
+  cellClass: ClassType | CellPropFn<ClassType>,
+  cellStyle: StyleType | CellPropFn<StyleType>,
+  cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>,
+  headClass: ClassType | HeadPropFn<ClassType>,
+  headStyle: StyleType | HeadPropFn<StyleType>,
+  headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>,
   dataKey: string,
   highlight: boolean,
   currentPage: number,
@@ -126,7 +160,7 @@ export interface StoreOptions {
   tooltipWidth: number | string,
   singleSorter: boolean,
   singleFilter: boolean,
-  expandRenderer: RenderFn | null
+  expandRenderer: ExpandRenderFn | null
 }
 
 export interface RowState {
@@ -173,28 +207,68 @@ export interface StoreGetters {
 }
 
 export interface RowInstance {
-  el: HTMLElement | null,
+  el?: HTMLElement | null,
   row: RowState
 }
 
+export interface TableRowPayload {
+  row: Data,
+  key: Key,
+  index: number,
+  event: Event
+}
+
+export interface TableCellPayload {
+  row: Data,
+  key: Key,
+  rowIndex: number,
+  column: TableColumnOptions,
+  columnIndex: number,
+  event: Event
+}
+
+export interface TableHeadPayload {
+  column: TableColumnOptions,
+  index: number,
+  event: Event
+}
+
 export interface TableAction {
-  increaseColumn(column: ColumnOptions): void,
-  decreaseColumn(column: ColumnOptions): void,
-  emitRowEnter(data: Data, key: Key, index: number): void,
-  emitRowLeave(data: Data, key: Key, index: number): void,
-  emitRowClick(data: Data, key: Key, index: number): void,
-  emitRowCheck(data: Data, checked: boolean, key: Key, index: number): void,
+  increaseColumn(column: TableColumnOptions): void,
+  decreaseColumn(column: TableColumnOptions): void,
+  emitRowEnter(payload: TableRowPayload): void,
+  emitRowLeave(payload: TableRowPayload): void,
+  emitRowClick(payload: TableRowPayload): void,
+  emitRowDblclick(payload: TableRowPayload): void,
+  emitRowContextmenu(payload: TableRowPayload): void,
+  emitRowCheck(payload: Omit<TableRowPayload, 'event'> & { checked: boolean }): void,
   emitAllRowCheck(checked: boolean, partial: boolean): void,
-  emitRowExpand(data: Data, expanded: boolean, key: Key, index: number): void,
+  emitRowExpand(payload: Omit<TableRowPayload, 'event'> & { expanded: boolean }): void,
   emitRowFilter(): void,
   emitRowSort(): void,
-  handleRowDragStart(rowInstance: RowInstance): void,
+  handleRowDragStart(rowInstance: RowInstance, event: DragEvent): void,
   handleRowDragOver(rowInstance: RowInstance, event: DragEvent): void,
-  handleRowDrop(rowInstance: RowInstance): void,
-  handleRowDragEnd(): void
+  handleRowDrop(rowInstance: RowInstance, event: DragEvent): void,
+  handleRowDragEnd(event: DragEvent): void,
+  emitCellEnter(payload: TableCellPayload): void,
+  emitCellLeave(payload: TableCellPayload): void,
+  emitCellClick(payload: TableCellPayload): void,
+  emitCellDblclick(payload: TableCellPayload): void,
+  emitCellContextmenu(payload: TableCellPayload): void,
+  emitHeadEnter(payload: TableHeadPayload): void,
+  emitHeadLeave(payload: TableHeadPayload): void,
+  emitHeadClick(payload: TableHeadPayload): void,
+  emitHeadDblclick(payload: TableHeadPayload): void,
+  emitHeadContextmenu(payload: TableHeadPayload): void
 }
 
 export const DEFAULT_KEY_FIELD = 'id'
-export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE') // 表格状态管理
-export const TABLE_ACTION: InjectionKey<TableAction> = Symbol('TABLE_ACTION') // 表格组件的顶层 Api
+/**
+ * 表格状态管理
+ */
+export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
+/**
+ * 表格组件的顶层 Api
+ */
+export const TABLE_ACTION: InjectionKey<TableAction> = Symbol('TABLE_ACTION')
 export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')

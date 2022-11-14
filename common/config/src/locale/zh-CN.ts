@@ -29,6 +29,10 @@ export function zhCNLocale() {
       week7: '日'
     },
 
+    checkbox: {
+      all: '全选'
+    },
+
     colorPicker: {
       confirm: '确定',
       cancel: '重置'
@@ -44,10 +48,16 @@ export function zhCNLocale() {
       cancel: '取消'
     },
 
+    drawer: {
+      confirm: '确认',
+      cancel: '取消'
+    },
+
     form: {
       submit: '提交',
       reset: '重置',
-      notNullable: '不可为空'
+      notNullable: '不可为空',
+      validateFail: '验证未通过'
     },
 
     input: {
@@ -57,7 +67,8 @@ export function zhCNLocale() {
     layout: {
       signOut: '注销',
       signType: '导航模式',
-      majorColor: '主题颜色'
+      majorColor: '主题颜色',
+      themeMode: '主题模式'
     },
 
     modal: {

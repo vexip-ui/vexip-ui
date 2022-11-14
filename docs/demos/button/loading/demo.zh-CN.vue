@@ -2,43 +2,31 @@
   <Button loading type="primary">
     加载中
   </Button>
-  <Button
-    type="primary"
-    :loading="loading"
-    @click="load"
-  >
+  <Button type="primary" :loading="loading" @click="load">
     点一下我
   </Button>
-  <Button
-    loading
-    circle
-    type="primary"
-  >
+  <Button loading circle type="primary">
     加载中
   </Button>
-  <Button
-    loading
-    circle
-    type="primary"
-  ></Button>
+  <Button loading circle type="primary"></Button>
+  <Button circle loading type="primary">
+    <template #icon>
+      <Icon><MagnifyingGlass></MagnifyingGlass></Icon>
+    </template>
+  </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { MagnifyingGlass } from '@vexip-ui/icons'
 
-export default defineComponent({
-  setup() {
-    const loading = ref(false)
+const loading = ref(false)
 
-    function load() {
-      loading.value = true
+function load() {
+  loading.value = true
 
-      setTimeout(() => {
-        loading.value = false
-      }, 3000)
-    }
-
-    return { loading, load }
-  }
-})
+  setTimeout(() => {
+    loading.value = false
+  }, 3000)
+}
 </script>

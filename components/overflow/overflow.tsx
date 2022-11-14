@@ -2,63 +2,43 @@ import {
   defineComponent,
   ref,
   computed,
+  watch,
   onMounted,
   onBeforeUnmount,
+  nextTick,
   createTextVNode,
   Fragment
 } from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
-import {
-  useNameHelper,
-  useProps,
-  booleanProp,
-  booleanStringProp,
-  eventProp,
-  emitEvent
-} from '@vexip-ui/config'
-import { useResize } from '@vexip-ui/mixins'
-import { nextFrameOnce } from '@vexip-ui/utils'
-
-import type { PropType } from 'vue'
+import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useResize } from '@vexip-ui/hooks'
+import { isDefined } from '@vexip-ui/utils'
+import { overflowProps } from './props'
 
 const TEXT_VNODE = createTextVNode('').type
 
 export default defineComponent({
   name: 'Overflow',
-  props: {
-    items: Array as PropType<Array<Record<string, any>>>,
-    tag: String,
-    attrFlag: booleanStringProp,
-    static: booleanProp,
-    onRestChange: eventProp<(rest: number) => void>(),
-    onToggle: eventProp<(overflow: boolean) => void>()
-  },
+  inheritAttrs: false,
+  props: overflowProps,
   emits: [],
-  setup(_props, { slots, expose }) {
+  setup(_props, { attrs, slots, expose }) {
     const props = useProps('overflow', _props, {
       items: {
-        default: () => [],
+        default: null,
         static: true
       },
       tag: 'div',
       attrFlag: false,
-      static: false,
-      onRestChange: {
-        default: null,
-        isFunc: true
-      },
-      onToggle: {
-        default: null,
-        isFunc: true
-      }
+      static: false
     })
 
     const nh = useNameHelper('overflow')
     const { observeResize, unobserveResize } = useResize()
     const restCount = ref(0)
 
-    const wrapper = ref<HTMLElement | null>(null)
-    const counter = ref<HTMLElement | null>(null)
+    const wrapper = ref<HTMLElement>()
+    const counter = ref<HTMLElement>()
 
     const className = computed(() => {
       return [nh.b(), nh.bs('vars')]
@@ -67,11 +47,18 @@ export default defineComponent({
       return props.attrFlag ? (props.attrFlag === true ? 'hidden' : props.attrFlag) : false
     })
 
+    watch(
+      () => props.items?.length,
+      () => {
+        nextTick(refresh)
+      }
+    )
+
     expose({ refresh })
 
     onMounted(() => {
       refresh()
-      wrapper.value && observeResize(wrapper.value, handleResize)
+      wrapper.value && observeResize(wrapper.value, refresh)
     })
     onBeforeUnmount(() => {
       wrapper.value && unobserveResize(wrapper.value)
@@ -91,16 +78,16 @@ export default defineComponent({
 
     function computeHorizontalMargin(el: HTMLElement) {
       const style = getComputedStyle(el)
-      const marginLeft = parseFloat(style.marginLeft)
-      const marginRight = parseFloat(style.marginRight)
+      const marginLeft = parseFloat(style.marginLeft) || 0
+      const marginRight = parseFloat(style.marginRight) || 0
 
       return marginLeft + marginRight
     }
 
     function computeHorizontalPadding(el: HTMLElement) {
       const style = getComputedStyle(el)
-      const paddingLeft = parseFloat(style.paddingLeft)
-      const paddingRight = parseFloat(style.paddingRight)
+      const paddingLeft = parseFloat(style.paddingLeft) || 0
+      const paddingRight = parseFloat(style.paddingRight) || 0
 
       return paddingLeft + paddingRight
     }
@@ -110,6 +97,7 @@ export default defineComponent({
     }
 
     let lastOverflow = false
+    let lastRestCount = restCount.value
 
     function refresh() {
       const counterEl = counter.value
@@ -150,8 +138,6 @@ export default defineComponent({
             restCount.value = len - j
             totalWidth -= childWidths[j]
 
-            updateRest(restCount.value)
-
             if (totalWidth + counterEl.offsetWidth + counterMargin <= wrapperWidth || !j) {
               overflow = true
               i = j - 1
@@ -161,9 +147,12 @@ export default defineComponent({
         }
       }
 
-      if (!overflow) {
-        toggleDisplay(counterEl, false)
+      if (lastRestCount !== restCount.value) {
+        lastRestCount = restCount.value
+        updateRest(restCount.value)
       }
+
+      toggleDisplay(counterEl, overflow)
 
       if (overflow !== lastOverflow) {
         lastOverflow = overflow
@@ -171,15 +160,11 @@ export default defineComponent({
       }
     }
 
-    function handleResize() {
-      nextFrameOnce(refresh)
-    }
-
-    function syncCounterRef(el: HTMLElement | null) {
+    function syncCounterRef(el?: HTMLElement | null) {
       if (el) {
-        counter.value = el.nextElementSibling as HTMLElement | null
+        counter.value = el.nextElementSibling as HTMLElement | undefined
       } else {
-        counter.value = null
+        counter.value = undefined
       }
     }
 
@@ -191,10 +176,9 @@ export default defineComponent({
 
       const renderCounter = () =>
         counterVNode?.type === TEXT_VNODE ? <span>{counterVNode}</span> : counterVNode
-
-      return (
-        <CustomTag ref={wrapper} class={className.value}>
-          {itemSlot && props.items.length
+      const render = () => (
+        <CustomTag ref={wrapper} {...attrs} class={className.value}>
+          {itemSlot && isDefined(props.items)
             ? props.items.map((item, index) => {
               const vnode = itemSlot({ item, index })[0]
 
@@ -205,7 +189,7 @@ export default defineComponent({
               }
 
               return (
-                  <ResizeObserver key={index} throttle onResize={handleResize}>
+                  <ResizeObserver key={index} onResize={refresh}>
                     {() => vnode}
                   </ResizeObserver>
               )
@@ -220,6 +204,13 @@ export default defineComponent({
               )}
         </CustomTag>
       )
+
+      if (import.meta.env.MODE === 'test') {
+        // It is difficult to test ResizeObserver in vitest, so directly rendering all items
+        return render()
+      }
+
+      return <ResizeObserver onResize={refresh}>{render()}</ResizeObserver>
     }
   }
 })

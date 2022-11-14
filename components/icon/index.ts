@@ -1,9 +1,10 @@
-import _Icon from './icon'
-import { register } from './register'
+import type { ClassType, StyleType } from '@vexip-ui/config'
+import type { IconProps } from './props'
 
-const Icon = _Icon as typeof _Icon & {
-  register: typeof register
+export { default as Icon } from './icon'
+export type { IconProps, IconCProps } from './props'
+
+export type IconMinorProps = Omit<Partial<IconProps>, 'icon'> & {
+  class?: ClassType,
+  style?: StyleType
 }
-
-export * from './symbol'
-export { Icon, register }

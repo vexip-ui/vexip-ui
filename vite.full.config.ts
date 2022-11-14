@@ -1,7 +1,7 @@
 // This config is for building library, do not use to create serve.
 
-import { resolve } from 'path'
-import { readFileSync } from 'fs'
+import { resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -21,6 +21,8 @@ const componentsDir = resolve(__dirname, 'components')
 const logLevel = process.env.LOG_LEVEL
 const sourceMap = process.env.SOURCE_MAP === 'true'
 
+const outDir = 'dist'
+
 export default defineConfig(async () => {
   return {
     logLevel: (logLevel || 'info') as LogLevel,
@@ -35,14 +37,21 @@ export default defineConfig(async () => {
       ]
     },
     build: {
+      outDir,
       sourcemap: sourceMap,
       lib: {
         entry: resolve(componentsDir, 'full-lib.ts'),
-        formats: ['es', 'cjs'],
-        fileName: 'vexip-ui'
+        formats: ['es', 'cjs', 'iife'],
+        name: 'VexipUI',
+        fileName: format => `vexip-ui.${format === 'es' ? 'mjs' : format === 'cjs' ? 'cjs' : 'js'}`
       },
       rollupOptions: {
-        external: ['vue']
+        external: ['vue'],
+        output: {
+          globals: {
+            vue: 'Vue'
+          }
+        }
       },
       commonjsOptions: {
         sourceMap: false
@@ -56,13 +65,18 @@ export default defineConfig(async () => {
         exclude: [
           'node_modules',
           'playground',
+          'dev-server',
+          'common/hooks',
           'common/icons',
-          'common/mixins',
-          'common/utils',
-          'components/*/__serve__'
+          'common/utils'
         ],
-        compilerOptions: { sourceMap },
-        copyDtsFiles: false
+        outputDir: outDir,
+        compilerOptions: {
+          sourceMap: false
+        },
+        copyDtsFiles: true,
+        skipDiagnostics: false,
+        logDiagnostics: true
       })
     ]
   }

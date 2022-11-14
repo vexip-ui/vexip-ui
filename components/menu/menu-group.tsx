@@ -1,6 +1,7 @@
 import { defineComponent, ref, reactive, computed, inject, provide } from 'vue'
 import { MenuItem } from '@/components/menu-item'
 import { useNameHelper, useProps } from '@vexip-ui/config'
+import { callIfFunc } from '@vexip-ui/utils'
 import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
@@ -34,7 +35,7 @@ const MenuGroup = defineComponent({
       indent.value = parentItemState.indent + 1
     }
 
-    const labelStyle = computed(() => {
+    const titleStyle = computed(() => {
       return {
         paddingLeft: parentItemState?.isUsePopper
           ? undefined
@@ -69,14 +70,14 @@ const MenuGroup = defineComponent({
           children={item.children}
           route={item.route}
         >
-          {item.name || item.label}
+          {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
       )
 
       return props.children.map(child => {
         if (child.group) {
           return (
-            <MenuGroup label={child.name || child.label}>
+            <MenuGroup label={child.name ? callIfFunc(child.name) : child.label}>
               {child.children?.map(renderItem)}
             </MenuGroup>
           )
@@ -93,8 +94,8 @@ const MenuGroup = defineComponent({
 
       return (
         <li class={nh.b()}>
-          <div class={nh.be('title')}>
-            <span class={nh.be('label')} style={labelStyle.value}>
+          <div class={nh.be('label')}>
+            <span class={nh.be('title')} style={titleStyle.value}>
               {slots.label ? slots.label() : props.label}
             </span>
           </div>

@@ -5,9 +5,9 @@ import { Icon } from '@/components/icon'
 import { ChevronRight } from '@vexip-ui/icons'
 import type { NameHelper } from '@vexip-ui/config'
 
-import type { MenuConfig } from './symbol'
+import type { ContextmenuConfig } from './symbol'
 
-function renderItemIcon(item: MenuConfig, nh: NameHelper) {
+function renderItemIcon(item: ContextmenuConfig, nh: NameHelper) {
   if (!item.icon) return null
 
   let icon: any
@@ -16,20 +16,23 @@ function renderItemIcon(item: MenuConfig, nh: NameHelper) {
     icon = item.icon()
   } else {
     icon = (
-      <Icon icon={item.icon} style={[{ color: item.iconColor || item.color }, item.icon.style]}></Icon>
+      <Icon
+        icon={item.icon}
+        style={[{ color: item.iconColor || item.color }, item.icon.style]}
+      ></Icon>
     )
   }
 
   return <div class={nh.be('icon')}>{icon}</div>
 }
 
-function renderItemShortcut(item: MenuConfig, nh: NameHelper) {
+function renderItemShortcut(item: ContextmenuConfig, nh: NameHelper) {
   if (!item.shortcut) return null
 
   return <div class={nh.be('shortcut')}>{item.shortcut}</div>
 }
 
-function renderGroupItem(item: MenuConfig, nh: NameHelper) {
+function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
   return (
     <Dropdown
       transfer={false}
@@ -49,7 +52,9 @@ function renderGroupItem(item: MenuConfig, nh: NameHelper) {
             disabled={item.disabled}
           >
             {renderItemIcon(item, nh)}
-            <span style={{ color: item.color }}>{item.label || item.key}</span>
+            <span class={nh.be('label')} style={{ color: item.color }}>
+              {item.label || item.key}
+            </span>
             {renderItemShortcut(item, nh)}
             <div class={[nh.be('icon'), nh.be('arrow')]}>
               <Icon icon={ChevronRight} style={{ color: item.iconColor || item.color }}></Icon>
@@ -76,7 +81,7 @@ function renderGroupItem(item: MenuConfig, nh: NameHelper) {
   )
 }
 
-export function renderItem({ config, nh }: { config: MenuConfig, nh: NameHelper }) {
+export function renderItem({ config, nh }: { config: ContextmenuConfig, nh: NameHelper }) {
   if (config.children?.length) {
     return renderGroupItem(config, nh)
   } else {
@@ -88,7 +93,9 @@ export function renderItem({ config, nh }: { config: MenuConfig, nh: NameHelper 
         disabled={config.disabled}
       >
         {renderItemIcon(config, nh)}
-        <span style={{ color: config.color }}>{config.label || config.key}</span>
+        <span class={nh.be('label')} style={{ color: config.color }}>
+          {config.label || config.key}
+        </span>
         {renderItemShortcut(config, nh)}
       </DropdownItem>
     )

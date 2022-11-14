@@ -9,19 +9,21 @@ import {
 } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY } from './symbol'
 
-import type { ClassType } from '@vexip-ui/config'
+import type { ClassType, StyleType } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Key,
   Data,
-  RowClassFn,
+  RowPropFn,
+  CellPropFn,
+  HeadPropFn,
   FilterOptions,
   ParsedFilterOptions,
   SorterOptions,
   ParsedSorterOptions,
   SelectionColumn,
   ExpandColumn,
-  ColumnOptions,
+  TableColumnOptions,
   ColumnWithKey,
   RowState,
   StoreOptions,
@@ -44,6 +46,14 @@ export function useStore(options: StoreOptions) {
     columns: [],
     data: [],
     rowClass: '',
+    rowStyle: '',
+    rowAttrs: null!,
+    cellClass: '',
+    cellStyle: '',
+    cellAttrs: null!,
+    headClass: '',
+    headStyle: '',
+    headAttrs: null!,
     width: 0,
     dataKey: options.dataKey ?? DEFAULT_KEY_FIELD,
     highlight: false,
@@ -87,6 +97,14 @@ export function useStore(options: StoreOptions) {
   setPageSize(state, options.pageSize)
 
   setRowClass(state, options.rowClass)
+  setRowStyle(state, options.rowStyle)
+  setRowAttrs(state, options.rowAttrs)
+  setCellClass(state, options.cellClass)
+  setCellStyle(state, options.cellStyle)
+  setCellAttrs(state, options.cellAttrs)
+  setHeadClass(state, options.headClass)
+  setHeadStyle(state, options.headStyle)
+  setHeadAttrs(state, options.headAttrs)
   setHighlight(state, options.highlight)
   setVirtual(state, options.virtual)
 
@@ -162,6 +180,14 @@ export function useStore(options: StoreOptions) {
     setCurrentPage: setCurrentPage.bind(null, state),
     setPageSize: setPageSize.bind(null, state),
     setRowClass: setRowClass.bind(null, state),
+    setRowStyle: setRowStyle.bind(null, state),
+    setRowAttrs: setRowAttrs.bind(null, state),
+    setCellClass: setCellClass.bind(null, state),
+    setCellStyle: setCellStyle.bind(null, state),
+    setCellAttrs: setCellAttrs.bind(null, state),
+    setHeadClass: setHeadClass.bind(null, state),
+    setHeadStyle: setHeadStyle.bind(null, state),
+    setHeadAttrs: setHeadAttrs.bind(null, state),
     setTableWidth: setTableWidth.bind(null, state),
     setColumnWidth: setColumnWidth.bind(null, state),
     setRowHeight: setRowHeight.bind(null, state),
@@ -206,7 +232,7 @@ export function useStore(options: StoreOptions) {
 
 export type TableStore = ReturnType<typeof useStore>
 
-function setColumns(state: StoreState, columns: ColumnOptions[]) {
+function setColumns(state: StoreState, columns: TableColumnOptions[]) {
   columns = Array.from(columns).sort((prev, next) => {
     return (prev.order || 0) - (next.order || 0)
   })
@@ -264,7 +290,7 @@ function setColumns(state: StoreState, columns: ColumnOptions[]) {
     if (isNull(key)) {
       key = getIndexId()
 
-      console.error('[Vexip warn] Table column requires key prop, but missing')
+      console.error('[vexip-ui:Table] Table column requires key prop, but missing')
     }
 
     const fixed = column.fixed
@@ -391,8 +417,49 @@ function setPageSize(state: StoreState, pageSize: number) {
   state.pageSize = pageSize || state.rowData.length
 }
 
-function setRowClass(state: StoreState, rowClass: ClassType | RowClassFn) {
+function setRowClass(state: StoreState, rowClass: ClassType | RowPropFn<ClassType>) {
   state.rowClass = rowClass ?? ''
+}
+
+function setRowStyle(state: StoreState, rowStyle: StyleType | RowPropFn<StyleType>) {
+  state.rowStyle = rowStyle ?? ''
+}
+
+function setRowAttrs(
+  state: StoreState,
+  rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>
+) {
+  state.rowAttrs = rowAttrs ?? null!
+}
+
+function setCellClass(state: StoreState, cellClass: ClassType | CellPropFn<ClassType>) {
+  state.cellClass = cellClass ?? ''
+}
+
+function setCellStyle(state: StoreState, cellStyle: StyleType | CellPropFn<StyleType>) {
+  state.cellStyle = cellStyle ?? ''
+}
+
+function setCellAttrs(
+  state: StoreState,
+  cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>
+) {
+  state.cellAttrs = cellAttrs ?? null!
+}
+
+function setHeadClass(state: StoreState, headClass: ClassType | HeadPropFn<ClassType>) {
+  state.headClass = headClass ?? ''
+}
+
+function setHeadStyle(state: StoreState, headStyle: StyleType | HeadPropFn<StyleType>) {
+  state.headStyle = headStyle ?? ''
+}
+
+function setHeadAttrs(
+  state: StoreState,
+  headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>
+) {
+  state.headAttrs = headAttrs ?? null!
 }
 
 function setTableWidth(state: StoreState, width: number) {
@@ -527,9 +594,9 @@ function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type
 function clearSort(state: StoreState) {
   const sorters = state.sorters
 
-  Object.keys(sorters).forEach(key => {
+  for (const key of Object.keys(sorters)) {
     sorters[key].type = null
-  })
+  }
 }
 
 function handleFilter(state: StoreState, key: Key, active: ParsedFilterOptions['active']) {
@@ -545,9 +612,13 @@ function handleFilter(state: StoreState, key: Key, active: ParsedFilterOptions['
 function clearFilter(state: StoreState) {
   const filters = state.filters
 
-  Object.keys(filters).forEach(key => {
+  for (const key of Object.keys(filters)) {
     filters[key].active = null
-  })
+
+    for (const option of filters[key].options) {
+      option.active = false
+    }
+  }
 }
 
 function handleCheck(state: StoreState, getters: StoreGetters, key: Key, checked: boolean) {
@@ -810,7 +881,7 @@ function filterData(
 function sortData(
   sorters: Record<Key, ParsedSorterOptions>,
   data: RowState[],
-  columns: ColumnOptions[],
+  columns: TableColumnOptions[],
   isSingle: boolean
 ) {
   const keys = Object.keys(sorters)

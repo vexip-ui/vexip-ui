@@ -1,5 +1,5 @@
 import prismjs from 'prismjs'
-import loadLanguages from 'prismjs/components/index'
+import loadLanguages from 'prismjs/components/index.js'
 import { escapeHtml } from './escape-html'
 
 loadLanguages(['markup', 'css', 'javascript'])
@@ -34,7 +34,12 @@ function wrap(code: string, lang: string) {
   if (lang === 'text') {
     code = escapeHtml(code)
   }
-  return `<pre v-pre class="language-${lang}"><code>${code}</code></pre>`
+
+  const lineCount = code.split('\n').length - 1
+  const lineUnits = Array.from({ length: lineCount }, () => '<span></span>').join('')
+  const lineNumbers = `<span aria-hidden="true" class="code-line-numbers">${lineUnits}</span>`
+
+  return `<pre v-pre class="language-${lang}" lang="${lang}"><code>${code}</code>${lineNumbers}</pre>`
 }
 
 function getLangCodeFromExtension(extension: string) {

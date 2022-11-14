@@ -1,10 +1,6 @@
 <template>
   <Table :columns="columns" :data="data" :width="1000">
-    <TableColumn
-      name="First Name"
-      id-key="firstName"
-      :order="0"
-    >
+    <TableColumn name="First Name" id-key="firstName" :order="0">
       <template #default="{ row }">
         <Icon style="margin-right: 8px;">
           <User></User>
@@ -22,12 +18,13 @@
       name="Age"
       id-key="age"
       :order="2"
+      :renderer="renderAge"
     ></TableColumn>
   </Table>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, h } from 'vue'
 import { User } from '@vexip-ui/icons'
 
 const columns = ref([
@@ -82,5 +79,20 @@ const data = ref([
 
 function jobAccessor(row: { job: string }) {
   return row.job
+}
+
+function handleAgeClick() {
+  console.info('clicked')
+}
+
+function renderAge({ row }: { row: { age: string } }) {
+  return h(
+    'span',
+    {
+      class: 'my-age',
+      onClick: handleAgeClick
+    },
+    ['age: ', row.age]
+  )
 }
 </script>

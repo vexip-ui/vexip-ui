@@ -17,4 +17,7 @@
   <Button text type="error">
     Error
   </Button>
+  <Button text disabled>
+    Disabled
+  </Button>
 </template>

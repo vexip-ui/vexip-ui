@@ -1,17 +1,13 @@
 <template>
-  <div style="height: 200px;">
+  <Space style="height: 200px;">
     <Slider v-model:value="value" vertical></Slider>
-  </div>
+    <Slider v-model:value="rangeValue" vertical range></Slider>
+  </Space>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const value = ref(40)
-
-    return { value }
-  }
-})
+const value = ref(40)
+const rangeValue = ref([30, 60])
 </script>

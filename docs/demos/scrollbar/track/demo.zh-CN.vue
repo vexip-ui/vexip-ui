@@ -20,15 +20,15 @@ import { boundRange, multipleFixed } from '@vexip-ui/utils'
 
 import type { Scrollbar } from 'vexip-ui'
 
-const pane = ref<HTMLElement | null>(null)
-const bar = ref<InstanceType<typeof Scrollbar> | null>(null)
+const pane = ref<HTMLElement>()
+const bar = ref<InstanceType<typeof Scrollbar>>()
 const barLength = ref(35)
 
 onMounted(() => {
   if (!pane.value) return
 
   barLength.value = boundRange(
-    pane.value.offsetHeight / (pane.value.scrollHeight || 1) * 100,
+    (pane.value.offsetHeight / (pane.value.scrollHeight || 1)) * 100,
     5,
     99
   )
@@ -55,7 +55,7 @@ function handleBarScroll(percent: number) {
 
   if (scrollHeight <= offsetHeight) return
 
-  pane.value.scrollTop = percent * (scrollHeight - offsetHeight) / 100
+  pane.value.scrollTop = (percent * (scrollHeight - offsetHeight)) / 100
 }
 </script>
 

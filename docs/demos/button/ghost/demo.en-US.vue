@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 20px; background-color: #345462;">
+  <div style="padding: 20px; background-color: #212a2b;">
     <Button ghost>
       Default
     </Button>
@@ -17,6 +17,9 @@
     </Button>
     <Button ghost type="error">
       Error
+    </Button>
+    <Button ghost disabled>
+      Disabled
     </Button>
   </div>
 </template>

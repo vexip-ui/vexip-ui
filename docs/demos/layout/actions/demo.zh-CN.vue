@@ -1,6 +1,6 @@
 <template>
   <Layout
-    logo="https://www.vexipui.com/logo.png"
+    logo="https://www.vexipui.com/vexip-ui.svg"
     sign-name="Vexip UI"
     :user="user"
     :actions="actions"
@@ -27,7 +27,7 @@ import {
   User
 } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',

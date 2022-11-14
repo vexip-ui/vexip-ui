@@ -16,9 +16,11 @@
     </span>
     <span :class="nh.be('signal')" :style="signalStyle">
       <slot v-if="props.loading" name="loading">
-        <Icon pulse>
-          <Spinner></Spinner>
-        </Icon>
+        <Icon
+          :spin="props.loadingSpin"
+          :pulse="!props.loadingSpin"
+          :icon="props.loadingIcon"
+        ></Icon>
       </slot>
       <slot v-else name="icon" :value="currentValue">
         <Icon v-if="currentValue && props.openIcon" :icon="props.openIcon"></Icon>
@@ -51,48 +53,27 @@ import { useFieldStore } from '@/components/form'
 import {
   useNameHelper,
   useProps,
-  booleanProp,
-  sizeProp,
-  stateProp,
   createSizeProp,
   createStateProp,
-  eventProp,
   emitEvent
 } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { Spinner } from '@vexip-ui/icons'
-
-import type { PropType } from 'vue'
+import { switchProps } from './props'
 
 export default defineComponent({
   name: 'Switch',
   components: {
-    Icon,
-    Spinner
+    Icon
   },
-  props: {
-    size: sizeProp,
-    state: stateProp,
-    value: booleanProp,
-    disabled: booleanProp,
-    openColor: String,
-    closeColor: String,
-    loading: booleanProp,
-    icon: Object,
-    openIcon: Object,
-    closeIcon: Object,
-    openText: String,
-    closeText: String,
-    onBeforeChange: Function as PropType<(checked: boolean) => unknown>,
-    onChange: eventProp<(value: boolean) => void>()
-  },
+  props: switchProps,
   emits: ['update:value'],
   setup(_props, { emit }) {
-    const { idFor, state, disabled, validateField, getFieldValue, setFieldValue } =
+    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
       useFieldStore<boolean>(() => input.value?.focus())
 
     const props = useProps('switch', _props, {
-      size: createSizeProp(),
+      size: createSizeProp(size),
       state: createStateProp(state),
       value: {
         default: () => getFieldValue(false),
@@ -101,8 +82,9 @@ export default defineComponent({
       disabled: () => disabled.value,
       openColor: '',
       closeColor: '',
-      loading: false,
-      icon: null,
+      loading: () => loading.value,
+      loadingIcon: Spinner,
+      loadingSpin: false,
       openIcon: null,
       closeIcon: null,
       openText: '',
@@ -116,7 +98,7 @@ export default defineComponent({
     const nh = useNameHelper('switch')
     const currentValue = ref(props.value)
 
-    const input = ref<HTMLElement | null>(null)
+    const input = ref<HTMLElement>()
 
     const className = computed(() => {
       return [

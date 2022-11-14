@@ -3,7 +3,7 @@
     <Button style="margin-bottom: 20px;" @click="reduced = !reduced">
       展开/收起
     </Button>
-    <Menu :reduced="reduced" transfer :options="options"></Menu>
+    <Menu :reduced="reduced" :options="options"></Menu>
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 import { ref } from 'vue'
 import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 
-import type { MenuOptions } from 'vexip-ui/es/menu'
+import type { MenuOptions } from 'vexip-ui'
 
 const reduced = ref(false)
 const options: MenuOptions[] = [

@@ -1,7 +1,10 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
+import { readdirSync, statSync } from 'node:fs'
 import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+
+const dirs = readdirSync(__dirname).filter(f => statSync(resolve(f)).isDirectory())
 
 export default defineConfig({
   resolve: {
@@ -12,15 +15,17 @@ export default defineConfig({
   },
   test: {
     include: ['components/*/tests/*.spec.{ts,tsx}'],
-    environment: 'jsdom',
+    environment: 'happy-dom',
     clearMocks: true,
     setupFiles: [resolve(__dirname, 'scripts/test-setup.ts')],
     transformMode: {
       web: [/\.[jt]sx$/]
+    },
+    coverage: {
+      exclude: dirs.filter(f => f !== 'components').map(f => `${f}/**`),
+      reporter: ['text'],
+      extension: ['ts', 'tsx', 'vue']
     }
   },
-  plugins: [
-    vue(),
-    vueJsx()
-  ]
+  plugins: [vue(), vueJsx()]
 })

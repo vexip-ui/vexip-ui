@@ -1,9 +1,15 @@
 <template>
   <div>
-    <Button type="warning" @click="$message.warning({ content: '一条自定义图标的消息', icon: CircleQuestion })">
+    <Button
+      type="warning"
+      @click="Message.warning({ content: '一条自定义图标的消息', icon: CircleQuestion })"
+    >
       自定义图标
     </Button>
-    <Button type="error" @click="$message.error({ content: '一条自定义图标颜色的消息', iconColor: 'green' })">
+    <Button
+      type="error"
+      @click="Message.error({ content: '一条自定义图标颜色的消息', iconColor: 'green' })"
+    >
       自定义图标颜色
     </Button>
     <Button type="success" @click="sendCustomizedIconMessage">
@@ -12,27 +18,20 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, h } from 'vue'
-import { Icon } from 'vexip-ui'
+<script setup lang="ts">
+import { h } from 'vue'
 import { CircleQuestion, Share } from '@vexip-ui/icons'
+import { Icon, Message } from 'vexip-ui'
 
-export default defineComponent({
-  setup() {
-    return { CircleQuestion }
-  },
-  methods: {
-    sendCustomizedIconMessage() {
-      this.$message.success({
-        content: '一条函数渲染图标的消息',
-        icon: () => {
-          return h(Icon, {
-            icon: Share,
-            flip: 'horizontal'
-          })
-        }
+function sendCustomizedIconMessage() {
+  Message.success({
+    content: '一条函数渲染图标的消息',
+    icon: () => {
+      return h(Icon, {
+        icon: Share,
+        flip: 'horizontal'
       })
     }
-  }
-})
+  })
+}
 </script>
