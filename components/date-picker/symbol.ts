@@ -25,4 +25,10 @@ export interface DatePickerState {
   enterColumn(type: 'prev' | 'next'): void
 }
 
+export interface DisabledTime {
+  hour?(hour: number): boolean,
+  minute?(hour: number, minute: number): boolean,
+  second?(hour: number, minute: number, second: number): boolean
+}
+
 export const datePickerTypes = Object.freeze<DatePickerType>(['date', 'datetime', 'year', 'month'])

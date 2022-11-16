@@ -38,7 +38,7 @@
               v-for="(option, index) in normalizedOptions"
               :key="index"
               :value="option.value"
-              :disabled="option.disabled"
+              :disabled="option.disabled || props.disabledItem(option.value, option)"
               :active="currentActive === index"
               :meta="option.meta"
             >
@@ -85,12 +85,14 @@ import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
 import { useDisplay, useModifier } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, createStateProp, emitEvent } from '@vexip-ui/config'
-import { USE_TOUCH, debounce, debounceMinor } from '@vexip-ui/utils'
+import { USE_TOUCH, debounce, debounceMinor, boundRange } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
+
+const toFalse = () => false
 
 export default defineComponent({
   name: 'Wheel',
@@ -125,7 +127,11 @@ export default defineComponent({
       insertEmpty: false,
       disabled: () => disabled.value,
       loading: () => loading.value,
-      loadingLock: false
+      loadingLock: false,
+      disabledItem: {
+        default: toFalse,
+        isFunc: true
+      }
     })
 
     const nh = useNameHelper('wheel')
@@ -238,7 +244,8 @@ export default defineComponent({
     })
     const prevDisabled = computed(() => {
       return (
-        props.disabled || !itemList.value.slice(0, currentActive.value).some(item => !item.disabled)
+        props.disabled ||
+        !itemList.value.slice(0, currentActive.value).some(item => !isItemDisbaled(item))
       )
     })
     const nextDisabled = computed(() => {
@@ -247,7 +254,7 @@ export default defineComponent({
         currentActive.value >= itemList.value.length - 1 ||
         !itemList.value
           .slice(currentActive.value + 1, itemList.value.length)
-          .some(item => !item.disabled)
+          .some(item => !isItemDisbaled(item))
       )
     })
     const prevIcon = computed(() => (props.horizontal ? AngleLeft : AngleUp))
@@ -337,6 +344,10 @@ export default defineComponent({
     })
     watch(() => props.candidate, computeSize)
 
+    function isItemDisbaled(item: ItemState) {
+      return item.disabled || props.disabledItem(item.value, item.meta)
+    }
+
     function queryEnabledActive(active: number, step: number) {
       step = step / Math.abs(step)
 
@@ -350,11 +361,11 @@ export default defineComponent({
     }
 
     function findEnabledActive(active: number, sign = 1) {
-      if (itemList.value[active]?.disabled) {
+      if (itemList.value[active] && isItemDisbaled(itemList.value[active])) {
         active = queryEnabledActive(active, 1 * sign)
 
         if (sign > 0 ? active >= itemList.value.length : active < 0) {
-          active = queryEnabledActive(active, -1 * sign)
+          active = queryEnabledActive(boundRange(active, 0, itemList.value.length - 1), -1 * sign)
 
           // 全禁用
           if (sign > 0 ? active < 0 : active >= itemList.value.length) active = 0
@@ -466,6 +477,7 @@ export default defineComponent({
       wrapper,
       scroll,
 
+      isItemDisbaled,
       beforeScroll,
       handleWheel,
       handleScrollEnd,

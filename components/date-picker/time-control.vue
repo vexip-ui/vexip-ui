@@ -1,13 +1,13 @@
 <template>
   <div
     ref="wrapper"
-    :class="nh.be('input')"
+    :class="[nh.be('input'), hasError && nh.bem('input', 'error')]"
     tabindex="-1"
     @keydown="handleInput"
   >
     <div
       v-if="enabled.hour"
-      :class="[nh.be('unit'), visible && unitType === 'hour' ? nh.bem('unit', 'focused') : '']"
+      :class="[nh.be('unit'), visible && unitType === 'hour' && nh.bem('unit', 'focused')]"
       @click="handleInputFocus('hour')"
     >
       {{ formattedHour }}
@@ -20,7 +20,7 @@
         {{ separator }}
       </div>
       <div
-        :class="[nh.be('unit'), visible && unitType === 'minute' ? nh.bem('unit', 'focused') : '']"
+        :class="[nh.be('unit'), visible && unitType === 'minute' && nh.bem('unit', 'focused')]"
         @click="handleInputFocus('minute')"
       >
         {{ formattedMinute }}
@@ -34,7 +34,7 @@
         {{ separator }}
       </div>
       <div
-        :class="[nh.be('unit'), visible && unitType === 'second' ? nh.bem('unit', 'focused') : '']"
+        :class="[nh.be('unit'), visible && unitType === 'second' && nh.bem('unit', 'focused')]"
         @click="handleInputFocus('second')"
       >
         {{ formattedSecond }}
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
 import { doubleDigits } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'
@@ -59,8 +59,8 @@ export default defineComponent({
   name: 'TimeControl',
   props: {
     unitType: {
-      type: String as PropType<TimeType | ''>,
-      default: 'date'
+      type: String as PropType<TimeType>,
+      default: 'hour'
     },
     enabled: {
       type: Object as PropType<Record<TimeType, boolean>>,
@@ -106,9 +106,23 @@ export default defineComponent({
     labels: {
       type: Object as PropType<Partial<Record<TimeType, string>>>,
       default: () => ({})
+    },
+    hasError: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['input', 'plus', 'minus', 'enter', 'cancel', 'unit-focus', 'prev-unit', 'next-unit'],
+  emits: [
+    'input',
+    'plus',
+    'minus',
+    'enter',
+    'cancel',
+    'unit-focus',
+    'unit-blur',
+    'prev-unit',
+    'next-unit'
+  ],
   setup(props, { emit }) {
     const nh = useNameHelper('time-picker')
 
@@ -123,6 +137,13 @@ export default defineComponent({
     const formattedSecond = computed(() => {
       return formatValue('second')
     })
+
+    watch(
+      () => props.unitType,
+      (_, prev) => {
+        prev && emit('unit-blur', prev)
+      }
+    )
 
     function formatValue(type: TimeType) {
       return props.noFiller || props.activated[type]

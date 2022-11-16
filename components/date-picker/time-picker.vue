@@ -23,7 +23,7 @@
       <div :class="nh.be('control')">
         <TimeControl
           ref="start"
-          :unit-type="currentState === 'start' ? startState.column : ''"
+          :unit-type="currentState === 'start' ? startState.column : undefined"
           :enabled="startState.enabled"
           :activated="startState.activated"
           :time-value="startState.timeValue"
@@ -35,6 +35,7 @@
           :filler="props.filler"
           :no-filler="props.noFiller"
           :labels="props.labels"
+          :has-error="startDisabled"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -53,7 +54,7 @@
           </div>
           <TimeControl
             ref="end"
-            :unit-type="currentState === 'end' ? endState.column : ''"
+            :unit-type="currentState === 'end' ? endState.column : undefined"
             :enabled="endState.enabled"
             :activated="endState.activated"
             :time-value="endState.timeValue"
@@ -65,6 +66,7 @@
             :filler="props.filler"
             :no-filler="props.noFiller"
             :labels="props.labels"
+            :has-error="endDisabled"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -139,6 +141,7 @@
                   :candidate="props.candidate"
                   :steps="props.steps"
                   :pointer="props.pointer"
+                  :disabled-time="isDisabledTime"
                   @change="handleWheelChange"
                   @toggle-col="handleStartInput"
                 ></TimeWheel>
@@ -151,6 +154,7 @@
                   :candidate="props.candidate"
                   :steps="props.steps"
                   :pointer="props.pointer"
+                  :disabled-time="isDisabledTime"
                   @change="handleWheelChange"
                   @toggle-col="handleEndInput"
                 ></TimeWheel>
@@ -159,7 +163,12 @@
                 <Button text size="small" @click.stop="handleCancel">
                   {{ props.cancelText || locale.cancel }}
                 </Button>
-                <Button type="primary" size="small" @click.stop="finishInput">
+                <Button
+                  type="primary"
+                  size="small"
+                  :disabled="startDisabled || endDisabled"
+                  @click.stop="finishInput"
+                >
                   {{ props.confirmText || locale.confirm }}
                 </Button>
               </div>
@@ -194,15 +203,26 @@ import {
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
-import { USE_TOUCH, doubleDigits, boundRange, format } from '@vexip-ui/utils'
+import { USE_TOUCH, toNumber, doubleDigits, boundRange, format } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { timePickerProps } from './props'
 import { useColumn } from './helper'
 
-import type { TimeType } from './symbol'
+import type { TimeType, DisabledTime } from './symbol'
 
 // const TIME_REG = /^((?:[01]?[0-9])|(?:2[0-3]))((?::[0-5]?[0-9]))?((?::[0-5]?[0-9]))?$/
 const TIME_REG = /^((?:\d{1,2}))((?::\d{1,2}))?((?::\d{1,2}))?$/
+
+const enum DisabledType {
+  UPSTREAM,
+  TRUE,
+  AT_MIN_TRUE,
+  AT_MAX_TRUE,
+  FALSE
+}
+
+const defaultMin = [0, 0, 0]
+const defaultMax = [23, 59, 59]
 
 export default defineComponent({
   name: 'TimePicker',
@@ -279,7 +299,9 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      min: null,
+      max: null
     })
 
     const placement = toRef(props, 'placement')
@@ -347,6 +369,50 @@ export default defineComponent({
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && !!lastValue.value
     })
+    const minUnits = computed(() => {
+      return props.min ? props.min.split(':').map(toNumber) : defaultMin
+    })
+    const maxUnits = computed(() => {
+      return props.max ? props.max.split(':').map(toNumber) : defaultMax
+    })
+    const reversed = computed(() => {
+      const min = minUnits.value
+      const max = maxUnits.value
+
+      for (let i = 0; i < 3; ++i) {
+        if (min[i] < max[i]) return false
+        if (min[i] > max[i]) return true
+      }
+
+      return false
+    })
+    const startDisabled = computed(() => {
+      const { hour, minute, second } = startState.timeValue
+
+      return (
+        isHourDisabled(hour) ||
+        isMinuteDisabled(hour, minute) !== DisabledType.FALSE ||
+        isSecondDisabled(hour, minute, second) !== DisabledType.FALSE
+      )
+    })
+    const endDisabled = computed(() => {
+      if (!props.isRange) return false
+
+      const { hour, minute, second } = endState.timeValue
+
+      return (
+        isHourDisabled(hour) ||
+        isMinuteDisabled(hour, minute) !== DisabledType.FALSE ||
+        isSecondDisabled(hour, minute, second) !== DisabledType.FALSE
+      )
+    })
+
+    const isDisabledTime: DisabledTime = {
+      hour: isHourDisabled,
+      minute: (hour, minute) => isMinuteDisabled(hour, minute) !== DisabledType.FALSE,
+      second: (hour, minute, second) =>
+        isSecondDisabled(hour, minute, second) !== DisabledType.FALSE
+    }
 
     parseValue(props.value, false)
 
@@ -525,7 +591,137 @@ export default defineComponent({
       return Array.isArray(currentValue.value) ? currentValue.value.join('|') : currentValue.value
     }
 
+    function isHourDisabled(hour: number) {
+      const min = minUnits.value[0] || defaultMin[0]
+      const max = maxUnits.value[0] || defaultMax[0]
+
+      return reversed.value ? hour > max && hour < min : hour < min || hour > max
+    }
+
+    function isMinuteDisabled(hour: number, minute: number) {
+      if (isHourDisabled(hour)) return DisabledType.UPSTREAM
+
+      if (minUnits.value[0] === maxUnits.value[0] && hour === minUnits.value[0]) {
+        const min = minUnits.value[1] || defaultMin[1]
+        const max = maxUnits.value[1] || defaultMax[1]
+
+        if (reversed.value ? minute > max && minute < min : minute < min || minute > max) {
+          return DisabledType.TRUE
+        }
+      }
+
+      if (hour === minUnits.value[0]) {
+        const min = minUnits.value[1] || defaultMin[1]
+
+        if (minute < min) return DisabledType.AT_MIN_TRUE
+      }
+
+      if (hour === maxUnits.value[0]) {
+        const max = maxUnits.value[1] || defaultMax[1]
+
+        if (minute > max) return DisabledType.AT_MAX_TRUE
+      }
+
+      return DisabledType.FALSE
+    }
+
+    function isSecondDisabled(hour: number, minute: number, second: number) {
+      if (isMinuteDisabled(hour, minute) !== DisabledType.FALSE) return DisabledType.UPSTREAM
+
+      if (
+        minUnits.value[0] === maxUnits.value[0] &&
+        hour === minUnits.value[0] &&
+        minUnits.value[1] === maxUnits.value[1] &&
+        minute === minUnits.value[1]
+      ) {
+        const min = minUnits.value[2] || defaultMin[2]
+        const max = maxUnits.value[2] || defaultMax[2]
+
+        if (reversed.value ? second > max && second < min : second < min || second > max) {
+          return DisabledType.TRUE
+        }
+      }
+
+      if (hour === minUnits.value[0] && minute === minUnits.value[1]) {
+        const min = minUnits.value[2] || defaultMin[2]
+
+        if (second < min) return DisabledType.AT_MIN_TRUE
+      }
+
+      if (hour === maxUnits.value[0] && minute === maxUnits.value[1]) {
+        const max = maxUnits.value[2] || defaultMax[2]
+
+        if (second > max) return DisabledType.AT_MAX_TRUE
+      }
+
+      return DisabledType.FALSE
+    }
+
+    function verifyHour(hour: number) {
+      if (!isHourDisabled(hour)) return hour
+
+      if (reversed.value) {
+        const minDis = minUnits.value[0] - hour
+        const maxDis = hour - maxUnits.value[0]
+
+        return minDis > maxDis ? maxUnits.value[0] : minUnits.value[0]
+      }
+
+      return boundRange(hour, minUnits.value[0], maxUnits.value[0])
+    }
+
+    function verifyMinute(hour: number, minute: number) {
+      const type = isMinuteDisabled(hour, minute)
+
+      if (type === DisabledType.AT_MIN_TRUE) return minUnits.value[1]
+      if (type === DisabledType.AT_MAX_TRUE) return maxUnits.value[1]
+
+      if (type === DisabledType.TRUE) {
+        if (reversed.value) {
+          const minDis = minUnits.value[1] - minute
+          const maxDis = minute - maxUnits.value[1]
+
+          return minDis > maxDis ? maxUnits.value[1] : minUnits.value[1]
+        }
+
+        return boundRange(minute, minUnits.value[1], maxUnits.value[1])
+      }
+
+      return minute
+    }
+
+    function verifySecond(hour: number, minute: number, second: number) {
+      const type = isSecondDisabled(hour, minute, second)
+
+      if (type === DisabledType.AT_MIN_TRUE) return minUnits.value[2]
+      if (type === DisabledType.AT_MAX_TRUE) return maxUnits.value[2]
+
+      if (type === DisabledType.TRUE) {
+        if (reversed.value) {
+          const minDis = minUnits.value[2] - second
+          const maxDis = second - maxUnits.value[2]
+
+          return minDis > maxDis ? maxUnits.value[2] : minUnits.value[2]
+        }
+
+        return boundRange(second, minUnits.value[2], maxUnits.value[2])
+      }
+
+      return second
+    }
+
+    function verifyTime() {
+      const state = getCurrentState()
+      const timeValue = state.timeValue
+
+      timeValue.hour = verifyHour(timeValue.hour)
+      timeValue.minute = verifyMinute(timeValue.hour, timeValue.minute)
+      timeValue.second = verifySecond(timeValue.hour, timeValue.minute, timeValue.second)
+    }
+
     function emitChange() {
+      verifyTime()
+
       if (lastValue.value !== getStringValue()) {
         lastValue.value = getStringValue()
 
@@ -635,6 +831,7 @@ export default defineComponent({
       }
 
       verifyValue(type)
+
       state.activated[type] = true
       emitEvent(props.onInput, type, state.timeValue[type])
     }
@@ -782,6 +979,9 @@ export default defineComponent({
       selectorClass,
       hasPrefix,
       showClear,
+      isDisabledTime,
+      startDisabled,
+      endDisabled,
 
       wrapper,
       reference,

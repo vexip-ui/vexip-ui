@@ -101,6 +101,8 @@ export const timePickerProps = buildProps({
   loadingIcon: Object,
   loadingLock: booleanProp,
   loadingSpin: booleanProp,
+  min: String,
+  max: String,
   onInput: eventProp<(type: TimeType, value: number) => void>(),
   onPlus: eventProp<(type: TimeType, value: number) => void>(),
   onMinus: eventProp<(type: TimeType, value: number) => void>(),

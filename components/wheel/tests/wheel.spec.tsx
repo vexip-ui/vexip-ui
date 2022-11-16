@@ -119,14 +119,17 @@ describe('Wheel', () => {
   })
 
   it('item disabled', async () => {
+    const disabledItem = vi.fn((value: string) => value === '5')
     const wrapper = mount(Wheel, {
       props: {
+        disabledItem,
         arrow: true,
         options: [
           { value: '1' },
           { value: '2', disabled: true },
           { value: '3' },
-          { value: '4', disabled: true }
+          { value: '4', disabled: true },
+          { value: '5' }
         ]
       }
     })
@@ -135,6 +138,7 @@ describe('Wheel', () => {
     const items = wrapper.findAll('.vxp-wheel__item')
     expect(items[1].classes()).toContain('vxp-wheel__item--disabled')
     expect(items[3].classes()).toContain('vxp-wheel__item--disabled')
+    expect(items[4].classes()).toContain('vxp-wheel__item--disabled')
 
     await wrapper.find('.vxp-wheel__arrow--next').trigger('click')
     expect(items[2].classes()).toContain('vxp-wheel__item--active')

@@ -13,7 +13,11 @@
       @keydown.stop
     >
       <template #default="{ option }">
-        {{ doubleDigits(option.value) }}
+        <span
+          :class="[nh.be('option'), isHourDisabled(option.value) && nh.bem('option', 'disabled')]"
+        >
+          {{ doubleDigits(option.value) }}
+        </span>
       </template>
     </Wheel>
     <Wheel
@@ -29,7 +33,11 @@
       @keydown.stop
     >
       <template #default="{ option }">
-        {{ doubleDigits(option.value) }}
+        <span
+          :class="[nh.be('option'), isMinuteDisabled(option.value) && nh.bem('option', 'disabled')]"
+        >
+          {{ doubleDigits(option.value) }}
+        </span>
       </template>
     </Wheel>
     <Wheel
@@ -45,7 +53,11 @@
       @keydown.stop
     >
       <template #default="{ option }">
-        {{ doubleDigits(option.value) }}
+        <span
+          :class="[nh.be('option'), isSecondDisabled(option.value) && nh.bem('option', 'disabled')]"
+        >
+          {{ doubleDigits(option.value) }}
+        </span>
       </template>
     </Wheel>
   </div>
@@ -58,7 +70,18 @@ import { useNameHelper } from '@vexip-ui/config'
 import { USE_TOUCH, range, doubleDigits } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
-import type { TimeType } from './symbol'
+import type { TimeType, DisabledTime } from './symbol'
+
+// const enum ValueType {
+//   HOUR = 0,
+//   MINUTE = 1,
+//   SECOND = 2
+// }
+
+// const defaultMin = [0, 0, 0]
+// const defaultMax = [23, 59, 59]
+
+// const toFalse = () => false
 
 export default defineComponent({
   name: 'TimeWheel',
@@ -109,6 +132,10 @@ export default defineComponent({
     pointer: {
       type: Boolean,
       default: USE_TOUCH
+    },
+    disabledTime: {
+      type: Object as PropType<DisabledTime>,
+      default: () => ({})
     }
   },
   emits: ['change', 'toggle-col', 'update:hour', 'update:minute', 'update:second'],
@@ -144,17 +171,35 @@ export default defineComponent({
       }
     )
     watch(currentHour, value => {
-      emit('change', 'hour', value)
       emit('update:hour', value)
+      emit('change', 'hour', value)
     })
     watch(currentMinute, value => {
-      emit('change', 'minute', value)
       emit('update:minute', value)
+      emit('change', 'minute', value)
     })
     watch(currentSecond, value => {
-      emit('change', 'second', value)
       emit('update:second', value)
+      emit('change', 'second', value)
     })
+
+    function isHourDisabled(hour: number) {
+      return typeof props.disabledTime.hour === 'function' && props.disabledTime.hour(hour)
+    }
+
+    function isMinuteDisabled(minute: number) {
+      return (
+        typeof props.disabledTime.minute === 'function' &&
+        props.disabledTime.minute(currentHour.value, minute)
+      )
+    }
+
+    function isSecondDisabled(second: number) {
+      return (
+        typeof props.disabledTime.second === 'function' &&
+        props.disabledTime.second(currentHour.value, currentMinute.value, second)
+      )
+    }
 
     function updateTimeRange() {
       const [hourStep = 1, minuteStep = 1, secondStep = 1] = props.steps
@@ -188,6 +233,9 @@ export default defineComponent({
       secondWheel,
 
       doubleDigits,
+      isHourDisabled,
+      isMinuteDisabled,
+      isSecondDisabled,
       handleToggleColumn,
 
       refreshWheel
