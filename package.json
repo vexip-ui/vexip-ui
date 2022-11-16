@@ -59,7 +59,7 @@
   "exports": {
     ".": {
       "import": "./es/components/index.mjs",
-      "require": "./lib/components/index.js",
+      "require": "./lib/components/index.cjs",
       "types": "./dist/components/index.d.ts"
     },
     "./es": "./es/components/index.mjs",
@@ -161,7 +161,7 @@
     "dist/*",
     "css/*.css",
     "es/components/*/style.mjs",
-    "lib/components/*/style.js",
+    "lib/components/*/style.cjs",
     "style/**/*.scss",
     "theme/**/*.css"
   ],
