@@ -85,14 +85,12 @@ import { Scroll } from '@/components/scroll'
 import { useFieldStore } from '@/components/form'
 import { useDisplay, useModifier } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, createStateProp, emitEvent } from '@vexip-ui/config'
-import { USE_TOUCH, debounce, debounceMinor, boundRange } from '@vexip-ui/utils'
+import { USE_TOUCH, toFalse, debounce, debounceMinor, boundRange } from '@vexip-ui/utils'
 import { AngleUp, AngleRight, AngleDown, AngleLeft } from '@vexip-ui/icons'
 import { wheelProps } from './props'
 import { WHEEL_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
-
-const toFalse = () => false
 
 export default defineComponent({
   name: 'Wheel',

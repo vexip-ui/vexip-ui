@@ -407,7 +407,7 @@ export default defineComponent({
       )
     })
 
-    const isDisabledTime: DisabledTime = {
+    const isDisabledTime: Required<DisabledTime> = {
       hour: isHourDisabled,
       minute: (hour, minute) => isMinuteDisabled(hour, minute) !== DisabledType.FALSE,
       second: (hour, minute, second) =>

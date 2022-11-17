@@ -1,6 +1,8 @@
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
+import { toNumber } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
+import type { DisabledTime } from './symbol'
 
 type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
@@ -134,5 +136,112 @@ export function useColumn<T extends string>(
     enabled,
     resetColumn,
     enterColumn
+  }
+}
+
+const enum DisabledType {
+  UPSTREAM,
+  TRUE,
+  AT_MIN_TRUE,
+  AT_MAX_TRUE,
+  FALSE
+}
+
+const defaultMin = [0, 0, 0]
+const defaultMax = [23, 59, 59]
+
+export function useTimeBound(originMin: Ref<string>, originMax: Ref<string>) {
+  const minUnits = computed(() => {
+    return originMin.value ? originMin.value.split(':').map(toNumber) : defaultMin
+  })
+  const maxUnits = computed(() => {
+    return originMax.value ? originMax.value.split(':').map(toNumber) : defaultMax
+  })
+  const reversed = computed(() => {
+    const min = minUnits.value
+    const max = maxUnits.value
+
+    for (let i = 0; i < 3; ++i) {
+      if (min[i] < max[i]) return false
+      if (min[i] > max[i]) return true
+    }
+
+    return false
+  })
+
+  const isDisabledTime: Required<DisabledTime> = {
+    hour: isHourDisabled,
+    minute: (hour, minute) => isMinuteDisabled(hour, minute) !== DisabledType.FALSE,
+    second: (hour, minute, second) => isSecondDisabled(hour, minute, second) !== DisabledType.FALSE
+  }
+
+  function isHourDisabled(hour: number) {
+    const min = minUnits.value[0] || defaultMin[0]
+    const max = maxUnits.value[0] || defaultMax[0]
+
+    return reversed.value ? hour > max && hour < min : hour < min || hour > max
+  }
+
+  function isMinuteDisabled(hour: number, minute: number) {
+    if (isHourDisabled(hour)) return DisabledType.UPSTREAM
+
+    if (minUnits.value[0] === maxUnits.value[0] && hour === minUnits.value[0]) {
+      const min = minUnits.value[1] || defaultMin[1]
+      const max = maxUnits.value[1] || defaultMax[1]
+
+      if (reversed.value ? minute > max && minute < min : minute < min || minute > max) {
+        return DisabledType.TRUE
+      }
+    }
+
+    if (hour === minUnits.value[0]) {
+      const min = minUnits.value[1] || defaultMin[1]
+
+      if (minute < min) return DisabledType.AT_MIN_TRUE
+    }
+
+    if (hour === maxUnits.value[0]) {
+      const max = maxUnits.value[1] || defaultMax[1]
+
+      if (minute > max) return DisabledType.AT_MAX_TRUE
+    }
+
+    return DisabledType.FALSE
+  }
+
+  function isSecondDisabled(hour: number, minute: number, second: number) {
+    if (isMinuteDisabled(hour, minute) !== DisabledType.FALSE) return DisabledType.UPSTREAM
+
+    if (
+      minUnits.value[0] === maxUnits.value[0] &&
+      hour === minUnits.value[0] &&
+      minUnits.value[1] === maxUnits.value[1] &&
+      minute === minUnits.value[1]
+    ) {
+      const min = minUnits.value[2] || defaultMin[2]
+      const max = maxUnits.value[2] || defaultMax[2]
+
+      if (reversed.value ? second > max && second < min : second < min || second > max) {
+        return DisabledType.TRUE
+      }
+    }
+
+    if (hour === minUnits.value[0] && minute === minUnits.value[1]) {
+      const min = minUnits.value[2] || defaultMin[2]
+
+      if (second < min) return DisabledType.AT_MIN_TRUE
+    }
+
+    if (hour === maxUnits.value[0] && minute === maxUnits.value[1]) {
+      const max = maxUnits.value[2] || defaultMax[2]
+
+      if (second > max) return DisabledType.AT_MAX_TRUE
+    }
+
+    return DisabledType.FALSE
+  }
+
+  return {
+    isDisabledTime
   }
 }

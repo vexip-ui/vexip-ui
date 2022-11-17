@@ -87,6 +87,12 @@ export function toDate(any: Dateable, strict = false) {
     throw new RangeError('Invalid date value')
   }
 
+  if (typeof any === 'string' && !any.includes(':')) {
+    date.setHours(0)
+    date.setMinutes(0)
+    date.setSeconds(0)
+  }
+
   return date
 }
 
@@ -127,6 +133,19 @@ export function format(date: Dateable, pattern = 'yyyy-MM-dd HH:mm:ss') {
   }
 
   return result.replace(quotationRegExp, '$1')
+}
+
+/**
+ * 获取日期的时间部分
+ *
+ * @param date 给定的日期
+ */
+export function getTime(date: Dateable) {
+  date = toDate(date)
+
+  return `${doubleDigits(date.getHours())}:${doubleDigits(date.getMinutes())}:${doubleDigits(
+    date.getSeconds()
+  )}`
 }
 
 /**

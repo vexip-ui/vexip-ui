@@ -13,7 +13,7 @@ $time-picker: map.merge(
     unit-color: get-css-var('content-color-secondary'),
     unit-color-focus: get-css-var('color-white'),
     unit-bg-color-focus: get-css-var('color-primary-opacity-1'),
-    unit-bg-color-disabled: get-css-var('color-error-opacity-1'),
+    unit-bg-color-error: get-css-var('color-error-opacity-1'),
     separator-color: get-css-var('content-color-disabled'),
     exchange-color: get-css-var('content-color-secondary'),
     exchange-color-hover: get-css-var('color-primary-base'),
@@ -82,7 +82,7 @@ $time-picker: map.merge(
 
     &--focused {
       color: get-css-var('time-picker-unit-color-focus');
-      background-color: get-css-var('time-picker-unit-bg-color-disabled');
+      background-color: get-css-var('time-picker-unit-bg-color-error');
     }
   }
 

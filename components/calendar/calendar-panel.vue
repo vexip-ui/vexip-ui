@@ -63,10 +63,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import { useHover } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
-import { startOfWeek, rangeDate, differenceDays, debounceMinor } from '@vexip-ui/utils'
+import {
+  toFalse,
+  startOfDay,
+  endOfDay,
+  startOfWeek,
+  rangeDate,
+  differenceDays,
+  debounceMinor
+} from '@vexip-ui/utils'
 import { calendarPanelProps } from './props'
 
 import type { Dateable } from '@vexip-ui/utils'
@@ -100,14 +108,16 @@ export default defineComponent({
         validator: value => !Number.isNaN(+new Date(value))
       },
       disabledDate: {
-        default: () => false,
+        default: toFalse,
         isFunc: true
       },
       isRange: false,
       valueType: {
         default: 'start',
-        validator: (value: 'start' | 'end') => value === 'start' || value === 'end'
-      }
+        validator: value => value === 'start' || value === 'end'
+      },
+      min: null,
+      max: null
     })
 
     const startValue = ref<Date | null>(null)
@@ -117,6 +127,16 @@ export default defineComponent({
 
     const { wrapper, isHover } = useHover()
     const locale = useLocale('calendar')
+
+    const min = computed(() => (props.min ? +startOfDay(props.min) : -Infinity))
+    const max = computed(() => (props.max ? +endOfDay(props.max) : Infinity))
+    const reversed = computed(() => {
+      if (Number.isNaN(min.value) || Number.isNaN(max.value)) {
+        return false
+      }
+
+      return min.value > max.value
+    })
 
     const updateDateRange = debounceMinor(setDateRange)
 
@@ -175,13 +195,31 @@ export default defineComponent({
       )
     }
 
-    function isDisabled(date: Date) {
-      if (typeof props.disabledDate !== 'function') {
-        return true
+    function disabledDate(date: Date) {
+      if (typeof props.disabledDate === 'function') {
+        if (props.disabledDate(date)) {
+          return true
+        }
       }
 
+      const time = date.getTime()
+
+      if (reversed.value) {
+        if (time > max.value && time < min.value) {
+          return true
+        }
+      } else {
+        if (time < min.value || time > max.value) {
+          return true
+        }
+      }
+
+      return false
+    }
+
+    function isDisabled(date: Date) {
       if (!props.isRange) {
-        return props.disabledDate(date)
+        return disabledDate(date)
       }
 
       if (
@@ -200,7 +238,7 @@ export default defineComponent({
         return true
       }
 
-      return props.disabledDate(date)
+      return disabledDate(date)
     }
 
     function isHovered(date: Date) {

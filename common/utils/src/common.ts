@@ -119,6 +119,16 @@ export function noop(...args: any[]): any
 /* eslint-disable-next-line @typescript-eslint/no-empty-function */
 export function noop() {}
 
+export function toTrue(...args: any[]): true
+export function toTrue() {
+  return true
+}
+
+export function toFalse(...args: any[]): false
+export function toFalse() {
+  return false
+}
+
 /**
  * 生成一个 range 数组
  *

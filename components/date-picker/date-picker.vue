@@ -36,6 +36,7 @@
           :filler="props.filler"
           :no-filler="props.noFiller"
           :labels="props.labels"
+          :has-error="startDisabled"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -64,6 +65,7 @@
             :filler="props.filler"
             :no-filler="props.noFiller"
             :labels="props.labels"
+            :has-error="endDisabled"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -109,7 +111,12 @@
         <div
           v-if="currentVisible"
           ref="popper"
-          :class="[nh.be('popper'), nh.ns('calendar-vars'), nh.bs('vars')]"
+          :class="[
+            nh.be('popper'),
+            nh.ns('calendar-vars'),
+            nh.ns('time-picker-vars'),
+            nh.bs('vars')
+          ]"
           @click.stop="handleFocused"
         >
           <DatePanel
@@ -129,6 +136,10 @@
             :no-action="props.noAction"
             :steps="props.steps"
             :is-range="props.isRange"
+            :min="props.min"
+            :max="props.max"
+            :disabled-time="isDisabledTime"
+            :has-error="startDisabled || endDisabled"
             @shortcut="handleShortcut"
             @change="handlePanelChange"
             @toggle-col="handleInputFocus"
@@ -162,10 +173,18 @@ import {
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
-import { toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
+import {
+  toFalse,
+  toDate,
+  getTime,
+  isLeepYear,
+  doubleDigits,
+  boundRange,
+  differenceDays
+} from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { datePickerProps } from './props'
-import { useColumn } from './helper'
+import { useColumn, useTimeBound } from './helper'
 import { datePickerTypes } from './symbol'
 
 import type { Dateable } from '@vexip-ui/utils'
@@ -227,7 +246,7 @@ export default defineComponent({
       timeSeparator: ':',
       shortcuts: () => [],
       disabledDate: {
-        default: () => false,
+        default: toFalse,
         isFunc: true
       },
       steps: () => [1, 1, 1],
@@ -249,7 +268,9 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      min: null,
+      max: null
     })
 
     const placement = toRef(props, 'placement')
@@ -331,6 +352,112 @@ export default defineComponent({
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && !!lastValue.value
     })
+    const min = computed(() => (props.min ? +toDate(props.min) : -Infinity))
+    const max = computed(() => (props.max ? +toDate(props.max) : Infinity))
+    const reversed = computed(() => {
+      if (Number.isNaN(min.value) || Number.isNaN(max.value)) {
+        return false
+      }
+
+      return min.value > max.value
+    })
+    const startMinTime = computed(() => {
+      if (
+        props.type === 'datetime' &&
+        props.min &&
+        !differenceDays(props.min, startState.getDate())
+      ) {
+        return getTime(props.min)
+      }
+
+      return ''
+    })
+    const startMaxTime = computed(() => {
+      if (
+        props.type === 'datetime' &&
+        props.max &&
+        !differenceDays(props.max, startState.getDate())
+      ) {
+        return getTime(props.max)
+      }
+
+      return ''
+    })
+    const endMinTime = computed(() => {
+      if (
+        props.type === 'datetime' &&
+        props.isRange &&
+        props.min &&
+        !differenceDays(props.min, startState.getDate())
+      ) {
+        return getTime(props.min)
+      }
+
+      return ''
+    })
+    const endMaxTime = computed(() => {
+      if (
+        props.type === 'datetime' &&
+        props.isRange &&
+        props.max &&
+        !differenceDays(props.max, startState.getDate())
+      ) {
+        return getTime(props.max)
+      }
+
+      return ''
+    })
+
+    const { isDisabledTime: isDisabledStartTime } = useTimeBound(startMinTime, startMaxTime)
+    const { isDisabledTime: isDisabledEndTime } = useTimeBound(endMinTime, endMaxTime)
+
+    const isDisabledTime = computed(() => {
+      return currentState.value === 'start' ? isDisabledStartTime : isDisabledEndTime
+    })
+    const startDisabled = computed(() => {
+      const { hour, minute, second } = startState.dateValue
+
+      return (
+        disabledDate(startState.getDate()) ||
+        isDisabledStartTime.hour(hour) ||
+        isDisabledStartTime.minute(hour, minute) ||
+        isDisabledStartTime.second(hour, minute, second)
+      )
+    })
+    const endDisabled = computed(() => {
+      if (!props.isRange) return false
+
+      const { hour, minute, second } = startState.dateValue
+
+      return (
+        disabledDate(startState.getDate()) ||
+        isDisabledEndTime.hour(hour) ||
+        isDisabledEndTime.minute(hour, minute) ||
+        isDisabledEndTime.second(hour, minute, second)
+      )
+    })
+
+    function disabledDate(date: Date) {
+      if (typeof props.disabledDate === 'function') {
+        if (props.disabledDate(date)) {
+          return true
+        }
+      }
+
+      const time = date.getTime()
+
+      if (reversed.value) {
+        if (time > max.value && time < min.value) {
+          return true
+        }
+      } else {
+        if (time < min.value || time > max.value) {
+          return true
+        }
+      }
+
+      return false
+    }
 
     startState.enabled.year = true
     endState.enabled.year = true
@@ -433,6 +560,7 @@ export default defineComponent({
     )
 
     function createDateState() {
+      const noFiller = props.noFiller
       const { currentColumn, enabled, resetColumn, enterColumn } = useColumn([
         'year',
         'month',
@@ -451,12 +579,12 @@ export default defineComponent({
         second: 0
       })
       const activated = reactive({
-        year: false,
-        month: false,
-        date: false,
-        hour: false,
-        minute: false,
-        second: false
+        year: noFiller,
+        month: noFiller,
+        date: noFiller,
+        hour: noFiller,
+        minute: noFiller,
+        second: noFiller
       })
 
       return reactive({
@@ -975,6 +1103,8 @@ export default defineComponent({
 
     return {
       CalendarR,
+      startMinTime,
+      startMaxTime,
 
       props,
       nh,
@@ -994,6 +1124,8 @@ export default defineComponent({
       startActivated,
       endActivated,
       showClear,
+      startDisabled,
+      endDisabled,
 
       wrapper,
       reference,
@@ -1002,6 +1134,7 @@ export default defineComponent({
       end: endInput,
       panel: datePanel,
 
+      isDisabledTime,
       handleFocused,
       showPanel,
       handleInput,

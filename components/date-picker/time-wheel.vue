@@ -72,17 +72,6 @@ import { USE_TOUCH, range, doubleDigits } from '@vexip-ui/utils'
 import type { PropType } from 'vue'
 import type { TimeType, DisabledTime } from './symbol'
 
-// const enum ValueType {
-//   HOUR = 0,
-//   MINUTE = 1,
-//   SECOND = 2
-// }
-
-// const defaultMin = [0, 0, 0]
-// const defaultMax = [23, 59, 59]
-
-// const toFalse = () => false
-
 export default defineComponent({
   name: 'TimeWheel',
   components: {

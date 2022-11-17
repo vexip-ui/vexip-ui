@@ -26,7 +26,7 @@ type DateTimeType = DateType | TimeType
 | date-separator  | `string`                                                                | 日期部分的连接符                                                                                       | `'/'`                   | -       |
 | time-separator  | `string`                                                                | 时间部分的连接符                                                                                       | `':'`                   | -       |
 | shortcuts       | `{ name: string, value: Dateable \| (() => string \| number \| Date) }` | 设置日期快捷选择的候选列表                                                                             | `[]`                    | -       |
-| disable-date    | `(date: Date) => boolean`                                               | 判断日期是否禁用，接受一个日期参数，返回 `true` 则禁用，加载日历面板时会对当前面板的所有日期都调用一次 | `() => false`           | -       |
+| disabled-date   | `(date: Date) => boolean`                                               | 判断日期是否禁用，接受一个日期参数，返回 `true` 则禁用，加载日历面板时会对当前面板的所有日期都调用一次 | `() => false`           | -       |
 | steps           | `number[]`                                                              | 分别设置时间选择器每个滚轮的滚动跨度                                                                   | `[1, 1, 1]`             | -       |
 | ctrl-steps      | `number[]`                                                              | 分别设置时间选择器每个滚轮按住 Ctrl 时的滚动跨度                                                       | `[5, 5, 5]`             | -       |
 | prefix          | `Record<string, any>`                                                   | 前缀图标，使用前缀插槽时无效                                                                           | `null`                  | -       |

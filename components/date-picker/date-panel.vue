@@ -109,6 +109,8 @@
               :disabled-date="disabledDate"
               :is-range="calendarRange"
               :value-type="valueType"
+              :min="min"
+              :max="max"
               @select="handleSelectDate"
               @hover="handleHoverDate"
             ></CalendarPanel>
@@ -122,6 +124,7 @@
             :second="dateValue.second"
             :candidate="3"
             :steps="steps"
+            :disabled-time="disabledTime"
             @toggle-col="toggleColumn"
             @change="emitChange"
           ></TimeWheel>
@@ -131,7 +134,12 @@
         <Button text size="small" @click="handleCancel">
           {{ cancelText || locale.cancel }}
         </Button>
-        <Button type="primary" size="small" @click="handleConfirm">
+        <Button
+          type="primary"
+          size="small"
+          :disabled="hasError"
+          @click="handleConfirm"
+        >
           {{ confirmText || locale.confirm }}
         </Button>
       </div>
@@ -154,7 +162,7 @@ import { datePickerTypes } from './symbol'
 import type { PropType } from 'vue'
 import type { MonthIndex } from '@/components/calendar'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DateType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
+import type { DateType, DateTimeType, DatePickerType, DateShortcut, DisabledTime } from './symbol'
 
 export default defineComponent({
   name: 'DatePanel',
@@ -234,6 +242,22 @@ export default defineComponent({
     endActivated: {
       type: Object as PropType<Record<DateTimeType, boolean>>,
       default: () => ({})
+    },
+    min: {
+      type: [Number, String, Date] as PropType<Dateable>,
+      default: null
+    },
+    max: {
+      type: [Number, String, Date] as PropType<Dateable>,
+      default: null
+    },
+    disabledTime: {
+      type: Object as PropType<DisabledTime>,
+      default: () => ({})
+    },
+    hasError: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['click', 'shortcut', 'toggle-col', 'change', 'cancel', 'confirm', 'hover', 'type-change'],
@@ -243,8 +267,8 @@ export default defineComponent({
     const currentPane = ref<DateType>('date')
     const calendarYear = ref(today.getFullYear())
     const calendarMonth = ref(today.getMonth() + 1) // 1 ~ 12
-    const hoveredYear = ref(0) // 0 = false
-    const hoveredMonth = ref(0) // 0 = false
+    const hoveredYear = ref(0) // 0 is no hover (falsy)
+    const hoveredMonth = ref(0) // 0 is no hover (falsy)
     const yearRange = ref<number[]>([])
 
     const calendar = ref<HTMLElement>()
