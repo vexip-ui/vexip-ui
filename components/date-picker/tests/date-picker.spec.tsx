@@ -664,4 +664,131 @@ describe('DatePicker', () => {
       `${date.getFullYear()}-11-16`
     ])
   })
+
+  it('min year', async () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        type: 'year',
+        value: '2020',
+        min: '2020'
+      }
+    })
+    const input = wrapper.find('.vxp-date-picker__input')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-date-picker__input--error')
+
+    await input.trigger('keydown', { key: 'ArrowUp' })
+    expect(input.classes()).toContain('vxp-date-picker__input--error')
+  })
+
+  it('min month', async () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        type: 'month',
+        value: '2020-05',
+        min: '2020-05'
+      }
+    })
+    const input = wrapper.find('.vxp-date-picker__input')
+    const units = wrapper.findAll('.vxp-date-picker__unit')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-date-picker__input--error')
+
+    await units[1].trigger('click')
+    await input.trigger('keydown', { key: 'ArrowUp' })
+    expect(input.classes()).toContain('vxp-date-picker__input--error')
+  })
+
+  it('min date', async () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        value: '2020-05-15',
+        min: '2020-05-15'
+      }
+    })
+    const input = wrapper.find('.vxp-date-picker__input')
+    const units = wrapper.findAll('.vxp-date-picker__unit')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-date-picker__input--error')
+
+    await units[2].trigger('click')
+    await input.trigger('keydown', { key: 'ArrowUp' })
+    expect(input.classes()).toContain('vxp-date-picker__input--error')
+  })
+
+  it('max year', async () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        type: 'year',
+        value: '2020',
+        max: '2020'
+      }
+    })
+    const input = wrapper.find('.vxp-date-picker__input')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-date-picker__input--error')
+
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    expect(input.classes()).toContain('vxp-date-picker__input--error')
+  })
+
+  it('max month', async () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        type: 'month',
+        value: '2020-05',
+        max: '2020-05'
+      }
+    })
+    const input = wrapper.find('.vxp-date-picker__input')
+    const units = wrapper.findAll('.vxp-date-picker__unit')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-date-picker__input--error')
+
+    await units[1].trigger('click')
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    expect(input.classes()).toContain('vxp-date-picker__input--error')
+  })
+
+  it('max date', async () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        value: '2020-05-15',
+        max: '2020-05-15'
+      }
+    })
+    const input = wrapper.find('.vxp-date-picker__input')
+    const units = wrapper.findAll('.vxp-date-picker__unit')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-date-picker__input--error')
+
+    await units[2].trigger('click')
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    expect(input.classes()).toContain('vxp-date-picker__input--error')
+  })
+
+  it('min and max reversed', async () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        value: '2020-05-15',
+        min: '2020-05-18',
+        max: '2020-05-15'
+      }
+    })
+    const input = wrapper.find('.vxp-date-picker__input')
+    const units = wrapper.findAll('.vxp-date-picker__unit')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-date-picker__input--error')
+
+    await units[2].trigger('click')
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    expect(input.classes()).toContain('vxp-date-picker__input--error')
+  })
 })
