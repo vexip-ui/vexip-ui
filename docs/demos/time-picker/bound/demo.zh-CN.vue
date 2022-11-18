@@ -3,18 +3,11 @@
   <br />
   <br />
   <TimePicker
-    value="12:34:56"
+    is-range
+    :value="['12:34:56', '13:11:43']"
     no-filler
     min="11:20:30"
     max="13:20:10"
-  ></TimePicker>
-  <br />
-  <br />
-  <TimePicker
-    value="12:34:56"
-    no-filler
-    min="15:10:50"
-    max="13:20:20"
   ></TimePicker>
 </template>
 

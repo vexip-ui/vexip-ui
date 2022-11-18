@@ -474,41 +474,73 @@ export default defineComponent({
     }
 
     function isDisabledYear(year: number) {
-      if (!props.isRange) return false
+      if (props.isRange) {
+        if (
+          props.valueType === 'end' &&
+          props.startActivated.year &&
+          year < props.startValue.year
+        ) {
+          return true
+        }
 
-      if (props.valueType === 'end' && props.startActivated.year && year < props.startValue.year) {
-        return true
+        if (props.valueType === 'start' && props.endActivated.year && props.endValue.year < year) {
+          return true
+        }
       }
 
-      if (props.valueType === 'start' && props.endActivated.year && props.endValue.year < year) {
-        return true
+      if (props.type === 'year') {
+        return props.disabledDate(new Date(year, 0))
       }
 
-      return false
+      for (let i = 1; i <= 12; ++i) {
+        if (!isDisabledMonth(i, year)) {
+          return false
+        }
+      }
+
+      return true
     }
 
-    function isDisabledMonth(month: number) {
-      if (!props.isRange) return false
+    function isDisabledMonth(month: number, year = calendarYear.value) {
+      if (props.type === 'year') return false
 
-      const monthYear = calendarYear.value * 100 + month
+      if (props.isRange) {
+        const monthYear = year * 100 + month
 
-      if (
-        props.valueType === 'end' &&
-        props.startActivated.month &&
-        monthYear < 100 * props.startValue.year + props.startValue.month
-      ) {
-        return true
+        if (
+          props.valueType === 'end' &&
+          props.startActivated.month &&
+          monthYear < 100 * props.startValue.year + props.startValue.month
+        ) {
+          return true
+        }
+
+        if (
+          props.valueType === 'start' &&
+          props.endActivated.month &&
+          monthYear > 100 * props.endValue.year + props.endValue.month
+        ) {
+          return true
+        }
       }
 
-      if (
-        props.valueType === 'start' &&
-        props.endActivated.month &&
-        monthYear > 100 * props.endValue.year + props.endValue.month
-      ) {
-        return true
+      if (props.type === 'month') {
+        return props.disabledDate(new Date(year, month - 1))
       }
 
-      return false
+      const current = new Date(year, month - 1)
+      const end = new Date(year, month, 0)
+      const dayCount = end.getDate()
+
+      for (let i = 1; i <= dayCount; ++i) {
+        current.setDate(i)
+
+        if (!props.disabledDate(current)) {
+          return false
+        }
+      }
+
+      return true
     }
 
     function handleYearHover(year: number) {
