@@ -54,7 +54,8 @@
 
 ### TimePicker Slots
 
-| Name   | Description                                | Parameters | Since |
-| ------ | ------------------------------------------ | ---------- | ----- |
-| prefix | Slot for prefix content, usually is a icon | -          | -     |
-| suffix | Slot for suffix content, usually is a icon | -          | -     |
+| Name     | Description                                                       | Parameters | Since    |
+| -------- | ----------------------------------------------------------------- | ---------- | -------- |
+| prefix   | Slot for prefix content, usually is a icon                        | -          | -        |
+| suffix   | Slot for suffix content, usually is a icon                        | -          | -        |
+| exchange | The slot for the middle separator when range selection is enabled | -          | `2.0.14` |

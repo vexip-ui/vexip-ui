@@ -109,7 +109,6 @@ $time-picker: map.merge(
     display: flex;
     align-items: center;
     padding: 0 4px;
-    padding-top: 1px;
     color: get-css-var('time-picker-exchange-color');
 
     &--endabled:hover {

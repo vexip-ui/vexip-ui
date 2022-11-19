@@ -50,7 +50,11 @@
             :class="[nh.be('exchange'), props.exchange ? nh.bem('exchange', 'enabled') : '']"
             @click="handleExchangeClick"
           >
-            <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
+            <slot name="exchange">
+              <Icon style="padding-top: 1px;">
+                <ArrowRightArrowLeft></ArrowRightArrowLeft>
+              </Icon>
+            </slot>
           </div>
           <TimeControl
             ref="end"
