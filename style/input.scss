@@ -321,6 +321,7 @@ $input: map.merge(
     & > #{$wrapper},
     .#{$namespace}-number-input {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
+      height: 100%;
       border-radius: $inner-radius;
     }
   }
@@ -332,9 +333,11 @@ $input: map.merge(
     .#{$namespace}-select,
     .#{$namespace}-time-picker {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
+      height: 100%;
 
       &__selector {
         min-width: 60px;
+        height: 100%;
         background-color: transparent;
         border-radius: $inner-radius;
         box-shadow: unset;
@@ -389,5 +392,10 @@ $input: map.merge(
       @include inner-input($after-radius);
       @include inner-select($after-radius);
     }
+  }
+
+  &--transparent &__before,
+  &--transparent &__after {
+    background-color: transparent;
   }
 }
