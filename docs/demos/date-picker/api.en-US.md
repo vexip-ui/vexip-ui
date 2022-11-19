@@ -67,7 +67,8 @@ type Dateable = number | string | Date
 
 ### DatePicker Slots
 
-| Name   | Description                                    | Parameters | Since |
-| ------ | ---------------------------------------------- | ---------- | ----- |
-| prefix | Slot for prefix content, usually a single icon | -          | -     |
-| suffix | Slot for suffix content, usually a single icon | -          | -     |
+| Name     | Description                                                       | Parameters | Since    |
+| -------- | ----------------------------------------------------------------- | ---------- | -------- |
+| prefix   | Slot for prefix content, usually a single icon                    | -          | -        |
+| suffix   | Slot for suffix content, usually a single icon                    | -          | -        |
+| exchange | The slot for the middle separator when range selection is enabled | -          | `2.0.14` |

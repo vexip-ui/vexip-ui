@@ -48,7 +48,11 @@
         ></DateControl>
         <template v-if="props.isRange">
           <div :class="nh.be('exchange')">
-            <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
+            <slot name="exchange">
+              <Icon style="padding-top: 1px;">
+                <ArrowRightArrowLeft></ArrowRightArrowLeft>
+              </Icon>
+            </slot>
           </div>
           <DateControl
             ref="end"
