@@ -31,4 +31,12 @@ export interface DisabledTime {
   second?(hour: number, minute: number, second: number): boolean
 }
 
+export const enum DisabledType {
+  UPSTREAM,
+  TRUE,
+  AT_MIN_TRUE,
+  AT_MAX_TRUE,
+  FALSE
+}
+
 export const datePickerTypes = Object.freeze<DatePickerType>(['date', 'datetime', 'year', 'month'])

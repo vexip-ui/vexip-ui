@@ -48,6 +48,8 @@ export const datePickerProps = buildProps({
   loadingIcon: Object,
   loadingLock: booleanProp,
   loadingSpin: booleanProp,
+  min: [Number, String, Date] as PropType<Dateable>,
+  max: [Number, String, Date] as PropType<Dateable>,
   onInput: eventProp<(type: DateTimeType, value: number) => void>(),
   onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
   onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
