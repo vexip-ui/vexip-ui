@@ -1,3 +1,9 @@
+## [1.9.1](https://github.com/vexip-ui/vexip-ui/compare/utils@1.9.0...utils@1.9.1) (2022-11-21)
+
+### Features
+
+- **date-picker:** support min and max props to bound date ([#216](https://github.com/vexip-ui/vexip-ui/issues/216)) ([9cfd677](https://github.com/vexip-ui/vexip-ui/commit/9cfd6772ce6da6b5e20a11eff7c29b88c29ffb5a))
+
 # [1.9.0](https://github.com/vexip-ui/vexip-ui/compare/utils@1.8.0...utils@1.9.0) (2022-10-24)
 
 ### Features
