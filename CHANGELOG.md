@@ -1,3 +1,20 @@
+## [2.0.14](https://github.com/vexip-ui/vexip-ui/compare/v2.0.13...v2.0.14) (2022-11-21)
+
+### Bug Fixes
+
+- **input:** correct size for before and after content ([54c8bf8](https://github.com/vexip-ui/vexip-ui/commit/54c8bf8e8f00ca6930811b29995aa286503e1a70))
+
+### Features
+
+- **confirm:** support parse content as html ([6053b7b](https://github.com/vexip-ui/vexip-ui/commit/6053b7b2b39ac92419f1c4160167e48a31165c04))
+- **date-picker:** add exchange slot for range select ([1166e70](https://github.com/vexip-ui/vexip-ui/commit/1166e70fa70d166a9dfd514391f9cf9e092e1108))
+- **date-picker:** support min and max props to bound date ([#216](https://github.com/vexip-ui/vexip-ui/issues/216)) ([9cfd677](https://github.com/vexip-ui/vexip-ui/commit/9cfd6772ce6da6b5e20a11eff7c29b88c29ffb5a))
+- **message:** support parse content as html ([7bd4def](https://github.com/vexip-ui/vexip-ui/commit/7bd4def4b144975f92a3e4a1574a3ed024392f65))
+- **notice:** support parse title and content as html ([18929a9](https://github.com/vexip-ui/vexip-ui/commit/18929a966e355ad290cf949bc3fa1d1838b07216))
+- **time-picker:** add exchange slot for range select ([2431a64](https://github.com/vexip-ui/vexip-ui/commit/2431a64a3d06cef53ecf397639e315333146e89d))
+- **time-picker:** support min and max props to bound time ([87dfc32](https://github.com/vexip-ui/vexip-ui/commit/87dfc32c920b980f9f55db5d819bcaae32a6e37f)), closes [#215](https://github.com/vexip-ui/vexip-ui/issues/215)
+- **toast:** support parse content as html ([2609809](https://github.com/vexip-ui/vexip-ui/commit/26098090751e97d02c24ac6ead1c298d4c3306ef))
+
 ## [2.0.13](https://github.com/vexip-ui/vexip-ui/compare/v2.0.12...v2.0.13) (2022-11-09)
 
 ### Bug Fixes
