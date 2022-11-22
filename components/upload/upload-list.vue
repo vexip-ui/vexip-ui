@@ -68,6 +68,7 @@ export default defineComponent({
       loadingText: null,
       style: null,
       precision: 2
+      // 'canPreview' using UploadFile default
     })
 
     const nh = useNameHelper('upload')
