@@ -448,7 +448,6 @@ export default defineComponent({
           tableWidth.value = width
 
           nextTick(() => {
-            // wrapper.value && setTableWidth(wrapper.value.getBoundingClientRect().width)
             wrapper.value && setTableWidth(wrapper.value.offsetWidth)
           })
         } else {
@@ -457,6 +456,10 @@ export default defineComponent({
           tableWidth.value = `${numberWidth}px`
           setTableWidth(numberWidth)
         }
+      } else {
+        nextTick(() => {
+          wrapper.value && setTableWidth(wrapper.value.offsetWidth)
+        })
       }
     }
 
