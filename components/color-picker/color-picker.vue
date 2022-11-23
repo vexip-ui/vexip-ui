@@ -362,6 +362,7 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('empty')]: isEmpty.value && !currentVisible.value,
         [nh.bm('focused')]: currentVisible.value,
         [nh.bm('disabled')]: props.disabled,

@@ -41,7 +41,13 @@ export default defineComponent({
     const counter = ref<HTMLElement>()
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars')]
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        {
+          [nh.bm('inherit')]: props.inherit
+        }
+      ]
     })
     const hiddenFlag = computed(() => {
       return props.attrFlag ? (props.attrFlag === true ? 'hidden' : props.attrFlag) : false

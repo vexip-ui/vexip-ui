@@ -37,6 +37,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.placement),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('background')]: props.background,
           [nh.bm('shadow')]: props.shadow
         }

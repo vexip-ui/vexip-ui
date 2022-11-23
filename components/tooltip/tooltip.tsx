@@ -270,7 +270,11 @@ export default defineComponent({
         triggerVNode &&
           (CustomTag
             ? (
-            <CustomTag {...attrs} ref={originalTrigger} class={[nh.b(), nh.bs('vars')]}>
+            <CustomTag
+              {...attrs}
+              ref={originalTrigger}
+              class={[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]}
+            >
               {triggers}
             </CustomTag>
               )

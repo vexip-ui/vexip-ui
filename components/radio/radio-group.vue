@@ -72,6 +72,7 @@ export default defineComponent({
         nh.b(),
         nh.ns('radio-vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('vertical')]: props.vertical,
           [nh.bm('button')]: !props.vertical && props.button,
           [nh.bm('disabled')]: props.disabled,

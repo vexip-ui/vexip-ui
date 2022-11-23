@@ -1,6 +1,11 @@
 <template>
   <li
-    :class="[nh.be('file'), nh.bem('file', props.listType), nh.bem('file', props.file.status)]"
+    :class="[
+      nh.be('file'),
+      nh.bem('file', props.listType),
+      nh.bem('file', props.file.status),
+      props.inherit && nh.bem('file', 'inherit')
+    ]"
     :title="fileName"
     tabindex="-1"
   >

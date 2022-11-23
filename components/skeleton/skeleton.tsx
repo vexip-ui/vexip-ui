@@ -56,6 +56,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.size)]: props.size ?? groupState?.size,
         [nh.bm('block')]: block.value,
         [nh.bm('image')]: props.image,

@@ -87,6 +87,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(`marker-${markerType.value}`),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('reduced')]: isReduced.value,
           [nh.bm('dropdown')]: props.groupType === 'dropdown',
           [nh.bm('horizontal')]: props.horizontal

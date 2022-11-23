@@ -1,7 +1,8 @@
 <template>
   <CalendarPanel
     v-model:value="calendarValue"
-    :class="nh.b()"
+    :inherit="props.inherit"
+    :class="[nh.b()]"
     :year="calendarYear"
     :month="calendarMonth"
     :week-start="props.weekStart"

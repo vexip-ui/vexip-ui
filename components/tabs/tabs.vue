@@ -1,7 +1,8 @@
 <template>
-  <div :class="[nh.b(), nh.bm(props.placement)]">
+  <div :class="[nh.b(), nh.bm(props.placement), props.inherit && nh.bm('inherit')]">
     <div :class="nh.be('header')">
       <TabNav
+        inherit
         :active="currentActive"
         :card="props.card"
         :align="props.align"

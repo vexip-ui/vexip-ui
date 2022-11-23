@@ -193,6 +193,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.horizontal ? 'horizontal' : 'vertical'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading && props.loadingLock

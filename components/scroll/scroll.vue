@@ -249,7 +249,14 @@ export default defineComponent({
     /* autoplay */
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars'), nh.bm(props.mode)]
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(props.mode),
+        {
+          [nh.bm('inherit')]: props.inherit
+        }
+      ]
     })
     const style = computed(() => {
       const { width, height } = props

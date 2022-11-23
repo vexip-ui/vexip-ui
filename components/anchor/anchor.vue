@@ -4,6 +4,7 @@
     :class="{
       [nh.b()]: true,
       [nh.bs('vars')]: true,
+      [nh.bm('inherit')]: props.inherit,
       [nh.bm('no-marker')]: !props.marker
     }"
   >

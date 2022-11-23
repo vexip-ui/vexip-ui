@@ -73,6 +73,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(`label-${props.labelAlign}`),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading,
           [nh.bm(props.size)]: props.size !== 'default',

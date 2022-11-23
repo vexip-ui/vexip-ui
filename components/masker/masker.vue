@@ -91,6 +91,7 @@ export default defineComponent({
         nh.b(),
         nh.bs('vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('inner')]: props.inner,
           [nh.bm('disabled')]: props.disabled
         }

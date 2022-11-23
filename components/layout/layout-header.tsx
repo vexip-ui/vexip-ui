@@ -70,6 +70,7 @@ export default defineComponent({
         nh.be('header'),
         {
           [nh.bs('vars')]: !layoutState.isLayout,
+          [nh.bem('header', 'inherit')]: layoutState.isLayout || props.inherit,
           [nh.bem('header', 'affixed')]: layoutState.affixed
         }
       ]

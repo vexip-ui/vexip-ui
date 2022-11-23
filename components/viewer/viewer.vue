@@ -268,6 +268,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('draggable')]: !props.moveDisabled,
         [nh.bm('resizable')]: !props.zoomDisabled,
         [nh.bm('full')]: full.value,

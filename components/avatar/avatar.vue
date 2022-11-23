@@ -100,6 +100,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(size.value)]: typeof size.value !== 'number' && size.value !== 'default',
         [nh.bm('circle')]: props.circle
       }

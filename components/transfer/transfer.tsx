@@ -149,6 +149,7 @@ export default defineComponent({
         nh.b(),
         nh.bs('vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm(props.state)]: props.state !== 'default'
         }
       ]

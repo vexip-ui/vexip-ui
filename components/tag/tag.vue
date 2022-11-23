@@ -66,6 +66,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.size)]: props.size !== 'default',
         [nh.bm(props.type)]: props.type !== 'default',
         [nh.bm('border')]: props.border,

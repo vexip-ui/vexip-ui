@@ -311,6 +311,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('stripe')]: props.stripe,
         [nh.bm('border')]: props.border,
         [nh.bm('highlight')]: props.highlight,

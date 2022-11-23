@@ -77,6 +77,7 @@ export default defineComponent({
         nh.b(),
         nh.ns('checkbox-vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('vertical')]: props.vertical,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading && props.loadingLock,

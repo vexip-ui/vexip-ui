@@ -114,6 +114,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.ns('avatar-vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.size)]: typeof props.size !== 'number' && props.size !== 'default',
         [nh.bm('circle')]: props.circle,
         [nh.bm('vertical')]: props.vertical

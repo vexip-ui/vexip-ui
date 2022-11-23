@@ -107,6 +107,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(`align-${props.align}`)]: true,
         [nh.bm(props.placement)]: true,
         [nh.bm('card')]: props.card

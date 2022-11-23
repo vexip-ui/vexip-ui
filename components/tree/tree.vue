@@ -1,7 +1,7 @@
 <template>
   <div
     ref="wrapper"
-    :class="[nh.b(), nh.bs('vars')]"
+    :class="[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]"
     role="tree"
     tabindex="-1"
     :aria-disabled="props.disabled"

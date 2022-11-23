@@ -409,6 +409,7 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('multiple')]: props.multiple,
         [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0
       }

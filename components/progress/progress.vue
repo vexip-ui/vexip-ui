@@ -93,6 +93,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(`info-${props.infoType}`),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('activated')]: props.activated
         }
       ]

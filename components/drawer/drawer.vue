@@ -209,6 +209,7 @@ export default defineComponent({
         nh.b(),
         nh.bs('vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('inner')]: props.inner,
           [nh.bm('closable')]: props.closable,
           [nh.bm('resizable')]: props.resizable

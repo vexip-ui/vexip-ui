@@ -100,6 +100,7 @@ export default defineComponent({
       }
       const className = {
         [nh.b()]: true,
+        [nh.bm('inherit')]: gridState || props.inherit,
         [nh.bm('flex')]: cellFelx
       }
 

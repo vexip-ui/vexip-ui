@@ -41,7 +41,14 @@ export default defineComponent({
     const nh = useNameHelper('card')
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars'), nh.bm(`shadow-${props.shadow}`)]
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(`shadow-${props.shadow}`),
+        {
+          [nh.bm('inherit')]: props.inherit
+        }
+      ]
     })
     const hasTitle = computed(() => {
       return slots.title || props.title

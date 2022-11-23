@@ -237,6 +237,8 @@ $upload: map.merge(
   }
 
   &__files {
+    @include basis;
+
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -260,6 +262,8 @@ $upload: map.merge(
   }
 
   &__file {
+    @include basis;
+
     position: relative;
     display: inline-flex;
     align-items: center;
