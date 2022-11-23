@@ -190,7 +190,7 @@ export default defineComponent({
           }
         }
 
-        fileStates.value = value.map(file =>
+        fileStates.value = (value || []).map(file =>
           createFileState(
             file,
             file.id ? idMap.get(file.id) : file.source ? fileMap.get(file.source) : undefined
