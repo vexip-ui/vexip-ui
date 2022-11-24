@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img src="./docs/public/vexip-ui.svg" style="width: 180px;" />
+    <img src="./docs/public/vexip-ui.svg" width="180" style="width: 180px;" />
   </a>
 </p>
 
@@ -20,7 +20,7 @@
   You may let me know if you've written any awesome thing with Vexip UI! You are very welcome if you would like to contribute codes!
 </p>
 
-**English** | [中文](./README.zh-CN.md)
+**English** | [中文 [含技术支持群]](./README.zh-CN.md)
 
 Vexip UI provides a series of out-of-box components.
 
