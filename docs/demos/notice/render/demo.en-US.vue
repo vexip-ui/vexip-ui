@@ -6,8 +6,8 @@
 
 <script setup lang="ts">
 import { h } from 'vue'
-import { BellSlashR } from '@vexip-ui/icons'
 import { Icon, Notice } from 'vexip-ui'
+import { BellSlashR } from '@vexip-ui/icons'
 
 function sendCustomizedNotice() {
   Notice.open({
