@@ -1,3 +1,16 @@
+## [2.0.15](https://github.com/vexip-ui/vexip-ui/compare/v2.0.14...v2.0.15) (2022-11-24)
+
+### Bug Fixes
+
+- **table:** should use wrapper width to compute when width not set ([d628403](https://github.com/vexip-ui/vexip-ui/commit/d6284032aa91bc4a1e89ba0c9075516167aad0db))
+- **upload:** error when passing null to file-list ([b6f5df4](https://github.com/vexip-ui/vexip-ui/commit/b6f5df44a707bd2c239ef3c26fd2c2835869fb13))
+
+### Features
+
+- **confirm:** add fast open method for using title ([8f47f7e](https://github.com/vexip-ui/vexip-ui/commit/8f47f7e522ab2d32bef91955b476865e24ce7aa8))
+- **confirm:** support add title and set content or actions align ([cb2b767](https://github.com/vexip-ui/vexip-ui/commit/cb2b7675efb5d2d5c05dc689d05e8c99866816c1))
+- **upload:** add list-style prop ([94089e7](https://github.com/vexip-ui/vexip-ui/commit/94089e72a9cd823ca7699cd15916908a770b2824))
+
 ## [2.0.14](https://github.com/vexip-ui/vexip-ui/compare/v2.0.13...v2.0.14) (2022-11-21)
 
 ### Bug Fixes
