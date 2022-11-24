@@ -6,7 +6,16 @@
 $confirm: () !default;
 $confirm: map.merge(
   (
-    icon-color: get-css-var('color-warning-base')
+    title-font-size: get-css-var('font-size-primary'),
+    title-weight: 500,
+    title-color: get-css-var('content-color-primary'),
+    icon-color: get-css-var('color-warning-base'),
+    close-color: get-css-var('content-color-placeholder'),
+    close-color-hover: get-css-var('content-color-base'),
+    header-padding: 8px,
+    body-padding: 14px 8px,
+    body-padding-with-title: 8px,
+    actions-padding: 14px 8px 8px
   ),
   $confirm
 );
@@ -18,12 +27,42 @@ $confirm: map.merge(
 
   @include basis;
 
+  .#{$namespace}-modal__content {
+    position: relative;
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: get-css-var('confirm-header-padding');
+  }
+
+  &__title {
+    flex: 1 0 0;
+    font-size: get-css-var('modal-title-font-size');
+    font-weight: get-css-var('modal-title-weight');
+    color: get-css-var('modal-title-color');
+  }
+
   &__body {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 14px;
+    padding: get-css-var('confirm-body-padding');
+
+    &--with-title {
+      padding: get-css-var('confirm-body-padding-with-title');
+    }
+
+    &--left {
+      justify-content: flex-start;
+    }
+
+    &--right {
+      justify-content: flex-end;
+    }
   }
 
   &__icon {
@@ -34,18 +73,54 @@ $confirm: map.merge(
     color: get-css-var('confirm-icon-color');
   }
 
-  &__actions {
+  &__footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 0;
+    padding: get-css-var('confirm-actions-padding');
+
+    &--left {
+      justify-content: flex-start;
+    }
+
+    &--right {
+      justify-content: flex-end;
+    }
   }
 
   &__button {
     padding: 0 28px;
 
     &:last-child {
-      margin-left: 24px;
+      margin-left: 14px;
     }
+  }
+
+  &__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    height: 24px;
+    padding: 0;
+    margin-left: 6px;
+    color: get-css-var('confirm-close-color');
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    transition: get-css-var('transition-color');
+
+    &:hover,
+    &:focus {
+      color: get-css-var('confirm-close-color-hover');
+    }
+  }
+
+  &__header &__close {
+    position: relative;
+    top: 0;
+    right: 0;
   }
 }

@@ -38,6 +38,11 @@ module.exports = {
             position: 'before'
           },
           {
+            pattern: 'vexip-ui',
+            group: 'external',
+            position: 'before'
+          },
+          {
             pattern: '@vexip-ui/**',
             group: 'external',
             position: 'before'

@@ -4,25 +4,21 @@
   </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { Confirm, Message } from 'vexip-ui'
 
-export default defineComponent({
-  methods: {
-    async confirm() {
-      const isConfirm = await this.$confirm.open({
-        content: 'Are you sure want to uninstall?',
-        confirmType: 'success',
-        confirmText: 'Uninstall',
-        cancelText: 'Reconsider'
-      })
+async function confirm() {
+  const isConfirm = await Confirm.open({
+    content: 'Are you sure want to uninstall?',
+    confirmType: 'success',
+    confirmText: 'Uninstall',
+    cancelText: 'Reconsider'
+  })
 
-      if (isConfirm) {
-        this.$message.success('Uninstall succeed')
-      } else {
-        this.$message.warning('Why not stick to your thinking?')
-      }
-    }
+  if (isConfirm) {
+    Message.success('Uninstall succeed')
+  } else {
+    Message.warning('Why not stick to your thinking?')
   }
-})
+}
 </script>
