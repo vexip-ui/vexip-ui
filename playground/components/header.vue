@@ -51,8 +51,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Moon, Sun, ShareNodes, Download, ArrowRotateLeft, GithubB } from '@vexip-ui/icons'
 import { Confirm, Message } from 'vexip-ui'
+import { Moon, Sun, ShareNodes, Download, ArrowRotateLeft, GithubB } from '@vexip-ui/icons'
 import { downloadProject } from '../download/download'
 
 const props = defineProps({

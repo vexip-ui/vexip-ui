@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img src="./docs/public/vexip-ui.svg" style="width: 180px;" />
+    <img src="./docs/public/vexip-ui.svg" width="180" style="width: 180px;" />
   </a>
 </p>
 
@@ -20,7 +20,7 @@
   如果你用 Vexip UI 写了一些很酷的东西，你都可以告诉我！如果你可以并愿意贡献代码，非常欢迎！
 </p>
 
-**中文** | [English](./README.md)
+**中文 [含技术支持群]** | [English](./README.md)
 
 Vexip UI 提供了一系列开箱即用的组件。
 

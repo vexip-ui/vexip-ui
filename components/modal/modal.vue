@@ -127,6 +127,7 @@ export default defineComponent({
       inner: false,
       maskClose: true,
       modalClass: null,
+      modalStyle: null,
       noFooter: false,
       hideMask: false,
       draggable: false,
@@ -274,16 +275,21 @@ export default defineComponent({
     const wrapperStyle = computed(() => {
       const fixedHeight = currentHeight.value !== 'auto'
 
-      return {
-        top: `${currentTop.value}px`,
-        right:
-          fixedHeight || !props.right || props.right === 'auto' ? undefined : `${props.right}px`,
-        bottom:
-          fixedHeight || !props.bottom || props.bottom === 'auto' ? undefined : `${props.bottom}px`,
-        left: `${currentLeft.value}px`,
-        width: `${currentWidth.value}px`,
-        height: fixedHeight ? `${currentHeight.value}px` : undefined
-      }
+      return [
+        props.modalStyle,
+        {
+          top: `${currentTop.value}px`,
+          right:
+            fixedHeight || !props.right || props.right === 'auto' ? undefined : `${props.right}px`,
+          bottom:
+            fixedHeight || !props.bottom || props.bottom === 'auto'
+              ? undefined
+              : `${props.bottom}px`,
+          left: `${currentLeft.value}px`,
+          width: `${currentWidth.value}px`,
+          height: fixedHeight ? `${currentHeight.value}px` : undefined
+        }
+      ]
     })
     const hasTitle = computed(() => {
       return !!(slots.header || props.title)

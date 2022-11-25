@@ -1,4 +1,11 @@
-import { buildProps, booleanProp, booleanStringProp, classProp, eventProp } from '@vexip-ui/config'
+import {
+  buildProps,
+  booleanProp,
+  booleanStringProp,
+  classProp,
+  styleProp,
+  eventProp
+} from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -19,6 +26,7 @@ export const modalProps = buildProps({
   inner: booleanProp,
   maskClose: booleanProp,
   modalClass: classProp,
+  modalStyle: styleProp,
   noFooter: booleanProp,
   hideMask: booleanProp,
   draggable: booleanProp,

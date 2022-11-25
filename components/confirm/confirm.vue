@@ -6,15 +6,39 @@
     :active="visible"
     :class="[nh.b(), nh.bs('vars')]"
     :modal-class="classR"
+    :modal-style="styleR"
     :top="props.top"
     :left="props.left"
     :width="props.width"
     :mask-close="maskCloseR"
     @hide="handleReset"
   >
-    <div :class="nh.be('body')" :style="styleR">
-      <Renderer v-if="isFunction(rendererR)" :renderer="rendererR"></Renderer>
-      <template v-else>
+    <Renderer v-if="isFunction(rendererR)" :renderer="rendererR"></Renderer>
+    <template v-else>
+      <div v-if="title" :class="nh.be('header')">
+        <div :class="nh.be('title')">
+          {{ title }}
+        </div>
+        <button
+          v-if="closableR"
+          :class="nh.be('close')"
+          @mousedown.stop
+          @click="handleCancel"
+        >
+          <slot name="close">
+            <Icon :scale="1.2" label="close">
+              <Xmark></Xmark>
+            </Icon>
+          </slot>
+        </button>
+      </div>
+      <div
+        :class="[
+          nh.be('body'),
+          nh.bem('body', contentAlignR),
+          title && nh.bem('body', 'with-title')
+        ]"
+      >
         <div :class="nh.be('icon')">
           <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
           <Icon
@@ -28,22 +52,34 @@
         <div v-else :class="nh.be('content')">
           {{ content }}
         </div>
-      </template>
-    </div>
-    <div :class="nh.be('actions')">
-      <Button :class="nh.be('button')" no-pulse @click="handleCancel">
-        {{ cancelTextR || locale.cancel }}
-      </Button>
-      <Button
-        :class="nh.be('button')"
-        no-pulse
-        :type="confirmTypeR"
-        :loading="loading"
-        @click="handleConfirm"
+      </div>
+      <div :class="[nh.be('footer'), nh.bem('footer', actionsAlignR)]">
+        <Button :class="nh.be('button')" no-pulse @click="handleCancel">
+          {{ cancelTextR || locale.cancel }}
+        </Button>
+        <Button
+          :class="nh.be('button')"
+          no-pulse
+          :type="confirmTypeR"
+          :loading="loading"
+          @click="handleConfirm"
+        >
+          {{ confirmTextR || locale.confirm }}
+        </Button>
+      </div>
+      <button
+        v-if="closableR && !title"
+        :class="nh.be('close')"
+        @mousedown.stop
+        @click="handleCancel"
       >
-        {{ confirmTextR || locale.confirm }}
-      </Button>
-    </div>
+        <slot name="close">
+          <Icon :scale="1.2" label="close">
+            <Xmark></Xmark>
+          </Icon>
+        </slot>
+      </button>
+    </template>
   </Modal>
 </template>
 
@@ -55,10 +91,10 @@ import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
 import { useNameHelper, useProps, useLocale } from '@vexip-ui/config'
 import { isPromise, isFunction } from '@vexip-ui/utils'
-import { CircleQuestion } from '@vexip-ui/icons'
+import { Xmark, CircleQuestion } from '@vexip-ui/icons'
 import { confirmProps } from './props'
 
-import type { ConfirmType, ConfirmOptions } from './symbol'
+import type { ConfirmType, ConfirmRenderFn, ConfirmOptions } from './symbol'
 
 const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
@@ -79,7 +115,8 @@ export default defineComponent({
     Button,
     Icon,
     Modal,
-    Renderer
+    Renderer,
+    Xmark
   },
   props: confirmProps,
   setup(_props) {
@@ -112,11 +149,15 @@ export default defineComponent({
         static: true
       },
       iconColor: '',
-      parseHtml: false
+      closable: false,
+      parseHtml: false,
+      contentAlign: 'center',
+      actionsAlign: 'center'
     })
 
     const visible = ref(false)
     const loading = ref(false)
+    const title = ref('')
     const content = ref('')
     const iconColorR = ref(props.iconColor)
     const classR = ref(props.className)
@@ -126,8 +167,11 @@ export default defineComponent({
     const cancelTextR = ref(props.cancelText)
     const maskCloseR = ref(props.maskClose)
     const parseHtmlR = ref(props.parseHtml)
+    const closableR = ref(props.closable)
+    const contentAlignR = ref(props.contentAlign)
+    const actionsAlignR = ref(props.actionsAlign)
     const iconR = ref(props.icon)
-    const rendererR = ref<((options: ConfirmOptions) => any) | null>(props.renderer)
+    const rendererR = ref<ConfirmRenderFn | null>(props.renderer)
     const onBeforeConfirm = ref<(() => unknown) | null>(null)
 
     const onConfirm = ref<(() => void) | null>(null)
@@ -143,6 +187,7 @@ export default defineComponent({
       await mounted
 
       return await new Promise<boolean>(resolve => {
+        title.value = options.title ?? ''
         content.value = options.content ?? ''
         classR.value = options.className ?? props.className
         styleR.value = options.style ?? props.style
@@ -152,13 +197,15 @@ export default defineComponent({
         confirmTextR.value = options.confirmText ?? props.confirmText
         cancelTextR.value = options.cancelText ?? props.cancelText
         parseHtmlR.value = options.parseHtml ?? props.parseHtml
+        closableR.value = options.closable ?? props.closable
+        contentAlignR.value = options.contentAlign ?? props.contentAlign
+        actionsAlignR.value = options.actionsAlign ?? props.actionsAlign
         iconR.value = options.icon ?? props.icon
         rendererR.value = isFunction(options.renderer) ? options.renderer : props.renderer
         onBeforeConfirm.value = isFunction(options.onBeforeConfirm) ? options.onBeforeConfirm : null
 
         if (isFunction(rendererR.value)) {
-          const render = rendererR.value
-          rendererR.value = () => render(options)
+          rendererR.value = () => rendererR.value!(options, handleConfirm, handleCancel)
         }
 
         visible.value = true
@@ -211,6 +258,7 @@ export default defineComponent({
 
     function handleReset() {
       visible.value = false
+      title.value = ''
       content.value = ''
       iconColorR.value = props.iconColor
       classR.value = props.className
@@ -220,6 +268,9 @@ export default defineComponent({
       confirmTextR.value = props.confirmText
       cancelTextR.value = props.cancelText
       parseHtmlR.value = props.parseHtml
+      closableR.value = props.closable
+      contentAlignR.value = props.contentAlign
+      actionsAlignR.value = props.actionsAlign
       iconR.value = props.icon
       rendererR.value = props.renderer
     }
@@ -232,6 +283,7 @@ export default defineComponent({
       locale: useLocale('confirm'),
       visible,
       loading,
+      title,
       content,
 
       classR,
@@ -242,6 +294,9 @@ export default defineComponent({
       confirmTextR,
       cancelTextR,
       parseHtmlR,
+      closableR,
+      contentAlignR,
+      actionsAlignR,
       iconR,
       rendererR,
 
