@@ -92,6 +92,8 @@ $color-picker: map.merge(
   }
 
   &__popper {
+    @include basis;
+
     z-index: get-css-var('color-picker-popper-z-index');
     display: flex;
     padding: 5px 0;

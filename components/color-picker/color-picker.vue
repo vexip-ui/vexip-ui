@@ -89,7 +89,11 @@
         <div
           v-if="currentVisible"
           ref="popper"
-          :class="[nh.be('popper'), nh.bs('vars')]"
+          :class="[
+            nh.be('popper'),
+            nh.bs('vars'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
+          ]"
           @keydown.tab.stop="handleTabDown"
           @keydown.space="handleSpaceDown"
           @keydown.escape="handleEscDown"
@@ -147,6 +151,7 @@
               <Input
                 v-if="!props.noInput"
                 ref="input"
+                inherit
                 :class="nh.be('input')"
                 size="small"
                 :value="hex.toUpperCase()"
@@ -156,6 +161,7 @@
               <Button
                 v-if="props.clearable"
                 ref="cancel"
+                inherit
                 text
                 size="small"
                 @click="handleClear"
@@ -164,6 +170,7 @@
               </Button>
               <Button
                 ref="confirm"
+                inherit
                 type="primary"
                 size="small"
                 @click="handleOk"

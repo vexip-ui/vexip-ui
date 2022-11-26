@@ -291,6 +291,7 @@ export default defineComponent({
                   class={{
                     [nh.be('popper')]: true,
                     [nh.bs('vars')]: true,
+                    [nh.bem('popper', 'inherit')]: transferTo.value !== 'body',
                     [nh.bem('popper', props.reverse ? 'dark' : 'light')]: true,
                     [nh.bem('popper', 'no-hover')]: props.noHover,
                     [nh.bem('popper', 'no-arrow')]: props.noArrow

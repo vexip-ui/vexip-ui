@@ -273,6 +273,7 @@ export default defineComponent({
 
       return (
         <Badge
+          inherit
           class={[nh.be('badge'), nh.bem('badge', badgeType)]}
           content={props.badge}
           type={badgeType}

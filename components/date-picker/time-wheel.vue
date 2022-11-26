@@ -3,6 +3,7 @@
     <Wheel
       ref="hourWheel"
       v-model:value="currentHour"
+      inherit
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
@@ -23,6 +24,7 @@
     <Wheel
       ref="minuteWheel"
       v-model:value="currentMinute"
+      inherit
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"
@@ -43,6 +45,7 @@
     <Wheel
       ref="secondWheel"
       v-model:value="currentSecond"
+      inherit
       :pointer="pointer"
       :arrow="!noArrow"
       :candidate="candidate"

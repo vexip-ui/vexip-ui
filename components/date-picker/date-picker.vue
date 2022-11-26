@@ -119,7 +119,8 @@
             nh.be('popper'),
             nh.ns('calendar-vars'),
             nh.ns('time-picker-vars'),
-            nh.bs('vars')
+            nh.bs('vars'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
           ]"
           @click.stop="handleFocused"
         >

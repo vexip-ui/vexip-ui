@@ -11,19 +11,21 @@
   >
     <template #header>
       <slot name="header">
-        <Row :class="nh.be('header')" align="middle">
+        <Row inherit :class="nh.be('header')" align="middle">
           <Column flex="auto">
             <slot name="title"></slot>
           </Column>
           <Column :class="nh.be('actions')" flex="0">
             <NumberInput
               v-model:value="calendarYear"
+              inherit
               :class="nh.be('year-input')"
               :range="[1970, 2300]"
               :formatter="formatYearInput"
             ></NumberInput>
             <NumberInput
               v-model:value="calendarMonth"
+              inherit
               :class="nh.be('month-input')"
               :range="[1, 12]"
               :formatter="formatMonthInput"

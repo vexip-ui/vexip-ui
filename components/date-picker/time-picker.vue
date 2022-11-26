@@ -120,7 +120,11 @@
         <div
           v-if="currentVisible"
           ref="popper"
-          :class="[nh.be('popper'), nh.bs('vars')]"
+          :class="[
+            nh.be('popper'),
+            nh.bs('vars'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
+          ]"
           @click.stop="handleFocused"
         >
           <div :class="nh.be('panel')">
@@ -164,10 +168,16 @@
                 ></TimeWheel>
               </div>
               <div v-if="!props.noAction" :class="nh.be('action')">
-                <Button text size="small" @click.stop="handleCancel">
+                <Button
+                  inherit
+                  text
+                  size="small"
+                  @click.stop="handleCancel"
+                >
                   {{ props.cancelText || locale.cancel }}
                 </Button>
                 <Button
+                  inherit
                   type="primary"
                   size="small"
                   :disabled="startError || endError"
