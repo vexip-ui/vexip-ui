@@ -198,10 +198,10 @@ export default defineComponent({
         )
         syncInputFiles()
       },
-      { immediate: true }
+      { immediate: true, deep: true }
     )
 
-    expose({ execute })
+    expose({ execute, handleDelete })
 
     function handleClick() {
       !props.disabledClick && input.value?.click()
@@ -778,6 +778,7 @@ export default defineComponent({
     )
   },
   methods: {
-    execute: noop as () => Promise<false | any[]>
+    execute: noop as () => Promise<false | any[]>,
+    handleDelete: noop as (file: FileState) => void
   }
 })

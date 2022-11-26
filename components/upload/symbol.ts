@@ -78,7 +78,8 @@ export interface DirectoryReader {
 }
 
 export interface UploadExposed {
-  execute: () => Promise<false | any[]>
+  execute: () => Promise<false | any[]>,
+  handleDelete: (file: FileState) => void
 }
 
 export const uploadListTypes = Object.freeze<UploadListType>([
