@@ -28,6 +28,7 @@
             <Tag
               v-for="(item, index) in currentValues"
               :key="index"
+              inherit
               :class="nh.be('tag')"
               closable
               @click.stop="toggleVisible"
@@ -132,11 +133,16 @@
         <div
           v-if="currentVisible"
           ref="popper"
-          :class="[nh.be('popper'), nh.bs('vars')]"
+          :class="[
+            nh.be('popper'),
+            nh.bs('vars'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
+          ]"
           @click.stop
         >
           <VirtualList
             ref="virtualList"
+            inherit
             :class="[nh.be('list'), props.listClass]"
             :style="{
               height: listHeight,
@@ -530,6 +536,7 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('multiple')]: props.multiple,
         [nh.bm('filter')]: props.filter
       }

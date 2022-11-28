@@ -97,6 +97,7 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('focused')]: focused.value,
         [nh.bm('disabled')]: props.disabled,
         [nh.bm('loading')]: props.loading && props.loadingLock,

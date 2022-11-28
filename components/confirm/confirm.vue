@@ -54,11 +54,17 @@
         </div>
       </div>
       <div :class="[nh.be('footer'), nh.bem('footer', actionsAlignR)]">
-        <Button :class="nh.be('button')" no-pulse @click="handleCancel">
+        <Button
+          :class="nh.be('button')"
+          inherit
+          no-pulse
+          @click="handleCancel"
+        >
           {{ cancelTextR || locale.cancel }}
         </Button>
         <Button
           :class="nh.be('button')"
+          inherit
           no-pulse
           :type="confirmTypeR"
           :loading="loading"

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[nh.b(), nh.bs('vars')]">
+  <div :class="[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]">
     <template v-for="(item, index) in renderTexts" :key="index">
       <span v-if="item.isKey" :class="nh.be('key-word')">
         <slot name="light" :text="item.text">
@@ -62,6 +62,7 @@ export default defineComponent({
 
     return {
       nh,
+      props,
 
       renderTexts
     }

@@ -94,6 +94,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bem('panel', `arrow-${useArrowType.value}`),
         {
+          [nh.bem('panel', 'inherit')]: collapseState || props.inherit,
           [nh.bem('panel', 'card')]: useCard.value,
           [nh.bem('panel', 'ghost')]: !useCard.value && useGhost.value,
           [nh.bem('panel', 'expanded')]: currentExpanded.value,

@@ -1,5 +1,8 @@
 <template>
-  <ul :class="[nh.be('files'), nh.bs('vars')]" :style="props.style">
+  <ul
+    :class="[nh.be('files'), nh.bs('vars'), props.inherit && nh.bem('files', 'inherit')]"
+    :style="props.style"
+  >
     <transition
       v-for="item in props.files"
       :key="item.id"
@@ -7,6 +10,7 @@
       :name="props.selectToAdd ? transitionName : undefined"
     >
       <UploadFile
+        inherit
         :file="item"
         :icon-renderer="props.iconRenderer"
         :list-type="props.type"

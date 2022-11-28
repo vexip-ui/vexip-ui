@@ -135,6 +135,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(`type-${props.listType}`),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('multiple')]: props.multiple,
           [nh.bm('drag')]: props.allowDrag,
@@ -632,6 +633,7 @@ export default defineComponent({
         <>
           <Button
             ref={button}
+            inherit
             size={size.value}
             icon={IUpload}
             type={props.state}
@@ -748,6 +750,7 @@ export default defineComponent({
     function renderFileList() {
       return (
         <UploadList
+          inherit
           files={renderFiles.value}
           select-to-add={props.selectToAdd}
           type={props.image ? 'thumbnail' : props.listType}

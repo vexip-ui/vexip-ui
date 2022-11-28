@@ -66,6 +66,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('not-wrapper')]: !hasSlot.value,
         [nh.bm('is-dot')]: props.isDot
       }

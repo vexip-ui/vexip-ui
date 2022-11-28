@@ -119,7 +119,8 @@
             nh.be('popper'),
             nh.ns('calendar-vars'),
             nh.ns('time-picker-vars'),
-            nh.bs('vars')
+            nh.bs('vars'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
           ]"
           @click.stop="handleFocused"
         >
@@ -314,6 +315,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.type),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm('no-hour')]: !startState.enabled.hour,

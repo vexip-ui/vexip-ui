@@ -58,6 +58,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.type)]: props.type !== 'default',
         [nh.bm('disabled')]: props.disabled,
         [nh.bm('underline')]: props.underline

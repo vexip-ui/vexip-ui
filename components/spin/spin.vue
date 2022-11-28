@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="!props.inner"
-    :class="[nh.b(), nh.bs('vars')]"
+    :class="[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]"
     :aria-busy="currentActive ? 'true' : undefined"
   >
     <slot></slot>

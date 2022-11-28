@@ -1,7 +1,7 @@
 <template>
   <div
     ref="wrapper"
-    :class="[nh.b(), props.maxLines > 0 && nh.bm('multiple')]"
+    :class="className"
     :style="ellipsisStyle"
     v-bind="$attrs"
     @mouseenter="handleTriggerEnter"
@@ -17,6 +17,7 @@
         :class="{
           [tooltipNh.be('popper')]: true,
           [tooltipNh.bs('vars')]: true,
+          [tooltipNh.bem('popper', 'inherit')]: transferTo !== 'body',
           [tooltipNh.bem('popper', props.tooltipTheme)]: true,
           [tooltipNh.bem('popper', 'no-hover')]: props.noHover
         }"
@@ -80,6 +81,14 @@ export default defineComponent({
       transfer,
       wrapper,
       reference: wrapper
+    })
+
+    const className = computed(() => {
+      return {
+        [nh.b()]: true,
+        [nh.bm('inherit')]: props.inherit,
+        [nh.bm('multiple')]: props.maxLines
+      }
     })
     const ellipsisStyle = computed(() => {
       return props.maxLines > 0 ? { '-webkit-line-clamp': props.maxLines } : ''
@@ -145,6 +154,7 @@ export default defineComponent({
       content,
       transferTo,
 
+      className,
       ellipsisStyle,
       tipStyle,
 

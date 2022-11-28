@@ -31,8 +31,6 @@ $option: map.merge(
     @include define-preset-values('option', $option);
   }
 
-  @include basis;
-
   $label-v-padding: get-css-var('option-label-v-padding');
   $label-h-padding: get-css-var('option-label-h-padding');
   $label-padding: $label-v-padding $label-h-padding;
@@ -97,8 +95,6 @@ $option: map.merge(
 
   @at-root {
     &-group {
-      @include basis;
-
       white-space: nowrap;
       list-style: none;
       user-select: none;

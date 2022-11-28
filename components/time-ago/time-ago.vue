@@ -1,5 +1,5 @@
 <template>
-  <span :class="nh.b()" :title="currentTitle">
+  <span :class="[nh.b(), props.inherit && nh.bm('inherit')]" :title="currentTitle">
     {{ timeAgo }}
   </span>
 </template>
@@ -88,6 +88,7 @@ export default defineComponent({
 
     return {
       nh,
+      props,
       timeAgo,
 
       currentTitle

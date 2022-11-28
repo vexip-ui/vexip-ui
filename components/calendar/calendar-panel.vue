@@ -1,5 +1,5 @@
 <template>
-  <div :class="[nh.be('panel'), nh.bs('vars')]">
+  <div :class="[nh.be('panel'), nh.bs('vars'), props.inherit && nh.bem('panel', 'inherit')]">
     <slot name="header"></slot>
     <div :class="[nh.be('row'), nh.bem('row', 'week')]">
       <div v-for="week in 7" :key="week" :class="[nh.be('cell'), nh.be('cell-week')]">

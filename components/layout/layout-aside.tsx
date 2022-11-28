@@ -49,6 +49,7 @@ export default defineComponent({
         nh.be('aside'),
         {
           [nh.bs('vars')]: !layoutState.isLayout,
+          [nh.bem('aside', 'inherit')]: layoutState.isLayout || props.inherit,
           [nh.bem('aside', 'fixed')]: matched.value,
           [nh.bem('aside', 'expanded')]: currentExpanded.value,
           [nh.bem('aside', 'reduced')]: currentReduced.value

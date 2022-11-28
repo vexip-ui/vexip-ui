@@ -103,6 +103,7 @@
             </div>
             <CalendarPanel
               v-else
+              inherit
               :value="calendarValue"
               :year="calendarYear"
               :month="calendarMonth"
@@ -131,10 +132,16 @@
         </div>
       </div>
       <div v-if="!noAction" :class="nh.be('action')">
-        <Button text size="small" @click="handleCancel">
+        <Button
+          inherit
+          text
+          size="small"
+          @click="handleCancel"
+        >
           {{ cancelText || locale.cancel }}
         </Button>
         <Button
+          inherit
           type="primary"
           size="small"
           :disabled="hasError"

@@ -20,6 +20,7 @@
     <div :class="nh.be('scroll')">
       <Scroll
         ref="scroll"
+        inherit
         :scroll-x="props.horizontal ? targetWidth * currentActive : 0"
         :scroll-y="props.horizontal ? 0 : targetHeight * currentActive"
         :width="props.horizontal ? wrapperWidth : '100%'"
@@ -193,6 +194,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.horizontal ? 'horizontal' : 'vertical'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading && props.loadingLock

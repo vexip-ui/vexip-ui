@@ -105,6 +105,7 @@ export default defineComponent({
       return {
         [nh.bs('wrapper')]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.size)]: props.size !== 'default'
       }
     })

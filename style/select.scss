@@ -129,6 +129,8 @@ $select: map.merge(
   }
 
   &__popper {
+    @include basis;
+
     z-index: get-css-var('z-index-popper');
     display: flex;
     min-width: 98px;

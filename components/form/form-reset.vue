@@ -1,5 +1,6 @@
 <template>
   <Button
+    :inherit="isInherit"
     :class="nh.be('reset')"
     :size="props.size"
     :type="props.type"
@@ -26,14 +27,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue'
+import { defineComponent, computed, inject } from 'vue'
 import { Button } from '@/components/button'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
-import { noop, isPromise } from '@vexip-ui/utils'
+import { isPromise } from '@vexip-ui/utils'
 import { formResetProps } from './props'
 import { FORM_ACTIONS } from './symbol'
-
-import type { FormActions } from './symbol'
 
 export default defineComponent({
   name: 'FormReset',
@@ -65,15 +64,9 @@ export default defineComponent({
         isFunc: true
       }
     })
-    const actions = inject<FormActions>(FORM_ACTIONS, {
-      getLabelWidth: noop,
-      validate: noop,
-      validateFields: noop,
-      reset: noop,
-      resetFields: noop,
-      clearError: noop,
-      clearFieldsError: noop
-    })
+    const actions = inject(FORM_ACTIONS, null)
+
+    const isInherit = computed(() => !!actions || props.inherit)
 
     async function handleReset() {
       if (props.disabled) return
@@ -89,7 +82,7 @@ export default defineComponent({
       }
 
       if (result !== false) {
-        actions.reset()
+        actions?.reset()
         emitEvent(props.onReset)
       }
     }
@@ -98,6 +91,8 @@ export default defineComponent({
       props,
       nh: useNameHelper('form'),
       locale: useLocale('form'),
+
+      isInherit,
 
       handleReset
     }

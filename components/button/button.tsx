@@ -60,6 +60,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(type.value)]: type.value !== 'default',
         [nh.bm('simple')]: !props.ghost && props.simple,
         [nh.bm('ghost')]: props.ghost,
@@ -272,6 +273,7 @@ export default defineComponent({
 
       return (
         <Badge
+          inherit
           class={[nh.be('badge'), nh.bem('badge', badgeType)]}
           content={props.badge}
           type={badgeType}

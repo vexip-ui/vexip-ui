@@ -43,7 +43,13 @@ export default defineComponent({
             : props.useFlex
           : {})
       }
-      const className = [nh.b(), { [nh.bm('flex')]: columnFlex }]
+      const className = [
+        nh.b(),
+        {
+          [nh.bm('flex')]: columnFlex,
+          [nh.bm('inherit')]: rowState || props.inherit
+        }
+      ]
 
       if (columnFlex) {
         columnFlex.justify && className.push(nh.bm(columnFlex.justify))

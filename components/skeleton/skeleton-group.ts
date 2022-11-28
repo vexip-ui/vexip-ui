@@ -27,7 +27,7 @@ export default defineComponent({
         return h(
           typeof props.tag === 'string' ? props.tag : 'div',
           {
-            class: nh.b(),
+            class: [nh.b(), props.inherit && nh.bm('inherit')],
             role: 'group'
           },
           {

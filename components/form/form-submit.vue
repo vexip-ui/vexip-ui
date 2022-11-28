@@ -1,5 +1,6 @@
 <template>
   <Button
+    :inherit="isInherit"
     :class="nh.be('submit')"
     :size="props.size"
     :type="props.type"
@@ -36,11 +37,9 @@
 import { defineComponent, ref, computed, inject } from 'vue'
 import { Button } from '@/components/button'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
-import { noop, isPromise } from '@vexip-ui/utils'
+import { isPromise } from '@vexip-ui/utils'
 import { formSubmitProps } from './props'
 import { FORM_PROPS, FORM_ACTIONS } from './symbol'
-
-import type { FormActions } from './symbol'
 
 export default defineComponent({
   name: 'FormSubmit',
@@ -73,24 +72,17 @@ export default defineComponent({
     })
 
     const formProps = inject(FORM_PROPS, {})
-    const actions = inject<FormActions>(FORM_ACTIONS, {
-      getLabelWidth: noop,
-      validate: noop,
-      validateFields: noop,
-      reset: noop,
-      resetFields: noop,
-      clearError: noop,
-      clearFieldsError: noop
-    })
+    const actions = inject(FORM_ACTIONS, null)
 
     const loading = ref(false)
 
     const submit = ref<HTMLElement>()
 
     const isNative = computed(() => formProps.method && formProps.action)
+    const isInherit = computed(() => !!actions || props.inherit)
 
     async function handleSubmit() {
-      if (props.disabled) return
+      if (props.disabled || !actions) return
 
       loading.value = true
 
@@ -130,6 +122,7 @@ export default defineComponent({
       submit,
 
       isNative,
+      isInherit,
 
       handleSubmit
     }

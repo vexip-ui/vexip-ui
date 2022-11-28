@@ -70,7 +70,12 @@
           v-if="popperShow"
           v-show="popperShow && showGroup"
           ref="popper"
-          :class="[nh.be('popper'), nh.bs('vars'), isHorizontal ? nh.bem('popper', 'drop') : '']"
+          :class="[
+            nh.be('popper'),
+            nh.bs('vars'),
+            isHorizontal && nh.bem('popper', 'drop'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
+          ]"
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >

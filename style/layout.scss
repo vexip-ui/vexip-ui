@@ -39,6 +39,8 @@ $layout: map.merge(
   overflow: hidden;
 
   &__aside {
+    @include basis;
+
     position: absolute;
     top: 0;
     bottom: 0;
@@ -123,6 +125,8 @@ $layout: map.merge(
   }
 
   &__header {
+    @include basis;
+
     position: absolute;
     top: 0;
     left: 0;
@@ -206,6 +210,8 @@ $layout: map.merge(
   }
 
   &__footer {
+    @include basis;
+
     display: flex;
     flex-direction: column;
     align-items: center;

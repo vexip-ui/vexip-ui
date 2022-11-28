@@ -4,6 +4,7 @@
     ref="select"
     v-model:visible="visible"
     :class="nh.b()"
+    :inherit="props.inherit"
     :list-class="nh.be('list')"
     :value="currentValue"
     :size="props.size"
