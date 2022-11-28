@@ -42,6 +42,7 @@
         </span>
         <Checkbox
           v-if="hasCheckbox && !suffixCheckbox"
+          inherit
           :class="nh.be('checkbox')"
           :tab-index="-1"
           :control="hasArrow"
@@ -81,6 +82,7 @@
         </div>
         <Checkbox
           v-if="hasCheckbox && suffixCheckbox"
+          inherit
           :class="[nh.be('checkbox'), nh.bem('checkbox', 'suffix')]"
           :tab-index="-1"
           :control="hasArrow"
@@ -121,10 +123,10 @@
         :upper-matched="item.upperMatched"
         :node-props="nodeProps"
       >
-        <template #default="payload">
+        <template #default="payload: any">
           <slot v-bind="payload"></slot>
         </template>
-        <template #label="payload">
+        <template #label="payload: any">
           <slot name="label" v-bind="payload"></slot>
         </template>
       </TreeNode>

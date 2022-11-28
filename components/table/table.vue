@@ -11,6 +11,7 @@
     </div>
     <Scroll
       v-if="useXScroll"
+      inherit
       use-x-bar
       mode="horizontal"
       :class="[nh.be('wrapper'), props.scrollClass.horizontal]"
@@ -22,6 +23,7 @@
     >
       <TableHead ref="thead"></TableHead>
       <Scroll
+        inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -40,6 +42,7 @@
       <TableHead ref="thead"></TableHead>
       <Scroll
         ref="mainScroll"
+        inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -65,6 +68,7 @@
       <TableHead fixed="left"></TableHead>
       <Scroll
         ref="mainScroll"
+        inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.left]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -87,6 +91,7 @@
     >
       <TableHead fixed="right"></TableHead>
       <Scroll
+        inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.right]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -101,6 +106,7 @@
     <Scrollbar
       v-if="props.useYBar && bodyScrollHeight"
       ref="scrollbar"
+      inherit
       placement="right"
       :class="nh.bem('bar', 'vertical')"
       :fade="props.barFade"

@@ -187,6 +187,7 @@
     >
       <Select
         v-model:value="currentPageSize"
+        inherit
         :class="nh.be('size-select')"
         :options="sizeObjectOptions"
         :filter="false"
@@ -202,6 +203,7 @@
       {{ locale.jumpTo }}
       <NumberInput
         v-model:value="jumpValue"
+        inherit
         :class="nh.be('jump-input')"
         :clearable="false"
         :sync="false"

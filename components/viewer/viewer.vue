@@ -45,7 +45,11 @@
               :scale="getActionProp(action, 'iconScale') || 1"
             ></Icon>
           </button>
-          <Divider v-if="getActionProp(action, 'divided')" :vertical="!toolbarVertical"></Divider>
+          <Divider
+            v-if="getActionProp(action, 'divided')"
+            inherit
+            :vertical="!toolbarVertical"
+          ></Divider>
         </template>
       </template>
     </div>

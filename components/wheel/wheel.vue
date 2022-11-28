@@ -20,6 +20,7 @@
     <div :class="nh.be('scroll')">
       <Scroll
         ref="scroll"
+        inherit
         :scroll-x="props.horizontal ? targetWidth * currentActive : 0"
         :scroll-y="props.horizontal ? 0 : targetHeight * currentActive"
         :width="props.horizontal ? wrapperWidth : '100%'"

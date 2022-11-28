@@ -17,6 +17,7 @@
       </div>
       <div v-else-if="useBubble" :class="nh.be('reference')" :style="infoStyle">
         <Bubble
+          inherit
           :class="nh.be('bubble')"
           :style="bubbleStyle"
           :placement="bubbleType"

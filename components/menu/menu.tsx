@@ -333,7 +333,7 @@ export default defineComponent({
               )
             : props.horizontal
               ? (
-            <Overflow>
+            <Overflow inherit>
               {{
                 default: renderMenus,
                 counter: ({ count }: { count: number }) => (

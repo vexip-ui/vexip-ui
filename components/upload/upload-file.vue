@@ -54,6 +54,7 @@
         </div>
         <div v-if="props.file.status === 'uploading'" :class="nh.be('progress')">
           <Progress
+            inherit
             info-type="none"
             :stroke-width="2"
             :percentage="props.file.percentage"
@@ -70,6 +71,7 @@
                   {{ props.loadingText ?? locale.uploading }}
                 </span>
                 <Progress
+                  inherit
                   info-type="none"
                   :stroke-width="2"
                   :percentage="props.file.percentage"
@@ -108,6 +110,7 @@
             <CollapseTransition>
               <div v-if="props.file.status === 'uploading'" :class="nh.be('progress')">
                 <Progress
+                  inherit
                   info-type="none"
                   :stroke-width="4"
                   :percentage="props.file.percentage"

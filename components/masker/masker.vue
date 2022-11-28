@@ -86,17 +86,6 @@ export default defineComponent({
     let showing = false
     let prevFocusdEl: HTMLElement | null = null
 
-    const className = computed(() => {
-      return [
-        nh.b(),
-        nh.bs('vars'),
-        {
-          [nh.bm('inherit')]: props.inherit,
-          [nh.bm('inner')]: props.inner,
-          [nh.bm('disabled')]: props.disabled
-        }
-      ]
-    })
     const transferTo = computed(() => {
       return props.inner
         ? ''
@@ -105,6 +94,17 @@ export default defineComponent({
             ? 'body'
             : ''
           : props.transfer
+    })
+    const className = computed(() => {
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        {
+          [nh.bm('inherit')]: transferTo.value !== 'body' && props.inherit,
+          [nh.bm('inner')]: props.inner,
+          [nh.bm('disabled')]: props.disabled
+        }
+      ]
     })
 
     watch(

@@ -8,6 +8,7 @@
     <div ref="header" :class="nh.be('header')">
       <slot name="header" v-bind="getSlotPayload()">
         <Checkbox
+          inherit
           control
           :class="nh.be('checkbox')"
           :state="deepState ? state : undefined"
@@ -45,6 +46,7 @@
       <Input
         ref="input"
         v-model:value="currentFilter"
+        inherit
         clearable
         :disabled="disabled"
         :suffix="MagnifyingGlass"
@@ -76,6 +78,7 @@
     <VirtualList
       v-else
       ref="list"
+      inherit
       :class="nh.be('body')"
       :items="visibleOptions"
       :item-size="optionHeight"
@@ -104,6 +107,7 @@
             <ChevronLeft></ChevronLeft>
           </Icon>
           <NumberInput
+            inherit
             :value="currentPage"
             :class="nh.be('page-input')"
             size="small"

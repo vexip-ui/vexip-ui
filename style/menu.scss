@@ -321,9 +321,6 @@ $menu: map.merge(
     @include clear-both;
 
     #{$popper} & {
-      // @include basis;
-
-      // position: relative;
       display: inline-block;
       min-width: 70px;
       padding: 5px 0;

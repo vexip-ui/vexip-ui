@@ -633,6 +633,7 @@ export default defineComponent({
         <>
           <Button
             ref={button}
+            inherit
             size={size.value}
             icon={IUpload}
             type={props.state}

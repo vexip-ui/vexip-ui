@@ -22,6 +22,7 @@
     <Scrollbar
       v-if="props.useXBar"
       ref="xBar"
+      inherit
       placement="bottom"
       :class="[nh.bem('bar', 'horizontal'), props.barClass]"
       :fade="props.barFade"
@@ -37,6 +38,7 @@
     <Scrollbar
       v-if="props.useYBar"
       ref="yBar"
+      inherit
       placement="right"
       :class="[nh.bem('bar', 'vertical'), props.barClass]"
       :fade="props.barFade"

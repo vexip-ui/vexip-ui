@@ -17,6 +17,7 @@
         :class="{
           [tooltipNh.be('popper')]: true,
           [tooltipNh.bs('vars')]: true,
+          [tooltipNh.bem('popper', 'inherit')]: transferTo !== 'body',
           [tooltipNh.bem('popper', props.tooltipTheme)]: true,
           [tooltipNh.bem('popper', 'no-hover')]: props.noHover
         }"

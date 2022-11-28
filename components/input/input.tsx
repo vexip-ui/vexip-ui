@@ -105,6 +105,7 @@ export default defineComponent({
       return {
         [nh.bs('wrapper')]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.size)]: props.size !== 'default'
       }
     })
@@ -114,7 +115,6 @@ export default defineComponent({
         nh.bm(props.type),
         !hasBefore.value && !hasAfter.value && basisClass.value,
         {
-          [nh.bm('inherit')]: props.inherit,
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading && props.loadingLock,

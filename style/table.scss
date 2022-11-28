@@ -298,6 +298,8 @@ $table: map.merge(
     }
 
     &-wrapper {
+      @include basis;
+
       padding: {
         right: 0 !important;
         left: 0 !important;
