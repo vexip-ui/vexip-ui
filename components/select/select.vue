@@ -214,7 +214,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef, onMounted } from 'vue'
 import { Icon } from '@/components/icon'
 import { Option } from '@/components/option'
 import { Portal } from '@/components/portal'
@@ -657,6 +657,8 @@ export default defineComponent({
 
       filterOptions(value)
     })
+
+    onMounted(syncInputValue)
 
     function initValueAndLabel(value: SelectValue | null) {
       if (isNull(value)) {
