@@ -1,5 +1,5 @@
 <template>
-  <Row tag="header" class="header">
+  <Row tag="header" class="header" :column-flex="{ align: 'middle' }">
     <Column flex="0">
       <Linker to="https://www.vexipui.com">
         <h1 class="index">
@@ -13,29 +13,43 @@
     </Column>
     <Column flex="auto"></Column>
     <Column flex="0">
-      <div class="action" title="Toggle Dark" @click="toggleDark">
+      <div v-for="(meta, index) in repoMeta" :key="index" class="action">
+        <span class="repo-name">
+          {{ meta.name }}
+        </span>
+        <Select :value="meta.acttive" :options="meta.versions" transparent></Select>
+      </div>
+      <Switch
+        class="ssr-switch"
+        :value="ssr"
+        open-color="var(--vxp-color-success-base)"
+        open-text="SSR"
+        close-text="SPA"
+        @change="toggleSSR"
+      ></Switch>
+      <button class="action" title="Toggle Dark" @click="toggleDark">
         <Icon v-if="isDarkTheme" :scale="1.3">
           <Moon></Moon>
         </Icon>
         <Icon v-else :scale="1.3">
           <Sun></Sun>
         </Icon>
-      </div>
-      <div class="action" title="Share" @click="copyLink">
+      </button>
+      <button class="action" title="Share" @click="copyLink">
         <Icon :scale="1.3">
           <ShareNodes></ShareNodes>
         </Icon>
-      </div>
-      <div class="action" title="Download" @click="download">
+      </button>
+      <button class="action" title="Download" @click="download">
         <Icon :scale="1.3">
           <Download></Download>
         </Icon>
-      </div>
-      <div class="action" title="Reset" @click="reset">
+      </button>
+      <button class="action" title="Reset" @click="reset">
         <Icon :scale="1.3">
           <ArrowRotateLeft></ArrowRotateLeft>
         </Icon>
-      </div>
+      </button>
       <Linker
         class="github-link"
         title="Github"
@@ -50,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { Confirm, Message } from 'vexip-ui'
 import { Moon, Sun, ShareNodes, Download, ArrowRotateLeft, GithubB } from '@vexip-ui/icons'
 import { downloadProject } from '../download/download'
@@ -58,12 +72,75 @@ import { downloadProject } from '../download/download'
 const props = defineProps({
   store: {
     type: Object,
-    default: () => ({})
+    required: true
+  },
+  ssr: {
+    type: Boolean,
+    default: false
   }
 })
 
+const emit = defineEmits(['toggle-ssr'])
+
 const isDarkTheme = ref(document.documentElement.classList.contains('dark'))
 const libVersion = ref(__VERSION__)
+
+const repoMeta = reactive([
+  {
+    owner: 'vexip-ui',
+    repo: 'vexip-ui',
+    name: 'Vexip UI',
+    versions: ['latest'],
+    acttive: 'latest'
+  },
+  {
+    owner: 'vuejs',
+    repo: 'core',
+    name: 'Vue',
+    versions: ['latest'],
+    acttive: 'latest'
+  }
+])
+
+init()
+
+onMounted(() => {
+  window.addEventListener('blur', handleWindowBlur)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('blur', handleWindowBlur)
+})
+
+async function init() {
+  Promise.all(
+    repoMeta.map(async meta => {
+      meta.versions = ['latest', ...(await fetchVersions(meta.owner, meta.repo))]
+    })
+  )
+}
+
+async function fetchVersions(owner: string, repo: string, maxCount = 15) {
+  const response = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/releases?per_page=${maxCount}`
+  )
+  const releases = (await response.json()) as any[]
+  const versions = releases
+    .map(r => (/^v/.test(r.tag_name) ? r.tag_name.slice(1) : r.tag_name))
+    .filter(r => !r.includes('-'))
+
+  return versions as string[]
+}
+
+function handleWindowBlur() {
+  if (document.activeElement?.tagName === 'IFRAME') {
+    document.dispatchEvent(new MouseEvent('click'))
+  }
+}
+
+function toggleSSR() {
+  emit('toggle-ssr')
+}
 
 function toggleDark() {
   const cls = document.documentElement.classList
@@ -100,16 +177,12 @@ function reset() {
 
 <style lang="scss">
 .header {
-  --bg: var(--vxp-color-white);
-  --bg-light: var(--vxp-color-white);
-  --border: var(--vxp-border-color-base);
-
   z-index: 10;
   height: var(--nav-height);
   padding: 0 1em;
   font-size: 13px;
-  color: var(--base);
-  background-color: var(--bg);
+  color: var(--vxp-content-color-base);
+  background-color: var(--vxp-bg-color-base);
   border-bottom: 1px solid transparent;
   box-shadow: 0 0 4px rgba(0, 0, 0, 30%);
   transition:
@@ -118,12 +191,9 @@ function reset() {
     var(--vxp-transition-shadow);
 
   .dark & {
-    --base: #ddd;
-    --bg: #1a1a1a;
-    --bg-light: #242424;
     --border: #383838;
 
-    border-bottom-color: var(--border);
+    border-bottom-color: var(--vxp-border-color-base);
     box-shadow: none;
   }
 
@@ -151,18 +221,17 @@ function reset() {
     }
   }
 
+  .ssr-switch {
+    margin-right: 10px;
+  }
+
   .action,
   .github-link {
-    &,
-    .vxp-icon {
-      color: var(--base);
-    }
+    color: var(--vxp-content-color-secondary);
 
-    &:hover {
-      &,
-      .vxp-icon {
-        color: var(--base);
-      }
+    &:hover,
+    &:focus {
+      color: var(var(--vxp-content-color-base));
     }
   }
 
@@ -170,13 +239,20 @@ function reset() {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
     margin-right: 10px;
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+  }
+
+  .repo-name {
+    margin-right: 6px;
+    white-space: nowrap;
   }
 
   .vxp-column {
-    display: flex;
-    align-items: center;
     height: 100%;
   }
 }
