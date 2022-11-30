@@ -1,15 +1,35 @@
+@use 'sass:map';
 @use 'sass:math';
 
 @use './design' as *;
 
+$column: () !default;
+$column: map.merge(
+  (
+    display: block
+  ),
+  $column
+);
+
 .#{$namespace}-column {
+  &-vars {
+    @include define-preset-values('column', $column);
+  }
+
   @include basis;
 
   position: relative;
+  display: get-css-var('column-display');
   max-width: 100%;
 
   &--flex {
-    display: flex;
+    // display: flex;
+    @include define-preset-values(
+      'column',
+      (
+        display: flex
+      )
+    );
   }
 
   &--start {
@@ -56,6 +76,7 @@
     $size: (math.div(1, 24) * $i * 100) * 1%;
 
     &--#{$i} {
+      display: if($i == 0, none, get-css-var('column-display'));
       flex: 0 0 $size;
       max-width: $size;
     }
@@ -87,6 +108,7 @@
         $size: (math.div(1, 24) * $i * 100) * 1%;
 
         &--#{$point}-#{$i} {
+          display: get-css-var('column-display');
           flex: 0 0 $size;
           max-width: $size;
         }

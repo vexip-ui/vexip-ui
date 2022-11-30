@@ -45,6 +45,7 @@ export default defineComponent({
       }
       const className = [
         nh.b(),
+        nh.bs('vars'),
         {
           [nh.bm('flex')]: columnFlex,
           [nh.bm('inherit')]: rowState || props.inherit
