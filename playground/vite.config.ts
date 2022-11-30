@@ -3,70 +3,45 @@ import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import serveStatic from 'serve-static'
 
-const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
+const upstreamPkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'))
+const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
+
+const getVersion = (name: string) =>
+  /^\d/.test(pkg.dependencies[name]) ? pkg.dependencies[name] : pkg.dependencies[name].slice(1)
 
 export default defineConfig(({ command }) => {
-  const isServe = command === 'serve'
+  const useServer = command === 'serve'
 
   return {
     define: {
-      __VERSION__: JSON.stringify(pkg.version),
+      __VERSION__: JSON.stringify(upstreamPkg.version),
+      __VUE_VERSION__: JSON.stringify(getVersion('vue')),
+      __REPL_VERSION__: JSON.stringify(getVersion('@vue/repl')),
       __VUE_PROD_DEVTOOLS__: JSON.stringify(true)
     },
     resolve: {
       alias: [
-        { find: /^@\/(.+)/, replacement: resolve(__dirname, '..', '$1') },
-        { find: /^vexip-ui\/(.+)/, replacement: resolve(__dirname, '..', '$1') }
+        { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
+        { find: /^vexip-ui$/, replacement: resolve(__dirname, '../components') },
+        { find: /^vexip-ui\/(.+)/, replacement: resolve(__dirname, '../$1') },
+        { find: '@vexip-ui/config', replacement: resolve(__dirname, '../common/config/src') }
       ],
-      dedupe: ['vue', 'vexip-ui']
+      dedupe: useServer ? ['../components', 'vue'] : ['vue', 'vexip-ui']
     },
-    publicDir: !isServe && 'public',
+    publicDir: 'public',
     server: {
-      port: 6012
+      port: 6012,
+      fs: {
+        allow: ['..']
+      }
     },
     build: {
       chunkSizeWarningLimit: 10 * 1024
     },
     optimizeDeps: {
-      exclude: ['@vue/repl']
+      exclude: ['@vue/repl', 'vue/server-renderer']
     },
-    plugins: [
-      vue(),
-      vueJsx(),
-      isServe && {
-        name: 'serve-dist',
-        configureServer({ middlewares }) {
-          middlewares.use('/', serveStatic(resolve(__dirname, '../dist')))
-          middlewares.use('/', serveStatic(resolve(__dirname, 'public')))
-          middlewares.use('/icons', serveStatic(resolve(__dirname, '../common/icons/dist')))
-          middlewares.use('/utils', serveStatic(resolve(__dirname, '../common/utils/dist')))
-        }
-      },
-      {
-        name: 'copy-deps',
-        apply: 'build',
-        generateBundle() {
-          const depPaths: Record<string, string> = {
-            'vue.runtime.esm-browser.js': '../node_modules/vue/dist/vue.runtime.esm-browser.js',
-            'vexip-ui.js': '../dist/vexip-ui.mjs',
-            'style.css': '../dist/style.css',
-            'vexip-ui-icons.js': '../common/icons/dist/index.mjs',
-            'vexip-ui-utils.js': '../common/utils/dist/index.mjs'
-          }
-
-          Object.keys(depPaths).forEach(fileName => {
-            const filePath = resolve(__dirname, depPaths[fileName])
-
-            this.emitFile({
-              fileName,
-              type: 'asset',
-              source: readFileSync(filePath, 'utf-8')
-            })
-          })
-        }
-      }
-    ]
+    plugins: [vue(), vueJsx()]
   }
 })

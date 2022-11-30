@@ -10,14 +10,22 @@ import ThemeSwitch from './ThemeSwitch.vue'
 import { install } from 'vexip-ui'
 
 const loaded = ref(false)
-const app = getCurrentInstance()!.appContext.app
+const instance = getCurrentInstance()
 
-app.use(install)
+if (instance) {
+  instance.appContext.app.use(install)
+}
 
 const link = document.createElement('link')
 
 link.rel = 'stylesheet'
-link.href = '/style.css'
+
+if (import.meta.resolve) {
+  link.href = import.meta.resolve('vexip-ui/style.css') as any
+} else {
+  link.href = '__VEXIP_UI_STYLE__'
+}
+
 link.onload = () => {
   loaded.value = true
 }

@@ -1,5 +1,10 @@
 <template>
-  <Header :store="store" :ssr="ssrMode" @toggle-ssr="toggleSSR"></Header>
+  <Header
+    :store="store"
+    :ssr="ssrMode"
+    :versions="versions"
+    @toggle-ssr="toggleSSR"
+  ></Header>
   <Repl
     show-compile-output
     auto-resize
@@ -25,7 +30,8 @@ if (hash.startsWith('__SSR__')) {
   ssrMode.value = true
 }
 
-const store = new ReplStore({ serializedState: hash })
+const versions = getSearch()
+const store = new ReplStore({ serializedState: hash, versions })
 
 // enable experimental features
 const sfcOptions = {
@@ -46,9 +52,29 @@ function toggleSSR() {
   ssrMode.value = !ssrMode.value
   store.setFiles(store.getFiles())
 }
+
+function getSearch() {
+  if (location.search) {
+    const units = location.search.substring(1).split('&')
+
+    return units.reduce((prev, current) => {
+      if (current) {
+        const [key, value] = current.split('=')
+        prev[key] = value
+      }
+
+      return prev
+    }, {} as Record<string, string>)
+  }
+
+  return {}
+}
 </script>
 
 <style lang="scss">
+@use 'sass:map';
+@use './style.scss' as *;
+
 body {
   --nav-height: 50px;
 
@@ -81,5 +107,44 @@ body {
 
 .iframe-container {
   background-color: var(--vxp-bg-color-base) !important;
+}
+
+.split-pane {
+  $lg: (
+    max-width: map.get(map.get($break-point-map, 'lg'), 'min-width') - 0.02px
+  );
+
+  @include query-media('lg') {
+    .left,
+    .right {
+      width: 50%;
+    }
+  }
+
+  @media #{inspect($lg)} {
+    .left,
+    .right {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .right {
+      display: none;
+    }
+
+    .toggler {
+      display: block !important;
+    }
+
+    &.show-output {
+      .left {
+        display: none;
+      }
+
+      .right {
+        display: block;
+      }
+    }
+  }
 }
 </style>

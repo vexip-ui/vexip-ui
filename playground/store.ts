@@ -7,63 +7,120 @@ import mainCode from './templates/main.vue?raw'
 import appCode from './templates/app.vue?raw'
 import themeCode from './templates/theme.vue?raw'
 
-import type {
-  Store,
-  StoreOptions as _StoreOptions,
-  StoreState,
-  SFCOptions,
-  OutputModes
-} from '@vue/repl'
+import type { Store, StoreOptions, StoreState, SFCOptions, OutputModes } from '@vue/repl'
 
-type StoreOptions = Omit<_StoreOptions, 'defaultVueRuntimeURL' | 'defaultVueServerRendererURL'>
+type ReplOptions = Omit<StoreOptions, 'defaultVueRuntimeURL' | 'defaultVueServerRendererURL'> & {
+  versions?: Record<string, string>
+}
+
+interface PathMeta {
+  pkg: string,
+  path: string
+}
 
 const mainFile = 'Main.vue'
 const appFile = 'App.vue'
 const themeFile = 'ThemeSwitch.vue'
 
 const inertnalFiles: Record<string, string> = {
-  [mainFile]: mainCode,
+  [mainFile]: mainCode.replace('__VEXIP_UI_STYLE__', getUnpkgUrl('vexip-ui', 'dist/style.css')),
   [themeFile]: themeCode
 }
 
-const pkgPathMap: Record<string, string> = {
+const pkgPathMap: Record<string, string | PathMeta> = {
   vue: 'dist/vue.runtime.esm-browser.js',
-  'vue/server-renderer': 'dist/server-renderer.esm-browser.js',
+  'vue/server-renderer': {
+    pkg: '@vue/server-renderer',
+    path: 'dist/server-renderer.esm-browser.js'
+  },
   'vexip-ui': 'dist/vexip-ui.mjs',
+  'vexip-ui/style.css': {
+    pkg: 'vexip-ui',
+    path: 'dist/style.css'
+  },
   '@vexip-ui/icons': 'dist/index.mjs',
   '@vexip-ui/utils': 'dist/index.mjs',
-  'vue-router': 'vue-router.js'
+  'vue-router': 'dist/vue-router.esm-browser.js'
 }
 
-const devPathMap: Record<string, string> = {
-  vue: 'proxy/vue',
-  'vue/server-renderer': 'proxy/vue-server',
-  'vexip-ui': 'proxy/vexip-ui',
-  '@vexip-ui/icons': 'proxy/icons',
-  '@vexip-ui/utils': 'proxy/utils',
-  'vue-router': 'proxy/vue-router'
+const localeConfig = {
+  en: {
+    confirm: 'Are you sure you want to delete #{0}?',
+    ok: 'Delete',
+    cancel: 'Cancel'
+  },
+  zh: {
+    confirm: '确定要删除 #{0} 吗？',
+    ok: '删除',
+    cancel: '取消'
+  }
 }
 
-// function getUnpkgLink(pkg: string, version: string, path: string) {
-//   return `https://unpkg.com/${pkg}@${version}/${path}`
-// }
+type Language = keyof typeof localeConfig
+
+let defaultLanguage = (
+  typeof navigator !== 'undefined' ? navigator.language.split('-')[0] : 'en'
+) as Language
+
+if (!localeConfig[defaultLanguage]) {
+  defaultLanguage = 'en'
+}
+
+function getUnpkgUrl(pkg: string, path: string, version?: string) {
+  if (!version || version === 'latest') {
+    return `https://unpkg.com/${pkg}/${path}`
+  }
+
+  return `https://unpkg.com/${pkg}@${version}/${path}`
+}
 
 function buildImportMap(versions: Record<string, string> = {}) {
-  const importMap = { ...pkgPathMap }
+  const importMap: Record<string, string> = {}
 
-  for (const pkg of Object.keys(importMap)) {
-    const version = versions[pkg] || 'latest'
+  for (const name of Object.keys(pkgPathMap)) {
+    const meta = pkgPathMap[name]
 
-    if (version === 'latest') {
-      importMap[pkg] = `${location.origin}/${
-        import.meta.env.DEV ? devPathMap[pkg] : importMap[pkg]
-      }`
+    let pkg = ''
+    let path = ''
+
+    if (typeof meta === 'string') {
+      pkg = name
+      path = meta
     } else {
-      importMap[pkg] = `https://unpkg.com/${pkg}@${version}/${importMap[pkg]}`
+      pkg = meta.pkg
+      path = meta.path
     }
+
+    if (!pkg || !path) continue
+
+    importMap[name] = getUnpkgUrl(pkg, path, versions[pkg] || 'latest')
   }
 
   return importMap
+}
+
+function utoa(data: string): string {
+  const buffer = strToU8(data)
+  const zipped = zlibSync(buffer, { level: 9 })
+  const binary = strFromU8(zipped, true)
+
+  return btoa(binary)
+}
+
+function atou(base64: string): string {
+  const binary = atob(base64)
+
+  // zlib header (x78), level 9 (xDA)
+  if (binary.startsWith('\x78\xDA')) {
+    const buffer = strToU8(binary, true)
+    const unzipped = unzlibSync(buffer)
+
+    return strFromU8(unzipped)
+  }
+
+  // old unicode hacks for backward compatibility
+  // https://base64.guru/developers/javascript/examples/unicode-strings
+  return decodeURIComponent(escape(binary))
 }
 
 export class ReplStore implements Store {
@@ -72,15 +129,15 @@ export class ReplStore implements Store {
   options?: SFCOptions
   initialShowOutput: boolean
   initialOutputMode: OutputModes
-  versions: Record<string, string> = {}
-
-  // private pendingCompiler: Promise<any> | null = null
+  language = defaultLanguage
+  versions: Record<string, string>
 
   constructor({
     serializedState = '',
     showOutput = false,
-    outputMode = 'preview'
-  }: StoreOptions = {}) {
+    outputMode = 'preview',
+    versions = {}
+  }: ReplOptions = {}) {
     const files: StoreState['files'] = {}
 
     if (serializedState) {
@@ -99,6 +156,7 @@ export class ReplStore implements Store {
 
     this.initialShowOutput = showOutput
     this.initialOutputMode = outputMode as OutputModes
+    this.versions = { ...versions }
 
     this.state = reactive({
       mainFile,
@@ -137,11 +195,13 @@ export class ReplStore implements Store {
   }
 
   deleteFile(filename: string) {
+    const { confirm, ok, cancel } = localeConfig[this.language]
+
     Confirm.open({
-      content: `Are you sure you want to delete ${filename}?`,
+      content: confirm.replace('#{0}', filename),
       confirmType: 'error',
-      confirmText: 'Delete',
-      cancelText: 'Cancel'
+      confirmText: ok,
+      cancelText: cancel
     }).then(isConfirm => {
       if (!isConfirm) return
 
@@ -248,46 +308,40 @@ export class ReplStore implements Store {
 
   async setVersions(versions: Record<string, string>) {
     if (versions.vue && versions.vue !== this.versions.vue) {
-      const compilerUrl = `https://unpkg.com/@vue/compiler@${versions.vue}/dist/compiler-sfc.esm-browser.js`
+      const compilerUrl = getUnpkgUrl(
+        '@vue/compiler-sfc',
+        'dist/compiler-sfc.esm-browser.js',
+        versions.vue
+      )
 
       this.compiler = await import(/* @vite-ignore */ compilerUrl)
     }
 
+    if (versions['vexip-ui'] && versions['vexip-ui'] !== this.versions['vexip-ui']) {
+      const styleUrl = getUnpkgUrl('vexip-ui', 'dist/style.css', versions['vexip-ui'])
+
+      this.state.files[mainFile].code = mainCode.replace('__VEXIP_UI_STYLE__', styleUrl)
+    }
+
     this.versions = { ...versions }
 
-    this.initImportMap()
+    this.setImportMap({ imports: buildImportMap(this.versions) })
     this.forceSandboxReset()
   }
 
   resetVersions() {
     this.versions = {}
     this.compiler = defaultCompiler
+    this.state.files[mainFile].code = mainCode.replace(
+      '__VEXIP_UI_STYLE__',
+      getUnpkgUrl('vexip-ui', 'dist/style.css')
+    )
 
-    this.initImportMap()
+    this.setImportMap({ imports: buildImportMap(this.versions) })
     this.forceSandboxReset()
   }
-}
 
-function utoa(data: string): string {
-  const buffer = strToU8(data)
-  const zipped = zlibSync(buffer, { level: 9 })
-  const binary = strFromU8(zipped, true)
-
-  return btoa(binary)
-}
-
-function atou(base64: string): string {
-  const binary = atob(base64)
-
-  // zlib header (x78), level 9 (xDA)
-  if (binary.startsWith('\x78\xDA')) {
-    const buffer = strToU8(binary, true)
-    const unzipped = unzlibSync(buffer)
-
-    return strFromU8(unzipped)
+  setLanguage(language: Language) {
+    this.language = localeConfig[language] ? language : this.language
   }
-
-  // old unicode hacks for backward compatibility
-  // https://base64.guru/developers/javascript/examples/unicode-strings
-  return decodeURIComponent(escape(binary))
 }
