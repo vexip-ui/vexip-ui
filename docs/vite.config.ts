@@ -87,6 +87,20 @@ export default defineConfig(({ command }) => {
           return modules
         }
       },
+      {
+        name: 'provide-meta',
+        apply: 'build',
+        transformIndexHtml() {
+          const metaAttrs = [
+            { 'http-equiv': 'Expires', content: '0' },
+            { 'http-equiv': 'Pragma', content: 'no-cache' },
+            { 'http-equiv': 'Cache', content: 'no-cache' },
+            { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }
+          ]
+
+          return metaAttrs.map(attrs => ({ tag: 'meta', attrs }))
+        }
+      },
       createZipPlugin()
     ]
   }
