@@ -241,6 +241,7 @@ importers:
       compression: ^1.7.4
       cross-env: ^7.0.3
       express: ^4.18.1
+      fflate: ^0.7.4
       jszip: ^3.10.1
       kolorist: ^1.6.0
       markdown-it: ^13.0.1
@@ -260,6 +261,7 @@ importers:
       '@vexip-ui/hooks': link:../common/hooks
       '@vexip-ui/icons': link:../common/icons
       '@vexip-ui/utils': link:../common/utils
+      fflate: 0.7.4
       prismjs: 1.29.0
       vexip-ui: link:..
       vue: 3.2.41
@@ -293,7 +295,6 @@ importers:
   playground:
     specifiers:
       '@types/file-saver': ^2.0.5
-      '@types/serve-static': ^1.15.0
       '@vexip-ui/icons': workspace:^
       '@vitejs/plugin-vue': ^3.2.0
       '@vitejs/plugin-vue-jsx': ^2.1.1
@@ -315,7 +316,6 @@ importers:
       vue: 3.2.45
     devDependencies:
       '@types/file-saver': 2.0.5
-      '@types/serve-static': 1.15.0
       '@vitejs/plugin-vue': 3.2.0_vite@3.2.4+vue@3.2.45
       '@vitejs/plugin-vue-jsx': 2.1.1_vite@3.2.4+vue@3.2.45
       vite: 3.2.4
