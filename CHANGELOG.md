@@ -1,3 +1,19 @@
+## [2.0.16](https://github.com/vexip-ui/vexip-ui/compare/v2.0.15...v2.0.16) (2022-12-01)
+
+### Bug Fixes
+
+- **column:** cannot show when set span 0 with other brank points ([b73cc5a](https://github.com/vexip-ui/vexip-ui/commit/b73cc5adbaefdf4060eed6fb263b6f36ea03afa6))
+- **Grid:** provided state should not penetrate deep ([0a6b1fe](https://github.com/vexip-ui/vexip-ui/commit/0a6b1fe098f6be15c9924f4d91ccd00159ac75fc)), closes [#219](https://github.com/vexip-ui/vexip-ui/issues/219)
+- **select:** unsync input value when using filter with default value ([fd5e6a0](https://github.com/vexip-ui/vexip-ui/commit/fd5e6a07a3ed91f465aedbab3b8d10fb15d9965c))
+- **upload:** file list not sync when using select-to-add ([50784d8](https://github.com/vexip-ui/vexip-ui/commit/50784d850f6e7e5affebc66fa54ca787e0da47b9))
+
+### Features
+
+- export currentBreakPoint ref ([570b6f7](https://github.com/vexip-ui/vexip-ui/commit/570b6f769320c77f670a994334b08303df17b951))
+- **playground:** support change version and toggle ssr ([#221](https://github.com/vexip-ui/vexip-ui/issues/221)) ([065dcf3](https://github.com/vexip-ui/vexip-ui/commit/065dcf33fd4a6b2aac862687b5f5e650337025b7))
+- **scroll:** support horizontal exact mode ([a712cf9](https://github.com/vexip-ui/vexip-ui/commit/a712cf916c3e195e161d27f43df61b64404e06f7))
+- support components to inherit parent base style ([#220](https://github.com/vexip-ui/vexip-ui/issues/220)) ([ca26d3b](https://github.com/vexip-ui/vexip-ui/commit/ca26d3b12499a0313d5c325befc2baadba3280ee))
+
 ## [2.0.15](https://github.com/vexip-ui/vexip-ui/compare/v2.0.14...v2.0.15) (2022-11-24)
 
 ### Bug Fixes
