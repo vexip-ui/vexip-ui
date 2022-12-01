@@ -22,5 +22,6 @@
       "vexip-ui": ["../components"]
     },
     "lib": ["esnext", "dom"]
-  }
+  },
+  "exclude": ["templates"]
 }

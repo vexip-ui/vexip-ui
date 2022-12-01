@@ -29,7 +29,6 @@ export default defineConfig(({ command }) => {
       ],
       dedupe: useServer ? ['../components', 'vue'] : ['vue', 'vexip-ui']
     },
-    publicDir: 'public',
     server: {
       port: 6012,
       fs: {
@@ -40,8 +39,29 @@ export default defineConfig(({ command }) => {
       chunkSizeWarningLimit: 10 * 1024
     },
     optimizeDeps: {
+      force: true,
       exclude: ['@vue/repl', 'vue/server-renderer']
     },
-    plugins: [vue(), vueJsx()]
+    preview: {
+      port: 6012
+    },
+    plugins: [
+      vue(),
+      vueJsx(),
+      {
+        name: 'provide-meta',
+        apply: 'build',
+        transformIndexHtml() {
+          const metaAttrs = [
+            { 'http-equiv': 'Expires', content: '0' },
+            { 'http-equiv': 'Pragma', content: 'no-cache' },
+            { 'http-equiv': 'Cache', content: 'no-cache' },
+            { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }
+          ]
+
+          return metaAttrs.map(attrs => ({ tag: 'meta', attrs }))
+        }
+      }
+    ]
   }
 })
