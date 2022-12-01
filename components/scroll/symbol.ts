@@ -1,4 +1,4 @@
-export type ScrollMode = 'horizontal' | 'vertical' | 'both'
+export type ScrollMode = 'horizontal' | 'horizontal-exact' | 'vertical' | 'both'
 
 export interface ScrollPayload {
   type: ScrollMode,

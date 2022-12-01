@@ -6,7 +6,7 @@
     @mousedown="handleMouseDown"
     @touchstart="handleTouchStart"
     @scroll="ensureScrollOffset"
-    @wheel.exact="handleWheel($event, 'vertical')"
+    @wheel.exact="handleWheel($event, mode === 'horizontal-exact' ? 'horizontal' : 'vertical')"
     @wheel.shift="handleWheel($event, 'horizontal')"
   >
     <ResizeObserver throttle :on-resize="handleResize">
@@ -65,7 +65,7 @@ import { useScrollWrapper } from './hooks'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode } from './symbol'
 
-const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
+const scrollModes = Object.freeze(['horizontal', 'horizontal-exact', 'vertical', 'both'])
 
 const MOVE_EVENT = USE_TOUCH ? 'touchmove' : 'mousemove'
 const UP_EVENT = USE_TOUCH ? 'touchend' : 'mouseup'
@@ -122,6 +122,7 @@ export default defineComponent({
     const usingBar = ref(false)
     const scrolling = ref(false)
     const transitionDuration = ref<number>(-1)
+    const mode = computed(() => (props.mode === 'horizontal-exact' ? 'horizontal' : props.mode))
 
     const {
       wrapperElement,
@@ -144,7 +145,7 @@ export default defineComponent({
       computePercent,
       refresh
     } = useScrollWrapper({
-      mode: toRef(props, 'mode'),
+      mode,
       disabled: toRef(props, 'disabled'),
       width: toRef(props, 'width'),
       height: toRef(props, 'height'),
@@ -162,10 +163,10 @@ export default defineComponent({
 
     const canAutoplay = computed(() => {
       return (
-        props.mode !== 'both' &&
+        mode.value !== 'both' &&
         (isTrue(props.autoplay) || props.autoplay > 1000) &&
-        ((props.mode === 'horizontal' && enableXScroll.value) ||
-          (props.mode === 'vertical' && enableYScroll.value))
+        ((mode.value === 'horizontal' && enableXScroll.value) ||
+          (mode.value === 'vertical' && enableYScroll.value))
       )
     })
 
@@ -195,10 +196,9 @@ export default defineComponent({
 
       stopAutoplay()
 
-      const mode = props.mode
-      const distance = mode === 'horizontal' ? 'width' : 'height'
-      const limit = mode === 'horizontal' ? xScrollLimit : yScrollLimit
-      const prop = mode === 'horizontal' ? 'x' : 'y'
+      const distance = mode.value === 'horizontal' ? 'width' : 'height'
+      const limit = mode.value === 'horizontal' ? xScrollLimit : yScrollLimit
+      const prop = mode.value === 'horizontal' ? 'x' : 'y'
       const waiting = props.playWaiting < 20 ? 20 : props.playWaiting
 
       let playSpeed = 0.5
@@ -254,7 +254,7 @@ export default defineComponent({
       return [
         nh.b(),
         nh.bs('vars'),
-        nh.bm(props.mode),
+        nh.bm(mode.value),
         {
           [nh.bm('inherit')]: props.inherit
         }
@@ -415,7 +415,7 @@ export default defineComponent({
       }
 
       syncBarScroll()
-      emitScrollEvent(props.mode)
+      emitScrollEvent(mode.value)
     }
 
     function handlePointerUp(event: MouseEvent | TouchEvent) {
@@ -460,7 +460,7 @@ export default defineComponent({
         return true
       }
 
-      if (props.mode !== 'both' && props.mode !== type) return false
+      if (mode.value !== 'both' && mode.value !== type) return false
 
       prepareScroll()
 
@@ -660,11 +660,11 @@ export default defineComponent({
       let clientX = 0
       let clientY = 0
 
-      if (props.mode !== 'vertical') {
+      if (mode.value !== 'vertical') {
         clientX = elRect.left - wrapperRect.left + offset
       }
 
-      if (props.mode !== 'horizontal') {
+      if (mode.value !== 'horizontal') {
         clientY = elRect.top - wrapperRect.top + offset
       }
 
@@ -686,7 +686,7 @@ export default defineComponent({
       let clientX = 0
       let clientY = 0
 
-      if (props.mode !== 'vertical') {
+      if (mode.value !== 'vertical') {
         if (elRect.left < wrapperRect.left + offset) {
           clientX = elRect.left - wrapperRect.left - offset
         } else if (elRect.right > wrapperRect.right - offset) {
@@ -694,7 +694,7 @@ export default defineComponent({
         }
       }
 
-      if (props.mode !== 'horizontal') {
+      if (mode.value !== 'horizontal') {
         if (elRect.top < wrapperRect.top + offset) {
           clientY = elRect.top - wrapperRect.top - offset
         } else if (elRect.bottom > wrapperRect.bottom - offset) {

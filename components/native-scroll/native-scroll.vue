@@ -66,7 +66,7 @@ import { useScrollWrapper } from './hooks'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode } from '@/components/scroll'
 
-const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
+const scrollModes = Object.freeze(['horizontal', 'vertical', 'both'])
 
 const MOVE_EVENT = 'mousemove'
 const UP_EVENT = 'mouseup'
