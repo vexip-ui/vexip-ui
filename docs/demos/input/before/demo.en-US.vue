@@ -1,38 +1,53 @@
 <template>
-  <Input placeholder="vexip-ui" style="max-width: 420px;">
-    <template #before>
-      http://
-    </template>
-    <template #after>
-      .com
-    </template>
-  </Input>
-  <br />
-  <br />
-  <Input placeholder="vexip-ui" style="max-width: 420px;">
-    <template #before>
-      <Select v-model:value="protocol" :options="['http://', 'https://']"></Select>
-    </template>
-    <template #after>
-      <Select v-model:value="service" :options="['.com', '.cn', '.net', '.org']"></Select>
-    </template>
-  </Input>
-  <br />
-  <br />
-  <Input placeholder="vexip-ui" style="max-width: 420px;">
-    <template #before-button>
-      <Button :icon="MagnifyingGlass"></Button>
-    </template>
-  </Input>
-  <br />
-  <br />
-  <Input placeholder="vexip-ui" style="max-width: 420px;">
-    <template #after-button>
-      <Button type="primary" :icon="MagnifyingGlass">
-        Search
-      </Button>
-    </template>
-  </Input>
+  <Space vertical>
+    <Input placeholder="vexip-ui">
+      <template #before>
+        http://
+      </template>
+      <template #after>
+        .com
+      </template>
+    </Input>
+    <Input placeholder="vexip-ui">
+      <template #after-action>
+        <Button type="primary" :icon="MagnifyingGlass">
+          Search
+        </Button>
+      </template>
+    </Input>
+    <Input size="large" placeholder="vexip-ui">
+      <template #before-action>
+        <Select v-model:value="protocol" :options="['http://', 'https://']"></Select>
+      </template>
+      <template #after-action>
+        <Select v-model:value="service" :options="['.com', '.cn', '.net', '.org']"></Select>
+      </template>
+    </Input>
+    <Input placeholder="vexip-ui">
+      <template #before-action>
+        <Button>Before</Button>
+      </template>
+      <template #after-action>
+        <Button>After</Button>
+      </template>
+    </Input>
+    <Input size="small" placeholder="vexip-ui">
+      <template #before-action>
+        <Input style="max-width: 72px;"></Input>
+      </template>
+      <template #after-action>
+        <Input style="max-width: 72px;"></Input>
+      </template>
+    </Input>
+    <Input size="large" placeholder="vexip-ui">
+      <template #before-action>
+        <NumberInput style="max-width: 100px;"></NumberInput>
+      </template>
+      <template #after-action>
+        <NumberInput style="max-width: 100px;"></NumberInput>
+      </template>
+    </Input>
+  </Space>
 </template>
 
 <script setup lang="ts">
@@ -42,3 +57,9 @@ import { MagnifyingGlass } from '@vexip-ui/icons'
 const protocol = ref('http://')
 const service = ref('.com')
 </script>
+
+<style scoped>
+.vxp-input-wrapper {
+  max-width: 420px;
+}
+</style>

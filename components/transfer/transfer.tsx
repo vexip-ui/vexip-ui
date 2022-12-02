@@ -149,6 +149,7 @@ export default defineComponent({
         nh.b(),
         nh.bs('vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm(props.state)]: props.state !== 'default'
         }
       ]
@@ -281,6 +282,7 @@ export default defineComponent({
               ? slots.actions({ handleToTarget, handleToSource })
               : [
                   <Button
+                    inherit
                     class={nh.be('action')}
                     type={actionType.value}
                     size={'small'}
@@ -300,6 +302,7 @@ export default defineComponent({
                     }}
                   </Button>,
                   <Button
+                    inherit
                     class={nh.be('action')}
                     type={actionType.value}
                     size={'small'}

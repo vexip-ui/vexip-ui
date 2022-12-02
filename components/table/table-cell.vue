@@ -13,6 +13,7 @@
   >
     <Checkbox
       v-if="isSelection(column)"
+      inherit
       :class="nh.be('selection')"
       :checked="row.checked"
       :size="column.checkboxSize || 'default'"
@@ -47,7 +48,12 @@
     @dblclick="handleDblclick"
     @contextmenu="handleContextmenu"
   >
-    <Ellipsis v-if="!column.noEllipsis" :tooltip-theme="tooltipTheme" :tip-max-width="tooltipWidth">
+    <Ellipsis
+      v-if="!column.noEllipsis"
+      inherit
+      :tooltip-theme="tooltipTheme"
+      :tip-max-width="tooltipWidth"
+    >
       <Renderer
         v-if="isFunction(column.renderer)"
         :renderer="column.renderer"

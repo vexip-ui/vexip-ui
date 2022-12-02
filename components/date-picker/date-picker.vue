@@ -36,6 +36,7 @@
           :filler="props.filler"
           :no-filler="props.noFiller"
           :labels="props.labels"
+          :has-error="startError"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -47,7 +48,11 @@
         ></DateControl>
         <template v-if="props.isRange">
           <div :class="nh.be('exchange')">
-            <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
+            <slot name="exchange">
+              <Icon style="padding-top: 1px;">
+                <ArrowRightArrowLeft></ArrowRightArrowLeft>
+              </Icon>
+            </slot>
           </div>
           <DateControl
             ref="end"
@@ -64,6 +69,7 @@
             :filler="props.filler"
             :no-filler="props.noFiller"
             :labels="props.labels"
+            :has-error="endError"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -109,7 +115,13 @@
         <div
           v-if="currentVisible"
           ref="popper"
-          :class="[nh.be('popper'), nh.ns('calendar-vars'), nh.bs('vars')]"
+          :class="[
+            nh.be('popper'),
+            nh.ns('calendar-vars'),
+            nh.ns('time-picker-vars'),
+            nh.bs('vars'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
+          ]"
           @click.stop="handleFocused"
         >
           <DatePanel
@@ -125,10 +137,14 @@
             :confirm-text="props.confirmText"
             :cancel-text="props.cancelText"
             :today="props.today"
-            :disabled-date="props.disabledDate"
             :no-action="props.noAction"
             :steps="props.steps"
             :is-range="props.isRange"
+            :min="props.min"
+            :max="props.max"
+            :disabled-date="isDateDisabled"
+            :disabled-time="isTimeDisabled"
+            :has-error="startError || endError"
             @shortcut="handleShortcut"
             @change="handlePanelChange"
             @toggle-col="handleInputFocus"
@@ -162,14 +178,28 @@ import {
   createStateProp,
   emitEvent
 } from '@vexip-ui/config'
-import { toDate, isLeepYear, doubleDigits, boundRange } from '@vexip-ui/utils'
+import {
+  toFalse,
+  toDate,
+  getTime,
+  isLeepYear,
+  doubleDigits,
+  boundRange,
+  differenceDays,
+  startOfMonth
+} from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { datePickerProps } from './props'
-import { useColumn } from './helper'
+import { useColumn, useTimeBound } from './helper'
 import { datePickerTypes } from './symbol'
 
 import type { Dateable } from '@vexip-ui/utils'
 import type { TimeType, DateTimeType } from './symbol'
+
+// const defaultMin = [1900, 1, 1]
+// const defaultMax = [2399, 12, 31]
+
+const invalidDate = new Date('')
 
 export default defineComponent({
   name: 'DatePicker',
@@ -227,7 +257,7 @@ export default defineComponent({
       timeSeparator: ':',
       shortcuts: () => [],
       disabledDate: {
-        default: () => false,
+        default: toFalse,
         isFunc: true
       },
       steps: () => [1, 1, 1],
@@ -249,7 +279,9 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      min: null,
+      max: null
     })
 
     const placement = toRef(props, 'placement')
@@ -283,6 +315,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.type),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm('no-hour')]: !startState.enabled.hour,
@@ -330,6 +363,156 @@ export default defineComponent({
     })
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && !!lastValue.value
+    })
+    const min = computed(() => {
+      if (props.min) {
+        const date = rawValueToDate(props.min, invalidDate)
+
+        if (Number.isNaN(+date)) return -Infinity
+
+        date.setHours(0, 0, 0, 0)
+
+        return date
+      }
+
+      return -Infinity
+    })
+    const max = computed(() => {
+      if (props.max) {
+        let date = rawValueToDate(props.max, invalidDate)
+
+        if (Number.isNaN(+date)) return Infinity
+
+        if (props.type !== 'datetime') {
+          date.setHours(23, 59, 59, 999)
+
+          if (props.type === 'year') {
+            date.setMonth(11)
+            date.setDate(31)
+          } else if (props.type === 'month') {
+            date.setMonth(date.getMonth() + 1)
+            date = startOfMonth(date)
+            date.setDate(date.getDate() - 1)
+          }
+        }
+
+        return +date
+      }
+
+      return Infinity
+    })
+    const reversed = computed(() => {
+      if (Number.isNaN(min.value) || Number.isNaN(max.value)) {
+        return false
+      }
+
+      return min.value > max.value
+    })
+    const startMinTime = computed(() => {
+      if (
+        props.type === 'datetime' &&
+        props.min &&
+        !differenceDays(props.min, startState.getDate())
+      ) {
+        return getTime(props.min)
+      }
+
+      return ''
+    })
+    const startMaxTime = computed(() => {
+      if (
+        props.type === 'datetime' &&
+        props.max &&
+        !differenceDays(props.max, startState.getDate())
+      ) {
+        return getTime(props.max)
+      }
+
+      return ''
+    })
+    const endMinTime = computed(() => {
+      if (
+        props.type === 'datetime' &&
+        props.isRange &&
+        props.min &&
+        !differenceDays(props.min, startState.getDate())
+      ) {
+        return getTime(props.min)
+      }
+
+      return ''
+    })
+    const endMaxTime = computed(() => {
+      if (
+        props.type === 'datetime' &&
+        props.isRange &&
+        props.max &&
+        !differenceDays(props.max, startState.getDate())
+      ) {
+        return getTime(props.max)
+      }
+
+      return ''
+    })
+    const startReversed = computed(() => {
+      if (!props.isRange) return false
+
+      const startValue = startState.dateValue
+      const endValue = endState.dateValue
+
+      let types: DateTimeType[]
+
+      if (props.type === 'year') {
+        types = ['year']
+      } else if (props.type === 'month') {
+        types = ['year', 'month']
+      } else if (props.type === 'date') {
+        types = ['year', 'month', 'date']
+      } else {
+        types = ['year', 'month', 'date', 'hour', 'minute', 'second']
+      }
+
+      for (const type of types) {
+        if (startValue[type] < endValue[type]) return false
+        if (startValue[type] > endValue[type]) return true
+      }
+
+      return false
+    })
+
+    const startTimeBound = useTimeBound(startMinTime, startMaxTime)
+    const endTimeBound = useTimeBound(endMinTime, endMaxTime)
+
+    const isTimeDisabled = computed(() => {
+      return currentState.value === 'start'
+        ? startTimeBound.isTimeDisabled
+        : endTimeBound.isTimeDisabled
+    })
+    const startError = computed(() => {
+      const { hour, minute, second } = startState.dateValue
+      const { isTimeDisabled } = startTimeBound
+
+      return (
+        startReversed.value ||
+        isDateDisabled(startState.getDate()) ||
+        isTimeDisabled.hour(hour) ||
+        isTimeDisabled.minute(hour, minute) ||
+        isTimeDisabled.second(hour, minute, second)
+      )
+    })
+    const endError = computed(() => {
+      if (!props.isRange) return false
+
+      const { hour, minute, second } = endState.dateValue
+      const { isTimeDisabled } = endTimeBound
+
+      return (
+        startReversed.value ||
+        isDateDisabled(endState.getDate()) ||
+        isTimeDisabled.hour(hour) ||
+        isTimeDisabled.minute(hour, minute) ||
+        isTimeDisabled.second(hour, minute, second)
+      )
     })
 
     startState.enabled.year = true
@@ -433,6 +616,7 @@ export default defineComponent({
     )
 
     function createDateState() {
+      const noFiller = props.noFiller
       const { currentColumn, enabled, resetColumn, enterColumn } = useColumn([
         'year',
         'month',
@@ -451,12 +635,12 @@ export default defineComponent({
         second: 0
       })
       const activated = reactive({
-        year: false,
-        month: false,
-        date: false,
-        hour: false,
-        minute: false,
-        second: false
+        year: noFiller,
+        month: noFiller,
+        date: noFiller,
+        hour: noFiller,
+        minute: noFiller,
+        second: noFiller
       })
 
       return reactive({
@@ -491,7 +675,7 @@ export default defineComponent({
       return currentState.value === 'start' ? startState : endState
     }
 
-    function rawValueToDate(value: Dateable) {
+    function rawValueToDate(value: Dateable, defaultValue = new Date(props.today)) {
       let date!: Date
 
       if (typeof value === 'number') {
@@ -518,7 +702,7 @@ export default defineComponent({
       }
 
       if (Number.isNaN(date.getTime())) {
-        date = new Date(props.today)
+        date = defaultValue
       }
 
       return date
@@ -588,7 +772,41 @@ export default defineComponent({
       return Array.isArray(currentValue.value) ? currentValue.value.join('|') : currentValue.value
     }
 
+    function isDateDisabled(date: Date) {
+      if (typeof props.disabledDate === 'function') {
+        if (props.disabledDate(date)) {
+          return true
+        }
+      }
+
+      const time = date.getTime()
+
+      if (reversed.value) {
+        if (time > max.value && time < min.value) {
+          return true
+        }
+      } else {
+        if (time < min.value || time > max.value) {
+          return true
+        }
+      }
+
+      return false
+    }
+
+    function verifyDate() {
+      if (startError.value || (props.isRange && endError.value)) {
+        if (lastValue.value) {
+          parseValue(lastValue.value.split('|'))
+        } else {
+          parseValue(props.value)
+        }
+      }
+    }
+
     function emitChange() {
+      verifyDate()
+
       if (lastValue.value !== getStringValue()) {
         lastValue.value = getStringValue()
 
@@ -975,6 +1193,8 @@ export default defineComponent({
 
     return {
       CalendarR,
+      startMinTime,
+      startMaxTime,
 
       props,
       nh,
@@ -994,6 +1214,8 @@ export default defineComponent({
       startActivated,
       endActivated,
       showClear,
+      startError,
+      endError,
 
       wrapper,
       reference,
@@ -1002,6 +1224,8 @@ export default defineComponent({
       end: endInput,
       panel: datePanel,
 
+      isTimeDisabled,
+      isDateDisabled,
       handleFocused,
       showPanel,
       handleInput,

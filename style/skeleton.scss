@@ -107,4 +107,10 @@ $skeleton: map.merge(
       );
     animation: #{$namespace}-skeleton-loading 2000ms ease infinite;
   }
+
+  @at-root {
+    &-group {
+      @include basis;
+    }
+  }
 }

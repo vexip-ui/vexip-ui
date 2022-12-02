@@ -11,7 +11,7 @@ describe('Confirm', () => {
     expect(wrapper.find('.vxp-confirm').classes()).toContain('vxp-confirm-vars')
     expect(wrapper.find('.vxp-confirm__body').exists()).toBe(true)
     expect(wrapper.find('.vxp-confirm__content').exists()).toBe(true)
-    expect(wrapper.find('.vxp-confirm__actions').exists()).toBe(true)
+    expect(wrapper.find('.vxp-confirm__footer').exists()).toBe(true)
     expect(wrapper.findAll('.vxp-confirm__button').length).toEqual(2)
   })
 
@@ -68,5 +68,47 @@ describe('Confirm', () => {
     ;(buttons[1].element as HTMLButtonElement).click()
     await nextTick()
     await expect(promise).resolves.toEqual(true)
+  })
+
+  it('title', async () => {
+    const wrapper = mount(Confirm)
+
+    await nextTick()
+    wrapper.vm.openConfirm({
+      title: 'title',
+      content: 'content'
+    })
+    await nextTick()
+    await nextTick()
+    expect(wrapper.find('.vxp-confirm__title').exists()).toBe(true)
+    expect(wrapper.find('.vxp-confirm__title').text()).toEqual('title')
+  })
+
+  it('closable', async () => {
+    const wrapper = mount(Confirm)
+
+    await nextTick()
+    wrapper.vm.openConfirm({
+      content: 'content',
+      closable: true
+    })
+    await nextTick()
+    await nextTick()
+    expect(wrapper.find('.vxp-confirm__close').exists()).toBe(true)
+  })
+
+  it('content align and anctions align', async () => {
+    const wrapper = mount(Confirm)
+
+    await nextTick()
+    wrapper.vm.openConfirm({
+      content: 'content',
+      contentAlign: 'left',
+      actionsAlign: 'right'
+    })
+    await nextTick()
+    await nextTick()
+    expect(wrapper.find('.vxp-confirm__body').classes()).toContain('vxp-confirm__body--left')
+    expect(wrapper.find('.vxp-confirm__footer').classes()).toContain('vxp-confirm__footer--right')
   })
 })

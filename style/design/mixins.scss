@@ -2,7 +2,15 @@
 @use 'sass:math';
 @use './variables.scss' as *;
 
-@mixin basis {
+@mixin inherit-basis {
+  font-family: inherit;
+  font-size: inherit;
+  font-variant-numeric: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+@mixin basis($inherit: true) {
   font-family: get-css-var('font-family-base');
   font-size: get-css-var('font-size-base');
   font-variant-numeric: tabular-nums;
@@ -15,14 +23,12 @@
   *::after {
     box-sizing: border-box;
   }
-}
 
-@mixin inherit-basis {
-  font-family: inherit;
-  font-size: inherit;
-  font-variant-numeric: inherit;
-  line-height: inherit;
-  color: inherit;
+  @if $inherit {
+    &--inherit {
+      @include inherit-basis;
+    }
+  }
 }
 
 @mixin fixed {

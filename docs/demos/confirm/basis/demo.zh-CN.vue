@@ -4,20 +4,16 @@
   </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { Confirm, Message } from 'vexip-ui'
 
-export default defineComponent({
-  methods: {
-    async confirm() {
-      const isConfirm = await this.$confirm.open('确认提交吗？')
+async function confirm() {
+  const isConfirm = await Confirm.open('确认提交吗？')
 
-      if (isConfirm) {
-        this.$message.success('提交成功')
-      } else {
-        this.$message.warning('取消提交')
-      }
-    }
+  if (isConfirm) {
+    Message.success('提交成功')
+  } else {
+    Message.warning('取消提交')
   }
-})
+}
 </script>

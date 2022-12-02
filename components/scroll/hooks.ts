@@ -15,7 +15,7 @@ export function useScrollWrapper({
   onBeforeRefresh,
   onAfterRefresh
 }: {
-  mode: Ref<ScrollMode>,
+  mode: Ref<Exclude<ScrollMode, 'horizontal-exact'>>,
   disabled: Ref<boolean>,
   width: Ref<number | string>,
   height: Ref<number | string>,

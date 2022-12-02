@@ -1,172 +1,37 @@
 <template>
-  <Header :store="store"></Header>
+  <Header
+    :store="store"
+    :ssr="ssrMode"
+    :versions="versions"
+    @toggle-ssr="toggleSSR"
+  ></Header>
   <Repl
     show-compile-output
     auto-resize
     :clear-console="false"
     :store="store"
+    :ssr="ssrMode"
     :sfc-options="sfcOptions"
   ></Repl>
 </template>
 
 <script setup lang="ts">
-import { watchEffect } from 'vue'
-import { Repl, ReplStore as _ReplStore } from '@vue/repl'
-import { Confirm } from 'vexip-ui'
+import { ref, watchEffect } from 'vue'
+import { Repl } from '@vue/repl'
 import Header from './components/header.vue'
+import { ReplStore } from './store'
 
-class ReplStore extends _ReplStore {
-  deleteFile(filename: string) {
-    Confirm.open({
-      content: `Are you sure you want to delete ${filename}?`,
-      confirmType: 'error',
-      confirmText: 'Delete',
-      cancelText: 'Cancel'
-    }).then(isConfirm => {
-      if (!isConfirm) return
+const ssrMode = ref(false)
 
-      if (this.state.activeFile.filename === filename) {
-        this.state.activeFile = this.state.files[this.state.mainFile]
-      }
-      delete this.state.files[filename]
-    })
-  }
+let hash = location.hash.slice(1)
+
+if (hash.startsWith('__SSR__')) {
+  hash = hash.slice(7)
+  ssrMode.value = true
 }
 
-const mainCode = `import { createApp } from 'vue'
-import { install } from 'vexip-ui'
-import App from './App.vue'
-import ThemeSwitch from './ThemeSwitch.vue'
-
-App.name = 'Repl'
-
-const app = window.__app__ = createApp(App)
-
-app.config.unwrapInjectedRef = true
-app.config.errorHandler = e => console.error(e)
-
-app.use(install)
-
-new Promise((resolve, reject) => {
-  const link = document.createElement('link')
-  link.rel = 'stylesheet'
-  link.href = './style.css'
-  link.onload = resolve
-  link.onerror = reject
-  document.body.appendChild(link)
-}).then(() => app.component('ThemeSwitch', ThemeSwitch).mount('#app'))
-`
-
-const welcomeCode = `<template>
-  <Button type="primary" :icon="MagnifyingGlass">{{ msg }}</Button>
-
-  <!-- This is the dark theme trigger -->
-  <ThemeSwitch></ThemeSwitch>
-</template>
-
-<script setup lang="ts">
-import { ref, watch } from 'vue'
-import { MagnifyingGlass } from '@vexip-ui/icons'
-
-const msg = ref('Hello World!')
-${'</'}script>
-`
-
-const themeCode = `<template>
-  <div style="padding: 20px 0;">
-    <span style="margin-right: 10px;">Toggle Dark:</span>
-    <Switch v-model:value="isDark" class="theme-switch" :open-icon="Moon" :close-icon="Sun"></Switch>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { ref, watch } from 'vue'
-import { Sun, Moon } from '@vexip-ui/icons'
-
-const rootCls = document.documentElement.classList
-const isDark = ref(${document.documentElement.classList.contains('dark') ? 'true' : 'false'})
-
-if (isDark.value) {
-  rootCls.add('dark')
-}
-
-watch(isDark, value => {
-  value ? rootCls.add('dark') : rootCls.remove('dark')
-})
-${'</'}script>
-
-<style>
-body {
-  color: var(--vxp-content-color-base);
-  background-color: var(--vxp-bg-color-base);
-  transition: var(--vxp-transition-color), var(--vxp-transition-background);
-}
-
-.theme-switch {
-  border: 1px solid var(--vxp-border-color-base);
-}
-
-html.dark .theme-switch {
-  --vxp-switch-bg-color-open: #{rgba(#fff, 0.05)};
-  --vxp-switch-signal-bg-color: #000;
-  --vxp-switch-icon-color: var(--vxp-content-color-secondary);
-  --vxp-switch-shadow-focus: unset;
-}
-</style>
-`
-
-const setVH = () => {
-  document.documentElement.style.setProperty('--vh', window.innerHeight + 'px')
-}
-window.addEventListener('resize', setVH)
-setVH()
-
-const serializedState = location.hash.slice(1)
-const vueRuntimeUrl = import.meta.env.PROD
-  ? `${location.origin}/vue.runtime.esm-browser.js`
-  : `${location.origin}/proxy/vue`
-const vueServerRendererUrl = import.meta.env.PROD
-  ? `${location.origin}/server-renderer.esm-browser.js`
-  : `${location.origin}/proxy/vue-server`
-
-const store = new ReplStore({
-  serializedState,
-  defaultVueRuntimeURL: vueRuntimeUrl,
-  defaultVueServerRendererURL: vueServerRendererUrl
-})
-
-store.setImportMap({
-  imports: {
-    // vue: vueRuntimeUrl,
-    'vexip-ui': import.meta.env.PROD
-      ? `${location.origin}/vexip-ui.js`
-      : `${location.origin}/vexip-ui.mjs`,
-    '@vexip-ui/icons': import.meta.env.PROD
-      ? `${location.origin}/vexip-ui-icons.js`
-      : `${location.origin}/icons/index.mjs`,
-    '@vexip-ui/utils': import.meta.env.PROD
-      ? `${location.origin}/vexip-ui-utils.js`
-      : `${location.origin}/utils/index.mjs`,
-    'vue-router': import.meta.env.PROD
-      ? `${location.origin}/vue-router.js`
-      : `${location.origin}/proxy/vue-router`
-  }
-})
-;(!serializedState
-  ? store.setFiles(
-    {
-      'import-map.json': store.getFiles()['import-map.json'],
-      'main.ts': mainCode,
-      'App.vue': welcomeCode,
-      'ThemeSwitch.vue': themeCode
-    },
-    'main.ts'
-  )
-  : store.setFiles(store.getFiles(), 'main.ts')
-).then(() => {
-  store.state.files['main.ts'].hidden = true
-  store.setActive('App.vue')
-})
+const versions = getSearch()
+const store = new ReplStore({ serializedState: hash, versions })
 
 // enable experimental features
 const sfcOptions = {
@@ -177,31 +42,49 @@ const sfcOptions = {
 }
 
 // persist state
-watchEffect(() => history.replaceState({}, '', store.serialize()))
+watchEffect(() => {
+  const newHash = store.serialize().replace(/^#/, ssrMode.value ? '#__SSR__' : '#')
+
+  history.replaceState({}, '', newHash)
+})
+
+function toggleSSR() {
+  ssrMode.value = !ssrMode.value
+  store.setFiles(store.getFiles())
+}
+
+function getSearch() {
+  if (location.search) {
+    const units = location.search.substring(1).split('&')
+
+    return units.reduce((prev, current) => {
+      if (current) {
+        const [key, value] = current.split('=')
+        prev[key] = value
+      }
+
+      return prev
+    }, {} as Record<string, string>)
+  }
+
+  return {}
+}
 </script>
 
 <style lang="scss">
+@use 'sass:map';
+@use './style.scss' as *;
+
 body {
-  --base: var(--vxp-content-color-base);
   --nav-height: 50px;
 
   margin: 0;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Open Sans',
-    'Helvetica Neue',
-    sans-serif;
+  font-family: var(--vxp-font-family-base);
   font-size: 13px;
 }
 
 .vue-repl {
-  height: calc(var(--vh) - var(--nav-height));
+  height: calc(100vh - var(--nav-height));
 }
 
 .vue-repl,
@@ -223,6 +106,45 @@ body {
 }
 
 .iframe-container {
-  background-color: var(--bg) !important;
+  background-color: var(--vxp-bg-color-base) !important;
+}
+
+.split-pane {
+  $lg: (
+    max-width: map.get(map.get($break-point-map, 'lg'), 'min-width') - 0.02px
+  );
+
+  @include query-media('lg') {
+    .left,
+    .right {
+      width: 50%;
+    }
+  }
+
+  @media #{inspect($lg)} {
+    .left,
+    .right {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .right {
+      display: none;
+    }
+
+    .toggler {
+      display: block !important;
+    }
+
+    &.show-output {
+      .left {
+        display: none;
+      }
+
+      .right {
+        display: block;
+      }
+    }
+  }
 }
 </style>

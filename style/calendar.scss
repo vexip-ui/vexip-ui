@@ -38,7 +38,7 @@ $calendar: map.merge(
 );
 
 .#{$namespace}-calendar {
-  @include basis;
+  @include basis(false);
 
   width: 100%;
 

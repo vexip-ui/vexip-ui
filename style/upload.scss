@@ -237,6 +237,8 @@ $upload: map.merge(
   }
 
   &__files {
+    @include basis;
+
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -245,7 +247,23 @@ $upload: map.merge(
     margin: 0;
   }
 
+  &--image &__files {
+    margin-bottom: -8px;
+  }
+
+  &--has-file:not(&--image) &__files {
+    margin: 0;
+    margin-top: 8px;
+  }
+
+  &--to-add:not(&--image)#{&}--has-file &__files {
+    margin: 0;
+    margin-bottom: 8px;
+  }
+
   &__file {
+    @include basis;
+
     position: relative;
     display: inline-flex;
     align-items: center;

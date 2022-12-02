@@ -1,3 +1,49 @@
+## [2.0.16](https://github.com/vexip-ui/vexip-ui/compare/v2.0.15...v2.0.16) (2022-12-01)
+
+### Bug Fixes
+
+- **column:** cannot show when set span 0 with other brank points ([b73cc5a](https://github.com/vexip-ui/vexip-ui/commit/b73cc5adbaefdf4060eed6fb263b6f36ea03afa6))
+- **Grid:** provided state should not penetrate deep ([0a6b1fe](https://github.com/vexip-ui/vexip-ui/commit/0a6b1fe098f6be15c9924f4d91ccd00159ac75fc)), closes [#219](https://github.com/vexip-ui/vexip-ui/issues/219)
+- **select:** unsync input value when using filter with default value ([fd5e6a0](https://github.com/vexip-ui/vexip-ui/commit/fd5e6a07a3ed91f465aedbab3b8d10fb15d9965c))
+- **upload:** file list not sync when using select-to-add ([50784d8](https://github.com/vexip-ui/vexip-ui/commit/50784d850f6e7e5affebc66fa54ca787e0da47b9))
+
+### Features
+
+- export currentBreakPoint ref ([570b6f7](https://github.com/vexip-ui/vexip-ui/commit/570b6f769320c77f670a994334b08303df17b951))
+- **playground:** support change version and toggle ssr ([#221](https://github.com/vexip-ui/vexip-ui/issues/221)) ([065dcf3](https://github.com/vexip-ui/vexip-ui/commit/065dcf33fd4a6b2aac862687b5f5e650337025b7))
+- **scroll:** support horizontal exact mode ([a712cf9](https://github.com/vexip-ui/vexip-ui/commit/a712cf916c3e195e161d27f43df61b64404e06f7))
+- support components to inherit parent base style ([#220](https://github.com/vexip-ui/vexip-ui/issues/220)) ([ca26d3b](https://github.com/vexip-ui/vexip-ui/commit/ca26d3b12499a0313d5c325befc2baadba3280ee))
+
+## [2.0.15](https://github.com/vexip-ui/vexip-ui/compare/v2.0.14...v2.0.15) (2022-11-24)
+
+### Bug Fixes
+
+- **table:** should use wrapper width to compute when width not set ([d628403](https://github.com/vexip-ui/vexip-ui/commit/d6284032aa91bc4a1e89ba0c9075516167aad0db))
+- **upload:** error when passing null to file-list ([b6f5df4](https://github.com/vexip-ui/vexip-ui/commit/b6f5df44a707bd2c239ef3c26fd2c2835869fb13))
+
+### Features
+
+- **confirm:** add fast open method for using title ([8f47f7e](https://github.com/vexip-ui/vexip-ui/commit/8f47f7e522ab2d32bef91955b476865e24ce7aa8))
+- **confirm:** support add title and set content or actions align ([cb2b767](https://github.com/vexip-ui/vexip-ui/commit/cb2b7675efb5d2d5c05dc689d05e8c99866816c1))
+- **upload:** add list-style prop ([94089e7](https://github.com/vexip-ui/vexip-ui/commit/94089e72a9cd823ca7699cd15916908a770b2824))
+
+## [2.0.14](https://github.com/vexip-ui/vexip-ui/compare/v2.0.13...v2.0.14) (2022-11-21)
+
+### Bug Fixes
+
+- **input:** correct size for before and after content ([54c8bf8](https://github.com/vexip-ui/vexip-ui/commit/54c8bf8e8f00ca6930811b29995aa286503e1a70))
+
+### Features
+
+- **confirm:** support parse content as html ([6053b7b](https://github.com/vexip-ui/vexip-ui/commit/6053b7b2b39ac92419f1c4160167e48a31165c04))
+- **date-picker:** add exchange slot for range select ([1166e70](https://github.com/vexip-ui/vexip-ui/commit/1166e70fa70d166a9dfd514391f9cf9e092e1108))
+- **date-picker:** support min and max props to bound date ([#216](https://github.com/vexip-ui/vexip-ui/issues/216)) ([9cfd677](https://github.com/vexip-ui/vexip-ui/commit/9cfd6772ce6da6b5e20a11eff7c29b88c29ffb5a))
+- **message:** support parse content as html ([7bd4def](https://github.com/vexip-ui/vexip-ui/commit/7bd4def4b144975f92a3e4a1574a3ed024392f65))
+- **notice:** support parse title and content as html ([18929a9](https://github.com/vexip-ui/vexip-ui/commit/18929a966e355ad290cf949bc3fa1d1838b07216))
+- **time-picker:** add exchange slot for range select ([2431a64](https://github.com/vexip-ui/vexip-ui/commit/2431a64a3d06cef53ecf397639e315333146e89d))
+- **time-picker:** support min and max props to bound time ([87dfc32](https://github.com/vexip-ui/vexip-ui/commit/87dfc32c920b980f9f55db5d819bcaae32a6e37f)), closes [#215](https://github.com/vexip-ui/vexip-ui/issues/215)
+- **toast:** support parse content as html ([2609809](https://github.com/vexip-ui/vexip-ui/commit/26098090751e97d02c24ac6ead1c298d4c3306ef))
+
 ## [2.0.13](https://github.com/vexip-ui/vexip-ui/compare/v2.0.12...v2.0.13) (2022-11-09)
 
 ### Bug Fixes

@@ -1,1 +1,10 @@
-["basis", "labels", "no-filler", "step", "range", "shortcuts", "loading"]
+[
+  "basis",
+  "labels",
+  "no-filler",
+  "step",
+  "range",
+  "bound",
+  "shortcuts",
+  "loading"
+]

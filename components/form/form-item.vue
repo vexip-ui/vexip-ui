@@ -223,6 +223,7 @@ export default defineComponent({
       return {
         [nh.be('item')]: true,
         [nh.bs('vars')]: true,
+        [nh.bem('item', 'inherit')]: formFields || props.inherit,
         [nh.bem('item', 'required')]: !formProps.hideAsterisk && useAsterisk.value,
         [nh.bem('item', 'error')]: isError.value,
         [nh.bem('item', 'action')]: props.action,

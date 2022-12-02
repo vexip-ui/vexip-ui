@@ -16,6 +16,7 @@ export default defineComponent({
     const className = computed(() => {
       return {
         [nh.b()]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('no-marker')]: props.listStyle === 'none'
       }
     })

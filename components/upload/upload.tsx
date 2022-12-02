@@ -115,7 +115,9 @@ export default defineComponent({
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false,
-      defaultFiles: () => []
+      defaultFiles: () => [],
+      // 'canPreview' using UploadFile default
+      listStyle: null
     })
 
     const nh = useNameHelper('upload')
@@ -133,13 +135,15 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(`type-${props.listType}`),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('multiple')]: props.multiple,
           [nh.bm('drag')]: props.allowDrag,
           [nh.bm('to-add')]: props.selectToAdd,
           [nh.bm('block')]: props.block,
           [nh.bm('drag-only')]: props.disabledClick,
-          [nh.bm('image')]: props.image
+          [nh.bm('image')]: props.image,
+          [nh.bm('has-file')]: !props.hiddenFiles && renderFiles.value.length
         }
       ]
     })
@@ -187,7 +191,7 @@ export default defineComponent({
           }
         }
 
-        fileStates.value = value.map(file =>
+        fileStates.value = (value || []).map(file =>
           createFileState(
             file,
             file.id ? idMap.get(file.id) : file.source ? fileMap.get(file.source) : undefined
@@ -195,10 +199,10 @@ export default defineComponent({
         )
         syncInputFiles()
       },
-      { immediate: true }
+      { immediate: true, deep: true }
     )
 
-    expose({ execute })
+    expose({ execute, handleDelete })
 
     function handleClick() {
       !props.disabledClick && input.value?.click()
@@ -629,6 +633,7 @@ export default defineComponent({
         <>
           <Button
             ref={button}
+            inherit
             size={size.value}
             icon={IUpload}
             type={props.state}
@@ -743,24 +748,16 @@ export default defineComponent({
     }
 
     function renderFileList() {
-      const style = props.image
-        ? {
-            marginBottom: '-8px'
-          }
-        : {
-            [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
-              !props.hiddenFiles && renderFiles.value.length ? '8px' : undefined
-          }
-
       return (
         <UploadList
+          inherit
           files={renderFiles.value}
           select-to-add={props.selectToAdd}
           type={props.image ? 'thumbnail' : props.listType}
           icon-renderer={props.iconRenderer}
           loading-text={props.loadingText}
           can-preview={props.canPreview}
-          style={style}
+          style={props.listStyle}
           onDelete={handleDelete}
           onPreview={handlePreview}
         >
@@ -784,6 +781,7 @@ export default defineComponent({
     )
   },
   methods: {
-    execute: noop as () => Promise<false | any[]>
+    execute: noop as () => Promise<false | any[]>,
+    handleDelete: noop as (file: FileState) => void
   }
 })

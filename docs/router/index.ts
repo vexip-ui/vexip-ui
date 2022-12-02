@@ -1,6 +1,6 @@
+import { Loading } from 'vexip-ui'
 import { isClient, toKebabCase } from '@vexip-ui/utils'
 import { createRouter as _createRouter, createMemoryHistory, createWebHistory } from 'vue-router'
-import { Loading } from 'vexip-ui'
 import { defaultLanguage, langOptions, i18n } from '../i18n'
 import { getGuideConfig } from './guides'
 import { getComponentConfig } from './components'

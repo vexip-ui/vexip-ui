@@ -3,7 +3,7 @@ import { Icon } from '@/components/icon'
 import { Linker } from '@/components/linker'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { layoutFooterProps } from './props'
-import { useMediaQuery } from './helper'
+import { useLayoutState, useMediaQuery } from './helper'
 
 export default defineComponent({
   name: 'LayoutFooter',
@@ -17,10 +17,15 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('layout')
+    const layoutState = useLayoutState()
     const horizontalMatched = useMediaQuery(toRef(props, 'verticalLinks'))
 
     const className = computed(() => {
-      return [nh.be('footer')]
+      return {
+        [nh.be('footer')]: true,
+        [nh.bs('vars')]: !layoutState.isLayout,
+        [nh.bem('footer', 'inherit')]: layoutState.isLayout || props.inherit
+      }
     })
 
     function renderLinks() {

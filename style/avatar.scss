@@ -91,6 +91,8 @@ $avatar: map.merge(
 
   @at-root {
     &-group {
+      @include basis;
+
       display: inline-flex;
 
       &--vertical {

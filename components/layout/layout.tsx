@@ -97,6 +97,7 @@ export default defineComponent({
         nh.b(),
         nh.bs('vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('no-aside')]: props.noAside,
           [nh.bm('header-main')]: currentSignType.value === 'header'
         }

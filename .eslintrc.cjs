@@ -38,6 +38,11 @@ module.exports = {
             position: 'before'
           },
           {
+            pattern: 'vexip-ui',
+            group: 'external',
+            position: 'before'
+          },
+          {
             pattern: '@vexip-ui/**',
             group: 'external',
             position: 'before'
@@ -51,6 +56,31 @@ module.exports = {
     'vue/no-textarea-mustache': 'off'
   },
   overrides: [
+    {
+      files: ['components/**/*.vue'],
+      rules: {
+        '@typescript-eslint/consistent-type-imports': [
+          'error',
+          {
+            prefer: 'type-imports',
+            disallowTypeAnnotations: false
+          }
+        ],
+        'vue/component-tags-order': [
+          'error',
+          {
+            order: ['template', 'script']
+          }
+        ],
+        'vue/no-restricted-block': [
+          'error',
+          {
+            element: '/[^(template|script)]/',
+            message: 'Do not use blocks other than <template> or <script>.'
+          }
+        ]
+      }
+    },
     {
       files: ['docs/**'],
       globals: {

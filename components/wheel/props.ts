@@ -27,6 +27,7 @@ export const wheelProps = buildProps({
   disabled: booleanProp,
   loading: booleanProp,
   loadingLock: booleanProp,
+  disabledItem: Function as PropType<(value: string | number, data: RawOption) => boolean>,
   onChange: eventProp<(value: string | number, data: RawOption) => void>(),
   onPrev: eventProp<(value: string | number, data: RawOption) => void>(),
   onNext: eventProp<(value: string | number, data: RawOption) => void>()

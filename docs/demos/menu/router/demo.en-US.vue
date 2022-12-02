@@ -4,9 +4,17 @@
 
 <script setup lang="ts">
 import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
-import { createRouter, createWebHistory } from 'vue-router'
+// import { createRouter, createWebHistory } from 'vue-router'
 
-import type { RouteLocationRaw } from 'vue-router'
+// import type { RouteLocationRaw } from 'vue-router'
+
+function createWebHistory() {
+  //
+}
+
+function createRouter(options: any) {
+  return { currentRoute: { value: '' }, options } as any
+}
 
 const router = createRouter({
   history: createWebHistory(),
@@ -76,7 +84,7 @@ const router = createRouter({
 })
 
 // mock the push method
-router.push = async (to: RouteLocationRaw) => {
+router.push = async (to: /* RouteLocationRaw */ any) => {
   console.info(to)
 }
 

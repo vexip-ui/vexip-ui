@@ -23,7 +23,7 @@
       <div :class="nh.be('control')">
         <TimeControl
           ref="start"
-          :unit-type="currentState === 'start' ? startState.column : ''"
+          :unit-type="currentState === 'start' ? startState.column : undefined"
           :enabled="startState.enabled"
           :activated="startState.activated"
           :time-value="startState.timeValue"
@@ -35,6 +35,7 @@
           :filler="props.filler"
           :no-filler="props.noFiller"
           :labels="props.labels"
+          :has-error="startError"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -49,11 +50,15 @@
             :class="[nh.be('exchange'), props.exchange ? nh.bem('exchange', 'enabled') : '']"
             @click="handleExchangeClick"
           >
-            <Icon><ArrowRightArrowLeft></ArrowRightArrowLeft></Icon>
+            <slot name="exchange">
+              <Icon style="padding-top: 1px;">
+                <ArrowRightArrowLeft></ArrowRightArrowLeft>
+              </Icon>
+            </slot>
           </div>
           <TimeControl
             ref="end"
-            :unit-type="currentState === 'end' ? endState.column : ''"
+            :unit-type="currentState === 'end' ? endState.column : undefined"
             :enabled="endState.enabled"
             :activated="endState.activated"
             :time-value="endState.timeValue"
@@ -65,6 +70,7 @@
             :filler="props.filler"
             :no-filler="props.noFiller"
             :labels="props.labels"
+            :has-error="endError"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -114,7 +120,11 @@
         <div
           v-if="currentVisible"
           ref="popper"
-          :class="[nh.be('popper'), nh.bs('vars')]"
+          :class="[
+            nh.be('popper'),
+            nh.bs('vars'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
+          ]"
           @click.stop="handleFocused"
         >
           <div :class="nh.be('panel')">
@@ -139,6 +149,7 @@
                   :candidate="props.candidate"
                   :steps="props.steps"
                   :pointer="props.pointer"
+                  :disabled-time="isTimeDisabled"
                   @change="handleWheelChange"
                   @toggle-col="handleStartInput"
                 ></TimeWheel>
@@ -151,15 +162,27 @@
                   :candidate="props.candidate"
                   :steps="props.steps"
                   :pointer="props.pointer"
+                  :disabled-time="isTimeDisabled"
                   @change="handleWheelChange"
                   @toggle-col="handleEndInput"
                 ></TimeWheel>
               </div>
               <div v-if="!props.noAction" :class="nh.be('action')">
-                <Button text size="small" @click.stop="handleCancel">
+                <Button
+                  inherit
+                  text
+                  size="small"
+                  @click.stop="handleCancel"
+                >
                   {{ props.cancelText || locale.cancel }}
                 </Button>
-                <Button type="primary" size="small" @click.stop="finishInput">
+                <Button
+                  inherit
+                  type="primary"
+                  size="small"
+                  :disabled="startError || endError"
+                  @click.stop="finishInput"
+                >
                   {{ props.confirmText || locale.confirm }}
                 </Button>
               </div>
@@ -197,7 +220,7 @@ import {
 import { USE_TOUCH, doubleDigits, boundRange, format } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { timePickerProps } from './props'
-import { useColumn } from './helper'
+import { useColumn, useTimeBound } from './helper'
 
 import type { TimeType } from './symbol'
 
@@ -279,7 +302,9 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingSpin: false,
+      min: null,
+      max: null
     })
 
     const placement = toRef(props, 'placement')
@@ -287,8 +312,8 @@ export default defineComponent({
     const currentVisible = ref(props.visible)
     const focused = ref(false)
     const lastValue = ref('')
-    const startState = createDateState()
-    const endState = createDateState()
+    const startState = createTimeState()
+    const endState = createTimeState()
     const currentState = ref<'start' | 'end'>('start')
 
     const { timer } = useSetTimeout()
@@ -301,6 +326,7 @@ export default defineComponent({
       isDrop: true
     })
     const { isHover } = useHover(reference)
+    const { isTimeDisabled } = useTimeBound(toRef(props, 'min'), toRef(props, 'max'))
 
     const startInput = ref<InstanceType<typeof TimeControl>>()
     const endInput = ref<InstanceType<typeof TimeControl>>()
@@ -311,6 +337,7 @@ export default defineComponent({
         nh.ns('input-vars'),
         nh.bs('vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm('no-hour')]: !startState.enabled.hour,
@@ -346,6 +373,26 @@ export default defineComponent({
     })
     const showClear = computed(() => {
       return !props.disabled && props.clearable && isHover.value && !!lastValue.value
+    })
+    const startError = computed(() => {
+      const { hour, minute, second } = startState.timeValue
+
+      return (
+        isTimeDisabled.hour(hour) ||
+        isTimeDisabled.minute(hour, minute) ||
+        isTimeDisabled.second(hour, minute, second)
+      )
+    })
+    const endError = computed(() => {
+      if (!props.isRange) return false
+
+      const { hour, minute, second } = endState.timeValue
+
+      return (
+        isTimeDisabled.hour(hour) ||
+        isTimeDisabled.minute(hour, minute) ||
+        isTimeDisabled.second(hour, minute, second)
+      )
     })
 
     parseValue(props.value, false)
@@ -431,7 +478,7 @@ export default defineComponent({
       }
     )
 
-    function createDateState() {
+    function createTimeState() {
       const { currentColumn, enabled, resetColumn, enterColumn } = useColumn([
         'hour',
         'minute',
@@ -525,7 +572,19 @@ export default defineComponent({
       return Array.isArray(currentValue.value) ? currentValue.value.join('|') : currentValue.value
     }
 
+    function verifyTime() {
+      if (startError.value || (props.isRange && endError.value)) {
+        if (lastValue.value) {
+          parseValue(lastValue.value.split('|'))
+        } else {
+          parseValue(props.value)
+        }
+      }
+    }
+
     function emitChange() {
+      verifyTime()
+
       if (lastValue.value !== getStringValue()) {
         lastValue.value = getStringValue()
 
@@ -635,6 +694,7 @@ export default defineComponent({
       }
 
       verifyValue(type)
+
       state.activated[type] = true
       emitEvent(props.onInput, type, state.timeValue[type])
     }
@@ -782,6 +842,9 @@ export default defineComponent({
       selectorClass,
       hasPrefix,
       showClear,
+      isTimeDisabled,
+      startError,
+      endError,
 
       wrapper,
       reference,

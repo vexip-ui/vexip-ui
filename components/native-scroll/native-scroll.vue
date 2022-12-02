@@ -22,6 +22,7 @@
     <Scrollbar
       v-if="props.useXBar"
       ref="xBar"
+      inherit
       placement="bottom"
       :class="[nh.bem('bar', 'horizontal'), props.barClass]"
       :fade="props.barFade"
@@ -37,6 +38,7 @@
     <Scrollbar
       v-if="props.useYBar"
       ref="yBar"
+      inherit
       placement="right"
       :class="[nh.bem('bar', 'vertical'), props.barClass]"
       :fade="props.barFade"
@@ -64,7 +66,7 @@ import { useScrollWrapper } from './hooks'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode } from '@/components/scroll'
 
-const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
+const scrollModes = Object.freeze(['horizontal', 'vertical', 'both'])
 
 const MOVE_EVENT = 'mousemove'
 const UP_EVENT = 'mouseup'
@@ -250,7 +252,13 @@ export default defineComponent({
     /* autoplay */
 
     const className = computed(() => {
-      return [nh.b(), nh.bm(props.mode)]
+      return [
+        nh.b(),
+        nh.bm(props.mode),
+        {
+          [nh.bm('inherit')]: props.inherit
+        }
+      ]
     })
     const style = computed(() => {
       const { width, height } = props

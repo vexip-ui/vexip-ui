@@ -30,13 +30,18 @@ export class ConfirmManager {
 
   open(content: string, type?: ConfirmType): Promise<boolean>
   open(options: ConfirmOptions): Promise<boolean>
-  open(options: FuzzyOptions, type?: ConfirmType) {
+  open(content: string, title: string, type?: ConfirmType): Promise<boolean>
+  open(options: FuzzyOptions, title?: string, type?: ConfirmType) {
     if (!isClient) {
       return
     }
 
     if (typeof options === 'string') {
-      options = { content: options, confirmType: type }
+      if (type) {
+        options = { title, content: options, confirmType: type }
+      } else {
+        options = { content: options, confirmType: title as ConfirmType }
+      }
     }
 
     const item: ConfirmOptions = { ...this.defaults, ...options }

@@ -1,6 +1,7 @@
 <template>
   <Masker
     v-model:active="currentActive"
+    :inherit="props.inherit"
     :class="className"
     :inner="props.inner"
     :transition-name="props.transitionName"
@@ -55,10 +56,16 @@
         </div>
         <div v-if="!props.noFooter" ref="footer" :class="nh.be('footer')">
           <slot name="footer">
-            <Button text size="small" @click="handleCancle">
+            <Button
+              inherit
+              text
+              size="small"
+              @click="handleCancle"
+            >
               {{ props.cancelText || locale.cancel }}
             </Button>
             <Button
+              inherit
               type="primary"
               size="small"
               :loading="props.loading"
@@ -127,6 +134,7 @@ export default defineComponent({
       inner: false,
       maskClose: true,
       modalClass: null,
+      modalStyle: null,
       noFooter: false,
       hideMask: false,
       draggable: false,
@@ -273,16 +281,21 @@ export default defineComponent({
     const wrapperStyle = computed(() => {
       const fixedHeight = currentHeight.value !== 'auto'
 
-      return {
-        top: `${currentTop.value}px`,
-        right:
-          fixedHeight || !props.right || props.right === 'auto' ? undefined : `${props.right}px`,
-        bottom:
-          fixedHeight || !props.bottom || props.bottom === 'auto' ? undefined : `${props.bottom}px`,
-        left: `${currentLeft.value}px`,
-        width: `${currentWidth.value}px`,
-        height: fixedHeight ? `${currentHeight.value}px` : undefined
-      }
+      return [
+        props.modalStyle,
+        {
+          top: `${currentTop.value}px`,
+          right:
+            fixedHeight || !props.right || props.right === 'auto' ? undefined : `${props.right}px`,
+          bottom:
+            fixedHeight || !props.bottom || props.bottom === 'auto'
+              ? undefined
+              : `${props.bottom}px`,
+          left: `${currentLeft.value}px`,
+          width: `${currentWidth.value}px`,
+          height: fixedHeight ? `${currentHeight.value}px` : undefined
+        }
+      ]
     })
     const hasTitle = computed(() => {
       return !!(slots.header || props.title)

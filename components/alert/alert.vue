@@ -56,7 +56,7 @@ import {
 import { getRangeWidth } from '@vexip-ui/utils'
 import { alertProps } from './props'
 
-export type AlertType = 'default' | 'info' | 'success' | 'warning' | 'error'
+import type { AlertType } from './symbol'
 
 const predefinedIcons = {
   default: Flag,
@@ -116,6 +116,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.type)]: props.type,
         [nh.bm('colorful-text')]: props.colorfulText,
         [nh.bm('has-title')]: hasTitle.value,

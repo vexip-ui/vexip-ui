@@ -43,3 +43,10 @@ export const menuItemProps = buildProps({
 
 export type MenuItemProps = ExtractPropTypes<typeof menuItemProps>
 export type MenuItemCProps = ConfigurableProps<MenuItemProps, 'children'>
+
+export const menuGroupProps = buildProps({
+  label: String,
+  children: Array as PropType<MenuOptions[]>
+})
+
+export type MenuGroupProps = ExtractPropTypes<typeof menuGroupProps>
