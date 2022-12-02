@@ -1,37 +1,27 @@
 <template>
-  <Header
-    :store="store"
-    :ssr="ssrMode"
-    :versions="versions"
-    @toggle-ssr="toggleSSR"
-  ></Header>
-  <Repl
-    show-compile-output
-    auto-resize
-    :clear-console="false"
-    :store="store"
-    :ssr="ssrMode"
-    :sfc-options="sfcOptions"
-  ></Repl>
+  <template v-if="!loading">
+    <Header :store="store" :versions="versions"></Header>
+    <Repl
+      show-compile-output
+      auto-resize
+      :clear-console="false"
+      :store="store"
+      :sfc-options="sfcOptions"
+    ></Repl>
+  </template>
 </template>
 
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { Repl } from '@vue/repl'
 import Header from './components/header.vue'
-import { ReplStore } from './store'
+import { useReplStore } from './store'
 
-const ssrMode = ref(false)
+const versions = getVersions()
+const hash = location.hash.slice(1)
+const loading = ref(true)
 
-let hash = location.hash.slice(1)
-
-if (hash.startsWith('__SSR__')) {
-  hash = hash.slice(7)
-  ssrMode.value = true
-}
-
-const versions = getSearch()
-const store = new ReplStore({ serializedState: hash, versions })
+const store = useReplStore({ serializedState: hash, versions })
 
 // enable experimental features
 const sfcOptions = {
@@ -41,33 +31,22 @@ const sfcOptions = {
   }
 }
 
-// persist state
-watchEffect(() => {
-  const newHash = store.serialize().replace(/^#/, ssrMode.value ? '#__SSR__' : '#')
-
-  history.replaceState({}, '', newHash)
+store.init().then(() => {
+  loading.value = false
 })
 
-function toggleSSR() {
-  ssrMode.value = !ssrMode.value
-  store.setFiles(store.getFiles())
-}
+// persist state
+watchEffect(() => history.replaceState({}, '', store.serialize()))
 
-function getSearch() {
-  if (location.search) {
-    const units = location.search.substring(1).split('&')
+function getVersions() {
+  const search = new URLSearchParams(location.search)
+  const versions: Record<string, string> = {}
 
-    return units.reduce((prev, current) => {
-      if (current) {
-        const [key, value] = current.split('=')
-        prev[key] = value
-      }
-
-      return prev
-    }, {} as Record<string, string>)
+  for (const [pkg, version] of search.entries()) {
+    versions[pkg] = version
   }
 
-  return {}
+  return versions
 }
 </script>
 

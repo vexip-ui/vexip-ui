@@ -1,7 +1,9 @@
 <template>
-  <Button type="primary" :icon="MagnifyingGlass">
-    {{ msg }}
-  </Button>
+  <div>
+    <Button type="primary" :icon="MagnifyingGlass">
+      {{ msg }}
+    </Button>
+  </div>
 </template>
 
 <script setup lang="ts">

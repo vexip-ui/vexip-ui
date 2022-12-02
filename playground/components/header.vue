@@ -33,19 +33,13 @@
               :value="meta.active"
               :options="meta.versions"
               transparent
+              :loading="meta.loading"
+              @toggle="initRepoVersions(meta)"
               @change="changeVersion(pkg, $event)"
             ></Select>
           </div>
         </div>
         <div class="section">
-          <Switch
-            class="ssr-switch"
-            :value="ssr"
-            open-color="var(--vxp-color-success-base)"
-            open-text="SSR"
-            close-text="SPA"
-            @change="toggleSSR"
-          ></Switch>
           <button class="action" title="Toggle Dark" @click="toggleDark">
             <Icon v-if="isDarkTheme" :scale="1.3">
               <Moon></Moon>
@@ -101,7 +95,9 @@ interface RepoMeta {
   repo: string,
   name: string,
   versions: string[],
-  active: string
+  active: string,
+  loading: boolean,
+  loaded: boolean
 }
 
 const props = defineProps({
@@ -109,17 +105,11 @@ const props = defineProps({
     type: Object as PropType<ReplStore>,
     required: true
   },
-  ssr: {
-    type: Boolean,
-    default: false
-  },
   versions: {
     type: Object as PropType<Record<string, string>>,
     default: () => ({})
   }
 })
-
-const emit = defineEmits(['toggle-ssr'])
 
 const isDarkTheme = ref(document.documentElement.classList.contains('dark'))
 const libVersion = `Repl@${__REPL_VERSION__}`
@@ -142,29 +132,32 @@ const repoMeta: Record<string, RepoMeta> = reactive({
     repo: 'vexip-ui',
     name: 'Vexip UI',
     versions: [props.versions['vexip-ui'] || __VERSION__],
-    active: props.versions['vexip-ui'] || __VERSION__
+    active: props.versions['vexip-ui'] || __VERSION__,
+    loading: false,
+    loaded: false
   },
   vue: {
     owner: 'vuejs',
     repo: 'core',
     name: 'Vue',
     versions: [props.versions.vue || __VUE_VERSION__],
-    active: props.versions.vue || __VUE_VERSION__
+    active: props.versions.vue || __VUE_VERSION__,
+    loading: false,
+    loaded: false
   }
 })
-
-initRepoVersions()
 
 onMounted(() => {
   window.addEventListener('blur', handleWindowBlur)
 })
 
-async function initRepoVersions() {
-  Promise.all(
-    Object.values(repoMeta).map(async meta => {
-      meta.versions = await fetchVersions(meta.owner, meta.repo)
-    })
-  )
+async function initRepoVersions(meta: RepoMeta) {
+  if (!meta.loaded) {
+    meta.loading = true
+    meta.versions = await fetchVersions(meta.owner, meta.repo)
+    meta.loaded = true
+    meta.loading = false
+  }
 }
 
 async function fetchVersions(owner: string, repo: string, maxCount = 15) {
@@ -183,10 +176,6 @@ function handleWindowBlur() {
   if (document.activeElement?.tagName === 'IFRAME') {
     document.dispatchEvent(new MouseEvent('click'))
   }
-}
-
-function toggleSSR() {
-  emit('toggle-ssr')
 }
 
 function toggleDark() {
