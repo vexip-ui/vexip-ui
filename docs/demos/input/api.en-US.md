@@ -9,9 +9,9 @@
 | prefix-color | `string`                                                 | The color of the prefix content, affects the prefix slot                                               | `''`        | -       |
 | suffix       | `Record<string, any>`                                    | suffix icon, invalid when using suffix slot                                                            | `null`      | -       |
 | suffix-color | `string`                                                 | The color of the suffix content, which affects the suffix slot                                         | `''`        | -       |
-| formatter    | `(value: string) => string`                              | Set the method to format the value of the input box after each value change                            | `null`      | -       |
+| formatter    | `(value: string \| number) => string \| number`          | Set the method to format the value of the input box after each value change                            | `null`      | -       |
 | accessor     | `(value: string) => any`                                 | Set the method for reading the input value when the event is called back                               | `null`      | -       |
-| value        | `string`                                                 | Set the value of the input box                                                                         | `''`        | -       |
+| value        | `string \| number`                                       | Set the value of the input box                                                                         | `''`        | -       |
 | placeholder  | `string`                                                 | Set the placeholder for the input box                                                                  | `''`        | -       |
 | autofocus    | `boolean`                                                | Set the autofocus of the input field                                                                   | `false`     | -       |
 | spellcheck   | `boolean`                                                | Set spellcheck for input fields                                                                        | `false`     | -       |
@@ -35,19 +35,19 @@
 
 ### Input Events
 
-| Name         | Description                                                                                    | Parameters                                  | Since |
-| ------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------- | ----- |
-| focus        | Emitted when the input box is focused, returns the event object                                | `(event: FocusEvent)`                       | -     |
-| blur         | Emitted when the input box loses focus, returns the event object                               | `(event: FocusEvent)`                       | -     |
-| change       | Emitted when the value of the input box changes, returns the read value and the original value | `(accessedValue: any, originValue: string)` | -     |
-| input        | Emitted when a value is entered, returns the read value and the original value                 | `(accessedValue: any, originValue: string)` | -     |
-| enter        | Emitted when enter, returns the key event                                                      | `(event: KeyboardEvent)`                    | -     |
-| prefix-click | Emitted when the prefix part is clicked, returns the click event                               | `(event: MouseEvent)`                       | -     |
-| suffix-click | Emitted when the suffix part is clicked, returns the click event                               | `(event: MouseEvent)`                       | -     |
-| key-down     | Emitted when the key is pressed, returns the key event                                         | `(event: KeyboardEvent)`                    | -     |
-| key-press    | Emitted when the key is held down, returns the key event                                       | `(event: KeyboardEvent)`                    | -     |
-| key-up       | Emitted when the key is released, returns the key event                                        | `(event: KeyboardEvent)`                    | -     |
-| clear        | Emitted when the value is cleared by the clear button, no return value                         | -                                           | -     |
+| Name         | Description                                                            | Parameters                  | Since |
+| ------------ | ---------------------------------------------------------------------- | --------------------------- | ----- |
+| focus        | Emitted when the input box is focused, returns the event object        | `(event: FocusEvent)`       | -     |
+| blur         | Emitted when the input box loses focus, returns the event object       | `(event: FocusEvent)`       | -     |
+| change       | Emitted when the value of the input box changes                        | `(value: string \| number)` | -     |
+| input        | Emitted when a value is entered                                        | `(value: string \| number)` | -     |
+| enter        | Emitted when enter, returns the key event                              | `(event: KeyboardEvent)`    | -     |
+| prefix-click | Emitted when the prefix part is clicked, returns the click event       | `(event: MouseEvent)`       | -     |
+| suffix-click | Emitted when the suffix part is clicked, returns the click event       | `(event: MouseEvent)`       | -     |
+| key-down     | Emitted when the key is pressed, returns the key event                 | `(event: KeyboardEvent)`    | -     |
+| key-press    | Emitted when the key is held down, returns the key event               | `(event: KeyboardEvent)`    | -     |
+| key-up       | Emitted when the key is released, returns the key event                | `(event: KeyboardEvent)`    | -     |
+| clear        | Emitted when the value is cleared by the clear button, no return value | -                           | -     |
 
 ### Input Slots
 

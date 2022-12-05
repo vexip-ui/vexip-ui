@@ -9,9 +9,8 @@
 | prefix-color | `string`                                                 | 前缀内容的颜色，会影响前缀插槽                                    | `''`        | -       |
 | suffix       | `Record<string, any>`                                    | 后缀图标，使用后缀插槽时无效                                      | `null`      | -       |
 | suffix-color | `string`                                                 | 后缀内容的颜色，会影响后缀插槽                                    | `''`        | -       |
-| formatter    | `(value: string) => string`                              | 设置在每次值变化后，对输入框的值进行格式化的方法                  | `null`      | -       |
-| accessor     | `(value: string) => any`                                 | 设置在事件回调时，对输入的值的读取方法                            | `null`      | -       |
-| value        | `string`                                                 | 设置输入框的值                                                    | `''`        | -       |
+| formatter    | `(value: string \| number) => string \| number`          | 设置在每次值变化后，对输入框的值进行格式化的方法                  | `null`      | -       |
+| value        | `string \| number`                                       | 设置输入框的值                                                    | `''`        | -       |
 | placeholder  | `string`                                                 | 设置输入框的占位符                                                | `''`        | -       |
 | autofocus    | `boolean`                                                | 设置输入框的自动聚焦                                              | `false`     | -       |
 | spellcheck   | `boolean`                                                | 设置输入框的拼写检查                                              | `false`     | -       |
@@ -35,19 +34,19 @@
 
 ### Input 事件
 
-| 名称         | 说明                                         | 参数                                        | 始于 |
-| ------------ | -------------------------------------------- | ------------------------------------------- | ---- |
-| focus        | 输入框聚焦时触发，返回事件对象               | `(event: FocusEvent)`                       | -    |
-| blur         | 输入框失去焦点时触发，返回事件对象           | `(event: FocusEvent)`                       | -    |
-| change       | 当输入框值改变时触发，返回读取后的值和原始值 | `(accessedValue: any, originValue: string)` | -    |
-| input        | 当键入了值时触发，返回读取后的值和原始值     | `(accessedValue: any, originValue: string)` | -    |
-| enter        | 当键入回车时触发，返回按键事件               | `(event: KeyboardEvent)`                    | -    |
-| prefix-click | 当点击前缀部分时触发，返回点击事件           | `(event: MouseEvent)`                       | -    |
-| suffix-click | 当点击后缀部分时触发，返回点击事件           | `(event: MouseEvent)`                       | -    |
-| key-down     | 当键按下时触发，返回按键事件                 | `(event: KeyboardEvent)`                    | -    |
-| key-press    | 当键按住时触发，返回按键事件                 | `(event: KeyboardEvent)`                    | -    |
-| key-up       | 当键松开时触发，返回按键事件                 | `(event: KeyboardEvent)`                    | -    |
-| clear        | 当通过清除按钮清空值时触发，无返回值         | -                                           | -    |
+| 名称         | 说明                                 | 参数                        | 始于 |
+| ------------ | ------------------------------------ | --------------------------- | ---- |
+| focus        | 输入框聚焦时触发，返回事件对象       | `(event: FocusEvent)`       | -    |
+| blur         | 输入框失去焦点时触发，返回事件对象   | `(event: FocusEvent)`       | -    |
+| change       | 当输入框值改变时触发                 | `(value: string \| number)` | -    |
+| input        | 当键入了值时触发                     | `(value: string \| number)` | -    |
+| enter        | 当键入回车时触发，返回按键事件       | `(event: KeyboardEvent)`    | -    |
+| prefix-click | 当点击前缀部分时触发，返回点击事件   | `(event: MouseEvent)`       | -    |
+| suffix-click | 当点击后缀部分时触发，返回点击事件   | `(event: MouseEvent)`       | -    |
+| key-down     | 当键按下时触发，返回按键事件         | `(event: KeyboardEvent)`    | -    |
+| key-press    | 当键按住时触发，返回按键事件         | `(event: KeyboardEvent)`    | -    |
+| key-up       | 当键松开时触发，返回按键事件         | `(event: KeyboardEvent)`    | -    |
+| clear        | 当通过清除按钮清空值时触发，无返回值 | -                           | -    |
 
 ### Input 插槽
 

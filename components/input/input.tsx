@@ -38,7 +38,7 @@ export default defineComponent({
       clearField,
       getFieldValue,
       setFieldValue
-    } = useFieldStore<string>(() => inputControl.value?.focus())
+    } = useFieldStore<string | number>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
       size: createSizeProp(size),
@@ -82,9 +82,9 @@ export default defineComponent({
 
     const nh = useNameHelper('input')
     const focused = ref(false)
-    const currentValue = ref(props.value)
+    const currentValue = ref(String(props.value))
     const showPassword = ref(false)
-    const currentLength = ref(props.value ? props.value.length : 0)
+    const currentLength = ref(String(props.value) ? String(props.value).length : 0)
     const beforeHover = ref(false)
     const afterHover = ref(false)
 
@@ -152,7 +152,7 @@ export default defineComponent({
     })
     const formattedValue = computed(() => {
       return typeof props.formatter === 'function'
-        ? props.formatter(currentValue.value)
+        ? String(props.formatter(currentValue.value))
         : currentValue.value
     })
     const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
@@ -167,7 +167,7 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValue.value = value
+        currentValue.value = String(value)
         lastValue = value
       }
     )
@@ -223,23 +223,26 @@ export default defineComponent({
     function emitChangeEvent(type: InputEventType) {
       type = type === 'input' ? 'input' : 'change'
 
+      const value =
+        typeof props.value === 'number' ? parseFloat(currentValue.value) : currentValue.value
+
       if (type === 'change') {
-        if (lastValue === currentValue.value) return
+        if (lastValue === value) return
 
-        lastValue = currentValue.value
+        lastValue = value
 
-        setFieldValue(currentValue.value)
-        emitEvent(props.onChange, currentValue.value)
+        setFieldValue(value)
+        emitEvent(props.onChange, value)
 
         if (!props.sync) {
-          emit('update:value', currentValue.value)
+          emit('update:value', value)
           validateField()
         }
       } else {
-        emitEvent(props.onInput, currentValue.value)
+        emitEvent(props.onInput, value)
 
         if (props.sync) {
-          emit('update:value', currentValue.value)
+          emit('update:value', value)
           validateField()
         }
       }
