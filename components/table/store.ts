@@ -371,6 +371,16 @@ function setData(state: StoreState, data: Data[]) {
 
     if (oldDataMap[key]) {
       row = oldDataMap[key]
+
+      console.log('2')
+      if (row.data !== item) {
+        console.log('1')
+        const { checked, height, expanded } = Object.assign(row.data, item)
+
+        row.checked = !isNull(checked) ? !!checked : row.checked
+        row.height = !isNull(height) ? toNumber(height) : row.height
+        row.expanded = !isNull(expanded) ? !!expanded : row.expanded
+      }
     } else {
       const { checked, height, expanded } = item
 
