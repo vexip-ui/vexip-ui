@@ -420,7 +420,12 @@ export default defineComponent({
 
     function renderControl() {
       return (
-        <div id={idFor.value} ref={control} class={className.value}>
+        <div
+          id={idFor.value}
+          ref={control}
+          class={className.value}
+          onClick={() => inputControl.value?.focus()}
+        >
           {hasPrefix.value && renderPrefix()}
           <input
             ref={inputControl}

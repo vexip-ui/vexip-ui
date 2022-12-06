@@ -1,5 +1,10 @@
 <template>
-  <div :id="idFor" ref="wrapper" :class="className">
+  <div
+    :id="idFor"
+    ref="wrapper"
+    :class="className"
+    @click="input?.focus()"
+  >
     <div
       v-if="hasPrefix"
       :class="[nh.be('icon'), nh.be('prefix')]"
