@@ -5,7 +5,7 @@ import { Icon } from '@/components/icon'
 import { FIELD_OPTIONS } from '@/components/form/symbol'
 import { useNameHelper, useProps, createSizeProp, emitEvent } from '@vexip-ui/config'
 import { Spinner } from '@vexip-ui/icons'
-import { parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
+import { isClient, parseColorToRgba, mixColor, adjustAlpha } from '@vexip-ui/utils'
 import { buttonProps } from './props'
 import { GROUP_STATE, buttonTypes } from './symbol'
 
@@ -76,9 +76,9 @@ export default defineComponent({
     })
     const colorMap = computed(() => {
       if (props.color) {
-        const rootStyle = getComputedStyle(document.documentElement)
-        const black = parseColorToRgba(rootStyle.getPropertyValue(nh.nv('color-black')) || '#000')
-        const white = parseColorToRgba(rootStyle.getPropertyValue(nh.nv('color-white')) || '#fff')
+        const rootStyle = isClient ? getComputedStyle(document.documentElement) : null
+        const black = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-black')) || '#000')
+        const white = parseColorToRgba(rootStyle?.getPropertyValue(nh.nv('color-white')) || '#fff')
         const baseColor = parseColorToRgba(props.color)
 
         return {
