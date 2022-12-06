@@ -60,16 +60,18 @@
         ></Icon>
       </div>
     </transition>
-    <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
-      <Icon :scale="0.8">
-        <CaretUp></CaretUp>
-      </Icon>
-    </div>
-    <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
-      <Icon :scale="0.8">
-        <CaretDown></CaretDown>
-      </Icon>
-    </div>
+    <template v-if="props.controlType !== 'none'">
+      <div :class="nh.be('plus')" @click="plusNumber" @mousedown.prevent>
+        <Icon :scale="0.8">
+          <CaretUp></CaretUp>
+        </Icon>
+      </div>
+      <div :class="nh.be('minus')" @click="minusNumber" @mousedown.prevent>
+        <Icon :scale="0.8">
+          <CaretDown></CaretDown>
+        </Icon>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -162,7 +164,8 @@ export default defineComponent({
       loadingIcon: Spinner,
       loadingLock: false,
       loadingSpin: false,
-      sync: false
+      sync: false,
+      controlType: 'right'
     })
 
     const nh = useNameHelper('number-input')
@@ -204,6 +207,8 @@ export default defineComponent({
     let lastValue: number | null = props.value
 
     const className = computed(() => {
+      const [display, fade] = (props.controlType || 'right').split('-')
+
       return [
         nh.b(),
         nh.ns('input-vars'),
@@ -213,7 +218,9 @@ export default defineComponent({
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading && props.loadingLock,
           [nh.bm(props.size)]: props.size !== 'default',
-          [nh.bm(props.state)]: props.state !== 'default'
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm(`control-${display}`)]: display !== 'right',
+          [nh.bm('control-fade')]: fade
         }
       ]
     })
@@ -261,6 +268,7 @@ export default defineComponent({
       return focused.value ? preciseNumber.value : formattedValue.value
     })
     const isReadonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
+    const controlFade = computed(() => props.controlType?.endsWith('fade'))
 
     watch(
       () => props.value,
@@ -461,6 +469,7 @@ export default defineComponent({
       showClear,
       inputValue,
       isReadonly,
+      controlFade,
 
       wrapper,
       input: inputControl,
