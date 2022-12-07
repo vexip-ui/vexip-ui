@@ -1,3 +1,17 @@
+## [2.0.17](https://github.com/vexip-ui/vexip-ui/compare/v2.0.16...v2.0.17) (2022-12-07)
+
+### Bug Fixes
+
+- **input:** ensure focus when click input area ([a0b7ff8](https://github.com/vexip-ui/vexip-ui/commit/a0b7ff86afad948e27eb4892a46f2fa9db342308))
+- **playground:** compiler version should follow vue version ([51715cd](https://github.com/vexip-ui/vexip-ui/commit/51715cd64816df81aa8da9fb88b814293dab3c6b))
+- **select:** space down should not enter the input ([670a68e](https://github.com/vexip-ui/vexip-ui/commit/670a68e1b4d60d3bdd4d20f3fd5380f84150daa4))
+- **table:** should assign row data when set new data ([2518203](https://github.com/vexip-ui/vexip-ui/commit/2518203c45bd9c91b29a562d7857574bdd87270f))
+
+### Features
+
+- **input:** support number type value ([a145079](https://github.com/vexip-ui/vexip-ui/commit/a145079863786edc94ecc3657273c48dded14729))
+- **number:** add control-type prop ([1a588ac](https://github.com/vexip-ui/vexip-ui/commit/1a588ac2ed3bdcf5ad5474c39cad831019c53485))
+
 ## [2.0.16](https://github.com/vexip-ui/vexip-ui/compare/v2.0.15...v2.0.16) (2022-12-01)
 
 ### Bug Fixes
