@@ -99,7 +99,7 @@ import type {
 } from './typography'
 
 export interface PropsOptions {
-  default: Record<string, any>,
+  default?: Record<string, any>,
   alert?: AlertCProps,
   anchor?: AnchorCProps,
   autoComplete?: AutoCompleteCProps,

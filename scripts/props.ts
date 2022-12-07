@@ -48,7 +48,7 @@ async function main() {
     import { ${typography.map(name => `${toCapitalCase(name)}CProps`).join()} } from './typography'
 
     export interface PropsOptions {
-      default: Record<string, any>,
+      default?: Record<string, any>,
       ${types.join(',\n')},
       ${typography.map(name => `${toCamelCase(name)}?: ${toCapitalCase(name)}CProps`).join(',\n')}
     }
