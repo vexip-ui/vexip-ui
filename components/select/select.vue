@@ -511,7 +511,7 @@ export default defineComponent({
 
           updateHitting(index)
           modifier.resetAll()
-        } else if (modifier.enter || modifier.space) {
+        } else if (modifier.enter) {
           event.preventDefault()
           event.stopPropagation()
 
