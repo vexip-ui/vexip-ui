@@ -164,7 +164,6 @@ export default defineComponent({
           ? wrapper.value.offsetHeight
           : toNumber(currentHeight.value)
 
-        console.log({ width, height })
         state.xStart = width
         state.yStart = height
 
