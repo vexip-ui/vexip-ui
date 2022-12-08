@@ -20,6 +20,10 @@ type InputEventType = 'input' | 'change'
 
 const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
 
+function toNotNullString(value: any) {
+  return isNull(value) ? '' : String(value)
+}
+
 export default defineComponent({
   name: 'Input',
   components: {
@@ -80,11 +84,13 @@ export default defineComponent({
       sync: false
     })
 
+    const initValue = toNotNullString(props.value)
+
     const nh = useNameHelper('input')
     const focused = ref(false)
-    const currentValue = ref(String(props.value))
+    const currentValue = ref(initValue)
     const showPassword = ref(false)
-    const currentLength = ref(String(props.value) ? String(props.value).length : 0)
+    const currentLength = ref(initValue.length)
     const beforeHover = ref(false)
     const afterHover = ref(false)
 
@@ -152,7 +158,7 @@ export default defineComponent({
     })
     const formattedValue = computed(() => {
       return typeof props.formatter === 'function'
-        ? String(props.formatter(currentValue.value))
+        ? toNotNullString(props.formatter(currentValue.value))
         : currentValue.value
     })
     const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
@@ -167,8 +173,9 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValue.value = String(value)
-        lastValue = value
+        currentValue.value = toNotNullString(value)
+        limitValueLength()
+        lastValue = currentValue.value
       }
     )
 
