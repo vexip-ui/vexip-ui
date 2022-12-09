@@ -35,7 +35,8 @@ export default defineComponent({
         [nh.bs('vars')]: true,
         [nh.bm('inherit')]: props.inherit,
         [nh.bm('pending')]: props.pending,
-        [nh.bm('both-sides')]: props.bothSides
+        [nh.bm('both-sides')]: props.bothSides,
+        [nh.bm('flip')]: props.flip
       }
     })
 

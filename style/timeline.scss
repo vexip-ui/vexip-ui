@@ -5,8 +5,8 @@
 $timeline: () !default;
 $timeline: map.merge(
   (
-    item-span: 10px,
-    item-span-pending: 32px,
+    item-span: 20px,
+    item-span-pending: 36px,
     pointer-color: get-css-var('color-primary-base'),
     pointer-bg-color: get-css-var('color-white'),
     pointer-b-width: 2px,
@@ -35,7 +35,13 @@ $timeline: map.merge(
   flex-direction: column;
   padding-left: 6px;
 
+  &--flip {
+    padding-right: 6px;
+    padding-left: 0;
+  }
+
   &--both-sides {
+    padding-right: 0;
     padding-left: 0;
   }
 
@@ -43,14 +49,20 @@ $timeline: map.merge(
     position: relative;
     padding-bottom: get-css-var('timeline-item-span');
 
+    &:last-child {
+      padding-bottom: 0;
+    }
+
     $types: success error warning;
 
     @each $type in $types {
       &--#{$type} {
-        @include define-timeline-style((
-          pointer-color: 'color' $type 'base',
-          pointer-b-color: 'color' $type 'base'
-        ));
+        @include define-timeline-style(
+          (
+            pointer-color: 'color' $type 'base',
+            pointer-b-color: 'color' $type 'base'
+          )
+        );
       }
     }
   }
@@ -58,8 +70,16 @@ $timeline: map.merge(
   &--both-sides &__item {
     align-self: flex-end;
     width: 50%;
+  }
 
+  &--both-sides:not(&--flip) &__item {
     &:nth-child(even) {
+      align-self: flex-start;
+    }
+  }
+
+  &--both-sides#{&}--flip &__item {
+    &:nth-child(odd) {
       align-self: flex-start;
     }
   }
@@ -76,8 +96,16 @@ $timeline: map.merge(
     height: get-css-var('timeline-pointer-size');
   }
 
-  &--both-sides &__item:nth-child(even) &__signal {
-    left: calc(100% - 6px);
+  &--flip &__signal {
+    left: calc(get-css-var('timeline-pointer-size') * -0.5 + 100%);
+  }
+
+  &--both-sides:not(&--flip) &__item:nth-child(even) &__signal {
+    left: calc(get-css-var('timeline-pointer-size') * -0.5 + 100%);
+  }
+
+  &--both-sides#{&}--flip &__item:nth-child(even) &__signal {
+    left: calc(get-css-var('timeline-pointer-size') * -0.5 + 0.5px);
   }
 
   &--signal-click &__signal {
@@ -106,22 +134,49 @@ $timeline: map.merge(
     }
   }
 
-  &--both-sides &__item:nth-child(even) &__line {
+  &--flip &__line {
     left: 100%;
+  }
+
+  &--both-sides:not(&--flip) &__item:nth-child(even) &__line {
+    left: 100%;
+  }
+
+  &--both-sides#{&}--flip &__item:nth-child(even) &__line {
+    left: 0;
   }
 
   &__content {
     position: relative;
-    top: -6px;
+    top: -5px;
     display: flex;
     flex-direction: column;
+    padding-left: 16px;
+  }
+
+  &--flip &__content {
     padding: {
-      bottom: 8px;
+      right: 16px;
+      left: 0;
+    }
+  }
+
+  &--both-sides:not(&--flip) &__item:nth-child(even) &__content {
+    align-items: flex-end;
+    padding: {
+      right: 16px;
+      left: 0;
+    }
+  }
+
+  &--both-sides#{&}--flip &__item:nth-child(even) &__content {
+    padding: {
+      right: 0;
       left: 16px;
     }
   }
 
-  &--both-sides &__item:nth-child(even) &__content {
+  &--both-sides#{&}--flip &__item:nth-child(odd) &__content {
     align-items: flex-end;
     padding: {
       right: 16px;
