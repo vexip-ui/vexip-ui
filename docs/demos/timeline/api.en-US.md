@@ -8,6 +8,7 @@
 | lineColor  | `string`           | Set the color of the timeline                                                         | `null`  | -        |
 | spacing    | `number \| string` | Set the spacing between time nodes, you can pass a number or a legal css length value | `null`  | -        |
 | flip       | `boolean`          | Set whether to flip the content                                                       | `false` | `2.0.18` |
+| horizontal | `boolean`          | Set whether the timeline is horizontal                                                | `false` | `2.0.18` |
 
 ### Timeline Events
 

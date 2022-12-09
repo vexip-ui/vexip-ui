@@ -8,6 +8,7 @@
 | lineColor  | `string`           | 设置时间线的颜色                                              | `null`  | -        |
 | spacing    | `number \| string` | 设置时间节点间的间隔距离，可以传入一个数字或合法的 css 长度值 | `null`  | -        |
 | flip       | `boolean`          | 设置是否翻转内容                                              | `false` | `2.0.18` |
+| horizontal | `boolean`          | 设置时间线是否为横向                                          | `false` | `2.0.18` |
 
 ### Timeline 事件
 

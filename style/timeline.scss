@@ -2,6 +2,7 @@
 
 @use './design' as *;
 
+/* stylelint-disable length-zero-no-unit */
 $timeline: () !default;
 $timeline: map.merge(
   (
@@ -11,14 +12,17 @@ $timeline: map.merge(
     pointer-bg-color: get-css-var('color-white'),
     pointer-b-width: 2px,
     pointer-b-color: get-css-var('color-primary-base'),
-    pointer-size: 13px,
-    line-width: get-css-var('border-width'),
+    pointer-b-color-disabled: get-css-var('content-color-disabled'),
+    pointer-size: 12px,
+    line-width: 2px,
     line-style: solid,
     line-style-pending: dashed,
-    line-color: get-css-var('border-color-base')
+    line-color: get-css-var('border-color-light-2'),
+    line-inset: 0px
   ),
   $timeline
 );
+/* stylelint-enable */
 
 .#{$namespace}-timeline {
   &-vars {
@@ -35,18 +39,32 @@ $timeline: map.merge(
   flex-direction: column;
   padding-left: 6px;
 
+  &--horizontal {
+    flex-direction: row;
+    padding-top: 6px;
+    padding-left: 0;
+  }
+
   &--flip {
     padding-right: 6px;
     padding-left: 0;
   }
 
-  &--both-sides {
+  &--horizontal#{&}--flip {
+    padding-top: 0;
     padding-right: 0;
-    padding-left: 0;
+    padding-bottom: 6px;
+  }
+
+  &--both-sides,
+  &--both-sides#{&}--flip {
+    padding: 0;
   }
 
   &__item {
     position: relative;
+    display: flex;
+    align-items: flex-start;
     padding-bottom: get-css-var('timeline-item-span');
 
     &:last-child {
@@ -67,9 +85,19 @@ $timeline: map.merge(
     }
   }
 
+  &--horizontal &__item {
+    padding-right: get-css-var('timeline-item-span');
+    padding-bottom: 0;
+  }
+
   &--both-sides &__item {
     align-self: flex-end;
     width: 50%;
+  }
+
+  &--horizontal#{&}--both-sides &__item {
+    width: 100%;
+    height: 50%;
   }
 
   &--both-sides:not(&--flip) &__item {
@@ -84,28 +112,50 @@ $timeline: map.merge(
     }
   }
 
+  $pointer-size: get-css-var('timeline-pointer-size');
+
   &__signal {
     position: absolute;
     top: 0;
-    left: calc(get-css-var('timeline-pointer-size') * -0.5 + 0.5px);
+    left: calc($pointer-size * -0.5);
     z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: get-css-var('timeline-pointer-size');
-    height: get-css-var('timeline-pointer-size');
+    width: $pointer-size;
+    height: $pointer-size;
+  }
+
+  &--horizontal &__signal {
+    top: calc($pointer-size * -0.5);
+    left: 0;
   }
 
   &--flip &__signal {
-    left: calc(get-css-var('timeline-pointer-size') * -0.5 + 100%);
+    left: calc($pointer-size * -0.5 + 100%);
+  }
+
+  &--horizontal#{&}--flip &__signal {
+    top: calc($pointer-size * -0.5 + 100%);
+    left: 0;
   }
 
   &--both-sides:not(&--flip) &__item:nth-child(even) &__signal {
-    left: calc(get-css-var('timeline-pointer-size') * -0.5 + 100%);
+    left: calc($pointer-size * -0.5 + 100%);
   }
 
   &--both-sides#{&}--flip &__item:nth-child(even) &__signal {
-    left: calc(get-css-var('timeline-pointer-size') * -0.5 + 0.5px);
+    left: calc($pointer-size * -0.5);
+  }
+
+  &--horizontal#{&}--both-sides:not(&--flip) &__item:nth-child(even) &__signal {
+    top: calc($pointer-size * -0.5 + 100%);
+    left: 0;
+  }
+
+  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__signal {
+    top: calc($pointer-size * -0.5);
+    left: 0;
   }
 
   &--signal-click &__signal {
@@ -121,50 +171,113 @@ $timeline: map.merge(
     border-radius: 50%;
   }
 
+  &__item--disabled &__pointer {
+    border-color: get-css-var('timeline-pointer-b-color-disabled');
+  }
+
+  $line-width: get-css-var('timeline-line-width');
+
   &__line {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
+    left: calc($line-width * -0.5);
+    display: flex;
     width: 0;
-    border-left: {
-      width: get-css-var('timeline-line-width');
-      style: get-css-var('timeline-line-style');
-      color: get-css-var('timeline-line-color');
+    padding-top: calc($pointer-size + get-css-var('timeline-line-inset'));
+    padding-bottom: get-css-var('timeline-line-inset');
+
+    &::after {
+      height: 100%;
+      content: '';
+      border: 0 get-css-var('timeline-line-style') get-css-var('timeline-line-color');
+      border-left-width: $line-width;
+    }
+  }
+
+  &--horizontal &__line {
+    top: calc($line-width * -0.5);
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 0;
+    padding: 0;
+    padding-right: get-css-var('timeline-line-inset');
+    padding-left: calc($pointer-size + get-css-var('timeline-line-inset'));
+
+    &::after {
+      width: 100%;
+      height: 0;
+      border-top-width: $line-width;
+      border-left-width: 0;
     }
   }
 
   &--flip &__line {
-    left: 100%;
+    left: calc($line-width * -0.5 + 100%);
+  }
+
+  &--horizontal#{&}--flip &__line {
+    top: calc($line-width * -0.5 + 100%);
+    left: 0;
   }
 
   &--both-sides:not(&--flip) &__item:nth-child(even) &__line {
-    left: 100%;
+    left: calc($line-width * -0.5 + 100%);
   }
 
   &--both-sides#{&}--flip &__item:nth-child(even) &__line {
+    left: calc($line-width * -0.5);
+  }
+
+  &--horizontal#{&}--both-sides:not(&--flip) &__item:nth-child(even) &__line {
+    top: calc($line-width * -0.5 + 100%);
     left: 0;
   }
+
+  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__line {
+    top: calc($line-width * -0.5);
+    left: 0;
+  }
+
+  $content-pad: calc($pointer-size * 0.5 + 8px);
 
   &__content {
     position: relative;
     top: -5px;
     display: flex;
     flex-direction: column;
-    padding-left: 16px;
+    padding-left: $content-pad;
+  }
+
+  &--horizontal &__content {
+    top: 0;
+    padding: {
+      top: $content-pad;
+      left: 0;
+    }
   }
 
   &--flip &__content {
     padding: {
-      right: 16px;
+      right: $content-pad;
       left: 0;
+    }
+  }
+
+  &--horizontal#{&}--flip &__content {
+    padding: {
+      top: 0;
+      right: 0;
+      bottom: $content-pad;
     }
   }
 
   &--both-sides:not(&--flip) &__item:nth-child(even) &__content {
     align-items: flex-end;
     padding: {
-      right: 16px;
+      right: $content-pad;
       left: 0;
     }
   }
@@ -172,16 +285,37 @@ $timeline: map.merge(
   &--both-sides#{&}--flip &__item:nth-child(even) &__content {
     padding: {
       right: 0;
-      left: 16px;
+      left: $content-pad;
     }
   }
 
   &--both-sides#{&}--flip &__item:nth-child(odd) &__content {
     align-items: flex-end;
     padding: {
-      right: 16px;
+      right: $content-pad;
+    }
+  }
+
+  &--horizontal#{&}--both-sides:not(&--flip) &__item:nth-child(even) &__content {
+    align-self: flex-end;
+    padding: {
+      top: 0;
+      right: 0;
+      bottom: $content-pad;
+    }
+  }
+
+  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__content {
+    padding: {
+      top: $content-pad;
+      right: 0;
+      bottom: 0;
       left: 0;
     }
+  }
+
+  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(odd) &__content {
+    padding-right: 0;
   }
 
   &__item:last-child &__line {
@@ -193,8 +327,13 @@ $timeline: map.merge(
   &--pending &__item:nth-last-child(2) {
     padding-bottom: get-css-var('timeline-item-span-pending');
 
-    #{$line} {
-      border-left-style: get-css-var('timeline-line-style-pending');
+    #{$line}::after {
+      border-style: get-css-var('timeline-line-style-pending');
     }
+  }
+
+  &--horizontal#{&}--pending &__item:nth-last-child(2) {
+    padding-right: get-css-var('timeline-item-span-pending');
+    padding-bottom: 0;
   }
 }

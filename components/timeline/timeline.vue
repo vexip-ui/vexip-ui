@@ -1,5 +1,8 @@
 <template>
-  <div :class="className">
+  <div
+    :class="className"
+    :style="{ height: props.horizontal && props.bothSides ? `${height}px` : undefined }"
+  >
     <slot></slot>
   </div>
 </template>
@@ -23,11 +26,13 @@ export default defineComponent({
       bothSides: false,
       dashed: false,
       lineColor: null,
-      spacing: null
+      spacing: null,
+      flip: false,
+      horizontal: false
     })
 
     const nh = useNameHelper('timeline')
-    const itemStates = new Set<ItemState>()
+    const itemStates = reactive(new Set<ItemState>())
 
     const className = computed(() => {
       return {
@@ -36,12 +41,21 @@ export default defineComponent({
         [nh.bm('inherit')]: props.inherit,
         [nh.bm('pending')]: props.pending,
         [nh.bm('both-sides')]: props.bothSides,
-        [nh.bm('flip')]: props.flip
+        [nh.bm('flip')]: props.flip,
+        [nh.bm('horizontal')]: props.horizontal
       }
+    })
+    const height = computed(() => {
+      return Math.max(...Array.from(itemStates).map(state => state.height)) * 2
     })
 
     const refreshLabels = debounceMinor(() => {
+      const total = itemStates.size
+
       Array.from(itemStates).forEach((item, index) => {
+        item.index = index + 1
+        item.total = total
+
         if (isNull(item.label)) {
           item.label = index + 1
         }
@@ -52,6 +66,8 @@ export default defineComponent({
       dashed: toRef(props, 'dashed'),
       lineColor: toRef(props, 'lineColor'),
       spacing: toRef(props, 'spacing'),
+      bothSides: toRef(props, 'bothSides'),
+      horizontal: toRef(props, 'horizontal'),
       increaseItem,
       decreaseItem,
       handleSignalClick
@@ -74,7 +90,11 @@ export default defineComponent({
     }
 
     return {
-      className
+      nh,
+      props,
+      className,
+      height,
+      itemStates
     }
   }
 })
