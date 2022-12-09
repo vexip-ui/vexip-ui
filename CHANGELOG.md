@@ -1,3 +1,15 @@
+## [2.0.18](https://github.com/vexip-ui/vexip-ui/compare/v2.0.17...v2.0.18) (2022-12-09)
+
+### Bug Fixes
+
+- **input:** null value will be transformed to string null ([33f10e6](https://github.com/vexip-ui/vexip-ui/commit/33f10e6118bec2092aa2279ab86234bdd07ddee2))
+- **style:** color should not auto inherit ([e896107](https://github.com/vexip-ui/vexip-ui/commit/e8961077f188cb59c6e93cc302af850bf0001b09))
+
+### Features
+
+- **timeline:** support flip item content ([c605012](https://github.com/vexip-ui/vexip-ui/commit/c6050128a234e2317777223c8ca57a6200afba39))
+- **timeline:** support horizontal line ([210a3a5](https://github.com/vexip-ui/vexip-ui/commit/210a3a546d1d4f32524d1835f99cd2222c13a54b)), closes [#195](https://github.com/vexip-ui/vexip-ui/issues/195)
+
 ## [2.0.17](https://github.com/vexip-ui/vexip-ui/compare/v2.0.16...v2.0.17) (2022-12-07)
 
 ### Bug Fixes
