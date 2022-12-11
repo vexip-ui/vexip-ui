@@ -40,7 +40,7 @@
           </div>
         </div>
         <div class="section">
-          <button class="action" title="Toggle Dark" @click="toggleDark">
+          <button class="action" :title="locale.theme" @click="toggleDark">
             <Icon v-if="isDarkTheme" :scale="1.3">
               <Moon></Moon>
             </Icon>
@@ -48,17 +48,39 @@
               <Sun></Sun>
             </Icon>
           </button>
-          <button class="action" title="Share" @click="copyLink">
+          <button class="action" :title="locale.share" @click="copyLink">
             <Icon :scale="1.3">
               <ShareNodes></ShareNodes>
             </Icon>
           </button>
-          <button class="action" title="Download" @click="download">
+          <button class="action" :title="locale.download" @click="download">
             <Icon :scale="1.3">
               <Download></Download>
             </Icon>
           </button>
-          <button class="action" title="Reset" @click="reset">
+          <Dropdown v-model:visible="cdnPanelVisible" class="action" trigger="click">
+            <button class="action" :title="locale.cdn" style="margin-right: 0;">
+              <Icon :scale="1.3">
+                <Rocket></Rocket>
+              </Icon>
+            </button>
+            <template #drop>
+              <DropdownList class="cdn-panel">
+                <RadioGroup v-model:value="currentCdn" vertical size="small">
+                  <Radio v-for="cdn in cdnOptions" :key="cdn" :label="cdn"></Radio>
+                </RadioGroup>
+                <Button
+                  type="primary"
+                  size="small"
+                  style="margin-top: 6px;"
+                  @click="applyCdnLink"
+                >
+                  {{ locale.apply }}
+                </Button>
+              </DropdownList>
+            </template>
+          </Dropdown>
+          <button class="action" :title="locale.reset" @click="reset">
             <Icon :scale="1.3">
               <ArrowRotateLeft></ArrowRotateLeft>
             </Icon>
@@ -82,9 +104,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { Confirm, Message } from 'vexip-ui'
-import { Gear, Moon, Sun, ShareNodes, Download, ArrowRotateLeft, GithubB } from '@vexip-ui/icons'
+import {
+  Gear,
+  Moon,
+  Sun,
+  ShareNodes,
+  Download,
+  ArrowRotateLeft,
+  Rocket,
+  GithubB
+} from '@vexip-ui/icons'
+import { cdnTemplates } from '../store'
+import { locale } from '../locale'
 import { downloadProject } from '../download/download'
 
 import type { PropType } from 'vue'
@@ -118,7 +151,7 @@ const computedStyle = getComputedStyle(document.documentElement)
 const media = computedStyle.getPropertyValue('--vxp-break-point-lg').trim()
 const query = matchMedia(`only screen and ${media}`)
 
-const transferTo = ref(query!.matches ? '' : '#setting')
+const transferTo = ref('')
 const settingActive = ref(false)
 
 query.addEventListener('change', () => {
@@ -147,8 +180,33 @@ const repoMeta: Record<string, RepoMeta> = reactive({
   }
 })
 
+const versions = computed(() => {
+  const versions: Record<string, string> = {}
+
+  for (const pkg of Object.keys(repoMeta)) {
+    versions[pkg] = repoMeta[pkg].active
+  }
+
+  return versions
+})
+
+// const search = new URLSearchParams(location.search)
+
+const cdnStoreKey = 'vexip-sfc-playground-prefer-cdn'
+const cdnOptions = Object.keys(cdnTemplates)
+const cdnPanelVisible = ref(false)
+const currentCdn = ref(localStorage.getItem(cdnStoreKey) || 'unpkg')
+
+if (!cdnOptions.includes(currentCdn.value)) {
+  currentCdn.value = 'unpkg'
+}
+
 onMounted(() => {
   window.addEventListener('blur', handleWindowBlur)
+
+  requestAnimationFrame(() => {
+    transferTo.value = query!.matches ? '' : '#setting'
+  })
 })
 
 async function initRepoVersions(meta: RepoMeta) {
@@ -195,10 +253,10 @@ async function copyLink() {
 
 async function download() {
   const result = await Confirm.open({
-    content: 'Download project files?',
+    content: locale.doDownload,
     confirmType: 'primary',
-    confirmText: 'Download',
-    cancelText: 'Cancel'
+    confirmText: locale.download,
+    cancelText: locale.cancel
   })
 
   if (result) {
@@ -213,25 +271,20 @@ function reset() {
 function changeVersion(pkg: string, version: string) {
   repoMeta[pkg].active = version
 
-  const versions = getVersions()
-
-  props.store.setVersions(versions)
-  history.replaceState({}, '', `${buildSearch(versions)}${location.hash}`)
+  props.store.setVersions(versions.value)
+  history.replaceState({}, '', `${buildSearch()}${location.hash}`)
 }
 
-function getVersions() {
-  const versions: Record<string, string> = {}
+function applyCdnLink() {
+  cdnPanelVisible.value = false
 
-  for (const pkg of Object.keys(repoMeta)) {
-    versions[pkg] = repoMeta[pkg].active
-  }
-
-  return versions
+  props.store.setCdnLink(currentCdn.value)
+  localStorage.setItem(cdnStoreKey, currentCdn.value)
 }
 
-function buildSearch(search: Record<string, string>) {
-  if (Object.keys(search).length) {
-    return `?${Object.entries(search)
+function buildSearch() {
+  if (Object.keys(versions.value).length) {
+    return `?${Object.entries(versions.value)
       .map(([key, value]) => `${key}=${value}`)
       .join('&')}`
   }
@@ -335,6 +388,18 @@ function buildSearch(search: Record<string, string>) {
 
   .vxp-column {
     height: 100%;
+  }
+}
+
+.cdn-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 16px 12px;
+
+  .vxp-radio {
+    width: 100%;
+    padding: 6px 0;
+    margin: 0;
   }
 }
 

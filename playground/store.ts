@@ -1,7 +1,9 @@
-import { shallowRef, reactive, computed, watch, watchEffect } from 'vue'
+import { ref, shallowRef, reactive, computed, watch, watchEffect } from 'vue'
 import { Confirm } from 'vexip-ui'
 import { zlibSync, unzlibSync, strToU8, strFromU8 } from 'fflate'
 import { File, compileFile } from '@vue/repl'
+import { locale } from './locale'
+
 import mainCode from './templates/main.js?raw'
 import appCode from './templates/app.vue?raw'
 import themeCode from './templates/theme.vue?raw'
@@ -9,6 +11,7 @@ import themeCode from './templates/theme.vue?raw'
 import type { Store, StoreOptions, StoreState } from '@vue/repl'
 
 type ReplOptions = Omit<StoreOptions, 'defaultVueRuntimeURL' | 'defaultVueServerRendererURL'> & {
+  cdn?: string,
   versions?: Record<string, string>
 }
 
@@ -17,14 +20,15 @@ interface PathMeta {
   path: string
 }
 
+interface ImportMap {
+  imports?: Record<string, string>,
+  scopes?: Record<string, string>
+}
+
 const mainFile = 'main.js'
 const appFile = 'App.vue'
 const themeFile = 'ThemeSwitch.vue'
-
-const inertnalFiles: Record<string, string> = {
-  [mainFile]: mainCode.replace('__VEXIP_UI_STYLE__', getUnpkgUrl('vexip-ui', 'dist/style.css')),
-  [themeFile]: themeCode
-}
+const importsFile = 'imports.json'
 
 const pkgPathMap: Record<string, string | PathMeta> = {
   vue: 'dist/vue.runtime.esm-browser.js',
@@ -41,56 +45,14 @@ const pkgPathMap: Record<string, string | PathMeta> = {
   '@vexip-ui/utils': 'dist/index.mjs'
 }
 
-const localeConfig = {
-  en: {
-    confirm: 'Are you sure you want to delete #{0}?',
-    ok: 'Delete',
-    cancel: 'Cancel'
-  },
-  zh: {
-    confirm: '确定要删除 #{0} 吗？',
-    ok: '删除',
-    cancel: '取消'
-  }
+const inertnalFiles: Record<string, string> = {
+  [themeFile]: themeCode
 }
 
-type Language = keyof typeof localeConfig
-
-let defaultLanguage = (
-  typeof navigator !== 'undefined' ? navigator.language.split('-')[0] : 'en'
-) as Language
-
-if (!localeConfig[defaultLanguage]) {
-  defaultLanguage = 'en'
-}
-
-function getUnpkgUrl(pkg: string, path: string, version = 'latest') {
-  return `https://unpkg.com/${pkg}@${version}/${path}`
-}
-
-function buildImportMap(versions: Record<string, string> = {}) {
-  const importMap: Record<string, string> = {}
-
-  for (const name of Object.keys(pkgPathMap)) {
-    const meta = pkgPathMap[name]
-
-    let pkg = ''
-    let path = ''
-
-    if (typeof meta === 'string') {
-      pkg = name
-      path = meta
-    } else {
-      pkg = meta.pkg
-      path = meta.path
-    }
-
-    if (!pkg || !path) continue
-
-    importMap[name] = getUnpkgUrl(pkg, path, versions[pkg] || 'latest')
-  }
-
-  return importMap
+export const cdnTemplates: Record<string, string> = {
+  unpkg: 'https://unpkg.com/{pkg}@{version}/{path}',
+  jsdelivr: 'https://fastly.jsdelivr.net/npm/{pkg}@{version}/{path}',
+  elemecdn: 'https://npm.elemecdn.com/{pkg}@{version}/{path}'
 }
 
 function utoa(data: string): string {
@@ -126,7 +88,7 @@ export function useReplStore(options: ReplOptions = {}) {
     ...options
   }
 
-  const language = defaultLanguage
+  const cdn = ref(options.cdn || 'unpkg')
   const versions = reactive({ ...options.versions })
 
   const compiler = shallowRef<typeof import('vue/compiler-sfc')>()
@@ -147,6 +109,10 @@ export function useReplStore(options: ReplOptions = {}) {
     files[filename] = new File(filename, inertnalFiles[filename], true)
   }
 
+  if (!files[importsFile]) {
+    files[importsFile] = new File(importsFile, JSON.stringify({ imports: {} }, undefined, 2) + '\n')
+  }
+
   const state = reactive<StoreState>({
     mainFile,
     files,
@@ -157,7 +123,29 @@ export function useReplStore(options: ReplOptions = {}) {
     vueServerRendererURL: ''
   })
 
-  const importMap = computed(() => ({ imports: buildImportMap(versions) }))
+  const customImports = computed(() => {
+    const code = state.files[importsFile]?.code.trim()
+    let map: ImportMap = {}
+
+    if (!code) return map
+
+    try {
+      map = JSON.parse(code)
+    } catch (e) {
+      console.error(e)
+    }
+
+    return map
+  })
+  const importMap = computed(() => {
+    return <ImportMap>{
+      imports: {
+        ...buildImportMap(versions),
+        ...(customImports.value.imports || {})
+      },
+      scopes: customImports.value.scopes
+    }
+  })
 
   const store = reactive({
     state,
@@ -199,6 +187,37 @@ export function useReplStore(options: ReplOptions = {}) {
     { immediate: true, deep: true }
   )
 
+  function getUnpkgUrl(pkg: string, path: string, version = 'latest') {
+    const template = cdnTemplates[cdn.value]
+
+    return template.replace('{pkg}', pkg).replace('{version}', version).replace('{path}', path)
+  }
+
+  function buildImportMap(versions: Record<string, string> = {}) {
+    const importMap: Record<string, string> = {}
+
+    for (const name of Object.keys(pkgPathMap)) {
+      const meta = pkgPathMap[name]
+
+      let pkg = ''
+      let path = ''
+
+      if (typeof meta === 'string') {
+        pkg = name
+        path = meta
+      } else {
+        pkg = meta.pkg
+        path = meta.path
+      }
+
+      if (!pkg || !path) continue
+
+      importMap[name] = getUnpkgUrl(pkg, path, versions[pkg] || 'latest')
+    }
+
+    return importMap
+  }
+
   async function loadCompiler(version?: string) {
     const compilerUrl = getUnpkgUrl(
       '@vue/compiler-sfc',
@@ -234,12 +253,12 @@ export function useReplStore(options: ReplOptions = {}) {
   }
 
   function deleteFile(filename: string) {
-    const { confirm, ok, cancel } = localeConfig[language]
+    const { doDelete, del, cancel } = locale
 
     Confirm.open({
-      content: confirm.replace('#{0}', filename),
+      content: doDelete.replace('#{0}', filename),
       confirmType: 'error',
-      confirmText: ok,
+      confirmText: del,
       cancelText: cancel
     }).then(isConfirm => {
       if (!isConfirm) return
@@ -268,30 +287,39 @@ export function useReplStore(options: ReplOptions = {}) {
     return exported
   }
 
-  async function setFiles(newFiles: Record<string, string>) {
-    const newFileNames = Object.keys(newFiles)
-    const files: Record<string, File> = {}
+  // async function setFiles(newFiles: Record<string, string>) {
+  //   const newFileNames = Object.keys(newFiles)
+  //   const files: Record<string, File> = {}
 
-    for (const filename of newFileNames) {
-      files[filename] = new File(filename, newFiles[filename])
-    }
+  //   for (const filename of newFileNames) {
+  //     files[filename] = new File(filename, newFiles[filename])
+  //   }
 
-    for (const filename of Object.keys(inertnalFiles)) {
-      files[filename] = new File(filename, inertnalFiles[filename], true)
-    }
+  //   for (const filename of Object.keys(inertnalFiles)) {
+  //     files[filename] = new File(filename, inertnalFiles[filename], true)
+  //   }
 
-    for (const file in files) {
-      await compileFile(store, files[file])
-    }
+  //   state.files[mainFile] = new File(
+  //     mainFile,
+  //     mainCode.replace(
+  //       '__VEXIP_UI_STYLE__',
+  //       getUnpkgUrl('vexip-ui', 'dist/style.css', versions['vexip-ui'])
+  //     ),
+  //     true
+  //   )
 
-    state.files = files
+  //   for (const file in files) {
+  //     await compileFile(store, files[file])
+  //   }
 
-    if (!newFileNames.includes(state.activeFile.filename)) {
-      setActive(appFile)
-    }
+  //   state.files = files
 
-    state.resetFlip = !state.resetFlip
-  }
+  //   if (!newFileNames.includes(state.activeFile.filename)) {
+  //     setActive(appFile)
+  //   }
+
+  //   state.resetFlip = !state.resetFlip
+  // }
 
   function getImportMap() {
     return importMap.value
@@ -301,6 +329,10 @@ export function useReplStore(options: ReplOptions = {}) {
     Object.assign(versions, newVersions)
   }
 
+  function setCdnLink(link: string) {
+    cdn.value = link
+  }
+
   return {
     ...store,
 
@@ -308,8 +340,9 @@ export function useReplStore(options: ReplOptions = {}) {
     init,
     serialize,
     getFiles,
-    setFiles,
-    setVersions
+    // setFiles,
+    setVersions,
+    setCdnLink
   }
 }
 

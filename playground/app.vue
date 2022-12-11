@@ -5,6 +5,7 @@
       show-compile-output
       auto-resize
       :clear-console="false"
+      :show-import-map="false"
       :store="store"
       :sfc-options="sfcOptions"
     ></Repl>
@@ -17,11 +18,15 @@ import { Repl } from '@vue/repl'
 import Header from './components/header.vue'
 import { useReplStore } from './store'
 
-const versions = getVersions()
+const versions = parseVersions()
 const hash = location.hash.slice(1)
 const loading = ref(true)
 
-const store = useReplStore({ serializedState: hash, versions })
+const store = useReplStore({
+  serializedState: hash,
+  cdn: localStorage.getItem('vexip-sfc-playground-prefer-cdn') || 'unpkg',
+  versions
+})
 
 // enable experimental features
 const sfcOptions = {
@@ -38,12 +43,12 @@ store.init().then(() => {
 // persist state
 watchEffect(() => history.replaceState({}, '', store.serialize()))
 
-function getVersions() {
+function parseVersions() {
   const search = new URLSearchParams(location.search)
   const versions: Record<string, string> = {}
 
-  for (const [pkg, version] of search.entries()) {
-    versions[pkg] = version
+  for (const [name, value] of search.entries()) {
+    versions[name] = value
   }
 
   return versions
