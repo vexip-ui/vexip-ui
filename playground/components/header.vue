@@ -58,6 +58,11 @@
               <Download></Download>
             </Icon>
           </button>
+          <button class="action" :title="locale.format" @click="formatCodes">
+            <Icon :scale="1.3">
+              <CheckDouble></CheckDouble>
+            </Icon>
+          </button>
           <Dropdown v-model:visible="cdnPanelVisible" class="action" trigger="click">
             <button class="action" :title="locale.cdn" style="margin-right: 0;">
               <Icon :scale="1.3">
@@ -73,7 +78,7 @@
                   type="primary"
                   size="small"
                   style="margin-top: 6px;"
-                  @click="applyCdnLink"
+                  @click="applyCdn"
                 >
                   {{ locale.apply }}
                 </Button>
@@ -112,13 +117,15 @@ import {
   Sun,
   ShareNodes,
   Download,
-  ArrowRotateLeft,
   Rocket,
+  CheckDouble,
+  ArrowRotateLeft,
   GithubB
 } from '@vexip-ui/icons'
-import { cdnTemplates } from '../store'
+import { cdnTemplates, getCdn, setCdn } from '../cdn'
 import { locale } from '../locale'
 import { downloadProject } from '../download/download'
+import { prettierCode } from '../format'
 
 import type { PropType } from 'vue'
 import type { ReplStore } from '../store'
@@ -190,16 +197,9 @@ const versions = computed(() => {
   return versions
 })
 
-// const search = new URLSearchParams(location.search)
-
-const cdnStoreKey = 'vexip-sfc-playground-prefer-cdn'
 const cdnOptions = Object.keys(cdnTemplates)
 const cdnPanelVisible = ref(false)
-const currentCdn = ref(localStorage.getItem(cdnStoreKey) || 'unpkg')
-
-if (!cdnOptions.includes(currentCdn.value)) {
-  currentCdn.value = 'unpkg'
-}
+const currentCdn = ref(getCdn())
 
 onMounted(() => {
   window.addEventListener('blur', handleWindowBlur)
@@ -275,11 +275,9 @@ function changeVersion(pkg: string, version: string) {
   history.replaceState({}, '', `${buildSearch()}${location.hash}`)
 }
 
-function applyCdnLink() {
+function applyCdn() {
   cdnPanelVisible.value = false
-
-  props.store.setCdnLink(currentCdn.value)
-  localStorage.setItem(cdnStoreKey, currentCdn.value)
+  setCdn(currentCdn.value)
 }
 
 function buildSearch() {
@@ -290,6 +288,16 @@ function buildSearch() {
   }
 
   return ''
+}
+
+async function formatCodes() {
+  const files = props.store.state.files
+
+  for (const file of Object.values(files)) {
+    if (!file.hidden) {
+      file.code = await prettierCode(file.filename, file.code)
+    }
+  }
 }
 </script>
 

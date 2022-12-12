@@ -1,7 +1,8 @@
-import { ref, shallowRef, reactive, computed, watch, watchEffect } from 'vue'
+import { shallowRef, reactive, computed, watch, watchEffect } from 'vue'
 import { Confirm } from 'vexip-ui'
 import { zlibSync, unzlibSync, strToU8, strFromU8 } from 'fflate'
 import { File, compileFile } from '@vue/repl'
+import { getCdnUrl } from './cdn'
 import { locale } from './locale'
 
 import mainCode from './templates/main.js?raw'
@@ -11,7 +12,6 @@ import themeCode from './templates/theme.vue?raw'
 import type { Store, StoreOptions, StoreState } from '@vue/repl'
 
 type ReplOptions = Omit<StoreOptions, 'defaultVueRuntimeURL' | 'defaultVueServerRendererURL'> & {
-  cdn?: string,
   versions?: Record<string, string>
 }
 
@@ -49,12 +49,6 @@ const inertnalFiles: Record<string, string> = {
   [themeFile]: themeCode
 }
 
-export const cdnTemplates: Record<string, string> = {
-  unpkg: 'https://unpkg.com/{pkg}@{version}/{path}',
-  jsdelivr: 'https://fastly.jsdelivr.net/npm/{pkg}@{version}/{path}',
-  elemecdn: 'https://npm.elemecdn.com/{pkg}@{version}/{path}'
-}
-
 function utoa(data: string): string {
   const buffer = strToU8(data)
   const zipped = zlibSync(buffer, { level: 9 })
@@ -88,9 +82,7 @@ export function useReplStore(options: ReplOptions = {}) {
     ...options
   }
 
-  const cdn = ref(options.cdn || 'unpkg')
   const versions = reactive({ ...options.versions })
-
   const compiler = shallowRef<typeof import('vue/compiler-sfc')>()
 
   const files: StoreState['files'] = {}
@@ -177,7 +169,7 @@ export function useReplStore(options: ReplOptions = {}) {
         mainFile,
         mainCode.replace(
           '__VEXIP_UI_STYLE__',
-          getUnpkgUrl('vexip-ui', 'dist/style.css', versions['vexip-ui'])
+          getCdnUrl('vexip-ui', 'dist/style.css', versions['vexip-ui'])
         ),
         true
       )
@@ -186,12 +178,6 @@ export function useReplStore(options: ReplOptions = {}) {
     },
     { immediate: true, deep: true }
   )
-
-  function getUnpkgUrl(pkg: string, path: string, version = 'latest') {
-    const template = cdnTemplates[cdn.value]
-
-    return template.replace('{pkg}', pkg).replace('{version}', version).replace('{path}', path)
-  }
 
   function buildImportMap(versions: Record<string, string> = {}) {
     const importMap: Record<string, string> = {}
@@ -212,18 +198,14 @@ export function useReplStore(options: ReplOptions = {}) {
 
       if (!pkg || !path) continue
 
-      importMap[name] = getUnpkgUrl(pkg, path, versions[pkg] || 'latest')
+      importMap[name] = getCdnUrl(pkg, path, versions[pkg] || 'latest')
     }
 
     return importMap
   }
 
   async function loadCompiler(version?: string) {
-    const compilerUrl = getUnpkgUrl(
-      '@vue/compiler-sfc',
-      'dist/compiler-sfc.esm-browser.js',
-      version
-    )
+    const compilerUrl = getCdnUrl('@vue/compiler-sfc', 'dist/compiler-sfc.esm-browser.js', version)
 
     compiler.value = await import(/* @vite-ignore */ compilerUrl)
   }
@@ -287,50 +269,12 @@ export function useReplStore(options: ReplOptions = {}) {
     return exported
   }
 
-  // async function setFiles(newFiles: Record<string, string>) {
-  //   const newFileNames = Object.keys(newFiles)
-  //   const files: Record<string, File> = {}
-
-  //   for (const filename of newFileNames) {
-  //     files[filename] = new File(filename, newFiles[filename])
-  //   }
-
-  //   for (const filename of Object.keys(inertnalFiles)) {
-  //     files[filename] = new File(filename, inertnalFiles[filename], true)
-  //   }
-
-  //   state.files[mainFile] = new File(
-  //     mainFile,
-  //     mainCode.replace(
-  //       '__VEXIP_UI_STYLE__',
-  //       getUnpkgUrl('vexip-ui', 'dist/style.css', versions['vexip-ui'])
-  //     ),
-  //     true
-  //   )
-
-  //   for (const file in files) {
-  //     await compileFile(store, files[file])
-  //   }
-
-  //   state.files = files
-
-  //   if (!newFileNames.includes(state.activeFile.filename)) {
-  //     setActive(appFile)
-  //   }
-
-  //   state.resetFlip = !state.resetFlip
-  // }
-
   function getImportMap() {
     return importMap.value
   }
 
   async function setVersions(newVersions: Record<string, string>) {
     Object.assign(versions, newVersions)
-  }
-
-  function setCdnLink(link: string) {
-    cdn.value = link
   }
 
   return {
@@ -340,9 +284,7 @@ export function useReplStore(options: ReplOptions = {}) {
     init,
     serialize,
     getFiles,
-    // setFiles,
-    setVersions,
-    setCdnLink
+    setVersions
   }
 }
 

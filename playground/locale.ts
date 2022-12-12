@@ -10,7 +10,9 @@ const config = {
     reset: 'Reset',
     cdn: 'Change CDN',
     other: 'Other',
-    apply: 'Apply'
+    apply: 'Apply',
+    loading: 'Loading #{0}...',
+    format: 'Format codes'
   },
   zh: {
     doDelete: '确定要删除 #{0} 吗？',
@@ -23,7 +25,9 @@ const config = {
     reset: '重置',
     cdn: '更改 CDN',
     other: '其他',
-    apply: '应用'
+    apply: '应用',
+    loading: '加载 #{0} 中...',
+    format: '格式化代码'
   }
 }
 

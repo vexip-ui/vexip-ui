@@ -8,6 +8,7 @@
       :show-import-map="false"
       :store="store"
       :sfc-options="sfcOptions"
+      @keydown="handleKeyDown"
     ></Repl>
   </template>
 </template>
@@ -17,6 +18,7 @@ import { ref, watchEffect } from 'vue'
 import { Repl } from '@vue/repl'
 import Header from './components/header.vue'
 import { useReplStore } from './store'
+import { prettierCode } from './format'
 
 const versions = parseVersions()
 const hash = location.hash.slice(1)
@@ -24,7 +26,6 @@ const loading = ref(true)
 
 const store = useReplStore({
   serializedState: hash,
-  cdn: localStorage.getItem('vexip-sfc-playground-prefer-cdn') || 'unpkg',
   versions
 })
 
@@ -52,6 +53,19 @@ function parseVersions() {
   }
 
   return versions
+}
+
+async function handleKeyDown(event: KeyboardEvent) {
+  const { code, ctrlKey, metaKey, altKey, shiftKey } = event
+
+  if ((ctrlKey || metaKey) && code === 'KeyS') {
+    event.preventDefault()
+  } else if ((ctrlKey || metaKey || altKey) && shiftKey && code === 'KeyF') {
+    const file = store.state.activeFile
+
+    event.preventDefault()
+    file.code = await prettierCode(file.filename, file.code)
+  }
 }
 </script>
 
