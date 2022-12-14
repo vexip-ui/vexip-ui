@@ -351,6 +351,10 @@ describe('Select', () => {
     expect(onChange).toHaveBeenLastCalledWith([OPTIONS[1]], [OPTIONS[1]])
     expect(onCancel).toHaveBeenCalled()
     expect(onCancel).toHaveBeenLastCalledWith(OPTIONS[0], OPTIONS[0])
+
+    await options[0].trigger('click')
+    expect(onChange).toHaveBeenCalledTimes(4)
+    expect(onChange).toHaveBeenLastCalledWith([OPTIONS[1], OPTIONS[0]], [OPTIONS[1], OPTIONS[0]])
   })
 
   it('clearable', async () => {
@@ -465,6 +469,7 @@ describe('Select', () => {
     })
 
     await wrapper.setProps({ value: [OPTIONS[0], OPTIONS[1]] })
+    expect(wrapper.findAll('.vxp-select__tag').length).toEqual(2)
     await wrapper.find('input').trigger('keydown', { key: 'Backspace' })
     expect(wrapper.findAll('.vxp-select__tag').length).toEqual(1)
   })

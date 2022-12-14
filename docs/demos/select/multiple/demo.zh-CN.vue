@@ -6,6 +6,7 @@
     option-check
     :options="options"
   ></Select>
+  <p>当前值：{{ values }}</p>
 </template>
 
 <script setup lang="ts">
