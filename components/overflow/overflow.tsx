@@ -128,8 +128,8 @@ export default defineComponent({
 
           restCount.value = 0
         } else {
-          overflow = true
           restCount.value = childCount - 1 - props.maxCount
+          overflow = restCount.value > 0
         }
 
         postRefresh(overflow)
