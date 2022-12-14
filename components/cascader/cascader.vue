@@ -28,6 +28,7 @@
             inherit
             :class="[nh.be('tags')]"
             :items="templateValues"
+            :max-count="props.maxTagCount"
             @rest-change="restTagCount = $event"
           >
             <template #default="{ item, index }">
