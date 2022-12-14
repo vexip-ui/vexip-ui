@@ -1,18 +1,20 @@
 <template>
-  <Overflow>
-    <div v-for="n in 15" :key="n" class="item">
-      Item {{ n }}
-    </div>
-    <template #counter="{ count }">
-      <div class="item">
-        {{ `+${count}` }}
+  <div>
+    <Overflow>
+      <div v-for="n in 15" :key="n" class="item">
+        Item {{ n }}
       </div>
-    </template>
-  </Overflow>
+      <template #counter="{ count }">
+        <div class="item">
+          {{ `+${count}` }}
+        </div>
+      </template>
+    </Overflow>
+  </div>
 </template>
 
 <style scoped>
-.vxp-overflow {
+:deep(.vxp-overflow) {
   max-width: 360px;
   padding: 10px;
   border: var(--vxp-border-base);

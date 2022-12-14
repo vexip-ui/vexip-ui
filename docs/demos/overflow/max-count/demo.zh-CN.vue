@@ -1,9 +1,11 @@
 <template>
   <div>
-    <Overflow>
-      <div v-for="n in 15" :key="n" class="item">
-        元素 {{ n }}
-      </div>
+    <Overflow :items="items" :max-count="3">
+      <template #default="{ item }">
+        <div class="item">
+          元素 {{ item.index }}
+        </div>
+      </template>
       <template #counter="{ count }">
         <div class="item">
           {{ `+${count}` }}
@@ -13,9 +15,14 @@
   </div>
 </template>
 
+<script setup lang="ts">
+const items = Array.from({ length: 15 }, (_, index) => ({ index: index + 1 }))
+</script>
+
 <style scoped>
 :deep(.vxp-overflow) {
-  max-width: 360px;
+  display: inline-flex;
+  width: auto;
   padding: 10px;
   border: var(--vxp-border-base);
   border-radius: var(--vxp-radius-base);
