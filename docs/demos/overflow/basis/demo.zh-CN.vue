@@ -1,16 +1,18 @@
 <template>
-  <Overflow :items="items">
-    <template #default="{ item }">
-      <div class="item">
-        元素 {{ item.index }}
-      </div>
-    </template>
-    <template #counter="{ count }">
-      <div class="item">
-        {{ `+${count}` }}
-      </div>
-    </template>
-  </Overflow>
+  <div>
+    <Overflow :items="items">
+      <template #default="{ item }">
+        <div class="item">
+          元素 {{ item.index }}
+        </div>
+      </template>
+      <template #counter="{ count }">
+        <div class="item">
+          {{ `+${count}` }}
+        </div>
+      </template>
+    </Overflow>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -18,7 +20,7 @@ const items = Array.from({ length: 15 }, (_, index) => ({ index: index + 1 }))
 </script>
 
 <style scoped>
-.vxp-overflow {
+:deep(.vxp-overflow) {
   max-width: 360px;
   padding: 10px;
   border: var(--vxp-border-base);

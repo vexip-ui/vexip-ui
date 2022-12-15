@@ -254,6 +254,27 @@ const defaultKeyConfig: Required<SelectKeyConfig> = {
   children: 'children'
 }
 
+function isSameValue(newValue: SelectValue, oldValue: SelectValue) {
+  const isNewArray = Array.isArray(newValue)
+  const isOldArray = Array.isArray(oldValue)
+
+  if (isNewArray !== isOldArray) return false
+
+  if (isNewArray && isOldArray) {
+    if (newValue.length !== oldValue.length) return false
+
+    for (let i = 0, len = newValue.length; i < len; ++i) {
+      if (newValue[i] !== oldValue[i]) return false
+    }
+
+    return true
+  }
+
+  if (isNull(newValue)) return isNull(oldValue)
+
+  return newValue === oldValue
+}
+
 export default defineComponent({
   name: 'Select',
   components: {
@@ -620,7 +641,7 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        if (emittedValue !== value) {
+        if (!emittedValue || isSameValue(value, emittedValue)) {
           emittedValue = value
           initValueAndLabel(value)
         }
@@ -787,8 +808,10 @@ export default defineComponent({
       const value = option.value
 
       if (selected) {
-        removeArrayItem(userOptions.value, item => item.value === value)
-        optionValueMap.delete(value)
+        if (userOptions.value.find(item => item.value === value)) {
+          removeArrayItem(userOptions.value, item => item.value === value)
+          optionValueMap.delete(value)
+        }
       } else {
         if (!props.multiple) {
           userOptions.value.length = 0

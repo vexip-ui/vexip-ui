@@ -51,3 +51,4 @@
 | close   | The close action slot for modal | -          | -     |
 | header  | The header slot for modal       | -          | -     |
 | footer  | The footer slot for modal       | -          | -     |
+| title   | The title slot for modal        | -          | -     |

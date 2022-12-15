@@ -1,5 +1,5 @@
 <template>
-  <Select v-model:value="value" :options="options"></Select>
+  <Select v-model:value="value" :options="options" clearable></Select>
 </template>
 
 <script setup lang="ts">

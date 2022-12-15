@@ -30,7 +30,8 @@ export default defineComponent({
       },
       tag: 'div',
       attrFlag: false,
-      static: false
+      static: false,
+      maxCount: 0
     })
 
     const nh = useNameHelper('overflow')
@@ -45,7 +46,8 @@ export default defineComponent({
         nh.b(),
         nh.bs('vars'),
         {
-          [nh.bm('inherit')]: props.inherit
+          [nh.bm('inherit')]: props.inherit,
+          [nh.bm('manual')]: props.maxCount > 0
         }
       ]
     })
@@ -53,12 +55,9 @@ export default defineComponent({
       return props.attrFlag ? (props.attrFlag === true ? 'hidden' : props.attrFlag) : false
     })
 
-    watch(
-      () => props.items?.length,
-      () => {
-        nextTick(refresh)
-      }
-    )
+    watch([() => props.items?.length, () => props.maxCount], () => {
+      nextTick(refresh)
+    })
 
     expose({ refresh })
 
@@ -113,16 +112,38 @@ export default defineComponent({
       toggleDisplay(counterEl, true)
 
       const children = wrapper.value.children
+      const childCount = children.length
+
+      let overflow = false
+
+      if (props.maxCount > 0) {
+        for (let i = 0, len = childCount - 1; i < len; ++i) {
+          const child = children[i] as HTMLElement
+
+          child.style.display = i < props.maxCount ? '' : 'none'
+        }
+
+        if (props.maxCount > childCount - 1) {
+          toggleDisplay(counterEl, false)
+
+          restCount.value = 0
+        } else {
+          restCount.value = childCount - 1 - props.maxCount
+          overflow = restCount.value > 0
+        }
+
+        postRefresh(overflow)
+        return
+      }
+
       const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(wrapper.value)
       const childWidths: number[] = []
 
       let totalWidth = 0
-      let overflow = false
 
       const counterMargin = computeHorizontalMargin(counterEl)
-      const updateRest = (count: number) => emitEvent(props.onRestChange, count)
 
-      for (let i = 0, len = children.length - 1; i < len; ++i) {
+      for (let i = 0, len = childCount - 1; i < len; ++i) {
         if (i < 0) continue
 
         const child = children[i] as HTMLElement
@@ -153,12 +174,16 @@ export default defineComponent({
         }
       }
 
+      postRefresh(overflow)
+    }
+
+    function postRefresh(overflow: boolean) {
       if (lastRestCount !== restCount.value) {
         lastRestCount = restCount.value
-        updateRest(restCount.value)
+        emitEvent(props.onRestChange, restCount.value)
       }
 
-      toggleDisplay(counterEl, overflow)
+      counter.value && toggleDisplay(counter.value, overflow)
 
       if (overflow !== lastOverflow) {
         lastOverflow = overflow

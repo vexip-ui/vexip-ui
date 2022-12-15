@@ -8,6 +8,7 @@ export const overflowProps = buildProps({
   tag: String,
   attrFlag: booleanStringProp,
   static: booleanProp,
+  maxCount: Number,
   onRestChange: eventProp<(rest: number) => void>(),
   onToggle: eventProp<(overflow: boolean) => void>()
 })
