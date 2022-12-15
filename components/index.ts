@@ -41,6 +41,7 @@ import { FormSubmit } from './form-submit'
 import { Grid } from './grid'
 import { Highlight } from './highlight'
 import { Icon } from './icon'
+import { Image } from './image'
 import { Input } from './input'
 import { Layout } from './layout'
 import { LayoutAside } from './layout-aside'
@@ -160,6 +161,7 @@ const components = [
   Grid,
   Highlight,
   Icon,
+  Image,
   Input,
   Layout,
   LayoutAside,
@@ -287,6 +289,7 @@ export * from './form-submit'
 export * from './grid'
 export * from './highlight'
 export * from './icon'
+export * from './image'
 export * from './input'
 export * from './layout'
 export * from './layout-aside'

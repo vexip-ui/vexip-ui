@@ -1,5 +1,3 @@
 <template>
-  <Image></Image>
+  <Image src="/picture-1.jpg" width="300"></Image>
 </template>
-
-<script setup lang="ts"></script>

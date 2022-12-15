@@ -1,3 +1,3 @@
 ### Basis Usage
 
-Simplest usage.
+An unremarkable image.
