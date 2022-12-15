@@ -25,3 +25,7 @@ export function supportFlexGap() {
 
   return flexGapSupported
 }
+
+export function supportImgLoading() {
+  return !isClient || 'loading' in HTMLImageElement.prototype
+}

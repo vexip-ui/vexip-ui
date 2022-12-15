@@ -1,0 +1,33 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$image: () !default;
+$image: map.merge(
+  (
+    fit: 'cover',
+    radius: 0
+  ),
+  $image
+);
+
+.#{$namespace}-image {
+  &-vars {
+    @include define-preset-values('image', $image);
+  }
+
+  @include basis;
+
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  vertical-align: middle;
+  user-select: none;
+
+  &__img {
+    width: 100%;
+    height: 100%;
+  }
+}
