@@ -53,7 +53,9 @@ export interface I18nConfig {
     Grid: string,
     Divider: string,
     Layout: string,
+    NativeScroll: string,
     Row: string,
+    Scroll: string,
     Space: string,
     Split: string,
 
@@ -115,11 +117,9 @@ export interface I18nConfig {
 
     ConfigProvider: string,
     Masker: string,
-    NativeScroll: string,
     Overflow: string,
     Renderer: string,
     ResizeObserver: string,
-    Scroll: string,
     Scrollbar: string,
     VirtualList: string
   }
