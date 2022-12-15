@@ -10,8 +10,6 @@ $avatar: map.merge(
     b-color: get-css-var('border-color-base'),
     b-width: get-css-var('border-width'),
     b-style: get-css-var('border-style'),
-    border: get-css-var('avatar-b-width') get-css-var('avatar-b-style')
-    get-css-var('avatar-b-color'),
     size: 32px,
     radius: get-css-var('radius-base'),
     series-span: 8px,
@@ -24,10 +22,6 @@ $avatar: map.merge(
 .#{$namespace}-avatar {
   &-vars {
     @include define-preset-values('avatar', $avatar);
-  }
-
-  @mixin define-badge-style($style-map) {
-    @include define-preset-style('avatar', $style-map);
   }
 
   @include basis;
@@ -55,7 +49,9 @@ $avatar: map.merge(
   }
 
   &--border {
-    border: get-css-var('avatar-border');
+    border:
+      get-css-var('avatar-b-width') get-css-var('avatar-b-style')
+      get-css-var('avatar-b-color');
   }
 
   &--small {
@@ -112,7 +108,9 @@ $avatar: map.merge(
         }
 
         & > #{$self} {
-          border: get-css-var('avatar-border');
+          border:
+            get-css-var('avatar-b-width') get-css-var('avatar-b-style')
+            get-css-var('avatar-b-color');
         }
       }
 
