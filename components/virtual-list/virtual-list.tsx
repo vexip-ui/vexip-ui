@@ -129,35 +129,37 @@ export default defineComponent({
           onScroll={onScroll}
           onResize={onResize}
         >
-          <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
-            <ItemsTag
-              {...itemsAttrs}
-              class={[nh.be('items'), itemsClass]}
-              style={[itemsStyle.value, itemsOtherStyle]}
-            >
-              {itemSlot && props.items.length
-                ? renderingItems.map(item => {
-                  const key = item[keyField]
-                  const index = keyIndexMap.get(key)
-                  const vnode = itemSlot({ item, index })[0]
+          <ResizeObserver throttle onResize={refresh}>
+            <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
+              <ItemsTag
+                {...itemsAttrs}
+                class={[nh.be('items'), itemsClass]}
+                style={[itemsStyle.value, itemsOtherStyle]}
+              >
+                {itemSlot && props.items.length
+                  ? renderingItems.map(item => {
+                    const key = item[keyField]
+                    const index = keyIndexMap.get(key)
+                    const vnode = itemSlot({ item, index })[0]
 
-                  if (itemFixed) {
-                    vnode.key = key
+                    if (itemFixed) {
+                      vnode.key = key
 
-                    return vnode
-                  }
+                      return vnode
+                    }
 
-                  const onResize = handleItemResize.bind(null, key)
+                    const onResize = handleItemResize.bind(null, key)
 
-                  return (
-                      <ResizeObserver key={key} throttle onResize={onResize}>
-                        {() => vnode}
-                      </ResizeObserver>
-                  )
-                })
-                : slots.empty?.()}
-            </ItemsTag>
-          </ListTag>
+                    return (
+                        <ResizeObserver key={key} throttle onResize={onResize}>
+                          {() => vnode}
+                        </ResizeObserver>
+                    )
+                  })
+                  : slots.empty?.()}
+              </ItemsTag>
+            </ListTag>
+          </ResizeObserver>
         </NativeScroll>
       )
     }
