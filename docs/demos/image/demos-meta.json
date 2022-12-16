@@ -1,1 +1,7 @@
-["basis"]
+[
+  "basis",
+  "object-fit",
+  "style",
+  "fallback",
+  "skeleton"
+]

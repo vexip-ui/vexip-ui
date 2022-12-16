@@ -1,12 +1,18 @@
 @use 'sass:map';
 
 @use './design' as *;
+@use './masker.scss';
+@use './skeleton.scss';
+@use './viewer.scss';
 
 $image: () !default;
 $image: map.merge(
   (
     fit: 'cover',
-    radius: 0
+    radius: 0,
+    b-color: get-css-var('border-color-base'),
+    bg-color: transparent,
+    bg-color-error: get-css-var('fill-color-humble')
   ),
   $image
 );
@@ -25,11 +31,33 @@ $image: map.merge(
   overflow: hidden;
   vertical-align: middle;
   user-select: none;
+  background-color: get-css-var('image-bg-color');
   border-radius: get-css-var('image-radius');
+
+  &--border {
+    border: get-css-var('border-shape') get-css-var('image-b-color');
+  }
+
+  &--error {
+    background-color: get-css-var('image-bg-color-error');
+  }
+
+  &__skeleton {
+    width: 100%;
+    height: 100%;
+  }
 
   &__img {
     width: 100%;
     height: 100%;
     object-fit: get-css-var('image-fit');
+  }
+
+  &--loading &__img,
+  &--error &__img {
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    visibility: hidden;
   }
 }

@@ -5,6 +5,17 @@
     role="none"
     :style="style"
   >
+    <slot v-if="hasPlaceholder && loading" name="placeholder">
+      <Skeleton
+        v-if="props.skeleton"
+        :class="nh.be('skeleton')"
+        image
+        v-bind="skeletonProps"
+      ></Skeleton>
+    </slot>
+    <slot v-if="showError" name="error">
+      {{ props.errorTip || props.alt || props.src }}
+    </slot>
     <img
       v-if="shouldLoad && !showError"
       :class="nh.be('img')"
@@ -22,6 +33,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch, watchEffect, onBeforeUnmount } from 'vue'
+import { Skeleton } from '@/components/skeleton'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { useIntersection } from '@vexip-ui/hooks'
 import { supportImgLoading } from '@vexip-ui/utils'
@@ -33,7 +45,7 @@ const objectFitValues = Object.freeze(['fill', 'contain', 'cover', 'none', 'scal
 const numberRE = /[\d.]$/
 
 function normalizeSize(value: string | number) {
-  if (typeof value === 'number') return value && `${value}px`
+  if (typeof value === 'number') return value ? `${value}px` : '0'
 
   value = value.trim()
 
@@ -42,9 +54,12 @@ function normalizeSize(value: string | number) {
 
 export default defineComponent({
   name: 'Image',
+  components: {
+    Skeleton
+  },
   props: imageProps,
   emits: [],
-  setup(_props) {
+  setup(_props, { slots }) {
     const props = useProps('image', _props, {
       src: {
         default: '',
@@ -65,42 +80,62 @@ export default defineComponent({
         static: true
       },
       rootMargin: '',
-      preview: false
+      preview: false,
+      skeleton: false,
+      errorTip: '',
+      radius: 0,
+      border: false
     })
 
     const nh = useNameHelper('image')
 
     const shouldLoad = ref(useImageLoading)
-    const loading = ref(false)
+    const loading = ref(shouldLoad.value)
     const loadSrc = ref('')
     const loadFail = ref(false)
     const fallbackFail = ref(false)
 
     const wrapper = ref<HTMLElement>()
 
+    const showError = computed(() => {
+      // props.fallbackSrc ? loadFail.value && fallbackFail.value : loadFail.value
+      return loadFail.value && (!props.fallbackSrc || fallbackFail.value)
+    })
     const className = computed(() => {
       return [
         nh.b(),
         nh.bs('vars'),
         {
-          [nh.bm('inherit')]: props.inherit
+          [nh.bm('inherit')]: props.inherit,
+          [nh.bm('border')]: props.border,
+          [nh.bm('loading')]: loading.value,
+          [nh.bm('error')]: showError.value
         }
       ]
     })
     const style = computed(() => {
-      return {
+      const style: Record<string, string> = {
         width: normalizeSize(props.width),
         height: normalizeSize(props.height),
-        [nh.cv('fit')]: props.fit
+        [nh.cv('fit')]: props.fit,
+        [nh.cv('radius')]: props.radius && `${props.radius}px`
       }
+
+      if (props.border && typeof props.border === 'string') {
+        style[nh.cv('b-color')] = props.border
+      }
+
+      return style
     })
     const imageSrc = computed(() => props.src || (props.imgAttrs?.src as string))
     const imageLoading = computed(() => {
       return useImageLoading && props.lazy ? 'lazy' : undefined
     })
-    const showError = computed(() => {
-      // props.fallbackSrc ? loadFail.value && fallbackFail.value : loadFail.value
-      return loadFail.value && (!props.fallbackSrc || fallbackFail.value)
+    const hasPlaceholder = computed(() => !!(slots.placeholder || props.skeleton))
+    const skeletonProps = computed(() => {
+      return typeof props.skeleton === 'object'
+        ? Object.assign({ activated: true }, props.skeleton)
+        : { activated: true }
     })
 
     watch(imageSrc, value => {
@@ -137,6 +172,7 @@ export default defineComponent({
               disconnect?.()
               disconnect = undefined
               shouldLoad.value = true
+              loading.value = true
             }
           }).disconnect
         }
@@ -181,10 +217,12 @@ export default defineComponent({
       loadFail,
       fallbackFail,
 
+      showError,
       className,
       style,
       imageLoading,
-      showError,
+      hasPlaceholder,
+      skeletonProps,
 
       wrapper,
 

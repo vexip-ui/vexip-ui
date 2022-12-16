@@ -1,8 +1,8 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, booleanStringProp, eventProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ImageObjectFit } from './symbol'
+import type { ImageObjectFit, ImageSkeletonProps } from './symbol'
 
 export const imageProps = buildProps({
   src: String,
@@ -16,6 +16,13 @@ export const imageProps = buildProps({
   root: [String, Object, Function] as PropType<unknown>,
   rootMargin: String,
   preview: booleanProp,
+  skeleton: {
+    type: [Boolean, Object] as PropType<boolean | ImageSkeletonProps>,
+    default: null
+  },
+  errorTip: String,
+  radius: Number,
+  border: booleanStringProp,
   onLoad: eventProp<(event: Event) => void>(),
   onError: eventProp<(event: Event) => void>()
 })
