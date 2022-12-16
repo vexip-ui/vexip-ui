@@ -30,6 +30,9 @@
               :class="[nh.be('tags')]"
               :items="currentValues"
               :max-count="props.maxTagCount"
+              :style="{
+                maxWidth: props.maxTagCount <= 0 && `calc(100% - ${anchorWidth}px)`
+              }"
               @rest-change="restTagCount = $event"
             >
               <template #default="{ item, index }">
@@ -266,6 +269,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef, onMounted } from 'vue'
 import { Icon } from '@/components/icon'
+import { NativeScroll } from '@/components/native-scroll'
 import { Option } from '@/components/option'
 import { Overflow } from '@/components/overflow'
 import { Portal } from '@/components/portal'
@@ -331,6 +335,7 @@ export default defineComponent({
   name: 'Select',
   components: {
     Icon,
+    NativeScroll,
     Option,
     Overflow,
     Portal,
@@ -897,6 +902,8 @@ export default defineComponent({
       } else {
         currentVisible.value = false
       }
+
+      anchorWidth.value = 0
     }
 
     function handleChange(option: SelectOptionState) {

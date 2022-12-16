@@ -170,7 +170,7 @@ describe('Select', () => {
     const wrapper = mount(() => (
       <Select visible value={OPTIONS.slice(0, 2)} multiple options={OPTIONS}></Select>
     ))
-    const tags = wrapper.findAll('.vxp-select__tag')
+    const tags = wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)')
 
     expect(tags.length).toEqual(2)
     expect(wrapper.findAll('.vxp-option--selected').length).toEqual(2)
@@ -185,7 +185,7 @@ describe('Select', () => {
     ))
 
     await wrapper.find('.vxp-tag__close').trigger('click')
-    expect(wrapper.findAll('.vxp-select__tag').length).toEqual(1)
+    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toEqual(1)
   })
 
   it('prefix', () => {
@@ -469,9 +469,9 @@ describe('Select', () => {
     })
 
     await wrapper.setProps({ value: [OPTIONS[0], OPTIONS[1]] })
-    expect(wrapper.findAll('.vxp-select__tag').length).toEqual(2)
+    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toEqual(2)
     await wrapper.find('input').trigger('keydown', { key: 'Backspace' })
-    expect(wrapper.findAll('.vxp-select__tag').length).toEqual(1)
+    expect(wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)').length).toEqual(1)
   })
 
   it('hitting option', async () => {
