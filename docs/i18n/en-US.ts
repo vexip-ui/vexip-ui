@@ -4,9 +4,12 @@ export const enUS = defineI18n({
   common: {
     language: 'English',
     makeInterest: 'Make interesting in development',
-    slogan: 'Highly customizable property values, Full TypeScript, Performance should be good',
+    slogan: 'Highly customizable property values, Full TypeScript, Performance pretty good',
     getStarted: 'Get started',
     getComponents: 'Components',
+    changePrefix: 'Change Component Name Prefix',
+    apply: 'Apply',
+    prefixChanged: 'Change the component name prefix successfully',
     changeColor: 'Change Major Color',
     rollColor: 'Roll a color, maybe strange',
     resetColor: 'Reset the color',
@@ -55,7 +58,9 @@ export const enUS = defineI18n({
     Grid: 'Grid',
     Divider: 'Divider',
     Layout: 'Layout',
+    NativeScroll: 'NativeScroll',
     Row: 'Row',
+    Scroll: 'Scroll',
     Space: 'Space',
     Split: 'Split',
 
@@ -117,11 +122,9 @@ export const enUS = defineI18n({
 
     ConfigProvider: 'ConfigProvider',
     Masker: 'Masker',
-    NativeScroll: 'NativeScroll',
     Overflow: 'Overflow',
     Renderer: 'Renderer',
     ResizeObserver: 'ResizeObserver',
-    Scroll: 'Scroll',
     Scrollbar: 'Scrollbar',
     VirtualList: 'VirtualList'
   }

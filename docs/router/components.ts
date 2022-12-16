@@ -25,7 +25,9 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Grid', since: '2.0.0' },
         { name: 'Divider' },
         { name: 'Layout', since: '2.0.0' },
+        { name: 'NativeScroll', since: '1.3.1' },
         { name: 'Row' },
+        { name: 'Scroll' },
         { name: 'Space', since: '2.0.0' },
         { name: 'Split' }
       ]
@@ -107,11 +109,9 @@ export function getComponentConfig(): ComponentGroup[] {
       components: [
         { name: 'ConfigProvider', since: '2.0.0' },
         { name: 'Masker' },
-        { name: 'NativeScroll', since: '1.3.1' },
         { name: 'Overflow', since: '2.0.0' },
         { name: 'Renderer' },
         { name: 'ResizeObserver', since: '2.0.0' },
-        { name: 'Scroll' },
         { name: 'Scrollbar' },
         { name: 'VirtualList', since: '2.0.0' }
       ]
