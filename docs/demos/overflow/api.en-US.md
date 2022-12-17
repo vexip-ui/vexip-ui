@@ -17,7 +17,8 @@
 
 ### Overflow Slots
 
-| Name    | Description                                                                      | Parameters                                     | Since |
-| ------- | -------------------------------------------------------------------------------- | ---------------------------------------------- | ----- |
-| default | Slot for child elements, no params when not using the `items` prop               | `{ item: Record<string, any>, index: number }` | -     |
-| counter | The Slot of the counter, accepts the number of overflows, only allow single root | `{ count: number }`                            |
+| Name    | Description                                                                      | Parameters                                     | Since    |
+| ------- | -------------------------------------------------------------------------------- | ---------------------------------------------- | -------- |
+| default | Slot for child elements, no params when not using the `items` prop               | `{ item: Record<string, any>, index: number }` | -        |
+| counter | The Slot of the counter, accepts the number of overflows, only allow single root | `{ count: number }`                            | -        |
+| suffix  | The Slot of suffix content                                                       | -                                              | `2.0.19` |
