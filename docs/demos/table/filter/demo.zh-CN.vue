@@ -4,6 +4,7 @@
     :columns="columns"
     :data="data"
     :width="1000"
+    :row-height="40"
   ></Table>
   <Button style="margin-top: 10px;" @click="clearFilter">
     清除过滤
