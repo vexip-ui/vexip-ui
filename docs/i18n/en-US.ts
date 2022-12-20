@@ -97,6 +97,7 @@ export const enUS = defineI18n({
     Collapse: 'Collapse',
     Ellipsis: 'Ellipsis',
     Highlight: 'Highlight',
+    Image: 'Image',
     Table: 'Table',
     TabNav: 'TabNav',
     Tabs: 'Tabs',

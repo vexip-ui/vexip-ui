@@ -60,6 +60,11 @@ export function zhCNLocale() {
       validateFail: '验证未通过'
     },
 
+    image: {
+      placeholder: '加载中...',
+      error: '加载失败'
+    },
+
     input: {
       placeholder: '请输入'
     },

@@ -3,5 +3,8 @@
   "object-fit",
   "style",
   "fallback",
-  "skeleton"
+  "lazy",
+  "loading",
+  "group",
+  "viewer"
 ]

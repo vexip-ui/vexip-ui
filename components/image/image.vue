@@ -1,20 +1,24 @@
 <template>
   <div
+    v-show="!hidden"
     ref="wrapper"
     :class="className"
     role="none"
     :style="style"
   >
-    <slot v-if="hasPlaceholder && loading" name="placeholder">
+    <slot v-if="loading" name="placeholder">
       <Skeleton
         v-if="props.skeleton"
         :class="nh.be('skeleton')"
         image
         v-bind="skeletonProps"
       ></Skeleton>
+      <template v-else>
+        {{ props.placeholder || locale.placeholder }}
+      </template>
     </slot>
-    <slot v-if="showError" name="error">
-      {{ props.errorTip || props.alt || props.src }}
+    <slot v-else-if="showError" name="error">
+      {{ props.errorTip || props.alt || locale.error }}
     </slot>
     <img
       v-if="shouldLoad && !showError"
@@ -27,17 +31,41 @@
       :loading="imageLoading"
       @load="handleLoad"
       @error="handleError"
+      @click="handlePreview"
     />
+    <ImageViewer
+      v-if="hasPreview"
+      v-model:active="viewerActive"
+      :srcs="props.previewSrc || loadSrc"
+      :transfer="props.viewerTransfer"
+    >
+      <template #default="{ src }">
+        <slot v-if="$slots.preview" name="preview" :src="src"></slot>
+      </template>
+    </ImageViewer>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, watchEffect, onBeforeUnmount } from 'vue'
+import {
+  defineComponent,
+  ref,
+  reactive,
+  computed,
+  watch,
+  watchEffect,
+  inject,
+  onBeforeUnmount
+} from 'vue'
+import { ImageViewer } from '@/components/image-viewer'
 import { Skeleton } from '@/components/skeleton'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { useIntersection } from '@vexip-ui/hooks'
-import { supportImgLoading } from '@vexip-ui/utils'
+import { isClient, supportImgLoading } from '@vexip-ui/utils'
 import { imageProps } from './props'
+import { GROUP_STATE } from './symbol'
+
+import type { ImageState } from './symbol'
 
 const useImageLoading = supportImgLoading()
 const objectFitValues = Object.freeze(['fill', 'contain', 'cover', 'none', 'scale-down'])
@@ -55,11 +83,12 @@ function normalizeSize(value: string | number) {
 export default defineComponent({
   name: 'Image',
   components: {
+    ImageViewer,
     Skeleton
   },
   props: imageProps,
   emits: [],
-  setup(_props, { slots }) {
+  setup(_props) {
     const props = useProps('image', _props, {
       src: {
         default: '',
@@ -82,25 +111,33 @@ export default defineComponent({
       rootMargin: '',
       preview: false,
       skeleton: false,
+      placeholder: '',
       errorTip: '',
       radius: 0,
-      border: false
+      border: false,
+      previewSrc: '',
+      viewerTransfer: false
     })
 
+    const groupState = inject(GROUP_STATE, null)
+
     const nh = useNameHelper('image')
+    const locale = useLocale('image')
 
     const shouldLoad = ref(useImageLoading)
     const loading = ref(shouldLoad.value)
     const loadSrc = ref('')
     const loadFail = ref(false)
     const fallbackFail = ref(false)
+    const viewerActive = ref(false)
+    const hidden = ref(false)
 
     const wrapper = ref<HTMLElement>()
 
     const showError = computed(() => {
-      // props.fallbackSrc ? loadFail.value && fallbackFail.value : loadFail.value
       return loadFail.value && (!props.fallbackSrc || fallbackFail.value)
     })
+    const hasPreview = computed(() => !groupState && props.preview)
     const className = computed(() => {
       return [
         nh.b(),
@@ -109,7 +146,8 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('border')]: props.border,
           [nh.bm('loading')]: loading.value,
-          [nh.bm('error')]: showError.value
+          [nh.bm('error')]: showError.value,
+          [nh.bm('preview')]: groupState?.preview || hasPreview.value
         }
       ]
     })
@@ -118,7 +156,7 @@ export default defineComponent({
         width: normalizeSize(props.width),
         height: normalizeSize(props.height),
         [nh.cv('fit')]: props.fit,
-        [nh.cv('radius')]: props.radius && `${props.radius}px`
+        [nh.cv('radius')]: props.radius ? `${props.radius}px` : ''
       }
 
       if (props.border && typeof props.border === 'string') {
@@ -129,9 +167,8 @@ export default defineComponent({
     })
     const imageSrc = computed(() => props.src || (props.imgAttrs?.src as string))
     const imageLoading = computed(() => {
-      return useImageLoading && props.lazy ? 'lazy' : undefined
+      return hidden.value || (useImageLoading && props.lazy) ? 'lazy' : undefined
     })
-    const hasPlaceholder = computed(() => !!(slots.placeholder || props.skeleton))
     const skeletonProps = computed(() => {
       return typeof props.skeleton === 'object'
         ? Object.assign({ activated: true }, props.skeleton)
@@ -158,6 +195,25 @@ export default defineComponent({
 
     loadSrc.value = imageSrc.value
 
+    const state: ImageState = reactive({
+      src: computed(() => props.previewSrc || loadSrc.value),
+      index: 0,
+      total: 0
+    })
+
+    if (groupState) {
+      groupState.increaseItem(state)
+
+      const stopWatch = watchEffect(() => {
+        hidden.value = !groupState.showAll && state.index > 0
+      })
+
+      onBeforeUnmount(() => {
+        stopWatch()
+        groupState.decreaseItem(state)
+      })
+    }
+
     if (!useImageLoading) {
       let disconnect: (() => void) | undefined
 
@@ -165,8 +221,17 @@ export default defineComponent({
         disconnect?.()
         disconnect = undefined
 
+        if (!isClient) return
+
+        const root =
+          typeof props.root === 'string'
+            ? document.querySelector(props.root)
+            : (props.root as Element)
+
         if (props.lazy) {
           disconnect = useIntersection({
+            root: typeof root === 'object' ? root : document.documentElement,
+            rootMargin: props.rootMargin,
             target: wrapper,
             handler: () => {
               disconnect?.()
@@ -202,32 +267,52 @@ export default defineComponent({
         }
 
         loadSrc.value = props.fallbackSrc
+      } else {
+        loading.value = false
       }
 
       loadFail.value = true
       emitEvent(props.onError, event)
     }
 
+    function handlePreview() {
+      if (!groupState) {
+        if (props.preview) {
+          viewerActive.value = true
+        }
+
+        emitEvent(props.onPreview, props.previewSrc || loadSrc.value)
+        return
+      }
+
+      groupState.handlePreview(state)
+    }
+
     return {
       props,
       nh,
+      locale,
+
       shouldLoad,
       loading,
       loadSrc,
       loadFail,
       fallbackFail,
+      viewerActive,
+      hidden,
 
       showError,
+      hasPreview,
       className,
       style,
       imageLoading,
-      hasPlaceholder,
       skeletonProps,
 
       wrapper,
 
       handleLoad,
-      handleError
+      handleError,
+      handlePreview
     }
   }
 })

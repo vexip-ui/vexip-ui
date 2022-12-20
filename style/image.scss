@@ -12,7 +12,11 @@ $image: map.merge(
     radius: 0,
     b-color: get-css-var('border-color-base'),
     bg-color: transparent,
-    bg-color-error: get-css-var('fill-color-humble')
+    bg-color-error: get-css-var('fill-color-humble'),
+    close-bg-color: get-css-var('bg-color-reverse'),
+    close-color: get-css-var('bg-color-base'),
+    action-size: 40px,
+    action-offset: 30px
   ),
   $image
 );
@@ -38,6 +42,7 @@ $image: map.merge(
     border: get-css-var('border-shape') get-css-var('image-b-color');
   }
 
+  &--loading,
   &--error {
     background-color: get-css-var('image-bg-color-error');
   }
@@ -53,11 +58,117 @@ $image: map.merge(
     object-fit: get-css-var('image-fit');
   }
 
+  &--preview &__img {
+    cursor: pointer;
+  }
+
   &--loading &__img,
   &--error &__img {
     width: 0;
     height: 0;
     pointer-events: none;
     visibility: hidden;
+  }
+
+  &-viewer {
+    @mixin hanlder {
+      position: absolute;
+      display: flex;
+      padding: 0;
+      cursor: pointer;
+      background-color: transparent;
+      border: 0;
+      outline: 0;
+
+      $handler: #{&}-handler;
+
+      &-handler {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: get-css-var('image-action-size');
+        height: get-css-var('image-action-size');
+        color: get-css-var('image-close-color');
+        background-color: get-css-var('bg-color-reverse');
+        border-radius: 50%;
+        opacity: 60%;
+        transition: get-css-var('transition-opacity');
+      }
+
+      &:hover,
+      &:focus {
+        #{$handler} {
+          opacity: 90%;
+        }
+      }
+
+      &--disabled {
+        cursor: not-allowed;
+
+        &,
+        &:hover,
+        &:focus {
+          #{$handler} {
+            opacity: 30%;
+          }
+        }
+      }
+    }
+
+    @include basis;
+
+    &__wrapper {
+      width: 100%;
+      height: 100%;
+    }
+
+    &__close {
+      @include hanlder;
+
+      top: get-css-var('image-action-offset');
+      right: get-css-var('image-action-offset');
+    }
+
+    &__prev {
+      @include hanlder;
+
+      top: 50%;
+      left: get-css-var('image-action-offset');
+      transform: translateY(-50%);
+    }
+
+    &__next {
+      @include hanlder;
+
+      top: 50%;
+      right: get-css-var('image-action-offset');
+      transform: translateY(-50%);
+    }
+
+    .#{$namespace}-viewer {
+      &__toolbar {
+        bottom: get-css-var('image-action-offset');
+        opacity: 60%;
+        transition: get-css-var('transition-opacity');
+
+        &:hover,
+        &:focus-within {
+          opacity: 90%;
+        }
+      }
+
+      &__action {
+        width: get-css-var('image-action-size');
+        height: get-css-var('image-action-size');
+
+        .#{$namespace}-icon {
+          font-size: 1.4em;
+        }
+      }
+    }
+  }
+
+  &-group {
+    @include basis;
   }
 }

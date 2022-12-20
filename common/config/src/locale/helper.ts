@@ -63,6 +63,11 @@ export interface LocaleConfig {
     validateFail: string
   },
 
+  image: {
+    placeholder: string,
+    error: string
+  },
+
   input: {
     placeholder: string
   },

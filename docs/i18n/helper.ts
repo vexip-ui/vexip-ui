@@ -95,6 +95,7 @@ export interface I18nConfig {
     Collapse: string,
     Ellipsis: string,
     Highlight: string,
+    Image: string,
     Table: string,
     TabNav: string,
     Tabs: string,

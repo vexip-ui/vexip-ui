@@ -1,13 +1,25 @@
 <template>
-  <Image src="error" fallback-src="/picture-2.jpg" width="300"></Image>
-  <Image src="error" width="300" error-tip="Error"></Image>
-  <Image src="error" width="300">
-    <template #error>
-      <Icon :scale="3">
-        <FaceFrownOpenR></FaceFrownOpenR>
-      </Icon>
-    </template>
-  </Image>
+  <Space vertical>
+    <Image
+      src="error"
+      fallback-src="/picture-2.jpg"
+      width="300"
+      height="180"
+    ></Image>
+    <Image
+      src="error"
+      width="300"
+      height="180"
+      error-tip="Error"
+    ></Image>
+    <Image src="error" width="300" height="180">
+      <template #error>
+        <Icon :scale="3">
+          <FaceFrownOpenR></FaceFrownOpenR>
+        </Icon>
+      </template>
+    </Image>
+  </Space>
 </template>
 
 <script setup lang="ts">
