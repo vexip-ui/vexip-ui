@@ -49,6 +49,7 @@ $input: map.merge(
     width: 100%;
     height: get-css-var('input-height');
     padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
+    cursor: text;
     background-color: get-css-var('input-bg-color');
     border: get-css-var('border-shape') get-css-var('input-b-color');
     border-radius: get-css-var('input-radius');

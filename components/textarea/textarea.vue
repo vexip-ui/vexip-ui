@@ -1,5 +1,5 @@
 <template>
-  <div :id="idFor" :class="className">
+  <div :id="idFor" :class="className" @click="textarea?.focus()">
     <textarea
       ref="textarea"
       :class="nh.be('control')"

@@ -1,4 +1,4 @@
-import { reactive, computed, markRaw } from 'vue'
+import { reactive, computed, watchEffect, markRaw } from 'vue'
 import {
   isNull,
   debounceMinor,
@@ -162,6 +162,13 @@ export function useStore(options: StoreOptions) {
     return disableExpandRows
   })
 
+  watchEffect(() => {
+    state.heightBITree = markRaw(
+      createBITree(filteredData.value.length, state.rowHeight || state.rowMinHeight)
+    )
+    updateTotalHeight(state)
+  })
+
   const getters = reactive({
     filteredData,
     sortedData,
@@ -221,6 +228,699 @@ export function useStore(options: StoreOptions) {
     handleExpand: handleExpand.bind(null, state, getters)
   }
 
+  function setColumns(state: StoreState, columns: TableColumnOptions[]) {
+    columns = Array.from(columns).sort((prev, next) => {
+      return (prev.order || 0) - (next.order || 0)
+    })
+
+    const { widths, sorters, filters } = state
+
+    const normalColumns = []
+    const rightFixedColumns = []
+    const leftFixedColumns = []
+    const columnTypes = ['order', 'selection', 'expand']
+
+    for (let i = 0, len = columns.length; i < len; ++i) {
+      const column = { ...columns[i] } as ColumnWithKey
+
+      if ('type' in column && columnTypes.includes(column.type)) {
+        // key = isNull(column.key) ? getIndexId() : column.key
+
+        switch (column.type) {
+          case 'order': {
+            column.truthIndex = !!column.truthIndex
+
+            if (typeof column.orderLabel !== 'function') {
+              column.orderLabel = defaultIndexLabel
+            }
+
+            if (isNull(column.width)) column.width = 60
+
+            break
+          }
+          case 'selection': {
+            column.checkboxSize = column.checkboxSize || 'default'
+
+            if (typeof column.disableRow !== 'function') {
+              column.disableRow = () => false
+            }
+
+            if (isNull(column.width)) column.width = 40
+
+            break
+          }
+          case 'expand': {
+            if (typeof column.disableRow !== 'function') {
+              column.disableRow = () => false
+            }
+
+            if (isNull(column.width)) column.width = 40
+
+            break
+          }
+        }
+      }
+
+      let key = column.key
+
+      if (isNull(key)) {
+        key = getIndexId()
+
+        console.error('[vexip-ui:Table] Table column requires key prop, but missing')
+      }
+
+      const fixed = column.fixed
+
+      // 独立属性解析时注意隔断同对象引用
+      widths[key] = column.width || 100
+      sorters[key] = parseSorter(column.sorter)
+      filters[key] = parseFilter(column.filter)
+
+      column.key = key
+
+      if (fixed === true || fixed === 'left') {
+        leftFixedColumns.push(column)
+      } else if (fixed === 'right') {
+        rightFixedColumns.push(column)
+      } else {
+        normalColumns.push(column)
+      }
+    }
+
+    state.columns = leftFixedColumns.concat(normalColumns, rightFixedColumns)
+
+    if (leftFixedColumns.length) {
+      state.leftFixedColumns = leftFixedColumns
+    }
+
+    if (rightFixedColumns.length) {
+      state.rightFixedColumns = rightFixedColumns
+    }
+  }
+
+  function setDataKey(state: StoreState, field: string) {
+    const oldDataKey = state.dataKey
+
+    if (!isNull(field) && oldDataKey !== field) {
+      const { rowData, idMaps } = state
+
+      state.dataKey = field
+
+      rowData.forEach(row => {
+        let key = row.data[field] as Key
+
+        if (isNull(key)) {
+          key = getIndexId()
+        }
+
+        row.key = key
+        idMaps.set(row.data, key)
+      })
+    }
+  }
+
+  function setData(state: StoreState, data: Data[]) {
+    const clonedData = []
+    const dataMap: Record<Key, RowState> = {}
+    const { dataKey, idMaps } = state
+    const oldDataMap = state.dataMap
+    const hidden = !!state.virtual
+
+    dataMap[TABLE_HEAD_KEY] = oldDataMap[TABLE_HEAD_KEY] || {
+      key: TABLE_HEAD_KEY
+    }
+
+    for (let i = 0, len = data.length; i < len; ++i) {
+      const item = data[i]
+
+      let key = item[dataKey] as Key
+
+      if (isNull(key)) {
+        key = idMaps.get(item)!
+
+        if (isNull(key)) {
+          key = getIndexId()
+        }
+      }
+
+      let row: RowState
+
+      if (oldDataMap[key]) {
+        row = oldDataMap[key]
+
+        if (row.data !== item) {
+          const { checked, height, expanded } = Object.assign(row.data, item)
+
+          row.checked = !isNull(checked) ? !!checked : row.checked
+          row.height = !isNull(height) ? toNumber(height) : row.height
+          row.expanded = !isNull(expanded) ? !!expanded : row.expanded
+        }
+      } else {
+        const { checked, height, expanded } = item
+
+        row = {
+          key,
+          hidden,
+          checked: !!checked,
+          height: toNumber(height),
+          borderHeight: 0,
+          expanded: !!expanded,
+          hover: false,
+          expandHeight: 0,
+          index: -1,
+          data: item
+        }
+
+        idMaps.set(item, key)
+      }
+
+      // 行的初始位置索引
+      row.index = i
+      clonedData.push(row)
+      dataMap[key] = row
+    }
+
+    state.rowData = clonedData
+    state.dataMap = dataMap
+
+    computePartial(state)
+  }
+
+  function setCurrentPage(state: StoreState, currentPage: number) {
+    state.currentPage = currentPage ?? 1
+  }
+
+  function setPageSize(state: StoreState, pageSize: number) {
+    state.pageSize = pageSize || state.rowData.length
+  }
+
+  function setRowClass(state: StoreState, rowClass: ClassType | RowPropFn<ClassType>) {
+    state.rowClass = rowClass ?? ''
+  }
+
+  function setRowStyle(state: StoreState, rowStyle: StyleType | RowPropFn<StyleType>) {
+    state.rowStyle = rowStyle ?? ''
+  }
+
+  function setRowAttrs(
+    state: StoreState,
+    rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>
+  ) {
+    state.rowAttrs = rowAttrs ?? null!
+  }
+
+  function setCellClass(state: StoreState, cellClass: ClassType | CellPropFn<ClassType>) {
+    state.cellClass = cellClass ?? ''
+  }
+
+  function setCellStyle(state: StoreState, cellStyle: StyleType | CellPropFn<StyleType>) {
+    state.cellStyle = cellStyle ?? ''
+  }
+
+  function setCellAttrs(
+    state: StoreState,
+    cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>
+  ) {
+    state.cellAttrs = cellAttrs ?? null!
+  }
+
+  function setHeadClass(state: StoreState, headClass: ClassType | HeadPropFn<ClassType>) {
+    state.headClass = headClass ?? ''
+  }
+
+  function setHeadStyle(state: StoreState, headStyle: StyleType | HeadPropFn<StyleType>) {
+    state.headStyle = headStyle ?? ''
+  }
+
+  function setHeadAttrs(
+    state: StoreState,
+    headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>
+  ) {
+    state.headAttrs = headAttrs ?? null!
+  }
+
+  function setTableWidth(state: StoreState, width: number) {
+    width = toNumber(width)
+
+    const { columns, widths } = state
+
+    const hasWidthColumns = []
+    const flexColumns = []
+
+    let flexWidth = width
+
+    for (let i = 0, len = columns.length; i < len; ++i) {
+      const column = columns[i]
+
+      if (column.width) {
+        flexWidth -= column.width
+        hasWidthColumns.push(column)
+      } else {
+        flexColumns.push(column)
+      }
+    }
+
+    const flexColumnCount = flexColumns.length
+
+    let flexUnitWidth = 100
+
+    // 剩余空间有多时, 均分到弹性列
+    // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
+    if (flexColumnCount) {
+      flexUnitWidth = flexWidth / flexColumnCount
+    }
+
+    for (let i = 0; i < flexColumnCount; ++i) {
+      const column = flexColumns[i]
+      const key = column.key
+
+      widths[key] = flexUnitWidth
+    }
+
+    state.width = width
+  }
+
+  function setColumnWidth(state: StoreState, key: Key, width: number) {
+    if (state.widths[key]) {
+      state.widths[key] = width
+    }
+  }
+
+  function setRowHeight(state: StoreState, key: Key, height: number) {
+    if (state.dataMap[key] && state.dataMap[key].height !== height) {
+      state.dataMap[key].height = height
+    }
+  }
+
+  function setBorderHeight(state: StoreState, key: Key, height: number) {
+    if (state.dataMap[key]) {
+      state.dataMap[key].borderHeight = height
+    }
+  }
+
+  function setGlobalRowHeight(state: StoreState, height: number) {
+    state.rowHeight = height
+  }
+
+  function setMinRowHeight(state: StoreState, height: number) {
+    state.rowMinHeight = height
+  }
+
+  function setRowDraggable(state: StoreState, draggable: boolean) {
+    state.rowDraggable = !!draggable
+  }
+
+  function setRowExpandHeight(state: StoreState, key: Key, height: number) {
+    if (state.dataMap[key]) {
+      state.dataMap[key].expandHeight = height
+    }
+  }
+
+  function setBodyScroll(state: StoreState, scroll: number) {
+    state.bodyScroll = scroll
+  }
+
+  function setHighlight(state: StoreState, able: boolean) {
+    state.highlight = !!able
+  }
+
+  function setVirtual(state: StoreState, virtual: boolean) {
+    state.virtual = !!virtual
+  }
+
+  function setRowHover(state: StoreState, key: Key, hover: boolean) {
+    if (state.dataMap[key]) {
+      state.dataMap[key].hover = hover
+    }
+  }
+
+  function setEmptyText(state: StoreState, text: string) {
+    state.emptyText = text
+  }
+
+  function setTooltipTheme(state: StoreState, theme: TooltipTheme) {
+    state.tooltipTheme = theme
+  }
+
+  function setTooltipWidth(state: StoreState, theme: number | string) {
+    state.tooltipWidth = theme
+  }
+
+  function setSingleSorter(state: StoreState, able: boolean) {
+    state.singleSorter = !!able
+  }
+
+  function setSingleFilter(state: StoreState, able: boolean) {
+    state.singleFilter = !!able
+  }
+
+  function setDragging(state: StoreState, dragging: boolean) {
+    state.dragging = !!dragging
+  }
+
+  function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type']) {
+    if (state.sorters[key]) {
+      if (state.singleSorter && type) {
+        clearSort(state)
+      }
+
+      state.sorters[key].type = type
+    }
+  }
+
+  function clearSort(state: StoreState) {
+    const sorters = state.sorters
+
+    for (const key of Object.keys(sorters)) {
+      sorters[key].type = null
+    }
+  }
+
+  function handleFilter(state: StoreState, key: Key, active: ParsedFilterOptions['active']) {
+    if (state.filters[key]) {
+      if (state.singleFilter && (Array.isArray(active) ? active.length : active)) {
+        clearFilter(state)
+      }
+
+      state.filters[key].active = active
+    }
+  }
+
+  function clearFilter(state: StoreState) {
+    const filters = state.filters
+
+    for (const key of Object.keys(filters)) {
+      filters[key].active = null
+
+      for (const option of filters[key].options) {
+        option.active = false
+      }
+    }
+  }
+
+  function handleCheck(state: StoreState, getters: StoreGetters, key: Key, checked: boolean) {
+    const { dataMap } = state
+    const { disableCheckRows } = getters
+
+    if (dataMap[key] && !disableCheckRows[key]) {
+      dataMap[key].checked = !!checked
+    }
+
+    computePartial(state)
+  }
+
+  function handleCheckAll(state: StoreState, getters: StoreGetters) {
+    const { rowData, checkedAll } = state
+    const { disableCheckRows } = getters
+
+    let checked = !checkedAll
+
+    // 阻断 disabled 元素对全选的影响
+    if (Object.keys(disableCheckRows).length) {
+      // 由于被禁用的元素不可被操作，如果存在被禁用的元素且该状态为未被选中，则全选时仍然是 partial 状态
+      // 假设除了禁用的元素，其余元素均为选中状态（此时对于用户来说属于已经全选，点击的期望是取消全选）
+      let partialCheckedAll = true
+
+      for (const row of rowData) {
+        // 检查是否存在非禁用的且未被选中的元素（如有则证明现在不是全选，用户点击的期望是进行全选）
+        if (!disableCheckRows[row.key] && !row.checked) {
+          partialCheckedAll = false
+
+          break
+        }
+      }
+
+      checked = !partialCheckedAll
+    }
+
+    for (const row of rowData) {
+      if (!disableCheckRows[row.key]) {
+        row.checked = checked
+      }
+    }
+
+    state.checkedAll = checked
+    state.partial = false
+
+    computePartial(state)
+  }
+
+  function clearCheckAll(state: StoreState, getters: StoreGetters) {
+    const { rowData } = state
+    const { disableCheckRows } = getters
+
+    for (const row of rowData) {
+      if (!disableCheckRows[row.key]) {
+        row.checked = false
+      }
+    }
+
+    state.checkedAll = false
+    state.partial = false
+
+    computePartial(state)
+  }
+
+  function computePartial(state: StoreState) {
+    const data = state.rowData
+
+    let hasChecked = false
+    let hasNotChecked = false
+    let partial = false
+
+    for (let i = 0, len = data.length; i < len; ++i) {
+      const row = data[i]
+
+      if (row.checked) {
+        hasChecked = true
+      } else {
+        hasNotChecked = true
+      }
+
+      if (hasChecked && hasNotChecked) {
+        partial = true
+
+        break
+      }
+    }
+
+    if (hasChecked && !partial) {
+      state.checkedAll = true
+    } else {
+      state.checkedAll = false
+    }
+
+    state.partial = partial
+  }
+
+  function setRenderRows(state: StoreState, getters: StoreGetters, start: number, end: number) {
+    const { startRow, endRow, heightBITree, virtualData } = state
+
+    if (start === startRow && end === endRow) return
+
+    const { processedData } = getters
+    virtualData.length = 0
+
+    if (processedData[0]) {
+      let i = processedData.length
+
+      while (i--) {
+        const data = processedData[i]
+
+        data.hidden = !(i >= start && i < end)
+        !data.hidden && virtualData.push(data)
+      }
+
+      virtualData.reverse()
+
+      state.padTop = heightBITree?.sum(start) ?? 0
+      state.startRow = start
+      state.endRow = end
+    }
+  }
+
+  function handleExpand(state: StoreState, getters: StoreGetters, key: Key, expanded: boolean) {
+    const { dataMap } = state
+    const { disableExpandRows } = getters
+
+    if (dataMap[key] && !disableExpandRows[key]) {
+      dataMap[key].expanded = !!expanded
+    }
+  }
+
+  function toggleFilterItemActive(
+    state: StoreState,
+    options: { key: Key, value: number | string | null, active?: boolean, disableOthers?: boolean }
+  ) {
+    const { key, value, active = false, disableOthers = false } = options
+
+    if (state.filters[key]) {
+      const filterOptions = state.filters[key].options
+
+      if (disableOthers) {
+        for (let i = 0, len = filterOptions.length; i < len; ++i) {
+          filterOptions[i].active = false
+        }
+      }
+
+      const item = filterOptions.find(item => item.value === value)
+
+      if (item) {
+        item.active = active
+      }
+    }
+  }
+
+  function refreshRowIndex(state: StoreState) {
+    const data = state.rowData
+
+    for (let i = 0, len = data.length; i < len; ++i) {
+      data[i].index = i
+    }
+  }
+
+  function updateTotalHeight(state: StoreState) {
+    const { heightBITree, currentPage, pageSize, rowData } = state
+
+    if (heightBITree) {
+      if (currentPage && pageSize > 0 && pageSize < rowData.length) {
+        state.totalHeight =
+          heightBITree.sum(currentPage * pageSize) - heightBITree.sum((currentPage - 1) * pageSize)
+      } else {
+        state.totalHeight = heightBITree.sum() ?? 0
+      }
+    } else {
+      state.totalHeight = 0
+    }
+  }
+
+  function parseSorter(sorter: boolean | SorterOptions = false): ParsedSorterOptions {
+    const raw = typeof sorter === 'boolean' ? { able: sorter } : sorter
+    const { able = false, type = null, order = 0, method = null } = raw
+
+    return { able, type, order, method }
+  }
+
+  function parseFilter(filter: FilterOptions = { able: false, options: [] }): ParsedFilterOptions {
+    const { able = false, multiple = false, active = null, method = null } = filter
+    // 防止内部变化触发 deep watch
+    const options = deepClone(filter.options ?? [])
+    const formattedOptions = []
+
+    for (let i = 0, len = options.length; i < len; ++i) {
+      const item = options[i]
+      const option = typeof item === 'string' ? { value: item } : { ...item }
+
+      option.label = option.label ?? option.value.toString()
+
+      let isActive = false
+
+      if (multiple && Array.isArray(active)) {
+        isActive = active.includes(option.value)
+      } else if (!isNull(active)) {
+        isActive = Object.is(option.value, active)
+      }
+
+      option.active = isActive
+
+      formattedOptions.push(option as { value: string | number, label: string, active: boolean })
+    }
+
+    return { able, options: formattedOptions, multiple, active, method }
+  }
+
+  function filterData(
+    filters: Record<Key, ParsedFilterOptions>,
+    data: RowState[],
+    isSingle: boolean
+  ) {
+    const keys = Object.keys(filters)
+    const usedFilter: ParsedFilterOptions[] = []
+    const filterData: RowState[] = []
+
+    for (let i = 0, len = keys.length; i < len; ++i) {
+      const key = keys[i]
+      const filter = filters[key]
+      const { able, active, method } = filter
+
+      if (able && active && typeof method === 'function') {
+        usedFilter.push(filter)
+
+        if (isSingle) break
+      }
+    }
+
+    const usedFilterCount = usedFilter.length
+
+    for (let i = 0, len = data.length; i < len; ++i) {
+      const row = data[i]
+
+      let isFilter = true
+
+      for (let j = 0; j < usedFilterCount; j++) {
+        const { active, method } = usedFilter[j]
+
+        isFilter = method!(active! as any, row.data)
+
+        if (!isFilter) {
+          break
+        }
+      }
+
+      if (isFilter) {
+        filterData.push(row)
+      }
+    }
+
+    return filterData
+  }
+
+  function sortData(
+    sorters: Record<Key, ParsedSorterOptions>,
+    data: RowState[],
+    columns: TableColumnOptions[],
+    isSingle: boolean
+  ) {
+    const keys = Object.keys(sorters)
+    const usedSorter = []
+
+    for (let i = 0, len = keys.length; i < len; ++i) {
+      const key = keys[i] as keyof RowState
+      const { able, type, order, method } = sorters[key]
+
+      if (able && type) {
+        const column = columns.find(item => item.key === key)
+        const accessor = column?.accessor
+
+        usedSorter.push({
+          able,
+          key,
+          order,
+          type,
+          method: method ?? undefined,
+          accessor(row: RowState) {
+            if (typeof accessor === 'function') {
+              return accessor(row.data, row.index)
+            }
+
+            return row.data[key]
+          }
+        })
+
+        if (isSingle) break
+      }
+    }
+
+    // 多列排序优先级
+    usedSorter.sort((prev, next) => prev.order - next.order)
+
+    return sortByProps(data, usedSorter)
+  }
+
+  function pageData(currentPage: number, pageSize: number, data: RowState[]) {
+    return data.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+  }
+
   type Store = Readonly<{
     state: Readonly<typeof state>,
     getters: Readonly<typeof getters>,
@@ -231,695 +931,3 @@ export function useStore(options: StoreOptions) {
 }
 
 export type TableStore = ReturnType<typeof useStore>
-
-function setColumns(state: StoreState, columns: TableColumnOptions[]) {
-  columns = Array.from(columns).sort((prev, next) => {
-    return (prev.order || 0) - (next.order || 0)
-  })
-
-  const { widths, sorters, filters } = state
-
-  const normalColumns = []
-  const rightFixedColumns = []
-  const leftFixedColumns = []
-  const columnTypes = ['order', 'selection', 'expand']
-
-  for (let i = 0, len = columns.length; i < len; ++i) {
-    const column = { ...columns[i] } as ColumnWithKey
-
-    if ('type' in column && columnTypes.includes(column.type)) {
-      // key = isNull(column.key) ? getIndexId() : column.key
-
-      switch (column.type) {
-        case 'order': {
-          column.truthIndex = !!column.truthIndex
-
-          if (typeof column.orderLabel !== 'function') {
-            column.orderLabel = defaultIndexLabel
-          }
-
-          if (isNull(column.width)) column.width = 60
-
-          break
-        }
-        case 'selection': {
-          column.checkboxSize = column.checkboxSize || 'default'
-
-          if (typeof column.disableRow !== 'function') {
-            column.disableRow = () => false
-          }
-
-          if (isNull(column.width)) column.width = 40
-
-          break
-        }
-        case 'expand': {
-          if (typeof column.disableRow !== 'function') {
-            column.disableRow = () => false
-          }
-
-          if (isNull(column.width)) column.width = 40
-
-          break
-        }
-      }
-    }
-
-    let key = column.key
-
-    if (isNull(key)) {
-      key = getIndexId()
-
-      console.error('[vexip-ui:Table] Table column requires key prop, but missing')
-    }
-
-    const fixed = column.fixed
-
-    // 独立属性解析时注意隔断同对象引用
-    widths[key] = column.width || 100
-    sorters[key] = parseSorter(column.sorter)
-    filters[key] = parseFilter(column.filter)
-
-    column.key = key
-
-    if (fixed === true || fixed === 'left') {
-      leftFixedColumns.push(column)
-    } else if (fixed === 'right') {
-      rightFixedColumns.push(column)
-    } else {
-      normalColumns.push(column)
-    }
-  }
-
-  state.columns = leftFixedColumns.concat(normalColumns, rightFixedColumns)
-
-  if (leftFixedColumns.length) {
-    state.leftFixedColumns = leftFixedColumns
-  }
-
-  if (rightFixedColumns.length) {
-    state.rightFixedColumns = rightFixedColumns
-  }
-}
-
-function setDataKey(state: StoreState, field: string) {
-  const oldDataKey = state.dataKey
-
-  if (!isNull(field) && oldDataKey !== field) {
-    const { rowData, idMaps } = state
-
-    state.dataKey = field
-
-    rowData.forEach(row => {
-      let key = row.data[field] as Key
-
-      if (isNull(key)) {
-        key = getIndexId()
-      }
-
-      row.key = key
-      idMaps.set(row.data, key)
-    })
-  }
-}
-
-function setData(state: StoreState, data: Data[]) {
-  const clonedData = []
-  const dataMap: Record<Key, RowState> = {}
-  const { dataKey, idMaps } = state
-  const oldDataMap = state.dataMap
-  const hidden = !!state.virtual
-
-  dataMap[TABLE_HEAD_KEY] = oldDataMap[TABLE_HEAD_KEY] || {
-    key: TABLE_HEAD_KEY
-  }
-
-  for (let i = 0, len = data.length; i < len; ++i) {
-    const item = data[i]
-
-    let key = item[dataKey] as Key
-
-    if (isNull(key)) {
-      key = idMaps.get(item)!
-
-      if (isNull(key)) {
-        key = getIndexId()
-      }
-    }
-
-    let row: RowState
-
-    if (oldDataMap[key]) {
-      row = oldDataMap[key]
-    } else {
-      const { checked, height, expanded } = item
-
-      row = {
-        key,
-        hidden,
-        checked: !!checked,
-        height: toNumber(height),
-        borderHeight: 0,
-        expanded: !!expanded,
-        hover: false,
-        expandHeight: 0,
-        index: -1,
-        data: item
-      }
-
-      idMaps.set(item, key)
-    }
-
-    // 行的初始位置索引
-    row.index = i
-    clonedData.push(row)
-    dataMap[key] = row
-  }
-
-  state.rowData = clonedData
-  state.dataMap = dataMap
-
-  if (!state.heightBITree || clonedData.length !== Object.keys(oldDataMap).length) {
-    state.heightBITree = markRaw(
-      createBITree(clonedData.length, state.rowHeight || state.rowMinHeight)
-    )
-    updateTotalHeight(state)
-  }
-
-  computePartial(state)
-}
-
-function setCurrentPage(state: StoreState, currentPage: number) {
-  state.currentPage = currentPage ?? 1
-}
-
-function setPageSize(state: StoreState, pageSize: number) {
-  state.pageSize = pageSize || state.rowData.length
-}
-
-function setRowClass(state: StoreState, rowClass: ClassType | RowPropFn<ClassType>) {
-  state.rowClass = rowClass ?? ''
-}
-
-function setRowStyle(state: StoreState, rowStyle: StyleType | RowPropFn<StyleType>) {
-  state.rowStyle = rowStyle ?? ''
-}
-
-function setRowAttrs(
-  state: StoreState,
-  rowAttrs: Record<string, any> | RowPropFn<Record<string, any>>
-) {
-  state.rowAttrs = rowAttrs ?? null!
-}
-
-function setCellClass(state: StoreState, cellClass: ClassType | CellPropFn<ClassType>) {
-  state.cellClass = cellClass ?? ''
-}
-
-function setCellStyle(state: StoreState, cellStyle: StyleType | CellPropFn<StyleType>) {
-  state.cellStyle = cellStyle ?? ''
-}
-
-function setCellAttrs(
-  state: StoreState,
-  cellAttrs: Record<string, any> | CellPropFn<Record<string, any>>
-) {
-  state.cellAttrs = cellAttrs ?? null!
-}
-
-function setHeadClass(state: StoreState, headClass: ClassType | HeadPropFn<ClassType>) {
-  state.headClass = headClass ?? ''
-}
-
-function setHeadStyle(state: StoreState, headStyle: StyleType | HeadPropFn<StyleType>) {
-  state.headStyle = headStyle ?? ''
-}
-
-function setHeadAttrs(
-  state: StoreState,
-  headAttrs: Record<string, any> | HeadPropFn<Record<string, any>>
-) {
-  state.headAttrs = headAttrs ?? null!
-}
-
-function setTableWidth(state: StoreState, width: number) {
-  width = toNumber(width)
-
-  const { columns, widths } = state
-
-  const hasWidthColumns = []
-  const flexColumns = []
-
-  let flexWidth = width
-
-  for (let i = 0, len = columns.length; i < len; ++i) {
-    const column = columns[i]
-
-    if (column.width) {
-      flexWidth -= column.width
-      hasWidthColumns.push(column)
-    } else {
-      flexColumns.push(column)
-    }
-  }
-
-  const flexColumnCount = flexColumns.length
-
-  let flexUnitWidth = 100
-
-  // 剩余空间有多时, 均分到弹性列
-  // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
-  if (flexColumnCount) {
-    flexUnitWidth = flexWidth / flexColumnCount
-  }
-
-  for (let i = 0; i < flexColumnCount; ++i) {
-    const column = flexColumns[i]
-    const key = column.key
-
-    widths[key] = flexUnitWidth
-  }
-
-  state.width = width
-}
-
-function setColumnWidth(state: StoreState, key: Key, width: number) {
-  if (state.widths[key]) {
-    state.widths[key] = width
-  }
-}
-
-function setRowHeight(state: StoreState, key: Key, height: number) {
-  if (state.dataMap[key] && state.dataMap[key].height !== height) {
-    state.dataMap[key].height = height
-  }
-}
-
-function setBorderHeight(state: StoreState, key: Key, height: number) {
-  if (state.dataMap[key]) {
-    state.dataMap[key].borderHeight = height
-  }
-}
-
-function setGlobalRowHeight(state: StoreState, height: number) {
-  state.rowHeight = height
-}
-
-function setMinRowHeight(state: StoreState, height: number) {
-  state.rowMinHeight = height
-}
-
-function setRowDraggable(state: StoreState, draggable: boolean) {
-  state.rowDraggable = !!draggable
-}
-
-function setRowExpandHeight(state: StoreState, key: Key, height: number) {
-  if (state.dataMap[key]) {
-    state.dataMap[key].expandHeight = height
-  }
-}
-
-function setBodyScroll(state: StoreState, scroll: number) {
-  state.bodyScroll = scroll
-}
-
-function setHighlight(state: StoreState, able: boolean) {
-  state.highlight = !!able
-}
-
-function setVirtual(state: StoreState, virtual: boolean) {
-  state.virtual = !!virtual
-}
-
-function setRowHover(state: StoreState, key: Key, hover: boolean) {
-  if (state.dataMap[key]) {
-    state.dataMap[key].hover = hover
-  }
-}
-
-function setEmptyText(state: StoreState, text: string) {
-  state.emptyText = text
-}
-
-function setTooltipTheme(state: StoreState, theme: TooltipTheme) {
-  state.tooltipTheme = theme
-}
-
-function setTooltipWidth(state: StoreState, theme: number | string) {
-  state.tooltipWidth = theme
-}
-
-function setSingleSorter(state: StoreState, able: boolean) {
-  state.singleSorter = !!able
-}
-
-function setSingleFilter(state: StoreState, able: boolean) {
-  state.singleFilter = !!able
-}
-
-function setDragging(state: StoreState, dragging: boolean) {
-  state.dragging = !!dragging
-}
-
-function handleSort(state: StoreState, key: Key, type: ParsedSorterOptions['type']) {
-  if (state.sorters[key]) {
-    if (state.singleSorter && type) {
-      clearSort(state)
-    }
-
-    state.sorters[key].type = type
-  }
-}
-
-function clearSort(state: StoreState) {
-  const sorters = state.sorters
-
-  for (const key of Object.keys(sorters)) {
-    sorters[key].type = null
-  }
-}
-
-function handleFilter(state: StoreState, key: Key, active: ParsedFilterOptions['active']) {
-  if (state.filters[key]) {
-    if (state.singleFilter && (Array.isArray(active) ? active.length : active)) {
-      clearFilter(state)
-    }
-
-    state.filters[key].active = active
-  }
-}
-
-function clearFilter(state: StoreState) {
-  const filters = state.filters
-
-  for (const key of Object.keys(filters)) {
-    filters[key].active = null
-
-    for (const option of filters[key].options) {
-      option.active = false
-    }
-  }
-}
-
-function handleCheck(state: StoreState, getters: StoreGetters, key: Key, checked: boolean) {
-  const { dataMap } = state
-  const { disableCheckRows } = getters
-
-  if (dataMap[key] && !disableCheckRows[key]) {
-    dataMap[key].checked = !!checked
-  }
-
-  computePartial(state)
-}
-
-function handleCheckAll(state: StoreState, getters: StoreGetters) {
-  const { rowData, checkedAll } = state
-  const { disableCheckRows } = getters
-
-  let checked = !checkedAll
-
-  // 阻断 disabled 元素对全选的影响
-  if (Object.keys(disableCheckRows).length) {
-    // 由于被禁用的元素不可被操作，如果存在被禁用的元素且该状态为未被选中，则全选时仍然是 partial 状态
-    // 假设除了禁用的元素，其余元素均为选中状态（此时对于用户来说属于已经全选，点击的期望是取消全选）
-    let partialCheckedAll = true
-
-    for (const row of rowData) {
-      // 检查是否存在非禁用的且未被选中的元素（如有则证明现在不是全选，用户点击的期望是进行全选）
-      if (!disableCheckRows[row.key] && !row.checked) {
-        partialCheckedAll = false
-
-        break
-      }
-    }
-
-    checked = !partialCheckedAll
-  }
-
-  for (const row of rowData) {
-    if (!disableCheckRows[row.key]) {
-      row.checked = checked
-    }
-  }
-
-  state.checkedAll = checked
-  state.partial = false
-
-  computePartial(state)
-}
-
-function clearCheckAll(state: StoreState, getters: StoreGetters) {
-  const { rowData } = state
-  const { disableCheckRows } = getters
-
-  for (const row of rowData) {
-    if (!disableCheckRows[row.key]) {
-      row.checked = false
-    }
-  }
-
-  state.checkedAll = false
-  state.partial = false
-
-  computePartial(state)
-}
-
-function computePartial(state: StoreState) {
-  const data = state.rowData
-
-  let hasChecked = false
-  let hasNotChecked = false
-  let partial = false
-
-  for (let i = 0, len = data.length; i < len; ++i) {
-    const row = data[i]
-
-    if (row.checked) {
-      hasChecked = true
-    } else {
-      hasNotChecked = true
-    }
-
-    if (hasChecked && hasNotChecked) {
-      partial = true
-
-      break
-    }
-  }
-
-  if (hasChecked && !partial) {
-    state.checkedAll = true
-  } else {
-    state.checkedAll = false
-  }
-
-  state.partial = partial
-}
-
-function setRenderRows(state: StoreState, getters: StoreGetters, start: number, end: number) {
-  const { startRow, endRow, heightBITree, virtualData } = state
-
-  if (start === startRow && end === endRow) return
-
-  const { processedData } = getters
-  virtualData.length = 0
-
-  if (processedData[0]) {
-    let i = processedData.length
-
-    while (i--) {
-      const data = processedData[i]
-
-      data.hidden = !(i >= start && i < end)
-      !data.hidden && virtualData.push(data)
-    }
-
-    virtualData.reverse()
-
-    state.padTop = heightBITree?.sum(start) ?? 0
-    state.startRow = start
-    state.endRow = end
-  }
-}
-
-function handleExpand(state: StoreState, getters: StoreGetters, key: Key, expanded: boolean) {
-  const { dataMap } = state
-  const { disableExpandRows } = getters
-
-  if (dataMap[key] && !disableExpandRows[key]) {
-    dataMap[key].expanded = !!expanded
-  }
-}
-
-function toggleFilterItemActive(
-  state: StoreState,
-  options: { key: Key, value: number | string | null, active?: boolean, disableOthers?: boolean }
-) {
-  const { key, value, active = false, disableOthers = false } = options
-
-  if (state.filters[key]) {
-    const filterOptions = state.filters[key].options
-
-    if (disableOthers) {
-      for (let i = 0, len = filterOptions.length; i < len; ++i) {
-        filterOptions[i].active = false
-      }
-    }
-
-    const item = filterOptions.find(item => item.value === value)
-
-    if (item) {
-      item.active = active
-    }
-  }
-}
-
-function refreshRowIndex(state: StoreState) {
-  const data = state.rowData
-
-  for (let i = 0, len = data.length; i < len; ++i) {
-    data[i].index = i
-  }
-}
-
-function updateTotalHeight(state: StoreState) {
-  const { heightBITree, currentPage, pageSize, rowData } = state
-
-  if (heightBITree) {
-    if (currentPage && pageSize > 0 && pageSize < rowData.length) {
-      state.totalHeight =
-        heightBITree.sum(currentPage * pageSize) - heightBITree.sum((currentPage - 1) * pageSize)
-    } else {
-      state.totalHeight = heightBITree.sum() ?? 0
-    }
-  } else {
-    state.totalHeight = 0
-  }
-}
-
-function parseSorter(sorter: boolean | SorterOptions = false): ParsedSorterOptions {
-  const raw = typeof sorter === 'boolean' ? { able: sorter } : sorter
-  const { able = false, type = null, order = 0, method = null } = raw
-
-  return { able, type, order, method }
-}
-
-function parseFilter(filter: FilterOptions = { able: false, options: [] }): ParsedFilterOptions {
-  const { able = false, multiple = false, active = null, method = null } = filter
-  // 防止内部变化触发 deep watch
-  const options = deepClone(filter.options ?? [])
-  const formattedOptions = []
-
-  for (let i = 0, len = options.length; i < len; ++i) {
-    const item = options[i]
-    const option = typeof item === 'string' ? { value: item } : { ...item }
-
-    option.label = option.label ?? option.value.toString()
-
-    let isActive = false
-
-    if (multiple && Array.isArray(active)) {
-      isActive = active.includes(option.value)
-    } else if (!isNull(active)) {
-      isActive = Object.is(option.value, active)
-    }
-
-    option.active = isActive
-
-    formattedOptions.push(option as { value: string | number, label: string, active: boolean })
-  }
-
-  return { able, options: formattedOptions, multiple, active, method }
-}
-
-function filterData(
-  filters: Record<Key, ParsedFilterOptions>,
-  data: RowState[],
-  isSingle: boolean
-) {
-  const keys = Object.keys(filters)
-  const usedFilter: ParsedFilterOptions[] = []
-  const filterData: RowState[] = []
-
-  for (let i = 0, len = keys.length; i < len; ++i) {
-    const key = keys[i]
-    const filter = filters[key]
-    const { able, active, method } = filter
-
-    if (able && active && typeof method === 'function') {
-      usedFilter.push(filter)
-
-      if (isSingle) break
-    }
-  }
-
-  const usedFilterCount = usedFilter.length
-
-  for (let i = 0, len = data.length; i < len; ++i) {
-    const row = data[i]
-
-    let isFilter = true
-
-    for (let j = 0; j < usedFilterCount; j++) {
-      const { active, method } = usedFilter[j]
-
-      isFilter = method!(active! as any, row.data)
-
-      if (!isFilter) {
-        break
-      }
-    }
-
-    if (isFilter) {
-      filterData.push(row)
-    }
-  }
-
-  return filterData
-}
-
-function sortData(
-  sorters: Record<Key, ParsedSorterOptions>,
-  data: RowState[],
-  columns: TableColumnOptions[],
-  isSingle: boolean
-) {
-  const keys = Object.keys(sorters)
-  const usedSorter = []
-
-  for (let i = 0, len = keys.length; i < len; ++i) {
-    const key = keys[i] as keyof RowState
-    const { able, type, order, method } = sorters[key]
-
-    if (able && type) {
-      const column = columns.find(item => item.key === key)
-      const accessor = column?.accessor
-
-      usedSorter.push({
-        able,
-        key,
-        order,
-        type,
-        method: method ?? undefined,
-        accessor(row: RowState) {
-          if (typeof accessor === 'function') {
-            return accessor(row.data, row.index)
-          }
-
-          return row.data[key]
-        }
-      })
-
-      if (isSingle) break
-    }
-  }
-
-  // 多列排序优先级
-  usedSorter.sort((prev, next) => prev.order - next.order)
-
-  return sortByProps(data, usedSorter)
-}
-
-function pageData(currentPage: number, pageSize: number, data: RowState[]) {
-  return data.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-}

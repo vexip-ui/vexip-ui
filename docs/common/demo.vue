@@ -67,9 +67,7 @@
     <CollapseTransition>
       <Column v-show="codeExpanded" :class="`${prefix}__code`">
         <div :class="`language-${lang}`">
-          <slot name="code">
-            <pre :class="`language-${lang}`" :lang="lang"><code ref="codeRef"></code></pre>
-          </slot>
+          <pre :class="`language-${lang}`" :lang="lang"><code ref="codeRef"></code></pre>
           <span v-if="codeLines > 0" class="code-line-numbers">
             <span v-for="n in codeLines" :key="n"></span>
           </span>
@@ -86,11 +84,12 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots, ref, watch, onMounted } from 'vue'
+import { ref, watchEffect, onMounted } from 'vue'
 import { Message } from 'vexip-ui'
 import { CopyR, PenToSquareR, PaperPlaneR, Code, ChevronUp } from '@vexip-ui/icons'
 import { useI18n } from 'vue-i18n'
 import { highlight, languages } from 'prismjs'
+import { transformDemoCode } from './demo-prefix'
 import { usePlayground } from './playground'
 
 import type { PropType } from 'vue'
@@ -136,7 +135,6 @@ const props = defineProps({
     default: null
   }
 })
-const slots = useSlots()
 
 const { t } = useI18n({ useScope: 'global' })
 
@@ -147,32 +145,23 @@ const codeLines = ref(props.lines)
 const wrapper = ref<InstanceType<typeof Row>>()
 const codeRef = ref<HTMLElement>()
 
-watch(() => props.code, renderCodes)
+watchEffect(() => {
+  if (!codeRef.value || !props.code) return
+
+  const code = transformDemoCode(props.code)
+  const lang = getCodeLang(props.lang.toLowerCase())
+
+  if (languages[lang]) {
+    codeLines.value = code.split('\n').length - 1
+    codeRef.value.innerHTML = highlight(code, languages[lang], lang)
+  }
+})
 
 onMounted(() => {
-  if (props.code && !slots.code && codeRef.value) {
-    const lang = getCodeLang(props.lang.toLowerCase())
-
-    if (languages[lang]) {
-      codeRef.value.innerHTML = highlight(props.code, languages[lang], lang)
-    }
-  }
-
   if (typeof props.onMounted === 'function') {
     props.onMounted()
   }
 })
-
-function renderCodes() {
-  if (props.code && !slots.code && codeRef.value) {
-    const lang = getCodeLang(props.lang.toLowerCase())
-
-    if (languages[lang]) {
-      codeLines.value = props.code.split('\n').length - 1
-      codeRef.value.innerHTML = highlight(props.code, languages[lang], lang)
-    }
-  }
-}
 
 function expandCodes() {
   codeExpanded.value = !codeExpanded.value
@@ -218,6 +207,7 @@ function editInGithub() {
 }
 
 function editOnPlayground() {
+  // should use the original code
   if (props.code) {
     const { link } = usePlayground(props.code)
 

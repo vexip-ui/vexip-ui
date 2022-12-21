@@ -10,6 +10,8 @@ export const timelineProps = buildProps({
   dashed: booleanProp,
   lineColor: String,
   spacing: [Number, String],
+  flip: booleanProp,
+  horizontal: booleanProp,
   onSignalClick: eventProp<(label: string | number) => void>()
 })
 

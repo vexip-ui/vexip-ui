@@ -1,37 +1,33 @@
 <template>
-  <Header
-    :store="store"
-    :ssr="ssrMode"
-    :versions="versions"
-    @toggle-ssr="toggleSSR"
-  ></Header>
-  <Repl
-    show-compile-output
-    auto-resize
-    :clear-console="false"
-    :store="store"
-    :ssr="ssrMode"
-    :sfc-options="sfcOptions"
-  ></Repl>
+  <template v-if="!loading">
+    <Header :store="store" :versions="versions"></Header>
+    <Repl
+      show-compile-output
+      auto-resize
+      :clear-console="false"
+      :show-import-map="false"
+      :store="store"
+      :sfc-options="sfcOptions"
+      @keydown="handleKeyDown"
+    ></Repl>
+  </template>
 </template>
 
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { Repl } from '@vue/repl'
 import Header from './components/header.vue'
-import { ReplStore } from './store'
+import { useReplStore } from './store'
+import { prettierCode } from './format'
 
-const ssrMode = ref(false)
+const versions = parseVersions()
+const hash = location.hash.slice(1)
+const loading = ref(true)
 
-let hash = location.hash.slice(1)
-
-if (hash.startsWith('__SSR__')) {
-  hash = hash.slice(7)
-  ssrMode.value = true
-}
-
-const versions = getSearch()
-const store = new ReplStore({ serializedState: hash, versions })
+const store = useReplStore({
+  serializedState: hash,
+  versions
+})
 
 // enable experimental features
 const sfcOptions = {
@@ -41,33 +37,35 @@ const sfcOptions = {
   }
 }
 
-// persist state
-watchEffect(() => {
-  const newHash = store.serialize().replace(/^#/, ssrMode.value ? '#__SSR__' : '#')
-
-  history.replaceState({}, '', newHash)
+store.init().then(() => {
+  loading.value = false
 })
 
-function toggleSSR() {
-  ssrMode.value = !ssrMode.value
-  store.setFiles(store.getFiles())
-}
+// persist state
+watchEffect(() => history.replaceState({}, '', store.serialize()))
 
-function getSearch() {
-  if (location.search) {
-    const units = location.search.substring(1).split('&')
+function parseVersions() {
+  const search = new URLSearchParams(location.search)
+  const versions: Record<string, string> = {}
 
-    return units.reduce((prev, current) => {
-      if (current) {
-        const [key, value] = current.split('=')
-        prev[key] = value
-      }
-
-      return prev
-    }, {} as Record<string, string>)
+  for (const [name, value] of search.entries()) {
+    versions[name] = value
   }
 
-  return {}
+  return versions
+}
+
+async function handleKeyDown(event: KeyboardEvent) {
+  const { code, ctrlKey, metaKey, altKey, shiftKey } = event
+
+  if ((ctrlKey || metaKey) && code === 'KeyS') {
+    event.preventDefault()
+  } else if ((ctrlKey || metaKey || altKey) && shiftKey && code === 'KeyF') {
+    const file = store.state.activeFile
+
+    event.preventDefault()
+    file.code = await prettierCode(file.filename, file.code)
+  }
 }
 </script>
 

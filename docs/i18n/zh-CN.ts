@@ -4,9 +4,12 @@ export const zhCN = defineI18n({
   common: {
     language: '中文',
     makeInterest: '创造有趣的开发体验',
-    slogan: '高可定制化的属性值，全量的 TypeScript，性能应该还不错',
+    slogan: '高可定制化的属性值，全量的 TypeScript，性能很不错',
     getStarted: '开始使用',
     getComponents: '浏览组件',
+    changePrefix: '换个组件名前缀',
+    apply: '应用',
+    prefixChanged: '组件名前缀修改成功',
     changeColor: '换个主题色',
     rollColor: '随机一个颜色，可能很奇怪',
     resetColor: '重置主题色',
@@ -55,7 +58,9 @@ export const zhCN = defineI18n({
     Grid: '栅格布局',
     Divider: '分割线',
     Layout: '布局',
+    NativeScroll: '原生滚动',
     Row: '行布局',
+    Scroll: '滚动',
     Space: '间距',
     Split: '分割面板',
 
@@ -118,11 +123,9 @@ export const zhCN = defineI18n({
 
     ConfigProvider: '配置注入',
     Masker: '遮罩',
-    NativeScroll: '原生滚动',
     Overflow: '溢出',
     Renderer: '渲染器',
     ResizeObserver: '缩放观察',
-    Scroll: '滚动',
     Scrollbar: '滚动条',
     VirtualList: '虚拟列表'
   }

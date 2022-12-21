@@ -33,20 +33,14 @@
               :value="meta.active"
               :options="meta.versions"
               transparent
+              :loading="meta.loading"
+              @toggle="initRepoVersions(meta)"
               @change="changeVersion(pkg, $event)"
             ></Select>
           </div>
         </div>
         <div class="section">
-          <Switch
-            class="ssr-switch"
-            :value="ssr"
-            open-color="var(--vxp-color-success-base)"
-            open-text="SSR"
-            close-text="SPA"
-            @change="toggleSSR"
-          ></Switch>
-          <button class="action" title="Toggle Dark" @click="toggleDark">
+          <button class="action" :title="locale.theme" @click="toggleDark">
             <Icon v-if="isDarkTheme" :scale="1.3">
               <Moon></Moon>
             </Icon>
@@ -54,17 +48,44 @@
               <Sun></Sun>
             </Icon>
           </button>
-          <button class="action" title="Share" @click="copyLink">
+          <button class="action" :title="locale.share" @click="copyLink">
             <Icon :scale="1.3">
               <ShareNodes></ShareNodes>
             </Icon>
           </button>
-          <button class="action" title="Download" @click="download">
+          <button class="action" :title="locale.download" @click="download">
             <Icon :scale="1.3">
               <Download></Download>
             </Icon>
           </button>
-          <button class="action" title="Reset" @click="reset">
+          <button class="action" :title="locale.format" @click="formatCodes">
+            <Icon :scale="1.3">
+              <CheckDouble></CheckDouble>
+            </Icon>
+          </button>
+          <Dropdown v-model:visible="cdnPanelVisible" class="action" trigger="click">
+            <button class="action" :title="locale.cdn" style="margin-right: 0;">
+              <Icon :scale="1.3">
+                <Rocket></Rocket>
+              </Icon>
+            </button>
+            <template #drop>
+              <DropdownList class="cdn-panel">
+                <RadioGroup v-model:value="currentCdn" vertical size="small">
+                  <Radio v-for="cdn in cdnOptions" :key="cdn" :label="cdn"></Radio>
+                </RadioGroup>
+                <Button
+                  type="primary"
+                  size="small"
+                  style="margin-top: 6px;"
+                  @click="applyCdn"
+                >
+                  {{ locale.apply }}
+                </Button>
+              </DropdownList>
+            </template>
+          </Dropdown>
+          <button class="action" :title="locale.reset" @click="reset">
             <Icon :scale="1.3">
               <ArrowRotateLeft></ArrowRotateLeft>
             </Icon>
@@ -88,10 +109,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { Confirm, Message } from 'vexip-ui'
-import { Gear, Moon, Sun, ShareNodes, Download, ArrowRotateLeft, GithubB } from '@vexip-ui/icons'
+import {
+  Gear,
+  Moon,
+  Sun,
+  ShareNodes,
+  Download,
+  Rocket,
+  CheckDouble,
+  ArrowRotateLeft,
+  GithubB
+} from '@vexip-ui/icons'
+import { cdnTemplates, getCdn, setCdn } from '../cdn'
+import { locale } from '../locale'
 import { downloadProject } from '../download/download'
+import { prettierCode } from '../format'
 
 import type { PropType } from 'vue'
 import type { ReplStore } from '../store'
@@ -101,7 +135,9 @@ interface RepoMeta {
   repo: string,
   name: string,
   versions: string[],
-  active: string
+  active: string,
+  loading: boolean,
+  loaded: boolean
 }
 
 const props = defineProps({
@@ -109,17 +145,11 @@ const props = defineProps({
     type: Object as PropType<ReplStore>,
     required: true
   },
-  ssr: {
-    type: Boolean,
-    default: false
-  },
   versions: {
     type: Object as PropType<Record<string, string>>,
     default: () => ({})
   }
 })
-
-const emit = defineEmits(['toggle-ssr'])
 
 const isDarkTheme = ref(document.documentElement.classList.contains('dark'))
 const libVersion = `Repl@${__REPL_VERSION__}`
@@ -128,7 +158,7 @@ const computedStyle = getComputedStyle(document.documentElement)
 const media = computedStyle.getPropertyValue('--vxp-break-point-lg').trim()
 const query = matchMedia(`only screen and ${media}`)
 
-const transferTo = ref(query!.matches ? '' : '#setting')
+const transferTo = ref('')
 const settingActive = ref(false)
 
 query.addEventListener('change', () => {
@@ -142,29 +172,50 @@ const repoMeta: Record<string, RepoMeta> = reactive({
     repo: 'vexip-ui',
     name: 'Vexip UI',
     versions: [props.versions['vexip-ui'] || __VERSION__],
-    active: props.versions['vexip-ui'] || __VERSION__
+    active: props.versions['vexip-ui'] || __VERSION__,
+    loading: false,
+    loaded: false
   },
   vue: {
     owner: 'vuejs',
     repo: 'core',
     name: 'Vue',
     versions: [props.versions.vue || __VUE_VERSION__],
-    active: props.versions.vue || __VUE_VERSION__
+    active: props.versions.vue || __VUE_VERSION__,
+    loading: false,
+    loaded: false
   }
 })
 
-initRepoVersions()
+const versions = computed(() => {
+  const versions: Record<string, string> = {}
+
+  for (const pkg of Object.keys(repoMeta)) {
+    versions[pkg] = repoMeta[pkg].active
+  }
+
+  return versions
+})
+
+const cdnOptions = Object.keys(cdnTemplates)
+const cdnPanelVisible = ref(false)
+const currentCdn = ref(getCdn())
 
 onMounted(() => {
   window.addEventListener('blur', handleWindowBlur)
+
+  requestAnimationFrame(() => {
+    transferTo.value = query!.matches ? '' : '#setting'
+  })
 })
 
-async function initRepoVersions() {
-  Promise.all(
-    Object.values(repoMeta).map(async meta => {
-      meta.versions = await fetchVersions(meta.owner, meta.repo)
-    })
-  )
+async function initRepoVersions(meta: RepoMeta) {
+  if (!meta.loaded) {
+    meta.loading = true
+    meta.versions = await fetchVersions(meta.owner, meta.repo)
+    meta.loaded = true
+    meta.loading = false
+  }
 }
 
 async function fetchVersions(owner: string, repo: string, maxCount = 15) {
@@ -185,10 +236,6 @@ function handleWindowBlur() {
   }
 }
 
-function toggleSSR() {
-  emit('toggle-ssr')
-}
-
 function toggleDark() {
   const cls = document.documentElement.classList
   cls.toggle('dark')
@@ -206,10 +253,10 @@ async function copyLink() {
 
 async function download() {
   const result = await Confirm.open({
-    content: 'Download project files?',
+    content: locale.doDownload,
     confirmType: 'primary',
-    confirmText: 'Download',
-    cancelText: 'Cancel'
+    confirmText: locale.download,
+    cancelText: locale.cancel
   })
 
   if (result) {
@@ -224,30 +271,33 @@ function reset() {
 function changeVersion(pkg: string, version: string) {
   repoMeta[pkg].active = version
 
-  const versions = getVersions()
-
-  props.store.setVersions(versions)
-  history.replaceState({}, '', `${buildSearch(versions)}${location.hash}`)
+  props.store.setVersions(versions.value)
+  history.replaceState({}, '', `${buildSearch()}${location.hash}`)
 }
 
-function getVersions() {
-  const versions: Record<string, string> = {}
-
-  for (const pkg of Object.keys(repoMeta)) {
-    versions[pkg] = repoMeta[pkg].active
-  }
-
-  return versions
+function applyCdn() {
+  cdnPanelVisible.value = false
+  setCdn(currentCdn.value)
 }
 
-function buildSearch(search: Record<string, string>) {
-  if (Object.keys(search).length) {
-    return `?${Object.entries(search)
+function buildSearch() {
+  if (Object.keys(versions.value).length) {
+    return `?${Object.entries(versions.value)
       .map(([key, value]) => `${key}=${value}`)
       .join('&')}`
   }
 
   return ''
+}
+
+async function formatCodes() {
+  const files = props.store.state.files
+
+  for (const file of Object.values(files)) {
+    if (!file.hidden) {
+      file.code = await prettierCode(file.filename, file.code)
+    }
+  }
 }
 </script>
 
@@ -346,6 +396,18 @@ function buildSearch(search: Record<string, string>) {
 
   .vxp-column {
     height: 100%;
+  }
+}
+
+.cdn-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 16px 12px;
+
+  .vxp-radio {
+    width: 100%;
+    padding: 6px 0;
+    margin: 0;
   }
 }
 

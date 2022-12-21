@@ -8,15 +8,26 @@
   @include basis;
   @include input.handler;
 
-  @at-root {
-    & {
-      padding-right: calc(get-css-var('input-v-padding') + 20px);
-    }
-  }
+  padding-right: calc(get-css-var('input-h-padding') + 20px);
+
+  // @at-root {
+  //   & {
+  //     padding-right: calc(get-css-var('input-h-padding') + 20px);
+
+  //     &--action-left {
+  //       padding: get-css-var('input-h-padding');
+  //       padding-left: calc(get-css-var('input-h-padding') + 20px);
+  //     }
+
+  //     &--action-none {
+  //       padding: get-css-var('input-h-padding');
+  //     }
+  //   }
+  // }
 
   &__clear,
   &__loading {
-    right: calc(get-css-var('input-v-padding') + 20px);
+    right: calc(get-css-var('input-h-padding') + 20px);
   }
 
   &__plus,
@@ -56,8 +67,81 @@
     border-top-width: 1px;
   }
 
-  // &__icon--suffix,
-  // &__clear {
-  //   right: 20px;
-  // }
+  $focused: #{&}--focused;
+  $clear: #{&}__clear;
+  $loading: #{&}__loading;
+  $plus: #{&}__plus;
+  $minus: #{&}__minus;
+
+  $padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
+
+  &--control-fade {
+    padding: $padding;
+    transition:
+      padding get-css-var('transition-base'),
+      get-css-var('transition-background'),
+      get-css-var('transition-border'),
+      get-css-var('transition-shadow');
+
+    #{$plus},
+    #{$minus} {
+      opacity: 0%;
+      transition: get-css-var('transition-color'), get-css-var('transition-opacity');
+    }
+
+    &:hover,
+    &:focus,
+    &#{$focused} {
+      padding-right: calc(get-css-var('input-h-padding') + 20px);
+
+      #{$plus},
+      #{$minus} {
+        opacity: 100%;
+      }
+    }
+  }
+
+  &--control-left {
+    padding: $padding;
+    padding-left: calc(get-css-var('input-h-padding') + 20px);
+
+    #{$clear},
+    #{$loading} {
+      right: auto;
+      left: calc(get-css-var('input-h-padding') + 20px);
+    }
+
+    #{$plus},
+    #{$minus} {
+      right: auto;
+      left: 0;
+      border-right-width: get-css-var('border-width');
+      border-left-width: 0;
+    }
+  }
+
+  &--control-left#{&}--control-fade {
+    padding: $padding;
+
+    &:hover,
+    &:focus,
+    &#{$focused} {
+      padding-left: calc(get-css-var('input-h-padding') + 20px);
+    }
+  }
+
+  &--control-none {
+    padding: $padding;
+
+    #{$clear},
+    #{$loading} {
+      right: auto;
+      left: auto;
+    }
+
+    #{$plus},
+    #{$minus} {
+      display: none;
+    }
+  }
 }

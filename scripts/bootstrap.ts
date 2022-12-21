@@ -81,7 +81,7 @@ async function main() {
     {
       components: [
         ${exportComponents.map(name => `"${toCapitalCase(name)}"`).join(',\n')},
-        ${typography.map(name => `"${name}"`).join(',\n')}
+        ${typography.map(name => `"${toCapitalCase(name)}"`).join(',\n')}
       ],
       styleAlias: {
         ${typography.map(name => `"${toCapitalCase(name)}": "Typography"`)}
@@ -92,31 +92,66 @@ async function main() {
     }
   `
 
+  const demoPrefix = `
+    import { ref } from 'vue'
+    import { toCapitalCase } from '@vexip-ui/utils'
+
+    const components = [
+      ${components.map(name => `'${toCapitalCase(name)}'`).join(',\n')},
+      ${typography.map(name => `'${toCapitalCase(name)}'`).join(',\n')},
+    ]
+
+    const prefixKey = 'vexip-docs-prefer-demo-prefix'
+    const prefix = ref(localStorage.getItem(prefixKey) || '')
+
+    const templateRE = /<template>[\\s\\S]*<\\/template>/
+    const replaceRE = new RegExp(\`(\${components.join('|')})\`, 'g')
+
+    export function getDemoPrefix() {
+      return prefix.value
+    }
+
+    export function setDemoPrefix(value: string) {
+      prefix.value = value
+      localStorage.setItem(prefixKey, prefix.value)
+    }
+
+    export function transformDemoCode(code: string) {
+      return code.replace(templateRE, s => s.replace(replaceRE, \`\${toCapitalCase(prefix.value)}$1\`))
+    }
+  `
+
   const eslint = new ESLint({ fix: true })
   const indexPath = resolve(rootDir, 'components/index.ts')
   const typesPath = resolve(rootDir, 'types.d.ts')
   const metaDataPath = resolve(rootDir, 'meta-data.json')
+  const demoPrefixPath = resolve(rootDir, 'docs/common/demo-prefix.ts')
 
   await writeFile(
     indexPath,
     prettier.format(index, { ...prettierConfig, parser: 'typescript' }),
     'utf-8'
   )
-
   await writeFile(
     typesPath,
     prettier.format(types, { ...prettierConfig, parser: 'typescript' }),
     'utf-8'
   )
-
   await writeFile(
     metaDataPath,
     prettier.format(metaData, { ...prettierConfig, parser: 'json' }),
     'utf-8'
   )
+  await writeFile(
+    demoPrefixPath,
+    prettier.format(demoPrefix, { ...prettierConfig, parser: 'typescript' }),
+    'utf-8'
+  )
 
   await ESLint.outputFixes(await eslint.lintFiles(indexPath))
   await ESLint.outputFixes(await eslint.lintFiles(typesPath))
+  await ESLint.outputFixes(await eslint.lintFiles(metaDataPath))
+  await ESLint.outputFixes(await eslint.lintFiles(demoPrefixPath))
 
   await Promise.all(
     allComponents

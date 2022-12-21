@@ -1,7 +1,6 @@
 <template>
   <Select v-model:value="value" :options="options"></Select>
-  <br />
-  <br />
+  <p>当前值：{{ value }}</p>
   <Select placeholder="空选项"></Select>
 </template>
 

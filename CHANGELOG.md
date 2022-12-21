@@ -1,3 +1,48 @@
+## [2.0.19](https://github.com/vexip-ui/vexip-ui/compare/v2.0.18...v2.0.19) (2022-12-19)
+
+### Bug Fixes
+
+- **cascader:** ensure effective max-tag-count ([4d1e6c4](https://github.com/vexip-ui/vexip-ui/commit/4d1e6c4ddc542a676c7b64f71b6f0a617f981b22))
+- **hooks:** improve intersection count record ([2d2f360](https://github.com/vexip-ui/vexip-ui/commit/2d2f360ba3401d82b81f1952edce5faf7c22ca3d))
+- **overflow:** counter not hidden when max count equals to items count ([f4c3540](https://github.com/vexip-ui/vexip-ui/commit/f4c3540f38a9a593454570f6c9533756c5785e0d))
+- **select:** cannot re-select option in multiple mode ([c124596](https://github.com/vexip-ui/vexip-ui/commit/c1245964e39240ffd4611feafc71dd839ed08e31))
+- **skeleton:** attrs cannot be set ([69ee0d1](https://github.com/vexip-ui/vexip-ui/commit/69ee0d1382e4def9e0b485391d95c0b061b723ff))
+- **table:** height not correct when filter with row height set ([ca84f12](https://github.com/vexip-ui/vexip-ui/commit/ca84f12d489114691897182b16ec4f5658ec6c87))
+- **virtual-list:** items element height not refresh ([d3c0944](https://github.com/vexip-ui/vexip-ui/commit/d3c0944c0b7b03fce26db2c78f7ad25a44a78957))
+
+### Features
+
+- **overflow:** add max-count prop ([f982420](https://github.com/vexip-ui/vexip-ui/commit/f9824208a7a670d413b57b10c37745929c4529f4))
+- **overflow:** support add suffix content via slot ([6754072](https://github.com/vexip-ui/vexip-ui/commit/6754072803653c7b2654931425a44426d93022e3))
+- **playground:** support format codes via prettier ([5ff663c](https://github.com/vexip-ui/vexip-ui/commit/5ff663cda3963534fec687c06ed28a12803d4e0e))
+- **playground:** support select cdn address ([8d70fd6](https://github.com/vexip-ui/vexip-ui/commit/8d70fd686bafc8468a03320fc9e46ead549b5e7a))
+
+## [2.0.18](https://github.com/vexip-ui/vexip-ui/compare/v2.0.17...v2.0.18) (2022-12-09)
+
+### Bug Fixes
+
+- **input:** null value will be transformed to string null ([33f10e6](https://github.com/vexip-ui/vexip-ui/commit/33f10e6118bec2092aa2279ab86234bdd07ddee2))
+- **style:** color should not auto inherit ([e896107](https://github.com/vexip-ui/vexip-ui/commit/e8961077f188cb59c6e93cc302af850bf0001b09))
+
+### Features
+
+- **timeline:** support flip item content ([c605012](https://github.com/vexip-ui/vexip-ui/commit/c6050128a234e2317777223c8ca57a6200afba39))
+- **timeline:** support horizontal line ([210a3a5](https://github.com/vexip-ui/vexip-ui/commit/210a3a546d1d4f32524d1835f99cd2222c13a54b)), closes [#195](https://github.com/vexip-ui/vexip-ui/issues/195)
+
+## [2.0.17](https://github.com/vexip-ui/vexip-ui/compare/v2.0.16...v2.0.17) (2022-12-07)
+
+### Bug Fixes
+
+- **input:** ensure focus when click input area ([a0b7ff8](https://github.com/vexip-ui/vexip-ui/commit/a0b7ff86afad948e27eb4892a46f2fa9db342308))
+- **playground:** compiler version should follow vue version ([51715cd](https://github.com/vexip-ui/vexip-ui/commit/51715cd64816df81aa8da9fb88b814293dab3c6b))
+- **select:** space down should not enter the input ([670a68e](https://github.com/vexip-ui/vexip-ui/commit/670a68e1b4d60d3bdd4d20f3fd5380f84150daa4))
+- **table:** should assign row data when set new data ([2518203](https://github.com/vexip-ui/vexip-ui/commit/2518203c45bd9c91b29a562d7857574bdd87270f))
+
+### Features
+
+- **input:** support number type value ([a145079](https://github.com/vexip-ui/vexip-ui/commit/a145079863786edc94ecc3657273c48dded14729))
+- **number:** add control-type prop ([1a588ac](https://github.com/vexip-ui/vexip-ui/commit/1a588ac2ed3bdcf5ad5474c39cad831019c53485))
+
 ## [2.0.16](https://github.com/vexip-ui/vexip-ui/compare/v2.0.15...v2.0.16) (2022-12-01)
 
 ### Bug Fixes

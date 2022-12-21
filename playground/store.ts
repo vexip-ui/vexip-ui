@@ -1,13 +1,15 @@
-import { reactive, watchEffect } from 'vue'
+import { shallowRef, reactive, computed, watch, watchEffect } from 'vue'
 import { Confirm } from 'vexip-ui'
 import { zlibSync, unzlibSync, strToU8, strFromU8 } from 'fflate'
-import * as defaultCompiler from 'vue/compiler-sfc'
 import { File, compileFile } from '@vue/repl'
-import mainCode from './templates/main.vue?raw'
+import { getCdnUrl } from './cdn'
+import { locale } from './locale'
+
+import mainCode from './templates/main.js?raw'
 import appCode from './templates/app.vue?raw'
 import themeCode from './templates/theme.vue?raw'
 
-import type { Store, StoreOptions, StoreState, SFCOptions, OutputModes } from '@vue/repl'
+import type { Store, StoreOptions, StoreState } from '@vue/repl'
 
 type ReplOptions = Omit<StoreOptions, 'defaultVueRuntimeURL' | 'defaultVueServerRendererURL'> & {
   versions?: Record<string, string>
@@ -18,14 +20,15 @@ interface PathMeta {
   path: string
 }
 
-const mainFile = 'Main.vue'
+interface ImportMap {
+  imports?: Record<string, string>,
+  scopes?: Record<string, string>
+}
+
+const mainFile = 'main.js'
 const appFile = 'App.vue'
 const themeFile = 'ThemeSwitch.vue'
-
-const inertnalFiles: Record<string, string> = {
-  [mainFile]: mainCode.replace('__VEXIP_UI_STYLE__', getUnpkgUrl('vexip-ui', 'dist/style.css')),
-  [themeFile]: themeCode
-}
+const importsFile = 'imports.json'
 
 const pkgPathMap: Record<string, string | PathMeta> = {
   vue: 'dist/vue.runtime.esm-browser.js',
@@ -39,64 +42,11 @@ const pkgPathMap: Record<string, string | PathMeta> = {
     path: 'dist/style.css'
   },
   '@vexip-ui/icons': 'dist/index.mjs',
-  '@vexip-ui/utils': 'dist/index.mjs',
-  'vue-router': 'dist/vue-router.esm-browser.js'
+  '@vexip-ui/utils': 'dist/index.mjs'
 }
 
-const localeConfig = {
-  en: {
-    confirm: 'Are you sure you want to delete #{0}?',
-    ok: 'Delete',
-    cancel: 'Cancel'
-  },
-  zh: {
-    confirm: '确定要删除 #{0} 吗？',
-    ok: '删除',
-    cancel: '取消'
-  }
-}
-
-type Language = keyof typeof localeConfig
-
-let defaultLanguage = (
-  typeof navigator !== 'undefined' ? navigator.language.split('-')[0] : 'en'
-) as Language
-
-if (!localeConfig[defaultLanguage]) {
-  defaultLanguage = 'en'
-}
-
-function getUnpkgUrl(pkg: string, path: string, version?: string) {
-  if (!version || version === 'latest') {
-    return `https://unpkg.com/${pkg}/${path}`
-  }
-
-  return `https://unpkg.com/${pkg}@${version}/${path}`
-}
-
-function buildImportMap(versions: Record<string, string> = {}) {
-  const importMap: Record<string, string> = {}
-
-  for (const name of Object.keys(pkgPathMap)) {
-    const meta = pkgPathMap[name]
-
-    let pkg = ''
-    let path = ''
-
-    if (typeof meta === 'string') {
-      pkg = name
-      path = meta
-    } else {
-      pkg = meta.pkg
-      path = meta.path
-    }
-
-    if (!pkg || !path) continue
-
-    importMap[name] = getUnpkgUrl(pkg, path, versions[pkg] || 'latest')
-  }
-
-  return importMap
+const inertnalFiles: Record<string, string> = {
+  [themeFile]: themeCode
 }
 
 function utoa(data: string): string {
@@ -123,225 +73,219 @@ function atou(base64: string): string {
   return decodeURIComponent(escape(binary))
 }
 
-export class ReplStore implements Store {
-  state: StoreState
-  compiler = defaultCompiler
-  options?: SFCOptions
-  initialShowOutput: boolean
-  initialOutputMode: OutputModes
-  language = defaultLanguage
-  versions: Record<string, string>
+export function useReplStore(options: ReplOptions = {}) {
+  options = {
+    serializedState: '',
+    showOutput: false,
+    outputMode: 'preview',
+    versions: {},
+    ...options
+  }
 
-  constructor({
-    serializedState = '',
-    showOutput = false,
-    outputMode = 'preview',
-    versions = {}
-  }: ReplOptions = {}) {
-    const files: StoreState['files'] = {}
+  const versions = reactive({ ...options.versions })
+  const compiler = shallowRef<typeof import('vue/compiler-sfc')>()
 
-    if (serializedState) {
-      const saved = JSON.parse(atou(serializedState))
+  const files: StoreState['files'] = {}
 
-      for (const filename of Object.keys(saved)) {
-        files[filename] = new File(filename, saved[filename])
+  if (options.serializedState) {
+    const saved = JSON.parse(atou(options.serializedState))
+
+    for (const filename of Object.keys(saved)) {
+      files[filename] = new File(filename, saved[filename])
+    }
+  } else {
+    files[appFile] = new File(appFile, appCode)
+  }
+
+  for (const filename of Object.keys(inertnalFiles)) {
+    files[filename] = new File(filename, inertnalFiles[filename], true)
+  }
+
+  if (!files[importsFile]) {
+    files[importsFile] = new File(importsFile, JSON.stringify({ imports: {} }, undefined, 2) + '\n')
+  }
+
+  const state = reactive<StoreState>({
+    mainFile,
+    files,
+    activeFile: files[appFile],
+    errors: [],
+    resetFlip: false,
+    vueRuntimeURL: '',
+    vueServerRendererURL: ''
+  })
+
+  const customImports = computed(() => {
+    const code = state.files[importsFile]?.code.trim()
+    let map: ImportMap = {}
+
+    if (!code) return map
+
+    try {
+      map = JSON.parse(code)
+    } catch (e) {
+      console.error(e)
+    }
+
+    return map
+  })
+  const importMap = computed(() => {
+    return <ImportMap>{
+      imports: {
+        ...buildImportMap(versions),
+        ...(customImports.value.imports || {})
+      },
+      scopes: customImports.value.scopes
+    }
+  })
+
+  const store = reactive({
+    state,
+    compiler,
+    initialShowOutput: options.showOutput,
+    initialOutputMode: options.outputMode,
+    init,
+    setActive,
+    addFile,
+    deleteFile,
+    getImportMap
+  } as any as Store)
+
+  watch(
+    importMap,
+    value => {
+      state.files['import-map.json'] = new File(
+        'import-map.json',
+        JSON.stringify(value, null, 2),
+        true
+      )
+    },
+    { immediate: true, deep: true }
+  )
+  watch(
+    () => versions['vexip-ui'],
+    () => {
+      state.files[mainFile] = new File(
+        mainFile,
+        mainCode.replace(
+          '__VEXIP_UI_STYLE__',
+          getCdnUrl('vexip-ui', 'dist/style.css', versions['vexip-ui'])
+        ),
+        true
+      )
+
+      compiler.value && compileFile(store, state.files[mainFile])
+    },
+    { immediate: true, deep: true }
+  )
+
+  function buildImportMap(versions: Record<string, string> = {}) {
+    const importMap: Record<string, string> = {}
+
+    for (const name of Object.keys(pkgPathMap)) {
+      const meta = pkgPathMap[name]
+
+      let pkg = ''
+      let path = ''
+
+      if (typeof meta === 'string') {
+        pkg = name
+        path = meta
+      } else {
+        pkg = meta.pkg
+        path = meta.path
       }
-    } else {
-      files[appFile] = new File(appFile, appCode)
+
+      if (!pkg || !path) continue
+
+      importMap[name] = getCdnUrl(pkg, path, versions[pkg] || 'latest')
     }
 
-    for (const filename of Object.keys(inertnalFiles)) {
-      files[filename] = new File(filename, inertnalFiles[filename], true)
-    }
-
-    this.initialShowOutput = showOutput
-    this.initialOutputMode = outputMode as OutputModes
-    this.versions = { ...versions }
-
-    this.state = reactive({
-      mainFile,
-      files,
-      activeFile: files[appFile],
-      errors: [],
-      resetFlip: true,
-      vueRuntimeURL: '',
-      vueServerRendererURL: ''
-    })
-
-    this.state.mainFile = mainFile
-
-    this.initImportMap()
+    return importMap
   }
 
-  init() {
-    watchEffect(() => compileFile(this, this.state.activeFile))
+  async function loadCompiler(version?: string) {
+    const compilerUrl = getCdnUrl('@vue/compiler-sfc', 'dist/compiler-sfc.esm-browser.js', version)
 
-    for (const file of Object.keys(this.state.files)) {
-      compileFile(this, this.state.files[file])
+    compiler.value = await import(/* @vite-ignore */ compilerUrl)
+  }
+
+  async function init() {
+    if (!compiler.value) {
+      await loadCompiler()
+      watchEffect(() => compileFile(store, state.activeFile))
+    }
+
+    for (const file of Object.values(state.files)) {
+      compileFile(store, file)
     }
   }
 
-  setActive(filename: string) {
+  function setActive(filename: string) {
     if (!inertnalFiles[filename]) {
-      this.state.activeFile = this.state.files[filename]
+      state.activeFile = state.files[filename]
     }
   }
 
-  addFile(fileOrFilename: string | File): void {
+  function addFile(fileOrFilename: string | File): void {
     const file = typeof fileOrFilename === 'string' ? new File(fileOrFilename) : fileOrFilename
-    this.state.files[file.filename] = file
+    state.files[file.filename] = file
 
-    if (!file.hidden) this.setActive(file.filename)
+    if (!file.hidden) setActive(file.filename)
   }
 
-  deleteFile(filename: string) {
-    const { confirm, ok, cancel } = localeConfig[this.language]
+  function deleteFile(filename: string) {
+    const { doDelete, del, cancel } = locale
 
     Confirm.open({
-      content: confirm.replace('#{0}', filename),
+      content: doDelete.replace('#{0}', filename),
       confirmType: 'error',
-      confirmText: ok,
+      confirmText: del,
       cancelText: cancel
     }).then(isConfirm => {
       if (!isConfirm) return
 
-      if (this.state.activeFile.filename === filename) {
-        this.state.activeFile = this.state.files[this.state.mainFile]
+      if (state.activeFile.filename === filename) {
+        state.activeFile = state.files[appFile]
       }
 
-      delete this.state.files[filename]
+      delete state.files[filename]
     })
   }
 
-  serialize() {
-    return '#' + utoa(JSON.stringify(this.getFiles()))
+  function serialize() {
+    return '#' + utoa(JSON.stringify(getFiles()))
   }
 
-  getFiles() {
+  function getFiles() {
     const exported: Record<string, string> = {}
 
-    for (const filename of Object.keys(this.state.files)) {
+    for (const filename of Object.keys(state.files)) {
       if (!inertnalFiles[filename]) {
-        exported[filename] = this.state.files[filename].code
+        exported[filename] = state.files[filename].code
       }
     }
 
     return exported
   }
 
-  async setFiles(newFiles: Record<string, string>) {
-    const newFileNames = Object.keys(newFiles)
-    const files: Record<string, File> = {}
-
-    for (const filename of newFileNames) {
-      files[filename] = new File(filename, newFiles[filename])
-    }
-
-    for (const filename of Object.keys(inertnalFiles)) {
-      files[filename] = new File(filename, inertnalFiles[filename], true)
-    }
-
-    for (const file in files) {
-      await compileFile(this, files[file])
-    }
-
-    this.state.mainFile = mainFile
-    this.state.files = files
-
-    if (!newFileNames.includes(this.state.activeFile.filename)) {
-      this.setActive(mainFile)
-    }
-
-    this.initImportMap()
-    this.forceSandboxReset()
+  function getImportMap() {
+    return importMap.value
   }
 
-  private forceSandboxReset() {
-    this.state.resetFlip = !this.state.resetFlip
+  async function setVersions(newVersions: Record<string, string>) {
+    Object.assign(versions, newVersions)
   }
 
-  private initImportMap() {
-    const defaultMap = buildImportMap(this.versions)
-    const map = this.state.files['import-map.json']
+  return {
+    ...store,
 
-    if (!map) {
-      this.state.files['import-map.json'] = new File(
-        'import-map.json',
-        JSON.stringify(
-          {
-            imports: defaultMap
-          },
-          null,
-          2
-        )
-      )
-    } else {
-      try {
-        const json = JSON.parse(map.code)
-
-        for (const name of Object.keys(defaultMap)) {
-          if (!json.imports[name]) {
-            json.imports[name] = defaultMap[name]
-          }
-        }
-
-        map.code = JSON.stringify(json, null, 2)
-      } catch (e) {}
-    }
-  }
-
-  getImportMap() {
-    try {
-      return JSON.parse(this.state.files['import-map.json'].code)
-    } catch (e) {
-      this.state.errors = [`Syntax error in import-map.json: ${(e as Error).message}`]
-      return {}
-    }
-  }
-
-  setImportMap(map: {
-    imports: Record<string, string>,
-    scopes?: Record<string, Record<string, string>>
-  }) {
-    this.state.files['import-map.json']!.code = JSON.stringify(map, null, 2)
-  }
-
-  async setVersions(versions: Record<string, string>) {
-    if (versions.vue && versions.vue !== this.versions.vue) {
-      const compilerUrl = getUnpkgUrl(
-        '@vue/compiler-sfc',
-        'dist/compiler-sfc.esm-browser.js',
-        versions.vue
-      )
-
-      this.compiler = await import(/* @vite-ignore */ compilerUrl)
-    }
-
-    if (versions['vexip-ui'] && versions['vexip-ui'] !== this.versions['vexip-ui']) {
-      const styleUrl = getUnpkgUrl('vexip-ui', 'dist/style.css', versions['vexip-ui'])
-
-      this.state.files[mainFile].code = mainCode.replace('__VEXIP_UI_STYLE__', styleUrl)
-    }
-
-    this.versions = { ...versions }
-
-    this.setImportMap({ imports: buildImportMap(this.versions) })
-    this.forceSandboxReset()
-  }
-
-  resetVersions() {
-    this.versions = {}
-    this.compiler = defaultCompiler
-    this.state.files[mainFile].code = mainCode.replace(
-      '__VEXIP_UI_STYLE__',
-      getUnpkgUrl('vexip-ui', 'dist/style.css')
-    )
-
-    this.setImportMap({ imports: buildImportMap(this.versions) })
-    this.forceSandboxReset()
-  }
-
-  setLanguage(language: Language) {
-    this.language = localeConfig[language] ? language : this.language
+    versions,
+    init,
+    serialize,
+    getFiles,
+    setVersions
   }
 }
+
+export type ReplStore = ReturnType<typeof useReplStore>

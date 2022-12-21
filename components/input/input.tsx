@@ -20,6 +20,10 @@ type InputEventType = 'input' | 'change'
 
 const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
 
+function toNotNullString(value: any) {
+  return isNull(value) ? '' : String(value)
+}
+
 export default defineComponent({
   name: 'Input',
   components: {
@@ -38,7 +42,7 @@ export default defineComponent({
       clearField,
       getFieldValue,
       setFieldValue
-    } = useFieldStore<string>(() => inputControl.value?.focus())
+    } = useFieldStore<string | number>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
       size: createSizeProp(size),
@@ -80,11 +84,13 @@ export default defineComponent({
       sync: false
     })
 
+    const initValue = toNotNullString(props.value)
+
     const nh = useNameHelper('input')
     const focused = ref(false)
-    const currentValue = ref(props.value)
+    const currentValue = ref(initValue)
     const showPassword = ref(false)
-    const currentLength = ref(props.value ? props.value.length : 0)
+    const currentLength = ref(initValue.length)
     const beforeHover = ref(false)
     const afterHover = ref(false)
 
@@ -152,7 +158,7 @@ export default defineComponent({
     })
     const formattedValue = computed(() => {
       return typeof props.formatter === 'function'
-        ? props.formatter(currentValue.value)
+        ? toNotNullString(props.formatter(currentValue.value))
         : currentValue.value
     })
     const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
@@ -167,8 +173,9 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValue.value = value
-        lastValue = value
+        currentValue.value = toNotNullString(value)
+        limitValueLength()
+        lastValue = currentValue.value
       }
     )
 
@@ -223,23 +230,26 @@ export default defineComponent({
     function emitChangeEvent(type: InputEventType) {
       type = type === 'input' ? 'input' : 'change'
 
+      const value =
+        typeof props.value === 'number' ? parseFloat(currentValue.value) : currentValue.value
+
       if (type === 'change') {
-        if (lastValue === currentValue.value) return
+        if (lastValue === value) return
 
-        lastValue = currentValue.value
+        lastValue = value
 
-        setFieldValue(currentValue.value)
-        emitEvent(props.onChange, currentValue.value)
+        setFieldValue(value)
+        emitEvent(props.onChange, value)
 
         if (!props.sync) {
-          emit('update:value', currentValue.value)
+          emit('update:value', value)
           validateField()
         }
       } else {
-        emitEvent(props.onInput, currentValue.value)
+        emitEvent(props.onInput, value)
 
         if (props.sync) {
-          emit('update:value', currentValue.value)
+          emit('update:value', value)
           validateField()
         }
       }
@@ -417,7 +427,12 @@ export default defineComponent({
 
     function renderControl() {
       return (
-        <div id={idFor.value} ref={control} class={className.value}>
+        <div
+          id={idFor.value}
+          ref={control}
+          class={className.value}
+          onClick={() => inputControl.value?.focus()}
+        >
           {hasPrefix.value && renderPrefix()}
           <input
             ref={inputControl}
