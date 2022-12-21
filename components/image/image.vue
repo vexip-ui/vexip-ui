@@ -14,11 +14,15 @@
         v-bind="skeletonProps"
       ></Skeleton>
       <template v-else>
-        {{ props.placeholder || locale.placeholder }}
+        <span :class="nh.be('placeholder')">
+          {{ props.placeholder || locale.placeholder }}
+        </span>
       </template>
     </slot>
     <slot v-else-if="showError" name="error">
-      {{ props.errorTip || props.alt || locale.error }}
+      <span :class="nh.be('error')">
+        {{ props.errorTip || props.alt || locale.error }}
+      </span>
     </slot>
     <img
       v-if="shouldLoad && !showError"
@@ -29,6 +33,7 @@
       :width="props.width || undefined"
       :height="props.height || undefined"
       :loading="imageLoading"
+      :aria-label="props.alt"
       @load="handleLoad"
       @error="handleError"
       @click="handlePreview"

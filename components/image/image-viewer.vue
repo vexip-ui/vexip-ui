@@ -129,12 +129,16 @@ export default defineComponent({
     }
 
     function handlePrev() {
+      if (prevDisabled.value) return
+
       currentIndex.value--
       verifyIndex()
       emitEvent(props.onPrev, currentIndex.value, srcList.value[currentIndex.value])
     }
 
     function handleNext() {
+      if (nextDisabled.value) return
+
       currentIndex.value++
       verifyIndex()
       emitEvent(props.onNext, currentIndex.value, srcList.value[currentIndex.value])

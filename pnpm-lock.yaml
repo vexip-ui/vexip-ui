@@ -81,9 +81,9 @@ importers:
       '@types/prompts': 2.4.1
       '@types/semver': 7.3.13
       '@vexip-ui/commitlint-config': 0.1.0
-      '@vexip-ui/eslint-config': 0.5.1_wyqvi574yv7oiwfeinomdzmc3m
+      '@vexip-ui/eslint-config': 0.5.1_typescript@4.8.4
       '@vexip-ui/prettier-config': 0.1.0_prettier@2.7.1
-      '@vexip-ui/stylelint-config': 0.1.1_stylelint@14.14.1
+      '@vexip-ui/stylelint-config': 0.1.1
       '@vitejs/plugin-vue': 2.3.3_vite@2.9.14+vue@3.2.41
       '@vitejs/plugin-vue-jsx': 1.3.10
       '@vitest/coverage-c8': 0.24.5_stdbuzg2wqwledx5f7rpaqqvte
@@ -1774,10 +1774,8 @@ packages:
       '@commitlint/config-conventional': 17.2.0
     dev: true
 
-  /@vexip-ui/eslint-config/0.5.1_wyqvi574yv7oiwfeinomdzmc3m:
+  /@vexip-ui/eslint-config/0.5.1_typescript@4.8.4:
     resolution: {integrity: sha512-mid65O8/T9mMreBG4ajSD45Xi2pGJtf5KjTZzJwnleXp44DDMgw3eLLHOM7UyIzJerHrgX0FpgfQdSZdQDaPog==}
-    peerDependencies:
-      eslint: '>=8.0.0'
     dependencies:
       '@typescript-eslint/eslint-plugin': 5.42.0_6xw5wg2354iw4zujk2f3vyfrzu
       '@typescript-eslint/parser': 5.42.0_wyqvi574yv7oiwfeinomdzmc3m
@@ -1811,10 +1809,8 @@ packages:
       prettier: 2.7.1
     dev: true
 
-  /@vexip-ui/stylelint-config/0.1.1_stylelint@14.14.1:
+  /@vexip-ui/stylelint-config/0.1.1:
     resolution: {integrity: sha512-dFG2zhyZ+2MUXKf3jg/aGU7lyllOWhnqcpWVFyoh96DBd9VbLeTKZcN0GucvpjQy4hR9GgrzhKycfwcm5iYP0g==}
-    peerDependencies:
-      stylelint: '>=14.0.0'
     dependencies:
       postcss: 8.4.18
       postcss-html: 1.5.0
@@ -1826,6 +1822,8 @@ packages:
       stylelint-config-standard: 28.0.0_stylelint@14.14.1
       stylelint-config-standard-scss: 5.0.0_t5qxeji2l54punp3pwjdchi3we
       stylelint-order: 5.0.0_stylelint@14.14.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@vitejs/plugin-vue-jsx/1.3.10:
@@ -3108,8 +3106,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      JSONStream: 1.3.5
       is-text-path: 1.0.1
+      JSONStream: 1.3.5
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
