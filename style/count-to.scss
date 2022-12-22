@@ -1,0 +1,14 @@
+@use 'sass:map';
+
+@use './design' as *;
+
+$count-to: () !default;
+$count-to: map.merge((), $count-to);
+
+.#{$namespace}-count-to {
+  &-vars {
+    @include define-preset-values('count-to', $count-to);
+  }
+
+  @include basis;
+}
