@@ -121,8 +121,7 @@ export default defineComponent({
     Button,
     Icon,
     Modal,
-    Renderer,
-    Xmark
+    Renderer
   },
   props: confirmProps,
   setup(_props) {
