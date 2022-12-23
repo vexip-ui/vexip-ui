@@ -40,7 +40,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('count-to')
-    const className = computed(() => [nh.b()])
+    const className = computed(() => [nh.b(), nh.bs('vars')])
 
     const state = reactive({
       localStart: props.start,

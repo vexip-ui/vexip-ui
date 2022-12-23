@@ -1,3 +1,3 @@
-### Basis Usage
+### Usage
 
-Simplest usage.
+Custom usage.
