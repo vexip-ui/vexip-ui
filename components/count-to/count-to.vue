@@ -5,12 +5,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, reactive, onUnmounted } from 'vue'
+import { defineComponent, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 import { countToProps } from '@/components/count-to/props'
-import { countToEasingFnUtils } from '@/components/count-to/utils'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { isNumber } from '@vexip-ui/utils'
-import type { EasingFn } from '@/components/count-to/props'
+import { countToEasingFn } from './symbol'
 
 export default defineComponent({
   name: 'CountTo',
@@ -19,24 +18,17 @@ export default defineComponent({
     const props = useProps('countTo', _props, {
       start: 0,
       end: 0,
-      autoplay: true,
+      manual: false,
       duration: 3000,
       decimal: '',
       decimals: {
         default: 0,
-        validator(value) {
-          return value >= 0
-        }
+        validator: value => value >= 0
       },
       separator: '',
       prefix: '',
       suffix: '',
-      useEasing: true,
-      easingFn: {
-        default(): EasingFn {
-          return countToEasingFnUtils.linear
-        }
-      }
+      timing: 'linear'
     })
 
     const nh = useNameHelper('count-to')
@@ -54,17 +46,18 @@ export default defineComponent({
       rAF: 0
     })
 
-    const stopCount = computed(() => {
-      return props.start > props.end
+    const stopCount = computed(() => props.start > props.end)
+    const timingFn = computed(() => {
+      return typeof props.timing === 'string' ? countToEasingFn[props.timing] : props.timing
     })
 
     onMounted(() => {
-      if (props.autoplay) {
+      if (!props.manual) {
         start()
       }
     })
 
-    onUnmounted(() => {
+    onBeforeUnmount(() => {
       cancelAnimationFrame(state.rAF)
     })
 
@@ -75,6 +68,7 @@ export default defineComponent({
       let x1 = x[0]
       const x2 = x.length > 1 ? props.decimal + x[1] : ''
       const rgx = /(\d+)(\d{3})/
+
       if (props.separator && !isNumber(props.separator)) {
         while (rgx.test(x1)) {
           x1 = x1.replace(rgx, '$1' + props.separator + '$2')
@@ -88,31 +82,23 @@ export default defineComponent({
       if (!state.startTime) {
         state.startTime = timestamp
       }
-      state.timestamp = timestamp
+
       const progress = timestamp - state.startTime
+
+      state.timestamp = timestamp
       state.remaining = state.localDuration - progress
 
-      if (props.useEasing) {
-        if (stopCount.value) {
-          state.printVal =
-            state.localStart -
-            props.easingFn(progress, 0, state.localStart - props.end, state.localDuration)
-        } else {
-          state.printVal = props.easingFn(
-            progress,
-            state.localStart,
-            props.end - state.localStart,
-            state.localDuration
-          )
-        }
+      if (stopCount.value) {
+        state.printVal =
+          state.localStart -
+          timingFn.value(progress, 0, state.localStart - props.end, state.localDuration)
       } else {
-        if (stopCount.value) {
-          state.printVal =
-            state.localStart - (state.localStart - props.end) * (progress / state.localDuration)
-        } else {
-          state.printVal =
-            state.localStart + (props.end - state.localStart) * (progress / state.localDuration)
-        }
+        state.printVal = timingFn.value(
+          progress,
+          state.localStart,
+          props.end - state.localStart,
+          state.localDuration
+        )
       }
 
       if (stopCount.value) {
@@ -120,7 +106,9 @@ export default defineComponent({
       } else {
         state.printVal = state.printVal > props.end ? props.end : state.printVal
       }
+
       state.displayValue = formatCountToNumber(state.printVal)
+
       if (progress < state.localDuration) {
         state.rAF = requestAnimationFrame(count)
       }

@@ -1,63 +1,67 @@
 <template>
-  <Space class="root">
-    <CountTo
-      ref="countTo"
-      v-bind="inputForm"
-      :autoplay="true"
-      :use-easing="true"
-      :easing-fn="easingFn"
-      class="count-to"
-    ></CountTo>
-
-    <Space class="form">
-      <template v-for="(item, key) in inputForm" :key="key">
-        <Space>
-          <label style="width: 50px;">{{ key }}</label>
-          <Input v-model:value="inputForm[key]" :placeholder="key"></Input>
-        </Space>
-      </template>
-    </Space>
-
-    <Space>
-      <Button type="primary" @click="start">
-        start
-      </Button>
-      <Button type="primary" @click="pause">
-        pause
-      </Button>
-      <Button type="primary" @click="resume">
-        continue
-      </Button>
-      <Button type="primary" @click="toggle">
-        toggle
-      </Button>
-    </Space>
-
-    <p>过渡函数</p>
-    <Select v-model:value="selectedEasingFn" :options="options"></Select>
+  <Space vertical>
+    <CountTo ref="countTo" class="count-to" v-bind="propsModel"></CountTo>
+    <Form :model="propsModel" style="max-width: 300px;">
+      <FormItem prop="start" label="start">
+        <NumberInput></NumberInput>
+      </FormItem>
+      <FormItem prop="end" label="end">
+        <NumberInput></NumberInput>
+      </FormItem>
+      <FormItem prop="duration" label="duration">
+        <NumberInput></NumberInput>
+      </FormItem>
+      <FormItem prop="decimals" label="decimals">
+        <NumberInput></NumberInput>
+      </FormItem>
+      <FormItem prop="separator" label="separator">
+        <Input></Input>
+      </FormItem>
+      <FormItem prop="prefix" label="prefix">
+        <Input></Input>
+      </FormItem>
+      <FormItem prop="suffix" label="suffix">
+        <Input></Input>
+      </FormItem>
+      <FormItem prop="timing" label="timing">
+        <Select :options="timingOptions"></Select>
+      </FormItem>
+      <FormItem action>
+        <Button type="primary" @click="start">
+          Start
+        </Button>
+        <Button type="primary" @click="pause">
+          Pause
+        </Button>
+        <Button type="primary" @click="resume">
+          Continue
+        </Button>
+        <Button type="primary" @click="toggle">
+          Toggle
+        </Button>
+      </FormItem>
+    </Form>
   </Space>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
-import { CountTo, countToEasingFnUtils, type CountToProps } from 'vexip-ui'
+import { ref, reactive } from 'vue'
 
-type Key = keyof typeof countToEasingFnUtils
+import type { CountTo, CountToTimingName } from 'vexip-ui'
 
 const countTo = ref<InstanceType<typeof CountTo>>()
 
-const options = computed(() => Object.entries(countToEasingFnUtils).map(([key]) => key))
-const selectedEasingFn = ref<Key>(countToEasingFnUtils.easeOut.name as Key)
-const easingFn = computed(() => countToEasingFnUtils[selectedEasingFn.value])
+const timingOptions: CountToTimingName[] = ['linear', 'easeOut']
 
-const inputForm = reactive<Partial<CountToProps>>({
+const propsModel = reactive({
   start: 0,
   end: 2022.1224,
   duration: 3000,
   decimals: 4,
   separator: ',',
-  prefix: '$',
-  suffix: " wow! I'm a rich man!"
+  prefix: '¥',
+  suffix: 'RMB',
+  timing: timingOptions[0]
 })
 
 function start() {
@@ -78,18 +82,8 @@ function toggle() {
 </script>
 
 <style scoped>
-.root {
-  display: flex;
-  flex-direction: column;
-}
-
 .count-to {
   font-size: 2.5rem;
-  color: #f6416c;
-}
-
-.form {
-  display: flex;
-  width: 300px;
+  color: var(--vxp-color-error-base);
 }
 </style>
