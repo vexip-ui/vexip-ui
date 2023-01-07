@@ -11,14 +11,7 @@ import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
 
 import type { Ref } from 'vue'
-import type {
-  UploadListType,
-  HttpError,
-  SourceFile,
-  FileState,
-  FileOptions,
-  DirectoryEntity
-} from './symbol'
+import type { HttpError, SourceFile, FileState, FileOptions, DirectoryEntity } from './symbol'
 
 function getDefaultFileState(): FileState {
   return {
@@ -101,8 +94,8 @@ export default defineComponent({
       },
       selectToAdd: false,
       listType: {
-        default: 'name' as UploadListType,
-        validator: (value: UploadListType) => uploadListTypes.includes(value)
+        default: 'name',
+        validator: value => uploadListTypes.includes(value)
       },
       block: false,
       loadingText: null,
@@ -765,7 +758,7 @@ export default defineComponent({
             item: slots.item,
             icon: slots.icon,
             suffix: () =>
-              props.image && (!props.maxSize || renderFiles.value.length < props.maxSize)
+              props.image && (!props.countLimit || renderFiles.value.length < props.countLimit)
                 ? renderControl()
                 : null
           }}
