@@ -152,7 +152,7 @@ interface TableHeadPayload {
 | 名称            | 类型                                                     | 说明                                                         | 默认值         | 始于    |
 | --------------- | -------------------------------------------------------- | ------------------------------------------------------------ | -------------- | ------- |
 | columns         | `TableColumnOptions<any, any>[]`                         | 表格列的配置，参考下方的 TableColumn 属性                    | `[]`           | -       |
-| data            | `Record<string, unknown>[]`                              | 表格的数据源                                                 | `[]`           | -       |
+| data            | `Data[]`                                                 | 表格的数据源                                                 | `[]`           | -       |
 | data-key        | `string`                                                 | 数据源的索引字段，该字段的值需要在数据源中唯一               | `'id'`         | -       |
 | width           | `number`                                                 | 表格的宽度，在有固定列时使用                                 | `null`         | -       |
 | height          | `number`                                                 | 表格的高度，超出这个高度时会变成可滚动状态                   | `null`         | -       |
@@ -232,20 +232,28 @@ interface TableHeadPayload {
 
 ### TableColumn 属性
 
-| 名称          | 类型                                   | 说明                                                                         | 默认值  | 始于 |
-| ------------- | -------------------------------------- | ---------------------------------------------------------------------------- | ------- | ---- |
-| name          | `string`                               | 列的名称                                                                     | `''`    | -    |
-| key \| id-key | `string \| number`                     | 列的唯一索引，使用模版列时请使用 `id-key` 代替                               | `''`    | -    |
-| accessor      | `(data: any, rowIndex: number) => any` | 该列的数据读取方法，接收行数据和行位置索引，若不定义这按索引值从行数据上读取 | `null`  | -    |
-| fixed         | `boolean \| 'left' \| 'right'`         | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧           | `false` | -    |
-| className     | `string \| Record<string, boolean>`    | 该列单元格的自定义类名                                                       | `null`  | -    |
-| type          | `'order' \| 'selection' \| 'expand'`   | 设置内置特定类型列                                                           | `null`  | -    |
-| width         | `number`                               | 设置列宽                                                                     | `null`  | -    |
-| filter        | `FilterOptions<any, any>`              | 列的过滤配置器                                                               | `null`  | -    |
-| sorter        | `boolean \| SorterOptions<any>`        | 列的排序排序器                                                               | `null`  | -    |
-| order         | `number`                               | 列的渲染顺序                                                                 | `0`     | -    |
-| renderer      | `ColumnRenderFn`                       | 自定义渲染函数                                                               | `null`  | -    |
-| head-renderer | `HeadRenderFn`                         | 自定义头部渲染函数                                                           | `null`  | -    |
+| 名称          | 类型                                   | 说明                                                                         | 默认值      | 始于    |
+| ------------- | -------------------------------------- | ---------------------------------------------------------------------------- | ----------- | ------- |
+| name          | `string`                               | 列的名称                                                                     | `''`        | -       |
+| key \| id-key | `string \| number`                     | 列的唯一索引，使用模版列时请使用 `id-key` 代替                               | `''`        | -       |
+| accessor      | `(data: any, rowIndex: number) => any` | 该列的数据读取方法，接收行数据和行位置索引，若不定义这按索引值从行数据上读取 | `null`      | -       |
+| fixed         | `boolean \| 'left' \| 'right'`         | 是否为固定列，可选值为 `left`、`right`，设置为 `true` 时固定在左侧           | `false`     | -       |
+| class-name    | `string \| Record<string, boolean>`    | 该列单元格的自定义类名                                                       | `null`      | -       |
+| style         | `StyleType`                            | 列的自定义样式                                                               | `null`      | `2.0.1` |
+| attrs         | `Record<string, any>`                  | 列的自定义属性                                                               | `null`      | `2.0.1` |
+| type          | `'order' \| 'selection' \| 'expand'`   | 设置内置特定类型列                                                           | `null`      | -       |
+| width         | `number`                               | 设置列宽                                                                     | `null`      | -       |
+| filter        | `FilterOptions<any, any>`              | 列的过滤配置器                                                               | `null`      | -       |
+| sorter        | `boolean \| SorterOptions<any>`        | 列的排序排序器                                                               | `null`      | -       |
+| order         | `number`                               | 列的渲染顺序                                                                 | `0`         | -       |
+| renderer      | `ColumnRenderFn`                       | 自定义渲染函数                                                               | `null`      | -       |
+| head-renderer | `HeadRenderFn`                         | 自定义头部渲染函数                                                           | `null`      | -       |
+| no-ellipsis   | `boolean`                              | 是否禁用单元格的省略组件                                                     | `false`     | -       |
+| checkbox-size | `'small' \| 'default' \| 'large'`      | 当 `type` 为 `'selection'` 时设置复选框大小                                  | `'default'` | -       |
+| disable-row   | `(data: Data) => boolean`              | 设置禁用行的回调函数                                                         | `null`      | -       |
+| truth-index   | `boolean`                              | 当 `type` 为 `'order'` 时设置是否使用行真实（全局）索引                      | `false`     | -       |
+| order-label   | `(index: number) => string \| number`  | 当 `type` 为 `'order'` 时设置索引显示内容的回调函数                          | `null`      | -       |
+| meta-data     | `Data`                                 | 设置列的元数据                                                               | `{}`        | -       |
 
 ### TableColumn 插槽
 

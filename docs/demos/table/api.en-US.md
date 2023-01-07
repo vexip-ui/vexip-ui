@@ -152,7 +152,7 @@ interface TableHeadPayload {
 | Name            | Type                                                     | Description                                                                                                                                           | Default        | Since   |
 | --------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------- |
 | columns         | `TableColumnOptions<any, any>[]`                         | Table column configuration, refer to TableColumn properties below                                                                                     | `[]`           | -       |
-| data            | `Record<string, unknown>[]`                              | Table data source                                                                                                                                     | `[]`           | -       |
+| data            | `Data[]`                                                 | Table data source                                                                                                                                     | `[]`           | -       |
 | data-key        | `string`                                                 | The index field of the data source, the value of this field needs to be unique in the data source                                                     | `'id'`         | -       |
 | width           | `number`                                                 | The width of the table, used when there are fixed columns                                                                                             | `null`         | -       |
 | height          | `number`                                                 | The height of the table, beyond which it will become scrollable                                                                                       | `null`         | -       |
@@ -232,20 +232,28 @@ interface TableHeadPayload {
 
 ### TableColumn Props
 
-| Name          | Type                                   | Description                                                                                                                                  | Default | Since |
-| ------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
-| name          | `string`                               | The name of the column                                                                                                                       | `''`    | -     |
-| key \| id-key | `string \| number`                     | Unique index of the column, use `id-key` instead of                                                                                          | `''`    | -     |
-| accessor      | `(data: any, rowIndex: number) => any` | The data read method of this column, receiving row data and row position index, if not defined, it will be read from row data by index value | `null`  | -     |
-| fixed         | `boolean \| 'left' \| 'right'`         | Whether it is a fixed column, optional values ​​are `left`, `right`, when set to `true`, it is fixed on the left                             | `false` | -     |
-| className     | `string \| Record<string, boolean>`    | Custom class name for the cell in this column                                                                                                | `null`  | -     |
-| type          | `'order' \| 'selection' \| 'expand'`   | Set built-in type of the column                                                                                                              | `null`  | -     |
-| width         | `number`                               | set column width                                                                                                                             | `null`  | -     |
-| filter        | `FilterOptions<any, any>`              | Configure filter for the column                                                                                                              | `null`  | -     |
-| sorter        | `boolean \| SorterOptions<any>`        | Configure the sorter for the column                                                                                                          | `null`  | -     |
-| order         | `number`                               | The rendering order of the column                                                                                                            | `0`     | -     |
-| renderer      | `ColumnRenderFn`                       | Custom render function                                                                                                                       | `null`  | -     |
-| head-renderer | `HeadRenderFn`                         | Custom head render function                                                                                                                  | `null`  | -     |
+| Name          | Type                                   | Description                                                                                                                                  | Default     | Since   |
+| ------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------- |
+| name          | `string`                               | The name of the column                                                                                                                       | `''`        | -       |
+| key \| id-key | `string \| number`                     | Unique index of the column, use `id-key` instead of                                                                                          | `''`        | -       |
+| accessor      | `(data: any, rowIndex: number) => any` | The data read method of this column, receiving row data and row position index, if not defined, it will be read from row data by index value | `null`      | -       |
+| fixed         | `boolean \| 'left' \| 'right'`         | Whether it is a fixed column, optional values ​​are `left`, `right`, when set to `true`, it is fixed on the left                             | `false`     | -       |
+| class-name    | `string \| Record<string, boolean>`    | Custom class name for the cell in this column                                                                                                | `null`      | -       |
+| style         | `StyleType`                            | Custom style for the column                                                                                                                  | `null`      | `2.0.1` |
+| attrs         | `Record<string, any>`                  | Custom attributes for the column                                                                                                             | `null`      | `2.0.1` |
+| type          | `'order' \| 'selection' \| 'expand'`   | Set built-in type of the column                                                                                                              | `null`      | -       |
+| width         | `number`                               | Set column width                                                                                                                             | `null`      | -       |
+| filter        | `FilterOptions<any, any>`              | Configure filter for the column                                                                                                              | `null`      | -       |
+| sorter        | `boolean \| SorterOptions<any>`        | Configure the sorter for the column                                                                                                          | `null`      | -       |
+| order         | `number`                               | The rendering order of the column                                                                                                            | `0`         | -       |
+| renderer      | `ColumnRenderFn`                       | Custom render function                                                                                                                       | `null`      | -       |
+| head-renderer | `HeadRenderFn`                         | Custom head render function                                                                                                                  | `null`      | -       |
+| no-ellipsis   | `boolean`                              | Whether to disable the ellipsis component of the cell                                                                                        | `false`     | -       |
+| checkbox-size | `'small' \| 'default' \| 'large'`      | Set the checkbox size when `type` is `'selection'`                                                                                           | `'default'` | -       |
+| disable-row   | `(data: Data) => boolean`              | Set the callback function for disabled row                                                                                                   | `null`      | -       |
+| truth-index   | `boolean`                              | Set whether to use row truth (global) index when `type` is `'order'`                                                                         | `false`     | -       |
+| order-label   | `(index: number) => string \| number`  | When `type` is `'order'`, set the callback function to display the content of the order                                                      | `null`      | -       |
+| meta-data     | `Data`                                 | Set the column metadata                                                                                                                      | `{}`        | -       |
 
 ### TableColumn Slots
 
