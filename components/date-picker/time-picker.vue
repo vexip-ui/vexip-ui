@@ -407,6 +407,10 @@ export default defineComponent({
       () => props.value,
       value => {
         parseValue(value)
+
+        if (!value) {
+          toggleActivated(false)
+        }
       }
     )
     watch(() => props.format, parseFormat, { immediate: true })
