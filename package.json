@@ -14,6 +14,7 @@
     "props": "tsx scripts/props.ts",
     "serve": "tsx scripts/serve.ts",
     "serve:docs": "pnpm -C docs serve",
+    "serve:docs-ssr": "pnpm -C docs serve:ssr",
     "serve:playground": "pnpm -C playground serve",
     "serve:theme": "tsx scripts/serve.ts --theme",
     "build": "tsx scripts/build.ts",
