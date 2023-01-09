@@ -17,6 +17,7 @@ import { inputProps } from './props'
 import type { InputType } from './symbol'
 
 type InputEventType = 'input' | 'change'
+type ChangeListener = (value: string | number) => void
 
 const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
 
@@ -239,14 +240,14 @@ export default defineComponent({
         lastValue = value
 
         setFieldValue(value)
-        emitEvent(props.onChange, value)
+        emitEvent(props.onChange as ChangeListener, value)
 
         if (!props.sync) {
           emit('update:value', value)
           validateField()
         }
       } else {
-        emitEvent(props.onInput, value)
+        emitEvent(props.onInput as ChangeListener, value)
 
         if (props.sync) {
           emit('update:value', value)
