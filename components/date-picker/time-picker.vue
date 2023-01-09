@@ -181,7 +181,7 @@
                   type="primary"
                   size="small"
                   :disabled="startError || endError"
-                  @click.stop="finishInput"
+                  @click.stop="finishInput()"
                 >
                   {{ props.confirmText || locale.confirm }}
                 </Button>
@@ -304,7 +304,9 @@ export default defineComponent({
       loadingLock: false,
       loadingSpin: false,
       min: null,
-      max: null
+      max: null,
+      outsideClose: true,
+      outsideCancel: false
     })
 
     const placement = toRef(props, 'placement')
@@ -417,8 +419,6 @@ export default defineComponent({
     watch(currentVisible, value => {
       if (value) {
         updatePopper()
-      } else {
-        emitChange()
       }
 
       emitEvent(props.onToggle, value)
@@ -638,9 +638,10 @@ export default defineComponent({
       }
     }
 
-    function finishInput() {
+    function finishInput(shouldChange = true) {
       currentVisible.value = false
 
+      shouldChange && emitChange()
       startState.resetColumn()
       endState.resetColumn()
     }
@@ -745,7 +746,7 @@ export default defineComponent({
 
     function handleCancel() {
       parseValue(props.value)
-      finishInput()
+      finishInput(false)
       emitEvent(props.onCancel)
     }
 
@@ -811,8 +812,12 @@ export default defineComponent({
 
     function handleClickOutside() {
       emitEvent(props.onClickOutside)
-      finishInput()
-      handleBlur()
+
+      if (props.outsideClose && currentVisible.value) {
+        finishInput(!props.outsideCancel)
+        handleBlur()
+        emitEvent(props.onOutsideClose)
+      }
     }
 
     function handlePanelClosed() {

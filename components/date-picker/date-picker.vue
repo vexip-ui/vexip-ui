@@ -40,7 +40,7 @@
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
-          @enter="handlePaneConfirm"
+          @enter="handlePanelConfirm"
           @cancel="handleCancel"
           @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
@@ -73,7 +73,7 @@
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
-            @enter="handlePaneConfirm"
+            @enter="handlePanelConfirm"
             @cancel="handleCancel"
             @unit-focus="handleEndInput"
             @prev-unit="enterColumn('prev')"
@@ -149,7 +149,7 @@
             @change="handlePanelChange"
             @toggle-col="handleInputFocus"
             @cancel="handleCancel"
-            @confirm="handlePaneConfirm"
+            @confirm="handlePanelConfirm"
           ></DatePanel>
         </div>
       </transition>
@@ -281,7 +281,9 @@ export default defineComponent({
       loadingLock: false,
       loadingSpin: false,
       min: null,
-      max: null
+      max: null,
+      outsideClose: true,
+      outsideCancel: false
     })
 
     const placement = toRef(props, 'placement')
@@ -554,8 +556,6 @@ export default defineComponent({
     watch(currentVisible, value => {
       if (value) {
         updatePopper()
-      } else {
-        emitChange()
       }
 
       emitEvent(props.onToggle, value)
@@ -758,7 +758,7 @@ export default defineComponent({
       })
     }
 
-    function toggleActivated(value: boolean, type?: string) {
+    function toggleActivated(value: boolean, type?: 'start' | 'end') {
       const states = type ? (type === 'start' ? [startState] : [endState]) : [startState, endState]
 
       states.forEach(state => {
@@ -835,9 +835,10 @@ export default defineComponent({
       }
     }
 
-    function finishInput() {
+    function finishInput(shouldChange = true) {
       currentVisible.value = false
 
+      shouldChange && emitChange()
       startState.resetColumn('date')
       endState.resetColumn('date')
     }
@@ -951,14 +952,14 @@ export default defineComponent({
         state.dateValue[type] = prev * 10 + number
       } else {
         state.dateValue[type] = number
-        setActivated(type)
+        setActivatedTrue(type)
       }
 
       type !== 'year' && verifyValue(type)
       emitEvent(props.onInput, type, state.dateValue[type])
     }
 
-    function setActivated(type: DateTimeType) {
+    function setActivatedTrue(type: DateTimeType) {
       const activated = getCurrentState().activated
 
       if (type === 'date') {
@@ -1038,7 +1039,7 @@ export default defineComponent({
 
     function handleCancel() {
       parseValue(props.value)
-      finishInput()
+      finishInput(false)
       emitEvent(props.onCancel)
     }
 
@@ -1165,7 +1166,7 @@ export default defineComponent({
       })
     }
 
-    function handlePaneConfirm() {
+    function handlePanelConfirm() {
       if (!props.isRange) {
         handleEnter()
       } else {
@@ -1187,8 +1188,12 @@ export default defineComponent({
 
     function handleClickOutside() {
       emitEvent(props.onClickOutside)
-      finishInput()
-      handleBlur()
+
+      if (props.outsideClose && currentVisible.value) {
+        finishInput(!props.outsideCancel)
+        handleBlur()
+        emitEvent(props.onOutsideClose)
+      }
     }
 
     return {
@@ -1242,7 +1247,7 @@ export default defineComponent({
       enterColumn,
       handleStartInput,
       handleEndInput,
-      handlePaneConfirm,
+      handlePanelConfirm,
       handlePaneHide,
 
       focus: handleFocused,
