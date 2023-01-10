@@ -2,7 +2,12 @@
   <article ref="wrapper" class="article">
     <slot></slot>
     <Portal to="#toc-anchor">
-      <Anchor v-model:active="currentActive" :offset="15" bind-hash>
+      <Anchor
+        v-model:active="currentActive"
+        :offset="15"
+        bind-hash
+        :style="{ visibility: !loading ? undefined : 'hidden' }"
+      >
         <AnchorLink v-for="item in anchors" :key="item.id" :to="`#${item.id}`">
           {{ item.name }}
         </AnchorLink>
@@ -25,6 +30,10 @@ const props = defineProps({
   anchorLevel: {
     type: Number as PropType<2 | 3>,
     default: 2
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 const emit = defineEmits(['update:active'])
