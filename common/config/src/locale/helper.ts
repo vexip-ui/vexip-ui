@@ -81,7 +81,7 @@ export interface LocaleConfig {
 
   pagination: {
     page: string,
-    prePage: string,
+    perPage: string,
     prevPage: string,
     nextPage: string,
     prev: string,
