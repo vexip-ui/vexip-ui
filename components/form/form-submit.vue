@@ -23,6 +23,12 @@
     <slot>
       {{ props.label || locale.submit }}
     </slot>
+    <template v-if="$slots.icon" #icon>
+      <slot name="icon"></slot>
+    </template>
+    <template v-if="$slots.loading" #loading>
+      <slot name="loading"></slot>
+    </template>
     <button
       v-if="isNative"
       ref="submit"
