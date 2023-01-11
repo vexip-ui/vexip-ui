@@ -6,6 +6,7 @@
 $contextmenu: () !default;
 $contextmenu: map.merge(
   (
+    z-index: get-css-var('z-index-popper'),
     icon-color: get-css-var('content-color-secondary'),
     shortcut-color: get-css-var('content-color-disabled'),
     shortcut-offset: 30px
@@ -21,6 +22,7 @@ $contextmenu: map.merge(
   @include basis;
 
   position: fixed;
+  z-index: get-css-var('contextmenu-z-index');
 
   & &__item {
     position: relative;
