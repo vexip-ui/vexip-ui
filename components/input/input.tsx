@@ -422,7 +422,13 @@ export default defineComponent({
             }}
             onClick={toggleShowPassword}
           >
-            <Icon icon={passwordIcon.value}></Icon>
+            {slots.password
+              ? (
+                  slots.password({ plain: showPassword.value })
+                )
+              : (
+              <Icon icon={passwordIcon.value}></Icon>
+                )}
           </div>
         )
       }

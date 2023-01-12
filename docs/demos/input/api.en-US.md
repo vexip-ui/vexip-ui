@@ -24,7 +24,7 @@
 | max-length     | `number`                                                 | Set the maximum length of the input content, when the value is `0`, there is no limit                  | `0`         | -       |
 | before         | `string`                                                 | Set the front content of the input box                                                                 | `''`        | -       |
 | after          | `string`                                                 | Set the content after the input box                                                                    | `''`        | -       |
-| plain-password | `boolean`                                                | Set whether to show the button to toggle the visible password                                          | `false`     | -       |
+| plain-password | `boolean`                                                | Set whether to show the button to toggle show plain password                                           | `false`     | -       |
 | clearable      | `boolean`                                                | Set whether the value can be cleared                                                                   | `false`     | -       |
 | loading        | `boolean`                                                | Set whether is loading                                                                                 | `false`     | `2.0.0` |
 | loading-icon   | `Record<string, any>`                                    | Set the loading icon                                                                                   | `Spinner`   | `2.0.0` |
@@ -51,12 +51,13 @@
 
 ### Input Slots
 
-| Name          | Description                                                                                   | Parameters          | Since    |
-| ------------- | --------------------------------------------------------------------------------------------- | ------------------- | -------- |
-| prefix        | Slot for prefix content, usually a single icon                                                | -                   | -        |
-| suffix        | Slot for suffix content, usually a single icon                                                | -                   | -        |
-| before        | Slot for the before content, usually text content                                             | -                   | -        |
-| after         | Slot for the after content, usually text content                                              | -                   | -        |
-| before-action | Before button slot, which takes precedence over the `before` slot, is used to place a control | -                   | `2.0.0`  |
-| after-action  | After button slot, which takes precedence over the `after` slot, is used to place a control   | -                   | `2.0.0`  |
-| count         | Word count content slot                                                                       | `{ value: string }` | `2.0.12` |
+| Name          | Description                                                                                   | Parameters           | Since    |
+| ------------- | --------------------------------------------------------------------------------------------- | -------------------- | -------- |
+| prefix        | Slot for prefix content, usually a single icon                                                | -                    | -        |
+| suffix        | Slot for suffix content, usually a single icon                                                | -                    | -        |
+| before        | Slot for the before content, usually text content                                             | -                    | -        |
+| after         | Slot for the after content, usually text content                                              | -                    | -        |
+| before-action | Before button slot, which takes precedence over the `before` slot, is used to place a control | -                    | `2.0.0`  |
+| after-action  | After button slot, which takes precedence over the `after` slot, is used to place a control   | -                    | `2.0.0`  |
+| count         | Word count content slot                                                                       | `{ value: string }`  | `2.0.12` |
+| password      | Slot for plain password button, usually a single icon                                         | `{ plain: boolean }` | `2.0.21` |
