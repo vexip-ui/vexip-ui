@@ -6,7 +6,16 @@ import { ESLint } from 'eslint'
 import stylelint from 'stylelint'
 import minimist from 'minimist'
 import prompts from 'prompts'
-import { rootDir, prettierConfig, logger, components as allComponents, runParallel, toKebabCase, toCapitalCase, toCamelCase } from './utils'
+import {
+  rootDir,
+  prettierConfig,
+  logger,
+  components as allComponents,
+  runParallel,
+  toKebabCase,
+  toCapitalCase,
+  toCamelCase
+} from './utils'
 
 const args = minimist(process.argv.slice(2))
 const targets = args._
@@ -15,11 +24,13 @@ const eslint = new ESLint({ fix: true })
 
 async function main() {
   if (!targets.length) {
-    const name = (await prompts({
-      type: 'text',
-      name: 'component',
-      message: 'Input a component name:'
-    })).component
+    const name = (
+      await prompts({
+        type: 'text',
+        name: 'component',
+        message: 'Input a component name:'
+      })
+    ).component
 
     if (!name || allComponents.includes(name)) {
       process.exit(1)
@@ -53,9 +64,9 @@ async function main() {
 async function create(name: string) {
   if (allComponents.includes(name)) return
 
-  let kebabCaseName
-  let capitalCaseName
-  let camelCaseName
+  let kebabCaseName: string
+  let capitalCaseName: string
+  let camelCaseName: string
 
   if (name.match(/[A-Z]/)) {
     capitalCaseName = name.replace(/-/g, '')
@@ -67,14 +78,34 @@ async function create(name: string) {
     camelCaseName = toCamelCase(name)
   }
 
-  const generatedFiles = [
+  const generatedFiles: Array<{ filePath: string, source: string }> = [
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'index.ts'),
-      source: `export { default as ${capitalCaseName} } from './${kebabCaseName}.vue'\n`
+      source: `
+        export { default as ${capitalCaseName} } from './${kebabCaseName}.vue'
+        export type { ${capitalCaseName}Props, ${capitalCaseName}CProps } from './props'
+      `
     },
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'style.ts'),
       source: `import '@/style/${kebabCaseName}.scss'\n`
+    },
+    {
+      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'props.ts'),
+      source: `
+        import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+
+        import type { ExtractPropTypes } from 'vue'
+        import type { ConfigurableProps } from '@vexip-ui/config'
+
+        export const ${camelCaseName}Props = buildProps({
+          bool: booleanProp,
+          onEvent: eventProp<(bool: boolean) => void>()
+        })
+        
+        export type ${capitalCaseName}Props = ExtractPropTypes<typeof ${camelCaseName}Props>
+        export type ${capitalCaseName}CProps = ConfigurableProps<ExtractPropTypes<typeof ${camelCaseName}Props>>
+      `
     },
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, `${kebabCaseName}.vue`),
@@ -85,14 +116,12 @@ async function create(name: string) {
 
         <script lang="ts">
         import { defineComponent, computed } from 'vue'
-        import { useNameHelper, useProps, booleanProp, eventProp, emitEvent } from '@vexip-ui/config'
+        import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+        import { ${camelCaseName}Props } from './props'
 
         export default defineComponent({
           name: '${capitalCaseName}',
-          props: {
-            bool: booleanProp,
-            onEvent: eventProp<(bool: boolean) => void>()
-          },
+          props: ${camelCaseName}Props,
           emits: [],
           setup(_props) {
             const props = useProps('${camelCaseName}', _props, {
@@ -123,7 +152,13 @@ async function create(name: string) {
       `
     },
     {
-      filePath: path.resolve(rootDir, 'components', kebabCaseName, 'tests', `${kebabCaseName}.spec.tsx`),
+      filePath: path.resolve(
+        rootDir,
+        'components',
+        kebabCaseName,
+        'tests',
+        `${kebabCaseName}.spec.tsx`
+      ),
       source: `
         import { describe, it, expect } from 'vitest'
         import { mount } from '@vue/test-utils'
@@ -298,7 +333,10 @@ async function create(name: string) {
         await fs.writeFile(
           filePath,
           prettier.format(
-            source.split('\n').map(line => line.trim()).join('\n'),
+            source
+              .split('\n')
+              .map(line => line.trim())
+              .join('\n'),
             { ...prettierConfig, parser: 'markdown' }
           )
         )
@@ -332,7 +370,7 @@ async function create(name: string) {
         await ESLint.outputFixes(await eslint.lintFiles(filePath))
       }
 
-      logger.infoText(`create ${filePath}`)
+      logger.infoText(`generated ${filePath}`)
     })
   )
 }
