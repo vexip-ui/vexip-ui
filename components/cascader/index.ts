@@ -1,3 +1,7 @@
-export { default as Cascader } from './cascader.vue'
+import Cascader from './cascader.vue'
+
+export { Cascader }
+export type CascaderExposed = InstanceType<typeof Cascader>
+
 export type { CascaderProps, CascaderCProps } from './props'
 export type { CascaderKeyConfig } from './symbol'

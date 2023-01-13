@@ -1,6 +1,6 @@
-import fs from 'fs-extra'
 import path from 'node:path'
 import { cpus } from 'node:os'
+import fs from 'fs-extra'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
 import stylelint from 'stylelint'

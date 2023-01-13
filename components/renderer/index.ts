@@ -1,1 +1,4 @@
-export { default as Renderer } from './renderer'
+import Renderer from './renderer'
+
+export { Renderer }
+export type RendererExposed = InstanceType<typeof Renderer>

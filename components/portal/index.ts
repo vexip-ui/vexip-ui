@@ -1,1 +1,4 @@
-export { default as Portal } from './portal.vue'
+import Portal from './portal.vue'
+
+export { Portal }
+export type PortalExposed = InstanceType<typeof Portal>
