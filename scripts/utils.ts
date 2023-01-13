@@ -1,5 +1,13 @@
 import { resolve } from 'node:path'
-import { readdirSync, statSync, existsSync, lstatSync, rmdirSync, unlinkSync, readFileSync } from 'node:fs'
+import {
+  readdirSync,
+  statSync,
+  existsSync,
+  lstatSync,
+  rmdirSync,
+  unlinkSync,
+  readFileSync
+} from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { execa } from 'execa'
 import { bgYellow, bgCyan, bgGreen, bgRed, yellow, cyan, green, red, lightBlue } from 'kolorist'
@@ -157,7 +165,11 @@ export function fuzzyMatch(partials: string[], total: string[], includeAll = fal
   return matched
 }
 
-export function fuzzyMatchComponent(partialComponents: string[], includeAll = false, allComponents = components) {
+export function fuzzyMatchComponent(
+  partialComponents: string[],
+  includeAll = false,
+  allComponents = components
+) {
   const matched = fuzzyMatch(partialComponents, allComponents, includeAll)
 
   if (matched.length) {
@@ -168,7 +180,11 @@ export function fuzzyMatchComponent(partialComponents: string[], includeAll = fa
   }
 }
 
-export async function specifyComponent(args: ParsedArgs, allComponents = components, required = true) {
+export async function specifyComponent(
+  args: ParsedArgs,
+  allComponents = components,
+  required = true
+) {
   const matchedComponents = args._.length ? fuzzyMatchComponent(args._, true, allComponents) : ['']
 
   let component: string
@@ -179,8 +195,10 @@ export async function specifyComponent(args: ParsedArgs, allComponents = compone
         type: 'select',
         name: 'component',
         message: 'Select a component:',
-        choices: (matchedComponents.length > 1 ? matchedComponents : allComponents)
-          .map(name => ({ title: name, value: name }))
+        choices: (matchedComponents.length > 1 ? matchedComponents : allComponents).map(name => ({
+          title: name,
+          value: name
+        }))
       })
     ).component
   } else {
@@ -195,7 +213,11 @@ export async function specifyComponent(args: ParsedArgs, allComponents = compone
   return component
 }
 
-export async function runParallel<T>(maxConcurrency: number, source: T[], iteratorFn: (item: T, source: T[]) => Promise<any>) {
+export async function runParallel<T>(
+  maxConcurrency: number,
+  source: T[],
+  iteratorFn: (item: T, source: T[]) => Promise<any>
+) {
   const ret: Array<Promise<any>> = []
   const executing: Array<Promise<any>> = []
 
@@ -258,12 +280,14 @@ export async function getPackageInfo(inputPkg: string) {
     } else if (options.length === 1) {
       pkgName = options[0]
     } else {
-      pkgName = (await prompts({
-        type: 'select',
-        name: 'pkgName',
-        message: 'Select release package:',
-        choices: options.map(n => ({ title: n, value: n }))
-      })).pkgName
+      pkgName = (
+        await prompts({
+          type: 'select',
+          name: 'pkgName',
+          message: 'Select release package:',
+          choices: options.map(n => ({ title: n, value: n }))
+        })
+      ).pkgName
     }
   }
 
