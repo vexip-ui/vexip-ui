@@ -29,11 +29,11 @@ export function toKebabCase(value: string) {
  *
  * @param value 需要转换的命名
  */
-export function toCapitalCase(value: string) {
-  return (
-    value.charAt(0).toUpperCase() +
-    value.slice(1).replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))
-  )
+export function toCapitalCase<T extends string>(value: T) {
+  return (value.charAt(0).toUpperCase() +
+    value
+      .slice(1)
+      .replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))) as Capitalize<T>
 }
 
 /**
