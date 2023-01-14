@@ -285,9 +285,9 @@ export default defineComponent({
     })
     const wrapperClass = computed(() => {
       return [
-        nh.be('wrapper'),
         props.scrollAttrs?.class,
         props.scrollClass,
+        nh.be('wrapper'),
         {
           [nh.bem('wrapper', 'scrolling')]: scrolling.value,
           [nh.bem('wrapper', 'no-ready')]: !isReady.value,

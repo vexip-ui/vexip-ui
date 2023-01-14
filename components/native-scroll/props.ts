@@ -15,6 +15,7 @@ import type { ScrollPayload, BarScrollPayload } from './symbol'
 export const nativeScrollProps = buildProps({
   scrollClass: classProp,
   scrollStyle: styleProp,
+  scrollAttrs: Object as PropType<Record<string, any>>,
   mode: String as PropType<Exclude<ScrollMode, 'horizontal-exact'>>,
   width: [Number, String],
   height: [Number, String],

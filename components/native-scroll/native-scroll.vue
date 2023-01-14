@@ -11,8 +11,9 @@
       <component
         :is="props.wrapperTag || 'div'"
         ref="content"
+        v-bind="props.scrollAttrs"
         :class="wrapperClass"
-        :style="props.scrollStyle"
+        :style="[props.scrollAttrs?.style, props.scrollStyle]"
         @scroll.exact="handleScroll($event, 'vertical')"
         @scroll.shift="handleScroll($event, 'horizontal')"
       >
@@ -82,7 +83,8 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('nativeScroll', _props, {
       scrollClass: null,
-      scrollStyle: () => ({}),
+      scrollStyle: null,
+      scrollAttrs: null,
       mode: {
         default: 'vertical',
         validator: value => scrollModes.includes(value)
@@ -282,8 +284,9 @@ export default defineComponent({
     })
     const wrapperClass = computed(() => {
       return [
-        nh.be('wrapper'),
+        props.scrollAttrs?.class,
         props.scrollClass,
+        nh.be('wrapper'),
         {
           [nh.bem('wrapper', 'scrolling')]: scrolling.value,
           [nh.bem('wrapper', 'using-bar')]: usingBar.value
