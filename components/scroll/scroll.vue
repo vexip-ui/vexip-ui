@@ -82,6 +82,7 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('scroll', _props, {
       scrollClass: null,
+      scrollStyle: null,
       scrollAttrs: null,
       mode: {
         default: 'vertical',
@@ -285,8 +286,8 @@ export default defineComponent({
     const wrapperClass = computed(() => {
       return [
         nh.be('wrapper'),
-        props.scrollClass,
         props.scrollAttrs?.class,
+        props.scrollClass,
         {
           [nh.bem('wrapper', 'scrolling')]: scrolling.value,
           [nh.bem('wrapper', 'no-ready')]: !isReady.value,
@@ -298,6 +299,7 @@ export default defineComponent({
     const wrapperStyle = computed(() => {
       return [
         props.scrollAttrs?.style,
+        props.scrollStyle,
         {
           transform: `translate3d(${currentScroll.x}px, ${currentScroll.y}px, 0)`,
           transitionDuration:
