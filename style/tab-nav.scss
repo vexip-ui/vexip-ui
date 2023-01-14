@@ -40,19 +40,30 @@ $tab-nav: map.merge(
 
   position: relative;
   display: flex;
+  align-items: stretch;
   background-color: transparent;
   outline: 0;
 
   &--right,
   &--left {
     display: inline-flex;
+    flex-direction: column;
+  }
+
+  &__scroll {
+    display: flex;
+  }
+
+  &--right &__scroll,
+  &--left &__scroll {
+    display: inline-flex;
+    flex-direction: column;
   }
 
   &__list {
-    display: flex;
+    position: relative;
+    display: flex !important;
     flex-direction: row;
-    width: 100%;
-    height: 100%;
     padding: 0;
     margin: 0;
     list-style: none;
@@ -93,11 +104,13 @@ $tab-nav: map.merge(
     padding: get-css-var('tab-nav-v-padding') get-css-var('tab-nav-h-padding');
   }
 
-  &__prefix {
+  &--top &__prefix,
+  &--bottom &__prefix {
     padding-left: 3px;
   }
 
-  &__suffix {
+  &--top &__suffix,
+  &--bottom &__suffix {
     padding-right: 3px;
   }
 
@@ -117,6 +130,7 @@ $tab-nav: map.merge(
     justify-content: center;
     padding: get-css-var('tab-nav-v-padding') get-css-var('tab-nav-h-padding');
     color: get-css-var('tab-nav-color');
+    white-space: nowrap;
     cursor: pointer;
     user-select: none;
     border: 0 solid get-css-var('tab-nav-d-color');
