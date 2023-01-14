@@ -111,7 +111,7 @@ export function useScrollWrapper({
 
       // 获取 wrapper 的 px 大小
       if (typeof size === 'string') {
-        if (!size.endsWith('px') && Number.isNaN(Number(size))) {
+        if (!size.endsWith('px') && (!size || Number.isNaN(Number(size)))) {
           wrapper[sizeType] =
             wrapper.el[`offset${titleCaseSizeType}` as 'offsetWidth' | 'offsetHeight']
         } else {
@@ -195,10 +195,18 @@ export function useScrollWrapper({
 
     if (mode.value !== 'vertical') {
       currentScroll.x = Math.min(0, Math.max(currentScroll.x, xScrollLimit.value))
+
+      if (mode.value !== 'both') {
+        currentScroll.y = 0
+      }
     }
 
     if (mode.value !== 'horizontal') {
       currentScroll.y = Math.min(0, Math.max(currentScroll.y, yScrollLimit.value))
+
+      if (mode.value !== 'both') {
+        currentScroll.x = 0
+      }
     }
 
     computePercent()

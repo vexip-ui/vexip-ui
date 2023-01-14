@@ -6,6 +6,7 @@ import type { ScrollMode, ScrollPayload, BarScrollPayload } from './symbol'
 
 export const scrollProps = buildProps({
   scrollClass: classProp,
+  scrollAttrs: Object as PropType<Record<string, any>>,
   mode: String as PropType<ScrollMode>,
   width: [Number, String],
   height: [Number, String],

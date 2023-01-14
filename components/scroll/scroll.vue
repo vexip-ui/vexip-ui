@@ -13,6 +13,7 @@
       <component
         :is="props.wrapperTag || 'div'"
         ref="content"
+        v-bind="props.scrollAttrs"
         :class="wrapperClass"
         :style="wrapperStyle"
         @transitionend="transitionDuration = -1"
@@ -81,6 +82,7 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('scroll', _props, {
       scrollClass: null,
+      scrollAttrs: null,
       mode: {
         default: 'vertical',
         validator: value => scrollModes.includes(value)
@@ -284,6 +286,7 @@ export default defineComponent({
       return [
         nh.be('wrapper'),
         props.scrollClass,
+        props.scrollAttrs?.class,
         {
           [nh.bem('wrapper', 'scrolling')]: scrolling.value,
           [nh.bem('wrapper', 'no-ready')]: !isReady.value,
@@ -293,11 +296,14 @@ export default defineComponent({
       ]
     })
     const wrapperStyle = computed(() => {
-      return {
-        transform: `translate3d(${currentScroll.x}px, ${currentScroll.y}px, 0)`,
-        transitionDuration:
-          transitionDuration.value < 0 ? undefined : `${transitionDuration.value}ms`
-      }
+      return [
+        props.scrollAttrs?.style,
+        {
+          transform: `translate3d(${currentScroll.x}px, ${currentScroll.y}px, 0)`,
+          transitionDuration:
+            transitionDuration.value < 0 ? undefined : `${transitionDuration.value}ms`
+        }
+      ]
     })
 
     watch(enableXScroll, value => {
