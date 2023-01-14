@@ -99,8 +99,8 @@ describe('Scroll', () => {
     expect(wrapper.find('.vxp-scroll__bar--vertical').exists()).toBe(true)
   })
 
-  it('wrapper tag', () => {
-    const wrapper = mount(() => <Scroll wrapper-tag={'ul'}></Scroll>)
+  it('scroll tag', () => {
+    const wrapper = mount(() => <Scroll scroll-tag={'ul'}></Scroll>)
 
     expect(wrapper.find('.vxp-scroll__wrapper').element.tagName).toBe('UL')
   })

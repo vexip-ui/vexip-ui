@@ -33,7 +33,7 @@ export const nativeScrollProps = buildProps({
   appear: booleanProp,
   barDuration: Number,
   useBarTrack: booleanProp,
-  wrapperTag: String,
+  scrollTag: String,
   onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
   onXEnabledChange: eventProp<(enabled: boolean) => void>(),
   onYEnabledChange: eventProp<(enabled: boolean) => void>(),

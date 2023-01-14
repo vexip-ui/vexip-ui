@@ -35,7 +35,7 @@ export const scrollProps = buildProps({
   noTransition: booleanProp,
   onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
   useBarTrack: booleanProp,
-  wrapperTag: String,
+  scrollTag: String,
   onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
   onXEnabledChange: eventProp<(enabled: boolean) => void>(),
   onYEnabledChange: eventProp<(enabled: boolean) => void>(),

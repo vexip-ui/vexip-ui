@@ -9,7 +9,7 @@
   >
     <ResizeObserver throttle :on-resize="handleResize">
       <component
-        :is="props.wrapperTag || 'div'"
+        :is="props.scrollTag || 'div'"
         ref="content"
         v-bind="props.scrollAttrs"
         :class="wrapperClass"
@@ -114,7 +114,7 @@ export default defineComponent({
       appear: false,
       barDuration: null,
       useBarTrack: false,
-      wrapperTag: 'div'
+      scrollTag: 'div'
     })
 
     const emitter = createEventEmitter()
