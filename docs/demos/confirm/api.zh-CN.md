@@ -11,8 +11,8 @@ type ConfirmRenderFn = (options: ConfirmOptions, confirm: () => Promise<void>, c
 | 名称            | 类型                                 | 说明                                                                          | 默认值           | 始于     |
 | --------------- | ------------------------------------ | ----------------------------------------------------------------------------- | ---------------- | -------- |
 | content         | `string`                             | 确认框的提示内容                                                              | `''`             | -        |
-| className       | `string \| Record<string, boolean>`  | 提示的自定义类名                                                              | `null`           | -        |
-| style           | `string \| Record<string, any>`      | 确认框的内联样式                                                              | `null`           | -        |
+| className       | `ClassType`                          | 提示的自定义类名                                                              | `null`           | -        |
+| style           | `StyleType`                          | 确认框的内联样式                                                              | `null`           | -        |
 | confirmType     | `ConfirmType`                        | 确认按钮的类型                                                                | `'primary'`      | -        |
 | confirmText     | `string`                             | 确认按钮的内容                                                                | `locale.confirm` | -        |
 | cancelText      | `string`                             | 取消按钮的内容                                                                | `locale.cancel`  | -        |

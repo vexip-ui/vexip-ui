@@ -11,7 +11,8 @@ type ConfirmRenderFn = (options: ConfirmOptions, confirm: () => Promise<void>, c
 | Name            | Type                                 | Description                                                                                                  | Default          | Since    |
 | --------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ---------------- | -------- |
 | content         | `string`                             | The prompt content of the confirm                                                                            | `''`             | -        |
-| style           | `string \| Record<string, any>`      | Inline style for the confirm                                                                                 | `null`           | -        |
+| className       | `ClassType`                          | The custom class name for the confirm                                                                        | `null`           | -        |
+| style           | `StyleType`                          | Inline style for the confirm                                                                                 | `null`           | -        |
 | confirmType     | `ConfirmType`                        | Confirm button type                                                                                          | `'primary'`      | -        |
 | confirmText     | `string`                             | The content of the confirm button                                                                            | `locale.confirm` | -        |
 | cancelText      | `string`                             | The content of the cancel button                                                                             | `locale.cancel`  | -        |

@@ -66,8 +66,8 @@ createApp().use(myNotice, { property: '$myNotice' })
 | title      | `string`                                      | 提示的标题                                         | `''`    | -        |
 | content    | `string`                                      | 提示的内容                                         | `''`    | -        |
 | key        | `number \| string`                            | 提示的唯一索引，不设置时将使用内置的索引           | `''`    | -        |
-| className  | `string \| Record<string, boolean>`           | 提示的自定义类名                                   | `null`  | -        |
-| style      | `Record<string, any>`                         | 提示的内联样式                                     | `null`  | -        |
+| className  | `ClassType`                                   | 提示的自定义类名                                   | `null`  | -        |
+| style      | `StyleType`                                   | 提示的内联样式                                     | `null`  | -        |
 | duration   | `number`                                      | 提示的持续毫秒，设置为小于 500 时则不会自动关闭    | `4000`  | -        |
 | background | `boolean \| string`                           | 是否显示背景颜色，传入有效颜色值时可以自定义颜色   | `false` | -        |
 | color      | `boolean \| string`                           | 是否设置字体的颜色，传入有效颜色值时可以自定义颜色 | `false` | -        |
