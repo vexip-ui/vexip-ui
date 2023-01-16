@@ -1,5 +1,3 @@
 export { default as CountTo } from './count-to.vue'
-
-export { countToEasingFnUtils } from './utils'
-
-export type { CountToProps } from './props'
+export type { CountToProps, CountToCProps } from './props'
+export type { CountToTimingName, CountToTiming } from './symbol'

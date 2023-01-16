@@ -1,8 +1,12 @@
-import type { EasingFn } from '@/components/count-to/props'
+export type CountToTimingName = 'linear' | 'easeOut'
+export type CountToTiming = (
+  progress: number,
+  localStart: number,
+  end: number,
+  duration: number
+) => number
 
-type EaseFn = 'linear' | 'easeOut'
-
-export const countToEasingFnUtils: Record<EaseFn, EasingFn> = {
+export const countToEasingFn: Record<CountToTimingName, CountToTiming> = {
   easeOut: (progress, localStart, end, duration) =>
     (end * (-Math.pow(2, (-10 * progress) / duration) + 1) * 1024) / 1023 + localStart,
 
