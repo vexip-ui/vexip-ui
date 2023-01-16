@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, reactive, onUnmounted, watch } from 'vue'
+import { defineComponent, computed, onMounted, reactive, watch, onBeforeUnmount } from 'vue'
 import { countToProps } from '@/components/count-to/props'
 import { countToEasingFn } from '@/components/count-to/symbol'
 import { useNameHelper, useProps } from '@vexip-ui/config'
@@ -67,21 +67,14 @@ export default defineComponent({
       }
 
       watch(
-        () => props.start,
-        () => {
-          start()
-        }
-      )
-
-      watch(
-        () => props.end,
+        () => [props.start, props.end],
         () => {
           start()
         }
       )
     })
 
-    onUnmounted(() => {
+    onBeforeUnmount(() => {
       cancelAnimationFrame(state.rAF)
     })
 
@@ -125,6 +118,7 @@ export default defineComponent({
 
     function start() {
       cancelAnimationFrame(state.rAF)
+
       state.localStart = props.start
       state.startTime = 0
       state.localDuration = props.duration
@@ -133,16 +127,19 @@ export default defineComponent({
     }
 
     function pause() {
-      state.paused = true
       cancelAnimationFrame(state.rAF)
+
+      state.paused = true
     }
 
     function resume() {
       cancelAnimationFrame(state.rAF)
+
       state.paused = false
       state.startTime = 0
       state.localDuration = +state.remaining
       state.localStart = +state.printVal
+
       requestAnimationFrame(count)
     }
 
