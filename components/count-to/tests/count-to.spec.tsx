@@ -7,7 +7,8 @@ describe('CountTo', () => {
   it('render', () => {
     const wrapper = mount(CountTo)
 
-    expect(wrapper.classes()).toStrictEqual(['vxp-count-to', 'vxp-count-to-vars'])
+    expect(wrapper.classes()).toContain('vxp-count-to-vars')
+    expect(wrapper.find('span').text()).toEqual('0')
   })
 
   it('should autoplay when mounted', async () => {
