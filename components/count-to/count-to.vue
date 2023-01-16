@@ -159,16 +159,13 @@ export default defineComponent({
       }
     }
 
-    expose({
+    return {
+      state,
+      className,
       start,
       pause,
       resume,
       toggle
-    })
-
-    return {
-      state,
-      className
     }
   }
 })
