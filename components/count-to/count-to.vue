@@ -14,7 +14,7 @@ import { countToEasingFn } from './symbol'
 export default defineComponent({
   name: 'CountTo',
   props: countToProps,
-  setup(_props, { expose }) {
+  setup(_props) {
     const props = useProps('countTo', _props, {
       start: 0,
       end: 0,
