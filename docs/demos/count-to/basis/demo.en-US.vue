@@ -1,6 +1,10 @@
 <template>
   <Space vertical>
-    <CountTo ref="countTo" class="count-to" v-bind="propsModel"></CountTo>
+    <CountTo ref="countTo" class="count-to" v-bind="propsModel">
+      <template #prefix>
+        <ArrowUp></ArrowUp>
+      </template>
+    </CountTo>
     <Form :model="propsModel" style="max-width: 300px;">
       <FormItem prop="start" label="start">
         <NumberInput></NumberInput>
@@ -55,12 +59,12 @@ const timingOptions: CountToTimingName[] = ['linear', 'easeOut']
 
 const propsModel = reactive({
   start: 0,
-  end: 2022.1224,
+  end: 11.82,
   duration: 3000,
   decimals: 4,
   separator: ',',
-  prefix: '¥',
-  suffix: 'RMB',
+  prefix: '',
+  suffix: '%',
   timing: timingOptions[0]
 })
 
@@ -84,6 +88,12 @@ function toggle() {
 <style scoped>
 .count-to {
   font-size: 2.5rem;
-  color: var(--vxp-color-error-base);
+  color: rgb(63, 134, 0);
+}
+
+.count-to svg {
+  width: 30px;
+  height: 30px;
+  fill: rgb(63, 134, 0);
 }
 </style>
