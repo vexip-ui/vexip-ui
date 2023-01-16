@@ -1,15 +1,19 @@
 <template>
   <div :class="className">
-    {{ state.displayValue }}
+    <slot name="prefix"></slot>
+    <span>
+      {{ state.displayValue }}
+    </span>
+    <slot name="suffix"></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
+import { defineComponent, computed, onMounted, reactive, onUnmounted, watch } from 'vue'
 import { countToProps } from '@/components/count-to/props'
+import { countToEasingFn } from '@/components/count-to/symbol'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { isNumber } from '@vexip-ui/utils'
-import { countToEasingFn } from './symbol'
 
 export default defineComponent({
   name: 'CountTo',
@@ -18,22 +22,26 @@ export default defineComponent({
     const props = useProps('countTo', _props, {
       start: 0,
       end: 0,
-      manual: false,
+      autoplay: true,
       duration: 3000,
       decimal: '',
       decimals: {
         default: 0,
-        validator: value => value >= 0
+        validator(value) {
+          return value >= 0
+        }
       },
+      appear: false,
       separator: '',
       prefix: '',
       suffix: '',
-      timing: 'linear'
+      timing: {
+        default: 'linear'
+      }
     })
 
     const nh = useNameHelper('count-to')
     const className = computed(() => [nh.b(), nh.bs('vars')])
-
     const state = reactive({
       localStart: props.start,
       displayValue: formatCountToNumber(props.start),
@@ -46,35 +54,48 @@ export default defineComponent({
       rAF: 0
     })
 
-    const stopCount = computed(() => props.start > props.end)
+    const stopCount = computed(() => {
+      return props.start > props.end
+    })
     const timingFn = computed(() => {
       return typeof props.timing === 'string' ? countToEasingFn[props.timing] : props.timing
     })
 
     onMounted(() => {
-      if (!props.manual) {
+      if (props.appear) {
         start()
       }
+
+      watch(
+        () => props.start,
+        () => {
+          start()
+        }
+      )
+
+      watch(
+        () => props.end,
+        () => {
+          start()
+        }
+      )
     })
 
-    onBeforeUnmount(() => {
+    onUnmounted(() => {
       cancelAnimationFrame(state.rAF)
     })
 
     function formatCountToNumber(num: number) {
       const val = num.toFixed(props.decimals)
-
       const x = val.split('.')
       let x1 = x[0]
       const x2 = x.length > 1 ? props.decimal + x[1] : ''
       const rgx = /(\d+)(\d{3})/
-
       if (props.separator && !isNumber(props.separator)) {
         while (rgx.test(x1)) {
           x1 = x1.replace(rgx, '$1' + props.separator + '$2')
         }
       }
-
       return `${props.prefix}${x1}${x2 ? '.' : ''}${x2}${props.suffix}`
     }
 
@@ -82,33 +103,21 @@ export default defineComponent({
       if (!state.startTime) {
         state.startTime = timestamp
       }
-
-      const progress = timestamp - state.startTime
-
       state.timestamp = timestamp
+      const progress = timestamp - state.startTime
       state.remaining = state.localDuration - progress
-
-      if (stopCount.value) {
-        state.printVal =
-          state.localStart -
-          timingFn.value(progress, 0, state.localStart - props.end, state.localDuration)
-      } else {
-        state.printVal = timingFn.value(
-          progress,
-          state.localStart,
-          props.end - state.localStart,
-          state.localDuration
-        )
-      }
-
+      state.printVal = timingFn.value(
+        progress,
+        state.localStart,
+        props.end - state.localStart,
+        state.localDuration
+      )
       if (stopCount.value) {
         state.printVal = state.printVal < props.end ? props.end : state.printVal
       } else {
         state.printVal = state.printVal > props.end ? props.end : state.printVal
       }
-
       state.displayValue = formatCountToNumber(state.printVal)
-
       if (progress < state.localDuration) {
         state.rAF = requestAnimationFrame(count)
       }
@@ -116,7 +125,6 @@ export default defineComponent({
 
     function start() {
       cancelAnimationFrame(state.rAF)
-
       state.localStart = props.start
       state.startTime = 0
       state.localDuration = props.duration
@@ -131,7 +139,6 @@ export default defineComponent({
 
     function resume() {
       cancelAnimationFrame(state.rAF)
-
       state.paused = false
       state.startTime = 0
       state.localDuration = +state.remaining

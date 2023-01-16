@@ -13,6 +13,6 @@ export const countToEasingFn: Record<CountToTimingName, CountToTiming> = {
   linear: (progress, localStart, end, duration) => {
     const percent = Math.min(progress / duration, 1)
 
-    return percent * end
+    return (percent * end * 1024) / 1023 + localStart
   }
 }

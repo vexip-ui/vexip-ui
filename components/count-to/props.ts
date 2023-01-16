@@ -8,12 +8,13 @@ export const countToProps = buildProps({
   start: Number,
   end: Number,
   duration: Number,
-  manual: Boolean,
   decimals: Number,
   decimal: String,
   separator: String,
   prefix: String,
   suffix: String,
+  autoplay: Boolean,
+  appear: Boolean,
   timing: [String, Function] as PropType<CountToTimingName | CountToTiming>
 })
 
