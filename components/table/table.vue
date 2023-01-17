@@ -153,7 +153,7 @@ import {
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
 import { useStore } from './store'
-import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
+import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION, TABLE_LOCALE } from './symbol'
 
 import type {
   DropType,
@@ -177,6 +177,7 @@ export default defineComponent({
   emits: [],
   setup(_props) {
     const props = useProps('table', _props, {
+      locale: null,
       columns: {
         default: () => [],
         static: true
@@ -253,7 +254,7 @@ export default defineComponent({
     const indicator = ref<HTMLElement>()
     const scrollbar = ref<InstanceType<typeof Scrollbar>>()
 
-    const locale = useLocale('table')
+    const locale = useLocale('table', toRef(props, 'locale'))
 
     const store = useStore({
       columns: props.columns as TableColumnOptions[],
@@ -275,7 +276,7 @@ export default defineComponent({
       rowMinHeight: props.rowMinHeight,
       virtual: props.virtual,
       rowDraggable: props.rowDraggable,
-      emptyText: props.emptyText ?? locale.value.empty,
+      locale: locale.value,
       tooltipTheme: props.tooltipTheme,
       tooltipWidth: props.tooltipWidth,
       singleSorter: props.singleSorter,
@@ -370,7 +371,6 @@ export default defineComponent({
     const allColumns = computed(() => {
       return [...templateColumns.value].concat(props.columns as TableColumnOptions[])
     })
-    const emptyText = computed(() => props.emptyText ?? locale.value.empty)
 
     const {
       setColumns,
@@ -384,7 +384,7 @@ export default defineComponent({
       setRenderRows,
       setGlobalRowHeight,
       setRowDraggable,
-      setEmptyText,
+      setLocale,
       setTooltipTheme,
       setTooltipWidth,
       setSingleSorter,
@@ -426,7 +426,7 @@ export default defineComponent({
     watch(() => props.pageSize, setPageSize)
     watch(() => props.rowHeight, setGlobalRowHeight)
     watch(() => props.rowDraggable, setRowDraggable)
-    watch(emptyText, setEmptyText)
+    watch(locale, setLocale)
     watch(() => props.tooltipTheme, setTooltipTheme)
     watch(() => props.tooltipWidth, setTooltipWidth)
     watch(() => props.singleSorter, setSingleSorter)

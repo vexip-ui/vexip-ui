@@ -306,6 +306,7 @@ export default defineComponent({
     const props = useProps('select', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       visible: {
         default: false,
         static: true
@@ -350,7 +351,7 @@ export default defineComponent({
       transparent: false
     })
 
-    const locale = useLocale('select')
+    const locale = useLocale('select', toRef(props, 'locale'))
     const currentVisible = ref(props.visible)
     const currentLabels = ref<string[]>([])
     const currentValues = ref<(string | number)[]>([])

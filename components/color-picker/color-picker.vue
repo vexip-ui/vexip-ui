@@ -282,6 +282,7 @@ export default defineComponent({
     const props = useProps('colorPicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       value: {
         default: () => getFieldValue('')!,
         static: true
@@ -684,7 +685,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('colorPicker'),
+      locale: useLocale('colorPicker', toRef(props, 'locale')),
       idFor,
       isEmpty,
       currentVisible,

@@ -4,7 +4,8 @@ import {
   sizeProp,
   stateProp,
   classProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -14,6 +15,7 @@ import type { NumberInputControlType } from './symbol'
 export const numberInputProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('input'),
   prefix: Object,
   prefixColor: String,
   suffix: Object,

@@ -1,4 +1,4 @@
-import { buildProps, booleanProp, booleanStringProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, booleanStringProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -64,6 +64,7 @@ export type LayoutAsideProps = ExtractPropTypes<typeof layoutAsideProps>
 export type LayoutAsideCProps = ConfigurableProps<LayoutAsideProps, 'menus'>
 
 export const layoutHeaderProps = buildProps({
+  locale: localeProp('layout'),
   tag: String,
   logo: String,
   signName: String,

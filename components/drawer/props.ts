@@ -1,10 +1,18 @@
-import { buildProps, booleanProp, booleanStringProp, classProp, eventProp } from '@vexip-ui/config'
+import {
+  buildProps,
+  booleanProp,
+  booleanStringProp,
+  classProp,
+  eventProp,
+  localeProp
+} from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { DrawerPlacement } from './symbol'
 
 export const drawerProps = buildProps({
+  locale: localeProp('drawer'),
   transfer: booleanStringProp,
   active: booleanProp,
   width: [Number, String],

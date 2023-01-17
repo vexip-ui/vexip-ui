@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 import { useHover, useModifier } from '@vexip-ui/hooks'
@@ -136,6 +136,7 @@ export default defineComponent({
     const props = useProps('numberInput', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       prefix: null,
       prefixColor: '',
       suffix: null,
@@ -457,7 +458,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('input'),
+      locale: useLocale('input', toRef(props, 'locale')),
       idFor,
       focused,
       isHover,

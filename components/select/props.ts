@@ -5,7 +5,8 @@ import {
   sizeProp,
   stateProp,
   classProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -16,6 +17,7 @@ import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectOptionState }
 export const selectProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('select'),
   visible: booleanProp,
   options: Array as PropType<SelectRawOption[]>,
   disabled: booleanProp,

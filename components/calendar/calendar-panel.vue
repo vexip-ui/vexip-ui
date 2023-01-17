@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { useHover } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import {
@@ -86,6 +86,7 @@ export default defineComponent({
   emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('calendarBase', _props, {
+      locale: null,
       value: {
         default: null,
         static: true
@@ -126,7 +127,7 @@ export default defineComponent({
     const hoveredDate = ref<Date | null>(null)
 
     const { wrapper, isHover } = useHover()
-    const locale = useLocale('calendar')
+    const locale = useLocale('calendar', toRef(props, 'locale'))
 
     const min = computed(() => (props.min ? +startOfDay(props.min) : -Infinity))
     const max = computed(() => (props.max ? +endOfDay(props.max) : Infinity))

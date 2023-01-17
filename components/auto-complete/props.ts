@@ -4,7 +4,8 @@ import {
   booleanStringProp,
   sizeProp,
   stateProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -19,6 +20,7 @@ import type {
 export const autoCompleteProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('input'),
   transfer: booleanStringProp,
   value: [String, Number],
   options: Array as PropType<AutoCompleteRawOption[]>,

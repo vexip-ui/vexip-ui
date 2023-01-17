@@ -1,4 +1,4 @@
-import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { UploadList } from '@/components/upload-list'
@@ -53,6 +53,7 @@ export default defineComponent({
 
     const props = useProps('upload', _props, {
       state: createStateProp(state),
+      locale: null,
       url: {
         default: '',
         static: true
@@ -114,7 +115,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('upload')
-    const locale = useLocale('upload')
+    const locale = useLocale('upload', toRef(props, 'locale'))
     const fileStates = ref([]) as Ref<FileState[]>
     const isDragOver = ref(false)
 

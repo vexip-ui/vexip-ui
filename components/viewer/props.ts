@@ -1,10 +1,11 @@
-import { buildProps, booleanProp, booleanNumberProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, booleanNumberProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { ViewerState, ViewerToolbarPlacement, ToolbarAction } from './symbol'
 
 export const viewerProps = buildProps({
+  locale: localeProp('viewer'),
   width: [String, Number],
   height: [String, Number],
   moveDisabled: booleanProp,

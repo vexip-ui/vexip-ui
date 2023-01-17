@@ -4,7 +4,8 @@ import {
   sizeProp,
   stateProp,
   classProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -19,6 +20,7 @@ type ChangeListener =
 export const inputProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('input'),
   type: String as PropType<InputType>,
   prefix: Object,
   prefixColor: String,

@@ -1,4 +1,4 @@
-import { buildProps, booleanProp, stateProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, stateProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -19,6 +19,7 @@ export type SelectHandler = (
 
 export const transferProps = buildProps({
   state: stateProp,
+  locale: localeProp('transfer'),
   options: Array as PropType<RawOption[]>,
   value: Array as PropType<Values>,
   disabled: booleanProp,

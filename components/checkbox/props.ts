@@ -5,7 +5,8 @@ import {
   sizeProp,
   stateProp,
   classProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -43,6 +44,7 @@ export type RawOption =
 export const checkboxGroupProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('checkbox'),
   value: Array as PropType<(string | number)[]>,
   vertical: booleanProp,
   disabled: booleanProp,

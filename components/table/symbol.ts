@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { ComponentSize, ClassType, StyleType } from '@vexip-ui/config'
+import type { ComponentSize, ClassType, StyleType, LocaleConfig } from '@vexip-ui/config'
 import type { BITree } from '@vexip-ui/utils'
 import type { TooltipTheme } from '@/components/tooltip'
 import type { TableStore } from './store'
@@ -155,7 +155,7 @@ export interface StoreOptions {
   rowMinHeight: number,
   virtual: boolean,
   rowDraggable: boolean,
-  emptyText: string,
+  locale: LocaleConfig['table'],
   tooltipTheme: TooltipTheme,
   tooltipWidth: number | string,
   singleSorter: boolean,
@@ -271,4 +271,6 @@ export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
  * 表格组件的顶层 Api
  */
 export const TABLE_ACTION: InjectionKey<TableAction> = Symbol('TABLE_ACTION')
+export const TABLE_LOCALE: InjectionKey<LocaleConfig['table']> = Symbol('TABLE_LOCALE')
+
 export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')

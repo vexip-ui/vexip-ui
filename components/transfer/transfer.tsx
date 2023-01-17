@@ -1,4 +1,4 @@
-import { defineComponent, ref, reactive, computed, watchEffect, watch } from 'vue'
+import { defineComponent, ref, reactive, toRef, computed, watchEffect, watch } from 'vue'
 import TransferPanel from './transfer-panel.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
@@ -30,6 +30,7 @@ export default defineComponent({
 
     const props = useProps('transfer', _props, {
       state: createStateProp(state),
+      locale: null,
       options: {
         default: () => [],
         static: true
@@ -58,7 +59,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('transfer')
-    const locale = useLocale('transfer')
+    const locale = useLocale('transfer', toRef(props, 'locale'))
 
     const currentValue = ref<Set<string | number>>(null!)
     const sourceSelected = ref(new Set<string | number>())
@@ -265,6 +266,7 @@ export default defineComponent({
             loading-icon={props.loadingIcon}
             loading-lock={props.loadingLock}
             loading-spin={props.loadingSpin}
+            locale={locale.value}
             onSelect={() => handleSelect('source')}
             onEnter={handleToTarget}
             onSwitch={() => handlePanelFocus('target')}
@@ -342,6 +344,7 @@ export default defineComponent({
             loading-icon={props.loadingIcon}
             loading-lock={props.loadingLock}
             loading-spin={props.loadingSpin}
+            locale={locale.value}
             onSelect={() => handleSelect('target')}
             onEnter={handleToSource}
             onSwitch={() => handlePanelFocus('source')}

@@ -9,6 +9,7 @@ import type {
   CSSProperties,
   ComponentObjectPropsOptions
 } from 'vue'
+import type { LocaleNames, LocaleConfig } from './locale'
 
 export type PropsOptions = Record<string, Record<string, unknown>>
 
@@ -280,4 +281,8 @@ export function emitEvent<A extends any[]>(handlers: MaybeArray<(...args: A) => 
   } else {
     typeof handlers === 'function' && handlers(...args)
   }
+}
+
+export function localeProp<N extends LocaleNames>(_name: N) {
+  return Object as PropType<Partial<LocaleConfig[N]>>
 }
