@@ -65,6 +65,7 @@ interface SelectOptionState {
 | ignore-case     | `boolean`                                                                      | Set whether to ignore case when using built-in filtering                                                      | `false`        | `2.0.0` |
 | creatable       | `boolean`                                                                      | Set whether to support dynamic create options when filter options is enabled                                  | `false`        | `2.0.0` |
 | transparent     | `boolean`                                                                      | Set whether to be transparent                                                                                 | `false`        | `2.0.2` |
+| locale          | `LocaleConfig['select']`                                                       | Set the locale config                                                                                         | `null`         | `2.1.0` |
 
 ### Select Events
 

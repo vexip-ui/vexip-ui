@@ -49,6 +49,7 @@ type Dateable = number | string | Date
 | max             | `Dateable`                                                | Set the maximum date that can be selected                                                                                                      | `null`                  | `2.0.14` |
 | outside-close   | `boolean`                                                 | Set whether the component can be closed by clicking outside                                                                                    | `true`                  | `2.0.20` |
 | outside-cancel  | `boolean`                                                 | Set whether clicking outside the component to close is a cancel operation                                                                      | `false`                 | `2.0.20` |
+| locale          | `LocaleConfig['calendar'] & LocaleConfig['dataPicker']`   | Set the locale config                                                                                                                          | `null`                  | `2.1.0`  |
 
 ### DatePicker Events
 

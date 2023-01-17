@@ -19,6 +19,7 @@
 | loading         | `boolean`                                   | 设置抽屉的确认按钮是否为加载状态                                               | `false`          | `2.0.0` |
 | confirm-text    | `string`                                    | 确认按钮的内容                                                                 | `locale.confirm` | `2.0.0` |
 | cancel-text     | `string`                                    | 取消按钮的内容                                                                 | `locale.cancel`  | `2.0.0` |
+| locale          | `LocaleConfig['drawer']`                    | 设置多语言配置                                                                 | `null`           | `2.1.0` |
 
 ### Drawer 事件
 

@@ -182,6 +182,7 @@ interface TableHeadPayload {
 | empty-text      | `string`                                                 | Set the prompt when the table is empty                                                                                                                | `locale.empty` | -       |
 | single-sorter   | `boolean`                                                | After setting, it will limit the table to only one column to enable sorting                                                                           | `false`        | -       |
 | single-filter   | `boolean`                                                | After setting, it will limit the table to only one column to enable filtering                                                                         | `false`        | -       |
+| locale          | `LocaleConfig['table']`                                  | Set the locale config                                                                                                                                 | `null`         | `2.1.0` |
 
 ### Table Events
 

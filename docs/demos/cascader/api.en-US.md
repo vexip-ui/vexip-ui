@@ -89,6 +89,7 @@ interface OptionState {
 | loading-lock    | `boolean`                                                | Set whether to be read-only when loading                                                                                                                                           | `false`          | -       |
 | loading-spin    | `boolean`                                                | Set whether to use spin animation for the loading icon                                                                                                                             | `false`          | -       |
 | transparent     | `boolean`                                                | Set whether to be transparent                                                                                                                                                      | `false`          | `2.0.2` |
+| locale          | `LocaleConfig['select']`                                 | Set the locale config                                                                                                                                                              | `null`           | `2.1.0` |
 
 ### Cascader Events
 

@@ -13,6 +13,7 @@ import type {
 } from './symbol'
 
 export const layoutProps = buildProps({
+  locale: localeProp('layout'),
   noAside: booleanProp,
   footer: booleanProp,
   tag: String,

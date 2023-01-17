@@ -11,11 +11,7 @@ import {
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
-import type {
-  AutoCompleteKeyConfig,
-  AutoCompleteOptionState,
-  AutoCompleteRawOption
-} from './symbol'
+import type { AutoCompleteKeyConfig, AutoCompleteRawOption, AutoCompleteFilter } from './symbol'
 
 export const autoCompleteProps = buildProps({
   size: sizeProp,
@@ -25,9 +21,7 @@ export const autoCompleteProps = buildProps({
   value: [String, Number],
   options: Array as PropType<AutoCompleteRawOption[]>,
   filter: {
-    type: [Boolean, Function] as PropType<
-      boolean | ((value: string | number, options: AutoCompleteOptionState) => boolean)
-    >,
+    type: [Boolean, Function] as PropType<boolean | AutoCompleteFilter>,
     default: null
   },
   prefix: Object,

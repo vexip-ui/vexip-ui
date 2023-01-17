@@ -34,6 +34,7 @@
 | options      | `(string \| { value: string \| number, label?: string, control?: boolean })[]` | 设置选子复选框的选项，一般用于简单快速生成复选框组，使用插槽后失效 | `[]`        | -       |
 | loading      | `boolean`                                                                      | 设置是否为加载中                                                   | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                                                      | 设置在加载中时是否为只读                                           | `false`     | `2.0.0` |
+| locale       | `LocaleConfig['checkbox']`                                                     | 设置多语言配置                                                     | `null`      | `2.1.0` |
 
 ### CheckboxGroup 事件
 

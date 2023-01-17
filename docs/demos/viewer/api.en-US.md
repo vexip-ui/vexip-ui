@@ -49,17 +49,18 @@ interface ToolbarAction {
 
 ### Viewer Props
 
-| Name              | Type                | Description                                                                                                             | Default    | Since |
-| ----------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------- | ----- |
-| move-disabled     | `boolean`           | Set whether to disable the move function                                                                                | `false`    | -     |
-| zoom-disabled     | `boolean`           | Set whether to disable zoom function                                                                                    | `false`    | -     |
-| zoom-delta        | `number`            | Set the amount of change per zoom                                                                                       | `0.15`     | -     |
-| rotate-disabled   | `boolean`           | Set whether to disable rotation                                                                                         | `false`    | -     |
-| rotate-delta      | `number`            | Set the delta per rotation                                                                                              | `90`       | -     |
-| full-disabled     | `boolean`           | Set whether to disable full screen function                                                                             | `false`    | -     |
-| toolbar-placement | `ToolbarPlacement`  | Set the position of the toolbar                                                                                         | `'bottom'` | -     |
-| actions           | `ToolbarAction[]`   | Add custom action buttons                                                                                               | `[]`       | -     |
-| toolbar-fade      | `boolean \| number` | Set whether to trigger the toolbar to fade or not. When passing in a number, you can set the wait milliseconds for fade | `false`    | -     |
+| Name              | Type                     | Description                                                                                                             | Default    | Since   |
+| ----------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ---------- | ------- |
+| move-disabled     | `boolean`                | Set whether to disable the move function                                                                                | `false`    | -       |
+| zoom-disabled     | `boolean`                | Set whether to disable zoom function                                                                                    | `false`    | -       |
+| zoom-delta        | `number`                 | Set the amount of change per zoom                                                                                       | `0.15`     | -       |
+| rotate-disabled   | `boolean`                | Set whether to disable rotation                                                                                         | `false`    | -       |
+| rotate-delta      | `number`                 | Set the delta per rotation                                                                                              | `90`       | -       |
+| full-disabled     | `boolean`                | Set whether to disable full screen function                                                                             | `false`    | -       |
+| toolbar-placement | `ToolbarPlacement`       | Set the position of the toolbar                                                                                         | `'bottom'` | -       |
+| actions           | `ToolbarAction[]`        | Add custom action buttons                                                                                               | `[]`       | -       |
+| toolbar-fade      | `boolean \| number`      | Set whether to trigger the toolbar to fade or not. When passing in a number, you can set the wait milliseconds for fade | `false`    | -       |
+| locale            | `LocaleConfig['viewer']` | Set the locale config                                                                                                   | `null`     | `2.1.0` |
 
 ### Viewer Events
 

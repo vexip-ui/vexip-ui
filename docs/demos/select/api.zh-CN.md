@@ -65,6 +65,7 @@ interface SelectOptionState {
 | ignore-case     | `boolean`                                                                      | 在使用内置的过滤时，设置是否忽略大小写                      | `false`        | `2.0.0` |
 | creatable       | `boolean`                                                                      | 设置在开启了过滤选项功能后，是否支持动态创建选项            | `false`        | `2.0.0` |
 | transparent     | `boolean`                                                                      | 设置是否为透明模式                                          | `false`        | `2.0.2` |
+| locale          | `LocaleConfig['select']`                                                       | 设置多语言配置                                              | `null`         | `2.1.0` |
 
 ### Select 事件
 

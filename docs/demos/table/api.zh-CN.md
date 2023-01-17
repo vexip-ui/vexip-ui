@@ -182,6 +182,7 @@ interface TableHeadPayload {
 | empty-text      | `string`                                                 | 设置表格空数据时的提示语                                     | `locale.empty` | -       |
 | single-sorter   | `boolean`                                                | 设置后将限制表格只能有一列开启排序                           | `false`        | -       |
 | single-filter   | `boolean`                                                | 设置后将限制表格只能有一列开启过滤                           | `false`        | -       |
+| locale          | `LocaleConfig['table']`                                  | 设置多语言配置                                               | `null`         | `2.1.0` |
 
 ### Table 事件
 

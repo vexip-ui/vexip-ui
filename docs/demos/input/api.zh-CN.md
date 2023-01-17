@@ -31,6 +31,7 @@
 | loading-spin   | `boolean`                                                | 设置加载中图标是否使用旋转动画                                    | `false`     | `2.0.0` |
 | transparent    | `boolean`                                                | 设置是否为透明模式                                                | `false`     | `2.0.2` |
 | sync           | `boolean`                                                | 设置是否为同步输入模式                                            | `false`     | `2.0.6` |
+| locale         | `LocaleConfig['input']`                                  | 设置多语言配置                                                    | `null`      | `2.1.0` |
 
 ### Input 事件
 

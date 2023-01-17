@@ -33,6 +33,7 @@ export default defineComponent({
   emits: ['update:reduced', 'update:sign-type', 'update:color'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
+      locale: null,
       noAside: false,
       footer: false,
       tag: 'section',
@@ -235,6 +236,7 @@ export default defineComponent({
           v-model:sign-type={currentSignType.value}
           v-model:user-dropped={userDropped.value}
           v-model:color={currentColor.value}
+          locale={props.locale}
           user={props.user}
           actions={props.actions}
           config={props.config}

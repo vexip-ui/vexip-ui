@@ -36,6 +36,7 @@
 | max             | `string`                                                  | 设置可选的最大时间                                                                 | `null`           | `2.0.14` |
 | outside-close   | `boolean`                                                 | 设置是否可以通过点击组件外部进行关闭                                               | `true`           | `2.0.20` |
 | outside-cancel  | `boolean`                                                 | 设置点击组件外部进行关闭是否为取消操作                                             | `false`          | `2.0.20` |
+| locale          | `LocaleConfig['timePicker']`                              | 设置多语言配置                                                                     | `null`           | `2.1.0`  |
 
 ### TimePicker 事件
 

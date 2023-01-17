@@ -18,6 +18,7 @@
 | ~~page-total~~  | `boolean`                                             | Whether to enable the plugin to display the total number of entries                                        | `false`             | -        |
 | plugins         | `('total' \| 'jump' \|'size' \| undefined \| null)[]` | Set the plugins and where they render                                                                      | `[]`                | `2.0.8`  |
 | no-title        | `boolean`                                             | Set whether disable page items title attribute                                                             | `false`             | `2.0.11` |
+| locale          | `LocaleConfig['pagination']`                          | Set the locale config                                                                                      | `null`              | `2.1.0`  |
 
 ### Pagination Events
 
