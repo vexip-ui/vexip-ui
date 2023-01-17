@@ -68,6 +68,7 @@ import { Radio } from './radio'
 import { RadioGroup } from './radio-group'
 import { Renderer } from './renderer'
 import { ResizeObserver } from './resize-observer'
+import { Result } from './result'
 import { Row } from './row'
 import { Scroll } from './scroll'
 import { Scrollbar } from './scrollbar'
@@ -184,6 +185,7 @@ const components = [
   RadioGroup,
   Renderer,
   ResizeObserver,
+  Result,
   Row,
   Scroll,
   Scrollbar,
@@ -314,6 +316,7 @@ export * from './radio'
 export * from './radio-group'
 export * from './renderer'
 export * from './resize-observer'
+export * from './result'
 export * from './row'
 export * from './scroll'
 export * from './scrollbar'

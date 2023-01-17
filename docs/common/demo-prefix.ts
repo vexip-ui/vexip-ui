@@ -67,6 +67,7 @@ const components = [
   'RadioGroup',
   'Renderer',
   'ResizeObserver',
+  'Result',
   'Row',
   'Scroll',
   'Scrollbar',

@@ -79,6 +79,7 @@ export const enUS = defineI18n({
     Input: 'Input',
     NumberInput: 'NumberInput',
     Radio: 'Radio',
+    Result: 'Result',
     Select: 'Select',
     Slider: 'Slider',
     Switch: 'Switch',
