@@ -1,3 +1,3 @@
-### Custom
+### Custom Content
 
-Customize icons, titles, descriptions and extra content via slots
+Customize icons, titles, descriptions and extra content via slots.

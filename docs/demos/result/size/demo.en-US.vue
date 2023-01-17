@@ -1,5 +1,5 @@
 <template>
-  <Row style="max-width: 840px;gap:70px;">
+  <Row style="gap: 70px;">
     <Result title="small" description="Small Size" size="small">
     </Result>
     <Result title="default" description="Default Size">

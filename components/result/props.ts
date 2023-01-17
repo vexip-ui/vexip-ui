@@ -8,8 +8,9 @@ export const resultProps = buildProps({
   title: String,
   size: sizeProp,
   type: String as PropType<ResultType>,
-  description: String,
-  iconColor: String
+  icon: Object,
+  iconColor: String,
+  description: String
 })
 
 export type ResultProps = ExtractPropTypes<typeof resultProps>

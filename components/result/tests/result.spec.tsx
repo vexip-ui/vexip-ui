@@ -20,6 +20,7 @@ describe('Result', () => {
 
     expect(wrapper.find('.vxp-result').classes()).toContain('vxp-result--large')
   })
+
   it('types', () => {
     (['info', 'success', 'warning', 'error'] as const).forEach(type => {
       const wrapper = mount(() => <Result type={type}></Result>)

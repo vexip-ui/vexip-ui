@@ -1,18 +1,18 @@
 @use 'sass:map';
 @use './design' as *;
 
-$result: (
-  ) !default;
-$result: map.merge((
-      title-font-size: 20px,
-      icon-font-size:54px,
-      title-margin-top:16px,
-      description-font-size:14px,
-      description-margin-top:4px,
-      extra-margin-top:24px),
-    $result
+$result: () !default;
+$result: map.merge(
+  (
+    title-font-size: 20px,
+    icon-font-size: 54px,
+    title-margin-top: 16px,
+    description-font-size: 14px,
+    description-margin-top: 4px,
+    extra-margin-top: 24px
+  ),
+  $result
 );
-
 .#{$namespace}-result {
   &-vars {
     @include define-preset-values('result', $result);
@@ -30,19 +30,25 @@ $result: map.merge((
   text-align: center;
 
   &--small {
-    @include define-preset-values('result',
-        (icon-font-size:36px,
-          title-font-size:16px,
-          description-font-size:12px));
+    @include define-preset-values(
+      'result',
+      (
+        icon-font-size: 36px,
+        title-font-size: 16px,
+        description-font-size: 12px
+      )
+    );
   }
 
   &--large {
-    @include define-preset-values('result',
+    @include define-preset-values(
+      'result',
       (
-        icon-font-size:84px,
-        title-font-size:28px,
-        description-font-size:16px
-      ));
+        icon-font-size: 84px,
+        title-font-size: 28px,
+        description-font-size: 16px
+      )
+    );
   }
 
   &__icon {
@@ -53,13 +59,13 @@ $result: map.merge((
   }
 
   &__title {
-    font-size: get-css-var('result-title-font-size');
     margin-top: get-css-var('result-title-margin-top');
+    font-size: get-css-var('result-title-font-size');
   }
 
   &__description {
-    font-size: get-css-var('result-description-font-size');
     margin-top: get-css-var('result-description-margin-top');
+    font-size: get-css-var('result-description-font-size');
   }
 
   &__extra {
@@ -69,13 +75,14 @@ $result: map.merge((
   $types: info success warning error;
 
   @each $type in $types {
-    $color: if($type =='info', 'primary', $type);
-
+    $color: if($type == 'info', 'primary', $type);
     &--#{$type} {
-      @include define-result-style((bg-color: 'color'$color 'opacity-8',
-          icon-color: 'color'$color 'dark-2'
-        ));
+      @include define-result-style(
+        (
+          bg-color: 'color' $color 'opacity-8',
+          icon-color: 'color' $color 'dark-2'
+        )
+      );
     }
   }
-
 }

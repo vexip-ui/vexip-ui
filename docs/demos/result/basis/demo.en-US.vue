@@ -1,5 +1,5 @@
 <template>
-  <Row style="max-width: 840px;gap:30px;">
+  <Row style="gap: 30px;">
     <Result title="Success" type="success" description="success...">
       <template #extra>
         <Button type="primary">

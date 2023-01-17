@@ -1,21 +1,13 @@
 <template>
-  <Row style="max-width: 840px;gap:30px;">
-    <Result
-      title="Success"
-      type="success"
-      description="success..."
-    >
+  <Row style="gap: 30px;">
+    <Result title="Success" type="success" description="success...">
       <template #extra>
         <Button type="primary">
           返回
         </Button>
       </template>
     </Result>
-    <Result
-      title="Warning"
-      type="warning"
-      description="warning..."
-    >
+    <Result title="Warning" type="warning" description="warning...">
       <template #extra>
         <Button type="warning">
           返回

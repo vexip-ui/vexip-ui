@@ -1,12 +1,8 @@
 <template>
-  <div :class="className">
+  <div :class="className" :style="style">
     <div v-if="hasIcon" :class="nh.be('icon')">
       <slot name="icon">
-        <Icon
-          :class="nh.be('icon')"
-          :style="{ color: props.iconColor }"
-          :icon="iconComp"
-        ></Icon>
+        <Icon :class="nh.be('icon')" :icon="iconComp" :style="{ color: props.iconColor }"></Icon>
       </slot>
     </div>
     <div v-if="hasTitle" :class="nh.be('title')">
@@ -29,15 +25,10 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, emitEvent, createSizeProp } from '@vexip-ui/config'
-import {
-  CircleInfo,
-  CircleCheck,
-  CircleExclamation,
-  CircleXmark
-} from '@vexip-ui/icons'
+import { useNameHelper, useProps, createSizeProp } from '@vexip-ui/config'
+import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 import { resultProps } from './props'
-import type { ResultType } from './symbol'
+
 const predefinedIcons = {
   info: CircleInfo,
   success: CircleCheck,
@@ -45,6 +36,7 @@ const predefinedIcons = {
   error: CircleXmark
 }
 const resultTypes = Object.freeze(['info', 'success', 'warning', 'error'])
+
 export default defineComponent({
   name: 'Result',
   components: {
@@ -54,11 +46,12 @@ export default defineComponent({
   setup(_props, { slots }) {
     const props = useProps('result', _props, {
       title: '',
-      type: {
-        default: 'info' as ResultType,
-        validator: (value: ResultType) => resultTypes.includes(value)
-      },
       size: createSizeProp(),
+      type: {
+        default: 'info',
+        validator: value => resultTypes.includes(value)
+      },
+      icon: null,
       iconColor: '',
       description: ''
     })
@@ -66,17 +59,22 @@ export default defineComponent({
     const nh = useNameHelper('result')
 
     const iconComp = computed(() => {
+      if (props.icon) return props.icon
       return predefinedIcons[props.type] ?? null
     })
+
     const hasTitle = computed(() => {
       return slots.title || props.title
     })
+
     const hasIcon = computed(() => {
-      return slots.icon || props.type
+      return slots.icon || props.type || props.icon
     })
+
     const hasDescription = computed(() => {
       return slots.description || props.description
     })
+
     const className = computed(() => {
       return {
         [nh.b()]: true,
@@ -86,6 +84,18 @@ export default defineComponent({
         [nh.bm(props.size)]: props.size !== 'default'
       }
     })
+
+    const style = computed(() => {
+      const { cvm } = nh
+      if (props.iconColor) {
+        return cvm({
+          'icon-color': props.iconColor
+        })
+      }
+
+      return {}
+    })
+
     return {
       props,
       nh,
@@ -93,7 +103,8 @@ export default defineComponent({
       iconComp,
       hasTitle,
       hasIcon,
-      hasDescription
+      hasDescription,
+      style
     }
   }
 })
