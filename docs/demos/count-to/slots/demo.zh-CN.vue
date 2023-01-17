@@ -50,6 +50,6 @@ import { ArrowUp, ArrowDown } from '@vexip-ui/icons'
 }
 
 .down {
-  color: red;
+  color: red !important;
 }
 </style>

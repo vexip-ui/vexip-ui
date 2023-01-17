@@ -1,3 +1,3 @@
 ### Prefix And Suffix
 
-You can use the `prefix` and `suffix` slots to meet the personalized configuration.
+Set the values of `prefix` and `suffix` or use a slot with the same name to add front and rear contents to the input box.
