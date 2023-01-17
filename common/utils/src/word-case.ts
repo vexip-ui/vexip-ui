@@ -30,15 +30,15 @@ export function toKebabCase(value: string) {
  * @param value 需要转换的命名
  */
 
-type Capitalize1<T extends string> = T extends `${infer first}-${infer rest}`
-  ? `${Capitalize<first>}${Capitalize1<rest>}`
+type ReCapitalCase<T extends string> = T extends `${infer First}-${infer Rest}`
+  ? `${Capitalize<First>}${ReCapitalCase<Rest>}`
   : Capitalize<T>
 
 export function toCapitalCase<T extends string>(value: T) {
   return (value.charAt(0).toUpperCase() +
     value
       .slice(1)
-      .replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))) as Capitalize1<T>
+      .replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))) as ReCapitalCase<T>
 }
 
 /**
