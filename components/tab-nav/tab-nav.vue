@@ -61,6 +61,8 @@ import { TAB_NAV_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
 
+type ChangeListener = (label: string | number) => void
+
 const trackStyleMap = {
   top: ['left', 'width'],
   right: ['top', 'height'],
@@ -194,7 +196,7 @@ export default defineComponent({
       currentActive.value = label
 
       updateMarkerPosition()
-      emitEvent(props.onChange, label)
+      emitEvent(props.onChange as ChangeListener, label)
       emit('update:active', label)
     }
 
@@ -203,7 +205,7 @@ export default defineComponent({
     }
 
     function handleClose(label: string | number) {
-      emitEvent(props.onClose, label)
+      emitEvent(props.onClose as ChangeListener, label)
 
       requestAnimationFrame(updateMarkerPosition)
     }

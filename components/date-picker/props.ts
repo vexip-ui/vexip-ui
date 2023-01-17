@@ -50,6 +50,8 @@ export const datePickerProps = buildProps({
   loadingSpin: booleanProp,
   min: [Number, String, Date] as PropType<Dateable>,
   max: [Number, String, Date] as PropType<Dateable>,
+  outsideClose: booleanProp,
+  outsideCancel: booleanProp,
   onInput: eventProp<(type: DateTimeType, value: number) => void>(),
   onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
   onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
@@ -62,7 +64,8 @@ export const datePickerProps = buildProps({
   onFocus: eventProp(),
   onBlur: eventProp(),
   onChangeCol: eventProp<(type: DateTimeType, inputType: 'start' | 'end') => void>(),
-  onClickOutside: eventProp()
+  onClickOutside: eventProp(),
+  onOutsideClose: eventProp()
 })
 
 export type DatePickerProps = ExtractPropTypes<typeof datePickerProps>
@@ -105,6 +108,8 @@ export const timePickerProps = buildProps({
   loadingSpin: booleanProp,
   min: String,
   max: String,
+  outsideClose: booleanProp,
+  outsideCancel: booleanProp,
   onInput: eventProp<(type: TimeType, value: number) => void>(),
   onPlus: eventProp<(type: TimeType, value: number) => void>(),
   onMinus: eventProp<(type: TimeType, value: number) => void>(),
@@ -117,7 +122,8 @@ export const timePickerProps = buildProps({
   onFocus: eventProp(),
   onBlur: eventProp(),
   onChangeCol: eventProp<(type: TimeType, inputType: 'start' | 'end') => void>(),
-  onClickOutside: eventProp()
+  onClickOutside: eventProp(),
+  onOutsideClose: eventProp()
 })
 
 export type TimePickerProps = ExtractPropTypes<typeof timePickerProps>

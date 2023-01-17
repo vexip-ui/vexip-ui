@@ -11,6 +11,11 @@ import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { InputType } from './symbol'
 
+type ChangeListener =
+  | ((value: string | number) => void)
+  | ((value: string) => void)
+  | ((value: number) => void)
+
 export const inputProps = buildProps({
   size: sizeProp,
   state: stateProp,
@@ -43,8 +48,8 @@ export const inputProps = buildProps({
   sync: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
-  onInput: eventProp<(value: string | number) => void>(),
-  onChange: eventProp<(value: string | number) => void>(),
+  onInput: eventProp<ChangeListener>(),
+  onChange: eventProp<ChangeListener>(),
   onEnter: eventProp(),
   onClear: eventProp(),
   onPrefixClick: eventProp<(event: MouseEvent) => void>(),

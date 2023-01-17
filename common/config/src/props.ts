@@ -182,12 +182,22 @@ export type ConfigurableProps<T, E extends string = never, I extends string = ne
   ExcludeProps<keyof T, E, I>
 >
 
+/* eslint-disable @typescript-eslint/ban-types */
+type VexipProps<T> = {
+  [P in keyof T]: T[P] extends PropType<infer I>
+    ? PropType<I & {}>
+    : T[P] extends { type: PropType<infer I> }
+      ? PropType<I & {}>
+      : T[P]
+}
+/* eslint-enable */
+
 export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
   const common = {
     inherit: booleanProp
   }
 
-  return Object.freeze({ ...common, ...props }) as Expand<typeof common & T>
+  return Object.freeze({ ...common, ...props }) as Expand<VexipProps<typeof common & T>>
 }
 
 export function omitProps<T extends ComponentObjectPropsOptions, K extends keyof T>(

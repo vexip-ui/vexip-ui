@@ -1,5 +1,20 @@
 <template>
-  <Article ref="article" :class="prefix" :anchor-level="3">
+  <Article
+    ref="article"
+    :class="prefix"
+    :anchor-level="3"
+    :loading="!allLoaded"
+  >
+    <SkeletonGroup v-if="!allLoaded" loading activated>
+      <Skeleton
+        tag="h1"
+        :width="220"
+        :height="42"
+        style="--vxp-skeleton-spread: 1em; font-size: 2em;"
+      ></Skeleton>
+      <Skeleton tag="p" :height="21" :repeat="3"></Skeleton>
+      <Skeleton tag="p" :height="21" width="67%"></Skeleton>
+    </SkeletonGroup>
     <ResizeObserver @resize="refreshScroll?.()">
       <div :style="{ visibility: allLoaded ? undefined : 'hidden' }">
         <h1 :class="`${prefix}__title`">
@@ -28,11 +43,10 @@
           <a class="anchor__link" href="">#</a>
         </h2>
         <Demo
-          v-for="(example, index) in examples"
-          :key="index"
+          v-for="example in examples"
+          :key="example.github"
           :code="example.code"
           :github="example.github"
-          :active="example.id && activeDemo === example.id"
         >
           <component :is="example.demo"></component>
           <template #desc>
@@ -50,13 +64,6 @@
         </div>
       </div>
     </ResizeObserver>
-    <transition name="vxp-fade">
-      <div v-if="!allLoaded" :class="`${prefix}__loading`">
-        <Icon pulse :scale="1.2">
-          <Spinner></Spinner>
-        </Icon>
-      </div>
-    </transition>
   </Article>
 </template>
 
@@ -64,7 +71,6 @@
 import { defineAsyncComponent, markRaw, ref, computed, watch, watchEffect, inject } from 'vue'
 import Article from './article.vue'
 import Demo from './demo.vue'
-import { Spinner } from '@vexip-ui/icons'
 import { noop } from '@vexip-ui/utils'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -74,7 +80,6 @@ interface Example {
   demo: Record<string, any>,
   desc: Record<string, any>,
   code: string,
-  id: string,
   github: string
 }
 
@@ -93,7 +98,6 @@ const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 
 const prefix = 'component-doc'
-const activeDemo = ref('')
 const article = ref<InstanceType<typeof Article>>()
 
 const refreshScroll = inject<() => void>('refreshScroll', noop)
@@ -172,7 +176,6 @@ async function internalInit(name: string, language: string) {
         defineAsyncComponent(() => import(`../demos/${name}/${demo}/desc.${language}.md`))
       ),
       code: '',
-      id: '',
       github: `demos/${name}/${demo}/demo.${language}.vue`
     }
   })
@@ -196,6 +199,15 @@ watchEffect(async () => {
     top: 14px;
     right: 14px;
     color: var(--vxp-content-color-secondary);
+  }
+
+  &__api {
+    .md-table {
+      th:nth-child(1),
+      td:nth-child(1) {
+        white-space: nowrap;
+      }
+    }
   }
 
   .api,

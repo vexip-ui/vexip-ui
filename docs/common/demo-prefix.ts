@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { toCapitalCase } from '@vexip-ui/utils'
+import { isClient, toCapitalCase } from '@vexip-ui/utils'
 
 const components = [
   'Alert',
@@ -115,7 +115,7 @@ const components = [
 ]
 
 const prefixKey = 'vexip-docs-prefer-demo-prefix'
-const prefix = ref(localStorage.getItem(prefixKey) || '')
+const prefix = ref(isClient ? localStorage.getItem(prefixKey) || '' : '')
 
 const templateRE = /<template>[\s\S]*<\/template>/
 const replaceRE = new RegExp(`(${components.join('|')})`, 'g')
@@ -126,7 +126,7 @@ export function getDemoPrefix() {
 
 export function setDemoPrefix(value: string) {
   prefix.value = value
-  localStorage.setItem(prefixKey, prefix.value)
+  isClient && localStorage.setItem(prefixKey, prefix.value)
 }
 
 export function transformDemoCode(code: string) {

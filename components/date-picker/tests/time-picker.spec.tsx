@@ -178,6 +178,22 @@ describe('TimePicker', () => {
     expect(units[2].text()).toEqual('47')
   })
 
+  it('falsy value', async () => {
+    const wrapper = mount(TimePicker, {
+      props: { value: '09:24:47' }
+    })
+
+    const selector = wrapper.find('.vxp-time-picker__selector')
+
+    await wrapper.trigger('click')
+    await runScrollTimers()
+    await wrapper.trigger('clickoutside')
+    expect(selector.text()).toEqual('09:24:47')
+
+    await wrapper.setProps({ value: '' })
+    expect(selector.text()).toEqual('--:--:--')
+  })
+
   it('button text', () => {
     const wrapper = mount(() => (
       <TimePicker visible confirm-text={'OK'} cancel-text={'NO'}></TimePicker>

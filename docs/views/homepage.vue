@@ -38,6 +38,9 @@
         @change="refreshWave"
       ></MajorColor>
     </NativeScroll>
+    <Linker v-if="language === 'zh-CN'" class="cn-record" to="https://beian.miit.gov.cn/">
+      粤ICP备2020125887号-1
+    </Linker>
   </section>
 </template>
 
@@ -178,6 +181,13 @@ function handleSvaePrefix() {
   &__colors {
     position: relative;
     width: 100%;
+  }
+
+  .cn-record {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    color: var(--vxp-content-color-placeholder);
   }
 }
 </style>

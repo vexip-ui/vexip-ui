@@ -78,7 +78,7 @@ export function zhCNLocale() {
 
     pagination: {
       page: '页',
-      prePage: '条/页',
+      perPage: '条/页',
       prevPage: '上一页',
       nextPage: '下一页',
       prev: '向前',

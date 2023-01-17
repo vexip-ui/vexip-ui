@@ -17,6 +17,7 @@ import { inputProps } from './props'
 import type { InputType } from './symbol'
 
 type InputEventType = 'input' | 'change'
+type ChangeListener = (value: string | number) => void
 
 const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
 
@@ -128,7 +129,8 @@ export default defineComponent({
           [nh.bm('before')]: slots.beforeAction || slots['before-action'],
           [nh.bm('after')]: slots.afterAction || slots['after-action'],
           [nh.bm('loading')]: props.loading,
-          [nh.bm('transparent')]: props.transparent
+          [nh.bm('transparent')]: props.transparent,
+          [nh.bm('plain-password')]: props.plainPassword
         }
       ]
     })
@@ -239,14 +241,14 @@ export default defineComponent({
         lastValue = value
 
         setFieldValue(value)
-        emitEvent(props.onChange, value)
+        emitEvent(props.onChange as ChangeListener, value)
 
         if (!props.sync) {
           emit('update:value', value)
           validateField()
         }
       } else {
-        emitEvent(props.onInput, value)
+        emitEvent(props.onInput as ChangeListener, value)
 
         if (props.sync) {
           emit('update:value', value)
@@ -355,22 +357,6 @@ export default defineComponent({
         )
       }
 
-      if (props.type === 'password' && props.plainPassword) {
-        return (
-          <div
-            key={'password'}
-            class={[nh.be('icon'), nh.be('password')]}
-            style={{
-              color: props.suffixColor,
-              opacity: showClear.value || props.loading ? '0%' : ''
-            }}
-            onClick={toggleShowPassword}
-          >
-            <Icon icon={passwordIcon.value}></Icon>
-          </div>
-        )
-      }
-
       if (props.clearable || props.loading) {
         return (
           <div key={'placeholder'} class={[nh.be('icon'), nh.bem('icon', 'placeholder')]}></div>
@@ -425,6 +411,31 @@ export default defineComponent({
       )
     }
 
+    function renderPlainPassword() {
+      if (props.type === 'password' && props.plainPassword) {
+        return (
+          <div
+            key={'password'}
+            class={[nh.be('icon'), nh.be('password')]}
+            style={{
+              color: props.suffixColor
+            }}
+            onClick={toggleShowPassword}
+          >
+            {slots.password
+              ? (
+                  slots.password({ plain: showPassword.value })
+                )
+              : (
+              <Icon icon={passwordIcon.value}></Icon>
+                )}
+          </div>
+        )
+      }
+
+      return null
+    }
+
     function renderControl() {
       return (
         <div
@@ -456,6 +467,7 @@ export default defineComponent({
           />
           {renderSuffix()}
           {props.maxLength > 0 ? renderCount() : null}
+          {renderPlainPassword()}
         </div>
       )
     }

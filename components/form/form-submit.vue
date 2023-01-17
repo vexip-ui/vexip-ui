@@ -9,7 +9,7 @@
     :dashed="props.dashed"
     :text="props.text"
     :disabled="props.disabled"
-    :loading="loading"
+    :loading="isLoading"
     :circle="props.circle"
     :loading-icon="props.loadingIcon"
     :loading-spin="props.loadingSpin"
@@ -23,6 +23,12 @@
     <slot>
       {{ props.label || locale.submit }}
     </slot>
+    <template v-if="$slots.icon" #icon>
+      <slot name="icon"></slot>
+    </template>
+    <template v-if="$slots.loading" #loading>
+      <slot name="loading"></slot>
+    </template>
     <button
       v-if="isNative"
       ref="submit"
@@ -34,8 +40,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject } from 'vue'
+import { defineComponent, ref, computed, inject, provide } from 'vue'
 import { Button } from '@/components/button'
+import { FIELD_OPTIONS } from '@/components/form/symbol'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
 import { formSubmitProps } from './props'
@@ -49,6 +56,8 @@ export default defineComponent({
   props: formSubmitProps,
   emits: [],
   setup(_props) {
+    const fieldActions = inject(FIELD_OPTIONS, null)
+
     const props = useProps('form-submit', _props, {
       size: null,
       type: 'primary',
@@ -80,6 +89,9 @@ export default defineComponent({
 
     const isNative = computed(() => formProps.method && formProps.action)
     const isInherit = computed(() => !!actions || props.inherit)
+    const isLoading = computed(() => {
+      return loading.value || (fieldActions ? fieldActions.loading.value : false)
+    })
 
     async function handleSubmit() {
       if (props.disabled || !actions) return
@@ -117,12 +129,12 @@ export default defineComponent({
       props,
       nh: useNameHelper('form'),
       locale: useLocale('form'),
-      loading,
 
       submit,
 
       isNative,
       isInherit,
+      isLoading,
 
       handleSubmit
     }

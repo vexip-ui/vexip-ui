@@ -115,12 +115,22 @@ export function createRouter() {
     routes
   })
 
-  router.beforeResolve(() => {
-    Loading.open(5)
+  const loadedMap = new Map<string, boolean>()
+
+  router.beforeResolve(to => {
+    to.meta.loaded = !!loadedMap.get(to.path)
+
+    if (!to.meta.loaded) {
+      Loading.open(5)
+    }
+
+    return true
   })
 
   if (isClient) {
     router.afterEach(to => {
+      loadedMap.set(to.path, true)
+
       requestAnimationFrame(() => {
         document.title = to.meta.title
           ? `${i18n.global.t(to.meta.title as string)} - Vexip UI`

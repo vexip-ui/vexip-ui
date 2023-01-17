@@ -68,8 +68,8 @@ createApp().use(myNotice, { property: '$myNotice' })
 | title      | `string`                                      | The title of the notice                                                                                    | `''`    | -        |
 | content    | `string`                                      | The content of the notice                                                                                  | `''`    | -        |
 | key        | `number \| string`                            | The unique index of the hint, if not set, the built-in index will be used                                  | `''`    | -        |
-| className  | `string \| Record<string, boolean>`           | Custom class for the notice                                                                                | `null`  | -        |
-| style      | `Record<string, any>`                         | Inline style for the notice                                                                                | `null`  | -        |
+| className  | `ClassType`                                   | Custom class for the notice                                                                                | `null`  | -        |
+| style      | `StyleType`                                   | Inline style for the notice                                                                                | `null`  | -        |
 | duration   | `number`                                      | The duration of the notice in milliseconds, if set to less than 500, it will not automatically close       | `4000`  | -        |
 | background | `boolean \| string`                           | Whether to display the background color, the color can be customized when a valid color value is passed in | `false` | -        |
 | color      | `boolean \| string`                           | Whether to set the color of the font, you can customize the color when a valid color value is passed in    | `false` | -        |

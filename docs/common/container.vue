@@ -70,19 +70,21 @@ provide('refreshScroll', refreshScroll)
 provide('scrollToElement', scrollToElement)
 
 function refreshScroll() {
-  if (!scroll.value) return
+  requestAnimationFrame(() => {
+    if (!scroll.value) return
 
-  scroll.value.refresh()
+    scroll.value.refresh()
 
-  if (!refreshed) {
-    refreshed = true
-    nextFrameOnce(setScrollY)
-  }
+    if (!refreshed) {
+      refreshed = true
+      nextFrameOnce(setScrollY)
+    }
+  })
 }
 
 function setScrollY() {
   if (scroll.value) {
-    scroll.value.currentScroll.y = store.affixed ? 65 : 0
+    scroll.value.scrollTo(0, store.affixed ? 65 : 0)
     store.scrollY = store.affixed ? 65 : 0
   }
 }

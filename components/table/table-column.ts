@@ -43,7 +43,7 @@ export default defineComponent({
       attrs: null,
       type: {
         default: null,
-        validator: (value: TableColumnType) => columnTypes.includes(value),
+        validator: value => columnTypes.includes(value),
         static: true
       },
       width: null,

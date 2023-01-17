@@ -78,7 +78,7 @@ export function enUSLocale() {
 
     pagination: {
       page: 'Page | Pages',
-      prePage: '/ Page',
+      perPage: '/ Page',
       prevPage: 'Prev Page',
       nextPage: 'Next Page',
       prev: 'Prev',
