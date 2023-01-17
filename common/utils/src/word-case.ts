@@ -8,13 +8,12 @@ export type AnyCase<S> = string extends S
     : S extends `${infer F}${infer R}`
       ? `${Uppercase<F> | Lowercase<F>}${AnyCase<R>}`
       : ''
-
 /**
  * 将命名转换为短横线命名
  *
  * @param value 需要转换的命名
  */
-export function toKebabCase(value: string) {
+export function toKebabCase<T extends string>(value: T) {
   return (
     value.charAt(0).toLowerCase() +
     value
@@ -25,15 +24,20 @@ export function toKebabCase(value: string) {
 }
 
 /**
- * 将命名转换为全大写命名Capital
+ * 将命名转换为首字母大写的驼峰
  *
  * @param value 需要转换的命名
  */
-export function toCapitalCase(value: string) {
-  return (
-    value.charAt(0).toUpperCase() +
-    value.slice(1).replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))
-  )
+
+type Capitalize1<T extends string> = T extends `${infer first}-${infer rest}`
+  ? `${Capitalize<first>}${Capitalize1<rest>}`
+  : Capitalize<T>
+
+export function toCapitalCase<T extends string>(value: T) {
+  return (value.charAt(0).toUpperCase() +
+    value
+      .slice(1)
+      .replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))) as Capitalize1<T>
 }
 
 /**
