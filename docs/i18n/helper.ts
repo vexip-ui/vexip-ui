@@ -119,6 +119,7 @@ export interface I18nConfig {
     Toast: string,
 
     ConfigProvider: string,
+    CountTo: string,
     Masker: string,
     Overflow: string,
     Renderer: string,

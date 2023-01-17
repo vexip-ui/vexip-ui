@@ -121,6 +121,7 @@ export const enUS = defineI18n({
     Toast: 'Toast',
 
     ConfigProvider: 'ConfigProvider',
+    CountTo: 'CountTo',
     Masker: 'Masker',
     Overflow: 'Overflow',
     Renderer: 'Renderer',

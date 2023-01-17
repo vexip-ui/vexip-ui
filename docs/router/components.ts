@@ -108,6 +108,7 @@ export function getComponentConfig(): ComponentGroup[] {
       name: 'else',
       components: [
         { name: 'ConfigProvider', since: '2.0.0' },
+        { name: 'CountTo', since: '2.1.0' },
         { name: 'Masker' },
         { name: 'Overflow', since: '2.0.0' },
         { name: 'Renderer' },
