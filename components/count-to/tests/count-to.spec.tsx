@@ -48,24 +48,22 @@ describe('CountTo', () => {
     expect(state.paused).toBeTruthy()
   })
 
-  test('prefix & suffix & separator', async () => {
+  it('prefix & suffix & separator should work well', async () => {
     const wrapper = mount(() => (
       <CountTo start={0} end={2020.1224} prefix={'$'} suffix={'%'} separator={','} decimals={4} />
     ))
 
     const vm = wrapper.findComponent(CountTo).vm
 
-    const displayVal = vm.state.displayValue
-
-    expect(displayVal.startsWith('$')).toBeTruthy()
-    expect(displayVal.endsWith('%')).toBeTruthy()
+    expect(wrapper.find('.vxp-count-to').text().startsWith('$')).toBeTruthy()
+    expect(wrapper.find('.vxp-count-to').text().endsWith('%')).toBeTruthy()
     vm.start()
     await nextTick()
-    expect(vm.state.displayValue[2]).toBe(',')
-    expect(vm.state.displayValue[6]).toBe('.')
+    expect(wrapper.find('.vxp-count-to').text()[2]).toBe(',')
+    expect(wrapper.find('.vxp-count-to').text()[6]).toBe('.')
   })
 
-  test('autoplay & appear', async () => {
+  it('autoplay & appear should work', async () => {
     const wrapper = mount({
       setup() {
         const end = ref(2023)
@@ -77,12 +75,11 @@ describe('CountTo', () => {
         )
       }
     })
-    const vm = wrapper.findComponent(CountTo).vm
     await nextTick()
-    expect(vm.state.displayValue).toBe('2023')
+    expect(wrapper.find('.vxp-count-to').text()).toBe('2023')
 
     await wrapper.find('button').trigger('click')
     await nextTick()
-    expect(vm.state.displayValue).toBe('2024')
+    expect(wrapper.find('.vxp-count-to').text()).toBe('2024')
   })
 })
