@@ -1,3 +1,3 @@
-### Slots Usage
+### Prefix And Suffix
 
 You can use the `prefix` and `suffix` slots to meet the personalized configuration.
