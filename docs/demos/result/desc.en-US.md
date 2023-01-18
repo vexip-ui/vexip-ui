@@ -1,1 +1,1 @@
-Used to give feedback on the result of user's operation or access exception.
+It is usually used to provide user feedback on operation results or exceptions.

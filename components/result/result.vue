@@ -60,21 +60,12 @@ export default defineComponent({
 
     const iconComp = computed(() => {
       if (props.icon) return props.icon
+
       return predefinedIcons[props.type] ?? null
     })
-
-    const hasTitle = computed(() => {
-      return slots.title || props.title
-    })
-
-    const hasIcon = computed(() => {
-      return slots.icon || props.type || props.icon
-    })
-
-    const hasDescription = computed(() => {
-      return slots.description || props.description
-    })
-
+    const hasTitle = computed(() => slots.title || props.title)
+    const hasIcon = computed(() => slots.icon || props.type || props.icon)
+    const hasDescription = computed(() => slots.description || props.description)
     const className = computed(() => {
       return {
         [nh.b()]: true,
@@ -84,9 +75,9 @@ export default defineComponent({
         [nh.bm(props.size)]: props.size !== 'default'
       }
     })
-
     const style = computed(() => {
       const { cvm } = nh
+
       if (props.iconColor) {
         return cvm({
           'icon-color': props.iconColor
@@ -99,6 +90,7 @@ export default defineComponent({
     return {
       props,
       nh,
+
       className,
       iconComp,
       hasTitle,

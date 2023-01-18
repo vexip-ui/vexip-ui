@@ -2,13 +2,16 @@ import { describe, it, expect } from 'vitest'
 import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
 import { Result } from '..'
+
 const typeIconMap = {
   info: CircleInfo,
   success: CircleCheck,
   warning: CircleExclamation,
   error: CircleXmark
 }
+
 const TEXT = 'Text'
+
 describe('Result', () => {
   it('render', () => {
     const wrapper = mount(Result)
