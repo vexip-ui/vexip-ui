@@ -271,6 +271,5 @@ export const TABLE_STORE: InjectionKey<TableStore> = Symbol('TABLE_STORE')
  * 表格组件的顶层 Api
  */
 export const TABLE_ACTION: InjectionKey<TableAction> = Symbol('TABLE_ACTION')
-export const TABLE_LOCALE: InjectionKey<LocaleConfig['table']> = Symbol('TABLE_LOCALE')
 
 export const TABLE_HEAD_KEY = Symbol('TABLE_HEAD_KEY')

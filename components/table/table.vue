@@ -148,12 +148,13 @@ import {
   transformListToMap,
   removeArrayItem,
   toNumber,
-  nextFrameOnce
+  nextFrameOnce,
+  warnOnce
 } from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
 import { useStore } from './store'
-import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION, TABLE_LOCALE } from './symbol'
+import { DEFAULT_KEY_FIELD, TABLE_STORE, TABLE_ACTION } from './symbol'
 
 import type {
   DropType,
@@ -254,7 +255,20 @@ export default defineComponent({
     const indicator = ref<HTMLElement>()
     const scrollbar = ref<InstanceType<typeof Scrollbar>>()
 
-    const locale = useLocale('table', toRef(props, 'locale'))
+    const userLocale = computed(() => {
+      if (isDefined(props.emptyText)) {
+        warnOnce(
+          "[vexip-ui:Table] 'empty-text' prop has been deprecated, plesae " +
+            "using 'empty' option of 'locale' prop to instead it"
+        )
+
+        return { empty: props.emptyText, ...props.locale }
+      }
+
+      return props.locale
+    })
+
+    const locale = useLocale('table', userLocale)
 
     const store = useStore({
       columns: props.columns as TableColumnOptions[],
@@ -426,7 +440,7 @@ export default defineComponent({
     watch(() => props.pageSize, setPageSize)
     watch(() => props.rowHeight, setGlobalRowHeight)
     watch(() => props.rowDraggable, setRowDraggable)
-    watch(locale, setLocale)
+    watch(locale, setLocale, { deep: true })
     watch(() => props.tooltipTheme, setTooltipTheme)
     watch(() => props.tooltipWidth, setTooltipWidth)
     watch(() => props.singleSorter, setSingleSorter)
