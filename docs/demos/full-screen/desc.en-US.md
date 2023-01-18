@@ -1,1 +1,1 @@
-It will help you enlarge the content you want in full screen.
+This component will help you quickly display some content in full screen.

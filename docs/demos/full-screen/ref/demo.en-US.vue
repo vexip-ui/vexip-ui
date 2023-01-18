@@ -19,11 +19,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import type { FullScreenTriggerType, FullScreen } from 'vexip-ui'
+import type { FullScreenType, FullScreen } from 'vexip-ui'
 
 const fullScreen = ref<InstanceType<typeof FullScreen>>()
 
-const toggle = (type: FullScreenTriggerType) => {
+const toggle = (type: FullScreenType) => {
   fullScreen.value?.toggle(type)
 }
 </script>

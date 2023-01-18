@@ -6,18 +6,23 @@
       :style="{ [nh.cv('z-index')]: zIndexRef }"
       v-bind="$attrs"
     >
-      <slot :enter="enter" :exit="exit" :toggle="toggle"></slot>
+      <slot
+        :enter="enter"
+        :exit="exit"
+        :toggle="toggle"
+        :full="isEntered"
+      ></slot>
     </div>
   </Portal>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, computed } from 'vue'
+import { ref, defineComponent, computed, watch } from 'vue'
 import { Portal } from '@/components/portal'
 import { useNameHelper } from '@vexip-ui/config'
 import { useFullScreen } from '@vexip-ui/hooks'
 
-import type { FullScreenTriggerType } from './symbol'
+import type { FullScreenType } from './symbol'
 
 export default defineComponent({
   name: 'FullScreen',
@@ -28,16 +33,27 @@ export default defineComponent({
   setup() {
     const isEntered = ref(false)
     const zIndexRef = ref<number>()
-    const state = ref<FullScreenTriggerType>()
+    const state = ref<FullScreenType>()
 
     const nh = useNameHelper('full-screen')
     const className = computed(() => [nh.b(), nh.bs('vars'), { [nh.bm('full')]: isEntered.value }])
 
     const transferTo = computed(() => (isEntered.value ? 'body' : ''))
 
-    const { enter: browserEnter, exit: browserExit, target: rootRef } = useFullScreen()
+    const {
+      enter: browserEnter,
+      exit: browserExit,
+      target: rootRef,
+      full: browserFull
+    } = useFullScreen()
 
-    const enter = (type: FullScreenTriggerType = 'window', zIndex?: number) => {
+    watch(browserFull, value => {
+      if (!value) {
+        isEntered.value = false
+      }
+    })
+
+    function enter(type: FullScreenType = 'window', zIndex?: number) {
       if (isEntered.value) {
         exit()
       }
@@ -52,14 +68,14 @@ export default defineComponent({
       state.value = type
     }
 
-    const exit = () => {
+    function exit() {
       zIndexRef.value = undefined
       isEntered.value = false
 
       browserExit()
     }
 
-    const toggle = (type: FullScreenTriggerType = 'window', zIndex?: number) => {
+    function toggle(type: FullScreenType = 'window', zIndex?: number) {
       if (isEntered.value) {
         if (state.value !== type) {
           enter(type, zIndex)
@@ -73,11 +89,15 @@ export default defineComponent({
 
     return {
       nh,
-      className,
-      rootRef,
+
       zIndexRef,
       isEntered,
+
+      className,
       transferTo,
+
+      rootRef,
+
       enter,
       exit,
       toggle

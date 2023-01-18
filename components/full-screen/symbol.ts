@@ -1,1 +1,1 @@
-export type FullScreenTriggerType = 'window' | 'browser'
+export type FullScreenType = 'window' | 'browser'
