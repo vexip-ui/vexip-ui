@@ -14,6 +14,7 @@
   >
     <Checkbox
       v-if="isSelection(column)"
+      inherit
       control
       :class="nh.be('selection')"
       :checked="checkedAll"
@@ -79,6 +80,7 @@
           <Checkbox
             v-for="item in filter.options"
             :key="item.value"
+            inherit
             :checked="item.active"
             :label="item.label"
             :value="item.value"
@@ -87,6 +89,7 @@
         </div>
         <div :class="nh.be('filter-actions')">
           <Button
+            inherit
             text
             size="small"
             :disabled="!hasFilterActive"
@@ -94,7 +97,12 @@
           >
             {{ locale.filterConfirm }}
           </Button>
-          <Button text size="small" @click="handleResetFilter">
+          <Button
+            inherit
+            text
+            size="small"
+            @click="handleResetFilter"
+          >
             {{ locale.filterReset }}
           </Button>
         </div>

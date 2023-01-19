@@ -103,12 +103,15 @@
             </div>
             <CalendarPanel
               v-else
+              inherit
               :value="calendarValue"
               :year="calendarYear"
               :month="calendarMonth"
               :disabled-date="disabledDate"
               :is-range="calendarRange"
               :value-type="valueType"
+              :min="min"
+              :max="max"
               @select="handleSelectDate"
               @hover="handleHoverDate"
             ></CalendarPanel>
@@ -122,16 +125,28 @@
             :second="dateValue.second"
             :candidate="3"
             :steps="steps"
+            :disabled-time="disabledTime"
             @toggle-col="toggleColumn"
             @change="emitChange"
           ></TimeWheel>
         </div>
       </div>
       <div v-if="!noAction" :class="nh.be('action')">
-        <Button text size="small" @click="handleCancel">
+        <Button
+          inherit
+          text
+          size="small"
+          @click="handleCancel"
+        >
           {{ cancelText || locale.cancel }}
         </Button>
-        <Button type="primary" size="small" @click="handleConfirm">
+        <Button
+          inherit
+          type="primary"
+          size="small"
+          :disabled="hasError"
+          @click="handleConfirm"
+        >
           {{ confirmText || locale.confirm }}
         </Button>
       </div>
@@ -154,7 +169,7 @@ import { datePickerTypes } from './symbol'
 import type { PropType } from 'vue'
 import type { MonthIndex } from '@/components/calendar'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DateType, DateTimeType, DatePickerType, DateShortcut } from './symbol'
+import type { DateType, DateTimeType, DatePickerType, DateShortcut, DisabledTime } from './symbol'
 
 export default defineComponent({
   name: 'DatePanel',
@@ -234,6 +249,22 @@ export default defineComponent({
     endActivated: {
       type: Object as PropType<Record<DateTimeType, boolean>>,
       default: () => ({})
+    },
+    min: {
+      type: [Number, String, Date] as PropType<Dateable>,
+      default: null
+    },
+    max: {
+      type: [Number, String, Date] as PropType<Dateable>,
+      default: null
+    },
+    disabledTime: {
+      type: Object as PropType<DisabledTime>,
+      default: () => ({})
+    },
+    hasError: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['click', 'shortcut', 'toggle-col', 'change', 'cancel', 'confirm', 'hover', 'type-change'],
@@ -243,8 +274,8 @@ export default defineComponent({
     const currentPane = ref<DateType>('date')
     const calendarYear = ref(today.getFullYear())
     const calendarMonth = ref(today.getMonth() + 1) // 1 ~ 12
-    const hoveredYear = ref(0) // 0 = false
-    const hoveredMonth = ref(0) // 0 = false
+    const hoveredYear = ref(0) // 0 is no hover (falsy)
+    const hoveredMonth = ref(0) // 0 is no hover (falsy)
     const yearRange = ref<number[]>([])
 
     const calendar = ref<HTMLElement>()
@@ -450,41 +481,73 @@ export default defineComponent({
     }
 
     function isDisabledYear(year: number) {
-      if (!props.isRange) return false
+      if (props.isRange) {
+        if (
+          props.valueType === 'end' &&
+          props.startActivated.year &&
+          year < props.startValue.year
+        ) {
+          return true
+        }
 
-      if (props.valueType === 'end' && props.startActivated.year && year < props.startValue.year) {
-        return true
+        if (props.valueType === 'start' && props.endActivated.year && props.endValue.year < year) {
+          return true
+        }
       }
 
-      if (props.valueType === 'start' && props.endActivated.year && props.endValue.year < year) {
-        return true
+      if (props.type === 'year') {
+        return props.disabledDate(new Date(year, 0))
       }
 
-      return false
+      for (let i = 1; i <= 12; ++i) {
+        if (!isDisabledMonth(i, year)) {
+          return false
+        }
+      }
+
+      return true
     }
 
-    function isDisabledMonth(month: number) {
-      if (!props.isRange) return false
+    function isDisabledMonth(month: number, year = calendarYear.value) {
+      if (props.type === 'year') return false
 
-      const monthYear = calendarYear.value * 100 + month
+      if (props.isRange) {
+        const monthYear = year * 100 + month
 
-      if (
-        props.valueType === 'end' &&
-        props.startActivated.month &&
-        monthYear < 100 * props.startValue.year + props.startValue.month
-      ) {
-        return true
+        if (
+          props.valueType === 'end' &&
+          props.startActivated.month &&
+          monthYear < 100 * props.startValue.year + props.startValue.month
+        ) {
+          return true
+        }
+
+        if (
+          props.valueType === 'start' &&
+          props.endActivated.month &&
+          monthYear > 100 * props.endValue.year + props.endValue.month
+        ) {
+          return true
+        }
       }
 
-      if (
-        props.valueType === 'start' &&
-        props.endActivated.month &&
-        monthYear > 100 * props.endValue.year + props.endValue.month
-      ) {
-        return true
+      if (props.type === 'month') {
+        return props.disabledDate(new Date(year, month - 1))
       }
 
-      return false
+      const current = new Date(year, month - 1)
+      const end = new Date(year, month, 0)
+      const dayCount = end.getDate()
+
+      for (let i = 1; i <= dayCount; ++i) {
+        current.setDate(i)
+
+        if (!props.disabledDate(current)) {
+          return false
+        }
+      }
+
+      return true
     }
 
     function handleYearHover(year: number) {

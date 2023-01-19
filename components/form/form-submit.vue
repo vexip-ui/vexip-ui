@@ -1,5 +1,6 @@
 <template>
   <Button
+    :inherit="isInherit"
     :class="nh.be('submit')"
     :size="props.size"
     :type="props.type"
@@ -8,7 +9,7 @@
     :dashed="props.dashed"
     :text="props.text"
     :disabled="props.disabled"
-    :loading="loading"
+    :loading="isLoading"
     :circle="props.circle"
     :loading-icon="props.loadingIcon"
     :loading-effect="props.loadingEffect"
@@ -22,6 +23,12 @@
     <slot>
       {{ props.label || locale.submit }}
     </slot>
+    <template v-if="$slots.icon" #icon>
+      <slot name="icon"></slot>
+    </template>
+    <template v-if="$slots.loading" #loading>
+      <slot name="loading"></slot>
+    </template>
     <button
       v-if="isNative"
       ref="submit"
@@ -33,14 +40,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject } from 'vue'
+import { defineComponent, ref, computed, inject, provide } from 'vue'
 import { Button } from '@/components/button'
+import { FIELD_OPTIONS } from '@/components/form/symbol'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
-import { noop, isPromise } from '@vexip-ui/utils'
+import { isPromise } from '@vexip-ui/utils'
 import { formSubmitProps } from './props'
 import { FORM_PROPS, FORM_ACTIONS } from './symbol'
-
-import type { FormActions } from './symbol'
 
 export default defineComponent({
   name: 'FormSubmit',
@@ -50,6 +56,8 @@ export default defineComponent({
   props: formSubmitProps,
   emits: [],
   setup(_props) {
+    const fieldActions = inject(FIELD_OPTIONS, null)
+
     const props = useProps('form-submit', _props, {
       size: null,
       type: 'primary',
@@ -73,24 +81,20 @@ export default defineComponent({
     })
 
     const formProps = inject(FORM_PROPS, {})
-    const actions = inject<FormActions>(FORM_ACTIONS, {
-      getLabelWidth: noop,
-      validate: noop,
-      validateFields: noop,
-      reset: noop,
-      resetFields: noop,
-      clearError: noop,
-      clearFieldsError: noop
-    })
+    const actions = inject(FORM_ACTIONS, null)
 
     const loading = ref(false)
 
     const submit = ref<HTMLElement>()
 
     const isNative = computed(() => formProps.method && formProps.action)
+    const isInherit = computed(() => !!actions || props.inherit)
+    const isLoading = computed(() => {
+      return loading.value || (fieldActions ? fieldActions.loading.value : false)
+    })
 
     async function handleSubmit() {
-      if (props.disabled) return
+      if (props.disabled || !actions) return
 
       loading.value = true
 
@@ -125,11 +129,12 @@ export default defineComponent({
       props,
       nh: useNameHelper('form'),
       locale: useLocale('form'),
-      loading,
 
       submit,
 
       isNative,
+      isInherit,
+      isLoading,
 
       handleSubmit
     }

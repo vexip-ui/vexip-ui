@@ -25,12 +25,15 @@
         <slot name="control">
           <Overflow
             v-if="props.multiple"
+            inherit
             :class="[nh.be('tags')]"
             :items="templateValues"
+            :max-count="props.maxTagCount"
             @rest-change="restTagCount = $event"
           >
             <template #default="{ item, index }">
               <Tag
+                inherit
                 :class="nh.be('tag')"
                 :type="props.tagType"
                 closable
@@ -43,6 +46,7 @@
             <template #counter="{ count }">
               <Tag
                 v-if="props.noRestTip"
+                inherit
                 :class="[nh.be('tag'), nh.be('counter')]"
                 :type="props.tagType"
               >
@@ -50,6 +54,7 @@
               </Tag>
               <span v-else>
                 <Tooltip
+                  inherit
                   :transfer="false"
                   :visible="restTipShow"
                   trigger="custom"
@@ -58,14 +63,15 @@
                   @click.stop="toggleShowRestTip"
                 >
                   <template #trigger>
-                    <Tag :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                    <Tag inherit :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
                       {{ `+${count}` }}
                     </Tag>
                   </template>
-                  <NativeScroll use-y-bar>
+                  <NativeScroll inherit use-y-bar>
                     <template v-for="(item, index) in templateValues" :key="index">
                       <Tag
                         v-if="index >= templateValues.length - restTagCount"
+                        inherit
                         :class="nh.be('tag')"
                         closable
                         :type="props.tagType"
@@ -129,7 +135,11 @@
         <div
           v-if="currentVisible"
           ref="popper"
-          :class="[nh.be('popper'), nh.bs('vars')]"
+          :class="[
+            nh.be('popper'),
+            nh.bs('vars'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
+          ]"
           @click.stop
         >
           <div
@@ -405,6 +415,7 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('multiple')]: props.multiple,
         [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0
       }

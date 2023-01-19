@@ -55,13 +55,15 @@ async function serveComponent() {
     export const router = createRouter({
       history: createWebHashHistory('/'),
       routes: [
-        ${demos.map((demo, index) => {
-          return `{
+        ${demos
+          .map((demo, index) => {
+            return `{
             path: '${index ? `/${demo}` : '/'}',
             name: '${demo}',
             component: () => import('../../docs/demos/${target}/${demo}/demo.${matchedLang}.vue')
           }`
-        }).join(',\n')},
+          })
+          .join(',\n')},
         {
           path: '/:catchAll(.*)',
           redirect: '/'

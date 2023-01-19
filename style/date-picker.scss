@@ -10,9 +10,11 @@ $date-picker: () !default;
 $date-picker: map.merge(
   (
     color-disabled: get-css-var('input-control-color-disabled'),
+    color-error: get-css-var('color-error-base'),
     unit-color: get-css-var('content-color-secondary'),
     unit-color-focus: get-css-var('color-white'),
     unit-bg-color-focus: get-css-var('color-primary-opacity-1'),
+    unit-bg-color-error: get-css-var('color-error-opacity-1'),
     separator-color: get-css-var('content-color-disabled'),
     exchange-color: get-css-var('content-color-secondary'),
     exchange-color-hover: get-css-var('color-primary-base'),
@@ -72,6 +74,10 @@ $date-picker: map.merge(
     display: flex;
     align-items: center;
     outline: 0;
+
+    &--error {
+      color: get-css-var('date-picker-color-error');
+    }
   }
 
   &__unit {
@@ -86,6 +92,15 @@ $date-picker: map.merge(
     }
   }
 
+  &__input--error &__unit {
+    color: get-css-var('date-picker-color-error');
+
+    &--focused {
+      color: get-css-var('date-picker-unit-color-focus');
+      background-color: get-css-var('date-picker-unit-bg-color-error');
+    }
+  }
+
   &__label {
     text-align: center;
     user-select: none;
@@ -97,6 +112,10 @@ $date-picker: map.merge(
     transition: get-css-var('transition-color');
   }
 
+  &__input--error &__separator {
+    color: get-css-var('date-picker-color-error');
+  }
+
   &--disabled &__separator {
     color: get-css-var('date-picker-color-disabled');
   }
@@ -105,7 +124,6 @@ $date-picker: map.merge(
     display: flex;
     align-items: center;
     padding: 0 4px;
-    padding-top: 1px;
     color: get-css-var('date-picker-exchange-color');
 
     &--endabled:hover {
@@ -115,6 +133,10 @@ $date-picker: map.merge(
 
   &--disabled &__exchange {
     color: get-css-var('date-picker-color-disabled');
+  }
+
+  &__pad {
+    width: 2px;
   }
 
   &__popper {

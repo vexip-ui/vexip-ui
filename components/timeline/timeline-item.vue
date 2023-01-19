@@ -13,7 +13,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, inject, onBeforeUnmount } from 'vue'
+import {
+  defineComponent,
+  ref,
+  reactive,
+  computed,
+  watch,
+  inject,
+  onMounted,
+  onUpdated,
+  onBeforeUnmount
+} from 'vue'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { timelineItemProps } from './props'
 import { TIMELINE_STATE } from './symbol'
@@ -52,6 +62,7 @@ export default defineComponent({
 
     const nh = useNameHelper('timeline')
     const currentLabel = ref(props.label)
+    const content = ref<HTMLElement>()
 
     const className = computed(() => {
       return {
@@ -84,14 +95,31 @@ export default defineComponent({
 
     if (timelineState) {
       const state: ItemState = reactive({
-        label: currentLabel
+        label: currentLabel,
+        index: 0,
+        total: 0,
+        height: 0
       })
 
       timelineState.increaseItem(state)
 
+      watch(() => timelineState.bothSides, updateHeight)
+      watch(() => timelineState.horizontal, updateHeight)
+
+      onMounted(updateHeight)
+      onUpdated(updateHeight)
+
       onBeforeUnmount(() => {
         timelineState.decreaseItem(state)
       })
+
+      function updateHeight() {
+        requestAnimationFrame(() => {
+          if (timelineState?.horizontal && content.value) {
+            state.height = content.value.scrollHeight
+          }
+        })
+      }
     }
 
     function handleSignalClick() {
@@ -105,6 +133,8 @@ export default defineComponent({
       className,
       itemStyle,
       lineStyle,
+
+      content,
 
       handleSignalClick
     }

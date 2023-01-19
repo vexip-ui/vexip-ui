@@ -170,6 +170,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.state)]: props.state !== 'default',
         [nh.bm('vertical')]: props.vertical,
         [nh.bm('sliding')]: sliding.value[1] || sliding.value[0],

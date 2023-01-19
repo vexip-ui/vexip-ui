@@ -1,4 +1,6 @@
 declare const __VERSION__: string
+declare const __VUE_VERSION__: string
+declare const __REPL_VERSION__: string
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'

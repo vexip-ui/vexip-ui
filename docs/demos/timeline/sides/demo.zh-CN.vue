@@ -1,5 +1,9 @@
 <template>
-  <Timeline both-sides style="max-width: 500px;">
+  <p>
+    翻转：
+    <Switch v-model:value="flip"></Switch>
+  </p>
+  <Timeline both-sides :flip="flip" style="max-width: 500px;">
     <TimelineItem>
       <span style="margin-bottom: 10px;">项目负责人</span>
       <Card> 今日客户提出了XXX的需求，请及时做技术可行性分析 </Card>
@@ -22,3 +26,9 @@
     </TimelineItem>
   </Timeline>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const flip = ref(false)
+</script>

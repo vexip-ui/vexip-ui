@@ -7,6 +7,7 @@
   >
     <VirtualList
       ref="list"
+      inherit
       :items="options"
       :item-size="32"
       height="100%"
@@ -43,6 +44,7 @@
           >
             <Checkbox
               v-if="multiple || noCascaded"
+              inherit
               :class="nh.be('checkbox')"
               :checked="item.checked"
               :control="hasChildren(item)"

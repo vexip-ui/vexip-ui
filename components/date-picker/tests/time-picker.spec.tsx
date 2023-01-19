@@ -178,6 +178,22 @@ describe('TimePicker', () => {
     expect(units[2].text()).toEqual('47')
   })
 
+  it('falsy value', async () => {
+    const wrapper = mount(TimePicker, {
+      props: { value: '09:24:47' }
+    })
+
+    const selector = wrapper.find('.vxp-time-picker__selector')
+
+    await wrapper.trigger('click')
+    await runScrollTimers()
+    await wrapper.trigger('clickoutside')
+    expect(selector.text()).toEqual('09:24:47')
+
+    await wrapper.setProps({ value: '' })
+    expect(selector.text()).toEqual('--:--:--')
+  })
+
   it('button text', () => {
     const wrapper = mount(() => (
       <TimePicker visible confirm-text={'OK'} cancel-text={'NO'}></TimePicker>
@@ -593,5 +609,54 @@ describe('TimePicker', () => {
     await wrapper.trigger('clickoutside')
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith([format(date, 'HH:mm:ss'), '17:51:36'])
+  })
+
+  it('min', async () => {
+    const wrapper = mount(TimePicker, {
+      props: {
+        value: '12:14:26',
+        min: '11:20:30'
+      }
+    })
+    const input = wrapper.find('.vxp-time-picker__input')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-time-picker__input--error')
+
+    await input.trigger('keydown', { key: 'ArrowUp' })
+    expect(input.classes()).toContain('vxp-time-picker__input--error')
+  })
+
+  it('max', async () => {
+    const wrapper = mount(TimePicker, {
+      props: {
+        value: '10:22:46',
+        max: '11:20:30'
+      }
+    })
+    const input = wrapper.find('.vxp-time-picker__input')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-time-picker__input--error')
+
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    expect(input.classes()).toContain('vxp-time-picker__input--error')
+  })
+
+  it('min and max reversed', async () => {
+    const wrapper = mount(TimePicker, {
+      props: {
+        value: '10:22:46',
+        min: '12:00:00',
+        max: '11:20:30'
+      }
+    })
+    const input = wrapper.find('.vxp-time-picker__input')
+
+    await wrapper.trigger('click')
+    expect(input.classes()).not.toContain('vxp-time-picker__input--error')
+
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    expect(input.classes()).toContain('vxp-time-picker__input--error')
   })
 })

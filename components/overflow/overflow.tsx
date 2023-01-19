@@ -4,14 +4,12 @@ import {
   computed,
   watch,
   onMounted,
-  onBeforeUnmount,
   nextTick,
   createTextVNode,
   Fragment
 } from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { useResize } from '@vexip-ui/hooks'
 import { isDefined } from '@vexip-ui/utils'
 import { overflowProps } from './props'
 
@@ -30,39 +28,38 @@ export default defineComponent({
       },
       tag: 'div',
       attrFlag: false,
-      static: false
+      static: false,
+      maxCount: 0
     })
 
     const nh = useNameHelper('overflow')
-    const { observeResize, unobserveResize } = useResize()
     const restCount = ref(0)
 
     const wrapper = ref<HTMLElement>()
     const counter = ref<HTMLElement>()
+    const suffix = ref<HTMLElement>()
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars')]
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        {
+          [nh.bm('inherit')]: props.inherit,
+          [nh.bm('manual')]: props.maxCount > 0
+        }
+      ]
     })
     const hiddenFlag = computed(() => {
       return props.attrFlag ? (props.attrFlag === true ? 'hidden' : props.attrFlag) : false
     })
 
-    watch(
-      () => props.items?.length,
-      () => {
-        nextTick(refresh)
-      }
-    )
+    watch([() => props.items?.length, () => props.maxCount], () => {
+      nextTick(refresh)
+    })
 
     expose({ refresh })
 
-    onMounted(() => {
-      refresh()
-      wrapper.value && observeResize(wrapper.value, refresh)
-    })
-    onBeforeUnmount(() => {
-      wrapper.value && unobserveResize(wrapper.value)
-    })
+    onMounted(refresh)
 
     function toggleDisplay(el: HTMLElement, show: boolean) {
       if (hiddenFlag.value) {
@@ -107,16 +104,40 @@ export default defineComponent({
       toggleDisplay(counterEl, true)
 
       const children = wrapper.value.children
+      const childCount = children.length
+
+      let overflow = false
+
+      if (props.maxCount > 0) {
+        for (let i = 0, len = childCount - 1; i < len; ++i) {
+          const child = children[i] as HTMLElement
+
+          child.style.display = i < props.maxCount ? '' : 'none'
+        }
+
+        if (props.maxCount > childCount - 1) {
+          toggleDisplay(counterEl, false)
+
+          restCount.value = 0
+        } else {
+          restCount.value = childCount - 1 - props.maxCount
+          overflow = restCount.value > 0
+        }
+
+        postRefresh(overflow)
+        return
+      }
+
+      const suffixEl = suffix.value
       const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(wrapper.value)
       const childWidths: number[] = []
 
-      let totalWidth = 0
-      let overflow = false
+      let totalWidth = suffixEl ? suffixEl.offsetWidth : 0
 
       const counterMargin = computeHorizontalMargin(counterEl)
-      const updateRest = (count: number) => emitEvent(props.onRestChange, count)
+      const length = childCount - (suffixEl ? 2 : 1)
 
-      for (let i = 0, len = children.length - 1; i < len; ++i) {
+      for (let i = 0; i < length; ++i) {
         if (i < 0) continue
 
         const child = children[i] as HTMLElement
@@ -135,24 +156,34 @@ export default defineComponent({
 
         if (totalWidth > wrapperWidth) {
           for (let j = i; j >= 0; --j) {
-            restCount.value = len - j
+            restCount.value = length - j
             totalWidth -= childWidths[j]
 
             if (totalWidth + counterEl.offsetWidth + counterMargin <= wrapperWidth || !j) {
               overflow = true
               i = j - 1
+
+              if (suffixEl) {
+                suffixEl.style.maxWidth =
+                  i === -1 ? `${wrapperWidth - counterEl.offsetWidth}px` : ''
+              }
+
               break
             }
           }
         }
       }
 
+      postRefresh(overflow)
+    }
+
+    function postRefresh(overflow: boolean) {
       if (lastRestCount !== restCount.value) {
         lastRestCount = restCount.value
-        updateRest(restCount.value)
+        emitEvent(props.onRestChange, restCount.value)
       }
 
-      toggleDisplay(counterEl, overflow)
+      counter.value && toggleDisplay(counter.value, overflow)
 
       if (overflow !== lastOverflow) {
         lastOverflow = overflow
@@ -202,6 +233,15 @@ export default defineComponent({
             : (
             <span ref={counter} style={{ display: 'inline-block' }}></span>
               )}
+          {slots.suffix
+            ? (
+            <ResizeObserver onResize={refresh}>
+              <div ref={suffix} class={nh.be('suffix')}>
+                {slots.suffix()}
+              </div>
+            </ResizeObserver>
+              )
+            : null}
         </CustomTag>
       )
 

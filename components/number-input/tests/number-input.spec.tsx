@@ -26,11 +26,11 @@ function emitChange(input: HTMLInputElement, value: number) {
 
 describe('NumberInput', () => {
   it('render', () => {
-    const wrapper = mount(() => <NumberInput placeholder={NUMBER}></NumberInput>)
+    const wrapper = mount(() => <NumberInput placeholder={'test'}></NumberInput>)
 
     expect(wrapper.classes()).toContain('vxp-input-vars')
     expect(wrapper.find('input[type="text"]').exists()).toBe(true)
-    expect(wrapper.find('input[type="text"]').attributes('placeholder')).toEqual(String(NUMBER))
+    expect(wrapper.find('input[type="text"]').attributes('placeholder')).toEqual('test')
     expect(wrapper.find('.vxp-number-input__plus').exists()).toBe(true)
     expect(wrapper.find('.vxp-number-input__minus').exists()).toBe(true)
   })

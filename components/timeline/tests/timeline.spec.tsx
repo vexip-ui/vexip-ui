@@ -39,6 +39,18 @@ describe('Timeline', () => {
     expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--both-sides')
   })
 
+  it('flip', () => {
+    const wrapper = mount(() => <Timeline flip></Timeline>)
+
+    expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--flip')
+  })
+
+  it('horizontal', () => {
+    const wrapper = mount(() => <Timeline horizontal></Timeline>)
+
+    expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--horizontal')
+  })
+
   it('item type', () => {
     (['default', 'success', 'error', 'warning', 'disabled'] as const).forEach(type => {
       const wrapper = mount(() => (

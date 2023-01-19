@@ -2,8 +2,12 @@
 
 @use './design' as *;
 @use './icon.scss';
+@use './native-scroll.scss';
 @use './input.scss' as input;
 @use './option.scss';
+@use './overflow.scss';
+@use './tag.scss';
+@use './tooltip.scss';
 @use './virtual-list.scss';
 
 $select: () !default;
@@ -58,7 +62,18 @@ $select: map.merge(
   &--multiple &__control {
     flex-wrap: wrap;
     min-height: 0;
-    margin-top: -2px;
+    margin: -1px 0;
+  }
+
+  &--responsive &__control {
+    flex-wrap: nowrap;
+  }
+
+  &__tags {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;
   }
 
   &__tag {
@@ -129,6 +144,8 @@ $select: map.merge(
   }
 
   &__popper {
+    @include basis;
+
     z-index: get-css-var('z-index-popper');
     display: flex;
     min-width: 98px;

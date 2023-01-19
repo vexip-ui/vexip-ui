@@ -36,7 +36,15 @@ export default defineComponent({
     const nh = useNameHelper('row')
 
     const className = computed(() => {
-      return [nh.b(), nh.bs('vars'), nh.bm(props.justify), nh.bm(props.align)]
+      return [
+        nh.b(),
+        nh.bs('vars'),
+        nh.bm(props.justify),
+        nh.bm(props.align),
+        {
+          [nh.bm('inherit')]: props.inherit
+        }
+      ]
     })
     const style = computed(() => {
       if (!props.gap) return null

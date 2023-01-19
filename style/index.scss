@@ -42,9 +42,13 @@
 @use './form-item.scss';
 @use './form-reset.scss';
 @use './form-submit.scss';
+@use './full-screen.scss';
 @use './grid.scss';
 @use './highlight.scss';
 @use './icon.scss';
+@use './image.scss';
+@use './image-group.scss';
+@use './image-viewer.scss';
 @use './input.scss';
 @use './layout.scss';
 @use './layout-aside.scss';
@@ -72,6 +76,7 @@
 @use './radio-group.scss';
 @use './renderer.scss';
 @use './resize-observer.scss';
+@use './result.scss';
 @use './row.scss';
 @use './scroll.scss';
 @use './scrollbar.scss';

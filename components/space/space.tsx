@@ -58,6 +58,7 @@ export default defineComponent({
       const className = {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('inline')]: props.inline,
         [nh.bm('vertical')]: props.vertical,
         [nh.bm('no-wrap')]: props.vertical || props.noWrap,

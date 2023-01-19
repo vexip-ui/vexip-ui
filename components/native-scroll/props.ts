@@ -15,7 +15,8 @@ import type { ScrollPayload, BarScrollPayload } from './symbol'
 export const nativeScrollProps = buildProps({
   scrollClass: classProp,
   scrollStyle: styleProp,
-  mode: String as PropType<ScrollMode>,
+  scrollAttrs: Object as PropType<Record<string, any>>,
+  mode: String as PropType<Exclude<ScrollMode, 'horizontal-exact'>>,
   width: [Number, String],
   height: [Number, String],
   disabled: booleanProp,
@@ -32,7 +33,7 @@ export const nativeScrollProps = buildProps({
   appear: booleanProp,
   barDuration: Number,
   useBarTrack: booleanProp,
-  wrapperTag: String,
+  scrollTag: String,
   onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
   onXEnabledChange: eventProp<(enabled: boolean) => void>(),
   onYEnabledChange: eventProp<(enabled: boolean) => void>(),

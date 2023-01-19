@@ -13,7 +13,7 @@
 | closable        | `boolean`                             | Set whether to have a close button                                                                                                                                                                                      | `true`           | -     |
 | mask-close      | `boolean`                             | Set whether the mask layer can be closed by clicking                                                                                                                                                                    | `true`           | -     |
 | inner           | `boolean`                             | Set whether it is an inline modal, after opening, the positioning will change from fixed to absolute                                                                                                                    | `false`          | -     |
-| modal-class     | `string \| Record<string, boolean>`   | Custom class name of the modal                                                                                                                                                                                          | `null`           | -     |
+| modal-class     | `ClassType`                           | Custom class name of the modal                                                                                                                                                                                          | `null`           | -     |
 | no-footer       | `boolean`                             | Set whether to disable the bottom action buttons                                                                                                                                                                        | `false`          | -     |
 | hide-mask       | `boolean`                             | Set whether to hide the mask layer                                                                                                                                                                                      | `false`          | -     |
 | transfer        | `boolean \| string`                   | Set the rendering position of the modal. When set to `true`, it will render to `<body>` by default                                                                                                                      | `false`          | -     |
@@ -51,3 +51,4 @@
 | close   | The close action slot for modal | -          | -     |
 | header  | The header slot for modal       | -          | -     |
 | footer  | The footer slot for modal       | -          | -     |
+| title   | The title slot for modal        | -          | -     |

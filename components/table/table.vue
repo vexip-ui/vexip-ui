@@ -11,6 +11,7 @@
     </div>
     <Scroll
       v-if="useXScroll"
+      inherit
       use-x-bar
       mode="horizontal"
       :class="[nh.be('wrapper'), props.scrollClass.horizontal]"
@@ -19,9 +20,11 @@
       :bar-fade="props.barFade"
       :delta-x="50"
       @scroll="handleXScroll"
+      @x-enabled-change="xScrollEnabled = $event"
     >
       <TableHead ref="thead"></TableHead>
       <Scroll
+        inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -40,6 +43,7 @@
       <TableHead ref="thead"></TableHead>
       <Scroll
         ref="mainScroll"
+        inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.major]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -59,12 +63,13 @@
       v-if="leftFixedColumns.length"
       :class="{
         [nh.bem('fixed', 'left')]: true,
-        [nh.bem('fixed', 'active')]: xScrollPercent
+        [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
       }"
     >
       <TableHead fixed="left"></TableHead>
       <Scroll
         ref="mainScroll"
+        inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.left]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -82,11 +87,12 @@
       v-if="rightFixedColumns.length"
       :class="{
         [nh.bem('fixed', 'right')]: true,
-        [nh.bem('fixed', 'active')]: xScrollPercent !== 100
+        [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
       }"
     >
       <TableHead fixed="right"></TableHead>
       <Scroll
+        inherit
         :class="[nh.be('body-wrapper'), props.scrollClass.right]"
         :height="bodyScrollHeight"
         :scroll-y="bodyScroll"
@@ -101,6 +107,7 @@
     <Scrollbar
       v-if="props.useYBar && bodyScrollHeight"
       ref="scrollbar"
+      inherit
       placement="right"
       :class="nh.bem('bar', 'vertical')"
       :fade="props.barFade"
@@ -231,6 +238,7 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
     const bodyHeight = ref<number | undefined>(props.height)
+    const xScrollEnabled = ref(false)
     const xScrollPercent = ref(0)
     const yScrollPercent = ref(0)
     const headHeight = ref(0)
@@ -311,6 +319,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('stripe')]: props.stripe,
         [nh.bm('border')]: props.border,
         [nh.bm('highlight')]: props.highlight,
@@ -448,7 +457,6 @@ export default defineComponent({
           tableWidth.value = width
 
           nextTick(() => {
-            // wrapper.value && setTableWidth(wrapper.value.getBoundingClientRect().width)
             wrapper.value && setTableWidth(wrapper.value.offsetWidth)
           })
         } else {
@@ -457,6 +465,10 @@ export default defineComponent({
           tableWidth.value = `${numberWidth}px`
           setTableWidth(numberWidth)
         }
+      } else {
+        nextTick(() => {
+          wrapper.value && setTableWidth(wrapper.value.offsetWidth)
+        })
       }
     }
 
@@ -809,6 +821,7 @@ export default defineComponent({
       props,
       nh,
       bodyHeight,
+      xScrollEnabled,
       xScrollPercent,
       yScrollPercent,
       headHeight,

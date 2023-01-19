@@ -1,8 +1,15 @@
 import type { ComponentPublicInstance } from 'vue'
 
 export type ConfirmType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
+export type ConfirmAlign = 'left' | 'center' | 'right'
+export type ConfirmRenderFn = (
+  options: ConfirmOptions,
+  confirm: () => Promise<void>,
+  cancel: () => void
+) => any
 
 export interface ConfirmOptions extends Record<string, any> {
+  title?: string,
   content?: string,
   confirmType?: ConfirmType,
   confirmText?: string,
@@ -11,9 +18,12 @@ export interface ConfirmOptions extends Record<string, any> {
   iconColor?: string,
   className?: string | Record<string, any>,
   style?: string | Record<string, any>,
+  closable?: boolean,
   maskClose?: boolean,
   parseHtml?: boolean,
-  renderer?: (options: ConfirmOptions) => any,
+  contentAlign?: ConfirmAlign,
+  actionsAlign?: ConfirmAlign,
+  renderer?: ConfirmRenderFn,
   onBeforeConfirm?: () => unknown
 }
 

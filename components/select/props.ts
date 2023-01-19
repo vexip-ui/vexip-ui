@@ -12,6 +12,7 @@ import type { PropType, ExtractPropTypes } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
+import type { TagType } from '@/components/tag'
 import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectOptionState } from './symbol'
 
 export const selectProps = buildProps({
@@ -52,6 +53,9 @@ export const selectProps = buildProps({
   ignoreCase: booleanProp,
   creatable: booleanProp,
   transparent: booleanProp,
+  maxTagCount: Number,
+  noRestTip: booleanProp,
+  tagType: String as PropType<TagType>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),

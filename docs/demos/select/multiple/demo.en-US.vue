@@ -6,6 +6,14 @@
     option-check
     :options="options"
   ></Select>
+  <p>Current values: {{ values }}</p>
+  <Select
+    multiple
+    clearable
+    option-check
+    :max-tag-count="3"
+    :options="options"
+  ></Select>
 </template>
 
 <script setup lang="ts">

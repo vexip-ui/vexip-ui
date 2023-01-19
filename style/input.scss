@@ -49,6 +49,7 @@ $input: map.merge(
     width: 100%;
     height: get-css-var('input-height');
     padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
+    cursor: text;
     background-color: get-css-var('input-bg-color');
     border: get-css-var('border-shape') get-css-var('input-b-color');
     border-radius: get-css-var('input-radius');
@@ -285,6 +286,7 @@ $input: map.merge(
   }
 
   &__password {
+    margin-left: 4px;
     cursor: pointer;
   }
 
@@ -321,6 +323,7 @@ $input: map.merge(
     & > #{$wrapper},
     .#{$namespace}-number-input {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
+      height: 100%;
       border-radius: $inner-radius;
     }
   }
@@ -332,9 +335,11 @@ $input: map.merge(
     .#{$namespace}-select,
     .#{$namespace}-time-picker {
       width: calc(100% + 2 * get-css-var('input-h-padding'));
+      height: 100%;
 
       &__selector {
         min-width: 60px;
+        height: 100%;
         background-color: transparent;
         border-radius: $inner-radius;
         box-shadow: unset;
@@ -389,5 +394,10 @@ $input: map.merge(
       @include inner-input($after-radius);
       @include inner-select($after-radius);
     }
+  }
+
+  &--transparent &__before,
+  &--transparent &__after {
+    background-color: transparent;
   }
 }

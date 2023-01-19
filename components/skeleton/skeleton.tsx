@@ -9,7 +9,7 @@ export default defineComponent({
   name: 'Skeleton',
   inheritAttrs: false,
   props: skeletonProps,
-  setup(_props, { slots }) {
+  setup(_props, { attrs, slots }) {
     const props = useProps('skeleton', _props, {
       size: null,
       width: null,
@@ -56,6 +56,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: Object.keys(groupState).length || props.inherit,
         [nh.bm(props.size)]: props.size ?? groupState?.size,
         [nh.bm('block')]: block.value,
         [nh.bm('image')]: props.image,
@@ -104,8 +105,9 @@ export default defineComponent({
       return h(
         tag.value || 'div',
         {
-          class: className.value,
-          style: style.value
+          ...attrs,
+          class: [className.value, attrs.class],
+          style: [style.value, attrs.style]
         },
         props.image ? [<Icon icon={props.imageIcon || ImageR} scale={props.iconScale}></Icon>] : []
       )

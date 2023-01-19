@@ -189,6 +189,29 @@ describe('Input', () => {
     expect(onInput).toHaveBeenCalled()
   })
 
+  it('number value', async () => {
+    const onChange = vi.fn()
+    const onInput = vi.fn()
+    const wrapper = mount(Input, {
+      props: {
+        value: 1,
+        onChange,
+        onInput
+      }
+    })
+    const input = wrapper.find('input').element
+
+    emitInput(input, '2')
+    vi.runAllTimers()
+    vi.runAllTimers()
+    await nextTick()
+    expect(onInput).toHaveBeenCalledWith(2)
+
+    emitChange(input, '3')
+    await nextTick()
+    expect(onChange).toHaveBeenCalledWith(3)
+  })
+
   it('input throttle', async () => {
     const onInput = vi.fn()
     const wrapper = mount(Input, {

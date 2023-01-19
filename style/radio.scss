@@ -231,6 +231,8 @@ $radio: map.merge(
 
   @at-root {
     &-group {
+      @include basis;
+
       display: inline-flex;
       align-items: center;
       justify-content: flex-start;

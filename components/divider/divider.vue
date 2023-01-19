@@ -36,6 +36,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.vertical ? 'vertical' : 'horizontal'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('primary')]: !props.vertical && props.primary,
           [nh.bm('dashed')]: props.dashed,
           [nh.bm('with-text')]: !props.vertical && hasText.value,

@@ -1,1 +1,7 @@
-["basis", "pending", "sides"]
+[
+  "basis",
+  "pending",
+  "flip",
+  "sides",
+  "horizontal"
+]

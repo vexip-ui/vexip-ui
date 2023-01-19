@@ -76,8 +76,8 @@ $color-map: map.deep-merge(
   $color-map
 );
 
-@mixin define-level-colors($type, $max-lavel, $mode, $mixed-color) {
-  @for $i from 1 through $max-lavel {
+@mixin define-level-colors($type, $max-level, $mode, $mixed-color) {
+  @for $i from 1 through $max-level {
     $color-map: map.deep-merge(
       (
         $type: (
@@ -94,8 +94,8 @@ $color-map: map.deep-merge(
   }
 }
 
-@mixin define-opacity-colors($type, $max-lavel) {
-  @for $i from 1 through $max-lavel {
+@mixin define-opacity-colors($type, $max-level) {
+  @for $i from 1 through $max-level {
     $color-map: map.deep-merge(
       (
         $type: (
@@ -273,7 +273,8 @@ $z-index-map: map.merge(
   (
     popper: 1000,
     masker: 1500,
-    popup: 2000
+    popup: 2000,
+    full: 2147483584
   ),
   $z-index-map
 );

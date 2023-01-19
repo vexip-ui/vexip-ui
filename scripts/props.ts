@@ -4,11 +4,33 @@ import { existsSync } from 'node:fs'
 import { cpus } from 'node:os'
 import prettier from 'prettier'
 import { ESLint } from 'eslint'
-import { prettierConfig, logger, componentsDir, components, runParallel, toCapitalCase, toCamelCase } from './utils'
+import {
+  prettierConfig,
+  logger,
+  componentsDir,
+  components,
+  runParallel,
+  toCapitalCase,
+  toCamelCase
+} from './utils'
 
 async function main() {
   const ignores = ['config-provider', 'typography']
-  const typography = ['Title', 'Text', 'Blockquote', 'OL', 'UL', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'Strong']
+  const typography = [
+    'Title',
+    'Text',
+    'Blockquote',
+    'OL',
+    'UL',
+    'H1',
+    'H2',
+    'H3',
+    'H4',
+    'H5',
+    'H6',
+    'P',
+    'Strong'
+  ]
 
   const existsCProps = new Set<string>()
 
@@ -48,6 +70,7 @@ async function main() {
     import { ${typography.map(name => `${toCapitalCase(name)}CProps`).join()} } from './typography'
 
     export interface PropsOptions {
+      default?: Record<string, any>,
       ${types.join(',\n')},
       ${typography.map(name => `${toCamelCase(name)}?: ${toCapitalCase(name)}CProps`).join(',\n')}
     }

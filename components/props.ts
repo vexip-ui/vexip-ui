@@ -51,6 +51,7 @@ import type { ProgressCProps } from './progress'
 import type { RadioCProps } from './radio'
 import type { RadioGroupCProps } from './radio-group'
 import type { ResizeObserverCProps } from './resize-observer'
+import type { ResultCProps } from './result'
 import type { RowCProps } from './row'
 import type { ScrollCProps } from './scroll'
 import type { ScrollbarCProps } from './scrollbar'
@@ -99,6 +100,7 @@ import type {
 } from './typography'
 
 export interface PropsOptions {
+  default?: Record<string, any>,
   alert?: AlertCProps,
   anchor?: AnchorCProps,
   autoComplete?: AutoCompleteCProps,
@@ -152,6 +154,7 @@ export interface PropsOptions {
   radio?: RadioCProps,
   radioGroup?: RadioGroupCProps,
   resizeObserver?: ResizeObserverCProps,
+  result?: ResultCProps,
   row?: RowCProps,
   scroll?: ScrollCProps,
   scrollbar?: ScrollbarCProps,

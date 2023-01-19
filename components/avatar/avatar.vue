@@ -42,16 +42,7 @@ import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { avatarProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-import type { ComponentSize } from '@vexip-ui/config'
-import type { AvatarObjectFit } from './symbol'
-
-const objectFitValues = Object.freeze<AvatarObjectFit>([
-  'fill',
-  'contain',
-  'cover',
-  'none',
-  'scale-down'
-])
+const objectFitValues = Object.freeze(['fill', 'contain', 'cover', 'none', 'scale-down'])
 
 export default defineComponent({
   name: 'Avatar',
@@ -63,7 +54,7 @@ export default defineComponent({
   emits: [],
   setup(_props) {
     const props = useProps('avatar', _props, {
-      size: 'default' as ComponentSize,
+      size: 'default',
       src: {
         default: '',
         static: true
@@ -72,8 +63,8 @@ export default defineComponent({
       circle: false,
       alt: '',
       fit: {
-        default: 'cover' as AvatarObjectFit,
-        validator: (value: AvatarObjectFit) => objectFitValues.includes(value)
+        default: 'cover',
+        validator: value => objectFitValues.includes(value)
       },
       srcSet: '',
       gap: 4,
@@ -100,6 +91,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(size.value)]: typeof size.value !== 'number' && size.value !== 'default',
         [nh.bm('circle')]: props.circle
       }

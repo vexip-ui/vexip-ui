@@ -6,7 +6,7 @@
 | width     | `number \| string`                | 设置骨架屏的宽度，可以传入合法的 css 大小值                  | `null`  | -    |
 | height    | `number \| string`                | 设置骨架屏的高度，可以传入合法的 css 大小值                  | `null`  | -    |
 | repeat    | `number`                          | 设置骨架屏的重复渲染次数                                     | `1`     | -    |
-| tag       | `string`                          | 设置骨架屏渲染的标签                                         | `div`   | -    |
+| tag       | `string`                          | 设置骨架屏渲染的标签                                         | `'div'` | -    |
 | activated | `boolean`                         | 设置骨架屏是否处于激活效果                                   | `false` | -    |
 | image     | `boolean`                         | 设置是否为图片占位骨架屏                                     | `false` | -    |
 | imageIcon | `Record<string, any>`             | 图片占位时的图标                                             | `null`  | -    |

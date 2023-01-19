@@ -6,7 +6,8 @@ $row: () !default;
 $row: map.merge(
   (
     v-gap: 0,
-    h-gap: 0
+    h-gap: 0,
+    column-display: block
   ),
   $row
 );

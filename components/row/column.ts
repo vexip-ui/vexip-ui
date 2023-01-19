@@ -1,4 +1,4 @@
-import { defineComponent, computed, h, inject } from 'vue'
+import { defineComponent, computed, h, inject, provide } from 'vue'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { columnProps } from './props'
 import { ROW_STATE, breakPoints } from './symbol'
@@ -31,8 +31,9 @@ export default defineComponent({
     })
 
     const rowState = inject(ROW_STATE, null)
-
     const nh = useNameHelper('column')
+
+    provide(ROW_STATE, null)
 
     const className = computed(() => {
       const columnFlex = (props.useFlex || rowState?.columnFlex) && {
@@ -43,7 +44,14 @@ export default defineComponent({
             : props.useFlex
           : {})
       }
-      const className = [nh.b(), { [nh.bm('flex')]: columnFlex }]
+      const className = [
+        nh.b(),
+        nh.bs('vars'),
+        {
+          [nh.bm('flex')]: columnFlex,
+          [nh.bm('inherit')]: rowState || props.inherit
+        }
+      ]
 
       if (columnFlex) {
         columnFlex.justify && className.push(nh.bm(columnFlex.justify))

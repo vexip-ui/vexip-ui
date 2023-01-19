@@ -60,6 +60,11 @@ export function zhCNLocale() {
       validateFail: '验证未通过'
     },
 
+    image: {
+      placeholder: '加载中...',
+      error: '加载失败'
+    },
+
     input: {
       placeholder: '请输入'
     },
@@ -78,7 +83,7 @@ export function zhCNLocale() {
 
     pagination: {
       page: '页',
-      prePage: '条/页',
+      perPage: '条/页',
       prevPage: '上一页',
       nextPage: '下一页',
       prev: '向前',

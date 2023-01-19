@@ -2,10 +2,10 @@
   <div :id="idFor" :class="className" role="radiogroup">
     <slot>
       <template v-for="item in props.options" :key="item">
-        <Radio v-if="isObject(item)" :label="item.label">
+        <Radio v-if="isObject(item)" inherit :label="item.label">
           {{ item.content || item.label }}
         </Radio>
-        <Radio v-else :label="item">
+        <Radio v-else inherit :label="item">
           {{ item }}
         </Radio>
       </template>
@@ -72,6 +72,7 @@ export default defineComponent({
         nh.b(),
         nh.ns('radio-vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('vertical')]: props.vertical,
           [nh.bm('button')]: !props.vertical && props.button,
           [nh.bm('disabled')]: props.disabled,

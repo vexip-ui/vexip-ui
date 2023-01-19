@@ -1,6 +1,7 @@
 <template>
   <Masker
     v-model:active="currentActive"
+    :inherit="props.inherit"
     :class="className"
     :inner="props.inner"
     :transition-name="moveTransition"
@@ -42,10 +43,16 @@
         </div>
         <div v-if="props.footer || $slots.footer" :class="nh.be('footer')">
           <slot name="footer">
-            <Button text size="small" @click="handleCancle">
+            <Button
+              inherit
+              text
+              size="small"
+              @click="handleCancle"
+            >
               {{ props.cancelText || locale.cancel }}
             </Button>
             <Button
+              inherit
               type="primary"
               size="small"
               :loading="props.loading"
@@ -157,7 +164,6 @@ export default defineComponent({
           ? wrapper.value.offsetHeight
           : toNumber(currentHeight.value)
 
-        console.log({ width, height })
         state.xStart = width
         state.yStart = height
 

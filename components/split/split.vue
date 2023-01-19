@@ -163,6 +163,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.vertical ? 'vertical' : 'horizontal')]: true,
         [nh.bm('moving')]: moving.value,
         [nh.bm(`${fullType}-full`)]: !!fullType,

@@ -45,7 +45,11 @@
               :scale="getActionProp(action, 'iconScale') || 1"
             ></Icon>
           </button>
-          <Divider v-if="getActionProp(action, 'divided')" :vertical="!toolbarVertical"></Divider>
+          <Divider
+            v-if="getActionProp(action, 'divided')"
+            inherit
+            :vertical="!toolbarVertical"
+          ></Divider>
         </template>
       </template>
     </div>
@@ -268,6 +272,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('draggable')]: !props.moveDisabled,
         [nh.bm('resizable')]: !props.zoomDisabled,
         [nh.bm('full')]: full.value,

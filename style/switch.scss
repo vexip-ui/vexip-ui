@@ -37,6 +37,7 @@ $switch: map.merge(
 
   position: relative;
   display: inline-flex;
+  align-items: center;
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
@@ -128,7 +129,6 @@ $switch: map.merge(
 
   &__signal {
     position: absolute;
-    top: 50%;
     left: calc((#{$height} - #{$signal}) * 0.5);
     display: flex;
     align-items: center;
@@ -138,7 +138,7 @@ $switch: map.merge(
     background-color: get-css-var('switch-signal-bg-color');
     border-radius: 50%;
     transition: left get-css-var('transition-base'), get-css-var('transition-transform');
-    transform: translateY(-50%);
+    will-change: left;
 
     .#{$namespace}-icon {
       color: get-css-var('switch-icon-color');
@@ -146,8 +146,7 @@ $switch: map.merge(
   }
 
   &--open &__signal {
-    left: calc(100% - (#{$height} - #{$signal}) * 0.5);
-    transform: translate(-100%, -50%);
+    left: calc(100% - #{$signal} - (#{$height} - #{$signal}) * 0.5);
   }
 
   &--loading &__signal .#{$namespace}-icon {

@@ -122,6 +122,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(props.placement),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('fade')]: props.fade,
           [nh.bm('scrolling')]: scrolling.value,
           [nh.bm('tracking')]: tracking.value,

@@ -22,21 +22,36 @@
           </Button>
         </div>
       </div>
+      <P style="margin: 0 0 16px; font-size: 15px;">
+        {{ t('common.changePrefix') }}
+      </P>
+      <Input v-model:value="demoPrefix" :class="`${prefix}__prefix`" placeholder="e.g. Vxp">
+        <template #after-action>
+          <Button type="primary" @click="handleSvaePrefix">
+            {{ t('common.apply') }}
+          </Button>
+        </template>
+      </Input>
       <MajorColor
         :class="`${prefix}__colors`"
         :language="language"
         @change="refreshWave"
       ></MajorColor>
     </NativeScroll>
+    <Linker v-if="language === 'zh-CN'" class="cn-record" to="https://beian.miit.gov.cn/">
+      粤ICP备2020125887号-1
+    </Linker>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue'
+import { Message } from 'vexip-ui'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import MajorColor from '../common/major-color.vue'
 import Wave from '../common/wave.vue'
+import { getDemoPrefix, setDemoPrefix } from '../common/demo-prefix'
 
 const globalState = inject('globalState', { language: __ROLLBACK_LANG__ })
 
@@ -49,6 +64,8 @@ const wave = ref<InstanceType<typeof Wave>>()
 const sign = ref<HTMLElement>()
 
 const waveTop = ref(494)
+
+const demoPrefix = ref(getDemoPrefix())
 
 function getStarted() {
   router.push(`/${globalState.language}/guides/setup`)
@@ -66,6 +83,11 @@ function handleResize() {
   if (!sign.value) return
 
   waveTop.value = Math.round(sign.value.getBoundingClientRect().height * 0.93)
+}
+
+function handleSvaePrefix() {
+  setDemoPrefix(demoPrefix.value)
+  Message.success(t('common.prefixChanged'))
 }
 </script>
 
@@ -147,9 +169,25 @@ function handleResize() {
     user-select: none;
   }
 
+  &__prefix {
+    max-width: 200px;
+    margin-bottom: 20px;
+
+    .vxp-input__control {
+      width: 100%;
+    }
+  }
+
   &__colors {
     position: relative;
     width: 100%;
+  }
+
+  .cn-record {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    color: var(--vxp-content-color-placeholder);
   }
 }
 </style>

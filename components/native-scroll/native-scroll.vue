@@ -9,10 +9,11 @@
   >
     <ResizeObserver throttle :on-resize="handleResize">
       <component
-        :is="props.wrapperTag || 'div'"
+        :is="props.scrollTag || 'div'"
         ref="content"
+        v-bind="props.scrollAttrs"
         :class="wrapperClass"
-        :style="props.scrollStyle"
+        :style="[props.scrollAttrs?.style, props.scrollStyle]"
         @scroll.exact="handleScroll($event, 'vertical')"
         @scroll.shift="handleScroll($event, 'horizontal')"
       >
@@ -22,6 +23,7 @@
     <Scrollbar
       v-if="props.useXBar"
       ref="xBar"
+      inherit
       placement="bottom"
       :class="[nh.bem('bar', 'horizontal'), props.barClass]"
       :fade="props.barFade"
@@ -37,6 +39,7 @@
     <Scrollbar
       v-if="props.useYBar"
       ref="yBar"
+      inherit
       placement="right"
       :class="[nh.bem('bar', 'vertical'), props.barClass]"
       :fade="props.barFade"
@@ -64,7 +67,7 @@ import { useScrollWrapper } from './hooks'
 import type { EventHandler } from '@vexip-ui/utils'
 import type { ScrollMode } from '@/components/scroll'
 
-const scrollModes = Object.freeze<ScrollMode>(['horizontal', 'vertical', 'both'])
+const scrollModes = Object.freeze(['horizontal', 'vertical', 'both'])
 
 const MOVE_EVENT = 'mousemove'
 const UP_EVENT = 'mouseup'
@@ -80,7 +83,8 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('nativeScroll', _props, {
       scrollClass: null,
-      scrollStyle: () => ({}),
+      scrollStyle: null,
+      scrollAttrs: null,
       mode: {
         default: 'vertical',
         validator: value => scrollModes.includes(value)
@@ -110,7 +114,7 @@ export default defineComponent({
       appear: false,
       barDuration: null,
       useBarTrack: false,
-      wrapperTag: 'div'
+      scrollTag: 'div'
     })
 
     const emitter = createEventEmitter()
@@ -250,7 +254,13 @@ export default defineComponent({
     /* autoplay */
 
     const className = computed(() => {
-      return [nh.b(), nh.bm(props.mode)]
+      return [
+        nh.b(),
+        nh.bm(props.mode),
+        {
+          [nh.bm('inherit')]: props.inherit
+        }
+      ]
     })
     const style = computed(() => {
       const { width, height } = props
@@ -274,8 +284,9 @@ export default defineComponent({
     })
     const wrapperClass = computed(() => {
       return [
-        nh.be('wrapper'),
+        props.scrollAttrs?.class,
         props.scrollClass,
+        nh.be('wrapper'),
         {
           [nh.bem('wrapper', 'scrolling')]: scrolling.value,
           [nh.bem('wrapper', 'using-bar')]: usingBar.value

@@ -14,7 +14,7 @@ export default defineComponent({
     const nh = useNameHelper('ol')
 
     return () => (
-      <ol class={nh.b()} type={props.type}>
+      <ol class={[nh.b(), props.inherit && nh.bm('inherit')]} type={props.type}>
         {slots.default?.()}
       </ol>
     )

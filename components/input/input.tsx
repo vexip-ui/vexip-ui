@@ -17,8 +17,13 @@ import { inputProps } from './props'
 import type { InputType } from './symbol'
 
 type InputEventType = 'input' | 'change'
+type ChangeListener = (value: string | number) => void
 
 const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
+
+function toNotNullString(value: any) {
+  return isNull(value) ? '' : String(value)
+}
 
 export default defineComponent({
   name: 'Input',
@@ -38,7 +43,7 @@ export default defineComponent({
       clearField,
       getFieldValue,
       setFieldValue
-    } = useFieldStore<string>(() => inputControl.value?.focus())
+    } = useFieldStore<string | number>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
       size: createSizeProp(size),
@@ -80,11 +85,13 @@ export default defineComponent({
       sync: false
     })
 
+    const initValue = toNotNullString(props.value)
+
     const nh = useNameHelper('input')
     const focused = ref(false)
-    const currentValue = ref(props.value)
+    const currentValue = ref(initValue)
     const showPassword = ref(false)
-    const currentLength = ref(props.value ? props.value.length : 0)
+    const currentLength = ref(initValue.length)
     const beforeHover = ref(false)
     const afterHover = ref(false)
 
@@ -101,32 +108,39 @@ export default defineComponent({
     const hasAfter = computed(() => {
       return !!(slots.after || slots.afterAction || slots['after-action'] || props.after)
     })
+    const basisClass = computed(() => {
+      return {
+        [nh.bs('wrapper')]: true,
+        [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
+        [nh.bm(props.size)]: props.size !== 'default'
+      }
+    })
     const className = computed(() => {
       return [
         nh.b(),
-        nh.bs('vars'),
         nh.bm(props.type),
+        !hasBefore.value && !hasAfter.value && basisClass.value,
         {
-          [nh.bs('wrapper')]: !hasBefore.value && !hasAfter.value,
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading && props.loadingLock,
-          [nh.bm(props.size)]: props.size !== 'default',
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('before')]: slots.beforeAction || slots['before-action'],
           [nh.bm('after')]: slots.afterAction || slots['after-action'],
           [nh.bm('loading')]: props.loading,
-          [nh.bm('transparent')]: props.transparent
+          [nh.bm('transparent')]: props.transparent,
+          [nh.bm('plain-password')]: props.plainPassword
         }
       ]
     })
     const wrapperClass = computed(() => {
       return {
-        [nh.bs('wrapper')]: true,
-        [nh.bs('vars')]: true,
+        ...basisClass.value,
         [nh.bm(`wrapper--${props.size}`)]: props.size !== 'default',
         [nh.bs('wrapper--before-only')]: hasBefore.value && !hasAfter.value,
-        [nh.bs('wrapper--after-only')]: !hasBefore.value && hasAfter.value
+        [nh.bs('wrapper--after-only')]: !hasBefore.value && hasAfter.value,
+        [nh.bm('transparent')]: props.transparent
       }
     })
     const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
@@ -146,7 +160,7 @@ export default defineComponent({
     })
     const formattedValue = computed(() => {
       return typeof props.formatter === 'function'
-        ? props.formatter(currentValue.value)
+        ? toNotNullString(props.formatter(currentValue.value))
         : currentValue.value
     })
     const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
@@ -161,8 +175,9 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        currentValue.value = value
-        lastValue = value
+        currentValue.value = toNotNullString(value)
+        limitValueLength()
+        lastValue = currentValue.value
       }
     )
 
@@ -217,23 +232,26 @@ export default defineComponent({
     function emitChangeEvent(type: InputEventType) {
       type = type === 'input' ? 'input' : 'change'
 
+      const value =
+        typeof props.value === 'number' ? parseFloat(currentValue.value) : currentValue.value
+
       if (type === 'change') {
-        if (lastValue === currentValue.value) return
+        if (lastValue === value) return
 
-        lastValue = currentValue.value
+        lastValue = value
 
-        setFieldValue(currentValue.value)
-        emitEvent(props.onChange, currentValue.value)
+        setFieldValue(value)
+        emitEvent(props.onChange as ChangeListener, value)
 
         if (!props.sync) {
-          emit('update:value', currentValue.value)
+          emit('update:value', value)
           validateField()
         }
       } else {
-        emitEvent(props.onInput, currentValue.value)
+        emitEvent(props.onInput as ChangeListener, value)
 
         if (props.sync) {
-          emit('update:value', currentValue.value)
+          emit('update:value', value)
           validateField()
         }
       }
@@ -339,22 +357,6 @@ export default defineComponent({
         )
       }
 
-      if (props.type === 'password' && props.plainPassword) {
-        return (
-          <div
-            key={'password'}
-            class={[nh.be('icon'), nh.be('password')]}
-            style={{
-              color: props.suffixColor,
-              opacity: showClear.value || props.loading ? '0%' : ''
-            }}
-            onClick={toggleShowPassword}
-          >
-            <Icon icon={passwordIcon.value}></Icon>
-          </div>
-        )
-      }
-
       if (props.clearable || props.loading) {
         return (
           <div key={'placeholder'} class={[nh.be('icon'), nh.bem('icon', 'placeholder')]}></div>
@@ -405,9 +407,39 @@ export default defineComponent({
       )
     }
 
+    function renderPlainPassword() {
+      if (props.type === 'password' && props.plainPassword) {
+        return (
+          <div
+            key={'password'}
+            class={[nh.be('icon'), nh.be('password')]}
+            style={{
+              color: props.suffixColor
+            }}
+            onClick={toggleShowPassword}
+          >
+            {slots.password
+              ? (
+                  slots.password({ plain: showPassword.value })
+                )
+              : (
+              <Icon icon={passwordIcon.value}></Icon>
+                )}
+          </div>
+        )
+      }
+
+      return null
+    }
+
     function renderControl() {
       return (
-        <div id={idFor.value} ref={control} class={className.value}>
+        <div
+          id={idFor.value}
+          ref={control}
+          class={className.value}
+          onClick={() => inputControl.value?.focus()}
+        >
           {hasPrefix.value && renderPrefix()}
           <input
             ref={inputControl}
@@ -431,6 +463,7 @@ export default defineComponent({
           />
           {renderSuffix()}
           {props.maxLength > 0 ? renderCount() : null}
+          {renderPlainPassword()}
         </div>
       )
     }

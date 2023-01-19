@@ -63,8 +63,6 @@ export function useIntersection(options: UseIntersectionOptions) {
   let state = marginCache.get(margin)
   let { ob: observer, handlers } = state!
 
-  state!.count++
-
   let remove = noop
 
   const stopWatch = watch(
@@ -78,10 +76,12 @@ export function useIntersection(options: UseIntersectionOptions) {
 
       handlers.set(el, handler)
       observer.observe(el)
+      state && state.count++
 
       remove = () => {
         observer.unobserve(el)
         handlers.delete(el)
+        state && state.count--
         remove = noop
       }
     },
@@ -107,15 +107,13 @@ export function useIntersection(options: UseIntersectionOptions) {
 
     if (!state) return
 
-    state.count--
-
     if (state.count <= 0) {
       marginCache.delete(margin)
 
       if (!marginCache.size) {
         thresholdCache.delete(threshold)
 
-        if (!thresholdCache) {
+        if (!thresholdCache.size) {
           observerCache.delete(root)
         }
       }

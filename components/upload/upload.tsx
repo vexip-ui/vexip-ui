@@ -11,14 +11,7 @@ import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
 
 import type { Ref } from 'vue'
-import type {
-  UploadListType,
-  HttpError,
-  SourceFile,
-  FileState,
-  FileOptions,
-  DirectoryEntity
-} from './symbol'
+import type { HttpError, SourceFile, FileState, FileOptions, DirectoryEntity } from './symbol'
 
 function getDefaultFileState(): FileState {
   return {
@@ -101,8 +94,8 @@ export default defineComponent({
       },
       selectToAdd: false,
       listType: {
-        default: 'name' as UploadListType,
-        validator: (value: UploadListType) => uploadListTypes.includes(value)
+        default: 'name',
+        validator: value => uploadListTypes.includes(value)
       },
       block: false,
       loadingText: null,
@@ -115,7 +108,9 @@ export default defineComponent({
       loadingIcon: Spinner,
       loadingLock: false,
       loadingEffect: 'pulse-in',
-      defaultFiles: () => []
+      defaultFiles: () => [],
+      // 'canPreview' using UploadFile default
+      listStyle: null
     })
 
     const nh = useNameHelper('upload')
@@ -133,13 +128,15 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(`type-${props.listType}`),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm(props.state)]: props.state !== 'default',
           [nh.bm('multiple')]: props.multiple,
           [nh.bm('drag')]: props.allowDrag,
           [nh.bm('to-add')]: props.selectToAdd,
           [nh.bm('block')]: props.block,
           [nh.bm('drag-only')]: props.disabledClick,
-          [nh.bm('image')]: props.image
+          [nh.bm('image')]: props.image,
+          [nh.bm('has-file')]: !props.hiddenFiles && renderFiles.value.length
         }
       ]
     })
@@ -187,7 +184,7 @@ export default defineComponent({
           }
         }
 
-        fileStates.value = value.map(file =>
+        fileStates.value = (value || []).map(file =>
           createFileState(
             file,
             file.id ? idMap.get(file.id) : file.source ? fileMap.get(file.source) : undefined
@@ -195,10 +192,10 @@ export default defineComponent({
         )
         syncInputFiles()
       },
-      { immediate: true }
+      { immediate: true, deep: true }
     )
 
-    expose({ execute })
+    expose({ execute, handleDelete })
 
     function handleClick() {
       !props.disabledClick && input.value?.click()
@@ -629,6 +626,7 @@ export default defineComponent({
         <>
           <Button
             ref={button}
+            inherit
             size={size.value}
             icon={IUpload}
             type={props.state}
@@ -741,24 +739,16 @@ export default defineComponent({
     }
 
     function renderFileList() {
-      const style = props.image
-        ? {
-            marginBottom: '-8px'
-          }
-        : {
-            [(props.selectToAdd ? 'marginBottom' : 'marginTop') as any]:
-              !props.hiddenFiles && renderFiles.value.length ? '8px' : undefined
-          }
-
       return (
         <UploadList
+          inherit
           files={renderFiles.value}
           select-to-add={props.selectToAdd}
           type={props.image ? 'thumbnail' : props.listType}
           icon-renderer={props.iconRenderer}
           loading-text={props.loadingText}
           can-preview={props.canPreview}
-          style={style}
+          style={props.listStyle}
           onDelete={handleDelete}
           onPreview={handlePreview}
         >
@@ -766,7 +756,7 @@ export default defineComponent({
             item: slots.item,
             icon: slots.icon,
             suffix: () =>
-              props.image && (!props.maxSize || renderFiles.value.length < props.maxSize)
+              props.image && (!props.countLimit || renderFiles.value.length < props.countLimit)
                 ? renderControl()
                 : null
           }}
@@ -782,6 +772,7 @@ export default defineComponent({
     )
   },
   methods: {
-    execute: noop as () => Promise<false | any[]>
+    execute: noop as () => Promise<false | any[]>,
+    handleDelete: noop as (file: FileState) => void
   }
 })

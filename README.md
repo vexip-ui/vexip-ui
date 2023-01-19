@@ -1,13 +1,13 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img src="./docs/public/vexip-ui.svg" style="width: 180px;" />
+    <img src="./docs/public/vexip-ui.svg" width="180" style="width: 180px;" />
   </a>
 </p>
 
 <h1 align="center">Vexip UI</h1>
 
 <p align="center">
-  Highly customizable property values, Full TypeScript, Performance should be good
+  Highly customizable property values, Full TypeScript, Performance pretty good
 </p>
 
 <p align="center">
@@ -17,20 +17,20 @@
 </p>
 
 <p align="center">
-  You may let me know if you've written any awesome thing with Vexip UI! You are very welcome if you would like to contribute codes!
+  You can contace me if you've written any awesome thing with Vexip UI and want to show it on official website. You are very welcome if you would like to contribute codes!
 </p>
 
-**English** | [中文](./README.zh-CN.md)
+**English** | [中文 [含技术支持群]](./README.zh-CN.md)
 
 Vexip UI provides a series of out-of-box components.
 
-This library is using base on vue 3.0 with using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript** (not AnyScript).
+This library is using base on vue 3.0 with using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript**.
 
-Almost all the **default value of props** for each component can be quickly modified by configuration (except value and options props), for easy customization.
+Almost all the **default value of props** for each component can be quickly modified by configuration, for easy customization.
 
 And, the writing of component codes pay great attention to lowering the threshold of **source codes reading**, and the style of code is as close to the usual business code habits as possible to avoid dazzling encapsulation.
 
-There are currently **70+** components, many you can see everywhere and a few may bright your eyes.
+There are currently **70+** components, many you see everywhere are here and are better, and a few may bright your eyes.
 
 ## Features
 
@@ -39,13 +39,13 @@ There are currently **70+** components, many you can see everywhere and a few ma
 - 🔧 Configurable default value of props, quickly complete global/local modifications
 - ⚡ Composition Api, good performance base
 - 🔨 With TypeScript, fully types
-- 💪 800+ unit tests to provide good stability
+- 💪 900+ unit tests to provide good stability
 - 🎨 Support CSS variable, built-in dark theme
 - 🚩 Support i18n
 - 🛫 Provide resolver, support unplugin
 - 🚤 Support SSR
 - 🩹 Good a11n
-- 👀 Close to business code arrangement, lower threshold for source code reading
+- 👀 Close to business code arrangement, low threshold for source code reading
 
 ## Install
 
@@ -84,8 +84,6 @@ Thanks for all their contributions!
 ## Environment
 
 All components supported in modern browsers, I try to ensure the support of neerly two or three versions.
-
-I have limited energy and it's not start writing unit tests currently, if you encountered any bug, don't scold me and create a issue or PR.
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Opera | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Electron |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

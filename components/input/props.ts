@@ -12,6 +12,11 @@ import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { InputType } from './symbol'
 
+type ChangeListener =
+  | ((value: string | number) => void)
+  | ((value: string) => void)
+  | ((value: number) => void)
+
 export const inputProps = buildProps({
   size: sizeProp,
   state: stateProp,
@@ -20,8 +25,8 @@ export const inputProps = buildProps({
   prefixColor: String,
   suffix: Object,
   suffixColor: String,
-  formatter: Function as PropType<(value: string) => string>,
-  value: String,
+  formatter: Function as PropType<(value: string | number) => string | number>,
+  value: [String, Number],
   placeholder: String,
   autofocus: booleanProp,
   spellcheck: booleanProp,
@@ -44,8 +49,8 @@ export const inputProps = buildProps({
   sync: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
-  onInput: eventProp<(value: string) => void>(),
-  onChange: eventProp<(value: string) => void>(),
+  onInput: eventProp<ChangeListener>(),
+  onChange: eventProp<ChangeListener>(),
   onEnter: eventProp(),
   onClear: eventProp(),
   onPrefixClick: eventProp<(event: MouseEvent) => void>(),

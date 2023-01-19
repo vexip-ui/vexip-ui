@@ -1,13 +1,22 @@
 <template>
   <div ref="wrapper" :class="className" tabindex="-1">
-    <ul :class="nh.be('list')" role="tablist">
-      <ResizeObserver :on-resize="updateMarkerPosition">
-        <li :class="[nh.be('extra'), nh.bem('extra', 'prefix')]">
-          <div v-if="$slots.prefix" :class="nh.be('prefix')">
-            <slot name="prefix"></slot>
-          </div>
-        </li>
-      </ResizeObserver>
+    <ResizeObserver :on-resize="updateMarkerPosition">
+      <div :class="[nh.be('extra'), nh.bem('extra', 'prefix')]">
+        <div v-if="$slots.prefix" :class="nh.be('prefix')">
+          <slot name="prefix"></slot>
+        </div>
+      </div>
+    </ResizeObserver>
+    <Scroll
+      ref="scroll"
+      :class="nh.be('scroll')"
+      :mode="scrollMode"
+      :delta-x="40"
+      :delta-y="40"
+      scroll-tag="ul"
+      :scroll-class="nh.be('list')"
+      :scroll-attrs="{ role: 'tablist' }"
+    >
       <slot>
         <TabNavItem
           v-for="item in items"
@@ -31,19 +40,24 @@
           </slot>
         </button>
       </li>
-      <ResizeObserver :on-resize="updateMarkerPosition">
-        <li :class="[nh.be('extra'), nh.bem('extra', 'suffix')]">
-          <div v-if="$slots.suffix" :class="nh.be('suffix')">
-            <slot name="suffix"></slot>
-          </div>
-        </li>
-      </ResizeObserver>
-    </ul>
-    <div v-if="!props.card" :class="nh.be('track')" :style="markerStyle">
-      <slot name="marker">
-        <div :class="nh.be('marker')"></div>
-      </slot>
-    </div>
+      <div
+        v-if="!props.card"
+        :class="nh.be('track')"
+        role="none"
+        :style="markerStyle"
+      >
+        <slot name="marker">
+          <div :class="nh.be('marker')"></div>
+        </slot>
+      </div>
+    </Scroll>
+    <ResizeObserver :on-resize="updateMarkerPosition">
+      <div :class="[nh.be('extra'), nh.bem('extra', 'suffix')]">
+        <div v-if="$slots.suffix" :class="nh.be('suffix')">
+          <slot name="suffix"></slot>
+        </div>
+      </div>
+    </ResizeObserver>
   </div>
 </template>
 
@@ -51,6 +65,7 @@
 import { defineComponent, ref, reactive, toRef, computed, watch, onMounted, provide } from 'vue'
 import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
+import { Scroll } from '@/components/scroll'
 import { TabNavItem } from '@/components/tab-nav-item'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { Plus } from '@vexip-ui/icons'
@@ -60,6 +75,8 @@ import { tabNavProps } from './props'
 import { TAB_NAV_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
+
+type ChangeListener = (label: string | number) => void
 
 const trackStyleMap = {
   top: ['left', 'width'],
@@ -73,6 +90,7 @@ export default defineComponent({
   components: {
     Icon,
     ResizeObserver,
+    Scroll,
     TabNavItem,
     Plus
   },
@@ -102,11 +120,13 @@ export default defineComponent({
     const itemStates = new Set<ItemState>()
 
     const wrapper = useDisplay(updateMarkerPosition)
+    const scroll = ref<InstanceType<typeof Scroll>>()
 
     const className = computed(() => {
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(`align-${props.align}`)]: true,
         [nh.bm(props.placement)]: true,
         [nh.bm('card')]: props.card
@@ -128,6 +148,11 @@ export default defineComponent({
 
         return item
       })
+    })
+    const scrollMode = computed(() => {
+      return props.placement === 'top' || props.placement === 'bottom'
+        ? 'horizontal-exact'
+        : 'vertical'
     })
 
     const refreshLabels = debounceMinor(() => {
@@ -193,7 +218,7 @@ export default defineComponent({
       currentActive.value = label
 
       updateMarkerPosition()
-      emitEvent(props.onChange, label)
+      emitEvent(props.onChange as ChangeListener, label)
       emit('update:active', label)
     }
 
@@ -202,7 +227,7 @@ export default defineComponent({
     }
 
     function handleClose(label: string | number) {
-      emitEvent(props.onClose, label)
+      emitEvent(props.onClose as ChangeListener, label)
 
       requestAnimationFrame(updateMarkerPosition)
     }
@@ -231,8 +256,10 @@ export default defineComponent({
       className,
       markerStyle,
       items,
+      scrollMode,
 
       wrapper,
+      scroll,
 
       updateMarkerPosition,
       handleAdd

@@ -47,6 +47,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bm(props.justify)]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.align)]: props.align !== 'stretch',
         [nh.bm('dense')]: props.dense
       }

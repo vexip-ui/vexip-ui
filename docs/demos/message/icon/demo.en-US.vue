@@ -20,8 +20,8 @@
 
 <script setup lang="ts">
 import { h } from 'vue'
-import { CircleQuestion, Share } from '@vexip-ui/icons'
 import { Icon, Message } from 'vexip-ui'
+import { CircleQuestion, Share } from '@vexip-ui/icons'
 
 function sendCustomizedIconMessage() {
   Message.success({

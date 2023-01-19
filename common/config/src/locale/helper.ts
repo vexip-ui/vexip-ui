@@ -63,6 +63,11 @@ export interface LocaleConfig {
     validateFail: string
   },
 
+  image: {
+    placeholder: string,
+    error: string
+  },
+
   input: {
     placeholder: string
   },
@@ -81,7 +86,7 @@ export interface LocaleConfig {
 
   pagination: {
     page: string,
-    prePage: string,
+    perPage: string,
     prevPage: string,
     nextPage: string,
     prev: string,

@@ -49,6 +49,27 @@ describe('Table', () => {
     })
   })
 
+  it('set a new data', async () => {
+    const columns = [
+      {
+        name: 'Name',
+        key: 'name'
+      }
+    ]
+    const data = [{ name: '1' }]
+    const wrapper = mount(Table, {
+      props: { columns, data }
+    })
+
+    await runScrollTimers()
+    expect(wrapper.find('.vxp-table__cell').text()).toEqual(data[0].name)
+
+    const newData = [{ name: '2' }]
+    await wrapper.setProps({ data: newData })
+    await runScrollTimers()
+    expect(wrapper.find('.vxp-table__cell').text()).toEqual(newData[0].name)
+  })
+
   it('empty text', async () => {
     const columns = [
       {

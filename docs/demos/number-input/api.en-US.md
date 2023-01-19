@@ -1,34 +1,41 @@
+### Preset Types
+
+```ts
+type NumberInputControlType = 'right' | 'left' | 'right-fade' | 'left-fade' | 'none'
+```
+
 ### NumberInput Props
 
-| Name           | Type                                             | Description                                                                 | Default     | Since   |
-| -------------- | ------------------------------------------------ | --------------------------------------------------------------------------- | ----------- | ------- |
-| size           | `'small' \| 'default' \| 'large'`                | The size of the input box, the optional value is                            | `'default'` | -       |
-| state          | `'default' \| 'success' \| 'error' \| 'warning'` | The state of the input box                                                  | `'default'` | -       |
-| prefix         | `Record<string, any>`                            | The prefix icon, invalid when using prefix slot                             | `''`        | -       |
-| prefix-color   | `string`                                         | The color of the prefix content, affects the prefix slot                    | `''`        | -       |
-| suffix         | `Record<string, any>`                            | The suffix icon, invalid when using suffix slot                             | `''`        | -       |
-| suffix-color   | `string`                                         | The color of the suffix content, which affects the suffix slot              | `''`        | -       |
-| formatter      | `(value: number) => string`                      | Set the method to format the value of the input box after each value change | `null`      | -       |
-| accessor       | `(value: number \| null) => any`                 | Set the method for reading the input value when the event is called back    | `null`      | -       |
-| value          | `number \| null`                                 | Set the value of the input box                                              | `null`      | -       |
-| placeholder    | `string`                                         | Set the placeholder for the input box                                       | `''`        | -       |
-| autofocus      | `boolean`                                        | Set the autofocus of the input field                                        | `false`     | -       |
-| spellcheck     | `boolean`                                        | Set spellcheck for input fields                                             | `false`     | -       |
-| autocomplete   | `boolean`                                        | Set autocomplete for input fields                                           | `false`     | -       |
-| precision      | `number`                                         | Set the precision of the value                                              | `0`         | -       |
-| readonly       | `boolean`                                        | Set the read-only property of the input box                                 | `false`     | -       |
-| step           | `number`                                         | Set the amplitude of the single change of the increase and decrease buttons | `1`         | -       |
-| min            | `number`                                         | Set min limit                                                               | `-Infinity` | -       |
-| max            | `number`                                         | Set max limit                                                               | `Infinity`  | -       |
-| disabled       | `boolean`                                        | Set whether to disable the input box                                        | `false`     | -       |
-| input-class    | `ClassType`                                      | Set the class name of the input box `<input>` element                       | `''`        | -       |
-| debounce       | `boolean`                                        | Enable debounce, only trigger `input` event once when typing fast           | `false`     | -       |
-| clearable      | `boolean`                                        | Set whether the value can be cleared                                        | `false`     | -       |
-| loading        | `boolean`                                        | Set whether is loading                                                      | `false`     | `2.0.0` |
-| loading-icon   | `Record<string, any>`                            | Set the loading icon                                                        | `Spinner`   | `2.0.0` |
-| loading-lock   | `boolean`                                        | Set whether to be read-only when loading                                    | `false`     | `2.0.0` |
-| loading-effect | `string`                                         | Set the effect animation for the loading icon                               | `false`     | `2.0.0` |
-| sync           | `boolean`                                        | Set whether sync input mode                                                 | `false`     | `2.0.6` |
+| Name           | Type                                             | Description                                                                 | Default     | Since    |
+| -------------- | ------------------------------------------------ | --------------------------------------------------------------------------- | ----------- | -------- |
+| size           | `'small' \| 'default' \| 'large'`                | The size of the input box, the optional value is                            | `'default'` | -        |
+| state          | `'default' \| 'success' \| 'error' \| 'warning'` | The state of the input box                                                  | `'default'` | -        |
+| prefix         | `Record<string, any>`                            | The prefix icon, invalid when using prefix slot                             | `''`        | -        |
+| prefix-color   | `string`                                         | The color of the prefix content, affects the prefix slot                    | `''`        | -        |
+| suffix         | `Record<string, any>`                            | The suffix icon, invalid when using suffix slot                             | `''`        | -        |
+| suffix-color   | `string`                                         | The color of the suffix content, which affects the suffix slot              | `''`        | -        |
+| formatter      | `(value: number) => string`                      | Set the method to format the value of the input box after each value change | `null`      | -        |
+| accessor       | `(value: number \| null) => any`                 | Set the method for reading the input value when the event is called back    | `null`      | -        |
+| value          | `number \| null`                                 | Set the value of the input box                                              | `null`      | -        |
+| placeholder    | `string`                                         | Set the placeholder for the input box                                       | `''`        | -        |
+| autofocus      | `boolean`                                        | Set the autofocus of the input field                                        | `false`     | -        |
+| spellcheck     | `boolean`                                        | Set spellcheck for input fields                                             | `false`     | -        |
+| autocomplete   | `boolean`                                        | Set autocomplete for input fields                                           | `false`     | -        |
+| precision      | `number`                                         | Set the precision of the value                                              | `0`         | -        |
+| readonly       | `boolean`                                        | Set the read-only property of the input box                                 | `false`     | -        |
+| step           | `number`                                         | Set the amplitude of the single change of the increase and decrease buttons | `1`         | -        |
+| min            | `number`                                         | Set min limit                                                               | `-Infinity` | -        |
+| max            | `number`                                         | Set max limit                                                               | `Infinity`  | -        |
+| disabled       | `boolean`                                        | Set whether to disable the input box                                        | `false`     | -        |
+| input-class    | `ClassType`                                      | Set the class name of the input box `<input>` element                       | `''`        | -        |
+| debounce       | `boolean`                                        | Enable debounce, only trigger `input` event once when typing fast           | `false`     | -        |
+| clearable      | `boolean`                                        | Set whether the value can be cleared                                        | `false`     | -        |
+| loading        | `boolean`                                        | Set whether is loading                                                      | `false`     | `2.0.0`  |
+| loading-icon   | `Record<string, any>`                            | Set the loading icon                                                        | `Spinner`   | `2.0.0`  |
+| loading-lock   | `boolean`                                        | Set whether to be read-only when loading                                    | `false`     | `2.0.0`  |
+| loading-effect | `string`                                         | Set the effect animation for the loading icon                               | `false`     | `2.1.0`  |
+| sync           | `boolean`                                        | Set whether sync input mode                                                 | `false`     | `2.0.6`  |
+| control-type   | `NumberInputControlType`                         | Set the control type                                                        | `'right'`   | `2.0.17` |
 
 ### NumberInput Events
 

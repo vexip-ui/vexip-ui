@@ -53,6 +53,7 @@ export default defineComponent({
         nh.bs('vars'),
         nh.bm(`arrow-${props.arrowType}`),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('card')]: props.card,
           [nh.bm('ghost')]: !props.card && props.ghost
         }

@@ -1,4 +1,4 @@
-import { createVNode, render, markRaw } from 'vue'
+import { createApp, createVNode, render, markRaw } from 'vue'
 import Component from './confirm.vue'
 import { isClient, destroyObject } from '@vexip-ui/utils'
 
@@ -30,13 +30,18 @@ export class ConfirmManager {
 
   open(content: string, type?: ConfirmType): Promise<boolean>
   open(options: ConfirmOptions): Promise<boolean>
-  open(options: FuzzyOptions, type?: ConfirmType) {
+  open(content: string, title: string, type?: ConfirmType): Promise<boolean>
+  open(options: FuzzyOptions, title?: string, type?: ConfirmType) {
     if (!isClient) {
       return
     }
 
     if (typeof options === 'string') {
-      options = { content: options, confirmType: type }
+      if (type) {
+        options = { title, content: options, confirmType: type }
+      } else {
+        options = { content: options, confirmType: title as ConfirmType }
+      }
     }
 
     const item: ConfirmOptions = { ...this.defaults, ...options }
@@ -72,21 +77,25 @@ export class ConfirmManager {
   }
 
   private _getInstance() {
-    if (!this._mountedApp) {
-      console.warn('[vexip-ui:Confirm]: App missing, the plugin maybe not installed.')
-      return null
-    }
-
     if (!this._instance) {
-      const vnode = createVNode(Component, null, null)
+      if (!this._mountedApp) {
+        console.warn('[vexip-ui:Confirm]: App missing, the plugin maybe not installed.')
 
-      this._container = document.createElement('div')
-      vnode.appContext = this._mountedApp._context
+        this._container = document.createElement('div')
+        this._mountedApp = createApp(Component)
+        this._instance = this._mountedApp.mount(this._container) as ConfirmInstance
+      } else {
+        const vnode = createVNode(Component, null, null)
 
-      render(vnode, this._container, false)
+        this._container = document.createElement('div')
+        vnode.appContext = this._mountedApp._context
+
+        render(vnode, this._container, false)
+
+        this._instance = vnode.component!.proxy as ConfirmInstance
+      }
+
       document.body.appendChild(this._container.firstElementChild!)
-
-      this._instance = vnode.component!.proxy as ConfirmInstance
     }
 
     return this._instance

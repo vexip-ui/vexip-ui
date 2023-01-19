@@ -3,6 +3,7 @@
     <div v-for="(option, index) in renderAvatars" :key="index" :class="nh.be('item')">
       <slot :option="option" :index="index">
         <Avatar
+          inherit
           :src="option.src"
           :icon="option.icon"
           :alt="option.alt"
@@ -17,10 +18,15 @@
       </slot>
     </div>
     <div v-if="restAvatars.length" :class="[nh.be('item'), nh.bem('item', 'rest')]">
-      <Tooltip v-if="props.showTip" :trigger="props.tipTrigger" :tip-class="nh.be('rest')">
+      <Tooltip
+        v-if="props.showTip"
+        inherit
+        :trigger="props.tipTrigger"
+        :tip-class="nh.be('rest')"
+      >
         <template #trigger>
           <slot name="rest" :options="restAvatars" :count="restAvatars.length">
-            <Avatar :color="props.restColor" :background="props.restBackground">
+            <Avatar inherit :color="props.restColor" :background="props.restBackground">
               {{ `+${restAvatars.length}` }}
             </Avatar>
           </slot>
@@ -29,6 +35,7 @@
           <Avatar
             v-for="(option, index) in restAvatars"
             :key="index"
+            inherit
             :src="option.src"
             :icon="option.icon"
             :alt="option.alt"
@@ -48,7 +55,7 @@
         :options="restAvatars"
         :count="restAvatars.length"
       >
-        <Avatar :color="props.restColor" :background="props.restBackground">
+        <Avatar inherit :color="props.restColor" :background="props.restBackground">
           {{ `+${restAvatars.length}` }}
         </Avatar>
       </slot>
@@ -114,6 +121,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.ns('avatar-vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.size)]: typeof props.size !== 'number' && props.size !== 'default',
         [nh.bm('circle')]: props.circle,
         [nh.bm('vertical')]: props.vertical

@@ -116,6 +116,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.type)]: props.type,
         [nh.bm('colorful-text')]: props.colorfulText,
         [nh.bm('has-title')]: hasTitle.value,

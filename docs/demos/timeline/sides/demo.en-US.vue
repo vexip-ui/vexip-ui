@@ -1,5 +1,9 @@
 <template>
-  <Timeline both-sides style="max-width: 500px;">
+  <p>
+    Filp:
+    <Switch v-model:value="flip"></Switch>
+  </p>
+  <Timeline both-sides :flip="flip" style="max-width: 500px;">
     <TimelineItem>
       <span style="margin-bottom: 10px;">PM</span>
       <Card>
@@ -35,3 +39,9 @@
     </TimelineItem>
   </Timeline>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const flip = ref(false)
+</script>

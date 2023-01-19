@@ -1,5 +1,6 @@
 @use './design' as *;
 @use './tooltip.scss';
+
 .#{$namespace}-ellipsis {
   @include basis;
 

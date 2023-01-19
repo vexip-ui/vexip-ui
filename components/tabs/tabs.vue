@@ -1,7 +1,8 @@
 <template>
-  <div :class="[nh.b(), nh.bm(props.placement)]">
+  <div :class="[nh.b(), nh.bm(props.placement), props.inherit && nh.bm('inherit')]">
     <div :class="nh.be('header')">
       <TabNav
+        inherit
         :active="currentActive"
         :card="props.card"
         :align="props.align"
@@ -64,6 +65,8 @@ import { tabsProps } from './props'
 import { TABS_STATE } from './symbol'
 
 import type { ItemState } from './symbol'
+
+type ChangeListener = (label: string | number) => void
 
 export default defineComponent({
   name: 'Tabs',
@@ -163,7 +166,7 @@ export default defineComponent({
       currentActive.value = label
 
       computeIndex()
-      emitEvent(props.onChange, label)
+      emitEvent(props.onChange as ChangeListener, label)
       emit('update:active', label)
     }
 
@@ -172,7 +175,7 @@ export default defineComponent({
     }
 
     function handleClose(label: string | number) {
-      emitEvent(props.onClose, label)
+      emitEvent(props.onClose as ChangeListener, label)
     }
 
     return {

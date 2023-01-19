@@ -24,6 +24,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.type)]: props.type !== 'default',
         [nh.bm('delete')]: props.delete,
         [nh.bm('strong')]: props.strong,

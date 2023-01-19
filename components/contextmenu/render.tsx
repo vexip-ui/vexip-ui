@@ -35,6 +35,7 @@ function renderItemShortcut(item: ContextmenuConfig, nh: NameHelper) {
 function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
   return (
     <Dropdown
+      inherit
       transfer={false}
       {...{
         onContextmenu: (event: MouseEvent) => {

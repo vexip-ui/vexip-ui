@@ -33,7 +33,7 @@ export function throttle<T extends (...args: any[]) => any>(method: T, delay = 1
  * 将一个函数或方法进行防抖
  *
  * @param method 需要防抖的方法，需自行绑定 this
- * @param delay 防抖的限制时间，默认 300 ms
+ * @param delay 防抖的限制时间，默认 100ms
  */
 export function debounce<T extends (...args: any[]) => any>(method: T, delay = 100) {
   if (typeof method !== 'function') {

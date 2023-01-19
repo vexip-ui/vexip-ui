@@ -88,4 +88,29 @@ describe('Option', () => {
     expect(wrapper.find('.counter').exists()).toBe(true)
     expect(wrapper.find('.counter').text()).toEqual('2')
   })
+
+  it('max count', async () => {
+    const items = Array.from({ length: 5 }, (_, i) => ({ index: i + 1 }))
+    const wrapper = mount(Overflow, {
+      props: { items, maxCount: 3 },
+      slots: {
+        default: ({ item }: { item: { index: number } }) => <div class={'item'}>{item.index}</div>,
+        counter: ({ count }: { count: number }) => <div class={'counter'}>{count}</div>
+      }
+    })
+    const itemList = wrapper.findAll('.item')
+
+    await nextTick()
+
+    itemList.forEach((item, i) => {
+      if (i < 3) {
+        expect(item.attributes('style')).toBeUndefined()
+      } else {
+        expect(item.attributes('style')).toContain('display: none;')
+      }
+    })
+
+    expect(wrapper.find('.counter').exists()).toBe(true)
+    expect(wrapper.find('.counter').text()).toEqual('2')
+  })
 })

@@ -142,28 +142,62 @@ export const booleanNumberProp = {
   default: null
 }
 
+type AnyFunction = (...args: any[]) => any
+type VoidFunction = () => void
 /**
  * Use to deconstruct advanced types
  */
 type Expand<T> = T extends unknown ? { [K in keyof T]: T[K] } : never
+type MaybeFunction<T> = AnyFunction extends T ? T : T | (() => T)
 
-export type ConfigurableProps<T, E = never, I = never> = Expand<{
-  [P in keyof T]?: P extends I
-    ? T[P]
-    : P extends `on${Capitalize<string>}`
-      ? never
-      : T[Exclude<
-        P,
-        'inherit' | 'value' | 'checked' | 'active' | 'visible' | 'label' | 'options' | E
-      >]
-}>
+type CommonExcludedProps =
+  | 'inherit'
+  | 'value'
+  | 'checked'
+  | 'active'
+  | 'visible'
+  | 'label'
+  | 'options'
+type ExcludeProps<P, E extends string = never, I extends string = never> =
+  | CommonExcludedProps
+  | E
+  | (P extends I ? never : P extends `on${Capitalize<string>}` ? P : never)
+type PostProps<T, E extends string> = Omit<{ [P in keyof T]: MaybeFunction<T[P]> }, E>
+
+/**
+ * Create a configurable props
+ *
+ * @param T the type of import('vue').ExtractPropTypes
+ * @param E the props should force exclude
+ * @param I the props should force include
+ */
+export type ConfigurableProps<T, E extends string = never, I extends string = never> = PostProps<
+  {
+    [P in keyof T]?: P extends I
+      ? T[P]
+      : P extends `on${Capitalize<string>}`
+        ? never
+        : T[Exclude<P, CommonExcludedProps | E>]
+  },
+  ExcludeProps<keyof T, E, I>
+>
+
+/* eslint-disable @typescript-eslint/ban-types */
+type VexipProps<T> = {
+  [P in keyof T]: T[P] extends PropType<infer I>
+    ? PropType<I & {}>
+    : T[P] extends { type: PropType<infer I> }
+      ? PropType<I & {}>
+      : T[P]
+}
+/* eslint-enable */
 
 export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
   const common = {
     inherit: booleanProp
   }
 
-  return Object.freeze({ ...common, ...props }) as Expand<typeof common & T>
+  return Object.freeze({ ...common, ...props }) as Expand<VexipProps<typeof common & T>>
 }
 
 export function omitProps<T extends ComponentObjectPropsOptions, K extends keyof T>(
@@ -230,9 +264,6 @@ export type StyleType = string | CSSProperties | Array<string | CSSProperties>
 
 export const classProp = [String, Object, Array] as PropType<ClassType>
 export const styleProp = [String, Object, Array] as PropType<StyleType>
-
-type AnyFunction = (...args: any[]) => any
-type VoidFunction = () => void
 
 const eventTypes = [Function, Array]
 

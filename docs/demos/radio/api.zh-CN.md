@@ -4,7 +4,7 @@
 | ------------ | ------------------------------------------------ | -------------------------------------------------------------------- | ----------- | ------- |
 | value        | `string \| number`                               | 单选框的值，通常配合 group 组件使用                                  | `null`      | -       |
 | label        | `string \| number`                               | 单选框的标签值，当值与标签全等时，单选框将被选中，标签值**必需设置** | `null`      | -       |
-| label-class  | `string \| Record<string, boolean>`              | 单选框的标签内容的自定义类名                                         | `null`      | -       |
+| label-class  | `ClassType`                                      | 单选框的标签内容的自定义类名                                         | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | 单选框的大小                                                         | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | 单选框的状态                                                         | `'default'` | -       |
 | disabled     | `boolean`                                        | 设置是否禁用单选框                                                   | `false`     | -       |

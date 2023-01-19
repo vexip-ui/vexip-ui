@@ -40,8 +40,6 @@ $tooltip: map.merge(
   }
 
   &__tip {
-    @include basis;
-
     position: relative;
     min-width: get-css-var('tooltip-min-width');
     min-height: get-css-var('tooltip-min-height');
@@ -78,6 +76,8 @@ $tooltip: map.merge(
   $size: get-css-var('tooltip-arrow-size');
 
   &__popper {
+    @include basis;
+
     z-index: get-css-var('z-index-popper');
 
     &[data-popper-placement^='top'] {

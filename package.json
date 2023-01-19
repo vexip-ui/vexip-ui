@@ -1,6 +1,6 @@
 {
   "name": "vexip-ui",
-  "version": "2.0.13",
+  "version": "2.0.20",
   "type": "module",
   "license": "MIT",
   "author": "qmhc",
@@ -14,6 +14,7 @@
     "props": "tsx scripts/props.ts",
     "serve": "tsx scripts/serve.ts",
     "serve:docs": "pnpm -C docs serve",
+    "serve:docs-ssr": "pnpm -C docs serve:ssr",
     "serve:playground": "pnpm -C playground serve",
     "serve:theme": "tsx scripts/serve.ts --theme",
     "build": "tsx scripts/build.ts",
@@ -31,7 +32,7 @@
     "clean": "rimraf node_modules/.cache && rimraf node_modules/.vite && rimraf node_modules/.rts2_cache",
     "create": "tsx scripts/create.ts",
     "lint": "eslint --fix --ext .js,.ts,.tsx,.vue common/*/src/** components/** directives/** playground/** dev-server/** docs/**",
-    "lint:script": "eslint --fix --ext .js,.ts scripts/**",
+    "lint:scripts": "eslint --fix --ext .js,.ts scripts/**",
     "lint:style": "stylelint **/*.{vue,scss} --fix",
     "postpublish": "pinst --enable",
     "precommit": "lint-staged -c ./.husky/.lintstagedrc -q",
@@ -39,6 +40,7 @@
     "prepare": "is-ci || husky install",
     "prepublishOnly": "pinst --disable",
     "prettier": "prettier --write \"{common,component,directives,playground,dev-server,docs}/**/*.{ts,js,json,css,pcss,scss,vue,html,md}\"",
+    "prettier:scripts": "prettier --write \"scripts/**/*.{ts,js,json}\"",
     "publish:ci": "tsx scripts/publish.ts",
     "release": "tsx scripts/release.ts",
     "test": "vitest run",
@@ -59,7 +61,7 @@
   "exports": {
     ".": {
       "import": "./es/components/index.mjs",
-      "require": "./lib/components/index.js",
+      "require": "./lib/components/index.cjs",
       "types": "./dist/components/index.d.ts"
     },
     "./es": "./es/components/index.mjs",
@@ -161,7 +163,7 @@
     "dist/*",
     "css/*.css",
     "es/components/*/style.mjs",
-    "lib/components/*/style.js",
+    "lib/components/*/style.cjs",
     "style/**/*.scss",
     "theme/**/*.css"
   ],

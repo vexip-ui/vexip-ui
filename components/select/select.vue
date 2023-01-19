@@ -25,16 +25,70 @@
       <div :class="nh.be('control')">
         <slot name="control">
           <template v-if="props.multiple">
-            <Tag
-              v-for="(item, index) in currentValues"
-              :key="index"
-              :class="nh.be('tag')"
-              closable
-              @click.stop="toggleVisible"
-              @close="handleTagClose(item)"
+            <Overflow
+              inherit
+              :class="[nh.be('tags')]"
+              :items="currentValues"
+              :max-count="props.maxTagCount"
+              :style="{
+                maxWidth: props.maxTagCount <= 0 && `calc(100% - ${anchorWidth}px)`
+              }"
+              @rest-change="restTagCount = $event"
             >
-              {{ currentLabels[index] }}
-            </Tag>
+              <template #default="{ item, index }">
+                <Tag
+                  inherit
+                  :class="nh.be('tag')"
+                  :type="props.tagType"
+                  closable
+                  @click.stop="toggleVisible"
+                  @close="handleTagClose(item)"
+                >
+                  {{ currentLabels[index] }}
+                </Tag>
+              </template>
+              <template #counter="{ count }">
+                <Tag
+                  v-if="props.noRestTip"
+                  inherit
+                  :class="[nh.be('tag'), nh.be('counter')]"
+                  :type="props.tagType"
+                >
+                  {{ `+${count}` }}
+                </Tag>
+                <span v-else>
+                  <Tooltip
+                    inherit
+                    :transfer="false"
+                    :visible="restTipShow"
+                    trigger="custom"
+                    placement="top-end"
+                    :tip-class="nh.be('rest-tip')"
+                    @click.stop="toggleShowRestTip"
+                  >
+                    <template #trigger>
+                      <Tag inherit :class="[nh.be('tag'), nh.be('counter')]" :type="props.tagType">
+                        {{ `+${count}` }}
+                      </Tag>
+                    </template>
+                    <NativeScroll inherit use-y-bar>
+                      <template v-for="(item, index) in currentValues" :key="index">
+                        <Tag
+                          v-if="index >= currentValues.length - restTagCount"
+                          inherit
+                          :class="nh.be('tag')"
+                          closable
+                          :type="props.tagType"
+                          @close="handleTagClose(item)"
+                        >
+                          {{ currentLabels[index] }}
+                        </Tag>
+                      </template>
+                    </NativeScroll>
+                  </Tooltip>
+                </span>
+              </template>
+            </Overflow>
             <div
               v-if="props.filter"
               :class="nh.be('anchor')"
@@ -128,11 +182,16 @@
         <div
           v-if="currentVisible"
           ref="popper"
-          :class="[nh.be('popper'), nh.bs('vars')]"
+          :class="[
+            nh.be('popper'),
+            nh.bs('vars'),
+            transferTo !== 'body' && [nh.bem('popper', 'inherit')]
+          ]"
           @click.stop
         >
           <VirtualList
             ref="virtualList"
+            inherit
             :class="[nh.be('list'), props.listClass]"
             :style="{
               height: listHeight,
@@ -204,11 +263,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef } from 'vue'
+import { defineComponent, ref, reactive, computed, watch, watchEffect, toRef, onMounted } from 'vue'
 import { Icon } from '@/components/icon'
+import { NativeScroll } from '@/components/native-scroll'
 import { Option } from '@/components/option'
+import { Overflow } from '@/components/overflow'
 import { Portal } from '@/components/portal'
 import { Tag } from '@/components/tag'
+import { Tooltip } from '@/components/tooltip'
 import { VirtualList } from '@/components/virtual-list'
 import { useFieldStore } from '@/components/form'
 import {
@@ -244,13 +306,37 @@ const defaultKeyConfig: Required<SelectKeyConfig> = {
   children: 'children'
 }
 
+function isSameValue(newValue: SelectValue, oldValue: SelectValue) {
+  const isNewArray = Array.isArray(newValue)
+  const isOldArray = Array.isArray(oldValue)
+
+  if (isNewArray !== isOldArray) return false
+
+  if (isNewArray && isOldArray) {
+    if (newValue.length !== oldValue.length) return false
+
+    for (let i = 0, len = newValue.length; i < len; ++i) {
+      if (newValue[i] !== oldValue[i]) return false
+    }
+
+    return true
+  }
+
+  if (isNull(newValue)) return isNull(oldValue)
+
+  return newValue === oldValue
+}
+
 export default defineComponent({
   name: 'Select',
   components: {
     Icon,
+    NativeScroll,
     Option,
+    Overflow,
     Portal,
     Tag,
+    Tooltip,
     VirtualList,
     Check,
     CircleXmark,
@@ -316,7 +402,10 @@ export default defineComponent({
       filter: false,
       ignoreCase: false,
       creatable: false,
-      transparent: false
+      transparent: false,
+      maxTagCount: 0,
+      noRestTip: false,
+      tagType: null
     })
 
     const locale = useLocale('select')
@@ -331,6 +420,8 @@ export default defineComponent({
     const currentFilter = ref('')
     const anchorWidth = ref(0)
     const userOptions = ref<SelectOptionState[]>([])
+    const restTagCount = ref(0)
+    const restTipShow = ref(false)
 
     const { isMounted } = useMounted()
 
@@ -501,7 +592,7 @@ export default defineComponent({
 
           updateHitting(index)
           modifier.resetAll()
-        } else if (modifier.enter || modifier.space) {
+        } else if (modifier.enter) {
           event.preventDefault()
           event.stopPropagation()
 
@@ -526,8 +617,10 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.ns('input-vars')]: true,
         [nh.bs('vars')]: true,
+        [nh.bm('inherit')]: props.inherit,
         [nh.bm('multiple')]: props.multiple,
-        [nh.bm('filter')]: props.filter
+        [nh.bm('filter')]: props.filter,
+        [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0
       }
     })
     const selectorClass = computed(() => {
@@ -585,6 +678,7 @@ export default defineComponent({
     )
     watch(currentVisible, value => {
       if (value) {
+        restTipShow.value = false
         initHittingIndex()
 
         requestAnimationFrame(() => {
@@ -609,7 +703,7 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        if (emittedValue !== value) {
+        if (!emittedValue || !isSameValue(value, emittedValue)) {
           emittedValue = value
           initValueAndLabel(value)
         }
@@ -646,6 +740,8 @@ export default defineComponent({
 
       filterOptions(value)
     })
+
+    onMounted(syncInputValue)
 
     function initValueAndLabel(value: SelectValue | null) {
       if (isNull(value)) {
@@ -774,8 +870,10 @@ export default defineComponent({
       const value = option.value
 
       if (selected) {
-        removeArrayItem(userOptions.value, item => item.value === value)
-        optionValueMap.delete(value)
+        if (userOptions.value.find(item => item.value === value)) {
+          removeArrayItem(userOptions.value, item => item.value === value)
+          optionValueMap.delete(value)
+        }
       } else {
         if (!props.multiple) {
           userOptions.value.length = 0
@@ -800,6 +898,8 @@ export default defineComponent({
       } else {
         currentVisible.value = false
       }
+
+      anchorWidth.value = 0
     }
 
     function handleChange(option: SelectOptionState) {
@@ -854,6 +954,7 @@ export default defineComponent({
     }
 
     function handleClickOutside() {
+      restTipShow.value = false
       emitEvent(props.onClickOutside)
 
       if (props.outsideClose && currentVisible.value) {
@@ -871,6 +972,7 @@ export default defineComponent({
         userOptions.value.length = 0
         currentValues.value.length = 0
         currentLabels.value.length = 0
+        restTipShow.value = false
 
         emittedValue = props.multiple ? [] : ''
 
@@ -935,6 +1037,14 @@ export default defineComponent({
       }
     }
 
+    function toggleShowRestTip() {
+      if (!currentVisible.value) {
+        restTipShow.value = !restTipShow.value
+      } else {
+        restTipShow.value = false
+      }
+    }
+
     return {
       props,
       nh,
@@ -949,6 +1059,8 @@ export default defineComponent({
       isHover,
       currentFilter,
       anchorWidth,
+      restTagCount,
+      restTipShow,
 
       className,
       selectorClass,
@@ -977,7 +1089,8 @@ export default defineComponent({
       handleFocus,
       handleBlur,
       handleFilterInput,
-      handleBackspace
+      handleBackspace,
+      toggleShowRestTip
     }
   }
 })

@@ -1,14 +1,19 @@
 <template>
   <div :id="idFor" :class="className" role="group">
     <slot>
-      <Checkbox v-if="props.control" control>
+      <Checkbox v-if="props.control" inherit control>
         {{ controlLabel }}
       </Checkbox>
       <template v-for="(item, index) in props.options" :key="index">
-        <Checkbox v-if="isObject(item)" :value="item.value" :control="item.control">
+        <Checkbox
+          v-if="isObject(item)"
+          inherit
+          :value="item.value"
+          :control="item.control"
+        >
           {{ item.label || item.value }}
         </Checkbox>
-        <Checkbox v-else :value="item">
+        <Checkbox v-else inherit :value="item">
           {{ item }}
         </Checkbox>
       </template>
@@ -77,6 +82,7 @@ export default defineComponent({
         nh.b(),
         nh.ns('checkbox-vars'),
         {
+          [nh.bm('inherit')]: props.inherit,
           [nh.bm('vertical')]: props.vertical,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: props.loading && props.loadingLock,

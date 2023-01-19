@@ -1,5 +1,5 @@
-import { config } from '@vue/test-utils'
 import { vi, beforeEach } from 'vitest'
+import { config } from '@vue/test-utils'
 import { ResizeObserver } from '@juggle/resize-observer'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */

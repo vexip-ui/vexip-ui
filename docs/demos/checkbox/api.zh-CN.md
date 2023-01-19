@@ -5,7 +5,7 @@
 | checked      | `boolean`                                        | 复选框的勾选状态，可以使用 `v-model` 双向绑定                          | `false`     | -       |
 | label        | `string`                                         | 复选框的标签值，使用插槽后失效                                         | `null`      | -       |
 | value        | `string \| number`                               | 复选框关联的值，一般配合 CheckboxGroup 使用，在 CheckboxGroup 内应唯一 | `null`      | -       |
-| label-class  | `string \| Record<string, boolean>`              | 标签元素的类名                                                         | `null`      | -       |
+| label-class  | `ClassType`                                      | 标签元素的类名                                                         | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | 复选框的大小                                                           | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | 复选框的状态                                                           | `'default'` | -       |
 | disabled     | `boolean`                                        | 设置是否为禁用状态                                                     | `false`     | -       |
