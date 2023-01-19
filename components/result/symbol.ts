@@ -1,1 +1,1 @@
-export type ResultType = | 'info' | 'success' | 'warning' | 'error'
+export type ResultType = 'info' | 'success' | 'warning' | 'error'
