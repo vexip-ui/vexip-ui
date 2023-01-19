@@ -407,7 +407,7 @@ export default defineComponent({
       return props.sizeOptions.map(size => {
         return {
           value: size,
-          label: `${size} ${locale.value.prePage}`
+          label: `${size} ${locale.value.perPage}`
         }
       })
     })

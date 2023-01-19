@@ -12,6 +12,12 @@ export const tagProps = buildProps({
   color: String,
   simple: booleanProp,
   circle: booleanProp,
+  prefix: [String, Number],
+  prefixBg: String,
+  prefixColor: String,
+  suffix: [String, Number],
+  suffixBg: String,
+  suffixColor: String,
   onClose: eventProp()
 })
 

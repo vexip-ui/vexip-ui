@@ -60,6 +60,11 @@ export function enUSLocale() {
       validateFail: 'Validate failed'
     },
 
+    image: {
+      placeholder: 'Loading...',
+      error: 'Loading fail'
+    },
+
     input: {
       placeholder: 'Please input'
     },
@@ -78,7 +83,7 @@ export function enUSLocale() {
 
     pagination: {
       page: 'Page | Pages',
-      prePage: '/ Page',
+      perPage: '/ Page',
       prevPage: 'Prev Page',
       nextPage: 'Next Page',
       prev: 'Prev',

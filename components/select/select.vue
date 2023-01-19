@@ -707,7 +707,7 @@ export default defineComponent({
     watch(
       () => props.value,
       value => {
-        if (!emittedValue || isSameValue(value, emittedValue)) {
+        if (!emittedValue || !isSameValue(value, emittedValue)) {
           emittedValue = value
           initValueAndLabel(value)
         }

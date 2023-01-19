@@ -127,8 +127,8 @@ describe('NativeScroll', () => {
     expect(wrapper.find('.vxp-native-scroll__bar--vertical').exists()).toBe(true)
   })
 
-  it('wrapper tag', () => {
-    const wrapper = mount(() => <NativeScroll wrapper-tag={'ul'}></NativeScroll>)
+  it('scroll tag', () => {
+    const wrapper = mount(() => <NativeScroll scroll-tag={'ul'}></NativeScroll>)
 
     expect(wrapper.find('.vxp-native-scroll__wrapper').element.tagName).toBe('UL')
   })

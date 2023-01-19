@@ -11,8 +11,9 @@
   >
     <ResizeObserver throttle :on-resize="handleResize">
       <component
-        :is="props.wrapperTag || 'div'"
+        :is="props.scrollTag || 'div'"
         ref="content"
+        v-bind="props.scrollAttrs"
         :class="wrapperClass"
         :style="wrapperStyle"
         @transitionend="transitionDuration = -1"
@@ -81,6 +82,8 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('scroll', _props, {
       scrollClass: null,
+      scrollStyle: null,
+      scrollAttrs: null,
       mode: {
         default: 'vertical',
         validator: value => scrollModes.includes(value)
@@ -113,7 +116,7 @@ export default defineComponent({
         isFunc: true
       },
       useBarTrack: false,
-      wrapperTag: 'div'
+      scrollTag: 'div'
     })
 
     const emitter = createEventEmitter()
@@ -282,8 +285,9 @@ export default defineComponent({
     })
     const wrapperClass = computed(() => {
       return [
-        nh.be('wrapper'),
+        props.scrollAttrs?.class,
         props.scrollClass,
+        nh.be('wrapper'),
         {
           [nh.bem('wrapper', 'scrolling')]: scrolling.value,
           [nh.bem('wrapper', 'no-ready')]: !isReady.value,
@@ -293,11 +297,15 @@ export default defineComponent({
       ]
     })
     const wrapperStyle = computed(() => {
-      return {
-        transform: `translate3d(${currentScroll.x}px, ${currentScroll.y}px, 0)`,
-        transitionDuration:
-          transitionDuration.value < 0 ? undefined : `${transitionDuration.value}ms`
-      }
+      return [
+        props.scrollAttrs?.style,
+        props.scrollStyle,
+        {
+          transform: `translate3d(${currentScroll.x}px, ${currentScroll.y}px, 0)`,
+          transitionDuration:
+            transitionDuration.value < 0 ? undefined : `${transitionDuration.value}ms`
+        }
+      ]
     })
 
     watch(enableXScroll, value => {

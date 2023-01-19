@@ -3,7 +3,7 @@ import './style/index.scss'
 import { createApp as _createApp, createSSRApp } from 'vue'
 import App from './app.vue'
 import { install } from 'vexip-ui'
-import { isColor } from '@vexip-ui/utils'
+import { isClient, isColor } from '@vexip-ui/utils'
 import prismjs from 'prismjs'
 import { createRouter } from './router'
 import { i18n, vexipuiLocale } from './i18n'
@@ -15,7 +15,7 @@ import 'prismjs/plugins/highlight-keywords/prism-highlight-keywords'
 export async function createApp() {
   (prismjs as any).manual = false
 
-  if (typeof window !== 'undefined') {
+  if (isClient) {
     const isDark = localStorage.getItem('vexip-docs-theme-prefer-dark')
     const majorColor = localStorage.getItem('vexip-docs-prefer-major-color')
 

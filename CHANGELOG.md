@@ -1,3 +1,37 @@
+## [2.0.20](https://github.com/vexip-ui/vexip-ui/compare/v2.0.19...v2.0.20) (2023-01-10)
+
+### Bug Fixes
+
+- **date-picker:** reset activated when set value to falsy ([ea2e74e](https://github.com/vexip-ui/vexip-ui/commit/ea2e74ebc222f193be59efb5a95b58a4dc73de72))
+- **locale:** per page typo ([bf85f8b](https://github.com/vexip-ui/vexip-ui/commit/bf85f8b6f9560bf055e32844f7d2c59cbd363811))
+- **modal:** close button cannot be clicked in touch mode ([d0a24a4](https://github.com/vexip-ui/vexip-ui/commit/d0a24a4693dc0e3cd9a615f168c4cd3998bca7f1))
+- **switch:** misalignment of signal occurs during transition ([1bd5da5](https://github.com/vexip-ui/vexip-ui/commit/1bd5da56346844a9091c89020ffee78cf107c9c6))
+- **table:** column fixed effect displayed when scroll not enable ([6d75dcf](https://github.com/vexip-ui/vexip-ui/commit/6d75dcf160c268d6bac339f3c1208518ac850798))
+- **upload:** count-limit not effective in image mode ([f356f11](https://github.com/vexip-ui/vexip-ui/commit/f356f11919e1bb86a7bd2e066b398cdf728f0d50))
+
+### Features
+
+- **date-picker:** add outside-close and outside-cancel props ([5a62a8a](https://github.com/vexip-ui/vexip-ui/commit/5a62a8a554c3518dcd66eaca99a50a791eb81a5d))
+
+## [2.0.19](https://github.com/vexip-ui/vexip-ui/compare/v2.0.18...v2.0.19) (2022-12-19)
+
+### Bug Fixes
+
+- **cascader:** ensure effective max-tag-count ([4d1e6c4](https://github.com/vexip-ui/vexip-ui/commit/4d1e6c4ddc542a676c7b64f71b6f0a617f981b22))
+- **hooks:** improve intersection count record ([2d2f360](https://github.com/vexip-ui/vexip-ui/commit/2d2f360ba3401d82b81f1952edce5faf7c22ca3d))
+- **overflow:** counter not hidden when max count equals to items count ([f4c3540](https://github.com/vexip-ui/vexip-ui/commit/f4c3540f38a9a593454570f6c9533756c5785e0d))
+- **select:** cannot re-select option in multiple mode ([c124596](https://github.com/vexip-ui/vexip-ui/commit/c1245964e39240ffd4611feafc71dd839ed08e31))
+- **skeleton:** attrs cannot be set ([69ee0d1](https://github.com/vexip-ui/vexip-ui/commit/69ee0d1382e4def9e0b485391d95c0b061b723ff))
+- **table:** height not correct when filter with row height set ([ca84f12](https://github.com/vexip-ui/vexip-ui/commit/ca84f12d489114691897182b16ec4f5658ec6c87))
+- **virtual-list:** items element height not refresh ([d3c0944](https://github.com/vexip-ui/vexip-ui/commit/d3c0944c0b7b03fce26db2c78f7ad25a44a78957))
+
+### Features
+
+- **overflow:** add max-count prop ([f982420](https://github.com/vexip-ui/vexip-ui/commit/f9824208a7a670d413b57b10c37745929c4529f4))
+- **overflow:** support add suffix content via slot ([6754072](https://github.com/vexip-ui/vexip-ui/commit/6754072803653c7b2654931425a44426d93022e3))
+- **playground:** support format codes via prettier ([5ff663c](https://github.com/vexip-ui/vexip-ui/commit/5ff663cda3963534fec687c06ed28a12803d4e0e))
+- **playground:** support select cdn address ([8d70fd6](https://github.com/vexip-ui/vexip-ui/commit/8d70fd686bafc8468a03320fc9e46ead549b5e7a))
+
 ## [2.0.18](https://github.com/vexip-ui/vexip-ui/compare/v2.0.17...v2.0.18) (2022-12-09)
 
 ### Bug Fixes

@@ -47,6 +47,8 @@ type Dateable = number | string | Date
 | loading-spin    | `boolean`                                                 | Set whether to use spin animation for the loading icon                                                                                         | `false`                 | `2.0.0`  |
 | min             | `Dateable`                                                | Set the minimum date that can be selected                                                                                                      | `null`                  | `2.0.14` |
 | max             | `Dateable`                                                | Set the maximum date that can be selected                                                                                                      | `null`                  | `2.0.14` |
+| outside-close   | `boolean`                                                 | Set whether the component can be closed by clicking outside                                                                                    | `true`                  | `2.0.20` |
+| outside-cancel  | `boolean`                                                 | Set whether clicking outside the component to close is a cancel operation                                                                      | `false`                 | `2.0.20` |
 
 ### DatePicker Events
 

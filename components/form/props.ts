@@ -42,7 +42,7 @@ export const formItemProps = buildProps({
   required: booleanProp,
   htmlFor: String,
   errorTransition: String,
-  defaultValue: Object as PropType<unknown>,
+  defaultValue: Object as PropType<any>,
   hideErrorTip: booleanProp,
   validateAll: booleanProp,
   hideAsterisk: booleanProp,

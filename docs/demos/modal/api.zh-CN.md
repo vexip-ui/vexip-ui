@@ -13,7 +13,7 @@
 | closable        | `boolean`                             | 设置是否具有关闭按钮                                                                                                  | `true`           | -    |
 | mask-close      | `boolean`                             | 设置是否可以点击遮罩层关闭                                                                                            | `true`           | -    |
 | inner           | `boolean`                             | 设置是否为一个内联的模态框，开启后定位从 fixed 变位 absolute                                                          | `false`          | -    |
-| modal-class     | `string \| Record<string, boolean>`   | 模态框的自定义类名                                                                                                    | `null`           | -    |
+| modal-class     | `ClassType`                           | 模态框的自定义类名                                                                                                    | `null`           | -    |
 | no-footer       | `boolean`                             | 是否禁用底部的操作按钮                                                                                                | `false`          | -    |
 | hide-mask       | `boolean`                             | 设置是否隐藏遮罩层                                                                                                    | `false`          | -    |
 | transfer        | `boolean \| string`                   | 设置模态框的渲染位置，设置为 `true` 时默认渲染至 `<body>`                                                             | `false`          | -    |

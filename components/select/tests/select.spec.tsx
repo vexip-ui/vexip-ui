@@ -54,17 +54,22 @@ describe('Select', () => {
     expect(document.querySelector('.vxp-select__popper')).not.toBeNull()
   })
 
-  it('single value', () => {
+  it('single value', async () => {
     const wrapper = mount(Select, {
       props: {
         visible: true,
         value: OPTIONS[0],
-        options: OPTIONS
+        options: OPTIONS,
+        placeholder: TEXT
       }
     })
 
     expect(wrapper.find('.vxp-select__control').text()).toEqual(OPTIONS[0])
     expect(wrapper.find('.vxp-option--selected').exists()).toBe(true)
+
+    await wrapper.setProps({ value: null })
+    expect(wrapper.find('.vxp-select__control').text()).toEqual(TEXT)
+    expect(wrapper.find('.vxp-option--selected').exists()).toBe(false)
   })
 
   it('placeholder', async () => {
@@ -166,17 +171,27 @@ describe('Select', () => {
     expect(wrapper.classes()).toContain('vxp-select--multiple')
   })
 
-  it('multiple value', () => {
-    const wrapper = mount(() => (
-      <Select visible value={OPTIONS.slice(0, 2)} multiple options={OPTIONS}></Select>
-    ))
-    const tags = wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)')
+  it('multiple value', async () => {
+    const wrapper = mount(Select, {
+      props: {
+        visible: true,
+        value: OPTIONS.slice(0, 2),
+        multiple: true,
+        options: OPTIONS
+      }
+    })
+    let tags = wrapper.findAll('.vxp-select__tag')
 
     expect(tags.length).toEqual(2)
     expect(wrapper.findAll('.vxp-option--selected').length).toEqual(2)
     tags.forEach((tag, i) => {
       expect(tag.text()).toEqual(OPTIONS[i])
     })
+
+    await wrapper.setProps({ value: [] })
+    tags = wrapper.findAll('.vxp-select__tag')
+    expect(tags.length).toEqual(0)
+    expect(wrapper.findAll('.vxp-option--selected').length).toEqual(0)
   })
 
   it('tag close', async () => {

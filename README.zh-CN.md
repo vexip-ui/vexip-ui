@@ -7,7 +7,7 @@
 <h1 align="center">Vexip UI</h1>
 
 <p align="center">
-  高可定制化的属性值，全量的 TypeScript，性能应该还不错
+  高度可定制化的属性值，全量的 TypeScript，性能很不错
 </p>
 
 <p align="center">
@@ -17,20 +17,20 @@
 </p>
 
 <p align="center">
-  如果你用 Vexip UI 写了一些很酷的东西，你都可以告诉我！如果你可以并愿意贡献代码，非常欢迎！
+  如果你用 Vexip UI 写了一些很酷的东西，并希望在官网展示，可以联系我，如果你想要贡献代码，非常欢迎！
 </p>
 
 **中文 [含技术支持群]** | [English](./README.md)
 
 Vexip UI 提供了一系列开箱即用的组件。
 
-组件库使用全新的 **组合式 Api** 编写，并尽可能采用 Vue 传统的方式设计和编写组件，全量的 **TypeScript**（不是 AnyScript）。
+组件库使用全新的 **组合式 Api** 编写，并尽可能采用 Vue 传统的方式设计和编写组件，全量的 **TypeScript**。
 
-每个组件几乎所有的 **属性默认值** 均可以通过注入配置快速修改（除了值和选项属性），轻松实现定制化。
+每个组件几乎所有的 **属性默认值** 均可以通过注入配置快速修改，轻松实现定制化。
 
-同时，组件代码的编写非常注重降低 **源码阅读** 的门槛，代码的排布尽可能的贴近平时的业务代码的习惯，避免让人眼花缭乱的封装。
+同时，组件代码的编写非常注重降低 **源码阅读** 的门槛，代码的排布尽可能的贴近平时的业务代码的习惯，拒绝花里胡哨。
 
-目前有 **70+** 个组件，一些你几乎看烂了的组件这里大多有，或许也有一些你不太常见的组件。
+目前有 **70+** 个组件，一些你几乎看烂了的组件这里都有并且更优秀，也有一些新颖的组件。
 
 ## 特性
 
@@ -39,13 +39,13 @@ Vexip UI 提供了一系列开箱即用的组件。
 - 🔧 自由配置的属性默认值，快速完成全局/局部修改
 - ⚡ 组合式 Api，良好的性能基础
 - 🔨 TypeScript 编写，完整的类型
-- 💪 800+ 单元测试，为组件的提供良好的稳定性
-- 🎨 CSS 变量，内置暗黑主题
-- 🚩 国际化支持
+- 💪 900+ 单元测试，为组件的提供良好的稳定性
+- 🎨 支持 CSS 变量，内置暗黑主题
+- 🚩 支持国际化
 - 🛫 配套 Resolver，支持 unplugin 插件
 - 🚤 支持 SSR
-- 🩹 全面的可访问性
-- 👀 贴近业务代码编排，较低的源码阅读门槛
+- 🩹 优秀的可访问性
+- 👀 贴近业务代码编排，低源码阅读门槛
 
 ## 安装
 
@@ -93,8 +93,6 @@ yarn add vexip-ui
 ## 兼容环境
 
 所有组件兼容现代浏览器，尽量保证近两三个版本的支持。
-
-但我一个人精力有限，现在也还没开始写单元测试，所以有问题的话不要骂我，给我提点 issue 和 PR 吧。
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Opera | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Electron |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

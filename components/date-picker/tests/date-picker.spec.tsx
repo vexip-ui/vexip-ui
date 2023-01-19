@@ -255,6 +255,23 @@ describe('DatePicker', () => {
     expect(wrapper.find('.vxp-date-picker__year-item--selected').text()).toEqual('2022')
   })
 
+  it('falsy value', async () => {
+    vi.setSystemTime('2022-05-26 00:00:00')
+
+    const wrapper = mount(DatePicker, {
+      props: { type: 'datetime', value: '2022-05-27 09:24:47' }
+    })
+    const selector = wrapper.find('.vxp-date-picker__selector')
+
+    await wrapper.trigger('click')
+    await runScrollTimers()
+    await wrapper.trigger('clickoutside')
+    expect(selector.text()).toEqual('2022/05/2709:24:47')
+
+    await wrapper.setProps({ value: '' })
+    expect(selector.text()).toEqual('----/--/----:--:--')
+  })
+
   it('button text', () => {
     const wrapper = mount(() => (
       <DatePicker visible confirm-text={'OK'} cancel-text={'NO'}></DatePicker>

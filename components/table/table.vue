@@ -20,6 +20,7 @@
       :bar-fade="props.barFade"
       :delta-x="50"
       @scroll="handleXScroll"
+      @x-enabled-change="xScrollEnabled = $event"
     >
       <TableHead ref="thead"></TableHead>
       <Scroll
@@ -62,7 +63,7 @@
       v-if="leftFixedColumns.length"
       :class="{
         [nh.bem('fixed', 'left')]: true,
-        [nh.bem('fixed', 'active')]: xScrollPercent
+        [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent > 0
       }"
     >
       <TableHead fixed="left"></TableHead>
@@ -86,7 +87,7 @@
       v-if="rightFixedColumns.length"
       :class="{
         [nh.bem('fixed', 'right')]: true,
-        [nh.bem('fixed', 'active')]: xScrollPercent !== 100
+        [nh.bem('fixed', 'active')]: xScrollEnabled && xScrollPercent < 100
       }"
     >
       <TableHead fixed="right"></TableHead>
@@ -237,6 +238,7 @@ export default defineComponent({
 
     const nh = useNameHelper('table')
     const bodyHeight = ref<number | undefined>(props.height)
+    const xScrollEnabled = ref(false)
     const xScrollPercent = ref(0)
     const yScrollPercent = ref(0)
     const headHeight = ref(0)
@@ -819,6 +821,7 @@ export default defineComponent({
       props,
       nh,
       bodyHeight,
+      xScrollEnabled,
       xScrollPercent,
       yScrollPercent,
       headHeight,

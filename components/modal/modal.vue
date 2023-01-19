@@ -34,7 +34,9 @@
             <button
               v-if="props.closable"
               :class="nh.be('close')"
+              @pointerdown.stop
               @mousedown.stop
+              @touchstart.stop
               @click="handleClose(false)"
             >
               <slot name="close">
@@ -167,6 +169,7 @@ export default defineComponent({
     const footer = ref<HTMLElement>()
 
     const { target: header, moving: dragging } = useMoving({
+      capture: false,
       onStart: (state, event) => {
         if (!props.draggable || event.button > 0) {
           return false

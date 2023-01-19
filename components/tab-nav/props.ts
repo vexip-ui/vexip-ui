@@ -4,6 +4,11 @@ import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { TabNavAlign, TabNavPlacement, TabNavOptions } from './symbol'
 
+type ChangeListener =
+  | ((label: string | number) => void)
+  | ((label: string) => void)
+  | ((label: number) => void)
+
 export const tabNavProps = buildProps({
   active: [String, Number],
   card: booleanProp,
@@ -12,9 +17,9 @@ export const tabNavProps = buildProps({
   placement: String as PropType<TabNavPlacement>,
   closable: booleanProp,
   showAdd: booleanProp,
-  onChange: eventProp<(label: string | number) => void>(),
+  onChange: eventProp<ChangeListener>(),
   onAdd: eventProp(),
-  onClose: eventProp<(label: string | number) => void>()
+  onClose: eventProp<ChangeListener>()
 })
 
 export type TabNavProps = ExtractPropTypes<typeof tabNavProps>

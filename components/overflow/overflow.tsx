@@ -4,14 +4,12 @@ import {
   computed,
   watch,
   onMounted,
-  onBeforeUnmount,
   nextTick,
   createTextVNode,
   Fragment
 } from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { useResize } from '@vexip-ui/hooks'
 import { isDefined } from '@vexip-ui/utils'
 import { overflowProps } from './props'
 
@@ -35,11 +33,11 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('overflow')
-    const { observeResize, unobserveResize } = useResize()
     const restCount = ref(0)
 
     const wrapper = ref<HTMLElement>()
     const counter = ref<HTMLElement>()
+    const suffix = ref<HTMLElement>()
 
     const className = computed(() => {
       return [
@@ -61,13 +59,7 @@ export default defineComponent({
 
     expose({ refresh })
 
-    onMounted(() => {
-      refresh()
-      wrapper.value && observeResize(wrapper.value, refresh)
-    })
-    onBeforeUnmount(() => {
-      wrapper.value && unobserveResize(wrapper.value)
-    })
+    onMounted(refresh)
 
     function toggleDisplay(el: HTMLElement, show: boolean) {
       if (hiddenFlag.value) {
@@ -136,14 +128,16 @@ export default defineComponent({
         return
       }
 
+      const suffixEl = suffix.value
       const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(wrapper.value)
       const childWidths: number[] = []
 
-      let totalWidth = 0
+      let totalWidth = suffixEl ? suffixEl.offsetWidth : 0
 
       const counterMargin = computeHorizontalMargin(counterEl)
+      const length = childCount - (suffixEl ? 2 : 1)
 
-      for (let i = 0, len = childCount - 1; i < len; ++i) {
+      for (let i = 0; i < length; ++i) {
         if (i < 0) continue
 
         const child = children[i] as HTMLElement
@@ -162,12 +156,18 @@ export default defineComponent({
 
         if (totalWidth > wrapperWidth) {
           for (let j = i; j >= 0; --j) {
-            restCount.value = len - j
+            restCount.value = length - j
             totalWidth -= childWidths[j]
 
             if (totalWidth + counterEl.offsetWidth + counterMargin <= wrapperWidth || !j) {
               overflow = true
               i = j - 1
+
+              if (suffixEl) {
+                suffixEl.style.maxWidth =
+                  i === -1 ? `${wrapperWidth - counterEl.offsetWidth}px` : ''
+              }
+
               break
             }
           }
@@ -233,6 +233,15 @@ export default defineComponent({
             : (
             <span ref={counter} style={{ display: 'inline-block' }}></span>
               )}
+          {slots.suffix
+            ? (
+            <ResizeObserver onResize={refresh}>
+              <div ref={suffix} class={nh.be('suffix')}>
+                {slots.suffix()}
+              </div>
+            </ResizeObserver>
+              )
+            : null}
         </CustomTag>
       )
 
