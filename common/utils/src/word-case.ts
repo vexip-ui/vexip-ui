@@ -4,10 +4,10 @@
 export type AnyCase<S> = string extends S
   ? string
   : S extends `${infer F1}${infer F2}${infer R}`
-    ? `${Uppercase<F1> | Lowercase<F1>}${Uppercase<F2> | Lowercase<F2>}${AnyCase<R>}`
-    : S extends `${infer F}${infer R}`
-      ? `${Uppercase<F> | Lowercase<F>}${AnyCase<R>}`
-      : ''
+  ? `${Uppercase<F1> | Lowercase<F1>}${Uppercase<F2> | Lowercase<F2>}${AnyCase<R>}`
+  : S extends `${infer F}${infer R}`
+  ? `${Uppercase<F> | Lowercase<F>}${AnyCase<R>}`
+  : ''
 
 /**
  * 将命名转换为短横线命名
@@ -25,15 +25,20 @@ export function toKebabCase(value: string) {
 }
 
 /**
- * 将命名转换为全大写命名Capital
+ * 将命名转换为首字母大写的驼峰
  *
  * @param value 需要转换的命名
  */
-export function toCapitalCase(value: string) {
-  return (
-    value.charAt(0).toUpperCase() +
-    value.slice(1).replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))
-  )
+
+type CapitalCase<T extends string> = T extends `${infer First}-${infer Rest}`
+  ? `${Capitalize<First>}${CapitalCase<Rest>}`
+  : Capitalize<T>
+
+export function toCapitalCase<T extends string>(value: T) {
+  return (value.charAt(0).toUpperCase() +
+    value
+      .slice(1)
+      .replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))) as CapitalCase<T>
 }
 
 /**

@@ -76,6 +76,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Collapse' },
         { name: 'Ellipsis', since: '1.1.3' },
         { name: 'Highlight', since: '1.3.1' },
+        { name: 'Image', since: '2.1.0' },
         { name: 'Result', since: '2.1.0' },
         { name: 'Table' },
         { name: 'TabNav' },
@@ -109,6 +110,7 @@ export function getComponentConfig(): ComponentGroup[] {
       name: 'else',
       components: [
         { name: 'ConfigProvider', since: '2.0.0' },
+        { name: 'FullScreen', since: '2.1.0' },
         { name: 'Masker' },
         { name: 'Overflow', since: '2.0.0' },
         { name: 'Renderer' },

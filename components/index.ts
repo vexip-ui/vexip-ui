@@ -38,9 +38,13 @@ import { Form } from './form'
 import { FormItem } from './form-item'
 import { FormReset } from './form-reset'
 import { FormSubmit } from './form-submit'
+import { FullScreen } from './full-screen'
 import { Grid } from './grid'
 import { Highlight } from './highlight'
 import { Icon } from './icon'
+import { Image } from './image'
+import { ImageGroup } from './image-group'
+import { ImageViewer } from './image-viewer'
 import { Input } from './input'
 import { Layout } from './layout'
 import { LayoutAside } from './layout-aside'
@@ -158,9 +162,13 @@ const components = [
   FormItem,
   FormReset,
   FormSubmit,
+  FullScreen,
   Grid,
   Highlight,
   Icon,
+  Image,
+  ImageGroup,
+  ImageViewer,
   Input,
   Layout,
   LayoutAside,
@@ -286,9 +294,13 @@ export * from './form'
 export * from './form-item'
 export * from './form-reset'
 export * from './form-submit'
+export * from './full-screen'
 export * from './grid'
 export * from './highlight'
 export * from './icon'
+export * from './image'
+export * from './image-group'
+export * from './image-viewer'
 export * from './input'
 export * from './layout'
 export * from './layout-aside'
