@@ -38,6 +38,7 @@ import { Form } from './form'
 import { FormItem } from './form-item'
 import { FormReset } from './form-reset'
 import { FormSubmit } from './form-submit'
+import { FullScreen } from './full-screen'
 import { Grid } from './grid'
 import { Highlight } from './highlight'
 import { Icon } from './icon'
@@ -157,6 +158,7 @@ const components = [
   FormItem,
   FormReset,
   FormSubmit,
+  FullScreen,
   Grid,
   Highlight,
   Icon,
@@ -284,6 +286,7 @@ export * from './form'
 export * from './form-item'
 export * from './form-reset'
 export * from './form-submit'
+export * from './full-screen'
 export * from './grid'
 export * from './highlight'
 export * from './icon'

@@ -74,6 +74,7 @@ export interface I18nConfig {
     ColorPicker: string,
     DatePicker: string,
     Form: string,
+    FullScreen: string,
     Input: string,
     NumberInput: string,
     Radio: string,

@@ -76,6 +76,7 @@ export const zhCN = defineI18n({
     ColorPicker: '颜色选择器',
     DatePicker: '日期选择器',
     Form: '表单',
+    FullScreen: '全屏',
     Input: '输入框',
     NumberInput: '数字输入框',
     Radio: '单选框',

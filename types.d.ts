@@ -38,6 +38,7 @@ declare module 'vue' {
     FormItem: typeof import('vexip-ui')['FormItem'],
     FormReset: typeof import('vexip-ui')['FormReset'],
     FormSubmit: typeof import('vexip-ui')['FormSubmit'],
+    FullScreen: typeof import('vexip-ui')['FullScreen'],
     Grid: typeof import('vexip-ui')['Grid'],
     Highlight: typeof import('vexip-ui')['Highlight'],
     Icon: typeof import('vexip-ui')['Icon'],
