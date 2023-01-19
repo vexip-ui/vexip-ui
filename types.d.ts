@@ -69,6 +69,7 @@ declare module 'vue' {
     RadioGroup: typeof import('vexip-ui')['RadioGroup'],
     Renderer: typeof import('vexip-ui')['Renderer'],
     ResizeObserver: typeof import('vexip-ui')['ResizeObserver'],
+    Result: typeof import('vexip-ui')['Result'],
     Row: typeof import('vexip-ui')['Row'],
     Scroll: typeof import('vexip-ui')['Scroll'],
     Scrollbar: typeof import('vexip-ui')['Scrollbar'],

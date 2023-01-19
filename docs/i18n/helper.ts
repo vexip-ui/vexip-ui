@@ -78,6 +78,7 @@ export interface I18nConfig {
     Input: string,
     NumberInput: string,
     Radio: string,
+    Result: string,
     Select: string,
     Slider: string,
     Switch: string,

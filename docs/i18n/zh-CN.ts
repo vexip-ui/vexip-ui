@@ -80,6 +80,7 @@ export const zhCN = defineI18n({
     Input: '输入框',
     NumberInput: '数字输入框',
     Radio: '单选框',
+    Result: '结果',
     Select: '选择器',
     Slider: '滑动输入条',
     Switch: '开关',
