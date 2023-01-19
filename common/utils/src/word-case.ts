@@ -25,15 +25,20 @@ export function toKebabCase(value: string) {
 }
 
 /**
- * 将命名转换为全大写命名Capital
+ * 将命名转换为首字母大写的驼峰
  *
  * @param value 需要转换的命名
  */
-export function toCapitalCase(value: string) {
-  return (
-    value.charAt(0).toUpperCase() +
-    value.slice(1).replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))
-  )
+
+type CapitalCase<T extends string> = T extends `${infer First}-${infer Rest}`
+  ? `${Capitalize<First>}${CapitalCase<Rest>}`
+  : Capitalize<T>
+
+export function toCapitalCase<T extends string>(value: T) {
+  return (value.charAt(0).toUpperCase() +
+    value
+      .slice(1)
+      .replace(/-(\w)/g, (_, char) => (char ? char.toUpperCase() : ''))) as CapitalCase<T>
 }
 
 /**
