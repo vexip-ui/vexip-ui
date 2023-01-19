@@ -1,1 +1,10 @@
-["basis", "circle", "closable", "simple", "size", "type", "custom"]
+[
+  "basis",
+  "circle",
+  "closable",
+  "simple",
+  "size",
+  "type",
+  "custom",
+  "extra"
+]
