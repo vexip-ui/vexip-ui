@@ -3,22 +3,14 @@
     Placement:
     <RadioGroup v-model:value="placement" button :options="placements"></RadioGroup>
   </p>
-  <TabNav :placement="placement">
-    <template #prefix>
-      <Button> Prefix Extra Action </Button>
-    </template>
-    <TabNavItem label="Tab 1">
-      Tab 1
+  <TabNav
+    v-model:active="active"
+    :placement="placement"
+    :style="{ height: placement === 'left' ? '200px' : undefined }"
+  >
+    <TabNavItem v-for="tab in tabs" :key="tab.label" :label="tab.label">
+      {{ `标签页${tab.label}` }}
     </TabNavItem>
-    <TabNavItem label="Tab 2">
-      Tab 2
-    </TabNavItem>
-    <TabNavItem label="Tab 3">
-      Tab 3
-    </TabNavItem>
-    <template #suffix>
-      <Button> Suffix Extra Action </Button>
-    </template>
   </TabNav>
 </template>
 
@@ -29,4 +21,9 @@ import type { TabNavPlacement } from 'vexip-ui'
 
 const placements = ['top', 'left'] as TabNavPlacement[]
 const placement = ref(placements[0])
+
+const tabs = Array.from({ length: 30 }).map((_, index) => ({
+  label: index + 1
+}))
+const active = ref(1)
 </script>
