@@ -60,6 +60,11 @@ export function enUSLocale() {
       validateFail: 'Validate failed'
     },
 
+    image: {
+      placeholder: 'Loading...',
+      error: 'Loading fail'
+    },
+
     input: {
       placeholder: 'Please input'
     },

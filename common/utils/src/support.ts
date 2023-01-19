@@ -25,3 +25,17 @@ export function supportFlexGap() {
 
   return flexGapSupported
 }
+
+let imgLoadingSupported: boolean | null = null
+
+export function supportImgLoading() {
+  if (!isClient) {
+    return true
+  }
+
+  if (imgLoadingSupported === null) {
+    imgLoadingSupported = 'loading' in document.createElement('img')
+  }
+
+  return imgLoadingSupported
+}

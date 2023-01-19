@@ -98,6 +98,7 @@ export const zhCN = defineI18n({
     Collapse: '折叠面板',
     Ellipsis: '省略',
     Highlight: '高亮',
+    Image: '图片',
     Table: '表格',
     TabNav: '标签导航',
     Tabs: '标签页',
