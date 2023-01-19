@@ -87,7 +87,7 @@ interface OptionState {
 | loading         | `boolean`                                                | 设置是否为加载中                                                                                     | `false`          | -       |
 | loading-icon    | `Record<string, any>`                                    | 设置加载中的图标                                                                                     | `Spinner`        | -       |
 | loading-lock    | `boolean`                                                | 设置在加载中时是否为只读                                                                             | `false`          | -       |
-| loading-spin    | `boolean`                                                | 设置加载中图标是否使用旋转动画                                                                       | `false`          | -       |
+| loading-effect  | `string`                                                 | 设置加载中图标的效果动画                                                                             | `false`          | `2.1.0` |
 | transparent     | `boolean`                                                | 设置是否为透明模式                                                                                   | `false`          | `2.0.2` |
 
 ### Cascader 事件

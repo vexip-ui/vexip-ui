@@ -2,6 +2,7 @@ import { buildProps } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { IconEffect } from './symbol'
 
 const inOutProp = {
   type: [Boolean, String] as PropType<boolean | 'in' | 'out'>,
@@ -15,7 +16,8 @@ export const iconProps = buildProps({
   label: String,
   spin: inOutProp,
   pulse: inOutProp,
-  flip: String as PropType<'horizontal' | 'vertical' | 'both'>
+  flip: String as PropType<'horizontal' | 'vertical' | 'both'>,
+  effect: String as PropType<IconEffect>
 })
 
 export type IconProps = ExtractPropTypes<typeof iconProps>

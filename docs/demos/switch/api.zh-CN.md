@@ -10,7 +10,7 @@
 | close-color      | `string`                                         | 关闭状态时开关的填充颜色                                                                                  | `''`        | -       |
 | loading          | `boolean`                                        | 设置是否为加载状态                                                                                        | `false`     | -       |
 | loading-icon     | `Record<string, any>`                            | 设置加载中的图标                                                                                          | `Spinner`   | `2.0.0` |
-| loading-spin     | `boolean`                                        | 设置加载中图标是否使用旋转动画                                                                            | `false`     | `2.0.0` |
+| loading-effect   | `string`                                         | 设置加载中图标的效果动画                                                                                  | `false`     | `2.0.0` |
 | open-icon        | `Record<string, any>`                            | 开关打开且非加载中时的手柄内图标，使用了 `icon` 插槽后失效                                                | `null`      | -       |
 | close-icon       | `Record<string, any>`                            | 开关关闭且非加载中时的手柄内图标，使用了 `icon` 插槽后失效                                                | `null`      | -       |
 | open-text        | `string`                                         | 打开状态时开关的填充文字                                                                                  | `''`        | -       |

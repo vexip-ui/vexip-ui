@@ -23,7 +23,7 @@
     :loading="props.loading"
     :loading-icon="props.loadingIcon"
     :loading-lock="props.loadingLock"
-    :loading-spin="props.loadingSpin"
+    :loading-effect="props.loadingEffect"
     :transparent="transparent"
     @toggle="handleToggle"
     @select="handleSelect"
@@ -155,7 +155,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: null,
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       transparent: false
     })
 

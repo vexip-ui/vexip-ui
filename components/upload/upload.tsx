@@ -107,7 +107,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       defaultFiles: () => [],
       // 'canPreview' using UploadFile default
       listStyle: null
@@ -633,7 +633,7 @@ export default defineComponent({
             disabled={props.disabled}
             loading={props.loading}
             loading-icon={props.loadingIcon}
-            loading-spin={props.loadingSpin}
+            loading-effect={props.loadingEffect}
           >
             {props.buttonLabel ?? locale.value.upload}
           </Button>
@@ -658,8 +658,7 @@ export default defineComponent({
               )}
           <Icon
             class={nh.be('loading-icon')}
-            spin={props.loadingSpin}
-            pulse={!props.loadingSpin}
+            effect={props.loadingEffect}
             icon={props.loadingIcon}
             style={{ opacity: props.loading ? '100%' : '0%' }}
           ></Icon>
@@ -682,8 +681,7 @@ export default defineComponent({
                 ? (
                 <Icon
                   class={nh.be('loading-icon')}
-                  spin={props.loadingSpin}
-                  pulse={!props.loadingSpin}
+                  effect={props.loadingEffect}
                   icon={props.loadingIcon}
                   style={{ marginBottom: '6px' }}
                 ></Icon>

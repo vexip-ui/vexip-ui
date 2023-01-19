@@ -1,4 +1,5 @@
 import type { Ref, InjectionKey } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 
 export interface GroupState {
@@ -11,7 +12,7 @@ export interface GroupState {
   loading: boolean,
   loadingIcon: Record<string, any>,
   loadingLock: boolean,
-  loadingSpin: boolean,
+  loadingEffect: IconEffect,
   updateValue(value: string | number): void,
   registerInput(input: Ref<HTMLElement | null | undefined>): void,
   unregisterInput(input: Ref<HTMLElement | null | undefined>): void

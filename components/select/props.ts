@@ -9,6 +9,7 @@ import {
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
@@ -41,7 +42,7 @@ export const selectProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   keyConfig: Object as PropType<SelectKeyConfig>,
   filter: {
     type: [Boolean, Function] as PropType<

@@ -8,6 +8,7 @@ import {
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { Dateable } from '@vexip-ui/utils'
@@ -47,7 +48,7 @@ export const datePickerProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   min: [Number, String, Date] as PropType<Dateable>,
   max: [Number, String, Date] as PropType<Dateable>,
   outsideClose: booleanProp,
@@ -105,7 +106,7 @@ export const timePickerProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   min: String,
   max: String,
   outsideClose: booleanProp,
