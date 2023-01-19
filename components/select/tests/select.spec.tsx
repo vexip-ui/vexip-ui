@@ -180,7 +180,7 @@ describe('Select', () => {
         options: OPTIONS
       }
     })
-    let tags = wrapper.findAll('.vxp-select__tag')
+    let tags = wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)')
 
     expect(tags.length).toEqual(2)
     expect(wrapper.findAll('.vxp-option--selected').length).toEqual(2)
@@ -189,7 +189,7 @@ describe('Select', () => {
     })
 
     await wrapper.setProps({ value: [] })
-    tags = wrapper.findAll('.vxp-select__tag')
+    tags = wrapper.findAll('.vxp-select__tag:not(.vxp-select__counter)')
     expect(tags.length).toEqual(0)
     expect(wrapper.findAll('.vxp-option--selected').length).toEqual(0)
   })
