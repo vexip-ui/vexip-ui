@@ -8,6 +8,7 @@ import {
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
@@ -49,7 +50,7 @@ export const cascaderProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
   onToggle: eventProp<(visible: boolean) => void>(),
   onSelect: eventProp<(fullValue: string, data: Record<string, any>) => void>(),

@@ -1,6 +1,7 @@
 import { buildProps, booleanProp, stateProp, eventProp } from '@vexip-ui/config'
 
-import type { ExtractPropTypes } from 'vue'
+import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
 export const textareaProps = buildProps({
@@ -19,7 +20,7 @@ export const textareaProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   sync: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),

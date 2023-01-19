@@ -81,9 +81,9 @@ importers:
       '@types/prompts': 2.4.1
       '@types/semver': 7.3.13
       '@vexip-ui/commitlint-config': 0.1.0
-      '@vexip-ui/eslint-config': 0.5.1_typescript@4.8.4
+      '@vexip-ui/eslint-config': 0.5.1_wyqvi574yv7oiwfeinomdzmc3m
       '@vexip-ui/prettier-config': 0.1.0_prettier@2.7.1
-      '@vexip-ui/stylelint-config': 0.1.1
+      '@vexip-ui/stylelint-config': 0.1.1_stylelint@14.14.1
       '@vitejs/plugin-vue': 2.3.3_vite@2.9.14+vue@3.2.41
       '@vitejs/plugin-vue-jsx': 1.3.10
       '@vitest/coverage-c8': 0.24.5_stdbuzg2wqwledx5f7rpaqqvte
@@ -1060,8 +1060,8 @@ packages:
       vue-i18n:
         optional: true
     dependencies:
-      '@intlify/message-compiler': 9.3.0-beta.10
-      '@intlify/shared': 9.3.0-beta.10
+      '@intlify/message-compiler': 9.3.0-beta.16
+      '@intlify/shared': 9.3.0-beta.16
       jsonc-eslint-parser: 1.4.1
       source-map: 0.6.1
       vue-i18n: 9.2.2_vue@3.2.41
@@ -1090,11 +1090,11 @@ packages:
       '@intlify/shared': 9.2.2
       source-map: 0.6.1
 
-  /@intlify/message-compiler/9.3.0-beta.10:
-    resolution: {integrity: sha512-RoOC6yceOykLRhN0NlbkNOBUx1el6iphx3W8NfOx3jHVNtfT1FYokx14/5sU3F1F0uxeG4sp6q+ppKvaF8o+ww==}
+  /@intlify/message-compiler/9.3.0-beta.16:
+    resolution: {integrity: sha512-CGQI3xRcs1ET75eDQ0DUy3MRYOqTauRIIgaMoISKiF83gqRWg93FqN8lGMKcpBqaF4tI0JhsfosCaGiBL9+dnw==}
     engines: {node: '>= 14'}
     dependencies:
-      '@intlify/shared': 9.3.0-beta.10
+      '@intlify/shared': 9.3.0-beta.16
       source-map: 0.6.1
     dev: true
 
@@ -1102,8 +1102,8 @@ packages:
     resolution: {integrity: sha512-wRwTpsslgZS5HNyM7uDQYZtxnbI12aGiBZURX3BTR9RFIKKRWpllTsgzHWvj3HKm3Y2Sh5LPC1r0PDCKEhVn9Q==}
     engines: {node: '>= 14'}
 
-  /@intlify/shared/9.3.0-beta.10:
-    resolution: {integrity: sha512-h93uAanbAt/XgjDHclrVB7xix6r7Uz11wx0iGNOCdHP7aA2LCJjUT3uNbekJjjbo+Fl5jzTSJZdm2SexzoqhRA==}
+  /@intlify/shared/9.3.0-beta.16:
+    resolution: {integrity: sha512-kXbm4svALe3lX+EjdJxfnabOphqS4yQ1Ge/iIlR8tvUiYRCoNz3hig1M4336iY++Dfx5ytEQJPNjIcknNIuvig==}
     engines: {node: '>= 14'}
     dev: true
 
@@ -1123,7 +1123,7 @@ packages:
         optional: true
     dependencies:
       '@intlify/bundle-utils': 3.2.1_vue-i18n@9.2.2
-      '@intlify/shared': 9.3.0-beta.10
+      '@intlify/shared': 9.3.0-beta.16
       '@rollup/pluginutils': 4.2.1
       debug: 4.3.4
       fast-glob: 3.2.12
@@ -1774,8 +1774,10 @@ packages:
       '@commitlint/config-conventional': 17.2.0
     dev: true
 
-  /@vexip-ui/eslint-config/0.5.1_typescript@4.8.4:
+  /@vexip-ui/eslint-config/0.5.1_wyqvi574yv7oiwfeinomdzmc3m:
     resolution: {integrity: sha512-mid65O8/T9mMreBG4ajSD45Xi2pGJtf5KjTZzJwnleXp44DDMgw3eLLHOM7UyIzJerHrgX0FpgfQdSZdQDaPog==}
+    peerDependencies:
+      eslint: '>=8.0.0'
     dependencies:
       '@typescript-eslint/eslint-plugin': 5.42.0_6xw5wg2354iw4zujk2f3vyfrzu
       '@typescript-eslint/parser': 5.42.0_wyqvi574yv7oiwfeinomdzmc3m
@@ -1809,8 +1811,10 @@ packages:
       prettier: 2.7.1
     dev: true
 
-  /@vexip-ui/stylelint-config/0.1.1:
+  /@vexip-ui/stylelint-config/0.1.1_stylelint@14.14.1:
     resolution: {integrity: sha512-dFG2zhyZ+2MUXKf3jg/aGU7lyllOWhnqcpWVFyoh96DBd9VbLeTKZcN0GucvpjQy4hR9GgrzhKycfwcm5iYP0g==}
+    peerDependencies:
+      stylelint: '>=14.0.0'
     dependencies:
       postcss: 8.4.18
       postcss-html: 1.5.0
@@ -1822,8 +1826,6 @@ packages:
       stylelint-config-standard: 28.0.0_stylelint@14.14.1
       stylelint-config-standard-scss: 5.0.0_t5qxeji2l54punp3pwjdchi3we
       stylelint-order: 5.0.0_stylelint@14.14.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /@vitejs/plugin-vue-jsx/1.3.10:
@@ -3106,8 +3108,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2

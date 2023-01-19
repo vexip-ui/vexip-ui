@@ -37,7 +37,7 @@
         </span>
         <CollapseTransition appear horizontal fade-effect>
           <div v-if="loading" :class="nh.be('loading')">
-            <Icon :spin="loadingSpin" :pulse="!loadingSpin" :icon="loadingIcon"></Icon>
+            <Icon :effect="loadingEffect" :icon="loadingIcon"></Icon>
           </div>
         </CollapseTransition>
       </slot>
@@ -225,9 +225,9 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    loadingSpin: {
-      type: Boolean,
-      default: false
+    loadingEffect: {
+      type: String,
+      default: null
     }
   },
   emits: ['update:selected', 'select', 'enter', 'switch'],

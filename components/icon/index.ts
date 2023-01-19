@@ -3,6 +3,7 @@ import type { IconProps } from './props'
 
 export { default as Icon } from './icon'
 export type { IconProps, IconCProps } from './props'
+export type { IconEffect } from './symbol'
 
 export type IconMinorProps = Omit<Partial<IconProps>, 'icon'> & {
   class?: ClassType,

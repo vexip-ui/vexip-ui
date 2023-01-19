@@ -4,10 +4,10 @@
 export type AnyCase<S> = string extends S
   ? string
   : S extends `${infer F1}${infer F2}${infer R}`
-  ? `${Uppercase<F1> | Lowercase<F1>}${Uppercase<F2> | Lowercase<F2>}${AnyCase<R>}`
-  : S extends `${infer F}${infer R}`
-  ? `${Uppercase<F> | Lowercase<F>}${AnyCase<R>}`
-  : ''
+    ? `${Uppercase<F1> | Lowercase<F1>}${Uppercase<F2> | Lowercase<F2>}${AnyCase<R>}`
+    : S extends `${infer F}${infer R}`
+      ? `${Uppercase<F> | Lowercase<F>}${AnyCase<R>}`
+      : ''
 
 /**
  * 将命名转换为短横线命名

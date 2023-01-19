@@ -1,3 +1,3 @@
 ### Spin Effect
 
-The `spin` prop allows the icon to spin.
+Set `effect` prop to `spin-in` or `spin-out` to spin the icon.

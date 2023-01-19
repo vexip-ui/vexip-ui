@@ -1,6 +1,7 @@
 import { buildProps, booleanProp, stateProp, eventProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { TransferKeyConfig, TransferOptionState } from './symbol'
 
@@ -37,7 +38,7 @@ export const transferProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   onChange: eventProp<(values: Values) => void>(),
   onSelect: eventProp<SelectHandler>()
 })
