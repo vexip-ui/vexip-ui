@@ -1,4 +1,4 @@
-import { isDefined } from './common'
+import { isClient, isDefined } from './common'
 
 export interface TransferNode extends Node {
   __transferNode?: Node,
@@ -10,9 +10,8 @@ export interface EventPayload extends EventInit {
   [prop: string]: any
 }
 
-export const USE_TOUCH =
-  typeof window !== 'undefined' && ('ontouchstart' in window || getMaxTouchPoints() > 0)
-export const CLICK_TYPE = USE_TOUCH ? 'touchstart' : 'click'
+export const USE_TOUCH = isClient && ('ontouchstart' in window || getMaxTouchPoints() > 0)
+export const CLICK_TYPE = USE_TOUCH ? 'pointerdown' : 'click'
 
 function getMaxTouchPoints() {
   return typeof navigator !== 'undefined'
