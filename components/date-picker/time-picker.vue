@@ -107,11 +107,7 @@
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon
-            :spin="props.loadingSpin"
-            :pulse="!props.loadingSpin"
-            :icon="props.loadingIcon"
-          ></Icon>
+          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
         </div>
       </transition>
     </div>
@@ -259,6 +255,7 @@ export default defineComponent({
     const props = useProps('timePicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       visible: false,
       placement: {
         default: 'bottom-start',
@@ -302,7 +299,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       min: null,
       max: null,
       outsideClose: true,
@@ -835,7 +832,7 @@ export default defineComponent({
 
       props,
       nh,
-      locale: useLocale('timePicker'),
+      locale: useLocale('timePicker', toRef(props, 'locale')),
       idFor,
       isHover,
       currentVisible,

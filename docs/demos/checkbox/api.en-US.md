@@ -5,7 +5,7 @@
 | checked      | `boolean`                                        | Checked state of the checkbox, you can use `v-model` two-way binding                                                         | `false`     | -       |
 | label        | `string`                                         | The label value of the checkbox, invalid after using the slot                                                                | `null`      | -       |
 | value        | `string \| number`                               | The value associated with the checkbox, generally used with the CheckboxGroup, and should be unique within the CheckboxGroup | `null`      | -       |
-| label-class  | `string \| Record<string, boolean>`              | The class name of label element                                                                                              | `null`      | -       |
+| label-class  | `ClassType`                                      | The class name of label element                                                                                              | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | The size of the checkbox                                                                                                     | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | The state of the checkbox                                                                                                    | `'default'` | -       |
 | disabled     | `boolean`                                        | Set whether is disabled                                                                                                      | `false`     | -       |
@@ -34,6 +34,7 @@
 | options      | `(string \| { value: string \| number, label?: string, control?: boolean })[]` | Set options for selecting sub-check boxes, generally used to generate check box groups easily and quickly, after using slots invalid | `[]`        | -       |
 | loading      | `boolean`                                                                      | Set whether is loading                                                                                                               | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                                                      | Set whether to be read-only when loading                                                                                             | `false`     | `2.0.0` |
+| locale       | `LocaleConfig['checkbox']`                                                     | Set the locale config                                                                                                                | `null`      | `2.1.0` |
 
 ### CheckboxGroup Events
 

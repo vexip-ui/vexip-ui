@@ -1,4 +1,4 @@
-import { defineComponent, ref, computed, watch, onBeforeMount } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, onBeforeMount } from 'vue'
 import { Avatar } from '@/components/avatar'
 import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
@@ -22,6 +22,7 @@ export default defineComponent({
   emits: ['update:sign-type', 'update:color', 'update:user-dropped'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
+      locale: null,
       tag: 'header',
       logo: '',
       signName: '',
@@ -48,7 +49,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('layout')
-    const locale = useLocale('layout')
+    const locale = useLocale('layout', toRef(props, 'locale'))
     const layoutState = useLayoutState()
     const currentSignType = ref<LayoutSignType>(props.signType)
     const currentUserDropped = ref(props.userDropped)

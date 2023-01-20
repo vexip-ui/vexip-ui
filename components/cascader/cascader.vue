@@ -126,11 +126,7 @@
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-          <Icon
-            :spin="props.loadingSpin"
-            :pulse="!props.loadingSpin"
-            :icon="props.loadingIcon"
-          ></Icon>
+          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
         </div>
       </transition>
     </div>
@@ -270,6 +266,7 @@ export default defineComponent({
     const props = useProps('cascader', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       value: {
         default: () => getFieldValue([]),
         static: true
@@ -319,7 +316,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       transparent: false
     })
 
@@ -408,7 +405,7 @@ export default defineComponent({
       isDrop: true
     })
     const { isHover } = useHover(reference)
-    const locale = useLocale('select')
+    const locale = useLocale('select', toRef(props, 'locale'))
     const panelElList = ref<InstanceType<typeof CascaderPanel>[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)

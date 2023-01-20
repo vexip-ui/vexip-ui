@@ -10,7 +10,7 @@
 | closable        | `boolean`                                   | 设置抽屉是否具有关闭功能，开启时会添加关闭按钮                                 | `false`          | -       |
 | inner           | `boolean`                                   | 设置是否为一个内联的抽屉，开启后定位从 fixed 变位 absolute                     | `false`          | -       |
 | mask-close      | `boolean`                                   | 设置是否可以通关点击遮罩层关闭抽屉                                             | `true`           | -       |
-| drawer-class    | `string \| Record<string, boolean>`         | 定义抽屉容器的类名                                                             | `null`           | -       |
+| drawer-class    | `ClassType`                                 | 定义抽屉容器的类名                                                             | `null`           | -       |
 | hide-mask       | `boolean`                                   | 设置是否隐藏遮罩层                                                             | `false`          | -       |
 | transfer        | `boolean \| string`                         | 设置抽屉的渲染位置，设置为 `true` 时默认渲染至 `<body>`                        | `false`          | -       |
 | on-before-close | `(isConfirm?: boolean) => any`              | 设置抽屉的关闭前回调，支持异步函数和 Promise，返回值为 `false` 会阻止关闭      | `null`           | -       |
@@ -19,6 +19,7 @@
 | loading         | `boolean`                                   | 设置抽屉的确认按钮是否为加载状态                                               | `false`          | `2.0.0` |
 | confirm-text    | `string`                                    | 确认按钮的内容                                                                 | `locale.confirm` | `2.0.0` |
 | cancel-text     | `string`                                    | 取消按钮的内容                                                                 | `locale.cancel`  | `2.0.0` |
+| locale          | `LocaleConfig['drawer']`                    | 设置多语言配置                                                                 | `null`           | `2.1.0` |
 
 ### Drawer 事件
 

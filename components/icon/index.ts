@@ -7,6 +7,7 @@ export { Icon }
 export type IconExposed = InstanceType<typeof Icon>
 
 export type { IconProps, IconCProps } from './props'
+export type { IconEffect } from './symbol'
 
 export type IconMinorProps = Omit<Partial<IconProps>, 'icon'> & {
   class?: ClassType,

@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, onMounted, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
@@ -117,6 +117,7 @@ export default defineComponent({
   setup(_props, { slots, emit }) {
     const nh = useNameHelper('modal')
     const props = useProps('modal', _props, {
+      locale: null,
       transfer: false,
       active: {
         default: false,
@@ -459,7 +460,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('modal'),
+      locale: useLocale('modal', toRef(props, 'locale')),
       currentActive,
       dragging,
       resizing,

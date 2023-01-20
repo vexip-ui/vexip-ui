@@ -5,7 +5,7 @@
 | checked      | `boolean`                                        | 复选框的勾选状态，可以使用 `v-model` 双向绑定                          | `false`     | -       |
 | label        | `string`                                         | 复选框的标签值，使用插槽后失效                                         | `null`      | -       |
 | value        | `string \| number`                               | 复选框关联的值，一般配合 CheckboxGroup 使用，在 CheckboxGroup 内应唯一 | `null`      | -       |
-| label-class  | `string \| Record<string, boolean>`              | 标签元素的类名                                                         | `null`      | -       |
+| label-class  | `ClassType`                                      | 标签元素的类名                                                         | `null`      | -       |
 | size         | `'small' \| 'default' \| 'large'`                | 复选框的大小                                                           | `'default'` | -       |
 | state        | `'default' \| 'success' \| 'error' \| 'warning'` | 复选框的状态                                                           | `'default'` | -       |
 | disabled     | `boolean`                                        | 设置是否为禁用状态                                                     | `false`     | -       |
@@ -34,6 +34,7 @@
 | options      | `(string \| { value: string \| number, label?: string, control?: boolean })[]` | 设置选子复选框的选项，一般用于简单快速生成复选框组，使用插槽后失效 | `[]`        | -       |
 | loading      | `boolean`                                                                      | 设置是否为加载中                                                   | `false`     | `2.0.0` |
 | loading-lock | `boolean`                                                                      | 设置在加载中时是否为只读                                           | `false`     | `2.0.0` |
+| locale       | `LocaleConfig['checkbox']`                                                     | 设置多语言配置                                                     | `null`      | `2.1.0` |
 
 ### CheckboxGroup 事件
 

@@ -31,11 +31,12 @@
 | loading         | `boolean`                                                 | 设置是否为加载中                                                                   | `false`          | `2.0.0`  |
 | loading-icon    | `Record<string, any>`                                     | 设置加载中的图标                                                                   | `Spinner`        | `2.0.0`  |
 | loading-lock    | `boolean`                                                 | 设置在加载中时是否为只读                                                           | `false`          | `2.0.0`  |
-| loading-spin    | `boolean`                                                 | 设置加载中图标是否使用旋转动画                                                     | `false`          | `2.0.0`  |
+| loading-effect  | `string`                                                  | 设置加载中图标的效果动画                                                           | `false`          | `2.1.0`  |
 | min             | `string`                                                  | 设置可选的最小时间                                                                 | `null`           | `2.0.14` |
 | max             | `string`                                                  | 设置可选的最大时间                                                                 | `null`           | `2.0.14` |
 | outside-close   | `boolean`                                                 | 设置是否可以通过点击组件外部进行关闭                                               | `true`           | `2.0.20` |
 | outside-cancel  | `boolean`                                                 | 设置点击组件外部进行关闭是否为取消操作                                             | `false`          | `2.0.20` |
+| locale          | `LocaleConfig['timePicker']`                              | 设置多语言配置                                                                     | `null`           | `2.1.0`  |
 
 ### TimePicker 事件
 

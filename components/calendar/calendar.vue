@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, toRef } from 'vue'
 import CalendarPanel from './calendar-panel.vue'
 import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
@@ -105,6 +105,7 @@ export default defineComponent({
   emits: ['update:value'],
   setup(_props, { emit }) {
     const props = useProps('calendar', _props, {
+      locale: null,
       value: {
         default: null,
         static: true
@@ -133,7 +134,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('calendar')
-    const locale = useLocale('calendar')
+    const locale = useLocale('calendar', toRef(props, 'locale'))
 
     const calendarValue = ref(props.value)
     const calendarYear = ref(props.year)

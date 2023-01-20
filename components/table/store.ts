@@ -9,7 +9,7 @@ import {
 } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_HEAD_KEY } from './symbol'
 
-import type { ClassType, StyleType } from '@vexip-ui/config'
+import type { ClassType, StyleType, LocaleConfig } from '@vexip-ui/config'
 import type { TooltipTheme } from '@/components/tooltip'
 import type {
   Key,
@@ -63,7 +63,7 @@ export function useStore(options: StoreOptions) {
     rowMinHeight: options.rowMinHeight || 36,
     virtual: options.virtual,
     rowDraggable: !!options.rowDraggable,
-    emptyText: options.emptyText,
+    locale: options.locale,
     tooltipTheme: options.tooltipTheme,
     tooltipWidth: options.tooltipWidth,
     singleSorter: options.singleSorter,
@@ -207,7 +207,7 @@ export function useStore(options: StoreOptions) {
     setBodyScroll: setBodyScroll.bind(null, state),
     setHighlight: setHighlight.bind(null, state),
     setRowHover: setRowHover.bind(null, state),
-    setEmptyText: setEmptyText.bind(null, state),
+    setLocale: setLocale.bind(null, state),
     setTooltipTheme: setTooltipTheme.bind(null, state),
     setTooltipWidth: setTooltipWidth.bind(null, state),
     setSingleSorter: setSingleSorter.bind(null, state),
@@ -554,8 +554,8 @@ export function useStore(options: StoreOptions) {
     }
   }
 
-  function setEmptyText(state: StoreState, text: string) {
-    state.emptyText = text
+  function setLocale(state: StoreState, locale: LocaleConfig['table']) {
+    state.locale = locale
   }
 
   function setTooltipTheme(state: StoreState, theme: TooltipTheme) {

@@ -79,10 +79,11 @@ type BeforeSelect = (file: FileState, files: FileState[]) => MaybePromise<boolea
 | loading          | `boolean`                                        | 设置是否为加载中                                                                                                 | `false`            | `2.0.0` |
 | loading-icon     | `Record<string, any>`                            | 设置加载中的图标                                                                                                 | `Spinner`          | `2.0.0` |
 | loading-lock     | `boolean`                                        | 设置在加载中时是否为只读                                                                                         | `false`            | `2.0.0` |
-| loading-spin     | `boolean`                                        | 设置加载中图标是否使用旋转动画                                                                                   | `false`            | `2.0.0` |
+| loading-effect   | `string`                                         | 设置加载中图标的效果动画                                                                                         | `false`            | `2.0.0` |
 | default-files    | `FileOptions`                                    | 设置静态的文件列表                                                                                               | `[]`               | `2.0.0` |
 | can-preview      | `(file: FileState) => boolean>`                  | 判断文件是否可以预览                                                                                             | `isImage`          | `2.0.0` |
 | image            | `boolean`                                        | 是否开启图片上传模式，开启后 `accept` 和 `list-type` 属性将会失效                                                | `false`            | `2.0.8` |
+| locale           | `LocaleConfig['upload']`                         | 设置多语言配置                                                                                                   | `null`             | `2.1.0` |
 
 ### Upload 事件
 

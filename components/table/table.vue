@@ -148,7 +148,8 @@ import {
   transformListToMap,
   removeArrayItem,
   toNumber,
-  nextFrameOnce
+  nextFrameOnce,
+  warnOnce
 } from '@vexip-ui/utils'
 import { useSetTimeout } from '@vexip-ui/hooks'
 import { tableProps } from './props'
@@ -177,6 +178,7 @@ export default defineComponent({
   emits: [],
   setup(_props) {
     const props = useProps('table', _props, {
+      locale: null,
       columns: {
         default: () => [],
         static: true
@@ -253,7 +255,20 @@ export default defineComponent({
     const indicator = ref<HTMLElement>()
     const scrollbar = ref<InstanceType<typeof Scrollbar>>()
 
-    const locale = useLocale('table')
+    const userLocale = computed(() => {
+      if (isDefined(props.emptyText)) {
+        warnOnce(
+          "[vexip-ui:Table] 'empty-text' prop has been deprecated, plesae " +
+            "using 'empty' option of 'locale' prop to instead it"
+        )
+
+        return { empty: props.emptyText, ...props.locale }
+      }
+
+      return props.locale
+    })
+
+    const locale = useLocale('table', userLocale)
 
     const store = useStore({
       columns: props.columns as TableColumnOptions[],
@@ -275,7 +290,7 @@ export default defineComponent({
       rowMinHeight: props.rowMinHeight,
       virtual: props.virtual,
       rowDraggable: props.rowDraggable,
-      emptyText: props.emptyText ?? locale.value.empty,
+      locale: locale.value,
       tooltipTheme: props.tooltipTheme,
       tooltipWidth: props.tooltipWidth,
       singleSorter: props.singleSorter,
@@ -370,7 +385,6 @@ export default defineComponent({
     const allColumns = computed(() => {
       return [...templateColumns.value].concat(props.columns as TableColumnOptions[])
     })
-    const emptyText = computed(() => props.emptyText ?? locale.value.empty)
 
     const {
       setColumns,
@@ -384,7 +398,7 @@ export default defineComponent({
       setRenderRows,
       setGlobalRowHeight,
       setRowDraggable,
-      setEmptyText,
+      setLocale,
       setTooltipTheme,
       setTooltipWidth,
       setSingleSorter,
@@ -426,7 +440,7 @@ export default defineComponent({
     watch(() => props.pageSize, setPageSize)
     watch(() => props.rowHeight, setGlobalRowHeight)
     watch(() => props.rowDraggable, setRowDraggable)
-    watch(emptyText, setEmptyText)
+    watch(locale, setLocale, { deep: true })
     watch(() => props.tooltipTheme, setTooltipTheme)
     watch(() => props.tooltipWidth, setTooltipWidth)
     watch(() => props.singleSorter, setSingleSorter)

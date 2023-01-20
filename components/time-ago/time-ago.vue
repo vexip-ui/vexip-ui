@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, onBeforeUnmount } from 'vue'
 import { useNameHelper, useProps, useLocale } from '@vexip-ui/config'
 import { toDate, format } from '@vexip-ui/utils'
 import { getId, subscribe, unsubscribe, computeTimeAgo } from './helper'
@@ -18,6 +18,7 @@ export default defineComponent({
   props: timeAgoProps,
   setup(_props) {
     const props = useProps('timeAgo', _props, {
+      locale: null,
       datetime: {
         default: () => Date.now(),
         static: true
@@ -32,8 +33,8 @@ export default defineComponent({
 
     const nh = useNameHelper('time-ago')
     const datetime = toDateValue(props.datetime)
-    const locale = useLocale('timeAgo')
-    const wordSpace = computed(() => useLocale()?.value.wordSpace || false)
+    const locale = useLocale('timeAgo', toRef(props, 'locale'))
+    const wordSpace = computed(() => useLocale().value.wordSpace || false)
     const timeAgo = ref(computeTimeAgo(datetime, Date.now(), locale.value, wordSpace.value))
 
     const id = getId()

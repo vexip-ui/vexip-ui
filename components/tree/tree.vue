@@ -959,7 +959,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('tree'),
+      locale: useLocale('tree', toRef(props, 'locale')),
       treeData,
       indicatorShow,
       anyMatched,

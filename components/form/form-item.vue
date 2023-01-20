@@ -109,6 +109,7 @@ export default defineComponent({
   setup(_props, { slots }) {
     const nh = useNameHelper('form')
     const props = useProps('formItem', _props, {
+      locale: null,
       label: {
         default: '',
         static: true
@@ -154,7 +155,7 @@ export default defineComponent({
     const formActions = inject(FORM_ACTIONS, null)
     const formFields = inject(FORM_FIELDS, null)
     const emitter = createEventEmitter()
-    const locale = useLocale('form')
+    const locale = useLocale('form', toRef(props, 'locale'))
 
     const initValue = ref(props.defaultValue)
     const isError = ref(false)

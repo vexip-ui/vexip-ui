@@ -60,7 +60,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingEffect: 'pulse-in'
     })
 
     const nh = useNameHelper('radio-group')
@@ -93,7 +93,7 @@ export default defineComponent({
       loading: toRef(props, 'loading'),
       loadingIcon: toRef(props, 'loadingIcon'),
       loadingLock: toRef(props, 'loadingLock'),
-      loadingSpin: toRef(props, 'loadingSpin'),
+      loadingEffect: toRef(props, 'loadingEffect'),
       updateValue: debounceMinor(updateValue),
       registerInput,
       unregisterInput

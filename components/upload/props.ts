@@ -1,6 +1,14 @@
-import { buildProps, booleanProp, stateProp, styleProp, eventProp } from '@vexip-ui/config'
+import {
+  buildProps,
+  booleanProp,
+  stateProp,
+  styleProp,
+  eventProp,
+  localeProp
+} from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type {
   UploadListType,
@@ -14,6 +22,7 @@ import type {
 
 export const uploadProps = buildProps({
   state: stateProp,
+  locale: localeProp('upload'),
   url: String,
   fileList: Array as PropType<FileOptions[]>,
   multiple: booleanProp,
@@ -44,7 +53,7 @@ export const uploadProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   image: booleanProp,
   defaultFiles: Array as PropType<FileOptions[]>,
   canPreview: Function as PropType<(file: FileState) => boolean>,
@@ -84,6 +93,7 @@ export type UploadListProps = ExtractPropTypes<typeof uploadListProps>
 export type UploadListCProps = ConfigurableProps<UploadListProps, 'files'>
 
 export const uploadFileProps = buildProps({
+  locale: localeProp('upload'),
   file: Object as PropType<FileState>,
   iconRenderer: Function as PropType<RenderFn>,
   listType: String as PropType<UploadListType>,

@@ -1,10 +1,11 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Dateable } from '@vexip-ui/utils'
 
 export const calendarProps = buildProps({
+  locale: localeProp('calendar'),
   value: [Number, String, Date] as PropType<Dateable | Dateable[]>,
   year: Number,
   /**
@@ -25,6 +26,7 @@ export type CalendarProps = ExtractPropTypes<typeof calendarProps>
 export type CalendarCProps = ConfigurableProps<CalendarProps>
 
 export const calendarPanelProps = buildProps({
+  locale: localeProp('calendar'),
   /**
    * 选中的日期
    */

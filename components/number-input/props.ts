@@ -4,16 +4,19 @@ import {
   sizeProp,
   stateProp,
   classProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { NumberInputControlType } from './symbol'
 
 export const numberInputProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('input'),
   prefix: Object,
   prefixColor: String,
   suffix: Object,
@@ -42,7 +45,7 @@ export const numberInputProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   sync: booleanProp,
   controlType: String as PropType<NumberInputControlType>,
   onFocus: eventProp<(event: FocusEvent) => void>(),

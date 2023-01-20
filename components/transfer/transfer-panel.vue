@@ -37,7 +37,7 @@
         </span>
         <CollapseTransition appear horizontal fade-effect>
           <div v-if="loading" :class="nh.be('loading')">
-            <Icon :spin="loadingSpin" :pulse="!loadingSpin" :icon="loadingIcon"></Icon>
+            <Icon :effect="loadingEffect" :icon="loadingIcon"></Icon>
           </div>
         </CollapseTransition>
       </slot>
@@ -151,6 +151,7 @@ import { boundRange } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { VirtualListExposed } from '@/components/virtual-list'
+import type { LocaleConfig } from '@vexip-ui/config'
 import type { TransferOptionState } from './symbol'
 
 export default defineComponent({
@@ -225,15 +226,18 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    loadingSpin: {
-      type: Boolean,
-      default: false
+    loadingEffect: {
+      type: String,
+      default: null
+    },
+    locale: {
+      type: Object as PropType<LocaleConfig['transfer']>,
+      default: () => ({})
     }
   },
   emits: ['update:selected', 'select', 'enter', 'switch'],
   setup(props, { slots, emit }) {
     const nh = useNameHelper('transfer')
-    const locale = useLocale('transfer')
 
     const currentSelected = ref(new Set(props.selected))
     const pageSize = ref(10)
@@ -622,7 +626,6 @@ export default defineComponent({
       MagnifyingGlass,
 
       nh,
-      locale,
       currentSelected,
       pageSize,
       currentPage,

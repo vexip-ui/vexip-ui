@@ -140,7 +140,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
 import { Tooltip } from '@/components/tooltip'
-import { useNameHelper, useLocale } from '@vexip-ui/config'
+import { useNameHelper } from '@vexip-ui/config'
 import { isFunction } from '@vexip-ui/utils'
 import { CaretUp, CaretDown, Filter } from '@vexip-ui/icons'
 import { TABLE_STORE, TABLE_ACTION } from './symbol'
@@ -382,7 +382,7 @@ export default defineComponent({
 
     return {
       nh,
-      locale: useLocale('table'),
+      locale: toRef(state, 'locale'),
       filterVisible,
       checkedAll: toRef(state, 'checkedAll'),
       partial: toRef(state, 'partial'),

@@ -1,4 +1,4 @@
-import { buildProps, booleanProp, sizeProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, sizeProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -6,6 +6,7 @@ import type { PaginationPlugin } from './symbol'
 
 export const paginationProps = buildProps({
   size: sizeProp,
+  locale: localeProp('pagination'),
   total: Number,
   noBorder: booleanProp,
   background: booleanProp,

@@ -182,6 +182,7 @@ interface TableHeadPayload {
 | empty-text      | `string`                                                 | Set the prompt when the table is empty                                                                                                                | `locale.empty` | -       |
 | single-sorter   | `boolean`                                                | After setting, it will limit the table to only one column to enable sorting                                                                           | `false`        | -       |
 | single-filter   | `boolean`                                                | After setting, it will limit the table to only one column to enable filtering                                                                         | `false`        | -       |
+| locale          | `LocaleConfig['table']`                                  | Set the locale config                                                                                                                                 | `null`         | `2.1.0` |
 
 ### Table Events
 
@@ -238,7 +239,7 @@ interface TableHeadPayload {
 | key \| id-key | `string \| number`                     | Unique index of the column, use `id-key` instead of                                                                                          | `''`        | -       |
 | accessor      | `(data: any, rowIndex: number) => any` | The data read method of this column, receiving row data and row position index, if not defined, it will be read from row data by index value | `null`      | -       |
 | fixed         | `boolean \| 'left' \| 'right'`         | Whether it is a fixed column, optional values ​​are `left`, `right`, when set to `true`, it is fixed on the left                             | `false`     | -       |
-| class-name    | `string \| Record<string, boolean>`    | Custom class name for the cell in this column                                                                                                | `null`      | -       |
+| class-name    | `ClassType`                            | Custom class name for the cell in this column                                                                                                | `null`      | -       |
 | style         | `StyleType`                            | Custom style for the column                                                                                                                  | `null`      | `2.0.1` |
 | attrs         | `Record<string, any>`                  | Custom attributes for the column                                                                                                             | `null`      | `2.0.1` |
 | type          | `'order' \| 'selection' \| 'expand'`   | Set built-in type of the column                                                                                                              | `null`      | -       |

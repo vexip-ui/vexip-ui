@@ -16,11 +16,7 @@
     </span>
     <span :class="nh.be('signal')" :style="signalStyle">
       <slot v-if="props.loading" name="loading">
-        <Icon
-          :spin="props.loadingSpin"
-          :pulse="!props.loadingSpin"
-          :icon="props.loadingIcon"
-        ></Icon>
+        <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
       </slot>
       <slot v-else name="icon" :value="currentValue">
         <Icon v-if="currentValue && props.openIcon" :icon="props.openIcon"></Icon>
@@ -84,7 +80,7 @@ export default defineComponent({
       closeColor: '',
       loading: () => loading.value,
       loadingIcon: Spinner,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       openIcon: null,
       closeIcon: null,
       openText: '',

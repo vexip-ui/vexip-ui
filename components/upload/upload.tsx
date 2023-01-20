@@ -1,4 +1,4 @@
-import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { UploadList } from '@/components/upload-list'
@@ -53,6 +53,7 @@ export default defineComponent({
 
     const props = useProps('upload', _props, {
       state: createStateProp(state),
+      locale: null,
       url: {
         default: '',
         static: true
@@ -107,14 +108,14 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       defaultFiles: () => [],
       // 'canPreview' using UploadFile default
       listStyle: null
     })
 
     const nh = useNameHelper('upload')
-    const locale = useLocale('upload')
+    const locale = useLocale('upload', toRef(props, 'locale'))
     const fileStates = ref([]) as Ref<FileState[]>
     const isDragOver = ref(false)
 
@@ -633,7 +634,7 @@ export default defineComponent({
             disabled={props.disabled}
             loading={props.loading}
             loading-icon={props.loadingIcon}
-            loading-spin={props.loadingSpin}
+            loading-effect={props.loadingEffect}
           >
             {props.buttonLabel ?? locale.value.upload}
           </Button>
@@ -658,8 +659,7 @@ export default defineComponent({
               )}
           <Icon
             class={nh.be('loading-icon')}
-            spin={props.loadingSpin}
-            pulse={!props.loadingSpin}
+            effect={props.loadingEffect}
             icon={props.loadingIcon}
             style={{ opacity: props.loading ? '100%' : '0%' }}
           ></Icon>
@@ -682,8 +682,7 @@ export default defineComponent({
                 ? (
                 <Icon
                   class={nh.be('loading-icon')}
-                  spin={props.loadingSpin}
-                  pulse={!props.loadingSpin}
+                  effect={props.loadingEffect}
                   icon={props.loadingIcon}
                   style={{ marginBottom: '6px' }}
                 ></Icon>

@@ -12,7 +12,7 @@
     :loading="props.loading"
     :circle="props.circle"
     :loading-icon="props.loadingIcon"
-    :loading-spin="props.loadingSpin"
+    :loading-effect="props.loadingEffect"
     :icon="props.icon"
     :color="props.color"
     :button-type="props.buttonType"
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, inject } from 'vue'
+import { defineComponent, toRef, computed, inject } from 'vue'
 import { Button } from '@/components/button'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import { isPromise } from '@vexip-ui/utils'
@@ -50,6 +50,7 @@ export default defineComponent({
   setup(_props) {
     const props = useProps('formReset', _props, {
       size: null,
+      locale: null,
       type: 'default',
       label: null,
       dashed: null,
@@ -60,7 +61,7 @@ export default defineComponent({
       loading: null,
       circle: null,
       loadingIcon: null,
-      loadingSpin: null,
+      loadingEffect: null,
       icon: null,
       color: null,
       buttonType: null,
@@ -96,7 +97,7 @@ export default defineComponent({
     return {
       props,
       nh: useNameHelper('form'),
-      locale: useLocale('form'),
+      locale: useLocale('form', toRef(props, 'locale')),
 
       isInherit,
 

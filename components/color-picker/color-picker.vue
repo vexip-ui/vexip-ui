@@ -75,11 +75,7 @@
             <Icon><CircleXmark></CircleXmark></Icon>
           </div>
           <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-            <Icon
-              :spin="props.loadingSpin"
-              :pulse="!props.loadingSpin"
-              :icon="props.loadingIcon"
-            ></Icon>
+            <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
           </div>
         </transition>
       </slot>
@@ -282,6 +278,7 @@ export default defineComponent({
     const props = useProps('colorPicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       value: {
         default: () => getFieldValue('')!,
         static: true
@@ -314,7 +311,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false
+      loadingEffect: 'pulse-in'
     })
 
     const isEmpty = ref(true)
@@ -684,7 +681,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('colorPicker'),
+      locale: useLocale('colorPicker', toRef(props, 'locale')),
       idFor,
       isEmpty,
       currentVisible,

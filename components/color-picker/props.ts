@@ -4,10 +4,12 @@ import {
   booleanStringProp,
   sizeProp,
   stateProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { Color, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
@@ -18,6 +20,7 @@ type FormattedColor = string | RGBAColor | HSLAColor | HSVAColor
 export const colorPickerProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('colorPicker'),
   value: [String, Object] as PropType<Color | null>,
   visible: booleanProp,
   format: String as PropType<ColorFormat>,
@@ -44,7 +47,7 @@ export const colorPickerProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   onToggle: eventProp<(visible: boolean) => void>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),

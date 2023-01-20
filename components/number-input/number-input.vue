@@ -58,11 +58,7 @@
         <Icon><CircleXmark></CircleXmark></Icon>
       </div>
       <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
-        <Icon
-          :spin="props.loadingSpin"
-          :pulse="!props.loadingSpin"
-          :icon="props.loadingIcon"
-        ></Icon>
+        <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
       </div>
     </transition>
     <template v-if="props.controlType !== 'none'">
@@ -81,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 import { useHover, useModifier } from '@vexip-ui/hooks'
@@ -136,6 +132,7 @@ export default defineComponent({
     const props = useProps('numberInput', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       prefix: null,
       prefixColor: '',
       suffix: null,
@@ -168,7 +165,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       sync: false,
       controlType: 'right'
     })
@@ -457,7 +454,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('input'),
+      locale: useLocale('input', toRef(props, 'locale')),
       idFor,
       focused,
       isHover,

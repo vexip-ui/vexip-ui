@@ -4,7 +4,8 @@ import {
   booleanStringProp,
   classProp,
   styleProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -13,6 +14,7 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 const positionType = [Number, String]
 
 export const modalProps = buildProps({
+  locale: localeProp('modal'),
   transfer: booleanStringProp,
   active: booleanProp,
   width: positionType,

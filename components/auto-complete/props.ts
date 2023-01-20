@@ -4,28 +4,25 @@ import {
   booleanStringProp,
   sizeProp,
   stateProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
-import type {
-  AutoCompleteKeyConfig,
-  AutoCompleteOptionState,
-  AutoCompleteRawOption
-} from './symbol'
+import type { AutoCompleteKeyConfig, AutoCompleteRawOption, AutoCompleteFilter } from './symbol'
 
 export const autoCompleteProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('input'),
   transfer: booleanStringProp,
   value: [String, Number],
   options: Array as PropType<AutoCompleteRawOption[]>,
   filter: {
-    type: [Boolean, Function] as PropType<
-      boolean | ((value: string | number, options: AutoCompleteOptionState) => boolean)
-    >,
+    type: [Boolean, Function] as PropType<boolean | AutoCompleteFilter>,
     default: null
   },
   prefix: Object,
@@ -44,7 +41,7 @@ export const autoCompleteProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
   keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
   onSelect: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),

@@ -71,6 +71,7 @@ type TreeNodeProps = {
 | filter        | `string \| ((data: Data, node: TreeNodeProps) => boolean)`             | Set to filter nodes. When a string is passed in, it will be filtered according to the `label` value of nodes, or a custom filter will be passed in function                                                                                      | `''`           | `2.0.0` |
 | ignore-case   | `boolean`                                                              | Set whether to ignore case when using built-in filtering                                                                                                                                                                                         | `false`        | `2.0.0` |
 | node-props    | `Data \| ((data: Data, node: TreeNodeProps) => Data)`                  | Set the html attributes of the root element of all child nodes                                                                                                                                                                                   | `null`         | `2.0.0` |
+| locale        | `LocaleConfig['tree']`                                                 | Set the locale config                                                                                                                                                                                                                            | `null`         | `2.1.0` |
 
 ### Tree Events
 

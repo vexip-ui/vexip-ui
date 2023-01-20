@@ -1,4 +1,4 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -14,6 +14,7 @@ import type {
 } from './symbol'
 
 export const treeProps = buildProps({
+  locale: localeProp('tree'),
   arrow: {
     type: [Boolean, String] as PropType<boolean | 'auto'>,
     default: null

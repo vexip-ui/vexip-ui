@@ -10,7 +10,7 @@
 | closable        | `boolean`                                   | Set whether the drawer has a close function, a close button will be added when it is opened                                                                          | `false`          | -       |
 | inner           | `boolean`                                   | Set whether it is an inline drawer, after opening, the positioning will change from fixed to absolute                                                                | `false`          | -       |
 | mask-close      | `boolean`                                   | Set whether to close the drawer by clicking on the mask layer                                                                                                        | `true`           | -       |
-| drawer-class    | `string \| Record<string, boolean>`         | Class name that defines the drawer container                                                                                                                         | `null`           | -       |
+| drawer-class    | `ClassType`                                 | Class name that defines the drawer container                                                                                                                         | `null`           | -       |
 | hide-mask       | `boolean`                                   | Set whether to hide the mask layer                                                                                                                                   | `false`          | -       |
 | transfer        | `boolean \| string`                         | Set the rendering position of the drawer, when set to `true`, it will render to `<body>` by default                                                                  | `false`          | -       |
 | on-before-close | `(isConfirm?: boolean) => any`              | Set the drawer's callback before closing, supports asynchronous functions and promises, the return value of `false` will prevent closing                             | `null`           | -       |
@@ -19,6 +19,7 @@
 | loading         | `boolean`                                   | Set whether the confirm button of the drawer is in the loading state                                                                                                 | `false`          | `2.0.0` |
 | confirm-text    | `string`                                    | Confirm button content                                                                                                                                               | `locale.confirm` | `2.0.0` |
 | cancel-text     | `string`                                    | Cancel button content                                                                                                                                                | `locale.cancel`  | `2.0.0` |
+| locale          | `LocaleConfig['drawer']`                    | Set the locale config                                                                                                                                                | `null`           | `2.1.0` |
 
 ### Drawer Events
 

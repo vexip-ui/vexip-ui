@@ -4,11 +4,13 @@ import {
   booleanStringProp,
   sizeProp,
   stateProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
-import type { ConfigurableProps } from '@vexip-ui/config'
+import type { IconEffect } from '@/components/icon'
+import type { ConfigurableProps, LocaleConfig } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { Dateable } from '@vexip-ui/utils'
 import type { TimeType, DateTimeType, DatePickerType, DateShortcut, TimeShortcut } from './symbol'
@@ -16,6 +18,7 @@ import type { TimeType, DateTimeType, DatePickerType, DateShortcut, TimeShortcut
 export const datePickerProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: Object as PropType<Partial<LocaleConfig['calendar'] & LocaleConfig['datePicker']>>,
   type: String as PropType<DatePickerType>,
   visible: booleanProp,
   placement: String as PropType<Placement>,
@@ -47,7 +50,7 @@ export const datePickerProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   min: [Number, String, Date] as PropType<Dateable>,
   max: [Number, String, Date] as PropType<Dateable>,
   outsideClose: booleanProp,
@@ -74,6 +77,7 @@ export type DatePickerCProps = ConfigurableProps<DatePickerProps>
 export const timePickerProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('timePicker'),
   visible: booleanProp,
   placement: String as PropType<Placement>,
   transfer: booleanStringProp,
@@ -105,7 +109,7 @@ export const timePickerProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   min: String,
   max: String,
   outsideClose: booleanProp,

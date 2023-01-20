@@ -18,6 +18,7 @@
 | ~~page-total~~  | `boolean`                                             | 是否开启显示总条数的插件                                 | `false`             | -        |
 | plugins         | `('total' \| 'jump' \|'size' \| undefined \| null)[]` | 设置插件及其渲染的位置                                   | `[]`                | `2.0.8`  |
 | no-title        | `boolean`                                             | 设置是否禁用页码 title 属性                              | `false`             | `2.0.11` |
+| locale          | `LocaleConfig['pagination']`                          | 设置多语言配置                                           | `null`              | `2.1.0`  |
 
 ### Pagination 事件
 

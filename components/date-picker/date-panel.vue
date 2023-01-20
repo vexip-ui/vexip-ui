@@ -27,10 +27,10 @@
             </div>
             <div key="year" :class="nh.be('year')" @click.stop="togglePane('year')">
               <template v-if="currentPane === 'year'">
-                {{ `${yearRange[0]}${locale.year} - ${yearRange[9]}${locale.year}` }}
+                {{ `${yearRange[0]}${mergedLocale.year} - ${yearRange[9]}${mergedLocale.year}` }}
               </template>
               <template v-else>
-                {{ `${calendarYear}${locale.year}` }}
+                {{ `${calendarYear}${mergedLocale.year}` }}
               </template>
             </div>
             <div
@@ -138,7 +138,7 @@
           size="small"
           @click="handleCancel"
         >
-          {{ cancelText || locale.cancel }}
+          {{ cancelText || mergedLocale.cancel }}
         </Button>
         <Button
           inherit
@@ -147,7 +147,7 @@
           :disabled="hasError"
           @click="handleConfirm"
         >
-          {{ confirmText || locale.confirm }}
+          {{ confirmText || mergedLocale.confirm }}
         </Button>
       </div>
     </div>
@@ -265,6 +265,10 @@ export default defineComponent({
     hasError: {
       type: Boolean,
       default: false
+    },
+    locale: {
+      type: Object,
+      default: null
     }
   },
   emits: ['click', 'shortcut', 'toggle-col', 'change', 'cancel', 'confirm', 'hover', 'type-change'],
@@ -282,8 +286,12 @@ export default defineComponent({
 
     const { isHover } = useHover(calendar)
 
-    const locale = computed(() => {
-      return { ...useLocale('calendar').value, ...useLocale('datePicker').value }
+    const mergedLocale = computed(() => {
+      return {
+        ...useLocale('calendar').value,
+        ...useLocale('datePicker').value,
+        ...(props.locale ?? {})
+      }
     })
 
     const startActivated = computed(() => {
@@ -358,7 +366,7 @@ export default defineComponent({
     }
 
     function getMonthLabel(index: number) {
-      return locale.value[`month${index as MonthIndex}`]
+      return mergedLocale.value[`month${index as MonthIndex}`]
     }
 
     function togglePane(type: DateType) {
@@ -671,7 +679,7 @@ export default defineComponent({
 
     return {
       nh: useNameHelper('date-picker'),
-      locale,
+      mergedLocale,
       currentPane,
       calendarYear,
       calendarMonth,
