@@ -1,4 +1,4 @@
-import Tag from './tag.vue'
+import Tag from './tag'
 
 export { Tag }
 export type TagExposed = InstanceType<typeof Tag>
