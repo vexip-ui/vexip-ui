@@ -40,6 +40,7 @@ const components = [
   'FormItem',
   'FormReset',
   'FormSubmit',
+  'FullScreen',
   'Grid',
   'Highlight',
   'Icon',

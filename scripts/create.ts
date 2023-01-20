@@ -82,7 +82,11 @@ async function create(name: string) {
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'index.ts'),
       source: `
-        export { default as ${capitalCaseName} } from './${kebabCaseName}.vue'
+        import ${capitalCaseName} from './${kebabCaseName}.vue'
+
+        export { ${capitalCaseName} }
+        export type ${capitalCaseName}Exposed = InstanceType<typeof ${capitalCaseName}>
+
         export type { ${capitalCaseName}Props, ${capitalCaseName}CProps } from './props'
       `
     },

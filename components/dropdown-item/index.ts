@@ -1,1 +1,4 @@
-export { default as DropdownItem } from '../dropdown/dropdown-item.vue'
+import DropdownItem from '../dropdown/dropdown-item.vue'
+
+export { DropdownItem }
+export type DropdownItemExposed = InstanceType<typeof DropdownItem>

@@ -1,4 +1,8 @@
-export { default as Select } from './select.vue'
+import Select from './select.vue'
+
+export { Select }
+export type SelectExposed = InstanceType<typeof Select>
+
 export type { SelectProps, SelectCProps } from './props'
 export type {
   SelectKeyConfig,

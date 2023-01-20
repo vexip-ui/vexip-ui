@@ -1,4 +1,8 @@
-export { default as Table } from './table.vue'
+import Table from './table.vue'
+
+export { Table }
+export type TableExposed = InstanceType<typeof Table>
+
 export { defineFilter, defineSorter, defineColumn, defineColumns } from './helper'
 export type { TableProps, TableCProps } from './props'
 export type {

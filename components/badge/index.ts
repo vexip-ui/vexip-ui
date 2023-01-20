@@ -1,3 +1,7 @@
-export { default as Badge } from './badge.vue'
+import Badge from './badge.vue'
+
+export { Badge }
+export type BadgeExposed = InstanceType<typeof Badge>
+
 export type { BadgeProps, BadgeCProps } from './props'
 export type { BadgeType } from './symbol'

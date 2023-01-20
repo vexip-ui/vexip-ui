@@ -1,3 +1,7 @@
-export { default as NumberInput } from './number-input.vue'
+import NumberInput from './number-input.vue'
+
+export { NumberInput }
+export type NumberInputExposed = InstanceType<typeof NumberInput>
+
 export type { NumberInputProps, NumberInputCProps } from './props'
 export type { NumberInputControlType } from './symbol'
