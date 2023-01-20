@@ -70,10 +70,16 @@ import { isClient, supportImgLoading } from '@vexip-ui/utils'
 import { imageProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-import type { ImageState } from './symbol'
+import type { ImageObjectFit, ImageState } from './symbol'
 
 const useImageLoading = supportImgLoading()
-const objectFitValues = Object.freeze(['fill', 'contain', 'cover', 'none', 'scale-down'])
+const objectFitValues = Object.freeze<ImageObjectFit[]>([
+  'fill',
+  'contain',
+  'cover',
+  'none',
+  'scale-down'
+])
 
 const numberRE = /[\d.]$/
 

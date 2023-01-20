@@ -42,7 +42,15 @@ import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { avatarProps } from './props'
 import { GROUP_STATE } from './symbol'
 
-const objectFitValues = Object.freeze(['fill', 'contain', 'cover', 'none', 'scale-down'])
+import type { AvatarObjectFit } from './symbol'
+
+const objectFitValues = Object.freeze<AvatarObjectFit[]>([
+  'fill',
+  'contain',
+  'cover',
+  'none',
+  'scale-down'
+])
 
 export default defineComponent({
   name: 'Avatar',

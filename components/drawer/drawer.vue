@@ -91,7 +91,9 @@ import { isPromise, toNumber } from '@vexip-ui/utils'
 import { Xmark } from '@vexip-ui/icons'
 import { drawerProps } from './props'
 
-const drawerPlacements = Object.freeze(['top', 'right', 'bottom', 'left'])
+import type { DrawerPlacement } from './symbol'
+
+const drawerPlacements = Object.freeze<DrawerPlacement[]>(['top', 'right', 'bottom', 'left'])
 
 let idCount = 0
 

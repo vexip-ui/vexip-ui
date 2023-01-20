@@ -1,7 +1,9 @@
 import type { ScrollMode } from '@/components/scroll'
 
+export type NativeScrollMode = Exclude<ScrollMode, 'horizontal-exact'>
+
 export interface ScrollPayload {
-  type: ScrollMode,
+  type: NativeScrollMode,
   clientX: number,
   clientY: number,
   percentX: number,

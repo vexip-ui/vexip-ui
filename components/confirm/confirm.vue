@@ -106,7 +106,7 @@ const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
 
-const confirmTypes = Object.freeze<ConfirmType>([
+const confirmTypes = Object.freeze<ConfirmType[]>([
   'default',
   'primary',
   'info',

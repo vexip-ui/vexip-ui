@@ -51,7 +51,7 @@ import { progressProps } from './props'
 import type { CSSProperties } from 'vue'
 import type { ProgressInfoType } from './symbol'
 
-const infoTypes = Object.freeze<ProgressInfoType>([
+const infoTypes = Object.freeze<ProgressInfoType[]>([
   'outside',
   'inside',
   'bubble',

@@ -4,8 +4,14 @@ import { warnOnce } from '@vexip-ui/utils'
 import { iconProps } from './props'
 
 import type { CSSProperties } from 'vue'
+import type { IconPresetEffect } from './symbol'
 
-const internalEffects = Object.freeze(['spin-in', 'spin-out', 'pulse-in', 'pulse-out'])
+const internalEffects = Object.freeze<IconPresetEffect[]>([
+  'spin-in',
+  'spin-out',
+  'pulse-in',
+  'pulse-out'
+])
 
 export default defineComponent({
   name: 'Icon',
@@ -54,7 +60,9 @@ export default defineComponent({
       let effectCls = ''
 
       if (props.effect) {
-        effectCls = internalEffects.includes(props.effect) ? nh.bm(props.effect) : props.effect
+        effectCls = internalEffects.includes(props.effect as IconPresetEffect)
+          ? nh.bm(props.effect)
+          : props.effect
       } else if (props.spin) {
         effectCls = nh.bm(`spin-${props.spin === true || props.spin === 'in' ? 'in' : 'out'}`)
       } else if (props.pulse) {

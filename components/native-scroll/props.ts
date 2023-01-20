@@ -9,14 +9,13 @@ import {
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ScrollMode } from '@/components/scroll'
-import type { ScrollPayload, BarScrollPayload } from './symbol'
+import type { NativeScrollMode, ScrollPayload, BarScrollPayload } from './symbol'
 
 export const nativeScrollProps = buildProps({
   scrollClass: classProp,
   scrollStyle: styleProp,
   scrollAttrs: Object as PropType<Record<string, any>>,
-  mode: String as PropType<Exclude<ScrollMode, 'horizontal-exact'>>,
+  mode: String as PropType<NativeScrollMode>,
   width: [Number, String],
   height: [Number, String],
   disabled: booleanProp,

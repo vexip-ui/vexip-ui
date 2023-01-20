@@ -41,7 +41,7 @@ import { ScrollbarType } from './symbol'
 
 import type { ScrollbarPlacement } from './symbol'
 
-const scrollbarPlacements = Object.freeze<ScrollbarPlacement>(['top', 'right', 'bottom', 'left'])
+const scrollbarPlacements = Object.freeze<ScrollbarPlacement[]>(['top', 'right', 'bottom', 'left'])
 
 export default defineComponent({
   name: 'Scrollbar',

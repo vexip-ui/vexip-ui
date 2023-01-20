@@ -28,7 +28,7 @@ import { badgeProps } from './props'
 
 import type { BadgeType } from './symbol'
 
-const badgeTypes = Object.freeze<BadgeType>([
+const badgeTypes = Object.freeze<BadgeType[]>([
   'error',
   'primary',
   'success',

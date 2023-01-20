@@ -5,7 +5,7 @@ import { ROW_STATE } from './symbol'
 
 import type { RowGridJustify, RowGridAlign } from './symbol'
 
-const justifyList = Object.freeze<RowGridJustify>([
+const justifyList = Object.freeze<RowGridJustify[]>([
   'start',
   'end',
   'center',
@@ -13,7 +13,7 @@ const justifyList = Object.freeze<RowGridJustify>([
   'space-between',
   'space-evenly'
 ])
-const alignList = Object.freeze<RowGridAlign>(['top', 'middle', 'bottom', 'stretch'])
+const alignList = Object.freeze<RowGridAlign[]>(['top', 'middle', 'bottom', 'stretch'])
 
 export default defineComponent({
   name: 'Row',

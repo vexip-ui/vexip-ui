@@ -6,7 +6,7 @@ import { flatVNodes } from './helper'
 
 import type { SpaceAlign, SpaceJustify } from './symbol'
 
-const justifyList = Object.freeze<SpaceJustify>([
+const justifyList = Object.freeze<SpaceJustify[]>([
   'start',
   'end',
   'center',
@@ -14,7 +14,7 @@ const justifyList = Object.freeze<SpaceJustify>([
   'space-between',
   'space-evenly'
 ])
-const alignList = Object.freeze<SpaceAlign>(['start', 'end', 'center', 'baseline', 'stretch'])
+const alignList = Object.freeze<SpaceAlign[]>(['start', 'end', 'center', 'baseline', 'stretch'])
 
 const useFlexGap = supportFlexGap()
 

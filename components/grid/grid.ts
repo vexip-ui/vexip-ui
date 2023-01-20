@@ -8,7 +8,7 @@ import type { LayoutProp, GridJustify, GridAlign } from './symbol'
 
 const numberRE = /^\d+$/
 
-const justifyList = Object.freeze<GridJustify>([
+const justifyList = Object.freeze<GridJustify[]>([
   'start',
   'end',
   'center',
@@ -16,7 +16,7 @@ const justifyList = Object.freeze<GridJustify>([
   'space-between',
   'space-evenly'
 ])
-const alignList = Object.freeze<GridAlign>(['top', 'middle', 'bottom', 'stretch'])
+const alignList = Object.freeze<GridAlign[]>(['top', 'middle', 'bottom', 'stretch'])
 
 export default defineComponent({
   name: 'Grid',

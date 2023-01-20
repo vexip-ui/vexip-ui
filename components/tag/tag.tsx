@@ -7,7 +7,7 @@ import { tagProps } from './props'
 
 import type { TagType } from './symbol'
 
-const tagTypes = Object.freeze([
+const tagTypes = Object.freeze<TagType[]>([
   'default',
   'primary',
   'info',

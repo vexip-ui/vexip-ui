@@ -65,9 +65,9 @@ import { nativeScrollProps } from './props'
 import { useScrollWrapper } from './hooks'
 
 import type { EventHandler } from '@vexip-ui/utils'
-import type { ScrollMode } from '@/components/scroll'
+import type { NativeScrollMode } from './symbol'
 
-const scrollModes = Object.freeze(['horizontal', 'vertical', 'both'])
+const scrollModes = Object.freeze<NativeScrollMode[]>(['horizontal', 'vertical', 'both'])
 
 const MOVE_EVENT = 'mousemove'
 const UP_EVENT = 'mouseup'
@@ -485,7 +485,7 @@ export default defineComponent({
       emitScrollEvent('vertical')
     }
 
-    function emitScrollEvent(type: ScrollMode) {
+    function emitScrollEvent(type: NativeScrollMode) {
       emitEvent(props.onScroll, {
         type,
         clientX: currentScroll.x,

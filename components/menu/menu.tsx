@@ -21,7 +21,7 @@ import { MENU_STATE } from './symbol'
 import type { RouteRecordRaw, RouteLocationRaw } from 'vue-router'
 import type { MenuOptions, MenuMarkerType, MenuGroupType, MenuItemState, MenuState } from './symbol'
 
-const menuMarkerTypes = Object.freeze<MenuMarkerType>(['top', 'right', 'bottom', 'left', 'none'])
+const menuMarkerTypes = Object.freeze<MenuMarkerType[]>(['top', 'right', 'bottom', 'left', 'none'])
 
 export default defineComponent({
   name: 'Menu',

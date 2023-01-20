@@ -39,4 +39,9 @@ export const enum DisabledType {
   FALSE
 }
 
-export const datePickerTypes = Object.freeze<DatePickerType>(['date', 'datetime', 'year', 'month'])
+export const datePickerTypes = Object.freeze<DatePickerType[]>([
+  'date',
+  'datetime',
+  'year',
+  'month'
+])

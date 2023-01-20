@@ -82,7 +82,7 @@ export interface UploadExposed {
   handleDelete: (file: FileState) => void
 }
 
-export const uploadListTypes = Object.freeze<UploadListType>([
+export const uploadListTypes = Object.freeze<UploadListType[]>([
   'name',
   'detail',
   'thumbnail',

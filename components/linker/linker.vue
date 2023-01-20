@@ -21,7 +21,7 @@ import { linkerProps } from './props'
 
 import type { LinkerType } from './symbol'
 
-const linkerTypes = Object.freeze<LinkerType>([
+const linkerTypes = Object.freeze<LinkerType[]>([
   'default',
   'primary',
   'success',

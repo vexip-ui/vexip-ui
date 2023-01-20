@@ -30,7 +30,7 @@ import { TIMELINE_STATE } from './symbol'
 
 import type { TimelinkItemType, ItemState } from './symbol'
 
-const timelineItemTypes = Object.freeze<TimelinkItemType>([
+const timelineItemTypes = Object.freeze<TimelinkItemType[]>([
   'default',
   'success',
   'error',

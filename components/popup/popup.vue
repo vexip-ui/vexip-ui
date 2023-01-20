@@ -26,7 +26,7 @@ import { DELETE_HANDLER } from './symbol'
 import type { CSSProperties } from 'vue'
 import type { Key, PopupPlacement, PopupItemState } from './symbol'
 
-const popupPlacements = Object.freeze<PopupPlacement>([
+const popupPlacements = Object.freeze<PopupPlacement[]>([
   'top-right',
   'top-center',
   'top-left',

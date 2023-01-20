@@ -19,7 +19,7 @@ import type { InputType } from './symbol'
 type InputEventType = 'input' | 'change'
 type ChangeListener = (value: string | number) => void
 
-const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
+const inputTypes = Object.freeze<InputType[]>(['text', 'password', 'date', 'datetime', 'time'])
 
 function toNotNullString(value: any) {
   return isNull(value) ? '' : String(value)

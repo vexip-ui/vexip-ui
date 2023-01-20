@@ -23,8 +23,8 @@ import { FORM_PROPS, FORM_FIELDS, FORM_ACTIONS } from './symbol'
 
 import type { FormLabelAlign, SubmitMethod, FieldOptions } from './symbol'
 
-const submitMethods = Object.freeze<SubmitMethod>(['get', 'post', 'put', 'delete'])
-const labelAligns = Object.freeze<FormLabelAlign>(['right', 'top', 'left'])
+const submitMethods = Object.freeze<SubmitMethod[]>(['get', 'post', 'put', 'delete'])
+const labelAligns = Object.freeze<FormLabelAlign[]>(['right', 'top', 'left'])
 
 export default defineComponent({
   name: 'Form',
