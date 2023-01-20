@@ -24,11 +24,7 @@
     <div :class="nh.be('extra')">
       <transition :name="nh.ns('fade')" appear>
         <div v-if="props.loading" :class="nh.be('loading')">
-          <Icon
-            :spin="props.loadingSpin"
-            :pulse="!props.loadingSpin"
-            :icon="props.loadingIcon"
-          ></Icon>
+          <Icon :effect="props.loadingEffect" :icon="props.loadingIcon"></Icon>
         </div>
       </transition>
       <div v-if="props.maxLength > 0" :class="nh.be('count')">
@@ -80,7 +76,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       sync: false
     })
 

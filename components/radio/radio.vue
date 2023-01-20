@@ -9,7 +9,7 @@
         fade-effect
       >
         <div v-if="isLoading" :class="nh.be('loading')">
-          <Icon :spin="isLoadingSpin" :pulse="!isLoadingSpin" :icon="computedLoadingIcon"></Icon>
+          <Icon :effect="loadingEffect" :icon="computedLoadingIcon"></Icon>
         </div>
       </CollapseTransition>
       <slot>{{ props.label }}</slot>
@@ -85,7 +85,7 @@ export default defineComponent({
     const isLoading = computed(() => groupState?.loading || props.loading)
     const LoadingIcon = computed(() => groupState?.loadingIcon || null!)
     const isLoadingLock = computed(() => groupState?.loadingLock || false)
-    const isLoadingSpin = computed(() => groupState?.loadingSpin || false)
+    const loadingEffect = computed(() => groupState?.loadingEffect || '')
     const className = computed(() => {
       return [
         nh.b(),
@@ -153,7 +153,7 @@ export default defineComponent({
       isButton,
       isLoading,
       computedLoadingIcon: LoadingIcon,
-      isLoadingSpin,
+      loadingEffect,
 
       input,
 

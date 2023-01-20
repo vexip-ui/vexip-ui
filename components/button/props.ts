@@ -1,6 +1,7 @@
 import { buildProps, booleanProp, sizeProp, eventProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { ButtonType, ButtonAttrType } from './symbol'
 
@@ -15,7 +16,7 @@ export const buttonProps = buildProps({
   loading: booleanProp,
   circle: booleanProp,
   loadingIcon: Object,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   icon: Object,
   color: String,
   buttonType: String as PropType<ButtonAttrType>,

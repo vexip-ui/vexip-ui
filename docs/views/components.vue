@@ -72,7 +72,7 @@ const store = inject<Store>('store')!
 const prefix = 'components'
 
 const version = __VERSION__
-const minorVersion = version.split('.').slice(0, 2).join('.')
+const versionUnits = version.split('.').slice(2)
 
 const componentGroups = getComponentConfig()
 const currentMenu = ref('')
@@ -125,7 +125,19 @@ function scrollToMenuItem(label: string) {
 }
 
 function isNewComponent(config: ComponentConfig) {
-  return config.since && config.since.startsWith(minorVersion)
+  if (config.since) {
+    const units = config.since.split('.')
+    const length = Math.min(units.length, versionUnits.length)
+
+    for (let i = 0; i < length; ++i) {
+      if (units[i] < versionUnits[i]) return false
+      if (units[i] > versionUnits[i]) return true
+    }
+
+    return true
+  }
+
+  return false
 }
 
 function moveMenuIntoView() {

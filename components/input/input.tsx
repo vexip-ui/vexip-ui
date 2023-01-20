@@ -81,7 +81,7 @@ export default defineComponent({
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: 'pulse-in',
       transparent: false,
       sync: false
     })
@@ -379,11 +379,7 @@ export default defineComponent({
       if (props.loading) {
         return (
           <div key={'loading'} class={[nh.be('icon'), nh.be('loading')]}>
-            <Icon
-              spin={props.loadingSpin}
-              pulse={!props.loadingSpin}
-              icon={props.loadingIcon}
-            ></Icon>
+            <Icon effect={props.loadingEffect} icon={props.loadingIcon}></Icon>
           </div>
         )
       }

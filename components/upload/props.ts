@@ -8,6 +8,7 @@ import {
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type {
   UploadListType,
@@ -52,7 +53,7 @@ export const uploadProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   image: booleanProp,
   defaultFiles: Array as PropType<FileOptions[]>,
   canPreview: Function as PropType<(file: FileState) => boolean>,

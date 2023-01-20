@@ -273,7 +273,8 @@ $z-index-map: map.merge(
   (
     popper: 1000,
     masker: 1500,
-    popup: 2000
+    popup: 2000,
+    full: 2147483584
   ),
   $z-index-map
 );

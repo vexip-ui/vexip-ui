@@ -9,6 +9,7 @@ import {
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { InputType } from './symbol'
 
@@ -45,7 +46,7 @@ export const inputProps = buildProps({
   loading: booleanProp,
   loadingIcon: Object,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
   sync: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),

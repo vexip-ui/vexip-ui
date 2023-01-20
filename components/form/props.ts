@@ -1,6 +1,7 @@
 import { buildProps, booleanProp, sizeProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { ButtonType, ButtonAttrType } from '@/components/button'
 import type { RowGridJustify, RowGridAlign } from '@/components/row'
@@ -80,7 +81,7 @@ export const formSubmitProps = buildProps({
   disabled: booleanProp,
   circle: booleanProp,
   loadingIcon: Object,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   icon: Object,
   color: String,
   buttonType: String as PropType<ButtonAttrType>,
@@ -107,7 +108,7 @@ export const formResetProps = buildProps({
   loading: booleanProp,
   circle: booleanProp,
   loadingIcon: Object,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   icon: Object,
   color: String,
   buttonType: String as PropType<ButtonAttrType>,

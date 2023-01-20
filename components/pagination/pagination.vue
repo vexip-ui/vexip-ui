@@ -435,7 +435,7 @@ export default defineComponent({
       if (plugins.length) {
         warnOnce(
           "[vexip-ui:Pagination] 'page-jump', 'page-count' and 'page-total' props" +
-            " have been deprecated, please using 'plugins' prop to instead them"
+            " have been deprecated, please use 'plugins' prop to replace them"
         )
       }
 

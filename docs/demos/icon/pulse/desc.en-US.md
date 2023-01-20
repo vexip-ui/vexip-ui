@@ -1,3 +1,3 @@
 ### Pulse Effect
 
-It is an animation specially customized for this Spinner.
+Set the `effect` prop to `pulse-in` or `pulse-out` to make the icon have a pulse effect.
