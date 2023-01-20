@@ -21,7 +21,7 @@
     <div v-else :class="nh.be('empty')" :style="emptyStyle">
       <slot name="empty" :is-fixed="!!fixed">
         <template v-if="!fixed">
-          {{ emptyText }}
+          {{ locale.empty }}
         </template>
       </slot>
     </div>
@@ -101,7 +101,7 @@ export default defineComponent({
 
     return {
       nh: useNameHelper('table'),
-      emptyText: toRef(state, 'emptyText'),
+      locale: toRef(state, 'locale'),
 
       currentColumns,
       style,

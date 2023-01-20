@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 import { Spinner } from '@vexip-ui/icons'
@@ -58,6 +58,7 @@ export default defineComponent({
 
     const props = useProps('textarea', _props, {
       state: createStateProp(state),
+      locale: null,
       value: {
         default: () => getFieldValue(''),
         static: true
@@ -196,7 +197,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('input'),
+      locale: useLocale('input', toRef(props, 'locale')),
       idFor,
       currentValue,
       currentLength,

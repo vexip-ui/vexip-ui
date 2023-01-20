@@ -1,4 +1,4 @@
-import { buildProps, booleanProp, classProp, styleProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, classProp, styleProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -7,6 +7,7 @@ import type { ConfirmType, ConfirmAlign, ConfirmRenderFn } from './symbol'
 const positionType = [Number, String]
 
 export const confirmProps = buildProps({
+  locale: localeProp('confirm'),
   top: positionType,
   left: positionType,
   width: positionType,

@@ -266,6 +266,7 @@ export default defineComponent({
     const props = useProps('cascader', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       value: {
         default: () => getFieldValue([]),
         static: true
@@ -404,7 +405,7 @@ export default defineComponent({
       isDrop: true
     })
     const { isHover } = useHover(reference)
-    const locale = useLocale('select')
+    const locale = useLocale('select', toRef(props, 'locale'))
     const panelElList = ref<InstanceType<typeof CascaderPanel>[]>([])
     const restTagCount = ref(0)
     const restTipShow = ref(false)

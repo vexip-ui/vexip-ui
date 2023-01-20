@@ -54,6 +54,7 @@ export default defineComponent({
     const props = useProps('checkboxGroup', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       value: {
         default: () => getFieldValue([]),
         static: true
@@ -71,7 +72,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('checkbox-group')
-    const locale = useLocale('checkbox')
+    const locale = useLocale('checkbox', toRef(props, 'locale'))
     const valueMap = new Map<string | number, boolean>()
     const inputSet = new Set<Ref<HTMLElement | null | undefined>>()
     const controlSet = new Set<ControlState>()

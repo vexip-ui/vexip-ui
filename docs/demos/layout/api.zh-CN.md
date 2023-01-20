@@ -56,29 +56,30 @@ interface LayoutState {
 
 ### Layout 属性
 
-| 名称             | 类型                   | 说明                                                                               | 默认值                                                               | 始于 |
-| ---------------- | ---------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ---- |
-| no-aside         | `boolean`              | 设置是否禁用边栏                                                                   | `false`                                                              | -    |
-| footer           | `boolean`              | 设置是否使用页脚                                                                   | `false`                                                              | -    |
-| tag              | `string`               | 设置渲染的标签                                                                     | `'section'`                                                          | -    |
-| menus            | `MenuOptions[]`        | 设置菜单选项                                                                       | `[]`                                                                 | -    |
-| menu-props       | `LayoutMenuProps`      | 设置菜单属性                                                                       | `null`                                                               | -    |
-| logo             | `string`               | 设置 Logo 图片地址                                                                 | `''`                                                                 | -    |
-| sign-name        | `string`               | 设置标语                                                                           | `''`                                                                 | -    |
-| config           | `LayoutConfig[]`       | 设置用户下拉面板具备的配置选项                                                     | `['nav', 'theme', 'color']`                                          | -    |
-| user             | `LayoutUser`           | 设置用户信息                                                                       | `null`                                                               | -    |
-| actions          | `LayoutHeaderAction[]` | 设置用户下拉面板的操作选项                                                         | `[]`                                                                 | -    |
-| reduced          | `boolean`              | 设置边栏是否为缩小状态，可以使用 `v-model` 双向绑定                                | `false`                                                              | -    |
-| avatar-circle    | `boolean`              | 设置用户头像是否为圆形                                                             | `false`                                                              | -    |
-| sign-type        | `'aside' \| 'header'`  | 设置标语所在的块                                                                   | `'aside'`                                                            | -    |
-| header-fixed     | `boolean \| string`    | 设置头部是否固定，可以传入一个断点或媒体查询字符串，当满足该查询时才固定           | `'lg'`                                                               | -    |
-| aside-fixed      | `boolean \| string`    | 设置边栏是否固定，可以传入一个断点或媒体查询字符串，当满足该查询时才固定           | `'lg'`                                                               | -    |
-| copyright        | `string`               | 设置页脚的版权信息                                                                 | `''`                                                                 | -    |
-| links            | `LayoutFooterLink[]`   | 设置页脚的链接选项                                                                 | `[]`                                                                 | -    |
-| colors           | `string[]`             | 设置主题色配置的候选值                                                             | `['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707']` | -    |
-| color            | `string`               | 设置当前所选的主题色                                                               | `''`                                                                 | -    |
-| mini-header-sign | `boolean \| string`    | 设置头部的标语是否缩略，可以传入一个断点或媒体查询字符串，当满足该查询时才缩略     | `lg`                                                                 | -    |
-| vertical-links   | `boolean \| string`    | 设置页脚的链接是否纵向显示，可以传入一个断点或媒体查询字符串，当满足该查询时才纵向 | `md`                                                                 | -    |
+| 名称             | 类型                     | 说明                                                                               | 默认值                                                               | 始于    |
+| ---------------- | ------------------------ | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------- |
+| no-aside         | `boolean`                | 设置是否禁用边栏                                                                   | `false`                                                              | -       |
+| footer           | `boolean`                | 设置是否使用页脚                                                                   | `false`                                                              | -       |
+| tag              | `string`                 | 设置渲染的标签                                                                     | `'section'`                                                          | -       |
+| menus            | `MenuOptions[]`          | 设置菜单选项                                                                       | `[]`                                                                 | -       |
+| menu-props       | `LayoutMenuProps`        | 设置菜单属性                                                                       | `null`                                                               | -       |
+| logo             | `string`                 | 设置 Logo 图片地址                                                                 | `''`                                                                 | -       |
+| sign-name        | `string`                 | 设置标语                                                                           | `''`                                                                 | -       |
+| config           | `LayoutConfig[]`         | 设置用户下拉面板具备的配置选项                                                     | `['nav', 'theme', 'color']`                                          | -       |
+| user             | `LayoutUser`             | 设置用户信息                                                                       | `null`                                                               | -       |
+| actions          | `LayoutHeaderAction[]`   | 设置用户下拉面板的操作选项                                                         | `[]`                                                                 | -       |
+| reduced          | `boolean`                | 设置边栏是否为缩小状态，可以使用 `v-model` 双向绑定                                | `false`                                                              | -       |
+| avatar-circle    | `boolean`                | 设置用户头像是否为圆形                                                             | `false`                                                              | -       |
+| sign-type        | `'aside' \| 'header'`    | 设置标语所在的块                                                                   | `'aside'`                                                            | -       |
+| header-fixed     | `boolean \| string`      | 设置头部是否固定，可以传入一个断点或媒体查询字符串，当满足该查询时才固定           | `'lg'`                                                               | -       |
+| aside-fixed      | `boolean \| string`      | 设置边栏是否固定，可以传入一个断点或媒体查询字符串，当满足该查询时才固定           | `'lg'`                                                               | -       |
+| copyright        | `string`                 | 设置页脚的版权信息                                                                 | `''`                                                                 | -       |
+| links            | `LayoutFooterLink[]`     | 设置页脚的链接选项                                                                 | `[]`                                                                 | -       |
+| colors           | `string[]`               | 设置主题色配置的候选值                                                             | `['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707']` | -       |
+| color            | `string`                 | 设置当前所选的主题色                                                               | `''`                                                                 | -       |
+| mini-header-sign | `boolean \| string`      | 设置头部的标语是否缩略，可以传入一个断点或媒体查询字符串，当满足该查询时才缩略     | `lg`                                                                 | -       |
+| vertical-links   | `boolean \| string`      | 设置页脚的链接是否纵向显示，可以传入一个断点或媒体查询字符串，当满足该查询时才纵向 | `md`                                                                 | -       |
+| locale           | `LocaleConfig['layout']` | 设置多语言配置                                                                     | `null`                                                               | `2.1.0` |
 
 ### Layout 事件
 
@@ -119,21 +120,22 @@ interface LayoutState {
 
 ### LayoutHeader 属性
 
-| 名称          | 类型                   | 说明                           | 默认值                                                                      | 始于 |
-| ------------- | ---------------------- | ------------------------------ | --------------------------------------------------------------------------- | ---- |
-| tag           | `string`               | 设置渲染的标签                 | `header`                                                                    | -    |
-| logo          | `string`               | 设置 Logo 图片地址             | `''`                                                                        | -    |
-| sign-name     | `string`               | 设置标语                       | `''`                                                                        | -    |
-| user          | `LayoutUser`           | 设置用户信息                   | `{ name: '' }`                                                              | -    |
-| user-dropped  | `boolean`              | 设置用户下拉面板是否打开       | `false`                                                                     | -    |
-| avatar-circle | `boolean`              | 设置用户头像是否为圆形         | `false`                                                                     | -    |
-| config        | `LayoutConfig[]`       | 设置用户下拉面板具备的配置选项 | `['nav', 'color']`                                                          | -    |
-| actions       | `LayoutHeaderAction[]` | 设置用户下拉面板的操作选项     | `[{ label: 'signOut', name: locale.signOut, icon: ArrowRightFromBracket }]` | -    |
-| sign-type     | `LayoutSignType`       | 设置标语所在的块               | `'aside'`                                                                   | -    |
-| colors        | `string[]`             | 设置主题色配置的候选值         | `['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707']`        | -    |
-| color         | `string`               | 设置当前所选的主题色           | `''`                                                                        | -    |
-| menus         | `MenuOptions[]`        | 设置菜单选项                   | `[]`                                                                        | -    |
-| menu-props    | `LayoutMenuProps`      | 设置菜单属性                   | `null`                                                                      | -    |
+| 名称          | 类型                     | 说明                           | 默认值                                                                      | 始于    |
+| ------------- | ------------------------ | ------------------------------ | --------------------------------------------------------------------------- | ------- |
+| tag           | `string`                 | 设置渲染的标签                 | `header`                                                                    | -       |
+| logo          | `string`                 | 设置 Logo 图片地址             | `''`                                                                        | -       |
+| sign-name     | `string`                 | 设置标语                       | `''`                                                                        | -       |
+| user          | `LayoutUser`             | 设置用户信息                   | `{ name: '' }`                                                              | -       |
+| user-dropped  | `boolean`                | 设置用户下拉面板是否打开       | `false`                                                                     | -       |
+| avatar-circle | `boolean`                | 设置用户头像是否为圆形         | `false`                                                                     | -       |
+| config        | `LayoutConfig[]`         | 设置用户下拉面板具备的配置选项 | `['nav', 'color']`                                                          | -       |
+| actions       | `LayoutHeaderAction[]`   | 设置用户下拉面板的操作选项     | `[{ label: 'signOut', name: locale.signOut, icon: ArrowRightFromBracket }]` | -       |
+| sign-type     | `LayoutSignType`         | 设置标语所在的块               | `'aside'`                                                                   | -       |
+| colors        | `string[]`               | 设置主题色配置的候选值         | `['#339af0', '#f03e3e', '#be4bdb', '#7950f2', '#1b9e44', '#f76707']`        | -       |
+| color         | `string`                 | 设置当前所选的主题色           | `''`                                                                        | -       |
+| menus         | `MenuOptions[]`          | 设置菜单选项                   | `[]`                                                                        | -       |
+| menu-props    | `LayoutMenuProps`        | 设置菜单属性                   | `null`                                                                      | -       |
+| locale        | `LocaleConfig['layout']` | 设置多语言配置                 | `null`                                                                      | `2.1.0` |
 
 ### LayoutHeader 事件
 

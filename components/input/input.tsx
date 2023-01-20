@@ -1,4 +1,4 @@
-import { defineComponent, ref, computed, watch, Transition, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, Transition, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
 import { useHover } from '@vexip-ui/hooks'
@@ -48,6 +48,7 @@ export default defineComponent({
     const props = useProps('input', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       type: {
         default: 'text',
         validator: value => inputTypes.includes(value)
@@ -98,7 +99,7 @@ export default defineComponent({
     const inputControl = ref<HTMLElement>()
 
     const { wrapper: control, isHover } = useHover()
-    const locale = useLocale('input')
+    const locale = useLocale('input', toRef(props, 'locale'))
 
     let lastValue = props.value
 

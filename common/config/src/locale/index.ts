@@ -10,6 +10,8 @@ export * from './helper'
 export * from './zh-CN'
 export * from './en-US'
 
+type MaybeRef<T> = T | Ref<T>
+
 export const PROVIDED_LOCALE = '__vxp-provided-locale'
 export const globalLocal = computed(() => zhCNLocale())
 
@@ -26,7 +28,7 @@ export function getDefaultLocaleConfig(locale?: string) {
   }
 }
 
-export function configLocale(sourceLocale: LocaleOptions | Ref<LocaleOptions>, app?: App) {
+export function configLocale(sourceLocale: MaybeRef<LocaleOptions>, app?: App) {
   if (app) {
     const locale = computed(() => {
       const locale = unref(sourceLocale)
@@ -52,16 +54,27 @@ export function configLocale(sourceLocale: LocaleOptions | Ref<LocaleOptions>, a
   }
 }
 
-export function useLocale(): ComputedRef<LocaleConfig> | null
+export function useLocale(): ComputedRef<LocaleConfig>
 export function useLocale<T extends LocaleNames>(name: T): ComputedRef<LocaleConfig[T]>
-export function useLocale<T extends LocaleNames>(name?: T) {
+export function useLocale<T extends LocaleNames>(
+  name: T,
+  customLocale: MaybeRef<Partial<LocaleConfig[T]>>
+): ComputedRef<LocaleConfig[T]>
+export function useLocale<T extends LocaleNames>(
+  name?: T,
+  customLocale?: MaybeRef<Partial<LocaleConfig[T]>>
+) {
   const locale = inject<ComputedRef<LocaleConfig>>(PROVIDED_LOCALE, globalLocal)
 
   if (!name) {
     return locale
   }
 
-  return computed(() => locale.value?.[name] ?? ({} as LocaleConfig[T]))
+  if (customLocale) {
+    return computed(() => ({ ...(locale.value?.[name] ?? {}), ...(unref(customLocale) ?? {}) }))
+  }
+
+  return computed(() => locale.value?.[name] ?? {})
 }
 
 export function getCountWord(wordTemplate: string, count: number) {

@@ -14,3 +14,5 @@ export interface SelectOptionState extends OptionState {
   parent: SelectOptionState | null,
   data: SelectRawOption
 }
+
+export type SelectFilter = (value: string | number, options: SelectOptionState) => boolean

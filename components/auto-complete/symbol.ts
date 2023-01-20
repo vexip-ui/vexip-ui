@@ -10,3 +10,8 @@ export type AutoCompleteOptionState = Omit<SelectOptionState, 'label' | 'parent'
   parent: AutoCompleteOptionState | null,
   data: AutoCompleteRawOption
 }
+
+export type AutoCompleteFilter = (
+  value: string | number,
+  options: AutoCompleteOptionState
+) => boolean

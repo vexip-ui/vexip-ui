@@ -4,7 +4,8 @@ import {
   booleanStringProp,
   sizeProp,
   stateProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -19,6 +20,7 @@ type MaybeArrayData = Record<string, any> | Array<Record<string, any>>
 export const cascaderProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('select'),
   value: Array as PropType<CascaderValue>,
   visible: booleanProp,
   options: Array as PropType<Array<Record<string, any>>>,

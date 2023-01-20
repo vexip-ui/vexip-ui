@@ -1,4 +1,4 @@
-import { buildProps, booleanProp, sizeProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, sizeProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { IconEffect } from '@/components/icon'
@@ -36,6 +36,7 @@ export type FormCProps = ConfigurableProps<FormProps, 'model'>
 const mediaProp = [Number, Object] as PropType<number | ColumnOptions>
 
 export const formItemProps = buildProps({
+  locale: localeProp('form'),
   label: String,
   prop: String,
   rules: [Object, Array] as PropType<Rule | Rule[]>,
@@ -70,6 +71,7 @@ export type FormItemCProps = ConfigurableProps<FormItemProps, 'prop' | 'htmlFor'
 
 export const formSubmitProps = buildProps({
   size: sizeProp,
+  locale: localeProp('form'),
   type: String as PropType<ButtonType>,
   label: String,
   dashed: booleanProp,
@@ -95,6 +97,7 @@ export type FormSubmitCProps = ConfigurableProps<FormSubmitProps, never, 'onBefo
 
 export const formResetProps = buildProps({
   size: sizeProp,
+  locale: localeProp('form'),
   type: String as PropType<ButtonType>,
   label: String,
   dashed: booleanProp,

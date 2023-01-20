@@ -19,6 +19,7 @@
 | loading         | `boolean`                                   | Set whether the confirm button of the drawer is in the loading state                                                                                                 | `false`          | `2.0.0` |
 | confirm-text    | `string`                                    | Confirm button content                                                                                                                                               | `locale.confirm` | `2.0.0` |
 | cancel-text     | `string`                                    | Cancel button content                                                                                                                                                | `locale.cancel`  | `2.0.0` |
+| locale          | `LocaleConfig['drawer']`                    | Set the locale config                                                                                                                                                | `null`           | `2.1.0` |
 
 ### Drawer Events
 

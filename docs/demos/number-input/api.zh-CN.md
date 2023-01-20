@@ -36,6 +36,7 @@ type NumberInputControlType = 'right' | 'left' | 'right-fade' | 'left-fade' | 'n
 | loading-effect | `string`                                         | 设置加载中图标的效果动画                         | `false`     | `2.1.0`  |
 | sync           | `boolean`                                        | 设置是否为同步输入模式                           | `false`     | `2.0.6`  |
 | control-type   | `NumberInputControlType`                         | 设置控件类型                                     | `'right'`   | `2.0.17` |
+| locale         | `LocaleConfig['input']`                          | 设置多语言配置                                   | `null`      | `2.1.0`  |
 
 ### NumberInput 事件
 

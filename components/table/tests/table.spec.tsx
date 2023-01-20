@@ -77,7 +77,7 @@ describe('Table', () => {
         key: 'name'
       }
     ]
-    const wrapper = mount(() => <Table columns={columns} empty-text={'empty'}></Table>)
+    const wrapper = mount(() => <Table columns={columns} locale={{ empty: 'empty' }}></Table>)
 
     expect(wrapper.find('.vxp-table__empty').exists()).toBe(true)
     expect(wrapper.find('.vxp-table__empty').text()).toEqual('empty')

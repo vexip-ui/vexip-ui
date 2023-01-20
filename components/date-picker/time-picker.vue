@@ -255,6 +255,7 @@ export default defineComponent({
     const props = useProps('timePicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       visible: false,
       placement: {
         default: 'bottom-start',
@@ -831,7 +832,7 @@ export default defineComponent({
 
       props,
       nh,
-      locale: useLocale('timePicker'),
+      locale: useLocale('timePicker', toRef(props, 'locale')),
       idFor,
       isHover,
       currentVisible,

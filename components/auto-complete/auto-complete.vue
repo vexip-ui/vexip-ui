@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, watchEffect, onMounted, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, watchEffect, onMounted, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { Select } from '@/components/select'
 import { useFieldStore } from '@/components/form'
@@ -125,6 +125,7 @@ export default defineComponent({
     const props = useProps('autoComplete', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       transfer: false,
       value: {
         default: () => getFieldValue(''),
@@ -421,7 +422,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('input'),
+      locale: useLocale('input', toRef(props, 'locale')),
       idFor,
       currentValue,
       currentIndex,

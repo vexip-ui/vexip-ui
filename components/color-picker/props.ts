@@ -4,7 +4,8 @@ import {
   booleanStringProp,
   sizeProp,
   stateProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -19,6 +20,7 @@ type FormattedColor = string | RGBAColor | HSLAColor | HSVAColor
 export const colorPickerProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('colorPicker'),
   value: [String, Object] as PropType<Color | null>,
   visible: booleanProp,
   format: String as PropType<ColorFormat>,

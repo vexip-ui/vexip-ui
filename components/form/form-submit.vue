@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, inject, provide } from 'vue'
+import { defineComponent, ref, toRef, computed, inject } from 'vue'
 import { Button } from '@/components/button'
 import { FIELD_OPTIONS } from '@/components/form/symbol'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
@@ -60,6 +60,7 @@ export default defineComponent({
 
     const props = useProps('form-submit', _props, {
       size: null,
+      locale: null,
       type: 'primary',
       label: null,
       dashed: null,
@@ -128,7 +129,7 @@ export default defineComponent({
     return {
       props,
       nh: useNameHelper('form'),
-      locale: useLocale('form'),
+      locale: useLocale('form', toRef(props, 'locale')),
 
       submit,
 

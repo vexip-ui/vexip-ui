@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, nextTick } from 'vue'
+import { defineComponent, ref, toRef, onMounted, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
@@ -127,6 +127,7 @@ export default defineComponent({
   props: confirmProps,
   setup(_props) {
     const props = useProps('confirm', _props, {
+      locale: null,
       top: {
         default: 'auto',
         validator: positionValidator
@@ -286,7 +287,7 @@ export default defineComponent({
 
       props,
       nh: useNameHelper('confirm'),
-      locale: useLocale('confirm'),
+      locale: useLocale('confirm', toRef(props, 'locale')),
       visible,
       loading,
       title,

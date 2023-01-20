@@ -13,6 +13,12 @@ export interface TransferOptionState {
   data: string | Record<string, any>
 }
 
+export type TransferFilter = (
+  value: string,
+  options: TransferOptionState,
+  type: 'source' | 'target'
+) => boolean
+
 export interface TransferExposed {
   handleToTarget: () => void,
   handleToSource: () => void,

@@ -1,17 +1,13 @@
-import { buildProps, booleanProp, stateProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, stateProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { TransferKeyConfig, TransferOptionState } from './symbol'
+import type { TransferKeyConfig, TransferFilter } from './symbol'
 
 export type RawOption = string | Record<string, any>
 export type Values = (string | number)[]
-export type FilterHandler = (
-  value: string,
-  options: TransferOptionState,
-  type: 'source' | 'target'
-) => boolean
+
 export type SelectHandler = (
   type: 'source' | 'target',
   selected: { source: Values, target: Values },
@@ -20,12 +16,13 @@ export type SelectHandler = (
 
 export const transferProps = buildProps({
   state: stateProp,
+  locale: localeProp('transfer'),
   options: Array as PropType<RawOption[]>,
   value: Array as PropType<Values>,
   disabled: booleanProp,
   paged: booleanProp,
   filter: {
-    type: [Boolean, Function] as PropType<boolean | FilterHandler>,
+    type: [Boolean, Function] as PropType<boolean | TransferFilter>,
     default: null
   },
   emptyText: String,

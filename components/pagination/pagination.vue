@@ -216,7 +216,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, onMounted, onBeforeUpdate, nextTick } from 'vue'
+import {
+  defineComponent,
+  ref,
+  toRef,
+  computed,
+  watch,
+  onMounted,
+  onBeforeUpdate,
+  nextTick
+} from 'vue'
 import { Icon } from '@/components/icon'
 import { NumberInput } from '@/components/number-input'
 import { Select } from '@/components/select'
@@ -259,6 +268,7 @@ export default defineComponent({
   setup(_props, { emit }) {
     const props = useProps('pagination', _props, {
       size: createSizeProp(),
+      locale: null,
       total: {
         default: 0,
         validator: value => value >= 0,
@@ -304,7 +314,7 @@ export default defineComponent({
     const jumpValue = ref(props.active)
     const itemElList = ref<unknown[]>([])
 
-    const locale = useLocale('pagination')
+    const locale = useLocale('pagination', toRef(props, 'locale'))
 
     const { target: wrapper } = useModifier({
       passive: false,

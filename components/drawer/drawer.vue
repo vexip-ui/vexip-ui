@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch, nextTick } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Masker } from '@/components/masker'
@@ -107,6 +107,7 @@ export default defineComponent({
   emits: ['update:active'],
   setup(_props, { slots, emit }) {
     const props = useProps('drawer', _props, {
+      locale: null,
       transfer: false,
       active: {
         default: false,
@@ -328,7 +329,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('modal'),
+      locale: useLocale('drawer', toRef(props, 'locale')),
       currentActive,
       resizing,
 

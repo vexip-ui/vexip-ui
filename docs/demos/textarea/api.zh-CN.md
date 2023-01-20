@@ -19,6 +19,7 @@
 | loading-lock   | `boolean`                                        | 设置在加载中时是否为只读                                        | `false`              | `2.0.0` |
 | loading-effect | `string`                                         | 设置加载中图标的效果动画                                        | `false`              | `2.0.0` |
 | sync           | `boolean`                                        | 设置是否为同步输入模式                                          | `false`              | `2.0.6` |
+| locale         | `LocaleConfig['input']`                          | 设置多语言配置                                                  | `null`               | `2.1.0` |
 
 ### Textarea 事件
 

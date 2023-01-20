@@ -1,4 +1,4 @@
-import { buildProps, booleanProp, stateProp, eventProp } from '@vexip-ui/config'
+import { buildProps, booleanProp, stateProp, eventProp, localeProp } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
 import type { IconEffect } from '@/components/icon'
@@ -6,6 +6,7 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 
 export const textareaProps = buildProps({
   state: stateProp,
+  locale: localeProp('input'),
   value: String,
   placeholder: String,
   rows: Number,

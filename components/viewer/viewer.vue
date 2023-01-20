@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, onMounted } from 'vue'
+import { defineComponent, ref, reactive, toRef, computed, onMounted } from 'vue'
 import { Divider } from '@/components/divider'
 import { Icon } from '@/components/icon'
 import { Renderer } from '@/components/renderer'
@@ -90,6 +90,7 @@ export default defineComponent({
   emits: [],
   setup(_props) {
     const props = useProps('viewer', _props, {
+      locale: null,
       width: '100%',
       height: '100%',
       moveDisabled: false,
@@ -108,7 +109,7 @@ export default defineComponent({
     })
 
     const nh = useNameHelper('viewer')
-    const locale = useLocale('viewer')
+    const locale = useLocale('viewer', toRef(props, 'locale'))
 
     const { timer } = useSetTimeout()
     const toolbarActive = ref(false)

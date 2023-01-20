@@ -4,7 +4,8 @@ import {
   sizeProp,
   classProp,
   styleProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -42,6 +43,7 @@ export interface SortProfile {
 }
 
 export const tableProps = buildProps({
+  locale: localeProp('table'),
   columns: Array as PropType<TableColumnOptions<any, any>[]>,
   data: Array as PropType<Data[]>,
   dataKey: String,

@@ -49,17 +49,18 @@ interface ToolbarAction {
 
 ### Viewer 属性
 
-| 名称              | 类型                | 说明                                                     | 默认值     | 始于 |
-| ----------------- | ------------------- | -------------------------------------------------------- | ---------- | ---- |
-| move-disabled     | `boolean`           | 设置是否禁用移动功能                                     | `false`    | -    |
-| zoom-disabled     | `boolean`           | 设置是否禁用缩放功能                                     | `false`    | -    |
-| zoom-delta        | `number`            | 设置每次缩放的变化量                                     | `0.15`     | -    |
-| rotate-disabled   | `boolean`           | 设置是否禁用旋转功能                                     | `false`    | -    |
-| rotate-delta      | `number`            | 设置每次旋转的变化量                                     | `90`       | -    |
-| full-disabled     | `boolean`           | 设置是否禁用全屏功能                                     | `false`    | -    |
-| toolbar-placement | `ToolbarPlacement`  | 设置工具栏的位置                                         | `'bottom'` | -    |
-| actions           | `ToolbarAction[]`   | 添加自定义的操作按钮                                     | `[]`       | -    |
-| toolbar-fade      | `boolean \| number` | 设置触发工具栏是否渐隐，传入数字时可以设置渐隐的等待毫秒 | `false`    | -    |
+| 名称              | 类型                     | 说明                                                     | 默认值     | 始于    |
+| ----------------- | ------------------------ | -------------------------------------------------------- | ---------- | ------- |
+| move-disabled     | `boolean`                | 设置是否禁用移动功能                                     | `false`    | -       |
+| zoom-disabled     | `boolean`                | 设置是否禁用缩放功能                                     | `false`    | -       |
+| zoom-delta        | `number`                 | 设置每次缩放的变化量                                     | `0.15`     | -       |
+| rotate-disabled   | `boolean`                | 设置是否禁用旋转功能                                     | `false`    | -       |
+| rotate-delta      | `number`                 | 设置每次旋转的变化量                                     | `90`       | -       |
+| full-disabled     | `boolean`                | 设置是否禁用全屏功能                                     | `false`    | -       |
+| toolbar-placement | `ToolbarPlacement`       | 设置工具栏的位置                                         | `'bottom'` | -       |
+| actions           | `ToolbarAction[]`        | 添加自定义的操作按钮                                     | `[]`       | -       |
+| toolbar-fade      | `boolean \| number`      | 设置触发工具栏是否渐隐，传入数字时可以设置渐隐的等待毫秒 | `false`    | -       |
+| locale            | `LocaleConfig['viewer']` | 设置多语言配置                                           | `null`     | `2.1.0` |
 
 ### Viewer 事件
 

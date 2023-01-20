@@ -152,7 +152,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, toRef, computed } from 'vue'
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Progress } from '@/components/progress'
@@ -200,6 +200,7 @@ export default defineComponent({
   emits: [],
   setup(_props) {
     const props = useProps('uploadFile', _props, {
+      locale: null,
       file: {
         default: () => ({} as FileState),
         static: true
@@ -267,7 +268,7 @@ export default defineComponent({
     return {
       props,
       nh,
-      locale: useLocale('upload'),
+      locale: useLocale('upload', toRef(props, 'locale')),
 
       useIconRenderer,
       fileName,

@@ -5,7 +5,8 @@ import {
   sizeProp,
   stateProp,
   classProp,
-  eventProp
+  eventProp,
+  localeProp
 } from '@vexip-ui/config'
 
 import type { PropType, ExtractPropTypes } from 'vue'
@@ -13,11 +14,12 @@ import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { TagType } from '@/components/tag'
-import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectOptionState } from './symbol'
+import type { SelectKeyConfig, SelectRawOption, SelectValue, SelectFilter } from './symbol'
 
 export const selectProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('select'),
   visible: booleanProp,
   options: Array as PropType<SelectRawOption[]>,
   disabled: booleanProp,
@@ -45,9 +47,7 @@ export const selectProps = buildProps({
   loadingEffect: String as PropType<IconEffect>,
   keyConfig: Object as PropType<SelectKeyConfig>,
   filter: {
-    type: [Boolean, Function] as PropType<
-      boolean | ((value: string | number, options: SelectOptionState) => boolean)
-    >,
+    type: [Boolean, Function] as PropType<boolean | SelectFilter>,
     default: null
   },
   ignoreCase: booleanProp,
