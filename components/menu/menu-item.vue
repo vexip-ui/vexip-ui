@@ -24,7 +24,7 @@
           @mouseenter="handleMouseEnter"
           @mouseleave="handleMouseLeave"
         >
-          <div v-if="props.icon" :class="nh.be('icon')">
+          <div v-if="$slots.icon || props.icon" :class="nh.be('icon')">
             <slot name="icon">
               <Renderer v-if="typeof props.icon === 'function'" :renderer="props.icon"></Renderer>
               <Icon v-else v-bind="props.iconProps" :icon="props.icon"></Icon>
