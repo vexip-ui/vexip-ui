@@ -84,7 +84,9 @@ export function useMediaQuery(query: Ref<string | boolean>) {
   const computedStyle = getComputedStyle(document.documentElement)
   const computedQuery = computed(() => {
     if (breakPoints.includes(query.value as any)) {
-      const media = computedStyle.getPropertyValue(`--vxp-break-point-${query.value}`).trim()
+      const usedQuery = query.value === 'xs' ? 'sm' : query.value
+      const media = computedStyle.getPropertyValue(`--vxp-break-point-${usedQuery}`).trim()
+
       return `only screen and ${media}`
     }
 
