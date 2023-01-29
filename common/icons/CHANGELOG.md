@@ -1,3 +1,9 @@
+# [1.1.0](https://github.com/vexip-ui/vexip-ui/compare/icons@1.0.3...icons@1.1.0) (2023-01-29)
+
+### Features
+
+- **icons:** upgrade to font-awesome@6.2.1 ([a9e5950](https://github.com/vexip-ui/vexip-ui/commit/a9e59501d0a145c28814f96f9fbfb717130105b1))
+
 ## [1.0.3](https://github.com/vexip-ui/vexip-ui/compare/icons@1.0.2...icons@1.0.3) (2022-10-13)
 
 ## [1.0.2](https://github.com/vexip-ui/vexip-ui/compare/icons@1.0.1...icons@1.0.2) (2022-06-07)
