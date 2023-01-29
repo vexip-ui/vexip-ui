@@ -23,7 +23,7 @@ interface MenuOptions {
 | active        | `string`                                           | 设置默认激活的菜单                                                             | `null`       | -       |
 | accordion     | `boolean`                                          | 设置是否开启手风琴模式，该模式下同级菜单只能展开一个                           | `0`          | -       |
 | marker-type   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'none'` | 设置选中菜单的标记的类型                                                       | `'right'`    | -       |
-| reduced       | `boolean`                                          | 设置菜单是否搜索                                                               | `false`      | -       |
+| reduced       | `boolean`                                          | 设置菜单是否收缩                                                               | `false`      | -       |
 | horizontal    | `boolean`                                          | 设置是否为横向菜单                                                             | `false`      | -       |
 | group-type    | `'collapse' \| 'dropdown'`                         | 在展开状态时子菜单的形式                                                       | `'collapse'` | -       |
 | theme         | `'light' \| 'dark'`                                | 设置菜单的主题                                                                 | `'light'`    | -       |
