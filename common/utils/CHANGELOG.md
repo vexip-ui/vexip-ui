@@ -1,3 +1,15 @@
+## [1.9.2](https://github.com/vexip-ui/vexip-ui/compare/utils@1.9.1...utils@1.9.2) (2023-01-29)
+
+### Bug Fixes
+
+- **utils:** using pointerdown event for touch action ([e03462f](https://github.com/vexip-ui/vexip-ui/commit/e03462fa2eabbfc247cfc206a6a26fc4d33169ab))
+
+### Features
+
+- **Image:** add Image component ([#225](https://github.com/vexip-ui/vexip-ui/issues/225)) ([e26a75e](https://github.com/vexip-ui/vexip-ui/commit/e26a75eb4c714ae6e49193724b4f20f2bb7a5d38))
+- **Result:** add Result component ([#238](https://github.com/vexip-ui/vexip-ui/issues/238)) ([0812183](https://github.com/vexip-ui/vexip-ui/commit/0812183fc0d4b5f716b9b03498aa0891b9cd6353))
+- **select:** add max-tag-count, no-rest-tip and tag-type props ([#224](https://github.com/vexip-ui/vexip-ui/issues/224)) ([bdc7517](https://github.com/vexip-ui/vexip-ui/commit/bdc751789ebee18353900bcab1436d7d352739b0))
+
 ## [1.9.1](https://github.com/vexip-ui/vexip-ui/compare/utils@1.9.0...utils@1.9.1) (2022-11-21)
 
 ### Features
