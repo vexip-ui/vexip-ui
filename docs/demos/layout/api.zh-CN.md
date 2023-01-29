@@ -83,12 +83,15 @@ interface LayoutState {
 
 ### Layout 事件
 
-| 名称           | 说明                                       | 参数                                         | 始于 |
-| -------------- | ------------------------------------------ | -------------------------------------------- | ---- |
-| reduced-change | 当边栏缩小状态改变时触发，返回当前缩小状态 | `(reduced: boolean)`                         | -    |
-| sign-click     | 当标语被点击时触发                         | `(event: MouseEvent)`                        | -    |
-| menu-select    | 当菜单被选择时触发                         | `(label: string, meta: Record<string, any>)` | -    |
-| user-action    | 当用户下拉面板操作被点击时触发             | `(label: string, meta: Record<string, any>)` | -    |
+| 名称           | 说明                                       | 参数                                         | 始于    |
+| -------------- | ------------------------------------------ | -------------------------------------------- | ------- |
+| reduced-change | 当边栏缩小状态改变时触发，返回当前缩小状态 | `(reduced: boolean)`                         | -       |
+| sign-click     | 当标语被点击时触发                         | `(event: MouseEvent)`                        | -       |
+| menu-select    | 当菜单被选择时触发                         | `(label: string, meta: Record<string, any>)` | -       |
+| user-action    | 当用户下拉面板操作被点击时触发             | `(label: string, meta: Record<string, any>)` | -       |
+| nav-change     | 当通过配置面板改变导航类型时触发           | `(type: LayoutSignType)`                     | -       |
+| color-change   | 当通过配置面板改变主题色时触发             | `(color: string)`                            | -       |
+| toggle-theme   | 当通过配置面板改变主题模式时触发           | `(isDark: boolean)`                          | `2.1.0` |
 
 ### Layout 插槽
 
@@ -139,14 +142,15 @@ interface LayoutState {
 
 ### LayoutHeader 事件
 
-| 名称         | 说明                             | 参数                                         | 始于 |
-| ------------ | -------------------------------- | -------------------------------------------- | ---- |
-| nav-change   | 当通过配置面板改变导航类型时触发 | `(type: LayoutSignType)`                     | -    |
-| color-change | 当通过配置面板改变主题色时触发   | `(color: string)`                            | -    |
-| user-action  | 当用户下拉面板操作被点击时触发   | `(label: string, meta: Record<string, any>)` | -    |
-| sign-click   | 当标语被点击时触发               | `(event: MouseEvent)`                        | -    |
-| drop-change  | 当用户下拉面板打开或关闭时触发   | `(target: boolean)`                          | -    |
-| menu-select  | 当菜单被选择时触发               | `(label: string, meta: Record<string, any>)` | -    |
+| 名称         | 说明                             | 参数                                         | 始于    |
+| ------------ | -------------------------------- | -------------------------------------------- | ------- |
+| nav-change   | 当通过配置面板改变导航类型时触发 | `(type: LayoutSignType)`                     | -       |
+| color-change | 当通过配置面板改变主题色时触发   | `(color: string)`                            | -       |
+| user-action  | 当用户下拉面板操作被点击时触发   | `(label: string, meta: Record<string, any>)` | -       |
+| sign-click   | 当标语被点击时触发               | `(event: MouseEvent)`                        | -       |
+| drop-change  | 当用户下拉面板打开或关闭时触发   | `(target: boolean)`                          | -       |
+| menu-select  | 当菜单被选择时触发               | `(label: string, meta: Record<string, any>)` | -       |
+| toggle-theme | 当通过配置面板改变主题模式时触发 | `(isDark: boolean)`                          | `2.1.0` |
 
 ### LayoutHeader 插槽
 

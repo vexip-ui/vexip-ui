@@ -192,6 +192,8 @@ export default defineComponent({
     }
 
     function toggleTheme(darkMode: boolean) {
+      emitEvent(props.onToggleTheme, darkMode)
+
       if (!isClient) return
 
       requestAnimationFrame(() => {

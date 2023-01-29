@@ -40,7 +40,8 @@ export const layoutProps = buildProps({
   onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
   onUserAction: eventProp<(label: string, meta: Record<string, any>) => void>(),
   onNavChange: eventProp<(type: LayoutSignType) => void>(),
-  onColorChange: eventProp<(color: string) => void>()
+  onColorChange: eventProp<(color: string) => void>(),
+  onToggleTheme: eventProp<(isDark: boolean) => void>()
 })
 
 export type LayoutProps = ExtractPropTypes<typeof layoutProps>
@@ -85,7 +86,8 @@ export const layoutHeaderProps = buildProps({
   onSignClick: eventProp<(event: MouseEvent) => void>(),
   onDropChange: eventProp<(target: boolean) => void>(),
   onReducedChange: eventProp<(reduced: boolean) => void>(),
-  onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>()
+  onMenuSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
+  onToggleTheme: eventProp<(isDark: boolean) => void>()
 })
 
 export type LayoutHeaderProps = ExtractPropTypes<typeof layoutHeaderProps>

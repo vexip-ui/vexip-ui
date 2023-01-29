@@ -180,6 +180,10 @@ export default defineComponent({
       emitEvent(props.onMenuSelect, label, meta)
     }
 
+    function handleToggleTheme(isDark: boolean) {
+      emitEvent(props.onToggleTheme, isDark)
+    }
+
     function handleScroll({ clientY }: { clientY: number }) {
       state.scrollY = clientY
       state.affixed = !state.affixMatched && clientY >= 50
@@ -247,6 +251,7 @@ export default defineComponent({
           onUserAction={handleUserAction}
           onReducedChange={toggleReduce}
           onMenuSelect={handleMenuSelect}
+          onToggleTheme={handleToggleTheme}
         >
           {{
             left:

@@ -83,12 +83,15 @@ interface LayoutState {
 
 ### Layout Events
 
-| Name           | Description                                                                     | Parameters                                   | Since |
-| -------------- | ------------------------------------------------------------------------------- | -------------------------------------------- | ----- |
-| reduced-change | Emitted when the aside reduced state changed, returns the current reduced state | `(target: boolean)`                          | -     |
-| sign-click     | Emitted when the sign is clicked                                                | `(event: MouseEvent)`                        | -     |
-| menu-select    | Emitted when the menu is selected                                               | `(label: string, meta: Record<string, any>)` | -     |
-| user-action    | Emitted when the user dropdown panel action is clicked                          | `(label: string, meta: Record<string, any>)` | -     |
+| Name           | Description                                                                     | Parameters                                   | Since   |
+| -------------- | ------------------------------------------------------------------------------- | -------------------------------------------- | ------- |
+| reduced-change | Emitted when the aside reduced state changed, returns the current reduced state | `(target: boolean)`                          | -       |
+| sign-click     | Emitted when the sign is clicked                                                | `(event: MouseEvent)`                        | -       |
+| menu-select    | Emitted when the menu is selected                                               | `(label: string, meta: Record<string, any>)` | -       |
+| user-action    | Emitted when the user dropdown panel action is clicked                          | `(label: string, meta: Record<string, any>)` | -       |
+| nav-change     | Emitted when the navigation type is changed via the config panel                | `(type: LayoutSignType)`                     | -       |
+| color-change   | Emitted when the theme color is changed via the configuration panel             | `(color: string)`                            | -       |
+| toggle-theme   | Emitted when changing theme mode via config panel                               | `(isDark: boolean)`                          | `2.1.0` |
 
 ### Layout Slots
 
@@ -139,14 +142,15 @@ interface LayoutState {
 
 ### LayoutHeader Events
 
-| Name         | Description                                                         | Parameters                                   | Since |
-| ------------ | ------------------------------------------------------------------- | -------------------------------------------- | ----- |
-| nav-change   | Emitted when the navigation type is changed via the config panel    | `(type: LayoutSignType)`                     | -     |
-| color-change | Emitted when the theme color is changed via the configuration panel | `(color: string)`                            | -     |
-| user-action  | Emitted when the user dropdown panel action is clicked              | `(label: string, meta: Record<string, any>)` | -     |
-| sign-click   | Emitted when the sign is clicked                                    | `(event: MouseEvent)`                        | -     |
-| drop-change  | Emitted when the user drop-down panel is opened or closed           | `(target: boolean)`                          | -     |
-| menu-select  | Emitted when the menu is selected                                   | `(label: string, meta: Record<string, any>)` | -     |
+| Name         | Description                                                         | Parameters                                   | Since   |
+| ------------ | ------------------------------------------------------------------- | -------------------------------------------- | ------- |
+| nav-change   | Emitted when the navigation type is changed via the config panel    | `(type: LayoutSignType)`                     | -       |
+| color-change | Emitted when the theme color is changed via the configuration panel | `(color: string)`                            | -       |
+| user-action  | Emitted when the user dropdown panel action is clicked              | `(label: string, meta: Record<string, any>)` | -       |
+| sign-click   | Emitted when the sign is clicked                                    | `(event: MouseEvent)`                        | -       |
+| drop-change  | Emitted when the user drop-down panel is opened or closed           | `(target: boolean)`                          | -       |
+| menu-select  | Emitted when the menu is selected                                   | `(label: string, meta: Record<string, any>)` | -       |
+| toggle-theme | Emitted when changing theme mode via config panel                   | `(isDark: boolean)`                          | `2.1.0` |
 
 ### LayoutHeader Slots
 
