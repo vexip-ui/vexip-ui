@@ -61,4 +61,4 @@
 | before-action | Before button slot, which takes precedence over the `before` slot, is used to place a control | -                    | `2.0.0`  |
 | after-action  | After button slot, which takes precedence over the `after` slot, is used to place a control   | -                    | `2.0.0`  |
 | count         | Word count content slot                                                                       | `{ value: string }`  | `2.0.12` |
-| password      | Slot for plain password button, usually a single icon                                         | `{ plain: boolean }` | `2.0.21` |
+| password      | Slot for plain password button, usually a single icon                                         | `{ plain: boolean }` | `2.1.0`  |

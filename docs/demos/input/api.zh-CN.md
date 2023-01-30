@@ -60,4 +60,4 @@
 | before-action | 前置按钮插槽，优先于 `before` 插槽，用于放置一个控件 | -                    | `2.0.0`  |
 | after-action  | 后置按钮插槽，优先于 `after` 插槽，用于放置一个控件  | -                    | `2.0.0`  |
 | count         | 字数统计内容插槽                                     | `{ value: string }`  | `2.0.12` |
-| password      | 查看密码明文按钮的插槽，一般为单个图标               | `{ plain: boolean }` | `2.0.21` |
+| password      | 查看密码明文按钮的插槽，一般为单个图标               | `{ plain: boolean }` | `2.1.0`  |

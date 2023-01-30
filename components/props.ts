@@ -33,6 +33,9 @@ import type { FormSubmitCProps } from './form-submit'
 import type { GridCProps } from './grid'
 import type { HighlightCProps } from './highlight'
 import type { IconCProps } from './icon'
+import type { ImageCProps } from './image'
+import type { ImageGroupCProps } from './image-group'
+import type { ImageViewerCProps } from './image-viewer'
 import type { InputCProps } from './input'
 import type { LayoutCProps } from './layout'
 import type { LayoutAsideCProps } from './layout-aside'
@@ -136,6 +139,9 @@ export interface PropsOptions {
   grid?: GridCProps,
   highlight?: HighlightCProps,
   icon?: IconCProps,
+  image?: ImageCProps,
+  imageGroup?: ImageGroupCProps,
+  imageViewer?: ImageViewerCProps,
   input?: InputCProps,
   layout?: LayoutCProps,
   layoutAside?: LayoutAsideCProps,

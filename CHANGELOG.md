@@ -1,3 +1,35 @@
+# [2.1.0](https://github.com/vexip-ui/vexip-ui/compare/v2.0.20...v2.1.0) (2023-01-30)
+
+### Bug Fixes
+
+- **confirm:** fallback to create app when without mounted app ([064cc52](https://github.com/vexip-ui/vexip-ui/commit/064cc525d3aa0158b856655fed8119d9fb31ca7e))
+- **contextmenu:** should have default z-index ([debaa3d](https://github.com/vexip-ui/vexip-ui/commit/debaa3d7107b38355207759dc8840a0ca5169c6e))
+- **form:** icon and loading slots for submit and reset not effective ([260001c](https://github.com/vexip-ui/vexip-ui/commit/260001cb7d32402e835a1b1a5c2336816af9de90))
+- **form:** submit loading cannot follow form loading ([6bfcc69](https://github.com/vexip-ui/vexip-ui/commit/6bfcc6950f7f294ca932e7e959d0b636022988c5))
+- **input:** plain-password button cannot click when clearable ([ac33af5](https://github.com/vexip-ui/vexip-ui/commit/ac33af5d5dad5e9252acb8878cfdbc5dfdf24462)), closes [#229](https://github.com/vexip-ui/vexip-ui/issues/229)
+- **layout:** media query not correct when set to xs ([53c0150](https://github.com/vexip-ui/vexip-ui/commit/53c0150ccaa4982b2cc53b7919480604e787c8ed))
+- **menu:** menu item icon slot not effective ([9c20725](https://github.com/vexip-ui/vexip-ui/commit/9c2072517a1cffa4beb6e311b9a295e5ad5c063a))
+- **select:** cannot reset selected when passing empty value ([c46805a](https://github.com/vexip-ui/vexip-ui/commit/c46805a4fbba76d4b0de9c2bb9d54e4df00016b7))
+- **toast:** fallback to create app when without mounted app ([c6330a9](https://github.com/vexip-ui/vexip-ui/commit/c6330a90593d12af8311b09b27b6aeae6b5226cb))
+- **utils:** using pointerdown event for touch action ([e03462f](https://github.com/vexip-ui/vexip-ui/commit/e03462fa2eabbfc247cfc206a6a26fc4d33169ab))
+
+### Features
+
+- **full-screen:** add FullScreen component ([#212](https://github.com/vexip-ui/vexip-ui/issues/212)) ([46ebb3e](https://github.com/vexip-ui/vexip-ui/commit/46ebb3edc69eacfa8147bb2a26b27162cc1473a8))
+- **icons:** upgrade to font-awesome@6.2.1 ([a9e5950](https://github.com/vexip-ui/vexip-ui/commit/a9e59501d0a145c28814f96f9fbfb717130105b1))
+- **Image:** add Image component ([#225](https://github.com/vexip-ui/vexip-ui/issues/225)) ([e26a75e](https://github.com/vexip-ui/vexip-ui/commit/e26a75eb4c714ae6e49193724b4f20f2bb7a5d38))
+- **input:** add plain password button slot ([e74cee3](https://github.com/vexip-ui/vexip-ui/commit/e74cee38f19a27c85b1fc3c5cf360946ea499a80))
+- **layout:** emitted toggle-theme event ([e89f6c2](https://github.com/vexip-ui/vexip-ui/commit/e89f6c2d10d747b175f48e0087520cb97bfb0446)), closes [#242](https://github.com/vexip-ui/vexip-ui/issues/242)
+- **native-scroll:** add scroll-attrs prop ([68c4490](https://github.com/vexip-ui/vexip-ui/commit/68c4490c83839a067ad3b3868052c245dceda2b9))
+- **Result:** add Result component ([#238](https://github.com/vexip-ui/vexip-ui/issues/238)) ([0812183](https://github.com/vexip-ui/vexip-ui/commit/0812183fc0d4b5f716b9b03498aa0891b9cd6353))
+- **scroll:** add scroll-attrs prop ([d10d24e](https://github.com/vexip-ui/vexip-ui/commit/d10d24e55707328c09c39820eacf7a802fa3f132))
+- **scroll:** add scroll-style prop ([3a3d1b3](https://github.com/vexip-ui/vexip-ui/commit/3a3d1b32dea5377d1de705d82e58e18f6942bcfd))
+- **scroll:** support custom scroll wrapper tag (include NativeScroll) ([1182e21](https://github.com/vexip-ui/vexip-ui/commit/1182e218cb2dae13518f2c283ec981fb20db42f9))
+- **select:** add max-tag-count, no-rest-tip and tag-type props ([#224](https://github.com/vexip-ui/vexip-ui/issues/224)) ([bdc7517](https://github.com/vexip-ui/vexip-ui/commit/bdc751789ebee18353900bcab1436d7d352739b0))
+- support specify locale config via `locale` prop ([#239](https://github.com/vexip-ui/vexip-ui/issues/239)) ([e483dea](https://github.com/vexip-ui/vexip-ui/commit/e483deab8f58b0859ea310020973f990d83a720a))
+- **tab-nav:** support scroll when items size large than wrapper ([#234](https://github.com/vexip-ui/vexip-ui/issues/234)) ([066a985](https://github.com/vexip-ui/vexip-ui/commit/066a985d9bc976bf06a01fcc69c7e0411b0af86b))
+- **tag:** support add extra content ([#222](https://github.com/vexip-ui/vexip-ui/issues/222)) ([9fb911c](https://github.com/vexip-ui/vexip-ui/commit/9fb911cdc5624b8f9f83e6ba95b3c2567f44e871))
+
 ## [2.0.20](https://github.com/vexip-ui/vexip-ui/compare/v2.0.19...v2.0.20) (2023-01-10)
 
 ### Bug Fixes
