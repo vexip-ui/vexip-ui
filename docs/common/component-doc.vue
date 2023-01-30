@@ -100,7 +100,7 @@ const route = useRoute()
 const prefix = 'component-doc'
 const article = ref<InstanceType<typeof Article>>()
 
-const refreshScroll = inject<() => void>('refreshScroll', noop)
+const refreshScroll = inject<(animate?: boolean) => void>('refreshScroll', noop)
 const scrollToElement = inject<(el: Element) => void>('scrollToElement', noop)
 
 const desc = ref<Record<string, any> | null>(null)
@@ -120,7 +120,7 @@ watch(allLoaded, value => value && refresh())
 
 function refresh() {
   requestAnimationFrame(() => {
-    refreshScroll?.()
+    refreshScroll?.(false)
     article.value?.refreshAnchor()
 
     try {

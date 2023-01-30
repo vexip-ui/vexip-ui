@@ -27,7 +27,7 @@ const props = defineProps({
 const prefix = 'guide-doc'
 const article = ref<InstanceType<typeof Article>>()
 
-const refreshScroll = inject<() => void>('refreshScroll', noop)
+const refreshScroll = inject<(animate?: boolean) => void>('refreshScroll', noop)
 
 const desc = ref<Record<string, any> | null>(null)
 const descLoaded = ref(false)
@@ -36,7 +36,7 @@ watch(descLoaded, value => value && refresh())
 
 function refresh() {
   requestAnimationFrame(() => {
-    refreshScroll?.()
+    refreshScroll?.(false)
     article.value?.refreshAnchor()
   })
 }

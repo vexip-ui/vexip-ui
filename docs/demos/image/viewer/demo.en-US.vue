@@ -1,10 +1,10 @@
 <template>
-  <Image src="/picture-1.jpg" width="300" @preview="handlePreview"></Image>
+  <Image src="https://www.vexipui.com/picture-1.jpg" width="300" @preview="handlePreview"></Image>
   <br />
   <br />
   <ImageGroup show-all @preview="handlePreview">
-    <Image src="/picture-3.jpg" width="300"></Image>
-    <Image src="/picture-4.jpg" width="300"></Image>
+    <Image src="https://www.vexipui.com/picture-3.jpg" width="300"></Image>
+    <Image src="https://www.vexipui.com/picture-4.jpg" width="300"></Image>
   </ImageGroup>
   <ImageViewer
     v-model:active="viewerActive"

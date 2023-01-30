@@ -2,7 +2,7 @@
   <Space vertical>
     <Image
       src="error"
-      fallback-src="/picture-2.jpg"
+      fallback-src="https://www.vexipui.com/picture-2.jpg"
       width="300"
       height="180"
     ></Image>

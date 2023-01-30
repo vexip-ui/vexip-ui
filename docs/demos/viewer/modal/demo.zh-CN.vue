@@ -4,7 +4,7 @@
   </Button>
   <Modal v-model:active="active" title="查看" no-footer>
     <Viewer>
-      <img src="/picture-1.jpg" />
+      <img src="https://www.vexipui.com/picture-1.jpg" />
     </Viewer>
   </Modal>
 </template>

@@ -29,10 +29,10 @@ import { reactive } from 'vue'
 
 const loaded = reactive(new Set())
 const images = [
-  '/picture-1.jpg',
-  '/picture-2.jpg',
-  '/picture-3.jpg',
-  '/picture-4.jpg',
-  '/picture-5.jpg'
+  'https://www.vexipui.com/picture-1.jpg',
+  'https://www.vexipui.com/picture-2.jpg',
+  'https://www.vexipui.com/picture-3.jpg',
+  'https://www.vexipui.com/picture-4.jpg',
+  'https://www.vexipui.com/picture-5.jpg'
 ]
 </script>

@@ -25,13 +25,13 @@
       Title
     </div>
     <br />
-    <Avatar src="/qmhc.jpg" size="large" circle></Avatar>
+    <Avatar src="https://www.vexipui.com/qmhc.jpg" size="large" circle></Avatar>
     <div>Some content</div>
     <div>Some content</div>
     <div>Some content</div>
     <div>Some content</div>
     <br />
-    <img src="/qmhc.jpg" width="64" height="64" />
+    <img src="https://www.vexipui.com/qmhc.jpg" width="64" height="64" />
   </template>
 </template>
 

@@ -5,7 +5,7 @@
         {{ fit }}
       </p>
       <Image
-        src="/picture-1.jpg"
+        src="https://www.vexipui.com/picture-1.jpg"
         width="100"
         height="100"
         :fit="fit"

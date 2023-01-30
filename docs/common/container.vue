@@ -58,7 +58,7 @@ watch(
 )
 
 onMounted(() => {
-  requestAnimationFrame(setScrollY)
+  requestAnimationFrame(() => setScrollY())
 })
 
 function handleScroll({ clientY }: { clientY: number }) {
@@ -69,7 +69,7 @@ function handleScroll({ clientY }: { clientY: number }) {
 provide('refreshScroll', refreshScroll)
 provide('scrollToElement', scrollToElement)
 
-function refreshScroll() {
+function refreshScroll(animate = true) {
   requestAnimationFrame(() => {
     if (!scroll.value) return
 
@@ -77,14 +77,14 @@ function refreshScroll() {
 
     if (!refreshed) {
       refreshed = true
-      nextFrameOnce(setScrollY)
+      nextFrameOnce(() => setScrollY(animate))
     }
   })
 }
 
-function setScrollY() {
+function setScrollY(animate = true) {
   if (scroll.value) {
-    scroll.value.scrollTo(0, store.affixed ? 65 : 0)
+    scroll.value.scrollTo(0, store.affixed ? 65 : 0, animate ? undefined : 0)
     store.scrollY = store.affixed ? 65 : 0
   }
 }

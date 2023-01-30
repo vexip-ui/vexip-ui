@@ -1,7 +1,10 @@
 <template>
   <Result>
     <template #icon>
-      <img style="width: 300px; height: 180px; object-fit: cover;" src="/picture-1.jpg" />
+      <img
+        style="width: 300px; height: 180px; object-fit: cover;"
+        src="https://www.vexipui.com/picture-1.jpg"
+      />
     </template>
     <template #title>
       <h3>😂😂😂😂</h3>

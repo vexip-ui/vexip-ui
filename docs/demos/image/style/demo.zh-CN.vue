@@ -1,6 +1,6 @@
 <template>
   <Image
-    src="/picture-1.jpg"
+    src="https://www.vexipui.com/picture-1.jpg"
     width="300"
     height="200"
     :radius="8"

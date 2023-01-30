@@ -72,7 +72,8 @@ const store = inject<Store>('store')!
 const prefix = 'components'
 
 const version = __VERSION__
-const versionUnits = version.split('.').slice(2)
+const versionUnits = version.split('.').slice(0, 2)
+console.log(version, versionUnits)
 
 const componentGroups = getComponentConfig()
 const currentMenu = ref('')

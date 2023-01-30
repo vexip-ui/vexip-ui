@@ -240,9 +240,18 @@ function editOnPlayground() {
   &__description {
     padding: 0 14px 14px;
 
-    .markdown p {
-      padding: 0 14px;
-      margin-bottom: 6px;
+    .markdown {
+      p {
+        padding: 0 14px;
+        margin-bottom: 6px;
+      }
+
+      blockquote {
+        p {
+          padding: 0;
+          margin: 0;
+        }
+      }
     }
 
     .anchor {

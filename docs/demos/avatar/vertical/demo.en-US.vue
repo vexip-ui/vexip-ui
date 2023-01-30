@@ -18,7 +18,7 @@
 import { User } from '@vexip-ui/icons'
 
 const options = [
-  { src: '/qmhc.jpg' },
+  { src: 'https://www.vexipui.com/qmhc.jpg' },
   { icon: User },
   { text: 'Qmhc' },
   { text: 'Tom' },
