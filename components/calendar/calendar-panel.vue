@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef, computed, watch } from 'vue'
+import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
 import { useHover } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import {
@@ -168,6 +168,7 @@ export default defineComponent({
     }
 
     function parseValue(value: Dateable | Dateable[]) {
+      debugger
       if (!Array.isArray(value)) {
         value = [value, value]
       }
@@ -196,7 +197,7 @@ export default defineComponent({
       )
     }
 
-    function disabledDate(date: Date) {
+    function isDisabled(date: Date) {
       if (typeof props.disabledDate === 'function') {
         if (props.disabledDate(date)) {
           return true
@@ -218,29 +219,29 @@ export default defineComponent({
       return false
     }
 
-    function isDisabled(date: Date) {
-      if (!props.isRange) {
-        return disabledDate(date)
-      }
+    // function isDisabled(date: Date) {
+    //   if (!props.isRange) {
+    //     return disabledDate(date)
+    //   }
 
-      if (
-        props.valueType === 'end' &&
-        startValue.value &&
-        differenceDays(startValue.value, date) < 0
-      ) {
-        return true
-      }
+    //   if (
+    //     props.valueType === 'end' &&
+    //     startValue.value &&
+    //     differenceDays(startValue.value, date) < 0
+    //   ) {
+    //     return true
+    //   }
 
-      if (
-        props.valueType === 'start' &&
-        endValue.value &&
-        differenceDays(date, endValue.value) < 0
-      ) {
-        return true
-      }
+    //   if (
+    //     props.valueType === 'start' &&
+    //     endValue.value &&
+    //     differenceDays(date, endValue.value) < 0
+    //   ) {
+    //     return true
+    //   }
 
-      return disabledDate(date)
-    }
+    //   return disabledDate(date)
+    // }
 
     function isHovered(date: Date) {
       if (!date || !hoveredDate.value) {
@@ -270,17 +271,50 @@ export default defineComponent({
       return differenceDays(date, props.today) === 0
     }
 
-    function handleClick(date: Date) {
-      if (!isDisabled(date)) {
-        if (props.valueType) {
-          startValue.value = date
-        } else {
-          endValue.value = date
-        }
+    // let firstSelected: Date | null = null
 
-        emitEvent(props.onSelect, date)
-        emit('update:value', date)
+    function handleClick(date: Date) {
+      debugger
+      if (isDisabled(date)) {
+        return
       }
+
+      // date = new Date(date)
+
+      // if (!props.isRange) {
+      //   startValue.value = new Date(date)
+      //   endValue.value = new Date(date)
+
+      //   emitEvent(props.onSelect, date)
+      //   emit('update:value', date)
+
+      //   return
+      // }
+
+      // if (firstSelected) {
+      //   if (firstSelected.getTime() > date.getTime()) {
+      //     startValue.value = new Date(date)
+      //     endValue.value = firstSelected
+      //   } else {
+      //     startValue.value = firstSelected
+      //     endValue.value = new Date(date)
+      //   }
+
+      //   firstSelected = null
+      // } else {
+      //   firstSelected = new Date(date)
+      //   startValue.value = new Date(date)
+      //   endValue.value = new Date(date)
+      // }
+
+      if (props.valueType === 'start') {
+        startValue.value = date
+      } else {
+        endValue.value = date
+      }
+
+      emitEvent(props.onSelect, date)
+      emit('update:value', date)
     }
 
     function handleHover(date: Date) {
@@ -295,7 +329,7 @@ export default defineComponent({
       let min: number
       let max: number
 
-      if (!hoveredDate.value && startValue.value && endValue.value) {
+      if (startValue.value && endValue.value) {
         const startTime = startValue.value.getTime()
         const endTime = endValue.value.getTime()
 

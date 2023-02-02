@@ -55,6 +55,7 @@ export const datePickerProps = buildProps({
   max: [Number, String, Date] as PropType<Dateable>,
   outsideClose: booleanProp,
   outsideCancel: booleanProp,
+  unlinkPanel: booleanProp,
   onInput: eventProp<(type: DateTimeType, value: number) => void>(),
   onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
   onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
@@ -66,7 +67,7 @@ export const datePickerProps = buildProps({
   onToggle: eventProp<(visible: boolean) => void>(),
   onFocus: eventProp(),
   onBlur: eventProp(),
-  onChangeCol: eventProp<(type: DateTimeType, inputType: 'start' | 'end') => void>(),
+  onChangeCol: eventProp<(type: DateTimeType | null, inputType: 'start' | 'end') => void>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp()
 })

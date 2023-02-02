@@ -88,7 +88,7 @@ export function handleKeyEnter(event: KeyboardEvent) {
 
 export function useColumn<T extends string>(
   colTypes: T[],
-  currentColumn = ref(colTypes[0]) as Ref<T>
+  currentColumn = ref(colTypes[0]) as Ref<T | undefined>
 ) {
   const columnTypes = Array.from(colTypes)
   const columnCount = columnTypes.length
@@ -100,7 +100,7 @@ export function useColumn<T extends string>(
   ) as Record<T, boolean>
 
   function findEnabledColumn(types: T[]) {
-    currentColumn.value = types.find(type => enabled[type]) ?? currentColumn.value
+    currentColumn.value = types.find(type => enabled[type])
   }
 
   function resetColumn(type?: T, reverse = false) {

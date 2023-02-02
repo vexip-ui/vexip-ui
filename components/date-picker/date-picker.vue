@@ -45,6 +45,7 @@
           @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
           @next-unit="enterColumn('next')"
+          @blur="startState.column = undefined"
         ></DateControl>
         <template v-if="props.isRange">
           <div :class="nh.be('exchange')">
@@ -78,6 +79,7 @@
             @unit-focus="handleEndInput"
             @prev-unit="enterColumn('prev')"
             @next-unit="enterColumn('next')"
+            @blur="endState.column = undefined"
           ></DateControl>
         </template>
       </div>
@@ -107,7 +109,7 @@
       </transition>
     </div>
     <Portal :to="transferTo">
-      <transition :name="props.transitionName" @after-leave="handlePaneHide">
+      <transition :name="props.transitionName" @after-leave="handlePanelHide">
         <div
           v-if="currentVisible"
           ref="popper"
@@ -123,7 +125,6 @@
           <DatePanel
             ref="panel"
             :type="props.type"
-            :column="(currentState === 'start' ? startState : endState).column"
             :start-value="startState.dateValue"
             :end-value="endState.dateValue"
             :start-activated="startState.activated"
@@ -141,11 +142,14 @@
             :disabled-date="isDateDisabled"
             :disabled-time="isTimeDisabled"
             :has-error="startError || endError"
+            :selecting-type="hoveredLarge ? 'end' : 'start'"
             @shortcut="handleShortcut"
             @change="handlePanelChange"
             @toggle-col="handleInputFocus"
             @cancel="handleCancel"
             @confirm="handlePanelConfirm"
+            @hover="handleDateHover"
+            @time-change="handleTimeChange"
           ></DatePanel>
         </div>
       </transition>
@@ -191,9 +195,6 @@ import { datePickerTypes } from './symbol'
 
 import type { Dateable } from '@vexip-ui/utils'
 import type { TimeType, DateTimeType } from './symbol'
-
-// const defaultMin = [1900, 1, 1]
-// const defaultMax = [2399, 12, 31]
 
 const invalidDate = new Date('')
 
@@ -279,7 +280,8 @@ export default defineComponent({
       min: null,
       max: null,
       outsideClose: true,
-      outsideCancel: false
+      outsideCancel: false,
+      unlinkPanel: false
     })
 
     const placement = toRef(props, 'placement')
@@ -290,6 +292,8 @@ export default defineComponent({
     const endState = createDateState()
     const currentState = ref<'start' | 'end'>('start')
     const lastValue = ref('')
+    const firstSelected = ref<number[] | undefined>()
+    const hoveredDate = ref(new Date())
 
     const { timer } = useSetTimeout()
 
@@ -348,6 +352,15 @@ export default defineComponent({
       })
 
       return props.isRange ? values : values[0]
+    })
+    const hoveredLarge = computed(() => {
+      if (!firstSelected.value) return false
+
+      const [year, month, date] = firstSelected.value
+      const firstTime = new Date(`${year}-${month}-${date}`).getTime()
+      const hoverTime = hoveredDate.value.getTime()
+
+      return firstTime < hoverTime
     })
     const startActivated = computed(() => {
       const activated = startState.activated
@@ -513,13 +526,10 @@ export default defineComponent({
       )
     })
 
-    startState.enabled.year = true
-    endState.enabled.year = true
-
-    nextTick(() => {
-      startState.resetColumn('date')
-      endState.resetColumn('date')
-    })
+    // nextTick(() => {
+    //   startState.resetColumn('date')
+    //   endState.resetColumn('date')
+    // })
 
     watch(() => props.type, parseFormat)
     watch(
@@ -539,6 +549,8 @@ export default defineComponent({
         const hasMonth = value !== 'year'
         const hasDate = hasMonth && value !== 'month'
 
+        startState.enabled.year = true
+        endState.enabled.year = true
         startState.enabled.month = hasMonth
         endState.enabled.month = hasMonth
         startState.enabled.date = hasDate
@@ -570,14 +582,14 @@ export default defineComponent({
     })
     watch(currentState, value => {
       if (currentVisible.value) {
-        emitEvent(props.onChangeCol, getCurrentState().column, value)
+        emitEvent(props.onChangeCol, getCurrentState().column || null, value)
       }
     })
     watch(
       () => startState.column,
       value => {
         if (currentVisible.value && currentState.value === 'start') {
-          emitEvent(props.onChangeCol, value, 'start')
+          emitEvent(props.onChangeCol, value || null, 'start')
         }
       }
     )
@@ -585,7 +597,7 @@ export default defineComponent({
       () => endState.column,
       value => {
         if (currentVisible.value && currentState.value === 'end') {
-          emitEvent(props.onChangeCol, value, 'end')
+          emitEvent(props.onChangeCol, value || null, 'end')
         }
       }
     )
@@ -643,6 +655,9 @@ export default defineComponent({
         second: noFiller
       })
 
+      let valueRecord = { ...dateValue }
+      let activatedRecord = { ...activated }
+
       return reactive({
         column: currentColumn,
         enabled,
@@ -650,13 +665,16 @@ export default defineComponent({
         dateValue,
         resetColumn,
         enterColumn,
-        setDate: (date: Date) => {
+        setDate: (date: Date, withTime = true) => {
           dateValue.year = date.getFullYear()
           dateValue.month = date.getMonth() + 1
           dateValue.date = date.getDate()
-          dateValue.hour = date.getHours()
-          dateValue.minute = date.getMinutes()
-          dateValue.second = date.getSeconds()
+
+          if (withTime) {
+            dateValue.hour = date.getHours()
+            dateValue.minute = date.getMinutes()
+            dateValue.second = date.getSeconds()
+          }
         },
         getDate: () => {
           return new Date(
@@ -667,6 +685,14 @@ export default defineComponent({
             dateValue.minute,
             dateValue.second
           )
+        },
+        record() {
+          valueRecord = { ...dateValue }
+          activatedRecord = { ...activated }
+        },
+        restore() {
+          Object.assign(dateValue, valueRecord)
+          Object.assign(activated, activatedRecord)
         }
       })
     }
@@ -914,28 +940,32 @@ export default defineComponent({
       if (props.disabled || (props.loading && props.loadingLock)) return
 
       const target = event.target as Node
-      const lastVisible = currentVisible.value
+      // const lastVisible = currentVisible.value
+
       currentVisible.value = true
 
       handleFocused()
 
-      if (!lastVisible && wrapper.value && target) {
+      if (wrapper.value && target) {
         const units = Array.from(wrapper.value.querySelectorAll(`.${nh.be('unit')}`))
 
         if (!units.some(unit => unit === target || unit.contains(target))) {
-          emitEvent(props.onChangeCol, getCurrentState().column, currentState.value)
+          startState.column = undefined
+          endState.column = undefined
+          // emitEvent(props.onChangeCol, getCurrentState().column, currentState.value)
         }
       }
     }
 
     function handleInput(value: number) {
       const state = getCurrentState()
+      const type = state.column
 
-      handleInputNumber(state.column, value)
+      if (!type) return
 
-      if (
-        state.column === 'year' ? state.dateValue.year >= 1000 : state.dateValue[state.column] >= 10
-      ) {
+      handleInputNumber(type, value)
+
+      if (type === 'year' ? state.dateValue.year >= 1000 : state.dateValue[type] >= 10) {
         state.enterColumn('next', false)
       }
     }
@@ -977,7 +1007,7 @@ export default defineComponent({
       activated[type] = true
     }
 
-    function handleInputFocus(type: TimeType) {
+    function handleInputFocus(type: DateTimeType) {
       getCurrentState().column = type
     }
 
@@ -990,6 +1020,8 @@ export default defineComponent({
       const sign = isPlus ? 1 : -1
       const state = getCurrentState()
       const type = state.column
+
+      if (!type) return
 
       if (state.enabled[type]) {
         if (isTimeType(type)) {
@@ -1011,7 +1043,7 @@ export default defineComponent({
 
         verifyValue(type)
         emitEvent(props[isPlus ? 'onPlus' : 'onMinus'], type, state.dateValue[type])
-        datePanel.value?.refreshCalendar()
+        datePanel.value?.refreshCalendar(currentState.value)
       }
     }
 
@@ -1091,14 +1123,87 @@ export default defineComponent({
       return props.ctrlSteps[type === 'hour' ? 0 : type === 'minute' ? 1 : 2] || 1
     }
 
-    function handlePanelChange(type: DateTimeType, value: number) {
-      getCurrentState().dateValue[type] = value
-      updateDateActivated(type)
-      verifyRangeValue()
+    function handleDateHover(hoverDate: Date | null) {
+      if (props.isRange && hoverDate) {
+        hoveredDate.value = hoverDate
+
+        if (firstSelected.value) {
+          const hoverValues = [
+            hoverDate.getFullYear(),
+            hoverDate.getMonth() + 1,
+            hoverDate.getDate()
+          ]
+          const start = hoveredLarge.value ? firstSelected.value : hoverValues
+          const end = hoveredLarge.value ? hoverValues : firstSelected.value
+
+          let types: DateTimeType[]
+
+          if (props.type === 'year') {
+            types = ['year']
+          } else if (props.type === 'month') {
+            types = ['year', 'month']
+          } else {
+            types = ['year', 'month', 'date']
+          }
+
+          for (let i = 0, len = types.length; i < len; ++i) {
+            startState.dateValue[types[i]] = start[i]
+            endState.dateValue[types[i]] = end[i]
+          }
+        }
+      }
     }
 
-    function updateDateActivated(type: DateTimeType) {
-      const state = getCurrentState()
+    function handlePanelChange(values: number[]) {
+      let types: DateTimeType[]
+
+      if (props.type === 'year') {
+        types = ['year']
+      } else if (props.type === 'month') {
+        types = ['year', 'month']
+      } else {
+        types = ['year', 'month', 'date']
+      }
+
+      if (!firstSelected.value) {
+        firstSelected.value = values
+
+        for (let i = 0, len = types.length; i < len; ++i) {
+          startState.dateValue[types[i]] = values[i]
+          endState.dateValue[types[i]] = values[i]
+          updateDateActivated(types[i], 'start')
+          updateDateActivated(types[i], 'end')
+        }
+      } else {
+        const [year, month, date] = firstSelected.value
+        const firstTime = new Date(`${year}-${month}-${date}`).getTime()
+        const secondTime = new Date(`${values[0]}-${values[1]}-${values[2]}`).getTime()
+        const start = firstTime < secondTime ? firstSelected.value : values
+        const end = firstTime < secondTime ? values : firstSelected.value
+
+        for (let i = 0, len = types.length; i < len; ++i) {
+          startState.dateValue[types[i]] = start[i]
+          endState.dateValue[types[i]] = end[i]
+          updateDateActivated(types[i], 'start')
+          updateDateActivated(types[i], 'end')
+        }
+
+        verifyRangeValue()
+        firstSelected.value = undefined
+      }
+    }
+
+    function handleTimeChange(valueType: 'start' | 'end', type: TimeType, time: number) {
+      const state = valueType === 'start' ? startState : endState
+
+      state.dateValue[type] = time
+      updateDateActivated('hour', valueType)
+      updateDateActivated('minute', valueType)
+      updateDateActivated('second', valueType)
+    }
+
+    function updateDateActivated(type: DateTimeType, valueType?: 'start' | 'end') {
+      const state = valueType ? (valueType === 'start' ? startState : endState) : getCurrentState()
 
       if (type === 'month') {
         state.activated.year = true
@@ -1117,11 +1222,13 @@ export default defineComponent({
       const endDate = endState.getDate()
 
       if (startDate.getTime() > endDate.getTime()) {
-        if (currentState.value === 'start') {
-          startState.setDate(endDate)
-        } else {
-          endState.setDate(startDate)
-        }
+        startState.setDate(endDate)
+        endState.setDate(startDate)
+        // if (currentState.value === 'start') {
+        //   startState.setDate(endDate)
+        // } else {
+        //   endState.setDate(startDate)
+        // }
       }
     }
 
@@ -1148,21 +1255,21 @@ export default defineComponent({
       }
     }
 
-    function handleStartInput(type: TimeType) {
+    function handleStartInput(type: DateTimeType | null) {
       toggleCurrentState('start')
-      handleInputFocus(type)
+      type && handleInputFocus(type)
 
       nextTick(() => {
-        datePanel.value?.refreshCalendar()
+        datePanel.value?.refreshCalendar('start')
       })
     }
 
-    function handleEndInput(type: TimeType) {
+    function handleEndInput(type: DateTimeType) {
       toggleCurrentState('end')
       handleInputFocus(type)
 
       nextTick(() => {
-        datePanel.value?.refreshCalendar()
+        datePanel.value?.refreshCalendar('end')
       })
     }
 
@@ -1182,8 +1289,8 @@ export default defineComponent({
       }
     }
 
-    function handlePaneHide() {
-      datePanel.value?.refreshCalendar()
+    function handlePanelHide() {
+      datePanel.value?.refreshCalendar(currentState.value)
     }
 
     function handleClickOutside() {
@@ -1198,8 +1305,6 @@ export default defineComponent({
 
     return {
       CalendarR,
-      startMinTime,
-      startMaxTime,
 
       props,
       nh,
@@ -1210,8 +1315,8 @@ export default defineComponent({
       isHover,
       startState,
       endState,
-      lastValue,
       currentState,
+      hoveredLarge,
 
       className,
       selectorClass,
@@ -1221,6 +1326,8 @@ export default defineComponent({
       showClear,
       startError,
       endError,
+      startMinTime,
+      startMaxTime,
 
       wrapper,
       reference,
@@ -1241,14 +1348,16 @@ export default defineComponent({
       handleCancel,
       handleClear,
       handleShortcut,
+      handleDateHover,
       handlePanelChange,
+      handleTimeChange,
       finishInput,
       toggleCurrentState,
       enterColumn,
       handleStartInput,
       handleEndInput,
       handlePanelConfirm,
-      handlePaneHide,
+      handlePanelHide,
 
       focus: handleFocused,
       blur: handleBlur,
