@@ -32,7 +32,7 @@
             :is-next="isNextMonth(dateRange[(row - 1) * 7 + cell - 1])"
             :is-today="isToday(dateRange[(row - 1) * 7 + cell - 1])"
             :disabled="isDisabled(dateRange[(row - 1) * 7 + cell - 1])"
-            :in-range="props.isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
+            :in-range="usingRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
           >
             <div
               :class="{
@@ -43,7 +43,7 @@
                 [nh.bem('index', 'today')]: isToday(dateRange[(row - 1) * 7 + cell - 1]),
                 [nh.bem('index', 'disabled')]: isDisabled(dateRange[(row - 1) * 7 + cell - 1]),
                 [nh.bem('index', 'in-range')]:
-                  props.isRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])
+                  usingRange && isInRange(dateRange[(row - 1) * 7 + cell - 1])
               }"
               tabindex="0"
               @click="handleClick(dateRange[(row - 1) * 7 + cell - 1])"
@@ -73,7 +73,8 @@ import {
   startOfWeek,
   rangeDate,
   differenceDays,
-  debounceMinor
+  debounceMinor,
+  warnOnce
 } from '@vexip-ui/utils'
 import { calendarPanelProps } from './props'
 
@@ -118,7 +119,8 @@ export default defineComponent({
         validator: value => value === 'start' || value === 'end'
       },
       min: null,
-      max: null
+      max: null,
+      range: null
     })
 
     const startValue = ref<Date | null>(null)
@@ -137,6 +139,14 @@ export default defineComponent({
       }
 
       return min.value > max.value
+    })
+    const usingRange = computed(() => {
+      warnOnce(
+        "[vexip-ui:CalendarPanel] 'is-range' prop has been deprecated, please " +
+          "use 'range' prop to replace it"
+      )
+
+      return props.range ?? props.isRange
     })
 
     const updateDateRange = debounceMinor(setDateRange)
@@ -168,7 +178,6 @@ export default defineComponent({
     }
 
     function parseValue(value: Dateable | Dateable[]) {
-      debugger
       if (!Array.isArray(value)) {
         value = [value, value]
       }
@@ -182,7 +191,7 @@ export default defineComponent({
           endValue.value = Number.isNaN(+date) ? null : date
         }
 
-        if (!props.isRange) break
+        if (!usingRange.value) break
       }
     }
 
@@ -219,30 +228,6 @@ export default defineComponent({
       return false
     }
 
-    // function isDisabled(date: Date) {
-    //   if (!props.isRange) {
-    //     return disabledDate(date)
-    //   }
-
-    //   if (
-    //     props.valueType === 'end' &&
-    //     startValue.value &&
-    //     differenceDays(startValue.value, date) < 0
-    //   ) {
-    //     return true
-    //   }
-
-    //   if (
-    //     props.valueType === 'start' &&
-    //     endValue.value &&
-    //     differenceDays(date, endValue.value) < 0
-    //   ) {
-    //     return true
-    //   }
-
-    //   return disabledDate(date)
-    // }
-
     function isHovered(date: Date) {
       if (!date || !hoveredDate.value) {
         return false
@@ -271,41 +256,10 @@ export default defineComponent({
       return differenceDays(date, props.today) === 0
     }
 
-    // let firstSelected: Date | null = null
-
     function handleClick(date: Date) {
-      debugger
       if (isDisabled(date)) {
         return
       }
-
-      // date = new Date(date)
-
-      // if (!props.isRange) {
-      //   startValue.value = new Date(date)
-      //   endValue.value = new Date(date)
-
-      //   emitEvent(props.onSelect, date)
-      //   emit('update:value', date)
-
-      //   return
-      // }
-
-      // if (firstSelected) {
-      //   if (firstSelected.getTime() > date.getTime()) {
-      //     startValue.value = new Date(date)
-      //     endValue.value = firstSelected
-      //   } else {
-      //     startValue.value = firstSelected
-      //     endValue.value = new Date(date)
-      //   }
-
-      //   firstSelected = null
-      // } else {
-      //   firstSelected = new Date(date)
-      //   startValue.value = new Date(date)
-      //   endValue.value = new Date(date)
-      // }
 
       if (props.valueType === 'start') {
         startValue.value = date
@@ -368,6 +322,8 @@ export default defineComponent({
       endValue,
       dateRange,
       hoveredDate,
+
+      usingRange,
 
       body: wrapper,
 

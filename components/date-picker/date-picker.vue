@@ -34,9 +34,9 @@
           :date-separator="props.dateSeparator"
           :time-separator="props.timeSeparator"
           :filler="props.filler"
-          :no-filler="props.noFiller"
           :labels="props.labels"
           :has-error="startError"
+          :placeholder="startPlaceholder"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -47,7 +47,7 @@
           @next-unit="enterColumn('next')"
           @blur="startState.column = undefined"
         ></DateControl>
-        <template v-if="props.isRange">
+        <template v-if="usingRange">
           <div :class="nh.be('exchange')">
             <slot name="exchange">
               <Icon style="padding-top: 1px;">
@@ -68,9 +68,9 @@
             :date-separator="props.dateSeparator"
             :time-separator="props.timeSeparator"
             :filler="props.filler"
-            :no-filler="props.noFiller"
             :labels="props.labels"
             :has-error="endError"
+            :placeholder="endPlaceholder"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -109,7 +109,7 @@
       </transition>
     </div>
     <Portal :to="transferTo">
-      <transition :name="props.transitionName" @after-leave="handlePanelHide">
+      <transition :name="props.transitionName">
         <div
           v-if="currentVisible"
           ref="popper"
@@ -136,13 +136,14 @@
             :today="props.today"
             :no-action="props.noAction"
             :steps="props.steps"
-            :is-range="props.isRange"
+            :range="usingRange"
             :min="props.min"
             :max="props.max"
             :disabled-date="isDateDisabled"
             :disabled-time="isTimeDisabled"
             :has-error="startError || endError"
             :selecting-type="hoveredLarge ? 'end' : 'start'"
+            :locale="mergedLocale"
             @shortcut="handleShortcut"
             @change="handlePanelChange"
             @toggle-col="handleInputFocus"
@@ -176,7 +177,9 @@ import {
   useProps,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useLocale,
+  makeSentence
 } from '@vexip-ui/config'
 import {
   toFalse,
@@ -186,7 +189,8 @@ import {
   doubleDigits,
   boundRange,
   differenceDays,
-  startOfMonth
+  startOfMonth,
+  warnOnce
 } from '@vexip-ui/utils'
 import { CalendarR, CircleXmark, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { datePickerProps } from './props'
@@ -227,6 +231,7 @@ export default defineComponent({
     const props = useProps('datePicker', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       type: {
         default: 'date',
         validator: value => datePickerTypes.includes(value)
@@ -273,6 +278,7 @@ export default defineComponent({
         validator: value => !Number.isNaN(new Date(value))
       },
       isRange: false,
+      range: null,
       loading: () => loading.value,
       loadingIcon: Spinner,
       loadingLock: false,
@@ -281,8 +287,13 @@ export default defineComponent({
       max: null,
       outsideClose: true,
       outsideCancel: false,
-      unlinkPanel: false
+      placeholder: null
     })
+
+    warnOnce(
+      "[vexip-ui:DatePicker] 'on-filler' prop has been deprecated, please " +
+        "use 'placeholder' prop to replace it"
+    )
 
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
@@ -310,6 +321,41 @@ export default defineComponent({
     const endInput = ref<InstanceType<typeof DateControl>>()
     const datePanel = ref<InstanceType<typeof DatePanel>>()
 
+    const usingRange = computed(() => {
+      warnOnce(
+        "[vexip-ui:DatePicker] 'is-range' prop has been deprecated, please " +
+          "use 'range' prop to replace it"
+      )
+
+      return props.range ?? props.isRange
+    })
+    const mergedLocale = computed(() => {
+      return {
+        ...useLocale('calendar').value,
+        ...useLocale('datePicker').value,
+        ...(props.locale ?? {})
+      }
+    })
+    const startPlaceholder = computed(() => {
+      if (props.placeholder) {
+        return Array.isArray(props.placeholder) ? props.placeholder[0] : props.placeholder
+      }
+
+      const { select, start, [props.type]: type } = mergedLocale.value
+
+      return makeSentence(usingRange.value ? `${start} ${type}` : `${select} ${type}`)
+    })
+    const endPlaceholder = computed(() => {
+      if (props.placeholder) {
+        return Array.isArray(props.placeholder)
+          ? props.placeholder[1] || props.placeholder[0]
+          : props.placeholder
+      }
+
+      const { end, [props.type]: type } = mergedLocale.value
+
+      return makeSentence(`${end} ${type}`)
+    })
     const className = computed(() => {
       return [
         nh.b(),
@@ -325,7 +371,7 @@ export default defineComponent({
           [nh.bm('no-second')]: !startState.enabled.second,
           [nh.bm('visible')]: currentVisible.value,
           [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('is-range')]: props.isRange
+          [nh.bm('is-range')]: usingRange.value
         }
       ]
     })
@@ -351,7 +397,7 @@ export default defineComponent({
         return `${values.slice(0, 3).join('-')} ${values.slice(3).join(':')}`
       })
 
-      return props.isRange ? values : values[0]
+      return usingRange.value ? values : values[0]
     })
     const hoveredLarge = computed(() => {
       if (!firstSelected.value) return false
@@ -373,7 +419,12 @@ export default defineComponent({
       return activated.year && activated.month && activated.date
     })
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && isHover.value && !!lastValue.value
+      return (
+        !props.disabled &&
+        props.clearable &&
+        isHover.value &&
+        !!(Array.isArray(props.value) ? props.value[0] || props.value[1] : props.value)
+      )
     })
     const min = computed(() => {
       if (props.min) {
@@ -444,7 +495,7 @@ export default defineComponent({
     const endMinTime = computed(() => {
       if (
         props.type === 'datetime' &&
-        props.isRange &&
+        usingRange.value &&
         props.min &&
         !differenceDays(props.min, startState.getDate())
       ) {
@@ -456,7 +507,7 @@ export default defineComponent({
     const endMaxTime = computed(() => {
       if (
         props.type === 'datetime' &&
-        props.isRange &&
+        usingRange.value &&
         props.max &&
         !differenceDays(props.max, startState.getDate())
       ) {
@@ -466,7 +517,7 @@ export default defineComponent({
       return ''
     })
     const startReversed = computed(() => {
-      if (!props.isRange) return false
+      if (!usingRange.value) return false
 
       const startValue = startState.dateValue
       const endValue = endState.dateValue
@@ -512,7 +563,7 @@ export default defineComponent({
       )
     })
     const endError = computed(() => {
-      if (!props.isRange) return false
+      if (!usingRange.value) return false
 
       const { hour, minute, second } = endState.dateValue
       const { isTimeDisabled } = endTimeBound
@@ -526,23 +577,8 @@ export default defineComponent({
       )
     })
 
-    // nextTick(() => {
-    //   startState.resetColumn('date')
-    //   endState.resetColumn('date')
-    // })
-
     watch(() => props.type, parseFormat)
-    watch(
-      () => props.value,
-      value => {
-        parseValue(value)
-
-        if (!value) {
-          toggleActivated(false)
-        }
-      },
-      { immediate: true }
-    )
+    watch(() => props.value, parseValue, { immediate: true })
     watch(
       () => props.type,
       value => {
@@ -628,7 +664,7 @@ export default defineComponent({
     )
 
     function createDateState() {
-      const noFiller = props.noFiller
+      // const noFiller = props.noFiller
       const { currentColumn, enabled, resetColumn, enterColumn } = useColumn([
         'year',
         'month',
@@ -647,12 +683,12 @@ export default defineComponent({
         second: 0
       })
       const activated = reactive({
-        year: noFiller,
-        month: noFiller,
-        date: noFiller,
-        hour: noFiller,
-        minute: noFiller,
-        second: noFiller
+        year: false,
+        month: false,
+        date: false,
+        hour: false,
+        minute: false,
+        second: false
       })
 
       let valueRecord = { ...dateValue }
@@ -734,7 +770,7 @@ export default defineComponent({
       return date
     }
 
-    function parseValue(value: Dateable | Dateable[]) {
+    function parseValue<T extends Dateable | null>(value: T | T[]) {
       if (!Array.isArray(value)) {
         value = [value, value]
       }
@@ -744,8 +780,9 @@ export default defineComponent({
         const state = i === 0 ? startState : endState
 
         state.setDate(date)
+        toggleActivated(!!value[i], i === 0 ? 'start' : 'end')
 
-        if (!props.isRange) break
+        if (!usingRange.value) break
       }
     }
 
@@ -821,12 +858,13 @@ export default defineComponent({
     }
 
     function verifyDate() {
-      if (startError.value || (props.isRange && endError.value)) {
-        if (lastValue.value) {
-          parseValue(lastValue.value.split('|'))
-        } else {
-          parseValue(props.value)
-        }
+      if (startError.value || (usingRange.value && endError.value)) {
+        // if (lastValue.value) {
+        //   parseValue(lastValue.value.split('|'))
+        // } else {
+        //   parseValue(props.value)
+        // }
+        parseValue(props.value)
       }
     }
 
@@ -848,10 +886,10 @@ export default defineComponent({
             emitValues[i] = values[i]
           }
 
-          if (!props.isRange) break
+          if (!usingRange.value) break
         }
 
-        const emitValue = props.isRange ? emitValues : emitValues[0]
+        const emitValue = usingRange.value ? emitValues : emitValues[0]
 
         toggleActivated(true)
         setFieldValue(emitValue)
@@ -974,11 +1012,7 @@ export default defineComponent({
       const state = getCurrentState()
       const prev = state.dateValue[type]
 
-      if (
-        (props.noFiller || state.activated[type]) &&
-        prev > 0 &&
-        prev < (type === 'year' ? 1000 : 10)
-      ) {
+      if (state.activated[type] && prev > 0 && prev < (type === 'year' ? 1000 : 10)) {
         state.dateValue[type] = prev * 10 + number
       } else {
         state.dateValue[type] = number
@@ -1075,30 +1109,18 @@ export default defineComponent({
       emitEvent(props.onCancel)
     }
 
-    function resetValue() {
-      [startState, endState].forEach(state => {
-        state.dateValue.year = 1970
-        state.dateValue.month = 1
-        state.dateValue.date = 1
-        state.dateValue.hour = 0
-        state.dateValue.minute = 0
-        state.dateValue.second = 0
-      })
-
-      lastValue.value = ''
-    }
-
     function handleClear() {
       if (props.clearable) {
-        finishInput()
         nextTick(() => {
-          const emitValue = props.isRange ? ([] as string[] | number[]) : null
+          const emitValue = usingRange.value ? ([] as string[] | number[]) : null
 
-          resetValue()
+          parseValue(null)
+          finishInput(false)
           emitEvent(props.onChange, emitValue)
           emit('update:value', emitValue)
           emitEvent(props.onClear)
           clearField(emitValue!)
+          handleBlur()
 
           nextTick(() => {
             toggleActivated(false)
@@ -1124,7 +1146,7 @@ export default defineComponent({
     }
 
     function handleDateHover(hoverDate: Date | null) {
-      if (props.isRange && hoverDate) {
+      if (usingRange.value && hoverDate) {
         hoveredDate.value = hoverDate
 
         if (firstSelected.value) {
@@ -1216,7 +1238,7 @@ export default defineComponent({
     }
 
     function verifyRangeValue() {
-      if (!props.isRange) return
+      if (!usingRange.value) return
 
       const startDate = startState.getDate()
       const endDate = endState.getDate()
@@ -1224,11 +1246,6 @@ export default defineComponent({
       if (startDate.getTime() > endDate.getTime()) {
         startState.setDate(endDate)
         endState.setDate(startDate)
-        // if (currentState.value === 'start') {
-        //   startState.setDate(endDate)
-        // } else {
-        //   endState.setDate(startDate)
-        // }
       }
     }
 
@@ -1237,7 +1254,7 @@ export default defineComponent({
     }
 
     function enterColumn(type: 'prev' | 'next') {
-      if (props.isRange) {
+      if (usingRange.value) {
         const state = getCurrentState()
         const currentColumn = state.column
 
@@ -1274,7 +1291,7 @@ export default defineComponent({
     }
 
     function handlePanelConfirm() {
-      if (!props.isRange) {
+      if (!usingRange.value) {
         handleEnter()
       } else {
         if (currentState.value === 'start' && !endActivated.value) {
@@ -1287,10 +1304,6 @@ export default defineComponent({
           handleEnter()
         }
       }
-    }
-
-    function handlePanelHide() {
-      datePanel.value?.refreshCalendar(currentState.value)
     }
 
     function handleClickOutside() {
@@ -1318,6 +1331,10 @@ export default defineComponent({
       currentState,
       hoveredLarge,
 
+      usingRange,
+      mergedLocale,
+      startPlaceholder,
+      endPlaceholder,
       className,
       selectorClass,
       hasPrefix,
@@ -1357,7 +1374,6 @@ export default defineComponent({
       handleStartInput,
       handleEndInput,
       handlePanelConfirm,
-      handlePanelHide,
 
       focus: handleFocused,
       blur: handleBlur,

@@ -48,7 +48,14 @@ export interface LocaleConfig {
 
   datePicker: {
     confirm: string,
-    cancel: string
+    cancel: string,
+    year: string,
+    month: string,
+    date: string,
+    datetime: string,
+    start: string,
+    end: string,
+    select: string
   },
 
   drawer: {

@@ -28,10 +28,10 @@
             <div :class="nh.be('year-month')">
               <div key="year" :class="nh.be('year')" @click.stop="togglePane('year')">
                 <template v-if="currentPane === 'year'">
-                  {{ `${yearRange[0]}${mergedLocale.year} - ${yearRange[9]}${mergedLocale.year}` }}
+                  {{ `${yearRange[0]}${locale.year} - ${yearRange[9]}${locale.year}` }}
                 </template>
                 <template v-else>
-                  {{ `${calendarYear}${mergedLocale.year}` }}
+                  {{ `${calendarYear}${locale.year}` }}
                 </template>
               </div>
               <div
@@ -111,7 +111,7 @@
               :month="calendarMonth"
               :value-type="selectingType"
               :disabled-date="disabledDate"
-              :is-range="isRange"
+              :range="range"
               :min="min"
               :max="max"
               @select="handleSelectDate"
@@ -132,7 +132,7 @@
               @change="handleStartTimeChange"
             ></TimeWheel>
             <TimeWheel
-              v-if="isRange"
+              v-if="range"
               :hour="endValue.hour"
               :minute="endValue.minute"
               :second="endValue.second"
@@ -151,7 +151,7 @@
           size="small"
           @click="handleCancel"
         >
-          {{ cancelText || mergedLocale.cancel }}
+          {{ cancelText || locale.cancel }}
         </Button>
         <Button
           inherit
@@ -160,7 +160,7 @@
           :disabled="hasError"
           @click="handleConfirm"
         >
-          {{ confirmText || mergedLocale.confirm }}
+          {{ confirmText || locale.confirm }}
         </Button>
       </div>
     </div>
@@ -168,13 +168,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import TimeWheel from './time-wheel.vue'
 import { Button } from '@/components/button'
 import { CalendarPanel } from '@/components/calendar-panel'
 import { Icon } from '@/components/icon'
-import { useHover } from '@vexip-ui/hooks'
-import { useNameHelper, useLocale } from '@vexip-ui/config'
+import { useNameHelper } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
 import { AngleRight, AngleLeft, AnglesRight, AnglesLeft } from '@vexip-ui/icons'
 import { datePickerTypes } from './symbol'
@@ -206,9 +205,7 @@ export default defineComponent({
   props: {
     type: {
       default: 'date' as DatePickerType,
-      validator: (value: DatePickerType) => {
-        return datePickerTypes.includes(value)
-      }
+      validator: (value: DatePickerType) => datePickerTypes.includes(value)
     },
     enabled: {
       type: Object as PropType<Record<DateTimeType, boolean>>,
@@ -250,7 +247,7 @@ export default defineComponent({
       type: Array as PropType<number[]>,
       default: () => [1, 1, 1]
     },
-    isRange: {
+    range: {
       type: Boolean,
       default: false
     },
@@ -310,16 +307,6 @@ export default defineComponent({
     const hoveredMonth = ref(0) // 0 is no hover (falsy)
     const yearRange = ref<number[]>([])
 
-    const calendar = ref<HTMLElement>()
-
-    const mergedLocale = computed(() => {
-      return {
-        ...useLocale('calendar').value,
-        ...useLocale('datePicker').value,
-        ...(props.locale ?? {})
-      }
-    })
-
     const startActivated = computed(() => {
       const activated = props.startActivated
 
@@ -335,7 +322,7 @@ export default defineComponent({
       return props.type === 'datetime'
     })
     const calendarValue = computed(() => {
-      return props.isRange
+      return props.range
         ? startActivated.value || endActivated.value
           ? [getStringValue('start'), getStringValue('end')]
           : ['', '']
@@ -352,6 +339,10 @@ export default defineComponent({
       { immediate: true }
     )
 
+    onMounted(() => {
+      refreshCalendar('start')
+    })
+
     function getStringValue(type: 'start' | 'end') {
       const value = type === 'start' ? props.startValue : props.endValue
 
@@ -359,7 +350,7 @@ export default defineComponent({
     }
 
     function getMonthLabel(index: number) {
-      return mergedLocale.value[`month${index as MonthIndex}`]
+      return props.locale[`month${index as MonthIndex}`]
     }
 
     function togglePane(type: DateType) {
@@ -395,9 +386,6 @@ export default defineComponent({
     }
 
     function handleSelectDate(date: Date) {
-      // emitChange('year', date.getFullYear())
-      // emitChange('month', date.getMonth() + 1)
-      // emitChange('date', date.getDate())
       emitChange([date.getFullYear(), date.getMonth() + 1, date.getDate()])
     }
 
@@ -417,7 +405,6 @@ export default defineComponent({
       if (isDisabledMonth(month)) return
 
       calendarMonth.value = month
-      // emitChange('year', calendarYear.value)
 
       if (props.type !== 'month') {
         togglePane('date')
@@ -425,10 +412,6 @@ export default defineComponent({
         emitChange([calendarYear.value, month, 1])
       }
     }
-
-    // function toggleColumn(type: DateTimeType) {
-    //   emit('toggle-col', type)
-    // }
 
     function emitChange(values: number[]) {
       emit('change', values)
@@ -536,7 +519,7 @@ export default defineComponent({
 
     function isYearInRange(year: number) {
       if (
-        !props.isRange ||
+        !props.range ||
         (!hoveredYear.value && !props.startActivated.year && !props.endActivated.year)
       ) {
         return false
@@ -582,7 +565,7 @@ export default defineComponent({
 
     function isMonthInRange(month: number) {
       if (
-        !props.isRange ||
+        !props.range ||
         (!hoveredMonth.value && !props.startActivated.month && !props.endActivated.month)
       ) {
         return false
@@ -647,7 +630,6 @@ export default defineComponent({
 
     return {
       nh: useNameHelper('date-picker'),
-      mergedLocale,
       currentPane,
       calendarYear,
       calendarMonth,
