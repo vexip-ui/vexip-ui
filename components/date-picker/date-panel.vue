@@ -12,8 +12,8 @@
       </div>
     </div>
     <div :class="nh.be('list')">
-      <div style="display: flex;">
-        <div>
+      <div :class="nh.be('panel-body')">
+        <div :class="nh.be('date-panel')">
           <div :class="nh.be('header')">
             <div :class="[nh.be('arrow'), nh.be('prev-year')]" @click="handleDoublePrevClick">
               <Icon><AnglesLeft></AnglesLeft></Icon>
@@ -25,20 +25,22 @@
             >
               <Icon><AngleLeft></AngleLeft></Icon>
             </div>
-            <div key="year" :class="nh.be('year')" @click.stop="togglePane('year')">
-              <template v-if="currentPane === 'year'">
-                {{ `${yearRange[0]}${mergedLocale.year} - ${yearRange[9]}${mergedLocale.year}` }}
-              </template>
-              <template v-else>
-                {{ `${calendarYear}${mergedLocale.year}` }}
-              </template>
-            </div>
-            <div
-              v-show="currentPane === 'date'"
-              :class="nh.be('month')"
-              @click.stop="togglePane('month')"
-            >
-              {{ getMonthLabel(calendarMonth) }}
+            <div :class="nh.be('year-month')">
+              <div key="year" :class="nh.be('year')" @click.stop="togglePane('year')">
+                <template v-if="currentPane === 'year'">
+                  {{ `${yearRange[0]}${locale.year} - ${yearRange[9]}${locale.year}` }}
+                </template>
+                <template v-else>
+                  {{ `${calendarYear}${locale.year}` }}
+                </template>
+              </div>
+              <div
+                v-show="currentPane === 'date'"
+                :class="nh.be('month')"
+                @click.stop="togglePane('month')"
+              >
+                {{ getMonthLabel(calendarMonth) }}
+              </div>
             </div>
             <div
               v-show="currentPane === 'date'"
@@ -51,10 +53,10 @@
               <Icon><AnglesRight></AnglesRight></Icon>
             </div>
           </div>
-          <div ref="calendar" :class="nh.be('calendar')">
+          <div :class="nh.be('calendar')">
             <div
               v-if="currentPane === 'year'"
-              :class="nh.be('year-pane')"
+              :class="nh.be('year-panel')"
               @mouseleave="hoveredYear = 0"
             >
               <div
@@ -79,7 +81,7 @@
             </div>
             <div
               v-else-if="currentPane === 'month'"
-              :class="nh.be('month-pane')"
+              :class="nh.be('month-panel')"
               @mouseleave="hoveredMonth = 0"
             >
               <div
@@ -107,9 +109,9 @@
               :value="calendarValue"
               :year="calendarYear"
               :month="calendarMonth"
+              :value-type="selectingType"
               :disabled-date="disabledDate"
-              :is-range="calendarRange"
-              :value-type="valueType"
+              :range="range"
               :min="min"
               :max="max"
               @select="handleSelectDate"
@@ -117,18 +119,29 @@
             ></CalendarPanel>
           </div>
         </div>
-        <div v-if="isDatetime" :class="nh.be('time-wheel')">
+        <div v-if="isDatetime" :class="nh.be('time-panel')">
           <div :class="nh.be('header')"></div>
-          <TimeWheel
-            :hour="dateValue.hour"
-            :minute="dateValue.minute"
-            :second="dateValue.second"
-            :candidate="3"
-            :steps="steps"
-            :disabled-time="disabledTime"
-            @toggle-col="toggleColumn"
-            @change="emitChange"
-          ></TimeWheel>
+          <div :class="nh.be('wheel')">
+            <TimeWheel
+              :hour="startValue.hour"
+              :minute="startValue.minute"
+              :second="startValue.second"
+              :candidate="3"
+              :steps="steps"
+              :disabled-time="disabledTime"
+              @change="handleStartTimeChange"
+            ></TimeWheel>
+            <TimeWheel
+              v-if="range"
+              :hour="endValue.hour"
+              :minute="endValue.minute"
+              :second="endValue.second"
+              :candidate="3"
+              :steps="steps"
+              :disabled-time="disabledTime"
+              @change="handleEndTimeChange"
+            ></TimeWheel>
+          </div>
         </div>
       </div>
       <div v-if="!noAction" :class="nh.be('action')">
@@ -138,7 +151,7 @@
           size="small"
           @click="handleCancel"
         >
-          {{ cancelText || mergedLocale.cancel }}
+          {{ cancelText || locale.cancel }}
         </Button>
         <Button
           inherit
@@ -147,7 +160,7 @@
           :disabled="hasError"
           @click="handleConfirm"
         >
-          {{ confirmText || mergedLocale.confirm }}
+          {{ confirmText || locale.confirm }}
         </Button>
       </div>
     </div>
@@ -155,13 +168,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import TimeWheel from './time-wheel.vue'
 import { Button } from '@/components/button'
 import { CalendarPanel } from '@/components/calendar-panel'
 import { Icon } from '@/components/icon'
-import { useHover } from '@vexip-ui/hooks'
-import { useNameHelper, useLocale } from '@vexip-ui/config'
+import { useNameHelper } from '@vexip-ui/config'
 import { range, toDate } from '@vexip-ui/utils'
 import { AngleRight, AngleLeft, AnglesRight, AnglesLeft } from '@vexip-ui/icons'
 import { datePickerTypes } from './symbol'
@@ -169,7 +181,14 @@ import { datePickerTypes } from './symbol'
 import type { PropType } from 'vue'
 import type { MonthIndex } from '@/components/calendar'
 import type { Dateable } from '@vexip-ui/utils'
-import type { DateType, DateTimeType, DatePickerType, DateShortcut, DisabledTime } from './symbol'
+import type {
+  DateType,
+  TimeType,
+  DateTimeType,
+  DatePickerType,
+  DateShortcut,
+  DisabledTime
+} from './symbol'
 
 export default defineComponent({
   name: 'DatePanel',
@@ -186,9 +205,7 @@ export default defineComponent({
   props: {
     type: {
       default: 'date' as DatePickerType,
-      validator: (value: DatePickerType) => {
-        return datePickerTypes.includes(value)
-      }
+      validator: (value: DatePickerType) => datePickerTypes.includes(value)
     },
     enabled: {
       type: Object as PropType<Record<DateTimeType, boolean>>,
@@ -196,23 +213,15 @@ export default defineComponent({
     },
     startValue: {
       type: Object as PropType<Record<DateTimeType, number>>,
-      default: () => ({})
+      default: null
     },
     endValue: {
       type: Object as PropType<Record<DateTimeType, number>>,
-      default: () => ({})
-    },
-    valueType: {
-      type: String as PropType<'start' | 'end'>,
-      default: 'start'
+      default: null
     },
     shortcuts: {
       type: Array as PropType<DateShortcut[]>,
       default: () => []
-    },
-    column: {
-      type: String as PropType<DateTimeType>,
-      default: 'date'
     },
     confirmText: {
       type: String,
@@ -238,7 +247,7 @@ export default defineComponent({
       type: Array as PropType<number[]>,
       default: () => [1, 1, 1]
     },
-    isRange: {
+    range: {
       type: Boolean,
       default: false
     },
@@ -269,30 +278,34 @@ export default defineComponent({
     locale: {
       type: Object,
       default: null
+    },
+    selectingType: {
+      type: String as PropType<'start' | 'end'>,
+      default: 'start'
     }
   },
-  emits: ['click', 'shortcut', 'toggle-col', 'change', 'cancel', 'confirm', 'hover', 'type-change'],
+  emits: [
+    'click',
+    'shortcut',
+    'toggle-col',
+    'change',
+    'cancel',
+    'confirm',
+    'hover',
+    'type-change',
+    'time-change'
+  ],
   setup(props, { emit }) {
     const today = toDate(props.today)
 
-    const currentPane = ref<DateType>('date')
+    const currentPane = ref<DateType>(
+      props.type === 'year' ? 'year' : props.type === 'month' ? 'month' : 'date'
+    )
     const calendarYear = ref(today.getFullYear())
     const calendarMonth = ref(today.getMonth() + 1) // 1 ~ 12
     const hoveredYear = ref(0) // 0 is no hover (falsy)
     const hoveredMonth = ref(0) // 0 is no hover (falsy)
     const yearRange = ref<number[]>([])
-
-    const calendar = ref<HTMLElement>()
-
-    const { isHover } = useHover(calendar)
-
-    const mergedLocale = computed(() => {
-      return {
-        ...useLocale('calendar').value,
-        ...useLocale('datePicker').value,
-        ...(props.locale ?? {})
-      }
-    })
 
     const startActivated = computed(() => {
       const activated = props.startActivated
@@ -308,44 +321,16 @@ export default defineComponent({
     const isDatetime = computed(() => {
       return props.type === 'datetime'
     })
-    const dateValue = computed(() => {
-      return props.valueType === 'start' ? props.startValue : props.endValue
-    })
-    const activated = computed(() => {
-      return props.valueType === 'start' ? props.startActivated : props.endActivated
-    })
-    const calendarRange = computed(() => {
-      return (
-        props.isRange &&
-        ((props.valueType === 'start' && endActivated.value) ||
-          (props.valueType === 'end' && startActivated.value))
-      )
-    })
     const calendarValue = computed(() => {
-      return calendarRange.value
-        ? [
-            startActivated.value ? getStringValue('start') : '',
-            endActivated.value ? getStringValue('end') : ''
-          ]
-        : props.valueType === 'start'
-          ? startActivated.value
-            ? getStringValue(props.valueType)
-            : ''
-          : endActivated.value
-            ? getStringValue(props.valueType)
-            : ''
+      return props.range
+        ? startActivated.value || endActivated.value
+          ? [getStringValue('start'), getStringValue('end')]
+          : ['', '']
+        : startActivated.value
+          ? getStringValue('start')
+          : ''
     })
 
-    watch(
-      () => props.column,
-      value => {
-        if (value === 'year' || value === 'month' || value === 'date') {
-          currentPane.value = value
-          refreshCalendar()
-        }
-      },
-      { immediate: true }
-    )
     watch(
       calendarYear,
       value => {
@@ -353,26 +338,23 @@ export default defineComponent({
       },
       { immediate: true }
     )
-    watch(isHover, value => {
-      if (value) {
-        toggleColumn(currentPane.value)
-      }
+
+    onMounted(() => {
+      refreshCalendar('start')
     })
 
     function getStringValue(type: 'start' | 'end') {
       const value = type === 'start' ? props.startValue : props.endValue
 
-      return `${value.year}-${value.month}-${value.date}`
+      return value ? `${value.year}-${value.month}-${value.date}` : ''
     }
 
     function getMonthLabel(index: number) {
-      return mergedLocale.value[`month${index as MonthIndex}`]
+      return props.locale[`month${index as MonthIndex}`]
     }
 
     function togglePane(type: DateType) {
       currentPane.value = type
-
-      toggleColumn(type)
     }
 
     function adjustCalendar(type: 'year' | 'month', amount: number) {
@@ -404,19 +386,18 @@ export default defineComponent({
     }
 
     function handleSelectDate(date: Date) {
-      emitChange('year', date.getFullYear())
-      emitChange('month', date.getMonth() + 1)
-      emitChange('date', date.getDate())
+      emitChange([date.getFullYear(), date.getMonth() + 1, date.getDate()])
     }
 
     function handleSelectYear(year: number) {
       if (isDisabledYear(year)) return
 
       calendarYear.value = year
-      emitChange('year', year)
 
       if (props.type !== 'year') {
         togglePane('month')
+      } else {
+        emitChange([year, 1, 1])
       }
     }
 
@@ -424,20 +405,24 @@ export default defineComponent({
       if (isDisabledMonth(month)) return
 
       calendarMonth.value = month
-      emitChange('year', calendarYear.value)
-      emitChange('month', month)
 
       if (props.type !== 'month') {
         togglePane('date')
+      } else {
+        emitChange([calendarYear.value, month, 1])
       }
     }
 
-    function toggleColumn(type: DateTimeType) {
-      emit('toggle-col', type)
+    function emitChange(values: number[]) {
+      emit('change', values)
     }
 
-    function emitChange(type: DateTimeType, value: number) {
-      emit('change', type, value)
+    function handleStartTimeChange(type: TimeType, time: number) {
+      emit('time-change', 'start', type, time)
+    }
+
+    function handleEndTimeChange(type: TimeType, time: number) {
+      emit('time-change', 'end', type, time)
     }
 
     function handleDoublePrevClick() {
@@ -489,20 +474,6 @@ export default defineComponent({
     }
 
     function isDisabledYear(year: number) {
-      if (props.isRange) {
-        if (
-          props.valueType === 'end' &&
-          props.startActivated.year &&
-          year < props.startValue.year
-        ) {
-          return true
-        }
-
-        if (props.valueType === 'start' && props.endActivated.year && props.endValue.year < year) {
-          return true
-        }
-      }
-
       if (props.type === 'year') {
         return props.disabledDate(new Date(year, 0))
       }
@@ -518,26 +489,6 @@ export default defineComponent({
 
     function isDisabledMonth(month: number, year = calendarYear.value) {
       if (props.type === 'year') return false
-
-      if (props.isRange) {
-        const monthYear = year * 100 + month
-
-        if (
-          props.valueType === 'end' &&
-          props.startActivated.month &&
-          monthYear < 100 * props.startValue.year + props.startValue.month
-        ) {
-          return true
-        }
-
-        if (
-          props.valueType === 'start' &&
-          props.endActivated.month &&
-          monthYear > 100 * props.endValue.year + props.endValue.month
-        ) {
-          return true
-        }
-      }
 
       if (props.type === 'month') {
         return props.disabledDate(new Date(year, month - 1))
@@ -568,18 +519,18 @@ export default defineComponent({
 
     function isYearInRange(year: number) {
       if (
-        !calendarRange.value ||
+        !props.range ||
         (!hoveredYear.value && !props.startActivated.year && !props.endActivated.year)
       ) {
         return false
       }
 
-      if (
-        (props.valueType === 'start' && !props.endActivated.year) ||
-        (props.valueType === 'end' && !props.startActivated.year)
-      ) {
-        return false
-      }
+      // if (
+      //   (props.valueType === 'start' && !props.endActivated.year) ||
+      //   (props.valueType === 'end' && !props.startActivated.year)
+      // ) {
+      //   return false
+      // }
 
       const startYear = props.startValue.year
       const endYear = props.endValue.year
@@ -614,18 +565,18 @@ export default defineComponent({
 
     function isMonthInRange(month: number) {
       if (
-        !calendarRange.value ||
+        !props.range ||
         (!hoveredMonth.value && !props.startActivated.month && !props.endActivated.month)
       ) {
         return false
       }
 
-      if (
-        (props.valueType === 'start' && !props.endActivated.month) ||
-        (props.valueType === 'end' && !props.startActivated.month)
-      ) {
-        return false
-      }
+      // if (
+      //   (props.valueType === 'start' && !props.endActivated.month) ||
+      //   (props.valueType === 'end' && !props.startActivated.month)
+      // ) {
+      //   return false
+      // }
 
       const startMonthYear = 100 * props.startValue.year + props.startValue.month
       const endMonthYear = 100 * props.endValue.year + props.endValue.month
@@ -663,10 +614,10 @@ export default defineComponent({
     }
 
     // 重新计算日历页面
-    function refreshCalendar() {
+    function refreshCalendar(valueType: 'start' | 'end') {
       const today = toDate(props.today)
 
-      if (props.valueType === 'start') {
+      if (valueType === 'start') {
         calendarYear.value = props.startActivated.year ? props.startValue.year : today.getFullYear()
         calendarMonth.value = props.startActivated.month
           ? props.startValue.month
@@ -679,7 +630,6 @@ export default defineComponent({
 
     return {
       nh: useNameHelper('date-picker'),
-      mergedLocale,
       currentPane,
       calendarYear,
       calendarMonth,
@@ -689,12 +639,7 @@ export default defineComponent({
       hoveredMonth,
 
       isDatetime,
-      dateValue,
-      activated,
       calendarValue,
-      calendarRange,
-
-      calendar,
 
       getMonthLabel,
       togglePane,
@@ -704,8 +649,9 @@ export default defineComponent({
       handleSelectDate,
       handleSelectYear,
       handleSelectMonth,
-      toggleColumn,
       emitChange,
+      handleStartTimeChange,
+      handleEndTimeChange,
       handleDoublePrevClick,
       handleDoubleNextClick,
       handleCancel,

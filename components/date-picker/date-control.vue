@@ -4,85 +4,88 @@
     :class="className"
     tabindex="-1"
     @keydown="handleInput"
+    @blur="handleBlur"
   >
-    <div
-      v-if="enabled.year"
-      :class="[nh.be('unit'), visible && unitType === 'year' && nh.bem('unit', 'focused')]"
-      @click="handleInputFocus('year')"
-    >
-      {{ formattedYear }}
+    <div v-if="!focused && !isActivated" :class="nh.be('placeholder')">
+      {{ placeholder }}
     </div>
-    <div v-if="labels.year" :class="nh.be('label')">
-      {{ labels.year }}
-    </div>
-    <template v-if="enabled.month">
-      <div v-if="enabled.year" :class="nh.be('separator')">
-        {{ dateSeparator }}
-      </div>
+    <template v-else>
       <div
-        :class="[nh.be('unit'), visible && unitType === 'month' && nh.bem('unit', 'focused')]"
-        @click="handleInputFocus('month')"
+        v-if="enabled.year"
+        :class="[nh.be('unit'), getUnitFocusClass('year')]"
+        @click="handleInputFocus('year')"
       >
-        {{ formattedMonth }}
+        {{ formattedYear }}
       </div>
-      <div v-if="labels.month" :class="nh.be('label')">
-        {{ labels.month }}
+      <div v-if="labels.year" :class="nh.be('label')" @click="handleInputFocus('year')">
+        {{ labels.year }}
       </div>
-    </template>
-    <template v-if="enabled.date">
-      <div v-if="enabled.month || enabled.year" :class="nh.be('separator')">
-        {{ dateSeparator }}
-      </div>
-      <div
-        :class="[nh.be('unit'), visible && unitType === 'date' && nh.bem('unit', 'focused')]"
-        @click="handleInputFocus('date')"
-      >
-        {{ formattedDate }}
-      </div>
-      <div v-if="labels.date" :class="nh.be('label')">
-        {{ labels.date }}
-      </div>
-    </template>
-
-    <template v-if="showTimeUnits">
-      <div :class="nh.be('pad')"></div>
-      <div
-        v-if="enabled.hour"
-        :class="[nh.be('unit'), visible && unitType === 'hour' && nh.bem('unit', 'focused')]"
-        @click="handleInputFocus('hour')"
-      >
-        {{ formattedHour }}
-      </div>
-      <div v-if="labels.hour" :class="nh.be('label')">
-        {{ labels.hour }}
-      </div>
-      <template v-if="enabled.minute">
-        <div v-if="enabled.hour" :class="nh.be('separator')">
-          {{ timeSeparator }}
+      <template v-if="enabled.month">
+        <div v-if="enabled.year" :class="nh.be('separator')">
+          {{ dateSeparator }}
         </div>
         <div
-          :class="[nh.be('unit'), visible && unitType === 'minute' && nh.bem('unit', 'focused')]"
-          @click="handleInputFocus('minute')"
+          :class="[nh.be('unit'), getUnitFocusClass('month')]"
+          @click="handleInputFocus('month')"
         >
-          {{ formattedMinute }}
+          {{ formattedMonth }}
         </div>
-        <div v-if="labels.minute" :class="nh.be('label')">
-          {{ labels.minute }}
+        <div v-if="labels.month" :class="nh.be('label')" @click="handleInputFocus('month')">
+          {{ labels.month }}
         </div>
       </template>
-      <template v-if="enabled.second">
-        <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')">
-          {{ timeSeparator }}
+      <template v-if="enabled.date">
+        <div v-if="enabled.month || enabled.year" :class="nh.be('separator')">
+          {{ dateSeparator }}
         </div>
+        <div :class="[nh.be('unit'), getUnitFocusClass('date')]" @click="handleInputFocus('date')">
+          {{ formattedDate }}
+        </div>
+        <div v-if="labels.date" :class="nh.be('label')" @click="handleInputFocus('date')">
+          {{ labels.date }}
+        </div>
+      </template>
+
+      <template v-if="showTimeUnits">
+        <div :class="nh.be('pad')"></div>
         <div
-          :class="[nh.be('unit'), visible && unitType === 'second' && nh.bem('unit', 'focused')]"
-          @click="handleInputFocus('second')"
+          v-if="enabled.hour"
+          :class="[nh.be('unit'), getUnitFocusClass('hour')]"
+          @click="handleInputFocus('hour')"
         >
-          {{ formattedSecond }}
+          {{ formattedHour }}
         </div>
-        <div v-if="labels.second" :class="nh.be('label')">
-          {{ labels.second }}
+        <div v-if="labels.hour" :class="nh.be('label')" @click="handleInputFocus('hour')">
+          {{ labels.hour }}
         </div>
+        <template v-if="enabled.minute">
+          <div v-if="enabled.hour" :class="nh.be('separator')">
+            {{ timeSeparator }}
+          </div>
+          <div
+            :class="[nh.be('unit'), getUnitFocusClass('minute')]"
+            @click="handleInputFocus('minute')"
+          >
+            {{ formattedMinute }}
+          </div>
+          <div v-if="labels.minute" :class="nh.be('label')" @click="handleInputFocus('minute')">
+            {{ labels.minute }}
+          </div>
+        </template>
+        <template v-if="enabled.second">
+          <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')">
+            {{ timeSeparator }}
+          </div>
+          <div
+            :class="[nh.be('unit'), getUnitFocusClass('second')]"
+            @click="handleInputFocus('second')"
+          >
+            {{ formattedSecond }}
+          </div>
+          <div v-if="labels.second" :class="nh.be('label')" @click="handleInputFocus('second')">
+            {{ labels.second }}
+          </div>
+        </template>
       </template>
     </template>
   </div>
@@ -102,7 +105,7 @@ export default defineComponent({
   props: {
     unitType: {
       type: String as PropType<DateTimeType | ''>,
-      default: 'date'
+      default: ''
     },
     enabled: {
       type: Object as PropType<Record<DateTimeType, boolean>>,
@@ -139,10 +142,10 @@ export default defineComponent({
         return value.length === 1
       }
     },
-    noFiller: {
-      type: Boolean,
-      default: false
-    },
+    // noFiller: {
+    //   type: Boolean,
+    //   default: false
+    // },
     steps: {
       type: Array as PropType<number[]>,
       default: () => [1, 1, 1]
@@ -158,9 +161,23 @@ export default defineComponent({
     hasError: {
       type: Boolean,
       default: false
+    },
+    placeholder: {
+      type: String,
+      default: ''
     }
   },
-  emits: ['input', 'plus', 'minus', 'enter', 'cancel', 'unit-focus', 'prev-unit', 'next-unit'],
+  emits: [
+    'input',
+    'plus',
+    'minus',
+    'enter',
+    'cancel',
+    'unit-focus',
+    'prev-unit',
+    'next-unit',
+    'blur'
+  ],
   setup(props, { emit }) {
     const nh = useNameHelper('date-picker')
 
@@ -204,11 +221,15 @@ export default defineComponent({
       const isYear = type === 'year'
       const filler = props.filler
 
-      return props.noFiller || props.activated[type]
+      return props.activated[type]
         ? isYear
           ? props.dateValue.year.toString().padStart(4, '0')
           : doubleDigits(props.dateValue[type])
         : `${isYear ? `${filler}${filler}` : ''}${filler}${filler}`
+    }
+
+    function getUnitFocusClass(type: DateTimeType) {
+      return props.visible && props.unitType === type ? nh.bem('unit', 'focused') : null
     }
 
     function handleInputFocus(type: DateTimeType) {
@@ -253,9 +274,14 @@ export default defineComponent({
       }
     }
 
+    function handleBlur() {
+      emit('blur')
+    }
+
     return {
       nh,
 
+      isActivated,
       className,
       showTimeUnits,
       formattedYear,
@@ -267,8 +293,10 @@ export default defineComponent({
 
       wrapper,
 
+      getUnitFocusClass,
       handleInputFocus,
       handleInput,
+      handleBlur,
 
       focus: () => {
         wrapper.value?.focus()

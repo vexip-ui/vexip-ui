@@ -23,7 +23,7 @@
       <div :class="nh.be('control')">
         <TimeControl
           ref="start"
-          :unit-type="currentState === 'start' ? startState.column : undefined"
+          :unit-type="currentState === 'start' ? startState.column! : undefined"
           :enabled="startState.enabled"
           :activated="startState.activated"
           :time-value="startState.timeValue"
@@ -58,7 +58,7 @@
           </div>
           <TimeControl
             ref="end"
-            :unit-type="currentState === 'end' ? endState.column : undefined"
+            :unit-type="currentState === 'end' ? endState.column! : undefined"
             :enabled="endState.enabled"
             :activated="endState.activated"
             :time-value="endState.timeValue"
@@ -677,10 +677,13 @@ export default defineComponent({
 
     function handleInput(value: number) {
       const state = getCurrentState()
+      const type = state.column
 
-      handleInputNumber(state.column, value)
+      if (!type) return
 
-      if (state.column !== 'second' && state.timeValue[state.column] >= 10) {
+      handleInputNumber(type, value)
+
+      if (state.column !== 'second' && state.timeValue[type] >= 10) {
         state.enterColumn('next', false)
       }
     }
@@ -712,6 +715,8 @@ export default defineComponent({
       const state = getCurrentState()
       const type = state.column
 
+      if (!type) return
+
       if (state.enabled[type]) {
         state.timeValue[type] += ctrlKey ? getCtrlStep(type) : getStep(type)
 
@@ -723,6 +728,8 @@ export default defineComponent({
     function handleMinus(ctrlKey: boolean) {
       const state = getCurrentState()
       const type = state.column
+
+      if (!type) return
 
       if (state.enabled[type]) {
         state.timeValue[type] -= ctrlKey ? getCtrlStep(type) : getStep(type)
