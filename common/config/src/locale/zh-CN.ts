@@ -46,13 +46,15 @@ export function zhCNLocale() {
     datePicker: {
       confirm: '确认',
       cancel: '取消',
-      year: '年份',
-      month: '月份',
-      date: '日期',
-      datetime: '日期时间',
-      start: '开始',
-      end: '结束',
-      select: '请选择'
+      placeholder: {
+        year: '年份',
+        month: '月份',
+        date: '日期',
+        datetime: '日期时间',
+        start: '开始',
+        end: '结束',
+        select: '请选择'
+      }
     },
 
     drawer: {

@@ -23,7 +23,7 @@
       <div :class="nh.be('control')">
         <DateControl
           ref="start"
-          :unit-type="currentState === 'start' ? startState.column : ''"
+          :unit-type="currentState === 'start' ? startState.column! : ''"
           :enabled="startState.enabled"
           :activated="startState.activated"
           :date-value="startState.dateValue"
@@ -45,7 +45,7 @@
           @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
           @next-unit="enterColumn('next')"
-          @blur="startState.column = undefined"
+          @blur="startState.column = null"
         ></DateControl>
         <template v-if="usingRange">
           <div :class="nh.be('exchange')">
@@ -57,7 +57,7 @@
           </div>
           <DateControl
             ref="end"
-            :unit-type="currentState === 'end' ? endState.column : ''"
+            :unit-type="currentState === 'end' ? endState.column! : ''"
             :enabled="endState.enabled"
             :activated="endState.activated"
             :date-value="endState.dateValue"
@@ -79,7 +79,7 @@
             @unit-focus="handleEndInput"
             @prev-unit="enterColumn('prev')"
             @next-unit="enterColumn('next')"
-            @blur="endState.column = undefined"
+            @blur="endState.column = null"
           ></DateControl>
         </template>
       </div>
@@ -341,7 +341,7 @@ export default defineComponent({
         return Array.isArray(props.placeholder) ? props.placeholder[0] : props.placeholder
       }
 
-      const { select, start, [props.type]: type } = mergedLocale.value
+      const { select, start, [props.type]: type } = mergedLocale.value.placeholder
 
       return makeSentence(usingRange.value ? `${start} ${type}` : `${select} ${type}`)
     })
@@ -352,7 +352,7 @@ export default defineComponent({
           : props.placeholder
       }
 
-      const { end, [props.type]: type } = mergedLocale.value
+      const { end, [props.type]: type } = mergedLocale.value.placeholder
 
       return makeSentence(`${end} ${type}`)
     })
@@ -618,14 +618,14 @@ export default defineComponent({
     })
     watch(currentState, value => {
       if (currentVisible.value) {
-        emitEvent(props.onChangeCol, getCurrentState().column || null, value)
+        emitEvent(props.onChangeCol, getCurrentState().column, value)
       }
     })
     watch(
       () => startState.column,
       value => {
         if (currentVisible.value && currentState.value === 'start') {
-          emitEvent(props.onChangeCol, value || null, 'start')
+          emitEvent(props.onChangeCol, value, 'start')
         }
       }
     )
@@ -633,7 +633,7 @@ export default defineComponent({
       () => endState.column,
       value => {
         if (currentVisible.value && currentState.value === 'end') {
-          emitEvent(props.onChangeCol, value || null, 'end')
+          emitEvent(props.onChangeCol, value, 'end')
         }
       }
     )
@@ -988,8 +988,8 @@ export default defineComponent({
         const units = Array.from(wrapper.value.querySelectorAll(`.${nh.be('unit')}`))
 
         if (!units.some(unit => unit === target || unit.contains(target))) {
-          startState.column = undefined
-          endState.column = undefined
+          startState.column = null
+          endState.column = null
           // emitEvent(props.onChangeCol, getCurrentState().column, currentState.value)
         }
       }

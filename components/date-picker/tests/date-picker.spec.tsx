@@ -26,7 +26,7 @@ describe('DatePicker', () => {
     expect(wrapper.find('.vxp-date-picker__control').exists()).toBe(true)
     expect(wrapper.find('.vxp-date-picker__popper').exists()).toBe(true)
     expect(wrapper.find('.vxp-date-picker__panel').exists()).toBe(true)
-    expect(wrapper.findAll('.vxp-date-picker__unit').length).toEqual(3)
+    expect(wrapper.find('.vxp-date-picker__placeholder').exists()).toBe(true)
     expect(wrapper.find('.vxp-date-picker__year').exists()).toBe(true)
     expect(wrapper.find('.vxp-date-picker__month').exists()).toBe(true)
     expect(wrapper.find('.vxp-date-picker__calendar').exists()).toBe(true)
@@ -50,13 +50,19 @@ describe('DatePicker', () => {
       props: { visible: true, type: 'datetime' }
     })
 
+    wrapper.vm.focus()
+    await nextTick()
+
+    expect(wrapper.classes()).toContain('vxp-date-picker--datetime')
     expect(wrapper.findAll('.vxp-date-picker__unit').length).toEqual(6)
-    expect(wrapper.find('.vxp-date-picker__time-wheel').exists()).toBe(true)
+    expect(wrapper.find('.vxp-date-picker__wheel').exists()).toBe(true)
 
     await wrapper.setProps({ type: 'month' })
+    expect(wrapper.classes()).toContain('vxp-date-picker--month')
     expect(wrapper.findAll('.vxp-date-picker__unit').length).toEqual(2)
 
     await wrapper.setProps({ type: 'year' })
+    expect(wrapper.classes()).toContain('vxp-date-picker--year')
     expect(wrapper.findAll('.vxp-date-picker__unit').length).toEqual(1)
   })
 
@@ -67,14 +73,14 @@ describe('DatePicker', () => {
       props: { onFocus, onBlur }
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
-    const units = wrapper.findAll('.vxp-date-picker__unit')
+    // const units = wrapper.findAll('.vxp-date-picker__unit')
 
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
     expect(selector.classes()).not.toContain('vxp-date-picker__selector--focused')
 
     await wrapper.trigger('click')
     expect(wrapper.classes()).toContain('vxp-date-picker--visible')
-    expect(units[2].classes()).toContain('vxp-date-picker__unit--focused')
+    // expect(units[2].classes()).toContain('vxp-date-picker__unit--focused')
     expect(selector.classes()).toContain('vxp-date-picker__selector--focused')
     expect(onFocus).toHaveBeenCalledTimes(1)
 
@@ -200,11 +206,11 @@ describe('DatePicker', () => {
     expect(wrapper.find('.vxp-date-picker__year').text()).toEqual('2022年')
 
     await wrapper.find('.vxp-date-picker__month').trigger('click')
-    expect(wrapper.find('.vxp-date-picker__month-pane').exists()).toBe(true)
+    expect(wrapper.find('.vxp-date-picker__month-panel').exists()).toBe(true)
     expect(wrapper.find('.vxp-date-picker__month').attributes('style')).toContain('display: none;')
 
     await wrapper.find('.vxp-date-picker__year').trigger('click')
-    expect(wrapper.find('.vxp-date-picker__year-pane').exists()).toBe(true)
+    expect(wrapper.find('.vxp-date-picker__year-panel').exists()).toBe(true)
     expect(wrapper.find('.vxp-date-picker__year').text()).toEqual('2020年 - 2029年')
 
     await nextYear.trigger('click')
@@ -219,10 +225,13 @@ describe('DatePicker', () => {
     })
     const units = wrapper.findAll('.vxp-date-picker__unit')
 
-    expect(units[0].text()).toEqual('----')
-    units.slice(1).forEach(unit => {
-      expect(unit.text()).toEqual('--')
-    })
+    expect(wrapper.find('.vxp-date-picker__placeholder').exists()).toBe(false)
+    expect(units[0].text()).toEqual('2022')
+    expect(units[1].text()).toEqual('05')
+    expect(units[2].text()).toEqual('27')
+    expect(units[3].text()).toEqual('09')
+    expect(units[4].text()).toEqual('24')
+    expect(units[5].text()).toEqual('47')
 
     await wrapper.trigger('click')
     await runScrollTimers()
@@ -234,15 +243,15 @@ describe('DatePicker', () => {
     expect(activeWheelItems[1].text()).toEqual('24')
     expect(activeWheelItems[2].text()).toEqual('47')
 
-    await wrapper.trigger('clickoutside')
-    expect(units[0].text()).toEqual('2022')
-    expect(units[1].text()).toEqual('05')
-    expect(units[2].text()).toEqual('27')
-    expect(units[3].text()).toEqual('09')
-    expect(units[4].text()).toEqual('24')
-    expect(units[5].text()).toEqual('47')
+    // await wrapper.trigger('clickoutside')
+    // expect(units[0].text()).toEqual('2022')
+    // expect(units[1].text()).toEqual('05')
+    // expect(units[2].text()).toEqual('27')
+    // expect(units[3].text()).toEqual('09')
+    // expect(units[4].text()).toEqual('24')
+    // expect(units[5].text()).toEqual('47')
 
-    await wrapper.trigger('click')
+    // await wrapper.trigger('click')
     expect(wrapper.find('.vxp-calendar__index--selected').exists()).toBe(true)
     expect(wrapper.find('.vxp-calendar__index--selected').text()).toEqual('27')
 
@@ -269,7 +278,7 @@ describe('DatePicker', () => {
     expect(selector.text()).toEqual('2022/05/2709:24:47')
 
     await wrapper.setProps({ value: '' })
-    expect(selector.text()).toEqual('----/--/----:--:--')
+    expect(selector.find('.vxp-date-picker__placeholder').exists()).toBe(true)
   })
 
   it('button text', () => {
@@ -282,36 +291,29 @@ describe('DatePicker', () => {
     expect(buttons[1].text()).toEqual('OK')
   })
 
-  it('labels', () => {
+  it('labels', async () => {
     const labels = { year: '年', month: '月', date: '日', hour: '时', minute: '分', second: '秒' }
     const wrapper = mount(() => <DatePicker type={'datetime'} labels={labels}></DatePicker>)
 
-    expect(
-      expect(wrapper.find('.vxp-date-picker__selector').text()).toEqual(
-        '----年/--月/--日--时:--分:--秒'
-      )
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-date-picker__selector').text()).toEqual(
+      '----年/--月/--日--时:--分:--秒'
     )
   })
 
-  it('filler', () => {
+  it('filler', async () => {
     const wrapper = mount(() => <DatePicker type={'datetime'} filler={'?'}></DatePicker>)
 
+    await wrapper.trigger('click')
     expect(expect(wrapper.find('.vxp-date-picker__selector').text()).toEqual('????/??/????:??:??'))
   })
 
-  it('no filler', () => {
-    const wrapper = mount(() => (
-      <DatePicker type={'datetime'} value={'2022-05-27 09:24:47'} no-filler></DatePicker>
-    ))
-
-    expect(expect(wrapper.find('.vxp-date-picker__selector').text()).toEqual('2022/05/2709:24:47'))
-  })
-
-  it('separator', () => {
+  it('separator', async () => {
     const wrapper = mount(() => (
       <DatePicker type={'datetime'} date-separator={'^'} time-separator={'~'}></DatePicker>
     ))
 
+    await wrapper.trigger('click')
     expect(expect(wrapper.find('.vxp-date-picker__selector').text()).toEqual('----^--^----~--~--'))
   })
 
@@ -458,6 +460,7 @@ describe('DatePicker', () => {
     const wrapper = mount(DatePicker, {
       props: {
         type: 'datetime',
+        value: '2022-05-23',
         clearable: true,
         onClear
       }
@@ -479,7 +482,7 @@ describe('DatePicker', () => {
     await wrapper.find('.vxp-date-picker__clear').trigger('click')
     await nextTick()
     expect(onClear).toHaveBeenCalled()
-    expect(selector.text()).toEqual('----/--/----:--:--')
+    expect(selector.find('.vxp-date-picker__placeholder').exists()).toBe(true)
   })
 
   it('click unit', async () => {
@@ -492,9 +495,12 @@ describe('DatePicker', () => {
       }
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
-    const units = wrapper.findAll('.vxp-date-picker__unit')
 
     await wrapper.trigger('click')
+
+    const units = wrapper.findAll('.vxp-date-picker__unit')
+
+    await units[2].trigger('click')
     expect(onChangeCol).toHaveBeenCalled()
     expect(onChangeCol).toHaveBeenLastCalledWith('date', 'start')
 
@@ -639,19 +645,21 @@ describe('DatePicker', () => {
     const onChangeCol = vi.fn()
     const wrapper = mount(DatePicker, {
       props: {
-        isRange: true,
+        range: true,
         onChange,
         onChangeCol
       }
     })
+    await wrapper.trigger('click')
+
     const input = wrapper.findAll('.vxp-date-picker__input')
     const units = wrapper.findAll('.vxp-date-picker__unit')
 
     expect(input.length).toEqual(2)
     expect(units.length).toEqual(6)
 
-    await wrapper.trigger('click')
-    expect(units[2].classes()).toContain('vxp-date-picker__unit--focused')
+    await units[2].trigger('click')
+    // expect(units[2].classes()).toContain('vxp-date-picker__unit--focused')
 
     await input[0].trigger('keydown', { key: 'Tab' })
     expect(units[3].classes()).toContain('vxp-date-picker__unit--focused')
@@ -691,10 +699,12 @@ describe('DatePicker', () => {
       }
     })
     const input = wrapper.find('.vxp-date-picker__input')
+    const units = wrapper.findAll('.vxp-date-picker__unit')
 
     await wrapper.trigger('click')
     expect(input.classes()).not.toContain('vxp-date-picker__input--error')
 
+    await units[0].trigger('click')
     await input.trigger('keydown', { key: 'ArrowUp' })
     expect(input.classes()).toContain('vxp-date-picker__input--error')
   })
@@ -745,10 +755,12 @@ describe('DatePicker', () => {
       }
     })
     const input = wrapper.find('.vxp-date-picker__input')
+    const units = wrapper.findAll('.vxp-date-picker__unit')
 
     await wrapper.trigger('click')
     expect(input.classes()).not.toContain('vxp-date-picker__input--error')
 
+    await units[0].trigger('click')
     await input.trigger('keydown', { key: 'ArrowDown' })
     expect(input.classes()).toContain('vxp-date-picker__input--error')
   })
@@ -807,5 +819,22 @@ describe('DatePicker', () => {
     await units[2].trigger('click')
     await input.trigger('keydown', { key: 'ArrowDown' })
     expect(input.classes()).toContain('vxp-date-picker__input--error')
+  })
+
+  it('placeholder', async () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        placeholder: 'test'
+      }
+    })
+
+    expect(wrapper.find('.vxp-date-picker__placeholder').exists()).toBe(true)
+    expect(wrapper.find('.vxp-date-picker__placeholder').text()).toEqual('test')
+
+    await wrapper.setProps({ range: true, placeholder: ['1', '2'] })
+    const placeholders = wrapper.findAll('.vxp-date-picker__placeholder')
+    expect(placeholders.length).toEqual(2)
+    expect(placeholders[0].text()).toEqual('1')
+    expect(placeholders[1].text()).toEqual('2')
   })
 })

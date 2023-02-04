@@ -127,7 +127,7 @@ export const timePickerProps = buildProps({
   onToggle: eventProp<(visible: boolean) => void>(),
   onFocus: eventProp(),
   onBlur: eventProp(),
-  onChangeCol: eventProp<(type: TimeType, inputType: 'start' | 'end') => void>(),
+  onChangeCol: eventProp<(type: TimeType | null, inputType: 'start' | 'end') => void>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp()
 })

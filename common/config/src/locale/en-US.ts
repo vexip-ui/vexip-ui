@@ -46,13 +46,15 @@ export function enUSLocale() {
     datePicker: {
       confirm: 'Confrim',
       cancel: 'Cancel',
-      year: 'year',
-      month: 'month',
-      date: 'date',
-      datetime: 'datetime',
-      start: 'start',
-      end: 'end',
-      select: 'Please select'
+      placeholder: {
+        year: 'year',
+        month: 'month',
+        date: 'date',
+        datetime: 'datetime',
+        start: 'start',
+        end: 'end',
+        select: 'Please select'
+      }
     },
 
     drawer: {
