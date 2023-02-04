@@ -142,10 +142,6 @@ export default defineComponent({
         return value.length === 1
       }
     },
-    // noFiller: {
-    //   type: Boolean,
-    //   default: false
-    // },
     steps: {
       type: Array as PropType<number[]>,
       default: () => [1, 1, 1]

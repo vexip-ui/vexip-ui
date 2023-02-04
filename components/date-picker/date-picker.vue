@@ -821,8 +821,12 @@ export default defineComponent({
       })
     }
 
-    function toggleActivated(value: boolean, type?: 'start' | 'end') {
-      const states = type ? (type === 'start' ? [startState] : [endState]) : [startState, endState]
+    function toggleActivated(value: boolean, valueType?: 'start' | 'end') {
+      const states = valueType
+        ? valueType === 'start'
+          ? [startState]
+          : [endState]
+        : [startState, endState]
 
       states.forEach(state => {
         (Object.keys(state.activated) as DateTimeType[]).forEach(type => {
@@ -859,11 +863,6 @@ export default defineComponent({
 
     function verifyDate() {
       if (startError.value || (usingRange.value && endError.value)) {
-        // if (lastValue.value) {
-        //   parseValue(lastValue.value.split('|'))
-        // } else {
-        //   parseValue(props.value)
-        // }
         parseValue(props.value)
       }
     }
@@ -978,8 +977,6 @@ export default defineComponent({
       if (props.disabled || (props.loading && props.loadingLock)) return
 
       const target = event.target as Node
-      // const lastVisible = currentVisible.value
-
       currentVisible.value = true
 
       handleFocused()
@@ -990,7 +987,6 @@ export default defineComponent({
         if (!units.some(unit => unit === target || unit.contains(target))) {
           startState.column = null
           endState.column = null
-          // emitEvent(props.onChangeCol, getCurrentState().column, currentState.value)
         }
       }
     }
@@ -1122,6 +1118,8 @@ export default defineComponent({
           clearField(emitValue!)
           handleBlur()
 
+          lastValue.value = ''
+
           nextTick(() => {
             toggleActivated(false)
           })
@@ -1185,6 +1183,15 @@ export default defineComponent({
         types = ['year', 'month']
       } else {
         types = ['year', 'month', 'date']
+      }
+
+      if (!usingRange.value) {
+        for (let i = 0, len = types.length; i < len; ++i) {
+          startState.dateValue[types[i]] = values[i]
+          updateDateActivated(types[i], 'start')
+        }
+
+        return
       }
 
       if (!firstSelected.value) {

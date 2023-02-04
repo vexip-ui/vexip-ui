@@ -26,7 +26,7 @@ $time-picker: map.merge(
     d-color: get-css-var('border-color-light-2'),
     divider: get-css-var('border-shape') get-css-var('time-picker-d-color'),
     wheel-v-padding: 8px,
-    wheel-h-padding: 8px,
+    wheel-h-padding: 12px,
     option-color-disabled: get-css-var('content-color-disabled')
   ),
   $time-picker
@@ -166,9 +166,14 @@ $time-picker: map.merge(
     }
   }
 
+  &__wheels {
+    display: flex;
+    gap: 6px;
+    padding: get-css-var('time-picker-wheel-v-padding') get-css-var('time-picker-wheel-h-padding');
+  }
+
   &__wheel {
     display: flex;
-    padding: get-css-var('time-picker-wheel-v-padding') get-css-var('time-picker-wheel-h-padding');
   }
 
   &--no-hour {

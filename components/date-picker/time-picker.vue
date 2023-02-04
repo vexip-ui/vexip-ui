@@ -23,7 +23,7 @@
       <div :class="nh.be('control')">
         <TimeControl
           ref="start"
-          :unit-type="currentState === 'start' ? startState.column! : undefined"
+          :unit-type="currentState === 'start' ? startState.column! : ''"
           :enabled="startState.enabled"
           :activated="startState.activated"
           :time-value="startState.timeValue"
@@ -44,6 +44,7 @@
           @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
           @next-unit="enterColumn('next')"
+          @blur="startState.column = null"
         ></TimeControl>
         <template v-if="props.isRange">
           <div
@@ -58,7 +59,7 @@
           </div>
           <TimeControl
             ref="end"
-            :unit-type="currentState === 'end' ? endState.column! : undefined"
+            :unit-type="currentState === 'end' ? endState.column! : ''"
             :enabled="endState.enabled"
             :activated="endState.activated"
             :time-value="endState.timeValue"
@@ -79,6 +80,7 @@
             @unit-focus="handleEndInput"
             @prev-unit="enterColumn('prev')"
             @next-unit="enterColumn('next')"
+            @blur="endState.column = null"
           ></TimeControl>
         </template>
       </div>
@@ -99,11 +101,7 @@
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <transition :name="nh.ns('fade')" appear>
-        <div
-          v-if="!props.disabled && props.clearable && isHover && lastValue"
-          :class="[nh.be('icon'), nh.be('clear')]"
-          @click.stop="handleClear"
-        >
+        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
@@ -112,7 +110,7 @@
       </transition>
     </div>
     <Portal :to="transferTo">
-      <transition :name="props.transitionName" @after-leave="handlePanelClosed">
+      <transition :name="props.transitionName">
         <div
           v-if="currentVisible"
           ref="popper"
@@ -136,7 +134,7 @@
               </div>
             </div>
             <div :class="nh.be('list')">
-              <div style="display: flex;">
+              <div :class="nh.be('wheels')">
                 <TimeWheel
                   v-model:hour="startState.timeValue.hour"
                   v-model:minute="startState.timeValue.minute"
@@ -248,8 +246,6 @@ export default defineComponent({
       getFieldValue,
       setFieldValue
     } = useFieldStore<string | string[]>(() => reference.value?.focus())
-
-    const initValue = format(Date.now(), 'HH:mm:ss')
 
     const nh = useNameHelper('time-picker')
     const props = useProps('timePicker', _props, {
@@ -371,7 +367,12 @@ export default defineComponent({
       return props.isRange ? values : values[0]
     })
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && isHover.value && !!lastValue.value
+      return (
+        !props.disabled &&
+        props.clearable &&
+        isHover.value &&
+        !!(Array.isArray(props.value) ? props.value[0] || props.value[1] : props.value)
+      )
     })
     const startError = computed(() => {
       const { hour, minute, second } = startState.timeValue
@@ -394,22 +395,7 @@ export default defineComponent({
       )
     })
 
-    parseValue(props.value, false)
-
-    if (props.noFiller) {
-      lastValue.value = getStringValue()
-    }
-
-    watch(
-      () => props.value,
-      value => {
-        parseValue(value)
-
-        if (!value) {
-          toggleActivated(false)
-        }
-      }
-    )
+    watch(() => props.value, parseValue, { immediate: true })
     watch(() => props.format, parseFormat, { immediate: true })
     watch(
       () => props.visible,
@@ -511,22 +497,20 @@ export default defineComponent({
       return currentState.value === 'start' ? startState : endState
     }
 
-    function parseValue(value: string | string[], updateActivated = true) {
+    function parseValue<T extends string | null>(value: T | T[]) {
       if (!Array.isArray(value)) {
         value = [value, value]
       }
 
+      const defaultDate = new Date()
+
       for (let i = 0; i < 2; ++i) {
-        const match = TIME_REG.exec(value[i] || initValue)
+        const match = TIME_REG.exec(value[i] || '')
         const state = i === 0 ? startState : endState
-        const { activated, timeValue } = state
+        const { timeValue } = state
 
         if (match) {
-          if (updateActivated) {
-            activated.hour = !!match[1]
-            activated.minute = !!match[2]
-            activated.second = !!match[3]
-          }
+          toggleActivated(true, i === 0 ? 'start' : 'end')
 
           const hour = parseInt(match[1])
           const minute = match[2] ? parseInt(match[2].slice(1)) : 0
@@ -538,15 +522,11 @@ export default defineComponent({
           timeValue.minute = date.getMinutes()
           timeValue.second = date.getSeconds()
         } else {
-          timeValue.hour = 0
-          timeValue.minute = 0
-          timeValue.second = 0
+          timeValue.hour = defaultDate.getHours()
+          timeValue.minute = defaultDate.getMinutes()
+          timeValue.second = defaultDate.getSeconds()
 
-          if (updateActivated) {
-            activated.hour = false
-            activated.minute = false
-            activated.second = false
-          }
+          toggleActivated(false, i === 0 ? 'start' : 'end')
         }
 
         if (!props.isRange) break
@@ -561,8 +541,14 @@ export default defineComponent({
       })
     }
 
-    function toggleActivated(value: boolean) {
-      [startState, endState].forEach(state => {
+    function toggleActivated(value: boolean, valueType?: 'start' | 'end') {
+      const states = valueType
+        ? valueType === 'start'
+          ? [startState]
+          : [endState]
+        : [startState, endState]
+
+      states.forEach(state => {
         (Object.keys(state.activated) as TimeType[]).forEach(type => {
           state.activated[type] = value
         })
@@ -575,11 +561,7 @@ export default defineComponent({
 
     function verifyTime() {
       if (startError.value || (props.isRange && endError.value)) {
-        if (lastValue.value) {
-          parseValue(lastValue.value.split('|'))
-        } else {
-          parseValue(props.value)
-        }
+        parseValue(props.value)
       }
     }
 
@@ -625,16 +607,16 @@ export default defineComponent({
       if (props.disabled || (props.loading && props.loadingLock)) return
 
       const target = event.target as Node
-      const lastVisible = currentVisible.value
       currentVisible.value = true
 
       handleFocused()
 
-      if (!lastVisible && wrapper.value && target) {
+      if (wrapper.value && target) {
         const units = Array.from(wrapper.value.querySelectorAll(`.${nh.be('unit')}`))
 
         if (!units.some(unit => unit === target || unit.contains(target))) {
-          emitEvent(props.onChangeCol, getCurrentState().column, currentState.value)
+          startState.column = null
+          endState.column = null
         }
       }
     }
@@ -649,14 +631,18 @@ export default defineComponent({
 
     function handleClear() {
       if (props.clearable) {
-        lastValue.value = ''
-        finishInput()
         nextTick(() => {
-          parseValue('')
-          emitEvent(props.onChange, currentValue.value)
-          emit('update:value', currentValue.value)
+          const emitValue = props.isRange ? ([] as string[]) : ''
+
+          parseValue(null)
+          finishInput(false)
+          emitEvent(props.onChange, emitValue)
+          emit('update:value', emitValue)
           emitEvent(props.onClear)
-          clearField(currentValue.value)
+          clearField(emitValue)
+          handleBlur()
+
+          lastValue.value = ''
 
           nextTick(() => {
             toggleActivated(false)
@@ -828,11 +814,11 @@ export default defineComponent({
       }
     }
 
-    function handlePanelClosed() {
-      const { hour, minute } = startState.enabled
+    // function handlePanelClosed() {
+    //   const { hour, minute } = startState.enabled
 
-      handleStartInput(hour ? 'hour' : minute ? 'minute' : 'second')
-    }
+    //   handleStartInput(hour ? 'hour' : minute ? 'minute' : 'second')
+    // }
 
     return {
       ClockR,
@@ -882,7 +868,7 @@ export default defineComponent({
       handleStartInput,
       handleEndInput,
       handleExchangeClick,
-      handlePanelClosed,
+      // handlePanelClosed,
 
       focus: handleFocused,
       blur: handleBlur,

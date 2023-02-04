@@ -4,15 +4,16 @@
     :class="[nh.be('input'), hasError && nh.bem('input', 'error')]"
     tabindex="-1"
     @keydown="handleInput"
+    @blur="handleBlur"
   >
     <div
       v-if="enabled.hour"
-      :class="[nh.be('unit'), visible && unitType === 'hour' && nh.bem('unit', 'focused')]"
+      :class="[nh.be('unit'), getUnitFocusClass('hour')]"
       @click="handleInputFocus('hour')"
     >
       {{ formattedHour }}
     </div>
-    <div v-if="labels.hour" :class="nh.be('label')">
+    <div v-if="labels.hour" :class="nh.be('label')" @click="handleInputFocus('hour')">
       {{ labels.hour }}
     </div>
     <template v-if="enabled.minute">
@@ -20,12 +21,12 @@
         {{ separator }}
       </div>
       <div
-        :class="[nh.be('unit'), visible && unitType === 'minute' && nh.bem('unit', 'focused')]"
+        :class="[nh.be('unit'), getUnitFocusClass('minute')]"
         @click="handleInputFocus('minute')"
       >
         {{ formattedMinute }}
       </div>
-      <div v-if="labels.minute" :class="nh.be('label')">
+      <div v-if="labels.minute" :class="nh.be('label')" @click="handleInputFocus('minute')">
         {{ labels.minute }}
       </div>
     </template>
@@ -34,12 +35,12 @@
         {{ separator }}
       </div>
       <div
-        :class="[nh.be('unit'), visible && unitType === 'second' && nh.bem('unit', 'focused')]"
+        :class="[nh.be('unit'), getUnitFocusClass('second')]"
         @click="handleInputFocus('second')"
       >
         {{ formattedSecond }}
       </div>
-      <div v-if="labels.second" :class="nh.be('label')">
+      <div v-if="labels.second" :class="nh.be('label')" @click="handleInputFocus('second')">
         {{ labels.second }}
       </div>
     </template>
@@ -59,8 +60,8 @@ export default defineComponent({
   name: 'TimeControl',
   props: {
     unitType: {
-      type: String as PropType<TimeType>,
-      default: 'hour'
+      type: String as PropType<TimeType | ''>,
+      default: ''
     },
     enabled: {
       type: Object as PropType<Record<TimeType, boolean>>,
@@ -121,7 +122,8 @@ export default defineComponent({
     'unit-focus',
     'unit-blur',
     'prev-unit',
-    'next-unit'
+    'next-unit',
+    'blur'
   ],
   setup(props, { emit }) {
     const nh = useNameHelper('time-picker')
@@ -138,17 +140,21 @@ export default defineComponent({
       return formatValue('second')
     })
 
-    watch(
-      () => props.unitType,
-      (_, prev) => {
-        prev && emit('unit-blur', prev)
-      }
-    )
+    // watch(
+    //   () => props.unitType,
+    //   (_, prev) => {
+    //     prev && emit('unit-blur', prev)
+    //   }
+    // )
 
     function formatValue(type: TimeType) {
       return props.noFiller || props.activated[type]
         ? doubleDigits(props.timeValue[type])
         : `${props.filler}${props.filler}`
+    }
+
+    function getUnitFocusClass(type: TimeType) {
+      return props.visible && props.unitType === type ? nh.bem('unit', 'focused') : null
     }
 
     function handleInputFocus(type: TimeType) {
@@ -201,6 +207,10 @@ export default defineComponent({
       emit('cancel')
     }
 
+    function handleBlur() {
+      emit('blur')
+    }
+
     return {
       nh,
 
@@ -210,8 +220,10 @@ export default defineComponent({
 
       wrapper,
 
+      getUnitFocusClass,
       handleInputFocus,
       handleInput,
+      handleBlur,
 
       focus: () => {
         wrapper.value?.focus()

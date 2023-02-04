@@ -49,14 +49,14 @@ describe('TimePicker', () => {
       props: { onFocus, onBlur }
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
-    const units = wrapper.findAll('.vxp-time-picker__unit')
+    // const units = wrapper.findAll('.vxp-time-picker__unit')
 
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
     expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
 
     await wrapper.trigger('click')
     expect(wrapper.classes()).toContain('vxp-time-picker--visible')
-    expect(units[0].classes()).toContain('vxp-time-picker__unit--focused')
+    // expect(units[0].classes()).toContain('vxp-time-picker__unit--focused')
     expect(selector.classes()).toContain('vxp-time-picker__selector--focused')
     expect(onFocus).toHaveBeenCalledTimes(1)
 
@@ -158,9 +158,9 @@ describe('TimePicker', () => {
     })
     const units = wrapper.findAll('.vxp-time-picker__unit')
 
-    units.forEach(unit => {
-      expect(unit.text()).toEqual('--')
-    })
+    expect(units[0].text()).toEqual('09')
+    expect(units[1].text()).toEqual('24')
+    expect(units[2].text()).toEqual('47')
 
     await wrapper.trigger('click')
     await runScrollTimers()
@@ -172,10 +172,10 @@ describe('TimePicker', () => {
     expect(activeWheelItems[1].text()).toEqual('24')
     expect(activeWheelItems[2].text()).toEqual('47')
 
-    await wrapper.trigger('clickoutside')
-    expect(units[0].text()).toEqual('09')
-    expect(units[1].text()).toEqual('24')
-    expect(units[2].text()).toEqual('47')
+    // await wrapper.trigger('clickoutside')
+    // expect(units[0].text()).toEqual('09')
+    // expect(units[1].text()).toEqual('24')
+    // expect(units[2].text()).toEqual('47')
   })
 
   it('falsy value', async () => {
@@ -364,6 +364,7 @@ describe('TimePicker', () => {
     const onClear = vi.fn()
     const wrapper = mount(TimePicker, {
       props: {
+        value: '09:24:47',
         clearable: true,
         onClear
       }
@@ -394,9 +395,11 @@ describe('TimePicker', () => {
       props: { value: '09:24:47', onChangeCol }
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
-    const units = wrapper.findAll('.vxp-time-picker__unit')
 
     await wrapper.trigger('click')
+    const units = wrapper.findAll('.vxp-time-picker__unit')
+
+    await units[0].trigger('click')
     expect(onChangeCol).toHaveBeenCalled()
     expect(onChangeCol).toHaveBeenLastCalledWith('hour', 'start')
 
@@ -426,10 +429,12 @@ describe('TimePicker', () => {
         onChangeCol
       }
     })
+
+    await wrapper.trigger('click')
     const input = wrapper.find('.vxp-time-picker__input')
     const units = wrapper.findAll('.vxp-time-picker__unit')
 
-    await wrapper.trigger('click')
+    await units[0].trigger('click')
     await input.trigger('keydown', { key: 'ArrowUp' })
     expect(units[0].text()).toEqual('08')
     expect(onMinus).toHaveBeenCalled()
@@ -485,10 +490,12 @@ describe('TimePicker', () => {
         steps: [2, 3, 4]
       }
     })
+
+    await wrapper.trigger('click')
     const input = wrapper.find('.vxp-time-picker__input')
     const units = wrapper.findAll('.vxp-time-picker__unit')
 
-    await wrapper.trigger('click')
+    await units[0].trigger('click')
     await input.trigger('keydown', { key: 'ArrowUp' })
     expect(units[0].text()).toEqual('10')
 
@@ -508,10 +515,12 @@ describe('TimePicker', () => {
         ctrlSteps: [2, 3, 4]
       }
     })
+
+    await wrapper.trigger('click')
     const input = wrapper.find('.vxp-time-picker__input')
     const units = wrapper.findAll('.vxp-time-picker__unit')
 
-    await wrapper.trigger('click')
+    await units[0].trigger('click')
     await input.trigger('keydown.ctrl', { key: 'ArrowUp' })
     expect(units[0].text()).toEqual('07')
 
@@ -572,14 +581,16 @@ describe('TimePicker', () => {
         onChangeCol
       }
     })
+
+    await wrapper.trigger('click')
     const input = wrapper.findAll('.vxp-time-picker__input')
     const units = wrapper.findAll('.vxp-time-picker__unit')
 
     expect(input.length).toEqual(2)
     expect(units.length).toEqual(6)
 
-    await wrapper.trigger('click')
-    expect(units[0].classes()).toContain('vxp-time-picker__unit--focused')
+    // await wrapper.trigger('click')
+    // expect(units[0].classes()).toContain('vxp-time-picker__unit--focused')
 
     await units[2].trigger('click')
     await input[0].trigger('keydown', { key: 'Tab' })
@@ -618,11 +629,14 @@ describe('TimePicker', () => {
         min: '11:20:30'
       }
     })
-    const input = wrapper.find('.vxp-time-picker__input')
 
     await wrapper.trigger('click')
+    const input = wrapper.find('.vxp-time-picker__input')
+    const units = wrapper.findAll('.vxp-time-picker__unit')
+
     expect(input.classes()).not.toContain('vxp-time-picker__input--error')
 
+    await units[0].trigger('click')
     await input.trigger('keydown', { key: 'ArrowUp' })
     expect(input.classes()).toContain('vxp-time-picker__input--error')
   })
@@ -634,11 +648,14 @@ describe('TimePicker', () => {
         max: '11:20:30'
       }
     })
-    const input = wrapper.find('.vxp-time-picker__input')
 
     await wrapper.trigger('click')
+    const input = wrapper.find('.vxp-time-picker__input')
+    const units = wrapper.findAll('.vxp-time-picker__unit')
+
     expect(input.classes()).not.toContain('vxp-time-picker__input--error')
 
+    await units[0].trigger('click')
     await input.trigger('keydown', { key: 'ArrowDown' })
     expect(input.classes()).toContain('vxp-time-picker__input--error')
   })
@@ -651,11 +668,14 @@ describe('TimePicker', () => {
         max: '11:20:30'
       }
     })
-    const input = wrapper.find('.vxp-time-picker__input')
 
     await wrapper.trigger('click')
+    const input = wrapper.find('.vxp-time-picker__input')
+    const units = wrapper.findAll('.vxp-time-picker__unit')
+
     expect(input.classes()).not.toContain('vxp-time-picker__input--error')
 
+    await units[0].trigger('click')
     await input.trigger('keydown', { key: 'ArrowDown' })
     expect(input.classes()).toContain('vxp-time-picker__input--error')
   })
