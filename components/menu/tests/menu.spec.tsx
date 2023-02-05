@@ -129,7 +129,7 @@ describe('Menu', () => {
     await parent.find('.vxp-menu__label').trigger('click')
     expect(onExpand).toHaveBeenCalled()
     expect(onExpand).toHaveBeenCalledWith('1', {})
-    expect(parent.classes()).toContain('vxp-menu__item--group-visible')
+    expect(parent.attributes('aria-expanded')).toEqual('true')
 
     await parent.find('.vxp-menu__item').find('.vxp-menu__label').trigger('click')
     expect(onSelect).toHaveBeenCalled()
@@ -162,12 +162,12 @@ describe('Menu', () => {
     const parent2 = wrapper.find('.p2')
 
     await parent1.find('.vxp-menu__label').trigger('click')
-    expect(parent1.classes()).toContain('vxp-menu__item--group-visible')
-    expect(parent2.classes()).not.toContain('vxp-menu__item--group-visible')
+    expect(parent1.attributes('aria-expanded')).toEqual('true')
+    expect(parent2.attributes('aria-expanded')).toEqual('false')
 
     await parent2.find('.vxp-menu__label').trigger('click')
-    expect(parent1.classes()).not.toContain('vxp-menu__item--group-visible')
-    expect(parent2.classes()).toContain('vxp-menu__item--group-visible')
+    expect(parent1.attributes('aria-expanded')).toEqual('false')
+    expect(parent2.attributes('aria-expanded')).toEqual('true')
   })
 
   it('group', () => {

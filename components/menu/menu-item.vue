@@ -1,5 +1,10 @@
 <template>
-  <li ref="wrapper" :class="className" role="none">
+  <li
+    ref="wrapper"
+    :class="className"
+    :aria-expanded="isGroup ? groupExpanded : undefined"
+    role="none"
+  >
     <Tooltip
       placement="right"
       :reverse="tooltipReverse"
@@ -186,7 +191,6 @@ const MenuItem = defineComponent({
       return {
         [baseClass]: true,
         [`${baseClass}--disabled`]: props.disabled,
-        [`${baseClass}--group-visible`]: isGroup.value && groupExpanded.value,
         [`${baseClass}--selected`]: selected.value,
         [`${baseClass}--no-icon`]: !props.icon,
         [`${baseClass}--son-selected`]: sonSelected.value
