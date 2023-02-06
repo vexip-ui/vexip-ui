@@ -19,7 +19,7 @@ import type { LayoutConfig, LayoutHeaderAction, LayoutSignType } from './symbol'
 export default defineComponent({
   name: 'LayoutHeader',
   props: layoutHeaderProps,
-  emits: ['update:sign-type', 'update:color', 'update:user-dropped'],
+  emits: ['update:sign-type', 'update:color', 'update:user-dropped', 'update:dark-mode'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
       locale: null,
@@ -42,10 +42,7 @@ export default defineComponent({
         static: true
       },
       menuProps: null,
-      onNavChange: null,
-      onColorChange: null,
-      onUserAction: null,
-      onSignClick: null
+      darkMode: null
     })
 
     const nh = useNameHelper('layout')
@@ -64,7 +61,7 @@ export default defineComponent({
       return isClient ? document.documentElement : null
     })
     const currentColor = ref(props.color || props.colors?.[0] || getBaseColor())
-    const isDark = ref(rootEl.value?.classList.contains('dark') ?? false)
+    const isDark = ref(false)
 
     const className = computed(() => {
       return [
@@ -117,6 +114,13 @@ export default defineComponent({
       }
     )
     watch(currentColor, computeSeriesColors)
+    watch(
+      () => props.darkMode,
+      value => {
+        isDark.value = value ?? rootEl.value?.classList.contains('dark') ?? false
+      },
+      { immediate: true }
+    )
 
     onBeforeMount(() => {
       computeSeriesColors(currentColor.value)
@@ -192,13 +196,14 @@ export default defineComponent({
     }
 
     function toggleTheme(darkMode: boolean) {
+      isDark.value = darkMode
+
       emitEvent(props.onToggleTheme, darkMode)
+      emit('update:dark-mode', darkMode)
 
       if (!isClient) return
 
       requestAnimationFrame(() => {
-        isDark.value = darkMode
-
         if (rootEl.value) {
           if (darkMode) {
             rootEl.value.classList.add('dark')

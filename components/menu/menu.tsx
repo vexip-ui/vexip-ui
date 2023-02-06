@@ -167,7 +167,11 @@ export default defineComponent({
       })
 
       if (props.router && !props.manualRoute && !currentActive.value) {
-        currentActive.value = (currentRoute.value.meta?.label as string) ?? currentRoute.value.path
+        const route = currentRoute.value
+
+        if (route) {
+          currentActive.value = (route.meta?.label as string) ?? currentRoute.value.path
+        }
       }
     })
 

@@ -24,11 +24,7 @@ export default defineComponent({
       menuProps: null,
       logo: '',
       signName: '',
-      fixed: 'lg',
-      onReducedChange: null,
-      onExpandedChange: null,
-      onSignClick: null,
-      onMenuSelect: null
+      fixed: 'lg'
     })
 
     const nh = useNameHelper('layout')

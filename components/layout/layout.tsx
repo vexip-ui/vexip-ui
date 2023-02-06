@@ -30,7 +30,7 @@ export default defineComponent({
     NativeScroll
   },
   props: layoutProps,
-  emits: ['update:reduced', 'update:sign-type', 'update:color'],
+  emits: ['update:reduced', 'update:sign-type', 'update:color', 'update:dark-mode'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('layout', _props, {
       locale: null,
@@ -58,10 +58,7 @@ export default defineComponent({
       color: '',
       miniHeaderSign: 'lg',
       verticalLinks: 'md',
-      onReducedChange: null,
-      onSignClick: null,
-      onMenuSelect: null,
-      onUserAction: null
+      darkMode: null
     })
 
     const nh = useNameHelper('layout')
@@ -113,6 +110,7 @@ export default defineComponent({
       return props.noAside || currentSignType.value === 'header' || state.expanded
     })
     const menu = computed(() => aside.value?.menu || header.value?.menu || null)
+    const isDark = ref(props.darkMode)
 
     provide(LAYOUT_STATE, state)
 
@@ -156,6 +154,12 @@ export default defineComponent({
       emitEvent(props.onColorChange, value)
       emit('update:color', value)
     })
+    watch(
+      () => props.darkMode,
+      value => {
+        isDark.value = value
+      }
+    )
 
     function getBaseColor() {
       if (rootEl.value) {
@@ -182,6 +186,7 @@ export default defineComponent({
 
     function handleToggleTheme(isDark: boolean) {
       emitEvent(props.onToggleTheme, isDark)
+      emit('update:dark-mode', isDark)
     }
 
     function handleScroll({ clientY }: { clientY: number }) {
@@ -240,6 +245,7 @@ export default defineComponent({
           v-model:sign-type={currentSignType.value}
           v-model:user-dropped={userDropped.value}
           v-model:color={currentColor.value}
+          v-model:dark-mode={isDark.value}
           locale={props.locale}
           user={props.user}
           actions={props.actions}
