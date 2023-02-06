@@ -19,7 +19,7 @@ import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
 
 import type { RouteRecordRaw, RouteLocationRaw } from 'vue-router'
-import type { MenuOptions, MenuMarkerType, MenuGroupType, MenuItemState, MenuState } from './symbol'
+import type { MenuOptions, MenuMarkerType, MenuItemState, MenuState } from './symbol'
 
 const menuMarkerTypes = Object.freeze<MenuMarkerType[]>(['top', 'right', 'bottom', 'left', 'none'])
 
@@ -41,7 +41,7 @@ export default defineComponent({
       },
       accordion: false,
       markerType: {
-        default: 'right' as MenuMarkerType,
+        default: 'right',
         validator: value => menuMarkerTypes.includes(value)
       },
       reduced: false,
@@ -49,8 +49,8 @@ export default defineComponent({
       transfer: false,
       trigger: 'hover',
       groupType: {
-        default: 'collapse' as MenuGroupType,
-        validator: (value: MenuGroupType) => ['collapse', 'dropdown'].includes(value)
+        default: 'collapse',
+        validator: value => ['collapse', 'dropdown'].includes(value)
       },
       tooltipReverse: null,
       options: {
@@ -157,7 +157,7 @@ export default defineComponent({
     )
     watch(currentRoute, value => {
       if (!props.manualRoute && value) {
-        currentActive.value = (value.meta?.label as string) || value.path
+        currentActive.value = (value.meta?.label as string) ?? value.path
       }
     })
 
@@ -165,6 +165,10 @@ export default defineComponent({
       nextTick(() => {
         if (!props.horizontal && props.reduced) handleMenuReduce()
       })
+
+      if (props.router && !props.manualRoute && !currentActive.value) {
+        currentActive.value = (currentRoute.value.meta?.label as string) ?? currentRoute.value.path
+      }
     })
 
     expose({ expandItemByLabel })
