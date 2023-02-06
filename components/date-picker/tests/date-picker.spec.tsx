@@ -322,7 +322,6 @@ describe('DatePicker', () => {
       <DatePicker
         value={'2022-05-27 09:24:47'}
         type={'datetime'}
-        no-filler
         format={'yyyy-dd HH:ss'}
       ></DatePicker>
     ))

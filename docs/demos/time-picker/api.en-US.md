@@ -9,7 +9,7 @@
 | format          | `string`                                                  | Controls the display and hiding of time selection columns based on whether they have Hms                                       | `'HH:mm:ss'`     | -        |
 | separator       | `string`                                                  | The time unit separator                                                                                                        | `':'`            | -        |
 | filler          | `string`                                                  | Filler when time is not selected, the length is fixed to 1                                                                     | `'-'`            | -        |
-| no-filler       | `boolean`                                                 | Whether to disable filler, if disabled, the current value will be displayed in the control after initialization                | `false`          | -        |
+| ~~no-filler~~   | `boolean`                                                 | Whether to disable filler, if disabled, the current value will be displayed in the control after initialization                | `false`          | -        |
 | clearable       | `boolean`                                                 | whether to allow clear values                                                                                                  | `false`          | -        |
 | no-action       | `boolean`                                                 | whether to disable the bottom action bar of the time pane                                                                      | `false`          | -        |
 | no-arrow        | `boolean`                                                 | Whether to disable the wheel selector arrow indicator                                                                          | `false`          | -        |
@@ -27,7 +27,7 @@
 | transition-name | `string`                                                  | Set the transition to show and hide the time panel                                                                             | `'vxp-drop'`     | -        |
 | ok-text         | `string`                                                  | The text content of the time panel confirm button                                                                              | `locale.confirm` | -        |
 | cancel-text     | `string`                                                  | The text content of the cancel button in the time panel                                                                        | `locale.cancel`  | -        |
-| is-range        | `boolean`                                                 | Set whether to enable range selection mode                                                                                     | `false`          | -        |
+| ~~is-range~~    | `boolean`                                                 | Set whether to enable range selection mode                                                                                     | `false`          | -        |
 | loading         | `boolean`                                                 | Set whether is loading                                                                                                         | `false`          | `2.0.0`  |
 | loading-icon    | `Record<string, any>`                                     | Set the loading icon                                                                                                           | `Spinner`        | `2.0.0`  |
 | loading-lock    | `boolean`                                                 | Set whether to be read-only when loading                                                                                       | `false`          | `2.0.0`  |
@@ -37,6 +37,8 @@
 | outside-close   | `boolean`                                                 | Set whether the component can be closed by clicking outside                                                                    | `true`           | `2.0.20` |
 | outside-cancel  | `boolean`                                                 | Set whether clicking outside the component to close is a cancel operation                                                      | `false`          | `2.0.20` |
 | locale          | `LocaleConfig['timePicker']`                              | Set the locale config                                                                                                          | `null`           | `2.1.0`  |
+| range           | `boolean`                                                 | Set whether to enable range selection mode                                                                                     | `false`          | `2.1.1`  |
+| placeholder     | `string \| string[]`                                      | Set placeholder for date picker                                                                                                | `null`           | `2.1.1`  |
 
 ### TimePicker Events
 

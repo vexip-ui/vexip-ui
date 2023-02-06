@@ -97,6 +97,7 @@ export const timePickerProps = buildProps({
   labels: Object as PropType<Partial<Record<TimeType, string>>>,
   shortcuts: Array as PropType<TimeShortcut[]>,
   isRange: booleanProp,
+  range: booleanProp,
   disabled: booleanProp,
   transitionName: String,
   confirmText: String,
@@ -129,7 +130,8 @@ export const timePickerProps = buildProps({
   onBlur: eventProp(),
   onChangeCol: eventProp<(type: TimeType | null, inputType: 'start' | 'end') => void>(),
   onClickOutside: eventProp(),
-  onOutsideClose: eventProp()
+  onOutsideClose: eventProp(),
+  placeholder: [String, Array] as PropType<string | string[]>
 })
 
 export type TimePickerProps = ExtractPropTypes<typeof timePickerProps>

@@ -26,7 +26,7 @@ describe('TimePicker', () => {
     expect(wrapper.find('.vxp-time-picker__control').exists()).toBe(true)
     expect(wrapper.find('.vxp-time-picker__popper').exists()).toBe(true)
     expect(wrapper.find('.vxp-time-picker__panel').exists()).toBe(true)
-    expect(wrapper.findAll('.vxp-time-picker__unit').length).toEqual(3)
+    expect(wrapper.find('.vxp-time-picker__placeholder').exists()).toBe(true)
     expect(wrapper.find('.vxp-time-picker__action').exists()).toBe(true)
     expect(wrapper.find('.vxp-time-picker__action').findAll('.vxp-button').length).toEqual(2)
   })
@@ -171,11 +171,6 @@ describe('TimePicker', () => {
     expect(activeWheelItems[0].text()).toEqual('09')
     expect(activeWheelItems[1].text()).toEqual('24')
     expect(activeWheelItems[2].text()).toEqual('47')
-
-    // await wrapper.trigger('clickoutside')
-    // expect(units[0].text()).toEqual('09')
-    // expect(units[1].text()).toEqual('24')
-    // expect(units[2].text()).toEqual('47')
   })
 
   it('falsy value', async () => {
@@ -191,7 +186,7 @@ describe('TimePicker', () => {
     expect(selector.text()).toEqual('09:24:47')
 
     await wrapper.setProps({ value: '' })
-    expect(selector.text()).toEqual('--:--:--')
+    expect(wrapper.find('.vxp-time-picker__placeholder').exists()).toBe(true)
   })
 
   it('button text', () => {
@@ -204,36 +199,31 @@ describe('TimePicker', () => {
     expect(buttons[1].text()).toEqual('OK')
   })
 
-  it('labels', () => {
+  it('labels', async () => {
     const wrapper = mount(() => (
       <TimePicker labels={{ hour: '时', minute: '分', second: '秒' }}></TimePicker>
     ))
 
+    await wrapper.trigger('click')
     expect(expect(wrapper.find('.vxp-time-picker__selector').text()).toEqual('--时:--分:--秒'))
   })
 
-  it('filler', () => {
+  it('filler', async () => {
     const wrapper = mount(() => <TimePicker filler={'?'}></TimePicker>)
 
+    await wrapper.trigger('click')
     expect(expect(wrapper.find('.vxp-time-picker__selector').text()).toEqual('??:??:??'))
   })
 
-  it('no filler', () => {
-    const wrapper = mount(() => <TimePicker value={'09:24:47'} no-filler></TimePicker>)
-
-    expect(expect(wrapper.find('.vxp-time-picker__selector').text()).toEqual('09:24:47'))
-  })
-
-  it('separator', () => {
+  it('separator', async () => {
     const wrapper = mount(() => <TimePicker separator={'^'}></TimePicker>)
 
+    await wrapper.trigger('click')
     expect(expect(wrapper.find('.vxp-time-picker__selector').text()).toEqual('--^--^--'))
   })
 
   it('format', () => {
-    const wrapper = mount(() => (
-      <TimePicker value={'09:24:47'} no-filler format={'HH:ss'}></TimePicker>
-    ))
+    const wrapper = mount(() => <TimePicker value={'09:24:47'} format={'HH:ss'}></TimePicker>)
     const units = wrapper.findAll('.vxp-time-picker__unit')
 
     expect(units.length).toEqual(2)
@@ -386,7 +376,7 @@ describe('TimePicker', () => {
     await wrapper.find('.vxp-time-picker__clear').trigger('click')
     await nextTick()
     expect(onClear).toHaveBeenCalled()
-    expect(selector.text()).toEqual('--:--:--')
+    expect(selector.find('.vxp-time-picker__placeholder').exists()).toBe(true)
   })
 
   it('click unit', async () => {
@@ -576,7 +566,7 @@ describe('TimePicker', () => {
     const onChangeCol = vi.fn()
     const wrapper = mount(TimePicker, {
       props: {
-        isRange: true,
+        range: true,
         onChange,
         onChangeCol
       }
@@ -593,7 +583,7 @@ describe('TimePicker', () => {
     // expect(units[0].classes()).toContain('vxp-time-picker__unit--focused')
 
     await units[2].trigger('click')
-    await input[0].trigger('keydown', { key: 'Tab' })
+    await input[1].trigger('keydown', { key: 'Tab' })
     expect(units[3].classes()).toContain('vxp-time-picker__unit--focused')
     expect(onChangeCol).toHaveBeenLastCalledWith('hour', 'end')
 
@@ -678,5 +668,22 @@ describe('TimePicker', () => {
     await units[0].trigger('click')
     await input.trigger('keydown', { key: 'ArrowDown' })
     expect(input.classes()).toContain('vxp-time-picker__input--error')
+  })
+
+  it('placeholder', async () => {
+    const wrapper = mount(TimePicker, {
+      props: {
+        placeholder: 'test'
+      }
+    })
+
+    expect(wrapper.find('.vxp-time-picker__placeholder').exists()).toBe(true)
+    expect(wrapper.find('.vxp-time-picker__placeholder').text()).toEqual('test')
+
+    await wrapper.setProps({ range: true, placeholder: ['1', '2'] })
+    const placeholders = wrapper.findAll('.vxp-time-picker__placeholder')
+    expect(placeholders.length).toEqual(2)
+    expect(placeholders[0].text()).toEqual('1')
+    expect(placeholders[1].text()).toEqual('2')
   })
 })

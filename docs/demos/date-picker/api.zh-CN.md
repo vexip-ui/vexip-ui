@@ -35,7 +35,7 @@ type Dateable = number | string | Date
 | suffix          | `Record<string, any>`                                     | 后缀图标，使用后缀插槽时无效                                            | `null`                  | -        |
 | suffix-color    | `string`                                                  | 后缀内容的颜色，会影响后缀插槽                                          | `''`                    | -        |
 | no-suffix       | `boolean`                                                 | 设置是否禁用后缀图标                                                    | `false`                 | -        |
-| disabled        | `boolean`                                                 | 设置是否禁用日期选择框                                                  | `false`                 | -        |
+| disabled        | `boolean`                                                 | 设置是否禁用日期选择器                                                  | `false`                 | -        |
 | transition-name | `string`                                                  | 设置日期选择窗口的显示隐藏过渡效果                                      | `'vxp-drop'`            | -        |
 | confirm-text    | `string`                                                  | 日期选择窗口确认按钮的文本内容                                          | `locale.confirm`        | -        |
 | cancel-text     | `string`                                                  | 日期选择窗口取消按钮的文本内容                                          | `locale.cancel`         | -        |
@@ -60,7 +60,7 @@ type Dateable = number | string | Date
 | toggle     | 当日期面板显示状态改变时触发，返回当前状态                                                                                             | `(visible: boolean)`                                        | -    |
 | foucs      | 控件聚焦时触发，无返回值                                                                                                               | -                                                           | -    |
 | blur       | 控件失去焦点时触发，无返回值                                                                                                           | -                                                           | -    |
-| change     | 当选择的时间发生改变时触发，根据日期选择框类型是否为 `'year'` 以及是否开启了范围模式，会返回一个年份、年份范围、标准日期或标准日期范围 | `(value: string \| number \| number[] \| string[] \| null)` | -    |
+| change     | 当选择的时间发生改变时触发，根据日期选择器类型是否为 `'year'` 以及是否开启了范围模式，会返回一个年份、年份范围、标准日期或标准日期范围 | `(value: string \| number \| number[] \| string[] \| null)` | -    |
 | change-col | 当选择的日期类型发生改变时触发，返回当前类型的名称                                                                                     | `(type: DateTimeType \| null)`                              | -    |
 | input      | 当通过按键输入任意类型日期的值发生改变时触发，返回当前类型的名称与输入的值                                                             | `(type: DateTimeType, value: number)`                       | -    |
 | enter      | 当使用回车键确定或点击了日期选择窗口的确认按钮时触发，无返回值                                                                         | -                                                           | -    |

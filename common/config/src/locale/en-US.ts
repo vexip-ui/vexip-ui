@@ -51,8 +51,8 @@ export function enUSLocale() {
         month: 'month',
         date: 'date',
         datetime: 'datetime',
-        start: 'start',
-        end: 'end',
+        start: 'Start',
+        end: 'End',
         select: 'Please select'
       }
     },
@@ -131,7 +131,13 @@ export function enUSLocale() {
 
     timePicker: {
       confirm: 'Confrim',
-      cancel: 'Cancel'
+      cancel: 'Cancel',
+      placeholder: {
+        time: 'time',
+        start: 'Start',
+        end: 'End',
+        select: 'Please select'
+      }
     },
 
     transfer: {

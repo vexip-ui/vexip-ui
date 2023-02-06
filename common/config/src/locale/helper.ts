@@ -134,7 +134,13 @@ export interface LocaleConfig {
 
   timePicker: {
     confirm: string,
-    cancel: string
+    cancel: string,
+    placeholder: {
+      time: string,
+      start: string,
+      end: string,
+      select: string
+    }
   },
 
   transfer: {

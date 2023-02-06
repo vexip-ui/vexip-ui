@@ -36,6 +36,7 @@
           :no-filler="props.noFiller"
           :labels="props.labels"
           :has-error="startError"
+          :placeholder="startPlaceholder"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -46,7 +47,7 @@
           @next-unit="enterColumn('next')"
           @blur="startState.column = null"
         ></TimeControl>
-        <template v-if="props.isRange">
+        <template v-if="usingRange">
           <div
             :class="[nh.be('exchange'), props.exchange ? nh.bem('exchange', 'enabled') : '']"
             @click="handleExchangeClick"
@@ -72,6 +73,7 @@
             :no-filler="props.noFiller"
             :labels="props.labels"
             :has-error="endError"
+            :placeholder="endPlaceholder"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -145,10 +147,10 @@
                   :pointer="props.pointer"
                   :disabled-time="isTimeDisabled"
                   @change="handleWheelChange"
-                  @toggle-col="handleStartInput"
+                  @toggle-col="toggleCurrentState('start')"
                 ></TimeWheel>
                 <TimeWheel
-                  v-if="isRange"
+                  v-if="usingRange"
                   v-model:hour="endState.timeValue.hour"
                   v-model:minute="endState.timeValue.minute"
                   v-model:second="endState.timeValue.second"
@@ -158,7 +160,7 @@
                   :pointer="props.pointer"
                   :disabled-time="isTimeDisabled"
                   @change="handleWheelChange"
-                  @toggle-col="handleEndInput"
+                  @toggle-col="toggleCurrentState('end')"
                 ></TimeWheel>
               </div>
               <div v-if="!props.noAction" :class="nh.be('action')">
@@ -209,9 +211,10 @@ import {
   useLocale,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  makeSentence
 } from '@vexip-ui/config'
-import { USE_TOUCH, doubleDigits, boundRange, format } from '@vexip-ui/utils'
+import { USE_TOUCH, doubleDigits, boundRange, warnOnce } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
@@ -281,6 +284,7 @@ export default defineComponent({
       labels: () => ({}),
       shortcuts: () => [],
       isRange: false,
+      range: null,
       disabled: () => disabled.value,
       transitionName: () => nh.ns('drop'),
       confirmText: null,
@@ -299,9 +303,16 @@ export default defineComponent({
       min: null,
       max: null,
       outsideClose: true,
-      outsideCancel: false
+      outsideCancel: false,
+      placeholder: null
     })
 
+    warnOnce(
+      "[vexip-ui:TimePicker] 'on-filler' prop has been deprecated, please " +
+        "use 'placeholder' prop to replace it"
+    )
+
+    const locale = useLocale('timePicker', toRef(props, 'locale'))
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const currentVisible = ref(props.visible)
@@ -326,6 +337,34 @@ export default defineComponent({
     const startInput = ref<InstanceType<typeof TimeControl>>()
     const endInput = ref<InstanceType<typeof TimeControl>>()
 
+    const usingRange = computed(() => {
+      warnOnce(
+        "[vexip-ui:TimePicker] 'is-range' prop has been deprecated, please " +
+          "use 'range' prop to replace it"
+      )
+
+      return props.range ?? props.isRange
+    })
+    const startPlaceholder = computed(() => {
+      if (props.placeholder) {
+        return Array.isArray(props.placeholder) ? props.placeholder[0] : props.placeholder
+      }
+
+      const { select, start, time } = locale.value.placeholder
+
+      return makeSentence(usingRange.value ? `${start} ${time}` : `${select} ${time}`)
+    })
+    const endPlaceholder = computed(() => {
+      if (props.placeholder) {
+        return Array.isArray(props.placeholder)
+          ? props.placeholder[1] || props.placeholder[0]
+          : props.placeholder
+      }
+
+      const { end, time } = locale.value.placeholder
+
+      return makeSentence(`${end} ${time}`)
+    })
     const className = computed(() => {
       return [
         nh.b(),
@@ -340,7 +379,7 @@ export default defineComponent({
           [nh.bm('no-second')]: !startState.enabled.second,
           [nh.bm('visible')]: currentVisible.value,
           [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('is-range')]: props.isRange
+          [nh.bm('is-range')]: usingRange.value
         }
       ]
     })
@@ -364,7 +403,7 @@ export default defineComponent({
         return Object.values(state.timeValue).map(doubleDigits).join(':')
       })
 
-      return props.isRange ? values : values[0]
+      return usingRange.value ? values : values[0]
     })
     const showClear = computed(() => {
       return (
@@ -384,7 +423,7 @@ export default defineComponent({
       )
     })
     const endError = computed(() => {
-      if (!props.isRange) return false
+      if (!usingRange.value) return false
 
       const { hour, minute, second } = endState.timeValue
 
@@ -529,7 +568,7 @@ export default defineComponent({
           toggleActivated(false, i === 0 ? 'start' : 'end')
         }
 
-        if (!props.isRange) break
+        if (!usingRange.value) break
       }
     }
 
@@ -560,7 +599,7 @@ export default defineComponent({
     }
 
     function verifyTime() {
-      if (startError.value || (props.isRange && endError.value)) {
+      if (startError.value || (usingRange.value && endError.value)) {
         parseValue(props.value)
       }
     }
@@ -632,7 +671,7 @@ export default defineComponent({
     function handleClear() {
       if (props.clearable) {
         nextTick(() => {
-          const emitValue = props.isRange ? ([] as string[]) : ''
+          const emitValue = usingRange.value ? ([] as string[]) : ''
 
           parseValue(null)
           finishInput(false)
@@ -761,7 +800,7 @@ export default defineComponent({
     }
 
     function enterColumn(type: 'prev' | 'next') {
-      if (props.isRange) {
+      if (usingRange.value) {
         const state = getCurrentState()
         const currentColumn = state.column
 
@@ -825,7 +864,7 @@ export default defineComponent({
 
       props,
       nh,
-      locale: useLocale('timePicker', toRef(props, 'locale')),
+      locale,
       idFor,
       isHover,
       currentVisible,
@@ -837,6 +876,9 @@ export default defineComponent({
       currentState,
       currentValue,
 
+      usingRange,
+      startPlaceholder,
+      endPlaceholder,
       className,
       selectorClass,
       hasPrefix,

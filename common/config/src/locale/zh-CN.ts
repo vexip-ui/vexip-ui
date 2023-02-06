@@ -131,7 +131,13 @@ export function zhCNLocale() {
 
     timePicker: {
       confirm: '确认',
-      cancel: '取消'
+      cancel: '取消',
+      placeholder: {
+        time: '时间',
+        start: '开始',
+        end: '结束',
+        select: '请选择'
+      }
     },
 
     transfer: {

@@ -15,7 +15,7 @@ $time-picker: map.merge(
     unit-bg-color-focus: get-css-var('color-primary-opacity-1'),
     unit-bg-color-error: get-css-var('color-error-opacity-1'),
     separator-color: get-css-var('content-color-disabled'),
-    exchange-color: get-css-var('content-color-secondary'),
+    exchange-color: get-css-var('content-color-third'),
     exchange-color-hover: get-css-var('color-primary-base'),
     popper-z-index: get-css-var('z-index-popper'),
     pane-bg-color: get-css-var('bg-color-base'),
@@ -48,6 +48,10 @@ $time-picker: map.merge(
 
   user-select: none;
 
+  &__selector {
+    cursor: pointer;
+  }
+
   &__control {
     position: relative;
     display: flex;
@@ -63,6 +67,15 @@ $time-picker: map.merge(
     &--error {
       color: get-css-var('time-picker-color-error');
     }
+  }
+
+  &__placeholder {
+    overflow: hidden;
+    color: get-css-var('input-placeholder-color');
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
   }
 
   &__unit {

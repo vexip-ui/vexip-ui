@@ -1,7 +1,7 @@
 <template>
   <TimePicker
     v-model:value="time"
-    is-range
+    range
     clearable
     style="max-width: 300px;"
   ></TimePicker>

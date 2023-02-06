@@ -6,49 +6,54 @@
     @keydown="handleInput"
     @blur="handleBlur"
   >
-    <div
-      v-if="enabled.hour"
-      :class="[nh.be('unit'), getUnitFocusClass('hour')]"
-      @click="handleInputFocus('hour')"
-    >
-      {{ formattedHour }}
+    <div v-if="!focused && !isActivated" :class="nh.be('placeholder')">
+      {{ placeholder }}
     </div>
-    <div v-if="labels.hour" :class="nh.be('label')" @click="handleInputFocus('hour')">
-      {{ labels.hour }}
-    </div>
-    <template v-if="enabled.minute">
-      <div v-if="enabled.hour" :class="nh.be('separator')">
-        {{ separator }}
-      </div>
+    <template v-else>
       <div
-        :class="[nh.be('unit'), getUnitFocusClass('minute')]"
-        @click="handleInputFocus('minute')"
+        v-if="enabled.hour"
+        :class="[nh.be('unit'), getUnitFocusClass('hour')]"
+        @click="handleInputFocus('hour')"
       >
-        {{ formattedMinute }}
+        {{ formattedHour }}
       </div>
-      <div v-if="labels.minute" :class="nh.be('label')" @click="handleInputFocus('minute')">
-        {{ labels.minute }}
+      <div v-if="labels.hour" :class="nh.be('label')" @click="handleInputFocus('hour')">
+        {{ labels.hour }}
       </div>
-    </template>
-    <template v-if="enabled.second">
-      <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')">
-        {{ separator }}
-      </div>
-      <div
-        :class="[nh.be('unit'), getUnitFocusClass('second')]"
-        @click="handleInputFocus('second')"
-      >
-        {{ formattedSecond }}
-      </div>
-      <div v-if="labels.second" :class="nh.be('label')" @click="handleInputFocus('second')">
-        {{ labels.second }}
-      </div>
+      <template v-if="enabled.minute">
+        <div v-if="enabled.hour" :class="nh.be('separator')">
+          {{ separator }}
+        </div>
+        <div
+          :class="[nh.be('unit'), getUnitFocusClass('minute')]"
+          @click="handleInputFocus('minute')"
+        >
+          {{ formattedMinute }}
+        </div>
+        <div v-if="labels.minute" :class="nh.be('label')" @click="handleInputFocus('minute')">
+          {{ labels.minute }}
+        </div>
+      </template>
+      <template v-if="enabled.second">
+        <div v-if="enabled.minute || enabled.hour" :class="nh.be('separator')">
+          {{ separator }}
+        </div>
+        <div
+          :class="[nh.be('unit'), getUnitFocusClass('second')]"
+          @click="handleInputFocus('second')"
+        >
+          {{ formattedSecond }}
+        </div>
+        <div v-if="labels.second" :class="nh.be('label')" @click="handleInputFocus('second')">
+          {{ labels.second }}
+        </div>
+      </template>
     </template>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useNameHelper } from '@vexip-ui/config'
 import { doubleDigits } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'
@@ -111,6 +116,10 @@ export default defineComponent({
     hasError: {
       type: Boolean,
       default: false
+    },
+    placeholder: {
+      type: String,
+      default: ''
     }
   },
   emits: [
@@ -130,6 +139,11 @@ export default defineComponent({
 
     const wrapper = ref<HTMLElement>()
 
+    const isActivated = computed(() => {
+      return (Object.keys(props.enabled) as TimeType[]).every(type => {
+        return !props.enabled[type] || props.activated[type]
+      })
+    })
     const formattedHour = computed(() => {
       return formatValue('hour')
     })
@@ -139,13 +153,6 @@ export default defineComponent({
     const formattedSecond = computed(() => {
       return formatValue('second')
     })
-
-    // watch(
-    //   () => props.unitType,
-    //   (_, prev) => {
-    //     prev && emit('unit-blur', prev)
-    //   }
-    // )
 
     function formatValue(type: TimeType) {
       return props.noFiller || props.activated[type]
@@ -214,6 +221,7 @@ export default defineComponent({
     return {
       nh,
 
+      isActivated,
       formattedHour,
       formattedMinute,
       formattedSecond,
