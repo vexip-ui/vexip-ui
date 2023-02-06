@@ -186,7 +186,7 @@ const MenuItem = defineComponent({
       return {
         [baseClass]: true,
         [`${baseClass}--disabled`]: props.disabled,
-        [`${baseClass}--group-visible`]: isGroup.value && groupExpanded.value,
+        [`${baseClass}--group-visible`]: isGroup.value && groupExpanded.value && sonSelected.value,
         [`${baseClass}--selected`]: selected.value,
         [`${baseClass}--no-icon`]: !props.icon,
         [`${baseClass}--son-selected`]: sonSelected.value

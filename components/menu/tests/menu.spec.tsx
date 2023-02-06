@@ -129,12 +129,12 @@ describe('Menu', () => {
     await parent.find('.vxp-menu__label').trigger('click')
     expect(onExpand).toHaveBeenCalled()
     expect(onExpand).toHaveBeenCalledWith('1', {})
-    expect(parent.classes()).toContain('vxp-menu__item--group-visible')
 
     await parent.find('.vxp-menu__item').find('.vxp-menu__label').trigger('click')
     expect(onSelect).toHaveBeenCalled()
     expect(onSelect).toHaveBeenLastCalledWith('1-1', {})
     expect(parent.classes()).toContain('vxp-menu__item--son-selected')
+    expect(parent.classes()).toContain('vxp-menu__item--group-visible')
 
     await parent.find('.vxp-menu__label').trigger('click')
     expect(onReduce).toHaveBeenCalled()
@@ -162,10 +162,12 @@ describe('Menu', () => {
     const parent2 = wrapper.find('.p2')
 
     await parent1.find('.vxp-menu__label').trigger('click')
+    await parent1.find('.vxp-menu__item').find('.vxp-menu__label').trigger('click')
     expect(parent1.classes()).toContain('vxp-menu__item--group-visible')
     expect(parent2.classes()).not.toContain('vxp-menu__item--group-visible')
 
     await parent2.find('.vxp-menu__label').trigger('click')
+    await parent2.find('.vxp-menu__item').find('.vxp-menu__label').trigger('click')
     expect(parent1.classes()).not.toContain('vxp-menu__item--group-visible')
     expect(parent2.classes()).toContain('vxp-menu__item--group-visible')
   })
