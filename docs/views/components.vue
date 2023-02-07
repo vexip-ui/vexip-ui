@@ -190,9 +190,12 @@ function moveMenuIntoView() {
     color: var(--vxp-content-color-secondary);
     transition: var(--vxp-transition-color);
 
-    .vxp-menu__label:hover &,
+    .vxp-menu__label:hover & {
+      color: var(--vxp-content-color-secondary);
+    }
+
     .vxp-menu__item--selected .vxp-menu__label & {
-      color: var(--vxp-menu-label-color-hover);
+      color: var(--vxp-color-primary-opacity-3);
     }
   }
 }
