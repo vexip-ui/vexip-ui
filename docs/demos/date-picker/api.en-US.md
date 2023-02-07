@@ -52,6 +52,7 @@ type Dateable = number | string | Date
 | locale          | `LocaleConfig['calendar'] & LocaleConfig['dataPicker']`   | Set the locale config                                                                                                                          | `null`                  | `2.1.0`  |
 | range           | `boolean`                                                 | Set whether to enable range selection mode                                                                                                     | `false`                 | `2.1.1`  |
 | placeholder     | `string \| string[]`                                      | Set placeholder for date picker                                                                                                                | `null`                  | `2.1.1`  |
+| unit-readonly   | `boolean`                                                 | Set whether the input control is read-only                                                                                                     | `false`                 | `2.1.2`  |
 
 ### DatePicker Events
 

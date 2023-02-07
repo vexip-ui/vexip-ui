@@ -836,4 +836,22 @@ describe('DatePicker', () => {
     expect(placeholders[0].text()).toEqual('1')
     expect(placeholders[1].text()).toEqual('2')
   })
+
+  it('unit readonly', async () => {
+    const onChangeCol = vi.fn()
+    const wrapper = mount(DatePicker, {
+      props: {
+        value: '2022-05-27',
+        unitReadonly: true,
+        onChangeCol
+      }
+    })
+
+    await wrapper.trigger('click')
+    const units = wrapper.findAll('.vxp-date-picker__unit')
+
+    await units[2].trigger('click')
+    expect(units[2].classes()).not.toContain('vxp-date-picker__unit--focused')
+    expect(onChangeCol).toHaveBeenCalledTimes(0)
+  })
 })

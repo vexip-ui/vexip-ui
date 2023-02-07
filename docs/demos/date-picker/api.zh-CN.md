@@ -52,6 +52,7 @@ type Dateable = number | string | Date
 | locale          | `LocaleConfig['calendar'] & LocaleConfig['dataPicker']`   | 设置多语言配置                                                          | `null`                  | `2.1.0`  |
 | range           | `boolean`                                                 | 设置是否开启范围选择模式                                                | `false`                 | `2.1.1`  |
 | placeholder     | `string \| string[]`                                      | 设置日期选择器的占位符                                                  | `null`                  | `2.1.1`  |
+| unit-readonly   | `boolean`                                                 | 设置输入框控件是否只读                                                  | `false`                 | `2.1.2`  |
 
 ### DatePicker 事件
 

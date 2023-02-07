@@ -3,6 +3,7 @@
   "type",
   "labels",
   "filler",
+  "unit-readonly",
   "range",
   "bound",
   "shortcuts",

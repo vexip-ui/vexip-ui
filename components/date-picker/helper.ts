@@ -31,7 +31,6 @@ export function handleKeyEnter(event: KeyboardEvent) {
       type = 'next'
       break
     }
-    case 'Backspace':
     case 'Delete':
     case 'ArrowLeft': {
       // 上一列
@@ -119,6 +118,10 @@ export function useColumn<T extends string>(
   }
 
   function enterColumn(type: 'prev' | 'next', canLoop = true) {
+    if (!currentColumn.value) {
+      currentColumn.value = (type === 'next' ? columnTypes.at(-1) : columnTypes[0]) ?? null
+    }
+
     for (let i = 0; i < columnCount; ++i) {
       if (currentColumn.value === columnTypes[i]) {
         const rawTypes = type === 'prev' ? Array.from(columnTypes).reverse() : columnTypes
@@ -238,66 +241,10 @@ export function useTimeBound(originMin: Ref<string>, originMax: Ref<string>) {
     return DisabledType.FALSE
   }
 
-  // function verifyHour(hour: number) {
-  //   if (!isHourDisabled(hour)) return hour
-
-  //   if (reversed.value) {
-  //     const minDis = minUnits.value[0] - hour
-  //     const maxDis = hour - maxUnits.value[0]
-
-  //     return minDis > maxDis ? maxUnits.value[0] : minUnits.value[0]
-  //   }
-
-  //   return boundRange(hour, minUnits.value[0], maxUnits.value[0])
-  // }
-
-  // function verifyMinute(hour: number, minute: number) {
-  //   const type = isMinuteDisabled(hour, minute)
-
-  //   if (type === DisabledType.AT_MIN_TRUE) return minUnits.value[1]
-  //   if (type === DisabledType.AT_MAX_TRUE) return maxUnits.value[1]
-
-  //   if (type === DisabledType.TRUE) {
-  //     if (reversed.value) {
-  //       const minDis = minUnits.value[1] - minute
-  //       const maxDis = minute - maxUnits.value[1]
-
-  //       return minDis > maxDis ? maxUnits.value[1] : minUnits.value[1]
-  //     }
-
-  //     return boundRange(minute, minUnits.value[1], maxUnits.value[1])
-  //   }
-
-  //   return minute
-  // }
-
-  // function verifySecond(hour: number, minute: number, second: number) {
-  //   const type = isSecondDisabled(hour, minute, second)
-
-  //   if (type === DisabledType.AT_MIN_TRUE) return minUnits.value[2]
-  //   if (type === DisabledType.AT_MAX_TRUE) return maxUnits.value[2]
-
-  //   if (type === DisabledType.TRUE) {
-  //     if (reversed.value) {
-  //       const minDis = minUnits.value[2] - second
-  //       const maxDis = second - maxUnits.value[2]
-
-  //       return minDis > maxDis ? maxUnits.value[2] : minUnits.value[2]
-  //     }
-
-  //     return boundRange(second, minUnits.value[2], maxUnits.value[2])
-  //   }
-
-  //   return second
-  // }
-
   return {
     minUnits,
     maxUnits,
     reversed,
     isTimeDisabled
-    // verifyHour,
-    // verifyMinute,
-    // verifySecond
   }
 }

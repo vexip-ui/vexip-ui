@@ -57,6 +57,7 @@ export const datePickerProps = buildProps({
   outsideClose: booleanProp,
   outsideCancel: booleanProp,
   placeholder: [String, Array] as PropType<string | string[]>,
+  unitReadonly: booleanProp,
   onInput: eventProp<(type: DateTimeType, value: number) => void>(),
   onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
   onMinus: eventProp<(type: DateTimeType, value: number) => void>(),

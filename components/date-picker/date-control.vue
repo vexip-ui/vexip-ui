@@ -161,6 +161,10 @@ export default defineComponent({
     placeholder: {
       type: String,
       default: ''
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   emits: [
@@ -229,6 +233,8 @@ export default defineComponent({
     }
 
     function handleInputFocus(type: DateTimeType) {
+      if (props.readonly) return
+
       emit('unit-focus', type)
     }
 
@@ -236,6 +242,21 @@ export default defineComponent({
       if (!props.visible) return
 
       const type = handleKeyEnter(event)
+
+      if (props.readonly) {
+        switch (type) {
+          case 'ok': {
+            emit('enter')
+            break
+          }
+          case 'esc': {
+            emit('cancel')
+            break
+          }
+        }
+
+        return
+      }
 
       switch (type) {
         case 'next': {

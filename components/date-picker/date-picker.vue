@@ -10,6 +10,7 @@
       :class="selectorClass"
       tabindex="0"
       @keydown.space.prevent="showPanel"
+      @keydown.backspace.prevent="handleClear(false)"
     >
       <div
         v-if="hasPrefix"
@@ -37,6 +38,7 @@
           :labels="props.labels"
           :has-error="startError"
           :placeholder="startPlaceholder"
+          :readonly="props.unitReadonly"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
@@ -71,6 +73,7 @@
             :labels="props.labels"
             :has-error="endError"
             :placeholder="endPlaceholder"
+            :readonly="props.unitReadonly"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
@@ -100,7 +103,7 @@
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
@@ -287,7 +290,8 @@ export default defineComponent({
       max: null,
       outsideClose: true,
       outsideCancel: false,
-      placeholder: null
+      placeholder: null,
+      unitReadonly: false
     })
 
     warnOnce(
@@ -617,14 +621,14 @@ export default defineComponent({
       }
     })
     watch(currentState, value => {
-      if (currentVisible.value) {
+      if (!props.unitReadonly && currentVisible.value) {
         emitEvent(props.onChangeCol, getCurrentState().column, value)
       }
     })
     watch(
       () => startState.column,
       value => {
-        if (currentVisible.value && currentState.value === 'start') {
+        if (!props.unitReadonly && currentVisible.value && currentState.value === 'start') {
           emitEvent(props.onChangeCol, value, 'start')
         }
       }
@@ -632,7 +636,7 @@ export default defineComponent({
     watch(
       () => endState.column,
       value => {
-        if (currentVisible.value && currentState.value === 'end') {
+        if (!props.unitReadonly && currentVisible.value && currentState.value === 'end') {
           emitEvent(props.onChangeCol, value, 'end')
         }
       }
@@ -902,8 +906,8 @@ export default defineComponent({
       currentVisible.value = false
 
       shouldChange && emitChange()
-      startState.resetColumn('date')
-      endState.resetColumn('date')
+      startState.resetColumn()
+      endState.resetColumn()
     }
 
     function verifyValue(type: DateTimeType) {
@@ -1105,18 +1109,18 @@ export default defineComponent({
       emitEvent(props.onCancel)
     }
 
-    function handleClear() {
+    function handleClear(finish = true) {
       if (props.clearable) {
         nextTick(() => {
           const emitValue = usingRange.value ? ([] as string[] | number[]) : null
 
           parseValue(null)
-          finishInput(false)
+          finish && finishInput(false)
           emitEvent(props.onChange, emitValue)
           emit('update:value', emitValue)
           emitEvent(props.onClear)
           clearField(emitValue!)
-          handleBlur()
+          finish && handleBlur()
 
           lastValue.value = ''
 
