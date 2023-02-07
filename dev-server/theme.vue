@@ -108,7 +108,7 @@
         <br />
         <br />
         <DatePicker
-          is-range
+          range
           clearable
           transfer
           type="datetime"
@@ -116,7 +116,7 @@
         ></DatePicker>
         <br />
         <br />
-        <TimePicker is-range clearable :shortcuts="timeShortcuts"></TimePicker>
+        <TimePicker range clearable :shortcuts="timeShortcuts"></TimePicker>
         <br />
         <br />
         <template v-for="(meta, index) in linkerMeta" :key="index">

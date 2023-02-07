@@ -3,7 +3,7 @@
   <br />
   <br />
   <TimePicker
-    is-range
+    range
     :shortcuts="multipleShortcuts"
     clearable
     style="max-width: 300px;"

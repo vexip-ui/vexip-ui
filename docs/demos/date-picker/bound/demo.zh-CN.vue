@@ -26,7 +26,7 @@
   <br />
   <br />
   <DatePicker
-    is-range
+    range
     :value="['2020-05-13 09:27:15', '2020-05-16 12:34:56']"
     type="datetime"
     no-filler

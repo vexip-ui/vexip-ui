@@ -1,3 +1,16 @@
+## [2.1.1](https://github.com/vexip-ui/vexip-ui/compare/v2.1.0...v2.1.1) (2023-02-07)
+
+### Bug Fixes
+
+- **menu:** active menu not follow router when init ([75772ed](https://github.com/vexip-ui/vexip-ui/commit/75772ed1a2db804a729429629c9bf4bb03ca733b)), closes [#246](https://github.com/vexip-ui/vexip-ui/issues/246)
+- **menu:** improve group visible item style ([48c7166](https://github.com/vexip-ui/vexip-ui/commit/48c716602ab08ef83d889088c48ada26f35407a4)), closes [#248](https://github.com/vexip-ui/vexip-ui/issues/248)
+- **time-picker:** full controllable control value via value prop ([90ca68c](https://github.com/vexip-ui/vexip-ui/commit/90ca68c4b5615c6bae6ddbe59d63ee15bb18d19c))
+
+### Features
+
+- **layout:** support manually control dark mode ([04c199e](https://github.com/vexip-ui/vexip-ui/commit/04c199e91904546906502755786aba9e2e95855f)), closes [#245](https://github.com/vexip-ui/vexip-ui/issues/245)
+- **time-picker:** add placholder prop ([b5ca190](https://github.com/vexip-ui/vexip-ui/commit/b5ca1909bc409039d5cd79c9e08427e6408ce4bc))
+
 # [2.1.0](https://github.com/vexip-ui/vexip-ui/compare/v2.0.20...v2.1.0) (2023-01-30)
 
 ### Bug Fixes

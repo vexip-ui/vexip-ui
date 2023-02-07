@@ -3,7 +3,7 @@
   <br />
   <br />
   <TimePicker
-    is-range
+    range
     :value="['12:34:56', '13:11:43']"
     no-filler
     min="11:20:30"

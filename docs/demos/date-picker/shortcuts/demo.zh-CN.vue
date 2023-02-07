@@ -2,7 +2,7 @@
   <DatePicker type="datetime" :shortcuts="singleShortcuts" style="max-width: 300px;"></DatePicker>
   <br />
   <br />
-  <DatePicker :shortcuts="multipleShortcuts" is-range style="max-width: 300px;"></DatePicker>
+  <DatePicker :shortcuts="multipleShortcuts" range style="max-width: 300px;"></DatePicker>
 </template>
 
 <script setup lang="ts">
