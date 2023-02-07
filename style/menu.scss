@@ -222,6 +222,7 @@ $menu: map.merge(
         opacity: 100%;
       }
 
+      #{$self}--horizontal > &,
       #{$self}--horizontal :not(#{$popper}) & {
         background-color: get-css-var('menu-bg-color');
       }
