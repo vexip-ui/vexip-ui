@@ -8,6 +8,7 @@ $menu: () !default;
 $menu: map.merge(
   (
     bg-color: transparent,
+    bg-color-hover: get-css-var('fill-color-hover'),
     bg-color-selected: get-css-var('color-primary-opacity-8'),
     b-color: get-css-var('border-color-light-2'),
     d-color: get-css-var('border-color-light-1'),
@@ -15,9 +16,9 @@ $menu: map.merge(
     icon-color: get-css-var('content-color-secondary'),
     arrow-color: get-css-var('menu-icon-color'),
     label-color: get-css-var('content-color-base'),
-    label-color-hover: get-css-var('color-primary-base'),
-    label-color-visible: get-css-var('menu-label-color-hover'),
-    label-color-selected: get-css-var('menu-label-color-hover'),
+    label-color-hover: get-css-var('menu-label-color'),
+    label-color-visible: get-css-var('color-primary-base'),
+    label-color-selected: get-css-var('color-primary-base'),
     label-color-disabled: get-css-var('content-color-disabled'),
     marker-bg-color: get-css-var('color-primary-base'),
     popper-bg-color: get-css-var('bg-color-base'),
@@ -83,6 +84,12 @@ $menu: map.merge(
     }
   }
 
+  $self: #{&};
+  $popper: #{&}__popper;
+  $item: #{&}__item;
+  $label: #{&}__label;
+  $list: #{&}__list;
+
   &__item {
     padding: 0;
     list-style: none;
@@ -96,13 +103,11 @@ $menu: map.merge(
         height: 100%;
       }
     }
-  }
 
-  $self: #{&};
-  $popper: #{&}__popper;
-  $item: #{&}__item;
-  $label: #{&}__label;
-  $list: #{&}__list;
+    #{$self}--horizontal & {
+      padding: 0 4px;
+    }
+  }
 
   &__label {
     position: relative;
@@ -167,9 +172,25 @@ $menu: map.merge(
       display: none;
     }
 
-    &:hover,
-    #{$item}--son-selected > & {
+    &:hover {
       color: get-css-var('menu-label-color-hover');
+      background-color: get-css-var('menu-bg-color-hover');
+
+      #{$self}--horizontal & {
+        background-color: get-css-var('menu-bg-color');
+
+        &::after {
+          opacity: 100%;
+        }
+      }
+
+      #{$item}--disabled &::after {
+        opacity: 0%;
+      }
+    }
+
+    #{$item}--son-selected > & {
+      color: get-css-var('menu-label-color-selected');
 
       #{$self}--horizontal &::after {
         opacity: 100%;
@@ -182,8 +203,6 @@ $menu: map.merge(
 
     #{$item}--selected &,
     #{$item}--group-visible > & {
-      color: get-css-var('menu-label-color-visible');
-
       #{$self}--horizontal & {
         &::after {
           opacity: 100%;
@@ -203,14 +222,18 @@ $menu: map.merge(
         opacity: 100%;
       }
 
-      #{$self}--horizontal > & {
+      #{$self}--horizontal :not(#{$popper}) & {
         background-color: get-css-var('menu-bg-color');
       }
     }
 
     #{$item}--disabled & {
-      color: get-css-var('menu-label-color-disabled');
-      cursor: not-allowed;
+      &,
+      &:hover {
+        color: get-css-var('menu-label-color-disabled');
+        cursor: not-allowed;
+        background-color: get-css-var('menu-bg-color');
+      }
     }
   }
 
@@ -219,7 +242,7 @@ $menu: map.merge(
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    width: 24px;
+    min-width: 14px;
     margin-right: 10px;
     transition: margin get-css-var('transition-base');
 
@@ -232,7 +255,7 @@ $menu: map.merge(
     }
 
     #{$popper} & {
-      margin-right: 2px;
+      margin-right: 6px;
       margin-left: -2px;
     }
   }
@@ -298,7 +321,7 @@ $menu: map.merge(
     #{$self}--horizontal & {
       position: relative;
       right: auto;
-      margin-right: 4px;
+      margin-right: 0;
       margin-left: 6px;
       transform: rotate(0);
 

@@ -25,7 +25,7 @@ const options: MenuOptions[] = [
     name: '菜单 1',
     icon: EnvelopesBulk,
     children: [
-      { label: '1-1', name: '子菜单 1' },
+      { label: '1-1', name: '子菜单 1', disabled: true },
       { label: '1-2', name: '子菜单 2' },
       {
         label: '1-3',
@@ -40,13 +40,13 @@ const options: MenuOptions[] = [
   {
     label: '2',
     name: '菜单 2',
-    icon: City,
-    disabled: true
+    icon: City
   },
   {
     label: '3',
     name: '菜单 3',
-    icon: ChartPie
+    icon: ChartPie,
+    disabled: true
   },
   {
     label: '4',
@@ -54,7 +54,7 @@ const options: MenuOptions[] = [
     icon: User,
     children: [
       { label: '4-1', name: '子菜单 1' },
-      { label: '4-2', name: '子菜单 2' },
+      { label: '4-2', name: '子菜单 2', disabled: true },
       { label: '4-3', name: '子菜单 3' }
     ]
   },

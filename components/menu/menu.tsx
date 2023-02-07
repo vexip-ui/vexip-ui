@@ -125,13 +125,7 @@ export default defineComponent({
         handleExpand,
         increaseItem,
         decreaseItem,
-        beforeExpand: () => {
-          if (props.accordion) {
-            for (const item of menuItemSet) {
-              item.groupExpanded = false
-            }
-          }
-        }
+        doForEachItem
       })
     )
 
@@ -216,6 +210,12 @@ export default defineComponent({
 
     function decreaseItem(state: MenuItemState) {
       menuItemSet.delete(state)
+    }
+
+    function doForEachItem(cb: (item: MenuItemState) => void) {
+      for (const item of menuItemSet) {
+        cb(item)
+      }
     }
 
     function handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw) {
@@ -341,7 +341,7 @@ export default defineComponent({
               )
             : props.horizontal
               ? (
-            <Overflow inherit>
+            <Overflow class={nh.be('overflow')} inherit>
               {{
                 default: renderMenus,
                 counter: ({ count }: { count: number }) => (

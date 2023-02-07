@@ -67,7 +67,7 @@
     <Portal v-if="isGroup && isUsePopper" :to="transferTo">
       <transition :name="transition" appear @after-leave="popperShow = false">
         <div
-          v-if="popperShow"
+          v-if="!transferTo || popperShow"
           v-show="popperShow && showGroup"
           ref="popper"
           :class="[
@@ -163,7 +163,7 @@ const MenuItem = defineComponent({
 
     const nh = useNameHelper('menu')
     const baseClass = nh.be('item')
-    const placement = ref('right-start' as Placement)
+    const placement = ref<Placement>('right-start')
     const groupExpanded = ref(false)
     const selected = ref(false)
     const sonSelected = ref(false)
@@ -182,11 +182,13 @@ const MenuItem = defineComponent({
       wrapper
     })
 
+    const isGroup = computed(() => !!(slots.group || props.children?.length))
+    const showGroup = computed(() => isGroup.value && groupExpanded.value)
     const className = computed(() => {
       return {
         [baseClass]: true,
         [`${baseClass}--disabled`]: props.disabled,
-        [`${baseClass}--group-visible`]: isGroup.value && groupExpanded.value,
+        [`${baseClass}--group-visible`]: showGroup.value,
         [`${baseClass}--selected`]: selected.value,
         [`${baseClass}--no-icon`]: !props.icon,
         [`${baseClass}--son-selected`]: sonSelected.value
@@ -207,8 +209,6 @@ const MenuItem = defineComponent({
               }px`
       }
     })
-    const isGroup = computed(() => !!(slots.group || props.children?.length))
-    const showGroup = computed(() => isGroup.value && groupExpanded.value)
     const isUsePopper = computed(() => {
       return (
         (menuState && (menuState.horizontal || menuState.groupType === 'dropdown')) ||
@@ -246,21 +246,26 @@ const MenuItem = defineComponent({
 
     provide(MENU_ITEM_STATE, itemState)
 
-    watch(showGroup, value => {
-      if (value && isUsePopper.value) {
-        popperShow.value = true
-        updatePopper()
-      }
-    })
+    watch(
+      showGroup,
+      value => {
+        if (value && isUsePopper.value) {
+          popperShow.value = true
+          updatePopper()
+        }
+      },
+      { immediate: true }
+    )
     watch(selected, value => {
       if (value) {
         emitEvent(props.onSelect)
+      }
+
+      menuState?.doForEachItem(item => item.updateSonSelected(false, false))
+      value &&
         nextTick(() => {
           parentItemState?.updateSonSelected(value)
         })
-      } else {
-        parentItemState?.updateSonSelected(value)
-      }
     })
     watch(groupExpanded, expanded => {
       if (typeof menuState?.handleExpand === 'function') {
@@ -297,9 +302,9 @@ const MenuItem = defineComponent({
       }
     })
 
-    function updateSonSelected(selected: boolean) {
+    function updateSonSelected(selected: boolean, upstream = true) {
       sonSelected.value = selected
-      parentItemState?.updateSonSelected(selected)
+      upstream && parentItemState?.updateSonSelected(selected)
     }
 
     const { timer } = useSetTimeout()
@@ -312,7 +317,11 @@ const MenuItem = defineComponent({
       if (isGroup.value) {
         if (isUsePopper.value && dropTrigger.value !== 'click') return
 
-        menuState?.beforeExpand()
+        menuState?.doForEachItem(item => {
+          if (menuState.accordion) {
+            item.groupExpanded = false
+          }
+        })
         groupExpanded.value = !groupExpanded.value
       } else {
         if (isUsePopper.value) {
@@ -330,7 +339,11 @@ const MenuItem = defineComponent({
     function toggleGroupExpanded(expanded: boolean, upwrad = false) {
       clearTimeout(timer.hover)
 
-      menuState?.beforeExpand()
+      menuState?.doForEachItem(item => {
+        if (menuState.accordion) {
+          item.groupExpanded = false
+        }
+      })
       groupExpanded.value = expanded
 
       if (upwrad && typeof parentItemState?.toggleGroupExpanded === 'function') {
@@ -341,13 +354,13 @@ const MenuItem = defineComponent({
     function handleMouseEnter() {
       clearTimeout(timer.hover)
 
-      if (props.disabled || !isUsePopper.value || dropTrigger.value !== 'hover') return
+      if (!isUsePopper.value || dropTrigger.value !== 'hover') return
 
       if (typeof parentItemState?.handleMouseEnter === 'function') {
         parentItemState.handleMouseEnter()
       }
 
-      if (!isGroup.value) return
+      if (props.disabled || !isGroup.value) return
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = true
@@ -357,13 +370,13 @@ const MenuItem = defineComponent({
     function handleMouseLeave() {
       clearTimeout(timer.hover)
 
-      if (props.disabled || !isUsePopper.value || dropTrigger.value !== 'hover') return
+      if (!isUsePopper.value || dropTrigger.value !== 'hover') return
 
       if (typeof parentItemState?.handleMouseLeave === 'function') {
         parentItemState.handleMouseLeave()
       }
 
-      if (!isGroup.value) return
+      if (props.disabled || !isGroup.value) return
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = false
@@ -435,7 +448,10 @@ const MenuItem = defineComponent({
       handleSelect,
       handleMouseEnter,
       handleMouseLeave,
-      renderChildren
+      renderChildren,
+
+      propTransfer,
+      inTransfer
     }
   }
 })

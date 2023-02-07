@@ -27,7 +27,7 @@ export interface MenuItemState {
   parentState: MenuItemState | null,
   transfer: Readonly<boolean | string>,
   cachedExpanded: boolean,
-  updateSonSelected(selected: boolean): void,
+  updateSonSelected(selected: boolean, upstream?: boolean): void,
   toggleGroupExpanded(expanded: boolean, upword?: boolean): void,
   handleMouseEnter(): void,
   handleMouseLeave(): void
@@ -51,7 +51,7 @@ export interface MenuState {
   handleExpand(label: string, expanded: boolean, meta: Record<string, any>): void,
   increaseItem(state: MenuItemState): void,
   decreaseItem(state: MenuItemState): void,
-  beforeExpand(): void
+  doForEachItem(cb: (item: MenuItemState) => void): void
 }
 
 export interface MenuExposed {
