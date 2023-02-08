@@ -39,6 +39,9 @@ export default defineConfig(({ command }) => {
       ],
       dedupe: useServer ? ['../components', 'vue'] : ['vue']
     },
+    optimizeDeps: {
+      include: ['@vexip-ui/icons']
+    },
     server: {
       port: 9000,
       host: '0.0.0.0',
