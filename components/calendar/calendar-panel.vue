@@ -157,6 +157,7 @@ export default defineComponent({
     watch(() => props.value, parseValue)
     watch(() => props.year, updateDateRange)
     watch(() => props.month, updateDateRange)
+    watch(() => props.weekStart, updateDateRange)
     watch(isHover, value => {
       if (!value) {
         hoveredDate.value = null
