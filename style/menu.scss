@@ -26,7 +26,8 @@ $menu: map.merge(
     popper-z-index: get-css-var('z-index-popper'),
     popper-radius: get-css-var('radius-base'),
     popper-s-color: get-css-var('shadow-color-base'),
-    group-color: get-css-var('content-color-secondary')
+    group-color: get-css-var('content-color-secondary'),
+    indent-width: 20px
   ),
   $menu
 );
@@ -69,7 +70,7 @@ $menu: map.merge(
   }
 
   &--reduced {
-    width: 64px;
+    width: calc(get-css-var('menu-indent-width') * 2 + 24px);
   }
 
   &__popper {
@@ -248,7 +249,7 @@ $menu: map.merge(
     transition: margin get-css-var('transition-base');
 
     #{$self}--reduced & {
-      margin: 0;
+      margin: 0 5px;
     }
 
     #{$self}--horizontal & {
@@ -270,11 +271,12 @@ $menu: map.merge(
     transition: width get-css-var('transition-base'), get-css-var('transition-opacity');
 
     &--in-group {
-      padding-right: 30px;
+      padding-right: 20px;
     }
 
     #{$self}--reduced & {
       width: 0;
+      pointer-events: none;
       opacity: 0%;
     }
 
@@ -311,6 +313,7 @@ $menu: map.merge(
     }
 
     #{$self}--reduced & {
+      pointer-events: none;
       opacity: 0%;
     }
 

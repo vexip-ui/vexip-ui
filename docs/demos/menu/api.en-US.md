@@ -32,6 +32,7 @@ interface MenuOptions {
 | options       | `MenuOptions[]`                                    | Set configuration of the menu                                                                                                   | `[]`         | `2.0.0` |
 | router        | `Router`                                           | Set the Router object and its routes will be parsed automatically and generate the menus, will use `options` to be parsed first | `null`       | `2.0.0` |
 | manual-route  | `boolean`                                          | Whether it is set to manual route mode, route changes will not be processed automatically after it is enabled                   | `false`      | `2.0.0` |
+| indent        | `string \| number`                                 | Set the base indentation distance of each lavel menu item                                                                       | `null`       | `2.1.2` |
 
 ### Menu Events
 

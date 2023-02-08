@@ -19,6 +19,7 @@ export const menuProps = buildProps({
   options: Array as PropType<MenuOptions[]>,
   router: Object as PropType<Router>,
   manualRoute: booleanProp,
+  indent: [String, Number],
   onSelect: eventProp<(label: string, meta: Record<string, any>) => void>(),
   onExpand: eventProp<(label: string, meta: Record<string, any>) => void>(),
   onReduce: eventProp<(label: string, meta: Record<string, any>) => void>()

@@ -115,7 +115,7 @@ import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
 import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
 import { menuItemProps } from './props'
-import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
+import { MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 import type { Placement } from '@vexip-ui/hooks'
 import type { MenuOptions } from './symbol'
@@ -199,14 +199,14 @@ const MenuItem = defineComponent({
         return {}
       }
 
+      const indentWidth = nh.gcv('indent-width')
+      const multiplier = indent.value + (menuState?.isReduced ? 0 : groupState?.indent ?? 0) * 0.25
+
       return {
         paddingLeft:
           parentItemState && parentItemState.isUsePopper
             ? undefined
-            : `${
-                indent.value * baseIndentWidth +
-                (menuState?.isReduced ? 0 : groupState?.indent ?? 0) * 0.25 * baseIndentWidth
-              }px`
+            : `calc(${indentWidth} * ${multiplier})`
       }
     })
     const isUsePopper = computed(() => {

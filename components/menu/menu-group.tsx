@@ -2,7 +2,7 @@ import { defineComponent, ref, reactive, computed, inject, provide } from 'vue'
 import { MenuItem } from '@/components/menu-item'
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { callIfFunc } from '@vexip-ui/utils'
-import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
+import { MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { MenuOptions } from './symbol'
@@ -39,7 +39,7 @@ const MenuGroup = defineComponent({
       return {
         paddingLeft: parentItemState?.isUsePopper
           ? undefined
-          : `${indent.value * baseIndentWidth}px`
+          : `calc(${nh.gcv('indent-width')} * ${indent.value})`
       }
     })
     const onlyShowSlot = computed(() => {

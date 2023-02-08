@@ -32,6 +32,7 @@ interface MenuOptions {
 | options       | `MenuOptions[]`                                    | 设置菜单的配置                                                                 | `[]`         | `2.0.0` |
 | router        | `Router`                                           | 设置 Router 对象，并自动解析生成菜单，会优先使用 `options` 解析菜单            | `null`       | `2.0.0` |
 | manual-route  | `boolean`                                          | 设置是否为手动路由模式，开启后将不会自动处理路由变化                           | `false`      | `2.0.0` |
+| indent        | `string \| number`                                 | 置每层菜单的基础缩进距离                                                       | `null`       | `2.1.2` |
 
 ### Menu 事件
 

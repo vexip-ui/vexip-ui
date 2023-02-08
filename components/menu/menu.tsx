@@ -13,7 +13,7 @@ import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
 import { Overflow } from '@/components/overflow'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { callIfFunc } from '@vexip-ui/utils'
+import { isDefined, callIfFunc } from '@vexip-ui/utils'
 import MenuRest from './menu-rest'
 import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
@@ -58,7 +58,8 @@ export default defineComponent({
         static: true
       },
       router: null,
-      manualRoute: false
+      manualRoute: false,
+      indent: null
     })
 
     const nh = useNameHelper('menu')
@@ -93,6 +94,16 @@ export default defineComponent({
           [nh.bm('horizontal')]: props.horizontal
         }
       ]
+    })
+    const style = computed(() => {
+      const style: Record<string, string> = {}
+
+      if (isDefined(props.indent)) {
+        style[nh.cv('indent-width')] =
+          typeof props.indent === 'number' ? `${props.indent}px` : props.indent
+      }
+
+      return style
     })
     const menus = computed(() => {
       if (props.options?.length) {
@@ -334,7 +345,7 @@ export default defineComponent({
 
     return () => {
       return (
-        <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1}>
+        <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1} style={style.value}>
           {slots.default
             ? (
                 slots.default()
