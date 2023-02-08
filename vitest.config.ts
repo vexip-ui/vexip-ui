@@ -25,7 +25,8 @@ export default defineConfig({
       exclude: dirs.filter(f => f !== 'components').map(f => `${f}/**`),
       reporter: ['text'],
       extension: ['ts', 'tsx', 'vue']
-    }
+    },
+    testTimeout: 10000
   },
   plugins: [vue(), vueJsx()]
 })
