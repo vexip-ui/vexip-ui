@@ -10,6 +10,7 @@
       :class="selectorClass"
       tabindex="0"
       @keydown.space.prevent="showPanel"
+      @keydown.backspace.prevent="handleClear(false)"
     >
       <div
         v-if="hasPrefix"
@@ -37,11 +38,12 @@
           :labels="props.labels"
           :has-error="startError"
           :placeholder="startPlaceholder"
+          :readonly="props.unitReadonly"
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
-          @enter="handleEnter"
-          @cancel="handleCancel"
+          @enter="handleEnter(true)"
+          @cancel="handleCancel(true)"
           @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
           @next-unit="enterColumn('next')"
@@ -74,11 +76,12 @@
             :labels="props.labels"
             :has-error="endError"
             :placeholder="endPlaceholder"
+            :readonly="props.unitReadonly"
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
-            @enter="handleEnter"
-            @cancel="handleCancel"
+            @enter="handleEnter(true)"
+            @cancel="handleCancel(true)"
             @unit-focus="handleEndInput"
             @prev-unit="enterColumn('prev')"
             @next-unit="enterColumn('next')"
@@ -103,7 +106,7 @@
         :class="[nh.be('icon'), nh.bem('icon', 'placeholder'), nh.be('suffix')]"
       ></div>
       <transition :name="nh.ns('fade')" appear>
-        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear">
+        <div v-if="showClear" :class="[nh.be('icon'), nh.be('clear')]" @click.stop="handleClear()">
           <Icon><CircleXmark></CircleXmark></Icon>
         </div>
         <div v-else-if="props.loading" :class="[nh.be('icon'), nh.be('loading')]">
@@ -168,7 +171,7 @@
                   inherit
                   text
                   size="small"
-                  @click.stop="handleCancel"
+                  @click.stop="handleCancel()"
                 >
                   {{ props.cancelText || locale.cancel }}
                 </Button>
@@ -214,7 +217,7 @@ import {
   emitEvent,
   makeSentence
 } from '@vexip-ui/config'
-import { USE_TOUCH, doubleDigits, boundRange, warnOnce } from '@vexip-ui/utils'
+import { USE_TOUCH, isDefined, doubleDigits, boundRange, warnOnce } from '@vexip-ui/utils'
 import { CircleXmark, ClockR, ArrowRightArrowLeft, Spinner } from '@vexip-ui/icons'
 import { timePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
@@ -271,7 +274,7 @@ export default defineComponent({
         default: '-',
         validator: value => value.length === 1
       },
-      noFiller: false,
+      noFiller: null,
       clearable: false,
       noAction: false,
       noArrow: false,
@@ -283,7 +286,7 @@ export default defineComponent({
       steps: () => [1, 1, 1],
       labels: () => ({}),
       shortcuts: () => [],
-      isRange: false,
+      isRange: null,
       range: null,
       disabled: () => disabled.value,
       transitionName: () => nh.ns('drop'),
@@ -304,13 +307,16 @@ export default defineComponent({
       max: null,
       outsideClose: true,
       outsideCancel: false,
-      placeholder: null
+      placeholder: null,
+      unitReadonly: false
     })
 
-    warnOnce(
-      "[vexip-ui:TimePicker] 'on-filler' prop has been deprecated, please " +
-        "use 'placeholder' prop to replace it"
-    )
+    if (isDefined(props.noFiller)) {
+      warnOnce(
+        "[vexip-ui:TimePicker] 'on-filler' prop has been deprecated, please " +
+          "use 'placeholder' prop to replace it"
+      )
+    }
 
     const locale = useLocale('timePicker', toRef(props, 'locale'))
     const placement = toRef(props, 'placement')
@@ -338,12 +344,14 @@ export default defineComponent({
     const endInput = ref<InstanceType<typeof TimeControl>>()
 
     const usingRange = computed(() => {
-      warnOnce(
-        "[vexip-ui:TimePicker] 'is-range' prop has been deprecated, please " +
-          "use 'range' prop to replace it"
-      )
+      if (isDefined(props.isRange)) {
+        warnOnce(
+          "[vexip-ui:TimePicker] 'is-range' prop has been deprecated, please " +
+            "use 'range' prop to replace it"
+        )
+      }
 
-      return props.range ?? props.isRange
+      return props.range ?? props.isRange ?? false
     })
     const startPlaceholder = computed(() => {
       if (props.placeholder) {
@@ -458,14 +466,14 @@ export default defineComponent({
       }
     })
     watch(currentState, value => {
-      if (currentVisible.value) {
+      if (!props.unitReadonly && currentVisible.value) {
         emitEvent(props.onChangeCol, getCurrentState().column, value)
       }
     })
     watch(
       () => startState.column,
       value => {
-        if (currentVisible.value && currentState.value === 'start') {
+        if (!props.unitReadonly && currentVisible.value && currentState.value === 'start') {
           emitEvent(props.onChangeCol, value, 'start')
         }
       }
@@ -473,7 +481,7 @@ export default defineComponent({
     watch(
       () => endState.column,
       value => {
-        if (currentVisible.value && currentState.value === 'end') {
+        if (!props.unitReadonly && currentVisible.value && currentState.value === 'end') {
           emitEvent(props.onChangeCol, value, 'end')
         }
       }
@@ -668,18 +676,18 @@ export default defineComponent({
       endState.resetColumn()
     }
 
-    function handleClear() {
+    function handleClear(finish = true) {
       if (props.clearable) {
         nextTick(() => {
           const emitValue = usingRange.value ? ([] as string[]) : ''
 
           parseValue(null)
-          finishInput(false)
+          finish && finishInput(false)
           emitEvent(props.onChange, emitValue)
           emit('update:value', emitValue)
           emitEvent(props.onClear)
           clearField(emitValue)
-          handleBlur()
+          finish && handleBlur()
 
           lastValue.value = ''
 
@@ -772,12 +780,22 @@ export default defineComponent({
       return props.ctrlSteps[type === 'hour' ? 0 : type === 'minute' ? 1 : 2] || 1
     }
 
-    function handleEnter() {
+    function handleEnter(useKey = false) {
+      if (useKey) {
+        focused.value = false
+        reference.value?.focus()
+      }
+
       finishInput()
       emitEvent(props.onEnter)
     }
 
-    function handleCancel() {
+    function handleCancel(useKey = false) {
+      if (useKey) {
+        focused.value = false
+        reference.value?.focus()
+      }
+
       parseValue(props.value)
       finishInput(false)
       emitEvent(props.onCancel)

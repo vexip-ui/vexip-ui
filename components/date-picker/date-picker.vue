@@ -42,8 +42,8 @@
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
-          @enter="handlePanelConfirm"
-          @cancel="handleCancel"
+          @enter="handleEnter(true)"
+          @cancel="handleCancel(true)"
           @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
           @next-unit="enterColumn('next')"
@@ -77,8 +77,8 @@
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
-            @enter="handlePanelConfirm"
-            @cancel="handleCancel"
+            @enter="handleEnter(true)"
+            @cancel="handleCancel(true)"
             @unit-focus="handleEndInput"
             @prev-unit="enterColumn('prev')"
             @next-unit="enterColumn('next')"
@@ -150,8 +150,8 @@
             @shortcut="handleShortcut"
             @change="handlePanelChange"
             @toggle-col="handleInputFocus"
-            @cancel="handleCancel"
-            @confirm="handlePanelConfirm"
+            @confirm="handleEnter()"
+            @cancel="handleCancel()"
             @hover="handleDateHover"
             @time-change="handleTimeChange"
           ></DatePanel>
@@ -185,6 +185,7 @@ import {
   makeSentence
 } from '@vexip-ui/config'
 import {
+  isDefined,
   toFalse,
   toDate,
   getTime,
@@ -254,7 +255,7 @@ export default defineComponent({
         default: '-',
         validator: value => value.length === 1
       },
-      noFiller: false,
+      noFiller: null,
       clearable: false,
       noAction: false,
       labels: () => ({}),
@@ -280,7 +281,7 @@ export default defineComponent({
         default: () => new Date(),
         validator: value => !Number.isNaN(new Date(value))
       },
-      isRange: false,
+      isRange: null,
       range: null,
       loading: () => loading.value,
       loadingIcon: Spinner,
@@ -294,10 +295,12 @@ export default defineComponent({
       unitReadonly: false
     })
 
-    warnOnce(
-      "[vexip-ui:DatePicker] 'on-filler' prop has been deprecated, please " +
-        "use 'placeholder' prop to replace it"
-    )
+    if (isDefined(props.noFiller)) {
+      warnOnce(
+        "[vexip-ui:DatePicker] 'on-filler' prop has been deprecated, please " +
+          "use 'placeholder' prop to replace it"
+      )
+    }
 
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
@@ -321,22 +324,27 @@ export default defineComponent({
     })
     const { isHover } = useHover(reference)
 
+    const calendarLocale = useLocale('calendar')
+    const datePickerLocale = useLocale('datePicker')
+
     const startInput = ref<InstanceType<typeof DateControl>>()
     const endInput = ref<InstanceType<typeof DateControl>>()
     const datePanel = ref<InstanceType<typeof DatePanel>>()
 
     const usingRange = computed(() => {
-      warnOnce(
-        "[vexip-ui:DatePicker] 'is-range' prop has been deprecated, please " +
-          "use 'range' prop to replace it"
-      )
+      if (isDefined(props.isRange)) {
+        warnOnce(
+          "[vexip-ui:DatePicker] 'is-range' prop has been deprecated, please " +
+            "use 'range' prop to replace it"
+        )
+      }
 
-      return props.range ?? props.isRange
+      return props.range ?? props.isRange ?? false
     })
     const mergedLocale = computed(() => {
       return {
-        ...useLocale('calendar').value,
-        ...useLocale('datePicker').value,
+        ...calendarLocale.value,
+        ...datePickerLocale.value,
         ...(props.locale ?? {})
       }
     })
@@ -1098,12 +1106,22 @@ export default defineComponent({
       dateValue.date = date.getDate()
     }
 
-    function handleEnter() {
+    function handleEnter(useKey = false) {
+      if (useKey) {
+        focused.value = false
+        reference.value?.focus()
+      }
+
       finishInput()
       emitEvent(props.onEnter)
     }
 
-    function handleCancel() {
+    function handleCancel(useKey = false) {
+      if (useKey) {
+        focused.value = false
+        reference.value?.focus()
+      }
+
       parseValue(props.value)
       finishInput(false)
       emitEvent(props.onCancel)
@@ -1301,21 +1319,21 @@ export default defineComponent({
       })
     }
 
-    function handlePanelConfirm() {
-      if (!usingRange.value) {
-        handleEnter()
-      } else {
-        if (currentState.value === 'start' && !endActivated.value) {
-          toggleActivated(true, 'start')
-          currentState.value = 'end'
-        } else if (currentState.value === 'end' && !startActivated.value) {
-          toggleActivated(true, 'end')
-          currentState.value = 'start'
-        } else {
-          handleEnter()
-        }
-      }
-    }
+    // function handleConfirm() {
+    //   if (!usingRange.value) {
+    //     handleEnter()
+    //   } else {
+    //     if (currentState.value === 'start' && !endActivated.value) {
+    //       toggleActivated(true, 'start')
+    //       currentState.value = 'end'
+    //     } else if (currentState.value === 'end' && !startActivated.value) {
+    //       toggleActivated(true, 'end')
+    //       currentState.value = 'start'
+    //     } else {
+    //       handleEnter()
+    //     }
+    //   }
+    // }
 
     function handleClickOutside() {
       emitEvent(props.onClickOutside)
@@ -1384,7 +1402,6 @@ export default defineComponent({
       enterColumn,
       handleStartInput,
       handleEndInput,
-      handlePanelConfirm,
 
       focus: handleFocused,
       blur: handleBlur,

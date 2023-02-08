@@ -20,10 +20,10 @@
 
 | Name   | Description                                                                                                | Parameters         | Since |
 | ------ | ---------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| change | Emitter when the active item changes, returns the index of the active element                              | `(active: number)` | -     |
-| prev   | Emitter when the forward arrow is clicked to switch elements, returns the index of the active element      | `(active: number)` | -     |
-| next   | Emitter when the back arrow or autoplay toggle element is clicked, returns the index of the active element | `(active: number)` | -     |
-| select | Emitter when an element is clicked, returns the index of the clicked element                               | `(active: number)` | -     |
+| change | Emitted when the active item changes, returns the index of the active element                              | `(active: number)` | -     |
+| prev   | Emitted when the forward arrow is clicked to switch elements, returns the index of the active element      | `(active: number)` | -     |
+| next   | Emitted when the back arrow or autoplay toggle element is clicked, returns the index of the active element | `(active: number)` | -     |
+| select | Emitted when an element is clicked, returns the index of the clicked element                               | `(active: number)` | -     |
 
 ### Carousel Slots
 

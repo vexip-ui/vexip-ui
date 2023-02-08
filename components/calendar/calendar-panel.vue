@@ -67,6 +67,7 @@ import { defineComponent, ref, toRef, computed, watch, nextTick } from 'vue'
 import { useHover } from '@vexip-ui/hooks'
 import { useNameHelper, useProps, useLocale, emitEvent } from '@vexip-ui/config'
 import {
+  isDefined,
   toFalse,
   startOfDay,
   endOfDay,
@@ -113,7 +114,7 @@ export default defineComponent({
         default: toFalse,
         isFunc: true
       },
-      isRange: false,
+      isRange: null,
       valueType: {
         default: 'start',
         validator: value => value === 'start' || value === 'end'
@@ -141,12 +142,14 @@ export default defineComponent({
       return min.value > max.value
     })
     const usingRange = computed(() => {
-      warnOnce(
-        "[vexip-ui:CalendarPanel] 'is-range' prop has been deprecated, please " +
-          "use 'range' prop to replace it"
-      )
+      if (isDefined(props.isRange)) {
+        warnOnce(
+          "[vexip-ui:CalendarPanel] 'is-range' prop has been deprecated, please " +
+            "use 'range' prop to replace it"
+        )
+      }
 
-      return props.range ?? props.isRange
+      return props.range ?? props.isRange ?? false
     })
 
     const updateDateRange = debounceMinor(setDateRange)

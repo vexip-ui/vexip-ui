@@ -100,19 +100,19 @@ describe('TimePicker', () => {
 
     await input.trigger('keydown', { key: 'Escape' })
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
-    expect(selector.classes()).toContain('vxp-time-picker__selector--focused')
+    expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
     expect(onCancel).toHaveBeenCalled()
 
     await selector.trigger('keydown', { key: 'Space' })
     await input.trigger('keydown', { key: 'Enter' })
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
-    expect(selector.classes()).toContain('vxp-time-picker__selector--focused')
+    expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
     expect(onEnter).toHaveBeenCalled()
 
     await selector.trigger('keydown', { key: 'Space' })
     await input.trigger('keydown', { key: 'Space' })
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
-    expect(selector.classes()).toContain('vxp-time-picker__selector--focused')
+    expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
   })
 
   it('disabled', async () => {

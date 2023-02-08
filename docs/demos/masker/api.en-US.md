@@ -15,8 +15,8 @@
 
 | Name   | Description                                                                                                       | Parameters          | Since |
 | ------ | ----------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
-| toggle | Emitter when the active state of the mask changes, returns the current active state                               | `(active: boolean)` | -     |
-| close  | Emitter when the close function is used to trigger the close, no return value                                     | -                   | -     |
+| toggle | Emitted when the active state of the mask changes, returns the current active state                               | `(active: boolean)` | -     |
+| close  | Emitted when the close function is used to trigger the close, no return value                                     | -                   | -     |
 | show   | When the mask is opened, emitted after the transition effect, no return value                                     | -                   | -     |
 | hide   | When the mask is closed, the transition effect ends, it is emitted when it disappears completely, no return value | -                   | -     |
 

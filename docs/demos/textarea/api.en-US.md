@@ -25,15 +25,15 @@
 
 | Name      | Description                                                                                    | Parameters               | Since |
 | --------- | ---------------------------------------------------------------------------------------------- | ------------------------ | ----- |
-| focus     | Emitter when the input box is focused, returns the event object                                | `(event: FocusEvent)`    | -     |
-| blur      | Emitter when the input box loses focus, returns the event object                               | `(event: FocusEvent)`    | -     |
-| change    | Emitter when the value of the input box changes, returns the read value and the original value | `(value: string)`        | -     |
-| input     | Emitter when a value is entered, returns the read value and the original value                 | `(value: string)`        | -     |
-| enter     | Emitter when enter, returns the key event                                                      | `(event: KeyboardEvent)` | -     |
-| key-down  | Emitter when a key is pressed, returns the key event                                           | `(event: KeyboardEvent)` | -     |
-| key-press | Emitter when the key is held down, returns the key event                                       | `(event: KeyboardEvent)` | -     |
-| key-up    | Emitter when the key is released, returns the key event                                        | `(event: KeyboardEvent)` | -     |
-| clear     | Emitter when the value is cleared by the clear button, no return value                         | -                        | -     |
+| focus     | Emitted when the input box is focused, returns the event object                                | `(event: FocusEvent)`    | -     |
+| blur      | Emitted when the input box loses focus, returns the event object                               | `(event: FocusEvent)`    | -     |
+| change    | Emitted when the value of the input box changes, returns the read value and the original value | `(value: string)`        | -     |
+| input     | Emitted when a value is entered, returns the read value and the original value                 | `(value: string)`        | -     |
+| enter     | Emitted when enter, returns the key event                                                      | `(event: KeyboardEvent)` | -     |
+| key-down  | Emitted when a key is pressed, returns the key event                                           | `(event: KeyboardEvent)` | -     |
+| key-press | Emitted when the key is held down, returns the key event                                       | `(event: KeyboardEvent)` | -     |
+| key-up    | Emitted when the key is released, returns the key event                                        | `(event: KeyboardEvent)` | -     |
+| clear     | Emitted when the value is cleared by the clear button, no return value                         | -                        | -     |
 
 ### Textarea Slots
 

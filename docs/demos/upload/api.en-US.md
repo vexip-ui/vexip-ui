@@ -89,15 +89,15 @@ type BeforeSelect = (file: FileState, files: FileState[]) => MaybePromise<boolea
 
 | Name         | Description                                                                                                               | Parameters                            | Since |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----- |
-| change       | Emitter when the selected file changes, returns the list of selected files                                                | `(files: FileState[])`                | -     |
-| filter-error | Emitter when file type verification fails, returns the failed file                                                        | `(errorFile: FileState)`              | -     |
-| size-error   | Emitter when the file size check fails, returns the failed file                                                           | `(errorFile: FileState)`              | -     |
+| change       | Emitted when the selected file changes, returns the list of selected files                                                | `(files: FileState[])`                | -     |
+| filter-error | Emitted when file type verification fails, returns the failed file                                                        | `(errorFile: FileState)`              | -     |
+| size-error   | Emitted when the file size check fails, returns the failed file                                                           | `(errorFile: FileState)`              | -     |
 | progress     | Emitted when the progress of the uploaded file is updated, returns the latest progress and file                           | `(file: FileState, percent: number)`  | -     |
-| success      | Emitter when the file is uploaded successfully, returns the latest progress and file                                      | `(file: FileState, response: any)`    | -     |
-| error        | Emitter when file upload fails, returns the latest progress and file                                                      | `(file: FileState, error: HttpError)` | -     |
-| delete       | Emitter when the selected (uploaded) file is deleted, returns the deleted file                                            | `(file: FileState)`                   | -     |
-| exceed       | Emitter when the selected file exceeds the upper limit, returns the list of exceeded files and the list of selected files | `(exceedFiles: FileState[])`          | -     |
-| preview      | Emitter when a file is previewed, returns the previewed file                                                              | `(file: FileState)`                   | -     |
+| success      | Emitted when the file is uploaded successfully, returns the latest progress and file                                      | `(file: FileState, response: any)`    | -     |
+| error        | Emitted when file upload fails, returns the latest progress and file                                                      | `(file: FileState, error: HttpError)` | -     |
+| delete       | Emitted when the selected (uploaded) file is deleted, returns the deleted file                                            | `(file: FileState)`                   | -     |
+| exceed       | Emitted when the selected file exceeds the upper limit, returns the list of exceeded files and the list of selected files | `(exceedFiles: FileState[])`          | -     |
+| preview      | Emitted when a file is previewed, returns the previewed file                                                              | `(file: FileState)`                   | -     |
 
 ### Upload Slots
 
@@ -122,8 +122,8 @@ type BeforeSelect = (file: FileState, files: FileState[]) => MaybePromise<boolea
 
 | Name    | Description                                                                    | Parameters          | Since |
 | ------- | ------------------------------------------------------------------------------ | ------------------- | ----- |
-| delete  | Emitter when the selected (uploaded) file is deleted, returns the deleted file | `(file: FileState)` | -     |
-| preview | Emitter when a file is previewed, returns the previewed file                   | `(file: FileState)` | -     |
+| delete  | Emitted when the selected (uploaded) file is deleted, returns the deleted file | `(file: FileState)` | -     |
+| preview | Emitted when a file is previewed, returns the previewed file                   | `(file: FileState)` | -     |
 
 ### UploadList Slots
 

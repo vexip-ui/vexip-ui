@@ -118,6 +118,7 @@ export const timePickerProps = buildProps({
   max: String,
   outsideClose: booleanProp,
   outsideCancel: booleanProp,
+  unitReadonly: booleanProp,
   onInput: eventProp<(type: TimeType, value: number) => void>(),
   onPlus: eventProp<(type: TimeType, value: number) => void>(),
   onMinus: eventProp<(type: TimeType, value: number) => void>(),

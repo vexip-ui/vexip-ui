@@ -12,8 +12,8 @@
 
 | Name        | Description                                  | Parameters            | Since |
 | ----------- | -------------------------------------------- | --------------------- | ----- |
-| rest-change | Emitter when the number of overflows changes | `(rest: number)`      | -     |
-| toggle      | Emitter when the overflow state changes      | `(overflow: boolean)` | -     |
+| rest-change | Emitted when the number of overflows changes | `(rest: number)`      | -     |
+| toggle      | Emitted when the overflow state changes      | `(overflow: boolean)` | -     |
 
 ### Overflow Slots
 
