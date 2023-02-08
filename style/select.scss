@@ -41,6 +41,10 @@ $select: map.merge(
 
   @include input.handler(#{&}__selector);
 
+  &__selector {
+    cursor: inherit;
+  }
+
   &--multiple &__selector {
     @include define-css-var('input-v-padding', 2px);
 
