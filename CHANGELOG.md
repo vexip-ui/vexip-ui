@@ -1,3 +1,9 @@
+## [2.1.3](https://github.com/vexip-ui/vexip-ui/compare/v2.1.2...v2.1.3) (2023-02-08)
+
+### Bug Fixes
+
+- **menu:** incorrect group indent css var ([45ebf73](https://github.com/vexip-ui/vexip-ui/commit/45ebf7380ce08e386c825fd26ffbe4d0d8d3cd8d))
+
 ## [2.1.2](https://github.com/vexip-ui/vexip-ui/compare/v2.1.1...v2.1.2) (2023-02-08)
 
 ### Bug Fixes
