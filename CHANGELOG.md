@@ -1,3 +1,20 @@
+## [2.1.2](https://github.com/vexip-ui/vexip-ui/compare/v2.1.1...v2.1.2) (2023-02-08)
+
+### Bug Fixes
+
+- **calendar:** reactive for week-start prop changed ([bf8c9a5](https://github.com/vexip-ui/vexip-ui/commit/bf8c9a5d3d6249739e83ce89e5a7deec5d54d175)), closes [#255](https://github.com/vexip-ui/vexip-ui/issues/255)
+- **layout:** normalize layout main z-index ([e4d1e1a](https://github.com/vexip-ui/vexip-ui/commit/e4d1e1a032f7c82677023d6e2c572cb2a091d22b)), closes [#253](https://github.com/vexip-ui/vexip-ui/issues/253)
+- **locale:** corrent inject locale word space config ([aee45aa](https://github.com/vexip-ui/vexip-ui/commit/aee45aae8b93a54ac5f14bd6476584b52e12f045))
+- **menu:** correct selected style in horizontal mode ([1e56461](https://github.com/vexip-ui/vexip-ui/commit/1e56461e305af966ecd4cdb31c6136b85f90d6bf))
+- **plugins:** correct css file path for dark mode ([#254](https://github.com/vexip-ui/vexip-ui/issues/254)) ([f3aa29b](https://github.com/vexip-ui/vexip-ui/commit/f3aa29b6467fd846c017850e81f588928ac8de8e))
+- **select:** correct cursor style ([9e0d6a4](https://github.com/vexip-ui/vexip-ui/commit/9e0d6a4d2fca5f8aaed6a4590e53324a19308dad))
+
+### Features
+
+- **date-picker:** support set input unit controls readonly ([c55ea0d](https://github.com/vexip-ui/vexip-ui/commit/c55ea0dd83e4ac1ae37ef2663099399c8b3de6d7))
+- **menu:** support custom menu item indentation ([f385042](https://github.com/vexip-ui/vexip-ui/commit/f38504209696c4591e396e70f5786ab5d7d1785f)), closes [#252](https://github.com/vexip-ui/vexip-ui/issues/252)
+- **time-picker:** support set input unit controls readonly ([6eaaac0](https://github.com/vexip-ui/vexip-ui/commit/6eaaac073a8907d0595208e0f1d340394c2925d1))
+
 ## [2.1.1](https://github.com/vexip-ui/vexip-ui/compare/v2.1.0...v2.1.1) (2023-02-07)
 
 ### Bug Fixes
