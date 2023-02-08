@@ -64,7 +64,7 @@ export default defineConfig(() => {
       }
     },
     optimizeDeps: {
-      include: ['../components']
+      include: ['../components', '@vexip-ui/icons']
     },
     plugins: [
       vue(),
