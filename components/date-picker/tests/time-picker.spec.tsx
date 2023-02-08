@@ -14,6 +14,10 @@ async function runScrollTimers() {
   await nextTick()
 }
 
+function nextFrame() {
+  return new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+}
+
 describe('TimePicker', () => {
   it('render', () => {
     const wrapper = mount(TimePicker, {
@@ -99,18 +103,21 @@ describe('TimePicker', () => {
     expect(selector.classes()).toContain('vxp-time-picker__selector--focused')
 
     await input.trigger('keydown', { key: 'Escape' })
+    await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
     expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
     expect(onCancel).toHaveBeenCalled()
 
     await selector.trigger('keydown', { key: 'Space' })
     await input.trigger('keydown', { key: 'Enter' })
+    await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
     expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
     expect(onEnter).toHaveBeenCalled()
 
     await selector.trigger('keydown', { key: 'Space' })
     await input.trigger('keydown', { key: 'Space' })
+    await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-time-picker--visible')
     expect(selector.classes()).not.toContain('vxp-time-picker__selector--focused')
   })

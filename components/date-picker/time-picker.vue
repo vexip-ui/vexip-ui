@@ -42,8 +42,8 @@
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
-          @enter="handleEnter(true)"
-          @cancel="handleCancel(true)"
+          @enter="handleEnter"
+          @cancel="handleCancel"
           @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
           @next-unit="enterColumn('next')"
@@ -80,8 +80,8 @@
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
-            @enter="handleEnter(true)"
-            @cancel="handleCancel(true)"
+            @enter="handleEnter"
+            @cancel="handleCancel"
             @unit-focus="handleEndInput"
             @prev-unit="enterColumn('prev')"
             @next-unit="enterColumn('next')"
@@ -171,7 +171,7 @@
                   inherit
                   text
                   size="small"
-                  @click.stop="handleCancel()"
+                  @click.stop="handleCancel"
                 >
                   {{ props.cancelText || locale.cancel }}
                 </Button>
@@ -180,7 +180,7 @@
                   type="primary"
                   size="small"
                   :disabled="startError || endError"
-                  @click.stop="finishInput()"
+                  @click.stop="handleEnter"
                 >
                   {{ props.confirmText || locale.confirm }}
                 </Button>
@@ -786,22 +786,21 @@ export default defineComponent({
       return props.ctrlSteps[type === 'hour' ? 0 : type === 'minute' ? 1 : 2] || 1
     }
 
-    function handleEnter(useKey = false) {
-      if (useKey) {
-        focused.value = false
+    function fallbackFocus() {
+      requestAnimationFrame(() => {
+        handleBlur()
         reference.value?.focus()
-      }
+      })
+    }
 
+    function handleEnter() {
+      fallbackFocus()
       finishInput()
       emitEvent(props.onEnter)
     }
 
-    function handleCancel(useKey = false) {
-      if (useKey) {
-        focused.value = false
-        reference.value?.focus()
-      }
-
+    function handleCancel() {
+      fallbackFocus()
       parseValue(props.value)
       finishInput(false)
       emitEvent(props.onCancel)
@@ -825,10 +824,14 @@ export default defineComponent({
 
     function enterColumn(type: 'prev' | 'next') {
       if (usingRange.value) {
+        if (type === 'prev' && currentState.value === 'start' && !startState.column) {
+          toggleCurrentState('end')
+        }
+
         const state = getCurrentState()
         const currentColumn = state.column
 
-        state.enterColumn(type, false)
+        state.enterColumn(type, !currentColumn)
 
         if (currentColumn === state.column) {
           const isStart = currentState.value === 'start'
@@ -876,12 +879,6 @@ export default defineComponent({
         emitEvent(props.onOutsideClose)
       }
     }
-
-    // function handlePanelClosed() {
-    //   const { hour, minute } = startState.enabled
-
-    //   handleStartInput(hour ? 'hour' : minute ? 'minute' : 'second')
-    // }
 
     return {
       ClockR,

@@ -22,7 +22,7 @@ type Dateable = number | string | Date
 | filler          | `string`                                                  | 日期未选择时的填充符，长度固定为 1                                      | `'-'`                   | -        |
 | ~~no-filler~~   | `boolean`                                                 | 是否禁用初始填充，如果禁用，初始化后控件内会显示当前 `value`            | `false`                 | -        |
 | clearable       | `boolean`                                                 | 是否允许清空值                                                          | `false`                 | -        |
-| no-action       | `boolean`                                                 | 是否禁用日历面板的底部操作栏                                            | `false`                 | -        |
+| no-action       | `boolean`                                                 | 是否禁用日历面板的底部操作栏并改变选择模式                              | `false`                 | -        |
 | labels          | `Partial<Record<DateTimeType, string>>`                   | 设置在每个日期或时间单元后面的标签                                      | `{}`                    | -        |
 | date-separator  | `string`                                                  | 日期部分的连接符                                                        | `'/'`                   | -        |
 | time-separator  | `string`                                                  | 时间部分的连接符                                                        | `':'`                   | -        |

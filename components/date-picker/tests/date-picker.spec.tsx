@@ -14,6 +14,10 @@ async function runScrollTimers() {
   await nextTick()
 }
 
+function nextFrame() {
+  return new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+}
+
 describe('DatePicker', () => {
   it('render', () => {
     const wrapper = mount(DatePicker, {
@@ -123,18 +127,21 @@ describe('DatePicker', () => {
     expect(selector.classes()).toContain('vxp-date-picker__selector--focused')
 
     await input.trigger('keydown', { key: 'Escape' })
+    await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
     expect(selector.classes()).not.toContain('vxp-date-picker__selector--focused')
     expect(onCancel).toHaveBeenCalled()
 
     await selector.trigger('keydown', { key: 'Space' })
     await input.trigger('keydown', { key: 'Enter' })
+    await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
     expect(selector.classes()).not.toContain('vxp-date-picker__selector--focused')
     expect(onEnter).toHaveBeenCalled()
 
     await selector.trigger('keydown', { key: 'Space' })
     await input.trigger('keydown', { key: 'Space' })
+    await nextFrame()
     expect(wrapper.classes()).not.toContain('vxp-date-picker--visible')
     expect(selector.classes()).not.toContain('vxp-date-picker__selector--focused')
   })

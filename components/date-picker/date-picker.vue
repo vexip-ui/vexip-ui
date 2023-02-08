@@ -42,8 +42,8 @@
           @input="handleInput"
           @plus="handlePlus"
           @minus="handleMinus"
-          @enter="handleEnter(true)"
-          @cancel="handleCancel(true)"
+          @enter="handleEnter"
+          @cancel="handleCancel"
           @unit-focus="handleStartInput"
           @prev-unit="enterColumn('prev')"
           @next-unit="enterColumn('next')"
@@ -77,8 +77,8 @@
             @input="handleInput"
             @plus="handlePlus"
             @minus="handleMinus"
-            @enter="handleEnter(true)"
-            @cancel="handleCancel(true)"
+            @enter="handleEnter"
+            @cancel="handleCancel"
             @unit-focus="handleEndInput"
             @prev-unit="enterColumn('prev')"
             @next-unit="enterColumn('next')"
@@ -149,9 +149,8 @@
             :locale="mergedLocale"
             @shortcut="handleShortcut"
             @change="handlePanelChange"
-            @toggle-col="handleInputFocus"
-            @confirm="handleEnter()"
-            @cancel="handleCancel()"
+            @confirm="handleEnter"
+            @cancel="handleCancel"
             @hover="handleDateHover"
             @time-change="handleTimeChange"
           ></DatePanel>
@@ -593,6 +592,7 @@ export default defineComponent({
         isTimeDisabled.second(hour, minute, second)
       )
     })
+    const noActionMode = computed(() => props.type !== 'datetime' && props.noAction)
 
     watch(() => props.type, parseFormat)
     watch(() => props.value, parseValue, { immediate: true })
@@ -679,6 +679,10 @@ export default defineComponent({
         }
       }
     )
+
+    if (props.value) {
+      lastValue.value = getStringValue()
+    }
 
     function createDateState() {
       // const noFiller = props.noFiller
@@ -997,6 +1001,7 @@ export default defineComponent({
       currentVisible.value = true
 
       handleFocused()
+      toggleCurrentState('start')
 
       if (wrapper.value && target) {
         const units = Array.from(wrapper.value.querySelectorAll(`.${nh.be('unit')}`))
@@ -1111,23 +1116,22 @@ export default defineComponent({
       dateValue.date = date.getDate()
     }
 
-    function handleEnter(useKey = false) {
-      if (useKey) {
-        focused.value = false
+    function fallbackFocus() {
+      requestAnimationFrame(() => {
+        handleBlur()
         reference.value?.focus()
-      }
+      })
+    }
 
+    function handleEnter() {
+      fallbackFocus()
       finishInput()
       emitEvent(props.onEnter)
     }
 
-    function handleCancel(useKey = false) {
-      if (useKey) {
-        focused.value = false
-        reference.value?.focus()
-      }
-
-      parseValue(props.value)
+    function handleCancel() {
+      fallbackFocus()
+      parseValue(lastValue.value.split('|'))
       finishInput(false)
       emitEvent(props.onCancel)
     }
@@ -1218,6 +1222,8 @@ export default defineComponent({
           updateDateActivated(types[i], 'start')
         }
 
+        if (noActionMode.value) handleEnter()
+
         return
       }
 
@@ -1246,6 +1252,8 @@ export default defineComponent({
 
         verifyRangeValue()
         firstSelected.value = undefined
+
+        if (noActionMode.value) handleEnter()
       }
     }
 
@@ -1289,10 +1297,14 @@ export default defineComponent({
 
     function enterColumn(type: 'prev' | 'next') {
       if (usingRange.value) {
+        if (type === 'prev' && currentState.value === 'start' && !startState.column) {
+          toggleCurrentState('end')
+        }
+
         const state = getCurrentState()
         const currentColumn = state.column
 
-        state.enterColumn(type, false)
+        state.enterColumn(type, !currentColumn)
 
         if (currentColumn === state.column) {
           const isStart = currentState.value === 'start'
@@ -1306,9 +1318,9 @@ export default defineComponent({
       }
     }
 
-    function handleStartInput(type: DateTimeType | null) {
+    function handleStartInput(type: DateTimeType) {
       toggleCurrentState('start')
-      type && handleInputFocus(type)
+      handleInputFocus(type)
 
       nextTick(() => {
         datePanel.value?.refreshCalendar('start')
@@ -1324,27 +1336,11 @@ export default defineComponent({
       })
     }
 
-    // function handleConfirm() {
-    //   if (!usingRange.value) {
-    //     handleEnter()
-    //   } else {
-    //     if (currentState.value === 'start' && !endActivated.value) {
-    //       toggleActivated(true, 'start')
-    //       currentState.value = 'end'
-    //     } else if (currentState.value === 'end' && !startActivated.value) {
-    //       toggleActivated(true, 'end')
-    //       currentState.value = 'start'
-    //     } else {
-    //       handleEnter()
-    //     }
-    //   }
-    // }
-
     function handleClickOutside() {
       emitEvent(props.onClickOutside)
 
       if (props.outsideClose && currentVisible.value) {
-        finishInput(!props.outsideCancel)
+        finishInput(!noActionMode.value && !props.outsideCancel)
         handleBlur()
         emitEvent(props.onOutsideClose)
       }
