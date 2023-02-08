@@ -182,6 +182,7 @@ import {
   createStateProp,
   emitEvent,
   useLocale,
+  useWordSpace,
   makeSentence
 } from '@vexip-ui/config'
 import {
@@ -302,6 +303,10 @@ export default defineComponent({
       )
     }
 
+    const calendarLocale = useLocale('calendar')
+    const datePickerLocale = useLocale('datePicker')
+    const wordSpace = useWordSpace()
+
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const currentVisible = ref(props.visible)
@@ -323,9 +328,6 @@ export default defineComponent({
       isDrop: true
     })
     const { isHover } = useHover(reference)
-
-    const calendarLocale = useLocale('calendar')
-    const datePickerLocale = useLocale('datePicker')
 
     const startInput = ref<InstanceType<typeof DateControl>>()
     const endInput = ref<InstanceType<typeof DateControl>>()
@@ -355,7 +357,10 @@ export default defineComponent({
 
       const { select, start, [props.type]: type } = mergedLocale.value.placeholder
 
-      return makeSentence(usingRange.value ? `${start} ${type}` : `${select} ${type}`)
+      return makeSentence(
+        usingRange.value ? `${start} ${type}` : `${select} ${type}`,
+        wordSpace.value
+      )
     })
     const endPlaceholder = computed(() => {
       if (props.placeholder) {
@@ -366,7 +371,7 @@ export default defineComponent({
 
       const { end, [props.type]: type } = mergedLocale.value.placeholder
 
-      return makeSentence(`${end} ${type}`)
+      return makeSentence(`${end} ${type}`, wordSpace.value)
     })
     const className = computed(() => {
       return [

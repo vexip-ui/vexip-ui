@@ -77,6 +77,12 @@ export function useLocale<T extends LocaleNames>(
   return computed(() => locale.value?.[name] ?? {})
 }
 
+export function useWordSpace() {
+  const locale = inject<ComputedRef<LocaleConfig>>(PROVIDED_LOCALE, globalLocal)
+
+  return computed(() => locale.value.wordSpace ?? false)
+}
+
 export function getCountWord(wordTemplate: string, count: number) {
   const words = wordTemplate.split('|')
 
@@ -93,6 +99,6 @@ export function getCountWordOnly(wordTemplate: string, count: number) {
   return count > 1 ? words[1].trim() : words[0].trim()
 }
 
-export function makeSentence(words: string, wordSpace = useLocale()?.value.wordSpace || false) {
+export function makeSentence(words: string, wordSpace = globalLocal.value.wordSpace ?? false) {
   return !wordSpace ? words.replace(/\s+/g, '') : words
 }

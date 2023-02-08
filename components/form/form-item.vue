@@ -86,7 +86,7 @@ import { Column } from '@/components/column'
 import { Icon } from '@/components/icon'
 import { Tooltip } from '@/components/tooltip'
 import { CircleQuestionR } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, makeSentence } from '@vexip-ui/config'
+import { useNameHelper, useProps, useLocale, useWordSpace, makeSentence } from '@vexip-ui/config'
 import { isNull, isFunction, createEventEmitter, getRangeWidth } from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
@@ -156,6 +156,7 @@ export default defineComponent({
     const formFields = inject(FORM_FIELDS, null)
     const emitter = createEventEmitter()
     const locale = useLocale('form', toRef(props, 'locale'))
+    const wordSpace = useWordSpace()
 
     const initValue = ref(props.defaultValue)
     const isError = ref(false)
@@ -168,7 +169,10 @@ export default defineComponent({
 
     const isRequired = computed(() => formProps.allRequired || props.required)
     const requiredTip = computed(() => {
-      return makeSentence(`${props.label || props.prop} ${locale.value.notNullable}`)
+      return makeSentence(
+        `${props.label || props.prop} ${locale.value.notNullable}`,
+        wordSpace.value
+      )
     })
     const allRules = computed(() => {
       if (!props.prop) return []

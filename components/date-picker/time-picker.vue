@@ -215,6 +215,7 @@ import {
   createSizeProp,
   createStateProp,
   emitEvent,
+  useWordSpace,
   makeSentence
 } from '@vexip-ui/config'
 import { USE_TOUCH, isDefined, doubleDigits, boundRange, warnOnce } from '@vexip-ui/utils'
@@ -319,6 +320,8 @@ export default defineComponent({
     }
 
     const locale = useLocale('timePicker', toRef(props, 'locale'))
+    const wordSpace = useWordSpace()
+
     const placement = toRef(props, 'placement')
     const transfer = toRef(props, 'transfer')
     const currentVisible = ref(props.visible)
@@ -360,7 +363,10 @@ export default defineComponent({
 
       const { select, start, time } = locale.value.placeholder
 
-      return makeSentence(usingRange.value ? `${start} ${time}` : `${select} ${time}`)
+      return makeSentence(
+        usingRange.value ? `${start} ${time}` : `${select} ${time}`,
+        wordSpace.value
+      )
     })
     const endPlaceholder = computed(() => {
       if (props.placeholder) {
@@ -371,7 +377,7 @@ export default defineComponent({
 
       const { end, time } = locale.value.placeholder
 
-      return makeSentence(`${end} ${time}`)
+      return makeSentence(`${end} ${time}`, wordSpace.value)
     })
     const className = computed(() => {
       return [
