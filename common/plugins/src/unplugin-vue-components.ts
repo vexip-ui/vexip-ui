@@ -84,7 +84,7 @@ function getSideEffects(name: string, options: VexipUIResolverOptions) {
   } else if (importStyle === true || importStyle === 'css') {
     return [
       'vexip-ui/css/preset.css',
-      ...(importDarkTheme ? ['vexip-ui/theme/dark/index.css'] : []),
+      ...(importDarkTheme ? ['vexip-ui/themes/dark/index.css'] : []),
       `vexip-ui/css/${name}.css`
     ]
   }
