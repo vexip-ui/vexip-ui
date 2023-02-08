@@ -29,6 +29,7 @@ const MenuGroup = defineComponent({
     const parentItemState = inject(MENU_ITEM_STATE, null)
 
     const nh = useNameHelper('menu-group')
+    const menuNh = useNameHelper('menu')
     const indent = ref(1)
 
     if (parentItemState) {
@@ -39,7 +40,7 @@ const MenuGroup = defineComponent({
       return {
         paddingLeft: parentItemState?.isUsePopper
           ? undefined
-          : `calc(${nh.gcv('indent-width')} * ${indent.value})`
+          : `calc(${menuNh.gcv('indent-width')} * ${indent.value})`
       }
     })
     const onlyShowSlot = computed(() => {
