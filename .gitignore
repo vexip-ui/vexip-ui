@@ -39,3 +39,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
