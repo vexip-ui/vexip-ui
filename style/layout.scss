@@ -310,8 +310,8 @@ $layout: map.merge(
 
   &__user {
     .#{$namespace}-dropdown__trigger {
-      padding-right: 16px;
-      margin-right: -16px;
+      padding-right: 4px;
+      margin-right: -4px;
       cursor: pointer;
     }
 
