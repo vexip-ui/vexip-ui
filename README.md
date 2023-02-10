@@ -22,7 +22,7 @@
 
 **English** | [中文 [含技术支持群]](./README.zh-CN.md)
 
-Vexip UI provides a series of out-of-box components.
+Vexip (pronounced `/ˈvesɪp/`) UI provides a series of out-of-box components.
 
 This library is using base on vue 3.0 with using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript**.
 

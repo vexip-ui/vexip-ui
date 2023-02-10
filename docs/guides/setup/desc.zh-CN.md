@@ -1,6 +1,6 @@
-# Vexip UI
+# 欢迎来到 Vexip UI
 
-Vexip UI 提供了一系列开箱即用的组件。
+Vexip（发音为 `/ˈvesɪp/` <AudioButton src="/vexip-pron.wav"></AudioButton>）UI 提供了一系列开箱即用的组件。
 
 组件库使用全新的 **组合式 Api** 编写，并尽可能采用 Vue 传统的方式设计和编写组件，全量的 **TypeScript**。
 

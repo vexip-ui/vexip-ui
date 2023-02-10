@@ -1,6 +1,6 @@
-# Vexip UI
+# Welcome To Vexip UI
 
-Vexip UI provides a series of out-of-box components.
+Vexip (pronounced `/ˈvesɪp/` <AudioButton src="/vexip-pron.wav"></AudioButton>) UI provides a series of out-of-box components.
 
 This library is using base on vue 3.0 with using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript**.
 
