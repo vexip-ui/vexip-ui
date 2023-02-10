@@ -19,7 +19,7 @@
       type="radio"
       :class="nh.be('input')"
       :checked="currentValue === props.label"
-      :disabled="isDisabled"
+      :disabled="isDisabled || (isLoading && isLoadingLock)"
       :tabindex="props.tabIndex"
       @change="handleChange"
     />
@@ -152,6 +152,7 @@ export default defineComponent({
       isDisabled,
       isButton,
       isLoading,
+      isLoadingLock,
       computedLoadingIcon: LoadingIcon,
       loadingEffect,
 
