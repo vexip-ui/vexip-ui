@@ -420,12 +420,7 @@ export default defineComponent({
       return usingRange.value ? values : values[0]
     })
     const showClear = computed(() => {
-      return (
-        !props.disabled &&
-        props.clearable &&
-        isHover.value &&
-        !!(Array.isArray(props.value) ? props.value[0] || props.value[1] : props.value)
-      )
+      return !props.disabled && props.clearable && isHover.value && !!lastValue.value
     })
     const startError = computed(() => {
       const { hour, minute, second } = startState.timeValue
@@ -448,7 +443,16 @@ export default defineComponent({
       )
     })
 
-    watch(() => props.value, parseValue, { immediate: true })
+    watch(
+      () => props.value,
+      value => {
+        parseValue(value)
+        lastValue.value = (Array.isArray(value) ? value[0] || value[1] : value)
+          ? getStringValue()
+          : ''
+      },
+      { immediate: true }
+    )
     watch(() => props.format, parseFormat, { immediate: true })
     watch(
       () => props.visible,

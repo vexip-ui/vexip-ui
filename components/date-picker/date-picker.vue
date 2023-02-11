@@ -435,12 +435,7 @@ export default defineComponent({
       return activated.year && activated.month && activated.date
     })
     const showClear = computed(() => {
-      return (
-        !props.disabled &&
-        props.clearable &&
-        isHover.value &&
-        !!(Array.isArray(props.value) ? props.value[0] || props.value[1] : props.value)
-      )
+      return !props.disabled && props.clearable && isHover.value && !!lastValue.value
     })
     const min = computed(() => {
       if (props.min) {
@@ -595,7 +590,17 @@ export default defineComponent({
     const noActionMode = computed(() => props.type !== 'datetime' && props.noAction)
 
     watch(() => props.type, parseFormat)
-    watch(() => props.value, parseValue, { immediate: true })
+    watch(
+      () => props.value,
+      value => {
+        parseValue(value)
+
+        lastValue.value = (Array.isArray(value) ? value[0] || value[1] : value)
+          ? getStringValue()
+          : ''
+      },
+      { immediate: true }
+    )
     watch(
       () => props.type,
       value => {
@@ -679,10 +684,6 @@ export default defineComponent({
         }
       }
     )
-
-    if (props.value) {
-      lastValue.value = getStringValue()
-    }
 
     function createDateState() {
       // const noFiller = props.noFiller

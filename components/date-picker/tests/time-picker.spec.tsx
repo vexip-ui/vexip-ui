@@ -361,13 +361,13 @@ describe('TimePicker', () => {
     const onClear = vi.fn()
     const wrapper = mount(TimePicker, {
       props: {
-        value: '09:24:47',
         clearable: true,
         onClear
       }
     })
     const selector = wrapper.find('.vxp-time-picker__selector')
 
+    await nextTick()
     expect(wrapper.find('.vxp-time-picker__clear').exists()).toBe(false)
 
     await selector.trigger('mouseenter')
@@ -384,6 +384,10 @@ describe('TimePicker', () => {
     await nextTick()
     expect(onClear).toHaveBeenCalled()
     expect(selector.find('.vxp-time-picker__placeholder').exists()).toBe(true)
+
+    await wrapper.setProps({ value: '09:24:47' })
+    await selector.trigger('mouseenter')
+    expect(wrapper.find('.vxp-time-picker__clear').exists()).toBe(true)
   })
 
   it('click unit', async () => {

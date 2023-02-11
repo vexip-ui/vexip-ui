@@ -465,14 +465,13 @@ describe('DatePicker', () => {
     const onClear = vi.fn()
     const wrapper = mount(DatePicker, {
       props: {
-        type: 'datetime',
-        value: '2022-05-23',
         clearable: true,
         onClear
       }
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
 
+    await nextTick()
     expect(wrapper.find('.vxp-date-picker__clear').exists()).toBe(false)
 
     await selector.trigger('mouseenter')
@@ -489,6 +488,10 @@ describe('DatePicker', () => {
     await nextTick()
     expect(onClear).toHaveBeenCalled()
     expect(selector.find('.vxp-date-picker__placeholder').exists()).toBe(true)
+
+    await wrapper.setProps({ value: '2022-05-27' })
+    await selector.trigger('mouseenter')
+    expect(wrapper.find('.vxp-date-picker__clear').exists()).toBe(true)
   })
 
   it('click unit', async () => {
