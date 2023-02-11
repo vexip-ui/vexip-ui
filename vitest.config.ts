@@ -13,6 +13,9 @@ export default defineConfig({
       { find: '@vexip-ui/config', replacement: resolve(__dirname, 'common/config/src') }
     ]
   },
+  optimizeDeps: {
+    include: ['@vexip-ui/utils', '@vexip-ui/hooks', '@vexip-ui/icons']
+  },
   test: {
     include: ['components/*/tests/*.spec.{ts,tsx}'],
     environment: 'happy-dom',
