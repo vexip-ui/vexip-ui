@@ -1,3 +1,9 @@
 <template>
-  <Calendar :week-start="0"></Calendar>
+  <Calendar v-model:value="value"></Calendar>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const value = ref<Date>()
+</script>

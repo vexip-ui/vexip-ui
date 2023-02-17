@@ -17,18 +17,20 @@
           </Column>
           <Column :class="nh.be('actions')" flex="0">
             <NumberInput
-              v-model:value="calendarYear"
+              :value="calendarYear"
               inherit
               :class="nh.be('year-input')"
               :range="[1970, 2300]"
               :formatter="formatYearInput"
+              @change="handleYearChange"
             ></NumberInput>
             <NumberInput
-              v-model:value="calendarMonth"
+              :value="calendarMonth"
               inherit
               :class="nh.be('month-input')"
               :range="[1, 12]"
               :formatter="formatMonthInput"
+              @change="handleMonthChange"
             ></NumberInput>
           </Column>
         </Row>
@@ -85,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRef } from 'vue'
+import { defineComponent, ref, toRef, watch } from 'vue'
 import CalendarPanel from './calendar-panel.vue'
 import { Column } from '@/components/column'
 import { NumberInput } from '@/components/number-input'
@@ -102,7 +104,7 @@ export default defineComponent({
     Row
   },
   props: calendarProps,
-  emits: ['update:value'],
+  emits: ['update:value', 'update:year', 'update:month'],
   setup(_props, { emit }) {
     const props = useProps('calendar', _props, {
       locale: null,
@@ -140,6 +142,25 @@ export default defineComponent({
     const calendarYear = ref(props.year)
     const calendarMonth = ref(props.month)
 
+    watch(
+      () => props.value,
+      value => {
+        calendarValue.value = value
+      }
+    )
+    watch(
+      () => props.year,
+      value => {
+        calendarYear.value = value
+      }
+    )
+    watch(
+      () => props.month,
+      value => {
+        calendarMonth.value = value
+      }
+    )
+
     function formatYearInput(value: number) {
       return `${value}${locale.value.year}`
     }
@@ -165,6 +186,20 @@ export default defineComponent({
       emit('update:value', date)
     }
 
+    function handleYearChange(value: number) {
+      calendarYear.value = value
+
+      emitEvent(props.onYearChange, value, calendarMonth.value)
+      emit('update:year', value)
+    }
+
+    function handleMonthChange(value: number) {
+      calendarMonth.value = value
+
+      emitEvent(props.onMonthChange, calendarYear.value, value)
+      emit('update:month', value)
+    }
+
     return {
       props,
       nh,
@@ -175,7 +210,9 @@ export default defineComponent({
 
       formatYearInput,
       formatMonthInput,
-      handleClick
+      handleClick,
+      handleYearChange,
+      handleMonthChange
     }
   }
 })

@@ -2,9 +2,9 @@
 
 | Name          | Type                       | Description                                                                                                                             | Default                     | Since   |
 | ------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- | ------- |
-| value         | `number \| string \| Date` | The date currently selected by the calendar                                                                                             | `null`                      | -       |
-| year          | `number`                   | Current year of the calendar                                                                                                            | `new Date().getFullYear()`  | -       |
-| month         | `number`                   | Current month of the calendar, the optional value is 1 ~ 12                                                                             | `new Date().getMonth() + 1` | -       |
+| value         | `number \| string \| Date` | The date currently selected, can use `v-model` two-way binding                                                                          | `null`                      | -       |
+| year          | `number`                   | Current year of calendar, can use `v-model` two-way binding                                                                             | `new Date().getFullYear()`  | -       |
+| month         | `number`                   | Current month of calendar, the optional value is 1 ~ 12, can use `v-model` two-way binding                                              | `new Date().getMonth() + 1` | -       |
 | week-days     | `string[]`                 | The label of the week number displayed in the calendar header, an array of size 7 needs to be passed in                                 | `null`                      | -       |
 | week-start    | `number`                   | Set the first day of the week in the calendar, the optional value is 0 ~ 7, where 0 is Sunday                                           | `0`                         | -       |
 | today         | `number \| string \| Date` | Set today's date in the calendar                                                                                                        | `new Date()`                | -       |
@@ -13,9 +13,11 @@
 
 ### Calendar Events
 
-| Name   | Description                                                                                 | Parameters     | Since |
-| ------ | ------------------------------------------------------------------------------------------- | -------------- | ----- |
-| select | Emitted when the date selected in the calendar changes, returns the currently selected date | `(date: Date)` | -     |
+| Name         | Description                                                                           | Parameters                      | Since   |
+| ------------ | ------------------------------------------------------------------------------------- | ------------------------------- | ------- |
+| select       | Emitted when the date selected in the calendar changes, returns current selected date | `(date: Date)`                  | -       |
+| year-change  | Emitted when the year of the calendar is changed, returns current year and month      | `(year: number, month: number)` | `2.1.4` |
+| month-change | Emitted when the month of the calendar is changed, returns current year and month     | `(year: number, month: number)` | `2.1.4` |
 
 ### Calendar Slots
 

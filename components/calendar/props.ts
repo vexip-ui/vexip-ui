@@ -19,7 +19,9 @@ export const calendarProps = buildProps({
   weekStart: Number,
   today: [Number, String, Date] as PropType<Dateable>,
   disabledDate: Function as PropType<(data: Date) => boolean>,
-  onSelect: eventProp<(date: Date) => void>()
+  onSelect: eventProp<(date: Date) => void>(),
+  onYearChange: eventProp<(year: number, month: number) => void>(),
+  onMonthChange: eventProp<(year: number, month: number) => void>()
 })
 
 export type CalendarProps = ExtractPropTypes<typeof calendarProps>
