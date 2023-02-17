@@ -227,7 +227,7 @@ interface TableHeadPayload {
 | ------------- | ------------------------------------------ | --------------------------------- | ---- |
 | clearSort     | 清除表格当前激活的所有排序                 | `() => void`                      | -    |
 | clearFilter   | 清除当前表格激活的所有过滤                 | `() => void`                      | -    |
-| refresh       | 重置表格，将会触发表格的重新布局及数据渲染 | `() => void`                      | -    |
+| refresh       | 刷新表格，将会触发表格的重新布局及数据渲染 | `() => void`                      | -    |
 | getSelected   | 获取所有被勾选的行数据                     | `() => Record<string, unknown>[]` | -    |
 | clearSelected | 清除所有被勾选的行数据                     | `() => void`                      | -    |
 

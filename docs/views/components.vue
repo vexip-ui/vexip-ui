@@ -1,7 +1,7 @@
 <template>
   <Container ref="wrapper" :class="prefix">
     <template #aside>
-      <Scroll
+      <NativeScroll
         ref="menuScroll"
         use-y-bar
         height="100%"
@@ -41,7 +41,7 @@
             </MenuItem>
           </MenuGroup>
         </Menu>
-      </Scroll>
+      </NativeScroll>
     </template>
     <main :class="`${prefix}__main`">
       <router-view v-slot="{ Component }">
@@ -63,7 +63,7 @@ import Container from '../common/container.vue'
 import Footer from '../common/footer.vue'
 import { getComponentConfig } from '../router/components'
 
-import type { Scroll } from 'vexip-ui'
+import type { NativeScroll } from 'vexip-ui'
 import type { ComponentConfig } from '../router/components'
 import type { Store } from '../symbol'
 
@@ -78,7 +78,7 @@ console.log(version, versionUnits)
 const componentGroups = getComponentConfig()
 const currentMenu = ref('')
 const wrapper = ref<InstanceType<typeof Container>>()
-const menuScroll = ref<InstanceType<typeof Scroll>>()
+const menuScroll = ref<InstanceType<typeof NativeScroll>>()
 
 const i18n = useI18n({ useScope: 'global' })
 const { t } = i18n

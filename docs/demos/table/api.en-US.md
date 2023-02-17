@@ -223,13 +223,13 @@ interface TableHeadPayload {
 
 ### Table Methods
 
-| Name          | Description                                                                       | Signature                         | Since |
-| ------------- | --------------------------------------------------------------------------------- | --------------------------------- | ----- |
-| clearSort     | Clear all sorts currently active in the table                                     | `() => void`                      | -     |
-| clearFilter   | Clear all active filters in the current table                                     | `() => void`                      | -     |
-| refresh       | Reset the table, which will trigger the re-layout and data rendering of the table | `() => void`                      | -     |
-| getSelected   | Get all selected row data                                                         | `() => Record<string, unknown>[]` | -     |
-| clearSelected | Clear all selected row data                                                       | `() => void`                      | -     |
+| Name          | Description                                                                         | Signature                         | Since |
+| ------------- | ----------------------------------------------------------------------------------- | --------------------------------- | ----- |
+| clearSort     | Clear all sorts currently active in the table                                       | `() => void`                      | -     |
+| clearFilter   | Clear all active filters in the current table                                       | `() => void`                      | -     |
+| refresh       | Refresh the table, which will trigger the re-layout and data rendering of the table | `() => void`                      | -     |
+| getSelected   | Get all selected row data                                                           | `() => Record<string, unknown>[]` | -     |
+| clearSelected | Clear all selected row data                                                         | `() => void`                      | -     |
 
 ### TableColumn Props
 

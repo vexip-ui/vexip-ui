@@ -41,7 +41,7 @@ type AutoCompleteFilter = (value: string | number, options: AutoCompleteOptionSt
 | suffix-color   | `string`                                         | The color of the suffix content, which affects the suffix slot                              | `''`        | -       |
 | placeholder    | `string`                                         | Input control placeholder                                                                   | `null`      | -       |
 | size           | `'small' \| 'default' \| 'large'`                | Set input control size                                                                      | `'default'` | -       |
-| state          | `'default' \| 'success' \| 'error' \| 'warning'` | state of the input box                                                                      | `'default'` | -       |
+| state          | `'default' \| 'success' \| 'error' \| 'warning'` | state of the input                                                                          | `'default'` | -       |
 | disabled       | `boolean`                                        | Set whether to disable                                                                      | `false`     | -       |
 | drop-disabled  | `boolean`                                        | whether to allow drop-down list display                                                     | `false`     | -       |
 | placement      | `Placement`                                      | The position where the option list appears, the optional value is the same as Popper.js     | `'bottom'`  | -       |

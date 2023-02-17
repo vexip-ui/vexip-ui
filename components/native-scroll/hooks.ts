@@ -163,7 +163,7 @@ export function useScrollWrapper({
     }, 0)
   }
 
-  function scrollTo(clientX: number, clientY: number, duration?: number) {
+  function scrollTo(clientX: number, clientY: number, duration = 500) {
     return new Promise<void>(resolve => {
       if (!content.el) return
 
@@ -187,7 +187,7 @@ export function useScrollWrapper({
     })
   }
 
-  function scrollBy(deltaX: number, deltaY: number, duration?: number) {
+  function scrollBy(deltaX: number, deltaY: number, duration = 500) {
     return scrollTo(currentScroll.x + deltaX, currentScroll.y + deltaY, duration)
   }
 

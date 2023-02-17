@@ -44,3 +44,13 @@
 | Name    | Description                | Parameters | Since |
 | ------- | -------------------------- | ---------- | ----- |
 | defalut | Slot for scrolling content | -          | -     |
+
+### Scroll Methods
+
+| Name            | Description                                      | Signature                                                             | Since |
+| --------------- | ------------------------------------------------ | --------------------------------------------------------------------- | ----- |
+| refresh         | Refresh the scroll, will trigger recalculation   | `() => void`                                                          | -     |
+| scrollTo        | Scroll to the specified position                 | `(x: number, y: number, duration?: number) => void`                   | -     |
+| scrollBy        | Scroll the specified distance                    | `(dx: number, dy: number, duration?: number) => void`                 | -     |
+| scrollToElement | Scroll to the position of the specified element  | `(el: string \| Element, duration?: number, offset?: number) => void` | -     |
+| ensureInView    | Ensure the provided element is in view of scroll | `(el: string \| Element, duration?: number, offset?: number) => void` | -     |

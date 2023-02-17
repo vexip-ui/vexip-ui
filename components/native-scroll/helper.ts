@@ -16,6 +16,11 @@ export function animateScrollTo(options: {
 
   if (!el) return
 
+  if (duration <= 0) {
+    el.scrollTo(xTo, yTo)
+    return
+  }
+
   const xDistance = xTo - xFrom
   const yDistance = yTo - yFrom
 

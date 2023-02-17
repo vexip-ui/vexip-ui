@@ -41,3 +41,13 @@
 | 名称    | 说明           | 参数 | 始于 |
 | ------- | -------------- | ---- | ---- |
 | defalut | 滚动内容的插槽 | -    | -    |
+
+### NativeScroll 方法
+
+| 名称            | 说明                                 | 签名                                                                           | 始于    |
+| --------------- | ------------------------------------ | ------------------------------------------------------------------------------ | ------- |
+| refresh         | 刷新滚动，将会触发滚动的重新计算大小 | `() => void`                                                                   | -       |
+| scrollTo        | 滚动到指定位置                       | `(x: number, y: number, duration?: number) => Promise<void>`                   | -       |
+| scrollBy        | 滚动指定的距离                       | `(dx: number, dy: number, duration?: number) => Promise<void>`                 | -       |
+| scrollToElement | 滚动到指定元素所在的位置             | `(el: string \| Element, duration?: number, offset?: number) => Promise<void>` | -       |
+| ensureInView    | 确保提供的元素在滚动的可视区内       | `(el: string \| Element, duration?: number, offset?: number) => void`          | `2.1.4` |

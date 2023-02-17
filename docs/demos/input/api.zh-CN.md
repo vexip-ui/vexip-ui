@@ -10,7 +10,7 @@
 | suffix         | `Record<string, any>`                                    | 后缀图标，使用后缀插槽时无效                                      | `null`      | -       |
 | suffix-color   | `string`                                                 | 后缀内容的颜色，会影响后缀插槽                                    | `''`        | -       |
 | formatter      | `(value: string \| number) => string \| number`          | 设置在每次值变化后，对输入框的值进行格式化的方法                  | `null`      | -       |
-| value          | `string \| number`                                       | 设置输入框的值                                                    | `''`        | -       |
+| value          | `string \| number`                                       | 设置输入框的值，可以使用 `v-model` 双向绑定                       | `''`        | -       |
 | placeholder    | `string`                                                 | 设置输入框的占位符                                                | `''`        | -       |
 | autofocus      | `boolean`                                                | 设置输入框的自动聚焦                                              | `false`     | -       |
 | spellcheck     | `boolean`                                                | 设置输入框的拼写检查                                              | `false`     | -       |

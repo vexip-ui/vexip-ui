@@ -60,7 +60,7 @@ import { defineComponent, ref, computed, watch, toRef, onBeforeUnmount, nextTick
 import { Scrollbar } from '@/components/scrollbar'
 import { ResizeObserver } from '@/components/resize-observer'
 import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { USE_TOUCH, isTrue, createEventEmitter } from '@vexip-ui/utils'
+import { USE_TOUCH, isElement, isTrue, createEventEmitter } from '@vexip-ui/utils'
 import { nativeScrollProps } from './props'
 import { useScrollWrapper } from './hooks'
 
@@ -122,6 +122,8 @@ export default defineComponent({
     const nh = useNameHelper('native-scroll')
     const usingBar = ref(false)
     const scrolling = ref(false)
+
+    const wrapper = ref<HTMLElement>()
 
     const {
       contentElement,
@@ -510,6 +512,40 @@ export default defineComponent({
       return [0, yScrollLimit.value]
     }
 
+    function ensureInView(el: string | Element, duration?: number, offset = 0) {
+      if (!wrapper.value) return
+
+      if (typeof el === 'string') {
+        el = wrapper.value.querySelector(el)!
+      }
+
+      if (!isElement(el)) return
+
+      const wrapperRect = wrapper.value.getBoundingClientRect()
+      const elRect = el.getBoundingClientRect()
+
+      let clientX = 0
+      let clientY = 0
+
+      if (props.mode !== 'vertical') {
+        if (elRect.left < wrapperRect.left + offset) {
+          clientX = elRect.left - wrapperRect.left - offset
+        } else if (elRect.right > wrapperRect.right - offset) {
+          clientX = elRect.right - wrapperRect.right + offset
+        }
+      }
+
+      if (props.mode !== 'horizontal') {
+        if (elRect.top < wrapperRect.top + offset) {
+          clientY = elRect.top - wrapperRect.top - offset
+        } else if (elRect.bottom > wrapperRect.bottom - offset) {
+          clientY = elRect.bottom - wrapperRect.bottom + offset
+        }
+      }
+
+      scrollBy(clientX, clientY, duration)
+    }
+
     function addScrollListener(listener: EventHandler) {
       emitter.on('scroll', listener)
     }
@@ -535,7 +571,7 @@ export default defineComponent({
       enableXScroll,
       enableYScroll,
 
-      wrapper: ref<HTMLElement>(),
+      wrapper,
       content: contentElement,
       xBar,
       yBar,
@@ -553,6 +589,7 @@ export default defineComponent({
       scrollTo,
       scrollBy,
       scrollToElement,
+      ensureInView,
       getXScrollLimit,
       getYScrollLimit,
       addScrollListener,
