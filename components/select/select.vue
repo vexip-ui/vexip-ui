@@ -562,7 +562,7 @@ export default defineComponent({
       passive: false,
       onKeyDown: (event, modifier) => {
         if (!currentVisible.value) {
-          if (modifier.space) {
+          if (modifier.space || modifier.enter) {
             event.preventDefault()
             event.stopPropagation()
             toggleVisible()
@@ -593,7 +593,7 @@ export default defineComponent({
 
           updateHitting(index)
           modifier.resetAll()
-        } else if (modifier.enter) {
+        } else if (modifier.space || modifier.enter) {
           event.preventDefault()
           event.stopPropagation()
 
