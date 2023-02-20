@@ -111,7 +111,7 @@ describe('Select', () => {
 
     await wrapper.setProps({ visible: true })
     await wrapper.trigger('keydown', { key: 'Enter' })
-    expect(selector.classes()).not.toContain('vxp-select__selector--focused')
+    expect(selector.classes()).toContain('vxp-select__selector--focused')
   })
 
   it('disabled', async () => {
