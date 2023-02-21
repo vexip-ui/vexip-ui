@@ -111,6 +111,7 @@ export default defineComponent({
       value => {
         currentValue.value = value
         lastValue = value
+        setFieldValue(value)
       }
     )
 
@@ -142,7 +143,7 @@ export default defineComponent({
 
         lastValue = currentValue.value
 
-        setFieldValue(currentValue.value)
+        !props.sync && setFieldValue(currentValue.value)
         emitEvent(props.onChange, currentValue.value)
 
         if (!props.sync) {
@@ -150,6 +151,7 @@ export default defineComponent({
           validateField()
         }
       } else {
+        props.sync && setFieldValue(currentValue.value)
         emitEvent(props.onInput, currentValue.value)
 
         if (props.sync) {

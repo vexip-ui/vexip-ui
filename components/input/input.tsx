@@ -177,8 +177,9 @@ export default defineComponent({
       () => props.value,
       value => {
         currentValue.value = toNotNullString(value)
-        limitValueLength()
         lastValue = currentValue.value
+        setFieldValue(currentValue.value)
+        limitValueLength()
       }
     )
 
@@ -241,7 +242,7 @@ export default defineComponent({
 
         lastValue = value
 
-        setFieldValue(value)
+        !props.sync && setFieldValue(value)
         emitEvent(props.onChange as ChangeListener, value)
 
         if (!props.sync) {
@@ -249,6 +250,7 @@ export default defineComponent({
           validateField()
         }
       } else {
+        props.sync && setFieldValue(value)
         emitEvent(props.onInput as ChangeListener, value)
 
         if (props.sync) {
