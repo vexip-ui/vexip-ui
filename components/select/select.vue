@@ -105,7 +105,7 @@
                 role="combobox"
                 aria-autocomplete="list"
                 @input="handleFilterInput"
-                @keydown="handleBackspace"
+                @keydown="handleFilterKeyDown"
               />
               <span ref="device" :class="nh.be('device')" aria-hidden="true">
                 {{ currentFilter }}
@@ -593,7 +593,7 @@ export default defineComponent({
 
           updateHitting(index)
           modifier.resetAll()
-        } else if (modifier.space || modifier.enter) {
+        } else if (modifier.enter || (!props.filter && modifier.space)) {
           event.preventDefault()
           event.stopPropagation()
 
@@ -789,12 +789,12 @@ export default defineComponent({
       currentIndex.value = hitting
       let index = -1
 
-      visibleOptions.value.forEach(option => {
+      optionStates.value.forEach(option => {
         if (!option.hidden) {
           index += 1
           option.hitting = hitting === index
         } else {
-          option.hitting = false
+          option.hitting = hitting === index
         }
       })
 
@@ -811,12 +811,12 @@ export default defineComponent({
       return currentValues.value[0] === option.value
     }
 
-    function filterOptions(value: string | number) {
+    function filterOptions(inputValue: string) {
       const filter = props.filter
 
       if (!filter) return
 
-      if (!value) {
+      if (!inputValue) {
         optionStates.value.forEach(state => {
           state.hidden = false
         })
@@ -827,18 +827,18 @@ export default defineComponent({
 
         if (typeof filter === 'function') {
           normalOptions.value.forEach(state => {
-            state.hidden = !filter(value, state)
+            state.hidden = !filter(inputValue, state)
           })
         } else {
           if (props.ignoreCase) {
-            const ignoreCaseValue = value.toString().toLocaleLowerCase()
+            const ignoreCaseValue = inputValue.toString().toLocaleLowerCase()
 
             normalOptions.value.forEach(state => {
-              state.hidden = !state.value?.toString().toLocaleLowerCase().includes(ignoreCaseValue)
+              state.hidden = !state.label?.toString().toLocaleLowerCase().includes(ignoreCaseValue)
             })
           } else {
             normalOptions.value.forEach(state => {
-              state.hidden = !state.value?.toString().includes(value?.toString())
+              state.hidden = !state.label?.toString().includes(inputValue?.toString())
             })
           }
         }
@@ -1010,17 +1010,32 @@ export default defineComponent({
     function handleFilterInput() {
       if (!input.value) return
 
+      let hittingIndex: number
+
       currentFilter.value = input.value.value
 
-      if (showDynamic.value || currentIndex.value !== -1) {
-        currentIndex.value = 0
+      if (!currentFilter.value) {
+        hittingIndex = -1
+      } else if (showDynamic.value || currentIndex.value !== -1) {
+        hittingIndex = 0
       } else {
-        currentIndex.value = visibleOptions.value.findIndex(
-          option => String(option.value) === currentFilter.value
+        hittingIndex = visibleOptions.value.findIndex(
+          option => String(option.label) === currentFilter.value
         )
+        hittingIndex = hittingIndex === -1 ? 0 : hittingIndex
       }
 
       requestAnimationFrame(() => {
+        if (!hittingIndex) {
+          hittingIndex = visibleOptions.value.findIndex(
+            option => !currentValues.value.includes(option.value)
+          )
+        }
+
+        if (hittingIndex !== currentIndex.value) {
+          updateHitting(hittingIndex)
+        }
+
         if (props.multiple && device.value) {
           anchorWidth.value = getRangeWidth(device.value)
         }
@@ -1029,7 +1044,7 @@ export default defineComponent({
       })
     }
 
-    function handleBackspace(event: KeyboardEvent) {
+    function handleFilterKeyDown(event: KeyboardEvent) {
       if (!input.value) return
 
       if (event.key === 'Backspace' && !input.value.value && !isNull(currentValues.value.at(-1))) {
@@ -1090,7 +1105,7 @@ export default defineComponent({
       handleFocus,
       handleBlur,
       handleFilterInput,
-      handleBackspace,
+      handleFilterKeyDown,
       toggleShowRestTip
     }
   }

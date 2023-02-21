@@ -429,7 +429,10 @@ describe('Select', () => {
       props: {
         visible: true,
         filter: true,
-        options: OPTIONS
+        options: [
+          { value: 0, label: 'Op 1' },
+          { value: 1, label: 'Op 2' }
+        ]
       }
     })
     const input = wrapper.find('input').element
@@ -437,6 +440,7 @@ describe('Select', () => {
     emitInput(input, '2')
     await nextTick()
     expect(wrapper.findAll('.vxp-option').length).toEqual(1)
+    expect(wrapper.findAll('.vxp-option')[0].text()).toEqual('Op 2')
   })
 
   it('filter creatable', async () => {

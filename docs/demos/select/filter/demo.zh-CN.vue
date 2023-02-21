@@ -5,16 +5,22 @@
   <Select
     multiple
     clearable
-    filter
+    :filter="fitler"
     :options="options"
   ></Select>
 </template>
 
 <script setup lang="ts">
+import type { SelectFilter } from 'vexip-ui'
+
 const options = Array.from({ length: 12 }, (_, i) => ({
   label: `选项${i + 1}`,
   value: i + 1
 }))
+
+const fitler: SelectFilter = (filterValue, option) => {
+  return option.label.toLocaleLowerCase().includes(filterValue.toLocaleUpperCase())
+}
 </script>
 
 <style scoped>

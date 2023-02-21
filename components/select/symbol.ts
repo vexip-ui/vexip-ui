@@ -15,4 +15,4 @@ export interface SelectOptionState extends OptionState {
   data: SelectRawOption
 }
 
-export type SelectFilter = (value: string | number, options: SelectOptionState) => boolean
+export type SelectFilter = (value: string, option: SelectOptionState) => boolean
