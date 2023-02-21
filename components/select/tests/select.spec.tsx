@@ -94,6 +94,23 @@ describe('Select', () => {
     expect(selector.classes()).not.toContain('vxp-select__selector--focused')
   })
 
+  it('focus and blur', async () => {
+    const onFocus = vi.fn()
+    const onBlur = vi.fn()
+    const wrapper = mount(Select, {
+      props: { onFocus, onBlur }
+    })
+    const selector = wrapper.find('.vxp-select__selector')
+
+    await selector.trigger('focus')
+    expect(onFocus).toHaveBeenCalledTimes(1)
+    expect(onBlur).toHaveBeenCalledTimes(0)
+
+    await selector.trigger('blur')
+    expect(onFocus).toHaveBeenCalledTimes(1)
+    expect(onBlur).toHaveBeenCalledTimes(1)
+  })
+
   it('key toggle visible', async () => {
     const wrapper = mount(Select)
     const selector = wrapper.find('.vxp-select__selector')

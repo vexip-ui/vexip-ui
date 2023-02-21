@@ -990,7 +990,7 @@ export default defineComponent({
     }
 
     function handleBlur(event: FocusEvent) {
-      emitEvent(props.onFocus, event)
+      emitEvent(props.onBlur, event)
     }
 
     function syncInputValue() {
