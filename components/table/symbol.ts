@@ -25,14 +25,14 @@ export type TableColumnType = 'order' | 'selection' | 'expand'
 
 export type FilterOptions<D = Data, Val extends string | number = string | number> =
   | {
-    able: boolean,
+    able?: boolean,
     options: (string | { value: Val, label?: string, active?: boolean })[],
     multiple?: false,
     active?: null | Val,
     method?: null | ((active: Val, data: D) => boolean)
   }
   | {
-    able: boolean,
+    able?: boolean,
     options: (string | { value: Val, label?: string, active?: boolean })[],
     multiple: true,
     active?: null | Val[],
@@ -44,7 +44,7 @@ export interface ParsedFilterOptions extends Omit<Required<FilterOptions>, 'opti
 }
 
 export interface SorterOptions<D = Data> {
-  able: boolean,
+  able?: boolean,
   type?: null | 'asc' | 'desc',
   order?: number, // 优先级
   method?: null | ((prev: D, next: D) => number)

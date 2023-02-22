@@ -796,13 +796,13 @@ export function useStore(options: StoreOptions) {
 
   function parseSorter(sorter: boolean | SorterOptions = false): ParsedSorterOptions {
     const raw = typeof sorter === 'boolean' ? { able: sorter } : sorter
-    const { able = false, type = null, order = 0, method = null } = raw
+    const { able = true, type = null, order = 0, method = null } = raw
 
     return { able, type, order, method }
   }
 
   function parseFilter(filter: FilterOptions = { able: false, options: [] }): ParsedFilterOptions {
-    const { able = false, multiple = false, active = null, method = null } = filter
+    const { able = true, multiple = false, active = null, method = null } = filter
     // 防止内部变化触发 deep watch
     const options = deepClone(filter.options ?? [])
     const formattedOptions = []

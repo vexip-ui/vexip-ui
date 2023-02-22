@@ -33,7 +33,6 @@ const columns = ref([
     name: 'First Name',
     key: 'firstName',
     filter: defineFilter({
-      able: true,
       options: [
         { label: 'Starts with A', value: 'A' },
         { label: 'Starts with E', value: 'E' }
@@ -47,7 +46,6 @@ const columns = ref([
     name: 'Last Name',
     key: 'lastName',
     filter: defineFilter({
-      able: true,
       options: [
         { label: 'Starts with D', value: 'D' },
         { label: 'Starts with F', value: 'F' },

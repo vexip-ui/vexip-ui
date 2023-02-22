@@ -24,7 +24,6 @@ const columns = ref(
       name: 'Age',
       key: 'age',
       sorter: {
-        able: true,
         type: 'asc'
       }
     }
