@@ -32,7 +32,7 @@ const conveniences: Record<ToastType, Record<string, any>> = {
     icon: Spinner,
     showMask: true,
     iconProps: {
-      pulse: true
+      effect: 'pulse-in'
     }
   }
 }

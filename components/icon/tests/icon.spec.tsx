@@ -46,23 +46,23 @@ describe('Icon', () => {
 
   it('spin', async () => {
     const wrapper = mount(Icon, {
-      props: { spin: true, icon: Spinner }
+      props: { effect: 'spin-in', icon: Spinner }
     })
 
     expect(wrapper.classes()).toContain('vxp-icon--spin-in')
 
-    await wrapper.setProps({ spin: 'out' })
+    await wrapper.setProps({ effect: 'spin-out' })
     expect(wrapper.classes()).toContain('vxp-icon--spin-out')
   })
 
   it('pulse', async () => {
     const wrapper = mount(Icon, {
-      props: { pulse: true, icon: Spinner }
+      props: { effect: 'pulse-in', icon: Spinner }
     })
 
     expect(wrapper.classes()).toContain('vxp-icon--pulse-in')
 
-    await wrapper.setProps({ pulse: 'out' })
+    await wrapper.setProps({ effect: 'pulse-out' })
     expect(wrapper.classes()).toContain('vxp-icon--pulse-out')
   })
 

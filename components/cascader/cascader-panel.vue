@@ -67,7 +67,7 @@
               </slot>
             </span>
             <div :class="nh.be('icon')">
-              <Icon v-if="item.loading" pulse>
+              <Icon v-if="item.loading" effect="pulse-in">
                 <Spinner></Spinner>
               </Icon>
               <Icon v-else-if="item.error">

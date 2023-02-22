@@ -44,7 +44,7 @@
             v-else-if="props.file.status === 'uploading'"
             :class="[nh.be('icon'), nh.be('loading')]"
           >
-            <Icon pulse>
+            <Icon effect="pulse-in">
               <Spinner></Spinner>
             </Icon>
           </div>
@@ -81,7 +81,7 @@
                   {{ `${percentage}%` }}
                 </span>
               </div>
-              <Icon v-else pulse :scale="1.8">
+              <Icon v-else effect="pulse-in" :scale="1.8">
                 <Spinner></Spinner>
               </Icon>
             </template>

@@ -21,8 +21,8 @@
         <slot name="content">
           <div :class="nh.be('icon')">
             <slot name="icon">
-              <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
-              <Icon v-else pulse :icon="props.icon"></Icon>
+              <Icon v-if="props.spin" effect="spin-in" :icon="props.icon"></Icon>
+              <Icon v-else effect="pulse-in" :icon="props.icon"></Icon>
             </slot>
           </div>
           <div v-if="hasTip" :class="nh.be('tip')">
@@ -51,8 +51,8 @@
       <slot name="content">
         <div :class="nh.be('icon')">
           <slot name="icon">
-            <Icon v-if="props.spin" spin :icon="props.icon"></Icon>
-            <Icon v-else pulse :icon="props.icon"></Icon>
+            <Icon v-if="props.spin" effect="spin-in" :icon="props.icon"></Icon>
+            <Icon v-else effect="pulse-in" :icon="props.icon"></Icon>
           </slot>
         </div>
         <div v-if="hasTip" :class="nh.be('tip')">

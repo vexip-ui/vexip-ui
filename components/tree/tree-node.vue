@@ -37,7 +37,7 @@
           :aria-hidden="!loading && !hasArrow"
           @click.stop="handleToggleExpand()"
         >
-          <Icon v-if="loading" pulse><Spinner></Spinner></Icon>
+          <Icon v-if="loading" effect="pulse-in"><Spinner></Spinner></Icon>
           <Icon v-else><ChevronRight></ChevronRight></Icon>
         </span>
         <Checkbox
